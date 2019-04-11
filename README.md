@@ -6,8 +6,7 @@
 
 # Angular
 
-<!-- Angular is a development platform for building mobile and desktop web applications using Typescript/JavaScript and other languages. -->
-Angular는 Typescript/JavaScript 그리고 기타 언어를 사용하여 모바일 및 데스크톱 웹 애플리케이션을 구축하기 위한 개발 플랫폼입니다.
+Angular is a development platform for building mobile and desktop web applications using Typescript/JavaScript and other languages.
 
 ## Quickstart
 
@@ -16,8 +15,7 @@ Angular는 Typescript/JavaScript 그리고 기타 언어를 사용하여 모바�
 
 ## Changelog
 
-<!-- [Learn about the latest improvements][changelog].  -->
-[최신 변경 사항 확인하기][changelog].
+[Learn about the latest improvements][changelog]. 
 
 ## Want to help?
 
