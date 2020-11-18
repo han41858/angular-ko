@@ -3,20 +3,20 @@ import { Component, OnInit } from '@angular/core';
 import { EventsService } from './events.service';
 
 const DAY = 24 * 60 * 60 * 1000;
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+// const MONTHS = [
+//   'January',
+//   'February',
+//   'March',
+//   'April',
+//   'May',
+//   'June',
+//   'July',
+//   'August',
+//   'September',
+//   'October',
+//   'November',
+//   'December',
+// ];
 
 export type date = string; // of the format `YYYY-MM-DD`.
 export interface Duration {
