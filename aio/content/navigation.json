@@ -149,8 +149,10 @@
             },
             {
               "url": "guide/view-encapsulation",
-              "title": "View Encapsulation",
-              "tooltip": "Describes how component CSS styles are encapsulated into a component's view."
+              "//title": "View Encapsulation",
+              "title": "뷰 캡슐화",
+              "//tooltip": "Describes how component CSS styles are encapsulated into a component's view.",
+              "tooltip": "컴포넌트 CSS 스타일을 컴포넌트 뷰 안으로 제한하는 방법에 대해 알아보세요."
             },
             {
               "url": "guide/component-interaction",
@@ -168,8 +170,10 @@
             },
             {
               "url": "guide/inputs-outputs",
-              "title": "Sharing data between child and parent directives and components",
-              "tooltip": "Introductory guide to sharing data between parent and child directives or components."
+              "//title": "Sharing data between child and parent directives and components",
+              "title": "부모/자식 디렉티브/컴포넌트끼리 데이터 공유하기",
+              "//tooltip": "Introductory guide to sharing data between parent and child directives or components.",
+              "tooltip": "부모/자식 디렉티브/컴포넌트끼리 데이터를 공유하는 방법에 대해 알아보세요."
             },
             {
               "url": "guide/dynamic-component-loader",
@@ -215,8 +219,10 @@
             },
             {
               "url": "guide/pipes",
-              "title": "Pipes",
-              "tooltip": "Pipes transform displayed values within a template."
+              "//title": "Pipes",
+              "title": "파이프",
+              "//tooltip": "Pipes transform displayed values within a template.",
+              "tooltip": "파이프는 템플릿에 표시되는 데이터의 형식을 변환할 때 사용합니다."
             },
             {
               "url": "guide/binding-syntax",
@@ -543,8 +549,10 @@
         },
         {
           "url": "guide/property-binding-best-practices",
-          "title": "Property Binding Best Practices",
-          "tooltip": "Use property binding efficiently."
+          "//title": "Property Binding Best Practices",
+          "title": "프로퍼티 바인딩 모범 사례",
+          "//tooltip": "Use property binding efficiently.",
+          "tooltip": "프로퍼티 바인딩을 효율적으로 활용해 보세요."
         },
         {
           "//title": "Testing",
@@ -807,8 +815,10 @@
         },
         {
           "url": "guide/forms",
-          "title": "Building a Template-driven Form",
-          "tooltip": "Create a template-driven form using directives and Angular template syntax."
+          "//title": "Building a Template-driven Form",
+          "title": "템플릿 기반 폼  구성하기",
+          "//tooltip": "Create a template-driven form using directives and Angular template syntax.",
+          "tooltip": "디렉티브와 Angular 템플릿 문법을 활용해서 템플릿 기반 폼을 구성해 보세요."
         },
         {
           "url": "guide/web-worker",

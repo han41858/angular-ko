@@ -40,7 +40,8 @@
             "title": "DEV Community"
           },
           "indepth-dev": {
-            "desc": "Peer-reviewed Angular articles and tutorials.",
+            "//desc": "Peer-reviewed Angular articles and tutorials.",
+            "desc": "Angular 관련 글과 튜토리얼을 제공합니다.",
             "url": "https://indepth.dev/angular/",
             "title": "Angular inDepth"
           }
@@ -79,7 +80,8 @@
             "url": "https://github.com/ngRuAir/ngruair"
           },
           "the-deep-dive": {
-            "desc": "The advanced web development podcast about Angular, RxJS, TypeScript and other technologies. English, audio only.",
+            "//desc": "The advanced web development podcast about Angular, RxJS, TypeScript and other technologies. English, audio only.",
+            "desc": "Angular, RxJS, TypeScript 등 다양한 기술을 다루는 팟캐스트입니다. 영어 음성으로만 제공됩니다.",
             "logo": "https://i.imgur.com/mmE5Feq.jpg",
             "title": "The Deep Dive",
             "url": "https://thedeepdive.simplecast.com"
@@ -521,7 +523,8 @@
             "url": "https://jigsaw-zte.gitee.io"
           },
           "material-dayjs-adapter": {
-            "desc": "A DayJS implementation of @angular/material's DateAdapter that results in smaller bundle sizes than its MomentJS counterpart.",
+            "//desc": "A DayJS implementation of @angular/material's DateAdapter that results in smaller bundle sizes than its MomentJS counterpart.",
+            "desc": "@angular/material용 DayJS DateAdapter 입니다. 더 적은 용량으로 MomentJS를 대체할 수 있습니다.",
             "rev": true,
             "title": "material-dayjs-adapter",
             "url": "https://www.npmjs.com/package/@tabuckner/material-dayjs-adapter"
@@ -539,7 +542,8 @@
         "order": 1,
         "resources": {
           "-KLIzGEp8Mh5W-FkiQnL": {
-            "desc": "A no-nonsense beginner's guide to building web applications with Angular and TypeScript",
+            "//desc": "A no-nonsense beginner's guide to building web applications with Angular and TypeScript",
+            "desc": "Angular와 TypeScript로 웹 애플리케이션을 만드는 방법에 대해 안내하는 입문자용 가이드입니다.",
             "title": "Learning Angular - Third Edition",
             "url": "https://www.packtpub.com/product/learning-angular-third-edition/9781839210662"
           },

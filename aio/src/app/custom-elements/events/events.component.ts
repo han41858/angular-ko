@@ -59,10 +59,25 @@ export class EventsComponent implements OnInit {
   getEventDates(event: Event) {
     let dateString;
 
+    // // Check if there is a workshop
+    // if (event.workshopsDate) {
+    //   const mainEventDateString = `${processDate(event.date)} (conference)`;
+    //   const workshopsDateString = `${processDate(event.workshopsDate)} (workshops)`;
+    //   const areWorkshopsBeforeEvent = isBefore(event.workshopsDate, event.date);
+
+    //   dateString = areWorkshopsBeforeEvent ?
+    //       `${workshopsDateString}, ${mainEventDateString}` :
+    //       `${mainEventDateString}, ${workshopsDateString}`;
+    // } else {
+    //   // If no work shop date create conference date string
+    //   dateString = processDate(event.date);
+    // }
+    // dateString = `${dateString}, ${new Date(event.date.end).getFullYear()}`;
+
     // Check if there is a workshop
     if (event.workshopsDate) {
-      const mainEventDateString = `${processDate(event.date)} (conference)`;
-      const workshopsDateString = `${processDate(event.workshopsDate)} (workshops)`;
+      const mainEventDateString = `${processDate(event.date)} (컨퍼런스)`;
+      const workshopsDateString = `${processDate(event.workshopsDate)} (워크샵)`;
       const areWorkshopsBeforeEvent = isBefore(event.workshopsDate, event.date);
 
       dateString = areWorkshopsBeforeEvent ?
@@ -72,25 +87,41 @@ export class EventsComponent implements OnInit {
       // If no work shop date create conference date string
       dateString = processDate(event.date);
     }
-    dateString = `${dateString}, ${new Date(event.date.end).getFullYear()}`;
+    dateString = `${new Date(event.date.end).getFullYear()}. ${dateString}`;
     return dateString;
   }
 }
 
 function processDate(dates: Duration) {
+  // // Covert Date sting to date object for comparisons
+  // const startDate = new Date(dates.start);
+  // const endDate = new Date(dates.end);
+
+  // // Create a date string in the start like January 31
+  // let processedDate = `${MONTHS[startDate.getMonth()]} ${startDate.getDate()}`;
+
+  // // If they are in different months add the string '- February 2' Making the final string January 31 - February 2
+  // if (startDate.getMonth() !== endDate.getMonth()) {
+  //   processedDate = `${processedDate} - ${MONTHS[endDate.getMonth()]} ${endDate.getDate()}`;
+  // } else if (startDate.getDate() !== endDate.getDate()) {
+  //   // If not add - date eg it will make // January 30-31
+  //   processedDate = `${processedDate}-${endDate.getDate()}`;
+  // }
   // Covert Date sting to date object for comparisons
   const startDate = new Date(dates.start);
   const endDate = new Date(dates.end);
 
   // Create a date string in the start like January 31
-  let processedDate = `${MONTHS[startDate.getMonth()]} ${startDate.getDate()}`;
+  let processedDate = `${startDate.getMonth()+1}. ${startDate.getDate()}`;
 
   // If they are in different months add the string '- February 2' Making the final string January 31 - February 2
   if (startDate.getMonth() !== endDate.getMonth()) {
-    processedDate = `${processedDate} - ${MONTHS[endDate.getMonth()]} ${endDate.getDate()}`;
+    processedDate = `${processedDate} ~ ${endDate.getMonth()+1}. ${endDate.getDate()}.`;
   } else if (startDate.getDate() !== endDate.getDate()) {
     // If not add - date eg it will make // January 30-31
-    processedDate = `${processedDate}-${endDate.getDate()}`;
+    processedDate = `${processedDate}. ~ ${endDate.getDate()}.`;
+  } else {
+    processedDate = `${processedDate}.`
   }
 
   return processedDate;

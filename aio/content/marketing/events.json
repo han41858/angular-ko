@@ -1,7 +1,8 @@
 [
   {
     "name": "ng-china",
-    "location": "Online",
+    "//location": "Online",
+    "location": "온라인",
     "linkUrl": "https://ng-china.org/",
     "date": {
       "start": "2020-11-21",
@@ -10,7 +11,8 @@
   },
   {
     "name": "EnterpriseNG",
-    "location": "Online",
+    "//location": "Online",
+    "location": "온라인",
     "linkUrl": "https://www.ng-conf.org/",
     "date": {
       "start": "2020-11-19",
@@ -19,7 +21,8 @@
   },
   {
     "name": "ngrome",
-    "location": "Online",
+    "//location": "Online",
+    "location": "온라인",
     "linkUrl": "https://ngrome.io/",
     "date": {
       "start": "2020-10-20",
@@ -28,7 +31,8 @@
   },
   {
     "name": "DevReach",
-    "location": "Online",
+    "//location": "Online",
+    "location": "온라인",
     "linkUrl": "https://www.telerik.com/devreach/online/agenda-thursday#sessions",
     "date": {
       "start": "2020-10-19",
@@ -37,7 +41,8 @@
   },
   {
     "name": "ngVikings",
-    "location": "Oslo, Norway",
+    "//location": "Oslo, Norway",
+    "location": "노르웨이 오슬로",
     "linkUrl": "https://ngvikings.org/",
     "date": {
       "start": "2020-05-25",
@@ -50,7 +55,8 @@
   },
   {
     "name": "ng-conf",
-    "location": "Salt Lake City, Utah",
+    "//location": "Salt Lake City, Utah",
+    "location": "미국 유타주 솔트 레이크 시티",
     "linkUrl": "https://ng-conf.org/",
     "date": {
       "start": "2020-04-01",
@@ -59,7 +65,8 @@
   },
   {
     "name": "ngIndia",
-    "location": "Delhi, India",
+    "//location": "Delhi, India",
+    "location": "인도 델리",
     "linkUrl": "https://www.ng-ind.com/",
     "date": {
       "start": "2020-02-29",
@@ -68,7 +75,8 @@
   },
   {
     "name": "ReactiveConf",
-    "location": "Prague, Czech Republic",
+    "//location": "Prague, Czech Republic",
+    "location": "체코 프라하",
     "linkUrl": "https://reactiveconf.com/",
     "date": {
       "start": "2019-10-30",
@@ -77,7 +85,8 @@
   },
   {
     "name": "NG Rome MMXIX",
-    "location": "Rome, Italy",
+    "//location": "Rome, Italy",
+    "location": "이탈리아 로마",
     "linkUrl": "https://ngrome.io",
     "tooltip": "NG Rome MMXIX - The Italian Angular Conference",
     "date": {
@@ -91,7 +100,8 @@
   },
   {
     "name": "AngularConnect",
-    "location": "London, UK",
+    "//location": "London, UK",
+    "location": "영국 런던",
     "linkUrl": "https://www.angularconnect.com/?utm_source=angular.io&utm_medium=referral",
     "date": {
       "start": "2019-09-19",
@@ -100,7 +110,8 @@
   },
   {
     "name": "NG-DE",
-    "location": "Berlin, Germany",
+    "//location": "Berlin, Germany",
+    "location": "독일 베를린",
     "linkUrl": "https://ng-de.org/",
     "date": {
       "start": "2019-08-30",
@@ -113,7 +124,8 @@
   },
   {
     "name": "ng-japan",
-    "location": "Tokyo, Japan",
+    "//location": "Tokyo, Japan",
+    "location": "일본 도쿄",
     "linkUrl": "https://ngjapan.org/",
     "date": {
       "start": "2019-07-13",
@@ -122,7 +134,8 @@
   },
   {
     "name": "ngVikings",
-    "location": "Copenhagen, Denmark",
+    "//location": "Copenhagen, Denmark",
+    "location": "덴마크 코펜하겐",
     "linkUrl": "https://ngvikings.org/",
     "date": {
       "start": "2019-05-27",
@@ -135,7 +148,8 @@
   },
   {
     "name": "ng-conf",
-    "location": "Salt Lake City, Utah",
+    "//location": "Salt Lake City, Utah",
+    "location": "미국 유타주 솔트 레이크 시티",
     "linkUrl": "https://ng-conf.org/",
     "date": {
       "start": "2019-05-01",
@@ -144,7 +158,8 @@
   },
   {
     "name": "ng-India",
-    "location": "Gurgaon, India",
+    "//location": "Gurgaon, India",
+    "location": "인도 구르가온",
     "linkUrl": "https://www.ng-ind.com/",
     "date": {
       "start": "2019-02-23",
@@ -153,7 +168,8 @@
   },
   {
     "name": "ngAtlanta",
-    "location": "Atlanta, Georgia",
+    "//location": "Atlanta, Georgia",
+    "location": "미국 조지아주 애틀랜타",
     "linkUrl": "https://ng-atl.org/",
     "date": {
       "start": "2019-01-09",
@@ -162,7 +178,8 @@
   },
   {
     "name": "AngularConnect",
-    "location": "London, United Kingdom",
+    "//location": "London, United Kingdom",
+    "location": "영국 런던",
     "linkUrl": "https://past.angularconnect.com/2018",
     "date": {
       "start": "2018-11-05",
@@ -171,7 +188,8 @@
   },
   {
     "name": "ReactiveConf",
-    "location": "Prague, Czech Republic",
+    "//location": "Prague, Czech Republic",
+    "location": "체코 프라하",
     "linkUrl": "https://reactiveconf.com/",
     "date": {
       "start": "2018-10-29",
@@ -180,7 +198,8 @@
   },
   {
     "name": "AngularMix",
-    "location": "Orlando, Florida",
+    "//location": "Orlando, Florida",
+    "location": "미국 플로리다 올랜도",
     "linkUrl": "https://angularmix.com/",
     "date": {
       "start": "2018-10-10",
@@ -189,7 +208,8 @@
   },
   {
     "name": "Angular Conf Australia",
-    "location": "Melbourne, Australia",
+    "//location": "Melbourne, Australia",
+    "location": "호주 멜버른",
     "linkUrl": "https://www.angularconf.com.au/",
     "date": {
       "start": "2018-06-22",
@@ -198,7 +218,8 @@
   },
   {
     "name": "ng-japan",
-    "location": "Tokyo, Japan",
+    "//location": "Tokyo, Japan",
+    "location": "일본 도쿄",
     "linkUrl": "https://ngjapan.org/en.html",
     "date": {
       "start": "2018-06-16",
@@ -207,7 +228,8 @@
   },
   {
     "name": "WeAreDevelopers",
-    "location": "Vienna, Austria",
+    "//location": "Vienna, Austria",
+    "location": "오스트리아 비엔나",
     "linkUrl": "https://www.wearedevelopers.com/",
     "tooltip": "WeAreDevs",
     "date": {
@@ -217,7 +239,8 @@
   },
   {
     "name": "ng-conf",
-    "location": "Salt Lake City, Utah",
+    "//location": "Salt Lake City, Utah",
+    "location": "미국 유타주 솔트 레이크 시티",
     "linkUrl": "https://ng-conf.org/",
     "date": {
       "start": "2018-04-18",
@@ -226,7 +249,8 @@
   },
   {
     "name": "ngVikings",
-    "location": "Helsinki, Finland",
+    "//location": "Helsinki, Finland",
+    "location": "핀란드 헬싱키",
     "linkUrl": "https://ngvikings.org/",
     "date": {
       "start": "2018-03-01",
@@ -235,7 +259,8 @@
   },
   {
     "name": "ngAtlanta",
-    "location": "Atlanta, Georgia",
+    "//location": "Atlanta, Georgia",
+    "location": "미국 조지아주 애틀랜타",
     "linkUrl": "https://ng-atl.org/",
     "date": {
       "start": "2018-01-30",
