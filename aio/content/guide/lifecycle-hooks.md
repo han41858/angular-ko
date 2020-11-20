@@ -121,10 +121,12 @@ Angular executes hook methods in the following sequence. You can use them to per
 
       <!--
       Called before `ngOnInit()` and whenever one or more data-bound input properties change.
+
+      Note that if your component has no inputs or you use it without providing any inputs, the framework will not call `ngOnChanges()`.
       -->
       `ngOnInit()`이 실행되기 전에 한 번 실행되며 입력 프로퍼티로 바인딩된 값이 변경될 때마다 실행됩니다.
 
-      Note that if your component has no inputs or you use it without providing any inputs, the framework will not call `ngOnChanges()`.
+      컴포넌트에 입력 프로퍼티가 없거나, 선언하고 사용하지 않는다면 `ngOnChanges()`가 실행되지 않습니다.
 
     </td>
   </tr>
@@ -168,10 +170,10 @@ Angular executes hook methods in the following sequence. You can use them to per
     </td>
     <td>
 
-    <!--
-    Called immediately after `ngOnChanges()` on every change detection run, and immediately after `ngOnInit()` on the first run.
-    -->
-    `ngOnInit()`이 실행된 직후에 한 번 실행되며, 변화 감지 싸이클이 실행되면서 `ngOnChanges()`가 실행된 이후에 매번 실행됩니다.
+      <!--
+      Called immediately after `ngOnChanges()` on every change detection run, and immediately after `ngOnInit()` on the first run.
+      -->
+      `ngOnInit()`이 실행된 직후에 한 번 실행되며, 변화 감지 싸이클이 실행되면서 `ngOnChanges()`가 실행된 이후에 매번 실행됩니다.
 
     </td>
   </tr>

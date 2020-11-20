@@ -156,11 +156,10 @@ describe('Component Communication Cookbook Tests', () => {
   function countDownTimerTests(parentTag: string) {
     // #docregion countdown-timer-tests
     // ...
-    // The tests trigger periodic asynchronous operations (via `setInterval()`), which will prevent
-    // the app from stabilizing. See https://angular.io/api/core/ApplicationRef#is-stable-examples
-    // for more details.
-    // To allow the tests to complete, we will disable automatically waiting for the Angular app to
-    // stabilize.
+    // 이 테스트는 `setInterval()` 함수를 사용해서 주기적으로 비동기 요청을 보내기 때문에
+    // 앱이 안정된 상태(stablized)로 되지 않습니다.
+    // 자세한 내용은 https://angular.io/api/core/ApplicationRef#is-stable-examples 문서를 참고하세요.
+    // 그래서 이 테스트를 종료하려면 Angular 앱이 안정된 상태일 때 자동으로 종료되는 기능을 비활성화해야 합니다.
     beforeEach(() => browser.waitForAngularEnabled(false));
     afterEach(() => browser.waitForAngularEnabled(true));
 
@@ -172,7 +171,7 @@ describe('Component Communication Cookbook Tests', () => {
 
       await startButton.click();
 
-      // Wait for `<app-countdown-timer>` to be populated with any text.
+      // 텍스트가 전달되는 `<app-countdown-timer>`를 기다립니다.
       await browser.wait(() => timer.getText(), 2000);
 
       expect(await timer.getText()).toContain(await seconds.getText());
