@@ -1,7 +1,7 @@
 <!--
 # Property binding
 -->
-# 프로퍼티 바인딩
+# 프로퍼티 바인딩(Property binding)
 
 <!--
 Property binding in Angular helps you set values for properties of HTML elements or directives.

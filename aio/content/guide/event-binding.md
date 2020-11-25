@@ -1,7 +1,7 @@
 <!--
 # Event binding
 -->
-# 이벤트 바인딩
+# 이벤트 바인딩(Event binding)
 
 <!--
 Event binding allows you to listen for and respond to user actions such as keystrokes, mouse movements, clicks, and touches.
@@ -21,8 +21,12 @@ See the <live-example></live-example> for a working example containing the code 
 </div>
 
 
+<!--
 ## Binding to events
+-->
+## 이벤트 바인딩하기
 
+<!--
 To bind to an event you use the Angular event binding syntax.
 This syntax consists of a target event name within parentheses to the left of an equal sign, and a quoted template statement to the right.
 In the following example, the target event name is `click` and the template statement is `onSave()`.
@@ -110,17 +114,36 @@ When the `deleteRequest` event fires, Angular calls the parent component's `dele
 이제 `deleteRequest` 이벤트가 발생하면 부모 컴포넌트의 `deleteItem()` 메서드가 실행됩니다.
 
 
+<!--
 ### Determining an event target
+-->
+### 이벤트 대상 확인하기
 
+<!--
 To determine an event target, Angular checks if the name of the target event matches an event property of a known directive.
 In the following example, Angular checks to see if `myClick` is an event on the custom `ClickDirective`.
 
 <code-example path="event-binding/src/app/app.component.html" region="custom-directive" header="src/app/app.component.html"></code-example>
 
 If the target event name, `myClick` fails to match an element event or an output property of `ClickDirective`, Angular reports an "unknown directive" error.
+-->
+Angular는 이벤트 대상을 확인하기 위해 대상 이벤트 이름이 디렉티브의 이벤트 프로퍼티 이름과 같은지 검사합니다.
+그래서 아래 예제처럼 구현하면 `myClick` 이벤트가 `ClickDirective`에서 발생한 커스텀 이벤트라는 것을 판단할 수 있습니다.
+
+<code-example path="event-binding/src/app/app.component.html" region="custom-directive" header="src/app/app.component.html"></code-example>
+
+엘리먼트 이벤트나 `ClickDirective` 프로퍼티에서 `myClick`를 찾지 못하면 "unknown directive" 에러가 발생합니다.
+
 
 <hr />
 
-## What's next
 
+<!--
+## What's next
+-->
+## 다음 단계
+
+<!--
 For more information on how event binding works, see [How event binding works](guide/event-binding-concepts).
+-->
+이벤트 바인딩이 동작하는 것에 대새 자세하게 알아보려면 [이벤트 바인딩이 동작하는 과정](guide/event-binding-concepts) 문서를 참고하세요.
