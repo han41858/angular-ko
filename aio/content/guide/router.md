@@ -505,7 +505,7 @@ The one difference is that you place child routes in a `children` array within t
 아래 예제 코드에는 자식 컴포넌트가 `child-a`, `child-b` 2개 존재합니다.
 그리고 `FirstComponent`에는 `<nav>`가 존재하며 `AppComponent`에 있는 `<router-outlet>` 외에 또다른 `<router-outlet>`이 추가되어 있습니다.
 
-<code-example path="router/src/app/app.component.8.html" region="child-routes" header="In the template">
+<code-example path="router/src/app/app.component.8.html" region="child-routes" header="템플릿에서">
 </code-example>
 
 자식 라우팅 규칙도 일반 라우팅 규칙과 마찬가지로 `path`, `component` 프로퍼티로 정의합니다.

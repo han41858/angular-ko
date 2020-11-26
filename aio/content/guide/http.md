@@ -1616,7 +1616,7 @@ HTTP 요청이 발생한 시간과 응답이 도착한 시간을 확인하고, �
 <code-example
   path="http/src/app/http-interceptors/logging-interceptor.ts"
   region="excerpt"
-  header="app/http-interceptors/logging-interceptor.ts)">
+  header="app/http-interceptors/logging-interceptor.ts">
 </code-example>
 
 RxJS가 제공하는 `tap` 연산자와 `finalize`는 HTTP 요청이 성공하거나 실패하는 것에 관계없이 모든 응답에 대해 실행됩니다.
@@ -1669,7 +1669,7 @@ The function then forwards the clone of the request to `next.handle()` which ult
 <code-example
   path="http/src/app/http-interceptors/caching-interceptor.ts"
   region="v1"
-  header="app/http-interceptors/caching-interceptor.ts)">
+  header="app/http-interceptors/caching-interceptor.ts">
 </code-example>
 
 * `isCacheable()` 함수는 해당 요청이 캐싱 대상인지 결정합니다.

@@ -72,7 +72,7 @@ and how to [write your own](guide/structural-directives#unless) structural direc
 이 디렉티브는 아래 예제처럼 별표(`*`)로 시작하는 어트리뷰트 이름으로 적용합니다.
 
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngif)" region="ngif"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngIf)" region="ngif"></code-example>
 
 
 구조 디렉티브에는 괄호(`(`, `)`)도 없고 대괄호(`[`, `]`)도 없습니다. `*ngIf`는 단순하게 문자열일 뿐입니다.
@@ -195,7 +195,7 @@ The component and DOM nodes can be garbage-collected and free up memory.
 구조 디렉티브 중에서 `NgIf`는 가장 간단하며 이해하기도 쉽습니다.
 이 디렉티브는 표현식의 결과에 따라 DOM 조각을 추가하거나 제거합니다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngif-true)" region="ngif-true"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngIf-true)" region="ngif-true"></code-example>
 
 
 `ngIf` 디렉티브는 CSS처럼 엘리먼트를 숨기는 것이 아닙니다. 이 디렉티브가 `false` 조건으로 동작하면 DOM에서 엘리먼트를 완전히 제거합니다.
@@ -322,13 +322,13 @@ The [`NgFor`](guide/structural-directives#ngFor) and [`NgSwitch...`](guide/struc
 
 아래 코드는 `hero` 프로퍼티에 객체가 할당되었을 때 히어로의 이름을 표시하는 예제입니다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (asterisk)" region="asterisk"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (별표)" region="asterisk"></code-example>
 
 
 별표는 복잡한 문법을 단순하게 표현하는 문법 테크닉(syntactic sugar)입니다.
 Angular가 `*ngIf` _어트리뷰트_ 를 내부적으로 처리할 때는 `ngIf` 디렉티브가 적용된 호스트 엘리먼트를 감싸도록 `<ng-template>` _엘리먼트_ 를 구성합니다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngif-template)" region="ngif-template"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngIf 템플릿)" region="ngif-template"></code-example>
 
 
 * `*ngIf` 디렉티브는 호스트 엘리먼트 대신 `<ng-template>` 엘리먼트로 옮겨지며, 프로퍼티 바인딩 형태인 `[ngIf]`로 변환됩니다.
@@ -380,7 +380,7 @@ In this example, the `[class.odd]="odd"` stays on the `<div>`.
 
 `NgFor` 디렉티브의 기능이 다양하게 활용된 예제를 확인해 봅시다:
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (inside-ngfor)" region="inside-ngfor"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngFor 내부)" region="inside-ngfor"></code-example>
 
 
 이 예제는 `NgIf` 때보다 복잡해 보이고, 실제로도 복잡합니다.
@@ -826,7 +826,7 @@ Angular 기본 디렉티브인 _NgSwitch_ 를 사용한다는 것은 사실 `NgS
 
 예제를 확인해 봅시다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngswitch)" region="ngswitch"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngSwitch)" region="ngswitch"></code-example>
 
 
 `NgSwitch`는 적용되는 값에 해당되는 템플릿을 화면에 표시합니다. 위 예제의 경우에는 `hero.emotion`에 의해 결정됩니다.
@@ -850,7 +850,7 @@ Angular 기본 디렉티브인 _NgSwitch_ 를 사용한다는 것은 사실 `NgS
 
 다른 구조 디렉티브와 마찬가지로, `NgSwitchCase`와 `NgSwitchDefault`도 Angular가 렌더링할 때는 `<ng-template>` 엘리먼트로 변환됩니다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngswitch-template)" region="ngswitch-template"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngSwitch 템플릿)" region="ngswitch-template"></code-example>
 
 
 
@@ -914,7 +914,7 @@ as you'll see when you [write your own structural directive](guide/structural-di
 구조 디렉티브를 하나도 사용하지 않고 엘리먼트를 `<ng-template>`으로 감싸기만 하면, 이 엘리먼트는 화면에 표시되지 않습니다.
 그래서 다음 "Hip! Hip! Hooray!" 문단들 중 두 번째 문단인 "Hip!"은 표시되지 않습니다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (template-tag)" region="template-tag"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (템플릿 태그)" region="template-tag"></code-example>
 
 
 Angular는 두 번째 문단을 제거하면서 개발자가 보기에는 의미없어 보이는 주석을 남깁니다.
@@ -994,13 +994,13 @@ The browser won't display an `<option>` within a `<span>`.
 구조 디렉티브의 호스트 엘리먼트는 보통 엘리먼트 하나입니다.
 예를 들어 리스트 엘리먼트(`<li>`)에 `NgFor`를 사용한다면 다음과 같이 구현할 수 있습니다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngfor-li)" region="ngfor-li"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngFor-li)" region="ngfor-li"></code-example>
 
 
 하지만 호스트 엘리먼트가 하나가 아닌 경우가 있습니다.
 이런 경우라면 네이티브 HTML인 `<div>`로 엘리먼트를 감싸고 이 `<div>`에 디렉티브를 적용해도 됩니다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngif)" region="ngif"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngIf)" region="ngif"></code-example>
 
 
 호스트 엘리먼트 하나 밑에 `<span>`이나 `<div>` 엘리먼트를 사용하는 것은 일반적으로 문제가 없습니다.
@@ -1009,7 +1009,7 @@ _보통은_ 그렇죠. 하지만 _항상_ 그런 것은 아닙니다.
 엘리먼트를 묶으면 이 엘리먼트가 템플릿의 어떤 자리에 위치하는지에 따라서 CSS 스타일이 잘못 지정되거나 레이아웃 자체가 틀어질 수 있습니다.
 예를 들어 다음과 같은 문단이 있다고 합시다.
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngif-span)" region="ngif-span"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngIf-span)" region="ngif-span"></code-example>
 
 
 그리고 전역 CSS 스타일에는 `<p>` 안에 있는 `<span>`에 다음과 같은 스타일을 지정하고 있다고 합시다.
@@ -1106,7 +1106,7 @@ The `<ng-container>` satisfies a similar need in Angular templates.
 `ngIf`를 사용하는 `<p>` 엘리먼트를 생각해 봅시다. 이 엘리먼트는 `<ng-container>`를 사용합니다.
 
 
-<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngif-ngcontainer)" region="ngif-ngcontainer"></code-example>
+<code-example path="structural-directives/src/app/app.component.html" header="src/app/app.component.html (ngIf-ngcontainer)" region="ngif-ngcontainer"></code-example>
 
 
 이 코드는 제대로 렌더링 됩니다.
@@ -1215,7 +1215,7 @@ Angular's own directives do not.
 이렇게 작성하면 다음과 비슷한 코드가 될 것입니다:
 
 
-<code-example path="structural-directives/src/app/unless.directive.ts" header="src/app/unless.directive.ts (skeleton)" region="skeleton"></code-example>
+<code-example path="structural-directives/src/app/unless.directive.ts" header="src/app/unless.directive.ts (기본 코드)" region="skeleton"></code-example>
 
 
 디렉티브의 _셀렉터_ 는 일반적으로 디렉티브의 **어트리뷰트 이름**을 대괄호로 감싼 형태가 되기 때문에 이 예제에서는 `[appUnless]`를 지정했습니다.
@@ -1258,7 +1258,7 @@ You inject both in the directive constructor as private variables of the class.
 
 두 객체를 클래스에서 참조할 수 있도록 디렉티브 생성자에 두 심볼을 의존성으로 주입합니다.
 
-<code-example path="structural-directives/src/app/unless.directive.ts" header="src/app/unless.directive.ts (ctor)" region="ctor"></code-example>
+<code-example path="structural-directives/src/app/unless.directive.ts" header="src/app/unless.directive.ts (생성자)" region="ctor"></code-example>
 
 
 <!--
@@ -1322,7 +1322,7 @@ When the `condition` is truthy, the top (A) paragraph is removed and the bottom 
 </div>
 
 
-<code-example path="structural-directives/src/app/unless.directive.ts" header="src/app/unless.directive.ts (set)" region="set"></code-example>
+<code-example path="structural-directives/src/app/unless.directive.ts" header="src/app/unless.directive.ts (set())" region="set"></code-example>
 
 `appUnless` 프로퍼티의 값은 이 프로퍼티에 바인딩 된 값이 바뀔때마다 Angular가 새로 할당합니다.
 그래서 이 프로퍼티 값에 반응하려면 세터(setter)가 필요합니다.
