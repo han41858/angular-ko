@@ -11,9 +11,6 @@
 <!--
 A basic understanding of the following:
 * [Service Worker in Production](guide/service-worker-devops).
--->
-이 문서의 내용을 제대로 이해하려면 다음 내용을 미리 확인하는 것이 좋습니다.
-* [서비스 워커 활용](guide/service-worker-devops)
 
 <hr />
 
@@ -26,11 +23,25 @@ processes the configuration file during `ng build --prod`. Manually, you can pro
 ./node_modules/.bin/ngsw-config ./dist/&lt;project-name&gt; ./ngsw-config.json [/base/href]
 </code-example>
 
-<!--
 The configuration file uses the JSON format. All file paths must begin with `/`, which corresponds
 to the deployment directory&mdash;usually `dist/<project-name>` in CLI projects.
 -->
-이 설정 파일은 JSON 형식입니다. 이 파일에서 다른 파일의 위치를 가리킬 때는 반드시 `/`로 시작해야 하는데, 이 위치는 애플리케이션의 빌드 결과물이 위치하는 폴더를 의미하기 때문에 일반적으로 `dist/<프로젝트-이름>` 폴더를 의미합니다.
+이 문서의 내용을 제대로 이해하려면 다음 내용을 미리 확인하는 것이 좋습니다.
+* [서비스 워커 활용](guide/service-worker-devops)
+
+<hr />
+
+`ngsw-config.json` 설정 파일은 Angular 서비스 워커가 캐싱할 파일과 데이터 URL을 지정하는 파일이며, 이 리소스들을 어떻게 업데이트할 것인지도 지정합니다.
+[Angular CLI](cli)로 `ng build --prod` 명령을 실행하면 이 설정 파일이 자동으로 구성됩니다.
+아니면 `ngsw-config` 툴을 활용해서 이 파일을 직접 구성할 수도 있습니다:
+
+<code-example language="sh">
+./node_modules/.bin/ngsw-config ./dist/&lt;프로젝트-이름&gt; ./ngsw-config.json [/base/href]
+</code-example>
+
+이 설정 파일은 JSON 형식입니다.
+이 파일에서 다른 파일의 위치를 가리킬 때는 반드시 `/`로 시작해야 하는데, 이 위치는 애플리케이션의 빌드 결과물이 위치하는 폴더를 의미하기 때문에 일반적으로 `dist/<프로젝트-이름>` 폴더를 의미합니다.
+
 
 {@a glob-patterns}
 <!--
@@ -152,11 +163,11 @@ interface AssetGroup {
 
 <div class="alert is-helpful">
 
-When the ServiceWorker handles a request, it checks asset groups in the order in which they appear in `ngsw-config.json`.
-The first asset group that matches the requested resource handles the request.
+서비스 워커가 요청을 보내면 이 요청이 `ngsw-config.json` 안에 정의되어 있는지 확인합니다.
+서비스 워커 환경설정 파일에 이 요청이 등록되어 있으면, 제일 처음 매칭되는 리소스를 응답으로 활용합니다.
 
-It is recommended that you put the more specific asset groups higher in the list.
-For example, an asset group that matches `/foo.js` should appear before one that matches `*.js`.
+그래서 리소스 목록을 지정할 때는 더 구체적인 주소를 앞쪽에 두는 것이 좋습니다.
+예를 들어 `/foo.js` 라는 파일이 등록되어 있다면 이 항목은 `*.js` 보다 먼저 등록되어야 합니다.
 
 </div>
 
@@ -245,9 +256,17 @@ This section describes the resources to cache, broken up into the following grou
 
 ### `cacheQueryOptions`
 
+<!--
 These options are used to modify the matching behavior of requests. They are passed to the browsers `Cache#match` function. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Cache/match) for details. Currently, only the following options are supported:
 
 * `ignoreSearch`: Ignore query parameters. Defaults to `false`.
+-->
+이 옵션은 브라우저 `Cache#match` 함수로 전달되어 매칭되는 요청을 어떻게 처리할지 지정합니다.
+자세한 내용은 [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Cache/match) 문서를 참고하세요.
+아직까지는 이 옵션만 지원합니다:
+
+* `ignoreSearch`: 쿼리 인자를 무시합니다. 기본값은 `false`입니다.
+
 
 ## `dataGroups`
 
@@ -301,7 +320,8 @@ export interface DataGroup {
 애셋 리소스와는 다르게 API로 보내는 데이터 요청은 앱 버전으로 관리되지 않습니다.
 그래서 이런 요청은 자주 사용하는 API나 데이터 의존성 관계에 맞게 수동으로 캐싱하는 정책을 구성해야 합니다.
 
-This field contains an array of data groups, each of which defines a set of data resources and the policy by which they are cached.
+이 필드는 배열로 구성합니다.
+배열 항목은 객체이며, 데이터 리소스와 이 리소스에 적용될 캐싱 정책으로 구성됩니다.
 
 ```json
 {
@@ -318,11 +338,11 @@ This field contains an array of data groups, each of which defines a set of data
 
 <div class="alert is-helpful">
 
-When the ServiceWorker handles a request, it checks data groups in the order in which they appear in `ngsw-config.json`.
-The first data group that matches the requested resource handles the request.
+서비스 워커가 요청을 보내면 이 요청이 `ngsw-config.json` 안에 정의되어 있는지 확인합니다.
+서비스 워커 환경설정 파일에 이 요청이 등록되어 있으면, 제일 처음 매칭되는 리소스를 응답으로 활용합니다.
 
-It is recommended that you put the more specific data groups higher in the list.
-For example, a data group that matches `/api/foo.json` should appear before one that matches `/api/*.json`.
+그래서 리소스 목록을 지정할 때는 더 구체적인 주소를 앞쪽에 두는 것이 좋습니다.
+예를 들어 `/api/foo.json` 라는 데이터 그룹이 등록되어 있다면 이 항목은 `/api/*.json` 보다 먼저 등록되어야 합니다.
 
 </div>
 
@@ -440,12 +460,6 @@ The Angular service worker can use either of two caching strategies for data res
 * `performance`, the default, optimizes for responses that are as fast as possible. If a resource exists in the cache, the cached version is used, and no network request is made. This allows for some staleness, depending on the `maxAge`, in exchange for better performance. This is suitable for resources that don't change often; for example, user avatar images.
 
 * `freshness` optimizes for currency of data, preferentially fetching requested data from the network. Only if the network times out, according to `timeout`, does the request fall back to the cache. This is useful for resources that change frequently; for example, account balances.
--->
-Angular 서비스 워커는 캐싱하는 데이터 리소스를 대상으로 두 가지 정책 중 하나를 사용할 수 있습니다.
-
-* 기본 정책은 `performance`이며, 이 정책은 가장 빠르게 응답하도록 최적화된 정책입니다. 캐싱된 리소스가 있으면 그 리소스를 그대로 사용하며, `maxAge`와 같은 필드의 영향으로 만료되더라도 성능을 위해 만료된 데이터를 그대로 사용하기도 합니다. 이 정책은 사용자의 아바타 이미지와 같이 자주 변경되지 않는 리소스에 적합합니다.
-
-* 네트워크를 통해 자주 요청되며 최신 데이터가 중요하다면 `freshness` 정책을 사용할 수 있습니다. 이 정책을 사용하면 `timeout` 필드의 영향으로 네트워크가 타임아웃 되어야만 캐싱된 데이터를 사용합니다. 이 정책은 자산의 잔액과 같이 자주 변경되는 리소스에 적합합니다.
 
 
 <div class="alert is-helpful">
@@ -461,10 +475,36 @@ This will essentially do the following:
 4. If the resource does not exist in the cache, wait for the network request anyway.
 
 </div>
+-->
+Angular 서비스 워커는 캐싱하는 데이터 리소스를 대상으로 두 가지 정책 중 하나를 사용할 수 있습니다.
+
+* 기본 정책은 `performance`이며, 이 정책은 가장 빠르게 응답하도록 최적화된 정책입니다. 캐싱된 리소스가 있으면 그 리소스를 그대로 사용하며, `maxAge`와 같은 필드의 영향으로 만료되더라도 성능을 위해 만료된 데이터를 그대로 사용하기도 합니다. 이 정책은 사용자의 아바타 이미지와 같이 자주 변경되지 않는 리소스에 적합합니다.
+
+* 네트워크를 통해 자주 요청되며 최신 데이터가 중요하다면 `freshness` 정책을 사용할 수 있습니다. 이 정책을 사용하면 `timeout` 필드의 영향으로 네트워크가 타임아웃 되어야만 캐싱된 데이터를 사용합니다. 이 정책은 자산의 잔액과 같이 자주 변경되는 리소스에 적합합니다.
+
+
+<div class="alert is-helpful">
+
+[staleWhileRevalidate](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#stale-while-revalidate)를 활용하면 또 다른 정책을 활용할 수 있습니다.
+이 정책은 가능하면 캐싱된 데이터를 반환하며 백그라운드에서 새로운 데이터를 받아옵니다.
+이 정책을 사용하려면 `cacheConfig`에 `strategy`는 `freshness`로, `timeout`은 `0u`로 설정해야 합니다.
+
+옵션을 이렇게 설정하면 앱이 이렇게 동작합니다:
+
+1. 네트워크로 새로운 리소스를 요청합니다.
+2. 요청이 즉시(0ms) 완료되지 않으면 캐싱된 데이터를 찾습니다.
+3. 네트워크 요청이 완료되면 캐싱된 데이터를 갱신합니다.
+4. 캐싱된 리소스가 없으면 응답이 오기까지 기다립니다.
+
+</div>
 
 ### `cacheQueryOptions`
 
+<!--
 See [assetGroups](#assetgroups) for details.
+-->
+[assetGroups](#assetgroups) 섹션을 참고하세요.
+
 
 ## `navigationUrls`
 
@@ -509,7 +549,7 @@ To configure whether navigation requests are sent through to the network or not,
 
 <div class="alert is-helpful">
 
-To configure whether navigation requests are sent through to the network or not, see the [navigationRequestStrategy](#navigation-request-strategy) section.
+화면 전환 요청이 네트워크를 통해 밖으로 전달될지 결정하는 방법에 대해 알아보려면 [navigationRequestStrategy](#navigation-request-strategy) 섹션을 참고하세요.
 
 </div>
 
@@ -558,6 +598,7 @@ If the field is omitted, it defaults to:
 
 ## `navigationRequestStrategy`
 
+<!--
 This optional property enables you to configure how the service worker handles navigation requests:
 
 ```json
@@ -580,5 +621,35 @@ Possible values:
 
 The `freshness` strategy usually results in more requests sent to the server, which can increase response latency.
 It is recommended that you use the default performance strategy whenever possible.
+
+</div>
+-->
+이 옵션을 활용하면 화면 전환 요청을 어떻게 처리할지 지정할 수 있습니다:
+
+```json
+{
+  "navigationRequestStrategy": "freshness"
+}
+```
+
+이런 값을 사용할 수 있습니다:
+
+- `'performance'`: 기본값입니다. 미리 지정된 [인덱스 파일](#index-file)을 사용하며, 이 파일은 보통 캐싱되어 있습니다.
+
+- `'freshness'`: 네트워크가 연결되어 있으면 화면 전환 요청을 보냅니다.
+네트워크에 연결되어 있지 않으면 `performance` 모드로 동작합니다.
+이 값은 서버를 활용해서 리다이렉트 할 때(3xx 상태 코드) 사용하면 좋습니다.
+이런 경우를 생각해 보세요:
+    
+  - 애플리케이션이 인증을 직접 처리하지 않아서 인증용 웹사이트로 리다이렉트 할 때
+
+  - 앱사이트를 개편한 후에 존재하지 않는 링크/즐겨찾기로 들어오는 요청을 리다이렉트 할 때
+
+  - 앱을 일시적으로 사용할 수 없을 때 서버에서 제공하는 화면이나 다른 웹사이트로 리다이렉트 할 때
+
+<div class="alert is-important">
+
+`freshness` 정책을 사용하면 서버로 더 많은 요청을 보내기 때문에 서버와 통신하는 시간이 길어질 수 있습니다.
+꼭 필요한 경우가 아니라면 `performance` 정책을 권장합니다.
 
 </div>
