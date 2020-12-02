@@ -4,10 +4,18 @@
 -->
 # 테스트
 
+<!--
 Testing your Angular application helps you check that your app is working as you expect.
+-->
+애플리케이션이 원하는 대로 동작하는지 테스트해보세요.
 
+
+<!--
 ## Prerequisites
+-->
+## 사전 지식
 
+<!--
 Before writing tests for your Angular app, you should have a basic understanding of the following concepts:
 
 * Angular fundamentals
@@ -28,10 +36,36 @@ This sample application is much like the one in the [_Tour of Heroes_ tutorial](
   For the tests features in the testing guides, see <live-example stackblitz="specs" noDownload>tests</live-example>.
 
 </div>
+-->
+테스트를 작성하기 전에 이런 내용에 대해 미리 이해하고 있는 것이 좋습니다:
+
+* Angular 기본 개념
+* JavaScript
+* HTML
+* CSS
+* [Angular CLI](/cli)
+
+<hr>
+
+이 문서는 [Angular CLI](cli)로 생성한 Angular 애플리케이션에 유닛 테스트와 통합 테스트를 적용하는 방법과 팁에 대해 안내합니다.
+예제 애플리케이션은 [_히어로들의 여행_ 튜토리얼](tutorial)과 비슷합니다.
+
+<div class="alert is-helpful">
+
+이 문서에서 다루는 예제는 <live-example noDownload>sample app</live-example>에서 직접 확인할 수 있습니다.
+
+그리고 이 문서에서 다루는 테스트 기능은 <live-example stackblitz="specs" noDownload>tests</live-example>에서 확인할 수 있습니다.
+
+</div>
+
 
 {@a setup}
+{@a set-up-testing}
 
+<!--
 ## Set up testing
+-->
+## 테스트 환경설정
 
 <!--
 The Angular CLI downloads and installs everything you need to test an Angular application with the [Jasmine test framework](https://jasmine.github.io/).
@@ -189,8 +223,12 @@ IDE와 같은 툴에서 스펙 파일을 구분하려면 테스트 파일의 확
 
 {@a q-spec-file-location}
 
+<!--
 #### Place your spec file next to the file it tests
+-->
+#### 테스트하려는 파일 근처에 두는 방식
 
+<!--
 It's a good idea to put unit test spec files in the same folder
 as the application source code files that they test:
 
@@ -199,11 +237,25 @@ as the application source code files that they test:
 - Nearby tests can reveal how a part works in context.
 - When you move the source (inevitable), you remember to move the test.
 - When you rename the source file (inevitable), you remember to rename the test file.
+-->
+유닛 테스트 스펙 파일은 테스트하려는 파일과 같은 폴더에 두는 것이 좋습니다.
+이런 점에서 좋습니다:
+
+- 파일을 찾기 쉽습니다.
+- 애플리케이션에 테스트가 적용되지 않은 부분을 빠르게 찾을 수 있습니다.
+- 근처에 있는 테스트 파일이 어떤 컨텍스트에서 동작하는지 확인할 수 있습니다.
+- 소스 파일을 옮기면서 테스트 파일도 빠뜨리지 않고 옮길 수 있습니다.
+- 소스 파일의 이름을 변경할 때 테스트 파일도 빠뜨리지 않고 바꿀 수 있습니다.
+
 
 {@a q-specs-in-test-folder}
 
+<!--
 #### Place your spec files in a test folder
+-->
+#### 테스트 폴더에 따로 두는 방식
 
+<!--
 Application integration specs can test the interactions of multiple parts
 spread across folders and modules.
 They don't really belong to any part in particular, so they don't have a
@@ -213,6 +265,13 @@ It's often better to create an appropriate folder for them in the `tests` direct
 
 Of course specs that test the test helpers belong in the `test` folder,
 next to their corresponding helper files.
+-->
+애플리케이션 통합 스펙 파일은 여러 폴더와 여러 모듈에 걸쳐 통합 테스트를 진행합니다.
+그래서 이 스펙 파일은 어느 영역에 딱 포함된다고 할 수 없으며 관련 파일도 특정할 수 없습니다.
+
+그래서 이런 테스트는 `tests`라는 폴더를 만들도 이 안에 두는 것이 좋습니다.
+
+통합 테스트와 관련된 테스트 헬퍼도 이 폴더에 함께 두는 것이 좋습니다.
 
 
 {@a ci}
@@ -406,6 +465,7 @@ script:
 -->
 ### CI 환경에서 Chrome으로 테스트하기
 
+<!--
 When the CLI commands `ng test` and `ng e2e` are generally running the CI tests in your environment, you might still need to adjust your configuration to run the Chrome browser tests.
 
 There are configuration files for both the [Karma JavaScript test runner](https://karma-runner.github.io/latest/config/configuration-file.html)
@@ -475,8 +535,12 @@ Now you can run the following commands to use the `--no-sandbox` flag:
 
 <hr />
 
+<!--
 ## More info on testing
+-->
+## 참고
 
+<!--
 After you've set up your app for testing, you may find the following testing  guides useful.
 
 * [Code coverage](guide/testing-code-coverage)&mdash;find out how much of your app your tests are covering and how to specify required amounts.
@@ -487,5 +551,14 @@ After you've set up your app for testing, you may find the following testing  gu
 * [Testing pipes](guide/testing-pipes)&mdash;find out how to test attribute directives.
 * [Debugging tests](guide/testing-attribute-directives)&mdash;uncover common testing bugs.
 * [Testing utility APIs](guide/testing-utility-apis)&mdash;get familiar with Angular testing features.
+-->
+애플리케이션에 테스트를 적용하고 나면 이런 내용에 대해 알아보는 것도 좋습니다.
 
-
+* [코드 커버리지](guide/testing-code-coverage) &mdash; 테스트 코드가 애플리케이션을 얼마나 검사하고 있는지, 특정 기준으로 이 수치를 보장해야 할 때 사용합니다.
+* [서비스 테스트하기](guide/testing-services) &mdash; 서비스를 테스트하는 방법에 대해 알아보세요.
+* [컴포넌트 테스트하기 기본](guide/testing-components-basics) &mdash; Angular 컴포넌트를 테스트할 때 필요한 기본 개념에 대해 알아보세요.
+* [컴포넌트 테스트 시나리오](guide/testing-components-scenarios) &mdash; 컴포넌트의 형태에 따라 테스트하는 방법에 대해 알아보세요.
+* [어트리뷰트 디렉티브 테스트하기](guide/testing-attribute-directives) &mdash; 어트리뷰트 디렉티브를 테스트하는 방법에 대해 알아보세요.
+* [파이프 테스트하기](guide/testing-pipes) &mdash; 파이프를 테스트하는 방법에 대해 알아보세요.
+* [테스트 디버깅하기](guide/testing-attribute-directives) &mdash; 테스트 스펙을 작성할 때 발생하는 버그의 원인을 확인해 보세요.
+* [유틸리티 API 테스트하기](guide/testing-utility-apis) &mdash; Angular가 제공하는 테스트 기능에 대해 알아보세요.

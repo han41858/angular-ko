@@ -13,6 +13,12 @@ For an in-depth introduction to issues and techniques for designing accessible a
 
 This page discusses best practices for designing Angular applications that
 work well for all users, including those who rely on assistive technologies.
+
+<div class="alert is-helpful">
+
+  For the sample app that this page describes, see the <live-example></live-example>.
+
+</div>
 -->
 웹은 다양한 사람들이 사용하며 이중에는 시각이나 신체가 불편한 사람이 있을 수 있습니다.
 웹 생태계가 발전하면서 이들을 도울 수 있는 기술도 발전하고 있어서 웹에서 겪을 수 있는 불편함은 나날이 개선되고 있습니다.
@@ -22,7 +28,7 @@ work well for all users, including those who rely on assistive technologies.
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+이 문서에서 설명하는 예제 앱은 <live-example></live-example>에서 직접 실행하거나 다운받아 확인할 수 있습니다.
 
 </div>
 
@@ -273,7 +279,10 @@ router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
 -->
 * [Codelyzer](http://codelyzer.com/rules/) - 접근성 표준을 달성하기 위해 Lint 규칙을 활용해 보세요.
 
+<!--
 Books
+-->
+도서
 
 * "A Web for Everyone: Designing Accessible User Experiences", Sarah Horton and Whitney Quesenbery
 

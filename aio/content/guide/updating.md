@@ -32,6 +32,7 @@ _AngularJS_ 는 v1.x 버전의 Angular를 의미합니다.
 
 
 {@a announce}
+
 <!--
 ## Getting notified of new releases
 -->
@@ -42,7 +43,9 @@ To be notified when new releases are available, follow [@angular](https://twitte
 -->
 Angular 버전이 새로 나오는 정보를 얻으려면 Twitter에서 [@angular](https://twitter.com/angular "@angular on Twitter") 계정을 팔로우하거나 [Angular 블로그](https://blog.angular.io "Angular blog")를 구독하면 됩니다.
 
+
 {@a learn}
+
 <!--
 ## Learning about new features
 -->
@@ -60,6 +63,7 @@ Angular 버전이 새로 나오면서 변경된 것 중 가장 중요한 내용�
 
 
 {@a checking-version-app}
+
 <!--
 ## Checking your version of Angular
 -->
@@ -70,22 +74,27 @@ To check your app's version of Angular: From within your project directory, use 
 -->
 애플리케이션이 현재 사용하는 Angular 버전을 확인하려면 프로젝트 폴더에서 `ng version` 명령을 실행하면 됩니다.
 
+
 {@a checking-version-angular}
+
 <!--
 ## Finding the current version of Angular
 -->
 ## Angular 최신버전 찾기
 
+<!--
 The most recent stable released version of Angular appears in the [Angular documentation](https://angular.io/docs "Angular documentation") at the bottom of the left side navigation. For example, `stable (v5.2.9)`.
 
 You can also find the most current version of Angular by using the CLI command [`ng update`](cli/update). By default, [`ng update`](cli/update)(without additional arguments) lists the updates that are available to you.
 -->
-Angular 안정 버전 중에서 가장 최신 버전은 [Angular 가이드 문서](https://angular.io/docs "Angular documentation") 모든 페이지의 왼쪽에 있는 네비게이션에 `stable (v7.2.0)`과 같이 표시됩니다.
+Angular 안정 버전 중에서 가장 최신 버전은 [Angular 가이드 문서](https://angular.io/docs "Angular documentation") 모든 페이지의 왼쪽에 있는 네비게이션에 `stable (v11.1.0)`과 같이 표시됩니다.
 
 Angular 최신 버전은 Angular CLI 명령 [`ng update`](cli/update)를 실행해도 확인할 수 있습니다.
 기본적으로 [`ng update`](cli/update)(without additional arguments)를 옵션 없이 실행하면 현재 설치된 Angular 라이브러리 버전 중에서 업데이트할 수 있는 라이브러리 목록을 표시합니다.
 
+
 {@a updating}
+
 <!--
 ## Updating your environment and apps
 -->
@@ -112,7 +121,9 @@ Angular는 라이브러리 업데이트를 쉽게 할 수 있도록 [Angular Upd
 릴리즈 버전이 바뀌면서 변경되는 코드의 양은 [Angular의 버전 정책과 릴리즈](guide/releases#versioning "Angular Release Practices, Versioning")를 통해 예상해볼 수 있습니다.
 이 문서는 업데이트 방법에 대해서도 안내합니다.
 
+
 {@a resources}
+
 <!--
 ## Resource summary
 -->
