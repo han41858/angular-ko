@@ -577,7 +577,7 @@
             {
               "url": "guide/testing-services",
               "//title": "Testing Services",
-              "title": "서비스 테스트",
+              "title": "서비스 테스트하기",
               "//tooltip": "How to test services.",
               "tooltip": "서비스를 테스트하는 방법에 대해 알아보세요."
             },
@@ -605,14 +605,14 @@
             {
               "url": "guide/testing-pipes",
               "//title": "Testing Pipes",
-              "title": "파이프 테스트",
+              "title": "파이프 테스트하기",
               "//tooltip": "Writing tests for pipes.",
               "tooltip": "파이프를 테스트하는 방법에 대해 알아보세요."
             },
             {
               "url": "guide/test-debugging",
               "//title": "Debugging Tests",
-              "title": "디버깅 테스트",
+              "title": "테스트 디버깅하기",
               "//tooltip": "How to debug tests.",
               "tooltip": "디버그 테스트는 어떻게 하는 것인지 확인해보세요."
             },
