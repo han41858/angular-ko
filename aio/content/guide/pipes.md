@@ -885,7 +885,7 @@ The built-in [JsonPipe](api/common/JsonPipe "API description for JsonPipe") prov
 이 내용을 확인해 봅시다:
 
 * `fetch-json.pipe.ts` 파일에 `fetch` 파이프를 구현합니다.
-* 파이프를 사용해서 요청을 보내는 컴포넌트는 `hero-list.component.ts` 입니다. 이 컴포넌트 템플릿은 `heroes.json` 파일에서 히어로 목록을 파이프로 불러오는 코드가 두 번 사용되었는데, 두번째 사용된 코드에는 `fetch` 파이와 기본 파이프 `JsonPipe`를 사용해서 데이터를 JSON 형식으로 화면에 표시합니다.
+* 파이프를 사용해서 요청을 보내는 컴포넌트는 `hero-list.component.ts` 입니다. 이 컴포넌트 템플릿은 `heroes.json` 파일에서 히어로 목록을 파이프로 불러오는 코드가 두 번 사용되었는데, 두번째 사용된 코드에는 `fetch` 파이프와 기본 파이프 `JsonPipe`를 사용해서 데이터를 JSON 형식으로 화면에 표시합니다.
 
 <code-tabs>
   <code-pane
