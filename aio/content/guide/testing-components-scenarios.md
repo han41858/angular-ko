@@ -1,5 +1,9 @@
+<!--
 # Component testing scenarios
+-->
+# 컴포넌트 테스트 시나리오
 
+<!--
 This guide explores common component testing use cases.
 
 <div class="alert is-helpful">
@@ -9,9 +13,24 @@ This guide explores common component testing use cases.
   For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
 
 </div>
+-->
+이 문서에서는 컴포넌트를 다양하게 테스트하는 방법에 대해 알아봅시다.
 
+<div class="alert is-helpful">
+
+이 문서에서 다루는 예제 앱은 <live-example name="testing" embedded-style noDownload>sample app</live-example>에서 확인할 수 있습니다.
+
+이 문서에서 설명하는 테스트 기능은 <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>에서 확인할 수 있습니다.
+
+</div>
+
+
+<!--
 ## Component binding
+-->
+## 컴포넌트 바인딩
 
+<!--
 In the example app, the `BannerComponent` presents static title text in the HTML template.
 
 After a few changes, the `BannerComponent` presents a dynamic title by binding to
@@ -24,9 +43,23 @@ the component's `title` property like this.
 
 As minimal as this is, you decide to add a test to confirm that component
 actually displays the right content where you think it should.
+-->
+예제 앱에서 `BannerComponent` 템플릿에는 텍스트가 하나 있는데, `title` 프로퍼티는 프로퍼티 바인딩되어 있기 때문에 동적으로 변경될 수 있습니다.
 
+<code-example
+  path="testing/src/app/banner/banner.component.ts"
+  region="component"
+  header="app/banner/banner.component.ts"></code-example>
+
+이 컴포넌트를 가장 간단하게 테스트하려면 컴포넌트로 바인딩된 문자열이 실제로 표시되는지 확인하면 됩니다.
+
+
+<!--
 #### Query for the _&lt;h1&gt;_
+-->
+#### _&lt;h1&gt;_ 쿼리하기
 
+<!--
 You'll write a sequence of tests that inspect the value of the `<h1>` element
 that wraps the _title_ property interpolation binding.
 
@@ -37,11 +70,25 @@ and assign it to the `h1` variable.
   path="testing/src/app/banner/banner.component.spec.ts"
   region="setup"
   header="app/banner/banner.component.spec.ts (setup)"></code-example>
+-->
+_title_ 프로퍼티가 제대로 문자열 바인딩 되었는지 확인하려면 `<h1>` 엘리먼트의 값을 검사하면 됩니다.
+
+그러면 `beforeEach()`에서 표준 HTML `querySelector`를 사용해서 `h1` 엘리먼트를 찾으면 됩니다.
+
+<code-example
+  path="testing/src/app/banner/banner.component.spec.ts"
+  region="setup"
+  header="app/banner/banner.component.spec.ts (환경설정)"></code-example>
+
 
 {@a detect-changes}
 
+<!--
 #### _createComponent()_ does not bind data
+-->
+#### _createComponent()_ 는 데이터를 바인딩하지 않습니다.
 
+<!--
 For your first test you'd like to see that the screen displays the default `title`.
 Your instinct is to write a test that immediately inspects the `<h1>` like this:
 
@@ -66,9 +113,35 @@ The `TestBed.createComponent` does _not_ trigger change detection; a fact confir
 
 <code-example
   path="testing/src/app/banner/banner.component.spec.ts" region="test-w-o-detect-changes"></code-example>
+-->
+이제 `title` 프로퍼티에 할당된 문자열이 제대로 표시되는지 확인해 보려고 합니다.
+`<h1>` 엘리먼트를 검사하는 코드를 이렇게 작성해볼 수 있습니다:
+
+<code-example
+  path="testing/src/app/banner/banner.component.spec.ts"
+  region="expect-h1-default-v1">
+</code-example>
+
+하지만 이 테스트는 이런 메시지를 출력하면서 실패합니다:
+
+```javascript
+expected '' to contain 'Test Tour of Heroes'.
+```
+
+데이터 바인딩은 Angular가 **변화를 감지(change detection)** 했을 때 발생합니다.
+
+실제 운영환경에서는 Angular가 컴포넌트를 생성하거나 사용자가 키를 입력했을 때, AJAX와 같은 비동기 작업이 끝났을 때 변화 감지 로직이 자동으로 실행됩니다.
+
+하지만 `TestBed.createComponent` 만으로는 변화 감지 로직을 시작되지 않습니다.
+그래서 지금 시점에는 `<h1>` 엘리먼트의 값은 빈 문자열입니다:
+
+<code-example
+  path="testing/src/app/banner/banner.component.spec.ts" region="test-w-o-detect-changes"></code-example>
+
 
 #### _detectChanges()_
 
+<!--
 You must tell the `TestBed` to perform data binding by calling `fixture.detectChanges()`.
 Only then does the `<h1>` have the expected title.
 
@@ -87,11 +160,35 @@ Here's another test that changes the component's `title` property _before_ calli
   path="testing/src/app/banner/banner.component.spec.ts"
   region="after-change">
 </code-example>
+-->
+데이터를 바인딩하려면 `fixture.detectChanges()` 를 실행해야 합니다.
+이 메서드를 실행하고 나면 `<h1>` 엘리먼트에 컴포넌트 클래스에 있는 문자열이 바인딩되는 것을 확인할 수 있습니다.
+
+<code-example
+  path="testing/src/app/banner/banner.component.spec.ts"
+  region="expect-h1-default">
+</code-example>
+
+변화 감지 로직을 수동으로 시작하는 것은 더 나은 활용도를 위해 의도된 것입니다.
+변화 감지 로직은 자동이 실행되지 않기 때문에 개발자가 데이터가 바인딩되기 전 상태를 검사할 수 있으며, [라이프싸이클 후킹 메서드](guide/lifecycle-hooks)가 실행되면 데이터가 어떻게 변경되는지 원하는 시점마다 확인할 수 있습니다.
+
+`title` 프로퍼티는 이렇게 테스트할 수도 있습니다.
+
+<code-example
+  path="testing/src/app/banner/banner.component.spec.ts"
+  region="after-change">
+</code-example>
+
 
 {@a auto-detect-changes}
+{@a automatic-change-detection}
 
+<!--
 #### Automatic change detection
+-->
+#### 변화 감지 로직을 자동으로 실행하기
 
+<!--
 The `BannerComponent` tests frequently call `detectChanges`.
 Some testers prefer that the Angular test environment run change detection automatically.
 
@@ -123,13 +220,49 @@ the samples in this guide _always call_ `detectChanges()` _explicitly_.
 There is no harm in calling `detectChanges()` more often than is strictly necessary.
 
 </div>
+-->
+지금까지 작성한 테스트 코드에서는 `detectChanges`를 계속해서 호출해야 합니다.
+하지만 상황에 따라 변화 감지 로직을 자동으로 실행하는 것이 좋다는 개발자도 있습니다.
+
+이 동작은 `TestBed`를 설정할 때 `ComponentFixtureAutoDetect` 프로바이더를 지정하면 됩니다.
+먼저 테스트 라이브러리에서 이 심볼을 로드합니다:
+
+<code-example path="testing/src/app/banner/banner.component.detect-changes.spec.ts" region="import-ComponentFixtureAutoDetect" header="app/banner/banner.component.detect-changes.spec.ts (심볼 로드하기)"></code-example>
+
+그리고 테스트 모듈 설정의 `providers` 배열에 이 심볼을 추가합니다:
+
+<code-example path="testing/src/app/banner/banner.component.detect-changes.spec.ts" region="auto-detect" header="app/banner/banner.component.detect-changes.spec.ts (변화 감지 자동으로 실행하기)"></code-example>
+
+이 설정에 맞게 테스트 코드를 작성해보면 이렇습니다.
+
+<code-example path="testing/src/app/banner/banner.component.detect-changes.spec.ts" region="auto-detect-tests" header="app/banner/banner.component.detect-changes.spec.ts (변화 감지가 자동으로 동작하는 테스트 코드)"></code-example>
+
+변화 감지 로직이 자동으로 실행되면 첫번째 테스트 코드처럼 아주 간단한 테스트 코드를 작성할 수 있습니다.
+
+그리고 두번째 테스트 코드와 세번째 테스트 코드를 보면 이 환경설정의 한계를 확인할 수 있습니다.
+Angular 테스트 환경에서는 컴포넌트의 `title` 값이 변경된 것을 직접 감지할 수 없습니다.
+`ComponentFixtureAutoDetect` 서비스는 프라미스(Promise)가 완료되거나 타이머 이벤트, DOM 이벤트와 같은 _비동기 작업_ 에만 반응합니다.
+그래서 컴포넌트 프로퍼티를 직접 수정하면 이 수정사항은 화면에 반영되지 않습니다.
+이런 경우에는 변화 감지가 필요한 시점에 `fixture.detectChanges()`를 직접 실행해주면 됩니다.
+
+<div class="alert is-helpful">
+
+이 문서에서는 변화 감지 로직이 자동으로 실행되는 것이 고민하는 대신 _명시적으로_ `detectChanges()`를 실행하는 방식을 사용합니다.
+`detectChanges()`는 꼭 필요한 상황 외에 더 실행하더라도 아무 문제 없습니다.
+</div>
+
 
 <hr>
 
+
 {@a dispatch-event}
 
+<!--
 #### Change an input value with _dispatchEvent()_
+-->
+#### _dispatchEvent()_ 로 입력값 변경하기
 
+<!--
 To simulate user input, you can find the input element and set its `value` property.
 
 You will call `fixture.detectChanges()` to trigger Angular's change detection.
@@ -142,11 +275,29 @@ _Then_ you call `detectChanges()`.
 The following example demonstrates the proper sequence.
 
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="title-case-pipe" header="app/hero/hero-detail.component.spec.ts (pipe test)"></code-example>
+-->
+사용자가 입력하는 것을 시뮬레이션하려면 입력 엘리먼트를 찾아서 이 엘리먼트의 `value` 프로퍼티 값을 설정하면 됩니다.
+
+그리고 `fixture.detectChanges()` 를 실행하면 Angular 변화 감지 로직을 시작할 수 있습니다.
+하지만 이 과정은 꼭 필요한 단계가 하나 빠졌습니다.
+
+Angular는 입력 엘리먼트의 `value` 프로퍼티 값이 변경된 것을 알 수 없습니다.
+그래서 `dispatchEvent()`를 실행해서 엘리먼트에서 `input` 이벤트가 발생했다는 것을 알려야 Angular가 프로퍼티 값이 변경된 것을 확인할 수 있습니다.
+
+아래 테스트 코드처럼 작성하면 됩니다.
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="title-case-pipe" header="app/hero/hero-detail.component.spec.ts (파이프 테스트)"></code-example>
+
 
 <hr>
 
-## Component with external files
 
+<!--
+## Component with external files
+-->
+## 외부 파일을 사용하는 컴포넌트
+
+<!--
 The `BannerComponent` above is defined with an _inline template_ and _inline css_, specified in the `@Component.template` and `@Component.styles` properties respectively.
 
 Many components specify _external templates_ and _external css_ with the
@@ -177,10 +328,38 @@ You get this test failure message when the runtime environment
 compiles the source code _during the tests themselves_.
 
 To correct the problem, call `compileComponents()` as explained [below](#compile-components).
+-->
+이전 섹션에서 살펴본 `BannerComponent`는 `@Component.template`과 `@Component.styles` 프로퍼티를 사용해서 _인라인 템플릿_ 과 _인라인 CSS_ 로 구성되어 있습니다.
+
+하지만 컴포넌트는 대부분 `@Component.templateUrl`과 `@Component.styleUrls`를 사용해서 _별도 템플릿_ 파일과 _별도 CSS_ 파일로 구성됩니다.
+
+<code-example
+  path="testing/src/app/banner/banner-external.component.ts"
+  region="metadata"
+  header="app/banner/banner-external.component.ts (메타데이터)"></code-example>
+
+이렇게 구현하면 Angular가 컴포넌트를 컴파일 할 때 외부에서 해당 파일을 불러옵니다.
+
+Angular CLI로 `ng test` 명령을 사용한다면 _테스트가 실행되기 전에 앱이 컴파일되기 때문에_ 아무런 문제가 없습니다.
+
+하지만 **Angular CLI를 사용하지 않는 환경** 에서는 문제가 발생할 수 있습니다.
+실제로 `BannerComponent` 테스트 코드를 [plunker](https://plnkr.co/) 환경에서 실행한다면 이런 오류가 발생합니다:
+
+<code-example language="sh" class="code-shell" hideCopy>
+Error: This test module uses the component BannerComponent
+which is using a "templateUrl" or "styleUrls", but they were never compiled.
+Please call "TestBed.compileComponents" before your test.
+</code-example>
+
+이 문제를 해결하려면 [아래](#compile-components)에서 설명하는 대로 `compileComponents()` 메서드를 실행하면 됩니다.
+
 
 {@a component-with-dependency}
 
+<!--
 ## Component with a dependency
+-->
+## 의존성 객체가 주입되는 컴포넌트
 
 Components often have service dependencies.
 
