@@ -747,6 +747,7 @@ value becomes available. The test must become _asynchronous_.
 -->
 #### _fakeAsync()_ 로 비동기 테스트하기
 
+<!--
 To use `fakeAsync()` functionality, you must import `zone.js/dist/zone-testing` in your test setup file.
 If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
 
@@ -773,11 +774,44 @@ Limitation: The `fakeAsync()` function won't work if the test body makes an `XML
 XHR calls within a test are rare, but if you need to call XHR, see [`waitForAsync()`](#waitForAsync), below.
 
 </div>
+-->
+`fakeAsync()` 기능을 사용하려면 테스트 환경설정 파일에서 `zone.js/dist/zone-testing` 라이브러리를 로드해야 합니다.
+그리고 Angular CLI로 프로젝트를 생성했다면 `src/test.ts` 파일에 `zone-testing`이 이미 추가되어 있습니다.
+
+아래 코드는 서비스가 `ErrorObservable`을 반환했을 때 에러를 처리하는 테스트 코드입니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.spec.ts"
+  region="error-test">
+</code-example>
+
+이 코드에서 `it()` 함수가 받는 인자의 형태는 이렇습니다.
+
+```javascript
+fakeAsync(() => { /* 테스트 코드 */ })
+```
+
+`fakeAsync()` 함수를 활용하면 테스트 코드가 `fakeAsync 테스트 존` 안에서 실행되기 때문에 코드를 동기 방식으로 작성할 수 있습니다.
+그리고 테스트 코드도 동기 방식으로 실행되는 것처럼 보입니다.
+코드 실행 흐름을 헷갈리게 만드는 `Promise.then()`와 같은 문법은 사용하지 않아도 됩니다.
+
+<div class="alert is-helpful">
+
+한계: `fakeAsync()` 함수 안에서 `XMLHttpRequest` (XHR)를 활용하는 코드는 제대로 동작하지 않습니다.
+테스트 코드에서 XHR 요청을 실제로 보내는 경우는 거의 없습니다.
+실제 요청을 보내야 한다면 [`waitForAsync()`](#waitForAsync) 섹션을 참고하세요.
+
+</div>
+
 
 {@a tick}
 
+<!--
 #### The _tick()_ function
+-->
+#### _tick()_ 함수
 
+<!--
 You do have to call [tick()](api/core/testing/tick) to advance the (virtual) clock.
 
 Calling [tick()](api/core/testing/tick) simulates the passage of time until all pending asynchronous activities finish.
@@ -792,9 +826,28 @@ The [tick()](api/core/testing/tick) function accepts milliseconds and tickOption
 
 The [tick()](api/core/testing/tick) function is one of the Angular testing utilities that you import with `TestBed`.
 It's a companion to `fakeAsync()` and you can only call it within a `fakeAsync()` body.
+-->
+[tick()](api/core/testing/tick) 함수는 (가상) 시계를 감는 용도로 사용합니다.
+
+그래서 [tick()](api/core/testing/tick) 함수를 실행하면 다음 비동기 작업이 있는 시점까지 시간이 지난 것으로 간주할 수 있습니다.
+위 섹션에서 다룬 코드에서는 에러가 처리되는 `setTimeout()` 시점으로 이동합니다.
+
+[tick()](api/core/testing/tick) 함수는 밀리초 단위 숫자나 `tickOptions` 객체를 인자로 받아서 원하는 시간 만큼 이동할 수 있으며, 인자 없이 사용하면 0이 사용됩니다.
+그래서 아래 코드처럼 `fakeAsync()` 안에서 `setTimeout(fn, 100)`을 사용한 후에 `tick()`을 실행하면 타이머 콜백 함수를 실행할 수 있습니다.
+`tickOptions`는 옵션 객체이며 `processNewMacroTasksSynchronously` 프로퍼티를 지정할 수 있습니다.
+이 옵션의 기본값은 `true`이고, `true`를 사용하면 다음 매크로 태스크를 즉시 실행합니다.
+
+<code-example
+  path="testing/src/app/demo/async-helper.spec.ts"
+  region="fake-async-test-tick">
+</code-example>
+
+[tick()](api/core/testing/tick) 함수는 `TestBed` 라이브러리가 제공하는 함수 중 하나이며 `fakeAsync()` 안에서만 사용할 수 있습니다.
+
 
 #### tickOptions
 
+<!--
 <code-example
   path="testing/src/app/demo/async-helper.spec.ts"
   region="fake-async-test-tick-new-macro-task-sync">
@@ -808,18 +861,50 @@ In this example, we have a new macro task (nested setTimeout), by default, when 
 </code-example>
 
 And in some case, we don't want to trigger the new macro task when ticking, we can use `tick(milliseconds, {processNewMacroTasksSynchronously: false})` to not invoke new macro task.
+-->
+<code-example
+  path="testing/src/app/demo/async-helper.spec.ts"
+  region="fake-async-test-tick-new-macro-task-sync">
+</code-example>
 
+위 예제에서 `setTimeout()` 안에는 또다른 매크로 태스크(setTimeout)이 있는데, `setTimeout` 밖에서 `tick` 함수를 실행하면 `setTimeout` 콜백과 그 안쪽에 있는 `setTimeout` 콜백이 동시에 실행됩니다.
+
+<code-example
+  path="testing/src/app/demo/async-helper.spec.ts"
+  region="fake-async-test-tick-new-macro-task-async">
+</code-example>
+
+상황에 따라 원하는 타이머만 실행하려면 `tick(밀리초, {processNewMacroTasksSynchronously: false})`라고 실행하면 됩니다.
+
+
+<!--
 #### Comparing dates inside fakeAsync()
+-->
+#### `fakeAsync()` 안에서 시간 확인하기
 
+<!--
 `fakeAsync()` simulates passage of time, which allows you to calculate the difference between dates inside `fakeAsync()`.
 
 <code-example
   path="testing/src/app/demo/async-helper.spec.ts"
   region="fake-async-test-date">
 </code-example>
+-->
+`fakeAsync()`는 시간이 경과하는 것을 시뮬레이션하는 함수입니다.
+그래서 아래 코드처럼 구현하면 `fakeAsync()` 안에서 얼마나 시간이 흘렀는지 확인할 수 있습니다.
 
+<code-example
+  path="testing/src/app/demo/async-helper.spec.ts"
+  region="fake-async-test-date">
+</code-example>
+
+
+<!--
 #### jasmine.clock with fakeAsync()
+-->
+#### jasmine.clock과 함께 사용하기
 
+<!--
 Jasmine also provides a `clock` feature to mock dates. Angular automatically runs tests that are run after
 `jasmine.clock().install()` is called inside a `fakeAsync()` method until `jasmine.clock().uninstall()` is called. `fakeAsync()` is not needed and throws an error if nested.
 
@@ -836,17 +921,53 @@ import 'zone.js/dist/zone-testing';
   path="testing/src/app/demo/async-helper.spec.ts"
   region="fake-async-test-clock">
 </code-example>
+-->
+Jasmine도 시간을 조작하는 `clock` 기능을 제공합니다.
+Angular는 `fakeAsync()` 함수 안에서 `jasmine.clock().install()`이 실행되면 `jasmine.clock().uninstall()`이 실행되기 전까지 테스트 코드의 시간을 자동으로 진행합니다.
+`fakeAsync()`와 비슷한 동작을 하기 때문에 `fakeAsync()`를 명시적으로 실행할 필요는 없으며, `fakeAsync()`가 필요한 상황이라면 에러가 발생합니다.
 
+이 기능은 기본적으로 비활성화되어 있습니다.
+이 기능을 활성화하려면 `zone-testing`을 로드하기 전에 전역 플래그 값을 지정해야 합니다.
+
+Angular CLI로 생성한 프로젝트라면 `src/test.ts` 파일에 이렇게 지정하면 됩니다.
+
+```
+(window as any)['__zone_symbol__fakeAsyncPatchLock'] = true;
+import 'zone.js/dist/zone-testing';
+```
+
+<code-example
+  path="testing/src/app/demo/async-helper.spec.ts"
+  region="fake-async-test-clock">
+</code-example>
+
+
+<!--
 #### Using the RxJS scheduler inside fakeAsync()
+-->
+#### `fakeAsync()` 안에서 RxJS 스케쥴러 사용하기
 
+<!--
 You can also use RxJS scheduler in `fakeAsync()` just like using `setTimeout()` or `setInterval()`, but you need to import `zone.js/dist/zone-patch-rxjs-fake-async` to patch RxJS scheduler.
 <code-example
   path="testing/src/app/demo/async-helper.spec.ts"
   region="fake-async-test-rxjs">
 </code-example>
+-->
+RxJS 스케쥴러는 `fakeAsync()` 안에서 `setTimeout()`이나 `setInterval()`과 비슷하게 사용할 수 있지만, RxJS 스케쥴러를 사용하려면 `zone.js/dist/zone-patch-rxjs-fake-async` 라이브러리를 추가로 로드해야 합니다.
 
+<code-example
+  path="testing/src/app/demo/async-helper.spec.ts"
+  region="fake-async-test-rxjs">
+</code-example>
+
+
+<!--
 #### Support more macroTasks
+-->
+#### 매크로 태스크 지원하기
 
+<!--
 By default, `fakeAsync()` supports the following macro tasks.
 
 - `setTimeout`
@@ -886,10 +1007,54 @@ Note that in order to make the `<canvas>` element Zone.js-aware in your app, you
   path="testing/src/app/shared/canvas.component.ts"
   region="import-canvas-patch">
 </code-example>
+-->
+`fakeAsync()` 안에서는 이런 매크로 태스크를 지원합니다.
+
+- `setTimeout`
+- `setInterval`
+- `requestAnimationFrame`
+- `webkitRequestAnimationFrame`
+- `mozRequestAnimationFrame`
+
+하지만 `HTMLCanvasElement.toBlob()`를 실행하면 _"Unknown macroTask scheduled in fake async test"_ 에러가 발생합니다.
+
+<code-tabs>
+  <code-pane
+    header="src/app/shared/canvas.component.spec.ts (테스트 실패)"
+    path="testing/src/app/shared/canvas.component.spec.ts"
+    region="without-toBlob-macrotask">
+  </code-pane>
+  <code-pane
+    header="src/app/shared/canvas.component.ts"
+    path="testing/src/app/shared/canvas.component.ts"
+    region="main">
+  </code-pane>
+</code-tabs>
+
+이런 코드를 사용하려면 `beforeEach()` 함수에 매크로 태스크를 직접 정의해야 합니다:
+
+<code-example
+  header="src/app/shared/canvas.component.spec.ts (일부)"
+  path="testing/src/app/shared/canvas.component.spec.ts"
+  region="enable-toBlob-macrotask">
+</code-example>
+
+`<canvas>` 엘리먼트와 같이 Zone.js와 관련된 엘리먼트를 테스트하려면 `zone-patch-canvas` 패치를 추가해야 할 수도 있습니다.
+이 패치는 적용하려는 곳이 여러 곳이면 `polyfills.ts` 파일에, 파일 하나에만 적용하려면 `<canvas>`가 사용된 파일에 적용하면 됩니다:
+
+<code-example
+  header="src/polyfills.ts or src/app/shared/canvas.component.ts"
+  path="testing/src/app/shared/canvas.component.ts"
+  region="import-canvas-patch">
+</code-example>
 
 
+<!--
 #### Async observables
+-->
+#### 비동기 옵저버블
 
+<!--
 You might be satisfied with the test coverage of these tests.
 
 However, you might be troubled by the fact that the real service doesn't quite behave this way.
@@ -904,9 +1069,27 @@ from the `getQuote()` spy like this.
   path="testing/src/app/twain/twain.component.spec.ts"
   region="async-setup">
 </code-example>
+-->
+테스트 코드에 대한 테스트 커버리지 정보가 함께 제공되면 더 나을 수 있습니다.
 
+하지만 실제 서비스 객체를 사용하면서 이런 기능을 구현하기는 쉽지 않습니다.
+실세 서비스 객체는 리모트 서버로 HTTP 요청을 보낼 수도 있기 때문입니다.
+서버로 HTTP 요청을 보내면 응답을 받기까지 시간이 필요하기 때문에 이전에 살펴봤던 두 테스트 코드처럼 즉시 완료할 수 없습니다.
+
+그렇다면 비동기로 동작하는 옵저버블을 흉내내기 위해 `getQuote()` 스파이를 만들어서 사용하면 됩니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.spec.ts"
+  region="async-setup">
+</code-example>
+
+
+<!--
 #### Async observable helpers
+-->
+#### 비동기 옵저버블 헬퍼
 
+<!--
 The async observable was produced by an `asyncData` helper.
 The `asyncData` helper is a utility function that you'll have to write yourself, or you can copy this one from the sample code.
 
@@ -933,9 +1116,38 @@ There's a similar helper for producing an async error.
   path="testing/src/testing/async-observable-helpers.ts"
   region="async-error">
 </code-example>
+-->
+`asyncData` 헬퍼 함수는 비동기 옵저버블을 만들어서 반환합니다.
+그렇다면 이 헬퍼 함수는 개발자가 원하는 대로 만들어서 사용해도 되고 아래 코드를 기반으로 활용해도 됩니다.
 
+<code-example
+  path="testing/src/testing/async-observable-helpers.ts"
+  region="async-data"
+  header="testing/async-observable-helpers.ts">
+</code-example>
+
+이 헬퍼 함수는 JavaScript 엔진의 다음 실행 싸이클에 `data` 값을 옵저버블로 보냅니다.
+
+[RxJS `defer()` 연산자](http://reactivex.io/documentation/operators/defer.html)는 팩토리 함수를 인자로 받아서 프라미스나 옵저버블을 반환합니다.
+그리고 누군가 이 옵저버블을 반환하면 새로운 옵저버블이 생성됩니다.
+
+`defer()` 연산자는 `Promise.resolve()`를 옵저버블로 변환하며 `HttpClient`와 비슷하게 데이터를 하나 전달하고 종료됩니다.
+데이터를 받은 구독자들도 모두 구독이 해지됩니다.
+
+비동기 에러를 발생시키는 헬퍼는 이렇게 구현합니다.
+
+<code-example
+  path="testing/src/testing/async-observable-helpers.ts"
+  region="async-error">
+</code-example>
+
+
+<!--
 #### More async tests
+-->
+#### 비동기 더 활용하기
 
+<!--
 Now that the `getQuote()` spy is returning async observables,
 most of your tests will have to be async as well.
 
@@ -954,11 +1166,33 @@ To flush the first quote from the observable, you call [tick()](api/core/testing
 Then call `detectChanges()` to tell Angular to update the screen.
 
 Then you can assert that the quote element displays the expected text.
+-->
+이제 `getQuote()` 스파이는 비동기 옵저버블을 반환하기 때문에, 테스트 코드도 비동기로 실행되어야 합니다.
+
+그래서 실제 운영 환경에서 동작하는 흐름과 동일하게 실행하기 위해 `fakeAsync()`를 사용해야 합니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.spec.ts"
+  region="fake-async-test">
+</code-example>
+
+`ngOnInit()`이 실행된 후에는 명언이 표시되는 엘리먼트가 `'...'`로 표시됩니다.
+아직 첫번째 응답은 받지 못했습니다.
+
+이제 옵저버블로 전달되는 첫번째 명언을 표시하려면 [tick()](api/core/testing/tick)을 실행하면 됩니다.
+그리고 `detectChanges()`를 실행하면 Angular가 화면을 갱신합니다.
+
+이제 화면에 표시되는 엘리먼트가 원하는 문구가 맞는지 확인하면 됩니다.
+
 
 {@a waitForAsync}
 
+<!--
 #### Async test with _waitForAsync()_
+-->
+#### `waitForAsync()` 로 비동기 테스트하기
 
+<!--
 To use `waitForAsync()` functionality, you must import `zone.js/dist/zone-testing` in your test setup file.
 If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
 
@@ -985,11 +1219,38 @@ But the test's asynchronous nature is revealed by the call to `fixture.whenStabl
 which breaks the linear flow of control.
 
 When using an `intervalTimer()` such as `setInterval()` in `waitForAsync()`, remember to cancel the timer with `clearInterval()` after the test, otherwise the `waitForAsync()` never ends.
+-->
+`waitForAsync()` 함수를 사용하려면 테스트 환경설정 파일에 `zone.js/dist/zone-testing`을 로드해야 합니다.
+Angular CLI로 프로젝트를 생성했다면 `src/test.ts` 파일에서 이미 `zone-testing`을 로드하고 있습니다.
+
+<div class="alert is-helpful">
+
+`TestBed.compileComponents()` 메서드([아래](#compile-components) 참고)는 JIT 컴파일 중에 외부 템플릿 파일과 CSS 파일을 읽어오기 위해 `XHR` 요청을 보냅니다.
+그래서 `compileComponents()`를 실행하기 위해 `waitForAsync()` 유틸리티를 사용해야 합니다.
+
+</div>
+
+이전에 작성했던 `fakeAsync()` 테스트 코드를 `waitForAsync()`를 활용하는 방식으로 재작성해보면 이렇습니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.spec.ts"
+  region="async-test">
+</code-example>
+
+`waitForAsync()` 유틸리티는 비동기 로직들을 자동으로 재구성해서 _비동기 테스트 존_ 안에서 실행합니다.
+그래서 Jasmine이 제공하는 `done()` 함수를 테스트 함수에 전달할 필요가 없으며 명시적으로 `done()`을 실행할 필요도 없습니다.
+
+비동기로 실행되는 코드는 `fixture.whenStable()`을 활용하면 동기 방식으로 구성할 수 있습니다.
+
+`waitForAsync()` 안에서 `setInterval()`과 같은 타이머를 사용하면 테스트가 종료된 후에 `clearInterval()`로 타이머를 종료해야 합니다.
+이 타이머를 종료하지 않으면 `waitForAsync()`는 종료되지 않습니다.
+
 
 {@a when-stable}
 
 #### _whenStable_
 
+<!--
 The test must wait for the `getQuote()` observable to emit the next quote.
 Instead of calling [tick()](api/core/testing/tick), it calls `fixture.whenStable()`.
 
@@ -999,11 +1260,21 @@ In this example, the task queue becomes empty when the observable emits the firs
 
 The test resumes within the promise callback, which calls `detectChanges()` to
 update the quote element with the expected text.
+-->
+`getQuote()` 테스트 코드는 옵저버블로 데이터가 전달될 때까지 계속 기다립니다.
+이 때 [tick()](api/core/testing/tick)를 실행해도 되지만 `fixture.whenStable()`를 활용해도 됩니다.
+
+`fixture.whenStable()`은 JavaScript 엔진의 태스크 큐가 비는 시점에 프라미스가 완료된 상태를 반환합니다.
+이 예제에서 태스크 큐는 옵저버블로 첫번째 데이터가 전달된 후에 비게 됩니다.
+
+그러면 프라미스 콜백으로 지정된 테스트 코드가 계속 실행되면서 `detectChanges()`가 실행되고 화면에 보이는 엘리먼트의 문구를 갱신합니다.
+
 
 {@a jasmine-done}
 
 #### Jasmine _done()_
 
+<!--
 While the `waitForAsync()` and `fakeAsync()` functions greatly
 simplify Angular asynchronous testing,
 you can still fall back to the traditional technique
@@ -1037,6 +1308,34 @@ can give you that information and make assertions about the state of the view.
 <code-example
   path="testing/src/app/twain/twain.component.spec.ts"
   region="spy-done-test"></code-example>
+-->
+`waitForAsync()`와 `fakeAsync()`가 Angular에서 진행되는 비동기 테스트 코드를 아주 단순하게 만들어주기는 하지만, `it` 함수에 [`done` 콜백](https://jasmine.github.io/2.0/introduction.html#section-Asynchronous_Support)을 전달하는 기존 방식도 활용할 수 있습니다.
+
+하지만 `waitForAsync()`나 `fakeAsync()` 함수 안에서 `done()` 함수를 실행할 수는 없습니다.
+왜냐라면 `done()` 함수의 인자는 항상 `undefined`이기 때문입니다.
+
+Jasmine `done()` 함수를 직접 활용하는 경우에는 프라미스나 에러를 직접 처리해야 하며 `done()`도 적절한 시점에 실행해야 합니다.
+
+그래서 `done()`을 직접 활용하면 `waitForAsync()`나 `fakeAsync()`를 활용하는 것보다 신경쓸 내용이 많지만, `setInterval`같은 인터벌 함수를 사용하는 경우에는 이 방식을 꼭 사용해야 하는 경우도 있습니다.
+
+이전에 작성한 테스트 코드를 `done()`을 활용하는 방식으로 작성해보면 이렇습니다.
+첫번째로 살펴볼 코드는 컴포넌트의 `quote` 옵저버블 프로퍼티를 구독해서 테스트하는 코드입니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.spec.ts"
+  region="quote-done-test"></code-example>
+
+RxJS `last()` 연산자는 옵저버블이 종료되기 전까지 전달된 데이터 중 마지막 데이터를 스트림으로 보냅니다.
+그래서 `subscribe()` 콜백에서는 `detectChanges()`를 실행해서 엘리먼트의 문구를 마지막 데이터로 갱신하며, 나머지 코드는 위 코드와 비슷합니다.
+
+경우에 따라서는 의존성으로 주입된 서비스의 메서드를 어떻게 실행하고 어떤 값을 반환하며, 화면에 어떻게 반영되는지가 더 중요할 수 있습니다.
+
+가짜 `TwainService`에 `getQuote()` 스파이를 만드는 방식을 활용하면 원하는 시점에 화면이 어떤 상태가 되는지 원하는 대로 검증할 수 있습니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.spec.ts"
+  region="spy-done-test"></code-example>
+
 
 <hr>
 

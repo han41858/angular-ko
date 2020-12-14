@@ -1,8 +1,7 @@
 // #docplaster
 // #docregion import-canvas-patch
-// Import patch to make async `HTMLCanvasElement` methods (such as `.toBlob()`) Zone.js-aware.
-// Either import in `polyfills.ts` (if used in more than one places in the app) or in the component
-// file using `HTMLCanvasElement` (if it is only used in a single file).
+// 비동기 `HTMLCanvasElement` 메서드(ex. `.toBlob()`)를 지원하기 위해 패치를 로드합니다.
+// 이 패치는 `polyfills.ts` 파일이나 `HTMLCanvasElement` 파일에 적용하면 됩니다.
 import 'zone.js/dist/zone-patch-canvas';
 // #enddocregion import-canvas-patch
 // #docregion main

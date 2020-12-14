@@ -98,7 +98,7 @@ describe('Angular async helper', () => {
          nestedTimer(callback);
          expect(callback).not.toHaveBeenCalled();
          tick(0);
-         // the nested timeout will also be triggered
+         // 중첩된 setTimeout도 함께 실행됩니다.
          expect(callback).toHaveBeenCalled();
        }));
     // #enddocregion fake-async-test-tick-new-macro-task-sync
