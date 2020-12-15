@@ -1339,9 +1339,14 @@ RxJS `last()` 연산자는 옵저버블이 종료되기 전까지 전달된 데�
 
 <hr>
 
-{@a marble-testing}
-## Component marble tests
 
+{@a marble-testing}
+<!--
+## Component marble tests
+-->
+## 컴포넌트 마블 테스트
+
+<!--
 The previous `TwainComponent` tests simulated an asynchronous observable response
 from the `TwainService` with the `asyncData` and `asyncError` utilities.
 
@@ -1402,9 +1407,63 @@ you tell the `TestScheduler` to _flush_ its queue of prepared tasks like this.
 This step serves a purpose analogous to [tick()](api/core/testing/tick) and `whenStable()` in the
 earlier `fakeAsync()` and `waitForAsync()` examples.
 The balance of the test is the same as those examples.
+-->
+이전 섹션에서 살펴본 `TwainComponent` 테스트 코드는 `TwainService`에서 전달되는 비동기 옵저버블을 처리하기 위해 `asyncData`와 `asyncError` 유틸 함수를 사용했습니다.
 
+이정도 함수는 짧고 간단하기 때문에 직접 만들어서 쓰기에 문제될 정도는 아닙니다.
+하지만 보통은 이보다 복잡한 시나리오로 동작합니다.
+옵저버블로 데이터가 여러번 전달될 수 있으며 데이터가 전달되는 사이에 시간 간격이 있는 경우도 있습니다.
+그리고 옵저버블 여러 개를 활용하면서 전달되는 데이터와 에러를 다양하게 활용할 수도 있습니다.
+
+**RxJS 마블(marble) 테스트**를 활용하면 간단한 시나리오는 물론이고 복잡한 시나리오로 동작하는 옵저버블도 테스트할 수 있습니다.
+옵저버블이 동작하는 모습을 표현하는 [마블 다이어그램](http://rxmarbles.com/)을 본 적이 있을 것입니다.
+마블 테스트는 이와 비슷한 문법을 사용해서 옵저버블이 정해진 대로 동작하는지 검사하는 방식입니다.
+
+이번 섹션에서는 `TwainComponent`에 마블 테스트를 적용해 봅시다.
+
+먼저, `jasmine-marbles` npm 패키지를 설치하고 마블 테스트에 필요한 심볼을 로드합니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.marbles.spec.ts"
+  region="import-marbles"
+  header="app/twain/twain.component.marbles.spec.ts (심볼 로드하기)"></code-example>
+
+테스트 코드를 마블 테스트 방식으로 작성하면 이렇습니다:
+
+<code-example
+  path="testing/src/app/twain/twain.component.marbles.spec.ts"
+  region="get-quote-test"></code-example>
+
+Jasmine 테스트 코드는 동기 방식으로 동작한다는 것을 잊지 마세요.
+그래서 `fakeAsync()`가 사용되지 않았습니다.
+마블 테스트는 시간이 지난 것을 동기 테스트 코드 안에서 시뮬레이션하기 위해 별도 테스트 스케쥴러를 사용합니다.
+
+마블 테스트가 좋은 점은 옵저버블 스트림으로 전달되는 데이터를 시각적으로 표현할 수 있다는 것입니다.
+아래 코드는 3 [프레임](#marble-frame) (`---`) 동안 기다렸다가 데이터(`x`)를 전달하고 종료되는(`|`) [_콜드(cold)_ 옵저버블](#cold-observable)을 정의하는 코드입니다.
+두 번째 인자는 데이터가 전달되는 시점(`x`)에 실제로 전달될 데이터(`testQuote`)입니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.marbles.spec.ts"
+  region="test-quote-marbles"></code-example>
+
+그리고 마블 라이브러리는 옵저버블 관련 기능을 제공하기 때문에 `getQuote`에 스파이를 연결할 수 있습니다.
+
+마블 옵저버블을 시작할 준비가 되었다면 `TestScheduler.flush()`를 실행해서 큐에 있는 내용을 비우면 됩니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.marbles.spec.ts"
+  region="test-scheduler-flush"></code-example>
+
+지금 단계에서는 이전에 사용했던 `fakeAsync()`, `waitForAsync()`와 비슷한 용도로 [tick()](api/core/testing/tick)과 `whenStable()`를 사용했습니다.
+다른 부분은 이전에 살펴봤던 코드와 같습니다.
+
+
+<!--
 #### Marble error testing
+-->
+#### 마블 테스트 : 에러 처리
 
+<!--
 Here's the marble testing version of the `getQuote()` error test.
 
 <code-example
@@ -1423,9 +1482,32 @@ Look at the marble observable definition.
 This is a _cold_ observable that waits three frames and then emits an error,
 The hash (`#`) indicates the timing of the error that is specified in the third argument.
 The second argument is null because the observable never emits a value.
+-->
+`getQuote()` 에러 테스트 코드를 마블 테스트 방식으로 작성해보면 이렇습니다.
 
+<code-example
+  path="testing/src/app/twain/twain.component.marbles.spec.ts"
+  region="error-test"></code-example>
+
+이 테스트 코드도 `setTimeout()` 안에서 비동기로 에러가 발생하기 때문에 `fakeAsync()`와 [tick()](api/core/testing/tick)을 사용했습니다.
+
+마블 스타일로 에러 옵저버블을 정의해보면 이렇습니다.
+
+<code-example
+  path="testing/src/app/twain/twain.component.marbles.spec.ts"
+  region="error-marbles"></code-example>
+
+이 옵저버블은 3 프레임을 기다린 후에 에러를 발생시키는 _콜드_ 옵저버블입니다.
+그리고 세 번째 인자는 에러가 발생하는 시점(`#`)에 실제로 전달될 에러 객체입니다.
+두 번째 인자는 옵저버블로 전달될 데이터를 지정하지만, 이 예제에서는 데이터를 전달하지 않기 때문에 null을 지정했습니다.
+
+
+<!--
 #### Learn about marble testing
+-->
+#### 마블 테스트 활용하기
 
+<!--
 {@a marble-frame}
 A _marble frame_ is a virtual unit of testing time.
 Each symbol (`-`, `x`, `|`, `#`) marks the passing of one frame.
@@ -1442,13 +1524,36 @@ which reports router activity, is a _hot_ observable.
 RxJS marble testing is a rich subject, beyond the scope of this guide.
 Learn about it on the web, starting with the
 [official documentation](https://rxjs.dev/guide/testing/marble-testing).
+-->
+{@a marble-frame}
+_마블 프레임(marble frame)_ 은 테스트 환경에서 동작하는 가상 시간 단위입니다.
+그리고 마블 프레임에서 사용하는 개별 심볼(`-`, `x`, `|`, `#`)은 프레임 하나를 차지합니다.
+
+
+{@a cold-observable}
+_콜드_ 옵저버블은 누군가가 옵저버블을 구독하기 전까지는 데이터를 전달하지 않습니다.
+그리고 애플리케이션에서 사용하는 옵저버블 대부분은 콜드 옵저버블입니다.
+[_HttpClient_](guide/http) 메서드들도 모두 콜드 옵저버블을 반환합니다.
+
+
+_핫(hot)_ 옵저버블은 누군가 옵저버블을 구독하지 않아도 데이터를 보냅니다.
+라우터의 상태를 옵저버블로 전달하는 [_Router.events_](api/router/Router#events) 프로퍼티가 _핫_ 옵저버블입니다.
+
+RxJS 마블 테스트는 이 문서에서 다루는 내용 말고도 수많은 옵저버블 생성자를 지원합니다.
+자세한 내용은 [공식 문서](https://rxjs.dev/guide/testing/marble-testing)를 참고하세요.
+
 
 <hr>
 
+
 {@a component-with-input-output}
 
+<!--
 ## Component with inputs and outputs
+-->
+## 입출력 프로퍼티가 있는 컴포넌트
 
+<!--
 A component with inputs and outputs typically appears inside the view template of a host component.
 The host uses a property binding to set the input property and an event binding to
 listen to events raised by the output property.
@@ -1505,11 +1610,74 @@ The [discussion below](#routing-component) covers testing components that requir
 
 The immediate goal is to test the `DashboardHeroComponent`, not the `DashboardComponent`,
 so, try the second and third options.
+-->
+컴포넌트에는 입력 프로퍼티와 출력 프로퍼티가 존재하는 경우가 많습니다.
+이 컴포넌트는 호스트 엘리먼트에서 바인딩한 데이터로 프로퍼티 값을 설정하며 출력 프로퍼티로 호스트 컴포넌트에 이벤트를 보냅니다.
+
+컴포넌트를 테스트할 때는 이런 입출력 프로퍼티가 정해진 대로 바인딩되었는지 검사하는 것도 중요합니다.
+입력값이 제대로 프로퍼티에 할당되었는지, 출력 이벤트는 제대로 감지되는지 확인하는 테스트 코드를 작성하면 됩니다.
+
+이런 내용을 `DashboardHeroComponent`로 확인해 봅시다.
+이 컴포넌트는 `DashboardComponent`에서 받은 개별 히어로 데이터를 화면에 표시합니다.
+그리고 히어로 이름을 클릭하면 사용자가 선택한 히어로를 `DashboardComponent`로 보냅니다.
+
+`DashboardHeroComponent`는 `DashboardComponent` 템플릿에 이렇게 사용되었습니다:
+
+<code-example
+  path="testing/src/app/dashboard/dashboard.component.html"
+  region="dashboard-hero"
+  header="app/dashboard/dashboard.component.html (일부)"></code-example>
+
+`DashboardHeroComponent`는 `*ngFor`로 반복되면서 개별 컴포넌트마다 `hero`를 입력 프로퍼티로 전달합니다.
+그리고 `selected` 이벤트를 감지하는 방식으로 구현되었습니다.
+
+컴포넌트 전체 코드는 이렇게 구현되었습니다:
+
+{@a dashboard-hero-component}
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.ts"
+  region="component"
+  header="app/dashboard/dashboard-hero.component.ts (컴포넌트)"></code-example>
+
+이 컴포넌트는 아주 간단하지만 테스트로 다루기에는 충분합니다.
+이런 방식을 사용할 수 있습니다:
+
+- `DashboardComponent` 위에서 테스트합니다.
+- 이 컴포넌트만 단독으로 테스트합니다.
+- `DashboardComponent`를 대체한 상태로 테스트합니다.
+
+첫 번째 방식으로 진행하기 위해 `DashboardComponent`의 생성자를 확인해보면 이렇습니다:
+
+<code-example
+  path="testing/src/app/dashboard/dashboard.component.ts"
+  region="ctor"
+  header="app/dashboard/dashboard.component.ts (컴포넌트 생성자)"></code-example>
+
+`DashboardComponent`는 Angular 라우터와 `HeroService`를 의존성으로 주입받습니다.
+그래서 이 객체들은 목 객체로 대체해야 할 수 있습니다.
+실제 객체를 활용하면 테스트 코드가 복잡해집니다.
+
+
+<div class="alert is-helpful">
+
+컴포넌트를 테스트할 때 라우터를 대체하는 방법은 [아래에서 설명](#routing-component)합니다.
+
+</div>
+
+
+지금 작성하는 테스트 코드의 목적은 `DashboardHeroComponent`를 테스트하는 것이지 `DashboardComponent`를 테스트하는 것이 아닙니다.
+그러니 첫 번째 방법은 생략하고 두 번째 방법과 세 번째 방법으로 테스트 코드를 작성해 봅시다.
+
 
 {@a dashboard-standalone}
 
+<!--
 #### Test _DashboardHeroComponent_ stand-alone
+-->
+#### _DashboardHeroComponent_ 단독으로 테스트하기
 
+<!--
 Here's the meat of the spec file setup.
 
 <code-example
@@ -1539,9 +1707,41 @@ representation&mdash;something not possible with
 low cost and without resorting to much slower and more complicated end-to-end tests.
 
 </div>
+-->
+테스트 코드의 환경설정 부분은 이렇습니다.
 
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="setup"
+  header="app/dashboard/dashboard-hero.component.spec.ts (환경설정)"></code-example>
+
+이 환경설정 코드에서 히어로 데이터 `expectedHero`를 자식 컴포넌트 `hero` 프로퍼티로 어떻게 전달하는지 확인해 보세요.
+이 코드는 `DashboardComponent`가 `*ngFor` 안에서 프로퍼티를 바인딩하는 것을 대신하는 코드입니다.
+
+아래 코드는 이렇게 전달된 히어로의 이름이 템플릿에 제대로 표시되는지 확인하는 테스트 코드입니다.
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="name-test">
+</code-example>
+
+`DashboardHeroComponent`의 [템플릿](#dashboard-hero-component)은 히어로 이름을 Angular가 제공하는 `UpperCasePipe`로 전달하기 때문에 테스트 코드에서 히어로 이름을 확인할 때도 대문자로 확인합니다.
+
+
+<div class="alert is-helpful">
+
+이번 섹션에서는 [컴포넌트 클래스 테스트](guide/testing-components-basics#component-class-testing)로는 확인하기 어려운 컴포넌트의 시각 표현 부분을 테스트하는 것에 대해 다뤘습니다.
+엔드-투-엔드 테스트로 같은 내용을 검증하는 테스트 코드를 작성하는 것보다 훨씬 빠르고 간단합니다.
+
+</div>
+
+
+<!--
 #### Clicking
+-->
+#### 클릭 확인
 
+<!--
 Clicking the hero should raise a `selected` event that
 the host component (`DashboardComponent` presumably) can hear:
 
@@ -1558,11 +1758,27 @@ If the component behaves as expected, clicking the hero's element
 should tell the component's `selected` property to emit the `hero` object.
 
 The test detects that event through its subscription to `selected`.
+-->
+히어로를 클릭하면 `selected` 이벤트가 발생해야 하며 이 이벤트는 호스트 컴포넌트인 `DashboardComponent`가 받는다는 것을 테스트 코드로 작성하면 이렇습니다:
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="click-test">
+</code-example>
+
+컴포넌트의 `selected` 프로퍼티는 RxJS 동기 `Observable`과 비슷한 `EventEmitter` 객체를 반환합니다.
+이 때 호스트 컴포넌트는 이 옵저버블을 _암묵적으로_ 구독하지만 테스트 코드에서는 _명시적으로_ 구독해야 합니다.
+
+컴포넌트가 제대로 동작한다면 히어로 엘리먼트를 클릭했을 때 `selected` 프로퍼티로 `hero` 객체가 전달되어야 합니다.
+
+이벤트로 전달된 객체는 `selected` 프로퍼티를 구독한 이후에 확인할 수 있습니다.
+
 
 {@a trigger-event-handler}
 
 #### _triggerEventHandler_
 
+<!--
 The `heroDe` in the previous test is a `DebugElement` that represents the hero `<div>`.
 
 It has Angular properties and methods that abstract interaction with the native element.
@@ -1590,9 +1806,39 @@ that identifies which mouse button (if any) was pressed during the click.
 The `RouterLink` directive throws an error if the event object is missing.
 
 </div>
+-->
+위 테스트에서 사용했던 `heroDe`는 히어로 `<div>`를 의미하는 `DebugElement` 객체입니다.
 
+이 객체는 브라우저의 표준 엘리먼트와 상호작용할 수 있는 프로퍼티와 메서드를 제공합니다.
+그래서 이 테스트 코드에서는 `DebugElement.triggerEventHandler()` 함수로 클릭 이벤트를 직접 실행했습니다.
+그리고 클릭 이벤트는 `DashboardHeroComponent.click()`을 실행하도록 이벤트 바인딩되어 있습니다.
+
+`DebugElement.triggerEventHandler()` 메서드는 이벤트 이름과 전달되는 이벤트 객체를 자유롭게 선택할 수 있습니다.
+핸들러에 전달되는 이벤트 객체는 두 번째 인자로 전달합니다.
+
+결국 이 테스트 코드는 `null` 객체로 "click" 이벤트를 발생시킵니다.
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="trigger-event-handler">
+</code-example>
+
+이 테스트 코드에서는 호스트 컴포넌트의 `click()` 메서드가 이벤트 객체는 신경쓰지 않는다고 간주합시다.
+
+<div class="alert is-helpful">
+
+핸들러는 보통 이렇게 관대하지 않습니다.
+예를 들면 `RouterLink` 디렉티브는 클릭이 어떤 마우스 버튼에서 발생했는지 확인하기 위해 `button` 프로퍼티가 필요합니다.
+그래서 이런 경우에 이벤트 객체가 누락되면 에러가 발생합니다.
+
+</div>
+
+
+<!--
 #### Click the element
+-->
+#### 엘리먼트 클릭하기
 
+<!--
 The following test alternative calls the native element's own `click()` method,
 which is perfectly fine for _this component_.
 
@@ -1600,11 +1846,24 @@ which is perfectly fine for _this component_.
   path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
   region="click-test-2">
 </code-example>
+-->
+아래 코드는 `DebugElement`를 활용하는 대신 표준 엘리먼트가 제공하는 `click()` 메서드를 활용하는 코드입니다.
+_이 컴포넌트_ 는 이렇게 테스트해도 원하는 내용을 확인할 수 있습니다.
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="click-test-2">
+</code-example>
+
 
 {@a click-helper}
 
+<!--
 #### _click()_ helper
+-->
+#### _click()_ 헬퍼
 
+<!--
 Clicking a button, an anchor, or an arbitrary HTML element is a common test task.
 
 Make that consistent and easy by encapsulating the _click-triggering_ process
@@ -1636,6 +1895,38 @@ Here's the previous test, rewritten using the click helper.
   region="click-test-3"
   header="app/dashboard/dashboard-hero.component.spec.ts (test with click helper)">
 </code-example>
+-->
+버튼이나 앵커같은 HTML 엘리먼트를 클릭하는 동작은 테스트 코드에 자주 사용됩니다.
+
+그렇다면 클릭을 트리거링하는 과정을 일관되고 쉽게 사용하기 위해 이런 헬퍼 함수를 정의할 수 있습니다:
+
+<code-example
+  path="testing/src/testing/index.ts"
+  region="click-event"
+  header="testing/index.ts (클릭 헬퍼)"></code-example>
+
+첫 번째 인자는 클릭할 엘리먼트입니다.
+그리고 필요한 경우에는 두 번째 인자로 커스텀 이벤트 객체를 전달할 수 있습니다.
+기본값은 일반적으로 활용되는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button">마우스 왼쪽 버튼 이벤트 객체</a>를 사용했니다.
+
+
+<div class="alert is-important">
+
+`click()` 헬퍼 함수는 Angular가 제공하는 테스트 관련 기능이 **아닙니다**.
+이 함수는 가이드 문서에서 예제를 설명하기 위해 정의한 코드이며 모든 테스트 코드에서 이 헬퍼 함수를 사용합니다.
+이런 함수가 더 있다면 헬퍼들을 모아서 따로 구성하는 것도 좋습니다.
+
+</div>
+
+
+이전에 작성한 테스트 코드를 클릭 헬퍼를 사용하는 방식으로 수정하면 이렇습니다:
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="click-test-3"
+  header="app/dashboard/dashboard-hero.component.spec.ts (클릭 헬퍼를 사용하는 테스트 코드)">
+</code-example>
+
 
 <hr>
 
