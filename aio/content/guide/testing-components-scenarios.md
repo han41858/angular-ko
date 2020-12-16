@@ -1932,8 +1932,12 @@ Here's the previous test, rewritten using the click helper.
 
 {@a component-inside-test-host}
 
+<!--
 ## Component inside a test host
+-->
+## 테스트 호스트 안에서 테스트하기
 
+<!--
 The previous tests played the role of the host `DashboardComponent` themselves.
 But does the `DashboardHeroComponent` work correctly when properly data-bound to a host component?
 
@@ -1989,13 +1993,65 @@ The tests themselves are almost identical to the stand-alone version:
 
 Only the selected event test differs. It confirms that the selected `DashboardHeroComponent` hero
 really does find its way up through the event binding to the host component.
+-->
+이전에 살펴본 테스트 코드에서 호스트 엘리먼트의 역할은 `DashboardComponent`가 직접 합니다.
+그런데 호스트 컴포넌트가 바뀐 경우에도 데이터 바인딩만 제대로 된다면 `DashboardHeroComponent`가 동작할까요?
+
+`DashboardHeroComponent`를 테스트할 때 실제 호스트 컴포넌트인 `DashboardComponent`를 사용해도 테스트를 진행할 수 있습니다.
+하지만 실제 호스트 컴포넌트를 사용하기 위해 설정해야 할 내용이 훨씬 많아질 수 있습니다.
+`*ngFor`는 물론이고 상호작용하는 컴포넌트나 서비스가 더 필요할 수 있고, 바인딩되는 프로퍼티가 더 있을 수 있으며 HTML 레이아웃도 동적으로 변경될 수 있습니다.
+
+이런 요구조건을 다 만족시키기 위해 노력하는 것보다는 검증하려는 컴포넌트만 집중하기 위해 _테스트 호스트_ 를 따로 만드는 것이 좋습니다:
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="test-host"
+  header="app/dashboard/dashboard-hero.component.spec.ts (테스트 호스트)"
+ ></code-example>
+
+이 테스트 호스트는 `DashboardComponent`와 같은 방식으로 `DashboardHeroComponent`를 바인딩하면서도, `DashboardHeroComponent`에 사용하던 `Router`, `HeroService`, `*ngFor`를 신경쓰지 않을 수 있습니다.
+
+그리고 컴포넌트에 있는 테스트 히어로 데이터로 `DashboardHeroComponent`의 `hero` 프로퍼티를 바인딩하며, `onSelected` 핸들러로 `selected` 이벤트를 감지합니다.
+
+`DashboardHeroComponent`에서 `selected` 이벤트가 발생하면 히어로 데이터가 `selectedHero` 프로퍼티에 할당되기 때문에 데이터가 제대로 전달되었는지 확인할 수 있습니다.
+
+_테스트 호스트_ 를 활용하는 테스트 코드는 컴포넌트만 단독으로 테스트했던 코드와 비슷합니다:
+
+<code-example path="testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="test-host-setup" header="app/dashboard/dashboard-hero.component.spec.ts (테스트 호스트 환경설정)"></code-example>
+
+이 테스트 모듈 환경설정에서 이전과 다른 부분이 3가지 있습니다:
+
+1. `DashboardHeroComponent`와 함께 `TestHostComponent`를 등록합니다.
+1. `DashboardHeroComponent` 대신 `TestHostComponent`를 생성합니다.
+1. `DashboardHeroComponent.hero` 프로퍼티는 `TestHostComponent`가 바인딩합니다.
+
+`createComponent()`를 실행하면 이제 `DashboardHeroComponent` 인스턴스가 아니라 `TestHostComponent` 인스턴스가 포함된 `fixture`를 반환합니다.
+
+`TestHostComponent`를 생성하면 이 컴포넌트 템플릿에 사용된 `DashboardHeroComponent`도 함께 생성됩니다.
+그래서 테스트 DOM에서 히어로 엘리먼트(`heroEl`)를 쿼리하면 엘리먼트 트리를 깊이 들어가지 않아도 원하는 컴포넌트를 찾을 수 있습니다.
+
+나머지 코드는 컴포넌트를 단독으로 테스트했던 코드와 거의 비슷합니다:
+
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="test-host-tests"
+  header="app/dashboard/dashboard-hero.component.spec.ts (호스트 테스트하기)"></code-example>
+
+히어로가 선택되었을 때를 테스트하는 로직은 조금 다릅니다.
+이 테스트 코드에서는 호스트 컴포넌트에 이벤트 바인딩으로 전달된 객체를 검사하는 방식을 사용했습니다.
+
 
 <hr>
 
+
 {@a routing-component}
 
+<!--
 ## Routing component
+-->
+## 라우터를 활용하는 컴포넌트
 
+<!--
 A _routing component_ is a component that tells the `Router` to navigate to another component.
 The `DashboardComponent` is a _routing component_ because the user can
 navigate to the `HeroDetailComponent` by clicking on one of the _hero buttons_ on the dashboard.
@@ -2039,11 +2095,56 @@ The following test clicks the displayed hero and confirms that
   path="testing/src/app/dashboard/dashboard.component.spec.ts"
   region="navigate-test"
   header="app/dashboard/dashboard.component.spec.ts (navigate test)"></code-example>
+-->
+`Router`를 사용해서 다른 컴포넌트로 전환하는 컴포넌트가 있습니다.
+`DashboardComponent`도 대시보드에서 _히어로 버튼_ 중 하나를 클릭하면 `HeroDetailComponent` 화면으로 이동하기 때문에 라우터를 활용하는 컴포넌트입니다.
+
+라우터 객체는 아주 복잡합니다.
+그리고 `DashboardComponent`는 `Router` 뿐 아니라 `HeroService`도 함께 의존성 객체로 주입되고 있으니 테스트하기에는 너무 어려워 보입니다.
+
+<code-example
+  path="testing/src/app/dashboard/dashboard.component.ts"
+  region="ctor"
+  header="app/dashboard/dashboard.component.ts (생성자)"></code-example>
+
+`HeroService`를 스파이 객체로 대체하는 방법은 [이미 살펴본 내용](#component-with-async-service)이라 익숙할 것입니다.
+하지만 `Router`는 API를 방대하게 제공하고 있으며 애플리케이션 상태에 따라 다른 서비스와 함께 복잡하게 얽혀있을 수 있습니다.
+이 객체를 목 객체로 만드는 것은 어렵지 않을까요?
+
+다행히, 아직 `DashboardComponent`는 `Router`를 활용하는 로직이 많지 않습니다.
+
+<code-example
+  path="testing/src/app/dashboard/dashboard.component.ts"
+  region="goto-detail"
+  header="app/dashboard/dashboard.component.ts (goToDetail())">
+</code-example>
+
+이런 코드는 라우터를 활용하는 컴포넌트에 많이 사용됩니다.
+하지만 지금은 컴포넌트의 기능을 테스트하는 것이지 라우터를 테스트하는 것이 아니기 때문에, 주소를 이동한 후에 이 주소가 정해진 주소가 맞는지만 확인하면 됩니다.
+
+그래서 이 컴포넌트를 테스트할 때는 `HeroService` 목 객체를 만든 것과 비슷하게 라우터 목 객체를 만드는 것이 더 쉽습니다.
+
+<code-example
+  path="testing/src/app/dashboard/dashboard.component.spec.ts"
+  region="router-spy"
+  header="app/dashboard/dashboard.component.spec.ts (목 객체)"></code-example>
+
+아래 코드는 화면에 있는 히어로 엘리먼트를 클릭했을 때 지정된 주소로 잘 이동했는지 확인하는 테스트 코드입니다.
+
+<code-example
+  path="testing/src/app/dashboard/dashboard.component.spec.ts"
+  region="navigate-test"
+  header="app/dashboard/dashboard.component.spec.ts (네비게이션 테스트)"></code-example>
+
 
 {@a routed-component-w-param}
 
+<!--
 ## Routed components
+-->
+## 라우팅 대상이 되는 컴포넌트
 
+<!--
 A _routed component_ is the destination of a `Router` navigation.
 It can be trickier to test, especially when the route to the component _includes parameters_.
 The `HeroDetailComponent` is a _routed component_ that is the destination of such a route.
@@ -2090,9 +2191,53 @@ You'll take a different approach with `ActivatedRoute` because
 - Other _routed component_ tests need a test double for `ActivatedRoute`.
 
 These differences argue for a re-usable stub class.
+-->
+라우팅 대상이 되는 컴포넌트는 `Router`가 화면을 전환할 때 목적지가 되는 컴포넌트를 의미합니다.
+이런 컴포넌트를 테스트하려면 약간의 트릭을 사용해야 하며, 특히 라우팅 규칙에 라우팅 인자가 들어있다면 더 그렇습니다.
+`HeroDetailComponent`는 라우팅 규칙의 대상이 되는 컴포넌트입니다.
+
+사용자가 _대시보드_ 에서 히어로를 클릭하면 `DashboardComponent`는 `heroes/:id`라는 주소로 이동하도록 `Router`에게 요청합니다.
+이 주소에서 `:id` 부분이 정보를 수정할 히어로의 `id`에 해당하는 라우팅 인자입니다.
+
+`Router`는 이 주소를 만나면 `HeroDetailComponent`로 전환합니다.
+그리고 이 때 라우팅 정보에 대한 `ActivatedRoute` 객체가 `HeroDetailComponent` 인스턴스에 의존성으로 주입됩니다.
+
+`HeroDetailComponent`의 생성자는 이렇습니다:
+
+<code-example path="testing/src/app/hero/hero-detail.component.ts" region="ctor" header="app/hero/hero-detail.component.ts (constructor)"></code-example>
+
+`HeroDetail` 컴포넌트는 `HeroDetailService`에서 원하는 히어로 데이터를 가져오기 위해 `id` 인자가 필요합니다.
+그래서 `Observable`로 제공되는 `ActivatedRoute.paramMap` 프로퍼티를 참조하면 원하는 `id` 값을 참조할 수 있습니다.
+
+`ActivatedRoute.paramMap`에서 `id` 프로퍼티를 직접 참조할 수는 없습니다.
+이 프로퍼티는 옵저버블로 제공되기 때문에 반드시 _구독_ 해야 하며, 이렇게 해야 라우팅 인자가 변경될때마다 전달되는 `id` 값에 대응할 수 있습니다.
+
+<code-example path="testing/src/app/hero/hero-detail.component.ts" region="ng-on-init" header="app/hero/hero-detail.component.ts (ngOnInit())"></code-example>
+
+
+<div class="alert is-helpful">
+
+`ActivatedRoute.paramMap`에 대해 자세하게 알아보려면 [라우터 튜토리얼: 히어로들의 여행](guide/router-tutorial-toh) 문서의 [ActivatedRoute 활용하기](guide/router-tutorial-toh#activated-route-in-action) 섹션을 참고하세요.
+
+</div>
+
+
+이제 테스트 코드에서는 `HeroDetailComponent` 생성자로 주입되는 `ActivatedRoute` 객체의 `id` 값을 바꿔보면서 이 컴포넌트가 어떻게 반응하는지 테스트하면 됩니다.
+
+`Router`와 데이터 서비스의 목 객체를 만드는 방법에 대해서는 이미 다뤘습니다.
+
+`ActivatedRoute`는 이들과는 조금 다릅니다.
+
+- `paramMap`은 `Observable`을 반환하며 테스트 코드가 실행되는 동안 데이터를 한 번 이상 보낼 수 있습니다.
+- `ParamMap`을 만들기 위해 `convertToParamMap()` 라우터 헬퍼 함수를 사용합니다.
+- 라우팅 대상 컴포넌트를 테스트하려면 `ActivatedRoute` 목 객체가 필요합니다.
+
+이런 내용들은 나중에 재사용하기 위해 목 클래스로 만들어 둡시다.
+
 
 #### _ActivatedRouteStub_
 
+<!--
 The following `ActivatedRouteStub` class serves as a test double for `ActivatedRoute`.
 
 <code-example
@@ -2109,11 +2254,33 @@ Consider writing a more capable version of this stub class with
 the [_marble testing library_](#marble-testing).
 
 </div>
+-->
+아래 `ActivatedRouteStub` 클래스는 `ActivatedRoute`를 대신하기 위해 정의한 목 클래스입니다.
+
+<code-example
+  path="testing/src/testing/activated-route-stub.ts"
+  region="activated-route-stub"
+  header="testing/activated-route-stub.ts (ActivatedRouteStub)"></code-example>
+
+이런 헬퍼들은 `app` 폴더 옆에 `testing` 폴더를 만들어서 모아 두는 것이 좋습니다.
+이 문서에서는 `testing/activated-route-stub.ts`라는 파일에 `ActivatedRouteStub`을 정의했습니다.
+
+
+<div class="alert is-helpful">
+
+`ActivatedRouteStub`를 더 다양하게 활용하도록 확장하려면 [마블 테스트 라이브러리](#marble-testing) 섹션을 참고하세요.
+
+</div>
+
 
 {@a tests-w-test-double}
 
+<!--
 #### Testing with _ActivatedRouteStub_
+-->
+#### _ActivatedRouteStub_ 로 테스트하기
 
+<!--
 Here's a test demonstrating the component's behavior when the observed `id` refers to an existing hero:
 
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="route-good-id" header="app/hero/hero-detail.component.spec.ts (existing id)"></code-example>
@@ -2143,11 +2310,48 @@ New heroes have `id=0` and a blank `name`. This test confirms that the component
   path="testing/src/app/hero/hero-detail.component.spec.ts"
   region="route-no-id"
   header="app/hero/hero-detail.component.spec.ts (no id)"></code-example>
+-->
+아래 코드는 존재하는 히어로의 `id`를 받았을 때 컴포넌트의 동작을 테스트하는 코드입니다:
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="route-good-id" header="app/hero/hero-detail.component.spec.ts (id가 존재하는 경우)"></code-example>
+
+<div class="alert is-helpful">
+
+`createComponent()` 메서드와 `page` 객체는 [아래 섹션](#page-object)에서 다룹니다.
+지금 꼭 알아야 하는 내용은 아닙니다.
+
+</div>
+
+전달된 `id`와 맞는 히어로를 찾을 수 없으면 다시 `HeroListComponent`로 이동해야 합니다.
+
+이 때 실제 화면이동은 스파이로 대체하기 위해 [위에서 설명한](#routing-component) 라우터 목 객체를 사용해서 테스트 코드의 환경설정을 했습니다.
+
+아래 코드는 다시 `HeroListComponent`로 이동하는지 검사하는 테스트 코드입니다.
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="route-bad-id" header="app/hero/hero-detail.component.spec.ts (유효하지 않은 id)"></code-example>
+
+아직까지 이 문서에서 다루는 예제에 `id`인자를 빠뜨린 채로 `HeroDetailComponent`로 이동하는 라우팅 규칙은 등록되지 않았지만, 이 라우팅 규칙은 조만간 추가하는 것이 좋습니다.
+유효하지 않은 `id` 뿐 아니라 `id` 자체가 존재하지 않는 경우에도 컴포넌트가 적절하게 대응해야 합니다.
+
+아니면 이런 경우에 컴포넌트가 새로운 히어로를 생성하게 할 수도 있습니다.
+새로운 히어로의 `id`는 `0`으로 지정하며 `name`은 빈 문자열로 시작한다면 테스트 코드를 이렇게 작성할 수 있습니다:
+
+<code-example
+  path="testing/src/app/hero/hero-detail.component.spec.ts"
+  region="route-no-id"
+  header="app/hero/hero-detail.component.spec.ts (id가 없는 경우)"></code-example>
+
 
 <hr>
 
-## Nested component tests
+{@a nested-component-tests}
 
+<!--
+## Nested component tests
+-->
+## 중첩된 컴포넌트 테스트하기
+
+<!--
 Component templates often have nested components, whose templates
 may contain more components.
 
@@ -2185,11 +2389,44 @@ That's too much effort just to answer a few simple questions about links.
 
 This section describes two techniques for minimizing the setup.
 Use them, alone or in combination, to stay focused on testing the primary component.
+-->
+컴포넌트 템플릿에는 컴포넌트가 여러개 존재하면서 중첩된 컴포넌트가 있을 수도 있습니다.
+
+컴포넌트 트리는 얼마든지 복잡하게 구성될 수 있지만, 사실 테스트하는 컴포넌트 외에는 별 역할을 하지 않는 경우가 많습니다.
+
+`AppComponent`를 예로 들면, `RouterLink` 디렉티브가 사용된 네비게이션 바와 앵커 엘리먼트가 있다고 합시다.
+
+<code-example
+  path="testing/src/app/app.component.html"
+  header="app/app.component.html"></code-example>
+
+템플릿이 이렇게 구성되어 있으면 `AppComponent` _클래스_ 코드에 아무것도 없다고 해도 이 링크들이 `RouterLink` 디렉티브와 제대로 연결되었는지 확인하는 유닛 테스트 코드를 작성할 수 있습니다.
+이 내용은 [아래](#why-stubbed-routerlink-tests)에서 자세하게 다룹니다.
+
+링크가 제대로 동작하는지 확인하려고 해도 실제로 화면을 전환하는 `Router`는 필요 없으며, 라우팅 대상이 되는 컴포넌트가 들어갈 `<router-outlet>`도 필요하지 않습니다.
+
+`BannerComponent`(`<app-banner>`)와 `WelcomeComponent`(`<app-welcome>`)도 지금 테스트하는 기능과는 관계가 없습니다.
+
+하지만 `AppComponent` 인스턴스를 그대로 생성하면 관련 컴포넌트들도 함께 생성되기 때문에 이 컴포넌트들에 대한 설정도 추가로 해줘야 합니다.
+
+만약 이 컴포넌트들을 등록하지 않은 채로 컴파일하면 Angular 컴파일러가 `AppComponent` 템플릿에 사용된 `<app-banner>`, `<app-welcome>`, `<router-outlet>`를 확인할 수 없기 때문에 에러가 발생합니다.
+
+하지만 실제 컴포넌트를 등록하면 이 컴포넌트 내부에 있는 다른 컴포넌트도 또 등록해야 하며, 이와 관련된 서비스 객체도 모두 의존성으로 주입할 수 있도록 준비해야 합니다.
+
+링크가 제대로 동작하는지 확인하려고 하는데 이런 노력은 필요 없습니다.
+
+이번 섹션에서는 환경설정을 최소화하는 테크닉에 대해 알아봅시다.
+이제부터 설명하는 두가지 방법을 활용하면 테스트하려는 대상 컴포넌트에만 집중하는 데에 도움이 될 것입니다.
+
 
 {@a stub-component}
 
+<!--
 ##### Stubbing unneeded components
+-->
+##### 필요없는 컴포넌트 목으로 대체하기
 
+<!--
 In the first technique, you create and declare stub versions of the components
 and directive that play little or no role in the tests.
 
@@ -2215,11 +2452,34 @@ The `RouterLinkDirectiveStub`, [described later](#routerlink), is a test version
 of the real `RouterLink` that helps with the link tests.
 
 The rest are stubs.
+-->
+첫 번째 테크닉은 테스트와 관련이 없는 컴포넌트와 디렉티브를 목으로 만들어서 등록하는 것입니다.
+
+<code-example
+  path="testing/src/app/app.component.spec.ts"
+  region="component-stubs"
+  header="app/app.component.spec.ts (목 객체 정의하기)"></code-example>
+
+목 컴포넌트의 셀렉터는 대체하려는 컴포넌트와 같은 셀렉터를 사용하면 됩니다.
+셀렉터는 같지만 템플릿과 클래스가 비어있는 컴포넌트를 등록하는 셈입니다.
+
+그리고 이렇게 정의한 목 컴포넌트를 `TestBed` 환경설정에 등록합니다.
+
+<code-example
+  path="testing/src/app/app.component.spec.ts"
+  region="testbed-stubs"
+  header="app/app.component.spec.ts (TestBed에 목 객체 등록하기)"></code-example>
+
+이 테스트 코드가 테스트하는 대상은 `AppComponent`이기 때문에 `AppComponent`는 실제 컴포넌트를 등록해야 합니다.
+
+[이후](#routerlink)에 다루겠지만, `RouterLinkDirectiveStub`는 `RouterLink`를 대신하는 목 객체입니다.
+
 
 {@a no-errors-schema}
 
 #### _NO_ERRORS_SCHEMA_
 
+<!--
 In the second approach, add `NO_ERRORS_SCHEMA` to the `TestBed.schemas` metadata.
 
 <code-example
@@ -2237,9 +2497,31 @@ But the compiler won't throw an error when it encounters `<app-banner>`, `<app-w
 It simply renders them as empty tags and the browser ignores them.
 
 You no longer need the stub components.
+-->
+두 번째 테크닉은 `TestBed.schemas` 메타데이터에 `NO_ERRORS_SCHEMA`를 지정하는 것입니다.
 
+<code-example
+  path="testing/src/app/app.component.spec.ts"
+  region="no-errors-schema"
+  header="app/app.component.spec.ts (NO_ERRORS_SCHEMA)"></code-example>
+
+`NO_ERRORS_SCHEMA`를 사용하면 Angular 컴파일러가 확인할 수 없는 엘리먼트와 어트리뷰트는 모두 무시합니다.
+
+이 경우에는 Angular 컴파일러가 `<app-root>` 엘리먼트와 `routerLink` 어트리뷰트만 인식할 수 있습니다.
+왜냐하면 `TestBed` 환경설정에 `AppComponent`와 `RouterLinkDirectiveStub`만 등록되어 있기 때문입니다.
+
+Angualr 컴파일러는 `<app-banner>`, `<app-welcome>`, `<router-outlet>`에 해당하는 객체를 찾을 수 없지만 에러가 발생하지는 않습니다.
+이 태그들은 비어있는 태그로 렌더링되며 브라우저도 이 태그들을 무시합니다.
+
+컴포넌트를 목 객체로 대체할 필요도 없습니다.
+
+
+<!--
 #### Use both techniques together
+-->
+#### 두가지 방법 동시에 사용하기
 
+<!--
 These are techniques for _Shallow Component Testing_ ,
 so-named because they reduce the visual surface of the component to just those elements
 in the component's template that matter for tests.
@@ -2266,6 +2548,28 @@ as seen in this example.
 The Angular compiler creates the `BannerComponentStub` for the `<app-banner>` element
 and applies the `RouterLinkStubDirective` to the anchors with the `routerLink` attribute,
 but it ignores the `<app-welcome>` and `<router-outlet>` tags.
+-->
+두가지 테크닉은 _얕은 컴포넌트 테스트(shallow component testing)_ 를 하기 위한 방법입니다.
+컴포넌트 템플릿에서 테스트와 관련없는 부분을 생략하기 때문에 이런 이름이 붙었습니다.
+
+그리고 두 가지 테크닉 중에는 `NO_ERRORS_SCHEMA`를 활용하는 방법이 더 쉽지만 이 방법을 너무 많이 사용하면 안됩니다.
+
+`NO_ERRORS_SCHEMA`는 컴포넌트나 어트리뷰트 이름을 잘못 사용했을 때도 해당 객체를 무시합니다.
+이런 경우에는 에러도 표시되지 않기 때문에 문제를 해결하기 위해 많은 시간을 허비할 수도 있습니다.
+
+컴포넌트를 목 객체로 대신하는 방법의 장점이 또 있습니다.
+테스트하려는 컴포넌트가 이런 컴포넌트와 상호작용하는 로직이 있다면, 꼭 필요한 부분만 작성해서 이 동작을 실제로 확인할 수 있습니다.
+
+두 가지 테크닉을 동시에 활용하려면 환경설정 코드를 이렇게 구성하면 됩니다.
+
+<code-example
+  path="testing/src/app/app.component.spec.ts"
+  region="mixed-setup"
+  header="app/app.component.spec.ts (환경설정)"></code-example>
+
+이렇게 작성하면 Angular 컴파일러는 `<app-banner>` 엘리먼트를 `BannerComponentStub`으로 대체하며, `routerLink` 어트리뷰트를 `RouterLinkStubDirective`로 대체합니다.
+`<app-welcome>`과 `<router-outlet>` 태그는 무시합니다.
+
 
 <hr>
 
