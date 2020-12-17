@@ -2574,8 +2574,13 @@ but it ignores the `<app-welcome>` and `<router-outlet>` tags.
 <hr>
 
 {@a routerlink}
-## Components with _RouterLink_
 
+<!--
+## Components with _RouterLink_
+-->
+## _RouterLink_ 를 사용하는 컴포넌트
+
+<!--
 The real `RouterLinkDirective` is quite complicated and entangled with other components
 and directives of the `RouterModule`.
 It requires challenging setup to mock and use in tests.
@@ -2605,12 +2610,41 @@ Whether the router is configured properly to navigate with that route definition
 question for a separate set of tests.
 
 </div>
+-->
+실제 `RouterLinkDirective`는 아주 복잡하며 `RouterModule`에 있는 다른 컴포넌트, 디렉티브와 복잡하게 얽혀있습니다.
+그래서 이 객체를 테스트 코드에 사용하려면 환경설정 과정이 아주 복잡해 집니다.
+
+테스트 코드에서는 실제 디렉티브 대신 테스트에 꼭 필요한 내용만 구현해서 `RouterLinkDirectiveStub`로  대체하는 것이 좋습니다.
+
+<code-example
+  path="testing/src/testing/router-link-directive-stub.ts"
+  region="router-link"
+  header="testing/router-link-directive-stub.ts (RouterLinkDirectiveStub)"></code-example>
+
+`[routerLink]` 어트리뷰트로 바인딩된 URL은 디렉티브 `linkParams` 프로퍼티로 전달됩니다.
+
+그리고 `HostListener`는 호스트 엘리먼트(`AppComponent`의 `<a>` 엘리먼트)에서 발생하는 클릭 이벤트를 디렉티브 `onClick()` 메서드와 바인딩합니다.
+
+이제 앵커 엘리먼트를 클릭하면 `onClick()` 메서드가 실행되면서 목 디렉티브의 `navigatedTo` 프로퍼티 값을 할당합니다.
+그러면 앵커 엘리먼트를 클릭했을 때 이동하는 주소는 `navigatedTo` 프로퍼티 값을 확인하는 방식으로 검사할 수 있습니다.
+
+
+<div class="alert is-helpful">
+
+이동하려는 주소가 라우터에 등록되어 있는지 확인하는 테스트는 이 테스트와 별개입니다.
+
+</div>
+
 
 {@a by-directive}
 {@a inject-directive}
 
+<!--
 #### _By.directive_ and injected directives
+-->
+#### _By.directive_ 와 의존성으로 주입된 디렉티브
 
+<!--
 A little more setup triggers the initial data binding and gets references to the navigation links:
 
 <code-example
@@ -2654,11 +2688,57 @@ This is a skill you may need to test a more sophisticated component, one that ch
 re-calculates parameters, or re-arranges navigation options when the user clicks the link.
 
 </div>
+-->
+데이터 초기값을 바인딩하려면 네비게이션 링크 인스턴스를 가져와야 합니다:
+
+<code-example
+  path="testing/src/app/app.component.spec.ts"
+  region="test-setup"
+  header="app/app.component.spec.ts (테스트 환경설정)"></code-example>
+
+이 코드에서 이런 내용이 중요합니다:
+
+1. 앵커 엘리먼트에 적용된 디렉티브는 `By.directive`로 참조할 수 있습니다.
+
+1. `queryAll()` 함수는 해당 엘리먼트를 래핑한 `DebugElement`를 반환합니다.
+
+1. 개별 `DebugElement`에 있는 의존성 주입기(인젝터)를 활용하면 해당 엘리먼트 인스턴스에 있는 디렉티브 인스턴스를 참조할 수 있습니다.
+
+검사해야할 `AppComponent` 링크들은 이렇습니다:
+
+<code-example
+  path="testing/src/app/app.component.html"
+  region="links"
+  header="app/app.component.html (네비게이션 링크)"></code-example>
+
+
+{@a app-component-tests}
+
+이제 개별 링크가 `routerLink` 디렉티브와 잘 연결되었는지 테스트하려면 테스트 코드를 이렇게 작성하면 됩니다:
+
+<code-example path="testing/src/app/app.component.spec.ts" region="tests" header="app/app.component.spec.ts (링크 테스트)"></code-example>
+
+<div class="alert is-helpful">
+
+_이 테스트처럼_ "click" 이벤트를 테스트하는 것은 논란의 여지가 있습니다.
+이 코드는 _컴포넌트_ 를 테스트하는 것이 아니라 `RouterLinkDirectiveStub`를 테스트하는 것이기 때문입니다.
+목 디렉티브 객체로 이런 테스트 코드를 작성하면 원하는 결과를 얻지 못할 수도 있습니다.
+
+하지만 이 문서에서 다루는 내용을 확인하는 정도라면 문제되지 않습니다.
+이 문서는 라우터의 기능을 완벽하게 실행하는 것이 아니라 `RouterLink`가 적용된 엘리먼트를 찾고, 클릭한 후에, 결과가 예상한 대로인지 검사하는 것으로 충분합니다.
+사용자가 링크를 클릭했을 때 화면을 실제로 갱신하고 라우팅 인자를 다시 참조하며 네비게이션 옵션을 다시 확인하는 것보다는 이 방식이 더 사용하기 편합니다.
+
+</div>
+
 
 {@a why-stubbed-routerlink-tests}
 
+<!--
 #### What good are these tests?
+-->
+#### 이런 테스트는 어떤 점이 좋나요?
 
+<!--
 Stubbed `RouterLink` tests can confirm that a component with links and an outlet is setup properly,
 that the component has the links it should have, and that they are all pointing in the expected direction.
 These tests do not concern whether the app will succeed in navigating to the target component when the user clicks a link.
@@ -2678,13 +2758,35 @@ A future guide update will explain how to write such
 tests with the `RouterTestingModule`.
 
 </div>
+-->
+`RouterLink`를 목 객체로 대체해서 테스트하면 컴포넌트에 링크가 존재하는지, 이 링크들은 정해진 주소와 제대로 연결되어있는지 간단하게 확인할 수 있습니다.
+사용자가 링크를 클릭한 이후에 해당 컴포넌트가 제대로 표시되는 지는 신경쓰지 않아도 됩니다.
+
+꼭 필요한 내용만 테스트하려면 `RouterLink`와 `RouterOutlet`을 목 객체로 대신하는 것이 최선의 방법입니다.
+실제 라우터 객체를 사용하면 테스트하는 컴포넌트와 상관없는 이유로 얼마든지 문제가 발생할 수 있기 때문에 일을 복잡하게 만들기만 할 뿐입니다.
+`HeroListComponent`로 이동할 때 네비게이션 가드가 로그인하지 않은 사용자를 걸러낼 수도 있습니다.
+하지만 이런 상황은 `AppComponent`가 잘못한 것이 아니며 `AppComponent`를 수정한다고 이 문제가 해결되는 것도 아닙니다.
+
+권한이 없거나 로그인하지 않은 사용자가 화면을 전환하는 것을 막는 가드는 해당 가드를 테스트 코드로 확인하는 것이 좋습니다.
+
+
+<div class="alert is-helpful">
+
+`RouterTestingModule`을 활용해서 테스트 코드를 작성하는 방법은 다른 가이드 문서에서 다룰 예정입니다.
+
+</div>
+
 
 <hr>
 
 {@a page-object}
 
+<!--
 ## Use a _page_ object
+-->
+## _page_ 객체 활용하기
 
+<!--
 The `HeroDetailComponent` is a simple view with a title, two hero fields, and two buttons.
 
 <div class="lightbox">
@@ -2735,12 +2837,69 @@ Here are a few more `HeroDetailComponent` tests to reinforce the point.
   path="testing/src/app/hero/hero-detail.component.spec.ts"
   region="selected-tests"
   header="app/hero/hero-detail.component.spec.ts (selected tests)"></code-example>
+-->
+`HeroDetailComponent`는 제목과 히어로 필드 2개, 버튼 2개로 구성된 컴포넌트입니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/testing/hero-detail.component.png' alt="HeroDetailComponent in action">
+</div>
+
+하지만 이렇게 간단한 폼도 템플릿은 얼마든지 복잡하게 구성될 수 있습니다.
+
+<code-example
+  path="testing/src/app/hero/hero-detail.component.html" header="app/hero/hero-detail.component.html"></code-example>
+
+이 컴포넌트를 테스트하려면...
+
+- 컴포넌트가 히어로 데이터를 받아 DOM에 표시될 때까지 기다려야 합니다.
+- 제목을 참조해와야 합니다.
+- 이름을 입력하는 입력 필드를 참조해와야 합니다.
+- 클릭할 수 있는 버튼을 참조해와야 합니다.
+- 일부 컴포넌트와 라우터는 목 객체로 대신해야 합니다.
+
+이렇게 간단한 폼을 테스트할 때도 미리 준비해야 하는 환경설정과 CSS 엘리먼트 쿼리 로직이 많아질 수 있습니다.
+
+이 문제를 간단하게 하려면 `Page` 클래스를 별도로 만들어서 컴포넌트 프로퍼티를 직접 다루고 환경설정 코드도 캡슐화하는 것이 좋습니다.
+
+`hero-detail.component.spec.ts` 파일에서 사용하는 `Page` 클래스 코드는 이렇습니다.
+
+<code-example
+  path="testing/src/app/hero/hero-detail.component.spec.ts"
+  region="page"
+  header="app/hero/hero-detail.component.spec.ts (Page)"></code-example>
+
+이제 컴포넌트를 조작하고 검사하는 동작은 `Page` 객체의 인스턴스를 활용하는 것이 더 간단합니다.
+
+`createComponent` 메서드는 `page` 객체를 생성하고 `hero` 데이터가 전달되기 전까지 사용할 기본값을 채우는 동작을 합니다.
+
+<code-example
+  path="testing/src/app/hero/hero-detail.component.spec.ts"
+  region="create-component"
+  header="app/hero/hero-detail.component.spec.ts (createComponent())"></code-example>
+
+이전 섹션에서 다룬 [_HeroDetailComponent_ 테스트 코드](#tests-w-test-double)는 `createComponent()` 메서드와 `page`를 활용해서 테스트 코드를 줄이는 방법에 대해 설명했습니다.
+군더더기는 없습니다.
+프라미스가 완료되기를 기다릴 필요가 없으며 DOM 에서 원하는 엘리먼트를 찾는 코드도 필요없습니다.
+
+몇가지 테스트를 더 추가해보면 이렇게 활용할 수 있습니다.
+
+<code-example
+  path="testing/src/app/hero/hero-detail.component.spec.ts"
+  region="selected-tests"
+  header="app/hero/hero-detail.component.spec.ts (히어로 선택 테스트)"></code-example>
+
 
 <hr>
 
-{@a compile-components}
-## Calling _compileComponents()_
 
+{@a compile-components}
+
+<!--
+## Calling _compileComponents()_
+-->
+## _compileComponents()_ 실행하기
+
+<!--
 <div class="alert is-helpful">
 
 You can ignore this section if you _only_ run tests with the CLI `ng test` command
@@ -2784,9 +2943,54 @@ If the `TestBed` were allowed to continue, the tests would run and fail mysterio
 before the compiler could finished.
 
 The preemptive error message tells you to compile explicitly with `compileComponents()`.
+-->
+<div class="alert is-helpful">
 
+테스트를 실행할 때 Angular CLI `ng test` 명령만 사용한다면 이 섹션은 건너뛰어도 됩니다.
+Angular CLI는 테스트를 실행하기 전에 애플리케이션을 자동으로 빌드합니다.
+
+</div>
+
+Angular CLI를 사용하지 않고 테스트를 실행한다면 이런 에러가 발생하면서 테스트 실행이 실패합니다:
+
+<code-example language="sh" class="code-shell" hideCopy>
+Error: This test module uses the component BannerComponent
+which is using a "templateUrl" or "styleUrls", but they were never compiled.
+Please call "TestBed.compileComponents" before your test.
+</code-example>
+
+이 문제의 원인은 테스트 코드에서 사용하는 컴포넌트 중에 외부 템플릿 파일이나 외부 CSS 파일을 사용하는 컴포넌트가 있기 때문입니다.
+지금 다루는 예제에서는 `BannerComponent`가 원인입니다.
+
+<code-example
+  path="testing/src/app/banner/banner-external.component.ts"
+  header="app/banner/banner-external.component.ts (외부 템플릿 & CSS)"></code-example>
+
+그래서 이 테스트는 `TestBed`가 컴포넌트를 생성하는 부분에서 실패합니다.
+
+<code-example
+  path="testing/src/app/banner/banner.component.spec.ts"
+  region="configure-and-create"
+  header="app/banner/banner.component.spec.ts (실행에 실패한 테스트 코드 환경설정)"
+  avoid></code-example>
+
+문제는 컴포넌트가 컴파일되지 않았다는 것입니다.
+그래서 `createComponent()`를 실행해야 `TestBed`가 컴포넌트를 컴파일합니다.
+
+소스 코드가 메모리에 있는 경우는 문제가 되지 않습니다.
+하지만 `BannerComponent`를 컴파일하려면 외부 파일을 참조하기 위해 파일 시스템을 사용해야 하고, 이 파일 시스템은 _비동기로_ 동작하기 때문에 문제가 생깁니다.
+
+그래서 테스트를 더 진행하려면 컴포넌트가 컴파일되는 과정이 끝날때까지 기다려야 합니다.
+
+앞서 다룬 에러 메시지를 다시 확인해보면, `compileComponents()`를 실행하지 않았기 때문에 발생한 에러라는 것을 확인할 수 있습니다.
+
+
+<!--
 #### _compileComponents()_ is async
+-->
+#### _compioleComponents()_ 는 비동기로 동작합니다.
 
+<!--
 You must call `compileComponents()` within an asynchronous test function.
 
 <div class="alert is-critical">
@@ -2812,9 +3016,39 @@ To follow this pattern, import the `waitForAsync()` helper with the other testin
   path="testing/src/app/banner/banner-external.component.spec.ts"
   region="import-async">
 </code-example>
+-->
+`compileComponents()`는 비동기 테스트 함수 안에서 실행해야 합니다.
 
+
+<div class="alert is-critical">
+
+`waitForAsync()`와 같은 비동기 테스트 함수를 사용하지 않으면 이런 에러가 발생합니다.
+
+<code-example language="sh" class="code-shell" hideCopy>
+Error: ViewDestroyedError: Attempt to use a destroyed view
+</code-example>
+
+</div>
+
+일반적인 방법은 환경설정 로직을 `beforeEach()` 2개로 나누는 것입니다:
+
+1. 비동기 `beforeEach()`에서는 컴포넌트를 컴파일합니다.
+1. 동기 `beforeEach()`에서는 나머지 환경설정을 합니다.
+
+이 패턴을 활용하려면 테스트 라이브러리에서 `waitForAsync` 심볼을 로드해야 합니다.
+
+<code-example
+  path="testing/src/app/banner/banner-external.component.spec.ts"
+  region="import-async">
+</code-example>
+
+
+<!--
 #### The async _beforeEach_
+-->
+#### 비동기 _beforeEach_
 
+<!--
 Write the first async `beforeEach` like this.
 
 <code-example
@@ -2846,9 +3080,45 @@ nor any of the `override...` methods. The `TestBed` throws an error if you try.
 
 Make `compileComponents()` the last step
 before calling `TestBed.createComponent()`.
+-->
+첫 번째 비동기 `beforeEach()`는 이렇게 작성합니다.
 
+<code-example
+  path="testing/src/app/banner/banner-external.component.spec.ts"
+  region="async-before-each"
+  header="app/banner/banner-external.component.spec.ts (비동기 beforeEach())"></code-example>
+
+`waitForAsync()` 헬퍼 함수는 인자가 없는 함수를 인자로 받으며, 환경설정 로직은 이 함수에 작성합니다.
+
+그리고 `TestBed.configureTestinModule()` 메서드는 `TestBed` 클래스를 반환하기 때문에 `TestBed` 클래스가 제공하는 정적 메소드를 바로 체이닝해서 실행할 수 있습니다.
+
+지금 다루는 예제에서는 컴파일되는 컴포넌트가 `BannerComponent` 뿐입니다.
+하지만 컴포넌트가 여러개 사용되는 테스트 모듈의 환경을 설정할 때는 컴포넌트와 모듈을 더 로드해야 할 수도 있습니다.
+외부 파일을 로드해야 할 수도 있습니다.
+
+`TestBed.compileComponents()` 메서드는 테스트 모듈에 등록된 컴포넌트를 모두 비동기로 컴파일하는 메서드입니다.
+
+
+<div class="alert is-important">
+
+`compileComponents()`를 실행한 후에는 `TestBed` 설정을 변경하지 마세요.
+
+</div>
+
+
+`compileComponents()`를 실행하면 `TestBed` 인스턴스의 현재 설정이 확정되며 더이상 변경되지 않습니다.
+그래서 이후에는 `configureTestingModule`, `override...`와 같은 테스트 모듈 환경설정 메서드를 실행할 수 없습니다.
+실행하면 에러가 발생합니다.
+
+그래서 `compileComponents()`는 `TestBed.createComponent()`를 실행하기 직전에 실행해야 합니다.
+
+
+<!--
 #### The synchronous _beforeEach_
+-->
+#### 동기 _beforeEach_
 
+<!--
 The second, synchronous `beforeEach()` contains the remaining setup steps,
 which include creating the component and querying for elements to inspect.
 
@@ -2858,9 +3128,24 @@ which include creating the component and querying for elements to inspect.
   header="app/banner/banner-external.component.spec.ts (synchronous beforeEach)"></code-example>
 
 You can count on the test runner to wait for the first asynchronous `beforeEach` to finish before calling the second.
+-->
+두 번째로 구현하는 동기 `beforeEach()`에는 나머지 환경설정 로직을 작성합니다.
+컴포넌트를 생성하고 엘리먼트를 쿼리하는 로직을 작성하면 됩니다.
 
+<code-example
+  path="testing/src/app/banner/banner-external.component.spec.ts"
+  region="sync-before-each"
+  header="app/banner/banner-external.component.spec.ts (동기 beforeEach())"></code-example>
+
+테스트 러너는 이 함수 이전에 작성한 비동기 `beforeEach()` 실행이 완전히 끝난 후에 두 번째 `beforeEach()` 함수를 실행합니다.
+
+
+<!--
 #### Consolidated setup
+-->
+#### 환경설정 통합하기
 
+<!--
 You can consolidate the two `beforeEach()` functions into a single, async `beforeEach()`.
 
 The `compileComponents()` method returns a promise so you can perform the
@@ -2871,15 +3156,36 @@ into a `then(...)` callback.
   path="testing/src/app/banner/banner-external.component.spec.ts"
   region="one-before-each"
   header="app/banner/banner-external.component.spec.ts (one beforeEach)"></code-example>
+-->
+`beforeEach()` 함수를 둘로 나누는 대신 비동기 `beforeEach()` 하나로 통합하는 방법도 있습니다.
 
+`compileComponents()` 메서드는 프라미스를 반환하기 때문에, 컴포넌트를 컴파일한 이후에 필요한 동기 환경설정 작업은 프라미스의 `then()` 콜백으로 이어서 작성할 수 있습니다.
+
+<code-example
+  path="testing/src/app/banner/banner-external.component.spec.ts"
+  region="one-before-each"
+  header="app/banner/banner-external.component.spec.ts (beforeEach() 하나로 구성하기)"></code-example>
+
+
+<!--
 #### _compileComponents()_ is harmless
+-->
+#### _compileComponents()_ 는 안전하게 실행됩니다.
 
+<!--
 There's no harm in calling `compileComponents()` when it's not required.
 
 The component test file generated by the CLI calls `compileComponents()`
 even though it is never required when running `ng test`.
 
 The tests in this guide only call `compileComponents` when necessary.
+-->
+`compileComponents()`는 필요하지 않은 시점에 실행하더라도 아무 문제가 발생하지 않습니다.
+
+Angular CLI가 자동으로 생성한 컴포넌트 테스트 파일도 필요한 상황이 아니더라도 `compileComponents()`를 실행합니다.
+
+다만 이 문서에서는 꼭 필요할 때만 `compileComponents()`를 실행했습니다.
+
 
 <hr>
 
