@@ -44,14 +44,14 @@ the component's `title` property like this.
 As minimal as this is, you decide to add a test to confirm that component
 actually displays the right content where you think it should.
 -->
-예제 앱에서 `BannerComponent` 템플릿에는 텍스트가 하나 있는데, `title` 프로퍼티는 프로퍼티 바인딩되어 있기 때문에 동적으로 변경될 수 있습니다.
+예제 앱에서 `BannerComponent` 템플릿에 있는 `title` 프로퍼티는 부모 컴포넌트와 바인딩되어 있기 때문에 동적으로 변경될 수 있습니다.
 
 <code-example
   path="testing/src/app/banner/banner.component.ts"
   region="component"
   header="app/banner/banner.component.ts"></code-example>
 
-이 컴포넌트를 가장 간단하게 테스트하려면 컴포넌트로 바인딩된 문자열이 실제로 표시되는지 확인하면 됩니다.
+이 컴포넌트를 가장 간단하게 테스트하려면 컴포넌트로 문자열을 바인딩했을때 이 문자열이 실제로 표시되는지 확인하면 됩니다.
 
 
 <!--
@@ -73,7 +73,7 @@ and assign it to the `h1` variable.
 -->
 _title_ 프로퍼티가 제대로 문자열 바인딩 되었는지 확인하려면 `<h1>` 엘리먼트의 값을 검사하면 됩니다.
 
-그러면 `beforeEach()`에서 표준 HTML `querySelector`를 사용해서 `h1` 엘리먼트를 찾으면 됩니다.
+표준 HTML `querySelector`를 사용해서 `h1` 엘리먼트를 참조하도록 `beforeEach()`를 수정해 봅시다.
 
 <code-example
   path="testing/src/app/banner/banner.component.spec.ts"
@@ -115,7 +115,7 @@ The `TestBed.createComponent` does _not_ trigger change detection; a fact confir
   path="testing/src/app/banner/banner.component.spec.ts" region="test-w-o-detect-changes"></code-example>
 -->
 이제 `title` 프로퍼티에 할당된 문자열이 제대로 표시되는지 확인해 보려고 합니다.
-`<h1>` 엘리먼트를 검사하는 코드를 이렇게 작성해볼 수 있습니다:
+`<h1>` 엘리먼트를 검사하는 코드는 이렇게 작성해볼 수 있습니다:
 
 <code-example
   path="testing/src/app/banner/banner.component.spec.ts"
@@ -132,7 +132,7 @@ expected '' to contain 'Test Tour of Heroes'.
 
 실제 운영환경에서는 Angular가 컴포넌트를 생성하거나 사용자가 키를 입력했을 때, AJAX와 같은 비동기 작업이 끝났을 때 변화 감지 로직이 자동으로 실행됩니다.
 
-하지만 `TestBed.createComponent` 만으로는 변화 감지 로직을 시작되지 않습니다.
+하지만 `TestBed.createComponent` 만으로는 변화 감지 로직이 시작되지 않습니다.
 그래서 지금 시점에는 `<h1>` 엘리먼트의 값은 빈 문자열입니다:
 
 <code-example
@@ -170,7 +170,7 @@ Here's another test that changes the component's `title` property _before_ calli
 </code-example>
 
 변화 감지 로직을 수동으로 시작하는 것은 더 나은 활용도를 위해 의도된 것입니다.
-변화 감지 로직은 자동이 실행되지 않기 때문에 개발자가 데이터가 바인딩되기 전 상태를 검사할 수 있으며, [라이프싸이클 후킹 메서드](guide/lifecycle-hooks)가 실행되면 데이터가 어떻게 변경되는지 원하는 시점마다 확인할 수 있습니다.
+변화 감지 로직이 자동이 실행되지 않기 때문에 개발자가 데이터가 바인딩되기 전 상태를 검사할 수 있으며, [라이프싸이클 후킹 메서드](guide/lifecycle-hooks)가 실행되면서 데이터가 어떻게 변경되는지 원하는 시점마다 확인할 수 있습니다.
 
 `title` 프로퍼티는 이렇게 테스트할 수도 있습니다.
 
@@ -222,9 +222,9 @@ There is no harm in calling `detectChanges()` more often than is strictly necess
 </div>
 -->
 지금까지 작성한 테스트 코드에서는 `detectChanges`를 계속해서 호출해야 합니다.
-하지만 상황에 따라 변화 감지 로직을 자동으로 실행하는 것이 좋다는 개발자도 있습니다.
+하지만 변화 감지 로직이 자동으로 실행되는 것을 선호하는 개발자도 있습니다.
 
-이 동작은 `TestBed`를 설정할 때 `ComponentFixtureAutoDetect` 프로바이더를 지정하면 됩니다.
+변화 감지 로직을 자동으로 실행하려면 `TestBed`를 설정할 때 `ComponentFixtureAutoDetect` 프로바이더를 지정하면 됩니다.
 먼저 테스트 라이브러리에서 이 심볼을 로드합니다:
 
 <code-example path="testing/src/app/banner/banner.component.detect-changes.spec.ts" region="import-ComponentFixtureAutoDetect" header="app/banner/banner.component.detect-changes.spec.ts (심볼 로드하기)"></code-example>
@@ -237,9 +237,9 @@ There is no harm in calling `detectChanges()` more often than is strictly necess
 
 <code-example path="testing/src/app/banner/banner.component.detect-changes.spec.ts" region="auto-detect-tests" header="app/banner/banner.component.detect-changes.spec.ts (변화 감지가 자동으로 동작하는 테스트 코드)"></code-example>
 
-변화 감지 로직이 자동으로 실행되면 첫번째 테스트 코드처럼 아주 간단한 테스트 코드를 작성할 수 있습니다.
+변화 감지 로직이 자동으로 실행되면 첫 번째 테스트 코드처럼 아주 간단한 테스트 코드를 작성할 수 있습니다.
 
-그리고 두번째 테스트 코드와 세번째 테스트 코드를 보면 이 환경설정의 한계를 확인할 수 있습니다.
+그리고 두 번째 테스트 코드와 세 번째 테스트 코드를 보면 이 환경설정의 한계를 확인할 수 있습니다.
 Angular 테스트 환경에서는 컴포넌트의 `title` 값이 변경된 것을 직접 감지할 수 없습니다.
 `ComponentFixtureAutoDetect` 서비스는 프라미스(Promise)가 완료되거나 타이머 이벤트, DOM 이벤트와 같은 _비동기 작업_ 에만 반응합니다.
 그래서 컴포넌트 프로퍼티를 직접 수정하면 이 수정사항은 화면에 반영되지 않습니다.
@@ -248,7 +248,7 @@ Angular 테스트 환경에서는 컴포넌트의 `title` 값이 변경된 것�
 <div class="alert is-helpful">
 
 이 문서에서는 변화 감지 로직이 자동으로 실행되는 것이 고민하는 대신 _명시적으로_ `detectChanges()`를 실행하는 방식을 사용합니다.
-`detectChanges()`는 꼭 필요한 상황 외에 더 실행하더라도 아무 문제 없습니다.
+`detectChanges()`는 꼭 필요한 상황이 아닐 때 더 실행되더라도 문제가 발생하지 않습니다.
 </div>
 
 
@@ -279,7 +279,7 @@ The following example demonstrates the proper sequence.
 사용자가 입력하는 것을 시뮬레이션하려면 입력 엘리먼트를 찾아서 이 엘리먼트의 `value` 프로퍼티 값을 설정하면 됩니다.
 
 그리고 `fixture.detectChanges()` 를 실행하면 Angular 변화 감지 로직을 시작할 수 있습니다.
-하지만 이 과정은 꼭 필요한 단계가 하나 빠졌습니다.
+하지만 이 과정에서 꼭 필요한 단계가 하나 빠졌습니다.
 
 Angular는 입력 엘리먼트의 `value` 프로퍼티 값이 변경된 것을 알 수 없습니다.
 그래서 `dispatchEvent()`를 실행해서 엘리먼트에서 `input` 이벤트가 발생했다는 것을 알려야 Angular가 프로퍼티 값이 변경된 것을 확인할 수 있습니다.
@@ -351,7 +351,7 @@ which is using a "templateUrl" or "styleUrls", but they were never compiled.
 Please call "TestBed.compileComponents" before your test.
 </code-example>
 
-이 문제를 해결하려면 [아래](#compile-components)에서 설명하는 대로 `compileComponents()` 메서드를 실행하면 됩니다.
+이 문제를 해결하려면 [아래](#compile-components)에서 설명하는 대로 `compileComponents()` 메서드를 실행해주면 됩니다.
 
 
 {@a component-with-dependency}
@@ -421,7 +421,7 @@ This particular test suite supplies a minimal mock of the `UserService` that sat
   header="app/welcome/welcome.component.spec.ts"></code-example>
 -->
 컴포넌트를 테스트할 때는 실제 서비스 객체를 주입하지 않고 목 객체를 주입하는 것이 더 편합니다.
-목 객체는 mocks, subs, fakes, spies과 같은 용어로 언급하는 객체입니다.
+목 객체는 mocks, subs, fakes, spies과 같은 용어로 언급하기도 합니다.
 컴포넌트를 테스트하는 이유는 컴포넌트의 기능을 검사하는 것이지 서비스를 검사하는 것이 아닙니다.
 
 컴포넌트에 실제 서비스 객체를 주입하면 상황이 복잡해지기만 할 뿐입니다.
@@ -464,10 +464,10 @@ The component injector is a property of the fixture's `DebugElement`.
 -->
 테스트 코드를 작성하다보면 `WelcomeComponent`에 주입된 (목) `UserService`를 참조해야 하는 경우가 있습니다.
 
-Angular는 계층으로 구성된 의존성 주입 시스템을 제공합니다.
+Angular는 의존성 주입 시스템을 계층으로 구성합니다.
 그래서 최상위 인젝터(injector)부터 `TestBed` 안에 있는 테스트 대상 컴포넌트까지 존재하는 트리 여러 계층에 인젝터가 존재할 수 있습니다.
 
-의존성으로 주입된 서비스 객체를 참조하는 방법 중 가장 안전하고, **_언제나 동작하는_** 방법은 테스트 코드 안에 있는 인젝터를 사용하는 방법입니다.
+의존성으로 주입된 서비스 객체를 참조하는 방법 중 가장 안전하고, **_언제나 동작하는_** 방법은 테스트하는 컴포넌트 안에 있는 인젝터를 사용하는 방법입니다.
 컴포넌트 인젝터는 픽스쳐의 `DebugElement`로 참조할 수 있습니다.
 
 <code-example
@@ -562,7 +562,7 @@ The third test checks that the component displays the proper message when there 
 
 <code-example path="testing/src/app/welcome/welcome.component.spec.ts" region="tests" header="app/welcome/welcome.component.spec.ts"></code-example>
 
-첫번째 테스트 코드는 테스트 코드 자체가 잘 동작하는지 확인하는 테스트 코드입니다.
+첫 번째 테스트 코드는 테스트 코드 자체가 잘 동작하는지 확인하는 테스트 코드입니다.
 이 테스트 코드는 `UserService` 목 객체가 제대로 동작하는지 검사합니다.
 
 <div class="alert is-helpful">
@@ -685,7 +685,7 @@ You can write many useful tests with this spy, even though its `Observable` is s
 
 {@a service-spy}
 
-스파이 부분을 유심히 봅시다.
+스파이 코드를 선언한 부분을 봅시다.
 
 <code-example
   path="testing/src/app/twain/twain.component.spec.ts"
@@ -725,7 +725,7 @@ the component method calls `setTimeout()`.
 The test must wait at least one full turn of the JavaScript engine before the
 value becomes available. The test must become _asynchronous_.
 -->
-`Observable`을 동기 방식으로 사용하는 방식의 가장 좋은 점은 비동기 동작을 동기 방식으로 변경할 수 있다는 것입니다.
+`Observable`을 동기 방식으로 사용했을 때 가장 좋은 점은 비동기 동작을 동기 방식으로 변경할 수 있다는 것입니다.
 
 <code-example
   path="testing/src/app/twain/twain.component.spec.ts"
@@ -799,7 +799,7 @@ fakeAsync(() => { /* 테스트 코드 */ })
 
 한계: `fakeAsync()` 함수 안에서 `XMLHttpRequest` (XHR)를 활용하는 코드는 제대로 동작하지 않습니다.
 테스트 코드에서 XHR 요청을 실제로 보내는 경우는 거의 없습니다.
-실제 요청을 보내야 한다면 [`waitForAsync()`](#waitForAsync) 섹션을 참고하세요.
+실제로 요청을 보내야 한다면 [`waitForAsync()`](#waitForAsync) 섹션을 참고하세요.
 
 </div>
 
@@ -827,7 +827,7 @@ The [tick()](api/core/testing/tick) function accepts milliseconds and tickOption
 The [tick()](api/core/testing/tick) function is one of the Angular testing utilities that you import with `TestBed`.
 It's a companion to `fakeAsync()` and you can only call it within a `fakeAsync()` body.
 -->
-[tick()](api/core/testing/tick) 함수는 (가상) 시계를 감는 용도로 사용합니다.
+[tick()](api/core/testing/tick) 함수는 (가상) 시계를 앞으로 감는 용도로 사용합니다.
 
 그래서 [tick()](api/core/testing/tick) 함수를 실행하면 다음 비동기 작업이 있는 시점까지 시간이 지난 것으로 간주할 수 있습니다.
 위 섹션에서 다룬 코드에서는 에러가 처리되는 `setTimeout()` 시점으로 이동합니다.
@@ -1177,7 +1177,7 @@ Then you can assert that the quote element displays the expected text.
 </code-example>
 
 `ngOnInit()`이 실행된 후에는 명언이 표시되는 엘리먼트가 `'...'`로 표시됩니다.
-아직 첫번째 응답은 받지 못했습니다.
+아직 첫 번째 응답은 받지 못했습니다.
 
 이제 옵저버블로 전달되는 첫번째 명언을 표시하려면 [tick()](api/core/testing/tick)을 실행하면 됩니다.
 그리고 `detectChanges()`를 실행하면 Angular가 화면을 갱신합니다.
@@ -1531,7 +1531,7 @@ _마블 프레임(marble frame)_ 은 테스트 환경에서 동작하는 가상 
 
 
 {@a cold-observable}
-_콜드_ 옵저버블은 누군가가 옵저버블을 구독하기 전까지는 데이터를 전달하지 않습니다.
+_콜드(cold)_ 옵저버블은 누군가가 옵저버블을 구독하기 전까지는 데이터를 전달하지 않습니다.
 그리고 애플리케이션에서 사용하는 옵저버블 대부분은 콜드 옵저버블입니다.
 [_HttpClient_](guide/http) 메서드들도 모두 콜드 옵저버블을 반환합니다.
 
@@ -1716,7 +1716,7 @@ low cost and without resorting to much slower and more complicated end-to-end te
   header="app/dashboard/dashboard-hero.component.spec.ts (환경설정)"></code-example>
 
 이 환경설정 코드에서 히어로 데이터 `expectedHero`를 자식 컴포넌트 `hero` 프로퍼티로 어떻게 전달하는지 확인해 보세요.
-이 코드는 `DashboardComponent`가 `*ngFor` 안에서 프로퍼티를 바인딩하는 것을 대신하는 코드입니다.
+이 코드는 `DashboardComponent`가 `*ngFor` 안에서 프로퍼티 바인딩하는 것을 대신하는 코드입니다.
 
 아래 코드는 이렇게 전달된 히어로의 이름이 템플릿에 제대로 표시되는지 확인하는 테스트 코드입니다.
 
@@ -1828,7 +1828,7 @@ The `RouterLink` directive throws an error if the event object is missing.
 
 핸들러는 보통 이렇게 관대하지 않습니다.
 예를 들면 `RouterLink` 디렉티브는 클릭이 어떤 마우스 버튼에서 발생했는지 확인하기 위해 `button` 프로퍼티가 필요합니다.
-그래서 이런 경우에 이벤트 객체가 누락되면 에러가 발생합니다.
+이벤트 객체가 누락되면 에러가 발생합니다.
 
 </div>
 
@@ -1913,7 +1913,7 @@ Here's the previous test, rewritten using the click helper.
 <div class="alert is-important">
 
 `click()` 헬퍼 함수는 Angular가 제공하는 테스트 관련 기능이 **아닙니다**.
-이 함수는 가이드 문서에서 예제를 설명하기 위해 정의한 코드이며 모든 테스트 코드에서 이 헬퍼 함수를 사용합니다.
+이 함수는 가이드 문서에서 예제를 설명하기 위해 정의한 코드이며 테스트 코드에서만 이 헬퍼 함수를 사용합니다.
 이런 함수가 더 있다면 헬퍼들을 모아서 따로 구성하는 것도 좋습니다.
 
 </div>
@@ -2704,7 +2704,7 @@ re-calculates parameters, or re-arranges navigation options when the user clicks
 
 1. 개별 `DebugElement`에 있는 의존성 주입기(인젝터)를 활용하면 해당 엘리먼트 인스턴스에 있는 디렉티브 인스턴스를 참조할 수 있습니다.
 
-검사해야할 `AppComponent` 링크들은 이렇습니다:
+검사해야 할 `AppComponent` 링크들은 이렇습니다:
 
 <code-example
   path="testing/src/app/app.component.html"
@@ -3182,7 +3182,7 @@ The tests in this guide only call `compileComponents` when necessary.
 -->
 `compileComponents()`는 필요하지 않은 시점에 실행하더라도 아무 문제가 발생하지 않습니다.
 
-Angular CLI가 자동으로 생성한 컴포넌트 테스트 파일도 필요한 상황이 아니더라도 `compileComponents()`를 실행합니다.
+Angular CLI가 자동으로 생성한 컴포넌트 테스트 파일도 이 메서드가 필요한 지는 알 수 없지만 기본적으로 `compileComponents()`를 실행합니다.
 
 다만 이 문서에서는 꼭 필요할 때만 `compileComponents()`를 실행했습니다.
 
@@ -3191,8 +3191,12 @@ Angular CLI가 자동으로 생성한 컴포넌트 테스트 파일도 필요한
 
 {@a import-module}
 
+<!--
 ## Setup with module imports
+-->
+## 모듈을 로드하는 방식으로 환경설정 하기
 
+<!--
 Earlier component tests configured the testing module with a few `declarations` like this:
 
 <code-example
@@ -3234,9 +3238,54 @@ these tests could be run in a non-CLI environment
 where Angular would have to compile them in the browser.
 
 </div>
+-->
+위에서 살펴본 테스트 코드에서 테스트 모듈의 환경설정은 `declarations`를 사용해서 이렇게 설정했습니다:
 
+<code-example
+  path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
+  region="config-testbed"
+  header="app/dashboard/dashboard-hero.component.spec.ts (TestBed 환경설정)">
+</code-example>
+
+`DashboardComponent`는 아직 간단합니다.
+이정도는 별다른 헬퍼가 필요하지 않습니다.
+하지만 테스트하려는 컴포넌트가 더 복잡해져서 다른 컴포넌트, 디렉티브, 파이프, 서비스 프로바이더를 활용해야 한다면 테스트 모듈에도 이 항목들을 모두 등록해야 합니다.
+
+다행히, `TestBed.configureTestingModule` 인자는 `@NgModule` 데코레이터에 사용하는 메타데이터 형식과 같기 때문에 `providers`와 `imports` 배열도 사용할 수 있습니다.
+
+`HeroDetailComponent` 자체는 간단하지만 이 컴포넌트를 생성하기 위해 필요한 항목들이 많습니다.
+그렇다면 테스트 모듈의 기본 설정으로 활용할 수 있는 `CommonModule` 모듈을 만들어 봅시다.
+이 모듈에는:
+
+- 양방향 데이터 바인딩을 사용하기 위해 `FormsModule`이 제공하는 `NgModel` 관련 심볼을 등록합니다.
+- `shared` 폴더에 있는 `TitleCasePipe`를 등록합니다.
+- 라우터 서비스의 목 객체를 등록합니다.
+- 서비스로 가져올 히어로 데이터를 목 객체로 등록합니다.
+
+이런 설정들을 한 번에 모으면 이렇게 구현할 수 있습니다:
+
+<code-example
+  path="testing/src/app/hero/hero-detail.component.spec.ts"
+  region="setup-forms-module"
+  header="app/hero/hero-detail.component.spec.ts (FormsModule 환경설정)"></code-example>
+
+
+<div class="alert is-helpful">
+
+이 환경설정 코드에서 `beforeEach()`는 비동기이며 `TestBed.compileComponents()`도 실행합니다.
+`HeroDetailComponent`의 템플릿 파일과 스타일 파일이 별도 파일이기 때문에 이렇게 사용했습니다.
+
+그리고 이전에 살펴본 [_compileComponents() 실행하기_](#compile-components) 섹션에서 살펴봤듯이, 이 환경설정 코드는 명시적으로 컴포넌트를 컴파일하기 때문에 Angular CLI로 실행하지 않아도 테스트 코드를 실행할 수 있습니다.
+
+</div>
+
+
+<!--
 #### Import a shared module
+-->
+#### 공유 모듈 로드하기
 
+<!--
 Because many app components need the `FormsModule` and the `TitleCasePipe`, the developer created
 a `SharedModule` to combine these and other frequently requested parts.
 
@@ -3248,11 +3297,27 @@ The test configuration can use the `SharedModule` too as seen in this alternativ
   header="app/hero/hero-detail.component.spec.ts (SharedModule setup)"></code-example>
 
 It's a bit tighter and smaller, with fewer import statements (not shown).
+-->
+`FormsModule`과 `TitleCasePipe`가 애플리케이션 곳곳에 사용된다면 이 부분을 `SharedModule`로 만들어두고 재사용하는 것이 편합니다.
+
+환경설정을 이렇게 구성하면 됩니다:
+
+<code-example
+  path="testing/src/app/hero/hero-detail.component.spec.ts"
+  region="setup-shared-module"
+  header="app/hero/hero-detail.component.spec.ts (SharedModule 환경설정)"></code-example>
+
+이제 이 모듈을 활용하면 환경설정 코드가 더 간단해질 것입니다.
+
 
 {@a feature-module-import}
 
+<!--
 #### Import a feature module
+-->
+#### 기능 모듈 로드하기
 
+<!--
 The `HeroDetailComponent` is part of the `HeroModule` [Feature Module](guide/feature-modules) that aggregates more of the interdependent pieces
 including the `SharedModule`.
 Try a test configuration that imports the `HeroModule` like this one:
@@ -3272,13 +3337,38 @@ when there are many mutual dependencies within the module and
 the module is small, as feature modules tend to be.
 
 </div>
+-->
+`HeroDetailComponent`는 `HeroModule`이라는 [기능 모듈](guide/feature-modules)에 포함되어 있으며 `HeroModule`은 `SharedModule`을 포함해서 다른 구성요소들과도 연관되어 있습니다.
+그렇다면 `HeroModule`을 로드해서 활용하는 테스트 환경설정 코드는 이렇게 구성할 수 있습니다:
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="setup-hero-module" header="app/hero/hero-detail.component.spec.ts (HeroModule 환경설정)"></code-example>
+
+이 코드는 _정말_ 단순합니다.
+`HeroModule`을 제외하면 모두 _목 객체_ 를 등록하는 것 뿐입니다.
+`HeroDetailComponent`를 등록하는 코드도 없습니다.
+
+사실 이렇게 선언하면 `HeroDetailComponent`가 `HeroModule`과 `DynamicTestModule`에 중복 등록되기 때문에 에러가 발생합니다.
+
+
+<div class="alert is-helpful">
+
+테스트 환경을 구성할 때는 컴포넌트를 포함하는 기능 모듈을 통째로 로드하는 방식이 가장 간단합니다.
+모듈을 통째로 로드하면 모듈 안에서 필요한 의존성 관계도 모듈 안에서 자동으로 구성됩니다.
+
+</div>
+
 
 <hr>
 
+
 {@a component-override}
 
+<!--
 ## Override component providers
+-->
+## 컴포넌트 프로바이더 오버라이드하기
 
+<!--
 The `HeroDetailComponent` provides its own `HeroDetailService`.
 
 <code-example path="testing/src/app/hero/hero-detail.component.ts" region="prototype" header="app/hero/hero-detail.component.ts (prototype)"></code-example>
@@ -3317,11 +3407,58 @@ as seen in the following setup variation:
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="setup-override" header="app/hero/hero-detail.component.spec.ts (Override setup)"></code-example>
 
 Notice that `TestBed.configureTestingModule` no longer provides a (fake) `HeroService` because it's [not needed](#spy-stub).
+-->
+`HeroDetailComponent`는 컴포넌트 자체에서 `HeroDetailService`를 등록하고 있습니다.
+
+<code-example path="testing/src/app/hero/hero-detail.component.ts" region="prototype" header="app/hero/hero-detail.component.ts (프로토타입)"></code-example>
+
+이 서비스 프로바이더는 컴포넌트에 등록되어 있기 때문에 `TestBed.configureTestingModule()`에 서비스 프로바이더의 목 객체를 등록하는 방법으로는 대체할 수 없습니다.
+`TestBed.configureTestingModule()`에 등록하는 서비스 프로바이더는 _테스트 모듈_ 에 등록하는 것이지 컴포넌트에 등록하는 것이 아닙니다.
+그래서 이 서비스 프로바이더를 목 객체로 등록하려면 _픽스쳐 계층_ 에 있는 인젝터를 사용해야 합니다.
+
+Angular는 컴포넌트를 생성할 때 픽스쳐 인젝터의 자식 인젝터로 컴포넌트 인젝터를 함께 생성하며, 컴포넌트에 등록된 `HeroDetailService`는 이 컴포넌트 인젝터에 등록됩니다.
+
+하지만 픽스쳐 인젝터로는 자식 인젝터에 등록된 서비스를 참조할 수 없습니다.
+`TestBed.configureTestingModule()`도 마찬가지입니다.
+
+그래서 Angular는 실제 `HeroDetailService` 클래스의 인스턴스를 생성합니다!
+
+
+<div class="alert is-helpful">
+
+`HeroDetailService` 메서드가 리모트 서버로 XHR 요청을 보낸다면 이 테스트 코드가 실패하거나 타임아웃이 발생할 수 있습니다.
+리모트 서버가 준비되지 않았을 수도 있습니다.
+
+다행히, `HeroDetailService`는 의존성으로 주입되는 `HeroService`를 활용해서 데이터를 요청합니다.
+
+<code-example path="testing/src/app/hero/hero-detail.service.ts" region="prototype" header="app/hero/hero-detail.service.ts (프로토타입)"></code-example>
+
+그래서 [이전 섹션에서 설명한](#feature-module-import)대로 실제 `HeroService`를 `TestHeroService`로 대체하면 서버로 보내는 요청을 가로채서 원하는 응답으로 대체할 수 있습니다.
+
+</div>
+
+
+좋지 않은 경우를 생각해 봅시다.
+`HeroService`를 대체하기 어렵다면 어떨까요?
+`HeroDetailService`가 직접 서버로 요청을 보낸다면 어떨까요?
+
+`TestBed.overrideComponent()` 메서드는 컴포넌트의 `providers`에 등록된 의존성 객체를 다른 객체로 대체하는 메서드입니다.
+이렇게 사용합니다:
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="setup-override" header="app/hero/hero-detail.component.spec.ts (환경설정 오버라이드하기)"></code-example>
+
+`TestBed.configureTestingModule()`에는 이제 `HeroService`를 대체하는 코드가 없습니다.
+이 코드는 이제 [필요하지 않습니다](#spy-stub).
+
 
 {@a override-component-method}
 
+<!--
 #### The _overrideComponent_ method
+-->
+#### _overrideComponent_ 메서드
 
+<!--
 Focus on the `overrideComponent` method.
 
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="override-component-method" header="app/hero/hero-detail.component.spec.ts (overrideComponent)"></code-example>
@@ -3349,11 +3486,44 @@ The type parameter, `T`, is the kind of metadata you'd pass to the `@Component` 
   providers?: any[];
   ...
 </code-example>
+-->
+`overrideComponent` 메서드를 봅시다.
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="override-component-method" header="app/hero/hero-detail.component.spec.ts (overrideComponent())"></code-example>
+
+이 메서드는 인자를 2개 받는데, 첫 번째는 오버라이드 하려는 컴포넌트(`HeroDetailComponent`)이고, 두 번째는 오버라이드 메타데이터 객체입니다.
+[오버라이드 메타데이터 객체](guide/testing-utility-apis#metadata-override-object) 제네릭은 이렇게 선언되어 있습니다:
+
+<code-example language="javascript">
+  type MetadataOverride&lt;T&gt; = {
+    add?: Partial&lt;T&gt;;
+    remove?: Partial&lt;T&gt;;
+    set?: Partial&lt;T&gt;;
+  };
+</code-example>
+
+메타데이터 오버라이드 객체는 기존 메타데이터를 수정하거나 온전히 대체하는 방식으로 지정할 수 있습니다.
+위 예제 코드는 컴포넌트의 `providers` 메타데이터를 완전히 대체하는 방식으로 사용되었습니다.
+
+타입 `T`는 `@Component` 데코레이터에 전달하는 메타데이터의 타입을 가리킵니다:
+
+<code-example language="javascript">
+  selector?: string;
+  template?: string;
+  templateUrl?: string;
+  providers?: any[];
+  ...
+</code-example>
+
 
 {@a spy-stub}
 
+<!--
 #### Provide a _spy stub_ (_HeroDetailServiceSpy_)
+-->
+#### _HeroDetailServiceSpy_ 목 객체 등록하기
 
+<!--
 This example completely replaces the component's `providers` array with a new array containing a `HeroDetailServiceSpy`.
 
 The `HeroDetailServiceSpy` is a stubbed version of the real `HeroDetailService`
@@ -3366,24 +3536,54 @@ were called by spying on the service methods.
 Accordingly, the stub implements its methods as spies:
 
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="hds-spy" header="app/hero/hero-detail.component.spec.ts (HeroDetailServiceSpy)"></code-example>
+-->
+위에서 다룬 테스트 코드처럼 사용하면 컴포넌트의 `providers` 배열이 `HeroDetailServiceSpy`가 들어있는 새로운 배열로 완전히 대체됩니다.
+
+`HeroDetailServiceSpy`는 `HeroDetailService`를 대체하는 클래스이며, 서비스가 제공하는 기능은 모두 기존 기능을 대체하는 방식으로 정의되어 있습니다.
+원래 서비스 클래스에 필요한 `HeroService`는 의존성으로 주입되지 않으니 목 객체를 준비할 필요도 없습니다.
+
+`HeroDetailService` 메서드를 활용하는 `HeroDetailComponent` 테스트 코드는 목 서비스로 대체된 코드로 처리되기 때문에 아무런 문제가 발생하지 않습니다.
+목 객체는 이렇게 정의되어 있습니다:
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="hds-spy" header="app/hero/hero-detail.component.spec.ts (HeroDetailServiceSpy)"></code-example>
+
 
 {@a override-tests}
 
+<!--
 #### The override tests
+-->
+#### 오버라이드를 활용한 테스트 코드
 
+<!--
 Now the tests can control the component's hero directly by manipulating the spy-stub's `testHero`
 and confirm that service methods were called.
 
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="override-tests" header="app/hero/hero-detail.component.spec.ts (override tests)"></code-example>
+-->
+이제 컴포넌트 로직은 스파이에 있는 `testHero` 객체를 직접 조작하는 방식으로 테스트할 수 있습니다.
+
+<code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="override-tests" header="app/hero/hero-detail.component.spec.ts (오버라이드를 활용한 테스트 코드)"></code-example>
+
 
 {@a more-overrides}
 
+<!--
 #### More overrides
+-->
+#### 오버라이드 더 활용하기
 
+<!--
 The `TestBed.overrideComponent` method can be called multiple times for the same or different components.
 The `TestBed` offers similar `overrideDirective`, `overrideModule`, and `overridePipe` methods
 for digging into and replacing parts of these other classes.
 
 Explore the options and combinations on your own.
+-->
+`TestBed.overrideComponent()` 메서드는 컴포넌트를 대상으로 여러번 실행할 수도 있습니다.
+그리고 이 메서드와 비슷하게 활용할 수 있는 `overrideDirective()`, `overrideModule()`, `overridePipe()` 메서드를 제공하기 때문에, 클래스의 원하는 부분만 대체할 수도 있습니다.
+
+어떻게 활용할지는 여러분에게 달려있습니다.
+
 
 <hr>
