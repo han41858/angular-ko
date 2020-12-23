@@ -1,19 +1,37 @@
+<!--
 # Testing Utility APIs
+-->
+# 테스트 유틸리티 API
 
+<!--
 This page describes the most useful Angular testing features.
 
 The Angular testing utilities include the `TestBed`, the `ComponentFixture`, and a handful of functions that control the test environment.
 The [_TestBed_](#testbed-api-summary) and [_ComponentFixture_](#component-fixture-api-summary) classes are covered separately.
 
 Here's a summary of the stand-alone functions, in order of likely utility:
+-->
+이 문서는 Angular가 제공하는 테스트 기능 중 유용하게 사용할 수 있는 기능을 안내합니다.
+
+테스트 환경을 구성할 때는 `TestBed`나 `ComponentFixture`와 같은 테스트 유틸리티를 사용하는 것이 편합니다.
+[_TestBed_](#testbed-api-summary) 클래스와 [_ComponentFixture_](#component-fixture-api-summary) 클래스는 별도 문서에서 따로 다룹니다.
+
+자주 사용하는 테스트 유틸리티는 이런 것들이 있습니다:
+
 
 <table>
   <tr>
     <th>
+      <!--
       Function
+      -->
+      함수
     </th>
     <th>
+      <!--
       Description
+      -->
+      설명
     </th>
   </tr>
 
@@ -24,8 +42,12 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       Runs the body of a test (`it`) or setup (`beforeEach`) function within a special _async test zone_.
       See [discussion above](guide/testing-components-scenarios#waitForAsync).
+      -->
+      테스트 스펙(`it`)이나 환경설정 블럭(`beforeEach`) 함수을 _비동기 테스트 존_ 에서 실행합니다.
+      [`waitForAsync()` 로 비동기 테스트하기](guide/testing-components-scenarios#waitForAsync) 섹션을 참고하세요.
 
     </td>
   </tr>
@@ -37,8 +59,13 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       Runs the body of a test (`it`) within a special _fakeAsync test zone_, enabling
       a linear control flow coding style. See [discussion above](guide/testing-components-scenarios#fake-async).
+      -->
+      테스트 스펙(`it`)을 코딩 스타일을 선형(linear)으로 구성해서 _fakeAsync 테스트 존_ 에서 실행합니다.
+      [`fakeAsync()` 로 비동기 테스트하기](guide/testing-components-scenarios#fake-async) 섹션을 참고하세요.
+
 
     </td>
   </tr>
@@ -50,6 +77,7 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       Simulates the passage of time and the completion of pending asynchronous activities
       by flushing both _timer_ and _micro-task_ queues within the _fakeAsync test zone_.
 
@@ -64,6 +92,19 @@ Here's a summary of the stand-alone functions, in order of likely utility:
       by the specified number of milliseconds,
       clearing asynchronous activities scheduled within that timeframe.
       See [discussion above](guide/testing-components-scenarios#tick).
+      -->
+      시간이 지난 것을 시뮬레이션해서 아직 처리되지 않은 비동기 작업을 종료합니다.
+      _타이머_ , _마이크로 태스크_ , _fakeAsync 테스트 존_ 큐가 모두 대상이 됩니다.
+
+
+      <div class="alert is-helpful">
+
+      자세한 내용을 알아보려면 ["_Tasks, microtasks, queues and schedules_"](https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/) 블로그 글을 확인해보는 것도 좋습니다.
+
+      </div>
+
+      이 함수를 실행하면서 밀리초 단위로 인자를 전달하면 원하는 시간만큼 진행할 수 있습니다.
+      [`tick()` 함수](guide/testing-components-scenarios#tick) 섹션을 참고하세요.
 
     </td>
   </tr>
@@ -75,9 +116,13 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       Injects one or more services from the current `TestBed` injector into a test function.
       It cannot inject a service provided by the component itself.
       See discussion of the [debugElement.injector](guide/testing-components-scenarios#get-injected-services).
+      -->
+      현재 `TestBed` 인젝터에 등록된 서비스의 인스턴스를 참조합니다.
+      자세한 내용은 [debugElement.injector](guide/testing-components-scenarios#get-injected-services) 문서를 참고하세요.
 
     </td>
   </tr>
@@ -89,12 +134,18 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       When a `fakeAsync()` test ends with pending timer event _tasks_ (queued `setTimeOut` and `setInterval` callbacks),
       the test fails with a clear error message.
 
       In general, a test should end with no queued tasks.
       When pending timer tasks are expected, call `discardPeriodicTasks` to flush the _task_ queue
       and avoid the error.
+      -->
+      `fakeAsync()` 테스트가 끝난 이후에 남아있는 타이머 이벤트 _태스크_ (ex. `setTimeout`, `setInterval` 콜백)를 종료합니다.
+
+      일반적으로 테스트 코드를 종료할 때는 큐에 남아있는 태스크가 없어야 합니다.
+      그래서 테스트 코드가 종료된 시점에 남아있는 타이머가 있다면 `discardPeriodicTasks`를 실행해서 에러 없이 태스크 큐를 비울 수 있습니다.
 
     </td>
   </tr>
@@ -106,12 +157,18 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       When a `fakeAsync()` test ends with pending _micro-tasks_ such as unresolved promises,
       the test fails with a clear error message.
 
       In general, a test should wait for micro-tasks to finish.
       When pending microtasks are expected, call `flushMicrotasks` to flush the  _micro-task_ queue
       and avoid the error.
+      -->
+      `fakeAsync()` 테스트가 끝난 이후에 남아있는 _마이크로 태스크_ (ex. 프라미스)를 종료합니다.
+
+      일반적으로 테스트 코드는 마이크로 태스크가 모두 종료되기 전까지 종료되지 않습니다.
+      그래서 테스트 코드가 종료된 시점에 남아있는 마이크로 태스크가 있다면 `flushMicrotasks`를 실행해서 에러 없이 _마이크로 태스크_ 큐를 비울 수 있습니다.
 
     </td>
   </tr>
@@ -123,7 +180,10 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       A provider token for a service that turns on [automatic change detection](guide/testing-components-scenarios#automatic-change-detection).
+      -->
+      [변화 감지 로직을 자동으로 실행](guide/testing-components-scenarios#automatic-change-detection)하는 프로바이더 토큰입니다.
 
     </td>
   </tr>
@@ -135,10 +195,15 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
     <td>
 
+      <!--
       Gets the current instance of the `TestBed`.
       Usually unnecessary because the static class methods of the `TestBed` class are typically sufficient.
       The `TestBed` instance exposes a few rarely used members that are not available as
       static methods.
+      -->
+      현재 구성된 `TestBed` 인스턴스를 참조합니다.
+      일반적으로 `TestBed` 클래스의 정적 클래스 메서드를 실행하는 것만으로도 테스트 코드의 환경설정을 끝낼 수 있기 때문에 이 메서드를 사용하는 일은 별로 없습니다.
+      정적 메서드로 설정할 수 없는 클래스 멤버를 직접 참조하는 경우에만 사용합니다. 
 
     </td>
   </tr>
@@ -148,8 +213,12 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
 {@a testbed-class-summary}
 
+<!--
 ## _TestBed_ class summary
+-->
+## _TestBed_ 클래스 요약
 
+<!--
 The `TestBed` class is one of the principal Angular testing utilities.
 Its API is quite large and can be overwhelming until you've explored it,
 a little at a time. Read the early part of this guide first
@@ -180,10 +249,39 @@ appropriate to the method, that is, the parameter of an `@NgModule`,
     set?: Partial&lt;T&gt;;
   };
 </code-example>
+-->
+`TestBed` 클래스는 Angular 테스트 유틸리티 중에서도 가장 중요한 클래스입니다.
+이 클래스는 사용하기 편리한 API를 다양하게 제공합니다.
+개별 API를 사용하기 전에 테스트 문서들에서 다루는 내용을 먼저 보면 API를 어떻게 사용하는 것이 좋을지 쉽게 이해할 수 있을 것입니다.
+
+`configureTestingModule`에 전달하는 모듈 정의 객체는 `@NgModule` 메타데이터와 비슷합니다.
+
+<code-example language="javascript">
+  type TestModuleMetadata = {
+    providers?: any[];
+    declarations?: any[];
+    imports?: any[];
+    schemas?: Array&lt;SchemaMetadata | any[]&gt;;
+  };
+</code-example>
+
+{@a metadata-override-object}
+
+그리고 오버라이드 메서드가 인자로 받는 `MetadataOverride<T>` 객체에서 타입 `T`는 `@NgModule`, `@Component`, `@Directive`, `@Pipe`에 사용되는 메타데이터의 타입을 의미합니다.
+
+<code-example language="javascript">
+  type MetadataOverride&lt;T&gt; = {
+    add?: Partial&lt;T&gt;;
+    remove?: Partial&lt;T&gt;;
+    set?: Partial&lt;T&gt;;
+  };
+</code-example>
+
 
 {@a testbed-methods}
 {@a testbed-api-summary}
 
+<!--
 The `TestBed` API consists of static class methods that either update or reference a _global_ instance of the `TestBed`.
 
 Internally, all static methods cover methods of the current runtime `TestBed` instance,
@@ -192,14 +290,29 @@ which is also returned by the `getTestBed()` function.
 Call `TestBed` methods _within_ a `beforeEach()` to ensure a fresh start before each individual test.
 
 Here are the most important static methods, in order of likely utility.
+-->
+`TestBed`는 _전역_ `TestBed` 인스턴스를 활용하는 정적 클래스 메서드를 제공합니다.
+
+내부적으로 이런 정적 메서드들은 현재 사용되고 있는 `TestBed` 인스턴스를 대상으로 동작하는 것이며, 이 인스턴스는 `getTestBed()` 함수로 참조할 수 있습니다.
+
+`beforeEach()` _안에서_ `TestBed` 메서드를 실행하면 개별 테스트 스펙을 실행할 때 다른 테스트 스펙의 영향을 받지 않는 상태로 테스트 환경을 구성할 수 있습니다.
+
+`TestBed` 메서드 중에서는 이런 메서드들을 자주 사용합니다.
+
 
 <table>
   <tr>
     <th>
+      <!--
       Methods
+      -->
+      메서드
     </th>
     <th>
+      <!--
       Description
+      -->
+      설명
     </th>
   </tr>
 
@@ -210,12 +323,19 @@ Here are the most important static methods, in order of likely utility.
 
     <td>
 
+      <!--
       The testing shims (`karma-test-shim`, `browser-test-shim`)
       establish the [initial test environment](guide/testing) and a default testing module.
       The default testing module is configured with basic declaratives and some Angular service substitutes that every tester needs.
 
       Call `configureTestingModule` to refine the testing module configuration for a particular set of tests
       by adding and removing imports, declarations (of components, directives, and pipes), and providers.
+      -->
+      테스트 환경 구성 파일(`karma-test-shim`, `browser-test-shim`)을 기반으로 [기본 테스트 실행환경](guide/testing)과 기본 테스트 모듈을 생성합니다.
+      테스트 코드를 실행하려면 반드시 테스트 모듈을 구성해야 합니다.
+
+      특정 구성으로 테스트 모듈을 설정할 때는 `configureTestingModule` 메서드를 사용합니다.
+      이 메서드를 활용하면 원하는 컴포넌트, 디렉티브, 파이프, 서비스를 추가로 구성할 수 있습니다.
 
     </td>
   </tr>
@@ -227,12 +347,19 @@ Here are the most important static methods, in order of likely utility.
 
     <td>
 
+      <!--
       Compile the testing module asynchronously after you've finished configuring it.
       You **must** call this method if _any_ of the testing module components have a `templateUrl`
       or `styleUrls` because fetching component template and style files is necessarily asynchronous.
       See [above](guide/testing-components-scenarios#compile-components).
 
       After calling `compileComponents`, the `TestBed` configuration is frozen for the duration of the current spec.
+      -->
+      비동기로 테스트 모듈을 컴파일하면서 테스트 모듈 설정을 확정합니다.
+      테스트 모듈에 있는 컴포넌트 중에 `templateUrl`이나 `styleUrls`를 사용해서 외부 파일을 로드해야 하는 컴포넌트가 있다면 **반드시** 이 메서드를 실행해야 합니다.
+      자세한 내용은 [`compileComponents()` 실행하기](guide/testing-components-scenarios#compile-components) 문서를 참고하세요.
+
+      `compileComponents`을 실행하고 나면 `TestBed` 설정이 확정되어 변경할 수 없습니다.
 
     </td>
   </tr>
@@ -244,8 +371,12 @@ Here are the most important static methods, in order of likely utility.
 
     <td>
 
+      <!--
       Create an instance of a component of type `T` based on the current `TestBed` configuration.
       After calling `compileComponent`, the `TestBed` configuration is frozen for the duration of the current spec.
+      -->
+      현재 구성된 `TestBed` 환경에서 `T` 타입 컴포넌트 인스턴스를 생성합니다.
+      `compileComponents`을 실행하고 나면 `TestBed` 설정이 확정되어 변경할 수 없습니다.
 
     </td>
   </tr>
@@ -256,9 +387,14 @@ Here are the most important static methods, in order of likely utility.
     </td>
     <td>
 
+      <!--
       Replace metadata for the given `NgModule`. Recall that modules can import other modules.
       The `overrideModule` method can reach deeply into the current testing module to
       modify one of these inner modules.
+      -->
+      대상 `NgModule`에 지정된 메타데이터 설정을 변경합니다.
+      모듈은 다른 모듈이 로드할 수 있습니다.
+      `overrideModule` 메서드를 활용하면 현재 테스트 모듈에 로드된 모듈 일부를 변경할 수 있습니다.
 
     </td>
   </tr>
@@ -270,8 +406,11 @@ Here are the most important static methods, in order of likely utility.
 
     <td>
 
+      <!--
       Replace metadata for the given component class, which could be nested deeply
       within an inner module.
+      -->
+      테스트 모듈 메타데이터에 지정된 컴포넌트 설정을 오버라이드합니다.
 
     </td>
   </tr>
@@ -283,8 +422,11 @@ Here are the most important static methods, in order of likely utility.
 
     <td>
 
+      <!--
       Replace metadata for the given directive class, which could be nested deeply
       within an inner module.
+      -->
+      테스트 모듈 메타데이터에 지정된 디렉티브 설정을 오버라이드합니다.
 
     </td>
   </tr>
@@ -295,8 +437,11 @@ Here are the most important static methods, in order of likely utility.
     </td>
     <td>
 
+      <!--
       Replace metadata for the given pipe class, which could be nested deeply
       within an inner module.
+      -->
+      테스트 모듈 메타데이터에 지정된 파이프 설정을 오버라이드 합니다.
 
     </td>
   </tr>
@@ -309,6 +454,7 @@ Here are the most important static methods, in order of likely utility.
 
     <td>
 
+      <!--
       Retrieve a service from the current `TestBed` injector.
 
       The `inject` function is often adequate for this purpose.
@@ -323,6 +469,19 @@ Here are the most important static methods, in order of likely utility.
       <code-example path="testing/src/app/demo/demo.testbed.spec.ts" region="testbed-get-w-null" header="app/demo/demo.testbed.spec.ts"></code-example>
 
       After calling `TestBed.inject`, the `TestBed` configuration is frozen for the duration of the current spec.
+      -->
+      현재 구성된 `TestBed` 인젝터에서 서비스 인스턴스를 참조합니다.
+
+      `inject` 함수는 보통 이런 용도로 사용합니다.
+      그리고 등록되지 않은 서비스를 참조하면 에러가 발생합니다.
+
+      서비스 객체가 옵션 항목인 경우는 어떻게 될까요?
+
+      `TestBed.inject()` 메서드는 두 번째 인자를 받을 수 있는데, 이 인자에는 Angular가 프로바이더를 찾지 못했을 때 반환할 객체를 지정합니다.
+
+      <code-example path="testing/src/app/demo/demo.testbed.spec.ts" region="testbed-get-w-null" header="app/demo/demo.testbed.spec.ts"></code-example>
+
+      `TestBed.inject`를 실행하고 나면 `TestBed` 환경설정이 확정되어 변경할 수 없습니다.
 
     </td>
   </tr>
@@ -334,6 +493,7 @@ Here are the most important static methods, in order of likely utility.
     </td>
     <td>
 
+      <!--
       Initialize the testing environment for the entire test run.
 
       The testing shims (`karma-test-shim`, `browser-test-shim`) call it for you
@@ -345,6 +505,15 @@ Here are the most important static methods, in order of likely utility.
       Specify the Angular compiler factory, a `PlatformRef`, and a default Angular testing module.
       Alternatives for non-browser platforms are available in the general form
       `@angular/platform-<platform_name>/testing/<platform_name>`.
+      -->
+      테스트 실행환경 전체를 초기화합니다.
+
+      이 메서드는 테스트 환경설정 파일(`karma-test-shim`, `browser-test-shim`)이 자동으로 실행하기 때문에 이 메서드를 직접 실행할 일은 거의 없습니다.
+
+      이 메서드를 실행해야 하는 경우는 딱 하나 있습니다.
+      테스트 코드를 실행하다가 테스트 환경설정을 변경하고 나면 `resetTestEnvironment` 메서드를 제일 먼저 실행해야 합니다.
+
+      이 때 `PlatformRef`과 같은 Angular 컴파일러 팩토리를 명시해야 하며, 브라우저가 아닌 환경에서는 `@angular/platform-<플랫폼_이름>/testing/<플랫폼_이름>` 형태를 사용할 수 있습니다.
 
     </td>
   </tr>
@@ -355,14 +524,21 @@ Here are the most important static methods, in order of likely utility.
     </td>
     <td>
 
+      <!--
       Reset the initial test environment, including the default testing module.
+      -->
+      테스트 환경 전체를 초기화합니다. 기본 테스트 모듈도 초기화됩니다.
 
     </td>
   </tr>
 </table>
 
+<!--
 A few of the `TestBed` instance methods are not covered by static `TestBed` _class_ methods.
 These are rarely needed.
+-->
+이 섹션에서 다루지 않은 `TestBed` 메서드는 거의 사용되지 않습니다.
+
 
 {@a component-fixture-api-summary}
 
