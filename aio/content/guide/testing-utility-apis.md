@@ -11,9 +11,9 @@ The [_TestBed_](#testbed-api-summary) and [_ComponentFixture_](#component-fixtur
 
 Here's a summary of the stand-alone functions, in order of likely utility:
 -->
-이 문서는 Angular가 제공하는 테스트 기능 중 유용하게 사용할 수 있는 기능을 안내합니다.
+이 문서는 Angular가 제공하는 테스트 기능 중에서 유용하게 사용할 수 있는 기능을 안내합니다.
 
-테스트 환경을 구성할 때는 `TestBed`나 `ComponentFixture`와 같은 테스트 유틸리티를 사용하는 것이 편합니다.
+테스트 환경을 구성하려면 `TestBed`나 `ComponentFixture`와 같은 테스트 유틸리티를 사용하는 것이 편합니다.
 [_TestBed_](#testbed-api-summary) 클래스와 [_ComponentFixture_](#component-fixture-api-summary) 클래스는 별도 문서에서 따로 다룹니다.
 
 자주 사용하는 테스트 유틸리티는 이런 것들이 있습니다:
@@ -165,7 +165,7 @@ Here's a summary of the stand-alone functions, in order of likely utility:
       When pending microtasks are expected, call `flushMicrotasks` to flush the  _micro-task_ queue
       and avoid the error.
       -->
-      `fakeAsync()` 테스트가 끝난 이후에 남아있는 _마이크로 태스크_ (ex. 프라미스)를 종료합니다.
+      `fakeAsync()` 테스트가 끝난 이후에 남아있는 _마이크로 태스크_ (ex. `Promise`)를 종료합니다.
 
       일반적으로 테스트 코드는 마이크로 태스크가 모두 종료되기 전까지 종료되지 않습니다.
       그래서 테스트 코드가 종료된 시점에 남아있는 마이크로 태스크가 있다면 `flushMicrotasks`를 실행해서 에러 없이 _마이크로 태스크_ 큐를 비울 수 있습니다.
@@ -544,26 +544,44 @@ These are rarely needed.
 
 ## The _ComponentFixture_
 
+<!--
 The `TestBed.createComponent<T>`
 creates an instance of the component `T`
 and returns a strongly typed `ComponentFixture` for that component.
 
 The `ComponentFixture` properties and methods provide access to the component,
 its DOM representation, and aspects of its Angular environment.
+-->
+`TestBed.createComponent<T>` 메서드를 실행하면 컴포넌트 `T`의 인스턴스를 생성하면서 해당 컴포넌트의 타입에 맞게 동작하는 `ComponentFixture` 객체를 반환합니다.
+
+`ComponentFixture`에 존재하는 프로퍼티와 메서드를 활용하면 컴포넌트 인스턴스나 DOM 트리, Angular 환경에 접근할 수 있습니다.
+
 
 {@a component-fixture-properties}
 
+<!--
 ### _ComponentFixture_ properties
+-->
+### _ComponentFixture_ 프로퍼티
 
+<!--
 Here are the most important properties for testers, in order of likely utility.
+-->
+테스트 코드를 작성할 때 자주 사용하는 프로퍼티는 이런 것들이 있습니다.
 
 <table>
   <tr>
     <th>
+      <!--
       Properties
+      -->
+      프로퍼티
     </th>
     <th>
+      <!--
       Description
+      -->
+      설명
     </th>
   </tr>
 
@@ -574,7 +592,10 @@ Here are the most important properties for testers, in order of likely utility.
 
     <td>
 
+      <!--
       The instance of the component class created by `TestBed.createComponent`.
+      -->
+      `TestBed.createComponent`로 생성한 컴포넌트 클래스의 인스턴스를 참조합니다.
 
     </td>
   </tr>
@@ -586,10 +607,17 @@ Here are the most important properties for testers, in order of likely utility.
 
     <td>
 
+      <!--
       The `DebugElement` associated with the root element of the component.
 
       The `debugElement` provides insight into the component and its DOM element during test and debugging.
       It's a critical property for testers. The most interesting members are covered [below](#debug-element-details).
+      -->
+      `DebugElement`는 컴포넌트가 위치한 최상위 엘리먼트와 관련이 있습니다.
+
+      `debugElement`를 활용하면 테스트 코드를 작성하면서 컴포넌트 내부나 DOM 엘리먼트에 접근할 수 있습니다.
+      그래서 이 프로퍼티는 테스트 코드를 작성할 때 아주 중요합니다.
+      이 객체에 대해서는 [아래](#debug-element-details)에서 자세하게 알아봅시다.
 
     </td>
   </tr>
@@ -601,7 +629,10 @@ Here are the most important properties for testers, in order of likely utility.
 
     <td>
 
+      <!--
       The native DOM element at the root of the component.
+      -->
+      컴포넌트의 최상위 DOM 엘리먼트를 참조합니다.
 
     </td>
   </tr>
@@ -613,32 +644,53 @@ Here are the most important properties for testers, in order of likely utility.
 
     <td>
 
+      <!--
       The `ChangeDetectorRef` for the component.
 
       The `ChangeDetectorRef` is most valuable when testing a
       component that has the `ChangeDetectionStrategy.OnPush` method
       or the component's change detection is under your programmatic control.
+      -->
+      컴포넌트 안에 있는 `ChangeDetectorRef`를 참조합니다.
+
+      `ChangeDetectorRef`는 컴포넌트의 변화 감지 정책을 수동으로 관리하는 테스트 환경이나 `ChangeDetectionStrategy.OnPush` 메서드를 수동으로 실행할 때 중요합니다.
 
     </td>
   </tr>
 </table>
 
+
 {@a component-fixture-methods}
 
+<!--
 ### _ComponentFixture_ methods
+-->
+### _ComponentFixture_ 메서드
 
+<!--
 The _fixture_ methods cause Angular to perform certain tasks on the component tree.
 Call these method to trigger Angular behavior in response to simulated user action.
 
 Here are the most useful methods for testers.
+-->
+_fixture_ 가 제공하는 메서드를 실행하면 Angular가 컴포넌트 트리에 영향을 미칩니다.
+이 메서드들은 사용자의 동작을 시뮬레이션하는 용도로 사용합니다.
+
+테스트 코드를 작성할 때 자주 사용하는 메서드는 이런 것들이 있습니다.
 
 <table>
   <tr>
     <th>
+      <!--
       Methods
+      -->
+      메서드
     </th>
     <th>
+      <!--
       Description
+      -->
+      설명
     </th>
   </tr>
 
@@ -649,6 +701,7 @@ Here are the most useful methods for testers.
 
     <td>
 
+      <!--
       Trigger a change detection cycle for the component.
 
       Call it to initialize the component (it calls `ngOnInit`) and after your
@@ -658,6 +711,13 @@ Here are the most useful methods for testers.
 
       Runs `checkNoChanges` afterwards to confirm that there are no circular updates unless
       called as `detectChanges(false)`;
+      -->
+      컴포넌트의 변화 감지 싸이클을 시작합니다.
+
+      이 메서드는 컴포넌트를 초기화 할 때(`ngOnInit()`이 실행되는 시점) 한 번 실행하며, 테스트 코드가 실행되다가 컴포넌트에 바인딩된 데이터가 변경될때마다 실행하면 됩니다.
+      필요한 시점에 이 메서드를 실행하지 않으면 `personComponent.name`이라는 프로퍼티의 `name` 프로퍼티가 변경된 것을 감지하지 않으며 바인딩된 데이터도 갱신하지 않습니다.
+
+      더이상 변경되는 내용이 없는 것을 확인하려면 `checkNoChanges` 옵션값을 `false`로 사용해서 `detectChanges(false)`라고 실행할 수 있습니다.
 
     </td>
   </tr>
@@ -669,6 +729,7 @@ Here are the most useful methods for testers.
 
     <td>
 
+      <!--
       Set this to `true` when you want the fixture to detect changes automatically.
 
       When autodetect is `true`, the test fixture calls `detectChanges` immediately
@@ -679,6 +740,15 @@ Here are the most useful methods for testers.
 
       The default is `false`. Testers who prefer fine control over test behavior
       tend to keep it `false`.
+      -->
+      컴포넌트 픽스쳐의 변화 감지 싸이클을 자동으로 실행할 때 사용합니다.
+
+      이 메서드에 `true` 인자를 전달하면 컴포넌트 인스턴스가 생성된 직후에 `detectChanges` 메서드가 자동으로 실행됩니다.
+      그리고 컴포넌트에 바인딩된 프로퍼티 값이 변경될 때도 자동으로 `detectChanges`를 실행합니다.
+      다만, 테스트 코드에서 컴포넌트 프로퍼티 값을 직접 수정했다면 바인딩된 데이터를 갱신하기 위해 `fixture.detectChanges`를 직접 실행해야 합니다.
+
+      이 메서드 인자의 기본값은 `false` 입니다.
+      테스트 환경을 수동으로 제어하려면 `false`로 두는 것도 좋습니다.
 
     </td>
   </tr>
@@ -690,8 +760,13 @@ Here are the most useful methods for testers.
 
     <td>
 
+      <!--
       Do a change detection run to make sure there are no pending changes.
       Throws an exceptions if there are.
+      -->
+      더이상 변경될 것이 없다는 것을 확인하는 변화 감지 싸이클을 시작합니다.
+      이 변화 감지 싸이클 실행 중에 새롭게 반영되는 내용이 있으면 에러가 발생합니다.
+
     </td>
   </tr>
 
@@ -702,8 +777,12 @@ Here are the most useful methods for testers.
 
     <td>
 
+      <!--
       If the fixture is currently _stable_, returns `true`.
       If there are async tasks that have not completed, returns `false`.
+      -->
+      픽스쳐가 안정 상태이면 `true`를 반환합니다.
+      아직 완료되지 않은 비동기 태스크가 있다면 `false`를 반환합니다.
 
     </td>
   </tr>
@@ -715,12 +794,17 @@ Here are the most useful methods for testers.
 
     <td>
 
+      <!--
       Returns a promise that resolves when the fixture is stable.
 
       To resume testing after completion of asynchronous activity or
       asynchronous change detection, hook that promise.
       See [above](guide/testing-components-scenarios#when-stable).
+      -->
+      픽스쳐가 안정상태가 될 때 완료되는 프라미스를 반환합니다.
 
+      이 메서드는 비동기 작업이나 비동기 변화 감지를 기다렸다가 다음 코드를 실행할 때 사용합니다.
+      자세한 내용은 [위 항목](guide/testing-components-scenarios#when-stable)을 참고하세요.
     </td>
   </tr>
 
@@ -731,30 +815,47 @@ Here are the most useful methods for testers.
 
     <td>
 
+      <!--
       Trigger component destruction.
+      -->
+      컴포넌트를 종료합니다.
 
     </td>
   </tr>
 </table>
 
+
 {@a debug-element-details}
 
 #### _DebugElement_
 
+<!--
 The `DebugElement` provides crucial insights into the component's DOM representation.
 
 From the test root component's `DebugElement` returned by `fixture.debugElement`,
 you can walk (and query) the fixture's entire element and component subtrees.
 
 Here are the most useful `DebugElement` members for testers, in approximate order of utility:
+-->
+`DebugElement`를 활용하면 컴포넌트의 DOM에 직접 접근할 수 있습니다.
+
+`fixture.debugElement`라고 사용하면 테스트 환경에 있는 최상위 컴포넌트의 `DebugElement`를 참조할 수 있으며, 이 객체 안에 존재하는 엘리먼트나 하위 컴포넌트를 자유롭게 탐색할 수 있습니다.
+
+`DebugElement`의 멤버 중에 테스트 코드에 자주 사용하는 것은 이런 것들이 있습니다.
 
 <table>
   <tr>
     <th>
+      <!--
       Member
+      -->
+      멤버
     </th>
     <th>
+      <!--
       Description
+      -->
+      설명
     </th>
   </tr>
 
@@ -765,7 +866,11 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       The corresponding DOM element in the browser (null for WebWorkers).
+      -->
+      브라우저에 존재하는 DOM 엘리먼트를 참조합니다.
+      (WebWorker 실행 환경에서는 `null`입니다.)
 
     </td>
   </tr>
@@ -777,8 +882,11 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       Calling `query(predicate: Predicate<DebugElement>)` returns the first `DebugElement`
       that matches the [predicate](#query-predicate) at any depth in the subtree.
+      -->
+      `query(predicate: Predicate<DebugElement>)`라고 사용하면 DOM 트리에서 [쿼리 식](#query-predicate)과 매칭되는 첫 번째 `DebugElement`를 반환합니다.
 
     </td>
   </tr>
@@ -790,8 +898,11 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       Calling `queryAll(predicate: Predicate<DebugElement>)` returns all `DebugElements`
       that matches the [predicate](#query-predicate) at any depth in subtree.
+      -->
+      `queryAll(predicate: Predicate<DebugElement>)`라고 사용하면 DOM 트리 안에서 [쿼리 식](#query-predicate)과 매칭되는 모든 `DebugElement`를 반환합니다.
 
     </td>
   </tr>
@@ -803,8 +914,12 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       The host dependency injector.
       For example, the root element's component instance injector.
+      -->
+      호스트 인젝터를 참조합니다.
+      테스트 코드에서 사용하면 최상위 엘리먼트 역할을 하는 컴포넌트 인스턴스의 인젝터를 참조합니다.
 
     </td>
   </tr>
@@ -816,7 +931,10 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       The element's own component instance, if it has one.
+      -->
+      컴포넌트 인스턴스가 존재하면 인스턴스를 반환합니다.
 
     </td>
   </tr>
@@ -828,12 +946,19 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       An object that provides parent context for this element.
       Often an ancestor component instance that governs this element.
 
       When an element is repeated within `*ngFor`, the context is an `NgForRow` whose `$implicit`
       property is the value of the row instance value.
       For example, the `hero` in `*ngFor="let hero of heroes"`.
+      -->
+      현재 엘리먼트의 부모 컨텍스트를 반환합니다.
+      엘리먼트의 부모 컴포넌트를 찾아야 할 때 사용합니다.
+
+      엘리먼트가 `*ngFor`로 반복되고 있다면 `context`는 `NgForRow` 컨텍스트를 반환하며, 이 컨텍스트에서 `$implicit` 프로퍼티를 참조하면 해당 반복문이 순회하는 객체를 확인할 수 있습니다.
+      `*ngFor="let hero of heroes"`라고 사용하고 있다면 `hero` 객체를 확인할 수 있습니다.
 
     </td>
   </tr>
@@ -845,6 +970,7 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       The immediate `DebugElement` children. Walk the tree by descending through `children`.
 
       <div class="alert is-helpful">
@@ -852,6 +978,17 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
       `DebugElement` also has `childNodes`, a list of `DebugNode` objects.
       `DebugElement` derives from `DebugNode` objects and there are often
       more nodes than elements. Testers can usually ignore plain nodes.
+
+      </div>
+      -->
+      `DebugElement`의 자식 객체를 참조합니다.
+      `children` 프로퍼티를 활용하면 DOM 트리의 자식 객체를 참조할 수 있습니다.
+
+      <div class="alert is-helpful">
+
+      `DebugElement`에도 `DebugNode` 타입을 리스트로 관리하는 `childNodes` 프로퍼티가 존재합니다.
+      ``DebugElement` 객체도 `DebugNode` 객체를 기반으로 구성되는 것이며, 상황에 따라 엘리먼트 개수보다 더 많은 노드가 존재할 수도 잇습니다.
+      엘리먼트가 아닌 노드는 무시해도 됩니다.
 
       </div>
     </td>
@@ -863,7 +1000,10 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
     </td>
     <td>
 
+      <!--
       The `DebugElement` parent. Null if this is the root element.
+      -->
+      부모 `DebugElement`를 참조합니다. 최상위 엘리먼트에서 참조하면 `null`을 반환합니다.
 
     </td>
   </tr>
@@ -875,7 +1015,10 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       The element tag name, if it is an element.
+      -->
+      일반 엘리먼트라면 엘리먼트 태그 이름을 반환합니다.
 
     </td>
   </tr>
@@ -886,6 +1029,7 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
     </td>
     <td>
 
+      <!--
       Triggers the event by its name if there is a corresponding listener
       in the element's `listeners` collection.
       The second parameter is the _event object_ expected by the handler.
@@ -893,6 +1037,12 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
       If the event lacks a listener or there's some other problem,
       consider calling `nativeElement.dispatchEvent(eventObject)`.
+      -->
+      엘리먼트의 `listeners` 콜렉션에 존재하는 이벤트를 발생시킵니다.
+      이 메서드의 두 번째 인자에는 핸들러가 처리할 _이벤트 객체_ 를 전달할 수 있습니다.
+      자세한 내용은 [위 항목](guide/testing-components-scenarios#trigger-event-handler)을 참고하세요.
+
+      해당 이름으로 등록된 이벤트 리스너가 없거나 이 메서드 실행에 문제가 있다면 `nativeElement.dispatchEvent(eventObject)`를 대신 사용하세요.
 
     </td>
   </tr>
@@ -904,7 +1054,10 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       The callbacks attached to the component's `@Output` properties and/or the element's event properties.
+      -->
+      컴포넌트의 `@Output` 프로퍼티와 엘리먼트 이벤트 프로퍼티에 등록된 콜백 함수들을 반환합니다.
 
     </td>
   </tr>
@@ -916,8 +1069,12 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       This component's injector lookup tokens.
       Includes the component itself plus the tokens that the component lists in its `providers` metadata.
+      -->
+      해당 컴포넌트 인젝터에 사용된 의존성 주입 토큰을 참조합니다.
+      컴포넌트 토큰과 이 컴포넌트의 `providers` 메타데이터에 등록된 토큰이 모두 포함됩니다.
 
     </td>
   </tr>
@@ -929,7 +1086,10 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       Where to find this element in the source component template.
+      -->
+      소스 컴포넌트 템플릿에서 엘리먼트가 위치하는 곳을 반환합니다.
 
     </td>
   </tr>
@@ -941,8 +1101,12 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
     <td>
 
+      <!--
       Dictionary of objects associated with template local variables (e.g. `#foo`),
       keyed by the local variable name.
+      -->
+      템플릿에 선언된 템플릿 지역 변수(ex. `#foo`)를 모아서 객체 형태로 반환합니다.
+      지역 변수가 이 객체의 키로 구성됩니다.
 
     </td>
   </tr>
@@ -950,6 +1114,7 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
 
 {@a query-predicate}
 
+<!--
 The `DebugElement.query(predicate)` and `DebugElement.queryAll(predicate)` methods take a
 predicate that filters the source element's subtree for matching `DebugElement`.
 
@@ -965,6 +1130,22 @@ The Angular `By` class has three static methods for common predicates:
 - `By.directive(directive)` - return elements that Angular matched to an instance of the directive class.
 
 <code-example path="testing/src/app/hero/hero-list.component.spec.ts" region="by" header="app/hero/hero-list.component.spec.ts"></code-example>
+-->
+`DebugElement.query(predicate)` 메서드와 `DebugElement.queryAll(predicate)` 메서드는 소스 엘리먼트에서 원하는 `DebugElement`를 찾기 위해 매처(predicate)를 인자로 전달합니다.
+
+이 때 매처는 `DebugElement`를 인자로 받아서 _참으로 평가되는_ 값을 반환하는 함수면 어떤것이든 사용할 수 있습니다.
+그래서 아래 코드처럼 템플릿 지역 변수 `content`를 참조하고 있는 `DebugElements`를 모두 찾는 것도 가능합니다:
+
+<code-example path="testing/src/app/demo/demo.testbed.spec.ts" region="custom-predicate" header="app/demo/demo.testbed.spec.ts"></code-example>
+
+Angular가 제공하는 `By` 클래스는 정적 메서드를 3종류로 제공합니다:
+
+- `By.all` - 모든 엘리먼트를 반환합니다.
+- `By.css(selector)` - CSS 셀렉터와 매칭되는 엘리먼트를 모두 반환합니다.
+- `By.directive(directive)` - 특정 디렉티브가 적용된 엘리먼트를 모두 반환합니다.
+
+<code-example path="testing/src/app/hero/hero-list.component.spec.ts" region="by" header="app/hero/hero-list.component.spec.ts"></code-example>
+
 
 <hr>
 
