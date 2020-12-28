@@ -654,6 +654,7 @@ which automatically recognizes lazy-loaded `NgModules` and creates separate bund
 
 그리고 애플리케이션 초기 실행과 관련되지 않은 모듈은 Angular 라우터로 지연로딩하거나 [애플리케이션이 시작된 직후에](guide/router-tutorial-toh#preloading  "Preloading") 로딩할 수 있으며 [_지연 로딩_](guide/router#lazy-loading "Lazy loading")할 수도 있습니다.
 
+
 <div class="callout is-helpful">
 
 <header>지연로딩하는 모듈에 있는 심볼을 즉시로딩하지 마세요.</header>
@@ -667,6 +668,8 @@ which automatically recognizes lazy-loaded `NgModules` and creates separate bund
 이런 설정은 개발자가 직접 해줘야 합니다.
 
 Angular CLI는 [Angular AoT Webpack 플러그인](https://github.com/angular/angular-cli/tree/master/packages/ngtools/webpack)을 사용하기 때문에 지연로딩되는 `NgModule`을 자동으로 인식하고 번들링 파일을 생성합니다.
+
+</div>
 
 
 {@a measure}
