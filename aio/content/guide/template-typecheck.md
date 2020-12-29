@@ -242,7 +242,7 @@ Angular 9버전부터 도입된 엄격한 타입 검사 모드를 활성화하�
 |`strictOutputEventTypes`|컴포넌트/디렉티브가 `@Output()`으로 보내는 `$event`의 타입과 애니메이션 이벤트의 타입을 검사할지 지정합니다. `false`로 설정하면 이벤트를 `any` 타입으로 처리합니다.|
 |`strictDomEventTypes`|이벤트 바인딩으로 연결한 DOM 이벤트의 타입을 검사할지 지정합니다. `false`로 설정하면 이벤트 객체를 `any` 타입으로 처리합니다.|
 |`strictContextGenerics`|제네릭 컴포넌트에 사용되는 인자 타입을 검사할지 지정합니다. `false`로 설정하면 `any`로 처리합니다.|
-|`strictLiteralTypes`|Whether object and array literals declared in the template will have their type inferred. If disabled, the type of such literals will be `any`.|
+|`strictLiteralTypes`|템플릿에 선언된 객체와 배열 리터럴의 타입을 추론할지 지정합니다. `false`로 설정하면 이 리터럴들을 `any`로 간주합니다.|
 
 
 플래그를 조정하더라도 문제가 계속 발생하면 언제라도 `strictTemplates`를 비활성화해서 전체검사 모드로 변경할 수 있습니다.
@@ -329,7 +329,9 @@ export class AppComponent {
 그런데 이 예제 코드에서는 `AppComponent`의 `selectedUser` 프로퍼티가 `UserDetailComponent`의 `user` 타입과 맞지 않기 때문에 에러가 발생합니다.
 이 때 실행되는 타입 검사 로직은 `strictNullChecks`와 같은 플래그의 영향을 받습니다.
 
-You can avoid run-time type errors by providing more specific in-template type requirements to the template type checker. Make the input type requirements for your own directives as specific as possible by providing template-guard functions in the directive definition. See [Improving template type checking for custom directives](guide/structural-directives#directive-type-checks), and [Input setter coercion](#input-setter-coercion) in this guide.
+템플릿에서 타입을 강하게 규제할수록 실행 시점에 발생하는 타입 에러를 방지할 수 있습니다.
+그래서 커스텀 디렉티브를 만들 때 해당 디렉티브에 적용되는 템플릿 가드 함수를 정의할 수 있으며, 이 함수를 탄탄하게 만들수록 타입을 확실하게 검사할 수 있습니다.
+[커스텀 디렉티브에 향상된 템플릿 타입 검사 적용하기](guide/structural-directives#directive-type-checks) 문서와 [입력 프로퍼티 타입 검사](#input-setter-coercion) 문서를 참고하세요.
 
 
 <!--
@@ -406,7 +408,7 @@ Additionally, it is possible to provide type hints that are specific to the temp
 먼저, `strictNullChecks` 옵션을 활성화하고 입력으로 받을 수 있는 타입에 `null`을 추가하세요.
 라이브러리 사용자가 `null` 값을 입력값으로 전달하더라도 문제가 생기지 않을 것입니다.
 템플릿 타입 검사 로직에 힌트를 제공할 수도 있습니다.
-See [Improving template type checking for custom directives](guide/structural-directives#directive-type-checks), and [Input setter coercion](#input-setter-coercion) below.
+[커스텀 디렉티브에 향상된 템플릿 타입 검사 적용하기](guide/structural-directives#directive-type-checks) 문서와 [입력 프로퍼티 타입 검사](#input-setter-coercion) 문서를 참고하세요.
 
 {@a input-setter-coercion}
 

@@ -885,14 +885,14 @@ Differential loading is a strategy that allows your web application to support m
 그래서 증분 로딩이 등장했습니다.
 
 증분 로딩은 Angular CLI로 애플리케이션을 빌드할 때 이 애플리케이션의 빌드 결과물을 두 벌로 생성하는 방식입니다.
-첫번째 세트에는 최신 JavaScript 문법을 지원하는 코드가 들어갑니다.
+첫 번째 세트에는 최신 JavaScript 문법을 지원하는 코드가 들어갑니다.
 이 결과물에는 폴리필이 최소한으로 들어가기 때문에 번들 결과물의 크기도 상대적으로 작습니다.
-그리고 두번째 세트에는 조금 더 낮은 JavaScript 버전으로 빌드된 코드와 오래된 브라우저에서 지원하지 않는 문법을 실행하기 위한 폴리필이 모두 포함되는데, 따라서 번들 결과물의 크기는 상대적으로 좀 더 큽니다.
+그리고 두 번째 세트에는 조금 더 낮은 JavaScript 버전으로 빌드된 코드와 오래된 브라우저에서 지원하지 않는 문법을 실행하기 위한 폴리필이 모두 포함되는데, 따라서 번들 결과물의 크기는 상대적으로 좀 더 큽니다.
 증분 로딩 방식을 사용하면 애플리케이션이 동작하는 브라우저를 더 확보할 수 있으면서도, 브라우저에 꼭 필요한 코드만 로딩할 수 있습니다.
 
-* 첫번째 빌드 결과물에는 최신 ES2015 문법이 사용됩니다. 이 문법을 활용하면 최신 브라우저가 지원하는 훌륭한 내장 기능을 폴리필없이 사용할 수 있기 때문에 번들 결과물 크기도 작습니다.
+* 첫 번째 빌드 결과물에는 최신 ES2015 문법이 사용됩니다. 이 문법을 활용하면 최신 브라우저가 지원하는 훌륭한 내장 기능을 폴리필없이 사용할 수 있기 때문에 번들 결과물 크기도 작습니다.
 
-* 두번째 빌드 결과물에는 ES5 문법이 사용되며, 폴리필이 필요하면 폴릴필도 함께 포함됩니다. 빌드 결과물은 ES2015 문법이 사용된 것보다 조금 더 크지만 오래된 브라우저도 지원할 수 있습니다.
+* 두 번째 빌드 결과물에는 ES5 문법이 사용되며, 폴리필이 필요하면 폴릴필도 함께 포함됩니다. 빌드 결과물은 ES2015 문법이 사용된 것보다 조금 더 크지만 오래된 브라우저도 지원할 수 있습니다.
 
 
 <!--
@@ -1013,6 +1013,7 @@ Angular CLI로 빌드한 것을 배포할 때는 언제/어떻게 증분 로딩�
 -->
 ### 증분 로딩 활성화하기
 
+<!--
 To include differential loading in your application builds, you must configure the Browserslist and TypeScript configuration files in your application project.
 
 The following examples show a `.browserslistrc` and `tsconfig.json` file for a newly created Angular application. In this configuration, legacy browsers such as IE 9-11 are ignored, and the compilation target is ES2015.
@@ -1081,6 +1082,80 @@ If your Browserslist configuration includes support for any legacy browsers, the
 | ES5 support disabled | es2015  | Single build, ES5 not required |
 | ES5 support enabled  | es5     | Single build w/conditional polyfills for ES5 only |
 | ES5 support enabled  | es2015  | Differential loading (two builds w/conditional polyfills) |
+-->
+애플리케이션을 빌드하면서 증분 로딩을 포함하려면 애플리케이션 프로젝트에 있는 Browserlist 파일과 TypeScript 환경설정 파일을 조정해야 합니다.
+
+아래 코드는 Angular 애플리케이션을 생성했을 때 자동으로 생성되는 `.browserslistrc` 파일과 `tsconfig.json` 파일의 내용입니다.
+이 파일에 설정된 내용을 보면, IE 9-11과 같이 오래된 브라우저는 지원하지 않으며, 빌드 결과물은 ES2015 문법으로 생성합니다.target is ES2015.
+
+<code-example language="none" header=".browserslistrc">
+# 이 파일은 이후에 나열하는 브라우저를 지원하기 위해 빌드 시스템의 CSS, JS 파일 생성 방식을 조정할 때 사용됩니다.
+# 사용할 수 있는 형식과 규칙에 대해 알아보려면 이 링크를 참고하세요:
+# https://github.com/browserslist/browserslist#queries
+
+# Angular 프레임워크가 지원하는 모든 브라우저 목록을 확인하려면 이 문서를 참고하세요:
+# https://angular.io/guide/browser-support
+
+# 지정한 내용이 어떤 브라우저를 지원하는지 확인하려면 이 명령을 실행하면 됩니다:
+#   npx browserslist
+
+last 1 Chrome version
+last 1 Firefox version
+last 2 Edge major versions
+last 2 Safari major versions
+last 2 iOS major versions
+Firefox ESR
+not IE 11 # Angular는 명시적으로 허용할 때만 IE 11를 지원합니다. IE 11를 지원하려면 이 줄에 있는 'not' 접두사를 제거하세요.
+</code-example>
+
+<code-example language="json" header="tsconfig.json">
+
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  }
+}
+
+</code-example>
+
+<div class="alert is-important">
+
+원하는 브라우저를 지원하려면 어떻게 설정해야 하는지 확인하려면 [Browserlist 호환성 가이드](https://browserl.ist/?q=%3E+0.5%25%2C+last+2+versions%2C+Firefox+ESR%2C+not+dead%2C+not+IE+9-11) 문서를 참고하세요.
+
+</div>
+
+
+Browserlist 환경설정을 활용하면 ES2015 미지원 브라우저를 무시할 수 있습니다.
+이 경우에는 빌드 결과물이 한 벌만 생성됩니다.
+
+하지만 TypeScript 환경설정 파일에서 설정된 빌드 결과물 문법을 지원하지 않는 브라우저가 Browserlist에 등록되어 있다면 증분 로딩을 지원할 것인지 결정할 수 있습니다.
+
+
+{@a configuration-table }
+
+| Browserslist | ES 문법 | 빌드 결과물 |
+| -------- | -------- | -------- |
+| ES5 미지원 | es2015  | ES2015 한 벌만 생성됨 |
+| ES5 지원  | es5     | ES5 한 벌만 생성됨, 폴리필이 추가될 수 있음 |
+| ES5 지원  | es2015  | 증분 로딩 (개별 폴리필 포함 두 벌) |
+
 
 {@a test-and-serve}
 

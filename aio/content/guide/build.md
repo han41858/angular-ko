@@ -447,8 +447,13 @@ Each budget entry is a JSON object with the following properties:
 </table>
 
 {@a commonjs }
-## Configuring CommonJS dependencies
 
+<!--
+## Configuring CommonJS dependencies
+-->
+## CommonJS 패키지 관리
+
+<!--
 <div class="alert is-important">
 
 It is recommended that you avoid depending on CommonJS modules in your Angular applications.
@@ -473,6 +478,32 @@ To disable these warnings, you can add the CommonJS module name to `allowedCommo
    ...
 },
 </code-example>
+-->
+<div class="alert is-important">
+
+Angular 애플리케이션에는 CommonJS 모듈을 사용하는 패키지를 사용하지 않는 것을 권장합니다.
+CommonJS 모듈 방식은 애플리케이션 최적화 단계에서 코드 압축 기능을 활용할 수 없기 때문에 빌드 결과물의 크기가 상대적으로 더 큽니다.
+그래서 [ECMAScript 모듈](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) 방식으로 구현된 패키지를 사용하는 것을 권장합니다.
+자세한 내용은 [How CommonJS is making your bundles larger](https://web.dev/commonjs-larger-bundles/) 문서를 참고하세요.
+
+</div>
+
+Angular CLI는 CommonJS 모듈 방식으로 구현된 패키지를 발견하면 경고 메시지를 표시합니다.
+이 경고 메시지를 없애려면 `angular.json` 파일의 `build` 옵션 `allowedCommonJsDependencies` 배열에 CommonJS 모듈 이름을 추가하면 됩니다.
+
+<code-example lang="json">
+"build": {
+  "builder": "@angular-devkit/build-angular:browser",
+  "options": {
+     "allowedCommonJsDependencies": [
+        "lodash"
+     ]
+     ...
+   }
+   ...
+},
+</code-example>
+
 
 {@a browser-compat}
 

@@ -34,7 +34,6 @@ The template options object, `angularCompilerOptions`, is a sibling to the `comp
 -->
 ## 설정값 상속받기
 
-Like the TypeScript compiler, The Angular AOT compiler also supports `extends` in the `angularCompilerOptions` section of the TypeScript configuration file.
 <!--
 Like the TypeScript compiler, The Angular AOT compiler also supports `extends` in the `angularCompilerOptions` section of the TypeScript configuration file.
 The `extends` property is at the top level, parallel to `compilerOptions` and `angularCompilerOptions`.
@@ -167,6 +166,7 @@ When `true`, the compiler does not check the TypeScript version and does not rep
 
 ### `enableI18nLegacyMessageIdFormat`
 
+<!--
 Instructs the Angular template compiler to generate legacy ids for messages that are tagged in templates by the `i18n` attribute.
 See [Localizing your app](guide/i18n#mark-text-for-translations) for more information about marking messages for localization.
 
@@ -177,6 +177,19 @@ These message formats have a number of issues, such as whitespace handling and r
 
 The new message format is more resilient to whitespace changes, is the same across all translation file formats, and can be generated directly from calls to `$localize`.
 This allows `$localize` messages in application code to use the same id as identical `i18n` messages in component templates.
+-->
+이전 버전까지 사용하던 `i18n` 어트리뷰트가 지정둰 태그에서 ID를 추출할지 결정합니다.
+다국어 대상 문장을 지정하는 방법은 [다국어 적용하기](guide/i18n#mark-text-for-translations) 문서를 참고하세요.
+
+이 옵션을 `false`로 지정하면 이전 버전까지 사용하던 ID를 그대로 사용합니다.
+기본값은 `true` 입니다.
+
+Ivy 이전에 사용하던 문장 추출 툴은 메시지 ID를 추출할 때 오래된 방식을 사용했습니다.
+그래서 이 방식은 공백문자 처리나 템플릿의 원본 HTML 내부 정보를 요구하는 등 수많은 이슈가 존재합니다.
+
+Ivy부터는 더 유연한 방식으로 공백문자를 처리하며, 표준 번역 파일 형식을 따르고, `$localize`를 직접 실행할 수 있는 방식을 도입했습니다.
+애플리케이션 코드에서 `$localize`를 실행하면 컴포넌트 템플릿에서 `i18n` 메시지를 처리하는 것과 같은 효과를 낼 수 있습니다.
+
 
 ### `enableIvy`
 
@@ -187,7 +200,7 @@ For library projects generated with the CLI, the `prod` configuration default is
 -->
 [Ivy](guide/ivy) 컴파일을 활성화합니다.
 기본값은 `true`이며 Angular 9 버전부터 사용할 수 있습니다.
-그리고 Angular 9 버전부터는 이전 버전에서 사용하던 View Engine 컴파일러를 사용하기 위해 [Ivy를 제거](guide/ivy#opting-out-of-angular-ivy) 할 수도 있습니다.
+이전 버전에서 사용하던 View Engine 컴파일러를 사용하기 위해 [Ivy를 비활성화](guide/ivy#opting-out-of-angular-ivy) 할 수도 있습니다.
 
 Angular 9 버전부터 Angular CLI로 라이브러리 프로젝트를 생성했을 때 `prod` 환경 기본값은 `false` 입니다.
 
@@ -400,9 +413,15 @@ Angular CLI로 라이브러리 프로젝트를 생성했을 때 `dev` 환경 기
 
 ### `strictInjectionParameters`
 
+<!--
 When `true` (recommended), reports an error for a supplied parameter whose injection type cannot be determined. When `false` (currently the default), constructor parameters of classes marked with `@Injectable` whose type cannot be resolved produce a warning.
 
 When you use the CLI command `ng new --strict`, it is set to `true` in the generated project's configuration.
+-->
+`true` 값으로 지정하면(권장) 의존성 객체의 타입을 결정할 수 없을 때 에러를 표시합니다.
+`false` 값으로 지정하면(기본값) 생성자에 주입되는 객체 중 `@Injectable`이 지정되었지만 타입을 결정할 수 없을 때 경고 메시지를 표시합니다.
+
+Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했다면 `true`로 지정되어 있습니다.
 
 
 ### `strictTemplates`
@@ -420,7 +439,8 @@ When you use the CLI command `ng new --strict`, it is set to `true` in the gener
 세부 검사 옵션은 추가 옵션을 지정해서 제어할 수 있습니다.
 [템플릿 에러 해결하기](guide/template-typecheck#troubleshooting-template-errors) 문서를 참고하세요.
 
-When you use the CLI command `ng new --strict`, it is set to `true` in the generated project's configuration.
+Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했다면 `true`로 지정되어 있습니다.
+
 
 ### `trace`
 

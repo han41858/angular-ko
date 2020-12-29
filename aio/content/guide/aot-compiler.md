@@ -10,9 +10,9 @@ The Angular [ahead-of-time (AOT) compiler](guide/glossary#aot) converts your Ang
 
 This guide explains how to specify metadata and apply available compiler options to compile your applications efficiently using the AOT compiler.
 -->
-Angular 애플리케이션은 크게 컴포넌트와 컴포넌트 HTML 템플릿으로 구성됩니다. 그런데 이 컴포넌트와 템플릿은 브라우저가 바로 이해할 수 없기 때문에 Angular 애플리케이션은 브라우저에서 실행되기 전에 컴파일되어야 합니다.
+Angular 애플리케이션은 컴포넌트 클래스와 컴포넌트 HTML 템플릿으로 구성됩니다. 그런데 이 컴포넌트와 템플릿은 브라우저가 바로 이해할 수 없기 때문에 브라우저에서 실행되기 전에 컴파일되어야 합니다.
 
-Angular [Ahead-of-time (AOT) 컴파일러](guide/glossary#aot)는 브라우저가 애플리케이션 코드를 받아서 실행하기 _전에_ 미리 HTML 파일과 TypeScript 코드를 브라우저가 실행할 수 있는 JavaScript 코드로 변환합니다.
+Angular [Ahead-of-time (AOT) 컴파일러](guide/glossary#aot)는 브라우저가 애플리케이션 코드를 받아서 _전에_ 미리 HTML 파일과 TypeScript 코드를 브라우저가 실행할 수 있는 JavaScript 코드로 변환합니다.
 이 빌드 과정이 있기 때문에 브라우저가 앱을 렌더링하는 시간도 이전보다 빠릅니다.
 
 이 문서는 AOT 컴파일러를 사용할 때 지정할 수 있는 메타데이터와 컴파일러 옵션에 대해 다룹니다.
@@ -82,24 +82,29 @@ AOT 컴파일러는 이런 점에서 더 좋습니다.
 
 <!--
 Angular offers two ways to compile your application:
--->
-Angular는 두 종류의 컴파일 방식을 제공합니다:
 
-<!--
 * **_Just-in-Time_ (JIT)**, which compiles your app in the browser at runtime. This was the default until Angular 8.
 * **_Ahead-of-Time_ (AOT)**, which compiles your app and libraries at build time. This is the default since Angular 9.
--->
-* **_Just-in-Time_ (JIT)**: 브라우저에서 애플리케이션을 실행하면서 코드를 직접 컴파일하는 방식입니다. Angular 8까지는 기본 컴파일러였습니다.
-* **_Ahead-of-Time_ (AOT)**: 브라우저에 애플리케이션 코드를 보내기 전에 미리 컴파일하는 방식입니다. Angular 9부터 기본 컴파일러입니다.
 
 When you run the [`ng build`](cli/build) (build only) or [`ng serve`](cli/serve) (build and serve locally) CLI commands, the type of compilation (JIT or AOT) depends on the value of the `aot` property in your build configuration specified in `angular.json`. By default, `aot` is set to `true` for new CLI apps.
 
 See the [CLI command reference](cli) and [Building and serving Angular apps](guide/build) for more information.
+-->
+Angular는 컴파일 방식을 두 종류로 제공합니다:
+
+* **_Just-in-Time_ (JIT)**: 브라우저에서 애플리케이션을 실행하면서 코드를 직접 컴파일하는 방식입니다. Angular 8까지는 기본 컴파일러였습니다.
+* **_Ahead-of-Time_ (AOT)**: 브라우저에 애플리케이션 코드를 보내기 전에 미리 컴파일하는 방식입니다. Angular 9부터 기본 컴파일러입니다.
+
+Angular CLI로 [`ng build`](cli/build) 명령이나 [`ng serve`](cli/serve) 명령을 실행하면 `angular.json` 환경설정 파일에 설정된 `aot` 프로퍼티 값으로 컴파일 방식이 결정됩니다.
+Angular CLI로 생성한 앱에서 `aot` 프로퍼티의 기본값은 `true`입니다.
+
+자세한 내용은 [CLI 명령](cli) 문서나 [Angular 앱 빌드하고 서비스하기](guide/build) 문서를 참고하세요.
+
 
 <!--
 ## How AOT works
 -->
-## AOT 컴파일러가 동작하는 방식
+## AOT 컴파일러 동작 방식
 
 <!--
 The Angular AOT compiler extracts **metadata** to interpret the parts of the application that Angular is supposed to manage.
@@ -156,7 +161,7 @@ AOT 컴파일러는 3단계로 동작합니다.
 * 2단계는 *코드 생성* 단계입니다.
    1단계에서 수집한 메타데이터를 컴파일러의 `StaticReflector`가 처리하면서 메타데이터 유효성을 추가로 검사합니다. 이 때 에러가 추가로 발견되면 역시 에러를 발생시킵니다.
 
-* 3단계는 *템플릿 문법 체크* 단계입니다.
+* 3단계는 *템플릿 문법 검사* 단계입니다.
    이 단계는 생략될 수 있습니다. 이 단계에서는 Angular *템플릿 컴파일러*가 TypeScript 컴파일러를 사용해서 템플릿에 사용된 바인딩 표현식을 검증합니다.
 
 <!--
@@ -215,7 +220,7 @@ At the same time, the AOT **collector** analyzes the metadata recorded in the An
 
 You can think of `.metadata.json` as a diagram of the overall structure of a decorator's metadata, represented as an [abstract syntax tree (AST)](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
 -->
-첫번째 단계에서는 TypeScript 컴파일러가 분석과 관련된 작업을 합니다. TypeScript 컴파일러가 코드를 컴파일하고 나면 _타입 정의 파일_ 인 `.d.ts` 파일이 생성되며, 이 정보는 이후에 AOT 컴파일러가 애플리케이션 코드를 생성할 때 사용합니다.
+첫 번째 단계에서는 TypeScript 컴파일러가 분석과 관련된 작업을 합니다. TypeScript 컴파일러가 코드를 컴파일하고 나면 _타입 정의 파일_ 인 `.d.ts` 파일이 생성되며, 이 정보는 이후에 AOT 컴파일러가 애플리케이션 코드를 생성할 때 사용합니다.
 
 그리고 이 때 AOT **_콜렉터(collector)_**가 각 `.d.ts` 파일에 있는 Angular 데코레이터의 메타데이터를 분석하고 분석한 내용을 **`.metadata.json`** 파일로 생성합니다.
 
@@ -438,7 +443,7 @@ and [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Re
 
 Consider the following component decorator:
 -->
-AOT 컴파일러는 [함수 표현식](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)과 [화살표 함수 (람다 함수)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)를 지원하지 않습니다.
+AOT 컴파일러는 [함수 표현식](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)과 [화살표 함수(람다 함수)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)를 지원하지 않습니다.
 
 다음과 같은 컴포넌트 데코레이터가 있다고 합시다:
 
@@ -458,7 +463,7 @@ You can fix the error by converting to this:
 -->
 이 코드에는 AOT 콜렉터가 지원하지 않는 화살표 함수가 `() => new Server()`와 같이 사용되었습니다.
 그러면 이 코드는 제대로 변환되지 못하고 에러 노드로 처리됩니다.
-그리고 이후에 컴파일러가 이 노드를 처리할 때 에러가 발생하기 때문에, 이 화살표 함수는 _export가 사용된 함수_ 로 변경되어야 합니다.
+이후에 컴파일러가 이 노드를 처리할 때 에러가 발생하기 때문에, 이 화살표 함수는 _export가 사용된 함수_ 로 변경되어야 합니다.
 
 이 에러는 다음과 같이 수정하면 해결할 수 있습니다:
 
@@ -1012,7 +1017,7 @@ For more information about type-checking options, and about improvements to temp
 Angular 9버전의 기본 설정은 좀 더 깐깐한 타입 체크 기능을 사용하지 않는 것입니다.
 아직까지는 컴파일러 설정 파일에 `strictTemplates` 옵션을 지정해야 활성화할 수 있지만, 언젠가는 이 방식이 기본이 되기를 바랍니다.
 
-For more information about type-checking options, and about improvements to template type checking in version 9 and above, see [Template type checking](guide/template-typecheck).
+타입 검사 옵션이나 템플릿 타입 검사를 활성화하는 방법에 대해 알아보려면 [템플릿 타입 검사](guide/template-typecheck) 문서를 참고하세요.
 
 </div>
 
@@ -1068,7 +1073,7 @@ is reported as well as the above error message.
 그리고 에러 메시지로 출력되는 에러 위치는 `@Component` 어노테이션을 기준으로 한 상대 위치로 표시됩니다.
 컴포넌트에 `template` 대신 `templateUrl`을 사용했다면, 에러 메시지는 컴포넌트 클래스 파일 대신 HTML 파일을 가리키는 방식으로 출력됩니다.
 
-위 코드에서 에러가 발생한 위치는 문자열 바인딩이 사용된 첫번째 텍스트 노드입니다.
+위 코드에서 에러가 발생한 위치는 문자열 바인딩이 사용된 첫 번째 텍스트 노드입니다.
 에러가 `[value]="person.address.street"`와 같은 어트리뷰트 바인딩에서 발생했다면 에러가 발생한 위치로 어트리뷰트의 위치가 표시됩니다.
 
 템플릿 표현식의 유효성을 검사하는 로직은 TypeScript가 제공하는 타입 체커를 활용하기 때문에 TypeScript 컴파일러에 사용할 수 있는 옵션은 이 단계에서도 사용할 수 있습니다.
@@ -1119,7 +1124,7 @@ Use the [non-null type assertion operator](guide/template-expression-operators#n
 In the following example, the `person` and `address` properties are always set together, implying that `address` is always non-null if `person` is non-null.
 There is no convenient way to describe this constraint to TypeScript and the template compiler, but the error is suppressed in the example by using `address!.street`.
 -->
-표현식에 문자열 바인딩 문법을 사용할 때 `*ngIf`를 사용해도 `Object is possibly 'undefined'` 에러를 방지할 수 있지만, [nnull값 아님 보장 연산자(non-null assertion operator)](guide/template-expression-operators#non-null-assertion-operator)를 사용해도 이 에러를 방지할 수 있습니다.
+표현식에 문자열 바인딩 문법을 사용할 때 `*ngIf`를 사용해도 `Object is possibly 'undefined'` 에러를 방지할 수 있지만, [null값 아님 보장 연산자(non-null assertion operator)](guide/template-expression-operators#non-null-assertion-operator)를 사용해도 이 에러를 방지할 수 있습니다.
 
 컴포넌트 프로퍼티 `person`과 `address`의 값은 동시에 할당되기 때문에 `person`만 검사하면 `address`가 null이 아니라는 것을 보장할 수 있습니다.
 하지만 TypeScript나 템플릿 컴파일러는 이 정보를 알 수 없기 때문에 `address` 프로퍼티에 대해 `Object is possibly 'undefined'` 에러가 발생할 수 있습니다.
