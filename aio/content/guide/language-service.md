@@ -129,9 +129,15 @@ In the marketplace, search for Angular Language Service extension, and click the
 
 ### WebStorm
 
+<!--
 In [WebStorm](https://www.jetbrains.com/webstorm/), enable the plugin [Angular and AngularJS](https://plugins.jetbrains.com/plugin/6971-angular-and-angularjs).
 
 Since WebStorm 2019.1, the `@angular/language-service` is not required anymore and should be removed from your `package.json`.
+-->
+[WebStorm](https://www.jetbrains.com/webstorm/)은 [Angular and AngularJS](https://plugins.jetbrains.com/plugin/6971-angular-and-angularjs) 플러그인을 지원합니다.
+
+WebStorm 2019.1 버전부터는 `@angular/language-service`를 사용하지 않기 때문에 `package.json`에서 이 패키지를 제거해도 됩니다.
+
 
 ### Sublime Text
 

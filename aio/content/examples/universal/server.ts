@@ -15,7 +15,7 @@ export function app() {
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // #docregion ngExpressEngine
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
+  // Universal express 엔진 (https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine('html', ngExpressEngine({
     bootstrap: AppServerModule,
   }));
@@ -25,63 +25,21 @@ export function app() {
   server.set('views', distFolder);
 
   // #docregion data-request
-  // TODO: implement data requests securely
+  // TODO: 보안 로직을 추가해야 합니다.
   server.get('/api/**', (req, res) => {
     res.status(404).send('data requests are not yet supported');
   });
   // #enddocregion data-request
 
-<<<<<<< HEAD
-// Express Engine
-import { ngExpressEngine } from '@nguniversal/express-engine';
-// Import module map for lazy loading
-import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
-
-// #docregion ngExpressEngine
-app.engine('html', ngExpressEngine({
-  bootstrap: AppServerModuleNgFactory,
-  providers: [
-    provideModuleMap(LAZY_MODULE_MAP)
-  ]
-}));
-// #enddocregion ngExpressEngine
-
-app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, 'browser'));
-
-// #docregion data-request
-// TODO: 보안 로직을 추가해야 합니다.
-app.get('/api/*', (req, res) => {
-  res.status(404).send('data requests are not supported');
-});
-// #enddocregion data-request
-
-// #docregion static
-// 정적 파일을 요청하면 /browser에서 찾아서 보냅니다.
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
-// #enddocregion static
-
-// #docregion navigation-request
-// 페이지 요청은 Universal 엔진을 사용합니다.
-app.get('*', (req, res) => {
-  res.render('index', { req });
-});
-// #enddocregion navigation-request
-
-// Start up the Node server
-app.listen(PORT, () => {
-  console.log(`Node server listening on http://localhost:${PORT}`);
-});
-=======
   // #docregion static
-  // Serve static files from /browser
+  // 정적 파일은 /browser 주소로 제공합니다.
   server.get('*.*', express.static(distFolder, {
     maxAge: '1y'
   }));
   // #enddocregion static
 
   // #docregion navigation-request
-  // All regular routes use the Universal engine
+  // 모든 요청이 Universal 엔진을 사용합니다.
   server.get('*', (req, res) => {
     res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
   });
@@ -111,4 +69,3 @@ if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
 }
 
 export * from './src/main.server';
->>>>>>> ae0253f34adad0e37d2a5e6596a08aa049ba3072

@@ -102,11 +102,10 @@ src/
   app/ ...                   <i>애플리케이션 코드</i>
     app.server.module.ts     <i>* 서버 사이드 애플리케이션 모듈</i>
 server.ts                    <i>* Express 웹 서버</i>
-tsconfig.json                <i>TypeScript solution style configuration</i>
-tsconfig.base.json           <i>TypeScript base configuration</i>
-tsconfig.app.json            <i>TypeScript 클라이언트 설정 파일</i>
-tsconfig.server.json         <i>TypeScript 서버 설정 파일</i>
-tsconfig.spec.json           <i>TypeScript 스펙 설정 파일</i>
+tsconfig.json                <i>TypeScript 기본 환경설정 파일</i>
+tsconfig.app.json            <i>TypeScript 브라우저용 환경설정 파일</i>
+tsconfig.server.json         <i>TypeScript 서버용 환경설정 파일</i>
+tsconfig.spec.json           <i>TypeScript 스펙용 환경설정 파일</i>
 </code-example>
 
 이 중 `*` 표시가 된 파일이 새로 추가된 파일입니다.
@@ -269,11 +268,11 @@ At the same time, you'll load the full Angular app behind it.
 The user perceives near-instant performance from the landing page
 and gets the full interactive experience after the full app loads.
 -->
-Displaying the first page quickly can be critical for user engagement.
-Pages that load faster perform better, [even with changes as small as 100ms](https://web.dev/shopping-for-speed-on-ebay/).
-Your app may have to launch faster to engage these users before they decide to do something else.
+사용자를 사로잡으려면 첫 번째 화면을 빨리 표시하는 것이 아주 중요합니다.
+화면이 빠르게 뜰수록 사용자가 앱을 더 많이 사용할 수 있기 때문에 [100ms만 줄여도 비즈니스에 도움이 될 수 있습니다](https://web.dev/shopping-for-speed-on-ebay/).
+UX 측면에서도 사용자가 어떤 동작을 하기 전에 앱이 빠르게 뜨는 것이 무엇보다 중요합니다.
 
-이 때 Angular Universal을 사용하면 온전한 앱과 거의 비슷하게 동작하는 랜딩 페이지를 생성할 수 있습니다.
+Angular Universal을 사용하면 설치형 앱과 거의 비슷하게 동작하는 랜딩 페이지를 생성할 수 있습니다.
 페이지는 HTML만으로 구성되기 때문에 JavaScript가 비활성화되어도 화면을 제대로 표시할 수 있습니다.
 다만, JavaScript가 실행되지 않으면 브라우저 이벤트를 처리할 수 없기 때문에 네비게이션은 [`routerLink`](guide/router#router-link)를 사용하는 방식으로 구현되어야 합니다.
 
@@ -406,8 +405,9 @@ which then forwards it to the client in the HTTP response.
 -->
 `ngExpressEngine()` 함수는 Universal이 제공하는 `renderModule()` 함수를 랩핑한 함수이며, `renderModuleFactory()` 함수는 클라이언트의 요청을 서버가 렌더링한 HTML 페이지로 변경해서 요청하는 함수입니다.
 
-* `bootstrap`: The root `NgModule` or `NgModule` factory to use for bootstraping the app when rendering on the server. For the example app, it is `AppServerModule`. It's the bridge between the Universal server-side renderer and the Angular application.
-* `extraProviders`: This is optional and lets you specify dependency providers that apply only when rendering the app on the server. You can do this when your app needs information that can only be determined by the currently running server instance.
+* `bootstrap`: 서버에서 렌더링할 때 사용할 최상위 `NgModule`이나 `NgModule` 팩토리를 지정합니다. 그래서 `AppServerModule`와 같은 모듈을 지정할 수 있습니다. 이 때 지정되는 모듈은 Universal 서버사이드 렌더러와 Angular 애플리케이션을 연결하는 다리 역할을 합니다.
+
+* `extraProviders`: 서버에서 렌더링할 때 필요한 의존성 프로바이더를 등록할 수 있으며, 생략할 수 있습니다. 서버 인스턴스가 어떤 환경에서 실행되는지 확인하는 용도로 활용할 수 있습니다.
 
 `ngExpressEngine()` 함수는 렌더링된 페이지를 `Promise` 콜백 형태로 반환합니다.
 그리고 이 페이지를 어떻게 활용할 것인지는 서버에서 사용하는 엔진에 따라 달라집니다.
@@ -531,8 +531,12 @@ JavaScript 파일이나 이미지 파일, 스타일 파일과 같은 정적 애�
 <code-example path="universal/server.ts" header="server.ts (정적 파일)" region="static"></code-example>
 
 
+<!--
 ### Using absolute URLs for HTTP (data) requests on the server
+-->
+### 서버에서 절대 URL 사용하기
 
+<!--
 The tutorial's `HeroService` and `HeroSearchService` delegate to the Angular `HttpClient` module to fetch application data.
 These services send requests to _relative_ URLs such as `api/heroes`.
 In a server-side rendered app, HTTP URLs must be _absolute_ (for example, `https://my-server.com/api/heroes`).
@@ -549,3 +553,20 @@ Here, "request URL" refers to the URL of the request as a response to which the 
 For example, if the client requested `https://my-server.com/dashboard` and you are rendering the app on the server to respond to that request, `options.url` should be set to `https://my-server.com/dashboard`.
 
 Now, on every HTTP request made as part of rendering the app on the server, Angular can correctly resolve the request URL to an absolute URL, using the provided `options.url`.
+-->
+튜토리얼에서 다룬 `HeroService`와 `HeroSearchService`는 Angular `HttpClient` 모듈을 사용해서 애플리케이션 데이터를 가져옵니다.
+이 때 서비스는 `api/heroes`와 같은 _상대_ URL로 요청을 보냅니다.
+서버사이드에서 렌더링되는 앱은 반드시 `https://my-server.com/api/heroes`와 같은 _절대_ HTTP URL을 사용해야 합니다.
+이 말은, 서버에서 사용되는 URL은 절대주소로 변환되어야 하지만, 브라우저에서 실행될 때를 위해 상대주소로도 남아있어야 한다는 것을 의미합니다.
+
+이 과정은 `@nguniversal/express-engine`와 같이 `@nguniversal/*-engine` 형태로 제공되는 패키지를 활용하면 자동으로 처리할 수 있습니다.
+직접 설정해야 하는 내용은 아무것도 없습니다.
+
+하지만 이유가 있어서 `@nguniversal/*-engine` 패키지를 사용할 수 없다면 이 과정을 직접 처리해야 합니다.
+
+이 때 권장하는 방법은 항상 전체 URL을 [renderModule()](api/platform-server/renderModule), [renderModuleFactory()](api/platform-server/renderModuleFactory)의 `options` 인자로 전달하는 것입니다.
+대상은 `AppServerModule`에 어떤 것을 지정했는지에 따라 다릅니다.
+이 옵션값은 앱이 수정되더라도 변경될 일이 거의 없기 때문에 관리하기도 편합니다.
+`https://my-server.com/dashboard`라는 주소에 대응하는 앱을 서버에서 렌더링하는 상황이라면 `options.url`도 `https://my-server.com/dashboard`와 함께 지정하는 방식입니다.
+
+이렇게 설정하면 서버에서 앱을 렌더링할 때 필요한 HTTP 요청이 모두 `options.url`를 사용해서 절대 URL로 변경됩니다.

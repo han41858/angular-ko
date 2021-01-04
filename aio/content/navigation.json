@@ -800,7 +800,7 @@
             {
               "url": "guide/router-tutorial",
               "//title": "Using Angular Routes in a Single-page Application",
-              "title": "단일 페이지 애플리케이션에 라우터 활용하기",
+              "title": "SPA에 라우터 활용하기",
               "//tooltip": "A tutorial that covers many patterns associated with Angular routing.",
               "tooltip": "Angular 앱에 라우터를 적용하는 방법을 다양하게 확인해 보세요.."
             },
