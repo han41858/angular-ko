@@ -1,16 +1,30 @@
 {@a router-tutorial}
 
+<!--
 # Router tutorial: tour of heroes
+-->
+# 라우터 튜토리얼: 히어로들의 여행
 
+<!--
 This tutorial provides an extensive overview of the Angular router.
 In this tutorial, you will build upon a basic router configuration to explore features such as child routes, route parameters, lazy load NgModules, guard routes, and preloading data to improve the user experience.
 
 For a working example of the final version of the app, see the <live-example name="router"></live-example>.
+-->
+이번 튜토리얼에서는 Angular 라우터에 대해 깊이있게 알아봅니다.
+기본 라우터 설정을 구성하는 방법부터 시작해서 자식 라우팅 규칙을 정의하는 방법, 라우터 인자를 활용하는 방법, NgModule을 지연로딩하는 방법, 라우터 가드를 사용하는 방법, 데이터를 사전 로딩해서 UX를 개선하는 방법에 대해 알아봅시다.
+
+이 문서에서 다루는 예제 앱이 동작하는 것을 직접 확인하려면 <live-example name="router"></live-example>를 참고하세요.
+
 
 {@a router-tutorial-objectives}
 
+<!--
 ## Objectives
+-->
+## 목표
 
+<!--
 This guide describes development of a multi-page routed sample application.
 Along the way, it highlights key features of the router such as:
 
@@ -27,9 +41,32 @@ Along the way, it highlights key features of the router such as:
 
 This guide proceeds as a sequence of milestones as if you were building the app step-by-step, but assumes you are familiar with basic [Angular concepts](guide/architecture).
 For a general introduction to angular, see the [Getting Started](start). For a more in-depth overview, see the [Tour of Heroes](tutorial) tutorial.
+-->
+이 가이드 문서에서는 화면이 여러 개인 애플리케이션을 구현해 봅니다.
+이 과정 중에 라우터와 관련해서 중요한 내용은 이런 것들이 있습니다:
 
+* 애플리케이션 기능을 모듈 단위로 구성합니다.
+* *Heroes* 링크로 "Heroes List" 컴포넌트로 화면을 전환합니다.
+* "Hero Detail" 화면으로 전환하면서 Hero `id`를 라우터 인자로 전달합니다.
+* *Crisis Center* 안쪽으로 자식 라우팅 규칙을 정의합니다.
+* 라우팅 규칙을 적용하기 위해 `CanActivate` 가드를 사용합니다.
+* 자식 라우팅 규칙을 적용하기 위해 `CanActivateChild` 가드를 사용합니다.
+* 저장되지 않은 변경사항을 폐기할지 결정하기 위해 `CanDeactivate` 가드를 사용합니다.
+* 라우터 데이터를 미리 가져오기 위해 `Resolve` 가드를 사용합니다.
+* `NgModule`을 지연로딩합니다.
+* 기능 모듈을 로딩할지 결정하기 위해 `CanLoad` 가드를 사용합니다.
+
+이 문서를 읽는 독자가 [Angular의 기본 개념](guide/architecture)에 대해 익숙하다고 가정하고 차근차근 라우터에 대해 알아봅시다.
+[시작하기](start) 문서를 먼저 보고 이 문서를 보는 것도 좋습니다.
+튜토리얼 전체 개요를 확인하려면 [히어로들의 여행 튜토리얼](tutorial) 문서를 참고하세요.
+
+
+<!--
 ## Prerequisites
+-->
+## 사전지식
 
+<!--
 To complete this tutorial, you should have a basic understanding of the following concepts:
 
 * JavaScript
@@ -38,10 +75,23 @@ To complete this tutorial, you should have a basic understanding of the followin
 * [Angular CLI](/cli)
 
 You might find the [Tour of Heroes tutorial](/tutorial) helpful, but it is not required.
+-->
+이 문서를 제대로 이해하려면 이런 내용을 미리 알고 있는 것이 좋습니다:
+
+* JavaScript
+* HTML
+* CSS
+* [Angular CLI](/cli)
+
+[히어로들의 여행 튜토리얼](/tutorial) 문서를 보는 것도 도움이 되지만 꼭 필요한 것은 아닙니다.
 
 
+<!--
 ## The sample application in action
+-->
+## 예제 애플리케이션이 동작하는 모습
 
+<!--
 The sample application for this tutorial helps the Hero Employment Agency find crises for heroes to solve.
 
 The application has three main feature areas:
@@ -113,29 +163,115 @@ Behind this behavior is the router's `CanDeactivate` guard.
 The guard gives you a chance to clean-up or ask the user's permission before navigating away from the current view.
 
 The `Admin` and `Login` buttons illustrate other router capabilities covered later in the guide.
+-->
+이 문서에서 다루는 예제 애플리케이션은 히어로를 관리하는 회사가 위기상황에 대응할 수 있는 히어로를 찾는 기능을 제공합니다.
+
+이 애플리케이션이 제공하는 기능은 크게 3가지입니다:
+
+1. 히어로에게 할당해서 대처해야 할 위기를 모아 *Crisis Center* 화면으로 제공합니다.
+1. 회사가 관리하고 있는 히어로들의 목록을 *Heroes* 화면으로 제공합니다.
+1. 위기 목록과 히어로 목록을 관리하는 *Admin* 화면을 제공합니다.
+
+<live-example name="router" title="Hero Employment Agency Live Example">라이브 예제 앱</live-example>을 확인해 보세요.
+
+애플리케이션을 실행해보면 히어로의 목록이 네비게이션 버튼으로 구성된 *Heroes* 화면이 표시됩니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/hero-list.png' alt="Hero List">
+</div>
+
+
+화면에 있는 히어로 중 하나를 선택하면 히어로 편집 화면으로 전환됩니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/hero-detail.png' alt="Crisis Center Detail">
+</div>
+
+
+이름을 변경해 보세요.
+그리고 "Back" 버튼을 클릭하면 히어로 목록에 변경한 내용이 반영됩니다.
+이렇게 화면을 전환하면 변경한 이름이 즉시 반영됩니다.
+
+하지만 "Back" 버튼 대신 브라우저 뒤로 가기 버튼을 클릭하면 변경하기 전 이름으로 히어로 목록이 표시됩니다.
+Angular 앱도 일반 웹 네비게이션과 마찬가지로 브라우저 히스토리를 활용해서 화면을 전환합니다.
+
+그리고 *Crisis Center* 링크를 클릭하면 현재 발생된 위기 목록이 표시됩니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/crisis-center-list.png' alt="Crisis Center List">
+</div>
+
+위기를 하나 선택하면 수정화면이 표시됩니다.
+이 때 _Crisis Detail_ 화면은 해당 페이지의 목록 아래쪽에 자식 컴포넌트로 표시됩니다.
+
+위기의 이름을 변경해 보세요.
+변경한 이름은 목록에 _즉시_ 반영되지 않습니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/crisis-center-detail.png' alt="Crisis Center Detail">
+</div>
+
+변경한 내용이 즉시 반영되던 *Hero Detail* 화면과 다르게, *Crisis Detail* 화면에서 변경한 내용은 "Save" 버튼을 눌러서 저장하거나 "Cancel" 버튼을 눌러서 취소하지 않는 이상 목록에 반영되지 않습니다.
+두 버튼 중 하나를 누르면 *Crisis Center* 화면으로 돌아가면서 위기 목록이 표시됩니다.
+
+위기 이름을 수정한 다음에 브라우저 뒤로 가기 버튼이나 "Heroes" 링크를 눌러서 확인 팝업이 뜨는 것을 확인해 보세요.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/confirm-dialog.png' alt="Confirm Dialog">
+</div>
+
+이 팝업에서 "OK"를 선택하면 변경한 내용을 폐기하며 "Cancel"을 선택하면 수정을 계속합니다.
+
+이 동작은 라우터가 제공하는 `CanDeactivate` 가드로 구현합니다.
+이 가드는 현재 화면에서 수정한 내용을 정말 폐기할 것인지 사용자에게 확인하는 용도로 사용합니다.
+
+`Admin` 버튼과 `Login` 버튼을 활용하는 내용은 다른 가이드 문서에서 자세하게 다룹니다.
 
 
 {@a getting-started}
 
+<!--
 ## Milestone 1: Getting started
+-->
+## 마일스톤 1: 시작하기
 
+<!--
 Begin with a basic version of the app that navigates between two empty views.
 
 
 <div class="lightbox">
   <img src='generated/images/guide/router/router-1-anim.gif' alt="App in action">
 </div>
+-->
+빈 화면 두 개를 전환하는 기본 앱부터 만들어 봅시다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/router-1-anim.gif' alt="App in action">
+</div>
+
 
 {@a import}
 
+<!--
 Generate a sample application with the Angular CLI.
 
 <code-example language="none" class="code-shell">
   ng new angular-router-sample
 </code-example>
+-->
+Angular CLI로 다음 명령을 실행하면 예제 애플리케이션을 생성할 수 있습니다.
 
+<code-example language="none" class="code-shell">
+  ng new angular-router-sample
+</code-example>
+
+
+<!--
 ### Define Routes
+-->
+### 라우팅 규칙 정의하기
 
+<!--
 A router must be configured with a list of route definitions.
 
 Each definition translates to a [Route](api/router/Route) object which has two things: a `path`, the URL path segment for this route; and a `component`, the component associated with this route.
@@ -173,9 +309,52 @@ Replace the contents of each component with the sample HTML below.
   </code-pane>
 
 </code-tabs>
+-->
+라우터를 사용하려면 라우팅 규칙을 먼저 정의해야 합니다.
 
+라우팅 규칙은 [Route](api/router/Route) 객체로 정의하는데, 이 객체에는 매칭할 URL을 `path` 프로퍼티로 지정하고 이 라우팅 규칙이 활성화될 때 표시되는 컴포넌트를 `component` 프로퍼티로 지정합니다.
+
+라우터는 라우팅 규칙을 기준으로 브라우저 URL이나 라우터의 주소가 변경되는 것을 감지합니다.
+
+지금 정의하는 라우팅 규칙은 이런 역할을 합니다:
+
+* 브라우저 URL이 변경되고 `/crisis-center`와 매칭되면 라우터가 `CrisisListComponent` 인스턴스를 생성하고 화면에 표시합니다.
+
+* 애플리케이션 코드가 `/crisis-center` 주소로 이동하도록 요청하면 라우터가 `CrisisListComponent` 인스턴스를 생성하고 화면에 표시하며, 브라우저의 주소표시줄과 히스토리를 해당 URL로 변경합니다.
+
+이번 섹션에서는 간단하게 `CrisisListComponent`와 `HeroListComponent`와 매칭되는 라우팅 규칙 2개만 배열 형태로 정의했습니다.
+
+라우터가 화면에 렌더링할 `CrisisList` 컴포넌트와 `HeroList` 컴포넌트를 만들어 봅시다.
+
+<code-example language="none" class="code-shell">
+  ng generate component crisis-list
+</code-example>
+
+<code-example language="none" class="code-shell">
+  ng generate component hero-list
+</code-example>
+
+그리고 각 컴포넌트의 템플릿을 아래 HTML 내용으로 수정합니다.
+
+<code-tabs>
+
+  <code-pane header="src/app/crisis-list/crisis-list.component.html" path="router/src/app/crisis-list/crisis-list.component.1.html">
+
+  </code-pane>
+
+  <code-pane header="src/app/hero-list/hero-list.component.html" path="router/src/app/hero-list/hero-list.component.1.html" region="template">
+
+  </code-pane>
+
+</code-tabs>
+
+
+<!--
 ### Register `Router` and `Routes`
+-->
+### `Router`, `Routes` 등록하기
 
+<!--
 In order to use the `Router`, you must first register the `RouterModule` from the `@angular/router` package.
 Define an array of routes, `appRoutes`, and pass them to the `RouterModule.forRoot()` method.
 The `RouterModule.forRoot()` method returns a module that contains the configured `Router` service provider, plus other providers that the routing library requires.
@@ -198,11 +377,41 @@ A routing module is a special type of `Service Module` dedicated to routing.
 </div>
 
 Registering the `RouterModule.forRoot()` in the `AppModule` `imports` array makes the `Router` service available everywhere in the application.
+-->
+`Router`를 사용하려면 먼저 `@angular/router` 패키지로 제공되는 `RouterModule`을 등록해야 합니다.
+그리고 `RouterModule.forRoot()` 메서드 인자로 라우팅 규칙을 배열 형태로 정의한 `appRoutes`를 전달하면 됩니다.
+`RouterModule.forRoot()` 메서드는 인자로 전달된 라우팅 규칙으로 생성한 `Router` 서비스 프로바이더와 라우터 관련 라이브러리를 모듈 형태로 반환합니다.
+애플리케이션이 부트스트랩되고 나면 `Router`가 현재 브라우저 URL을 기준으로 초기 네비게이션 동작을 시작합니다.
+
+<div class="alert is-important">
+
+**참고:** `RouterModule.forRoot()` 메서드를 사용하는 것은 애플리케이션 전역에 프로바이더를 등록하는 패턴을 사용한 것입니다.
+애플리케이션 전역에 사용되는 프로바이더에 대해 알아보려면 [싱글턴 서비스](guide/singleton-services#forRoot-router) 문서를 참고하세요.
+라우팅 모듈은 라우팅만 전담하는 서비스 모듈입니다.
+
+</div>
+
+<code-example path="router/src/app/app.module.1.ts" header="src/app/app.module.ts (첫 번째 환경설정)" region="first-config"></code-example>
+
+
+<div class="alert is-helpful">
+
+`AppModule`에 `RouterModule`을 추가하면 라우터를 사용하기 위한 기본 환경설정은 끝납니다.
+하지만 애플리케이션이 점점 커지다 보면 모듈을 나누고 [라우팅 모듈](#routing-module)을 따로 둬서 [라우터 설정을 리팩토링](#refactor-the-routing-configuration-into-a-routing-module)하는 것도 검토해봐야 합니다.
+
+</div>
+
+`AppModule` `imports` 배열에 `RouterModule.forRoot()`를 등록하고 나면 애플리케이션 전역에서 `Router` 서비스를 사용할 수 있습니다.
+
 
 {@a shell}
 
+<!--
 ### Add the Router Outlet
+-->
+### 라우팅 영역 추가하기
 
+<!--
 The root `AppComponent` is the application shell. It has a title, a navigation bar with two links, and a router outlet where the router renders components.
 
 <div class="lightbox">
@@ -216,11 +425,32 @@ The router outlet serves as a placeholder where the routed components are render
 The corresponding component template looks like this:
 
 <code-example path="router/src/app/app.component.1.html" header="src/app/app.component.html"></code-example>
+-->
+애플리케이션의 기본 틀은 최상위 컴포넌트인 `AppComponent` 입니다.
+이 컴포넌트에는 제목이 하나 있으며, 링크가 2개로 구성된 네비게이션 바, 라우터가 컴포넌트를 렌더링하는 라우팅 영역(router outlet)으로 구성됩니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/shell-and-outlet.png' alt="Shell">
+</div>
+
+라우팅 영역은 라우터가 라우팅 규칙과 매칭되는 컴포넌트를 렌더링할 때 컴포넌트의 위치를 지정하는 역할을 합니다.
+
+
+{@a shell-template}
+
+`AppComponent` 컴포넌트의 템플릿 코드는 이렇게 구성됩니다:
+
+<code-example path="router/src/app/app.component.1.html" header="src/app/app.component.html"></code-example>
+
 
 {@a wildcard}
 
+<!--
 ### Define a Wildcard route
+-->
+### 와일드카드 라우팅 규칙 정의하기
 
+<!--
 You've created two routes in the app so far, one to `/crisis-center` and the other to `/heroes`.
 Any other URL causes the router to throw an error and crash the app.
 
@@ -258,11 +488,55 @@ Create the `PageNotFoundComponent` to display when users visit invalid URLs.
 
 Now when the user visits `/sidekicks`, or any other invalid URL, the browser displays "Page not found".
 The browser address bar continues to point to the invalid URL.
+-->
+이제 애플리케이션에는 `/crisis-center`와 `/heroes` 주소에 해당하는 라우팅 규칙 2개가 존재합니다.
+다른 URL로 접근하면 라우터가 에러가 발생시키면서 앱이 비정상 종료됩니다.
+
+잘못된 URL로 접근하는 것을 자연스럽게 방지하려면 와일드카드 라우팅 규칙(wildecard route)을 추가하면 됩니다.
+와일드카드 라우팅 규칙은 별표(`*`) 2개를 `path` 프로퍼티에 지정하는데, 이 주소는 모든 URL과 매칭됩니다.
+그래서 라우터가 라우팅 규칙 중에서 매칭되는 규칙을 찾지 못한 경우에 모두 이 와일드카드 라우팅 규칙을 적용합니다.
+와일드카드 라우팅 규칙는 커스텀 "404 Not Found" 컴포넌트를 화면에 표시하거나 다른 라우팅 규칙으로 [리다이렉션](#redirect)하는 용도로 사용할 수 있습니다.
+
+
+<div class="alert is-helpful">
+
+라우터는 라우터에 등록된 라우팅 규칙 중 [첫 번째로 매칭되는 것을 적용](/guide/router#example-config)하는 정책을 사용합니다.
+그리고 와일드카드 라우팅 규칙은 모든 주소와 매칭되기 때문에 라우팅 규칙 목록에서 가장 마지막에 등록해야 합니다.
+
+</div>
+
+
+이 동작을 테스트하기 위해 `HeroListComponent` 템플릿에 `RouterLink` 디렉티브가 적용된 버튼을 하나 추가하고 이 버튼과 연결된 주소를 `"/sidekicks"`으로 설정헤 봅시다.
+
+<code-example path="router/src/app/hero-list/hero-list.component.1.html" header="src/app/hero-list/hero-list.component.html (일부)"></code-example>
+
+이제 사용자가 버튼을 클릭하면 애플리케이션에서 에러가 발생합니다.
+왜냐하면 `"/sidekicks"`와 매칭되는 라우팅 규칙이 등록되지 않았기 때문입니다.
+
+이 때 `"/sidekicks"` 라우팅 규칙 대신 `PageNotFoundComponent` 화면으로 이동하는 와일드카드 라우팅 규칙을 정의할 수 있습니다.
+
+<code-example path="router/src/app/app.module.1.ts" header="src/app/app.module.ts (와일드카드 라우팅 규칙)" region="wildcard"></code-example>
+
+사용자가 등록되지 않은 URL로 접속했을 때 보여줄 `PageNotFoundComponent`를 생성해 봅시다.
+
+<code-example language="none" class="code-shell">
+  ng generate component page-not-found
+</code-example>
+
+<code-example path="router/src/app/page-not-found/page-not-found.component.html" header="src/app/page-not-found.component.html (404 컴포넌트)"></code-example>
+
+이제 사용자가 `/sidekicks` 과 같이 라우터에 등록되지 않은 주소로 접근하면 브라우저에 "Page not found" 문구가 표시됩니다.
+브라우저의 주소표시줄은 여전히 등록되지 않은 URL로 표시됩니다.
+
 
 {@a redirect}
 
+<!--
 ### Set up redirects
+-->
+### 리다이렉션 설정하기
 
+<!--
 When the application launches, the initial URL in the browser bar is by default:
 
 <code-example>
@@ -292,10 +566,7 @@ In this app, the router should select the route to the `HeroListComponent` only 
 
 <div class="callout is-helpful">
 
-  <!--
   <header>Spotlight on pathMatch</header>
-  -->
-  <header>pathMatch 자세하게 알아보기</header>
 
   Technically, `pathMatch = 'full'` results in a route hit when the *remaining*, unmatched  segments of the URL match `''`.
   In this example, the redirect is in a top level route so the *remaining* URL and the  *entire* URL are the same thing.
@@ -317,9 +588,65 @@ In this app, the router should select the route to the `HeroListComponent` only 
   [post on redirects](http://vsavkin.tumblr.com/post/146722301646/angular-router-empty-paths-componentless-routes).
 
 </div>
+-->
+애플리케이션이 실행되고 브라우저 주소표시줄에 표시되는 기본 URL은 이렇습니다:
 
+<code-example>
+  localhost:4200
+</code-example>
+
+이 주소는 라우터에 등록된 라우팅 규칙 중 어느 것에도 매칭되지 않기 때문에 와일드카드 라우팅 규칙과 매칭되면서 `PageNotFoundComponent`가 화면에 표시됩니다.
+
+애플리케이션에는 기본 주소와 매칭되는 화면이 필요합니다.
+기본 화면은 히어로의 목록을 표시하는 화면으로 지정해 봅시다.
+이 화면은 사용자가 "Heroes" 링크를 클릭하거나 브라우저 주소표시줄에 `localhost:4200/heroes`를 입력했을 때 표시되는 화면입니다.
+
+초기 상대 URL(`''`)을 기본 경로(`/heroes`)로 리다이렉션하는 `redirect` 라우팅 규칙을 추가해 봅시다.
+
+기본 라우팅 규칙은 와일드카드 라우팅 규칙 _위라면_ 어디에 추가해도 됩니다.
+예제 앱에서는 `appRoutes` 배열의 와일드카드 라우팅 규칙 바로 위에 기본 라우팅 규칙을 추가해 봅시다.
+
+<code-example path="router/src/app/app-routing.module.1.ts" header="src/app/app-routing.module.ts (appRoutes)" region="appRoutes"></code-example>
+
+기본 라우팅 규칙이 적용되고 나면 사용자가 직접 이동한 것처럼 브라우저의 주소가 `.../heroes`로 변경됩니다.
+
+리다이렉션 라우팅 규칙에는 URL을 매칭하는 방법을 결정하기 위해 `pathMatch` 프로퍼티를 지정해야 합니다.
+예제 앱에서는 *URL이 정확히* `''`와 매칭되었을 때만 `HeroListCompnent` 라우팅 규칙을 적용하기 위해 `pathMatch` 값으로 `'full'`을 지정했습니다.
+
+
+{@a pathmatch}
+
+<div class="callout is-helpful">
+
+<header>pathMatch 자세하게 알아보기</header>
+
+`pathMatch='full'`를 사용하면 *매칭되는* 주소가 정확히 `''`이어야 해당 라우팅 규칙이 적용됩니다.
+예제 앱에서도 최상위 라우팅 규칙에서 *매칭되는* URL이 *정확히* 빈 문자열과 매칭되기 때문에 이 라우팅 규칙이 적용되는 것입니다.
+
+`pathMatch`에는 `'prefix'` 값을 사용할 수도 있습니다.
+이 값을 사용하면 매칭되는 주소가 라우팅 규칙 경로로 시작되면 해당 라우팅 규칙이 적용됩니다.
+이 방식을 사용하면 모든 URL이 `''`과 매칭되기 때문에 예제 앱에는 사용하지 않았습니다.
+
+`pathMatch` 프로퍼티 값을 `'prefix'`로 바꾼 뒤에 `Go to sidekicks` 버튼을 클릭해 보세요.
+이 URL은 라우팅 규칙에 등록되지 않았기 때문에 "Page not found" 화면이 표시되어야 합니다.
+하지만 `'prefix'` 방식을 사용하면 "Heroes" 화면이 표시됩니다.
+브라우저 주소표시줄에 등록되지 않은 URL을 직접 입럭해도 `/heroes` 주소로 리다이렉션됩니다.
+결국 등록된 주소는 물론, 등록되지 않은 주소도 이 라우팅 규칙과 매칭됩니다.
+
+`HeroListComponent`를 표시하는 기본 라우팅 규칙은 URL이 정확히 `''`일 때만 동작해야 합니다.
+`pathMatch='full'` 설정으로 되돌리는 것을 잊지 마세요.
+
+이 내용은 Victor Savkin이 [리다이렉션에 대해 작성한 블로그 글](http://vsavkin.tumblr.com/post/146722301646/angular-router-empty-paths-componentless-routes)에서도 확인할 수 있습니다.
+
+</div>
+
+
+<!--
 ### Milestone 1 wrap up
+-->
+### 마일스톤 1 정리
 
+<!--
 Your sample app can switch between two views when the user clicks a link.
 
 Milestone 1 has covered how to do the following:
@@ -333,6 +660,21 @@ Milestone 1 has covered how to do the following:
 * Navigate to the default route when the app launches with an empty path.
 
 The starter app's structure looks like this:
+-->
+이제 예제 앱은 사용자가 클릭하는 링크에 따라 화면 2개를 전환합니다.
+
+마일스톤 1에서는 이런 내용을 다뤘습니다:
+
+* 라우터 라이브러리를 로드하는 방법에 대해 알아봤습니다.
+* 애플리케이션 템플릿에 앵커 태그로 네비게이션 바를 추가하고 `routerLink` 디렉티브와 `routerLinkActive` 디렉티브를 적용했습니다.
+* 라우터가 컴포넌트를 표시할 `router-outlet`을 추가했습니다.
+* `RouterModule.forRoot()` 메서드로 라우터 모듈을 설정했습니다.
+* 라우터가 동작하는 방식을 HTML5 브라우저 URL 방식으로 설정했습니다.
+* 등록되지 않은 주소를 와일드카드 라우팅 규칙으로 처리했습니다.
+* 빈 주소로 접근했을 때 처리할 기본 라우팅 규칙을 추가했습니다.
+
+앱 전체 구조는 이렇게 구성됩니다:
+
 
 <div class='filetree'>
 
@@ -481,8 +823,10 @@ The starter app's structure looks like this:
 </div>
 
 
-
+<!--
 Here are the files in this milestone.
+-->
+그리고 이번 마일스톤에서 다룬 파일의 내용은 이렇습니다.
 
 
 <code-tabs>

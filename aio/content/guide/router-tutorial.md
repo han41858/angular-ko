@@ -30,7 +30,7 @@ SPA는 이런 방식으로 UX를 대폭 개선했습니다.
 <!--
 ## Objectives
 -->
-## 용도
+## 목표
 
 <!--
 * Organize a sample application's features into modules.
@@ -74,7 +74,7 @@ You might find the [Tour of Heroes tutorial](/tutorial) helpful, but it is not r
 * CSS
 * [Angular CLI](/cli)
 
-[히어로들의 여행 튜토리얼](/tutorial)을 보는 것도 도움이 되지만 꼭 필요한 것은 아닙니다.
+[히어로들의 여행 튜토리얼](/tutorial) 문서를 보는 것도 도움이 되지만 꼭 필요한 것은 아닙니다.
 
 
 <!--
