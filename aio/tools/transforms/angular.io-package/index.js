@@ -14,7 +14,7 @@ const { extname, resolve } = require('canonical-path');
 const { existsSync } = require('fs');
 const { SRC_PATH } = require('../config');
 
-module.exports = new Package('angular.io', [gitPackage, apiPackage, contentPackage, cliDocsPackage])
+module.exports = new Package('angular.kr', [gitPackage, apiPackage, contentPackage, cliDocsPackage])
 
   // This processor relies upon the versionInfo. See below...
   .processor(require('./processors/processNavigationMap'))

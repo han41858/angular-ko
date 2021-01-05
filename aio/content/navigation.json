@@ -1222,9 +1222,9 @@
         },
         {
           "//title": "CLI Command Reference",
-          "title": "CLI 명령 참고",
+          "title": "Angular CLI",
           "//tooltip": "Angular CLI command reference.",
-          "tooltip": "Angular CLI 명령 참고",
+          "tooltip": "Angular CLI",
           "children": [
             {
               "//title": "Overview",
