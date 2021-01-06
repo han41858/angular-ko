@@ -7,22 +7,6 @@
     수백만 개발자들이 활동하는 Angular 커뮤니티에 참여해 보세요.">
   <base href="/">
 
-  <!-- Github Pages hack to allow SPA refresh without receiving 404. -->
-  <script>
-    (function () {
-      // Retrieve the URL the user was trying to access when receiving the 404.
-      var redirect = sessionStorage.redirect;
-      // Remove the URL from sessionStorage.
-      delete sessionStorage.redirect;
-      // Check if we actually need to redirect.
-      if (redirect && redirect != location.href) {
-        // We need to redirect to the URL the user was trying to access.
-        history.replaceState(null, null, redirect);
-      }
-    })();
-  </script>
-<!-- /Github Pages hack. -->
-
   <link rel="preconnect" href="https://www.google-analytics.com">
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <link rel="preconnect" href="https://stats.g.doubleclick.net">
