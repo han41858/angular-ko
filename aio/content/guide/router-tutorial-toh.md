@@ -1729,8 +1729,12 @@ It provides methods to handle parameter access for both route parameters (`param
 
 {@a reuse}
 
+<!--
 #### Observable <i>paramMap</i> and component reuse
+-->
+#### <i>paramMap</i> 옵저버블과 컴포넌트 재사용
 
+<!--
 In this example, you retrieve the route parameter map from an `Observable`.
 That implies that the route parameter map can change during the lifetime of this component.
 
@@ -1755,11 +1759,41 @@ However, `ActivatedRoute` observables are among the exceptions because `Activate
 The `Router` destroys a routed component when it is no longer needed along with the injected `ActivatedRoute`.
 
 </div>
+-->
+예제 앱에서 라우팅 인자를 받아오는 맵은 `Observable` 타입입니다.
+이 옵저버블로 전달되는 인자는 컴포넌트 라이프싸이클에 따라 변경될 수 있습니다.
+
+기본적으로 라우터는 어떤 컴포넌트가 다른 컴포넌트를 거치지 않고 같은 컴포넌트로 전환하면 해당 컴포넌트 인스턴스를 재사용합니다.
+이 때 라우팅 인자는 변경될 수 있습니다.
+
+부모 컴포넌트에서 "forward", "back" 버튼으로 목록에 있는 히어로를 스크롤한다고 합시다.
+그러면 화면이 전환될 때마다 다른 `id` 값으로 `HeroDetailComponent`이 재사용될 것입니다.
+
+어쩌면 현재 DOM에 존재하는 `HeroDetailComponent` 인스턴스를 제거하고 새로 받는 `id`로 화면을 다시 렌더링하는 것을 원할 수도 있습니다.
+하지만 더 나은 UX를 위해서라면 컴포넌트 인스턴스는 그대로 재사용하고 인자만 새로 받아서 갱신하는 방식이 더 좋습니다.
+
+다만, `ngOnInit()`은 컴포넌트가 초기화된 후에 한번만 실행되기 때문에 _같은 컴포넌트 인스턴스에서_ 라우팅 인자가 변경되는 것을 감지하려면 `paramMap` 옵저버블을 구독해야 합니다.
+
+
+<div class="alert is-helpful">
+
+컴포넌트 안에서 옵저버블을 구독하면 컴포넌트가 종료될때 이 옵저버블 구독을 반드시 해지해야 합니다.
+
+하지만 `ActivatedRoute` 옵저버블은 예외인데, `ActivatedRoute` 인스턴스와 이 인스턴스가 제공하는 옵저버블은 모두 `Router`와 별개입니다.
+`Router`는 라우팅 대상 컴포넌트에 의존성으로 주입되는 `ActivatedRoute`를 사용할 필요가 없을 때 해당 컴포넌트를 종료합니다.
+
+</div>
+
 
 {@a snapshot}
+{@a snapshot-the-no-observable-alternative}
 
+<!--
 #### `snapshot`: the no-observable alternative
+-->
+#### `snapshot`: 옵저버블을 사용하지 않는 방식
 
+<!--
 This application won't re-use the `HeroDetailComponent`.
 The user always returns to the hero list to select another hero to view.
 There's no way to navigate from one hero detail to another hero detail without visiting the list component in between.
@@ -1779,11 +1813,36 @@ Use the observable `paramMap` approach if there's a possibility that the router 
 This tutorial sample app uses with the observable `paramMap`.
 
 </div>
+-->
+예제 앱에서는 `HeroDetailComponent`를 재사용하지 않습니다.
+사용자가 다른 히어로의 상세정보를 보려면 반드시 히어로 목록 화면으로 돌아와야 하며, 히어로 목록을 표시하는 컴포넌트를 건너뛰고 다른 히어로의 상세정보를 확인하는 방법은 없습니다.
+그래서 라우터는 매번 `HeroDetailComponent`의 인스턴스를 새로 생성합니다.
+
+`HeroDetailComponent` 인스턴스가 재사용되지 않는다는 것을 확신할 수 있으면 `snapshot`을 활용하는 방법도 좋습니다.
+
+`route.snapshot`은 라우팅 인자의 최초값을 제공합니다.
+이 객체는 옵저버블이 아니기 때문에 구독하거나 옵저버블 연산자를 사용하지 않아도 직접 참조할 수 있습니다:
+
+<code-example path="router/src/app/heroes/hero-detail/hero-detail.component.2.ts" header="src/app/heroes/hero-detail/hero-detail.component.ts (ngOnInit() snapshot)" region="snapshot"></code-example>
+
+
+<div class="alert is-helpful">
+
+`snapshot`으로 참조할 수 있는 라우팅 인자는 해당 라우팅 인자의 최초값 뿐입니다.
+라우터가 컴포넌트를 재사용할 가능성이 있다면 `paramMap` 옵저버블을 사용해야 합니다.
+이 문서에서는 `paramMap` 옵저버블을 사용하는 방식을 기준으로 설명합니다.
+
+</div>
+
 
 {@a nav-to-list}
 
+<!--
 ### Navigating back to the list component
+-->
+### 이전 화면으로 전환하기
 
+<!--
 The `HeroDetailComponent` "Back" button uses the `gotoHeroes()` method that navigates imperatively back to the `HeroListComponent`.
 
 The router `navigate()` method takes the same one-item _link parameters array_ that you can bind to a `[routerLink]` directive.
@@ -1791,12 +1850,23 @@ It holds the path to the `HeroListComponent`:
 
 
 <code-example path="router/src/app/heroes/hero-detail/hero-detail.component.1.ts" header="src/app/heroes/hero-detail/hero-detail.component.ts (excerpt)" region="gotoHeroes"></code-example>
+-->
+`HeroDetailComponent`에 있는 "Back" 버튼은 `gotoHeroes()` 메서드를 실행해서 이전 화면인 `HeroListComponent`로 이동합니다.
+
+라우터가 제공하는 `navigate()` 메서드는 `[routerLink]` 디렉티브와 비슷하게 항목이 하나인 _링크 인자 배열_ 을 받습니다.
+이 인자에는 `HeroListComponent`에 해당하는 주소를 지정하면 됩니다:
+
+<code-example path="router/src/app/heroes/hero-detail/hero-detail.component.1.ts" header="src/app/heroes/hero-detail/hero-detail.component.ts (일부)" region="gotoHeroes"></code-example>
 
 
 {@a optional-route-parameters}
 
+<!--
 #### Route Parameters: Required or optional?
+-->
+#### 라우팅 인자: 필수일까 옵션일까?
 
+<!--
 Use [route parameters](#route-parameters) to specify a required parameter value within the route URL
 as you do when navigating to the `HeroDetailComponent` in order to view the hero with `id` 15:
 
@@ -1831,11 +1901,45 @@ The router supports navigation with optional parameters as well as required rout
 Define optional parameters in a separate object _after_ you define the required route parameters.
 
 In general, use a required route parameter when the value is mandatory (for example, if necessary to distinguish one route path from another); and an optional parameter when the value is optional, complex, and/or multivariate.
+-->
+`HeroDetailComponent`를 렌더링할 때 `id=15`에 해당하는 히어로를 찾아오는 경우와 같이, 화면을 전환하면서 필수 인자를 지정해야 한다면 [라우팅 인자](#route-parameters)를 활용해야 합니다.
+
+<code-example format="nocode">
+  localhost:4200/hero/15
+
+</code-example>
+
+화면을 전환할 때는 추가 정보를 함께 전달할 수도 있습니다.
+`HeroDetailComponent` 화면에서 히어로 목록 화면으로 돌아올 때 이전에 선택했던 히어로를 다르게 표시하면 UX에 도움이 될 것입니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/selected-hero.png' alt="Selected hero">
+</div>
+
+이 동작은 `HeroDetailComponent`에서 봤던 히어로의 `id`를 이전 화면으로 돌아가는 URL에 옵션 라우팅 인자로 추가하면 됩니다.
+
+옵션 라우팅 인자는 이런 형식으로 구성합니다:
+
+* 타입이 엄격하지 않은 경우: `name='wind*'`
+* 값이 여러개인 경우: `after='12/31/2015' & before='1/1/2017'` &mdash; 순서가 정해져있지 않다면 &mdash; `before='1/1/2017' & after='12/31/2015'` &mdash; 정해진 형식에 따라 &mdash; `during='currentYear'`
+
+이런 옵션 라우팅 인자들은 URL 주소와 매칭되지 않기 때문에 아무리 복잡한 정보라도 URL과 함께 자유롭게 전달할 수 있습니다.
+옵션 라우팅 인자는 라우터가 적용하는 URL 패턴 매칭과 별개로 동작하기 때문에 상대적으로 유연합니다.
+
+옵션 라우팅 인자는 필수 라우팅 인자와 마찬가지로 라우팅하면서 지정할 수도 있습니다.
+링크 배열의 이동하려는 주소 _다음에_ 객체 형태로 지정하면 됩니다.
+
+일반적으로 화면을 전환하면서 꼭 필요한 값은 필수 라우팅 인자로 사용하고, 생략할 수 있으며 복잡하거나 개수가 변경될 수 있으면 옵션 라우팅 인자로 사용합니다.
+
 
 {@a optionally-selecting}
 
+<!--
 #### Heroes list: optionally selecting a hero
+-->
+#### 히어로 목록: 히어로 선택하기(옵션)
 
+<!--
 When navigating to the `HeroDetailComponent` you specified the required `id` of the hero-to-edit in the
 route parameter and made it the second item of the [_link parameters array_](#link-parameters-array).
 
@@ -1887,11 +1991,65 @@ Although matrix notation never made it into the HTML standard, it is legal and i
 As such, the Router provides support for the matrix notation across browsers.
 
 </div>
+-->
+`HeroDetailComponent`로 화면을 전환할 때는 상세정보 화면에 표시할 히어로의 `id`를 [_링크 인자 배열_](#link-parameters-array)의 두번째 항목으로 전달할 수 있습니다.
+
+<code-example path="router/src/app/heroes/hero-list/hero-list.component.1.html" header="src/app/heroes/hero-list/hero-list.component.html (link-parameters-array)" region="link-parameters-array"></code-example>
+
+그러면 해당 라우팅 규칙의 `path` 프로퍼티에 `:id` 토큰이 존재하기 때문에, 라우터는 `id` 값을 심어서 최종 URL을 구성합니다:
+
+<code-example path="router/src/app/heroes/heroes-routing.module.1.ts" header="src/app/heroes/heroes-routing.module.ts (hero-detail-route)" region="hero-detail-route"></code-example>
+
+그리고 사용자가 뒤로가기 버튼을 클릭하면 `HeroDetailComponent`는 `HeroListComponent`로 돌아가기 위해 새로운 _링크 인자 배열_ 을 구성합니다.
+
+<code-example path="router/src/app/heroes/hero-detail/hero-detail.component.1.ts" header="src/app/heroes/hero-detail/hero-detail.component.ts (gotoHeroes())" region="gotoHeroes"></code-example>
+
+이 배열에는 라우팅 인자가 없습니다.
+왜냐하면 `HeroListComponent`에 필요한 필수 라우팅 인자가 없기 때문입니다.
+
+하지만 이제는 상세정보에서 봤던 히어로의 `id`를 `HeroListComponent`로 전달해서 이 히어로를 목록에서 하이라이트 처리해 봅시다.
+
+`id` 값은 객체 형태로 전달합니다.
+이 객체에 불필요한 인자(`foo`)가 있더라도 해당 인자는 `HeroListComponent`에서 무시하면 됩니다.
+이제 라우팅 주소를 이렇게 구성할 수 있습니다:
+
+<code-example path="router/src/app/heroes/hero-detail/hero-detail.component.3.ts" header="src/app/heroes/hero-detail/hero-detail.component.ts (목록으로 돌아가기)" region="gotoHeroes"></code-example>
+
+애플리케이션에서 직접 확인해보세요.
+"back" 버튼을 클릭하면 히어로 목록 화면으로 돌아갑니다.
+
+이 때 브라우저 주소표시줄을 확인하면 주소가 이런식으로 표시되는 것을 확인할 수 있습니다:
+
+<code-example language="bash">
+  localhost:4200/heroes;id=15;foo=foo
+
+</code-example>
+
+`id` 값은 URL에 존재하지만(`;id=15;foo=foo`) URL 주소 부분에 있는 것은 아닙니다.
+`/heroes` 주소에 해당하는 라우팅 규칙에는 `:id` 토큰이 없습니다.
+
+옵션 라우팅 인자는 URL 쿼리 스트링처럼 "?"나 "&"로 구분하지 않고 ";"로 구분합니다.
+이 방식은 매트릭스 URL 표기법(matrix URL notation)입니다.
+
+
+<div class="alert is-helpful">
+
+매트릭스 URL 표기법은 웹을 개발한 Tim Berners-Lee가 [1996년에 처음 제안](http://www.w3.org/DesignIssues/MatrixURIs.html)한 표기법입니다.
+
+매트릭스 표기법이 HTML 표준이 되진 않았지만, 이 표기법은 앚기 유효하며 부모/자식 사이에서 라우팅 인자를 전달하는 용도로 브라우저 라우팅 체계에 자주 사용됩니다.
+Angular Router도 이 표기법을 지원합니다.
+
+</div>
+
 
 {@a route-parameters-activated-route}
 
+<!--
 ### Route parameters in the `ActivatedRoute` service
+-->
+### `ActivatedRoute` 서비스에 있는 라우팅 인자
 
+<!--
 In its current state of development, the list of heroes is unchanged.
 No hero row is highlighted.
 
@@ -1937,11 +2095,59 @@ When the user navigates from the heroes list to the "Magneta" hero and back, "Ma
 </div>
 
 The optional `foo` route parameter is harmless and the router continues to ignore it.
+-->
+아직까지는 개발단계이기 때문에 히어로 목록이 변경되지 않습니다.
+하이라이트된 히어로 줄도 없습니다.
+
+상세정보 화면에서 보고 돌아온 히어로를 하이라이트 처리하려면 `HeroListComponent`가 라우팅 인자를 활용하도록 수정해야 합니다.
+
+이전 섹션에서 `HeroListComponent`에서 `HeroDetailComponent`로 이동할 때는 라우팅 인자 맵 `Observable`을 구독하거나 `HeroDetailComponent` 안에 주입된 `ActivatedRoute` 서비스를 사용했습니다.
+
+이번에 화면이 전환되는 방향은 이전과 반대로 `HeroDetailComponent`에서 `HeroListComponent`로 전환됩니다.
+
+먼저, `ActivatedRoute` 서비스 심볼을 로드합니다:
+
+<code-example path="router/src/app/heroes/hero-list/hero-list.component.ts" header="src/app/heroes/hero-list/hero-list.component.ts (ActivatedRoute 로드하기)" region="import-router"></code-example>
+
+그리고 `Observable` 타입으로 제공되는 라우팅 인자 맵을 참조하기 위해 `switchMap` 연산자를 로드합니다.
+
+<code-example path="router/src/app/heroes/hero-list/hero-list.component.ts" header="src/app/heroes/hero-list/hero-list.component.ts (rxjs 연산자 로드하기)" region="rxjs-imports"></code-example>
+
+그 다음에는 `ActivatedRoute`를 `HeroListComponent` 생성자로 주입합니다.
+
+<code-example path="router/src/app/heroes/hero-list/hero-list.component.ts" header="src/app/heroes/hero-list/hero-list.component.ts (constructor and ngOnInit)" region="ctor"></code-example>
+
+`ActivatedRoute.paramMap` 프로퍼티는 라우팅 인자 맵을 `Observable` 타입으로 제공합니다.
+`paramMap`은 사용자가 컴포넌트에 진입할 때마다 상황에 맞는 라우팅 인자를 전달하며, 이 경우에는 `id`도 포함됩니다.
+`ngOnInit()` 메서드에서 이 프로퍼티를 구독해서 받아온 `id` 값을 `selectedId`에 할당하고 히어로 정보를 요청해 봅시다.
+
+이제 템플릿은 [클래스 바인딩](guide/attribute-binding#class-binding)이 동작하면서 갱신됩니다.
+그래서 클래스 바인딩에 사용된 평가식이 `true`를 반환하면 CSS 클래스 `selected`가 해당 DOM에 추가되고, 평가식이 `false`를 반환하면 해당 클래스가 제거됩니다.
+클래스 바인딩은 `<li>` 태그에 지정합니다:
+
+<code-example path="router/src/app/heroes/hero-list/hero-list.component.html" header="src/app/heroes/hero-list/hero-list.component.html"></code-example>
+
+항목이 선택되었을 때 적용될 스타일을 추가합니다.
+
+<code-example path="router/src/app/heroes/hero-list/hero-list.component.css" region="selected" header="src/app/heroes/hero-list/hero-list.component.css"></code-example>
+
+이제 사용자가 히어로 목록 화면에서 "Magneta" 히어로의 상세정보 화면으로 이동한 후에 돌아오면 "Matneta" 항목이 선택된 모습으로 표시됩니다:
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/selected-hero.png' alt="Selected List">
+</div>
+
+함께 전달된 라우팅 인자 `foo`는 사용되지 않았지만 무시해도 문제되지 않습니다.
+
 
 {@a route-animation}
 
+<!--
 ### Adding routable animations
+-->
+### 라우팅 애니메이션 추가하기
 
+<!--
 This section shows you how to add some [animations](guide/animations) to the `HeroDetailComponent`.
 
 First, import the `BrowserAnimationsModule` and add it to the `imports` array:
@@ -1985,11 +2191,62 @@ The `getAnimationData()` function returns the animation property from the `data`
 <code-example path="router/src/app/app.component.2.ts" header="src/app/app.component.ts (router outlet)" region="function-binding"></code-example>
 
 When switching between the two routes, the `HeroDetailComponent` and `HeroListComponent` now ease in from the left when routed to and will slide to the right when navigating away.
+-->
+이번 섹션에서는 `HeroDetailComponent`로 화면을 전환할 때 [애니메이션](guide/animations)을 적용하는 방법에 대해 알아봅시다.
+
+먼저, `BrowserAnimationsModule`을 로드하고 앱 모듈 `imports` 배열에 추가합니다:
+
+<code-example path="router/src/app/app.module.ts" header="src/app/app.module.ts (애니메이션 모듈)" region="animations-module"></code-example>
+
+그리고 `HeroListComponent`와 `HeroDetailComponent`에 해당하는 라우팅 규칙에 `data` 객체를 추가합니다.
+전환 효과(transition)는 `states`를 기반으로 동작하기 때문에 애니메이션 `state`에 해당하는 `animation` 데이터를 라우팅 규칙에 추가해야 합니다.
+
+<code-example path="router/src/app/heroes/heroes-routing.module.2.ts" header="src/app/heroes/heroes-routing.module.ts (애니메이션 데이터)"></code-example>
+
+그 다음에는 `src/app/` 폴더에 `animations.ts` 파일을 생성하고 이런 내용으로 작성합니다:
+
+<code-example path="router/src/app/animations.ts" header="src/app/animations.ts (일부)"></code-example>
+
+이 파일의 내용은 이렇습니다:
+
+* 애니메이션 트리거를 생성하는 심볼, 상태를 조작하는 심볼, 상태 전환을 관리하는 심볼을 로드합니다.
+
+* `routeAnimation` 트리거를 `slideAnimation` 상수로 파일 외부로 공개합니다.
+
+* `heroes`, `hero` 라우팅 규칙이 적용될 때 사용될 전환 효과를 정의합니다.
+해당 컴포넌트에 진입할 때(`:enter`)는 컴포넌트가 화면 왼쪽에서 나타나도록 정의하며, 컴포넌트를 벗어날 때(`:leave`)는 화면 오른쪽으로 사라지도록 정의합니다.
+
+그리고 `AppComponent` 파일로 돌아가서 `@angular/router` 패키지에서 `RouterOutlet` 토큰을 로드하고 `'./animations.ts'` 파일에서 `slideInAnimation` 상수를 로드합니다.
+
+이제 `@Component` 메타데이터의 `animations` 배열에 `slideInAnimation`을 추가합니다.
+
+<code-example path="router/src/app/app.component.2.ts" header="src/app/app.component.ts (animations 배열)" region="animation-imports"></code-example>
+
+라우팅 애니메이션을 사용하려면 `RouterOutlet`을 둘러싸는 엘리먼트를 추가하고 이 엘리먼트에 `@routeAnimation` 트리거를 바인딩해야 합니다.
+
+이제 `@routeAnimation` 전환 효과에 적용되는 상태는 `data` 객체에 담아서 `ActivatedRoute`로 전달합니다.
+그리고 `outlet` 템플릿 변수가 할당된 `RouterOutlet`을 바인딩합니다.
+이 예제에서는 `outlet` 대신 `routerOutlet`을 바인딩했습니다.
+
+<code-example path="router/src/app/app.component.2.html" header="src/app/app.component.html (라우팅 영역)"></code-example>
+
+`@routeAnimation` 프로퍼티는 `routerOutlet` 참조와 함께 `getAnimationData()`와 바인딩되기 때문에 이제 `AppComponent`에 `getAnimationData()` 메서드를 정의해야 합니다.
+`getAnimationData()` 함수는 `ActivatedRoute` 안에 있는 `data` 객체에서 애니메이션 프로퍼티를 찾아서 반환하는 함수입니다.
+그리고 `animation` 프로퍼티는는 `animations.ts` 파일에 정의한 `slideInAnimation` 안에 있는 상태 이름과 매칭됩니다.
+
+<code-example path="router/src/app/app.component.2.ts" header="src/app/app.component.ts (router outlet)" region="function-binding"></code-example>
+
+이제 `HeroDetailComponent`와 `HeroListComponent`를 전환해보면 새로 등장하는 컴포넌트가 화면 왼쪽에서 나타나고, 사라지는 컴포넌트가 화면 오른쪽으로 사라지는 애니메이션이 동작하는 것을 확인할 수 있습니다.
+
 
 {@a milestone-3-wrap-up}
 
+<!--
 ### Milestone 3 wrap up
+-->
+### 마일스톤 3 정리
 
+<!--
 This section has covered the following:
 
 * Organizing the app into feature areas.
@@ -1999,6 +2256,16 @@ This section has covered the following:
 * Applying routable animations based on the page.
 
 After these changes, the folder structure is as follows:
+-->
+이번 섹션에서는 이런 내용을 다뤘습니다:
+
+* 애플리케이션을 기능 단위로 재구성했습니다.
+* 컴포넌트를 전환하는 방법에 대해 다뤘습니다.
+* 라우팅 인자로 정보를 전달하고 새로 표시되는 컴포넌트에서 이 정보를 구독해서 사용했습니다.
+* `AppModule`에 기능 모듈을 로드했습니다.
+* 라우팅 애니메이션을 적용했습니다.
+
+여기까지 작업하고 나면 폴더 구조가 이렇게 구성됩니다:
 
 <div class='filetree'>
 
@@ -2194,7 +2461,10 @@ After these changes, the folder structure is as follows:
 
 </div>
 
+<!--
 Here are the relevant files for this version of the sample application.
+-->
+그리고 이 시점에 예제 애플리케이션의 코드는 이렇습니다.
 
 <code-tabs>
 
