@@ -1034,7 +1034,7 @@ It is where developers expect to find and expand routing configuration.
 <!--
 ## Milestone 3: Heroes feature
 -->
-## 마일스톤 3: 히어로 관리 기능
+## 마일스톤 3: 히어로 관리 모듈
 
 <!--
 This milestone covers the following:
@@ -2234,7 +2234,7 @@ When switching between the two routes, the `HeroDetailComponent` and `HeroListCo
 `getAnimationData()` 함수는 `ActivatedRoute` 안에 있는 `data` 객체에서 애니메이션 프로퍼티를 찾아서 반환하는 함수입니다.
 그리고 `animation` 프로퍼티는는 `animations.ts` 파일에 정의한 `slideInAnimation` 안에 있는 상태 이름과 매칭됩니다.
 
-<code-example path="router/src/app/app.component.2.ts" header="src/app/app.component.ts (router outlet)" region="function-binding"></code-example>
+<code-example path="router/src/app/app.component.2.ts" header="src/app/app.component.ts (라우팅 영역)" region="function-binding"></code-example>
 
 이제 `HeroDetailComponent`와 `HeroListComponent`를 전환해보면 새로 등장하는 컴포넌트가 화면 왼쪽에서 나타나고, 사라지는 컴포넌트가 화면 오른쪽으로 사라지는 애니메이션이 동작하는 것을 확인할 수 있습니다.
 
@@ -2532,8 +2532,12 @@ Here are the relevant files for this version of the sample application.
 
 
 
+<!--
 ## Milestone 4: Crisis center feature
+-->
+## 마일스톤 4: 위기대응센터 모듈
 
+<!--
 This section shows you how to add child routes and use relative routing in your app.
 
 To add more features to the app's current crisis center, take similar steps as for the heroes feature:
@@ -2555,11 +2559,39 @@ You can leave Heroes in its current state as a contrast with the Crisis Center.
 In keeping with the <a href="https://blog.8thlight.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html" title="Separation of Concerns">Separation of Concerns principle</a>, changes to the Crisis Center don't affect the `AppModule` or any other feature's component.
 
 </div>
+-->
+이번 섹션에서는 애플리케이션에 자식 라우팅 규칙을 추가하고 상대 주소로 라우팅하는 방법에 대해 알아봅시다.
+
+지금 앱에 있는 위기대응센터 기능을 좀 더 확장하는 방법은 히어로 관리 기능을 추가했던 것과 비슷합니다:
+
+* `src/app` 폴더 아래 `crisis-center` 폴더를 만듭니다.
+* `app/heroes`에 있는 폴더와 파일을 `crisis-center` 폴더로 복사합니다.
+* 복사한 파일에서 "hero"라고 언급한 부분을 "crisis"로, "heroes"라고 언급한 부분을 "crises"로 변경합니다.
+* 새로 복사한 NgModule 파일의 이름을 `crisis-center.module.ts`, `cris-center-routing.module.ts`로 변경합니다.
+
+히어로 목 객체 대신 위기 목 객체를 생성합니다:
+
+<code-example path="router/src/app/crisis-center/mock-crises.ts" header="src/app/crisis-center/mock-crises.ts"></code-example>
+
+새로 만든 위기대응센터에는 새로운 개념인 자식 라우팅을 활용해 봅시다.
+그러면 위기대응센터 기능을 사용하면서 히어로 모듈의 상태를 그대로 유지할 수 있습니다.
+
+<div class="alert is-helpful">
+
+<a href="https://blog.8thlight.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html" title="Separation of Concerns">관심사 분리 원칙</a>에 따라 위기대응센터에서 변경하는 코드는 `AppModule`이나 다른 기능모듈에 영향을 주지 않아야 합니다.
+
+</div>
+
 
 {@a crisis-child-routes}
+{@a a-crisis-center-with-child-routes}
 
+<!--
 ### A crisis center with child routes
+-->
+### 위기대응센터와 자식 라우팅
 
+<!--
 This section shows you how to organize the crisis center to conform to the following recommended pattern for Angular applications:
 
 * Each feature area resides in its own folder.
@@ -2574,14 +2606,31 @@ If your app had many feature areas, the app component trees might look like this
 <div class="lightbox">
   <img src='generated/images/guide/router/component-tree.png' alt="Component Tree">
 </div>
+-->
+이번 섹션에서는 Angular 애플리케이션에서 권장하는 방식으로 위기대응센터를 구성해 봅시다:
 
+* 개별 기능 단위는 개별 폴더에 두세요.
+* 개별 기능 단위는 개별 Angular 기능 모듈로 구성하세요.
+* 개별 기능 단위에는 최상위 컴포넌트가 있어야 합니다.
+* 개별 기능 단위의 최상위 컴포넌트에는 라우팅 영역과 자식 라우팅 규칙이 있어야 합니다.
+* 개별 기능 단위에서 다른 기능 단위로 라우팅하는 경우도 가끔 있습니다.
+
+애플리케이션에 기능 단위가 많이 있다면 앱 컴포넌트 트리가 이렇게 구성될 것입니다:
+
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/component-tree.png' alt="Component Tree">
+</div>
 
 
 {@a child-routing-component}
 
-
+<!--
 ### Child routing component
+-->
+### 자식 라우팅 컴포넌트
 
+<!--
 Generate a `CrisisCenter` component in the `crisis-center` folder:
 
 <code-example language="none" class="code-shell">
@@ -2598,11 +2647,34 @@ The `CrisisCenterComponent` has the following in common with the `AppComponent`:
 * It is a shell for the crisis management feature area, just as the `AppComponent` is a shell to manage the high-level workflow.
 
 Like most shells, the `CrisisCenterComponent` class is minimal because it has no business logic, and its template has no links, just a title and `<router-outlet>` for the crisis center child component.
+-->
+`crisis-center` 폴더에서 다음 명령을 실행해서 `CrisisCenter` 컴포넌트를 생성합니다:
+
+<code-example language="none" class="code-shell">
+  ng generate component crisis-center/crisis-center
+</code-example>
+
+그리고 컴포넌트 템플릿의 내용을 이렇게 수정합니다:
+
+<code-example path="router/src/app/crisis-center/crisis-center/crisis-center.component.html" header="src/app/crisis-center/crisis-center/crisis-center.component.html"></code-example>
+
+`CrisisCenterComponent`는 이런 점에서 `AppComponent`와 비슷합니다:
+
+* 이 컴포넌트는 위기대응센터 기능의 최상위 컴포넌트입니다. `AppComponent`는 애플리케이션 전체에서 최상위 컴포넌트입니다.
+* 위기대응센터가 제공하는 기능은 이 컴포넌트 안에 표시됩니다. `AppComponent`는 그보다 상위 계층에서 동작합니다.
+
+기본 컴포넌트가 그렇듯, `CrisisCenterComponent`의 클래스에는 비즈니스 로직이 들어가지 않기 때문에 최소한의 코드만 작성됩니다.
+이 컴포넌트의 템플릿에는 링크도 존재하지 않으며 제목 하나와 자식 컴포넌트를 표시할 `<router-outlet>`만 존재합니다.
+
 
 {@a child-route-config}
 
+<!--
 ### Child route configuration
+-->
+### 자식 라우팅 환경설정
 
+<!--
 As a host page for the "Crisis Center" feature, generate a `CrisisCenterHome` component in the `crisis-center` folder.
 
 <code-example language="none" class="code-shell">
@@ -2656,11 +2728,64 @@ The absolute URL for the latter example, including the `localhost` origin, is as
 Here's the complete `crisis-center-routing.module.ts` file with its imports.
 
 <code-example path="router/src/app/crisis-center/crisis-center-routing.module.1.ts" header="src/app/crisis-center/crisis-center-routing.module.ts (excerpt)"></code-example>
+-->
+위기대응센터의 기능이 동작할 화면을 마련하기 위해 `crisis-center`에 `CrisisCenterHome` 컴포넌트를 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate component crisis-center/crisis-center-home
+</code-example>
+
+그리고 컴포넌트의 템플릿에 환영 메시지를 추가합니다.
+
+<code-example path="router/src/app/crisis-center/crisis-center-home/crisis-center-home.component.html" header="src/app/crisis-center/crisis-center-home/crisis-center-home.component.html"></code-example>
+
+`heroes-routing.module.ts` 파일을 복사해서 만든 `crisis-center-routing.module.ts` 파일을 수정해 봅시다.
+지금은 `crisis-center` 라우팅 규칙의 자식 라우팅 규칙을 추가합니다.
+
+<code-example path="router/src/app/crisis-center/crisis-center-routing.module.1.ts" header="src/app/crisis-center/crisis-center-routing.module.ts (라우팅 규칙)" region="routes"></code-example>
+
+이 때 `crisis-center` 주소에 해당하는 라우팅 규칙은 `CrisisListComponent`와 연결되는 `children` 프로퍼티로 구성됩니다.
+그리고 `CrisisListComponent` 라우팅 규칙에는 항목이 2개인 `children` 배열이 지정되어 있습니다.
+
+이 라우팅 규칙 2개를 활용하면 위기대응센터의 자식 컴포넌트인 `CrisisCenterHomeComponent`와 `CrisisDetailComponent`를 전환할 수 있습니다.
+
+라우터가 자식 라우팅 규칙을 처리하는 방식은 일반 라우팅 규칙을 처리하는 방식과 조금 다릅니다.
+
+위기대응센터에서 라우터가 화면에 렌더링하는 컴포넌트는 `AppComponent`에 있는 `RouterOutlet`이 아니라 `CrisisCenterComponent`에 있는 `RouterOutlet` 입니다.
+
+그리고 위기 상세정보 화면은 위기 목록의 자식 라우팅 규칙입니다.
+기본적으로 라우터는 [컴포넌트를 재사용](#reuse)하기 때문에, 위기 상세정보 컴포넌트는 위기 목록에서 선택하는 항목에 따라 재사용될 것입니다.
+하지만 히어로 상세정보 컴포넌트를 생각해보면, 이 컴포넌트는 목록에서 선택한 히어로마다 [계속 다른 컴포넌트 인스턴스를 생성](#snapshot-the-no-observable-alternative)합니다.
+
+라우팅 규칙에서 사용하는 `/`는 애플리케이션 최상위 주소를 가리킵니다.
+하지만 자식 라우팅 규칙은 부모 라우팅 규칙을 확장하는 것이기 때문에, 라우팅 규칙 트리를 따라 내려가면서 슬래시(`/`)를 붙이지 않아도 라우팅 규칙 구조에 맞게 최종 주소가 결정됩니다.
+
+그래서 위기대응센터 밖에서 위기대응센터로 이동하는 경로는 `/crisis-center`가 됩니다.
+
+* `CrisisCenterHomeComponent`로 이동하는 전체 URL은 `/crisis-center` (`/crisis-center` + `''` + `''`)입니다.
+
+* `id=2`에 해당하는 위기 항목을 표시하는 `CrisisDetailComponent`로 이동하는 전체 URL은 `/crisis-center/2` (`/crisis-center` + `''` +  `'/2'`)입니다.
+
+그리고 이후 예제에서 다루겠지만, 오리진(origin)이 `localhost`일 때 절대 URL은 이렇습니다:
+
+<code-example>
+  localhost:4200/crisis-center/2
+
+</code-example>
+
+여기까지 구현하고 나면 `crisis-center-routing.module.ts` 파일의 내용은 이렇습니다.
+
+<code-example path="router/src/app/crisis-center/crisis-center-routing.module.1.ts" header="src/app/crisis-center/crisis-center-routing.module.ts (일부)"></code-example>
+
 
 {@a import-crisis-module}
 
+<!--
 ### Import crisis center module into the `AppModule` routes
+-->
+### `AppModule` 라우팅 규칙에 위기대응센터 모듈 로드하기
 
+<!--
 As with the `HeroesModule`, you must add the `CrisisCenterModule` to the `imports` array of the `AppModule`
 _before_ the `AppRoutingModule`:
 
@@ -2681,11 +2806,37 @@ Remove the initial crisis center route from the `app-routing.module.ts` because 
 The `app-routing.module.ts` file retains the top-level application routes such as the default and wildcard routes.
 
 <code-example path="router/src/app/app-routing.module.3.ts" header="src/app/app-routing.module.ts (v3)" region="v3"></code-example>
+-->
+`HeroesModule`과 마찬가지로 `CrisisCenterModule`도 `AppModule` `imports` 배열에 `AppRoutingModule` _보다 먼저_ 등록해야 합니다:
+
+<code-tabs>
+
+  <code-pane path="router/src/app/crisis-center/crisis-center.module.ts"header="src/app/crisis-center/crisis-center.module.ts">
+
+  </code-pane>
+
+  <code-pane path="router/src/app/app.module.4.ts" header="src/app/app.module.ts (CrisisCenterModule 로드하기)" region="crisis-center-module">
+
+  </code-pane>
+
+</code-tabs>
+
+`app-routing.module.ts` 파일에 이전에 만들었던 위기대응센터 라우팅 규칙은 제거해도 됩니다.
+이제는 `HeroesModule`과 `CrisisCenterModule`이 관련 라우팅 규칙을 관리합니다.
+
+여기까지 작업하면 `app-routing.module.ts` 파일에는 애플리케이션 최상위 라우팅 규칙인 기본 라우팅 규칙과 와일드카드 라우팅 규칙만 존재합니다.
+
+<code-example path="router/src/app/app-routing.module.3.ts" header="src/app/app-routing.module.ts (v3)" region="v3"></code-example>
+
 
 {@a relative-navigation}
 
+<!--
 ### Relative navigation
+-->
+### 상대주소로 이동하기
 
+<!--
 While building out the crisis center feature, you navigated to the
 crisis detail route using an absolute path that begins with a slash.
 
@@ -2722,11 +2873,53 @@ The router then calculates the target URL based on the active route's location.
 Always specify the complete absolute path when calling router's `navigateByUrl()` method.
 
 </div>
+-->
+위기대응센터 모듈을 빌드하고 나면 슬래시(`/`)로 시작하는 절대주소를 사용해서 위기 상세정보 화면으로 이동할 수 있습니다.
+
+절대주소가 사용되면 라우터는 라우팅 규칙 환경설정의 최상위 계층부터 주소를 찾기 시작합니다.
+
+물론 절대주소를 사용해도 위기대응센터 안에 있는 화면을 모두 사용할 수 있지만, 이 방식은 모듈 밖에 있는 라우팅 규칙의 전체 구조도 알아야 하기 때문에 불편합니다.
+부모 계층에서 `/crisis-center` 라는 주소를 변경하면 이 모듈 안에서 사용하는 링크 인자 배열도 모두 변경해야 합니다.
+
+이런 경우에는 현재 URL 세그먼트의 상대주소로 원하는 주소를 지정할 수 있습니다.
+상대주소를 사용하면 모듈 밖에서 화면 주소를 변경하더라도 모듈 안에서 변경할 내용은 없습니다.
+
+
+<div class="alert is-helpful">
+
+라우터는 _링크 인자 배열_ 을 처리할 때 폴더 구조와 비슷한 문법을 사용합니다:
+
+`./`나 슬래시 없이 시작하는 주소는 현재 라우팅 계층을 기준으로 합니다.
+
+`../`는 현재 라우팅 계층의 한단계 위를 의미합니다.
+
+상대주소를 사용하면 부모 계층에 정의된 라우팅 규칙을 활용할 수도 있습니다.
+그리고 같은 계층에서 이웃한 라우팅 규칙으로 이동하려면 한단계 위로 올라가서 이웃 주소를 가리키는 `../<이웃 주소>`라고 사용하면 됩니다.
+
+</div>
+
+
+`Router.navigate` 메서드에 상대주소를 사용하려면 현재 라우팅 트리를 확인하기 위해 `ActivatedRoute`를 인자로 함께 전달해야 합니다.
+
+_링크 인자 배열_ 뒤에 객체를 추가하고 `relativeTo` 프로퍼티에 `ActivatedRoute`를 지정하면 됩니다.
+그러면 라우터는 인자로 전달된 라우팅 규칙을 기준으로 최종 URL을 결정합니다.
+
+
+<div class="alert is-helpful">
+
+`navigateByUrl()` 메서드를 사용한다면 반드시 절대주소를 사용해야 합니다.
+
+</div>
+
 
 {@a nav-to-crisis}
 
+<!--
 ### Navigate to crisis list with a relative URL
+-->
+### 상대주소로 위기대응센터로 이동하기
 
+<!--
 You've already injected the `ActivatedRoute` that you need to compose the relative navigation path.
 
 When using a `RouterLink` to navigate instead of the `Router` service, you'd use the same link parameters array, but you wouldn't provide the object with the `relativeTo` property.
@@ -2738,11 +2931,28 @@ Update the `gotoCrises()` method of the `CrisisDetailComponent` to navigate back
 
 Notice that the path goes up a level using the `../` syntax.
 If the current crisis `id` is `3`, the resulting path back to the crisis list is  `/crisis-center/;id=3;foo=foo`.
+-->
+상대주소를 사용하기 위한 `ActivatedRoute`는 이미 의존성으로 주입되고 있습니다.
+
+`Router`를 직접 사용하지 않고 `RouterLink`로 화면을 전환하려면 메서드를 사용할 때와 비슷하게 링크 인자 배열을 사용하면 되지만, 이 경우에는 `relativeTo` 프로퍼티를 사용할 수 없습니다.
+`RouterLink` 디렉티브에는 `relativeTo`를 따로 지정하지 않아도 `ActivatedRoute`가 적용됩니다.
+
+이제 `CrisisDetailComponent`에 있는 `gotoCrises()` 메서드가 위기 목록으로 이동할 때 상대주소를 사용하도록 수정해 봅시다.
+
+<code-example path="router/src/app/crisis-center/crisis-detail/crisis-detail.component.ts" header="src/app/crisis-center/crisis-detail/crisis-detail.component.ts (상대주소로 이동하기)" region="gotoCrises-navigate"></code-example>
+
+이 코드를 보면 `../`가 사용되었기 때문에 먼저 한단계 위 라우팅 계층으로 올라갑니다.
+그리고 다음 이어지는 객체에 따라 최종 주소는 `/crisis-center/;id=3;foo=foo`가 됩니다.
+
 
 {@a named-outlets}
 
+<!--
 ### Displaying multiple routes in named outlets
+-->
+### 이름이 지정된 라우팅 영역으로 라우팅 규칙 여러개 표시하기
 
+<!--
 You decide to give users a way to contact the crisis center.
 When a user clicks a "Contact" button, you want to display a message in a popup view.
 
@@ -2762,11 +2972,34 @@ Add an outlet named "popup" in the `AppComponent`, directly below the unnamed ou
 <code-example path="router/src/app/app.component.4.html" header="src/app/app.component.html (outlets)" region="outlets"></code-example>
 
 That's where a popup will go, once you learn how to route a popup component to it.
+-->
+이제부터는 사용자가 위기대응센터와 연락할 수 있는 기능을 만들어 봅시다.
+사용자가 "Contact" 버튼을 클릭하면 팝업에 메시지를 표시하려고 합니다.
+
+이 팝업은 애플리케이션에서 화면을 전환하더라도 계속 떠있으며, 사용자가 메시지를 보내거나 취소했을 때만 닫힙니다.
+그리고 이 팝업에 들어가는 컴포넌트는 일반 화면처럼 사용하지는 않습니다.
+
+지금은 라우팅 영역을 하나 더 정의한 후에 자식 라우팅 규칙에 해당하는 컴포넌트를 이 라우팅 영역에 표시해 봅시다.
+이름없이 사용할 수 있는 1차(primary) 라우팅 영역은 템플릿에 하나만 존재할 수 있습니다.
+
+라우팅 영역에 이름을 지정하면 한 템플릿 안에 라우팅 영역을 여러개 추가할 수도 있으며, 개별 라우팅 영역은 라우팅 규칙에 맞는 컴포넌트를 표시합니다.
+그리고 개별 라우팅 영역은 서로 다른 라우팅 규칙을 적용받기 때문에 서로 다른 내용을 표시할 수 있으며, 한번에 다른 내용으로 변경할 수도 있습니다.
+
+`AppComponent` 템플릿의 이름없는 라우팅 영역 바로 아래에 "popup"이라는 이름으로 라우팅 영역을 추가합시다.
+
+<code-example path="router/src/app/app.component.4.html" header="src/app/app.component.html (여러 라우팅 영역)" region="outlets"></code-example>
+
+팝업이 표시되는 위치는 새로 추가한 라우팅 영역입니다.
+
 
 {@a secondary-routes}
 
+<!--
 #### Secondary routes
+-->
+#### 2차 라우팅 규칙
 
+<!--
 Named outlets are the targets of  _secondary routes_.
 
 Secondary routes look like primary routes and you configure them the same way.
@@ -2812,6 +3045,53 @@ It looks similar to any other component in this guide, but there are two key dif
 Note that the `send()` method simulates latency by waiting a second before "sending" the message and closing the popup.
 
 The `closePopup()` method closes the popup view by navigating to the popup outlet with a `null` which the section on [clearing secondary routes](#clear-secondary-routes) covers.
+-->
+이름이 지정된 라우팅 규칙은 _2차 라우팅 규칙(secondary routes)_ 대상이 될 수 있습니다.
+
+2차 라우팅 규칙은 1차(primary) 라우팅 규칙과 비슷해 보이며, 설정하는 방법도 같습니다.
+다만 다른 점이 몇가지 있습니다.
+
+* 각 라우팅 규칙은 서로 독립적입니다.
+* 다른 라우팅 규칙과 결합해서 사용합니다.
+* 이름이 지정된 라우팅 영역에 표시됩니다.
+
+메시지를 보낼 수 있는 컴포넌트를 새로 생성합시다.
+
+<code-example language="none" class="code-shell">
+  ng generate component compose-message
+</code-example>
+
+이 컴포넌트에는 헤더와 메시지를 입력받는 필드 "Send", "Cancel" 버튼이 존재합니다.
+
+<div class="lightbox">
+  <img src='generated/images/guide/router/contact-popup.png' alt="Contact popup">
+</div>
+
+컴포넌트를 구성하는 파일의 내용은 이렇습니다:
+
+<code-tabs>
+
+  <code-pane header="src/app/compose-message/compose-message.component.css" path="router/src/app/compose-message/compose-message.component.css">
+
+  </code-pane>
+
+  <code-pane header="src/app/compose-message/compose-message.component.html" path="router/src/app/compose-message/compose-message.component.html">
+
+  </code-pane>
+
+  <code-pane header="src/app/compose-message/compose-message.component.ts" path="router/src/app/compose-message/compose-message.component.ts">
+
+  </code-pane>
+
+</code-tabs>
+
+이 컴포넌트는 다른 컴포넌트들과 거의 비슷하지만 다른 점이 두가지 있습니다.
+
+`send()` 메서드는 메시지를 보낸 것을 시뮬레이션하기 위해 "sending" 문구를 표시하고 1초 있다가 팝업을 닫습니다.
+
+`closePopup()` 메서드는 2차 라우팅 규칙에 해당하는 주소에 `null`을 지정해서 팝업을 닫습니다.
+이 내용은 [2차 라우팅 규칙 해제하기](#clear-secondary-routes) 섹션에서 다룹니다.
+
 
 {@a add-secondary-route}
 
