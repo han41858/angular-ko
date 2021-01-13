@@ -3095,8 +3095,12 @@ The `closePopup()` method closes the popup view by navigating to the popup outle
 
 {@a add-secondary-route}
 
+<!--
 #### Add a secondary route
+-->
+#### 2차 라우팅 규칙 추가하기
 
+<!--
 Open the `AppRoutingModule` and add a new `compose` route to the `appRoutes`.
 
 <code-example path="router/src/app/app-routing.module.3.ts" header="src/app/app-routing.module.ts (compose route)" region="compose"></code-example>
@@ -3126,11 +3130,47 @@ Routing to a named outlet has revealed a router feature:
 you can target multiple outlets with multiple routes in the same `RouterLink` directive.
 
 </div>
+-->
+`AppRoutingModule`를 열고 `appRoutes` 배열에 `compose` 라우팅 규칙을 추가합니다.
+
+<code-example path="router/src/app/app-routing.module.3.ts" header="src/app/app-routing.module.ts (compose 라우팅 규칙)" region="compose"></code-example>
+
+그리고 `path`, `component` 프로퍼티 외에 `outlet` 프로퍼티를 추가하고 이 프로퍼티의 값을 `'popup'`로 지정합니다.
+라우팅 규칙을 이렇게 지정하면 `ComposeMessageComponent`이 팝업 라우팅 영역에 표시됩니다.
+
+이제 사용자가 팝업을 열 수 있도록 `AppComponent` 템플릿에 "Contact" 링크를 추가합니다.
+
+<code-example path="router/src/app/app.component.4.html" header="src/app/app.component.html (Contact 링크)" region="contact-link"></code-example>
+
+`compose` 주소에 해당하는 라우팅 규칙은 "popup" 라우팅 영역을 사용하도록 설정했지만, `RouterLink` 디렉티브에도 추가 설정이 필요합니다.
+`RouterLink` 디렉티브에 바인딩하는 _링크 인자 배열_ 에 원하는 라우팅 영역 이름을 지정해야 합니다.
+
+지금 작성한 _링크 인자 배열_ 에는 객체가 추가되었고 이 객체에는 `outlets` 프로퍼티 값이 하나지만, 라우팅 영역이 여러개라면 객체 키를 더 추가할 수도 있습니다.
+지금은 "popup" 라우팅 영역만 지정했습니다.
+
+이렇게 작성하면 사용자가 링크를 클릭했을 때 라우터가 `compose`에 해당하는 라우팅 규칙을 `popup` 라우팅 영역에 적용합니다.
+
+
+<div class="alert is-helpful">
+
+라우팅 규칙를 하나만 적용하면서 이름을 지정하지 않은 라우팅 영역이 하나만 있다면 `outlets` 객체는 필요없습니다.
+
+이 경우에는 이름이 지정되지 않은 1차 라우팅 영역을 대상으로 라우터가 동작하며, `outlets` 객체는 라우터가 자동으로 생성합니다.
+
+이 예제를 통해 라우터가 제공하는 기능을 확인할 수 있습니다:
+`RouterLink` 디렉티브를 활용하면 라우팅 영역 여러개에 라우팅 규칙 여러개를 동시에 적용할 수 있습니다.
+
+</div>
+
 
 {@a secondary-route-navigation}
 
+<!--
 #### Secondary route navigation: merging routes during navigation
+-->
+#### 2차 라우팅 규칙 적용하기: 라우팅 규칙 병합하기
 
+<!--
 Navigate to the _Crisis Center_ and click "Contact".
 you should see something like the following URL in the browser address bar.
 
@@ -3158,11 +3198,45 @@ The router is keeping track of two separate branches in a navigation tree and ge
 You can add many more outlets and routes, at the top level and in nested levels, creating a navigation tree with many branches and the router will generate the URLs to go with it.
 
 You can tell the router to navigate an entire tree at once by filling out the `outlets` object and then pass that object inside a _link parameters array_  to the `router.navigate` method.
+-->
+_위기대응센터_ 로 이동해서 "Contact" 링크를 클릭해 봅시다.
+그러면 브라우저 주소표시줄에 이런 URL이 표시될 것입니다.
+
+<code-example>
+  http://.../crisis-center(popup:compose)
+
+</code-example>
+
+`...` 뒤에 붙는 URL은 이런 의미입니다:
+
+* `crisis-center`는 1차 네비게이션 경로입니다.
+* 1차 라우팅 규칙은 소괄호(`()`) 안에 들어갑니다.
+* 2차 라우팅 규칙은 라우팅 영역의 이름(`popup`)과 구분자(`:`), 2차 라우팅 규칙의 경로(`compose`)로 구성됩니다.
+
+히어로 목록으로 이동하는 링크를 클릭하고 브라우저 주소표시줄을 다시 봅시다.
+
+<code-example>
+  http://.../heroes(popup:compose)
+</code-example>
+
+1차 라우팅 규칙의 주소는 변경되었지만 2차 라우팅 규칙의 주소는 변경되지 않았습니다.
+
+라우팅 규칙이 동시에 여러개 사용되면 라우터는 각 라우팅 규칙을 별개로 관리합니다.
+
+라우팅 영역과 라우팅 규칙은 최상위 계층부터 계층 구조로 얼마든지 자유롭게 구성할 수 있으며, 네비게이션 트리도 이 구조에 맞게 브랜치를 구성된 후에 최종 URL을 생성합니다.
+
+그래서 `outlets` 객체를 사용하면서 전체 네비게이션 트리 중 어떤 경로로 이동할 지 한번에 지정할 수 있습니다.
+이 객체는 `router.navigate` 메서드에 전달하는 _링크 인자 배열_ 안에 객체 형태로 전달합니다.
+
 
 {@a clear-secondary-routes}
 
+<!--
 #### Clearing secondary routes
+-->
+#### 2차 라우팅 규칙 해제하기
 
+<!--
 Like regular outlets, secondary outlets persists until you navigate away to a new component.
 
 Each secondary outlet has its own navigation, independent of the navigation driving the primary outlet.
@@ -3183,14 +3257,40 @@ The only named outlet is `'popup'`.
 This time, the value of `'popup'` is `null`.
 That's not a route, but it is a legitimate value.
 Setting the popup `RouterOutlet` to `null` clears the outlet and removes the secondary popup route from the current URL.
+-->
+보통 라우팅 영역과 비슷하게, 2차 라우팅 영역도 컴포넌트 밖으로 이동할 때까지 유지됩니다.
+
+2차 라우팅 영역은 네비게이션을 직접 관리하며, 이 네비게이션 동작은 1차 라우팅 영역과는 별개로 동작합니다.
+그래서 1차 라우팅 영역에 적용되는 라우팅 규칙이 변경되어도 팝업이 표시되는 라우팅 영역은 영향을 받지 않습니다.
+위기대응센터 모듈과 히어로 모듈을 전환하더라도 팝업이 계속 표시되는 것은 이때문입니다.
+
+`closePopup()` 메서드를 다시 봅시다:
+
+<code-example path="router/src/app/compose-message/compose-message.component.ts" header="src/app/compose-message/compose-message.component.ts (closePopup())" region="closePopup"></code-example>
+
+"send" 버튼이나 "cancel" 버튼을 클릭하면 팝업 화면을 비웁니다.
+`closePopup()` 함수는 [링크 인자 배열](#link-parameters-array)을 `Router.navigate()` 메서드에 인자로 전달해서 이 동작을 처리합니다.
+
+`AppComponent`에 있는 _Contact_ `RouterLink`에 바인딩된 배열과 비슷하게, 이 링크 인자 배열에도 `outlets` 프로퍼티가 존재하는 객체가 사용되었습니다.
+`outlets` 프로퍼티의 값은 라우팅 영역을 키로 하는 객체로 구성됩니다.
+이 예제에서는 `'popup'` 이라는 라우팅 영역만 사용되었습니다.
+
+그런데 `closePopup()` 함수에 사용된 `'popoup'` 라우팅 영역의 값은 `null`입니다.
+이 값이 라우팅 규칙과 매칭되지는 않지만, 사용할 수 있는 값은 맞습니다.
+팝업이 표시되는 `RouterOutlet`에 `null` 값을 지정하면 라우터가 라우팅 영역의 내용을 비우며, 현재 URL에서 2차 라우팅 규칙에 해당하는 부분도 제거합니다.
+
 
 {@a guards}
 
 {@a milestone-5-route-guards}
 
 
+<!--
 ## Milestone 5: Route guards
+-->
+## 마일스톤 5: 라우팅 가드
 
+<!--
 At the moment, any user can navigate anywhere in the application anytime, but sometimes you need to control access to different parts of your app for various reasons. Some of which may include the following:
 
 * Perhaps the user is not authorized to navigate to the target component.
@@ -3248,19 +3348,93 @@ If the feature module is loaded asynchronously, the `CanLoad` guard is checked b
 If _any_ guard returns false, pending guards that have not completed will be canceled, and the entire navigation is canceled.
 
 There are several examples over the next few sections.
+-->
+지금까지 작성한 앱에서는 사용자가 애플리케이션이 제공하는 화면을 어디든 자유롭게 이동할 수 있지만, 때로는 이 과정을 제어해야 하는 경우도 있습니다.
+이런 경우가 그렇습니다:
+
+* 로그인하지 않은 사용자가 어떤 컴포넌트로 이동하려는 경우
+* 로그인 한 사용자가 권한이 있는지 확인해야 하는 경우
+* 컴포넌트를 표시하기 전에 데이터를 먼저 불러와야 하는 경우
+* 컴포넌트를 벗어나기 전에 변경한 내용을 저장해야 하는 경우
+* 저장하지 않는다면 변경한 내용을 폐기할지 사용자에게 확인을 받아야 하는 경우
+
+이런 경우는 라우팅 규칙 환경설정에 가드를 추가해서 처리할 수 있습니다.
+
+라우터는 가드가 반환하는 값에 따라 이런 동작을 합니다:
+
+* 가드가 `true`를 반환하면 화면 이동을 계속 진행합니다.
+* 가드가 `false`를 반환하면 화면 이동을 멈춥니다.
+* 가드가 `UrlTree`를 반환하면 화면 이동을 취소하고 `UrlTree`에 해당하는 주소로 이동합니다.
+
+
+<div class="alert is-helpful">
+
+**참고**: 라우터 가드가 다른 곳으로 이동하도록 지정하면 현재 진행되는 네비게이션 동작은 취소됩니다.
+라우터 가드 안에서 이 동작을 직접 처리한다면 가드가 반환하는 값이 `false`여야 합니다.
+
+</div>
+
+라우터 가드는 불리언 결과값을 동기 방식으로 반환할 수 있습니다.
+하지만 대부분의 경우에 라우터 가드는 결과값을 동기 방식으로 반환할 수 없습니다.
+라우터 가드는 사용자에게 물어보거나, 변경된 내용을 저장하기 위해 서버와 통신해야 하고, 데이터를 받아오기도 해야 합니다.
+이 동작은 모두 비동기로 이루어집니다.
+
+그래서 라우팅 가드는 결과값으로 `Observable<boolean>`이나 `Promise<boolean>`을 반환할 수 있으며, 이 옵저버블이나 프라미스가 결과값을 보내기 전까지 라우터가 동작을 멈춥니다.
+
+
+<div class="alert is-critical">
+
+**참고:** 라우터 가드에 옵저버블이 사용되면 이 옵저버블은 반드시 종료되어야 합니다.
+옵저버블이 종료되지 않으면 네비게이션 동작도 멈춘 상태로 유지됩니다.
+
+</div>
+
+
+라우터가 제공하는 가드 인터페이스는 이런 것들이 있습니다:
+
+* [`CanActivate`](api/router/CanActivate): *앞으로 적용될* 라우팅 규칙에 개입합니다.
+* [`CanActivateChild`](api/router/CanActivateChild): *앞으로 적용될* 자식 라우팅 규칙에 개입합니다.
+* [`CanDeactivate`](api/router/CanDeactivate): 현재 적용된 라우팅 규칙을 *벗어날 때* 개입합니다.
+* [`Resolve`](api/router/Resolve): *앞으로 적용될* 라우팅 규칙에 필요한 데이터를 먼저 처리할 때 사용합니다.
+* [`CanLoad`](api/router/CanLoad): _비동기로_ 로드되는 기능 모듈로 *이동할 때* 개입합니다.
+
+
+라우팅 가드는 라우팅 규칙 계층 구조 어디에라도 자유롭게 여러개씩도 적용할 수 있습니다.
+라우터는 가장 안쪽에 있는 자식 라우팅 규칙부터 위쪽 계층으로 향하면서 `CanDeactivated`, `CanActivateChild` 가드가 먼저 실행됩니다.
+그리고 최상위 계층부터 자식 라우팅 규칙으로 향하면서 `CanActivate` 가드가 실행됩니다.
+이 때 기능 모듈이 비동기로 로드된다면 이 모듈을 로드하기 전에 `CanLoad` 가드가 실행됩니다.
+이 과정 중에 `false`를 반환하는 가드가 있으면 아직 실행되지 않은 가드 실행은 모두 취소되며 네비게이션 동작도 취소됩니다.
+
+다음 섹션에서는 예제를 보면서 자세하게 알아봅시다.
+
 
 {@a can-activate-guard}
 
+<!--
 ### `CanActivate`: requiring authentication
+-->
+### `CanActivate`: 인증을 확인할 때
 
+<!--
 Applications often restrict access to a feature area based on who the user is.
 You could permit access only to authenticated users or to users with a specific role.
 You might block or limit access until the user's account is activated.
 
 The `CanActivate` guard is the tool to manage these navigation business rules.
+-->
+사용자에 따라 애플리케이션 일부 영역에 접근하는 것을 제한해야 하는 경우가 있습니다.
+로그인 한 사용자나 해당 영역과 관련된 사용자만 접근을 허락하는 경우가 그렇습니다.
+이런 사용자가 아니라면 접근을 제한할 수도 있습니다.
 
+`CanActivate` 가드는 이런 경우에 사용합니다.
+
+
+<!--
 #### Add an admin feature module
+-->
+#### 관리자 기능 모듈 추가하기
 
+<!--
 This section guides you through extending the crisis center with some new administrative features.
 Start by adding a new feature module named `AdminModule`.
 
@@ -3289,6 +3463,35 @@ Next, generate the supporting components.
 </code-example>
 
 The admin feature file structure looks like this:
+-->
+이번 섹션에서는 위기대응센터 기능을 확장해서 관리자용 기능 모듈을 만들어 봅시다.
+먼저 `AdminModule`이라는 이름으로 기능 모듈을 생성합니다.
+
+`admin` 폴더에 기능 모듈 파일과 라우팅 환경설정 파일을 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate module admin --routing
+</code-example>
+
+그리고 컴포넌트를 몇개 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate component admin/admin-dashboard
+</code-example>
+
+<code-example language="none" class="code-shell">
+  ng generate component admin/admin
+</code-example>
+
+<code-example language="none" class="code-shell">
+  ng generate component admin/manage-crises
+</code-example>
+
+<code-example language="none" class="code-shell">
+  ng generate component admin/manage-heroes
+</code-example>
+
+그러면 관리자 모듈이 이렇게 구성됩니다:
 
 
 <div class='filetree'>
@@ -3391,6 +3594,7 @@ The admin feature file structure looks like this:
 
 </div>
 
+<!--
 The admin feature module contains the `AdminComponent` used for routing within the
 feature module, a dashboard route and two unfinished components to manage crises and heroes.
 
@@ -3425,11 +3629,51 @@ You only want the `Dashboard` link to be active when the user visits that route.
 Adding an additional binding to the `Dashboard` routerLink,`[routerLinkActiveOptions]="{ exact: true }"`, marks the `./` link as active when the user navigates to the `/admin` URL and not when navigating to any of the child routes.
 
 </div>
+-->
+관리자 기능 모듈에서 라우팅은 `AdminComponent`가 담당하며, 이 컴포넌트에는 위기 목록과 히어로 목록을 관리하는 컴포넌트가 표시됩니다.
+
+<code-tabs>
+
+  <code-pane header="src/app/admin/admin/admin.component.html"  path="router/src/app/admin/admin/admin.component.html">
+
+  </code-pane>
+
+  <code-pane header="src/app/admin/admin-dashboard/admin-dashboard.component.html" path="router/src/app/admin/admin-dashboard/admin-dashboard.component.1.html">
+
+  </code-pane>
+
+  <code-pane header="src/app/admin/admin.module.ts" path="router/src/app/admin/admin.module.ts">
+
+  </code-pane>
+
+  <code-pane header="src/app/admin/manage-crises/manage-crises.component.html" path="router/src/app/admin/manage-crises/manage-crises.component.html">
+
+  </code-pane>
+
+  <code-pane header="src/app/admin/manage-heroes/manage-heroes.component.html"  path="router/src/app/admin/manage-heroes/manage-heroes.component.html">
+
+  </code-pane>
+
+</code-tabs>
+
+
+<div class="alert is-helpful">
+
+관리자 대시보드로 이동하는 `RouterLink`에는 주소가 `./` 라고만 사용되었는데, 이 주소는 관리자 기능 모듈에 있는 모든 주소와 매칭됩니다.
+하지만 대시보드 링크는 현재 주소가 정확히 `./`과 매칭될 때만 하이라이트 되는 것을 의도했기 때문에 `RouterLink` 디렉티브에 `[routerLinkActiveOptions]="{ exact: true }"` 바인딩을 추가했습니다.
+이렇게 구현하면 사용자가 `/admin` 주소로 접근했을 때만 대시보드 링크가 하이라이트 처리되며, 관리자 모듈 안에 있는 자식 라우팅 규칙에 접근했을 때는 대시보드 링크가 하이라이트되지 않습니다.
+
+</div>
+
 
 {@a component-less-route}
 
+<!--
 ##### Component-less route: grouping routes without a component
+-->
+##### 컴포넌트가 없는 라우팅 규칙: 라우팅 규칙을 그룹으로 묶기
 
+<!--
 The initial admin routing configuration:
 
 <code-example path="router/src/app/admin/admin-routing.module.1.ts" header="src/app/admin/admin-routing.module.ts (admin routing)" region="admin-routes"></code-example>
@@ -3448,11 +3692,34 @@ to register the admin routes.
 Add an "Admin" link to the `AppComponent` shell so that users can get to this feature.
 
 <code-example path="router/src/app/app.component.5.html" header="src/app/app.component.html (template)"></code-example>
+-->
+관리자 모듈의 초기 라우팅 환경설정은 이렇습니다:
+
+<code-example path="router/src/app/admin/admin-routing.module.1.ts" header="src/app/admin/admin-routing.module.ts (관리자 모듈 라우팅 설정)" region="admin-routes"></code-example>
+
+`AdminComponent` 안쪽에 있는 자식 라우팅 규칙은 `path` 프로퍼티와 `children` 프로퍼티가 있지만 `component` 프로퍼티는 없습니다.
+이런 라우팅 규칙을 _컴포넌트가 없는(component-less)_ 라우팅 규칙이라고 합니다.
+
+위기대응센터를 관리하는 라우팅 규칙을 `admin` 경로 안으로 넣을 때 컴포넌트가 추가로 필요하지는 않습니다.
+_컴포넌트가 없는_ 라우팅 규칙은 [자식 라우팅 규칙에 적용하는 가드](#can-activate-child-guard)를 좀 더 편하게 사용하기 위한 것입니다.
+
+이제 `app.module.ts` 파일에 `AdminModule`을 로드하고 관리자 라우팅 모듈을 `imports` 배열에 추가합니다.
+
+<code-example path="router/src/app/app.module.4.ts" header="src/app/app.module.ts (관리자 모듈 추가하기)" region="admin-module"></code-example>
+
+그리고 사용자가 관리자 모듈로 이동할 수 있도록 `AppComponent` 템플릿에 "Admin" 링크를 추가합니다.
+
+<code-example path="router/src/app/app.component.5.html" header="src/app/app.component.html (템플릿)"></code-example>
+
 
 {@a guard-admin-feature}
 
+<!--
 #### Guard the admin feature
+-->
+#### 관리자 모듈 사용 제한하기
 
+<!--
 Currently, every route within the Crisis Center is open to everyone.
 The new admin feature should be accessible only to authenticated users.
 
@@ -3475,11 +3742,39 @@ update the admin route with a `canActivate` guard property that references it:
 <code-example path="router/src/app/admin/admin-routing.module.2.ts" header="src/app/admin/admin-routing.module.ts (guarded admin route)" region="admin-route"></code-example>
 
 The admin feature is now protected by the guard, but the guard requires more customization to work fully.
+-->
+아직까지는 모든 사용자가 위기대응센터로 이동하는 라우팅 규칙을 사용할 수 있습니다.
+새로 만든 관리자 기능에는 일부 사용자만 접근할 수 있도록 만들어 봅시다.
+
+먼저 로그인하지 않은 사용자가 관리자 모듈로 접근하면 로그인 화면으로 리다이렉션하는 `canActivate()` 가드 메서드를 구현해 봅시다.
+
+다음 명령을 실행해서 `auth` 폴더에 `AuthGuard`를 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate guard auth/auth
+</code-example>
+
+이 문서에서는 가드가 동작하는 개념을 설명하기 위해 콘솔에 로그를 하나 출력하고 `true`를 즉시 반환합니다.
+라우팅 가드가 `true`를 반환했기 때문에 네비게이션 동작은 그대로 진행됩니다:
+
+<code-example path="router/src/app/auth/auth.guard.1.ts" header="src/app/auth/auth.guard.ts (일부)"></code-example>
+
+그 다음에는 `admin-routing.module.ts` 파일을 열고 `AuthGuard` 클래스를 로드한 후에 `admin`에 해당하는 라우팅 규칙에 `canActivate` 가드 프로퍼티를 다음과 같이 연결합니다:
+
+<code-example path="router/src/app/admin/admin-routing.module.2.ts" header="src/app/admin/admin-routing.module.ts (관리자용 라우팅 규칙 제한하기)" region="admin-route"></code-example>
+
+이제 관리자 모듈은 라우팅 가드로 보호됩니다.
+하지만 이 가드가 제대로 동작하려면 작업을 좀 더 해야 합니다.
+
 
 {@a teach-auth}
 
+<!--
 #### Authenticate with `AuthGuard`
+-->
+#### `AuthGuard`에 인증기능 넣기
 
+<!--
 Make the `AuthGuard` mimic authentication.
 
 The `AuthGuard` should call an application service that can login a user and retain information about the current user. Generate a new `AuthService` in the `auth` folder:
@@ -3516,11 +3811,56 @@ The `ActivatedRouteSnapshot` contains the _future_ route that will be activated 
 
 If the user is not logged in, you store the attempted URL the user came from using the `RouterStateSnapshot.url` and tell the router to redirect to a login page&mdash;a page you haven't created yet.
 Returning a `UrlTree` tells the `Router` to cancel the current navigation and schedule a new one to redirect the user.
+-->
+`AuthGuard`에 인증 기능을 임시로 구현해 봅시다.
+
+`AuthGuard`는 애플리케이션 서비스를 활용해서 사용자를 로그인시키고 로그인 한 사용자의 정보를 받아옵니다.
+다음 명령을 실행해서 `auth` 폴더에 `AuthService`를 생성합니다:
+
+<code-example language="none" class="code-shell">
+  ng generate service auth/auth
+</code-example>
+
+그리고 `AuthService`에 로그인 기능을 추가합니다:
+
+<code-example path="router/src/app/auth/auth.service.ts" header="src/app/auth/auth.service.ts (일부)"></code-example>
+
+이 코드가 실제로 로그인을 하는 것은 아니기 때문에 사용자가 로그인했는지는 `isLoggedIn` 플래그로 판단합니다.
+그리고 `login()` 메서드는 API가 실행된 것을 흉내내기 위해 옵저버블을 사용해서 약간 시연을 지연한 후에 결과를 반환합니다.
+`redirectUrl` 프로퍼티는 사용자가 로그인한 후에 이동할 URL을 잠시 보관하는 프로퍼티입니다.
+
+
+<div class="alert is-helpful">
+
+코드를 간단하게 작성하기 위해 이 예제에서는 로그인한 사용자를 `/admin`으로 리다이렉션합니다.
+
+</div>
+
+
+`AuthGuard`가 `AuthService`를 사용하도록 수정해 봅시다.
+
+<code-example path="router/src/app/auth/auth.guard.2.ts" header="src/app/auth/auth.guard.ts (v2)"></code-example>
+
+`AuthGuard`에는 `AuthService`와 `Router`가 의존성 객체로 주입됩니다.
+라우팅 가드에 필요하다면 다른 서비스도 의존성으로 주입해서 활용할 수 있습니다.
+
+이 라우팅 가드는 불리언 결과값을 즉시 반환합니다.
+사용자가 로그인한 상태라면 `true`를 반환하고 네비게이션 동작도 계속 진행될 것입니다.
+
+`ActivatedRouteSnapshot`에서는 _앞으로 적용될_ 라우팅 규칙에 대한 정보를 참조할 수 있으며, `RouterStateSnapshot`에서는 _앞으로 적용될_ 애플리케이션의 `RouterState` 정보를 참조할 수 있기 때문에, 라우팅 가드 로직에 필요하다면 이 객체들을 활용하는 것도 좋습니다.
+
+그리고 사용자가 로그인하지 않은 상태라면 이동하려는 주소를 `AuthService.redirectUrl` 프로퍼티에 저장한 후에 로그인 페이지로 리다이렉션합니다&mdash;이 화면은 아직 만들지 않았습니다.
+라우팅 가드가 `UrlTree`를 반환하면 라우터는 현재 진행되고 있는 네비게이션 동작을 취소하고 반환하는 `UrlTree`로 사용자를 리다이렉션합니다.
+
 
 {@a add-login-component}
 
+<!--
 #### Add the `LoginComponent`
+-->
+#### `LoginComponent` 추가하기
 
+<!--
 You need a `LoginComponent` for the user to log in to the app. After logging in, you'll redirect to the stored URL if available, or use the default URL.
 There is nothing new about this component or the way you use it in the router configuration.
 
@@ -3531,6 +3871,38 @@ There is nothing new about this component or the way you use it in the router co
 Register a `/login` route in the `auth/auth-routing.module.ts`.
 In `app.module.ts`, import and add the `AuthModule` to the `AppModule` imports.
 
+
+<code-tabs>
+
+  <code-pane header="src/app/app.module.ts" path="router/src/app/app.module.ts" region="auth">
+
+  </code-pane>
+
+  <code-pane header="src/app/auth/login/login.component.html" path="router/src/app/auth/login/login.component.html">
+
+  </code-pane>
+
+  <code-pane header="src/app/auth/login/login.component.ts" path="router/src/app/auth/login/login.component.1.ts">
+
+  </code-pane>
+
+  <code-pane header="src/app/auth/auth.module.ts" path="router/src/app/auth/auth.module.ts">
+
+  </code-pane>
+
+</code-tabs>
+-->
+사용자가 로그인하려면 `LoginComponent`가 필요합니다.
+이 컴포넌트는 사용자가 로그인한 후에 저장된 URL로 이동하거나 기본 주소로 리다이렉션하면 됩니다.
+컴포넌트를 새로 만들고 라우터 환경설정에 추가하는 방법은 이전과 같습니다.
+
+<code-example language="none" class="code-shell">
+  ng generate component auth/login
+</code-example>
+
+
+`/login` 라우팅 규칙은 `auth/auth-routing.module.ts`에 등록합니다.
+그리고 `app.module.ts` 파일에 `AuthModule`을 로드하면 됩니다.
 
 <code-tabs>
 
