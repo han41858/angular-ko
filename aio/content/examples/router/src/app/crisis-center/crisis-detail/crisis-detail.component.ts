@@ -57,9 +57,9 @@ export class CrisisDetailComponent implements OnInit {
 
   gotoCrises() {
     const crisisId = this.crisis ? this.crisis.id : null;
-    // Pass along the crisis id if available
-    // so that the CrisisListComponent can select that crisis.
-    // Add a totally useless `foo` parameter for kicks.
+    // 화면에 표시한 위기 항목의 id를 전달해서
+    // CrisisListComponent에서 해당 위기 항목을 하이라이트 처리합니다.
+    // `foo` 인자는 사용하지 않지만 문제가 발생하지 않습니다.
   // #docregion gotoCrises-navigate
     // 상대주소를 사용해서 목록 화면으로 돌아갑니다.
     this.router.navigate(['../', { id: crisisId, foo: 'foo' }], { relativeTo: this.route });

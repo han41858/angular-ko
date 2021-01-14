@@ -3927,8 +3927,12 @@ In `app.module.ts`, import and add the `AuthModule` to the `AppModule` imports.
 
 {@a can-activate-child-guard}
 
+<!--
 ### `CanActivateChild`: guarding child routes
+-->
+### `CanActivateChild`: 자식 라우팅 규칙 제한하기
 
+<!--
 You can also protect child routes with the `CanActivateChild` guard.
 The `CanActivateChild` guard is similar to the `CanActivate` guard.
 The key difference is that it runs before any child route is activated.
@@ -3949,12 +3953,37 @@ Add the same `AuthGuard` to the `component-less` admin route to protect all othe
 instead of adding the `AuthGuard` to each route individually.
 
 <code-example path="router/src/app/admin/admin-routing.module.3.ts" header="src/app/admin/admin-routing.module.ts (excerpt)" region="can-activate-child"></code-example>
+-->
+자식 라우팅 규칙은 `CanActivateChild` 가드로 보호할 수 있습니다.
+`CanActivateChild` 가드는 `CanActivate` 가드와 비슷합니다.
+라우팅 규칙이 아니라 자식 라우팅 규칙이 활성화되기 실행된다는 점만 다릅니다.
+
+관리자 모듈은 이제 로그인하지 않은 사용자가 접근할 수 없도록 보호처리 되었습니다.
+기능 모듈 사용을 이렇게 제한하면 _그 안에 있는_ 자식 라우팅 규칙도 함께 제한해야 합니다.
+
+`AuthGuard`를 수정해서 `admin` 라우팅 규칙 안에서 발생하는 네비게이션을 제한해 봅시다.
+`auth.guard.ts` 파일을 열고 `CanActivatedChild` 인터페이스를 불러옵니다.
+
+그 다음에는 `canActivate()` 메서드와 같은 인자 형식으로 `canActivateChild()` 메서드를 선언합니다.
+인자는 `ActivatedRouteSnapshot`과 `RouterStateSnapshot` 입니다.
+`canActivateChild()` 메서드도 `Observable<boolean|UrlTree>`나 `Promise<boolean|UrlTree>`를 비동기로 반환할 수 있으며, `boolean` 타임이나 `UrlTree` 객체를 동기 방식으로 반환할 수도 있습니다.
+어떤 방식이던지 `true`를 반환하면 진행 중인 네비게이션 동작을 계속 진행하며, `UrlTree`를 반환하면 로그인 페이지로 이동합니다:
+
+<code-example path="router/src/app/auth/auth.guard.3.ts" header="src/app/auth/auth.guard.ts (일부)" region="can-activate-child"></code-example>
+
+이제 `AuthGuard`는 개별 라우팅 규칙에 지정하지 않고 그 상위 계층에 추가해도 자식 라우팅 규칙을 모두 보호할 수 있습니다.
+
+<code-example path="router/src/app/admin/admin-routing.module.3.ts" header="src/app/admin/admin-routing.module.ts (일부)" region="can-activate-child"></code-example>
+
 
 {@a can-deactivate-guard}
 
-
+<!--
 ### `CanDeactivate`: handling unsaved changes
+-->
+### `CanDeactivate`: 저장하지 않은 변경사항을 처리할 때
 
+<!--
 Back in the "Heroes" workflow, the app accepts every change to a hero immediately without validation.
 
 In the real world, you might have to accumulate the users changes, validate across fields, validate on the server, or hold changes in a pending state until the user confirms them as a group or cancels and reverts all changes.
@@ -3969,11 +3998,31 @@ If you let the user move to the next screen immediately and saving were to fail 
 You need to stop the navigation while you wait, asynchronously, for the server to return with its answer.
 
 The `CanDeactivate` guard helps you decide what to do with unsaved changes and how to proceed.
+-->
+히어로 목록으로 돌아가는 과정을 보면 예재 앱에서 히어로의 정보를 수정하면 이 내용이 즉시 반영됩니다.
+
+하지만 실제로 운영되는 앱이라면 사용자가 변경한 내용은 한번에 모았다가 각 필드값의 유효성을 검사해야 하고, 서버에서도 검사해야 합니다.
+아니면 사용자가 데이터를 한 번에 처리할 것인지, 한번에 취소할 것인지, 실행한 내용을 되돌릴지 결정할때까지 변경사항을 임시로 들고있어야 할 수도 있습니다.
+
+그래서 사용자가 현재 화면을 벗어난다면, 저장하지 않은 변경사항을 어떻게 처리할지 사용자에게 물어볼 수 있습니다.
+이 때 사용자가 결정하는 것에 따라 화면을 벗어나지 않고 수정을 계속하거나, 저장하고 넘어갈 수도 있습니다.
+
+그리고 변경사항을 저장하는 경우에는 저장이 끝날때까지 화면 전환 동작을 잠시 멈춰야 할 수도 있습니다.
+저장이 되었는지 확인하지 않고 바로 다음 화면으로 넘어가면 데이터에 문제가 있어서 저장이 실패하더라도 이 에러를 처리하기 어렵습니다.
+
+그래서 화면을 전환하기 전에 잠시 기다렸다가, 서버가 응답을 보냈을 때 비동기로 화면을 전환하는 방식이 더 안전합니다.
+
+저장하지 않은 변경사항을 어떻게 처리할지 확인받거나 이후 동작을 처리하려면 `CanDeactivate` 가드를 사용하면 됩니다.
+
 
 {@a cancel-save}
 
+<!--
 #### Cancel and save
+-->
+#### 취소하거나 저장하기
 
+<!--
 Users update crisis information in the `CrisisDetailComponent`.
 Unlike the `HeroDetailComponent`, the user changes do not update the crisis entity immediately.
 Instead, the app updates the entity when the user presses the Save button and discards the changes when the user presses the Cancel button.
@@ -4039,13 +4088,88 @@ Add the `Guard` to the crisis detail route in `crisis-center-routing.module.ts` 
 <code-example path="router/src/app/crisis-center/crisis-center-routing.module.3.ts" header="src/app/crisis-center/crisis-center-routing.module.ts (can deactivate guard)"></code-example>
 
 Now you have given the user a safeguard against unsaved changes.
+-->
+앱 사용자는 `CrisisDetailComponent`에서 위기 정보를 수정합니다.
+그런데 `HeroDetailComponent`와는 다르게, 이 컴포넌트는 사용자가 변경한 내용을 즉시 반영하지 않습니다.
+이 컴포넌트에서는 사용자가 "Save" 버튼을 눌렀을 때 전체 내용을 갱신하고, "Cancel" 버튼을 누르면 모든 변경사항을 폐기합니다.
+
+어떤 버튼이든 누른 후에는 위기 목록 화면으로 돌아갑니다.
+
+<code-example path="router/src/app/crisis-center/crisis-detail/crisis-detail.component.ts" header="src/app/crisis-center/crisis-detail/crisis-detail.component.ts (취소하거나 저장하는 메서드)" region="cancel-save"></code-example>
+
+기본 시나리오는 이렇지만 사용자는 변경사항을 저장하지 않은 상태에서 히어로 목록 링크를 클릭할 수 있고, 브라우저에서 뒤로 가기 버튼을 누를수도 있습니다.
+
+이런 경우에 다이얼로그를 하나 띄워서 사용자가 어떤 결정을 할 것인지 명확하게 결정하고, 사용자가 결정할 때까지 비동기로 기다리는 방식을 활용할 수 있습니다.
+
+
+<div class="alert is-helpful">
+
+동기 코드로 사용자의 응답을 기다릴 수도 있지만, 이 방식은 코드 실행을 중단시킵니다.
+좀 더 나은 사용성을 제공하고 백그라운드에서 다른 작업을 계속 할 수 있는 비동기 방식이 더 좋습니다.
+
+</div>
+
+
+사용자의 결정을 받을 `Dialog` 서비스를 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate service dialog
+</code-example>
+
+그리고 사용자의 결정을 받을 `confirm()` 메서드를 `DialogService`에 추가합니다.
+`window.confirm`는 모달 팝업을 띄우면서 사용자의 응답을 기다리는 메서드입니다.
+
+<code-example path="router/src/app/dialog.service.ts" header="src/app/dialog.service.ts"></code-example>
+
+`confirm()` 메서드는 사용자가 결정한 것을 `Observable`로 반환하기 때문에 이 값을 활용하면 변경사항을 폐기하거나 저장할 수 있고, 이후에 화면을 벗어나거나(`true`인 경우) 수정화면에 그대로 남아있을 수(`false`인 경우) 있습니다.
+
+
+{@a CanDeactivate}
+
+컴포넌트에 `canDeactivate()` 메서드가 있는지 검사하는 가드를 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate guard can-deactivate
+</code-example>
+
+그리고 아래 코드를 가드에 붙여넣습니다.
+
+<code-example path="router/src/app/can-deactivate.guard.ts" header="src/app/can-deactivate.guard.ts"></code-example>
+
+이 가드는 어떤 컴포넌트에 `canDeactivate` 메서드가 있는지 미리 알 필요가 없으며, 컴포넌트에 `canDeactivate()` 메서드가 있을 때만 이 메서드를 실행합니다.
+이렇게 구현하면 가드를 재사용하기도 편합니다.
+
+이 방법 대신 `CrisisDetailComponent`를 대상으로만 동작하는 `CanDeactivate` 가드를 만들 수도 있습니다.
+이 방식은 컴포넌트 인스턴스를 `canDeactivate()` 메서드로 전달해야 하며, 추가 정보가 필요하다면 `ActivatedRoute`나 `RouterStateSnapshot`을 추가로 전달해서 활용하면 됩니다.
+이 컴포넌트에만 동작하는 라우팅 가드를 만들거나, 컴포넌트에 있는 프로퍼티를 더 활용해야 한다면 이 방식이 유용할 수도 있습니다.
+
+<code-example path="router/src/app/can-deactivate.guard.1.ts" header="src/app/can-deactivate.guard.ts (컴포넌트 전용 가드)"></code-example>
+
+`CrisisDetailComponent`를 다시 보면, 이 컴포넌트는 사용자의 결정을 이렇게 받습니다.
+
+<code-example path="router/src/app/crisis-center/crisis-detail/crisis-detail.component.ts" header="src/app/crisis-center/crisis-detail/crisis-detail.component.ts (일부)" region="canDeactivate"></code-example>
+
+`canDeactivate()` 메서드는 결과값을 동기 방식으로 반환할 수 있습니다.
+변경된 내용이 없어서 화면을 벗어나도 문제되지 않으면 `true`를 즉시 반환합니다.
+하지만 변경된 내용을 어떻게 해야 할지 결정해야 하는 상황이라면 `Promise`나 `Observable`을 반환해서 라우터의 실행을 잠시 멈출 수 있습니다.
+
+이 가드를 적용하려면 `crisis-center-routing.module.ts` 파일에서 위기 상세정보에 해당하는 라우팅 규칙의 `canDeactivate` 배열에 추가하면 됩니다.
+
+<code-example path="router/src/app/crisis-center/crisis-center-routing.module.3.ts" header="src/app/crisis-center/crisis-center-routing.module.ts (가드 추가하기)"></code-example>
+
+이제 사용자가 변경한 내용을 어떻게 처리할지 보호하는 가드가 추가되었습니다.
+
 
 {@a Resolve}
 
 {@a resolve-guard}
 
+<!--
 ### _Resolve_: pre-fetching component data
+-->
+### _Resolve_: 컴포넌트 데이터 미리 받아오기
 
+<!--
 In the `Hero Detail` and `Crisis Detail`, the app waited until the route was activated to fetch the respective hero or crisis.
 
 If you were using a real world API, there might be some delay before the data to display is returned from the server.
@@ -4058,12 +4182,28 @@ There's no point in navigating to a crisis detail for an `id` that doesn't have 
 It'd be better to send the user back to the `Crisis List` that shows only valid crisis centers.
 
 In summary, you want to delay rendering the routed component until all necessary data has been fetched.
+-->
+히어로 상세정보 컴포넌트와 위기 상세정보 컴포넌트는 라우팅 규칙이 적용된 후에 해당 컴포넌트에 필요한 데이터를 다 받아와야 컴포넌트가 표시됩니다.
+
+실제 운영환경에서 서버가 제공하는 API를 사용한다면 데이터를 받아와서 표시하기까지 시간이 좀 걸릴 것입니다.
+이 때 데이터가 표시되기까지 빈 화면이 표시되는데, 이 동작을 개선해 봅시다.
+
+리졸버(resolver)를 사용하면 서버에서 데이터를 미리 받아올 수 있기 때문에 라우팅 규칙이 적용되는 시점에 바로 컴포넌트 내용을 표시할 수 있습니다.
+만약 데이터를 받아올 때 에러가 발생한다면 이 에러도 컴포넌트로 이동하기 전에 처리할 수 있습니다.
+실제로 존재하지 않는 `id`를 가지고 위기 상세정보 화면으로 이동할 필요는 없습니다.
+이런 경우에는 사용자를 위기 목록 화면으로 다시 이동시켜서 올바른 목록이 무엇인지 다시 확인하게 하는 것이 좋습니다.
+
+간단하게 설명하자면, 컴포넌트를 화면에 표시하기 전에 해당 컴포넌트에 필요한 데이터를 다 받아올 때까지 렌더링을 지연시킬 수 있습니다.
 
 
 {@a fetch-before-navigating}
 
+<!--
 #### Fetch data before navigating
+-->
+#### 화면을 전환하기 전에 데이터 받아오기
 
+<!--
 At the moment, the `CrisisDetailComponent` retrieves the selected crisis.
 If the crisis is not found, the router navigates back to the crisis list view.
 
@@ -4117,6 +4257,61 @@ The router looks for that method and calls it if found.
 1. Returning an empty `Observable` in at least one resolver will cancel navigation.
 
 The relevant Crisis Center code for this milestone follows.
+-->
+지금까지 구현한 대로라면 `CrisisDetailComponent`는 목록에서 선택한 위기 정보를 직접 받아옵니다.
+이 때 위기 항목이 실제로 존재하지 않으면 목록 화면으로 다시 이동합니다.
+
+그런데 UX 측면에서 생각해보면, 이 컴포넌트에 필요한 것들을 모두 준비해둔 후에 라우팅 규칙을 적용하는 것이 더 나을 수 있습니다.
+새로 만들 `CrisisDetailResolver` 서비스는 원하는 위기 항목을 받아온 후에, 이 항목이 실제로 존재하지 않으면 `CrisisDetailComponent` 인스턴스를 생성하고 라우팅 규칙을 적용하기 _전에_ 다른 화면으로 이동하는 서비스입니다.
+
+위기대응센터 모듈 폴더에서 다음 명령을 실행해서 `CrisisDetailResolver` 서비스를 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate service crisis-center/crisis-detail-resolver
+</code-example>
+
+<code-example path="router/src/app/crisis-center/crisis-detail-resolver.service.1.ts" header="src/app/crisis-center/crisis-detail-resolver.service.ts (생성된 서비스)"></code-example>
+
+이제 `CrisisDetailComponent.ngOnInit()`에서 데이터를 받아오는 코드를 `CrisisDetailResolverService`로 옮깁니다.
+데이터를 받아오려면 `Crisis` 모델, `CrisisService`를 로드해야 하고, 원하는 데이터를 받아오지 못했을 때 사용하기 위해 `Router`도 로드해야 합니다.
+
+이번 예제에서는 `Resolve` 인터페이스를 `Crisis` 타입으로만 명시적으로 구현해 봅시다.
+
+`CrisisService`와 `Router`는 생성자에 주입하고 `resolve()` 메서드를 정의합니다.
+이 메서드는 상황에 따라 `Promise`나 `Observable`, 또는 동기 방식으로 결과값을 반환합니다.
+
+`CrisisService.getCrisis()` 메서드는 데이터를 받아오기 전까지 라우팅 규칙이 적용되는 것을 지연시키기 위해 옵저버블을 반환합니다.
+이 때 옵저버블은 반드시 종료되어야 라우터가 그 다음 작업을 처리할 수 있습니다.
+`take` 연산자에 `1`을 인자를 사용하면 `getCrisis()` 메서드로 첫번째 데이터를 받은 후에 옵저버블을 확실하게 종료할 수 있습니다.
+
+원하는 위기 항목을 받아오지 못해서 옵저버블이 빈 값이 전달하면 `CrisisDetailComponent`로 이동하던 네비게이션 동작을 취소하고 `CrisisListComponent`로 돌아갑니다.
+여기까지 구현하고 나면 리졸버 서비스 코드는 이렇습니다:
+
+<code-example path="router/src/app/crisis-center/crisis-detail-resolver.service.ts" header="src/app/crisis-center/crisis-detail-resolver.service.ts"></code-example>
+
+그리고 이 리졸버는 `crisis-center-routing.module.ts` 파일에 로드하고 `CrisisDetailComponent`에 해당하는 라우팅 규칙의 `resolve` 객체에 추가하면 됩니다.
+
+<code-example path="router/src/app/crisis-center/crisis-center-routing.module.4.ts" header="src/app/crisis-center/crisis-center-routing.module.ts (resolver)"></code-example>
+
+이제 `CrisisDetailComponent`는 데이터를 직접 받아오지 않습니다.
+그래서 이 컴포넌트에 해당하는 라우팅 규칙을 수정해서 데이터를 어디에서 받아오는지 지정해야 합니다.
+`CrisisDetailComponent` 안에서는 `ActivatedRoute.data.crisis` 프로퍼티에서 데이터를 받아오도록 수정합니다.
+
+<code-example path="router/src/app/crisis-center/crisis-detail/crisis-detail.component.ts" header="src/app/crisis-center/crisis-detail/crisis-detail.component.ts (ngOnInit v2)" region="ngOnInit"></code-example>
+
+이런 점이 중요합니다:
+
+1. 라우터가 제공하는 `Resolve` 인터페이스는 생략할 수 있습니다.
+`CrisisDetailResolverService`도 어떤 클래스를 상속하지 않습니다.
+라우터는 관련 메서드가 존재할 때만 해당 메서드를 실행합니다.
+
+1. 라우터는 필요한 상황마다 자동으로 리졸버를 실행합니다.
+리졸버가 필요한 경우를 직접 찾아서 추가할 필요는 없습니다.
+
+1. 옵저버블로 빈 값을 전달하면 리졸버가 화면 전환 동작을 취소합니다.
+
+여기까지 구현하고 나면 위기대응센터의 코드는 이렇게 구성됩니다.
+
 
 <code-tabs>
 
@@ -4166,7 +4361,10 @@ The relevant Crisis Center code for this milestone follows.
 
 </code-tabs>
 
+<!--
 Guards
+-->
+그리고 가드 코드는 이렇습니다.
 
 <code-tabs>
 
@@ -4180,12 +4378,17 @@ Guards
 
 </code-tabs>
 
+
 {@a query-parameters}
 
 {@a fragment}
 
+<!--
 ### Query parameters and fragments
+-->
+### 쿼리 인자와 프래그먼트
 
+<!--
 In the [route parameters](#optional-route-parameters) section, you only dealt with parameters specific to the route.
 However, you can use query parameters to get optional parameters available to all routes.
 
@@ -4229,6 +4432,52 @@ You can use these persistent bits of information for things that need to be prov
 
 The `query params` and `fragment` can also be preserved using a `RouterLink` with
 the `queryParamsHandling` and `preserveFragment` bindings respectively.
+
+</div>
+-->
+[라우팅 인자](#optional-route-parameters) 섹션에서는 라우팅 규칙에서 인자를 받아오는 방법만 다뤘습니다.
+하지만 쿼리 인자를 사용해도 라우팅 규칙에서 원하는 인자를 받아올 수 있습니다.
+
+화면에 있는 엘리먼트 중 `id` 어트리븉를 추출할 수 있는 엘리먼트를  [프래그먼트(Fragments)](https://en.wikipedia.org/wiki/Fragment_identifier)로 전달할 수도 있습니다.
+
+새로 적용되는 라우팅 규칙에 `session_id` 쿼리를 활용할 수 있도록 `AuthGuard`를 수정해 봅시다.
+
+화면에 표시되는 특정 지점으로 이동하기 위해 앵커(`<a>`) 엘리먼트를 추가할 수 있습니다.
+
+`/login` 라우팅 규칙으로 이동하는 `router.navigate()` 메서드에 `NavigationExtras` 객체를 전달하면 됩니다.
+
+<code-example path="router/src/app/auth/auth.guard.4.ts" header="src/app/auth/auth.guard.ts (v3)"></code-example>
+
+쿼리 인자와 프래그먼트는 네비게이션이 끝나도 없애지 않고 그대로 유지할 수도 있습니다.
+`LoginComponent`에서 사용하는 `router.navigateUrl()` 함수의 두 번째 인자로 객체를 전달하면서, 이 객체의 `queryParamsHandling` 프로퍼티와 `preserveFragment` 프로퍼티를 지정하면 현재 화면에 진입하면서 사용된 쿼리 인자와 프래그먼트를 다음 라우팅 규칙에도 적용하도록 유지할 수 있습니다.
+
+<code-example path="router/src/app/auth/login/login.component.ts" header="src/app/auth/login/login.component.ts (쿼리 인자 유지하기)" region="preserve"></code-example>
+
+
+<div class="alert is-helpful">
+
+`queryParamsHandling` 기능을 사용할 때 기존에 존재하는 쿼리 인자와 현재 쿼리 인자를 합치는 `merge` 옵션을 사용할 수도 있습니다.
+
+</div>
+
+
+로그인한 후에 관리자 대시보드로 이동하기 할 때 쿼리 인자와 프래그먼트를 처리할 수 있도록 `admin-dashboard.component.ts` 코드를 수정해 봅시다.
+
+<code-example path="router/src/app/admin/admin-dashboard/admin-dashboard.component.1.ts" header="src/app/admin/admin-dashboard/admin-dashboard.component.ts (v2)"></code-example>
+
+쿼리 인자와 프랙먼트는 `ActivatedRoute` 서비스 안에서도 참조할 수 있습니다.
+라우팅 인자와 비슷하게, 쿼리 인자와 프래그먼트도 `Observable` 타입으로 제공됩니다.
+위기대응센터 관리자 컴포넌트에서는 템플릿에서 `AsyncPipe`를 사용해서 옵저버블을 직접 처리합니다.
+
+이제 사용자가 "Admin" 버튼을 클릭하면 로그인 화면으로 이동하면서 `queryParamMap`과 `fragment`에 접근합니다.
+그리고 로그인 화면에서 로그인 버튼을 클릭하면 저장해둔 쿼리 인자와 프래그먼트를 사용해서 관리자 대시보드로 이동하며, 이 정보는 브라우저 주소표시줄에서도 확인할 수 있습니다.
+
+인증 토큰이나 세션 ID와 같이 여러 화면에 사용되는 정보라면 이런 식으로 유지하는 것도 좋습니다.
+
+
+<div class="alert is-helpful">
+
+쿼리 인자와 프래그먼트를 `RouterLink`에 사용하려면 각각 `queryParamsHandling`, `preserveFragment` 바인딩을 추가하면 됩니다.
 
 </div>
 
