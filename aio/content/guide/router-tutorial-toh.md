@@ -4484,8 +4484,12 @@ the `queryParamsHandling` and `preserveFragment` bindings respectively.
 
 {@a asynchronous-routing}
 
+<!--
 ## Milestone 6: Asynchronous routing
+-->
+## 마일스톤 6: 비동기 라우팅
 
+<!--
 As you've worked through the milestones, the application has naturally gotten larger.
 At some point you'll reach a point where the application takes a long time to load.
 
@@ -4505,11 +4509,34 @@ Some modules, like `AppModule`, must be loaded from the start.
 But others can and should be lazy loaded.
 The `AdminModule`, for example, is needed by a few authorized users, so
 you should only load it when requested by the right people.
+-->
+지금까지 몇 개 마일스톤을 거쳐오면서 애플리케이션의 크기는 자연스럽게 커졌습니다.
+이제는 애플리케이션이 실행되기까지 시간이 좀 더 걸린다는 것을 느낄 수도 있습니다.
+
+이 문제를 해결하려면 비동기 라우팅을 활용해서 기능 모듈을 필요할 때 지연로딩하면 됩니다.
+모듈을 지연로딩하면 얻는 장점이 몇가지 있습니다.
+
+* 사용자에게 필요한 기능 모듈만 로드할 수 있습니다.
+* 애플리케이션 특정 기능만 사용하는 사용자라면 애플리케이션 실행 속도를 향상시킬 수 있습니다.
+* 초기 실행에 필요한 빌드 결과물을 기반으로 이후에 필요한 모듈을 확장하는 방식으로 실행할 수 있습니다.
+
+이 방식은 이미 일부 다뤘습니다.
+애플리케이션을 `AppModule`, `HeroesModule`, `AdminModule`, `CrisisCenterModule`로 나누고 나면, 각 모듈을 지연로딩할 것인지 자연스럽게 지정할 수 있습니다.
+
+`AppModule`은 애플리케이션이 시작될 때 로딩되어야 합니다.
+하지만 나머지 모듈은 지연로딩할 수 있으며, 지연로딩을 권장하기도 합니다.
+`AdminModule`을 생각해보면, 이 모듈은 권한이 있는 일부 사용자에게만 필요한 모듈입니다.
+그렇다면 권한이 있는 사용자만 이 모듈을 로드하는 것이 합리적입니다.
+
 
 {@a lazy-loading-route-config}
 
+<!--
 ### Lazy Loading route configuration
+-->
+### 지연로딩 라우팅 환경설정
 
+<!--
 Change the `admin` path in the `admin-routing.module.ts` from `'admin'` to an empty string, `''`, the empty path.
 
 Use empty path routes to group routes together without adding any additional path segments to the URL.
@@ -4549,11 +4576,62 @@ The root `AppModule` must neither load nor reference the `AdminModule` or its fi
 
 In `app.module.ts`, remove the `AdminModule` import statement from the top of the file
 and remove the `AdminModule` from the NgModule's `imports` array.
+-->
+`admin-routing.module.ts` 파일에서 `admin`에 해당하는 경로를 빈 문자열 `''` 주소로 변경해 봅시다.
+
+라우팅 규칙에 빈 문자열을 주소로 사용하는 방식은 해당 라우팅 규칙 하위 계층에 있는 라우팅 규칙을 그룹화 하는 방식입니다.
+주소를 바꿔도 사용자는 여전히 `/admin` 주소에 접근해서 `AdminComponent`를 확인할 수 있으며, 관리자 모듈의 자식 컴포넌트도 이 컴포넌트에 표시됩니다.
+
+`AppRoutingModule` 파일을 열고 `admin`으로 연결되는 라우팅 규칙을 `appRoutes` 배열에 추가해 봅시다.
+
+이 때 `children` 프로퍼티 대신 `loadChildren` 프로퍼티를 사용해 봅시다.
+`loadChildren` 프로퍼티는 함수는 인자로 받는데, 이 함수는 브라우저가 제공하는 동적 로딩 기능을 활용해서 `import('...')`라는 코드를 프라미스 형태로 반환합니다.
+이 라우팅 규칙의 주소는 `AdminModule`에 해당하는 주소를 지정합니다.
+앱 최상위 주소를 기준으로 상대주소로 지정합니다.
+이제 이 코드가 사용되면 `Promise`가 `NgModule`을 반환합니다.
+이 경우에 `NgModule`은 `AdminModule`입니다.
+
+<code-example path="router/src/app/app-routing.module.5.ts" region="admin-1" header="app-routing.module.ts (모듈 지연 로딩)"></code-example>
+
+
+<div class="alert is-important">
+
+*참고*: 절대주소를 사용하면 `NgModule` 파일 위치를 지정할 때 `src/app`부터 시작하는 경로로 지정해야 `NgModule`을 제대로 로드할 수 있습니다.
+[절대주소로 경로 맵핑하기](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping) 문서에서 확인할 수 있듯이, `baseUrl`과 `paths` 프로퍼티는 프로젝트의 `tsconfig.json` 설정의 영향을 받습니다.
+
+</div>
+
+
+이제 라우터가 해당 라우팅 규칙을 적용하는 시점이 되면 `loadChildren` 설정에 따라 `AdminModule`을 동적으로 로드합니다.
+그리고 `AdminModule`을 로드한 이후에는 `AdminModule`의 라우팅 규칙이 현재 애플리케이션의 라우팅 규칙 환경설정에 통합됩니다.
+결국 최종 목적지는 `AdminComponent`가 됩니다.
+
+모듈을 지연로딩하고 기존 라우팅 규칙과 합치는 과정은 해당 라우팅 규칙이 요청되었을 때 딱 한 번만 실행됩니다.
+이후에는 원래부터 있던 모듈처럼 동작합니다.
+
+
+<div class="alert is-helpful">
+
+Angular도 SystemJS를 활용해서 모듈을 비동기로 로드하는 방식을 기본으로 제공합니다.
+Webpack과 같은 번들링 툴을 사용한다면 해당 번들링 툴에 맞는 방식으로 모듈을 지연로딩하는 것이 좋습니다.
+
+</div>
+
+
+이제 마지막 단계로 관리자 모듈을 메인 애플리케이션에서 완전히 분리해 봅시다.
+최상위 `AppModule`은 이제 더이상 `AdminModule`이나 이 모듈에 있는 파일을 참조하지 않습니다.
+
+`app.module.ts` 파일에서 `AdminModule`을 로드하는 코드를 제거하고 `imports` 배열에도 `AdminModule`을 제거하세요.
+
 
 {@a can-load-guard}
 
+<!--
 ### `CanLoad`: guarding unauthorized loading of feature modules
+-->
+### `CanLoad`: 권한없는 사용자가 모듈 로딩하는 것을 제한하기
 
+<!--
 You're already protecting the `AdminModule` with a `CanActivate` guard that prevents unauthorized users from accessing the admin feature area.
 It redirects to the login page if the user is not authorized.
 
@@ -4579,11 +4657,41 @@ array property for the `admin` route.
 The completed admin route looks like this:
 
 <code-example path="router/src/app/app-routing.module.5.ts" region="admin" header="app-routing.module.ts (lazy admin route)"></code-example>
+-->
+지금도 `AdminModule`이 `CanActivate` 가드로 보호되고 있긴 합니다.
+`CanActivate` 가드는 권한이 없는 사용자가 관리자 모듈에 접근하는 것을 막는 라우팅 가드입니다.
+
+하지만 `CanActivate`만 사용하면 사용자가 `AdminModule`에 있는 컴포넌트를 사용하지 않아도 `AdminModule`을 로드합니다.
+사용자가 로그인하지 않은 상태라면 `AdminModule`을 아예 로드하지 않는 것이 가장 좋습니다.
+
+이런 경우에 `CanLoad` 가드를 사용하면 사용자가 로그인하고, 관리자 모듈에 대한 권한이 있을 때만 `AdminModule`을 로드합니다.
+
+이전에 작성한 `AuthGuard`에는 `CanLoad` 가드를 사용에 사용할 수 있는 `checkLogin()` 메서드가 이미 구현되어 있습니다.
+
+`auth.guard.ts` 파일을 엽니다.
+`@angular/router` 패키지로 제공되는 `CanLoad` 인터페이스를 로드합니다.
+이 인터페이스를 `AuthGuard` 클래스의 `implements` 목록에 추가합니다.
+그리고 `canLoad()` 메서드를 이렇게 정의하면 됩니다:
+
+<code-example path="router/src/app/auth/auth.guard.ts" header="src/app/auth/auth.guard.ts (CanLoad 가드)" region="canLoad"></code-example>
+
+라우터는 `canLoad()` 메서드가 정의한대로 `route`로 전달되는 인자에 따라 최종 URL을 결정합니다.
+`checkLogin()` 메서드는 사용자가 로그인했을 때 해당 URL로 리다이렉션하는 메서드입니다.
+
+이제 `AppRoutingModule`에 `AuthGuard`를 로드하고 `AuthGuard`를 `canLoad` 배열에 추가합니다.
+여기까지 작성하고 나면 `admin` 주소에 해당하는 라우팅 규칙이 이렇게 마무리됩니다:
+
+<code-example path="router/src/app/app-routing.module.5.ts" region="admin" header="app-routing.module.ts (지연로딩되는 admin 라우팅 규칙)"></code-example>
+
 
 {@a preloading}
-
+{@a preloading-background-loading-of-feature-areas}
+<!--
 ### Preloading: background loading of feature areas
+-->
+### 사전로딩: 백그라운드에서 모듈 로딩하기
 
+<!--
 In addition to loading modules on-demand, you can load modules asynchronously with preloading.
 
 The `AppModule` is eagerly loaded when the application starts, meaning that it loads right away.
@@ -4599,11 +4707,31 @@ You could lazy load the Crisis Center.
 But you're almost certain that the user will visit the Crisis Center within minutes of launching the app.
 Ideally, the app would launch with just the `AppModule` and the `HeroesModule` loaded and then, almost immediately, load the `CrisisCenterModule` in the background.
 By the time the user navigates to the Crisis Center, its module will have been loaded and ready.
+-->
+모듈이 필요할 때 지연로딩할 수 있는 것처럼, 모듈을 미리 로드해둘 수도 있습니다.
+
+`AppModule`은 애플리케이션이 시작되는 시점에 로드되기 때문에 즉시 로드된다고 볼 수 있습니다.
+하지만 `AdminModule`은 사용자가 링크를 클릭했을 때 지연로딩됩니다.
+
+모듈을 백그라운드에서 사전에 로딩하는 것은 사용자가 해당 모듈로 화면을 전환할 때 필요한 데이터를 미리 로딩해두는 것과 같습니다.
+위기대응센터를 생각해 봅시다.
+이 모듈은 사용자가 제일 처음 접하는 화면이 아닙니다.
+사용자가 처음 보는 화면은 히어로 목록이 표시되는 화면입니다.
+따라서 실행에 필요한 애플리케이션 용량을 최소한으로 유지하면서 빠르게 실행하려면 `AppModule`과 `HeroesModule`을 즉시 로드하는 것이 타당합니다.
+
+위기대응센터 모듈은 지연로딩할 수 있습니다.
+그런데 대부분의 사용자가 위기대응센터에 방문한다고 하면 `AppModule`과 `HeroesModule`을 로드한 채로 애플리케이션을 실행한 직후에 `CrisisCenterModule`을 백그라운드에서 로드하는 것이 좋습니다.
+애플리케이션을 실행한 후에 사용자가 위기대응센터로 이동하게 되면 모듈은 이미 로드된 상태이기 때문에 화면 전환을 요청한 시점에 바로 접근할 수 있습니다.
+
 
 {@a how-preloading}
 
+<!--
 #### How preloading works
+-->
+#### 사전로딩이 동작하는 방식
 
+<!--
 After each successful navigation, the router looks in its configuration for an unloaded module that it can preload.
 Whether it preloads a module, and which modules it preloads, depends upon the preload strategy.
 
@@ -4616,10 +4744,27 @@ The router either never preloads, or preloads every lazy loaded module.
 The `Router` also supports [custom preloading strategies](#custom-preloading) for fine control over which modules to preload and when.
 
 This section guides you through updating the `CrisisCenterModule` to load lazily by default and use the `PreloadAllModules` strategy to load all lazy loaded modules.
+-->
+네비게이션 동작이 성공적으로 끝나면 라우터는 환경설정을 살펴보고 사전로딩해야 하는 모듈 중에 아직 로드되지 않은 모듈을 찾습니다.
+이 때 사전로딩해야 하는 모듈을 찾으면 사전로딩 정책에 따라 모듈을 사전로딩합니다.
+
+`Router`가 제공하는 사전로딩 정책은 2가지 입니다:
+
+* 기본값은 사전로딩하지 않습니다. 지연로딩 대상 모듈은 필요할 때만 로드됩니다.
+* 지연로딩 대상 모듈을 모두 사전로딩합니다.
+
+라우터는 사전로딩을 사용하지 않거나 모든 지연로딩 대상 모듈을 사전로딩합니다.
+그리고 특별한 조작이 필요한 경우를 위해 [커스텀 사전로딩 정책](#custom-preloading)을 사용할 수도 있습니다.
+
+이번 섹션에서는 `CrisisCenterModule`이 지연로딩되도록 수정한 후에 `PreloadAllModules` 정책을 사용해서 지연로딩 대상 모듈을 모두 사전로딩해 봅시다.
+
 
 {@a lazy-load-crisis-center}
 
+<!--
 #### Lazy load the crisis center
+-->
+#### 위기대응센터 지연로딩하기
 
 Update the route configuration to lazy load the `CrisisCenterModule`.
 Take the same steps you used to configure `AdminModule` for lazy loading.
