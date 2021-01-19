@@ -11,8 +11,8 @@ In this tutorial, you will build upon a basic router configuration to explore fe
 
 For a working example of the final version of the app, see the <live-example name="router"></live-example>.
 -->
-이번 튜토리얼에서는 Angular 라우터에 대해 깊이있게 알아봅니다.
-기본 라우터 설정을 구성하는 방법부터 시작해서 자식 라우팅 규칙을 정의하는 방법, 라우터 인자를 활용하는 방법, NgModule을 지연로딩하는 방법, 라우터 가드를 사용하는 방법, 데이터를 사전 로딩해서 UX를 개선하는 방법에 대해 알아봅시다.
+이번 튜토리얼에서는 Angular 라우터에 대해 깊이있게 알아봅시다.
+기본 라우터 설정을 구성하는 방법부터 시작해서 자식 라우팅 규칙을 정의하는 방법, 라우터 인자를 활용하는 방법, NgModule을 지연로딩하는 방법, 라우터 가드를 사용하는 방법, 데이터를 사전 로딩해서 사용성을 개선하는 방법에 대해 알아봅니다.
 
 이 문서에서 다루는 예제 앱이 동작하는 것을 직접 확인하려면 <live-example name="router"></live-example>를 참고하세요.
 
@@ -43,10 +43,10 @@ This guide proceeds as a sequence of milestones as if you were building the app 
 For a general introduction to angular, see the [Getting Started](start). For a more in-depth overview, see the [Tour of Heroes](tutorial) tutorial.
 -->
 이 가이드 문서에서는 화면이 여러 개인 애플리케이션을 구현해 봅니다.
-이 과정 중에 라우터와 관련해서 중요한 내용은 이런 것들이 있습니다:
+이 과정을 진행하면서 라우터와 관련해서 알아둬야 할 내용은 이런 것들이 있습니다:
 
 * 애플리케이션 기능을 모듈 단위로 구성합니다.
-* *Heroes* 링크로 "Heroes List" 컴포넌트로 화면을 전환합니다.
+* *Heroes* 링크를 사용해서 "Heroes List" 컴포넌트로 화면을 전환합니다.
 * "Hero Detail" 화면으로 전환하면서 Hero `id`를 라우터 인자로 전달합니다.
 * *Crisis Center* 안쪽으로 자식 라우팅 규칙을 정의합니다.
 * 라우팅 규칙을 적용하기 위해 `CanActivate` 가드를 사용합니다.
@@ -601,7 +601,7 @@ In this app, the router should select the route to the `HeroListComponent` only 
 기본 화면은 히어로의 목록을 표시하는 화면으로 지정해 봅시다.
 이 화면은 사용자가 "Heroes" 링크를 클릭하거나 브라우저 주소표시줄에 `localhost:4200/heroes`를 입력했을 때 표시되는 화면입니다.
 
-초기 상대 URL(`''`)을 기본 경로(`/heroes`)로 리다이렉션하는 `redirect` 라우팅 규칙을 추가해 봅시다.
+초기 주소로 상대 URL(`''`)을 기본 경로(`/heroes`)로 리다이렉션하는 `redirect` 라우팅 규칙을 추가해 봅시다.
 
 기본 라우팅 규칙은 와일드카드 라우팅 규칙 _위라면_ 어디에 추가해도 됩니다.
 예제 앱에서는 `appRoutes` 배열의 와일드카드 라우팅 규칙 바로 위에 기본 라우팅 규칙을 추가해 봅시다.
@@ -620,8 +620,8 @@ In this app, the router should select the route to the `HeroListComponent` only 
 
 <header>pathMatch 자세하게 알아보기</header>
 
-`pathMatch='full'`를 사용하면 *매칭되는* 주소가 정확히 `''`이어야 해당 라우팅 규칙이 적용됩니다.
-예제 앱에서도 최상위 라우팅 규칙에서 *매칭되는* URL이 *정확히* 빈 문자열과 매칭되기 때문에 이 라우팅 규칙이 적용되는 것입니다.
+`pathMatch='full'`을 사용하면 *매칭되는* 주소가 정확히 `''`이어야 해당 라우팅 규칙이 적용됩니다.
+예제 앱에서도 최상위 라우팅 규칙에서 *매칭되는* URL이 *정확히* 빈 문자열과 매칭되기 때문에 이 라우팅 규칙이 적용됩니다.
 
 `pathMatch`에는 `'prefix'` 값을 사용할 수도 있습니다.
 이 값을 사용하면 매칭되는 주소가 라우팅 규칙 경로로 시작되면 해당 라우팅 규칙이 적용됩니다.
@@ -1014,7 +1014,7 @@ It makes testing the feature module easier.
 Its existence calls attention to the fact that a module is routed.
 It is where developers expect to find and expand routing configuration.
 -->
-최상위 라우팅 모듈이라고도 하는 `AppRoutingModule` 모듈은 최상위 기능 모듈의 라우팅 환경설정을 대신하는 모듈입니다.
+최상위 라우팅 모듈이라고도 하는 `AppRoutingModule`은 최상위 기능 모듈의 라우팅 환경설정을 대신하는 모듈입니다.
 
 라우팅 모듈을 사용하면 앱이 점점 복잡해지면서 가드와 리졸버가 복잡하게 적용될수록 코드를 효율적으로 관리할 수 있습니다.
 
@@ -1061,7 +1061,7 @@ This section shows you how refactor the app into different feature modules, impo
 
 * 모듈에 있는 라우팅 설정을 기능 모듈로 옮깁니다.
 * 화면 전환 로직을 수정합니다.
-* 필수/옵션 정볼르 라우팅 인자로 전달합니다.
+* 필수/옵션 정보를 라우팅 인자로 전달합니다.
 
 이번 마일스톤에서 다루는 예제 앱은 [히어로들의 여행 튜토리얼]<live-example name="toh-pt4" title="Tour of Heroes: Services example code"></live-example> 예제 앱의 ["서비스" 섹션](tutorial/toh-pt4 "Tour of Heroes: Services") 코드를 많이 참고했습니다.
 
@@ -1308,7 +1308,7 @@ Though the feature routes are currently minimal, routes have a tendency to grow 
 </div>
 
 
-여기까지 작업하고 나면`HeroesRoutingModule`의 코드는 이렇습니다:
+여기까지 작업하고 나면 `HeroesRoutingModule`의 코드는 이렇습니다:
 
 
 <code-example path="router/src/app/heroes/heroes-routing.module.1.ts" header="src/app/heroes/heroes-routing.module.ts"></code-example>
@@ -1823,7 +1823,7 @@ This tutorial sample app uses with the observable `paramMap`.
 `route.snapshot`은 라우팅 인자의 최초값을 제공합니다.
 이 객체는 옵저버블이 아니기 때문에 구독하거나 옵저버블 연산자를 사용하지 않아도 직접 참조할 수 있습니다:
 
-<code-example path="router/src/app/heroes/hero-detail/hero-detail.component.2.ts" header="src/app/heroes/hero-detail/hero-detail.component.ts (ngOnInit() snapshot)" region="snapshot"></code-example>
+<code-example path="router/src/app/heroes/hero-detail/hero-detail.component.2.ts" header="src/app/heroes/hero-detail/hero-detail.component.ts (ngOnInit() 스냅샷)" region="snapshot"></code-example>
 
 
 <div class="alert is-helpful">
@@ -1992,7 +1992,7 @@ As such, the Router provides support for the matrix notation across browsers.
 
 </div>
 -->
-`HeroDetailComponent`로 화면을 전환할 때는 상세정보 화면에 표시할 히어로의 `id`를 [_링크 인자 배열_](#link-parameters-array)의 두번째 항목으로 전달할 수 있습니다.
+`HeroDetailComponent`로 화면을 전환할 때는 상세정보 화면에 표시할 히어로의 `id`를 [_링크 인자 배열_](#link-parameters-array)의 두 번째 항목으로 전달할 수 있습니다.
 
 <code-example path="router/src/app/heroes/hero-list/hero-list.component.1.html" header="src/app/heroes/hero-list/hero-list.component.html (link-parameters-array)" region="link-parameters-array"></code-example>
 
@@ -4282,7 +4282,7 @@ The relevant Crisis Center code for this milestone follows.
 
 `CrisisService.getCrisis()` 메서드는 데이터를 받아오기 전까지 라우팅 규칙이 적용되는 것을 지연시키기 위해 옵저버블을 반환합니다.
 이 때 옵저버블은 반드시 종료되어야 라우터가 그 다음 작업을 처리할 수 있습니다.
-`take` 연산자에 `1`을 인자를 사용하면 `getCrisis()` 메서드로 첫번째 데이터를 받은 후에 옵저버블을 확실하게 종료할 수 있습니다.
+`take` 연산자에 `1`을 인자를 사용하면 `getCrisis()` 메서드로 첫 번째 데이터를 받은 후에 옵저버블을 확실하게 종료할 수 있습니다.
 
 원하는 위기 항목을 받아오지 못해서 옵저버블이 빈 값이 전달하면 `CrisisDetailComponent`로 이동하던 네비게이션 동작을 취소하고 `CrisisListComponent`로 돌아갑니다.
 여기까지 구현하고 나면 리졸버 서비스 코드는 이렇습니다:
