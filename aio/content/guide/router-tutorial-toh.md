@@ -4766,6 +4766,7 @@ This section guides you through updating the `CrisisCenterModule` to load lazily
 -->
 #### 위기대응센터 지연로딩하기
 
+<!--
 Update the route configuration to lazy load the `CrisisCenterModule`.
 Take the same steps you used to configure `AdminModule` for lazy loading.
 
@@ -4812,22 +4813,86 @@ This configures the `Router` preloader to immediately load all lazy loaded route
 When you visit `http://localhost:4200`, the `/heroes` route loads immediately upon launch and the router starts loading the `CrisisCenterModule` right after the `HeroesModule` loads.
 
 Currently, the `AdminModule` does not preload because `CanLoad` is blocking it.
+-->
+라우팅 규칙을 변경해서 `CrisisCenterModule`를 지연로딩하도록 수정해 봅시다.
+이 과정은 `AdminModule`에 지연로딩을 적용할 때와 같습니다.
+
+1. `CrisisCenterRoutingModule`에 지정한 `crisis-center` 주소를 빈 문자열로 변경합니다.
+
+1. `AppRoutingModule`에 `crisis-center` 라우팅 규칙을 추가합니다.
+
+1. `loadChildren` 프로퍼티를 추가하고 `CrisisCenterModule`을 지정합니다.
+
+1. `app.module.ts` 파일에 있는 `CrisisCenterModule` 관련 코드를 제거합니다.
+
+여기까지 작성하면 _사전로딩을 할 준비_ 는 끝났습니다:
+
+
+<code-tabs>
+
+  <code-pane header="app.module.ts" path="router/src/app/app.module.ts" region="preload">
+
+  </code-pane>
+
+  <code-pane header="app-routing.module.ts" path="router/src/app/app-routing.module.6.ts" region="preload-v1">
+
+  </code-pane>
+
+  <code-pane header="crisis-center-routing.module.ts" path="router/src/app/crisis-center/crisis-center-routing.module.ts">
+
+  </code-pane>
+
+</code-tabs>
+
+
+이렇게 수정하면 사용자가 "Crisis Center" 버튼을 클릭했을 때 `CrisisCenterModule`을 동적으로 로드하고 화면을 전환합니다.
+
+이제 지연로딩 대상 모듈을 모두 사전로딩하기 위해 Angular 라우터 패키지로 제공되는 `PreloadAllModules` 토큰을 로드합니다.
+
+`RouterModule.forRoot()` 메서드는 두 번째 인자로 추가 환경설정 옵션을 받습니다.
+`preloadingStrategy`도 이 때 설정할 수 있는 옵션 중 하나입니다.
+`forRoot()`를 실행할 때 이렇게 인자를 지정하면 됩니다:
+
+<code-example path="router/src/app/app-routing.module.6.ts" header="src/app/app-routing.module.ts (모두 사전로딩하기)" region="forRoot"></code-example>
+
+이렇게 설정하면 애플리케이션이 실행된 후에 지연로딩해야 하는 모듈을 모두 사전로딩합니다.
+
+그래서 `http://localhost:4200`이나 `/heroes` 주소에 접근하면 라우터가 `HeroesModule`을 로드한 후에 `CrisisCenterModule`을 로드합니다.
+
+다만, `AdminModule`은 `CanLoad`로 보호되고 있기 때문에 사전로딩되지 않습니다.
+
 
 {@a preload-canload}
 
+<!--
 #### `CanLoad` blocks preload
+-->
+#### `CanLoad`는 사전로딩을 막습니다.
 
+<!--
 The `PreloadAllModules` strategy does not load feature areas protected by a [CanLoad](#can-load-guard) guard.
 
 You added a `CanLoad` guard to the route in the `AdminModule` a few steps back to block loading of that module until the user is authorized.
 That `CanLoad` guard takes precedence over the preload strategy.
 
 If you want to preload a module as well as guard against unauthorized access, remove the `canLoad()` guard method and rely on the [canActivate()](#can-activate-guard) guard alone.
+-->
+`PreloadAllModules` 정책을 지정해도 [CanLoad](#can-load-guard) 가드가 보호하는 모듈은 사전로딩하지 않습니다.
+
+`AdminModule` 라우팅 규칙은 로그인하지 않은 사용자가 접근하는 것을 막기 위해 `CanLoad` 가드가 사용되었습니다.
+이 때 `CanLoad` 가드는 사전로딩 정책보다 우선 순위로 동작합니다.
+
+그래서 로그인하지 않은 사용자를 막으면서 사전로딩도 하려면 `canLoad()` 가드 메서드를 제거하고 [`canActivate()`](#can-activate-guard) 가드만 사용해야 합니다.
+
 
 {@a custom-preloading}
 
+<!--
 ### Custom Preloading Strategy
+-->
+### 커스텀 사전로딩 정책
 
+<!--
 Preloading every lazy loaded module works well in many situations.
 However, in consideration of things such as low bandwidth and user metrics, you can use a custom preloading strategy for specific feature modules.
 
@@ -4884,21 +4949,94 @@ Now the file is as follows:
 Once the application loads the initial route, the `CrisisCenterModule` is preloaded.
 Verify this by logging in to the `Admin` feature area and noting that the `crisis-center` is listed in the `Preloaded Modules`.
 It also logs to the browser's console.
+-->
+지연로딩 대상 모듈을 사전로딩하는 동작은 웬만해서는 문제가 발생하지 않습니다.
+하지만 사용자 디바이스의 네트워크 상황이 좋지 않거나 데이터 소모를 줄이는 방법을 고려한다면 모듈마다 적합한 커스텀 사전로딩 정책을 사용할 수도 있습니다.
+
+이번 섹셔넹서는 라우팅 규칙에 `data.preload` 플래그가 `true`일때만 모듈을 사전로딩하는 커스텀 사전로딩 정책을 정의하는 방법에 대해 알아봅시다.
+라우팅 규칙에 있는 `data` 프로퍼티에는 어떤 모양의 객체라도 자유롭게 지정할 수 있습니다.
+
+`AppRoutingModule`에 등록한 `crisis-center` 라우팅 규칙에 `data.preload` 플래그를 추가합니다.
+
+<code-example path="router/src/app/app-routing.module.ts" header="src/app/app-routing.module.ts (route data preload)" region="preload-v2"></code-example>
+
+그리고 `SelectivePreloadingStrategy` 서비스를 생성합니다.
+
+<code-example language="none" class="code-shell">
+  ng generate service selective-preloading-strategy
+</code-example>
+
+`selective-preloading-strategy.service.ts` 파일의 내용을 이렇게 수정합니다:
+
+<code-example path="router/src/app/selective-preloading-strategy.service.ts" header="src/app/selective-preloading-strategy.service.ts"></code-example>
+
+`SelectivePreloadingStrategyService`는 `PreloadingStrategy` 인터페이스를 확장해서 구현하며, `preload()` 메서드 하나만 정의합니다.
+
+라우터는 `preload()` 메서드를 실행할 때 인자를 2개 전달합니다:
+
+1. 참고할 라우팅 규칙
+1. 비동기 모듈 로더 함수
+
+`preload()` 함수는 반드시 `Observable`을 반환해야 합니다.
+해당 라우팅 규칙이 모듈을 사전로딩해야 한다면 로더 함수를 실행해서 옵저버블을 반환하면 됩니다.
+그리고 사전로딩하지 않아야 한다면 `of(null)` 옵저버블을 반환하면 됩니다.
+
+이번 예제에서는 라우팅 규칙에 있는 `data.preload` 플래그가 참으로 평가될 때 모듈을 사전로딩하도록 구현했습니다.
+
+이 동작과 함께 `SelectivePreloadingStrategyService`는 사전로딩하는 라우팅 규칙의 주소를 콘솔에 출력하고 `public preloadedModules` 배열 프로퍼티에 추가합니다.
+
+이렇게 배열에 추가한 정보는 `AdminDashboardComponent`와 같은 화면에서 관리자용 정보로 표시할 수 있습니다.
+
+하지만 그전에, `AppRoutingModule` 코드를 약간 수정해야 합니다.
+
+1. `AppRoutingModule`에 `SelectivePreloadingStrategyService`를 로드합니다.
+1. `forRoot()`에 사용한 `PreloadAllModules` 정책을 `SelectivePreloadingStrategyService`로 변경합니다.
+1. `AppRoutingModule` 프로바이더 배열에 `SelectivePreloadingStrategyService` 정책을 추가하면 이제 앱 전체에서 이 사전로딩 정책을 자유롭게 사용할 수 있습니다.
+
+이제 사전로딩한 라우팅 규칙을 확인하도록 `AdminDashboardComponent`를 수정해 봅시다.
+
+1. `SelectivePreloadingStrategyService`를 로드합니다.
+1. 이 정책을 생성자로 주입합니다.
+1. 사전로딩 정책 서비스의 `preloadedModules` 배열을 화면에 표시하도록 템플릿을 수정합니다.
+
+그러면 컴포넌트 클래스 파일의 내용이 이렇게 구성됩니다:
+
+<code-example path="router/src/app/admin/admin-dashboard/admin-dashboard.component.ts" header="src/app/admin/admin-dashboard/admin-dashboard.component.ts (사전로딩된 모듈 확인하기)"></code-example>
+
+이제 애플리케이션이 첫 번째 라우팅 규칙을 로드하면 그 뒤에 바로 `CrisisCenterModule`이 사전로딩됩니다.
+이 모듈이 정말 사전로딩 되었는지 관리자 모듈로 이동해서 확인해 보세요.
+모듈이 사전로딩되면 브라우저 콘솔에도 로그가 출력됩니다.
+
 
 {@a redirect-advanced}
 
+<!--
 ### Migrating URLs with redirects
+-->
+### 리다이렉션으로 기존 URL 마이그레이션하기
 
+<!--
 You've setup the routes for navigating around your application and used navigation imperatively and declaratively.
 But like any application, requirements change over time.
 You've setup links and navigation to `/heroes` and `/hero/:id` from the `HeroListComponent` and `HeroDetailComponent` components.
 If there were a requirement that links to `heroes` become `superheroes`, you would still want the previous URLs to navigate correctly.
 You also don't want to update every link in your application, so redirects makes refactoring routes trivial.
+-->
+지금까지 애플리케이션에 활용하는 라우팅 규칙을 다양하게 수정해봤습니다.
+하지만 모든 애플리케이션이 그렇듯, 요구사항은 때에 따라 변경될 수 있습니다.
+지금은 `/heroes`, `/hero/:id`라는 주소가 `HeroListComponent`나 `HeroDetailComponent`와 연결됩니다.
+`heroes`라는 주소가 `superheroes`로 변경되더라도 이전 주소를 그대로 유지하는 경우를 생각해 봅시다.
+리다이렉션을 활용하면 애플리케이션에 존재하는 링크를 매번 변경하지 않아도 라우팅 규칙 수정사항을 최소화 할 수 있습니다.
+
 
 {@a url-refactor}
 
+<!--
 #### Changing `/heroes` to `/superheroes`
+-->
+#### `/heroes` 주소를 `/superheroes`로 변경하기
 
+<!--
 This section guides you through migrating the `Hero` routes to new URLs.
 The `Router` checks for redirects in your configuration before navigating, so each redirect is triggered when needed. To support this change, add redirects from the old routes to the new routes in the `heroes-routing.module`.
 
@@ -4937,11 +5075,58 @@ Update the `goToHeroes()` method in the `hero-detail.component.ts` to navigate b
 <code-example path="router/src/app/heroes/hero-detail/hero-detail.component.ts" region="redirect" header="src/app/heroes/hero-detail/hero-detail.component.ts (goToHeroes)"></code-example>
 
 With the redirects setup, all previous routes now point to their new destinations and both URLs still function as intended.
+-->
+이번 섹션에서는 `/heroes`에 해당하는 라우팅 규칙을 다른 URL로 마이그레이션하는 방법에 대해 알아봅시다.
+라우터는 화면을 전환하기 전에 일반 라우팅 규칙보다 리다이렉션을 먼저 검사합니다.
+그래서 화면에 접근하는 URL이 변경된다면 이전 라우팅 규칙을 그대로 두고 리다이렉션 라우팅 규칙을 추가하면 됩니다.
+
+<code-example path="router/src/app/heroes/heroes-routing.module.ts" header="src/app/heroes/heroes-routing.module.ts (heroes 리다이렉션)"></code-example>
+
+리다이렉션 타입이 2개인 것을 유심히 봅시다.
+첫 번째는 라우팅 인자 없이 `/heroes` 주소가 `/superheroes` 주소로 변경된 것입니다.
+그리고 두 번째는 `:id` 라우팅 인자가 포함된 `/hero/:id` 주소가 `/superhero/:id` 주소로 변경된 것입니다.
+라우터가 제공하는 패턴 매칭은 `path` 프로퍼티 안에 있는 라우팅 인자도 모두 처리할 수 있기 때문에 리다이렉션 주소에 라우팅 인자가 있더라도 최종 주소를 원하는 대로 처리할 수 있습니다.
+이전에 언급했듯이, `/hero/15`라는 주소가 있을 때 라우팅 인자 `id`에 해당하는 값은 `15`입니다.
+
+
+<div class="alert is-helpful">
+
+라우터는 리다이렉션할 때 [쿼리 인자](#query-parameters)와 [프래그먼트](#fragment)도 그대로 처리합니다.
+
+* 절대주소로 리다이렉션하면 `redirectTo`에 지정된 쿼리 인자와 프래그먼트를 활용합니다.
+* 상대주소로 리다이렉션하면 소스 URL에 있는 쿼리 인자와 프래그먼트를 활용합니다.
+
+</div>
+
+
+이제 `HeroesModule`에 빈 주소가 사용되면 `/heroes`로 이동한 후에 `/superheroes`로 이동한다고 생각할 수 있습니다.
+하지만 라우터는 리다이렉션을 한 계층에서 한 번만 처리합니다.
+이 정책은 리다이렉션이 끝나지 않고 계속되는 상황을 막기 위한 것입니다.
+
+이 상황을 해결하려면 `app-routing.module.ts` 파일에 지정된 주소를 `/superheroes`로 변경해야 합니다.
+
+<code-example path="router/src/app/app-routing.module.ts" header="src/app/app-routing.module.ts (superheroes로 리다이렉션 하기)"></code-example>
+
+`routerLink`는 라우팅 규칙과 직접 연결되지 않기 때문에 라우팅 규칙의 주소가 변경되면 관련 링크도 모두 수정해야 합니다.
+`app.component.ts` 템플릿에 있는 `/heroes` 링크를 수정합니다.
+
+<code-example path="router/src/app/app.component.html" header="src/app/app.component.html (superheroes 라우터 링크 수정)"></code-example>
+
+그리고 `hero-detail.component.ts` 파일의 `goToHeroes()` 메서드도 `/superheroes`로 이동하도록 수정합니다.
+
+<code-example path="router/src/app/heroes/hero-detail/hero-detail.component.ts" region="redirect" header="src/app/heroes/hero-detail/hero-detail.component.ts (goToHeroes())"></code-example>
+
+여기까지 작업하고 나면 이전에 사용하던 주소와 새로 변경된 주소가 모두 원하는 화면으로 도앚ㄱ합니다.
+
 
 {@a inspect-config}
 
+<!--
 ### Inspect the router's configuration
+-->
+### 라우터 환경설정 확인하기
 
+<!--
 To determine if your routes are actually evaluated [in the proper order](#routing-module-order), you can inspect the router's configuration.
 
 Do this by injecting the router and logging to the console its `config` property.
@@ -4949,11 +5134,25 @@ For example, update the `AppModule` as follows and look in the browser console w
 to see the finished route configuration.
 
 <code-example path="router/src/app/app.module.7.ts" header="src/app/app.module.ts (inspect the router config)" region="inspect-config"></code-example>
+-->
+라우팅 규칙이 [어떤 순서로](#routing-module-order) 최종결정되었는지 확인하려면 라우터 환경설정을 직접 확인하면 됩니다.
+
+라우터 설정을 확인하려면 라우터를 의존성 객체로 주입하고 이 객체의 `config` 프로퍼티를 확인하면 됩니다.
+`AppModule`의 경우라면 아래 코드처럼 작성하면 최종 라우터 설정을 확인할 수 있습니다.
+
+<code-example path="router/src/app/app.module.7.ts" header="src/app/app.module.ts (라우터 환경설정 확인하기)" region="inspect-config"></code-example>
+
 
 {@a final-app}
 
+<!--
 ## Final app
+-->
+## 최종 결과
 
+<!--
 For the completed router app, see the <live-example name="router"></live-example> for the final source code.
+-->
+여기까지 작업한 내용을 확인하려면 <live-example name="router"></live-example>를 참고하세요.
 
 {@a link-parameters-array}
