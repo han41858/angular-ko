@@ -1,7 +1,11 @@
+<!--
 # Building a template-driven form
+-->
+# 템플릿 기반 폼 구성하기
 
 {@a template-driven}
 
+<!--
 This tutorial shows you how to create a template-driven form whose control elements are bound to data properties, with input validation to maintain data integrity and styling to improve the user experience.
 
 Template-driven forms use [two-way data binding](guide/architecture-components#data-binding "Intro to 2-way data binding") to update the data model in the component as changes are made in the template and vice versa.
@@ -27,9 +31,44 @@ This tutorial shows you how to build a form from scratch, using a simplified sam
   Run or download the example app: <live-example></live-example>.
 
 </div>
+-->
+이 가이드 문서는 템플릿 기반 폼을 구성해서 엘리먼트에 데이터를 바인딩하고, 입력 필드에 입력된 데이터를 검사한 후에 더 나은 사용성을 위해 스타일을 지정하는 방식을 안내합니다.
 
+템플릿 기반 폼은 컴포넌트에 있는 데이터를 템플릿에 반영할 때, 템플릿에 입력한 데이터를 컴포넌트에 반영할 때 [양방향 데이터 바인딩](guide/architecture-components#data-binding "Intro to 2-way data binding")을 활용합니다.
+
+
+<div class="alert is-helpful">
+
+Angular로 폼을 만드는 방식은 두 가지 입니다.
+[템플릿 문법과 디렉티브](guide/glossary#template "Definition of template terms")를 활용하면 템플릿 기반으로 폼을 구성할 수 있고, 이 문서는 이 내용을 다룹니다.
+반응형(모델 기반)으로 폼을 구성하는 방식도 있습니다.
+
+폼 구성이 간단하다면 템플릿 기반 폼을 사용하는 것도 좋지만 폼 구성이 복잡하거나 확장성을 고려한다면 반응형 폼이 유리합니다.
+두 방식의 차이점을 확인하려면 [폼 소개](guide/forms-overview "Overview of Angular forms.") 문서를 참고하세요.
+
+</div>
+
+
+로그인 폼, 문의사항 폼과 같은 대부분의 폼은 Angular 템플릿으로 구성할 수 있습니다.
+폼 컨트롤을 원하는 대로 늘어놓고 데이터를 바인딩하기만 하면 됩니다.
+그리고 폼 컨트롤에 유효성 검사 규칙을 추가하고 나면 유효성 검사 결과를 화면에 표시할 수도 있고, 조건에 따라 특정 폼 컨트롤을 비활성화 할 수도 있으며, 시각적인 표현을 추가하는 등 자유롭게 활용할 수 있습니다.
+
+[히어로들의 여행 튜토리얼](tutorial "Tour of Heroes")에 있는 간단한 폼을 만들면서 이 과정을 진행해 봅시다.
+
+
+<div class="alert is-helpful">
+
+예제 앱을 직접 실행해보거나 다운받아 확인하려면 <live-example></live-example>를 참고하세요.
+
+</div>
+
+
+<!--
 ## Objectives
+-->
+## 목표
 
+<!--
 This tutorial teaches you how to do the following:
 
 * Build an Angular form with a component and template.
@@ -37,20 +76,45 @@ This tutorial teaches you how to do the following:
 * Provide visual feedback using special CSS classes that track the state of the controls.
 * Display validation errors to users and enable or disable form controls based on the form status.
 * Share information across HTML elements using [template reference variables](guide/template-reference-variables).
+-->
+이 문서는 이런 내용을 다룹니다:
 
+* 컴포넌트와 템플릿을 활용해서 Angular 폼을 구성합니다.
+* 입력 필드와 데이터를 양방향으로 바인딩하기 위해 `ngModel`를 사용합니다.
+* 폼 컨트롤의 상태를 시각적으로 표현하기 위해 CSS 클래스를 지정해 봅니다.
+* 유효성 검사 결과를 화면에 표시하며 폼 상태에 따라 특정 폼 컨트롤을 비활성화해 봅니다.
+* 엘리먼트의 값을 다른 엘리먼트에서 참조하기 위해 [템플릿 참조 변수(template reference variables)](guide/template-reference-variables)를 사용해 봅니다.
+
+
+<!--
 ## Prerequisites
+-->
+## 사전지식
 
+<!--
 Before going further into template-driven forms, you should have a basic understanding of the following.
 
 * TypeScript and HTML5 programming.
 * Angular app-design fundamentals, as described in [Angular Concepts](guide/architecture "Introduction to Angular concepts.").
 * The basics of [Angular template syntax](guide/template-syntax "Template syntax guide").
 * The form-design concepts that are presented in [Introduction to Forms](guide/forms-overview "Overview of Angular forms.").
+-->
+템플릿 기반 폼에 대해 자세하게 알아보기 전에, 이런 내용을 먼저 알아두는 것이 좋습니다.
+
+* TypeScript, HTML5 프로그래밍
+* [Angular 개요](guide/architecture "Introduction to Angular concepts.") 문서에서 설명하는 Angular 앱 설계 개념
+* 기본 [Angular 템플릿 문법](guide/template-syntax "Template syntax guide")
+* [폼 소개](guide/forms-overview "Overview of Angular forms.") 문서에서 설명하는 폼 디자인 컨셉
+
 
 {@a intro}
 
+<!--
 ## Build a template-driven form
+-->
+## 템플릿 기반 폼 구성하기
 
+<!--
 Template-driven forms rely on directives defined in the `FormsModule`.
 
 * The `NgModel` directive reconciles value changes in the attached form element with changes in the data model, allowing you to respond to user input with input validation and error handling.
@@ -59,9 +123,25 @@ Template-driven forms rely on directives defined in the `FormsModule`.
 As soon as you import `FormsModule`, this directive becomes active by default on all `<form>` tags. You don't need to add a special selector.
 
 * The `NgModelGroup` directive creates and binds a `FormGroup` instance to a DOM element.
+-->
+템플릿 기반 폼은 `FormsModule`이 제공하는 디렉티브로 구성합니다.
 
+* `NgModel` 디렉티브는 폼 엘리먼트와 데이터 모델을 연결하는 디렉티브입니다.
+사용자가 입력하는 동작에 반응하거나 유효성을 검사하고 에러를 처리하는 기능을 제공합니다.
+
+* `NgForm` 디렉티브는 최상위 `FormGroup` 인스턴스를 생성하며 `<form>` 엘리먼트를 추적하면서 폼 전체의 값과 전체 유효성 검사 결과를 관리하는 디렉티브입니다.
+`FormsModule`을 로드하면 기본적으로 모든 `<form>` 태그에 이 디렉티브가 적용됩니다.
+`NgForm`은 수동으로 지정할 필요가 없습니다.
+
+* `NgModelGroup` 디렉티브는 `FormGroup` 인스턴스를 생성하고 DOM 엘리먼트와 연결하는 디렉티브입니다.
+
+
+<!--
 ### The sample application
+-->
+### 예제 애플리케이션
 
+<!--
 The sample form in this guide is used by the *Hero Employment Agency* to maintain personal information about heroes.
 Every hero needs a job. This form helps the agency match the right hero with the right crisis.
 
@@ -78,9 +158,38 @@ In addition, the **Submit** button is disabled, and the "required" bar to the le
 <div class="lightbox">
   <img src="generated/images/guide/forms/hero-form-2.png" alt="Invalid, Name Required">
 </div>
+-->
+이 가이드문서에서 다루는 예제 폼은 *히어로 관리 회사* 에서 히어로의 개인정보를 관리하는 용도로 사용됩니다.
+모든 히어로는 직업을 원합니다.
+그래서 히어로에게 적절할 위기를 연결할 때 이 폼을 사용합니다.
 
+
+<div class="lightbox">
+  <img src="generated/images/guide/forms/hero-form-1.png" alt="Clean Form">
+</div>
+
+
+폼에 시각적 표현을 적용하면 사용성을 개선할 수 있습니다.
+그래서 이 폼의 필수 항목 2개는 눈에 띄도록 입력 필드 왼쪽에 녹색 막대를 표시했습니다.
+이 필드에는 초기값이 입력되어 있기 때문에 폼 유효성 검사도 통과하고 **Submit** 버튼도 활성화되어 있습니다.
+
+이 폼에 유효성 로직을 추가하고, 표준 CSS로 스타일을 어떻게 커스터마이징하는지, 올바른 입력값을 받기 위해 에러를 처리하는 방법에 대해 알아봅시다.
+사용자가 히어로 이름을 지우면 폼이 유효하지 않은 상태가 됩니다.
+애플리케이션은 이 상태 변화를 감지하고 사용자가 에러를 잘 볼 수 있도록 표시해야 합니다.
+그리고 **Submit** 버튼이 비활성화되며 필수 항목을 표시하던 녹색 막대가 빨간색으로 변경될 것입니다.
+
+
+<div class="lightbox">
+  <img src="generated/images/guide/forms/hero-form-2.png" alt="Invalid, Name Required">
+</div>
+
+
+<!--
 ### Step overview
+-->
+### 진행과정 미리보기
 
+<!--
 In the course of this tutorial, you bind a sample form to data and handle user input using the following steps.
 
 1. Build the basic form.
@@ -96,11 +205,36 @@ In the course of this tutorial, you bind a sample form to data and handle user i
 5. Handle form submission using the [`ngSubmit`](api/forms/NgForm#properties) output property of the form.
    * Disable the **Submit** button until the form is valid.
    * After submit, swap out the finished form for different content on the page.
+-->
+가이드 문서를 진행하면서 폼에 데이터를 바인딩하고 사용자가 입력하는 내용을 단계별로 처리해 봅시다.
+
+1. 기본 폼 구성하기
+   * 데이터 모델을 정의합니다.
+   * `FormsModule`과 같은 폼 관련 기능을 로드합니다.
+
+2. `ngModel` 디렉티브를 사용해서 폼 컨트롤과 데이터 프로퍼티를 양방향으로 바인딩합니다.
+   * CSS 클래스를 활용해서 `ngModel`의 상태를 확인합니다.
+   * `ngModel`이 폼 컨트롤에 접근할 수 있도록 이름을 지정합니다.
+
+3. `ngModel`을 활용해서 입력값을 추적하고 폼 컨트롤의 상태를 관리합니다.
+   * 상태에 따라 다르게 표시되도록 CSS를 지정합니다.
+   * 유효성을 검사하고 발생한 에러를 화면에 표시합니다.
+
+4. 데이터를 추가하기 위해 표준 HTML 버튼 클릭 이벤트에 반응하는 로직을 추가합니다.
+
+5. 폼에 적용된 [`ngSubmit`](api/forms/NgForm#properties)로 폼 제출 동작을 관리합니다.
+   * 폼이 유효하지 않으면 **Submit** 버튼을 비활성화합니다.
+   * 폼을 제출하고 나면 폼의 내용을 모두 비우고 화면에 새로운 내용을 표시합니다.
+
 
 {@a step1}
 
+<!--
 ## Build the form
+-->
+## 폼 구성하기
 
+<!--
 You can recreate the sample application from the code provided here, or you can examine or download the <live-example></live-example>.
 
 1. The provided sample application creates the `Hero` class which defines the data model reflected in the form.
@@ -153,11 +287,72 @@ If you run the app right now, you see the list of powers in the selection contro
 <div class="lightbox">
   <img src="generated/images/guide/forms/hero-form-3.png" alt="Early form with no binding">
 </div>
+-->
+이제부터는 가이드 문서에서 설명하는 코드나 <live-example></live-example>를 참고해서 애플리케이션을 수정해 봅시다.
+
+
+1. 예제 애플리케이션은 폼에 반영할 데이터 모델로 `Hero` 클래스를 제공합니다.
+
+   <code-example path="forms/src/app/hero.ts" header="src/app/hero.ts"></code-example>
+
+2. 폼 레이아웃은 `HeroFormComponent` 클래스에 정의합니다.
+
+   <code-example path="forms/src/app/hero-form/hero-form.component.ts" header="src/app/hero-form/hero-form.component.ts (v1)" region="v1"></code-example>
+
+   이 컴포넌트의 `selector`는 "app-hero-form" 입니다. 부모 컴포넌트 템플릿에 `<app-hero-form>`이라는 태그가 보이면 이 컴포넌트를 의미한다고 보면 됩니다.
+
+3. 아래 코드는 새로운 히어로 인스턴스를 만드는 코드입니다. 이 데이터는 폼 초기값으로 사용됩니다.
+
+   <code-example path="forms/src/app/hero-form/hero-form.component.ts" region="SkyDog"></code-example>
+
+   이 문서에서는 `model`이나 `powers`를 더미 데이터로 사용합니다.
+   실제로 운영되는 앱이라면 실제 데이터를 활용할 것입니다.
+
+4. 애플리케이션에 폼 기능을 추가하고, 폼 컴포넌트를 최상위 모듈에 등록합니다.
+
+   <code-example path="forms/src/app/app.module.ts" header="src/app/app.module.ts"></code-example>
+
+5. 최상위 컴포넌트 템플릿에 폼 컴포넌트를 추가합니다.
+
+   <code-example path="forms/src/app/app.component.html" header="src/app/app.component.html"></code-example>
+
+   여기까지 작성하고 나면 폼 그룹 2개와 제출 버튼으로 구성된 폼이 완성됩니다.
+   각 폼 그룹은 히어로 데이터 모델 중 이름과 별명에 해당됩니다.
+   개별 그룹은 라벨과 입력 필드로 구성됩니다.
+
+   * **Name** `<input>` 엘리먼트에는 HTML5 `required` 어트리뷰트가 지정되어 있습니다.
+   * **Alter Ego** `<input>` 엘리먼트에는 `required` 어트리뷰트가 지정되어 있지 않습니다. 이 필드는 옵션 항목입니다.
+
+   **Submit** 버튼은 시각적 표현을 위해 클래스가 몇 개 지정되어 있습니다.
+   여기까지 구현한 폼은 모두 HTML5 문법을 활용한 것이며 바인딩 문법이나 디렉티브는 사용되지 않았습니다.
+
+6. 예제 폼에서는 [Twitter Bootstrap](http://getbootstrap.com/css/)이 제공하는 클래스를 활용했습니다: `container`, `form-group`, `form-control`, `btn`
+이 클래스들을 활용하려면 전역 스타일 파일에 이런 내용을 추가해야 합니다.
+
+   <code-example path="forms/src/styles.1.css" header="src/styles.css"></code-example>
+
+7. 이 폼은 히어로 관리회사가 인증한 특수능력 중 하나를 선택하도록 구성합니다.
+   이 때 활용되는 `powers`라는 목록은 데이터 모델의 일부이며 `HeroFormComponent`가 관리합니다.
+   Angular가 제공하는 [NgForOf 디렉티브](api/common/NgForOf "API reference")를 활용하면 배열에 있는 항목마다 `<select>` 엘리먼트의 내부 항목을 추가할 수 있습니다.
+
+   <code-example path="forms/src/app/hero-form/hero-form.component.html" header="src/app/hero-form/hero-form.component.html (powers)" region="powers"></code-example>
+
+이제 예제 애플리케이션을 실행해보면 `<select>` 엘리먼트에 선택할 수 있는 목록이 표시되는 것을 확인할 수 있습니다.
+입력 엘리먼트는 아직 데이터나 이벤트가 반영되지 않았기 때문에 아무값도 입력되어있지 않으며, 사용자 이벤트에도 반응하지 않습니다.
+
+<div class="lightbox">
+  <img src="generated/images/guide/forms/hero-form-3.png" alt="Early form with no binding">
+</div>
+
 
 {@a ngModel}
 
+<!--
 ## Bind input controls to data properties
+-->
+## 입력 컨트롤과 데이터 프로퍼티 바인딩하기
 
+<!--
 The next step is to bind the input controls to the corresponding `Hero` properties with two-way data binding, so that they respond to user input by updating the data model, and also respond to programmatic changes in the data by updating the display.
 
 The `ngModel` directive declared in the `FormsModule` lets you bind controls in your template-driven form to properties in your data model.
@@ -177,6 +372,29 @@ This example has a temporary diagnostic interpolation after each input tag, `{{m
 The note reminds you to remove the diagnostic lines when you have finished observing the two-way data binding at work.
 
 </div>
+-->
+다음 단계는 입력 컨트롤과 `Hero` 프로퍼티를 양방향으로 바인딩하는 것입니다.
+데이터를 양방향으로 바인딩하면 사용자가 입력한 값을 데이터 모델에 반영할 수 있으며, 프로그램에서 변경한 데이터의 값을 화면에 반영할 수 있습니다.
+
+`ngModel` 디렉티브는 `FormsModule`이 제공하는 디렉티브이며, 이 디렉티브를 활용하면 템플릿 기반 폼에서 폼 엘리먼트와 데이터 모델을 연결할 수 있습니다.
+이 디렉티브를 양방향 데이터 바인딩 문법으로 `[(ngModel)]`라고 사용하면, Angular는 폼 컨트롤에서 발생하는 사용자의 동작과 폼 컨트롤의 값을 추적하며 이 값을 데이터 모델에 자동으로 반영합니다.
+
+1. `hero-form.component.html` 템플릿 파일을 엽니다.
+
+2. **Name** 뒤에 있는 `<input>` 태그를 찾습니다.
+
+3. 양방향 데이터 바인딩 문법으로 `ngModel` 디렉티브를 추가합니다.
+
+<code-example path="forms/src/app/hero-form/hero-form.component.html" header="src/app/hero-form/hero-form.component.html (일부)" region="ngModelName-1"></code-example>
+
+
+<div class="alert is-helpful">
+
+이 예제에서는 입력 필드에 입력된 값을 확인하기 위해 `{{mode.name}}` 이라는 표현식을 임시로 사용했습니다.
+양방향 데이터 바인딩이 예상대로 동작하는 것을 확인하고 나면 이 코드를 제거하는 것을 잊지 마세요.
+
+</div>
+
 
 {@a ngForm}
 
