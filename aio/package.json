@@ -14,7 +14,7 @@
     "ng": "yarn check-env && ng",
     "start": "yarn check-env && ng serve --configuration=fast",
     "prebuild": "yarn setup",
-    "build": "yarn ~~build",
+    "build": "yarn ~~build&&cp angular-kr/robots.txt dist/robots.txt",
     "prebuild-local": "yarn setup-local",
     "build-local": "yarn ~~build",
     "prebuild-local-ci": "yarn setup-local-ci",
