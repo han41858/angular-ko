@@ -168,8 +168,9 @@ Angular는 일정한 주기로 릴리즈됩니다. 많은 개발자들이 버전
 <!--
 ## Support policy and schedule
 -->
-## 관리 정책과 일정
+## 지원 정책과 일정
 
+<!--
 All of our major releases are supported for 18 months.
 
 * 6 months of *active support*, during which regularly-scheduled updates and patches are released.
@@ -186,13 +187,42 @@ Version | Status | Released     | Active Ends  | LTS Ends
 ^8.0.0  | LTS    | May 28, 2019 | Nov 28, 2019 | Nov 28, 2020
 
 Angular versions ^4.0.0, ^5.0.0, ^6.0.0 and ^7.0.0 are no longer under support.
+-->
+메이저 릴리즈 지원은 18개월동안 제공됩니다.
 
+* 메이저 릴리즈 이후 6개월은 *액티브 지원(active support)* 기간입니다. 업데이트 버전과 패치가 정기적으로 제공됩니다.
+
+* 액티브 지원기간 이후 12개월은 *장기 지원(long-term suppoert, LTS)* 기간입니다. 이 기간에는 [심각한 버그 수정이나 보안 패치](#lts-fixes)만 제공됩니다.
+
+현재 지원되고 있는 Angular 버전은 이렇습니다.
+
+
+버전 | 상태 | 릴리즈 일자     | 액티브 지원 종료  | LTS 종료
+------- | ------ | ------------ | ------------ | ------------
+^10.0.0 | Active | 2020. 6. 24. | 2020. 12. 24. | 2021. 12. 24.
+^9.0.0  | LTS    | 2020. 2. 6. | 2020. 8. 6. | 2021. 8. 6.
+^8.0.0  | LTS    | 2019. 5. 28. | 2019. 11. 28. | 2020. 11. 28.
+
+Angular ^4.0.0, ^5.0.0, ^6.0.0, ^7.0.0 버전은 지원이 중단되었습니다.
+
+
+{@a lts-fixes}
+<!--
 ### LTS fixes
+-->
+### LTS 패치
 
+<!--
 As a general rule, a fix is considered for an LTS version if it resolves one of:
 
 * a newly identified security vulnerability,
 * a regression, since the start of LTS, caused by a 3rd party change, such as a new browser version.
+-->
+일반적으로 LTS 패치는 이런 경우에 제공됩니다.
+
+* 보안 취약점이 발견되었을 때
+* LTS 지원이 시작된 이후 서드 파티 변경사항(ex. 새 브라우저 버전 배포)을 반영해야 할 때
+
 
 {@a deprecation}
 {@a deprecation-practices}

@@ -84,14 +84,16 @@ Your library should supply documentation (typically a README file) for installat
 
 이 명령을 실행하면 워크스페이스에 `projects/my-lib` 폴더가 생성되고 이 폴더에 컴포넌트 하나와 서비스 하나, NgModule 하나가 생성됩니다.
 
+
 <div class="alert is-helpful">
 
-     For more details on how a library project is structured, refer to the [Library project files](guide/file-structure#library-project-files) section of the [Project File Structure guide](guide/file-structure).
+라이브러리 프로젝트가 어떻게 구성되는지 자세하게 알아보려면 [프로젝트 파일 구조 가이드](guide/file-structure) 문서의 [라이브러리 프로젝트 파일 구조](guide/file-structure#library-project-files) 섹션을 참고하세요.
 
-     You can use the monorepo model to use the same workspace for multiple projects.
-     See [Setting up for a multi-project workspace](guide/file-structure#multiple-projects).
+한 워크스페이스에 여러 프로젝트를 두눈 모노레포(monorepo) 모델을 사용할 수 있씁니다.
+[워크스페이스에 프로젝트 여러개 구성하기](guide/file-structure#multiple-projects) 문서를 참고하세요.
 
 </div>
+
 
 그리고 워크스페이스 환경설정 파일인 `angular.json`에 `library` 타입으로 프로젝트가 추가됩니다.
 
@@ -156,13 +158,13 @@ Here are some things to consider in migrating application functionality to a lib
    * 그리고 라이브러리가 다른 서비스를 활용한다면 이 서비스도 포함해야 하는지 검토해 보세요.
    * 라이브러리 코드가 Angular Material과 같은 다른 라이브러리를 활용한다면 이 라이브러리를 의존성 패키지로 추가해야 합니다.
 
-* Consider how you provide services to client applications.
+* 클라이언트 애플리케이션에 서비스를 어떻게 제공할 것인지 고민해 보세요.
 
-   * Services should declare their own providers (rather than declaring providers in the NgModule or a component), so that they are *tree-shakable*. This allows the compiler to leave the service out of the bundle if it never gets injected into the application that imports the library. For more about this, see [Tree-shakable providers](guide/dependency-injection-providers#tree-shakable-providers).
+   * 서비스는 NgModule이나 컴포넌트에 등록되기보다는 스스로 등록되어야 합니다. 그래야 해당 서비스가 실제로 사용되지 않으면 *트리 셰이킹* 대상이 되어 최종 빌드 결과물에 포함되지 않습니다. 자세한 내용을 알아보려면 [트리 셰이킹 대항이 되는 프로바이더](guide/dependency-injection-providers#tree-shakable-providers) 문서를 참고하세요.
 
-   * If you register global service providers or share providers across multiple NgModules, use the [`forRoot()` and `forChild()` design patterns](guide/singleton-services) provided by the [RouterModule](api/router/RouterModule).
+   * 전역 범위에 서비스 프로바이더를 등록하거나 여러 NgModule이 서비스 인스턴스를 공유하도록 프로바이더를 등록하려면 [RouterModule](api/router/RouterModule)이 제공하는 방식처럼 [`forRoot()`, `forChild()` 디자인 패턴](guide/singleton-services)을 사용하세요.
 
-   * If your library provides optional services that might not be used by all client applications, support proper tree-shaking for that case by using the [lightweight token design pattern](guide/lightweight-injection-tokens).
+   * 라이브러리가 제공하는 서비스 중에 꼭 사용하지 않아도 되는 서비스가 있다면 트리 셰이킹이 제대로 동작할 수 있도록 [경량 토큰 디자인 패턴](guide/lightweight-injection-tokens)을 사용하세요.
 
 
 <!--
@@ -232,11 +234,15 @@ In general, the more complex the customization, the more useful the schematic ap
 
 To learn more, see [Schematics Overview](guide/schematics) and [Schematics for Libraries](guide/schematics-for-libraries).
 -->
-A library typically includes *reusable code* that defines components, services, and other Angular artifacts (pipes, directives, and so on) that you simply import into a project.
-A library is packaged into an npm package for publishing and sharing.
-This package can also include [schematics](guide/glossary#schematic) that provide instructions for generating or transforming code directly in your project, in the same way that the CLI creates a generic new component with `ng generate component`.
-A schematic that is packaged with a library can, for example, provide the Angular CLI with the information it needs to generate a component that configures and uses a particular feature, or set of features, defined in that library.
-One example of this is Angular Material's navigation schematic which configures the CDK's `BreakpointObserver` and uses it with Material's `MatSideNav` and `MatToolbar` components.
+라이브러리는 일반적으로 컴포넌트, 서비스, 파이프, 디렉티브 등을 *재사용할 수 있는 형태로* 제공합니다.
+그리고 라이브러리는 npm 패키지 형태로 배포되어 여러 사람에게 공유됩니다.
+npm 패키지는 [스키매틱(schematic)](guide/glossary#schematic)을 제공할 수도 있습니다.
+스키매틱을 활용하면 npm 패키지를 설치한 후에 프로젝트에 파일을 생성하거나 프로젝트에 있는 파일을 수정할 수 있습니다.
+그래서 Angular CLI로 `ng generate component` 명령을 실행했을 때 프로젝트 파일을 수정하는 것과 비슷한 효과를 낼 수 있습니다.
+그리고 스키매틱을 활용하면 Angular CLI의 기본 기능을 확장할 수도 있습니다.
+Angular CLI로 생성하는 Angular 구성 요소 항목을 추가할 수 있고, 어떤 기능 단위로 확장할 수도 있습니다.
+Angular Material 네비게이션 스키매틱이 이런 방식으로 동작합니다.
+Angular Material 스키매틱은 CDK가 제공하는 `BreakpointObserver`가 Material이 제공하는 `MatSideNav`, `MatToolbar` 컴포넌트를 사용하도록 환경설정을 변경합니다.
 
 [스키매틱](guide/glossary#schematic)은 Angular CLI를 확장할 수 있습니다.
 
@@ -246,14 +252,15 @@ One example of this is Angular Material's navigation schematic which configures 
 
 * 업데이트 스키매틱을 제공한다면 `ng update` 명령으로 라이브러리를 업데이트하면서 관련 라이브러리도 함께 업데이트할 수 있습니다. 새로운 버전을 도입하면서 수정해야 하는 코드도 자동으로 처리할 수 있습니다.
 
-What you include in your library depends on your task.
-For example, you could define a schematic to create a dropdown that is pre-populated with canned data to show how to add it to an app.
-If you want a dropdown that would contain different passed-in values each time, your library could define a schematic to create it with a given configuration. Developers could then use `ng generate` to configure an instance for their own app.
+라이브러리에 포함되는 스키매틱은 라이브러리가 어떤 기능을 제공하느냐에 따라 달라집니다.
+항목이 고정된 드롭다운을 제공하는 라이브러리라면 애플리케이션에서 이 드롭다운을 어떻게 사용하는지 알려주는 코드를 스키매틱에 추가할 수 있습니다.
+그리고 매번 새로운 목록으로 구성되는 드롭다운을 제공한다면, 스키매틱에 이 동작과 관련된 환경설정을 더 추가할 수도 있습니다.
+개발자가 `ng generate` 명령을 실행할 때 라이브러리가 제공해야 하는 기능은 무엇인지 고민해 보세요.
 
-Suppose you want to read a configuration file and then generate a form based on that configuration.
-If that form will need additional customization by the developer who is using your library, it might work best as a schematic.
-However, if the form will always be the same and not need much customization by developers, then you could create a dynamic component that takes the configuration and generates the form.
-In general, the more complex the customization, the more useful the schematic approach.
+환경설정 파일을 읽고 이 설정에 따라 어떤 형태를 만들어낸다고 해봅시다.
+그러면 라이브러리를 사용하는 개발자가 추가로 커스터마이징할 수 있는 형태가 되어야 하는데, 이 작업에도 스키매틱을 적용하기 좋습니다.
+그런데 폼 구성이 거의 변경되지 않는다면 컴포넌트를 생성할 때 사용자에게 바로 입력받는 설정대로 동적으로 구성하는 방식도 사용할만 합니다.
+보통은 커스터마이징이 복잡할 수록 스키매틱을 사용하는 방식이 더 편합니다.
 
 더 자세한 내용은 [스키매틱 개요](guide/schematics) 문서나 [라이브러리용 스키매틱](guide/schematics-for-libraries) 문서를 참고하세요.
 
@@ -300,25 +307,40 @@ npm publish
 이전에 npm 저장소에 배포해본 적이 없다면 계정을 먼저 만들어야 합니다.
 자세한 내용은 [npm 패키지 배포하기](https://docs.npmjs.com/getting-started/publishing-npm-packages) 문서를 참고하세요.
 
+
 <div class="alert is-important">
 
-For now, it is not recommended to publish Ivy libraries to NPM because Ivy generated code is not backward compatible with View Engine, so apps using View Engine will not be able to consume them. Furthermore, the internal Ivy instructions are not yet stable, which can potentially break consumers using a different Angular version from the one used to build the library.
+Ivy용 라이브러리를 NPM 코드 저장소에 배포하는 것은 아직 권장하지 않습니다.
+Ivy용으로 빌드된 코드는 이전 버전인 View Engine과 호환이 되지 않기 때문에 실행도 되지 않습니다.
+그리고 Ivy 내부 구조가 아직 완전하게 정리된 것이 아니기 때문에 라이브러리를 빌드한 Angular 버전과 라이브러리를 사용하는 애플리케이션의 Angular 버전이 다르면 예상치 못한 문제가 발생할 수도 있습니다.
 
-When a published library is used in an Ivy app, the Angular CLI will automatically convert it to Ivy using a tool known as the Angular compatibility compiler (`ngcc`). Thus, by publishing your libraries using the View Engine compiler ensures that they can be transparently consumed by both View Engine and Ivy apps.
+Ivy를 사용하는 애플리케이션에 View Engine용으로 빌드된 라이브러리가 사용되면 이 라이브러리는 Angular 호환성 컴파일러(Angular compatibility compiler, `ngcc`) 툴을 적용되어 Ivy 용으로 변환됩니다.
+그래서 View Engine 컴파일러로 빌드된 라이브러리는 View Engine을 활용하는 앱과 Ivy를 활용하는 앱 모두 제대로 동작합니다.
 
 </div>
 
+
 {@a lib-assets}
 
+<!--
 ## Managing assets in a library
+-->
+## 라이브러리 리소스 관리하기
 
+<!--
 Starting with version 9.x of the [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md) tool, you can configure the tool to automatically copy assets into your library package as part of the build process.
 You can use this feature when your library needs to publish optional theming files, Sass mixins, or documentation (like a changelog).
 
 * Learn how to [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md).
 
 * Learn more about how to use the tool to [embed assets in CSS](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md).
+-->
+[ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md) 9.x 버전부터는 라이브러리를 빌드하는 단계에 리소스 파일도 복사할 것인지 지정할 수 있습니다.
+라이브러리에 테마 파일이나 Sass 믹스인 파일, changelog와 같은 문서가 함께 제공되어야 한다면 이 기능을 활용해 보세요.
 
+* [빌드 단계에 라이브러리 리소스 복사하기](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md) 문서를 참고해 보세요.
+
+* 이 툴은 [CSS에 리소스 내장](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md)하는 방식으로도 사용할 수 있습니다.
 
 
 <!--
