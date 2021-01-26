@@ -20,7 +20,7 @@ var resources = [
   'app/phone-detail/phone-detail.module.js'
 ];
 resources.map(function(sourcePath) {
-  // Need to rename zone.umd.min.js to zone.min.js
+  // zone.umd.min.js 파일의 이름을 zone.min.js로 변경합니다.
   var destPath = `aot/${sourcePath}`.replace('.umd.min.js', '.min.js');
   fsExtra.copySync(sourcePath, destPath);
 });

@@ -1113,7 +1113,7 @@ AngularJS 컴포넌트에는 `scope`나 `controller`에 정의된 입출력 프�
 
 <table>
   <tr>
-    <th>
+    <th style="width:14rem;">
     </th>
     <th>
       <!--
@@ -2115,17 +2115,15 @@ Angular는 TypeScript로 구현하기 때문에 AngularJS 앱을 업그레이드
   npm i typescript --save-dev
 </code-example>
 
-Install type definitions for the existing libraries that
-you're using but that don't come with prepackaged types: AngularJS, AngularJS Material, and the
-Jasmine unit test framework.
+AngularJS나 AngularJS Material, Jasmine과 같이 타입을 직접 제공하지 않는 라이브러리는 해당 라이브러리에 맞는 타입 정의 패키지를 추가할 수 있습니다.
 
-For the PhoneCat app, we can install the necessary type definitions by running the following command:
+PhoeCat 앱에서는 이런 명령을 실행하면 필요한 타입 정의 파일을 모두 설치할 수 있습니다:
 
 <code-example format="">
   npm install @types/jasmine @types/angular @types/angular-animate @types/angular-aria @types/angular-cookies @types/angular-mocks @types/angular-resource @types/angular-route @types/angular-sanitize --save-dev
 </code-example>
 
-If you are using AngularJS Material, you can install the type definitions via:
+AngularJS Material을 사용한다면 이 라이브러리에 해당하는 타입 정의 패키지도 설치할 수 있습니다:
 
 <code-example format="">
   npm install @types/angular-material --save-dev
