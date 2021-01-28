@@ -146,6 +146,7 @@ npm 패키지를 설치한 이후에 `ngcc`를 자동으로 실행하려면 `pos
 
 
 {@a opting-out-of-angular-ivy}
+{@a opting-out-of-ivy-in-version-9}
 <!--
 ## Opting out of Ivy in version 9
 -->
@@ -259,7 +260,7 @@ Ivy를 제거한 프로젝트에서 국제화(internationalization) 기능을 �
 
 <code-example language="typescript" header="polyfills.ts">
 /***************************************************************************************************
- * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
+ * Angular 템플릿에서 i18n 태그를 사용하기 위해 `$localize`를 전역 범위에 로드합니다.
  */
 import '@angular/localize/init';
 </code-example>
@@ -271,6 +272,7 @@ import '@angular/localize/init';
 -->
 ### Ivy 없이 SSR 사용하기
 
+<!--
 If you opt out of Ivy and your application uses  [Angular Universal](guide/universal) to render Angular applications on the server, you must also change the way the server performs bootstrapping.
 
 The following example shows how you modify the `server.ts` file to provide the `AppServerModuleNgFactory` as the bootstrap module.
@@ -330,6 +332,75 @@ function run() {
 // Webpack will replace 'require' with '__webpack_require__'
 // '__non_webpack_require__' is a proxy to Node 'require'
 // The below code is to ensure that the server is run only when not requiring the bundle.
+declare const __non_webpack_require__: NodeRequire;
+const mainModule = __non_webpack_require__.main;
+if (mainModule && mainModule.filename === __filename) {
+  run();
+}
+
+export * from './src/main.server';
+</code-example>
+-->
+Ivy를 제거한 애플리케이션을 [Angular Universal](guide/universal)로 서버에서 렌더링하려면 서버에서 부트스트랩하는 코드를 변경해야 합니다.
+
+아래 코드는 모듈을 부트스트랩하는 `AppServerModuleNgFactory`를 활용해서 서버사이드 렌더링을 구현하는 예제 코드입니다.
+이 파일은 `server.ts` 파일에 작성합니다.
+
+* 가상 파일 `app.server.module.ngfactory`에서 `AppServerModuleNgFactory`를 로드합니다.
+* `ngExpressEngine`을 실행할 때 `bootstrap: AppServerModuleNgFactory`를 지정합니다.
+
+<code-example language="typescript" header="server.ts">
+import 'zone.js/dist/zone-node';
+
+import { ngExpressEngine } from '@nguniversal/express-engine';
+import * as express from 'express';
+import { join } from 'path';
+
+import { APP_BASE_HREF } from '@angular/common';
+
+import { AppServerModuleNgFactory } from './src/app/app.server.module.ngfactory';
+
+// Express를 참조하면 서버리스 함수를 사용할 수 있습니다.
+export function app() {
+  const server = express();
+  const distFolder = join(process.cwd(), 'dist/ivy-test/browser');
+
+  // Universal express 엔진(https://github.com/angular/universal/tree/master/modules/express-engine)을 활용합니다.
+  server.engine('html', ngExpressEngine({
+    bootstrap: AppServerModuleNgFactory,
+  }));
+
+  server.set('view engine', 'html');
+  server.set('views', distFolder);
+
+  // Express Rest API 엔드포인트 예제
+  // app.get('/api/**', (req, res) => { });
+  // 정적 파일은 /browser 에 위치합니다.
+  server.get('*.*', express.static(distFolder, {
+    maxAge: '1y'
+  }));
+
+  // 모든 라우팅 규칙을 Universal 엔진으로 처리합니다.
+  server.get('*', (req, res) => {
+    res.render('index', { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
+  });
+
+  return server;
+}
+
+function run() {
+  const port = process.env.PORT || 4000;
+
+  // Node 서버를 시작합니다.
+  const server = app();
+  server.listen(port, () => {
+    console.log(`Node Express server listening on http://localhost:${port}`);
+  });
+}
+
+// Webpack은 'require'를 '__webpack_require__'로 변경합니다.
+// '__non_webpack_require__'는 Node `require`에 해당하는 프록시입니다.
+// 아래 코드는 빌드 결과물이 필요하지 않은 경우에만 서버를 실행하는 코드입니다.
 declare const __non_webpack_require__: NodeRequire;
 const mainModule = __non_webpack_require__.main;
 if (mainModule && mainModule.filename === __filename) {

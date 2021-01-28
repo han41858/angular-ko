@@ -219,7 +219,10 @@ During a transition, a new view is inserted directly after the old one and both 
 <code-example path="animations/src/app/animations.ts" header="src/app/animations.ts" region="style-view" language="typescript"></code-example>
 
 
+<!--
 ### Querying the view containers
+-->
+### 뷰 컨테이너 쿼리하기
 
 <!--
 Use the `query()` method to find and animate elements within the current host component. The `query(":enter")` statement returns the view that is being inserted, and `query(":leave")` returns the view that is being removed.
