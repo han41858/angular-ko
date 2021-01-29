@@ -177,7 +177,7 @@ Once the animation is finished the resulting rendered DOM is identical to that r
 * 데코레이터 메타데이터 밖에 선언된 함수와 상수는 이제 정적으로 처리되지 않습니다.
 이전에는 이 항목들을 라이브러리처럼 로드하고 `@NgModule`을 정의할 때 사용해야 했습니다.
 
-* 지역 참조로 디렉티브의 입력 프로퍼티를 참조하는 로직은 더이상 동작하지 않습니다.
+* 디렉티브의 입력값을 바인딩하기 전에 참조하면 값을 제대로 확인할 수 없습니다.
 [이 내용](guide/ivy-compatibility-examples#forward-refs-directive-inputs)을 참고하세요.
 
 * 바인딩하지 않은 클래스 어트리뷰트와 `[class]` 바인딩이 동시에 존재하면 바인딩하지 않은 어트리뷰트가 추가됩니다.
