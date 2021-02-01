@@ -1349,7 +1349,7 @@
         {
           "url": "https://discord.gg/angular",
           "//title": "Join Discord",
-          "title": "디스코드 가입하기",
+          "title": "Discord 가입하기",
           "//tooltip": "Join the discussions at Angular Community Discord server.",
           "tooltip": "Angular 커뮤니티 디스코드 서버에서 이야기를 나눠보세요."
         },
@@ -1369,7 +1369,7 @@
         {
           "url": "https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md",
           "//title": "Code of Conduct",
-          "title": "커뮤니티 활용 수칙",
+          "title": "커뮤니티 행동강령",
           "//tooltip": "Treating each other with respect.",
           "tooltip": "친하게 지내요:)"
         }

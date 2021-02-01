@@ -14,10 +14,10 @@ Learn more about the [Compiler](https://www.youtube.com/watch?v=anphffaCZrQ) and
 Ivy는 Angular의 [다음 세대 컴파일러이자 렌더링 파이프라인](https://blog.angular.io/a-plan-for-version-8-0-and-ivy-b3318dfc19f7)의 코드 네임 입니다.
 이 렌더링 엔진은 Angular 9 버전부터 이전에 사용하던 View Engine을 대신해서 사용되고 있습니다.
 
+
 <div class="alert is-helpful">
 
-Learn more about the [Compiler](https://www.youtube.com/watch?v=anphffaCZrQ) and [Runtime](https://www.youtube.com/watch?v=S0o-4yc2n-8) in these videos from our team.
-
+Angular 팀이 [컴파일러](https://www.youtube.com/watch?v=anphffaCZrQ)와 [실행환경](https://www.youtube.com/watch?v=S0o-4yc2n-8)에 대해 설명한 영상도 확인해 보세요.
 
 </div>
 

@@ -40,26 +40,48 @@ export class ApiListComponent implements OnInit {
   type: Option;
 
   // API types
+  // types: Option[] = [
+  //   { value: 'all', title: 'All' },
+  //   { value: 'class', title: 'Class' },
+  //   { value: 'const', title: 'Const'},
+  //   { value: 'decorator', title: 'Decorator' },
+  //   { value: 'directive', title: 'Directive' },
+  //   { value: 'enum', title: 'Enum' },
+  //   { value: 'function', title: 'Function' },
+  //   { value: 'interface', title: 'Interface' },
+  //   { value: 'pipe', title: 'Pipe'},
+  //   { value: 'ngmodule', title: 'NgModule'},
+  //   { value: 'type-alias', title: 'Type alias' },
+  //   { value: 'package', title: 'Package'}
+  // ];
+
   types: Option[] = [
-    { value: 'all', title: 'All' },
-    { value: 'class', title: 'Class' },
-    { value: 'const', title: 'Const'},
-    { value: 'decorator', title: 'Decorator' },
-    { value: 'directive', title: 'Directive' },
-    { value: 'enum', title: 'Enum' },
-    { value: 'function', title: 'Function' },
-    { value: 'interface', title: 'Interface' },
-    { value: 'pipe', title: 'Pipe'},
+    { value: 'all', title: '전체' },
+    { value: 'class', title: '클래스' },
+    { value: 'const', title: '상수'},
+    { value: 'decorator', title: '데코레이터' },
+    { value: 'directive', title: '디렉티브' },
+    { value: 'enum', title: '열거값' },
+    { value: 'function', title: '함수' },
+    { value: 'interface', title: '인터페이스' },
+    { value: 'pipe', title: '파이프'},
     { value: 'ngmodule', title: 'NgModule'},
-    { value: 'type-alias', title: 'Type alias' },
-    { value: 'package', title: 'Package'}
+    { value: 'type-alias', title: '타입 별칭' },
+    { value: 'package', title: '패키지'}
   ];
 
+  // statuses: Option[] = [
+  //   { value: 'all', title: 'All' },
+  //   { value: 'stable', title: 'Stable'},
+  //   { value: 'deprecated', title: 'Deprecated' },
+  //   { value: 'security-risk', title: 'Security Risk' }
+  // ];
+
   statuses: Option[] = [
-    { value: 'all', title: 'All' },
-    { value: 'stable', title: 'Stable'},
-    { value: 'deprecated', title: 'Deprecated' },
-    { value: 'security-risk', title: 'Security Risk' }
+    { value: 'all', title: '전체' },
+    { value: 'stable', title: '안정 버전'},
+    { value: 'deprecated', title: '지원 중단' },
+    { value: 'security-risk', title: '보안 위험' }
   ];
 
   @ViewChild('filter', { static: true }) queryEl: ElementRef;

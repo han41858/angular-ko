@@ -1,21 +1,34 @@
 <div class="l-flex-wrap api-filter">
 
+  <!-- <aio-select (change)="setType($event.option)"
+              [options]="types"
+              [selected]="type"
+              [showSymbol]="true"
+              !label="Type:">
+  </aio-select> -->
   <aio-select (change)="setType($event.option)"
               [options]="types"
               [selected]="type"
               [showSymbol]="true"
-              label="Type:">
+              label="타입:">
   </aio-select>
 
+<!--   <aio-select (change)="setStatus($event.option)"
+              [options]="statuses"
+              [selected]="status"
+              [disabled]="type.value === 'package'"
+              !label="Status:">
+  </aio-select> -->
   <aio-select (change)="setStatus($event.option)"
               [options]="statuses"
               [selected]="status"
               [disabled]="type.value === 'package'"
-              label="Status:">
+              label="상태:">
   </aio-select>
 
   <div class="form-search">
-    <input #filter placeholder="Filter" (input)="setQuery($any($event.target).value)" aria-label="Filter Search">
+    <!-- <input #filter placeholder="Filter" (input)="setQuery($any($event.target).value)" aria-label="Filter Search"> -->
+    <input #filter placeholder="필터" (input)="setQuery($any($event.target).value)" aria-label="Filter Search">
     <i class="material-icons">search</i>
   </div>
 </div>
