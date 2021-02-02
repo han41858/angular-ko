@@ -1,5 +1,9 @@
+<!--
 # Static query migration guide
+-->
+# 정적 쿼리 마이그레이션 가이드
 ​
+<!--
 **Important note for library authors: This migration is especially crucial for library authors to facilitate their users upgrading to version 9 when it becomes available.**
 
 In version 9, the default setting for `@ViewChild` and `@ContentChild` queries is changing in order to fix buggy and surprising behavior in queries (read more about that [here](#what-does-this-flag-mean)).
@@ -32,28 +36,96 @@ Starting with version 9, the `static` flag will default to false.
 At that time, any `{static: false}` flags can be safely removed, and we will have a schematic that will update your code for you.
 
 Note: this flag only applies to `@ViewChild` and `@ContentChild` queries specifically, as `@ViewChildren` and `@ContentChildren` queries do not have a concept of static and dynamic (they are always resolved as if they are "dynamic").
+-->
+**이 문서는 라이브러리 개발자에게 특히 중요합니다.**
 
+Angular 9 버전부터는 `@ViewChild`, `@ContentChild` 쿼리의 오동작을 수정하기 위해 기본 동작이 변경되었습니다.
+자세한 내용은 [이 섹션](#what-does-this-flag-mean)을 참고하세요.
+
+그래서 이 변경사항을 반영하기 위해 Angular 8 버전에는 `@ViewChild`, `@ContentChild` 쿼리에 동작 방식을 꼭 지정하도록 수정되기도 했습니다.
+
+이 마이그레이션은 "static" 플래그를 명시적으로 지정해서 언제 쿼리할 것인지 확실하게 지정하는 것입니다.
+이 플래그를 지정하면 Angular 버전을 9로 업그레이드 하더라도 기존에 동작하던 대로 동작할 것입니다.
+
+이전:
+
+```
+// 템플릿 구성 방식에 따라 `ngOnInit` 실행 시점에 쿼리한 결과와 `ngAfterViewInit` 실행 시점에 쿼리 결과가 달랐습니다.
+@ViewChild('foo') foo: ElementRef;
+```
+
+이후:
+
+```
+// 쿼리 결과를 ngOnInit 안에서 활용하는 경우
+@ViewChild('foo', {static: true}) foo: ElementRef;
+
+또는
+
+// 쿼리 결과를 ngAfterViewInit 안에서 활용하는 경우
+@ViewChild('foo', {static: false}) foo: ElementRef;
+```
+
+Angular 9 버전부터는 `static` 플래그의 기본값이 `false`입니다.
+그래서 Angular 9 버전을 사용하면 `{static: false}`라고 작성했던 이전 버전의 코드를 제거해도 됩니다.
+
+참고: 이 플래그는 `@ViewChild`, `@ContentChild` 쿼리에만 해당됩니다. `@ViewChildren`, `@ContentChildren` 쿼리는 항상 동적으로 실행됩니다.
+
+
+<!--
 ## FAQ
+-->
+## 자주 묻는 질문
 
 {@a what-to-do-with-todo}
+<!--
 ### What should I do if I see a `/* TODO: add static flag */` comment printed by the schematic?
+-->
+### `/* TODO: add static flag */` 라는 주석이 보이면 어떻게 처리해야 하나요?
 
+<!--
 If you see this comment, it means that the schematic couldn't statically figure out the correct flag. In this case, you'll have to add the correct flag based on your application's behavior.
 For more information on how to choose, see the [next question](#how-do-i-choose).
+-->
+이 메시지는 스키매틱이 적절한 플래그 값을 결정하지 못했다는 것을 의미합니다.
+그래서 이런 경우에는 원하는 대로 동작하도록 플래그 값을 직접 지정해야 합니다.
+어떤 방식을 선택해야 하는지 알아보려면 [다음 섹션](#how-do-i-choose)을 참고하세요.
+
 
 {@a how-do-i-choose}
+{@a how-do-i-choose-which-static-flag-value-to-use-true-or-false}
+<!--
 ### How do I choose which `static` flag value to use: `true` or `false`?
+-->
+### `static` 플래그 값은 `true`/`false` 중 어떤 것을 선택해야 하나요?
 
+<!--
 In the official API docs, we have always recommended retrieving query results in [`ngAfterViewInit` for view queries](api/core/ViewChild#description) and [`ngAfterContentInit` for content queries](api/core/ContentChild#description).
 This is because by the time those lifecycle hooks run, change detection has completed for the relevant nodes and we can guarantee that we have collected all the possible query results.
 
 Most applications will want to use `{static: false}` for the same reason. This setting will ensure query matches that are dependent on binding resolution (e.g. results inside `*ngIf`s or `*ngFor`s) will be found by the query.
 
 There are rarer cases where `{static: true}` flag might be necessary (see [answer here](#should-i-use-static-true)).
+-->
+공식 API 문서를 보면 쿼리 결과는 [뷰 쿼리라면 `ngAfterViewInit`](api/core/ViewChild#description)에서, 컨텐츠 쿼리라면 [`ngAfterContentInit`](api/core/ContentChild#description)에서 참조할 것을 권장하고 있습니다.
+왜냐하면 이 시점이 되어야 변화 감지 로직이 끝나고 DOM 노드에 변경사항이 반영되면서 쿼리 결과를 예상대로 참조할 수 있기 때문입니다.
+
+그래서 보통은 `{static: false}`를 사용하면 됩니다.
+이 정책을 사용하면 `*ngIf`나 `*ngFor` 바인딩 표현식의 결과에 따라서 쿼리 결과가 갱신됩니다.
+
+`{static: true}` 플래그 값을 사용해야 하는 경우는 거의 없습니다.
+[이 섹션](#should-i-use-static-true)을 참고하세요.
+
+
 
 {@a should-i-use-static-true}
+{@a is-there-a-case-where-i-should-use-static-true}
+<!--
 ### Is there a case where I should use `{static: true}`?
+-->
+### `{static: true}`를 사용해야 하는 경우가 있나요?
 
+<!--
 This option was introduced to support creating embedded views on the fly.
 If you need access to a `TemplateRef` in a query to create a view dynamically, you won't be able to do so in `ngAfterViewInit`.
 Change detection has already run on that view, so creating a new view with the template will cause an `ExpressionHasChangedAfterChecked` error to be thrown.
@@ -65,9 +137,25 @@ For example, if your component relies on the query results being populated in th
 
 Note: Selecting the static option means that query results nested in `*ngIf` or `*ngFor` will not be found by the query.
 These results are only retrievable after change detection runs.
+-->
+이 옵션은 임베디드 뷰를 지원하기 위해 도입되었습니다.
+만약 동적으로 생성되는 `TemplateRef`를 쿼리하면 이 쿼리 결과는 `ngAfterViewInit` 안에서는 접근할 수 없습니다.
+변화 감지 동작은 이미 실행된 화면에 임베디드 뷰를 새로 생성하면 `ExpressionHasChangedAfterChecked` 에러가 발생하기 때문입니다.
+이 상황에서 `static` 플래그 값을 `true`로 지정하면 임베디드 뷰를 `ngOnInit` 시점에 생성합니다.
+이런 경우가 아니라면 `{static: false}`를 사용하면 됩니다.
+
+하지만 Angular 8 버전도 지원하면서 뷰 쿼리인 경우 `ngAfterViewInit` **전에**, 컨텐츠 쿼리인 경우 `ngAfterContentInit` **전에** 쿼리 결과를 사용해야 한다면 `static` 플래그 값을 `true`로 지정해야 합니다.
+`ngOnInit` 함수나 `@Input` 세터 안에서 쿼리 결과를 참조해야 하는 경우에도 이 플래그 값을 `true`로 지정하거나, 이후 시점에 동작하도록 컴포넌트 로직을 수정해야 합니다.
+
+참고: 이 옵션값은 `*ngIf`, `*ngFor` 안에 있는 내용을 쿼리해야 하느냐에 따라 결정된다고 볼 수 있습니다.
+이 디렉티브 안에 있는 내용은 변화 감지 동작이 실행된 이후에 반영됩니다.
+
 
 {@a what-does-this-flag-mean}
+<!--
 ### What does this flag mean and why is it necessary?
+-->
+### 이 플래그는 어떤 역할을 하나요? 왜 필요한가요?
 
 The default behavior for queries has historically been undocumented and confusing, and has also commonly led to issues that are difficult to debug.
 In version 9, we would like to make query behavior more consistent and simple to understand.
