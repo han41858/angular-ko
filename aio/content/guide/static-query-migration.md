@@ -44,7 +44,7 @@ Angular 9 버전부터는 `@ViewChild`, `@ContentChild` 쿼리의 오동작을 �
 
 그래서 이 변경사항을 반영하기 위해 Angular 8 버전에는 `@ViewChild`, `@ContentChild` 쿼리에 동작 방식을 꼭 지정하도록 수정되기도 했습니다.
 
-이 마이그레이션은 "static" 플래그를 명시적으로 지정해서 언제 쿼리할 것인지 확실하게 지정하는 것입니다.
+이 마이그레이션은 "static" 플래그를 명시적으로 지정해서 언제 쿼리할 것인지 확실하게 결정하는 것입니다.
 이 플래그를 지정하면 Angular 버전을 9로 업그레이드 하더라도 기존에 동작하던 대로 동작할 것입니다.
 
 이전:
@@ -107,7 +107,7 @@ Most applications will want to use `{static: false}` for the same reason. This s
 
 There are rarer cases where `{static: true}` flag might be necessary (see [answer here](#should-i-use-static-true)).
 -->
-공식 API 문서를 보면 쿼리 결과는 [뷰 쿼리라면 `ngAfterViewInit`](api/core/ViewChild#description)에서, 컨텐츠 쿼리라면 [`ngAfterContentInit`](api/core/ContentChild#description)에서 참조할 것을 권장하고 있습니다.
+공식 API 문서를 보면 [뷰 쿼리라면 `ngAfterViewInit`](api/core/ViewChild#description)에서, 컨텐츠 쿼리라면 [`ngAfterContentInit`](api/core/ContentChild#description)에서 쿼리 결과를 참조도록 권장하고 있습니다.
 왜냐하면 이 시점이 되어야 변화 감지 로직이 끝나고 DOM 노드에 변경사항이 반영되면서 쿼리 결과를 예상대로 참조할 수 있기 때문입니다.
 
 그래서 보통은 `{static: false}`를 사용하면 됩니다.
@@ -140,7 +140,7 @@ These results are only retrievable after change detection runs.
 -->
 이 옵션은 임베디드 뷰를 지원하기 위해 도입되었습니다.
 만약 동적으로 생성되는 `TemplateRef`를 쿼리하면 이 쿼리 결과는 `ngAfterViewInit` 안에서는 접근할 수 없습니다.
-변화 감지 동작은 이미 실행된 화면에 임베디드 뷰를 새로 생성하면 `ExpressionHasChangedAfterChecked` 에러가 발생하기 때문입니다.
+변화 감지 동작이 이미 한 번 실행된 화면에 임베디드 뷰를 새로 생성하면 `ExpressionHasChangedAfterChecked` 에러가 발생하기 때문입니다.
 이 상황에서 `static` 플래그 값을 `true`로 지정하면 임베디드 뷰를 `ngOnInit` 시점에 생성합니다.
 이런 경우가 아니라면 `{static: false}`를 사용하면 됩니다.
 
@@ -157,6 +157,7 @@ These results are only retrievable after change detection runs.
 -->
 ### 이 플래그는 어떤 역할을 하나요? 왜 필요한가요?
 
+<!--
 The default behavior for queries has historically been undocumented and confusing, and has also commonly led to issues that are difficult to debug.
 In version 9, we would like to make query behavior more consistent and simple to understand.
 
@@ -221,35 +222,151 @@ This makes the logic more consistent and predictable for users.
 
 That said, if an application does need query results earlier (for example, the query result is needed to create an embedded view), it's possible to add the `{static: true}` flag to explicitly ask for static resolution.
 With this flag, users can indicate that they only care about results that are statically available and the query results will be populated before `ngOnInit`.
+-->
+쿼리 동작은 지금까지 어떻게 동작하는지 문서화된 적이 없었으며 사용자들에게 혼란을 주고 있었고 디버깅하기도 어려웠습니다.
+Angular 9 버전부터는 쿼리 동작을 일관된 방식으로 조정하면서 이해하기도 쉽게 개선했습니다.
+
+변경된 이유를 설명하자면, 지금까지 쿼리가 어떻게 동작했는지 이해할 필요가 있습니다.
+
+`static` 플래그가 도입되기 전에는 개별 쿼리가 어떻게 동작할지 컴파일러가 그때 그때 결정했습니다.
+`@ViewChild`, `@ContentChild` 쿼리가 정적으로 동작할지, 동적으로 동작할지는 사용자가 쿼리 결과를 언제 사용하느냐에 따라  컴파일 시점에 결정되었습니다.
+
+- **정적 쿼리**는 쿼리 결과가 정적으로 결정됩니다
+쿼리 결과가 실행시점에 사용되지 않는 방식으로 바인딩한 경우가 그랬습니다.
+정적으로 쿼리된 결과는 변화 감지 동작이 일어나기 전에 활용할 수 있습니다.
+`ngOnInit`에서 접근하는 경우가 그렇습니다.
+
+- **동적 쿼리**는 쿼리 결과가 정적으로 결정되지 않습니다.
+쿼리 결과는 실행 시점에 바인딩되는 결과에 따라 달라집니다.
+동적으로 쿼리된 결과는 변화 감지 동작이 끝난 후에 활용할 수 있습니다.
+컨텐츠 쿼리라면 `ngAfterContentInit`, 뷰 쿼리르면 `ngAfterViewInit`에서 접근하는 경우가 그렇습니다.
+
+예를 들어서 이런 컴포넌트가 있다고 합시다.
+`Comp` 안에는 이런 쿼리가 있습니다:
+
+```
+@ViewChild(Foo) foo: Foo;
+```
+
+그리고 템플릿은 이렇습니다:
+
+```
+<div foo></div>
+```
+
+`Foo` 쿼리는 정적으로 처리됩니다.
+왜냐하면 컴파일 시점에도 `Foo`에 해당하는 `<div>`가 존재하기 때문에 언제나 쿼리할 수 있기 때문입니다.
+이 쿼리 동작은 실행 시점에 영향을 받지 않습니다.
+그래서 변화 감지가 동작하고 템플릿이 변경된 이후까지 쿼리 시점을 기다릴 필요가 없습니다.
+이 쿼리 결과는 `ngOnInit` 안에서 접근할 수 있습니다.
+
+하지만 쿼리 코드는 같으면서 템플릿이 다른 경우를 생각해 봅시다:
+
+```
+<div foo *ngIf="showing"></div>
+```
+
+템플릿이 이렇게 구성되면 이 쿼리는 동적 쿼리로 구분됩니다.
+이런 템플릿에서 쿼리를 하려면 실행 시점에 `showing`이 어떤 값인지 확인해야 합니다.
+그래서 변화 감지 로직이 먼저 실행된 후인 `ngAfterViewInit`이나 쿼리 프로퍼티 세터에서만 이 쿼리 결과를 활용할 수 있습니다.
+
+따라서 템플릿에 `*ngIf`나 `*ngFor`가 사용되면 변화 감지 로직이 동작해야 쿼리 결과에 접근할 수 있습니다.
+
+쿼리가 동적이냐/정적이냐는 `@ViewChild`와 `@ContentChild` 쿼리에만 해당된다는 것을 잊지 마세요.
+`@ViewChildren` 쿼리와 `@ContentChildren` 쿼리는 정적/동적을 구분하지 않고 언제나 동적으로 실행됩니다.
+
+쿼리가 이렇게 동작했기 때문에 쿼리가 실행되는 시점에 따라 쿼리 결과가 달라질 수 있었습니다.
+실제로 이런 일들이 벌어졌습니다:
+
+* 어떤 경우에는 `ngOnInit` 안에서 쿼리 결과를 참조할 수 있었지만 그렇지 않은 경우도 있었습니다. [이 이슈](https://github.com/angular/angular/issues/21800)와 [이 이슈](https://github.com/angular/angular/issues/19872))를 참고하세요.
+
+* `@ViewChild` 쿼리와 `@ViewChildren` 쿼리가 실행되는 시점이 달랐습니다. `@ContentChild` 쿼리도 `@ContentChildren` 쿼리와 실행되는 시점이 달랐습니다.
+그래서 사용자가 `@ViewChild` 쿼리를 `@ViewChildren` 쿼리로 변경하면 쿼리 시점이 달라지기 때문에 코드가 제대로 동작하지 않는 문제가 발생했습니다.
+
+* 템플릿에 `*ngIf`, `*ngFor`가 추가되면 제대로 돌아가던 코드가 동작하지 않는 경우가 있었습니다.
+
+* `@ContentChild` 쿼리 결과가 컴포넌트 라이프싸이클이 동작하는 시점에 따라 다른 경우가 있었습니다.
+특히 컴포넌트에서 `*ngIf`를 사용하는 경우에는 이런 문제가 발생하는 경우가 많았습니다.
+
+그래서 Angular 9 버전에는 모든 쿼리 동작이 변화 감지 이후에 실행되는 것을 기본 동작으로 변경하면서 쿼리 동작을 단순화했습니다.
+이제 쿼리 대상이 템플릿의 어느 위치에 있느냐는 쿼리 결과에 영향을 주지 않으며, 코드가 갑자기 동작하지 않을 일도 없이 기본 동작이 언제나 같습니다.
+Angular 개발자가 작성하면서도 쿼리 결과를 일관되게 예상할 수 있을 것입니다.
+
+이제는 임베디드 뷰를 생성하기 위해 쿼리 결과를 꼭 사전에 참조해야 하는 상황이라면 `{static: true}` 플래그를 설정해서 쿼리를 정적으로 실행하면 됩니다.
+이 플래그 값을 사용하면 이 쿼리는 명시적으로 정적으로 실행되어야 한다는 것을 의미하며, `ngOnInit`에서도 쿼리 결과를 참조할 수 있습니다.
+
 
 {@a view-children-and-content-children}
+<!--
 ### Does this change affect `@ViewChildren` or `@ContentChildren` queries?
+-->
+### 이 변경사항이 `@ViewChildren`이나 `@ContentChildren` 쿼리에 영향을 주나요?
 
+<!--
 No, this change only affects `@ViewChild` and `@ContentChild` queries specifically.
 `@ViewChildren` and `@ContentChildren` queries are already "dynamic" by default and don't support static resolution.
+-->
+아닙니다.
+이 변경사항은 `@ViewChild`, `@ContentChild` 쿼리에만 해당됩니다.
+`@ViewChildren`, `@ContentChildren` 쿼리는 언제나 동적으로 실행되며 정적으로 실행되는 경우는 없습니다.
+
 
 {@a why-specify-static-false}
+<!--
 ### ​Why do I have to specify `{static: false}`? Isn't that the default?
+-->
+### 기본값이 `false`라면 왜 `{static: false}`를 지정해야 하나요?
 
+<!--
 The goal of this migration is to transition apps that aren't yet on version 9 to a query pattern that is compatible with version 9.
 However, most applications use libraries, and it's likely that some of these libraries may not be upgraded to version 8 yet (and thus might not have the proper flags).
 Since the application's version of Angular will be used for compilation, if we change the default, the behavior of queries in the library's components will change to the version 8 default and possibly break.
 This way, an application's dependencies will behave the same way during the transition as they did in the previous version.
 
 In Angular version 9 and later, it will be safe to remove any `{static: false}` flags and we will do this cleanup for you in a schematic.
+-->
+이 마이그레이션의 목표는 아직 Angular 9 버전을 사용하는 애플리케이션의 쿼리 동작을 Angular 9 방식으로 맞추기 위한 것입니다.
+애플리케이션이 사용하는 라이브러리 중에는 Angular 8, 어쩌면 그 이전 버전으로 개발된 라이브러리도 있을 수 있습니다.
+이런 경우에도 Angular는 컴파일 시점에 기본 동작을 지정하지만, 이전 버전으로 개발된 라이브러리 컴포넌트는 이 변경사항을 적용해야 예상치 못한 에러가 발생하는 것을 방지할 수 있습니다.
+이 마이그레이션은 새롭게 변경된 정책으로 안전하게 변경하기 위한 것입니다.
+
+Angular 9 버전부터는 `{static: false}` 플래그를 제거해도 됩니다.
+
 
 {@a libraries}
+<!--
 ###  Can I keep on using Angular libraries that haven’t yet updated to version 8 yet?
+-->
+### Angular 8 버전 이전에 개발된 라이브러리는 계속 사용할 수 있나요?
 
+<!--
 Yes, absolutely!
 Because we have not changed the default query behavior in version 8 (i.e. the compiler still chooses a timing if no flag is set), when your application runs with a library that has not updated to version 8, the library will run the same way it did in version 7.
 This guarantees your app will work in version 8 even if libraries take longer to update their code.
+-->
+네, 문제 없습니다!
+Angular 8 버전까지는 쿼리의 기본 동작이 변경되지 않았습니다.
+이전 버전으로 개발된 라이브러리는 컴파일되면서 이전 방식으로 동작하는 코드가 빌드되었기 때문에 이 라이브러리가 실행되는 방식이 변경되는 것은 아닙니다.
+애플리케이션이 사용하는 Angular 버전이 8 이전이라면 이 라이브러리를 사용해도 그대로 동작할 것입니다.
+
 
 {@a update-library-to-use-static-flag}
+<!--
 ###  Can I update my library to version 8 by adding the `static` flag to view queries, while still being compatible with Angular version 7 apps?
+-->
+### 라이브러리를 업그레이드하면서 `static` 플래그를 추가하면, 이 라이브러리는 Angular 7 버전 앱에서도 실행되나요?
 
+<!--
 Yes, the Angular team's recommendation for libraries is to update to version 8 and add the `static` flag. Angular version 7 apps will continue to work with libraries that have this flag.
 
 However, if you update your library to Angular version 8 and want to take advantage of the new version 8 APIs, or you want more recent dependencies (such as Typescript or RxJS) your library will become incompatible with Angular version 7 apps. If your goal is to make your library compatible with Angular versions 7 and 8, you should not update your lib at all—except for `peerDependencies` in `package.json`.
 
 In general, the most efficient plan is for libraries to adopt a 6 month major version schedule and bump the major version after each Angular update. That way, libraries stay in the same release cadence as Angular.
+-->
+네, Angular 팀은 라이브러리의 버전을 Angular 8로 업그레이드 할 때 `static` 플래그를 추가하는 것을 권장하고 있습니다.
+Angular 7 버전까지는 이전 방식대로 동작할 것입니다.
+
+그런데 라이브러리 버전을 8로 업그레이드 하면 8 버전에 해당하는 API나 관련 의존성 패키지들(TypeScript, RxJS)도 변경되기 때문에 Angular 7 버전의 애플리케이션과는 호환되지 않을 수 있습니다.
+라이브러리가 Angular 7, 8 버전을 지원해야 한다면 `package.json`에 있는 `peerDependencies` 외의 항목을 변경하면 안됩니다.
+
+일반적으로는 Angular 메이저 버전이 업데이트되는 6개월 주기마다 라이브러리 버전도 함께 올리는 방식이 가장 좋습니다.

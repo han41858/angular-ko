@@ -1,5 +1,9 @@
+<!--
 # Glossary
+-->
+# 용어사전
 
+<!--
 Angular has its own vocabulary.
 Most Angular terms are common English words or computing terms
 that have a specific meaning within the Angular system.
@@ -11,39 +15,78 @@ unexpected definitions.
 [A](#A) [B](#B) [C](#C) [D](#D) [E](#E) [F](#F) [G](#G) [H](#H) [I](#I)
 [J](#J) [K](#K) [L](#L) [M](#M) [N](#N) [O](#O) [P](#P) [Q](#Q) [R](#R)
 [S](#S) [T](#T) [U](#U) [V](#V) [W](#W) [X](#X) [Y](#Y) [Z](#Z)
+-->
+Angular에서 사용하는 용어들이 있습니다.
+이 용어들은 Angular에 사용되는 개념을 설명하기 위해 자주 사용되는 영어 단어나 컴퓨터 용어를 도입한 경우가 많습니다.
+
+이 용어들 중에서 중요한 용어, 단어만 보면 의미를 쉽게 파악할 수 없는 용어에 대해 알아봅시다.
+
+[A](#A) [B](#B) [C](#C) [D](#D) [E](#E) [F](#F) [G](#G) [H](#H) [I](#I)
+[J](#J) [K](#K) [L](#L) [M](#M) [N](#N) [O](#O) [P](#P) [Q](#Q) [R](#R)
+[S](#S) [T](#T) [U](#U) [V](#V) [W](#W) [X](#X) [Y](#Y) [Z](#Z)
 
 
 {@a A}
 {@a aot}
-
-
+{@a ahead-of-time-aot-compilation}
+<!--
 ## ahead-of-time (AOT) compilation
+-->
+## AOT(Ahead-of-time) 컴파일
 
+<!--
 The Angular ahead-of-time (AOT) compiler converts Angular HTML and TypeScript code
 into efficient JavaScript code during the build phase, before the browser downloads
 and runs that code.
 This is the best compilation mode for production environments, with decreased load time and increased performance compared to [just-in-time (JIT) compilation](#jit).
 
 By compiling your application using the `ngc` command-line tool, you can bootstrap directly to a module factory, so you don't need to include the Angular compiler in your JavaScript bundle.
+-->
+AOT 컴파일러는 Angular HTML 템플릿과 TypeScript 코드를 빌드 단계에서 JavaScript 코드로 변환하며, 이렇게 변환된 코드는 브라우저가 다운로드해서 실행합니다.
+운영환경이라면 로딩 시간과 성능 측면에서 [JIT(Just-in-time)](#jit) 컴파일러보다 유리합니다.
+
+커맨드 라인 툴 `ngc`를 사용해서 컴파일하면 모듈 팩토리 코드를 그대로 부트스트랩할 수 있기 때문에, 클라이언트로 Angular 컴파일러 코드를 전달할 필요도 없습니다.
+
 
 {@a angular-element}
 
+<!--
 ## Angular element
+-->
+## Angular 엘리먼트
 
+<!--
 An Angular [component](#component) packaged as a [custom element](#custom-element).
 
 Learn more in [Angular Elements Overview](guide/elements).
+-->
+[커스텀 엘리먼트](#custom-element)로 동작하도록 패키징된 Angular [컴포넌트](#component)를 의미합니다.
+
+자세한 내용은 [Angular Elements 개요](guide/elements) 문서를 참고하세요.
+
 
 {@a annotation}
 
+<!--
 ## annotation
+-->
+## 어노테이션(annotation)
 
+<!--
 A structure that provides metadata for a class. See [decorator](#decorator).
+-->
+클래스에 메타데이터를 적용하는 구조를 의미합니다.
+[데코레이터](#decorator) 섹션을 참고하세요.
+
 
 {@a app-shell}
 
+<!--
 ## app-shell
+-->
+## 앱 기본코드(app-shell)
 
+<!--
 App shell is a way to render a portion of your application via a route at build time.
 This gives users a meaningful first paint of your application that appears quickly because the browser can render static HTML and CSS without the need to initialize JavaScript.
 
@@ -53,10 +96,26 @@ You can use the Angular CLI to [generate](cli/generate#appshell) an app shell.
 This can improve the user experience by quickly launching a static rendered page (a skeleton common to all pages) while the browser downloads the full client version and switches to it automatically after the code loads.
 
 See also [Service Worker and PWA](guide/service-worker-intro).
+-->
+앱 기본코드는 애플리케이션이 실행되면서 특정 컴포넌트를 렌더링하는 구조를 제공합니다.
+그리고 앱 기본코드는 브라우저가 처리할 수 있는 정적 HTML과 CSS로 제공되기 때문에 사용자에게 "의미있는 첫번째 화면(meaningful first paint)"를 보여주는 역할도 합니다.
+
+자세한 내용은 [앱 기본코드 모델](https://developers.google.com/web/fundamentals/architecture/app-shell) 문서를 참고하세요.
+
+앱 기본코드는 Angular CLI로 [생성](cli/generate#appshell)할 수도 있습니다.
+앱 기본코드를 사용하면 브라우저가 Angular 코드를 전부 받기 전에 정적으로 렌더링된 화면을 사용자에게 빠르게 보여줄 수 있으며, 코드를 모두 받고 난 후에는 동적으로 실행되는 애플리케이션 화면으로 전환할 수 있습니다.
+
+[서비스 워커와 PWA](guide/service-worker-intro) 문서도 참고해 보세요.
+
+
 {@a architect}
 
+<!--
 ## Architect
+-->
+## 아키텍트(Architect)
 
+<!--
 The tool that the CLI uses to perform complex tasks such as compilation and test running, according to a provided configuration.
 Architect is a shell that runs a [builder](#builder) (defined in an [npm package](#npm-package)) with a given [target configuration](#target).
 
@@ -66,6 +125,18 @@ For example, a built-in builder for linting is defined in the package `@angular-
 
 Use the [CLI command `ng run`](cli/run) to invoke a builder by specifying a [target configuration](#target) associated with that builder.
 Integrators can add builders to enable tools and workflows to run through the Angular CLI. For example, a custom builder can replace the third-party tools used by the built-in implementations for CLI commands such as `ng build` or `ng test`.
+-->
+컴파일, 테스트 실행과 같이 특정 환경설정으로 동작하는 Angular CLI의 복잡한 과정을 처리하기 위한 툴입니다.
+아키텍트는 [특정 환경설정](#target)으로 동작하는 [npm 패키지](#npm-package)를 [빌더](#builder) 형태로 실행하는 셸(shell)입니다.
+
+[워크스페이스 환경설정 파일](guide/workspace-config#project-tool-configuration-options) 섹션에서도 확인할 수 있듯이, 이 환경설정 파일의 "architect" 섹션을 확인하면 아키텍트 빌드 옵션이 어떻게 지정되어 있는지 확인할 수 있습니다.
+
+예를 들면, 기본 린트 툴은 `@angular-devkit/build_angular:tslint` 패키지이며, 이 패키지는 [TSLint](https://palantir.github.io/tslint/)를 활용하고, 이 패키지가 실행될 때 `tslint.json` 파일에 설정된 규칙을 따릅니다.
+
+[Angular CLI `ng run`](cli/run) 명령을 실행하면 [원하는 환경설정](#target)으로 빌더를 직접 실행할 수 있습니다.
+그래서 프로젝트 관리자가 원하는 대로 툴과 실행동작을 추가할 수 있습니다.
+`ng build`나 `ng test` 명령이 Angular CLI가 아니라 서드 파티 툴을 사용하도록 변경할 수도 있습니다.
+
 
 {@a attribute-directive}
 
@@ -73,32 +144,55 @@ Integrators can add builders to enable tools and workflows to run through the An
 {@a attribute-directives}
 
 
+<!--
 ## attribute directives
+-->
+## 어트리뷰트 디렉티브(attribute directives)
 
+<!--
 A category of [directive](#directive) that can listen to and modify the behavior of
 other HTML elements, attributes, properties, and components. They are usually represented
 as HTML attributes, hence the name.
 
 Learn more in [Attribute Directives](guide/attribute-directives).
+-->
+[디렉티브](#directive)의 한 종류이며, HTML 엘리먼트, 어트리뷰트, 프로퍼티, 컴포넌트의 행동을 감지하고 확장하는 역할을 합니다.
+이름에서 알 수 있듯이, 이 디렉티브는 HTML 어트리뷰트와 비슷하게 동작합니다.
+
+자세한 내용은 [어트리뷰트 디렉티브](guide/attribute-directives) 문서를 참고하세요.
 
 
 {@a B}
 
 {@a binding}
 
+<!--
 ## binding
+-->
+## 바인딩(binding)
 
+<!--
 Generally, the practice of setting a variable or property to a data value.
 Within Angular, typically refers to [data binding](#data-binding),
 which coordinates DOM object properties with data object properties.
 
 Sometimes refers to a [dependency-injection](#dependency-injection) binding
 between a [token](#token) and a dependency [provider](#provider).
+-->
+일반적으로는 변수나 프로퍼티 값을 할당하는 것을 의미합니다.
+Angular에서는 DOM 객체의 프로퍼티와 데이터 객체의 프로퍼티를 [데이터 바인딩](#data-binding)하는 것을 의미합니다.
+
+[의존성 주입](#dependency-injection)에서는 [토큰(token)](#token)과 [프로바이더(provider)](#provider)를 연결하는 것을 의미합니다.
+
 
 {@a bootstrap}
 
+<!--
 ## bootstrap
+-->
+## 부트스트랩(bootstrap)
 
+<!--
 A way to initialize and launch an app or system.
 
 In Angular, an app's root NgModule (`AppModule`) has a `bootstrap` property that identifies the app's top-level [components](#component).
@@ -106,11 +200,25 @@ During the bootstrap process, Angular creates and inserts these components into 
 You can bootstrap multiple apps in the same `index.html`. Each app contains its own components.
 
 Learn more in [Bootstrapping](guide/bootstrapping).
+-->
+애플리케이션이나 시스템을 초기화하고 실행하는 것을 의미합니다.
+
+Angular에서는 애플리케이션 최상위 NgModule(`AppModule`)에 지정된 `bootstrap` 프로퍼티에 따라 애플리케이션 최상위 [컴포넌트](#component)를 생성합니다.
+부트스트랩 과정 중에는 Angular가 최상위 컴포넌트를 생성해서 호스트 웹 페이지 `index.html`에 추가합니다.
+그리고 `index.html` 파일 하나에 여러 개의 앱을 부트스트랩할 수도 있습니다.
+각 앱들은 각각 컴포넌트를 구성합니다.
+
+자세한 내용은 [부트스트랩](guide/bootstrapping) 문서를 참고하세요.
+
 
 {@a builder}
 
+<!--
 ## builder
+-->
+## 빌더(builder)
 
+<!--
 A function that uses the [Architect](#architect) API to perform a complex process such as "build" or "test".
 The builder code is defined in an [npm package](#npm-package).
 
@@ -118,6 +226,15 @@ For example, [BrowserBuilder](https://github.com/angular/angular-cli/tree/master
 
 The [CLI command `ng run`](cli/run) invokes a builder with a specific [target configuration](#target).
 The [workspace configuration](guide/workspace-config) file, `angular.json`, contains default configurations for built-in builders.
+-->
+[아키텍트](#architect) API를 활용해서 애플리케이션을 빌드하거나 테스트하는 함수를 의미합니다.
+빌더 코드는 [npm 패키지](#npm-package)로 제공됩니다.
+
+예를 들면, [BrowserBuilder](https://github.com/angular/angular-cli/tree/master/packages/angular_devkit/build_angular/src/browser)는 [webpack](https://webpack.js.org/)을 사용해서 애플리케이션 코드를 빌드하며, [KarmaBuilder](https://github.com/angular/angular-cli/tree/master/packages/angular_devkit/build_angular/src/karma)는 Karma 서버를 실행하고 유닛 테스트를 실행합니다.
+
+[Angular CLI `ng run`](cli/run) 명령을 실행하면 [특정 환경설정](#target)으로 빌더를 직접 실행할 수 있습니다.
+기본 빌더는 [워크스페이스 환경설정 파일](guide/workspace-config) `angular.json` 파일에 정의되어 있습니다.
+
 
 {@a C}
 
