@@ -242,9 +242,14 @@ The [workspace configuration](guide/workspace-config) file, `angular.json`, cont
 {@a dash-case}
 {@a camelcase}
 {@a kebab-case}
+{@a case-types}
 
+<!--
 ## case types
+-->
+## 대소문자 표기법 종류(case types)
 
+<!--
 Angular uses capitalization conventions to distinguish the names of various types, as described in the [naming guidelines section](guide/styleguide#02-01) of the Style Guide. Here's a summary of the case types:
 
 * camelCase : Symbols, properties, methods, pipe names, non-component directive selectors, constants.
@@ -260,11 +265,35 @@ For example, "convert_link_mode".
 
 * UPPER_UNDERSCORE_CASE (or UPPER_SNAKE_CASE, or SCREAMING_SNAKE_CASE): Traditional for constants (acceptable, but prefer camelCase).
 Upper snake case uses words in all capital letters connected with underscores. For example, "FIX_ME".
+-->
+Angular는 타입 이름을 대문자 컨벤션으로 사용합니다.
+스타일 가이드 문서의 [명명 규칙 섹션](guide/styleguide#02-01)을 참고하세요.
+이 문서에서는 간단하게만 살펴봅시다:
+
+* 캐멀 케이스(camelCase) : 심볼, 프로퍼티, 메서드, 파이프 이름, 디렉티브 셀렉터, 상수에 사용합니다.
+"selectedHero"와 같이 첫 글자를 소문자로 시작합니다.
+
+* 대문자 캐멀 케이스(UpperCamelCase, PascalCase) : 클래스, 컴포넌트 클래스, 인터페이스, NgModule, 디렉티브, 파이프에 사용합니다.
+"HeroListComponent"와 같이 첫 글자를 대문자로 시작합니다.
+
+* 대시-케이스(dash-case, kebab-case) : 파일 이름, 컴포넌트 셀렉터에 사용합니다.
+ex. "app-hero-list"
+
+* 밑줄_케이스(underscore_case, snake_case) : Angular에서는 거의 사용되지 않습니다.
+ex. "convert_link_mode"
+
+* 대문자_밑줄_케이스(UPPER_UNDERSCORE_CASE, UPPER_SNAKE_CASE, SCREAMING_SNAKE_CASE) : 전통적으로 상수에 사용했습니다.
+ex. "FIX_ME"
+
 
 {@a change-detection}
 
+<!--
 ## change detection
+-->
+## 변화 감지(change detection)
 
+<!--
 The mechanism by which the Angular framework synchronizes the state of an application's UI with the state of the data.
 The change detector checks the current state of the data model whenever it runs, and maintains it as the previous state to compare on the next iteration.
 
@@ -277,14 +306,44 @@ Using the default ("CheckAlways") change-detection strategy, the change detector
 In the second phase, it updates the page DOM to reflect any new data values.
 
 If you set the `OnPush` ("CheckOnce") change-detection strategy, the change detector runs only when [explicitly invoked] (api/core/ChangeDetectorRef), or when it is triggered by an `Input` reference change or event handler. This typically improves performance. For more information, see [Optimize Angular's change detection](https://web.dev/faster-angular-change-detection/).
+-->
+Angular 프레임워크가 애플리케이션의 UI 상태와 데이터 상태를 동기화하는 구조를 의미합니다.
+변화 감지가 실행되면 데이터 모델의 현재 상태를 검사하고 이 상태를 다음 변화 감지 싸이클까지 유지해서 상태를 변경해야 할지 결정합니다.
+
+그래서 애플리케이션이 컴포넌트 데이터를 변경하면 이 내용이 DOM 프로퍼티에 반영되는 것을 확인할 수 있습니다.
+변화 감지는 화면에 변경된 내용을 데이터 모델에 반영하는 역할도 합니다.
+사용자가 UI에서 어떤 동작을 하면 이벤트가 발생하고 데이터 모델의 상태를 변경시키는 식입니다.
+이벤트는 변화 감지를 발생시킨다고 볼 수 있습니다.
+
+기본 변화 감지 정책("CheckAlways")를 사용하면 템플릿에 [데이터가 프로퍼티에 바인딩](#data-binding) 될 때마다 [뷰 계층](#view-tree)을 따라 내려가며 변화 감지가 동작합니다.
+이 때 첫 번째 단계에서는 현재 상태와 이전 상태를 비교해서 변화가 발생한 상태를 모두 취합하며, 두 번째 단계에서는 새로운 데이터로 페이지 DOM을 갱신합니다.
+
+변화 감지 정책으로 `OnPush`("CheckOnce")를 사용하면 변화 감지 동작은 개발자가 [명시적으로 실행](api/core/ChangeDetectorRef)하거나 `Input` 값이 변경되었을 때, 이벤트 핸들러가 동작했을 때만 실행됩니다.
+일반적으로 이 정책은 성능을 향상시키기 위한 용도로 사용됩니다.
+자세한 내용은 [Angular 변화 감지 동작 최적화하기](https://web.dev/faster-angular-change-detection/) 문서를 참고하세요.
+
 
 {@a class-decorator}
 
+<!--
 ## class decorator
+-->
+## 클래스 데코레이터(class decorator)
 
+<!--
 A [decorator](#decorator) that appears immediately before a class definition, which declares the class to be of the given type, and provides metadata suitable to the type.
 
 The following decorators can declare Angular class types:
+* `@Component()`
+* `@Directive()`
+* `@Pipe()`
+* `@Injectable()`
+* `@NgModule()`
+-->
+클래스 앞에 지정하는 [데코레이터](#decorator)를 의미합니다.
+클래스를 특정 타입으로 지정하거나 해당 타입에 맞는 메타데이터를 지정하는 용도로 사용합니다.
+
+Angular 클래스 타입에 지정할 수 있는 데코레이터는 이런 것들이 있습니다:
 * `@Component()`
 * `@Directive()`
 * `@Pipe()`
@@ -294,31 +353,64 @@ The following decorators can declare Angular class types:
 
 {@a class-field-decorator}
 
+<!--
 ## class field decorator
+-->
+## 클래스 필드 데코레이터(class field decorator)
 
+<!--
 A [decorator](#decorator) statement immediately before a field in a class definition that declares the type of that field. Some examples are `@Input` and `@Output`.
+-->
+클래스 필드 앞에 지정하는 [데코레이터](#decorator)를 의미합니다.
+해당 필드를 `@Input`, `@Output`과 같은 특정 타입으로 지정합니다.
+
 
 {@a collection}
 
+<!--
 ## collection
+-->
+## 콜렉션(collection)
 
+<!--
 In Angular, a set of related [schematics](#schematic) collected in an [npm package](#npm-package).
+-->
+Angular에서는 [npm 패키지](#npm-package)로 구성된 [스키매틱](#schematic) 묶음을 의미합니다.
+
 
 {@a cli}
-
+{@a command-line-interface-cli}
+<!--
 ## command-line interface (CLI)
+-->
+## 커맨드라인 인터페이스(command-line interface, CLI)
 
+<!--
 The [Angular CLI](cli) is a command-line tool for managing the Angular development cycle. Use it to create the initial filesystem scaffolding for a [workspace](#workspace) or [project](#project), and to run [schematics](#schematic) that add and modify code for initial generic versions of various elements. The CLI supports all stages of the development cycle, including building, testing, bundling, and deployment.
 
 * To begin using the CLI for a new project, see [Local Environment Setup](guide/setup-local "Setting up for Local Development").
 * To learn more about the full capabilities of the CLI, see the [CLI command reference](cli).
 
 See also [Schematics CLI](#schematics-cli).
+-->
+[Angular CLI](cli)는 Angular 개발 과정에 사용하는 커맨드라인 툴입니다.
+Angular CLI를 활용하면 [워크스페이스](#workspace)나 [프로젝트](#project)와 같은 파일시스템 기본 틀을 생성할 수 있고, [스키매틱](#schematic)을 실행할 수 있으며, Angular 구성요소를 자동으로 생성할 수 있습니다.
+
+* Angular CLI를 사용해서 프로젝트를 시작하려면 [로컬 개발환경 설정](guide/setup-local "Setting up for Local Development") 문서를 참고하세요.
+
+* Angular CLI를 사용하는 방법에 대해 알아보려면 [CLI 명령 참고](cli) 문서를 참고하세요.
+
+[스키매틱 CLI](#schematics-cli) 섹션도 확인해 보세요.
+
 
 {@a component}
 
+<!--
 ## component
+-->
+## 컴포넌트(component)
 
+<!--
 A class with the `@Component()` [decorator](#decorator) that associates it with a companion [template](#template). Together, the component class and template define a [view](#view).
 A component is a special type of [directive](#directive).
 The `@Component()` decorator extends the `@Directive()` decorator with template-oriented features.
@@ -326,24 +418,55 @@ The `@Component()` decorator extends the `@Directive()` decorator with template-
 An Angular component class is responsible for exposing data and handling most of the view's display and user-interaction logic through [data binding](#data-binding).
 
 Read more about component classes, templates, and views in [Introduction to Angular concepts](guide/architecture).
+-->
+`@Component()` [데코레이터](#decorator)를 사용해서 [템플릿](#template)과 연결된 클래스를 의미합니다.
+[뷰](#view)는 이 컴포넌트 클래스와 템플릿이 조합되어 렌더링됩니다.
+컴포넌트는 [디렉티브](#directive)의 특수한 타입이라고 할 수 있습니다.
+`@Component()` 데코레이터는 `@Directive()` 데코레이터를 기반으로 템플릿 관련 기능을 확장한 것입니다.
 
 
+Angular 컴포넌트 클래스는 화면에 표시될 데이터를 제공하며 화면에서 일어나는 모든 동작과 사용자 입력을 [데이터 바인딩](#data-binding)으로 처리합니다.
+
+컴포넌트 클래스, 템플릿, 뷰에 대해 알아보려면 [Angular 개요](guide/architecture) 문서를 참고하세요.
+
+
+{@a configuration}
+<!--
 ## configuration
+-->
+## 환경설정(configuration)
 
+<!--
 See  [workspace configuration](#cli-config)
+-->
+[워크스페이스 환경설정](#cli-config) 섹션을 참고하세요.
+
 
 {@a content-projection}
 
+<!--
 ## content projection
+-->
+## 컨텐츠 프로젝션(content projection)
 
+<!--
 A way to insert DOM content from outside a component into the component's view in a designated spot.
 
 For more information, see [Responding to changes in content](guide/lifecycle-hooks#content-projection).
+-->
+컴포넌트 밖에서 컴포넌트 안쪽으로 DOM 컨텐츠를 전달해서 표시하는 것을 의미합니다.
+
+자세한 내용은 [외부 컨텐츠 변경사항 감지하기](guide/lifecycle-hooks#content-projection) 문서를 참고하세요.
+
 
 {@a custom-element}
 
+<!--
 ## custom element
+-->
+## 커스텀 엘리먼트(custom element)
 
+<!--
 A web platform feature, currently supported by most browsers and available in other browsers through polyfills (see [Browser support](guide/browser-support)).
 
 The custom element feature extends HTML by allowing you to define a tag whose content is created and controlled by JavaScript code. A custom element (also called a *web component*) is recognized by a browser when it's added to the [CustomElementRegistry](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry).
@@ -353,14 +476,29 @@ You can use the API to transform an Angular component so that it can be register
 See [Angular element](#angular-element).
 
 See also [dynamic component loading](#dynamic-components).
+-->
+웹 플랫폼이 제공하는 기능이며, 최신 브라우저는 모두 지원하고 오래된 브라우저는 폴리필을 활용하면 사용할 수 있습니다.
+[브라우저 지원](guide/browser-support) 문서를 참고하세요.
+
+커스텀 엘리먼트는 JavaScript 코드로 동작하는 태그를 정의해서 표준 HTML 문법을 확장하는 것을 의미합니다.
+커스텀 엘리먼트는 *웹 컴포넌트(web component)* 라고도 하며, 브라우저 [CustomElementRegistry](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry)에 추가하면 사용할 수 있습니다.
+
+커스텀 엘리먼트는 Angular 컴포넌트로 변환할 수 있기 때문에 Angular 애플리케이션의 DOM 안에서는 커스텀 엘리먼트를 자유롭게 사용할 수 있습니다.
+이렇게 사용되는 커스텀 엘리먼트 태그는 컴포넌트의 화면을 구성하거나, Angular의 변화 감지, 데이터 바인딩 기능을 활용할 수 있으며, Angular의 동작과 별개로 컨텐츠를 추가할 수도 있습니다.
+
+자세한 내용은 [Angular 엘리먼트](#angular-element) 섹션과 [컴포넌트 동적 로드하기](#dynamic-components) 섹션을 참고하세요.
 
 
 {@a D}
 
 {@a data-binding}
 
+<!--
 ## data binding
+-->
+## 데이터 바인딩(data binding)
 
+<!--
 A process that allows apps to display data values to a user and respond to user
 actions (such as clicks, touches, and keystrokes).
 
@@ -379,11 +517,31 @@ Read about the following forms of binding in Angular's [Template Syntax](guide/t
  * [Class binding](guide/attribute-binding#class-binding)
  * [Style binding](guide/attribute-binding#style-binding)
  * [Two-way data binding with ngModel](guide/built-in-directives#ngModel)
+-->
+사용자가 볼 수 있도록 데이터를 화면에 표시하거나 사용자의 동작(ex. 클릭, 터치, 키입력)에 반응하는 과정을 의미합니다.
+
+데이터 바인딩을 사용하려면 HTML 위젯과 데이터 소스의 관계를 정의해야 하며, 이 관계를 정의하고 나면 프레임워크가 필요한 작업을 알아서 처리합니다.
+데이터 바인딩은 애플리케이션 데이터를 HTML로 밀어넣거나 이벤트 리스너를 붙이는 과정, 화면에서 변경된 내용을 끌어와서 애플리케이션 데이터를 갱신하는 과정을 대신하는 것입니다.
+
+Angular [템플릿 문법](guide/template-syntax)에서 다루는 데이터 바인딩의 종류는 이런 것들이 있습니다:
+
+ * [문자열 바인딩(Interpolation)](guide/interpolation)
+ * [프로퍼티 바인딩(Property binding)](guide/property-binding)
+ * [이벤트 바인딩(Event binding)](guide/event-binding)
+ * [어트리뷰트 바인딩(Attribute binding)](guide/attribute-binding)
+ * [클래스 바인딩(Class binding)](guide/attribute-binding#class-binding)
+ * [스타일 바인딩(Style binding)](guide/attribute-binding#style-binding)
+ * [ngModel을 활용하는 양방향 바인딩(Two-way data binding with ngModel)](guide/built-in-directives#ngModel)
+
 
 {@a declarable}
 
+<!--
 ## declarable
+-->
+## 선언할 수 있는 항목(declarable)
 
+<!--
 A class type that you can add to the `declarations` list of an [NgModule](#ngmodule).
 You can declare [components](#component), [directives](#directive), and [pipes](#pipe).
 
@@ -393,14 +551,29 @@ Don't declare the following:
 * NgModule classes
 * Service classes
 * Non-Angular classes and objects, such as strings, numbers, functions, entity models, configurations, business logic, and helper classes
+-->
+[NgModule](#ngmodule) `declarations` 배열에 등록할 수 있는 클래스 타입을 의미합니다.
+이 배열에는 [컴포넌트](#component), [디렉티브](#directive), [파이프](#pipe)를 등록할 수 있습니다.
+
+이런 클래스는 등록할 수 없습니다:
+
+* 다른 NgModule에 등록된 클래스
+* 다른 패키지에서 불러온 디렉티브 배열(ex. `@angular/forms`에서 불러온 `FORMS_DIRECTIVES`)
+* NgModule 클래스
+* 서비스 클래스
+* Angular 구성요소가 아닌 클래스, 객체(문자열, 숫자, 함수, 데이터 모델, 환경설정, 비즈니스 로직, 헬퍼 클래스)
 
 
 {@a decorator}
 
 {@a decoration}
-
+{@a decorator--decoration}
+<!--
 ## decorator | decoration
+-->
+## 데코레이터(decorator), 데코레이션(decoration)
 
+<!--
 A function that modifies a class or property definition. Decorators (also called *annotations*) are an experimental (stage 2) [JavaScript language feature](https://github.com/wycats/javascript-decorators).
 TypeScript adds support for decorators.
 
@@ -408,40 +581,82 @@ Angular defines decorators that attach metadata to classes or properties
 so that it knows what those classes or properties mean and how they should work.
 
 See [class decorator](#class-decorator), [class field decorator](#class-field-decorator).
+-->
+클래스나 클래스 프로퍼티의 동작을 변경하는 함수를 의미합니다.
+데코레이터(어노테이션, annotation)은 [JavaScript 언어 스펙](https://github.com/wycats/javascript-decorators) 중 실험적인(스테이지 2) 기능에 해당됩니다.
+TypeScript는 데코레이터를 지원하고 있습니다.
+
+Angular는 데코레이터에 메타데이터를 지정하는 방식으로 클래스나 클래스 프로퍼티를 확장합니다.
+
+[클래스 데코레이터](#class-decorator), [클래스 필드 데코레이터](#class-field-decorator)도 확인해 보세요.
+
 
 {@a di}
 
 {@a dependency-injection}
+{@a dependency-injection-di}
 
+<!--
 ## dependency injection (DI)
+-->
+## 의존성 주입(dependency injection, DI)
 
+<!--
 A design pattern and mechanism for creating and delivering some parts of an application (dependencies) to other parts of an application that require them.
 
 In Angular, dependencies are typically services, but they also can be values, such as strings or functions.
 An [injector](#injector) for an app (created automatically during bootstrap) instantiates dependencies when needed, using a configured [provider](#provider) of the service or value.
 
 Learn more in [Dependency Injection in Angular](guide/dependency-injection).
+-->
+애플리케이션의 일부(의존성 객체)를 사용하는 시점에 외부에서 생성해서 전달하는 디자인 패턴이자 동작 방식을 의미합니다.
+
+Angular에서 의존성 객체는 일반적으로 서비스이지만, 특정 값이나 문자열, 함수도 의존성 객체가 될 수 잇습니다.
+애플리케이션은 부트스트랩 단계에서 자동으로 [인젝터(injector)](#injector)를 생성하며, 필요한 시점에 이 인젝터가 [프로바이더](#provider)에 등록된 대로 의존성 객체를 생성해서 전달합니다.
+
+자세한 내용은 [Angular의 의존성 주입](guide/dependency-injection) 문서를 참고하세요.
+
 
 {@a di-token}
 
+<!--
 ## DI token
+-->
+## 의존성 객체 토큰(DI token)
 
+<!--
 A lookup token associated with a dependency [provider](#provider), for use with the [dependency injection](#di) system.
+-->
+[의존성 주입](#di) 시스템에서 의존성 객체의 [프로바이더](#provider)를 찾을 때 사용하는 토큰입니다.
+
 
 {@a differential-loading}
 
+<!--
 ## differential loading
+-->
+## 증분 로딩(differential loading)
 
+<!--
 A build technique that creates two bundles for an application. One smaller bundle is for modern browsers. A second, larger bundle allows the application to run correctly in older browsers (such as IE11) that do not support all modern browser APIs.
 
 For more information, see the [Deployment](guide/deployment#differential-loading) guide.
+-->
+애플리케이션 빌드 결과물을 두 벌로 생성하는 테크닉을 의미합니다.
+이 방식을 사용하면 최신 브라우저에서 동작하는 작은 빌드 결과물을 한 벌 생성하고, 최신 브라우저 API를 지원하지 않는 오래된 브라우저(ex. IE11)에서 동작하는 빌드 결과물을 한 벌 생성합니다.
+
+자세한 내용은 [배포](guide/deployment#differential-loading) 문서를 참고하세요.
 
 
 {@a directive}
 {@a directives}
 
+<!--
 ## directive
+-->
+## 디렉티브(directive)
 
+<!--
 A class that can modify the structure of the DOM or modify attributes in the DOM and component data model. A directive class definition is immediately preceded by a `@Directive()` [decorator](#decorator) that supplies metadata.
 
 A directive class is usually associated with an HTML element or attribute, and that element or attribute is often referred to as the directive itself. When Angular finds a directive in an HTML [template](#template), it creates the matching directive class instance and gives the instance control over that portion of the browser DOM.
@@ -456,49 +671,107 @@ There are three categories of directive:
 Angular supplies a number of built-in directives that begin with the `ng` prefix.
 You can also create new directives to implement your own functionality.
 You associate a *selector* (an HTML tag such as `<my-directive>`) with a custom directive, thereby extending the [template syntax](guide/template-syntax) that you can use in your apps.
+-->
+DOM 구조, 어트리뷰트 동작, 컴포넌트 데이터 모델을 조작하는 클래스를 의미합니다.
+디렉티브 클래스는 메타데이터를 `@Directive()` [데코레이터](#decorator)에 전달하고 클래스 앞에 붙여 선언합니다.
+
+디렉티브 클래스는 일반적으로 HTML 엘리먼트나 어트리뷰트와 관련이 있으며, 디렉티브 자체를 조작하기도 합니다.
+Angular는 HTML [템플릿](#template)에서 디렉티브 클래스와 매칭되는 셀렉터를 찾으면 해당 디렉티브 클래스의 인스턴스를 생성하며, 이 인스턴스가 브라우저 DOM을 조작합니다.
+
+디렉티브는 3종류로 구분할 수 있습니다:
+
+* [컴포넌트(component)](#component) : `@Directive()`를 확장한 `@Component()` 데코레이터를 사용합니다. 템플릿과 클래스 코드를 묶은 단위입니다.
+
+* [어트리뷰트 디렉티브(attribute directive)](#attribute-directive) : 엘리먼트의 동작이나 모습을 조작합니다.
+
+* [구조 디렉티브(structural directive)](#structural-directive) : DOM 구조를 조작합니다.
+
+Angular가 제공하는 기본 디렉티브는 모두 `ng` 접두사로 시작됩니다.
+그리고 필요한 로직을 담아 새로운 디렉티브를 만드는 것도 가능합니다.
+디렉티브의 *셀렉터*를 `<my-directive>`와 같이 정의한 후에 [템플릿 문법](guide/template-syntax)에 따라 원하는 동작을 하면 됩니다.
+
 
 {@a dom}
 
+<!--
 ## domain-specific language (DSL)
+-->
+## 특정 도메인 언어(domain-specific language, DSL)
 
+<!--
 A special-purpose library or API; see [Domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language).
 Angular extends TypeScript with domain-specific languages for a number of domains relevant to Angular apps, defined in NgModules such as [animations](guide/animations), [forms](guide/forms), and [routing and navigation](guide/router).
+-->
+특정 용도로 사용되는 라이브러리나 API를 의미합니다.
+[Domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language) 문서를 참고하세요.
+Angular는 TypeScript를 특정 도메인 언어로 사용해서 Angular앱에 필요한 기능을 구현하고 있습니다.
+[애니메이션](guide/animations), [폼](guide/forms), [라우팅과 네비게이션](guide/router) 등이 그렇습니다.
+
 
 {@a dynamic-components}
 
+<!--
 ## dynamic component loading
+-->
+## 컴포넌트 동적 로드하기
 
+<!--
 A technique for adding a component to the DOM at run time. Requires that you exclude the component from compilation and then connect it to Angular's change-detection and event-handling framework when you add it to the DOM.
 
 See also [custom element](#custom-element), which provides an easier path with the same result.
+-->
+실행시점에 컴포넌트를 DOM에 추가하는 테크닉을 의미합니다.
+이 컴포넌트는 DOM에 추가되는 시점에 컴파일되며 이 시점부터 Angular의 변화 감지 동작과 이벤트 처리 동작이 연결됩니다.
+
+[커스텀 엘리먼트](#custom-element)를 사용해도 같은 효과를 낼 수 있지만 커스텀 엘리먼트를 활용하는 방법이 좀 더 쉽습니다.
 
 
 {@a E}
 
 {@a eager-loading}
 
+<!--
 ## eager loading
+-->
+## 즉시 로딩(eager loading)
 
+<!--
 NgModules or components that are loaded on launch are called eager-loaded, to distinguish them from those
 that are loaded at run time (lazy-loaded).
 See [lazy loading](#lazy-load).
+-->
+애플리케이션이 로드되면서 함께 로드되는 NgModule이나 컴포넌트를 즉시 로딩(eager-loaded)되었다고 합니다.
+실행시점에 로드되는 지연로딩(lazy-loaded)과는 다릅니다.
+
+[지연 로딩](#lazy-load) 섹션을 참고하세요.
 
 
 {@a ecma}
 
 ## ECMAScript
 
+<!--
 The [official JavaScript language specification](https://en.wikipedia.org/wiki/ECMAScript).
 
 Not all browsers support the latest ECMAScript standard, but you can use a [transpiler](#transpile) (like [TypeScript](#typescript)) to write code using the latest features, which will then be transpiled to code that runs on versions that are supported by browsers.
 
 To learn more, see [Browser Support](guide/browser-support).
+-->
+[JavaScript 언어의 공식 스펙](https://en.wikipedia.org/wiki/ECMAScript)을 의미합니다.
+
+모든 브라우저가 ECMAScript 표준을 지원하는 것은 아니기 때문에 최신 기능을 활용하려면 [TypeScript](#typescript)와 같은 [트랜스파일러](#transpile)를 사용해서 브라우저 버전에 맞는 코드로 변환해야 합니다.
+
+자세한 내용을 알아보려면 [브라우저 지원](guide/browser-support) 문서를 참고하세요.
 
 
 {@a element}
 
+<!--
 ## element
+-->
+## 엘리먼트(element)
 
+<!--
 Angular defines an `ElementRef` class to wrap render-specific native UI elements.
 In most cases, this allows you to use Angular templates and data binding to access DOM elements
 without reference to the native element.
@@ -507,44 +780,90 @@ The documentation generally refers to *elements* (`ElementRef` instances), as di
 (which can be accessed directly if necessary).
 
 Compare to [custom element](#custom-element).
+-->
+Angular는 표준 UI 엘리먼트를 랩핑하는 `ElementRef` 클래스를 제공합니다.
+그래서 보통은 표준 엘리먼트를 직접 참조하지 않아도 Angular 템플릿과 데이터 바인딩을 처리할 수 있습니다.
+
+Angular 가이드 문서에서 언급하는 *엘리먼트* 는 보통 *DOM 엘리먼트* 를 의미합니다.
+
+[커스텀 엘리먼트](#custom-element)와는 어떻게 다른지 확인해 보세요.
+
 
 {@a entry-point}
 
+<!--
 ## entry point
+-->
+## 진입점(entry point)
 
+<!--
 A [JavaScript module](#module) that is intended to be imported by a user of [an
 npm package](guide/npm-packages). An entry-point module typically re-exports
 symbols from other internal modules. A package can contain multiple
 entry points. For example, the `@angular/core` package has two entry-point
 modules, which can be imported using the module names `@angular/core` and
 `@angular/core/testing`.
+-->
+[npm 패키지](guide/npm-packages)로 제공되어 개발자가 로드해서 사용하는 [JavaScript 모듈](#module)를 의미합니다.
+진입점이 되는 모듈은 일반적으로 다른 내부 모듈의 심볼을 불러와서 다시 외부로 공개(re-export) 하는 방식으로 구성됩니다.
+예를 들어 `@angular/core` 패키지에는 진입점이 되는 모듈이 2개 있는데, 각각 `@angular/core`와 `@angular/core/testing` 모듈을 로드합니다.
+
 
 {@a F}
 
 {@a form-control}
 
+<!--
 ## form control
+-->
+## 폼 컨트롤(form control)
 
+<!--
 A instance of `FormControl`, which is a fundamental building block for Angular forms. Together with `FormGroup` and `FormArray`, tracks the value, validation, and status of a form input element.
 
 Read more forms in the [Introduction to forms in Angular](guide/forms-overview).
+-->
+Angular 폼을 구성하는 개별 구성요소인 `FormControl` 인스턴스를 의미합니다.
+폼 컨트롤은 `FormGroup`이나 `FormArray`로 묶어서 관리할 수 있으며, 폼 입력 엘리먼트의 값을 추적하면서 유효성을 검사하고 폼의 상태를 관리합니다.
+
+자세한 내용은 [Angular 폼 소개](guide/forms-overview) 문서를 참고하세요.
+
 
 {@a form-model}
 
+<!--
 ## form model
+-->
+## 폼 모델(form model)
 
+<!--
 The "source of truth" for the value and validation status of a form input element at a given point in time. When using [reactive forms](#reactive-forms), the form model is created explicitly in the component class. When using [template-driven forms](#template-driven-forms), the form model is implicitly created by directives.
 
 Learn more about reactive and template-driven forms in the [Introduction to forms in Angular](guide/forms-overview).
+-->
+폼 입력 엘리먼트의 값과 유효성 상태를 참조할 때 사용하는 "원천 소스(source of truth)"를 의미합니다.
+[반응형 폼](#reactive-forms)을 사용하면 컴포넌트 클래스에 명시적으로 폼 모델을 구성하고, [템플릿 기반 폼](#template-driven-forms)을 사용하면 디렉티브로 폼 모델을 구성합니다.
+
+반응형 폼과 템플릿 기반 폼에 대해 알아보려면 [Angular 폼 소개](guide/forms-overview) 문서를 참고하세요.
+
 
 {@a form-validation}
 
+<!--
 ## form validation
+-->
+## 폼 유효성 검사(form validation)
 
+<!--
 A check that runs when form values change and reports whether the given values are correct and complete, according to the defined constraints. Reactive forms apply [validator functions](guide/form-validation#adding-to-reactive-forms). Template-driven forms use [validator directives](guide/form-validation#adding-to-template-driven-forms).
 
 
 To learn more, see [Form Validation](guide/form-validation).
+-->
+폼 값이 변경되었을 때 정해진 규칙에 따라 이 값을 검사해서 값이 유효한지, 입력이 끝났는지 판단하는 과정을 의미합니다.
+반응형 폼은 [유효성 검사 함수](guide/form-validation#adding-to-reactive-forms)를 사용하며 템플릿 기반 폼은 [유효성 검사 디렉티브](guide/form-validation#adding-to-template-driven-forms)를 사용합니다.
+
+자세한 내용은 [폼 유효성 검사](guide/form-validation) 문서를 참고하세요.
 
 {@a G}
 
@@ -556,21 +875,42 @@ To learn more, see [Form Validation](guide/form-validation).
 
 {@a immutability}
 
+<!--
 ## immutability
+-->
+## 불변성(immutability)
 
+<!--
 The ability to alter the state of a value after its creation. [Reactive forms](#reactive-forms) perform immutable changes in that
 each change to the data model produces a new data model rather than modifying the existing one. [Template-driven forms](#template-driven-forms) perform mutable changes with `NgModel` and [two-way data binding](#data-binding) to modify the existing data model in place.
+-->
+생성된 후에 상태가 변경될 수 있는 성질을 의미합니다.
+[반응형 폼](#reactive-forms)에서는 불변성을 기반으로 하기 때문에 개별 데이터가 변경될 때마다 기존 데이터 모델을 활용하지 않고 새로운 데이터 모델을 생성합니다.
+[템플릿 기반 폼](#template-driven-forms)은 `NgModel`과 [양방향 데이터 바인딩](#data-binding)을 활용해서 기존 데이터 모델 내부 값을 변경합니다.
+
 
 {@a injectable}
 
+<!--
 ## injectable
+-->
+## 의존성으로 주입할 수 있는 객체(injectable)
 
+<!--
 An Angular class or other definition that provides a dependency using the [dependency injection](#di) mechanism. An injectable [service](#service) class must be marked by the `@Injectable()` [decorator](#decorator). Other items, such as constant values, can also be injectable.
+-->
+[의존성 주입](#di) 메커니즘에 의해 의존성 객체로 주입될 수 있는 Angular 클래스나 객체를 의미합니다.
+의존성으로 주입되는 [서비스](#service) 클래스는 반드시 `@Injectable()` [데코레이터](#decorator)가 지정되어야 하며, 상수는 데코레이터가 지정되지 않아도 의존성 객체로 주입될 수 있습니다.
+
 
 {@a injector}
 
+<!--
 ## injector
+-->
+## 인젝터(injector)
 
+<!--
 An object in the Angular [dependency-injection](#dependency-injection) system
 that can find a named dependency in its cache or create a dependency
 using a configured [provider](#provider).
@@ -584,22 +924,49 @@ and are inherited through the component hierarchy.
 * You can configure injectors with different providers that can provide different implementations of the same dependency.
 
 Learn more about the injector hierarchy in [Hierarchical Dependency Injectors](guide/hierarchical-dependency-injection).
+-->
+Angular [의존성 주입](#dependency-injection) 시스템 안에 있는 객체로, 미리 설정된 [프로바이더](#provider) 대로 의존성 객체를 생성하고 캐싱하는 역할을 합니다.
+인젝터는 애플리케이션 부트스트랩 과정 중에 NgModule이 자동으로 생성하며, 컴포넌트 계층에 따라 개별 인젝터가 생성됩니다.
+
+* 인젝터는 의존성 객체를 싱글턴(singleton) 인스턴스로 관리하기 때문에, 여러 컴포넌트에 같은 인스턴스를 주입할 수 있습니다.
+
+* NgModule와 컴포넌트 계층에 따라 구성되는 인젝터 계층에 따라 의존성 객체가 다른 인스턴스로 주입될 수 있습니다.
+
+* 어떤 의존성 객체를 다른 객체가 대신하도록 프로바이더를 등록할 수 있습니다.
+
+인젝터 계층에 대해 자세하게 알아보려면 [인젝터 계층](guide/hierarchical-dependency-injection) 문서를 참고하세요.
+
 
 {@a input}
 
+<!--
 ## input
+-->
+## 입력 프로퍼티 데코레이터(input)
 
+<!--
 When defining a [directive](#directive), the `@Input()` decorator on a directive property
 makes that property available as a *target* of a [property binding](guide/property-binding).
 Data values flow into an input property from the data source identified
 in the [template expression](#template-expression) to the right of the equal sign.
 
 To learn more, see [input and output properties](guide/inputs-outputs).
+-->
+[디렉티브](#directive)를 정의할 때 디렉티브 프로퍼티에 `@Input()` 데코레이터를 붙이면 이 프로퍼티를 [프로퍼티 바인딩](guide/property-binding) *대상* 으로 만들 수 있습니다.
+[템플릿 표현식](#template-expression)에서 등호(`=`) 오른쪽에 있는 데이터 값이 이 입력 프로퍼티를 통해 디렉티브 안쪽으로 전달됩니다.
+
+자세한 내용은 [입출력 프로퍼티](guide/inputs-outputs) 문서를 참고하세요.
+
+
 
 {@a interpolation}
 
+<!--
 ## interpolation
+-->
+## 문자열 바인딩(interpolation)
 
+<!--
 A form of property [data binding](#data-binding) in which a [template expression](#template-expression) between double-curly braces renders as text.
 That text can be concatenated with neighboring text before it is assigned to an element property
 or displayed between element tags, as in this example.
@@ -610,15 +977,31 @@ or displayed between element tags, as in this example.
 
 
 Read more in the [Interpolation](guide/interpolation) guide.
+-->
+[템플릿 표현식](#template-expression)에서 이중 중괄호(`{{`, `}}`)로 [바인딩된 데이터](#data-binding)를 문자열로 렌더링하는 방식입니다.
+이 문자열은 이웃한 문자열과 조합되어 엘리먼트 프로퍼티로 할당되거나 엘리먼트 태그 안에 표시됩니다.
+
+```html
+<label>My current hero is {{hero.name}}</label>
+```
+
+자세한 내용은 [문자열 바인딩](guide/interpolation) 문서를 참고하세요.
+
 
 {@a ivy}
 
 ## Ivy
 
+<!--
 Ivy is the code name for Angular's [next-generation compilation and rendering pipeline](https://blog.angular.io/a-plan-for-version-8-0-and-ivy-b3318dfc19f7).
 With the version 9 release of Angular, the new compiler and runtime instructions are used by default instead of the older compiler and runtime, known as [View Engine](#ve).
 
 See [Angular Ivy](guide/ivy).
+-->
+Ivy는 Angular의 [다음 세대 컴파일러이자 렌더링 파이프라인](https://blog.angular.io/a-plan-for-version-8-0-and-ivy-b3318dfc19f7)의 코드명입니다.
+Angular 9 버전부터는 이전까지 사용하던 [View Engine](#ve)대신 이 컴파일러가 기본으로 사용됩니다.
+
+자세한 내용은 [Angular Ivy](guide/ivy) 문서를 참고하세요.
 
 
 {@a J}
@@ -627,7 +1010,10 @@ See [Angular Ivy](guide/ivy).
 
 ## JavaScript
 
+<!--
 See [ECMAScript](#ecma), [TypeScript](#typescript).
+-->
+[ECMAScript](#ecma), [TypeScript](#typescript) 섹션을 참고하세요.
 
 
 {@a jit}
