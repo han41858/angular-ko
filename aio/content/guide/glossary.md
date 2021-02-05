@@ -1018,9 +1018,12 @@ See [ECMAScript](#ecma), [TypeScript](#typescript).
 
 {@a jit}
 
-
+<!--
 ## just-in-time (JIT) compilation
+-->
+## JIT(just-in-time) 컴파일
 
+<!--
 The Angular just-in-time (JIT) compiler converts your Angular HTML and TypeScript code into
 efficient JavaScript code at run time, as part of bootstrapping.
 
@@ -1029,6 +1032,13 @@ JIT mode is strongly discouraged for production use
 because it results in large application payloads that hinder the bootstrap performance.
 
 Compare to [ahead-of-time (AOT) compilation](#aot).
+-->
+Angular JIT 컴파일러는 Angular HTML 템플릿과 TypeScript 코드를 브라우저에서 실행할 수 있는 JavaScript 코드로 변환하는 컴파일러이며, 애플리케이션이 부트스트랩되는 시점에 실행됩니다.
+JIT 컴파일러는 개발단계에 활용하면 좋기 때문에 Angular 8 버전까지는 Angular CLI로 `ng build`나 `ng serve`명령을 실행하면 JIT 컴파일러가 사용되었습니다.
+하지만 애플리케이션을 다운받아야 하는 용량이 커지고 부트스트랩 속도도 느리기 때문에 운영용으로는 사용하지 않는 것이 좋습니다.
+Angular 9 버전부터는 기본 컴파일러가 AOT 컴파일러로 변경되었습니다.
+
+[AOT 컴파일](#aot)과 어떻게 다른지 확인해 보세요.
 
 
 {@a K}
@@ -1037,19 +1047,34 @@ Compare to [ahead-of-time (AOT) compilation](#aot).
 {@a L}
 
 {@a lazy-load}
+{@a lazy-loading}
 
+<!--
 ## lazy loading
+-->
+## 지연 로딩(lazy loading)
 
+<!--
 A process that speeds up application load time by splitting the application into multiple bundles and loading them on demand.
 For example, dependencies can be lazy loaded as needed&mdash;as opposed to [eager-loaded](#eager-loading) modules that are required by the root module and are thus loaded on launch.
 
 The [router](#router) makes use of lazy loading to load child views only when the parent view is activated.
 Similarly, you can build custom elements that can be loaded into an Angular app when needed.
+-->
+애플리케이션 로딩 시간을 줄이기 위해 애플리케이션을 작은 단위로 나누고 필요할 때 로드하는 과정을 의미합니다.
+이와 반대로 [즉시 로딩](#eager-loading)되는 모듈은 애플리케이션이 실행되면서 로드되는 모듈을 의미하며, 애플리케이션 최상위 모듈이 즉시 로딩 모듈에 해당됩니다.
+
+[라우터](#router)를 사용하면 부모 화면이 활성화되었을 때만 자식 화면을 지연로딩할 수 있으며, 커스텀 엘리먼트를 사용할 때 로드하는 방식도 활용할 수 있습니다.
+
 
 {@a library}
 
+<!--
 ## library
+-->
+## library(라이브러리)
 
+<!--
 In Angular, a [project](#project) that provides functionality that can be included in other Angular apps.
 A library isn't a complete Angular app and can't run independently.
 (To add re-usable Angular functionality to non-Angular web apps, you can use Angular [custom elements](#angular-element).)
@@ -1059,11 +1084,26 @@ A library isn't a complete Angular app and can't run independently.
 * Application developers can use the [Angular CLI](#cli) to `add` a published library for use with an application in the same [workspace](#workspace).
 
 See also [schematic](#schematic).
+-->
+Angular 앱에 어떤 기능을 제공하는 [프로젝트](#project)를 의미합니다.
+라이브러리는 완전한 Angular 앱이 아니며 단독으로 실행할 수도 없습니다.
+Angular를 사용하지 않은 웹앱에서 Angular 기능을 사용하려면 Angular [커스텀 엘리먼트](#angular-element)를 참고하세요.
+
+* 라이브러리 개발자라면 [Angular CLI](#cli) `generate` 명령을 실행하면 기존에 존재하는 [워크스페이스](#workspace) 안에 라이브러리 기본 코드를 생성할 수 있으며, 이 라이브러리는 `npm` 패키지로 배포할 수 있습니다.
+
+* [Angular CLI](#cli) `add` 명령을 실행하면 현재 [워크스페이스](#workspace)에 있는 애플리케이션에 라이브러리를 추가할 수 있습니다.
+
+[스키매틱](#schematic) 섹션도 확인해 보세요.
+
 
 {@a lifecycle-hook}
 
+<!--
 ## lifecycle hook
+-->
+## 라이프싸이클 후킹 함수(lifecycle hook)
 
+<!--
 An interface that allows you to tap into the lifecycle of [directives](#directive) and [components](#component) as they are created, updated, and destroyed.
 
 Each interface has a single hook method whose name is the interface name prefixed with `ng`.
@@ -1081,13 +1121,36 @@ Angular calls these hook methods in the following order:
 * `ngOnDestroy`: Just before the directive is destroyed.
 
 To learn more, see [Lifecycle Hooks](guide/lifecycle-hooks).
+-->
+[디렉티브](#directive)와 [컴포넌트](#component)가 생성되고, 갱신된 후에 종료되는 라이프싸이클에 개발자가 개입할 수 있는 기능을 제공하는 인터페이스입니다.
+
+라이프싸이클 후킹 인터페이스는 `ng` 접두사로 시작하며, 라이프싸이클 후킹 메서드 하나에 개입합니다.
+예를 들어 `OnInit` 인터페이스가 제공하는 후킹 메서드 이름은 `ngOnInit` 입니다.
+
+Angular는 이런 순서로 라이프싸이클 후킹 메서드를 실행합니다:
+
+* `ngOnChanges`: [input](#input)/[output](#output)에 바인딩된 값이 변경되었을 때
+* `ngOnInit`: 첫 번째 `ngOnChanges`가 실행되고 난 후
+* `ngDoCheck`: 개발자가 커스텀 변화 감지 싸이클을 실행했을 때
+* `ngAfterContentInit`: 컴포넌트 컨텐츠가 초기화 된 후
+* `ngAfterContentChecked`: 컴포넌트 컨텐츠를 검사하고 난 후 매번
+* `ngAfterViewInit`: 컴포넌트 뷰가 초기화된 후
+* `ngAfterViewChecked`: 컴포넌트 뷰를 검사하고 난 후 매번
+* `ngOnDestroy`: 디렉티브가 종료되기 직전
+
+자세한 내용은 [라이프싸이클 후킹 함수](guide/lifecycle-hooks) 문서를 참고하세요.
+
 
 {@a M}
 
 {@a module}
 
+<!--
 ## module
+-->
+## 모듈(module)
 
+<!--
 In general, a module collects a block of code dedicated to a single purpose. Angular uses standard JavaScript modules and also defines an Angular module, `NgModule`.
 
 In JavaScript (ECMAScript), each file is a module and all objects defined in the file belong to that module. Objects can exported, making them public, and public objects can be imported for use by other modules.
@@ -1095,6 +1158,15 @@ In JavaScript (ECMAScript), each file is a module and all objects defined in the
 Angular ships as a collection of JavaScript modules (also called libraries). Each Angular library name begins with the `@angular` prefix. Install Angular libraries with the [npm package manager](https://docs.npmjs.com/getting-started/what-is-npm) and import parts of them with JavaScript `import` declarations.
 
 Compare to [NgModule](#ngmodule).
+-->
+일반적으로는 특정 용도로 활용되는 코드의 집합을 의미합니다.
+Angular에서는 JavaScript 모듈과 함께 Angular 전용 모듈 `NgModule`을 사용합니다.
+
+JavaScript(ECMAScript)에서는 개별 파일이 하나의 모듈이며 이 파일에 정의된 모든 객체가 모듈에 속한 객체입니다.
+이 객체들은 `public`으로 만들어 모듈 외부로 공개될 수 있고, 외부 모듈에서는 이 객체를 불러와서 사용할 수 있습니다.
+
+Angular가 제공하는 라이브러리는 `@angular`라는 이름으로 시작하며 JavaScript 모듈 형태로 제공됩니다.
+[npm 패키지 매니저](https://docs.npmjs.com/getting-started/what-is-npm)를 사용하면 필요한 Angular 라이브러리를 더 설치할 수 있으며, 이렇게 설치된 라이브러리는 JavaScript `import` 구문으로 불러옵니다.
 
 
 {@a N}
@@ -1103,14 +1175,19 @@ Compare to [NgModule](#ngmodule).
 
 ## ngcc
 
+<!--
 Angular compatibility compiler.
 If you build your app using [Ivy](#ivy), but it depends on libraries that have not been compiled with Ivy, the CLI uses `ngcc` to automatically update the dependent libraries to use Ivy.
+-->
+Angular 호환성 컴파일러(compatibility compiler)를 의미합니다.
+[Ivy](#ivy)로 개발한 애플리케이션에 Ivy로 컴파일되지 않은 라이브러리를 사용하면 Angular CLI가 `ngcc`를 사용해서 Ivy에 맞게 자동으로 조정합니다.
 
 
 {@a ngmodule}
 
 ## NgModule
 
+<!--
 A class definition preceded by the `@NgModule()` [decorator](#decorator), which declares and serves as a manifest for a block of code dedicated to an application domain, a workflow, or a closely related set of capabilities.
 
 Like a [JavaScript module](#module), an NgModule can export functionality for use by other NgModules and import public functionality from other NgModules.
@@ -1121,14 +1198,40 @@ NgModules are typically named after the file in which the exported thing is defi
 Every Angular application has a root module. By convention, the class is called `AppModule` and resides in a file named `app.module.ts`.
 
 To learn more, see [NgModules](guide/ngmodules).
+-->
+`@NgModule()` [데코레이터](#decorator)가 지정된 클래스이며, 이 클래스는 애플리케이션의 도메인, 업무 흐름, 관련된 코드를 묶은 단위입니다.
+
+[JavaScript 모듈](#module)과 비슷하게 NgModule도 다른 NgModule이 로드해서 사용할 수 있습니다.
+NgModule의 메타데이터에는 이 모듈에 포함되고 외부로 공개될 컴포넌트, 디렉티브, 파이프를 등록합니다.
+[선언할 수 있는 항목](#declarable)을 참고하세요.
+
+NgModule의 이름은 일반적으로 모듈이 정의된 파일의 이름과 같도록 지정합니다.
+예를 들어 Angular [DatePipe](api/common/DatePipe) 클래스는 `date_pipe` 기능 모듈에 속해 있으며, 이 모듈은 `date_pipe.ts` 파일에 정의되어 있습니다.
+이 모듈은 `@angular/core`와 같은 Angular [패키지 그룹](#scoped-package)으로 제공됩니다.
+
+Angular 애플리케이션에는 최상위 모듈이 반드시 존재합니다.
+이 모듈은 일반적으로 `AppModule`이라고 하며 `app.module.ts` 파일에 정의합니다.
+
+자세한 내용은 [NgModule](guide/ngmodules) 문서를 참고하세요.
+
 
 {@a npm-package}
 
+<!--
 ## npm package
+-->
+## npm 패키지
 
+<!--
 The [npm package manager](https://docs.npmjs.com/getting-started/what-is-npm) is used to distribute and load Angular modules and libraries.
 
 Learn more about how Angular uses [Npm Packages](guide/npm-packages).
+-->
+Angular 모듈과 라이브러리는 [npm 패키지 매니저](https://docs.npmjs.com/getting-started/what-is-npm)를 활용해서 배포됩니다.
+
+Angular가 활용하는 npm 패키지를 확인하려면 [Npm 패키지](guide/npm-packages) 문서를 참고하세요.
+
+
 
 {@a ngc}
 
@@ -1334,8 +1437,12 @@ This installs the `schematics` executable, which you can use to create a new sch
 
 {@a scoped-package}
 
+<!--
 ## scoped package
+-->
+## 패키지 그룹(scoped package)
 
+<!--
 A way to group related [npm packages](guide/npm-packages).
 NgModules are delivered within scoped packages whose names begin with the Angular *scope name* `@angular`. For example, `@angular/core`, `@angular/common`, `@angular/forms`, and `@angular/router`.
 
@@ -1344,6 +1451,17 @@ Import a scoped package in the same way that you import a normal package.
 <code-example path="architecture/src/app/app.component.ts" header="architecture/src/app/app.component.ts (import)" region="import">
 
 </code-example>
+-->
+관련된 [npm 패키지](guide/npm-packages)를 묶은 단위입니다.
+패키지 그룹 안에 있는 NgModule은 Angular의 *그룹 이름* `@angular`로 시작합니다.
+`@angular/core`, `@angular/common`, `@angular/forms`, `@angular/router`들이 그렇습니다.
+
+패키지 그룹을 사용하는 방법은 일반 npm 패키지를 사용하는 방법과 같습니다.
+
+<code-example path="architecture/src/app/app.component.ts" header="architecture/src/app/app.component.ts (로드하기)" region="import">
+
+</code-example>
+
 
 {@a server-side-rendering}
 
