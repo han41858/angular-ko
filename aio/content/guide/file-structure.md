@@ -93,8 +93,8 @@ The top level of the workspace contains workspace-wide configuration files, conf
 | `package-lock.json`     | `node_modules`에 설치된 패키지들의 버전 정보를 저장합니다. 자세한 내용은 [npm 문서](https://docs.npmjs.com/files/package-lock.json)를 참고하세요. 이 파일은 npm을 사용했을 때 생성되며, yarn을 사용한다면 이 파일 대신 [yarn.lock](https://yarnpkg.com/lang/en/docs/yarn-lock/) 파일이 생성됩니다. |
 | `src/`                  | 최상위 애플리케이션 프로젝트를 구성하는 소스 파일입니다. |
 | `node_modules/`         | 워크스페이스에 사용할 [npm 패키지](guide/npm-packages)가 설치되는 폴더입니다. 이 폴더에 설치한 [npm 패키지](guide/npm-packages)는 워크스페이스에 존재하는 모든 프로젝트에 사용할 수 있습니다. |
-| `tsconfig.json`         | The `tsconfig.json` file is a ["Solution Style"](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html#support-for-solution-style-tsconfigjson-files) TypeScript configuration file. Code editors and TypeScript’s language server use this file to improve development experience. Compilers do not use this file. |
-| `tsconfig.base.json`    | The base [TypeScript](https://www.typescriptlang.org/) configuration for projects in the workspace. All other configuration files inherit from this base file. For more information, see the [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) section of the TypeScript documentation.|
+| `tsconfig.json`         | [솔루션 스타일](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html#support-for-solution-style-tsconfigjson-files) TypeScript 환경설정 파일입니다. 코드 에디터나 TypeScript 언어 서버가 개발자 도구를 제공할 때 이 파일을 사용합니다. 컴파일러는 이 파일을 사용하지 않습니다. |
+| `tsconfig.base.json`    | 프로젝트에 적용되는 [TypeScript](https://www.typescriptlang.org/) 환경설정 파일입니다. 자세한 내용은 TypeScript 공식 문서의 [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) 섹션을 참고하세요.|
 | `tslint.json`           | 워크스페이스에 있는 프로젝트에 적용할 [TSLint](https://palantir.github.io/tslint/) 환경설정 파일입니다. |
 
 
@@ -185,16 +185,19 @@ Angular components, templates, and styles go here.
 | `environments/`        | 환경에 맞게 적용될 빌드 환경설정 옵션이 존재합니다. 아무 접미사 없는 파일이 기본으로 적용되는 파일이며, 운영용 빌드 환경설정 파일은 "prod" 접미사가 붙습니다. 추가로 필요하면 다른 빌드 환경설정을 추가할 수도 있습니다. |
 | `favicon.ico`          | 애플리케이션이 즐겨찾기에 추가될 때 표시될 아이콘입니다. |
 | `index.html`           | 웹사이트에 접근한 사용자가 보게 되는 메인 HTML 파일입니다. 앱에 사용되는 JavaScript 파일과 CSS 파일은 Angular CLI가 빌드시점에 자동으로 `index.html` 파일에 추가하기 때문에 `<script>` 태그나 `<link>` 태그를 수동으로 작성할 필요는 없습니다. |
-| `main.ts`              | The main entry point for your application. Compiles the application with the [JIT compiler](guide/glossary#jit) and bootstraps the application's root module (AppModule) to run in the browser. You can also use the [AOT compiler](guide/aot-compiler) without changing any code by appending the `--aot` flag to the CLI `build` and `serve` commands. |
+| `main.ts`              | 애플리케이션의 메인 진입점입니다. [JIT 컴파일러](guide/glossary#jit)를 사용하면 이 파일을 기준으로 애플리케이션의 최상위 모듈(AppModule)이 부트스트랩됩니다. Angular CLI로 `build`, `serve` 명령을 실행할 때 `--aot` 플래그를 사용하면 [AOT 컴파일러](guide/aot-compiler)가 사용되는데, 이 컴파일러의 진입점도 이 파일입니다. |
 | `polyfills.ts`         | 오래된 브라우저를 지원하기 위한 폴리필 스크립트를 작성합니다. |
 | `styles.sass`          | 프로젝트에 적용될 CSS 파일 목록을 지정합니다. 프로젝트에 지정된 기본 스타일 전처리기에 따라서 확장자가 달라질 수 있습니다. |
 | `test.ts`              | 유닛 테스트를 실행할 때 진입점이 될 파일입니다. 이 파일은 수정할 일이 거의 없습니다. |
 
+
 <div class="alert is-helpful">
 
-If you create an application using Angular's strict mode, you will also have an additional `package.json` file in the `src/app` directory. For more information, see [Strict mode](/guide/strict-mode).
+애플리케이션을 생성할 때 Angular strict 모드를 사용하면 `src/app` 폴더에 `package.json` 파일이 하나 더 생성됩니다.
+자세한 내용은 [Strict 모드](/guide/strict-mode) 문서를 참고하세요.
 
 </div>
+
 
 {@a app-src}
 

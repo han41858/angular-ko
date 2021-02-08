@@ -135,22 +135,12 @@ Angular is built on the latest standards of the web platform.
 Targeting such a wide range of browsers is challenging because they do not support all features of modern browsers.
 You compensate by loading polyfill scripts ("polyfills") for the browsers that you must support.
 The [table below](#polyfill-libs) identifies most of the polyfills you might need.
--->
-Angular는 최신 웹 플랫폼 표준을 준수하며 만들어졌습니다.
-하지만 최신 브라우저들이 대부분 지원하는 기능을 제대로 지원하지 않는 일부 브라우저에서는 Angular 애플리케이션의 기능 중 일부가 제대로 동작하지 않을 수 있습니다.
-이 문제는 폴리필 스크립트를 로드하는 방법으로 해결할 수 있습니다.
-개발자들이 자주 사용하는 폴리필은 [아래 표](#polyfill-libs)를 참고하세요.
 
 <div class="alert is-important">
 
-<!--
 The suggested polyfills are the ones that run full Angular applications.
 You may need additional polyfills to support features not covered by this list.
 Note that polyfills cannot magically transform an old, slow browser into a modern, fast one.
--->
-이 문서에서 소개하는 폴리필은 Angular 애플리케이션을 제대로 동작시키기 위해 필요한 것들입니다.
-그래서 필요한 기능이 더 있다면 또 다른 폴리필을 추가해야 할 수도 있습니다.
-다만, 오래되고 느린 브라우저에 폴리필을 사용했다고 해서 최신 스펙으로 동작하고 속도도 빠른 브라우저로 짠 변신하는 것은 아닙니다.
 
 </div>
 
@@ -162,9 +152,39 @@ In Angular CLI version 8 and higher, applications are built using *differential 
 
 This strategy allows you to continue to build your web application to support multiple browsers, but only load the necessary code that the browser needs.
 For more information about how this works, see [Differential Loading](guide/deployment#differential-loading) in the [Deployment guide](guide/deployment).
+-->
 
+Angular는 최신 웹 플랫폼 표준을 준수하며 만들어졌습니다.
+하지만 최신 브라우저들이 대부분 지원하는 기능을 제대로 지원하지 않는 일부 브라우저에서는 Angular 애플리케이션의 기능 중 일부가 제대로 동작하지 않을 수 있습니다.
+이 문제는 폴리필 스크립트를 로드하는 방법으로 해결할 수 있습니다.
+개발자들이 자주 사용하는 폴리필은 [아래 표](#polyfill-libs)를 참고하세요.
+
+
+<div class="alert is-important">
+
+이 문서에서 소개하는 폴리필은 Angular 애플리케이션을 제대로 동작시키기 위해 필요한 것들입니다.
+그래서 필요한 기능이 더 있다면 또 다른 폴리필을 추가해야 할 수도 있습니다.
+다만, 오래되고 느린 브라우저에 폴리필을 사용했다고 해서 최신 스펙으로 동작하고 속도도 빠른 브라우저로 짠 변신하는 것은 아닙니다.
+
+</div>
+
+
+Angular CLI 8 이후 버전은 애플리케이션을 빌드할 때 *증분 로딩(differential loading)*을 활용하기 때문에 빌드 결과물도 두 벌로 생성됩니다.
+
+* 첫 번째 빌드 결과물은 최신 ES2015 문법으로 생성됩니다. 이 파일을 활용하면 폴리필을 거의 사용하지 않고도 최신 브라우저가 지원하는 기능을 활용할 수 있습니다. 빌드 결과물 크기도 작습니다.
+
+* 두 번째 빌드 결과물은 ES5 문법으로 생성됩니다. 이 파일을 활용하려면 폴리필이 필요하며, 빌드 결과물 크기도 좀 더 크지만 오래된 브라우저를 지원할 수 있습니다.
+
+이 방식을 활용하면 웹 애플리케이션이 지원하는 브라우저를 다양하게 확보할 수 있습니다.
+브라우저는 애플리케이션에 필요한 파일만 다운로드받아 실행합니다.
+증분 로딩이 어떻게 동작하는지 알아보려면 [배포](guide/deployment) 문서의 [증분 로딩](guide/deployment#differential-loading) 섹션을 참고하세요.
+
+<!--
 ## Enabling polyfills with CLI projects
+-->
+## Angular CLI로 만든 프로젝트에 폴리필 활성화하기
 
+<!--
 The [Angular CLI](cli) provides support for polyfills.
 If you are not using the CLI to create your projects, see [Polyfill instructions for non-CLI users](#non-cli).
 
@@ -177,17 +197,14 @@ This file incorporates the mandatory and many of the optional polyfills as JavaS
 
 For example, if you need the optional [web animations polyfill](http://caniuse.com/#feat=web-animation), you could install it with `npm`, using the following command (or the `yarn` equivalent):
 
-<!--
 <code-example language="sh" class="code-shell">
   # install the optional web animations polyfill
   npm install --save web-animations-js
 </code-example>
--->
 
 You can then add the import statement in the `src/polyfills.ts` file.
 For many polyfills, you can simply un-comment the corresponding `import` statement in the file, as in the following example.
 
-<!--
 <code-example header="src/polyfills.ts">
   /**
   * Required to support Web Animations `@angular/platform-browser/animations`.
@@ -195,7 +212,32 @@ For many polyfills, you can simply un-comment the corresponding `import` stateme
   **/
   import 'web-animations-js';  // Run `npm install --save web-animations-js`.
 </code-example>
+
+If the polyfill you want is not already in `polyfills.ts` file, add the `import` statement by hand.
 -->
+[Angular CLI](cli)는 폴리필을 지원합니다.
+프로젝트를 생성할 때 Angular CLI를 사용하지 않았다면 [Angular CLI를 사용하지 않은 환경에서 폴리필 설정하기](#non-cli) 섹션을 참고하세요.
+
+Angular CLI `ng new` 명령으로 프로젝트를 설정했다면 폴리필 설정이 이미 `src/polyfills.ts` 파일에 구성되어 있습니다.
+이 파일에는 필수 폴리필과 옵션 폴리필이 추가되어 있습니다.
+
+* `ng new` 명령으로 프로젝트를 생성하면 `zone.js`와 같은 [_필수_ 폴리필](#polyfill-libs)이 `src/polyfills.ts` 환경설정 파일에서 `import` 구문으로 로드됩니다.
+
+* _옵션_ 폴리필이 필요하면 해당 npm 패키지를 설치한 후에 `src/polyfills.ts` 파일에서 `import` 구문을 찾아서 주석을 해제하거나 추가하면 됩니다.
+
+예를 들어 [웹 애니메이션 폴리필](http://caniuse.com/#feat=web-animation)이 필요하다면 `npm`으로 해당 패키지를 설치하면 됩니다(`yarn`도 사용할 수 있습니다):
+
+
+<code-example language="sh" class="code-shell">
+  # 웹 애니메이션 폴리필을 설치합니다.
+  npm install --save web-animations-js
+</code-example>
+
+
+그리고 `src/polyfills.ts` 파일에 `import` 구문을 추가합니다.
+해당 `import` 구문이 이미 파일에 있다면 주석을 해제하면 됩니다.
+
+
 <code-example header="src/polyfills.ts">
   /**
   * `@angular/platform-browser/animations` 패키지로 웹 애니메이션을 사용할 때 필요합니다.
@@ -204,7 +246,8 @@ For many polyfills, you can simply un-comment the corresponding `import` stateme
   import 'web-animations-js';  // `npm install --save web-animations-js` 명령을 실행한 후에 동작합니다.
 </code-example>
 
-If the polyfill you want is not already in `polyfills.ts` file, add the `import` statement by hand.
+
+원하는 `import` 구문이 `polyfills.ts` 파일에 없다면, 직접 `import` 구문을 추가하면 됩니다.
 
 
 {@a polyfill-libs}
@@ -298,8 +341,12 @@ Angular 기능 중 일부는 폴리필을 추가로 적용해야 하는 것이 �
 
     <td>
 
+      <!--
       [AnimationBuilder](api/animations/AnimationBuilder).
       (Standard animation support does not require polyfills.)
+      -->
+      [AnimationBuilder](api/animations/AnimationBuilder).
+      (표준 애니메이션만 사용하면 폴리필이 필요하지 않습니다.)
 
     </td>
 
@@ -313,9 +360,12 @@ Angular 기능 중 일부는 폴리필을 추가로 적용해야 하는 것이 �
     </td>
 
     <td>
+      <!--
       <p>If AnimationBuilder is used, enables scrubbing
       support for IE/Edge and Safari.
       (Chrome and Firefox support this natively).</p>
+      -->
+      <p>AnimationBuilder를 사용하면 IE, Edge, Safari에 폴리필이 필요합니다.(Chrome, Firefox는 기본 지원합니다.)</p>
     </td>
 
   </tr>
@@ -346,8 +396,11 @@ Angular 기능 중 일부는 폴리필을 추가로 적용해야 하는 것이 �
 
     <td>
 
+      <!--
       [Router](guide/router) when using
       [hash-based routing](guide/router#location-strategy)
+      -->
+      [해시 기반으로 라우팅](guide/router#location-strategy) 할 때 [Router](guide/router)
     </td>
 
     <td>
@@ -371,7 +424,11 @@ Angular 기능 중 일부는 폴리필을 추가로 적용해야 하는 것이 �
 -->
 ### 추천 폴리필
 
+<!--
 The following polyfills are used to test the framework itself. They are a good starting point for an application.
+-->
+아래 나열한 폴리필들은 프레임워크를 테스트할 때 사용하는 패키지들입니다.
+애플리케이션 개발을 시작할때부터 추가해서 활용하는 것도 좋습니다.
 
 
 <table>
@@ -504,15 +561,15 @@ computed with the <a href="http://closure-compiler.appspot.com/home">closure com
 <!--
 ## Polyfills for non-CLI users
 -->
-## Angular CLI를 사용하지 않는 경우에 필요한 폴리필
+## Angular CLI를 사용하지 않은 환경에서 폴리필 설정하기
 
+<!--
 If you are not using the CLI, add your polyfill scripts directly to the host web page (`index.html`).
 
 For example:
 
-<!--
 <code-example header="src/index.html" language="html">
-  &lt;!-- pre-zone polyfills -->
+  &lt;!-- pre-zone polyfills ->
   &lt;script src="node_modules/core-js/client/shim.min.js">&lt;/script>
   &lt;script src="node_modules/web-animations-js/web-animations.min.js">&lt;/script>
   &lt;script>
@@ -531,12 +588,16 @@ For example:
      */
     // __Zone_enable_cross_context_check = true;
   &lt;/script>
-  &lt;!-- zone.js required by Angular -->
+  &lt;!-- zone.js required by Angular ->
   &lt;script src="node_modules/zone.js/bundles/zone.umd.js">&lt;/script>
 
-  &lt;!-- application polyfills -->
+  &lt;!-- application polyfills ->
 </code-example>
 -->
+Angular CLI를 사용하지 않는다면 호스트 웹 페이지 파일 `index.html`에 폴리필 스크립트를 직접 추가하면 됩니다.
+
+이렇게 설정합니다:
+
 <code-example header="src/index.html" language="html">
   &lt;!-- 폴리필에 필요한 스크립트 --&gt;
   &lt;script src="node_modules/core-js/client/shim.min.js">&lt;/script>

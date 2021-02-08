@@ -32,8 +32,12 @@ TypeScript 반드시 *tsc* 컴파일러를 통해 JavaScript로 *트랜스파일
 
 {@a tsconfig}
 
+<!--
 ## Configuration files
+-->
+## 환경설정 파일
 
+<!--
 A given Angular workspace contains several TypeScript configuration files.
 At the root `tsconfig.json` file specifies the base TypeScript and Angular compiler options that all projects in the workspace inherit.
 
@@ -76,11 +80,67 @@ The initial `tsconfig.json` for an Angular workspace typically looks like the fo
   }
 }
 </code-example>
+-->
+Angular 워크스페이스에는 TypeScript 환경설정 파일이 여러개 존재합니다.
+최상위 `tsconfig.json` 파일에는 워크스페이스 안에 있는 모든 프로젝트에 적용되는 기본 TypeScript 옵션과 Angular 컴파일러 옵션을 지정합니다.
 
+
+<div class="alert is-helpful">
+
+Angular 컴파일러에 사용할 수 있는 옵션을 알아보려면 [Angular 컴파일러 옵션](guide/angular-compiler-options) 문서를 참고하세요.
+
+</div>
+
+
+TypeScript와 Angular는 타입 검사 기능과 빌드 결과물을 생성할 때 사용할 수 있는 옵션을 다양하게 제공합니다.
+자세한 내용을 알아보려면 TypeScript 문서의 [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) 섹션을 참고하세요.
+
+
+<div class="alert is-helpful">
+
+TypeScript 환경설정 파일에 대해 자세하게 알아보려면 공식 [TypeScript wiki](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html) 문서를 참고하세요.
+환경설정 파일을 상속하는 것에 대해 알아보려면 [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) 섹션을 참고하세요.
+
+</div>
+
+Angular 워크스페이스를 새로 생성했을 때 구성되는 `tsconfig.json` 파일의 내용은 이렇습니다.
+
+<code-example lang="json" header="tsconfig.json" linenums="false">
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  }
+}
+</code-example>
+
+
+<!--
 ### Strict mode
+-->
+### Strict 모드
 
+<!--
 When you create new workspaces and projects, you have the option to use Angular's strict mode, which can help you write better, more maintainable code.
 For more information, see [Strict mode](/guide/strict-mode).
+-->
+워크스페이스나 프로젝트를 새로 생성할 때 Angular가 제공하는 strict 모드를 활성화할 수 있습니다.
+strict 모드를 사용하면 유지보수하기 유리한 코드를 작성할 수 있습니다.
+자세한 내용은 [Strict 모드](/guide/strict-mode) 문서를 참고하세요.
+
 
 {@a noImplicitAny}
 
@@ -142,16 +202,20 @@ For more information about how the TypeScript configuration affects compilation,
 
 </code-example>
 
+
 <div class="alert is-helpful">
 
-For more information about how the TypeScript configuration affects compilation, see [Angular Compiler Options](guide/angular-compiler-options) and [Template Type Checking](guide/template-typecheck).
+TypeScript 환경설정 파일이 컴파일에 미치는 영향을 확인하려면 [Angular 컴파일러 옵션](guide/angular-compiler-options) 문서와 [템플릿 타입 검사](guide/template-typecheck) 문서를 참고하세요.
 
 </div>
 
 
 {@a typings}
 
+<!--
 ## TypeScript typings
+-->
+## TypeScript 타입 정의 파일
 
 <!--
 Many JavaScript libraries, such as jQuery, the Jasmine testing library, and Angular,
@@ -207,7 +271,8 @@ TypeScript에는 조금 특별한 타입 정의 파일인 `lib.d.ts`가 있습�
 
 TypeScript 컴파일에 사용하는 `--target` 옵션에 따라 타입 정의 파일이 _추가로_ 생성될 수도 있습니다. `--target` 옵션이 `es6`라면 `Promise`에 대한 타입 정의가 추가되는 식입니다.
 
-By default, the target is `es2015`. If you are targeting `es5`, you still have newer type declarations due to the list of declaration files included:
+`target` 기본값은 `es2015` 입니다.
+`es5` 문법으로 빌드하려면 타입 정의 파일을 추가해야 합니다:
 
 <code-example path="getting-started/tsconfig.0.json" header="tsconfig.json (lib 일부)" region="lib"></code-example>
 
@@ -241,4 +306,9 @@ npm 패키지 중에는 `d.ts` 파일을 제공하지 *않는* 패키지들도 �
 
 ### *target*
 
+<!--
 By default, the target is `es2015`, which is supported only in modern browsers. You can configure the target to `es5` to specifically support legacy browsers. [Differential loading](guide/deployment#differential-loading) is also provided by the Angular CLI to support modern, and legacy browsers with separate bundles.
+-->
+기본값은 `es2015`이며, 최신 브라우저는 모두 이 문법을 지원합니다.
+하지만 오래된 브라우저를 지원해야 한다면 `es5` 문법으로 빌드할 수도 있습니다.
+[증분 로딩](guide/deployment#differential-loading)은 최신 브라우저와 오래된 브라우저를 동시에 지원하기 위해 Angular CLI가 빌드 결과물을 두 벌로 생성하는 방식입니다.
