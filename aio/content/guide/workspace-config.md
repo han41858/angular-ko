@@ -13,7 +13,7 @@ Angular [워크스페이스](guide/glossary#workspace) 최상위 폴더에 있�
 <!--
 ## Overall JSON structure
 -->
-## JSON 최상위 계층
+## JSON 파일의 최상위 계층
 
 <!--
 At the top level of `angular.json`, a few properties configure the workspace, and a `projects` section contains the remaining per-project configuration options. CLI defaults set at the workspace level can be overridden by defaults set at the project level, and defaults set at the project level can be overridden on the command line.
@@ -128,7 +128,7 @@ The following top-level configuration properties are available for each project,
 | :-------------- | :---------------------------- |
 | `root`          | 프로젝트 파일의 최상위 폴더를 지정하며, 워크스페이스 폴더로부터 상대 경로로 지정합니다. 워크스페이스 기본 앱은 워크스페이스 최상위 계층에 존재하기 때문에 빈 문자열로 지정됩니다. |
 | `sourceRoot`    | 프로젝트의 소스 파일이 위치하는 폴더를 지정합니다. |
-| `projectType`   | 프로젝트 타입을 "application"이나 "library" 중 하나로 지정합니다. 애플리케이션 프로젝트는 브라우저에 단독으로 실행할 수 있지만 라이브러리는 이렇게 실행할 수 없습니다. 앱과 e2e 테스트 앱은 모두 "application" 타입입니다.|
+| `projectType`   | 프로젝트 타입을 "application"이나 "library" 중 하나로 지정합니다. 애플리케이션 프로젝트는 브라우저에 단독으로 실행할 수 있지만 라이브러리는 이렇게 실행할 수 없습니다. 기본 앱과 e2e 테스트 앱은 모두 "application" 타입입니다.|
 | `prefix`        | Angular CLI가 자동으로 생성하는 셀렉터의 접두사를 지정합니다. 앱 단위나 기능모듈 단위로 지정할 수 있습니다. |
 | `schematics`    | 프로젝트에서 `ng generate` 명령으로 사용하는 스키매틱을 구성합니다.자세한 내용은 아래 [스키매틱 생성하기](#schematics) 섹션을 참고하세요. |
 | `architect`     | 프로젝트에 적용되는 기본 Architect 빌더 옵션을 설정합니다. |
@@ -392,11 +392,19 @@ Some additional options can only be set through the configuration file, either b
 
 {@a complex-config}
 
+<!--
 ## Complex configuration values
+-->
+## 복잡한 환경설정 값들
 
+<!--
 The options `assets`, `styles`, and `scripts` can have either simple path string values, or object values with specific fields.
 The `sourceMap` and `optimization` options can be set to a simple Boolean value with a command flag, but can also be given a complex value using the configuration file.
 The following sections provide more details of how these complex values are used in each case.
+-->
+`assets`, `styles`, `scripts` 필드에는 경로를 지정하거나 미리 정해져 있는 형식으로 객체를 할당하는 방식으로 사용합니다.
+그런데 `sourceMap`이나 `optimization` 옵션에는 간단하게 불리언 값을 지정할 수도 있지만 복잡한 값으로 구성할 수도 있습니다.
+어떻게 활용할 수 있는지 알아봅시다.
 
 
 {@a asset-config}
@@ -406,6 +414,7 @@ The following sections provide more details of how these complex values are used
 -->
 ### 애셋 환경설정
 
+<!--
 Each `build` target configuration can include an `assets` array that lists files or folders you want to copy as-is when building your project.
 By default, the `src/assets/` folder and `src/favicon.ico` are copied over.
 
@@ -521,11 +530,176 @@ You can mix simple and complex file references for styles and scripts.
 ]
 
 </code-example>
+-->
+`build` 환경설정에는 프로젝트를 빌드할 때 복사할 파일이나 폴더를 지정하기 위해 `assets` 배열을 사용할 수 있습니다.
+기본값은 `src/assets/` 폴더와 `src/favicon.ico` 파일을 복사하도록 구성되어 있습니다.
+
+<code-example language="json">
+
+"assets": [
+  "src/assets",
+  "src/favicon.ico"
+]
+
+</code-example>
+
+이 애셋을 복사하지 않으려면 배열에서 제거하기만 하면 됩니다.
+
+`assets` 배열에는 워크스페이스 최상위 폴더를 기준으로 상대주소를 문자열로 지정할 수도 있지만, 객체 형태로 지정할 수도 있습니다.
+이 때 객체에는 이런 필드를 사용합니다.
+
+* `glob`:  `input` 폴더에서 파일을 선택할 [node-glob](https://github.com/isaacs/node-glob/blob/master/README.md)를 지정합니다.
+* `input`: 소스 폴더를 워크스페이스 최상위 경로의 상대경로로 지정합니다.
+* `output`: 복사할 위치를 `outDir`의 상대경로로 지정합니다(기본값은 `dist/*프로젝트-이름*` 입니다). 보안 문제가 있을 수 있기 때문에 Angular CLI는 `outDir` 안쪽에만 파일을 씁니다.
+* `ignore`: 제외할 파일 패턴을 지정합니다.
+
+그래서 기본 설정을 객체 형태로 바꿔보면 이렇게 표현할 수 있습니다.
+
+<code-example language="json">
+
+"assets": [
+  {
+    "glob": "**/*",
+    "input": "src/assets/",
+    "output": "/assets/"
+  },
+  {
+    "glob": "favicon.ico",
+    "input": "src/",
+    "output": "/"
+  }
+]
+
+</code-example>
+
+이 방식을 사용하면 프로젝트 외부에 있는 애셋도 복사해 올 수 있습니다.
+node 패키지 안에서 복사해오려면 이렇게 작성하면 됩니다:
+
+<code-example language="json">
+
+"assets": [
+ {
+   "glob": "**/*",
+   "input": "./node_modules/some-package/images",
+   "output": "/some-package/"
+ }
+]
+
+</code-example>
+
+이렇게 작성하면 `node_modules/some-package/images/`가 `dist/some-package`에 복사됩니다.
+
+그리고 아래 예제는 복사할 폴더에서 일부 파일을 제외하기 위해 `ignore` 필드를 사용한 예제입니다:
+
+<code-example language="json">
+
+"assets": [
+ { 
+   "glob": "**/*",
+   "input": "src/assets/",
+   "ignore": ["**/*.svg"],
+   "output": "/assets/" 
+ }
+]
+
+</code-example>
+
+
+{@a style-script-config}
+
+<!--
+### Styles and scripts configuration
+-->
+### 스타일, 스크립트 환경설정
+
+<!--
+An array entry for the `styles` and `scripts` options can be a simple path string, or an object that points to an extra entry-point file.
+The associated builder will load that file and its dependencies as a separate bundle during the build.
+With a configuration object, you have the option of naming the bundle for the entry point, using a `bundleName` field.
+
+The bundle is injected by default, but you can set `inject` to false to exclude the bundle from injection.
+For example, the following object values create and name a bundle that contains styles and scripts, and excludes it from injection:
+
+<code-example language="json">
+
+   "styles": [
+     {
+       "input": "src/external-module/styles.scss",
+       "inject": false,
+       "bundleName": "external-module"
+     }
+   ],
+   "scripts": [
+     { 
+       "input": "src/external-module/main.js",
+       "inject": false,
+       "bundleName": "external-module"
+     }
+   ]
+
+</code-example>
+
+You can mix simple and complex file references for styles and scripts.
+
+<code-example language="json">
+
+"styles": [
+  "src/styles.css",
+  "src/more-styles.css",
+  { "input": "src/lazy-style.scss", "inject": false },
+  { "input": "src/pre-rename-style.scss", "bundleName": "renamed-style" },
+]
+
+</code-example>
+-->
+`styles`, `scripts` 옵션에는 간단하게 경로만 문자열로 지정해도 되지만, 객체를 사용하면 더 다양한 설정을 할 수 있습니다.
+이 환경설정은 이후에 빌더에 활용되는데, 빌드 과정에 의존성을 처리해서 별도 파일로 빌드됩니다.
+이 필드에 객체 형태를 사용하면 `bundleName` 필드를 사용해서 빌드 결과물 파일의 이름을 지정할 수 있습니다.
+
+기본적으로 빌드 결과물은 `index.html` 파일에 추가되지만, `inject` 필드를 `false`로 지정하면 이 파일이 추가되는 것을 제외할 수 있습니다.
+그래서 아래처럼 작성하면 스타일 파일과 스크립트 파일을 정해진 이름으로 빌드하지만 `index.html` 파일에는 자동으로 추가하지 않습니다:
+
+<code-example language="json">
+
+   "styles": [
+     {
+       "input": "src/external-module/styles.scss",
+       "inject": false,
+       "bundleName": "external-module"
+     }
+   ],
+   "scripts": [
+     { 
+       "input": "src/external-module/main.js",
+       "inject": false,
+       "bundleName": "external-module"
+     }
+   ]
+
+</code-example>
+
+이전에 사용하던 방식과 함께 사용할 수도 있습니다.
+
+<code-example language="json">
+
+"styles": [
+  "src/styles.css",
+  "src/more-styles.css",
+  { "input": "src/lazy-style.scss", "inject": false },
+  { "input": "src/pre-rename-style.scss", "bundleName": "renamed-style" },
+]
+
+</code-example>
+
 
 {@a style-preprocessor}
 
+<!--
 #### Style preprocessor options
+-->
+#### 스타일 전처리기 옵션
 
+<!--
 In Sass and Stylus you can make use of the `includePaths` functionality for both component and global styles, which allows you to add extra base paths that will be checked for imports.
 
 To add paths, use the `stylePreprocessorOptions` option:
@@ -552,12 +726,43 @@ Files in that folder, such as `src/style-paths/_variables.scss`, can be imported
 
 Note that you will also need to add any styles or scripts to the `test` builder if you need them for unit tests.
 See also [Using runtime-global libraries inside your app](guide/using-libraries#using-runtime-global-libraries-inside-your-app).
+-->
+Sass나 Stylus를 사용한다면 `includePaths` 필드를 지정해서 추가 컴포넌트나 전역 스타일을 불러올 수 있습니다.
+
+`includePaths` 필드는 `stylePreprocessorOptions` 옵션 안에 사용합니다:
+
+<code-example language="json">
+
+"stylePreprocessorOptions": {
+  "includePaths": [
+    "src/style-paths"
+  ]
+}
+
+</code-example>
+
+이 폴더에 `src/style-paths/_variables.scss`라는 파일이 있다면, 이제 이 파일은 상대경로를 사용하지 않아도 프로젝트에 불러올 수 있습니다:
+
+```ts
+// src/app/app.component.scss
+// 상대주소는 기본으로 동작합니다.
+@import '../style-paths/variables';
+// 이 방식도 동작합니다.
+@import 'variables';
+```
+
+이 방식은 유닛 테스트를 진행하기 위해 `test` 빌더를 별도로 설정할 때도 활용하면 좋습니다.
+[앱에서 전역 컨텍스트에 있는 라이브러리 사용하기](guide/using-libraries#using-runtime-global-libraries-inside-your-app) 문서를 참고하세요.
 
 
 {@a optimize-and-srcmap}
 
+<!--
 ### Optimization and source map configuration
+-->
+### 빌드 최적화, 소스 맵 환경설정
 
+<!--
 The `optimization` and `sourceMap` browser builder options can be either a Boolean or an Object for more fine-grained configuration.
 In this section we will explain how to fine tune these options.
 
@@ -601,5 +806,52 @@ In this section we will explain how to fine tune these options.
 
    For [Universal](guide/glossary#universal), you can reduce the code rendered in the HTML page by
    setting styles optimization to `true` and styles source maps to `false`.
+
+</div>
+-->
+`optimization` 필드와 `sourceMap` 필드에는 간단하게 불리언 값을 지정할 수 있으며, 좀 더 세부적으로 설정하기 위해 객체 형태로 지정할 수도 있습니다.
+이번 섹션에서는 이 옵션들을 어떻게 활용할 수 있는지 알아봅시다.
+
+* `optimazation` 옵션에는 스크립트 파일, 스타일 파일, 폰트 파일에 대한 최적화 여부를 불리언 값으로 지정할 수 있습니다:
+
+<code-example language="json">
+
+  "optimization": { 
+    "scripts": true,
+    "styles": false,
+    "fonts": true
+  }
+
+</code-example>
+
+
+<div class="alert is-important">
+
+폰트 파일을 최적화하려면 인터넷 연결이 필요합니다.
+원래는 폰트 파일이 렌더링을 막지만, 이 옵션이 활성화되어 있으면 외부 Google 폰트와 아이콘 CSS로 변환되어 애플리케이션 HTML 인덱스 파일에 인라인으로 삽입됩니다.
+
+</div>
+
+* `sourceMap` 옵션은 스크립트 파일과 스타일 파일을 대상으로 사용할 수 있습니다.
+소스맵을 감출지, 벤더 패키지 소스맵을 활용할지 지정할 수 있습니다:
+
+<code-example language="json">
+
+  "sourceMap": {
+    "scripts": true,
+    "styles": false,
+    "hidden": true,
+    "vendor": true
+  }
+
+</code-example>
+
+
+<div class="alert is-helpful">
+
+소스맵을 감추면 빌드 결과물에서 소스맵을 참조하지 않습니다.
+이 옵션은 에러를 처리할 때는 소스맵을 활용하지만 개발자 도구에 노출되는 것을 방지할 때 사용하면 됩니다.
+
+[Universal](guide/glossary#universal)에서는 스타일 최적화를 `true`로, 스타일 소스맵을 `false`로 지정하면 HTML 페이지의 용량을 줄일 수 있습니다.
 
 </div>
