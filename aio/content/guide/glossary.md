@@ -1236,15 +1236,25 @@ Angular가 활용하는 npm 패키지를 확인하려면 [Npm 패키지](guide/n
 {@a ngc}
 
 ## ngc
+
+<!--
 `ngc` is a Typescript-to-Javascript transpiler that processes Angular decorators, metadata, and templates, and emits JavaScript code.
 The most recent implementation is internally referred to as `ngtsc` because it's a minimalistic wrapper around the TypeScript compiler `tsc` that adds a transform for processing Angular code.
+-->
+`ngc`는 TypeScript로 작성된 Angular 데코레이터, 메타데이터, 템플릿 코드를 JavaScript 코드로 변환하는 트랜스파일러입니다.
+이런 트랜스파일러 중에서 가장 많이 사용하는 것은 `ngtsc`인데, 이 트랜스파일러는 TypeScript 컴파일러 `tsc`에 Angular 코드를 변환하는 기능을 추가한 것입니다.
+
 
 {@a O}
 
 {@a observable}
 
+<!--
 ## observable
+-->
+## 옵저버블(observable)
 
+<!--
 A producer of multiple values, which it pushes to [subscribers](#subscriber). Used for asynchronous event handling throughout Angular. You execute an observable by subscribing to it with its `subscribe()` method, passing callbacks for notifications of new values, errors, or completion.
 
 Observables can deliver single or multiple values of any type to subscribers, either synchronously (as a function delivers a value to its caller) or on a schedule. A subscriber receives notification of new values as they are produced and notification of either normal completion or error completion.
@@ -1252,40 +1262,81 @@ Observables can deliver single or multiple values of any type to subscribers, ei
 Angular uses a third-party library called [Reactive Extensions (RxJS)](http://reactivex.io/rxjs/).
 
 To learn more, see [Observables](guide/observables).
+-->
+데이터를 [구독자(subscriber)](#subscriber)에게 보내는 객체입니다.
+이 객체는 Angular 전반에 걸쳐 비동기 이벤트를 처리할 때 사용됩니다.
+옵저버블가 제공하는 `subscribe()` 메서드를 실행하면 이 옵저버블을 구독할 수 있으며, 이 메서드에 지정하는 콜백 함수로 데이터, 에러, 종료 신호를 받습니다.
+
+옵저버블은 데이터를 동기 방식으로 하나만 보낼 수도 있지만 스케쥴에 따라 여러개 보낼 수도 있습니다.
+
+Angular는 서드 파티 라이브러리 [Reactive Extensions(RxJS)](http://reactivex.io/rxjs/)를 사용합니다.
+
+자세한 내용은 [옵저버블](guide/observables) 문서를 참고하세요.
 
 
 {@a observer}
 
+<!--
 ## observer
+-->
+## 옵저버(observer)
 
+<!--
 An object passed to the `subscribe()` method for an [observable](#observable). The object defines the callbacks for the [subscriber](#subscriber).
+-->
+[옵저버블](#observable) `subscribe()` 메서드에 전달하는 객체입니다.
+이 개체에는 [구독자](#subscriber)가 반응할 콜백 함수를 정의합니다.
+
 
 {@a output}
 
+<!--
 ## output
+-->
+## 출력 프로퍼티 데코레이터(output)
 
+<!--
 When defining a [directive](#directive), the `@Output{}` decorator on a directive property
 makes that property available as a *target* of [event binding](guide/event-binding).
 Events stream *out* of this property to the receiver identified
 in the [template expression](#template-expression) to the right of the equal sign.
 
 To learn more, see [Input and Output Properties](guide/inputs-outputs).
+-->
+[디렉티브(directive)](#directive)를 정의할 때 디렉티브 프로퍼티에 `@Output()` 데코레이터를 지정하면 이 프로퍼티를 [이벤트 바인딩](guide/event-binding) *대상* 으로 지정할 수 있습니다.
+그래서 이 프로퍼티를 거쳐 디렉티브 *밖으로* 전달되는 데이터는 [템플릿 표현식](#template-expression)으로 받아서 처리할 수 있습니다.
+
+자세한 내용을 확인하려면 [입출력 프로퍼티](guide/inputs-outputs) 문서를 참고하세요.
 
 
 {@a P}
 
 {@a pipe}
 
+<!--
 ## pipe
+-->
+## 파이프(pipe)
 
+<!--
 A class which is preceded by the `@Pipe{}` decorator and which defines a function that transforms input values to output values for display in a [view](#view). Angular defines various pipes, and you can define new pipes.
 
 To learn more, see [Pipes](guide/pipes).
+-->
+`@Pipe()` 데코레이터가 지정된 클래스이며, 이 클래스는 입력으로 받은 값을 [화면](#view)에 표시하기 적합한 형식으로 변환합니다.
+용도에 따라 Angular가 제공하는 기본 파이프를 사용하거나 커스텀 파이프를 정의해서 사용하면 됩니다.
+
+자세한 내용을 확인하려면 [파이프](guide/pipes) 문서를 참고하세요.
+
 
 {@a platform}
 
+<!--
 ## platform
+-->
+## 플랫폼(platform)
 
+<!--
 In Angular terminology, a platform is the context in which an Angular application runs.
 The most common platform for Angular applications is a web browser, but it can also be an operating system for a mobile device, or a web server.
 
@@ -1294,18 +1345,44 @@ Support for the various Angular run-time platforms is provided by the `@angular/
 * When running in a web browser, [`BrowserModule`](api/platform-browser/BrowserModule) is imported from the `platform-browser` package, and supports services that simplify security and event processing, and allows applications to access browser-specific features, such as interpreting keyboard input and controlling the title of the document being displayed. All applications running in the browser use the same platform service.
 
 * When [server-side rendering](#server-side-rendering) (SSR) is used, the [`platform-server`](api/platform-server) package provides web server implementations of the `DOM`, `XMLHttpRequest`, and other low-level features that don't rely on a browser.
+-->
+Angular에서는 Angular 애플리케이션이 실행되는 컨텍스트를 의미합니다.
+가장 많이 사용되는 플랫폼은 웹 브라우저지만, 모바일 디바이스나 웹 서버가 플랫폼이 될 수도 있습니다.
+
+Angular는 `@angular/platform-*` 패키지들로 다양한 플랫폼을 지원합니다.
+이 패키지들은 `@angular/core`, `@angular/common`을 사용해서 각기 다른 환경에서 발생하는 사용자의 입력을 처리하거나 해당 플랫폼에 맞게 UI를 렌더링하면서 애플리케이션을 실행합니다.
+특정 플랫폼에만 있는 기능을 활용할 수도 있습니다.
+
+* 웹 브라우저를 사용한다면 `platform-browser` 패키지가 제공하는 [`BrowserModule`](api/platform-browser/BrowserModule)을 로드해서 보안 정책, 이벤트를 처리하며, 키입력을 처리하거나 문서에 제목을 표시하는 등 브라우저용 기능을 제공하기도 합니다.
+브라우저에서 실행되는 애플리케이션은 모두 같은 플랫폼 서비스를 사용합니다.
+
+* [서버 사이드 렌더링(Server-side rendering, SSR)](#server-side-rendering)을 사용한다면 [`platform-server`](api/platform-server) 패키지를 로드해서 웹 서버용 `DOM`, `XMLHttpReqeuest`를 처리합니다.
+브라우저에는 없는 기능을 사용하기도 합니다.
+
 
 {@a polyfill}
 
+<!--
 ## polyfill
+-->
+## 폴리필(polyfill)
 
+<!--
 An [npm package](guide/npm-packages) that plugs gaps in a browser's JavaScript implementation.
 See [Browser Support](guide/browser-support) for polyfills that support particular functionality for particular platforms.
+-->
+브라우저 JavaScript 호환성을 맞출 때 사용하는 [npm 패키지](guide/npm-packages) 입니다.
+어떤 플랫폼에서 어떤 폴리필을 사용해야 하는지 알아보려면 [브라우저 지원](guide/browser-support) 문서를 참고하세요.
+
 
 {@a project}
 
+<!--
 ## project
+-->
+## 프로젝트(project)
 
+<!--
 In the Angular CLI, a standalone application or [library](#library) that can be created or modified by a CLI command.
 
 A project, as generated by the [`ng new`](cli/new), contains the set of source files, resources, and configuration files that you need to develop and test the application using the CLI. Projects can also be created with the `ng generate application` and `ng generate library` commands.
@@ -1313,11 +1390,25 @@ A project, as generated by the [`ng new`](cli/new), contains the set of source f
 For more information, see [Project File Structure](guide/file-structure).
 
 The [`angular.json`](guide/workspace-config) file configures all projects in a [workspace](#workspace).
+-->
+Angular에서는 Angular CLI 명령으로 생성/조작하는 단독 실행 애플리케이션이나 [라이브러리](#library)를 의미합니다.
+
+Angular CLI [`ng new`](cli/new) 명령을 실행해서 프로젝트를 생성하면 이 애플리케이션을 개발하고 테스트할 때 필요한 기본 소스 파일, 기본 리소스, 환경설정 파일이 자동으로 구성됩니다.
+프로젝트는 `ng generate application` 명령이나 `ng generate library` 명령을 실행해도 생성할 수 있습니다.
+
+자세한 내용을 알아보려면 [프로젝트 파일 구조](guide/file-structure) 문서를 참고하세요.
+
+[워크스페이스](#workspace)에 있는 모든 프로젝트는 [`angular.json`](guide/workspace-config) 환경설정 파일의 영향을 받습니다.
+
 
 {@a provider}
 
+<!--
 ## provider
+-->
+## 프로바이더(provider)
 
+<!--
 An object that implements one of the [`Provider`](api/core/Provider) interfaces. A provider object defines how to obtain an injectable dependency associated with a [DI token](#token).
 An [injector](#injector) uses the provider to create a new instance of a dependency
 for a class that requires it.
@@ -1328,6 +1419,15 @@ You can register your own providers for services that your app needs.
 See also [service](#service), [dependency injection](#di).
 
 Learn more in [Dependency Injection](guide/dependency-injection).
+-->
+[`Provider`](api/core/Provider) 인터페이스로 구현한 객체입니다.
+프로바이더 객체는 [DI 토큰](#token)에 해당하는 의존성 객체를 어떻게 얻어와야 할지 정의합니다.
+[인젝터(injector)](#injector)는 프로바이더에 정의된 대로 새로운 인스턴스를 만들고, 주입받기를 요청한 클래스에 이 인스턴스를 주입합니다.
+
+Angular의 기본 서비스는 모든 인젝터에 등록되어 있습니다.
+그래서 개발자는 애플리케이션에 추가로 필요한 프로바이더만 등록하면 됩니다.
+
+자세한 내용은 [서비스](#service), [의존성 주입](#di) 섹션이나 [의존성 주입](guide/dependency-injection) 문서를 참고하세요.
 
 
 {@a Q}
@@ -1336,8 +1436,12 @@ Learn more in [Dependency Injection](guide/dependency-injection).
 
 {@a reactive-forms}
 
+<!--
 ## reactive forms
+-->
+## 반응형 폼(reactive forms)
 
+<!--
 A framework for building Angular forms through code in a component.
 The alternative is a [template-driven form](#template-driven-forms).
 
@@ -1350,32 +1454,72 @@ When using reactive forms:
 * The associated Angular directives are prefixed with `form`, such as `formControl`, `formGroup`, and `formControlName`.
 
 The alternative is a template-driven form. For an introduction and comparison of both forms approaches, see [Introduction to Angular Forms](guide/forms-overview).
+-->
+컴포넌트에서 Angular 폼을 구성하는 방식을 의미합니다.
+다른 방식은 [템플릿 기반 폼](#template-driven-forms)이 있습니다.
+
+반응형 폼을 사용하면:
+
+* "원천 소스(source of truth)"는 폼 모델이며 컴포넌트 클래스에 정의합니다.
+* 유효성 검사는 디렉티브가 아니라 함수로 실행합니다.
+* 폼 컨트롤은 컴포넌트 클래스에서 명시적으로 생성합니다. `FormControl` 인스턴스를 직접 생성하거나 `FormBuilder`를 사용할 수 있습니다.
+* 템플릿 입력 엘리먼트에는 `ngModel`을 사용하지 *않습니다*.
+* 관련 디렉티브는 `form` 접두사로 시작합니다: `formControl`, `formGroup`, `formControlName`
+
+이 방식 대신 템플릿 기반 폼을 사용할 수도 있습니다.
+둘 중 어떤 방식을 사용해야 하는지 알아보려면 [Angular 폼 소개](guide/forms-overview) 문서를 참고하세요.
+
 
 {@a resolver}
 
+<!--
 ## resolver
+-->
+## 리졸버(resolver)
 
+<!--
 A class that implements the [Resolve](api/router/Resolve "API reference") interface (or a function with the same signature as the [resolve() method](api/router/Resolve#resolve "API reference")) that you use to produce or retrieve data that is needed before navigation to a requested route can be completed.
 
 Resolvers run after all [route guards](#route-guard "Definition") for a route tree have been executed and have succeeded.
 
 See an example of using a [resolve guard](guide/router-tutorial-toh#resolve-guard "Routing techniques tutorial") to retrieve dynamic data.
+-->
+[Resolve](api/router/Resolve "API reference") 인터페이스로 구현하거나 [resolve() 메서드](api/router/Resolve#resolve "API reference")가 있는 클래스입니다.
+이 클래스는 화면을 전환하기 전에 필요한 데이터를 미리 받아올 때 사용하며, 데이터가 모두 준비되면 라우팅 동작을 계속 진행합니다.
+
+리졸버는 라우팅 트리에 존재하는 [라우팅 가드(route guards)](#route-guard "Definition")가 모두 성공적으로 실행한 후에 실행됩니다.
+
+동적으로 데이터를 받아오는 예제를 확인하려면 [리졸브 가드](guide/router-tutorial-toh#resolve-guard "Routing techniques tutorial") 문서를 참고하세요.
+
 
 {@a route-guard}
 
+<!--
 ## route guard
+-->
+## 라우팅 가드(route guard)
 
+<!--
 A method that controls navigation to a requested route in a routing application.
 Guards determine whether a route can be activated or deactivated, and whether a lazy-loaded module can be loaded.
 
 Learn more in the [Routing and Navigation](guide/router#preventing-unauthorized-access "Examples") guide.
+-->
+화면 전환 요청을 조작하는 메서드를 의미합니다.
+라우팅 가드를 사용하면 라우팅 규칙을 활성화할지 여부, 비활성화할지 여부, 지연로딩 대상 모듈을 로드할지 여부를 결정할 수 있습니다.
+
+자세한 내용은 [라우팅, 네비게이션](guide/router#preventing-unauthorized-access "Examples") 문서를 참고하세요.
 
 
 {@a router}
 {@a router-module}
 
+<!--
 ## router
+-->
+## 라우터(router)
 
+<!--
 A tool that configures and implements navigation among states and [views](#view) within an Angular app.
 
 The `Router` module is an [NgModule](#ngmodule) that provides the necessary service providers and directives for navigating through application views. A [routing component](#routing-component) is one that imports the `Router` module and whose template contains a `RouterOutlet` element where it can display views produced by the router.
@@ -1383,33 +1527,75 @@ The `Router` module is an [NgModule](#ngmodule) that provides the necessary serv
 The router defines navigation among views on a single page, as opposed to navigation among pages. It interprets URL-like links to determine which views to create or destroy, and which components to load or unload. It allows you to take advantage of [lazy loading](#lazy-load) in your Angular apps.
 
 To learn more, see [Routing and Navigation](guide/router).
+-->
+애플리케이션 상태에 따라 화면을 전환하는 규칙을 정의하고, 이 규칙에 따라 화면을 전환하는 툴입니다.
+
+`Router` 모듈은 [NgModule](#ngmodule) 형태로 제공되며, 이 모듈에는 애플리케이션 화면을 전환할 때 필요한 서비스 프로바이더와 디렉티브들이 정의되어 있습니다.
+라우터는 현재 라우팅 규칙에 해당하는 [라우팅 대상 컴포넌트](#routing-component)를 불러와서 `RouterOutlet` 엘리먼트에 표시합니다.
+
+라우터는 페이지 자체를 전환하지 않고 한 화면 안에서 화면 일부를 갱신합니다.
+어떤 화면이 표시될지는 URL과 비슷한 링크로 정의하며, 이 링크에 따라 컴포넌트가 로드되거나 종료됩니다.
+라우터로 [지연 로딩](#lazy-load) 기능을 활용할 수도 있습니다.
+
+
+자세한 내용은 [라우팅, 네비게이션](guide/router) 문서를 참고하세요.
+
 
 {@a router-outlet}
 
+<!--
 ## router outlet
+-->
+## 라우팅 영역(router outlet)
 
+<!--
 A [directive](#directive) that acts as a placeholder in a routing component's template. Angular dynamically renders the template based on the current router state.
+-->
+컴포넌트가 화면에 표시될 위치를 지정하는 [디렉티브](#directive)입니다.
+Angular는 라우터의 현재 상테에 따라 동적으로 템플릿을 렌더링합니다.
+
 
 {@a router-component}
+{@a routing-component}
 
+<!--
 ## routing component
+-->
+## 라우팅 대상 컴포넌트(routing component)
 
+<!--
 An Angular [component](#component) with a `RouterOutlet` directive in its template that displays views based on router navigations.
 
 For more information, see [Routing and Navigation](guide/router).
+-->
+라우터가 화면을 전환할 때 `RouterOutlet` 디렉티브에 표시되는 [컴포넌트](#component)를 의미합니다.
+
+자세한 내용은 [라우팅, 네비게이션](guide/router) 문서를 참고하세요.
+
 
 {@a rule}
 
+<!--
 ## rule
+-->
+## 룰(rule)
 
+<!--
 In [schematics](#schematic), a function that operates on a [file tree](#file-tree) to create, delete, or modify files in a specific manner.
+-->
+[스키매틱(schematics)](#schematic)에서 [파일 트리](#file-tree)를 조작하면서 파일을 생성/삭제/수정하는 함수를 의미합니다.
+
 
 {@a S}
 
 {@a schematic}
 
+<!--
 ## schematic
+-->
+## 스키매틱(schematic)
 
+<!--
 A scaffolding library that defines how to generate or transform a programming project by creating, modifying, refactoring, or moving files and code.
 A schematic defines [rules](#rule) that operate on a virtual file system called a [tree](#file-tree).
 
@@ -1421,11 +1607,31 @@ The [Angular CLI](#cli) uses schematics to generate and modify [Angular projects
 Add these schematics to the npm package that you use to publish and share your library.
 
 For more information, see [Schematics](guide/schematics) and [Integrating Libraries with the CLI](guide/creating-libraries#integrating-with-the-cli).
+-->
+프로젝트 파일과 코드를 생성/수정/리팩토링/이동하는 방법을 정의한 라이브러리입니다.
+스키매틱은 [룰](#rule)을 정의해서 [트리](#file-tree)라고 하는 가상 파일 시스템을 조작합니다.
+
+[Angular CLI](#cli)는 [Angular 프로젝트](#project)나 프로젝트 구성요소를 생성/수정할 때 이 스키매틱을 사용합니다.
+
+* Angular CLI가 사용하는 스키매틱은 Angular가 기본으로 제공합니다.
+[Angular CLI 명령 참고](cli) 문서를 확인해 보세요.
+[`ng add`](cli/add) 명령을 실행하면 프로젝트에 라이브러리를 추가하는 스키매틱을 실행합니다.
+그리고 [`ng generate`](cli/generate) 명령을 실행하면 애플리케이션이나 라이브러리, Angular 구성요소를 생성하는 스키매틱을 실행합니다.
+
+* [라이브러리](#library) 개발자라면 Angular CLI를 활용해서 라이브러리를 사용할 수 있도록 스키매틱을 추가로 정의할 수 있습니다.
+npm 패키지에 스키매틱을 추가하고 라이브러리를 배포하면 됩니다.
+
+자세한 내용을 확인하려면 [스키매틱](guide/schematics) 문서와 [Angular CLI에 라이브러리 통합하기](guide/creating-libraries#integrating-with-the-cli) 문서를 참고하세요.
+
 
 {@a schematics-cli}
 
+<!--
 ## Schematics CLI
+-->
+## 스키매틱 CLI
 
+<!--
 Schematics come with their own command-line tool.
 Using Node 6.9 or above, install the Schematics CLI globally:
 
@@ -1434,6 +1640,18 @@ npm install -g @angular-devkit/schematics-cli
 </code-example>
 
 This installs the `schematics` executable, which you can use to create a new schematics [collection](#collection) with an initial named schematic. The collection folder is a workspace for schematics. You can also use the `schematics` command to add a new schematic to an existing collection, or extend an existing schematic.
+-->
+스키매틱은 커맨드라인 툴로 제공됩니다.
+Node 6.9 이상 버전에서 스키매틱 CLI를 전역으로 설치하려면 이 명령을 실행하면 됩니다:
+
+<code-example language="bash">
+npm install -g @angular-devkit/schematics-cli
+</code-example>
+
+이 명령을 실행하면 `schematics` 실행파일이 설치되는데, 이 파일을 사용해서 새로운 스키매틱 [콜렉션](#collection)을 만들 수 있습니다.
+콜렉션 폴더는 스키매틱용 워크스페이스입니다.
+`schematics` 명령은 기존에 존재하는 콜렉션에 새 스키매틱을 추가하거나, 기존 스키매틱을 확장할 때도 사용합니다.
+
 
 {@a scoped-package}
 
@@ -1465,8 +1683,12 @@ Import a scoped package in the same way that you import a normal package.
 
 {@a server-side-rendering}
 
+<!--
 ## server-side rendering
+-->
+## 서버 사이드 렌더링(server-side rendering)
 
+<!--
 A technique that generates static application pages on the server, and can generate and serve those pages in response to requests from browsers.
 It can also pre-generate pages as HTML files that you serve later.
 
@@ -1474,12 +1696,26 @@ This technique can improve performance on mobile and low-powered devices and imp
 The static version can also make your app more visible to web crawlers.
 
 You can easily prepare an app for server-side rendering by using the [CLI](#cli) to run the [Angular Universal](#universal) tool, using the `@nguniversal/express-engine` [schematic](#schematic).
+-->
+애플리케이션 화면을 서버에 정적으로 빌드해두고, 브라우저 요청이 있을 때 이 화면을 그대로 제공하는 방식입니다.
+미리 생성해둔 화면은 HTML 파일 형태로 제공됩니다.
+
+이 방식을 활용하면 모바일 디바이스나 저사양 디바이스의 성능을 향상시킬 수 있으며, 첫 번째 화면이 정적으로 빠르게 표시되기 때문에 애플리케이션이 시작되는 시간도 짧아집니다.
+애플리케이션 화면이 정적으로 제공되면 웹 크롤러에 대응할 수도 있습니다.
+
+[Angular CLI](#cli)로 [Angular Universal](#universal) 툴을 실행하면 Angular 애플리케이션에 서버 사이드 렌더링을 적용할 수 있습니다.
+이 때 `@nguniversal/express-engine` [스키매틱](#schematic)을 사용합니다.
+
 
 
 {@a service}
 
+<!--
 ## service
+-->
+## 서비스(service)
 
+<!--
 In Angular, a class with the [@Injectable()](#injectable) decorator that encapsulates non-UI logic and code that can be reused across an application.
 Angular distinguishes components from services to increase modularity and reusability.
 
@@ -1488,6 +1724,15 @@ The injectable class is instantiated by a [provider](#provider).
 [Injectors](#injector) maintain lists of providers and use them to provide service instances when they are required by components or other services.
 
 To learn more, see [Introduction to Services and Dependency Injection](guide/architecture-services).
+-->
+Angular에서는 [`@Injectable()`](#injectable) 데코레이터가 지정된 클래스를 의미하는데, 이 클래스는 UI와 관계없는 로직이나 코드를 캡슐화해서 애플리케이션에 재사용됩니다.
+애플리케이션 코드를 모듈화하거나 재사용하기에 유리하기 때문에 Angular 팀은 컴포넌트와 서비스를 확실하게 구분하기를 권장하고 있습니다.
+
+`@Injectable()` 메타데이터를 사용하면 서비스 클래스를 [의존성 주입](#di) 메커니즘의 대상으로 만들 수 있습니다.
+서비스 클래스를 생성하는 방법은 [프로바이더](#provider)에 정의하는데, 이 프로바이더는 [인젝터(injectors)](#injector)가 관리하며, 인젝터는 의존성 주입 요청을 받았을 때 프로바이더에 정해진 대로 서비스의 인스턴스를 생성해서 의존성으로 주입합니다.
+
+자세한 내용은 [서비스와 의존성 주입](guide/architecture-services) 문서를 참고하세요.
+
 
 {@a structural-directive}
 {@a structural-directives}
