@@ -1737,16 +1737,29 @@ Angular에서는 [`@Injectable()`](#injectable) 데코레이터가 지정된 클
 {@a structural-directive}
 {@a structural-directives}
 
+<!--
 ## structural directives
+-->
+## 구조 디렉티브(structural directives)
 
+<!--
 A category of [directive](#directive) that is responsible for shaping HTML layout by modifying the DOM&mdash;that is, adding, removing, or manipulating elements and their children.
 
 To learn more, see [Structural Directives](guide/structural-directives).
+-->
+[디렉티브](#directive) 중에서 DOM을 조작해서 HTML 레이아웃을 추가하거나, 제거하건, 변경하는 디렉티브입니다.
+
+자세한 내용을 알아보려면 [구조 디렉티브](guide/structural-directives) 문서를 참고하세요.
+
 
 {@a subscriber}
 
+<!--
 ## subscriber
+-->
+## 구독자(subscriber)
 
+<!--
 A function that defines how to obtain or generate values or messages to be published. This function is executed when a consumer calls the `subscribe()` method of an [observable](#observable).
 
 The act of subscribing to an observable triggers its execution, associates callbacks with it, and creates a `Subscription` object that lets you unsubscribe.
@@ -1756,13 +1769,30 @@ The `subscribe()` method takes a JavaScript object (called an [observer](#observ
 * The `next` notification sends a value such as a number, a string, or an object.
 * The `error` notification sends a JavaScript Error or exception.
 * The `complete` notification doesn't send a value, but the handler is called when the call completes. Scheduled values can continue to be returned after the call completes.
+-->
+옵저버블이 발생하는 값이나 메시지를 어떻게 처리할지 정의한 함수입니다.
+이 함수는 [옵저버블](#observable)의 `subscribe()` 메서드를 실행한 이후에만 실행됩니다.
+
+옵저버블을 구독한다는 것을 옵저버블을 시작한다고 볼 수 있으며, 이 옵저버블에 콜백을 연결하는 의미로도 볼 수 있습니다.
+옵저버블을 구독하면 `Subscription` 객체를 생성하며, 이 객체를 사용해서 옵저버블 구독을 해지할 수 있습니다.
+
+`subscribe()` 메서드는 [옵저버](#observer)라고 하는 JavaScript 객체를 인자로 받으며, 이 옵저버에 정의하는 콜백 함수는 옵저버블의 3가지 데이터 전달에 반응합니다.
+
+* `next`: 숫자, 문자열, 객체 데이터을 전달합니다.
+* `error`: JavaScript Error 객체나 예외가 발생했음을 알립니다.
+* `complete`: 옵저버블이 종료된 것을 알립니다. 데이터를 전달하지는 않으며, 옵저버블을 종료한 후에 스케쥴러에 정의된 데이터를 반환할 수 있습니다.
+
 
 {@a T}
 
 {@a target}
 
+<!--
 ## target
+-->
+## 빌드 대상(target)
 
+<!--
 A buildable or runnable subset of a [project](#project), configured as an object in the [workspace configuration file](guide/workspace-config#project-tool-configuration-options), and executed by an [Architect](#architect) [builder](#builder).
 
 In the `angular.json` file, each project has an "architect" section that contains targets which configure builders. Some of these targets correspond to [CLI commands](#cli), such as `build`, `serve`, `test`, and `lint`.
@@ -1772,11 +1802,33 @@ For example, the Architect builder invoked by the `ng build` command to compile 
 The Architect tool provides a set of builders. The [`ng new` command](cli/new) provides a set of targets for the initial application project. The [`ng generate application`](cli/generate#application) and [`ng generate library`](cli/generate#library) commands provide a set of targets for each new [project](#project). These targets, their options and configurations, can be customized to meet the needs of your project. For example, you may want to add a "staging" or "testing" configuration to a project's "build" target.
 
 You can also define a custom builder, and add a target to the project configuration that uses your custom builder. You can then run the target using the [`ng run`](cli/run) CLI command.
+-->
+[워크스페이스 환경설정 파일](guide/workspace-config#project-tool-configuration-options)에 정의하고 [아키텍트](#architect) [빌더](#builder)가 빌드하거나 실행할 수 있는 [프로젝트](#project)의 대상을 의미합니다.
+
+`angular.json` 파일에는 개별 프로젝트마다 "architect" 섹션이 있으며, 이 섹션에 빌더의 대상을 정의합니다.
+이 빌드 대상 중에는 [Angular CLI 명령](#cli)의 `build`, `serve`, `test`, `lint`을 활용하는 것들도 있습니다.
+
+예를 들어 `ng build` 명령을 싫애하면 아키텍트 빌더가 실행되며 빌드 툴로 프로젝트를 컴파일하는데, 이 때 환경설정에 지정된 기본값과 커맨드라인에서 지정된 옵션을 활용합니다.
+`build` 명령을 실행할 때 `--prod` 플래그를 붙이면 `build`가 빌드하는 대상이 "production" 환경설정으로 변경됩니다.
+
+아키텍트 툴은 여러가지 빌더를 제공합니다.
+[`ng new` 명령](cli/new)은 애플리케이션 프로젝트에 생성할 수 있는 빌드 대상을 여러가지 제공합니다.
+[`ng generate application`](cli/generate#application) 명령이나 [`ng generate library`](cli/generate#library) 명령은 각각 [프로젝트](#project)를 생성하는 빌드 대상을 제공합니다.
+이런 빌드 대상을 활용할 때는 프로젝트에 필요한 대로 옵션이나 환경설정을 커스터마이징할 수 있습니다.
+프로젝트 "build" 대상으로 "staging" 이나 "testing" 환경도 추가할 수 있습니다.
+
+필요하다면 커스텀 빌더를 정의해서 프로젝트에 추가할 수도 있습니다.
+이렇게 추가한 빌드 대상은 [`ng run`](cli/run) 명령으로 실행합니다.
+
 
 {@a template}
 
+<!--
 ## template
+-->
+## 템플릿(template)
 
+<!--
 Code that defines how to render a component's [view](#view).
 
 A template combines straight HTML with Angular [data-binding](#data-binding) syntax, [directives](#directive),
@@ -1786,11 +1838,28 @@ The Angular elements insert or calculate values that modify the HTML elements be
 A template is associated with a [component class](#component) through the `@Component()` [decorator](#decorator). The template code can be provided inline, as the value of the `template` property, or in a separate HTML file linked through the `templateUrl` property.
 
 Additional templates, represented by `TemplateRef` objects, can define alternative or *embedded* views, which can be referenced from multiple components.
+-->
+컴포넌트의 [뷰(view)](#view)를 어떻게 렌더링할지 정의한 코드입니다.
+
+템플릿은 일반 HTML 문법과 Angular [데이터 바인딩](#data-binding) 문법, [디렉티브](#directive), [템플릿 표현식](#template-expression)을 조합해서 정의합니다.
+그리고 Angular 엘리먼트를 활용하면 화면이 표시되기 전에 HTML 엘리먼트에 엘리먼트를 더 추가하거나 값을 계산하는 로직을 변경할 수 있습니다.
+Angular 템플릿에서 사용할 수 있는 문법을 알아보려면 [템플릿 문법](guide/template-syntax) 문서를 참고하세요.
+
+템플릿에는 `@Component()` [데코레이터](#decorator)가 지정된 [컴포넌트 클래스](#component)를 사용할 수 있습니다.
+이 때 컴포넌트의 템플릿 코드는 `template` 프로퍼티를 사용해서 인라인으로 정의하거나 `templateUrl` 프로퍼티를 사용해서 별도 HTML 파일로 정의합니다.
+
+Angular가 제공하는 `TemplateRef` 객체를 활용하면 대체 템플릿이나 *임베디드* 뷰를 구성할 수 있습니다.
+이 객체는 여러 컴포넌트가 참조할 수도 잇습니다.
+
 
 {@a template-driven-forms}
 
+<!--
 ## template-driven forms
+-->
+## 템플릿 기반 폼(template-driven forms)
 
+<!--
 A format for building Angular forms using HTML forms and input elements in the view.
 The alternative format uses the [reactive forms](#reactive-forms) framework.
 
@@ -1802,19 +1871,46 @@ When using template-driven forms:
 * The associated Angular directives are prefixed with `ng` such as `ngForm`, `ngModel`, and `ngModelGroup`.
 
 The alternative is a reactive form. For an introduction and comparison of both forms approaches, see [Introduction to Angular Forms](guide/forms-overview).
+-->
+뷰 안에서 HTML 폼 엘리먼트와 입력 엘리먼트로 Angular 폼을 구성하는 방식을 의미합니다.
+이 방식 외에 [반응형 폼](#reactive-forms)을 사용할 수도 있습니다.
+
+템플릿 기반 폼을 사용할 때는:
+
+* "원천 소스(source of truth)"가 템플릿 안에 존재합니다. 유효성 검사 로직은 개별 입력 엘리먼트의 어트리뷰트에 정의합니다.
+* `ngModel`로 컴포넌트 모델과 입력 엘리먼트를 [양방향 바인딩](#data-binding)으로 동기화할 수 있습니다.
+* Angular는 개별 입력 엘리먼트마다 폼 컨트롤을 생성하며, `name` 어트리뷰트를 사용해서 양방향 바인딩을 연결합니다.
+* 관련 디렉티브는 `ng`라는 접두사로 시작합니다: `ngForm`, `ngModel`, `ngModelGroup`
+
+템플릿 기반 폼 방식 외에 반응형 폼 방식을 사용할 수도 있습니다.
+두 방식이 어떻게 다른지 알아보려면 [Angular 폼 소개](guide/forms-overview) 문서를 참고하세요.
+
 
 {@a template-expression}
 
+<!--
 ## template expression
+-->
+## 템플릿 표현식(template expression)
 
+<!--
 A TypeScript-like syntax that Angular evaluates within a [data binding](#data-binding).
 
 Read about how to write template expressions in the [template expressions](guide/interpolation#template-expressions) section of the [Interpolation](guide/interpolation) guide.
+-->
+Angular가 [데이터 바인딩](#data-binding)을 평가하는 문법이며 TypeScript 문법과 비슷합니다.
+
+템플릿 표현식이 어떻게 동작하는지, 어떻게 작성해야 하는지 확인하려면 [문자열 바인딩](guide/interpolation) 문서의 [템플릿 표현식](guide/interpolation#template-expressions) 섹션을 참고하세요.
+
 
 {@a template-reference-variable}
 
+<!--
 ## template reference variable
+-->
+## 템플릿 참조 변수(template reference variable)
 
+<!--
 A variable defined in a template that references an instance associated with an element, such as a directive instance, component instance, template as in `TemplateRef`, or DOM element.
 After declaring a template reference variable on an element in a template,
 you can access values from that variable elsewhere within the same template.
@@ -1823,30 +1919,65 @@ The following example defines a template reference variable named `#phone`.
 <code-example path="template-reference-variables/src/app/app.component.html" region="ref-var" header="src/app/app.component.html"></code-example>
 
 For more information, see the [Template reference variable](guide/template-reference-variables) guide.
+-->
+템플릿에서 엘리먼트와 관련된 인스턴스를 가리키는 변수를 의미합니다.
+이 인스턴스는 디렉티브의 인스턴스, 컴포넌트의 인스턴스, `TemplateRef`로 표현되는 템플릿, DOM 엘리먼트 자체일 수 있습니다.
+템플릿에 있는 엘리먼트에 템플릿 참조 변수를 선언하고 이 템플릿 안이라면 어디에서든 변수를 사용해서 인스턴스를 참조할 수 있습니다.
+아래 코드는 `#phone`이라는 템플릿 참조 변수를 정의한 예제 코드입니다.
+
+<code-example path="template-reference-variables/src/app/app.component.html" region="ref-var" header="src/app/app.component.html"></code-example>
+
+자세한 내용은 [템플릿 참조 변수](guide/template-reference-variables) 문서를 참고하세요.
+
 
 {@a token}
 
+<!--
 ## token
+-->
+## 토큰(token)
 
+<!--
 An opaque identifier used for efficient table lookup. In Angular, a [DI token](#di-token) is used to find [providers](#provider) of dependencies in the [dependency injection](#di) system.
+-->
+테이블을 효율적으로 조회하기 위해 사용하는 임의의 식별자를 의미합니다.
+Angular에서는 [의존성 주입](#di) 시스템에서 [프로바이더](#provider)를 찾을 때 [DI 토큰](#di-token)을 사용합니다.
+
 
 {@a transpile}
 
+<!--
 ## transpile
+-->
+## 트랜스파일(transpile)
 
+<!--
 The translation process that transforms one version of JavaScript to another version; for example, down-leveling ES2015 to the older ES5 version.
+-->
+특정 버전으로 작성된 JavaScript 코드를 다른 버전으로 변환하는 과정을 의미합니다.
+ES2015 문법으로 작성된 코드를 ES5 문법으로 변환하는 경우가 그렇습니다.
+
 
 {@a file-tree}
 
+<!--
 ## tree
+-->
+## 트리(tree)
 
+<!--
 In [schematics](#schematic), a virtual file system represented by the `Tree` class.
 Schematic [rules](#rule) take a tree object as input, operate on them, and return a new tree object.
+-->
+[스키매틱](#schematic)에서는 `Tree` 클래스로 표현하는 가상 파일 시스템을 의미합니다.
+스키매틱 [룰](#rule)은 트리 객체를 입력으로 받아서 이 트리를 처리해서 새로운 트리 객체로 반환합니다.
+
 
 {@a typescript}
 
 ## TypeScript
 
+<!--
 A programming language based on JavaScript that is notable for its optional typing system.
 TypeScript provides compile-time type checking and strong tooling support (such as
 code completion, refactoring, inline documentation, and intelligent search).
@@ -1854,18 +1985,37 @@ Many code editors and IDEs support TypeScript either natively or with plug-ins.
 
 TypeScript is the preferred language for Angular development.
 Read more about TypeScript at [typescriptlang.org](http://www.typescriptlang.org/).
+-->
+JavaScript 문법을 바탕으로 정적 타입 시스템을 추가한 프로그래밍 언어입니다.
+TypeScript는 컴파일 시점에 타입을 검사하는 기능을 제공하고, 코드 자동완성, 리팩토링, 인라인 문서, 지능형 검색과 같은 강력한 기능을 제공합니다.
+현재는 TypeScript를 기본으로 지원하거나 플러그인 형태로 지원하는 코드 에디터와 IDE가 다수 존재합니다.
 
+Angular를 개발할 때는 TypeScript를 사용합니다.
+TypeScript에 대해 자세하게 알아보려면 [typescriptlang.org](http://www.typescriptlang.org/) 사이트를 참고하세요.
+
+
+<!--
 ## TypeScript configuration file
+-->
+## TypeScript 환경설정 파일
 
+<!--
 A file specifies the root files and the compiler options required to compile a TypeScript project. For more information, see [TypeScript configuration](/guide/typescript-configuration).
+-->
+TypeScript 프로젝트를 컴파일하기 위해 최상위 파일과 컴파일러 옵션을 정의한 파일입니다.
+자세한 내용을 알아보려면 [TypeScript 환경설정](guide/typescript-configuration) 문서를 참고하세요.
 
 
 {@a U}
 
 {@a unidirectional-data-flow}
 
+<!--
 ## unidirectional data flow
+-->
+## 단방향 데이터 흐름(unidirectional data flow)
 
+<!--
 A data flow model where the component tree is always checked for changes in one direction (parent to child), which prevents cycles in the change detection graph.
 
 In practice, this means that data in Angular flows downward during change detection.
@@ -1874,23 +2024,47 @@ A failure could occur, however, if a child component tries to change a value in 
 In development mode, Angular throws the `ExpressionChangedAfterItHasBeenCheckedError` error if your app attempts to do this, rather than silently failing to render the new value.
 
 To avoid this error, a [lifecycle hook](guide/lifecycle-hooks) method that seeks to make such a change should trigger a new change detection run. The new run follows the same direction as before, but succeeds in picking up the new value.
+-->
+컴포넌트 트리에서 변화를 감지하기 위해 부모에서 자식으로 향하는 데이터 처리 흐름을 의미합니다.
+
+이 말은 Angular의 데이터가 변화 감지 싸이클 중에는 아래 방향으로 흘러간다는 것을 의미합니다.
+부모 컴포넌트는 자식 컴포넌트보다 먼저 검사되기 때문에 부모 컴포넌트에 있는 데이터는 자식 컴포넌트로 쉽게 전달될 수 있습니다.
+하지만 부모 컴포넌트의 변화 감지 싸이클 중에 자식 컴포넌트에서 데이터를 변경하려고 하면 에러가 발생합니다.
+부모 컴포넌트는 이미 렌더링된 상태이기 때문입니다.
+Angular 개발모드에서 이런 상황이 발생하면 `ExpressionChangedAfterItHasBeenCheckedError` 에러가 발생하며 새로 변경된 데이터가 렌더링에 반영되지 않습니다.
+
+이 에러를 해결하려면 [라이프싸이클 후킹](guide/lifecycle-hooks) 메서드를 사용해서 새로운 변화 감지 싸이클을 시작해야 합니다.
+변화 감지 싸이클이 시작되더라도 방향은 이전과 같지만, 새로운 싸이클에는 새로운 값이 반영됩니다.
+
 
 {@a universal}
 
 ## Universal
 
+<!--
 A tool for implementing [server-side rendering](#server-side-rendering) of an Angular application.
 When integrated with an app, Universal generates and serves static pages on the server in response to requests from browsers.
 The initial static page serves as a fast-loading placeholder while the full application is being prepared for normal execution in the browser.
 
 To learn more, see [Angular Universal: server-side rendering](guide/universal).
+-->
+Angular 애플리케이션에 [서버 사이드 렌더링](#server-side-rendering)을 적용할 때 사용하는 툴입니다.
+앱에 Universal이 적용되면 Universal이 정적 페이지를 서버에 생성하고 브라우저의 요청에 따라 이 페이지를 제공합니다.
+이 때 정적 페이지는 브라우저에서 애플리케이션이 완전히 준비되기 전까지 빠르게 표시될 무언가를 제공하는 용도로 사용합니다.
+
+자세한 내용을 알아보려면 [Angular Universal: 서버 사이드 렌더링](guide/universal) 문서를 참고하세요.
+
 
 {@a V}
 
 {@a view}
 
+<!--
 ## view
+-->
+## 뷰(view)
 
+<!--
 The smallest grouping of display elements that can be created and destroyed together.
 Angular renders a view under the control of one or more [directives](#directive).
 
@@ -1904,33 +2078,78 @@ the structure (number and order) of elements in a view can't.
 You can change the structure of elements by inserting, moving, or removing nested views within their view containers.
 
 View hierarchies can be loaded and unloaded dynamically as the user navigates through the application, typically under the control of a [router](#router).
+-->
+함께 생성되고 함께 제거되는 엘리먼트 그룹 중 가장 작은 단위를 의미합니다.
+Angular는 [디렉티브](#directive)로 뷰가 렌더링되는 것을 제어합니다.
+
+[컴포넌트](#component)는 클래스와 [템플릿](#template)을 조합해서 뷰를 구성하며, 컴포넌트가 구성한 뷰는 `ViewRef` 인스턴스로 참조할 수 있습니다.
+컴포넌트가 존재하는 뷰는 *호스트 뷰(host view)*라고 합니다.
+뷰는 [뷰 계층(view hierarchies)](#view-tree) 형태로 구성됩니다.
+
+뷰에 있는 엘리먼트 프로퍼티는 사용자의 동작에 따라 동적으로 변경되며, 뷰에 있는 엘리먼트의 구조(개수나 순서)는 영향을 미치지 않습니다.
+엘리먼트 구조는 뷰 컨테이너 안에서 엘리먼트를 추가, 이동, 제거하는 방식으로 조작할 수 있습니다.
+
+뷰 계층은 사용자가 접근하는 애플리케이션 화면에 따라 동적으로 로드되거나 제거됩니다.
+Angular에서는 보통 [라우터](#router)가 이 과정을 담당합니다.
+
+
 
 {@a ve}
 
 ## View Engine
 
+<!--
 The compilation and rendering pipeline used by Angular before version 9. Compare [Ivy](#ivy).
+-->
+Angular 9 버전 이전에 사용하던 컴파일, 렌더링 파이프라인입니다.
+[Ivy](#ivy)와 어떻게 다른지 확인해 보세요.
 
 
 {@a view-tree}
+{@a view-hierarchy}
 
+<!--
 ## view hierarchy
+-->
+## 뷰 계층(view hierarchy)
 
+<!--
 A tree of related views that can be acted on as a unit. The root view is a component's *host view*. A host view can be the root of a tree of *embedded views*, collected in a *view container* (`ViewContainerRef`) attached to an anchor element in the hosting component. The view hierarchy is a key part of Angular [change detection](#change-detection).
 
 The view hierarchy doesn't imply a component hierarchy. Views that are embedded in the context of a particular hierarchy can be host views of other components. Those components can be in the same NgModule as the hosting component, or belong to other NgModules.
+-->
+관련된 뷰를 묶어 트리 형태로 구성한 것을 의미합니다.
+최상위 뷰는 컴포넌트의 *호스트 뷰(host view)* 입니다.
+호스트 뷰는 *임베디드 뷰(embedded views)* 트리의 최상위 계층이 될 수 있으며, 호스트 컴포넌트의 앵커 엘리먼트에 따라 *뷰 컨테이너(view container)* (`ViewContainerRef`)로 구성되기도 합니다.
+뷰 계층은 Angular [변화 감지(change detection)](#change-detection) 싸이클에서도 중요한 역할을 합니다.
+
+뷰 계층이 컴포넌트 계층과 똑같다고는 볼 수 없습니다.
+어떤 뷰는 다른 컴포넌트 호스트 뷰 컨텍스트 안에 존재할 수 있습니다.
+이 관계는 NgModule 하나에서 가능하며, 여러 NgModule에 걸쳐서도 가능합니다.
+
 
 {@a W}
 {@a web-component}
 
+<!--
 ## web component
+-->
+## 웹 컴포넌트(web component)
 
+<!--
 See [custom element](#custom-element).
+-->
+[커스텀 엘리먼트](#custom-element)를 참고하세요.
+
 
 {@a workspace}
 
+<!--
 ## workspace
+-->
+## 워크스페이스(workspace)
 
+<!--
 A collection of Angular [projects](#project) (that is, applications and libraries) powered by the [Angular CLI] (#cli) that are typically co-located in a single source-control repository (such as [git](https://git-scm.com/)).
 
 The [CLI](#cli) [`ng new` command](cli/new) creates a file system directory (the "workspace root").
@@ -1939,13 +2158,28 @@ In the workspace root, it also creates the workspace [configuration file](#confi
 Commands that create or operate on apps and libraries (such as `add` and `generate`) must be executed from within a workspace folder.
 
 For more information, see [Workspace Configuration](guide/workspace-config).
+-->
+[Angular CLI]로 생성한 Angular [프로젝트(애플리케이션, 라이브러리)](#project)를 의미합니다.
+일반적으로 [git](https://git-scm.com/)과 같은 코드 저장소 하나로 관리됩니다.
+
+[Angular CLI](#cli) [`ng new` 명령](cli/new)을 실행하면 워크스페이스 최상위에 해당하는 파일 시스템 디렉토리를 생성할 수 있습니다.
+이 때 워크스페이스 최상위 폴더에 워크스페이스 [환경설정 파일](#configuration) `angular.json` 파일을 함께 생성하며, 같은 이름으로 애플리케이션 프로젝트의 초기 코드를 생성합니다.
+
+`ng add`나 `ng generate`와 같이 애플리케이션이나 라이브러리를 생성하거나 조작하는 명령은 반드시 워크스페이스 폴더 안에서 실행해야 합니다.
+
+자세한 내용을 알아보려면 [워크스페이스 환경설정](guide/workspace-config) 문서를 참고하세요.
+
 
 {@a cli-config}
 
 {@a config}
 
+<!--
 ## workspace configuration
+-->
+## 워크스페이스 환경설정(workspace configuration)
 
+<!--
 A file named `angular.json` at the root level of an Angular [workspace](#workspace) provides workspace-wide and project-specific configuration defaults for build and development tools that are provided by or integrated with the [Angular CLI](#cli).
 
 For more information, see [Workspace Configuration](guide/workspace-config).
@@ -1953,6 +2187,15 @@ For more information, see [Workspace Configuration](guide/workspace-config).
 Additional project-specific configuration files are used by tools, such as `package.json` for the [npm package manager](#npm-package), `tsconfig.json` for [TypeScript transpilation](#transpile), and `tslint.json` for [TSLint](https://palantir.github.io/tslint/).
 
 For more information, see [Workspace and Project File Structure](guide/file-structure).
+-->
+Angular [워크스페이스](#workspace) 최상위 폴더에 위치한 `angular.json` 파일은 워크스페이스 전역과 특정 프로젝트에서 [Angular CLI](#cli)를 사용할 때 적용될 기본 환경설정을 정의합니다.
+
+자세한 내용을 알아보려면 [워크스페이스 환경설정](guide/workspace-config) 문서를 참고하세요.
+
+이 파일 외에도 [npm 패키지 매니저](#npm-package)를 설정하는 `package.json` 파일과 [TypeScript 트랜스파일](#transpile)을 설정하는 `tsconfig.json` 파일, [TSLint](https://palantir.github.io/tslint/) 규칙을 설정하는 `tslint.json` 파일도 존재합니다.
+
+자세한 내용을 알아보려면 [워크스페이스와 프로젝트 파일 구조](guide/file-structure) 문서를 참고하세요.
+
 
 {@a X}
 
@@ -1963,8 +2206,12 @@ For more information, see [Workspace and Project File Structure](guide/file-stru
 {@a Z}
 {@a zone}
 
+<!--
 ## zone
+-->
+## 존(zone)
 
+<!--
 An execution context for a set of asynchronous tasks. Useful for debugging, profiling, and testing apps that include asynchronous operations such as event processing, promises, and calls to remote servers.
 
 An Angular app runs in a zone where it can respond to asynchronous events by checking for data changes and updating the information it displays by resolving [data bindings](#data-binding).
@@ -1973,3 +2220,12 @@ A zone client can take action before and after an async operation completes.
 
 Learn more about zones in this
 [Brian Ford video](https://www.youtube.com/watch?v=3IqtmUscE_U).
+-->
+비동기 태스크가 실행되는 컨텍스트입니다.
+이 컨텍스트는 이벤트 처리, 프로미스, 리모트 서버에서 받은 응답을 처리하는 비동기 작업을 디버깅하거나 점검, 테스트하는 용도로 사용됩니다.
+
+Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩](#data-binding)된 정보를 갱신할 때 존을 활용합니다.
+
+존 클라이언트는 비동기 작업이 실행되기 전과 실행된 후에 추가 동작을 실행할 수 있습니다.
+
+존에 대해 알아보려면 [Brian Ford의 영상](https://www.youtube.com/watch?v=3IqtmUscE_U)을 참고하세요.
