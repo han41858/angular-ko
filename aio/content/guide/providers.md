@@ -1,4 +1,7 @@
+<!--
 # Providing dependencies in modules
+-->
+# 모듈 안에서 의존성 객체 제공하기
 
 <!--
 A provider is an instruction to the [Dependency Injection](/guide/dependency-injection) system on how to obtain a value for a dependency. Most of the time, these dependencies are services that you create and provide.
@@ -131,11 +134,12 @@ Angular 라우터가 모듈을 지연 로딩하면, 이 때 새로운 인젝터�
 하지만 모듈이 지연 로딩된다고 해서 모든 서비스가 지연로딩 되는 것은 아닙니다.
 예를 들면, Router와 같은 모듈은 앱 모듈에만 등록되었지만 이 모듈은 브라우저 전체를 대상으로 동작합니다.
 
-As of Angular version 9, you can provide a new instance of a service with each lazy loaded module. The following code adds this functionality to `UserService`.
+Angular 9 버전부터는 지연로딩되는 모듈마다 서비스 인스턴스를 새로 생성할 수 있습니다.
+아래 코드는 이렇게 동작하도록 `UserService` 코드를 수정한 코드입니다.
 
 <code-example path="providers/src/app/user.service.2.ts"  header="src/app/user.service.ts"></code-example>
 
-With `providedIn: 'any'`, all eagerly loaded modules share a singleton instance; however, lazy loaded modules each get their own unique instance, as shown in the following diagram.
+`providedIn: 'any'`를 사용하면 즉시 로드되는 모듈은 모두 싱글턴 인스턴스 하나를 공유하지만, 지연로딩되는 모듈은 개별 모듈마다 인스턴스를 새로 생성합니다.
 
 <img src="generated/images/guide/providers/any-provider.svg" alt="any-provider-scope" class="left">
 

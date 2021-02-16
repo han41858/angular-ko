@@ -1,6 +1,6 @@
 // #docplaster
 // #docregion
-// Import the native Angular services.
+// 기본 Angular 서비스를 로드합니다.
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
