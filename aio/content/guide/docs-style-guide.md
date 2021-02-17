@@ -1,6 +1,10 @@
+<!--
 # Angular documentation style guide
+-->
+# Angular 문서 작성 스타일 가이드
 <!-- formerly Authors Style Guide -->
 
+<!--
 This style guide is for anyone who contributes to the Angular documentation (this site).
 These guidelines should be followed by all authors.
 Deviations must be approved by a documentation editor.
@@ -21,9 +25,32 @@ We strive for consistency to the extent feasible, but you may find parts of our 
 When in doubt, **follow this guide rather than imitating existing documents.**
 
 </div>
+-->
+이 문서는 Angular 문서(이 사이트)에 기여하려는 분들을 위한 가이드 문서입니다.
+기여자들은 모두 이 가이드라인을 따라야 하며 문서 편집자의 승인을 반영됩니다.
 
+가이드라인을 정하는 이유는 이렇습니다:
+
+* Angular 문서를 보는 사용자들에게 높은 수준의 문서를 일관되게 제공하려고 합니다.
+
+* 문서 작성에 기여하는 과정을 단순하게 만들기 위해서입니다. 문서를 작성할 때 사용할 말투, 스타일을 미리 정해두었기 때문에 필요한 내용을 빠르게 찾을 수 있을 것입니다.
+
+
+<div class="alert is-helpful">
+
+이 가이드 문서는 *살아있는 문서* 이며 계속 수정됩니다.
+되도록 많은 내용을 담도록 확장하고 있지만 이 가이드문서에서 아직 다루지 않는 내용이 있을 수 있습니다.
+다른 문서와 충돌하는 내용이 있다면 **이 문서를 최우선 기준으로 삼으세요**.
+
+</div>
+
+
+<!--
 ## Scope of these guidelines
+-->
+## 이 문서에서 다루는 내용
 
+<!--
 We ask all contributing authors to adhere to three aspects of style:
 
 
@@ -54,10 +81,46 @@ Style                    | Guidelines
 Note: Angular API and CLI reference docs are generated from source code and/or related source files, which may have other markup styles and other ways of including code examples.
 
 </div>
+-->
+이 가이드 문서는 다음 세가지 분야를 다룹니다:
+
+* **문서 스타일:** 문서에 사용하는 단어, 문법, 대소문자 구분, 문장부호.
+Angular 가이드문서는 일관된 "말투"로 작성되어야 하며, 정확한 정보를 제공해야 하고, 배경과 관계없이 전세계 개발자들에게 도움이 되어야 합니다.
+
+* **마크업 스타일:** 이미지, 표, 경고 메시지, 예제 코드를 다루는 방법.
+Angular 문서는 마크다운(Markdown)으로 작성되며, 필요에 맞게 확장된 형태로 제공됩니다.
+마크업 스타일을 확실하게 지켜야 사용자가 보기 편하고, 이 사이트를 빌드할 때 문제가 발생하지 않으며, 의도된 대로 동작할 것입니다.
+
+* **Angular 코딩 스타일:** 애플리케이션이나 예제 코드에 사용하는 코딩 스타일.
+Angular의 개념과 기능을 다룰 때 이해하기 쉽도록 코드 예제를 제공하는 것을 권장합니다.
+예제로 만든 앱은 Angular 문서 사이트에 직접 들어가기 때문에 Angular 문서를 빌드할 때 자동으로 테스트하도록 구성되어 있습니다.
+예제 코드에 기여하고 싶다면 Angular는 물론이고 Angular 문서 사이트가 어떻게 동작하는지 이해해야 합니다.
+
+각 분야에 해당하는 가이드라인이 어떤 내용을 바탕으로 작성되었는지, 이 문서에서는 어떤 내용을 더 다루는지 아래 표를 보면서 확인해 보세요.
 
 
+스타일                    | 가이드라인
+------------------------ | -------------------------------
+**문서 스타일**        | 기준: [Google Developer Documentation Style Guide](https://developers.google.com/style/)<br />이 문서: Angular와 관련된 모든 내용을 다룹니다.
+**마크업 스타일**         | 기준: 이 문서<br />이 문서: 마크다운으로 작성하는 가이드 문서의 마크업, 튜토리얼을 다룹니다.
+**Angular 코딩 스타일** | 기준: [Angular 스타일 가이드](guide/styleguide "Angular Application Code Style Guide").<br />이 문서: Angular 문서에 사용하는 예제 코드를 어떻게 만들고, 관리하는지에 대해 다룹니다.
+
+
+<div class="alert is-helpful">
+
+참고: Angular API 문서와 CLI 문서는 소스 코드에 있는 코드를 기반으로 자동 생성됩니다.
+이 문서에서 설명하는 내용과 다른 스타일로 작성될 수 있습니다.
+
+</div>
+
+
+
+<!--
 ## Doc generation and tooling
+-->
+## 문서 생성, 관련 툴
 
+<!--
 To make changes to the documentation pages and sample code, clone the [Angular github repository](https://github.com/angular/angular "Angular repo") and go to the `aio/` folder.
 
 The [aio/README.md](https://github.com/angular/angular/blob/master/aio/README.md "AIO ReadMe") explains how to install and use the tools to edit and test your changes.
@@ -73,9 +136,30 @@ Here are a few essential commands for guide page authors.
 1.  http://localhost:4200/  &mdash;  browse to the app running locally.
 
 You can combine `yarn docs-watch` and `yarn start` into one command with `yarn serve-and-sync`.
+-->
+Angular 문서를 수정하고 싶다면 [Angular GitHub 코드저장소](https://github.com/angular/angular "Angular repo")를 클론하고 `aio/` 폴더로 이동하세요.
 
+관련 패키지를 어떻게 설치하는지, 문서를 수정하고 테스트할 때는 어떤 툴을 사용해야 하는지는 [aio/README.md](https://github.com/angular/angular/blob/master/aio/README.md "AIO ReadMe") 문서에 작성되어 있습니다.
+
+문서를 수정하면서 사용하는 명령 중 중요한 것 몇가지 살펴보면 이렇습니다.
+
+1. `yarn setup` &mdash; 문서 프로젝트에 필요한 패키지를 설치합니다.
+
+2. `yarn docs-watch --watch-only` &mdash; 파일이 변경되는 것을 감지해서 브라우저를 자동으로 갱신합니다. `--watch-only` 플래그를 사용하면 최초 재빌드를 건너뜁니다.
+
+1. `yarn start` &mdash; 변경한 내용을 브라우저에서 확인할 수 있도록 문서 뷰어 애플리케이션을 시작합니다.
+
+1. http://localhost:4200/ &mdash; 로컬 환경에서 확인할 수 있는 문서 뷰어 애플리케이션입니다.
+
+`yarn docs-watch` 명령과 `yarn start` 명령을 한 번에 실행하려면 `yarn serve-and-sync` 명령을 사용하면 됩니다.
+
+
+<!--
 ## Guide pages
+-->
+## 가이드 문서
 
+<!--
  All but a few guide pages are [markdown](https://daringfireball.net/projects/markdown/syntax "markdown") files with an `.md` extension.
 
 Every guide page file is stored in the `content/guide` directory. Although the [side navigation](#navigation) panel displays as a hierarchy, the directory is flat with no sub-folders.
@@ -100,9 +184,47 @@ _Marketing_ pages are similar to guide pages. They're located in the `content/ma
 Only a few people are authorized to write marketing pages. This style guide does not discuss creation or maintenance of marketing pages.
 
 </div>
+-->
+간단하지만 `.md` 파일 확장자에 대한 모든 내용을 다루고 있는 문서는 [markdown](https://daringfireball.net/projects/markdown/syntax "markdown")에서 확인할 수 있습니다.
 
+가이드 문서 파일은 모두 `content/guide` 디렉토리 안에 있습니다.
+[왼쪽 네비게이션](#navigation) 패널은 계층으로 구성되어 있지만, 이 디렉토리에는 하위 폴더가 존재하지 않습니다.
+이후에 네비게이션 구조가 변경되더라도 파일 위치를 옮기지 않기 위해 이 방식을 선택했습니다.
+
+문서 프로젝트를 빌드하면 `content/guide` 디렉토리에 있는 마크다운 파일을 JSON 파일로 변환해서 `src/generated/docs/guide` 디렉토리로 옮기는데, 이 디렉토리에도 하위 폴더가 존재하지 않습니다.
+이렇게 생성된 JSON 파일에는 문서에 대한 메타데이터와 HTML 문서가 들어 있습니다.
+
+문서 사이트를 방문하는 사용자는 페이지 URL로 문서 화면을 요청합니다.
+그러면 문서 뷰어가 해당 JSON 파일을 불러와서, 처리하고 온전한 HTML 문서로 렌더링합니다.
+
+페이지 URL은 `content` 파일의 이름과 같기 때문에 `guide/{문서-이름}`과 같은 형식이 됩니다.
+지금 보고 있는 _이 문서_ 라면 `content/guide/doc-style-guide.md` 파일에 원문이 있고, 주소는 `guide/docs-style-guide`가 됩니다.
+
+
+<div class="alert is-helpful">
+
+_튜토리얼_ 문서도 일반 가이드 문서와 비슷합니다.
+`content/guide`가 아니라 `content/tutorial` 디렉토리에 있고 URL이 `tutorial/{문서-이름}`으로 구성된다는 점만 다릅니다.
+
+_API_ 문서는 Angular 소스 코드에 있는 내용을 기반으로 자동 생성된 것이며 `src/generated/docs/api` 디렉토리에 존재합니다.
+Angular 문서 뷰어는 `api/`로 시작하는 URL을 확인하면 이 디렉토리에 있는 JSON 문서 파일을 불러옵니다.
+API 문서를 생성하고 관리하는 내용은 이 가이드 문서에서 다루지 않습니다.
+
+_마케팅_ 문서도 일반 가이드 문서와 비슷합니다.
+이 문서들은 `content/marketing` 디렉토리에 있는데, 개별 문서 파일은 마크다운일 수 있지만 정적 HTML 문서일 수도 있고, JSON 데이터를 렌더링하는 동적 HTML 문서일 수도 있습니다.
+
+마케팅 문서들은 일부 사용자만 수정할 수 있습니다.
+마케팅 문서를 생성하고 관리하는 내용은 이 가이드 문서에서 다루지 않습니다.
+
+</div>
+
+
+<!--
 ## Markdown and HTML
+-->
+## 마크다운, HTML
 
+<!--
 While documentation guide pages ultimately render as HTML, almost all of them are written in [markdown](https://daringfireball.net/projects/markdown/syntax "markdown").
 
 Markdown is easier to read and to edit than HTML. Many editors (including Visual Studio Code) can render markdown as you type it.
@@ -130,9 +252,47 @@ Standard markdown processors don't allow you to put markdown _within_ HTML tags.
   It is customary but not required to _precede_ the _closing HTML_ tag with a blank line as well.
 
 </div>
+-->
+가이드 문서는 결국 HTML로 렌더링되지만, 문서의 내용은 거의 [마크다운](https://daringfireball.net/projects/markdown/syntax "markdown")으로 작성됩니다.
 
+마크다운은 HTML보다 읽기 쉽고 수정하기도 쉽습니다.
+Visual Studio Code와 같은 에디터를 사용한다면 입력한 내용이 어떻게 렌더링 되는지도 바로 확인할 수 있습니다.
+
+때로는 마크다운 문법이 아니라 HTML 문법으로 작성해야 하는 경우도 있습니다.
+마크다운 파일에는 마크다운 문법은 물론이고 HTML를 섞어서 사용할 수 있습니다.
+
+보통 마크다운 프로세서는 HTML 태그 _안에_ 마크다운을 작성하지 못하도록 합니다.
+하지만 Angular 마크다운 프로세서는 **HTML 안에서도 마크다운을 사용할 수 있도록 지원**합니다.
+규칙 하나만 지키면 됩니다:
+
+
+<div class="alert is-critical">
+
+HTML 태그 앞뒤에 _빈 줄 하나를_ **꼭** 넣으세요
+
+</div>
+
+```html
+<div class="alert is-critical">
+
+  HTML 태그 앞뒤에 _빈 줄 하나를_ **꼭** 넣으세요
+
+</div>
+```
+
+<div class="alert is-helpful">
+
+  보통은 그렇게 사용하지만 _HTML 닫는 태그 앞_ 에 빈 줄을 추가할 필요는 없습니다.
+
+</div>
+
+
+<!--
 ## Title
+-->
+## 제목
 
+<!--
 Every guide document must have a title.
 
 The title should appear at the top of the physical page.
@@ -153,9 +313,40 @@ Title text should be in "Sentence case", which means the first word is capitaliz
 **Always follow the title with at least one blank line.**
 
 Note that the corresponding left-nav TOC text should be in "title case", which means that you use capital letters to start the first words and all principal words. Use lower case letters for secondary words such as "in", "of", and "the". The TOC title can also be shortened to fit in the column.
+-->
+가이드 문서에는 반드시 제목이 있어야 합니다.
 
+제목은 가이드 문서 제일 위에 표시되며, 마크다운 `#` 문자로 시작하세요.
+`<h1>` 태그를 사용해도 됩니다.
+
+
+```html
+  # Angular 문서 작성 스타일 가이드
+```
+
+**제목(`<h1>`)은 문서마다 한 번만 사용할 수 있습니다!**
+
+제목은 "문장처럼(Sentence case)" 작성합니다.
+첫 번째 글자는 대문자로 시작하며 그 다음 글자는 모두 소문자여야 합니다.
+"Angular"와 같은 기술 용어는 예외입니다.
+
+```html
+  # Deprecation policy in Angular
+```
+
+**제목 뒤에 빈 줄을 꼭 넣으세요.**
+
+왼쪽 네비게이션의 TOC는 "제목처럼(title case)" 표시됩니다.
+각 단어의 첫 번째 글자는 대문자로 표시되며 "in"이나 "of", "the"와 같은 일부 경우만 소문자로 표시됩니다.
+TOC 제목은 칼럼에 맞게 축약될 수 있습니다.
+
+
+<!--
 ## Sections
+-->
+## 섹션
 
+<!--
 A typical document is divided into sections.
 
 All heading text should be in "Sentence case", which means the first word is capitalized and all other words are lower case.
@@ -192,9 +383,57 @@ The secondary heading should be followed by a blank line and then the content fo
 
   A secondary section ...
 ```
+-->
+한 문서는 여러개의 섹션으로 구성됩니다.
 
+섹션의 제목은 "문장처럼(Sentence case)" 작성합니다.
+첫 번째 글자는 대문자로, 나머지 글자는 소문자로 작성하면 됩니다.
+
+
+**섹션 제목 뒤에 빈 줄을 꼭 넣으세요.**
+
+<h2 class="no-toc">
+메인 섹션 제목
+</h2>
+
+메인 섹션은 세부 섹션 여러개로 구성되기도 합니다.
+
+메인 섹션은 마크다운 `##` 문자로 시작하세요.
+`<h2>` HTML 태그를 사용해도 됩니다.
+
+메인 섹션 제목은 본문과 구분하기 위해 메인 섹션 제목 뒤에 반드시 빈 줄이 하나 이상 있어야 합니다.
+
+```html
+  ## 섹션
+
+  섹션의 본문이 여기에 들어갑니다.
+```
+
+
+<h3 class="no-toc">
+세부 섹션 제목
+</h3>
+
+세부 섹션에는 메인 섹션 제목과 관련된 내용 중 일부를 자세하게 설명합니다.
+
+세부 섹션 제목은 마크다운 `###` 문자로 시작합니다.
+`<h3>` HTML 태그를 사용해도 됩니다.
+
+세부 섹션 제목은 본문과 구분하기 위해 세부 섹션 제목 뒤에 반드시 빈 줄이 하나 이상 있어야 합니다.
+
+```html
+  ### 세부 섹션 제목
+
+  세부 섹션의 본문이 여기에 들어갑니다
+```
+
+
+<!--
 #### Additional section headings
+-->
+#### 더 깊은 섹션의 제목
 
+<!--
 Try to minimize the heading depth, preferably only two. But more headings, such as this one, are permitted if they make sense.
 
 **N.B.**:  The [Table-of-contents](#table-of-contents) generator only considers main (`<h2>`) and secondary (`<h3>`) headings.
@@ -204,9 +443,26 @@ Try to minimize the heading depth, preferably only two. But more headings, such 
 
   Try to minimize ...
 ```
+-->
+목차를 단순하게 유지하기 위해 섹션 제목은 2단계까지만 표시됩니다.
+목차에 표시되지는 않겠지만 섹션을 더 세분화 하려면 더 깊은 섹션 제목을 사용해도 됩니다.
 
+**참고**: [목차](#table-of-contents)를 생성하는 제너레이터는 메인 섹션 제목(`<h2>`)과 2차 섹션 제목(`<h3>`)만 추출합니다.
+
+```html
+  #### 더 깊은 섹션 제목
+
+  더 깊은 섹션의 본문이 여기에 들어갑니다.
+```
+
+
+{@a table-of-contents}
+<!--
 ## Table of contents
+-->
+## 목차(Table of contents)
 
+<!--
 Most pages display a table of contents (TOC). The TOC appears in the right panel when the viewport is wide. When narrow, the TOC appears in an expandable/collapsible region near the top of the page.
 
 You should not create your own TOC by hand. The TOC is generated automatically from the page's main and secondary section headers.
@@ -226,9 +482,38 @@ You can turn off TOC generation for the _entire_ page by writing the title with 
 A guide without a TOC
 </h1>
 ```
+-->
+거의 모든 문서에는 목차(Table of contents, TOC)가 표시됩니다.
+브라우저 너비가 충분히 크다면 목차가 오른쪽 패널에 표시되는 것을 확인할 수 있습니다.
+브라우저 너비가 좁은 상황에서는 문서 제일 위에 접을 수 있는 형태로 표시됩니다.
 
+목차는 수동으로 생성할 필요가 없습니다.
+목차는 가이드 문서의 메인 섹션 제목과 세부 섹션 제목을 추출해서 자동으로 생성됩니다.
+
+목차에서 특정 섹션 제목을 제외하려면 `<h2>` 엘리먼트나 `<h3>` 엘리먼트에 `no-toc` 클래스를 추가하면 됩니다.
+이 방식은 HTML 엘리먼트로 작성한 섹션 제목에만 사용할 수 있습니다.
+
+```html
+<h3 class="no-toc">
+이 섹션 제목은 목차에 표시되지 않습니다.
+</h3>
+```
+
+목차 _전체를_ 생성하지 않으려면 문서 제목을 의미하는 `<h1>` 엘리먼트에 `no-toc` 클래스를 추가하면 됩니다.
+
+```html
+<h1 class="no-toc">
+목차가 표시되지 않는 가이드 문서
+</h1>
+```
+
+{@a navigation}
+<!--
 ## Navigation
+-->
+## 네비게이션
 
+<!--
 The navigation links at the top, left, and bottom of the screen are generated from the JSON configuration file, `content/navigation.json`.
 
 The authority to change the `navigation.json` file is limited to a few core team members.
@@ -283,19 +568,93 @@ Do not create a node that is both a _header_ and an _item_ node. That is, do not
 The current guidelines allow for a three-level navigation structure with two header levels. Don't add a third header level.
 
 </div>
+-->
+이 사이트 제일 위, 왼쪽, 아래에 표시되는 네비게이션 링크는 `content/navigation.json` 파일을 기준으로 생성된 것입니다.
+
+`navigation.json` 파일을 수정할 권한은 Angular 팀 중에서도 일부만 갖고 있습니다.
+하지만 새로운 가이드 문서를 추가하는 경우에는 왼쪽 네비게이션 패널에 표시될 제목과 위치를 제안할 수 있습니다.
+
+`navigation.json` 파일에 있는 `SideNav` 노드를 확인해 보세요.
+`SideNav` 노드는 네비게이션 노드의 배열 형태로 구성됩니다.
+개별 노드는 문서 하나를 가리키는 _아이템(item)_ 노드이거나 자식 노드를 갖고 있는 _헤더(header)_ 노드입니다.
+
+수정하려는 문서의 헤더를 찾아보세요.
+Angular의 기능을 설명하는 가이드 문서는 `Fundamentals` 헤더 노드 안쪽에 있습니다.
+
+```html
+{
+  "title": "Fundamentals",
+  "tooltip": "The fundamentals of Angular",
+  "children": [ ... ]
+}
+```
+
+_헤더_ 노드의 자식 노드는 _아이템_ 노드이거나 또다른 _헤더_ 노드일 수 있습니다.
+수정하려는 문서가 세부 헤더 안에 있다면 JSON 파일에서 세부 헤더를 찾아보세요.
+
+_아이템_ 노드는 _헤더_ 노드의 자식으로 추가할 수 있습니다.
+이런식으로 구성하면 됩니다.
+
+```html
+{
+  "url": "guide/architecture",
+  "title": "Architecture",
+  "tooltip": "The basic building blocks of Angular applications."
+}
+```
+
+네비게이션 노드는 이런 프로퍼티들로 구성됩니다:
+
+* `url`- 가이드 문서의 URL(아이템 노드에만 존재합니다.)
+
+* `title`- 왼쪽 네비게이션에 표시될 문자열
+
+* `tooltip` - 네비게이션 링크에 마우스를 올렸을 때 표시될 내용
+
+* `children` - 자식 노드 배열(헤더 노드에만 존재합니다.)
+
+* `hidden` - `true`로 지정하면 해당 문서가 네비게이션 패널에 표시되지 않습니다. 일반적으로는 잘 사용되지 않지만, 문서를 작업하는 동안 사용자에게 노출하지 않으려고 지정하는 경우가 종종 있습니다. "Angular 문서 작성 스타일 가이드" 문서에도 `hidden: true`가 지정되어 있습니다.
 
 
+<div class="alert is-critical">
+
+_헤더_ 노드와 _아이템_ 노드에 동시에 속하는 노드를 만들지 마세요.
+_헤더_ 노드에는 `url` 프로퍼티를 사용하지 않습니다.
+
+</div>
+
+
+<div class="alert is-critical">
+
+현재 가이드라인에서는 헤더 계층을 2단계까지, 네비게이션 계층을 3단계까지만 허용합니다.
+
+</div>
+
+
+<!--
 ## Code snippets
+-->
+## 코드 블럭(Code snippets)
 
+<!--
 Guides are rich in examples of working Angular code. Example code can be commands entered in a terminal window, a fragment of TypeScript or HTML, or an entire code file.
 
 Whatever the source, the doc viewer renders them as "code snippets", either individually with the [_code-example_](#code-example "code-example") component or as a tabbed collection with the [_code-tabs_](#code-tabs "code-tabs") component.
+-->
+Angular 가이드 문서에는 수많은 예제 코드가 있습니다.
+예제 코드는 터미널 창에 입력하는 명령일 수 있으며 TypeScript나 HTML 코드의 일부일 수도 있고, 파일에 있는 코드가 전부 표시될 수도 있습니다.
+
+어떤 것을 사용하던지 Angular 문서 뷰어는 이 예제 코드를 [_code-example_](#code-example "code-example") 컴포넌트로 표시하거나, 탭 형태로 표시되는 [_code-tabs_](#code-tabs "code-tabs") 컴포넌트로 표시합니다.
 
 
 {@a code-example}
 
+<!--
 ### Code example
+-->
+### CodeExampleComponent
 
+<!--
 You can display a simple, inline code snippet with the markdown backtick syntax.
 Use a single backtick on either side of a term when referring to code or the
 name of a file in a sentence.
@@ -375,9 +734,101 @@ A guide page might not have its own sample code. It might refer instead to a sam
 The Angular CI process runs all end-to-end tests for every Angular PR. Angular re-tests the samples after every new version of a sample and every new version of Angular itself.
 
 When possible, every snippet of code on a guide page should be derived from a code sample file. You tell the Angular documentation engine which code file - or fragment of a code file - to display by configuring `<code-example>` attributes.
+-->
+마크다운 역따옴표(`` ` ``) 문법을 활용하면 인라인 코드를 간단하게 표시할 수 있습니다.
+코드에 해당하는 구문, 파일 이름에 해당하는 구문 앞뒤에 역따옴표를 추가하면 됩니다.
+이런 내용이 있다고 합시다:
 
+* `app.component.ts` 파일에 `logger()` 메서드를 추가합니다.
+* `name` 프로퍼티의 값은 `Sally` 입니다.
+* `declarations` 배열에 컴포넌트 클래스 이름을 추가하세요.
+
+그렇다면 마크다운은 이렇게 작성합니다:
+
+```markdown
+
+* In the `app.component.ts`, add a `logger()` method.
+* The <code class="no-auto-link">item</code> property is `true`.
+* Add the component class name to the `declarations` array.
+
+```
+
+사전에 등록된 경우에는 용어에 역따옴표를 지정했을 때 API 문서로 자동으로 연결되는 경우가 있습니다.
+이 기능을 비활성화하려면 `no-auto-link` 클래스를 지정하면 됩니다:
+
+```html
+The <code class="no-auto-link">item</code> property is `true`.
+```
+
+Angular 가이드 문서는 예제 코드를 표시할 때 `<code-example>` 태그에 해당하는 `CodeExampleComponent`를 사용합니다.
+이 태그에는 `header` 어트리뷰트를 지정할 수 있는데, 예제 파일이 어떤 경로에 있는지, 이름이 정확히 무엇인지 지정할 때 사용합니다.
+예제 코드가 다루는 것이 무엇인지 정확하게 파악할 수 있도록 헤더는 반드시 사용하는 것을 권장합니다.
+자세한 내용은 [코드 블럭과 예제 코드](guide/docs-style-guide#code-snippets-and-code-samples) 섹션을 참고하세요.
+
+
+<h3 class="no-toc">인라인(Inline) 코드 블럭</h3>
+
+되도록이면 [동작하는 애플리케이션의 코드](#from-code-samples)를 참조하는 것이 좋습니다.
+하지만 인라인 코드 블럭을 사용하는 것이 더 좋은 경우도 있습니다.
+
+터미널에 입력하는 내용이나 출력되는 내용을 `<code-example>` 태그 안에 넣고 이 태그에 `code-shell` CSS 클래스를 지정한 후에 언어를 `sh`로 지정하면 이렇게 표시됩니다:
+
+<code-example language="sh" class="code-shell">
+  npm start
+</code-example>
+
+```html
+<code-example language="sh" class="code-shell">
+  npm start
+</code-example>
+```
+
+인라인으로 직접 작성한 코드는 테스트할 수 _없기_ 때문에 동작한다고 보장할 수 없습니다.
+그래서 이런 방식은 짧은 코드를 사용할 때나, 커맨드 셸에 어떤 값을 입력할 때, 커맨드 셸에서 출력되는 내용을 표시할 때만 제한적으로 사용됩니다.
+
+특별한 이유가 있어서 편집자가 허락하지 않는 한 **인라인 코드 블럭**을 사용하지 마세요.
+보통은 테스트가 통과한 예제 코드에서 자동으로 추출하는 방식을 사용해야 합니다.
+
+JSON 파일에 구성하는 환경설정 옵션과 같이 실제로 사용되지 않는 코드를 설명할 때는 `<code-example>` 태그를 사용해도 되며, 해당 내용이 어떤 내용인지 구분할 수 있도록 `header` 어트리뷰트를 지정하는 것을 권장합니다.
+
+
+{@a from-code-samples}
+
+<h3 class="no-toc">코드 블럭과 예제 코드</h3>
+
+Angular 가이드 문서에서는 실제로 동작하는 예제 코드를 화면에 표시하는 것이 아주 중요합니다.
+
+그래서 저희는 특정 가이드 문서에서 설명하는 내용대로 동작하는 예제 코드를 직접 불러와서 코드 블럭을 표시하고 있습니다.
+
+문서에 표시되는 예제 코드를 관리할 책임은 해당 문서를 작성한 사람에게 있습니다.
+문서 작성자는 해당 예제에 대한 엔드-투-엔드 테스트를 반드시 작성해야 합니다.
+
+예제 코드는 `angular/angular` 코드 저장소의 `content/examples` 디렉토리 아래에 있습니다.
+예제 폴더의 이름은 이 예제 코드가 사용되는 가이드 문서의 이름과 같습니다.
+
+
+<div class="alert is-helpful">
+
+가이드 문서에 표시되는 예제 코드가 없을 수 있습니다.
+다른 문서에 있는 예제 코드를 참조하는 경우도 있습니다.
+
+</div>
+
+
+Angular CI는 Angular PR이 있을 때마다 엔드-투-엔드 테스트를 전부 실행합니다.
+그리고 예제 코드가 변경되거나 Angular의 새 버전이 나올때마다 모든 테스트를 실행합니다.
+
+되도록이면 가이드 문서에 표시되는 코드 블럭을 예제 코드 파일에서 직접 불러오는 것이 좋습니다.
+어떤 파일을 불러왔는지는 `<code-example>` 어트리뷰트 값을 지정해서 화면에 표시할 수 있습니다.
+
+
+{@a code-snippets-and-code-samples}
+<!--
 #### Code snippet from a file
+-->
+#### 파일을 불러와서 코드 블럭 표시하기
 
+<!--
 _This_ "Authors Doc Style Guide" has its own sample application, located in the `content/examples/docs-style-guide` folder.
 
 The following _code-example_ displays the sample's `app.module.ts`.
@@ -422,6 +873,53 @@ The preferred way to un-ignore a file is to update the `content/examples/.gitign
 </code-example>
 
 </div>
+-->
+지금 보고 있는 "Angular 문서 작성 스타일 가이드" 문서에 표시되는 예제 애플리케이션은 `content/examples/docs-style-guide` 폴더에 있습니다.
+
+이 폴더에 있는 `app.module.ts` 파일의 내용은 이렇습니다.
+
+<code-example path="docs-style-guide/src/app/app.module.ts" header="src/app/app.module.ts"></code-example>
+
+이 파일의 내용을 코드 블럭으로 표시하려면 마크업을 이렇게 작성하면 됩니다:
+
+```html
+<code-example
+  path="docs-style-guide/src/app/app.module.ts"
+  header="src/app/app.module.ts">
+</code-example>
+```
+
+코드 블럭에 불러올 소스 파일은 `content/examples` _안에_ 있는 경로를 `path` 어트리뷰트로 지정하면 됩니다.
+위 예제에서 `path` 어트리뷰트에 지정된 값은 `docs-style-guide/src/app/app.module.ts` 입니다.
+
+이 파일을 찾을수 있도록 헤더를 추가하려면 `header` 어트리뷰트를 지정하면 됩니다.
+보통은 예제 코드의 최상위 폴더를 기준으로 파일 위치를 지정합니다.
+
+
+<div class="alert is-helpful">
+
+따로 언급하지 않는 한 이 문서에서 다루는 코드 블럭은 모두 `content/examples/docs-style-guide` 디렉토리에 있는 소스 코드에서 불러온 것입니다.
+
+</div>
+
+
+<div class="alert is-important">
+
+경로로 지정한 파일이 존재하지 않거나 **_git_-ignore** 에 포함되어 있으면 에러가 발생합니다.
+
+`.js` 파일들은 대부분 _git_-ignore에 추가되어 있습니다.
+이렇게 제외된 파일을 다시 포함시키고 화면에 표시하려면 이 파일을 _git_-ignore 에서 제외해야 합니다.
+
+가장 좋은 방법은 `content/examples/.gitignore` 파일을 이렇게 수정하는 것입니다:
+
+<code-example header="content/examples/.gitignore">
+  # my-guide
+  !my-guide/src/something.js
+  !my-guide/more-javascript*.js
+</code-example>
+
+</div>
+
 
 #### Code-example attributes
 
@@ -493,7 +991,11 @@ Here's the markup for an "avoid" example in the
 </code-example>
 
 {@a code-tabs}
+
+<!--
 ### Code Tabs
+-->
+### CodeTabsComponent
 
 Code tabs display code much like _code examples_ do.  The added advantage is that they can display multiple code samples within a tabbed interface.  Each tab is displayed using _code pane_.
 
