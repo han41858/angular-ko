@@ -27,11 +27,11 @@ When in doubt, **follow this guide rather than imitating existing documents.**
 </div>
 -->
 이 문서는 Angular 문서(이 사이트)에 기여하려는 분들을 위한 가이드 문서입니다.
-기여자들은 모두 이 가이드라인을 따라야 하며 문서 편집자의 승인을 반영됩니다.
+기여자들은 모두 이 가이드라인을 따라야 하며 문서 편집자의 승인을 거친 후에 반영됩니다.
 
 가이드라인을 정하는 이유는 이렇습니다:
 
-* Angular 문서를 보는 사용자들에게 높은 수준의 문서를 일관되게 제공하려고 합니다.
+* Angular 문서를 보는 독자들에게 높은 수준의 문서를 일관되게 제공하려고 합니다.
 
 * 문서 작성에 기여하는 과정을 단순하게 만들기 위해서입니다. 문서를 작성할 때 사용할 말투, 스타일을 미리 정해두었기 때문에 필요한 내용을 빠르게 찾을 수 있을 것입니다.
 
@@ -85,7 +85,7 @@ Note: Angular API and CLI reference docs are generated from source code and/or r
 이 가이드 문서는 다음 세가지 분야를 다룹니다:
 
 * **문서 스타일:** 문서에 사용하는 단어, 문법, 대소문자 구분, 문장부호.
-Angular 가이드문서는 일관된 "말투"로 작성되어야 하며, 정확한 정보를 제공해야 하고, 배경과 관계없이 전세계 개발자들에게 도움이 되어야 합니다.
+Angular 가이드문서는 일관된 "말투(voice)"로 작성되어야 하며, 정확한 정보를 제공해야 하고, 배경과 관계없이 전세계 개발자들에게 도움이 되어야 합니다.
 
 * **마크업 스타일:** 이미지, 표, 경고 메시지, 예제 코드를 다루는 방법.
 Angular 문서는 마크다운(Markdown)으로 작성되며, 필요에 맞게 확장된 형태로 제공됩니다.
@@ -141,7 +141,7 @@ Angular 문서를 수정하고 싶다면 [Angular GitHub 코드저장소](https:
 
 관련 패키지를 어떻게 설치하는지, 문서를 수정하고 테스트할 때는 어떤 툴을 사용해야 하는지는 [aio/README.md](https://github.com/angular/angular/blob/master/aio/README.md "AIO ReadMe") 문서에 작성되어 있습니다.
 
-문서를 수정하면서 사용하는 명령 중 중요한 것 몇가지 살펴보면 이렇습니다.
+문서를 수정하면서 사용하는 명령 중 중요한 것 몇가지를 살펴보면 이렇습니다.
 
 1. `yarn setup` &mdash; 문서 프로젝트에 필요한 패키지를 설치합니다.
 
@@ -195,9 +195,9 @@ Only a few people are authorized to write marketing pages. This style guide does
 이렇게 생성된 JSON 파일에는 문서에 대한 메타데이터와 HTML 문서가 들어 있습니다.
 
 문서 사이트를 방문하는 사용자는 페이지 URL로 문서 화면을 요청합니다.
-그러면 문서 뷰어가 해당 JSON 파일을 불러와서, 처리하고 온전한 HTML 문서로 렌더링합니다.
+그러면 문서 뷰어가 해당 JSON 파일을 불러와서 처리한 후에 온전한 HTML 문서로 렌더링합니다.
 
-페이지 URL은 `content` 파일의 이름과 같기 때문에 `guide/{문서-이름}`과 같은 형식이 됩니다.
+페이지 URL은 문서 파일의 이름과 같기 때문에 `guide/{문서-이름}`과 같은 형식이 됩니다.
 지금 보고 있는 _이 문서_ 라면 `content/guide/doc-style-guide.md` 파일에 원문이 있고, 주소는 `guide/docs-style-guide`가 됩니다.
 
 
@@ -207,7 +207,7 @@ _튜토리얼_ 문서도 일반 가이드 문서와 비슷합니다.
 `content/guide`가 아니라 `content/tutorial` 디렉토리에 있고 URL이 `tutorial/{문서-이름}`으로 구성된다는 점만 다릅니다.
 
 _API_ 문서는 Angular 소스 코드에 있는 내용을 기반으로 자동 생성된 것이며 `src/generated/docs/api` 디렉토리에 존재합니다.
-Angular 문서 뷰어는 `api/`로 시작하는 URL을 확인하면 이 디렉토리에 있는 JSON 문서 파일을 불러옵니다.
+Angular 문서 뷰어는 `api/`로 시작하는 URL로 요청이 들어오면 이 디렉토리에 있는 JSON 문서 파일을 불러옵니다.
 API 문서를 생성하고 관리하는 내용은 이 가이드 문서에서 다루지 않습니다.
 
 _마케팅_ 문서도 일반 가이드 문서와 비슷합니다.
@@ -282,7 +282,7 @@ HTML 태그 앞뒤에 _빈 줄 하나를_ **꼭** 넣으세요
 
 <div class="alert is-helpful">
 
-  보통은 그렇게 사용하지만 _HTML 닫는 태그 앞_ 에 빈 줄을 추가할 필요는 없습니다.
+  보통은 _HTML 닫는 태그 앞_ 에 빈 줄을 추가하지만, 필수는 아닙니다.
 
 </div>
 
@@ -336,9 +336,9 @@ Note that the corresponding left-nav TOC text should be in "title case", which m
 
 **제목 뒤에 빈 줄을 꼭 넣으세요.**
 
-왼쪽 네비게이션의 TOC는 "제목처럼(title case)" 표시됩니다.
+왼쪽 네비게이션의 목차는 "제목처럼(title case)" 표시됩니다.
 각 단어의 첫 번째 글자는 대문자로 표시되며 "in"이나 "of", "the"와 같은 일부 경우만 소문자로 표시됩니다.
-TOC 제목은 칼럼에 맞게 축약될 수 있습니다.
+목차의 문자열은 너비에 맞게 축약될 수 있습니다.
 
 
 <!--
@@ -445,7 +445,7 @@ Try to minimize the heading depth, preferably only two. But more headings, such 
 ```
 -->
 목차를 단순하게 유지하기 위해 섹션 제목은 2단계까지만 표시됩니다.
-목차에 표시되지는 않겠지만 섹션을 더 세분화 하려면 더 깊은 섹션 제목을 사용해도 됩니다.
+목차에 표시되지는 않겠지만 섹션을 더 세분화 하려면 더 깊은 섹션 제목을 사용하면 됩니다.
 
 **참고**: [목차](#table-of-contents)를 생성하는 제너레이터는 메인 섹션 제목(`<h2>`)과 2차 섹션 제목(`<h3>`)만 추출합니다.
 
@@ -460,7 +460,7 @@ Try to minimize the heading depth, preferably only two. But more headings, such 
 <!--
 ## Table of contents
 -->
-## 목차(Table of contents)
+## 목차
 
 <!--
 Most pages display a table of contents (TOC). The TOC appears in the right panel when the viewport is wide. When narrow, the TOC appears in an expandable/collapsible region near the top of the page.
@@ -572,7 +572,7 @@ The current guidelines allow for a three-level navigation structure with two hea
 이 사이트 제일 위, 왼쪽, 아래에 표시되는 네비게이션 링크는 `content/navigation.json` 파일을 기준으로 생성된 것입니다.
 
 `navigation.json` 파일을 수정할 권한은 Angular 팀 중에서도 일부만 갖고 있습니다.
-하지만 새로운 가이드 문서를 추가하는 경우에는 왼쪽 네비게이션 패널에 표시될 제목과 위치를 제안할 수 있습니다.
+하지만 새로운 가이드 문서를 추가하는 경우에는 왼쪽 네비게이션 패널에 표시될 제목과 위치를 제안해 주셔도 됩니다.
 
 `navigation.json` 파일에 있는 `SideNav` 노드를 확인해 보세요.
 `SideNav` 노드는 네비게이션 노드의 배열 형태로 구성됩니다.
@@ -753,7 +753,7 @@ When possible, every snippet of code on a guide page should be derived from a co
 
 ```
 
-사전에 등록된 경우에는 용어에 역따옴표를 지정했을 때 API 문서로 자동으로 연결되는 경우가 있습니다.
+사전에 등록된 용어에 역따옴표를 지정하면 API 문서로 자동으로 연결되는 경우가 있습니다.
 이 기능을 비활성화하려면 `no-auto-link` 클래스를 지정하면 됩니다:
 
 ```html
@@ -921,8 +921,12 @@ The preferred way to un-ignore a file is to update the `content/examples/.gitign
 </div>
 
 
+<!--
 #### Code-example attributes
+-->
+#### 컴포넌트 어트리뷰트
 
+<!--
 You control the _code-example_ output by setting one or more of its attributes:
 
 * `path`- the path to the file in the `content/examples` folder.
@@ -938,11 +942,32 @@ You control the _code-example_ output by setting one or more of its attributes:
 * `hideCopy`- hides the copy button
 
 * `language`- the source code language such as `javascript`, `html`, `css`, `typescript`, `json`, or `sh`. This attribute only works for inline examples.
+-->
+`CodeExampleComponent`의 어트리뷰트를 활용하면 코드 블럭이 표시되는 방식을 변경할 수 있습니다:
+
+* `path` &mdash; `content/examples` 폴더를 기준으로 파일 경로를 지정합니다.
+
+* `header` &mdash; 코드 블럭의 제목을 지정합니다.
+
+* `region` &mdash; 소스 파일에서 표시할 영역의 이름을 지정합니다. 영역은 _docregion_ 마크업으로 지정합니다.[아래](#region "Displaying a code fragment") 섹션을 참고하세요.
+
+* `linenums` &mdash; `true`, `false`, `number` 값을 지정할 수 있습니다. 값을 지정하지 않았을 때 기본값은 `false`이며, 줄번호가 표시되지 않습니다. 거의 사용되지는 않지만 `number` 값을 지정하면 해당 숫자로 줄번호가 시작합니다. 그래서 `linenum=4`라고 지정하면 첫 번째 줄이 4부터 시작합니다.
+
+* `class` &mdash; 코드 블럭에 추가로 지정될 CSS 클래스(ex. `no-box`, `code-shell`, `avoid`)를 지정합니다.
+
+* `hideCopy` &mdash; 복사 버튼을 표시하지 않습니다.
+
+* `language` &mdash; 소스 코드가 어떤 언어인지 지정합니다. `javascript`, `html`, `css`, `typescript`, `json`, `sh` 값을 지정할 수 있으며, 인라인 코드 블럭에만 사용할 수 있습니다.
+
 
 {@a region}
 
+<!--
 #### Displaying a code fragment
+-->
+#### 일부 코드만 표시하기
 
+<!--
 Often you want to focus on a fragment of code within a sample code file. In this example, you focus on the `AppModule` class and its `NgModule` metadata.
 
 <code-example
@@ -967,9 +992,39 @@ A couple of observations:
 
 1. Omitting the `header` is fine when the source of the fragment is obvious. We just said that this is a fragment of the `app.module.ts` file which was displayed immediately above, in full, with a header.
 There's no need to repeat the header.
+-->
+예제 코드 파일 중에서 일부 영역만 강조하고 싶은 경우가 있습니다.
+`AppModule` 클래스와 `NgModule` 메타데이터만 표시하는 경우가 그렇습니다.
 
+<code-example
+  path="docs-style-guide/src/app/app.module.ts"
+  region="class">
+</code-example>
+
+이런 경우에는 [아래](#source-code-markup) 섹션에서 설명하는 것처럼 표시하려는 코드를 _docregion_ 로 감싸고 영역 이름을 지정하면 됩니다.
+그리고 코드를 표시할 때 `<code-example>` 태그에 `region` 어트리뷰트를 지정하면 됩니다.
+
+
+```html
+<code-example
+  path="docs-style-guide/src/app/app.module.ts"
+  region="class">
+</code-example>
+```
+
+이런 내용을 확인해 보세요:
+
+1. `region` 어트리뷰트의 값은 소스 파일의 `#docregion`에 지정한 `"class"`입니다. `content/examples/docs-style-guide/src/app/app.modules.ts` 파일에서 이 내용을 찾아보세요.
+
+1. 코드 블럭이 무슨 내용을 다루고 있는지 확실하다면 `header` 어트리뷰트는 생략해도 됩니다. 이 예제에서도 코드 블럭 위에서 `app.module.ts` 파일의 일부라고 이미 언급하고 있기 때문에 생략했습니다. 제목을 다시 반복할 필요는 없습니다.
+
+
+<!--
 #### Example of bad code
+-->
+#### 나쁜 코드 예제
 
+<!--
 Sometimes you want to display an example of bad code or bad design.
 
 You should be careful. Readers don't always read carefully and are likely to copy and paste your example of bad code in their own applications. So don't display bad code often.
@@ -989,6 +1044,30 @@ Here's the markup for an "avoid" example in the
 
 <code-example path="styleguide/src/05-03/app/heroes/shared/hero-button/hero-button.component.avoid.ts" region="example" header="app/heroes/hero-button/hero-button.component.ts">
 </code-example>
+-->
+때로는 사용하지 말아야 하는 방식을 예제 코드로 표시하고 싶을 때가 있습니다.
+
+이런 경우에는 주의해야 합니다.
+문서를 읽는 사람이 항상 주의를 기울인다고 보장할 수 없습니다.
+나쁜 코드를 그대로 복사해서 자신의 애플리케이션에 그대로 붙여넣을 수도 있습니다.
+그래서 나쁜 코드는 자주 사용하지 마세요.
+
+나쁜 코드를 표시하려면 `class`에 `avoid`를 추가하는 것이 좋습니다.
+이 클래스를 지정하면 코드 블럭이 빨간색으로 표시되기 때문에 한 번 더 주의를 줄 수 있습니다.
+
+[_Angular 코딩 스타일 가이드_](guide/styleguide#05-03 "Style 05-03: components as elements")에서 다루는 내용 중에서 `avoid`를 사용한 코드 블럭을 보면 이렇습니다.
+
+```html
+<code-example
+  path="styleguide/src/05-03/app/heroes/shared/hero-button/hero-button.component.avoid.ts"
+  region="example"
+  header="app/heroes/hero-button/hero-button.component.ts">
+</code-example>
+```
+
+<code-example path="styleguide/src/05-03/app/heroes/shared/hero-button/hero-button.component.avoid.ts" region="example" header="app/heroes/hero-button/hero-button.component.ts">
+</code-example>
+
 
 {@a code-tabs}
 
@@ -997,14 +1076,29 @@ Here's the markup for an "avoid" example in the
 -->
 ### CodeTabsComponent
 
+<!--
 Code tabs display code much like _code examples_ do.  The added advantage is that they can display multiple code samples within a tabbed interface.  Each tab is displayed using _code pane_.
+-->
+`CodeTabsComponent`는 `CodeExampleComponent`와 비슷하게 예제 코드를 표시합니다.
+예제 코드가 탭으로 구성된다는 점만 다릅니다.
+각 탭은 개별 패널(code pane)로 구성됩니다.
 
+<!--
 #### Code-tabs attributes
+-->
+#### 탭 컴포넌트 어트리뷰트
 
+<!--
 * `linenums`: The value can be `true`, `false` or a number indicating the starting line number. If not specified, it defaults to `false`.
+-->
+* `linenums` &mdash; `true`, `false`, `number` 타입을 지정할 수 있습니다. 기본값은 `false` 이며, `number` 값을 지정하면 첫 번째 줄번호가 해당 값으로 시작합니다.
 
+<!--
 #### Code-pane attributes
+-->
+#### 패널 어트리뷰트
 
+<!--
 * `path` - a file in the content/examples folder
 * `header` - seen in the header of a tab
 * `linenums` - overrides the `linenums` property at the `code-tabs` level for this particular pane. The value can be `true`, `false` or a number indicating the starting line number. If not specified, it defaults to `false`.
@@ -1060,11 +1154,72 @@ The `linenums` attribute in the second pane disables line numbering for _itself 
   </code-pane>
 </code-tabs>
 ```
+-->
+* `path` &mdash; `content/examples` 폴더를 기준으로 소스 파일의 주소를 지정합니다.
+* `header` &mdash; 탭에 표시될 제목을 지정합니다.
+* `linenums` &mdash; `<code-tabs>` 계층에 지정된 `linenums` 프로퍼티를 오버라이드 합니다. `true`, `false`, `number` 타입을 지정할 수 있습니다. 기본값은 `false` 이며, `number` 값을 지정하면 첫 번째 줄번호가 해당 값으로 시작합니다.
+
+아래 예제는 개별 제목을 지정하면서 코드 탭을 구성한 결과물입니다.
+`<code-tabs>` 계층과 `<code-pane>` 계층에 지정한 `linenums` 프로퍼티가 어떻게 동작하는지 확인해 보세요.
+
+<code-tabs linenums="true">
+  <code-pane
+    header="app.component.html"
+    path="docs-style-guide/src/app/app.component.html">
+  </code-pane>
+  <code-pane
+    header="app.component.ts"
+    path="docs-style-guide/src/app/app.component.ts"
+    linenums="false">
+  </code-pane>
+  <code-pane
+    header="app.component.css (히어로 목록)"
+    path="docs-style-guide/src/app/app.component.css"
+    region="heroes">
+  </code-pane>
+  <code-pane
+    header="package.json (scripts)"
+    path="docs-style-guide/package.1.json">
+  </code-pane>
+</code-tabs>
+
+이 모습을 마크업으로 구성해보면 이렇습니다.
+
+이 마크업에서는 `<code-tabs>`에 `linenums` 어트리뷰트가 지정되었기 때문에 모든 패널에 줄번호가 표시됩니다.
+하지만 두 번째 패널에서 `linenums` 어트리뷰트를 비활성화했기 때문에 해당 패널에는 줄번호가 표시되지 않습니다.
+
+```html
+<code-tabs linenums="true">
+  <code-pane
+    header="app.component.html"
+    path="docs-style-guide/src/app/app.component.html">
+  </code-pane>
+  <code-pane
+    header="app.component.ts"
+    path="docs-style-guide/src/app/app.component.ts"
+    linenums="false">
+  </code-pane>
+  <code-pane
+    header="app.component.css (heroes)"
+    path="docs-style-guide/src/app/app.component.css"
+    region="heroes">
+  </code-pane>
+  <code-pane
+    header="package.json (scripts)"
+    path="docs-style-guide/package.1.json">
+  </code-pane>
+</code-tabs>
+```
+
 
 {@a source-code-markup}
 
+<!--
 ## Source code markup
+-->
+## 소스 코드 마크업
 
+<!--
 You must add special code snippet markup to sample source code files before they can be displayed by `<code-example>` and `<code-tabs>` components.
 
 <div class="alert is-helpful">
@@ -1083,9 +1238,9 @@ Code snippet markup is always in the form of a comment. Here's the default _docr
 Different file types have different comment syntax so adjust accordingly.
 
 ```html
-<!-- #docregion -->
+<!- #docregion ->
 ... some HTML ...
-<!-- #enddocregion -->
+<!- #enddocregion ->
 ```
 
 ```
@@ -1103,10 +1258,54 @@ Code snippet markup is not supported in JSON files because comments are forbidde
 See [below](#json-files) for details and workarounds.
 
 </div>
+-->
+소스 코드를 `<code-example>` 컴포넌트나 `<code-tabs>` 컴포넌트로 표시하려면 예제 코드용 마크업을 추가해야 합니다.
+
+
+<div class="alert is-helpful">
+
+이 문서에서 다루는 예제 소스 코드는 모두 `context/examples/docs-style-guide` 폴더에 있습니다.
+
+</div>
+
+예제 코드용 마크업은 주석 형태로 작성합니다.
+TypeScript 파일이나 JavaScript 파일에는 기본 _docregion_ 마크업을 이렇게 작성합니다:
+
+```
+// #docregion
+... 코드 ...
+// #enddocregion
+```
+
+파일 확장자가 다른 경우에는 해당 확장자에 맞는 주석을 사용합니다.
+
+```html
+<!-- #docregion -->
+... HTML 코드 ...
+<!-- #enddocregion -->
+```
+
+```
+/* #docregion */
+... CSS 코드 ...
+/* #enddocregion */
+```
+
+문서 생성 툴은 소스 코드를 문서 뷰어에 표시하기 전에 이 주석을 제거합니다.
+stackblitz나 예제 코드를 내려받을 때도 마찬가지입니다.
+
+
+<div class="alert is-important">
+
+JSON 파일에는 주석을 사용할 수 없기 때문에 예제 코드용 마크업도 사용할 수 없습니다.
+자세한 내용은 [아래](#json-files) 섹션을 참고하세요.
+
+</div>
 
 
 #### _#docregion_
 
+<!--
 The _#docregion_ is the most important kind of code snippet markup.
 
 The `<code-example>` and `<code-tabs>` components won't display a source code file unless it has a _#docregion_.
@@ -1123,9 +1322,32 @@ The `src/main.ts` is a simple example of a file with a single _#docregion_ at th
   header="src/main.ts"></code-example>
 
 </div>
+-->
+예제 코드용 마크업에서는 _#docregion_ 이 가장 중요합니다.
 
+_#docregion_ 을 지정하지 않으면 `<code-example>` 컴포넌트나 `<code-tabs>` 컴포넌트에 소스 코드를 표시할 수 없습니다.
+
+_#docregion_ 주석을 붙이면 코드 블럭이 표시할 영역의 시작점을 지정합니다.
+이 시작점 _뒤부터_ 파일이 끝나거나 _#enddocregion_ 주석이 있을 때까지 사이에 있는 영역은 모두 해당 영역에 포함됩니다.
+
+
+<div class="alert is-helpful">
+
+`src/main.ts` 파일의 내용을 모두 영역으로 지정하려면 파일 제일 위에 _#docregion_ 을 추가하면 됩니다.
+
+<code-example
+  path="docs-style-guide/src/main.ts"
+  header="src/main.ts"></code-example>
+
+</div>
+
+
+<!--
 #### Named _#docregions_
+-->
+#### 이름이 지정된 _#docregion_
 
+<!--
 You'll often display multiple snippets from different fragments within the same file.
 You distinguish among them by giving each fragment its own _#docregion name_ as follows.
 
@@ -1144,9 +1366,34 @@ Remember to refer to this region by name in the `region` attribute of the `<code
 ```
 
 The _#docregion_ with no name is the _default region_. Do _not_ set the `region` attribute when referring to the default _#docregion_.
+-->
+때로는 파일 하나에 코드 영역을 여러개 지정해야 할 때가 있습니다.
+개별 코드 영역은 _#docregion 이름_ 이라는 방식으로 지정할 수 있습니다.
 
+```
+// #docregion 영역-이름
+... 코드 ...
+// #enddocregion 영역-이름
+```
+
+영역 이름을 이렇게 지정한 후에는 `<code-example>`이나 `<code-pane>`의 `region` 어트리뷰트로 해당 영역을 가리킬 수 있습니다:
+
+```html
+<code-example
+  path="docs-style-guide/src/app/app.module.ts"
+  region="class"></code-example>
+```
+
+영역 이름 없이 지정한 _#docregion_ 은 _기본 영역_ 으로 간주합니다.
+기본 영역을 가리킬 때는 `region` 어트리뷰트를 사용하지 _마세요_.
+
+
+<!--
 #### Nested _#docregions_
+-->
+#### 중첩된 _#docregion_
 
+<!--
 You can nest _#docregions_ within _#docregions_
 ```
 // #docregion
@@ -1162,9 +1409,31 @@ You can nest _#docregions_ within _#docregions_
 The `src/app/app.module.ts` file has a good example of a nested region.
 
 </div>
+-->
+_#docregion_ 은 _#docregion_ 안에 구성할 수도 있습니다.
+```
+// #docregion
+... 코드 ...
+// #docregion 안쪽-영역
+... 다른 코드 ...
+// #enddocregion 안쪽-영역
+... 또 다른 코드 ...
+/// #enddocregion
+```
 
+<div class="alert is-helpful">
+
+`src/app/app.module.ts` 파일에 중첩된 _#docregion_ 이 사용되었습니다.
+
+</div>
+
+
+<!--
 #### Combining fragments
+-->
+#### 코드 영역 조합하기
 
+<!--
 You can combine several fragments from the same file into a single code snippet by defining
 multiple _#docregions_ with the _same region name_.
 
@@ -1214,9 +1483,66 @@ Some observations:
   If we neglected to add, `#docplaster`, the processor would insert the _default_ plaster - an ellipsis comment - between the fragments. Try removing the `#docplaster` comment yourself to see the effect.
 
 * One `#docregion` comment mentions **_two_** region names as does an `#enddocregion` comment. This is a convenient way to start (or stop) multiple regions on the same code line. You could have put these comments on separate lines and many authors prefer to do so.
+-->
+소스 코드에 _같은 영역 이름_ 을 여러번 사용하면 흩어져 있는 코드를 코드 블럭 하나로 표시할 수 있습니다.
 
+`src/app/app.component.ts` 파일에는 중첩된 _#docregion_ 이 구성되어 있습니다.
+
+안쪽에 있는 `class-skeleton` 영역은 두 번 사용되었습니다.
+한 번은 클래스 정의가 시작되는 코드에 사용되었고, 다른 한 번은 클래스 정의가 끝나는 코드에 사용되었습니다.
+
+
+<code-example>
+// #docplaster
+...
+// #docregion class, class-skeleton
+export class AppComponent {
+// #enddocregion class-skeleton
+  title = 'Authors Style Guide Sample';
+  heroes = HEROES;
+  selectedHero: Hero;
+
+  onSelect(hero: Hero): void {
+    this.selectedHero = hero;
+  }
+// #docregion class-skeleton
+}
+// #enddocregion class, class-skeleton
+</code-example>
+
+코드 영역이 각각 어떻게 표시되는지 확인해 보세요.
+
+<code-tabs>
+  <code-pane
+    header="app.component.ts (class)"
+    path="docs-style-guide/src/app/app.component.ts"
+    region="class">
+  </code-pane>
+  <code-pane
+    header="app.component.ts (class-skeleton)"
+    path="docs-style-guide/src/app/app.component.ts"
+    region="class-skeleton">
+  </code-pane>
+</code-tabs>
+
+이런 내용을 확인해 보세요:
+
+* 제일 위에 사용된 `#docplaster`는 코드 영역용 마크업 중 하나입니다. 이 마크업을 사용하면 흩어져 있는 코드 영역을 하나로 합칩니다.
+
+  이 예제처럼 사용하면 예제 코드를 추출하는 프로세서가 각 코드 영역 사이에 있는 내용을 포함하지 않습니다. 중간을 채우는 무언가(plaster)가 없다는 의미입니다. 영역 이름을 여러번 사용하는 예제 코드는 보통 이렇게 사용합니다.
+
+  `#docplaster`를 추가하지 않으면 예제 코드 추출 프로세서가 _기본_ 문구로 축약 주석을 코드 영역 사이에 추가합니다. `#docplaster` 주석을 제거하면 어떻게 표시되는지 확인해 보세요.
+
+* `#docregion`, `#enddocregion` 주석에 영역 이름이 **두 개** 지정된 코드가 있습니다. 이렇게 사용하면 코드 영역 여러 개를 한번에 시작하거나 종료할 수 있습니다. 여러 줄로 나눠서 지정하는 방식보다는 편합니다.
+
+
+{@a json-files}
+<!--
 #### JSON files
+-->
+#### JSON 파일
 
+<!--
 Code snippet markup is not supported for JSON files because comments are forbidden in JSON files.
 
 You can display an entire JSON file by referring to it in the `src` attribute.
@@ -1239,9 +1565,39 @@ Here's an example that excerpts certain scripts from `package.json` into a parti
   path="docs-style-guide/package.1.json"
   header="package.json (selected scripts)"></code-example>
 ```
+-->
+JSON 파일은 주석을 지원하지 않기 때문에 코드 영역용 마크업을 사용할 수 없습니다.
 
+그래서 `src` 어트리뷰트로 JSON 파일을 지정하면 JSON 파일의 내용 전체가 표시됩니다.
+JSON 파일에는 `#docregion` 태그를 사용할 수 없기 때문에 특정 영역만 표시할 수 없습니다.
+
+이 때 JSON 파일의 내용이 너무 많다면 특정 노드만 복사해서 마크다운 역따옴표(\`)로 구성하는 방법을 사용할 수 있습니다.
+
+하지만 이 방식을 사용하면 JSON 형식에서 어긋날 가능성이 있습니다.
+이 방식보다는 원하는 부분만 따로 JSON 파일로 만드는 것이 더 좋습니다.
+
+이렇게 만든 JSON 파일은 테스트할 수 없기 때문에 예제 애플리케이션에도 사용할 수 없습니다.
+하지만 문법 오류가 발생하는 것은 IDE에서 확인할 수 있습니다.
+
+아래 예제는 `package.json` 파일에서 일부 노드만 따와서 `package.1.json` 파일로 구성한 것입니다:
+
+<code-example
+  path="docs-style-guide/package.1.json"
+  header="package.json (scripts만 표시)"></code-example>
+
+```html
+<code-example
+  path="docs-style-guide/package.1.json"
+  header="package.json (scripts만 표시)"></code-example>
+```
+
+
+<!--
 #### Partial file naming
+-->
+#### 작업중인 파일의 이름 짓기
 
+<!--
 Many guides tell a story. In that story, the app evolves incrementally, often with simplistic or incomplete code along the way.
 
 To tell that story in code, you'll often need to create partial files or intermediate versions of the final source code file with fragments of code that don't appear in the final app.
@@ -1262,10 +1618,36 @@ Remember to exclude these files from stackblitz by listing them in the `stackbli
 <code-example
   path="docs-style-guide/stackblitz.json"
   header="stackblitz.json"></code-example>
+-->
+가이드 문서에는 보통 흐름이 있습니다.
+이 흐름을 유지하면서 애플리케이션에 기능이 점점 추가되기 때문에 이 과정 중에 미완성 코드가 있을 수 있습니다.
+
+이런 흐름을 만들기 위해 때로는 최종 소스 코드의 일부나 작업중인 코드를 별도 파일로 만들어야 하는 경우가 있습니다.
+
+이 때 별도 파일에 이름을 지정해야 하는데, 파일 확장자 앞에 숫자를 추가하는 방식을 권장합니다:
+
+```html
+package.1.json
+app.component.1.ts
+app.component.2.ts
+```
+
+Angular 문서에서 다루는 예제 코드를 보다보면 이런 식으로 지어진 이름을 많이 확인할 수 있습니다.
+
+stackblitz에 올릴 때는 이 파일들을 `stackblitz.json` 파일에 추가해서 제외해야 한다는 것을 잊지 마세요.
+
+<code-example
+  path="docs-style-guide/stackblitz.json"
+  header="stackblitz.json"></code-example>
+
 
 {@a live-examples}
+<!--
 ## Live examples
+-->
+## 라이브 예제
 
+<!--
 By adding `<live-example>` to the page you generate links that run sample code in the Stackblitz live coding environment and download that code to the reader's file system.
 
 Live examples (AKA "stackblitz") are defined by one or more `stackblitz.json` files in the root of a code sample folder. Each sample folder usually has a single unnamed definition file, the default `stackblitz.json`.
@@ -1363,11 +1745,128 @@ Here's an embedded live example for this guide.
 ```
 
 <live-example embedded></live-example>
+-->
+문서에 `<live-example>`를 추가하면 사용자가 실제로 실행할 수 있는 예제 코드를 Stackblitz 라이브 코딩 환경으로 제공하거나 사용자의 파일 시스템으로 다운받는 기능을 제공할 수 있습니다.
+
+라이브 예제는 예제 코드 폴더에 있는 `stackblitz.json` 파일로 정의합니다.
+개별 폴더에서 별도로 정하지 않는 이상 기본값으로 `stackblitz.json` 파일이 사용됩니다.
+
+
+<div class="alert is-helpful">
+
+`이름.stackblitz.json` 라는 형태로 정의 파일에 이름을 지정할 수 있습니다.
+`content/examples/testing` 폴더를 확인해 보세요.
+
+`stackblitz.json` 파일의 스키마는 아직 문서화되지 않았지만 예제 폴더에 있는 `stackblitz.json` 파일을 참조하면 원하는 내용을 대부분 찾을 수 있을 것입니다.
+
+</div>
+
+
+문서에 `<live-example></live-example>`를 추가하면 기본적으로 링크 2개가 추가됩니다.
+
+
+<live-example></live-example>
+
+
+1. 첫 번째 링크는 가이드 문서와 같은 이름의 예제 코드 폴더에 있는 `stackblitz.json` 파일에 따라 구성된 Stackblitz 예제로 이동하는 링크입니다.
+
+2. 두 번째 링크는 예제를 내려받는 링크입니다.
+
+첫 번째 링크를 클릭하면 새 탭이 열리면서 StackBlitz 환경에서 예제 애플리케이션을 실행합니다.
+
+그리고 라이브 예제의 어트리뷰트와 클래스를 지정하면 라이브 예제가 표시되는 모습이나 동작을 변경할 수 있습니다.
+
+
+<h3 class="no-toc">커스텀 라벨, 툴팁</h3>
+
+`title` 어트리뷰트를 지정하면 링크에 커스텀 라벨과 툴팁을 지정할 수 있습니다.
+
+<live-example title="라이브 예제에 커스텀 라벨 지정하기"></live-example>
+
+```html
+<live-example title="라이브 예제에 커스텀 라벨 지정하기"></live-example>
+```
+
+이 동작은 `<live-example>` 태그 안에 추가하는 방식으로도 가능합니다:
+
+<live-example>라이브 예제에 커스텀 라벨 지정하기</live-example>
+
+```html
+<live-example>라이브 예제에 커스텀 라벨 지정하기</live-example>
+```
+
+
+<h3 class="no-toc">다른 가이드 문서에 있는 라이브 예제</h3>
+
+현재 가이드 문서와 다른 이름 폴더에 있는 라이브 예제를 연결하려면 `name` 어트리뷰트로 해당 폴더 이름을 지정하면 됩니다.
+
+<live-example name="router">Router 문서에 있는 라이브 예제</live-example>
+
+```html
+<live-example name="router">Router 문서에 있는 라이브 예제</live-example>
+```
+
+
+<h3 class="no-toc">특정 Stackblitz 지정하기</h3>
+
+이름이 지정된 `stackblitz.json` 파일과 연결된 Stackblitz 예제로 이동하려면 `stackblitz` 어트리뷰트를 사용하면 됩니다.
+아래처럼 사용하면 현재 가이드 문서 예제 코드에 있는 `second.stackblitz.json` 파일과 연결된 Stackblitz 애플리케이션이 실행됩니다.
+
+<live-example stackblitz="second"></live-example>
+
+```html
+<live-example stackblitz="second"></live-example>
+```
+
+
+<h3 class="no-toc">내려받기 생략하기</h3>
+
+내려받기 링크를 생략하려면 `noDownload` 어트리뷰트를 추가하면 됩니다.
+
+<live-example noDownload>Stackblitz만 제공하기</live-example>
+
+```html
+<live-example noDownload>Stackblitz만 제공하기</live-example>
+```
+
+
+<h3 class="no-toc">내려받기만 제공하기</h3>
+
+라이브 Stackblitz 링크를 생략하고 내려받기만 제공하려면 `downloadOnly` 어트리뷰트를 추가하면 됩니다.
+
+<live-example downloadOnly>내려받기만 제공하기</live-example>
+
+```html
+<live-example downloadOnly>내려받기만 제공하기</live-example>
+```
+
+
+<h3 class="no-toc">라이브 예제 내장하기</h3>
+
+기본적으로 라이브 예제 링크는 별도 브라우저 탭으로 Stackblitz 환경에 접근합니다.
+그런데 가이드 문서 안에 Stackblitz를 내장하려면 `embedde` 어트리뷰트를 추가하면 됩니다.
+
+다만, 성능 문제로 Stackblitz 환경이 바로 시작되지는 않습니다.
+문서를 보는 사용자는 이미지 하나를 먼저 확인하게 될 것입니다.
+이 이미지를 클릭하면 화면 안에 `<iframe>` 을 구성하는 형태로 Stackblitz 환경이 시작됩니다.
+
+  이렇게 사용하면 됩니다.
+
+```html
+<live-example embedded></live-example>
+```
+
+<live-example embedded></live-example>
+
 
 {@a anchors}
 
+<!--
 ## Anchors
+-->
+## 앵커(anchor)
 
+<!--
 Every section header tag is also an anchor point. Another guide page could add a link to this section by writing:
 
 <div class="alert is-helpful">
@@ -1389,11 +1888,41 @@ When navigating within the page, you can omit the page URL when specifying the l
 ```html
 ... the link that [scrolls up](#anchors "Anchors") to ...
 ```
+-->
+모든 섹션 제목 태그는 앵커로 연결됩니다.
+그래서 다른 문서에서 이 섹션을 참조하려면 이렇게 지정하면 됩니다:
+
+
+<div class="alert is-helpful">
+
+자세한 내용은 ["앵커"](guide/docs-style-guide#anchors "Style Guide - Anchors") 섹션을 참고하세요.
+
+</div>
+
+```html
+<div class="alert is-helpful">
+
+자세한 내용은 ["앵커"](guide/docs-style-guide#anchors "Style Guide - Anchors") 섹션을 참고하세요.
+
+</div>
+```
+
+문서 안에서 이동하는 경우에는 [위로 스크롤](#anchors "Anchors")과 같이 문서 URL을 생략해도 됩니다.
+
+```html
+... 이동하는 경우에는 [위로 스크롤](#anchors "Anchors")과 같이 ...
+```
+
 
 {@a ugly-anchors}
+{@a ugly-long-section-header-anchors}
 
+<!--
 #### Ugly, long section header anchors
+-->
+#### 부적절하거나 긴 섹션 제목 앵커
 
+<!--
 It is often a good idea to *lock-in* a good anchor name.
 
 Sometimes the section header text makes for an unattractive anchor. [This one](#ugly-long-section-header-anchors) is pretty bad.
@@ -1432,15 +1961,74 @@ If you do, be sure to set the `id` attribute - not the `name` attribute! The doc
 ```
 
 </div>
+-->
+앵커 이름은 적절하게 지정하는 것이 좋습니다.
 
+그런 의미에서 [이런 앵커](#ugly-long-section-header-anchors)는 좋다고 할 수 없습니다.
+
+```html
+[이런 앵커](#ugly-long-section-header-anchors)는 좋다고 할 수 없습니다.
+```
+
+이런 앵커는 보기에도 좋지 않지만 **이후에 제목이 변경되면 연결이 끊어질 수 있기 때문** 에 더 좋지 않습니다.
+
+그래서 때로는 커스텀 앵커를 명시적으로 지정하는 것이 나을 때가 있습니다.
+제목 위나 원하는 위치에 `{a 이름}` 을 지정하면 됩니다.
+
+<code-example  language="html">
+  &#123;@a ugly-anchors&#125;
+
+  #### 부적절하거나 긴 섹션 제목 앵커
+</code-example>
+
+
+이렇게 지정한 [커스텀 앵커](#ugly-anchors)는 아래처럼 사용합니다.
+
+```html
+이렇게 지정한 [커스텀 앵커](#ugly-anchors)는 아래처럼 사용합니다.
+```
+
+
+<div class="alert is-helpful">
+
+이 방식대신 HTML `<a>` 태그를 사용할 수도 있습니다.
+
+`<a>` 태그를 사용할 때는 반드시 `id` 어트리뷰트를 지정하세요.
+`name` 어트리뷰트가 아닙니다!
+문서 생성 툴은 `name`를 처리하지 않습니다.
+
+```html
+<a id="anchors"></a>
+
+## 앵커(anchor)
+```
+
+</div>
+
+
+<!--
 ## Alerts and Callouts
+-->
+## 경고 박스, 참고 박스(callout)
 
+<!--
 Alerts and callouts present warnings, extra detail or references to other pages. They can also be used to provide commentary that _enriches_ the reader's understanding of the content being presented.
 
 An alert or callout _must not_ contain anything _essential_ to that understanding. Don't put a critical instruction or a tutorial step in a subsection.
+-->
+경고 박스나 참고 박스는 모두 어떤 내용을 경고하거나 추가로 설명할 때, 다른 문서에 있는 내용을 가리킬 때 사용합니다.
+사용자의 이해를 돕기 위해 내용을 추가하는 용도로 사용한다고 볼 수 있습니다.
 
+경고 박스나 참고 박스에는 문서를 이해하기 위해 _꼭 필요한_ 내용이 들어가면 _안됩니다_.
+중요한 내용은 세부 섹션 안에 작성하세요.
+
+
+<!--
 ### Alerts
+-->
+### 경고 박스(Alert)
 
+<!--
 Alerts draw attention to short important points. Alerts should not be used for multi-line content (use [callouts](#callouts "callouts") instead).
 
 <div class="alert is-helpful">
@@ -1500,9 +2088,84 @@ A helpful, informational alert.
 
 </div>
 ```
+-->
+경고 박스는 중요한 내용을 짧게 강조할 때 사용합니다.
+그래서 경고 박스 안에 여러 줄을 작성하는 것은 권장하지 않습니다.
+이 경우에는 [참고 박스](#callouts "callouts")를 사용하세요
 
+
+<div class="alert is-helpful">
+
+라이브 예제에 스타일을 지정하는 방법은 [이 섹션](guide/docs-style-guide#live-examples "Live examples")에서 다룹니다.
+
+</div>
+
+
+이 때 열고 닫는 `<div>` 태그 뒤에 빈 줄이 꼭 들어가야 합니다.
+`</div>` 앞에도 빈 줄을 넣는 경우가 많지만 필수는 아닙니다.
+
+
+```html
+<div class="alert is-helpful">
+
+라이브 예제에 스타일을 지정하는 방법은 [이 섹션](guide/docs-style-guide#live-examples "Live examples")에서 다룹니다.
+
+</div>
+```
+
+경고 박스에서 설명하는 내용의 _위험도나 중요도_ 에 따라 스타일을 3단계로 구분해서 사용할 수 있습니다.
+
+
+<div class="alert is-critical">
+
+꼭 알아야 하는 내용(critical)
+
+</div>
+
+<div class="alert is-important">
+
+중요한 내용(important)
+
+</div>
+
+<div class="alert is-helpful">
+
+알아두면 도움이 되는 내용(helpful, informational)
+
+</div>
+
+
+이 내용은 이렇게 구성하면 됩니다.
+
+```html
+<div class="alert is-critical">
+
+꼭 알아야 하는 내용(critical)
+
+</div>
+
+<div class="alert is-important">
+
+중요한 내용(important)
+
+</div>
+
+<div class="alert is-helpful">
+
+알아두면 도움이 되는 내용(helpful, informational)
+
+</div>
+```
+
+
+{@a callouts}
+
+<!--
 ### Callouts
+-->
+### 참고 박스(Callout)
 
+<!--
 Callouts, like alerts, are meant to draw attention to important points. Use a callout when you want a riveting header and multi-line content.
 
 If you have more than two paragraphs, consider creating a new page or making it part of the main content.
@@ -1546,10 +2209,81 @@ Notice that:
 * a blank line separates the `</header>` tag from the markdown content
 
 Callouts are meant to grab the user's attention. They are not for casual asides. Please use them sparingly.
+-->
+참고 박스는 경고 박스와 비슷하게 중요한 내용을 강조할 때 사용합니다.
+참고 박스에는 제목이 있으며 내용도 여러 줄로 작성합니다.
 
+문단이 2개 이상 된다면 문서를 따로 만들거나 메인 섹션으로 다루는 것을 고려해 보세요.
+
+참고 박스도 경고 박스처럼 _위험도나 중요도_ 에 따라 스타일을 3단계로 구분해서 사용합니다.
+
+
+<div class="callout is-critical">
+<header>꼭 알아야 하는 내용(critical)</header>
+
+**죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를,** 잎새에 이는 바람에도 나는 괴로워했다.
+별을 노래하는 마음으로 모든 죽어 가는 것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다.
+
+오늘 밤에도 별이 바람에 스치운다.
+
+</div>
+
+<div class="callout is-important">
+<header>중요한 내용(important)</header>
+
+**죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를,** 잎새에 이는 바람에도 나는 괴로워했다.
+별을 노래하는 마음으로 모든 죽어 가는 것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다.
+
+오늘 밤에도 별이 바람에 스치운다.
+
+</div>
+
+<div class="callout is-helpful">
+<header>알아두면 도움이 되는 내용(helpful, informational)</header>
+
+**죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를,** 잎새에 이는 바람에도 나는 괴로워했다.
+별을 노래하는 마음으로 모든 죽어 가는 것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다.
+
+오늘 밤에도 별이 바람에 스치운다.
+
+</div>
+
+
+이 중에서 첫 번째 참고 박스를 예로 들면 이렇게 작성하면 됩니다:
+
+```html
+<div class="callout is-critical">
+<header>꼭 알아야 하는 내용(critical)</header>
+
+**죽는 날까지 하늘을 우러러 한 점 부끄럼이 없기를,** 잎새에 이는 바람에도 나는 괴로워했다.
+별을 노래하는 마음으로 모든 죽어 가는 것을 사랑해야지 그리고 나한테 주어진 길을 걸어가야겠다.
+
+오늘 밤에도 별이 바람에 스치운다.
+
+</div>
+```
+
+이런 점에 주의하세요:
+
+* 참고 박스의 제목은 모두 대문자로 변환됩니다.
+* 참고 박스의 내용은 마크다운으로도 작성할 수 있습니다.
+* 제목과 본문을 구분하기 위해 `</header>` 태그 뒤에 빈 줄을 넣어야 합니다.
+
+
+참고 박스는 가이드 문서를 읽는 독자의 주의를 끌기 위한 것입니다.
+너무 자주 사용하지 마세요.
+
+
+<!--
 ## Trees
+-->
+## 트리(Tree)
 
+<!--
 Trees can represent hierarchical data.
+-->
+트리는 데이터의 계층 구조를 표현합니다.
+
 
 <div class='filetree'>
 
@@ -1603,7 +2337,10 @@ Trees can represent hierarchical data.
 
 </div>
 
+<!--
 Here is the markup for this file tree.
+-->
+이 파일 트리는 이렇게 구성합니다.
 
 ```html
 <div class='filetree'>
@@ -1644,10 +2381,13 @@ Here is the markup for this file tree.
 ```
 
 
+<!--
 ## Tables
+-->
+## 표
 
+<!--
 Use HTML tables to present tabular data.
-
 
 <style>
   td, th {vertical-align: top}
@@ -1667,7 +2407,7 @@ Use HTML tables to present tabular data.
   <tr>
     <td><code>Angular v2</code></td>
     <td>Routing</td>
-    <!-- can use markdown too; remember blank lines -->
+    <!- can use markdown too; remember blank lines ->
     <td>
 
       *Faster*
@@ -1706,7 +2446,7 @@ Here is the markup for this table.
   <tr>
     <td><code>Angular v2</code></td>
     <td>Routing</td>
-    <!-- can use markdown too; remember blank lines -->
+    <!- can use markdown too; remember blank lines ->
     <td>
 
       *Faster*
@@ -1724,9 +2464,93 @@ Here is the markup for this table.
   </tr>
 </table>
 ```
+-->
+표 형태의 데이터는 HTML `<table>`로 구성합니다.
 
+
+<style>
+  td, th {vertical-align: top}
+</style>
+
+<table>
+  <tr>
+    <th>프레임워크</th>
+    <th>동작</th>
+    <th>속도</th>
+  </tr>
+  <tr>
+    <td><code>AngularJS</code></td>
+    <td>라우팅</td>
+    <td>빠름</td>
+  </tr>
+  <tr>
+    <td><code>Angular v2</code></td>
+    <td>라우팅</td>
+    <!-- 마크다운도 사용할 수 있습니다. 빈 줄을 꼭 넣으세요 -->
+    <td>
+
+      *더 빠름*
+
+    </td>
+  </tr>
+  <tr>
+    <td><code>Angular v4</code></td>
+    <td>라우팅</td>
+    <td>
+
+      **제일 빠름 :)**
+
+    </td>
+  </tr>
+</table>
+
+이 표는 이렇게 구성합니다.
+
+```html
+<style>
+  td, th {vertical-align: top}
+</style>
+
+<table>
+  <tr>
+    <th>프레임워크</th>
+    <th>동작</th>
+    <th>속도</th>
+  </tr>
+  <tr>
+    <td><code>AngularJS</code></td>
+    <td>라우팅</td>
+    <td>빠름</td>
+  </tr>
+  <tr>
+    <td><code>Angular v2</code></td>
+    <td>라우팅</td>
+    <!-- 마크다운도 사용할 수 있습니다. 빈 줄을 꼭 넣으세요 -->
+    <td>
+
+      *더 빠름*
+
+    </td>
+  </tr>
+  <tr>
+    <td><code>Angular v4</code></td>
+    <td>라우팅</td>
+    <td>
+
+      **제일 빠름 :)**
+
+    </td>
+  </tr>
+</table>
+```
+
+
+<!--
 ## Images
+-->
+## 이미지
 
+<!--
 <h3 class="no-toc">Image location</h3>
 
 Store images in the `content/images` directory in a folder with the same URL as the guide page.
@@ -1833,9 +2657,135 @@ Headings and code-examples automatically clear a floating image. If you need to 
 ```
 
 Note that you generally don't wrap a floating image in a `<figure>` element.
+-->
+<h3 class="no-toc">이미지 파일의 위치</h3>
 
+이미지 파일은 `content/images` 디렉토리 아래 가이드 문서 URL과 같은 이름의 하위 폴더 안에서 관리합니다.
+"Angular 문서 작성 스타일 가이드" 문서라면 `content/images/guide/docs-style-guide` 폴더가 됩니다.
+
+이 폴더들은 Angular 문서 생성 툴이 문서 프로젝트를 빌드할 때 `generated/images` 위치로 복사됩니다.
+이미지 태그의 `src` 어트리뷰트는 _이 디렉토리_ 를 기준으로 지정하면 됩니다.
+
+이 문서에 포함된 "날아가는 히어로" 이미지에 해당하는 이미지 태그의 `src` 어트리뷰트는 이렇게 지정합니다.
+
+```
+src="generated/images/guide/docs-style-guide/flying-hero.png"
+```
+
+
+<h3 class="no-toc">HTML <i>&lt;img&gt;</i> 태그를 사용하세요</h3>
+
+**마크다운 이미지 문법 \!\[\.\.\.\]\(\.\.\.\)를 사용하지 마세요.**
+
+이미지를 추가하려면 반드시 `<img>` 태그를 사용해야 합니다.
+
+그리고 접근성을 고려해서 모든 이미지에는 `alt` 어트리뷰트를 지정하는 것이 좋습니다.
+
+이미지를 그림자가 있는 프레임 안에 표시하려면 `<div class="lightbox">` 태그 안에 `<img>` 태그를 사용하면 됩니다.
+이 `<div>` 태그에서 `lightbox` 클래스를 생략해야 한다면 문서 작성자의 허가를 받으세요.
+
+이렇게 사용하면 됩니다:
+
+<div class="lightbox">
+  <img src="generated/images/guide/docs-style-guide/flying-hero.png"
+    alt="히어로가 날아갑니다.">
+</div>
+
+```html
+<div class="lightbox">
+  <img src="generated/images/guide/docs-style-guide/flying-hero.png"
+    alt="히어로가 날아갑니다.">
+</div>
+```
+
+
+_HTML 이미지 엘리먼트는 닫는 태그를 사용하지 않습니다._
+
+
+<h3 class="no-toc">이미지의 크기</h3>
+
+문서 생성기는 이미지 파일을 읽어서 이미지 파일의 너비와 높이로 `img` 태그의 `width` 어트리뷰트와 `height` 어트리뷰트 값을 자동으로 지정합니다.
+이미지의 크기를 직접 지정하려면 `width` 어트리뷰트와 `height` 어트리뷰트 값을 직접 지정하면 됩니다.
+
+"날아가는 히어로" 이미지의 크기를 적절하게 조정하려면 이렇게 지정하면 됩니다:
+
+<div class="lightbox">
+  <img src="generated/images/guide/docs-style-guide/flying-hero.png"
+    alt="Angular 히어로가 날아갑니다."
+    width="200">
+</div>
+
+```html
+
+<div class="lightbox">
+  <img src="generated/images/guide/docs-style-guide/flying-hero.png"
+    alt="Angular 히어로가 날아갑니다."
+    width="200">
+</div>
+```
+
+너비가 큰 이미지는 문제가 될 수 있습니다.
+브라우저는 기본적으로 이미지의 너비를 조정하겠지만, 특정 뷰포트(viewport)에서는 문서를 넘어가는 경우가 생길 수 있습니다.
+
+**너비는 700px보다 크게 지정하지 마세요**.
+큰 이미지를 사용하려면 독자가 클릭했을 때 원래 크기로 표시될 수 있도록 링크 형태로 제공하세요.
+아래 예제는 "AOT 컴파일" 문서에 있는 `source-map-explorer` 결과를 표시하는 이미지 파일입니다:
+
+<a href="generated/images/guide/docs-style-guide/toh-pt6-bundle.png" title="Click to view larger image">
+  <div class="lightbox">
+    <img src="generated/images/guide/docs-style-guide/toh-pt6-bundle-700w.png" alt="toh-pt6-bundle" width="300px">
+  </div>
+</a>
+
+
+<h3 class="no-toc">이미지 압축</h3>
+
+이미지 파일의 크기가 크면 불러오는 시간도 오래 걸리기 때문에 사용자에게 불편을 줄 수 있습니다.
+이미지 파일은 항상 압축하세요.
+이미지 파일을 압축하려면 [tinypng](https://tinypng.com/ "tinypng")와 같은 웹 사이트를 활용하면 됩니다.
+
+
+<h3 class="no-toc">floating 이미지</h3>
+
+이미지 태그의 `class` 어트리뷰트에 `"left"`나 `"right"`를 지정하면 이미지를 한쪽으로 옮겨서 표시할 수 있습니다.
+
+<img src="generated/images/guide/docs-style-guide/flying-hero.png"
+   alt="Angular 히어로가 날아갑니다."
+   width="200"
+   class="left">
+
+이 문장은 "날아가는 히어로" 이미지 오른쪽에서 적절하게 줄바꿈되며 표시됩니다.
+
+제목이나 예제 코드를 사용할 때는 floating 속성이 지정된 이미지가 표시되지 않습니다.
+이런 경우에는 문장 앞에 `<br class="clear">`를 추가하세요.
+
+<br class="clear">
+
+이 내용을 마크업으로 구성하면 이렇습니다:
+
+```html
+<img src="generated/images/guide/docs-style-guide/flying-hero.png"
+   alt="Angular 히어로가 날아갑니다."
+   width="200"
+   class="left">
+
+이 문장은 "날아가는 히어로" 이미지 오른쪽에서 적절하게 줄바꿈되며 표시됩니다.
+
+제목이나 예제 코드를 사용할 때는 floating 속성이 지정된 이미지가 표시되지 않습니다.
+이런 경우에는 문장 앞에 `<br class="clear">`를 추가하세요.
+
+<br class="clear">
+```
+
+`<figure>` 엘리먼트를 사용할 때는 보통 floating 속성을 사용하지 않습니다.
+
+
+<!--
 #### Floating within a subsection
+-->
+#### 세부 섹션 안에서 floating 이미지 사용하기
 
+<!--
 If you have a floating image inside an alert, callout, or a subsection, it is a good idea to apply the `clear-fix` class to the `div` to ensure that the image doesn't overflow its container. For example:
 
 <div class="alert is-helpful clear-fix">
@@ -1858,6 +2808,34 @@ If you have a floating image inside an alert, callout, or a subsection, it is a 
     class="right">
 
   A subsection with **markdown** formatted text.
+
+</div>
+```
+-->
+경고 박스나 참고 박스, 세부 섹션 안에서 floating 속성으로 이미지를 표시해야 한다면 이미지가 영역을 벗어나지 않도록 `<div>` 엘리먼트에 `clear-fix` 클래스를 지정하는 것이 좋습니다.
+이렇게 사용하면 됩니다:
+
+
+<div class="alert is-helpful clear-fix">
+
+  <img src="generated/images/guide/docs-style-guide/flying-hero.png"
+    alt="Angular 히어로가 날아갑니다."
+    width="100"
+    class="right">
+
+  **마크다운** 으로 작성된 세부 섹션
+
+</div>
+
+```html
+<div class="alert is-helpful clear-fix">
+
+  <img src="generated/images/guide/docs-style-guide/flying-hero.png"
+    alt="Angular 히어로가 날아갑니다."
+    width="100"
+    class="right">
+
+  **마크다운** 으로 작성된 세부 섹션
 
 </div>
 ```
