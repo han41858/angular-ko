@@ -3,9 +3,16 @@
 -->
 # Angular 코딩 스타일 가이드
 
+<!--
 Looking for an opinionated guide to Angular syntax, conventions, and application structure?
 Step right in!
 This style guide presents preferred conventions and, as importantly, explains why.
+-->
+Angular 애플리케이션을 개발할 때 문법을 어떻게 사용해야 하는지, 구조는 어떻게 잡아야 하는지 찾고 있나요?
+그렇다면 제대로 오셨습니다!
+이 가이드 문서는 Angular 애플리케이션을 개발할 때 지키면 좋은 것들을 안내합니다.
+왜 그렇게 사용해야 하는지도 함께 알려드립니다.
+
 
 {@a toc}
 
@@ -1346,7 +1353,6 @@ For example, the prefix `toh` represents **T**our **o**f **H**eroes and the pref
 
 <div class="s-rule do">
 
-
 <!--
 **Do** use consistent names for all pipes, named after their feature.
 The pipe class name should use [UpperCamelCase](guide/glossary#case-types)
@@ -1355,11 +1361,8 @@ and the corresponding `name` string should use *lowerCamelCase*.
 The `name` string cannot use hyphens ("dash-case" or "kebab-case").
 -->
 커스텀 파이프를 구현한 클래스에는 `Pipe` 접미사를 **붙이고,** 이 파일에는 `.pipe` 타입을 **명시하세요.**
-The pipe class name should use [UpperCamelCase](guide/glossary#case-types)
-(the general convention for class names),
-and the corresponding `name` string should use *lowerCamelCase*.
-The `name` string cannot use hyphens ("dash-case" or "kebab-case").
-
+파이프 클래스의 이름은 클래스 이름이 보통 그렇듯 [대문자 캐멀 케이스(UpperCamelCase)](guide/glossary#case-types)로 작성하며, 메타데이터의 `name` 프로퍼티는 *소문자 캐멀 케이스(lowerCamelCase)*로 작성해야 합니다.
+`name`에는 하이픈을 사용하는 "대시 케이스(dash-case)"나 "케밥 케이스(kebab-case)"를 사용하지 마세요.
 
 </div>
 
@@ -2151,7 +2154,7 @@ A descriptive folder structure makes a world of difference to you and the people
 <!--
 **Avoid** files with multiple components, multiple services, or a mixture.
 -->
-파일 하나에 컴포넌트나 서비스 여러개를 선언하지 마세요.
+파일 하나에 컴포넌트나 서비스를 여러개 선언하지 마세요.
 
 </div>
 
@@ -2242,8 +2245,7 @@ in a single file than as multiple files. Be wary of this loophole.
 
 <div class="s-why-last">
 
-
-
+<!--
 **Why?** No one wants to search for a file through seven levels of folders.
 A flat structure is easy to scan.
 
@@ -2254,7 +2256,15 @@ So when a folder has ten or more files, it may be time to create subfolders.
 
 Base your decision on your comfort level.
 Use a flatter structure until there is an obvious value to creating a new folder.
+-->
+**왜?** 파일 하나를 찾기 위해 폴더 안쪽으로 7번이나 들어가고 싶은 사람은 아무도 없습니다.
+한 폴더에 모두 있어야 찾기 편합니다.
 
+그런데 <a href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">심리학</a> 측면에서 생각해보면 관심사가 9개를 넘어가면 사람이 혼란을 느끼기 시작합니다.
+그래서 폴더 안에 파일이 10개 이상 있다면 하위 폴더를 만드는 것도 고려해볼만 합니다.
+
+편한 방법을 선택하세요.
+폴더를 만들어야 할 이유가 확실하게 생기지 않는다면 폴더 구조는 최대한 단순하게 유지하는 것이 좋습니다.
 
 </div>
 
@@ -2669,6 +2679,7 @@ Whatever you choose, be consistent.
 #### 스타일 04-07
 
 
+<!--
 <div class="s-rule do">
 
 **Do** create folders named for the feature area they represent.
@@ -2730,14 +2741,79 @@ and more difficult in a flat structure.
 <a href="#toc">Back to top
 
 </a>
+-->
+<div class="s-rule do">
+
+해당 기능을 표현할 수 있는 폴더 이름을 **지정하세요**.
+
+</div>
+
+<div class="s-why">
+
+**왜?** 개발자가 찾으려고 하는 파일이 어디에 있는지 한 눈에 알 수 있어야 합니다.
+그러려면 폴더 구조가 단순할수록, 중복되거나 군더더기 없는 폴더 이름이 사용될수록 더 좋습니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** LIFT 가이드라인도 이 내용을 다룹니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** 애플리케이션 구조가 잡다해지는 것을 방지하려면 LIFT 가이드라인을 지키는 것이 좋습니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** 한 폴더에 파일 개수가 10개 이상되면 일관된 규칙으로 하위 폴더를 만드는 것이 더 좋을 수 있습니다.
+
+</div>
+
+<div class="s-rule do">
+
+기능 영역마다 NgModule을 **생성하세요**.
+
+</div>
+
+<div class="s-why">
+
+**왜?** NgModule은 지연로딩을 적용할 수 있는 단위입니다.
+
+</div>
+
+<div class="s-why-last">
+
+**왜?** NgModule은 다른 NgModule과 분리할 수 있기 때문에 테스트하기 쉽고 재사용하기도 편합니다.
+
+</div>
+
+<div>
+
+자세한 내용은 <a href="#file-tree">폴더와 파일 구조 예제</a>를 참고하세요.
+
+</div>
+
+<a href="#toc">맨 위로</a>
+
 
 
 {@a 04-08}
 
+<!--
 ### App _root module_
+-->
+### 앱 _최상위 모듈_
 
+<!--
 #### Style 04-08
+-->
+#### 스타일 04-08
 
+<!--
 <div class="s-rule do">
 
 
@@ -2786,6 +2862,38 @@ for example, in `/src/app`.
 <code-example path="styleguide/src/04-08/app/app.module.ts" region="example" header="app/app.module.ts">
 
 </code-example>
+-->
+<div class="s-rule do">
+
+애플리케이션 최상위 모듈은 애플리케이션 최상위 폴더에 **생성하세요**.
+보통은 `/src/app` 폴더입니다.
+
+</div>
+
+
+<div class="s-why">
+
+**왜?** 애플리케이션에는 최상위 NgModule이 반드시 존재합니다.
+
+</div>
+
+
+<div class="s-rule consider">
+
+최상위 모듈을 정의하는 파일의 이름은 `app.module.ts`을 권장합니다.
+
+</div>
+
+<div class="s-why-last">
+
+**왜?** 최상위 모듈이 어디에 있는지, 어떤 파일인지 쉽게 파악할 수 있는 곳에 두는 곳에 좋습니다.
+
+</div>
+
+
+<code-example path="styleguide/src/04-08/app/app.module.ts" region="example" header="app/app.module.ts">
+
+</code-example>
 
 
 <!--
@@ -2796,11 +2904,17 @@ for example, in `/src/app`.
 
 {@a 04-09}
 
+<!--
 ### Feature modules
+-->
+### 기능 모듈
 
+<!--
 #### Style 04-09
+-->
+#### 스타일 04-09
 
-
+<!--
 <div class="s-rule do">
 
 
@@ -2914,14 +3028,92 @@ area, folder, and file; for example, `app/heroes/heroes.module.ts` defines `Hero
 </div>
 
 <a href="#toc">Back to top</a>
+-->
+<div class="s-rule do">
+
+NgModule은 애플리케이션이 제공하는 특정 기능 단위로 **생성하세요**.
+히어로와 관련된 기능은 `Heroes` 모듈로 만드는 식입니다.
+
+</div>
+
+<div class="s-rule do">
+
+기능 모듈의 폴더 이름은 기능 모듈의 이름과 같도록 **지정하세요**.
+`Heroes` 기능 모듈이라면 `app/heroes`라고 지정하는 식입니다.
+
+</div>
+
+<div class="s-rule do">
+
+기능 모듈을 정의하는 파일의 이름은 기능 이름과 폴더 이름과 비슷한 방식으로 **지정하세요**.
+`app/heroes/heroes.module.ts`라고 지정하는 식입니다.
+
+</div>
+
+<div class="s-rule do">
+
+기능 모듈의 클래스 이름은 기능 이름, 폴더 이름, 파일 이름을 지정과 비슷한 방식으로 **지정하세요**.
+`app/heroes/heroes.module.ts` 파일에 정의하는 기능 모듈 클래스 이름은 `HeroesModule`인 것이 좋습니다.
+
+</div>
+
+
+<div class="s-why">
+
+**왜?** 기능 모듈은 다른 모듈과 확실하게 구분되어야 합니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** 기능 모듈 폴더에는 해당 기능을 제공하기 위해 사용되는 컴포넌트들이 포함됩니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** 기능 모듈은 즉시 로드할 수 있으며 지연로딩할 수도 있습니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** 기능 모듈은 다른 기능 모듈과 확실하게 구분되도록 정의하는 것이 좋습니다.
+
+</div>
+
+
+<div class="s-why">
+
+**왜?** 기능 모듈을 명확하게 구분하면 여러 팀이 어떤 모듈을 담당할지 나누기도 좋습니다.
+
+</div>
+
+
+
+<div class="s-why-last">
+
+**왜?** 기능 모듈은 다른 모듈과 격리할 수 있기 때문에 테스트하기도 편합니다.
+
+</div>
+
+
+<a href="#toc">맨 위로</a>
+
 
 {@a 04-10}
 
+<!--
 ### Shared feature module
+-->
+### 공유 모듈
 
+<!--
 #### Style 04-10
+-->
+#### 스타일 04-10
 
-
+<!--
 <div class="s-rule do">
 
 
@@ -3058,6 +3250,89 @@ that may need features from another common module; for example,
 **Why?** You don't want each module to have its own separate instance of singleton services.
 Yet there is a real danger of that happening if the `SharedModule` provides a service.
 
+
+</div>
+-->
+<div class="s-rule do">
+
+공유 모듈은 `shared` 폴더 안에 `SharedModule`이라는 이름으로 **정의하세요**.
+`app/shared/shared.module.ts` 파일에 `SharedModule`을 정의하는 식입니다.
+
+</div>
+
+<div class="s-rule do">
+
+공유 모듈에 정의하는 컴포넌트, 디렉티브, 파이프는 다른 기능 모듈에 재사용될 수 있는 형태로 **구현하세요**.
+
+</div>
+
+
+<div class="s-rule consider">
+
+`SharedModule`이라는 이름은 애플리케이션 전역에 사용된다는 의미이기 때문에 이 이름을 **권장합니다**.
+
+</div>
+
+
+<div class="s-rule avoid">
+
+공유 모듈에 서비스를 정의하는 것은 **권장하지 _않습니다_**.
+서비스의 인스턴스는 애플리케이션 전역에 싱글턴으로 하나만 존재하거나, 특정 기능 모듈에 존재합니다.
+아래 예제 코드 트리에는 `SharedModule` 안에 `FilterTextService`가 들어있지만, 서비스가 특정 상태를 기반으로 동작하는 것이 아니라면 예외적으로 허용될 수 있습니다.
+
+</div>
+
+<div class="s-rule do">
+
+모든 모듈이 사용하는 리소스는 `SharedModule`에서 **불러오세요**.
+`CommonModule`이나 `FormsModule`이 대상이 될 수 있습니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** `SharedModule`은 다른 모듈이 일반적으로 사용하는 컴포넌트나 디렉티브, 파이프를 대신 제공할 수 있습니다.
+`ngFor`나 `CommonModule`이 그렇습니다.
+
+</div>
+
+<div class="s-rule do">
+
+모든 컴포넌트, 디렉티브, 파이프를 `SharedModule` 안에 **정의하세요**.
+
+</div>
+
+<div class="s-rule do">
+
+`SharedModule` 안에 있는 모든 심볼은 다른 기능 모듈이 사용할 수 있도록 모두 **외부로 공개(export)하세요**.
+
+</div>
+
+<div class="s-why">
+
+**왜?** `SharedModule`는 다른 기능 모듈이 자주 사용하는 컴포넌트나 디렉티브, 파이프를 더 쉽게 사용하기 위해 정의하는 모듈입니다.
+
+</div>
+
+
+
+<div class="s-rule avoid">
+
+앱 전역에 싱글턴으로 존재하는 서비스의 프로바이더는 `SharedModule` 안에 등록하지 마세요.
+의도적인 것이라면 괜찮겠지만, 주의해야 합니다.
+
+</div>
+
+<div class="s-why">
+
+**왜?** 지연로딩되는 기능 모듈이 공유 모듈을 로드하면 서비스 인스턴스를 새로 생성하기 때문에 원하는대로 동작하지 않을 수 있습니다.
+
+</div>
+
+<div class="s-why-last">
+
+**왜?** 싱글턴 서비스를 개별 모듈마다 따로 구성하는 상황은 바람직하지 않습니다.
+`SharedModule`에 서비스 프로바이더를 등록하면 이런 상황이 될 수 있습니다.
 
 </div>
 
