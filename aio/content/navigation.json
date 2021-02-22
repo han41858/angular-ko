@@ -1235,7 +1235,7 @@
             },
             {
               "//title": "Usage Analytics",
-              "title": "사용 통계 수집",
+              "title": "사용통계 분석",
               "//tooltip": "For administrators, guide to gathering usage analytics from your users.",
               "tooltip": "관리자라면 사용자들이 Angular CLI를 어떻게 활용하는지 통계를 수집해 보세요.",
               "url": "cli/usage-analytics-gathering"
