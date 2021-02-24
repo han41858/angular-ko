@@ -28,7 +28,7 @@
       {$ option.description | marked $}
       {% if option.subcommands.length -%}
       <!-- <p>This option can take one of the following <a href="#{$ option.name $}-commands">sub-commands</a>:<p> -->
-      <p>이 명령은 다음 <a href="#{$ option.name $}-commands">세부 명령</a> 중 하나를 옵션으로 받을 수 있습니다:<p>
+      <p>이 명령은 다음 <a href="#{$ option.name $}-commands">목록</a> 중 하나를 인자로 받습니다:<p>
       <ul>
         {% for subcommand in option.subcommands %}
         <li><code class="no-auto-link"><a class="code-anchor" href="#{$ subcommand.name $}-command">{$ subcommand.name $}</a></code></li>
@@ -65,9 +65,11 @@
       <td>
         {% if option.deprecated %}
           {% if option.deprecated === true %}
-            <p><strong>Deprecated</strong></p>
+            <!-- <p><strong>Deprecated</strong></p> -->
+            <p><strong>지원 중단</strong></p>
           {% else %}
-            {$ ('**Deprecated:** ' + option.deprecated) | marked $}
+            <!-- {$ ('**Deprecated:** ' + option.deprecated) | marked $} -->
+            {$ ('**지원 중단:** ' + option.deprecated) | marked $}
           {% endif %}
         {% endif %}
         {$ option.description | marked $}
@@ -106,7 +108,8 @@
 
 {%- macro renderSubcommands(container) -%}
 {% for command in container.positionalOptions %}{% if command.subcommands.length %}
-<h2><a id="{$ command.name $}-commands"></a>{$ command.name | title $} commands</h2>
+<!-- <h2><a id="{$ command.name $}-commands"></a>{$ command.name | title $} commands</h2> -->
+<h2><a id="{$ command.name $}-commands"></a>{$ command.name | title $} 목록</h2>
 {% for subcommand in command.subcommands %}
 <h3><code class="no-auto-link"><a id="{$ subcommand.name $}-command"></a>{$ subcommand.name $}</code></h3>
 {% for name in container.names %}
