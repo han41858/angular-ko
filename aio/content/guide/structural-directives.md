@@ -1204,7 +1204,7 @@ Angular's own directives do not.
 
 디렉티브를 작성하는 방법은 컴포넌트를 작성하는 것과 비슷합니다.
 
-* `Component` 데코레이터를 불러오는 것처럼 `Directive` 데코레이터를 로ㄷ합니다.
+* `Component` 데코레이터를 불러오는 것처럼 `Directive` 데코레이터를 로드합니다.
 
 * `Input`, `TemplateRef`, `ViewContainerRef` 심볼을 로드합니다. 구조 디렉티브가 DOM을 조작하려면 이 심볼들이 필요합니다.
 
