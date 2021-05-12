@@ -1068,7 +1068,7 @@ Add a `viewProviders` array and inject the `AnimalService` in the
 `<app-child>` class, too, but give `emoji` a different value. Here,
 it has a value of 🐶 (puppy).
 -->
-`<app-child>` 클래스의 `viewProviders` 배열에 `AnimalService`를 추가하하는데 `emoji`에는 다른 값을 할당해 봅시다.
+`<app-child>` 클래스의 `viewProviders` 배열에 `AnimalService`를 추가하는데 `emoji`에는 다른 값을 할당해 봅시다.
 이번 예제에서는 🐶(강아지)를 할당했습니다.
 
 <code-example path="providers-viewproviders/src/app/child/child.component.ts" header="providers-viewproviders/src/app/child.component.ts" region="provide-animal-service">
