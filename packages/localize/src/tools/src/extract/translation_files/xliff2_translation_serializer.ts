@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import {AbsoluteFsPath, FileSystem, getFileSystem} from '@angular/compiler-cli/src/ngtsc/file_system';
+import {AbsoluteFsPath, getFileSystem, PathManipulation} from '@angular/compiler-cli/src/ngtsc/file_system';
 import {ɵParsedMessage, ɵSourceLocation} from '@angular/localize';
 
 import {FormatOptions, validateOptions} from './format_options';
@@ -20,7 +20,7 @@ const MAX_LEGACY_XLIFF_2_MESSAGE_LENGTH = 20;
 /**
  * A translation serializer that can write translations in XLIFF 2 format.
  *
- * http://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html
+ * https://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html
  *
  * @see Xliff2TranslationParser
  * @publicApi used by CLI
@@ -29,12 +29,12 @@ export class Xliff2TranslationSerializer implements TranslationSerializer {
   private currentPlaceholderId = 0;
   constructor(
       private sourceLocale: string, private basePath: AbsoluteFsPath, private useLegacyIds: boolean,
-      private formatOptions: FormatOptions = {}, private fs: FileSystem = getFileSystem()) {
+      private formatOptions: FormatOptions = {}, private fs: PathManipulation = getFileSystem()) {
     validateOptions('Xliff1TranslationSerializer', [['xml:space', ['preserve']]], formatOptions);
   }
 
   serialize(messages: ɵParsedMessage[]): string {
-    const messageMap = consolidateMessages(messages, message => this.getMessageId(message));
+    const messageGroups = consolidateMessages(messages, message => this.getMessageId(message));
     const xml = new XmlFile();
     xml.startTag('xliff', {
       'version': '2.0',
@@ -49,8 +49,9 @@ export class Xliff2TranslationSerializer implements TranslationSerializer {
     // messages that come from a particular original file, and the translation file parsers may
     // not
     xml.startTag('file', {'id': 'ngi18n', 'original': 'ng.template', ...this.formatOptions});
-    for (const [id, duplicateMessages] of messageMap.entries()) {
+    for (const duplicateMessages of messageGroups) {
       const message = duplicateMessages[0];
+      const id = this.getMessageId(message);
 
       xml.startTag('unit', {id});
       const messagesWithLocations = duplicateMessages.filter(hasLocation);
@@ -112,7 +113,9 @@ export class Xliff2TranslationSerializer implements TranslationSerializer {
     const text = substitutionLocations?.[placeholderName]?.text;
 
     if (placeholderName.startsWith('START_')) {
-      const closingPlaceholderName = placeholderName.replace(/^START/, 'CLOSE');
+      // Replace the `START` with `CLOSE` and strip off any `_1` ids from the end.
+      const closingPlaceholderName =
+          placeholderName.replace(/^START/, 'CLOSE').replace(/_\d+$/, '');
       const closingText = substitutionLocations?.[closingPlaceholderName]?.text;
       const attrs: Record<string, string> = {
         id: `${this.currentPlaceholderId++}`,
@@ -185,7 +188,7 @@ export class Xliff2TranslationSerializer implements TranslationSerializer {
  * and links are special cases.
  */
 function getTypeForPlaceholder(placeholder: string): string|null {
-  const tag = placeholder.replace(/^(START_|CLOSE_)/, '');
+  const tag = placeholder.replace(/^(START_|CLOSE_)/, '').replace(/_\d+$/, '');
   switch (tag) {
     case 'BOLD_TEXT':
     case 'EMPHASISED_TEXT':

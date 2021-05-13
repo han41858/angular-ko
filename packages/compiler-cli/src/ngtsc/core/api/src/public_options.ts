@@ -127,9 +127,9 @@ export interface StrictTemplateOptions {
   /**
    * If `true`, implies all template strictness flags below (unless individually disabled).
    *
-   * Has no effect unless `fullTemplateTypeCheck` is also enabled.
+   * This flag is a superset of `fullTemplateTypeCheck`.
    *
-   * Defaults to `false`, even if "fullTemplateTypeCheck" is set.
+   * Defaults to `false`, even if "fullTemplateTypeCheck" is `true`.
    */
   strictTemplates?: boolean;
 
@@ -338,6 +338,22 @@ export interface I18nOptions {
    * The default is `false`, but this will be switched in a future major release.
    */
   i18nNormalizeLineEndingsInICUs?: boolean;
+}
+
+/**
+ * Options that specify compilation target.
+ *
+ * @publicApi
+ */
+export interface TargetOptions {
+  /**
+   * Specifies the compilation mode to use. The following modes are available:
+   * - 'full': generates fully AOT compiled code using Ivy instructions.
+   * - 'partial': generates code in a stable, but intermediate form suitable for publication to NPM.
+   *
+   * The default value is 'full'.
+   */
+  compilationMode?: 'full'|'partial';
 }
 
 /**

@@ -8,9 +8,10 @@
 
 import {Arguments, Argv, CommandModule} from 'yargs';
 
-import {getConfig, getRepoBaseDir} from '../../utils/config';
+import {getConfig} from '../../utils/config';
 import {error, green, info, red, yellow} from '../../utils/console';
 import {addGithubTokenOption} from '../../utils/git/github-yargs';
+import {GitClient} from '../../utils/git/index';
 import {getReleaseConfig} from '../config/index';
 
 import {CompletionState, ReleaseTool} from './index';
@@ -26,20 +27,22 @@ function builder(argv: Argv): Argv<ReleasePublishOptions> {
 }
 
 /** Yargs command handler for staging a release. */
-async function handler(args: Arguments<ReleasePublishOptions>) {
+async function handler() {
+  const git = GitClient.getInstance();
   const config = getConfig();
   const releaseConfig = getReleaseConfig(config);
-  const projectDir = getRepoBaseDir();
-  const task = new ReleaseTool(releaseConfig, config.github, args.githubToken, projectDir);
+  const projectDir = git.baseDir;
+  const task = new ReleaseTool(releaseConfig, config.github, projectDir);
   const result = await task.run();
 
   switch (result) {
     case CompletionState.FATAL_ERROR:
       error(red(`Release action has been aborted due to fatal errors. See above.`));
-      process.exitCode = 1;
+      process.exitCode = 2;
       break;
     case CompletionState.MANUALLY_ABORTED:
       info(yellow(`Release action has been manually aborted.`));
+      process.exitCode = 1;
       break;
     case CompletionState.SUCCESS:
       info(green(`Release action has completed successfully.`));

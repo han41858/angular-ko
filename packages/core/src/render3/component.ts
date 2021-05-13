@@ -8,29 +8,31 @@
 
 // We are temporarily importing the existing viewEngine from core so we can be sure we are
 // correctly implementing its interfaces for backwards compatibility.
-import {Type} from '../core';
 import {Injector} from '../di/injector';
+import {Type} from '../interface/type';
 import {Sanitizer} from '../sanitization/sanitizer';
 import {assertDefined, assertIndexInRange} from '../util/assert';
+
 import {assertComponentType} from './assert';
+import {readPatchedLView} from './context_discovery';
 import {getComponentDef} from './definition';
 import {diPublicInInjector, getOrCreateNodeInjectorForNode} from './di';
-import {throwProviderNotFoundError} from './errors';
+import {throwProviderNotFoundError} from './errors_di';
 import {registerPostOrderHooks} from './hooks';
 import {addToViewTree, CLEAN_PROMISE, createLView, createTView, getOrCreateTComponentView, getOrCreateTNode, initTNodeFlags, instantiateRootComponent, invokeHostBindingsInCreationMode, locateHostElement, markAsComponentHost, refreshView, registerHostBindingOpCodes, renderView} from './instructions/shared';
 import {ComponentDef, ComponentType, RenderFlags} from './interfaces/definition';
 import {TElementNode, TNodeType} from './interfaces/node';
 import {PlayerHandler} from './interfaces/player';
-import {domRendererFactory3, RElement, Renderer3, RendererFactory3} from './interfaces/renderer';
+import {domRendererFactory3, Renderer3, RendererFactory3} from './interfaces/renderer';
+import {RElement} from './interfaces/renderer_dom';
 import {CONTEXT, HEADER_OFFSET, LView, LViewFlags, RootContext, RootContextFlags, TVIEW, TViewType} from './interfaces/view';
 import {writeDirectClass, writeDirectStyle} from './node_manipulation';
 import {enterView, getCurrentTNode, leaveView, setSelectedIndex} from './state';
 import {computeStaticStyling} from './styling/static_styling';
 import {setUpAttributes} from './util/attrs_utils';
 import {publishDefaultGlobalUtils} from './util/global_utils';
-import {defaultScheduler, stringifyForError} from './util/misc_utils';
+import {defaultScheduler} from './util/misc_utils';
 import {getRootContext} from './util/view_traversal_utils';
-import {readPatchedLView} from './util/view_utils';
 
 
 
@@ -177,7 +179,7 @@ export function createRootComponentView(
   ngDevMode && assertIndexInRange(rootView, index);
   rootView[index] = rNode;
   // '#host' is added here as we don't know the real host DOM name (we don't want to read it) and at
-  // the same time we want to communicate the the debug `TNode` that this is a special `TNode`
+  // the same time we want to communicate the debug `TNode` that this is a special `TNode`
   // representing a host element.
   const tNode: TElementNode = getOrCreateTNode(tView, index, TNodeType.Element, '#host', null);
   const mergedAttrs = tNode.mergedAttrs = def.hostAttrs;

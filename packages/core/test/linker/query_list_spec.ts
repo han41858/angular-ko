@@ -51,6 +51,11 @@ import {beforeEach, describe, expect, it} from '@angular/core/testing/src/testin
       expect(queryList.length).toEqual(2);
     });
 
+    it('should support get', () => {
+      queryList.reset(['one', 'two']);
+      expect(queryList.get(1)).toEqual('two');
+    });
+
     it('should support map', () => {
       queryList.reset(['one', 'two']);
       expect(queryList.map((x) => x)).toEqual(['one', 'two']);
@@ -151,7 +156,7 @@ import {beforeEach, describe, expect, it} from '@angular/core/testing/src/testin
       expect(data.length).toBe(0);
     });
 
-    if (getDOM().supportsDOMEvents()) {
+    if (getDOM().supportsDOMEvents) {
       describe('simple observable interface', () => {
         it('should fire callbacks on change', fakeAsync(() => {
              let fires = 0;

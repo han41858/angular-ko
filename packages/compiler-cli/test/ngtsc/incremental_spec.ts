@@ -7,7 +7,7 @@
  */
 
 import {runInEachFileSystem} from '../../src/ngtsc/file_system/testing';
-import {loadStandardTestFiles} from '../helpers/src/mock_file_loading';
+import {loadStandardTestFiles} from '../../src/ngtsc/testing';
 
 import {NgtscTestEnvironment} from './env';
 
@@ -154,14 +154,20 @@ runInEachFileSystem(() => {
       setupFooBarProgram(env);
 
       // Pretend a change was made to BarDir.
-      env.invalidateCachedFile('bar_directive.ts');
+      env.write('bar_directive.ts', `
+        import {Directive} from '@angular/core';
+
+        @Directive({selector: '[barr]'})
+        export class BarDir {}
+      `);
       env.driveMain();
 
       let written = env.getFilesWrittenSinceLastFlush();
       expect(written).toContain('/bar_directive.js');
       expect(written).toContain('/bar_component.js');
       expect(written).toContain('/bar_module.js');
-      expect(written).toContain('/foo_component.js');
+      expect(written).not.toContain('/foo_component.js');  // BarDir is not exported by BarModule,
+                                                           // so upstream NgModule is not affected
       expect(written).not.toContain('/foo_pipe.js');
       expect(written).not.toContain('/foo_module.js');
     });
@@ -178,7 +184,7 @@ runInEachFileSystem(() => {
       env.write('component2.ts', `
         import {Component} from '@angular/core';
 
-        @Component({selector: 'cmp2', template: 'cmp2'})
+        @Component({selector: 'cmp2', template: '<cmp></cmp>'})
         export class Cmp2 {}
       `);
       env.write('dep.ts', `
@@ -197,36 +203,43 @@ runInEachFileSystem(() => {
         export class MyPipe {}
       `);
       env.write('module.ts', `
-        import {NgModule} from '@angular/core';
+        import {NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
         import {Cmp1} from './component1';
         import {Cmp2} from './component2';
         import {Dir} from './directive';
         import {MyPipe} from './pipe';
 
-        @NgModule({declarations: [Cmp1, Cmp2, Dir, MyPipe]})
+        @NgModule({declarations: [Cmp1, Cmp2, Dir, MyPipe], schemas: [NO_ERRORS_SCHEMA]})
         export class Mod {}
       `);
       env.driveMain();
 
-      // Pretend a change was made to 'dep'. Since this may affect the NgModule scope, like it does
-      // here if the selector is updated, all components in the module scope need to be recompiled.
+      // Pretend a change was made to 'dep'. Since the selector is updated this affects the NgModule
+      // scope, so all components in the module scope need to be recompiled.
       env.flushWrittenFileTracking();
-      env.invalidateCachedFile('dep.ts');
+      env.write('dep.ts', `
+        export const SELECTOR = 'cmp_updated';
+      `);
       env.driveMain();
       const written = env.getFilesWrittenSinceLastFlush();
       expect(written).not.toContain('/directive.js');
       expect(written).not.toContain('/pipe.js');
+      expect(written).not.toContain('/module.js');
       expect(written).toContain('/component1.js');
       expect(written).toContain('/component2.js');
       expect(written).toContain('/dep.js');
-      expect(written).toContain('/module.js');
     });
 
     it('should rebuild components where their NgModule declared dependencies have changed', () => {
       setupFooBarProgram(env);
 
-      // Pretend a change was made to FooPipe.
-      env.invalidateCachedFile('foo_pipe.ts');
+      // Rename the pipe so components that use it need to be recompiled.
+      env.write('foo_pipe.ts', `
+        import {Pipe} from '@angular/core';
+
+        @Pipe({name: 'foo_changed'})
+        export class FooPipe {}
+      `);
       env.driveMain();
       const written = env.getFilesWrittenSinceLastFlush();
       expect(written).not.toContain('/bar_directive.js');
@@ -240,15 +253,25 @@ runInEachFileSystem(() => {
     it('should rebuild components where their NgModule has changed', () => {
       setupFooBarProgram(env);
 
-      // Pretend a change was made to FooPipe.
-      env.invalidateCachedFile('foo_module.ts');
+      // Pretend a change was made to FooModule.
+      env.write('foo_module.ts', `
+        import {NgModule} from '@angular/core';
+        import {FooCmp} from './foo_component';
+        import {FooPipe} from './foo_pipe';
+        import {BarModule} from './bar_module';
+        @NgModule({
+          declarations: [FooCmp], // removed FooPipe
+          imports: [BarModule],
+        })
+        export class FooModule {}
+      `);
       env.driveMain();
       const written = env.getFilesWrittenSinceLastFlush();
       expect(written).not.toContain('/bar_directive.js');
       expect(written).not.toContain('/bar_component.js');
       expect(written).not.toContain('/bar_module.js');
+      expect(written).not.toContain('/foo_pipe.js');
       expect(written).toContain('/foo_component.js');
-      expect(written).toContain('/foo_pipe.js');
       expect(written).toContain('/foo_module.js');
     });
 
@@ -396,7 +419,7 @@ runInEachFileSystem(() => {
       expect(env.getContents('cmp.js')).not.toContain('DepDir');
     });
 
-    it('should rebuild only a Component (but with the correct CompilationScope) and its module if its template has changed',
+    it('should rebuild only a Component (but with the correct CompilationScope) if its template has changed',
        () => {
          setupFooBarProgram(env);
 
@@ -407,9 +430,7 @@ runInEachFileSystem(() => {
          const written = env.getFilesWrittenSinceLastFlush();
          expect(written).not.toContain('/bar_directive.js');
          expect(written).toContain('/bar_component.js');
-         // /bar_module.js should also be re-emitted, because remote scoping of BarComponent might
-         // have been affected.
-         expect(written).toContain('/bar_module.js');
+         expect(written).not.toContain('/bar_module.js');
          expect(written).not.toContain('/foo_component.js');
          expect(written).not.toContain('/foo_pipe.js');
          expect(written).not.toContain('/foo_module.js');
@@ -503,6 +524,58 @@ runInEachFileSystem(() => {
       env.driveMain();
     });
 
+    it('should allow incremental compilation with redirected source files', () => {
+      env.tsconfig({fullTemplateTypeCheck: true});
+
+      // This file structure has an identical version of "a" under the root node_modules and inside
+      // of "b". Because their package.json file indicates it is the exact same version of "a",
+      // TypeScript will transform the source file of "node_modules/b/node_modules/a/index.d.ts"
+      // into a redirect to "node_modules/a/index.d.ts". During incremental compilations, the
+      // redirected "node_modules/b/node_modules/a/index.d.ts" source file should be considered as
+      // its unredirected source file to avoid a change in declaration files.
+      env.write('node_modules/a/index.js', `export class ServiceA {}`);
+      env.write('node_modules/a/index.d.ts', `export declare class ServiceA {}`);
+      env.write('node_modules/a/package.json', `{"name": "a", "version": "1.0"}`);
+      env.write('node_modules/b/node_modules/a/index.js', `export class ServiceA {}`);
+      env.write('node_modules/b/node_modules/a/index.d.ts', `export declare class ServiceA {}`);
+      env.write('node_modules/b/node_modules/a/package.json', `{"name": "a", "version": "1.0"}`);
+      env.write('node_modules/b/index.js', `export {ServiceA as ServiceB} from 'a';`);
+      env.write('node_modules/b/index.d.ts', `export {ServiceA as ServiceB} from 'a';`);
+      env.write('component1.ts', `
+        import {Component} from '@angular/core';
+        import {ServiceA} from 'a';
+        import {ServiceB} from 'b';
+
+        @Component({selector: 'cmp', template: 'cmp'})
+        export class Cmp1 {}
+      `);
+      env.write('component2.ts', `
+        import {Component} from '@angular/core';
+        import {ServiceA} from 'a';
+        import {ServiceB} from 'b';
+
+        @Component({selector: 'cmp2', template: 'cmp'})
+        export class Cmp2 {}
+      `);
+      env.driveMain();
+      env.flushWrittenFileTracking();
+
+      // Now update `component1.ts` and change its imports to avoid complete structure reuse, which
+      // forces recreation of source file redirects.
+      env.write('component1.ts', `
+        import {Component} from '@angular/core';
+        import {ServiceA} from 'a';
+
+        @Component({selector: 'cmp', template: 'cmp'})
+        export class Cmp1 {}
+      `);
+      env.driveMain();
+
+      const written = env.getFilesWrittenSinceLastFlush();
+      expect(written).toContain('/component1.js');
+      expect(written).not.toContain('/component2.js');
+    });
+
     describe('template type-checking', () => {
       beforeEach(() => {
         env.tsconfig({strictTemplates: true});
@@ -582,6 +655,67 @@ runInEachFileSystem(() => {
         `);
 
         expect(env.driveDiagnostics().length).toBe(1);
+      });
+
+      it('should retain default imports that have been converted into a value expression', () => {
+        // This test defines the component `TestCmp` that has a default-imported class as
+        // constructor parameter, and uses `TestDir` in its template. An incremental compilation
+        // updates `TestDir` and changes its inputs, thereby triggering re-emit of `TestCmp` without
+        // performing re-analysis of `TestCmp`. The output of the re-emitted file for `TestCmp`
+        // should continue to have retained the default import.
+        env.write('service.ts', `
+          import {Injectable} from '@angular/core';
+
+          @Injectable({ providedIn: 'root' })
+          export default class DefaultService {}
+        `);
+        env.write('cmp.ts', `
+          import {Component, Directive} from '@angular/core';
+          import DefaultService from './service';
+
+          @Component({
+            template: '<div dir></div>',
+          })
+          export class TestCmp {
+            constructor(service: DefaultService) {}
+          }
+        `);
+        env.write('dir.ts', `
+          import {Directive} from '@angular/core';
+
+          @Directive({ selector: '[dir]' })
+          export class TestDir {}
+        `);
+        env.write('mod.ts', `
+          import {NgModule} from '@angular/core';
+          import {TestDir} from './dir';
+          import {TestCmp} from './cmp';
+
+          @NgModule({ declarations: [TestDir, TestCmp] })
+          export class TestMod {}
+        `);
+
+        env.driveMain();
+        env.flushWrittenFileTracking();
+
+        // Update `TestDir` to change its inputs, triggering a re-emit of `TestCmp` that uses
+        // `TestDir`.
+        env.write('dir.ts', `
+          import {Directive} from '@angular/core';
+
+          @Directive({ selector: '[dir]', inputs: ['added'] })
+          export class TestDir {}
+        `);
+        env.driveMain();
+
+        // Verify that `TestCmp` was indeed re-emitted.
+        const written = env.getFilesWrittenSinceLastFlush();
+        expect(written).toContain('/dir.js');
+        expect(written).toContain('/cmp.js');
+
+        // Verify that the default import is still present.
+        const content = env.getContents('cmp.js');
+        expect(content).toContain(`import DefaultService from './service';`);
       });
 
       it('should recompile when a remote change happens to a scope', () => {
@@ -748,12 +882,14 @@ runInEachFileSystem(() => {
 
           let diags = env.driveDiagnostics();
           expect(diags.length).toBe(1);
-          expect(diags[0].messageText).toContain('"alpha" | "beta"');
+          expect(diags[0].messageText)
+              .toContain(`Type '"gamma"' is not assignable to type 'keyof Keys'.`);
 
           // On a rebuild, the same errors should be present.
           diags = env.driveDiagnostics();
           expect(diags.length).toBe(1);
-          expect(diags[0].messageText).toContain('"alpha" | "beta"');
+          expect(diags[0].messageText)
+              .toContain(`Type '"gamma"' is not assignable to type 'keyof Keys'.`);
         });
       });
     });
@@ -764,7 +900,10 @@ runInEachFileSystem(() => {
     import {Component} from '@angular/core';
     import {fooSelector} from './foo_selector';
 
-    @Component({selector: fooSelector, template: 'foo'})
+    @Component({
+      selector: fooSelector,
+      template: '{{ 1 | foo }}'
+    })
     export class FooCmp {}
   `);
     env.write('foo_pipe.ts', `
@@ -797,13 +936,20 @@ runInEachFileSystem(() => {
     @Directive({selector: '[bar]'})
     export class BarDir {}
   `);
+    env.write('bar_pipe.ts', `
+    import {Pipe} from '@angular/core';
+
+    @Pipe({name: 'foo'})
+    export class BarPipe {}
+  `);
     env.write('bar_module.ts', `
     import {NgModule} from '@angular/core';
     import {BarCmp} from './bar_component';
     import {BarDir} from './bar_directive';
+    import {BarPipe} from './bar_pipe';
     @NgModule({
-      declarations: [BarCmp, BarDir],
-      exports: [BarCmp],
+      declarations: [BarCmp, BarDir, BarPipe],
+      exports: [BarCmp, BarPipe],
     })
     export class BarModule {}
   `);

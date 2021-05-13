@@ -7,6 +7,7 @@
  */
 
 import {obsoleteInIvy} from '@angular/private/testing';
+import {runfiles} from '@bazel/runfiles';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as shx from 'shelljs';
@@ -14,7 +15,7 @@ import * as shx from 'shelljs';
 // Resolve the "npm_package" directory by using the runfile resolution. Note that we need to
 // resolve the "package.json" of the package since otherwise NodeJS would resolve the "main"
 // file, which is not necessarily at the root of the "npm_package".
-shx.cd(path.dirname(require.resolve('angular/packages/common/npm_package/package.json')));
+shx.cd(path.dirname(runfiles.resolve('angular/packages/common/npm_package/package.json')));
 
 describe('@angular/common ng_package', () => {
   describe('should have the locales files', () => {
@@ -39,24 +40,14 @@ describe('@angular/common ng_package', () => {
     expect(shx.ls('-R', 'bundles').stdout.split('\n').filter(n => !!n).sort()).toEqual([
       'common-http-testing.umd.js',
       'common-http-testing.umd.js.map',
-      'common-http-testing.umd.min.js',
-      'common-http-testing.umd.min.js.map',
       'common-http.umd.js',
       'common-http.umd.js.map',
-      'common-http.umd.min.js',
-      'common-http.umd.min.js.map',
       'common-testing.umd.js',
       'common-testing.umd.js.map',
-      'common-testing.umd.min.js',
-      'common-testing.umd.min.js.map',
       'common-upgrade.umd.js',
       'common-upgrade.umd.js.map',
-      'common-upgrade.umd.min.js',
-      'common-upgrade.umd.min.js.map',
       'common.umd.js',
       'common.umd.js.map',
-      'common.umd.min.js',
-      'common.umd.min.js.map',
     ]);
   });
 
@@ -104,14 +95,22 @@ describe('@angular/common ng_package', () => {
 
 
   describe('should have module resolution properties in the package.json file for', () => {
+    interface PackageJson {
+      main: string;
+      es2015: string;
+      module: string;
+      typings: string;
+    }
     // https://github.com/angular/common-builds/blob/master/package.json
     it('/', () => {
-      const actual = JSON.parse(fs.readFileSync('package.json', {encoding: 'utf-8'}));
+      const actual =
+          JSON.parse(fs.readFileSync('package.json', {encoding: 'utf-8'})) as PackageJson;
       expect(actual['main']).toEqual('./bundles/common.umd.js');
     });
     // https://github.com/angular/common-builds/blob/master/http/package.json
     it('/http', () => {
-      const actual = JSON.parse(fs.readFileSync('http/package.json', {encoding: 'utf-8'}));
+      const actual =
+          JSON.parse(fs.readFileSync('http/package.json', {encoding: 'utf-8'})) as PackageJson;
       expect(actual['main']).toEqual('../bundles/common-http.umd.js');
       expect(actual['es2015']).toEqual('../fesm2015/http.js');
       expect(actual['module']).toEqual('../fesm2015/http.js');
@@ -119,12 +118,15 @@ describe('@angular/common ng_package', () => {
     });
     // https://github.com/angular/common-builds/blob/master/testing/package.json
     it('/testing', () => {
-      const actual = JSON.parse(fs.readFileSync('testing/package.json', {encoding: 'utf-8'}));
+      const actual =
+          JSON.parse(fs.readFileSync('testing/package.json', {encoding: 'utf-8'})) as PackageJson;
       expect(actual['main']).toEqual('../bundles/common-testing.umd.js');
     });
     // https://github.com/angular/common-builds/blob/master/http/testing/package.json
     it('/http/testing', () => {
-      const actual = JSON.parse(fs.readFileSync('http/testing/package.json', {encoding: 'utf-8'}));
+      const actual =
+          JSON.parse(fs.readFileSync('http/testing/package.json', {encoding: 'utf-8'})) as
+          PackageJson;
       expect(actual['main']).toEqual('../../bundles/common-http-testing.umd.js');
       expect(actual['es2015']).toEqual('../../fesm2015/http/testing.js');
       expect(actual['module']).toEqual('../../fesm2015/http/testing.js');
@@ -132,7 +134,8 @@ describe('@angular/common ng_package', () => {
     });
     // https://github.com/angular/common-builds/blob/master/upgrade/package.json
     it('/upgrade', () => {
-      const actual = JSON.parse(fs.readFileSync('upgrade/package.json', {encoding: 'utf-8'}));
+      const actual =
+          JSON.parse(fs.readFileSync('upgrade/package.json', {encoding: 'utf-8'})) as PackageJson;
       expect(actual['main']).toEqual('../bundles/common-upgrade.umd.js');
       expect(actual['es2015']).toEqual('../fesm2015/upgrade.js');
       expect(actual['module']).toEqual('../fesm2015/upgrade.js');

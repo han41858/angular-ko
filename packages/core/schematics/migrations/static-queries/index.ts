@@ -9,12 +9,11 @@
 import {logging} from '@angular-devkit/core';
 import {Rule, SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
 import {relative} from 'path';
-import {from} from 'rxjs';
 import * as ts from 'typescript';
 
 import {NgComponentTemplateVisitor} from '../../utils/ng_component_template';
 import {getProjectTsConfigPaths} from '../../utils/project_tsconfig_paths';
-import {createMigrationProgram} from '../../utils/typescript/compiler_host';
+import {canMigrateFile, createMigrationProgram} from '../../utils/typescript/compiler_host';
 
 import {NgQueryResolveVisitor} from './angular/ng_query_visitor';
 import {QueryTemplateStrategy} from './strategies/template_strategy/template_strategy';
@@ -41,11 +40,7 @@ interface AnalyzedProject {
 
 /** Entry point for the V8 static-query migration. */
 export default function(): Rule {
-  return (tree: Tree, context: SchematicContext) => {
-    // We need to cast the returned "Observable" to "any" as there is a
-    // RxJS version mismatch that breaks the TS compilation.
-    return from(runMigration(tree, context).then(() => tree)) as any;
-  };
+  return runMigration;
 }
 
 /** Runs the V8 migration static-query migration for all determined TypeScript projects. */
@@ -123,8 +118,8 @@ function analyzeProject(
   }
 
   const typeChecker = program.getTypeChecker();
-  const sourceFiles = program.getSourceFiles().filter(
-      f => !f.isDeclarationFile && !program.isSourceFileFromExternalLibrary(f));
+  const sourceFiles =
+      program.getSourceFiles().filter(sourceFile => canMigrateFile(basePath, sourceFile, program));
   const queryVisitor = new NgQueryResolveVisitor(typeChecker);
 
   // Analyze all project source-files and collect all queries that

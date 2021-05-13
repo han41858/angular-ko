@@ -39,6 +39,7 @@
       "resources": {
         "files": [
           "/assets/images/favicons/**",
+          "/generated/js/custom-elements-es5-polyfills.js",
           "/*-es5*.js",
           "!/**/_unused/**"
         ]
@@ -75,7 +76,7 @@
     "!/**/*__*/**",
     "!/**/stackblitz",
     "!/**/stackblitz.html",
-    "!/api/*/**/*-*",
+    "!/api/*/**/*-\\D{0,}",
     "!/api/**/AnimationStateDeclarationMetadata*",
     "!/api/**/CORE_DIRECTIVES*",
     "!/api/**/DirectiveMetadata*",
@@ -123,6 +124,12 @@
     "!/guide/service-worker-configref",
     "!/guide/service-worker-configref.html",
     "!/guide/service-worker-configref/",
+    "!/guide/updating-to-version-10",
+    "!/guide/updating-to-version-10.html",
+    "!/guide/updating-to-version-10/",
+    "!/guide/updating-to-version-11",
+    "!/guide/updating-to-version-11.html",
+    "!/guide/updating-to-version-11/",
     "!/guide/webpack",
     "!/guide/webpack.html",
     "!/guide/webpack/",

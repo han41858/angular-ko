@@ -17,7 +17,7 @@ For the final sample app with two lazy-loaded modules that this page describes, 
 This section introduces the basic procedure for configuring a lazy-loaded route.
 For a step-by-step example, see the [step-by-step setup](#step-by-step) section on this page.
 
-To lazy load Angular modules, use `loadchildren` (instead of `component`) in your `AppRoutingModule` `routes` configuration as follows.
+To lazy load Angular modules, use `loadChildren` (instead of `component`) in your `AppRoutingModule` `routes` configuration as follows.
 
 <code-example header="AppRoutingModule (excerpt)">
 
@@ -101,7 +101,16 @@ Instead, it adds the declared route, `customers` to the `routes` array declared 
 Notice that the lazy-loading syntax uses `loadChildren` followed by a function that uses the browser's built-in `import('...')` syntax for dynamic imports.
 The import path is the relative path to the module.
 
-#### Add another feature module
+<div class="callout is-helpful">
+<header>String-based lazy loading</header>
+
+In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](https://angular.io/guide/deprecations#loadchildren-string-syntax) in favor of the `import()` syntax. However, you can opt into using string-based lazy loading (`loadChildren: './path/to/module#Module'`) by including the lazy-loaded routes in your `tsconfig` file, which includes the lazy-loaded files in the compilation.
+
+By default the CLI will generate projects with stricter file inclusions intended to be used with the `import()` syntax.
+
+</div>
+
+### Add another feature module
 
 Use the same command to create a second lazy-loaded feature module with routing, along with its stub component.
 
@@ -258,7 +267,7 @@ Create a resolver service.
 With the CLI, the command to generate a service is as follows:
 
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
   ng generate service <service-name>
 </code-example>
 
@@ -313,8 +322,13 @@ ngOnInit() {
 
 For more information with a working example, see the [routing tutorial section on preloading](guide/router-tutorial-toh#preloading-background-loading-of-feature-areas).
 
+## Troubleshooting lazy-loading modules
 
-<hr>
+A common error when lazy-loading modules is importing common modules in multiple places within an application.  You can test for this condition by first generating the module using the Angular CLI and including the `--route route-name` parameter, where `route-name` is the name of your module. Next, generate the module without the `--route` parameter. If the Angular CLI generates an error when you use the `--route` parameter, but runs correctly without it, you may have imported the same module in multiple places.
+
+Remember, many common Angular modules should be imported at the base of your application.
+
+For more information on Angular Modules, see [NgModules](guide/ngmodules).
 
 ## More on NgModules and routing
 

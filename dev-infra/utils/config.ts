@@ -10,7 +10,7 @@ import {existsSync} from 'fs';
 import {dirname, join} from 'path';
 
 import {debug, error} from './console';
-import {exec} from './shelljs';
+import {GitClient} from './git/index';
 import {isTsNodeAvailable} from './ts-node';
 
 /** Configuration for Git client interactions. */
@@ -64,11 +64,14 @@ let userConfig: {[key: string]: any}|null = null;
  * Get the configuration from the file system, returning the already loaded
  * copy if it is defined.
  */
-export function getConfig(): NgDevConfig {
+export function getConfig(): NgDevConfig;
+export function getConfig(baseDir?: string): NgDevConfig;
+export function getConfig(baseDir?: string): NgDevConfig {
   // If the global config is not defined, load it from the file system.
   if (cachedConfig === null) {
+    baseDir = baseDir || GitClient.getInstance().baseDir;
     // The full path to the configuration file.
-    const configPath = join(getRepoBaseDir(), CONFIG_FILE_PATH);
+    const configPath = join(baseDir, CONFIG_FILE_PATH);
     // Read the configuration and validate it before caching it for the future.
     cachedConfig = validateCommonConfig(readConfigFile(configPath));
   }
@@ -100,7 +103,7 @@ function validateCommonConfig(config: Partial<NgDevConfig>) {
  * configuration file cannot be read.
  */
 function readConfigFile(configPath: string, returnEmptyObjectOnError = false): object {
-  // If the the `.ts` extension has not been set up already, and a TypeScript based
+  // If the `.ts` extension has not been set up already, and a TypeScript based
   // version of the given configuration seems to exist, set up `ts-node` if available.
   if (require.extensions['.ts'] === undefined && existsSync(`${configPath}.ts`) &&
       isTsNodeAvailable()) {
@@ -141,18 +144,6 @@ export function assertNoErrors(errors: string[]) {
   process.exit(1);
 }
 
-/** Gets the path of the directory for the repository base. */
-export function getRepoBaseDir() {
-  const baseRepoDir = exec(`git rev-parse --show-toplevel`);
-  if (baseRepoDir.code) {
-    throw Error(
-        `Unable to find the path to the base directory of the repository.\n` +
-        `Was the command run from inside of the repo?\n\n` +
-        `ERROR:\n ${baseRepoDir.stderr}`);
-  }
-  return baseRepoDir.trim();
-}
-
 /**
  * Get the local user configuration from the file system, returning the already loaded copy if it is
  * defined.
@@ -163,8 +154,9 @@ export function getRepoBaseDir() {
 export function getUserConfig() {
   // If the global config is not defined, load it from the file system.
   if (userConfig === null) {
+    const git = GitClient.getInstance();
     // The full path to the configuration file.
-    const configPath = join(getRepoBaseDir(), USER_CONFIG_FILE_PATH);
+    const configPath = join(git.baseDir, USER_CONFIG_FILE_PATH);
     // Set the global config object.
     userConfig = readConfigFile(configPath, true);
   }

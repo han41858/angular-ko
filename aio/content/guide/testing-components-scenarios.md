@@ -124,10 +124,7 @@ There is no harm in calling `detectChanges()` more often than is strictly necess
 
 </div>
 
-<hr>
-
 {@a dispatch-event}
-
 #### Change an input value with _dispatchEvent()_
 
 To simulate user input, you can find the input element and set its `value` property.
@@ -142,8 +139,6 @@ _Then_ you call `detectChanges()`.
 The following example demonstrates the proper sequence.
 
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="title-case-pipe" header="app/hero/hero-detail.component.spec.ts (pipe test)"></code-example>
-
-<hr>
 
 ## Component with external files
 
@@ -167,7 +162,7 @@ However, if you run the tests in a **non-CLI environment**,
 tests of this component may fail.
 For example, if you run the `BannerComponent` tests in a web coding environment such as [plunker](https://plnkr.co/), you'll see a message like this one:
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: This test module uses the component BannerComponent
 which is using a "templateUrl" or "styleUrls", but they were never compiled.
 Please call "TestBed.compileComponents" before your test.
@@ -291,10 +286,7 @@ The remaining tests confirm the logic of the component when the service returns 
 The second test validates the effect of changing the user name.
 The third test checks that the component displays the proper message when there is no logged-in user.
 
-<hr>
-
 {@a component-with-async-service}
-
 ## Component with async service
 
 In this sample, the `AboutComponent` template hosts a `TwainComponent`.
@@ -379,7 +371,7 @@ value becomes available. The test must become _asynchronous_.
 
 #### Async test with _fakeAsync()_
 
-To use `fakeAsync()` functionality, you must import `zone.js/dist/zone-testing` in your test setup file.
+To use `fakeAsync()` functionality, you must import `zone.js/testing` in your test setup file.
 If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
 
 The following test confirms the expected behavior when the service returns an `ErrorObservable`.
@@ -461,7 +453,7 @@ If you use the Angular CLI, configure this flag in `src/test.ts`.
 
 ```
 (window as any)['__zone_symbol__fakeAsyncPatchLock'] = true;
-import 'zone.js/dist/zone-testing';
+import 'zone.js/testing';
 ```
 
 <code-example
@@ -471,7 +463,7 @@ import 'zone.js/dist/zone-testing';
 
 #### Using the RxJS scheduler inside fakeAsync()
 
-You can also use RxJS scheduler in `fakeAsync()` just like using `setTimeout()` or `setInterval()`, but you need to import `zone.js/dist/zone-patch-rxjs-fake-async` to patch RxJS scheduler.
+You can also use RxJS scheduler in `fakeAsync()` just like using `setTimeout()` or `setInterval()`, but you need to import `zone.js/plugins/zone-patch-rxjs-fake-async` to patch RxJS scheduler.
 <code-example
   path="testing/src/app/demo/async-helper.spec.ts"
   region="fake-async-test-rxjs">
@@ -591,22 +583,14 @@ Then you can assert that the quote element displays the expected text.
 
 #### Async test with _waitForAsync()_
 
-To use `waitForAsync()` functionality, you must import `zone.js/dist/zone-testing` in your test setup file.
+To use `waitForAsync()` functionality, you must import `zone.js/testing` in your test setup file.
 If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
-
-<div class="alert is-helpful">
-
-The `TestBed.compileComponents()` method (see [below](#compile-components)) calls `XHR`
-to read external template and css files during "just-in-time" compilation.
-Write tests that call `compileComponents()` with the `waitForAsync()` utility.
-
-</div>
 
 Here's the previous `fakeAsync()` test, re-written with the `waitForAsync()` utility.
 
 <code-example
   path="testing/src/app/twain/twain.component.spec.ts"
-  region="async-test">
+  region="waitForAsync-test">
 </code-example>
 
 The `waitForAsync()` utility hides some asynchronous boilerplate by arranging for the tester's code
@@ -670,8 +654,6 @@ can give you that information and make assertions about the state of the view.
   path="testing/src/app/twain/twain.component.spec.ts"
   region="spy-done-test"></code-example>
 
-<hr>
-
 {@a marble-testing}
 ## Component marble tests
 
@@ -686,7 +668,7 @@ with overlapping sequences of values and errors.
 
 **RxJS marble testing** is a great way to test observable scenarios,
 both simple and complex.
-You've likely seen the [marble diagrams](http://rxmarbles.com/)
+You've likely seen the [marble diagrams](https://rxmarbles.com/)
 that illustrate how observables work.
 Marble testing uses a similar marble language to
 specify the observable streams and expectations in your tests.
@@ -776,10 +758,7 @@ RxJS marble testing is a rich subject, beyond the scope of this guide.
 Learn about it on the web, starting with the
 [official documentation](https://rxjs.dev/guide/testing/marble-testing).
 
-<hr>
-
 {@a component-with-input-output}
-
 ## Component with inputs and outputs
 
 A component with inputs and outputs typically appears inside the view template of a host component.
@@ -970,10 +949,7 @@ Here's the previous test, rewritten using the click helper.
   header="app/dashboard/dashboard-hero.component.spec.ts (test with click helper)">
 </code-example>
 
-<hr>
-
 {@a component-inside-test-host}
-
 ## Component inside a test host
 
 The previous tests played the role of the host `DashboardComponent` themselves.
@@ -1032,10 +1008,7 @@ The tests themselves are almost identical to the stand-alone version:
 Only the selected event test differs. It confirms that the selected `DashboardHeroComponent` hero
 really does find its way up through the event binding to the host component.
 
-<hr>
-
 {@a routing-component}
-
 ## Routing component
 
 A _routing component_ is a component that tells the `Router` to navigate to another component.
@@ -1186,8 +1159,6 @@ New heroes have `id=0` and a blank `name`. This test confirms that the component
   region="route-no-id"
   header="app/hero/hero-detail.component.spec.ts (no id)"></code-example>
 
-<hr>
-
 ## Nested component tests
 
 Component templates often have nested components, whose templates
@@ -1309,8 +1280,6 @@ The Angular compiler creates the `BannerComponentStub` for the `<app-banner>` el
 and applies the `RouterLinkStubDirective` to the anchors with the `routerLink` attribute,
 but it ignores the `<app-welcome>` and `<router-outlet>` tags.
 
-<hr>
-
 {@a routerlink}
 ## Components with _RouterLink_
 
@@ -1417,10 +1386,7 @@ tests with the `RouterTestingModule`.
 
 </div>
 
-<hr>
-
 {@a page-object}
-
 ## Use a _page_ object
 
 The `HeroDetailComponent` is a simple view with a title, two hero fields, and two buttons.
@@ -1474,8 +1440,6 @@ Here are a few more `HeroDetailComponent` tests to reinforce the point.
   region="selected-tests"
   header="app/hero/hero-detail.component.spec.ts (selected tests)"></code-example>
 
-<hr>
-
 {@a compile-components}
 ## Calling _compileComponents()_
 
@@ -1488,7 +1452,7 @@ because the CLI compiles the application before running the tests.
 
 If you run tests in a **non-CLI environment**, the tests may fail with a message like this one:
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: This test module uses the component BannerComponent
 which is using a "templateUrl" or "styleUrls", but they were never compiled.
 Please call "TestBed.compileComponents" before your test.
@@ -1530,10 +1494,10 @@ You must call `compileComponents()` within an asynchronous test function.
 <div class="alert is-critical">
 
 If you neglect to make the test function async
-(e.g., forget to use `waitForAsync()` as described below),
+(e.g., forget to use the `async` keyword as described below),
 you'll see this error message
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: ViewDestroyedError: Attempt to use a destroyed view
 </code-example>
 
@@ -1544,13 +1508,6 @@ A typical approach is to divide the setup logic into two separate `beforeEach()`
 1.  An async `beforeEach()` that compiles the components
 1.  A synchronous `beforeEach()` that performs the remaining setup.
 
-To follow this pattern, import the `waitForAsync()` helper with the other testing symbols.
-
-<code-example
-  path="testing/src/app/banner/banner-external.component.spec.ts"
-  region="import-async">
-</code-example>
-
 #### The async _beforeEach_
 
 Write the first async `beforeEach` like this.
@@ -1559,8 +1516,6 @@ Write the first async `beforeEach` like this.
   path="testing/src/app/banner/banner-external.component.spec.ts"
   region="async-before-each"
   header="app/banner/banner-external.component.spec.ts (async beforeEach)"></code-example>
-
-The `waitForAsync()` helper function takes a parameterless function with the body of the setup.
 
 The `TestBed.configureTestingModule()` method returns the `TestBed` class so you can chain
 calls to other `TestBed` static methods such as `compileComponents()`.
@@ -1619,10 +1574,7 @@ even though it is never required when running `ng test`.
 
 The tests in this guide only call `compileComponents` when necessary.
 
-<hr>
-
 {@a import-module}
-
 ## Setup with module imports
 
 Earlier component tests configured the testing module with a few `declarations` like this:
@@ -1705,10 +1657,7 @@ the module is small, as feature modules tend to be.
 
 </div>
 
-<hr>
-
 {@a component-override}
-
 ## Override component providers
 
 The `HeroDetailComponent` provides its own `HeroDetailService`.
@@ -1817,5 +1766,3 @@ The `TestBed` offers similar `overrideDirective`, `overrideModule`, and `overrid
 for digging into and replacing parts of these other classes.
 
 Explore the options and combinations on your own.
-
-<hr>

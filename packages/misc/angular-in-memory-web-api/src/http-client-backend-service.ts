@@ -6,7 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {HttpBackend, HttpEvent, HttpHeaders, HttpParams, HttpRequest, HttpResponse, HttpXhrBackend, XhrFactory} from '@angular/common/http';
+import {XhrFactory} from '@angular/common';
+import {HttpBackend, HttpEvent, HttpHeaders, HttpParams, HttpRequest, HttpResponse, HttpXhrBackend} from '@angular/common/http';
 import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -19,7 +20,7 @@ import {InMemoryBackendConfig, InMemoryBackendConfigArgs, InMemoryDbService, Res
  * For Angular `HttpClient` simulate the behavior of a RESTy web api
  * backed by the simple in-memory data store provided by the injected `InMemoryDbService`.
  * Conforms mostly to behavior described here:
- * http://www.restapitutorial.com/lessons/httpmethods.html
+ * https://www.restapitutorial.com/lessons/httpmethods.html
  *
  * ### Usage
  *

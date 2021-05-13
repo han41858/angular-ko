@@ -40,8 +40,14 @@ import {DOCUMENT} from '../dom_tokens';
 export abstract class PlatformLocation {
   abstract getBaseHrefFromDOM(): string;
   abstract getState(): unknown;
-  abstract onPopState(fn: LocationChangeListener): void;
-  abstract onHashChange(fn: LocationChangeListener): void;
+  /**
+   * Returns a function that, when executed, removes the `popstate` event handler.
+   */
+  abstract onPopState(fn: LocationChangeListener): VoidFunction;
+  /**
+   * Returns a function that, when executed, removes the `hashchange` event handler.
+   */
+  abstract onHashChange(fn: LocationChangeListener): VoidFunction;
 
   abstract get href(): string;
   abstract get protocol(): string;
@@ -58,6 +64,10 @@ export abstract class PlatformLocation {
   abstract forward(): void;
 
   abstract back(): void;
+
+  historyGo?(relativePosition: number): void {
+    throw new Error('Not implemented');
+  }
 }
 
 export function useBrowserPlatformLocation() {
@@ -114,20 +124,24 @@ export class BrowserPlatformLocation extends PlatformLocation {
   // This is moved to its own method so that `MockPlatformLocationStrategy` can overwrite it
   /** @internal */
   _init() {
-    (this as {location: Location}).location = getDOM().getLocation();
-    this._history = getDOM().getHistory();
+    (this as {location: Location}).location = window.location;
+    this._history = window.history;
   }
 
   getBaseHrefFromDOM(): string {
     return getDOM().getBaseHref(this._doc)!;
   }
 
-  onPopState(fn: LocationChangeListener): void {
-    getDOM().getGlobalEventTarget(this._doc, 'window').addEventListener('popstate', fn, false);
+  onPopState(fn: LocationChangeListener): VoidFunction {
+    const window = getDOM().getGlobalEventTarget(this._doc, 'window');
+    window.addEventListener('popstate', fn, false);
+    return () => window.removeEventListener('popstate', fn);
   }
 
-  onHashChange(fn: LocationChangeListener): void {
-    getDOM().getGlobalEventTarget(this._doc, 'window').addEventListener('hashchange', fn, false);
+  onHashChange(fn: LocationChangeListener): VoidFunction {
+    const window = getDOM().getGlobalEventTarget(this._doc, 'window');
+    window.addEventListener('hashchange', fn, false);
+    return () => window.removeEventListener('hashchange', fn);
   }
 
   get href(): string {
@@ -177,6 +191,10 @@ export class BrowserPlatformLocation extends PlatformLocation {
 
   back(): void {
     this._history.back();
+  }
+
+  historyGo(relativePosition: number = 0): void {
+    this._history.go(relativePosition);
   }
 
   getState(): unknown {

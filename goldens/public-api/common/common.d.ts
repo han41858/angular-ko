@@ -3,9 +3,9 @@ export declare const APP_BASE_HREF: InjectionToken<string>;
 export declare class AsyncPipe implements OnDestroy, PipeTransform {
     constructor(_ref: ChangeDetectorRef);
     ngOnDestroy(): void;
-    transform<T>(obj: Observable<T> | Promise<T>): T | null;
+    transform<T>(obj: Observable<T> | Subscribable<T> | Promise<T>): T | null;
     transform<T>(obj: null | undefined): null;
-    transform<T>(obj: Observable<T> | Promise<T> | null | undefined): T | null;
+    transform<T>(obj: Observable<T> | Subscribable<T> | Promise<T> | null | undefined): T | null;
 }
 
 export declare class CommonModule {
@@ -96,11 +96,13 @@ export declare function getLocaleWeekEndRange(locale: string): [WeekDay, WeekDay
 
 export declare function getNumberOfCurrencyDigits(code: string): number;
 
-export declare class HashLocationStrategy extends LocationStrategy {
+export declare class HashLocationStrategy extends LocationStrategy implements OnDestroy {
     constructor(_platformLocation: PlatformLocation, _baseHref?: string);
     back(): void;
     forward(): void;
     getBaseHref(): string;
+    historyGo(relativePosition?: number): void;
+    ngOnDestroy(): void;
     onPopState(fn: LocationChangeListener): void;
     path(includeHash?: boolean): string;
     prepareExternalUrl(internal: string): string;
@@ -155,6 +157,7 @@ export declare class Location {
     forward(): void;
     getState(): unknown;
     go(path: string, query?: string, state?: any): void;
+    historyGo(relativePosition?: number): void;
     isCurrentPathEqualTo(path: string, query?: string): boolean;
     normalize(url: string): string;
     onUrlChange(fn: (url: string, state: unknown) => void): void;
@@ -182,6 +185,7 @@ export declare abstract class LocationStrategy {
     abstract back(): void;
     abstract forward(): void;
     abstract getBaseHref(): string;
+    historyGo?(relativePosition: number): void;
     abstract onPopState(fn: LocationChangeListener): void;
     abstract path(includeHash?: boolean): string;
     abstract prepareExternalUrl(internal: string): string;
@@ -324,11 +328,13 @@ export declare enum NumberSymbol {
     CurrencyGroup = 13
 }
 
-export declare class PathLocationStrategy extends LocationStrategy {
+export declare class PathLocationStrategy extends LocationStrategy implements OnDestroy {
     constructor(_platformLocation: PlatformLocation, href?: string);
     back(): void;
     forward(): void;
     getBaseHref(): string;
+    historyGo(relativePosition?: number): void;
+    ngOnDestroy(): void;
     onPopState(fn: LocationChangeListener): void;
     path(includeHash?: boolean): string;
     prepareExternalUrl(internal: string): string;
@@ -355,8 +361,9 @@ export declare abstract class PlatformLocation {
     abstract forward(): void;
     abstract getBaseHrefFromDOM(): string;
     abstract getState(): unknown;
-    abstract onHashChange(fn: LocationChangeListener): void;
-    abstract onPopState(fn: LocationChangeListener): void;
+    historyGo?(relativePosition: number): void;
+    abstract onHashChange(fn: LocationChangeListener): VoidFunction;
+    abstract onPopState(fn: LocationChangeListener): VoidFunction;
     abstract pushState(state: any, title: string, url: string): void;
     abstract replaceState(state: any, title: string, url: string): void;
 }
@@ -419,7 +426,7 @@ export declare abstract class ViewportScroller {
     abstract scrollToPosition(position: [number, number]): void;
     abstract setHistoryScrollRestoration(scrollRestoration: 'auto' | 'manual'): void;
     abstract setOffset(offset: [number, number] | (() => [number, number])): void;
-    static ɵprov: never;
+    static ɵprov: unknown;
 }
 
 export declare enum WeekDay {
@@ -430,4 +437,8 @@ export declare enum WeekDay {
     Thursday = 4,
     Friday = 5,
     Saturday = 6
+}
+
+export declare abstract class XhrFactory {
+    abstract build(): XMLHttpRequest;
 }

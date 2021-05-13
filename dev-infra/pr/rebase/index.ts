@@ -6,32 +6,34 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {types as graphQLTypes} from 'typed-graphqlify';
+import {types as graphqlTypes} from 'typed-graphqlify';
 
+import {Commit} from '../../commit-message/parse';
+import {getCommitsInRange} from '../../commit-message/utils';
 import {getConfig, NgDevConfig} from '../../utils/config';
 import {error, info, promptConfirm} from '../../utils/console';
 import {addTokenToGitHttpsUrl} from '../../utils/git/github-urls';
 import {GitClient} from '../../utils/git/index';
 import {getPr} from '../../utils/github';
 
-/* GraphQL schema for the response body for each pending PR. */
+/* Graphql schema for the response body for each pending PR. */
 const PR_SCHEMA = {
-  state: graphQLTypes.string,
-  maintainerCanModify: graphQLTypes.boolean,
-  viewerDidAuthor: graphQLTypes.boolean,
-  headRefOid: graphQLTypes.string,
+  state: graphqlTypes.string,
+  maintainerCanModify: graphqlTypes.boolean,
+  viewerDidAuthor: graphqlTypes.boolean,
+  headRefOid: graphqlTypes.string,
   headRef: {
-    name: graphQLTypes.string,
+    name: graphqlTypes.string,
     repository: {
-      url: graphQLTypes.string,
-      nameWithOwner: graphQLTypes.string,
+      url: graphqlTypes.string,
+      nameWithOwner: graphqlTypes.string,
     },
   },
   baseRef: {
-    name: graphQLTypes.string,
+    name: graphqlTypes.string,
     repository: {
-      url: graphQLTypes.string,
-      nameWithOwner: graphQLTypes.string,
+      url: graphqlTypes.string,
+      nameWithOwner: graphqlTypes.string,
     },
   },
 };
@@ -42,7 +44,8 @@ const PR_SCHEMA = {
  */
 export async function rebasePr(
     prNumber: number, githubToken: string, config: Pick<NgDevConfig, 'github'> = getConfig()) {
-  const git = new GitClient(githubToken);
+  /** The singleton instance of the GitClient. */
+  const git = GitClient.getAuthenticatedInstance();
   // TODO: Rely on a common assertNoLocalChanges function.
   if (git.hasLocalChanges()) {
     error('Cannot perform rebase of PR with local changes.');
@@ -85,13 +88,33 @@ export async function rebasePr(
     // Fetch the branch at the commit of the PR, and check it out in a detached state.
     info(`Checking out PR #${prNumber} from ${fullHeadRef}`);
     git.run(['fetch', '-q', headRefUrl, headRefName]);
-    git.run(['checkout', '--detach', 'FETCH_HEAD']);
-
+    git.run(['checkout', '-q', '--detach', 'FETCH_HEAD']);
     // Fetch the PRs target branch and rebase onto it.
     info(`Fetching ${fullBaseRef} to rebase #${prNumber} on`);
     git.run(['fetch', '-q', baseRefUrl, baseRefName]);
+
+    const commonAncestorSha = git.run(['merge-base', 'HEAD', 'FETCH_HEAD']).stdout.trim();
+
+    const commits = await getCommitsInRange(commonAncestorSha, 'HEAD');
+
+    let squashFixups = commits.filter((commit: Commit) => commit.isFixup).length === 0 ?
+        false :
+        await promptConfirm(
+            `PR #${prNumber} contains fixup commits, would you like to squash them during rebase?`,
+            true);
+
     info(`Attempting to rebase PR #${prNumber} on ${fullBaseRef}`);
-    const rebaseResult = git.runGraceful(['rebase', 'FETCH_HEAD']);
+
+    /**
+     * Tuple of flags to be added to the rebase command and env object to run the git command.
+     *
+     * Additional flags to perform the autosquashing are added when the user confirm squashing of
+     * fixup commits should occur.
+     */
+    const [flags, env] = squashFixups ?
+        [['--interactive', '--autosquash'], {...process.env, GIT_SEQUENCE_EDITOR: 'true'}] :
+        [[], undefined];
+    const rebaseResult = git.runGraceful(['rebase', ...flags, 'FETCH_HEAD'], {env: env});
 
     // If the rebase was clean, push the rebased PR up to the authors fork.
     if (rebaseResult.status === 0) {

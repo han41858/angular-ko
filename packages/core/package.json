@@ -4,12 +4,15 @@
   "description": "Angular - the core framework",
   "author": "angular",
   "license": "MIT",
+  "engines": {
+    "node": "^12.14.1 || ^14.0.0"
+  },
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "peerDependencies": {
     "rxjs": "^6.5.3",
-    "zone.js": "~0.11.3"
+    "zone.js": "~0.11.4"
   },
   "repository": {
     "type": "git",

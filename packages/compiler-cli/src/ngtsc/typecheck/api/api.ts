@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {BoundTarget, DirectiveMeta, SchemaMetadata} from '@angular/compiler';
+import {AbsoluteSourceSpan, BoundTarget, DirectiveMeta, ParseSourceSpan, SchemaMetadata} from '@angular/compiler';
 import * as ts from 'typescript';
 
 import {AbsoluteFsPath} from '../../file_system';
@@ -260,6 +260,35 @@ export interface TypeCheckingConfig {
    * literals are cast to `any` when declared.
    */
   strictLiteralTypes: boolean;
+
+  /**
+   * Whether to use inline type constructors.
+   *
+   * If this is `true`, create inline type constructors when required. For example, if a type
+   * constructor's parameters has private types, it cannot be created normally, so we inline it in
+   * the directives definition file.
+   *
+   * If false, do not create inline type constructors. Fall back to using `any` type for
+   * constructors that normally require inlining.
+   *
+   * This option requires the environment to support inlining. If the environment does not support
+   * inlining, this must be set to `false`.
+   */
+  useInlineTypeConstructors: boolean;
+
+  /**
+   * Whether or not to produce diagnostic suggestions in cases where the compiler could have
+   * inferred a better type for a construct, but was prevented from doing so by the current type
+   * checking configuration.
+   *
+   * For example, if the compiler could have used a template context guard to infer a better type
+   * for a structural directive's context and `let-` variables, but the user is in
+   * `fullTemplateTypeCheck` mode and such guards are therefore disabled.
+   *
+   * This mode is useful for clients like the Language Service which want to inform users of
+   * opportunities to improve their own developer experience.
+   */
+  suggestionsForSuboptimalTypeInference: boolean;
 }
 
 
@@ -307,61 +336,19 @@ export interface ExternalTemplateSourceMapping {
 }
 
 /**
- * Abstracts the operation of determining which shim file will host a particular component's
- * template type-checking code.
- *
- * Different consumers of the type checking infrastructure may choose different approaches to
- * optimize for their specific use case (for example, the command-line compiler optimizes for
- * efficient `ts.Program` reuse in watch mode).
+ * A mapping of a TCB template id to a span in the corresponding template source.
  */
-export interface ComponentToShimMappingStrategy {
-  /**
-   * Given a component, determine a path to the shim file into which that component's type checking
-   * code will be generated.
-   *
-   * A major constraint is that components in different input files must not share the same shim
-   * file. The behavior of the template type-checking system is undefined if this is violated.
-   */
-  shimPathForComponent(node: ts.ClassDeclaration): AbsoluteFsPath;
+export interface SourceLocation {
+  id: TemplateId;
+  span: AbsoluteSourceSpan;
 }
 
 /**
- * Strategy used to manage a `ts.Program` which contains template type-checking code and update it
- * over time.
- *
- * This abstraction allows both the Angular compiler itself as well as the language service to
- * implement efficient template type-checking using common infrastructure.
+ * A representation of all a node's template mapping information we know. Useful for producing
+ * diagnostics based on a TCB node or generally mapping from a TCB node back to a template location.
  */
-export interface TypeCheckingProgramStrategy extends ComponentToShimMappingStrategy {
-  /**
-   * Whether this strategy supports modifying user files (inline modifications) in addition to
-   * modifying type-checking shims.
-   */
-  readonly supportsInlineOperations: boolean;
-
-  /**
-   * Retrieve the latest version of the program, containing all the updates made thus far.
-   */
-  getProgram(): ts.Program;
-
-  /**
-   * Incorporate a set of changes to either augment or completely replace the type-checking code
-   * included in the type-checking program.
-   */
-  updateFiles(contents: Map<AbsoluteFsPath, string>, updateMode: UpdateMode): void;
-}
-
-export enum UpdateMode {
-  /**
-   * A complete update creates a completely new overlay of type-checking code on top of the user's
-   * original program, which doesn't include type-checking code from previous calls to
-   * `updateFiles`.
-   */
-  Complete,
-
-  /**
-   * An incremental update changes the contents of some files in the type-checking program without
-   * reverting any prior changes.
-   */
-  Incremental,
+export interface FullTemplateMapping {
+  sourceLocation: SourceLocation;
+  templateSourceMapping: TemplateSourceMapping;
+  span: ParseSourceSpan;
 }

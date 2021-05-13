@@ -12,7 +12,7 @@ The class interacts with the view through an API of properties and methods.
 
 For example, `HeroListComponent` has a `heroes` property that holds an array of heroes.
 Its `selectHero()` method sets a `selectedHero` property when the user clicks to choose a hero from that list.
-The component acquires the heroes from a service, which is a TypeScript [parameter property](http://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties) on the constructor.
+The component acquires the heroes from a service, which is a TypeScript [parameter property](https://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties) on the constructor.
 The service is provided to the component through the dependency injection system.
 
 <code-example path="architecture/src/app/hero-list.component.ts" header="src/app/hero-list.component.ts (class)" region="class"></code-example>
@@ -126,7 +126,7 @@ Angular pipes let you declare display-value transformations in your template HTM
 
 Angular defines various pipes, such as the [date](api/common/DatePipe) pipe and [currency](api/common/CurrencyPipe) pipe; for a complete list, see the [Pipes API list](api?type=pipe). You can also define new pipes.
 
-To specify a value transformation in an HTML template, use the [pipe operator (|)](guide/template-expression-operators#pipe).
+To specify a value transformation in an HTML template, use the [pipe operator (|)](guide/pipes).
 
 `{{interpolated_value | pipe_name}}`
 
@@ -166,8 +166,8 @@ The example template uses two built-in structural directives to add application 
 
 <code-example path="architecture/src/app/hero-list.component.1.html" header="src/app/hero-list.component.html (structural)" region="structural"></code-example>
 
-* [`*ngFor`](guide/structural-directives#inside-ngfor) is an iterative; it tells Angular to stamp out one `<li>` per hero in the `heroes` list.
-* [`*ngIf`](guide/structural-directives#ngif-case-study) is a conditional; it includes the `HeroDetail` component only if a selected hero exists.
+* [`*ngFor`](guide/built-in-directives#ngFor) is an iterative; it tells Angular to stamp out one `<li>` per hero in the `heroes` list.
+* [`*ngIf`](guide/built-in-directives#ngIf) is a conditional; it includes the `HeroDetail` component only if a selected hero exists.
 
 #### Attribute directives
 
@@ -181,7 +181,7 @@ The `ngModel` directive, which implements two-way data binding, is an example of
 Angular has more pre-defined directives that either alter the layout structure
 (for example, [ngSwitch](guide/built-in-directives#ngSwitch))
 or modify aspects of DOM elements and components
-(for example, [ngStyle](guide/built-in-directives#ngStyle) and [ngClass](guide/built-in-directives#ngClass)).
+(for example, [ngStyle](guide/built-in-directives#ngstyle) and [ngClass](guide/built-in-directives#ngClass)).
 
 <div class="alert is-helpful">
 

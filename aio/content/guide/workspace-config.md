@@ -28,7 +28,6 @@ The initial app that you create with `ng new app_name` is listed under "projects
 
 </code-example>
 
-Each additional app that you create with `ng generate application` has a corresponding end-to-end test project, with its own configuration section.
 When you create a library project with `ng generate library`, the library project is also added to the `projects` section.
 
 <div class="alert is-helpful">
@@ -40,11 +39,6 @@ When you create a library project with `ng generate library`, the library projec
   For more information, see [Workspace and project file structure](guide/file-structure).
 
 </div>
-
-## Strict mode
-
-When you create new workspaces and projects, you have the option to use Angular's strict mode, which can help you write better, more maintainable code.
-For more information, see [Strict mode](/guide/strict-mode).
 
 ## Project configuration options
 
@@ -77,11 +71,11 @@ The following top-level configuration properties are available for each project,
 ## Generation schematics
 
 Angular generation [schematics](guide/glossary#schematic) are instructions for modifying a project by adding files or modifying existing files.
-Individual schematics for the default Angular CLI `ng generate` sub-commands are collected in the package `@angular`.
+Individual schematics for the default Angular CLI `ng generate` sub-commands are collected in the package `@schematics/angular`.
 Specify the schematic name for a subcommand in the format `schematic-package:schematic-name`;
-for example, the schematic for generating a component is `@angular:component`.
+for example, the schematic for generating a component is `@schematics/angular:component`.
 
-The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://github.com/angular/angular-cli/blob/7.0.x/packages/schematics/angular/application/schema.json).
+The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json).
 The schema describes the options available to the CLI for each of the `ng generate` sub-commands, as shown in the `--help` output.
 
 The fields given in the schema correspond to the allowed argument values and defaults for the CLI sub-command options.
@@ -101,7 +95,7 @@ See [Angular CLI Builders](guide/cli-builder).
 ### Default Architect builders and targets
 
 Angular defines default builders for use with specific CLI commands, or with the general `ng run` command.
-The JSON schemas that the define the options and defaults for each of these default builders are collected in the [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/8.0.x/packages/angular/cli/lib/config/schema.json) package.
+The JSON schemas that define the options and defaults for each of these default builders are collected in the [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/master/packages/angular/cli/lib/config/schema.json) package.
 The schemas configure options for the following builders.
 
 * app-shell
@@ -109,7 +103,6 @@ The schemas configure options for the following builders.
 * dev-server
 * extract-i18n
 * karma
-* protractor
 * server
 * tslint
 
@@ -175,15 +168,17 @@ The `architect/build` section configures defaults for options of the `ng build` 
 
 ### Alternate build configurations
 
-By default, a `production` configuration is defined, and the `ng build` command has `--prod` option that builds using this configuration. The `production` configuration sets defaults that optimize the app in a number of ways, such as bundling files, minimizing excess whitespace, removing comments and dead code, and rewriting code to use short, cryptic names ("minification").
+Angular CLI comes with two build configurations: `production` and `development`. By default, the `ng build` command uses the `production` configuration, which applies a number of build optimizations, including:
+* Bundling files
+* Minimizing excess whitespace
+* Removing comments and dead code
+* Rewriting code to use short, mangled names (minification)
 
 You can define and name additional alternate configurations (such as `stage`, for instance) appropriate to your development process. Some examples of different build configurations are `stable`, `archive` and `next` used by AIO itself, and the individual locale-specific configurations required for building localized versions of an app. For details, see [Internationalization (i18n)](guide/i18n#merge-aot).
 
 You can select an alternate configuration by passing its name to the `--configuration` command line flag.
 
 You can also pass in more than one configuration name as a comma-separated list. For example, to apply both `stage` and `fr` build configurations, use the command `ng build --configuration stage,fr`. In this case,  the command parses the named configurations from left to right. If multiple configurations change the same setting, the last-set value is the final one.
-
-If the `--prod` command line flag is also used, it is applied first, and its settings can be overridden by any configurations specified via the `--configuration` flag.
 
 {@a build-props}
 
@@ -196,7 +191,7 @@ Some additional options can only be set through the configuration file, either b
 | OPTIONS PROPERTIES | DESCRIPTION |
 | :------------------------- | :---------------------------- |
 | `assets`                   | An object containing paths to static assets to add to the global context of the project. The default paths point to the project's icon file and its `assets` folder. See more in [Assets configuration](#asset-config) below. |
-| `styles`                   | An array of style files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors: [sass/scss](http://sass-lang.com/), [less](http://lesscss.org/), and [stylus](http://stylus-lang.com/). See more in [Styles and scripts configuration](#style-script-config) below. |
+| `styles`                   | An array of style files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors: [sass/scss](https://sass-lang.com/), [less](http://lesscss.org/), and [stylus](https://stylus-lang.com/). See more in [Styles and scripts configuration](#style-script-config) below. |
 | `stylePreprocessorOptions` | An object containing option-value pairs to pass to style preprocessors. See more in [Styles and scripts configuration](#style-script-config) below. |
 | `scripts`                  | An object containing JavaScript script files to add to the global context of the project. The scripts are loaded exactly as if you had added them in a `<script>` tag inside `index.html`. See more in [Styles and scripts configuration](#style-script-config) below. |
 | `budgets`                  | Default size-budget type and threshholds for all or parts of your app. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See [Configure size budgets](guide/build#configure-size-budgets). (Not available in `test` section.) |
@@ -235,6 +230,7 @@ A asset specification object can have the following fields.
 * `input`: A path relative to the workspace root.
 * `output`: A path relative to `outDir` (default is `dist/`*project-name*). Because of the security implications, the CLI never writes files outside of the project output path.
 * `ignore`: A list of globs to exclude.
+* `followSymlinks`: Allow glob patterns to follow symlink directories. This allows subdirectories of the symlink to be searched. Defaults to `false`.
 
 For example, the default asset paths can be represented in more detail using the following objects.
 
@@ -277,11 +273,11 @@ The following example uses the `ignore` field to exclude certain files in the as
 <code-example language="json">
 
 "assets": [
- { 
+ {
    "glob": "**/*",
    "input": "src/assets/",
    "ignore": ["**/*.svg"],
-   "output": "/assets/" 
+   "output": "/assets/"
  }
 ]
 
@@ -308,7 +304,7 @@ For example, the following object values create and name a bundle that contains 
      }
    ],
    "scripts": [
-     { 
+     {
        "input": "src/external-module/main.js",
        "inject": false,
        "bundleName": "external-module"
@@ -361,34 +357,161 @@ Files in that folder, such as `src/style-paths/_variables.scss`, can be imported
 Note that you will also need to add any styles or scripts to the `test` builder if you need them for unit tests.
 See also [Using runtime-global libraries inside your app](guide/using-libraries#using-runtime-global-libraries-inside-your-app).
 
+### Optimization configuration
 
-{@a optimize-and-srcmap}
+The `optimization` browser builder option can be either a Boolean or an Object for more fine-tune configuration. This option enables various optimizations of the build output, including:
 
-### Optimization and source map configuration
+- Minification of scripts and styles
+- Tree-shaking
+- Dead-code elimination
+- Inlining of critical CSS
+- Fonts inlining
 
-The `optimization` and `sourceMap` browser builder options can be either a Boolean or an Object for more fine-grained configuration.
-In this section we will explain how to fine tune these options.
+There are several options that can be used to fine-tune the optimization of an application.
 
-* The `optimization` option applies to scripts, styles and fonts. You can supply a value such as the following to apply optimization to one or the other:
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts</code></td>
+<td>Enables optimization of the scripts output.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>styles</code></td>
+<td>Enables optimization of the styles output.</td>
+<td><code>boolean|<a href="#styles-optimization-options">Styles optimization options</a></code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>fonts</code></td>
+<td>Enables optimization for fonts.<br><strong>Note:</strong> This requires internet access.</td>
+<td><code class="no-auto-link">boolean|<a href="#fonts-optimization-options">Fonts optimization options</a></code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+#### Styles optimization options
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>minify</code></td>
+<td>Minify CSS definitions by removing extraneous whitespace and comments, merging identifiers and minimizing values.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>inlineCritical</code></td>
+<td>Extract and inline critical CSS definitions to improve <a href="https://web.dev/first-contentful-paint/">First Contentful Paint.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+#### Fonts optimization options
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>inline</code></td>
+<td>Reduce <a href="https://web.dev/render-blocking-resources/">render blocking requests</a> by inlining external Google fonts and icons CSS definitions in the application's HTML index file.<br><strong>Note:</strong>This requires internet access.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+
+You can supply a value such as the following to apply optimization to one or the other:
 
 <code-example language="json">
 
-  "optimization": { 
+  "optimization": {
     "scripts": true,
-    "styles": false,
+    "styles": {
+      "minify": true,
+      "inlineCritical": true
+    },
     "fonts": true
   }
 
 </code-example>
 
-<div class="alert is-important">
+<div class="alert is-helpful">
 
-  Fonts optimization requires internet access.
-  When enabled, render blocking requests will be reduced by inlining external Google fonts and icons CSS definitions in the application's HTML index file. 
+   For [Universal](guide/glossary#universal), you can reduce the code rendered in the HTML page by
+   setting styles optimization to `true`.
 
 </div>
 
-* The `sourceMap` option applies for both scripts and styles. You can also choose to output hidden source maps, or resolve vendor package source maps:
+### Source map configuration
+
+The `sourceMap` browser builder option can be either a Boolean or an Object for more fine-tune configuration to control the source maps of an application.
+
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts</code></td>
+<td>Output source maps for all scripts.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>styles</code></td>
+<td>Output source maps for all styles.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>vendor</code></td>
+<td>Resolve vendor packages source maps.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>Output source maps used for error reporting tools.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+
+
+The example below shows how to toggle one or more values to configure the source map outputs:
 
 <code-example language="json">
 
@@ -406,8 +529,5 @@ In this section we will explain how to fine tune these options.
    When using hidden source maps, source maps will not be referenced in the bundle.
    These are useful if you only want source maps to map error stack traces in error reporting tools,
    but don't want to expose your source maps in the browser developer tools.
-
-   For [Universal](guide/glossary#universal), you can reduce the code rendered in the HTML page by
-   setting styles optimization to `true` and styles source maps to `false`.
 
 </div>

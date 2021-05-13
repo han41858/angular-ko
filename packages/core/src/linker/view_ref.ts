@@ -6,7 +6,6 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {ApplicationRef} from '../application_ref';
 import {ChangeDetectorRef} from '../change_detection/change_detector_ref';
 
 /**
@@ -94,7 +93,7 @@ export abstract class EmbeddedViewRef<C> extends ViewRef {
   /**
    * The context for this view, inherited from the anchor element.
    */
-  abstract get context(): C;
+  abstract context: C;
 
   /**
    * The root nodes for this embedded view.
@@ -104,5 +103,15 @@ export abstract class EmbeddedViewRef<C> extends ViewRef {
 
 export interface InternalViewRef extends ViewRef {
   detachFromAppRef(): void;
-  attachToAppRef(appRef: ApplicationRef): void;
+  attachToAppRef(appRef: ViewRefTracker): void;
+}
+
+/**
+ * Interface for tracking root `ViewRef`s in `ApplicationRef`.
+ *
+ * NOTE: Importing `ApplicationRef` here directly creates circular dependency, which is why we have
+ * a subset of the `ApplicationRef` interface `ViewRefTracker` here.
+ */
+export interface ViewRefTracker {
+  detachView(viewRef: ViewRef): void;
 }

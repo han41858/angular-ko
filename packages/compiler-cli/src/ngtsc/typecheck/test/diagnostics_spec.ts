@@ -36,7 +36,7 @@ runInEachFileSystem(() => {
           }]);
 
       expect(messages).toEqual(
-          [`TestComponent.html(1, 10): Type 'string' is not assignable to type 'number'.`]);
+          [`TestComponent.html(1, 11): Type 'string' is not assignable to type 'number'.`]);
     });
 
     it('infers type of template variables', () => {
@@ -395,6 +395,19 @@ runInEachFileSystem(() => {
               street: string;
             };
           };
+        }`);
+
+        expect(messages).toEqual([]);
+      });
+
+      it('does not produce diagnostic for fallback value using nullish coalescing', () => {
+        const messages = diagnose(`<div>{{ greet(name ?? 'Frodo') }}</div>`, `
+        export class TestComponent {
+          name: string | null;
+
+          greet(name: string) {
+            return 'hello ' + name;
+          }
         }`);
 
         expect(messages).toEqual([]);

@@ -32,7 +32,7 @@ describe('ng-dev release build', () => {
   /** Invokes the build command handler. */
   async function invokeBuild({json}: {json?: boolean} = {}) {
     spyOn(releaseConfig, 'getReleaseConfig')
-        .and.returnValue({npmPackages, buildPackages, generateReleaseNotesForHead: async () => {}});
+        .and.returnValue({npmPackages, buildPackages, releaseNotes: {}});
     await ReleaseBuildCommandModule.handler({json: !!json, $0: '', _: []});
   }
 
@@ -50,7 +50,7 @@ describe('ng-dev release build', () => {
     expect(writeSpy).toHaveBeenCalledTimes(1);
 
     const jsonText = writeSpy.calls.mostRecent().args[0] as string;
-    const parsed = JSON.parse(jsonText);
+    const parsed = JSON.parse(jsonText) as releaseConfig.BuiltPackage[];
 
     expect(parsed).toEqual([
       {name: '@angular/pkg1', outputPath: 'dist/pkg1'},

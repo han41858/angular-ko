@@ -8,9 +8,9 @@ in both reactive and template-driven forms.
 
 Before reading about form validation, you should have a basic understanding of the following.
 
-* [TypeScript](https://www.typescriptlang.org/docs/home.html "The TypeScript language") and HTML5  programming.
+* [TypeScript](https://www.typescriptlang.org/ "The TypeScript language") and HTML5  programming.
 
-* Fundamental concepts of [Angular app design](guide/architecture "Introduction to Angular app-design concepts").
+* Fundamental concepts of [Angular application design](guide/architecture "Introduction to Angular application-design concepts").
 
 * The [two types of forms that Angular supports](guide/forms-overview "Introduction to Angular forms").
 

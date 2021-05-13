@@ -11,7 +11,9 @@ import {fakeAsync, flushMicrotasks, waitForAsync} from '@angular/core/testing';
 import {AsyncTestCompleter, beforeEach, describe, expect, inject, it, Log, xit} from '@angular/core/testing/src/testing_internal';
 import {browserDetection} from '@angular/platform-browser/testing/src/browser_util';
 
+import {global} from '../../src/util/global';
 import {scheduleMicroTask} from '../../src/util/microtask';
+import {getNativeRequestAnimationFrame} from '../../src/util/raf';
 import {NoopNgZone} from '../../src/zone/ng_zone';
 
 const needsLongerTimers = browserDetection.isSlow || browserDetection.isEdge;
@@ -927,6 +929,284 @@ function commonTests() {
           expect(asyncResult).toEqual('works');
         });
       });
+    });
+  });
+
+  describe('coalescing', () => {
+    describe(
+        'shouldCoalesceRunChangeDetection = false, shouldCoalesceEventChangeDetection = false',
+        () => {
+          let notCoalesceZone: NgZone;
+          let logs: string[] = [];
+
+          beforeEach(() => {
+            notCoalesceZone = new NgZone({});
+            logs = [];
+            notCoalesceZone.onMicrotaskEmpty.subscribe(() => {
+              logs.push('microTask empty');
+            });
+          });
+
+          it('should run sync', () => {
+            notCoalesceZone.run(() => {});
+            expect(logs).toEqual(['microTask empty']);
+          });
+
+          it('should emit onMicroTaskEmpty multiple times within the same event loop for multiple ngZone.run',
+             () => {
+               notCoalesceZone.run(() => {});
+               notCoalesceZone.run(() => {});
+               expect(logs).toEqual(['microTask empty', 'microTask empty']);
+             });
+
+          it('should emit onMicroTaskEmpty multiple times within the same event loop for multiple tasks',
+             () => {
+               const tasks: Task[] = [];
+               notCoalesceZone.run(() => {
+                 tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+                   logs.push('eventTask1');
+                 }, undefined, () => {}));
+                 tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+                   logs.push('eventTask2');
+                 }, undefined, () => {}));
+                 tasks.push(Zone.current.scheduleMacroTask('myMacro', () => {
+                   logs.push('macroTask');
+                 }, undefined, () => {}));
+               });
+               tasks.forEach(t => t.invoke());
+               expect(logs).toEqual([
+                 'microTask empty', 'eventTask1', 'microTask empty', 'eventTask2',
+                 'microTask empty', 'macroTask', 'microTask empty'
+               ]);
+             });
+        });
+
+    describe('shouldCoalesceEventChangeDetection = true, shouldCoalesceRunChangeDetection = false', () => {
+      let nativeRequestAnimationFrame: (fn: FrameRequestCallback) => void;
+      let nativeSetTimeout: any = global[Zone.__symbol__('setTimeout')];
+      if (!global.requestAnimationFrame) {
+        nativeRequestAnimationFrame = function(fn: Function) {
+          global[Zone.__symbol__('setTimeout')](fn, 16);
+        };
+      } else {
+        nativeRequestAnimationFrame = getNativeRequestAnimationFrame().nativeRequestAnimationFrame;
+      }
+      let patchedImmediate: any;
+      let coalesceZone: NgZone;
+      let logs: string[] = [];
+
+      beforeEach(() => {
+        patchedImmediate = setImmediate;
+        global.setImmediate = global[Zone.__symbol__('setImmediate')];
+        coalesceZone = new NgZone({shouldCoalesceEventChangeDetection: true});
+        logs = [];
+        coalesceZone.onMicrotaskEmpty.subscribe(() => {
+          logs.push('microTask empty');
+        });
+      });
+
+      afterEach(() => {
+        global.setImmediate = patchedImmediate;
+      });
+
+      it('should run in requestAnimationFrame async', (done: DoneFn) => {
+        let task: Task|undefined = undefined;
+        coalesceZone.run(() => {
+          task = Zone.current.scheduleEventTask('myEvent', () => {
+            logs.push('myEvent');
+          }, undefined, () => {});
+        });
+        task!.invoke();
+        expect(logs).toEqual(['microTask empty', 'myEvent']);
+        nativeRequestAnimationFrame(() => {
+          expect(logs).toEqual(['microTask empty', 'myEvent', 'microTask empty']);
+          done();
+        });
+      });
+
+      it('should only emit onMicroTaskEmpty once within the same event loop for multiple event tasks',
+         (done: DoneFn) => {
+           const tasks: Task[] = [];
+           coalesceZone.run(() => {
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask1');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask2');
+             }, undefined, () => {}));
+           });
+           tasks.forEach(t => t.invoke());
+           expect(logs).toEqual(['microTask empty', 'eventTask1', 'eventTask2']);
+           nativeRequestAnimationFrame(() => {
+             expect(logs).toEqual(
+                 ['microTask empty', 'eventTask1', 'eventTask2', 'microTask empty']);
+             done();
+           });
+         });
+
+      it('should only emit onMicroTaskEmpty once within the same event loop for ngZone.run in onMicrotaskEmpty subscription',
+         (done: DoneFn) => {
+           const tasks: Task[] = [];
+           coalesceZone.onMicrotaskEmpty.subscribe(() => {
+             coalesceZone.run(() => {});
+           });
+           coalesceZone.run(() => {
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask1');
+             }, undefined, () => {}));
+           });
+           coalesceZone.run(() => {
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask2');
+             }, undefined, () => {}));
+           });
+           tasks.forEach(t => t.invoke());
+           expect(logs).toEqual(['microTask empty', 'microTask empty', 'eventTask1', 'eventTask2']);
+           nativeSetTimeout(() => {
+             expect(logs).toEqual([
+               'microTask empty', 'microTask empty', 'eventTask1', 'eventTask2', 'microTask empty'
+             ]);
+             done();
+           }, 100);
+         });
+
+      it('should emit onMicroTaskEmpty once within the same event loop for not only event tasks, but event tasks are before other tasks',
+         (done: DoneFn) => {
+           const tasks: Task[] = [];
+           coalesceZone.run(() => {
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask1');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask2');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleMacroTask('myMacro', () => {
+               logs.push('macroTask');
+             }, undefined, () => {}));
+           });
+           tasks.forEach(t => t.invoke());
+           expect(logs).toEqual(['microTask empty', 'eventTask1', 'eventTask2', 'macroTask']);
+           nativeRequestAnimationFrame(() => {
+             expect(logs).toEqual(
+                 ['microTask empty', 'eventTask1', 'eventTask2', 'macroTask', 'microTask empty']);
+             done();
+           });
+         });
+
+      it('should emit multiple onMicroTaskEmpty within the same event loop for not only event tasks, but event tasks are after other tasks',
+         (done: DoneFn) => {
+           const tasks: Task[] = [];
+           coalesceZone.run(() => {
+             tasks.push(Zone.current.scheduleMacroTask('myMacro', () => {
+               logs.push('macroTask');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask1');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask2');
+             }, undefined, () => {}));
+           });
+           tasks.forEach(t => t.invoke());
+           expect(logs).toEqual(
+               ['microTask empty', 'macroTask', 'microTask empty', 'eventTask1', 'eventTask2']);
+           nativeRequestAnimationFrame(() => {
+             expect(logs).toEqual([
+               'microTask empty', 'macroTask', 'microTask empty', 'eventTask1', 'eventTask2',
+               'microTask empty'
+             ]);
+             done();
+           });
+         });
+    });
+
+    describe('shouldCoalesceRunChangeDetection = true', () => {
+      let nativeRequestAnimationFrame: (fn: FrameRequestCallback) => void;
+      let nativeSetTimeout: any = global[Zone.__symbol__('setTimeout')];
+      if (!global.requestAnimationFrame) {
+        nativeRequestAnimationFrame = function(fn: Function) {
+          global[Zone.__symbol__('setTimeout')](fn, 16);
+        };
+      } else {
+        nativeRequestAnimationFrame = getNativeRequestAnimationFrame().nativeRequestAnimationFrame;
+      }
+      let patchedImmediate: any;
+      let coalesceZone: NgZone;
+      let logs: string[] = [];
+
+      beforeEach(() => {
+        patchedImmediate = setImmediate;
+        global.setImmediate = global[Zone.__symbol__('setImmediate')];
+        coalesceZone = new NgZone({shouldCoalesceRunChangeDetection: true});
+        logs = [];
+        coalesceZone.onMicrotaskEmpty.subscribe(() => {
+          logs.push('microTask empty');
+        });
+      });
+
+      afterEach(() => {
+        global.setImmediate = patchedImmediate;
+      });
+
+      it('should run in requestAnimationFrame async', (done: DoneFn) => {
+        coalesceZone.run(() => {});
+        expect(logs).toEqual([]);
+        nativeRequestAnimationFrame(() => {
+          expect(logs).toEqual(['microTask empty']);
+          done();
+        });
+      });
+
+      it('should only emit onMicroTaskEmpty once within the same event loop for multiple ngZone.run',
+         (done: DoneFn) => {
+           coalesceZone.run(() => {});
+           coalesceZone.run(() => {});
+           expect(logs).toEqual([]);
+           nativeRequestAnimationFrame(() => {
+             expect(logs).toEqual(['microTask empty']);
+             done();
+           });
+         });
+
+      it('should only emit onMicroTaskEmpty once within the same event loop for ngZone.run in onMicrotaskEmpty subscription',
+         (done: DoneFn) => {
+           coalesceZone.onMicrotaskEmpty.subscribe(() => {
+             coalesceZone.run(() => {});
+           });
+           coalesceZone.run(() => {});
+           coalesceZone.run(() => {});
+           expect(logs).toEqual([]);
+           nativeSetTimeout(() => {
+             expect(logs).toEqual(['microTask empty']);
+             done();
+           }, 100);
+         });
+
+      it('should only emit onMicroTaskEmpty once within the same event loop for multiple tasks',
+         (done: DoneFn) => {
+           const tasks: Task[] = [];
+           coalesceZone.run(() => {
+             tasks.push(Zone.current.scheduleMacroTask('myMacro', () => {
+               logs.push('macroTask');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask1');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleEventTask('myEvent', () => {
+               logs.push('eventTask2');
+             }, undefined, () => {}));
+             tasks.push(Zone.current.scheduleMacroTask('myMacro', () => {
+               logs.push('macroTask');
+             }, undefined, () => {}));
+           });
+           tasks.forEach(t => t.invoke());
+           expect(logs).toEqual(['macroTask', 'eventTask1', 'eventTask2', 'macroTask']);
+           nativeRequestAnimationFrame(() => {
+             expect(logs).toEqual(
+                 ['macroTask', 'eventTask1', 'eventTask2', 'macroTask', 'microTask empty']);
+             done();
+           });
+         });
     });
   });
 }

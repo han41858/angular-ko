@@ -26,14 +26,25 @@ export interface ReleaseConfig {
   npmPackages: string[];
   /** Builds release packages and returns a list of paths pointing to the output. */
   buildPackages: () => Promise<BuiltPackage[]|null>;
-  /** Generates the release notes from the most recent tag to `HEAD`. */
-  generateReleaseNotesForHead: (outputPath: string) => Promise<void>;
+  /** The list of github labels to add to the release PRs. */
+  releasePrLabels?: string[];
+  /** Configuration for creating release notes during publishing. */
+  releaseNotes: ReleaseNotesConfig;
+}
+
+/** Configuration for creating release notes during publishing. */
+export interface ReleaseNotesConfig {
+  /** Whether to prompt for and include a release title in the generated release notes. */
+  useReleaseTitle?: boolean;
+  /** List of commit scopes to disclude from generated release notes. */
+  hiddenScopes?: string[];
   /**
-   * Gets a pattern for extracting the release notes of the a given version.
-   * @returns A pattern matching the notes for a given version (including the header).
+   * List of commit groups, either {npmScope}/{scope} or {scope}, to use for ordering.
+   *
+   * Each group for the release notes, will appear in the order provided in groupOrder and any other
+   * groups will appear after these groups, sorted by `Array.sort`'s default sorting order.
    */
-  // TODO: Remove this in favor of a canonical changelog format across the Angular organization.
-  extractReleaseNotesPattern?: (version: semver.SemVer) => RegExp;
+  groupOrder?: string[];
 }
 
 /** Configuration for releases in the dev-infra configuration. */
@@ -54,8 +65,8 @@ export function getReleaseConfig(config: Partial<DevInfraReleaseConfig> = getCon
   if (config.release?.buildPackages === undefined) {
     errors.push(`No "buildPackages" function configured for releasing.`);
   }
-  if (config.release?.generateReleaseNotesForHead === undefined) {
-    errors.push(`No "generateReleaseNotesForHead" function configured for releasing.`);
+  if (config.release?.releaseNotes === undefined) {
+    errors.push(`No "releaseNotes" configured for releasing.`);
   }
 
   assertNoErrors(errors);

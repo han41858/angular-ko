@@ -17,7 +17,7 @@ import {addErrorsToBundle, addParseDiagnostic, addParseError, canParseXml, getAt
 /**
  * A translation parser that can load translations from XLIFF 2 files.
  *
- * http://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html
+ * https://docs.oasis-open.org/xliff/xliff-core/v2.0/os/xliff-core-v2.0-os.html
  *
  * @see Xliff2TranslationSerializer
  * @publicApi used by CLI
@@ -132,12 +132,23 @@ class Xliff2TranslationVisitor extends BaseVisitor {
       return;
     }
 
-    const targetMessage = element.children.find(isNamedElement('target'));
+    let targetMessage = element.children.find(isNamedElement('target'));
     if (targetMessage === undefined) {
+      // Warn if there is no `<target>` child element
       addParseDiagnostic(
-          bundle.diagnostics, element.sourceSpan, 'Missing required <target> element',
-          ParseErrorLevel.ERROR);
-      return;
+          bundle.diagnostics, element.sourceSpan, 'Missing <target> element',
+          ParseErrorLevel.WARNING);
+
+      // Fallback to the `<source>` element if available.
+      targetMessage = element.children.find(isNamedElement('source'));
+      if (targetMessage === undefined) {
+        // Error if there is neither `<target>` nor `<source>`.
+        addParseDiagnostic(
+            bundle.diagnostics, element.sourceSpan,
+            'Missing required element: one of <target> or <source> is required',
+            ParseErrorLevel.ERROR);
+        return;
+      }
     }
 
     const {translation, parseErrors, serializeErrors} = serializeTranslationMessage(targetMessage, {

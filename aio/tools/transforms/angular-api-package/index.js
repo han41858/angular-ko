@@ -17,7 +17,6 @@ module.exports =
         // Register the processors
         .processor(require('./processors/mergeParameterInfo'))
         .processor(require('./processors/processPseudoClasses'))
-        .processor(require('./processors/splitDescription'))
         .processor(require('./processors/convertPrivateClassesToInterfaces'))
         .processor(require('./processors/generateApiListDoc'))
         .processor(require('./processors/addNotYetDocumentedProperty'))
@@ -87,7 +86,7 @@ module.exports =
           readTypeScriptModules.ignoreExportsMatching = [/^_|^ɵɵ|^VERSION$/];
           readTypeScriptModules.hidePrivateMembers = true;
 
-          // NOTE: This list should be in sync with tools/public_api_guard/BUILD.bazel
+          // NOTE: This list should be in sync with the folders/files in `goldens/public-api`.
           readTypeScriptModules.sourceFiles = [
             'animations/index.ts',
             'animations/browser/index.ts',
@@ -102,15 +101,15 @@ module.exports =
             'core/testing/index.ts',
             'elements/index.ts',
             'forms/index.ts',
-            // Current plan for Angular v8 is to hide documentation for the @angular/http package
-            // 'http/index.ts',
-            // 'http/testing/index.ts',
+            'localize/index.ts',
+            'localize/init/index.ts',
             'platform-browser/index.ts',
             'platform-browser/animations/index.ts',
             'platform-browser/testing/index.ts',
             'platform-browser-dynamic/index.ts',
             'platform-browser-dynamic/testing/index.ts',
             'platform-server/index.ts',
+            'platform-server/init/index.ts',
             'platform-server/testing/index.ts',
             'platform-webworker/index.ts',
             'platform-webworker-dynamic/index.ts',
@@ -218,7 +217,7 @@ module.exports =
           convertToJsonProcessor.docTypes =
               convertToJsonProcessor.docTypes.concat(API_DOC_TYPES_TO_RENDER);
           postProcessHtml.docTypes =
-              convertToJsonProcessor.docTypes.concat(API_DOC_TYPES_TO_RENDER);
+              postProcessHtml.docTypes.concat(API_DOC_TYPES_TO_RENDER);
           autoLinkCode.docTypes = API_DOC_TYPES;
           autoLinkCode.codeElements = ['code', 'code-example', 'code-pane'];
         });

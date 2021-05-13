@@ -82,7 +82,7 @@ import {humanizeDom, humanizeDomSourceSpans, humanizeLineColumn, humanizeNodes} 
         });
 
         it('should not error on void elements from HTML5 spec',
-           () => {  // http://www.w3.org/TR/html-markup/syntax.html#syntax-elements without:
+           () => {  // https://html.spec.whatwg.org/multipage/syntax.html#syntax-elements without:
              // <base> - it can be present in head only
              // <meta> - it can be present in head only
              // <command> - obsolete
@@ -707,6 +707,23 @@ import {humanizeDom, humanizeDomSourceSpans, humanizeLineColumn, humanizeNodes} 
             [html.Element, 'div', 0, '<div><br/></div>', '<div>', '</div>'],
             [html.Element, 'br', 1, '<br/>', '<br/>', '<br/>'],
           ]);
+        });
+
+        it('should set the end source span excluding trailing whitespace whitespace', () => {
+          expect(humanizeDomSourceSpans(
+                     parser.parse('<input type="text" />\n\n\n  <span>\n</span>', 'TestComp', {
+                       leadingTriviaChars: [' ', '\n', '\r', '\t'],
+                     })))
+              .toEqual([
+                [
+                  html.Element, 'input', 0, '<input type="text" />', '<input type="text" />',
+                  '<input type="text" />'
+                ],
+                [html.Attribute, 'type', 'text', 'type="text"'],
+                [html.Text, '\n\n\n  ', 0, ''],
+                [html.Element, 'span', 0, '<span>\n</span>', '<span>', '</span>'],
+                [html.Text, '\n', 1, ''],
+              ]);
         });
 
         it('should not set the end source span for elements that are implicitly closed', () => {

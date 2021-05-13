@@ -49,7 +49,7 @@ This gives users a meaningful first paint of your application that appears quick
 
 Learn more in [The App Shell Model](https://developers.google.com/web/fundamentals/architecture/app-shell).
 
-You can use the Angular CLI to [generate](cli/generate#appshell) an app shell.
+You can use the Angular CLI to [generate](cli/generate#app-shell) an app shell.
 This can improve the user experience by quickly launching a static rendered page (a skeleton common to all pages) while the browser downloads the full client version and switches to it automatically after the code loads.
 
 See also [Service Worker and PWA](guide/service-worker-intro).
@@ -340,6 +340,12 @@ Angular supplies a number of built-in directives that begin with the `ng` prefix
 You can also create new directives to implement your own functionality.
 You associate a *selector* (an HTML tag such as `<my-directive>`) with a custom directive, thereby extending the [template syntax](guide/template-syntax) that you can use in your apps.
 
+**UpperCamelCase**, such as `NgIf`, refers to a directive class.
+You can use **UpperCamelCase** when describing properties and directive behavior.
+
+**lowerCamelCase**, such as `ngIf` refers to a directive's attribute name.
+You can use **lowerCamelCase** when describing how to apply the directive to an element in the HTML template.
+
 {@a dom}
 
 ## domain-specific language (DSL)
@@ -587,7 +593,7 @@ To learn more, see [Lifecycle Hooks](guide/lifecycle-hooks).
 
 In general, a module collects a block of code dedicated to a single purpose. Angular uses standard JavaScript modules and also defines an Angular module, `NgModule`.
 
-In JavaScript (ECMAScript), each file is a module and all objects defined in the file belong to that module. Objects can exported, making them public, and public objects can be imported for use by other modules.
+In JavaScript (ECMAScript), each file is a module and all objects defined in the file belong to that module. Objects can be exported, making them public, and public objects can be imported for use by other modules.
 
 Angular ships as a collection of JavaScript modules (also called libraries). Each Angular library name begins with the `@angular` prefix. Install Angular libraries with the [npm package manager](https://docs.npmjs.com/getting-started/what-is-npm) and import parts of them with JavaScript `import` declarations.
 
@@ -643,7 +649,7 @@ A producer of multiple values, which it pushes to [subscribers](#subscriber). Us
 
 Observables can deliver single or multiple values of any type to subscribers, either synchronously (as a function delivers a value to its caller) or on a schedule. A subscriber receives notification of new values as they are produced and notification of either normal completion or error completion.
 
-Angular uses a third-party library called [Reactive Extensions (RxJS)](http://reactivex.io/rxjs/).
+Angular uses a third-party library called [Reactive Extensions (RxJS)](https://rxjs.dev/).
 
 To learn more, see [Observables](guide/observables).
 
@@ -901,7 +907,7 @@ A buildable or runnable subset of a [project](#project), configured as an object
 
 In the `angular.json` file, each project has an "architect" section that contains targets which configure builders. Some of these targets correspond to [CLI commands](#cli), such as `build`, `serve`, `test`, and `lint`.
 
-For example, the Architect builder invoked by the `ng build` command to compile a project uses a particular build tool, and has a default configuration whose values can be overridden on the command line. The `build` target also defines an alternate configuration for a "production" build, that can be invoked with the `--prod` flag on the `build` command.
+For example, the Architect builder invoked by the `ng build` command to compile a project uses a particular build tool, and has a default configuration with values that you can override on the command line. The `build` target also defines an alternate configuration for a "development" build, which you can invoke with the `--configuration development` flag on the `build` command.
 
 The Architect tool provides a set of builders. The [`ng new` command](cli/new) provides a set of targets for the initial application project. The [`ng generate application`](cli/generate#application) and [`ng generate library`](cli/generate#library) commands provide a set of targets for each new [project](#project). These targets, their options and configurations, can be customized to meet the needs of your project. For example, you may want to add a "staging" or "testing" configuration to a project's "build" target.
 
@@ -958,6 +964,27 @@ The following example defines a template reference variable named `#phone`.
 
 For more information, see the [Template reference variable](guide/template-reference-variables) guide.
 
+
+{@a template-input-variable}
+
+## template input variable
+
+A template input variable is a variable you can reference within a single instance of the template. You declare a template input variable using the `let` keyword as in `let customer`.
+
+```
+ <tr *ngFor="let customer of customers;">
+     <td>{{customer.customerNo}}</td>
+     <td>{{customer.name}}</td>
+     <td>{{customer.address}}</td>
+     <td>{{customer.city}}</td>
+     <td>{{customer.state}}</td>
+     <button (click)="selectedCustomer=customer">Select</button>
+   </tr>
+```
+
+Read and learn more about [template input variables](guide/template-reference-variables#template-input-variable).
+
+
 {@a token}
 
 ## token
@@ -987,7 +1014,7 @@ code completion, refactoring, inline documentation, and intelligent search).
 Many code editors and IDEs support TypeScript either natively or with plug-ins.
 
 TypeScript is the preferred language for Angular development.
-Read more about TypeScript at [typescriptlang.org](http://www.typescriptlang.org/).
+Read more about TypeScript at [typescriptlang.org](https://www.typescriptlang.org/).
 
 ## TypeScript configuration file
 

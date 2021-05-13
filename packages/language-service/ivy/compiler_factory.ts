@@ -6,71 +6,65 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {NgCompiler} from '@angular/compiler-cli/src/ngtsc/core';
+import {CompilationTicket, freshCompilationTicket, incrementalFromCompilerTicket, NgCompiler, resourceChangeTicket} from '@angular/compiler-cli/src/ngtsc/core';
 import {NgCompilerOptions} from '@angular/compiler-cli/src/ngtsc/core/api';
+import {AbsoluteFsPath, resolve} from '@angular/compiler-cli/src/ngtsc/file_system';
 import {TrackedIncrementalBuildStrategy} from '@angular/compiler-cli/src/ngtsc/incremental';
-import {TypeCheckingProgramStrategy} from '@angular/compiler-cli/src/ngtsc/typecheck/api';
-import * as ts from 'typescript/lib/tsserverlibrary';
+import {ProgramDriver} from '@angular/compiler-cli/src/ngtsc/program_driver';
 
-import {LanguageServiceAdapter} from './language_service_adapter';
-import {isExternalTemplate} from './utils';
+import {LanguageServiceAdapter} from './adapters';
 
+/**
+ * Manages the `NgCompiler` instance which backs the language service, updating or replacing it as
+ * needed to produce an up-to-date understanding of the current program.
+ *
+ * TODO(alxhub): currently the options used for the compiler are specified at `CompilerFactory`
+ * construction, and are not changable. In a real project, users can update `tsconfig.json`. We need
+ * to properly handle a change in the compiler options, either by having an API to update the
+ * `CompilerFactory` to use new options, or by replacing it entirely.
+ */
 export class CompilerFactory {
   private readonly incrementalStrategy = new TrackedIncrementalBuildStrategy();
   private compiler: NgCompiler|null = null;
-  private lastKnownProgram: ts.Program|null = null;
 
   constructor(
       private readonly adapter: LanguageServiceAdapter,
-      private readonly programStrategy: TypeCheckingProgramStrategy,
+      private readonly programStrategy: ProgramDriver,
+      private readonly options: NgCompilerOptions,
   ) {}
 
-  /**
-   * Create a new instance of the Ivy compiler if the program has changed since
-   * the last time the compiler was instantiated. If the program has not changed,
-   * return the existing instance.
-   * @param fileName override the template if this is an external template file
-   * @param options angular compiler options
-   */
-  getOrCreateWithChangedFile(fileName: string, options: NgCompilerOptions): NgCompiler {
+  getOrCreate(): NgCompiler {
     const program = this.programStrategy.getProgram();
-    if (!this.compiler || program !== this.lastKnownProgram) {
-      this.compiler = new NgCompiler(
-          this.adapter,  // like compiler host
-          options,       // angular compiler options
-          program,
-          this.programStrategy,
-          this.incrementalStrategy,
-          true,  // enableTemplateTypeChecker
-          this.lastKnownProgram,
-          undefined,  // perfRecorder (use default)
-      );
-      this.lastKnownProgram = program;
+    const modifiedResourceFiles = new Set<AbsoluteFsPath>();
+    for (const fileName of this.adapter.getModifiedResourceFiles() ?? []) {
+      modifiedResourceFiles.add(resolve(fileName));
     }
-    if (isExternalTemplate(fileName)) {
-      this.overrideTemplate(fileName, this.compiler);
-    }
-    return this.compiler;
-  }
 
-  private overrideTemplate(fileName: string, compiler: NgCompiler) {
-    if (!this.adapter.isTemplateDirty(fileName)) {
-      return;
-    }
-    // 1. Get the latest snapshot
-    const latestTemplate = this.adapter.readResource(fileName);
-    // 2. Find all components that use the template
-    const ttc = compiler.getTemplateTypeChecker();
-    const components = compiler.getComponentsWithTemplateFile(fileName);
-    // 3. Update component template
-    for (const component of components) {
-      if (ts.isClassDeclaration(component)) {
-        ttc.overrideComponentTemplate(component, latestTemplate);
+    if (this.compiler !== null && program === this.compiler.getCurrentProgram()) {
+      if (modifiedResourceFiles.size > 0) {
+        // Only resource files have changed since the last NgCompiler was created.
+        const ticket = resourceChangeTicket(this.compiler, modifiedResourceFiles);
+        this.compiler = NgCompiler.fromTicket(ticket, this.adapter);
+      } else {
+        // The previous NgCompiler is being reused, but we still want to reset its performance
+        // tracker to capture only the operations that are needed to service the current request.
+        this.compiler.perfRecorder.reset();
       }
-    }
-  }
 
-  registerLastKnownProgram() {
-    this.lastKnownProgram = this.programStrategy.getProgram();
+      return this.compiler;
+    }
+
+    let ticket: CompilationTicket;
+    if (this.compiler === null) {
+      ticket = freshCompilationTicket(
+          program, this.options, this.incrementalStrategy, this.programStrategy,
+          /* perfRecorder */ null, true, true);
+    } else {
+      ticket = incrementalFromCompilerTicket(
+          this.compiler, program, this.incrementalStrategy, this.programStrategy,
+          modifiedResourceFiles, /* perfRecorder */ null);
+    }
+    this.compiler = NgCompiler.fromTicket(ticket, this.adapter);
+    return this.compiler;
   }
 }

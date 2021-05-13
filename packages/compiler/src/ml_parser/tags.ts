@@ -15,13 +15,13 @@ export enum TagContentType {
 export interface TagDefinition {
   closedByParent: boolean;
   implicitNamespacePrefix: string|null;
-  contentType: TagContentType;
   isVoid: boolean;
   ignoreFirstLf: boolean;
   canSelfClose: boolean;
   preventNamespaceInheritance: boolean;
 
   isClosedByChild(name: string): boolean;
+  getContentType(prefix?: string): TagContentType;
 }
 
 export function splitNsName(elementName: string): [string|null, string] {
@@ -63,7 +63,7 @@ export function mergeNsAndName(prefix: string, localName: string): string {
   return prefix ? `:${prefix}:${localName}` : localName;
 }
 
-// see http://www.w3.org/TR/html51/syntax.html#named-character-references
+// see https://www.w3.org/TR/html51/syntax.html#named-character-references
 // see https://html.spec.whatwg.org/multipage/entities.json
 // This list is not exhaustive to keep the compiler footprint low.
 // The `&#123;` / `&#x1ab;` syntax should be used when the named character reference does not

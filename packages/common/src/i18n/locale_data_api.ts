@@ -81,7 +81,7 @@ export enum TranslationWidth {
  * Examples are given for `en-US`.
  *
  * @see `getLocaleDateFormat()`
- * @see `getLocaleTimeFormat()``
+ * @see `getLocaleTimeFormat()`
  * @see `getLocaleDateTimeFormat()`
  * @see [Internationalization (i18n) Guide](https://angular.io/guide/i18n)
  * @publicApi
@@ -122,7 +122,7 @@ export enum NumberSymbol {
   /**
    * Decimal separator.
    * For `en-US`, the dot character.
-   * Example : 2,345`.`67
+   * Example: 2,345`.`67
    */
   Decimal,
   /**

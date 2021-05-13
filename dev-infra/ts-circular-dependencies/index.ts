@@ -58,7 +58,7 @@ export function main(
   const cycles: ReferenceChain[] = [];
   const checkedNodes = new WeakSet<ts.SourceFile>();
 
-  globSync(glob, {absolute: true}).forEach(filePath => {
+  globSync(glob, {absolute: true, ignore: ['**/node_modules/**']}).forEach(filePath => {
     const sourceFile = analyzer.getSourceFile(filePath);
     cycles.push(...analyzer.findCycles(sourceFile, checkedNodes));
   });
@@ -93,7 +93,7 @@ export function main(
     info(yellow(`   Please rerun with "--warnings" to inspect unresolved imports.`));
   }
 
-  const expected: Golden = JSON.parse(readFileSync(goldenFile, 'utf8'));
+  const expected = JSON.parse(readFileSync(goldenFile, 'utf8')) as Golden;
   const {fixedCircularDeps, newCircularDeps} = compareGoldens(actual, expected);
   const isMatching = fixedCircularDeps.length === 0 && newCircularDeps.length === 0;
 

@@ -11,14 +11,16 @@ import {join} from 'path';
 import * as semver from 'semver';
 
 import {getBranchPushMatcher} from '../../../utils/testing';
+import {_npmPackageInfoCache} from '../../versioning';
 import {ActiveReleaseTrains} from '../../versioning/active-release-trains';
 import * as npm from '../../versioning/npm-publish';
 import {ReleaseTrain} from '../../versioning/release-trains';
 import {ReleaseAction} from '../actions';
 import {actions} from '../actions/index';
 import {changelogPath} from '../constants';
+import {ReleaseNotes} from '../release-notes/release-notes';
 
-import {getChangelogForVersion, getTestingMocksForReleaseAction, parse, setupReleaseActionForTesting, testTmpDir} from './test-utils';
+import {fakeNpmPackageQueryRequest, getChangelogForVersion, getTestingMocksForReleaseAction, parse, setupReleaseActionForTesting, testTmpDir} from './test-utils';
 
 describe('common release action logic', () => {
   const baseReleaseTrains: ActiveReleaseTrains = {
@@ -37,6 +39,9 @@ describe('common release action logic', () => {
     it('should not modify release train versions and cause invalid other actions', async () => {
       const {releaseConfig, gitClient} = getTestingMocksForReleaseAction();
       const descriptions: string[] = [];
+
+      // Fake the NPM package request as otherwise the test would rely on `npmjs.org`.
+      fakeNpmPackageQueryRequest(releaseConfig.npmPackages[0], {'dist-tags': {}});
 
       for (const actionCtor of actions) {
         if (await actionCtor.isActive(testReleaseTrain)) {
@@ -85,7 +90,7 @@ describe('common release action logic', () => {
     const fakeReleaseNotes = getChangelogForVersion(version.format());
     const forkBranchName = `changelog-cherry-pick-${version}`;
 
-    it('should prepend fetched changelog', async () => {
+    it('should prepend the changelog to the next branch', async () => {
       const {repo, fork, instance, testTmpDir} =
           setupReleaseActionForTesting(TestAction, baseReleaseTrains);
 
@@ -93,7 +98,8 @@ describe('common release action logic', () => {
       // it is properly appended. Also expect a pull request to be created in the fork.
       repo.expectChangelogFetch(branchName, fakeReleaseNotes)
           .expectFindForkRequest(fork)
-          .expectPullRequestToBeCreated('master', fork, forkBranchName, 200);
+          .expectPullRequestToBeCreated('master', fork, forkBranchName, 200)
+          .expectPullRequestWait(200);
 
       // Simulate that the fork branch name is available.
       fork.expectBranchRequest(forkBranchName, null);
@@ -104,60 +110,6 @@ describe('common release action logic', () => {
       expect(changelogContent).toEqual(`${fakeReleaseNotes}Existing changelog`);
     });
 
-    it('should respect a custom release note extraction pattern', async () => {
-      const {repo, fork, instance, testTmpDir, releaseConfig} =
-          setupReleaseActionForTesting(TestAction, baseReleaseTrains);
-
-      // Custom pattern matching changelog output sections grouped through
-      // basic level-1 markdown headers (compared to the default anchor pattern).
-      releaseConfig.extractReleaseNotesPattern = version =>
-          new RegExp(`(# v${version} \\("[^"]+"\\).*?)(?:# v|$)`, 's');
-
-      const customReleaseNotes = `# v${version} ("newton-kepler")\n\nNew Content!`;
-
-      // Expect the changelog to be fetched and return a fake changelog to test that
-      // it is properly appended. Also expect a pull request to be created in the fork.
-      repo.expectChangelogFetch(branchName, customReleaseNotes)
-          .expectFindForkRequest(fork)
-          .expectPullRequestToBeCreated('master', fork, forkBranchName, 200);
-
-      // Simulate that the fork branch name is available.
-      fork.expectBranchRequest(forkBranchName, null);
-
-      await instance.testCherryPickWithPullRequest(version, branchName);
-
-      const changelogContent = readFileSync(join(testTmpDir, changelogPath), 'utf8');
-      expect(changelogContent).toEqual(`${customReleaseNotes}\n\nExisting changelog`);
-    });
-
-    it('should print an error if release notes cannot be extracted', async () => {
-      const {repo, fork, instance, testTmpDir, releaseConfig} =
-          setupReleaseActionForTesting(TestAction, baseReleaseTrains);
-
-      // Expect the changelog to be fetched and return a fake changelog to test that
-      // it is properly appended. Also expect a pull request to be created in the fork.
-      repo.expectChangelogFetch(branchName, `non analyzable changelog`)
-          .expectFindForkRequest(fork)
-          .expectPullRequestToBeCreated('master', fork, forkBranchName, 200);
-
-      // Simulate that the fork branch name is available.
-      fork.expectBranchRequest(forkBranchName, null);
-
-      spyOn(console, 'error');
-
-      await instance.testCherryPickWithPullRequest(version, branchName);
-
-      expect(console.error)
-          .toHaveBeenCalledWith(
-              jasmine.stringMatching(`Could not cherry-pick release notes for v${version}`));
-      expect(console.error)
-          .toHaveBeenCalledWith(jasmine.stringMatching(
-              `Please copy the release notes manually into the "master" branch.`));
-
-      const changelogContent = readFileSync(join(testTmpDir, changelogPath), 'utf8');
-      expect(changelogContent).toEqual(`Existing changelog`);
-    });
-
     it('should push changes to a fork for creating a pull request', async () => {
       const {repo, fork, instance, gitClient} =
           setupReleaseActionForTesting(TestAction, baseReleaseTrains);
@@ -166,7 +118,8 @@ describe('common release action logic', () => {
       // it is properly appended. Also expect a pull request to be created in the fork.
       repo.expectChangelogFetch(branchName, fakeReleaseNotes)
           .expectFindForkRequest(fork)
-          .expectPullRequestToBeCreated('master', fork, forkBranchName, 200);
+          .expectPullRequestToBeCreated('master', fork, forkBranchName, 200)
+          .expectPullRequestWait(200);
 
       // Simulate that the fork branch name is available.
       fork.expectBranchRequest(forkBranchName, null);
@@ -201,11 +154,13 @@ class TestAction extends ReleaseAction {
     throw Error('Not implemented.');
   }
 
-  async testBuildAndPublish(newVersion: semver.SemVer, publishBranch: string, distTag: string) {
-    await this.buildAndPublish(newVersion, publishBranch, distTag);
+  async testBuildAndPublish(version: semver.SemVer, publishBranch: string, distTag: string) {
+    const releaseNotes = await ReleaseNotes.fromLatestTagToHead(version, this.config);
+    await this.buildAndPublish(releaseNotes, publishBranch, distTag);
   }
 
   async testCherryPickWithPullRequest(version: semver.SemVer, branch: string) {
-    await this.cherryPickChangelogIntoNextBranch(version, branch);
+    const releaseNotes = await ReleaseNotes.fromLatestTagToHead(version, this.config);
+    await this.cherryPickChangelogIntoNextBranch(releaseNotes, branch);
   }
 }

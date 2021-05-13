@@ -8,7 +8,6 @@
 
 import {join} from 'path';
 
-import {getRepoBaseDir} from '../../utils/config';
 import {error} from '../../utils/console';
 
 import {Formatter} from './base-formatter';
@@ -19,7 +18,7 @@ import {Formatter} from './base-formatter';
 export class Buildifier extends Formatter {
   name = 'buildifier';
 
-  binaryFilePath = join(getRepoBaseDir(), 'node_modules/.bin/buildifier');
+  binaryFilePath = join(this.git.baseDir, 'node_modules/.bin/buildifier');
 
   defaultFileMatcher = ['**/*.bzl', '**/BUILD.bazel', '**/WORKSPACE', '**/BUILD'];
 
@@ -28,7 +27,7 @@ export class Buildifier extends Formatter {
       commandFlags: `${BAZEL_WARNING_FLAG} --lint=warn --mode=check --format=json`,
       callback:
           (_: string, code: number, stdout: string) => {
-            return code !== 0 || !JSON.parse(stdout)['success'];
+            return code !== 0 || !(JSON.parse(stdout) as {success: string}).success;
           },
     },
     format: {

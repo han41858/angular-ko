@@ -7,15 +7,18 @@
  */
 import 'reflect-metadata';
 
-import {ElementRef, QueryList, ɵɵsetComponentScope as setComponentScope} from '@angular/core';
+import {ElementRef, QueryList} from '@angular/core';
 import {Injectable} from '@angular/core/src/di/injectable';
 import {setCurrentInjector, ɵɵinject} from '@angular/core/src/di/injector_compatibility';
 import {ɵɵdefineInjectable, ɵɵInjectorDef} from '@angular/core/src/di/interface/defs';
 import {ivyEnabled} from '@angular/core/src/ivy_switch';
 import {ContentChild, ContentChildren, ViewChild, ViewChildren} from '@angular/core/src/metadata/di';
-import {Component, Directive, HostBinding, HostListener, Input, Output, Pipe} from '@angular/core/src/metadata/directives';
-import {NgModule, NgModuleDef} from '@angular/core/src/metadata/ng_module';
-import {ComponentDef, FactoryFn, PipeDef} from '@angular/core/src/render3/interfaces/definition';
+import {Component, Directive, HostBinding, HostListener, Input, Pipe} from '@angular/core/src/metadata/directives';
+import {NgModule} from '@angular/core/src/metadata/ng_module';
+import {NgModuleDef} from '@angular/core/src/metadata/ng_module_def';
+import {FactoryFn} from '@angular/core/src/render3/definition_factory';
+import {ComponentDef, PipeDef} from '@angular/core/src/render3/interfaces/definition';
+
 
 
 ivyEnabled && describe('render3 jit', () => {
@@ -188,13 +191,14 @@ ivyEnabled && describe('render3 jit', () => {
       constructor(public token: Token) {}
     }
 
-    const injectorDef: ɵɵInjectorDef<Module> = (Module as any).ɵinj;
-    const instance = injectorDef.factory();
+    const factory: FactoryFn<Module> = (Module as any).ɵfac;
+    const instance = factory();
 
     // Since the instance was created outside of an injector using the module, the
     // injection will use the default provider, not the provider from the module.
     expect(instance.token).toBe('default');
 
+    const injectorDef: ɵɵInjectorDef<Module> = (Module as any).ɵinj;
     expect(injectorDef.providers).toEqual([{provide: Token, useValue: 'test'}]);
   });
 
