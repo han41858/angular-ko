@@ -1002,7 +1002,7 @@ For more information on providers and the bootstrap process, see [Dependency Inj
 
 최신 HTML5 브라우저는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries" title="HTML5 browser history push-state">history.pushState</a> API를 제공합니다.
 이 API를 활용하면 서버로 새로운 페이지 요청을 보내지 않으면서 브라우저의 주소나 히스토리를 변경할 수 있습니다.
-그리고 Angular 라우터는 새로운 페이지 로드가 필요한 URL과 구별하지 않으면서 자연스러운 URL을 처리할 숭 ㅣㅆ습니다.
+그리고 Angular 라우터는 새로운 페이지 로드가 필요한 URL과 구별하지 않으면서 자연스러운 URL을 처리할 수 있습니다.
 
 "HTML5 pushState" 스타일로 구성되는 위기대응센터 URL은 이렇습니다:
 
