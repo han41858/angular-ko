@@ -223,7 +223,7 @@ Ivy를 제거하려면 프로젝트에 있는 TypeScript 환경설정 파일에�
 
 Angular 9 버전부터는 `enableIvy` 플래그의 기본값이 `true`입니다.
 
-아래 예제는 `enableIvy` 옵션을 `false`로 지정해서 Ivy를 사용하지 않는 TypeScript 환경설정 파일 예지입니다.
+아래 예제는 `enableIvy` 옵션을 `false`로 지정해서 Ivy를 사용하지 않는 TypeScript 환경설정 파일 예시입니다.
 
 <code-example language="json" header="tsconfig.app.json">
 {
