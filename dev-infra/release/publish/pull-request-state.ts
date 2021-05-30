@@ -9,19 +9,28 @@
 import * as Octokit from '@octokit/rest';
 import {GitClient} from '../../utils/git/index';
 
+/** Thirty seconds in milliseconds. */
+const THIRTY_SECONDS_IN_MS = 30000;
+
 /** State of a pull request in Github. */
 export type PullRequestState = 'merged'|'closed'|'open';
 
 /** Gets whether a given pull request has been merged. */
-export async function getPullRequestState(api: GitClient, id: number): Promise<PullRequestState> {
+export async function getPullRequestState(
+    api: GitClient<boolean>, id: number): Promise<PullRequestState> {
   const {data} = await api.github.pulls.get({...api.remoteParams, pull_number: id});
   if (data.merged) {
     return 'merged';
-  } else if (data.closed_at !== null) {
-    return await isPullRequestClosedWithAssociatedCommit(api, id) ? 'merged' : 'closed';
-  } else {
-    return 'open';
   }
+  // Check if the PR was closed more than 30 seconds ago, this extra time gives Github time to
+  // update the closed pull request to be associated with the closing commit.
+  // Note: a Date constructed with `null` creates an object at 0 time, which will never be greater
+  // than the current date time.
+  if (data.closed_at !== null &&
+      (new Date(data.closed_at).getTime() < Date.now() - THIRTY_SECONDS_IN_MS)) {
+    return await isPullRequestClosedWithAssociatedCommit(api, id) ? 'merged' : 'closed';
+  }
+  return 'open';
 }
 
 /**
@@ -30,7 +39,7 @@ export async function getPullRequestState(api: GitClient, id: number): Promise<P
  * the merge is not fast-forward, Github does not consider the PR as merged and instead
  * shows the PR as closed. See for example: https://github.com/angular/angular/pull/37918.
  */
-async function isPullRequestClosedWithAssociatedCommit(api: GitClient, id: number) {
+async function isPullRequestClosedWithAssociatedCommit(api: GitClient<boolean>, id: number) {
   const request =
       api.github.issues.listEvents.endpoint.merge({...api.remoteParams, issue_number: id});
   const events: Octokit.IssuesListEventsResponse = await api.github.paginate(request);
@@ -64,7 +73,7 @@ async function isPullRequestClosedWithAssociatedCommit(api: GitClient, id: numbe
 }
 
 /** Checks whether the specified commit is closing the given pull request. */
-async function isCommitClosingPullRequest(api: GitClient, sha: string, id: number) {
+async function isCommitClosingPullRequest(api: GitClient<boolean>, sha: string, id: number) {
   const {data} = await api.github.repos.getCommit({...api.remoteParams, ref: sha});
   // Matches the closing keyword supported in commit messages. See:
   // https://docs.github.com/en/enterprise/2.16/user/github/managing-your-work-on-github/closing-issues-using-keywords.

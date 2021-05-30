@@ -22,8 +22,9 @@ import {LexerRange} from '../../ml_parser/lexer';
 import {isNgContainer as checkIsNgContainer, splitNsName} from '../../ml_parser/tags';
 import {mapLiteral} from '../../output/map_util';
 import * as o from '../../output/output_ast';
-import {ParseError, ParseSourceSpan} from '../../parse_util';
+import {ParseError, ParseSourceFile, ParseSourceSpan} from '../../parse_util';
 import {DomElementSchemaRegistry} from '../../schema/dom_element_schema_registry';
+import {isTrustedTypesSink} from '../../schema/trusted_types_sinks';
 import {CssSelector, SelectorMatcher} from '../../selector';
 import {BindingParser} from '../../template_parser/binding_parser';
 import {error, partitionArray} from '../../util';
@@ -38,7 +39,7 @@ import {createLocalizeStatements} from './i18n/localize_utils';
 import {I18nMetaVisitor} from './i18n/meta';
 import {assembleBoundTextPlaceholders, assembleI18nBoundString, declareI18nVariable, getTranslationConstPrefix, hasI18nMeta, I18N_ICU_MAPPING_PREFIX, i18nFormatPlaceholderNames, icuFromI18nMessage, isI18nRootNode, isSingleI18nIcu, placeholdersToParams, TRANSLATION_VAR_PREFIX, wrapI18nPlaceholder} from './i18n/util';
 import {StylingBuilder, StylingInstruction} from './styling_builder';
-import {asLiteral, chainedInstruction, CONTEXT_NAME, getAttrsForDirectiveMatching, getInterpolationArgsLength, IMPLICIT_REFERENCE, invalid, NON_BINDABLE_ATTR, REFERENCE_PREFIX, RENDER_FLAGS, trimTrailingNulls, unsupported} from './util';
+import {asLiteral, chainedInstruction, CONTEXT_NAME, getAttrsForDirectiveMatching, getInterpolationArgsLength, IMPLICIT_REFERENCE, invalid, NON_BINDABLE_ATTR, REFERENCE_PREFIX, RENDER_FLAGS, RESTORED_VIEW_CONTEXT_NAME, trimTrailingNulls, unsupported} from './util';
 
 
 
@@ -82,8 +83,10 @@ export function prepareEventListenerParameters(
       eventAst.handlerSpan, implicitReceiverAccesses, EVENT_BINDING_SCOPE_GLOBALS);
   const statements = [];
   if (scope) {
-    statements.push(...scope.restoreViewStatement());
+    // `variableDeclarations` needs to run first, because
+    // `restoreViewStatement` depends on the result.
     statements.push(...scope.variableDeclarations());
+    statements.unshift(...scope.restoreViewStatement());
   }
   statements.push(...bindingExpr.render3Stmts);
 
@@ -107,15 +110,31 @@ export function prepareEventListenerParameters(
 }
 
 // Collects information needed to generate `consts` field of the ComponentDef.
-// When a constant requires some pre-processing, the `prepareStatements` section
-// contains corresponding statements.
 export interface ComponentDefConsts {
+  /**
+   * When a constant requires some pre-processing (e.g. i18n translation block that includes
+   * goog.getMsg and $localize calls), the `prepareStatements` section contains corresponding
+   * statements.
+   */
   prepareStatements: o.Statement[];
+
+  /**
+   * Actual expressions that represent constants.
+   */
   constExpressions: o.Expression[];
+
+  /**
+   * Cache to avoid generating duplicated i18n translation blocks.
+   */
+  i18nVarRefsCache: Map<i18n.I18nMeta, o.ReadVarExpr>;
 }
 
 function createComponentDefConsts(): ComponentDefConsts {
-  return {prepareStatements: [], constExpressions: []};
+  return {
+    prepareStatements: [],
+    constExpressions: [],
+    i18nVarRefsCache: new Map(),
+  };
 }
 
 export class TemplateDefinitionBuilder implements t.Visitor<void>, LocalResolver {
@@ -341,8 +360,17 @@ export class TemplateDefinitionBuilder implements t.Visitor<void>, LocalResolver
         (scope: BindingScope, relativeLevel: number) => {
           let rhs: o.Expression;
           if (scope.bindingLevel === retrievalLevel) {
-            // e.g. ctx
-            rhs = o.variable(CONTEXT_NAME);
+            if (scope.isListenerScope() && scope.hasRestoreViewVariable()) {
+              // e.g. restoredCtx.
+              // We have to get the context from a view reference, if one is available, because
+              // the context that was passed in during creation may not be correct anymore.
+              // For more information see: https://github.com/angular/angular/pull/40360.
+              rhs = o.variable(RESTORED_VIEW_CONTEXT_NAME);
+              scope.notifyRestoredViewContextUse();
+            } else {
+              // e.g. ctx
+              rhs = o.variable(CONTEXT_NAME);
+            }
           } else {
             const sharedCtxVar = scope.getSharedContextName(retrievalLevel);
             // e.g. ctx_r0   OR  x(2);
@@ -847,17 +875,17 @@ export class TemplateDefinitionBuilder implements t.Visitor<void>, LocalResolver
       this.i18n.appendTemplate(template.i18n!, templateIndex);
     }
 
-    const tagName = sanitizeIdentifier(template.tagName || '');
-    const contextName = `${this.contextName}${tagName ? '_' + tagName : ''}_${templateIndex}`;
+    const tagNameWithoutNamespace =
+        template.tagName ? splitNsName(template.tagName)[1] : template.tagName;
+    const contextName = `${this.contextName}${
+        template.tagName ? '_' + sanitizeIdentifier(template.tagName) : ''}_${templateIndex}`;
     const templateName = `${contextName}_Template`;
-
     const parameters: o.Expression[] = [
       o.literal(templateIndex),
       o.variable(templateName),
-
       // We don't care about the tag's namespace here, because we infer
       // it based on the parent nodes inside the template instruction.
-      o.literal(template.tagName ? splitNsName(template.tagName)[1] : template.tagName),
+      o.literal(tagNameWithoutNamespace),
     ];
 
     // find directives matching on a given <ng-template> node
@@ -909,7 +937,7 @@ export class TemplateDefinitionBuilder implements t.Visitor<void>, LocalResolver
     this.templatePropertyBindings(templateIndex, template.templateAttrs);
 
     // Only add normal input/output binding instructions on explicit <ng-template> elements.
-    if (template.tagName === NG_TEMPLATE_TAG_NAME) {
+    if (tagNameWithoutNamespace === NG_TEMPLATE_TAG_NAME) {
       const [i18nInputs, inputs] =
           partitionArray<t.BoundAttribute, t.BoundAttribute>(template.inputs, hasI18nMeta);
 
@@ -1299,7 +1327,20 @@ export class TemplateDefinitionBuilder implements t.Visitor<void>, LocalResolver
       // Note that static i18n attributes aren't in the i18n array,
       // because they're treated in the same way as regular attributes.
       if (attr.i18n) {
-        attrExprs.push(o.literal(attr.name), this.i18nTranslate(attr.i18n as i18n.Message));
+        // When i18n attributes are present on elements with structural directives
+        // (e.g. `<div *ngIf title="Hello" i18n-title>`), we want to avoid generating
+        // duplicate i18n translation blocks for `ɵɵtemplate` and `ɵɵelement` instruction
+        // attributes. So we do a cache lookup to see if suitable i18n translation block
+        // already exists.
+        const {i18nVarRefsCache} = this._constants;
+        let i18nVarRef: o.ReadVarExpr;
+        if (i18nVarRefsCache.has(attr.i18n)) {
+          i18nVarRef = i18nVarRefsCache.get(attr.i18n)!;
+        } else {
+          i18nVarRef = this.i18nTranslate(attr.i18n as i18n.Message);
+          i18nVarRefsCache.set(attr.i18n, i18nVarRef);
+        }
+        attrExprs.push(o.literal(attr.name), i18nVarRef);
       } else {
         attrExprs.push(
             ...getAttributeNameLiterals(attr.name), trustedConstAttribute(elementName, attr));
@@ -1628,6 +1669,7 @@ export class BindingScope implements LocalResolver {
   private map = new Map<string, BindingData>();
   private referenceNameIndex = 0;
   private restoreViewVariable: o.ReadVarExpr|null = null;
+  private usesRestoredViewContext = false;
   static createRootScope(): BindingScope {
     return new BindingScope();
   }
@@ -1803,17 +1845,23 @@ export class BindingScope implements LocalResolver {
   }
 
   restoreViewStatement(): o.Statement[] {
-    // restoreView($state$);
-    return this.restoreViewVariable ?
-        [instruction(null, R3.restoreView, [this.restoreViewVariable]).toStmt()] :
-        [];
+    const statements: o.Statement[] = [];
+    if (this.restoreViewVariable) {
+      const restoreCall = instruction(null, R3.restoreView, [this.restoreViewVariable]);
+      // Either `const restoredCtx = restoreView($state$);` or `restoreView($state$);`
+      // depending on whether it is being used.
+      statements.push(
+          this.usesRestoredViewContext ?
+              o.variable(RESTORED_VIEW_CONTEXT_NAME).set(restoreCall).toConstDecl() :
+              restoreCall.toStmt());
+    }
+    return statements;
   }
 
   viewSnapshotStatements(): o.Statement[] {
     // const $state$ = getCurrentView();
-    const getCurrentViewInstruction = instruction(null, R3.getCurrentView, []);
     return this.restoreViewVariable ?
-        [this.restoreViewVariable.set(getCurrentViewInstruction).toConstDecl()] :
+        [this.restoreViewVariable.set(instruction(null, R3.getCurrentView, [])).toConstDecl()] :
         [];
   }
 
@@ -1842,6 +1890,14 @@ export class BindingScope implements LocalResolver {
     while (current.parent) current = current.parent;
     const ref = `${REFERENCE_PREFIX}${current.referenceNameIndex++}`;
     return ref;
+  }
+
+  hasRestoreViewVariable(): boolean {
+    return !!this.restoreViewVariable;
+  }
+
+  notifyRestoredViewContextUse(): void {
+    this.usesRestoredViewContext = true;
   }
 }
 
@@ -1974,6 +2030,10 @@ export interface ParseTemplateOptions {
    */
   preserveWhitespaces?: boolean;
   /**
+   * Preserve original line endings instead of normalizing '\r\n' endings to '\n'.
+   */
+  preserveLineEndings?: boolean;
+  /**
    * How to parse interpolation markers.
    */
   interpolationConfig?: InterpolationConfig;
@@ -2022,6 +2082,7 @@ export interface ParseTemplateOptions {
    * `$localize` message id format and you are not using compile time translation merging.
    */
   enableI18nLegacyMessageIdFormat?: boolean;
+
   /**
    * If this text is stored in an external template (e.g. via `templateUrl`) then we need to decide
    * whether or not to normalize the line-endings (from `\r\n` to `\n`) when processing ICU
@@ -2031,6 +2092,32 @@ export interface ParseTemplateOptions {
    * The default is `false`, but this will be switched in a future major release.
    */
   i18nNormalizeLineEndingsInICUs?: boolean;
+
+  /**
+   * Whether to always attempt to convert the parsed HTML AST to an R3 AST, despite HTML or i18n
+   * Meta parse errors.
+   *
+   *
+   * This option is useful in the context of the language service, where we want to get as much
+   * information as possible, despite any errors in the HTML. As an example, a user may be adding
+   * a new tag and expecting autocomplete on that tag. In this scenario, the HTML is in an errored
+   * state, as there is an incomplete open tag. However, we're still able to convert the HTML AST
+   * nodes to R3 AST nodes in order to provide information for the language service.
+   *
+   * Note that even when `true` the HTML parse and i18n errors are still appended to the errors
+   * output, but this is done after converting the HTML AST to R3 AST.
+   */
+  alwaysAttemptHtmlToR3AstConversion?: boolean;
+
+  /**
+   * Include HTML Comment nodes in a top-level comments array on the returned R3 AST.
+   *
+   * This option is required by tooling that needs to know the location of comment nodes within the
+   * AST. A concrete example is @angular-eslint which requires this in order to enable
+   * "eslint-disable" comments within HTML templates, which then allows users to turn off specific
+   * rules on a case by case basis, instead of for their whole project within a configuration file.
+   */
+  collectCommentNodes?: boolean;
 }
 
 /**
@@ -2049,19 +2136,21 @@ export function parseTemplate(
       template, templateUrl,
       {leadingTriviaChars: LEADING_TRIVIA_CHARS, ...options, tokenizeExpansionForms: true});
 
-  if (parseResult.errors && parseResult.errors.length > 0) {
-    // TODO(ayazhafiz): we may not always want to bail out at this point (e.g. in
-    // the context of a language service).
-    return {
+  if (!options.alwaysAttemptHtmlToR3AstConversion && parseResult.errors &&
+      parseResult.errors.length > 0) {
+    const parsedTemplate: ParsedTemplate = {
       interpolationConfig,
       preserveWhitespaces,
-      template,
       errors: parseResult.errors,
       nodes: [],
       styleUrls: [],
       styles: [],
       ngContentSelectors: []
     };
+    if (options.collectCommentNodes) {
+      parsedTemplate.commentNodes = [];
+    }
+    return parsedTemplate;
   }
 
   let rootNodes: html.Node[] = parseResult.rootNodes;
@@ -2073,7 +2162,26 @@ export function parseTemplate(
   const i18nMetaVisitor = new I18nMetaVisitor(
       interpolationConfig, /* keepI18nAttrs */ !preserveWhitespaces,
       enableI18nLegacyMessageIdFormat);
-  rootNodes = html.visitAll(i18nMetaVisitor, rootNodes);
+  const i18nMetaResult = i18nMetaVisitor.visitAllWithErrors(rootNodes);
+
+  if (!options.alwaysAttemptHtmlToR3AstConversion && i18nMetaResult.errors &&
+      i18nMetaResult.errors.length > 0) {
+    const parsedTemplate: ParsedTemplate = {
+      interpolationConfig,
+      preserveWhitespaces,
+      errors: i18nMetaResult.errors,
+      nodes: [],
+      styleUrls: [],
+      styles: [],
+      ngContentSelectors: []
+    };
+    if (options.collectCommentNodes) {
+      parsedTemplate.commentNodes = [];
+    }
+    return parsedTemplate;
+  }
+
+  rootNodes = i18nMetaResult.rootNodes;
 
   if (!preserveWhitespaces) {
     rootNodes = html.visitAll(new WhitespaceVisitor(), rootNodes);
@@ -2088,19 +2196,24 @@ export function parseTemplate(
     }
   }
 
-  const {nodes, errors, styleUrls, styles, ngContentSelectors} =
-      htmlAstToRender3Ast(rootNodes, bindingParser);
+  const {nodes, errors, styleUrls, styles, ngContentSelectors, commentNodes} = htmlAstToRender3Ast(
+      rootNodes, bindingParser, {collectCommentNodes: !!options.collectCommentNodes});
+  errors.push(...parseResult.errors, ...i18nMetaResult.errors);
 
-  return {
+  const parsedTemplate: ParsedTemplate = {
     interpolationConfig,
     preserveWhitespaces,
     errors: errors.length > 0 ? errors : null,
-    template,
     nodes,
     styleUrls,
     styles,
     ngContentSelectors
   };
+
+  if (options.collectCommentNodes) {
+    parsedTemplate.commentNodes = commentNodes;
+  }
+  return parsedTemplate;
 }
 
 const elementRegistry = new DomElementSchemaRegistry();
@@ -2136,15 +2249,24 @@ export function resolveSanitizationFn(context: core.SecurityContext, isAttribute
 
 function trustedConstAttribute(tagName: string, attr: t.TextAttribute): o.Expression {
   const value = asLiteral(attr.value);
-  switch (elementRegistry.securityContext(tagName, attr.name, /* isAttribute */ true)) {
-    case core.SecurityContext.HTML:
-      return o.importExpr(R3.trustConstantHtml).callFn([value], attr.valueSpan);
-    case core.SecurityContext.SCRIPT:
-      return o.importExpr(R3.trustConstantScript).callFn([value], attr.valueSpan);
-    case core.SecurityContext.RESOURCE_URL:
-      return o.importExpr(R3.trustConstantResourceUrl).callFn([value], attr.valueSpan);
-    default:
-      return value;
+  if (isTrustedTypesSink(tagName, attr.name)) {
+    switch (elementRegistry.securityContext(tagName, attr.name, /* isAttribute */ true)) {
+      case core.SecurityContext.HTML:
+        return o.taggedTemplate(
+            o.importExpr(R3.trustConstantHtml),
+            new o.TemplateLiteral([new o.TemplateLiteralElement(attr.value)], []), undefined,
+            attr.valueSpan);
+      // NB: no SecurityContext.SCRIPT here, as the corresponding tags are stripped by the compiler.
+      case core.SecurityContext.RESOURCE_URL:
+        return o.taggedTemplate(
+            o.importExpr(R3.trustConstantResourceUrl),
+            new o.TemplateLiteral([new o.TemplateLiteralElement(attr.value)], []), undefined,
+            attr.valueSpan);
+      default:
+        return value;
+    }
+  } else {
+    return value;
   }
 }
 
@@ -2248,15 +2370,6 @@ export interface ParsedTemplate {
    * How to parse interpolation markers.
    */
   interpolationConfig?: InterpolationConfig;
-
-  /**
-   * The string contents of the template.
-   *
-   * This is the "logical" template string, after expansion of any escaped characters (for inline
-   * templates). This may differ from the actual template bytes as they appear in the .ts file.
-   */
-  template: string;
-
   /**
    * Any errors from parsing the template the first time.
    *
@@ -2283,4 +2396,10 @@ export interface ParsedTemplate {
    * Any ng-content selectors extracted from the template.
    */
   ngContentSelectors: string[];
+
+  /**
+   * Any R3 Comment Nodes extracted from the template when the `collectCommentNodes` parse template
+   * option is enabled.
+   */
+  commentNodes?: t.Comment[];
 }

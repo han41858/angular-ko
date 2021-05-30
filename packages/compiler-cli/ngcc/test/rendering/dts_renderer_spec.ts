@@ -14,8 +14,8 @@ import {absoluteFrom, getFileSystem} from '../../../src/ngtsc/file_system';
 import {runInEachFileSystem, TestFile} from '../../../src/ngtsc/file_system/testing';
 import {Reexport} from '../../../src/ngtsc/imports';
 import {MockLogger} from '../../../src/ngtsc/logging/testing';
+import {loadTestFiles} from '../../../src/ngtsc/testing';
 import {Import, ImportManager} from '../../../src/ngtsc/translator';
-import {loadTestFiles} from '../../../test/helpers';
 import {DecorationAnalyzer} from '../../src/analysis/decoration_analyzer';
 import {ModuleWithProvidersAnalyzer, ModuleWithProvidersInfo} from '../../src/analysis/module_with_providers_analyzer';
 import {NgccReferencesRegistry} from '../../src/analysis/ngcc_references_registry';
@@ -141,7 +141,7 @@ runInEachFileSystem(() => {
           result.find(f => f.path === _('/node_modules/test-package/typings/file.d.ts'))!;
       expect(typingsFile.contents)
           .toContain(
-              'foo(x: number): number;\n    static ɵfac: ɵngcc0.ɵɵFactoryDef<A, never>;\n    static ɵdir: ɵngcc0.ɵɵDirectiveDefWithMeta');
+              'foo(x: number): number;\n    static ɵfac: ɵngcc0.ɵɵFactoryDeclaration<A, never>;\n    static ɵdir: ɵngcc0.ɵɵDirectiveDeclaration');
     });
 
     it('should render imports into typings files', () => {

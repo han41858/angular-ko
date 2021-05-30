@@ -10,7 +10,7 @@ import {AotCompilerHost, AotCompilerOptions, createAotCompiler, GeneratedFile, t
 import {MetadataBundlerHost} from '@angular/compiler-cli/src/metadata/bundler';
 import {MetadataCollector} from '@angular/compiler-cli/src/metadata/collector';
 import {ModuleMetadata} from '@angular/compiler-cli/src/metadata/index';
-import {getCachedSourceFile} from '@angular/compiler-cli/test/helpers';
+import {getCachedSourceFile} from '@angular/compiler-cli/src/ngtsc/testing';
 import {newArray} from '@angular/compiler/src/util';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -427,7 +427,7 @@ export class MockAotCompilerHost implements AotCompilerHost {
       if (this.metadataVisible) {
         const metadataPath = modulePath.replace(DTS, '.metadata.json');
         if (this.tsHost.fileExists(metadataPath)) {
-          let result = JSON.parse(this.tsHost.readFile(metadataPath));
+          let result = JSON.parse(this.tsHost.readFile(metadataPath)) as {[key: string]: any}[];
           return Array.isArray(result) ? result : [result];
         }
       }
@@ -688,7 +688,7 @@ export function setup(options: {
       if (options.compileFakeCore) {
         readBazelWrittenFilesFrom(
             resolveNpmTreeArtifact(
-                'angular/packages/compiler-cli/test/ngtsc/fake_core/npm_package'),
+                'angular/packages/compiler-cli/src/ngtsc/testing/fake_core/npm_package'),
             'core', angularFiles, skipDirs);
       }
       if (options.compileAnimations) {

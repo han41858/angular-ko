@@ -6,18 +6,21 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {APP_BASE_HREF, DOCUMENT, Location, ɵgetDOM as getDOM} from '@angular/common';
+import {APP_BASE_HREF, DOCUMENT, ɵgetDOM as getDOM} from '@angular/common';
 import {ApplicationRef, Component, CUSTOM_ELEMENTS_SCHEMA, destroyPlatform, NgModule} from '@angular/core';
 import {inject} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {NavigationEnd, Resolve, Router, RouterModule} from '@angular/router';
-import {filter, first} from 'rxjs/operators';
 
 describe('bootstrap', () => {
   if (isNode) return;
   let log: any[] = [];
   let testProviders: any[] = null!;
+
+  @Component({template: 'simple'})
+  class SimpleCmp {
+  }
 
   @Component({selector: 'test-app', template: 'root <router-outlet></router-outlet>'})
   class RootCmp {
@@ -348,31 +351,83 @@ describe('bootstrap', () => {
     await router.navigateByUrl('/aa');
     window.scrollTo(0, 5000);
 
-    // IE 11 uses non-standard pageYOffset instead of scrollY
-    const getScrollY = () => window.scrollY !== undefined ? window.scrollY : window.pageYOffset;
-
     await router.navigateByUrl('/fail');
-    expect(getScrollY()).toEqual(5000);
+    expect(window.pageYOffset).toEqual(5000);
 
     await router.navigateByUrl('/bb');
     window.scrollTo(0, 3000);
 
-    expect(getScrollY()).toEqual(3000);
+    expect(window.pageYOffset).toEqual(3000);
 
     await router.navigateByUrl('/cc');
-    expect(getScrollY()).toEqual(0);
+    expect(window.pageYOffset).toEqual(0);
 
     await router.navigateByUrl('/aa#marker2');
-    expect(getScrollY()).toBeGreaterThanOrEqual(5900);
-    expect(getScrollY()).toBeLessThan(6000);  // offset
+    expect(window.pageYOffset).toBeGreaterThanOrEqual(5900);
+    expect(window.pageYOffset).toBeLessThan(6000);  // offset
 
     await router.navigateByUrl('/aa#marker3');
-    expect(getScrollY()).toBeGreaterThanOrEqual(8900);
-    expect(getScrollY()).toBeLessThan(9000);
+    expect(window.pageYOffset).toBeGreaterThanOrEqual(8900);
+    expect(window.pageYOffset).toBeLessThan(9000);
     done();
   });
 
-  function waitForNavigationToComplete(router: Router): Promise<any> {
-    return router.events.pipe(filter((e: any) => e instanceof NavigationEnd), first()).toPromise();
-  }
+  it('should cleanup "popstate" and "hashchange" listeners', async () => {
+    @NgModule({
+      imports: [BrowserModule, RouterModule.forRoot([])],
+      declarations: [RootCmp],
+      bootstrap: [RootCmp],
+      providers: testProviders,
+    })
+    class TestModule {
+    }
+
+    spyOn(window, 'addEventListener').and.callThrough();
+    spyOn(window, 'removeEventListener').and.callThrough();
+
+    const ngModuleRef = await platformBrowserDynamic().bootstrapModule(TestModule);
+    ngModuleRef.destroy();
+
+    expect(window.addEventListener).toHaveBeenCalledTimes(2);
+
+    expect(window.addEventListener)
+        .toHaveBeenCalledWith('popstate', jasmine.any(Function), jasmine.any(Boolean));
+    expect(window.addEventListener)
+        .toHaveBeenCalledWith('hashchange', jasmine.any(Function), jasmine.any(Boolean));
+
+    expect(window.removeEventListener).toHaveBeenCalledWith('popstate', jasmine.any(Function));
+    expect(window.removeEventListener).toHaveBeenCalledWith('hashchange', jasmine.any(Function));
+  });
+
+  it('can schedule a navigation from the NavigationEnd event #37460', async (done) => {
+    @NgModule({
+      imports: [
+        BrowserModule,
+        RouterModule.forRoot(
+            [
+              {path: 'a', component: SimpleCmp},
+              {path: 'b', component: SimpleCmp},
+            ],
+            )
+      ],
+      declarations: [RootCmp, SimpleCmp],
+      bootstrap: [RootCmp],
+      providers: [...testProviders],
+    })
+    class TestModule {
+    }
+
+    const res = await platformBrowserDynamic([]).bootstrapModule(TestModule);
+    const router = res.injector.get(Router);
+    router.events.subscribe(() => {
+      expect(router.getCurrentNavigation()?.id).toBeDefined();
+    });
+    router.events.subscribe(async (e) => {
+      if (e instanceof NavigationEnd && e.url === '/b') {
+        await router.navigate(['a']);
+        done();
+      }
+    });
+    await router.navigateByUrl('/b');
+  });
 });

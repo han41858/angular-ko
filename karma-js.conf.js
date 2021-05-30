@@ -32,10 +32,12 @@ module.exports = function(config) {
       {pattern: 'node_modules/angular-mocks-1.5/angular-mocks.js', included: false, watched: false},
       {pattern: 'node_modules/angular-1.6/angular?(.min).js', included: false, watched: false},
       {pattern: 'node_modules/angular-mocks-1.6/angular-mocks.js', included: false, watched: false},
+      {pattern: 'node_modules/angular-1.7/angular?(.min).js', included: false, watched: false},
+      {pattern: 'node_modules/angular-mocks-1.7/angular-mocks.js', included: false, watched: false},
       {pattern: 'node_modules/angular/angular?(.min).js', included: false, watched: false},
       {pattern: 'node_modules/angular-mocks/angular-mocks.js', included: false, watched: false},
 
-      'node_modules/core-js/client/core.js',
+      'node_modules/core-js-bundle/index.js',
       'node_modules/jasmine-ajax/lib/mock-ajax.js',
 
       // Dependencies built by Bazel. See `config.yml` for steps running before
@@ -83,6 +85,7 @@ module.exports = function(config) {
       'dist/all/@angular/compiler/test/render3/**',
       'dist/all/@angular/core/test/bundling/**',
       'dist/all/@angular/core/test/render3/ivy/**',
+      'dist/all/@angular/core/test/render3/jit/**',
       'dist/all/@angular/core/test/render3/perf/**',
       'dist/all/@angular/elements/schematics/**',
       'dist/all/@angular/examples/**/e2e_test/*',

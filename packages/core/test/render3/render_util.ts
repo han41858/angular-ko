@@ -6,7 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {RendererStyleFlags2, RendererType2} from '@angular/core';
 import {ChangeDetectorRef} from '@angular/core/src/change_detection/change_detector_ref';
+import {InjectFlags} from '@angular/core/src/di';
 import {Provider} from '@angular/core/src/di/interface/provider';
 import {ElementRef} from '@angular/core/src/linker/element_ref';
 import {TemplateRef} from '@angular/core/src/linker/template_ref';
@@ -14,16 +16,19 @@ import {ViewContainerRef} from '@angular/core/src/linker/view_container_ref';
 import {Renderer2} from '@angular/core/src/render/api';
 import {createLView, createTView, getOrCreateTComponentView, getOrCreateTNode, renderComponentOrTemplate} from '@angular/core/src/render3/instructions/shared';
 import {TConstants, TNodeType} from '@angular/core/src/render3/interfaces/node';
+import {RComment, RElement, RNode, RText} from '@angular/core/src/render3/interfaces/renderer_dom';
 import {enterView, getLView} from '@angular/core/src/render3/state';
 import {EMPTY_ARRAY} from '@angular/core/src/util/empty';
+import {noop} from '@angular/core/src/util/noop';
 import {stringifyElement} from '@angular/platform-browser/testing/src/browser_util';
+
 import {SWITCH_CHANGE_DETECTOR_REF_FACTORY__POST_R3__ as R3_CHANGE_DETECTOR_REF_FACTORY} from '../../src/change_detection/change_detector_ref';
 import {Injector} from '../../src/di/injector';
 import {Type} from '../../src/interface/type';
 import {SWITCH_ELEMENT_REF_FACTORY__POST_R3__ as R3_ELEMENT_REF_FACTORY} from '../../src/linker/element_ref';
 import {SWITCH_TEMPLATE_REF_FACTORY__POST_R3__ as R3_TEMPLATE_REF_FACTORY} from '../../src/linker/template_ref';
 import {SWITCH_VIEW_CONTAINER_REF_FACTORY__POST_R3__ as R3_VIEW_CONTAINER_REF_FACTORY} from '../../src/linker/view_container_ref';
-import {RendererStyleFlags2, RendererType2, SWITCH_RENDERER2_FACTORY__POST_R3__ as R3_RENDERER2_FACTORY} from '../../src/render/api';
+import {SWITCH_RENDERER2_FACTORY__POST_R3__ as R3_RENDERER2_FACTORY} from '../../src/render/api';
 import {CreateComponentOptions} from '../../src/render3/component';
 import {getDirectivesAtNodeIndex, getLContext, isComponentInstance} from '../../src/render3/context_discovery';
 import {extractDirectiveDef, extractPipeDef} from '../../src/render3/definition';
@@ -31,11 +36,12 @@ import {NG_ELEMENT_ID} from '../../src/render3/fields';
 import {ComponentDef, ComponentTemplate, ComponentType, DirectiveDef, DirectiveType, renderComponent as _renderComponent, RenderFlags, tick, ɵɵdefineComponent, ɵɵdefineDirective, ɵɵProvidersFeature} from '../../src/render3/index';
 import {DirectiveDefList, DirectiveDefListOrFactory, DirectiveTypesOrFactory, HostBindingsFunction, PipeDef, PipeDefList, PipeDefListOrFactory, PipeTypesOrFactory} from '../../src/render3/interfaces/definition';
 import {PlayerHandler} from '../../src/render3/interfaces/player';
-import {domRendererFactory3, ProceduralRenderer3, RComment, RElement, Renderer3, RendererFactory3, RendererStyleFlags3, RNode, RText} from '../../src/render3/interfaces/renderer';
-import {HEADER_OFFSET, LView, LViewFlags, TVIEW, TViewType} from '../../src/render3/interfaces/view';
+import {domRendererFactory3, ProceduralRenderer3, Renderer3, RendererFactory3, RendererStyleFlags3} from '../../src/render3/interfaces/renderer';
+import {LView, LViewFlags, TVIEW, TViewType} from '../../src/render3/interfaces/view';
 import {destroyLView} from '../../src/render3/node_manipulation';
 import {getRootView} from '../../src/render3/util/view_traversal_utils';
 import {Sanitizer} from '../../src/sanitization/sanitizer';
+
 import {getRendererFactory2} from './imported_renderer2';
 
 
@@ -81,7 +87,6 @@ export abstract class BaseFixture {
   }
 }
 
-function noop() {}
 /**
  * Fixture for testing template functions in a convenient way.
  *
@@ -290,13 +295,13 @@ export function renderTemplate<T>(
         providedRendererFactory, renderer, null, null);
     enterView(hostLView);
 
-    const def: ComponentDef<any> = ɵɵdefineComponent({
-      type: Object,
-      template: templateFn,
-      decls: decls,
-      vars: vars,
-      consts: consts,
-    });
+    const def = ɵɵdefineComponent({
+                  type: Object,
+                  template: templateFn,
+                  decls: decls,
+                  vars: vars,
+                  consts: consts,
+                }) as ComponentDef<any>;
     def.directiveDefs = directives || null;
     def.pipeDefs = pipes || null;
 
@@ -452,11 +457,11 @@ export const text: RText = null as any as Text;
  *  like injectElementRef() prematurely.
  */
 export function enableIvyInjectableFactories() {
-  (ElementRef as any)[NG_ELEMENT_ID] = () => R3_ELEMENT_REF_FACTORY(ElementRef);
-  (TemplateRef as any)[NG_ELEMENT_ID] = () => R3_TEMPLATE_REF_FACTORY(TemplateRef, ElementRef);
-  (ViewContainerRef as any)[NG_ELEMENT_ID] = () =>
-      R3_VIEW_CONTAINER_REF_FACTORY(ViewContainerRef, ElementRef);
-  (ChangeDetectorRef as any)[NG_ELEMENT_ID] = () => R3_CHANGE_DETECTOR_REF_FACTORY();
+  (ElementRef as any)[NG_ELEMENT_ID] = () => R3_ELEMENT_REF_FACTORY();
+  (TemplateRef as any)[NG_ELEMENT_ID] = () => R3_TEMPLATE_REF_FACTORY();
+  (ViewContainerRef as any)[NG_ELEMENT_ID] = () => R3_VIEW_CONTAINER_REF_FACTORY();
+  (ChangeDetectorRef as any)[NG_ELEMENT_ID] = (flags: InjectFlags) =>
+      R3_CHANGE_DETECTOR_REF_FACTORY(flags);
   (Renderer2 as any)[NG_ELEMENT_ID] = () => R3_RENDERER2_FACTORY();
 }
 

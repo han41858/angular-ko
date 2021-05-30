@@ -13,12 +13,15 @@
   },
   "author": "angular",
   "license": "MIT",
+  "engines": {
+    "node": "^12.14.1 || ^14.0.0"
+  },
   "bugs": {
     "url": "https://github.com/angular/angular/issues"
   },
   "homepage": "https://github.com/angular/angular/tree/master/packages/router",
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "^2.1.0"
   },
   "peerDependencies": {
     "@angular/core": "0.0.0-PLACEHOLDER",

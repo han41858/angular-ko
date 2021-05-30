@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {AotCompiler, AotCompilerOptions, core, createAotCompiler, FormattedMessageChain, GeneratedFile, getParseErrors, isFormattedError, isSyntaxError, MessageBundle, NgAnalyzedFileWithInjectables, NgAnalyzedModules, ParseSourceSpan, PartialModule, Serializer, Xliff, Xliff2, Xmb} from '@angular/compiler';
+import {AotCompiler, AotCompilerOptions, core, createAotCompiler, FormattedMessageChain, GeneratedFile, getMissingNgModuleMetadataErrorData, getParseErrors, isFormattedError, isSyntaxError, MessageBundle, NgAnalyzedFileWithInjectables, NgAnalyzedModules, ParseSourceSpan, PartialModule, Serializer, Xliff, Xliff2, Xmb} from '@angular/compiler';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as ts from 'typescript';
@@ -47,6 +47,17 @@ const LOWER_FIELDS = ['useValue', 'useFactory', 'data', 'id', 'loadChildren'];
  * Fields to lower within metadata in render3 mode.
  */
 const R3_LOWER_FIELDS = [...LOWER_FIELDS, 'providers', 'imports', 'exports'];
+
+/**
+ * Installs a handler for testing purposes to allow inspection of the temporary program.
+ */
+let tempProgramHandlerForTest: ((program: ts.Program) => void)|null = null;
+export function setTempProgramHandlerForTest(handler: (program: ts.Program) => void): void {
+  tempProgramHandlerForTest = handler;
+}
+export function resetTempProgramHandlerForTest(): void {
+  tempProgramHandlerForTest = null;
+}
 
 const emptyModules: NgAnalyzedModules = {
   ngModules: [],
@@ -618,6 +629,9 @@ class AngularCompilerProgram implements Program {
     }
 
     const tmpProgram = ts.createProgram(rootNames, this.options, this.hostAdapter, oldTsProgram);
+    if (tempProgramHandlerForTest !== null) {
+      tempProgramHandlerForTest(tmpProgram);
+    }
     const sourceFiles: string[] = [];
     const tsFiles: string[] = [];
     tmpProgram.getSourceFiles().forEach(sf => {
@@ -654,7 +668,7 @@ class AngularCompilerProgram implements Program {
     // - we cache all the files in the hostAdapter
     // - new new stubs use the exactly same imports/exports as the old once (we assert that in
     // hostAdapter.updateGeneratedFile).
-    if (tsStructureIsReused(tmpProgram) !== StructureIsReused.Completely) {
+    if (tsStructureIsReused(this._tsProgram) !== StructureIsReused.Completely) {
       throw new Error(`Internal Error: The structure of the program changed during codegen.`);
     }
   }
@@ -676,7 +690,7 @@ class AngularCompilerProgram implements Program {
   private _addStructuralDiagnostics(error: Error) {
     const diagnostics = this._structuralDiagnostics || (this._structuralDiagnostics = []);
     if (isSyntaxError(error)) {
-      diagnostics.push(...syntaxErrorToDiagnostics(error));
+      diagnostics.push(...syntaxErrorToDiagnostics(error, this.tsProgram));
     } else {
       diagnostics.push({
         messageText: error.toString(),
@@ -1022,7 +1036,7 @@ function diagnosticChainFromFormattedDiagnosticChain(chain: FormattedMessageChai
   };
 }
 
-function syntaxErrorToDiagnostics(error: Error): Diagnostic[] {
+function syntaxErrorToDiagnostics(error: Error, program: ts.Program): Diagnostic[] {
   const parserErrors = getParseErrors(error);
   if (parserErrors && parserErrors.length) {
     return parserErrors.map<Diagnostic>(e => ({
@@ -1044,6 +1058,33 @@ function syntaxErrorToDiagnostics(error: Error): Diagnostic[] {
       position: error.position
     }];
   }
+
+  const ngModuleErrorData = getMissingNgModuleMetadataErrorData(error);
+  if (ngModuleErrorData !== null) {
+    // This error represents the import or export of an `NgModule` that didn't have valid metadata.
+    // This _might_ happen because the NgModule in question is an Ivy-compiled library, and we want
+    // to show a more useful error if that's the case.
+    const ngModuleClass =
+        getDtsClass(program, ngModuleErrorData.fileName, ngModuleErrorData.className);
+    if (ngModuleClass !== null && isIvyNgModule(ngModuleClass)) {
+      return [{
+        messageText: `The NgModule '${ngModuleErrorData.className}' in '${
+            ngModuleErrorData
+                .fileName}' is imported by this compilation, but appears to be part of a library compiled for Angular Ivy. This may occur because:
+
+  1) the library was processed with 'ngcc'. Removing and reinstalling node_modules may fix this problem.
+
+  2) the library was published for Angular Ivy and v12+ applications only. Check its peer dependencies carefully and ensure that you're using a compatible version of Angular.
+
+See https://angular.io/errors/NG6999 for more information.
+`,
+        category: ts.DiagnosticCategory.Error,
+        code: DEFAULT_ERROR_CODE,
+        source: SOURCE,
+      }];
+    }
+  }
+
   // Produce a Diagnostic anyway since we know for sure `error` is a SyntaxError
   return [{
     messageText: error.message,
@@ -1051,4 +1092,39 @@ function syntaxErrorToDiagnostics(error: Error): Diagnostic[] {
     code: DEFAULT_ERROR_CODE,
     source: SOURCE,
   }];
+}
+
+function getDtsClass(program: ts.Program, fileName: string, className: string): ts.ClassDeclaration|
+    null {
+  const sf = program.getSourceFile(fileName);
+  if (sf === undefined || !sf.isDeclarationFile) {
+    return null;
+  }
+  for (const stmt of sf.statements) {
+    if (!ts.isClassDeclaration(stmt)) {
+      continue;
+    }
+    if (stmt.name === undefined || stmt.name.text !== className) {
+      continue;
+    }
+
+    return stmt;
+  }
+
+  // No classes found that matched the given name.
+  return null;
+}
+
+function isIvyNgModule(clazz: ts.ClassDeclaration): boolean {
+  for (const member of clazz.members) {
+    if (!ts.isPropertyDeclaration(member)) {
+      continue;
+    }
+    if (ts.isIdentifier(member.name) && member.name.text === 'ɵmod') {
+      return true;
+    }
+  }
+
+  // No Ivy 'ɵmod' property found.
+  return false;
 }

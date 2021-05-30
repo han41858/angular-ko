@@ -19,7 +19,7 @@ filegroup(
     name = "web_test_bootstrap_scripts",
     # do not sort
     srcs = [
-        "@npm//:node_modules/core-js/client/core.js",
+        "@npm//:node_modules/core-js-bundle/index.js",
         "//packages/zone.js/bundles:zone.umd.js",
         "//packages/zone.js/bundles:zone-testing.umd.js",
         "//packages/zone.js/bundles:task-tracking.umd.js",
@@ -42,9 +42,12 @@ filegroup(
         "@npm//:node_modules/angular-1.5/angular.min.js",
         "@npm//:node_modules/angular-1.6/angular.js",
         "@npm//:node_modules/angular-1.6/angular.min.js",
+        "@npm//:node_modules/angular-1.7/angular.js",
+        "@npm//:node_modules/angular-1.7/angular.min.js",
         "@npm//:node_modules/angular-mocks/angular-mocks.js",
         "@npm//:node_modules/angular-mocks-1.5/angular-mocks.js",
         "@npm//:node_modules/angular-mocks-1.6/angular-mocks.js",
+        "@npm//:node_modules/angular-mocks-1.7/angular-mocks.js",
     ],
 )
 

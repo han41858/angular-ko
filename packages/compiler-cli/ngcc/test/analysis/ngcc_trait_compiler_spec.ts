@@ -9,16 +9,17 @@
 import {ErrorCode, makeDiagnostic, ngErrorCode} from '../../../src/ngtsc/diagnostics';
 import {absoluteFrom} from '../../../src/ngtsc/file_system';
 import {runInEachFileSystem} from '../../../src/ngtsc/file_system/testing';
+import {SemanticSymbol} from '../../../src/ngtsc/incremental/semantic_graph';
 import {MockLogger} from '../../../src/ngtsc/logging/testing';
 import {ClassDeclaration, Decorator, isNamedClassDeclaration} from '../../../src/ngtsc/reflection';
-import {getDeclaration} from '../../../src/ngtsc/testing';
+import {getDeclaration, loadTestFiles} from '../../../src/ngtsc/testing';
 import {AnalysisOutput, CompileResult, DecoratorHandler, DetectResult, HandlerPrecedence, TraitState} from '../../../src/ngtsc/transform';
-import {loadTestFiles} from '../../../test/helpers';
 import {NgccTraitCompiler} from '../../src/analysis/ngcc_trait_compiler';
 import {Esm2015ReflectionHost} from '../../src/host/esm2015_host';
 import {createComponentDecorator} from '../../src/migrations/utils';
 import {EntryPointBundle} from '../../src/packages/entry_point_bundle';
 import {makeTestEntryPointBundle} from '../helpers/utils';
+import {getTraitDiagnostics} from '../host/util';
 
 runInEachFileSystem(() => {
   describe('NgccTraitCompiler', () => {
@@ -39,7 +40,8 @@ runInEachFileSystem(() => {
     });
 
     function createCompiler({entryPoint, handlers}: {
-      entryPoint: EntryPointBundle; handlers: DecoratorHandler<unknown, unknown, unknown>[]
+      entryPoint: EntryPointBundle;
+      handlers: DecoratorHandler<unknown, unknown, SemanticSymbol|null, unknown>[]
     }) {
       const reflectionHost = new Esm2015ReflectionHost(new MockLogger(), false, entryPoint.src);
       return new NgccTraitCompiler(handlers, reflectionHost);
@@ -234,12 +236,13 @@ runInEachFileSystem(() => {
 
         const record = compiler.recordFor(mockClazz)!;
         const migratedTrait = record.traits[0];
-        if (migratedTrait.state !== TraitState.ERRORED) {
+        const diagnostics = getTraitDiagnostics(migratedTrait);
+        if (diagnostics === null) {
           return fail('Expected migrated class trait to be in an error state');
         }
 
-        expect(migratedTrait.diagnostics.length).toBe(1);
-        expect(migratedTrait.diagnostics[0].messageText).toEqual(`test diagnostic`);
+        expect(diagnostics.length).toBe(1);
+        expect(diagnostics[0].messageText).toEqual(`test diagnostic`);
       });
     });
 
@@ -294,7 +297,7 @@ runInEachFileSystem(() => {
   });
 });
 
-class TestHandler implements DecoratorHandler<unknown, unknown, unknown> {
+class TestHandler implements DecoratorHandler<unknown, unknown, null, unknown> {
   constructor(readonly name: string, protected log: string[]) {}
 
   precedence = HandlerPrecedence.PRIMARY;
@@ -307,6 +310,10 @@ class TestHandler implements DecoratorHandler<unknown, unknown, unknown> {
   analyze(node: ClassDeclaration): AnalysisOutput<unknown> {
     this.log.push(this.name + ':analyze:' + node.name.text);
     return {};
+  }
+
+  symbol(node: ClassDeclaration, analysis: Readonly<unknown>): null {
+    return null;
   }
 
   compileFull(node: ClassDeclaration): CompileResult|CompileResult[] {

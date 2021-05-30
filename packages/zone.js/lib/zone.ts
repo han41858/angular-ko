@@ -313,7 +313,7 @@ interface ZoneType {
    * load patch for specified native module, allow user to
    * define their own patch, user can use this API after loading zone.js
    */
-  __load_patch(name: string, fn: _PatchFn): void;
+  __load_patch(name: string, fn: _PatchFn, ignoreDuplicate?: boolean): void;
 
   /**
    * Zone symbol API to generate a string with __zone_symbol__ prefix
@@ -337,7 +337,7 @@ interface _ZonePrivate {
   onUnhandledError: (error: Error) => void;
   microtaskDrainDone: () => void;
   showUncaughtError: () => boolean;
-  patchEventTarget: (global: any, apis: any[], options?: any) => boolean[];
+  patchEventTarget: (global: any, api: _ZonePrivate, apis: any[], options?: any) => boolean[];
   patchOnProperties: (obj: any, properties: string[]|null, prototype?: any) => void;
   patchThen: (ctro: Function) => void;
   patchMethod:
@@ -359,6 +359,7 @@ interface _ZonePrivate {
   filterProperties: (target: any, onProperties: string[], ignoreProperties: any[]) => string[];
   attachOriginToPatched: (target: any, origin: any) => void;
   _redefineProperty: (target: any, callback: string, desc: any) => void;
+  nativeScheduleMicroTask: (func: Function) => void;
   patchCallbacks:
       (api: _ZonePrivate, target: any, targetName: string, method: string,
        callbacks: string[]) => void;
@@ -745,9 +746,12 @@ const Zone: ZoneType = (function(global: any) {
     }
 
     // tslint:disable-next-line:require-internal-with-underscore
-    static __load_patch(name: string, fn: _PatchFn): void {
+    static __load_patch(name: string, fn: _PatchFn, ignoreDuplicate = false): void {
       if (patches.hasOwnProperty(name)) {
-        if (checkDuplicate) {
+        // `checkDuplicate` option is defined from global variable
+        // so it works for all modules.
+        // `ignoreDuplicate` can work for the specified module
+        if (!ignoreDuplicate && checkDuplicate) {
           throw Error('Already loaded patch: ' + name);
         }
       } else if (!global['__Zone_disable_' + name]) {
@@ -1340,27 +1344,31 @@ const Zone: ZoneType = (function(global: any) {
   let _isDrainingMicrotaskQueue: boolean = false;
   let nativeMicroTaskQueuePromise: any;
 
+  function nativeScheduleMicroTask(func: Function) {
+    if (!nativeMicroTaskQueuePromise) {
+      if (global[symbolPromise]) {
+        nativeMicroTaskQueuePromise = global[symbolPromise].resolve(0);
+      }
+    }
+    if (nativeMicroTaskQueuePromise) {
+      let nativeThen = nativeMicroTaskQueuePromise[symbolThen];
+      if (!nativeThen) {
+        // native Promise is not patchable, we need to use `then` directly
+        // issue 1078
+        nativeThen = nativeMicroTaskQueuePromise['then'];
+      }
+      nativeThen.call(nativeMicroTaskQueuePromise, func);
+    } else {
+      global[symbolSetTimeout](func, 0);
+    }
+  }
+
   function scheduleMicroTask(task?: MicroTask) {
     // if we are not running in any task, and there has not been anything scheduled
     // we must bootstrap the initial task creation by manually scheduling the drain
     if (_numberOfNestedTaskFrames === 0 && _microTaskQueue.length === 0) {
       // We are not running in Task, so we need to kickstart the microtask queue.
-      if (!nativeMicroTaskQueuePromise) {
-        if (global[symbolPromise]) {
-          nativeMicroTaskQueuePromise = global[symbolPromise].resolve(0);
-        }
-      }
-      if (nativeMicroTaskQueuePromise) {
-        let nativeThen = nativeMicroTaskQueuePromise[symbolThen];
-        if (!nativeThen) {
-          // native Promise is not patchable, we need to use `then` directly
-          // issue 1078
-          nativeThen = nativeMicroTaskQueuePromise['then'];
-        }
-        nativeThen.call(nativeMicroTaskQueuePromise, drainMicroTaskQueue);
-      } else {
-        global[symbolSetTimeout](drainMicroTaskQueue, 0);
-      }
+      nativeScheduleMicroTask(drainMicroTaskQueue);
     }
     task && _microTaskQueue.push(task);
   }
@@ -1425,7 +1433,8 @@ const Zone: ZoneType = (function(global: any) {
     filterProperties: () => [],
     attachOriginToPatched: () => noop,
     _redefineProperty: () => noop,
-    patchCallbacks: () => noop
+    patchCallbacks: () => noop,
+    nativeScheduleMicroTask: nativeScheduleMicroTask
   };
   let _currentZoneFrame: _ZoneFrame = {parent: null, zone: new Zone(null, null)};
   let _currentTask: Task|null = null;

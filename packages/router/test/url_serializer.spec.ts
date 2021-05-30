@@ -186,6 +186,12 @@ describe('url serializer', () => {
     expect(url.serialize(tree)).toEqual('/one#');
   });
 
+  it('should parse no fragment', () => {
+    const tree = url.parse('/one');
+    expect(tree.fragment).toEqual(null);
+    expect(url.serialize(tree)).toEqual('/one');
+  });
+
   describe('encoding/decoding', () => {
     it('should encode/decode path segments and parameters', () => {
       const u = `/${encodeUriSegment('one two')};${encodeUriSegment('p 1')}=${
@@ -307,7 +313,7 @@ describe('url serializer', () => {
 
     // Test special characters in general
 
-    // From http://www.ietf.org/rfc/rfc3986.txt
+    // From https://tools.ietf.org/html/rfc3986
     const unreserved = `abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~`;
 
     it('should encode a minimal set of special characters in queryParams', () => {

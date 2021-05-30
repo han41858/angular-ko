@@ -11,9 +11,10 @@ import * as nock from 'nock';
 import {join} from 'path';
 import * as semver from 'semver';
 
+import * as commitMessageUtils from '../../../commit-message/utils';
 import {GithubConfig} from '../../../utils/config';
 import * as console from '../../../utils/console';
-import {getBranchPushMatcher, VirtualGitClient} from '../../../utils/testing';
+import {getBranchPushMatcher, installVirtualGitClientSpies, VirtualGitClient} from '../../../utils/testing';
 import {ReleaseConfig} from '../../config/index';
 import {ActiveReleaseTrains} from '../../versioning/active-release-trains';
 import * as npm from '../../versioning/npm-publish';
@@ -21,6 +22,7 @@ import {_npmPackageInfoCache, NpmPackageInfo} from '../../versioning/npm-registr
 import {ReleaseAction, ReleaseActionConstructor} from '../actions';
 import * as constants from '../constants';
 import * as externalCommands from '../external-commands';
+import {buildDateStamp} from '../release-notes/context';
 
 import {GithubTestingRepo} from './github-api-testing';
 
@@ -33,7 +35,7 @@ export const testTmpDir: string = process.env['TEST_TMPDIR']!;
 /** Interface describing a test release action. */
 export interface TestReleaseAction<T extends ReleaseAction = ReleaseAction> {
   instance: T;
-  gitClient: VirtualGitClient;
+  gitClient: VirtualGitClient<boolean>;
   repo: GithubTestingRepo;
   fork: GithubTestingRepo;
   testTmpDir: string;
@@ -44,13 +46,13 @@ export interface TestReleaseAction<T extends ReleaseAction = ReleaseAction> {
 /** Gets necessary test mocks for running a release action. */
 export function getTestingMocksForReleaseAction() {
   const githubConfig = {owner: 'angular', name: 'dev-infra-test'};
-  const gitClient = new VirtualGitClient(undefined, {github: githubConfig}, testTmpDir);
+  const gitClient = VirtualGitClient.getAuthenticatedInstance({github: githubConfig});
   const releaseConfig: ReleaseConfig = {
     npmPackages: [
       '@angular/pkg1',
       '@angular/pkg2',
     ],
-    generateReleaseNotesForHead: jasmine.createSpy('generateReleaseNotesForHead').and.resolveTo(),
+    releaseNotes: {},
     buildPackages: () => {
       throw Error('Not implemented');
     },
@@ -67,6 +69,9 @@ export function getTestingMocksForReleaseAction() {
 export function setupReleaseActionForTesting<T extends ReleaseAction>(
     actionCtor: ReleaseActionConstructor<T>, active: ActiveReleaseTrains,
     isNextPublishedToNpm = true): TestReleaseAction<T> {
+  installVirtualGitClientSpies();
+  spyOn(commitMessageUtils, 'getCommitsInRange').and.returnValue(Promise.resolve([]));
+
   // Reset existing HTTP interceptors.
   nock.cleanAll();
 
@@ -89,13 +94,18 @@ export function setupReleaseActionForTesting<T extends ReleaseAction>(
   spyOn(console, 'promptConfirm').and.resolveTo(true);
 
   // Fake all external commands for the release tool.
-  spyOn(npm, 'runNpmPublish').and.resolveTo(true);
+  spyOn(npm, 'runNpmPublish').and.resolveTo();
   spyOn(externalCommands, 'invokeSetNpmDistCommand').and.resolveTo();
   spyOn(externalCommands, 'invokeYarnInstallCommand').and.resolveTo();
+  spyOn(externalCommands, 'invokeBazelCleanCommand').and.resolveTo();
   spyOn(externalCommands, 'invokeReleaseBuildCommand').and.resolveTo([
     {name: '@angular/pkg1', outputPath: `${testTmpDir}/dist/pkg1`},
     {name: '@angular/pkg2', outputPath: `${testTmpDir}/dist/pkg2`}
   ]);
+
+  // Fake checking the package versions since we don't actually create packages to check against in
+  // the publish tests.
+  spyOn(ReleaseAction.prototype, '_verifyPackageVersions' as any).and.resolveTo();
 
   // Create an empty changelog and a `package.json` file so that file system
   // interactions with the project directory do not cause exceptions.
@@ -116,7 +126,7 @@ export function parse(version: string): semver.SemVer {
 
 /** Gets a changelog for the specified version. */
 export function getChangelogForVersion(version: string): string {
-  return `<a name="${version}"></a>Changelog\n\n`;
+  return `<a name="${version}"></a>\n# ${version} (${buildDateStamp()})\n\n\n`;
 }
 
 export async function expectStagingAndPublishWithoutCherryPick(
@@ -161,7 +171,6 @@ export async function expectStagingAndPublishWithoutCherryPick(
           'Expected release staging branch to be created in fork.');
 
   expect(externalCommands.invokeReleaseBuildCommand).toHaveBeenCalledTimes(1);
-  expect(releaseConfig.generateReleaseNotesForHead).toHaveBeenCalledTimes(1);
   expect(npm.runNpmPublish).toHaveBeenCalledTimes(2);
   expect(npm.runNpmPublish)
       .toHaveBeenCalledWith(`${testTmpDir}/dist/pkg1`, expectedNpmDistTag, undefined);
@@ -190,7 +199,8 @@ export async function expectStagingAndPublishWithCherryPick(
       .expectTagToBeCreated(expectedTagName, 'STAGING_COMMIT_SHA')
       .expectReleaseToBeCreated(`v${expectedVersion}`, expectedTagName)
       .expectChangelogFetch(expectedBranch, getChangelogForVersion(expectedVersion))
-      .expectPullRequestToBeCreated('master', fork, expectedCherryPickForkBranch, 300);
+      .expectPullRequestToBeCreated('master', fork, expectedCherryPickForkBranch, 300)
+      .expectPullRequestWait(300);
 
   // In the fork, we make the staging and cherry-pick branches appear as
   // non-existent, so that the PRs can be created properly without collisions.
@@ -229,7 +239,6 @@ export async function expectStagingAndPublishWithCherryPick(
           'Expected cherry-pick branch to be created in fork.');
 
   expect(externalCommands.invokeReleaseBuildCommand).toHaveBeenCalledTimes(1);
-  expect(releaseConfig.generateReleaseNotesForHead).toHaveBeenCalledTimes(1);
   expect(npm.runNpmPublish).toHaveBeenCalledTimes(2);
   expect(npm.runNpmPublish)
       .toHaveBeenCalledWith(`${testTmpDir}/dist/pkg1`, expectedNpmDistTag, undefined);

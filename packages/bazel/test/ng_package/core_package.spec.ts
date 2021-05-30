@@ -7,13 +7,14 @@
  */
 
 import {ivyEnabled, obsoleteInIvy} from '@angular/private/testing';
+import {runfiles} from '@bazel/runfiles';
 import * as path from 'path';
 import * as shx from 'shelljs';
 
 // Resolve the "npm_package" directory by using the runfile resolution. Note that we need to
 // resolve the "package.json" of the package since otherwise NodeJS would resolve the "main"
 // file, which is not necessarily at the root of the "npm_package".
-shx.cd(path.dirname(require.resolve('angular/packages/core/npm_package/package.json')));
+shx.cd(path.dirname(runfiles.resolve('angular/packages/core/npm_package/package.json')));
 
 /**
  * Utility functions that allows me to create fs paths
@@ -58,8 +59,11 @@ describe('@angular/core ng_package', () => {
       });
 
       it('should contain metadata for ng update', () => {
+        interface PackageJson {
+          'ng-update': {packageGroup: string[];};
+        }
         expect(shx.cat(packageJson)).not.toContain('NG_UPDATE_PACKAGE_GROUP');
-        expect(JSON.parse(shx.cat(packageJson))['ng-update']['packageGroup'])
+        expect((JSON.parse(shx.cat(packageJson)) as PackageJson)['ng-update'].packageGroup)
             .toContain('@angular/core');
       });
     });
@@ -131,14 +135,6 @@ describe('@angular/core ng_package', () => {
 
       it('should have a source map next to the umd file', () => {
         expect(shx.ls('bundles/core.umd.js.map').length).toBe(1, 'File not found');
-      });
-
-      it('should have a minified umd file in the /bundles directory', () => {
-        expect(shx.ls('bundles/core.umd.min.js').length).toBe(1, 'File not found');
-      });
-
-      it('should have a source map next to the minified umd file', () => {
-        expect(shx.ls('bundles/core.umd.min.js.map').length).toBe(1, 'File not found');
       });
 
       it('should have the version info in the header', () => {
@@ -229,14 +225,6 @@ describe('@angular/core ng_package', () => {
 
       it('should have a source map next to the umd file', () => {
         expect(shx.ls('bundles/core-testing.umd.js.map').length).toBe(1, 'File not found');
-      });
-
-      it('should have a minified umd file in the /bundles directory', () => {
-        expect(shx.ls('bundles/core-testing.umd.min.js').length).toBe(1, 'File not found');
-      });
-
-      it('should have a source map next to the minified umd file', () => {
-        expect(shx.ls('bundles/core-testing.umd.min.js.map').length).toBe(1, 'File not found');
       });
 
       it('should have an AMD name', () => {

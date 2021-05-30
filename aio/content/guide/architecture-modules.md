@@ -152,7 +152,7 @@ Other JavaScript modules use *import statements* to access public objects from o
 <code-example path="architecture/src/app/app.module.ts" region="export"></code-example>
 
 <div class="alert is-helpful">
-  <a href="http://exploringjs.com/es6/ch_modules.html">Learn more about the JavaScript module system on the web.</a>
+  <a href="https://exploringjs.com/es6/ch_modules.html">Learn more about the JavaScript module system on the web.</a>
 </div>
 -->
 Angular가 제공하는 NgModule 체계는 JavaScript에서 객체를 묶어 관리하는 JavaScript (ES2015) 모듈 시스템과 다릅니다.

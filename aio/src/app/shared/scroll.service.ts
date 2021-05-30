@@ -24,7 +24,7 @@ export class ScrollService implements OnDestroy {
   poppedStateScrollPosition: ScrollPosition|null = null;
   // Whether the browser supports the necessary features for manual scroll restoration.
   supportManualScrollRestoration: boolean = !!window && ('scrollTo' in window) &&
-      ('scrollX' in window) && ('scrollY' in window) && isScrollRestorationWritable();
+      ('pageXOffset' in window) && isScrollRestorationWritable();
 
   // Offset from the top of the document to bottom of any static elements
   // at the top (e.g. toolbar) + some margin
@@ -33,7 +33,7 @@ export class ScrollService implements OnDestroy {
       const toolbar = this.document.querySelector('.app-toolbar');
       this._topOffset = (toolbar && toolbar.clientHeight || 0) + topMargin;
     }
-    return this._topOffset!;
+    return this._topOffset as number;
   }
 
   get topOfPageElement() {

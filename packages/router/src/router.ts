@@ -27,7 +27,7 @@ import {ChildrenOutletContexts} from './router_outlet_context';
 import {ActivatedRoute, createEmptyState, RouterState, RouterStateSnapshot} from './router_state';
 import {isNavigationCancelingError, navigationCancelingError, Params} from './shared';
 import {DefaultUrlHandlingStrategy, UrlHandlingStrategy} from './url_handling_strategy';
-import {containsTree, createEmptyUrlTree, UrlSerializer, UrlTree} from './url_tree';
+import {containsTree, createEmptyUrlTree, IsActiveMatchOptions, UrlSerializer, UrlTree} from './url_tree';
 import {standardizeConfig, validateConfig} from './utils/config';
 import {Checks, getAllRouteGuards} from './utils/preactivation';
 import {isUrlTree} from './utils/type_guards';
@@ -81,6 +81,9 @@ export interface UrlCreationOptions {
    *    }
    *  }
    * ```
+   *
+   * A value of `null` or `undefined` indicates that the navigation commands should be applied
+   * relative to the root.
    */
   relativeTo?: ActivatedRoute|null;
 
@@ -354,6 +357,29 @@ type LocationChangeInfo = {
 };
 
 /**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `true`
+ * (exact = true).
+ */
+export const exactMatchOptions: IsActiveMatchOptions = {
+  paths: 'exact',
+  fragment: 'ignored',
+  matrixParams: 'ignored',
+  queryParams: 'exact'
+};
+
+/**
+ * The equivalent `IsActiveUrlTreeOptions` options for `Router.isActive` is called with `false`
+ * (exact = false).
+ */
+export const subsetMatchOptions: IsActiveMatchOptions = {
+  paths: 'subset',
+  fragment: 'ignored',
+  matrixParams: 'ignored',
+  queryParams: 'subset'
+};
+
+
+/**
  * @description
  *
  * A service that provides navigation among views and URL manipulation capabilities.
@@ -374,6 +400,7 @@ export class Router {
   private navigations: Observable<NavigationTransition>;
   private lastSuccessfulNavigation: Navigation|null = null;
   private currentNavigation: Navigation|null = null;
+  private disposed = false;
 
   private locationSubscription?: SubscriptionLike;
   /**
@@ -488,7 +515,7 @@ export class Router {
     this.ngModule = injector.get(NgModuleRef);
     this.console = injector.get(Console);
     const ngZone = injector.get(NgZone);
-    this.isNgZoneEnabled = ngZone instanceof NgZone;
+    this.isNgZoneEnabled = ngZone instanceof NgZone && NgZone.isInAngularZone();
 
     this.resetConfig(config);
     this.currentUrlTree = createEmptyUrlTree();
@@ -570,12 +597,11 @@ export class Router {
                                if (transition !== this.transitions.getValue()) {
                                  return EMPTY;
                                }
-                               return [t];
-                             }),
 
-                             // This delay is required to match old behavior that forced navigation
-                             // to always be async
-                             switchMap(t => Promise.resolve(t)),
+                               // This delay is required to match old behavior that forced
+                               // navigation to always be async
+                               return Promise.resolve(t);
+                             }),
 
                              // ApplyRedirects
                              applyRedirects(
@@ -606,10 +632,8 @@ export class Router {
                                  }
                                  this.browserUrlTree = t.urlAfterRedirects;
                                }
-                             }),
 
-                             // Fire RoutesRecognized
-                             tap(t => {
+                               // Fire RoutesRecognized
                                const routesRecognized = new RoutesRecognized(
                                    t.id, this.serializeUrl(t.extractedUrl),
                                    this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot!);
@@ -689,9 +713,7 @@ export class Router {
                          error.url = t.guardsResult;
                          throw error;
                        }
-                     }),
 
-                     tap(t => {
                        const guardsEnd = new GuardsCheckEnd(
                            t.id, this.serializeUrl(t.extractedUrl),
                            this.serializeUrl(t.urlAfterRedirects), t.targetSnapshot!,
@@ -821,7 +843,7 @@ export class Router {
                          // navigation completes, there will be nothing in
                          // history.state.navigationId. This can cause sync problems with AngularJS
                          // sync code which looks for a value here in order to determine whether or
-                         // not to handle a given popstate event or to leave it to the Angualr
+                         // not to handle a given popstate event or to leave it to the Angular
                          // router.
                          this.resetUrlToCurrentUrlTree();
                          const navCancel = new NavigationCancel(
@@ -872,7 +894,7 @@ export class Router {
                                replaceUrl: this.urlUpdateStrategy === 'eager'
                              };
 
-                             return this.scheduleNavigation(
+                             this.scheduleNavigation(
                                  mergedTree, 'imperative', null, extras,
                                  {resolve: t.resolve, reject: t.reject, promise: t.promise});
                            }, 0);
@@ -1005,7 +1027,10 @@ export class Router {
     return this.serializeUrl(this.currentUrlTree);
   }
 
-  /** The current Navigation object if one exists */
+  /**
+   * Returns the current `Navigation` object when the router is navigating,
+   * and `null` when idle.
+   */
   getCurrentNavigation(): Navigation|null {
     return this.currentNavigation;
   }
@@ -1045,10 +1070,12 @@ export class Router {
 
   /** Disposes of the router. */
   dispose(): void {
+    this.transitions.complete();
     if (this.locationSubscription) {
       this.locationSubscription.unsubscribe();
       this.locationSubscription = undefined;
     }
+    this.disposed = true;
   }
 
   /**
@@ -1094,6 +1121,9 @@ export class Router {
    *
    * // navigate to /team/44/user/22
    * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+   *
+   * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
+   * tree should be created relative to the root.
    * ```
    */
   createUrlTree(commands: any[], navigationExtras: UrlCreationOptions = {}): UrlTree {
@@ -1115,7 +1145,7 @@ export class Router {
     if (q !== null) {
       q = this.removeEmptyProps(q);
     }
-    return createUrlTree(a, this.currentUrlTree, commands, q!, f!);
+    return createUrlTree(a, this.currentUrlTree, commands, q, f ?? null);
   }
 
   /**
@@ -1209,14 +1239,39 @@ export class Router {
     return urlTree;
   }
 
-  /** Returns whether the url is activated */
-  isActive(url: string|UrlTree, exact: boolean): boolean {
+  /**
+   * Returns whether the url is activated.
+   *
+   * @deprecated
+   * Use `IsActiveUrlTreeOptions` instead.
+   *
+   * - The equivalent `IsActiveUrlTreeOptions` for `true` is
+   * `{paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'}`.
+   * - The equivalent for `false` is
+   * `{paths: 'subset', queryParams: 'subset', fragment: 'ignored', matrixParams: 'ignored'}`.
+   */
+  isActive(url: string|UrlTree, exact: boolean): boolean;
+  /**
+   * Returns whether the url is activated.
+   */
+  isActive(url: string|UrlTree, matchOptions: IsActiveMatchOptions): boolean;
+  /** @internal */
+  isActive(url: string|UrlTree, matchOptions: boolean|IsActiveMatchOptions): boolean;
+  isActive(url: string|UrlTree, matchOptions: boolean|IsActiveMatchOptions): boolean {
+    let options: IsActiveMatchOptions;
+    if (matchOptions === true) {
+      options = {...exactMatchOptions};
+    } else if (matchOptions === false) {
+      options = {...subsetMatchOptions};
+    } else {
+      options = matchOptions;
+    }
     if (isUrlTree(url)) {
-      return containsTree(this.currentUrlTree, url, exact);
+      return containsTree(this.currentUrlTree, url, options);
     }
 
     const urlTree = this.parseUrl(url);
-    return containsTree(this.currentUrlTree, urlTree, exact);
+    return containsTree(this.currentUrlTree, urlTree, options);
   }
 
   private removeEmptyProps(params: Params): Params {
@@ -1238,7 +1293,6 @@ export class Router {
               .next(new NavigationEnd(
                   t.id, this.serializeUrl(t.extractedUrl), this.serializeUrl(this.currentUrlTree)));
           this.lastSuccessfulNavigation = this.currentNavigation;
-          this.currentNavigation = null;
           t.resolve(true);
         },
         e => {
@@ -1250,6 +1304,9 @@ export class Router {
       rawUrl: UrlTree, source: NavigationTrigger, restoredState: RestoredState|null,
       extras: NavigationExtras,
       priorPromise?: {resolve: any, reject: any, promise: Promise<boolean>}): Promise<boolean> {
+    if (this.disposed) {
+      return Promise.resolve(false);
+    }
     // * Imperative navigations (router.navigate) might trigger additional navigations to the same
     //   URL via a popstate event and the locationChangeListener. We should skip these duplicate
     //   navs. Duplicates may also be triggered by attempts to sync AngularJS and Angular router

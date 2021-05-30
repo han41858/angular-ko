@@ -1,5 +1,4 @@
 /* tslint:disable:forin member-ordering */
-// #docplaster
 
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 
@@ -74,9 +73,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.alert(`Delete ${hero ? hero.name : 'the hero'}.`);
   }
 
-  // #docregion evil-title
   evilTitle = 'Template <script>alert("evil never sleeps")</script>Syntax';
-  // #enddocregion evil-title
 
   fontSizePx = 16;
 
@@ -95,11 +92,11 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   heroIdIncrement = 1;
 
-  // heroImageUrl = 'http://www.wpclipart.com/cartoon/people/hero/hero_silhoutte_T.png';
-  // Public Domain terms of use: http://www.wpclipart.com/terms.html
+  // heroImageUrl = 'https://wpclipart.com/cartoon/people/hero/hero_silhoutte_T.png';
+  // Public Domain terms of use: https://wpclipart.com/terms.html
   heroImageUrl = 'assets/images/hero.png';
-  // villainImageUrl = 'http://www.clker.com/cliparts/u/s/y/L/x/9/villain-man-hi.png'
-  // Public Domain terms of use http://www.clker.com/disclaimer.html
+  // villainImageUrl = 'https://www.clker.com/cliparts/u/s/y/L/x/9/villain-man-hi.png'
+  // Public Domain terms of use https://www.clker.com/disclaimer.html
   villainImageUrl = 'assets/images/villain.png';
 
   iconUrl = 'assets/images/ng-logo.png';
@@ -139,7 +136,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.currentHero.name = name.toUpperCase();
   }
 
-  // #docregion setClasses
   currentClasses: {};
   setCurrentClasses() {
     // 컴포넌트 프로퍼티의 현재 스테이트에 따라 CSS 클래스를 지정하거나 제거합니다.
@@ -149,9 +145,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       special:  this.isSpecial
     };
   }
-  // #enddocregion setClasses
 
-  // #docregion setStyles
   currentStyles: {};
   setCurrentStyles() {
     // 컴포넌트 프로퍼티의 현재 스테이트에 따라 CSS 스타일을 지정합니다.
@@ -161,15 +155,10 @@ export class AppComponent implements AfterViewInit, OnInit {
       'font-size':   this.isSpecial    ? '24px'   : '12px'
     };
   }
-  // #enddocregion setStyles
 
-  // #docregion trackByHeroes
   trackByHeroes(index: number, hero: Hero): number { return hero.id; }
-  // #enddocregion trackByHeroes
 
-  // #docregion trackById
   trackById(index: number, item: any): number { return item.id; }
-  // #enddocregion trackById
 }
 
 // helper to track changes to viewChildren

@@ -13,8 +13,8 @@ import {absoluteFrom, getFileSystem, getSourceFileOrError} from '../../../src/ng
 import {runInEachFileSystem, TestFile} from '../../../src/ngtsc/file_system/testing';
 import {NoopImportRewriter} from '../../../src/ngtsc/imports';
 import {MockLogger} from '../../../src/ngtsc/logging/testing';
+import {loadFakeCore, loadTestFiles} from '../../../src/ngtsc/testing';
 import {ImportManager} from '../../../src/ngtsc/translator';
-import {loadFakeCore, loadTestFiles} from '../../../test/helpers';
 import {DecorationAnalyzer} from '../../src/analysis/decoration_analyzer';
 import {ModuleWithProvidersAnalyzer} from '../../src/analysis/module_with_providers_analyzer';
 import {NgccReferencesRegistry} from '../../src/analysis/ngcc_references_registry';
@@ -40,7 +40,7 @@ function setup(files: TestFile[], dtsFiles?: TestFile[]) {
       new DecorationAnalyzer(fs, bundle, host, referencesRegistry).analyzeProgram();
   const switchMarkerAnalyses = new SwitchMarkerAnalyzer(host, bundle.entryPoint.packagePath)
                                    .analyzeProgram(bundle.src.program);
-  const renderer = new EsmRenderingFormatter(host, false);
+  const renderer = new EsmRenderingFormatter(fs, host, false);
   const importManager = new ImportManager(new NoopImportRewriter(), IMPORT_PREFIX);
   return {
     host,
@@ -156,8 +156,8 @@ runInEachFileSystem(() => {
           renderer.addImports(
               output,
               [
-                {specifier: '@angular/core', qualifier: 'i0'},
-                {specifier: '@angular/common', qualifier: 'i1'}
+                {specifier: '@angular/core', qualifier: ts.createIdentifier('i0')},
+                {specifier: '@angular/common', qualifier: ts.createIdentifier('i1')}
               ],
               sourceFile);
           expect(output.toString()).toContain(`/* A copyright notice */
@@ -231,7 +231,8 @@ const x = 3;
           const file = getSourceFileOrError(program, _('/node_modules/test-package/some/file.js'));
           const output = new MagicString(PROGRAM.contents);
           renderer.addConstants(output, 'const x = 3;', file);
-          renderer.addImports(output, [{specifier: '@angular/core', qualifier: 'i0'}], file);
+          renderer.addImports(
+              output, [{specifier: '@angular/core', qualifier: ts.createIdentifier('i0')}], file);
           expect(output.toString()).toContain(`
 import {Directive} from '@angular/core';
 import * as i0 from '@angular/core';

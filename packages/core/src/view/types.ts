@@ -14,7 +14,8 @@ import {NgModuleRef} from '../linker/ng_module_factory';
 import {QueryList} from '../linker/query_list';
 import {TemplateRef} from '../linker/template_ref';
 import {ViewContainerRef} from '../linker/view_container_ref';
-import {Renderer2, RendererFactory2, RendererType2} from '../render/api';
+import {Renderer2, RendererFactory2} from '../render/api';
+import {RendererType2} from '../render/api_flags';
 import {Sanitizer} from '../sanitization/sanitizer';
 import {SecurityContext} from '../sanitization/security';
 
@@ -208,6 +209,7 @@ export const enum NodeFlags {
   StaticQuery = 1 << 28,
   DynamicQuery = 1 << 29,
   TypeNgModule = 1 << 30,
+  EmitDistinctChangesOnly = 1 << 31,
   CatQuery = TypeContentQuery | TypeViewQuery,
 
   // mutually exclusive values...

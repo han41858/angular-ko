@@ -7,33 +7,45 @@
  */
 import * as o from '../../output/output_ast';
 import {Identifiers as R3} from '../r3_identifiers';
-import {R3DirectiveDef, R3DirectiveMetadata, R3HostMetadata, R3QueryMetadata} from '../view/api';
-import {createDirectiveTypeParams} from '../view/compiler';
+import {R3CompiledExpression} from '../util';
+import {R3DirectiveMetadata, R3HostMetadata, R3QueryMetadata} from '../view/api';
+import {createDirectiveType} from '../view/compiler';
 import {asLiteral, conditionallyCreateMapObjectLiteral, DefinitionMap} from '../view/util';
+import {R3DeclareDirectiveMetadata, R3DeclareQueryMetadata} from './api';
+import {toOptionalLiteralMap} from './util';
 
+/**
+ * Every time we make a breaking change to the declaration interface or partial-linker behavior, we
+ * must update this constant to prevent old partial-linkers from incorrectly processing the
+ * declaration.
+ *
+ * Do not include any prerelease in these versions as they are ignored.
+ */
+const MINIMUM_PARTIAL_LINKER_VERSION = '12.0.0';
 
 /**
  * Compile a directive declaration defined by the `R3DirectiveMetadata`.
  */
-export function compileDeclareDirectiveFromMetadata(meta: R3DirectiveMetadata): R3DirectiveDef {
+export function compileDeclareDirectiveFromMetadata(meta: R3DirectiveMetadata):
+    R3CompiledExpression {
   const definitionMap = createDirectiveDefinitionMap(meta);
 
   const expression = o.importExpr(R3.declareDirective).callFn([definitionMap.toLiteralMap()]);
+  const type = createDirectiveType(meta);
 
-  const typeParams = createDirectiveTypeParams(meta);
-  const type = o.expressionType(o.importExpr(R3.DirectiveDefWithMeta, typeParams));
-
-  return {expression, type};
+  return {expression, type, statements: []};
 }
 
 /**
  * Gathers the declaration fields for a directive into a `DefinitionMap`. This allows for reusing
  * this logic for components, as they extend the directive metadata.
  */
-export function createDirectiveDefinitionMap(meta: R3DirectiveMetadata): DefinitionMap {
-  const definitionMap = new DefinitionMap();
+export function createDirectiveDefinitionMap(meta: R3DirectiveMetadata):
+    DefinitionMap<R3DeclareDirectiveMetadata> {
+  const definitionMap = new DefinitionMap<R3DeclareDirectiveMetadata>();
 
-  definitionMap.set('version', o.literal(1));
+  definitionMap.set('minVersion', o.literal(MINIMUM_PARTIAL_LINKER_VERSION));
+  definitionMap.set('version', o.literal('0.0.0-PLACEHOLDER'));
 
   // e.g. `type: MyDirective`
   definitionMap.set('type', meta.internalType);
@@ -78,13 +90,20 @@ export function createDirectiveDefinitionMap(meta: R3DirectiveMetadata): Definit
  * by `R3DeclareQueryMetadata`.
  */
 function compileQuery(query: R3QueryMetadata): o.LiteralMapExpr {
-  const meta = new DefinitionMap();
+  const meta = new DefinitionMap<R3DeclareQueryMetadata>();
   meta.set('propertyName', o.literal(query.propertyName));
   if (query.first) {
     meta.set('first', o.literal(true));
   }
   meta.set(
       'predicate', Array.isArray(query.predicate) ? asLiteral(query.predicate) : query.predicate);
+  if (!query.emitDistinctChangesOnly) {
+    // `emitDistinctChangesOnly` is special because we expect it to be `true`.
+    // Therefore we explicitly emit the field, and explicitly place it only when it's `false`.
+    meta.set('emitDistinctChangesOnly', o.literal(false));
+  } else {
+    // The linker will assume that an absent `emitDistinctChangesOnly` flag is by default `true`.
+  }
   if (query.descendants) {
     meta.set('descendants', o.literal(true));
   }
@@ -100,7 +119,7 @@ function compileQuery(query: R3QueryMetadata): o.LiteralMapExpr {
  * in `R3DeclareDirectiveMetadata['host']`
  */
 function compileHostMetadata(meta: R3HostMetadata): o.LiteralMapExpr|null {
-  const hostMetadata = new DefinitionMap();
+  const hostMetadata = new DefinitionMap<NonNullable<R3DeclareDirectiveMetadata['host']>>();
   hostMetadata.set('attributes', toOptionalLiteralMap(meta.attributes, expression => expression));
   hostMetadata.set('listeners', toOptionalLiteralMap(meta.listeners, o.literal));
   hostMetadata.set('properties', toOptionalLiteralMap(meta.properties, o.literal));
@@ -114,29 +133,6 @@ function compileHostMetadata(meta: R3HostMetadata): o.LiteralMapExpr|null {
 
   if (hostMetadata.values.length > 0) {
     return hostMetadata.toLiteralMap();
-  } else {
-    return null;
-  }
-}
-
-/**
- * Creates an object literal expression from the given object, mapping all values to an expression
- * using the provided mapping function. If the object has no keys, then null is returned.
- *
- * @param object The object to transfer into an object literal expression.
- * @param mapper The logic to use for creating an expression for the object's values.
- * @returns An object literal expression representing `object`, or null if `object` does not have
- * any keys.
- */
-function toOptionalLiteralMap<T>(
-    object: {[key: string]: T}, mapper: (value: T) => o.Expression): o.LiteralMapExpr|null {
-  const entries = Object.keys(object).map(key => {
-    const value = object[key];
-    return {key, value: mapper(value), quoted: true};
-  });
-
-  if (entries.length > 0) {
-    return o.literalMap(entries);
   } else {
     return null;
   }

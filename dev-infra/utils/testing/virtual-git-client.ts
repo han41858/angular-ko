@@ -8,6 +8,7 @@
 
 import {SpawnSyncOptions, SpawnSyncReturns} from 'child_process';
 import * as parseArgs from 'minimist';
+import {SemVer} from 'semver';
 
 import {NgDevConfig} from '../config';
 import {GitClient} from '../git/index';
@@ -58,7 +59,21 @@ export interface Commit {
  * Virtual git client that mocks Git commands and keeps track of the repository state
  * in memory. This allows for convenient test assertions with Git interactions.
  */
-export class VirtualGitClient extends GitClient {
+export class VirtualGitClient<Authenticated extends boolean> extends GitClient<Authenticated> {
+  static getInstance(config = mockNgDevConfig, tmpDir = testTmpDir): VirtualGitClient<false> {
+    return new VirtualGitClient(undefined, config, tmpDir);
+  }
+
+  static getAuthenticatedInstance(config = mockNgDevConfig, tmpDir = testTmpDir):
+      VirtualGitClient<true> {
+    return new VirtualGitClient('abc123', config, tmpDir);
+  }
+
+  private constructor(token: Authenticated extends true? string: undefined, config: NgDevConfig,
+                                                   tmpDir: string) {
+    super(token, config, tmpDir);
+  }
+
   /** Current Git HEAD that has been previously fetched. */
   fetchHeadRef: RemoteRef|null = null;
   /** List of known branches in the repository. */
@@ -67,6 +82,15 @@ export class VirtualGitClient extends GitClient {
   head: GitHead = this.branches['master'];
   /** List of pushed heads to a given remote ref. */
   pushed: {remote: RemoteRef, head: GitHead}[] = [];
+
+
+  /**
+   * Override the actual GitClient getLatestSemverTag, as an actual tag cannot be retrieved in
+   * testing.
+   */
+  getLatestSemverTag() {
+    return new SemVer('0.0.0');
+  }
 
   /** Override for the actual Git client command execution. */
   runGraceful(args: string[], options: SpawnSyncOptions = {}): SpawnSyncReturns<string> {
@@ -190,10 +214,10 @@ export class VirtualGitClient extends GitClient {
 }
 
 
-/**
- * Builds a Virtual Git Client instance with the provided config and set the temporary test
- * directory.
- */
-export function buildVirtualGitClient(config = mockNgDevConfig, tmpDir = testTmpDir) {
-  return (new VirtualGitClient(undefined, config, tmpDir));
+export function installVirtualGitClientSpies() {
+  const authenticatedVirtualGitClient = VirtualGitClient.getAuthenticatedInstance();
+  spyOn(GitClient, 'getAuthenticatedInstance').and.returnValue(authenticatedVirtualGitClient);
+
+  const unauthenticatedVirtualGitClient = VirtualGitClient.getInstance();
+  spyOn(GitClient, 'getInstance').and.returnValue(unauthenticatedVirtualGitClient);
 }

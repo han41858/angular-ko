@@ -126,7 +126,7 @@ export class ActivatedRoute {
       /** An observable of the query parameters shared by all the routes. */
       public queryParams: Observable<Params>,
       /** An observable of the URL fragment shared by all the routes. */
-      public fragment: Observable<string>,
+      public fragment: Observable<string|null>,
       /** An observable of the static and resolved data of this route. */
       public data: Observable<Data>,
       /** The outlet name of the route, a constant. */
@@ -298,12 +298,30 @@ export class ActivatedRouteSnapshot {
   constructor(
       /** The URL segments matched by this route */
       public url: UrlSegment[],
-      /** The matrix parameters scoped to this route */
+      /**
+       *  The matrix parameters scoped to this route.
+       *
+       *  You can compute all params (or data) in the router state or to get params outside
+       *  of an activated component by traversing the `RouterState` tree as in the following
+       *  example:
+       *  ```
+       *  collectRouteParams(router: Router) {
+       *    let params = {};
+       *    let stack: ActivatedRouteSnapshot[] = [router.routerState.snapshot.root];
+       *    while (stack.length > 0) {
+       *      const route = stack.pop()!;
+       *      params = {...params, ...route.params};
+       *      stack.push(...route.children);
+       *    }
+       *    return params;
+       *  }
+       *  ```
+       */
       public params: Params,
       /** The query parameters shared by all the routes */
       public queryParams: Params,
       /** The URL fragment shared by all the routes */
-      public fragment: string,
+      public fragment: string|null,
       /** The static and resolved data of this route */
       public data: Data,
       /** The outlet name of the route */

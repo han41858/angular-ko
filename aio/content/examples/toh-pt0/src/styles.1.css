@@ -14,7 +14,7 @@ body {
 }
 body, input[type="text"], button {
   color: #333;
-  font-family: Cambria, Georgia;
+  font-family: Cambria, Georgia, serif;
 }
 /* 모든 엘리먼트에 적용되는 스타일 */
 * {

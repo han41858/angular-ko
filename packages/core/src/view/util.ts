@@ -9,7 +9,7 @@
 import {devModeEqual, WrappedValue} from '../change_detection/change_detection';
 import {SOURCE} from '../di/injector_compatibility';
 import {ViewEncapsulation} from '../metadata/view';
-import {RendererType2} from '../render/api';
+import {RendererType2} from '../render/api_flags';
 import {stringify} from '../util/stringify';
 
 import {expressionChangedAfterItHasBeenCheckedError} from './errors';
@@ -444,5 +444,4 @@ function _toStringWithNull(v: any): string {
   return v != null ? v.toString() : '';
 }
 
-export const EMPTY_ARRAY: any[] = [];
 export const EMPTY_MAP: {[key: string]: any} = {};

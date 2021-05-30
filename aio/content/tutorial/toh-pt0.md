@@ -59,7 +59,7 @@ To create a new workspace and an initial app project:
   1. Ensure that you are not already in an Angular workspace folder. For example, if you have previously created the Getting Started workspace, change to the parent of that folder.
   2. Run the CLI command `ng new` and provide the name `angular-tour-of-heroes`, as shown here:
 
-  <code-example language="sh" class="code-shell">
+  <code-example language="sh">
      ng new angular-tour-of-heroes
   </code-example>
 
@@ -112,7 +112,7 @@ Angular 애플리케이션은 Angular [워크스페이스](guide/glossary#worksp
 <!--
 Go to the workspace directory and launch the application.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   cd angular-tour-of-heroes
   ng serve --open
 </code-example>

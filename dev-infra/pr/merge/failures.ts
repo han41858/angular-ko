@@ -6,6 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {TargetLabel} from './config';
+
 /**
  * Class that can be used to describe pull request failures. A failure
  * is described through a human-readable message and a flag indicating
@@ -34,8 +36,16 @@ export class PullRequestFailure {
     return new this(`Not marked as merge ready.`);
   }
 
-  static noTargetLabel() {
-    return new this(`No target branch could be determined. Please ensure a target label is set.`);
+  static isDraft() {
+    return new this('Pull request is still in draft.');
+  }
+
+  static isClosed() {
+    return new this('Pull request is already closed.');
+  }
+
+  static isMerged() {
+    return new this('Pull request is already merged.');
   }
 
   static mismatchingTargetBranch(allowedBranches: string[]) {
@@ -74,6 +84,31 @@ export class PullRequestFailure {
   static insufficientPermissionsToMerge(
       message = `Insufficient Github API permissions to merge pull request. Please ensure that ` +
           `your auth token has write access.`) {
+    return new this(message);
+  }
+
+  static hasBreakingChanges(label: TargetLabel) {
+    const message = `Cannot merge into branch for "${label.pattern}" as the pull request has ` +
+        `breaking changes. Breaking changes can only be merged with the "target: major" label.`;
+    return new this(message);
+  }
+
+  static hasFeatureCommits(label: TargetLabel) {
+    const message = `Cannot merge into branch for "${label.pattern}" as the pull request has ` +
+        'commits with the "feat" type. New features can only be merged with the "target: minor" ' +
+        'or "target: major" label.';
+    return new this(message);
+  }
+
+  static missingBreakingChangeLabel() {
+    const message = 'Pull Request has at least one commit containing a breaking change note, but ' +
+        'does not have a breaking change label.';
+    return new this(message);
+  }
+
+  static missingBreakingChangeCommit() {
+    const message = 'Pull Request has a breaking change label, but does not contain any commits ' +
+        'with breaking change notes.';
     return new this(message);
   }
 }

@@ -17,11 +17,9 @@ import { MessagesComponent } from './messages/messages.component';
     BrowserModule,
     FormsModule
   ],
-  // #docregion providers
   providers: [
     // `providedIn`을 사용했기 때문에 프로바이더는 등록하지 않습니다.
   ],
-  // #enddocregion providers
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

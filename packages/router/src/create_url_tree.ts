@@ -12,8 +12,8 @@ import {UrlSegment, UrlSegmentGroup, UrlTree} from './url_tree';
 import {forEach, last, shallowEqual} from './utils/collection';
 
 export function createUrlTree(
-    route: ActivatedRoute, urlTree: UrlTree, commands: any[], queryParams: Params,
-    fragment: string): UrlTree {
+    route: ActivatedRoute, urlTree: UrlTree, commands: any[], queryParams: Params|null,
+    fragment: string|null): UrlTree {
   if (commands.length === 0) {
     return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
   }
@@ -47,7 +47,7 @@ function isCommandWithOutlets(command: any): command is {outlets: {[key: string]
 
 function tree(
     oldSegmentGroup: UrlSegmentGroup, newSegmentGroup: UrlSegmentGroup, urlTree: UrlTree,
-    queryParams: Params, fragment: string): UrlTree {
+    queryParams: Params|null, fragment: string|null): UrlTree {
   let qp: any = {};
   if (queryParams) {
     forEach(queryParams, (value: any, name: any) => {
@@ -186,7 +186,7 @@ function createPositionApplyingDoubleDots(
   return new Position(g, false, ci - dd);
 }
 
-function getOutlets(commands: any[]): {[k: string]: any[]} {
+function getOutlets(commands: unknown[]): {[k: string]: unknown[]|string} {
   if (isCommandWithOutlets(commands[0])) {
     return commands[0].outlets;
   }
@@ -229,7 +229,10 @@ function updateSegmentGroupChildren(
     const outlets = getOutlets(commands);
     const children: {[key: string]: UrlSegmentGroup} = {};
 
-    forEach(outlets, (commands: any, outlet: string) => {
+    forEach(outlets, (commands, outlet) => {
+      if (typeof commands === 'string') {
+        commands = [commands];
+      }
       if (commands !== null) {
         children[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
       }
@@ -293,7 +296,7 @@ function createNewSegmentGroup(
     // if we start with an object literal, we need to reuse the path part from the segment
     if (i === 0 && isMatrixParams(commands[0])) {
       const p = segmentGroup.segments[startIndex];
-      paths.push(new UrlSegment(p.path, commands[0]));
+      paths.push(new UrlSegment(p.path, stringify(commands[0])));
       i++;
       continue;
     }
@@ -311,9 +314,13 @@ function createNewSegmentGroup(
   return new UrlSegmentGroup(paths, {});
 }
 
-function createNewSegmentChildren(outlets: {[name: string]: any}): any {
-  const children: {[key: string]: UrlSegmentGroup} = {};
-  forEach(outlets, (commands: any, outlet: string) => {
+function createNewSegmentChildren(outlets: {[name: string]: unknown[]|string}):
+    {[outlet: string]: UrlSegmentGroup} {
+  const children: {[outlet: string]: UrlSegmentGroup} = {};
+  forEach(outlets, (commands, outlet) => {
+    if (typeof commands === 'string') {
+      commands = [commands];
+    }
     if (commands !== null) {
       children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
     }

@@ -94,7 +94,7 @@ This tutorial teaches you how to do the following:
 <!--
 Before going further into template-driven forms, you should have a basic understanding of the following.
 
-* TypeScript and HTML5 programming.
+* [TypeScript](https://www.typescriptlang.org/ "The TypeScript language") and HTML5 programming.
 * Angular app-design fundamentals, as described in [Angular Concepts](guide/architecture "Introduction to Angular concepts.").
 * The basics of [Angular template syntax](guide/template-syntax "Template syntax guide").
 * The form-design concepts that are presented in [Introduction to Forms](guide/forms-overview "Overview of Angular forms.").
@@ -271,7 +271,7 @@ template using the `<app-hero-form>` tag.
    The **Submit** button has some classes on it for styling.
    At this point, the form  layout is all plain HTML5, with no bindings or directives.
 
-6. The sample form uses some style classes from [Twitter Bootstrap](http://getbootstrap.com/css/): `container`, `form-group`, `form-control`, and `btn`.
+6. The sample form uses some style classes from [Twitter Bootstrap](https://getbootstrap.com/css/): `container`, `form-group`, `form-control`, and `btn`.
    To use these styles, the app's style sheet imports the library.
 
    <code-example path="forms/src/styles.1.css" header="src/styles.css"></code-example>

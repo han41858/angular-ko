@@ -6,12 +6,15 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {initMockFileSystem} from '../../file_system/testing';
 import {TypeCheckingConfig} from '../api';
 
 import {ALL_ENABLED_CONFIG, tcb, TestDeclaration, TestDirective} from './test_utils';
 
 
 describe('type check blocks', () => {
+  beforeEach(() => initMockFileSystem('Native'));
+
   it('should generate a basic block for a binding', () => {
     expect(tcb('{{hello}} {{world}}')).toContain('"" + (((ctx).hello)) + (((ctx).world));');
   });
@@ -47,6 +50,13 @@ describe('type check blocks', () => {
         .toContain('(((ctx).a) ? ((ctx).b) : ((((ctx).c) ? ((ctx).d) : (((ctx).e)))))');
   });
 
+  it('should handle nullish coalescing operator', () => {
+    expect(tcb('{{ a ?? b }}')).toContain('((((ctx).a)) ?? (((ctx).b)))');
+    expect(tcb('{{ a ?? b ?? c }}')).toContain('(((((ctx).a)) ?? (((ctx).b))) ?? (((ctx).c)))');
+    expect(tcb('{{ (a ?? b) + (c ?? e) }}'))
+        .toContain('(((((ctx).a)) ?? (((ctx).b))) + ((((ctx).c)) ?? (((ctx).e))))');
+  });
+
   it('should handle quote expressions as any type', () => {
     const TEMPLATE = `<span [quote]="sql:expression"></span>`;
     expect(tcb(TEMPLATE)).toContain('null as any');
@@ -60,7 +70,7 @@ describe('type check blocks', () => {
       selector: '[dir]',
       inputs: {inputA: 'inputA'},
     }];
-    expect(tcb(TEMPLATE, DIRECTIVES)).toContain('_t1: DirA = (null!); _t1.inputA = ("value");');
+    expect(tcb(TEMPLATE, DIRECTIVES)).toContain('_t1: i0.DirA = null!; _t1.inputA = ("value");');
   });
 
   it('should handle multiple bindings to the same property', () => {
@@ -106,12 +116,18 @@ describe('type check blocks', () => {
   it('should handle method calls of template variables', () => {
     const TEMPLATE = `<ng-template let-a>{{a(1)}}</ng-template>`;
     expect(tcb(TEMPLATE)).toContain('var _t2 = _t1.$implicit;');
-    expect(tcb(TEMPLATE)).toContain('(_t2).a(1)');
+    expect(tcb(TEMPLATE)).toContain('(_t2)(1)');
   });
 
   it('should handle implicit vars when using microsyntax', () => {
     const TEMPLATE = `<div *ngFor="let user of users"></div>`;
     expect(tcb(TEMPLATE)).toContain('var _t2 = _t1.$implicit;');
+  });
+
+  it('should handle direct calls of an implicit template variable', () => {
+    const TEMPLATE = `<div *ngFor="let a of letters">{{a(1)}}</div>`;
+    expect(tcb(TEMPLATE)).toContain('var _t2 = _t1.$implicit;');
+    expect(tcb(TEMPLATE)).toContain('(_t2)(1)');
   });
 
   describe('type constructors', () => {
@@ -127,9 +143,11 @@ describe('type check blocks', () => {
         },
         isGeneric: true,
       }];
-      expect(tcb(TEMPLATE, DIRECTIVES))
-          .toContain(
-              'var _t1 = Dir.ngTypeCtor({ "fieldA": (((ctx).foo)), "fieldB": (null as any) });');
+      const actual = tcb(TEMPLATE, DIRECTIVES);
+      expect(actual).toContain(
+          'const _ctor1: <T extends string = any>(init: Pick<i0.Dir<T>, "fieldA" | "fieldB">) => i0.Dir<T> = null!;');
+      expect(actual).toContain(
+          'var _t1 = _ctor1({ "fieldA": (((ctx).foo)), "fieldB": null as any });');
     });
 
     it('should handle multiple bindings to the same property', () => {
@@ -177,11 +195,14 @@ describe('type check blocks', () => {
         inputs: {input: 'input'},
         isGeneric: true,
       }];
-      expect(tcb(TEMPLATE, DIRECTIVES))
-          .toContain(
-              'var _t2 = Dir.ngTypeCtor({ "input": (null!) }); ' +
-              'var _t1 = _t2; ' +
-              '_t2.input = (_t1);');
+
+      const actual = tcb(TEMPLATE, DIRECTIVES);
+      expect(actual).toContain(
+          'const _ctor1: <T extends string = any>(init: Pick<i0.Dir<T>, "input">) => i0.Dir<T> = null!;');
+      expect(actual).toContain(
+          'var _t2 = _ctor1({ "input": (null!) }); ' +
+          'var _t1 = _t2; ' +
+          '_t2.input = (_t1);');
     });
 
     it('should generate circular references between two directives correctly', () => {
@@ -207,14 +228,16 @@ describe('type check blocks', () => {
           isGeneric: true,
         }
       ];
-      expect(tcb(TEMPLATE, DIRECTIVES))
-          .toContain(
-              'var _t4 = DirA.ngTypeCtor({ "inputA": (null!) }); ' +
-              'var _t3 = _t4; ' +
-              'var _t2 = DirB.ngTypeCtor({ "inputB": (_t3) }); ' +
-              'var _t1 = _t2; ' +
-              '_t4.inputA = (_t1); ' +
-              '_t2.inputB = (_t3);');
+      const actual = tcb(TEMPLATE, DIRECTIVES);
+      expect(actual).toContain(
+          'const _ctor1: <T extends string = any>(init: Pick<i0.DirA<T>, "inputA">) => i0.DirA<T> = null!; const _ctor2: <T extends string = any>(init: Pick<i0.DirB<T>, "inputB">) => i0.DirB<T> = null!;');
+      expect(actual).toContain(
+          'var _t4 = _ctor1({ "inputA": (null!) }); ' +
+          'var _t3 = _t4; ' +
+          'var _t2 = _ctor2({ "inputB": (_t3) }); ' +
+          'var _t1 = _t2; ' +
+          '_t4.inputA = (_t1); ' +
+          '_t2.inputB = (_t3);');
     });
 
     it('should handle empty bindings', () => {
@@ -255,7 +278,7 @@ describe('type check blocks', () => {
       }];
       expect(tcb(TEMPLATE, DIRECTIVES))
           .toContain(
-              'var _t1: typeof Dir.ngAcceptInputType_fieldA = (null!); ' +
+              'var _t1: typeof i0.Dir.ngAcceptInputType_fieldA = null!; ' +
               '_t1 = (((ctx).foo));');
     });
   });
@@ -315,11 +338,11 @@ describe('type check blocks', () => {
       },
     ];
     const block = tcb(TEMPLATE, DIRECTIVES);
-    expect(block).toContain('var _t1: HasInput = (null!)');
+    expect(block).toContain('var _t1: i0.HasInput = null!');
     expect(block).toContain('_t1.input = (((ctx).value));');
-    expect(block).toContain('var _t2: HasOutput = (null!)');
+    expect(block).toContain('var _t2: i0.HasOutput = null!');
     expect(block).toContain('_t2["output"]');
-    expect(block).toContain('var _t4: HasReference = (null!)');
+    expect(block).toContain('var _t4: i0.HasReference = null!');
     expect(block).toContain('var _t3 = _t4;');
     expect(block).toContain('(_t3).a');
     expect(block).not.toContain('NoBindings');
@@ -349,7 +372,7 @@ describe('type check blocks', () => {
     }];
     expect(tcb(TEMPLATE, DIRECTIVES))
         .toContain(
-            'var _t2: Dir = (null!); ' +
+            'var _t2: i0.Dir = null!; ' +
             'var _t1 = _t2; ' +
             '"" + (((_t1).value));');
   });
@@ -377,7 +400,7 @@ describe('type check blocks', () => {
       inputs: {'color': 'color', 'strong': 'strong', 'enabled': 'enabled'},
     }];
     const block = tcb(TEMPLATE, DIRECTIVES);
-    expect(block).not.toContain('var _t1: Dir = (null!);');
+    expect(block).not.toContain('var _t1: Dir = null!;');
     expect(block).not.toContain('"color"');
     expect(block).not.toContain('"strong"');
     expect(block).not.toContain('"enabled"');
@@ -397,7 +420,7 @@ describe('type check blocks', () => {
     }];
     expect(tcb(TEMPLATE, DIRECTIVES))
         .toContain(
-            'var _t2: Dir = (null!); ' +
+            'var _t2: i0.Dir = null!; ' +
             'var _t1 = _t2; ' +
             '_t2.input = (_t1);');
   });
@@ -425,9 +448,9 @@ describe('type check blocks', () => {
     ];
     expect(tcb(TEMPLATE, DIRECTIVES))
         .toContain(
-            'var _t2: DirB = (null!); ' +
+            'var _t2: i0.DirB = null!; ' +
             'var _t1 = _t2; ' +
-            'var _t3: DirA = (null!); ' +
+            'var _t3: i0.DirA = null!; ' +
             '_t3.inputA = (_t1); ' +
             'var _t4 = _t3; ' +
             '_t2.inputA = (_t4);');
@@ -445,7 +468,7 @@ describe('type check blocks', () => {
       undeclaredInputFields: ['fieldA']
     }];
     const block = tcb(TEMPLATE, DIRECTIVES);
-    expect(block).not.toContain('var _t1: Dir = (null!);');
+    expect(block).not.toContain('var _t1: Dir = null!;');
     expect(block).toContain('(((ctx).foo)); ');
   });
 
@@ -462,8 +485,8 @@ describe('type check blocks', () => {
     }];
     expect(tcb(TEMPLATE, DIRECTIVES))
         .toContain(
-            'var _t1: Dir = (null!); ' +
-            'var _t2: typeof _t1["fieldA"] = (null!); ' +
+            'var _t1: i0.Dir = null!; ' +
+            'var _t2: typeof _t1["fieldA"] = null!; ' +
             '_t2 = (((ctx).foo)); ');
   });
 
@@ -481,7 +504,7 @@ describe('type check blocks', () => {
        }];
        const block = tcb(TEMPLATE, DIRECTIVES);
        expect(block).toContain(
-           'var _t1: Dir = (null!); ' +
+           'var _t1: i0.Dir = null!; ' +
            '_t1["some-input.xs"] = (((ctx).foo)); ');
      });
 
@@ -498,7 +521,7 @@ describe('type check blocks', () => {
     }];
     expect(tcb(TEMPLATE, DIRECTIVES))
         .toContain(
-            'var _t1: Dir = (null!); ' +
+            'var _t1: i0.Dir = null!; ' +
             '_t1.field2 = _t1.field1 = (((ctx).foo));');
   });
 
@@ -517,8 +540,8 @@ describe('type check blocks', () => {
        }];
        expect(tcb(TEMPLATE, DIRECTIVES))
            .toContain(
-               'var _t1: typeof Dir.ngAcceptInputType_field1 = (null!); ' +
-               'var _t2: Dir = (null!); ' +
+               'var _t1: typeof i0.Dir.ngAcceptInputType_field1 = null!; ' +
+               'var _t2: i0.Dir = null!; ' +
                '_t2.field2 = _t1 = (((ctx).foo));');
      });
 
@@ -537,7 +560,7 @@ describe('type check blocks', () => {
        }];
        expect(tcb(TEMPLATE, DIRECTIVES))
            .toContain(
-               'var _t1: Dir = (null!); ' +
+               'var _t1: i0.Dir = null!; ' +
                '_t1.field2 = (((ctx).foo));');
      });
 
@@ -553,9 +576,9 @@ describe('type check blocks', () => {
       coercedInputFields: ['fieldA'],
     }];
     const block = tcb(TEMPLATE, DIRECTIVES);
-    expect(block).not.toContain('var _t1: Dir = (null!);');
+    expect(block).not.toContain('var _t1: Dir = null!;');
     expect(block).toContain(
-        'var _t1: typeof Dir.ngAcceptInputType_fieldA = (null!); ' +
+        'var _t1: typeof i0.Dir.ngAcceptInputType_fieldA = null!; ' +
         '_t1 = (((ctx).foo));');
   });
 
@@ -572,9 +595,9 @@ describe('type check blocks', () => {
       undeclaredInputFields: ['fieldA'],
     }];
     const block = tcb(TEMPLATE, DIRECTIVES);
-    expect(block).not.toContain('var _t1: Dir = (null!);');
+    expect(block).not.toContain('var _t1: Dir = null!;');
     expect(block).toContain(
-        'var _t1: typeof Dir.ngAcceptInputType_fieldA = (null!); ' +
+        'var _t1: typeof i0.Dir.ngAcceptInputType_fieldA = null!; ' +
         '_t1 = (((ctx).foo));');
   });
 
@@ -613,7 +636,7 @@ describe('type check blocks', () => {
       }];
       const TEMPLATE = `<div *ngIf="person">{{person.name}}</div>`;
       const block = tcb(TEMPLATE, DIRECTIVES);
-      expect(block).toContain('if (NgIf.ngTemplateGuard_ngIf(_t1, ((ctx).person)))');
+      expect(block).toContain('if (i0.NgIf.ngTemplateGuard_ngIf(_t1, ((ctx).person)))');
     });
 
     it('should emit binding guards', () => {
@@ -660,14 +683,13 @@ describe('type check blocks', () => {
       const TEMPLATE = `<div dir (dirOutput)="foo($event)"></div>`;
       const block = tcb(TEMPLATE, DIRECTIVES);
       expect(block).toContain(
-          '_outputHelper(_t1["outputField"]).subscribe(function ($event): any { (ctx).foo($event); });');
+          '_t1["outputField"].subscribe(function ($event): any { (ctx).foo($event); });');
     });
 
     it('should emit a listener function with AnimationEvent for animation events', () => {
       const TEMPLATE = `<div (@animation.done)="foo($event)"></div>`;
       const block = tcb(TEMPLATE);
-      expect(block).toContain(
-          'function ($event: animations.AnimationEvent): any { (ctx).foo($event); }');
+      expect(block).toContain('function ($event: i1.AnimationEvent): any { (ctx).foo($event); }');
     });
 
     it('should emit addEventListener calls for unclaimed outputs', () => {
@@ -730,11 +752,13 @@ describe('type check blocks', () => {
       useContextGenericType: true,
       strictLiteralTypes: true,
       enableTemplateTypeChecker: false,
+      useInlineTypeConstructors: true,
+      suggestionsForSuboptimalTypeInference: false,
     };
 
     describe('config.applyTemplateContextGuards', () => {
       const TEMPLATE = `<div *dir>{{ value }}</div>`;
-      const GUARD_APPLIED = 'if (Dir.ngTemplateContextGuard(';
+      const GUARD_APPLIED = 'if (i0.Dir.ngTemplateContextGuard(';
 
       it('should apply template context guards when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
@@ -763,13 +787,13 @@ describe('type check blocks', () => {
 
       it('generates a references var when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
-        expect(block).toContain('var _t1 = (_t2 as any as core.TemplateRef<any>);');
+        expect(block).toContain('var _t1 = (_t2 as any as i1.TemplateRef<any>);');
       });
 
       it('generates a reference var when disabled', () => {
         const DISABLED_CONFIG: TypeCheckingConfig = {...BASE_CONFIG, checkTemplateBodies: false};
         const block = tcb(TEMPLATE, DIRECTIVES, DISABLED_CONFIG);
-        expect(block).toContain('var _t1 = (_t2 as any as core.TemplateRef<any>);');
+        expect(block).toContain('var _t1 = (_t2 as any as i1.TemplateRef<any>);');
       });
     });
 
@@ -822,7 +846,7 @@ describe('type check blocks', () => {
       it('should check types of directive outputs when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
         expect(block).toContain(
-            '_outputHelper(_t1["outputField"]).subscribe(function ($event): any { (ctx).foo($event); });');
+            '_t1["outputField"].subscribe(function ($event): any { (ctx).foo($event); });');
         expect(block).toContain(
             '_t2.addEventListener("nonDirOutput", function ($event): any { (ctx).foo($event); });');
       });
@@ -833,7 +857,7 @@ describe('type check blocks', () => {
         expect(block).toContain('function ($event: any): any { (ctx).foo($event); }');
         // Note that DOM events are still checked, that is controlled by `checkTypeOfDomEvents`
         expect(block).toContain(
-            '_t1.addEventListener("nonDirOutput", function ($event): any { (ctx).foo($event); });');
+            'addEventListener("nonDirOutput", function ($event): any { (ctx).foo($event); });');
       });
     });
 
@@ -842,8 +866,7 @@ describe('type check blocks', () => {
 
       it('should check types of animation events when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
-        expect(block).toContain(
-            'function ($event: animations.AnimationEvent): any { (ctx).foo($event); }');
+        expect(block).toContain('function ($event: i1.AnimationEvent): any { (ctx).foo($event); }');
       });
       it('should not check types of animation events when disabled', () => {
         const DISABLED_CONFIG:
@@ -859,7 +882,7 @@ describe('type check blocks', () => {
       it('should check types of DOM events when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
         expect(block).toContain(
-            '_outputHelper(_t1["outputField"]).subscribe(function ($event): any { (ctx).foo($event); });');
+            '_t1["outputField"].subscribe(function ($event): any { (ctx).foo($event); });');
         expect(block).toContain(
             '_t2.addEventListener("nonDirOutput", function ($event): any { (ctx).foo($event); });');
       });
@@ -869,7 +892,7 @@ describe('type check blocks', () => {
         // Note that directive outputs are still checked, that is controlled by
         // `checkTypeOfOutputEvents`
         expect(block).toContain(
-            '_outputHelper(_t1["outputField"]).subscribe(function ($event): any { (ctx).foo($event); });');
+            '_t1["outputField"].subscribe(function ($event): any { (ctx).foo($event); });');
         expect(block).toContain('function ($event: any): any { (ctx).foo($event); }');
       });
     });
@@ -887,7 +910,7 @@ describe('type check blocks', () => {
             TypeCheckingConfig = {...BASE_CONFIG, checkTypeOfDomReferences: false};
         const block = tcb(TEMPLATE, [], DISABLED_CONFIG);
         expect(block).toContain(
-            'var _t1 = (_t2 as any); ' +
+            'var _t1 = _t2 as any; ' +
             '"" + (((_t1).value));');
       });
     });
@@ -913,7 +936,7 @@ describe('type check blocks', () => {
       it('should trace references to an <ng-template> when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
         expect(block).toContain(
-            'var _t3 = (_t4 as any as core.TemplateRef<any>); ' +
+            'var _t3 = (_t4 as any as i1.TemplateRef<any>); ' +
             '"" + (((_t3).value2));');
       });
 
@@ -922,7 +945,7 @@ describe('type check blocks', () => {
             TypeCheckingConfig = {...BASE_CONFIG, checkTypeOfNonDomReferences: false};
         const block = tcb(TEMPLATE, DIRECTIVES, DISABLED_CONFIG);
         expect(block).toContain(
-            'var _t1 = (_t2 as any); ' +
+            'var _t1 = _t2 as any; ' +
             '"" + (((_t1).value));');
       });
     });
@@ -962,12 +985,14 @@ describe('type check blocks', () => {
 
       it('should check types of pipes when enabled', () => {
         const block = tcb(TEMPLATE, PIPES);
-        expect(block).toContain('(null as TestPipe).transform(((ctx).a), ((ctx).b), ((ctx).c))');
+        expect(block).toContain('var _pipe1: i0.TestPipe = null!;');
+        expect(block).toContain('(_pipe1.transform(((ctx).a), ((ctx).b), ((ctx).c)));');
       });
       it('should not check types of pipes when disabled', () => {
         const DISABLED_CONFIG: TypeCheckingConfig = {...BASE_CONFIG, checkTypeOfPipes: false};
         const block = tcb(TEMPLATE, PIPES, DISABLED_CONFIG);
-        expect(block).toContain('(null as any).transform(((ctx).a), ((ctx).b), ((ctx).c))');
+        expect(block).toContain('var _pipe1: i0.TestPipe = null!;');
+        expect(block).toContain('((_pipe1 as any).transform(((ctx).a), ((ctx).b), ((ctx).c)));');
       });
     });
 
@@ -976,8 +1001,8 @@ describe('type check blocks', () => {
 
       it('should use undefined for safe navigation operations when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
-        expect(block).toContain('((null as any) ? (((ctx).a))!.method() : undefined)');
-        expect(block).toContain('((null as any) ? (((ctx).a))!.b : undefined)');
+        expect(block).toContain('(null as any ? (((ctx).a))!.method() : undefined)');
+        expect(block).toContain('(null as any ? (((ctx).a))!.b : undefined)');
       });
       it('should use an \'any\' type for safe navigation operations when disabled', () => {
         const DISABLED_CONFIG:
@@ -992,8 +1017,8 @@ describe('type check blocks', () => {
       const TEMPLATE = `{{a.method()?.b}} {{a()?.method()}}`;
       it('should check the presence of a property/method on the receiver when enabled', () => {
         const block = tcb(TEMPLATE, DIRECTIVES);
-        expect(block).toContain('((null as any) ? ((((ctx).a)).method())!.b : undefined)');
-        expect(block).toContain('((null as any) ? ((ctx).a())!.method() : undefined)');
+        expect(block).toContain('(null as any ? ((((ctx).a)).method())!.b : undefined)');
+        expect(block).toContain('(null as any ? ((ctx).a())!.method() : undefined)');
       });
       it('should not check the presence of a property/method on the receiver when disabled', () => {
         const DISABLED_CONFIG:
@@ -1009,13 +1034,13 @@ describe('type check blocks', () => {
 
       it('should use the generic type of the context when enabled', () => {
         const block = tcb(TEMPLATE);
-        expect(block).toContain('function Test_TCB<T extends string>(ctx: Test<T>)');
+        expect(block).toContain('function _tcb1<T extends string>(ctx: i0.Test<T>)');
       });
 
       it('should use any for the context generic type when disabled', () => {
         const DISABLED_CONFIG: TypeCheckingConfig = {...BASE_CONFIG, useContextGenericType: false};
         const block = tcb(TEMPLATE, undefined, DISABLED_CONFIG);
-        expect(block).toContain('function Test_TCB(ctx: Test<any>)');
+        expect(block).toContain('function _tcb1(ctx: i0.Test<any>)');
       });
     });
 
@@ -1038,7 +1063,7 @@ describe('type check blocks', () => {
                TypeCheckingConfig = {...BASE_CONFIG, honorAccessModifiersForInputBindings: true};
            const block = tcb(TEMPLATE, DIRECTIVES, enableChecks);
            expect(block).toContain(
-               'var _t1: Dir = (null!); ' +
+               'var _t1: i0.Dir = null!; ' +
                '_t1["some-input.xs"] = (((ctx).foo)); ');
          });
 
@@ -1056,9 +1081,40 @@ describe('type check blocks', () => {
             TypeCheckingConfig = {...BASE_CONFIG, honorAccessModifiersForInputBindings: true};
         const block = tcb(TEMPLATE, DIRECTIVES, enableChecks);
         expect(block).toContain(
-            'var _t1: Dir = (null!); ' +
+            'var _t1: i0.Dir = null!; ' +
             '_t1.fieldA = (((ctx).foo)); ');
       });
     });
   });
+
+  it('should use `any` type for type constructors with bound generic params ' +
+         'when `useInlineTypeConstructors` is `false`',
+     () => {
+       const template = `
+    <div dir
+      [inputA]='foo'
+      [inputB]='bar'
+      ></div>
+    `;
+       const declarations: TestDeclaration[] = [{
+         code: `
+           interface PrivateInterface{};
+           export class Dir<T extends PrivateInterface, U extends string> {};
+        `,
+         type: 'directive',
+         name: 'Dir',
+         selector: '[dir]',
+         inputs: {
+           inputA: 'inputA',
+           inputB: 'inputB',
+         },
+         isGeneric: true
+       }];
+
+       const renderedTcb = tcb(template, declarations, {useInlineTypeConstructors: false});
+
+       expect(renderedTcb).toContain(`var _t1: i0.Dir<any, any> = null!;`);
+       expect(renderedTcb).toContain(`_t1.inputA = (((ctx).foo));`);
+       expect(renderedTcb).toContain(`_t1.inputB = (((ctx).bar));`);
+     });
 });

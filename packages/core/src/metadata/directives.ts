@@ -7,7 +7,7 @@
  */
 
 import {ChangeDetectionStrategy} from '../change_detection/constants';
-import {Provider} from '../di';
+import {Provider} from '../di/interface/provider';
 import {Type} from '../interface/type';
 import {compileComponent as render3CompileComponent, compileDirective as render3CompileDirective} from '../render3/jit/directive';
 import {compilePipe as render3CompilePipe} from '../render3/jit/pipe';
@@ -424,8 +424,8 @@ export interface ComponentDecorator {
    *
    * ```html
    * <a>Spaces</a>&ngsp;<a>between</a>&ngsp;<a>links.</a>
-   * <!-->compiled to be equivalent to:</>
-   *  <a>Spaces</a> <a>between</a> <a>links.</a>
+   * <!-- compiled to be equivalent to:
+   *  <a>Spaces</a> <a>between</a> <a>links.</a>  -->
    * ```
    *
    * Note that sequences of `&ngsp;` are still collapsed to just one space character when
@@ -433,8 +433,8 @@ export interface ComponentDecorator {
    *
    * ```html
    * <a>before</a>&ngsp;&ngsp;&ngsp;<a>after</a>
-   * <!-->compiled to be equivalent to:</>
-   *  <a>Spaces</a> <a>between</a> <a>links.</a>
+   * <!-- compiled to be equivalent to:
+   *  <a>before</a> <a>after</a> -->
    * ```
    *
    * To preserve sequences of whitespace characters, use the
@@ -533,7 +533,7 @@ export interface Component extends Directive {
   encapsulation?: ViewEncapsulation;
 
   /**
-   * Overrides the default encapsulation start and end delimiters (`{{` and `}}`)
+   * Overrides the default interpolation start and end delimiters (`{{` and `}}`).
    */
   interpolation?: [string, string];
 
@@ -823,6 +823,11 @@ export interface HostListenerDecorator {
   /**
    * Decorator that declares a DOM event to listen for,
    * and provides a handler method to run when that event occurs.
+   *
+   * Angular invokes the supplied handler method when the host element emits the specified event,
+   * and updates the bound element with the result.
+   *
+   * If the handler method returns false, applies `preventDefault` on the bound element.
    */
   (eventName: string, args?: string[]): any;
   new(eventName: string, args?: string[]): any;

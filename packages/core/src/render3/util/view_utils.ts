@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {assertDefined, assertDomNode, assertGreaterThan, assertGreaterThanOrEqual, assertIndexInRange, assertLessThan} from '../../util/assert';
+import {assertDomNode, assertGreaterThan, assertGreaterThanOrEqual, assertIndexInRange, assertLessThan} from '../../util/assert';
 import {assertTNode, assertTNodeForLView} from '../assert';
 import {LContainer, TYPE} from '../interfaces/container';
-import {LContext, MONKEY_PATCH_KEY_NAME} from '../interfaces/context';
 import {TConstants, TNode} from '../interfaces/node';
-import {isProceduralRenderer, RNode} from '../interfaces/renderer';
+import {isProceduralRenderer} from '../interfaces/renderer';
+import {RNode} from '../interfaces/renderer_dom';
 import {isLContainer, isLView} from '../interfaces/type_checks';
 import {FLAGS, HEADER_OFFSET, HOST, LView, LViewFlags, PARENT, PREORDER_HOOK_FLAGS, RENDERER, TData, TRANSPLANTED_VIEWS_TO_REFRESH, TView} from '../interfaces/view';
 
@@ -140,24 +140,6 @@ export function getComponentLViewByIndex(nodeIndex: number, hostView: LView): LV
   const slotValue = hostView[nodeIndex];
   const lView = isLView(slotValue) ? slotValue : slotValue[HOST];
   return lView;
-}
-
-
-/**
- * Returns the monkey-patch value data present on the target (which could be
- * a component, directive or a DOM node).
- */
-export function readPatchedData(target: any): LView|LContext|null {
-  ngDevMode && assertDefined(target, 'Target expected');
-  return target[MONKEY_PATCH_KEY_NAME] || null;
-}
-
-export function readPatchedLView(target: any): LView|null {
-  const value = readPatchedData(target);
-  if (value) {
-    return Array.isArray(value) ? value : (value as LContext).lView;
-  }
-  return null;
 }
 
 /** Checks whether a given view is in creation mode */
