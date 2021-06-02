@@ -28,7 +28,7 @@ There are two ways to make a service a singleton in Angular:
 Angular에서 서비스를 싱글턴으로 사용하는 방법은 두 가지가 있습니다:
 
 * `@Injectable()` `providedIn` 프로퍼티에 `root`를 지정해서 서비스 프로바이더를 애플리케이션 루트에 등록하는 방법
-* 서비스를 `AppModule`에 선언하고 다른 모듈에서 `AppModule`만 로드하는 방법
+* 서비스를 `AppModule`에 등록하거나, `AppModule`만 로드하는 모듈에 등록하는 방법
 
 
 {@a providedIn}
