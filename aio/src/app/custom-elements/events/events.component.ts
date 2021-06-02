@@ -59,24 +59,11 @@ export class EventsComponent implements OnInit {
   getEventDates(event: Event) {
     let dateString;
 
-    // // Check if there is a workshop
-    // if (event.workshopsDate) {
-    //   const mainEventDateString = `${processDate(event.date)} (conference)`;
-    //   const workshopsDateString = `${processDate(event.workshopsDate)} (workshops)`;
-    //   const areWorkshopsBeforeEvent = isBefore(event.workshopsDate, event.date);
-
-    //   dateString = areWorkshopsBeforeEvent ?
-    //       `${workshopsDateString}, ${mainEventDateString}` :
-    //       `${mainEventDateString}, ${workshopsDateString}`;
-    // } else {
-    //   // If no work shop date create conference date string
-    //   dateString = processDate(event.date);
-    // }
-    // dateString = `${dateString}, ${new Date(event.date.end).getFullYear()}`;
-
     // Check if there is a workshop
     if (event.workshopsDate) {
+      // const mainEventDateString = `${processDate(event.date)} (conference)`;
       const mainEventDateString = `${processDate(event.date)} (컨퍼런스)`;
+      // const workshopsDateString = `${processDate(event.workshopsDate)} (workshops)`;
       const workshopsDateString = `${processDate(event.workshopsDate)} (워크샵)`;
       const areWorkshopsBeforeEvent = isBefore(event.workshopsDate, event.date);
 
