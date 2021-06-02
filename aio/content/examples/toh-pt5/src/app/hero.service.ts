@@ -12,16 +12,18 @@ export class HeroService {
   constructor(private messageService: MessageService) { }
 
   getHeroes(): Observable<Hero[]> {
-    // TODO: 이 메시지는 서버에서 히어로 정보를 가져온 _후에_ 보내야 합니다.
+    const heroes = of(HEROES);
     this.messageService.add('HeroService: fetched heroes');
-    return of(HEROES);
+    return heroes;
   }
 
   // #docregion getHero
   getHero(id: number): Observable<Hero> {
-    // TODO: 이 메시지는 서버에서 히어로 정보를 가져온 _후에_ 보내야 합니다.
+    // 지금은 히어로의 `id` 프로퍼티가 항상 존재한다고 간주합니다.
+    // 에러를 처리하는 방법은 다음 튜토리얼에 대해 알아봅니다.
+    const hero = HEROES.find(h => h.id === id)!;
     this.messageService.add(`HeroService: fetched hero id=${id}`);
-    return of(HEROES.find(hero => hero.id === id));
+    return of(hero);
   }
   // #enddocregion getHero
 }

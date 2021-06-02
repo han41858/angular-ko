@@ -11,15 +11,24 @@ Angular Universal executes on the _server_, generating _static_ application page
 the client. This means that the application generally renders more quickly, giving users a chance to view the application
 layout before it becomes fully interactive.
 
-For a more detailed look at different techniques and concepts surrounding SSR, please check out this
+For a more detailed look at different techniques and concepts surrounding SSR, check out this
 [article](https://developers.google.com/web/updates/2019/02/rendering-on-the-web).
 
-You can easily prepare an app for server-side rendering using the [Angular CLI](guide/glossary#cli).
+You can easily prepare an application for server-side rendering using the [Angular CLI](guide/glossary#cli).
 The CLI schematic `@nguniversal/express-engine` performs the required steps, as described below.
--->
-이 문서는 **Angular Universal**에 대해 소개합니다. Angular Universal은 Angular 애플리케이션을 서버에서 실행하는 테크닉입니다.
 
-일반적으로 Angular 애플리케이션은 _브라우저_ 에서 실행됩니다. DOM에 페이지가 렌더링되고 사용자의 동작에 반응하는 것도 모두 브라우저에서 이루어집니다.
+<div class="alert is-helpful">
+
+  **Note:** <live-example downloadOnly>Download the finished sample code</live-example>,
+  which runs in a [Node.js® Express](https://expressjs.com/) server.
+
+</div>
+-->
+이 문서는 **Angular Universal**에 대해 소개합니다.
+Angular Universal은 Angular 애플리케이션을 서버에서 실행하는 테크닉입니다.
+
+일반적으로 Angular 애플리케이션은 _브라우저_ 에서 실행됩니다.
+DOM에 페이지가 렌더링되고 사용자의 동작에 반응하는 것도 모두 브라우저에서 이루어집니다.
 하지만 이와 다르게 Angular Universal은 _서버_ 에 미리 _정적_ 으로 생성해둔 애플리케이션을 클라이언트가 실행하고, 그 이후에 클라이언트에서 앱을 다시 부트스트랩하는 테크닉입니다.
 이 방식을 사용하면 애플리케이션을 좀 더 빠르게 실행할 수 있기 때문에 사용자가 보는 애플리케이션 화면도 빠르게 띄울 수 있습니다.
 
@@ -30,13 +39,10 @@ Angular CLI 스키매틱 중 `@nguniversal/express-engine`를 활용하는 방�
 
 <div class="alert is-helpful">
 
-  <!--
-  **Note:** <live-example downloadOnly>Download the finished sample code</live-example>,
-  which runs in a [Node.js® Express](https://expressjs.com/) server.
-  -->
   **참고:**  <live-example downloadOnly>완성된 샘플 코드를 다운</live-example>받고 [Node.js® Express](https://expressjs.com/) 서버에서 직접 실행해볼 수 있습니다.
 
 </div>
+
 
 {@a the-example}
 <!--
@@ -47,11 +53,11 @@ Angular CLI 스키매틱 중 `@nguniversal/express-engine`를 활용하는 방�
 <!--
 The [Tour of Heroes tutorial](tutorial) is the foundation for this walkthrough.
 
-In this example, the Angular CLI compiles and bundles the Universal version of the app with the
+In this example, the Angular CLI compiles and bundles the Universal version of the application with the
 [Ahead-of-Time (AOT) compiler](guide/aot-compiler).
 A Node.js Express web server compiles HTML pages with Universal based on client requests.
 
-To create the server-side app module, `app.server.module.ts`, run the following CLI command.
+To create the server-side application module, `app.server.module.ts`, run the following CLI command.
 
 <code-example language="bash">
 
@@ -110,13 +116,14 @@ tsconfig.spec.json           <i>TypeScript 스펙용 환경설정 파일</i>
 
 이 중 `*` 표시가 된 파일이 새로 추가된 파일입니다.
 
+
 <!--
 ### Universal in action
 -->
 ### Universal 앱 실행하기
 
 <!--
-To start rendering your app with Universal on your local system, use the following command.
+To start rendering your application with Universal on your local system, use the following command.
 
 <code-example language="bash">
 npm run dev:ssr
@@ -125,23 +132,22 @@ npm run dev:ssr
 Open a browser and navigate to http://localhost:4200/.
 You should see the familiar Tour of Heroes dashboard page.
 
-Navigation via `routerLinks` works correctly because they use the native anchor (`<a>`) tags.
+Navigation using `routerLinks` works correctly because they use the native anchor (`<a>`) tags.
 You can go from the Dashboard to the Heroes page and back.
 You can click a hero on the Dashboard page to display its Details page.
 
 If you throttle your network speed so that the client-side scripts take longer to download (instructions below),
 you'll notice:
-* Clicking a hero on the Heroes page does nothing.
 * You can't add or delete a hero.
 * The search box on the Dashboard page is ignored.
 * The *Back* and *Save* buttons on the Details page don't work.
 
 User events other than `routerLink` clicks aren't supported.
-You must wait for the full client app to bootstrap and run, or buffer the events using libraries like
+You must wait for the full client application to bootstrap and run, or buffer the events using libraries like
 [preboot](https://github.com/angular/preboot), which allow you to replay these events once the client-side scripts load.
 
-The transition from the server-rendered app to the client app happens quickly on a development machine, but you should
-always test your apps in real-world scenarios.
+The transition from the server-rendered application to the client application happens quickly on a development machine, but you should
+always test your applications in real-world scenarios.
 
 You can simulate a slower network to see the transition more clearly as follows:
 
@@ -150,7 +156,7 @@ You can simulate a slower network to see the transition more clearly as follows:
 dropdown on the far right of the menu bar.
 1. Try one of the "3G" speeds.
 
-The server-rendered app still launches quickly but the full client app may take seconds to load.
+The server-rendered application still launches quickly but the full client application may take seconds to load.
 -->
 로컬 개발 환경에서 Angular 앱을 Universal로 렌더링하려면 다음 명령을 실행하면 됩니다.
 
@@ -166,7 +172,6 @@ npm run dev:ssr
 그리고 대시보드 화면에서 히어로를 클릭하면 히어로 상세정보 화면으로 이동할 수 있습니다.
 
 이 상태에서 네트워크 속도를 제한하면 애플리케이션 코드를 다운로드하는 속도가 느려지기 때문에 다음과 같은 현상이 발생합니다:
-* 히어로 목록 화면에서 히어로를 클릭하면 아무일도 일어나지 않습니다.
 * 히어로를 추가하거나 삭제할 수 없습니다.
 * 대시보드 화면에 있는 검색창이 동작하지 않습니다.
 * 히어로 상세정보 화면에 있는 *Back*, *Save* 버튼이 동작하지 않습니다.
@@ -192,11 +197,10 @@ npm run dev:ssr
 ## 서버 사이드 렌더링은 왜 필요한가요?
 
 <!--
-There are three main reasons to create a Universal version of your app.
+There are three main reasons to create a Universal version of your application.
 
 1. Facilitate web crawlers through [search engine optimization (SEO)](https://static.googleusercontent.com/media/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf)
 1. Improve performance on mobile and low-powered devices
-
 1. Show the first page quickly with a [first-contentful paint (FCP)](https://developers.google.com/web/tools/lighthouse/audits/first-contentful-paint)
 -->
 1. [검색 엔진 최적화(SEO)](https://static.googleusercontent.com/media/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf)를 통해 웹 크롤러에 대응하기 위해
@@ -216,7 +220,7 @@ Google, Bing, Facebook, Twitter, and other social media sites rely on web crawle
 make that content searchable on the web.
 These web crawlers may be unable to navigate and index your highly interactive Angular application as a human user could do.
 
-Angular Universal can generate a static version of your app that is easily searchable, linkable, and navigable without JavaScript.
+Angular Universal can generate a static version of your application that is easily searchable, linkable, and navigable without JavaScript.
 Universal also makes a site preview available since each URL returns a fully rendered page.
 
 Enabling web crawlers is often referred to as
@@ -225,13 +229,14 @@ Enabling web crawlers is often referred to as
 Google, Bing, Facebook, Twitter와 같은 소셜 미디어 사이트는 웹 애플리케이션 컨텐츠를 수집하고 검색에 활용하기 위해 웹 크롤러를 사용합니다.
 그런데 이런 웹 크롤러는 진짜 사람이 하는 것처럼 애플리케이션 페이지를 효율적으로 이동하면서 원하는 내용을 수집하지는 못합니다.
 
-Angular Universal은 이런 경우에 사용합니다. Angular Universal을 적용하면 애플리케이션을 정적으로 빌드해둘 수 있기 때문에 컨텐츠를 검색하기 쉽고, 링크를 연결할 수 있으며, JavaScript를 사용하지 않아도 페이지를 전환할 수 있습니다.
+Angular Universal은 이런 경우에 사용합니다.
+Angular Universal을 적용하면 애플리케이션을 정적으로 빌드해둘 수 있기 때문에 컨텐츠를 검색하기 쉽고, 링크를 연결할 수 있으며, JavaScript를 사용하지 않아도 페이지를 전환할 수 있습니다.
 그리고 Universal을 적용하면 완전히 렌더링된 페이지를 서버에 준비하기 때문에 웹사이트의 미리보기 화면을 제공할 수도 있습니다.
 
 웹 크롤러에 대응하는 과정은 [검색 엔진 최적화(search engine optimization, SEO)](https://static.googleusercontent.com/media/www.google.com/en//webmasters/docs/search-engine-optimization-starter-guide.pdf)라고도 합니다.
 
-{@a no-javascript}
 
+{@a no-javascript}
 <!--
 ### Improve performance on mobile and low-powered devices
 -->
@@ -239,16 +244,16 @@ Angular Universal은 이런 경우에 사용합니다. Angular Universal을 적�
 
 <!--
 Some devices don't support JavaScript or execute JavaScript so poorly that the user experience is unacceptable.
-For these cases, you may require a server-rendered, no-JavaScript version of the app.
+For these cases, you may require a server-rendered, no-JavaScript version of the application.
 This version, however limited, may be the only practical alternative for
-people who otherwise couldn't use the app at all.
+people who otherwise couldn't use the application at all.
 -->
 JavaScript를 지원하지 않는 디바이스가 존재하기도 하고 JavaScript를 실행하는 것이 오히려 사용자의 UX를 해치는 디바이스도 존재합니다.
 이런 경우에는 클라이언트에서 JavaScript를 실행하지 말고 서버에서 미리 렌더링된 앱을 보내서 간단하게 실행하는 것이 더 좋습니다.
 앱을 이렇게 제공하면 원래 사용자에게 제공하려던 기능을 모두 제공할 수는 없겠지만, 앱을 전혀 사용할 수 없는 상황은 피할 수 있습니다.
 
-{@a startup-performance}
 
+{@a startup-performance}
 <!--
 ### Show the first page quickly
 -->
@@ -257,16 +262,16 @@ JavaScript를 지원하지 않는 디바이스가 존재하기도 하고 JavaScr
 <!--
 Displaying the first page quickly can be critical for user engagement.
 Pages that load faster perform better, [even with changes as small as 100ms](https://web.dev/shopping-for-speed-on-ebay/).
-Your app may have to launch faster to engage these users before they decide to do something else.
+Your application may have to launch faster to engage these users before they decide to do something else.
 
-With Angular Universal, you can generate landing pages for the app that look like the complete app.
+With Angular Universal, you can generate landing pages for the application that look like the complete application.
 The pages are pure HTML, and can display even if JavaScript is disabled.
-The pages don't handle browser events, but they _do_ support navigation through the site using [`routerLink`](guide/router#router-link).
+The pages don't handle browser events, but they _do_ support navigation through the site using [`routerLink`](guide/router-reference#router-link).
 
 In practice, you'll serve a static version of the landing page to hold the user's attention.
-At the same time, you'll load the full Angular app behind it.
+At the same time, you'll load the full Angular application behind it.
 The user perceives near-instant performance from the landing page
-and gets the full interactive experience after the full app loads.
+and gets the full interactive experience after the full application loads.
 -->
 사용자를 사로잡으려면 첫 번째 화면을 빨리 표시하는 것이 아주 중요합니다.
 화면이 빠르게 뜰수록 사용자가 앱을 더 많이 사용할 수 있기 때문에 [100ms만 줄여도 비즈니스에 도움이 될 수 있습니다](https://web.dev/shopping-for-speed-on-ebay/).
@@ -274,7 +279,7 @@ UX 측면에서도 사용자가 어떤 동작을 하기 전에 앱이 빠르게 
 
 Angular Universal을 사용하면 설치형 앱과 거의 비슷하게 동작하는 랜딩 페이지를 생성할 수 있습니다.
 페이지는 HTML만으로 구성되기 때문에 JavaScript가 비활성화되어도 화면을 제대로 표시할 수 있습니다.
-다만, JavaScript가 실행되지 않으면 브라우저 이벤트를 처리할 수 없기 때문에 네비게이션은 [`routerLink`](guide/router#router-link)를 사용하는 방식으로 구현되어야 합니다.
+다만, JavaScript가 실행되지 않으면 브라우저 이벤트를 처리할 수 없기 때문에 네비게이션은 [`routerLink`](guide/router-reference#router-link)를 사용하는 방식으로 구현되어야 합니다.
 
 운영환경에서도 첫 페이지를 빠르게 표시하기 위해 페이지를 정적으로 렌더링해서 제공하는 경우가 많습니다.
 그 이후에 온전한 버전의 Angular 앱을 로드하는 방법을 사용하기도 합니다.
@@ -282,7 +287,6 @@ Angular Universal을 사용하면 설치형 앱과 거의 비슷하게 동작하
 
 
 {@a how-does-it-work}
-
 <!--
 ## Universal web servers
 -->
@@ -304,7 +308,7 @@ Universal 웹 서버는 애플리케이션 페이지 요청을 받았을 때 [Un
 <div class="alert is-helpful">
 
   <!--
-  **Note:** _Any_ web server technology can serve a Universal app as long as it can call Universal's `renderModule()` function.
+  **Note:** _Any_ web server technology can serve a Universal application as long as it can call Universal's `renderModule()` function.
   The principles and decision points discussed here apply to any web server technology.
   -->
   **참고:** Angular Universal이 제공하는 `renderModule()` 함수를 실행할수만 있다면 _아무_ 웹 서버를 사용해도 Universal 앱을 제공할 수 있습니다.
@@ -351,7 +355,7 @@ Universal 애플리케이션은 (`platform-browser` 대신) Angular가 제공하
 ### 브라우저 API 활용하기
 
 <!--
-Because a Universal app doesn't execute in the browser, some of the browser APIs and capabilities may be missing on the server.
+Because a Universal application doesn't execute in the browser, some of the browser APIs and capabilities may be missing on the server.
 
 For example, server-side applications can't reference browser-only global objects such as `window`, `document`, `navigator`, or `location`.
 
@@ -360,9 +364,9 @@ or [`DOCUMENT`](api/common/DOCUMENT); it may substitute adequately for these API
 If Angular doesn't provide it, it's possible to write new abstractions that delegate to the browser APIs while in the browser
 and to an alternative implementation while on the server (aka shimming).
 
-Similarly, without mouse or keyboard events, a server-side app can't rely on a user clicking a button to show a component.
-The app must determine what to render based solely on the incoming client request.
-This is a good argument for making the app [routable](guide/router).
+Similarly, without mouse or keyboard events, a server-side application can't rely on a user clicking a button to show a component.
+The application must determine what to render based solely on the incoming client request.
+This is a good argument for making the application [routable](guide/router).
 -->
 Universal `platform-server` 앱은 브라우저에서 실행되지 않기 때문에 브라우저 API를 직접 활용할 수 없습니다.
 
@@ -371,7 +375,8 @@ Universal `platform-server` 앱은 브라우저에서 실행되지 않기 때문
 Angular는 이런 객체를 참조해야 하는 상황을 대비해서 [`Localtion`](api/common/Location)이나 [`DOCUMENT`](api/common/DOCUMENT) 과 같은 추상 클래스를 제공하기 때문에, 필요한 곳에 의존성으로 주입받아 사용하면 됩니다.
 그리고 Angular가 제공하는 추상 클래스로 해결할 수 없다면 개발자가 직접 이 추상 클래스를 정의해야 합니다.
 
-이와 비슷하게, 마우스 이벤트나 키보드 이벤트도 서버 사이드 앱에는 존재하지 않습니다. 서버에서 페이지를 렌더링하는데 컴포넌트를 표시하는 버튼을 누를 사용자가 없기 때문입니다.
+이와 비슷하게, 마우스 이벤트나 키보드 이벤트도 서버 사이드 앱에는 존재하지 않습니다.
+서버에서 페이지를 렌더링하는데 컴포넌트를 표시하는 버튼을 누를 사용자가 없기 때문입니다.
 그렇다면 서버 사이드 앱은 클라이언트의 요청만으로 온전히 렌더링할 수 있는 로직으로 작성해야 합니다.
 이 방식은 앱을 [라우팅할 수 있도록](guide/router) 구현한다는 측면에서도 활용할 수 있습니다.
 
@@ -395,8 +400,8 @@ The important bit in the `server.ts` file is the `ngExpressEngine()` function.
 The `ngExpressEngine()` function is a wrapper around Universal's `renderModule()` function which turns a client's
 requests into server-rendered HTML pages. It accepts an object with the following properties:
 
-* `bootstrap`: The root `NgModule` or `NgModule` factory to use for bootstraping the app when rendering on the server. For the example app, it is `AppServerModule`. It's the bridge between the Universal server-side renderer and the Angular application.
-* `extraProviders`: This is optional and lets you specify dependency providers that apply only when rendering the app on the server. You can do this when your app needs information that can only be determined by the currently running server instance.
+* `bootstrap`: The root `NgModule` or `NgModule` factory to use for bootstraping the application when rendering on the server. For the example app, it is `AppServerModule`. It's the bridge between the Universal server-side renderer and the Angular application.
+* `extraProviders`: This is optional and lets you specify dependency providers that apply only when rendering the application on the server. You can do this when your application needs information that can only be determined by the currently running server instance.
 
 The `ngExpressEngine()` function returns a `Promise` callback that resolves to the rendered page.
 It's up to the engine to decide what to do with that page.
@@ -420,7 +425,8 @@ which then forwards it to the client in the HTTP response.
   for different backend technologies at the [Universal repository](https://github.com/angular/universal).
 
   -->
-  **참고:** `renderModule()` 함수를 직접 사용하는 것보다는 `ngExpressEngine()` 랩핑 헬퍼를 사용하는 것이 편합니다. 이와 비슷한 방식으로 제공되는 랩퍼 함수들을 알아보려면 [Universal 레파지토리](https://github.com/angular/universal)를 참고하세요.
+  **참고:** `renderModule()` 함수를 직접 사용하는 것보다는 `ngExpressEngine()` 랩핑 헬퍼를 사용하는 것이 편합니다.
+  이와 비슷한 방식으로 제공되는 랩퍼 함수들을 알아보려면 [Universal 레파지토리](https://github.com/angular/universal)를 참고하세요.
 
 </div>
 
@@ -437,7 +443,7 @@ The web server must distinguish _app page requests_ from other kinds of requests
 
 It's not as simple as intercepting a request to the root address `/`.
 The browser could ask for one of the application routes such as `/dashboard`, `/heroes`, or `/detail:12`.
-In fact, if the app were only rendered by the server, _every_ app link clicked would arrive at the server
+In fact, if the application were only rendered by the server, _every_ application link clicked would arrive at the server
 as a navigation URL intended for the router.
 
 Fortunately, application routes have something in common: their URLs lack file extensions.
@@ -548,11 +554,11 @@ You don't need to do anything to make relative URLs work on the server.
 If, for some reason, you are not using an `@nguniversal/*-engine` package, you may need to handle it yourself.
 
 The recommended solution is to pass the full request URL to the `options` argument of [renderModule()](api/platform-server/renderModule) or [renderModuleFactory()](api/platform-server/renderModuleFactory) (depending on what you use to render `AppServerModule` on the server).
-This option is the least intrusive as it does not require any changes to the app.
-Here, "request URL" refers to the URL of the request as a response to which the app is being rendered on the server.
-For example, if the client requested `https://my-server.com/dashboard` and you are rendering the app on the server to respond to that request, `options.url` should be set to `https://my-server.com/dashboard`.
+This option is the least intrusive as it does not require any changes to the application.
+Here, "request URL" refers to the URL of the request as a response to which the application is being rendered on the server.
+For example, if the client requested `https://my-server.com/dashboard` and you are rendering the application on the server to respond to that request, `options.url` should be set to `https://my-server.com/dashboard`.
 
-Now, on every HTTP request made as part of rendering the app on the server, Angular can correctly resolve the request URL to an absolute URL, using the provided `options.url`.
+Now, on every HTTP request made as part of rendering the application on the server, Angular can correctly resolve the request URL to an absolute URL, using the provided `options.url`.
 -->
 튜토리얼에서 다룬 `HeroService`와 `HeroSearchService`는 Angular `HttpClient` 모듈을 사용해서 애플리케이션 데이터를 가져옵니다.
 이 때 서비스는 `api/heroes`와 같은 _상대_ URL로 요청을 보냅니다.

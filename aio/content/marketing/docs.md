@@ -102,7 +102,7 @@ for information about submission guidelines.
 Our community values respectful, supportive communication.
 Please consult and adhere to the [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md "Contributor code of conduct").
 -->
-<h4>우리는 멀리 있지 않습니다!</h4>
+<h3>저희는 멀리 있지 않습니다!</h4>
 
 개발자들의 의견을 듣고 싶습니다. [문제가 있거나 문서에 반영하고 싶은 내용이 있다면 이곳에 올려주세요.](https://github.com/angular/angular/issues/new/choose "Angular GitHub repository new issue form")
 

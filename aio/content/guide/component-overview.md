@@ -44,14 +44,14 @@ To view or download the example code used in this topic, see the <live-example><
 <!--
 To create a component, verify that you have met the following prerequisites:
 
-1. Install the Angular CLI.
-1. Create an Angular project.
+1. [Install the Angular CLI.](guide/setup-local#install-the-angular-cli)
+1. [Create an Angular workspace](guide/setup-local#create-a-workspace-and-initial-application) with initial application.
    If you don't have a project, you can create one using `ng new <project-name>`, where `<project-name>` is the name of your Angular application.
 -->
 컴포넌트를 만들려면 이런 환경이 준비되어야 합니다:
 
-1. Angular CLI가 설치되어 있어야 합니다.
-1. Angular 프로젝트가 있어야 합니다.
+1. [Angular CLI가 설치되어 있어야 합니다.](guide/setup-local#install-the-angular-cli)
+1. [Angular 워크스페이스](guide/setup-local#create-a-workspace-and-initial-application)가 존재하고 이 안에 기본 애플리케이션이 있어야 합니다.
 아직 프로젝트가 없다면 `ng new <프로젝트-이름>` 명령을 실행해서 프로젝트를 생성할 수 있습니다.
 
 
@@ -242,9 +242,9 @@ To create a new component manually:
 ## 컴포넌트 CSS 셀렉터 지정하기
 
 <!--
-Every component requires a CSS _selector_. A selector instructs Angular to instantiate this component wherever it finds the corresponding tag in template HTML. For example, consider a component, `hello-world.component.ts` that defines its selector as `app-hello-world`. This selector instructs angular to instantiate this component any time the tag, `<app-hello-world>` in a template.
+Every component requires a CSS _selector_. A selector instructs Angular to instantiate this component wherever it finds the corresponding tag in template HTML. For example, consider a component `hello-world.component.ts` that defines its selector as `app-hello-world`. This selector instructs Angular to instantiate this component any time the tag `<app-hello-world>` appears in a template.
 
-To specify a component's selector, add a `selector` statement to the `@Component` decorator.
+Specify a component's selector by adding a `selector` statement to the `@Component` decorator.
 
 <code-example
     path="component-overview/src/app/component-overview/component-overview.component.ts"
@@ -341,14 +341,14 @@ An Angular component requires a template defined using `template` or `templateUr
 <!--
 You can declare component styles uses for its template in one of two ways: by referencing an external file, or directly within the component.
 
-To declare the styles for a component in a separate file, add a `stylesUrls` property to the `@Component` decorator.
+To declare the styles for a component in a separate file, add a `styleUrls` property to the `@Component` decorator.
 
 <code-example
     path="component-overview/src/app/component-overview/component-overview.component.ts"
     region="decorator">
 </code-example>
 
-To select the styles within the component, add a `styles` property to the `@Component` decorator that contains the styles you want to use.
+To declare the styles within the component, add a `styles` property to the `@Component` decorator that contains the styles you want to use.
 
 <code-example
     path="component-overview/src/app/component-overview/component-overview.component.3.ts"
@@ -359,7 +359,7 @@ The `styles` property takes an array of strings that contain the CSS rule declar
 -->
 템플릿에 적용될 컴포넌트 스타일은 컴포넌트 안에 직접 정의하거나, 별도 파일로 만들고 컴포넌트에 불러오는 방법을 사용합니다.
 
-컴포넌트 스타일을 별도 파일로 정의하려면 `@Component` 데코레이터의 `stylesUrls` 프로퍼티를 지정하면 됩니다.
+컴포넌트 스타일을 별도 파일로 정의하려면 `@Component` 데코레이터의 `styleUrls` 프로퍼티를 지정하면 됩니다.
 
 <code-example
     path="component-overview/src/app/component-overview/component-overview.component.ts"
@@ -391,3 +391,5 @@ The `styles` property takes an array of strings that contain the CSS rule declar
 * 컴포넌트를 정의할 때 사용할 수 있는 옵션에 대해 알아보려면 [컴포넌트 API 문서](api/core/Component)를 참고하세요.
 * 컴포넌트에 스타일을 지정하는 방법에 대해 자세하게 알아보려면 [컴포넌트 스타일](guide/component-styles) 문서를 참고하세요.
 * 템플릿에 대해 자세하게 알아보려면 [템플릿 문법](guide/template-syntax) 문서를 참고하세요.
+
+@reviewed 2021-03-18

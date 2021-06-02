@@ -1,7 +1,7 @@
 <!--
-# Hooking into the component lifecycle
+# Lifecycle hooks
 -->
-# 컴포넌트 라이프싸이클 후킹
+# 라이프싸이클 후킹 함수
 
 <!--
 A component instance has a lifecycle that starts when Angular instantiates the component class and renders the component view along with its child views.
@@ -51,7 +51,7 @@ The hooks give you the opportunity to act on a component or directive instance a
 Each interface defines the prototype for a single hook method, whose name is the interface name prefixed with `ng`.
 For example, the `OnInit` interface has a hook method named `ngOnInit()`. If you implement this method in your component or directive class, Angular calls it shortly after checking the input properties for that component or directive for the first time.
 
-<code-example path="lifecycle-hooks/src/app/peek-a-boo.component.ts" region="ngOnInit" header="peek-a-boo.component.ts (excerpt)"></code-example>
+<code-example path="lifecycle-hooks/src/app/peek-a-boo.directive.ts" region="ngOnInit" header="peek-a-boo.directive.ts (excerpt)"></code-example>
 
 You don't have to implement all (or any) of the lifecycle hooks, just the ones you need.
 -->
@@ -62,7 +62,7 @@ Angular `core` 라이브러리의 *라이프싸이클 훅* 인터페이스에 �
 `OnInit` 인터페이스에는 `ngOnInit()` 메서드가 정의되어 있는 식입니다.
 `ngOnInit()` 메서드를 컴포넌트나 디렉티브 클래스에 정의하면 Angular가 입력 프로퍼티를 검사한 직후에 실행되기 때문에 인스턴스 초기화 로직을 작성할 수 있습니다.
 
-<code-example path="lifecycle-hooks/src/app/peek-a-boo.component.ts" region="ngOnInit" header="peek-a-boo.component.ts (일부)"></code-example>
+<code-example path="lifecycle-hooks/src/app/peek-a-boo.directive.ts" region="ngOnInit" header="peek-a-boo.directive.ts (일부)"></code-example>
 
 라이프싸이클 후킹 함수를 전부 구현할 필요는 없습니다.
 필요한 것만 구현해서 사용하면 됩니다.
@@ -120,11 +120,11 @@ Angular executes hook methods in the following sequence. You can use them to per
     <td>
 
       <!--
-      Called before `ngOnInit()` and whenever one or more data-bound input properties change.
+      Called before `ngOnInit()` (if the component has bound inputs) and whenever one or more data-bound input properties change.
 
       Note that if your component has no inputs or you use it without providing any inputs, the framework will not call `ngOnChanges()`.
       -->
-      `ngOnInit()`이 실행되기 전에 한 번 실행되며 입력 프로퍼티로 바인딩된 값이 변경될 때마다 실행됩니다.
+      (컴포넌트에 입력 프로퍼티가 바인딩된 후) `ngOnInit()`이 실행되기 전에 한 번 실행되며 입력 프로퍼티로 바인딩된 값이 변경될 때마다 실행됩니다.
 
       컴포넌트에 입력 프로퍼티가 없거나, 선언하고 사용하지 않는다면 `ngOnChanges()`가 실행되지 않습니다.
 
@@ -148,9 +148,10 @@ Angular executes hook methods in the following sequence. You can use them to per
     <td>
 
       <!--
-      Called once, after the first `ngOnChanges()`.
+      Called once, after the first `ngOnChanges()`. `ngOnInit()` is still called even when `ngOnChanges()` is not (which is the case when there are no template-bound inputs).
       -->
       `ngOnChanges()`가 처음 실행된 후에 한 번 실행됩니다.
+      `ngOnInit()` 템플릿에 입력 프로퍼티가 연결되지 않아 `ngOnChanges()`가 실행되지 않아도 실행됩니다.
 
     </td>
   </tr>
@@ -170,10 +171,10 @@ Angular executes hook methods in the following sequence. You can use them to per
     </td>
     <td>
 
-      <!--
-      Called immediately after `ngOnChanges()` on every change detection run, and immediately after `ngOnInit()` on the first run.
-      -->
-      `ngOnInit()`이 실행된 직후에 한 번 실행되며, 변화 감지 싸이클이 실행되면서 `ngOnChanges()`가 실행된 이후에 매번 실행됩니다.
+    <!--
+    Called immediately after `ngOnChanges()` on every change detection run, and immediately after `ngOnInit()` on the first run.
+    -->
+    `ngOnInit()`이 실행된 직후에 한 번 실행되며, 변화 감지 싸이클이 실행되면서 `ngOnChanges()`가 실행된 이후에 매번 실행됩니다.
 
     </td>
   </tr>
@@ -636,7 +637,7 @@ You can't touch the implementation of a native `<div>`, or modify a third party 
 You can, however watch these elements with a directive.
 
 The directive defines `ngOnInit()` and `ngOnDestroy()` hooks
-that log messages to the parent via an injected `LoggerService`.
+that log messages to the parent using an injected `LoggerService`.
 
 <code-example path="lifecycle-hooks/src/app/spy.directive.ts" region="spy-directive" header="src/app/spy.directive.ts"></code-example>
 
@@ -646,14 +647,7 @@ Here it is attached to the repeated hero `<div>`:
 
 <code-example path="lifecycle-hooks/src/app/spy.component.html" region="template" header="src/app/spy.component.html"></code-example>
 
-Each spy's creation and destruction marks the appearance and disappearance of the attached hero `<div>`
-with an entry in the *Hook Log* as seen here:
-
-<div class="lightbox">
-  <img src='generated/images/guide/lifecycle-hooks/spy-directive.gif' alt="Spy Directive">
-</div>
-
-Adding a hero results in a new hero `<div>`. The spy's `ngOnInit()` logs that event.
+Each spy's creation and destruction marks the appearance and disappearance of the attached hero `<div>` with an entry in the *Hook Log*. Adding a hero results in a new hero `<div>`. The spy's `ngOnInit()` logs that event.
 
 The *Reset* button clears the `heroes` list.
 Angular removes all hero `<div>` elements from the DOM and destroys their spy directives at the same time.
@@ -679,13 +673,9 @@ The spy's `ngOnDestroy()` method reports its last moments.
 
 <code-example path="lifecycle-hooks/src/app/spy.component.html" region="template" header="src/app/spy.component.html"></code-example>
 
-히어로 목록이 변경되면서 `<div>` 엘리먼트가 화면에 나타나거나 제거되면 관련 로그가 다음과 같이 표시됩니다:
-
-<div class="lightbox">
-  <img src='generated/images/guide/lifecycle-hooks/spy-directive.gif' alt="Spy Directive">
-</div>
-
-새 히어로가 추가되면서 `<div>` 엘리먼트가 DOM에 추가되면 `ngOnInit()` 에 정의한 로그가 화면에 표시됩니다.
+개별 스파이는 히어로 `<div>`가 화면에 표시되거나 화면에서 제거될 때마다 생성되고 종료되며, 이 내용은 로그로 기록됩니다.
+히어로 `<div>`를 하나 추가해 보세요.
+`ngOnInit()`가 실행된 것을 로그로 확인할 수 있습니다.
 
 *Reset* 버튼을 눌러서 `heroes` 목록을 초기화 해보세요.
 그러면 Angular가 히어로와 관련된 `<div>` 엘리먼트를 모두 DOM에서 제거하면서 스파이 디렉티브도 종료됩니다.
@@ -793,14 +783,14 @@ The *AfterView* sample explores the `AfterViewInit()` and `AfterViewChecked()` h
 
 Here's a child view that displays a hero's name in an `<input>`:
 
-<code-example path="lifecycle-hooks/src/app/after-view.component.ts" region="child-view" header="ChildComponent"></code-example>
+<code-example path="lifecycle-hooks/src/app/child-view.component.ts" region="child-view" header="ChildViewComponent"></code-example>
 
 The `AfterViewComponent` displays this child view *within its template*:
 
 <code-example path="lifecycle-hooks/src/app/after-view.component.ts" region="template" header="AfterViewComponent (template)"></code-example>
 
 The following hooks take action based on changing values *within the child view*,
-which can only be reached by querying for the child view via the property decorated with
+which can only be reached by querying for the child view using the property decorated with
 [@ViewChild](api/core/ViewChild).
 
 <code-example path="lifecycle-hooks/src/app/after-view.component.ts" region="hooks" header="AfterViewComponent (class excerpts)"></code-example>
@@ -815,7 +805,7 @@ which can only be reached by querying for the child view via the property decora
 
 자식 뷰는 히어로의 이름을 `<input>` 엘리먼트에 표시합니다:
 
-<code-example path="lifecycle-hooks/src/app/after-view.component.ts" region="child-view" header="ChildComponent"></code-example>
+<code-example path="lifecycle-hooks/src/app/child-view.component.ts" region="child-view" header="ChildComponent"></code-example>
 
 그리고 `AfterViewComponent`는 *템플릿 안에* 이 자식 뷰를 표시합니다:
 
@@ -911,7 +901,7 @@ This time, instead of including the child view within the template, it imports t
 the `AfterContentComponent`'s parent.
 The following is the parent's template.
 
-<code-example path="lifecycle-hooks/src/app/after-content.component.ts" region="parent-template" header="AfterContentParentComponent (template excerpt)"></code-example>
+<code-example path="lifecycle-hooks/src/app/after-content-parent.component.ts" region="parent-template" header="AfterContentParentComponent (template excerpt)"></code-example>
 
 Notice that the `<app-child>` tag is tucked between the `<after-content>` tags.
 Never put content between a component's element tags *unless you intend to project that content
@@ -947,7 +937,7 @@ In this case, the projected content is the `<app-child>` from the parent.
 이번에는 템플릿에 자식 뷰를 포함하는 것이 아니라 부모 컴포넌트 `AfterContentComponent`에서 받아오는 방식으로 구현했습니다.
 그래서 부모 템플릿은 이렇게 구성됩니다.
 
-<code-example path="lifecycle-hooks/src/app/after-content.component.ts" region="parent-template" header="AfterContentParentComponent (템플릿 일부)"></code-example>
+<code-example path="lifecycle-hooks/src/app/after-content-parent.component.ts" region="parent-template" header="AfterContentParentComponent (템플릿 일부)"></code-example>
 
 `<app-child>` 태그가 `<after-content>` 태그 안에 들어가 있는 것을 유심히 보세요.
 *컴포넌트 안에 프로젝션하는 경우가 아니라면* 컴포넌트 엘리먼트 태그 안에는 아무것도 넣어서는 안됩니다.
@@ -981,7 +971,7 @@ appear *within* the component's template.
 projected into the component.
 
 The following *AfterContent* hooks take action based on changing values in a *content child*,
-which can only be reached by querying for them via the property decorated with
+which can only be reached by querying for them using the property decorated with
 [@ContentChild](api/core/ContentChild).
 
 <code-example path="lifecycle-hooks/src/app/after-content.component.ts" region="hooks" header="AfterContentComponent (class excerpts)"></code-example>

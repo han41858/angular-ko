@@ -222,12 +222,11 @@ The following table lists some of the key AngularJS template features with their
       <!--
       Angular has true template input variables that are explicitly defined using the `let` keyword.
 
-      For more information, see the [ngFor micro-syntax](guide/built-in-directives#microsyntax)
-      section of the [Built-in Directives](guide/built-in-directives) page.
+      For more information, see the [Structural directive shorthand](guide/structural-directives#shorthand) section of [Structural Directives](guide/structural-directives).
       -->
       Angular 템플릿에서는 `let` 키워드를 사용해서 입력 변수를 정의할 수 있습니다.
 
-      자세한 내용은 [기본 디렉티브](guide/built-in-directives) 문서의 [ngFor 세부 문법](guide/built-in-directives#microsyntax) 섹션을 참고하세요.
+      자세한 내용은 [구조 디렉티브](guide/structural-directives) 문서의 [구조 디렉티브 단축 문법](guide/structural-directives#shorthand) 섹션을 참고하세요.
     </td>
 
   </tr>
@@ -920,7 +919,7 @@ ANgularJS에서는 템플릿에 사용할 수 있는 디렉티브를 70개 이�
       For more information on style binding, see the [Style binding](guide/attribute-binding#style-binding) section of the
       [Attribute binding](guide/attribute-binding) page.
 
-      For more information on the `ngStyle` directive, see the [NgStyle](guide/built-in-directives#ngStyle)
+      For more information on the `ngStyle` directive, see the [NgStyle](guide/built-in-directives#ngstyle)
       section of the [Built-in directives](guide/built-in-directives) page.
       -->
       Angular에서는 `ngStyle`가 비슷한 동작을 합니다.
@@ -932,7 +931,7 @@ ANgularJS에서는 템플릿에 사용할 수 있는 디렉티브를 70개 이�
 
       스타일 바인딩에 대해 더 자세하게 알아보려면 [어트리뷰트 바인딩](guide/attribute-binding) 문서의 [스타일 바인딩](guide/attribute-binding#style-binding) 섹션을 참고하세요.
 
-      그리고 `ngStyle` 디렉티브에 대해 알아보려면 [기본 디렉티브](guide/built-in-directives) 문서의 [NgStyle](guide/built-in-directives#ngStyle) 섹션을 참고하세요.
+      그리고 `ngStyle` 디렉티브에 대해 알아보려면 [기본 디렉티브](guide/built-in-directives) 문서의 [NgStyle](guide/built-in-directives#ngstyle) 섹션을 참고하세요.
     </td>
 
   </tr>
@@ -991,9 +990,9 @@ ANgularJS에서는 템플릿에 사용할 수 있는 디렉티브를 70개 이�
 
       In this example, if `favoriteHero` is not set, the `ngSwitch` value is `null`
       and `*ngSwitchDefault` displays, "Please enter ...".
-      If `favoriteHero` is set, the app checks the movie hero by calling a component method.
-      If that method returns `true`, the app selects `*ngSwitchCase="true"` and displays: "Excellent choice!"
-      If that methods returns `false`, the app selects `*ngSwitchCase="false"` and displays: "No movie, sorry!"
+      If `favoriteHero` is set, the application checks the movie hero by calling a component method.
+      If that method returns `true`, the application selects `*ngSwitchCase="true"` and displays: "Excellent choice!"
+      If that methods returns `false`, the application selects `*ngSwitchCase="false"` and displays: "No movie, sorry!"
 
       The (*) before `ngSwitchCase` and `ngSwitchDefault` is required in this example.
 

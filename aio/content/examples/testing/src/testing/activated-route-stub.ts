@@ -22,7 +22,7 @@ export class ActivatedRouteStub {
   readonly paramMap = this.subject.asObservable();
 
   /** paramMap 옵저버블로 데이터를 전달합니다. */
-  setParamMap(params?: Params) {
+  setParamMap(params: Params = {}) {
     this.subject.next(convertToParamMap(params));
   }
 }

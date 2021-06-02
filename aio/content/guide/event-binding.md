@@ -57,6 +57,27 @@ Angular 이벤트 바인딩 문법은 소괄호(`(`, `)`) 안에 **대상이 되
 </div>
 
 
+## Binding to passive events
+
+Angular also supports passive event listeners. For example, you can use the following steps to make a scroll event passive.
+
+1. Create a file `zone-flags.ts` under `src` directory.
+2. Add the following line into this file.
+
+```
+(window as any)['__zone_symbol__PASSIVE_EVENTS'] = ['scroll'];
+```
+
+3. In the `src/polyfills.ts` file, before importing zone.js, import the newly created `zone-flags`.
+
+```
+import './zone-flags';
+import 'zone.js';  // Included with Angular CLI.
+```
+
+After those steps, if you add event listeners for the `scroll` event, the listeners will be `passive`.
+
+
 {@a custom-events-with-eventemitter}
 
 <!--
@@ -133,9 +154,6 @@ Angular는 이벤트 대상을 확인하기 위해 대상 이벤트 이름이 �
 <code-example path="event-binding/src/app/app.component.html" region="custom-directive" header="src/app/app.component.html"></code-example>
 
 엘리먼트 이벤트나 `ClickDirective` 프로퍼티에서 `myClick`를 찾지 못하면 "unknown directive" 에러가 발생합니다.
-
-
-<hr />
 
 
 <!--

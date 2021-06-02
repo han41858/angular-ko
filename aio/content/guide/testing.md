@@ -31,7 +31,7 @@ This sample application is much like the one in the [_Tour of Heroes_ tutorial](
 
 <div class="alert is-helpful">
 
-  For the sample app that the testing guides describe, see the <live-example noDownload>sample app</live-example>.
+  For the sample application that the testing guides describe, see the <live-example noDownload>sample app</live-example>.
 
   For the tests features in the testing guides, see <live-example stackblitz="specs" noDownload>tests</live-example>.
 
@@ -73,16 +73,16 @@ The Angular CLI downloads and installs everything you need to test an Angular ap
 The project you create with the CLI is immediately ready to test.
 Just run the [`ng test`](cli/test) CLI command:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng test
 </code-example>
 
-The `ng test` command builds the app in _watch mode_,
+The `ng test` command builds the application in _watch mode_,
 and launches the [Karma test runner](https://karma-runner.github.io).
 
 The console output looks a bit like this:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 10% building modules 1/1 modules 0 active
 ...INFO [karma]: Karma v1.7.1 server started at http://0.0.0.0:9876/
 ...INFO [launcher]: Launching browser Chrome ...
@@ -111,7 +111,7 @@ The tests run again, the browser refreshes, and the new test results appear.
 Angular 애플리케이션은 [Jasmine 테스트 프레임워크](https://jasmine.github.io/)로 테스트하는데, 애플리케이션을 테스트할 때 필요한 환경은 Angular CLI가 프로젝트를 생성하면서 모두 준비하기 때문에 바로 테스트할 수 있는 상태입니다.
 프로젝트 최상위 폴더에서 [`ng test`](cli/test) 명령을 실행해 보세요:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng test
 </code-example>
 
@@ -119,7 +119,7 @@ Angular 애플리케이션은 [Jasmine 테스트 프레임워크](https://jasmin
 
 콘솔은 다음과 같이 출력될 것입니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 10% building modules 1/1 modules 0 active
 ...INFO [karma]: Karma v1.7.1 server started at http://0.0.0.0:9876/
 ...INFO [launcher]: Launching browser Chrome ...
@@ -177,7 +177,7 @@ Karma의 전체 설정값은 테스트를 실행하는 시점에 `angular.json` 
 #### 다른 테스트 프레임워크
 
 <!--
-You can also unit test an Angular app with other testing libraries and test runners.
+You can also unit test an Angular application with other testing libraries and test runners.
 Each library and runner has its own distinctive installation procedures, configuration, and syntax.
 
 Search the web to learn more.
@@ -288,7 +288,7 @@ Continuous integration (CI) servers let you set up your project repository so th
 There are paid CI services like Circle CI and Travis CI, and you can also host your own for free using Jenkins and others.
 Although Circle CI and Travis CI are paid services, they are provided free for open source projects.
 You can create a public project on GitHub and add these services without paying.
-Contributions to the Angular repo are automatically run through a whole suite of Circle CI tests.
+Contributions to the Angular repository are automatically run through a whole suite of Circle CI tests.
 
 This article explains how to configure your project to run Circle CI and Travis CI, and also update your test configuration to be able to run tests in the Chrome browser in either environment.
 -->
@@ -301,6 +301,7 @@ Circle CI와 Travis CI는 기본적으로 유료 서비스지만, 오픈 소스 
 Angular 공식 레파지토리에 코드를 반영할 때도 Circle CI 테스트가 자동으로 실행됩니다.
 
 이 섹션에서는 프로젝트에 Circle CI와 Travis CI를 연결하는 방법에 대해 설명하고, 프로젝트의 테스트 스펙을 리모트 서버의 Chrome 브라우저에서 실행하는 방법에 대해 안내합니다.
+
 
 <!--
 ### Configure project for Circle CI
@@ -329,7 +330,6 @@ jobs:
           paths:
             - "node_modules"
       - run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 ```
 
 This configuration caches `node_modules/` and uses [`npm run`](https://docs.npmjs.com/cli/run-script) to run CLI commands, because `@angular/cli` is not installed globally.
@@ -386,19 +386,12 @@ jobs:
 Step 1: Create a file called `.travis.yml` at the project root, with the following content:
 
 ```
-dist: trusty
-sudo: false
-
 language: node_js
 node_js:
   - "10"
 
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  chrome: stable
 
 cache:
   directories:
@@ -409,7 +402,6 @@ install:
 
 script:
   - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-  - npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 ```
 
 This does the same things as the CircleCI configuration, except that Travis doesn't come with Chrome, so use Chromium instead.
@@ -424,19 +416,12 @@ You'll need to push a new commit to trigger a build.
 1단계: 프로젝트 최상위 폴더에 `.travis.yml` 파일을 생성하고 내용을 다음과 같이 작성합니다:
 
 ```
-dist: trusty
-sudo: false
-
 language: node_js
 node_js:
   - "10"
 
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  chrome: stable
 
 cache:
   directories:
@@ -447,8 +432,8 @@ install:
 
 script:
   - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-  - npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 ```
+
 
 이 환경설정 파일의 내용은 Circle CI에서 설정했던 내용과 같지만, Travis에는 Chrome이 설치되어있지 않기 때문에 Chromium을 추가로 설치했습니다.
 
@@ -460,25 +445,111 @@ script:
 * 더 자세한 내용은 [Travis CI 문서](https://docs.travis-ci.com/)를 참고하세요.
 
 
+
+### Configure project for GitLab CI
+
+Step 1: Create a file called `.gitlab-ci.yml` at the project root, with the following content:
+
+```
+image: node:14.15-stretch
+variables:
+  FF_USE_FASTZIP: "true"
+
+cache:
+  untracked: true
+  policy: push
+  key: ${CI_COMMIT_SHORT_SHA}
+  paths:
+    - node_modules/
+
+.pull_cached_node_modules:
+  cache:
+    untracked: true
+    key: ${CI_COMMIT_SHORT_SHA}
+    policy: pull
+
+stages:
+  - setup
+  - test
+
+install:
+  stage: setup
+  script:
+    - npm ci
+
+test:
+  stage: test
+  extends: .pull_cached_node_modules
+  before_script:
+    - apt-get update
+    - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - apt install -y ./google-chrome*.deb;
+    - export CHROME_BIN=/usr/bin/google-chrome
+  script:
+    - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+```
+
+This configuration caches `node_modules/` in the `install` job and re-uses the cached `node_modules/` in the `test` job.
+
+Step 2: [Sign up for GitLab CI](https://gitlab.com/users/sign_in) and [add your project](https://gitlab.com/projects/new).
+You'll need to push a new commit to trigger a build.
+
+Step 3: Commit your changes and push them to your repository.
+
+* Learn more about GitLab CI testing from [GitLab CI/CD documentation](https://docs.gitlab.com/ee/ci/).
+
+### Configure project for GitHub Actions
+
+Step 1: Create a folder called `.github/workflows` at root of your project
+
+Step 2: In the new folder, create a file called `main.yml` with the following content:
+
+```yml
+name: CI Angular app through Github Actions
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Setup
+        run: npm ci
+
+      - name: Test
+        run: |
+          npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+```
+
+Step 3: [Sign up for GitHub](https://github.com/join) and [add your project](https://github.com/new). You'll need to push a new commit to trigger a build.
+
+Step 4: Commit your changes and push them to your repository.
+
+* Learn more about GitHub Actions from [GitHub Actions documentation](https://docs.github.com/en/actions).
+
+
 <!--
 ### Configure CLI for CI testing in Chrome
 -->
 ### CI 환경에서 Chrome으로 테스트하기
 
 <!--
-When the CLI commands `ng test` and `ng e2e` are generally running the CI tests in your environment, you might still need to adjust your configuration to run the Chrome browser tests.
+While the CLI command `ng test` is generally running the CI tests in your environment, you might still need to adjust your configuration to run the Chrome browser tests.
 
-There are configuration files for both the [Karma JavaScript test runner](https://karma-runner.github.io/latest/config/configuration-file.html)
-and [Protractor](https://www.protractortest.org/#/api-overview) end-to-end testing tool,
+There is a configuration file for the [Karma JavaScript test runner](https://karma-runner.github.io/latest/config/configuration-file.html),
 which you must adjust to start Chrome without sandboxing.
 
 We'll be using [Headless Chrome](https://developers.google.com/web/updates/2017/04/headless-chrome#cli) in these examples.
 
 * In the Karma configuration file, `karma.conf.js`, add a custom launcher called ChromeHeadlessCI below browsers:
 -->
-로컬 개발환경에서 Angular CLI로 `ng test` 명령이나 `ng e2e` 명령을 실행하면 Chrome 브라우저가 실행되고 이 브라우저에서 테스트가 실행됩니다.
+로컬 개발환경에서 Angular CLI로 `ng test` 명령을 실행하면 Chrome 브라우저가 실행되고 이 브라우저에서 테스트가 실행됩니다.
 
-이런 환경을 구성하려면 [Karma JavaScript 테스트 러너](https://karma-runner.github.io/latest/config/configuration-file.html)와 e2e 테스트 툴인 [Protractor](https://www.protractortest.org/#/api-overview)가 실행될 환경이 모두 설정되어야 하며, Angular CLI로 생성한 프로젝트에는 이 환경은 자동으로 구성되어 있습니다.
+이런 환경을 구성하려면 [Karma JavaScript 테스트 러너](https://karma-runner.github.io/latest/config/configuration-file.html)가 실행될 환경이 모두 설정되어야 하며, Angular CLI로 생성한 프로젝트에는 이 환경은 자동으로 구성되어 있습니다.
 하지만 CI 환경에서는 Chrome 브라우저를 직접 실행하지 않고 화면과 샌드박스 기능 없이 사용하는 것이 더 좋습니다.
 
 이번 섹션에서는 [Headless Chrome](https://developers.google.com/web/updates/2017/04/headless-chrome#cli)을 사용하는 방법에 대해 알아봅시다.
@@ -514,13 +585,12 @@ exports.config = config;
 ```
 
 <!--
-Now you can run the following commands to use the `--no-sandbox` flag:
+Now you can run the following command to use the `--no-sandbox` flag:
 -->
 그러면 아래 명령들은 `--no-sandbox` 플래그가 지정된 채로 실행됩니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
-  ng e2e --protractor-config=e2e/protractor-ci.conf.js
 </code-example>
 
 <div class="alert is-helpful">
@@ -533,23 +603,21 @@ Now you can run the following commands to use the `--no-sandbox` flag:
 </div>
 
 
-<hr />
-
 <!--
-## More info on testing
+## More information on testing
 -->
 ## 참고
 
 <!--
-After you've set up your app for testing, you may find the following testing  guides useful.
+After you've set up your application for testing, you may find the following testing  guides useful.
 
 * [Code coverage](guide/testing-code-coverage)&mdash;find out how much of your app your tests are covering and how to specify required amounts.
-* [Testing services](guide/testing-services)&mdash;learn how to test the services your app uses.
+* [Testing services](guide/testing-services)&mdash;learn how to test the services your application uses.
 * [Basics of testing components](guide/testing-components-basics)&mdash;discover the basics of testing Angular components.
 * [Component testing scenarios](guide/testing-components-scenarios)&mdash;read about the various kinds of component testing scenarios and use cases.
 * [Testing attribute directives](guide/testing-attribute-directives)&mdash;learn about how to test your attribute directives.
 * [Testing pipes](guide/testing-pipes)&mdash;find out how to test attribute directives.
-* [Debugging tests](guide/testing-attribute-directives)&mdash;uncover common testing bugs.
+* [Debugging tests](guide/test-debugging)&mdash;uncover common testing bugs.
 * [Testing utility APIs](guide/testing-utility-apis)&mdash;get familiar with Angular testing features.
 -->
 애플리케이션에 테스트를 적용하고 나면 이런 내용에 대해 알아보는 것도 좋습니다.
@@ -560,5 +628,5 @@ After you've set up your app for testing, you may find the following testing  gu
 * [컴포넌트 테스트 시나리오](guide/testing-components-scenarios) &mdash; 컴포넌트의 형태에 따라 테스트하는 방법에 대해 알아보세요.
 * [어트리뷰트 디렉티브 테스트하기](guide/testing-attribute-directives) &mdash; 어트리뷰트 디렉티브를 테스트하는 방법에 대해 알아보세요.
 * [파이프 테스트하기](guide/testing-pipes) &mdash; 파이프를 테스트하는 방법에 대해 알아보세요.
-* [테스트 디버깅하기](guide/testing-attribute-directives) &mdash; 테스트 스펙을 작성할 때 발생하는 버그의 원인을 확인해 보세요.
+* [테스트 디버깅하기](guide/test-debugging) &mdash; 테스트 스펙을 작성할 때 발생하는 버그의 원인을 확인해 보세요.
 * [유틸리티 API 테스트하기](guide/testing-utility-apis) &mdash; Angular가 제공하는 테스트 기능에 대해 알아보세요.

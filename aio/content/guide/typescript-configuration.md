@@ -52,7 +52,7 @@ For more information, see the [Configuration inheritance with extends](https://w
 
 <div class="alert is-helpful">
 
-For more information TypeScript configuration files, see the official [TypeScript wiki](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
+For more information TypeScript configuration files, see the official [TypeScript wiki](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
 For details about configuration inheritance, see the [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) section.
 
 </div>
@@ -98,7 +98,7 @@ TypeScript와 Angular는 타입 검사 기능과 빌드 결과물을 생성할 �
 
 <div class="alert is-helpful">
 
-TypeScript 환경설정 파일에 대해 자세하게 알아보려면 공식 [TypeScript wiki](http://www.typescriptlang.org/docs/handbook/tsconfig-json.html) 문서를 참고하세요.
+TypeScript 환경설정 파일에 대해 자세하게 알아보려면 공식 [TypeScript wiki](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) 문서를 참고하세요.
 환경설정 파일을 상속하는 것에 대해 알아보려면 [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) 섹션을 참고하세요.
 
 </div>
@@ -186,7 +186,8 @@ For more information about how the TypeScript configuration affects compilation,
 개발자에 따라 `true`가 편할수도 있고 `false`가 편할수도 있으며, 나중에 이 값을 변경하더라도 큰 문제는 없습니다.
 하지만 규모가 큰 프로젝트를 개발한다면 이 플래그의 역할에 대해 확실히 알아두는 것이 좋습니다.
 
-`noImplicitAny` 플래그 값이 `false` (기본값)로 설정되면 타입이 지정되지 않은 변수에 TypeScript의 타입 추론 기능이 동작하며, 최종적으로 타입을 추론하지 못한 변수를 `any` 타입으로 처리합니다. 그래서 이 플래그는 *implicit `any`*를 의미한다고도 볼 수 있습니다.
+`noImplicitAny` 플래그 값이 `false` (기본값)로 설정되면 타입이 지정되지 않은 변수에 TypeScript의 타입 추론 기능이 동작하며, 최종적으로 타입을 추론하지 못한 변수를 `any` 타입으로 처리합니다.
+그래서 이 플래그는 *implicit `any`*를 의미한다고도 볼 수 있습니다.
 
 `noImplicitAny` 플래그의 값이 `true`이면 TypeScript 컴파일러의 타입 추론이 여전히 동작하고 JavaScript로 코드를 변환하는 데에도 문제가 없지만, 타입을 추론하지 못한 변수가 있을 때 **에러가 발생합니다**.
 이렇게 설정하면 컴파일 시점에 발생할 수 있는 에러를 좀 더 강력한 정적 타입 룰로 방지할 수 있기 때문에, 많은 개발자들이 이 옵션을 선호합니다.
@@ -238,7 +239,8 @@ Angular packages include them already.
 
 </div>
 -->
-jQuery나 Jasmine과 같이 JavaScript로 만들어진 라이브러리들은 TypeScript 컴파일러가 타입 정보를 인식할 수 없습니다. 그래서 TypeScript 코드를 컴파일 할 때 적절한 타입 정보를 찾지 못하면 에러가 발생합니다.
+jQuery나 Jasmine과 같이 JavaScript로 만들어진 라이브러리들은 TypeScript 컴파일러가 타입 정보를 인식할 수 없습니다.
+그래서 TypeScript 코드를 컴파일 할 때 적절한 타입 정보를 찾지 못하면 에러가 발생합니다.
 
 라이브러리에 대한 타입 정보는 [TypeScript 타입 정의 파일](https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html)&mdash;`d.ts` 파일&mdash;로 제공할 수 있습니다.
 
@@ -267,9 +269,11 @@ By default, the target is `es2015`. If you are targeting `es5`, you still have n
 
 <code-example path="getting-started/tsconfig.0.json" header="tsconfig.json (lib excerpt)" region="lib"></code-example>
 -->
-TypeScript에는 조금 특별한 타입 정의 파일인 `lib.d.ts`가 있습니다. 이 파일은 실행 시점의 JavaScript 객체나 DOM 객체에 대한 타입을 제공합니다.
+TypeScript에는 조금 특별한 타입 정의 파일인 `lib.d.ts`가 있습니다.
+이 파일은 실행 시점의 JavaScript 객체나 DOM 객체에 대한 타입을 제공합니다.
 
-TypeScript 컴파일에 사용하는 `--target` 옵션에 따라 타입 정의 파일이 _추가로_ 생성될 수도 있습니다. `--target` 옵션이 `es6`라면 `Promise`에 대한 타입 정의가 추가되는 식입니다.
+TypeScript 컴파일에 사용하는 `--target` 옵션에 따라 타입 정의 파일이 _추가로_ 생성될 수도 있습니다.
+`--target` 옵션이 `es6`라면 `Promise`에 대한 타입 정의가 추가되는 식입니다.
 
 `target` 기본값은 `es2015` 입니다.
 `es5` 문법으로 빌드하려면 타입 정의 파일을 추가해야 합니다:
@@ -287,16 +291,17 @@ Many libraries&mdash;jQuery, Jasmine, and Lodash among them&mdash;do *not* inclu
 Fortunately, either their authors or community contributors have created separate `d.ts` files for these libraries and
 published them in well-known locations.
 
-You can install these typings via `npm` using the
-[`@types/*` scoped package](http://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)
+You can install these typings with `npm` using the
+[`@types/*` scoped package](https://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)
 and Typescript, starting at 2.0, automatically recognizes them.
 
 For instance, to install typings for `jasmine` you run `npm install @types/jasmine --save-dev`.
 -->
-npm 패키지 중에는 `d.ts` 파일을 제공하지 *않는* 패키지들도 많습니다. jQuery나 Jasmine, Lodash 들이 그렇습니다.
+npm 패키지 중에는 `d.ts` 파일을 제공하지 *않는* 패키지들도 많습니다.
+jQuery나 Jasmine, Lodash 들이 그렇습니다.
 하지만 다행히 라이브러리 개발자나 커뮤니티 기여자들이 이 라이브러리에 대한 `d.ts` 파일을 추가로 제공하는 경우가 있습니다.
 
-이런 타입 정의 파일은 TypeScript 2.0부터 [`@types/*` 로 시작하는 패키지](http://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)로 제공되며, `npm`으로 설치하면 자동으로 인식됩니다.
+이런 타입 정의 파일은 TypeScript 2.0부터 [`@types/*` 로 시작하는 패키지](https://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)로 제공되며, `npm`으로 설치하면 자동으로 인식됩니다.
 
 예를 들어 `jasmine`에 대한 타입 정의 파일을 설치하려면 `npm install @types/jasmine --save-dev` 명령을 실행하면 됩니다.
 

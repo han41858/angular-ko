@@ -10,7 +10,7 @@ and place that component in the application shell.
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+  For the sample application that this page describes, see the <live-example></live-example>.
 
 </div>
 -->
@@ -170,6 +170,7 @@ Give it `id` and `name` properties.
 
 <code-example path="toh-pt1/src/app/hero.ts"  header="src/app/hero.ts"></code-example>
 
+
 Return to the `HeroesComponent` class and import the `Hero` interface.
 
 Refactor the component's `hero` property to be of type `Hero`.
@@ -302,7 +303,7 @@ Here it binds the `hero.name` property to the HTML textbox so that data can flow
 ### _FormsModule_ 을 빠뜨렸습니다.
 
 <!--
-Notice that the app stopped working when you added `[(ngModel)]`.
+Notice that the application stopped working when you added `[(ngModel)]`.
 
 To see the error, open the browser development tools and look in the console
 for a message like
@@ -334,7 +335,7 @@ Can't bind to 'ngModel' since it isn't a known property of 'input'.
 
 <!--
 Angular needs to know how the pieces of your application fit together
-and what other files and libraries the app requires.
+and what other files and libraries the application requires.
 This information is called _metadata_.
 
 Some of the metadata is in the `@Component` decorators that you added to your component classes.
@@ -369,13 +370,13 @@ Open `AppModule` (`app.module.ts`) and import the `FormsModule` symbol from the 
  region="formsmodule-js-import">
 </code-example>
 
-Then add `FormsModule` to the `@NgModule` metadata's `imports` array, which contains a list of external modules that the app needs.
+Then add `FormsModule` to the `@NgModule` metadata's `imports` array, which contains a list of external modules that the application needs.
 
 <code-example path="toh-pt1/src/app/app.module.ts" header="app.module.ts (@NgModule imports)"
 region="ng-imports">
 </code-example>
 
-When the browser refreshes, the app should work again. You can edit the hero's name and see the changes reflected immediately in the `<h2>` above the textbox.
+When the browser refreshes, the application should work again. You can edit the hero's name and see the changes reflected immediately in the `<h2>` above the textbox.
 -->
 `AppModule` (`app.module.ts`)를 열고 `@angular/forms` 라이브러리에서 제공하는 `FormsModule` 심볼을 로드합니다.
 

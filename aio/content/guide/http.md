@@ -5,7 +5,7 @@
 
 <!--
 Most front-end applications need to communicate with a server over the HTTP protocol, in order to download or upload data and access other back-end services.
-Angular provides a simplified client HTTP API for Angular applications, the `HttpClient` service class in `@angular/common/http`.
+Angular provides a client HTTP API for Angular applications, the `HttpClient` service class in `@angular/common/http`.
 
 The HTTP client service offers the following major features.
 
@@ -32,14 +32,14 @@ HTTP 클라이언트 서비스는 이런 기능을 제공합니다.
 ##### 사전지식
 
 <!--
-Before working with the `HTTPClientModule`, you should have a basic understanding of the following:
+Before working with the `HttpClientModule`, you should have a basic understanding of the following:
 
 * TypeScript programming
 * Usage of the HTTP protocol
 * Angular app-design fundamentals, as described in [Angular Concepts](guide/architecture)
 * Observable techniques and operators. See the [Observables](guide/observables) guide.
 -->
-`HTTPClientModule`에 대해 알아보기 전에 이런 내용을 먼저 이해하고 있는 것이 좋습니다:
+`HttpClientModule`에 대해 알아보기 전에 이런 내용을 먼저 이해하고 있는 것이 좋습니다:
 
 * TypeScript 사용방법
 * HTTP 프로토콜 사용방법
@@ -84,7 +84,7 @@ You can run the <live-example></live-example> that accompanies this guide.
 
 The sample app does not require a data server.
 It relies on the
-[Angular _in-memory-web-api_](https://github.com/angular/in-memory-web-api/blob/master/README.md),
+[Angular _in-memory-web-api_](https://github.com/angular/angular/tree/master/packages/misc/angular-in-memory-web-api),
 which replaces the _HttpClient_ module's `HttpBackend`.
 The replacement service simulates the behavior of a REST-like backend.
 
@@ -125,7 +125,7 @@ Look at the `AppModule` _imports_ to see how it is configured.
 이 문서에서 다루는 예제 앱은 <live-example></live-example>에서 직접 확인하거나 다운받아 확인할 수 있습니다.
 
 이 예제 앱이 동작할 때는 데이터 서버가 없어도 됩니다.
-예제에서는 _HttpClient_ 모듈의 `HttpBackend`를 대체하는 [Angular 인-메모리 web API](https://github.com/angular/in-memory-web-api/blob/master/README.md)를 활용합니다.
+예제에서는 _HttpClient_ 모듈의 `HttpBackend`를 대체하는 [Angular 인-메모리 web API](https://github.com/angular/angular/tree/master/packages/misc/angular-in-memory-web-api)를 활용합니다.
 그래서 REST API로 동작하는 백엔드와 비슷한 동작을 흉내낼 수 있습니다.
 
 설정방법은 `AppModule` _imports_ 배열을 참고하세요.
@@ -139,7 +139,7 @@ Look at the `AppModule` _imports_ to see how it is configured.
 ## 서버에서 데이터 받아오기
 
 <!--
-Use the [`HTTPClient.get()`](api/common/http/HttpClient#get) method to fetch data from a server.
+Use the [`HttpClient.get()`](api/common/http/HttpClient#get) method to fetch data from a server.
 The asynchronous method sends an HTTP request, and returns an Observable that emits the requested data when the response is received.
 The return type varies based on the `observe` and `responseType` values that you pass to the call.
 
@@ -149,7 +149,7 @@ The `get()` method takes two arguments; the endpoint URL from which to fetch, an
 options: {
     headers?: HttpHeaders | {[header: string]: string | string[]},
     observe?: 'body' | 'events' | 'response',
-    params?: HttpParams|{[param: string]: string | string[]},
+    params?: HttpParams|{[param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>},
     reportProgress?: boolean,
     responseType?: 'arraybuffer'|'blob'|'json'|'text',
     withCredentials?: boolean,
@@ -193,7 +193,7 @@ Later sections show some of the additional option possibilities.
 options: {
     headers?: HttpHeaders | {[header: string]: string | string[]},
     observe?: 'body' | 'events' | 'response',
-    params?: HttpParams|{[param: string]: string | string[]},
+    params?: HttpParams|{[param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>},
     reportProgress?: boolean,
     responseType?: 'arraybuffer'|'blob'|'json'|'text',
     withCredentials?: boolean,
@@ -677,7 +677,7 @@ Two types of errors can occur.
 
 * The server backend might reject the request, returning an HTTP response with a status code such as 404 or 500. These are error _responses_.
 
-* Something could go wrong on the client-side such as a network error that prevents the request from completing successfully or an exception thrown in an RxJS operator. These errors produce JavaScript `ErrorEvent` objects.
+* Something could go wrong on the client-side such as a network error that prevents the request from completing successfully or an exception thrown in an RxJS operator. These errors have `status` set to `0` and the `error` property contains a `ProgressEvent` object, whose `type` might provide further information.
 
 `HttpClient` captures both kinds of errors in its `HttpErrorResponse`. You can inspect that response to identify the error's cause.
 
@@ -708,7 +708,7 @@ The following code updates the `getConfig()` method, using a [pipe](guide/pipes 
 이 응답은 에러 _응답_ 입니다.
 
 * 네트워크 에러 등 클라이언트쪽에서 뭔가가 잘못되어 요청을 완료하지 못했거나 RxJS 연산자에서 에러가 발생한 경우입니다.
-이 상황에서는 JavaScript `ErrorEvent` 객체가 생성됩니다.
+이 애러 객체의 `status` 프로퍼티 값은 `0`이며, `error` 프로퍼티로 `ProgressEvent` 객체가 전달되기 때문에 이 객체의 `type` 필드를 확인하면 더 많은 정보를 확인할 수 있습니다.
 
 `HttpClient`는 두 가지 에러를 모두 `HttpErrorResponse`로 처리하기 때문에, 서버로 보낸 요청이 왜 실패했는지 확인하려면 에러가 왜 발생했는지 파악해야 합니다.
 
@@ -776,7 +776,7 @@ HTTP 요청을 보냈을 때 발생한 에러가 일시적인 원인 때문이�
 <!--
 In addition to fetching data from a server, `HttpClient` supports other HTTP methods such as PUT, POST, and DELETE, which you can use to modify the remote data.
 
-The sample app for this guide includes a simplified version of the "Tour of Heroes" example
+The sample app for this guide includes an abridged version of the "Tour of Heroes" example
 that fetches heroes and enables users to add, delete, and update them.
 The following sections show examples of the data-update methods from the sample's `HeroesService`.
 -->
@@ -804,7 +804,7 @@ In the following example, the `HeroesService` makes an HTTP POST request when ad
 The `HttpClient.post()` method is similar to `get()` in that it has a type parameter, which you can use to specify that you expect the server to return data of a given type. The method takes a resource URL and two additional parameters:
 
 * *body* - The data to POST in the body of the request.
-* *options*` - An object containing method options which, in this case, [specify required headers](#adding-headers).
+* *options* - An object containing method options which, in this case, [specify required headers](#adding-headers).
 
 The example catches errors as [described above](#error-details).
 
@@ -845,6 +845,7 @@ that hero to the displayed `heroes` list.
 </code-example>
 
 그러면 새로운 히어로가 정상적으로 추가되었다는 것을 컴포넌트가 알 수 있고, `heroes` 배열에 이 히어로를 추가해서 새로운 목록으로 화면에 표시할 수 있습니다.
+
 
 <!--
 ### Making a DELETE request
@@ -1170,7 +1171,8 @@ HTTP 요청에 적용된 인터셉터는 HTTP 응답에도 다시 활용할 수 
 <!--
 To implement an interceptor, declare a class that implements the `intercept()` method of the `HttpInterceptor` interface.
 
- Here is a do-nothing _noop_ interceptor that simply passes the request through without touching it:
+Here is a do-nothing _noop_ interceptor that passes the request through without touching it:
+
 <code-example
   path="http/src/app/http-interceptors/noop-interceptor.ts"
   header="app/http-interceptors/noop-interceptor.ts">
@@ -1189,7 +1191,7 @@ export abstract class HttpHandler {
 
 Like `intercept()`, the `handle()` method transforms an HTTP request into an `Observable` of [`HttpEvents`](#interceptor-events) which ultimately include the server's response. The `intercept()` method could inspect that observable and alter it before returning it to the caller.
 
-This _no-op_ interceptor simply calls `next.handle()` with the original request and returns the observable without doing a thing.
+This _no-op_ interceptor calls `next.handle()` with the original request and returns the observable without doing a thing.
 -->
 인터셉터를 구현하려면, `HttpInterceptor` 인터페이스를 사용하는 클래스를 정의하고 이 클래스 안에 `intercept()` 메소드를 정의하면 됩니다.
 
@@ -1346,14 +1348,41 @@ There are many more interceptors in the complete sample code.
 
 <!--
 Angular applies interceptors in the order that you provide them.
-If you provide interceptors _A_, then _B_, then _C_,  requests flow in _A->B->C_ and
-responses flow out _C->B->A_.
+For example, consider a situation in which you want to handle the authentication of your HTTP requests and log them before sending them to a server. To accomplish this task, you could provide an `AuthInterceptor` service and then a `LoggingInterceptor` service.
+Outgoing requests would flow from the `AuthInterceptor` to the `AuthInterceptor`.
+Responses from these requests would flow in the other direction, from `LoggingInterceptor` back to `AuthInterceptor`.
+The following is a visual representation of the process:
+
+<div class="lightbox">
+  <img src="generated/images/guide/http/interceptor-order.svg" alt="Interceptor in order of HttpClient, AuthInterceptor, AuthInterceptor, HttpBackend, Server, and back in opposite order to show the two-way flow">
+</div>
+
+<div class="alert is-helpful">
+
+   The last interceptor in the process is always the `HttpBackend` that handles communication with the server.
+
+</div>
 
 You cannot change the order or remove interceptors later.
 If you need to enable and disable an interceptor dynamically, you'll have to build that capability into the interceptor itself.
 -->
-인터셉터는 등록한 순서대로 적용됩니다.
-그래서 인터셉터 _A_, _B_, _C_ 순서대로 지정하면, HTTP 요청이 _A->B->C_ 순서로 처리되고 HTTP 응답은 _C->B->A_ 순서로 처리됩니다.
+인터셉터는 등록된 순서대로 실행됩니다.
+서버로 요청을 보내기 전에 인증 필드를 추가하고 로그로 남겨야 한다고 합시다.
+이 경우에는 `AuthInterceptor` 서비스를 등록한 후에 `LoggingInterceptor` 서비스를 등록하면 됩니다.
+그러면 외부로 향하는 요청이 `AuthInterceptor`를 거친 후에 `LoggingInterceptor`로 전달됩니다.
+그리고 돌아오는 응답은 반대로 `LoggingInterceptor`를 거쳐 `AuthInterceptor`로 전달됩니다.
+이 과정을 그림으로 표현해보면 이렇습니다:
+
+<div class="lightbox">
+  <img src="generated/images/guide/http/interceptor-order.svg" alt="Interceptor in order of HttpClient, AuthInterceptor, AuthInterceptor, HttpBackend, Server, and back in opposite order to show the two-way flow">
+</div>
+
+<div class="alert is-helpful">
+
+   The last interceptor in the process is always the `HttpBackend` that handles communication with the server.
+
+</div>
+
 
 인터셉터를 등록한 이후에 실행 순서를 변경하거나 특정 인터셉터를 건너뛸 수는 없습니다.
 인터셉터를 적용할지 건너뛰어야 할지 지정하려면 인터셉터 안에 동적으로 로직을 작성해야 합니다.
@@ -1530,6 +1559,11 @@ To do this, set the cloned request body to `null`.
 ```
 
 
+## Http interceptor use-cases
+
+Below are a number of common uses for interceptors.
+
+
 <!--
 ### Setting default headers
 -->
@@ -1586,9 +1620,9 @@ An interceptor that alters headers can be used for a number of different operati
 
 
 <!--
-### Using interceptors for logging
+### Logging request and response pairs
 -->
-### 인터셉터를 로그로 활용하기
+### 요청/응답을 로그로 출력하기
 
 <!--
 Because interceptors can process the request and response _together_, they can perform tasks such as timing and logging an entire HTTP operation.
@@ -1625,10 +1659,44 @@ RxJS가 제공하는 `tap` 연산자와 `finalize`는 HTTP 요청이 성공하�
 `tap` 연산자와 `finalize` 연산자 모두 옵저버블의 값을 확인하기만 하고, 옵저버블의 내용은 변경하지 않습니다.
 
 
+{@a custom-json-parser}
+
+### Custom JSON parsing
+
+Interceptors can be used to replace the built-in JSON parsing with a custom implementation.
+
+The `CustomJsonInterceptor` in the following example demonstrates how to achieve this.
+If the intercepted request expects a `'json'` response, the `responseType` is changed to `'text'`
+to disable the built-in JSON parsing. Then the response is parsed via the injected `JsonParser`.
+
+<code-example
+  path="http/src/app/http-interceptors/custom-json-interceptor.ts"
+  region="custom-json-interceptor"
+  header="app/http-interceptors/custom-json-interceptor.ts">
+</code-example>
+
+You can then implement your own custom `JsonParser`.
+Here is a custom JsonParser that has a special date reviver.
+
+<code-example
+  path="http/src/app/http-interceptors/custom-json-interceptor.ts"
+  region="custom-json-parser"
+  header="app/http-interceptors/custom-json-interceptor.ts">
+</code-example>
+
+You provide the `CustomParser` along with the `CustomJsonInterceptor`.
+
+<code-example
+  path="http/src/app/http-interceptors/index.ts"
+  region="custom-json-interceptor"
+  header="app/http-interceptors/index.ts">
+</code-example>
+
+
 {@a caching}
 
 <!--
-### Using interceptors for caching
+### Caching requests
 -->
 ### 인터셉터를 캐시로 활용하기
 
@@ -1647,9 +1715,9 @@ The `CachingInterceptor` in the following example demonstrates this approach.
 </code-example>
 
 * The `isCacheable()` function determines if the request is cacheable.
-In this sample, only GET requests to the npm package search api are cacheable.
+In this sample, only GET requests to the npm package search API are cacheable.
 
-* If the request is not cacheable, the interceptor simply forwards the request
+* If the request is not cacheable, the interceptor forwards the request
 to the next handler in the chain.
 
 * If a cacheable request is found in the cache, the interceptor returns an `of()` _observable_ with
@@ -1911,6 +1979,16 @@ a search request for a package with that name to the npm web API.
 </code-example>
 
 Here, the `keyup` event binding sends every keystroke to the component's `search()` method.
+
+<div class="alert is-helpful">
+
+The type of `$event.target` is only `EventTarget` in the template.
+In the `getValue()` method, the target is cast to an `HTMLInputElement` to allow type-safe access to its `value` property.
+
+<code-example path="http/src/app/package-search/package-search.component.ts" region="getValue"></code-example>
+
+</div>
+
 The following snippet implements debouncing for this input using RxJS operators.
 
 <code-example
@@ -1927,11 +2005,11 @@ as happens in the `search()` method.
 Rather than forward every `searchText` value directly to the injected `PackageSearchService`,
 the code in `ngOnInit()` pipes search values through three operators, so that a search value reaches the service only if it's a new value and the user has stopped typing.
 
-* `debounceTime(500)`&emdash;Wait for the user to stop typing (1/2 second in this case).
+* `debounceTime(500)`⁠—Wait for the user to stop typing (1/2 second in this case).
 
-* `distinctUntilChanged()`&emdash;Wait until the search text changes.
+* `distinctUntilChanged()`⁠—Wait until the search text changes.
 
-* `switchMap()`&emdash;Send the search request to the service.
+* `switchMap()`⁠—Send the search request to the service.
 
 The code sets `packages$` to this re-composed `Observable` of search results.
 The template subscribes to `packages$` with the [AsyncPipe](api/common/AsyncPipe)
@@ -1958,6 +2036,16 @@ See [Using interceptors to request multiple values](#cache-refresh) for more abo
 </code-example>
 
 이 코드를 보면 `keyup` 이벤트가 컴포넌트 `search()` 메서드와 바인딩되었기 때문에 키입력 이벤트가 발생할 때마다 `search()` 메서드가 실행됩니다.
+
+<div class="alert is-helpful">
+
+템플릿에서 확인할 수 있는 `$event.target`의 타입은 `EventTarget` 입니다.
+그래서 `getValue()` 메소드를 사용하려면 이 객체를 `HTMLInputElement`로 캐스팅해야 합니다.
+
+<code-example path="http/src/app/package-search/package-search.component.ts" region="getValue"></code-example>
+
+</div>
+
 그리고 아래 코드는 RxJS 연산자로 입력값을 디바운싱하는 코드입니다.
 
 <code-example
@@ -1972,11 +2060,11 @@ See [Using interceptors to request multiple values](#cache-refresh) for more abo
 그렇다면 `searchText` 값이 변경될 때마다 `PackageSearchService`로 요청을 보내기보다 `ngOnInit()`에 구현한 것처럼 파이프를 사용해서 이 동작을 적절히 조절하는 것이 좋습니다.
 이 코드에서는 사용자가 입력을 멈춘 시점에 값이 정말 변경되었을 때만 요청을 보내기 위해 연산자가 3개 사용되었습니다.
 
-* `debounceTime(500)` &mdash; 사용자가 입력을 멈출때까지 기다립니다.
+* `debounceTime(500)`⁠—사용자가 입력을 멈출때까지 기다립니다.
 
-* `distinctUntilChanged()` &mdash; 값이 실제로 변경된 것을 감지합니다.
+* `distinctUntilChanged()`⁠—값이 실제로 변경된 것을 감지합니다.
 
-* `switchMap()` &mdash; 서비스로 검색 요청을 보냅니다.
+* `switchMap()`⁠—서비스로 검색 요청을 보냅니다.
 
 연산자를 통과한 검색 결과는 `packages$` 옵저버블에 저장됩니다.
 그래서 템플릿에 [AsyncPipe](api/common/AsyncPipe)를 사용하면 검색 결과를 화면에서 확인할 수 있습니다.
@@ -2031,7 +2119,7 @@ consider moving it to a utility function or into the `PackageSearchService` itse
 
 <!--
 [Cross-Site Request Forgery (XSRF or CSRF)](https://en.wikipedia.org/wiki/Cross-site_request_forgery) is an attack technique by which the attacker can trick an authenticated user into unknowingly executing actions on your website.
-`HttpClient` supports a [common mechanism](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-Header_Token) used to prevent XSRF attacks.
+`HttpClient` supports a [common mechanism](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token) used to prevent XSRF attacks.
 When performing HTTP requests, an interceptor reads a token from a cookie, by default `XSRF-TOKEN`, and sets it as an HTTP header, `X-XSRF-TOKEN`.
 Since only code that runs on your domain could read the cookie, the backend can be certain that the HTTP request came from your client application and not an attacker.
 
@@ -2055,7 +2143,7 @@ Failing to do so renders Angular's default protection ineffective.
 </div>
 -->
 [사이트간 요청 위조 (Cross-Site Request Forgery (XSRF))](https://en.wikipedia.org/wiki/Cross-site_request_forgery)는 인증받지 않은 사용자가 웹사이트를 공격하는 방법 중 하나입니다.
-Angular에서 제공하는 `HttpClient`는 [XSRF 공격을 방어하는 기능](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-Header_Token)을 탑재하고 있습니다.
+Angular에서 제공하는 `HttpClient`는 [XSRF 공격을 방어하는 기능](https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token)을 탑재하고 있습니다.
 그래서 HTTP 요청이 발생했을 때 쿠키에서 토큰을 읽는 인터셉터가 자동으로 동작하며, `XSRF-TOKEN`으로 설정된 HTTP 헤더를 `X-XSRF-TOKEN`으로 변경합니다.
 결국 현재 도메인에 유효한 쿠키만 읽을 수 있으며, 백엔드가 HTTP 요청을 좀 더 안전하게 처리할 수 있습니다.
 
@@ -2077,6 +2165,7 @@ Angular 앱 여러개가 같은 도메인이나 서브도메인을 사용해서 
 
 </div>
 
+.
 <!--
 ### Configuring custom cookie/header names
 -->
@@ -2200,7 +2289,7 @@ Now you can write a test that expects a GET Request to occur and provides a mock
 <code-example
   path="http/src/testing/http-client.spec.ts"
   region="get-test"
-  header="app/testing/http-client.spec.ts(httpClient.get)">
+  header="app/testing/http-client.spec.ts (HttpClient.get)">
 </code-example>
 
 The last step, verifying that no requests remain outstanding, is common enough for you to move it into an `afterEach()` step:
@@ -2215,7 +2304,7 @@ The last step, verifying that no requests remain outstanding, is common enough f
 <code-example
   path="http/src/testing/http-client.spec.ts"
   region="get-test"
-  header="app/testing/http-client.spec.ts(httpClient.get())">
+  header="app/testing/http-client.spec.ts (HttpClient.get())">
 </code-example>
 
 모든 응답이 처리되었는지 마지막으로 검사하는 로직은 `afterEach()`로 옮겨도 됩니다:
@@ -2224,6 +2313,7 @@ The last step, verifying that no requests remain outstanding, is common enough f
   path="http/src/testing/http-client.spec.ts"
   region="afterEach">
 </code-example>
+
 
 <!--
 #### Custom request expectations
@@ -2311,3 +2401,50 @@ HTTP 요청이 실패한 경우에 애플리케이션의 방어 로직이 제대
   path="http/src/testing/http-client.spec.ts"
   region="network-error">
 </code-example>
+
+
+## Passing metadata to interceptors
+
+Many interceptors require or benefit from configuration. Consider an interceptor that retries failed requests.
+By default, the interceptor might retry a request three times, but you might want to override this retry count for particularly error-prone or sensitive requests.
+
+`HttpClient` requests contain a _context_ that can carry metadata about the request.
+This context is available for interceptors to read or modify, though it is not transmitted to the backend server when the request is sent.
+This allows applications or other interceptors to tag requests with configuration parameters, such as how many times to retry a request.
+
+### Creating a context token
+
+Angular stores and retrieves a value in the context using an `HttpContextToken`.
+You can create a context token using the `new` operator, as in the following example:
+
+<code-example path="http/src/app/http-interceptors/retry-interceptor.ts" region="context-token" header="creating a context token"></code-example>
+
+The lambda function `() => 3` passed during the creation of the `HttpContextToken` serves two purposes:
+
+1. It allows TypeScript to infer the type of this token: `HttpContextToken<number>`.
+  The request context is type-safe&mdash;reading a token from a request's context returns a value of the appropriate type.
+
+1. It sets the default value for the token.
+  This is the value that the request context returns if no other value has been set for this token.
+  Using a default value avoids the need to check if a particular value is set.
+
+### Setting context values when making a request
+
+When making a request, you can provide an `HttpContext` instance, in which you have already set the context values.
+
+<code-example path="http/src/app/http-interceptors/retry-interceptor.ts" region="set-context" header="setting context values"></code-example>
+
+### Reading context values in an interceptor
+
+Within an interceptor, you can read the value of a token in a given request's context with `HttpContext.get()`.
+If you have not explicitly set a value for the token, Angular returns the default value specified in the token.
+
+<code-example path="http/src/app/http-interceptors/retry-interceptor.ts" region="reading-context" header="reading context values in an interceptor"></code-example>
+
+### Contexts are mutable
+
+Unlike most other aspects of `HttpRequest` instances, the request context is mutable and persists across other immutable transformations of the request.
+This allows interceptors to coordinate operations through the context.
+For instance, the `RetryInterceptor` example could use a second context token to track how many errors occur during the execution of a given request:
+
+<code-example path="http/src/app/http-interceptors/retry-interceptor.ts" region="mutable-context" header="coordinating operations through the context"></code-example>

@@ -35,6 +35,7 @@ RxJS provides an implementation of the `Observable` type, which is needed until 
 <!--
 RxJS offers a number of functions that can be used to create new observables. These functions can simplify the process of creating observables from things such as events, timers, promises, and so on. For example:
 
+
 <code-example path="rx-library/src/simple-creation.1.ts" region="promise" header="Create an observable from a promise"></code-example>
 
 <code-example path="rx-library/src/simple-creation.2.ts" region="interval" header="Create an observable from a counter"></code-example>

@@ -34,30 +34,55 @@ A project's `src/environments/` folder contains the base configuration file, `en
 You can add override defaults for additional environments, such as production and staging, in target-specific configuration files.
 
 For example:
--->
-프로젝트의 기본 환경설정 파일은 `src/environments/` 폴더에 존재하는 `environment.ts` 파일입니다.
-그리고 `production`이나 `staging`과 같은 환경을 위해 설정 파일을 따로 구성한다면, 이 파일을 오버라이드하는 방식으로 새로운 설정 파일을 구성할 수 있습니다.
 
-예를 들면 이런 식입니다:
-
-<!--
 ```
 └──myProject/src/environments/
                    └──environment.ts
                    └──environment.prod.ts
                    └──environment.stage.ts
 ```
--->
+
+The base file `environment.ts`, contains the default environment settings. For example:
+
 ```
-└──myProject/src/environments/
-     └──environment.ts
-     └──environment.prod.ts
-     └──environment.stage.ts
+export const environment = {
+  production: false
+};
 ```
 
-<!--
-The base file `environment.ts`, contains the default environment settings. For example:
+The `build` command uses this as the build target when no environment is specified.
+You can add further variables, either as additional properties on the environment object, or as separate objects.
+For example, the following adds a default for a variable to the default environment:
+
+```
+export const environment = {
+  production: false,
+  apiUrl: 'http://my-api-url'
+};
+```
+
+You can add target-specific configuration files, such as `environment.prod.ts`.
+The following sets content sets default values for the production build target:
+
+```
+export const environment = {
+  production: true,
+  apiUrl: 'http://my-prod-url'
+};
+```
 -->
+프로젝트의 기본 환경설정 파일은 `src/environments/` 폴더에 존재하는 `environment.ts` 파일입니다.
+그리고 `production`이나 `staging`과 같은 환경을 위해 설정 파일을 따로 구성한다면, 이 파일을 오버라이드하는 방식으로 새로운 설정 파일을 구성할 수 있습니다.
+
+예를 들면 이런 식입니다:
+
+```
+└──myProject/src/environments/
+                   └──environment.ts
+                   └──environment.prod.ts
+                   └──environment.stage.ts
+```
+
 기본 환경설정 파일 `environment.ts` 파일에는 환경설정의 기본이 되는 내용들이 존재합니다.
 기본 설정은 이렇습니다:
 
@@ -67,11 +92,6 @@ export const environment = {
 };
 ```
 
-<!--
-The `build` command uses this as the build target when no environment is specified.
-You can add further variables, either as additional properties on the environment object, or as separate objects.
-For example, the following adds a default for a variable to the default environment:
--->
 빌드 환경을 따로 지정하지 않은 상태로 `build` 명령을 실행하면 `environment.ts` 파일이 기본으로 사용됩니다.
 물론 이 파일은 좀 더 많은 설정값을 갖도록 확장할 수도 있고, 필요하다면 다른 객체를 더 선언해서 사용하는 것도 가능합니다.
 그래서 기본 환경 설정 객체에 다음과 같이 새로운 프로퍼티를 추가할 수도 있습니다:
@@ -83,10 +103,6 @@ export const environment = {
 };
 ```
 
-<!--
-You can add target-specific configuration files, such as `environment.prod.ts`.
-The following sets content sets default values for the production build target:
--->
 그리고 `environment.prod.ts` 파일에는 해당 환경에 맞는 설정값을 지정할 수 있습니다.
 위에서 살펴본 `environment` 객체를 운영용 환경에 맞게 오버라이드하면 다음과 같이 같이 구성할 수 있습니다:
 
@@ -97,6 +113,7 @@ export const environment = {
 };
 ```
 
+
 <!--
 ### Using environment-specific variables in your app
 -->
@@ -104,8 +121,6 @@ export const environment = {
 
 <!--
 The following application structure configures build targets for production and staging environments:
--->
-`production` 환경과 `staging` 환경을 포함해서 총 3가지 빌드 환경을 구성한다면 다음과 같이 구성할 수 있습니다:
 
 ```
 └── src
@@ -118,25 +133,16 @@ The following application structure configures build targets for production and 
         └── environment.ts
 ```
 
-<!--
 To use the environment configurations you have defined, your components must import the original environments file:
--->
-그리고 컴포넌트 코드에서 환경변수를 참조하려면 기본 환경설정 파일인 `environment.ts` 파일을 로드해야 합니다:
 
 ```
 import { environment } from './../environments/environment';
 ```
 
-<!--
 This ensures that the build and serve commands can find the configurations for specific build targets.
 
 The following code in the component file (`app.component.ts`) uses an environment variable defined in the configuration files.
--->
-그러면 `ng build` 명령이나 `ng serve` 명령이 실행될 때 기본 환경설정 파일을 로드하기 때문에, 애플리케이션 코드에서 이 환경설정 파일의 내용을 참조할 수 있습니다.
 
-아래 코드는 컴포넌트 파일(`app.component.ts`)에서 환경변수를 참조하고 이 환경변수 객체에 있느 프로퍼티를 콘솔에 출력하는 코드입니다.
-
-<!--
 ```
 import { Component } from '@angular/core';
 import { environment } from './../environments/environment';
@@ -154,6 +160,29 @@ export class AppComponent {
 }
 ```
 -->
+`production` 환경과 `staging` 환경을 포함해서 총 3가지 빌드 환경을 구성한다면 다음과 같이 구성할 수 있습니다:
+
+```
+└── src
+    └── app
+        ├── app.component.html
+        └── app.component.ts
+    └── environments
+        ├── environment.prod.ts
+        ├── environment.staging.ts
+        └── environment.ts
+```
+
+그리고 컴포넌트 코드에서 환경변수를 참조하려면 기본 환경설정 파일인 `environment.ts` 파일을 로드해야 합니다:
+
+```
+import { environment } from './../environments/environment';
+```
+
+그러면 `ng build` 명령이나 `ng serve` 명령이 실행될 때 기본 환경설정 파일을 로드하기 때문에, 애플리케이션 코드에서 이 환경설정 파일의 내용을 참조할 수 있습니다.
+
+아래 코드는 컴포넌트 파일(`app.component.ts`)에서 환경변수를 참조하고 이 환경변수 객체에 있느 프로퍼티를 콘솔에 출력하는 코드입니다.
+
 ```
 import { Component } from '@angular/core';
 import { environment } from './../environments/environment';
@@ -171,6 +200,7 @@ export class AppComponent {
 }
 ```
 
+
 {@a file-replacement}
 {@a configure-target-specific-file-replacements}
 
@@ -180,12 +210,70 @@ export class AppComponent {
 ## 빌드 환경에 맞게 환경설정 파일 교체하기
 
 <!--
-The main CLI configuration file, `angular.json`, contains a `fileReplacements` section in the configuration for each build target, which allows you to replace any file with a target-specific version of that file.
+The main CLI configuration file, `angular.json`, contains a `fileReplacements` section in the configuration for each build target, which allows you to replace any file in the TypeScript program with a target-specific version of that file.
 This is useful for including target-specific code or variables in a build that targets a specific environment, such as production or staging.
 
 By default no files are replaced.
 You can add file replacements for specific build targets.
 For example:
+
+```
+"configurations": {
+  "production": {
+    "fileReplacements": [
+      {
+        "replace": "src/environments/environment.ts",
+        "with": "src/environments/environment.prod.ts"
+      }
+    ],
+    ...
+```
+
+This means that when you build your production configuration with `ng build --configuration production`, the `src/environments/environment.ts` file is replaced with the target-specific version of the file, `src/environments/environment.prod.ts`.
+
+You can add additional configurations as required. To add a staging environment, create a copy of `src/environments/environment.ts` called `src/environments/environment.staging.ts`, then add a `staging` configuration to `angular.json`:
+
+```
+"configurations": {
+  "production": { ... },
+  "staging": {
+    "fileReplacements": [
+      {
+        "replace": "src/environments/environment.ts",
+        "with": "src/environments/environment.staging.ts"
+      }
+    ]
+  }
+}
+```
+
+You can add more configuration options to this target environment as well.
+Any option that your build supports can be overridden in a build target configuration.
+
+To build using the staging configuration, run the following command:
+
+<code-example language="sh">
+ ng build --configuration=staging
+</code-example>
+
+You can also configure the `serve` command to use the targeted build configuration if you add it to the "serve:configurations" section of `angular.json`:
+
+```
+"serve": {
+  "builder": "@angular-devkit/build-angular:dev-server",
+  "options": {
+    "browserTarget": "your-project-name:build"
+  },
+  "configurations": {
+    "production": {
+      "browserTarget": "your-project-name:build:production"
+    },
+    "staging": {
+      "browserTarget": "your-project-name:build:staging"
+    }
+  }
+},
+```
 -->
 Angular CLI 환경설정 파일인 `angular.json` 파일에는 각 빌드 환경마다 `fileReplacements` 섹션이 존재하는데, 이 값을 설정하면 해당 빌드 환경에 해당하는 파일로 환경설정 파일을 교체할 수 있습니다.
 그래서 `production` 환경이나 `staging` 환경에 해당하는 환경설정을 기본 환경설정 파일과 별개로 구성한 뒤에, Angular CLI 명령을 실행할 때 적절한 환경설정 파일로 교체해서 실행할 수 있습니다.
@@ -204,12 +292,7 @@ Angular CLI 환경설정 파일인 `angular.json` 파일에는 각 빌드 환경
     ...
 ```
 
-<!--
-This means that when you build your production configuration (using `ng build --prod` or `ng build --configuration=production`), the `src/environments/environment.ts` file is replaced with the target-specific version of the file, `src/environments/environment.prod.ts`.
-
-You can add additional configurations as required. To add a staging environment, create a copy of `src/environments/environment.ts` called `src/environments/environment.staging.ts`, then add a `staging` configuration to `angular.json`:
--->
-이렇게 설정하면 프로젝트를 운영용 환경으로 빌드할 때(`ng build --prod` 또는 `ng build --configuration=production`) `src/environments/environment.ts` 파일을 `src/environments/environment.prod.ts` 파일로 교체한 후에 Angular CLI 명령이 실행됩니다.
+이렇게 설정하면 프로젝트를 운영용 환경으로 빌드할 때(`ng build --configuration production`) `src/environments/environment.ts` 파일을 `src/environments/environment.prod.ts` 파일로 교체한 후에 Angular CLI 명령이 실행됩니다.
 
 이 설정은 원하는 대로 추가할 수 있습니다.
 `staging` 환경을 추가로 구성해야 한다면 `src/environments/environment.ts` 파일을 복사해서 `src/environments/environment.staging.ts` 파일을 만들고, `staging` 환경에 대한 설정을 `angular.json` 파일에 다음과 같이 추가하면 됩니다:
@@ -228,23 +311,14 @@ You can add additional configurations as required. To add a staging environment,
 }
 ```
 
-<!--
-You can add more configuration options to this target environment as well.
-Any option that your build supports can be overridden in a build target configuration.
-
-To build using the staging configuration, run the following command:
--->
 빌드 환경은 얼마든지 추가할 수 있기 때문에, 빌드 환경에 어울리는 설정값을 자유롭게 지정할 수 있습니다.
 
 이제 `staging` 환경으로 애플리케이션을 빌드하려면 다음 명령을 실행하면 됩니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
  ng build --configuration=staging
 </code-example>
 
-<!--
-You can also configure the `serve` command to use the targeted build configuration if you add it to the "serve:configurations" section of `angular.json`:
--->
 그리고 새로 추가한 환경으로 `ng serve` 명령을 실행하려면 `angular.json` 파일의 "serve:configurations" 섹션 내용을 다음과 같이 수정하면 됩니다:
 
 ```
@@ -263,6 +337,7 @@ You can also configure the `serve` command to use the targeted build configurati
   }
 },
 ```
+
 
 {@a size-budgets}
 {@a configure-size-budgets}
@@ -308,7 +383,7 @@ Specify size values in the following formats:
 
 * 12%: Percentage of size relative to baseline. (Not valid for baseline values.)
 
-When you configure a budget, the build system warns or reports an error when a given part of the app reaches or exceeds a boundary size that you set.
+When you configure a budget, the build system warns or reports an error when a given part of the application reaches or exceeds a boundary size that you set.
 
 Each budget entry is a JSON object with the following properties:
 -->
@@ -339,10 +414,10 @@ Each budget entry is a JSON object with the following properties:
     The type of budget. One of:
 
 * `bundle` - The size of a specific bundle.
-* `initial` - The initial size of the app.
+* `initial` - The size of JavaScript needed for bootstrapping the application. Defaults to warning @ 500kb and erroring at 1mb.
 * `allScript` - The size of all scripts.
-* `all` - The size of the entire app.
-* `anyComponentStyle` - This size of any one component stylesheet.
+* `all` - The size of the entire application.
+* `anyComponentStyle` - This size of any one component stylesheet. Defaults to warning at 2kb and erroring at 4kb.
 * `anyScript` - The size of any one script.
 * `any` - The size of any file.
 
@@ -398,17 +473,19 @@ Each budget entry is a JSON object with the following properties:
     <td>
       용량을 제한하는 방식을 지정하며, 다음 항목 중 하나를 사용합니다:
 
-      * bundle - 특정 번들 파일을 기준으로 합니다.
+      * `bundle` - 특정 번들 파일을 기준으로 합니다.
 
-      * initial - 애플리케이션이 처음 실행될 때 필요한 용량을 기준으로 합니다.
+      * `initial` - 애플리케이션이 처음 실행될 때 필요한 용량을 기준으로 합니다. 기본 설정에서 500kb를 넘으면 경고 메시지가 출력되며 1mb를 넘으면 에러 메시지가 출력됩니다.
 
-      * allScript - 스크립트 파일 전체를 기준으로 합니다.
+      * `allScript` - 스크립트 파일 전체를 기준으로 합니다.
 
-      * all - 애플리케이션 전체 용량을 기준으로 합니다.
+      * `all` - 애플리케이션 전체 용량을 기준으로 합니다.
 
-      * anyScript - 개별 스크립트 파일을 기준으로 합니다.
+      * `anyComponentStyle` - 컴포넌트 스타일시트 파일 하나를 기준으로 합니다. 기본 설정에서 2kb를 넘으면 경고 메시지가 출력되며 4kb를 넘으면 에러 메시지가 출력됩니다.
 
-      * any - 개별 파일을 기준으로 합니다.
+      * `anyScript` - 개별 스크립트 파일을 기준으로 합니다.
+
+      * `any` - 개별 파일을 기준으로 합니다.
 
     </td>
   </tr>
@@ -445,6 +522,7 @@ Each budget entry is a JSON object with the following properties:
     <td>기준값보다 이 용량 이상으로 작거나 크면 에러 메시지를 표시합니다.</td>
   </tr>
 </table>
+
 
 {@a commonjs }
 
@@ -521,6 +599,21 @@ Browserlist looks for configuration options in a `browserslist` property of the 
 Autoprefixer looks for the `browserslist` configuration when it prefixes your CSS.
 
 * You can tell Autoprefixer what browsers to target by adding a browserslist property to the package configuration file, `package.json`:
+```
+ "browserslist": [
+   "> 1%",
+   "last 2 versions"
+ ]
+```
+
+* Alternatively, you can add a new file, `.browserslistrc`, to the project directory, that specifies browsers you want to support:
+```
+ ### Supported Browsers
+ > 1%
+ last 2 versions
+```
+
+See the [browserslist repo](https://github.com/browserslist/browserslist) for more examples of how to target specific browsers and versions.
 -->
 Angular CLI는 브라우저 종류와 버전에 대한 호환성을 보장하기 위해 [Autoprefixer](https://github.com/postcss/autoprefixer)를 사용합니다.
 그래서 특정 브라우저에서 동작하기를 원하거나 특정 브라우저 버전을 배제하는 내용으로 빌드 옵션으로 설정할 수 있습니다.
@@ -538,28 +631,16 @@ Autoprefixer는 지원하는 브라우저를 지정할 때 내부적으로 [Brow
  ]
 ```
 
-<!--
-* Alternatively, you can add a new file, `.browserslistrc`, to the project directory, that specifies browsers you want to support:
--->
 * 아니면 프로젝트 폴더에 `.browserlistrc` 파일을 만들고 이 파일에 다음과 같이 지정할 수도 있습니다:
 
-<!--
-```
- ### Supported Browsers
- > 1%
- last 2 versions
-```
--->
 ```
  ### 지원 브라우저
  > 1%
  last 2 versions
 ```
 
-<!--
-See the [browserslist repo](https://github.com/browserslist/browserslist) for more examples of how to target specific browsers and versions.
--->
 지원할 브라우저와 브라우저 버전을 지정하는 방법은 [browserslist GitHub 레파지토리](https://github.com/browserslist/browserslist)를 참고하세요.
+
 
 <!--
 ### Backward compatibility with Lighthouse
@@ -567,7 +648,7 @@ See the [browserslist repo](https://github.com/browserslist/browserslist) for mo
 ### Lighthouse 하위 호환성 설정
 
 <!--
-If you want to produce a progressive web app and are using [Lighthouse](https://developers.google.com/web/tools/lighthouse/) to grade the project, add the following `browserslist` entry to your `package.json` file, in order to eliminate the [old flexbox](https://developers.google.com/web/tools/lighthouse/audits/old-flexbox) prefixes:
+If you want to produce a progressive web application and are using [Lighthouse](https://developers.google.com/web/tools/lighthouse/) to grade the project, add the following `browserslist` entry to your `package.json` file, in order to eliminate the [old flexbox](https://developers.google.com/web/tools/lighthouse/audits/old-flexbox) prefixes:
 -->
 PWA 앱을 대상으로 [Lighthouse](https://developers.google.com/web/tools/lighthouse/)를 사용해서 프로젝트를 점검하려면 `package.json` 파일에 다음 내용을 추가해야 합니다.
 이 설정은 [이전 버전의 CSS Flexbox](https://developers.google.com/web/tools/lighthouse/audits/old-flexbox)를 지원하지 않겠다는 것을 의미합니다.
@@ -580,6 +661,7 @@ PWA 앱을 대상으로 [Lighthouse](https://developers.google.com/web/tools/lig
 ]
 ```
 
+
 <!--
 ### Backward compatibility with CSS grid
 -->
@@ -588,13 +670,13 @@ PWA 앱을 대상으로 [Lighthouse](https://developers.google.com/web/tools/lig
 <!--
 CSS grid layout support in Autoprefixer, which was previously on by default, is off by default in Angular 8 and higher.
 
-To use CSS grid with IE10/11, you must explicitly enable it using the `autoplace` option.
+To use CSS grid with Internet Explorer 10/11, you must explicitly enable it using the `autoplace` option.
 To do this, add the following to the top of the global styles file (or within a specific css selector scope):
 -->
 CSS 그리드 레이아웃은 자동 접두사(autoprefixer) 기능을 지원합니다.
 이 기능은 Angular 8 버전 이전까지는 기본으로 활성화되었지만 8버전부터는 지원하지 않는 것이 기본값입니다.
 
-IE10/11 환경에서 CSS 그리드를 사용하려면 `autoplace` 옵션을 사용해서 이 기능을 명시적으로 활성화해야 합니다.
+IE11 환경에서 CSS 그리드를 사용하려면 `autoplace` 옵션을 사용해서 이 기능을 명시적으로 활성화해야 합니다.
 전역 스타일 파일 제일 위쪽에 다음 코드를 추가하면 됩니다.
 
 ```
@@ -624,7 +706,7 @@ For more information, see [Autoprefixer documentation](https://autoprefixer.gith
 ## 백엔드 서버 프록시 설정하기
 
 <!--
-You can use the [proxying support](https://webpack.js.org/configuration/dev-server/#devserverproxy) in the `webpack` dev server to divert certain URLs to a backend server, by passing a file to the `--proxy-config` build option.
+You can use the [proxying support](https://webpack.js.org/configuration/dev-server/#devserverproxy) in the `webpack` development server to divert certain URLs to a backend server, by passing a file to the `--proxy-config` build option.
 For example, to divert all calls for `http://localhost:4200/api` to a server running on `http://localhost:3000/api`, take the following steps.
 -->
 Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용하기 때문에 특정 백엔드 주소로 향하는 HTTP 요청에 대해 [프록시를 설정](https://webpack.js.org/configuration/dev-server/#devserverproxy) 할 수 있습니다.
@@ -659,7 +741,7 @@ Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용�
     ...
     ```
 
-1. To run the dev server with this proxy configuration, call `ng serve`.
+1. To run the development server with this proxy configuration, call `ng serve`.
 
 You can edit the proxy configuration file to add configuration options; some examples are given below.
 For a description of all options, see [webpack DevServer documentation](https://webpack.js.org/configuration/dev-server/#devserverproxy).
@@ -860,7 +942,7 @@ In this case, you can configure the backend proxy to redirect calls through your
 
 다음 명령을 실행해서 프록시 에이전트 패키지를 설치합니다:
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 npm install --save-dev https-proxy-agent
 </code-example>
 
@@ -895,3 +977,9 @@ function setupForCorporateProxy(proxyConfig) {
 
 module.exports = setupForCorporateProxy(proxyConfig);
 ```
+
+{@a browser-compat}
+
+## Configuring browser compatibility
+
+See [browser support guide](guide/browser-support).

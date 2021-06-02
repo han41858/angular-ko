@@ -27,7 +27,7 @@ export class AfterViewComponent implements  AfterViewChecked, AfterViewInit {
   private prevHero = '';
 
   // `ChildViewComponent` 타입의 뷰 자식 컴포넌트를 참조합니다.
-  @ViewChild(ChildViewComponent) viewChild: ChildViewComponent;
+  @ViewChild(ChildViewComponent) viewChild!: ChildViewComponent;
 
   // #enddocregion hooks
   constructor(private logger: LoggerService) {

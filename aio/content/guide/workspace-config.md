@@ -22,13 +22,14 @@ The following properties, at the top level of the file, configure the workspace.
 
 * `version`: The configuration-file version.
 * `newProjectRoot`: Path where new projects are created. Absolute or relative to the workspace folder.
-* `defaultProject`: Default project name to use in commands, where not provided as an argument. When you use `ng new` to create a new app in a new workspace, that app is the default project for the workspace until you change it here.
+* `defaultProject`: Default project name to use in commands, where not provided as an argument. When you use `ng new` to create a new application in a new workspace, that application is the default project for the workspace until you change it here.
 * `schematics` : A set of [schematics](guide/glossary#schematic) that customize the `ng generate` sub-command option defaults for this workspace. See [Generation schematics](#schematics) below.
 * `projects` : Contains a subsection for each project (library or application) in the workspace, with the per-project configuration options.
 
-The initial app that you create with `ng new app_name` is listed under "projects":
+The initial application that you create with `ng new app_name` is listed under "projects":
 -->
-`angular.json` 파일의 최상위 계층에는 워크스페이스를 설정하는 프로퍼티가 존재합니다. 이 계층에서 `projects` 섹션을 정의하면 특정 프로젝트에 옵션을 지정할 수 있습니다.
+`angular.json` 파일의 최상위 계층에는 워크스페이스를 설정하는 프로퍼티가 존재합니다.
+이 계층에서 `projects` 섹션을 정의하면 특정 프로젝트에 옵션을 지정할 수 있습니다.
 Angular CLI가 기본으로 구성한 워크스페이스 설정은 프로젝트 계층에서 오버라이드할 수 있으며, 프로젝트 계층에 지정된 설정은 커맨드라인에서 오버라이드할 수 있습니다.
 
 `angular.json` 파일의 최상위 계층에는 워크스페이스의 환경을 구성하는 프로퍼티가 다음과 같이 존재합니다.
@@ -63,7 +64,7 @@ When you create a library project with `ng generate library`, the library projec
 
   <!--
   Note that the `projects` section of the configuration file does not correspond exactly to the workspace file structure.
-  * The initial app created by `ng new` is at the top level of the workspace file structure.
+  * The initial application created by `ng new` is at the top level of the workspace file structure.
   * Additional applications and libraries go into a `projects` folder in the workspace.
 
   For more information, see [Workspace and project file structure](guide/file-structure).
@@ -120,7 +121,7 @@ The following top-level configuration properties are available for each project,
 | `root`          | The root folder for this project's files, relative to the workspace folder. Empty for the initial app, which resides at the top level of the workspace. |
 | `sourceRoot`    | The root folder for this project's source files. |
 | `projectType`   | One of "application" or "library". An application can run independently in a browser, while a library cannot.|
-| `prefix`        | A string that Angular prepends to generated selectors. Can be customized to identify an app or feature area. |
+| `prefix`        | A string that Angular prepends to generated selectors. Can be customized to identify an application or feature area. |
 | `schematics`    | A set of schematics that customize the `ng generate` sub-command option defaults for this project. See [Generation schematics](#schematics) below.  |
 | `architect`     | Configuration defaults for Architect builder targets for this project. |
 -->
@@ -135,7 +136,7 @@ The following top-level configuration properties are available for each project,
 
 
 {@a schematics}
-
+{@a generation-schematics}
 <!--
 ## Generation schematics
 -->
@@ -143,21 +144,21 @@ The following top-level configuration properties are available for each project,
 
 <!--
 Angular generation [schematics](guide/glossary#schematic) are instructions for modifying a project by adding files or modifying existing files.
-Individual schematics for the default Angular CLI `ng generate` sub-commands are collected in the package `@angular`.
+Individual schematics for the default Angular CLI `ng generate` sub-commands are collected in the package `@schematics/angular`.
 Specify the schematic name for a subcommand in the format `schematic-package:schematic-name`;
-for example, the schematic for generating a component is `@angular:component`.
+for example, the schematic for generating a component is `@schematics/angular:component`.
 
-The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://github.com/angular/angular-cli/blob/7.0.x/packages/schematics/angular/application/schema.json).
+The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json).
 The schema describes the options available to the CLI for each of the `ng generate` sub-commands, as shown in the `--help` output.
 
 The fields given in the schema correspond to the allowed argument values and defaults for the CLI sub-command options.
 You can update your workspace schema file to set a different default for a sub-command option.
 -->
 Angular에서 생성 [스키매틱(schematics)](guide/glossary#schematic)을 정의하면 Angular 구성요소를 프로젝트에 추가하면서 미리 정해둔 대로 프로젝트 파일을 자동 수정할 수 있습니다.
-Angular CLI로 `ng generate` 명령을 사용할 때 활용되는 스키매틱은 `@angular` 패키지에서 제공하는 것입니다.
-이 때 `ng generate` 뒤에 오는 세부 명령은 `schematic-package:스키매틱-이름` 형식으로 지정되어 있기 때문에 컴포넌트 생성 명령은 `@angular:component` 스키매틱으로 정의되어 있습니다.
+Angular CLI로 `ng generate` 명령을 사용할 때 활용되는 스키매틱은 `@schematics/angular` 패키지에서 제공하는 것입니다.
+이 때 `ng generate` 뒤에 오는 세부 명령은 `schematic-package:스키매틱-이름` 형식으로 지정되어 있기 때문에 컴포넌트 생성 명령은 `@schematics/angular:component` 스키매틱으로 정의되어 있습니다.
 
-그리고 Angular CLI로 프로젝트와 구성요소를 생성할 떄 사용되는 JSON 스키마는 [`@schematics/angular`](https://github.com/angular/angular-cli/blob/7.0.x/packages/schematics/angular/application/schema.json) 패키지로 제공됩니다.
+그리고 Angular CLI로 프로젝트와 구성요소를 생성할 떄 사용되는 JSON 스키마는 [`@schematics/angular`](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json) 패키지로 제공됩니다.
 `ng generate` 명령에 어떤 옵션을 사용할 수 있는지 알아보려면 `ng generate --help` 명령을 실행해서 도움말을 확인해 보세요.
 
 워크스페이스에 있는 스키마 파일을 변경하면 세부 명령의 기본 옵션값을 변경할 수 있습니다.
@@ -193,7 +194,7 @@ Architect는 [빌더(builder)](guide/glossary#builder)를 사용해서 [빌드 �
 
 <!--
 Angular defines default builders for use with specific CLI commands, or with the general `ng run` command.
-The JSON schemas that the define the options and defaults for each of these default builders are collected in the [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/8.0.x/packages/angular/cli/lib/config/schema.json) package.
+The JSON schemas that define the options and defaults for each of these default builders are collected in the [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/master/packages/angular/cli/lib/config/schema.json) package.
 The schemas configure options for the following builders.
 
 * app-shell
@@ -206,7 +207,7 @@ The schemas configure options for the following builders.
 * tslint
 -->
 Angular는 Angular CLI를 사용할 때 활용할 빌더와 기본 옵션을 미리 지정해두었습니다.
-Angular CLI 명령의 기본 옵션과 기본 빌드 대상은 [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/8.0.x/packages/angular/cli/lib/config/schema.json) 패키지에 정의되어 있으며, 다음 빌더들이 활용됩니다.
+Angular CLI 명령의 기본 옵션과 기본 빌드 대상은 [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/master/packages/angular/cli/lib/config/schema.json) 패키지에 정의되어 있으며, 다음 빌더들이 활용됩니다.
 
 * app-shell
 * browser
@@ -260,9 +261,9 @@ Architect 빌드 대상은 `angular.json` 파일의 `architect` 섹션에서 지
 * The `architect/build` section configures defaults for options of the `ng build` command.
 See [Build target](#build-target) below for more information.
 
-* The `architect/serve` section overrides build defaults and supplies additional serve defaults for the `ng serve` command. In addition to the options available for the `ng build` command, it adds options related to serving the app.
+* The `architect/serve` section overrides build defaults and supplies additional serve defaults for the `ng serve` command. In addition to the options available for the `ng build` command, it adds options related to serving the application.
 
-* The `architect/e2e` section overrides build-option defaults for building end-to-end testing apps using the `ng e2e` command.
+* The `architect/e2e` section overrides build-option defaults for building end-to-end testing applications using the `ng e2e` command.
 
 * The `architect/test` section overrides build-option defaults for test builds and supplies additional test-running defaults for the `ng test` command.
 
@@ -270,9 +271,9 @@ See [Build target](#build-target) below for more information.
 
 * The `architect/extract-i18n` section configures defaults for options of the `ng extract-i18n` command, which extracts marked message strings from source code and outputs translation files.
 
-* The `architect/server` section configures defaults for creating a Universal app with server-side rendering, using the `ng run <project>:server` command.
+* The `architect/server` section configures defaults for creating a Universal application with server-side rendering, using the `ng run <project>:server` command.
 
-* The `architect/app-shell` section configures defaults for creating an app shell for a progressive web app (PWA), using the `ng run <project>:app-shell` command.
+* The `architect/app-shell` section configures defaults for creating an application shell for a progressive web application (PWA), using the `ng run <project>:app-shell` command.
 
 In general, the options for which you can configure defaults correspond to the command options listed in the [CLI reference page](cli) for each command.
 Note that all options in the configuration file must use [camelCase](guide/glossary#case-conventions), rather than dash-case.
@@ -330,9 +331,13 @@ The `architect/build` section configures defaults for options of the `ng build` 
 ### 빌드 옵션 변경
 
 <!--
-By default, a `production` configuration is defined, and the `ng build` command has `--prod` option that builds using this configuration. The `production` configuration sets defaults that optimize the app in a number of ways, such as bundling files, minimizing excess whitespace, removing comments and dead code, and rewriting code to use short, cryptic names ("minification").
+Angular CLI comes with two build configurations: `production` and `development`. By default, the `ng build` command uses the `production` configuration, which applies a number of build optimizations, including:
+* Bundling files
+* Minimizing excess whitespace
+* Removing comments and dead code
+* Rewriting code to use short, mangled names (minification)
 
-You can define and name additional alternate configurations (such as `stage`, for instance) appropriate to your development process. Some examples of different build configurations are `stable`, `archive` and `next` used by AIO itself, and the individual locale-specific configurations required for building localized versions of an app. For details, see [Internationalization (i18n)](guide/i18n#merge-aot).
+You can define and name additional alternate configurations (such as `stage`, for instance) appropriate to your development process. Some examples of different build configurations are `stable`, `archive` and `next` used by AIO itself, and the individual locale-specific configurations required for building localized versions of an application. For details, see [Internationalization (i18n)](guide/i18n#merge-aot).
 
 You can select an alternate configuration by passing its name to the `--configuration` command line flag.
 
@@ -340,7 +345,11 @@ You can also pass in more than one configuration name as a comma-separated list.
 
 If the `--prod` command line flag is also used, it is applied first, and its settings can be overridden by any configurations specified via the `--configuration` flag.
 -->
-`ng build` 명령을 실행할 때 `--prod` 옵션을 사용하면 `production` 설정이 적용되는데, `production` 설정에는 애플리케이션 번들링을 최적화하기 위해 공백 문자나 주석, 사용하지 않는 코드를 제거하고, 코드를 짧게 변환하면서 난독화하는 동작이 포함되어 있습니다.
+Angular CLI comes with two build configurations: `production` and `development`. By default, the `ng build` command uses the `production` configuration, which applies a number of build optimizations, including:
+* Bundling files
+* Minimizing excess whitespace
+* Removing comments and dead code
+* Rewriting code to use short, mangled names (minification)
 
 개발 과정에 필요하다면 `stage`와 같은 빌드 설정을 추가할 수도 있습니다. 그래서 Angular IO (Angular 공식 가이드 문서) 프로젝트는 `stable`, `archive`, `next`와 같은 빌드 설정을 추가로 정의해서 사용하고 있으며, 애플리케이션에 다국어를 적용하기 위한 설정도 추가할 수 있습니다. 자세한 내용은 [Internationalization (i18n)](guide/i18n#merge-aot) 문서를 참고하세요.
 
@@ -370,10 +379,10 @@ Some additional options can only be set through the configuration file, either b
 | OPTIONS PROPERTIES | DESCRIPTION |
 | :------------------------- | :---------------------------- |
 | `assets`                   | An object containing paths to static assets to add to the global context of the project. The default paths point to the project's icon file and its `assets` folder. See more in [Assets configuration](#asset-config) below. |
-| `styles`                   | An array of style files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors: [sass/scss](http://sass-lang.com/), [less](http://lesscss.org/), and [stylus](http://stylus-lang.com/). See more in [Styles and scripts configuration](#style-script-config) below. |
+| `styles`                   | An array of style files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors: [sass/scss](https://sass-lang.com/), [less](http://lesscss.org/), and [stylus](https://stylus-lang.com/). See more in [Styles and scripts configuration](#style-script-config) below. |
 | `stylePreprocessorOptions` | An object containing option-value pairs to pass to style preprocessors. See more in [Styles and scripts configuration](#style-script-config) below. |
 | `scripts`                  | An object containing JavaScript script files to add to the global context of the project. The scripts are loaded exactly as if you had added them in a `<script>` tag inside `index.html`. See more in [Styles and scripts configuration](#style-script-config) below. |
-| `budgets`                  | Default size-budget type and threshholds for all or parts of your app. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See [Configure size budgets](guide/build#configure-size-budgets). (Not available in `test` section.) |
+| `budgets`                  | Default size-budget type and threshholds for all or parts of your application. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See [Configure size budgets](guide/build#configure-size-budgets). (Not available in `test` section.) |
 | `fileReplacements`         | An object containing files and their compile-time replacements. See more in [Configure target-specific file replacements](guide/build#configure-target-specific-file-replacements).|
 -->
 이 환경설정 파일의 내용은 [`ng build`](cli/build), [`ng serve`](cli/serve), [`ng test`](cli/test) 명령에 적용됩니다. 이 명령에 사용할 수 있는 옵션의 목록은 [Angular CLI](cli) 문서를 참고하세요.
@@ -383,7 +392,7 @@ Some additional options can only be set through the configuration file, either b
 | 옵션값 | 설명 |
 | :------------------------- | :---------------------------- |
 | `assets`                   | 프로젝트 전역에 사용되는 정적 리소스를 지정합니다. 기본 경로는 `asssets` 입니다. 자세한 내용은 아래 [애셋 환경설정](#asset-config) 섹션을 참고하세요. |
-| `styles`                   | 프로젝트 전역에 사용되는 스타일 파일을 지정합니다. Angular는 기본 CSS는 물론이고 [sass/scss](http://sass-lang.com/), [less](http://lesscss.org/), [stylus](http://stylus-lang.com/)도 기본으로 지원합니다. 자세한 내용은 아래 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요. |
+| `styles`                   | 프로젝트 전역에 사용되는 스타일 파일을 지정합니다. Angular는 기본 CSS는 물론이고 [sass/scss](https://sass-lang.com/), [less](http://lesscss.org/), [stylus](https://stylus-lang.com/)도 기본으로 지원합니다. 자세한 내용은 아래 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요. |
 | `stylePreprocessorOptions` | 스타일 전처리기에 전달할 옵션을 키-값 형태로 지정합니다. 자세한 내용은 아래 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요. |
 | `scripts`                  | 프로젝트 전역에 사용되는 JavaScript 파일을 지정합니다. 이 때 지정되는 JavaScript 파일들은 `index.html`에 `<script>` 태그로 자동 추가됩니다. 자세한 내용은 아래 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요. |
 | `budgets`                  | 애플리케이션 빌드 결과물의 한계 크기를 지정합니다. 애플리케이션을 빌드해서 생성되는 빌드 결과물의 크기가 이 옵션에서 지정된 값보다 크면 경고 메시지나 에러 메시지를 출력합니다. 자세한 내용은 [빌드 결과물 크기 지정하기](guide/build#configure-size-budgets) 문서를 참고하세요. (`test` 환경설정에는 적용되지 않습니다.) |
@@ -408,13 +417,12 @@ The following sections provide more details of how these complex values are used
 
 
 {@a asset-config}
-
+{@a assets-configuration}
 <!--
 ### Assets configuration
 -->
 ### 애셋 환경설정
 
-<!--
 Each `build` target configuration can include an `assets` array that lists files or folders you want to copy as-is when building your project.
 By default, the `src/assets/` folder and `src/favicon.ico` are copied over.
 
@@ -436,6 +444,7 @@ A asset specification object can have the following fields.
 * `input`: A path relative to the workspace root.
 * `output`: A path relative to `outDir` (default is `dist/`*project-name*). Because of the security implications, the CLI never writes files outside of the project output path.
 * `ignore`: A list of globs to exclude.
+* `followSymlinks`: Allow glob patterns to follow symlink directories. This allows subdirectories of the symlink to be searched. Defaults to `false`.
 
 For example, the default asset paths can be represented in more detail using the following objects.
 
@@ -478,20 +487,22 @@ The following example uses the `ignore` field to exclude certain files in the as
 <code-example language="json">
 
 "assets": [
- { 
+ {
    "glob": "**/*",
    "input": "src/assets/",
    "ignore": ["**/*.svg"],
-   "output": "/assets/" 
+   "output": "/assets/"
  }
 ]
 
 </code-example>
 
+
 {@a style-script-config}
 
 ### Styles and scripts configuration
 
+<!--
 An array entry for the `styles` and `scripts` options can be a simple path string, or an object that points to an extra entry-point file.
 The associated builder will load that file and its dependencies as a separate bundle during the build.
 With a configuration object, you have the option of naming the bundle for the entry point, using a `bundleName` field.
@@ -509,7 +520,7 @@ For example, the following object values create and name a bundle that contains 
      }
    ],
    "scripts": [
-     { 
+     {
        "input": "src/external-module/main.js",
        "inject": false,
        "bundleName": "external-module"
@@ -552,6 +563,7 @@ You can mix simple and complex file references for styles and scripts.
 * `input`: 소스 폴더를 워크스페이스 최상위 경로의 상대경로로 지정합니다.
 * `output`: 복사할 위치를 `outDir`의 상대경로로 지정합니다(기본값은 `dist/*프로젝트-이름*` 입니다). 보안 문제가 있을 수 있기 때문에 Angular CLI는 `outDir` 안쪽에만 파일을 씁니다.
 * `ignore`: 제외할 파일 패턴을 지정합니다.
+* `followSymlinks`: Allow glob patterns to follow symlink directories. This allows subdirectories of the symlink to be searched. Defaults to `false`.
 
 그래서 기본 설정을 객체 형태로 바꿔보면 이렇게 표현할 수 있습니다.
 
@@ -600,93 +612,6 @@ node 패키지 안에서 복사해오려면 이렇게 작성하면 됩니다:
    "ignore": ["**/*.svg"],
    "output": "/assets/" 
  }
-]
-
-</code-example>
-
-
-{@a style-script-config}
-
-<!--
-### Styles and scripts configuration
--->
-### 스타일, 스크립트 환경설정
-
-<!--
-An array entry for the `styles` and `scripts` options can be a simple path string, or an object that points to an extra entry-point file.
-The associated builder will load that file and its dependencies as a separate bundle during the build.
-With a configuration object, you have the option of naming the bundle for the entry point, using a `bundleName` field.
-
-The bundle is injected by default, but you can set `inject` to false to exclude the bundle from injection.
-For example, the following object values create and name a bundle that contains styles and scripts, and excludes it from injection:
-
-<code-example language="json">
-
-   "styles": [
-     {
-       "input": "src/external-module/styles.scss",
-       "inject": false,
-       "bundleName": "external-module"
-     }
-   ],
-   "scripts": [
-     { 
-       "input": "src/external-module/main.js",
-       "inject": false,
-       "bundleName": "external-module"
-     }
-   ]
-
-</code-example>
-
-You can mix simple and complex file references for styles and scripts.
-
-<code-example language="json">
-
-"styles": [
-  "src/styles.css",
-  "src/more-styles.css",
-  { "input": "src/lazy-style.scss", "inject": false },
-  { "input": "src/pre-rename-style.scss", "bundleName": "renamed-style" },
-]
-
-</code-example>
--->
-`styles`, `scripts` 옵션에는 간단하게 경로만 문자열로 지정해도 되지만, 객체를 사용하면 더 다양한 설정을 할 수 있습니다.
-이 환경설정은 이후에 빌더에 활용되는데, 빌드 과정에 의존성을 처리해서 별도 파일로 빌드됩니다.
-이 필드에 객체 형태를 사용하면 `bundleName` 필드를 사용해서 빌드 결과물 파일의 이름을 지정할 수 있습니다.
-
-기본적으로 빌드 결과물은 `index.html` 파일에 추가되지만, `inject` 필드를 `false`로 지정하면 이 파일이 추가되는 것을 제외할 수 있습니다.
-그래서 아래처럼 작성하면 스타일 파일과 스크립트 파일을 정해진 이름으로 빌드하지만 `index.html` 파일에는 자동으로 추가하지 않습니다:
-
-<code-example language="json">
-
-   "styles": [
-     {
-       "input": "src/external-module/styles.scss",
-       "inject": false,
-       "bundleName": "external-module"
-     }
-   ],
-   "scripts": [
-     { 
-       "input": "src/external-module/main.js",
-       "inject": false,
-       "bundleName": "external-module"
-     }
-   ]
-
-</code-example>
-
-이전에 사용하던 방식과 함께 사용할 수도 있습니다.
-
-<code-example language="json">
-
-"styles": [
-  "src/styles.css",
-  "src/more-styles.css",
-  { "input": "src/lazy-style.scss", "inject": false },
-  { "input": "src/pre-rename-style.scss", "bundleName": "renamed-style" },
 ]
 
 </code-example>
@@ -755,37 +680,167 @@ Sass나 Stylus를 사용한다면 `includePaths` 필드를 지정해서 추가 �
 [앱에서 전역 컨텍스트에 있는 라이브러리 사용하기](guide/using-libraries#using-runtime-global-libraries-inside-your-app) 문서를 참고하세요.
 
 
-{@a optimize-and-srcmap}
+{@a optimization-configuration}
 
 <!--
-### Optimization and source map configuration
+### Optimization configuration
 -->
 ### 빌드 최적화, 소스 맵 환경설정
 
-<!--
-The `optimization` and `sourceMap` browser builder options can be either a Boolean or an Object for more fine-grained configuration.
-In this section we will explain how to fine tune these options.
+The `optimization` browser builder option can be either a Boolean or an Object for more fine-tune configuration. This option enables various optimizations of the build output, including:
 
-* The `optimization` option applies to scripts, styles and fonts. You can supply a value such as the following to apply optimization to one or the other:
+- Minification of scripts and styles
+- Tree-shaking
+- Dead-code elimination
+- Inlining of critical CSS
+- Fonts inlining
+
+There are several options that can be used to fine-tune the optimization of an application.
+
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts</code></td>
+<td>Enables optimization of the scripts output.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>styles</code></td>
+<td>Enables optimization of the styles output.</td>
+<td><code>boolean|<a href="#styles-optimization-options">Styles optimization options</a></code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>fonts</code></td>
+<td>Enables optimization for fonts.<br><strong>Note:</strong> This requires internet access.</td>
+<td><code class="no-auto-link">boolean|<a href="#fonts-optimization-options">Fonts optimization options</a></code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+#### Styles optimization options
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>minify</code></td>
+<td>Minify CSS definitions by removing extraneous whitespace and comments, merging identifiers and minimizing values.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>inlineCritical</code></td>
+<td>Extract and inline critical CSS definitions to improve <a href="https://web.dev/first-contentful-paint/">First Contentful Paint.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+#### Fonts optimization options
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>inline</code></td>
+<td>Reduce <a href="https://web.dev/render-blocking-resources/">render blocking requests</a> by inlining external Google fonts and icons CSS definitions in the application's HTML index file.<br><strong>Note:</strong>This requires internet access.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+
+You can supply a value such as the following to apply optimization to one or the other:
 
 <code-example language="json">
 
-  "optimization": { 
+  "optimization": {
     "scripts": true,
-    "styles": false,
+    "styles": {
+      "minify": true,
+      "inlineCritical": true
+    },
     "fonts": true
   }
 
 </code-example>
 
-<div class="alert is-important">
+<div class="alert is-helpful">
 
-  Fonts optimization requires internet access.
-  When enabled, render blocking requests will be reduced by inlining external Google fonts and icons CSS definitions in the application's HTML index file. 
+   For [Universal](guide/glossary#universal), you can reduce the code rendered in the HTML page by
+   setting styles optimization to `true`.
 
 </div>
 
-* The `sourceMap` option applies for both scripts and styles. You can also choose to output hidden source maps, or resolve vendor package source maps:
+### Source map configuration
+
+<!--
+The `sourceMap` browser builder option can be either a Boolean or an Object for more fine-tune configuration to control the source maps of an application.
+
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts</code></td>
+<td>Output source maps for all scripts.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>styles</code></td>
+<td>Output source maps for all styles.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>vendor</code></td>
+<td>Resolve vendor packages source maps.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>Output source maps used for error reporting tools.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+
+
+The example below shows how to toggle one or more values to configure the source map outputs:
 
 <code-example language="json">
 
@@ -804,36 +859,49 @@ In this section we will explain how to fine tune these options.
    These are useful if you only want source maps to map error stack traces in error reporting tools,
    but don't want to expose your source maps in the browser developer tools.
 
-   For [Universal](guide/glossary#universal), you can reduce the code rendered in the HTML page by
-   setting styles optimization to `true` and styles source maps to `false`.
-
 </div>
 -->
-`optimization` 필드와 `sourceMap` 필드에는 간단하게 불리언 값을 지정할 수 있으며, 좀 더 세부적으로 설정하기 위해 객체 형태로 지정할 수도 있습니다.
-이번 섹션에서는 이 옵션들을 어떻게 활용할 수 있는지 알아봅시다.
+The `sourceMap` browser builder option can be either a Boolean or an Object for more fine-tune configuration to control the source maps of an application.
 
-* `optimazation` 옵션에는 스크립트 파일, 스타일 파일, 폰트 파일에 대한 최적화 여부를 불리언 값으로 지정할 수 있습니다:
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>Option</th>
+<th width="40%">Description</th>
+<th>Value Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts</code></td>
+<td>Output source maps for all scripts.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>styles</code></td>
+<td>Output source maps for all styles.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>vendor</code></td>
+<td>Resolve vendor packages source maps.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>Output source maps used for error reporting tools.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
 
-<code-example language="json">
 
-  "optimization": { 
-    "scripts": true,
-    "styles": false,
-    "fonts": true
-  }
-
-</code-example>
-
-
-<div class="alert is-important">
-
-폰트 파일을 최적화하려면 인터넷 연결이 필요합니다.
-원래는 폰트 파일이 렌더링을 막지만, 이 옵션이 활성화되어 있으면 외부 Google 폰트와 아이콘 CSS로 변환되어 애플리케이션 HTML 인덱스 파일에 인라인으로 삽입됩니다.
-
-</div>
-
-* `sourceMap` 옵션은 스크립트 파일과 스타일 파일을 대상으로 사용할 수 있습니다.
-소스맵을 감출지, 벤더 패키지 소스맵을 활용할지 지정할 수 있습니다:
+The example below shows how to toggle one or more values to configure the source map outputs:
 
 <code-example language="json">
 
@@ -846,12 +914,9 @@ In this section we will explain how to fine tune these options.
 
 </code-example>
 
-
 <div class="alert is-helpful">
 
-소스맵을 감추면 빌드 결과물에서 소스맵을 참조하지 않습니다.
-이 옵션은 에러를 처리할 때는 소스맵을 활용하지만 개발자 도구에 노출되는 것을 방지할 때 사용하면 됩니다.
-
-[Universal](guide/glossary#universal)에서는 스타일 최적화를 `true`로, 스타일 소스맵을 `false`로 지정하면 HTML 페이지의 용량을 줄일 수 있습니다.
+   소스맵을 감추면 빌드 결과물에서 소스맵을 참조하지 않습니다.
+   이 옵션은 에러를 처리할 때는 소스맵을 활용하지만 개발자 도구에 노출되는 것을 방지할 때 사용하면 됩니다.
 
 </div>

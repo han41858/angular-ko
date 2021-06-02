@@ -71,8 +71,8 @@ The top level of the workspace contains workspace-wide configuration files, conf
 | :--------------------- | :------------------------------------------|
 | `.editorconfig`        | Configuration for code editors. See [EditorConfig](https://editorconfig.org/). |
 | `.gitignore`           | Specifies intentionally untracked files that [Git](https://git-scm.com/) should ignore. |
-| `README.md`            | Introductory documentation for the root app. |
-| `angular.json`         | CLI configuration defaults for all projects in the workspace, including configuration options for build, serve, and test tools that the CLI uses, such as [TSLint](https://palantir.github.io/tslint/), [Karma](https://karma-runner.github.io/), and [Protractor](http://www.protractortest.org/). For details, see [Angular Workspace Configuration](guide/workspace-config). |
+| `README.md`            | Introductory documentation for the root application. |
+| `angular.json`         | CLI configuration defaults for all projects in the workspace, including configuration options for build, serve, and test tools that the CLI uses, such as [TSLint](https://palantir.github.io/tslint/), [Karma](https://karma-runner.github.io/), and [Protractor](https://www.protractortest.org/). For details, see [Angular Workspace Configuration](guide/workspace-config). |
 | `package.json`          | Configures [npm package dependencies](guide/npm-packages) that are available to all projects in the workspace. See [npm documentation](https://docs.npmjs.com/files/package.json) for the specific format and contents of this file. |
 | `package-lock.json`     | Provides version information for all packages installed into `node_modules` by the npm client. See [npm documentation](https://docs.npmjs.com/files/package-lock.json) for details. If you use the yarn client, this file will be [yarn.lock](https://yarnpkg.com/lang/en/docs/yarn-lock/) instead. |
 | `src/`                  | Source files for the root-level application project. |
@@ -88,13 +88,12 @@ The top level of the workspace contains workspace-wide configuration files, conf
 | `.editorconfig`        | 코드 에디터 환경설정 파일입니다. [EditConfig](https://editorconfig.org/)를 참고하세요. |
 | `.gitignore`           | [Git](https://git-scm.com/)으로 관리하지 않을 파일을 지정합니다. |
 | `README.md`            | 앱 설명 파일입니다. |
-| `angular.json`         | 워크스페이스에 있는 모든 프로젝트에 적용되는 Angular CLI 환경설정파일입니다. Angular CLI로 빌드, 서빙, 테스트할 때 사용하는 [TSLint](https://palantir.github.io/tslint/), [Karma](https://karma-runner.github.io/), [Protractor](http://www.protractortest.org/) 설정도 이 파일에 구성합니다. 자세한 내용은 [Angular 워크스페이스 환경설정](guide/workspace-config) 문서를 참고하세요. |
+| `angular.json`         | 워크스페이스에 있는 모든 프로젝트에 적용되는 Angular CLI 환경설정파일입니다. Angular CLI로 빌드, 서빙, 테스트할 때 사용하는 [TSLint](https://palantir.github.io/tslint/), [Karma](https://karma-runner.github.io/), [Protractor](https://www.protractortest.org/) 설정도 이 파일에 구성합니다. 자세한 내용은 [Angular 워크스페이스 환경설정](guide/workspace-config) 문서를 참고하세요. |
 | `package.json`          | 워크스페이스에 있는 모든 프로젝트에 적용될 [npm 패키지](guide/npm-packages) 목록을 지정합니다. 자세한 내용은 [npm 문서](https://docs.npmjs.com/files/package.json)를 참고하세요. |
 | `package-lock.json`     | `node_modules`에 설치된 패키지들의 버전 정보를 저장합니다. 자세한 내용은 [npm 문서](https://docs.npmjs.com/files/package-lock.json)를 참고하세요. 이 파일은 npm을 사용했을 때 생성되며, yarn을 사용한다면 이 파일 대신 [yarn.lock](https://yarnpkg.com/lang/en/docs/yarn-lock/) 파일이 생성됩니다. |
 | `src/`                  | 최상위 애플리케이션 프로젝트를 구성하는 소스 파일입니다. |
 | `node_modules/`         | 워크스페이스에 사용할 [npm 패키지](guide/npm-packages)가 설치되는 폴더입니다. 이 폴더에 설치한 [npm 패키지](guide/npm-packages)는 워크스페이스에 존재하는 모든 프로젝트에 사용할 수 있습니다. |
-| `tsconfig.json`         | [솔루션 스타일](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html#support-for-solution-style-tsconfigjson-files) TypeScript 환경설정 파일입니다. 코드 에디터나 TypeScript 언어 서버가 개발자 도구를 제공할 때 이 파일을 사용합니다. 컴파일러는 이 파일을 사용하지 않습니다. |
-| `tsconfig.base.json`    | 프로젝트에 적용되는 [TypeScript](https://www.typescriptlang.org/) 환경설정 파일입니다. 자세한 내용은 TypeScript 공식 문서의 [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) 섹션을 참고하세요.|
+| `tsconfig.json`         | 프로젝트에 적용되는 [TypeScript](https://www.typescriptlang.org/) 환경설정 파일입니다. 자세한 내용은 TypeScript 공식 문서의 [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) 섹션을 참고하세요. |
 | `tslint.json`           | 워크스페이스에 있는 프로젝트에 적용할 [TSLint](https://palantir.github.io/tslint/) 환경설정 파일입니다. |
 
 
@@ -113,7 +112,7 @@ This initial root-level application is the *default app* for CLI commands (unles
 
 <div class="alert is-helpful">
 
-   Besides using the CLI on the command line, you can also manipulate files directly in the app's source folder and configuration files.
+   Besides using the CLI on the command line, you can also manipulate files directly in the application's source folder and configuration files.
 
 </div>
 
@@ -158,7 +157,7 @@ Files at the top level of `src/` support testing and running your application. S
 
 <div class="alert is-helpful">
 
-If you create an application using Angular's strict mode, you will also have an additional `package.json` file in the `src/app` directory. For more information, see [Strict mode](/guide/strict-mode).
+New Angular projects use strict mode by default. If this is not desired you can opt-out when creating the project. For more information, see [Strict mode](/guide/strict-mode).
 
 </div>
 
@@ -169,7 +168,7 @@ Angular components, templates, and styles go here.
 
 | `src/app/` FILES | PURPOSE |
 | :-------------------------- | :------------------------------------------|
-| `app/app.component.ts`      | Defines the logic for the app's root component, named `AppComponent`. The view associated with this root component becomes the root of the [view hierarchy](guide/glossary#view-hierarchy) as you add components and services to your application. |
+| `app/app.component.ts`      | Defines the logic for the application's root component, named `AppComponent`. The view associated with this root component becomes the root of the [view hierarchy](guide/glossary#view-hierarchy) as you add components and services to your application. |
 | `app/app.component.html`    | Defines the HTML template associated with the root `AppComponent`. |
 | `app/app.component.css`     | Defines the base CSS stylesheet for the root `AppComponent`. |
 | `app/app.component.spec.ts` | Defines a unit test for the root `AppComponent`. |
@@ -193,7 +192,8 @@ Angular components, templates, and styles go here.
 
 <div class="alert is-helpful">
 
-애플리케이션을 생성할 때 Angular strict 모드를 사용하면 `src/app` 폴더에 `package.json` 파일이 하나 더 생성됩니다.
+새로 Angular 프로젝트를 새엉하면 strict 모드가 기본으로 활성화됩니다.
+이 모드는 비활성화할 수도 있습니다.
 자세한 내용은 [Strict 모드](/guide/strict-mode) 문서를 참고하세요.
 
 </div>
@@ -305,10 +305,10 @@ If you intend to have multiple projects in a workspace, you can skip the initial
 The following command creates a workspace with all of the workspace-wide configuration files, but no root-level application.
 
 <code-example language="bash">
-ng new my-workspace --createApplication="false"
+ng new my-workspace --create-application false
 </code-example>
 
-You can then generate apps and libraries with names that are unique within the workspace.
+You can then generate applications and libraries with names that are unique within the workspace.
 
 <code-example language="bash">
 cd my-workspace
@@ -319,7 +319,7 @@ ng generate application my-first-app
 최상위 애플리케이션 없이 워크스페이스를 생성하려면 다음 명령을 실행하면 됩니다.
 
 <code-example language="bash">
-ng new my-workspace --createApplication="false"
+ng new my-workspace --create-application false
 </code-example>
 
 그리고 다음 명령을 실행하면 워크스페이스 안에 라이브러리 프로젝트를 생성할 수 있습니다.
@@ -383,9 +383,9 @@ my-workspace/
 ## 라이브러리 프로젝트 파일 구조
 
 <!--
-When you generate a library using the CLI (with a command such as `ng generate library my-lib`), the generated files go into the projects/ folder of the workspace. For more information about creating your own libraries, see  [Creating Libraries](guide/creating-libraries).
+When you generate a library using the CLI (with a command such as `ng generate library my-lib`), the generated files go into the `projects/` folder of the workspace. For more information about creating your own libraries, see  [Creating Libraries](guide/creating-libraries).
 
-Libraries (unlike applications and their associated e2e projects) have their own `package.json` configuration files.
+Libraries (unlike applications and their associated e2e projects) have their own `package.json` configuration file.
 
 Under the `projects/` folder, the `my-lib` folder contains your library code.
 
@@ -398,6 +398,7 @@ Under the `projects/` folder, the `my-lib` folder contains your library code.
 | `ng-package.json`    | Configuration file used by [ng-packagr](https://github.com/ng-packagr/ng-packagr) for building your library.                                                                                                                 |
 | `package.json`       | Configures [npm package dependencies](guide/npm-packages) that are required for this library.                                                                                                                                |
 | `tsconfig.lib.json`  | Library-specific [TypeScript](https://www.typescriptlang.org/) configuration, including TypeScript and Angular template compiler options. See [TypeScript Configuration](guide/typescript-configuration).            |
+| `tsconfig.lib.prod.json`  | Library-specific [TypeScript](https://www.typescriptlang.org/) configuration that is used when building the library in production mode.              |
 | `tsconfig.spec.json` | [TypeScript](https://www.typescriptlang.org/) configuration for the library tests. See [TypeScript Configuration](guide/typescript-configuration).                                                                     |
 | `tslint.json`        | Library-specific [TSLint](https://palantir.github.io/tslint/) configuration. |
 -->
@@ -418,5 +419,6 @@ Angular CLI로 `ng generate library my-lib` 명령을 실행하면 이 라이브
 | `ng-package.json`    | 라이브러리를 빌드할 때 사용하는 [ng-packagr](https://github.com/ng-packagr/ng-packagr) 환경설정 파일입니다. |
 | `package.json`       | [npm 의존 패키지](guide/npm-packages) 목록을 지정하는 파일입니다. |
 | `tsconfig.lib.json`  |  [TypeScript](https://www.typescriptlang.org/) 환경설정 파일입니다. 라이브러리에 사용될 TypeScript 문법 옵션과 Angular 템플릿 컴파일러 옵션을 지정합니다. 자세한 내용은 [TypeScript 환경설정](guide/typescript-configuration) 문서를 참고하세요.  |
+| `tsconfig.lib.prod.json`  | 라이브러리용 [TypeScript](https://www.typescriptlang.org/) 환경설정 파일입니다. 라이브러리를 운영 모드로 빌드할 때 사용됩니다.              |
 | `tsconfig.spec.json` | 라이브러리를 테스트할 때 사용할 [TypeScript](https://www.typescriptlang.org/) 환경설정 파일입니다. 자세한 내용은 [TypeScript 환경설정](guide/typescript-configuration) 문서를 참고하세요. |
 | `tslint.json`        | [TSLint](https://palantir.github.io/tslint/) 환경설정 파일입니다. |

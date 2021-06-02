@@ -4,18 +4,18 @@
 # 프로젝트 생성하기
 
 <!--
-You begin by creating an initial application using the Angular CLI. Throughout this tutorial, you’ll modify and extend that starter application to create the Tour of Heroes app.
+You begin by creating an initial application using the Angular CLI. Throughout this tutorial, you’ll modify and extend that starter application to create the Tour of Heroes application.
 
 In this part of the tutorial, you'll do the following:
 
 1. Set up your environment.
-2. Create a new workspace and initial app project.
+2. Create a new workspace and initial application project.
 3. Serve the application.
 4. Make changes to the application.
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+  For the sample application that this page describes, see the <live-example></live-example>.
 
 </div>
 -->
@@ -52,9 +52,9 @@ To set up your development environment, follow the instructions in [Local Enviro
 ## 워크스페이스와 애플리케이션 기본 틀 생성하기
 
 <!--
-You develop apps in the context of an Angular [workspace](guide/glossary#workspace). A workspace contains the files for one or more [projects](guide/glossary#project). A project is the set of files that comprise an app, a library, or end-to-end (e2e) tests. For this tutorial, you will create a new workspace.
+You develop applications in the context of an Angular [workspace](guide/glossary#workspace). A workspace contains the files for one or more [projects](guide/glossary#project). A project is the set of files that comprise an app, a library, or end-to-end (e2e) tests. For this tutorial, you will create a new workspace.
 
-To create a new workspace and an initial app project:
+To create a new workspace and an initial application project:
 
   1. Ensure that you are not already in an Angular workspace folder. For example, if you have previously created the Getting Started workspace, change to the parent of that folder.
   2. Run the CLI command `ng new` and provide the name `angular-tour-of-heroes`, as shown here:
@@ -63,18 +63,17 @@ To create a new workspace and an initial app project:
      ng new angular-tour-of-heroes
   </code-example>
 
-  3. The `ng new` command prompts you for information about features to include in the initial app project. Accept the defaults by pressing the Enter or Return key.
+  3. The `ng new` command prompts you for information about features to include in the initial application project. Accept the defaults by pressing the Enter or Return key.
 
 The Angular CLI installs the necessary Angular `npm` packages and other dependencies. This can take a few minutes.
 
 It also creates the following workspace and starter project files:
 
   * A new workspace, with a root folder named `angular-tour-of-heroes`.
-  * An initial skeleton app project, also called `angular-tour-of-heroes` (in the `src` subfolder).
-  * An end-to-end test project (in the e2e subfolder).
+  * An initial skeleton app project in the `src/app` subfolder.
   * Related configuration files.
 
-The initial app project contains a simple Welcome app, ready to run.
+The initial app project contains a simple Welcome application, ready to run.
 -->
 Angular 애플리케이션은 Angular [워크스페이스](guide/glossary#workspace) 안에서 개발합니다.
 워크스페이스는 여러 개의 [프로젝트](guide/glossary#project)로 구성되는 단위이며, 프로젝트는 애플리케이션이나 라이브러리, 엔드-투-엔드(e2e) 테스트를 구성하는 파일들의 집합을 의미합니다.
@@ -86,7 +85,7 @@ Angular 애플리케이션은 Angular [워크스페이스](guide/glossary#worksp
 
   2. Angular CLI 명령 `ng new`를 실행해서 `angular-tour-of-heroes` 라는 이름으로 워크스페이스를 생성합니다:
 
-  <code-example language="sh" class="code-shell">
+  <code-example language="sh">
      ng new angular-tour-of-heroes
   </code-example>
 
@@ -97,8 +96,7 @@ Angular 애플리케이션은 Angular [워크스페이스](guide/glossary#worksp
 그리고 이 명령은 몇가지 프로젝트 파일을 준비하기도 합니다:
 
   * `angular-tour-of-heroes`라는 폴더 이름으로 새로운 워크스페이스를 생성합니다.
-  * 서브 폴더 `src`를 생성하고 이 폴더에 애플리케이션 초기 코드를 생성합니다.
-  * 서브 폴더 `e2e`를 생성하고 엔드-투-엔드 테스트 프로젝트를 생성합니다.
+  * 서브 폴더 `src/app`를 생성하고 이 폴더에 애플리케이션 초기 코드를 생성합니다.
   * 환경설정파일을 생성합니다.
 
 이제 간단한 Welcome 앱이 완성되었습니다.
@@ -120,17 +118,17 @@ Go to the workspace directory and launch the application.
 <div class="alert is-helpful">
 
 The `ng serve` command builds the app, starts the development server,
-watches the source files, and rebuilds the app as you make changes to those files.
+watches the source files, and rebuilds the application as you make changes to those files.
 
 The `--open` flag opens a browser to `http://localhost:4200/`.
 
 </div>
 
-You should see the app running in your browser.
+You should see the application running in your browser.
 -->
 워크스페이스 폴더로 이동해서 애플리케이션을 실행합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   cd angular-tour-of-heroes
   ng serve --open
 </code-example>
@@ -171,7 +169,7 @@ _컴포넌트_ 는 Angular 애플리케이션의 기본 구성 요소입니다.
 ## 애플리케이션 수정하기
 
 <!--
-Open the project in your favorite editor or IDE and navigate to the `src/app` folder to make some changes to the starter app.
+Open the project in your favorite editor or IDE and navigate to the `src/app` folder to make some changes to the starter application.
 
 You'll find the implementation of the shell `AppComponent` distributed over three files:
 
@@ -299,7 +297,7 @@ Here are the code files discussed on this page.
 <!--
 * You created the initial application structure using the Angular CLI.
 * You learned that Angular components display data.
-* You used the double curly braces of interpolation to display the app title.
+* You used the double curly braces of interpolation to display the application title.
 -->
 * Angular CLI를 이용하면 애플리케이션의 기본 틀을 생성할 수 있습니다.
 * Angular 컴포넌트를 사용하면 컴포넌트에 있는 데이터를 화면에 표시할 수 있습니다.

@@ -31,7 +31,7 @@ function builder(argv: Argv): Argv<ReleaseBuildOptions> {
 /** Yargs command handler for building a release. */
 async function handler(args: Arguments<ReleaseBuildOptions>) {
   const {npmPackages} = getReleaseConfig();
-  let builtPackages = await buildReleaseOutput();
+  let builtPackages = await buildReleaseOutput(true);
 
   // If package building failed, print an error and exit with an error code.
   if (builtPackages === null) {

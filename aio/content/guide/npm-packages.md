@@ -4,7 +4,7 @@
 # 워크스페이스 npm 패키지
 
 <!--
-The Angular Framework, Angular CLI, and components used by Angular applications are packaged as [npm packages](https://docs.npmjs.com/getting-started/what-is-npm "What is npm?") and distributed via the [npm registry](https://docs.npmjs.com/).
+The Angular Framework, Angular CLI, and components used by Angular applications are packaged as [npm packages](https://docs.npmjs.com/getting-started/what-is-npm "What is npm?") and distributed using the [npm registry](https://docs.npmjs.com/).
 
 You can download and install these npm packages by using the [npm CLI client](https://docs.npmjs.com/cli/install), which is installed with and runs as a [Node.js®](https://nodejs.org "Nodejs.org") application. By default, the Angular CLI uses the npm client.
 
@@ -42,7 +42,7 @@ Angular 애플리케이션 개발에 필요한 `Node.js`, `npm` 버전과 설치
 Both `npm` and `yarn` install the packages that are identified in a [`package.json`](https://docs.npmjs.com/files/package.json) file.
 
 The CLI command `ng new` creates a `package.json` file when it creates the new workspace.
-This `package.json` is used by all projects in the workspace, including the initial app project that is created by the CLI when it creates the workspace.
+This `package.json` is used by all projects in the workspace, including the initial application project that is created by the CLI when it creates the workspace.
 
 Initially, this `package.json` includes _a starter set of packages_, some of which are required by Angular and others that support common application scenarios.
 You add packages to `package.json` as your application evolves.
@@ -92,7 +92,7 @@ The `dependencies` section of `package.json` contains:
 
 * [**Angular packages**](#angular-packages): Angular core and optional modules; their package names begin `@angular/`.
 
-* [**Support packages**](#support-packages): 3rd party libraries that must be present for Angular apps to run.
+* [**Support packages**](#support-packages): 3rd party libraries that must be present for Angular applications to run.
 
 * [**Polyfill packages**](#polyfills): Polyfills plug gaps in a browser's JavaScript implementation.
 
@@ -117,21 +117,21 @@ To add a new dependency, use the [`ng add`](cli/add) command.
 
 <!--
 The following Angular packages are included as dependencies in the default `package.json` file for a new Angular workspace.
-For a complete list of Angular packages, see the [API reference](http://angular.io/api?type=package).
+For a complete list of Angular packages, see the [API reference](https://angular.io/api?type=package).
 
 Package name                               | Description
 ----------------------------------------   | --------------------------------------------------
 [**@angular/animations**](api/animations) | Angular's animations library makes it easy to define and apply animation effects such as page and list transitions. For more information, see the [Animations guide](guide/animations).
 [**@angular/common**](api/common) | The commonly-needed services, pipes, and directives provided by the Angular team. The [`HttpClientModule`](api/common/http/HttpClientModule) is also here, in the [`@angular/common/http`](api/common/http) subfolder. For more information, see the [HttpClient guide](guide/http).
-**@angular/compiler** | Angular's template compiler. It understands templates and can convert them to code that makes the application run and render. Typically you don’t interact with the compiler directly; rather, you use it indirectly via `platform-browser-dynamic` when JIT compiling in the browser. For more information, see the [Ahead-of-time Compilation guide](guide/aot-compiler).
+**@angular/compiler** | Angular's template compiler. It understands templates and can convert them to code that makes the application run and render. Typically you don’t interact with the compiler directly; rather, you use it indirectly using `platform-browser-dynamic` when JIT compiling in the browser. For more information, see the [Ahead-of-time Compilation guide](guide/aot-compiler).
 [**@angular/core**](api/core) | Critical runtime parts of the framework that are needed by every application. Includes all metadata decorators, `Component`, `Directive`,  dependency injection, and the component lifecycle hooks.
 [**@angular/forms**](api/forms) | Support for both [template-driven](guide/forms) and [reactive forms](guide/reactive-forms). For information about choosing the best forms approach for your app, see [Introduction to forms](guide/forms-overview).
 [**@angular/<br />platform&#8209;browser**](api/platform-browser) | Everything DOM and browser related, especially the pieces that help render into the DOM. This package also includes the `bootstrapModuleFactory()` method for bootstrapping applications for production builds that pre-compile with [AOT](guide/aot-compiler).
-[**@angular/<br />platform&#8209;browser&#8209;dynamic**](api/platform-browser-dynamic) | Includes [providers](api/core/Provider) and methods to compile and run the app on the client using the [JIT compiler](guide/aot-compiler).
-[**@angular/router**](api/router) | The router module navigates among your app pages when the browser URL changes. For more information, see [Routing and Navigation](guide/router).
+[**@angular/<br />platform&#8209;browser&#8209;dynamic**](api/platform-browser-dynamic) | Includes [providers](api/core/Provider) and methods to compile and run the application on the client using the [JIT compiler](guide/aot-compiler).
+[**@angular/router**](api/router) | The router module navigates among your application pages when the browser URL changes. For more information, see [Routing and Navigation](guide/router).
 -->
 아래 나열한 Angular 패키지들은 Angular 워크스페이스를 생성할 때 기본으로 `package.json` 파일에 등록되는 패키지들입니다.
-Angular 패키지 전체 목록을 확인하려면 [API 문서](http://angular.io/api?type=package)를 참고하세요.
+Angular 패키지 전체 목록을 확인하려면 [API 문서](api?type=package)를 참고하세요.
 
 패키지 이름                               | 설명
 ----------------------------------------   | --------------------------------------------------
@@ -196,11 +196,11 @@ The packages listed in the `devDependencies` section of `package.json` help you 
 
 To add a new `devDependency`, use either one of the following commands:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   npm install --save-dev &lt;package-name&gt;
 </code-example>
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   yarn add --dev &lt;package-name&gt;
 </code-example>
 
@@ -213,12 +213,8 @@ Package name                               | Description
 [**@angular/cli**](https://github.com/angular/angular-cli/) | The Angular CLI tools.
 **@angular/<br />compiler&#8209;cli** | The Angular compiler, which is invoked by the Angular CLI's `ng build` and `ng serve` commands.
 **@types/... ** | TypeScript definition files for 3rd party libraries such as Jasmine and Node.js.
-[**codelyzer**](https://www.npmjs.com/package/codelyzer) | A linter for Angular apps whose rules conform to the Angular [style guide](guide/styleguide).
 **jasmine/... ** | Packages to support the [Jasmine](https://jasmine.github.io/) test library.
 **karma/... ** | Packages to support the [karma](https://www.npmjs.com/package/karma) test runner.
-[**protractor**](https://www.npmjs.com/package/protractor) | An end-to-end (e2e) framework for Angular apps. Built on top of [WebDriverJS](https://github.com/SeleniumHQ/selenium/wiki/WebDriverJs).
-[**ts-node**](https://www.npmjs.com/package/ts-node) | TypeScript execution environment and REPL for Node.js.
-[**tslint**](https://www.npmjs.com/package/tslint) | A static analysis tool that checks TypeScript code for readability, maintainability, and functionality errors.
 [**typescript**](https://www.npmjs.com/package/typescript) | The TypeScript language server, including the *tsc* TypeScript compiler.
 -->
 로컬 환경에서 애플리케이션을 개발할 때 필요한 패키지는 `package.json` 파일의 `devDependencies` 섹션에 추가합니다.
@@ -226,11 +222,11 @@ Package name                               | Description
 
 `devDependency`에 패키지를 추가하려면 이런 명령을 실행하면 됩니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   npm install --save-dev &lt;package-name&gt;
 </code-example>
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   yarn add --dev &lt;package-name&gt;
 </code-example>
 
@@ -243,12 +239,8 @@ Package name                               | Description
 [**@angular/cli**](https://github.com/angular/angular-cli/) | Angular CLI 툴입니다.
 **@angular/<br />compiler&#8209;cli** | Angular CLI로 `ng build`, `ng serve` 명령을 실행할 때 사용되는 Angular 컴파일러입니다.
 **@types/...** | Jasmine과 Node.js 라이브러리에 TypeScript 정의 파일을 추가하는 라이브러리 입니다.
-[**codelyzer**](https://www.npmjs.com/package/codelyzer) | Angular [스타일 가이드](guide/styleguide)에서 권장하는 규칙에 맞는지 코드를 검사하는 라이브러리입니다.
 **jasmine/...** | [Jamine](https://jasmine.github.io/)를 실행할 때 필요한 라이브러리입니다.
 **karma/...** | [karma](https://www.npmjs.com/package/karma) 테스트 러너를 실행할 때 필요한 라이브러리 입니다.
-[**protractor**](https://www.npmjs.com/package/protractor) | Angular 앱 전용 엔드-투-엔드(end-to-end, e2e) 테스트 프레임워크입니다. [WebDriverJS](https://github.com/SeleniumHQ/selenium/wiki/WebDriverJs)를 기반으로 개발되었습니다.
-[**ts-node**](https://www.npmjs.com/package/ts-node) | Node.js용 TypeScript 실행환경과 REPL을 제공하는 패키지입니다.
-[**tslint**](https://www.npmjs.com/package/tslint) | TypeScript 코드의 가독성, 유지보수성, 사용 오류를 정적으로 분석하는 툴입니다.
 [**typescript**](https://www.npmjs.com/package/typescript) | TypeScript 언어 서버, TypeScript 컴파일러(*tsc*)를 제공하는 라이브러리입니다.
 
 

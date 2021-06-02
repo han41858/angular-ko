@@ -73,6 +73,7 @@ Angular는 대괄호와 소괄호를 함께 사용하는 `[()]`라는 문법을 
 <code-example path="two-way-binding/src/app/app.component.html" header="src/app/app.component.html" region="two-way-syntax"></code-example>
 
 
+{@a how-two-way-binding-works}
 <!--
 ## How two-way binding works
 -->

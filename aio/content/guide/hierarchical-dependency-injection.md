@@ -58,8 +58,8 @@ using and results in smaller bundle sizes.
 Tree-shaking is especially useful for a library
 because the application which uses the library may not have
 a need to inject it. Read more
-about [tree-shakable providers](guide/dependency-injection-providers#tree-shakable-providers)
-in [DI Providers](guide/dependency-injection-providers).
+about [tree-shakable providers](guide/architecture-services#providing-services)
+in [Introduction to services and dependency injection](guide/architecture-services).
 
 </div>
 
@@ -102,7 +102,7 @@ here `root`, which makes the service available in the `root` `ModuleInjector`.
 `@Injectable()`의 `providedIn` 프로퍼티를 `root`로 설정하면 최적화 툴이 트리 셰이킹 대상인지 검사하고 사용되지 않는 빌드 결과물에서 제거하기 때문에 빌드 결과물의 크기를 더 줄일 수 있습니다.
 
 특히 트리 셰이킹은 다른 라이브러리를 많이 활용하는 라이브러리 프로젝트에 더 효율적입니다.
-자세한 내용은 [트리 셰이킹 대상이 되는 프로바이더](guide/dependency-injection-providers#tree-shakable-providers) 문서와 [의존성 프로바이더](guide/dependency-injection-providers) 문서를 참고하세요.
+자세한 내용은 [트리 셰이킹 대상이 되는 프로바이더](guide/architecture-services#providing-services) 문서와 [서비스, 의존성 주입 개요](guide/architecture-services) 문서를 참고하세요.
 
 </div>
 

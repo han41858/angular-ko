@@ -351,7 +351,7 @@ Test that clicking the *Agree* and *Disagree* buttons update the appropriate cou
 
 
 <!--
-## Parent interacts with child via *local variable*
+## Parent interacts with child using *local variable*
 -->
 ## *템플릿 지역 변수*로 자식 컴포넌트에 접근하기
 
@@ -470,12 +470,15 @@ Test also that clicking the *Stop* button pauses the countdown timer:
 ## _@ViewChild()_ 로 자식 컴포넌트 접근하기
 
 <!--
-The *local variable* approach is simple and easy. But it is limited because
+The *local variable* approach is easy. But it is limited because
 the parent-child wiring must be done entirely within the parent template.
 The parent component *itself* has no access to the child.
 
-You can't use the *local variable* technique if an instance of the parent component *class*
-must read or write child component values or must call child component methods.
+You can't use the *local variable* technique if the parent component's *class* relies on the
+child component's *class*.  The parent-child relationship of the components is not established
+within each components respective *class* with the *local variable* technique.  Since the *class*
+instances are not connected to one another, the parent *class* cannot access the child *class*
+properties and methods.
 
 When the parent component *class* requires that kind of access,
 ***inject*** the child component into the parent as a *ViewChild*.
@@ -506,7 +509,7 @@ It takes a bit more work to get the child view into the parent component *class*
 First, you have to import references to the `ViewChild` decorator and the `AfterViewInit` lifecycle hook.
 
 Next, inject the child `CountdownTimerComponent` into the private `timerComponent` property
-via the `@ViewChild` property decoration.
+using the `@ViewChild` property decoration.
 
 The `#timer` local variable is gone from the component metadata.
 Instead, bind the buttons to the parent component's own `start` and `stop` methods and
@@ -521,7 +524,7 @@ So it displays `0` seconds initially.
 Then Angular calls the `ngAfterViewInit` lifecycle hook at which time it is *too late*
 to update the parent view's display of the countdown seconds.
 Angular's unidirectional data flow rule prevents updating the parent view's
-in the same cycle. The app has to *wait one turn* before it can display the seconds.
+in the same cycle. The application has to *wait one turn* before it can display the seconds.
 
 Use `setTimeout()` to wait one tick and then revise the `seconds()` method so
 that it takes future values from the timer component.
@@ -592,7 +595,7 @@ Angular는 단방향 데이터 흐름을 권장하기 때문에 부모 컴포넌
 {@a bidirectional-service}
 
 <!--
-## Parent and children communicate via a service
+## Parent and children communicate using a service
 -->
 ## 서비스를 사용해서 통신하기
 
@@ -629,8 +632,8 @@ Each `AstronautComponent` is a child of the `MissionControlComponent` and theref
 <div class="alert is-helpful">
 
 Notice that this example captures the `subscription` and `unsubscribe()` when the `AstronautComponent` is destroyed.
-This is a memory-leak guard step. There is no actual risk in this app because the
-lifetime of a `AstronautComponent` is the same as the lifetime of the app itself.
+This is a memory-leak guard step. There is no actual risk in this application because the
+lifetime of a `AstronautComponent` is the same as the lifetime of the application itself.
 That *would not* always be true in a more complex application.
 
 You don't add this guard to the `MissionControlComponent` because, as the parent,

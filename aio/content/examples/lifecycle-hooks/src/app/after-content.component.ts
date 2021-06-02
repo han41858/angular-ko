@@ -25,7 +25,7 @@ export class AfterContentComponent implements AfterContentChecked, AfterContentI
   comment = '';
 
   // `ChildComponent` 타입의 자식 컴포넌트를 참조합니다.
-  @ContentChild(ChildComponent) contentChild: ChildComponent;
+  @ContentChild(ChildComponent) contentChild!: ChildComponent;
 
 // #enddocregion hooks
   constructor(private logger: LoggerService) {

@@ -92,7 +92,7 @@ This gives users a meaningful first paint of your application that appears quick
 
 Learn more in [The App Shell Model](https://developers.google.com/web/fundamentals/architecture/app-shell).
 
-You can use the Angular CLI to [generate](cli/generate#appshell) an app shell.
+You can use the Angular CLI to [generate](cli/generate#app-shell) an app shell.
 This can improve the user experience by quickly launching a static rendered page (a skeleton common to all pages) while the browser downloads the full client version and switches to it automatically after the code loads.
 
 See also [Service Worker and PWA](guide/service-worker-intro).
@@ -102,7 +102,7 @@ See also [Service Worker and PWA](guide/service-worker-intro).
 
 자세한 내용은 [앱 기본코드 모델](https://developers.google.com/web/fundamentals/architecture/app-shell) 문서를 참고하세요.
 
-앱 기본코드는 Angular CLI로 [생성](cli/generate#appshell)할 수도 있습니다.
+앱 기본코드는 Angular CLI로 [생성](cli/generate#app-shell)할 수도 있습니다.
 앱 기본코드를 사용하면 브라우저가 Angular 코드를 전부 받기 전에 정적으로 렌더링된 화면을 사용자에게 빠르게 보여줄 수 있으며, 코드를 모두 받고 난 후에는 동적으로 실행되는 애플리케이션 화면으로 전환할 수 있습니다.
 
 [서비스 워커와 PWA](guide/service-worker-intro) 문서도 참고해 보세요.
@@ -302,10 +302,10 @@ The change detector is responsible for updating the view to reflect the current 
 Similarly, the user can interact with the UI, causing events that change the state of the data model.
 These events can trigger change detection.
 
-Using the default ("CheckAlways") change-detection strategy, the change detector goes through the [view hierarchy](#view-tree) on each VM turn to check every [data-bound property](#data-binding) in the template. In the first phase, it compares the current state of the dependent data with the previous state, and collects changes.
+Using the default change-detection strategy, the change detector goes through the [view hierarchy](#view-tree) on each VM turn to check every [data-bound property](#data-binding) in the template. In the first phase, it compares the current state of the dependent data with the previous state, and collects changes.
 In the second phase, it updates the page DOM to reflect any new data values.
 
-If you set the `OnPush` ("CheckOnce") change-detection strategy, the change detector runs only when [explicitly invoked] (api/core/ChangeDetectorRef), or when it is triggered by an `Input` reference change or event handler. This typically improves performance. For more information, see [Optimize Angular's change detection](https://web.dev/faster-angular-change-detection/).
+If you set the `OnPush` change-detection strategy, the change detector runs only when [explicitly invoked] (api/core/ChangeDetectorRef), or when it is triggered by an `Input` reference change or event handler. This typically improves performance. For more information, see [Optimize Angular's change detection](https://web.dev/faster-angular-change-detection/).
 -->
 Angular 프레임워크가 애플리케이션의 UI 상태와 데이터 상태를 동기화하는 구조를 의미합니다.
 변화 감지가 실행되면 데이터 모델의 현재 상태를 검사하고 이 상태를 다음 변화 감지 싸이클까지 유지해서 상태를 변경해야 할지 결정합니다.
@@ -315,10 +315,10 @@ Angular 프레임워크가 애플리케이션의 UI 상태와 데이터 상태�
 사용자가 UI에서 어떤 동작을 하면 이벤트가 발생하고 데이터 모델의 상태를 변경시키는 식입니다.
 이벤트는 변화 감지를 발생시킨다고 볼 수 있습니다.
 
-기본 변화 감지 정책("CheckAlways")를 사용하면 템플릿에 [데이터가 프로퍼티에 바인딩](#data-binding) 될 때마다 [뷰 계층](#view-tree)을 따라 내려가며 변화 감지가 동작합니다.
+기본 변화 감지 정책를 사용하면 템플릿에 [데이터가 프로퍼티에 바인딩](#data-binding) 될 때마다 [뷰 계층](#view-tree)을 따라 내려가며 변화 감지가 동작합니다.
 이 때 첫 번째 단계에서는 현재 상태와 이전 상태를 비교해서 변화가 발생한 상태를 모두 취합하며, 두 번째 단계에서는 새로운 데이터로 페이지 DOM을 갱신합니다.
 
-변화 감지 정책으로 `OnPush`("CheckOnce")를 사용하면 변화 감지 동작은 개발자가 [명시적으로 실행](api/core/ChangeDetectorRef)하거나 `Input` 값이 변경되었을 때, 이벤트 핸들러가 동작했을 때만 실행됩니다.
+변화 감지 정책으로 `OnPush`를 사용하면 변화 감지 동작은 개발자가 [명시적으로 실행](api/core/ChangeDetectorRef)하거나 `Input` 값이 변경되었을 때, 이벤트 핸들러가 동작했을 때만 실행됩니다.
 일반적으로 이 정책은 성능을 향상시키기 위한 용도로 사용됩니다.
 자세한 내용은 [Angular 변화 감지 동작 최적화하기](https://web.dev/faster-angular-change-detection/) 문서를 참고하세요.
 
@@ -671,6 +671,12 @@ There are three categories of directive:
 Angular supplies a number of built-in directives that begin with the `ng` prefix.
 You can also create new directives to implement your own functionality.
 You associate a *selector* (an HTML tag such as `<my-directive>`) with a custom directive, thereby extending the [template syntax](guide/template-syntax) that you can use in your apps.
+
+**UpperCamelCase**, such as `NgIf`, refers to a directive class.
+You can use **UpperCamelCase** when describing properties and directive behavior.
+
+**lowerCamelCase**, such as `ngIf` refers to a directive's attribute name.
+You can use **lowerCamelCase** when describing how to apply the directive to an element in the HTML template.
 -->
 DOM 구조, 어트리뷰트 동작, 컴포넌트 데이터 모델을 조작하는 클래스를 의미합니다.
 디렉티브 클래스는 메타데이터를 `@Directive()` [데코레이터](#decorator)에 전달하고 클래스 앞에 붙여 선언합니다.
@@ -689,6 +695,12 @@ Angular는 HTML [템플릿](#template)에서 디렉티브 클래스와 매칭되
 Angular가 제공하는 기본 디렉티브는 모두 `ng` 접두사로 시작됩니다.
 그리고 필요한 로직을 담아 새로운 디렉티브를 만드는 것도 가능합니다.
 디렉티브의 *셀렉터*를 `<my-directive>`와 같이 정의한 후에 [템플릿 문법](guide/template-syntax)에 따라 원하는 동작을 하면 됩니다.
+
+`NgIf`와 같은 **대문자 캐멀 케이스(UpperCamelCase)** 는 디렉티브 클래스를 의미합니다.
+프로퍼티나 디렉티브의 동작을 설명할 때 **대문자 캐멀 케이스** 를 사용합니다.
+
+`ngIf`와 같은 **소문자 캐멀 케이스(lowerCamelCase)** 는 디렉티브의 어트리뷰트 이름을 의미합니다.
+HTML 템플릿 안에 있는 엘리먼트에 디렉티브를 적용할 때 **소문자 캐멀 케이스** 를 사용합니다.
 
 
 {@a dom}
@@ -1153,7 +1165,7 @@ Angular는 이런 순서로 라이프싸이클 후킹 메서드를 실행합니�
 <!--
 In general, a module collects a block of code dedicated to a single purpose. Angular uses standard JavaScript modules and also defines an Angular module, `NgModule`.
 
-In JavaScript (ECMAScript), each file is a module and all objects defined in the file belong to that module. Objects can exported, making them public, and public objects can be imported for use by other modules.
+In JavaScript (ECMAScript), each file is a module and all objects defined in the file belong to that module. Objects can be exported, making them public, and public objects can be imported for use by other modules.
 
 Angular ships as a collection of JavaScript modules (also called libraries). Each Angular library name begins with the `@angular` prefix. Install Angular libraries with the [npm package manager](https://docs.npmjs.com/getting-started/what-is-npm) and import parts of them with JavaScript `import` declarations.
 
@@ -1259,7 +1271,7 @@ A producer of multiple values, which it pushes to [subscribers](#subscriber). Us
 
 Observables can deliver single or multiple values of any type to subscribers, either synchronously (as a function delivers a value to its caller) or on a schedule. A subscriber receives notification of new values as they are produced and notification of either normal completion or error completion.
 
-Angular uses a third-party library called [Reactive Extensions (RxJS)](http://reactivex.io/rxjs/).
+Angular uses a third-party library called [Reactive Extensions (RxJS)](https://rxjs.dev/).
 
 To learn more, see [Observables](guide/observables).
 -->
@@ -1269,7 +1281,7 @@ To learn more, see [Observables](guide/observables).
 
 옵저버블은 데이터를 동기 방식으로 하나만 보낼 수도 있지만 스케쥴에 따라 여러개 보낼 수도 있습니다.
 
-Angular는 서드 파티 라이브러리 [Reactive Extensions(RxJS)](http://reactivex.io/rxjs/)를 사용합니다.
+Angular는 서드 파티 라이브러리 [Reactive Extensions(RxJS)](https://rxjs.dev/)를 사용합니다.
 
 자세한 내용은 [옵저버블](guide/observables) 문서를 참고하세요.
 
@@ -1797,7 +1809,7 @@ A buildable or runnable subset of a [project](#project), configured as an object
 
 In the `angular.json` file, each project has an "architect" section that contains targets which configure builders. Some of these targets correspond to [CLI commands](#cli), such as `build`, `serve`, `test`, and `lint`.
 
-For example, the Architect builder invoked by the `ng build` command to compile a project uses a particular build tool, and has a default configuration whose values can be overridden on the command line. The `build` target also defines an alternate configuration for a "production" build, that can be invoked with the `--prod` flag on the `build` command.
+For example, the Architect builder invoked by the `ng build` command to compile a project uses a particular build tool, and has a default configuration with values that you can override on the command line. The `build` target also defines an alternate configuration for a "development" build, which you can invoke with the `--configuration development` flag on the `build` command.
 
 The Architect tool provides a set of builders. The [`ng new` command](cli/new) provides a set of targets for the initial application project. The [`ng generate application`](cli/generate#application) and [`ng generate library`](cli/generate#library) commands provide a set of targets for each new [project](#project). These targets, their options and configurations, can be customized to meet the needs of your project. For example, you may want to add a "staging" or "testing" configuration to a project's "build" target.
 
@@ -1809,7 +1821,7 @@ You can also define a custom builder, and add a target to the project configurat
 이 빌드 대상 중에는 [Angular CLI 명령](#cli)의 `build`, `serve`, `test`, `lint`을 활용하는 것들도 있습니다.
 
 예를 들어 `ng build` 명령을 싫애하면 아키텍트 빌더가 실행되며 빌드 툴로 프로젝트를 컴파일하는데, 이 때 환경설정에 지정된 기본값과 커맨드라인에서 지정된 옵션을 활용합니다.
-`build` 명령을 실행할 때 `--prod` 플래그를 붙이면 `build`가 빌드하는 대상이 "production" 환경설정으로 변경됩니다.
+`development` 환경으로 `build` 명령을 실행하려면 `--configuration development` 플래그를 붙이면 됩니다.
 
 아키텍트 툴은 여러가지 빌더를 제공합니다.
 [`ng new` 명령](cli/new)은 애플리케이션 프로젝트에 생성할 수 있는 빌드 대상을 여러가지 제공합니다.
@@ -1930,6 +1942,26 @@ For more information, see the [Template reference variable](guide/template-refer
 자세한 내용은 [템플릿 참조 변수](guide/template-reference-variables) 문서를 참고하세요.
 
 
+{@a template-input-variable}
+
+## template input variable
+
+A template input variable is a variable you can reference within a single instance of the template. You declare a template input variable using the `let` keyword as in `let customer`.
+
+```
+ <tr *ngFor="let customer of customers;">
+     <td>{{customer.customerNo}}</td>
+     <td>{{customer.name}}</td>
+     <td>{{customer.address}}</td>
+     <td>{{customer.city}}</td>
+     <td>{{customer.state}}</td>
+     <button (click)="selectedCustomer=customer">Select</button>
+   </tr>
+```
+
+Read and learn more about [template input variables](guide/template-reference-variables#template-input-variable).
+
+
 {@a token}
 
 <!--
@@ -1984,14 +2016,14 @@ code completion, refactoring, inline documentation, and intelligent search).
 Many code editors and IDEs support TypeScript either natively or with plug-ins.
 
 TypeScript is the preferred language for Angular development.
-Read more about TypeScript at [typescriptlang.org](http://www.typescriptlang.org/).
+Read more about TypeScript at [typescriptlang.org](https://www.typescriptlang.org/).
 -->
 JavaScript 문법을 바탕으로 정적 타입 시스템을 추가한 프로그래밍 언어입니다.
 TypeScript는 컴파일 시점에 타입을 검사하는 기능을 제공하고, 코드 자동완성, 리팩토링, 인라인 문서, 지능형 검색과 같은 강력한 기능을 제공합니다.
 현재는 TypeScript를 기본으로 지원하거나 플러그인 형태로 지원하는 코드 에디터와 IDE가 다수 존재합니다.
 
 Angular를 개발할 때는 TypeScript를 사용합니다.
-TypeScript에 대해 자세하게 알아보려면 [typescriptlang.org](http://www.typescriptlang.org/) 사이트를 참고하세요.
+TypeScript에 대해 자세하게 알아보려면 [typescriptlang.org](https://www.typescriptlang.org/) 사이트를 참고하세요.
 
 
 <!--

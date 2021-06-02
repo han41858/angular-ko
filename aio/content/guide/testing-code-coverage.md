@@ -11,16 +11,16 @@ Code coverage reports show you any parts of your code base that may not be prope
 
 <div class="alert is-helpful">
 
-  For the sample app that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
+For the sample app that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
 
-  For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
+For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
 
 </div>
 
 
 To generate a coverage report run the following command in the root of your project.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng test --no-watch --code-coverage
 </code-example>
 
@@ -49,7 +49,7 @@ Angular CLI는 유닛 테스트를 실행하면서 코드 커버리지 보고서
 
 커버리지 보고서를 생성하려면 프로젝트 최상위 폴더에서 이 명령을 실행하면 됩니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng test --no-watch --code-coverage
 </code-example>
 
@@ -77,41 +77,57 @@ The code coverage percentages let you estimate how much of your code is tested.
 If your team decides on a set minimum amount to be unit tested, you can enforce this minimum with the Angular CLI.
 
 For example, suppose you want the code base to have a minimum of 80% code coverage.
-To enable this, open the [Karma](https://karma-runner.github.io) test platform configuration file, `karma.conf.js`, and add the following in the `coverageIstanbulReporter:` key.
+To enable this, open the [Karma](https://karma-runner.github.io) test platform configuration file, `karma.conf.js`, and add the `check` property in the `coverageReporter:` key.
 
-```
-coverageIstanbulReporter: {
-  reports: [ 'html', 'lcovonly' ],
-  fixWebpackSourcePaths: true,
-  thresholds: {
-    statements: 80,
-    lines: 80,
-    branches: 80,
-    functions: 80
+```js
+coverageReporter: {
+  dir: require('path').join(__dirname, './coverage/<project-name>'),
+  subdir: '.',
+  reporters: [
+    { type: 'html' },
+    { type: 'text-summary' }
+  ],
+  check: {
+    global: {
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80
+    }
   }
 }
 ```
 
-The `thresholds` property causes the tool to enforce a minimum of 80% code coverage when the unit tests are run in the project.
+The `check` property causes the tool to enforce a minimum of 80% code coverage when the unit tests are run in the project.
+
+You can find more information about the different coverage configuration options [here](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md).
 -->
 코드 커버리지 퍼센트 값을 보면 애플리케이션 코드를 얼마나 테스트하는지 확인할 수 있습니다.
 팀에서 이 값을 어느 정도 이상으로 유지하려고 할 때 이 값을 강제할 수 있습니다.
 
 
 코드 커버리지 값이 최소한 80%는 되어야 한다고 합시다.
-이 값을 강제하려면 [Karma](https://karma-runner.github.io) 테스트 플랫폼 설정 파일 `karma.conf.js`에 `coverageIstanbulReporter:` 키를 추가하면 됩니다.
+이 값을 강제하려면 [Karma](https://karma-runner.github.io) 테스트 플랫폼 설정 파일 `karma.conf.js`의 `coverageReporter:` 프로퍼티에 `check` 프로퍼티를 추가하면 됩니다.
 
-```
-coverageIstanbulReporter: {
-  reports: [ 'html', 'lcovonly' ],
-  fixWebpackSourcePaths: true,
-  thresholds: {
-    statements: 80,
-    lines: 80,
-    branches: 80,
-    functions: 80
+```js
+coverageReporter: {
+  dir: require('path').join(__dirname, './coverage/<project-name>'),
+  subdir: '.',
+  reporters: [
+    { type: 'html' },
+    { type: 'text-summary' }
+  ],
+  check: {
+    global: {
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80
+    }
   }
 }
 ```
 
-`thresholds` 프로퍼티에 지정하는 값이 코드 커버리지로 강제하는 값입니다.
+이렇게 `check` 프로퍼티를 지정하면 프로젝트를 대상으로 유닛 테스트를 실행할 때 80% 코드 커버리지르 강제할 수 있습니다.
+
+코드 커버리지 환경설정 옵션에 대해 자세하게 알아보려면 [이 문서](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md)를 참고하세요.

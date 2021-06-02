@@ -151,7 +151,7 @@ In the component file, add a metadata property called `animations:` within the `
 ## 간단한 트랜지션 구현하기
 
 <!--
-Let's animate a simple transition that changes a single HTML element from one state to another. For example, you can specify that a button displays either **Open** or **Closed** based on the user's last action. When the button is in the `open` state, it's visible and yellow. When it's the `closed` state, it's transparent and green.
+Let's animate a simple transition that changes a single HTML element from one state to another. For example, you can specify that a button displays either **Open** or **Closed** based on the user's last action. When the button is in the `open` state, it's visible and yellow. When it's in the `closed` state, it's transparent and green.
 
 In HTML, these attributes are set using ordinary CSS styles such as color and opacity. In Angular, use the `style()` function to specify a set of CSS styles for use with animations. You can collect a set of styles in an animation state, and give the state a name, such as `open` or `closed`.
 -->
@@ -165,6 +165,17 @@ In HTML, these attributes are set using ordinary CSS styles such as color and op
 
 <div class="lightbox">
   <img src="generated/images/guide/animations/open-closed.png" alt="open and closed states">
+</div>
+
+<div class="alert is-helpful">
+
+  Let's create a new `open-close` component to animate with simple transitions.
+
+  Run the following command in terminal to generate the component:
+
+  `ng g component open-close`
+
+  This will create the component at `src/app/open-close.component.ts`.
 </div>
 
 
@@ -254,7 +265,7 @@ The second argument, `delay`, has the same syntax as `duration`. For example:
 
 * Wait for 100ms and then run for 200ms: `'0.2s 100ms'`
 
-The third argument, `easing`, controls how the animation [accelerates and decelerates](http://easings.net/) during its runtime. For example, `ease-in` causes the animation to begin slowly, and to pick up speed as it progresses.
+The third argument, `easing`, controls how the animation [accelerates and decelerates](https://easings.net/) during its runtime. For example, `ease-in` causes the animation to begin slowly, and to pick up speed as it progresses.
 
 * Wait for 100ms, run for 200ms. Use a deceleration curve to start out fast and slowly decelerate to a resting point: `'0.2s 100ms ease-out'`
 
@@ -280,7 +291,7 @@ The third argument, `easing`, controls how the animation [accelerates and decele
 
 * 100ms 기다렸다가 200ms 동안 지속한다면 이렇게 지정합니다: `'0.2s 100ms'`
 
-세번째 인자 `easing`은 애니메이션이 어떤 [가속도](http://easings.net/)로 진행될지 지정합니다. 예를 들어 `ease-in`을 사용하면 느리게 시작했다가 점점 빨라집니다.
+세번째 인자 `easing`은 애니메이션이 어떤 [가속도](https://easings.net/)로 진행될지 지정합니다. 예를 들어 `ease-in`을 사용하면 느리게 시작했다가 점점 빨라집니다.
 
 * 100ms 기다렸다가 200ms 시작하는데, 처음에는 빠르게 진행되다가 천천히 마무리하려면 이렇게 지정합니다: `'0.2s 100ms ease-out'`
 
@@ -411,7 +422,7 @@ The animation is executed or triggered when the expression value changes to a ne
 The following code snippet binds the trigger to the value of the `isOpen` property.
 
 <code-example path="animations/src/app/open-close.component.1.html" header="src/app/open-close.component.html"
-region="compare">
+region="trigger">
 </code-example>
 
 In this example, when the `isOpen` expression evaluates to a defined state of `open` or `closed`, it notifies the trigger `openClose` of a state change. Then it's up to the `openClose` code to handle the state change and kick off a state change animation.
@@ -435,7 +446,7 @@ For elements entering or leaving a page (inserted or removed from the DOM), you 
 아래 코드에서는 애니메이션 트리거가 `isOpen` 프로퍼티에 반응합니다.
 
 <code-example path="animations/src/app/open-close.component.1.html" header="src/app/open-close.component.html"
-region="compare">
+region="trigger">
 </code-example>
 
 이 예제 코드에서 `isOpen` 표현식의 평가 결과에 따라 상태는 `open`이나 `closed`가 되며, 이 상태가 `openClose` 트리거로 전달됩니다.
@@ -561,7 +572,7 @@ What it does
 
 <tr>
 <td><code>query()</code></td>
-<td>Use to find one or more inner HTML elements within the current element. </td>
+<td>Finds one or more inner HTML elements within the current element. </td>
 </tr>
 
 <tr>
@@ -686,7 +697,7 @@ You may also be interested in the following:
 
 <div class="alert is-helpful">
 
-Check out this full animation [demo](http://animationsftw.in/#/) with accompanying [presentation](https://www.youtube.com/watch?v=JhNo3Wvj6UQ&feature=youtu.be&t=2h47m53s), shown at the AngularConnect conference in November 2017.
+Check out this [presentation](https://www.youtube.com/watch?v=rnTK9meY5us), shown at the AngularConnect conference in November 2017, and the accompanying [source code](https://github.com/matsko/animationsftw.in).
 </div>
 -->
 다음 내용에 대해서도 알아보세요:
@@ -698,6 +709,6 @@ Check out this full animation [demo](http://animationsftw.in/#/) with accompanyi
 
 <div class="alert is-helpful">
 
-Angular 애니메이션으로 만든 [데모 사이트](http://animationsftw.in/#/)와 2017년 11월 AngularConnect 컨퍼런스 [발표 영상](https://www.youtube.com/watch?v=JhNo3Wvj6UQ&feature=youtu.be&t=2h47m53s)도 확인해 보세요.
+2017년 11월 AngularConnect 컨퍼런스 [발표 영상](https://www.youtube.com/watch?v=rnTK9meY5us)을 [소스 코드](https://github.com/matsko/animationsftw.in)와 함께 확인해 보세요.
 
 </div>

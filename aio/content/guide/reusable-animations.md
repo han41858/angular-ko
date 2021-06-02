@@ -4,28 +4,25 @@
 # 애니메이션 재사용하기
 
 <!--
-#### Prerequisites
+This topic provides some examples of how to create reusable animations.
 -->
-#### 사전지식
+이 문서는 애니메이션을 재사용하는 예제에 대해 다룹니다.
 
 <!--
-A basic understanding of the following concepts:
+## Prerequisites
+-->
+## 사전지식
+
+<!--
+Before continuing with this topic, you should be familiar with the following:
 
 * [Introduction to Angular animations](guide/animations)
 * [Transition and triggers](guide/transition-and-triggers)
-
-<hr>
-
-The [AnimationOptions](https://angular.io/api/animations/AnimationOptions) interface in Angular animations enables you to create animations that you can reuse across different components.
 -->
 다음 내용은 미리 이해하고 이 문서를 보는 것이 좋습니다:
 
 * [Angular 애니메이션 소개](guide/animations)
 * [트랜지션 & 트리거](guide/transition-and-triggers)
-
-<hr>
-
-애니메이션을 정의해두고 여러 컴포넌트에서 사용하려면 [AnimationOptions](api/animations/AnimationOptions) 인터페이스를 사용해서 애니메이션을 정의하면 됩니다.
 
 
 <!--
@@ -34,9 +31,9 @@ The [AnimationOptions](https://angular.io/api/animations/AnimationOptions) inter
 ## 애니메이션 정의하기
 
 <!--
-To create a reusable animation, use the [`animation()`](https://angular.io/api/animations/animation) method to define an animation in a separate `.ts` file and declare this animation definition as a `const` export variable. You can then import and reuse this animation in any of your app components using the [`useAnimation()`](https://angular.io/api/animations/useAnimation) API.
+To create a reusable animation, use the [`animation()`](api/animations/animation) method to define an animation in a separate `.ts` file and declare this animation definition as a `const` export variable. You can then import and reuse this animation in any of your application components using the [`useAnimation()`](api/animations/useAnimation) API.
 
-<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts" region="reusable" language="typescript"></code-example>
+<code-example path="animations/src/app/animations.1.ts" header="src/app/animations.ts" region="animation-const" language="typescript"></code-example>
 
 In the above code snippet, `transAnimation` is made reusable by declaring it as an export variable.
 
@@ -45,13 +42,18 @@ In the above code snippet, `transAnimation` is made reusable by declaring it as 
 **Note:** The `height`, `opacity`, `backgroundColor`, and `time` inputs are replaced during runtime.
 </div>
 
-You can import the reusable `transAnimation` variable in your component class and reuse it using the `useAnimation()` method as shown below.
+You can also export a part of an animation. For example, the following snippet exports the animation `trigger`.
+
+<code-example path="animations/src/app/animations.1.ts" header="src/app/animations.1.ts" region="trigger-const" language="typescript"></code-example>
+
+From this point, you can import resuable animation variables in your component class. For example, the following code snippet imports the `transAnimation` variable for use in the `useAnimation()` method.
 
 <code-example path="animations/src/app/open-close.component.3.ts" header="src/app/open-close.component.ts" region="reusable" language="typescript"></code-example>
 -->
-애니메이션을 재사용하려면 [`animation()`](api/animations/animation) 함수를 사용해서 애니메이션만 `.ts` 파일에 따로 정의하고 이 애니메이션을 상수(`const`)로 선언한 후에 파일 외부로 공개해야 합니다. 그러면 컴포넌트 메타데이터에서 [`useAnimation()`](https://angular.io/api/animations/useAnimation) API로 이 애니메이션을 불러와서 적용할 수 있습니다. 
+애니메이션을 재사용하려면 [`animation()`](api/animations/animation) 함수를 사용해서 애니메이션만 `.ts` 파일에 따로 정의하고 이 애니메이션을 상수(`const`)로 선언한 후에 파일 외부로 공개해야 합니다.
+그러면 컴포넌트 메타데이터에서 [`useAnimation()`](api/animations/useAnimation) API로 이 애니메이션을 불러와서 적용할 수 있습니다. 
 
-<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts" region="reusable" language="typescript"></code-example>
+<code-example path="animations/src/app/animations.1.ts" header="src/app/animations.ts" region="animation-const" language="typescript"></code-example>
 
 위 예제 코드에서 `transAnimation`이 재사용할 수 있도록 선언된 애니메이션입니다.
 
@@ -61,7 +63,13 @@ You can import the reusable `transAnimation` variable in your component class an
 
 </div>
 
-그리고 이 `transAnimation` 애니메이션은 컴포넌트 클래스 코드에 `useAnimation()` 메소드로 다음과 같이 적용합니다.
+애니메이션은 일부만 외부로 공개할 수도 있습니다.
+`trigger` 애니메이션만 외부로 공개해 봅시다.
+
+<code-example path="animations/src/app/animations.1.ts" header="src/app/animations.1.ts" region="trigger-const" language="typescript"></code-example>
+
+이제부터는 컴포넌트 클래스에 애니메이션을 로드해서 재사용할 수 있습니다.
+아래 예제 코드는 `useAnimation()` 메소드 안에 `transAnimation` 을 사용한 예제 코드입니다.
 
 <code-example path="animations/src/app/open-close.component.3.ts" header="src/app/open-close.component.ts" region="reusable" language="typescript"></code-example>
 

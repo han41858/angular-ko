@@ -26,7 +26,7 @@ The `<parent-component>` serves as the context for the `<child-component>`.
 
 `@Input()` and `@Output()` give a child component a way to communicate with its parent component.
 `@Input()` allows a parent component to update data in the child component.
-Conversely, `@Output() allows the child to send data to a parent component.
+Conversely, `@Output()` allows the child to send data to a parent component.
 -->
 Angular에서는 부모 컴포넌트와 자식 컴포넌트가 데이터를 주고받는 패턴이 자주 사용됩니다.
 이 패턴은 `@Input()`, `@Output()` 데코레이터 구현합니다.
@@ -65,7 +65,7 @@ Angular에서는 부모 컴포넌트와 자식 컴포넌트가 데이터를 주�
 The `@Input()` decorator in a child component or directive signifies that the property can receive its value from its parent component.
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/input.svg" alt="Input data flow diagram">
+  <img src="generated/images/guide/inputs-outputs/input.svg" alt="Input data flow diagram of data flowing from parent to child">
 </div>
 
 To use `@Input()`, you must configure the parent and child.
@@ -73,7 +73,7 @@ To use `@Input()`, you must configure the parent and child.
 `@Input()` 데코레이터는 자식 컴포넌트/디렉티브에 있는 특정 프로퍼티가 부모 컴포넌트/디렉티브에서 값을 받는다는 것을 지정하는 데코레이터입니다.
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/input.svg" alt="Input data flow diagram">
+  <img src="generated/images/guide/inputs-outputs/input.svg" alt="Input data flow diagram of data flowing from parent to child">
 </div>
 
 `@Input()` 데코레이터는 부모-자식 관계에서만 사용할 수 있습니다.
@@ -135,7 +135,7 @@ With `@Input()`, Angular passes the value for `currentItem` to the child so that
 The following diagram shows this structure:
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/input-diagram-target-source.svg" alt="Property binding diagram">
+  <img src="generated/images/guide/inputs-outputs/input-diagram-target-source.svg" alt="Property binding diagram of the target, item, in square brackets set to the source, currentItem, on the right of an equal sign">
 </div>
 
 The target in the square brackets, `[]`, is the property you decorate with `@Input()` in the child component.
@@ -159,7 +159,7 @@ The binding source, the part to the right of the equal sign, is the data that th
 아래 그림을 보면서 구조를 확인해 보세요:
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/input-diagram-target-source.svg" alt="Property binding diagram">
+  <img src="generated/images/guide/inputs-outputs/input-diagram-target-source.svg" alt="Property binding diagram of the target, item, in square brackets set to the source, currentItem, on the right of an equal sign">
 </div>
 
 이 때 프로퍼티 바인딩 대상이 되는 프로퍼티는 부모 컴포넌트 템플릿에서 대괄호(`[]`)로 감싼 프로퍼티이며, 자식 컴포넌트 클래스에서 `@Input()` 데코레이터를 지정한 프로퍼티이기도 합니다.
@@ -190,7 +190,7 @@ See the [`OnChanges`](guide/lifecycle-hooks#onchanges) section of the [Lifecycle
 The `@Output()` decorator in a child component or directive allows data to flow from the child to the parent.
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/output.svg" alt="Output diagram">
+  <img src="generated/images/guide/inputs-outputs/output.svg" alt="Output diagram of the data flow going from child to parent">
 </div>
 
 `@Output()` marks a property in a child component as a doorway through which data can travel from the child to the parent.
@@ -205,7 +205,7 @@ To use `@Output()`, you must configure the parent and child.
 자식 컴포넌트/디렉티브에 `@Output()` 데코레이터를 사용하면 부모 컴포넌트/디렉티브로 데이터를 전달할 수 있습니다.
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/output.svg" alt="Output diagram">
+  <img src="generated/images/guide/inputs-outputs/output.svg" alt="Output diagram of the data flow going from child to parent">
 </div>
 
 `@Output()` 데코레이터는 자식 컴포넌트 프로퍼티 중 부모 컴포넌트로 데이터를 보내는 프로퍼티를 지정하는 역할을 합니다.
@@ -399,7 +399,7 @@ When you click delete, the child component raises an event, `deleteRequest`, whi
 The following diagram shows the different parts of the `@Input()` and `@Output()` on the `<app-input-output>` child component.
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/input-output-diagram.svg" alt="Input/Output diagram">
+  <img src="generated/images/guide/inputs-outputs/input-output-diagram.svg" alt="Diagram of an input target and an output target each bound to a source.">
 </div>
 
 The child selector is `<app-input-output>` with `item` and `deleteRequest` being `@Input()` and `@Output()`
@@ -419,7 +419,7 @@ syntax, `[()]`, see [Two-way Binding](guide/two-way-binding).
 아래 그림을 보면서 자식 컴포넌트 `<app-input-output>`에 사용된 `@Input()` 데코레이터와 `@Output()` 데코레이터가 어떻게 연결되는지 확인해 보세요.
 
 <div class="lightbox">
-  <img src="generated/images/guide/inputs-outputs/input-output-diagram.svg" alt="Input/Output diagram">
+  <img src="generated/images/guide/inputs-outputs/input-output-diagram.svg" alt="Diagram of an input target and an output target each bound to a source.">
 </div>
 
 이 코드에서 자식 컴포넌트 셀렉터는 `<app-input-output>`이며, 자식 컴포넌트에 있는 `item` 프로퍼티와 `deleteRequest` 프로퍼티는 각각 `@Input()` 데코레이터와 `@Output()` 데코레이터가 지정되었습니다.

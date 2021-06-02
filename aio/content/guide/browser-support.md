@@ -9,120 +9,87 @@ Angular supports most recent browsers. This includes the following specific vers
 Angular는 대부분의 브라우저를 지원합니다. 좀 더 자세하게 설명하면 다음 버전을 지원합니다:
 
 <table>
-
   <tr>
-
-<th>
-      <!--
-      Browser
-      -->
-      브라우저
-</th>
-
-<th>
-      <!--
-      Supported versions
-      -->
-      지원 버전
-</th>
-
+    <!--
+    <th>Browser</th>
+    <th>Supported versions</th>
+    -->
+    <th>브라우저</th>
+    <th>지원 버전</th>
   </tr>
-
   <tr>
-
-    <td>
-      Chrome
-    </td>
-
-    <td>
-      <!--
-      latest
-      -->
-      최신 버전
-    </td>
+    <td>Chrome</td>
+    <!--
+    <td>latest</td>
+    -->
+    <td>최신 버전</td>
   </tr>
-
   <tr>
-
-    <td>
-      Firefox
-    </td>
-
-    <td>
-      <!--
-      latest and extended support release (ESR)
-      -->
-      최신버전과 ESR(extended support release) 버전
-    </td>
+    <td>Firefox</td>
+    <!--
+    <td>latest and extended support release (ESR)</td>
+    -->
+    <td>최신버전과 ESR(extended support release) 버전</td>
   </tr>
-
   <tr>
-
+    <td>Edge</td>
+    <!--
+    <td>2 most recent major versions</td>
+    -->
+    <td>최근 2개 메이저 버전</td>
+  </tr>
+  <tr>
+    <td>IE</td>
     <td>
-      Edge
-    </td>
-
-    <td>
+      11<br>
       <!--
-      2 most recent major versions
+      <em>*deprecated, see the <a href="guide/deprecations#internet-explorer-11">deprecations guide</a></em>
       -->
-      최근 2개 메이저 버전
+      <em>*지원이 중단되었습니다. <a href="guide/deprecations#internet-explorer-11">지원 중단 가이드</a> 문서를 참고하세요.</em>
     </td>
   </tr>
   <tr>
-    <td>
-      IE
-    </td>
-    <td>
-      <div>11</div>
-    </td>
-  </tr>
- <tr>
-    <td>
-      Safari
-    </td>
-
-    <td>
-      <!--
-      2 most recent major versions
-      -->
-      최근 2개 메이저 버전
-    </td>
+    <td>Safari</td>
+    <!--
+    <td>2 most recent major versions</td>
+    -->
+    <td>최근 2개 메이저 버전</td>
   </tr>
   <tr>
-    <td>
-      iOS
-    </td>
-
-    <td>
-      <!--
-      2 most recent major versions
-      -->
-      최근 2개 메이저 버전
-    </td>
+    <td>iOS</td>
+    <!--
+    <td>2 most recent major versions</td>
+    -->
+    <td>최근 2개 메이저 버전</td>
   </tr>
   <tr>
-    <td>
-      Android
-    </td>
-
-    <td>
-      Q (10.0), Pie (9.0), Oreo (8.0), Nougat (7.0)
-    </td>
+    <td>Android</td>
+    <td>Q (10.0), Pie (9.0), Oreo (8.0), Nougat (7.0)</td>
   </tr>
-
 </table>
+
 
 <div class="alert is-helpful">
 
 <!--
 Angular's continuous integration process runs unit tests of the framework on all of these browsers for every pull request,
-using <a href="https://saucelabs.com/">SauceLabs</a> and
-<a href="https://www.browserstack.com">Browserstack</a>.
+using [Sauce Labs](https://saucelabs.com/) and
+[BrowserStack](https://www.browserstack.com/).
 -->
-Angular는 <a href="https://saucelabs.com/">SauceLabs</a>와 <a href="https://www.browserstack.com">Browserstack</a>과 함께 브라우저 지원을 위해 지속적으로 노력하고 있습니다.
+Angular는 [Sauce Labs](https://saucelabs.com/)와 [BrowserStack](https://www.browserstack.com/)과 함께 브라우저 지원을 위해 지속적으로 노력하고 있습니다.
 
 </div>
+
+
+{@a ie11}
+## Configuring Angular CLI for compatibility with IE11
+
+While Angular supports all browsers listed above, in order to improve the build times and output,  Angular CLI applications don't support IE11 by default.
+
+Angular CLI uses [`browserlist`](https://github.com/browserslist/browserslist) to configure browser support for applications.
+
+You can enable the IE11 support by following the instructions in the `.browserslistrc` file at the root of your project.
+
 
 {@a polyfills}
 <!--
@@ -195,20 +162,20 @@ This file incorporates the mandatory and many of the optional polyfills as JavaS
 
 * If you need an _optional_ polyfill, you must install its npm package, then uncomment or create the corresponding import statement in the `src/polyfills.ts` configuration file.
 
-For example, if you need the optional [web animations polyfill](http://caniuse.com/#feat=web-animation), you could install it with `npm`, using the following command (or the `yarn` equivalent):
+For example, if you need the optional [web animations polyfill](https://caniuse.com/web-animation), you could install it with `npm`, using the following command (or the `yarn` equivalent):
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   # install the optional web animations polyfill
   npm install --save web-animations-js
 </code-example>
 
 You can then add the import statement in the `src/polyfills.ts` file.
-For many polyfills, you can simply un-comment the corresponding `import` statement in the file, as in the following example.
+For many polyfills, you can un-comment the corresponding `import` statement in the file, as in the following example.
 
 <code-example header="src/polyfills.ts">
   /**
   * Required to support Web Animations `@angular/platform-browser/animations`.
-  * Needed for: All but Chrome, Firefox and Opera. http://caniuse.com/#feat=web-animation
+  * Needed for: All but Chrome, Firefox and Opera. https://caniuse.com/web-animation
   **/
   import 'web-animations-js';  // Run `npm install --save web-animations-js`.
 </code-example>
@@ -225,10 +192,10 @@ Angular CLI `ng new` 명령으로 프로젝트를 설정했다면 폴리필 설�
 
 * _옵션_ 폴리필이 필요하면 해당 npm 패키지를 설치한 후에 `src/polyfills.ts` 파일에서 `import` 구문을 찾아서 주석을 해제하거나 추가하면 됩니다.
 
-예를 들어 [웹 애니메이션 폴리필](http://caniuse.com/#feat=web-animation)이 필요하다면 `npm`으로 해당 패키지를 설치하면 됩니다(`yarn`도 사용할 수 있습니다):
+예를 들어 [웹 애니메이션 폴리필](https://caniuse.com/web-animation)이 필요하다면 `npm`으로 해당 패키지를 설치하면 됩니다(`yarn`도 사용할 수 있습니다):
 
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   # 웹 애니메이션 폴리필을 설치합니다.
   npm install --save web-animations-js
 </code-example>
@@ -241,7 +208,7 @@ Angular CLI `ng new` 명령으로 프로젝트를 설정했다면 폴리필 설�
 <code-example header="src/polyfills.ts">
   /**
   * `@angular/platform-browser/animations` 패키지로 웹 애니메이션을 사용할 때 필요합니다.
-  * Chrome, Firefox, Opera를 제외한 브라우저에 필요합니다. http://caniuse.com/#feat=web-animation
+  * Chrome, Firefox, Opera를 제외한 브라우저에 필요합니다. https://caniuse.com/web-animation
   **/
   import 'web-animations-js';  // `npm install --save web-animations-js` 명령을 실행한 후에 동작합니다.
 </code-example>
@@ -263,40 +230,23 @@ These are the polyfills required to run an Angular application on each supported
 다음 브라우저에서 Angular 애플리케이션을 실행하려면 반드시 폴리필을 적용해야 합니다:
 
 <table>
-
   <tr style="vertical-align: top">
-
-    <th>
-      <!--
-      Browsers (Desktop & Mobile)
-      -->
-      브라우저 (데스크탑 & 모바일)
-    </th>
-
-    <th>
-      <!--
-      Polyfills Required
-      -->
-      필요한 폴리필
-    </th>
-
+    <!--
+    <th>Browsers (Desktop & Mobile)</th>
+    <th>Polyfills Required</th>
+    -->
+    <th>브라우저 (데스크탑 & 모바일)</th>
+    <th>필요한 폴리필</th>
   </tr>
-
   <tr style="vertical-align: top">
-
     <td>
       Chrome, Firefox, Edge, <br>
       Safari, Android, IE 11
     </td>
-
     <td>
-
-      [ES2015](guide/browser-support#core-es6)
-
+      <a href="guide/browser-support#core-es6">ES2015</a>
     </td>
-
   </tr>
-
 </table>
 
 
@@ -311,54 +261,31 @@ Some features of Angular may require additional polyfills.
 Angular 기능 중 일부는 폴리필을 추가로 적용해야 하는 것이 있습니다.
 
 <table>
-
   <tr style="vertical-align: top">
-
-    <th>
-      <!--
-      Feature
-      -->
-      기능
-    </th>
-
-    <th>
-      <!--
-      Polyfill
-      -->
-      폴리필
-    </th>
-
-    <th style="width: 50%">
-       <!--
-       Browsers (Desktop & Mobile)
-       -->
-       브라우저 (데스크탑 & 모바일)
-    </th>
-
+    <!--
+    <th>Feature</th>
+    <th>Polyfill</th>
+    <th style="width: 50%">Browsers (Desktop & Mobile)</th>
+    -->
+    <th>기능</th>
+    <th>폴리픽</th>
+    <th style="width: 50%">브라우저 (데스크탑 & 모바일)</th>
   </tr>
-
   <tr style="vertical-align: top">
-
     <td>
-
       <!--
-      [AnimationBuilder](api/animations/AnimationBuilder).
+      <a href="api/animations/AnimationBuilder">AnimationBuilder</a>
       (Standard animation support does not require polyfills.)
       -->
-      [AnimationBuilder](api/animations/AnimationBuilder).
+      <a href="api/animations/AnimationBuilder">AnimationBuilder</a>
       (표준 애니메이션만 사용하면 폴리필이 필요하지 않습니다.)
-
     </td>
-
     <td>
-
       <!--
-      [Web Animations](guide/browser-support#web-animations)
+      <a href="guide/browser-support#web-animations">Web Animations</a>
       -->
-      [웹 애니메이션](guide/browser-support#web-animations)
-
+      <a href="guide/browser-support#web-animations">웹 애니메이션</a>
     </td>
-
     <td>
       <!--
       <p>If AnimationBuilder is used, enables scrubbing
@@ -367,54 +294,37 @@ Angular 기능 중 일부는 폴리필을 추가로 적용해야 하는 것이 �
       -->
       <p>AnimationBuilder를 사용하면 IE, Edge, Safari에 폴리필이 필요합니다.(Chrome, Firefox는 기본 지원합니다.)</p>
     </td>
-
   </tr>
 
   <tr style="vertical-align: top">
-
     <td>
-
-       <!--
-       [NgClass](api/common/NgClass) on SVG elements
-       -->
-       SVG 엘리먼트에 적용하는 [NgClass](api/common/NgClass) 
-    </td>
-
-    <td>
-
-      [classList](guide/browser-support#classlist)
-
-    </td>
-
-    <td>
-      IE 11
-    </td>
-
-  </tr>
-
-  <tr style="vertical-align: top">
-
-    <td>
-
       <!--
-      [Router](guide/router) when using
-      [hash-based routing](guide/router#location-strategy)
+      <a href="api/common/NgClass">NgClass</a> on SVG elements
       -->
-      [해시 기반으로 라우팅](guide/router#location-strategy) 할 때 [Router](guide/router)
+      SVG 엘리먼트에 적용하는 <a href="api/common/NgClass">NgClass</a>
     </td>
-
     <td>
-
-      [ES7/array](guide/browser-support#core-es7-array)
-
+      <a href="guide/browser-support#classlist">classList</a>
     </td>
-
     <td>
       IE 11
     </td>
-
   </tr>
 
+  <tr style="vertical-align: top">
+    <td>
+      <!--
+      <a href="guide/router">Router</a> when using <a href="guide/router#location-strategy">hash-based routing</a>
+      -->
+      <a href="guide/router#location-strategy">해시 기반으로</a> <a href="guide/router">Router</a>를 사용할 때
+    </td>
+    <td>
+      <a href="guide/browser-support#core-es7-array">ES7/array</a>
+    </td>
+    <td>
+      IE 11
+    </td>
+  </tr>
 </table>
 
 
@@ -432,129 +342,78 @@ The following polyfills are used to test the framework itself. They are a good s
 
 
 <table>
-
   <tr>
-
     <th>
       <!--
       Polyfill
       -->
       폴리필
     </th>
-
     <th>
       <!--
       License
       -->
       라이센스
     </th>
-
     <th>
       <!--
       Size*
       -->
       크기*
     </th>
-
   </tr>
-
   <tr>
-
     <td>
-
       <a id='core-es7-array' href="https://github.com/zloirock/core-js/tree/v2/fn/array">ES7/array</a>
-
     </td>
-
     <td>
       MIT
     </td>
-
     <td>
       0.1KB
     </td>
-
   </tr>
-
   <tr>
-
     <td>
-
       <a id='core-es6' href="https://github.com/zloirock/core-js">ES2015</a>
-
     </td>
-
     <td>
       MIT
     </td>
-
     <td>
       27.4KB
     </td>
-
   </tr>
 
   <tr>
-
     <td>
-
       <a id='classlist' href="https://github.com/eligrey/classList.js">classList</a>
-
     </td>
-
     <td>
       Public domain
     </td>
-
     <td>
       1KB
     </td>
-
   </tr>
-
   <tr>
-
     <td>
-
-      <a id='intl' href="https://github.com/andyearnshaw/Intl.js">Intl</a>
-
-    </td>
-
-    <td>
-      MIT / Unicode license
-    </td>
-
-    <td>
-      13.5KB
-    </td>
-
-  </tr>
-
-  <tr>
-
-    <td>
-
        <a id='web-animations' href="https://github.com/web-animations/web-animations-js">Web Animations</a>
-
     </td>
-
     <td>
       Apache
     </td>
-
     <td>
       14.8KB
     </td>
-
   </tr>
-
 </table>
 
 <!--
 \* Figures are for minified and gzipped code,
-computed with the <a href="http://closure-compiler.appspot.com/home">closure compiler</a>.
+computed with the [closure compiler](https://closure-compiler.appspot.com/home).
 -->
-\* <a href="http://closure-compiler.appspot.com/home">closure compiler</a>로 압축되고 난독화된 크기입니다.
+\* [closure compiler](https://closure-compiler.appspot.com/home)로 압축되고 난독화된 크기입니다.
 
 {@a non-cli}
 
@@ -581,7 +440,6 @@ For example:
     // __Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
     // __Zone_disable_on_property = true; // disable patch onProperty such as onclick
     // __zone_symbol__UNPATCHED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
-
     /*
      * in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
      * with the following flag, it will bypass `zone.js` patch for IE/Edge
@@ -590,7 +448,6 @@ For example:
   &lt;/script>
   &lt;!-- zone.js required by Angular ->
   &lt;script src="node_modules/zone.js/bundles/zone.umd.js">&lt;/script>
-
   &lt;!-- application polyfills ->
 </code-example>
 -->

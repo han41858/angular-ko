@@ -11,7 +11,7 @@ It will also be easier to unit-test with a mock service.
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+  For the sample application that this page describes, see the <live-example></live-example>.
 
 </div>
 -->
@@ -70,7 +70,7 @@ when the user clicks a hero.
 <!--
 Using the Angular CLI, create a service called `hero`.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate service hero
 </code-example>
 
@@ -81,7 +81,7 @@ The command generates a skeleton `HeroService` class in `src/app/hero.service.ts
 -->
 Angular CLI로 다음 명령을 실행해서 `hero` 서비스를 생성합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate service hero
 </code-example>
 
@@ -158,7 +158,7 @@ before Angular can _inject_ it into the `HeroesComponent` by registering a _prov
 
 To make sure that the `HeroService` can provide this service, register it
 with the _injector_, which is the object that is responsible for choosing
-and injecting the provider where the app requires it.
+and injecting the provider where the application requires it.
 
 By default, the Angular CLI command `ng generate service` registers a provider with the _root injector_ for your service by including provider metadata, that is `providedIn: 'root'` in the `@Injectable()` decorator.
 -->
@@ -177,7 +177,7 @@ Angular CLI로 `ng generate service` 명령을 실행하면 이 서비스의 `@I
 
 <!--
 When you provide the service at the root level, Angular creates a single, shared instance of `HeroService` and injects into any class that asks for it.
-Registering the provider in the `@Injectable` metadata also allows Angular to optimize an app by removing the service if it turns out not to be used after all.
+Registering the provider in the `@Injectable` metadata also allows Angular to optimize an application by removing the service if it turns out not to be used after all.
 -->
 서비스가 최상위 인젝터에 등록되면 Angular는 `HeroService`의 인스턴스를 하나만 생성하며, 이 클래스가 주입되는 모든 곳에서 같은 인스턴스를 공유합니다.
 그리고 `@Injectable()` 데코레이터는 이 데코레이터가 등록된 클래스가 실제로 사용되지 않으면 이 클래스를 최종 빌드 결과물에서 제거하는 대상으로 등록하는 역할도 합니다.
@@ -291,7 +291,7 @@ Create a method to retrieve the heroes from the service.
 <!--
 While you could call `getHeroes()` in the constructor, that's not the best practice.
 
-Reserve the constructor for simple initialization such as wiring constructor parameters to properties.
+Reserve the constructor for minimal initialization such as wiring constructor parameters to properties.
 The constructor shouldn't _do anything_.
 It certainly shouldn't call a function that makes HTTP requests to a remote server as a _real_ data service would.
 
@@ -316,7 +316,7 @@ let Angular call `ngOnInit()` at an appropriate time _after_ constructing a `Her
 ### 동작 확인하기
 
 <!--
-After the browser refreshes, the app should run as before,
+After the browser refreshes, the application should run as before,
 showing a list of heroes and a hero detail view when you click on a hero name.
 -->
 브라우저가 갱신되고 나면 앱이 이전과 동일하게 동작할 것입니다.
@@ -336,9 +336,9 @@ as if heroes could be fetched synchronously.
 <code-example path="toh-pt4/src/app/heroes/heroes.component.1.ts" header="src/app/heroes/heroes.component.ts" region="get-heroes">
 </code-example>
 
-This will not work in a real app.
+This will not work in a real application.
 You're getting away with it now because the service currently returns _mock heroes_.
-But soon the app will fetch heroes from a remote server,
+But soon the application will fetch heroes from a remote server,
 which is an inherently _asynchronous_ operation.
 
 The `HeroService` must wait for the server to respond,
@@ -378,7 +378,7 @@ Angular가 제공하는 [`HttpClient.get` 메소드는 `Observable`을 반환하
 ### 옵저버블 `HeroService`
 
 <!--
-`Observable` is one of the key classes in the [RxJS library](http://reactivex.io/rxjs/).
+`Observable` is one of the key classes in the [RxJS library](https://rxjs.dev/).
 
 In a [later tutorial on HTTP](tutorial/toh-pt6), you'll learn that Angular's `HttpClient` methods return RxJS `Observable`s.
 In this tutorial, you'll simulate getting data from the server with the RxJS `of()` function.
@@ -400,7 +400,7 @@ In the [HTTP tutorial](tutorial/toh-pt6), you'll call `HttpClient.get<Hero[]>()`
 
 </div>
 -->
-`Observable`은 [RxJS 라이브러리](http://reactivex.io/rxjs/)가 제공하는 클래스 중 가장 중요한 클래스입니다.
+`Observable`은 [RxJS 라이브러리](https://rxjs.dev/)가 제공하는 클래스 중 가장 중요한 클래스입니다.
 
 [이후에 HTTP에 대해서 알아볼 때](tutorial/toh-pt6) Angular의 `HttpClient` 클래스가 제공하는 메소드는 모두 RxJS가 제공하는 `Observable` 타입을 반환한다는 것을 다시 한 번 살펴볼 것입니다.
 이 튜토리얼에서는 리모트 서버를 사용하지 않고 RxJS의 `of()` 함수로 데이터를 즉시 반환해 봅시다.
@@ -503,7 +503,7 @@ the `HeroService` requests heroes from the server.
 <!--
 This section guides you through the following:
 
-* adding a `MessagesComponent` that displays app messages at the bottom of the screen
+* adding a `MessagesComponent` that displays application messages at the bottom of the screen
 * creating an injectable, app-wide `MessageService` for sending messages to be displayed
 * injecting `MessageService` into the `HeroService`
 * displaying a message when `HeroService` fetches heroes successfully
@@ -524,7 +524,7 @@ This section guides you through the following:
 <!--
 Use the CLI to create the `MessagesComponent`.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate component messages
 </code-example>
 
@@ -541,7 +541,7 @@ You should see the default paragraph from `MessagesComponent` at the bottom of t
 -->
 Angular CLI로 다음 명령을 실행해서 `MessagesComponent`를 생성합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate component messages
 </code-example>
 
@@ -565,7 +565,7 @@ Angular CLI로 다음 명령을 실행해서 `MessagesComponent`를 생성합니
 <!--
 Use the CLI to create the `MessageService` in `src/app`.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate service message
 </code-example>
 
@@ -578,7 +578,7 @@ The service exposes its cache of `messages` and two methods: one to `add()` a me
 -->
 `src/app` 폴더에서 Angular CLI로 다음 명령을 실행해서 `MessageService`를 생성합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate service message
 </code-example>
 
@@ -768,7 +768,7 @@ path="toh-pt4/src/app/heroes/heroes.component.ts">
 
 Refresh the browser to see the list of heroes, and scroll to the bottom to see the
 messages from the HeroService. Each time you click a hero, a new message appears to record
-the selection. Use the "clear" button to clear the message history.
+the selection. Use the **Clear messages** button to clear the message history.
 -->
 사용자가 히어로를 클릭할 때마다 어떤 히어로를 선택했는지 기록을 남기려면 다음과 같은 코드를 추가하면 됩니다.
 이 내용은 다음 섹션인 [라우팅](tutorial/toh-pt5)에서 활용해 봅시다.
@@ -779,7 +779,7 @@ path="toh-pt4/src/app/heroes/heroes.component.ts">
 
 브라우저를 새로고침하면 히어로 목록이 화면에 표시됩니다.
 그리고 이 화면에서 스크롤을 화면 끝까지 내리면 HeroService가 보낸 메시지를 확인할 수 있습니다.
-이 메시지 목록은 사용자가 히어로를 클릭할 때마다 추가되며, "clear" 버튼을 누르면 기록을 지울 수 있습니다.
+이 메시지 목록은 사용자가 히어로를 클릭할 때마다 추가되며, "Clear messages" 버튼을 누르면 기록을 지울 수 있습니다.
 
 
 {@a final-code-review}
@@ -837,7 +837,7 @@ Here are the code files discussed on this page.
 
 <!--
 * You refactored data access to the `HeroService` class.
-* You registered the `HeroService` as the _provider_ of its service at the root level so that it can be injected anywhere in the app.
+* You registered the `HeroService` as the _provider_ of its service at the root level so that it can be injected anywhere in the application.
 * You used [Angular Dependency Injection](guide/dependency-injection) to inject it into a component.
 * You gave the `HeroService` _get data_ method an asynchronous signature.
 * You discovered `Observable` and the RxJS _Observable_ library.

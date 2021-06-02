@@ -161,7 +161,7 @@ To incorporate the feature module into your app, you have to let the root module
 <code-example path="feature-modules/src/app/app.module.ts" region="app-module" header="src/app/app.module.ts"></code-example>
 
 
-Now the `AppModule` knows about the feature module. If you were to add any service providers to the feature module, `AppModule` would know about those too, as would any other feature modules. However, NgModules don’t expose their components.
+Now the `AppModule` knows about the feature module. If you were to add any service providers to the feature module, `AppModule` would know about those too, as would any other feature modules. However, NgModules don’t expose their components by default.
 -->
 애플리케이션에서 기능 모듈을 사용하려면, 이 기능 모듈을 앱 모듈인 `app.module.ts`에 추가해야 합니다.
 `customer-dashboard.module.ts` 파일을 다시 보면 가장 아래에 `CustomerDashboardModule` 클래스를 `export` 로 지정한 것을 확인할 수 있습니다.
@@ -200,8 +200,6 @@ Now, in addition to the title that renders by default, the `CustomerDashboardCom
 <div class="lightbox">
   <img src="generated/images/guide/feature-modules/feature-module.png" alt="feature module component">
 </div>
-
-<hr />
 -->
 Angular CLI로 만든  `CustomerDashboardComponent`의 템플릿 파일인 `customer-dashboard.component.html`에는 다음과 같이 마크업이 구성되어 있습니다:
 
@@ -221,8 +219,6 @@ Angular CLI로 만든  `CustomerDashboardComponent`의 템플릿 파일인 `cust
 <div class="lightbox">
   <img src="generated/images/guide/feature-modules/feature-module.png" alt="기능 모듈 컴포넌트">
 </div>
-
-<hr />
 
 
 <!--

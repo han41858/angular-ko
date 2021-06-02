@@ -3,20 +3,20 @@ import { Component, OnInit } from '@angular/core';
 import { EventsService } from './events.service';
 
 const DAY = 24 * 60 * 60 * 1000;
-// const MONTHS = [
-//   'January',
-//   'February',
-//   'March',
-//   'April',
-//   'May',
-//   'June',
-//   'July',
-//   'August',
-//   'September',
-//   'October',
-//   'November',
-//   'December',
-// ];
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 
 export type date = string; // of the format `YYYY-MM-DD`.
 export interface Duration {
@@ -87,41 +87,25 @@ export class EventsComponent implements OnInit {
       // If no work shop date create conference date string
       dateString = processDate(event.date);
     }
-    dateString = `${new Date(event.date.end).getFullYear()}. ${dateString}`;
+    dateString = `${dateString}, ${new Date(event.date.end).getUTCFullYear()}`;
     return dateString;
   }
 }
 
 function processDate(dates: Duration) {
-  // // Covert Date sting to date object for comparisons
-  // const startDate = new Date(dates.start);
-  // const endDate = new Date(dates.end);
-
-  // // Create a date string in the start like January 31
-  // let processedDate = `${MONTHS[startDate.getMonth()]} ${startDate.getDate()}`;
-
-  // // If they are in different months add the string '- February 2' Making the final string January 31 - February 2
-  // if (startDate.getMonth() !== endDate.getMonth()) {
-  //   processedDate = `${processedDate} - ${MONTHS[endDate.getMonth()]} ${endDate.getDate()}`;
-  // } else if (startDate.getDate() !== endDate.getDate()) {
-  //   // If not add - date eg it will make // January 30-31
-  //   processedDate = `${processedDate}-${endDate.getDate()}`;
-  // }
   // Covert Date sting to date object for comparisons
   const startDate = new Date(dates.start);
   const endDate = new Date(dates.end);
 
   // Create a date string in the start like January 31
-  let processedDate = `${startDate.getMonth()+1}. ${startDate.getDate()}`;
+  let processedDate = `${MONTHS[startDate.getUTCMonth()]} ${startDate.getUTCDate()}`;
 
   // If they are in different months add the string '- February 2' Making the final string January 31 - February 2
-  if (startDate.getMonth() !== endDate.getMonth()) {
-    processedDate = `${processedDate} ~ ${endDate.getMonth()+1}. ${endDate.getDate()}.`;
-  } else if (startDate.getDate() !== endDate.getDate()) {
+  if (startDate.getUTCMonth() !== endDate.getUTCMonth()) {
+    processedDate = `${processedDate} - ${MONTHS[endDate.getUTCMonth()]} ${endDate.getUTCDate()}`;
+  } else if (startDate.getUTCDate() !== endDate.getUTCDate()) {
     // If not add - date eg it will make // January 30-31
-    processedDate = `${processedDate}. ~ ${endDate.getDate()}.`;
-  } else {
-    processedDate = `${processedDate}.`
+    processedDate = `${processedDate}-${endDate.getUTCDate()}`;
   }
 
   return processedDate;

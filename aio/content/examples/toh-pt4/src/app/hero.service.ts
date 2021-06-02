@@ -25,11 +25,11 @@ export class HeroService {
 
   // #docregion getHeroes, getHeroes-1
   getHeroes(): Observable<Hero[]> {
+    const heroes = of(HEROES);
     // #enddocregion getHeroes-1
-    // TODO: 메시지는 히어로 데이터를 가져온 _후에_ 보내야 합니다.
     this.messageService.add('HeroService: fetched heroes');
     // #docregion getHeroes-1
-    return of(HEROES);
+    return heroes;
   }
   // #enddocregion getHeroes, getHeroes-1
 }

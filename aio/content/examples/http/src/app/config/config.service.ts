@@ -14,6 +14,7 @@ import { catchError, retry } from 'rxjs/operators';
 export interface Config {
   heroesUrl: string;
   textfile: string;
+  date: any;
 }
 // #enddocregion config-interface
 // #docregion proto
@@ -42,7 +43,7 @@ export class ConfigService {
 
   getConfig_1() {
   // #docregion getConfig_1
-    return this.http.get(this.configUrl);
+    return this.http.get<Config>(this.configUrl);
   }
   // #enddocregion getConfig_1
 
@@ -71,7 +72,7 @@ export class ConfigService {
 
   // #docregion handleError
   private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
+    if (error.status === 0) {
       // 클라이언트나 네트워크 문제로 발생한 에러.
       console.error('An error occurred:', error.error.message);
     } else {

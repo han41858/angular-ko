@@ -16,7 +16,7 @@ A basic understanding of the following:
 
 The `ngsw-config.json` configuration file specifies which files and data URLs the Angular service
 worker should cache and how it should update the cached files and data. The [Angular CLI](cli)
-processes the configuration file during `ng build --prod`. Manually, you can process it with the
+processes the configuration file during `ng build`. Manually, you can process it with the
 `ngsw-config` tool (where `<project-name>` is the name of the project being built):
 
 <code-example language="sh">
@@ -32,7 +32,7 @@ to the deployment directory&mdash;usually `dist/<project-name>` in CLI projects.
 <hr />
 
 `ngsw-config.json` 설정 파일은 Angular 서비스 워커가 캐싱할 파일과 데이터 URL을 지정하는 파일이며, 이 리소스들을 어떻게 업데이트할 것인지도 지정합니다.
-[Angular CLI](cli)로 `ng build --prod` 명령을 실행하면 이 설정 파일이 자동으로 구성됩니다.
+[Angular CLI](cli)로 `ng build` 명령을 실행하면 이 설정 파일이 자동으로 구성됩니다.
 아니면 `ngsw-config` 툴을 활용해서 이 파일을 직접 구성할 수도 있습니다:
 
 <code-example language="sh">
@@ -78,8 +78,8 @@ Each section of the configuration file is described below.
 ## `appData`
 
 <!--
-This section enables you to pass any data you want that describes this particular version of the app.
-The `SwUpdate` service includes that data in the update notifications. Many apps use this section to provide additional information for the display of UI popups, notifying users of the available update.
+This section enables you to pass any data you want that describes this particular version of the application.
+The `SwUpdate` service includes that data in the update notifications. Many applications use this section to provide additional information for the display of UI popups, notifying users of the available update.
 -->
 애플리케이션에 필요한 데이터가 있다면 이 섹션을 사용해서 전달할 수 있습니다.
 `SwUpdate` 서비스에도 업데이트 알림과 관련된 데이터가 필요할 수 있습니다. 그래서 보통 이 섹션은 업데이트 알림을 표시하는 팝업에 필요한 데이터를 지정하는 용도로 사용합니다.
@@ -95,7 +95,7 @@ Specifies the file that serves as the index page to satisfy navigation requests.
 ## `assetGroups`
 
 <!--
-*Assets* are resources that are part of the app version that update along with the app. They can include resources loaded from the page's origin as well as third-party resources loaded from CDNs and other external URLs. As not all such external URLs may be known at build time, URL patterns can be matched.
+*Assets* are resources that are part of the application version that update along with the application. They can include resources loaded from the page's origin as well as third-party resources loaded from CDNs and other external URLs. As not all such external URLs may be known at build time, URL patterns can be matched.
 
 This field contains an array of asset groups, each of which defines a set of asset resources and the policy by which they are cached.
 
@@ -204,7 +204,7 @@ A `name` is mandatory. It identifies this particular group of assets between ver
 <!--
 The `installMode` determines how these resources are initially cached. The `installMode` can be either of two values:
 
-* `prefetch` tells the Angular service worker to fetch every single listed resource while it's caching the current version of the app. This is bandwidth-intensive but ensures resources are available whenever they're requested, even if the browser is currently offline.
+* `prefetch` tells the Angular service worker to fetch every single listed resource while it's caching the current version of the application. This is bandwidth-intensive but ensures resources are available whenever they're requested, even if the browser is currently offline.
 
 * `lazy` does not cache any of the resources up front. Instead, the Angular service worker only caches resources for which it receives requests. This is an on-demand caching mode. Resources that are never requested will not be cached. This is useful for things like images at different resolutions, so the service worker only caches the correct assets for the particular screen and orientation.
 
@@ -221,7 +221,7 @@ Defaults to `prefetch`.
 ### `updateMode`
 
 <!--
-For resources already in the cache, the `updateMode` determines the caching behavior when a new version of the app is discovered. Any resources in the group that have changed since the previous version are updated in accordance with `updateMode`.
+For resources already in the cache, the `updateMode` determines the caching behavior when a new version of the application is discovered. Any resources in the group that have changed since the previous version are updated in accordance with `updateMode`.
 
 * `prefetch` tells the service worker to download and cache the changed resources immediately.
 
@@ -245,7 +245,7 @@ This section describes the resources to cache, broken up into the following grou
 * `files` lists patterns that match files in the distribution directory. These can be single files or glob-like patterns that match a number of files.
 
 * `urls` includes both URLs and URL patterns that will be matched at runtime. These resources are not fetched directly and do not have content hashes, but they will be cached according to their HTTP headers. This is most useful for CDNs such as the Google Fonts service.<br>
-  _(Negative glob patterns are not supported and `?` will be matched literally; i.e. it will not match any character other than `?`.)_
+  _(Negative glob patterns are not supported and `?` will be matched literally; that is, it will not match any character other than `?`.)_
 -->
 이 섹션에는 캐싱할 리소스 목록을 다음과 같은 방식으로 지정합니다.
 
@@ -271,7 +271,7 @@ These options are used to modify the matching behavior of requests. They are pas
 ## `dataGroups`
 
 <!--
-Unlike asset resources, data requests are not versioned along with the app. They're cached according to manually-configured policies that are more useful for situations such as API requests and other data dependencies.
+Unlike asset resources, data requests are not versioned along with the application. They're cached according to manually-configured policies that are more useful for situations such as API requests and other data dependencies.
 
 This field contains an array of data groups, each of which defines a set of data resources and the policy by which they are cached.
 
@@ -384,7 +384,7 @@ A list of URL patterns. URLs that match these patterns are cached according to t
 
 ### `version`
 <!--
-Occasionally APIs change formats in a way that is not backward-compatible. A new version of the app may not be compatible with the old API format and thus may not be compatible with existing cached resources from that API.
+Occasionally APIs change formats in a way that is not backward-compatible. A new version of the application may not be compatible with the old API format and thus may not be compatible with existing cached resources from that API.
 
 `version` provides a mechanism to indicate that the resources being cached have been updated in a backwards-incompatible way, and that the old cache entries&mdash;those from previous versions&mdash;should be discarded.
 
@@ -470,7 +470,7 @@ To use this strategy set `strategy` to `freshness` and `timeout` to `0u` in `cac
 This will essentially do the following:
 
 1. Try to fetch from the network first.
-2. If the network request does not complete after 0ms (i.e. immediately), fall back to the cache (ignoring cache age).
+2. If the network request does not complete after 0ms (that is, immediately), fall back to the cache (ignoring cache age).
 3. Once the network request completes, update the cache for future requests.
 4. If the resource does not exist in the cache, wait for the network request anyway.
 
@@ -527,7 +527,7 @@ The ServiceWorker will redirect navigation requests that don't match any `asset`
 
 By default, these criteria are:
 
-1. The URL must not contain a file extension (i.e. a `.`) in the last path segment.
+1. The URL must not contain a file extension (that is, a `.`) in the last path segment.
 2. The URL must not contain `__`.
 
 <div class="alert is-helpful">
@@ -562,7 +562,7 @@ To configure whether navigation requests are sent through to the network or not,
 <!--
 While these default criteria are fine in most cases, it is sometimes desirable to configure different rules. For example, you may want to ignore specific routes (that are not part of the Angular app) and pass them through to the server.
 
-This field contains an array of URLs and [glob-like](#glob-patterns) URL patterns that will be matched at runtime. It can contain both negative patterns (i.e. patterns starting with `!`) and non-negative patterns and URLs.
+This field contains an array of URLs and [glob-like](#glob-patterns) URL patterns that will be matched at runtime. It can contain both negative patterns (that is, patterns starting with `!`) and non-negative patterns and URLs.
 
 Only requests whose URLs match _any_ of the non-negative URLs/patterns and _none_ of the negative ones will be considered navigation requests. The URL query will be ignored when matching.
 

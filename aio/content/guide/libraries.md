@@ -5,17 +5,17 @@
 
 <!--
 Many applications need to solve the same general problems, such as presenting a unified user interface, presenting data, and allowing data entry.
-Developers can create general solutions for particular domains that can be adapted for re-use in different apps.
+Developers can create general solutions for particular domains that can be adapted for re-use in different applications.
 Such a solution can be built as Angular *libraries* and these libraries can be published and shared as *npm packages*.
 
-An Angular library is an Angular [project](guide/glossary#project) that differs from an app in that it cannot run on its own.
-A library must be imported and used in an app.
+An Angular library is an Angular [project](guide/glossary#project) that differs from an application in that it cannot run on its own.
+A library must be imported and used in an application.
 
 Libraries extend Angular's base functionality. For example, to add [reactive forms](guide/reactive-forms) to an app, add the library package using `ng add @angular/forms`, then import the `ReactiveFormsModule` from the `@angular/forms` library in your application code.
 Similarly, adding the [service worker](guide/service-worker-intro) library to an Angular application is one of the steps for turning an application into a [Progressive Web App](https://developers.google.com/web/progressive-web-apps/) (PWA).
 [Angular Material](https://material.angular.io/) is an example of a large, general-purpose library that provides sophisticated, reusable, and adaptable UI components.
 
-Any app developer can use these and other libraries that have been published as npm packages by the Angular team or by third parties. See [Using Published Libraries](guide/using-libraries).
+Any application developer can use these and other libraries that have been published as npm packages by the Angular team or by third parties. See [Using Published Libraries](guide/using-libraries).
 -->
 애플리케이션마다 일반적으로 발생하는 문제들이 있습니다.
 사용자가 무언가 할 수 있는 화면을 구성하거나, 데이터를 표시하고, 데이터를 입력받는 기능은 어느 어플리케이션에나 필요합니다.
@@ -48,9 +48,16 @@ Whether you decide to package functionality as a library is an architectural dec
 Packaging functionality as a library forces the artifacts in the library to be decoupled from the application's business logic.
 This can help to avoid various bad practices or architecture mistakes that can make it difficult to decouple and reuse code in the future.
 
-Putting code into a separate library is more complex than simply putting everything in one app.
+Putting code into a separate library is more complex than simply putting everything in one application.
 It requires more of an investment in time and thought for managing, maintaining, and updating the library.
-This complexity can pay off, however, when the library is being used in multiple apps.
+This complexity can pay off, however, when the library is being used in multiple applications.
+
+<div class="alert is-helpful">
+
+Note that libraries are intended to be used by Angular applications.
+To add Angular functionality to non-Angular web applications, you can use [Angular custom elements](guide/elements).
+
+</div>
 -->
 재사용할만한 기능이 있다면 누구나 라이브러리를 만들수 있습니다.
 이렇게 만든 라이브러리는 로컬 환경에 있는 여러 프로젝트에 적용하는 것도 물론 가능하지만 [npm 패키지](guide/npm-packages)로 배포해서 다른 Angular 개발자에게 도움을 줄 수도 있습니다.
@@ -70,10 +77,6 @@ npm 일반 저장소 뿐만 아니라 프라이빗 npm 기업용 저장소나 np
 
 <div class="alert is-helpful">
 
-<!--
-Note that libraries are intended to be used by Angular apps.
-To add Angular functionality to non-Angular web apps, you can use [Angular custom elements](guide/elements).
--->
 Angular 라이브러리는 Angular 앱이 로드해서 사용하는 것이 기본입니다.
 Angular가 아닌 웹 앱에서 Angular의 기능을 활용하려면 [Angular 커스텀 엘리먼트](guide/elements) 문서를 참고하세요.
 

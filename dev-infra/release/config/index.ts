@@ -6,8 +6,6 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import * as semver from 'semver';
-
 import {assertNoErrors, getConfig, NgDevConfig} from '../../utils/config';
 
 /** Interface describing a built package. */
@@ -25,7 +23,7 @@ export interface ReleaseConfig {
   /** List of NPM packages that are published as part of this project. */
   npmPackages: string[];
   /** Builds release packages and returns a list of paths pointing to the output. */
-  buildPackages: () => Promise<BuiltPackage[]|null>;
+  buildPackages: (stampForRelease?: boolean) => Promise<BuiltPackage[]|null>;
   /** The list of github labels to add to the release PRs. */
   releasePrLabels?: string[];
   /** Configuration for creating release notes during publishing. */

@@ -39,7 +39,7 @@ export type NavigationTrigger = 'imperative'|'popstate'|'hashchange';
  * ```
  *
  * @see `Event`
- * @see [Router events summary](guide/router#router-events)
+ * @see [Router events summary](guide/router-reference#router-events)
  * @publicApi
  */
 export class RouterEvent {
@@ -134,7 +134,7 @@ export class NavigationEnd extends RouterEvent {
 
 /**
  * An event triggered when a navigation is canceled, directly or indirectly.
- * This can happen when a route guard
+ * This can happen for several reasons including when a route guard
  * returns `false` or initiates a redirect by returning a `UrlTree`.
  *
  * @see `NavigationStart`

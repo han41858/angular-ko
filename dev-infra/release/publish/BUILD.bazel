@@ -11,6 +11,7 @@ ts_library(
         "//dev-infra/commit-message",
         "//dev-infra/pr/merge",
         "//dev-infra/release/config",
+        "//dev-infra/release/notes",
         "//dev-infra/release/versioning",
         "//dev-infra/utils",
         "@npm//@octokit/rest",

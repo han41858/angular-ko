@@ -24,7 +24,7 @@ export class HeroService {
   getHero(id: number | string) {
     return this.getHeroes().pipe(
       // `id` 앞에 사용된 `+`는 문자열을 숫자로 변환합니다.
-      map((heroes: Hero[]) => heroes.find(hero => hero.id === +id))
+      map((heroes: Hero[]) => heroes.find(hero => hero.id === +id)!)
     );
   }
 }

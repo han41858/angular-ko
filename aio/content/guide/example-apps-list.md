@@ -364,6 +364,19 @@ Angular 템플릿의 기본 함수를 다루는 애플리케이션입니다.
 
 
 <!--
+### Content projection
+-->
+### 컨텐츠 프로젝션 (Content projection)
+
+<live-example name="content-projection"></live-example>
+
+<!--
+Demonstrates how to use Angular's content projection feature when creating reusable components.
+-->
+컴포넌트를 재사용하기 위해 Angular 컨텐츠 프로젝션을 사용하는 방법에 대해 설명합니다.
+
+
+<!--
 ### Interpolation
 -->
 ### 문자열 바인딩(Interpolation)
@@ -422,12 +435,12 @@ For more information, see [Template reference variables](guide/template-referenc
 <live-example name="ngcontainer"></live-example>
 
 Demonstrates `<ngcontainer>`.
-For more information, see the [ngtemplate section](guide/structural-directives#ngcontainer) of [Structural directives](guide/structural-directives) .
+For more information, see the [ng-container section](guide/built-in-directives#ngcontainer) of [Built-in directives](guide/structural-directives) .
 -->
 <live-example name="ngcontainer"></live-example>
 
 `<ngcontainer>`를 다루는 애플리케이션입니다.
-자세한 내용은 [구조 디렉티브](guide/structural-directives) 문서의 [비슷한 엘리먼트 묶기 : `<ng-container>`](guide/structural-directives#ngcontainer) 섹션을 참고하세요.
+자세한 내용은 [기본 디렉티브](guide/structural-directives) 문서의 [ng-container 섹션](guide/built-in-directives#ngcontainer) 섹션을 참고하세요.
 
 
 <!--

@@ -211,21 +211,17 @@ Angular CLI로 명령을 실행하는 방법은 이렇습니다:
 
 
 <!--
-### Boolean and enumerated options
+### Boolean options
 -->
-### 불리언, 열거값 옵션
+### 불리언 옵션
 
 <!--
-Boolean options have two forms: `--thisOption` sets the flag, `--noThisOption` clears it.
+Boolean options have two forms: `--this-option` sets the flag to `true`, `--no-this-option` sets it to `false`.
 If neither option is supplied, the flag remains in its default state, as listed in the reference documentation.
-
-Allowed values are given with each enumerated option description, with the default value in **bold**.
 -->
 불리언 옵션은 두 가지 형태로 사용됩니다.
-`--thisOption`은 플래그를 설정하며, `--noThisOption`은 해당 플래그를 제거하는 식입니다.
+`--thisOption`은 플래그 값을 `true`로 설정하며, `--noThisOption`은 해당 플래그 값을 `false`로 설정합니다.
 옵션값이 지정되지 않으면 기본값이 사용됩니다.
-
-옵션값이 열거값인 경우에 어떤 값을 사용하고 있는지 확인하려면 개별 문서를 참고하세요.
 
 
 <!--

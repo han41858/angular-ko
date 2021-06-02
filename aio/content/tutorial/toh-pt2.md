@@ -4,12 +4,12 @@
 # 목록 표시하기
 
 <!--
-In this page, you'll expand the Tour of Heroes app to display a list of heroes, and
+In this page, you'll expand the Tour of Heroes application to display a list of heroes, and
 allow users to select a hero and display the hero's details.
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+  For the sample application that this page describes, see the <live-example></live-example>.
 
 </div>
 -->
@@ -95,7 +95,7 @@ Make it look like this:
 
 <code-example path="toh-pt2/src/app/heroes/heroes.component.1.html" region="list" header="heroes.component.html (heroes template)"></code-example>
 
-That shows one hero. To list them all, add an `*ngFor` to the `<li>` to iterate through the list of heroes:
+That displays an error since the property 'hero' does not exist. To have access to each individual hero and list them all, add an `*ngFor` to the `<li>` to iterate through the list of heroes:
 
 <code-example path="toh-pt2/src/app/heroes/heroes.component.1.html" region="li">
 </code-example>
@@ -128,7 +128,7 @@ After the browser refreshes, the list of heroes appears.
 
 <code-example path="toh-pt2/src/app/heroes/heroes.component.1.html" region="list" header="heroes.component.html (히어로 목록 템플릿)"></code-example>
 
-이 구문은 히어로 한 명을 표시하는 구문입니다. 목록에 있는 히어로를 모두 표시하려면 `<li>` 엘리먼트에 `*ngFor`를 적용해서 배열을 순회하면 됩니다:
+That displays an error since the property 'hero' does not exist. To have access to each individual hero and list them all, add an `*ngFor` to the `<li>` to iterate through the list of heroes:
 
 <code-example path="toh-pt2/src/app/heroes/heroes.component.1.html" region="li">
 </code-example>
@@ -224,13 +224,12 @@ Angular CLI로 `HeroesComponent`를 생성하면 이 컴포넌트에 스타일�
 
 
 <!--
-## Master/Detail
+## Viewing details
 -->
-## 목록/상세정보
+## 상세정보 표시하기
 
 <!--
-When the user clicks a hero in the **master** list,
-the component should display the selected hero's **details** at the bottom of the page.
+When the user clicks a hero in the list, the component should display the selected hero's details at the bottom of the page.
 
 In this section, you'll listen for the hero item click event
 and update the hero detail.
@@ -254,6 +253,7 @@ This is an example of Angular's [event binding](guide/event-binding) syntax.
 
 The parentheses around `click` tell Angular to listen for the `<li>` element's  `click` event.
 When the user clicks in the `<li>`, Angular executes the `onSelect(hero)` expression.
+
 
 In the next section, define an `onSelect()` method in `HeroesComponent` to
 display the hero that was defined in the `*ngFor` expression.
@@ -309,7 +309,7 @@ After the browser refreshes, the application is broken.
 
 Open the browser developer tools and look in the console for an error message like this:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   HeroesComponent.html:3 ERROR TypeError: Cannot read property 'name' of undefined
 </code-example>
 -->
@@ -323,7 +323,7 @@ Open the browser developer tools and look in the console for an error message li
 
 이 때 브라우저의 개발자 도구를 열어서 콘솔창을 보면 다음과 같은 에러 메시지를 확인할 수 있습니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   HeroesComponent.html:3 ERROR TypeError: Cannot read property 'name' of undefined
 </code-example>
 
@@ -334,7 +334,7 @@ Open the browser developer tools and look in the console for an error message li
 #### 무슨 일이 일어난 걸까요?
 
 <!--
-When the app starts, the `selectedHero` is `undefined` _by design_.
+When the application starts, the `selectedHero` is `undefined` _by design_.
 
 Binding expressions in the template that refer to properties of `selectedHero`&mdash;expressions like `{{selectedHero.name}}`&mdash;_must fail_ because there is no selected hero.
 -->
@@ -366,7 +366,7 @@ Don't forget the asterisk (*) in front of `ngIf`. It's a critical part of the sy
 After the browser refreshes, the list of names reappears.
 The details area is blank.
 Click a hero in the list of heroes and its details appear.
-The app seems to be working again.
+The application seems to be working again.
 The heroes appear in a list and details about the clicked hero appear at the bottom of the page.
 -->
 컴포넌트는 `selectedHero` 프로퍼티의 값이 존재할 때만 선택된 히어로의 상세화면을 보여줘야 합니다.
@@ -412,19 +412,19 @@ When the user picks a hero, `selectedHero` has a value and
 ### 선택된 항목 스타일 지정하기
 
 <!--
-It's difficult to identify the _selected hero_ in the list when all `<li>` elements look alike.
-
-If the user clicks "Magneta", that hero should render with a distinctive but subtle background color like this:
+To help identify the selected hero, you can use the `.selected` CSS class in the [styles you added earlier](#styles).
+To apply the `.selected` class to the `<li>` when the user clicks it, use class binding.
 
 <div class="lightbox">
-  <img src='generated/images/guide/toh/heroes-list-selected.png' alt="Selected hero">
+  <img src='generated/images/guide/toh/heroes-list-selected.png' alt="Selected hero with dark background and light text that differentiates it from unselected list items">
 </div>
+
 
 That _selected hero_ coloring is the work of the `.selected` CSS class in the [styles you added earlier](#styles).
 You just have to apply the `.selected` class to the `<li>` when the user clicks it.
 
-The Angular [class binding](guide/attribute-binding#class-binding) makes it easy to add and remove a CSS class conditionally.
-Just add `[class.some-css-class]="some-condition"` to the element you want to style.
+Angular's [class binding](guide/attribute-binding#class-binding) can add and remove a CSS class conditionally.
+Add `[class.some-css-class]="some-condition"` to the element you want to style.
 
 Add the following `[class.selected]` binding to the `<li>` in the `HeroesComponent` template:
 
@@ -436,13 +436,13 @@ The finished `<li>` looks like this:
 
 <code-example path="toh-pt2/src/app/heroes/heroes.component.html" region="li" header="heroes.component.html (list item hero)"></code-example>
 -->
-히어로 목록에 있는 `<li>` 엘리먼트는 모두 똑같이 표시되기 때문에 이 중에서 _선택된_ 히어로를 구분하기 어렵습니다.
-
-이것보다는 사용자가 "Magneta"와 같은 히어로를 클릭했을 때 이 항목의 배경색이 다음과 같이 변경되어 다른 항목과 구별되는 것이 더 좋습니다:
+To help identify the selected hero, you can use the `.selected` CSS class in the [styles you added earlier](#styles).
+To apply the `.selected` class to the `<li>` when the user clicks it, use class binding.
 
 <div class="lightbox">
-  <img src='generated/images/guide/toh/heroes-list-selected.png' alt="Selected hero">
+  <img src='generated/images/guide/toh/heroes-list-selected.png' alt="Selected hero with dark background and light text that differentiates it from unselected list items">
 </div>
+
 
 이 스타일은 [이전에 추가한 스타일](#styles)에 있는 `.selected` CSS 클래스가 적용된 것입니다.
 사용자가 선택한 항목에 이 클래스를 적용하려면 사용자가 클릭한 `<li>` 엘리먼트에 `.selected` 클래스를 적용하기만 하면 됩니다.
@@ -497,7 +497,7 @@ Here are the code files discussed on this page, including the `HeroesComponent` 
 ## 정리
 
 <!--
-* The Tour of Heroes app displays a list of heroes in a Master/Detail view.
+* The Tour of Heroes application displays a list of heroes with a detail view.
 * The user can select a hero and see that hero's details.
 * You used `*ngFor` to display a list.
 * You used `*ngIf` to conditionally include or exclude a block of HTML.

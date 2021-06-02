@@ -16,7 +16,7 @@ The `HeroDetailComponent` will present details of a selected hero.
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+  For the sample application that this page describes, see the <live-example></live-example>.
 
 </div>
 -->
@@ -44,7 +44,7 @@ The `HeroDetailComponent` will present details of a selected hero.
 <!--
 Use the Angular CLI to generate a new component named `hero-detail`.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate component hero-detail
 </code-example>
 
@@ -63,7 +63,7 @@ The command also adds the `HeroDetailComponent` as a declaration in the `@NgModu
 -->
 Angular CLI로 `hero-detail` 컴포넌트를 생성합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate component hero-detail
 </code-example>
 
@@ -141,7 +141,7 @@ Add a `hero` property, preceded by the `@Input()` decorator.
 
 That's the only change you should make to the `HeroDetailComponent` class.
 There are no more properties. There's no presentation logic.
-This component simply receives a hero object through its `hero` property and displays it.
+This component only receives a hero object through its `hero` property and displays it.
 -->
 `HeroDetailComponent` 템플릿에 바인딩된 `hero`는 컴포넌트의 `hero` 프로퍼티를 참조해야 합니다.
 
@@ -176,9 +176,9 @@ region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (Hero 
 ## `HeroDetailComponent` 표시하기
 
 <!--
-The `HeroesComponent` is still a master/detail view.
+The `HeroesComponent` used to display the hero details on its own, before you removed that portion of the template.
+This section guides you through delegating logic to the `HeroDetailComponent`.
 
-It used to display the hero details on its own, before you cut that portion of the template. Now it will delegate to the `HeroDetailComponent`.
 
 The two components will have a parent/child relationship.
 The parent `HeroesComponent` will control the child `HeroDetailComponent`
@@ -187,9 +187,8 @@ the user selects a hero from the list.
 
 You won't change the `HeroesComponent` _class_ but you will change its _template_.
 -->
-`HeroesComponent`는 이전과 동일하게 목록/상세정보를 표시해야 합니다.
-
-그런데 히어로의 상세정보를 표시하는 부분은 이제 템플릿에 존재하지 않습니다. 이 부분은 `HeroDetailComponent`로 옮겨졌습니다.
+The `HeroesComponent` used to display the hero details on its own, before you removed that portion of the template.
+This section guides you through delegating logic to the `HeroDetailComponent`.
 
 이제 `HeroesComponent`와 `HeroDetailComponent`는 부모/자식 관계가 되었습니다.
 부모 컴포넌트인 `HeroesComponent`는 자식 컴포넌트인 `HeroDetailComponent`를 관리합니다.
@@ -227,7 +226,7 @@ The revised `HeroesComponent` template should look like this:
 <code-example path="toh-pt3/src/app/heroes/heroes.component.html"
   header="heroes.component.html"></code-example>
 
-The browser refreshes and the app starts working again as it did before.
+The browser refreshes and the application starts working again as it did before.
 -->
 `HeroDetailComponent`의 셀렉터는 `'app-hero-detail'` 입니다.
 원래 히어로의 상세정보를 표시하던 `HeroesComponent` 템플릿 아래쪽에 `<app-hero-detail>` 엘리먼트를 추가합니다.
@@ -265,7 +264,7 @@ Now the `HeroDetailComponent` is presenting those details instead of the `Heroes
 
 Refactoring the original `HeroesComponent` into two components yields benefits, both now and in the future:
 
-1. You simplified the `HeroesComponent` by reducing its responsibilities.
+1. You reduced the `HeroesComponent` responsibilities.
 
 1. You can evolve the `HeroDetailComponent` into a rich hero editor
 without touching the parent `HeroesComponent`.

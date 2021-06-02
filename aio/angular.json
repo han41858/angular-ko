@@ -31,35 +31,27 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "webWorkerTsConfig": "tsconfig.worker.json",
-            "aot": true,
-            "optimization": true,
-            "buildOptimizer": true,
             "outputHashing": "all",
             "sourceMap": true,
-            "statsJson": true,
-            "extractCss": true,
-            "extractLicenses": true,
             "namedChunks": true,
-            "vendorChunk": false,
             "assets": [
               "src/assets",
               "src/generated",
               "src/pwa-manifest.json",
-              "src/google385281288605d160.html",
-              {
-                "glob": "custom-elements.min.js",
-                "input": "node_modules/@webcomponents/custom-elements",
-                "output": "/assets/js"
-              },
-              {
-                "glob": "native-shim.js",
-                "input": "node_modules/@webcomponents/custom-elements/src",
-                "output": "/assets/js"
-              },
-              "src/404.html"
+              "src/google385281288605d160.html"
             ],
             "styles": [
-              "src/styles/main.scss"
+              "src/styles/main.scss",
+              {
+                "inject": false,
+                "input": "src/styles/custom-themes/dark-theme.scss",
+                "bundleName": "dark-theme"
+              },
+              {
+                "inject": false,
+                "input": "src/styles/custom-themes/light-theme.scss",
+                "bundleName": "light-theme"
+              }
             ],
             "scripts": [],
             "budgets": [
@@ -71,6 +63,7 @@
           },
           "configurations": {
             "fast": {
+              "buildOptimizer": false,
               "optimization": false
             },
             "next": {
@@ -156,19 +149,9 @@
             "karmaConfig": "karma.conf.js",
             "assets": [
               "src/assets",
-              "src/generated",
               "src/pwa-manifest.json",
               "src/google385281288605d160.html",
-              {
-                "glob": "custom-elements.min.js",
-                "input": "node_modules/@webcomponents/custom-elements",
-                "output": "/assets/js"
-              },
-              {
-                "glob": "native-shim.js",
-                "input": "node_modules/@webcomponents/custom-elements/src",
-                "output": "/assets/js"
-              }
+              "src/404.html"
             ],
             "styles": [
               "src/styles/main.scss"

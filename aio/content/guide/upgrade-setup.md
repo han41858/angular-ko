@@ -51,7 +51,7 @@ Perform the _clone-to-launch_ steps with these terminal commands.
 터미널에서 다음 명령을 실행하면 _저장소를 복제하고 실행_ 할 수 있습니다.
 
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   git clone https://github.com/angular/quickstart.git quickstart
   cd quickstart
   npm install
@@ -86,7 +86,7 @@ and unzip it into your project folder. Then perform the remaining steps with the
 <a href="https://github.com/angular/quickstart/archive/master.zip" title="Download the QuickStart seed repository">QuickStart seed</a>를 다운받고 quickstart 폴더에 압축을 풉니다.
 그리고 터미널에서 다음 명령을 실행합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   cd quickstart
   npm install
   npm start
@@ -148,7 +148,7 @@ Open a terminal window in the project folder and enter the following commands fo
 
 ### OS/X (bash)
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   xargs rm -rf &lt; non-essential-files.osx.txt
   rm src/app/*.spec*.ts
   rm non-essential-files.osx.txt
@@ -159,7 +159,7 @@ Open a terminal window in the project folder and enter the following commands fo
 
 ### Windows
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   for /f %i in (non-essential-files.txt) do del %i /F /S /Q
   rd .git /s /q
   rd e2e /s /q
@@ -258,10 +258,10 @@ Focus on the following three TypeScript (`.ts`) files in the **`/src`** folder.
 All guides and cookbooks have _at least these core files_.
 Each file has a distinct purpose and evolves independently as the application grows.
 
-Files outside `src/` concern building, deploying, and testing your app.
+Files outside `src/` concern building, deploying, and testing your application.
 They include configuration files and external dependencies.
 
-Files inside `src/` "belong" to your app.
+Files inside `src/` "belong" to your application.
 Add new Typescript, HTML and CSS files inside the `src/` directory, most of them inside `src/app`,
 unless told to do otherwise.
 
@@ -426,12 +426,12 @@ Angular CLI로 프로젝트를 생성했다면 이 내용은 이미 `src/test.ts
 이전에는 HTML 파일에서 이 파일들을 직접 로드하기도 했습니다:
 
 ```
-import 'zone.js/dist/long-stack-trace-zone';
-import 'zone.js/dist/proxy';
-import 'zone.js/dist/sync-test';
-import 'zone.js/dist/jasmine-patch';
-import 'zone.js/dist/async-test';
-import 'zone.js/dist/fake-async-test';
+import 'zone.js/plugins/long-stack-trace-zone';
+import 'zone.js/plugins/proxy';
+import 'zone.js/plugins/sync-test';
+import 'zone.js/plugins/jasmine-patch';
+import 'zone.js/plugins/async-test';
+import 'zone.js/plugins/fake-async-test';
 ```
 
 <!--

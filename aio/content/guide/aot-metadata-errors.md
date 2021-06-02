@@ -23,7 +23,6 @@ AOT 컴파일러를 사용하다보면 다음과 같은 에러가 발생할 수 
 [Tagged template expressions are not supported](#tagged-template-expressions-not-supported)<br>
 [Symbol reference expected](#symbol-reference-expected)<br>
 
-<hr>
 
 {@a expression-form-not-supported}
 ## Expression form not supported
@@ -79,8 +78,6 @@ const prop = typeof Fooish; // typeof는 메타데이터에 사용할 수 없습
 이 에러를 해결하려면 Angular 메타데이터에 사용할 수 있는 [제한된 표현식 문법](guide/aot-compiler#expression-syntax)으로만 코드를 작성해야 합니다.
 사용하려는 TypeScript 기능을 지원하는지 확인해 보세요.
 
-
-<hr>
 
 {@a reference-to-a-local-symbol}
 ## Reference to a local (non-exported) symbol
@@ -241,8 +238,6 @@ export class MyComponent {}
 때로는 `export`를 지정하더라도 "[`Only initialized variables and constants can be referenced`](#only-initialized-variables)" 에러가 발생할 수 있으니 주의하세요.
 
 
-<hr>
-
 {@a only-initialized-variables}
 ## Only initialized variables and constants
 
@@ -352,8 +347,6 @@ export class MyComponent {}
 ```
 
 
-<hr>
-
 {@a reference-to-a-non-exported-class}
 ## Reference to a non-exported class
 
@@ -428,8 +421,6 @@ export abstract class MyStrategy { }
 ```
 
 
-<hr>
-
 {@a reference-to-a-non-exported-function}
 ## Reference to a non-exported function
 
@@ -498,8 +489,6 @@ export function myStrategy() { ... }
   ...
 ```
 
-
-<hr>
 
 {@a function-calls-not-supported}
 ## Function calls are not supported
@@ -605,8 +594,6 @@ export function someValueFactory() {
 ```
 
 
-<hr>
-
 {@a destructured-variable-not-supported}
 ## Destructured variable or constant not supported
 
@@ -682,7 +669,6 @@ import { configuration } from './configuration';
   ...
 ```
 
-<hr>
 
 {@a could-not-resolve-type}
 ## Could not resolve type
@@ -826,8 +812,6 @@ export class MyComponent {
 ```
 
 
-<hr>
-
 {@a name-expected}
 ## Name expected
 
@@ -869,7 +853,6 @@ provider: [{ provide: Foo, useValue: { 0: 'test' } }]
 provider: [{ provide: Foo, useValue: { '0': 'test' } }]
 ```
 
-<hr>
 
 {@a unsupported-enum-member-name}
 ## Unsupported enum member name
@@ -926,7 +909,6 @@ enum Colors {
 
 별도 초기화 로직이 있거나 추가 연산으로 프로퍼티 이름을 지정하는 방식은 사용하지 마세요.
 
-<hr>
 
 {@a tagged-template-expressions-not-supported}
 ## Tagged template expressions are not supported
@@ -956,7 +938,6 @@ is a _tag function_ native to JavaScript ES2015.
 
 The AOT compiler does not support tagged template expressions; avoid them in metadata expressions.
 
-<hr>
 
 {@a symbol-reference-expected}
 ## Symbol reference expected
@@ -984,7 +965,6 @@ const raw = String.raw`A tagged template ${expression} string`;
 
 하지만 AOT 컴파일러는 이 표현식을 지원하지 않습니다.
 
-<hr>
 
 {@a symbol-reference-expected}
 ## Symbol reference expected

@@ -7,7 +7,6 @@
  */
 
 import {fakeAsync, tick} from '@angular/core/testing';
-import {describe, expect, it} from '@angular/core/testing/src/testing_internal';
 import {AbstractControl, AsyncValidator, AsyncValidatorFn, FormArray, FormControl, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {Observable, of, timer} from 'rxjs';
 import {first, map} from 'rxjs/operators';
@@ -61,6 +60,20 @@ describe('Validators', () => {
       expect(Validators.min(2)(new FormControl('1'))).toEqual({'min': {'min': 2, 'actual': '1'}});
     });
 
+    it('should not error on small float number validation', () => {
+      expect(Validators.min(1.20)(new FormControl(1.25))).toBeNull();
+    });
+
+    it('should not error on equal float values', () => {
+      expect(Validators.min(1.25)(new FormControl(1.25))).toBeNull();
+    });
+
+    it('should return a validation error on big values', () => {
+      expect(Validators.min(1.25)(new FormControl(1.20))).toEqual({
+        'min': {'min': 1.25, 'actual': 1.20}
+      });
+    });
+
     it('should not error on big values', () => {
       expect(Validators.min(2)(new FormControl(3))).toBeNull();
     });
@@ -103,6 +116,20 @@ describe('Validators', () => {
 
     it('should return null if NaN after parsing', () => {
       expect(Validators.max(2)(new FormControl('aaa'))).toBeNull();
+    });
+
+    it('should not error on small float number validation', () => {
+      expect(Validators.max(1.20)(new FormControl(1.15))).toBeNull();
+    });
+
+    it('should not error on equal float values', () => {
+      expect(Validators.max(1.25)(new FormControl(1.25))).toBeNull();
+    });
+
+    it('should return a validation error on big values', () => {
+      expect(Validators.max(1.25)(new FormControl(1.30))).toEqual({
+        'max': {'max': 1.25, 'actual': 1.30}
+      });
     });
 
     it('should return a validation error on big values', () => {

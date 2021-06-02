@@ -11,6 +11,6 @@ import { Component, Input } from '@angular/core'; // Input 심볼을 로드합�
 
 // #docregion use-input
 export class ItemDetailComponent {
-  @Input() item: string; // 프로퍼티에 @Input() 데코레이터를 지정합니다.
+  @Input() item = ''; // 프로퍼티에 @Input() 데코레이터를 지정합니다.
 }
 // #enddocregion use-input

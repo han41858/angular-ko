@@ -1,11 +1,11 @@
 // #docplaster
 
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 
-export function docRegionSubscriber(console) {
+export function docRegionSubscriber(console: Console) {
   // #docregion subscriber
   // 이 함수는 subscribe()가 실행될 때 같이 실행됩니다.
-  function sequenceSubscriber(observer) {
+  function sequenceSubscriber(observer: Observer<number>) {
     // 1, 2, 3을 순서대로 보내고, 옵저버블을 종료합니다.
     observer.next(1);
     observer.next(2);
@@ -36,9 +36,9 @@ export function docRegionSubscriber(console) {
 
 // #docregion fromevent
 
-function fromEvent(target, eventName) {
-  return new Observable((observer) => {
-    const handler = (e) => observer.next(e);
+function fromEvent<T extends keyof HTMLElementEventMap>(target: HTMLElement, eventName: T) {
+  return new Observable<HTMLElementEventMap[T]>((observer) => {
+    const handler = (e: HTMLElementEventMap[T]) => observer.next(e);
 
     // 대상 엘리먼트에 이벤트 핸들러를 추가합니다.
     target.addEventListener(eventName, handler);
@@ -52,7 +52,7 @@ function fromEvent(target, eventName) {
 
 // #enddocregion fromevent
 
-export function docRegionFromEvent(document) {
+export function docRegionFromEvent(document: Document) {
   // #docregion fromevent_use
 
   const ESC_KEY = 27;

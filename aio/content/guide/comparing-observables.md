@@ -8,9 +8,12 @@ You can often use observables instead of promises to deliver values asynchronous
 
 Observables behave somewhat differently from the alternative techniques in each of these situations, but offer some significant advantages. Here are detailed comparisons of the differences.
 -->
-비동기 로직을 처리하려면 Promise대신 옵저버블을 사용할 수 있으며, 이벤트 핸들러도 옵저버블로 처리할 수 있습니다. 그리고 옵저버블은 객체 하나로 데이터를 여러번 보낼 수 있기 때문에, 데이터를 배열로 묶어서 한번에 보내는 방식보다 더 효율적입니다.
+비동기 로직을 처리하려면 Promise대신 옵저버블을 사용할 수 있으며, 이벤트 핸들러도 옵저버블로 처리할 수 있습니다.
+그리고 옵저버블은 객체 하나로 데이터를 여러번 보낼 수 있기 때문에, 데이터를 배열로 묶어서 한번에 보내는 방식보다 더 효율적입니다.
 
-옵저버블은 Promise나 이벤트 API, 배열을 사용하는 방식과 조금 다르게 동작하지만, 옵저버블의 독특한 장점이 있습니다. 이 문서에서는 이 차이점에 대해 알아봅니다.
+옵저버블은 Promise나 이벤트 API, 배열을 사용하는 방식과 조금 다르게 동작하지만, 옵저버블의 독특한 장점이 있습니다.
+이 문서에서는 이 차이점에 대해 알아봅니다.
+
 
 <!--
 ## Observables compared to promises
@@ -37,6 +40,7 @@ Observables are often compared to promises. Here are some key differences:
 * 옵저버블은 체이닝과 구독을 구별하지만, Promise는 `.then()` 하나로 사용합니다. 다른 곳에서 가져온 데이터를 복잡하게 가공해야 한다면 옵저버블이 더 효율적입니다.
 
 * 옵저버블에서 제공하는 `subscribe()`는 에러도 함께 처리할 수 있습니다. Promise는 `.catch()`를 사용하는 위치에 따라 에러를 처리하는 로직이 달라져야 하지만, 옵저버블은 에러 처리 로직을 한 군데에 집중할 수 있습니다.
+
 
 <!--
 ### Creation and subscription
@@ -76,6 +80,7 @@ Observables are often compared to promises. Here are some key differences:
     region="promise">
   </code-example>
 
+
 <!--
 ### Chaining
 -->
@@ -114,6 +119,7 @@ Observables are often compared to promises. Here are some key differences:
     region="chain">
   </code-example>
 
+
 <!--
 ### Cancellation
 -->
@@ -134,6 +140,7 @@ Observables are often compared to promises. Here are some key differences:
 * Promises are not cancellable.
 -->
 * Promise는 실행되는 도중에 취소할 수 없습니다.
+
 
 <!--
 ### Error handling
@@ -161,6 +168,7 @@ Observables are often compared to promises. Here are some key differences:
     header="src/promises.ts (error)"
     region="error">
   </code-example>
+
 
 <!--
 ### Cheat sheet
@@ -244,6 +252,7 @@ promise.then((value) => {
   </tbody>
 </table>
 
+
 <!--
 ## Observables compared to events API
 -->
@@ -251,17 +260,19 @@ promise.then((value) => {
 
 <!--
 Observables are very similar to event handlers that use the events API. Both techniques define notification handlers, and use them to process multiple values delivered over time. Subscribing to an observable is equivalent to adding an event listener. One significant difference is that you can configure an observable to transform an event before passing the event to the handler.
--->
-옵저버블은 이벤트 API를 활용하는 이벤트 핸들러와 아주 비슷합니다. 두 방식은 모두 핸들러를 지정해서 이벤트를 처리하며, 데이터가 여러번 계속 전달된다는 점도 같습니다. 사실 옵저버블을 구독하는 것은 엘리먼트에 이벤트 리스너를 연결하는 것과 비슷합니다. 다른 점을 꼽아보자면, 옵저버블은 이벤트 핸들러가 이벤트를 받기 전에 옵저버블 연산자를 사용해서 다른 형태로 변환할 수 있습니다.
 
-<!--
 Using observables to handle events and asynchronous operations can have the advantage of greater consistency in contexts such as HTTP requests.
--->
-그리고 옵저버블로 이벤트를 처리하거나 비동기 로직을 처리하는 방식은 컨텍스트를 계속 유지해야 하는 경우에 좀 더 유리합니다. HTTP 요청이 이런 경우에 해당됩니다.
 
-<!--
 Here are some code samples that illustrate how the same kind of operation is defined using observables and the events API.
 -->
+옵저버블은 이벤트 API를 활용하는 이벤트 핸들러와 아주 비슷합니다.
+두 방식은 모두 핸들러를 지정해서 이벤트를 처리하며, 데이터가 여러번 계속 전달된다는 점도 같습니다.
+사실 옵저버블을 구독하는 것은 엘리먼트에 이벤트 리스너를 연결하는 것과 비슷합니다.
+다른 점을 꼽아보자면, 옵저버블은 이벤트 핸들러가 이벤트를 받기 전에 옵저버블 연산자를 사용해서 다른 형태로 변환할 수 있습니다.
+
+그리고 옵저버블로 이벤트를 처리하거나 비동기 로직을 처리하는 방식은 컨텍스트를 계속 유지해야 하는 경우에 좀 더 유리합니다.
+HTTP 요청이 이런 경우에 해당됩니다.
+
 각 상황에서 옵저버블과 이벤트 API가 어떻게 다른지 확인해 봅시다.
 
 <table>
@@ -385,6 +396,8 @@ button.removeEventListener(‘click’, handler);
 An observable produces values over time. An array is created as a static set of values. In a sense, observables are asynchronous where arrays are synchronous. In the following examples, ➞ implies asynchronous value delivery.
 -->
 옵저버블은 데이터를 여러번 전달하지만, 배열은 데이터를 한 번에 묶어서 전달합니다. 
+그래서 옵저버블은 비동기이며 배열은 동기라고 볼 수도 있습니다.
+예제를 확인해 보세요.
 
 <table>
   <tr>

@@ -9,7 +9,8 @@ A provider is an instruction to the [Dependency Injection](/guide/dependency-inj
 For the final sample app using the provider that this page describes,
 see the <live-example></live-example>.
 -->
-프로바이더는 [의존성 주입](/guide/dependency-injection)에 사용되는 객체를 가져오는 방법을 지정한 것입니다. 이 때 의존성으로 주입되는 객체는 일반적으로 서비스입니다.
+프로바이더는 [의존성 주입](/guide/dependency-injection)에 사용되는 객체를 가져오는 방법을 지정한 것입니다.
+이 때 의존성으로 주입되는 객체는 일반적으로 서비스입니다.
 
 이 가이드에서 다루는 예제의 최종 코드는 <live-example></live-example>에서 직접 확인하거나 다운받아 확인할 수 있습니다.
 
@@ -81,11 +82,13 @@ The example above shows the preferred way to provide a service in a module. This
 
 <code-example path="providers/src/app/user.module.ts"  header="src/app/user.module.ts"></code-example>
 -->
-특정 `@NgModule`에 포함되도록 서비스를 등록할 수도 있습니다. 예를 들어 `UserModule`을 로드하지 않은 상태에서는 `UserService`를 사용할 수 없도록 하려면, 코드를 다음과 같이 작성하면 됩니다:
+특정 `@NgModule`에 포함되도록 서비스를 등록할 수도 있습니다.
+예를 들어 `UserModule`을 로드하지 않은 상태에서는 `UserService`를 사용할 수 없도록 하려면, 코드를 다음과 같이 작성하면 됩니다:
 
 <code-example path="providers/src/app/user.service.1.ts"  header="src/app/user.service.ts"></code-example>
 
-이 방법을 사용하면 실제로 사용되지 않는 서비스는 트리 셰이킹으로 제거되기 때문에 애플리케이션을 배포할 때도 좋습니다. 서비스가 포함될 모듈을 지정하는 방법을 사용할 수 없다면, 반대로 모듈 안에 서비스 프로바이더를 등록하는 방법도 있습니다:
+이 방법을 사용하면 실제로 사용되지 않는 서비스는 트리 셰이킹으로 제거되기 때문에 애플리케이션을 배포할 때도 좋습니다.
+서비스가 포함될 모듈을 지정하는 방법을 사용할 수 없다면, 반대로 모듈 안에 서비스 프로바이더를 등록하는 방법도 있습니다:
 
 <code-example path="providers/src/app/user.module.ts"  header="src/app/user.module.ts"></code-example>
 
@@ -189,7 +192,21 @@ Register a provider with a component when you must limit a service instance to a
 프로바이더를 컴포넌트에 지정하면 서비스 인스턴스의 범위도 해당 컴포넌트로 제한되며, 컴포넌트가 생성될 때마다 서비스 인스턴스가 생성됩니다.
 예를 들면 `UserEditorComponent`에서 `UserService`를 사용하는데 이 서비스가 컴포넌트마다 다른 값을 캐싱하는 용도로 사용할 수 있으며, 새로운 `UserEditorComponent`가 생성되면 `UserService`의 인스턴스도 새롭게 생성됩니다.
 
-<hr>
+
+{@a singleton-services}
+{@a component-child-injectors}
+
+## Injector hierarchy and service instances
+
+Services are singletons within the scope of an injector, which means there is at most one instance of a service in a given injector.
+
+Angular DI has a [hierarchical injection system](guide/hierarchical-dependency-injection), which means that nested injectors can create their own service instances.
+Whenever Angular creates a new instance of a component that has `providers` specified in `@Component()`, it also creates a new child injector for that instance.
+Similarly, when a new NgModule is lazy-loaded at run time, Angular can create an injector for it with its own providers.
+
+Child modules and component injectors are independent of each other, and create their own separate instances of the provided services. When Angular destroys an NgModule or component instance, it also destroys that injector and that injector's service instances.
+
+For more information, see [Hierarchical injectors](guide/hierarchical-dependency-injection).
 
 
 <!--
@@ -201,11 +218,11 @@ Register a provider with a component when you must limit a service instance to a
 You may also be interested in:
 * [Singleton Services](guide/singleton-services), which elaborates on the concepts covered on this page.
 * [Lazy Loading Modules](guide/lazy-loading-ngmodules).
-* [Tree-shakable Providers](guide/dependency-injection-providers#tree-shakable-providers).
+* [Dependency providers](guide/dependency-injection-providers).
 * [NgModule FAQ](guide/ngmodule-faq).
 -->
 다음 내용에 대해서도 알아보세요.
 * [싱글턴 서비스](guide/singleton-services)
 * [모듈 지연 로딩](guide/lazy-loading-ngmodules)
-* [트리 셰이킹 프로바이더](guide/dependency-injection-providers#트리-셰이킹-대상이-되는-프로바이더)
+* [의존성 프로바이더](guide/dependency-injection-providers)
 * [NgModule FAQ](guide/ngmodule-faq)

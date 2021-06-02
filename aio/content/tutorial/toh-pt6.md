@@ -13,7 +13,7 @@ Angular's `HttpClient`.
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+  For the sample application that this page describes, see the <live-example></live-example>.
 
 </div>
 -->
@@ -37,12 +37,12 @@ Angular's `HttpClient`.
 <!--
 `HttpClient` is Angular's mechanism for communicating with a remote server over HTTP.
 
-Make `HttpClient` available everywhere in the app in two steps. First, add it to the root `AppModule` by importing it:
+Make `HttpClient` available everywhere in the application in two steps. First, add it to the root `AppModule` by importing it:
 
 <code-example path="toh-pt6/src/app/app.module.ts" region="import-http-client" header="src/app/app.module.ts (HttpClientModule import)">
 </code-example>
 
-Next, still in the `AppModule`, add `HttpClient` to the `imports` array:
+Next, still in the `AppModule`, add `HttpClientModule` to the `imports` array:
 
 <code-example path="toh-pt6/src/app/app.module.ts" region="import-httpclientmodule" header="src/app/app.module.ts (imports array excerpt)">
 </code-example>
@@ -66,15 +66,15 @@ Next, still in the `AppModule`, add `HttpClient` to the `imports` array:
 
 <!--
 This tutorial sample mimics communication with a remote data server by using the
-[In-memory Web API](https://github.com/angular/in-memory-web-api "In-memory Web API") module.
+[In-memory Web API](https://github.com/angular/angular/tree/master/packages/misc/angular-in-memory-web-api "In-memory Web API") module.
 
-After installing the module, the app will make requests to and receive responses from the `HttpClient`
+After installing the module, the application will make requests to and receive responses from the `HttpClient`
 without knowing that the *In-memory Web API* is intercepting those requests,
 applying them to an in-memory data store, and returning simulated responses.
 
 By using the In-memory Web API, you won't have to set up a server to learn about `HttpClient`.
 -->
-이번 예제에서는 [인-메모리(in-memory) Web API](https://github.com/angular/in-memory-web-api "In-memory Web API") 모듈로 리모트 데이터 서버와 통신하는 부분을 대신합니다.
+이번 예제에서는 [인-메모리(in-memory) Web API](https://github.com/angular/angular/tree/master/packages/misc/angular-in-memory-web-api "In-memory Web API") 모듈로 리모트 데이터 서버와 통신하는 부분을 대신합니다.
 
 이 모듈을 설치하고나면 `HttpClient`로 보내는 요청이나 받는 요청이 *인-메모리 Web API*로 처리되며, 데이터가 저장되고 반환하는 것도 이 모듈을 활용합니다.
 
@@ -85,7 +85,7 @@ By using the In-memory Web API, you won't have to set up a server to learn about
 <!--
 **Important:** the In-memory Web API module has nothing to do with HTTP in Angular.
 
-If you're just reading this tutorial to learn about `HttpClient`, you can [skip over](#import-heroes) this step.
+If you're reading this tutorial to learn about `HttpClient`, you can [skip over](#import-heroes) this step.
 If you're coding along with this tutorial, stay here and add the In-memory Web API now.
 -->
 **중요:** 인-메모리 Web API 모듈은 Angular가 제공하는 기능이 아닙니다.
@@ -98,7 +98,7 @@ If you're coding along with this tutorial, stay here and add the In-memory Web A
 <!--
 Install the In-memory Web API package from npm with the following command:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   npm install angular-in-memory-web-api --save
 </code-example>
 
@@ -119,7 +119,7 @@ that primes the in-memory database.
 
 Generate the class `src/app/in-memory-data.service.ts` with the following command:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate service InMemoryData
 </code-example>
 
@@ -130,11 +130,11 @@ Replace the default contents of `in-memory-data.service.ts` with the following:
 The `in-memory-data.service.ts` file will take over the function of `mock-heroes.ts`.
 However, don't delete `mock-heroes.ts` yet, as you still need it for a few more steps of this tutorial.
 
-When the server is ready, you'll detach the In-memory Web API, and the app's requests will go through to the server.
+When the server is ready, you'll detach the In-memory Web API, and the application's requests will go through to the server.
 -->
 다음 명령을 실행해서 npm 저장소에 있는 인-메모리 Web API 패키지를 설치합니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   npm install angular-in-memory-web-api --save
 </code-example>
 
@@ -152,7 +152,7 @@ When the server is ready, you'll detach the In-memory Web API, and the app's req
 
 다음 명령을 실행해서 `src/app/in-memory-data.service.ts` 클래스를 생성합니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate service InMemoryData
 </code-example>
 
@@ -237,7 +237,7 @@ Convert that method to use `HttpClient` as follows:
 Refresh the browser. The hero data should successfully load from the
 mock server.
 
-You've swapped `of()` for `http.get()` and the app keeps working without any other changes
+You've swapped `of()` for `http.get()` and the application keeps working without any other changes
 because both functions return an `Observable<Hero[]>`.
 -->
 지금까지 `HeroService.getHeroes()` 메소드는 히어로 목록 목 데이터를 `Observable<Hero[]>` 타입으로 반환하기 위해 RxJs `of()` 함수를 사용했습니다.
@@ -384,10 +384,10 @@ has configured with both the name of the operation that failed and a safe return
 </code-example>
 
 After reporting the error to the console, the handler constructs
-a user friendly message and returns a safe value to the app so the app can keep working.
+a user friendly message and returns a safe value to the application so the application can keep working.
 
 Because each service method returns a different kind of `Observable` result,
-`handleError()` takes a type parameter so it can return the safe value as the type that the app expects.
+`handleError()` takes a type parameter so it can return the safe value as the type that the application expects.
 -->
 `HeroService`의 메소드들은 에러 처리로직이 비슷하기 때문에 `handleError()` 메소드에 이 로직을 정의합니다.
 
@@ -408,7 +408,7 @@ Because each service method returns a different kind of `Observable` result,
 
 <!--
 The `HeroService` methods will **tap** into the flow of observable values
-and send a message, via the `log()` method, to the message area at the bottom of the page.
+and send a message, using the `log()` method, to the message area at the bottom of the page.
 
 They'll do that with the RxJS `tap()` operator,
 which looks at the observable values, does something with those values,
@@ -566,10 +566,10 @@ URL은 변경되지 않았습니다. 이 예제에 정의한 웹 API는 히어�
 ## 새 히어로 추가하기
 
 <!--
-To add a hero, this app only needs the hero's name. You can use an `<input>`
+To add a hero, this application only needs the hero's name. You can use an `<input>`
 element paired with an add button.
 
-Insert the following into the `HeroesComponent` template, just after
+Insert the following into the `HeroesComponent` template, after
 the heading:
 
 <code-example path="toh-pt6/src/app/heroes/heroes.component.html" region="add" header="src/app/heroes/heroes.component.html (add)"></code-example>
@@ -803,7 +803,7 @@ For this to work, the next step is to add a component with a selector that match
 <!--
 Create a `HeroSearchComponent` with the CLI.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate component hero-search
 </code-example>
 
@@ -821,7 +821,7 @@ component's `search()` method with the new search box value.
 -->
 Angular CLI로 다음 명령을 실행해서 `HeroSearchComponent`를 생성합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   ng generate component hero-search
 </code-example>
 
@@ -983,7 +983,7 @@ It cancels and discards previous search observables, returning only the latest s
 <div class="alert is-helpful">
 
   <!--
-  With the [switchMap operator](http://www.learnrxjs.io/operators/transformation/switchmap.html),
+  With the [switchMap operator](https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap),
   every qualifying key event can trigger an `HttpClient.get()` method call.
   Even with a 300ms pause between requests, you could have multiple HTTP requests in flight
   and they may not return in the order sent.
@@ -993,9 +993,9 @@ It cancels and discards previous search observables, returning only the latest s
 
   Note that canceling a previous `searchHeroes()` Observable
   doesn't actually abort a pending HTTP request.
-  Unwanted results are simply discarded before they reach your application code.
+  Unwanted results are discarded before they reach your application code.
   -->
-  [switchMap 연산자](http://www.learnrxjs.io/operators/transformation/switchmap.html)를 사용하면 옵저버블 체이닝을 통과한 키이벤트마다 `HttpClient.get()` 메소드가 실행됩니다.
+  [switchMap 연산자](https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap)를 사용하면 옵저버블 체이닝을 통과한 키이벤트마다 `HttpClient.get()` 메소드가 실행됩니다.
   그런데 요청을 300ms 당 한 번으로 제한하더라도 동작중인 HTTP 요청은 여러개가 될 수 있으며, 응답이 돌아오는 순서도 보낸 순서와 다를 수 있습니다.
 
   이 때 `switchMap()` 연산자를 활용하면 이전에 보낸 HTTP 요청을 취소하고 제일 마지막에 보낸 HTTP 요청만 남겨둘 수 있습니다.
@@ -1019,18 +1019,18 @@ That's the job of the [`AsyncPipe`](#asyncpipe) in the template.
 #### 동작 확인하기
 
 <!--
-Run the app again. In the *Dashboard*, enter some text in the search box.
+Run the application again. In the *Dashboard*, enter some text in the search box.
 If you enter characters that match any existing hero names, you'll see something like this.
 
 <div class="lightbox">
-  <img src='generated/images/guide/toh/toh-hero-search.png' alt="Hero Search Component">
+  <img src='generated/images/guide/toh/toh-hero-search.gif' alt="Hero Search field with the letters 'm' and 'a' along with four search results that match the query displayed in a list beneath the search input">
 </div>
 -->
 애플리케이션을 다시 실행해 보세요.
 *대시보드* 화면에 있는 검색창에 무언가를 입력했을 때 이 입력값이 포함된 히어로의 이름이 있으면 다음과 같은 모습으로 화면에 표시될 것입니다.
 
 <div class="lightbox">
-  <img src='generated/images/guide/toh/toh-hero-search.png' alt="Hero Search Component">
+  <img src='generated/images/guide/toh/toh-hero-search.gif' alt="Hero Search field with the letters 'm' and 'a' along with four search results that match the query displayed in a list beneath the search input">
 </div>
 
 

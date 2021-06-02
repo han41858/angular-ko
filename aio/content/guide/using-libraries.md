@@ -20,10 +20,10 @@ Angular 애플리케이션을 만들 때 [Angular Material](https://material.ang
 Libraries are published as [npm packages](guide/npm-packages), usually together with schematics that integrate them with the Angular CLI.
 To integrate reusable library code into an application, you need to install the package and import the provided functionality where you will use it. For most published Angular libraries, you can use the Angular CLI `ng add <lib_name>` command.
 
-The `ng add` command uses a package manager such as [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) to install the library package, and invokes schematics that are included in the package to other scaffolding within the project code, such as adding import statements, fonts, themes, and so on.
+The `ng add` command uses a package manager such as [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) to install the library package, and invokes schematics that are included in the package to other scaffolding within the project code, such as adding import statements, fonts, and themes.
 
-A published library typically provides a README or other documentation on how to add that lib to your app.
-For an example, see [Angular Material](https://material.angular.io/) docs.
+A published library typically provides a README or other documentation on how to add that lib to your application.
+For an example, see the [Angular Material](https://material.angular.io/) documentation.
 -->
 Angular 라이브러리는 [npm 패키지](guide/npm-packages)처럼 배포되며 Angular CLI 스키매틱을 확장하기도 합니다.
 애플리케이션에 라이브러리 기능을 추가하려면 먼저 이 라이브러리 패키지를 설치하고 앱에 로드해야 하는데, Angular 라이브러리라면 Angular CLI를 사용해서 `ng add <라이브러리_이름>` 명령을 실행하면 됩니다.
@@ -151,7 +151,7 @@ Angular 자체를 업데이트하려면 다른 라이브러리들이 최신버�
 ## 전역 컨텍스트에 라이브러리 추가하기
 
 <!--
-Legacy JavaScript libraries that are not imported into an app can be added to the runtime global scope and loaded as if they were in a script tag.
+Legacy JavaScript libraries that are not imported into an application can be added to the runtime global scope and loaded as if they were in a script tag.
 Configure the CLI to do this at build time using the "scripts" and "styles" options of the build target in the [CLI configuration file](guide/workspace-config), `angular.json`.
 
 For example, to use the [Bootstrap 4](https://getbootstrap.com/docs/4.0/getting-started/introduction/) library, first install the library and its dependencies using the npm package manager:
@@ -195,7 +195,7 @@ Bootstrap CSS 파일은 "styles" 배열에 추가합니다:
 ```
 
 <!--
-Run or restart `ng serve` to see Bootstrap 4 working in your app.
+Run or restart `ng serve` to see Bootstrap 4 working in your application.
 -->
 이제 `ng serve` 명령을 다시 실행하면 애플리케이션에 Bootstrap 4가 적용된 것을 확인할 수 있습니다.
 

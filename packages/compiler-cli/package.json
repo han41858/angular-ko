@@ -41,7 +41,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": "^12.14.1 || ^14.0.0"
+    "node": "^12.14.1 || >=14.0.0"
   },
   "bugs": {
     "url": "https://github.com/angular/angular/issues"
@@ -49,8 +49,5 @@
   "homepage": "https://github.com/angular/angular/tree/master/packages/compiler-cli",
   "ng-update": {
     "packageGroup": "NG_UPDATE_PACKAGE_GROUP"
-  },
-  "publishConfig": {
-    "registry": "https://wombat-dressing-room.appspot.com"
   }
 }

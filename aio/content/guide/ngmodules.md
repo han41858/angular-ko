@@ -34,7 +34,7 @@ Modules are a great way to organize an application and extend it with capabiliti
 Angular libraries are NgModules, such as `FormsModule`, `HttpClientModule`, and `RouterModule`.
 Many third-party libraries are available as NgModules such as
 <a href="https://material.angular.io/">Material Design</a>,
-<a href="http://ionicframework.com/">Ionic</a>, and
+<a href="https://ionicframework.com/">Ionic</a>, and
 <a href="https://github.com/angular/angularfire2">AngularFire2</a>.
 
 NgModules consolidate components, directives, and pipes into
@@ -51,7 +51,7 @@ NgModule metadata does the following:
 * Declares which components, directives, and pipes belong to the module.
 * Makes some of those components, directives, and pipes public so that other module's component templates can use them.
 * Imports other modules with the components, directives, and pipes that components in the current module need.
-* Provides services that the other application components can use.
+* Provides services that other application components can use.
 
 Every Angular app has at least one module, the root module.
 You [bootstrap](guide/bootstrapping) that module to launch the application.
@@ -64,7 +64,7 @@ You then import these modules into the root module.
 모듈은 애플리케이션을 효율적으로 구성하기 위해 마련된 체계이며, 외부 라이브러리를 효율적으로 사용하기 위한 방법이기도 합니다.
 
 Angular에서 제공하는 `FormsModule`이나 `HttpClientModule`, `RouterModule`과 같은 라이브러리들도 NgModule입니다.
-그리고 <a href="https://material.angular.io/">Material Design</a>이나 <a href="http://ionicframework.com/">Ionic</a>, <a href="https://github.com/angular/angularfire2">AngularFire2</a>와 같이 NgModule 형태로 제공되는 서드파티 라이브러리도 있습니다.
+그리고 <a href="https://material.angular.io/">Material Design</a>이나 <a href="https://ionicframework.com/">Ionic</a>, <a href="https://github.com/angular/angularfire2">AngularFire2</a>와 같이 NgModule 형태로 제공되는 서드파티 라이브러리도 있습니다.
 
 NgModule은 컴포넌트와 디렉티브, 파이프 등 기능이 연관된 구성요소를 하나로 묶어 관리하는 단위이며, 기능의 측면이나 애플리케이션 비즈니스 도메인, 업무 흐름, 공통 유틸 등 해당 모듈이 담당하는 부분에만 집중하도록 구성합니다.
 

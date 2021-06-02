@@ -1,7 +1,5 @@
 // #docplaster
-// #docregion import-async
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-// #enddocregion import-async
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
@@ -12,15 +10,28 @@ describe('BannerComponent (external files)', () => {
   let fixture: ComponentFixture<BannerComponent>;
   let h1: HTMLElement;
 
+  describe('setup that may fail', () => {
+    // #docregion setup-may-fail
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        declarations: [ BannerComponent ],
+      }); // missing call to compileComponents()
+      fixture = TestBed.createComponent(BannerComponent);
+    });
+    // #enddocregion setup-may-fail
+
+    it('should create', () => {
+      expect(fixture.componentInstance).toBeDefined();
+    });
+  });
+
   describe('Two beforeEach', () => {
     // #docregion async-before-each
-    beforeEach(waitForAsync(() => {
-      TestBed
-          .configureTestingModule({
-            declarations: [BannerComponent],
-          })
-          .compileComponents();  // 템플릿과 CSS를 컴파일합니다.
-    }));
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        declarations: [ BannerComponent ],
+      }).compileComponents();  // 템플릿과 CSS를 컴파일합니다.
+    });
     // #enddocregion async-before-each
 
     // synchronous beforeEach
@@ -37,18 +48,14 @@ describe('BannerComponent (external files)', () => {
 
   describe('One beforeEach', () => {
     // #docregion one-before-each
-    beforeEach(waitForAsync(() => {
-      TestBed
-          .configureTestingModule({
-            declarations: [BannerComponent],
-          })
-          .compileComponents()
-          .then(() => {
-            fixture = TestBed.createComponent(BannerComponent);
-            component = fixture.componentInstance;
-            h1 = fixture.nativeElement.querySelector('h1');
-          });
-    }));
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        declarations: [ BannerComponent ],
+      }).compileComponents();
+      fixture = TestBed.createComponent(BannerComponent);
+      component = fixture.componentInstance;
+      h1 = fixture.nativeElement.querySelector('h1');
+    });
     // #enddocregion one-before-each
 
     tests();

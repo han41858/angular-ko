@@ -23,7 +23,7 @@ To prevent the retention of unused components, your library should use the light
 이 문서는 라이브러리 개발자에게 유용한 의존성 주입 테크닉에 대해 다룹니다.
 라이브러리에 *경량 의존성 토큰(lightweight injection tokens)*을 활용하면 라이브러리를 활용하는 앱 빌드 결과물의 크기를 최적화할 수 있습니다.
 
-앱 빌드 결과물의 크기를 최적화 하려면 [트리 셰이킹 대상이 되는 프로바이더](guide/dependency-injection-providers#tree-shakable-providers)를 활용할 수도 있습니다.
+앱 빌드 결과물의 크기를 최적화 하려면 [트리 셰이킹 대상이 되는 프로바이더](guide/architecture-services#introduction-to-services-and-dependency-injection)를 활용할 수도 있습니다.
 일반적으로 앱에 실제로 사용되지 않는 컴포넌트나 서비스는 빌드 결과물에 포함되지 않습니다.
 
 하지만 의존성 토큰을 관리하는 방식에 따라 실제로 사용하지 않는 컴포넌트나 서비스가 빌드 결과물에 포함될 수 있습니다.
@@ -201,7 +201,7 @@ class MyComponent {
 
 <div class="alert is-helpful">
 
-라이브러리가 제공하는 서비스는 모두 컴포넌트 생성자가 아니라 최상위 계층에 등록해서 [트리 셰이킹 대상이 되는 프로바이더](guide/dependency-injection-providers#tree-shakable-providers)로 등록해야 합니다.
+라이브러리가 제공하는 서비스는 모두 컴포넌트 생성자가 아니라 최상위 계층에 등록해서 [트리 셰이킹 대상이 되는 프로바이더](guide/architecture-services#introduction-to-services-and-dependency-injection)로 등록해야 합니다.
 
 </div>
 

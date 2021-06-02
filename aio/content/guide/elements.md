@@ -8,7 +8,7 @@ _Angular elements_ are Angular components packaged as _custom elements_ (also ca
 
 <div class="alert is-helpful">
 
-  For the sample app that this page describes, see the <live-example></live-example>.
+  For the sample application that this page describes, see the <live-example></live-example>.
 
 </div>
 
@@ -63,13 +63,13 @@ Angular에서 제공하는 커스텀 엘리먼트 변환 방식은 아주 단순
 <!--
 Custom elements bootstrap themselves - they start automatically when they are added to the DOM, and are automatically destroyed when removed from the DOM. Once a custom element is added to the DOM for any page, it looks and behaves like any other HTML element, and does not require any special knowledge of Angular terms or usage conventions.
 
-- <b>Easy dynamic content in an Angular app</b>
+- <b>Easy dynamic content in an Angular application</b>
 
-  Transforming a component to a custom element provides an easy path to creating dynamic HTML content in your Angular app. HTML content that you add directly to the DOM in an Angular app is normally displayed without Angular processing, unless you define a _dynamic component_, adding your own code to connect the HTML tag to your app data, and participate in change detection. With a custom element, all of that wiring is taken care of automatically.
+  Transforming a component to a custom element provides an easy path to creating dynamic HTML content in your Angular application. HTML content that you add directly to the DOM in an Angular application is normally displayed without Angular processing, unless you define a _dynamic component_, adding your own code to connect the HTML tag to your application data, and participate in change detection. With a custom element, all of that wiring is taken care of automatically.
 
 - <b>Content-rich applications</b>
 
-  If you have a content-rich app, such as the Angular app that presents this documentation, custom elements let you give your content providers sophisticated Angular functionality without requiring knowledge of Angular. For example, an Angular guide like this one is added directly to the DOM by the Angular navigation tools, but can include special elements like `<code-snippet>` that perform complex operations. All you need to tell your content provider is the syntax of your custom element. They don't need to know anything about Angular, or anything about your component's data structures or implementation.
+  If you have a content-rich application, such as the Angular app that presents this documentation, custom elements let you give your content providers sophisticated Angular functionality without requiring knowledge of Angular. For example, an Angular guide like this one is added directly to the DOM by the Angular navigation tools, but can include special elements like `<code-snippet>` that perform complex operations. All you need to tell your content provider is the syntax of your custom element. They don't need to know anything about Angular, or anything about your component's data structures or implementation.
 -->
 Angular에서 커스텀 엘리먼트는 이 엘리먼트가 생성될 때 자동으로 변환됩니다.
 이 엘리먼트는 DOM에 추가될 때 자동으로 생성되며, DOM에서 제거될 때 자동으로 종료됩니다.
@@ -139,12 +139,19 @@ create and destroy instances, and to detect and respond to changes.
 The conversion process implements the `NgElementConstructor` interface, and creates a
 constructor class that is configured to produce a self-bootstrapping instance of your component.
 
-Use a JavaScript function, `customElements.define()`,  to register the configured constructor
-and its associated custom-element tag with the browser's `CustomElementRegistry`.
+Use the built-in [`customElements.define()`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) function to register the configured constructor and its associated custom-element tag with the browser's [`CustomElementRegistry`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry).
 When the browser encounters the tag for the registered element, it uses the constructor to create a custom-element instance.
 
 <div class="lightbox">
   <img src="generated/images/guide/elements/createElement.png" alt="Transform a component to a custom element" class="left">
+</div>
+
+<div class="alert is-important">
+
+  Avoid using the [`@Component`](api/core/Component) [selector](api/core/Directive#selector) as the custom-element tag name.
+  This can lead to unexpected behavior, due to Angular creating two component instances for a single DOM element:
+  One regular Angular component and a second one using the custom element.
+
 </div>
 -->
 Angular에서는 `createCustomElement()` 함수를 사용해서 Angular 컴포넌트를 커스텀 엘리먼트로 변환할 수 있습니다.
@@ -152,12 +159,20 @@ Angular에서는 `createCustomElement()` 함수를 사용해서 Angular 컴포�
 
 커스텀 엘리먼트 변환 과정은 `NgElementConstructor` 인터페이스나 컴포넌트의 생성자 함수에서 정의할 수 있으며, 이 변환 과정은 커스텀 엘리먼트의 인스턴스가 생성될 때 실행됩니다.
 
-그리고 JavaScript 함수인 `customElements.define()`를 사용해야 하며, 관련된 커스텀 엘리먼트 태그도 브라우저의 `CustomElementRegistry`에 등록해야 합니다.
+그리고 JavaScript 함수인 [`customElements.define()`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define)를 사용해야 하며, 관련된 커스텀 엘리먼트 태그도 브라우저의 [`CustomElementRegistry`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry)에 등록해야 합니다.
 브라우저는 여기에 등록된 방법으로 커스텀 엘리먼트의 인스턴스를 생성합니다.
 
 <div class="lightbox">
   <img src="generated/images/guide/elements/createElement.png" alt="Transform a component to a custom element" class="left">
 </div>
+
+<div class="alert is-important">
+
+  [`@Component`](api/core/Component) [selector](api/core/Directive#selector)를 커스텀 엘리먼트 태그 이름으로 사용하지 마세요.
+  이렇게 사용하면 Angular가 DOM 엘리먼트에 Angular 컴포넌트와 커스텀 엘리먼트를 중복으로 생성하기 때문에, 비정상적으로 동작합니다.
+
+</div>
+
 
 <!--
 ### Mapping
@@ -226,7 +241,7 @@ The recently-developed [custom elements](https://developer.mozilla.org/en-US/doc
 
 In browsers that support Custom Elements natively, the specification requires developers use ES2015 classes to define Custom Elements - developers can opt-in to this by setting the `target: "es2015"` property in their project's [TypeScript configuration file](/guide/typescript-configuration). As Custom Element and ES2015 support may not be available in all browsers, developers can instead choose to use a polyfill to support older browsers and ES5 code.
 
-Use the [Angular CLI](cli) to automatically set up your project with the correct polyfill: 
+Use the [Angular CLI](cli) to automatically set up your project with the correct polyfill:
 
 <code-example language="sh">
 
@@ -282,16 +297,16 @@ ng add @angular/elements --project=*your_project_name*
 ## 예제 : 팝업 서비스
 
 <!--
-Previously, when you wanted to add a component to an app at runtime, you had to define a _dynamic component_. The app module would have to list your dynamic component under `entryComponents`, so that the app wouldn't expect it to be present at startup, and then you would have to load it, attach it to an element in the DOM, and wire up all of the dependencies, change detection, and event handling, as described in [Dynamic Component Loader](guide/dynamic-component-loader).
+Previously, when you wanted to add a component to an application at runtime, you had to define a _dynamic component_, and then you would have to load it, attach it to an element in the DOM, and wire up all of the dependencies, change detection, and event handling, as described in [Dynamic Component Loader](guide/dynamic-component-loader).
 
-Using an Angular custom element makes the process much simpler and more transparent, by providing all of the infrastructure and framework automatically&mdash;all you have to do is define the kind of event handling you want. (You do still have to exclude the component from compilation, if you are not going to use it in your app.)
+Using an Angular custom element makes the process much simpler and more transparent, by providing all of the infrastructure and framework automatically&mdash;all you have to do is define the kind of event handling you want. (You do still have to exclude the component from compilation, if you are not going to use it in your application.)
 
-The Popup Service example app (shown below) defines a component that you can either load dynamically or convert to a custom element.
+The Popup Service example application (shown below) defines a component that you can either load dynamically or convert to a custom element.
 
 - `popup.component.ts` defines a simple pop-up element that displays an input message, with some animation and styling.
-- `popup.service.ts` creates an injectable service that provides two different ways to invoke the PopupComponent; as a dynamic component, or as a custom element. Notice how much more setup is required for the dynamic-loading method.
-- `app.module.ts` adds the PopupComponent in the module's `entryComponents` list, to exclude it from compilation and avoid startup warnings or errors.
-- `app.component.ts` defines the app's root component, which uses the PopupService to add the pop-up to the DOM at run time. When the app runs, the root component's constructor converts PopupComponent to a custom element.
+- `popup.service.ts` creates an injectable service that provides two different ways to invoke the `PopupComponent`; as a dynamic component, or as a custom element. Notice how much more setup is required for the dynamic-loading method.
+- `app.module.ts` adds the `PopupComponent` in the module's `declarations` list.
+- `app.component.ts` defines the application's root component, which uses the `PopupService` to add the pop-up to the DOM at run time. When the application runs, the root component's constructor converts `PopupComponent` to a custom element.
 
 For comparison, the demo shows both methods. One button adds the popup using the dynamic-loading method, and the other uses the custom element. You can see that the result is the same; only the preparation is different.
 -->
@@ -306,8 +321,8 @@ Angular에서 제공하는 커스텀 엘리먼트 기능을 활용하면 필요�
 아래 살펴보는 팝업 서비스 예제는 동적 컴포넌트와 커스텀 엘리먼트를 함께 다룹니다.
 
 - `popup.component.ts`는 간단한 팝업 엘리먼트를 정의합니다. 이 팝업에는 간단한 애니메이션과 스타일도 지정되어 있습니다.
-- `popup.service.ts`는 PopupComponent를 다른 방식으로 실행하는 함수 2개를 정의하며, 의존성으로 주입할 수 있도록 서비스로 구현합니다. 동적 컴포넌트 형태로 실행하는 함수에 더 많은 로직이 필요한 것도 확인해 보세요.
-- `app.module.ts`는 모듈의 `entryComponents`에 PopupComponent를 등록합니다. 따라서 PopupComponent는 Angular 컴파일에서 제외됩니다.
+- `popup.service.ts`는 `PopupComponent`를 다른 방식으로 실행하는 함수 2개를 정의하며, 의존성으로 주입할 수 있도록 서비스로 구현합니다. 동적 컴포넌트 형태로 실행하는 함수에 더 많은 로직이 필요한 것도 확인해 보세요.
+- `app.module.ts`는 모듈의 `entryComponents`에 PopupComponent를 등록합니다.
 - `app.component.ts`는 앱의 최상위 컴포넌트를 정의합니다. 이 컴포넌트는 PopupService를 활용해서 DOM에 팝업 엘리먼트를 추가합니다. 그리고 최상위 컴포넌트의 생성자가 실행될 때 PopupComponent가 커스텀 엘리먼트로 변환됩니다.
 
 이 예제는 두 가지 방식을 모두 구현하고 있으니 비교를 해보는 것도 좋습니다.
@@ -355,7 +370,7 @@ class MyDialog {
 }
 ```
 
-The most straight forward way to get accurate typings is to cast the return value of the relevant DOM methods to the correct type. For that, you can use the `NgElement` and `WithProperties` types (both exported from `@angular/elements`):
+The most straightforward way to get accurate typings is to cast the return value of the relevant DOM methods to the correct type. For that, you can use the `NgElement` and `WithProperties` types (both exported from `@angular/elements`):
 
 ```ts
 const aDialog = document.createElement('my-dialog') as NgElement & WithProperties<{content: string}>;

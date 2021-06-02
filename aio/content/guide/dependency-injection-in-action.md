@@ -4,160 +4,24 @@
 # 실전 의존성 주입
 
 <!--
-This section explores many of the features of dependency injection (DI) in Angular.
+This guide explores many of the features of dependency injection (DI) in Angular.
+
+<div class="alert is-helpful">
+
+See the <live-example></live-example> for a working example containing the code snippets in this guide.
+
+</div>
 -->
 이 문서는 Angular에서 활용할 수 있는 다양한 의존성 주입 테크닉에 대해 소개합니다.
 
-{@a toc}
-
-<!--
-See the <live-example name="dependency-injection-in-action"></live-example>
-of the code in this cookbook.
--->
-이 문서에서 다루는 예제는 <live-example name="dependency-injection-in-action"></live-example>에서 직접 실행하거나 다운받아 확인할 수 있습니다.
-
-{@a nested-dependencies}
-
-<!--
-## Nested service dependencies
--->
-## 중첩된 서비스 의존성
-
-<!--
-The _consumer_ of an injected service doesn't need to know how to create that service.
-It's the job of the DI framework to create and cache dependencies. The consumer just
-needs to let the DI framework know which dependencies it needs.
-
-Sometimes a service depends on other services, which may depend on yet other services.
-The dependency injection framework resolves these nested dependencies in the correct order.
-At each step, the consumer of dependencies declares what it requires in its
-constructor, and lets the framework provide them.
-
-The following example shows that `AppComponent` declares its dependence on `LoggerService` and `UserContext`.
-
-<code-example path="dependency-injection-in-action/src/app/app.component.ts" region="ctor" header="src/app/app.component.ts"></code-example>
-
-
-`UserContext` in turn depends on both `LoggerService` and
-`UserService`, another service that gathers information about a particular user.
-
-
-<code-example path="dependency-injection-in-action/src/app/user-context.service.ts" region="injectables" header="user-context.service.ts (injection)"></code-example>
-
-
-When Angular creates `AppComponent`, the DI framework creates an instance of `LoggerService` and starts to create `UserContextService`.
-`UserContextService` also needs `LoggerService`, which the framework already has, so the framework can provide the same instance. `UserContextService` also needs `UserService`, which the framework has yet to create. `UserService` has no further dependencies, so the framework can simply use `new` to instantiate the class and provide the instance to the `UserContextService` constructor.
-
-The parent `AppComponent` doesn't need to know about the dependencies of dependencies.
-Declare what's needed in the constructor (in this case `LoggerService` and `UserContextService`)
-and the framework resolves the nested dependencies.
-
-When all dependencies are in place, `AppComponent` displays the user information.
-
-<div class="lightbox">
-  <img src="generated/images/guide/dependency-injection-in-action/logged-in-user.png" alt="Logged In User">
-</div>
--->
-서비스를 의존성으로 주입받아 _사용하는 쪽_ 에서는 이 서비스가 어떻게 생성되었는지 신경쓸 필요가 없습니다.
-의존성 객체를 생성하고 관리하는 것은 온전히 프레임워크의 역할입니다. 의존성을 주입받는 쪽에서는 프레임워크에게 필요한 객체를 요청하기만 하면 됩니다.
-
-때로는 의존성으로 주입되는 서비스도 다른 서비스를 의존성으로 주입받아야 하는 경우가 있습니다.
-이 때 서비스들을 올바른 순서로 처리하는 것도 프레임워크가 하는 일입니다.
-생성자에서 의존성으로 요청할 객체의 타입을 지정하면 프레임워크가 이 생성자들의 처리 순서를 판단해서 요청하는 타입에 맞는 객체의 인스턴스를 생성해서 주입합니다.
-
-아래 코드는 `AppComponent`의 생성자가 `LoggerService`와 `UserContext`를 의존성으로 주입받도록 요청하는 예제 코드입니다.
-
-<code-example path="dependency-injection-in-action/src/app/app.component.ts" region="ctor" header="src/app/app.component.ts"></code-example>
-
-
-그런데 `UserContext`에서도 `LoggerService`와 `UserService`를 의존성으로 주입받도록 요청합니다. 이 서비스는 특정 사용자에 대한 정보를 가져올 때 사용합니다.
-
-<code-example path="dependency-injection-in-action/src/app/user-context.service.ts" region="injectables" header="user-context.service.ts (의존성 주입)"></code-example>
-
-그러면 Angular가 `AppComponent`를 생성할 때 `LoggerService`와 `UserContextService`의 인스턴스를 먼저 생성합니다.
-그런데 `UserContextService`에서 필요한 `LoggerService`의 인스턴스는 이미 프레임워크가 생성했기 때문에 이전에 만들었던 인스턴스를 다시 활용합니다. 이 시점에 `UserContextService`에 필요한 `UserService`는 아직 생성되지 않았습니다. `UserService`는 추가로 필요한 의존성이 없기 때문에 프레임워크는 간단하게 `new` 키워드를 사용해서 `UserService`의 인스턴스를 생성하고 이 인스턴스를 `UserContextService`의 생성자에 주입합니다.
-
-`AppComponent`의 입장에서는 의존성 객체가 또다른 의존성을 갖는지 신경쓸 필요가 없습니다.
-원하는 객체 타입을 생성자에 지정하기만 하면 프레임워크가 모두 처리할 것입니다.
-
-그리고 모든 의존성 관계가 정리되면 `AppComponent`가 화면에 표시됩니다.
-
-<div class="lightbox">
-  <img src="generated/images/guide/dependency-injection-in-action/logged-in-user.png" alt="Logged In User">
-</div>
-
-
-{@a service-scope}
-
-<!--
-## Limit service scope to a component subtree
--->
-## 서비스가 주입될 수 있는 범위를 특정 컴포넌트로 제한하기
-
-<!--
-An Angular application has multiple injectors, arranged in a tree hierarchy that parallels the component tree.
-Each injector creates a singleton instance of a dependency.
-That same instance is injected wherever that injector provides that service.
-A particular service can be provided and created at any level of the injector hierarchy,
-which means that there can be multiple instances of a service if it is provided by multiple injectors.
-
-Dependencies provided by the root injector can be injected into *any* component *anywhere* in the application.
-In some cases, you might want to restrict service availability to a particular region of the application.
-For instance, you might want to let users explicitly opt in to use a service,
-rather than letting the root injector provide it automatically.
-
-You can limit the scope of an injected service to a *branch* of the application hierarchy
-by providing that service *at the sub-root component for that branch*.
-This example shows how to make a different instance of `HeroService` available to `HeroesBaseComponent`
-by adding it to the `providers` array of the `@Component()` decorator of the sub-component.
-
-<code-example path="dependency-injection-in-action/src/app/sorted-heroes.component.ts" region="injection" header="src/app/sorted-heroes.component.ts (HeroesBaseComponent excerpt)">
-
-</code-example>
-
-When Angular creates `HeroesBaseComponent`, it also creates a new instance of `HeroService`
-that is visible only to that component and its children, if any.
-
-You could also provide `HeroService` to a different component elsewhere in the application.
-That would result in a different instance of the service, living in a different injector.
-
 <div class="alert is-helpful">
 
-Examples of such scoped `HeroService` singletons appear throughout the accompanying sample code,
-including `HeroBiosComponent`, `HeroOfTheMonthComponent`, and `HeroesBaseComponent`.
-Each of these components has its own `HeroService` instance managing its own independent collection of heroes.
-
-</div>
--->
-Angular 애플리케이션의 인젝터는 동시에 여러 개가 존재하며, 컴포넌트 트리의 구조에 따라 트리 형태로 구성되고 계층 구조에 따라서 병렬로 존재하기도 합니다.
-각각의 인젝터는 해당 인젝터에 등록된 의존성 객체의 싱글턴 인스턴스를 생성하고 관리하며, 이 인젝터가 주입하는 서비스는 모두 같은 인스턴스입니다.
-그런데 서비스 프로바이더는 다양한 인젝터 계층에 등록될 수 있기 때문에, 특정 서비스의 인스턴스도 여러 인젝터에 동시에 존재할 수 있습니다.
-
-애플리케이션의 최상위 인젝터가 관리하는 의존성 객체의 인스턴스는 애플리케이션 *전역*의 컴포넌트에 자유롭게 주입될 수 있습니다.
-그런데 어떤 경우에는 특정 서비스를 애플리케이션 일부 범위에서만 사용할 수 있도록 제한하고 싶은 경우가 있습니다.
-최상위 인젝터가 아무 제한없이 의존성으로 주입하는 대신, 명시적으로 지정한 서비스를 사용하도록 하려고 합니다.
-
-서비스 프로바이더를 *컴포넌트 트리의 특정 브랜치*에 등록하면 해당 *브랜치* 범위에 이 서비스를 사용하도록 지정할 수 있습니다.
-아래 예제는 `HeroService`의 프로바이더를 `HeroesBaseComponent` 계층의 `@Component()` 데코레이터 `providers` 배열에 등록한 예제 코드입니다. 이렇게 구현하면 `HeroesBaseComponent` 상위 컴포넌트 트리와는 별개로 이 계층에 새로운 `HeroService`의 인스턴스가 생성됩니다.
-
-<code-example path="dependency-injection-in-action/src/app/sorted-heroes.component.ts" region="injection" header="src/app/sorted-heroes.component.ts (HeroesBaseComponent 일부)">
-</code-example>
-
-이제 Angular가 `HeroesBaseComponent`의 인스턴스를 생성하면 `HeroService`의 인스턴스도 새로 생성합니다. 그리고 `HeroesBaseComponent`와 이 컴포넌트의 자식 컴포넌트에서 `HeroService`를 의존성으로 요청하면 이 인스턴스가 사용됩니다.
-
-`HeroService`의 프로바이더는 다른 컴포넌트에도 등록할 수 있습니다.
-결국 서로 다른 인젝터에 서로 다른 서비스 인스턴스가 존재하게 됩니다.
-
-<div class="alert is-helpful">
-
-이 문서에서 다루는 예제 코드에서 `HeroService`의 프로바이더를 등록하는 로직은 `HeroBiosComponent`, `HeroOfTheMonthComponent`, `HeroesBaseComponent`에 각각 사용되었습니다.
-그래서 각각의 컴포넌트는 독자적인 `HeroService` 인스턴스를 관리하며, 이들 컴포넌트가 관리하는 히어로의 목록도 서로 다릅니다.
+이 문서에서 다루는 예제 코드는 <live-example></live-example>에서 직접 실행하거나 다운받아 실행할 수 있습니다.
 
 </div>
 
 
 {@a multiple-service-instances}
-
 
 <!--
 ## Multiple service instances (sandboxing)
@@ -509,7 +373,7 @@ Although developers strive to avoid it, many visual effects and third-party tool
 require DOM access.
 As a result, you might need to access a component's DOM element.
 
-To illustrate, here's a simplified version of `HighlightDirective` from
+To illustrate, here's a minimal version of `HighlightDirective` from
 the [Attribute Directives](guide/attribute-directives) page.
 
 <code-example path="dependency-injection-in-action/src/app/highlight.directive.ts" header="src/app/highlight.directive.ts">
@@ -523,7 +387,7 @@ Angular sets the constructor's `el` parameter to the injected `ElementRef`.
 (An `ElementRef` is a wrapper around a DOM element,
 whose `nativeElement` property exposes the DOM element for the directive to manipulate.)
 
-The sample code applies the directive's `myHighlight` attribute to two `<div>` tags,
+The sample code applies the directive's `appHighlight` attribute to two `<div>` tags,
 first without a value (yielding the default color) and then with an assigned color value.
 
 <code-example path="dependency-injection-in-action/src/app/app.component.html" region="highlight" header="src/app/app.component.html (highlight)"></code-example>
@@ -558,73 +422,6 @@ The following image shows the effect of mousing over the `<hero-bios-and-contact
 <div class="lightbox">
   <img src="generated/images/guide/dependency-injection-in-action/highlight.png" alt="Highlighted bios">
 </div>
-
-
-{@a providers}
-
-<!--
-## Define dependencies with providers
--->
-## 프로바이더로 의존성 정의하기
-
-<!--
-This section demonstrates how to write providers that deliver dependent services.
-
-In order to get a service from a dependency injector, you have to give it a [token](guide/glossary#token).
-Angular usually handles this transaction by specifying a constructor parameter and its type.
-The parameter type serves as the injector lookup token.
-Angular passes this token to the injector and assigns the result to the parameter.
-
-The following is a typical example.
-
-
-<code-example path="dependency-injection-in-action/src/app/hero-bios.component.ts" region="ctor" header="src/app/hero-bios.component.ts (component constructor injection)"></code-example>
-
-
-Angular asks the injector for the service associated with `LoggerService`
-and assigns the returned value to the `logger` parameter.
-
-If the injector has already cached an instance of the service associated with the token,
-it provides that instance.
-If it doesn't, it needs to make one using the provider associated with the token.
-
-<div class="alert is-helpful">
-
-If the injector doesn't have a provider for a requested token, it delegates the request
-to its parent injector, where the process repeats until there are no more injectors.
-If the search fails, the injector throws an error&mdash;unless the request was [optional](guide/dependency-injection-in-action#optional).
-
-
-</div>
-
-A new injector has no providers.
-Angular initializes the injectors it creates with a set of preferred providers.
-You have to configure providers for your own app-specific dependencies.
--->
-이번 섹션에서는 의존성으로 주입하는 서비스의 프로바이더를 어떻게 정의할 수 있는지 알아봅시다.
-
-인젝터를 통해 서비스를 주입받으려면 이 서비스에 해당하는 [토큰](guide/glossary#token)을 선언해야 합니다.
-그리고 이렇게 선언된 토큰은 Angular가 생성자의 인자에 지정된 타입을 인젝터에서 찾을때 활용됩니다.
-그래서 인젝터에 토큰을 보내면 그 토큰에 해당되는 의존성 객체를 받아올 수 있습니다.
-
-예제를 보면서 이 내용을 확인해 봅시다.
-
-<code-example path="dependency-injection-in-action/src/app/hero-bios.component.ts" region="ctor" header="src/app/hero-bios.component.ts (컴포넌트 생성자로 주입되는 의존성 객체)"></code-example>
-
-이 코드에서 Angular는 인젝터에 `LoggerService`에 해당하는 서비스가 있는지 확인하고, 인젝터가 반환하는 객체를 `logger` 프로퍼티에 할당합니다.
-
-그리고 인젝터는 이 토큰에 해당하는 서비스의 인스턴스가 이미 캐싱되어 있으면 그 인스턴스를 바로 반환하며, 인스턴스가 존재하지 않으면 프로바이더를 사용해서 새로운 인스턴스를 생성합니다.
-
-<div class="alert is-helpful">
-
-요청된 토큰에 해당하는 프로바이더가 인젝터에 없다면 이 의존성 주입 요청은 부모 인젝터로 전달되며, 이 과정은 애플리케이션 최상위 인젝터까지 반복됩니다.
-그리고 &mdash;[optional](guide/dependency-injection-in-action#optional) 데코레이터가 사용되지 않은 상태에서&mdash;최종 인젝터에서도 프로바이더를 찾지 못하면 에러가 발생합니다.
-
-</div>
-
-새로 생성된 인젝터에는 프로바이더가 없습니다.
-그리고 프로바이더가 등록되지 않은 인젝터는 Angular가 생성하지도 않습니다.
-애플리케이션에 의존성 객체가 필요하다면 프로바이더를 꼭 등록해야 합니다.
 
 
 {@a defining-providers}
@@ -1030,7 +827,7 @@ But they did neither.
 
 When you use a class this way, it's called a *class interface*.
 
-As mentioned in [DI Providers](guide/dependency-injection-providers#interface-not-valid-token),
+As mentioned in [DI Providers](guide/dependency-injection-providers#di-and-interfaces),
 an interface is not a valid DI token because it is a TypeScript artifact that doesn't exist at run time.
 Use this abstract class interface to get the strong typing of an interface,
 and also use it as a provider token in the way you would a normal class.
@@ -1072,7 +869,7 @@ Look again at the TypeScript `MinimalLogger` class to confirm that it has no imp
 
 클래스가 이렇게 사용되는 것을 *클래스 인터페이스*라고 합니다.
   
-[의존성 주입 프로바이더](guide/dependency-injection-providers#interface-not-valid-token)에서 언급했던 것처럼, 인터페이스는 TypeScript에만 있는 개념이며 애플리케이션이 실행되는 시점에는 존재하지 않기 때문에 의존성 주입 토큰으로 사용할 수 없습니다.
+[의존성 주입 프로바이더](guide/dependency-injection-providers#di-and-interfaces)에서 언급했던 것처럼, 인터페이스는 TypeScript에만 있는 개념이며 애플리케이션이 실행되는 시점에는 존재하지 않기 때문에 의존성 주입 토큰으로 사용할 수 없습니다.
 그래서 인터페이스처럼 형태를 강제할 수 있고, 일반 클래스처럼 프로바이더 토큰으로 사용할 수 있는 추상 클래스 인터페이스를 사용하는 것입니다.
 
 그리고 클래스 인터페이스에는 이 클래스가 주입된 곳에서 *사용할 수 있는 멤버만* 정의하는 것이 좋습니다.
@@ -1295,53 +1092,3 @@ TypeScript에서는 클래스가 정의되는 순서도 신경써야 합니다.
 이 경우에도 `forwardRef`를 사용하면 순환 참조 문제를 해결할 수 있습니다.
 
 <code-example path="dependency-injection-in-action/src/app/parent-finder.component.ts" region="alex-providers" header="parent-finder.component.ts (AlexComponent providers 배열)"></code-example>
-
-
-<!--- Waiting for good examples
-
-{@a directive-level-providers}
-
-{@a element-level-providers}
-
-## Element-level providers
-
-A component is a specialization of directive, and the `@Component()` decorator inherits the `providers` property from `@Directive`. The injector is at the element level, so a provider configured with any element-level injector is available to any component, directive, or pipe attached to the same element.
-
-Here's a live example that implements a custom form control, taking advantage of an injector that is shared by a component and a directive on the same element.
-
-https://stackblitz.com/edit/basic-form-control
-
-The component, `custom-control`, configures a provider for the DI token `NG_VALUE_ACCESSOR`.
-In the template, the `FormControlName` directive is instantiated along with the custom component.
-It can inject the `NG_VALUE_ACCESSOR` dependency because they share the same injector.
-(Notice that this example also makes use of `forwardRef()` to resolve a circularity in the definitions.)
-
-### Sharing a service among components
-
-__NEED TO TURN THIS INTO FULL EXTERNAL EXAMPLE__
-
-Suppose you want to share the same `HeroCacheService` among multiple components. One way to do this is to create a directive.
-
-```
-<ng-container heroCache>
-  <hero-overview></hero-overview>
-  <hero-details></hero-details>
-</ng-container>
-```
-
-Use the `@Directive()` decorator to configure the provider for the service:
-
-```
-@Directive(providers:[HeroCacheService])
-
-class heroCache{...}
-```
-
-Because the injectors for both the overview and details components are children of the injector created from the `heroCache` directive, they can inject things it provides.
-If the `heroCache` directive provides the `HeroCacheService`, the two components end up sharing them.
-
-If you want to show only one of them, use the directive to make sure __??of what??__.
-
-`<hero-overview heroCache></hero-overview>`
-
- --->

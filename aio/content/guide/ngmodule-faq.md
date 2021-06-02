@@ -24,11 +24,8 @@ Declare them in a module if they belong to that particular module.
 이 배열에는 모듈에 포함되는 컴포넌트나 디렉티브, 파이프를 등록하며, 이 Angular 구성요소들을 [declarable](guide/bootstrapping#declarations-배열)이라고도 합니다.
 대상 클래스는 _딱 하나의_ 모듈에만 등록해야 합니다.
 
-<hr/>
-
 
 {@a q-declarable}
-
 <!--
 ## What is a _declarable_?
 -->
@@ -41,8 +38,6 @@ They're the only classes that you can add to `declarations`.
 -->
 Declarable은 컴포넌트나 디렉티브, 파이프와 같이 모듈의 `declarations` 배열에 등록하는 클래스입니다.
 Declarable은 Angular 구성요소이면서, JavaScript 클래스이기도 합니다.
-
-<hr/>
 
 
 <!--
@@ -76,8 +71,6 @@ NgModule의 `declarations` 배열에는 [declarable](guide/bootstrapping#declara
 * 서비스 클래스
 * Angular 구성요소가 아닌 클래스나 객체 : 문자열, 숫자, 함수, 데이터 모델, config 설정, 업무 로직 클래스, 헬퍼 클래스
 
-<hr/>
-
 
 <!--
 ## Why list the same component in multiple `NgModule` properties?
@@ -109,8 +102,6 @@ as well as dynamically loaded in a pop-up dialog.
 * 팝업과 같이 동적으로 로딩되는 컴포넌트가 있을 수도 있습니다.
 
 
-<hr/>
-
 <!--
 ## What does "Can't bind to 'x' since it isn't a known property of 'y'" mean?
 -->
@@ -136,7 +127,6 @@ The "x" class isn't visible to other modules until you add it to the `exports` l
 
 </div>
 
-<hr/>
 
 <!--
 ## What should I import?
@@ -170,10 +160,8 @@ Import [BrowserModule](guide/ngmodule-faq#q-browser-vs-common-module) only in th
 
 [BrowserModule](guide/ngmodule-faq#q-browser-vs-common-module)은 애플리케이션의 최상위 `AppModule`에서만 로드합니다.
 
-<hr/>
 
 {@a q-browser-vs-common-module}
-
 <!--
 ## Should I import `BrowserModule` or `CommonModule`?
 -->
@@ -206,10 +194,7 @@ Importing `CommonModule` also frees feature modules for use on _any_ target plat
 브라우저에서 동작하지 않는 Angular 애플리케이션이라면 `BrowserModule` 없이 `CommonModule`을 사용하는 경우도 있습니다.
 
 
-<hr/>
-
 {@a q-reimport}
-
 <!--
 ## What if I import the same module twice?
 -->
@@ -237,10 +222,7 @@ Angular doesn't like NgModules with circular references, so don't let Module 'A'
 Angular는 순환 참조를 지원하지 않습니다. 모듈 'A'가 모듈 'B'를 참조하는 상태에서 모듈 'B'가 모듈 'A'를 다시 참조하면 안됩니다.
 
 
-<hr/>
-
 {@a q-reexport}
-
 <!--
 ## What should I export?
 -->
@@ -267,13 +249,10 @@ An NgModule can even export a module that it doesn't import.
 불러온 모듈에 등록된 Angular 구성요소 전체를 다시 공개할 수도 있고, 아무것도 추가하지 않고 그대로 다시 공개할 수도 있습니다.
 
 
-<hr/>
-
 <!--
 ## What should I *not* export?
 -->
 ## 모듈 외부로 공개하지 *말아야* 하는 것은 어떤 것이 있나요?
-
 
 <!--
 Don't export the following:
@@ -298,8 +277,6 @@ Its only purpose is to add http service providers to the application as a whole.
 진입 컴포넌트를 모듈 외부로 공개해도 별 문제는 없지만, 아무 이득없이 모듈 외부로 공개할 필요도 없습니다.
 * public `declarations` 배열이 없는 서비스 모듈.
 `HttpClientModule`과 같은 모듈은 불러와서 다시 공개할 이유가 없습니다. 왜냐하면 이 모듈은 아무것도 모듈 외부로 공개하지 않으며, 앱 전역에서 사용하는 http 서비스 프로바이더만 제공하기 때문입니다.
-
-<hr/>
 
 
 <!--
@@ -346,8 +323,6 @@ Angular 라이브러리 중 `BrowserModule`을 보면 다음과 같이 사용된
 이 모듈의 목적은 앱 전역에 http 서비스 프로바이더를 제공하는 것 뿐입니다.
 
 
-<hr/>
-
 <!--
 ## What is the `forRoot()` method?
 -->
@@ -363,6 +338,12 @@ You add that result to the `imports` list of the root `AppModule`.
 Only call and import a `forRoot()` result in the root application module, `AppModule`.
 Avoid importing it in any other module, particularly in a lazy-loaded module. For more
 information on `forRoot()` see [the `forRoot()` pattern](guide/singleton-services#the-forroot-pattern) section of the [Singleton Services](guide/singleton-services) guide.
+
+<div class="alert is-helpful">
+Note: the `forRoot()` import can be used in a module other than `AppModule`. Importantly,
+`forRoot()` should only be called once, and the module that imports the `forRoot()` needs to be available to
+the root `ModuleInjector`. For more information, refer to the guide on [Hierarchical injectors](guide/hierarchical-dependency-injection#moduleinjector).
+</div>
 
 For a service, instead of using `forRoot()`,  specify `providedIn: 'root'` on the service's `@Injectable()` decorator, which
 makes the service automatically available to the whole application and thus singleton by default.
@@ -384,6 +365,12 @@ Follow this convention when you write similar modules with configurable service 
 앱 모듈이 아닌 기능 모듈, 특히 지연로딩 되는 다른 모듈에서 이 함수를 사용하면 런타임 에러가 발생할 수 있습니다.
 `forRoot()` 함수에 대해 더 알아보려면 [싱글턴 서비스](guide/singleton-services) 가이드 문서의 [`forRoot()` 패턴](guide/singleton-services#the-forroot-pattern) 섹션을 참고하세요.
 
+<div class="alert is-helpful">
+Note: the `forRoot()` import can be used in a module other than `AppModule`. Importantly,
+`forRoot()` should only be called once, and the module that imports the `forRoot()` needs to be available to
+the root `ModuleInjector`. For more information, refer to the guide on [Hierarchical injectors](guide/hierarchical-dependency-injection#moduleinjector).
+</div>
+
 서비스를 싱글턴으로 만드는 것이라면 `forRoot()` 메소드 대신 `@Injectable()` 데코레이터 안에 `providedIn: 'root'`를 지정해도 됩니다.
 이렇게 지정된 서비스는 앱 전역으로 사용할 수 있는 싱글턴 서비스로 생성됩니다.
 
@@ -393,8 +380,6 @@ Follow this convention when you write similar modules with configurable service 
 
 서비스 프로바이더의 설정을 외부에서 지정하는 모듈이라면 이 패턴을 도입할 수 있는지 검토해 보세요.
 
-
-<hr/>
 
 <!--
 ## Why is a service provided in a feature module visible everywhere?
@@ -443,10 +428,7 @@ NgModule 체계에서 가장 중요한 것은 확장성입니다.
 좀 더 자세한 내용을 확인하려면 [서비스를 모듈 범위로 제한하고 싶으면 어떻게 하면 되나요?](guide/ngmodule-faq#service-scope) 섹션을 참고하세요.
 
 
-<hr/>
-
 {@a q-lazy-loaded-module-provider-visibility}
-
 <!--
 ## Why is a service provided in a lazy-loaded module visible only to that module?
 -->
@@ -476,8 +458,6 @@ Angular 라우터가 모듈을 지연로딩하면, 이 모듈은 새로운 실�
 하지만 이 때 등록되는 프로바이더의 토큰이 같더라도 모두 상위 모듈의 프로바이더와는 분리됩니다.
 그래서 지연로딩되는 컴포넌트로 라우팅 될 때도 애플리케이션 전역에 있는 인젝터 대신 해당 모듈에 등록된 서비스 프로바이더로 서비스 인스턴스가 생성됩니다.
 
-
-<hr/>
 
 <!--
 ## What if two modules provide the same service?
@@ -513,8 +493,6 @@ Angular는 주입하는 서비스를 찾을 때 토큰으로 구분하기 때문
 하지만, 최상위 `AppModule`에 등록된 서비스 프로바이더는 모든 NgModule에 등록된 서비스 프로바이더보다 우선 처리됩니다.
 토큰이 중복되는 상황이라면 `AppModule`에 지정된 서비스 프로바이더가 최우선으로 동작합니다.
 
-
-<hr/>
 
 {@a service-scope}
 <!--
@@ -610,12 +588,7 @@ Angular가 [모듈을 지연로딩하면](guide/ngmodule-faq#q-lazy-loaded-modul
 하지만 서비스를 컴포넌트에 등록하면 컴포넌트의 인스턴스마다 새로운 서비스 인스턴스가 계속 생성되기 때문에, 서비스가 등록된 모듈을 지연로딩하는 방법이 더 효율적입니다.
 
 
-
-<hr/>
-
 {@a q-root-component-or-module}
-
-
 <!--
 ## Should I add application-wide providers to the root `AppModule` or the root `AppComponent`?
 -->
@@ -681,10 +654,7 @@ Angular는 애플리케이션이 시작될 때 로드되는 모듈에 있는 모
 따라서 지연로딩되는 모듈은 `AppComponent`의 인젝터에 접근할 수 없습니다.
 
 
-<hr/>
-
 {@a q-component-or-module}
-
 <!--
 ## Should I add other providers to a module or a component?
 -->
@@ -723,10 +693,7 @@ not the root `AppComponent`.
 [_애플리케이션 전역에 동작하는 서비스_ 는](guide/ngmodule-faq#q-root-component-or-module) 최상위 컴포넌트 `AppComponent`가 아니라 최상위 모듈 `AppModule`에 등록하는 것이 좋다는 것도 꼭 기억하세요.
 
 
-<hr/>
-
 {@a q-why-bad}
-
 <!--
 ## Why is it bad if a shared module provides a service to a lazy-loaded module?
 -->
@@ -750,7 +717,10 @@ and delivers the app-wide singleton service. No problem.
 
 <!--
 ### The lazy loaded scenario
+-->
+### 지연로딩되는 모듈의 경우
 
+<!--
 Now consider a lazy loaded module that also provides a service called `UserService`.
 
 When the router lazy loads a module, it creates a child injector and registers the `UserService`
@@ -772,7 +742,6 @@ Then toggle between the "Contact" and "Heroes" links a few times.
 The username goes bonkers as the Angular creates a new `UserService` instance each time.
 I'd like to see the error so I can include it.-->
 
-### 지연로딩되는 모듈의 경우
 
 이번에는 지연로딩되는 모듈에서 `UserService`를 사용하는 경우를 생각해 봅시다.
 
@@ -784,10 +753,7 @@ I'd like to see the error so I can include it.-->
 모듈이 지연로딩될 때마다 서비스의 인스턴스는 계속 생성되며, 애플리케이션 전역에 싱글턴으로 사용하기 위해 프로바이더를 등록했던 의도와는 달라집니다.
 
 
-<hr/>
-
 {@a q-why-child-injector}
-
 <!--
 ## Why does lazy loading create a child injector?
 -->
@@ -836,10 +802,7 @@ Angular는 즉시 로딩되는 모듈의 `@NgModule.providers`에 등록된 프�
 하지만 애플리케이션의 최상위 인젝터는 이미 닫혔고 새로운 프로바이더도 추가할 수 없기 때문에, 지연로딩된 모듈 컨텍스트에 새로운 자식 인젝터를 생성합니다.
 
 
-<hr/>
-
 {@a q-is-it-loaded}
-
 <!--
 ## How can I tell if an NgModule or service was previously loaded?
 -->
@@ -872,10 +835,7 @@ Here is a custom constructor for an NgModule called `GreetingModule`.
 <code-example path="ngmodules/src/app/greeting/greeting.module.ts" region="ctor" header="src/app/greeting/greeting.module.ts (Constructor)"></code-example>
 
 
-<hr/>
-
 {@a q-entry-component-defined}
-
 <!--
 ## What is an `entry component`?
 -->
@@ -919,8 +879,6 @@ For more information, see [Entry Components](guide/entry-components).
 좀 더 자세한 내용을 확인하려면 [진입 컴포넌트](guide/entry-components) 문서를 참고하세요.
 
 
-<hr/>
-
 <!--
 ## What's the difference between a _bootstrap_ component and an _entry component_?
 -->
@@ -949,8 +907,6 @@ For more information, see [Entry Components](guide/entry-components).
 
 좀 더 자세한 내용을 확인하려면 [진입 컴포넌트](guide/entry-components) 문서를 참고하세요.
 
-
-<hr/>
 
 <!--
 ## When do I add components to _entryComponents_?
@@ -989,8 +945,6 @@ _진입 컴포넌트_ 로 지정할 필요가 있는 컴포넌트는 Angular가 
 
 좀 더 자세한 내용을 확인하려면 [진입 컴포넌트](guide/entry-components) 문서를 참고하세요.
 
-
-<hr/>
 
 <!--
 ## Why does Angular need _entryComponents_?
@@ -1033,8 +987,6 @@ the compiler omits it.
 
 컴포넌트가 _진입 컴포넌트_ 가 아니고, 템플릿에도 사용되지 않으면 이 컴포넌트는 컴파일러가 처리하지 않습니다.
 
-
-<hr/>
 
 <!--
 ## What kinds of modules should I have and how should I use them?
@@ -1117,7 +1069,7 @@ For more information, see [Feature Modules](guide/feature-modules) and
 In an Angular app, NgModules and JavaScript modules work together.
 
 In modern JavaScript, every file is a module
-(see the [Modules](http://exploringjs.com/es6/ch_modules.html) page of the Exploring ES6 website).
+(see the [Modules](https://exploringjs.com/es6/ch_modules.html) page of the Exploring ES6 website).
 Within each file you write an `export` statement to make parts of the module public.
 
 An Angular NgModule is a class with the `@NgModule` decorator&mdash;JavaScript modules
@@ -1131,7 +1083,7 @@ For more information, see [JavaScript Modules vs. NgModules](guide/ngmodule-vs-j
 Angular 앱에서는 NgModule과 JavaScript 모듈을 함께 사용합니다.
 
 ES6를 사용하는 최근 JavaScript는 각각의 파일을 모듈로 볼 수 있습니다.
-([모듈](http://exploringjs.com/es6/ch_modules.html) 문서를 참고하세요.)
+([모듈](https://exploringjs.com/es6/ch_modules.html) 문서를 참고하세요.)
 그리고 각각의 파일에서 `export` 키워드로 지정한 객체가 모듈 외부로 공개됩니다.
 
 Angular의 모듈은 `@NgModule` 데코레이터가 지정된 JavaScript 클래스입니다.
@@ -1143,10 +1095,7 @@ NgModule을 로드하면 이 모듈이 모듈 외부로 공개한 클래스들�
 좀 더 자세한 내용은 [JavaScript 모듈 vs. NgModules](guide/ngmodule-vs-jsmodule) 문서를 참고하세요.
 
 
-<hr/>
-
 {@a q-template-reference}
-
 <!--
 ## How does Angular find components, directives, and pipes in a template?<br>What is a <i><b>template reference</b></i>?
 -->
@@ -1172,10 +1121,7 @@ or exported by a module that this module imports.
 이 때 적용되는 컴포넌트 셀렉터와 파이프 이름은 현재 모듈에 정의된 클래스이거나, 다른 모듈에서 가져온 클래스만 유효합니다.
 
 
-<hr/>
-
 {@a q-angular-compiler}
-
 <!--
 ## What is the Angular compiler?
 -->

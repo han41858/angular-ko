@@ -10,6 +10,12 @@ The commands use an internal tool called Architect to run *CLI builders*, which 
 With Angular version 8, the CLI Builder API is stable and available to developers who want to customize the Angular CLI by adding or modifying commands. For example, you could supply a builder to perform an entirely new task, or to change which third-party tool is used by an existing command.
 
 This document explains how CLI builders integrate with the workspace configuration file, and shows how you can create your own builder.
+
+<div class="alert is-helpful">
+
+   You can find the code from the examples used here in [this GitHub repository](https://github.com/mgechev/cli-builders-demo).
+
+</div>
 -->
 Angular CLI는 프로젝트 코드를 조작하는 명령을 다양하게 제공합니다.
 린트(lint)나 빌드, 테스트가 이런 명령에 해당됩니다.
@@ -23,9 +29,6 @@ CLI 빌더 API가 확정된 8버전부터는 개발자가 Angular CLI 명령을 
 
 <div class="alert is-helpful">
 
-   <!--
-   You can find the code from the examples used here in [this GitHub repository](https://github.com/mgechev/cli-builders-demo).
-   -->
    이 문서에서 다루는 예제 코드는 [GitHub 저장소](https://github.com/mgechev/cli-builders-demo)에서 확인할 수 있습니다.
 
 </div>
@@ -267,7 +270,7 @@ In either case, you must provide required inputs, but can allow other inputs to 
 <!--
 You define builder inputs in a JSON schema associated with that builder.
 The Architect tool collects the resolved input values into an `options` object, and validates their types against the schema before passing them to the builder function.
-(The Schematics library does the same kind of validation of user input).
+(The Schematics library does the same kind of validation of user input.)
 
 For our example builder, we expect the `options` value to be a `JsonObject` with two keys: a `command` that is a string, and an `args` array of string values.
 
@@ -315,7 +318,7 @@ For more information, see the [JSON schemas website](http://json-schema.org/).
 <!--
 To link our builder implementation with its schema and name, we need to create a *builder definition* file, which we can point to in `package.json`.
 
-Create a file named `builders.json` file that looks like this.
+Create a file named `builders.json` that looks like this:
 -->
 그리고 빌더와 스키마를 연결하려면 *빌더 정의(builder definition)* 파일을 만들고 이 파일을 `package.json` 파일에 추가해야 합니다.
 
@@ -392,7 +395,7 @@ Targets are defined in the `angular.json` [CLI configuration file](guide/workspa
 A target specifies the builder to use, its default options configuration, and named alternative configurations.
 The Architect tool uses the target definition to resolve input options for a given run.
 
-The  `angular.json` file has a section for each project, and the "architect" section of each project configures targets for builders used by CLI commands such as 'build', 'test', and 'lint'.
+The `angular.json` file has a section for each project, and the "architect" section of each project configures targets for builders used by CLI commands such as 'build', 'test', and 'lint'.
 By default, for example, the `build` command runs the builder  `@angular-devkit/build-angular:browser` to perform the build task, and passes in default option values as specified for the `build` target in   `angular.json`.
 -->
 빌더를 사용하려면 [프로젝트](guide/glossary#project)를 빌드할 방법(target)과 입력값을 명확하게 지정해야 합니다.
@@ -519,15 +522,15 @@ Angular CLI를 사용하면서 옵션값을 지정하면 오버라이드 객체�
    You can also invoke a builder directly from another builder or test by calling `BuilderContext.scheduleBuilder()`.
    You pass an `options` object directly to the method, and those option values are validated against the schema of the builder without further adjustment.
 
-   Only the  `BuilderContext.scheduleTarget()` method resolves the configuration and overrides through the `angular.json` file.
+   Only the `BuilderContext.scheduleTarget()` method resolves the configuration and overrides through the `angular.json` file.
    -->
    빌더는 다른 빌더가 실행할 수도 있고 `BuilderContext.scheduleBuilder()` 메소드로도 실행할 수 있습니다.
    그런데 이 메소드 인자로 `options` 객체를 직접 지정하면 해당 옵션값도 빌더 스키마를 기준으로 유효성을 검사하며, 이 옵션값은 더이상 변경되지 않습니다.
 
    `angular.json` 파일에서 읽어온 옵션값을 활용하는 것은 `BuilderContext.scheduleTarget()` 메소드뿐입니다.
 
-
 </div>
+
 
 <!--
 ### Default architect configuration
@@ -644,7 +647,7 @@ We need to update the `angular.json` file to add a target for this builder to th
 
 * We'll add a new target section to the "architect" object for our project.
 
-* The target named "touch" uses our builder, which we published to `@example/command-runner`. (See [Publishing your Library](guide/creating-libraries#publishing-your-library))
+* The target named "touch" uses our builder, which we published to `@example/command-runner`. (See [Publishing your Library](guide/creating-libraries#publishing-your-library).)
 
 * The options object provides default values for the two inputs that we defined; `command`, which is the Unix command to execute, and `args`, an array that contains the file to operate on.
 
@@ -709,6 +712,7 @@ We need to update the `angular.json` file to add a target for this builder to th
 }
 
 </code-example>
+
 
 <!--
 ### Running the builder

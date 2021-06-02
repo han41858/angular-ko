@@ -28,7 +28,7 @@ Angular가 제공하는 배포 도구를 활용하면 애플리케이션을 배�
 
 <!--
 During development, you typically use the `ng serve` command to build, watch, and serve the application from local memory, using [webpack-dev-server](https://webpack.js.org/guides/development/#webpack-dev-server).
-When you are ready to deploy, however, you must use the `ng build` command to build the app and deploy the build artifacts elsewhere.
+When you are ready to deploy, however, you must use the `ng build` command to build the application and deploy the build artifacts elsewhere.
 
 Both `ng build` and `ng serve` clear the output folder before they build the project, but only the `ng build` command writes the generated build artifacts to the output folder.
 
@@ -44,7 +44,7 @@ You will need two terminals to get the live-reload experience.
 
 * On the first terminal, run the [`ng build` command](cli/build) in *watch* mode to compile the application to the `dist` folder.
 
-  <code-example language="none" class="code-shell">
+  <code-example language="sh">
 
    ng build --watch
 
@@ -54,7 +54,7 @@ You will need two terminals to get the live-reload experience.
 
 * On the second terminal, install a web server (such as [lite-server](https://github.com/johnpapa/lite-server)), and run it against the output folder. For example:
 
-  <code-example language="none" class="code-shell">
+  <code-example language="sh">
 
    lite-server --baseDir="dist/project-name"
 
@@ -85,7 +85,7 @@ This method is for development and testing only, and is not a supported or secur
 
 * 터미널에서 [`ng build` 명령](cli/build)을 실행하면서 *워치* 모드를 활성화할 수 있습니다. 이렇게 실행하면 애플리케이션 코드가 변경될 때마다 `dist` 폴더의 내용물도 다시 생성됩니다. `ng serve` 명령이 실행되는 동작과 비슷합니다.
 
-  <code-example language="none" class="code-shell">
+  <code-example language="sh">
 
    ng build --watch
 
@@ -93,7 +93,7 @@ This method is for development and testing only, and is not a supported or secur
   
 * 아니면 [lite-server](https://github.com/johnpapa/lite-server)와 같은 웹 서버를 실행해서 빌드 결과물이 위치한 폴더를 직접 띄워볼 수도 있습니다. 보통 이렇게 실행합니다:
 
-  <code-example language="none" class="code-shell">
+  <code-example language="sh">
 
    lite-server --baseDir="dist/project-name"
 
@@ -120,14 +120,14 @@ When you add a package with deployment capability, it'll automatically update yo
 
 For example, the following command automatically deploys a project to Firebase.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 ng add @angular/fire
 ng deploy
 </code-example>
 
 The command is interactive. In this case, you must have or create a Firebase account, and authenticate using that account. The command prompts you to select a Firebase project for deployment
 
-After the command produces an optimal build of your application (equivalent to `ng deploy --prod`), it'll upload the production assets to Firebase.
+The command builds your application and uploads the production assets to Firebase.
 
 In the table below, you can find a list of packages which implement deployment functionality to different platforms. The `deploy` command for each package may require different command line options. You can read more by following the links associated with the package names below:
 
@@ -135,13 +135,13 @@ In the table below, you can find a list of packages which implement deployment f
 |---------------------------------------------------------------|--------------------------------------------------------------------------------|
 | [Firebase hosting](https://firebase.google.com/docs/hosting)  | [`@angular/fire`](https://npmjs.org/package/@angular/fire)                     |
 | [Azure](https://azure.microsoft.com/en-us/)                   | [`@azure/ng-deploy`](https://npmjs.org/package/@azure/ng-deploy)               |
-| [Now](https://zeit.co/now)                                    | [`@zeit/ng-deploy`](https://npmjs.org/package/@zeit/ng-deploy)                 |
+| [Vercel (Previously known as Zeit)](https://vercel.com/solutions/angular)                                    | [`@zeit/ng-deploy`](https://npmjs.org/package/@zeit/ng-deploy)                 |
 | [Netlify](https://www.netlify.com/)                           | [`@netlify-builder/deploy`](https://npmjs.org/package/@netlify-builder/deploy) |
 | [GitHub pages](https://pages.github.com/)                     | [`angular-cli-ghpages`](https://npmjs.org/package/angular-cli-ghpages)         |
 | [NPM](https://npmjs.com/)                                     | [`ngx-deploy-npm`](https://npmjs.org/package/ngx-deploy-npm)                   |
 | [Amazon Cloud S3](https://aws.amazon.com/s3/?nc2=h_ql_prod_st_s3) | [`@jefiozie/ngx-aws-deploy`](https://www.npmjs.com/package/@jefiozie/ngx-aws-deploy) |
 
-If you're deploying to a self-managed server or there's no builder for your favorite cloud platform, you can either create a builder that allows you to use the `ng deploy` command, or read through this guide to learn how to manually deploy your app.
+If you're deploying to a self-managed server or there's no builder for your favorite cloud platform, you can either create a builder that allows you to use the `ng deploy` command, or read through this guide to learn how to manually deploy your application.
 -->
 Angular CLI 8.3.0 버전부터 도입된 `ng deploy` 명령을 실행하면 `deploy` [CLI 빌더](https://angular.io/guide/cli-builder)가 실행됩니다.
 프로젝트에서 `ng add [패키지 이름]` 명령을 실행하면 플랫폼에 따라 다르게 활용할 수 있는 서드 파티 빌더를 설치해서 활용할 수 있습니다.
@@ -150,7 +150,7 @@ Angular CLI 8.3.0 버전부터 도입된 `ng deploy` 명령을 실행하면 `dep
 
 프로젝트를 Firebase로 자동 배포하는 명령에 대해 알아봅시다.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 ng add @angular/fire
 ng deploy
 </code-example>
@@ -158,8 +158,7 @@ ng deploy
 `ng add @angular/fire` 명령을 실행하면 Firebase 계정과 계정 인증에 대한 내용 몇가지를 추가로 입력해야 합니다.
 그리고나서 Firebase로 배포할 프로젝트를 선택하면 됩니다.
 
-`ng deploy` 명령을 실행하고 나면 `--prod` 플래그를 붙이지 않아도 애플리케이션을 운영용으로 빌드합니다.
-그리고 빌드 결과물을 Firebase로 업로드하는 작업까지 자동으로 수행합니다.
+이 명령을 실행하면 애플리케이션을 빌드하고 빌드 결과물과 운영용 애셋을 Firebase에 업로드하는 작업까지 자동으로 수행합니다.
 
 플랫폼마다 활용할 수 있는 배포 패키지를 확인해 보세요.
 패키지에 따라 `deploy` 명령을 실행할 때 추가 옵션이 필요할 수도 있습니다.
@@ -169,7 +168,7 @@ ng deploy
 |---|---|
 | [Firebase hosting](https://firebase.google.com/docs/hosting)  | [`@angular/fire`](https://npmjs.org/package/@angular/fire)                     |
 | [Azure](https://azure.microsoft.com/en-us/)                   | [`@azure/ng-deploy`](https://npmjs.org/package/@azure/ng-deploy)               |
-| [Now](https://zeit.co/now)                                    | [`@zeit/ng-deploy`](https://npmjs.org/package/@zeit/ng-deploy)                 |
+| [Vercel (이전에는 Zeit라는 이름을 사용)](https://vercel.com/solutions/angular)                                    | [`@zeit/ng-deploy`](https://npmjs.org/package/@zeit/ng-deploy)                 |
 | [Netlify](https://www.netlify.com/)                           | [`@netlify-builder/deploy`](https://npmjs.org/package/@netlify-builder/deploy) |
 | [GitHub pages](https://pages.github.com/)                     | [`angular-cli-ghpages`](https://npmjs.org/package/angular-cli-ghpages)         |
 | [NPM](https://npmjs.com/)                                     | [`ngx-deploy-npm`](https://npmjs.org/package/ngx-deploy-npm)                   |
@@ -189,9 +188,9 @@ For the simplest deployment, create a production build and copy the output direc
 
 1. Start with the production build:
 
-  <code-example language="none" class="code-shell">
+  <code-example language="sh">
 
-    ng build --prod
+    ng build
 
   </code-example>
 
@@ -207,9 +206,9 @@ This is the simplest production-ready deployment of your application.
 
 1. 애플리케이션을 운영용으로 빌드합니다.
 
-  <code-example language="none" class="code-shell">
+  <code-example language="sh">
 
-    ng build --prod
+    ng build
 
   </code-example>
   
@@ -224,21 +223,39 @@ This is the simplest production-ready deployment of your application.
 {@a deploy-to-github}
 
 <!--
-### Deploy to GitHub pages
+### Deploy to GitHub Pages
 -->
 ### GitHub 페이지에 배포하기
 
-<!--
-Another simple way to deploy your Angular app is to use [GitHub Pages](https://help.github.com/articles/what-is-github-pages/).
+To deploy your Angular application to [GitHub Pages](https://help.github.com/articles/what-is-github-pages/), complete the following steps:
 
-1. You need to [create a GitHub account](https://github.com/join) if you don't have one, and then [create a repository](https://help.github.com/articles/create-a-repo/) for your project.
-Make a note of the user name and project name in GitHub.
+1. [Create a GitHub repository](https://help.github.com/articles/create-a-repo/) for your project.
 
-1. Build your project using Github project name, with the Angular CLI command [`ng build`](cli/build) and the options shown here:
+1. Configure `git` in your local project by adding a remote that specifies the GitHub repository you created in previous step.
+  GitHub provides these commands when you create the repository so that you can copy and paste them at your command prompt.
+  The commands should be similar to the following, though GitHub fills in your project-specific settings for you:
 
-  <code-example language="none" class="code-shell">
+  ```sh
+  git remote add origin https://github.com/your-username/your-project-name.git
+  git branch -M main
+  git push -u origin main
+  ```
 
-    ng build --prod --output-path docs --base-href /&lt;project_name&gt;/
+  When you paste these commands from GitHub, they run automatically.
+
+1. Create and check out a `git` branch named `gh-pages`.
+
+  ```sh
+  git checkout -b gh-pages
+  ```
+
+1. Build your project using the Github project name, with the Angular CLI command [`ng build`](cli/build) and the following options, where `your_project_name` is the name of the project that you gave the GitHub repository in step 1.
+
+  Be sure to include the slashes on either side of your project name as in `/your_project_name/`.
+
+  <code-example language="sh">
+
+    ng build --output-path docs --base-href /your_project_name/
 
   </code-example>
 
@@ -246,44 +263,19 @@ Make a note of the user name and project name in GitHub.
 
 1. Commit your changes and push.
 
-1. On the GitHub project page, configure it to [publish from the docs folder](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch).
+1. On the GitHub project page, go to Settings and scroll down to the GitHub Pages section to configure the site to [publish from the docs folder](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch).
 
-You can see your deployed page at `https://<user_name>.github.io/<project_name>/`.
+1. Click Save.
+
+1. Click on the GitHub Pages link at the top of the GitHub Pages section to see your deployed application.
+The format of the link is `https://<user_name>.github.io/<project_name>/`.
 
 <div class="alert is-helpful">
 
 Check out [angular-cli-ghpages](https://github.com/angular-buch/angular-cli-ghpages), a full featured package that does all this for you and has extra functionality.
 
 </div>
--->
-또 다른 방법은 Angular 앱을 [GitHub Pages](https://help.github.com/articles/what-is-github-pages/)에 배포하는 것입니다.
 
-1. GitHub 페이지에 배포하려면 먼저 [GitHub 계정을 생성](https://github.com/join)해야 합니다. 그리고 프로젝트가 위치할 [코드 저장소를 하나 만듭니다](https://help.github.com/articles/create-a-repo/).
-
-1. Github 프로젝트 이름을 기본 주소로 지정하면서 Angular 프로젝트를 빌드합니다. [`ng build`](cli/build)를 실행할 때 옵션을 다음과 같이 사용하면 됩니다:
-
-  <code-example language="none" class="code-shell">
-
-    ng build --prod --output-path docs --base-href /&lt;project_name&gt;/
-
-  </code-example>
-  
-1. 빌드가 끝나면 `docs/index.html` 파일을 복사해서 `docs/404.html` 파일을 생성합니다.
-
-1. 변경사항을 커밋하고 레파지토리에 푸시합니다.
-
-1. GitHub 프로젝트 페이지에서 [docs 폴더가 static으로 동작하도록 설정](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch)합니다.
-
-이제 `https://<user_name>.github.io/<project_name>/`에 접속하면 Angular 애플리케이션이 동작하는 것을 확인할 수 있습니다.
-
-<div class="alert is-helpful">
-
-[angular-cli-ghpages](https://github.com/angular-buch/angular-cli-ghpages)도 확인해 보세요.
-이 프로젝트를 활용하면 Angular CLI를 사용하는 환경에서 GitHub 페이지 설정을 더 간단하고 다양하게 할 수 있습니다.
-
-</div>
-
-<hr>
 
 {@a server-configuration}
 
@@ -306,11 +298,11 @@ This section covers changes you may have to make to the server or to files deplo
 
 
 <!--
-Angular apps are perfect candidates for serving with a simple static HTML server.
+Angular applications are perfect candidates for serving with a simple static HTML server.
 You don't need a server-side engine to dynamically compose application pages because
 Angular does that on the client-side.
 
-If the app uses the Angular router, you must configure the server
+If the application uses the Angular router, you must configure the server
 to return the application's host page (`index.html`) when asked for a file that it does not have.
 -->
 Angular 애플리케이션은 간단한 정적 HTML 서버로 호스팅하는 것도 아주 간단합니다.
@@ -322,7 +314,7 @@ Angular 애플리케이션은 간단한 정적 HTML 서버로 호스팅하는 �
 
 <!--
 A routed application should support "deep links".
-A _deep link_ is a URL that specifies a path to a component inside the app.
+A _deep link_ is a URL that specifies a path to a component inside the application.
 For example, `http://www.mysite.com/heroes/42` is a _deep link_ to the hero detail page
 that displays the hero with `id: 42`.
 
@@ -367,7 +359,7 @@ The list is by no means exhaustive, but should provide you with a good starting 
 
 <!--
 * [Apache](https://httpd.apache.org/): add a
-[rewrite rule](http://httpd.apache.org/docs/current/mod/mod_rewrite.html) to the `.htaccess` file as shown
+[rewrite rule](https://httpd.apache.org/docs/current/mod/mod_rewrite.html) to the `.htaccess` file as shown
   (https://ngmilk.rocks/2015/03/09/angularjs-html5-mode-or-pretty-urls-on-apache-using-htaccess/):
 
   <code-example>
@@ -380,7 +372,7 @@ The list is by no means exhaustive, but should provide you with a good starting 
     RewriteRule ^ /index.html
   </code-example>
 -->
-* [Apache](https://httpd.apache.org/): `.htaccess` 파일에 [rewrite rule](http://httpd.apache.org/docs/current/mod/mod_rewrite.html)을 추가합니다. ([참고](https://ngmilk.rocks/2015/03/09/angularjs-html5-mode-or-pretty-urls-on-apache-using-htaccess/))
+* [Apache](https://httpd.apache.org/): `.htaccess` 파일에 [rewrite rule](https://httpd.apache.org/docs/current/mod/mod_rewrite.html)을 추가합니다. ([참고](https://ngmilk.rocks/2015/03/09/angularjs-html5-mode-or-pretty-urls-on-apache-using-htaccess/))
 
   <code-example>
     RewriteEngine On
@@ -393,7 +385,7 @@ The list is by no means exhaustive, but should provide you with a good starting 
   </code-example>
 
 <!--
-* [Nginx](http://nginx.org/): use `try_files`, as described in
+* [Nginx](https://nginx.org/): use `try_files`, as described in
 [Front Controller Pattern Web Apps](https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#front-controller-pattern-web-apps),
 modified to serve `index.html`:
 
@@ -401,7 +393,7 @@ modified to serve `index.html`:
   try_files $uri $uri/ /index.html;
   ```
 -->
-* [Nginx](http://nginx.org/): [Front Controller Pattern Web Apps](https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#front-controller-pattern-web-apps)에서 설명하는 대로 `try_files`를 사용해서 `index.html`을 보내도록 설정합니다.
+* [Nginx](https://nginx.org/): [Front Controller Pattern Web Apps](https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#front-controller-pattern-web-apps)에서 설명하는 대로 `try_files`를 사용해서 `index.html`을 보내도록 설정합니다.
 
   ```
   try_files $uri $uri/ /index.html;
@@ -410,7 +402,7 @@ modified to serve `index.html`:
 <!--
 * [Ruby](https://www.ruby-lang.org/): create a Ruby server using ([sinatra](http://sinatrarb.com/)) with a basic Ruby file that configures the server `server.rb`:
 
-  ``` ruby
+  ```ruby
   require 'sinatra'
 
   # Folder structure
@@ -446,7 +438,7 @@ modified to serve `index.html`:
 
 <!--
 * [IIS](https://www.iis.net/): add a rewrite rule to `web.config`, similar to the one shown
-[here](http://stackoverflow.com/a/26152011/2116927):
+[here](https://stackoverflow.com/a/26152011):
 
   <code-example format='.' language="xml">
     &lt;system.webServer&gt;
@@ -465,7 +457,7 @@ modified to serve `index.html`:
     &lt;/system.webServer&gt;
   </code-example>
 -->
-* [IIS](https://www.iis.net/): [이 글](http://stackoverflow.com/a/26152011/2116927)에서 설명한 것과 비슷하게 `web.config`에 rewrite rule을 추가합니다.
+* [IIS](https://www.iis.net/): [이 글](https://stackoverflow.com/a/26152011)에서 설명한 것과 비슷하게 `web.config`에 rewrite rule을 추가합니다.
 
   <code-example format='.' language="xml">
     &lt;system.webServer&gt;
@@ -489,7 +481,7 @@ modified to serve `index.html`:
 [directly configure](https://github.com/isaacs/github/issues/408)
 the GitHub Pages server, but you can add a 404 page.
 Copy `index.html` into `404.html`.
-It will still be served as the 404 response, but the browser will process that page and load the app properly.
+It will still be served as the 404 response, but the browser will process that page and load the application properly.
 It's also a good idea to
 [serve from `docs/` on master](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch)
 and to
@@ -538,7 +530,7 @@ Browsers forbid such requests unless the server permits them explicitly.
 There isn't anything the client application can do about these errors.
 The server must be configured to accept the application's requests.
 Read about how to enable CORS for specific servers at
-<a href="http://enable-cors.org/server.html" title="Enabling CORS server">enable-cors.org</a>.
+<a href="https://enable-cors.org/server.html" title="Enabling CORS server">enable-cors.org</a>.
 -->
 Angular 애플리케이션을 개발하다보면 애플리케이션이 호스팅되는 서버와 다른 서버로 요청을 보낼 때 <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" title="Cross-origin resource sharing">
 <i>교차 출처 리소스 공유(cross-origin resource sharing, CORS)</i></a> 에러가 발생하는 일이 종종 있습니다.
@@ -546,9 +538,8 @@ Angular 애플리케이션을 개발하다보면 애플리케이션이 호스팅
 
 이 에러가 발생할 때 클라이언트 애플리케이션 쪽에서 처리할 수 있는 것은 아무것도 없습니다.
 클라이언트 애플리케이션이 요청하는 것을 서버가 처리할 수 있도록 서버의 설정을 변경해야 합니다.
-서버 종류에 따라 CORS를 허용하는 방법은 <a href="http://enable-cors.org/server.html" title="Enabling CORS server">enable-cors.org</a> 문서를 참고하세요.
+서버 종류에 따라 CORS를 허용하는 방법은 <a href="https://enable-cors.org/server.html" title="Enabling CORS server">enable-cors.org</a> 문서를 참고하세요.
 
-<hr>
 
 {@a optimize}
 
@@ -558,7 +549,7 @@ Angular 애플리케이션을 개발하다보면 애플리케이션이 호스팅
 ## 운영 배포 최적화
 
 <!--
-The `--prod` _meta-flag_ engages the following build optimization features.
+The `production` configuration engages the following build optimization features.
 
 * [Ahead-of-Time (AOT) Compilation](guide/aot-compiler): pre-compiles Angular component templates.
 * [Production mode](#enable-prod-mode): deploys the production environment which enables _production mode_.
@@ -569,7 +560,7 @@ The `--prod` _meta-flag_ engages the following build optimization features.
 
 See [`ng build`](cli/build) for more about CLI build options and what they do.
 -->
-`--prod` _메타 플래그_ 를 사용하면 Angular 애플리케이션을 운영용으로 최적화해서 빌드할 수 있습니다.
+`production` 환경설정를 사용하면 Angular 애플리케이션을 운영용으로 최적화해서 빌드할 수 있습니다.
 
 * [AOT 컴파일러](guide/aot-compiler) 사용: Angular 컴포넌트의 템플릿을 미리 컴파일합니다.
 * [운영 모드](#enable-prod-mode) 활성화: 애플리케이션이 동작하는 환경을 _운영 모드_ 로 변경합니다.
@@ -589,7 +580,7 @@ See [`ng build`](cli/build) for more about CLI build options and what they do.
 ### 운영 모드 활성화하기
 
 <!--
-In addition to build optimizations, Angular also has a runtime production mode. Angular apps run in development mode by default, as you can see by the following message on the browser console:
+In addition to build optimizations, Angular also has a runtime production mode. Angular applications run in development mode by default, as you can see by the following message on the browser console:
 
 <code-example format="nocode">
 
@@ -597,9 +588,10 @@ In addition to build optimizations, Angular also has a runtime production mode. 
 
 </code-example>
 
-Switching to _production mode_ makes it run faster by disabling development specific checks such as the dual change detection cycles.
-
-When you enable production builds via `--prod` command line flag, the runtime production mode is enabled as well.
+_Production mode_ improves application performance by disabling development-only safety
+checks and debugging utilities, such as the expression-changed-after-checked detection.
+Building your application with the production configuration automatically enables Angular's
+runtime production mode.
 -->
 빌드 최적화와 함께 Angular에도 운영 모드가 존재합니다.
 Angular 애플리케이션은 기본적으로 개발모드로 동작하며, 이 모드에서는 브라우저 콘솔에 다음과 같은 메시지가 출력됩니다:
@@ -611,8 +603,7 @@ Angular 애플리케이션은 기본적으로 개발모드로 동작하며, 이 
 </code-example>
 
 애플리케이션이 동작하는 환경을 _운영 모드_ 로 변경하면 개발 모드에서 동작하는 이중 변화 감지 로직이 생략되기 때문에 애플리케이션 실행속도가 조금 더 빨라집니다.
-
-Angular 애플리케이션을 빌드할 때 `--prod` 플래그를 사용하면 Angular 실행 환경이 자동으로 운영 모드로 변경됩니다.
+애플리케이션을 운영 환경으로 빌드하면 Angular의 런타임 운영모드도 자동으로 활성화됩니다.
 
 
 {@a lazy-loading}
@@ -624,7 +615,7 @@ Angular 애플리케이션을 빌드할 때 `--prod` 플래그를 사용하면 A
 
 <!--
 You can dramatically reduce launch time by only loading the application modules that
-absolutely must be present when the app starts.
+absolutely must be present when the application starts.
 
 Configure the Angular Router to defer loading of all other modules (and their associated code), either by
 [waiting until the app has launched](guide/router-tutorial-toh#preloading  "Preloading")
@@ -636,7 +627,7 @@ them on demand.
 <header>Don't eagerly import something from a lazy-loaded module</header>
 
 If you mean to lazy-load a module, be careful not to import it
-in a file that's eagerly loaded when the app starts (such as the root `AppModule`).
+in a file that's eagerly loaded when the application starts (such as the root `AppModule`).
 If you do that, the module will be loaded immediately.
 
 The bundling configuration must take lazy loading into consideration.
@@ -683,8 +674,8 @@ Angular CLI는 [Angular AoT Webpack 플러그인](https://github.com/angular/ang
 You can make better decisions about what to optimize and how when you have a clear and accurate understanding of
 what's making the application slow.
 The cause may not be what you think it is.
-You can waste a lot of time and money optimizing something that has no tangible benefit or even makes the app slower.
-You should measure the app's actual behavior when running in the environments that are important to you.
+You can waste a lot of time and money optimizing something that has no tangible benefit or even makes the application slower.
+You should measure the application's actual behavior when running in the environments that are important to you.
 
 The
 <a href="https://developers.google.com/web/tools/chrome-devtools/network-performance/understanding-resource-timing" title="Chrome DevTools Network Performance">
@@ -716,23 +707,23 @@ tool is a great way to inspect the generated JavaScript bundles after a producti
 
 Install `source-map-explorer`:
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
   npm install source-map-explorer --save-dev
 
 </code-example>
 
-Build your app for production _including the source maps_
+Build your application for production _including the source maps_
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
-  ng build --prod --source-map
+  ng build --source-map
 
 </code-example>
 
 List the generated bundles in the `dist/project-name/` folder.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
   ls dist/project-name/*.js
 
@@ -741,7 +732,7 @@ List the generated bundles in the `dist/project-name/` folder.
 Run the explorer to generate a graphical representation of one of the bundles.
 The following example displays the graph for the _main_ bundle.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
   node_modules/.bin/source-map-explorer dist/project-name/main*
 
@@ -750,7 +741,7 @@ The following example displays the graph for the _main_ bundle.
 The `source-map-explorer` analyzes the source map generated with the bundle and draws a map of all dependencies,
 showing exactly which classes are included in the bundle.
 
-Here's the output for the _main_ bundle of an example app called `cli-quickstart`.
+Here's the output for the _main_ bundle of an example application called `cli-quickstart`.
 
 <div class="lightbox">
   <img src="generated/images/guide/deployment/quickstart-sourcemap-explorer.png" alt="quickstart sourcemap explorer">
@@ -760,7 +751,7 @@ Here's the output for the _main_ bundle of an example app called `cli-quickstart
 
 `source-map-explorer`는 다음 명령을 실행해서 설치합니다:
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
   npm install source-map-explorer --save-dev
 
@@ -768,7 +759,7 @@ Here's the output for the _main_ bundle of an example app called `cli-quickstart
 
 그리고 애플리케이션을 운영용으로 빌드할 때 _소스 맵_ 을 함께 생성하도록 다음과 같이 실행합니다.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
   ng build --prod --source-map
 
@@ -776,7 +767,7 @@ Here's the output for the _main_ bundle of an example app called `cli-quickstart
 
 빌드가 끝나면 `dist/` 폴더의 내용을 확인해 봅시다.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
   ls dist/*.bundle.js
 
@@ -785,7 +776,7 @@ Here's the output for the _main_ bundle of an example app called `cli-quickstart
 이제 `source-map-explorer`로 번들링 파일을 로드하면 번들링 파일의 구조를 시각화해볼 수 있습니다.
 예를 들어 _main_ 파일이 번들링된 결과물을 분석하려면 다음과 같이 실행합니다.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
   node_modules/.bin/source-map-explorer dist/main.*.bundle.js
 
@@ -798,6 +789,7 @@ Here's the output for the _main_ bundle of an example app called `cli-quickstart
 <div class="lightbox">
   <img src="generated/images/guide/deployment/quickstart-sourcemap-explorer.png" alt="quickstart sourcemap explorer">
 </div>
+
 
 {@a base-tag}
 
@@ -820,13 +812,13 @@ See also the [*APP_BASE_HREF*](api/common/APP_BASE_HREF "API: APP_BASE_HREF") al
 </div>
 
 In development, you typically start the server in the folder that holds `index.html`.
-That's the root folder and you'd add `<base href="/">` near the top of `index.html` because `/` is the root of the app.
+That's the root folder and you'd add `<base href="/">` near the top of `index.html` because `/` is the root of the application.
 
-But on the shared or production server, you might serve the app from a subfolder.
-For example, when the URL to load the app is something like `http://www.mysite.com/my/app/`,
+But on the shared or production server, you might serve the application from a subfolder.
+For example, when the URL to load the application is something like `http://www.mysite.com/my/app/`,
 the subfolder is `my/app/` and you should add `<base href="/my/app/">` to the server version of the `index.html`.
 
-When the `base` tag is mis-configured, the app fails to load and the browser console displays `404 - Not Found` errors
+When the `base` tag is mis-configured, the application fails to load and the browser console displays `404 - Not Found` errors
 for the missing files. Look at where it _tried_ to find those files and adjust the base tag appropriately.
 -->
 이미지 파일이나 스크립트 파일, 스타일 시트는 상대 URL로 참조하는데, 상대 URL이 시작하는 위치는 HTML 문서에 [_&lt;base href="..."/&gt;_](/guide/router)로 지정합니다.
@@ -847,6 +839,23 @@ for the missing files. Look at where it _tried_ to find those files and adjust t
 
 `base` 태그가 잘못된 값으로 설정되면 애플리케이션 파일을 찾을 수 없기 때문에 애플리케이션을 실행할 수 없어서 브라우저 콘솔에 `404 - Not Found` 에러가 출력됩니다.
 이 에러가 발생하면 `base` 태그값을 바꿔보면서 정확한 위치를 지정해야 합니다.
+
+
+{@a deploy-url}
+
+## The `deploy` url
+
+A command line option used to specify the base path for resolving relative URLs for assets such as images, scripts, and style sheets at _compile_ time. For example: `ng build --deploy-url /my/assets`.
+
+The effects of defining a `deploy url` and `base href` can overlap.
+* Both can be used for initial scripts, stylesheets, lazy scripts, and css resources.
+
+However, defining a `base href` has a few unique effects.
+* Defining a `base href` can be used for locating relative template (HTML) assets, and relative fetch/XMLHttpRequests.
+
+The `base href` can also be used to define the Angular router's default base (see [APP_BASE_HREF](https://angular.io/api/common/APP_BASE_HREF)). Users with more complicated setups may need to manually configure the `APP_BASE_HREF` token within the application. (e.g., application routing base is / but assets/scripts/etc. are at /assets/).
+
+Unlike the `base href` which can be defined in a single place, the `deploy url` needs to be hard-coded into an application at build time. This means specifying a `deploy url` will decrease build speed, but this is the unfortunate cost of using an option that embeds itself throughout an application. That is why a `base href` is generally the better option.
 
 
 {@a differential-loading}
@@ -1166,17 +1175,15 @@ Browserlist 환경설정을 활용하면 ES2015 미지원 브라우저를 무시
 ## 로컬 환경에서 오래된 브라우저 테스트하기
 
 <!--
-In Angular CLI version 8 and higher, differential loading is enabled by default for the `ng build` command.
+Differential loading is not enabled by default for application projects that were generated with Angular CLI 10 and above.
 The `ng serve`, `ng test`, and `ng e2e` commands, however, generate a single ES2015 build which cannot run in older browsers that don't support the modules, such as IE 11.
 
-If you want to run ES5 code during development, you could disable differential loading completely.
 To maintain the benefits of differential loading, however, a better option is to define multiple configurations for `ng serve`, `ng e2e`, and `ng test`.
 -->
-Angular CLI 8버전부터는 증분 로딩이 활성화된 것을 기본값으로 `ng build` 명령을 실행합니다.
+Angular CLI 10 버전부터는 증분 로딩이 비활성화된 채로 기본 애플리케이션 프로젝트가 생성됩니다.
 하지만 `ng serve`, `ng test`, `ng e2e` 명령을 실행할 때는 ES2015 버전으로만 빌드 결과물이 생성되기 때문에 모듈을 지원하지 않는 IE 11과 같은 오래된 브라우저는 이 코드를 실행할 수 없습니다.
 
-이 환경에서 ES5 코드를 사용하려면 증분 로딩을 비활성화해야 합니다.
-이 경우에는 증분 로딩을 그대로 활용하기 위해 `ng serve`, `ng e2e`, `ng test`용 환경설정을 추가하는 것이 더 좋습니다.
+이 경우에는 증분 로딩을 그대로 활용하기 위해 `ng serve`, `ng e2e`, `ng test`용 환경설정을 추가하는 것이 좋습니다.
 
 
 {@a differential-serve}
@@ -1242,14 +1249,14 @@ In `angular.json` add two new configuration sections under the `build` and `serv
 </code-example>
 
 <!--
-You can then run the `ng serve` command with this configuration. Make sure to replace `<app-name>` (in `"<app-name>:build:es5"`) with the actual name of the app, as it appears under `projects` in `angular.json`. For example, if your app name is `myAngularApp` the config will become `"browserTarget": "myAngularApp:build:es5"`.
+You can then run the `ng serve` command with this configuration. Make sure to replace `<app-name>` (in `"<app-name>:build:es5"`) with the actual name of the app, as it appears under `projects` in `angular.json`. For example, if your application name is `myAngularApp` the configuration will become `"browserTarget": "myAngularApp:build:es5"`.
 -->
 이제 `ng serve` 명령을 실행하면 새로 추가한 환경으로 애플리케이션을 빌드합니다.
 위 예제 코드에서 `"<app-name>:build:es5"`의 `<app-name>`을 실제 앱에 맞게 수정하는 것을 잊지 마세요.
 앱 이름이 `myAngularApp`이라면 새로 추가한 설정은 `"browserTarget": "myAngularApp:build:es5"`가 되어야 합니다.
 
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
 ng serve --configuration es5
 
@@ -1300,52 +1307,8 @@ You can then run the tests with this configuration
 -->
 새로 추가한 설정은 다음 명령으로 실행할 수 있습니다.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
 
 ng test --configuration es5
-
-</code-example>
-
-
-<!--
-### Configuring the e2e command
--->
-### e2e 환경설정
-
-<!--
-Create an [ES5 serve configuration](guide/deployment#configuring-serve-for-es5) as explained above, and configuration an ES5 configuration for the E2E target.
--->
-같은 방식으로 [ES5 serve 환경설정 파일](guide/deployment#configuring-serve-for-es5)을 만들고 프로젝트 환경설정에 E2E 빌드 대상을 다음과 같이 추가합니다.
-
-<code-example language="json">
-
-"e2e": {
-  "builder": "@angular-devkit/build-angular:protractor",
-  "options": {
-      ...
-  },
-  "configurations": {
-	  "production": {
-		  ...
-	  },
-    "es5": {
-      "devServerTarget": "&lt;app-name&gt;:serve:es5"
-    }
-  }
-},
-
-</code-example>
-
-<!--
-You can then run the `ng e2e` command with this configuration. Make sure to replace `<app-name>` (in `"<app-name>:serve:es5"`) with the actual name of the app, as it appears under `projects` in `angular.json`. For example, if your app name is `myAngularApp` the config will become `"devServerTarget": "myAngularApp:serve:es5"`.
--->
-이 경우에도 `"<app-name>:serve:es5"` 코드의 `<app-name>` 부분은 실제 앱에 맞게 수정해야 합니다.
-앱 이름이 `myAngularApp`이라면 새로 추가한 설정은 `"devServerTarget": "myAngularApp:serve:es5"`가 되어야 합니다.
-
-이제 다음과 같이 실행하면 ES5 문법으로 빌드한 결과물을 테스트할 수 있습니다.
-
-<code-example language="none" class="code-shell">
-
-ng e2e --configuration es5
 
 </code-example>

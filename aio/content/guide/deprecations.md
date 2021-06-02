@@ -7,14 +7,16 @@
 Angular strives to balance innovation and stability.
 Sometimes, APIs and features become obsolete and need to be removed or replaced so that Angular can stay current with new best practices, changing dependencies, or changes in the (web) platform itself.
 
-To make these transitions as easy as possible, we deprecate APIs and features for a period of time before removing them. This gives you time to update your apps to the latest APIs and best practices.
+To make these transitions as easy as possible, we deprecate APIs and features for a period of time before removing them. This gives you time to update your applications to the latest APIs and best practices.
 
 This guide contains a summary of all Angular APIs and features that are currently deprecated.
 -->
 Angular는 혁신과 안정성 사이에서 균형을 추구합니다.
-그래서 특정 API나 기능이 더이상 필요없다면 이 기능을 제거하거나 다른 기능으로 대체하면서 누구나 Angular를 최선의 방식으로 활용할 수 있도록 관리하고 있습니다. 가끔은 의존성 패키지가 변경되거나 플랫폼과 관련된 기능이 변경되기도 합니다.
+그래서 특정 API나 기능이 더이상 필요없다면 이 기능을 제거하거나 다른 기능으로 대체하면서 누구나 Angular를 최선의 방식으로 활용할 수 있도록 관리하고 있습니다.
+가끔은 의존성 패키지가 변경되거나 플랫폼과 관련된 기능이 변경되기도 합니다.
 
-이런 변화를 자연스럽게 도입할 수 있도록 지원이 중단되는 기능이나 API는 Angular에서 바로 제거되지 않고 약간 시간 여유를 둔 후에 제거됩니다. 지원이 중단되는 것으로 결정된 기능이 있다면 이 기간을 이용해서 더 나은 방식으로 변경하는 것이 좋습니다.
+이런 변화를 자연스럽게 도입할 수 있도록 지원이 중단되는 기능이나 API는 Angular에서 바로 제거되지 않고 약간 시간 여유를 둔 후에 제거됩니다.
+지원이 중단되는 것으로 결정된 기능이 있다면 이 기간을 이용해서 더 나은 방식으로 변경하는 것이 좋습니다.
 
 이 문서는 Angular가 제공하던 기능이나 API 중에서 지금은 지원이 중단된 기능에 대해 안내합니다.
 
@@ -25,11 +27,13 @@ Features and APIs that were deprecated in v6 or earlier are candidates for remov
 
 For step-by-step instructions on how to update to the latest Angular release, use the interactive update guide at [update.angular.io](https://update.angular.io).
 -->
-Angular 6 버전까지 지원이 중단되기로 계획되었던 기능들은 Angular 9 버전부터 완전히 제거됩니다. 자세한 내용은 [Angular의 릴리즈 정책](guide/releases#deprecation-practices "Angular의 릴리즈 정책: 지원이 중단되는 기능") 문서를 참고하세요.
+Angular 6 버전까지 지원이 중단되기로 계획되었던 기능들은 Angular 9 버전부터 완전히 제거됩니다.
+자세한 내용은 [Angular의 릴리즈 정책](guide/releases#deprecation-practices "Angular의 릴리즈 정책: 지원이 중단되는 기능") 문서를 참고하세요.
 
 그리고 지원이 중단되는 기능을 단계별로 수정하는 방법에 대해 알아보려면 [update.angular.io](https://update.angular.io) 가이드를 참고하세요.
 
 </div>
+
 
 {@a index}
 <!--
@@ -38,9 +42,10 @@ Angular 6 버전까지 지원이 중단되기로 계획되었던 기능들은 An
 ## 목차
 
 <!--
-To help you future-proof your apps, the following table lists all deprecated APIs and features, organized by the release in which they are candidates for removal. Each item is linked to the section later in this guide that describes the deprecation reason and replacement options.
+To help you future-proof your projects, the following table lists all deprecated APIs and features, organized by the release in which they are candidates for removal. Each item is linked to the section later in this guide that describes the deprecation reason and replacement options.
 -->
-이 문서에서 설명하는 기능이나 API는 모두 지원이 중단됩니다. 각각의 링크를 클릭해서 해당 기능이 왜 없어지는지, 어떻게 변경되는지 확인해 보세요.
+이 문서에서 설명하는 기능이나 API는 모두 지원이 중단됩니다.
+각각의 링크를 클릭해서 해당 기능이 왜 없어지는지, 어떻게 변경되는지 확인해 보세요.
 
 <!--
 deprecation -> removal cheat sheet
@@ -51,61 +56,65 @@ v7 - v10
 v8 - v11
 v9 - v12
 v10 - v13
+v11 - v14
+v12 - v15
 -->
 
 <!--
 | Area                          | API or Feature                                                                | May be removed in |
 | ----------------------------- | ---------------------------------------------------------------------------   | ----------------- |
-| `@angular/bazel`              | [`Bazel builder and schematics`](#bazelbuilder)                               | v10 |
-| `@angular/common`             | [`ReflectiveInjector`](#reflectiveinjector)                                   | <!-v8-> v11 |
-| `@angular/common`             | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | <!-v9-> v11 |
-| `@angular/core`               | [`DefaultIterableDiffer`](#core)                                              | <!-v7-> v11 |
-| `@angular/core`               | [`ReflectiveKey`](#core)                                                      | <!-v8-> v11 |
-| `@angular/core`               | [`RenderComponentType`](#core)                                                | <!-v7-> v11 |
-| `@angular/core`               | [`WrappedValue`](#core)                                                       | <!-v10-> v12 |
-| `@angular/forms`              | [`ngModel` with reactive forms](#ngmodel-reactive)                            | <!-v6-> v11 |
-| `@angular/upgrade`            | [`@angular/upgrade`](#upgrade)                                                | <!-v8-> v11 |
-| `@angular/upgrade`            | [`getAngularLib`](#upgrade-static)                                            | <!-v8-> v11 |
-| `@angular/upgrade`            | [`setAngularLib`](#upgrade-static)                                            | <!-v8-> v11 |
-| template syntax               | [`<template`>](#template-tag)                                                 | <!-v7-> v11 |
-| polyfills                     | [reflect-metadata](#reflect-metadata)                                         | <!-v8-> v11 |
-| npm package format            | [`esm5` and `fesm5` entry-points in @angular/* npm packages](guide/deprecations#esm5-fesm5) | <!- v9 -> v11 |
-| `@angular/core`               | [`defineInjectable`](#core)                                                   | <!-v8-> v11 |
-| `@angular/core`               | [`entryComponents`](api/core/NgModule#entryComponents)                        | <!-v9-> v11 |
-| `@angular/core`               | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)       | <!-v9-> v11 |
-| `@angular/router`             | [`loadChildren` string syntax](#loadChildren)                                 | <!-v9-> v11 |
-| `@angular/core/testing`       | [`TestBed.get`](#testing)                                                     | <!-v9-> v12 |
-| `@angular/core/testing`       | [`async`](#testing)                                                     | <!-v9-> v12 |
+| `@angular/common`             | [`ReflectiveInjector`](#reflectiveinjector)                                   | <!--v8--> v11 |
+| `@angular/common`             | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | <!--v9--> v11 |
+| `@angular/common/http`        | [`XhrFactory`](api/common/http/XhrFactory)                                    | <!--v12--> v15 |
+| `@angular/core`               | [`DefaultIterableDiffer`](#core)                                              | <!--v7--> v11 |
+| `@angular/core`               | [`ReflectiveKey`](#core)                                                      | <!--v8--> v11 |
+| `@angular/core`               | [`RenderComponentType`](#core)                                                | <!--v7--> v11 |
+| `@angular/core`               | [`WrappedValue`](#core)                                                       | <!--v10--> v12 |
+| `@angular/forms`              | [`ngModel` with reactive forms](#ngmodel-reactive)                            | <!--v6--> v11 |
+| `@angular/upgrade`            | [`@angular/upgrade`](#upgrade)                                                | <!--v8--> v11 |
+| `@angular/upgrade`            | [`getAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
+| `@angular/upgrade`            | [`setAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
+| template syntax               | [`<template`>](#template-tag)                                                 | <!--v7--> v11 |
+| polyfills                     | [reflect-metadata](#reflect-metadata)                                         | <!--v8--> v11 |
+| npm package format            | [`esm5` and `fesm5` entry-points in @angular/* npm packages](guide/deprecations#esm5-fesm5) | <!-- v9 --> v11 |
+| `@angular/core`               | [`defineInjectable`](#core)                                                   | <!--v8--> v11 |
+| `@angular/core`               | [`entryComponents`](api/core/NgModule#entryComponents)                        | <!--v9--> v11 |
+| `@angular/core`               | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)       | <!--v9--> v11 |
+| `@angular/router`             | [`loadChildren` string syntax](#loadChildren)                                 | <!--v9--> v11 |
+| `@angular/core/testing`       | [`TestBed.get`](#testing)                                                     | <!--v9--> v12 |
+| `@angular/core/testing`       | [`async`](#testing)                                                           | <!--v9--> v12 |
+| `@angular/forms`              | [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group)   | <!--v11--> v14 |
 | `@angular/router`             | [`ActivatedRoute` params and `queryParams` properties](#activatedroute-props) | unspecified |
-| template syntax               | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)            | <!-v7-> unspecified |
+| template syntax               | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)            | <!--v7--> unspecified |
 
 For information about Angular CDK and Angular Material deprecations, see the [changelog](https://github.com/angular/components/blob/master/CHANGELOG.md).
 -->
 
 | 영역                   | API, 기능                                                                | 지원 중단 |
 | ---------------------- | ---------------------------------------------------------------------------   | ----------------- |
-| `@angular/bazel`       | [`Bazel 빌더, 스키매틱`](#bazelbuilder)                               | v10 |
-| `@angular/common`      | [`ReflectiveInjector`](#reflectiveinjector)                                   | <!--v8--> v11 |
-| `@angular/common`      | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | <!--v9--> v11 |
-| `@angular/core`        | [`DefaultIterableDiffer`](#core)                                              | <!--v7--> v11 |
-| `@angular/core`        | [`ReflectiveKey`](#core)                                                      | <!--v8--> v11 |
-| `@angular/core`        | [`RenderComponentType`](#core)                                                | <!--v7--> v11 |
-| `@angular/core`        | [`WrappedValue`](#core)                                                       | <!--v10--> v12 |
-| `@angular/forms`       | [반응형 폼이 제공하는 `ngModel`](#ngmodel-reactive)                            | <!--v6--> v11 |
-| `@angular/upgrade`     | [`@angular/upgrade`](#upgrade)                                                | <!--v8--> v11 |
-| `@angular/upgrade`     | [`getAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
-| `@angular/upgrade`     | [`setAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
-| 템플릿 문법             | [`<template`>](#template-tag)                                                 | <!--v7--> v11 |
-| 폴리필                  | [reflect-metadata](#reflect-metadata)                                         | <!--v8--> v11 |
-| npm 패키지 형식          | [@angular/* npm 패키지가 제공하는 `esm5`, `fesm5` 진입점](guide/deprecations#esm5-fesm5) | <!-- v9 --> v11 |
-| `@angular/core`         | [`defineInjectable`](#core)                                                   | <!--v8--> v11 |
-| `@angular/core`         | [`entryComponents`](api/core/NgModule#entryComponents)                        | <!--v9--> v11 |
-| `@angular/core`         | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)       | <!--v9--> v11 |
-| `@angular/router`       | [문자열로 `loadChildren`을 사용하는 문법](#loadChildren)                                 | <!--v9--> v11 |
-| `@angular/core/testing` | [`TestBed.get`](#testing)                                                     | <!--v9--> v12 |
-| `@angular/core/testing` | [`async`](#testing)                                                     | <!--v9--> v12 |
-| `@angular/router`       | [`ActivatedRoute` 인자, `queryParams` 프로퍼티](#activatedroute-props) | 미확정 |
-| 템플릿 문법              | [`/deep/`, `>>>`, `::ng-deep`](#deep-component-style-selector)            | <!--v7--> 미확정 |
+| `@angular/common`             | [`ReflectiveInjector`](#reflectiveinjector)                                   | <!--v8--> v11 |
+| `@angular/common`             | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | <!--v9--> v11 |
+| `@angular/common/http`        | [`XhrFactory`](api/common/http/XhrFactory)                                    | <!--v12--> v15 |
+| `@angular/core`               | [`DefaultIterableDiffer`](#core)                                              | <!--v7--> v11 |
+| `@angular/core`               | [`ReflectiveKey`](#core)                                                      | <!--v8--> v11 |
+| `@angular/core`               | [`RenderComponentType`](#core)                                                | <!--v7--> v11 |
+| `@angular/core`               | [`WrappedValue`](#core)                                                       | <!--v10--> v12 |
+| `@angular/forms`              | [반응형 폼이 제공하는 `ngModel`](#ngmodel-reactive)                            | <!--v6--> v11 |
+| `@angular/upgrade`            | [`@angular/upgrade`](#upgrade)                                                | <!--v8--> v11 |
+| `@angular/upgrade`            | [`getAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
+| `@angular/upgrade`            | [`setAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
+| 템플릿 문법               | [`<template`>](#template-tag)                                                 | <!--v7--> v11 |
+| 폴리필                     | [reflect-metadata](#reflect-metadata)                                         | <!--v8--> v11 |
+| npm 패키지 형식            | [@angular/* npm 패키지가 제공하는 `esm5`, `fesm5` 진입점](guide/deprecations#esm5-fesm5) | <!-- v9 --> v11 |
+| `@angular/core`               | [`defineInjectable`](#core)                                                   | <!--v8--> v11 |
+| `@angular/core`               | [`entryComponents`](api/core/NgModule#entryComponents)                        | <!--v9--> v11 |
+| `@angular/core`               | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)       | <!--v9--> v11 |
+| `@angular/router`             | [`loadChildren` string syntax](#loadChildren)                                 | <!--v9--> v11 |
+| `@angular/core/testing`       | [`TestBed.get`](#testing)                                                     | <!--v9--> v12 |
+| `@angular/core/testing`       | [`async`](#testing)                                                           | <!--v9--> v12 |
+| `@angular/forms`              | [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group)   | <!--v11--> v14 |
+| `@angular/router`             | [`ActivatedRoute` 인자, `queryParams` 프로퍼티](#activatedroute-props) | 미확정 |
+| 템플릿 문법               | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)            | <!--v7--> 미확정 |
 
 Angular CDK와 Angular Material에서 지원이 중단되는 기능을 확인하려면 [이 체인지 로그](https://github.com/angular/components/blob/master/CHANGELOG.md)를 확인하세요.
 
@@ -125,9 +134,10 @@ This section contains a complete list all of the currently-deprecated APIs, with
 <div class="alert is-helpful">
 
 <!--
-Tip: In the [API reference section](api) of this doc site, deprecated APIs are indicated by ~~strikethrough.~~ You can filter the API list by [**Status: deprecated**](api?status=deprecated).
+Tip: In the [API reference section](api) of this site, deprecated APIs are indicated by ~~strikethrough.~~ You can filter the API list by [**Status: deprecated**](api?status=deprecated).
 -->
-팁: [API 스펙](api) 문서에서 지원이 중단된 API는 ~~취소선~~으로 표시됩니다. 그리고 해당 문서에서 지원이 중단된 기능만 보려면 [**Status: deprecated**](api?status=deprecated)를 선택하면 됩니다.
+팁: [API 스펙](api) 문서에서 지원이 중단된 API는 ~~취소선~~으로 표시됩니다.
+ 그리고 해당 문서에서 지원이 중단된 기능만 보려면 [**Status: deprecated**](api?status=deprecated)를 선택하면 됩니다.
 
 </div>
 
@@ -144,6 +154,14 @@ Tip: In the [API reference section](api) of this doc site, deprecated APIs are i
 | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | `{provide: DEFAULT_CURRENCY_CODE, useValue: 'USD'}` | v9                    | `LOCAL_ID`의 기본값은 `USD` 였지만 v11 부터는 제거됩니다. |
 
 
+{@a common-http}
+### @angular/common/http
+
+| API                                          | Replacement                          | Deprecation announced | Notes |
+| -------------------------------------------- | ------------------------------------ | --------------------- | ----- |
+| [`XhrFactory`](api/common/http/XhrFactory)   | `XhrFactory` in `@angular/common`    | v12                   | The `XhrFactory` has moved from `@angular/common/http` to `@angular/common`. |
+
+
 {@a core}
 ### @angular/core
 
@@ -151,24 +169,26 @@ Tip: In the [API reference section](api) of this doc site, deprecated APIs are i
 | API | Replacement | Deprecation announced | Notes |
 | --- | ----------- | --------------------- | ----- |
 | [`DefaultIterableDiffer`](api/core/DefaultIterableDiffer) | n/a | v4 | Not part of public API. |
-| [`ReflectiveInjector`](api/core/ReflectiveInjector) | [`Injector.create`](api/core/Injector#create)  | v5 | See [`ReflectiveInjector`](#reflectiveinjector) |
+| [`ReflectiveInjector`](api/core/ReflectiveInjector) | `{@link Injector#create Injector.create()}` | v5 | See [`ReflectiveInjector`](#reflectiveinjector) |
 | [`ReflectiveKey`](api/core/ReflectiveKey) | none | v5 | none |
 | [`defineInjectable`](api/core/defineInjectable) | `ɵɵdefineInjectable` | v8 | Used only in generated code. No source code should depend on this API. |
 | [`entryComponents`](api/core/NgModule#entryComponents) | none | v9 | See [`entryComponents`](#entryComponents) |
 | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS) | none | v9 | See [`ANALYZE_FOR_ENTRY_COMPONENTS`](#entryComponents) |
 | [`WrappedValue`](api/core/WrappedValue) | none | v10 | See [removing `WrappedValue`](#wrapped-value) |
 | [`async`](api/core/testing/async) | [`waitForAsync`](api/core/testing/waitForAsync) | v11 | The `async` function from `@angular/core/testing` has been renamed to `waitForAsync` in order to avoid confusion with the native JavaScript `async` syntax. The existing function is deprecated and will be removed in a future version. |
+[ `ViewChildren.emitDistinctChangesOnly` / `ContentChildren.emitDistinctChangesOnly` | none (was part of [issue #40091](https://github.com/angular/angular/issues/40091)) ] | This is a temporary flag introduced as part of bugfix of [issue #40091](https://github.com/angular/angular/issues/40091) and will be removed. |
 -->
 | API | 대체 방식 | 지원 중단 발표 | 참고 |
 | --- | ----------- | --------------------- | ----- |
 | [`DefaultIterableDiffer`](api/core/DefaultIterableDiffer) | - | v4 | public API에서 제거됩니다. |
-| [`ReflectiveInjector`](api/core/ReflectiveInjector) | [`Injector.create`](api/core/Injector#create)  | v5 | [`ReflectiveInjector`](#reflectiveinjector) 참고 |
+| [`ReflectiveInjector`](api/core/ReflectiveInjector) |  `{@link Injector#create Injector.create()}` | v5 | [`ReflectiveInjector`](#reflectiveinjector) 참고 |
 | [`ReflectiveKey`](api/core/ReflectiveKey) | - | v5 | - |
 | [`defineInjectable`](api/core/defineInjectable) | `ɵɵdefineInjectable` | v8 | 자동 생성된 코드에만 사용됩니다. 실제로는 사용되지 않습니다. |
 | [`entryComponents`](api/core/NgModule#entryComponents) | - | v9 | [`entryComponents`](#entryComponents) 참고 |
 | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS) | - | v9 | [`ANALYZE_FOR_ENTRY_COMPONENTS`](#entryComponents) 참고 |
 | [`WrappedValue`](api/core/WrappedValue) | - | v10 | [removing `WrappedValue`](#wrapped-value) 참고 |
 | [`async`](api/core/testing/async) | [`waitForAsync`](api/core/testing/waitForAsync) | v11 | 표준 JavaScript `async` 와 혼동되는 것을 피하기 위해 `@angular/core/testing`이 제공하던 `async` 함수가 `waitForAsync`로 변경되었습니다. 기존에 있던 함수는 이후 버전에 제거될 예정입니다. |
+[ `ViewChildren.emitDistinctChangesOnly` / `ContentChildren.emitDistinctChangesOnly` | - ([이슈 #40091](https://github.com/angular/angular/issues/40091) 참고) ] | 이 플래그는 [이슈 #40091](https://github.com/angular/angular/issues/40091) 버그를 해결하기 위해 임시로 도입되었으며 이제 사용되지 않습니다. |
 
 
 {@a testing}
@@ -193,10 +213,12 @@ Tip: In the [API reference section](api) of this doc site, deprecated APIs are i
 | API | Replacement | Deprecation announced | Notes |
 | --- | ----------- | --------------------- | ----- |
 | [`ngModel` with reactive forms](#ngmodel-reactive) | [`FormControlDirective`](api/forms/FormControlDirective) | v6 | none |
+| [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group) | [`AbstractControlOptions` parameter value](api/forms/AbstractControlOptions) | v11 | none |
 -->
 | API | 대체 방식 | 지원 중단 발표 | 참고 |
 | --- | ----------- | --------------------- | ----- |
 | [`ngModel` with reactive forms](#ngmodel-reactive) | [`FormControlDirective`](api/forms/FormControlDirective) | v6 | - |
+| [`FormBuilder.group` 구형 옵션 인자](api/forms/FormBuilder#group) | [`AbstractControlOptions` 인자](api/forms/AbstractControlOptions) | v11 | - |
 
 
 {@a upgrade}
@@ -247,11 +269,11 @@ This section lists all of the currently-deprecated features, which includes temp
 
 <!--
 Bazel builder and schematics were introduced in Angular Labs to let users try out Bazel without having to manage Bazel version and BUILD files.
-This feature has been deprecated. For more information, please refer to the [migration doc](https://github.com/angular/angular/blob/master/packages/bazel/src/schematics/README.md).
+This feature has been deprecated. For more information, please refer to the [migration doc](https://github.com/angular/angular/blob/master/packages/bazel/docs/BAZEL_SCHEMATICS.md).
 -->
 Bazel 빌더와 스키매틱은 Bazel 버전과 BUILD 파일을 신경쓰지 않고 Bazel을 사용하기 위해 Angular Labs에 도입되었습니다.
 이 기능은 지원이 중단되었습니다.
-자세한 내용은 [마이그레이션 안내 문서](https://github.com/angular/angular/blob/master/packages/bazel/src/schematics/README.md)를 참고하세요.
+자세한 내용은 [마이그레이션 안내 문서](https://github.com/angular/angular/blob/master/packages/bazel/docs/BAZEL_SCHEMATICS.md)를 참고하세요.
 
 
 {@a wtf}
@@ -279,7 +301,9 @@ The shadow-dom-piercing descendant combinator is deprecated and support is being
 For more information, see [/deep/, >>>, and ::ng-deep](guide/component-styles#deprecated-deep--and-ng-deep "Component Styles guide, Deprecated deep and ngdeep")
  in the Component Styles guide.
 -->
-섀도우 DOM 안쪽으로 자식 엘리먼트를 선택하는 셀렉터는 [최신 브라우저에서 지원하지 않기 때문에 제거되었습니다](https://developers.google.com/web/updates/2017/10/remove-shadow-piercing). 이에 따라 Angular 3 버전에 존재하던 `/deep/`과 `>>>`, `::ng-deep`은 모두 Angular 4버전부터 지원이 중단되는 것으로 계획되었습니다. 다만, 지원이 중단되기 전까지 이 기능이 꼭 필요하다면 이 중에서는 `::ng-deep`을 사용하는 것을 권장합니다.
+섀도우 DOM 안쪽으로 자식 엘리먼트를 선택하는 셀렉터는 [최신 브라우저에서 지원하지 않기 때문에 제거되었습니다](https://developers.google.com/web/updates/2017/10/remove-shadow-piercing).
+이에 따라 Angular 3 버전에 존재하던 `/deep/`과 `>>>`, `::ng-deep`은 모두 Angular 4 버전부터 지원이 중단되는 것으로 계획되었습니다.
+다만, 지원이 중단되기 전까지 이 기능이 꼭 필요하다면 이 중에서는 `::ng-deep`을 사용하는 것을 권장합니다.
 
 더 자세한 내용은 컴포넌트 스타일 가이드 문서의 [/deep/, >>>, ::ng-deep](guide/component-styles#deprecated-deep--and-ng-deep "Component Styles guide, Deprecated deep and ngdeep") 섹션을 참고하세요.
 
@@ -359,7 +383,7 @@ this.value = 'some value';
 ```
 
 By default, when you use this pattern, you will see a deprecation warning once in dev
-mode. You can choose to silence this warning by providing a config for
+mode. You can choose to silence this warning by configuring
 `ReactiveFormsModule` at import time:
 
 ```ts
@@ -369,7 +393,7 @@ imports: [
 ```
 
 Alternatively, you can choose to surface a separate warning for each instance of this
-pattern with a config value of `"always"`. This may help to track down where in the code
+pattern with a configuration value of `"always"`. This may help to track down where in the code
 the pattern is being used as the code is being updated.
 -->
 반응형 폼이 제공하는 `ngModel` 입력 프로퍼티와 `ngModelChange` 이벤트가 Angular 6부터 지원이 중단되었으며, 이후 버전에는 완전히 제거될 예정입니다.
@@ -439,7 +463,8 @@ In v5, Angular replaced the `ReflectiveInjector` with the `StaticInjector`. The 
 
 Before:
 -->
-Angular 5버전부터 `ReflectiveInjector`가 `StaticInjector`로 변경되었습니다. 그 결과로 이제는 더이상 Reflect 폴리필이 사용되지 않기 때문에 Angular 애플리케이션의 빌드 결과물 크기도 더 작아졌습니다.
+Angular 5버전부터 `ReflectiveInjector`가 `StaticInjector`로 변경되었습니다.
+그 결과로 이제는 더이상 Reflect 폴리필이 사용되지 않기 때문에 Angular 애플리케이션의 빌드 결과물 크기도 더 작아졌습니다.
 
 이전에는 이렇게 사용했습니다:
 
@@ -477,7 +502,10 @@ const routes: Routes = [{
 }];
 ```
 -->
-Angular에 지연 라우팅이 처음 등장했을 때는 브라우저가 JavaScript 리소스를 추가로, 동적으로 로딩하는 기능이 없었습니다. 그래서 Angular는 이 기능을 구현하기 위해 독자적으로 `loadChildren: './lazy/lazy.module#LazyModule'`와 같은 문법을 만들어냈습니다. 하지만 이제는 ECMAScript의 동적 로딩 기능을 브라우저 계층에서 지원하는 경우가 많아졌습니다. 그래서 Angular도 이전 방식 대신 새로운 방식을 활용하기로 결정했습니다.
+Angular에 지연 라우팅이 처음 등장했을 때는 브라우저가 JavaScript 리소스를 추가로, 동적으로 로딩하는 기능이 없었습니다.
+그래서 Angular는 이 기능을 구현하기 위해 독자적으로 `loadChildren: './lazy/lazy.module#LazyModule'`와 같은 문법을 만들어냈습니다.
+하지만 이제는 ECMAScript의 동적 로딩 기능을 브라우저 계층에서 지원하는 경우가 많아졌습니다.
+그래서 Angular도 이전 방식 대신 새로운 방식을 활용하기로 결정했습니다.
 
 Angular 8 버전부터는 이전까지 사용하던 [`loadChildren`](api/router/LoadChildren) 문법을 사용하지 않고, `import()`를 사용합니다.
 
@@ -519,7 +547,8 @@ const routes: Routes = [{
 <!--
 **Version 8 update**: When you update to version 8, the [`ng update`](cli/update) command performs the transformation automatically. Prior to version 7, the `import()` syntax only works in JIT mode (with view engine).
 -->
-**8 버전으로 업데이트하기**: Angular를 8버전으로 올리기 위해 [`ng update`](cli/update) 명령을 실행하면 `loadChildren`으로 지연로딩하던 문법이 자동으로 수정됩니다. 7버전까지는 `import()` 문법이 JIT 모드에서만 동작했습니다.
+**8 버전으로 업데이트하기**: Angular를 8버전으로 올리기 위해 [`ng update`](cli/update) 명령을 실행하면 `loadChildren`으로 지연로딩하던 문법이 자동으로 수정됩니다.
+7 버전까지는 `import()` 문법이 JIT 모드에서만 동작했습니다.
 
 </div>
 
@@ -528,7 +557,9 @@ const routes: Routes = [{
 <!--
 **Declaration syntax**: It's important to follow the route declaration syntax `loadChildren: () => import('...').then(m => m.ModuleName)` to allow `ngc` to discover the lazy-loaded module and the associated `NgModule`. You can find the complete list of allowed syntax constructs [here](https://github.com/angular/angular-cli/blob/a491b09800b493fe01301387fa9a025f7c7d4808/packages/ngtools/webpack/src/transformers/import_factory.ts#L104-L113). These restrictions will be relaxed with the release of Ivy since it'll no longer use `NgFactories`.
 -->
-**선언형 문법(declaration syntax)**: `loadChildren` 프로퍼티를 사용해서 모듈을 지연로딩 하려면 `loadChildren: () => import('...').then(m => m.ModuleName)`와 같은 문법을 사용해야 `ngc`가 해당 모듈을 제대로 로드할 수 있습니다. 이 때 사용할 수 있는 문법에 대해서는 [이 문서](https://github.com/angular/angular-cli/blob/a491b09800b493fe01301387fa9a025f7c7d4808/packages/ngtools/webpack/src/transformers/import_factory.ts#L104-L113)를 참고하세요. 문법이 한정되어 있어서 개발자에게는 제약인 것처럼 느낄 수 있지만, 이 방식은 `NgFactories`를 사용하지 않기 때문에 Ivy를 도입하는 측면에서는 더 유리합니다.
+**선언형 문법(declaration syntax)**: `loadChildren` 프로퍼티를 사용해서 모듈을 지연로딩 하려면 `loadChildren: () => import('...').then(m => m.ModuleName)`와 같은 문법을 사용해야 `ngc`가 해당 모듈을 제대로 로드할 수 있습니다.
+이 때 사용할 수 있는 문법에 대해서는 [이 문서](https://github.com/angular/angular-cli/blob/a491b09800b493fe01301387fa9a025f7c7d4808/packages/ngtools/webpack/src/transformers/import_factory.ts#L104-L113)를 참고하세요.
+문법이 한정되어 있어서 개발자에게는 제약인 것처럼 느낄 수 있지만, 이 방식은 `NgFactories`를 사용하지 않기 때문에 Ivy를 도입하는 측면에서는 더 유리합니다.
 
 </div>
 
@@ -549,7 +580,7 @@ const routes: Routes = [{
 | `params` | `paramMap` |
 | `queryParams` | `queryParamMap` |
 
-For more information see the [Getting route information](guide/router#activated-route) section of the [Router guide](guide/router).
+For more information see the [Getting route information](guide/router-reference#activated-route) section of the [Router guide](guide/router).
 -->
 [ActivatedRoute](api/router/ActivatedRoute)에 있던 [프로퍼티](api/router/ActivatedRoute#properties) 중에서 자주 사용되지 않던 프로퍼티가 다른 타입의 프로퍼티로 대체되었습니다.
 
@@ -558,7 +589,7 @@ For more information see the [Getting route information](guide/router#activated-
 | `params` | `paramMap` |
 | `queryParams` | `queryParamMap` |
 
-자세한 내용은 [라우터](guide/router) 문서의 [라우팅 규칙에서 정보 얻기](guide/router#activated-route) 섹션을 참고하세요.
+자세한 내용은 [라우터](guide/router) 문서의 [라우팅 규칙에서 정보 얻기](guide/router-reference#activated-route) 섹션을 참고하세요.
 
 
 {@a reflect-metadata}
@@ -576,9 +607,13 @@ In a typical Angular project, the polyfill is not used in production builds, so 
 -->
 Angular 애플리케이션과 같이 JIT 컴파일러를 사용하는 애플리케이션은 [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API를 사용하기 위해 폴리필이 필요했습니다.
 
-이 폴리필은 Angular 8.0 버전부터 사용하지 않지만([#14473 참고](https://github.com/angular/angular-cli/pull/14473)), 서드파티 패키지에 의존성이 있었기 때문에 제거하지는 않았습니다. 이 버전에서는 단순하게 Angular가 직접 사용하는 reflect-metadata 관련 코드를 제거했을 뿐입니다. 당분간 이 패키지는 그대로 유지되겠지만 애플리케이션 개발자나 서드파티 라이브러리 개발자는 이 폴리필이 정말 필요한지 판단해보고 사용하지 않는 쪽으로 코드를 리팩토링하는 것이 나을 수 있습니다.
+이 폴리필은 Angular 8.0 버전부터 사용하지 않지만([#14473 참고](https://github.com/angular/angular-cli/pull/14473)), 서드파티 패키지에 의존성이 있었기 때문에 제거하지는 않았습니다.
+이 버전에서는 단순하게 Angular가 직접 사용하는 reflect-metadata 관련 코드를 제거했을 뿐입니다.
+당분간 이 패키지는 그대로 유지되겠지만 애플리케이션 개발자나 서드파티 라이브러리 개발자는 이 폴리필이 정말 필요한지 판단해보고 사용하지 않는 쪽으로 코드를 리팩토링하는 것이 나을 수 있습니다.
 
-Angular 프로젝트를 운영용으로 빌드하더라도 폴리필이 사용되는 경우는 그리 많지 않기 때문에 이 폴리필이 제거되더라도 애플리케이션을 운영하는 데에는 큰 영향이 없습니다. 하지만 빌드 단계를 조금 더 단순하게 줄이고 외부 의존성을 정리하기 위해서는 최종적으로 폴리필을 제거하는 것이 좋습니다.
+Angular 프로젝트를 운영용으로 빌드하더라도 폴리필이 사용되는 경우는 그리 많지 않기 때문에 이 폴리필이 제거되더라도 애플리케이션을 운영하는 데에는 큰 영향이 없습니다.
+하지만 빌드 단계를 조금 더 단순하게 줄이고 외부 의존성을 정리하기 위해서는 최종적으로 폴리필을 제거하는 것이 좋습니다.
+
 
 {@a static-query-resolution}
 <!--
@@ -633,9 +668,11 @@ should be written when the `valueChange` event fires.
 ```
 
 <!--
-However, in practice, Angular simply ignores two-way bindings to template variables. Starting in version 8, attempting to write to template variables is deprecated. In a future version, we will throw to indicate that the write is not supported.
+However, in practice, Angular ignores two-way bindings to template variables. Starting in version 8, attempting to write to template variables is deprecated. In a future version, we will throw to indicate that the write is not supported.
 -->
-하지만 Angular는 템플릿 변수가 양방향 바인딩으로 연결되되더라도 템플릿 변수에 값을 할당하는 로직은 처리하지 않습니다. 그리고 이제 Angular 8 버전부터는 템플릿 변수에 값을 할당하는 로직 자체를 작성할 수 없습니다. 이 코드는 다음과 같이 작성되어야 하며, 이 코드를 그대로 남겨둔다면 이후 버전에서는 에러가 발생할 수도 있습니다.
+하지만 Angular는 템플릿 변수가 양방향 바인딩으로 연결되되더라도 템플릿 변수에 값을 할당하는 로직은 처리하지 않습니다.
+그리고 이제 Angular 8 버전부터는 템플릿 변수에 값을 할당하는 로직 자체를 작성할 수 없습니다.
+이 코드는 다음과 같이 작성되어야 하며, 이 코드를 그대로 남겨둔다면 이후 버전에서는 에러가 발생할 수도 있습니다.
 
 ```html
 <option *ngFor="let optionName of options" [value]="optionName"></option>
@@ -656,7 +693,8 @@ These two properties have subtle differences, so switching to `textContent` unde
 -->
 서버 사이드 렌더링에 사용되는 [Domino](https://github.com/fgnass/domino)는 `innerText`를 지원하지 않기 때문에 Domino에 사용된 `innerText`를 자동으로 `textContent`로 변환하는 "domino 어댑터"를 platform-server에서 제공했습니다.
 
-그런데 두 프로퍼티의 동작이 약간 다르기 때문에 `innerText`를 사용한 개발자가 혼란스러울 수 있었습니다. 그래서 앞으로는 Domino에 `innerText`를 사용할 수 없고 명확하게 `textContext`만 사용해서 바인딩하도록 변경되었습니다.
+그런데 두 프로퍼티의 동작이 약간 다르기 때문에 `innerText`를 사용한 개발자가 혼란스러울 수 있었습니다.
+그래서 앞으로는 Domino에 `innerText`를 사용할 수 없고 명확하게 `textContext`만 사용해서 바인딩하도록 변경되었습니다.
 
 {@a wtf-apis}
 <!--
@@ -691,7 +729,7 @@ Ivy 엔진을 사용하면서 부터는 더이상 이런 코드가 필요하지 
 ### 제네릭 없는 `ModuleWithProviders`
 
 <!--
-Some Angular libraries, such as `@angular/router` and `@ngrx/store`, implement APIs that return a type called `ModuleWithProviders` (typically via a method named `forRoot()`).
+Some Angular libraries, such as `@angular/router` and `@ngrx/store`, implement APIs that return a type called `ModuleWithProviders` (typically using a method named `forRoot()`).
 This type represents an `NgModule` along with additional providers.
 Angular version 9 deprecates use of `ModuleWithProviders` without an explicitly generic type, where the generic type refers to the type of the `NgModule`.
 In a future version of Angular, the generic will no longer be optional.
@@ -799,6 +837,15 @@ If you rely on the behavior that the same object instance should cause change de
 - 강제로 갱신하려면 [`ChangeDetectorRef.detectChanges()`](api/core/ChangeDetectorRef#detectchanges)를 직접 실행하세요.
 
 
+### Internet Explorer 11
+Angular support for Microsoft's Internet Explorer 11 (IE11) is deprecated and will be removed in Angular v13.
+Ending IE11 support allows Angular to take advantage of web platform APIs present only in evergreen browsers, resulting in better APIs for developers and more capabilities for application users.
+An additional motivation behind this removal is the drop in global usage of IE11 to just ~1% (as of March 2021).
+For full rationale and discussion behind this deprecation see [RFC: Internet Explorer 11 support deprecation and removal](https://github.com/angular/angular/issues/41840).
+
+*Note: IE11 will be supported in Angular v12 LTS releases through November 2022.*
+
+
 {@a deprecated-cli-flags}
 
 <!--
@@ -820,7 +867,6 @@ This section contains a complete list all of the currently deprecated CLI flags.
 | `extractCss`                    | <!-v11-> v13     | No longer required to disable CSS extraction during development.               | 
 | `i18nFormat`                    | <!-v9-> v12      | Format is now automatically detected.                                           |
 | `i18nLocale`                    | <!-v9-> v12      | New [localization option](/guide/i18n#localize-config) in version 9 and later.  |
-| `lazyModules`                   | <!-v9-> v12      | Used with deprecated SystemJsNgModuleLoader.                                    |
 | `hmrWarning`                    | <!-v11-> v13     | No longer has an effect.                                                       |
 | `servePathDefaultWarning`       | <!-v11-> v13     | No longer has an effect.                                                       |
 -->
@@ -829,25 +875,8 @@ This section contains a complete list all of the currently deprecated CLI flags.
 | `extractCss`                    | <!--v11--> v13     | 개발 단계에서 CSS 추출을 막는 정책이 폐기되었습니다.               | 
 | `i18nFormat`                    | <!--v9--> v12      | 형식은 이제 자동으로 감지됩니다.                                           |
 | `i18nLocale`                    | <!--v9--> v12      | 9 버전부터 새로운 [지역화 옵션](/guide/i18n#localize-config)이 사용됩니다.  |
-| `lazyModules`                   | <!--v9--> v12      | 지원이 중단된 SystemJsNgModuleLoader와 사용하던 옵션입니다.                                    |
 | `hmrWarning`                    | <!--v11--> v13     | 이제는 아무 동작도 하지 않습니다.                                                       |
 | `servePathDefaultWarning`       | <!--v11--> v13     | 이제는 아무 동작도 하지 않습니다.                                                       |
-
-
-### @ngtools/webpack
-
-<!--
-| API/Option                      | May be removed in | Notes                                                                           |
-| ------------------------------- | ----------------- |-------------------------------------------------------------------------------- |
-| `discoverLazyRoutes`            | <!-v9-> v12     | Used with deprecated SystemJsNgModuleLoader.                                    |
-| `additionalLazyModules`         | <!-v9-> v12     | Used with deprecated SystemJsNgModuleLoader.                                    |
-| `additionalLazyModuleResources` | <!-v9-> v12     | Used with deprecated SystemJsNgModuleLoader.                                    |
--->
-| API/옵션                      | 지원 중단 | 참고                                                                           |
-| ------------------------------- | ----------------- |-------------------------------------------------------------------------------- |
-| `discoverLazyRoutes`            | <!--v9--> v12     | 지원이 중단된 SystemJsNgModuleLoader와 사용하던 옵션입니다.                                    |
-| `additionalLazyModules`         | <!--v9--> v12     | 지원이 중단된 SystemJsNgModuleLoader와 사용하던 옵션입니다.                                    |
-| `additionalLazyModuleResources` | <!--v9--> v12     | 지원이 중단된 SystemJsNgModuleLoader와 사용하던 옵션입니다.                                    |
 
 
 ### @schematics/angular
@@ -877,7 +906,7 @@ The following APIs have been removed starting with version *11.0.0*:
 | ---------------- | -------------- | ----------- | ----- |
 | `@angular/router` | `preserveQueryParams` | [`queryParamsHandling`](api/router/UrlCreationOptions#queryParamsHandling) | |
 
-To see APIs removed in version 10, check out this guide on the [version 10 docs site](https://v10.angular.io/guide/deprecations#removed).
+*To see APIs removed in version 10, check out this guide on the [version 10 docs site](https://v10.angular.io/guide/deprecations#removed).
 -->
 아래 API들은 Angular 11.0.0 버전부터 지원이 중단됩니다:
 
@@ -885,7 +914,7 @@ To see APIs removed in version 10, check out this guide on the [version 10 docs 
 | ---------------- | -------------- | ----------- | ----- |
 | `@angular/router` | `preserveQueryParams` | [`queryParamsHandling`](api/router/UrlCreationOptions#queryParamsHandling) | |
 
-Angular 10 버전에 제거된 API를 확인하려면 [Angular 10 문서](https://v10.angular.io/guide/deprecations#removed)를 참고하세요.
+*Angular 10 버전에 제거된 API를 확인하려면 [Angular 10 문서](https://v10.angular.io/guide/deprecations#removed)를 참고하세요.
 
 
 
@@ -896,7 +925,7 @@ Angular 10 버전에 제거된 API를 확인하려면 [Angular 10 문서](https:
 ### @angular/* npm 패키지가 제공하던 `esm5`, `fesm5` 코드 형식
 
 <!--
-As of Angular v8, the CLI primarily consumes the `fesm2015` variant of the code distributed via `@angular/*` npm packages.
+As of Angular v8, the CLI primarily consumes the `fesm2015` variant of the code distributed as part of `@angular/*` npm packages.
 This renders the `esm5` and `fesm5` distributions obsolete and unnecessary, adding bloat to the package size and slowing down npm installations.
 
 This removal has no impact on CLI users, unless they modified their build configuration to explicitly consume these code distributions.

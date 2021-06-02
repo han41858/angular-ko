@@ -4,7 +4,7 @@
 # 서비스 워커 추가하기
 
 <!--
-This document explains how to enable Angular service worker support in projects that you created with the [Angular CLI](cli). It then uses a simple example to show you a service worker in action, demonstrating loading and basic caching.
+This document explains how to enable Angular service worker support in projects that you created with the [Angular CLI](cli). It then uses an example to show you a service worker in action, demonstrating loading and basic caching.
 -->
 이 문서는 [Angular CLI](cli)로 생성한 프로젝트에 Angular 서비스 워커를 어떻게 도입할 수 있는지 설명합니다.
 간단한 예제를 다루면서 서비스 워커를 실제로 동작시켜보고, 로딩과 기본 캐싱 정책에 대해서도 알아봅시다.
@@ -25,7 +25,7 @@ A basic understanding of the information in [Introduction to Angular service wor
 ## 프로젝트에 서비스 워커 추가하기
 
 <!--
-To set up the Angular service worker in your project, use the CLI command `ng add @angular/pwa`. It takes care of configuring your app to use service workers by adding the `service-worker` package along
+To set up the Angular service worker in your project, use the CLI command `ng add @angular/pwa`. It takes care of configuring your application to use service workers by adding the `service-worker` package along
 with setting up the necessary support files.
 -->
 프로젝트에 Angular 서비스 워커를 추기하려면 Angular CLI 명령 `ng add @angular/pwa`를 실행하면 됩니다.
@@ -40,7 +40,7 @@ The above command completes the following actions:
 
 1. Adds the `@angular/service-worker` package to your project.
 2. Enables service worker build support in the CLI.
-3. Imports and registers the service worker in the app module.
+3. Imports and registers the service worker in the application module.
 4. Updates the `index.html` file:
     * Includes a link to add the `manifest.webmanifest` file.
     * Adds meta tags for `theme-color`.
@@ -64,7 +64,7 @@ The above command completes the following actions:
 그리고 프로젝트를 빌드해봅시다:
 
 ```sh
-ng build --prod
+ng build
 ```
 
 <!--
@@ -119,7 +119,7 @@ With the server running, you can point your browser at http://localhost:8080/. Y
 
 <!--
 **Note:**
-If you are not using HTTPS, the service worker will only be registered when accessing the app on `localhost`.
+If you are not using HTTPS, the service worker will only be registered when accessing the application on `localhost`.
 -->
 **참고:**
 HTTPS를 사용하지 않으면 `localhost`에서 앱을 실행할 때만 서비스 워커를 등록할 수 있습니다.
@@ -154,7 +154,7 @@ To simulate a network issue, disable network interaction for your application. I
 </div>
 
 <!--
-Now the app has no access to network interaction.
+Now the application has no access to network interaction.
 
 For applications that do not use the Angular service worker, refreshing now would display Chrome's Internet disconnected page that says "There is no Internet connection".
 
@@ -192,7 +192,8 @@ Notice that all of the files the browser needs to render this application are ca
 * Anything under `assets`.
 * Images and fonts directly under the configured `outputPath` (by default `./dist/<project-name>/`) or `resourcesOutputPath`. See [`ng build`](cli/build) for more information about these options.
 -->
-브라우저가 애플리케이션을 렌더링하기 위해 필요한 리소스들은 모두 캐싱됩니다. 그래서 Angular CLI가 생성한 `ngsw-config.json` 파일에는 다음과 같은 항목들이 캐싱되도록 설정되어 있습니다:
+브라우저가 애플리케이션을 렌더링하기 위해 필요한 리소스들은 모두 캐싱됩니다.
+그래서 Angular CLI가 생성한 `ngsw-config.json` 파일에는 다음과 같은 항목들이 캐싱되도록 설정되어 있습니다:
 
 * `index.html`
 * `favicon.ico`
@@ -224,7 +225,7 @@ Pay attention to two key points:
 
 <!--
 Now that you've seen how service workers cache your application, the
-next step is understanding how updates work.
+next step is understanding how updates work. Let's make a change to the application, and watch the service worker install the update:
 
 1. If you're testing in an incognito window, open a second blank tab. This will keep the incognito and the cache state alive during your test.
 
@@ -232,16 +233,15 @@ next step is understanding how updates work.
 
 3. Shut down `http-server`.
 
-4. Next, make a change to the application, and watch the service worker install the update.
+4. Open `src/app/app.component.html` for editing.
 
-5. Open `src/app/app.component.html` for editing.
+5. Change the text `Welcome to {{title}}!` to `Bienvenue à {{title}}!`.
 
-6. Change the text `Welcome to {{title}}!` to `Bienvenue à {{title}}!`.
-
-7. Build and run the server again:
+6. Build and run the server again:
 -->
 지금까지 서비스 워커가 애플리케이션을 어떻게 캐싱하는지 알아봤습니다.
 이제 애플리케이션 코드를 수정하면 어떻게하면 되는지 알아봅시다.
+애플리케이션을 수정하고 서비스 워커가 이 변경사항을 반영할 수 있도록 작업해 봅시다:
 
 1. 브라우저를 시크릿 모드로 실행한 상태에서 탭을 새로 엽니다. 그러면 이전에 사용하던 캐시 상태가 그대로 유지될 것입니다.
 
@@ -249,16 +249,14 @@ next step is understanding how updates work.
 
 3. `http-server` 서버를 중지합니다.
 
-4. 이제 애플리케이션 코드를 수정해서 서비스 워커가 새로 업데이트 된 내용으로 애플리케이션을 다시 캐싱하도록 해봅시다.
+4. `src/app/app.component.html` 파일을 엽니다.
 
-5. `src/app/app.component.html` 파일을 엽니다.
+5. `Welcome to {{title}}!`를 `Bienvenue à {{title}}!`로 변경합니다.
 
-6. `Welcome to {{title}}!`를 `Bienvenue à {{title}}!`로 변경합니다.
-
-7. 애플리케이션을 다시 빌드하고 서버를 실행합니다:
+6. 애플리케이션을 다시 빌드하고 서버를 실행합니다:
 
 ```sh
-ng build --prod
+ng build
 http-server -p 8080 -c-1 dist/<project-name>
 ```
 
@@ -292,7 +290,9 @@ If you look at the `http-server` logs, you can see the service worker requesting
 
 2. Refresh the page.
 -->
-무언가 잘못된 걸까요? 아닙니다. Angular 서비스 워커는 이미 **설치된** 애플리케이션을 실행하는 원래 역할을 다하고 있을 뿐입니다. 애플리케이션을 빠르게 실행하기 위해서, 이미 애플리케이션을 실행하고 있는 상태라면 서비스 워커는 새로운 업데이트가 있는지 확인하지 않습니다.
+무언가 잘못된 걸까요? 아닙니다.
+Angular 서비스 워커는 이미 **설치된** 애플리케이션을 실행하는 원래 역할을 다하고 있을 뿐입니다.
+애플리케이션을 빠르게 실행하기 위해서, 이미 애플리케이션을 실행하고 있는 상태라면 서비스 워커는 새로운 업데이트가 있는지 확인하지 않습니다.
 
 `http-server`가 출력한 로그를 확인해보면 서비스 워커가 `ngsw.json` 파일을 요청한 것을 확인할 수 있습니다.
 서비스 워커는 이 파일의 내용을 보고 업데이트를 해야 할지 판단합니다.
@@ -309,7 +309,7 @@ If you look at the `http-server` logs, you can see the service worker requesting
 </div>
 
 <!--
-The service worker installed the updated version of your app *in the background*, and the next time the page is loaded or reloaded, the service worker switches to the latest version.
+The service worker installed the updated version of your application *in the background*, and the next time the page is loaded or reloaded, the service worker switches to the latest version.
 -->
 서비스 워커는 애플리케이션을 *백그라운드에서* 설치하고 업데이트합니다.
 그래서 페이지가 다시 로드되면 애플리케이션이 최신 버전으로 실행됩니다.

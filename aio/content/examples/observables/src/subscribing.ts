@@ -1,7 +1,7 @@
 // #docplaster
 import { of } from 'rxjs';
 
-export function docRegionObserver(console) {
+export function docRegionObserver(console: Console) {
   // #docregion observer
 
   // 3개의 값을 전달하도록 옵저버블을 간단하게 정의합니다.
@@ -9,8 +9,8 @@ export function docRegionObserver(console) {
 
   // 옵저버 객체를 정의합니다.
   const myObserver = {
-    next: x => console.log('Observer got a next value: ' + x),
-    error: err => console.error('Observer got an error: ' + err),
+    next: (x: number) => console.log('Observer got a next value: ' + x),
+    error: (err: Error) => console.error('Observer got an error: ' + err),
     complete: () => console.log('Observer got a complete notification'),
   };
 

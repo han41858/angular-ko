@@ -4,10 +4,10 @@
 # 애플리케이션 기본 틀
 
 <!--
-App shell is a way to render a portion of your application via a route at build time.
+Application shell is a way to render a portion of your application using a route at build time.
 It can improve the user experience by quickly launching a static rendered page (a skeleton common to all pages) while the browser downloads the full client version and switches to it automatically after the code loads.
 
-This gives users a meaningful first paint of your application that appears quickly because the browser can simply render the HTML and CSS without the need to initialize any JavaScript.
+This gives users a meaningful first paint of your application that appears quickly because the browser can render the HTML and CSS without the need to initialize any JavaScript.
 
 Learn more in [The App Shell Model](https://developers.google.com/web/fundamentals/architecture/app-shell).
 -->
@@ -43,7 +43,7 @@ For an existing application, you have to manually add the `RouterModule` and def
 ## 2단계: 애플리케이션 기본 틀 생성하기
 
 <!--
-Use the CLI to automatically create the app shell.
+Use the CLI to automatically create the application shell.
 -->
 다음 명령을 실행하면 애플리케이션의 기본 틀이 생성됩니다.
 
@@ -52,31 +52,51 @@ ng generate app-shell
 </code-example>
 
 <!--
-* `client-project` takes the name of your client application.
+For more information about this command see [App shell command](cli/generate#app-shell-command). 
 
 After running this command you will notice that the `angular.json` configuration file has been updated to add two new targets, with a few other changes.
 -->
-* `client-project`에는 클라이언트 애플리케이션의 이름이 들어갑니다.
+이 명령에 대해 자세하게 알아보려면 [앱 셸 명령](cli/generate#app-shell-command) 문서를 참고하세요.
 
 이 명령을 실행하고 나면 `angular.json` 설정 파일에 다음 두 빌드 대상이 추가됩니다.
 
 <code-example language="json">
 "server": {
   "builder": "@angular-devkit/build-angular:server",
+  "defaultConfiguration": "production",
   "options": {
-    "outputPath": "dist/my-app-server",
+    "outputPath": "dist/my-app/server",
     "main": "src/main.server.ts",
     "tsConfig": "tsconfig.server.json"
+  },
+  "configurations": {
+    "development": {
+      "outputHashing": "none",
+    },
+    "production": {
+      "outputHashing": "media",
+      "fileReplacements": [
+        {
+          "replace": "src/environments/environment.ts",
+          "with": "src/environments/environment.prod.ts"
+        }
+      ],
+      "sourceMap": false,
+      "optimization": true
+    }
   }
 },
 "app-shell": {
   "builder": "@angular-devkit/build-angular:app-shell",
+  "defaultConfiguration": "production",
   "options": {
-    "browserTarget": "my-app:build",
-    "serverTarget": "my-app:server",
     "route": "shell"
   },
   "configurations": {
+    "development": {
+      "browserTarget": "my-app:build:development",
+      "serverTarget": "my-app:server:development",
+    },
     "production": {
       "browserTarget": "my-app:build:production",
       "serverTarget": "my-app:server:production"
@@ -96,10 +116,13 @@ Use the CLI to build the `app-shell` target.
 이제 다음 명령을 실행해서 `app-shell`이 제대로 빌드되는지 확인해 봅시다.
 
 <code-example language="bash">
-ng run my-app:app-shell
+ng run my-app:app-shell:development
 </code-example>
 
+<!--
 Or to use the production configuration.
+-->
+아니면 운영 환경으로 빌드할 수도 있습니다.
 
 
 <code-example language="bash">
@@ -107,6 +130,6 @@ ng run my-app:app-shell:production
 </code-example>
 
 <!--
-To verify the build output, open `dist/my-app/index.html`. Look for default text `app-shell works!` to show that the app shell route was rendered as part of the output.
+To verify the build output, open `dist/my-app/browser/index.html`. Look for default text `app-shell works!` to show that the application shell route was rendered as part of the output.
 -->
-빌드 결과물은 `dist/my-app/index.html` 파일로 확인하면 됩니다. 애플리케이션이 제대로 실행된다면 화면에 `app-shell works!`라는 문구가 표시될 것입니다.
+빌드 결과물은 `dist/my-app/browser/index.html` 파일로 확인하면 됩니다. 애플리케이션이 제대로 실행된다면 화면에 `app-shell works!`라는 문구가 표시될 것입니다.

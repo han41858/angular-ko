@@ -3,6 +3,7 @@
 -->
 # 템플릿 타입 검사
 
+
 <!--
 ## Overview of template type checking
 -->
@@ -14,6 +15,7 @@ Angular currently has three modes of doing this, depending on the value of the `
 -->
 TypeScript 컴파일러가 TypeScript 코드에서 타입 에러를 찾아내는 것과 마찬가지로, Angular 컴파일러도 템플릿에 사용된 표현식이나 바인딩 문법에서 에러를 찾아냅니다.
 현재 Angular가 제공하는 타입 검사 모드는 3종류인데, [TypeScript 환경설정 파일](guide/typescript-configuration)에서 `fullTemplateTypeCheck`, `strictTemplates` 플래그로 지정합니다.
+
 
 <!--
 ### Basic mode
@@ -34,7 +36,7 @@ The compiler does not verify that the value of `user.address.city` is assignable
 The compiler also has some major limitations in this mode:
 
 * Importantly, it doesn't check embedded views, such as `*ngIf`, `*ngFor`, other `<ng-template>` embedded view.
-* It doesn't figure out the types of `#refs`, the results of pipes, the type of `$event` in event bindings, and so on.
+* It doesn't figure out the types of `#refs`, the results of pipes, or the type of `$event` in event bindings.
 
 In many cases, these things end up as type `any`, which can cause subsequent parts of the expression to go unchecked.
 -->
@@ -98,12 +100,12 @@ The following still have type `any`.
 ### 엄격한(Strict) 모드
 
 <!--
-Angular version 9 maintains the behavior of the `fullTemplateTypeCheck` flag, and introduces a third "strict mode".
+Angular maintains the behavior of the `fullTemplateTypeCheck` flag, and introduces a third "strict mode".
 Strict mode is a superset of full mode, and is accessed by setting the `strictTemplates` flag to true. This flag supersedes the `fullTemplateTypeCheck` flag.
-In strict mode, Angular version 9 adds checks that go beyond the version 8 type-checker.
+In strict mode, Angular uses checks that go beyond the version 8 type-checker.
 Note that strict mode is only available if using Ivy.
 
-In addition to the full mode behavior, Angular version 9:
+In addition to the full mode behavior, Angular does the following:
 
 * Verifies that component/directive bindings are assignable to their `@Input()`s.
 * Obeys TypeScript's `strictNullChecks` flag when validating the above.
@@ -112,7 +114,7 @@ In addition to the full mode behavior, Angular version 9:
 * Infers the correct type of `$event` in component/directive, DOM, and animation event bindings.
 * Infers the correct type of local references to DOM elements, based on the tag name (for example, the type that `document.createElement` would return for that tag).
 -->
-Angular 9버전부터는 `fullTemplateTypeCheck` 플래그 외에 엄격한 모드를 추가로 도입했습니다.
+Angular는 `fullTemplateTypeCheck` 플래그 외에 엄격한 모드를 추가로 도입했습니다.
 엄격한 모드는 `strictTemplates` 플래그 값을 `true`로 설정하면 활성화되는데, 이렇게 설정하면 `fullTemplateTypeCheck` 플래그의 값은 어떤값이든 관계없습니다.
 이 모드는 전체검사 모드의 검사 기능을 모두 포함합니다.
 하지만 Ivy를 사용할 때만 동작한다는 것을 명심하세요.
@@ -165,7 +167,8 @@ In strict mode, Angular knows that the `user` in the `<span>` has a type of `Use
 이 코드에서 `<h2>`와 `<span>`은 `*ngFor` 임베디드 뷰 안에 있는 엘리먼트입니다.
 기본 모드에서는 이 엘리먼트를 검사하지 않습니다.
 그리고 전체검사 모드에서는 `config`와 `user` 객체가 있는지는 검사하지만 `any` 타입으로 처리합니다.
-엄격한 검사 모드에서는 `<span>`에 사용된 `user` 객체가 `User` 타입인지 검사하며, 이 객체 안에 `address`가 있고 또 `city` 프로퍼티가 있는지 검사합니다. `user.address.city`의 타입이 `string`인지도 검사합니다.
+엄격한 검사 모드에서는 `<span>`에 사용된 `user` 객체가 `User` 타입인지 검사하며, 이 객체 안에 `address`가 있고 또 `city` 프로퍼티가 있는지 검사합니다.
+`user.address.city`의 타입이 `string`인지도 검사합니다.
 
 
 {@a troubleshooting-template-errors}
@@ -176,7 +179,7 @@ In strict mode, Angular knows that the `user` in the `<span>` has a type of `Use
 ## 템플릿 에러 해결하기
 
 <!--
-When enabling the new strict mode in version 9, you might encounter template errors that didn't arise in either of the previous modes.
+With strict mode, you might encounter template errors that didn't arise in either of the previous modes.
 These errors often represent genuine type mismatches in the templates that were not caught by the previous tooling.
 If this is the case, the error message should make it clear where in the template the problem occurs.
 
@@ -191,31 +194,69 @@ In case of a false positive like these, there are a few options:
 * Use the [`$any()` type-cast function](guide/template-expression-operators#any-type-cast-function) in certain contexts to opt out of type-checking for a part of the expression.
 * You can disable strict checks entirely by setting `strictTemplates: false` in the application's TypeScript configuration file, `tsconfig.json`.
 * You can disable certain type-checking operations individually, while maintaining strictness in other aspects, by setting a _strictness flag_ to `false`.
-* If you want to use `strictTemplates` and `strictNullChecks` together, you can opt out of strict null type checking specifically for input bindings via `strictNullInputTypes`.
+* If you want to use `strictTemplates` and `strictNullChecks` together, you can opt out of strict null type checking specifically for input bindings using `strictNullInputTypes`.
 
-|Strictness flag|Effect|
-|-|-|
-|`strictInputTypes`|Whether the assignability of a binding expression to the `@Input()` field is checked. Also affects the inference of directive generic types. |
-|`strictInputAccessModifiers`|Whether access modifiers such as `private`/`protected`/`readonly` are honored when assigning a binding expression to an `@Input()`. If disabled, the access modifiers of the `@Input` are ignored; only the type is checked.|
-|`strictNullInputTypes`|Whether `strictNullChecks` is honored when checking `@Input()` bindings (per `strictInputTypes`). Turning this off can be useful when using a library that was not built with `strictNullChecks` in mind.|
-|`strictAttributeTypes`|Whether to check `@Input()` bindings that are made using text attributes (for example, `<mat-tab label="Step 1">` vs `<mat-tab [label]="'Step 1'">`).
-|`strictSafeNavigationTypes`|Whether the return type of safe navigation operations (for example, `user?.name`) will be correctly inferred based on the type of `user`). If disabled, `user?.name` will be of type `any`.
-|`strictDomLocalRefTypes`|Whether local references to DOM elements will have the correct type. If disabled `ref` will be of type `any` for `<input #ref>`.|
-|`strictOutputEventTypes`|Whether `$event` will have the correct type for event bindings to component/directive an `@Output()`, or to animation events. If disabled, it will be `any`.|
-|`strictDomEventTypes`|Whether `$event` will have the correct type for event bindings to DOM events. If disabled, it will be `any`.|
-|`strictContextGenerics`|Whether the type parameters of generic components will be inferred correctly (including any generic bounds). If disabled, any type parameters will be `any`.|
-|`strictLiteralTypes`|Whether object and array literals declared in the template will have their type inferred. If disabled, the type of such literals will be `any`.|
-
+Unless otherwise noted, each option below is set to the value for `strictTemplates` (`true` when `strictTemplates` is `true` and vice versa).
+<table>
+  <thead>
+    <tr>
+      <th>Strictness flag</th>
+      <th>Effect</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>strictInputTypes</code></td>
+      <td>Whether the assignability of a binding expression to the <code>@Input()</code> field is checked. Also affects the inference of directive generic types.</td>
+    </tr>
+    <tr>
+      <td><code>strictInputAccessModifiers</code></td>
+      <td>Whether access modifiers such as <code>private</code>/<code>protected</code>/<code>readonly</code> are honored when assigning a binding expression to an <code>@Input()</code>. If disabled, the access modifiers of the <code>@Input</code> are ignored; only the type is checked. This option is <code>false</code> by default, even with <code>strictTemplates</code> set to <code>true</code>.</td>
+    </tr>
+    <tr>
+      <td><code>strictNullInputTypes</code></td>
+      <td>Whether <code>strictNullChecks</code> is honored when checking <code>@Input()</code> bindings (per <code>strictInputTypes</code>). Turning this off can be useful when using a library that was not built with <code>strictNullChecks</code> in mind.</td>
+    </tr>
+    <tr>
+      <td><code>strictAttributeTypes</code></td>
+      <td>Whether to check <code>@Input()</code> bindings that are made using text attributes (for example, <code>&lt;mat-tab label="Step 1"&gt;</code> vs <code>&lt;mat-tab [label]="'Step 1'"&gt;</code>).</td>
+    </tr>
+    <tr>
+      <td><code>strictSafeNavigationTypes</code></td>
+      <td>Whether the return type of safe navigation operations (for example, <code>user?.name</code>) will be correctly inferred based on the type of <code>user</code>). If disabled, <code>user?.name</code> will be of type <code>any</code>.</td>
+    </tr>
+    <tr>
+      <td><code>strictDomLocalRefTypes</code></td>
+      <td>Whether local references to DOM elements will have the correct type. If disabled <code>ref</code> will be of type <code>any</code> for <code>&lt;input #ref&gt;</code>.</td>
+    </tr>
+    <tr>
+      <td><code>strictOutputEventTypes</code></td>
+      <td>Whether <code>$event</code> will have the correct type for event bindings to component/directive an <code>@Output()</code>, or to animation events. If disabled, it will be <code>any</code>.</td>
+    </tr>
+    <tr>
+      <td><code>strictDomEventTypes</code></td>
+      <td>Whether <code>$event</code> will have the correct type for event bindings to DOM events. If disabled, it will be <code>any</code>.</td>
+    </tr>
+    <tr>
+      <td><code>strictContextGenerics</code></td>
+      <td>Whether the type parameters of generic components will be inferred correctly (including any generic bounds). If disabled, any type parameters will be <code>any</code>.</td>
+    </tr>
+    <tr>
+      <td><code>strictLiteralTypes</code></td>
+      <td>Whether object and array literals declared in the template will have their type inferred. If disabled, the type of such literals will be <code>any</code>. This flag is <code>true</code> when <em>either</em> <code>fullTemplateTypeCheck</code> or <code>strictTemplates</code> is set to <code>true</code>.</td>
+    </tr>
+  </tbody>
+</table>
 
 If you still have issues after troubleshooting with these flags, you can fall back to full mode by disabling `strictTemplates`.
 
-If that doesn't work, an option of last resort is to turn off full mode entirely with `fullTemplateTypeCheck: false`, as we've made a special effort to make Angular version 9 backwards compatible in this case.
+If that doesn't work, an option of last resort is to turn off full mode entirely with `fullTemplateTypeCheck: false`.
 
 A type-checking error that you cannot resolve with any of the recommended methods can be the result of a bug in the template type-checker itself.
 If you get errors that require falling back to basic mode, it is likely to be such a bug.
-If this happens, please [file an issue](https://github.com/angular/angular/issues) so the team can address it.
+If this happens, [file an issue](https://github.com/angular/angular/issues) so the team can address it.
 -->
-Angular 9버전부터 도입된 엄격한 타입 검사 모드를 활성화하면 이전까지 확인하지 못했던 템플릿 에러가 발생할 것입니다.
+Angular에 도입된 엄격한 타입 검사 모드를 활성화하면 이전까지 확인하지 못했던 템플릿 에러가 발생할 것입니다.
 새로 확인된 에러 중 대부분은 템플릿에서 타입을 잘못 사용했던 것이 엄격한 타입 검사 모드에서 검출된 것입니다.
 이런 경우는 문제가 발생한 부분을 에러 메시지에서 쉽게 확인할 수 있습니다.
 
@@ -232,23 +273,61 @@ Angular 9버전부터 도입된 엄격한 타입 검사 모드를 활성화하�
 * 특정 규칙만 비활성화할 수 있습니다. 해당 _strictness flag_를 `false`로 설정하면 됩니다.
 * `strictTemplates` 옵션과 `strictNullChecks` 옵션을 그대로 사용하려면 `strictNullInputTypes` 옵션을 추가로 사용해서 입력 프로퍼티로 바인딩되는 객체의 타입 검사 옵션을 조정할 수 있습니다.
 
-|플래그|효과|
-|-|-|
-|`strictInputTypes`|`@Input()` 필드로 바인딩되는 표현식이 적절한지 검사합니다. 디렉티브의 제네릭 타입도 함께 검사합니다.|
-|`strictNullInputTypes`|`strictInputTypes`를 활성화했을 때 `strictNullChecks` 옵션도 적용할지 지정합니다. 사용하는 라이브러리가 `strictNullChecks`를 고려하지 않았다면 이 옵션값을 `false`로 지정하는 것이 좋습니다.|
-|`strictAttributeTypes`|바인딩없이 문자열로 지정한 어트리뷰트도 검사할지 지정합니다. `true`로 설정하면 `<mat-tab label="Step 1">`도 검사하며 `false`로 설정하면 `<mat-tab [label]="'Step 1'">`만 검사합니다.|
-|`strictSafeNavigationTypes`|안전참조 연산자 이후에 있는 프로퍼티의 타입을 검사할지 지정합니다. `false`로 설정하면 `user?.name`이라고 사용했을 때 `name`을 `any` 타입으로 처리합니다.|
-|`strictDomLocalRefTypes`|DOM 엘리먼트를 참조하는 템플릿 로컬 변수의 타입을 검사할지 지정합니다. `false`로 설정하면 `<input #ref>`라고 사용했을 때 `ref`를 `any` 타입으로 처리합니다.|
-|`strictOutputEventTypes`|컴포넌트/디렉티브가 `@Output()`으로 보내는 `$event`의 타입과 애니메이션 이벤트의 타입을 검사할지 지정합니다. `false`로 설정하면 이벤트를 `any` 타입으로 처리합니다.|
-|`strictDomEventTypes`|이벤트 바인딩으로 연결한 DOM 이벤트의 타입을 검사할지 지정합니다. `false`로 설정하면 이벤트 객체를 `any` 타입으로 처리합니다.|
-|`strictContextGenerics`|제네릭 컴포넌트에 사용되는 인자 타입을 검사할지 지정합니다. `false`로 설정하면 `any`로 처리합니다.|
-|`strictLiteralTypes`|템플릿에 선언된 객체와 배열 리터럴의 타입을 추론할지 지정합니다. `false`로 설정하면 이 리터럴들을 `any`로 간주합니다.|
-
+Unless otherwise noted, each option below is set to the value for `strictTemplates` (`true` when `strictTemplates` is `true` and vice versa).
+<table>
+  <thead>
+    <tr>
+      <th>플래그</th>
+      <th>효과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>strictInputTypes</code></td>
+      <td><code>@Input()</code> 필드로 바인딩되는 표현식이 적절한지 검사합니다. 디렉티브의 제네릭 타입도 함께 검사합니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictInputAccessModifiers</code></td>
+      <td>Whether access modifiers such as <code>private</code>/<code>protected</code>/<code>readonly</code> are honored when assigning a binding expression to an <code>@Input()</code>. If disabled, the access modifiers of the <code>@Input</code> are ignored; only the type is checked. This option is <code>false</code> by default, even with <code>strictTemplates</code> set to <code>true</code>.</td>
+    </tr>
+    <tr>
+      <td><code>strictNullInputTypes</code></td>
+      <td><code>strictInputTypes</code>를 활성화했을 때 <code>strictNullChecks</code> 옵션도 적용할지 지정합니다. 사용하는 라이브러리가 <code>strictNullChecks</code>를 고려하지 않았다면 이 옵션값을 <code>false</code>로 지정하는 것이 좋습니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictAttributeTypes</code></td>
+      <td>바인딩없이 문자열로 지정한 어트리뷰트도 검사할지 지정합니다. <code>true</code>로 설정하면 <code>&lt;mat-tab label="Step 1"&gt;</code>도 검사하며 <code>false</code>로 설정하면 <code>&lt;mat-tab [label]="'Step 1'"&gt;</code>만 검사합니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictSafeNavigationTypes</code></td>
+      <td>안전참조 연산자 이후에 있는 프로퍼티의 타입을 검사할지 지정합니다. <code>false</code>로 설정하면 <code>user?.name</code>이라고 사용했을 때 <code>name</code>을 <code>any</code> 타입으로 처리합니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictDomLocalRefTypes</code></td>
+      <td>DOM 엘리먼트를 참조하는 템플릿 로컬 변수의 타입을 검사할지 지정합니다. <code>false</code>로 설정하면 <code>&lt;input #ref^gt;</code>라고 사용했을 때 <code>ref</code>를 <code>any</code> 타입으로 처리합니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictOutputEventTypes</code></td>
+      <td>컴포넌트/디렉티브가 <code>@Output()</code>으로 보내는 <code>$event</code>의 타입과 애니메이션 이벤트의 타입을 검사할지 지정합니다. <code>false</code>로 설정하면 이벤트를 <code>any</code> 타입으로 처리합니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictDomEventTypes</code></td>
+      <td>이벤트 바인딩으로 연결한 DOM 이벤트의 타입을 검사할지 지정합니다. <code>false</code>로 설정하면 이벤트 객체를 <code>any</code> 타입으로 처리합니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictContextGenerics</code></td>
+      <td>제네릭 컴포넌트에 사용되는 인자 타입을 검사할지 지정합니다. <code>false</code>로 설정하면 <code>any</code>로 처리합니다.</td>
+    </tr>
+    <tr>
+      <td><code>strictLiteralTypes</code></td>
+      <td>템플릿에 선언된 객체와 배열 리터럴의 타입을 추론할지 지정합니다. <code>false</code>로 설정하면 이 리터럴들을 <code>any</code>로 간주합니다. This flag is <code>true</code> when <em>either</em> <code>fullTemplateTypeCheck</code> or <code>strictTemplates</code> is set to <code>true</code>.</td>
+    </tr>
+  </tbody>
+</table>
 
 플래그를 조정하더라도 문제가 계속 발생하면 언제라도 `strictTemplates`를 비활성화해서 전체검사 모드로 변경할 수 있습니다.
 
 하지만 전체검사 모드에서도 계속 에러가 발생하면 `fullTemplateTypeCheck` 값을 `false`로 설정해서 전체검사 모드도 비활성화할 수 있습니다.
-전체검사 모드를 비활성화하면 Angular 9 이전 버전처럼 잘 동작할 것입니다.
 
 기본 검사모드에서도 문제가 해결되지 않는다면 어쩌면 템플릿 타입 검사 기능의 버그일 수도 있습니다.
 이런 상황이 발생하면 꼭 저희에게 [이슈](https://github.com/angular/angular/issues)로 제보해 주세요.
@@ -261,7 +340,7 @@ Angular 9버전부터 도입된 엄격한 타입 검사 모드를 활성화하�
 ## 입력 프로퍼티 타입 검사
 
 <!--
-In Angular version 9, the template type checker checks whether a binding expression's type is compatible with that of the corresponding directive input.
+The template type checker checks whether a binding expression's type is compatible with that of the corresponding directive input.
 As an example, consider the following component:
 
 ```typescript
@@ -282,7 +361,7 @@ The `AppComponent` template uses this component as follows:
 
 ```ts
 @Component({
-  selector: 'my-app',
+  selector: 'app-root',
   template: '<user-detail [user]="selectedUser" />',
 })
 export class AppComponent {
@@ -296,7 +375,7 @@ TypeScript checks the assignment according to its type system, obeying flags suc
 
 You can avoid run-time type errors by providing more specific in-template type requirements to the template type checker. Make the input type requirements for your own directives as specific as possible by providing template-guard functions in the directive definition. See [Improving template type checking for custom directives](guide/structural-directives#directive-type-checks), and [Input setter coercion](#input-setter-coercion) in this guide.
 -->
-Angular 9버전부터는 템플릿 타입 검사 로직이 바인딩 표현식 결과값의 타입과 디렉티브 입력 프로퍼티의 타입이 적절한지 검사합니다.
+Angular는 템플릿 타입 검사 로직이 바인딩 표현식 결과값의 타입과 디렉티브 입력 프로퍼티의 타입이 적절한지 검사합니다.
 다음과 같은 컴포넌트가 있다고 합시다:
 
 ```typescript
@@ -317,7 +396,7 @@ export class UserDetailComponent {
 
 ```ts
 @Component({
-  selector: 'my-app',
+  selector: 'app-root',
   template: '<user-detail [user]="selectedUser" />',
 })
 export class AppComponent {
@@ -438,6 +517,7 @@ Consider the following directive:
 class SubmitButton {
   private _disabled: boolean;
 
+  @Input()
   get disabled(): boolean {
     return this._disabled;
   }
@@ -500,6 +580,7 @@ TypeScript에서는 게터와 세터를 같은 타입으로 지정해야 하기 
 class SubmitButton {
   private _disabled: boolean;
 
+  @Input()
   get disabled(): boolean {
     return this._disabled;
   }

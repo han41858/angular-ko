@@ -56,14 +56,13 @@ import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-routable',
-  templateUrl: './routable.component.html',
-  styleUrls: ['./routable.component.css']
+  template: 'Routable1Component template'
 })
 export class Routable1Component implements OnInit {
 
   navStart: Observable<NavigationStart>;
 
-  constructor(private router: Router) {
+  constructor(router: Router) {
     // NavigationStart 이벤트에 해당하는 옵저버블만 받습니다.
     this.navStart = router.events.pipe(
       filter(evt => evt instanceof NavigationStart)
@@ -71,7 +70,7 @@ export class Routable1Component implements OnInit {
   }
 
   ngOnInit() {
-    this.navStart.subscribe(evt => console.log('Navigation Started!'));
+    this.navStart.subscribe(() => console.log('Navigation Started!'));
   }
 }
 
@@ -84,8 +83,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-routable',
-  templateUrl: './routable.component.html',
-  styleUrls: ['./routable.component.css']
+  template: 'Routable2Component template'
 })
 export class Routable2Component implements OnInit {
   constructor(private activatedRoute: ActivatedRoute) {}
@@ -109,14 +107,14 @@ import { FormGroup } from '@angular/forms';
 })
 export class MyComponent implements OnInit {
   nameChangeLog: string[] = [];
-  heroForm: FormGroup;
+  heroForm!: FormGroup;
 
   ngOnInit() {
     this.logNameChange();
   }
   logNameChange() {
     const nameControl = this.heroForm.get('name');
-    nameControl.valueChanges.forEach(
+    nameControl?.valueChanges.forEach(
       (value: string) => this.nameChangeLog.push(value)
     );
   }

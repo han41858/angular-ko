@@ -12,6 +12,21 @@ Angular 언어지원 서비스를 활용하면 코드 에디터에서 코드 자
 심볼을 찾아 이동하는 기능은 별도 HTML 파일에서는 물론이고 인라인 템플릿에서도 가능합니다.
 
 
+## Configuring compiler options for the Angular Language Service
+
+To enable the latest Language Service features, set the `strictTemplates` option in `tsconfig.json` by setting `strictTemplates` to `true,` as shown in the following example:
+
+<code-example language="json">
+
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  }
+
+</code-example>
+
+For more information, see the [Angular compiler options](guide/angular-compiler-options) guide.
+
+
 <!--
 ## Features
 -->
@@ -91,7 +106,7 @@ Angular 언어지원 서비스를 사용하면 코드를 작성할 때 발생하
 ### 빠른 정보와 네비게이션
 
 <!--
-The quick-info feature allows you to hover to see where components, directives, modules, and so on come from.
+The quick-info feature allows you to hover to see where components, directives, and modules come from.
 You can then click "Go to definition" or press F12 to go directly to the definition.
 -->
 빠른 정보(quick-info) 기능을 활용하면 템플릿에서 컴포넌트, 디렉티브, 모듈 심볼에 커서나 마우스를 옮겼을 때 해당 객체의 정보를 확인할 수 있습니다.
@@ -109,22 +124,30 @@ You can then click "Go to definition" or press F12 to go directly to the definit
 
 <!--
 Angular Language Service is currently available as an extension for [Visual Studio Code](https://code.visualstudio.com/),
-[WebStorm](https://www.jetbrains.com/webstorm), and [Sublime Text](https://www.sublimetext.com/).
+[WebStorm](https://www.jetbrains.com/webstorm), [Sublime Text](https://www.sublimetext.com/) and [Eclipse IDE](https://www.eclipse.org/eclipseide/).
 -->
-Angular 언어지원 서비스는 현재 [Visual Studio Code](https://code.visualstudio.com/)와 [WebStorm](https://www.jetbrains.com/webstorm), [Sublime Text](https://www.sublimetext.com/)를 대상으로 제공됩니다.
+Angular 언어지원 서비스는 현재 [Visual Studio Code](https://code.visualstudio.com/)와 [WebStorm](https://www.jetbrains.com/webstorm), [Sublime Text](https://www.sublimetext.com/), [Eclipse IDE](https://www.eclipse.org/eclipseide/)를 대상으로 제공됩니다.
 
 
 ### Visual Studio Code
 
 <!--
-In [Visual Studio Code](https://code.visualstudio.com/), install the extension from the [Extensions: Marketplace](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template). You can open the marketplace from the editor using the Extensions icon on the left menu pane, or use VS Quick Open (⌘+P on Mac, CTRL+P on Windows) and type "? ext".
+In [Visual Studio Code](https://code.visualstudio.com/), install the extension from the [Extensions: Marketplace](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template). You can open the marketplace from the editor using the Extensions icon on the left menu pane, or use VS Quick Open (⌘+P on Mac, CTRL+P on Windows) and type "? ext". In the marketplace, search for Angular Language Service extension, and click the **Install** button.
 
-In the marketplace, search for Angular Language Service extension, and click the **Install** button.
+The Visual Studio Code integration with the Angular language service is maintained and distributed by the Angular team.
 -->
 [Visual Studio Code](https://code.visualstudio.com/)에서는 [Extensions: Marketplace](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)에서 확장기능을 설치하면 됩니다.
 왼쪽 메뉴 패널에서 Extensions 아이콘을 클릭하거나 VS Quick Open(맥에서는 ⌘+P, 윈도우에서는 CTRL+P)을 눌러서 마켓을 열고 "? ext"를 입력하면 됩니다.
+그리고 마켓에서 Angular Language Service 확장 기능을 찾아서 **Install** 버튼을 누르면 설치됩니다.
 
-마켓에서 Angular Language Service 확장 기능을 찾아서 **Install** 버튼을 누르면 설치됩니다.
+Visual Studio Code에 적용되는 Angular 언어 지원 서비스는 Angular 팀이 직접 관리합니다.
+
+
+### Visual Studio
+
+In [Visual Studio](https://visualstudio.microsoft.com/), install the extension from the [Extensions: Marketplace](https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.AngularLanguageService). You can open the marketplace from the editor selecting Extensions on the top menu pane, and then selecting Manage Extensions. In the marketplace, search for Angular Language Service extension, and click the **Install** button.
+
+The Visual Studio integration with the Angular language service is maintained and distributed by Microsoft with help from the Angular team. Check out the project [here](https://github.com/microsoft/vs-ng-language-service)
 
 
 ### WebStorm
@@ -208,6 +231,11 @@ npm install --save-dev @angular/language-service
 </code-example>
 
 이제 Angular 언어지원 서비스가 동작하면서 `.ts` 파일을 대상으로 코드 진단 기능과 자동완성 기능이 동작합니다.
+
+
+### Eclipse IDE
+
+Either directly install the "Eclipse IDE for Web and JavaScript developers" package which comes with the Angular Language Server included, or from other Eclipse IDE packages, use Help > Eclipse Marketplace to find and install [Eclipse Wild Web Developer](https://marketplace.eclipse.org/content/wild-web-developer-html-css-javascript-typescript-nodejs-angular-json-yaml-kubernetes-xml).
 
 
 <!--

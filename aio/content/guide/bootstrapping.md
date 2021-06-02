@@ -10,6 +10,7 @@
 
 <!--
 A basic understanding of the following:
+* [JavaScript Modules vs. NgModules](guide/ngmodule-vs-jsmodule).
 
 <hr />
 

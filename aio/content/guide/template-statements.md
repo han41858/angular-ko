@@ -70,7 +70,7 @@ The following JavaScript and template expression syntax is not allowed:
 * increment and decrement operators, `++` and `--`
 * operator assignment, such as `+=` and `-=`
 * the bitwise operators, such as `|` and `&`
-* the [pipe operator](guide/template-expression-operators#pipe)
+* the [pipe operator](guide/pipes)
 -->
 [템플릿 표현식(template expressions)](guide/interpolation)과 비슷하게, 템플릿 실행문도 JavaScript와 비슷한 문법을 사용합니다.
 하지만 템플릿 실행문 파서는 템플릿 표현식과 다른 파서를 사용합니다.
@@ -82,7 +82,7 @@ JavaScript 문법 중 이런 문법은 템플릿 실행문에 사용할 수 없�
 * 증감 연산자 `++`, `--`
 * 복합대입 연산자 `+=`, `-=`
 * 비트 연산자 `|`, `&`
-* [파이프 연산자](guide/template-expression-operators#pipe)
+* [파이프 연산자](guide/pipes)
 
 
 <!--
@@ -100,7 +100,7 @@ For example, `deleteHero()` of `(click)="deleteHero()"` is a method of the compo
 
 The statement context may also refer to properties of the template's own context.
 In the following example, the component's event handling method, `onSave()` takes the template's own `$event` object as an argument.
-On the next two lines, the `deleteHero()` method takes a [template input variable](guide/built-in-directives#template-input-variable), `hero`, and `onSubmit()` takes a [template reference variable](guide/template-reference-variables), `#heroForm`.
+On the next two lines, the `deleteHero()` method takes a [template input variable](guide/structural-directives#shorthand), `hero`, and `onSubmit()` takes a [template reference variable](guide/template-reference-variables), `#heroForm`.
 
 <code-example path="template-syntax/src/app/app.component.html" region="context-var-statement" header="src/app/app.component.html"></code-example>
 
@@ -118,7 +118,7 @@ In the preceding `deleteHero(hero)`, the `hero` is the template input variable, 
 
 템플릿 실행문의 컨텍스트 안에서는 템플릿 컨텍스트에 있는 프로퍼티도 참조할 수 있습니다.
 그래서 아래 예제처럼 컴포넌트의 이벤트 핸들링 메서드 `onSave()` 를 실행하면서 템플릿에 있는 `$event` 객체를 인자로 전달할 수 있습니다.
-아래 예제에서 `deleteHero()` 메서드를 실행하면서 [템플릿 입력 변수](guide/built-in-directives#template-input-variable) `hero`를 인자로 사용했으며, `onSubmit()` 메서드를 실행하면서 [템플릿 참조 변수](guide/template-reference-variables) `#heroForm`을 사용했습니다.
+아래 예제에서 `deleteHero()` 메서드를 실행하면서 [템플릿 입력 변수](guide/structural-directives#shorthand) `hero`를 인자로 사용했으며, `onSubmit()` 메서드를 실행하면서 [템플릿 참조 변수](guide/template-reference-variables) `#heroForm`을 사용했습니다.
 
 <code-example path="template-syntax/src/app/app.component.html" region="context-var-statement" header="src/app/app.component.html"></code-example>
 

@@ -1,3 +1,4 @@
+{@a angular-compiler-options}
 <!--
 # Angular compiler options
 -->
@@ -132,11 +133,21 @@ Angular 데코레이터는 트리 셰이킹의 대상이 되지 않습니다.
 ### `annotateForClosureCompiler`
 
 <!--
-When `true`, use [Tsickle](https://github.com/angular/tsickle) to annotate the emitted JavaScript with [JSDoc](http://usejsdoc.org/) comments needed by the
+When `true`, use [Tsickle](https://github.com/angular/tsickle) to annotate the emitted JavaScript with [JSDoc](https://jsdoc.app/) comments needed by the
 [Closure Compiler](https://github.com/google/closure-compiler). Default is `false`.
 -->
-`true`로 설정하면 [Tsickle](https://github.com/angular/tsickle)을 사용해서 [Closure 컴파일러](https://github.com/google/closure-compiler)용 [JSDoc](http://usejsdoc.org/) 주석을 생성합니다.
+`true`로 설정하면 [Tsickle](https://github.com/angular/tsickle)을 사용해서 [Closure 컴파일러](https://github.com/google/closure-compiler)용 [JSDoc](https://jsdoc.app/) 주석을 생성합니다.
 기본값은 `false` 입니다.
+
+
+### `compilationMode`
+
+Specifies the compilation mode to use. The following modes are available:
+
+- `'full'`: generates fully AOT-compiled code according to the version of Angular that is currently being used.
+- `'partial'`: generates code in a stable, but intermediate form suitable for a published library.
+
+The default value is `'full'`.
 
 
 ### `disableExpressionLowering`
@@ -196,13 +207,13 @@ Ivy부터는 더 유연한 방식으로 공백문자를 처리하며, 표준 번
 <!--
 Enables the [Ivy](guide/ivy) compilation and rendering pipeline. Default is `true`, as of version 9. In version 9, you can [opt out of Ivy](guide/ivy#opting-out-of-angular-ivy) to continue using the previous compiler, View Engine.
 
-For library projects generated with the CLI, the `prod` configuration default is `false` in version 9.
+For library projects generated with the CLI, the production configuration default is `false` in version 9.
 -->
 [Ivy](guide/ivy) 컴파일을 활성화합니다.
 기본값은 `true`이며 Angular 9 버전부터 사용할 수 있습니다.
 이전 버전에서 사용하던 View Engine 컴파일러를 사용하기 위해 [Ivy를 비활성화](guide/ivy#opting-out-of-angular-ivy) 할 수도 있습니다.
 
-Angular 9 버전부터 Angular CLI로 라이브러리 프로젝트를 생성했을 때 `prod` 환경 기본값은 `false` 입니다.
+Angular 9 버전부터 Angular CLI로 라이브러리 프로젝트를 생성했을 때 운영 환경의 기본값은 `false` 입니다.
 
 
 ### `enableResourceInlining`
@@ -212,13 +223,13 @@ When `true`, replaces the `templateUrl` and `styleUrls` property in all `@Compon
 
 When enabled, the `.js` output of `ngc` does not include any lazy-loaded template or style URLs.
 
-For library projects generated with the CLI, the dev configuration default is `true`.
+For library projects generated with the CLI, the development configuration default is `true`.
 -->
 `true`로 설정하면 `@Component` 데코레이터에 사용된 `templateUrl`과 `styleUrls` 프로퍼티를 인라인 `template`과 `styles` 프로퍼티로 변환합니다.
 
 그리고 `ngc` 결과물이 만드는 `.js` 파일도 템플릿 파일과 스타일 파일을 지연로딩하지 않습니다.
 
-Angular CLI로 라이브러리 프로젝트를 생성했을 때 `dev` 환경 기본값은 `true`입니다.
+Angular CLI로 라이브러리 프로젝트를 생성했을 때 개발 환경의 기본값은 `true`입니다.
 
 
 {@a enablelegacytemplate}
@@ -251,7 +262,7 @@ to the generated flat module index instead of the library index file.
 
 Produces only one `.metadata.json` file, which contains all the metadata necessary
 for symbols exported from the library index. In the generated `.ngfactory.js` files, the flat
-module index is used to import symbols that includes both the public API from the library index
+module index is used to import symbols that include both the public API from the library index
 as well as shrowded internal symbols.
 
 By default the `.ts` file supplied in the `files` field is assumed to be the library index.
@@ -290,13 +301,13 @@ would be `"index.d.ts"`.
 <!--
 When `true` (recommended), enables the [binding expression validation](guide/aot-compiler#binding-expression-validation) phase of the template compiler, which uses TypeScript to validate binding expressions. For more information, see [Template type checking](guide/template-typecheck).
 
-Default is `false`, but when you use the CLI command `ng new`, it is set to `true` by default in the generated project's configuration.
+Default is `false`, but when you use the CLI command `ng new --strict`, it is set to `true` in the generated project's configuration.
 -->
 `true`로 설정하면 템플릿을 컴파일할 때 TypeScript 컴파일러로 [바인딩 표현식의 유효성을 검사](guide/aot-compiler#binding-expression-validation)하는 단계가 활성화됩니다.
 이 옵션은 `true`로 설정하는 것을 권장합니다.
 더 자세한 내용은 [템플릿 타입 검사](guide/template-typecheck) 문서를 참고하세요.
 
-이 옵션의 기본값은 `false`지만, Angular CLI `ng new` 명령을 사용하면 프로젝트 환경설정 파일을 수정하면서 `true`로 변경됩니다.
+이 옵션의 기본값은 `false`지만, Angular CLI `ng new --strict` 명령을 실행하면 프로젝트 `true` 값으로 설정됩니다.
 
 
 ### `generateCodeForLibraries`
@@ -363,21 +374,21 @@ When `true`, does not emit `.ngfactory.js` and `.ngstyle.js` files. This turns o
 
 Can be used to instruct the template compiler to produce `.metadata.json` files for distribution with an `npm` package while avoiding the production of `.ngfactory.js` and `.ngstyle.js` files that cannot be distributed to `npm`.
 
-For library projects generated with the CLI, the dev configuration default is `true`.
+For library projects generated with the CLI, the development configuration default is `true`.
 -->
 `true`로 설정하면 `.ngfactory.js` 파일과 `.ngstyle.js` 파일을 생성하지 않습니다.
 그리고 이 상태에서는 템플릿을 컴파일하면서 확인할 수 있는 분석 기능도 동작하지 않습니다.
 
 이 옵션은 라이브러리를 npm 저장소에 배포하기 위해 `.ngfactory.js` 파일과 `.ngstyle.js` 파일 생성을 생략할 때 사용합니다.
 
-Angular CLI로 라이브러리 프로젝트를 생성했을 때 `dev` 환경 기본값은 `true`입니다.
+Angular CLI로 라이브러리 프로젝트를 생성했을 때 개발 환경의 기본값은 `true`입니다.
 
 
 ### `strictMetadataEmit`
 
 <!--
 When `true`, reports an error to the `.metadata.json` file if `"skipMetadataEmit"` is `false`.
-Default is `false`. Use only when `"skipMetadataEmit"` is `false` and `"skipTemplateCodeGen"` is `true`.
+Default is `false`. Use only when `"skipMetadataEmit"` is `false` and `"skipTemplateCodegen"` is `true`.
 
 This option is intended to validate the `.metadata.json` files emitted for bundling with an `npm` package. The validation is strict and can emit errors for metadata that would never produce an error when used by the template compiler. You can choose to suppress the error emitted by this option for an exported symbol by including `@dynamic` in the comment documenting the symbol.
 
@@ -390,11 +401,11 @@ If the client of a library intends to use a symbol in an annotation, the templat
 This option allows detection of these errors during the build phase of
 the library and is used, for example, in producing Angular libraries themselves.
 
-For library projects generated with the CLI, the dev configuration default is `true`.
+For library projects generated with the CLI, the development configuration default is `true`.
 -->
 `"skipMetadataEmit"` 옵션값이 `false`인 상태에서 `true`로 설정하면 컴파일하면서 발생한 에러를 `.metadata.json` 파일에 남깁니다.
 기본값은 `false` 입니다.
-이 옵션은 `"skipMetadataEmit"` 옵션값이 `false`이고 `"skipTemplateCodeGen"` 옵션값이 `true`일 때만 사용하세요.
+이 옵션은 `"skipMetadataEmit"` 옵션값이 `false`이고 `"skipTemplateCodegen"` 옵션값이 `true`일 때만 사용하세요.
 
 이 옵션은 라이브러리를 `npm` 패키지로 배포하기 위해 번들링할 때 `.metadata.json` 파일의 유효성을 확인하기 위해 도입되었습니다.
 이 유효성 검사를 활성화하면 이전까지 템플릿 컴파일러가 확인하지 못했던 에러가 추가로 발생할 수 있습니다.
@@ -408,7 +419,7 @@ For library projects generated with the CLI, the dev configuration default is `t
 라이브러리 사용자가 어노테이션에 어떤 심볼을 사용하면, 이 단계에서 발생한 에러가 문제되지 않는 상황이 될 수도 있습니다.
 이 에러들은 나중에 발생할 수도 있는 에러를 빌드 단계에서 미리 확인해보기 위한 것일 뿐입니다.
 
-Angular CLI로 라이브러리 프로젝트를 생성했을 때 `dev` 환경 기본값은 `true`입니다.
+Angular CLI로 라이브러리 프로젝트를 생성했을 때 개발 환경의 기본값은 `true`입니다.
 
 
 ### `strictInjectionParameters`
@@ -427,7 +438,7 @@ Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했�
 ### `strictTemplates`
 
 <!--
-When `true`, enables [strict template type checking](guide/template-typecheck#strict-mode) in Angular version 9. Strict mode is only available when using [Ivy](guide/ivy).
+When `true`, enables [strict template type checking](guide/template-typecheck#strict-mode). Strict mode is only available when using [Ivy](guide/ivy) (Angular version 9 and later).
 
 Additional strictness flags allow you to enable and disable specific types of strict template type checking. See [troubleshooting template errors](guide/template-typecheck#troubleshooting-template-errors).
 
@@ -449,3 +460,14 @@ When `true`, prints extra information while compiling templates. Default is `fal
 -->
 `true`로 설정하면 템플릿을 컴파일할 때 좀 더 많은 정보를 제공합니다.
 기본값은 `false`입니다.
+
+
+{@a cli-options}
+## Command Line Options
+
+While most of the time you interact with the Angular Compiler indirectly using Angular CLI, when debugging certain issues, you might find it useful to invoke the Angular Compiler directly.
+You can use the `ngc` command provided by the `@angular/compiler-cli` npm package to call the compiler from the command line.
+
+The `ngc` command is just a wrapper around TypeScript's `tsc` compiler command and is primarily configured via the `tsconfig.json` configuration options documented in [the previous sections](#angular-compiler-options).
+
+In addition to the configuration file, you can also use [`tsc` command line options](https://www.typescriptlang.org/docs/handbook/compiler-options.html) to configure `ngc`.

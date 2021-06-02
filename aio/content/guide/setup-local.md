@@ -52,16 +52,16 @@ To install Angular on your local system, you need the following:
 {@a nodejs}
 
 * **Node.js**
-  
-  Angular requires a [current, active LTS, or maintenance LTS](https://nodejs.org/about/releases) version of Node.js.
+
+  Angular requires an [active LTS or maintenance LTS](https://nodejs.org/about/releases) version of Node.js.
 
   <div class="alert is-helpful">
 
-  For information about specific version requirements, see the `engines` key in the [package.json](https://unpkg.com/@angular/cli/package.json) file.
+  For information about specific version requirements, see the `engines` key in the [package.json](https://unpkg.com/browse/@angular/core/package.json) file.
 
   </div>
 
-  For more information on installing Node.js, see [nodejs.org](http://nodejs.org "Nodejs.org").
+  For more information on installing Node.js, see [nodejs.org](https://nodejs.org "Nodejs.org").
   If you are unsure what version of Node.js runs on your system, run `node -v` in a terminal window.
 
 {@a npm}
@@ -87,15 +87,15 @@ Angular를 로컬 환경에 설치하려면 이런 것들이 필요합니다:
 
 * **Node.js**
   
-  Angular를 실행하려면 [최신 버전이거나, 현재 활성 LTS 버전이거나 유지보수 중인 LTS 버전](https://nodejs.org/about/releases)의 Node.js가 필요합니다.
+  Angular를 실행하려면 [현재 활성 LTS 버전이거나 유지보수 중인 LTS 버전](https://nodejs.org/about/releases)의 Node.js가 필요합니다.
 
   <div class="alert is-helpful">
 
-  정확히 어떤 버전이 필요한지 확인하려면 [package.json](https://unpkg.com/@angular/cli/package.json) 파일의 `engines` 필드를 확인해 보세요.
+  정확히 어떤 버전이 필요한지 확인하려면 [package.json](https://unpkg.com/browse/@angular/core/package.json) 파일의 `engines` 필드를 확인해 보세요.
 
   </div>
 
-  Node.js 설치방법을 확인하려면 [nodejs.org](http://nodejs.org "Nodejs.org")를 참고하세요.
+  Node.js 설치방법을 확인하려면 [nodejs.org](https://nodejs.org "Nodejs.org")를 참고하세요.
   시스템에 설치된 Node.js 버전을 확인하려면 터미널에서 `node -v` 명령을 실행하면 됩니다.
 
 {@a npm}
@@ -111,7 +111,7 @@ Angular를 로컬 환경에 설치하려면 이런 것들이 필요합니다:
 
 
 {@a install-cli}
-
+{@a install-the-angular-cli}
 <!--
 ## Install the Angular CLI
 -->
@@ -121,17 +121,22 @@ Angular를 로컬 환경에 설치하려면 이런 것들이 필요합니다:
 You use the Angular CLI to create projects, generate application and library code, and perform a variety of ongoing development tasks such as testing, bundling, and deployment.
 
 To install the Angular CLI, open a terminal window and run the following command:
+
+<code-example language="sh">
+  npm install -g @angular/cli<aio-angular-dist-tag class="pln"></aio-angular-dist-tag>
+</code-example>
 -->
 Angular CLI를 활용하면 프로젝트나 애플리케이션, 라이브러리를 생성할 수 있고 개발 단계에 필요한 테스트, 번들링, 배포 과정을 간편하게 처리할 수 있습니다.
 
 Angular CLI를 설치하려면 터미널에서 다음 명령을 실행하면 됩니다:
 
-<code-example language="sh" class="code-shell">
-  npm install -g @angular/cli
+<code-example language="sh">
+  npm install -g @angular/cli<aio-angular-dist-tag class="pln"></aio-angular-dist-tag>
 </code-example>
 
-{@a create-proj}
 
+{@a create-proj}
+{@a create-a-workspace-and-initial-application}
 <!--
 ## Create a workspace and initial application
 -->
@@ -144,7 +149,7 @@ To create a new workspace and initial starter app:
 
 1. Run the CLI command `ng new` and provide the name `my-app`, as shown here:
 
-    <code-example language="sh" class="code-shell">
+   <code-example language="sh">
       ng new my-app
 
     </code-example>
@@ -154,11 +159,6 @@ To create a new workspace and initial starter app:
 The Angular CLI installs the necessary Angular npm packages and other dependencies. This can take a few minutes.
 
 The CLI creates a new workspace and a simple Welcome app, ready to run.
-
-<div class="alert is-helpful">
-
-You also have the option to use Angular's strict mode, which can help you write better, more maintainable code.
-For more information, see [Strict mode](/guide/strict-mode).
 -->
 애플리케이션은 Angular [**워크스페이스**](guide/glossary#workspace) 영역에서 개발합니다.
 
@@ -166,7 +166,7 @@ For more information, see [Strict mode](/guide/strict-mode).
 
 1. Angular CLI로 `ng new` 명령을 실행하면서 `my-app`을 이름으로 지정합니다:
 
-    <code-example language="sh" class="code-shell">
+    <code-example language="sh">
       ng new my-app
 
     </code-example>
@@ -177,12 +177,6 @@ For more information, see [Strict mode](/guide/strict-mode).
 
 npm 패키지가 설치되고 나면 바로 실행할 수 있는 상태로 워크스페이스와 기본 앱이 구성됩니다.
 
-<div class="alert is-helpful">
-
-Angular 애플리케이션에 엄격한 모드를 적용하면 유지관리 측면에서 더 좋은 애플리케이션 코드를 작성할 수 있습니다.
-자세한 내용은 [엄격한 모드](guide/strict-mode) 문서를 참고하세요.
-
-</div>
 
 {@a serve}
 
@@ -198,7 +192,7 @@ The Angular CLI includes a server, so that you can build and serve your app loca
 
 1. Run the following command:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   cd my-app
   ng serve --open
 </code-example>
@@ -217,7 +211,7 @@ Angular CLI는 서버 기능을 내장하고 있기 때문에 로컬 환경에�
 
 1. `ng serve` 명령을 실행합니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
   cd my-app
   ng serve --open
 </code-example>

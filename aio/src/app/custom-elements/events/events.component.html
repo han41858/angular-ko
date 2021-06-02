@@ -1,6 +1,20 @@
-<!-- <p>Where we'll be presenting:</p> -->
-<p>이런 행사를 준비하고 있습니다:</p>
-<table class="is-full-width">
+<!--
+<h2>Where we'll be presenting:</h2>
+<div *ngIf="!upcomingEvents?.length">
+  <p>We don't have any upcoming speaking engagements at the moment.</p>
+  <p>Until something comes up, make sure you check our <a href="https://www.youtube.com/angular">YouTube channel</a>
+    and follow us on <a href="https://twitter.com/angular">social media</a>.</p>
+  <p>If you want us to be part of your event reach out on <a href="mailto:devrel@angular.io">devrel@angular.io</a>!</p>
+</div>
+-->
+<h2>이런 행사를 준비하고 있습니다:</h2>
+<div *ngIf="!upcomingEvents?.length">
+  <p>We don't have any upcoming speaking engagements at the moment.</p>
+  <p>Until something comes up, make sure you check our <a href="https://www.youtube.com/angular">YouTube channel</a>
+    and follow us on <a href="https://twitter.com/angular">social media</a>.</p>
+  <p>If you want us to be part of your event reach out on <a href="mailto:devrel@angular.io">devrel@angular.io</a>!</p>
+</div>
+<table class="is-full-width" *ngIf="upcomingEvents?.length">
   <thead>
     <tr>
       <!--
@@ -26,8 +40,10 @@
   </tbody>
 </table>
 
-<!-- <p>Where we already presented:</p> -->
-<p>이런 행사를 진행했습니다:</p>
+<br />
+
+<!-- <h2>Where we already presented:</h2> -->
+<h2>이런 행사를 진행했습니다:</h2>
 <table class="is-full-width">
   <thead>
     <tr>

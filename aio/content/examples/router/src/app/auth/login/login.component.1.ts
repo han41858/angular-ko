@@ -12,18 +12,18 @@ export class LoginComponent {
   message: string;
 
   constructor(public authService: AuthService, public router: Router) {
-    this.setMessage();
+    this.message = this.getMessage();
   }
 
-  setMessage() {
-    this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
+  getMessage() {
+    return 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
   }
 
   login() {
     this.message = 'Trying to log in ...';
 
     this.authService.login().subscribe(() => {
-      this.setMessage();
+      this.message = this.getMessage();
       if (this.authService.isLoggedIn) {
         // 보통은 AuthService에서 리다이렉트할 URL을 가져옵니다.
         // 하지만 예제를 간단하게 구성하기 위해 `/admin`으로 리다이렉트 합시다.
@@ -37,6 +37,6 @@ export class LoginComponent {
 
   logout() {
     this.authService.logout();
-    this.setMessage();
+    this.message = this.getMessage();
   }
 }

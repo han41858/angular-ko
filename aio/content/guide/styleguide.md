@@ -50,7 +50,8 @@ _항상_ 이라는 단어가 조금 강하게 와닿을 수도 있지만, 이 �
 If you fully understand the meaning behind the guideline and have a good reason to deviate, then do so. Please strive to be consistent.
 -->
 **"권장합니다"**나 **"~하는 것을 고려해보세요"**는 일반적으로 사용하는 스타일을 의미합니다.
-이 어휘가 사용된 가이드라인을 확실하게 이해하고 있지만, 꼭 그렇게 사용하지 않아도 될 이유가 있다면 해당 스타일 가이드를 지키지 않아도 됩니다. 코드의 일관성을 유지하는 것에 더 신경쓰는 것이 좋습니다.
+이 어휘가 사용된 가이드라인을 확실하게 이해하고 있지만, 꼭 그렇게 사용하지 않아도 될 이유가 있다면 해당 스타일 가이드를 지키지 않아도 됩니다.
+코드의 일관성을 유지하는 것에 더 신경쓰는 것이 좋습니다.
 
 </div>
 
@@ -59,7 +60,8 @@ If you fully understand the meaning behind the guideline and have a good reason 
 <!--
 **Avoid** indicates something you should almost never do. Code examples to *avoid* have an unmistakable red header.
 -->
-**"~하는 것은 피하세요"**는 되도록 피해야 하는 스타일을 의미합니다. 오해를 방지하기 위해 이 스타일은 빨간색 헤더로 표시합니다.
+**"~하는 것은 피하세요"**는 되도록 피해야 하는 스타일을 의미합니다.
+오해를 방지하기 위해 이 스타일은 빨간색 헤더로 표시합니다.
 
 </div>
 
@@ -334,7 +336,8 @@ As the app grows, this rule becomes even more important.
 <!--
 **Why?** Small functions help avoid hidden bugs that come with large functions that share variables with external scope, create unwanted closures, or unwanted coupling with dependencies.
 -->
-**왜?** 함수의 기능이 작으면 버그가 발생할 가능성을 줄일 수 있습니다. 기능이 복잡한 함수는 변수를 공유하거나, 불필요한 클로저를 만들고 다른 코드와 커플링될 가능성이 더 크기 때문에 버그가 발생할 가능성도 커집니다.
+**왜?** 함수의 기능이 작으면 버그가 발생할 가능성을 줄일 수 있습니다.
+기능이 복잡한 함수는 변수를 공유하거나, 불필요한 클로저를 만들고 다른 코드와 커플링될 가능성이 더 크기 때문에 버그가 발생할 가능성도 커집니다.
 
 </div>
 
@@ -352,7 +355,8 @@ As the app grows, this rule becomes even more important.
 <!--
 Naming conventions are hugely important to maintainability and readability. This guide recommends naming conventions for the file name and the symbol name.
 -->
-명명 규칙은 앱의 유지보수성이나 가독성 측면에서 아주 중요합니다. 이번 가이드에서는 파일의 이름이나 심볼 이름에 대한 명명 규칙을 소개합니다.
+명명 규칙은 앱의 유지보수성이나 가독성 측면에서 아주 중요합니다.
+이번 가이드에서는 파일의 이름이나 심볼 이름에 대한 명명 규칙을 소개합니다.
 
 
 {@a 02-01}
@@ -385,7 +389,8 @@ Naming conventions are hugely important to maintainability and readability. This
 <!--
 **Do** follow a pattern that describes the symbol's feature then its type. The recommended pattern is `feature.type.ts`.
 -->
-파일의 이름은 그 파일에 정의된 심볼의 기능과 타입이 드러나도록 작성**하세요.** `기능.타입.ts`와 같은 형식으로 작성하는 것을 권장합니다.
+파일의 이름은 그 파일에 정의된 심볼의 기능과 타입이 드러나도록 작성**하세요.**
+`기능.타입.ts`와 같은 형식으로 작성하는 것을 권장합니다.
 
 </div>
 
@@ -397,7 +402,9 @@ Naming conventions are hugely important to maintainability and readability. This
 <!--
 **Why?** Naming conventions help provide a consistent way to find content at a glance. Consistency within the project is vital. Consistency with a team is important. Consistency across a company provides tremendous efficiency.
 -->
-**왜?** 명명 규칙을 명확하게 정하면 파일의 이름만 봐도 내용을 쉽게 파악할 수 있습니다. 그래서 파일의 이름은 일관된 규칙으로 정해져야 하며, 프로젝트나 팀에서 정한 일관성이라도 좋습니다. 회사 전체에 일관된 명명 규칙을 사용한다면 더 효율적입니다.
+**왜?** 명명 규칙을 명확하게 정하면 파일의 이름만 봐도 내용을 쉽게 파악할 수 있습니다.
+그래서 파일의 이름은 일관된 규칙으로 정해져야 하며, 프로젝트나 팀에서 정한 일관성이라도 좋습니다.
+회사 전체에 일관된 명명 규칙을 사용한다면 더 효율적입니다.
 
 </div>
 
@@ -421,7 +428,8 @@ Naming conventions are hugely important to maintainability and readability. This
 <!--
 **Why?** Names of folders and files should clearly convey their intent. For example, `app/heroes/hero-list.component.ts` may contain a component that manages a list of heroes.
 -->
-**왜?** 폴더나 파일의 이름을 보면 그 안의 내용물이 무엇인지 확실하게 알 수 있어야 합니다. 예를 들어 `app/heroes/hero-list.component.ts`라는 파일을 보면 이 파일이 히어로의 리스트를 처리하는 컴포넌트라고 바로 알 수 있습니다.
+**왜?** 폴더나 파일의 이름을 보면 그 안의 내용물이 무엇인지 확실하게 알 수 있어야 합니다.
+예를 들어 `app/heroes/hero-list.component.ts`라는 파일을 보면 이 파일이 히어로의 리스트를 처리하는 컴포넌트라고 바로 알 수 있습니다.
 
 </div>
 
@@ -472,7 +480,8 @@ Naming conventions are hugely important to maintainability and readability. This
 <!--
 **Do** use consistent type names for all components following a pattern that describes the component's feature then its type. A recommended pattern is `feature.type.ts`.
 -->
-컴포넌트 타입의 파일이라면 그 컴포넌트의 기능을 표현하도록 파일의 이름을 작성**하세요.** `기능.component.ts` 형식을 권장합니다.
+컴포넌트 타입의 파일이라면 그 컴포넌트의 기능을 표현하도록 파일의 이름을 작성**하세요.**
+`기능.component.ts` 형식을 권장합니다.
 
 </div>
 
@@ -524,7 +533,8 @@ Invent additional type names if you must but take care not to create too many.
 **Why?** Unabbreviated type names such as `.service` are descriptive and unambiguous.
 Abbreviations such as `.srv`, `.svc`, and `.serv` can be confusing.
 -->
-**왜?** 타입에 사용하는 단어는 축약하지 않는 것이 좋습니다. `.srv`, `.svc`, `.serv`와 같은 단어는 혼란을 줄 수 있습니다.
+**왜?** 타입에 사용하는 단어는 축약하지 않는 것이 좋습니다.
+`.srv`, `.svc`, `.serv`와 같은 단어는 혼란을 줄 수 있습니다.
 
 </div>
 
@@ -870,7 +880,8 @@ Decide if this exception is agreeable in your project.
 As always, strive for consistency.
 -->
 이렇게 작성하면 간단한 단어 하나로도 서비스라는 것이 명확해 집니다.
-하지만 개발자에 따라서 "-er" 접미사를 사용하는 것이 더 익숙할 수도 있습니다. 그래서 `LoggerService`라는 이름보다 `Logger`가 더 익숙할 수 있습니다.
+하지만 개발자에 따라서 "-er" 접미사를 사용하는 것이 더 익숙할 수도 있습니다.
+그래서 `LoggerService`라는 이름보다 `Logger`가 더 익숙할 수 있습니다.
 프로젝트에 어울린다면 어떤 방식을 사용해도 문제없습니다.
 일관성을 유지하기만 하면 됩니다.
 
@@ -1042,7 +1053,8 @@ As always, strive for consistency.
 <!--
 **Avoid** putting app logic in `main.ts`. Instead, consider placing it in a component or service.
 -->
-애플리케이션 로직을 `main.ts` 파일에 작성하는 것은 **피하세요.** 이 로직은 컴포넌트나 서비스에 들어가는 것이 좋습니다.
+애플리케이션 로직을 `main.ts` 파일에 작성하는 것은 **피하세요.**
+이 로직은 컴포넌트나 서비스에 들어가는 것이 좋습니다.
 
 </div>
 
@@ -1075,7 +1087,7 @@ As always, strive for consistency.
 <a href="#toc">맨 위로</a>
 
 {@a 05-02}
-
+{@a component-selectors}
 <!--
 ### Component selectors
 -->
@@ -1142,7 +1154,8 @@ As always, strive for consistency.
 <!--
 **Do** use a hyphenated, lowercase element selector value; for example, `admin-users`.
 -->
-컴포넌트 셀렉터는 하이픈(`-`)으로 구분되는 소문자를 **사용하세요.** `admin-users`와 같이 지정하면 됩니다.
+컴포넌트 셀렉터는 하이픈(`-`)으로 구분되는 소문자를 **사용하세요.**
+`admin-users`와 같이 지정하면 됩니다.
 
 </div>
 
@@ -1240,7 +1253,8 @@ For example, the prefix `toh` represents **T**our **o**f **H**eroes and the pref
 <!--
 **Why?** Keeps the names of the properties defined in the directives that are bound to the view consistent with the attribute names.
 -->
-**왜?** 디렉티브에 정의된 프로퍼티 이름이 뷰에서 어떻게 활용되는지 생각해 보세요. 디렉티브의 셀렉터는 HTML문서에서 어트리뷰트로 사용됩니다.
+**왜?** 디렉티브에 정의된 프로퍼티 이름이 뷰에서 어떻게 활용되는지 생각해 보세요.
+디렉티브의 셀렉터는 HTML문서에서 어트리뷰트로 사용됩니다.
 
 </div>
 
@@ -1277,7 +1291,8 @@ For example, the prefix `toh` represents **T**our **o**f **H**eroes and the pref
 <!--
 **Do** use a custom prefix for the selector of directives (e.g, the prefix `toh` from **T**our **o**f **H**eroes).
 -->
-커스텀 디렉티브의 셀렉터에는 접두사를 **사용하세요.** 예를 들어 프로젝트 이름이 **T**our **o**f **H**eroes 라면 `toh`를 접두사로 사용할 수 있습니다.
+커스텀 디렉티브의 셀렉터에는 접두사를 **사용하세요.**
+예를 들어 프로젝트 이름이 **T**our **o**f **H**eroes 라면 `toh`를 접두사로 사용할 수 있습니다.
 
 </div>
 
@@ -1293,6 +1308,12 @@ For example, the prefix `toh` represents **T**our **o**f **H**eroes and the pref
 
 </div>
 
+
+<div class="s-rule avoid">
+
+**Don't** prefix a directive name with `ng` because that prefix is reserved for Angular and using it could cause bugs that are difficult to diagnose.
+
+</div>
 
 
 <div class="s-why">
@@ -1508,9 +1529,9 @@ The `name` string cannot use hyphens ("dash-case" or "kebab-case").
 
 
 <!--
-**Why?** Provides pattern matching for [karma](http://karma-runner.github.io/) or other test runners.
+**Why?** Provides pattern matching for [karma](https://karma-runner.github.io/) or other test runners.
 -->
-**왜?** [karma](http://karma-runner.github.io/)와 같은 테스트 러너는 파일 패턴 매칭도 지원합니다.
+**왜?** [karma](https://karma-runner.github.io/)와 같은 테스트 러너는 파일 패턴 매칭도 지원합니다.
 
 </div>
 
@@ -1999,7 +2020,8 @@ All third party vendor scripts are stored in another folder and not in the `src`
 You didn't write them and you don't want them cluttering `src`.
 Use the naming conventions for files in this guide.
 -->
-애플리케이션을 개발할 때는 단기 계획과 장기 계획이 필요합니다. 그리고 시작은 작게 하지만 애플리케이션이 나아가야 할 방향은 항상 염두에 두어야 합니다.
+애플리케이션을 개발할 때는 단기 계획과 장기 계획이 필요합니다.
+그리고 시작은 작게 하지만 애플리케이션이 나아가야 할 방향은 항상 염두에 두어야 합니다.
 
 애플리케이션 코드는 모두 `src` 폴더에 둡니다.
 이 중에서 특정 기능은 따로 모아 별개의 폴더에 둘 수 있으며, 이 때 NgModule도 함께 생성합니다.
@@ -2088,7 +2110,8 @@ _이 기능을 수정하려면 어디에 있는 파일을 열어야 원하는 �
 <!--
 **Do** make locating code intuitive, simple, and fast.
 -->
-코드는 직관적으로 떠오르는 위치에 두세요. 그게 간단하고 빠릅니다.
+코드는 직관적으로 떠오르는 위치에 두세요.
+그게 간단하고 빠릅니다.
 
 </div>
 
@@ -2356,8 +2379,8 @@ But if something is not obvious or departs from a convention, then spell it out.
 
 
 
-<div class="s-rule
- do">
+<div class="s-rule do">
+
 
 <!--
 **Do** have a near term view of implementation and a long term vision.
@@ -3458,7 +3481,8 @@ Yet there is a real danger of that happening if the `SharedModule` provides a se
 <!--
 A distinct application feature or workflow may be *lazy loaded* or *loaded on demand* rather than when the application starts.
 -->
-애플리케이션 모듈은 *지연로딩*하거나 흐름상 *필요할 때 로드*할 수 있습니다. 그러면 애플리케이션에는 이 모듈이 제외되면서 초기 실행 속도가 빨라집니다.
+애플리케이션 모듈은 *지연로딩*하거나 흐름상 *필요할 때 로드*할 수 있습니다.
+그러면 애플리케이션에는 이 모듈이 제외되면서 초기 실행 속도가 빨라집니다.
 
 <div class="s-rule do">
 
@@ -3526,7 +3550,7 @@ A typical *lazy loaded folder* contains a *routing component*, its child compone
 ## 컴포넌트
 
 {@a 05-03}
-
+{@a style-05-03}
 <!--
 ### Components as elements
 -->
@@ -3574,7 +3598,9 @@ Developers place components on the page as they would native HTML elements and w
 <!--
 There are a few cases where you give a component an attribute, such as when you want to augment a built-in element. For example, [Material Design](https://material.angular.io/components/button/overview) uses this technique with `<button mat-button>`. However, you wouldn't use this technique on a custom element.
 -->
-기본 엘리먼트에 추가 기능을 덧붙이는 아주 특이한 경우라면 어트리뷰트 셀렉터를 컴포넌트 셀렉터로 활용할 수도 있습니다. [Material Design](https://material.angular.io/components/button/overview)이 이 방식을 활용하고 있는데, 이 라이브러리는 버튼을 매터리얼 디자인으로 전환하기 위해 `<button mat-button>`과 같은 표현 방식을 사용합니다. 물론 어트리뷰트 셀렉터를 사용하는 대신 커스텀 엘리먼트로 구현해도 됩니다.
+기본 엘리먼트에 추가 기능을 덧붙이는 아주 특이한 경우라면 어트리뷰트 셀렉터를 컴포넌트 셀렉터로 활용할 수도 있습니다.
+[Material Design](https://material.angular.io/components/button/overview)이 이 방식을 활용하고 있는데, 이 라이브러리는 버튼을 매터리얼 디자인으로 전환하기 위해 `<button mat-button>`과 같은 표현 방식을 사용합니다.
+물론 어트리뷰트 셀렉터를 사용하는 대신 커스텀 엘리먼트로 구현해도 됩니다.
 
 </div>
 
@@ -3709,7 +3735,8 @@ Angular는 앞으로 HTML 템플릿에도 이 기능을 지원할 수 있도록 
 <!--
 **Why?** The `./` prefix is standard syntax for relative URLs; don't depend on Angular's current ability to do without that prefix.
 -->
-**왜?** `./` 접미사는 상대주소를 표현하는 표준 문법입니다. Angular와는 관련이 없습니다.
+**왜?** `./` 접미사는 상대주소를 표현하는 표준 문법입니다.
+Angular와는 관련이 없습니다.
 
 
 </div>
@@ -4031,7 +4058,8 @@ helps instantly identify which members of the component serve which purpose.
 <!--
 **Do** limit logic in a component to only that required for the view. All other logic should be delegated to services.
 -->
-컴포넌트에 작성하는 로직은 뷰와 관련된 로직으로만 **제한하세요.** 뷰와 관계없는 로직은 모두 서비스로 옮기는 것이 좋습니다.
+컴포넌트에 작성하는 로직은 뷰와 관련된 로직으로만 **제한하세요.**
+뷰와 관계없는 로직은 모두 서비스로 옮기는 것이 좋습니다.
 
 </div>
 
@@ -4043,7 +4071,8 @@ helps instantly identify which members of the component serve which purpose.
 <!--
 **Do** move reusable logic to services and keep components simple and focused on their intended purpose.
 -->
-다른 컴포넌트에서 재사용할 수 있는 로직도 서비스로 옮기세요. 컴포넌트에는 그 역할에 맞는 기능만 간결하게 작성해야 합니다.
+다른 컴포넌트에서 재사용할 수 있는 로직도 서비스로 옮기세요.
+컴포넌트에는 그 역할에 맞는 기능만 간결하게 작성해야 합니다.
 
 </div>
 
@@ -4171,7 +4200,8 @@ helps instantly identify which members of the component serve which purpose.
 <!--
 **Why?** Angular allows for an [alternative syntax](guide/binding-syntax) `on-*`. If the event itself was prefixed with `on` this would result in an `on-onEvent` binding expression.
 -->
-**왜?** Angular에서 제공하는 문법 중 `on-*`을 붙이는 문법은 [이벤트를 바인딩하는 대체 문법](guide/binding-syntax) 중 하나입니다. 그래서 이벤트 이름에 `on`을 붙이면, 이 이벤트를 바인딩할 때 `on-onEvent`와 같은 표현을 사용해야 합니다.
+**왜?** Angular에서 제공하는 문법 중 `on-*`을 붙이는 문법은 [이벤트를 바인딩하는 대체 문법](guide/binding-syntax) 중 하나입니다.
+그래서 이벤트 이름에 `on`을 붙이면, 이 이벤트를 바인딩할 때 `on-onEvent`와 같은 표현을 사용해야 합니다.
 
 </div>
 
@@ -4278,6 +4308,26 @@ helps instantly identify which members of the component serve which purpose.
 <a href="#toc">Back to top</a>
 -->
 <a href="#toc">맨 위로</a>
+
+
+### Initialize inputs
+
+#### Style 05-18
+
+TypeScript's `--strictPropertyInitialization` compiler option ensures that a class initializes its properties during construction. When enabled, this option causes the TypeScript compiler to report an error if the class does not set a value to any property that is not explicitly marked as optional.
+
+By design, Angular treats all `@Input` properties as optional. When possible, you should satisfy `--strictPropertyInitialization` by providing a default value.
+
+<code-example path="styleguide/src/05-18/app/heroes/hero/hero.component.ts" region="example" header="app/heroes/hero/hero.component.ts"></code-example>
+
+If the property is hard to construct a default value for, use `?` to explicitly mark the property as optional.
+
+<code-example path="styleguide/src/05-18/app/heroes/hero/hero.component.optional.ts" region="example" header="app/heroes/hero/hero.component.ts"></code-example>
+
+You may want to have a required `@Input` field, meaning all your component users are required to pass that attribute. In such cases, use a default value. Just suppressing the TypeScript error with `!` is insufficient and should be avoided because it will prevent the type checker ensure the input value is provided.
+
+<code-example path="styleguide/src/05-18/app/heroes/hero/hero.component.avoid.ts" region="example" header="app/heroes/hero/hero.component.ts"></code-example>
+
 
 <!--
 ## Directives
@@ -4460,7 +4510,8 @@ Compare with the less preferred `host` metadata alternative.
 <!--
 **Do** use services as singletons within the same injector. Use them for sharing data and functionality.
 -->
-서비스는 같은 인젝터를 사용해서 싱글턴으로 **사용하세요.** 서비스는 데이터와 함수를 공유하는 방식으로 사용해야 합니다.
+서비스는 같은 인젝터를 사용해서 싱글턴으로 **사용하세요.**
+서비스는 데이터와 함수를 공유하는 방식으로 사용해야 합니다.
 
 </div>
 
@@ -4606,7 +4657,8 @@ Compare with the less preferred `host` metadata alternative.
 <!--
 **Why?** When you provide the service to a root injector, that instance of the service is shared and available in every class that needs the service. This is ideal when a service is sharing methods or state.
 -->
-**왜?** 애플리케이션 최상위 인젝터에 서비스 프로바이더를 등록하면, 이 서비스의 인스턴스는 모든 클래스에 공유되며, 서비스의 스테이트나 메소드를 함께 활용할 수 있습니다. 서비스는 이런 방식으로 사용하는 것이 가장 좋습니다.
+**왜?** 애플리케이션 최상위 인젝터에 서비스 프로바이더를 등록하면, 이 서비스의 인스턴스는 모든 클래스에 공유되며, 서비스의 스테이트나 메소드를 함께 활용할 수 있습니다.
+서비스는 이런 방식으로 사용하는 것이 가장 좋습니다.
 
 </div>
 
@@ -4630,7 +4682,8 @@ Compare with the less preferred `host` metadata alternative.
 <!--
 **Why?** This is not ideal when two different components need different instances of a service. In this scenario it would be better to provide the service at the component level that needs the new and separate instance.
 -->
-**왜?** 같은 서비스를 의존성으로 주입받는 두 컴포넌트가 서로 다른 인스턴스를 사용하는 것은 서비스를 구현의도에 맞게 사용하는 방법이 아닙니다. 이 방식은 두 컴포넌트가 사용하는 서비스의 인스턴스를 명확하게 분리할 필요가 있을 때만 사용하는 방식입니다.
+**왜?** 같은 서비스를 의존성으로 주입받는 두 컴포넌트가 서로 다른 인스턴스를 사용하는 것은 서비스를 구현의도에 맞게 사용하는 방법이 아닙니다.
+이 방식은 두 컴포넌트가 사용하는 서비스의 인스턴스를 명확하게 분리할 필요가 있을 때만 사용하는 방식입니다.
 
 </div>
 
@@ -4675,7 +4728,8 @@ Compare with the less preferred `host` metadata alternative.
 **Why?** The Angular Dependency Injection (DI) mechanism resolves a service's own
 dependencies based on the declared types of that service's constructor parameters.
 -->
-**왜?** 서비스에도 의존성으로 주입하는 객체가 있을 수 있습니다. 이 때 Angular 의존성 주입 메커니즘에 따라 올바른 의존성 객체를 주입하려면, 서비스 생성자에 의존성 객체의 타입을 명시해야 합니다.
+**왜?** 서비스에도 의존성으로 주입하는 객체가 있을 수 있습니다.
+이 때 Angular 의존성 주입 메커니즘에 따라 올바른 의존성 객체를 주입하려면, 서비스 생성자에 의존성 객체의 타입을 명시해야 합니다.
 
 </div>
 
@@ -4759,7 +4813,9 @@ XHR 통신으로 데이터를 가져오거나 로컬 스토리지, 메모리에 
 <!--
 **Why?** The component's responsibility is for the presentation and gathering of information for the view. It should not care how it gets the data, just that it knows who to ask for it. Separating the data services moves the logic on how to get it to the data service, and lets the component be simpler and more focused on the view.
 -->
-**왜?** 컴포넌트는 화면을 담당하며, 화면에 표시된 정보를 모으는 것까지만 컴포넌트의 역할입니다. 어딘가에서 데이터를 가져오는 로직은 컴포넌트가 담당하는 것이 아니며, 이 역할을 담당하는 무언가를 활용하기만 할 뿐입니다. 데이터를 처리하는 로직은 모두 서비스로 옮기고, 컴포넌트는 화면을 담당하는 역할에 집중하도록 하세요.
+**왜?** 컴포넌트는 화면을 담당하며, 화면에 표시된 정보를 모으는 것까지만 컴포넌트의 역할입니다.
+어딘가에서 데이터를 가져오는 로직은 컴포넌트가 담당하는 것이 아니며, 이 역할을 담당하는 무언가를 활용하기만 할 뿐입니다.
+데이터를 처리하는 로직은 모두 서비스로 옮기고, 컴포넌트는 화면을 담당하는 역할에 집중하도록 하세요.
 
 </div>
 
@@ -4792,7 +4848,8 @@ A data service encapsulates these details. It's easier to evolve these
 details inside the service without affecting its consumers. And it's
 easier to test the consumers with mock service implementations.
 -->
-이 로직들은 데이터 서비스 안쪽에 구현하는 것이 좋습니다. 그러면 데이터를 사용하는 쪽과 관계없이 로직을 수정하거나 확장할 수 있으며, 컴포넌트에 목업 서비스를 주입해서 테스트하기도 편해집니다.
+이 로직들은 데이터 서비스 안쪽에 구현하는 것이 좋습니다.
+그러면 데이터를 사용하는 쪽과 관계없이 로직을 수정하거나 확장할 수 있으며, 컴포넌트에 목업 서비스를 주입해서 테스트하기도 편해집니다.
 
 </div>
 
@@ -4847,7 +4904,8 @@ Angular 컴포넌트가 실행되는 각 이벤트 시점을 활용하려면 라
 **Why?** Lifecycle interfaces prescribe typed method
 signatures. Use those signatures to flag spelling and syntax mistakes.
 -->
-**왜?** 라이프싸이클 인터페이스는 Angular 컴포넌트의 이벤트 시점을 활용할 수 있는 메소드를 미리 정의해 둔 것입니다. 이 메소드를 그대로 활용하면 오타를 내거나 문법을 잘못 사용하는 실수를 방지할 수 있습니다.
+**왜?** 라이프싸이클 인터페이스는 Angular 컴포넌트의 이벤트 시점을 활용할 수 있는 메소드를 미리 정의해 둔 것입니다.
+이 메소드를 그대로 활용하면 오타를 내거나 문법을 잘못 사용하는 실수를 방지할 수 있습니다.
 
 </div>
 
@@ -4965,14 +5023,14 @@ codelyzer 룰은 필요한대로 수정해서 사용하는 것을 **권장합니
 [Atom](https://atom.io/)을 사용한다면 [이 기능](https://atom.io/packages/angular-2-typescript-snippets)을 사용하는 것을 **권장합니다.**
 
 <!--
-**Consider** using [snippets](https://github.com/orizens/sublime-angular2-snippets) for [Sublime Text](http://www.sublimetext.com/) that follow these styles and guidelines.
+**Consider** using [snippets](https://github.com/orizens/sublime-angular2-snippets) for [Sublime Text](https://www.sublimetext.com/) that follow these styles and guidelines.
 -->
-[Sublime Text](http://www.sublimetext.com/)를 사용한다면 [이 기능](https://github.com/orizens/sublime-angular2-snippets)을 사용하는 것을 **권장합니다.**
+[Sublime Text](https://www.sublimetext.com/)를 사용한다면 [이 기능](https://github.com/orizens/sublime-angular2-snippets)을 사용하는 것을 **권장합니다.**
 
 <!--
-**Consider** using [snippets](https://github.com/mhartington/vim-angular2-snippets) for [Vim](http://www.vim.org/) that follow these styles and guidelines.
+**Consider** using [snippets](https://github.com/mhartington/vim-angular2-snippets) for [Vim](https://www.vim.org/) that follow these styles and guidelines.
 -->
-[Vim](http://www.vim.org/)을 사용한다면 [이 기능](https://github.com/mhartington/vim-angular2-snippets)을 사용하는 것을 **권장합니다.**
+[Vim](https://www.vim.org/)을 사용한다면 [이 기능](https://github.com/mhartington/vim-angular2-snippets)을 사용하는 것을 **권장합니다.**
 
 </div>
 

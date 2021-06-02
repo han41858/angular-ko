@@ -44,10 +44,10 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
       <!--
       Runs the body of a test (`it`) or setup (`beforeEach`) function within a special _async test zone_.
-      See [discussion above](guide/testing-components-scenarios#waitForAsync).
+      See [waitForAsync](guide/testing-components-scenarios#waitForAsync).
       -->
       테스트 스펙(`it`)이나 환경설정 블럭(`beforeEach`) 함수을 _비동기 테스트 존_ 에서 실행합니다.
-      [`waitForAsync()` 로 비동기 테스트하기](guide/testing-components-scenarios#waitForAsync) 섹션을 참고하세요.
+      [`waitForAsync()`](guide/testing-components-scenarios#waitForAsync) 섹션을 참고하세요.
 
     </td>
   </tr>
@@ -61,11 +61,10 @@ Here's a summary of the stand-alone functions, in order of likely utility:
 
       <!--
       Runs the body of a test (`it`) within a special _fakeAsync test zone_, enabling
-      a linear control flow coding style. See [discussion above](guide/testing-components-scenarios#fake-async).
+      a linear control flow coding style. See [fakeAsync](guide/testing-components-scenarios#fake-async).
       -->
       테스트 스펙(`it`)을 코딩 스타일을 선형(linear)으로 구성해서 _fakeAsync 테스트 존_ 에서 실행합니다.
-      [`fakeAsync()` 로 비동기 테스트하기](guide/testing-components-scenarios#fake-async) 섹션을 참고하세요.
-
+      [`fakeAsync()`](guide/testing-components-scenarios#fake-async) 섹션을 참고하세요.
 
     </td>
   </tr>
@@ -91,7 +90,7 @@ Here's a summary of the stand-alone functions, in order of likely utility:
       Accepts an optional argument that moves the virtual clock forward
       by the specified number of milliseconds,
       clearing asynchronous activities scheduled within that timeframe.
-      See [discussion above](guide/testing-components-scenarios#tick).
+      See [tick](guide/testing-components-scenarios#tick).
       -->
       시간이 지난 것을 시뮬레이션해서 아직 처리되지 않은 비동기 작업을 종료합니다.
       _타이머_ , _마이크로 태스크_ , _fakeAsync 테스트 존_ 큐가 모두 대상이 됩니다.
@@ -104,7 +103,7 @@ Here's a summary of the stand-alone functions, in order of likely utility:
       </div>
 
       이 함수를 실행하면서 밀리초 단위로 인자를 전달하면 원하는 시간만큼 진행할 수 있습니다.
-      [`tick()` 함수](guide/testing-components-scenarios#tick) 섹션을 참고하세요.
+      [`tick()`](guide/testing-components-scenarios#tick) 섹션을 참고하세요.
 
     </td>
   </tr>
@@ -351,13 +350,13 @@ Here are the most important static methods, in order of likely utility.
       Compile the testing module asynchronously after you've finished configuring it.
       You **must** call this method if _any_ of the testing module components have a `templateUrl`
       or `styleUrls` because fetching component template and style files is necessarily asynchronous.
-      See [above](guide/testing-components-scenarios#compile-components).
+      See [compileComponents](guide/testing-components-scenarios#compile-components).
 
       After calling `compileComponents`, the `TestBed` configuration is frozen for the duration of the current spec.
       -->
       비동기로 테스트 모듈을 컴파일하면서 테스트 모듈 설정을 확정합니다.
       테스트 모듈에 있는 컴포넌트 중에 `templateUrl`이나 `styleUrls`를 사용해서 외부 파일을 로드해야 하는 컴포넌트가 있다면 **반드시** 이 메서드를 실행해야 합니다.
-      자세한 내용은 [`compileComponents()` 실행하기](guide/testing-components-scenarios#compile-components) 문서를 참고하세요.
+      자세한 내용은 [`compileComponents()`](guide/testing-components-scenarios#compile-components) 문서를 참고하세요.
 
       `compileComponents`을 실행하고 나면 `TestBed` 설정이 확정되어 변경할 수 없습니다.
 
@@ -799,12 +798,12 @@ _fixture_ 가 제공하는 메서드를 실행하면 Angular가 컴포넌트 트
 
       To resume testing after completion of asynchronous activity or
       asynchronous change detection, hook that promise.
-      See [above](guide/testing-components-scenarios#when-stable).
+      See [whenStable](guide/testing-components-scenarios#when-stable).
       -->
       픽스쳐가 안정상태가 될 때 완료되는 프라미스를 반환합니다.
 
       이 메서드는 비동기 작업이나 비동기 변화 감지를 기다렸다가 다음 코드를 실행할 때 사용합니다.
-      자세한 내용은 [위 항목](guide/testing-components-scenarios#when-stable)을 참고하세요.
+      자세한 내용은 [`whenStable`](guide/testing-components-scenarios#when-stable) 섹션을 참고하세요.
     </td>
   </tr>
 
@@ -950,14 +949,14 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
       An object that provides parent context for this element.
       Often an ancestor component instance that governs this element.
 
-      When an element is repeated within `*ngFor`, the context is an `NgForRow` whose `$implicit`
+      When an element is repeated within `*ngFor`, the context is an `NgForOf` whose `$implicit`
       property is the value of the row instance value.
       For example, the `hero` in `*ngFor="let hero of heroes"`.
       -->
       현재 엘리먼트의 부모 컨텍스트를 반환합니다.
       엘리먼트의 부모 컴포넌트를 찾아야 할 때 사용합니다.
 
-      엘리먼트가 `*ngFor`로 반복되고 있다면 `context`는 `NgForRow` 컨텍스트를 반환하며, 이 컨텍스트에서 `$implicit` 프로퍼티를 참조하면 해당 반복문이 순회하는 객체를 확인할 수 있습니다.
+      엘리먼트가 `*ngFor`로 반복되고 있다면 `context`는 `NgForOf` 컨텍스트를 반환하며, 이 컨텍스트에서 `$implicit` 프로퍼티를 참조하면 해당 반복문이 순회하는 객체를 확인할 수 있습니다.
       `*ngFor="let hero of heroes"`라고 사용하고 있다면 `hero` 객체를 확인할 수 있습니다.
 
     </td>
@@ -1033,14 +1032,14 @@ Here are the most useful `DebugElement` members for testers, in approximate orde
       Triggers the event by its name if there is a corresponding listener
       in the element's `listeners` collection.
       The second parameter is the _event object_ expected by the handler.
-      See [above](guide/testing-components-scenarios#trigger-event-handler).
+      See [triggerEventHandler](guide/testing-components-scenarios#trigger-event-handler).
 
       If the event lacks a listener or there's some other problem,
       consider calling `nativeElement.dispatchEvent(eventObject)`.
       -->
       엘리먼트의 `listeners` 콜렉션에 존재하는 이벤트를 발생시킵니다.
       이 메서드의 두 번째 인자에는 핸들러가 처리할 _이벤트 객체_ 를 전달할 수 있습니다.
-      자세한 내용은 [위 항목](guide/testing-components-scenarios#trigger-event-handler)을 참고하세요.
+      자세한 내용은 [`triggerEventHandler`](guide/testing-components-scenarios#trigger-event-handler) 섹션을 참고하세요.
 
       해당 이름으로 등록된 이벤트 리스너가 없거나 이 메서드 실행에 문제가 있다면 `nativeElement.dispatchEvent(eventObject)`를 대신 사용하세요.
 

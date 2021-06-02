@@ -10,8 +10,8 @@ import { HeroesService } from './heroes.service';
   styleUrls: ['./heroes.component.css']
 })
 export class HeroesComponent implements OnInit {
-  heroes: Hero[];
-  editHero: Hero; // the hero currently being edited
+  heroes: Hero[] = [];
+  editHero: Hero | undefined; // 수정하고 있는 히어로 객체
 
   constructor(private heroesService: HeroesService) {}
 

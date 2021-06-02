@@ -144,6 +144,15 @@ including another selector inside parentheses after `:host`.
 The next example targets the host element again, but only when it also has the `active` CSS class.
 
 <code-example path="component-styles/src/app/hero-details.component.css" region="hostfunction" header="src/app/hero-details.component.css"></code-example>
+
+The `:host` selector can also be combined with other selectors.
+Add selectors behind the `:host` to select child elements, for example using `:host h2` to target all `<h2>` elements inside a component's view.
+
+<div class="alert is-helpful">
+
+You should not add selectors (other than `:host-context`) in front of the `:host` selector to style a component based on the outer context of the component's view. Such selectors are not scoped to a component's view and will select the outer context, but it's not native behavior. Use `:host-context` selector for that purpose instead.
+
+</div>
 -->
 컴포넌트가 *위치하는* 엘리먼트(호스트 엘리먼트)에 스타일을 지정하려면 가상 클래스 셀렉터 `:host`를 사용합니다.
 이 때 컴포넌트가 위치하는 엘리먼트라는 것은 컴포넌트 템플릿 *안쪽*이 아닌 컴포넌트를 나타내는 엘리먼트 자체를 가리킵니다.
@@ -158,7 +167,19 @@ The next example targets the host element again, but only when it also has the `
 
 그래서 아래 예제는 `active` CSS 클래스가 지정된 호스트 엘리먼트만 가리킵니다.
 
+
 <code-example path="component-styles/src/app/hero-details.component.css" region="hostfunction" header="src/app/hero-details.component.css"></code-example>
+
+`:host` 셀렉터는 다른 셀렉터와 조합해서 사용할 수 있습니다.
+그래서 `:host h2`와 같이 작성하면 모든 컴포넌트 뷰에 있는 엘리먼트 중에서 모든 `<h2>`를 대상으로 지정할 수 있습니다.
+
+<div class="alert is-helpful">
+
+`:host` 셀렉터 앞에는 다른 셀렉터(`:host-context` 제외)를 사용할 수 없습니다.
+`:host` 셀렉터는 컴포넌트의 뷰를 대상으로 하기 때문에 외부 컨텍스트를 지정할 수 없습니다.
+외부 컨텍스트와 연동하려면 `:host-context` 셀렉터를 사용해야 합니다.
+
+</div>
 
 
 ### :host-context
@@ -300,7 +321,7 @@ They are _not inherited_ by any components nested within the template nor by any
 
 The Angular CLI command [`ng generate component`](cli/generate) defines an empty `styles` array when you create the component with the `--inline-style` flag.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng generate component hero-app --inline-style
 </code-example>
 -->
@@ -319,7 +340,7 @@ ng generate component hero-app --inline-style
 
 Angular CLI로 [`ng generate component`](cli/generate) 명령을 실행할 때 `--inline-style` 플래그를 지정하면 `styles` 배열이 비어있는 상태에서 컴포넌트 코드 개발을 시작할 수 있습니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng generate component hero-app --inline-style
 </code-example>
 
@@ -353,7 +374,7 @@ They are _not inherited_ by any components nested within the template nor by any
 
 When you use the Angular CLI command [`ng generate component`](cli/generate) without the `--inline-style` flag, it creates an empty styles file for you and references that file in the component's generated `styleUrls`.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng generate component hero-app
 </code-example>
 -->
@@ -379,7 +400,7 @@ ng generate component hero-app
 
 Angular CLI로 [`ng generate component`](cli/generate) 명령을 실행할 때 `--inline-style` 플래그를 지정하지 않으면 컴포넌트 이름으로 스타일 파일을 만들고 컴포넌트 메타데이터의 `styleUrls`에서 이 파일을 참조합니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng generate component hero-app
 </code-example>
 
@@ -416,8 +437,7 @@ You can also write `<link>` tags into the component's HTML template.
 
 <div class="alert is-critical">
 
-When building with the CLI, be sure to include the linked style file among the assets to be copied to the server as described in the [CLI wiki](https://github.com/angular/angular-cli/wiki/stories-asset-configuration).
-<!- 2018-10-16: The link above is still the best source for this information. ->
+When building with the CLI, be sure to include the linked style file among the assets to be copied to the server as described in the [Assets configuration guide](guide/workspace-config#assets-configuration).
 
 Once included, the CLI will include the stylesheet, whether the link tag's href URL is relative to the application root or the component file.
 
@@ -431,8 +451,7 @@ Once included, the CLI will include the stylesheet, whether the link tag's href 
 <div class="alert is-critical">
 
 Angular CLI가 애플리케이션을 빌드할 때 링크로 연결된 스타일 파일이 `assets` 폴더에 있고 빌드 결과에 제대로 포함되는지 꼭 확인하세요.
-`assets` 폴더를 활용하는 방법은 [CLI wiki](https://github.com/angular/angular-cli/wiki/stories-asset-configuration)에서 소개합니다.
-<!-- 2018-10-16: The link above is still the best source for this information. -->
+`assets` 폴더를 활용하는 방법은 [애셋 환경설정 가이드](guide/workspace-config#assets-configuration)문서에서 설명합니다.
 
 스타일 파일이 `assets` 폴더에 있다면 CLI가 이 스타일 파일을 빌드 결과물에 포함시키며, 컴포넌트에서는 애플리케이션 최상위 경로나 컴포넌트 파일의 상대경로로 이 스타일 파일을 참조할 수 있습니다.
 
@@ -470,15 +489,13 @@ When building with the CLI, you must configure the `angular.json` to include _al
 
 Register **global** style files in the `styles` section which, by default, is pre-configured with the global `styles.css` file.
 
-See the [CLI wiki](https://github.com/angular/angular-cli/wiki/stories-global-styles) to learn more.
-<!- 2018-10-16: The link above is still the best source for this information. ->
+See the [Styles configuration guide](guide/workspace-config#styles-and-scripts-configuration) to learn more.
 -->
 Angular CLI로 애플리케이션의 빌드 설정 파일인 `angular.json` 파일은 빌드에 포함될 _모든 외부 자원_ 을 지정하는데, 이 때 외부 스타일 파일을 지정할 수도 있습니다.
 
 이 때 `styles` 항목을 활용하면 **전역**으로 지정될 스타일 파일을 지정할 수 있으며, CLI로 생성한 프로젝트라면 `styles.css` 파일이 초기값으로 지정됩니다.
 
-더 자세한 내용은 [CLI wiki](https://github.com/angular/angular-cli/wiki/stories-global-styles)를 참고하세요.
-<!-- 2018-10-16: The link above is still the best source for this information. -->
+더 자세한 내용은 [스타일 환경설정 가이드](guide/workspace-config#styles-and-scripts-configuration) 문서를 참고하세요.
 
 
 <!--
@@ -488,7 +505,7 @@ Angular CLI로 애플리케이션의 빌드 설정 파일인 `angular.json` 파�
 
 <!--
 If you're building with the CLI,
-you can write style files in [sass](http://sass-lang.com/), [less](http://lesscss.org/), or [stylus](http://stylus-lang.com/) and specify those files in the `@Component.styleUrls` metadata with the appropriate extensions (`.scss`, `.less`, `.styl`) as in the following example:
+you can write style files in [sass](https://sass-lang.com/), [less](http://lesscss.org/), or [stylus](https://stylus-lang.com/) and specify those files in the `@Component.styleUrls` metadata with the appropriate extensions (`.scss`, `.less`, `.styl`) as in the following example:
 
 <code-example>
 @Component({
@@ -502,10 +519,7 @@ you can write style files in [sass](http://sass-lang.com/), [less](http://lesscs
 The CLI build process runs the pertinent CSS preprocessor.
 
 When generating a component file with `ng generate component`, the CLI emits an empty CSS styles file (`.css`) by default.
-You can configure the CLI to default to your preferred CSS preprocessor
-as explained in the [CLI wiki](https://github.com/angular/angular-cli/wiki/stories-css-preprocessors
-"CSS Preprocessor integration").
-<!- 2018-10-16: The link above is still the best source for this information. ->
+You can configure the CLI to default to your preferred CSS preprocessor as explained in the [Workspace configuration guide](guide/workspace-config#generation-schematics).
 
 
 <div class="alert is-important">
@@ -514,7 +528,7 @@ Style strings added to the `@Component.styles` array _must be written in CSS_ be
 
 </div>
 -->
-Angular CLI를 사용한다면 [sass](http://sass-lang.com/)나 [less](http://lesscss.org/), [stylus](http://stylus-lang.com/)를 사용할 수도 있으며, 이렇게 만든 스타일 파일은 `@Component.styleUrls` 메타데이터에 다음과 같이 지정할 수 있습니다:
+Angular CLI를 사용한다면 [sass](http://sass-lang.com/)나 [less](http://lesscss.org/), [stylus](https://stylus-lang.com/)를 사용할 수도 있으며, 이렇게 만든 스타일 파일은 `@Component.styleUrls` 메타데이터에 다음과 같이 지정할 수 있습니다:
 
 <code-example>
 @Component({
@@ -528,9 +542,7 @@ Angular CLI를 사용한다면 [sass](http://sass-lang.com/)나 [less](http://le
 그러면 Angular CLI에 정의된 CSS 프리프로세서를 통해 최종 결과물에는 CSS 스타일로 변환됩니다.
 
 `ng generate component` 명령으로 컴포넌트를 생성하면 비어있는 CSS 파일(`.css`)이 기본으로 생성됩니다.
-이 때 스타일 파일을 어떤 확장자로 생성할지 Angular CLI 환경 설정파일에 지정할 수 있으며, 더 자세한 내용은 [CLI 문서](https://github.com/angular/angular-cli/wiki/stories-css-preprocessors
-"CSS Preprocessor integration") 문서를 참고하세요.
-<!-- 2018-10-16: The link above is still the best source for this information. -->
+Angular CLI가 기본으로 사용할 CSS 전처리기를 지정하는 방법에 대해 알아보려면 [워크스페이스 환경설정 가이드](guide/workspace-config#generation-schematics) 문서를 참고하세요.
 
 
 <div class="alert is-important">

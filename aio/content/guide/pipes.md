@@ -10,7 +10,7 @@ For example, you would use a pipe to show a date as **April 15, 1988** rather th
 
 <div class="alert is-helpful">
 
-  For the sample app used in this topic, see the <live-example></live-example>.
+  For the sample application used in this topic, see the <live-example></live-example>.
 
 </div>
 
@@ -107,9 +107,8 @@ The tabs in the example show the following:
   </code-pane>
 </code-tabs>
 
-The component's `birthday` value flows through the
-[pipe operator](guide/template-expression-operators#pipe) ( | ) to the [`date`](api/common/DatePipe)
-function.
+The component's `birthday` value flows through the pipe operator, `|` to the [`date`](api/common/DatePipe) function.
+
 -->
 파이프를 사용하려면 템플릿 표현식에 파이프 연산자(`|`)를 사용하고 파이프 *이름*을 지정하면 됩니다.
 `date` 프로퍼티에 [`DatePipe`](api/common/DatePipe)를 적용해 봅시다:
@@ -129,7 +128,7 @@ function.
   </code-pane>
 </code-tabs>
 
-컴포넌트 `birthday` 값은 [파이프 연산자 (`|`)](guide/template-expression-operators#pipe)를 거쳐 [DatePipe](api/common/DatePipe)로 전달됩니다.
+컴포넌트 `birthday` 값은 파이프 연산자 `|`를 거쳐 [DatePipe](api/common/DatePipe)로 전달됩니다.
 
 
 {@a parameterizing-a-pipe}
@@ -322,7 +321,7 @@ Use `name` in template expressions as you would for a built-in pipe.
 
 <div class="alert is-important">
 
-* Include your pipe in the `declarations` field of the `NgModule` metadata in order for it to be available to a template. See the `app.module.ts` file in the example app (<live-example></live-example>). For details, see [NgModules](guide/ngmodules "NgModules introduction").
+* Include your pipe in the `declarations` field of the `NgModule` metadata in order for it to be available to a template. See the `app.module.ts` file in the example application (<live-example></live-example>). For details, see [NgModules](guide/ngmodules "NgModules introduction").
 * Register your custom pipes. The [Angular CLI](cli "CLI Overview and Command Reference") [`ng generate pipe`](cli/generate#pipe "ng generate pipe in the CLI Command Reference") command registers the pipe automatically.
 
 </div>
@@ -517,7 +516,7 @@ Angular updates the display every time the user adds a hero.
 If the user clicks the **Reset** button, Angular replaces `heroes` with a new array of the original heroes and updates the display.
 If you add the ability to remove or change a hero, Angular would detect those changes and update the display as well.
 
-However, executing a pipe to update the display with every change would slow down your app's performance.
+However, executing a pipe to update the display with every change would slow down your application's performance.
 So Angular uses a faster change-detection algorithm for executing a pipe, as described in the next section.
 -->
 Angular는 키입력, 마우스 이동, 타이머 만료, 서버 응답과 같은 DOM 이벤트가 발생할 때마다 [변화 감지 동작](guide/glossary#change-detection "Definition of change detection")을 실행하고 바인딩된 데이터가 변경되었는지 검사합니다.
@@ -589,7 +588,7 @@ The tabs for the example show the following:
   </code-pane>
 </code-tabs>
 
-The app now shows unexpected behavior: When the user adds flying heroes, none of them appear under "Heroes who fly."
+The application now shows unexpected behavior: When the user adds flying heroes, none of them appear under "Heroes who fly."
 This happens because the code that adds a hero does so by pushing it onto the `heroes` array:
 
 <code-example path="pipes/src/app/flying-heroes.component.ts" region="push" header="src/app/flying-heroes.component.ts"></code-example>
@@ -691,7 +690,7 @@ Angular executes an impure pipe every time it detects a change with every keystr
 
 <div class="alert is-important">
 
-While an impure pipe can be useful, be careful using one. A long-running impure pipe could dramatically slow down your app.
+While an impure pipe can be useful, be careful using one. A long-running impure pipe could dramatically slow down your application.
 
 </div>
 
@@ -832,13 +831,13 @@ Angular가 제공하는 [`AsyncPipe`](/api/common/AsyncPipe "API description of 
 ## HTTP 요청 캐싱하기
 
 <!--
-To [communicate with backend services using HTTP](/guide/http "Communicating with backend services using HTTP"), the `HttpClient` service uses observables and offers the `HTTPClient.get()` method to fetch data from a server.
+To [communicate with backend services using HTTP](/guide/http "Communicating with backend services using HTTP"), the `HttpClient` service uses observables and offers the `HttpClient.get()` method to fetch data from a server.
 The asynchronous method sends an HTTP request, and returns an observable that emits the requested data for the response.
 
 As shown in the previous section, you can use the impure `AsyncPipe` to accept an observable as input and subscribe to the input automatically.
 You can also create an impure pipe to make and cache an HTTP request.
 
-Impure pipes are called whenever change detection runs for a component, which could be every few milliseconds for `CheckAlways`.
+Impure pipes are called whenever change detection runs for a component, which could be as often as every few milliseconds.
 To avoid performance problems, call the server only when the requested URL changes, as shown in the following example, and use the pipe to cache the server response.
 The tabs show the following:
 
@@ -916,3 +915,14 @@ The built-in [JsonPipe](api/common/JsonPipe "API description for JsonPipe") prov
 [JsonPipe](api/common/JsonPipe "API description for JsonPipe")는 데이터 바인딩이 왜 실패했는지 확인하거나 바인딩할 객체를 미리 확인하는 용도로도 활용할 수 있습니다.
 
 </div>
+
+
+## Pipes and precedence
+
+The pipe operator has a higher precedence than the ternary operator (`?:`), which means `a ? b : c | x` is parsed as `a ? b : (c | x)`.
+The pipe operator cannot be used without parentheses in the first and second operands of `?:`.
+
+Due to precedence, if you want a pipe to apply to the result of a ternary, wrap the entire expression in parentheses; for example, `(a ? b : c) | x`.
+
+<code-example path="pipes/src/app/precedence.component.html" region="precedence" header="src/app/precedence.component.html">
+</code-example>

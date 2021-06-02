@@ -20,7 +20,7 @@ import {UrlSegment, UrlSegmentGroup} from './url_tree';
  *
  * @see `Route`
  * @see `Router`
- * @see [Router configuration guide](guide/router#configuration)
+ * @see [Router configuration guide](guide/router-reference#configuration)
  * @publicApi
  */
 export type Routes = Route[];
@@ -396,8 +396,12 @@ export interface Route {
    * Default is 'prefix'.
    *
    * By default, the router checks URL elements from the left to see if the URL
-   * matches a given  path, and stops when there is a match. For example,
-   * '/team/11/user' matches 'team/:id'.
+   * matches a given path and stops when there is a config match. Importantly there must still be a
+   * config match for each segment of the URL. For example, '/team/11/user' matches the prefix
+   * 'team/:id' if one of the route's children matches the segment 'user'. That is, the URL
+   * '/team/11/user` matches the config
+   * `{path: 'team/:id', children: [{path: ':user', component: User}]}`
+   * but does not match when there are no children as in `{path: 'team/:id', component: Team}`.
    *
    * The path-match strategy 'full' matches against the entire URL.
    * It is important to do this when redirecting empty-path routes.
@@ -418,7 +422,10 @@ export interface Route {
   component?: Type<any>;
   /**
    * A URL to redirect to when the path matches.
+   *
    * Absolute if the URL begins with a slash (/), otherwise relative to the path URL.
+   * Note that no further redirects are evaluated after an absolute redirect.
+   *
    * When not present, router does not redirect.
    */
   redirectTo?: string;

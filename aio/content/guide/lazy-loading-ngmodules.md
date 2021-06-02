@@ -4,12 +4,12 @@
 # 기능모듈 지연로딩 하기
 
 <!--
-By default, NgModules are eagerly loaded, which means that as soon as the app loads, so do all the NgModules, whether or not they are immediately necessary. For large apps with lots of routes, consider lazy loading&mdash;a design pattern that loads NgModules as needed. Lazy loading helps keep initial
+By default, NgModules are eagerly loaded, which means that as soon as the application loads, so do all the NgModules, whether or not they are immediately necessary. For large applications with lots of routes, consider lazy loading&mdash;a design pattern that loads NgModules as needed. Lazy loading helps keep initial
 bundle sizes smaller, which in turn helps decrease load times.
 
 <div class="alert is-helpful">
 
-For the final sample app with two lazy-loaded modules that this page describes, see the
+For the final sample application with two lazy-loaded modules that this page describes, see the
 <live-example></live-example>.
 
 </div>
@@ -20,8 +20,7 @@ For the final sample app with two lazy-loaded modules that this page describes, 
 
 <div class="alert is-helpful">
 
-For the final sample app with two lazy-loaded modules that this page describes, see the
-<live-example></live-example>.
+이 문서에서 다루는 예제 앱의 최종 완성본은 <live-example></live-example>에서 직접 실행하거나 다운받아 실행할 수 있습니다.
 
 </div>
 
@@ -33,7 +32,7 @@ For the final sample app with two lazy-loaded modules that this page describes, 
 This section introduces the basic procedure for configuring a lazy-loaded route.
 For a step-by-step example, see the [step-by-step setup](#step-by-step) section on this page.
 
-To lazy load Angular modules, use `loadchildren` (instead of `component`) in your `AppRoutingModule` `routes` configuration as follows.
+To lazy load Angular modules, use `loadChildren` (instead of `component`) in your `AppRoutingModule` `routes` configuration as follows.
 
 <code-example header="AppRoutingModule (excerpt)">
 
@@ -93,7 +92,7 @@ where `customer-app` is the name of your app:
 ng new customer-app --routing
 </code-example>
 
-This creates an app called `customer-app` and the `--routing` flag
+This creates an application called `customer-app` and the `--routing` flag
 generates a file called `app-routing.module.ts`, which is one of
 the files you need for setting up lazy loading for your feature module.
 Navigate into the project by issuing the command `cd customer-app`.
@@ -149,6 +148,15 @@ Instead, it adds the declared route, `customers` to the `routes` array declared 
 
 Notice that the lazy-loading syntax uses `loadChildren` followed by a function that uses the browser's built-in `import('...')` syntax for dynamic imports.
 The import path is the relative path to the module.
+
+<div class="callout is-helpful">
+<header>String-based lazy loading</header>
+
+In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](https://angular.io/guide/deprecations#loadchildren-string-syntax) in favor of the `import()` syntax. However, you can opt into using string-based lazy loading (`loadChildren: './path/to/module#Module'`) by including the lazy-loaded routes in your `tsconfig` file, which includes the lazy-loaded files in the compilation.
+
+By default the CLI will generate projects with stricter file inclusions intended to be used with the `import()` syntax.
+
+</div>
 -->
 그 다음에는 컴포넌트로 라우팅할 기능 모듈을 생성해야 합니다.
 터미널에서 다음 명령을 실행해서 `customers` 기능 모듈을 생성합니다.
@@ -173,10 +181,20 @@ ng generate module customers --route customers --module app.module
 지연로딩되는 모듈은 동적로딩을 위해 브라우저가 제공하는 `import('...')` 문법의 문자열이 `loadChildren` 프로퍼티에 할당되는 식으로 구현합니다.
 
 
+<div class="callout is-helpful">
+<header>String-based lazy loading</header>
+
+In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](https://angular.io/guide/deprecations#loadchildren-string-syntax) in favor of the `import()` syntax. However, you can opt into using string-based lazy loading (`loadChildren: './path/to/module#Module'`) by including the lazy-loaded routes in your `tsconfig` file, which includes the lazy-loaded files in the compilation.
+
+By default the CLI will generate projects with stricter file inclusions intended to be used with the `import()` syntax.
+
+</div>
+
+
 <!--
-#### Add another feature module
+### Add another feature module
 -->
-#### 기능 모듈 하나 더 생성하기
+### 기능 모듈 하나 더 생성하기
 
 <!--
 Use the same command to create a second lazy-loaded feature module with routing, along with its stub component.
@@ -222,7 +240,7 @@ so you can easily navigate to your modules in the browser:
 
 <code-example path="lazy-loading-ngmodules/src/app/app.component.html" header="app.component.html" region="app-component-template" header="src/app/app.component.html"></code-example>
 
-To see your app in the browser so far, enter the following command in the terminal window:
+To see your application in the browser so far, enter the following command in the terminal window:
 
 <code-example language="bash">
 ng serve
@@ -335,7 +353,7 @@ The other feature module's routing module is configured similarly.
 ### 지연로딩 동작 확인하기
 
 <!--
-You can check to see that a module is indeed being lazy loaded with the Chrome developer tools. In Chrome, open the dev tools by pressing `Cmd+Option+i` on a Mac or `Ctrl+Shift+j` on a PC and go to the Network Tab.
+You can check to see that a module is indeed being lazy loaded with the Chrome developer tools. In Chrome, open the developer tools by pressing `Cmd+Option+i` on a Mac or `Ctrl+Shift+j` on a PC and go to the Network Tab.
 
 <div class="lightbox">
   <img src="generated/images/guide/lazy-loading-ngmodules/network-tab.png" width="600" alt="lazy loaded modules diagram">
@@ -426,12 +444,12 @@ Angular CLI로 생성한 `app-routing.module.ts` 파일을 보면, `imports` 배
 
 ## Preloading
 
-Preloading improves UX by loading parts of your app in the background.
+Preloading improves UX by loading parts of your application in the background.
 You can preload modules or component data.
 
 ### Preloading modules
 
-Preloading modules improves UX by loading parts of your app in the background so users don't have to wait for the elements to download when they activate a route.
+Preloading modules improves UX by loading parts of your application in the background so users don't have to wait for the elements to download when they activate a route.
 
 To enable preloading of all lazy loaded modules, import the `PreloadAllModules` token from the Angular `router`.
 
@@ -465,11 +483,11 @@ Create a resolver service.
 With the CLI, the command to generate a service is as follows:
 
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
   ng generate service <service-name>
 </code-example>
 
-In your service, import the following router members, implement `Resolve`, and inject the `Router` service:
+In the newly-created service, implement the `Resolve` interface provided by the `@angular/router` package:
 
 <code-example header="Resolver service (excerpt)">
 
@@ -477,8 +495,14 @@ import { Resolve } from '@angular/router';
 
 ...
 
-export class CrisisDetailResolverService implements Resolve<> {
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<> {
+/* An interface that represents your data model */
+export interface Crisis {
+  id: number;
+  name: string;
+}
+
+export class CrisisDetailResolverService implements Resolve<Crisis> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Crisis> {
     // your logic goes here
   }
 }
@@ -489,7 +513,7 @@ Import this resolver into your module's routing module.
 
 <code-example header="Feature module's routing module (excerpt)">
 
-import { YourResolverService }    from './your-resolver.service';
+import { CrisisDetailResolverService } from './crisis-detail-resolver.service';
 
 </code-example>
 
@@ -500,28 +524,55 @@ Add a `resolve` object to the component's `route` configuration.
   path: '/your-path',
   component: YourComponent,
   resolve: {
-    crisis: YourResolverService
+    crisis: CrisisDetailResolverService
   }
 }
 </code-example>
 
 
-In the component, use an `Observable` to get the data from the `ActivatedRoute`.
+In the component's constructor, inject an instance of the `ActivatedRoute` class that represents the current route.
 
+<code-example header="Component's constructor (excerpt)">
 
-<code-example header="Component (excerpt)">
-ngOnInit() {
-  this.route.data
-    .subscribe((your-parameters) => {
-      // your data-specific code goes here
-    });
+import { ActivatedRoute } from '@angular/router';
+
+@Component({ ... })
+class YourComponent {
+  constructor(private route: ActivatedRoute) {}
 }
+
+</code-example>
+
+Use the injected instance of the `ActivatedRoute` class to access `data` associated with a given route.
+
+<code-example header="Component's ngOnInit lifecycle hook (excerpt)">
+
+import { ActivatedRoute } from '@angular/router';
+
+@Component({ ... })
+class YourComponent {
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.data
+      .subscribe(data => {
+        const crisis: Crisis = data.crisis;
+        // ...
+      });
+  }
+}
+
 </code-example>
 
 For more information with a working example, see the [routing tutorial section on preloading](guide/router-tutorial-toh#preloading-background-loading-of-feature-areas).
 
+## Troubleshooting lazy-loading modules
 
-<hr>
+A common error when lazy-loading modules is importing common modules in multiple places within an application.  You can test for this condition by first generating the module using the Angular CLI and including the `--route route-name` parameter, where `route-name` is the name of your module. Next, generate the module without the `--route` parameter. If the Angular CLI generates an error when you use the `--route` parameter, but runs correctly without it, you may have imported the same module in multiple places.
+
+Remember, many common Angular modules should be imported at the base of your application.
+
+For more information on Angular Modules, see [NgModules](guide/ngmodules).
 
 <!--
 ## More on NgModules and routing

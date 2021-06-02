@@ -22,7 +22,7 @@ Angular 팀은 Ivy가 이전에 사용하던 View Engine 렌더링 엔진과 하
 ## Ivy에서 디버깅하는 방법
 
 <!--
-If you're seeing errors, first temporarily [turn off Ivy](guide/ivy#opting-out-of-angular-ivy) in your `tsconfig.json` and re-start your app.
+If you're seeing errors, first temporarily [turn off Ivy](guide/ivy#opting-out-of-angular-ivy) in your `tsconfig.json` and re-start your application.
 
 If you're still seeing the errors, they are not specific to Ivy. In this case, you may want to consult the [general update guide](guide/updating-to-version-12). If you've opted into any of the new, stricter type-checking settings, you may also want to check out the [template type-checking guide](guide/template-typecheck).
 
@@ -31,7 +31,7 @@ If the errors are gone, switch back to Ivy by removing the changes to the `tscon
 애플리케이션을 개발하다가 에러가 발생하면 먼저 `tsconfig.json` 설정을 변경해서 임시로 [Ivy를 끄고](guide/ivy#opting-out-of-angular-ivy) 애플리케이션을 재시작 해보세요.
 
 그래도 에러가 발생한다면 이 문제는 Ivy 때문에 발생하는 문제가 아닙니다.
-이런 경우에는 [업데이트 가이드](guide/updating-to-version-11)를 확인해 보세요.
+이런 경우에는 [업데이트 가이드](guide/updating-to-version-12)를 확인해 보세요.
 새로운 타입을 도입했거나 엄격한 타입 검사 설정을 활성화했다면 [템플릿 타입 검사 가이드](guide/template-typecheck) 문서를 보는 것도 좋습니다.
 
 에러가 사라지면 `tsconfig.json` 파일을 다시 원래대로 돌려서 Ivy를 활성화 한 후에 애플리케이션이 제대로 동작하는지 확인해 보세요.
@@ -51,12 +51,12 @@ Anything that you import outside lazy modules can end up in the main bundle.
 See more details in the original issue [here](https://github.com/angular/angular-cli/issues/16146#issuecomment-557559287).
 
 1. Check that imported libraries have been marked side-effect-free.
-If your app imports from shared libraries that are meant to be free from side effects, add "sideEffects": false to their `package.json`.
+If your application imports from shared libraries that are meant to be free from side effects, add "sideEffects": false to their `package.json`.
 This will ensure that the libraries will be properly tree-shaken if they are imported but not directly referenced.
 See more details in the original issue [here](https://github.com/angular/angular-cli/issues/16799#issuecomment-580912090).
 
-1. Projects not using Angular CLI will see a significant size regression unless they update their minifier settings and set compile-time constants `ngDevMode`, `ngI18nClosureMode` and `ngJitMode` to `false` (for Terser, please set these to `false` via [`global_defs` config option](https://terser.org/docs/api-reference.html#conditional-compilation)).
-Please note that these constants are not meant to be used by 3rd party library or application code as they are not part of our public api surface and might change in the future.
+1. Projects not using Angular CLI will see a significant size regression unless they update their minifier settings and set compile-time constants `ngDevMode`, `ngI18nClosureMode` and `ngJitMode` to `false` (for Terser, set these to `false` using [`global_defs` config option](https://terser.org/docs/api-reference.html#conditional-compilation)).
+Note that these constants are not meant to be used by 3rd party library or application code as they are not part of our public api surface and might change in the future.
 -->
 Ivy를 도입한 이후에 애플리케이션 빌드 용량이 커졌다면 이런 내용을 확인해 보세요:
 
@@ -86,7 +86,7 @@ Teaser를 사용한다면 [`global_defs` 환경설정 옵션](https://terser.org
 
 * All classes that use Angular DI must have an Angular decorator like `@Directive()` or `@Injectable` (previously, undecorated classes were allowed in AOT mode only or if injection flags were used). See further [details](guide/ivy-compatibility-examples#undecorated-classes).
 
-* Unbound inputs for directives (e.g. name in `<my-comp name="">`) are now set upon creation of the view, before change detection runs (previously, all inputs were set during change detection).
+* Unbound inputs for directives (for example, name in `<my-comp name="">`) are now set upon creation of the view, before change detection runs (previously, all inputs were set during change detection).
 
 * Static attributes set directly in the HTML of a template will override any conflicting host attributes set by directives or components (previously, static host attributes set by directives / components would override static template attributes if conflicting).
 -->
@@ -114,7 +114,7 @@ Teaser를 사용한다면 [`global_defs` 환경설정 옵션](https://terser.org
 <!--
 * Properties like `host` inside `@Component` and `@Directive` decorators can be inherited (previously, only properties with explicit field decorators like `@HostBinding` would be inherited).
 
-* HammerJS support is opt-in through importing the `HammerModule` (previously, it was always included in production bundles regardless of whether the app used HammerJS).
+* HammerJS support is opt-in through importing the `HammerModule` (previously, it was always included in production bundles regardless of whether the application used HammerJS).
 
 * `@ContentChild` and `@ContentChildren` queries will no longer be able to match their directive's own host node (previously, these queries would match the host node in addition to its content children).
 
@@ -129,6 +129,7 @@ Teaser를 사용한다면 [`global_defs` 환경설정 옵션](https://terser.org
 * Forward references to directive inputs accessed through local refs are no longer supported by default. [details](guide/ivy-compatibility-examples#forward-refs-directive-inputs)
 
 * If there is both an unbound class attribute and a `[class]` binding, the classes in the unbound attribute will also be added (previously, the class binding would overwrite classes in the unbound attribute).
+For more information about the updated style precedence in Ivy, refer to the [style precedence guide](guide/style-precedence).
 
 * It is now an error to assign values to template-only variables like `item` in `ngFor="let item of items"` (previously, the compiler would ignore these assignments).
 
@@ -148,13 +149,18 @@ Teaser를 사용한다면 [`global_defs` 환경설정 옵션](https://terser.org
 
 * `DebugElement.classes` returns `undefined` for classes that were added and then subsequently removed (previously, classes added and later removed would have a value of `false`).
 
-* If selecting the native `<option>` element in a `<select>` where the `<option>`s are created via `*ngFor`, use the `[selected]` property of an `<option>` instead of binding to the `[value]` property of the `<select>` element (previously, you could bind to either.) [details](guide/ivy-compatibility-examples#select-value-binding)
+* If selecting the native `<option>` element in a `<select>` where the `<option>`s are created using `*ngFor`, use the `[selected]` property of an `<option>` instead of binding to the `[value]` property of the `<select>` element (previously, you could bind to either.) [details](guide/ivy-compatibility-examples#select-value-binding)
 
-* Embedded views (such as ones created by `*ngFor`) are now inserted in front of anchor DOM comment node (e.g. `<!-ng-for-of->`) rather than behind it as was the case previously.
-In most cases this does not have any impact on rendered DOM.
-In some cases (such as animations delaying the removal of an embedded view) any new embedded views will be inserted after the embedded view being animated away.
-This difference only last while the animation is active, and might alter the visual appearance of the animation.
-Once the animation is finished the resulting rendered DOM is identical to that rendered with View Engine.
+* Embedded views (such as ones created by `*ngFor`) are now inserted in front of anchor DOM comment node (for example, `<!--ng-for-of-->`) rather than behind it as was the case previously.
+  In most cases this has no impact on rendered DOM.
+
+  When animations delay the removal of an embedded view, any new embedded views will be inserted after the embedded view that will be removed once the animation completes.
+  This difference only lasts while the animation is active, and might alter the visual appearance of the animation.
+  When the animation is finished, the resulting rendered DOM is identical to that rendered with View Engine.
+
+  One additional exception is the `<select>` element with `<option>` elements dynamically rendered using `NgForOf`. If a [`trackBy`](api/common/NgForOf#ngForTrackBy) function is not provided, the selected `<option>` will not be preserved when the iterable used by the `NgForOf` changes.
+  With View Engine, this programming error was obscured, and often not visible.
+  To avoid this problem, provide the `trackBy` function to correctly associate the model with the rendered DOM elements.
 -->
 * `@Component`, `@Directive` 데코레이터 안에 있는 `host`와 같은 프로퍼티가 상속될 수 있습니다.
 이전에는 `@HostBinding`과 같은 일부 데코레이터만 상속되었습니다.
@@ -182,6 +188,7 @@ Once the animation is finished the resulting rendered DOM is identical to that r
 
 * 바인딩하지 않은 클래스 어트리뷰트와 `[class]` 바인딩이 동시에 존재하면 바인딩하지 않은 어트리뷰트가 추가됩니다.
 이전에는 클래스 바인딩이 바인딩하지 않은 어트리뷰트의 값을 덮어썼습니다.
+Ivy 환경에 적용되는 스타일 우선순위에 대해 자세하게 알아보려면 [스타일 우선순위 가이드](guide/style-precedence) 문서를 참고하세요.
 
 * `ngFor="let item of items"`와 같은 표현식에서 `item`처럼, 템플릿에서만 사용하는 변수에 값을 할당하면 이제 에러가 발생합니다.
 이전에는 컴파일러가 할당 표현식을 무시했습니다.
@@ -217,7 +224,13 @@ Once the animation is finished the resulting rendered DOM is identical to that r
 
 * `*ngFor` 등이 생성한 임베디드 뷰(embedded view)는 이제 `<!--ng-for-of-->`와 같은 DOM 주석 노드 앞에 추가됩니다.
 이전에는 DOM 주석 노드 뒤에 추가되었습니다.
-보통의 경우라면 이 변경사항이 렌더링된 DOM에 주는 경우는 거의 없습니다.
-하지만 임베디드 뷰를 사라지게 하는 애니메이션에 딜레이를 사용했을 때는 이 애니메이션이 끝나야 새로운 임베디드 뷰가 추가되었기 때문에, 이 변경사항이 적용되면 애니메이션이 이전과 다르게 동작할 수 있습니다.
-이런 상황은 애니메이션이 활성화되었을 때만 확인할 수 있습니다.
-애니메이션이 끝나고 나면 DOM은 View Engine 때와 같은 방식으로 동작합니다.
+
+  보통의 경우라면 이 변경사항이 렌더링된 DOM에 주는 경우는 거의 없습니다.
+  하지만 임베디드 뷰를 사라지게 하는 애니메이션에 딜레이를 사용했을 때는 이 애니메이션이 끝나야 새로운 임베디드 뷰가 추가되었기 때문에, 이 변경사항이 적용되면 애니메이션이 이전과 다르게 동작할 수 있습니다.
+  이런 상황은 애니메이션이 활성화되었을 때만 확인할 수 있습니다.
+  애니메이션이 끝나고 나면 DOM은 View Engine 때와 같은 방식으로 동작합니다.
+
+  또다른 예외 상황은 `<select>` 엘리먼트 안에서 `<option>` 엘리먼트가 `NgForOf`로 동적으로 렌더링되는 경우가 있습니다.
+  이 경우에 [`trackBy`](api/common/NgForOf#ngForTrackBy) 함수를 지정하지 않으면 `NgForOf`가 변경되었을 때 `<option>`이 유지되지 않습니다.
+  View Engine에서는 에러가 발생하며 화면이 제대로 표시되지 않기도 했습니다.
+  이 문제를 방지하려면 `trackBy` 함수를 지정해서 모델과 렌더링된 DOM 엘리먼트를 제대로 연결하면 됩니다.

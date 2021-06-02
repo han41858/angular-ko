@@ -10,9 +10,9 @@ const locations = new Observable((observer) => {
 
   // 접속 위치를 처리하는 API는 간단하게 사용해 봅니다.
   if ('geolocation' in navigator) {
-    watchId = navigator.geolocation.watchPosition((position: Position) => {
+    watchId = navigator.geolocation.watchPosition((position: GeolocationPosition) => {
       observer.next(position);
-    }, (error: PositionError) => {
+    }, (error: GeolocationPositionError) => {
       observer.error(error);
     });
   } else {

@@ -4,16 +4,17 @@
 # Angular 프로젝트를 최신 버전으로 유지하기
 
 <!--
-Just like Web and the entire web ecosystem, Angular is continuously improving. Angular balances continuous improvement with a strong focus on stability and making updates easy. Keeping your Angular app up-to-date enables you to take advantage of leading-edge new features, as well as optimizations and bug fixes.
+Just like Web and the entire web ecosystem, Angular is continuously improving. Angular balances continuous improvement with a strong focus on stability and making updates easy. Keeping your Angular application up-to-date enables you to take advantage of leading-edge new features, as well as optimizations and bug fixes.
 
-This document contains information and resources to help you keep your Angular apps and libraries up-to-date.
+This document contains information and resources to help you keep your Angular applications and libraries up-to-date.
 
 For information about our versioning policy and practices&mdash;including
 support and deprecation practices, as well as the release schedule&mdash;see [Angular versioning and releases](guide/releases "Angular versioning and releases").
 -->
 웹 생태계와 마찬가지로 Angular도 끊임없이 발전하고 있습니다.
 그리고 Angular는 성능 향상과 안정성 향상 외에도 업데이트를 쉽게 할 수 있는 방법에 대해 계속 고민하고 있습니다.
-Angular 애플리케이션을 최신버전으로 유지하면 Angular가 제공하는 최신 기술을 자연스럽게 사용할 수 있을 것입니다. 라이브러리가 최적화됨에 따라 애플리케이션도 최적화될 것이고, 이전 버전에 존재하는 버그도 함께 수정될 것입니다.
+Angular 애플리케이션을 최신버전으로 유지하면 Angular가 제공하는 최신 기술을 자연스럽게 사용할 수 있을 것입니다.
+ 라이브러리가 최적화됨에 따라 애플리케이션도 최적화될 것이고, 이전 버전에 존재하는 버그도 함께 수정될 것입니다.
 
 이 문서는 Angular 애플리케이션과 Angular 라이브러리를 최신버전으로 유지할 때 활용할 수 있는 정보와 리소스에 대해 다룹니다.
 
@@ -70,7 +71,7 @@ Angular 버전이 새로 나오면서 변경된 것 중 가장 중요한 내용�
 ## 현재 사용하는 Angular 버전 확인하기
 
 <!--
-To check your app's version of Angular: From within your project directory, use the `ng version` command.
+To check your application's version of Angular: From within your project directory, use the `ng version` command.
 -->
 애플리케이션이 현재 사용하는 Angular 버전을 확인하려면 프로젝트 폴더에서 `ng version` 명령을 실행하면 됩니다.
 

@@ -8,7 +8,7 @@ This guide explores common component testing use cases.
 
 <div class="alert is-helpful">
 
-  For the sample app that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
+  For the sample application that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
 
   For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
 
@@ -107,7 +107,7 @@ Binding happens when Angular performs **change detection**.
 
 In production, change detection kicks in automatically
 when Angular creates a component or the user enters a keystroke or
-an asynchronous activity (e.g., AJAX) completes.
+an asynchronous activity (for example, AJAX) completes.
 
 The `TestBed.createComponent` does _not_ trigger change detection; a fact confirmed in the revised test:
 
@@ -252,9 +252,6 @@ Angular 테스트 환경에서는 컴포넌트의 `title` 값이 변경된 것�
 </div>
 
 
-<hr>
-
-
 {@a dispatch-event}
 
 <!--
@@ -289,9 +286,6 @@ Angular는 입력 엘리먼트의 `value` 프로퍼티 값이 변경된 것을 �
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="title-case-pipe" header="app/hero/hero-detail.component.spec.ts (파이프 테스트)"></code-example>
 
 
-<hr>
-
-
 <!--
 ## Component with external files
 -->
@@ -312,13 +306,13 @@ as the following variant of `BannerComponent` does.
 This syntax tells the Angular compiler to read the external files during component compilation.
 
 That's not a problem when you run the CLI `ng test` command because it
-_compiles the app before running the tests_.
+_compiles the application before running the tests_.
 
 However, if you run the tests in a **non-CLI environment**,
 tests of this component may fail.
 For example, if you run the `BannerComponent` tests in a web coding environment such as [plunker](https://plnkr.co/), you'll see a message like this one:
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: This test module uses the component BannerComponent
 which is using a "templateUrl" or "styleUrls", but they were never compiled.
 Please call "TestBed.compileComponents" before your test.
@@ -345,7 +339,7 @@ Angular CLI로 `ng test` 명령을 사용한다면 _테스트가 실행되기 �
 하지만 **Angular CLI를 사용하지 않는 환경** 에서는 문제가 발생할 수 있습니다.
 실제로 `BannerComponent` 테스트 코드를 [plunker](https://plnkr.co/) 환경에서 실행한다면 이런 오류가 발생합니다:
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: This test module uses the component BannerComponent
 which is using a "templateUrl" or "styleUrls", but they were never compiled.
 Please call "TestBed.compileComponents" before your test.
@@ -482,7 +476,7 @@ Angular는 의존성 주입 시스템을 계층으로 구성합니다.
 #### _TestBed.inject()_
 
 <!--
-You _may_ also be able to get the service from the root injector via `TestBed.inject()`.
+You _may_ also be able to get the service from the root injector using `TestBed.inject()`.
 This is easier to remember and less verbose.
 But it only works when Angular injects the component with the service instance in the test's root injector.
 
@@ -544,7 +538,7 @@ The first is a sanity test; it confirms that the stubbed `UserService` is called
 
 <div class="alert is-helpful">
 
-The second parameter to the Jasmine matcher (e.g., `'expected name'`) is an optional failure label.
+The second parameter to the Jasmine matcher (for example, `'expected name'`) is an optional failure label.
 If the expectation fails, Jasmine appends this label to the expectation failure message.
 In a spec with multiple expectations, it can help clarify what went wrong and which expectation failed.
 
@@ -576,8 +570,6 @@ Jasmine 검증식(matcher)에 두 번째로 전달하는 인자(`'expected name'
 두 번째 테스트 코드는 사용자의 이름이 변경된 것을 확인하는 코드입니다.
 그리고 세 번째 코드는 사용자가 로그인하지 않았을 때 적절한 메시지를 화면에 표시하는지 확인하는 코드입니다.
 
-
-<hr>
 
 {@a component-with-async-service}
 
@@ -748,7 +740,7 @@ value becomes available. The test must become _asynchronous_.
 #### _fakeAsync()_ 로 비동기 테스트하기
 
 <!--
-To use `fakeAsync()` functionality, you must import `zone.js/dist/zone-testing` in your test setup file.
+To use `fakeAsync()` functionality, you must import `zone.js/testing` in your test setup file.
 If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
 
 The following test confirms the expected behavior when the service returns an `ErrorObservable`.
@@ -775,7 +767,7 @@ XHR calls within a test are rare, but if you need to call XHR, see [`waitForAsyn
 
 </div>
 -->
-`fakeAsync()` 기능을 사용하려면 테스트 환경설정 파일에서 `zone.js/dist/zone-testing` 라이브러리를 로드해야 합니다.
+`fakeAsync()` 기능을 사용하려면 테스트 환경설정 파일에서 `zone.js/testing` 라이브러리를 로드해야 합니다.
 그리고 Angular CLI로 프로젝트를 생성했다면 `src/test.ts` 파일에 `zone-testing`이 이미 추가되어 있습니다.
 
 아래 코드는 서비스가 `ErrorObservable`을 반환했을 때 에러를 처리하는 테스트 코드입니다.
@@ -914,7 +906,7 @@ If you use the Angular CLI, configure this flag in `src/test.ts`.
 
 ```
 (window as any)['__zone_symbol__fakeAsyncPatchLock'] = true;
-import 'zone.js/dist/zone-testing';
+import 'zone.js/testing';
 ```
 
 <code-example
@@ -933,7 +925,7 @@ Angular CLI로 생성한 프로젝트라면 `src/test.ts` 파일에 이렇게 �
 
 ```
 (window as any)['__zone_symbol__fakeAsyncPatchLock'] = true;
-import 'zone.js/dist/zone-testing';
+import 'zone.js/testing'';
 ```
 
 <code-example
@@ -948,13 +940,13 @@ import 'zone.js/dist/zone-testing';
 #### `fakeAsync()` 안에서 RxJS 스케쥴러 사용하기
 
 <!--
-You can also use RxJS scheduler in `fakeAsync()` just like using `setTimeout()` or `setInterval()`, but you need to import `zone.js/dist/zone-patch-rxjs-fake-async` to patch RxJS scheduler.
+You can also use RxJS scheduler in `fakeAsync()` just like using `setTimeout()` or `setInterval()`, but you need to import `zone.js/plugins/zone-patch-rxjs-fake-async` to patch RxJS scheduler.
 <code-example
   path="testing/src/app/demo/async-helper.spec.ts"
   region="fake-async-test-rxjs">
 </code-example>
 -->
-RxJS 스케쥴러는 `fakeAsync()` 안에서 `setTimeout()`이나 `setInterval()`과 비슷하게 사용할 수 있지만, RxJS 스케쥴러를 사용하려면 `zone.js/dist/zone-patch-rxjs-fake-async` 라이브러리를 추가로 로드해야 합니다.
+RxJS 스케쥴러는 `fakeAsync()` 안에서 `setTimeout()`이나 `setInterval()`과 비슷하게 사용할 수 있지만, RxJS 스케쥴러를 사용하려면 `zone.js/plugins/zone-patch-rxjs-fake-async` 라이브러리를 추가로 로드해야 합니다.
 
 <code-example
   path="testing/src/app/demo/async-helper.spec.ts"
@@ -1193,7 +1185,7 @@ Then you can assert that the quote element displays the expected text.
 #### `waitForAsync()` 로 비동기 테스트하기
 
 <!--
-To use `waitForAsync()` functionality, you must import `zone.js/dist/zone-testing` in your test setup file.
+To use `waitForAsync()` functionality, you must import `zone.js/testing` in your test setup file.
 If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
 
 <div class="alert is-helpful">
@@ -1208,7 +1200,7 @@ Here's the previous `fakeAsync()` test, re-written with the `waitForAsync()` uti
 
 <code-example
   path="testing/src/app/twain/twain.component.spec.ts"
-  region="async-test">
+  region="waitForAsync-test">
 </code-example>
 
 The `waitForAsync()` utility hides some asynchronous boilerplate by arranging for the tester's code
@@ -1220,7 +1212,7 @@ which breaks the linear flow of control.
 
 When using an `intervalTimer()` such as `setInterval()` in `waitForAsync()`, remember to cancel the timer with `clearInterval()` after the test, otherwise the `waitForAsync()` never ends.
 -->
-`waitForAsync()` 함수를 사용하려면 테스트 환경설정 파일에 `zone.js/dist/zone-testing`을 로드해야 합니다.
+`waitForAsync()` 함수를 사용하려면 테스트 환경설정 파일에 `zone.js/testing`을 로드해야 합니다.
 Angular CLI로 프로젝트를 생성했다면 `src/test.ts` 파일에서 이미 `zone-testing`을 로드하고 있습니다.
 
 <div class="alert is-helpful">
@@ -1234,7 +1226,7 @@ Angular CLI로 프로젝트를 생성했다면 `src/test.ts` 파일에서 이미
 
 <code-example
   path="testing/src/app/twain/twain.component.spec.ts"
-  region="async-test">
+  region="waitForAsync-test">
 </code-example>
 
 `waitForAsync()` 유틸리티는 비동기 로직들을 자동으로 재구성해서 _비동기 테스트 존_ 안에서 실행합니다.
@@ -1337,9 +1329,6 @@ RxJS `last()` 연산자는 옵저버블이 종료되기 전까지 전달된 데�
   region="spy-done-test"></code-example>
 
 
-<hr>
-
-
 {@a marble-testing}
 <!--
 ## Component marble tests
@@ -1358,7 +1347,7 @@ with overlapping sequences of values and errors.
 
 **RxJS marble testing** is a great way to test observable scenarios,
 both simple and complex.
-You've likely seen the [marble diagrams](http://rxmarbles.com/)
+You've likely seen the [marble diagrams](https://rxmarbles.com/)
 that illustrate how observables work.
 Marble testing uses a similar marble language to
 specify the observable streams and expectations in your tests.
@@ -1416,7 +1405,7 @@ The balance of the test is the same as those examples.
 그리고 옵저버블 여러 개를 활용하면서 전달되는 데이터와 에러를 다양하게 활용할 수도 있습니다.
 
 **RxJS 마블(marble) 테스트**를 활용하면 간단한 시나리오는 물론이고 복잡한 시나리오로 동작하는 옵저버블도 테스트할 수 있습니다.
-옵저버블이 동작하는 모습을 표현하는 [마블 다이어그램](http://rxmarbles.com/)을 본 적이 있을 것입니다.
+옵저버블이 동작하는 모습을 표현하는 [마블 다이어그램](https://rxmarbles.com/)을 본 적이 있을 것입니다.
 마블 테스트는 이와 비슷한 문법을 사용해서 옵저버블이 정해진 대로 동작하는지 검사하는 방식입니다.
 
 이번 섹션에서는 `TwainComponent`에 마블 테스트를 적용해 봅시다.
@@ -1541,9 +1530,6 @@ _핫(hot)_ 옵저버블은 누군가 옵저버블을 구독하지 않아도 데�
 
 RxJS 마블 테스트는 이 문서에서 다루는 내용 말고도 수많은 옵저버블 생성자를 지원합니다.
 자세한 내용은 [공식 문서](https://rxjs.dev/guide/testing/marble-testing)를 참고하세요.
-
-
-<hr>
 
 
 {@a component-with-input-output}
@@ -1687,9 +1673,9 @@ Here's the meat of the spec file setup.
 
 Note how the setup code assigns a test hero (`expectedHero`) to the component's `hero` property,
 emulating the way the `DashboardComponent` would set it
-via the property binding in its repeater.
+using the property binding in its repeater.
 
-The following test verifies that the hero name is propagated to the template via a binding.
+The following test verifies that the hero name is propagated to the template using a binding.
 
 <code-example
   path="testing/src/app/dashboard/dashboard-hero.component.spec.ts"
@@ -1874,7 +1860,7 @@ in a helper such as the `click()` function below:
   region="click-event"
   header="testing/index.ts (click helper)"></code-example>
 
-The first parameter is the _element-to-click_. If you wish, you can pass a
+The first parameter is the _element-to-click_. If you want, you can pass a
 custom event object as the second parameter. The default is a (partial)
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button">left-button mouse event object</a>
 accepted by many handlers including the `RouterLink` directive.
@@ -1927,8 +1913,6 @@ Here's the previous test, rewritten using the click helper.
   header="app/dashboard/dashboard-hero.component.spec.ts (클릭 헬퍼를 사용하는 테스트 코드)">
 </code-example>
 
-
-<hr>
 
 {@a component-inside-test-host}
 
@@ -2039,9 +2023,6 @@ _테스트 호스트_ 를 활용하는 테스트 코드는 컴포넌트만 단�
 
 히어로가 선택되었을 때를 테스트하는 로직은 조금 다릅니다.
 이 테스트 코드에서는 호스트 컴포넌트에 이벤트 바인딩으로 전달된 객체를 검사하는 방식을 사용했습니다.
-
-
-<hr>
 
 
 {@a routing-component}
@@ -2162,7 +2143,7 @@ Here's the `HeroDetailComponent` constructor:
 <code-example path="testing/src/app/hero/hero-detail.component.ts" region="ctor" header="app/hero/hero-detail.component.ts (constructor)"></code-example>
 
 The `HeroDetail` component needs the `id` parameter so it can fetch
-the corresponding hero via the `HeroDetailService`.
+the corresponding hero using the `HeroDetailService`.
 The component has to get the `id` from the `ActivatedRoute.paramMap` property
 which is an `Observable`.
 
@@ -2300,7 +2281,7 @@ This test expects the component to try to navigate to the `HeroListComponent`.
 
 <code-example path="testing/src/app/hero/hero-detail.component.spec.ts" region="route-bad-id" header="app/hero/hero-detail.component.spec.ts (bad id)"></code-example>
 
-While this app doesn't have a route to the `HeroDetailComponent` that omits the `id` parameter, it might add such a route someday.
+While this application doesn't have a route to the `HeroDetailComponent` that omits the `id` parameter, it might add such a route someday.
 The component should do something reasonable when there is no `id`.
 
 In this implementation, the component should create and display a new hero.
@@ -2341,8 +2322,6 @@ New heroes have `id=0` and a blank `name`. This test confirms that the component
   region="route-no-id"
   header="app/hero/hero-detail.component.spec.ts (id가 없는 경우)"></code-example>
 
-
-<hr>
 
 {@a nested-component-tests}
 
@@ -2571,8 +2550,6 @@ but it ignores the `<app-welcome>` and `<router-outlet>` tags.
 `<app-welcome>`과 `<router-outlet>` 태그는 무시합니다.
 
 
-<hr>
-
 {@a routerlink}
 
 <!--
@@ -2741,7 +2718,7 @@ _이 테스트처럼_ "click" 이벤트를 테스트하는 것은 논란의 여�
 <!--
 Stubbed `RouterLink` tests can confirm that a component with links and an outlet is setup properly,
 that the component has the links it should have, and that they are all pointing in the expected direction.
-These tests do not concern whether the app will succeed in navigating to the target component when the user clicks a link.
+These tests do not concern whether the application will succeed in navigating to the target component when the user clicks a link.
 
 Stubbing the RouterLink and RouterOutlet is the best option for such limited testing goals.
 Relying on the real router would make them brittle.
@@ -2776,8 +2753,6 @@ tests with the `RouterTestingModule`.
 
 </div>
 
-
-<hr>
 
 {@a page-object}
 
@@ -2889,9 +2864,6 @@ Here are a few more `HeroDetailComponent` tests to reinforce the point.
   header="app/hero/hero-detail.component.spec.ts (히어로 선택 테스트)"></code-example>
 
 
-<hr>
-
-
 {@a compile-components}
 
 <!--
@@ -2909,7 +2881,7 @@ because the CLI compiles the application before running the tests.
 
 If you run tests in a **non-CLI environment**, the tests may fail with a message like this one:
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: This test module uses the component BannerComponent
 which is using a "templateUrl" or "styleUrls", but they were never compiled.
 Please call "TestBed.compileComponents" before your test.
@@ -2926,12 +2898,12 @@ the following version of the `BannerComponent` does.
 The test fails when the `TestBed` tries to create the component.
 
 <code-example
-  path="testing/src/app/banner/banner.component.spec.ts"
-  region="configure-and-create"
-  header="app/banner/banner.component.spec.ts (setup that fails)"
+  path="testing/src/app/banner/banner-external.component.spec.ts"
+  region="setup-may-fail"
+  header="app/banner/banner-external.component.spec.ts (setup that fails)"
   avoid></code-example>
 
-Recall that the app hasn't been compiled.
+Recall that the application hasn't been compiled.
 So when you call `createComponent()`, the `TestBed` compiles implicitly.
 
 That's not a problem when the source code is in memory.
@@ -2953,7 +2925,7 @@ Angular CLI는 테스트를 실행하기 전에 애플리케이션을 자동으�
 
 Angular CLI를 사용하지 않고 테스트를 실행한다면 이런 에러가 발생하면서 테스트 실행이 실패합니다:
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: This test module uses the component BannerComponent
 which is using a "templateUrl" or "styleUrls", but they were never compiled.
 Please call "TestBed.compileComponents" before your test.
@@ -2969,8 +2941,8 @@ Please call "TestBed.compileComponents" before your test.
 그래서 이 테스트는 `TestBed`가 컴포넌트를 생성하는 부분에서 실패합니다.
 
 <code-example
-  path="testing/src/app/banner/banner.component.spec.ts"
-  region="configure-and-create"
+  path="testing/src/app/banner/banner-external.component.spec.ts"
+  region="setup-may-fail"
   header="app/banner/banner.component.spec.ts (실행에 실패한 테스트 코드 환경설정)"
   avoid></code-example>
 
@@ -2996,10 +2968,10 @@ You must call `compileComponents()` within an asynchronous test function.
 <div class="alert is-critical">
 
 If you neglect to make the test function async
-(e.g., forget to use `waitForAsync()` as described below),
+(for example, forget to use `waitForAsync()` as described below),
 you'll see this error message
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: ViewDestroyedError: Attempt to use a destroyed view
 </code-example>
 
@@ -3009,13 +2981,6 @@ A typical approach is to divide the setup logic into two separate `beforeEach()`
 
 1.  An async `beforeEach()` that compiles the components
 1.  A synchronous `beforeEach()` that performs the remaining setup.
-
-To follow this pattern, import the `waitForAsync()` helper with the other testing symbols.
-
-<code-example
-  path="testing/src/app/banner/banner-external.component.spec.ts"
-  region="import-async">
-</code-example>
 -->
 `compileComponents()`는 비동기 테스트 함수 안에서 실행해야 합니다.
 
@@ -3024,7 +2989,7 @@ To follow this pattern, import the `waitForAsync()` helper with the other testin
 
 `waitForAsync()`와 같은 비동기 테스트 함수를 사용하지 않으면 이런 에러가 발생합니다.
 
-<code-example language="sh" class="code-shell" hideCopy>
+<code-example language="sh" hideCopy>
 Error: ViewDestroyedError: Attempt to use a destroyed view
 </code-example>
 
@@ -3034,13 +2999,6 @@ Error: ViewDestroyedError: Attempt to use a destroyed view
 
 1. 비동기 `beforeEach()`에서는 컴포넌트를 컴파일합니다.
 1. 동기 `beforeEach()`에서는 나머지 환경설정을 합니다.
-
-이 패턴을 활용하려면 테스트 라이브러리에서 `waitForAsync` 심볼을 로드해야 합니다.
-
-<code-example
-  path="testing/src/app/banner/banner-external.component.spec.ts"
-  region="import-async">
-</code-example>
 
 
 <!--
@@ -3055,8 +3013,6 @@ Write the first async `beforeEach` like this.
   path="testing/src/app/banner/banner-external.component.spec.ts"
   region="async-before-each"
   header="app/banner/banner-external.component.spec.ts (async beforeEach)"></code-example>
-
-The `waitForAsync()` helper function takes a parameterless function with the body of the setup.
 
 The `TestBed.configureTestingModule()` method returns the `TestBed` class so you can chain
 calls to other `TestBed` static methods such as `compileComponents()`.
@@ -3087,8 +3043,6 @@ before calling `TestBed.createComponent()`.
   path="testing/src/app/banner/banner-external.component.spec.ts"
   region="async-before-each"
   header="app/banner/banner-external.component.spec.ts (비동기 beforeEach())"></code-example>
-
-`waitForAsync()` 헬퍼 함수는 인자가 없는 함수를 인자로 받으며, 환경설정 로직은 이 함수에 작성합니다.
 
 그리고 `TestBed.configureTestinModule()` 메서드는 `TestBed` 클래스를 반환하기 때문에 `TestBed` 클래스가 제공하는 정적 메소드를 바로 체이닝해서 실행할 수 있습니다.
 
@@ -3187,8 +3141,6 @@ Angular CLI가 자동으로 생성한 컴포넌트 테스트 파일도 이 메�
 다만 이 문서에서는 꼭 필요할 때만 `compileComponents()`를 실행했습니다.
 
 
-<hr>
-
 {@a import-module}
 
 <!--
@@ -3286,7 +3238,7 @@ where Angular would have to compile them in the browser.
 #### 공유 모듈 로드하기
 
 <!--
-Because many app components need the `FormsModule` and the `TitleCasePipe`, the developer created
+Because many application components need the `FormsModule` and the `TitleCasePipe`, the developer created
 a `SharedModule` to combine these and other frequently requested parts.
 
 The test configuration can use the `SharedModule` too as seen in this alternative setup:
@@ -3356,9 +3308,6 @@ the module is small, as feature modules tend to be.
 모듈을 통째로 로드하면 모듈 안에서 필요한 의존성 관계도 모듈 안에서 자동으로 구성됩니다.
 
 </div>
-
-
-<hr>
 
 
 {@a component-override}
@@ -3584,6 +3533,3 @@ Explore the options and combinations on your own.
 그리고 이 메서드와 비슷하게 활용할 수 있는 `overrideDirective()`, `overrideModule()`, `overridePipe()` 메서드를 제공하기 때문에, 클래스의 원하는 부분만 대체할 수도 있습니다.
 
 어떻게 활용할지는 여러분에게 달려있습니다.
-
-
-<hr>

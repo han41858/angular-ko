@@ -20,8 +20,8 @@ import { Hero } from '../hero';
 })
 // #docregion ctor
 export class HeroListComponent implements OnInit {
-  heroes$: Observable<Hero[]>;
-  selectedId: number;
+  heroes$!: Observable<Hero[]>;
+  selectedId = 0;
 
   constructor(
     private service: HeroService,
@@ -32,7 +32,7 @@ export class HeroListComponent implements OnInit {
     this.heroes$ = this.route.paramMap.pipe(
       switchMap(params => {
         // `param.get()` 앞에 붙은 (+)는 문자열을 숫자로 변환합니다.
-        this.selectedId = +params.get('id');
+        this.selectedId = parseInt(params.get('id')!, 10);
         return this.service.getHeroes();
       })
     );

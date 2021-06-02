@@ -49,23 +49,19 @@ export class HeroService {
   }
   // #enddocregion getHeroes, getHeroes-1, getHeroes-2
 
-  // #docregion getHeroNo404
   /** GET: id에 해당하는 히어로 데이터를 가져옵니다. 존재하지 않으면 `undefined`를 반환합니다. */
-  getHeroNo404<Hero>(id: number): Observable<Hero> {
+  getHeroNo404<Data>(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/?id=${id}`;
     return this.http.get<Hero[]>(url)
       .pipe(
         map(heroes => heroes[0]), // 배열에 있는 항목 중 하나만 반환합니다.
-        // #enddocregion getHeroNo404
         tap(h => {
           const outcome = h ? `fetched` : `did not find`;
           this.log(`${outcome} hero id=${id}`);
         }),
         catchError(this.handleError<Hero>(`getHero id=${id}`))
-        // #docregion getHeroNo404
       );
   }
-  // #enddocregion getHeroNo404
 
   // #docregion getHero
   /** GET: id에 해당하는 히어로 데이터 가져오기. 존재하지 않으면 404를 반환합니다. */
@@ -108,8 +104,7 @@ export class HeroService {
 
   // #docregion deleteHero
   /** DELETE: 서버에서 히어로를 제거합니다. */
-  deleteHero(hero: Hero | number): Observable<Hero> {
-    const id = typeof hero === 'number' ? hero : hero.id;
+  deleteHero(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
 
     return this.http.delete<Hero>(url, this.httpOptions).pipe(

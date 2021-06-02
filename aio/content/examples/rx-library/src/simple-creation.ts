@@ -6,11 +6,13 @@
 /* tslint:disable:no-shadowed-variable */
 /* tslint:disable:align */
 // #docregion ajax
+  import { Observable } from 'rxjs';
   import { ajax } from 'rxjs/ajax';
 
 // AJAX 요청을 옵저버블로 변환합니다.
 // #enddocregion ajax
-export function docRegionAjax(console, ajax) {
+export function docRegionAjax<T>(console: Console,
+                                 ajax: (url: string) => Observable<{status: number, response: T}>) {
   // #docregion ajax
   const apiData = ajax('/api/data');
   // 구독을 시작하고 AJAX 요청을 보냅니다.

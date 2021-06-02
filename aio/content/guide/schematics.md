@@ -18,7 +18,8 @@ You can use schematics to enforce architectural rules and conventions, making yo
 
 스키매틱 콜렉션은 프로젝트를 생성하고 관리하는 관점에서 아주 강력한 툴이 될 수 있으며, 특히 회사 업무에 필요한 대로 Angular 프로젝트를 커스터마이징하는 측면에서 유용합니다.
 개발하고 있는 앱에 어떤 UI 패턴이나 컴포넌트 조합, 정해진 형식의 템플릿이 자주 사용된다면 이 구성을 스키매틱으로 정의했다가 나중에 다시 사용하는 것도 효율적일 수 있습니다.
-스키매틱을 사용하면 처음 설계된 구조나 코딩 컨벤션을 강제할 수 있다는 측면에서도 도움이 됩니다. 프로젝트 유지보수는 물론이고 팀끼리 하는 의사소통도 편해질 것입니다.
+스키매틱을 사용하면 처음 설계된 구조나 코딩 컨벤션을 강제할 수 있다는 측면에서도 도움이 됩니다.
+프로젝트 유지보수는 물론이고 팀끼리 하는 의사소통도 편해질 것입니다.
 
 
 <!--
@@ -74,13 +75,13 @@ A JSON schema associated with a schematic tells the Angular CLI what options are
 These defaults can be overridden by providing a different value for an option on the command line.
 See [Workspace Configuration](guide/workspace-config) for information about how you can change the generation option defaults for your workspace.
 
-The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://raw.githubusercontent.com/angular/angular-cli/v7.0.0/packages/schematics/angular/application/schema.json).
+The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://github.com/angular/angular-cli/tree/master/packages/schematics/angular).
 The schema describes the options available to the CLI for each of the `ng generate` sub-commands, as shown in the `--help` output.
 -->
 Angular CLI에 사용할 수 있는 명령과 서브 명령, 옵션, 옵션의 기본값은 모두 JSON 스키마 형태로 정의되어 있습니다.
 워크스페이스에서 사용할 기본 옵션을 변경하려면 [워크스페이스 환경설정](guide/workspace-config) 문서를 참고하세요.
 
-Angular CLI로 프로젝트를 생성할 때 사용하는 기본 스키매틱의 JSON 스키마는 [`@schematics/angular`](https://raw.githubusercontent.com/angular/angular-cli/v7.0.0/packages/schematics/angular/application/schema.json) 패키지에 존재합니다.
+Angular CLI로 프로젝트를 생성할 때 사용하는 기본 스키매틱의 JSON 스키마는 [`@schematics/angular`](https://github.com/angular/angular-cli/tree/master/packages/schematics/angular) 패키지에 존재합니다.
 그리고 `ng generate`와 같은 서브 명령을 실행할 때 어떤 옵션을 사용할 수 있는지 알아보려면 `--help` 옵션을 붙여서 실행하면 됩니다.
 
 
@@ -131,7 +132,7 @@ Partner and third party libraries also support the Angular CLI with add schemati
 For example, `@ng-bootstrap/schematics` adds [ng-bootstrap](https://ng-bootstrap.github.io/)  to an app, and  `@clr/angular` installs and sets up [Clarity from VMWare](https://vmware.github.io/clarity/documentation/v1.0/get-started).
 
 An add schematic can also update a project with configuration changes, add additional dependencies (such as polyfills), or scaffold package-specific initialization code.
-For example, the `@angular/pwa` schematic turns your application into a PWA by adding an app manifest and service worker, and the `@angular/elements`  schematic adds the `document-register-element.js` polyfill and dependencies for Angular Elements.
+For example, the `@angular/pwa` schematic turns your application into a PWA by adding an application manifest and service worker, and the `@angular/elements`  schematic adds the `document-register-element.js` polyfill and dependencies for Angular Elements.
 -->
 라이브러리에 추가 스키매틱이 정의되어 있다면 `ng add` 명령으로 이 라이브러리를 설치하고 추가로 필요한 작업을 자동으로 할 수 있습니다.
 Angular 라이브러리가 제공하는 스키매틱 중에서는 추가 스키매틱이 가장 많습니다.

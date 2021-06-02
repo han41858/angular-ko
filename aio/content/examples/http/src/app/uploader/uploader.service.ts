@@ -63,7 +63,7 @@ export class UploaderService {
 
       case HttpEventType.UploadProgress:
         // 진행률을 % 형식으로 변환합니다.
-        const percentDone = Math.round(100 * event.loaded / event.total);
+        const percentDone = Math.round(100 * event.loaded / (event.total ?? 0));
         return `File "${file.name}" is ${percentDone}% uploaded.`;
 
       case HttpEventType.Response:

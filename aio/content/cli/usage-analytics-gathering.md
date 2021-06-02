@@ -39,13 +39,13 @@ This ID is a string that looks like `UA-123456-12`.
 You can choose to use a descriptive string as the key value, or be assigned a random key when you run the CLI command.
 For example, the following command adds a configuration key named "tracking".
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global cli.analyticsSharing.tracking UA-123456-12
 </code-example>
 
 To turn off this feature, run the following command:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global --remove cli.analyticsSharing
 </code-example>
 -->
@@ -57,13 +57,13 @@ ng config --global --remove cli.analyticsSharing
 이 키에는 일반 문자열이나 랜덤 키를 값으로 할당할 수도 있습니다.
 아래 코드는 환경설정에 "tracking"이라는 트래킹 키를 추가하는데, 트래킹 ID로 `UA-1234565-12`를 지정하는 명령입니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global cli.analyticsSharing.tracking UA-123456-12
 </code-example>
 
 이 기능을 끄러면 이렇게 실행하면 됩니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global --remove cli.analyticsSharing
 </code-example>
 
@@ -78,26 +78,26 @@ You can add a custom user ID to the global configuration, in order to identify u
 If that user enables CLI analytics for their own project, your analytics display tracks and labels their individual usage.
 
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global cli.analyticsSharing.user SOME_USER_NAME
 </code-example>
 
 To generate a new random user ID, run the following command:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global cli.analyticsSharing.user ""
 </code-example>
 -->
 전역 환경설정 파일에 커스텀 사용자 ID를 추가하면 해당 사용자가 사용한 명령이나 플래그값의 통계를 따로 확인할 수 있습니다.
 이 기능도 사용자마다 프로젝트에 활성화하면 됩니다.
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global cli.analyticsSharing.user SOME_USER_NAME
 </code-example>
 
 사용자 ID를 랜덤값으로 지정하려면 이렇게 실행하면 됩니다:
 
-<code-example language="sh" class="code-shell">
+<code-example language="sh">
 ng config --global cli.analyticsSharing.user ""
 </code-example>
 

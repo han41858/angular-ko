@@ -1,15 +1,15 @@
 // #docplaster
 
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 
-export function docRegionDelaySequence(console) {
+export function docRegionDelaySequence(console: Console) {
   // #docregion delay_sequence
-  function sequenceSubscriber(observer) {
+  function sequenceSubscriber(observer: Observer<number>) {
     const seq = [1, 2, 3];
-    let timeoutId;
+    let timeoutId: any;
 
     // 배열을 순회하면서 배열의 항목을 1초마다 하나씩 발행합니다.
-    function doInSequence(arr, idx) {
+    function doInSequence(arr: number[], idx: number) {
       timeoutId = setTimeout(() => {
         observer.next(arr[idx]);
         if (idx === arr.length - 1) {
@@ -75,7 +75,10 @@ export function docRegionDelaySequence(console) {
   // #enddocregion subscribe_twice
 }
 
-export function docRegionMulticastSequence(console) {
+export function docRegionMulticastSequence(console: Console, runSequence: boolean) {
+  if (!runSequence) {
+    return multicastSequenceSubscriber;
+  }
   // #docregion multicast_sequence
   function multicastSequenceSubscriber() {
     const seq = [1, 2, 3];
@@ -91,16 +94,18 @@ export function docRegionMulticastSequence(console) {
       observers.push(observer);
       // 구독이 처음 실행되면 스트림을 발생하기 시작합니다.
       if (observers.length === 1) {
-        timeoutId = doSequence({
+        const multicastObserver: Observer<number> = {
           next(val) {
             // 모든 구독에 대해 스트림을 발행합니다.
             observers.forEach(obs => obs.next(val));
           },
+          error() { /* 에러를 처리합니다... */ },
           complete() {
             // 모든 구독에 종료 스트림을 전달합니다.
             observers.slice(0).forEach(obs => obs.complete());
           }
-        }, seq, 0);
+        };
+        doSequence(multicastObserver, seq, 0);
       }
 
       return {
@@ -113,21 +118,21 @@ export function docRegionMulticastSequence(console) {
           }
         }
       };
+
+      // 배열을 순회하면서 1초마다 하나씩 스트림을 발행합니다.
+      function doSequence(sequenceObserver: Observer<number>, arr: number[], idx: number) {
+        timeoutId = setTimeout(() => {
+          console.log('Emitting ' + arr[idx]);
+          sequenceObserver.next(arr[idx]);
+          if (idx === arr.length - 1) {
+            sequenceObserver.complete();
+          } else {
+            doSequence(sequenceObserver, arr, ++idx);
+          }
+        }, 1000);
+      }
     };
   }
-
-  // 배열을 순회하면서 1초마다 하나씩 스트림을 발행합니다.
-  function doSequence(observer, arr, idx) {
-    return setTimeout(() => {
-      observer.next(arr[idx]);
-      if (idx === arr.length - 1) {
-        observer.complete();
-      } else {
-        doSequence(observer, arr, ++idx);
-      }
-    }, 1000);
-  }
-
   // doSequence()에 정의된 스트림을 발행하는 옵저버블을 생성합니다.
   const multicastSequence = new Observable(multicastSequenceSubscriber());
 
@@ -138,7 +143,7 @@ export function docRegionMulticastSequence(console) {
   });
 
   // 0.5초 후에 또 다른 구독을 시작합니다.
-// (첫번째 값은 다시 받지 않습니다.)
+  // (첫번째 값은 받지 않습니다.)
   setTimeout(() => {
     multicastSequence.subscribe({
       next(num) { console.log('2nd subscribe: ' + num); },
@@ -156,4 +161,6 @@ export function docRegionMulticastSequence(console) {
   // (3초 후): 2nd sequence finished
 
   // #enddocregion multicast_sequence
+
+  return multicastSequenceSubscriber;
 }
