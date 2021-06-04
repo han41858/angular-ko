@@ -25,27 +25,38 @@
   "start_url": "/?utm_source=homescreen",
   "shortcuts": [
     {
-      "name": "Go to API Reference",
+      "/name": "Go to API Reference",
+      "name": "API 문서",
       "short_name": "API",
-      "description": "Go to the Angular API reference page.",
+      "/description": "Go to the Angular API reference page.",
+      "description": "API 문서로 이동합니다.",
       "url": "/api?utm_source=homescreen"
     },
     {
-      "name": "Go to Glossary",
-      "short_name": "Glossary",
-      "description": "Go to the glossary page: A list of common Angular terms and their explanation.",
+      "/name": "Go to Glossary",
+      "name": "용어사전",
+      "/short_name": "Glossary",
+      "short_name": "용어사전",
+      "/description": "Go to the glossary page: A list of common Angular terms and their explanation.",
+      "description": "용어사전 문서로 이동합니다: Angular에서 사용하는 용어가 어떤 의미인지 확인해 보세요.",
       "url": "/guide/glossary?utm_source=homescreen"
     },
     {
-      "name": "Go to Resources",
-      "short_name": "Resources",
-      "description": "Go to the resources page: A list of Angular resouces, such as development tooling, UI libraries, books, courses, community publications, podcasts, etc.",
+      "/name": "Go to Resources",
+      "name": "리소스",
+      "/short_name": "Resources",
+      "short_name": "리소스",
+      "/description": "Go to the resources page: A list of Angular resouces, such as development tooling, UI libraries, books, courses, community publications, podcasts, etc.",
+      "description": "리소스 문서로 이동합니다: 개발 툴, UI 라이브러리, 도서, 온라인 코스, 커뮤니티, 팟캐스트 등 Angular와 관련된 리소스 목록을 확인해 보세요.",
       "url": "/resources?utm_source=homescreen"
     },
     {
-      "name": "Go to Tutorial: Tour of Heroes",
-      "short_name": "Tutorial",
-      "description": "Go to the \"Tour of Heroes\" tutorial page: Learn how to create your first Angular application.",
+      "/name": "Go to Tutorial: Tour of Heroes",
+      "name": "튜토리얼: 히어로들의 여행",
+      "/short_name": "Tutorial",
+      "short_name": "튜토리얼",
+      "/description": "Go to the \"Tour of Heroes\" tutorial page: Learn how to create your first Angular application.",
+      "description": "\"히어로들의 여행\" 튜토리얼 문서로 이동합니다: Angular 애플리케이션을 어떻게 처음부터 만드는지 확인해 보세요.",
       "url": "/tutorial?utm_source=homescreen"
     }
   ]
