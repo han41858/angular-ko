@@ -402,7 +402,6 @@ Under the `projects/` folder, the `my-lib` folder contains your library code.
 | `tsconfig.spec.json` | [TypeScript](https://www.typescriptlang.org/) configuration for the library tests. See [TypeScript Configuration](guide/typescript-configuration).                                                                     |
 | `tslint.json`        | Library-specific [TSLint](https://palantir.github.io/tslint/) configuration. |
 -->
--->
 Angular CLI로 `ng generate library my-lib` 명령을 실행하면 이 라이브러리는 워크스페이스 `projects/` 폴더 아래에 생성됩니다.
 자세한 내용은 [라이브러리 만들기](guide/creating-libraries) 문서를 참고하세요.
 
