@@ -273,7 +273,8 @@ Angular에 도입된 엄격한 타입 검사 모드를 활성화하면 이전까
 * 특정 규칙만 비활성화할 수 있습니다. 해당 _strictness flag_를 `false`로 설정하면 됩니다.
 * `strictTemplates` 옵션과 `strictNullChecks` 옵션을 그대로 사용하려면 `strictNullInputTypes` 옵션을 추가로 사용해서 입력 프로퍼티로 바인딩되는 객체의 타입 검사 옵션을 조정할 수 있습니다.
 
-Unless otherwise noted, each option below is set to the value for `strictTemplates` (`true` when `strictTemplates` is `true` and vice versa).
+별도로 언급하지 않는 한, 아래 언급하는 옵션의 값은 `strictTemplates` 값을 따라갑니다.
+
 <table>
   <thead>
     <tr>
@@ -288,7 +289,7 @@ Unless otherwise noted, each option below is set to the value for `strictTemplat
     </tr>
     <tr>
       <td><code>strictInputAccessModifiers</code></td>
-      <td>Whether access modifiers such as <code>private</code>/<code>protected</code>/<code>readonly</code> are honored when assigning a binding expression to an <code>@Input()</code>. If disabled, the access modifiers of the <code>@Input</code> are ignored; only the type is checked. This option is <code>false</code> by default, even with <code>strictTemplates</code> set to <code>true</code>.</td>
+      <td><code>@Input</code>에 지정된 <code>private</code>/<code>protected</code>/<code>readonly</code>와 같은 접근제어자가 제대로 동작하게 합니다. <code>false</code>로 설정하면 <code>@Input</code>에 지정된 접근제어자를 무시하고 타입만 검사합니다. <code>strictTemplates</code> 값을 <code>true</code>로 지정하더라도 이 플래그의 기본값은 <code>false</code>입니다.</td>
     </tr>
     <tr>
       <td><code>strictNullInputTypes</code></td>
@@ -304,7 +305,7 @@ Unless otherwise noted, each option below is set to the value for `strictTemplat
     </tr>
     <tr>
       <td><code>strictDomLocalRefTypes</code></td>
-      <td>DOM 엘리먼트를 참조하는 템플릿 로컬 변수의 타입을 검사할지 지정합니다. <code>false</code>로 설정하면 <code>&lt;input #ref^gt;</code>라고 사용했을 때 <code>ref</code>를 <code>any</code> 타입으로 처리합니다.</td>
+      <td>DOM 엘리먼트를 참조하는 템플릿 로컬 변수의 타입을 검사할지 지정합니다. <code>false</code>로 설정하면 <code>&lt;input #ref&gt;</code>라고 사용했을 때 <code>ref</code>를 <code>any</code> 타입으로 처리합니다.</td>
     </tr>
     <tr>
       <td><code>strictOutputEventTypes</code></td>
@@ -320,7 +321,7 @@ Unless otherwise noted, each option below is set to the value for `strictTemplat
     </tr>
     <tr>
       <td><code>strictLiteralTypes</code></td>
-      <td>템플릿에 선언된 객체와 배열 리터럴의 타입을 추론할지 지정합니다. <code>false</code>로 설정하면 이 리터럴들을 <code>any</code>로 간주합니다. This flag is <code>true</code> when <em>either</em> <code>fullTemplateTypeCheck</code> or <code>strictTemplates</code> is set to <code>true</code>.</td>
+      <td>템플릿에 선언된 객체와 배열 리터럴의 타입을 추론할지 지정합니다. <code>false</code>로 설정하면 이 리터럴들을 <code>any</code>로 간주합니다. <code>fullTemplateTypeCheck</code> 플래그나 <code>strictTemplates</code> 플래그를 활성화했다면 이 플래그값도 <code>true</code>로 지정됩니다.</td>
     </tr>
   </tbody>
 </table>
