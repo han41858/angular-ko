@@ -56,7 +56,7 @@ Angular 가이드 문서는 프로토타입부터 대규모 기업용 앱에도 
   </a>
   <a href="start" class="docs-card" title="Try out Angular">
       <section>살펴보기</section>
-      <p>로컬 개발환경 설정 없이 미리 만들어둔 Angular 앱이 어떻게 동작하는지 확인해 보세요.</p>
+      <p>로컬 개발환경 설정 없이 Angular 앱이 어떻게 동작하는지 확인해 보세요.</p>
       <p class="card-footer">실행해보기</p>
   </a>
   <a href="tutorial" class="docs-card" title="Create an app">
@@ -81,7 +81,7 @@ Most Angular code can be written with just the latest JavaScript, using [types](
 -->
 이 문서를 읽는 분은 [HTML](https://developer.mozilla.org/docs/Learn/HTML/Introduction_to_HTML "Learn HTML")이나 [CSS](https://developer.mozilla.org/docs/Learn/CSS/First_steps "Learn CSS"), [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript "Learn JavaScript")의 기본 지식이나 관련 툴, 그리고 [클래스](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes "ES2015 클래스")나 [모듈](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import "ES2015 모듈")과 같은 [JavaScript의 최신 기술](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Language_Resources "Latest JavaScript standards")에 익숙한 개발자를 대상으로 합니다.
 그리고 이 문서에서 제공하는 예제 코드는 모두 [TypeScript](https://www.typescriptlang.org/ "TypeScript")로 작성되었습니다.
-Angular 코드는 일반적으로 최신 JavaScript 스펙을 바탕으로 [타입](https://www.typescriptlang.org/docs/handbook/classes.html "TypeScript Types")을 사용해서 의존성을 주입하며, [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html "Decorators")를 사용해서 메타데이터를 지정합니다.
+Angular 코드는 일반적으로 최신 JavaScript 스펙을 바탕으로 [타입 시스템](https://www.typescriptlang.org/docs/handbook/classes.html "TypeScript Types")을 활용해서 의존성을 주입하며, [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html "Decorators")를 활용해서 메타데이터를 지정합니다.
 
 <!--
 ## Feedback
@@ -102,11 +102,11 @@ for information about submission guidelines.
 Our community values respectful, supportive communication.
 Please consult and adhere to the [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md "Contributor code of conduct").
 -->
-<h3>저희는 멀리 있지 않습니다!</h4>
+<h3>저희는 여러분 곁에 있습니다!</h4>
 
 개발자들의 의견을 듣고 싶습니다. [문제가 있거나 문서에 반영하고 싶은 내용이 있다면 이곳에 올려주세요.](https://github.com/angular/angular/issues/new/choose "Angular GitHub repository new issue form")
 
-Angular Github 레파지토리에 [풀 리퀘스트](https://github.com/angular/angular/pulls "Angular Github pull requests")로 Angular 가이드 문서에 직접 기여할 수도 있습니다.
+Angular Github 코드 저장소에 [풀 리퀘스트](https://github.com/angular/angular/pulls "Angular Github pull requests")로 Angular 가이드 문서에 직접 기여할 수도 있습니다.
 가이드라인에 대해 자세하게 알아보려면 [Angular에 기여하기](https://github.com/angular/angular/blob/master/CONTRIBUTING.md "Contributing guide") 문서를 참고하세요.
 
 Angular 커뮤니티는 활발하게 운영되고 있으며, 문제가 생겼을 때 커뮤니티에서 지원을 받을 수도 있습니다.

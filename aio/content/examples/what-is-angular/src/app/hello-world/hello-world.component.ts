@@ -10,5 +10,5 @@ import { Component } from '@angular/core';
     `,
 })
 export class HelloWorldComponent {
-  // The code in this class drives the component's behavior.
+  // 여기에는 컴포넌트의 동작을 정의하는 코드가 들어갑니다.
 }
