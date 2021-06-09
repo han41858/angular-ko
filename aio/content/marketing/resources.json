@@ -46,17 +46,20 @@
             "title": "Angular inDepth"
           },
           "angular-nation": {
-            "desc": "Angular Nation is a free private network created for Angular developers to network, collaborate, and ask questions.",
+            "/desc": "Angular Nation is a free private network created for Angular developers to network, collaborate, and ask questions.",
+            "desc": "Angular Nation은 Angular 개발자들이 함께 소통하고 협업하며 질문을 주고 받을 수 있는 개인 네트워크입니다.",
             "url": "https://www.angularnation.net/",
             "title": "Angular Nation"
           },
           "angular-builders": {
-            "desc": "A collection of Angular builders for your Angular projects",
+            "/desc": "A collection of Angular builders for your Angular projects",
+            "desc": "Angular 프로젝트에 사용되는 Angular 빌더를 모아놓은 사이트입니다.",
             "url": "https://angular-builders.dev/",
             "title": "Angular Builders"
           },
           "butter-cms": {
-            "desc": "Add API Based CMS to your Angular app",
+            "/desc": "Add API Based CMS to your Angular app",
+            "desc": "Angular 앱에 API 기반 CMS 서비스를 추가해 보세요.",
             "url": "https://github.com/ButterCMS/buttercms-angular-tutorial",
             "title": "API Based CMS with Butter"
           }
@@ -159,7 +162,8 @@
             "url": "https://ngrx.io/"
           },
           "rx-angular": {
-            "desc": "RxAngular is a reactive library that provides extensions for developing high performant and scalable applications. It addresses the issues of local state management, rendering performance, and reactive architecture.",
+            "/desc": "RxAngular is a reactive library that provides extensions for developing high performant and scalable applications. It addresses the issues of local state management, rendering performance, and reactive architecture.",
+            "desc": "RxAngular는 애플리케이션의 성능을 높이고 확장이 편하도록 돕는 반응형 라이브러리입니다. 로컬 상태 관리, 렌더링 성능 향상, 반응형 아키텍처를 다룹니다.",
             "title": "rx-angular",
             "url": "https://rx-angular.io"
           },
@@ -204,7 +208,8 @@
             "url": "https://github.com/ngx-api-utils/ngx-api-utils"
           },
           "butter": {
-            "desc": "ButterCMS is a headless CMS that lets you manage content using our dashboard and integrate it into your Angular Application",
+            "/desc": "ButterCMS is a headless CMS that lets you manage content using our dashboard and integrate it into your Angular Application",
+            "desc": "ButterCMS는 Angular 애플리케이션과 통합되는 헤드리스 CMS입니다. 애플리케이션 내용을 대시보드로 관리할 수 있습니다.",
             "logo": "https://buttercms.com/static/v2/images/logo.fb7c1035e94d.svg",
             "title": "ButterCMS",
             "url": "https://buttercms.com/docs/api-client/angular"
@@ -256,7 +261,8 @@
         "order": 2,
         "resources": {
           "ub": {
-            "desc": "UI Bakery is a low code platform to generate Angular applications.",
+            "//desc": "UI Bakery is a low code platform to generate Angular applications.",
+            "desc": "UI Bakery는 Angular 애플리케이션을 간단하게 생성할 수 있는 플랫폼입니다.",
             "logo": "",
             "rev": true,
             "title": "UI Bakery",
@@ -283,7 +289,8 @@
             "url": "https://cli.angular.io"
           },
           "angular-eslint": {
-            "desc": "The tooling which enables ESLint to lint Angular projects.",
+            "/desc": "The tooling which enables ESLint to lint Angular projects.",
+            "desc": "Angular 프로젝트에 ESLint를 적용할 수 있는 툴입니다.",
             "logo": "",
             "title": "Angular ESLint",
             "url": "https://github.com/angular-eslint/angular-eslint#readme"
@@ -302,7 +309,8 @@
             "url": "https://angularplayground.it/"
           },
           "angular-prerender": {
-            "desc": "A command line tool to prerender Angular Apps that uses Angular Universal but also supports Scully plugins.",
+            "/desc": "A command line tool to prerender Angular Apps that uses Angular Universal but also supports Scully plugins.",
+            "desc": "Angular Universal과 Scully 플러그인이 적용된 Angular 앱을 사전 렌더링하는 커맨드라인 툴입니다.",
             "logo": "https://repository-images.githubusercontent.com/142886533/bd323700-e8ff-11e9-9645-75bc009ee359",
             "title": "angular-prerender",
             "url": "https://github.com/chrisguttandin/angular-prerender"
@@ -315,13 +323,15 @@
             "url": "https://nrwl.io/nx"
           },
           "protractor": {
-            "desc": "The official end to end testing framework for Angular applications.",
+            "/desc": "The official end to end testing framework for Angular applications.",
+            "desc": "Angular 애플리케이션를 대상으로 엔드 투 엔드 테스트를 실행할 때 사용하는 Angular 공식 테스트 프레임워크입니다.",
             "logo": "",
             "title": "Protractor",
             "url": "https://protractor.angular.io/"
           },
           "observer-spy": {
-            "desc": "A library for testing RxJS observables that offers an alternative to Marble Tests.",
+            "/desc": "A library for testing RxJS observables that offers an alternative to Marble Tests.",
+            "desc": "RxJS 옵저버블을 테스트할 때 Marble Test를 적용할 수 있도록 확장하는 라이브러리입니다.",
             "logo": "",
             "title": "observer-spy",
             "url": "https://github.com/hirezio/observer-spy"
@@ -334,7 +344,8 @@
             "url": "https://scully.io"
           },
           "ng-mocks": {
-            "desc": "A testing library for creating mock services, components, directives, pipes and modules out of annoying dependencies in unit tests.",
+            "/desc": "A testing library for creating mock services, components, directives, pipes and modules out of annoying dependencies in unit tests.",
+            "desc": "서비스, 컴포넌트, 디렉티브, 파이프, 모듈를 목 객체로 생성하는 테스트 라이브러리입니다. 유닛 테스트에 활용합니다.",
             "title": "ng-mocks",
             "logo": "",
             "url": "https://github.com/ike18t/ng-mocks#readme"
@@ -437,13 +448,15 @@
             "url": "https://material.angular.io/"
           },
           "mdb5": {
-            "desc": "Free components, templates & plugins for the latest Bootstrap 5 styled in accordance with Material Design 2.0 (guidelines introduced in 2020)",
+            "/desc": "Free components, templates & plugins for the latest Bootstrap 5 styled in accordance with Material Design 2.0 (guidelines introduced in 2020)",
+            "desc": "2020년에 가이드라인이 나온 Material Design 2.0을 준수한 최신 Bootstrap 5 라이브러리입니다. 컴포넌트와 템플릿, 플러그인을 무료로 제공합니다.",
             "logo": "",
             "title": "Angular & Material Design 2.0 for Bootstrap 5",
             "url": "https://mdbootstrap.com/docs/b5/angular/"
           },
           "mdb4": {
-            "desc": "Free components, templates & plugins for the latest Bootstrap 4 styled in accordance with Material Design (guidelines introduced in 2015)",
+            "/desc": "Free components, templates & plugins for the latest Bootstrap 4 styled in accordance with Material Design (guidelines introduced in 2015)",
+            "desc": "2015년에 가이드라인이 나온 Material Deisn을 준수한 Bootstrap 4 라이브러리입니다. 컴포넌트와 템플릿, 플러그인을 무료로 제공합니다.",
             "logo": "",
             "title": "Angular & Material Design for Bootstrap 4",
             "url": "https://mdbootstrap.com/docs/angular/"
@@ -576,12 +589,14 @@
             "url": "https://www.npmjs.com/package/@tabuckner/material-dayjs-adapter"
           },
           "ngx-skeleton-loader": {
-            "desc": "NGX Skeleton Loader is a lightweight and A11Y friendly solution for blazing fast loading skeletons that automatically adapt to your Angular apps.",
+            "/desc": "NGX Skeleton Loader is a lightweight and A11Y friendly solution for blazing fast loading skeletons that automatically adapt to your Angular apps.",
+            "desc": "NGX Skeleton Loader는 가볍고 A11Y 친화적인 솔루션입니다. Angular 애플리케이션에 간단하게 적용하면 정말 빠른 효과를 볼 수 있습니다.",
             "title": "NGX Skeleton Loader",
             "url": "https://www.npmjs.com/package/ngx-skeleton-loader"
           },
           "taiga-ui": {
-            "desc": "Taiga UI is fully-treeshakable Angular UI Kit consisting of multiple base libraries and several add-ons. We have 130+ components, 100+ directives, dozens of tokens, utils and tools. They are easily customizable and well engineered.",
+            "/desc": "Taiga UI is fully-treeshakable Angular UI Kit consisting of multiple base libraries and several add-ons. We have 130+ components, 100+ directives, dozens of tokens, utils and tools. They are easily customizable and well engineered.",
+            "desc": "Taiga UI는 트리 셰이킹이 완벽하게 동작하는 Angular UI Kit 입니다. 컴포넌트를 130개 이상, 디렉티브를 100개 이상 제공하며 이외에도 개발에 도움이 되는 유틸리티와 도구도 제공합니다. 쉽게 커스터마이징해서 사용할 수도 있습니다.",
             "title": "Taiga UI",
             "url": "https://taiga-ui.dev"
           }
@@ -663,7 +678,7 @@
           },
           "ab5": {
             "/desc": "How to build Angular applications using NGRX",
-            "desc": "NGRX로 Angular 애플리케이션을 만드는 방법",
+            "desc": "NGRX로 Angular 애플리케이션을 만드는 방법을 알아보세요.",
             "logo": "",
             "title": "Architecting Angular Applications with NGRX",
             "url": "https://www.packtpub.com/web-development/architecting-angular-applications-redux"
@@ -675,25 +690,30 @@
             "url": "https://leanpub.com/developing-with-angular"
           },
           "reactive-state-for-angular-with-ngrx": {
-            "desc": "Learn how to build a Reactive Application with Ngrx and Angular",
+            "/desc": "Learn how to build a Reactive Application with Ngrx and Angular",
+            "desc": "NgRx와 Angular를 사용해서 반응형 애플리케이션을 어떻게 만들 수 있는지 안내합니다.",
             "title": "Reactive State for Angular with NgRx",
             "url": "https://bpbonline.com/products/reactive-state-for-angular-with-ngrx"
           },
           "ngrx-reactive-state-management": {
             "title": "NgRx: Reactive State Management for Angular",
-            "desc": "Comprehensive learning resource on building Angular apps with NgRx",
+            "/desc": "Comprehensive learning resource on building Angular apps with NgRx",
+            "desc": "Angular에 NgRx를 적용하는 방법을 종합적으로 다루는 학습 코스입니다.",
             "url": "https://gumroad.com/l/angular-ngrx-book",
             "logo": ""
           },
           "testing-angular-guide": {
             "title": "Testing Angular",
-            "desc": "A Guide to Robust Angular Applications (free online book and e-book)",
+            "/desc": "A Guide to Robust Angular Applications (free online book and e-book)",
+            "desc": "Angular 애플리케이션을 견고하고 탄탄하게 만드는 방법을 안내합니다. 무료 온라인 도서와 e북을 제공합니다.",
             "url": "https://testing-angular.com",
             "logo": ""
           },
           "butter-cms": {
-            "title":"How to integrate ButterCMS into Angular 2+ App",
-            "desc": "Integrate a Headless CMS into your Angular App, create blog posts and pages",
+            "/title":"How to integrate ButterCMS into Angular 2+ App",
+            "title": "Angular 2+ 앱에 ButterCMS 통합하기",
+            "/desc": "Integrate a Headless CMS into your Angular App, create blog posts and pages",
+            "desc": "Angular 앱에 헤드리스 CMS를 통합해 보세요. 블로그를 편하게 관리할 수 있습니다.",
             "url":"https://medium.com/orlyknop/how-to-integrate-buttercms-into-angular-2-app-a1baaa51402",
             "logo": ""
           }
@@ -799,7 +819,8 @@
             "url": "https://ultimateangular.com/"
           },
           "angular-pro-screencast": {
-            "desc": "Youtube Channel. Online videos in English and Russian providing in-depth coverage of the Angular advanced topics.",
+            "/desc": "Youtube Channel. Online videos in English and Russian providing in-depth coverage of the Angular advanced topics.",
+            "desc": "온라인 영상을 영어와 러시아어로 제공하는 Youtube 채널입니다. 깊이 있는 주제를 다양하게 다룹니다.",
             "title": "Angular Pro Screencast",
             "url": "https://www.youtube.com/playlist?list=PLLf-VBOaoVk1E9fTBZdq1CfnRa2TtL_Kb"
           },
@@ -883,7 +904,7 @@
             "/desc": "Basic and Advanced training across Europe in German",
             "desc": "Angular의 기본 내용과 심화 내용을 학습해 보세요. 독일에서 진행됩니다.",
             "/title": "TheCodeCampus (German)",
-            "title": "TheCodeCampus (독일)",
+            "title": "TheCodeCampus (독일어)",
             "url": "https://www.thecodecampus.de/schulungen/angular"
           },
           "-KLIzFhfGKi1xttqJ7Uh": {
@@ -931,28 +952,28 @@
             "desc": "온라인으로 진행되는 수업입니다. 실시간으로 진행되며, 강사의 피드백도 바로 확인할 수 있습니다.",
             "logo": "https://learn.javascript.ru/img/sitetoolbar__logo_ru.svg",
             "/title": "Learn Javascript (Russian)",
-            "title": "Learn Javascript (러시아)",
+            "title": "Learn Javascript (러시아어)",
             "url": "https://learn.javascript.ru/courses/angular"
           },
           "zenika-angular": {
             "/desc": "Angular trainings delivered by Zenika (FRANCE)",
             "desc": "Zenika가 진행하는 Angular 트레이닝 코스입니다.",
             "/title": "Angular Trainings (French)",
-            "title": "Angular Trainings (프랑스)",
+            "title": "Angular Trainings (프랑스어)",
             "url": "https://training.zenika.com/fr/training/angular/description"
           },
           "formationjs": {
             "/desc": "Angular onsite training in Paris (France). Monthly Angular workshops and custom onsite classes. We are focused on Angular, so we are always up to date.",
             "desc": "프랑스 파리에서 진행되는 Angular 현장 코스입니다. 매달 진행되며 항상 Angular 최신버전을 대상으로 수업합니다.",
             "/title": "Formation JavaScript (French)",
-            "title": "Formation JavaScript (프랑스)",
+            "title": "Formation JavaScript (프랑스어)",
             "url": "https://formationjavascript.com/formation-angular/"
           },
           "humancoders-angular": {
             "/desc": "Angular trainings delivered by Human Coders (France)",
             "desc": "Human Coders가 진행하는 트레이닝 코스입니다.",
             "/title": "Formation Angular (French)",
-            "title": "Formation Angular (프랑스)",
+            "title": "Formation Angular (프랑스어)",
             "url": "https://www.humancoders.com/formations/angular"
           },
           "wao": {
@@ -967,7 +988,7 @@
             "desc": "독일에서 Angular 책을 출판한 저자가 직접 강의하는 수업입니다. 블로그에는 관련 기술과 영상을 영어와 독일어로 제공합니다.",
             "logo": "https://angular.schule/assets/img/brand.svg",
             "/title": "Angular.Schule (German)",
-            "title": "Angular.Schule (독일)",
+            "title": "Angular.Schule (독일어)",
             "url": "https://angular.schule/"
           },
           "strbrw": {
@@ -981,13 +1002,15 @@
             "desc": "독일, 오스트리아 스위스 최고의 커뮤니티가 모여 진행하는 Angular 트레이닝 코스입니다. 정기적으로 블로그나 튜토리얼을 작성하고 있습니다.",
             "logo": "https://angular.de/assets/img/angular-de-logo.svg",
             "/title": "Angular.de (German)",
-            "title": "Angular.de (독일)",
+            "title": "Angular.de (독일어)",
             "url": "https://angular.de/"
           },
           "AngularArchitects": {
-            "desc": "In-depth training and consulting with focus on enterprise-scale Angular applications and architecture (remote, on-site company trainings, and public workshops). We also blog about these topics on a regular basis.",
+            "/desc": "In-depth training and consulting with focus on enterprise-scale Angular applications and architecture (remote, on-site company trainings, and public workshops). We also blog about these topics on a regular basis.",
+            "desc": "기업용 규모의 Angular 애플리케이션에 어울리는 아키텍처를 깊이있게 다루는 트레이닝, 컨설팅 코스입니다. 원격으로 진행하거나 직접 방문해서 진행합니다. 블로그도 확인해 보세요.",
             "rev": true,
-            "title": "Angular Architects (German and English)",
+            "/title": "Angular Architects (German and English)",
+            "title": "Angular Architects (독일어, 영어)",
             "url": "https://www.angulararchitects.io/"
           }
         }

@@ -9,10 +9,9 @@
 -->
 <h2>이런 행사를 준비하고 있습니다:</h2>
 <div *ngIf="!upcomingEvents?.length">
-  <p>We don't have any upcoming speaking engagements at the moment.</p>
-  <p>Until something comes up, make sure you check our <a href="https://www.youtube.com/angular">YouTube channel</a>
-    and follow us on <a href="https://twitter.com/angular">social media</a>.</p>
-  <p>If you want us to be part of your event reach out on <a href="mailto:devrel@angular.io">devrel@angular.io</a>!</p>
+  <p>현재는 예정된 행사가 없습니다.</p>
+  <p>새로운 일정이 잡힐 때까지 <a href="https://www.youtube.com/angular">저희 YouTube 채널</a>과 <a href="https://twitter.com/angular">소셜 미디어</a>를 확인해 주세요.</p>
+  <p>이벤트를 준비하고 있다면 <a href="mailto:devrel@angular.io">devrel@angular.io</a>로 연락주시면 됩니다!</p>
 </div>
 <table class="is-full-width" *ngIf="upcomingEvents?.length">
   <thead>
