@@ -345,11 +345,13 @@ You can also pass in more than one configuration name as a comma-separated list.
 
 If the `--prod` command line flag is also used, it is applied first, and its settings can be overridden by any configurations specified via the `--configuration` flag.
 -->
-Angular CLI comes with two build configurations: `production` and `development`. By default, the `ng build` command uses the `production` configuration, which applies a number of build optimizations, including:
-* Bundling files
-* Minimizing excess whitespace
-* Removing comments and dead code
-* Rewriting code to use short, mangled names (minification)
+Angular CLI는 `production`, `development` 환경을 기본으로 구성합니다.
+따로 환경을 지정하지 않은 채로 `ng build` 명령을 실행하면 `production` 환경설정이 적용되며, 이 환경에서는 다음과 같은 빌드 최적화 과정이 추가됩니다:
+
+* 파일을 번들링합니다.
+* 공백문자를 제거합니다.
+* 주석과 데드 코드를 제거합니다.
+* 코드를 난독화해서 용량을 줄입니다.
 
 개발 과정에 필요하다면 `stage`와 같은 빌드 설정을 추가할 수도 있습니다. 그래서 Angular IO (Angular 공식 가이드 문서) 프로젝트는 `stable`, `archive`, `next`와 같은 빌드 설정을 추가로 정의해서 사용하고 있으며, 애플리케이션에 다국어를 적용하기 위한 설정도 추가할 수 있습니다. 자세한 내용은 [Internationalization (i18n)](guide/i18n#merge-aot) 문서를 참고하세요.
 
@@ -423,6 +425,7 @@ The following sections provide more details of how these complex values are used
 -->
 ### 애셋 환경설정
 
+<!--
 Each `build` target configuration can include an `assets` array that lists files or folders you want to copy as-is when building your project.
 By default, the `src/assets/` folder and `src/favicon.ico` are copied over.
 
@@ -496,11 +499,90 @@ The following example uses the `ignore` field to exclude certain files in the as
 ]
 
 </code-example>
+-->
+개별 `build` 환경설정에는 모두 `assets` 배열이 존재합니다.
+이 배열에는 프로젝트를 빌드한 이후에 빌드 결과물 폴더에 복사할 파일과 폴더를 지정합니다.
+기본 대상은 `src/assets/` 폴더와 `src/favicon.ico` 파일이 지정되어 있습니다.
+
+<code-example language="json">
+
+"assets": [
+  "src/assets",
+  "src/favicon.ico"
+]
+
+</code-example>
+
+이 중에서 필요없는 것이 있다면 `assets` 배열에서 제거하면 됩니다.
+
+애셋 환경설정이 복잡하다면 워크스페이스 최상위 폴더를 기준으로 하는 경로를 지정하는 대신, 객체 형태를 사용할 수도 있습니다.
+객체는 이런 필드로 구성하면 됩니다.
+
+* `glob`:  `input` 디렉토리에서 지정할 대상을 [node-glob](https://github.com/isaacs/node-glob/blob/master/README.md) 패턴으로 지정합니다.
+* `input`: 워크스페이스 최상위 폴더 기준으로 대상 폴더를 지정합니다.
+* `output`: `outDir`의 경로를 지정합니다(기본값은 `dist/`*프로젝트-이름*). 프로젝트 밖으로 빌드 결과물을 생성하는 방식은 보안 이슈 때문에 허용되지 않습니다.
+* `ignore`: 제외할 파일 패턴을 지정합니다.
+* `followSymlinks`: glob 패턴이 symlink 디렉토리도 참조할 것인지 지정합니다. 기본값은 `false`이며, 이 플래그에 `true` 값을 지정하면 symlink로 연결된 하위 폴더도 대상이 됩니다.
+
+그래서 기본 애셋 경로들을 객체 형식으로 자세하게 풀어서 작성해보면 이렇습니다.
+
+<code-example language="json">
+
+"assets": [
+  {
+    "glob": "**/*",
+    "input": "src/assets/",
+    "output": "/assets/"
+  },
+  {
+    "glob": "favicon.ico",
+    "input": "src/",
+    "output": "/"
+  }
+]
+
+</code-example>
+
+이 방식을 확장하면 프로젝트 밖에 있는 애셋을 복사할 수도 있습니다.
+아래 코드는 node 패키지에 있는 파일을 복사하도록 구성한 환경설정입니다:
+
+<code-example language="json">
+
+"assets": [
+ {
+   "glob": "**/*",
+   "input": "./node_modules/some-package/images",
+   "output": "/some-package/"
+ }
+]
+
+</code-example>
+
+이렇게 구성하면 `node_modules/some-package/images/`에 있는 파일들이 `dist/some-package/`로 복사됩니다.
+
+그리고 아래 코드는 대상 폴더에 있는 파일들 중 특정 확장자를 복사하지 않기 위해 `ignore` 필드를 지정한 환경설정입니다:
+
+<code-example language="json">
+
+"assets": [
+ {
+   "glob": "**/*",
+   "input": "src/assets/",
+   "ignore": ["**/*.svg"],
+   "output": "/assets/"
+ }
+]
+
+</code-example>
+
 
 
 {@a style-script-config}
-
+{@a styles-and-scripts-configuration}
+<!--
 ### Styles and scripts configuration
+-->
+### 스타일, 스크립트 환경설정
 
 <!--
 An array entry for the `styles` and `scripts` options can be a simple path string, or an object that points to an extra entry-point file.
@@ -563,7 +645,7 @@ You can mix simple and complex file references for styles and scripts.
 * `input`: 소스 폴더를 워크스페이스 최상위 경로의 상대경로로 지정합니다.
 * `output`: 복사할 위치를 `outDir`의 상대경로로 지정합니다(기본값은 `dist/*프로젝트-이름*` 입니다). 보안 문제가 있을 수 있기 때문에 Angular CLI는 `outDir` 안쪽에만 파일을 씁니다.
 * `ignore`: 제외할 파일 패턴을 지정합니다.
-* `followSymlinks`: Allow glob patterns to follow symlink directories. This allows subdirectories of the symlink to be searched. Defaults to `false`.
+* `followSymlinks`: glob 패턴이 symlink 디렉토리도 참조할 것인지 지정합니다. 기본값은 `false`이며, 이 플래그에 `true` 값을 지정하면 symlink로 연결된 하위 폴더도 대상이 됩니다.
 
 그래서 기본 설정을 객체 형태로 바꿔보면 이렇게 표현할 수 있습니다.
 
@@ -687,6 +769,7 @@ Sass나 Stylus를 사용한다면 `includePaths` 필드를 지정해서 추가 �
 -->
 ### 빌드 최적화, 소스 맵 환경설정
 
+<!--
 The `optimization` browser builder option can be either a Boolean or an Object for more fine-tune configuration. This option enables various optimizations of the build output, including:
 
 - Minification of scripts and styles
@@ -727,8 +810,57 @@ There are several options that can be used to fine-tune the optimization of an a
 </tr>
 </tbody>
 </table>
+-->
+`optimization` 브라우저 빌더 옵션에는 불리언이나 객체를 지정할 수 있습니다.
+이 옵션으로 설정할 수 있는 항목은 이런 것들이 있습니다:
 
+- 스크립트/스타일 파일을 압축할 것인지
+- 트리 셰이킹 할 것인지
+- 데드 코드를 제거할 것인지
+- 주요 CSS 파일을 인라인으로 변환할 것인지
+- 폰트를 인라인으로 포함할 것인지
+
+그리고 이런 옵션들을 더 지정할 수 있습니다.
+
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>옵션</th>
+<th width="40%">설명</th>
+<th>타입</th>
+<th>기본값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scripts</code></td>
+<td>스크립트 파일을 최적화할 것인지 지정합니다.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>styles</code></td>
+<td>스타일 파일을 최적화할 것인지 지정합니다.</td>
+<td><code>boolean|<a href="#styles-optimization-options">스타일 최적화 옵션</a></code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>fonts</code></td>
+<td>폰트를 최적화할 것인지 지정합니다.<br><strong>참고:</strong> 인터넷 연결이 필요합니다.</td>
+<td><code class="no-auto-link">boolean|<a href="#fonts-optimization-options">폰트 최적화 옵션</a></code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+
+{@a styles-optimization-options}
+<!--
 #### Styles optimization options
+-->
+#### 스타일 최적화 옵션
+
+<!--
 <table class="is-full-width is-fixed-layout">
 <thead>
 <tr>
@@ -753,8 +885,40 @@ There are several options that can be used to fine-tune the optimization of an a
 </tr>
 </tbody>
 </table>
+-->
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>옵션</th>
+<th width="40%">설명</th>
+<th>타입</th>
+<th>기본값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>minify</code></td>
+<td>공백문자, 주석을 제거하고 일부 코드를 병합해서 CSS 정의 코드를 압축합니다.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>inlineCritical</code></td>
+<td><a href="https://web.dev/first-contentful-paint/">화면이 최초로 그려지는 성능(First Contentful Paint)</a>을 향상시키기 위해 주요 CSS를 추출하고 인라인으로 만듭니다.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
 
+
+{@a fonts-optimization-options}
+<!--
 #### Fonts optimization options
+-->
+#### 폰트 최적화 옵션
+
+<!--
 <table class="is-full-width is-fixed-layout">
 <thead>
 <tr>
@@ -796,8 +960,52 @@ You can supply a value such as the following to apply optimization to one or the
    setting styles optimization to `true`.
 
 </div>
+-->
+<table class="is-full-width is-fixed-layout">
+<thead>
+<tr>
+<th>옵션</th>
+<th width="40%">설명</th>
+<th>타입</th>
+<th>기본값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>inline</code></td>
+<td>애플리케이션의 index 파일에 필요한 외부 Google 폰트, 아이콘 CSS 정의를 인라인으로 심어서 <a href="https://web.dev/render-blocking-resources/">렌더링을 방해하는 요청</a>을 줄입니다.<br><strong>참고:</strong>인터넷 연결이 필요합니다.</td>
+<td><code class="no-auto-link">boolean</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
 
+빌드 최적화 옵션은 이런 형태로도 지정할 수 있습니다:
+
+<code-example language="json">
+
+  "optimization": {
+    "scripts": true,
+    "styles": {
+      "minify": true,
+      "inlineCritical": true
+    },
+    "fonts": true
+  }
+
+</code-example>
+
+<div class="alert is-helpful">
+
+   스타일 최적화 옵션을 `true`로 설정하고 Angular [Universal](guide/glossary#universal)을 함께 활용하면 HTML 페이지를 렌더링하기 위해 필요한 코드의 양을 줄일 수 있습니다.
+
+</div>
+
+
+<!--
 ### Source map configuration
+-->
+### 소스맵 환경설정
 
 <!--
 The `sourceMap` browser builder option can be either a Boolean or an Object for more fine-tune configuration to control the source maps of an application.
@@ -861,39 +1069,40 @@ The example below shows how to toggle one or more values to configure the source
 
 </div>
 -->
-The `sourceMap` browser builder option can be either a Boolean or an Object for more fine-tune configuration to control the source maps of an application.
+`sourceMap` 브라우저 빌더 옵션에는 불리언이나 객체를 지정할 수 있습니다.
+이 옵션은 애플리케이션의 소스맵을 어떻게 생성할지 지정합니다.
 
 <table class="is-full-width is-fixed-layout">
 <thead>
 <tr>
-<th>Option</th>
-<th width="40%">Description</th>
-<th>Value Type</th>
-<th>Default Value</th>
+<th>옵션</th>
+<th width="40%">설명</th>
+<th>타입</th>
+<th>기본값</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>scripts</code></td>
-<td>Output source maps for all scripts.</td>
+<td>모든 스크립트 파일마다 소스맵을 생성합니다.</td>
 <td><code class="no-auto-link">boolean</code></td>
 <td><code>true</code></td>
 </tr>
 <tr>
 <td><code>styles</code></td>
-<td>Output source maps for all styles.</td>
+<td>모든 스타일 파일마다 소스맵을 생성합니다.</td>
 <td><code class="no-auto-link">boolean</code></td>
 <td><code>true</code></td>
 </tr>
 <tr>
 <td><code>vendor</code></td>
-<td>Resolve vendor packages source maps.</td>
+<td>서드 파티 패키지용 소스맵을 생성합니다.</td>
 <td><code class="no-auto-link">boolean</code></td>
 <td><code>false</code></td>
 </tr>
 <tr>
 <td><code>hidden</code></td>
-<td>Output source maps used for error reporting tools.</td>
+<td>에러 확인툴 용으로 활용하는 소스맵을 생성합니다.</td>
 <td><code class="no-auto-link">boolean</code></td>
 <td><code>false</code></td>
 </tr>
@@ -901,7 +1110,7 @@ The `sourceMap` browser builder option can be either a Boolean or an Object for 
 </table>
 
 
-The example below shows how to toggle one or more values to configure the source map outputs:
+소스맵 환경설정은 이렇게 지정합니다:
 
 <code-example language="json">
 
