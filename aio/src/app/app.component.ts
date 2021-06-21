@@ -306,17 +306,17 @@ export class AppComponent implements OnInit {
     const pageClass = `page-${this.pageId}`;
     const folderClass = `folder-${this.folderId}`;
     const viewClasses = Object.keys(this.currentNodes).map(view => `view-${view}`).join(' ');
-    const notificationClass = `aio-notification-${this.notification.showNotification}`;
-    const notificationAnimatingClass = this.notificationAnimating ? 'aio-notification-animating' : '';
+    // const notificationClass = `aio-notification-${this.notification.showNotification}`;
+    // const notificationAnimatingClass = this.notificationAnimating ? 'aio-notification-animating' : '';
 
     this.hostClasses = [
       mode,
       sideNavOpen,
       pageClass,
       folderClass,
-      viewClasses,
-      notificationClass,
-      notificationAnimatingClass
+      viewClasses
+      // notificationClass,
+      // notificationAnimatingClass
     ].join(' ');
   }
 

@@ -5,6 +5,7 @@
 </div>
 
 <mat-toolbar color="primary" class="app-toolbar no-print" [class.transitioning]="isTransitioning">
+  <!--
   <mat-toolbar-row class="notification-container">
     <aio-notification notificationId="survey-march-2020" expirationDate="2020-04-15" [dismissOnContentClick]="true" (dismissed)="notificationDismissed()">
       <a href="https://goo.gle/angular-survey-2020">
@@ -14,6 +15,7 @@
       </a>
     </aio-notification>
   </mat-toolbar-row>
+  -->
   <mat-toolbar-row>
     <button mat-button class="hamburger" [class.starting]="isStarting" (click)="sidenav.toggle()" title="Docs menu">
       <mat-icon svgIcon="menu"></mat-icon>

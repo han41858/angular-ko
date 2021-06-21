@@ -53,6 +53,7 @@ export class NotificationComponent implements OnInit {
   ngOnInit() {
     const previouslyHidden = this.storage.getItem(LOCAL_STORAGE_NAMESPACE + this.notificationId) === 'hide';
     const expired = this.currentDate > new Date(this.expirationDate);
+
     this.showNotification = previouslyHidden || expired ? 'hide' : 'show';
   }
 

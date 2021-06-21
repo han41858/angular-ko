@@ -29,15 +29,15 @@ export class SearchResultsComponent implements OnChanges {
   resultSelected = new EventEmitter<SearchResult>();
 
   searchState: SearchState = SearchState.InProgress;
-  readonly defaultArea = 'other';
+  readonly defaultArea = '기타';
   readonly folderToAreaMap: Record<string, string> = {
       api: 'api',
       cli: 'cli',
-      docs: 'guides',
-      errors: 'errors',
-      guide: 'guides',
-      start: 'tutorials',
-      tutorial: 'tutorials',
+      docs: '문서',
+      errors: '에러',
+      guide: '문서',
+      start: '튜토리얼',
+      tutorial: '튜토리얼',
   };
   searchAreas: SearchArea[] = [];
 

@@ -19,10 +19,10 @@ const FETCHING_ERROR_CONTENTS = (path: string) => `
   <div class="nf-container l-flex-wrap flex-center">
     <div class="nf-icon material-icons">error_outline</div>
     <div class="nf-response l-flex-wrap">
-      <h1 class="no-toc">Request for document failed.</h1>
+      <h1 class="no-toc">문서 불러오기 실패</h1>
       <p>
-        We are unable to retrieve the "${path}" page at this time.
-        Please check your connection and try again later.
+        "${path}" 주소에 해당하는 문서를 불러오지 못했습니다.
+        주소를 다시 확인하거나 잠시 후에 다시 시도해 주세요.
       </p>
     </div>
   </div>
