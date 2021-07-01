@@ -19,7 +19,6 @@ export class ClickDirective {
 @Directive({
   selector: '[myClick2]',
   // tslint:disable: no-outputs-metadata-property
-  outputs: ['clicks:myClick']  // propertyName:alias
   outputs: ['clicks:myClick']  // 프로퍼티_이름:별칭
 })
 // tslint:enable: no-outputs-metadata-property
