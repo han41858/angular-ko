@@ -43,8 +43,6 @@ To get the most out of property binding, you should be familiar with the followi
 * [템플릿 기본](guide/glossary#template)
 * [바인딩 문법](guide/binding-syntax)
 
-<hr />
-
 
 <!--
 ## Understanding the flow of data

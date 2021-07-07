@@ -393,14 +393,26 @@ Updating the property without changing object identity has no effect.
 </div>
 
 
+<!--
 #### Single and multiple-style binding example
+-->
+#### 한 번에 여러 스타일을 바인딩하는 예제
 
+<!--
 <code-example path="attribute-binding/src/app/single-and-multiple-style-binding.component.ts" header="nav-bar.component.ts">
 </code-example>
 
 If there are multiple bindings to the same style attribute, Angular uses [styling precedence](guide/style-precedence) to determine which binding to use.
 
 The following table summarizes style binding syntax.
+-->
+<code-example path="attribute-binding/src/app/single-and-multiple-style-binding.component.ts" header="nav-bar.component.ts">
+</code-example>
+
+같은 스타일 어트리뷰트를 여러 번 바인딩하는 경우에는 Angular [스타일 우선순위](guide/style-precedence)에 따라 최종 스타일이 결정됩니다.
+
+아래 표를 참고하세요.
+
 
 <style>
   td, th {vertical-align: top}
@@ -477,16 +489,29 @@ The following table summarizes style binding syntax.
   </tr>
 </table>
 
+<!--
 <div class="alert is-helpful">
 
 The [NgStyle](guide/built-in-directives/#ngstyle) directive can be used as an alternative to direct `[style]` bindings.
 However, using the above style binding syntax without `NgStyle` is preferred because due to improvements in style binding in Angular, `NgStyle` no longer provides significant value, and might eventually be removed in the future.
 
 </div>
+-->
+<div class="alert is-helpful">
+
+[NgStyle](guide/built-in-directives/#ngstyle) 디렉티브를 사용하는 것보다는 직접 `[style]` 처럼 바인딩하는 것이 더 좋습니다.
+`[style]`이라고 사용하는 것에 비해 `NgStyle` 디렉티브를 사용하는 것이 특별히 유리한 점이 없다고 판단되면, 이후 Angular 버전에는 스타일 바인딩 성능향상을 위해 `NgStyle` 디렉티브가 제거될 수 있습니다.
+
+</div>
+
 
 {@a styling-precedence}
+<!--
 ## Styling Precedence
+-->
+## 스타일 우선순위
 
+<!--
 A single HTML element can have its CSS class list and style values bound to multiple sources (for example, host bindings from multiple directives).
 
 When there are multiple bindings to the same class name or style property, Angular uses a set of precedence rules to resolve conflicts and determine which classes or styles are ultimately applied to the element.
@@ -531,10 +556,63 @@ In addition, bindings take precedence over static attributes.
 In the following case, `class` and `[class]` have similar specificity, but the `[class]` binding will take precedence because it is dynamic.
 
 <code-example path="attribute-binding/src/app/app.component.html" region="dynamic-priority" header="src/app/app.component.html"></code-example>
+-->
+HTML 엘리먼트 하나에 디렉티브가 여러개 적용되는 상황이라면 CSS 클래스 목록이나 스타일 값이 여러 번 바인딩될 수 있습니다.
+
+이 때 같은 클래스 이름이나 스타일 프로퍼티가 여러 번 바인딩되면 Angular는 우선순위에 따라 엘리먼트에 적용될 클래스와 스타일을 결정합니다.
+
+<div class="alert is-helpful">
+<h4>스타일 우선순위(높은 순서부터 낮은 순서로)</h4>
+
+1. 템플릿 바인딩
+    1. 프로퍼티 바인딩 (ex. `<div [class.foo]="hasFoo">`, `<div [style.color]="color">`)
+    1. 맵 바인딩 (ex. `<div [class]="classExpr">`, `<div [style]="styleExpr">`)
+    1. 정적 값 (ex. `<div class="foo">`, `<div style="color: blue">`)
+1. 디렉티브 호스트 바인딩
+    1. 프로퍼티 바인딩 (ex. `host: {'[class.foo]': 'hasFoo'}` or `host: {'[style.color]': 'color'}`)
+    1. 맵 바인딩 (ex. `host: {'[class]': 'classExpr'}`, `host: {'[style]': 'styleExpr'}`)
+    1. 정적 값 (ex. `host: {'class': 'foo'}`, `host: {'style': 'color: blue'}`)
+1. 컴포넌트 호스트 바인딩
+    1. 프로퍼티 바인딩 (ex. `host: {'[class.foo]': 'hasFoo'}`, `host: {'[style.color]': 'color'}`)
+    1. 맵 바인딩 (ex. `host: {'[class]': 'classExpr'}`, `host: {'[style]': 'styleExpr'}`)
+    1. 정적 값 (ex. `host: {'class': 'foo'}`, `host: {'style': 'color: blue'}`)
+
+</div>
+
+그리고 더 구체적인 클래스/스타일 바인딩을 사용할수록 우선순위가 높습니다.
+
+그래서 `[class.foo]`라고 바인딩하는 방식은 `[class]`라고 바인딩하는 것보다 우선순위가 높으며, 마찬가지로 `[style.bar]`라고 바인딩하는 방식은 `[style]`라고 바인딩하는 것보다 우선순위가 높습니다.
+
+<code-example path="attribute-binding/src/app/app.component.html" region="basic-specificity" header="src/app/app.component.html"></code-example>
+
+클래스/스타일의 우선순위를 결정하는 규칙은 여러 소스에서 바인딩을 하는 경우에 적용됩니다.
+템플릿에서 직접 엘리먼트에 바인딩하거나, 디렉티브가 호스트 바인딩하는 경우, 컴포넌트가 호스트 바인딩하는 경우가 이런 경우에 해당됩니다.
+
+이 중에서 템플릿 바인딩의 우선순위가 가장 높습니다.
+엘리먼트에 직접, 명시적으로 적용되었기 때문입니다.
+
+디렉티브 호스트 바인딩은 그 다음으로 우선순위가 높습니다.
+디렉티브는 템플릿에 여러 번 사용될 수 있기 때문에 템플릿에서 직접 바인딩하는 것보다는 우선순위가 낮습니다.
+
+디렉티브는 컴포넌트의 기능을 확장하기도 합니다.
+그래서 컴포넌트 호스트 바인딩의 우선순위가 가장 낮습니다.
+
+<code-example path="attribute-binding/src/app/app.component.html" region="source-specificity" header="src/app/app.component.html"></code-example>
+
+추가로, 바인딩 문법은 정적 어트리뷰트 할당 방식보다 우선순위가 높습니다.
+
+아래 코드에서 `class`와 `[class]`의 우선순위가 비슷할 것 같지만, `[class]`라고 바인딩한 것이 동적으로 할당되기 때문에 정적으로 할당한 것보다 우선순위가 높습니다.
+
+<code-example path="attribute-binding/src/app/app.component.html" region="dynamic-priority" header="src/app/app.component.html"></code-example>
+
 
 {@a styling-delegation}
+<!--
 ### Delegating to styles with lower precedence
+-->
+### 낮은 우선순위로 적용하기
 
+<!--
 It is possible for higher precedence styles to "delegate" to lower precedence styles using `undefined` values.
 Whereas setting a style property to `null` ensures the style is removed, setting it to `undefined` will cause Angular to fall back to the next-highest precedence binding to that style.
 
@@ -545,10 +623,25 @@ For example, consider the following template:
 Imagine that the `dirWithHostBinding` directive and the `comp-with-host-binding` component both have a `[style.width]` host binding.
 In that case, if `dirWithHostBinding` sets its binding to `undefined`, the `width` property will fall back to the value of the `comp-with-host-binding` host binding.
 However, if `dirWithHostBinding` sets its binding to `null`, the `width` property will be removed entirely.
+-->
+높은 우선순위에서 `undefined` 값을 지정하면 낮은 우선순위로 위임(delegate)할 수 있습니다.
+이 때 `null` 값을 지정하면 스탕리 프로퍼티가 제거되기 때문에, 낮은 우선순위로 넘기려면 `undefined` 값을 지정해야 합니다.
+
+템플릿이 이렇게 구성되었다고 합시다:
+
+<code-example path="attribute-binding/src/app/app.component.html" region="style-delegation" header="src/app/app.component.html"></code-example>
+
+`dirWithHostBinding` 디렉티브와 `comp-with-host-binding` 컴포넌트는 모두 호스트 바인딩으로 `[style.width]`라는 표현을 사용합니다.
+이런 경우에 `dirWithHostBinding`에서 `undefined` 값을 바인딩하면 `width` 프로퍼티는 `comp-with-host-binding` 호스트 바인딩 결과로 결정됩니다.
+`dirWithHostBinding`에서 `null` 값을 바인딩하면 `width` 프로퍼티가 엘리먼트에서 제거됩니다.
 
 
+<!--
 ## Injecting attribute values
+-->
+## 어트리뷰트 값을 의존성으로 주입하기
 
+<!--
 There are cases where you need to differentiate the behavior of a [Component](api/core/Component) or [Directive](api/core/Directive) based on a static value set on the host element as an HTML attribute. For example, you might have a directive that needs to know the `type` of a `<button>` or `<input>` element.
 
 The [Attribute](api/core/Attribute) parameter decorator is great for passing the value of an HTML attribute to a component/directive constructor using [dependency injection](guide/dependency-injection).
@@ -580,5 +673,41 @@ Another example is the [RouterOutlet](api/router/RouterOutlet) directive, which 
   <header>@Attribute() vs @Input()</header>
 
   Remember, use [@Input()](api/core/Input) when you want to keep track of the attribute value and update the associated property. Use [@Attribute()](api/core/Attribute) when you want to inject the value of an HTML attribute to a component or directive constructor.
+
+</div>
+-->
+호스트 엘리먼트에 있는 어트리뷰트 값을 [컴포넌트](api/core/Component)나 [디렉티브](api/core/Directive)에서 받아야 하는 경우가 있습니다.
+`<button>` 엘리먼트나 `<input>` 엘리먼트에 적용된 `type` 값을 참조하는 디렉티브가 있다고 합시다.
+
+이런 경우에 [Attribute](api/core/Attribute) 데코레이터를 사용하면 HTML 어트리뷰트에 지정된 값을 컴포넌트/디렉티브 생성자에 [의존성으로 주입](guide/dependency-injection)받을 수 있습니다.
+
+<div class="alert is-helpful">
+
+  의존성으로 주입되는 값은 의존성 주입이 일어난 시점의 HTML 어트리뷰트 값입니다.
+  이후에 변경되는 HTML 어트리뷰트 값은 전달되지 않습니다.
+
+</div>
+
+<code-example
+  path="attribute-binding/src/app/my-input-with-attribute-decorator.component.ts"
+  header="src/app/my-input-with-attribute-decorator.component.ts">
+</code-example>
+
+<code-example
+  path="attribute-binding/src/app/app.component.html"
+  region="attribute-decorator"
+  header="src/app/app.component.html">
+</code-example>
+
+이 예제에서 `app.component.html`은 **The type of the input is: number** dhk 같이 표시됩니다.
+
+이 방식은 [RouterOutlet](api/router/RouterOutlet) 디렉티브에도 활용할 수 있습니다.
+라우팅 영역의 [이름](api/router/RouterOutlet#description)을 [Attribute](api/core/Attribute) 데코레이터로 받아오는 방식으로 활용하면 됩니다.
+
+<div class="callout is-helpful">
+
+  <header>@Attribute() vs @Input()</header>
+
+  어트리뷰트 값이 변경되는 것을 감지하려면 [@Input()](api/core/Input)를 사용해야 합니다. [@Attribute()](api/core/Attribute)는 컴포넌트/디렉티브 생성자에서 HTML 어트리뷰트의 값을 의존성으로 주입받는 용도로 사용하세요.
 
 </div>
