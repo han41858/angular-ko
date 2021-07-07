@@ -75,7 +75,7 @@ Angular에서 이야기하는 서비스는 [의존성 주입 시스템](guide/gl
 
     * The `clearCart()` method returns an empty array of items, which empties the cart.
 -->
-1. 장바구니 서비스를 생성하려면 `app` 폴더에 마우스 오른쪽 버튼을 클릭하고 **Angular Generator**를 선택한 다음에 **Service**를 선택합녀 됩니다.
+1. 장바구니 서비스를 생성하려면 `app` 폴더에 마우스 오른쪽 버튼을 클릭하고 **Angular Generator**를 선택한 다음에 **Service**를 선택하면 됩니다.
     이 서비스의 이름은 `cart`라고 지정합니다.
 
     <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.1.ts"></code-example>
