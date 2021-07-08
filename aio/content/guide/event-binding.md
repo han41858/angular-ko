@@ -57,8 +57,12 @@ Angular 이벤트 바인딩 문법은 소괄호(`(`, `)`) 안에 **대상이 되
 </div>
 
 
+<!--
 ## Binding to passive events
+-->
+## 패시브 이벤트 바인딩하기
 
+<!--
 Angular also supports passive event listeners. For example, you can use the following steps to make a scroll event passive.
 
 1. Create a file `zone-flags.ts` under `src` directory.
@@ -76,6 +80,25 @@ import 'zone.js';  // Included with Angular CLI.
 ```
 
 After those steps, if you add event listeners for the `scroll` event, the listeners will be `passive`.
+-->
+Angular는 패시브 이벤트 리스너도 지원합니다.
+스크롤 이벤트를 감지하는 경우를 생각해 봅시다.
+
+1. `src` 디렉토리 아래에 `zone-flags.ts` 파일을 생성합니다.
+2. 이 파일에 이런 내용을 추가합니다.
+
+```
+(window as any)['__zone_symbol__PASSIVE_EVENTS'] = ['scroll'];
+```
+
+3. 그리고 `src/polyfills.ts` 파일에서 zone.js를 불러오기 전에 이렇게 만든 `zone-flags` 파일을 불러옵니다.
+
+```
+import './zone-flags';
+import 'zone.js';  // Included with Angular CLI.
+```
+
+이렇게 작업하고 `scroll` 이벤트를 감지하는 이벤트 리스너를 추가하면, 이 이벤트 리스너는 `passive` 이벤트 리스너가 됩니다.
 
 
 {@a custom-events-with-eventemitter}
