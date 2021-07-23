@@ -182,7 +182,7 @@ See [Angular CLI Builders](guide/cli-builder).
 Architect는 Angular CLI가 애플리케이션 빌드나 테스트 작업같이 복잡한 로직을 실행할 때 활용하는 툴입니다.
 Architect는 [빌더(builder)](guide/glossary#builder)를 사용해서 [빌드 대상](guide/glossary#target)과 관련된 환경설정 값으로 해당 작업을 수행합니다.
 그리고 필요한 경우에는 빌더나 빌드 대상을 추가해서 Angular CLI의 기능을 확장할 수도 있습니다.
-자세한 내용은 [Angular LCI 빌더](guide/cli-builder) 문서를 참고하세요.
+자세한 내용은 [Angular CLI 빌더](guide/cli-builder) 문서를 참고하세요.
 
 
 {@a default-build-targets}
