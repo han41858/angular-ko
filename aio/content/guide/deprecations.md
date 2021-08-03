@@ -63,29 +63,29 @@ v12 - v15
 <!--
 | Area                          | API or Feature                                                                | May be removed in |
 | ----------------------------- | ---------------------------------------------------------------------------   | ----------------- |
-| `@angular/common`             | [`ReflectiveInjector`](#reflectiveinjector)                                   | <!--v8--> v11 |
-| `@angular/common`             | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | <!--v9--> v11 |
-| `@angular/common/http`        | [`XhrFactory`](api/common/http/XhrFactory)                                    | <!--v12--> v15 |
-| `@angular/core`               | [`DefaultIterableDiffer`](#core)                                              | <!--v7--> v11 |
-| `@angular/core`               | [`ReflectiveKey`](#core)                                                      | <!--v8--> v11 |
-| `@angular/core`               | [`RenderComponentType`](#core)                                                | <!--v7--> v11 |
-| `@angular/core`               | [`WrappedValue`](#core)                                                       | <!--v10--> v12 |
-| `@angular/forms`              | [`ngModel` with reactive forms](#ngmodel-reactive)                            | <!--v6--> v11 |
-| `@angular/upgrade`            | [`@angular/upgrade`](#upgrade)                                                | <!--v8--> v11 |
-| `@angular/upgrade`            | [`getAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
-| `@angular/upgrade`            | [`setAngularLib`](#upgrade-static)                                            | <!--v8--> v11 |
-| template syntax               | [`<template`>](#template-tag)                                                 | <!--v7--> v11 |
-| polyfills                     | [reflect-metadata](#reflect-metadata)                                         | <!--v8--> v11 |
-| npm package format            | [`esm5` and `fesm5` entry-points in @angular/* npm packages](guide/deprecations#esm5-fesm5) | <!-- v9 --> v11 |
-| `@angular/core`               | [`defineInjectable`](#core)                                                   | <!--v8--> v11 |
-| `@angular/core`               | [`entryComponents`](api/core/NgModule#entryComponents)                        | <!--v9--> v11 |
-| `@angular/core`               | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)       | <!--v9--> v11 |
-| `@angular/router`             | [`loadChildren` string syntax](#loadChildren)                                 | <!--v9--> v11 |
-| `@angular/core/testing`       | [`TestBed.get`](#testing)                                                     | <!--v9--> v12 |
-| `@angular/core/testing`       | [`async`](#testing)                                                           | <!--v9--> v12 |
-| `@angular/forms`              | [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group)   | <!--v11--> v14 |
+| `@angular/common`             | [`ReflectiveInjector`](#reflectiveinjector)                                   | <!-v8-> v11 |
+| `@angular/common`             | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | <!-v9-> v11 |
+| `@angular/common/http`        | [`XhrFactory`](api/common/http/XhrFactory)                                    | <!-v12-> v15 |
+| `@angular/core`               | [`DefaultIterableDiffer`](#core)                                              | <!-v7-> v11 |
+| `@angular/core`               | [`ReflectiveKey`](#core)                                                      | <!-v8-> v11 |
+| `@angular/core`               | [`RenderComponentType`](#core)                                                | <!-v7-> v11 |
+| `@angular/core`               | [`WrappedValue`](#core)                                                       | <!-v10-> v12 |
+| `@angular/forms`              | [`ngModel` with reactive forms](#ngmodel-reactive)                            | <!-v6-> v11 |
+| `@angular/upgrade`            | [`@angular/upgrade`](#upgrade)                                                | <!-v8-> v11 |
+| `@angular/upgrade`            | [`getAngularLib`](#upgrade-static)                                            | <!-v8-> v11 |
+| `@angular/upgrade`            | [`setAngularLib`](#upgrade-static)                                            | <!-v8-> v11 |
+| template syntax               | [`<template`>](#template-tag)                                                 | <!-v7-> v11 |
+| polyfills                     | [reflect-metadata](#reflect-metadata)                                         | <!-v8-> v11 |
+| npm package format            | [`esm5` and `fesm5` entry-points in @angular/* npm packages](guide/deprecations#esm5-fesm5) | <!- v9 -> v11 |
+| `@angular/core`               | [`defineInjectable`](#core)                                                   | <!-v8-> v11 |
+| `@angular/core`               | [`entryComponents`](api/core/NgModule#entryComponents)                        | <!-v9-> v11 |
+| `@angular/core`               | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)       | <!-v9-> v11 |
+| `@angular/router`             | [`loadChildren` string syntax](#loadChildren)                                 | <!-v9-> v11 |
+| `@angular/core/testing`       | [`TestBed.get`](#testing)                                                     | <!-v9-> v12 |
+| `@angular/core/testing`       | [`async`](#testing)                                                           | <!-v9-> v12 |
+| `@angular/forms`              | [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group)   | <!-v11-> v14 |
 | `@angular/router`             | [`ActivatedRoute` params and `queryParams` properties](#activatedroute-props) | unspecified |
-| template syntax               | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)            | <!--v7--> unspecified |
+| template syntax               | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)            | <!-v7-> unspecified |
 
 For information about Angular CDK and Angular Material deprecations, see the [changelog](https://github.com/angular/components/blob/master/CHANGELOG.md).
 -->
@@ -157,9 +157,15 @@ Tip: In the [API reference section](api) of this site, deprecated APIs are indic
 {@a common-http}
 ### @angular/common/http
 
+<!--
 | API                                          | Replacement                          | Deprecation announced | Notes |
 | -------------------------------------------- | ------------------------------------ | --------------------- | ----- |
 | [`XhrFactory`](api/common/http/XhrFactory)   | `XhrFactory` in `@angular/common`    | v12                   | The `XhrFactory` has moved from `@angular/common/http` to `@angular/common`. |
+-->
+
+| API                                          | 대체 방식                          | 지원 중단 발표 | 참고 |
+| -------------------------------------------- | ------------------------------------ | --------------------- | ----- |
+| [`XhrFactory`](api/common/http/XhrFactory)   | `@angular/common` 패키지의 `XhrFactory`     | v12                   | `XhrFactory`는 `@angular/common/http`에서 `@angular/common`로 이동했습니다. |
 
 
 {@a core}
@@ -188,7 +194,7 @@ Tip: In the [API reference section](api) of this site, deprecated APIs are indic
 | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS) | - | v9 | [`ANALYZE_FOR_ENTRY_COMPONENTS`](#entryComponents) 참고 |
 | [`WrappedValue`](api/core/WrappedValue) | - | v10 | [removing `WrappedValue`](#wrapped-value) 참고 |
 | [`async`](api/core/testing/async) | [`waitForAsync`](api/core/testing/waitForAsync) | v11 | 표준 JavaScript `async` 와 혼동되는 것을 피하기 위해 `@angular/core/testing`이 제공하던 `async` 함수가 `waitForAsync`로 변경되었습니다. 기존에 있던 함수는 이후 버전에 제거될 예정입니다. |
-[ `ViewChildren.emitDistinctChangesOnly` / `ContentChildren.emitDistinctChangesOnly` | - ([이슈 #40091](https://github.com/angular/angular/issues/40091) 참고) ] | 이 플래그는 [이슈 #40091](https://github.com/angular/angular/issues/40091) 버그를 해결하기 위해 임시로 도입되었으며 이제 사용되지 않습니다. |
+| `ViewChildren.emitDistinctChangesOnly` / `ContentChildren.emitDistinctChangesOnly` | - | | 이 플래그는 [이슈 #40091](https://github.com/angular/angular/issues/40091) 버그를 해결하기 위해 임시로 도입되었으며 이제 사용되지 않습니다. |
 
 
 {@a testing}
@@ -838,12 +844,21 @@ If you rely on the behavior that the same object instance should cause change de
 
 
 ### Internet Explorer 11
+
+<!--
 Angular support for Microsoft's Internet Explorer 11 (IE11) is deprecated and will be removed in Angular v13.
 Ending IE11 support allows Angular to take advantage of web platform APIs present only in evergreen browsers, resulting in better APIs for developers and more capabilities for application users.
 An additional motivation behind this removal is the drop in global usage of IE11 to just ~1% (as of March 2021).
 For full rationale and discussion behind this deprecation see [RFC: Internet Explorer 11 support deprecation and removal](https://github.com/angular/angular/issues/41840).
 
 *Note: IE11 will be supported in Angular v12 LTS releases through November 2022.*
+-->
+Angular는 더이상 Microsoft Internet Explorer 11 (IE11)을 지원하지 않으며, Angular v13부터는 지원이 완전히 중단될 예정입니다.
+IE11 지원을 중단하게 되면 최신 브라우저에만 사용할 수 있는 웹 플랫폼 API를 활용할 수 있기 때문에, 개발자들과 애플리케이션 사용자에게 더 나은 API를 제공할 수 있을 것입니다.
+전세계 IE11 사용자가 ~1% 도 되지 않는다는 것(2021년 5월 기준)이 이 결정에 영향을 주기도 했습니다.
+논의가 어떻게 진행되었는지 확인하려면 [RFC: Internet Explorer 11 support deprecation and removal](https://github.com/angular/angular/issues/41840)를 참고하세요.
+
+*참고: Angular v12 LTS 릴리즈가 유지되는 2022년 11월까지는 IE11를 지원합니다.*
 
 
 {@a deprecated-cli-flags}
