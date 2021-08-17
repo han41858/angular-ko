@@ -196,8 +196,12 @@ Register a provider with a component when you must limit a service instance to a
 {@a singleton-services}
 {@a component-child-injectors}
 
+<!--
 ## Injector hierarchy and service instances
+-->
+## 인젝터 계층과 서비스 인스턴스
 
+<!--
 Services are singletons within the scope of an injector, which means there is at most one instance of a service in a given injector.
 
 Angular DI has a [hierarchical injection system](guide/hierarchical-dependency-injection), which means that nested injectors can create their own service instances.
@@ -207,6 +211,19 @@ Similarly, when a new NgModule is lazy-loaded at run time, Angular can create an
 Child modules and component injectors are independent of each other, and create their own separate instances of the provided services. When Angular destroys an NgModule or component instance, it also destroys that injector and that injector's service instances.
 
 For more information, see [Hierarchical injectors](guide/hierarchical-dependency-injection).
+-->
+서비스의 인스턴스는 인젝터 범위 안에서는 싱글턴입니다.
+이 말은 한 인젝터 안에 서비스 인스턴스는 하나만 존재할 수 있다는 의미입니다.
+
+Angular의 의존성 주입 시스템은 [계층으로 구성되는 인젝터 시스템](guide/hierarchical-dependency-injection)입니다.
+그래서 인젝터가 계층으로 구성되면 인젝터마다 서비스 인스턴스를 구성할 수 있습니다.
+그리고 `@Component()`에 `providers`가 지정되어 있으면 Angular는 컴포넌트 인젝터를 추가로 구성하면서 관련된 인스턴스도 함께 생성합니다.
+이것과 비슷하게, 실행시점에 지연로딩되는 NgModule이 있으면 이 모듈에 포함된 프로바이더를 관리하기 위해 인젝터를 추가로 구성합니다.
+
+자식 모듈의 인젝터와 컴포넌트 인젝터는 서로 영향을 주지 않기 때문에 서비스의 인스턴스도 별개로 구성합니다.
+NgModule, 컴포넌트 인스턴스가 종료되면 해당 클래스에 생성된 인젝터와 이 인젝터에 포함된 서비스 인스턴스도 모두 종료됩니다.
+
+자세한 내용을 확인하려면 [인젝터 계층](guide/hierarchical-dependency-injection) 문서를 참고하세요.
 
 
 <!--

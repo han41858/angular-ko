@@ -644,9 +644,9 @@
         {
           "url": "guide/lazy-loading-ngmodules",
           "/title": "Lazy Loading Feature Modules",
-          "title": "기능 모듈 지연로딩하기",
+          "title": "기능 모듈 지연 로딩하기",
           "/tooltip": "Lazy load modules to speed up your apps.",
-          "tooltip": "모듈을 지연로딩하면 앱을 빠르게 실행할 수 있습니다."
+          "tooltip": "모듈을 지연 로딩하면 앱을 빠르게 실행할 수 있습니다."
         },
         {
           "url": "guide/lightweight-injection-tokens",

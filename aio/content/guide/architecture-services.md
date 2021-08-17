@@ -74,6 +74,7 @@ Services can depend on other services. For example, here's a `HeroService` that 
 -->
 ## 의존성 주입 (Dependency injection, DI)
 
+<!--
 <img src="generated/images/guide/architecture/dependency-injection.png" alt="Service" class="left">
 
 DI is wired into the Angular framework and used everywhere to provide new components with the services or other things they need.
@@ -112,6 +113,8 @@ The process of `HeroService` injection looks something like this.
   <img src="generated/images/guide/architecture/injector-injects.png" alt="Service" class="left">
 </div>
 -->
+<img src="generated/images/guide/architecture/dependency-injection.png" alt="Service" class="left">
+
 DI는 서비스와 같은 객체를 Angular 프레임워크와 묶는 개념이며, 이렇게 프레임워크에 추가된 객체는 컴포넌트가 생성될 때 자유롭게 주입할 수 있습니다.
 컴포넌트는 서비스를 활용합니다.
 이 말은, 서비스를 컴포넌트에 *의존성으로 주입*하면 컴포넌트에서 서비스 클래스에 접근할 수 있다는 말입니다.
