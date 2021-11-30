@@ -27,12 +27,14 @@ export type NavigationTrigger = 'imperative'|'popstate'|'hashchange';
  * The following code shows how a class subscribes to router events.
  *
  * ```ts
+ * import {Event, RouterEvent, Router} from '@angular/router';
+ *
  * class MyService {
- *   constructor(public router: Router, logger: Logger) {
+ *   constructor(public router: Router) {
  *     router.events.pipe(
  *        filter((e: Event): e is RouterEvent => e instanceof RouterEvent)
  *     ).subscribe((e: RouterEvent) => {
- *       logger.log(e.id, e.url);
+ *       // Do something
  *     });
  *   }
  * }
@@ -100,7 +102,7 @@ export class NavigationStart extends RouterEvent {
   }
 
   /** @docsNotRequired */
-  toString(): string {
+  override toString(): string {
     return `NavigationStart(id: ${this.id}, url: '${this.url}')`;
   }
 }
@@ -126,7 +128,7 @@ export class NavigationEnd extends RouterEvent {
   }
 
   /** @docsNotRequired */
-  toString(): string {
+  override toString(): string {
     return `NavigationEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${
         this.urlAfterRedirects}')`;
   }
@@ -155,7 +157,7 @@ export class NavigationCancel extends RouterEvent {
   }
 
   /** @docsNotRequired */
-  toString(): string {
+  override toString(): string {
     return `NavigationCancel(id: ${this.id}, url: '${this.url}')`;
   }
 }
@@ -181,7 +183,7 @@ export class NavigationError extends RouterEvent {
   }
 
   /** @docsNotRequired */
-  toString(): string {
+  override toString(): string {
     return `NavigationError(id: ${this.id}, url: '${this.url}', error: ${this.error})`;
   }
 }
@@ -205,7 +207,7 @@ export class RoutesRecognized extends RouterEvent {
   }
 
   /** @docsNotRequired */
-  toString(): string {
+  override toString(): string {
     return `RoutesRecognized(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${
         this.urlAfterRedirects}', state: ${this.state})`;
   }
@@ -231,7 +233,7 @@ export class GuardsCheckStart extends RouterEvent {
     super(id, url);
   }
 
-  toString(): string {
+  override toString(): string {
     return `GuardsCheckStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${
         this.urlAfterRedirects}', state: ${this.state})`;
   }
@@ -259,7 +261,7 @@ export class GuardsCheckEnd extends RouterEvent {
     super(id, url);
   }
 
-  toString(): string {
+  override toString(): string {
     return `GuardsCheckEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${
         this.urlAfterRedirects}', state: ${this.state}, shouldActivate: ${this.shouldActivate})`;
   }
@@ -288,7 +290,7 @@ export class ResolveStart extends RouterEvent {
     super(id, url);
   }
 
-  toString(): string {
+  override toString(): string {
     return `ResolveStart(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${
         this.urlAfterRedirects}', state: ${this.state})`;
   }
@@ -313,7 +315,7 @@ export class ResolveEnd extends RouterEvent {
     super(id, url);
   }
 
-  toString(): string {
+  override toString(): string {
     return `ResolveEnd(id: ${this.id}, url: '${this.url}', urlAfterRedirects: '${
         this.urlAfterRedirects}', state: ${this.state})`;
   }
@@ -465,7 +467,7 @@ export class Scroll {
  * * [ResolveStart](api/router/ResolveStart): When the router begins the *resolve*
  * phase of routing.
  * * [ResolveEnd](api/router/ResolveEnd): When the router finishes the *resolve*
- * phase of routing successfuly.
+ * phase of routing successfully.
  * * [ChildActivationEnd](api/router/ChildActivationEnd): When the router finishes
  * activating a route's children.
  * * [ActivationEnd](api/router/ActivationEnd): When the router finishes activating a route.

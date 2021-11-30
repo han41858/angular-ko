@@ -25,8 +25,8 @@ export function superCar() {
 }
 
 /////////// example 3 //////////
-class MockEngine extends Engine { cylinders = 8; }
-class MockTires  extends Tires  { make = 'YokoGoodStone'; }
+class MockEngine extends Engine { override cylinders = 8; }
+class MockTires  extends Tires  { override make = 'YokoGoodStone'; }
 
 export function testCar() {
   // 8 실린더 엔진과 YokoGoodStone 메이커의 타이어를 사용하는 테스트카 생성하기

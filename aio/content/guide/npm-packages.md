@@ -117,7 +117,7 @@ To add a new dependency, use the [`ng add`](cli/add) command.
 
 <!--
 The following Angular packages are included as dependencies in the default `package.json` file for a new Angular workspace.
-For a complete list of Angular packages, see the [API reference](https://angular.io/api?type=package).
+For a complete list of Angular packages, see the [API reference](api?type=package).
 
 Package name                               | Description
 ----------------------------------------   | --------------------------------------------------
@@ -143,7 +143,6 @@ Angular 패키지 전체 목록을 확인하려면 [API 문서](api?type=package
 [**@angular/<br />platform&#8209;browser**](api/platform-browser) | DOM과 브라우저 관련 코드, 특히 DOM에 렌더링할 때 필요한 코드를 제공하는 패키지입니다. 이 패키지는 [AOT 컴파일러](guide/aot-compiler)로 빌드한 애플리케이션을 브라우저에서 실행시킬 때 사용하는 `bootstrapModuleFactory()` 메서드도 제공합니다.
 [**@angular/<br />platform&#8209;browser&#8209;dynamic**](api/platform-browser-dynamic) | [JIT 컴파일러](guide/aot-compiler)로 애플리케이션을 컴파일하고 실행할 때 필요한 [프로바이더](api/core/Provider)를 제공하는 패키지입니다.
 [**@angular/router**](api/router) | 브라우저 URL이 변경될 때 애플리케이션 화면을 전환하는 라우터 모듈을 제공하는 패키지입니다. 자세한 내용은 [라우팅, 네비게이션](guide/router) 문서를 참고하세요.
-
 
 
 {@a support-packages}

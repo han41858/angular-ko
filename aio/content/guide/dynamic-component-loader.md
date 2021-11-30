@@ -4,9 +4,7 @@
 # 동적 컴포넌트 로더
 
 <!--
-Component templates are not always fixed. An application may need to load new components at runtime.
-
-This cookbook shows you how to use `ComponentFactoryResolver` to add components dynamically.
+Component templates are not always fixed. An application might need to load new components at runtime. This cookbook shows you how to add components dynamically.
 
 See the <live-example name="dynamic-component-loader"></live-example>
 of the code in this cookbook.
@@ -57,7 +55,7 @@ Angular comes with its own API for loading components dynamically.
 ## 앵커 디렉티브
 
 <!--
-Before you can add components you have to define an anchor point
+Before adding components, you have to define an anchor point
 to tell Angular where to insert components.
 
 The ad banner uses a helper directive called `AdDirective` to
@@ -191,10 +189,6 @@ value to select an `adItem` from the array.
 
 
 <!--
-After `loadComponent()` selects an ad, it uses `ComponentFactoryResolver`
-to resolve a `ComponentFactory` for each specific component.
-The `ComponentFactory` then creates an instance of each component.
-
 Next, you're targeting the `viewContainerRef` that
 exists on this specific instance of the component. How do you know it's
 this specific instance? Because it's referring to `adHost` and `adHost` is the
@@ -208,9 +202,6 @@ To add the component to the template, you call `createComponent()` on `ViewConta
 The `createComponent()` method returns a reference to the loaded component.
 Use that reference to interact with the component by assigning to its properties or calling its methods.
 -->
-`loadComponent()`에서 뷰에 표시할 광고를 결정하고 나면, 광고로 표시할 컴포넌트를 구성하기 위해 `ComponentFactoryResolver`를 사용합니다.
-컴포넌트 데이터를 인자로 사용해서 `ComponentFactoryResolver.resolveComponentFactory()` 함수를 실행하고 나면 `ComponentFactory` 타입으로 컴포넌트의 인스턴스가 생성됩니다.
-
 그리고 나면 `AdDirective` 컴포넌트의 인스턴스에 있는 `viewContainerRef`를 참조합니다.
 이 객체는 `adHost`를 가리키는데, `adHost`는 이전에 언급했던 것처럼 Angular가 컴포넌트를 동적으로 로드할 위치를 지정한 디렉티브입니다.
 
@@ -223,10 +214,7 @@ Use that reference to interact with the component by assigning to its properties
 이 인스턴스의 프로퍼티를 직접 지정하면 컴포넌트의 내용을 바꿀 수 있습니다.
 
 
-<!--
 {@a common-interface}
--->
-{@a 공통-인터페이스}
 
 <!--
 ## The _AdComponent_ interface
@@ -281,3 +269,5 @@ Here are two sample components and the `AdComponent` interface for reference:
 See the <live-example name="dynamic-component-loader"></live-example>.
 -->
 예제를 직접 실행하거나 다운로드 받으려면 <live-example name="dynamic-component-loader"></live-example>를 확인해 보세요.
+
+@reviewed 2021-09-17

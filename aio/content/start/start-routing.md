@@ -40,7 +40,7 @@ This section shows you how to define a route to show individual product details.
     In the file list, right-click the `app` folder, choose `Angular Generator` and `Component`.
     Name the component `product-details`.
 
-1. In `app.module.ts`, add a route for product details, with a `path` of `products/:productId` and `ProductDetailsComponent` for the `component`.
+1. In `app.module.ts`, add a route for product details, with a `path` of `products/:productId` and `ProductDetailsComponent` for the `component`, include `ProductDetailsComponent` in `AppModule`'s declarations.
 
     <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="product-details-route">
     </code-example>
@@ -236,3 +236,5 @@ To continue exploring Angular:
 
 * 장바구니 기능을 추가하거나 배송 가격을 외부 데이터로 받아오는 방법을 알아보려면 [데이터 다루기](start/start-data "Try it: Managing Data") 문서를 확인해 보세요.
 * 애플리케이션을 Firebase나 로컬 환경에 배포하는 방법을 알아보려면 [배포](start/start-deployment "Try it: Deployment") 문서를 확인해 보세요.
+
+@reviewed 2021-09-15

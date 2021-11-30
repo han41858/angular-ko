@@ -215,3 +215,5 @@ The Angular community also has an extensive [network of third-party tools and li
 UX/UI를 개선하려면 [Angular Material](https://material.angular.io/ "Angular Material web site")를 참고하세요.
 
 Angular에 활용할 수 있는 [서드파티 툴, 라이브러리 네트워크](resources "Angular resources list")도 확인해 보세요.
+
+@reviewed 2021-09-15

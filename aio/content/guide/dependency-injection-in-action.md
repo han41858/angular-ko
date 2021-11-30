@@ -127,7 +127,7 @@ and confirm that the three `HeroBioComponent` instances have their own cached he
 When a class requires a dependency, that dependency is added to the constructor as a parameter.
 When Angular needs to instantiate the class, it calls upon the DI framework to supply the dependency.
 By default, the DI framework searches for a provider in the injector hierarchy,
-starting at the component's local injector of the component, and if necessary bubbling up
+starting at the component's local injector, and if necessary bubbling up
 through the injector tree until it reaches the root injector.
 
 * The first injector configured with a provider supplies the dependency (a service instance or value) to the constructor.
@@ -139,7 +139,7 @@ on the service-valued parameters of a class constructor.
 -->
 클래스에 의존성 객체를 주입하려면 생성자 인자에 의존성 객체의 타입을 지정하면 됩니다.
 그러면 Angular가 이 클래스의 인스턴스를 생성하면서 의존성 주입 프레임워크에 의존성 객체의 인스턴스를 요청합니다.
-의존성 주입 프레임워크는 인젝터 계층을 따라가면서 프로바이더를 찾기 시작하는데, 이 과정은 의존성 객체 주입을 요청한 컴포넌트 클래스의 인젝터부터 애플리케이션 최상위 인젝터에 도달할 때까지 버블링됩니다.
+의존성 주입 프레임워크는 인젝터 계층을 따라가면서 프로바이더를 찾기 시작하는데, 이 과정은 의존성 객체 주입을 요청한 인젝터부터 애플리케이션 최상위 인젝터에 도달할 때까지 버블링됩니다.
 
 * 의존성 객체를 찾는 과정에서 처음 만나는 프로바이더를 사용해서 인스턴스를 생성하고, 의존성 주입을 요청한 클래스의 생성자에 주입합니다.
 
@@ -212,7 +212,7 @@ Angular throws an error if the parent lacks that service, even if a component hi
 in the component tree includes it.
 
 A second `@Host()` function decorates the `loggerService` constructor property.
-The only `LoggerService` instance in the app is provided at the `AppComponent` level.
+The only `LoggerService` instance in the application is provided at the `AppComponent` level.
 The host `HeroBioComponent` doesn't have its own `LoggerService` provider.
 
 Angular throws an error if you haven't also decorated the property with `@Optional()`.
@@ -238,7 +238,7 @@ with the "!!!" marker to indicate that the logger was found.
 
 
 If you restore the `@Host()` decorator and comment out `@Optional`,
-the app throws an exception when it cannot find the required logger at the host component level.
+the application throws an exception when it cannot find the required logger at the host component level.
 -->
 의존성 객체는 컴포넌트 계층 중 어떠한 곳에도 자유롭게 등록할 수 있습니다.
 그래서 컴포넌트 클래스가 의존성 객체를 요청하면 Angular는 해당 컴포넌트의 인젝터부터 프로바이더를 찾기 시작하며, 원하는 프로바이더를 찾을 때까지 인젝터 트리를 따라 올라갑니다.

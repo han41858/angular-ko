@@ -4,7 +4,7 @@
 # Angular 프로젝트를 최신 버전으로 유지하기
 
 <!--
-Just like Web and the entire web ecosystem, Angular is continuously improving. Angular balances continuous improvement with a strong focus on stability and making updates easy. Keeping your Angular application up-to-date enables you to take advantage of leading-edge new features, as well as optimizations and bug fixes.
+Just like Web and the entire web ecosystem, Angular is continuously improving. Angular balances continuous improvement with a strong focus on stability and making updates straightforward. Keeping your Angular application up-to-date enables you to take advantage of leading-edge new features, as well as optimizations and bug fixes.
 
 This document contains information and resources to help you keep your Angular applications and libraries up-to-date.
 
@@ -84,11 +84,11 @@ To check your application's version of Angular: From within your project directo
 ## Angular 최신버전 찾기
 
 <!--
-The most recent stable released version of Angular appears in the [Angular documentation](https://angular.io/docs "Angular documentation") at the bottom of the left side navigation. For example, `stable (v5.2.9)`.
+The most recent stable released version of Angular appears in the [Angular documentation](docs "Angular documentation") at the bottom of the left side navigation. For example, `stable (v5.2.9)`.
 
 You can also find the most current version of Angular by using the CLI command [`ng update`](cli/update). By default, [`ng update`](cli/update)(without additional arguments) lists the updates that are available to you.
 -->
-Angular 안정 버전 중에서 가장 최신 버전은 [Angular 가이드 문서](https://angular.io/docs "Angular documentation") 모든 페이지의 왼쪽에 있는 네비게이션에 `stable (v11.1.0)`과 같이 표시됩니다.
+Angular 안정 버전 중에서 가장 최신 버전은 [Angular 가이드 문서](docs "Angular documentation") 모든 페이지의 왼쪽에 있는 네비게이션에 `stable (v13.0.0)`과 같이 표시됩니다.
 
 Angular 최신 버전은 Angular CLI 명령 [`ng update`](cli/update)를 실행해도 확인할 수 있습니다.
 기본적으로 [`ng update`](cli/update)(without additional arguments)를 옵션 없이 실행하면 현재 설치된 Angular 라이브러리 버전 중에서 업데이트할 수 있는 라이브러리 목록을 표시합니다.
@@ -102,7 +102,7 @@ Angular 최신 버전은 Angular CLI 명령 [`ng update`](cli/update)를 실행�
 ## Angular 버전 업데이트하기
 
 <!--
-To make updating easy, we provide complete instructions in the interactive [Angular Update Guide](https://update.angular.io/ "Angular Update Guide").
+To make updating uncomplicated, we provide complete instructions in the interactive [Angular Update Guide](https://update.angular.io/ "Angular Update Guide").
 
 The Angular Update Guide provides customized update instructions, based on the current and target versions that you specify. It includes basic and advanced update paths, to match the complexity of your applications. It also includes troubleshooting information and any recommended manual changes to help you get the most out of the new release.
 

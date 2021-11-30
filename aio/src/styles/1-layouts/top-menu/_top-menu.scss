@@ -1,7 +1,8 @@
 @use '../../mixins';
+@use '../../constants';
 
 // VARIABLES
-$showTopMenuWidth: 1048px;
+$showTopMenuWidth: 1150px;
 $hideTopMenuWidth: $showTopMenuWidth - 1;
 $hamburgerShownMargin: 0 8px 0 0;
 $hamburgerHiddenMargin: 0 16px 0 -64px;
@@ -57,7 +58,7 @@ mat-toolbar.app-toolbar {
       min-width: 15%;
     }
 
-    &:not(.starting) {
+    &:not(.no-animations) {
       transition-duration: 0.4s;
       transition-property: color, margin;
       transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -132,7 +133,10 @@ mat-toolbar.app-toolbar {
 
           .nav-link-inner {
             border-radius: 4px;
+            font-size: 1.3rem;
+            font-size: clamp(10px, 1.6rem, 20px);
             padding: 8px 16px;
+            padding: 8px clamp(5px, 0.7vw, 16px);
           }
 
           &:focus {
@@ -156,14 +160,16 @@ mat-toolbar.app-toolbar {
     min-width: 150px;
     height: 100%;
     margin-right: 16px;
+    position: relative;
 
     input {
       border: none;
       border-radius: 100px;
-      padding: 5px 16px;
+      padding: 5px 3rem 5px 16px;
       margin-left: 8px;
       width: 180px;
       max-width: 240px;
+      line-height: normal;
       height: 50%;
       -webkit-appearance: none;
 
@@ -183,9 +189,32 @@ mat-toolbar.app-toolbar {
         }
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 515px) {
         width: 150px;
       }
+
+      &::-webkit-search-cancel-button {
+        display: none;
+      }
+
+      &::-ms-clear {
+        display: none;
+      }
+
+      &:not(:focus):not(:hover) + mat-icon:not(:hover):not(:focus) {
+        display: none;
+      }
+    }
+
+    mat-icon {
+      position: absolute;
+      color: constants.$blue;
+      right: 0.7rem;
+      font-size: 2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -198,44 +227,21 @@ mat-toolbar.app-toolbar {
 
   // EXTERNAL LINK ICONS
   .toolbar-external-icons-container {
-    display: flex;
-    flex-direction: row;
-    flex-shrink: 0; // This is required for the icons to be displayed correctly in IE11.
-    height: 100%;
-
-    @media screen and (max-width: 350px) {
-      a[title="GitHub"] {
-        display: none;
-      }
-    }
-
-    a[title="Twitter"], a[title="YouTube"] {
-      @media screen and (max-width: 420px) {
-        display: none;
-      }
-    }
-
     a {
-      display: flex;
-      align-items: center;
-      padding: 0;
-      margin: 24px 8px;
-
-      &:focus {
-        outline-offset: 8px;
-      }
-
       @media screen and (max-width: 480px) {
-        margin: 0 0 0 8px;
-        padding: 0;
+        margin: 0 -8px 0 0;
       }
 
-      &:hover {
-        opacity: 0.8;
+      @media screen and (max-width: 420px) {
+        &:not([title="GitHub"]) {
+          display: none;
+        }
       }
 
-      img {
-        height: 24px;
+      @media screen and (max-width: 350px) {
+        &[title="GitHub"] {
+          display: none;
+        }
       }
     }
   }

@@ -604,8 +604,13 @@ Angular sets special CSS classes on the control element to reflect the state, as
 
 </table>
 
+Additionally, Angular applies the `ng-submitted` class to `<form>` elements upon submission. This class does *not* apply to inner controls.
+
 You use these CSS classes to define the styles for your control based on its status.
 -->
+추가로, Angular는 `<form>` 엘리먼트에 `ng-submitted` 클래스를 추가합니다.
+이 클래스는 안쪽에 있는 컨트롤에는 적용되지 *않습니다*.
+
 폼 컨트롤에 `NgModel` 디렉티브를 추가하면 이 폼 컨트롤의 상태를 추적할 수 있습니다.
 사용자가 폼 컨트롤에 접근했는지, 값이 변경되었는지, 값이 유효하지 않은지 검사할 수 있습니다.
 Angular는 폼 컨트롤의 상태에 따라 이 엘리먼트에 CSS 클래스를 자동으로 지정합니다.

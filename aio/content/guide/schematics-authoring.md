@@ -5,7 +5,7 @@
 
 <!--
 You can create your own schematics to operate on Angular projects.
-Library developers typically package schematics with their libraries in order to integrate them with the Angular CLI.
+Library developers typically package schematics with their libraries to integrate them with the Angular CLI.
 You can also create stand-alone schematics to manipulate the files and constructs in Angular applications as a way of customizing them for your development environment and making them conform to your standards and constraints.
 Schematics can be chained, running other schematics to perform complex operations.
 
@@ -44,7 +44,7 @@ When making modifications, you don't actually change the base, but add those mod
 
 * Each schematic runs in a context, represented by a `SchematicContext` object.
 
-The context object passed into a rule provides access to utility functions and metadata that the schematic may need to work with, including a logging API to help with debugging.
+The context object passed into a rule provides access to utility functions and metadata that the schematic might need to work with, including a logging API to help with debugging.
 The context also defines a *merge strategy* that determines how changes are merged from the staged tree into the base tree. A change can be accepted or ignored, or throw an exception.
 -->
 스키매틱의 퍼블릭 API는 아래와 같은 컨셉을 클래스로 정의한 것입니다.
@@ -151,7 +151,7 @@ import {
 <!--
 Rules can collect option values from the caller and inject them into templates.
 The options available to your rules, with their allowed values and defaults, are defined in the schematic's JSON schema file, `<schematic>/schema.json`.
-You can define variable or enumerated data types for the schema using TypeScript interfaces.
+Define variable or enumerated data types for the schema using TypeScript interfaces.
 
 The schema defines the types and default values of variables used in the schematic.
 For example, the hypothetical "Hello World" schematic might have the following schema.
@@ -180,7 +180,7 @@ For example, the hypothetical "Hello World" schematic might have the following s
 
 
 <!--
-You can see examples of schema files for the Angular CLI command schematics in [`@schematics/angular`](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json).
+See examples of schema files for the Angular CLI command schematics in [`@schematics/angular`](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json).
 -->
 스키마 파일에 대해 더 알아보려면 Angular CLI 명령 스키마가 정의되어 있는 [`@schematics/angular` 파일](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json)을 확인해보는 것도 좋습니다.
 
@@ -192,13 +192,13 @@ You can see examples of schema files for the Angular CLI command schematics in [
 
 <!--
 Schematic *prompts* introduce user interaction into schematic execution.
-You can configure schematic options to display a customizable question to the user.
+Configure schematic options to display a customizable question to the user.
 The prompts are displayed before the execution of the schematic, which then uses the response as the value for the option.
-This allows users to direct the operation of the schematic without requiring in-depth knowledge of the full spectrum of available options.
+This lets users direct the operation of the schematic without requiring in-depth knowledge of the full spectrum of available options.
 
 The "Hello World" schematic might, for example, ask the user for their name, and display that name in place of the default name "world". To define such a prompt, add an `x-prompt` property to the schema for the `name` variable.
 
-Similarly, you can add a prompt to allow the user to decide whether the schematic will use color when executing its hello action. The schema with both prompts would be as follows.
+Similarly, you can add a prompt to let the user decide whether the schematic uses color when executing its hello action. The schema with both prompts would be as follows.
 -->
 스키매틱에 *프롬프트(prompt)*를 추가하면 스키매틱을 실행하면서 사용자와 직접 상호작용하면서 스키매틱 설정값을 사용자에게 받을 수도 있습니다.
 프롬프트는 보통 스키매틱 로직을 실행하기 전에 입력값에 대한 정보를 제공하는 용도로 사용합니다.
@@ -210,7 +210,6 @@ Similarly, you can add a prompt to allow the user to decide whether the schemati
 
 이 방식과 비슷하게 액션에 사용할 색상을 입력받는 것도 물론 가능합니다.
 스키마에는 프롬프트를 여러개 정의할 수 있습니다.
-
 
 <code-example language="json" header="src/hello-world/schema.json">
 
@@ -336,7 +335,7 @@ In this form, the `x-prompt` field value is a JSON object with subfields that cu
 | items   |	string and/or label/value object pair (only valid with type `list`) |
 
 The following example of the long form is from the JSON schema for the schematic that the CLI uses to [generate applications](https://github.com/angular/angular-cli/blob/ba8a6ea59983bb52a6f1e66d105c5a77517f062e/packages/schematics/angular/application/schema.json#L56).
-It defines the prompt that allows users to choose which style preprocessor they want to use for the application being created.
+It defines the prompt that lets users choose which style preprocessor they want to use for the application being created.
 By using the long form, the schematic can provide more explicit formatting of the menu choices.
 -->
 프롬프트로 값을 받을 때 커스터마이징을 더 하려면 확장 문법을 사용할 수 있습니다.
@@ -359,8 +358,7 @@ By using the long form, the schematic can provide more explicit formatting of th
         "css",
         "scss",
         "sass",
-        "less",
-        "styl"
+        "less"
       ],
       "x-prompt": {
         "message": "Which stylesheet format would you like to use?",
@@ -369,8 +367,7 @@ By using the long form, the schematic can provide more explicit formatting of th
           { "value": "css",  "label": "CSS" },
           { "value": "scss", "label": "SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]" },
           { "value": "sass", "label": "Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]" },
-          { "value": "less", "label": "Less   [ http://lesscss.org/                                            ]" },
-          { "value": "styl", "label": "Stylus [ https://stylus-lang.com/                                       ]" }
+          { "value": "less", "label": "Less   [ http://lesscss.org/                                            ]" }
         ]
       },
     },
@@ -434,7 +431,7 @@ The following JSON schema is a complete description of the long-form syntax for 
 
 <!--
 Schematics come with their own command-line tool.
-Using Node 6.9 or above, install the Schematics command line tool globally:
+Using Node 6.9 or later, install the Schematics command line tool globally:
 -->
 스키매틱은 자체 커맨드라인 툴을 제공합니다.
 그래서 Node 6.9 이상 버전에서 다음 명령을 실행하면 스키매틱 커맨드라인 툴을 전역에 설치할 수 있습니다:
@@ -446,10 +443,10 @@ npm install -g @angular-devkit/schematics-cli
 <!--
 This installs the `schematics` executable, which you can use to create a new schematics collection in its own project folder, add a new schematic to an existing collection, or extend an existing schematic.
 
-In the following sections, we will create a new schematics collection using the CLI in order to introduce the files and file structure, and some of the basic concepts.
+In the following sections, you will create a new schematics collection using the CLI to introduce the files and file structure, and some of the basic concepts.
 
 The most common use of schematics, however, is to integrate an Angular library with the Angular CLI.
-You can do this by creating the schematic files directly within the library project in an Angular workspace, without using the Schematics CLI.
+Do this by creating the schematic files directly within the library project in an Angular workspace, without using the Schematics CLI.
 See [Schematics for Libraries](guide/schematics-for-libraries).
 -->
 그러면 `schematics` 실행파일이 설치됩니다.
@@ -487,7 +484,7 @@ code .
 </code-example>
 
 The initial schematic gets the same name as the project folder, and is generated in `src/hello-world`.
-You can add related schematics to this collection, and modify the generated skeleton code to define your schematic's functionality.
+Add related schematics to this collection, and modify the generated skeleton code to define your schematic's functionality.
 Each schematic name must be unique within the collection.
 -->
 다음 명령을 실행하면 `hello-world` 프로젝트가 생성되고 이 프로젝트 폴더 안에 `hello-world` 스키매틱이 생성됩니다.
@@ -528,7 +525,7 @@ schematics &lt;path-to-schematics-project&gt;:&lt;schematics-name&gt; --&lt;requ
 </code-example>
 
 The path can be absolute or relative to the current working directory where the command is executed.
-For example, to run the schematic we just generated (which has no required options), use the following command.
+For example, to run the schematic you just generated (which has no required options), use the following command.
 
 <code-example language="bash">
 schematics .:hello-world
@@ -607,7 +604,7 @@ Each schematic is created with a name, description, and factory function.
 * The `factory` property points to the generated entry function. In this example, you invoke the `hello-world` schematic by calling the `helloWorld()` factory function.
 * The optional  `schema` property points to a JSON schema file that defines the command-line options available to the schematic.
 * The optional `aliases` array specifies one or more strings that can be used to invoke the schematic.
-   For example, the schematic for the Angular CLI “generate” command has an alias “g”, allowing you to use the command `ng g`.
+   For example, the schematic for the Angular CLI “generate” command has an alias “g”, that lets you use the command `ng g`.
 -->
 컬렉션을 구성하는 프로젝트 폴더의 최상위 경로에는 컬렉션 설정 파일과 `node_modules` 폴더, `src/` 폴더가 존재합니다.
 이 중 `src/` 폴더 안에는 컬렉션에 포함되는 스키매틱들이 각각의 이름으로 존재하며, 이 스키매틱들은 `collection.json` 스키마에 모두 등록되어 있습니다.

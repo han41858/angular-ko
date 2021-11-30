@@ -61,6 +61,7 @@ Angular에서 이야기하는 서비스는 [의존성 주입 시스템](guide/gl
 
     <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.1.ts"></code-example>
 
+1. Import the `Product` interface from `./products.js`.
 1. In the `CartService` class, define an `items` property to store the array of the current products in the cart.
 
     <code-example path="getting-started/src/app/cart.service.ts" header="src/app/cart.service.ts" region="props"></code-example>
@@ -212,7 +213,12 @@ For customers to see their cart, you can create the cart view in two steps:
 
     StackBlitz also generates an `ngOnInit()` by default in components.  You can ignore the `CartComponent` `ngOnInit()` for this tutorial.
 
-1. Open `app.module.ts` and add a route for the component `CartComponent`, with a `path` of `cart`.
+1. Ensure that the newly created `CartComponent` is added to the module's `declarations` in `app.module.ts`.
+
+    <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="declare-cart">
+    </code-example>
+
+1. Still in `app.module.ts`, add a route for the component `CartComponent`, with a `path` of `cart`.
 
     <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="cart-route">
     </code-example>

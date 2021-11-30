@@ -14,7 +14,7 @@ import { NoopInterceptor } from './noop-interceptor';
 // #enddocregion interceptor-providers
 import { TrimNameInterceptor } from './trim-name-interceptor';
 import { UploadInterceptor } from './upload-interceptor';
-
+import { RetryInterceptor } from './retry-interceptor';
 // #docregion interceptor-providers
 
 /** Http interceptor 프로바이더를 실행 순서대로 등록합니다. */

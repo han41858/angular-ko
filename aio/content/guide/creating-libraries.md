@@ -4,7 +4,7 @@
 # 라이브러리 만들기
 
 <!--
-This page provides a conceptual overview of how you can create and publish new libraries to extend Angular functionality.
+This page provides a conceptual overview of how to create and publish new libraries to extend Angular functionality.
 
 If you find that you need to solve the same problem in more than one application (or want to share your solution with other developers), you have a candidate for a library.
 A simple example might be a button that sends users to your company website, that would be included in all applications that your company builds.
@@ -23,10 +23,20 @@ A simple example might be a button that sends users to your company website, tha
 Use the Angular CLI to generate a new library skeleton in a new workspace with the following commands.
 
 <code-example language="bash">
- ng new my-workspace --create-application=false
+ ng new my-workspace --no-create-application
  cd my-workspace
  ng generate library my-lib
 </code-example>
+
+<div class="callout is-important">
+
+<header>Naming your library</header>
+
+  You should be very careful when choosing the name of your library if you want to publish it later in a public package registry such as npm. See [Publishing your library](guide/creating-libraries#publishing-your-library).
+  
+  Avoid using a name that is prefixed with `ng-`, such as `ng-library`. The `ng-` prefix is a reserved keyword used from the Angular framework and its libraries. The `ngx-` prefix is preferred as a convention used to denote that the library is suitable for use with Angular. It is also an excellent indication to consumers of the registry to differentiate between libraries of different JavaScript frameworks.
+
+</div>
 
 The `ng generate` command creates the `projects/my-lib` folder in your workspace, which contains a component and a service inside an NgModule.
 
@@ -34,7 +44,7 @@ The `ng generate` command creates the `projects/my-lib` folder in your workspace
 
      For more details on how a library project is structured, refer to the [Library project files](guide/file-structure#library-project-files) section of the [Project File Structure guide](guide/file-structure).
 
-     You can use the monorepo model to use the same workspace for multiple projects.
+     Use the monorepo model to use the same workspace for multiple projects.
      See [Setting up for a multi-project workspace](guide/file-structure#multiple-projects).
 
 </div>
@@ -55,7 +65,7 @@ When you generate a new library, the workspace configuration file, `angular.json
         ...
 </code-example>
 
-You can build, test, and lint the project with CLI commands:
+Build, test, and lint the project with CLI commands:
 
 <code-example language="bash">
  ng build my-lib --configuration development
@@ -77,10 +87,26 @@ Your library should supply documentation (typically a README file) for installat
 라이브러리 프로젝트의 기본 틀은 Angular CLI로 다음 명령을 실행하면 생성할 수 있습니다:
 
 <code-example language="bash">
- ng new my-workspace --create-application=false
+ ng new my-workspace --no-create-application
  cd my-workspace
  ng generate library my-lib
 </code-example>
+
+
+<div class="callout is-important">
+
+<header>라이브러리 이름 짓기</header>
+
+라이브러리를 npm과 같은 공용 공간에 배포할 계획이 있다면 이름을 짓는 것에 신경써야 합니다.
+[라이브러리 배포하기](guide/creating-libraries#publishing-your-library) 문서도 참고해 보세요.
+
+이 때 `ng-` 접두사를 붙여서 `ng-library`와 같은 형식으로 짓는 것은 피하세요.
+`ng-` 접두사는 Angular 프레임워크와 관련 라이브러리가 사용하는 접두사입니다.
+라이브러리가 Angular용이라면 `ngx-` 접두사를 따르는 것은 고려해볼만 합니다.
+이런 접두사는 Angular용 라이브러리와 다른 JavaScript 프레임워크 라이브러리를 구분하는 측면에서도 좋습니다.
+
+</div>
+
 
 이 명령을 실행하면 워크스페이스에 `projects/my-lib` 폴더가 생성되고 이 폴더에 컴포넌트 하나와 서비스 하나, NgModule 하나가 생성됩니다.
 
@@ -117,12 +143,12 @@ Your library should supply documentation (typically a README file) for installat
 
 
 <!--
-## Refactoring parts of an app into a library
+## Refactoring parts of an application into a library
 -->
 ## 앱 코드를 라이브러리용으로 리팩토링하기
 
 <!--
-To make your solution reusable, you need to adjust it so that it does not depend on app-specific code.
+To make your solution reusable, you need to adjust it so that it does not depend on application-specific code.
 Here are some things to consider in migrating application functionality to a library.
 
 * Declarations such as components and pipes should be designed as stateless, meaning they don’t rely on or alter external variables. If you do rely on state, you need to evaluate every case and decide whether it is application state or state that the library would manage.
@@ -138,7 +164,7 @@ Here are some things to consider in migrating application functionality to a lib
 
 * Consider how you provide services to client applications.
 
-   * Services should declare their own providers, rather than declaring providers in the NgModule or a component. Declaring a provider makes that service *tree-shakable*. This practice allows the compiler to leave the service out of the bundle if it never gets injected into the application that imports the library. For more about this, see [Tree-shakable providers](guide/architecture-services#providing-services).
+   * Services should declare their own providers, rather than declaring providers in the NgModule or a component. Declaring a provider makes that service *tree-shakable*. This practice lets the compiler leave the service out of the bundle if it never gets injected into the application that imports the library. For more about this, see [Tree-shakable providers](guide/architecture-services#providing-services).
 
    * If you register global service providers or share providers across multiple NgModules, use the [`forRoot()` and `forChild()` design patterns](guide/singleton-services) provided by the [RouterModule](api/router/RouterModule).
 
@@ -181,7 +207,7 @@ This package can also include [schematics](guide/glossary#schematic) that provid
 A schematic that is packaged with a library can, for example, provide the Angular CLI with the information it needs to generate a component that configures and uses a particular feature, or set of features, defined in that library.
 One example of this is [Angular Material's navigation schematic](https://material.angular.io/guide/schematics#navigation-schematic) which configures the CDK's [BreakpointObserver](https://material.angular.io/cdk/layout/overview#breakpointobserver) and uses it with Material's [MatSideNav](https://material.angular.io/components/sidenav/overview) and [MatToolbar](https://material.angular.io/components/toolbar/overview) components.
 
-You can create and include the following kinds of schematics:
+Create and include the following kinds of schematics:
 
 * Include an installation schematic so that `ng add` can add your library to a project.
 
@@ -194,11 +220,11 @@ For example, you could define a schematic to create a dropdown that is pre-popul
 If you want a dropdown that would contain different passed-in values each time, your library could define a schematic to create it with a given configuration. Developers could then use `ng generate` to configure an instance for their own application.
 
 Suppose you want to read a configuration file and then generate a form based on that configuration.
-If that form will need additional customization by the developer who is using your library, it might work best as a schematic.
+If that form needs additional customization by the developer who is using your library, it might work best as a schematic.
 However, if the form will always be the same and not need much customization by developers, then you could create a dynamic component that takes the configuration and generates the form.
 In general, the more complex the customization, the more useful the schematic approach.
 
-To learn more, see [Schematics Overview](guide/schematics) and [Schematics for Libraries](guide/schematics-for-libraries).
+For more information, see [Schematics Overview](guide/schematics) and [Schematics for Libraries](guide/schematics-for-libraries).
 -->
 라이브러리는 일반적으로 컴포넌트, 서비스, 파이프, 디렉티브 등을 *재사용할 수 있는 형태로* 제공합니다.
 그리고 라이브러리는 npm 패키지 형태로 배포되어 여러 사람에게 공유됩니다.
@@ -266,109 +292,34 @@ npm publish
 ## 라이브러리 리소스 관리하기
 
 <!--
-Starting with version 9.x of the [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md) tool, you can configure the tool to automatically copy assets into your library package as part of the build process.
-You can use this feature when your library needs to publish optional theming files, Sass mixins, or documentation (like a changelog).
-
-* Learn how to [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md).
-
-* Learn more about how to use the tool to [embed assets in CSS](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md).
+In your Angular library, the distributable can include additional assets like theming files, Sass mixins, or documentation (like a changelog).
+For more information [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md) and [embed assets in component styles](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md).
 -->
-[ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md) 9.x 버전부터는 라이브러리를 빌드하는 단계에 리소스 파일도 복사할 것인지 지정할 수 있습니다.
-라이브러리에 테마 파일이나 Sass 믹스인 파일, changelog와 같은 문서가 함께 제공되어야 한다면 이 기능을 활용해 보세요.
-
-* [빌드 단계에 라이브러리 리소스 복사하기](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md) 문서를 참고해 보세요.
-
-* 이 툴은 [CSS에 리소스 내장](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md)하는 방식으로도 사용할 수 있습니다.
+Angular 라이브러리 안에는 테마 파일이나 Sass 믹스인, changelog와 같은 문서 파일을 둘 수 있습니다.
+자세한 내용은 [빌드 단계에 라이브러리 리소스 복사하기](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md) 문서와 [리소스를 컴포넌트 스타일에 내장하기](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md) 문서를 참고하세요.
 
 
-<!--
-## Linked libraries
--->
-## 라이브러리 링크
-
-<!--
-While working on a published library, you can use [npm link](https://docs.npmjs.com/cli/link) to avoid reinstalling the library on every build.
-
-The library must be rebuilt on every change.
-When linking a library, make sure that the build step runs in watch mode, and that the library's `package.json` configuration points at the correct entry points.
-For example, `main` should point at a JavaScript file, not a TypeScript file.
--->
-이미 배포한 라이브러리를 수정하고 있는데, 새로 라이브러리를 빌드할 때마다 다시 설치해야 하는 상황을 피하려면 [npm link](https://docs.npmjs.com/cli/link) 기능을 활용하는 것도 좋습니다.
-
-이 기능을 활용하면 라이브러리 코드가 변경되었을 때 반드시 라이브러리를 다시 빌드해야 합니다.
-그래서 워치 모드로 빌드하는 것이 편하며, 라이브러리의 `package.json` 파일의 진입점이 제대로 설정되어 있어야 합니다.
-`main`으로 지정하는 파일은 TypeScript 파일이 아니라 JavaScript 파일이어야 합니다.
-
-
-<!--
-### Use TypeScript path mapping for peer dependencies
--->
-### 의존 관계에 있는 라이브러리를 위해 TypeScript 경로 연결하기
+## Peer dependencies
 
 <!--
 Angular libraries should list any `@angular/*` dependencies the library depends on as peer dependencies.
 This ensures that when modules ask for Angular, they all get the exact same module.
 If a library lists `@angular/core` in `dependencies` instead of `peerDependencies`, it might get a different Angular module instead, which would cause your application to break.
-
-While developing a library, you must install all peer dependencies through `devDependencies` to ensure that the library compiles properly.
-A linked library will then have its own set of Angular libraries that it uses for building, located in its `node_modules` folder.
-However, this can cause problems while building or running your application.
-
-To get around this problem you can use TypeScript path mapping to tell TypeScript that it should load some modules from a specific location.
-List all the peer dependencies that your library uses in the workspace TypeScript configuration file `./tsconfig.json`, and point them at the local copy in the application's `node_modules` folder.
-
-```
-{
-  "compilerOptions": {
-    // ...
-    // paths are relative to `baseUrl` path.
-    "paths": {
-      "@angular/*": [
-        "./node_modules/@angular/*"
-      ]
-    }
-  }
-}
-```
-
-This mapping ensures that your library always loads the local copies of the modules it needs.
 -->
-Angular 라이브러리에서 `@angular/*` 패키지를 의존 라이브러리로 등록한다면 상호 의존 관계(peer dependencies)로 등록해야 Angular 모듈을 제대로 참조할 수 있습니다.
-그리고 `@angular/core`를 `peerDependencies`가 아니라 `dependencies`에 지정하면 Angular 모듈이 아닌 다른 모듈을 참조하기 때문에 애플리케이션이 제대로 동작하지 않습니다.
-
-라이브러리를 개발하는 중이라면 관련 라이브러리를 `devDependencies`에 등록해야 문제없이 컴파일할 수 있습니다.
-그리고 라이브러리를 링크해서 사용한다면 해당 라이브러리의 `node_modules` 폴더에 Angular 라이브러리들도 제대로 설치되어 있어야 합니다.
-하지만 이렇게 사용하면 애플리케이션을 빌드하거나 실행할 때 에러가 발생합니다.
-
-문제를 해결하려면 특정 위치에 있는 모듈을 정확하게 지정하도록 TypeScript 패스를 연결하면 됩니다.
-사용하는 모든 라이브러리들을 TypeScript 환경설정 파일 `.tsconfig.json`에 추가하고 이 라이브러리의 각 위치를 `node_modules` 폴더 안에서 지정해주면 됩니다.
-
-```
-{
-  "compilerOptions": {
-    // ...
-    // 이 때 지정하는 경로는 `baseUrl`을 기준으로 하는 상대주소입니다.
-    "paths": {
-      "@angular/*": [
-        "./node_modules/@angular/*"
-      ]
-    }
-  }
-}
-```
-
-이렇게 작성하면 라이브러리에 필요한 추가 라이브러리의 위치를 제대로 찾을 수 있습니다.
+Angular 라이브러리는 해당 라이브러리가 활용하는 `@angular/*` 의존성 패키지들을 관련 패키지(peer dependencies)로 등록해야 합니다.
+그래야 라이브러리가 사용하는 Angular 모듈을 제대로 불러올 수 있습니다.
+`@angular/core` 패키지가 `peerDependencies`에 있지 않고 `dependencies`에 있으면, 다른 Angular 모듈을 불러오기 때문에 라이브러리도 제대로 동작하지 않을 것입니다.
 
 
 <!--
-## Using your own library in apps
+## Using your own library in applications
 -->
 ## 로컬 환경에 활용하기
 
 <!--
-You don't have to publish your library to the npm package manager in order to use it in your own applications, but you do have to build it first.
+You don't have to publish your library to the npm package manager to use it the same workspace, but you do have to build it first.
 
-To use your own library in an app:
+To use your own library in an application:
 
 * Build the library. You cannot use a library before it is built.
  <code-example language="bash">
@@ -380,17 +331,16 @@ To use your own library in an app:
  import { myExport } from 'my-lib';
  ```
 -->
-로컬 환경에 있는 앱에 사용하는 것이 목적이라면 굳이 라이브러리를 배포할 필요가 없습니다.
-하지만 빌드는 해야 합니다.
+같은 로컬 워크스페이스에서 사용하는 라이브러리라면 npm 패키지 매니저로 배포할 필요가 없지만, 빌드는 해야 합니다.
 
-라이브러리를 로컬에 있는 앱에 사용하려면:
+이렇게 사용하면 됩니다:
 
-* 라이브러리를 빌드합니다. 라이브러리는 빌드해야 사용할 수 있습니다.
- <code-example language="bash">
- ng build my-lib
- </code-example>
+* 라이브러리는 빌드하기 전에는 사용할 수 없습니다. 먼저 라이브러리를 빌드합니다.
+  <code-example language="bash">
+  ng build my-lib
+  </code-example>
 
-* 앱에서 다음과 같이 라이브러리를 로드합니다:
+* 그리고 애플리케이션에서 이렇게 불러오면 됩니다:
  ```
  import { myExport } from 'my-lib';
  ```
@@ -403,7 +353,7 @@ To use your own library in an app:
 
 <!--
 The build step is important if you haven't published your library as an npm package and then installed the package back into your application from npm.
-For instance, if you clone your git repository and run `npm install`, your editor will show the `my-lib` imports as missing if you haven't yet built your library.
+For instance, if you clone your git repository and run `npm install`, your editor shows the `my-lib` imports as missing if you haven't yet built your library.
 -->
 직접 만든 라이브러리를 애플리케이션에 활용하려면 npm 패키지로 배포해야 하는데, npm 패키지로 배포하려면 빌드를 해야하기 때문에 빌드 과정은 아주 중요합니다.
 라이브러리를 제대로 빌드하지 않으면 `npm install` 명령으로 라이브러리를 설치했다고 해도 `my-lib`와 같은 심볼을 찾을 수 없기 때문에 에러가 발생할 수 있습니다.
@@ -411,21 +361,25 @@ For instance, if you clone your git repository and run `npm install`, your edito
 <div class="alert is-helpful">
 
 <!--
-When you import something from a library in an Angular app, Angular looks for a mapping between the library name and a location on disk.
+When you import something from a library in an Angular application, Angular looks for a mapping between the library name and a location on disk.
 When you install a library package, the mapping is in the `node_modules` folder. When you build your own library, it has to find the mapping in your `tsconfig` paths.
 
 Generating a library with the Angular CLI automatically adds its path to the `tsconfig` file.
 The Angular CLI uses the `tsconfig` paths to tell the build system where to find the library.
+
+For more information, see [Path mapping overview](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping).
 -->
 Angular 앱에서 라이브러리 심볼을 로드하면 Angular가 디스크에서 라이브러리를 찾습니다.
 이 라이브러리가 패키지로 설치되었다면 `node_modules` 폴더를 찾을 것이고 로컬에서 빌드하고 옮겼다면 `tsconfig`에 있는 경로를 찾습니다.
 
 Angular CLI로 라이브러리를 생성하면 `tsconfig` 파일에 자동으로 이 라이브러리의 경로를 추가하기 때문에 빌드 시스템도 바로 동작합니다.
 
+자세한 내용은 [경로 맵핑하기](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping) 문서를 참고하세요.
+
 </div>
 
 <!--
-If you find that changes to your library are not reflected in your application, your app is probably using an old build of the library.
+If you find that changes to your library are not reflected in your application, your application is probably using an old build of the library.
 
 You can rebuild your library whenever you make changes to it, but this extra step takes time.
 *Incremental builds* functionality improves the library-development experience.
@@ -476,92 +430,80 @@ TypeScript path mappings should *not* point to the library source `.ts` files.
 
 {@a ivy-libraries}
 
-## Building libraries with Ivy
+<!--
+## Publishing libraries
+-->
+## 라이브러리 배포하기
 
-There are three distribution formats that you can use when publishing a library:
+<!--
+There are two distribution formats to use when publishing a library:
 
-* View Engine _(deprecated)_&mdash;legacy format, slated for removal in Angular version 13.
-  Only use this format if you must support View Engine applications.
 * partial-Ivy **(recommended)**&mdash;contains portable code that can be consumed by Ivy applications built with any version of Angular from v12 onwards.
 * full-Ivy&mdash;contains private Angular Ivy instructions, which are not guaranteed to work across different versions of Angular. This format requires that the library and application are built with the _exact_ same version of Angular. This format is useful for environments where all library and application code is built directly from source.
 
-New libraries created with Angular CLI default to partial-Ivy format.
-If you are creating a new library with `ng generate library`, Angular uses Ivy by default with no further action on your part.
-
-### Transitioning libraries to partial-Ivy format
-
-Existing libraries, which are configured to generate the View Engine format, do not change when upgrading to later versions of Angular that use Ivy.
-
-If you intend to publish your library to npm, compile with partial-Ivy code by setting `"compilationMode": "partial"` in `tsconfig.prod.json`.
-
-A library that uses View Engine, rather than Ivy, has a `tsconfig.prod.json` file that contains the following:
-
-<code-example>
-
-"angularCompilerOptions": {
-  "enableIvy": false
-}
-
-</code-example>
-
-To convert such libraries to use the partial-Ivy format, change the `tsconfig.prod.json` file by removing the `enableIvy` option and adding the `compilationMode` option.
-
-Enable partial-Ivy compilation by replacing `"enableIvy": false` with `"compilationMode": "partial"` as follows:
-
-<code-example>
-
-"angularCompilerOptions": {
-  "compilationMode": "partial"
-}
-
-</code-example>
-
 For publishing to npm use the partial-Ivy format as it is stable between patch versions of Angular.
 
-Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions are not part of Angular's public API, and so may change between patch versions.
+Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions are not part of Angular's public API, and so might change between patch versions.
+-->
+라이브러리 배포 형식은 2가지 입니다:
 
-Partial-Ivy code is not backward compatible with View Engine.
-If you use the library in a View Engine application, you must compile the library into the View Engine format by setting `"enableIvy": false` in the `tsconfig.json` file.
+* 일부 Ivy **(partial-Ivy, 권장)** &mdash; 12 이후 버전이라면 모든 Angular 버전에서 동작할 수 있도록 실행 코드를 일부 포함합니다.
+* 완전 Ivy(full-Ivy)) &mdash; Angular Ivy 관련 코드를 최소화합니다. 모든 Angular 버전에서 동작하지는 않으며, 라이브러리가 개발된 Angular 버전과 애플리케이션의 Angular 버전이 _정확히_ 같을 때만 동작합니다. 이 방식은 애플리케이션 코드와 라이브러리 코드가 동시에 개발할 때 사용하면 좋습니다.
 
-Ivy applications can still consume the View Engine format because the Angular compatibility compiler, or `ngcc`, can convert it to Ivy.
+일부 Ivy 형식으로 라이브러리를 빌드하면 Angular 버전에 관계없이 라이브러리를 사용할 수 있습니다.
 
+완전 Ivy 형식으로는 npm 저장소에 배포하지 마세요.
+이 방식으로 생성한 Ivy 관련 코드는 Angular의 public API가 아닐 수 있으며, 이후 버전에서는 변경될 수 있습니다.
+
+
+<!--
 ## Ensuring library version compatibility
+-->
+## 버전 호환성 보장하기
 
+<!--
 The Angular version used to build an application should always be the same or greater than the Angular versions used to build any of its dependent libraries.
-For example, if you had a library using Angular version 12, the application that depends on that library should use Angular version 12 or later.
+For example, if you had a library using Angular version 13, the application that depends on that library should use Angular version 13 or later.
 Angular does not support using an earlier version for the application.
 
-<div class="alert is-helpful">
-
-The Angular CLI uses Ivy to build applications and no longer uses View Engine.
-A library or an application built with View Engine cannot consume a partial-Ivy library.
-
-</div>
-
-Because this process happens during the application build, it uses the same version of the Angular compiler, ensuring that the application and all of its libraries use a single version of Angular.
 
 If you intend to publish your library to npm, compile with partial-Ivy code by setting `"compilationMode": "partial"` in `tsconfig.prod.json`.
 This partial format is stable between different versions of Angular, so is safe to publish to npm.
+Code with this format is processed during the application build using the same version of the Angular compiler, ensuring that the application and all of its libraries use a single version of Angular.
+
 
 Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions are not part of Angular's public API, and so might change between patch versions.
 
-Partial-Ivy code is not backward compatible with View Engine.
-If you use the library in a View Engine application, you must compile the library into the View Engine format by setting `"enableIvy": false` in the `tsconfig.json` file.
-
-Ivy applications can still consume the View Engine format because the Angular compatibility compiler, or `ngcc`, can convert it to Ivy in the Angular CLI.
-
 If you've never published a package in npm before, you must create a user account. Read more in [Publishing npm Packages](https://docs.npmjs.com/getting-started/publishing-npm-packages).
+-->
+라이브러리를 활용하는 애플리케이션의 Angular 버전은 반드시 라이브러리가 의존성으로 갖는 Angular 버전과 같거나 그 이후 버전이어야 합니다.
+이 말은, 라이브러리가 Angular 13 버전에서 개발되었다면, 이 라이브러리를 활용하는 애플리케이션의 Angular 버전은 13이거나 그 이후 버전이 되어야 한다는 것을 의미합니다.
+라이브러리가 개발된 버전보다 이전에 나온 버전을 사용한다면 정상 실행을 보장하지 않습니다.
+
+라이브러리를 npm 저장소에 배포하려는 경우에는 `tsconfig.prod.json` 파일에 `"compilationMode": "partial"` 설정을 명시해서 일부 Ivy 코드로 컴파일하세요.
+이 형식을 사용하면 애플리케이션을 빌드할 때 Angular 컴파일러가 버전을 조정하며, 라이브러리에서 사용하는 Ivy 코드가 실행될 수 있도록 Ivy 실행 코드를 일부 포함하기 때문에 애플리케이션의 Angular 버전과 관계없이 라이브러리를 활용할 수 있습니다.
+
+완전 Ivy 형식으로는 npm 저장소에 배포하지 마세요.
+이 방식으로 생성한 Ivy 관련 코드는 Angular의 public API가 아닐 수 있으며, 이후 버전에서는 변경될 수 있습니다.
+
+이전에 npm 저장소에 라이브러리를 배포한 적이 없다면 계정을 먼저 만들어야 합니다.
+자세한 내용은 [npm 패키지 배포하기](https://docs.npmjs.com/getting-started/publishing-npm-packages) 문서를 참고하세요.
 
 
+{@a consuming-partial-ivy-code-outside-the-angular-cli}
+<!--
 ## Consuming partial-Ivy code outside the Angular CLI
+-->
+## Angular CLI 외부에서 일부 Ivy 코드 활용하기
 
+<!--
 An application installs many Angular libraries from npm into its `node_modules` directory.
 However, the code in these libraries cannot be bundled directly along with the built application as it is not fully compiled.
-To finish compilation, you can use the Angular linker.
+To finish compilation, use the Angular linker.
 
 For applications that don't use the Angular CLI, the linker is available as a Babel plugin.
-You can use the Babel plugin using the module `@angular/compiler-cli/linker/babel` to incorporate into your builds.
-For example, you can integrate the plugin into a custom Webpack build by registering the linker as a plugin for `babel-loader`.
+Use the Babel plugin using the module `@angular/compiler-cli/linker/babel` to incorporate into your builds.
+For example, integrate the plugin into a custom Webpack build by registering the linker as a plugin for `babel-loader`.
 
 Previously, if you ran `yarn install` or `npm install` you had to re-run `ngcc`.
 Now, libraries only need to be processed by the linker a single time, regardless of other npm operations.
@@ -573,3 +515,25 @@ The Angular linker Babel plugin supports build caching, meaning that libraries o
 The Angular CLI integrates the linker plugin automatically, so if consumers of your library are using the CLI, they can install Ivy-native libraries from npm without any additional configuration.
 
 </div>
+-->
+애플리케이션에 설치하는 Angular 라이브러리들은 모두 `node_modules` 디렉토리에 위치합니다.
+하지만 라이브러리 코드는 애플리케이션이 빌드을 빌드할 때 제대로 빌드되지 않을 수 있습니다.
+그래서 빌드를 제대로 하려면 Angular 링커(linker)를 사용해야 합니다.
+
+Angular CLI를 사용하지 않는 애플리케이션이라면 Babel 플러그인 형태로 링커를 사용할 수 있습니다.
+`@angular/compiler-cli/linker/babel` ㅁ도ㅠㄹ을 사용하면 됩니다.
+이 플러그인은 `babel-loader`와 비슷하게 링커를 커스텀 Webpack 빌더로 등록한 것입니다.
+
+이전에는 `yarn install`이나 `npm install` 명령을 실행하면 `ngcc` 명령이 다시 실행되었을 것입니다.
+하지만 Angular 링커 Babel 플러그인은 빌드 캐시 기능을 지원하기 때문에, 이제는 라이브러리가 링커로 연결되기 때문에 다른 npm 명령 실행과 관계없이 한 번만 빌드됩니다.
+
+
+<div class="alert is-helpful">
+
+Angular CLI는 링커 플러그인을 자동으로 등록합니다.
+그래서 Angular CLI를 활용하는 애플리케이션이라면 별다른 설정을 하지 않아도 Ivy용 라이브러리를 설치해서 활용할 수 있습니다.
+
+</div>
+
+
+@reviewed 2021-10-29

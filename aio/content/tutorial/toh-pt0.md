@@ -52,7 +52,7 @@ To set up your development environment, follow the instructions in [Local Enviro
 ## 워크스페이스와 애플리케이션 기본 틀 생성하기
 
 <!--
-You develop applications in the context of an Angular [workspace](guide/glossary#workspace). A workspace contains the files for one or more [projects](guide/glossary#project). A project is the set of files that comprise an app, a library, or end-to-end (e2e) tests. For this tutorial, you will create a new workspace.
+You develop applications in the context of an Angular [workspace](guide/glossary#workspace). A workspace contains the files for one or more [projects](guide/glossary#project). A project is the set of files that comprise an application or a library. For this tutorial, you will create a new workspace.
 
 To create a new workspace and an initial application project:
 
@@ -302,4 +302,3 @@ Here are the code files discussed on this page.
 * Angular CLI를 이용하면 애플리케이션의 기본 틀을 생성할 수 있습니다.
 * Angular 컴포넌트를 사용하면 컴포넌트에 있는 데이터를 화면에 표시할 수 있습니다.
 * 이중 중괄호를 사용하면 컴포넌트 프로퍼티 값을 템플릿에 바인딩 할 수 있습니다.
-

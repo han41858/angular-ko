@@ -65,6 +65,24 @@ Learn more in [Angular Elements Overview](guide/elements).
 자세한 내용은 [Angular Elements 개요](guide/elements) 문서를 참고하세요.
 
 
+{@a apf}
+
+<!--
+## Angular package format (APF)
+-->
+## Angular 패키지 형식 (Angular Package Format, APF)
+
+<!--
+An Angular specific specification for layout of npm packages that is used by all first-party Angular packages, and most third-party Angular libraries.
+
+Learn more in the [Angular Package Format specification](guide/angular-package-format).
+-->
+퍼스트 파티 Angular 패키지들은 Angular가 정산 형식에 따라 npm 패키지를 구성하며, 서드 파티 Angular 라이브러리 중에 이 형식을 차용하는 경우가 있습니다.
+and most third-party Angular libraries.
+
+자세한 내용은 [Angular 패키지 형식 스펙](guide/angular-package-format) 문서를 참고하세요.
+
+
 {@a annotation}
 
 <!--
@@ -87,7 +105,7 @@ A structure that provides metadata for a class. See [decorator](#decorator).
 ## 앱 기본코드(app-shell)
 
 <!--
-App shell is a way to render a portion of your application via a route at build time.
+App shell is a way to render a portion of your application using a route at build time.
 This gives users a meaningful first paint of your application that appears quickly because the browser can render static HTML and CSS without the need to initialize JavaScript.
 
 Learn more in [The App Shell Model](https://developers.google.com/web/fundamentals/architecture/app-shell).
@@ -193,11 +211,11 @@ Angular에서는 DOM 객체의 프로퍼티와 데이터 객체의 프로퍼티�
 ## 부트스트랩(bootstrap)
 
 <!--
-A way to initialize and launch an app or system.
+A way to initialize and launch an application or system.
 
-In Angular, an app's root NgModule (`AppModule`) has a `bootstrap` property that identifies the app's top-level [components](#component).
+In Angular, an application's root NgModule (`AppModule`) has a `bootstrap` property that identifies the application's top-level [components](#component).
 During the bootstrap process, Angular creates and inserts these components into the `index.html` host web page.
-You can bootstrap multiple apps in the same `index.html`. Each app contains its own components.
+You can bootstrap multiple applications in the same `index.html`. Each application contains its own components.
 
 Learn more in [Bootstrapping](guide/bootstrapping).
 -->
@@ -321,7 +339,6 @@ Angular 프레임워크가 애플리케이션의 UI 상태와 데이터 상태�
 변화 감지 정책으로 `OnPush`를 사용하면 변화 감지 동작은 개발자가 [명시적으로 실행](api/core/ChangeDetectorRef)하거나 `Input` 값이 변경되었을 때, 이벤트 핸들러가 동작했을 때만 실행됩니다.
 일반적으로 이 정책은 성능을 향상시키기 위한 용도로 사용됩니다.
 자세한 내용은 [Angular 변화 감지 동작 최적화하기](https://web.dev/faster-angular-change-detection/) 문서를 참고하세요.
-
 
 {@a class-decorator}
 
@@ -471,7 +488,7 @@ A web platform feature, currently supported by most browsers and available in ot
 
 The custom element feature extends HTML by allowing you to define a tag whose content is created and controlled by JavaScript code. A custom element (also called a *web component*) is recognized by a browser when it's added to the [CustomElementRegistry](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry).
 
-You can use the API to transform an Angular component so that it can be registered with the browser and used in any HTML that you add directly to the DOM within an Angular app. The custom element tag inserts the component's view, with change-detection and data-binding functionality, into content that would otherwise be displayed without Angular processing.
+You can use the API to transform an Angular component so that it can be registered with the browser and used in any HTML that you add directly to the DOM within an Angular application. The custom element tag inserts the component's view, with change-detection and data-binding functionality, into content that would otherwise be displayed without Angular processing.
 
 See [Angular element](#angular-element).
 
@@ -499,7 +516,7 @@ See also [dynamic component loading](#dynamic-components).
 ## 데이터 바인딩(data binding)
 
 <!--
-A process that allows apps to display data values to a user and respond to user
+A process that allows applications to display data values to a user and respond to user
 actions (such as clicks, touches, and keystrokes).
 
 In data binding, you declare the relationship between an HTML widget and a data source
@@ -605,7 +622,7 @@ Angular는 데코레이터에 메타데이터를 지정하는 방식으로 클�
 A design pattern and mechanism for creating and delivering some parts of an application (dependencies) to other parts of an application that require them.
 
 In Angular, dependencies are typically services, but they also can be values, such as strings or functions.
-An [injector](#injector) for an app (created automatically during bootstrap) instantiates dependencies when needed, using a configured [provider](#provider) of the service or value.
+An [injector](#injector) for an application (created automatically during bootstrap) instantiates dependencies when needed, using a configured [provider](#provider) of the service or value.
 
 Learn more in [Dependency Injection in Angular](guide/dependency-injection).
 -->
@@ -630,24 +647,6 @@ A lookup token associated with a dependency [provider](#provider), for use with 
 [의존성 주입](#di) 시스템에서 의존성 객체의 [프로바이더](#provider)를 찾을 때 사용하는 토큰입니다.
 
 
-{@a differential-loading}
-
-<!--
-## differential loading
--->
-## 증분 로딩(differential loading)
-
-<!--
-A build technique that creates two bundles for an application. One smaller bundle is for modern browsers. A second, larger bundle allows the application to run correctly in older browsers (such as IE11) that do not support all modern browser APIs.
-
-For more information, see the [Deployment](guide/deployment#differential-loading) guide.
--->
-애플리케이션 빌드 결과물을 두 벌로 생성하는 테크닉을 의미합니다.
-이 방식을 사용하면 최신 브라우저에서 동작하는 작은 빌드 결과물을 한 벌 생성하고, 최신 브라우저 API를 지원하지 않는 오래된 브라우저(ex. IE11)에서 동작하는 빌드 결과물을 한 벌 생성합니다.
-
-자세한 내용은 [배포](guide/deployment#differential-loading) 문서를 참고하세요.
-
-
 {@a directive}
 {@a directives}
 
@@ -670,7 +669,7 @@ There are three categories of directive:
 
 Angular supplies a number of built-in directives that begin with the `ng` prefix.
 You can also create new directives to implement your own functionality.
-You associate a *selector* (an HTML tag such as `<my-directive>`) with a custom directive, thereby extending the [template syntax](guide/template-syntax) that you can use in your apps.
+You associate a *selector* (an HTML tag such as `<my-directive>`) with a custom directive; this extends the [template syntax](guide/template-syntax) that you can use in your applications.
 
 **UpperCamelCase**, such as `NgIf`, refers to a directive class.
 You can use **UpperCamelCase** when describing properties and directive behavior.
@@ -712,13 +711,12 @@ HTML 템플릿 안에 있는 엘리먼트에 디렉티브를 적용할 때 **소
 
 <!--
 A special-purpose library or API; see [Domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language).
-Angular extends TypeScript with domain-specific languages for a number of domains relevant to Angular apps, defined in NgModules such as [animations](guide/animations), [forms](guide/forms), and [routing and navigation](guide/router).
+Angular extends TypeScript with domain-specific languages for a number of domains relevant to Angular applications, defined in NgModules such as [animations](guide/animations), [forms](guide/forms), and [routing and navigation](guide/router).
 -->
 특정 용도로 사용되는 라이브러리나 API를 의미합니다.
 [Domain-specific language](https://en.wikipedia.org/wiki/Domain-specific_language) 문서를 참고하세요.
 Angular는 TypeScript를 특정 도메인 언어로 사용해서 Angular앱에 필요한 기능을 구현하고 있습니다.
 [애니메이션](guide/animations), [폼](guide/forms), [라우팅과 네비게이션](guide/router) 등이 그렇습니다.
-
 
 {@a dynamic-components}
 
@@ -1005,15 +1003,12 @@ Read more in the [Interpolation](guide/interpolation) guide.
 ## Ivy
 
 <!--
-Ivy is the code name for Angular's [next-generation compilation and rendering pipeline](https://blog.angular.io/a-plan-for-version-8-0-and-ivy-b3318dfc19f7).
-With the version 9 release of Angular, the new compiler and runtime instructions are used by default instead of the older compiler and runtime, known as [View Engine](#ve).
-
-See [Angular Ivy](guide/ivy).
+Ivy is the historical code name for Angular's current
+[compilation and rendering pipeline](https://blog.angular.io/a-plan-for-version-8-0-and-ivy-b3318dfc19f7).
+It is now the only supported engine, so everything uses Ivy.
 -->
-Ivy는 Angular의 [다음 세대 컴파일러이자 렌더링 파이프라인](https://blog.angular.io/a-plan-for-version-8-0-and-ivy-b3318dfc19f7)의 코드명입니다.
-Angular 9 버전부터는 이전까지 사용하던 [View Engine](#ve)대신 이 컴파일러가 기본으로 사용됩니다.
-
-자세한 내용은 [Angular Ivy](guide/ivy) 문서를 참고하세요.
+Ivy는 현재 [컴파일러이자 렌더링 파이프라인](https://blog.angular.io/a-plan-for-version-8-0-and-ivy-b3318dfc19f7)에 사용되는 템플릿 엔진의 코드명입니다.
+현재 지원하는 템플릿 엔진은 모두 Ivy 입니다.
 
 
 {@a J}
@@ -1071,13 +1066,12 @@ A process that speeds up application load time by splitting the application into
 For example, dependencies can be lazy loaded as needed&mdash;as opposed to [eager-loaded](#eager-loading) modules that are required by the root module and are thus loaded on launch.
 
 The [router](#router) makes use of lazy loading to load child views only when the parent view is activated.
-Similarly, you can build custom elements that can be loaded into an Angular app when needed.
+Similarly, you can build custom elements that can be loaded into an Angular application when needed.
 -->
 애플리케이션 로딩 시간을 줄이기 위해 애플리케이션을 작은 단위로 나누고 필요할 때 로드하는 과정을 의미합니다.
 이와 반대로 [즉시 로딩](#eager-loading)되는 모듈은 애플리케이션이 실행되면서 로드되는 모듈을 의미하며, 애플리케이션 최상위 모듈이 즉시 로딩 모듈에 해당됩니다.
 
 [라우터](#router)를 사용하면 부모 화면이 활성화되었을 때만 자식 화면을 지연로딩할 수 있으며, 커스텀 엘리먼트를 사용할 때 로드하는 방식도 활용할 수 있습니다.
-
 
 {@a library}
 
@@ -1087,9 +1081,9 @@ Similarly, you can build custom elements that can be loaded into an Angular app 
 ## library(라이브러리)
 
 <!--
-In Angular, a [project](#project) that provides functionality that can be included in other Angular apps.
-A library isn't a complete Angular app and can't run independently.
-(To add re-usable Angular functionality to non-Angular web apps, you can use Angular [custom elements](#angular-element).)
+In Angular, a [project](#project) that provides functionality that can be included in other Angular applications.
+A library isn't a complete Angular application and can't run independently.
+(To add re-usable Angular functionality to non-Angular web applications, you can use Angular [custom elements](#angular-element).)
 
 * Library developers can use the [Angular CLI](#cli) to `generate` scaffolding for a new library in an existing [workspace](#workspace), and can publish a library as an `npm` package.
 
@@ -1189,7 +1183,7 @@ Angular가 제공하는 라이브러리는 `@angular`라는 이름으로 시작�
 
 <!--
 Angular compatibility compiler.
-If you build your app using [Ivy](#ivy), but it depends on libraries that have not been compiled with Ivy, the CLI uses `ngcc` to automatically update the dependent libraries to use Ivy.
+If you build your application using [Ivy](#ivy), but it depends on libraries that have not been compiled with Ivy, the CLI uses `ngcc` to automatically update the dependent libraries to use Ivy.
 -->
 Angular 호환성 컴파일러(compatibility compiler)를 의미합니다.
 [Ivy](#ivy)로 개발한 애플리케이션에 Ivy로 컴파일되지 않은 라이브러리를 사용하면 Angular CLI가 `ngcc`를 사용해서 Ivy에 맞게 자동으로 조정합니다.
@@ -1426,7 +1420,7 @@ An [injector](#injector) uses the provider to create a new instance of a depende
 for a class that requires it.
 
 Angular registers its own providers with every injector, for services that Angular defines.
-You can register your own providers for services that your app needs.
+You can register your own providers for services that your application needs.
 
 See also [service](#service), [dependency injection](#di).
 
@@ -1532,11 +1526,11 @@ Learn more in the [Routing and Navigation](guide/router#preventing-unauthorized-
 ## 라우터(router)
 
 <!--
-A tool that configures and implements navigation among states and [views](#view) within an Angular app.
+A tool that configures and implements navigation among states and [views](#view) within an Angular application.
 
 The `Router` module is an [NgModule](#ngmodule) that provides the necessary service providers and directives for navigating through application views. A [routing component](#routing-component) is one that imports the `Router` module and whose template contains a `RouterOutlet` element where it can display views produced by the router.
 
-The router defines navigation among views on a single page, as opposed to navigation among pages. It interprets URL-like links to determine which views to create or destroy, and which components to load or unload. It allows you to take advantage of [lazy loading](#lazy-load) in your Angular apps.
+The router defines navigation among views on a single page, as opposed to navigation among pages. It interprets URL-like links to determine which views to create or destroy, and which components to load or unload. It allows you to take advantage of [lazy loading](#lazy-load) in your Angular applications.
 
 To learn more, see [Routing and Navigation](guide/router).
 -->
@@ -1613,7 +1607,7 @@ A schematic defines [rules](#rule) that operate on a virtual file system called 
 
 The [Angular CLI](#cli) uses schematics to generate and modify [Angular projects](#project) and parts of projects.
 
-* Angular provides a set of schematics for use with the CLI. See the [Angular CLI command reference](cli). The [`ng add`](cli/add) command runs schematics as part of adding a library to your project. The [`ng generate`](cli/generate) command runs schematics to create apps, libraries, and Angular code constructs.
+* Angular provides a set of schematics for use with the CLI. See the [Angular CLI command reference](cli). The [`ng add`](cli/add) command runs schematics as part of adding a library to your project. The [`ng generate`](cli/generate) command runs schematics to create applications, libraries, and Angular code constructs.
 
 * [Library](#library) developers can create schematics that enable the Angular CLI to add and update their published libraries, and to generate artifacts the library defines.
 Add these schematics to the npm package that you use to publish and share your library.
@@ -1704,10 +1698,10 @@ Import a scoped package in the same way that you import a normal package.
 A technique that generates static application pages on the server, and can generate and serve those pages in response to requests from browsers.
 It can also pre-generate pages as HTML files that you serve later.
 
-This technique can improve performance on mobile and low-powered devices and improve the user experience by showing a static first page quickly while the client-side app is loading.
-The static version can also make your app more visible to web crawlers.
+This technique can improve performance on mobile and low-powered devices and improve the user experience by showing a static first page quickly while the client-side application is loading.
+The static version can also make your application more visible to web crawlers.
 
-You can easily prepare an app for server-side rendering by using the [CLI](#cli) to run the [Angular Universal](#universal) tool, using the `@nguniversal/express-engine` [schematic](#schematic).
+You can easily prepare an application for server-side rendering by using the [CLI](#cli) to run the [Angular Universal](#universal) tool, using the `@nguniversal/express-engine` [schematic](#schematic).
 -->
 애플리케이션 화면을 서버에 정적으로 빌드해두고, 브라우저 요청이 있을 때 이 화면을 그대로 제공하는 방식입니다.
 미리 생성해둔 화면은 HTML 파일 형태로 제공됩니다.
@@ -1717,7 +1711,6 @@ You can easily prepare an app for server-side rendering by using the [CLI](#cli)
 
 [Angular CLI](#cli)로 [Angular Universal](#universal) 툴을 실행하면 Angular 애플리케이션에 서버 사이드 렌더링을 적용할 수 있습니다.
 이 때 `@nguniversal/express-engine` [스키매틱](#schematic)을 사용합니다.
-
 
 
 {@a service}
@@ -2053,7 +2046,7 @@ A data flow model where the component tree is always checked for changes in one 
 In practice, this means that data in Angular flows downward during change detection.
 A parent component can easily change values in its child components because the parent is checked first.
 A failure could occur, however, if a child component tries to change a value in its parent during change detection (inverting the expected data flow), because the parent component has already been rendered.
-In development mode, Angular throws the `ExpressionChangedAfterItHasBeenCheckedError` error if your app attempts to do this, rather than silently failing to render the new value.
+In development mode, Angular throws the `ExpressionChangedAfterItHasBeenCheckedError` error if your application attempts to do this, rather than silently failing to render the new value.
 
 To avoid this error, a [lifecycle hook](guide/lifecycle-hooks) method that seeks to make such a change should trigger a new change detection run. The new run follows the same direction as before, but succeeds in picking up the new value.
 -->
@@ -2131,10 +2124,13 @@ Angular에서는 보통 [라우터](#router)가 이 과정을 담당합니다.
 ## View Engine
 
 <!--
-The compilation and rendering pipeline used by Angular before version 9. Compare [Ivy](#ivy).
+A previous compilation and rendering pipeline used by Angular. It has since been replaced by
+[Ivy](#ivy) and is no longer in use. View Engine was deprecated in version 9 and removed in version
+13.
 -->
-Angular 9 버전 이전에 사용하던 컴파일, 렌더링 파이프라인입니다.
-[Ivy](#ivy)와 어떻게 다른지 확인해 보세요.
+Angular가 이전에 사용하던 컴팦일, 렌더링 파이프라인 엔진입니다.
+View Engine은 9버전부터 지원 중단이 결정되었고, 13버전 부터는 [Ivy](#ivy)로 완전히 대체되어 지금은 더이상 사용되지 않습니다.
+
 
 
 {@a view-tree}
@@ -2182,12 +2178,12 @@ See [custom element](#custom-element).
 ## 워크스페이스(workspace)
 
 <!--
-A collection of Angular [projects](#project) (that is, applications and libraries) powered by the [Angular CLI] (#cli) that are typically co-located in a single source-control repository (such as [git](https://git-scm.com/)).
+A collection of Angular [projects](#project) (that is, applications and libraries) powered by the [Angular CLI](#cli) that are typically co-located in a single source-control repository (such as [git](https://git-scm.com/)).
 
 The [CLI](#cli) [`ng new` command](cli/new) creates a file system directory (the "workspace root").
 In the workspace root, it also creates the workspace [configuration file](#configuration) (`angular.json`) and, by default, an initial application project with the same name.
 
-Commands that create or operate on apps and libraries (such as `add` and `generate`) must be executed from within a workspace folder.
+Commands that create or operate on applications and libraries (such as `add` and `generate`) must be executed from within a workspace folder.
 
 For more information, see [Workspace Configuration](guide/workspace-config).
 -->
@@ -2244,9 +2240,9 @@ Angular [워크스페이스](#workspace) 최상위 폴더에 위치한 `angular.
 ## 존(zone)
 
 <!--
-An execution context for a set of asynchronous tasks. Useful for debugging, profiling, and testing apps that include asynchronous operations such as event processing, promises, and calls to remote servers.
+An execution context for a set of asynchronous tasks. Useful for debugging, profiling, and testing applications that include asynchronous operations such as event processing, promises, and calls to remote servers.
 
-An Angular app runs in a zone where it can respond to asynchronous events by checking for data changes and updating the information it displays by resolving [data bindings](#data-binding).
+An Angular application runs in a zone where it can respond to asynchronous events by checking for data changes and updating the information it displays by resolving [data bindings](#data-binding).
 
 A zone client can take action before and after an async operation completes.
 

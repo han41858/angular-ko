@@ -506,11 +506,94 @@
           ]
         },
         {
-          "url": "guide/i18n",
-          "/title": "Internationalization (i18n)",
+          "/title": "Internationalization",
           "title": "국제화 (i18n)",
-          "/tooltip": "Translate the app's template text into multiple languages.",
-          "tooltip": "템플릿에 있는 문구를 여러 언어로 번역해 보세요."
+          "/tooltip": "Translate the text of your application text into multiple languages",
+          "tooltip": "템플릿 문구를 여러 언어로 번역해 보세요.",
+          "children": [
+            {
+              "url": "guide/i18n-overview",
+              "title": "Overview",
+              "tooltip": "Introduces the Angular internationalization and lists topics that teach you how to localize your applications"
+            },
+            {
+              "title": "Common internationalization tasks",
+              "tooltip": "Task-based content on many of the common tasks associated with Angular internationalization, such as adding the locale package and formatting data for a locale",
+              "children": [
+                {
+                  "url": "guide/i18n-common-overview",
+                  "title": "Overview",
+                  "tooltip": "Introduces the common Angular internationalization tasks and lists topics that teach you how to localize your applications"
+                },
+                {
+                  "url": "guide/i18n-common-add-package",
+                  "title": "Add the localize package",
+                  "tooltip": "Add the Angular localize package"
+                },
+                {
+                  "url": "guide/i18n-common-locale-id",
+                  "title": "Refer to locales by ID",
+                  "tooltip": "Reference using locale IDs"
+                },
+                {
+                  "url": "guide/i18n-common-format-data-locale",
+                  "title": "Format data based on locale",
+                  "tooltip": "Format data based on locale"
+                },
+                {
+                  "url": "guide/i18n-common-prepare",
+                  "title": "Prepare templates for translations",
+                  "tooltip": "Prepare content for translation"
+                },
+                {
+                  "url": "guide/i18n-common-translation-files",
+                  "title": "Work with translation files",
+                  "tooltip": "Work with translation files"
+                },
+                {
+                  "url": "guide/i18n-common-merge",
+                  "title": "Merge translations into the app",
+                  "tooltip": "Merge translations into your app"
+                },
+                {
+                  "url": "guide/i18n-common-deploy",
+                  "title": "Deploy multiple locales",
+                  "tooltip": "Deploy multiple locale for your app"
+                }
+              ]
+            },
+            {
+              "url": "guide/i18n-example",
+              "title": "Example Angular application",
+              "tooltip": "Example of a translated Angular application"
+            },
+            {
+              "title": "Optional internationalization practices",
+              "tooltip": "Task-based content on many of the optional pratices associated with Angular internationalization",
+              "children": [
+                {
+                  "url": "guide/i18n-optional-overview",
+                  "title": "Overview",
+                  "tooltip": "Introduces the optional Angular internationalization tasks and lists topics that teach you how to manually configure localization settings for your applications"
+                },
+                {
+                  "url": "guide/i18n-optional-manual-runtime-locale",
+                  "title": "Set the runtime locale manually",
+                  "tooltip": "Set the runtime locale manually"
+                },
+                {
+                  "url": "guide/i18n-optional-import-global-variants",
+                  "title": "Import global variants of the locale data",
+                  "tooltip": "Import global variants of the locale data"
+                },
+                {
+                  "url": "guide/i18n-optional-manage-marked-text",
+                  "title": "Manage marked text with custom IDs",
+                  "tooltip": "Manage marked text with custom IDs"
+                }
+              ]
+            }
+          ]
         },
         {
           "/title": "Animations",
@@ -590,6 +673,13 @@
               "tooltip": "서비스 워커를 사용하는 Angular 서비스 만들기"
             },
             {
+              "url": "guide/service-worker-notifications",
+              "/title": "Service Worker Notifications",
+              "title": "서비스 워커 알림",
+              "/tooltip": "Configuring service worker notification behavior.",
+              "tooltip": "서비스 워커의 알림 기능을 설정해 보세요."
+            },
+            {
               "url": "guide/service-worker-devops",
               "/title": "Service Worker in Production",
               "title": "서비스 워커 활용",
@@ -604,6 +694,27 @@
               "tooltip": "서비스 워커 캐시 설정하기"
             }
           ]
+        },
+        {
+          "url": "guide/web-worker",
+          "/title": "Web Workers",
+          "title": "웹 워커",
+          "/tooltip": "Using web workers for background processing.",
+          "tooltip": "백그라운드 작업에 웹 워커를 활용해 보세요."
+        },
+        {
+          "url": "guide/universal",
+          "/title": "Server-side Rendering",
+          "title": "서버 사이드 렌더링",
+          "/tooltip": "Render HTML server-side with Angular Universal.",
+          "tooltip": "Angular Universal을 사용해서 HTML을 서버에서 렌더링 해 보세요."
+        },
+        {
+          "url": "guide/prerendering",
+          "/title": "Prerendering",
+          "title": "사전 렌더링",
+          "/tooltip": "Prerender HTML server-side with Angular Universal.",
+          "tooltip": "Angular Universal을 사용하면 HTML을 서버에서 사전 렌더링 할 수 있습니다."
         }
       ]
     },
@@ -729,13 +840,6 @@
           "tooltip": "빌더를 활용하면 Angular CLI를 원하는 대로 커스터마이징할 수 있습니다."
         },
         {
-          "url": "guide/universal",
-          "/title": "Server-side Rendering",
-          "title": "서버사이드 렌더링",
-          "/tooltip": "Render HTML server-side with Angular Universal.",
-          "tooltip": "Angular Universal을 사용하면 서버사이드 렌더링을 적용할 수 있습니다."
-        },
-        {
           "url": "guide/language-service",
           "/title": "Language Service",
           "title": "언어 지원 서비스",
@@ -782,7 +886,7 @@
       "/title": "Tutorials",
       "title": "튜토리얼",
       "/tooltip": "End-to-end tutorials for learning Angular concepts and patterns.",
-      "tooltip": "튜토리얼을 진행하면서 Angular의 개념과 개발 패턴에 대해 알아보세요.",
+      "tooltip": "튜토리얼을 진행하면서 Angular의 개념과 개발 패턴을 알아보세요.",
       "children": [
         {
           "/title": "Tutorial: Tour of Heroes",
@@ -856,17 +960,10 @@
           "tooltip": "디렉티브와 Angular 템플릿 문법을 활용해서 템플릿 기반 폼을 구성해 보세요."
         },
         {
-          "url": "guide/web-worker",
-          "/title": "Web Workers",
-          "title": "웹 워커",
-          "/tooltip": "Using web workers for background processing.",
-          "tooltip": "웹 워커를 사용해서 백그라운드 연산을 처리해 보세요."
-        },
-        {
           "/title": "Angular Libraries",
           "title": "Angular 라이브러리",
           "/tooltip": "Extending Angular with shared libraries.",
-          "tooltip": "Angular를 라이브러리 형태로 확장해 보세요.",
+          "tooltip": "라이브러리로 Angular 생태계를 확장해 보세요.",
           "children": [
             {
               "url": "guide/libraries",
@@ -888,6 +985,13 @@
               "title": "라이브러리 만들기",
               "/tooltip": "Extend Angular by creating, publishing, and using your own libraries.",
               "tooltip": "라이브러리를 직접 개발하고 배포하는 방법에 대해 알아보세요."
+            },
+            {
+              "url": "guide/angular-package-format",
+              "/title": "Angular Package Format",
+              "title": "Angular Package Format",
+              "/tooltip": "Information about the Angular Package Format.",
+              "tooltip": "Angular Package Format에 대해 알아보세요."
             }
           ]
         }
@@ -921,33 +1025,16 @@
           "tooltip": "브라우저 지원사항과 폴리필에 대해 확인해 보세요."
         },
         {
-          "/title": "Updating to Version 12",
-          "title": "12 버전으로 업데이트하기",
-          "/tooltip": "Support for updating your application from version 11 to 12.",
-          "tooltip": "Angular 프레임워크를 11 버전에서 12 버전으로 업데이트하는 방법에 대해 안내합니다.",
-          "children": [
-            {
-              "url": "guide/updating-to-version-12",
-              "/title": "Overview",
-              "title": "개요",
-              "/tooltip": "Everything you need to know for updating your application from version 11 to 12.",
-              "tooltip": "Angular 프레임워크 11 버전에서 12 버전으로 업데이트하기 위해 어떤 것을 알아둬야 하는지 확인해 보세요."
-            },
-            {
-              "url": "guide/ivy-compatibility",
-              "/title": "Ivy Compatibility Guide",
-              "title": "Ivy 호환성 가이드",
-              "/tooltip": "Details to help you make sure your application is compatible with Ivy.",
-              "tooltip": "애플리케이션이 Ivy와 호환되는지 확인해 보세요."
-            },
-            {
-              "url": "guide/migration-legacy-message-id",
-              "/title": "Migration: Legacy Localization IDs",
-              "title": "마이그레이션: 구형 다국어 ID 형식",
-              "/tooltip": "Learn how to migrate legacy IDs for localization to new, more stable ones.",
-              "tooltip": "구형 다국어 ID 형식을 어떻게 마이그레이션할 수 있는지 알아봅시다."
-            }
-          ]
+          "url": "guide/browser-support",
+          "/title": "Browser Support",
+          "title": "브라우저 지원",
+          "/tooltip": "Browser support and polyfills guide.",
+          "tooltip": "브라우저 지원과 폴리필에 대해 설명합니다."
+        },
+        {
+          "url": "guide/update-to-latest-version",
+          "title": "Update to Version 13",
+          "tooltip": "Support to update your application to version 13"
         },
         {
           "url": "guide/deprecations",
@@ -957,16 +1044,10 @@
           "tooltip": "지원이 중단되는 Angular API와 기능에 대해 알아봅시다."
         },
         {
-          "url": "guide/ivy",
-          "title": "Angular Ivy",
-          "/tooltip": "About the Angular Ivy compilation and rendering pipeline.",
-          "tooltip": "Angular Ivy 컴파일과 렌더링 파이프라인에 대해 알아봅시다."
-        },
-        {
           "/title": "Upgrading from AngularJS",
           "title": "AngularJS 앱 업그레이드하기",
           "/tooltip": "Incrementally upgrade an AngularJS application to Angular.",
-          "tooltip": "AngularJS 앱을 Angular로 업그레이드 해보세요.",
+          "tooltip": "AngularJS 앱을 Angular로 점진적으로 업그레이드 해보세요.",
           "children": [
             {
               "url": "guide/upgrade",
@@ -1292,6 +1373,13 @@
               "url": "cli"
             },
             {
+              "/title": "Persistent Disk Cache",
+              "title": "디스크 캐시",
+              "/tooltip": "Details on the Angular CLI persistent disk cache.",
+              "tooltip": "Angular CLI가 디스크 캐시를 어떻게 활용하는지 확인해 보세요.",
+              "url": "cli/cache"
+            },
+            {
               "/title": "Usage Analytics",
               "title": "사용통계 분석",
               "/tooltip": "For administrators, guide to gathering usage analytics from your users.",
@@ -1395,6 +1483,17 @@
               "title": "문서 스타일 가이드",
               "/tooltip": "Style guide for documentation authors.",
               "tooltip": "문서를 작성할 때 참고할만한 권장사항에 대해 확인해 보세요."
+            },
+            {
+              "url": "guide/localizing-angular",
+              "title": "Angular doc localization guidelines",
+              "tooltip": "Learn about the guidelines for localizing Angular documentation."
+            },
+            {
+              "url": "guide/localized-documentation",
+              "title": "Localized documentation",
+              "tooltip": "A list of localized versions of the Angular documentation",
+              "hidden": true
             }
           ]
         }
@@ -1541,6 +1640,11 @@
         {
           "title": "한국어",
           "url": "https://angular.kr/"
+        },
+        {
+          "/title": "Complete language list",
+          "title": "번역이 완료된 언어 목록",
+          "url": "guide/localized-documentation"
         }
       ]
     }

@@ -46,7 +46,7 @@ To create a component, verify that you have met the following prerequisites:
 
 1. [Install the Angular CLI.](guide/setup-local#install-the-angular-cli)
 1. [Create an Angular workspace](guide/setup-local#create-a-workspace-and-initial-application) with initial application.
-   If you don't have a project, you can create one using `ng new <project-name>`, where `<project-name>` is the name of your Angular application.
+   If you don't have a project, create one using `ng new <project-name>`, where `<project-name>` is the name of your Angular application.
 -->
 컴포넌트를 만들려면 이런 환경이 준비되어야 합니다:
 
@@ -55,15 +55,16 @@ To create a component, verify that you have met the following prerequisites:
 아직 프로젝트가 없다면 `ng new <프로젝트-이름>` 명령을 실행해서 프로젝트를 생성할 수 있습니다.
 
 
+{@a creating-a-component}
 <!--
 ## Creating a component
 -->
 ## 컴포넌트 생성하기
 
 <!--
-The easiest way to create a component is with the Angular CLI. You can also create a component manually.
+The best way to create a component is with the Angular CLI. You can also create a component manually.
 -->
-컴포넌트를 생성하는 방법 중 가장 쉬운 방법은 Angular CLI를 사용하는 것입니다.
+컴포넌트를 생성하는 방법 중 가장 좋은 방법은 Angular CLI를 사용하는 것입니다.
 Angular CLI를 사용하지 않고 수동으로 만드는 방법도 있습니다.
 
 
@@ -124,7 +125,7 @@ Angular CLI로 컴포넌트를 생성하려면:
 ### 수동으로 컴포넌트 생성하기
 
 <!--
-Although the Angular CLI is the easiest way to create an Angular component, you can also create a component manually.
+Although the Angular CLI is the best way to create an Angular component, you can also create a component manually.
 This section describes how to create the core component file within an existing Angular project.
 
 To create a new component manually:
@@ -179,7 +180,7 @@ To create a new component manually:
         region="class">
    </code-example>
 -->
-컴포넌트는 Angular CLI로 생성하는 것이 가장 간단하지만, 수동으로 생성할 수도 있습니다.
+컴포넌트는 Angular CLI로 생성하는 것이 가장 좋지만, 수동으로 생성할 수도 있습니다.
 이번 섹션에서는 Angular 프로젝트에 컴포넌트를 수동으로 생성하는 방법에 대해 알아봅시다.
 
 컴포넌트는 이렇게 생성하면 됩니다:
@@ -271,7 +272,7 @@ Angular는 템플릿 HTML에 사용된 컴포넌트 셀렉터를 기준으로 �
 
 <!--
 A template is a block of HTML that tells Angular how to render the component in your application.
-You can define a template for your component in one of two ways: by referencing an external file, or directly within the component.
+Define a template for your component in one of two ways: by referencing an external file, or directly within the component.
 
 To define a template as an external file, add a `templateUrl` property to the `@Component` decorator.
 
@@ -287,7 +288,7 @@ To define a template within the component, add a `template` property to the `@Co
     region="template">
 </code-example>
 
-If you want your template to span multiple lines, you can use backticks (<code> ` </code>).
+If you want your template to span multiple lines, use backticks (<code> ` </code>).
 For example:
 
 <code-example
@@ -339,7 +340,7 @@ An Angular component requires a template defined using `template` or `templateUr
 ## 컴포넌트 스타일 지정하기
 
 <!--
-You can declare component styles uses for its template in one of two ways: by referencing an external file, or directly within the component.
+Declare component styles uses for its template in one of two ways: by referencing an external file, or directly within the component.
 
 To declare the styles for a component in a separate file, add a `styleUrls` property to the `@Component` decorator.
 
@@ -383,7 +384,7 @@ The `styles` property takes an array of strings that contain the CSS rule declar
 
 <!--
 * For an architectural overview of components, see [Introduction to components and templates](guide/architecture-components).
-* For additional options you can use when creating a component, see [Component](api/core/Component) in the API Reference.
+* For additional options to use when creating a component, see [Component](api/core/Component) in the API Reference.
 * For more information on styling components, see [Component styles](guide/component-styles).
 * For more information on templates, see [Template syntax](guide/template-syntax).
 -->

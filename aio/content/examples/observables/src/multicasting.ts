@@ -83,14 +83,14 @@ export function docRegionMulticastSequence(console: Console, runSequence: boolea
   function multicastSequenceSubscriber() {
     const seq = [1, 2, 3];
     // 구독중인 옵저버를 추적합니다.
-    const observers = [];
+    const observers: Observer<unknown>[] = [];
     // 한 번 생성된 데이터는 모든 구독자에게 멀티캐스팅되기 때문에
     // 타이머 id는 하나로 관리합니다.
-    let timeoutId;
+    let timeoutId: any;
 
     // 구독자 함수를 반환합니다.
     // 이 함수는 subscribe()가 실행될 때 함께 실행됩니다.
-    return observer => {
+    return (observer: Observer<unknown>) => {
       observers.push(observer);
       // 구독이 처음 실행되면 스트림을 발생하기 시작합니다.
       if (observers.length === 1) {
@@ -152,9 +152,12 @@ export function docRegionMulticastSequence(console: Console, runSequence: boolea
   }, 1500);
 
   // 로그:
+  // (1초 후): Emitting 1
   // (1초 후): 1st subscribe: 1
+  // (2초 후): Emitting 2
   // (2초 후): 1st subscribe: 2
   // (2초 후): 2nd subscribe: 2
+  // (3초 후): Emitting 3
   // (3초 후): 1st subscribe: 3
   // (3초 후): 1st sequence finished
   // (3초 후): 2nd subscribe: 3

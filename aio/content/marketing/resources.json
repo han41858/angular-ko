@@ -62,6 +62,11 @@
             "desc": "Angular 앱에 API 기반 CMS 서비스를 추가해 보세요.",
             "url": "https://github.com/ButterCMS/buttercms-angular-tutorial",
             "title": "API Based CMS with Butter"
+          },
+          "angular-community-meetup": {
+            "desc": "Come learn technical skills and network at this monthly, multi-series, multi-event, multi-timezone online meetup.",
+            "url": "https://angularcommunity.net",
+            "title": "Angular Community Meetup"
           }
         }
       },
@@ -69,25 +74,37 @@
         "/Podcasts": "",
         "order": 3,
         "resources": {
-          "sdfjkdkfj": {
+          "adventures-in-angular": {
             "/desc": "Adventures in Angular is a weekly podcast dedicated to the Angular platform and related technologies, tools, languages, and practices.",
             "desc": "Adventures in Angular는 Angular 플랫폼과 관련 기술, 툴, 언어, 활용방안에 대해 일주일에 한 번씩 방송하는 채널입니다.",
             "logo": "",
             "title": "Adventures in Angular",
             "url": "https://devchat.tv/adv-in-angular/"
           },
-          "sdlkfjsldfkj": {
+          "angular-show": {
+            "desc": "ng-conf's official all-Angular podcast.",
+            "logo": "",
+            "title": "The Angular Show",
+            "url": "https://www.spreaker.com/show/angular-show"
+          },
+          "angular-air": {
             "/desc": "Weekly video podcast hosted by Jeff Whelpley with all the latest and greatest happenings in the wild world of Angular.",
             "desc": "Jeff Whelpley는 일주일에 한 번씩 Angular 생태계에서 일어나는 다양한 소식을 전합니다.",
             "logo": "",
             "title": "AngularAir",
             "url": "https://angularair.com/"
           },
-          "sdlkfjsldfkz": {
+          "angular-rocks": {
+            "desc": "Podcast for those who want to know more about Angular 🚀",
+            "logo": "",
+            "title": "Angular Rocks",
+            "url": "https://angularrocks.com"
+          },
+          "happy-angular": {
             "/desc": "A weekly German podcast for Angular on the go",
             "desc": "독일에서 격주로 진행되는 팟캐스트입니다.",
             "logo": "",
-            "title": "Happy Angular Podcast",
+            "title": "Happy Angular",
             "url": "https://happy-angular.de/"
           },
           "ngruair": {
@@ -97,12 +114,12 @@
             "title": "NgRuAir",
             "url": "https://github.com/ngRuAir/ngruair"
           },
-          "the-deep-dive": {
-            "/desc": "The advanced web development podcast about Angular, RxJS, TypeScript and other technologies. English, audio only.",
-            "desc": "Angular, RxJS, TypeScript 등 다양한 기술을 다루는 팟캐스트입니다. 영어 음성으로만 제공됩니다.",
-            "logo": "https://i.imgur.com/mmE5Feq.jpg",
-            "title": "The Deep Dive",
-            "url": "https://thedeepdive.simplecast.com"
+          "ngxp": {
+            "/desc": "Weekly technical-adjacent podcast by Brooke Avery & Erik Slack. Don't just code in Angular, come enjoy the Angular Experience!",
+            "desc": "Brooke Avery & Erik Slack이 진행하는 기술 기반 팟캐스트입니다. Angular 코드만 다루는 것이 아니라 Angular 사용경험 전반을 다룹니다.",
+            "logo": "",
+            "title": "Angular Experience (NgXP)",
+            "url": "https://ngxp.show"
           }
         }
       }
@@ -225,7 +242,7 @@
             "desc": "VS Code는 웹 앱을 개발하거나 디버깅할 때 사용합니다. 가벼운데다 무료입니다.",
             "logo": "",
             "title": "Visual Studio Code",
-            "url": "http://code.visualstudio.com/"
+            "url": "https://code.visualstudio.com/"
           },
           "ab2": {
             "/desc": "Lightweight yet powerful IDE, perfectly equipped for complex client-side development and server-side development with Node.js",
@@ -417,7 +434,7 @@
             "desc": "전문가 수준의 Angular UI 컴포넌트를 TypeScript로 작성한 라이브러리입니다. 데이터 그리드, 트리뷰, 차트, 에디터, 드롭다운, 데이트 피커 등을 제공합니다. 이 라이브러리에서 제공하는 컴포넌트는 모두 AOT 컴파일을 지원하며 성능 향상을 위해 트리 셰이킹도 지원합니다. 다국어와 웹 접근성 기능도 제공합니다.",
             "logo": "",
             "title": "Kendo UI",
-            "url": "http://www.telerik.com/kendo-angular-ui/"
+            "url": "https://www.telerik.com/kendo-angular-ui"
           },
           "a5b": {
             "/desc": "High-performance UI controls with the most complete Angular support available. Wijmo’s controls are all written in TypeScript and have zero dependencies. FlexGrid control includes full declarative markup, including cell templates.",
@@ -462,8 +479,8 @@
             "url": "https://mdbootstrap.com/docs/angular/"
           },
           "mcc": {
-            "/desc": "Material components made by the community",
-            "desc": "개발자 커뮤니티에서 만든 Material 컴포넌트 모음입니다.",
+            "/desc": "Material components made by the community that includes Color Picker, Timer Picker, Speed Dial and Scrollspy",
+            "desc": "개발자 커뮤니티에서 만든 Material 컴포넌트 모음입니다. 컬러 피커, 날짜 피커, 스피드 다이얼과 Scrollspy를 제공합니다.",
             "logo": "",
             "title": "Material Community Components",
             "url": "https://github.com/tiaguinho/material-community-components"
@@ -716,6 +733,11 @@
             "desc": "Angular 앱에 헤드리스 CMS를 통합해 보세요. 블로그를 편하게 관리할 수 있습니다.",
             "url":"https://medium.com/orlyknop/how-to-integrate-buttercms-into-angular-2-app-a1baaa51402",
             "logo": ""
+          },
+          "angular-projects": {
+            "title": "Angular Projects - Second Edition",
+            "desc": "Build modern web apps by exploring Angular with 10 different projects and cutting-edge technologies",
+            "url": "https://www.packtpub.com/product/angular-projects-second-edition/9781800205260"
           }
         }
       },
@@ -862,6 +884,11 @@
             "logo": "",
             "title": "DotNetTricks",
             "url": "https://www.dotnettricks.com/courses/angular"
+          },
+          "architect-angular-nation": {
+            "desc": "Whether you're already an architect or you'd like to become one, come learn how to keep your apps clean and fast (especially at the enterprise level). Four weeks of training includes live office hours every week with an Angular GDE, diversity discounts, and scholarships available!",
+            "title": "Angular Architect Training",
+            "url": "https://www.angularnation.net/"
           }
         }
       },

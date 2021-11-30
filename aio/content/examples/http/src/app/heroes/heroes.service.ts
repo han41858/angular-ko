@@ -70,7 +70,7 @@ export class HeroesService {
 
   // #docregion deleteHero
   /** DELETE: DB에서 히어로를 삭제합니다. */
-  deleteHero(id: number): Observable<{}> {
+  deleteHero(id: number): Observable<unknown> {
     const url = `${this.heroesUrl}/${id}`; // DELETE api/heroes/42
     return this.http.delete(url, httpOptions)
       .pipe(

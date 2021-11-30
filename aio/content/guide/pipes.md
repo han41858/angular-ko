@@ -5,33 +5,33 @@
 
 <!--
 Use [pipes](guide/glossary#pipe "Definition of a pipe") to transform strings, currency amounts, dates, and other data for display.
-Pipes are simple functions you can use in [template expressions](/guide/glossary#template-expression "Definition of template expression") to accept an input value and return a transformed value. Pipes are useful because you can use them throughout your application, while only declaring each pipe once.
+Pipes are simple functions to use in [template expressions](/guide/glossary#template-expression "Definition of template expression") to accept an input value and return a transformed value. Pipes are useful because you can use them throughout your application, while only declaring each pipe once.
 For example, you would use a pipe to show a date as **April 15, 1988** rather than the raw string format.
 
 <div class="alert is-helpful">
 
-  For the sample application used in this topic, see the <live-example></live-example>.
+For the sample application used in this topic, see the <live-example></live-example>.
 
 </div>
 
 Angular provides built-in pipes for typical data transformations, including transformations for internationalization (i18n), which use locale information to format data.
 The following are commonly used built-in pipes for data formatting:
 
-* [`DatePipe`](api/common/DatePipe): Formats a date value according to locale rules.
-* [`UpperCasePipe`](api/common/UpperCasePipe): Transforms text to all upper case.
-* [`LowerCasePipe`](api/common/LowerCasePipe): Transforms text to all lower case.
-* [`CurrencyPipe`](api/common/CurrencyPipe): Transforms a number to a currency string, formatted according to locale rules.
-* [`DecimalPipe`](/api/common/DecimalPipe): Transforms a number into a string with a decimal point, formatted according to locale rules.
-* [`PercentPipe`](api/common/PercentPipe): Transforms a number to a percentage string, formatted according to locale rules.
+*   [`DatePipe`](api/common/DatePipe): Formats a date value according to locale rules.
+*   [`UpperCasePipe`](api/common/UpperCasePipe): Transforms text to all upper case.
+*   [`LowerCasePipe`](api/common/LowerCasePipe): Transforms text to all lower case.
+*   [`CurrencyPipe`](api/common/CurrencyPipe): Transforms a number to a currency string, formatted according to locale rules.
+*   [`DecimalPipe`](/api/common/DecimalPipe): Transforms a number into a string with a decimal point, formatted according to locale rules.
+*   [`PercentPipe`](api/common/PercentPipe): Transforms a number to a percentage string, formatted according to locale rules.
 
 <div class="alert is-helpful">
 
-* For a complete list of built-in pipes, see the [pipes API documentation](/api/common#pipes "Pipes API reference summary").
-* To learn more about using pipes for internationalization (i18n) efforts, see [formatting data based on locale](/guide/i18n#i18n-pipes "Formatting data based on locale").
+*   For a complete list of built-in pipes, see the [pipes API documentation](/api/common#pipes "Pipes API reference summary").
+*   To learn more about using pipes for internationalization (i18n) efforts, see [formatting data based on locale][AioGuideI18nCommonFormatDataLocale].
 
 </div>
 
-You can also create pipes to encapsulate custom transformations and use your custom pipes in template expressions.
+Create pipes to encapsulate custom transformations and use your custom pipes in template expressions.
 -->
 [파이프](guide/glossary#pipe "Definition of a pipe")를 사용하면 문자열, 통화, 일자와 같은 데이터를 원하는 형태로 화면에 표시할 수 있습니다.
 파이프는 [템플릿 표현식](/guide/glossary#template-expression "Definition of template expression")과 마찬가지로 어떤 값을 입력받아서 변환된 데이터를 반환하는 함수입니다.
@@ -47,17 +47,17 @@ You can also create pipes to encapsulate custom transformations and use your cus
 Angular는 일반적인 데이터 변환용으로 사용할 수 있는 기본 파이프를 몇가지 지원하며, 이 때 지역이나 국가에서 자주 사용하는 형식에 맞는 국제화(internationalization, i18n)도 지원합니다.
 자주 사용하는 기본 파이프는 이런 것들이 있습니다:
 
-* [`DatePipe`](api/common/DatePipe): 날짜 데이터를 원하는 형식으로 변환합니다.
-* [`UpperCasePipe`](api/common/UpperCasePipe): 문자열을 모두 대문자로 변환합니다.
-* [`LowerCasePipe`](api/common/LowerCasePipe): 문자열을 모두 소문자로 변환합니다.
-* [`CurrencyPipe`](api/common/CurrencyPipe): 숫자를 통화 단위로 변환합니다. 지역에 맞는 표시 형식도 적용할 수 있습니다.
-* [`DecimalPipe`](/api/common/DecimalPipe): 숫자가 표시되는 자릿수를 지정합니다. 지역에 맞는 표시 형식도 적용할 수 있습니다.
-* [`PercentPipe`](api/common/PercentPipe): 숫자를 백분율로 변환합니다. 지역에 맞는 표시 형식도 적용할 수 있습니다.
+*   [`DatePipe`](api/common/DatePipe): 날짜 데이터를 원하는 형식으로 변환합니다.
+*   [`UpperCasePipe`](api/common/UpperCasePipe): 문자열을 모두 대문자로 변환합니다.
+*   [`LowerCasePipe`](api/common/LowerCasePipe): 문자열을 모두 소문자로 변환합니다.
+*   [`CurrencyPipe`](api/common/CurrencyPipe): 숫자를 통화 단위로 변환합니다. 지역에 맞는 표시 형식도 적용할 수 있습니다.
+*   [`DecimalPipe`](/api/common/DecimalPipe): 숫자가 표시되는 자릿수를 지정합니다. 지역에 맞는 표시 형식도 적용할 수 있습니다.
+*   [`PercentPipe`](api/common/PercentPipe): 숫자를 백분율로 변환합니다. 지역에 맞는 표시 형식도 적용할 수 있습니다.
 
 <div class="alert is-helpful">
 
-* Angular가 제공하는 기본 파이프를 살펴보려면 [파이프 API 문서](/api/common#pipes "Pipes API reference summary")를 참고하세요.
-* 파이프에 국제화(internationalization, i18n)가 적용되는 과정을 자세하게 확인하려면 [지역에 맞게 데이터 변환하기](/guide/i18n#i18n-pipes "Formatting data based on locale") 문서를 참고하세요.
+*   Angular가 제공하는 기본 파이프를 살펴보려면 [파이프 API 문서](/api/common#pipes "Pipes API reference summary")를 참고하세요.
+*   파이프에 국제화(internationalization, i18n)가 적용되는 과정을 자세하게 확인하려면 [지역에 맞게 데이터 변환하기][AioGuideI18nCommonFormatDataLocale] 문서를 참고하세요.
 
 </div>
 
@@ -72,15 +72,15 @@ Angular는 일반적인 데이터 변환용으로 사용할 수 있는 기본 �
 <!--
 To use pipes you should have a basic understanding of the following:
 
-* [Typescript](guide/glossary#typescript "Definition of Typescript") and HTML5 programming
-* [Templates](guide/glossary#template "Definition of a template") in HTML with CSS styles
-* [Components](guide/glossary#component "Definition of a component")
+*   [Typescript](guide/glossary#typescript "Definition of Typescript") and HTML5 programming
+*   [Templates](guide/glossary#template "Definition of a template") in HTML with CSS styles
+*   [Components](guide/glossary#component "Definition of a component")
 -->
 파이프에 대해 이해하려면 다음 내용들을 먼저 이해하고 있는 것이 좋습니다:
 
-* [Typescript](guide/glossary#typescript "Definition of Typescript")와 HTML5 문법
-* [템플릿](guide/glossary#template "Definition of a template")에서 HTML과 CSS 스타일을 구성하는 방법
-* [컴포넌트](guide/glossary#component "Definition of a component")
+*   [Typescript](guide/glossary#typescript "Definition of Typescript")와 HTML5 문법
+*   [템플릿](guide/glossary#template "Definition of a template")에서 HTML과 CSS 스타일을 구성하는 방법
+*   [컴포넌트](guide/glossary#component "Definition of a component")
 
 
 <!--
@@ -92,19 +92,12 @@ To use pipes you should have a basic understanding of the following:
 To apply a pipe, use the pipe operator (`|`) within a template expression as shown in the following code example, along with the *name* of the pipe, which is `date` for the built-in [`DatePipe`](api/common/DatePipe).
 The tabs in the example show the following:
 
-* `app.component.html` uses `date` in a separate template to display a birthday.
-* `hero-birthday1.component.ts` uses the same pipe as part of an in-line template in a component that also sets the birthday value.
+*   `app.component.html` uses `date` in a separate template to display a birthday.
+*   `hero-birthday1.component.ts` uses the same pipe as part of an in-line template in a component that also sets the birthday value.
 
 <code-tabs>
-  <code-pane
-    header="src/app/app.component.html"
-    region="hero-birthday-template"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-birthday1.component.ts"
-    path="pipes/src/app/hero-birthday1.component.ts">
-  </code-pane>
+    <code-pane header="src/app/app.component.html" region="hero-birthday-template" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="src/app/hero-birthday1.component.ts" path="pipes/src/app/hero-birthday1.component.ts"></code-pane>
 </code-tabs>
 
 The component's `birthday` value flows through the pipe operator, `|` to the [`date`](api/common/DatePipe) function.
@@ -113,19 +106,12 @@ The component's `birthday` value flows through the pipe operator, `|` to the [`d
 파이프를 사용하려면 템플릿 표현식에 파이프 연산자(`|`)를 사용하고 파이프 *이름*을 지정하면 됩니다.
 `date` 프로퍼티에 [`DatePipe`](api/common/DatePipe)를 적용해 봅시다:
 
-* `app.component.html`에 있는 `birthday` 프로퍼티는 템플릿에 생일을 표시할 때 사용하는 프로퍼티입니다.
-* `hero-birthday1.component.ts` 파일에서도 인라인 템플릿에 날짜 파이프를 사용해서 생일이 표시되는 형식을 변환합니다.
+*   `app.component.html`에 있는 `birthday` 프로퍼티는 템플릿에 생일을 표시할 때 사용하는 프로퍼티입니다.
+*   `hero-birthday1.component.ts` 파일에서도 인라인 템플릿에 날짜 파이프를 사용해서 생일이 표시되는 형식을 변환합니다.
 
 <code-tabs>
-  <code-pane
-    header="src/app/app.component.html"
-    region="hero-birthday-template"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-birthday1.component.ts"
-    path="pipes/src/app/hero-birthday1.component.ts">
-  </code-pane>
+    <code-pane header="src/app/app.component.html" region="hero-birthday-template" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="src/app/hero-birthday1.component.ts" path="pipes/src/app/hero-birthday1.component.ts"></code-pane>
 </code-tabs>
 
 컴포넌트 `birthday` 값은 파이프 연산자 `|`를 거쳐 [DatePipe](api/common/DatePipe)로 전달됩니다.
@@ -140,12 +126,12 @@ The component's `birthday` value flows through the pipe operator, `|` to the [`d
 
 <!--
 Use optional parameters to fine-tune a pipe's output.
-For example, you can use the [`CurrencyPipe`](api/common/CurrencyPipe "API reference") with a country code such as EUR as a parameter.
+For example, use the [`CurrencyPipe`](api/common/CurrencyPipe "API reference") with a country code such as EUR as a parameter.
 The template expression `{{ amount | currency:'EUR' }}` transforms the `amount` to currency in euros.
 Follow the pipe name (`currency`) with a colon (`:`) and the parameter value (`'EUR'`).
 
 If the pipe accepts multiple parameters, separate the values with colons.
-For example, `{{ amount | currency:'EUR':'Euros '}}` adds the second parameter, the string literal `'Euros '`, to the output string. You can use any valid template expression as a parameter, such as a string literal or a component property.
+For example, `{{ amount | currency:'EUR':'Euros '}}` adds the second parameter, the string literal `'Euros '`, to the output string. Use any valid template expression as a parameter, such as a string literal or a component property.
 
 Some pipes require at least one parameter and allow more optional parameters, such as [`SlicePipe`](/api/common/SlicePipe "API reference for SlicePipe"). For example, `{{ slice:1:5 }}` creates a new array or string containing a subset of the elements starting with element `1` and ending with element `5`.
 -->
@@ -170,36 +156,18 @@ Some pipes require at least one parameter and allow more optional parameters, su
 <!--
 The tabs in the following example demonstrates toggling between two different formats (`'shortDate'` and `'fullDate'`):
 
-* The `app.component.html` template uses a format parameter for the [`DatePipe`](api/common/DatePipe) (named `date`) to show the date as **04/15/88**.
-* The `hero-birthday2.component.ts` component binds the pipe's format parameter to the component's `format` property in the `template` section, and adds a button for a click event bound to the component's `toggleFormat()` method.
-* The `hero-birthday2.component.ts` component's `toggleFormat()` method toggles the component's `format` property between a short form
+*   The `app.component.html` template uses a format parameter for the [`DatePipe`](api/common/DatePipe) (named `date`) to show the date as **04/15/88**.
+*   The `hero-birthday2.component.ts` component binds the pipe's format parameter to the component's `format` property in the `template` section, and adds a button for a click event bound to the component's `toggleFormat()` method.
+*   The `hero-birthday2.component.ts` component's `toggleFormat()` method toggles the component's `format` property between a short form
 (`'shortDate'`) and a longer form (`'fullDate'`).
 
 <code-tabs>
-  <code-pane
-    header="src/app/app.component.html"
-    region="format-birthday"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-birthday2.component.ts (template)"
-    region="template"
-    path="pipes/src/app/hero-birthday2.component.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-birthday2.component.ts (class)"
-    region="class"
-    path="pipes/src/app/hero-birthday2.component.ts">
-  </code-pane>
+    <code-pane header="src/app/app.component.html" region="format-birthday" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="src/app/hero-birthday2.component.ts (template)" region="template" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
+    <code-pane header="src/app/hero-birthday2.component.ts (class)" region="class" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
 </code-tabs>
 
-Clicking the **Toggle Format** button alternates the date format between **04/15/1988** and **Friday, April 15, 1988** as shown in Figure 1.
-
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/date-format-toggle-anim.gif' alt="Date Format Toggle">
-</div>
-
-**Figure 1.** Clicking the button toggles the date format
+Clicking the **Toggle Format** button alternates the date format between **04/15/1988** and **Friday, April 15, 1988**.
 
 <div class="alert is-helpful">
 
@@ -209,35 +177,18 @@ For `date` pipe format options, see [DatePipe](api/common/DatePipe "DatePipe API
 -->
 아래 예제에서 탭을 변경해보면 두 종류 형식(`'shortDate'`, `'fullDate'`)으로 날짜 형식을 지정한 것을 확인할 수 있습니다.
 
-* `app.component.html` 템플릿에는 **04/15/88**이라는 형식으로 표시하기 위해 [`DatePipe`](api/common/DatePipe)를 사용했습니다.
-* `hero-birthday2.componen.ts`에는 컴포넌트에 있는 `format` 프로퍼티를 사용해서 파이프의 날짜 형식을 지정합니다. 그리고 화면에서 버튼을 클릭하면 `toggleFormat()` 메소드가 실행되면서 날짜 형식을 변경합니다.
-* `hero-birthday2.component.ts`에 정의된 `toggleFormat()`는 컴포넌트 `format` 프로퍼티를 두 종류 날짜 형식(`'shortDate'`, `'fullDate'`)으로 변경합니다.
+*   `app.component.html` 템플릿에는 **04/15/88**이라는 형식으로 표시하기 위해 [`DatePipe`](api/common/DatePipe)를 사용했습니다.
+*   `hero-birthday2.componen.ts`에는 컴포넌트에 있는 `format` 프로퍼티를 사용해서 파이프의 날짜 형식을 지정합니다. 그리고 화면에서 버튼을 클릭하면 `toggleFormat()` 메소드가 실행되면서 날짜 형식을 변경합니다.
+*   `hero-birthday2.component.ts`에 정의된 `toggleFormat()`는 컴포넌트 `format` 프로퍼티를 두 종류 날짜 형식(`'shortDate'`, `'fullDate'`)으로 변경합니다.
 
 <code-tabs>
-  <code-pane
-    header="src/app/app.component.html"
-    region="format-birthday"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-birthday2.component.ts (템플릿)"
-    region="template"
-    path="pipes/src/app/hero-birthday2.component.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-birthday2.component.ts (클래스)"
-    region="class"
-    path="pipes/src/app/hero-birthday2.component.ts">
-  </code-pane>
+    <code-pane header="src/app/app.component.html" region="format-birthday" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="src/app/hero-birthday2.component.ts (template)" region="template" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
+    <code-pane header="src/app/hero-birthday2.component.ts (class)" region="class" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
 </code-tabs>
 
 이제 화면에서 **Toggle Format** 버튼을 클릭하면 날짜 형식이 **04/15/1988**이라고 표시되거나 **Friday, April 15, 1988**라고 표시되는 것을 확인할 수 있습니다.
 
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/date-format-toggle-anim.gif' alt="Date Format Toggle">
-</div>
-
-**그림 1.** 날짜 형식을 변경하는 모습
 
 <div class="alert is-helpful">
 
@@ -252,23 +203,15 @@ For `date` pipe format options, see [DatePipe](api/common/DatePipe "DatePipe API
 ### 예제: 파이프 체이닝
 
 <!--
-You can chain pipes so that the output of one pipe becomes the input to the next.
+Chain pipes so that the output of one pipe becomes the input to the next.
 
 In the following example, chained pipes first apply a format to a date value, then convert the formatted date to uppercase characters.
 The first tab for the `src/app/app.component.html` template chains `DatePipe` and `UpperCasePipe` to display the birthday as **APR 15, 1988**.
 The second tab for the `src/app/app.component.html` template passes the `fullDate` parameter to `date` before chaining to `uppercase`, which produces **FRIDAY, APRIL 15, 1988**.
 
 <code-tabs>
-  <code-pane
-    header="src/app/app.component.html (1)"
-    region="chained-birthday"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/app.component.html (2)"
-    region="chained-parameter-birthday"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
+    <code-pane header="src/app/app.component.html (1)" region="chained-birthday" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="src/app/app.component.html (2)" region="chained-parameter-birthday" path="pipes/src/app/app.component.html"></code-pane>
 </code-tabs>
 -->
 파이프는 하나를 통과한 결과를 다른 파이프로 전달하는 방식으로 체이닝할 수 있습니다.
@@ -278,16 +221,8 @@ The second tab for the `src/app/app.component.html` template passes the `fullDat
 그리고 두번째 탭은 `src/app/app.component.html` 템플릿 파일에서 `date` 프로퍼티를 `fullDate` 형식으로 변환한 후에 `uppercase` 파이프를 한 번 더 사용해서 **FRIDAY, APRIL 15, 1988**이라고 표시하는 코드입니다.
 
 <code-tabs>
-  <code-pane
-    header="src/app/app.component.html (1)"
-    region="chained-birthday"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/app.component.html (2)"
-    region="chained-parameter-birthday"
-    path="pipes/src/app/app.component.html">
-  </code-pane>
+    <code-pane header="src/app/app.component.html (1)" region="chained-birthday" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="src/app/app.component.html (2)" region="chained-parameter-birthday" path="pipes/src/app/app.component.html"></code-pane>
 </code-tabs>
 
 
@@ -300,7 +235,7 @@ The second tab for the `src/app/app.component.html` template passes the `fullDat
 
 <!--
 Create custom pipes to encapsulate transformations that are not provided with the built-in pipes.
-You can then use your custom pipe in template expressions, the same way you use built-in pipes—to transform input values to output values for display.
+Then, use your custom pipe in template expressions, the same way you use built-in pipes—to transform input values to output values for display.
 -->
 Angular 기본 파이프로 원하는 변환작업을 수행할 수 없다면 커스텀 파이프를 만들어서 활용하면 됩니다.
 커스텀 파이프는 기본 파이프와 같은 방식으로 템플릿 표현식에 사용할 수 있으며, 데이터를 화면에 원하는 형태로 표시하기 위해 어떤 값을 받아서 가공하고 반환한다는 점도 같습니다.
@@ -321,8 +256,8 @@ Use `name` in template expressions as you would for a built-in pipe.
 
 <div class="alert is-important">
 
-* Include your pipe in the `declarations` field of the `NgModule` metadata in order for it to be available to a template. See the `app.module.ts` file in the example application (<live-example></live-example>). For details, see [NgModules](guide/ngmodules "NgModules introduction").
-* Register your custom pipes. The [Angular CLI](cli "CLI Overview and Command Reference") [`ng generate pipe`](cli/generate#pipe "ng generate pipe in the CLI Command Reference") command registers the pipe automatically.
+*   Include your pipe in the `declarations` field of the `NgModule` metadata in order for it to be available to a template. See the `app.module.ts` file in the example application (<live-example></live-example>). For details, see [NgModules](guide/ngmodules "NgModules introduction").
+*   Register your custom pipes. The [Angular CLI](cli "CLI Overview and Command Reference") [`ng generate pipe`](cli/generate#pipe "ng generate pipe in the CLI Command Reference") command registers the pipe automatically.
 
 </div>
 -->
@@ -335,9 +270,8 @@ Use `name` in template expressions as you would for a built-in pipe.
 
 <div class="alert is-important">
 
-* 클래스에 파이프 데코레이터를 붙여서 파이프로 선언한 후에는 `NgModule` 메타데이터의 `declarations` 필드에 이 파이프를 등록해야 템플릿에 사용할 수 있습니다. 예제 앱(<live-example></live-example>)의 `app.module.ts` 파일에서 이 내용을 확인할 수 있으며 자세한 내용은 [NgModules](guide/ngmodules "NgModules introduction") 문서를 참고하세요.
-
-* [Angular CLI](cli "CLI Overview and Command Reference")로 [`ng generate pipe`](cli/generate#pipe "ng generate pipe in the CLI Command Reference") 명령을 실행하면 파이프가 자동으로 등록됩니다.
+*   클래스에 파이프 데코레이터를 붙여서 파이프로 선언한 후에는 `NgModule` 메타데이터의 `declarations` 필드에 이 파이프를 등록해야 템플릿에 사용할 수 있습니다. 예제 앱(<live-example></live-example>)의 `app.module.ts` 파일에서 이 내용을 확인할 수 있으며 자세한 내용은 [NgModules](guide/ngmodules "NgModules introduction") 문서를 참고하세요.
+*   [Angular CLI](cli "CLI Overview and Command Reference")로 [`ng generate pipe`](cli/generate#pipe "ng generate pipe in the CLI Command Reference") 명령을 실행하면 파이프가 자동으로 등록됩니다.
 
 </div>
 
@@ -363,34 +297,30 @@ Angular invokes the `transform` method with the value of a binding as the first 
 ### 예제: 지수 변환하기
 
 <!--
-In a game, you may want to implement a transformation that raises a value exponentially to increase a hero's power.
+In a game, you might want to implement a transformation that raises a value exponentially to increase a hero's power.
 For example, if the hero's score is 2, boosting the hero's power exponentially by 10 produces a score of 1024.
-You can use a custom pipe for this transformation.
+Use a custom pipe for this transformation.
 
 The following code example shows two component definitions:
 
-* The `exponential-strength.pipe.ts` component defines a custom pipe named `exponentialStrength` with the `transform` method that performs the transformation.
-It defines an argument to the `transform` method (`exponent`) for a parameter passed to the pipe.
-
-* The `power-booster.component.ts` component demonstrates how to use the pipe, specifying a value (`2`) and the exponent parameter (`10`).
-Figure 2 shows the output.
+*   The `exponential-strength.pipe.ts` component defines a custom pipe named `exponentialStrength` with the `transform` method that performs the transformation.
+    It defines an argument to the `transform` method (`exponent`) for a parameter passed to the pipe.
+*   The `power-booster.component.ts` component demonstrates how to use the pipe, specifying a value (`2`) and the exponent parameter (`10`).
 
 <code-tabs>
-  <code-pane
-    header="src/app/exponential-strength.pipe.ts"
-    path="pipes/src/app/exponential-strength.pipe.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/power-booster.component.ts"
-    path="pipes/src/app/power-booster.component.ts">
-  </code-pane>
+    <code-pane header="src/app/exponential-strength.pipe.ts" path="pipes/src/app/exponential-strength.pipe.ts"></code-pane>
+    <code-pane header="src/app/power-booster.component.ts" path="pipes/src/app/power-booster.component.ts"></code-pane>
 </code-tabs>
 
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/power-booster.png' alt="Power Booster">
-</div>
+The browser displays the following:
 
-**Figure 2.** Output from the `exponentialStrength` pipe
+<code-example language="none">
+
+Power Booster
+
+Superpower boost: 1024
+
+</code-example>
 
 <div class="alert is-helpful">
 
@@ -404,28 +334,25 @@ To examine the behavior the `exponentialStrength` pipe in the <live-example></li
 
 아래 두 파일의 내용을 확인해 보세요:
 
-* `exponential-strength.pipe.ts`에는  `exponentialStrength`라는 이름으로 커스텀 파이프가 정의되어 있으며, 변환 로직은 이 파이프 클래스의 `transform()` 메소드에 구현되어 있습니다.
+*   `exponential-strength.pipe.ts`에는  `exponentialStrength`라는 이름으로 커스텀 파이프가 정의되어 있으며, 변환 로직은 이 파이프 클래스의 `transform()` 메소드에 구현되어 있습니다.
 
-* 이 커스텀 파이프는 `power-booster.component.ts` 파일 템플릿에서 사용합니다. 이 때 `2` 값을 `10` 제곱하도록 파이프 인자를 지정했습니다. 이렇게 지정한 인자는 커스텀 파이프의 `transform()` 메소드로 전달됩니다.
+*   이 커스텀 파이프는 `power-booster.component.ts` 파일 템플릿에서 사용합니다. 이 때 `2` 값을 `10` 제곱하도록 파이프 인자를 지정했습니다. 이렇게 지정한 인자는 커스텀 파이프의 `transform()` 메소드로 전달됩니다.
 
-어떻게 처리되는지 그림 2에서 확인해 보세요.
+어떻게 처리되는지 확인해 보세요.
 
 <code-tabs>
-  <code-pane
-    header="src/app/exponential-strength.pipe.ts"
-    path="pipes/src/app/exponential-strength.pipe.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/power-booster.component.ts"
-    path="pipes/src/app/power-booster.component.ts">
-  </code-pane>
+    <code-pane header="src/app/exponential-strength.pipe.ts" path="pipes/src/app/exponential-strength.pipe.ts"></code-pane>
+    <code-pane header="src/app/power-booster.component.ts" path="pipes/src/app/power-booster.component.ts"></code-pane>
 </code-tabs>
 
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/power-booster.png' alt="Power Booster">
-</div>
+<code-example language="none">
 
-**그림 2.** `exponentialStrength` 파이프 실행 결과
+Power Booster
+
+Superpower boost: 1024
+
+</code-example>
+
 
 <div class="alert is-helpful">
 
@@ -447,17 +374,9 @@ If the data is a primitive input value, such as `String` or `Number`, or an obje
 
 For example, you could change the previous custom pipe example to use two-way data binding with `ngModel` to input the amount and boost factor, as shown in the following code example.
 
-<code-example path="pipes/src/app/power-boost-calculator.component.ts" header="src/app/power-boost-calculator.component.ts">
+<code-example path="pipes/src/app/power-boost-calculator.component.ts" header="src/app/power-boost-calculator.component.ts"></code-example>
 
-</code-example>
-
-The `exponentialStrength` pipe executes every time the user changes the "normal power" value or the "boost factor", as shown in Figure 3.
-
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/power-boost-calculator-anim.gif' alt="Power Boost Calculator">
-</div>
-
-**Figure 3.** Changing the amount and boost factor for the `exponentialStrength` pipe
+The `exponentialStrength` pipe executes every time the user changes the "normal power" value or the "boost factor".
 
 Angular detects each change and immediately runs the pipe.
 This is fine for primitive input values.
@@ -468,17 +387,9 @@ However, if you change something *inside* a composite object (such as the month 
 
 그래서 이전 섹션에서 구현했던 커스텀 파이프에 `ngModel`로 양방향 바인딩을 연결하면 다음과 같이 구현할 수 있습니다.
 
-<code-example path="pipes/src/app/power-boost-calculator.component.ts" header="src/app/power-boost-calculator.component.ts">
+<code-example path="pipes/src/app/power-boost-calculator.component.ts" header="src/app/power-boost-calculator.component.ts"></code-example>
 
-</code-example>
-
-이제 `exponentialStrength` 파이프는 그림 3처럼 사용자가 "normal power" 값이나 "boost factor" 값을 변경할 때마다 실행되는 것을 확인할 수 있습니다.
-
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/power-boost-calculator-anim.gif' alt="Power Boost Calculator">
-</div>
-
-**그림 3.** 파이프 인자 값을 변경할 때 `exponentialStrength` 파이프가 동작하는 모습
+이제 `exponentialStrength` 파이프는 사용자가 "normal power" 값이나 "boost factor" 값을 변경할 때마다 실행되는 것을 확인할 수 있습니다.
 
 Angular는 인자값이 변경되거나 참조 객체가 변경되는 것을 감지할 때마다 파이프 함수를 다시 실행합니다.
 인자가 기본 자료형인 경우에는 크게 문제되지 않습니다.
@@ -496,20 +407,12 @@ Angular looks for changes to data-bound values in a [change detection](guide/glo
 The following example, which doesn't use a pipe, demonstrates how Angular uses its default change detection strategy to monitor and update its display of every hero in the `heroes` array.
 The example tabs show the following:
 
-* In the `flying-heroes.component.html (v1)` template, the `*ngFor` repeater displays the hero names.
-* Its companion component class `flying-heroes.component.ts (v1)` provides heroes, adds heroes into the array, and resets the array.
+*   In the `flying-heroes.component.html (v1)` template, the `*ngFor` repeater displays the hero names.
+*   Its companion component class `flying-heroes.component.ts (v1)` provides heroes, adds heroes into the array, and resets the array.
 
 <code-tabs>
-  <code-pane
-    header="src/app/flying-heroes.component.html (v1)"
-    region="template-1"
-    path="pipes/src/app/flying-heroes.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/flying-heroes.component.ts (v1)"
-    region="v1"
-    path="pipes/src/app/flying-heroes.component.ts">
-  </code-pane>
+    <code-pane header="src/app/flying-heroes.component.html (v1)" region="template-1" path="pipes/src/app/flying-heroes.component.html"></code-pane>
+    <code-pane header="src/app/flying-heroes.component.ts (v1)" region="v1" path="pipes/src/app/flying-heroes.component.ts"></code-pane>
 </code-tabs>
 
 Angular updates the display every time the user adds a hero.
@@ -523,20 +426,12 @@ Angular는 키입력, 마우스 이동, 타이머 만료, 서버 응답과 같�
 아래 예제는 파이프를 사용하지 않았지만 Angular의 기본 변화 감지 로직이 어떻게 동작하는지 확인할 수 있는 예제 코드입니다.
 이런 내용을 확인해 보세요:
 
-* `flying-heroes.component.html (v1)` 템플릿에는 `heroes` 배열을 순회하기 위해 `*ngFor`를 사용했습니다.
-* 컴포넌트 클래스 파일 `flying-heroes.component.ts (v1)`에는 템플릿에 사용할 `heroes` 배열이 선언되어 있으며, 이 배열에 히어로를 추가하거나 배열을 초기화하는 메서드도 정의되어 있습니다.
+*   `flying-heroes.component.html (v1)` 템플릿에는 `heroes` 배열을 순회하기 위해 `*ngFor`를 사용했습니다.
+*   컴포넌트 클래스 파일 `flying-heroes.component.ts (v1)`에는 템플릿에 사용할 `heroes` 배열이 선언되어 있으며, 이 배열에 히어로를 추가하거나 배열을 초기화하는 메서드도 정의되어 있습니다.
 
 <code-tabs>
-  <code-pane
-    header="src/app/flying-heroes.component.html (v1)"
-    region="template-1"
-    path="pipes/src/app/flying-heroes.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/flying-heroes.component.ts (v1)"
-    region="v1"
-    path="pipes/src/app/flying-heroes.component.ts">
-  </code-pane>
+    <code-pane header="src/app/flying-heroes.component.html (v1)" region="template-1" path="pipes/src/app/flying-heroes.component.html"></code-pane>
+    <code-pane header="src/app/flying-heroes.component.ts (v1)" region="v1" path="pipes/src/app/flying-heroes.component.ts"></code-pane>
 </code-tabs>
 
 이제 사용자가 히어로를 추가하면 그 때마다 Angular가 화면을 갱신합니다.
@@ -567,25 +462,17 @@ In other words, given the same input, a pure function should always return the s
 With a pure pipe, Angular ignores changes within composite objects, such as a newly added element of an existing array, because checking a primitive value or object reference is much faster than performing a deep check for differences within objects.
 Angular can quickly determine if it can skip executing the pipe and updating the view.
 
-However, a pure pipe with an array as input may not work the way you want.
+However, a pure pipe with an array as input might not work the way you want.
 To demonstrate this issue, change the previous example to filter the list of heroes to just those heroes who can fly.
 Use the `FlyingHeroesPipe` in the `*ngFor` repeater as shown in the following code.
 The tabs for the example show the following:
 
-* The template (`flying-heroes.component.html (flyers)`) with the new pipe.
-* The `FlyingHeroesPipe` custom pipe implementation (`flying-heroes.pipe.ts`).
+*   The template (`flying-heroes.component.html (flyers)`) with the new pipe.
+*   The `FlyingHeroesPipe` custom pipe implementation (`flying-heroes.pipe.ts`).
 
 <code-tabs>
-  <code-pane
-    header="src/app/flying-heroes.component.html (flyers)"
-    region="template-flying-heroes"
-    path="pipes/src/app/flying-heroes.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/flying-heroes.pipe.ts"
-    region="pure"
-    path="pipes/src/app/flying-heroes.pipe.ts">
-  </code-pane>
+    <code-pane header="src/app/flying-heroes.component.html (flyers)" region="template-flying-heroes" path="pipes/src/app/flying-heroes.component.html"></code-pane>
+    <code-pane header="src/app/flying-heroes.pipe.ts" region="pure" path="pipes/src/app/flying-heroes.pipe.ts"></code-pane>
 </code-tabs>
 
 The application now shows unexpected behavior: When the user adds flying heroes, none of them appear under "Heroes who fly."
@@ -596,24 +483,18 @@ This happens because the code that adds a hero does so by pushing it onto the `h
 The change detector ignores changes to elements of an array, so the pipe doesn't run.
 
 The reason Angular ignores the changed array element is that the *reference* to the array hasn't changed.
-Since the array is the same, Angular does not update the display.
+Because the array is the same, Angular does not update the display.
 
 One way to get the behavior you want is to change the object reference itself.
-You can replace the array with a new array containing the newly changed elements, and then input the new array to the pipe.
-In the above example, you can create an array with the new hero appended, and assign that to `heroes`. Angular detects the change in the array reference and executes the pipe.
+Replace the array with a new array containing the newly changed elements, and then input the new array to the pipe.
+In the preceding example, create an array with the new hero appended, and assign that to `heroes`. Angular detects the change in the array reference and executes the pipe.
 
 To summarize, if you mutate the input array, the pure pipe doesn't execute.
-If you *replace* the input array, the pipe executes and the display is updated, as shown in Figure 4.
+If you *replace* the input array, the pipe executes and the display is updated.
 
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/flying-heroes-anim.gif' alt="Flying Heroes">
-</div>
+The preceding example demonstrates changing a component's code to accommodate a pipe.
 
-**Figure 4.** The `flyingHeroes` pipe filtering the display to flying heroes
-
-The above example demonstrates changing a component's code to accommodate a pipe.
-
-To keep your component simpler and independent of HTML templates that use pipes, you can, as an alternative, use an *impure* pipe to detect changes within composite objects such as arrays, as described in the next section.
+To keep your component independent of HTML templates that use pipes, you can, as an alternative, use an *impure* pipe to detect changes within composite objects such as arrays, as described in the next section.
 -->
 기본적으로 파이프는 *순수한(pure)* 상태로 정의되며 Angular는 이 파이프로 입력받는 값이 *정말 변경된 것(pure change)*을 감지할 때만 파이프 로직을 실행합니다.
 이 때 값이 정말 변경되었다는 것은 `String`, `Number`, `Boolean`, `Symbol`과 같은 기본 자료형의 값이 변경되었거나, `Date`, `Array`, `Function`, `Object`와 같은 객체 참조가 변경된 것을 의미합니다.
@@ -631,20 +512,12 @@ To keep your component simpler and independent of HTML templates that use pipes,
 이 현상을 확인하기 위해 이전에 만들었던 예제 코드를 살짝 바꿔서, 히어로 중에 날 수 있는 히어로만 필터링하는 파이프를 만들어 봅시다.
 `*ngFor`로 `heroes` 배열을 순회할 때 `FlyingHeroesPipe`를 사용해서 다음과 같이 구현합니다:
 
-* 새로 만드는 파이프는 템플릿 파일 `flying-heroes.component.html`에 사용합니다.
-* 커스텀 파이프 `FlyingHeroesPipe`는 `flying-heroes.pipe.ts` 파일에 구현합니다.
- 
+*   새로 만드는 파이프는 템플릿 파일 `flying-heroes.component.html`에 사용합니다.
+*   커스텀 파이프 `FlyingHeroesPipe`는 `flying-heroes.pipe.ts` 파일에 구현합니다.
+
 <code-tabs>
-  <code-pane
-    header="src/app/flying-heroes.component.html (비행할 수 있는 히어로)"
-    region="template-flying-heroes"
-    path="pipes/src/app/flying-heroes.component.html">
-  </code-pane>
-  <code-pane
-    header="src/app/flying-heroes.pipe.ts"
-    region="pure"
-    path="pipes/src/app/flying-heroes.pipe.ts">
-  </code-pane>
+    <code-pane header="src/app/flying-heroes.component.html (flyers)" region="template-flying-heroes" path="pipes/src/app/flying-heroes.component.html"></code-pane>
+    <code-pane header="src/app/flying-heroes.pipe.ts" region="pure" path="pipes/src/app/flying-heroes.pipe.ts"></code-pane>
 </code-tabs>
 
 이렇게 구현하면 앱이 이상하게 동작합니다.
@@ -663,19 +536,11 @@ Angular 변화 감지기(change detector)는 배열의 항목이 변경된 것�
 
 정리하자면, 순수한 파이프에 입력 배열을 인자로 전달하면 이 배열 참조가 변경되지 않는 이상 파이프가 동작하지 않습니다.
 이 경우에는 인자로 전달되는 배열 자체를 교체해야 합니다.
-그림 4에서 어떻게 동작하는지 확인해 보세요.
-
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/flying-heroes-anim.gif' alt="Flying Heroes">
-</div>
-
-**그림 4.** `flyingHeroes` 파이프가 동작하는 모습
 
 이 예제를 통해 파이프와 컴포넌트가 어떻게 연동되는지 알아봤습니다.
 
 하지만 컴포넌트를 간단하게 유지하면서 HTML 템플릿과 분리된 상태를 유지하려는 용도로 파이프를 사용한다면, *순수하지 않은(impure)* 파이프를 사용해서 변화를 감지하는 방식이 더 나을 수 있습니다.
 이 내용은 다음 섹션에서 살펴봅시다.
-
 
 {@a impure-flying-heroes}
 
@@ -702,16 +567,8 @@ The following code shows the complete implementation of `FlyingHeroesImpurePipe`
 The example shows that you don't have to change anything else—the only difference is setting the `pure` flag as `false` in the pipe metadata.
 
 <code-tabs>
-  <code-pane
-    header="src/app/flying-heroes.pipe.ts (FlyingHeroesImpurePipe)"
-    region="impure"
-    path="pipes/src/app/flying-heroes.pipe.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/flying-heroes.pipe.ts (FlyingHeroesPipe)"
-    region="pure"
-    path="pipes/src/app/flying-heroes.pipe.ts">
-  </code-pane>
+    <code-pane header="src/app/flying-heroes.pipe.ts (FlyingHeroesImpurePipe)" region="impure" path="pipes/src/app/flying-heroes.pipe.ts"></code-pane>
+    <code-pane header="src/app/flying-heroes.pipe.ts (FlyingHeroesPipe)" region="pure" path="pipes/src/app/flying-heroes.pipe.ts"></code-pane>
 </code-tabs>
 
 `FlyingHeroesImpurePipe` is a good candidate for an impure pipe because the `transform` function is trivial and fast:
@@ -719,13 +576,13 @@ The example shows that you don't have to change anything else—the only differe
 <code-example path="pipes/src/app/flying-heroes.pipe.ts" header="src/app/flying-heroes.pipe.ts (filter)" region="filter"></code-example>
 
 You can derive a `FlyingHeroesImpureComponent` from `FlyingHeroesComponent`.
-As shown in the code below, only the pipe in the template changes.
+As shown in the following code, only the pipe in the template changes.
 
 <code-example path="pipes/src/app/flying-heroes-impure.component.html" header="src/app/flying-heroes-impure.component.html (excerpt)" region="template-flying-heroes"></code-example>
 
 <div class="alert is-helpful">
 
-  To confirm that the display updates as the user adds heroes, see the <live-example></live-example>.
+To confirm that the display updates as the user adds heroes, see the <live-example></live-example>.
 
 </div>
 -->
@@ -747,16 +604,8 @@ As shown in the code below, only the pipe in the template changes.
 따라서 파이프가 동작하는 로직은 모두 똑같고 파이프 메타데이터의 `pure` 플래그에 `false` 값을 지정한 것만 다릅니다.
 
 <code-tabs>
-  <code-pane
-    header="src/app/flying-heroes.pipe.ts (FlyingHeroesImpurePipe)"
-    region="impure"
-    path="pipes/src/app/flying-heroes.pipe.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/flying-heroes.pipe.ts (FlyingHeroesPipe)"
-    region="pure"
-    path="pipes/src/app/flying-heroes.pipe.ts">
-  </code-pane>
+    <code-pane header="src/app/flying-heroes.pipe.ts (FlyingHeroesImpurePipe)" region="impure" path="pipes/src/app/flying-heroes.pipe.ts"></code-pane>
+    <code-pane header="src/app/flying-heroes.pipe.ts (FlyingHeroesPipe)" region="pure" path="pipes/src/app/flying-heroes.pipe.ts"></code-pane>
 </code-tabs>
 
 이 정도라면 `FlyingHeroesImpurePipe`에 있는 `transform()` 함수가 간단하고 실행도 빨리 끝나기 때문에 사용하기에 문제가 없습니다:
@@ -799,9 +648,7 @@ Without this pipe, your component code would have to subscribe to the observable
 The following code example binds an observable of message strings
 (`message$`) to a view with the `async` pipe.
 
-<code-example path="pipes/src/app/hero-async-message.component.ts" header="src/app/hero-async-message.component.ts">
-
-</code-example>
+<code-example path="pipes/src/app/hero-async-message.component.ts" header="src/app/hero-async-message.component.ts"></code-example>
 -->
 [옵저버블](/guide/glossary#observable "Definition of observable")은 애플리케이션 안에서 메시지를 전달하는 용도로 활용할 수 있습니다.
 그리고 옵저버블은 동기/비동기 방식을 선택해서 실행할 수 있으며 데이터를 여러번 전달할 수도 있기 때문에 이벤트를 처리할 때 자주 사용됩니다.
@@ -818,10 +665,7 @@ Angular가 제공하는 [`AsyncPipe`](/api/common/AsyncPipe "API description of 
 
 아래 예제 코드는 옵저버블 메시지 스트림 `message$`로 데이터를 전달받기 위해 `async` 파이프를 사용하는 예제 코드입니다.
 
-<code-example path="pipes/src/app/hero-async-message.component.ts" header="src/app/hero-async-message.component.ts">
-
-</code-example>
-
+<code-example path="pipes/src/app/hero-async-message.component.ts" header="src/app/hero-async-message.component.ts"></code-example>
 
 {@a no-filter-pipe}
 
@@ -834,39 +678,40 @@ Angular가 제공하는 [`AsyncPipe`](/api/common/AsyncPipe "API description of 
 To [communicate with backend services using HTTP](/guide/http "Communicating with backend services using HTTP"), the `HttpClient` service uses observables and offers the `HttpClient.get()` method to fetch data from a server.
 The asynchronous method sends an HTTP request, and returns an observable that emits the requested data for the response.
 
-As shown in the previous section, you can use the impure `AsyncPipe` to accept an observable as input and subscribe to the input automatically.
+As shown in the previous section, use the impure `AsyncPipe` to accept an observable as input and subscribe to the input automatically.
 You can also create an impure pipe to make and cache an HTTP request.
 
 Impure pipes are called whenever change detection runs for a component, which could be as often as every few milliseconds.
 To avoid performance problems, call the server only when the requested URL changes, as shown in the following example, and use the pipe to cache the server response.
 The tabs show the following:
 
-* The `fetch` pipe (`fetch-json.pipe.ts`).
-* A harness component (`hero-list.component.ts`) for demonstrating the request, using a template that defines two bindings to the pipe requesting the heroes from the `heroes.json` file. The second binding chains the `fetch` pipe with the built-in `JsonPipe` to display the same hero data in JSON format.
+*   The `fetch` pipe (`fetch-json.pipe.ts`).
+*   A harness component (`hero-list.component.ts`) for demonstrating the request, using a template that defines two bindings to the pipe requesting the heroes from the `heroes.json` file. The second binding chains the `fetch` pipe with the built-in `JsonPipe` to display the same hero data in JSON format.
 
 <code-tabs>
-  <code-pane
-    header="src/app/fetch-json.pipe.ts"
-    path="pipes/src/app/fetch-json.pipe.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-list.component.ts"
-    path="pipes/src/app/hero-list.component.ts">
-  </code-pane>
+    <code-pane header="src/app/fetch-json.pipe.ts" path="pipes/src/app/fetch-json.pipe.ts"></code-pane>
+    <code-pane header="src/app/hero-list.component.ts" path="pipes/src/app/hero-list.component.ts"></code-pane>
 </code-tabs>
 
-In the above example, a breakpoint on the pipe's request for data shows the following:
+In the preceding example, a breakpoint on the pipe's request for data shows the following:
 
-* Each binding gets its own pipe instance.
-* Each pipe instance caches its own URL and data and calls the server only once.
+*   Each binding gets its own pipe instance.
+*   Each pipe instance caches its own URL and data and calls the server only once.
 
-The `fetch` and `fetch-json` pipes display the heroes as shown in Figure 5.
+The `fetch` and `fetch-json` pipes display the heroes in the browser as follows:
 
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/hero-list.png' alt="Hero List">
-</div>
+<code-example language="none">
 
-**Figure 5.** The `fetch` and `fetch-json` pipes displaying the heroes
+Heroes from JSON File
+
+Windstorm
+Bombasto
+Magneto
+Tornado
+
+Heroes as JSON: [ { "name": "Windstorm", "canFly": true }, { "name": "Bombasto", "canFly": false }, { "name": "Magneto", "canFly": false }, { "name": "Tornado", "canFly": true } ]
+
+</code-example>
 
 <div class="alert is-helpful">
 
@@ -883,32 +728,34 @@ The built-in [JsonPipe](api/common/JsonPipe "API description for JsonPipe") prov
 이 때 성능이 저하되는 것을 피하려면 서버로 요청하는 URL이 변경될 때만 파이프 로직을 실행하고 서버에서 받은 응답을 캐싱하는 방법을 사용하는 것이 좋습니다.
 이 내용을 확인해 봅시다:
 
-* `fetch-json.pipe.ts` 파일에 `fetch` 파이프를 구현합니다.
-* 파이프를 사용해서 요청을 보내는 컴포넌트는 `hero-list.component.ts` 입니다. 이 컴포넌트 템플릿은 `heroes.json` 파일에서 히어로 목록을 파이프로 불러오는 코드가 두 번 사용되었는데, 두번째 사용된 코드에는 `fetch` 파이프와 기본 파이프 `JsonPipe`를 사용해서 데이터를 JSON 형식으로 화면에 표시합니다.
+*   `fetch-json.pipe.ts` 파일에 `fetch` 파이프를 구현합니다.
+*   파이프를 사용해서 요청을 보내는 컴포넌트는 `hero-list.component.ts` 입니다. 이 컴포넌트 템플릿은 `heroes.json` 파일에서 히어로 목록을 파이프로 불러오는 코드가 두 번 사용되었는데, 두번째 사용된 코드에는 `fetch` 파이프와 기본 파이프 `JsonPipe`를 사용해서 데이터를 JSON 형식으로 화면에 표시합니다.
 
 <code-tabs>
-  <code-pane
-    header="src/app/fetch-json.pipe.ts"
-    path="pipes/src/app/fetch-json.pipe.ts">
-  </code-pane>
-  <code-pane
-    header="src/app/hero-list.component.ts"
-    path="pipes/src/app/hero-list.component.ts">
-  </code-pane>
+    <code-pane header="src/app/fetch-json.pipe.ts" path="pipes/src/app/fetch-json.pipe.ts"></code-pane>
+    <code-pane header="src/app/hero-list.component.ts" path="pipes/src/app/hero-list.component.ts"></code-pane>
 </code-tabs>
 
 이 예제를 실행했을 때 파이프는 다음과 같이 동작합니다:
 
-* 파이프가 사용된 곳마다 개별 파이프 인스턴스가 생성됩니다.
-* 개별 파이프 인스턴스는 URL과 데이터를 캐싱하기 때문에 서버로 요청을 한 번만 보냅니다.
+*   파이프가 사용된 곳마다 개별 파이프 인스턴스가 생성됩니다.
+*   개별 파이프 인스턴스는 URL과 데이터를 캐싱하기 때문에 서버로 요청을 한 번만 보냅니다.
 
-그래서 그림 5와 같은 화면을 확인할 수 있습니다.
+그래서 브라우저를 보면 이렇게 동작하는 것을 확인할 수 있습니다.
 
-<div class="lightbox">
-  <img src='generated/images/guide/pipes/hero-list.png' alt="Hero List">
-</div>
+<code-example language="none">
 
-**그림 5.** 파이프로 히어로 목록을 표시한 모습
+Heroes from JSON File
+
+Windstorm
+Bombasto
+Magneto
+Tornado
+
+Heroes as JSON: [ { "name": "Windstorm", "canFly": true }, { "name": "Bombasto", "canFly": false }, { "name": "Magneto", "canFly": false }, { "name": "Tornado", "canFly": true } ]
+
+</code-example>
+
 
 <div class="alert is-helpful">
 
@@ -917,12 +764,31 @@ The built-in [JsonPipe](api/common/JsonPipe "API description for JsonPipe") prov
 </div>
 
 
+<!--
 ## Pipes and precedence
+-->
+## 파이프와 우선순위
 
+<!--
 The pipe operator has a higher precedence than the ternary operator (`?:`), which means `a ? b : c | x` is parsed as `a ? b : (c | x)`.
 The pipe operator cannot be used without parentheses in the first and second operands of `?:`.
 
 Due to precedence, if you want a pipe to apply to the result of a ternary, wrap the entire expression in parentheses; for example, `(a ? b : c) | x`.
 
-<code-example path="pipes/src/app/precedence.component.html" region="precedence" header="src/app/precedence.component.html">
-</code-example>
+<code-example path="pipes/src/app/precedence.component.html" region="precedence" header="src/app/precedence.component.html"></code-example>
+-->
+파이프 연산자는 삼항연산자(`?:`)보다 우선순위가 높기 때문에 `a ? b : c | x` 라고 작성하면 `a ? b : (c | x)`로 처리됩니다.
+이 경우에 괄호를 사용하지 않고서는 삼항연산자의 첫 번째 항목이나 두 번째 항목에 파이프를 적용할 수 없습니다.
+
+이런 우선순위를 고려해서 삼항연산자의 결과에 파이프를 적용하려면 괄호를 사용해서 `(a ? b : c) | x`라고 작성해야 합니다.
+
+<code-example path="pipes/src/app/precedence.component.html" region="precedence" header="src/app/precedence.component.html"></code-example>
+
+
+<!-- links -->
+
+[AioGuideI18nCommonFormatDataLocale]: guide/i18n-common-format-data-locale "Format data based on locale | Angular"
+
+<!-- end links -->
+
+@reviewed 2021-09-15

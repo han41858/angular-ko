@@ -6,15 +6,6 @@
 <!--
 If your tests aren't working as you expect them to, you can inspect and debug them in the browser.
 
-<div class="alert is-helpful">
-
-  For the sample application that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
-
-  For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
-
-</div>
-
-
 Debug specs in the browser in the same way that you debug an application.
 
 1. Reveal the Karma browser window. See [Set up testing](guide/testing#set-up-testing) if you need help with this step.
@@ -30,14 +21,6 @@ Debug specs in the browser in the same way that you debug an application.
 </div>
 -->
 테스트 코드가 예상한 대로 동작하지 않는다면 원인이 무엇인지 브라우저에서 확인할 수 있습니다.
-
-<div class="alert is-helpful">
-
-이 문서에서 다루는 예제 앱을 직접 확인하려면 <live-example name="testing" embedded-style noDownload>sample app</live-example> 링크를 참고하세요.
-
-이 문서에서 다루는 테스트 기능이 동작하는 것을 직접 확인하려면 <live-example name="testing" stackblitz="specs" noDownload>tests</live-example> 링클르 참고하세요.
-
-</div>
 
 
 브라우저에서 테스트 코드를 디버깅하는 방법은 애플리케이션을 디버깅하는 방법과 같습니다.

@@ -296,7 +296,7 @@ Angular _콜렉터(collector)_ 는 JavaScript의 하위집합이며 JavaScript �
     <td><code>`pie is ${multiplier} times better than cake`</code></td>
    <tr>
     <td>Literal string</td>
-    <td><code>pi</code></td>
+    <td><code>'pi'</code></td>
   </tr>
    <tr>
     <td>Literal number</td>
@@ -370,7 +370,7 @@ Angular _콜렉터(collector)_ 는 JavaScript의 하위집합이며 JavaScript �
     <td><code>`pie is ${multiplier} times better than cake`</code></td>
    <tr>
     <td>문자열 리터럴</td>
-    <td><code>pi</code></td>
+    <td><code>'pi'</code></td>
   </tr>
    <tr>
     <td>숫자 리터럴</td>
@@ -988,6 +988,12 @@ In the template type-checking phase, the Angular template compiler uses the Type
 
 Enable this phase explicitly by adding the compiler option `"fullTemplateTypeCheck"` in the `"angularCompilerOptions"` of the project's TypeScript configuration file
 (see [Angular Compiler Options](guide/angular-compiler-options)).
+
+Template validation produces error messages when a type error is detected in a template binding
+expression, similar to how type errors are reported by the TypeScript compiler against code in a `.ts`
+file.
+
+For example, consider the following component:
 -->
 템플릿 표현식에 사용된 코드의 타입을 체크하는 기능은 Angular 컴파일러가 제공하는 기능 중 가장 훌륭한 기능이라고도 할 수 있습니다.
 이 기능을 활용하면 실행 시점에 발생하는 문제로 앱이 종료되는 것을 미리 방지할 수 있기 때문입니다.
@@ -995,38 +1001,6 @@ Enable this phase explicitly by adding the compiler option `"fullTemplateTypeChe
 
 이 단계는 프로젝트의 환경설정 파일의 컴파일러 옵션 섹션인 `"angularCompilerOptions"`에 `"fullTemplateTypeCheck"` 옵션을 지정하면 명시적으로 활성화할 수 있습니다.
 자세한 내용은 [Angular 컴파일러 옵션](guide/angular-compiler-options) 문서를 참고하세요.
-
-<div class="alert is-helpful">
-
-<!--
-In [Angular Ivy](guide/ivy), the template type checker has been completely rewritten to be more capable as well as stricter, meaning it can catch a variety of new errors that the previous type checker would not detect.
-
-As a result, templates that previously compiled under View Engine can fail type checking under Ivy. This can happen because Ivy's stricter checking catches genuine errors, or because application code is not typed correctly, or because the application uses libraries in which typings are inaccurate or not specific enough.
-
-This stricter type checking is not enabled by default in version 9, but can be enabled by setting the `strictTemplates` configuration option.
-We do expect to make strict type checking the default in the future.
-
-For more information about type-checking options, and about improvements to template type checking in version 9 and above, see [Template type checking](guide/template-typecheck).
--->
-[Angular Ivy](guide/ivy)에 사용된 템플릿 타입 체커는 이전 버전보다 강력한 룰을 적용할 수 있도록 완전히 새로 작성되었습니다.
-이제는 이전 버전에서 발견하지 못했던 에러도 확실하게 검출할 수 있습니다.
-
-다만, 이렇게 변경되면서 이전의 View Engine에서 정상 컴파일되었던 템플릿이 Ivy에서는 컴파일되지 않을 수 있습니다.
-이것은 새로운 템플릿 엔진인 Angular Ivy가 검사하는 룰이 좀 더 강력해진 것이 직접적인 원인이지만, 애플리케이션 코드의 타입이 제대로 지정되지 않았거나, 타입정보가 부족한 라이브러리를 사용했기 때문에 발생하는 문제일 수도 있습니다.
-
-Angular 9버전의 기본 설정은 좀 더 깐깐한 타입 체크 기능을 사용하지 않는 것입니다.
-아직까지는 컴파일러 설정 파일에 `strictTemplates` 옵션을 지정해야 활성화할 수 있지만, 언젠가는 이 방식이 기본이 되기를 바랍니다.
-
-타입 검사 옵션이나 템플릿 타입 검사를 활성화하는 방법에 대해 알아보려면 [템플릿 타입 검사](guide/template-typecheck) 문서를 참고하세요.
-
-</div>
-
-<!--
-Template validation produces error messages when a type error is detected in a template binding
-expression, similar to how type errors are reported by the TypeScript compiler against code in a `.ts`
-file.
-
-For example, consider the following component:
 -->
 템플릿의 유효성을 검사하다가 에러가 발생하면 이 에러가 어디서 발생했는지 콘솔에 표시됩니다.
 TypeScript 컴파일러로 `.ts` 파일을 컴파일하다가 에러를 확인하는 것과 비슷합니다.
@@ -1099,7 +1073,7 @@ For example, to avoid `Object is possibly 'undefined'` error in the template abo
 ```typescript
   @Component({
     selector: 'my-component',
-    template: '<span *ngIf="person"> {{person.addresss.street}} </span>'
+    template: '<span *ngIf="person"> {{person.address.street}} </span>'
   })
   class MyComponent {
     person?: Person;
@@ -1108,10 +1082,12 @@ For example, to avoid `Object is possibly 'undefined'` error in the template abo
 
 <!--
 Using `*ngIf` allows the TypeScript compiler to infer that the `person` used in the binding expression will never be `undefined`.
+
+For more information about input type narrowing, see [Improving template type checking for custom directives](guide/structural-directives#directive-type-checks).
 -->
 `*ngIf`를 사용하면 TypeScript 컴파일러가 `person` 객체의 타입을 추론할 수 있기 때문에 이 객체가 `undefined`라면 바인딩 표현식도 실행되지 않습니다.
 
-For more information about input type narrowing, see [Input setter coercion](guide/template-typecheck#input-setter-coercion) and [Improving template type checking for custom directives](guide/structural-directives#directive-type-checks).
+입력값 타입의 범위를 줄이는 방법에 대해 알아보려면 [커스텀 디렉티브로 템플릿 타입 검사 강화하기](guide/structural-directives#directive-type-checks) 문서를 참고하세요.
 
 <!--
 ### Non-null type assertion operator

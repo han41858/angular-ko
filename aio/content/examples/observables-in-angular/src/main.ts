@@ -2,6 +2,7 @@
 // tslint:disable: no-output-native
 // #docregion
 import { Component, Output, OnInit, EventEmitter, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 
 // #docregion eventemitter
@@ -63,7 +64,7 @@ export class Routable1Component implements OnInit {
   navStart: Observable<NavigationStart>;
 
   constructor(router: Router) {
-    // NavigationStart 이벤트에 해당하는 옵저버블만 받습니다.
+    // NavigationStart 이벤트만 받는 옵저버블을 생성합니다.
     this.navStart = router.events.pipe(
       filter(evt => evt instanceof NavigationStart)
     ) as Observable<NavigationStart>;
@@ -125,6 +126,7 @@ export class MyComponent implements OnInit {
 
 
 @NgModule({
+  imports: [CommonModule],
   declarations:
       [ZippyComponent, AsyncObservablePipeComponent, Routable1Component, Routable2Component, MyComponent]
 })

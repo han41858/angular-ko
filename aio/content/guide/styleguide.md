@@ -47,7 +47,7 @@ _항상_ 이라는 단어가 조금 강하게 와닿을 수도 있지만, 이 �
 
 <!--
 **Consider** guidelines should generally be followed.
-If you fully understand the meaning behind the guideline and have a good reason to deviate, then do so. Please strive to be consistent.
+If you fully understand the meaning behind the guideline and have a good reason to deviate, then do so. Aim to be consistent.
 -->
 **"권장합니다"**나 **"~하는 것을 고려해보세요"**는 일반적으로 사용하는 스타일을 의미합니다.
 이 어휘가 사용된 가이드라인을 확실하게 이해하고 있지만, 꼭 그렇게 사용하지 않아도 될 이유가 있다면 해당 스타일 가이드를 지키지 않아도 됩니다.
@@ -101,9 +101,9 @@ The guideline uses the shortcut `hero.component.ts|html|css|spec` to represent t
 
 <!--
 Apply the
-<a href="https://wikipedia.org/wiki/Single_responsibility_principle"><i>single responsibility principle</i> (SRP)</a>
+<a href="https://wikipedia.org/wiki/Single_responsibility_principle"><i>single responsibility principle (SRP)</i></a>
 to all components, services, and other symbols.
-This helps make the app cleaner, easier to read and maintain, and more testable.
+This helps make the application cleaner, easier to read and maintain, and more testable.
 -->
 모든 컴포넌트와 서비스, 심볼은 <a href="https://wikipedia.org/wiki/Single_responsibility_principle"><i>단일 책임 원칙(SRP)</i></a>을 준수하며 작성하세요.
 그러면 애플리케이션이 좀 더 깔끔해지고 유지보수하기도 편하며, 테스트하기도 편해집니다.
@@ -237,7 +237,7 @@ supporting classes into their own, dedicated files.
 
 
 <!--
-As the app grows, this rule becomes even more important.
+As the application grows, this rule becomes even more important.
 <a href="#toc">Back to top</a>
 -->
 앱이 규모가 커지면서 복잡해 질수록 이 규칙은 점점 더 중요해집니다.
@@ -414,7 +414,7 @@ Naming conventions are hugely important to maintainability and readability. This
 
 
 <!--
-**Why?** The naming conventions should simply help find desired code faster and make it easier to understand.
+**Why?** The naming conventions should help find desired code faster and make it easier to understand.
 -->
 **왜?** 적절한 명명 규칙을 사용하면 원하는 코드를 빠르게 찾을 수 있고, 코드를 이해하기도 쉽습니다.
 
@@ -1033,7 +1033,7 @@ As always, strive for consistency.
 <div class="s-rule do">
 
 <!--
-**Do** put bootstrapping and platform logic for the app in a file named `main.ts`.
+**Do** put bootstrapping and platform logic for the application in a file named `main.ts`.
 -->
 부트스트랩이나 플랫폼과 관련된 로직은 `main.ts` 파일에 **작성하세요.**
 
@@ -1051,7 +1051,7 @@ As always, strive for consistency.
 <div class="s-rule avoid">
 
 <!--
-**Avoid** putting app logic in `main.ts`. Instead, consider placing it in a component or service.
+**Avoid** putting application logic in `main.ts`. Instead, consider placing it in a component or service.
 -->
 애플리케이션 로직을 `main.ts` 파일에 작성하는 것은 **피하세요.**
 이 로직은 컴포넌트나 서비스에 들어가는 것이 좋습니다.
@@ -1173,7 +1173,7 @@ For example, the prefix `toh` represents **T**our **o**f **H**eroes and the pref
 <div class="s-rule do">
 
 <!--
-**Do** use a prefix that identifies the feature area or the app itself.
+**Do** use a prefix that identifies the feature area or the application itself.
 -->
 접두사는 해당 컴포넌트의 기능이나 앱의 특성을 표현할 수 있도록 **지정하세요.**
 
@@ -1182,7 +1182,7 @@ For example, the prefix `toh` represents **T**our **o**f **H**eroes and the pref
 <div class="s-why">
 
 <!--
-**Why?** Prevents element name collisions with components in other apps and with native HTML elements.
+**Why?** Prevents element name collisions with components in other applications and with native HTML elements.
 -->
 **왜?** 컴포넌트의 엘리먼트 셀렉터는 다른 앱의 컴포넌트 셀렉터나 네이티브 HTML과 충돌하지 않도록 지정해야 합니다.
 
@@ -1191,7 +1191,7 @@ For example, the prefix `toh` represents **T**our **o**f **H**eroes and the pref
 <div class="s-why">
 
 <!--
-**Why?** Makes it easier to promote and share the component in other apps.
+**Why?** Makes it easier to promote and share the component in other applications.
 -->
 **왜?** 커스텀 컴포넌트가 다른 애플리케이션에도 활용될 수 있는 경우를 생각해보면, 사용하기 편하고 잘 구분되는 이름을 사용하는 것이 좋습니다.
 
@@ -2010,9 +2010,9 @@ A consistent class and file name convention make these modules easy to spot and 
 ## 애플리케이션 구조와 NgModule
 
 <!--
-Have a near-term view of implementation and a long-term vision. Start small but keep in mind where the app is heading down the road.
+Have a near-term view of implementation and a long-term vision. Start small but keep in mind where the application is heading.
 
-All of the app's code goes in a folder named `src`.
+All of the application's code goes in a folder named `src`.
 All feature areas are in their own folder, with their own NgModule.
 
 All content is one asset per file. Each component, service, and pipe is in its own file.
@@ -2048,7 +2048,7 @@ Use the naming conventions for files in this guide.
 <div class="s-rule do">
 
 <!--
-**Do** structure the app such that you can **L**ocate code quickly,
+**Do** structure the application such that you can **L**ocate code quickly,
 **I**dentify the code at a glance,
 keep the **F**lattest structure you can, and
 **T**ry to be DRY.
@@ -2108,7 +2108,7 @@ _이 기능을 수정하려면 어디에 있는 파일을 열어야 원하는 �
 
 
 <!--
-**Do** make locating code intuitive, simple, and fast.
+**Do** make locating code intuitive and fast.
 -->
 코드는 직관적으로 떠오르는 위치에 두세요.
 그게 간단하고 빠릅니다.
@@ -2370,7 +2370,7 @@ But if something is not obvious or departs from a convention, then spell it out.
 
 
 <!--
-**Do** start small but keep in mind where the app is heading down the road.
+**Do** start small but keep in mind where the application is heading down the road.
 -->
 작은 부분부터 코딩을 시작하더라도 애플리케이션의 최종 목적지를 항상 **염두에 두어야 합니다**.
 
@@ -2395,7 +2395,7 @@ But if something is not obvious or departs from a convention, then spell it out.
 
 
 <!--
-**Do** put all of the app's code in a folder named `src`.
+**Do** put all of the application's code in a folder named `src`.
 -->
 애플리케이션의 코드는 모두 `src` 폴더 아래에 **두세요**.
 
@@ -2419,7 +2419,7 @@ But if something is not obvious or departs from a convention, then spell it out.
 
 
 <!--
-**Why?** Helps keep the app structure small and easy to maintain in the early stages, while being easy to evolve as the app grows.
+**Why?** Helps keep the application structure small and easy to maintain in the early stages, while being easy to evolve as the application grows.
 -->
 **왜?** 애플리케이션의 폴더 구조는 개발 초기부터 간단하게 구성해야 애플리케이션을 확장할 때도 편합니다.
 </div>
@@ -2430,7 +2430,7 @@ But if something is not obvious or departs from a convention, then spell it out.
 
 
 <!--
-**Why?** Components often have four files (e.g. `*.html`, `*.css`, `*.ts`, and `*.spec.ts`) and can clutter a folder quickly.
+**Why?** Components often have four files (for example, `*.html`, `*.css`, `*.ts`, and `*.spec.ts`) and can clutter a folder quickly.
 -->
 **왜?** 컴포넌트는 보통 4개 파일(`*.html`, `*.css`, `*.ts`, `*.spec.ts`)로 구성되기 때문에 컴포넌트 폴더를 따로 구분하지 않고 모아둔다면 이 폴더는 빠르게 복잡해집니다.
 </div>
@@ -2674,7 +2674,7 @@ Here is a compliant folder and file structure:
 
 <!--
 While components in dedicated folders are widely preferred,
-another option for small apps is to keep components flat (not in a dedicated folder).
+another option for small applications is to keep components flat (not in a dedicated folder).
 This adds up to four files to the existing folder, but also reduces the folder nesting.
 Whatever you choose, be consistent.
 -->
@@ -2724,7 +2724,7 @@ at a glance. The structure is as flat as it can be and there are no repetitive o
 
 <div class="s-why">
 
-**Why?** Helps reduce the app from becoming cluttered through organizing the
+**Why?** Helps reduce the application from becoming cluttered through organizing the
 content and keeping them aligned with the LIFT guidelines.
 
 </div>
@@ -2841,7 +2841,7 @@ and more difficult in a flat structure.
 
 
 
-**Do** create an NgModule in the app's root folder,
+**Do** create an NgModule in the application's root folder,
 for example, in `/src/app`.
 
 
@@ -2853,7 +2853,7 @@ for example, in `/src/app`.
 
 
 
-**Why?** Every app requires at least one root NgModule.
+**Why?** Every application requires at least one root NgModule.
 
 
 </div>
@@ -3545,6 +3545,49 @@ A typical *lazy loaded folder* contains a *routing component*, its child compone
 <a href="#toc">맨 위로</a>
 
 <!--
+### Do not add filtering and sorting logic to pipes
+-->
+### 파이프에 필터, 정렬 로직을 넣지 마세요
+
+<!--
+#### Style 04-13
+-->
+#### 스타일 04-13
+
+<div class="s-rule avoid">
+
+<!--
+**Avoid** adding filtering or sorting logic into custom pipes.
+-->
+커스텀 파이프에 필터, 정렬 로직을 넣는 것은 **피하세요**.
+
+</div>
+
+<div class="s-rule do">
+
+<!--
+**Do** pre-compute the filtering and sorting logic in components or services before binding the model in templates.
+-->
+필터, 정렬 로직은 컴포넌트나 서비스 로직으로 미리 처리한 후에 템플릿에 바인딩하는 것이 좋습니다.
+
+</div>
+
+<div class="s-why-last">
+
+<!--
+**Why?** Filtering and especially sorting are expensive operations. As Angular can call pipe methods many times per second, sorting and filtering operations can degrade the user experience severely for even moderately-sized lists.
+-->
+**왜?** 필터, 그리고 특히 정렬 로직은 많은 연산이 필요합니다. Angular 안에서는 파이프가 1초에 여러번도 호출될 수 있기 때문에, 이 때마다 정렬, 필터 연산이 실행되면 UX 측면에서 좋지 않습니다.
+
+</div>
+
+<!--
+<a href="#toc">Back to top</a>
+-->
+<a href="#toc">맨 위로</a>
+
+
+<!--
 ## Components
 -->
 ## 컴포넌트
@@ -4082,7 +4125,7 @@ helps instantly identify which members of the component serve which purpose.
 
 
 <!--
-**Why?** Logic may be reused by multiple components when placed within a service and exposed via a function.
+**Why?** Logic may be reused by multiple components when placed within a service and exposed as a function.
 -->
 **왜?** 다른 컴포넌트에도 재사용할 수 있는 로직을 서비스 안에 함수로 작성하면 필요한 곳에 자유롭게 활용할 수 있습니다.
 
@@ -4631,7 +4674,7 @@ Compare with the less preferred `host` metadata alternative.
 
 
 <!--
-**Do** provide a service with the app root injector in the `@Injectable` decorator of the service.
+**Do** provide a service with the application root injector in the `@Injectable` decorator of the service.
 -->
 서비스는 `@Injectable` 데코레이터를 사용해서 애플리케이션 최상위 인젝터에 **등록하세요.**
 

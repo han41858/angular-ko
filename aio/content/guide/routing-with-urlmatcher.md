@@ -1,6 +1,6 @@
 # Tutorial: Creating custom route matches
 
-The Angular Router supports a powerful matching strategy that you can use to help users navigate your application. This matching strategy supports static routes, variable routes with parameters, wildcard routes, and so on. You can also build your own custom pattern matching for situations in which the URLs are more complicated.
+The Angular Router supports a powerful matching strategy that you can use to help users navigate your application. This matching strategy supports static routes, variable routes with parameters, wildcard routes, and so on. Also, build your own custom pattern matching for situations in which the URLs are more complicated.
 
 In this tutorial, you'll build a custom route matcher using Angular's `UrlMatcher`. This matcher looks for a Twitter handle in the URL.
 
@@ -19,7 +19,7 @@ To complete this tutorial, you should have a basic understanding of the followin
 * CSS
 * [Angular CLI](/cli)
 
-If you are unfamiliar with how Angular's router works, we recommend you review [Using Angular routes in a single-page application](guide/router-tutorial).
+If you are unfamiliar with how Angular's router works, review [Using Angular routes in a single-page application](guide/router-tutorial).
 
 ## Create a sample application
 
@@ -48,12 +48,12 @@ Using the Angular CLI, create a new application, _angular-custom-route-match_. I
 1. In your code editor, locate the file, `profile.component.html` and replace
    the placeholder content with the following HTML.
 
-   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.html" header="routing-with-urlmatcher/src/app/profile/profile.component.html"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.html" header="src/app/profile/profile.component.html"></code-example>
 
 1. In your code editor, locate the file, `app.component.html` and replace
    the placeholder content with the following HTML.
-    
-   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.html" header="routing-with-urlmatcher/src/app/profile/profile.component.html"></code-example>
+
+   <code-example path="routing-with-urlmatcher/src/app/app.component.html" header="src/app/app.component.html"></code-example>
 
 ## Configure your routes for your application
 
@@ -63,26 +63,26 @@ With your application framework in place, you next need to add routing capabilit
 
 1. Add an `import` statement for Angular's `RouterModule` and `UrlMatcher`.
 
-   <code-example path="routing-with-urlmatcher/src/app/app.module.ts" header="routing-with-urlmatcher/src/app/app.module.ts" region="import"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/app.module.ts" header="src/app/app.module.ts" region="import"></code-example>
 
 1. In the imports array, add a `RouterModule.forRoot([])` statement.
 
-   <code-example path="routing-with-urlmatcher/src/app/app.module.ts" header="routing-with-urlmatcher/src/app/app.module.ts" region="imports-array"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/app.module.ts" header="src/app/app.module.ts" region="imports-array"></code-example>
 
 1. Define the custom route matcher by adding the following code to the `RouterModule.forRoot()` statement.
 
-   <code-example path="routing-with-urlmatcher/src/app/app.module.ts" header="routing-with-urlmatcher/src/app/app.module.ts" region="matcher"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/app.module.ts" header="src/app/app.module.ts" region="matcher"></code-example>
 
 This custom matcher is a function that performs the following tasks:
 
 * The matcher verifies that the array contains only one segment.
 * The matcher employs a regular expression to ensure that the format of the username is a match.
-* If there is a match, the function returns the entire URL, defining a `username` route parameter as a substring of the path. 
+* If there is a match, the function returns the entire URL, defining a `username` route parameter as a substring of the path.
 * If there isn't a match, the function returns null and the router continues to look for other routes that match the URL.
 
 <div class="is-helpful">
 
-A custom URL matcher behaves like any other route definition. You can define child routes or lazy loaded routes as you would with any other route.
+A custom URL matcher behaves like any other route definition. Define child routes or lazy loaded routes as you would with any other route.
 
 </div>
 
@@ -94,19 +94,19 @@ With the custom matcher in place, you now need to subscribe to the route paramet
 
 1. Add an `import` statement for Angular's `ActivatedRoute` and `ParamMap`.
 
-   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="routing-with-urlmatcher/src/app/profile/profile.component.ts" region="activated-route-and-parammap"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="src/app/profile/profile.component.ts" region="activated-route-and-parammap"></code-example>
 
 1. Add an `import` statement for RxJS `map`.
 
-   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="routing-with-urlmatcher/src/app/profile/profile.component.ts" region="rxjs-map"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="src/app/profile/profile.component.ts" region="rxjs-map"></code-example>
 
 1. Subscribe to the `username` route parameter.
 
-   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="routing-with-urlmatcher/src/app/profile/profile.component.ts" region="subscribe"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="src/app/profile/profile.component.ts" region="subscribe"></code-example>
 
 1. Inject the `ActivatedRoute` into the component's constructor.
 
-   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="routing-with-urlmatcher/src/app/profile/profile.component.ts" region="activatedroute"></code-example>
+   <code-example path="routing-with-urlmatcher/src/app/profile/profile.component.ts" header="src/app/profile/profile.component.ts" region="activatedroute"></code-example>
 
 ## Test your custom URL matcher
 

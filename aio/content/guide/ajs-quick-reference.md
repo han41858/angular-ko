@@ -285,7 +285,7 @@ ANgularJS에서는 템플릿에 사용할 수 있는 디렉티브를 70개 이�
       <!--
       The application startup process is called **bootstrapping**.
 
-      Although you can bootstrap an AngularJS app in code,
+      Although you can bootstrap an AngularJS application in code,
       many applications bootstrap declaratively with the `ng-app` directive,
       giving it the name of the application's module (`movieHunter`).
       -->
@@ -311,7 +311,7 @@ ANgularJS에서는 템플릿에 사용할 수 있는 디렉티브를 70개 이�
 
       <!--
       Angular doesn't have a bootstrap directive.
-      To launch the app in code, explicitly bootstrap the application's root module (`AppModule`)
+      To launch the application in code, explicitly bootstrap the application's root module (`AppModule`)
       in `main.ts`
       and the application's root component (`AppComponent`) in `app.module.ts`.
       -->

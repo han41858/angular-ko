@@ -29,12 +29,11 @@ A basic understanding of the following:
 ## 서비스 워커와 앱 리소스 캐싱
 
 <!--
-Conceptually, you can imagine the Angular service worker as a forward cache or a CDN edge that is installed in the end user's web browser. The service worker's job is to satisfy requests made by the Angular application for resources or data from a local cache, without needing to wait for the network. Like any cache, it has rules for how content is expired and updated.
+Conceptually, imagine the Angular service worker as a forward cache or a CDN edge that is installed in the end user's web browser. The service worker's job is to satisfy requests made by the Angular application for resources or data from a local cache, without needing to wait for the network. Like any cache, it has rules for how content is expired and updated.
 -->
 개념으로 보면, Angular 서비스 워커는 사용자의 웹 브라우저에 설치된 캐싱 서버나 CDN 엣지(edge)라고 이해할 수도 있습니다.
 서비스 워커의 역할은 Angular 앱이 요청한 리소스를 로컬 캐시에 저장해두었다가, 다음에 똑같은 리소스가 요청되면 네트워크 사용 없이 직접 리소스를 반환하는 것이기 때문입니다.
 그리고 일반적인 캐싱 서버와 마찬가지로, 서비스 워커에도 리소스의 만료 시점을 지정하는 룰이 존재합니다.
-
 
 {@a versions}
 
@@ -44,7 +43,7 @@ Conceptually, you can imagine the Angular service worker as a forward cache or a
 ### 앱 버전
 
 <!--
-In the context of an Angular service worker, a "version" is a collection of resources that represent a specific build of the Angular application. Whenever a new build of the application is deployed, the service worker treats that build as a new version of the application. This is true even if only a single file is updated. At any given time, the service worker may have multiple versions of the application in its cache and it may be serving them simultaneously. For more information, see the [App tabs](guide/service-worker-devops#tabs) section below.
+In the context of an Angular service worker, a "version" is a collection of resources that represent a specific build of the Angular application. Whenever a new build of the application is deployed, the service worker treats that build as a new version of the application. This is true even if only a single file is updated. At any given time, the service worker might have multiple versions of the application in its cache and it might be serving them simultaneously. For more information, see the [App tabs](guide/service-worker-devops#tabs) section below.
 
 To preserve application integrity, the Angular service worker groups all files into a version together. The files grouped into a version usually include HTML, JS, and CSS files. Grouping of these files is essential for integrity because HTML, JS, and CSS files frequently refer to each other and depend on specific content. For example, an `index.html` file might have a `<script>` tag that references `bundle.js` and it might attempt to call a function `startApp()` from within that script. Any time this version of `index.html` is served, the corresponding `bundle.js` must be served with it. For example, assume that the `startApp()` function is renamed to `runApp()` in both files. In this scenario, it is not valid to serve the old `index.html`, which calls `startApp()`, along with the new bundle, which defines `runApp()`.
 -->
@@ -62,10 +61,10 @@ To preserve application integrity, the Angular service worker groups all files i
 
 <!--
 This file integrity is especially important when lazy loading modules.
-A JS bundle may reference many lazy chunks, and the filenames of the
+A JS bundle might reference many lazy chunks, and the filenames of the
 lazy chunks are unique to the particular build of the application. If a running
 application at version `X` attempts to load a lazy chunk, but the server has
-updated to version `X + 1` already, the lazy loading operation will fail.
+already updated to version `X + 1`, the lazy loading operation will fail.
 
 The version identifier of the application is determined by the contents of all
 resources, and it changes if any of them change. In practice, the version
@@ -196,7 +195,7 @@ configured lifetimes.
 <!--
 It can be problematic for an application if the version of resources
 it's receiving changes suddenly or without warning. See the
-[Versions](guide/service-worker-devops#versions) section above
+[App versions](guide/service-worker-devops#versions) section above
 for a description of such issues.
 
 The Angular service worker provides a guarantee: a running application
@@ -291,11 +290,11 @@ Angular 서비스 워커는 사실 웹 브라우저에서 실행되는 간단한
 ### 서비스 워커 생략하기
 
 <!--
-In some cases, you may want to bypass the service worker entirely and let the browser handle the
+In some cases, you might want to bypass the service worker entirely and let the browser handle the
 request instead. An example is when you rely on a feature that is currently not supported in service
 workers (for example, [reporting progress on uploaded files](https://github.com/w3c/ServiceWorker/issues/1141)).
 
-To bypass the service worker you can set `ngsw-bypass` as a request header, or as a query parameter.
+To bypass the service worker, set `ngsw-bypass` as a request header, or as a query parameter.
 (The value of the header or query parameter is ignored and can be empty or omitted.)
 -->
 때로는 서비스 워커를 생략하고 앱에서 발생하는 HTTP 요청을 모두 브라우저에게 위임해야 할 때도 있습니다.
@@ -311,7 +310,7 @@ To bypass the service worker you can set `ngsw-bypass` as a request header, or a
 ## 서비스 워커 디버깅하기
 
 <!--
-Occasionally, it may be necessary to examine the Angular service
+Occasionally, it might be necessary to examine the Angular service
 worker in a running state to investigate issues or to ensure that
 it is operating as designed. Browsers provide built-in tools for
 debugging service workers and the Angular service worker itself
@@ -337,6 +336,7 @@ is `ngsw/state`. Here is an example of this debug page's contents:
 ```
 NGSW Debug Info:
 
+Driver version: 13.3.7
 Driver state: NORMAL ((nominal))
 Latest manifest hash: eea7f5f464f90789b621170af5a569d6be077e5c
 Last update check: never
@@ -536,7 +536,7 @@ Tools open to differ from behavior a user might experience.
 * If you look in the Cache Storage viewer, the cache is frequently
 out of date. Right click the Cache Storage title and refresh the caches.
 
-Stopping and starting the service worker in the Service Worker
+* Stopping and starting the service worker in the Service Worker
 pane triggers a check for updates.
 -->
 Chrome과 같은 브라우저에서 제공하는 개발자 도구를 활용하면 서비스 워커의 동작을 확인할 수 있습니다.
@@ -588,11 +588,12 @@ essentially self-destructing.
 <!--
 Also included in the `@angular/service-worker` NPM package is a small
 script `safety-worker.js`, which when loaded will unregister itself
-from the browser. This script can be used as a last resort to get rid
-of unwanted service workers already installed on client pages.
+from the browser and remove the service worker caches. This script can
+be used as a last resort to get rid of unwanted service workers already 
+installed on client pages.
 
 It's important to note that you cannot register this worker directly,
-as old clients with cached state may not see a new `index.html` which
+as old clients with cached state might not see a new `index.html` which
 installs the different worker script. Instead, you must serve the
 contents of `safety-worker.js` at the URL of the Service Worker script
 you are trying to unregister, and must continue to do so until you are
@@ -601,10 +602,10 @@ most sites, this means that you should serve the safety worker at the
 old Service Worker URL forever.
 
 This script can be used both to deactivate `@angular/service-worker`
-as well as any other Service Workers which might have been served in
-the past on your site.
+(and remove the corresponding caches) as well as any other Service
+Workers which might have been served in the past on your site.
 -->
-`@angular/service-worker` NPM 패키지에는 `safety-worker.js` 라는 작은 스크립트 파일이 하나 존재하는데, 이 파일은 브라우저에서 서비스 워커를 제거하는 용도로 사용됩니다.
+`@angular/service-worker` NPM 패키지에는 `safety-worker.js` 라는 작은 스크립트 파일이 하나 존재하는데, 이 파일은 브라우저에서 서비스 워커와 서비스 워커 캐시를 제거하는 용도로 사용됩니다.
 이 스크립트 파일을 실행하면 클라이언트 페이지에 이미 설치된 서비스 워커를 안전하게 제거할 수 있습니다.
 
 하지만 이 서비스 워커는 개발자가 브라우저에 직접 등록할 수 없습니다.
@@ -622,7 +623,7 @@ the past on your site.
 
 <!--
 It is important to note that service workers don't work behind redirect. You
-may have already encountered the error `The script resource is behind a redirect, which is disallowed`.
+might have already encountered the error `The script resource is behind a redirect, which is disallowed`.
 
 This can be a problem if you have to change your application's location. If you setup
 a redirect from the old location (for example `example.com`) to the new
@@ -633,7 +634,7 @@ entirely from Service Worker. The old worker (registered at `example.com`)
  get redirected to the new location `www.example.com` and create the error
 `The script resource is behind a redirect, which is disallowed`.
 
-To remedy this, you may need to kill the old worker using one of the above
+To remedy this, you might need to deactivate the old worker using one of the above
 techniques ([Fail-safe](#fail-safe) or [Safety Worker](#safety-worker)).
 -->
 서비스 워커는 리다이렉트와는 궁합이 맞지 않습니다.
@@ -653,7 +654,7 @@ techniques ([Fail-safe](#fail-safe) or [Safety Worker](#safety-worker)).
 ## 더 알아보기
 
 <!--
-You may also be interested in the following:
+You might also be interested in the following:
 * [Service Worker Configuration](guide/service-worker-config).
 -->
 다음 내용도 확인해 보세요:

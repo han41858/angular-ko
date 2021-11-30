@@ -23,7 +23,9 @@ import { slideInAnimation } from './animations';
 // #enddocregion decorator
     slideInAnimation
 // #docregion decorator
+// #enddocregion toggle-app-animations, define
     // 애니메이션 트리거는 여기에 작성합니다.
+// #docregion toggle-app-animations, define
   ]
 })
 // #enddocregion decorator, define
@@ -34,7 +36,7 @@ export class AppComponent {
 
 // #docregion prepare-router-outlet
   prepareRoute(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation;
+    return outlet?.activatedRouteData?.['animation'];
   }
 
 // #enddocregion prepare-router-outlet

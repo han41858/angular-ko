@@ -68,11 +68,7 @@ function sendRequest(
   req: HttpRequest<any>,
   next: HttpHandler,
   cache: RequestCache): Observable<HttpEvent<any>> {
-
-  // npm 검색 API에는 헤더가 필요 없습니다.
-  const noHeaderReq = req.clone({ headers: new HttpHeaders() });
-
-  return next.handle(noHeaderReq).pipe(
+  return next.handle(req).pipe(
     tap(event => {
       // 서버의 응답은 HttpResponse 타입이 아닐 수도 있습니다.
       if (event instanceof HttpResponse) {

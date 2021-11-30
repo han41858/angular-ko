@@ -11,7 +11,7 @@ export class AuthService {
   isLoggedIn = false;
 
   // 사용자가 로그인한 후에 이동할 URL을 저장합니다.
-  redirectUrl: string;
+  redirectUrl: string | null = null;
 
   login(): Observable<boolean> {
     return of(true).pipe(

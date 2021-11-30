@@ -4,9 +4,9 @@
 # 싱글턴 서비스 (Singleton services)
 
 <!--
-A singleton service is a service for which only one instance exists in an app.
+A singleton service is a service for which only one instance exists in an application.
 
-For a sample app using the app-wide singleton service that this page describes, see the
+For a sample application using the app-wide singleton service that this page describes, see the
 <live-example name="ngmodules"></live-example> showcasing all the documented features of NgModules.
 -->
 싱글턴 서비스는 앱 전체에서 단 하나의 인스턴스만 존재하는 서비스를 말합니다.
@@ -61,7 +61,7 @@ Angular 6.0 버전부터 Angular CLI로 서비스를 생성하면 `@Injectable()
 ### NgModule의 `providers` 배열
 
 <!--
-In apps built with Angular versions prior to 6.0, services are registered NgModule `providers` arrays as follows:
+In applications built with Angular versions prior to 6.0, services are registered NgModule `providers` arrays as follows:
 -->
 Angular 6.0 버전 이전에는 Angular CLI로 서비스를 생성했을 때 이 서비스가 NgModule의 `providers` 배열에 추가됐습니다:
 
@@ -76,11 +76,10 @@ Angular 6.0 버전 이전에는 Angular CLI로 서비스를 생성했을 때 이
 
 <!--
 If this NgModule were the root `AppModule`, the `UserService` would be a singleton and available
-throughout the app. Though you may see it coded this way, using the `providedIn` property of the `@Injectable()` decorator on the service itself is preferable as of Angular 6.0 as it makes your services tree-shakable.
+throughout the application. Though you may see it coded this way, using the `providedIn` property of the `@Injectable()` decorator on the service itself is preferable as of Angular 6.0 as it makes your services tree-shakable.
 -->
 이 경우에도 서비스가 추가되는 모듈은 `AppModule`이기 때문에 `UserService`는 앱 전역에서 인스턴스 하나만 존재합니다.
 동작은 동일하지만, Angular 6.0부터는 트리 셰이킹이 가능한 서비스를 명확하게 지정하기 위해 서비스 클래스의 `@Injectable()` 데코레이터에 `providedIn` 메타데이터를 지정하는 방법을 더 권장합니다.
-
 
 {@a forRoot}
 {@a the-forroot-pattern}
@@ -103,7 +102,7 @@ There are multiple ways to prevent this:
 
 <div class="alert is-helpful">
 
-**Note:** There are two example apps where you can see this scenario; the more advanced <live-example noDownload name="ngmodules">NgModules live example</live-example>, which contains `forRoot()` and `forChild()` in the routing modules and the `GreetingModule`, and the simpler <live-example name="lazy-loading-ngmodules" noDownload>Lazy Loading live example</live-example>. For an introductory explanation see the [Lazy Loading Feature Modules](guide/lazy-loading-ngmodules) guide.
+**Note:** There are two example applications where you can see this scenario; the more advanced <live-example noDownload name="ngmodules">NgModules live example</live-example>, which contains `forRoot()` and `forChild()` in the routing modules and the `GreetingModule`, and the simpler <live-example name="lazy-loading-ngmodules" noDownload>Lazy Loading live example</live-example>. For an introductory explanation see the [Lazy Loading Feature Modules](guide/lazy-loading-ngmodules) guide.
 
 </div>
 
@@ -162,7 +161,7 @@ If the `RouterModule` didn’t have `forRoot()` then each feature module would i
 
 **Note:** If you have a module which has both providers and declarations,
 you _can_ use this
-technique to separate them out and you may see this pattern in legacy apps.
+technique to separate them out and you may see this pattern in legacy applications.
 However, since Angular 6.0, the best practice for providing services is with the
 `@Injectable()` `providedIn` property.
 
@@ -202,7 +201,7 @@ This sequence ensures that whatever you add explicitly to
 the `AppModule` providers takes precedence over the providers
 of imported modules.
 
-The sample app imports `GreetingModule` and uses its `forRoot()` method one time, in `AppModule`. Registering it once like this prevents multiple instances.
+The sample application imports `GreetingModule` and uses its `forRoot()` method one time, in `AppModule`. Registering it once like this prevents multiple instances.
 
 You can also add a `forRoot()` method in the `GreetingModule` that configures
 the greeting `UserService`.
@@ -221,7 +220,7 @@ snippet, other parts of the file are left out. For the complete file, see the <l
 
 <code-example path="ngmodules/src/app/app.module.ts" region="import-for-root" header="src/app/app.module.ts (imports)"></code-example>
 
-The app displays "Miss Marple" as the user instead of the default "Sherlock Holmes".
+The application displays "Miss Marple" as the user instead of the default "Sherlock Holmes".
 
 Remember to import `GreetingModule` as a Javascript import at the top of the file and don't add it to more than one `@NgModule` `imports` list.
 -->
@@ -264,7 +263,7 @@ Remember to import `GreetingModule` as a Javascript import at the top of the fil
 
 <!--
 Only the root `AppModule` should import the `GreetingModule`. If a
-lazy-loaded module imports it too, the app can generate
+lazy-loaded module imports it too, the application can generate
 [multiple instances](guide/ngmodule-faq#q-why-bad) of a service.
 
 To guard against a lazy loaded module re-importing `GreetingModule`, add the following `GreetingModule` constructor.

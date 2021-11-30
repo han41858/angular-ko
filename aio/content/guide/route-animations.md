@@ -28,7 +28,7 @@ To enable routing transition animation, do the following:
 3. Define the animation.
 
 
-Let's illustrate a router transition animation by navigating between two routes, *Home* and *About* associated with the `HomeComponent` and `AboutComponent` views respectively. Both of these component views are children of the top-most view, hosted by `AppComponent`. We'll implement a router transition animation that slides in the new view to the right and slides out the old view when the user navigates between the two routes.
+Illustrate a router transition animation by navigating between two routes, *Home* and *About* associated with the `HomeComponent` and `AboutComponent` views respectively. Both of these component views are children of the top-most view, hosted by `AppComponent`. We'll implement a router transition animation that slides in the new view to the right and slides out the old view when the user navigates between the two routes.
 
 </br>
 
@@ -71,11 +71,11 @@ Angular 라우터가 제공하는 애니메이션 기능은 라우팅 규칙이 
 <!--
 To begin, configure a set of routes using methods available in the `RouterModule` class. This route configuration tells the router how to navigate.
 
-Use the `RouterModule.forRoot` method to define a set of routes. Also, import this `RouterModule` to the `imports` array of the main module, `AppModule`.
+Use the `RouterModule.forRoot` method to define a set of routes. Also, add `RouterModule` to the `imports` array of the main module, `AppModule`.
 
 <div class="alert is-helpful">
 
-**Note:** Use the `RouterModule.forRoot` method in the root module, `AppModule`, to register top-level application routes and providers. For feature modules, call the `RouterModule.forChild` method to register additional routes.
+**Note:** Use the `RouterModule.forRoot` method in the root module, `AppModule`, to register top-level application routes and providers. For feature modules, call the `RouterModule.forChild` method instead.
 
 </div>
 
@@ -85,11 +85,11 @@ The following configuration defines the possible routes for the application.
 
 The `home` and `about` paths are associated with the `HomeComponent` and `AboutComponent` views. The route configuration tells the Angular router to instantiate the `HomeComponent` and `AboutComponent` views when the navigation matches the corresponding path.
 
-In addition to `path` and `component`, the `data` property of each route defines the key animation-specific configuration associated with a route. The `data` property value is passed into `AppComponent` when the route changes. You can also pass additional data in route configuration that is consumed within the animation. The data property value has to match the transitions defined in the `routeAnimation` trigger, which we'll define later.
+In addition to `path` and `component`, the `data` property of each route defines the key animation-specific configuration associated with a route. The `data` property value is passed into `AppComponent` when the route changes. You can also pass additional data in route configuration that is consumed within the animation. The data property value has to match the transitions defined in the `routeAnimation` trigger, which we'll define shortly.
 
 <div class="alert is-helpful">
 
-**Note:** The `data` property names that you use can be arbitrary. For example, the name *animation* used in the example above is an arbitrary choice.
+**Note:** The `data` property names that you use can be arbitrary. For example, the name *animation* used in the preceding example is an arbitrary choice.
 
 </div>
 -->
@@ -99,7 +99,7 @@ In addition to `path` and `component`, the `data` property of each route defines
 
 <div class="alert is-helpful">
 
-**참고:** `RouterModule.forRoot()` 메소드 실행 결과를 `AppModule`에 등록하면 앱 전역에 라우팅 규칙과 라우팅 관련 서비스 프로바이더가 등록됩니다. 그래서 자식 모듈에서는 자연스럽게 서비스 프로바이더를 사용할 수 있으며, 라우팅 규칙을 추가로 지정하려면 `RouterModule.forChild()` 메소드를 사용하면 됩니다.
+**참고:** `RouterModule.forRoot()` 메소드 실행 결과를 `AppModule`에 등록하면 앱 전역에 라우팅 규칙과 라우팅 관련 서비스 프로바이더가 등록됩니다. 그래서 자식 모듈에서는 자연스럽게 서비스 프로바이더를 사용할 수 있으며, 라우팅 규칙을 지정하려면 `RouterModule.forChild()` 메소드를 사용하면 됩니다.
 
 </div>
 
@@ -124,9 +124,9 @@ In addition to `path` and `component`, the `data` property of each route defines
 ## 라우팅 영역(router outlet)
 
 <!--
-After configuring the routes, tell the Angular router where to render the views when matched with a route. You can set a router outlet by inserting a `<router-outlet>` container inside the root `AppComponent` template.
+After configuring the routes, add a `<router-outlet>` inside the root `AppComponent` template. The `<router-outlet>` directive tells the Angular router where to render the views when matched with a route.
 
-The `<router-outlet>` container has an attribute directive that contains data about active routes and their states, based on the `data` property that we set in the route configuration.
+The `<router-outlet>` directive holds the custom data set for the currently active route which can be accessed via the directive's `activatedRouteData` property, we can use such data to animate our routing transitions.
 
 <code-example path="animations/src/app/app.component.html" header="src/app/app.component.html" region="route-animations-outlet"></code-example>
 
@@ -134,11 +134,12 @@ The `<router-outlet>` container has an attribute directive that contains data ab
 
 <code-example path="animations/src/app/app.component.ts" header="src/app/app.component.ts" region="prepare-router-outlet" language="typescript"></code-example>
 
-Here, the `prepareRoute()` method takes the value of the outlet directive (established through `#outlet="outlet"`) and returns a string value representing the state of the animation based on the custom data of the current active route. You can use this data to control which transition to execute for each route.
+Here, the `prepareRoute()` method takes the value of the outlet directive (established through `#outlet="outlet"`) and returns a string value representing the state of the animation based on the custom data of the current active route. Use this data to control which transition to execute for each route.
 -->
 라우팅 규칙을 선언하고 나면 라우팅 규칙에 연결된 컴포넌트가 화면에 표시될 위치를 지정해야 합니다. 이번 예제에서는 `AppComponent` 템플릿에 `<router-outlet>`를 추가하는 방식으로 지정합니다.
 
-`<router-outlet>`를 감싸는 컨테이너에는 활성화된 라우팅 규칙이나 특정 상태를 어트리뷰트 디렉티브로 지정할 수 있습니다. `data` 객체에 지정한 값은 이 때 사용합니다.
+`<router-outlet>` 디렉티브는 현재 활성화된 라우팅 규칙에 대한 커스텀 데이터를 `activatedRouteData` 프로퍼티에 담고 있습니다.
+라우팅 애니메이션에 이 데이터를 활용할 수 있습니다.
 
 <code-example path="animations/src/app/app.component.html" header="src/app/app.component.html" region="route-animations-outlet"></code-example>
 
@@ -155,16 +156,16 @@ Here, the `prepareRoute()` method takes the value of the outlet directive (estab
 ## 애니메이션 정의하기
 
 <!--
-Animations can be defined directly inside your components. For this example we are defining the animations in a separate file, which allows us to re-use the animations.
+Animations can be defined directly inside your components. For this example you are defining the animations in a separate file, which lets us re-use the animations.
 
 The following code snippet defines a reusable animation named `slideInAnimation`.
 
 
 <code-example path="animations/src/app/animations.ts" header="src/app/animations.ts" region="route-animations" language="typescript"></code-example>
 
-The animation definition does several things:
+The animation definition performs the following tasks:
 
-* Defines two transitions. A single trigger can define multiple states and transitions.
+* Defines two transitions (a single `trigger` can define multiple states and transitions).
 * Adjusts the styles of the host and child views to control their relative positions during the transition.
 * Uses `query()` to determine which child view is entering and which is leaving the host view.
 
@@ -178,6 +179,8 @@ A route change activates the animation trigger, and a transition matching the st
 Make the animation definition available in your application by adding the reusable animation (`slideInAnimation`) to the `animations` metadata of the `AppComponent`.
 
 <code-example path="animations/src/app/app.component.ts" header="src/app/app.component.ts" region="define" language="typescript"></code-example>
+
+So, let's break down the animation definition and see more closely what it does...
 -->
 애니메이션은 컴포넌트에 직접 정의할 수 있습니다. 하지만 이번에는 이 애니메이션을 재사용할 수 있도록 별도 파일에 정의해 봅시다.
 
@@ -210,13 +213,21 @@ Make the animation definition available in your application by adding the reusab
 ### 호스트/자식 컴포넌트 스타일 지정하기
 
 <!--
-During a transition, a new view is inserted directly after the old one and both elements appear on screen at the same time. To prevent this, apply additional styling to the host view, and to the removed and inserted child views. The host view must use relative positioning, and the child views must use absolute positioning. Adding styling to the views animates the containers in place, without the DOM moving things around.
+During a transition, a new view is inserted directly after the old one and both elements appear on screen at the same time. To prevent this behavior, update the host view to use relative positioning. Then, update the removed and inserted child views to use absolute positioning. Adding these styles to the views animates the containers in place and prevents one view from affecting the position of the other on the page.
 
-<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts" region="style-view" language="typescript"></code-example>
+<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts (excerpt)" region="style-view" language="typescript"></code-example>
 -->
-트랜지션이 진행되는 동안에는 새로운 화면이 이전에 있던 화면을 대체하는 애니메이션이 함께 진행되기 때문에 두 화면이 동시에 표시되는 순간이 있습니다. 그러면 호스트 화면에 스타일을 추가해서 애니메이션을 개선할 수 있습니다. 호스트 화면은 반드시 상대(relative) 위치를 사용하며 자식 화면은 절대(absolute) 주소를 사용하면 됩니다.
 
-<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts" region="style-view" language="typescript"></code-example>
+During a transition, a new view is inserted directly after the old one and both elements appear on screen at the same time.
+To prevent this behavior, update the host view to use relative positioning.
+Then, update the removed and inserted child views to use absolute positioning.
+Adding these styles to the views animates the containers in place and prevents one view from affecting the position of the other on the page.
+
+트랜지션이 진행되는 동안에는 새로운 화면이 이전에 있던 화면을 대체하는 애니메이션이 함께 진행되기 때문에 두 화면이 동시에 표시되는 순간이 있습니다.
+이 문제를 해결하려면 호스트 화면이 상대적인 위치를 사용하도록 수정하고, 새로 들어오는 자식 화면은 절대(absolute) 위치를 사용하면 됩니다.
+이렇게 수정하면 애니메이션이 적용된 화면이 제위치에서 움직이며 다른 화면에 영향을 주는 것도 방지할 수 있습니다.
+
+<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts (일부)" region="style-view" language="typescript"></code-example>
 
 
 <!--
@@ -227,19 +238,19 @@ During a transition, a new view is inserted directly after the old one and both 
 <!--
 Use the `query()` method to find and animate elements within the current host component. The `query(":enter")` statement returns the view that is being inserted, and `query(":leave")` returns the view that is being removed.
 
-Let's assume that we are routing from the *Home => About*.
+Assume that you are routing from the *Home => About*.
 
-<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts (Continuation from above)" region="query" language="typescript"></code-example>
+<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts (excerpt)" region="query" language="typescript"></code-example>
 
 The animation code does the following after styling the views:
 
 * `query(':enter', style({ left: '-100%' }))` matches the view that is added and hides the newly added view by positioning it to the far left.
 * Calls `animateChild()` on the view that is leaving, to run its child animations.
-* Uses `group()` function to make the inner animations run in parallel.
-* Within the `group()` function:
+* Uses <code>[group](api/animations/group)()</code> function to make the inner animations run in parallel.
+* Within the <code>[group](api/animations/group)()</code> function:
     * Queries the view that is removed and animates it to slide far to the right.
     * Slides in the new view by animating the view with an easing function and duration. </br>
-    This animation results in the `about` view sliding from the left to right.
+    This animation results in the `about` view sliding in from the left.
 * Calls the `animateChild()` method on the new view to run its child animations after the main animation completes.
 
 You now have a basic routable animation that animates routing from one view to another.
@@ -248,14 +259,14 @@ You now have a basic routable animation that animates routing from one view to a
 
 *Home => About*으로 이동하는 경우를 생각해 봅시다.
 
-<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts (Continuation from above)" region="query" language="typescript"></code-example>
+<code-example path="animations/src/app/animations.ts" header="src/app/animations.ts (일부)" region="query" language="typescript"></code-example>
 
 이 때 애니메이션 코드는 다음과 같은 순서로 동작합니다:
 
 * `query(':enter style({ left: '-100%'})`는 화면에 추가되는 엘리먼트에 매칭되며 처음에는 보이지 않도록 화면 왼쪽에 배치됩니다.
 * 화면에서 사라지는 엘리먼트는 `animateChild()`를 실행해서 자식 애니메이션을 시작합니다.
-* 자식 애니메이션은 동시에 시작하기 위해 `group()` 함수를 사용했습니다.
-* `group()` 함수 안에서는:
+* 자식 애니메이션은 동시에 시작하기 위해 <code>[group](api/animations/group)()</code> 함수를 사용했습니다.
+* <code>[group](api/animations/group)()</code> 함수 안에서는:
 	* 화면에서 사라지는 엘리먼트를 찾아서 화면 오른쪽으로 이동합니다.
 	* 새로운 화면을 일반 가속도 함수로 움직입니다.</br>
 	결국 `about` 화면은 화면 왼쪽부터 오른쪾으로 움직입니다.
@@ -270,7 +281,7 @@ You now have a basic routable animation that animates routing from one view to a
 ## 더 알아보기
 
 <!--
-You may also be interested in the following:
+You might also be interested in the following:
 
 * [Introduction to Angular animations](guide/animations)
 * [Transition and triggers](guide/transition-and-triggers)

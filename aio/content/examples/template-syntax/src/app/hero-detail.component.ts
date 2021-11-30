@@ -20,7 +20,7 @@ import { Hero } from './hero';
   </div>`
 })
 export class HeroDetailComponent {
-  hero = new Hero(-1, '', 'Zzzzzzzz'); // default sleeping hero
+  hero = new Hero(-1, '', 'Zzzzzzzz'); // 기본 상태에서 히어로는 자고 있습니다.
   // heroImageUrl = 'https://wpclipart.com/cartoon/people/hero/hero_silhoutte_T.png';
   // Public Domain terms of use: https://wpclipart.com/terms.html
   heroImageUrl = 'assets/images/hero.png';
@@ -58,10 +58,10 @@ export class HeroDetailComponent {
 })
 export class BigHeroDetailComponent extends HeroDetailComponent {
 
-  @Input() hero!: Hero;
-  @Output() deleteRequest = new EventEmitter<Hero>();
+  @Input() override hero!: Hero;
+  @Output() override deleteRequest = new EventEmitter<Hero>();
 
-  delete() {
+  override delete() {
     this.deleteRequest.emit(this.hero);
   }
 }

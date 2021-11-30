@@ -184,7 +184,7 @@ Detect and act upon changes to input property values with the `ngOnChanges()` me
 
 <div class="alert is-helpful">
 
-You may prefer this approach to the property setter when watching multiple, interacting input properties.
+You might prefer this approach to the property setter when watching multiple, interacting input properties.
 
 Learn about `ngOnChanges()` in the [Lifecycle Hooks](guide/lifecycle-hooks) chapter.
 
@@ -331,7 +331,6 @@ Test that clicking the *Agree* and *Disagree* buttons update the appropriate cou
 
 </code-example>
 
-
 이 때 전달되는 이벤트 객체는 템플릿에서 `$event`라는 이름으로 접근할 수 있으며, 템플릿에서 이벤트 핸들러 함수에 인자로 전달하기 때문에 컴포넌트 클래스 코드에서 이 이벤트 객체를 활용할 수 있습니다:
 
 <div class="lightbox">
@@ -355,18 +354,16 @@ Test that clicking the *Agree* and *Disagree* buttons update the appropriate cou
 -->
 ## *템플릿 지역 변수*로 자식 컴포넌트에 접근하기
 
-<!--
 A parent component cannot use data binding to read child properties
-or invoke child methods. You can do both
+or invoke child methods. Do both
 by creating a template reference variable for the child element
 and then reference that variable *within the parent template*
 as seen in the following example.
 
 {@a countdown-timer-example}
-
 The following is a child `CountdownTimerComponent` that repeatedly counts down to zero and launches a rocket.
-It has `start` and `stop` methods that control the clock and it displays a
-countdown status message in its own template.
+The `start` and `stop` methods control the clock and a 
+countdown status message displays in its own template.
 
 <code-example path="component-interaction/src/app/countdown-timer.component.ts" header="component-interaction/src/app/countdown-timer.component.ts">
 
@@ -383,14 +380,14 @@ The `CountdownLocalVarParentComponent` that hosts the timer component is as foll
 The parent component cannot data bind to the child's
 `start` and `stop` methods nor to its `seconds` property.
 
-You can place a local variable, `#timer`, on the tag `<countdown-timer>` representing the child component.
+Place a local variable, `#timer`, on the tag `<countdown-timer>` representing the child component.
 That gives you a reference to the child component and the ability to access
 *any of its properties or methods* from within the parent template.
 
 This example wires parent buttons to the child's `start` and `stop` and
 uses interpolation to display the child's `seconds` property.
 
-Here we see the parent and child working together.
+Here, the parent and child are working together.
 
 <div class="lightbox">
   <img src="generated/images/guide/component-interaction/countdown-timer-anim.gif" alt="countdown timer">
@@ -469,14 +466,13 @@ Test also that clicking the *Stop* button pauses the countdown timer:
 -->
 ## _@ViewChild()_ 로 자식 컴포넌트 접근하기
 
-<!--
-The *local variable* approach is easy. But it is limited because
+The *local variable* approach is straightforward. But it is limited because
 the parent-child wiring must be done entirely within the parent template.
 The parent component *itself* has no access to the child.
 
 You can't use the *local variable* technique if the parent component's *class* relies on the
-child component's *class*.  The parent-child relationship of the components is not established
-within each components respective *class* with the *local variable* technique.  Since the *class*
+child component's *class*. The parent-child relationship of the components is not established
+within each components respective *class* with the *local variable* technique. Because the *class*
 instances are not connected to one another, the parent *class* cannot access the child *class*
 properties and methods.
 
@@ -485,7 +481,7 @@ When the parent component *class* requires that kind of access,
 
 The following example illustrates this technique with the same
 [Countdown Timer](guide/component-interaction#countdown-timer-example) example.
-Neither its appearance nor its behavior will change.
+Neither its appearance nor its behavior changes.
 The child [CountdownTimerComponent](guide/component-interaction#countdown-timer-example) is the same as well.
 
 <div class="alert is-helpful">
@@ -524,7 +520,7 @@ So it displays `0` seconds initially.
 Then Angular calls the `ngAfterViewInit` lifecycle hook at which time it is *too late*
 to update the parent view's display of the countdown seconds.
 Angular's unidirectional data flow rule prevents updating the parent view's
-in the same cycle. The application has to *wait one turn* before it can display the seconds.
+in the same cycle. The application must *wait one turn* before it can display the seconds.
 
 Use `setTimeout()` to wait one tick and then revise the `seconds()` method so
 that it takes future values from the timer component.
@@ -539,7 +535,8 @@ Use [the same countdown timer tests](guide/component-interaction#countdown-tests
 하지만 이 방식은 부모 컴포넌트의 템플릿에서만 자식 컴포넌트에 접근할 수 있기 때문에 자유롭게 활용하기에는 제한이 있습니다.
 부모 컴포넌트의 *클래스*에서는 자식 컴포넌트에 접근할 수 없기 때문입니다.
 
-*템플릿 지역 변수*를 사용하는 방법은 부모 컴포넌트 *클래스*에서는 사용할 수 없습니다.
+*템플릿 지역 변수*를 사용하는 방식은 부모 컴포넌트의 *클래스*에서는 사용할 수 없습니다.
+컴포넌트의 부모-자식 관계는 컴포넌트가 완전히 생성된 이후에 구성되기 때문입니다.
 그래서 부모 컴포넌트의 클래스에서는 자식 컴포넌트의 프로퍼티를 읽거나 메소드를 실행할 수 없습니다.
 
 부모 컴포넌트의 *클래스*에서 자식 컴포넌트에 접근하려면 자식 컴포넌트에 *ViewChild*를 사용해서 부모 컴포넌트로 ***주입(inject)*** 해야 합니다.
@@ -717,3 +714,5 @@ and verify that the history meets expectations:
 
 
 [맨 위로](guide/component-interaction#top)
+
+@reviewed 2021-09-17

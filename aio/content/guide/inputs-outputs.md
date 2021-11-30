@@ -5,7 +5,7 @@
 
 <!--
 A common pattern in Angular is sharing data between a parent component and one or more child components.
-You can implement this pattern by using the `@Input()` and `@Output()` directives.
+Implement this pattern with the `@Input()` and `@Output()` decorators.
 
 <div class="alert is-helpful">
 
@@ -25,8 +25,8 @@ Consider the following hierarchy:
 The `<parent-component>` serves as the context for the `<child-component>`.
 
 `@Input()` and `@Output()` give a child component a way to communicate with its parent component.
-`@Input()` allows a parent component to update data in the child component.
-Conversely, `@Output()` allows the child to send data to a parent component.
+`@Input()` lets a parent component update data in the child component.
+Conversely, `@Output()` lets the child send data to a parent component.
 -->
 Angular에서는 부모 컴포넌트와 자식 컴포넌트가 데이터를 주고받는 패턴이 자주 사용됩니다.
 이 패턴은 `@Input()`, `@Output()` 데코레이터 구현합니다.
@@ -51,7 +51,6 @@ Angular에서는 부모 컴포넌트와 자식 컴포넌트가 데이터를 주�
 `@Input()`, `@Output()` 데코레이터를 활용하면 자식 컴포넌트가 부모 컴포넌트와 통신할 수 있습니다.
 이 때 `@Input()`은 부모 컴포넌트에서 자식 컴포넌트로 데이터를 전달할 때 사용합니다.
 그리고 `@Output()`은 반대로 자식 컴포넌트에서 부모 컴포넌트로 데이터를 전달할 때 사용합니다.
-
 
 
 {@a input}
@@ -172,7 +171,7 @@ The binding source, the part to the right of the equal sign, is the data that th
 ### `@Input()` 변화 감지하기
 
 <!--
-To watch for changes on an `@Input()` property, you can use `OnChanges`, one of Angular's [lifecycle hooks](guide/lifecycle-hooks).
+To watch for changes on an `@Input()` property, use `OnChanges`, one of Angular's [lifecycle hooks](guide/lifecycle-hooks).
 See the [`OnChanges`](guide/lifecycle-hooks#onchanges) section of the [Lifecycle Hooks](guide/lifecycle-hooks) guide for more details and examples.
 -->
 `@Input()` 프로퍼티로 전달되는 값이 변경되는 것을 감지하려면 Angular [라이프싸이클 후킹 함수](guide/lifecycle-hooks) 중 `OnChanges`를 활용하면 됩니다.
@@ -187,7 +186,7 @@ See the [`OnChanges`](guide/lifecycle-hooks#onchanges) section of the [Lifecycle
 ## 부모 컴포넌트로 데이터 전달하기
 
 <!--
-The `@Output()` decorator in a child component or directive allows data to flow from the child to the parent.
+The `@Output()` decorator in a child component or directive lets data flow from the child to the parent.
 
 <div class="lightbox">
   <img src="generated/images/guide/inputs-outputs/output.svg" alt="Output diagram of the data flow going from child to parent">
@@ -239,7 +238,7 @@ The following example features an `<input>` where a user can enter a value and c
 
   <code-example path="inputs-outputs/src/app/item-output/item-output.component.ts" region="item-output" header="src/app/item-output/item-output.component.ts"></code-example>
 
-  The different parts of the above declaration are as follows:
+  The different parts of the preceding declaration are as follows:
 
     * `@Output()`&mdash;a decorator function marking the property as a way for data to go from the child to the parent
     * `newItemEvent`&mdash;the name of the `@Output()`
@@ -349,7 +348,7 @@ The `addItem()` method takes an argument in the form of a string and then adds t
 
   The `$event` contains the data that the user types into the `<input>` in the child template UI.
 
-  To see the `@Output()` working, you can add the following to the parent's template:
+  To see the `@Output()` working, add the following to the parent's template:
 
   ```html
     <ul>
@@ -389,7 +388,7 @@ The `addItem()` method takes an argument in the form of a string and then adds t
 ## `@Input()`, `@Output()` 함께 사용하기
 
 <!--
-You can use `@Input()` and `@Output()` on the same child component as follows:
+Use `@Input()` and `@Output()` on the same child component as follows:
 
 <code-example path="inputs-outputs/src/app/app.component.html" region="together" header="src/app/app.component.html"></code-example>
 
@@ -426,3 +425,5 @@ syntax, `[()]`, see [Two-way Binding](guide/two-way-binding).
 그리고 `currentItem` 프로퍼티와 `crossOffItem()` 메서드는 부모 컴포넌트 클래스에 정의되어 있습니다.
 
 프로퍼티 바인딩과 이벤트 바인딩을 결합한 _상자 안에 있는 바나나 (`[()]`)_ 문법에 대해 자세하게 알아보려면 [양방향 바인딩](guide/two-way-binding) 문서를 참고하세요.
+
+@reviewed 2021-09-17

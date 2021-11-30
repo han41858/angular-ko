@@ -21,7 +21,7 @@ The service is provided to the component through the dependency injection system
 
 <code-example path="architecture/src/app/hero-list.component.ts" header="src/app/hero-list.component.ts (class)" region="class"></code-example>
 
-Angular creates, updates, and destroys components as the user moves through the application. Your app can take action at each moment in this lifecycle through optional [lifecycle hooks](guide/lifecycle-hooks), like `ngOnInit()`.
+Angular creates, updates, and destroys components as the user moves through the application. Your application can take action at each moment in this lifecycle through optional [lifecycle hooks](guide/lifecycle-hooks), like `ngOnInit()`.
 -->
 *컴포넌트(component)*는 [*뷰(view)*](guide/glossary#view "Definition of view")라고 하는 화면의 일부를 구성합니다.
 [히어로들의 여행 튜토리얼](tutorial)을 예로 들면 이 튜토리얼에서 다루는 컴포넌트들이 다음과 같은 뷰를 각각 정의하고 있습니다:

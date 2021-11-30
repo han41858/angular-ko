@@ -46,7 +46,7 @@ ng config --global cli.analyticsSharing.tracking UA-123456-12
 To turn off this feature, run the following command:
 
 <code-example language="sh">
-ng config --global --remove cli.analyticsSharing
+ng config --global cli.analyticsSharing undefined
 </code-example>
 -->
 회사 내부 개발팀에게 CLI 사용정보를 접근할 수 있도록 설정하려면 `ng config` 명령을 사용해서 [`angular.json` 워크스페이스 환경설정 파일](guide/workspace-config)에 키를 추가해야 합니다.
@@ -79,13 +79,13 @@ If that user enables CLI analytics for their own project, your analytics display
 
 
 <code-example language="sh">
-ng config --global cli.analyticsSharing.user SOME_USER_NAME
+ng config --global cli.analyticsSharing.uuid SOME_USER_NAME
 </code-example>
 
 To generate a new random user ID, run the following command:
 
 <code-example language="sh">
-ng config --global cli.analyticsSharing.user ""
+ng config --global cli.analyticsSharing.uuid ""
 </code-example>
 -->
 전역 환경설정 파일에 커스텀 사용자 ID를 추가하면 해당 사용자가 사용한 명령이나 플래그값의 통계를 따로 확인할 수 있습니다.

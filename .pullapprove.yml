@@ -57,7 +57,6 @@
 #
 # aikidave
 # gkalpak
-# kapunahelewong
 # petebacondarwin
 # TeriGlover
 
@@ -80,7 +79,6 @@ meta:
   # one are those that appear above it.
   no-groups-above-this-pending: &no-groups-above-this-pending len(groups.active.pending.exclude("required-minimum-review").exclude("global-approvers").exclude("global-docs-approvers")) == 0
   no-groups-above-this-rejected: &no-groups-above-this-rejected len(groups.active.rejected.exclude("required-minimum-review").exclude("global-approvers").exclude("global-docs-approvers")) == 0
-  no-groups-above-this-active: &no-groups-above-this-active len(groups.active.exclude("required-minimum-review").exclude("global-approvers").exclude("global-docs-approvers")) == 0
 
   can-be-global-approved: &can-be-global-approved '"global-approvers" not in groups.approved'
   can-be-global-docs-approved: &can-be-global-docs-approved '"global-docs-approvers" not in groups.approved'
@@ -98,22 +96,23 @@ meta:
 # https://developer.github.com/v3/previews/#draft-pull-requests
 github_api_version: 'shadow-cat-preview'
 
-pullapprove_conditions:
+# https://docs.pullapprove.com/config/overrides/
+# Note that overrides are processed in order.
+overrides:
   # For PRs which are still being worked on, either still in draft mode or indicated through WIP in
   # title or label, PullApprove stays in a pending state until its ready for review.
-  - condition: "'WIP' not in title"
-    unmet_status: pending
+  - if: "draft or 'WIP' in title or 'PR state: WIP' in labels"
+    status: pending
     explanation: 'Waiting to send reviews as PR is WIP'
-  - condition: "'PR state: WIP' not in labels"
-    unmet_status: pending
-    explanation: 'Waiting to send reviews as PR is WIP'
-  - condition: 'not draft'
-    unmet_status: pending
-    explanation: 'Waiting to send reviews as PR is in draft'
   # Disable PullApprove on specific PRs by adding the `PullApprove: disable` label
-  - condition: "'PullApprove: disable' not in labels"
-    unmet_status: success
+  - if: "'PullApprove: disable' in labels"
+    status: success
     explanation: "PullApprove skipped because of 'PullApprove: disable' label"
+  # If no file matching based groups are active, report this pull request as failing. Most likely,
+  # the PR author would need to update the PullApprove config, or create new group.
+  - if: len(groups.active.exclude("required-minimum-review").exclude("global-*")) == 0 and len(groups.approved.include("global-*")) == 0
+    status: failure
+    explanation: 'At least one group must match this PR. Please update an existing review group, or create a new group.'
 
 groups:
   # =========================================================
@@ -179,7 +178,6 @@ groups:
         - ayazhafiz # Ayaz Hafiz
         - clydin # Charles Lyding
         - crisbeto # Kristiyan Kostadinov
-        - dennispbrown # Denny Brown
         - devversion # Paul Gschwendtner
         - dgp1130 # Doug Parker
         - filipesilva # Filipe Silva
@@ -192,10 +190,6 @@ groups:
         - JiaLiPassion # Jia Li
         - JoostK # Joost Koehoorn
         - josephperrott # Joey Perrott
-        - juleskremer # Jules Kremer
-        - kapunahelewong # Kapunahele Wong
-        - kara # Kara Erickson
-        - kyliau # Keen Yee Liau
         - manughub # Manu Murthy
         - mgechev # Minko Gechev
         - mmalerba # Miles Malerba
@@ -243,6 +237,7 @@ groups:
         contains_any_globs(files.exclude('packages/compiler-cli/ngcc/**'), [
           'packages/compiler/**',
           'packages/examples/compiler/**',
+          'aio/content/examples/angular-compiler-options/**',
           'packages/compiler-cli/**',
           'aio/content/guide/angular-compiler-options.md',
           'aio/content/guide/aot-compiler.md',
@@ -251,8 +246,9 @@ groups:
           ])
     reviewers:
       users:
-        - alxhub
         - AndrewKushnir
+        - alxhub
+        - atscott
         - JoostK
 
   # =========================================================
@@ -414,7 +410,11 @@ groups:
           'aio/content/guide/template-statements.md',
           'aio/content/guide/user-input.md',
           'aio/content/examples/user-input/**',
-          'aio/content/images/guide/user-input/**'
+          'aio/content/images/guide/user-input/**',
+          'aio/content/guide/view-encapsulation.md',
+          'aio/content/examples/view-encapsulation/**',
+          'aio/content/images/guide/view-encapsulation/**',
+          'aio/content/special-elements/**'
           ])
     reviewers:
       users:
@@ -543,7 +543,20 @@ groups:
           'packages/compiler/src/render3/view/i18n/**',
           'packages/compiler-cli/src/extract_i18n.ts',
           'packages/localize/**',
-          'aio/content/guide/i18n.md',
+          'aio/content/guide/i18n-overview.md',
+          'aio/content/guide/i18n-common-overview.md',
+          'aio/content/guide/i18n-common-add-package.md',
+          'aio/content/guide/i18n-common-locale-id.md',
+          'aio/content/guide/i18n-common-format-data-locale.md',
+          'aio/content/guide/i18n-common-prepare.md',
+          'aio/content/guide/i18n-common-translation-files.md',
+          'aio/content/guide/i18n-common-merge.md',
+          'aio/content/guide/i18n-common-deploy.md',
+          'aio/content/guide/i18n-example.md',
+          'aio/content/guide/i18n-optional-overview.md',
+          'aio/content/guide/i18n-optional-manual-runtime-locale.md',
+          'aio/content/guide/i18n-optional-import-global-variants.md',
+          'aio/content/guide/i18n-optional-manage-marked-text.md',
           'aio/content/examples/i18n/**'
           ])
     reviewers:
@@ -562,6 +575,7 @@ groups:
       - >
         contains_any_globs(files, [
           'packages/platform-server/**',
+          'aio/content/guide/prerendering.md',
           'aio/content/guide/universal.md',
           'aio/content/examples/universal/**'
           ])
@@ -569,7 +583,6 @@ groups:
       users:
         - alan-agius4
         - alxhub
-        - kyliau
 
   # =========================================================
   #  Framework: Router
@@ -617,6 +630,7 @@ groups:
           'aio/content/guide/service-worker-config.md',
           'aio/content/guide/service-worker-devops.md',
           'aio/content/guide/service-worker-intro.md',
+          'aio/content/guide/service-worker-notifications.md',
           'aio/content/images/guide/service-worker/**'
           ])
     reviewers:
@@ -664,7 +678,7 @@ groups:
       - *can-be-global-approved
       - *can-be-global-docs-approved
       - >
-        contains_any_globs(files.exclude('packages/compiler-cli/**').exclude('packages/language-service/**'), [
+        contains_any_globs(files.exclude('packages/compiler-cli/**').exclude('packages/language-service/**').exclude('packages/service-worker/**'), [
           'packages/**/testing/**',
           'aio/content/guide/testing.md',
           'aio/content/guide/test-debugging.md',
@@ -731,9 +745,12 @@ groups:
           'packages/core/test/linker/security_integration_spec.ts',
           'packages/compiler/src/schema/**',
           'packages/platform-browser/src/security/**',
+          'packages/tsconfig-tsec-base.json',
+          'packages/tsec-exemption.json',
+          'tools/tsec.bzl',
           'aio/content/guide/security.md',
           'aio/content/examples/security/**',
-          'aio/content/images/guide/security/**'
+          'aio/content/images/guide/security/**',
           ])
     reviewers:
       users:
@@ -759,9 +776,9 @@ groups:
           ])
     reviewers:
       users:
+        - devversion
         - IgorMinar
         - josephperrott
-        - kyliau
 
   # =========================================================
   #  Language Service
@@ -779,7 +796,6 @@ groups:
           ])
     reviewers:
       users:
-        - kyliau
         - atscott
         - zarend
 
@@ -967,6 +983,7 @@ groups:
           'aio/content/guide/updating.md',
           'aio/content/guide/deprecations.md',
           'aio/content/guide/migration-legacy-message-id.md',
+          'aio/content/examples/deprecation-guide/**',
           'aio/content/guide/migration-renderer.md',
           'aio/content/guide/migration-undecorated-classes.md',
           'aio/content/guide/migration-dynamic-flag.md',
@@ -974,7 +991,7 @@ groups:
           'aio/content/guide/migration-localize.md',
           'aio/content/guide/migration-module-with-providers.md',
           'aio/content/guide/static-query-migration.md',
-          'aio/content/guide/updating-to-version-12.md',
+          'aio/content/guide/update-to-latest-version.md',
           'aio/content/guide/ivy-compatibility.md',
           'aio/content/guide/ivy-compatibility-examples.md'
           ])
@@ -1013,13 +1030,14 @@ groups:
       - *can-be-global-docs-approved
       - >
         contains_any_globs(files, [
-          'packages/compiler-cli/src/tooling.ts'
+          'packages/compiler-cli/private/tooling.ts',
+          'packages/localize/tools/index.ts'
         ])
     reviewers:
       users:
         - alan-agius4
         - clydin
-        - kyliau
+        - dgp1130
         - IgorMinar
     reviews:
       request: -1 # request reviews from everyone
@@ -1073,7 +1091,8 @@ groups:
         contains_any_globs(files, [
           'aio/content/guide/creating-libraries.md',
           'aio/content/guide/libraries.md',
-          'aio/content/guide/using-libraries.md'
+          'aio/content/guide/using-libraries.md',
+          'aio/content/guide/angular-package-format.md'
           ])
     reviewers:
       users:
@@ -1126,6 +1145,8 @@ groups:
           'aio/content/guide/docs-style-guide.md',
           'aio/content/examples/docs-style-guide/**',
           'aio/content/images/guide/docs-style-guide/**',
+          'aio/content/guide/localized-documentation.md',
+          'aio/content/guide/localizing-angular.md',
           'aio/content/guide/reviewing-content.md',
           'aio/content/guide/updating-content-github-ui.md',
           'aio/content/guide/updating-search-keywords.md',
@@ -1153,10 +1174,10 @@ groups:
           '.ng-dev/**',
           '.vscode/**',
           '.yarn/**',
-          'dev-infra/**',
           'docs/*.md',
           'docs/images/**',
           'goldens/*',
+          'goldens/public-api/manage.js',
           'modules/*',
           'packages/*',
           'packages/examples/test-utils/**',
@@ -1176,7 +1197,6 @@ groups:
           'tools/source-map-test/**',
           'tools/symbol-extractor/**',
           'tools/testing/**',
-          'tools/ts-api-guardian/**',
           'tools/tslint/**',
           'tools/utils/**',
           'tools/yarn/**',
@@ -1201,9 +1221,10 @@ groups:
       - *no-groups-above-this-rejected
       - *can-be-global-approved
       - >
-        contains_any_globs(files, [
+        contains_any_globs(files.exclude("goldens/public-api/manage.js"), [
           'goldens/public-api/**',
           'docs/NAMING.md',
+          'aio/content/guide/angular-package-format.md',
           'aio/content/errors/*.md',
           'aio/content/guide/glossary.md',
           'aio/content/guide/styleguide.md',
@@ -1304,35 +1325,3 @@ groups:
         - atscott
         - jelbourn
         - josephperrott
-
-  # ====================================================
-  #  Catch all for if no groups match the code change
-  # ====================================================
-  fallback:
-    <<: *defaults
-    # A group is considered to be `active` for a PR if at least one of group's
-    # conditions matches the PR.
-    #
-    # The PullApprove CI check should fail if a PR has no `active` groups, as
-    # this indicates the PR is modifying a file that has no owner.
-    #
-    # This is enforced through the pullapprove verification check done
-    # as part of the CircleCI lint job.  Failures in this lint job should be
-    # fixed as part of the PR.  This can be done by updating the
-    # `.pullapprove.yml` file cover the unmatched path.
-    # The pullapprove verification script is part of the ng-dev tool and can be
-    # run locally with the command: `yarn -s ng-dev pullapprove verify`
-    #
-    # For cases in which the verification check fails to ensure coverage, this
-    # group will be active.  The expectation is that this should be remedied
-    # before merging the PR as described above.  In an emergency situation
-    # `global-approvers` can still approve PRs that match this `fallback` rule,
-    # but that should be an exception and not an expectation.
-    conditions:
-      - *no-groups-above-this-active
-      # When any of the `global-*` groups is approved, they cause other groups to deactivate.
-      # In those cases, the condition above would evaluate to `true` while in reality, only a global
-      # approval has been provided. To ensure we don't activate the fallback group in such cases,
-      # ensure that no explicit global approval has been provided.
-      - *can-be-global-approved
-      - *can-be-global-docs-approved

@@ -1,24 +1,19 @@
 <!--
 # Entry components
 -->
+# 진입 컴포넌트 (Entry components)
+
+<div class="alert is-helpful">
 
 <!--
-<div class="alert is-helpful">
-
-Entry components have been deprecated with the [Ivy rendering engine](https://angular.io/guide/ivy). 
-For more information, see [entryComponents deprecation](https://angular.io/guide/deprecations#entrycomponents-and-analyze_for_entry_components-no-longer-required) in the [Deprecated APIs and features](https://angular.io/guide/deprecations).
-
-</div>
+Entry components are deprecated, for more information, see
+[entryComponents deprecation](guide/deprecations#entrycomponents-and-analyze_for_entry_components-no-longer-required)
+in the [Deprecated APIs and features](guide/deprecations).
 -->
-<div class="alert is-helpful">
-
-진입 컴포넌트는 [Ivy 렌더링 엔진](https://angular.io/guide/ivy)이 도입되면서 사용이 중단되었습니다.
-자세한 내용은 [지원이 중단되는 API, 기능](https://angular.io/guide/deprecations) 문서의 [entryComponents 지원 중단](https://angular.io/guide/deprecations#entrycomponents-and-analyze_for_entry_components-no-longer-required) 섹션을 참고하세요.
+진입 컴포넌트는 지원이 중단되었습니다.
+자세한 내용은 [지원이 중단되는 API, 기능](guide/deprecations) 문서의 [entryComponents 지원 중단](guide/deprecations#entrycomponents-and-analyze_for_entry_components-no-longer-required) 섹션을 참고하세요.
 
 </div>
-
-
-# 진입 컴포넌트 (Entry components)
 
 <!--
 An entry component is any component that Angular loads imperatively, (which means you’re not referencing it in the template), by type. You specify an entry component by bootstrapping it in an NgModule, or including it in a routing definition.
@@ -31,8 +26,8 @@ An entry component is any component that Angular loads imperatively, (which mean
 <!--
     To contrast the two types of components, there are components which are included in the template, which are declarative. Additionally, there are components which you load imperatively; that is, entry components.
 -->
-컴포넌트는 용도에 따라 두 종류로 구분할 수 있습니다.
-하나는 템플릿에서 셀렉터로 사용하는 컴포넌트이며, 다른 하나는 모듈에서 명시적으로 지정하는 진입 컴포넌트입니다.
+    컴포넌트는 용도에 따라 두 종류로 구분할 수 있습니다.
+    하나는 템플릿에서 셀렉터로 사용하는 컴포넌트이며, 다른 하나는 모듈에서 명시적으로 지정하는 진입 컴포넌트입니다.
 
 </div>
 
@@ -166,7 +161,7 @@ All router components must be entry components. Because this would require you t
 </div>
 
 Though the `@NgModule` decorator has an `entryComponents` array, most of the time
-you won't have to explicitly set any entry components because Angular adds components listed in `@NgModule.bootstrap` and those in route definitions to entry components automatically. Though these two mechanisms account for most entry components, if your app happens to bootstrap or dynamically load a component by type imperatively,
+you won't have to explicitly set any entry components because Angular adds components listed in `@NgModule.bootstrap` and those in route definitions to entry components automatically. Though these two mechanisms account for most entry components, if your application happens to bootstrap or dynamically load a component by type imperatively,
 you must add it to `entryComponents` explicitly.
 -->
 <div class="alert is-helpful">
@@ -185,7 +180,7 @@ you must add it to `entryComponents` explicitly.
 ### `entryComponents` 배열과 컴파일러의 동작
 
 <!--
-For production apps you want to load the smallest code possible.
+For production applications you want to load the smallest code possible.
 The code should contain only the classes that you actually need and
 exclude components that are never used. For this reason, the Angular compiler only generates code for components which are reachable from the `entryComponents`; This means that adding more references to `@NgModule.declarations` does not imply that they will necessarily be included in the final bundle.
 -->

@@ -25,25 +25,25 @@ A basic understanding of the information in [Introduction to Angular service wor
 ## 프로젝트에 서비스 워커 추가하기
 
 <!--
-To set up the Angular service worker in your project, use the CLI command `ng add @angular/pwa`. It takes care of configuring your application to use service workers by adding the `service-worker` package along
+To set up the Angular service worker in your project, use the CLI command `ng add @angular/pwa`. It takes care of configuring your application to use service workers by adding the `@angular/service-worker` package along
 with setting up the necessary support files.
 -->
 프로젝트에 Angular 서비스 워커를 추기하려면 Angular CLI 명령 `ng add @angular/pwa`를 실행하면 됩니다.
-그러면 Angular CLI가 프로젝트에 `service-worker` 패키지를 추가하고 서비스 워커가 동작하기 위해 필요한 환경을 자동으로 구성합니다.
+그러면 Angular CLI가 프로젝트에 `@angular/service-worker` 패키지를 추가하고 서비스 워커가 동작하기 위해 필요한 환경을 자동으로 구성합니다.
 
 ```sh
 ng add @angular/pwa --project *project-name*
 ```
 
 <!--
-The above command completes the following actions:
+The preceding command completes the following actions:
 
 1. Adds the `@angular/service-worker` package to your project.
 2. Enables service worker build support in the CLI.
 3. Imports and registers the service worker in the application module.
 4. Updates the `index.html` file:
     * Includes a link to add the `manifest.webmanifest` file.
-    * Adds meta tags for `theme-color`.
+    * Adds a meta tag for `theme-color`.
 5. Installs icon files to support the installed Progressive Web App (PWA).
 6. Creates the service worker configuration file called [`ngsw-config.json`](/guide/service-worker-config), which specifies the caching behaviors and other settings.
 
@@ -89,7 +89,7 @@ using an example application.
 ### `http-server`로 애플리케이션 띄우기
 
 <!--
-Because `ng serve` does not work with service workers, you must use a separate HTTP server to test your project locally. You can use any HTTP server. The example below uses the [http-server](https://www.npmjs.com/package/http-server) package from npm. To reduce the possibility of conflicts and avoid serving stale content, test on a dedicated port and disable caching.
+Because `ng serve` does not work with service workers, you must use a separate HTTP server to test your project locally. Use any HTTP server. The following example uses the [http-server](https://www.npmjs.com/package/http-server) package from npm. To reduce the possibility of conflicts and avoid serving stale content, test on a dedicated port and disable caching.
 
 To serve the directory containing your web files with `http-server`, run the following command:
 -->
@@ -107,24 +107,36 @@ http-server -p 8080 -c-1 dist/<project-name>
 ### 초기 로드
 
 <!--
-With the server running, you can point your browser at http://localhost:8080/. Your application should load normally.
-
-**Tip:** When testing Angular service workers, it's a good idea to use an incognito or private window in your browser to ensure the service worker doesn't end up reading from a previous leftover state, which can cause unexpected behavior.
--->
-서버를 실행하고 나면 브라우저로 http://localhost:8080/ 에 접근해서 Angular 애플리케이션을 실행할 수 있습니다.
-
-**팁:** Angular 서비스 워커를 사용할 때는 이전에 실행했던 서비스 워커의 영향을 배제하기 위해 브라우저를 시크릿 모드로 실행하는 것이 좋습니다.
+With the server running, point your browser at http://localhost:8080/. Your application should load normally.
 
 <div class="alert is-helpful">
 
-<!--
-**Note:**
-If you are not using HTTPS, the service worker will only be registered when accessing the application on `localhost`.
--->
-**참고:**
-HTTPS를 사용하지 않으면 `localhost`에서 앱을 실행할 때만 서비스 워커를 등록할 수 있습니다.
+**Tip:** When testing Angular service workers, it's a good idea to use an incognito or private window in your browser to ensure the service worker doesn't end up reading from a previous leftover state, which can cause unexpected behavior.
 
 </div>
+
+<div class="alert is-helpful">
+
+**Note:**
+If you are not using HTTPS, the service worker will only be registered when accessing the application on `localhost`.
+
+</div>
+-->
+서버를 실행하고 나면 브라우저로 http://localhost:8080/ 에 접근해서 Angular 애플리케이션을 실행할 수 있습니다.
+
+<div class="alert is-helpful">
+
+**팁:** Angular 서비스 워커를 테스트할 때는 이전에 실행했던 서비스 워커의 영향을 제거하기 위해 브라우저를 시크릿 모드로 실행하는 것이 좋습니다.
+
+</div>
+
+<div class="alert is-helpful">
+
+**참고:**
+HTTPS를 사용하지 않으면 `localhost`에서 앱을 실행할 때만 서비스 워커를 등록하고 서비스 워커에 접근할 수 있습니다.
+
+</div>
+
 
 <!--
 ### Simulating a network issue
@@ -132,13 +144,17 @@ HTTPS를 사용하지 않으면 `localhost`에서 앱을 실행할 때만 서비
 ### 네트워크 오류 시뮬레이션하기
 
 <!--
-To simulate a network issue, disable network interaction for your application. In Chrome:
+To simulate a network issue, disable network interaction for your application.
+
+In Chrome:
 
 1. Select **Tools** > **Developer Tools** (from the Chrome menu located at the top right corner).
-2. Go to the **Network tab**.
-3. Check the **Offline box**.
+1. Go to the **Network tab**.
+1. Select **Offline** in the **Throttling** dropdown menu.
 -->
-네트워크 오류를 시뮬레이션하려면 애플리케이션이 동작하는 네트워크 환경을 조작하면 됩니다. Chrome이라면 이렇게 합니다:
+네트워크 오류를 시뮬레이션하려면 애플리케이션이 동작하는 네트워크 환경을 조작하면 됩니다.
+
+Chrome이라면 이렇게 합니다:
 
 1. 오른쪽 위 메뉴에서 **도구 더보기** > **개발자 도구**를 선택합니다.
 2. **Network 탭**으로 이동합니다.
@@ -146,11 +162,11 @@ To simulate a network issue, disable network interaction for your application. I
 
 <!--
 <div class="lightbox">
-  <img src="generated/images/guide/service-worker/offline-checkbox.png" alt="The offline checkbox in the Network tab is checked">
+  <img src="generated/images/guide/service-worker/offline-option.png" alt="The offline option in the Network tab is selected">
 </div>
 -->
 <div class="lightbox">
-  <img src="generated/images/guide/service-worker/offline-checkbox.png" alt="Network 탭의 Offline 체크박스가 체크된 모습">
+  <img src="generated/images/guide/service-worker/offline-option.png" alt="Network 탭의 Offline 체크박스가 선택된 모습">
 </div>
 
 <!--
@@ -160,7 +176,7 @@ For applications that do not use the Angular service worker, refreshing now woul
 
 With the addition of an Angular service worker, the application behavior changes. On a refresh, the page loads normally.
 
-If you look at the Network tab, you can verify that the service worker is active.
+Look at the Network tab to verify that the service worker is active.
 -->
 이제는 애플리케이션이 네트워크를 사용할 수 없습니다.
 
@@ -171,10 +187,10 @@ If you look at the Network tab, you can verify that the service worker is active
 </div>
 
 <!--
-Notice that under the "Size" column, the requests state is `(from ServiceWorker)`. This means that the resources are not being loaded from the network. Instead, they are being loaded from the service worker's cache.
+Notice that under the "Size" column, the requests state is `(ServiceWorker)`. This means that the resources are not being loaded from the network. Instead, they are being loaded from the service worker's cache.
 -->
 하지만 서비스 워커가 동작하는 Angular 애플리케이션이라면 애플리케이션 동작에 필요한 파일은 서비스 워커를 사용해서 가져올 수 있습니다.
-그래서 네트워크 탭에서 Size 행을 확인해보면 `(from ServiceWorker)`라는 부분을 확인할 수 있습니다.
+그래서 네트워크 탭에서 Size 행을 확인해보면 `(ServiceWorker)`라는 부분을 확인할 수 있습니다.
 이 말은 애플리케이션 실행에 필요한 리소스를 네트워크를 사용하지 않고 로드했다는 의미입니다.
 이 리소스들은 서비스 워커의 캐시에서 로드한 것입니다.
 
@@ -201,7 +217,7 @@ Notice that all of the files the browser needs to render this application are ca
 * `assets` 폴더에 있는 모든 파일
 * `outputPath` (기본값은 `./dist/<project-name>/`)와 `resourcesOutputPath`로 지정된 폴더에 있는 이미지 파일과 폰트 파일. 자세한 내용은 [`ng build`](cli/build) 문서를 참고하세요.
 
-<div class="alert is-helpful">
+<div class="alert is-important">
 <!--
 Pay attention to two key points:
 
@@ -225,19 +241,19 @@ Pay attention to two key points:
 
 <!--
 Now that you've seen how service workers cache your application, the
-next step is understanding how updates work. Let's make a change to the application, and watch the service worker install the update:
+next step is understanding how updates work. Make a change to the application, and watch the service worker install the update:
 
-1. If you're testing in an incognito window, open a second blank tab. This will keep the incognito and the cache state alive during your test.
+1. If you're testing in an incognito window, open a second blank tab. This keeps the incognito and the cache state alive during your test.
 
-2. Close the application tab, but not the window. This should also close the Developer Tools.
+1. Close the application tab, but not the window. This should also close the Developer Tools.
 
-3. Shut down `http-server`.
+1. Shut down `http-server`.
 
-4. Open `src/app/app.component.html` for editing.
+1. Open `src/app/app.component.html` for editing.
 
-5. Change the text `Welcome to {{title}}!` to `Bienvenue à {{title}}!`.
+1. Change the text `Welcome to {{title}}!` to `Bienvenue à {{title}}!`.
 
-6. Build and run the server again:
+1. Build and run the server again:
 -->
 지금까지 서비스 워커가 애플리케이션을 어떻게 캐싱하는지 알아봤습니다.
 이제 애플리케이션 코드를 수정하면 어떻게하면 되는지 알아봅시다.
@@ -268,53 +284,48 @@ http-server -p 8080 -c-1 dist/<project-name>
 <!--
 Now look at how the browser and service worker handle the updated application.
 
-1. Open http://localhost:8080 again in the same window. What happens?
+1. Open [http://localhost:8080](http://localhost:8080) again in the same window. What happens?
+
+  <div class="lightbox">
+    <img src="generated/images/guide/service-worker/welcome-msg-en.png" alt="It still says Welcome to Service Workers!">
+  </div>
+
+  What went wrong? Nothing, actually. The Angular service worker is doing its job and serving the version of the application that it has **installed**, even though there is an update available. In the interest of speed, the service worker doesn't wait to check for updates before it serves the application that it has cached.
+
+  Look at the `http-server` logs to see the service worker requesting `/ngsw.json`. This is how the service worker checks for updates.
+
+1. Refresh the page.
+
+  <div class="lightbox">
+    <img src="generated/images/guide/service-worker/welcome-msg-fr.png" alt="The text has changed to say Bienvenue à app!">
+  </div>
+
+  The service worker installed the updated version of your application *in the background*, and the next time the page is loaded or reloaded, the service worker switches to the latest version.
 -->
 이제 브라우저와 서비스 워커가 어떻게 동작하는지 확인해 봅시다.
 
-1. 이전에 열었던 윈도우에서 http://localhost:8080로 접속합니다. 어떤 화면이 보이나요?
+1. 이전에 열었던 윈도우에서 [http://localhost:8080](http://localhost:8080)로 접속합니다. 어떤 화면이 보이나요?
 
-<!--
-<div class="lightbox">
-  <img src="generated/images/guide/service-worker/welcome-msg-en.png" alt="It still says Welcome to Service Workers!">
-</div>
--->
-<div class="lightbox">
-  <img src="generated/images/guide/service-worker/welcome-msg-en.png" alt="아직 Welcome to Service Workers!가 표시됩니다.">
-</div>
+  <div class="lightbox">
+    <img src="generated/images/guide/service-worker/welcome-msg-en.png" alt="It still says Welcome to Service Workers!">
+  </div>
 
-<!--
-What went wrong? Nothing, actually. The Angular service worker is doing its job and serving the version of the application that it has **installed**, even though there is an update available. In the interest of speed, the service worker doesn't wait to check for updates before it serves the application that it has cached.
+  무언가 잘못된 걸까요? 아닙니다.
+  Angular 서비스 워커는 이미 **설치된** 애플리케이션을 실행하는 원래 역할을 다하고 있을 뿐입니다.
+  애플리케이션을 빠르게 실행하기 위해서, 이미 애플리케이션을 실행하고 있는 상태라면 서비스 워커는 새로운 업데이트가 있는지 확인하지 않습니다.
 
-If you look at the `http-server` logs, you can see the service worker requesting `/ngsw.json`. This is how the service worker checks for updates.
+  `http-server`가 출력한 로그를 확인해보면 서비스 워커가 `ngsw.json` 파일을 요청한 것을 확인할 수 있습니다.
+  서비스 워커는 이 파일의 내용을 보고 업데이트를 해야 할지 판단합니다.
 
-2. Refresh the page.
--->
-무언가 잘못된 걸까요? 아닙니다.
-Angular 서비스 워커는 이미 **설치된** 애플리케이션을 실행하는 원래 역할을 다하고 있을 뿐입니다.
-애플리케이션을 빠르게 실행하기 위해서, 이미 애플리케이션을 실행하고 있는 상태라면 서비스 워커는 새로운 업데이트가 있는지 확인하지 않습니다.
+1. 페이지를 새로고침 해봅시다.
 
-`http-server`가 출력한 로그를 확인해보면 서비스 워커가 `ngsw.json` 파일을 요청한 것을 확인할 수 있습니다.
-서비스 워커는 이 파일의 내용을 보고 업데이트를 해야 할지 판단합니다.
+  <div class="lightbox">
+    <img src="generated/images/guide/service-worker/welcome-msg-fr.png" alt="The text has changed to say Bienvenue à app!">
+  </div>
 
-2. 페이지를 새로고침 해봅시다.
+  서비스 워커는 애플리케이션을 *백그라운드에서* 설치하고 업데이트합니다.
+  그래서 페이지가 다시 로드되면 애플리케이션이 최신 버전으로 실행됩니다.
 
-<!--
-<div class="lightbox">
-  <img src="generated/images/guide/service-worker/welcome-msg-fr.png" alt="The text has changed to say Bienvenue à app!">
-</div>
--->
-<div class="lightbox">
-  <img src="generated/images/guide/service-worker/welcome-msg-fr.png" alt="화면의 문구가 Bienvenue à app!로 변경되었습니다.">
-</div>
-
-<!--
-The service worker installed the updated version of your application *in the background*, and the next time the page is loaded or reloaded, the service worker switches to the latest version.
--->
-서비스 워커는 애플리케이션을 *백그라운드에서* 설치하고 업데이트합니다.
-그래서 페이지가 다시 로드되면 애플리케이션이 최신 버전으로 실행됩니다.
-
-<hr />
 
 <!--
 ## More on Angular service workers
@@ -322,8 +333,10 @@ The service worker installed the updated version of your application *in the bac
 ## 더 알아보기
 
 <!--
-You may also be interested in the following:
+You might also be interested in the following:
+* [App Shell](guide/app-shell).
 * [Communicating with service workers](guide/service-worker-communications).
 -->
 이제 다음 내용을 확인해 보세요:
-* [서비스 워커로 통신하기](guide/service-worker-communications).
+* [앱 기본 틀](guide/app-shell)
+* [서비스 워커로 통신하기](guide/service-worker-communications)

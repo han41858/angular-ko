@@ -199,7 +199,7 @@ And in the same file, add it to the `@NgModule` `declarations` array:
 
 Now you could use your `ItemDirective` in a component. This example uses `AppModule`, but you'd do it the same way for a feature module. For more about directives, see [Attribute Directives](guide/attribute-directives) and [Structural Directives](guide/structural-directives). You'd also use the same technique for [pipes](guide/pipes) and components.
 
-Remember, components, directives, and pipes belong to one module only. You only need to declare them once in your app because you share them by importing the necessary modules. This saves you time and helps keep your app lean.
+Remember, components, directives, and pipes belong to one module only. You only need to declare them once in your application because you share them by importing the necessary modules. This saves you time and helps keep your application lean.
 -->
 `declarations` 배열에 디렉티브를 등록해 봅시다.
 모듈에 디렉티브나 컴포넌트, 파이프를 등록하려면 다음 순서로 진행합니다:
@@ -231,7 +231,6 @@ Angular CLI로 디렉티브를 생성하면 디렉티브의 기본 구조가 다
 컴포넌트, 디렉티브, 파이프는 언제나 모듈 하나에만 포함된다는 것을 꼭 기억하세요.
 이 구성요소들은 어떤 모듈이던지 한 곳에만 등록하면 되며, 다른 곳에서는 등록된 모듈을 불러와서 사용하기만 하면 됩니다.
 이 구조는 앱을 구성하는 모듈의 결합도를 최대한 낮추기 위한 구조입니다.
-
 
 {@a imports}
 
@@ -278,7 +277,7 @@ Angular CLI로 생성했던 `NgModule` 모듈로 설명하면, 모듈에 포함�
 ## `providers` 배열
 
 <!--
-The providers array is where you list the services the app needs. When
+The providers array is where you list the services the application needs. When
 you list services here, they are available app-wide. You can scope
 them when using feature modules and lazy loading. For more information, see
 [Providers](guide/providers).
@@ -308,6 +307,11 @@ most applications have only one component tree and bootstrap a single root compo
 
 This one root component is usually called `AppComponent` and is in the
 root module's `bootstrap` array.
+
+In a situation where you want to bootstrap a component based on an API response,
+or you want to mount the `AppComponent` in a different DOM node that doesn't match
+the component selector, please refer to `ApplicationRef.bootstrap()`
+documentation.
 -->
 Angular 애플리케이션은 최상위 모듈인 `AppModule`에서 시작되며, 이 때 모듈에 정의된 `entryComponent` 배열을 참조합니다.
 Angular 모듈의 다른 메타데이터와는 다르게, `bootstrap` 배열에 등록된 컴포넌트는 부트스트랩 단계에서 바로 생성되어 브라우저 DOM에 추가됩니다.
@@ -319,13 +323,16 @@ Angular 모듈의 다른 메타데이터와는 다르게, `bootstrap` 배열에 
 
 컴포넌트 트리가 하나만 있다면 이 컴포넌트 트리의 최상위 컴포넌트를 보통 `AppComponent`라고 하고, Angular 모듈의 `bootstrap` 배열에는 컴포넌트 하나만 등록합니다.
 
+API 요청을 보내고 받은 응답에 따라 부트스트랩 할 컴포넌트를 선택하거나, `AppComponent`를 컴포넌트 셀렉터로 지정한 이름과 다른 DOM 노드로 마운트 할 수도 있습니다.
+자세한 내용은 `ApplicationRef.bootstrap()` 문서를 참고하세요.
+
 <!--
 ## More about Angular Modules
 -->
 ## Angular 모듈 더 알아보기
 
 <!--
-For more on NgModules you're likely to see frequently in apps,
+For more on NgModules you're likely to see frequently in applications,
 see [Frequently Used Modules](guide/frequent-ngmodules).
 -->
 애플리케이션을 개발하면서 자주 사용하는 NgModule에 대해 더 알아보려면 [자주 사용하는 NgModule](guide/frequent-ngmodules) 문서를 참고하세요.

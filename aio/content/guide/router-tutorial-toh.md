@@ -7,7 +7,7 @@
 
 <!--
 This tutorial provides an extensive overview of the Angular router.
-In this tutorial, you will build upon a basic router configuration to explore features such as child routes, route parameters, lazy load NgModules, guard routes, and preloading data to improve the user experience.
+In this tutorial, you build upon a basic router configuration to explore features such as child routes, route parameters, lazy load NgModules, guard routes, and preloading data to improve the user experience.
 
 For a working example of the final version of the app, see the <live-example name="router"></live-example>.
 -->
@@ -103,66 +103,6 @@ The application has three main feature areas:
 Try it by clicking on this <live-example name="router" title="Hero Employment Agency Live Example">live example link</live-example>.
 
 The application renders with a row of navigation buttons and the *Heroes* view with its list of heroes.
-
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/hero-list.png' alt="Hero List">
-</div>
-
-
-
-Select one hero and the application takes you to a hero editing screen.
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/hero-detail.png' alt="Crisis Center Detail">
-</div>
-
-
-
-Alter the name.
-Click the "Back" button and the application returns to the heroes list which displays the changed hero name.
-Notice that the name change took effect immediately.
-
-Had you clicked the browser's back button instead of the application's "Back" button, the app would have returned you to the heroes list as well.
-Angular application navigation updates the browser history as normal web navigation does.
-
-Now click the *Crisis Center* link for a list of ongoing crises.
-
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/crisis-center-list.png' alt="Crisis Center List">
-</div>
-
-Select a crisis and the application takes you to a crisis editing screen.
-The _Crisis Detail_ appears in a child component on the same page, beneath the list.
-
-Alter the name of a crisis.
-Notice that the corresponding name in the crisis list does _not_ change.
-
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/crisis-center-detail.png' alt="Crisis Center Detail">
-</div>
-
-
-Unlike *Hero Detail*, which updates as you type, *Crisis Detail* changes are temporary until you either save or discard them by pressing the "Save" or "Cancel" buttons.
-Both buttons navigate back to the *Crisis Center* and its list of crises.
-
-Click the browser back button or the "Heroes" link to activate a dialog.
-
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/confirm-dialog.png' alt="Confirm Dialog">
-</div>
-
-
-
-You can say "OK" and lose your changes or click "Cancel" and continue editing.
-
-Behind this behavior is the router's `CanDeactivate` guard.
-The guard gives you a chance to clean-up or ask the user's permission before navigating away from the current view.
-
-The `Admin` and `Login` buttons illustrate other router capabilities covered later in the guide.
 -->
 이 문서에서 다루는 예제 애플리케이션은 히어로를 관리하는 회사가 위기상황에 대응할 수 있는 히어로를 찾는 기능을 제공합니다.
 
@@ -177,17 +117,31 @@ The `Admin` and `Login` buttons illustrate other router capabilities covered lat
 애플리케이션을 실행해보면 히어로의 목록이 네비게이션 버튼으로 구성된 *Heroes* 화면이 표시됩니다.
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/hero-list.png' alt="Hero List">
+  <img src='generated/images/guide/router/hero-list.gif' alt="Example application with a row of navigation buttons and a list of heroes">
 </div>
 
 
+<!--
+Select one hero and the application takes you to a hero editing screen.
+-->
 화면에 있는 히어로 중 하나를 선택하면 히어로 편집 화면으로 전환됩니다.
 
+
 <div class="lightbox">
-  <img src='generated/images/guide/router/hero-detail.png' alt="Crisis Center Detail">
+  <img src='generated/images/guide/router/hero-detail.png' alt="Detail view of hero with additional information, input, and back button">
 </div>
 
 
+<!--
+Alter the name.
+Click the "Back" button and the application returns to the heroes list which displays the changed hero name.
+Notice that the name change took effect immediately.
+
+Had you clicked the browser's back button instead of the application's "Back" button, the application would have returned you to the heroes list as well.
+Angular application navigation updates the browser history as normal web navigation does.
+
+Now click the *Crisis Center* link for a list of ongoing crises.
+-->
 이름을 변경해 보세요.
 그리고 "Back" 버튼을 클릭하면 히어로 목록에 변경한 내용이 반영됩니다.
 이렇게 화면을 전환하면 변경한 이름이 즉시 반영됩니다.
@@ -197,10 +151,18 @@ Angular 앱도 일반 웹 네비게이션과 마찬가지로 브라우저 히스
 
 그리고 *Crisis Center* 링크를 클릭하면 현재 발생된 위기 목록이 표시됩니다.
 
+
 <div class="lightbox">
-  <img src='generated/images/guide/router/crisis-center-list.png' alt="Crisis Center List">
+  <img src='generated/images/guide/router/crisis-center-list.gif' alt="Crisis Center list of crises">
 </div>
 
+<!--
+Select a crisis and the application takes you to a crisis editing screen.
+The _Crisis Detail_ appears in a child component on the same page, beneath the list.
+
+Alter the name of a crisis.
+Notice that the corresponding name in the crisis list does _not_ change.
+-->
 위기를 하나 선택하면 수정화면이 표시됩니다.
 이 때 _Crisis Detail_ 화면은 해당 페이지의 목록 아래쪽에 자식 컴포넌트로 표시됩니다.
 
@@ -208,18 +170,33 @@ Angular 앱도 일반 웹 네비게이션과 마찬가지로 브라우저 히스
 변경한 이름은 목록에 _즉시_ 반영되지 않습니다.
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/crisis-center-detail.png' alt="Crisis Center Detail">
+  <img src='generated/images/guide/router/crisis-center-detail.gif' alt="Crisis Center detail of a crisis with data, an input, and save and cancel buttons.">
 </div>
 
+<!--
+Unlike *Hero Detail*, which updates as you type, *Crisis Detail* changes are temporary until you either save or discard them by pressing the "Save" or "Cancel" buttons.
+Both buttons navigate back to the *Crisis Center* and its list of crises.
+
+Click the browser back button or the "Heroes" link to activate a dialog.
+-->
 변경한 내용이 즉시 반영되던 *Hero Detail* 화면과 다르게, *Crisis Detail* 화면에서 변경한 내용은 "Save" 버튼을 눌러서 저장하거나 "Cancel" 버튼을 눌러서 취소하지 않는 이상 목록에 반영되지 않습니다.
 두 버튼 중 하나를 누르면 *Crisis Center* 화면으로 돌아가면서 위기 목록이 표시됩니다.
 
 위기 이름을 수정한 다음에 브라우저 뒤로 가기 버튼이나 "Heroes" 링크를 눌러서 확인 팝업이 뜨는 것을 확인해 보세요.
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/confirm-dialog.png' alt="Confirm Dialog">
+  <img src='generated/images/guide/router/confirm-dialog.png' alt="Alert that asks user to confirm discarding changes">
 </div>
 
+
+<!--
+You can say "OK" and lose your changes or click "Cancel" and continue editing.
+
+Behind this behavior is the router's `CanDeactivate` guard.
+The guard gives you a chance to clean-up or ask the user's permission before navigating away from the current view.
+
+The `Admin` and `Login` buttons illustrate other router capabilities covered later in the guide.
+-->
 이 팝업에서 "OK"를 선택하면 변경한 내용을 폐기하며 "Cancel"을 선택하면 수정을 계속합니다.
 
 이 동작은 라우터가 제공하는 `CanDeactivate` 가드로 구현합니다.
@@ -240,7 +217,7 @@ Begin with a basic version of the application that navigates between two empty v
 
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/router-1-anim.gif' alt="App in action">
+  <img src='generated/images/guide/router/router-1-anim.gif' alt="Animated image of application with a Crisis Center button and a Heroes button. The pointer clicks each button to show a view for each.">
 </div>
 -->
 빈 화면 두 개를 전환하는 기본 앱부터 만들어 봅시다.
@@ -296,7 +273,7 @@ Generate the `CrisisList` and `HeroList` components so that the router has somet
   ng generate component hero-list
 </code-example>
 
-Replace the contents of each component with the sample HTML below.
+Replace the contents of each component with the following sample HTML.
 
 <code-tabs>
 
@@ -355,7 +332,7 @@ Replace the contents of each component with the sample HTML below.
 ### `Router`, `Routes` 등록하기
 
 <!--
-In order to use the `Router`, you must first register the `RouterModule` from the `@angular/router` package.
+To use the `Router`, you must first register the `RouterModule` from the `@angular/router` package.
 Define an array of routes, `appRoutes`, and pass them to the `RouterModule.forRoot()` method.
 The `RouterModule.forRoot()` method returns a module that contains the configured `Router` service provider, plus other providers that the routing library requires.
 Once the application is bootstrapped, the `Router` performs the initial navigation based on the current browser URL.
@@ -413,31 +390,24 @@ Registering the `RouterModule.forRoot()` in the `AppModule` `imports` array make
 
 <!--
 The root `AppComponent` is the application shell. It has a title, a navigation bar with two links, and a router outlet where the router renders components.
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/shell-and-outlet.png' alt="Shell">
-</div>
-
-The router outlet serves as a placeholder where the routed components are rendered.
-
-{@a shell-template}
-
-The corresponding component template looks like this:
-
-<code-example path="router/src/app/app.component.1.html" header="src/app/app.component.html"></code-example>
 -->
 애플리케이션의 기본 틀은 최상위 컴포넌트인 `AppComponent` 입니다.
 이 컴포넌트에는 제목이 하나 있으며, 링크가 2개로 구성된 네비게이션 바, 라우터가 컴포넌트를 렌더링하는 라우팅 영역(router outlet)으로 구성됩니다.
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/shell-and-outlet.png' alt="Shell">
+  <img src='generated/images/guide/router/shell-and-outlet.gif' alt="A nav, made of two navigation buttons, with the first button active and its associated view displayed">
 </div>
 
+<!--
+The router outlet serves as a placeholder where the routed components are rendered.
+-->
 라우팅 영역은 라우터가 라우팅 규칙과 매칭되는 컴포넌트를 렌더링할 때 컴포넌트의 위치를 지정하는 역할을 합니다.
-
 
 {@a shell-template}
 
+<!--
+The corresponding component template looks like this:
+-->
 `AppComponent` 컴포넌트의 템플릿 코드는 이렇게 구성됩니다:
 
 <code-example path="router/src/app/app.component.1.html" header="src/app/app.component.html"></code-example>
@@ -459,35 +429,6 @@ A wildcard route has a path consisting of two asterisks.
 It matches every URL.
 Thus, the router selects this wildcard route if it can't match a route earlier in the configuration.
 A wildcard route can navigate to a custom "404 Not Found" component or [redirect](#redirect) to an existing route.
-
-
-<div class="alert is-helpful">
-
-The router selects the route with a [_first match wins_](/guide/router-reference#example-config) strategy.
-Because a wildcard route is the least specific route, place it last in the route configuration.
-
-</div>
-
-To test this feature, add a button with a `RouterLink` to the `HeroListComponent` template and set the link to a non-existant route called `"/sidekicks"`.
-
-<code-example path="router/src/app/hero-list/hero-list.component.1.html" header="src/app/hero-list/hero-list.component.html (excerpt)"></code-example>
-
-The application fails if the user clicks that button because you haven't defined a `"/sidekicks"` route yet.
-
-Instead of adding the `"/sidekicks"` route, define a `wildcard` route and have it navigate to a `PageNotFoundComponent`.
-
-<code-example path="router/src/app/app.module.1.ts" header="src/app/app.module.ts (wildcard)" region="wildcard"></code-example>
-
-Create the `PageNotFoundComponent` to display when users visit invalid URLs.
-
-<code-example language="sh">
-  ng generate component page-not-found
-</code-example>
-
-<code-example path="router/src/app/page-not-found/page-not-found.component.html" header="src/app/page-not-found.component.html (404 component)"></code-example>
-
-Now when the user visits `/sidekicks`, or any other invalid URL, the browser displays "Page not found".
-The browser address bar continues to point to the invalid URL.
 -->
 이제 애플리케이션에는 `/crisis-center`와 `/heroes` 주소에 해당하는 라우팅 규칙 2개가 존재합니다.
 다른 URL로 접근하면 라우터가 에러가 발생시키면서 앱이 비정상 종료됩니다.
@@ -500,31 +441,49 @@ The browser address bar continues to point to the invalid URL.
 
 <div class="alert is-helpful">
 
+<!--
+The router selects the route with a [_first match wins_](/guide/router-reference#example-config) strategy.
+Because a wildcard route is the least specific route, place it last in the route configuration.
+-->
 라우터는 라우터에 등록된 라우팅 규칙 중 [첫 번째로 매칭되는 것을 적용](guide/router-reference#example-config)하는 정책을 사용합니다.
 그리고 와일드카드 라우팅 규칙은 모든 주소와 매칭되기 때문에 라우팅 규칙 목록에서 가장 마지막에 등록해야 합니다.
 
 </div>
 
-
+<!--
+To test this feature, add a button with a `RouterLink` to the `HeroListComponent` template and set the link to a non-existant route called `"/sidekicks"`.
+-->
 이 동작을 테스트하기 위해 `HeroListComponent` 템플릿에 `RouterLink` 디렉티브가 적용된 버튼을 하나 추가하고 이 버튼과 연결된 주소를 `"/sidekicks"`으로 설정헤 봅시다.
 
-<code-example path="router/src/app/hero-list/hero-list.component.1.html" header="src/app/hero-list/hero-list.component.html (일부)"></code-example>
+<code-example path="router/src/app/hero-list/hero-list.component.1.html" header="src/app/hero-list/hero-list.component.html (excerpt)"></code-example>
 
+<!--
+The application fails if the user clicks that button because you haven't defined a `"/sidekicks"` route yet.
+
+Instead of adding the `"/sidekicks"` route, define a `wildcard` route and have it navigate to a `PageNotFoundComponent`.
+-->
 이제 사용자가 버튼을 클릭하면 애플리케이션에서 에러가 발생합니다.
 왜냐하면 `"/sidekicks"`와 매칭되는 라우팅 규칙이 등록되지 않았기 때문입니다.
 
 이 때 `"/sidekicks"` 라우팅 규칙 대신 `PageNotFoundComponent` 화면으로 이동하는 와일드카드 라우팅 규칙을 정의할 수 있습니다.
 
-<code-example path="router/src/app/app.module.1.ts" header="src/app/app.module.ts (와일드카드 라우팅 규칙)" region="wildcard"></code-example>
+<code-example path="router/src/app/app.module.1.ts" header="src/app/app.module.ts (wildcard)" region="wildcard"></code-example>
 
+<!--
+Create the `PageNotFoundComponent` to display when users visit invalid URLs.
+-->
 사용자가 등록되지 않은 URL로 접속했을 때 보여줄 `PageNotFoundComponent`를 생성해 봅시다.
 
-<code-example language="none" class="code-shell">
+<code-example language="sh">
   ng generate component page-not-found
 </code-example>
 
-<code-example path="router/src/app/page-not-found/page-not-found.component.html" header="src/app/page-not-found.component.html (404 컴포넌트)"></code-example>
+<code-example path="router/src/app/page-not-found/page-not-found.component.html" header="src/app/page-not-found.component.html (404 component)"></code-example>
 
+<!--
+Now when the user visits `/sidekicks`, or any other invalid URL, the browser displays "Page not found".
+The browser address bar continues to point to the invalid URL.
+-->
 이제 사용자가 `/sidekicks` 과 같이 라우터에 등록되지 않은 주소로 접근하면 브라우저에 "Page not found" 문구가 표시됩니다.
 브라우저의 주소표시줄은 여전히 등록되지 않은 URL로 표시됩니다.
 
@@ -538,56 +497,6 @@ The browser address bar continues to point to the invalid URL.
 
 <!--
 When the application launches, the initial URL in the browser bar is by default:
-
-<code-example>
-  localhost:4200
-</code-example>
-
-That doesn't match any of the hard-coded routes which means the router falls through to the wildcard route and displays the `PageNotFoundComponent`.
-
-The application needs a default route to a valid page.
-The default page for this application is the list of heroes.
-The application should navigate there as if the user clicked the "Heroes" link or pasted `localhost:4200/heroes` into the address bar.
-
-Add a `redirect` route that translates the initial relative URL (`''`) to the desired default path (`/heroes`).
-
-Add the default route somewhere _above_ the wildcard route.
-It's just above the wildcard route in the following excerpt showing the complete `appRoutes` for this milestone.
-
-
-<code-example path="router/src/app/app-routing.module.1.ts" header="src/app/app-routing.module.ts (appRoutes)" region="appRoutes"></code-example>
-
-The browser address bar shows `.../heroes` as if you'd navigated there directly.
-
-A redirect route requires a `pathMatch` property to tell the router how to match a URL to the path of a route.
-In this app, the router should select the route to the `HeroListComponent` only when the *entire URL* matches `''`, so set the `pathMatch` value to `'full'`.
-
-{@a pathmatch}
-
-<div class="callout is-helpful">
-
-  <header>Spotlight on pathMatch</header>
-
-  Technically, `pathMatch = 'full'` results in a route hit when the *remaining*, unmatched  segments of the URL match `''`.
-  In this example, the redirect is in a top level route so the *remaining* URL and the  *entire* URL are the same thing.
-
-  The other possible `pathMatch` value is `'prefix'` which tells the router to match the  redirect route when the remaining URL begins with the redirect route's prefix  path.
-  This doesn't apply to this sample application because if the `pathMatch` value were `'prefix'`,   every URL would match `''`.
-
-  Try setting it to `'prefix'` and clicking the `Go to sidekicks` button.
-  Since that's a bad URL, you should see the "Page not found" page.
-  Instead, you're still on the "Heroes" page.
-  Enter a bad URL in the browser address bar.
-  You're instantly re-routed to `/heroes`.
-  Every URL, good or bad, that falls through to this route definition is a match.
-
-  The default route should redirect to the `HeroListComponent` only when the entire url is    `''`.
-  Remember to restore the redirect to `pathMatch = 'full'`.
-
-  Learn more in Victor Savkin's
-  [post on redirects](https://vsavkin.tumblr.com/post/146722301646/angular-router-empty-paths-componentless-routes).
-
-</div>
 -->
 애플리케이션이 실행되고 브라우저 주소표시줄에 표시되는 기본 URL은 이렇습니다:
 
@@ -595,6 +504,18 @@ In this app, the router should select the route to the `HeroListComponent` only 
   localhost:4200
 </code-example>
 
+<!--
+That doesn't match any of the hard-coded routes which means the router falls through to the wildcard route and displays the `PageNotFoundComponent`.
+
+The application needs a default route to a valid page.
+The default page for this application is the list of heroes.
+The application should navigate there as if the user clicked the "Heroes" link or pasted `localhost:4200/heroes` into the address bar.
+
+Add a `redirect` route that translates the initial relative URL (`''`) to the default path (`/heroes`) you want.
+
+Add the default route somewhere _above_ the wildcard route.
+It's just above the wildcard route in the following excerpt showing the complete `appRoutes` for this milestone.
+-->
 이 주소는 라우터에 등록된 라우팅 규칙 중 어느 것에도 매칭되지 않기 때문에 와일드카드 라우팅 규칙과 매칭되면서 `PageNotFoundComponent`가 화면에 표시됩니다.
 
 애플리케이션에는 기본 주소와 매칭되는 화면이 필요합니다.
@@ -608,6 +529,12 @@ In this app, the router should select the route to the `HeroListComponent` only 
 
 <code-example path="router/src/app/app-routing.module.1.ts" header="src/app/app-routing.module.ts (appRoutes)" region="appRoutes"></code-example>
 
+<!--
+The browser address bar shows `.../heroes` as if you'd navigated there directly.
+
+A redirect route requires a `pathMatch` property to tell the router how to match a URL to the path of a route.
+In this app, the router should select the route to the `HeroListComponent` only when the *entire URL* matches `''`, so set the `pathMatch` value to `'full'`.
+-->
 기본 라우팅 규칙이 적용되고 나면 사용자가 직접 이동한 것처럼 브라우저의 주소가 `.../heroes`로 변경됩니다.
 
 리다이렉션 라우팅 규칙에는 URL을 매칭하는 방법을 결정하기 위해 `pathMatch` 프로퍼티를 지정해야 합니다.
@@ -618,25 +545,48 @@ In this app, the router should select the route to the `HeroListComponent` only 
 
 <div class="callout is-helpful">
 
-<header>pathMatch 자세하게 알아보기</header>
+<!--
+  <header>Spotlight on pathMatch</header>
+-->
+  <header>pathMatch 자세하게 알아보기</header>
 
-`pathMatch='full'`을 사용하면 *매칭되는* 주소가 정확히 `''`이어야 해당 라우팅 규칙이 적용됩니다.
-예제 앱에서도 최상위 라우팅 규칙에서 *매칭되는* URL이 *정확히* 빈 문자열과 매칭되기 때문에 이 라우팅 규칙이 적용됩니다.
+<!--
+  Technically, `pathMatch = 'full'` results in a route hit when the *remaining*, unmatched  segments of the URL match `''`.
+  In this example, the redirect is in a top level route so the *remaining* URL and the  *entire* URL are the same thing.
 
-`pathMatch`에는 `'prefix'` 값을 사용할 수도 있습니다.
-이 값을 사용하면 매칭되는 주소가 라우팅 규칙 경로로 시작되면 해당 라우팅 규칙이 적용됩니다.
-이 방식을 사용하면 모든 URL이 `''`과 매칭되기 때문에 예제 앱에는 사용하지 않았습니다.
+  The other possible `pathMatch` value is `'prefix'` which tells the router to match the  redirect route when the remaining URL begins with the redirect route's prefix  path.
+  This doesn't apply to this sample application because if the `pathMatch` value were `'prefix'`,   every URL would match `''`.
 
-`pathMatch` 프로퍼티 값을 `'prefix'`로 바꾼 뒤에 `Go to sidekicks` 버튼을 클릭해 보세요.
-이 URL은 라우팅 규칙에 등록되지 않았기 때문에 "Page not found" 화면이 표시되어야 합니다.
-하지만 `'prefix'` 방식을 사용하면 "Heroes" 화면이 표시됩니다.
-브라우저 주소표시줄에 등록되지 않은 URL을 직접 입럭해도 `/heroes` 주소로 리다이렉션됩니다.
-결국 등록된 주소는 물론, 등록되지 않은 주소도 이 라우팅 규칙과 매칭됩니다.
+  Try setting it to `'prefix'` and clicking the `Go to sidekicks` button.
+  Because that's a bad URL, you should see the "Page not found" page.
+  Instead, you're still on the "Heroes" page.
+  Enter a bad URL in the browser address bar.
+  You're instantly re-routed to `/heroes`.
+  Every URL, good or bad, that falls through to this route definition is a match.
 
-`HeroListComponent`를 표시하는 기본 라우팅 규칙은 URL이 정확히 `''`일 때만 동작해야 합니다.
-`pathMatch='full'` 설정으로 되돌리는 것을 잊지 마세요.
+  The default route should redirect to the `HeroListComponent` only when the entire url is    `''`.
+  Remember to restore the redirect to `pathMatch = 'full'`.
 
-이 내용은 Victor Savkin이 [리다이렉션에 대해 작성한 블로그 글](http://vsavkin.tumblr.com/post/146722301646/angular-router-empty-paths-componentless-routes)에서도 확인할 수 있습니다.
+  Learn more in Victor Savkin's
+  [post on redirects](https://vsavkin.tumblr.com/post/146722301646/angular-router-empty-paths-componentless-routes).
+-->
+  `pathMatch='full'`을 사용하면 *매칭되는* 주소가 정확히 `''`이어야 해당 라우팅 규칙이 적용됩니다.
+  예제 앱에서도 최상위 라우팅 규칙에서 *매칭되는* URL이 *정확히* 빈 문자열과 매칭되기 때문에 이 라우팅 규칙이 적용됩니다.
+
+  `pathMatch`에는 `'prefix'` 값을 사용할 수도 있습니다.
+  이 값을 사용하면 매칭되는 주소가 라우팅 규칙 경로로 시작되면 해당 라우팅 규칙이 적용됩니다.
+  이 방식을 사용하면 모든 URL이 `''`과 매칭되기 때문에 예제 앱에는 사용하지 않았습니다.
+
+  `pathMatch` 프로퍼티 값을 `'prefix'`로 바꾼 뒤에 `Go to sidekicks` 버튼을 클릭해 보세요.
+  이 URL은 라우팅 규칙에 등록되지 않았기 때문에 "Page not found" 화면이 표시되어야 합니다.
+  하지만 `'prefix'` 방식을 사용하면 "Heroes" 화면이 표시됩니다.
+  브라우저 주소표시줄에 등록되지 않은 URL을 직접 입럭해도 `/heroes` 주소로 리다이렉션됩니다.
+  결국 등록된 주소는 물론, 등록되지 않은 주소도 이 라우팅 규칙과 매칭됩니다.
+
+  `HeroListComponent`를 표시하는 기본 라우팅 규칙은 URL이 정확히 `''`일 때만 동작해야 합니다.
+  `pathMatch='full'` 설정으로 되돌리는 것을 잊지 마세요.
+
+  이 내용은 Victor Savkin이 [리다이렉션에 대해 작성한 블로그 글](http://vsavkin.tumblr.com/post/146722301646/angular-router-empty-paths-componentless-routes)에서도 확인할 수 있습니다.
 
 </div>
 
@@ -649,7 +599,7 @@ In this app, the router should select the route to the `HeroListComponent` only 
 <!--
 Your sample application can switch between two views when the user clicks a link.
 
-Milestone 1 has covered how to do the following:
+Milestone 1 covered how to do the following:
 
 * Load the router library.
 * Add a nav bar to the shell template with anchor tags, `routerLink`  and `routerLinkActive` directives.
@@ -895,10 +845,10 @@ The Routing Module has several characteristics:
 
 <!--
 The sample routing application does not include routing by default.
-When you use the [Angular CLI](cli) to create a project that does use routing, set the `--routing` option for the project or app, and for each NgModule.
+When you use the [Angular CLI](cli) to create a project that does use routing, set the `--routing` option for the project or application, and for each NgModule.
 When you create or initialize a new project (using the CLI [`ng new`](cli/new) command) or a new application (using the [`ng generate app`](cli/generate) command), specify the `--routing` option.
 This tells the CLI to include the `@angular/router` npm package and create a file named `app-routing.module.ts`.
-You can then use routing in any NgModule that you add to the project or app.
+You can then use routing in any NgModule that you add to the project or application.
 
 For example, the following command generates an NgModule that can use routing.
 
@@ -1044,17 +994,9 @@ This milestone covers the following:
 
 This sample application recreates the heroes feature in the "Services" section of the [Tour of Heroes tutorial](tutorial/toh-pt4 "Tour of Heroes: Services"), and reuses much of the code from the <live-example name="toh-pt4" title="Tour of Heroes: Services example code"></live-example>.
 
-<!- KW - this gif isn't ideal for accessibility. Would like to remove it.->
-<!- Here's how the user will experience this version of the app:
-
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/router-2-anim.gif' alt="App in action">
-</div> ->
-
 A typical application has multiple feature areas, each dedicated to a particular business purpose with its own folder.
 
-This section shows you how refactor the app into different feature modules, import them into the main module and navigate among them.
+This section shows you how refactor the application into different feature modules, import them into the main module and navigate among them.
 -->
 이번 마일스톤에서는 이런 내용을 다룹니다:
 
@@ -1063,10 +1005,6 @@ This section shows you how refactor the app into different feature modules, impo
 * 필수/옵션 정보를 라우팅 인자로 전달합니다.
 
 이번 마일스톤에서 다루는 예제 앱은 [히어로들의 여행 튜토리얼]<live-example name="toh-pt4" title="Tour of Heroes: Services example code"></live-example> 예제 앱의 ["서비스" 섹션](tutorial/toh-pt4 "Tour of Heroes: Services") 코드를 많이 참고했습니다.
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/router-2-anim.gif' alt="App in action">
-</div> ->
 
 일반적으로 애플리케이션은 특정 기능들의 묶음으로 구성되며, 용도에 맞게 폴더별로 존재하기도 합니다.
 
@@ -1249,7 +1187,7 @@ The heroes feature has two interacting components, the hero list and the hero de
 When you navigate to list view, it gets a list of heroes and displays them.
 When you click on a hero, the detail view has to display that particular hero.
 
-You tell the detail view which hero to display by including the selected hero's id in the route URL.
+You tell the detail view which hero to display by including the selected hero's ID in the route URL.
 
 Import the hero components from their new locations in the `src/app/heroes/` folder and define the two hero routes.
 
@@ -1330,7 +1268,7 @@ The hero routes are currently defined in two places: in the `HeroesRoutingModule
 by way of the `HeroesModule`, and in the `AppRoutingModule`.
 
 Routes provided by feature modules are combined together into their imported module's routes by the router.
-This allows you to continue defining the feature module routes without modifying the main route configuration.
+This lets you continue defining the feature module routes without modifying the main route configuration.
 
 Remove the `HeroListComponent` import and the `/heroes` route from the `app-routing.module.ts`.
 
@@ -1445,7 +1383,7 @@ The route to `HeroDetailComponent` has an `:id` token in the path.
 The `:id` token creates a slot in the path for a Route Parameter.
 In this case,  this configuration causes the router to insert the `id` of a hero into that slot.
 
-If you tell the router to navigate to the detail component and display "Magneta", you expect a hero id to appear in the browser URL like this:
+If you tell the router to navigate to the detail component and display "Magneta", you expect a hero ID to appear in the browser URL like this:
 
 
 <code-example format="nocode">
@@ -1743,7 +1681,7 @@ Each click navigated imperatively to the `HeroDetailComponent` with the next or 
 You wouldn't want the router to remove the current `HeroDetailComponent` instance from the DOM only to re-create it for the next `id` as this would re-render the view.
 For better UX, the router re-uses the same component instance and updates the parameter.
 
-Since `ngOnInit()` is only called once per component instantiation, you can detect when the route parameters change from _within the same instance_ using the observable `paramMap` property.
+Because `ngOnInit()` is only called once per component instantiation, you can detect when the route parameters change from _within the same instance_ using the observable `paramMap` property.
 
 
 <div class="alert is-helpful">
@@ -1751,11 +1689,11 @@ Since `ngOnInit()` is only called once per component instantiation, you can dete
 When subscribing to an observable in a component, you almost always unsubscribe when the component is destroyed.
 
 However, `ActivatedRoute` observables are among the exceptions because `ActivatedRoute` and its observables are insulated from the `Router` itself.
-The `Router` destroys a routed component when it is no longer needed. This means all the component's members will also be destroyed, 
-including the injected `ActivatedRoute` and the subscriptions to its `Observable` properties. 
+The `Router` destroys a routed component when it is no longer needed. This means all the component's members will also be destroyed,
+including the injected `ActivatedRoute` and the subscriptions to its `Observable` properties.
 
 The `Router` does not `complete` any `Observable` of the `ActivatedRoute` so any `finalize` or `complete` blocks will not run.
-If you need to handle something in a `finalize`, you will still need to unsubscribe in `ngOnDestroy`. You will also have to
+If you need to handle something in a `finalize`, you still need to unsubscribe in `ngOnDestroy`. You also have to
 unsubscribe if your observable pipe has a delay with code you do not want to run after the component is destroyed.
 
 </div>
@@ -1780,8 +1718,12 @@ unsubscribe if your observable pipe has a delay with code you do not want to run
 컴포넌트 안에서 옵저버블을 구독하면 컴포넌트가 종료될때 이 옵저버블 구독을 반드시 해지해야 합니다.
 
 하지만 `ActivatedRoute` 옵저버블은 예외인데, `ActivatedRoute` 인스턴스와 이 인스턴스가 제공하는 옵저버블은 모두 `Router`와 별개입니다.
-The `Router` destroys a routed component when it is no longer needed. This means all the component's members will also be destroyed, 
-including the injected `ActivatedRoute` and the subscriptions to its `Observable` properties. 
+더이상 필요하지 않게 된 컴포넌트는 `Router`가 종료합니다.
+이 말은 컴포넌트의 멤버도 모두 종료된다는 것이며, 이 때 의존성으로 주입된 `ActivatedRoute`도 종료되고 이 옵저버블 구독도 종료됩니다.
+
+그런데 `Router`는 `ActivatedRoute`를 구독하는 `Observable`에 `complete` 신호를 보내지 않기 때문에 `finalize`나 `complete` 코드가 실행되지 않습니다.
+그래서 `finalize`로 실행해야 하는 것이 있다면 `ngOnDestroy`에서 구독이 끝나는 동작을 직접 처리해야 합니다.
+
 
 The `Router` does not `complete` any `Observable` of the `ActivatedRoute` so any `finalize` or `complete` blocks will not run.
 If you need to handle something in a `finalize`, you will still need to unsubscribe in `ngOnDestroy`. You will also have to
@@ -1899,7 +1841,7 @@ Optional information can also include other forms such as:
 particular order&mdash;`before='1/1/2017' & after='12/31/2015'`&mdash; in a
 variety of formats&mdash;`during='currentYear'`.
 
-As these kinds of parameters don't fit easily in a URL path, you can use optional parameters for conveying arbitrarily complex information during navigation.
+As these kinds of parameters don't fit smoothly in a URL path, you can use optional parameters for conveying arbitrarily complex information during navigation.
 Optional parameters aren't involved in pattern matching and afford flexibility of expression.
 
 The router supports navigation with optional parameters as well as required route parameters.
@@ -2089,14 +2031,14 @@ Look for it within the repeated `<li>` tag as shown here:
 
 <code-example path="router/src/app/heroes/hero-list/hero-list.component.html" header="src/app/heroes/hero-list/hero-list.component.html"></code-example>
 
-Add some styles to apply when the list item is selected.
+Add some styles to apply when the hero is selected.
 
 <code-example path="router/src/app/heroes/hero-list/hero-list.component.css" region="selected" header="src/app/heroes/hero-list/hero-list.component.css"></code-example>
 
 When the user navigates from the heroes list to the "Magneta" hero and back, "Magneta" appears selected:
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/selected-hero.png' alt="Selected List">
+  <img src='generated/images/guide/router/selected-hero.png' alt="Selected hero in list has different background color">
 </div>
 
 The optional `foo` route parameter is harmless and the router continues to ignore it.
@@ -2182,7 +2124,7 @@ Add an `animations` array to the `@Component` metadata that contains the `slideI
 
 <code-example path="router/src/app/app.component.2.ts" header="src/app/app.component.ts (animations)" region="animation-imports"></code-example>
 
-In order to use the routable animations, wrap the `RouterOutlet` inside an element, use the `@routeAnimation` trigger, and bind it to the element.
+To use the routable animations, wrap the `RouterOutlet` inside an element, use the `@routeAnimation` trigger, and bind it to the element.
 
 For the `@routeAnimation` transitions to key off states, provide it with the `data` from the `ActivatedRoute`.
 The `RouterOutlet` is exposed as an `outlet` template variable, so you bind a reference to the router outlet.
@@ -2195,7 +2137,7 @@ The `getAnimationData()` function returns the animation property from the `data`
 
 <code-example path="router/src/app/app.component.2.ts" header="src/app/app.component.ts (router outlet)" region="function-binding"></code-example>
 
-When switching between the two routes, the `HeroDetailComponent` and `HeroListComponent` now ease in from the left when routed to and will slide to the right when navigating away.
+When switching between the two routes, the `HeroDetailComponent` and `HeroListComponent` now ease in from the left when routed to, and slide to the right when navigating away.
 -->
 이번 섹션에서는 `HeroDetailComponent`로 화면을 전환할 때 [애니메이션](guide/animations)을 적용하는 방법에 대해 알아봅시다.
 
@@ -2243,7 +2185,6 @@ When switching between the two routes, the `HeroDetailComponent` and `HeroListCo
 
 이제 `HeroDetailComponent`와 `HeroListComponent`를 전환해보면 새로 등장하는 컴포넌트가 화면 왼쪽에서 나타나고, 사라지는 컴포넌트가 화면 오른쪽으로 사라지는 애니메이션이 동작하는 것을 확인할 수 있습니다.
 
-
 {@a milestone-3-wrap-up}
 
 <!--
@@ -2252,7 +2193,7 @@ When switching between the two routes, the `HeroDetailComponent` and `HeroListCo
 ### 마일스톤 3 정리
 
 <!--
-This section has covered the following:
+This section covered the following:
 
 * Organizing the application into feature areas.
 * Navigating imperatively from one component to another.
@@ -2605,7 +2546,7 @@ This section shows you how to organize the crisis center to conform to the follo
 * Each area root component has its own router outlet and child routes.
 * Feature area routes rarely (if ever) cross with routes of other features.
 
-If your application had many feature areas, the app component trees might look like this:
+If your application had many feature areas, the component trees might consist of multiple components for those features, each with branches of other, related, components.
 
 
 <div class="lightbox">
@@ -2620,12 +2561,7 @@ If your application had many feature areas, the app component trees might look l
 * 개별 기능 단위의 최상위 컴포넌트에는 라우팅 영역과 자식 라우팅 규칙이 있어야 합니다.
 * 개별 기능 단위에서 다른 기능 단위로 라우팅하는 경우도 가끔 있습니다.
 
-애플리케이션에 기능 단위가 많이 있다면 앱 컴포넌트 트리가 이렇게 구성될 것입니다:
-
-
-<div class="lightbox">
-  <img src='generated/images/guide/router/component-tree.png' alt="Component Tree">
-</div>
+애플리케이션에 기능 단위가 많이 있다면 앱 컴포넌트 트리가 복잡하게 구성되며, 개별 브랜치에는 관련된 컴포넌트가 존재할 것입니다.
 
 
 {@a child-routing-component}
@@ -2708,7 +2644,7 @@ The router displays the components of these routes in the `RouterOutlet` of the 
 The `CrisisListComponent` contains the crisis list and a `RouterOutlet` to display the `Crisis Center Home` and `Crisis Detail` route components.
 
 The `Crisis Detail` route is a child of the `Crisis List`.
-The router [reuses components](#reuse) by default, so the `Crisis Detail` component will be re-used as you select different crises.
+The router [reuses components](#reuse) by default, so the `Crisis Detail` component is re-used as you select different crises.
 In contrast, back in the `Hero Detail` route, [the component was recreated](#snapshot-the-no-observable-alternative) each time you selected a different hero from the list of heroes.
 
 At the top level, paths that begin with `/` refer to the root of the application.
@@ -2833,9 +2769,11 @@ The `app-routing.module.ts` file retains the top-level application routes such a
 </code-tabs>
 
 <div class="alert is-helpful">
-The import order of the modules is important because the order of the routes defined in the modules affects route matching.
-If the `AppModule` were imported first, its wildcard route (`path: '**'`) would take precedence over the routes defined in `CrisisCenterModule`.
-For more information, see the section on [route order](guide/router#route-order).
+
+모듈에 등록된 라우팅 규칙은 전체 라우팅 매칭에 영향을 주기 때문에 모듈을 로드하는 순서는 중요합니다.
+그래서 `AppModule`이 제일 처음 로드되면 와일드카으 라우팅 규칙(`path: '**'`)이 `CrisisCenterModule`에 등록된 라우팅 규칙보다 먼저 등록됩니다.
+자세한 내용은 [라우팅 규칙 순서](guide/router#route-order) 문서를 참고하세요.
+
 </div>
 
 `app-routing.module.ts` 파일에 이전에 만들었던 위기대응센터 라우팅 규칙은 제거해도 됩니다.
@@ -2984,11 +2922,11 @@ A template can also have any number of named outlets.
 Each named outlet has its own set of routes with their own components.
 Multiple outlets can display different content, determined by different routes, all at the same time.
 
-Add an outlet named "popup" in the `AppComponent`, directly below the unnamed outlet.
+Add an outlet named "popup" in the `AppComponent`, directly following the unnamed outlet.
 
 <code-example path="router/src/app/app.component.4.html" header="src/app/app.component.html (outlets)" region="outlets"></code-example>
 
-That's where a popup will go, once you learn how to route a popup component to it.
+That's where a popup goes, once you learn how to route a popup component to it.
 -->
 이제부터는 사용자가 위기대응센터와 연락할 수 있는 기능을 만들어 봅시다.
 사용자가 "Contact" 버튼을 클릭하면 팝업에 메시지를 표시하려고 합니다.
@@ -3007,7 +2945,6 @@ That's where a popup will go, once you learn how to route a popup component to i
 <code-example path="router/src/app/app.component.4.html" header="src/app/app.component.html (여러 라우팅 영역)" region="outlets"></code-example>
 
 팝업이 표시되는 위치는 새로 추가한 라우팅 영역입니다.
-
 
 {@a secondary-routes}
 
@@ -3036,23 +2973,26 @@ It displays a short form with a header, an input box for the message,
 and two buttons, "Send" and "Cancel".
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/contact-popup.png' alt="Contact popup">
+  <img src='generated/images/guide/router/contact-form.png' alt="Contact textarea with send and cancel buttons">
 </div>
 
-Here's the component, its template and styles:
+Here's the component, its template, and styles:
 
 <code-tabs>
 
-  <code-pane header="src/app/compose-message/compose-message.component.css" path="router/src/app/compose-message/compose-message.component.css">
-
+  <code-pane
+      header="src/app/compose-message/compose-message.component.html"
+      path="router/src/app/compose-message/compose-message.component.html">
   </code-pane>
 
-  <code-pane header="src/app/compose-message/compose-message.component.html" path="router/src/app/compose-message/compose-message.component.html">
-
+  <code-pane
+      header="src/app/compose-message/compose-message.component.ts"
+      path="router/src/app/compose-message/compose-message.component.ts">
   </code-pane>
 
-  <code-pane header="src/app/compose-message/compose-message.component.ts" path="router/src/app/compose-message/compose-message.component.ts">
-
+  <code-pane
+      header="src/app/compose-message/compose-message.component.css"
+      path="router/src/app/compose-message/compose-message.component.css">
   </code-pane>
 
 </code-tabs>
@@ -3081,23 +3021,26 @@ The `closePopup()` method closes the popup view by navigating to the popup outle
 이 컴포넌트에는 헤더와 메시지를 입력받는 필드 "Send", "Cancel" 버튼이 존재합니다.
 
 <div class="lightbox">
-  <img src='generated/images/guide/router/contact-popup.png' alt="Contact popup">
+  <img src='generated/images/guide/router/contact-form.png' alt="Contact textarea with send and cancel buttons">
 </div>
 
 컴포넌트를 구성하는 파일의 내용은 이렇습니다:
 
 <code-tabs>
 
-  <code-pane header="src/app/compose-message/compose-message.component.css" path="router/src/app/compose-message/compose-message.component.css">
-
+  <code-pane
+      header="src/app/compose-message/compose-message.component.html"
+      path="router/src/app/compose-message/compose-message.component.html">
   </code-pane>
 
-  <code-pane header="src/app/compose-message/compose-message.component.html" path="router/src/app/compose-message/compose-message.component.html">
-
+  <code-pane
+      header="src/app/compose-message/compose-message.component.ts"
+      path="router/src/app/compose-message/compose-message.component.ts">
   </code-pane>
 
-  <code-pane header="src/app/compose-message/compose-message.component.ts" path="router/src/app/compose-message/compose-message.component.ts">
-
+  <code-pane
+      header="src/app/compose-message/compose-message.component.css"
+      path="router/src/app/compose-message/compose-message.component.css">
   </code-pane>
 
 </code-tabs>
@@ -3143,7 +3086,7 @@ This `outlets` object within an outer object was unnecessary when there was only
 
 The router assumed that your route specification targeted the unnamed primary outlet and created these objects for you.
 
-Routing to a named outlet has revealed a router feature:
+Routing to a named outlet revealed a router feature:
 you can target multiple outlets with multiple routes in the same `RouterLink` directive.
 
 </div>
@@ -3208,7 +3151,7 @@ Click the _Heroes_ link and look at the URL again.
   http://.../heroes(popup:compose)
 </code-example>
 
-The primary navigation part has changed; the secondary route is the same.
+The primary navigation part changed; the secondary route is the same.
 
 The router is keeping track of two separate branches in a navigation tree and generating a representation of that tree in the URL.
 
@@ -3308,7 +3251,7 @@ Setting the popup `RouterOutlet` to `null` clears the outlet and removes the sec
 ## 마일스톤 5: 라우팅 가드
 
 <!--
-At the moment, any user can navigate anywhere in the application any time, but sometimes you need to control access to different parts of your app for various reasons. Some of which may include the following:
+At the moment, any user can navigate anywhere in the application any time, but sometimes you need to control access to different parts of your application for various reasons, some of which might include the following:
 
 * Perhaps the user is not authorized to navigate to the target component.
 * Maybe the user must login (authenticate) first.
@@ -3362,7 +3305,7 @@ You can have multiple guards at every level of a routing hierarchy.
 The router checks the `CanDeactivate` guards first, from the deepest child route to the top.
 Then it checks the `CanActivate` and `CanActivateChild` guards from the top down to the deepest child route.
 If the feature module is loaded asynchronously, the `CanLoad` guard is checked before the module is loaded.
-If _any_ guard returns false, pending guards that have not completed will be canceled, and the entire navigation is canceled.
+If _any_ guard returns false, pending guards that have not completed are canceled, and the entire navigation is canceled.
 
 There are several examples over the next few sections.
 -->
@@ -3749,7 +3692,7 @@ Generate an `AuthGuard` in the `auth` folder.
   ng generate guard auth/auth
 </code-example>
 
-To demonstrate the fundamentals, this example only logs to the console, `returns` true immediately, and allows navigation to proceed:
+To demonstrate the fundamentals, this example only logs to the console, `returns` true immediately, and lets navigation proceed:
 
 <code-example path="router/src/app/auth/auth.guard.1.ts" header="src/app/auth/auth.guard.ts (excerpt)"></code-example>
 
@@ -3962,7 +3905,7 @@ Open `auth.guard.ts` and add the `CanActivateChild` interface to the imported to
 
 Next, implement the `canActivateChild()` method which takes the same arguments as the `canActivate()` method: an `ActivatedRouteSnapshot` and `RouterStateSnapshot`.
 The `canActivateChild()` method can return an `Observable<boolean|UrlTree>` or `Promise<boolean|UrlTree>` for async checks and a `boolean` or `UrlTree` for sync checks.
-This one returns either `true` to allow the user to access the admin feature module or `UrlTree` to redirect the user to the login page instead:
+This one returns either `true` to let the user access the admin feature module or `UrlTree` to redirect the user to the login page instead:
 
 <code-example path="router/src/app/auth/auth.guard.3.ts" header="src/app/auth/auth.guard.ts (excerpt)" region="can-activate-child"></code-example>
 
@@ -4194,7 +4137,7 @@ You don't want to display a blank component while waiting for the data.
 
 To improve this behavior, you can pre-fetch data from the server using a resolver so it's ready the
 moment the route is activated.
-This also allows you to handle errors before routing to the component.
+This also lets you handle errors before routing to the component.
 There's no point in navigating to a crisis detail for an `id` that doesn't have a record.
 It'd be better to send the user back to the `Crisis List` that shows only valid crisis centers.
 
@@ -4271,7 +4214,7 @@ The router looks for that method and calls it if found.
 
 1. The router calls the resolver in any case where the user could navigate away so you don't have to code for each use case.
 
-1. Returning an empty `Observable` in at least one resolver will cancel navigation.
+1. Returning an empty `Observable` in at least one resolver cancels navigation.
 
 The relevant Crisis Center code for this milestone follows.
 -->
@@ -4412,7 +4355,7 @@ However, you can use query parameters to get optional parameters available to al
 [Fragments](https://en.wikipedia.org/wiki/Fragment_identifier) refer to certain elements on the page
 identified with an `id` attribute.
 
-Update the `AuthGuard` to provide a `session_id` query that will remain after navigating to another route.
+Update the `AuthGuard` to provide a `session_id` query that remains after navigating to another route.
 
 Add an `anchor` element so you can jump to a certain point on the page.
 
@@ -4421,7 +4364,7 @@ Add the `NavigationExtras` object to the `router.navigate()` method that navigat
 <code-example path="router/src/app/auth/auth.guard.4.ts" header="src/app/auth/auth.guard.ts (v3)"></code-example>
 
 You can also preserve query parameters and fragments across navigations without having to provide them again when navigating.
-In the `LoginComponent`, you'll add an *object* as the second argument in the `router.navigateUrl()` function and provide the `queryParamsHandling` and `preserveFragment` to pass along the current query parameters and fragment to the next route.
+In the `LoginComponent`, you'll add an *object* as the second argument in the `router.navigate()` function and provide the `queryParamsHandling` and `preserveFragment` to pass along the current query parameters and fragment to the next route.
 
 <code-example path="router/src/app/auth/login/login.component.ts" header="src/app/auth/login/login.component.ts (preserve)" region="preserve"></code-example>
 
@@ -4714,7 +4657,7 @@ In addition to loading modules on-demand, you can load modules asynchronously wi
 The `AppModule` is eagerly loaded when the application starts, meaning that it loads right away.
 Now the `AdminModule` loads only when the user clicks on a link, which is called lazy loading.
 
-Preloading allows you to load modules in the background so that the data is ready to render when the user activates a particular route.
+Preloading lets you load modules in the background so that the data is ready to render when the user activates a particular route.
 Consider the Crisis Center.
 It isn't the first view that a user sees.
 By default, the Heroes are the first view.
@@ -4723,7 +4666,7 @@ For the smallest initial payload and fastest launch time, you should eagerly loa
 You could lazy load the Crisis Center.
 But you're almost certain that the user will visit the Crisis Center within minutes of launching the app.
 Ideally, the application would launch with just the `AppModule` and the `HeroesModule` loaded and then, almost immediately, load the `CrisisCenterModule` in the background.
-By the time the user navigates to the Crisis Center, its module will have been loaded and ready.
+By the time the user navigates to the Crisis Center, its module is loaded and ready.
 -->
 모듈이 필요할 때 지연로딩할 수 있는 것처럼, 모듈을 미리 로드해둘 수도 있습니다.
 
@@ -4739,7 +4682,6 @@ By the time the user navigates to the Crisis Center, its module will have been l
 위기대응센터 모듈은 지연로딩할 수 있습니다.
 그런데 대부분의 사용자가 위기대응센터에 방문한다고 하면 `AppModule`과 `HeroesModule`을 로드한 채로 애플리케이션을 실행한 직후에 `CrisisCenterModule`을 백그라운드에서 로드하는 것이 좋습니다.
 애플리케이션을 실행한 후에 사용자가 위기대응센터로 이동하게 되면 모듈은 이미 로드된 상태이기 때문에 화면 전환을 요청한 시점에 바로 접근할 수 있습니다.
-
 
 {@a how-preloading}
 
@@ -5068,7 +5010,7 @@ Previously, you navigated to a URL such as `/hero/15` with a route parameter `id
 
 The `Router` also supports [query parameters](#query-parameters) and the [fragment](#fragment) when using redirects.
 
-* When using absolute redirects, the `Router` will use the query parameters and the fragment from the `redirectTo` in the route config.
+* When using absolute redirects, the `Router` uses the query parameters and the fragment from the `redirectTo` in the route config.
 * When using relative redirects, the `Router` use the query params and the fragment from the source URL.
 
 </div>
@@ -5162,12 +5104,12 @@ to see the finished route configuration.
 {@a final-app}
 
 <!--
-## Final app
+## Final application
 -->
 ## 최종 결과
 
 <!--
-For the completed router app, see the <live-example name="router"></live-example> for the final source code.
+For the completed router application, see the <live-example name="router"></live-example> for the final source code.
 -->
 여기까지 작업한 내용을 확인하려면 <live-example name="router"></live-example>를 참고하세요.
 

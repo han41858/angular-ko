@@ -59,7 +59,6 @@ Angular 애플리케이션에서는 여러가지 뷰를 계층으로 구성합�
   For the sample application that this page describes, see the <live-example></live-example>.
   -->
   이 문서에서 설명한 앱을 직접 실행해 보려면 <live-example></live-example>를 참고하세요.
-
 </div>
 
 

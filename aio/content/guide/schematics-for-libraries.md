@@ -10,7 +10,7 @@ With your schematics, your users can use `ng add` to install an initial version 
 
 All three types of schematics can be part of a collection that you package with your library.
 
-Download the <live-example downloadOnly>library schematics project</live-example> for a completed example of the steps below.
+Download the <live-example downloadOnly>library schematics project</live-example> for a completed example of the following steps.
 -->
 Angular 라이브러리는 Angular CLI와 통합하는 스키매틱을 함께 제공할 수 있습니다.
 이 방법을 활용하면 사용자가 `ng add` 명령을 사용해서 라이브러리를 설치할 수 있고, `ng generate` 명령을 사용해서 라이브러리가 제공하는 Angular 구성요소를 생성할 수 있으며, `ng update`를 사용해서 라이브러리 버전을 업데이트하면서 필요한 수정사항을 자동으로 처리할 수 있습니다.
@@ -88,7 +88,7 @@ Now you are ready to create that schematic.
 
 <!--
 A schematic for the `ng add` command can enhance the initial installation process for your users.
-The following steps will define this type of schematic.
+The following steps define this type of schematic.
 
 1. Go to the `<lib-root>/schematics/ng-add/` folder.
 
@@ -103,7 +103,7 @@ The only step needed to provide initial `ng add` support is to trigger an instal
 The task uses the user's preferred package manager to add the library to the project's `package.json` configuration file, and install it in the project’s `node_modules` directory.
 
 In this example, the function receives the current `Tree` and returns it without any modifications.
-If you need to, you can do additional setup when your package is installed, such as generating files, updating configuration, or any other initial setup your library requires.
+If you need to, do additional setup when your package is installed, such as generating files, updating configuration, or any other initial setup your library requires.
 -->
 `ng add` 스키매틱을 정의하면 라이브러리 설치 과정을 확장할 수 있습니다.
 다음 순서로 진행해 봅시다.
@@ -122,7 +122,6 @@ If you need to, you can do additional setup when your package is installed, such
 
 위에서 작성한 예제 코드는 `Tree` 객체를 받지만 이 객체를 수정하지 않고 그대로 반환합니다.
 필요하다면 라이브러리 패키지를 설치한 이후에 어떤 파일을 생성한다던지, 환경설정 파일을 수정한다던지, 라이브러리 초기화 작업을 실행할 수 있습니다.
-
 
 ### Define dependency type
 
@@ -237,7 +236,7 @@ ng generate my-lib:my-service
 <!--
 When you add a schematic to the collection, you have to point to it in the collection's schema, and provide configuration files to define options that a user can pass to the command.
 
-1. Edit the `schematics/collection.json` file to point to the new schematic subfolder, and include a pointer to a schema file that will specify inputs for the new schematic.
+1. Edit the `schematics/collection.json` file to point to the new schematic subfolder, and include a pointer to a schema file that specifies inputs for the new schematic.
 
     <code-example header="projects/my-lib/schematics/collection.json (Schematics Collection)" path="schematics-for-libraries/projects/my-lib/schematics/collection.json">
     </code-example>
@@ -249,7 +248,7 @@ When you add a schematic to the collection, you have to point to it in the colle
     <code-example header="projects/my-lib/schematics/my-service/schema.json (Schematic JSON Schema)" path="schematics-for-libraries/projects/my-lib/schematics/my-service/schema.json">
     </code-example>
 
-    * *id*: A unique id for the schema in the collection.
+    * *id*: A unique ID for the schema in the collection.
     * *title*: A human-readable description of the schema.
     * *type*: A descriptor for the type provided by the properties.
     * *properties*: An object that defines the available options for the schematic.
@@ -314,7 +313,7 @@ Schematic templates support special syntax to execute code and variable substitu
 
 1. Create a `files/` folder inside the `schematics/my-service/` folder.
 
-1. Create a file named `__name@dasherize__.service.ts.template` that defines a template you can use for generating files. This template will generate a service that already has Angular's `HttpClient` injected into its constructor.
+1. Create a file named `__name@dasherize__.service.ts.template` that defines a template to use for generating files. This template will generate a service that already has Angular's `HttpClient` injected into its constructor.
 
 <code-example lang="ts" header="projects/my-lib/schematics/my-service/files/__name@dasherize__.service.ts.template (Schematic Template)">
 
@@ -330,7 +329,7 @@ export class <%= classify(name) %>Service {
 
 </code-example>
 
-* The `classify` and `dasherize` methods are utility functions that your schematic will use to transform your source template and filename.
+* The `classify` and `dasherize` methods are utility functions that your schematic uses to transform your source template and filename.
 
 * The `name` is provided as a property from your factory function. It is the same `name` you defined in the schema.
 -->
@@ -430,14 +429,14 @@ The options are the option values passed through from the `ng generate` command.
 ## 생성(generation) 룰 정의하기
 
 <!--
-We now have the framework in place for creating the code that actually modifies the user's application to set it up for the service defined in your library.
+You now have the framework in place for creating the code that actually modifies the user's application to set it up for the service defined in your library.
 
-The Angular workspace where the user has installed your library contains multiple projects (applications and libraries).
-The user can specify the project on the command line, or allow it to default.
+The Angular workspace where the user installed your library contains multiple projects (applications and libraries).
+The user can specify the project on the command line, or let it default.
 In either case, your code needs to identify the specific project to which this schematic is being applied, so that you can retrieve information from the project configuration.
 
-You can do this using the `Tree` object that is passed in to the factory function.
-The `Tree` methods give you access to the complete file tree in your workspace, allowing you to read and write files during the execution of the schematic.
+Do this using the `Tree` object that is passed in to the factory function.
+The `Tree` methods give you access to the complete file tree in your workspace, letting you read and write files during the execution of the schematic.
 -->
 이제 프로젝트에 있는 애플리케이션 코드를 수정할 준비가 끝났습니다.
 
@@ -466,7 +465,7 @@ The `Tree` methods give you access to the complete file tree in your workspace, 
     Be sure to check that the context exists and throw the appropriate error.
 
 1. The `workspace.extensions` property includes a `defaultProject` value for determining which project to use if not provided.
-   We will use that value as a fallback, if no project is explicitly specified in the `ng generate` command.
+   You will use that value as a fallback, if no project is explicitly specified in the `ng generate` command.
 
     <code-example header="projects/my-lib/schematics/my-service/index.ts (Default Project)" path="schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="project-fallback">
     </code-example>
@@ -523,7 +522,7 @@ The `Tree` methods give you access to the complete file tree in your workspace, 
 ### 룰 정의하기
 
 <!--
-A `Rule` can use external template files, transform them, and return another `Rule` object with the transformed template. You can use the templating to generate any custom files required for your schematic.
+A `Rule` can use external template files, transform them, and return another `Rule` object with the transformed template. Use the templating to generate any custom files required for your schematic.
 
 1. Add the following code to your factory function.
 
@@ -542,10 +541,10 @@ A `Rule` can use external template files, transform them, and return another `Ru
     <code-example header="projects/my-lib/schematics/my-service/index.ts (Chain Rule)" path="schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts" region="chain">
     </code-example>
 
-    The `chain()` method allows you to combine multiple rules into a single rule, so that you can perform multiple operations in a single schematic.
+    The `chain()` method lets you combine multiple rules into a single rule, so that you can perform multiple operations in a single schematic.
     Here you are only merging the template rules with any code executed by the schematic.
 
-See a complete example of the schematic rule function below.
+See a complete example of the following schematic rule function.
 
 <code-example header="projects/my-lib/schematics/my-service/index.ts" path="schematics-for-libraries/projects/my-lib/schematics/my-service/index.ts">
 </code-example>
@@ -591,7 +590,7 @@ For more information about rules and utility methods, see [Provided Rules](https
 ## 라이브러리 스키매틱 실행하기
 
 <!--
-After you build your library and schematics, you can install the schematics collection to run against your project. The steps below show you how to generate a service using the schematic you created above.
+After you build your library and schematics, you can install the schematics collection to run against your project. The following steps show you how to generate a service using the schematic you created earlier.
 -->
 라이브러리와 스키매틱을 빌드하고 나면 이제 Angular 프로젝트에 스키매틱 컬렉션을 설치할 수 있습니다.
 이제부터는 지금까지 구현한 스키매틱을 사용해서 서비스를 생성하는 방법에 대해 알아봅시다.
@@ -668,7 +667,7 @@ npm link dist/my-lib
 ### 스키매틱 실행하기
 
 <!--
-Now that your library is installed, you can run the schematic using the `ng generate` command.
+Now that your library is installed, run the schematic using the `ng generate` command.
 
 <code-example language="bash">
 
@@ -676,7 +675,7 @@ ng generate my-lib:my-service --name my-data
 
 </code-example>
 
-In the console, you will see that the schematic was run and the `my-data.service.ts` file was created in your application folder.
+In the console, you see that the schematic was run and the `my-data.service.ts` file was created in your application folder.
 
 <code-example language="bash" hideCopy="true">
 

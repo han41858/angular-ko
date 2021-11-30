@@ -1,9 +1,12 @@
 <!--
 # Common Routing Tasks
 -->
-# 기본 라우팅 작업
+# 일반 라우팅 동작
 
+<!--
 This topic describes how to implement many of the common tasks associated with adding the Angular router to your application.
+-->
+이 문서는 Angular 애플리케이션에 라우터를 추가하는 방법을 설명합니다.
 
 
 {@a basics}
@@ -13,11 +16,11 @@ This topic describes how to implement many of the common tasks associated with a
 ## 라우팅 가능한 상태로 앱 생성하기
 
 <!--
-The following command uses the Angular CLI to generate a basic Angular application with an app routing module, called `AppRoutingModule`, which is an NgModule where you can configure your routes.
+The following command uses the Angular CLI to generate a basic Angular application with an application routing module, called `AppRoutingModule`, which is an NgModule where you can configure your routes.
 The application name in the following example is `routing-app`.
 
 <code-example language="sh">
-  ng new routing-app --routing
+  ng new routing-app --routing --defaults
 </code-example>
 
 When generating a new app, the CLI prompts you to select CSS or a CSS preprocessor.
@@ -28,7 +31,7 @@ Angular CLI로 다음과 같은 명령을 실행하면 Angular 앱을 생성하�
 `routing-app` 이라는 이름으로 앱을 생성하는 명령은 이렇습니다.
 
 <code-example language="sh">
-  ng new routing-app --routing
+  ng new routing-app --routing --defaults
 </code-example>
 
 애플리케이션을 생성하는 과정에 CSS 전처리기를 사용할 것인지 물어봅니다.
@@ -152,7 +155,7 @@ The following is the default `AppModule` using the CLI with the `--routing` flag
   The Angular CLI performs this step automatically.
   The CLI also sets up a `Routes` array for your routes and configures the `imports` and `exports` arrays for `@NgModule()`.
 
-  <code-example path="router/src/app/app-routing.module.7.ts" header="CLI app routing module">
+  <code-example path="router/src/app/app-routing.module.7.ts" header="CLI application routing module">
 
   </code-example>
 
@@ -168,7 +171,7 @@ The following is the default `AppModule` using the CLI with the `--routing` flag
 
   1. Add your routes to your application.
 
-  Now that you have defined your routes, you can add them to your application.
+  Now that you have defined your routes, add them to your application.
   First, add links to the two components.
   Assign the anchor tag that you want to add the route to the `routerLink` attribute.
   Set the value of the attribute to the component to show when a user clicks on each link.
@@ -249,7 +252,7 @@ Each item in the list has a unique `id`.
 To edit an item, users click an Edit button, which opens an `EditGroceryItem` component.
 You want that component to retrieve the `id` for the grocery item so it can display the right information to the user.
 
-You can use a route to pass this type of information to your application components.
+Use a route to pass this type of information to your application components.
 To do so, you use the [ActivatedRoute](api/router/ActivatedRoute) interface.
 
 To get information from a route:
@@ -435,7 +438,7 @@ For more details on `pathMatch` see [Spotlight on `pathMatch`](guide/router-tuto
 ## 중첩 라우팅 규칙
 
 <!--
-As your application grows more complex, you may want to create routes that are relative to a component other than your root component.
+As your application grows more complex, you might want to create routes that are relative to a component other than your root component.
 These types of nested routes are called child routes.
 This means you're adding a second `<router-outlet>` to your app, because it is in addition to the `<router-outlet>` in `AppComponent`.
 
@@ -479,16 +482,16 @@ The one difference is that you place child routes in a `children` array within t
 ## 상대주소 사용하기
 
 <!--
-Relative paths allow you to define paths that are relative to the current URL segment.
+Relative paths let you define paths that are relative to the current URL segment.
 The following example shows a relative route to another component, `second-component`.
 `FirstComponent` and `SecondComponent` are at the same level in the tree, however, the link to `SecondComponent` is situated within the `FirstComponent`, meaning that the router has to go up a level and then into the second directory to find the `SecondComponent`.
-Rather than writing out the whole path to get to `SecondComponent`, you can use the `../` notation to go up a level.
+Rather than writing out the whole path to get to `SecondComponent`, use the `../` notation to go up a level.
 
 <code-example path="router/src/app/app.component.8.html" region="relative-route" header="In the template">
 
 </code-example>
 
-In addition to `../`, you can use `./` or no leading slash to specify the current level.
+In addition to `../`, use `./` or no leading slash to specify the current level.
 -->
 상대주소를 사용하면 현재 URL를 기준으로 라우팅할 주소를 지정할 수 있습니다.
 아래 예제는 `second-component`로 이동하는 링크에 상대주소를 적용한 예제 코드입니다.
@@ -694,7 +697,7 @@ import { Observable } from 'rxjs';
 
 <!--
 You can configure your routes to lazy load modules, which means that Angular only loads modules as needed, rather than loading all modules when the application launches.
-Additionally, you can preload parts of your application in the background to improve the user experience.
+Additionally, preload parts of your application in the background to improve the user experience.
 
 For more information on lazy loading and preloading see the dedicated guide [Lazy loading NgModules](guide/lazy-loading-ngmodules).
 -->
@@ -813,7 +816,7 @@ A link parameters array holds the following ingredients for router navigation:
 * The path of the route to the destination component.
 * Required and optional route parameters that go into the route URL.
 
-You can bind the `RouterLink` directive to such an array like this:
+Bind the `RouterLink` directive to such an array like this:
 
 <code-example path="router/src/app/app.component.3.ts" header="src/app/app.component.ts (h-anchor)" region="h-anchor"></code-example>
 
@@ -821,7 +824,7 @@ The following is a two-element array when specifying a route parameter:
 
 <code-example path="router/src/app/heroes/hero-list/hero-list.component.1.html" header="src/app/heroes/hero-list/hero-list.component.html (nav-to-detail)" region="nav-to-detail"></code-example>
 
-You can provide optional route parameters in an object, as in `{ foo: 'foo' }`:
+Provide optional route parameters in an object, as in `{ foo: 'foo' }`:
 
 <code-example path="router/src/app/app.component.3.ts" header="src/app/app.component.ts (cc-query-params)" region="cc-query-params"></code-example>
 
@@ -918,7 +921,6 @@ The link parameters array affords the flexibility to represent any routing depth
 
 <!--
 When the router navigates to a new component view, it updates the browser's location and history with a URL for that view.
-As this is a strictly local URL the browser won't send this URL to the server and will not reload the page.
 
 Modern HTML5 browsers support <a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries" title="HTML5 browser history push-state">history.pushState</a>, a technique that changes a browser's location and history without triggering a server page request.
 The router can compose a "natural" URL that is indistinguishable from one that would otherwise require a page load.
@@ -954,7 +956,6 @@ For more information on providers and the bootstrap process, see [Dependency Inj
 </div>
 -->
 화면에 새로운 컴포넌트를 표시하게 되면 브라우저의 주소와 히스토리가 변경됩니다.
-그리고 이 주소는 로컬 환경에만 적용되는 URL이기 때문에 단일 페이지 애플리케이션이 이 주소를 서버로 보내지 않아도 화면을 갱신할 수 있습니다.
 
 최신 HTML5 브라우저는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries" title="HTML5 browser history push-state">history.pushState</a> API를 제공합니다.
 이 API를 활용하면 서버로 새로운 페이지 요청을 보내지 않으면서 브라우저의 주소나 히스토리를 변경할 수 있습니다.
@@ -997,7 +998,7 @@ For more information on providers and the bootstrap process, see [Dependency Inj
 ## URL 스타일 결정하기
 
 <!--
-You must choose a routing strategy early in the development of you project because once the application is in production, visitors to your site use and depend on application URL references.
+You must choose a routing strategy early in the development of your project because once the application is in production, visitors to your site use and depend on application URL references.
 
 Almost all Angular projects should use the default HTML5 style.
 It produces URLs that are easier for users to understand and it preserves the option to do server-side rendering.
@@ -1023,8 +1024,8 @@ URL 스타일은 프로젝트 개발 단계 이전에 결정하는 것이 좋습
 
 <!--
 The router uses the browser's <a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API#Adding_and_modifying_history_entries" title="HTML5 browser history push-state">history.pushState</a> for navigation.
-`pushState` allows you to customize in-app URL paths; for example, `localhost:4200/crisis-center`.
-The in-app URLs can be indistinguishable from server URLs.
+`pushState` lets you customize in-application URL paths; for example, `localhost:4200/crisis-center`.
+The in-application URLs can be indistinguishable from server URLs.
 
 Modern HTML5 browsers were the first to support `pushState` which is why many people refer to these URLs as "HTML5 style" URLs.
 
@@ -1087,12 +1088,12 @@ The preferred way to configure the strategy is to add a <a href="https://develop
 
 <code-example path="router/src/index.html" header="src/index.html (base-href)" region="base-href"></code-example>
 
-Without that tag, the browser may not be able to load resources
+Without that tag, the browser might not be able to load resources
 (images, CSS, scripts) when "deep linking" into the application.
 
-Some developers may not be able to add the `<base>` element, perhaps because they don't have access to `<head>` or the `index.html`.
+Some developers might not be able to add the `<base>` element, perhaps because they don't have access to `<head>` or the `index.html`.
 
-Those developers may still use HTML5 URLs by taking the following two steps:
+Those developers can still use HTML5 URLs by taking the following two steps:
 
 1. Provide the router with an appropriate `APP_BASE_HREF` value.
 1. Use root URLs (URLs with an `authority`) for all web resources: CSS, images, scripts, and template HTML files.
@@ -1141,7 +1142,7 @@ foo://example.com:8042/over/there?name=ferret#nose
 ### `HashLocationStrategy`
 
 <!--
-You can use `HashLocationStrategy` by providing the `useHash: true` in an object as the second argument of the `RouterModule.forRoot()` in the `AppModule`.
+Use `HashLocationStrategy` by providing the `useHash: true` in an object as the second argument of the `RouterModule.forRoot()` in the `AppModule`.
 
 <code-example path="router/src/app/app.module.6.ts" header="src/app/app.module.ts (hash URL strategy)"></code-example>
 -->

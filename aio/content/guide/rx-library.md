@@ -33,7 +33,7 @@ RxJS provides an implementation of the `Observable` type, which is needed until 
 ## 옵저버블 생성 함수
 
 <!--
-RxJS offers a number of functions that can be used to create new observables. These functions can simplify the process of creating observables from things such as events, timers, promises, and so on. For example:
+RxJS offers a number of functions that can be used to create new observables. These functions can simplify the process of creating observables from things such as events, timers, and promises. For example:
 
 
 <code-example path="rx-library/src/simple-creation.1.ts" region="promise" header="Create an observable from a promise"></code-example>
@@ -44,7 +44,9 @@ RxJS offers a number of functions that can be used to create new observables. Th
 
 <code-example path="rx-library/src/simple-creation.ts" region="ajax" header="Create an observable that creates an AJAX request"></code-example>
 -->
-RxJS offers a number of functions that can be used to create new observables. These functions can simplify the process of creating observables from things such as events, timers, promises, and so on. For example:
+RxJS는 옵저버블을 생성하는 함수를 다양하게 제공합니다.
+이 함수들은 이벤트, 타이머, 프로미스 등으로 옵저버블을 만드는 과정을 단순화한 것입니다.
+이런 것들이 있습니다:
 
 <code-example path="rx-library/src/simple-creation.1.ts" region="promise" header="Promise를 옵저버블로 변환하기"></code-example>
 
@@ -108,7 +110,7 @@ RxJS에서 제공하는 연산자는 옵저버블의 기본 철학을 그대로 
 RxJS provides many operators, but only a handful are used frequently. For a list of operators and usage samples, visit the [RxJS API Documentation](https://rxjs.dev/api).
 
 <div class="alert is-helpful">
-  Note that, for Angular apps, we prefer combining operators with pipes, rather than chaining. Chaining is used in many RxJS examples.
+  Note that, for Angular applications, we prefer combining operators with pipes, rather than chaining. Chaining is used in many RxJS examples.
 </div>
 
 | Area | Operators |
@@ -201,7 +203,7 @@ The following converts the previous example to retry the request before catching
 <!--
 Because Angular applications are mostly written in TypeScript, you will typically know when a variable is an observable. Although the Angular framework does not enforce a naming convention for observables, you will often see observables named with a trailing “$” sign.
 
-This can be useful when scanning through code and looking for observable values. Also, if you want a property to store the most recent value from an observable, it can be convenient to simply use the same name with or without the “$”.
+This can be useful when scanning through code and looking for observable values. Also, if you want a property to store the most recent value from an observable, it can be convenient to use the same name with or without the “$”.
 
 For example:
 

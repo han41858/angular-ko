@@ -498,8 +498,8 @@ Here are the most important static methods, in order of likely utility.
       The testing shims (`karma-test-shim`, `browser-test-shim`) call it for you
       so there is rarely a reason for you to call it yourself.
 
-      You may call this method _exactly once_. If you must change
-      this default in the middle of your test run, call `resetTestEnvironment` first.
+      Call this method _exactly once_. To change
+      this default in the middle of a test run, call `resetTestEnvironment` first.
 
       Specify the Angular compiler factory, a `PlatformRef`, and a default Angular testing module.
       Alternatives for non-browser platforms are available in the general form
@@ -509,7 +509,7 @@ Here are the most important static methods, in order of likely utility.
 
       이 메서드는 테스트 환경설정 파일(`karma-test-shim`, `browser-test-shim`)이 자동으로 실행하기 때문에 이 메서드를 직접 실행할 일은 거의 없습니다.
 
-      이 메서드를 실행해야 하는 경우는 딱 하나 있습니다.
+      이 메서드를 실행해야 하는 경우는 _딱 하나_ 있습니다.
       테스트 코드를 실행하다가 테스트 환경설정을 변경하고 나면 `resetTestEnvironment` 메서드를 제일 먼저 실행해야 합니다.
 
       이 때 `PlatformRef`과 같은 Angular 컴파일러 팩토리를 명시해야 하며, 브라우저가 아닌 환경에서는 `@angular/platform-<플랫폼_이름>/testing/<플랫폼_이름>` 형태를 사용할 수 있습니다.

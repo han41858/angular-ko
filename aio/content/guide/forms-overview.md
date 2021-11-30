@@ -54,7 +54,7 @@ Reactive forms and template-driven forms process and manage form data differentl
 
 * **Reactive forms** provide direct, explicit access to the underlying forms object model. Compared to template-driven forms, they are more robust: they're more scalable, reusable, and testable. If forms are a key part of your application, or you're already using reactive patterns for building your application, use reactive forms.
 
-* **Template-driven forms** rely on directives in the template to create and manipulate the underlying object model. They are useful for adding a simple form to an app, such as an email list signup form. They're easy to add to an app, but they don't scale as well as reactive forms. If you have very basic form requirements and logic that can be managed solely in the template, template-driven forms could be a good fit.
+* **Template-driven forms** rely on directives in the template to create and manipulate the underlying object model. They are useful for adding a simple form to an app, such as an email list signup form. They're straightforward to add to an app, but they don't scale as well as reactive forms. If you have very basic form requirements and logic that can be managed solely in the template, template-driven forms could be a good fit.
 -->
 반응형 폼(Reactive form)과 템플릿 기반 폼(template-drive form)은 폼을 처리하는 방법과 데이터를 관리하는 방법이 다릅니다.
 
@@ -75,7 +75,7 @@ Reactive forms and template-driven forms process and manage form data differentl
 ### 차이점
 
 <!--
-The table below summarizes the key differences between reactive and template-driven forms.
+The following table summarizes the key differences between reactive and template-driven forms.
 
 <style>
   table {width: 100%};
@@ -161,7 +161,7 @@ Both reactive and template-driven forms are built on the following base classes.
 
 * `FormArray` tracks the same values and status for an array of form controls.
 
-* `ControlValueAccessor` creates a bridge between Angular `FormControl` instances and native DOM elements.
+* `ControlValueAccessor` creates a bridge between Angular `FormControl` instances and built-in DOM elements.
 -->
 반응형 폼과 템플릿 기반 폼에서 공통으로 활용하는 클래스들은 이런 것들이 있습니다.
 
@@ -172,7 +172,6 @@ Both reactive and template-driven forms are built on the following base classes.
 * `FormArray`: 폼 컨트롤 배열의 값이 변경되는 것을 감지하며 유효성 검사 결과를 관리합니다.
 
 * `ControlValueAccessor`: Angular `FormControl`과 DOM 엘리먼트를 연결하는 역할을 합니다.
-
 
 {@a setup-the-form-model}
 
@@ -500,7 +499,7 @@ The following examples demonstrate the process of testing forms with reactive an
 ### 반응형 폼 테스트하기
 
 <!--
-Reactive forms provide a relatively easy testing strategy because they provide synchronous access to the form and data models, and they can be tested without rendering the UI.
+Reactive forms provide a relatively straightforward testing strategy because they provide synchronous access to the form and data models, and they can be tested without rendering the UI.
 In these tests, status and data are queried and manipulated through the control without interacting with the change detection cycle.
 
 The following tests use the favorite-color components from previous examples to verify the view-to-model and model-to-view data flows for a reactive form.

@@ -31,9 +31,9 @@ This sample application is much like the one in the [_Tour of Heroes_ tutorial](
 
 <div class="alert is-helpful">
 
-  For the sample application that the testing guides describe, see the <live-example noDownload>sample app</live-example>.
+  For a hands-on experience, <live-example name="testing" stackblitz="specs" noDownload>run tests and explore the test code</live-example> in your browser as your read this guide.
 
-  For the tests features in the testing guides, see <live-example stackblitz="specs" noDownload>tests</live-example>.
+  If you'd like to experiment with the application that this guide describes, <live-example name="testing" noDownload>run it in your browser</live-example> or <live-example name="testing" downloadOnly>download and run it locally</live-example>.
 
 </div>
 -->
@@ -52,9 +52,9 @@ This sample application is much like the one in the [_Tour of Heroes_ tutorial](
 
 <div class="alert is-helpful">
 
-이 문서에서 다루는 예제는 <live-example noDownload>sample app</live-example>에서 직접 확인할 수 있습니다.
+  이 문서에서 다루는 예제는 <live-example name="testing" stackblitz="specs" noDownload>테스트 코드 확인하고 실행하기</live-example>에서 직접 확인할 수 있습니다.
 
-그리고 이 문서에서 다루는 테스트 기능은 <live-example stackblitz="specs" noDownload>tests</live-example>에서 확인할 수 있습니다.
+  그리고 이 문서에서 다루는 테스트 기능은 <live-example stackblitz="specs" noDownload>tests</live-example>에서 확인할 수 있습니다.
 
 </div>
 
@@ -101,7 +101,7 @@ A Chrome browser also opens and displays the test output in the "Jasmine HTML Re
 </div>
 
 Most people find this browser output easier to read than the console log.
-You can click on a test row to re-run just that test or click on a description to re-run the tests in the selected test group ("test suite").
+Click on a test row to re-run just that test or click on a description to re-run the tests in the selected test group ("test suite").
 
 Meanwhile, the `ng test` command is watching for changes.
 
@@ -155,7 +155,7 @@ Chrome ...: Executed 3 of 3 SUCCESS (0.135 secs / 0.205 secs)
 <!--
 The CLI takes care of Jasmine and Karma configuration for you.
 
-You can fine-tune many options by editing the `karma.conf.js` in the root folder of the project and
+Fine-tune many options by editing the `karma.conf.js` in the root folder of the project and
 the `test.ts` files in the `src/` folder.
 
 The `karma.conf.js` file is a partial Karma configuration file.
@@ -197,7 +197,7 @@ The CLI generated a test file for the `AppComponent` named `app.component.spec.t
 
 <div class="alert is-important">
 
-The test file extension **must be `.spec.ts`** so that tooling can identify it as a file with tests (AKA, a _spec_ file).
+The test file extension **must be `.spec.ts`** so that tooling can identify it as a file with tests (also known as a _spec_ file).
 
 </div>
 
@@ -232,7 +232,7 @@ IDE와 같은 툴에서 스펙 파일을 구분하려면 테스트 파일의 확
 It's a good idea to put unit test spec files in the same folder
 as the application source code files that they test:
 
-- Such tests are easy to find.
+- Such tests are painless to find.
 - You see at a glance if a part of your application lacks tests.
 - Nearby tests can reveal how a part works in context.
 - When you move the source (inevitable), you remember to move the test.
@@ -282,7 +282,7 @@ next to their corresponding helper files.
 ## 지속적인 통합환경 구성하기
 
 <!--
-One of the best ways to keep your project bug-free is through a test suite, but it's easy to forget to run tests all the time.
+One of the best ways to keep your project bug-free is through a test suite, but you might forget to run tests all the time.
 Continuous integration (CI) servers let you set up your project repository so that your tests run on every commit and pull request.
 
 There are paid CI services like Circle CI and Travis CI, and you can also host your own for free using Jenkins and others.
@@ -585,7 +585,7 @@ exports.config = config;
 ```
 
 <!--
-Now you can run the following command to use the `--no-sandbox` flag:
+Now, run the following command to use the `--no-sandbox` flag:
 -->
 그러면 아래 명령들은 `--no-sandbox` 플래그가 지정된 채로 실행됩니다.
 
@@ -609,14 +609,14 @@ Now you can run the following command to use the `--no-sandbox` flag:
 ## 참고
 
 <!--
-After you've set up your application for testing, you may find the following testing  guides useful.
+After you've set up your application for testing, you might find the following testing  guides useful.
 
 * [Code coverage](guide/testing-code-coverage)&mdash;find out how much of your app your tests are covering and how to specify required amounts.
 * [Testing services](guide/testing-services)&mdash;learn how to test the services your application uses.
 * [Basics of testing components](guide/testing-components-basics)&mdash;discover the basics of testing Angular components.
 * [Component testing scenarios](guide/testing-components-scenarios)&mdash;read about the various kinds of component testing scenarios and use cases.
 * [Testing attribute directives](guide/testing-attribute-directives)&mdash;learn about how to test your attribute directives.
-* [Testing pipes](guide/testing-pipes)&mdash;find out how to test attribute directives.
+* [Testing pipes](guide/testing-pipes)&mdash;find out how to test pipes.
 * [Debugging tests](guide/test-debugging)&mdash;uncover common testing bugs.
 * [Testing utility APIs](guide/testing-utility-apis)&mdash;get familiar with Angular testing features.
 -->

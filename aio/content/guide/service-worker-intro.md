@@ -4,7 +4,7 @@
 # 서비스 워커
 
 <!--
-Service workers augment the traditional web deployment model and empower applications to deliver a user experience with the reliability and performance on par with natively-installed code. Adding a service worker to an Angular application is one of the steps for turning an application into a [Progressive Web App](https://developers.google.com/web/progressive-web-apps/) (also known as a PWA).
+Service workers augment the traditional web deployment model and empower applications to deliver a user experience with the reliability and performance on par with code that is written to run on your operating system and hardware. Adding a service worker to an Angular application is one of the steps for turning an application into a [Progressive Web App](https://developers.google.com/web/progressive-web-apps/) (also known as a PWA).
 
 At its simplest, a service worker is a script that runs in the web browser and manages caching for an application.
 
@@ -44,7 +44,7 @@ Angular applications, as single-page applications, are in a prime position to be
 
 Angular's service worker is designed to optimize the end user experience of using an application over a slow or unreliable network connection, while also minimizing the risks of serving outdated content.
 
-The Angular service worker's behavior follows that design goal:
+To achieve this, the Angular service worker follows these guidelines:
 
 * Caching an application is like installing a native application. The application is cached as one unit, and all files update together.
 * A running application continues to run with the same version of all files. It does not suddenly start receiving cached files from a newer version, which are likely incompatible.
@@ -52,9 +52,9 @@ The Angular service worker's behavior follows that design goal:
 * Updates happen in the background, relatively quickly after changes are published. The previous version of the application is served until an update is installed and ready.
 * The service worker conserves bandwidth when possible. Resources are only downloaded if they've changed.
 
-To support these behaviors, the Angular service worker loads a *manifest* file from the server. The manifest describes the resources to cache and includes hashes of every file's contents. When an update to the application is deployed, the contents of the manifest change, informing the service worker that a new version of the application should be downloaded and cached. This manifest is generated from a CLI-generated configuration file called `ngsw-config.json`.
+To support these behaviors, the Angular service worker loads a *manifest* file from the server. The file, called `ngsw.json` (not to be confused with the [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest)), describes the resources to cache and includes hashes of every file's contents. When an update to the application is deployed, the contents of the manifest change, informing the service worker that a new version of the application should be downloaded and cached. This manifest is generated from a CLI-generated configuration file called `ngsw-config.json`.
 
-Installing the Angular service worker is as easy as including an `NgModule`. In addition to registering the Angular service worker with the browser, this also makes a few services available for injection which interact with the service worker and can be used to control it. For example, an application can ask to be notified when a new update becomes available, or an application can ask the service worker to check the server for available updates.
+Installing the Angular service worker is as straightforward as including an `NgModule`. In addition to registering the Angular service worker with the browser, this also makes a few services available for injection which interact with the service worker and can be used to control it. For example, an application can ask to be notified when a new update becomes available, or an application can ask the service worker to check the server for available updates.
 -->
 Angular 애플리케이션은 단일 페이지 애플리케이션(Single-page application, SPA)이기 때문에 서비스 워커의 효율을 극대화할 수 있습니다.
 Angular는 5.0.0 버전부터 서비스 워커를 도입했습니다.
@@ -75,8 +75,10 @@ Angular가 제공하는 서비스 워커가 지향하는 방향은 이렇습니�
 
 * 서비스 워커는 네트워크 대역폭을 최소한으로 사용합니다. 애플리케이션이 사용하는 리소스는 변경되었을 때만 다시 다운로드됩니다.
 
+
 이런 동작을 지원하기 위해 Angular 서비스 워커는 서버에서 *매니페스트(manifest)* 파일을 받아옵니다.
-이 매니페스트 파일에는 캐싱해야할 리소스의 목록과 모든 파일의 내용과 관련된 해시값이 저장되어 있습니다.
+Angular에서는 이 역할을 `ngsw.json` 파일이 담당하는데, 이 매니페스트 파일은 [웹 앱 매니페스트](https://developer.mozilla.org/en-US/docs/Web/Manifest)와는 다릅니다.
+`ngsw.json` 파일에는 캐싱해야할 리소스의 목록과 모든 파일의 내용과 관련된 해시값이 저장되어 있습니다.
 그래서 애플리케이션의 새로운 버전이 배포되면 이 매니페스트 파일의 내용도 바뀌기 때문에, 자연스럽게 서비스 워커는 애플리케이션의 새로운 버전이 배포되었으니 새로 다운로드 받고 캐싱해야 한다는 것을 알 수 있습니다.
 Angular CLI를 사용해서 생성한 프로젝트에 존재하는 기본 매니페스트 파일의 이름은 `ngsw-config.json`입니다.
 
@@ -91,13 +93,13 @@ Angular 애플리케이션에 Angular 서비스 워커를 적용하는 것은 `N
 ## 동작 환경
 
 <!--
-To make use of all the features of Angular service worker, use the latest versions of Angular and the Angular CLI.
+To make use of all the features of Angular service workers, use the latest versions of Angular and the Angular CLI.
 
-In order for service workers to be registered, the application must be accessed over HTTPS, not HTTP.
+For service workers to be registered, the application must be accessed over HTTPS, not HTTP.
 Browsers ignore service workers on pages that are served over an insecure connection.
-The reason is that service workers are quite powerful, so extra care needs to be taken to ensure the service worker script has not been tampered with.
+The reason is that service workers are quite powerful, so extra care is needed to ensure the service worker script has not been tampered with.
 
-There is one exception to this rule: to make local development easier, browsers do _not_ require a secure connection when accessing an application on `localhost`.
+There is one exception to this rule: to make local development more straightforward, browsers do _not_ require a secure connection when accessing an application on `localhost`.
 -->
 Angular 서비스 워커가 제공하는 기능을 모두 사용하려면 Angular 패키지와 Angular CLI를 모두 최신버전으로 유지해야 합니다.
 
@@ -122,14 +124,14 @@ Browsers like IE and Opera Mini do not support service workers.
 If the user is accessing your application with a browser that does not support service workers, the service worker is not registered and related behavior such as offline cache management and push notifications does not happen.
 More specifically:
 
-* The browser does not download the service worker script and `ngsw.json` manifest file.
+* The browser does not download the service worker script and the `ngsw.json` manifest file.
 * Active attempts to interact with the service worker, such as calling `SwUpdate.checkForUpdate()`, return rejected promises.
 * The observable events of related services, such as `SwUpdate.available`, are not triggered.
 
 It is highly recommended that you ensure that your application works even without service worker support in the browser.
-Although an unsupported browser ignores service worker caching, it will still report errors if the application attempts to interact with the service worker.
-For example, calling `SwUpdate.checkForUpdate()` will return rejected promises.
-To avoid such an error, you can check whether the Angular service worker is enabled using `SwUpdate.isEnabled()`.
+Although an unsupported browser ignores service worker caching, it still reports errors if the application attempts to interact with the service worker.
+For example, calling `SwUpdate.checkForUpdate()` returns rejected promises.
+To avoid such an error, check whether the Angular service worker is enabled using `SwUpdate.isEnabled`.
 
 To learn more about other browsers that are service worker ready, see the [Can I Use](https://caniuse.com/#feat=serviceworkers) page and [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API).
 -->
@@ -162,6 +164,7 @@ The rest of the articles in this section specifically address the Angular implem
 
 * [App Shell](guide/app-shell)
 * [Service Worker Communication](guide/service-worker-communications)
+* [Service Worker Notifications](guide/service-worker-notifications)
 * [Service Worker in Production](guide/service-worker-devops)
 * [Service Worker Configuration](guide/service-worker-config)
 
@@ -179,6 +182,7 @@ Angular가 제공하는 서비스 워커를 활용하는 방법을 더 알아보
 
 * [애플리케이션 기본 틀](guide/app-shell)
 * [서비스 워커 통신](guide/service-worker-communications)
+* [서비스 워커 알림 (Notifications)](guide/service-worker-notifications)
 * [운영환경에 서비스 워커 활용하기](guide/service-worker-devops)
 * [서비스 워커 설정](guide/service-worker-config)
 

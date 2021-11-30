@@ -35,19 +35,21 @@
 <!-- `class.special`이 `classExpression`로 지정되는 `class`보다 우선순위가 높습니다.  -->
 <div [class.special]="isSpecial" [class]="classExpression">Some text.</div>
 
-<!-- `style.color`가 `styleExpression`로 지정되는 `style`보다 우선순위가 높습니다.  -->
-<div [style.color]="color" [style]="styleExpression">Some text.</div>
+<!-- `style.border`가 `styleExpression`로 지정되는 `border`보다 우선순위가 높습니다.  -->
+<div [style.border]="border" [style]="styleExpression">Some text.</div>
 <!-- #enddocregion basic-specificity -->
 
 <!-- #docregion source-specificity -->
 <h3>소스별 우선순위</h3>
 
-<!-- `dirWithClassBinding`이나 `comp-with-host-binding`보다 `class.special` 템플릿 바인딩의 우선순위가 더 높습니다. -->
-<comp-with-host-binding [class.special]="isSpecial" dirWithClassBinding>Some text.</comp-with-host-binding>
+<!-- `class.special` 템플릿 바인딩이 `dirWithClassBinding`이나 `comp-with-host-binding`가 바인딩하는 `special` 클래스보다 우선순위가 높습니다.-->
+<comp-with-host-binding [class.special]="isSpecial" dirWithClassBinding></comp-with-host-binding>
 
-<!-- `dirWithStyleBinding`이나 `comp-with-host-binding`보다 `style.color` 템플릿 바인딩의 우선순위가 더 높습니다. -->
-<comp-with-host-binding [style.color]="color" dirWithStyleBinding>Some text.</comp-with-host-binding>
-<!-- #enddocregion source-specificity -->
+
+<!-- `style.color` 템플릿 바인딩이 `dirWithStyleBinding`이나 `comp-with-host-binding`가 바인딩하는 `color` 프로퍼티보다 우선순위가 높습니다.. -->
+<div>
+  <comp-with-host-binding [style.color]="color" dirWithStyleBinding></comp-with-host-binding>
+</div>
 
 <!-- #docregion dynamic-priority -->
 <h3>동적 vs 정적</h3>
@@ -55,15 +57,18 @@
 <!-- `classExpression`이 동적으로 처리되기 때문에 `class`보다 우선순위가 높습니다. -->
 <div class="special" [class]="classExpression">Some text.</div>
 
-<!-- `styleExpression`이 동적으로 처리되기 때문에 `style`보다 우선순위가 높습니다. -->
-<div style="color: blue" [style]="styleExpression">Some text.</div>
+<!-- `styleExpression`이 동적으로 처리되기 때문에 `style="border: dotted darkblue 3px"`보다 우선순위가 높습니다 -->
+<div style="border: dotted darkblue 3px" [style]="styleExpression">Some text.</div>
 
 <!-- #enddocregion dynamic-priority -->
 
-<!-- #docregion style-delegation -->
-<comp-with-host-binding dirWithHostBinding></comp-with-host-binding>
-<!-- #enddocregion style-delegation -->
+<div class="readability">
+  <!-- #docregion style-delegation -->
+  <comp-with-host-binding dirWithHostBinding></comp-with-host-binding>
+  <!-- #enddocregion style-delegation -->
+</div>
 
 <!-- #docregion attribute-decorator -->
 <app-my-input-with-attribute-decorator type="number"></app-my-input-with-attribute-decorator>
 <!-- #enddocregion attribute-decorator -->
+

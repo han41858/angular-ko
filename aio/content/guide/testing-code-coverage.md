@@ -7,13 +7,13 @@
 
 <!--
 The CLI can run unit tests and create code coverage reports.
-Code coverage reports show you any parts of your code base that may not be properly tested by your unit tests.
+Code coverage reports show you any parts of your code base that might not be properly tested by your unit tests.
 
 <div class="alert is-helpful">
 
-For the sample app that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
+  For a hands-on experience, <live-example name="testing" stackblitz="specs" noDownload>run tests and explore the test code</live-example> in your browser as your read this guide.
 
-For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
+  If you'd like to experiment with the application that this guide describes, <live-example name="testing" noDownload>run it in your browser</live-example> or <live-example name="testing" downloadOnly>download and run it locally</live-example>.
 
 </div>
 
@@ -26,7 +26,7 @@ To generate a coverage report run the following command in the root of your proj
 
 When the tests are complete, the command creates a new `/coverage` folder in the project. Open the `index.html` file to see a report with your source code and code coverage values.
 
-If you want to create code-coverage reports every time you test, you can set the following option in the CLI configuration file, `angular.json`:
+If you want to create code-coverage reports every time you test, set the following option in the CLI configuration file, `angular.json`:
 
 ```
   "test": {
@@ -41,9 +41,9 @@ Angular CLI는 유닛 테스트를 실행하면서 코드 커버리지 보고서
 
 <div class="alert is-helpful">
 
-이 문서에서 다루는 예제 앱은 <live-example name="testing" embedded-style noDownload>sample app</live-example>에서 확인할 수 있습니다.
+  이 문서에서 다루는 예제 앱은 <live-example name="testing" stackblitz="specs" noDownload>테스트 코드 확인하고 실행하기</live-example>에서 확인할 수 있습니다.
 
-그리고 이 문서에서 다루는 테스트 기능은 <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>에서 확인할 수 있습니다.
+  그리고 이 문서에서 다루는 테스트 기능은 <live-example name="testing" noDownload>브라우저에서 실행하기</live-example>나 <live-example name="testing" downloadOnly>내려받아 로컬에서 실행하기</live-example>에서 확인할 수 있습니다.
 
 </div>
 
@@ -74,7 +74,7 @@ Angular CLI는 유닛 테스트를 실행하면서 코드 커버리지 보고서
 
 <!--
 The code coverage percentages let you estimate how much of your code is tested.
-If your team decides on a set minimum amount to be unit tested, you can enforce this minimum with the Angular CLI.
+If your team decides on a set minimum amount to be unit tested, enforce this minimum with the Angular CLI.
 
 For example, suppose you want the code base to have a minimum of 80% code coverage.
 To enable this, open the [Karma](https://karma-runner.github.io) test platform configuration file, `karma.conf.js`, and add the `check` property in the `coverageReporter:` key.
@@ -100,7 +100,7 @@ coverageReporter: {
 
 The `check` property causes the tool to enforce a minimum of 80% code coverage when the unit tests are run in the project.
 
-You can find more information about the different coverage configuration options [here](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md).
+Find more information about the different coverage configuration options [here](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md).
 -->
 코드 커버리지 퍼센트 값을 보면 애플리케이션 코드를 얼마나 테스트하는지 확인할 수 있습니다.
 팀에서 이 값을 어느 정도 이상으로 유지하려고 할 때 이 값을 강제할 수 있습니다.

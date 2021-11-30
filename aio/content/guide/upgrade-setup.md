@@ -383,24 +383,6 @@ The following are all in `src/`
 
 
 <!--
-## Appendix: Develop locally with IE
--->
-## 부록: 로컬 개발 환경에서 IE 활용하기
-
-<!--
-If you develop angular locally with `ng serve`, a `websocket` connection is set up automatically between browser and local dev server, so when your code changes, the browser can automatically refresh.
-
-In Windows, by default, one application can only have 6 websocket connections, <a href="https://msdn.microsoft.com/library/ee330736%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396#websocket_maxconn" title="MSDN WebSocket settings">MSDN WebSocket Settings</a>.
-So when IE is refreshed (manually or automatically by `ng serve`), sometimes the websocket does not close properly. When websocket connections exceed the limitations, a `SecurityError` will be thrown. This error will not affect the angular application, you can just restart IE to clear this error, or modify the windows registry to update the limitations.
--->
-로컬 개발환경에서 Angular 애플리케이션을 개발하면 `ng serve` 명령을 실행했을 때 브라우저와 로컬 개발 서버가 `websocket`으로 연결됩니다. 그래서 코드를 변경했을 때 브라우저가 코드 변경분을 반영하기 위해 페이지를 자동으로 갱신합니다.
-
-그리고 Windows에서는 <a href="https://msdn.microsoft.com/library/ee330736%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396#websocket_maxconn" title="MSDN WebSocket settings">MSDN WebSocket 설정에 따라</a> 애플리케이션에 6개의 웹소켓을 연결할 수 있습니다.
-그래서 IE에서 수동으로 페이지를 새로고침하거나 `ng serve`에 의해 자동으로 갱신되면 종종 웹소켓이 정상적으로 종료되지 않아서 새로운 웹소켓을 연결하지 못할 때가 있습니다. 이 때 `SecurityError` 가 발생하는데, 이 에러가 Angular 애플리케이션에는 영향을 주지 않지만 에러를 없애려면 IE를 재시작해야 합니다.
-Windows에서 이 제한을 해제하려면 레지스트리를 수정해야 합니다.
-
-
-<!--
 ## Appendix: Test using `fakeAsync()/waitForAsync()`
 -->
 ## 부록: `fakeAsync()/waitForAsync()` 활용하기

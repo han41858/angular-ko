@@ -123,7 +123,7 @@ There are two main steps to setting up a lazy-loaded feature module:
 ### 앱 생성하기
 
 <!--
-If you don’t already have an app, you can follow the steps below to
+If you don’t already have an app, follow the following steps to
 create one with the CLI. If you already have an app, skip to
 [Configure the routes](#config-routes). Enter the following command
 where `customer-app` is the name of your app:
@@ -192,9 +192,9 @@ The import path is the relative path to the module.
 <div class="callout is-helpful">
 <header>String-based lazy loading</header>
 
-In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](https://angular.io/guide/deprecations#loadchildren-string-syntax) in favor of the `import()` syntax. However, you can opt into using string-based lazy loading (`loadChildren: './path/to/module#Module'`) by including the lazy-loaded routes in your `tsconfig` file, which includes the lazy-loaded files in the compilation.
+In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](guide/deprecations#loadchildren-string-syntax) in favor of the `import()` syntax. However, you can opt into using string-based lazy loading (`loadChildren: './path/to/module#Module'`) by including the lazy-loaded routes in your `tsconfig` file, which includes the lazy-loaded files in the compilation.
 
-By default the CLI will generate projects with stricter file inclusions intended to be used with the `import()` syntax.
+By default the CLI generates projects with stricter file inclusions intended to be used with the `import()` syntax.
 
 </div>
 -->
@@ -221,20 +221,10 @@ ng generate module customers --route customers --module app.module
 지연로딩되는 모듈은 동적로딩을 위해 브라우저가 제공하는 `import('...')` 문법의 문자열이 `loadChildren` 프로퍼티에 할당되는 식으로 구현합니다.
 
 
-<!--
-<div class="callout is-helpful">
-<header>String-based lazy loading</header>
-
-In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](https://angular.io/guide/deprecations#loadchildren-string-syntax) in favor of the `import()` syntax. However, you can opt into using string-based lazy loading (`loadChildren: './path/to/module#Module'`) by including the lazy-loaded routes in your `tsconfig` file, which includes the lazy-loaded files in the compilation.
-
-By default the CLI will generate projects with stricter file inclusions intended to be used with the `import()` syntax.
-
-</div>
--->
 <div class="callout is-helpful">
 <header>문자열 기반의 지연 로딩</header>
 
-Angular 8 버전부터 문자열을 사용해서 `loadChildren` 라우팅 규칙을 정의하는 방식이 [지원 중단](https://angular.io/guide/deprecations#loadchildren-string-syntax)되고 `import()` 문법을 활용하는 방식이 도입되었습니다.
+Angular 8 버전부터 문자열을 사용해서 `loadChildren` 라우팅 규칙을 정의하는 방식이 [지원 중단](guide/deprecations#loadchildren-string-syntax)되고 `import()` 문법을 활용하는 방식이 도입되었습니다.
 하지만 `tsconfig` 파일의 설정을 조정하면 `loadChildren: './path/to/module#Module'`과 같이 문자열을 사용하는 방식도 사용할 수 있습니다.
 
 Angular CLI는 기본적으로 엄격한 파일 로딩 방식을 활용하기 위해 `import()` 문법으로 기본 코드를 구성합니다.
@@ -285,9 +275,9 @@ ng generate module orders --route orders --module app.module
 ### 화면 구성하기
 
 <!--
-Though you can type the URL into the address bar, a navigation UI is easier for the user and more common.
+Though you can type the URL into the address bar, a navigation UI is straightforward for the user and more common.
 Replace the default placeholder markup in `app.component.html` with a custom nav
-so you can easily navigate to your modules in the browser:
+so you can navigate to your modules in the browser:
 
 <code-example path="lazy-loading-ngmodules/src/app/app.component.html" header="app.component.html" region="app-component-template" header="src/app/app.component.html"></code-example>
 
@@ -411,7 +401,7 @@ You can check to see that a module is indeed being lazy loaded with the Chrome d
 </div>
 
 
-Click on the Orders or Customers button. If you see a chunk appear, everything is wired up properly and the feature module is being lazy loaded. A chunk should appear for Orders and for Customers but will only appear once for each.
+Click on the Orders or Customers button. If you see a chunk appear, everything is wired up properly and the feature module is being lazy loaded. A chunk should appear for Orders and for Customers but only appears once for each.
 
 
 <div class="lightbox">
@@ -564,7 +554,7 @@ RouterModule.forRoot(
 ### 컴포넌트 데이터 사전 로딩하기
 
 <!--
-To preload component data, you can use a `resolver`.
+To preload component data, use a `resolver`.
 Resolvers improve UX by blocking the page load until all necessary data is available to fully display the page.
 -->
 컴포넌트에 사용할 데이터를 사전 로딩하려면 `resolver`를 사용하면 됩니다.
@@ -580,11 +570,19 @@ Resolvers improve UX by blocking the page load until all necessary data is avail
 Create a resolver service.
 With the CLI, the command to generate a service is as follows:
 
-
 <code-example language="sh">
   ng generate service <service-name>
 </code-example>
+-->
+리졸버 서비스를 만들어 봅시다.
+Angular CLI를 사용해서 이런 명령을 실행하면 됩니다:
 
+<code-example language="sh">
+  ng generate service <서비스-이름>
+</code-example>
+
+
+<!--
 In the newly-created service, implement the `Resolve` interface provided by the `@angular/router` package:
 
 <code-example header="Resolver service (excerpt)">
@@ -606,15 +604,45 @@ export class CrisisDetailResolverService implements Resolve<Crisis> {
 }
 
 </code-example>
+-->
+이렇게 만든 서비스에 `@angular/router` 패키지에서 `Resolve` 인터페이스를 불러와서 확장합니다.
 
+<code-example header="리졸버 서비스 (일부)">
+
+import { Resolve } from '@angular/router';
+
+...
+
+/* 데이터 모델을 표현하는 인터페이스 */
+export interface Crisis {
+  id: number;
+  name: string;
+}
+
+export class CrisisDetailResolverService implements Resolve<Crisis> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Crisis> {
+    // 로직은 여기에 작성합니다.
+  }
+}
+
+</code-example>
+
+
+<!--
 Import this resolver into your module's routing module.
 
 <code-example header="Feature module's routing module (excerpt)">
+-->
+그리고 라우팅 모듈에 리졸버를 불러옵니다.
+
+<code-example header="기능 모듈의 라우팅 모듈 (일부)">
 
 import { CrisisDetailResolverService } from './crisis-detail-resolver.service';
 
 </code-example>
 
+
+<!--
 Add a `resolve` object to the component's `route` configuration.
 
 <code-example header="Feature module's routing module (excerpt)">
@@ -626,8 +654,21 @@ Add a `resolve` object to the component's `route` configuration.
   }
 }
 </code-example>
+-->
+컴포넌트의 `route` 설정에 `resolve` 객체를 이렇게 추가합니다.
+
+<code-example header="기능 모듈의 라우팅 모듈 (일부)">
+{
+  path: '/your-path',
+  component: YourComponent,
+  resolve: {
+    crisis: CrisisDetailResolverService
+  }
+}
+</code-example>
 
 
+<!--
 In the component's constructor, inject an instance of the `ActivatedRoute` class that represents the current route.
 
 <code-example header="Component's constructor (excerpt)">
@@ -640,7 +681,23 @@ class YourComponent {
 }
 
 </code-example>
+-->
+그리고 컴포넌트 생성자에 `ActivatedRoute` 클래스를 의존성으로 주입합니다.
+이 클래스는 현재 활성화된 라우팅 규칙을 표현하는 객체입니다.
 
+<code-example header="컴포넌트 생성자 (일부)">
+
+import { ActivatedRoute } from '@angular/router';
+
+@Component({ ... })
+class YourComponent {
+  constructor(private route: ActivatedRoute) {}
+}
+
+</code-example>
+
+
+<!--
 Use the injected instance of the `ActivatedRoute` class to access `data` associated with a given route.
 
 <code-example header="Component's ngOnInit lifecycle hook (excerpt)">
@@ -661,72 +718,7 @@ class YourComponent {
 }
 
 </code-example>
-
-For more information with a working example, see the [routing tutorial section on preloading](guide/router-tutorial-toh#preloading-background-loading-of-feature-areas).
 -->
-리졸버 서비스를 만들어 봅시다.
-Angular CLI로 서비스를 생성하는 방법과 동일합니다:
-
-
-<code-example language="sh">
-  ng generate service <서비스-이름>
-</code-example>
-
-명령을 실행해서 새로 생성한 서비스에 `@angular/router` 패키지로 제공되는 `Resolve` 인터페이스를 확장합니다:
-
-<code-example header="리졸버 서비스 (일부)">
-
-import { Resolve } from '@angular/router';
-
-...
-
-/* 데이터 모델을 표현하는 인터페이스 */
-export interface Crisis {
-  id: number;
-  name: string;
-}
-
-export class CrisisDetailResolverService implements Resolve<Crisis> {
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Crisis> {
-    // 로직은 여기에 들어갑니다.
-  }
-}
-
-</code-example>
-
-이 리졸버를 라우팅 모듈에 추가합니다.
-
-<code-example header="기능 모듈의 라우팅 모듈 (일부)">
-
-import { CrisisDetailResolverService } from './crisis-detail-resolver.service';
-
-</code-example>
-
-그리고 컴포넌트의 `route` 설정에 `resolve` 객체를 추가합니다.
-
-<code-example header="기능 모듈의 라우팅 모듈 (일부)">
-{
-  path: '/your-path',
-  component: YourComponent,
-  resolve: {
-    crisis: CrisisDetailResolverService
-  }
-}
-</code-example>
-
-그리고 컴포넌트 생성자로 현재 활성화된 라우팅 규칙을 의미하는 `ActivatedRoute` 클래스를 의존성으로 주입합니다.
-
-<code-example header="컴포넌트 생성자 (일부)">
-
-import { ActivatedRoute } from '@angular/router';
-
-@Component({ ... })
-class YourComponent {
-  constructor(private route: ActivatedRoute) {}
-}
-
-</code-example>
-
 이제 의존성으로 주입된 `ActivatedRoute` 클래스에서 `data`를 참조하면 됩니다.
 
 <code-example header="컴포넌트의 ngOnInit 라이프싸이클 후킹 함수 (일부)">
@@ -748,7 +740,11 @@ class YourComponent {
 
 </code-example>
 
-더 자세하게 알아보려면 [라우팅 튜토리얼 문서의 사전로딩 섹션](guide/router-tutorial-toh#preloading-background-loading-of-feature-areas)을 참고하세요.
+
+<!--
+For more information with a working example, see the [routing tutorial section on preloading](guide/router-tutorial-toh#preloading-background-loading-of-feature-areas).
+-->
+더 자세한 내용과 예제를 살펴보려면 [라우팅 튜토리얼 문서의 사전로딩 섹션](guide/router-tutorial-toh#preloading-background-loading-of-feature-areas) 문서를 참고하세요.
 
 
 <!--
@@ -757,7 +753,7 @@ class YourComponent {
 ## 지연 로딩 문제 해결하기
 
 <!--
-A common error when lazy-loading modules is importing common modules in multiple places within an application.  You can test for this condition by first generating the module using the Angular CLI and including the `--route route-name` parameter, where `route-name` is the name of your module. Next, generate the module without the `--route` parameter. If the Angular CLI generates an error when you use the `--route` parameter, but runs correctly without it, you may have imported the same module in multiple places.
+A common error when lazy-loading modules is importing common modules in multiple places within an application.  Test for this condition by first generating the module using the Angular CLI and including the `--route route-name` parameter, where `route-name` is the name of your module. Next, generate the module without the `--route` parameter. If the Angular CLI generates an error when you use the `--route` parameter, but runs correctly without it, you might have imported the same module in multiple places.
 
 Remember, many common Angular modules should be imported at the base of your application.
 
@@ -778,7 +774,7 @@ Angular 모듈은 일반적으로 애플리케이션 자체에서 불러와야 �
 ## NgModule과 라우팅 더 알아보기
 
 <!--
-You may also be interested in the following:
+You might also be interested in the following:
 * [Routing and Navigation](guide/router).
 * [Providers](guide/providers).
 * [Types of Feature Modules](guide/module-types).

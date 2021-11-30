@@ -157,3 +157,5 @@ You have a complete online store application with a product catalog, a shopping 
 이제 온라인샵 애플리케이션에는 상품 목록을 표시하는 화면, 장바구니 기능, 주문 기능이 완성되었습니다.
 
 * 애플리케이션을 Firebase나 로컬 환경에 배포하는 방법을 알아보려면 [배포](start/start-deployment "Try it: Deployment") 문서를 확인해 보세요.
+
+@reviewed 2021-09-15

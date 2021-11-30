@@ -6,7 +6,7 @@
 <!--
 Creating shared modules allows you to organize and streamline your code. You can put commonly
 used directives, pipes, and components into one module and then import just that module wherever
-you need it in other parts of your app.
+you need it in other parts of your application.
 -->
 모듈을 만들어서 공유하면 코드를 효율적으로 사용할 수 있습니다.
 자주 사용하는 디렉티브나 파이프, 컴포넌트가 있다면, 이 구성요소들을 모듈로 묶어서 필요한 곳에 사용할 수 있습니다.

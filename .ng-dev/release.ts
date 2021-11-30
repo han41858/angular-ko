@@ -1,5 +1,5 @@
+import {ReleaseConfig} from '@angular/dev-infra-private/ng-dev/release/config';
 import {join} from 'path';
-import {ReleaseConfig} from '../dev-infra/release/config';
 
 /** Configuration for the `ng-dev release` command. */
 export const release: ReleaseConfig = {
@@ -22,11 +22,11 @@ export const release: ReleaseConfig = {
     '@angular/service-worker',
     '@angular/upgrade',
   ],
-  buildPackages: async (stampForRelease: boolean) => {
+  buildPackages: async () => {
     // The buildTargetPackages function is loaded at runtime as the loading the script causes an
     // invocation of bazel.
     const {buildTargetPackages} = require(join(__dirname, '../scripts/build/package-builder'));
-    return buildTargetPackages('dist/release-output', false, 'Release', stampForRelease);
+    return buildTargetPackages('dist/release-output', false, 'Release', /* isRelease */ true);
   },
   releaseNotes: {
     hiddenScopes: ['aio', 'dev-infra', 'docs-infra', 'zone.js'],

@@ -584,7 +584,7 @@ For more information, see [Component interaction](guide/component-interaction).
 <!--
 <live-example name="component-styles"></live-example>
 
-Demonstrates styling in Angular apps.
+Demonstrates styling in Angular applications.
 For more information, see [Component styles](guide/component-styles).
 -->
 <live-example name="component-styles"></live-example>
@@ -1034,7 +1034,7 @@ Angular 애플리케이션의 보안 관련 내용을 다루는 애플리케이�
 ### 테스트
 
 <!--
-For the sample app that the testing guides describe, see the <live-example noDownload name="testing">sample app</live-example>.
+For the sample application that the testing guides describe, see the <live-example noDownload name="testing">sample app</live-example>.
 
 For the tests featured in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
 

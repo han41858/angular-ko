@@ -10,7 +10,7 @@ Schematics are packaged into [collections](guide/glossary#collection) and instal
 
 The schematic collection can be a powerful tool for creating, modifying, and maintaining any software project, but is particularly useful for customizing Angular projects to suit the particular needs of your own organization.
 You might use schematics, for example, to generate commonly-used UI patterns or specific components, using predefined templates or layouts.
-You can use schematics to enforce architectural rules and conventions, making your projects consistent and inter-operative.
+Use schematics to enforce architectural rules and conventions, making your projects consistent and inter-operative.
 -->
 스키매틱은 복잡한 로직을 쉽게 작성할 수 있도록 미리 템플릿을 정의해두고 이 템플릿을 바탕으로 코드를 생성하는 툴을 의미합니다.
 그래서 이 스키매틱을 잘 활용하면 프로젝트에 수많은 기능을 편하게 추가할 수 있습니다.
@@ -33,7 +33,7 @@ You can modify these schematics, and define new ones to do things like update yo
 
 Schematics that are included in the `@schematics/angular` collection are run by default by the commands `ng generate` and `ng add`.
 The package contains named schematics that configure the options that are available to the CLI for `ng generate` sub-commands, such as `ng generate component` and `ng generate service`.
-The subcommands for `ng generate` are shorthand for the corresponding schematic. You can specify a particular schematic (or collection of schematics) to generate, using the long form:
+The subcommands for `ng generate` are shorthand for the corresponding schematic. To specify a particular schematic (or collection of schematics) to generate, using the long form:
 
 <code-example language="bash">
 ng generate my-schematic-collection:my-schematic-name
@@ -73,7 +73,7 @@ ng generate 스키매틱-이름 --collection 콜렉션-이름
 <!--
 A JSON schema associated with a schematic tells the Angular CLI what options are available to commands and subcommands, and determines the defaults.
 These defaults can be overridden by providing a different value for an option on the command line.
-See [Workspace Configuration](guide/workspace-config) for information about how you can change the generation option defaults for your workspace.
+See [Workspace Configuration](guide/workspace-config) for information about how to change the generation option defaults for your workspace.
 
 The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://github.com/angular/angular-cli/tree/master/packages/schematics/angular).
 The schema describes the options available to the CLI for each of the `ng generate` sub-commands, as shown in the `--help` output.
@@ -93,7 +93,7 @@ Angular CLI로 프로젝트를 생성할 때 사용하는 기본 스키매틱의
 <!--
 As a library developer, you can create your own collections of custom schematics to integrate your library with the Angular CLI.
 
-* An *add schematic* allows developers to install your library in an Angular workspace using `ng add`.
+* An *add schematic* lets developers install your library in an Angular workspace using `ng add`.
 
 * *Generation schematics* can tell the `ng generate` subcommands how to modify projects, add configurations and scripts, and scaffold artifacts that are defined in your library.
 
@@ -126,13 +126,13 @@ An add schematic is typically supplied with a library, so that the library can b
 The `add` command uses your package manager to download new dependencies, and invokes an installation script that is implemented as a schematic.
 
 For example, the [`@angular/material`](https://material.angular.io/guide/schematics) schematic tells the `add` command to install and set up Angular Material and theming, and register new starter components that can be created with `ng generate`.
-You can look at this one as an example and model for your own add schematic.
+Look at this one as an example and model for your own add schematic.
 
 Partner and third party libraries also support the Angular CLI with add schematics.
 For example, `@ng-bootstrap/schematics` adds [ng-bootstrap](https://ng-bootstrap.github.io/)  to an app, and  `@clr/angular` installs and sets up [Clarity from VMWare](https://vmware.github.io/clarity/documentation/v1.0/get-started).
 
 An add schematic can also update a project with configuration changes, add additional dependencies (such as polyfills), or scaffold package-specific initialization code.
-For example, the `@angular/pwa` schematic turns your application into a PWA by adding an application manifest and service worker, and the `@angular/elements`  schematic adds the `document-register-element.js` polyfill and dependencies for Angular Elements.
+For example, the `@angular/pwa` schematic turns your application into a PWA by adding an application manifest and service worker.
 -->
 라이브러리에 추가 스키매틱이 정의되어 있다면 `ng add` 명령으로 이 라이브러리를 설치하고 추가로 필요한 작업을 자동으로 할 수 있습니다.
 Angular 라이브러리가 제공하는 스키매틱 중에서는 추가 스키매틱이 가장 많습니다.

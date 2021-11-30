@@ -248,39 +248,6 @@ Project-specific [TypeScript](https://www.typescriptlang.org/) configuration fil
 | `tslint.json`          | [TSLint](https://palantir.github.io/tslint/) 환경을 구성합니다. |
 
 
-<!--
-### End-to-end test files
--->
-### 엔드-투-엔드 테스트 파일
-
-<!--
-An `e2e/` folder at the top level contains source files for a set of end-to-end tests that correspond to the root-level application, along with test-specific configuration files.
-
-For a multi-project workspace, application-specific end-to-end tests are in the project root, under `projects/project-name/e2e/`.
-
-<code-example language="none">
-  e2e/
-     src/                 (end-to-end tests for my-app)
-        app.e2e-spec.ts
-        app.po.ts
-      protractor.conf.js  (test-tool config)
-      tsconfig.json       (TypeScript config inherits from workspace)
-</code-example>
--->
-`e2e/` 폴더에는 최상위 애플리케이션을 대상으로 엔드-투-엔드 테스트를 실행할 때 필요한 파일들이 존재합니다.
-
-워크스페이스에 프로젝트가 여러개 존재한다면 특정 프로젝트에 적용될 테스트 관련 파일이 `projects/프로젝트-이름/e2e/`에 존재합니다.
-
-<code-example language="none">
-  e2e/
-     src/                 (my-app 엔드-투-엔드 테스트 스펙)
-        app.e2e-spec.ts
-        app.po.ts
-      protractor.conf.js  (테스트 환경설정)
-      tsconfig.json       (워크스페이스에서 상속받은 TypeScript 환경설정)
-</code-example>
-
-
 {@a multiple-projects}
 
 <!--
@@ -346,9 +313,6 @@ my-workspace/
   projects/       (generated applications and libraries)
     my-first-app/ --(an explicitly generated application)
       ...         --(application-specific config)
-      e2e/        ----(corresponding e2e tests)
-         src/     ----(e2e tests source)
-         ...      ----(e2e-specific config)
       src/        --(source and support files for application)
     my-lib/       --(a generated library)
       ...         --(library-specific config)
@@ -365,9 +329,6 @@ my-workspace/
   projects/       (새로 생성한 애플리케이션이나 라이브러리)
     my-first-app/ --(새로 생성한 애플리케이션)
       ...         --(애플리케이션 환경설정 파일)
-      e2e/        ----(e2e 테스트 관련 파일)
-         src/     ----(e2e 테스트 소스)
-         ...      ----(e2e 환경설정 파일)
       src/        --(애플리케이션 소스 파일)
     my-lib/       --(새로 생성한 라이브러리)
       ...         --(라이브러리 환경설정 파일)
@@ -385,7 +346,7 @@ my-workspace/
 <!--
 When you generate a library using the CLI (with a command such as `ng generate library my-lib`), the generated files go into the `projects/` folder of the workspace. For more information about creating your own libraries, see  [Creating Libraries](guide/creating-libraries).
 
-Libraries (unlike applications and their associated e2e projects) have their own `package.json` configuration file.
+Libraries unlike applications have their own `package.json` configuration file.
 
 Under the `projects/` folder, the `my-lib` folder contains your library code.
 
@@ -405,7 +366,7 @@ Under the `projects/` folder, the `my-lib` folder contains your library code.
 Angular CLI로 `ng generate library my-lib` 명령을 실행하면 이 라이브러리는 워크스페이스 `projects/` 폴더 아래에 생성됩니다.
 자세한 내용은 [라이브러리 만들기](guide/creating-libraries) 문서를 참고하세요.
 
-라이브러리 프로젝트에는 애플리케이션 프로젝트나 e2e 프로젝트와는 다르게 독립적인 `package.json` 환경설정 파일이 존재합니다.
+라이브러리 프로젝트에는 애플리케이션 프로젝트와는 다르게 독립적인 `package.json` 환경설정 파일이 존재합니다.
 
 `projects/` 폴더 아래 생성되는 `my-lib` 폴더는 다음과 같이 구성됩니다.
 

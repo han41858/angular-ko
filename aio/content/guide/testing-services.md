@@ -8,14 +8,14 @@ To check that your services are working as you intend, you can write tests speci
 
 <div class="alert is-helpful">
 
-  For the sample application that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
+  For a hands-on experience, <live-example name="testing" stackblitz="specs" noDownload>run tests and explore the test code</live-example> in your browser as you read this guide.
 
-  For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
+  If you'd like to experiment with the application that this guide describes, <live-example name="testing" noDownload>run it in your browser</live-example> or <live-example name="testing" downloadOnly>download and run it locally</live-example>.
 
 </div>
 
 
-Services are often the easiest files to unit test.
+Services are often the smoothest files to unit test.
 Here are some synchronous and asynchronous unit tests of the `ValueService`
 written without assistance from Angular testing utilities.
 
@@ -25,9 +25,9 @@ written without assistance from Angular testing utilities.
 
 <div class="alert is-helpful">
 
-이 문서에서 다루는 예제 앱은 <live-example name="testing" embedded-style noDownload>sample app</live-example>에서 확인할 수 있습니다.
+  이 문서에서 다루는 예제 앱은 <live-example name="testing" stackblitz="specs" noDownload>테스트 코드 확인하고 실행하기</live-example>에서 확인할 수 있습니다.
 
-이 문서에서 설명하는 테스트 기능은 <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>에서 확인할 수 있습니다.
+  이 문서에서 설명하는 테스트 기능은 <live-example name="testing" noDownload>브라우저에서 실행하기</live-example>나 <live-example name="testing" downloadOnly>내려받아 로컬에서 실행하기</live-example>에서 확인할 수 있습니다.
 
 </div>
 
@@ -46,7 +46,7 @@ Angular 구성요소 중에 유닛 테스트를 적용하기 가장 쉬운 것�
 
 <!--
 Services often depend on other services that Angular injects into the constructor.
-In many cases, it's easy to create and _inject_ these dependencies by hand while
+In many cases, you can create and _inject_ these dependencies by hand while
 calling the service's constructor.
 
 The `MasterService` is a simple example:
@@ -63,13 +63,13 @@ The first test creates a `ValueService` with `new` and passes it to the `MasterS
 
 However, injecting the real service rarely works well as most dependent services are difficult to create and control.
 
-Instead you can mock the dependency, use a dummy value, or create a
-[spy](https://jasmine.github.io/2.0/introduction.html#section-Spies)
+Instead, mock the dependency, use a dummy value, or create a
+[spy](https://jasmine.github.io/tutorials/your_first_suite#section-Spies)
 on the pertinent service method.
 
 <div class="alert is-helpful">
 
-Prefer spies as they are usually the easiest way to mock services.
+Prefer spies as they are usually the best way to mock services.
 
 </div>
 
@@ -77,7 +77,7 @@ These standard testing techniques are great for unit testing services in isolati
 
 However, you almost always inject services into application classes using Angular
 dependency injection and you should have tests that reflect that usage pattern.
-Angular testing utilities make it easy to investigate how injected services behave.
+Angular testing utilities make it straightforward to investigate how injected services behave.
 -->
 서비스는 다른 서비스를 의존성으로 주입받는 경우가 종종 있습니다.
 이런 의존성 객체들은 대부분 간단하게 생성해서 서비스 생성자를 실행할 때 직접 인자로 전달하면 됩니다.

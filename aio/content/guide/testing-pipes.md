@@ -8,9 +8,9 @@ You can test [pipes](guide/pipes) without the Angular testing utilities.
 
 <div class="alert is-helpful">
 
-  For the sample application that the testing guides describe, see the <live-example name="testing" embedded-style noDownload>sample app</live-example>.
+  For a hands-on experience, <live-example name="testing" stackblitz="specs" noDownload>run tests and explore the test code</live-example> in your browser as you read this guide.
 
-  For the tests features in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
+  If you'd like to experiment with the application that this guide describes, <live-example name="testing" noDownload>run it in your browser</live-example> or <live-example name="testing" downloadOnly>download and run it locally</live-example>.
 
 </div>
 -->
@@ -18,9 +18,9 @@ You can test [pipes](guide/pipes) without the Angular testing utilities.
 
 <div class="alert is-helpful">
 
-이 문서에서 다루는 예제 앱을 직접 확인하려면 <live-example name="testing" embedded-style noDownload>sample app</live-example> 링크를 참고하세요.
+  이 문서에서 다루는 예제 앱을 직접 확인하려면 <live-example name="testing" stackblitz="specs" noDownload>테스트 코드 확인하고 실행하기</live-example> 링크를 참고하세요.
 
-이 문서에서 다루는 테스트 기능이 동작하는 것을 직접 확인하려면 <live-example name="testing" stackblitz="specs" noDownload>tests</live-example> 링크를 확인하세요.
+  이 문서에서 다루는 테스트 기능이 동작하는 것을 직접 확인하려면 <live-example name="testing" noDownload>브라우저에서 실행하기</live-example>나 <live-example name="testing" downloadOnly>내려받아 로컬에서 실행하기</live-example> 링크를 확인하세요.
 
 </div>
 

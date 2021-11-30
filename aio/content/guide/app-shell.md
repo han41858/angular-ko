@@ -24,7 +24,7 @@ Angular 애플리케이션을 빌드할 때 애플리케이션 자체의 렌더�
 ## 1단계: 애플리케이션 생성하기
 
 <!--
-You can do this with the following CLI command:
+Do this with the following CLI command:
 -->
 Angular CLI로 다음 명령을 실행하면 애플리케이션을 생성할 수 있습니다:
 
@@ -54,7 +54,7 @@ ng generate app-shell
 <!--
 For more information about this command see [App shell command](cli/generate#app-shell-command). 
 
-After running this command you will notice that the `angular.json` configuration file has been updated to add two new targets, with a few other changes.
+After running this command you can see that the `angular.json` configuration file has been updated to add two new targets, with a few other changes.
 -->
 이 명령에 대해 자세하게 알아보려면 [앱 셸 명령](cli/generate#app-shell-command) 문서를 참고하세요.
 
@@ -130,6 +130,7 @@ ng run my-app:app-shell:production
 </code-example>
 
 <!--
-To verify the build output, open `dist/my-app/browser/index.html`. Look for default text `app-shell works!` to show that the application shell route was rendered as part of the output.
+To verify the build output, open <code class="no-auto-link">dist/my-app/browser/index.html</code>. Look for default text `app-shell works!` to show that the application shell route was rendered as part of the output.
 -->
-빌드 결과물은 `dist/my-app/browser/index.html` 파일로 확인하면 됩니다. 애플리케이션이 제대로 실행된다면 화면에 `app-shell works!`라는 문구가 표시될 것입니다.
+빌드 결과물은 <code class="no-auto-link">dist/my-app/browser/index.html</code> 파일로 확인하면 됩니다.
+애플리케이션이 제대로 실행된다면 화면에 `app-shell works!`라는 문구가 표시될 것입니다.

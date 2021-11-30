@@ -362,7 +362,11 @@ This section walks you through creating a child component, `ProductAlertsCompone
 
   <code-example header="src/app/product-alerts/product-alerts.component.html" path="getting-started/src/app/product-alerts/product-alerts.component.1.html"></code-example>
 
-1. To display `ProductAlertsComponent` as a child of `ProductListComponent`, add the selector, `<app-product-alerts>` to `product-list.component.html`.
+1. To make `ProductAlertsComponent` available to other components in the application, add it to `AppModule`'s declarations in `app.module.ts`.
+
+  <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="declare-product-alerts"></code-example>
+
+1. Finally, to display `ProductAlertsComponent` as a child of `ProductListComponent`, add the selector, `<app-product-alerts>` to `product-list.component.html`.
   Pass the current product as input to the component using property binding.
 
   <code-example header="src/app/product-list/product-list.component.html" path="getting-started/src/app/product-list/product-list.component.5.html" region="app-product-alerts"></code-example>
@@ -421,9 +425,14 @@ The Phone XL price is over $700, so the **Notify Me** button appears on that pro
   <code-example header="src/app/product-alerts/product-alerts.component.html" path="getting-started/src/app/product-alerts/product-alerts.component.1.html"></code-example>
 
 1. `ProductListComponent`의 자식 컴포넌트로 `ProductAlertsComponent`를 표시하기 위해 `product-list.component.html` 파일에 `<app-product-alerts>` 셀렉터를 추가합니다.
-  그러면 프로퍼티 바인딩을 통해 해당 상품이 자식 컴포넌트의 입력 프로퍼티로 전달됩니다.
 
-  <code-example header="src/app/product-list/product-list.component.html" path="getting-started/src/app/product-list/product-list.component.5.html" region="app-product-alerts"></code-example>
+<code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="declare-product-alerts"></code-example>
+
+1. 그리고 `ProductAlertsComponent`를 표시할 수 있도록 `product-list.component.html` 파일에서 `ProductListComponent`의 자식으로 `<app-product-alerts>` 셀렉터를 추가합니다.
+   그러면 프로퍼티 바인딩을 통해 해당 상품이 자식 컴포넌트의 입력 프로퍼티로 전달됩니다.
+
+<code-example header="src/app/product-list/product-list.component.html" path="getting-started/src/app/product-list/product-list.component.5.html" region="app-product-alerts"></code-example>
+
 
 알림 컴포넌트는 상품 목록 컴포넌트에 있는 상품 데이터를 입력 프로퍼티로 받습니다.
 이 알림 컴포넌트는 상품 가격에 따라 **Notify Me** 버튼을 표시하는데, Phone XL의 가격이 $700를 넘기 때문에 이 상품에 **Notify Me** 버튼이 표시되는 것을 확인할 수 있습니다.
@@ -443,6 +452,13 @@ The Phone XL price is over $700, so the **Notify Me** button appears on that pro
 To make the **Notify Me** button work, the child component needs to notify and pass the data to the parent component.
 The `ProductAlertsComponent` needs to emit an event when the user clicks **Notify Me** and the `ProductListComponent` needs to respond to the event.
 
+  <div class="alert is-helpful">
+
+  In new components, the Angular Generator includes an empty `constructor()`, the `OnInit` interface, and the `ngOnInit()` method.
+  Since these steps don't use them, the following code examples omit them for brevity.
+
+  </div>
+
 1. In `product-alerts.component.ts`, import `Output` and `EventEmitter` from `@angular/core`.
 
   <code-example header="src/app/product-alerts/product-alerts.component.ts" path="getting-started/src/app/product-alerts/product-alerts.component.ts" region="imports"></code-example>
@@ -451,13 +467,6 @@ The `ProductAlertsComponent` needs to emit an event when the user clicks **Notif
   Configuring `ProductAlertsComponent` with an `@Output()` allows the `ProductAlertsComponent` to emit an event when the value of the `notify` property changes.
 
   <code-example path="getting-started/src/app/product-alerts/product-alerts.component.ts" header="src/app/product-alerts/product-alerts.component.ts" region="input-output"></code-example>
-
-  <div class="alert is-helpful">
-
-  In new components, the Angular Generator includes an empty `constructor()`, the `OnInit` interface, and the `ngOnInit()` method.
-  Since these steps don't use them, the following code example omits them for brevity.
-
-  </div>
 
 1. In `product-alerts.component.html`, update the **Notify Me** button with an event binding to call the `notify.emit()` method.
 
@@ -486,6 +495,13 @@ For more information on communication between components, see [Component Interac
 -->
 **Notikfy Me** 버튼이 제대로 동작하려면 자식 컴포넌트에서 부모 컴포넌트로 알림을 보내기 위해 데이터를 전달할 수 있어야 합니다.
 그러면 `ProductAlertsComponent`는 사용자가 **Notify Me** 버튼을 클릭했을 때 부모 컴포넌트로 이벤트를 보내야 합니다.
+
+  <div class="alert is-helpful">
+
+  Angular Generator로 컴포넌트를 새로 만들면 `constructor()` 메서드가 빈 내용으로 생성되며, `OnInit` 인터페이스를 확장하는 `ngOnInit()` 메서드도 함께 생성됩니다.
+  지금 단계에서는 이 메서드들을 사용하지 않기 때문에 예제에서 생략했습니다.
+
+  </div>
 
 1. `product-alerts.component.ts` 파일에 `@angular/core` 패키지가 제공하는 `Output` 심볼과 `EventEmitter` 심볼을 로드합니다.
 
@@ -549,5 +565,6 @@ To continue exploring Angular and developing this application:
 애플리케이션을 조금 더 수정해 보면서 Angular가 제공하는 기능에 대해 더 알아봅시다:
 
 * 상품 상세정보 화면으로 전환하려면 [앱 네비게이션](start/start-routing "Getting started: In-app navigation") 문서를 확인해 보세요.
-
 * 로컬 개발환경을 구성하고 애플리케이션을 Firebase나 자체 서버로 배포하려면 [배포](start/start-deployment "Getting started: Deployment") 문서를 확인해 보세요.
+
+@reviewed 2021-09-15

@@ -6,7 +6,7 @@
 <!--
 Directives are classes that add additional behavior to elements
 in your Angular applications.
-With Angular's built-in directives, you can manage forms, lists, styles, and what users see.
+Use Angular's built-in directives to manage forms, lists, styles, and what users see.
 
 <div class="alert is-helpful">
 
@@ -90,7 +90,7 @@ They do not have special access to any private APIs that other directives can't 
 ## `NgClass`로 클래스 추가/제거하기
 
 <!--
-You can add or remove multiple CSS classes simultaneously with `ngClass`.
+Add or remove multiple CSS classes simultaneously with `ngClass`.
 
 <div class="alert is-helpful">
 
@@ -98,7 +98,7 @@ To add or remove a *single* class, use [class binding](guide/attribute-binding#c
 
 </div>
 -->
-`ngClass`를 사용하면 CSS 클래스 여러 개를 엘리먼트에 추가하거나 제거할 수 있습니다.
+`ngClass`를 사용하면 CSS 클래스 여러 개를 엘리먼트에 동시에 추가하거나 제거할 수 있습니다.
 
 <div class="alert is-helpful">
 
@@ -176,7 +176,7 @@ For more information, see the <live-example></live-example> `app.component.ts` a
 ## `NgStyle`로 인라인 스타일 지정하기
 
 <!--
-You can use `NgStyle` to set multiple inline styles simultaneously, based on the state of the component.
+Use `NgStyle` to set multiple inline styles simultaneously, based on the state of the component.
 
 1. To use `NgStyle`, add a method to the component class.
 
@@ -218,7 +218,7 @@ See the <live-example></live-example> `app.component.ts` and `app.component.html
 ## `ngModel`로 프로퍼티 값 표시하기, 변경된 값 반영하기
 
 <!--
-You can use the `NgModel` directive to display a data property and update that property when the user makes changes.
+Use the `NgModel` directive to display a data property and update that property when the user makes changes.
 
 1. Import `FormsModule`  and add it to the NgModule's `imports` list.
 
@@ -230,7 +230,7 @@ You can use the `NgModel` directive to display a data property and update that p
 
   This `[(ngModel)]` syntax can only set a data-bound property.
 
-To customize your configuration, you can write the expanded form, which separates the property and event binding.
+To customize your configuration, write the expanded form, which separates the property and event binding.
 Use [property binding](guide/property-binding) to set the property and [event binding](guide/event-binding) to respond to changes.
 The following example changes the `<input>` value to uppercase:
 
@@ -277,7 +277,7 @@ The `NgModel` directive works for an element supported by a [ControlValueAccesso
 Angular provides *value accessors* for all of the basic HTML form elements.
 For more information, see [Forms](guide/forms).
 
-To apply `[(ngModel)]` to a non-form native element or a third-party custom component, you have to write a value accessor.
+To apply `[(ngModel)]` to a non-form built-in element or a third-party custom component, you have to write a value accessor.
 For more information, see the API documentation on [DefaultValueAccessor](api/forms/DefaultValueAccessor).
 
 <div class="alert is-helpful">
@@ -338,7 +338,7 @@ For more information, see [Structural Directives](guide/structural-directives).
 ## `NgIf`로 엘리먼트 추가/제거하기
 
 <!--
-You can add or remove an element by applying an `NgIf` directive to a host element.
+Add or remove an element by applying an `NgIf` directive to a host element.
 
 When `NgIf` is `false`, Angular removes an element and its descendants from the DOM.
 Angular then disposes of their components, which frees up memory and resources.
@@ -405,7 +405,7 @@ In this example, Angular does not display the `nullCustomer` because it is `null
 ## `NgFor`로 배열 항목 표시하기
 
 <!--
-You can use the `NgFor` directive to present a list of items.
+Use the `NgFor` directive to present a list of items.
 
 1. Define a block of HTML that determines how Angular renders a single item.
 
@@ -451,7 +451,7 @@ In the following example, the selector is `<app-item-detail>`.
 
 <code-example path="built-in-directives/src/app/app.component.html" region="NgFor-2" header="src/app/app.component.html"></code-example>
 
-You can reference a template input variable, such as `item`, in the following locations:
+Reference a template input variable, such as `item`, in the following locations:
 
   * within the `ngFor` host element
   * within the host element descendants to access the item's properties
@@ -485,7 +485,7 @@ For more information about template input variables, see [Structural directive s
 ### `*ngFor`에서 `index` 활용하기
 
 <!--
-You can get the `index` of `*ngFor` in a template input variable and use it in the template.
+Get the `index` of `*ngFor` in a template input variable and use it in the template.
 
 In the `*ngFor`, add a semicolon and `let i=index` to the short hand.
 The following example gets the `index` in a variable named `i` and displays it with the item name.
@@ -541,7 +541,7 @@ For more information about `NgFor` see the [NgForOf API reference](api/common/Ng
 ### `*ngFor` `trackBy`로 항목 추적하기
 
 <!--
-By tracking changes to an item list, you can reduce the number of calls your application makes to the server.
+Reduce the number of calls your application makes to the server by tracking changes to an item list.
 With the `*ngFor` `trackBy` property, Angular can change and re-render only those items that have changed, rather than reloading the entire list of items.
 
 1. Add a method to the component that returns the value `NgFor` should track.
@@ -564,7 +564,7 @@ In the following illustration of the `trackBy` effect, **Reset items** creates n
   <img src="generated/images/guide/built-in-directives/ngfor-trackby.gif" alt="Animation of trackBy">
 </div>
 -->
-배열 항목이 변경되는 것을 추적하면 애플리케이션이 리모트 서버와 통신하는 횟수를 줄일 수 있습니다.
+배열 항목이 변경되는 것을 추적하면 불필요한 함수 실행 횟수를 줄일 수 있습니다.
 `*ngFor` `trackBy` 프로퍼티를 사용하면 Angular는 배열에서 변경된 항목만 화면에서 갱신하고 렌더링을 새로 합니다.
 이 경우에는 배열 전체를 다시 불러오지 않습니다.
 
@@ -599,7 +599,7 @@ In the following illustration of the `trackBy` effect, **Reset items** creates n
 <!--
 The Angular `<ng-container>` is a grouping element that doesn't interfere with styles or layout because Angular doesn't put it in the DOM.
 
-You can use `<ng-container>` when there's no single element to host the directive.
+Use `<ng-container>` when there's no single element to host the directive.
 
 Here's a conditional paragraph using `<ng-container>`.
 
@@ -672,7 +672,7 @@ Angular puts only the selected element into the DOM.
 
   <code-example path="built-in-directives/src/app/app.component.html" region="NgSwitch" header="src/app/app.component.html"></code-example>
 
-1. In the parent component, define `currentItem` so you can use it in the `[ngSwitch]` expression.
+1. In the parent component, define `currentItem`, to use it in the `[ngSwitch]` expression.
 
   <code-example path="built-in-directives/src/app/app.component.ts" region="item" header="src/app/app.component.ts"></code-example>
 
@@ -686,7 +686,7 @@ Angular puts only the selected element into the DOM.
     <img src="generated/images/guide/built-in-directives/ngswitch.gif" alt="Animation of NgSwitch">
   </div>
 
-Switch directives also work with native HTML elements and web components.
+Switch directives also work with built-in HTML elements and web components.
 For example, you could replace the `<app-best-item>` switch case with a `<div>` as follows.
 
 <code-example path="built-in-directives/src/app/app.component.html" region="NgSwitch-div" header="src/app/app.component.html"></code-example>

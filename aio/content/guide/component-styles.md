@@ -13,7 +13,7 @@ with components, enabling a more modular design than regular stylesheets.
 
 This page describes how to load and apply these component styles.
 
-You can run the <live-example></live-example> in Stackblitz and download the code from there.
+Run the <live-example></live-example> in Stackblitz and download the code from there.
 -->
 Angular 애플리케이션의 스타일은 표준 CSS를 사용해서 지정합니다.
 따라서 기존에 사용하고 있는 CSS 스타일시트, 셀렉터, 룰, 미디어 쿼리도 Angular 애플리케이션에 그대로 사용할 수 있습니다.
@@ -31,7 +31,7 @@ Angular는 여기에 추가로 개별 컴포넌트에 *컴포넌트 스타일*�
 ## 컴포넌트 스타일 사용하기
 
 <!--
-For every Angular component you write, you may define not only an HTML template,
+For every Angular component you write, you can define not only an HTML template,
 but also the CSS styles that go with that template,
 specifying any selectors, rules, and media queries that you need.
 
@@ -69,7 +69,7 @@ not to the nested `HeroMainComponent` nor to `<h1>` tags anywhere else in the ap
 
 This scoping restriction is a ***styling modularity feature***.
 
-* You can use the CSS class names and selectors that make the most sense in the context of each component.
+* Use the CSS class names and selectors that make the most sense in the context of each component.
 
 
 * Class names and selectors are local to the component and don't collide with
@@ -79,11 +79,11 @@ This scoping restriction is a ***styling modularity feature***.
 * Changes to styles elsewhere in the application don't affect the component's styles.
 
 
-* You can co-locate the CSS code of each component with the TypeScript and HTML code of the component,
+* Co-locate the CSS code of each component with the TypeScript and HTML code of the component,
   which leads to a neat and tidy project structure.
 
 
-* You can change or remove component CSS code without searching through the
+* Change or remove component CSS code without searching through the
   whole application to find where else the code is used.
 -->
 <div class="alert is-critical">
@@ -125,23 +125,27 @@ The following sections describe these selectors.
 컴포넌트에 스타일 문법에는 섀도우 DOM에 적용할 수 있는 특별한 *셀렉터* 를 몇가지 사용할 수 있습니다.
 이 셀렉터들은 [W3C](https://www.w3.org) 사이트의 [CSS Scoping Module Level 1](https://www.w3.org/TR/css-scoping-1)에서 정의하는 표준 셀렉터입니다.
 
+
 ### :host
 
 <!--
-Use the `:host` pseudo-class selector to target styles in the element that *hosts* the component (as opposed to
-targeting elements *inside* the component's template).
+Every component is associated within an element that matches the component's selector. This element, into which the template is rendered, 
+is called the _host element_.
+The `:host` pseudo-class selector may be used to create styles that target the host element itself, as opposed to targeting elements inside the host.
 
+<code-example path="component-styles/src/app/host-selector-example.component.ts" header="src/app/host-selector-example.component.ts">
+</code-example>
+
+Creating the following style will target the component's host element. Any rule applied to this selector will affect the host element and all its descendants (in this case, italicizing all contained text).
 
 <code-example path="component-styles/src/app/hero-details.component.css" region="host" header="src/app/hero-details.component.css"></code-example>
 
-The `:host` selector is the only way to target the host element. You can't reach
-the host element from inside the component with other selectors because it's not part of the
-component's own template. The host element is in a parent component's template.
+The `:host` selector only targets the host element of a component. Any styles within the `:host` block of a child component will *not* affect parent components.
 
 Use the *function form* to apply host styles conditionally by
 including another selector inside parentheses after `:host`.
 
-The next example targets the host element again, but only when it also has the `active` CSS class.
+In this example the host's content also becomes bold when the `active` CSS class is applied to the host element.
 
 <code-example path="component-styles/src/app/hero-details.component.css" region="hostfunction" header="src/app/hero-details.component.css"></code-example>
 
@@ -150,23 +154,25 @@ Add selectors behind the `:host` to select child elements, for example using `:h
 
 <div class="alert is-helpful">
 
-You should not add selectors (other than `:host-context`) in front of the `:host` selector to style a component based on the outer context of the component's view. Such selectors are not scoped to a component's view and will select the outer context, but it's not native behavior. Use `:host-context` selector for that purpose instead.
+You should not add selectors (other than `:host-context`) in front of the `:host` selector to style a component based on the outer context of the component's view. Such selectors are not scoped to a component's view and will select the outer context, but it's not built-in behavior. Use `:host-context` selector for that purpose instead.
 
 </div>
 -->
-컴포넌트가 *위치하는* 엘리먼트(호스트 엘리먼트)에 스타일을 지정하려면 가상 클래스 셀렉터 `:host`를 사용합니다.
-이 때 컴포넌트가 위치하는 엘리먼트라는 것은 컴포넌트 템플릿 *안쪽*이 아닌 컴포넌트를 나타내는 엘리먼트 자체를 가리킵니다.
+컴포넌트는 컴포넌트 셀렉터와 같은 이름의 엘리먼트 안에 구성됩니다.
+이 엘리먼트는 이후에 템플릿에 렌더링되는데, 이 엘리먼트가 렌더링되는 위치를 _호스트 엘리먼트(host element)_라고 합니다.
+`:host` 가상 클래스 셀렉터는 이 호스트 엘리먼트를 가리킵니다.
+대상 엘리먼트(targeting elements))는 호스트 엘리먼트 안에 들어가는 엘리먼트로, 호스트 엘리먼트와는 반대 개념입니다.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="host" header="src/app/hero-details.component.css"></code-example>
+<code-example path="component-styles/src/app/host-selector-example.component.ts" header="src/app/host-selector-example.component.ts">
+</code-example>
 
-컴포넌트에 스타일을 지정할 때 컴포넌트가 위치한 엘리먼트 자체를 가리키는 방법은 `:host` 셀렉터를 사용하는 것뿐입니다.
-컴포넌트가 위치하는 엘리먼트는 컴포넌트 템플릿 외부에 있기 때문에 이 방법을 제외하면 컴포넌트 안쪽에서 접근할 수 없습니다.
-호스트 엘리먼트는 부모 컴포넌트의 템플릿에 정의되기 때문입니다.
+컴포넌트의 호스트 엘리먼트에 스타일을 지정해 봅시다.
+`:host` 셀렉터를 붙여 지정하는 규칙은 호스트 엘리먼트와 그 자식 엘리먼트에 영향을 미칩니다.
 
-그리고 `:host` 셀렉터에 괄호(`(`, `)`)를 함께 사용하면 특정 조건에 맞는 스타일만 지정할 수도 있습니다.
+`:host` 셀렉터는 컴포넌트의 호스트 엘리먼트만 대상으로 지정할 수 있습니다.
+그래서 `:host` 블록 안에 선언한 스타일은 모두 부모 컴포넌트에 영향을 미치지 *않습니다*.
 
-그래서 아래 예제는 `active` CSS 클래스가 지정된 호스트 엘리먼트만 가리킵니다.
-
+아래 예제처럼 구현하면 호스트 엘리먼트에 `active` CSS 클래스가 지정되었을 때 텍스트를 굵게 표시합니다.
 
 <code-example path="component-styles/src/app/hero-details.component.css" region="hostfunction" header="src/app/hero-details.component.css"></code-example>
 
@@ -185,29 +191,35 @@ You should not add selectors (other than `:host-context`) in front of the `:host
 ### :host-context
 
 <!--
-Sometimes it's useful to apply styles based on some condition *outside* of a component's view.
+Sometimes it's useful to apply styles to elements within a component's template 
+based on some condition in an element that is an ancestor of the host element.
 For example, a CSS theme class could be applied to the document `<body>` element, and
 you want to change how your component looks based on that.
 
 Use the `:host-context()` pseudo-class selector, which works just like the function
 form of `:host()`. The `:host-context()` selector looks for a CSS class in any ancestor of the component host element,
-up to the document root. The `:host-context()` selector is useful when combined with another selector.
+up to the document root. The `:host-context()` selector is only useful when combined with another selector.
 
-The following example applies a `background-color` style to all `<h2>` elements *inside* the component, only
-if some ancestor element has the CSS class `theme-light`.
+The following example italicizes all text inside a component, but only
+if some _ancestor_ element of the host element has the CSS class `active`.
 
 <code-example path="component-styles/src/app/hero-details.component.css" region="hostcontext" header="src/app/hero-details.component.css"></code-example>
+
+Note that only the host element and its descendants will be affected, not the ancestor with the assigned `active` class.
 -->
-어떤 경우에는 컴포넌트 뷰 *밖*에 있는 스타일을 조건으로 활용해서 컴포넌트 스타일을 적용해야 하는 경우도 있습니다.
-예를 들면 HTML 문서의 `<body>` 엘리먼트에 적용된 CSS 테마 클래스에 따라 컴포넌트의 뷰가 어떻게 표시되는지 확인하고 싶다고 합니다.
+때로는 호스트 엘리먼트의 부모 엘리먼트의 조건에 따라 컴포넌트 템플릿의 스타일을 적용해야 하는 경우가 있습니다.
+HTML 문서의 `<body>` 엘리먼트에 CSS 테마 관련 클래스가 지정된다면 이 조건에 따라 컴포넌트의 모습을 변형하는 경우가 그렇습니다.
 
 이 때 `:host-context` 가상 클래스 셀렉터를 사용하면 `:host()` 를 사용할 때와 비슷하게 컴포넌트 밖에 있는 엘리먼트를 가리킬 수 있습니다.
-`:host-context()` 셀렉터는 컴포넌트가 위치하는 호스트 엘리먼트의 부모 엘리먼트부터 HTML 문서의 루트 노트까지 적용됩니다.
-그리고 이 셀렉터는 다른 셀렉터와 마찬가지로 조합해서 사용할 수도 있습니다.
+`:host-context()` 셀렉터는 컴포넌트가 위치하는 호스트 엘리먼트의 부모 엘리먼트부터 HTML 문서의 루트 노드까지 적용됩니다.
+이 셀렉터는 다른 셀렉터와 마찬가지로 조합해서 사용할 수도 있습니다.
 
-아래 예제는 CSS 클래스 `theme-light`가 지정된 부모 엘리먼트의 자식 엘리먼트 중 이 컴포넌트 *안*에 있는 `<h2>` 엘리먼트에 `background-color` 스타일을 지정하는 예제 코드입니다.
+아래 예제 코드는 호스트 엘리먼트의 _부모_ 엘리먼트 중에 `active` CSS 클래스가 지정되었을 때 텍스트에 이탤릭 스타일을 지정하는 예제 코드입니다.
 
 <code-example path="component-styles/src/app/hero-details.component.css" region="hostcontext" header="src/app/hero-details.component.css"></code-example>
+
+호스트 엘리먼트와 그 자식 엘리먼트만 영향을 받는다는 것이 중요합니다.
+`active` 클래스가 지정된 호스트 엘리먼트의 부모 엘리먼트는 영향을 받지 않습니다.
 
 
 {@a deprecated-deep--and-ng-deep}
@@ -305,7 +317,7 @@ The scoping rules outlined earlier apply to each of these loading patterns.
 ### 컴포넌트 메타데이터로 스타일 지정하기
 
 <!--
-You can add a `styles` array property to the `@Component` decorator.
+Add a `styles` array property to the `@Component` decorator.
 
 Each string in the array defines some CSS for this component.
 
@@ -351,7 +363,7 @@ ng generate component hero-app --inline-style
 ### 컴포넌트 메타데이터에 외부 스타일 파일 불러오기
 
 <!--
-You can load styles from external CSS files by adding a `styleUrls` property
+Load styles from external CSS files by adding a `styleUrls` property
 to a component's `@Component` decorator:
 
 <code-tabs>
@@ -412,7 +424,7 @@ ng generate component hero-app
 ### 템플릿 인라인 스타일
 
 <!--
-You can embed CSS styles directly into the HTML template by putting them
+Embed CSS styles directly into the HTML template by putting them
 inside `<style>` tags.
 
 <code-example path="component-styles/src/app/hero-controls.component.ts" region="inlinestyles" header="src/app/hero-controls.component.ts">
@@ -439,7 +451,7 @@ You can also write `<link>` tags into the component's HTML template.
 
 When building with the CLI, be sure to include the linked style file among the assets to be copied to the server as described in the [Assets configuration guide](guide/workspace-config#assets-configuration).
 
-Once included, the CLI will include the stylesheet, whether the link tag's href URL is relative to the application root or the component file.
+Once included, the CLI includes the stylesheet, whether the link tag's href URL is relative to the application root or the component file.
 
 </div>
 -->
@@ -461,7 +473,7 @@ Angular CLI가 애플리케이션을 빌드할 때 링크로 연결된 스타일
 ### CSS @imports
 
 <!--
-You can also import CSS files into the CSS files using the standard CSS `@import` rule.
+Import CSS files into the CSS files using the standard CSS `@import` rule.
 For details, see [`@import`](https://developer.mozilla.org/en/docs/Web/CSS/@import)
 on the [MDN](https://developer.mozilla.org) site.
 
@@ -505,7 +517,7 @@ Angular CLI로 애플리케이션의 빌드 설정 파일인 `angular.json` 파�
 
 <!--
 If you're building with the CLI,
-you can write style files in [sass](https://sass-lang.com/), [less](http://lesscss.org/), or [stylus](https://stylus-lang.com/) and specify those files in the `@Component.styleUrls` metadata with the appropriate extensions (`.scss`, `.less`, `.styl`) as in the following example:
+you can write style files in [sass](https://sass-lang.com/), or [less](http://lesscss.org/), and specify those files in the `@Component.styleUrls` metadata with the appropriate extensions (`.scss`, `.less`) as in the following example:
 
 <code-example>
 @Component({
@@ -519,7 +531,7 @@ you can write style files in [sass](https://sass-lang.com/), [less](http://lessc
 The CLI build process runs the pertinent CSS preprocessor.
 
 When generating a component file with `ng generate component`, the CLI emits an empty CSS styles file (`.css`) by default.
-You can configure the CLI to default to your preferred CSS preprocessor as explained in the [Workspace configuration guide](guide/workspace-config#generation-schematics).
+Configure the CLI to default to your preferred CSS preprocessor as explained in the [Workspace configuration guide](guide/workspace-config#generation-schematics).
 
 
 <div class="alert is-important">
@@ -528,7 +540,7 @@ Style strings added to the `@Component.styles` array _must be written in CSS_ be
 
 </div>
 -->
-Angular CLI를 사용한다면 [sass](http://sass-lang.com/)나 [less](http://lesscss.org/), [stylus](https://stylus-lang.com/)를 사용할 수도 있으며, 이렇게 만든 스타일 파일은 `@Component.styleUrls` 메타데이터에 다음과 같이 지정할 수 있습니다:
+Angular CLI를 사용한다면 [sass](http://sass-lang.com/)나 [less](http://lesscss.org/)를 사용할 수도 있으며, 이렇게 만든 스타일 파일은 `@Component.styleUrls` 메타데이터에 다음과 같이 지정할 수 있습니다:
 
 <code-example>
 @Component({
@@ -550,3 +562,5 @@ Angular CLI가 기본으로 사용할 CSS 전처리기를 지정하는 방법에
 `@Component.styles`에 문자열로 지정하는 스타일은 _반드시 CSS 문법으로_ 지정해야 합니다. Angular CLI는 인라인 스타일을 처리할 때 CSS 프리프로세서를 별도로 사용하지 않습니다.
 
 </div>
+
+@reviewed 2021-09-17

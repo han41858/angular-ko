@@ -210,7 +210,7 @@ export class AppComponent {
 ## 빌드 환경에 맞게 환경설정 파일 교체하기
 
 <!--
-The main CLI configuration file, `angular.json`, contains a `fileReplacements` section in the configuration for each build target, which allows you to replace any file in the TypeScript program with a target-specific version of that file.
+The main CLI configuration file, `angular.json`, contains a `fileReplacements` section in the configuration for each build target, which lets you replace any file in the TypeScript program with a target-specific version of that file.
 This is useful for including target-specific code or variables in a build that targets a specific environment, such as production or staging.
 
 By default no files are replaced.
@@ -349,7 +349,7 @@ Angular CLI 환경설정 파일인 `angular.json` 파일에는 각 빌드 환경
 
 <!--
 As applications grow in functionality, they also grow in size.
-The CLI allows you to set size thresholds in your configuration to ensure that parts of your application stay within size boundaries that you define.
+The CLI lets you set size thresholds in your configuration to ensure that parts of your application stay within size boundaries that you define.
 
 Define your size boundaries in the CLI configuration file, `angular.json`, in a `budgets` section for each [configured environment](#app-environments).
 -->
@@ -473,21 +473,15 @@ Each budget entry is a JSON object with the following properties:
     <td>
       용량을 제한하는 방식을 지정하며, 다음 항목 중 하나를 사용합니다:
 
-      * `bundle` - 특정 번들 파일을 기준으로 합니다.
+* `bundle` - 특정 번들 파일을 기준으로 합니다.
+* `initial` - 애플리케이션이 처음 실행될 때 필요한 용량을 기준으로 합니다. 기본 설정에서 500kb를 넘으면 경고 메시지가 출력되며 1mb를 넘으면 에러 메시지가 출력됩니다.
+* `allScript` - 스크립트 파일 전체를 기준으로 합니다.
+* `all` - 애플리케이션 전체 용량을 기준으로 합니다.
+* `anyComponentStyle` - 컴포넌트 스타일시트 파일 하나를 기준으로 합니다. 기본 설정에서 2kb를 넘으면 경고 메시지가 출력되며 4kb를 넘으면 에러 메시지가 출력됩니다.
+* `anyScript` - 개별 스크립트 파일을 기준으로 합니다.
+* `any` - 개별 파일을 기준으로 합니다.
 
-      * `initial` - 애플리케이션이 처음 실행될 때 필요한 용량을 기준으로 합니다. 기본 설정에서 500kb를 넘으면 경고 메시지가 출력되며 1mb를 넘으면 에러 메시지가 출력됩니다.
-
-      * `allScript` - 스크립트 파일 전체를 기준으로 합니다.
-
-      * `all` - 애플리케이션 전체 용량을 기준으로 합니다.
-
-      * `anyComponentStyle` - 컴포넌트 스타일시트 파일 하나를 기준으로 합니다. 기본 설정에서 2kb를 넘으면 경고 메시지가 출력되며 4kb를 넘으면 에러 메시지가 출력됩니다.
-
-      * `anyScript` - 개별 스크립트 파일을 기준으로 합니다.
-
-      * `any` - 개별 파일을 기준으로 합니다.
-
-    </td>
+  </td>
   </tr>
   <tr>
     <td>name</td>
@@ -542,7 +536,7 @@ For more information, see [How CommonJS is making your bundles larger](https://w
 </div>
 
 The Angular CLI outputs warnings if it detects that your browser application depends on CommonJS modules.
-To disable these warnings, you can add the CommonJS module name to `allowedCommonJsDependencies` option in the `build` options located in `angular.json` file.
+To disable these warnings, add the CommonJS module name to `allowedCommonJsDependencies` option in the `build` options located in `angular.json` file.
 
 <code-example lang="json">
 "build": {
@@ -592,13 +586,13 @@ Angular CLI는 CommonJS 모듈 방식으로 구현된 패키지를 발견하면 
 
 <!--
 The CLI uses [Autoprefixer](https://github.com/postcss/autoprefixer) to ensure compatibility with different browser and browser versions.
-You may find it necessary to target specific browsers or exclude certain browser versions from your build.
+You might find it necessary to target specific browsers or exclude certain browser versions from your build.
 
 Internally, Autoprefixer relies on a library called [Browserslist](https://github.com/browserslist/browserslist) to figure out which browsers to support with prefixing.
 Browserlist looks for configuration options in a `browserslist` property of the package configuration file, or in a configuration file named `.browserslistrc`.
 Autoprefixer looks for the `browserslist` configuration when it prefixes your CSS.
 
-* You can tell Autoprefixer what browsers to target by adding a browserslist property to the package configuration file, `package.json`:
+* Tell Autoprefixer what browsers to target by adding a browserslist property to the package configuration file, `package.json`:
 ```
  "browserslist": [
    "> 1%",
@@ -631,73 +625,6 @@ Autoprefixer는 지원하는 브라우저를 지정할 때 내부적으로 [Brow
  ]
 ```
 
-* 아니면 프로젝트 폴더에 `.browserlistrc` 파일을 만들고 이 파일에 다음과 같이 지정할 수도 있습니다:
-
-```
- ### 지원 브라우저
- > 1%
- last 2 versions
-```
-
-지원할 브라우저와 브라우저 버전을 지정하는 방법은 [browserslist GitHub 레파지토리](https://github.com/browserslist/browserslist)를 참고하세요.
-
-
-<!--
-### Backward compatibility with Lighthouse
--->
-### Lighthouse 하위 호환성 설정
-
-<!--
-If you want to produce a progressive web application and are using [Lighthouse](https://developers.google.com/web/tools/lighthouse/) to grade the project, add the following `browserslist` entry to your `package.json` file, in order to eliminate the [old flexbox](https://developers.google.com/web/tools/lighthouse/audits/old-flexbox) prefixes:
--->
-PWA 앱을 대상으로 [Lighthouse](https://developers.google.com/web/tools/lighthouse/)를 사용해서 프로젝트를 점검하려면 `package.json` 파일에 다음 내용을 추가해야 합니다.
-이 설정은 [이전 버전의 CSS Flexbox](https://developers.google.com/web/tools/lighthouse/audits/old-flexbox)를 지원하지 않겠다는 것을 의미합니다.
-
-```
-"browserslist": [
-  "last 2 versions",
-  "not ie <= 10",
-  "not ie_mob <= 10"
-]
-```
-
-
-<!--
-### Backward compatibility with CSS grid
--->
-### CSS 그리드 하위 호환성 설정
-
-<!--
-CSS grid layout support in Autoprefixer, which was previously on by default, is off by default in Angular 8 and higher.
-
-To use CSS grid with Internet Explorer 10/11, you must explicitly enable it using the `autoplace` option.
-To do this, add the following to the top of the global styles file (or within a specific css selector scope):
--->
-CSS 그리드 레이아웃은 자동 접두사(autoprefixer) 기능을 지원합니다.
-이 기능은 Angular 8 버전 이전까지는 기본으로 활성화되었지만 8버전부터는 지원하지 않는 것이 기본값입니다.
-
-IE11 환경에서 CSS 그리드를 사용하려면 `autoplace` 옵션을 사용해서 이 기능을 명시적으로 활성화해야 합니다.
-전역 스타일 파일 제일 위쪽에 다음 코드를 추가하면 됩니다.
-
-```
-/* autoprefixer grid: autoplace */
-```
-
-<!--
-or
--->
-또는
-
-```
-/* autoprefixer grid: no-autoplace */
-```
-
-<!--
-For more information, see [Autoprefixer documentation](https://autoprefixer.github.io/).
--->
-자세한 내용은 [자동 접두사 문서](https://autoprefixer.github.io/)를 참고하세요.
-
-
 {@a proxy}
 
 <!--
@@ -706,7 +633,7 @@ For more information, see [Autoprefixer documentation](https://autoprefixer.gith
 ## 백엔드 서버 프록시 설정하기
 
 <!--
-You can use the [proxying support](https://webpack.js.org/configuration/dev-server/#devserverproxy) in the `webpack` development server to divert certain URLs to a backend server, by passing a file to the `--proxy-config` build option.
+Use the [proxying support](https://webpack.js.org/configuration/dev-server/#devserverproxy) in the `webpack` development server to divert certain URLs to a backend server, by passing a file to the `--proxy-config` build option.
 For example, to divert all calls for `http://localhost:4200/api` to a server running on `http://localhost:3000/api`, take the following steps.
 -->
 Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용하기 때문에 특정 백엔드 주소로 향하는 HTTP 요청에 대해 [프록시를 설정](https://webpack.js.org/configuration/dev-server/#devserverproxy) 할 수 있습니다.
@@ -717,7 +644,6 @@ Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용�
 1. Create a file `proxy.conf.json` in your project's `src/` folder.
 
 1. Add the following content to the new proxy file:
-
     ```
     {
       "/api": {
@@ -728,7 +654,6 @@ Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용�
     ```
 
 1. In the CLI configuration file, `angular.json`, add the `proxyConfig` option to the `serve` target:
-
     ```
     ...
     "architect": {
@@ -743,7 +668,7 @@ Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용�
 
 1. To run the development server with this proxy configuration, call `ng serve`.
 
-You can edit the proxy configuration file to add configuration options; some examples are given below.
+Edit the proxy configuration file to add configuration options; following are some examples.
 For a description of all options, see [webpack DevServer documentation](https://webpack.js.org/configuration/dev-server/#devserverproxy).
 
 Note that if you edit the proxy configuration file, you must relaunch the `ng serve` process to make your changes effective.
@@ -790,7 +715,7 @@ Note that if you edit the proxy configuration file, you must relaunch the `ng se
 
 <!--
 The `pathRewrite` proxy configuration option lets you rewrite the URL path at run time.
-For example, you can specify the following `pathRewrite` value to the proxy configuration to remove "api" from the end of a path.
+For example, specify the following `pathRewrite` value to the proxy configuration to remove "api" from the end of a path.
 -->
 프록시 설정 옵션 중 `pathRewrite` 옵션을 사용하면 애플리케이션이 실행되면서 요청하는 URL 주소를 다른 주소로 변경할 수 있습니다.
 예를 들어 다음과 같이 설정하면 요청하는 주소 마지막에 붙는 "api" 문자열을 제거합니다.

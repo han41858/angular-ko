@@ -4,7 +4,7 @@
 # 이벤트 바인딩(Event binding)
 
 <!--
-Event binding allows you to listen for and respond to user actions such as keystrokes, mouse movements, clicks, and touches.
+Event binding lets you listen for and respond to user actions such as keystrokes, mouse movements, clicks, and touches.
 
 <div class="alert is-helpful">
 
@@ -99,6 +99,50 @@ import 'zone.js';  // Included with Angular CLI.
 ```
 
 이렇게 작업하고 `scroll` 이벤트를 감지하는 이벤트 리스너를 추가하면, 이 이벤트 리스너는 `passive` 이벤트 리스너가 됩니다.
+
+
+<!--
+## Binding to passive events
+-->
+## 패시브 이벤트 바인딩하기
+
+<!--
+Angular also supports passive event listeners. For example, use the following steps to make a scroll event passive.
+
+1. Create a file `zone-flags.ts` under `src` directory.
+2. Add the following line into this file.
+
+```
+(window as any)['__zone_symbol__PASSIVE_EVENTS'] = ['scroll'];
+```
+
+3. In the `src/polyfills.ts` file, before importing zone.js, import the newly created `zone-flags`.
+
+```
+import './zone-flags';
+import 'zone.js';  // Included with Angular CLI.
+```
+
+After those steps, if you add event listeners for the `scroll` event, the listeners will be `passive`.
+-->
+Angular는 패시브 이벤트 리스너를 지원합니다.
+스크롤 패시브 이벤트라면 이렇게 활용하면 됩니다.
+
+1. `src` 디렉토리에 `zone-flags.ts` 파일을 만듭니다.
+2. 이 파일에 이런 코드를 작성합니다.
+
+```
+(window as any)['__zone_symbol__PASSIVE_EVENTS'] = ['scroll'];
+```
+
+3. `src/polyfills.ts` 파일에서 zone.js를 로드하기 전에 `zone-flags`를 먼저 로드합니다.
+
+```
+import './zone-flags';
+import 'zone.js';  // Included with Angular CLI.
+```
+
+여기까지 작업하고 나면 `scroll` 이벤트 리스너를 추가했을 때 이 리스너는 `passive`로 동작합니다.
 
 
 {@a custom-events-with-eventemitter}

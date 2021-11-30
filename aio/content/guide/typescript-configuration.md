@@ -222,7 +222,7 @@ TypeScript 환경설정 파일이 컴파일에 미치는 영향을 확인하려�
 Many JavaScript libraries, such as jQuery, the Jasmine testing library, and Angular,
 extend the JavaScript environment with features and syntax
 that the TypeScript compiler doesn't recognize natively.
-When the compiler doesn't recognize something, it throws an error.
+When the compiler doesn't recognize something, it reports an error.
 
 Use [TypeScript type definition files](https://www.typescriptlang.org/docs/handbook/writing-declaration-files.html)&mdash;`d.ts files`&mdash;to tell the compiler about the libraries you load.
 
@@ -292,10 +292,21 @@ Fortunately, either their authors or community contributors have created separat
 published them in well-known locations.
 
 You can install these typings with `npm` using the
-[`@types/*` scoped package](https://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)
-and Typescript, starting at 2.0, automatically recognizes them.
+[`@types/*` scoped package](https://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html).
 
-For instance, to install typings for `jasmine` you run `npm install @types/jasmine --save-dev`.
+Which ambient declaration files in `@types/*` are automatically included is determined by
+the [`types` TypeScript compiler option](https://www.typescriptlang.org/tsconfig#types). The Angular
+CLI generates a `tsconfig.app.json` file which is used to build an application, in which the
+`types` compiler option is set to `[]` to disable automatic inclusion of declarations
+from `@types/*`. Similarly, the `tsconfig.spec.json` file is used for testing and sets
+`"types": ["jasmine"]` to allow using Jasmine's ambient declarations in tests.
+
+After installing `@types/*` declarations, you have to update the `tsconfig.app.json` and
+`tsconfig.spec.json` files to add the newly installed declarations to the list of `types`. If the
+declarations are only meant for testing, then only the `tsconfig.spec.json` file should be updated.
+
+For instance, to install typings for `chai` you run `npm install @types/chai --save-dev` and then
+update `tsconfig.spec.json` to add `"chai"` to the list of `types`.
 -->
 npm 패키지 중에는 `d.ts` 파일을 제공하지 *않는* 패키지들도 많습니다.
 jQuery나 Jasmine, Lodash 들이 그렇습니다.
@@ -303,7 +314,14 @@ jQuery나 Jasmine, Lodash 들이 그렇습니다.
 
 이런 타입 정의 파일은 TypeScript 2.0부터 [`@types/*` 로 시작하는 패키지](https://www.typescriptlang.org/docs/handbook/declaration-files/consumption.html)로 제공되며, `npm`으로 설치하면 자동으로 인식됩니다.
 
-예를 들어 `jasmine`에 대한 타입 정의 파일을 설치하려면 `npm install @types/jasmine --save-dev` 명령을 실행하면 됩니다.
+이런 패키지를 설치하고 나면 `@types/*` 안에 있는 타입 정의 파일들이 [TypeScript 컴파일러 옵션 중 `types`](https://www.typescriptlang.org/tsconfig#types) 설정에 따라 자동으로 로드됩니다.
+Angular CLI는 애플리케이션을 빌드하기 위해 `tsconfig.app.json` 파일을 생성하는데, 이 파일을 보면 `@types/*`에 존재하는 타입 정의 파일을 자동으로 불러오지 않기 위해  `types` 컴파일러 옵션값을 `[]`로 지정한 것을 확인할 수 있습니다.
+그리고 `tsconfig.spec.json` 파일을 보면 Jasmin 타입 정의 파일을 불러오기 위해 `"types": ["jasmine"]`를 지정한 것을 확인할 수 있습니다.
+
+`@types/*` 패키지를 설치하고 나면 `tsconfig.app.json` 파일이나 `tsconfig.spec.json` 파일의 `types` 목록을 수정해야 합니다.
+테스트 용도로만 사용되는 패키지라면 `tsconfig.spec.json` 파일만 수정하면 됩니다.
+
+예를 들어 `npm install @types/chai --save-dev` 명령을 실행해서 `chai`에 해당하는 타입 정의 파일을 설치했다면 `tsconfig.spec.json` 파일의 `types` 옵션에 `"chai"`를 추가하면 됩니다.
 
 
 {@a target}
@@ -312,8 +330,6 @@ jQuery나 Jasmine, Lodash 들이 그렇습니다.
 ### *target*
 
 <!--
-By default, the target is `es2015`, which is supported only in modern browsers. You can configure the target to `es5` to specifically support legacy browsers. [Differential loading](guide/deployment#differential-loading) is also provided by the Angular CLI to support modern, and legacy browsers with separate bundles.
+By default, the target is `es2017`, which is supported in modern browsers.
 -->
-기본값은 `es2015`이며, 최신 브라우저는 모두 이 문법을 지원합니다.
-하지만 오래된 브라우저를 지원해야 한다면 `es5` 문법으로 빌드할 수도 있습니다.
-[증분 로딩](guide/deployment#differential-loading)은 최신 브라우저와 오래된 브라우저를 동시에 지원하기 위해 Angular CLI가 빌드 결과물을 두 벌로 생성하는 방식입니다.
+기본값은 `es2017`이며, 최신 브라우저는 모두 이 문법을 지원합니다.

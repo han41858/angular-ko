@@ -31,7 +31,6 @@ export class HeroListComponent implements OnInit {
   ngOnInit() {
     this.heroes$ = this.route.paramMap.pipe(
       switchMap(params => {
-        // `param.get()` 앞에 붙은 (+)는 문자열을 숫자로 변환합니다.
         this.selectedId = parseInt(params.get('id')!, 10);
         return this.service.getHeroes();
       })

@@ -1,7 +1,7 @@
 # NgModule API
 
 <!--
-At a high level, NgModules are a way to organize Angular apps
+At a high level, NgModules are a way to organize Angular applications
 and they accomplish this through the metadata in the `@NgModule`
 decorator.
 The metadata falls into three categories:
@@ -9,9 +9,9 @@ The metadata falls into three categories:
 NgModule을 사용하면 Angular 애플리케이션의 코드를 효율적으로 구성할 수 있으며, 이 때 `@NgModule` 데코레이터를 사용합니다. 이 데코레이터의 메타데이터는 세종류로 나눠 볼 수 있습니다:
 
 <!--
-* **Static:** Compiler configuration which tells the compiler about directive selectors and where in templates the directives should be applied through selector matching. This is configured via the `declarations` array.
-* **Runtime:** Injector configuration via the `providers` array.
-* **Composability/Grouping:** Bringing NgModules together and making them available via the `imports` and `exports` arrays.
+* **Static:** Compiler configuration which tells the compiler about directive selectors and where in templates the directives should be applied through selector matching. This is configured using the `declarations` array.
+* **Runtime:** Injector configuration using the `providers` array.
+* **Composability/Grouping:** Bringing NgModules together and making them available using the `imports` and `exports` arrays.
 -->
 * **정적(static) 설정:** 컴파일러가 모듈을 빌드할 때 알아야 할 디렉티브를 등록합니다. `declarations` 배열이 해당됩니다.
 * **런타임(runtime) 설정:** 모듈이 실행될 때 의존성을 주입해야 한다면, `providers` 배열로 인젝터를 설정합니다.
@@ -308,7 +308,7 @@ The following table summarizes the `@NgModule` metadata properties.
       <!--
       A list of components that can be dynamically loaded into the view.
 
-      By default, an Angular app always has at least one entry component, the root component, `AppComponent`. Its purpose is to serve as a point of entry into the app, that is, you bootstrap it to launch the app.
+      By default, an Angular application always has at least one entry component, the root component, `AppComponent`. Its purpose is to serve as a point of entry into the app, that is, you bootstrap it to launch the application.
 
       Routed components are also _entry components_ because they need to be loaded dynamically.
       The router creates them and drops them into the DOM near a `<router-outlet>`.
@@ -321,7 +321,7 @@ The following table summarizes the `@NgModule` metadata properties.
 
       That leaves only components bootstrapped using one of the imperative techniques, such as [`ViewComponentRef.createComponent()`](api/core/ViewContainerRef#createComponent) as undiscoverable.
 
-      Dynamic component loading is not common in most apps beyond the router. If you need to dynamically load components, you must add these components to the `entryComponents` list yourself.
+      Dynamic component loading is not common in most applications beyond the router. If you need to dynamically load components, you must add these components to the `entryComponents` list yourself.
 
       For more information, see [Entry Components](guide/entry-components).
       -->

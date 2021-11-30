@@ -20,8 +20,8 @@ import { trigger, transition, state, animate, style, AnimationEvent } from '@ang
 // #docregion state2
       state('closed', style({
         height: '100px',
-        opacity: 0.5,
-        backgroundColor: 'green'
+        opacity: 0.8,
+        backgroundColor: 'blue'
       })),
 // #enddocregion state2, trigger-wildcard1
 // #docregion transition1
@@ -78,7 +78,7 @@ export class OpenCloseComponent {
 
 // #enddocregion component
 // #docregion events1, events
-  onAnimationEvent( event: AnimationEvent ) {
+  onAnimationEvent(event: AnimationEvent) {
 // #enddocregion events1, events
     if (!this.logging) {
       return;
@@ -87,16 +87,16 @@ export class OpenCloseComponent {
     // 이 예제에서 트리거 이름은 openClose입니다.
     console.warn(`Animation Trigger: ${event.triggerName}`);
 
-    // phaseName은 start나 done 문자열입니다.
+    // phaseName은 "start"나 "done" 문자열입니다.
     console.warn(`Phase: ${event.phaseName}`);
 
     // 이 예제에서 totalTime은 1초이거나 0.5초입니다.
     console.warn(`Total time: ${event.totalTime}`);
 
-    // 이 예제에서 fromState는 open이거나 closed입니다.
+    // 이 예제에서 fromState는 "open"이거나 "closed"입니다.
     console.warn(`From: ${event.fromState}`);
 
-    // 이 예제에서 toState는 open이거나 closed입니다.
+    // 이 예제에서 toState는 "open"이거나 "closed"입니다.
     console.warn(`To: ${event.toState}`);
 
     // 이 예제에서 이벤트가 발생한 HTML 엘리먼트는 버튼입니다.
