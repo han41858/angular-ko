@@ -282,7 +282,7 @@ The third argument, `easing`, controls how the animation [accelerates and decele
 
 * Start immediately, run for 200ms. Use an acceleration curve to start slow and end at full velocity: `'0.2s ease-in'`
 -->
-트랜지션 함수의 두 번째 인자에 사용하는 `animate()` 함수는 `timings`와 `syltes`를 인자로 받습니다.
+트랜지션 함수의 두 번째 인자에 사용하는 `animate()` 함수는 `timings`와 `styles`를 인자로 받습니다.
 
 그리고 `timings` 인자는 숫자를 간단하게 사용하거나, 지속시간(duration), 시작 딜레이(delay), 가속도(easing) 부분으로 구성된 문자열을 사용합니다.
 
