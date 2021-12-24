@@ -227,10 +227,17 @@ This is the simplest production-ready deployment of your application.
 -->
 ### GitHub 페이지에 배포하기
 
+<!--
 To deploy your Angular application to [GitHub Pages](https://help.github.com/articles/what-is-github-pages/), complete the following steps:
+-->
+Angular 애플리케이션을 [GitHub Pages](https://help.github.com/articles/what-is-github-pages/)에 배포하려면 이렇게 작업하면 됩니다:
 
+<!--
 1. [Create a GitHub repository](https://help.github.com/articles/create-a-repo/) for your project.
+-->
+1. 프로젝트용 [GitHub 코드저장소를 생성](https://help.github.com/articles/create-a-repo/)합니다.
 
+<!--
 1. Configure `git` in your local project by adding a remote that specifies the GitHub repository you created in previous step.
   GitHub provides these commands when you create the repository so that you can copy and paste them at your command prompt.
   The commands should be similar to the following, though GitHub fills in your project-specific settings for you:
@@ -242,13 +249,31 @@ To deploy your Angular application to [GitHub Pages](https://help.github.com/art
   ```
 
   When you paste these commands from GitHub, they run automatically.
+-->
+2. 로컬 프로젝트의 `git` 설정을 수정해서 새로 생성한 GitHub 코드 저장소를 리모트에 추가합니다.
+  이 과정은 GitHub 코드저장소를 생성하면 커맨드 창에 안내되기 때문에 복사해서 붙여넣으면 됩니다.
+  보통은 이런 식입니다:
 
+  ```sh
+  git remote add origin https://github.com/계정/프로젝트-이름.git
+  git branch -M main
+  git push -u origin main
+  ```
+
+<!--
 1. Create and check out a `git` branch named `gh-pages`.
 
   ```sh
   git checkout -b gh-pages
   ```
+-->
+3. `gh-pages`라는 이름으로 `git` 브랜치를 생성하고 체크아웃합니다.
 
+  ```sh
+  git checkout -b gh-pages
+  ```
+
+<!--
 1. Build your project using the Github project name, with the Angular CLI command [`ng build`](cli/build) and the following options, where `your_project_name` is the name of the project that you gave the GitHub repository in step 1.
 
   Be sure to include the slashes on either side of your project name as in `/your_project_name/`.
@@ -258,7 +283,19 @@ To deploy your Angular application to [GitHub Pages](https://help.github.com/art
     ng build --output-path docs --base-href /your_project_name/
 
   </code-example>
+-->
+4. Github 프로젝트 이름을 지정하면서 Angular CLI [`ng build`](cli/build) 명령으로 프로젝트를 빌드합니다. 이 때 프로젝트 이름은 1단계에서 지정한 GitHub 코드저장소의 프로젝트 이름입니다.
 
+  프로젝트 이름 앞뒤에 슬래시(`/`)를 붙여서 `/프로젝트_이름/` 이라고 지정해야 합니다.
+
+  <code-example language="sh">
+
+    ng build --output-path docs --base-href /프로젝트_이름/
+
+  </code-example>
+
+
+<!--
 1. When the build is complete, make a copy of `docs/index.html` and name it `docs/404.html`.
 
 1. Commit your changes and push.
@@ -269,10 +306,25 @@ To deploy your Angular application to [GitHub Pages](https://help.github.com/art
 
 1. Click on the GitHub Pages link at the top of the GitHub Pages section to see your deployed application.
 The format of the link is `https://<user_name>.github.io/<project_name>/`.
+-->
+5. 프로젝트가 빌드되고 나면 `docs/index.html` 파일을 복사해서 `docs/404.html` 파일을 생성합니다.
+
+6. 변경사항을 커밋하고 푸시합니다.
+
+7. GitHub 프로젝트 화면에서 Settings로 이동해서 [publish from docs folder](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch) 메뉴를 선택합니다.
+
+8. Save를 클릭합니다.
+
+9. GitHub Pages 섹션의 링크를 클릭해서 애플리케이션이 제대로 배포되었는지 확인해 보세요.
+`https://<계정>.github.io/<프로젝트_이름>/` 이라는 형식입니다.
+
 
 <div class="alert is-helpful">
 
+<!--
 Check out [angular-cli-ghpages](https://github.com/angular-buch/angular-cli-ghpages), a full featured package that does all this for you and has extra functionality.
+-->
+더 활용할 수 있는 기능을 알아보려면 [angular-cli-ghpages](https://github.com/angular-buch/angular-cli-ghpages) 문서를 참고하세요.
 
 </div>
 
@@ -513,10 +565,15 @@ and to
     } ]
   </code-example>
 
+
 {@a mime}
 
+<!--
 ### Configuring correct MIME-type for JavaScript assets
+-->
+### JavaScript 리소스에 대해 MIME-타입 설정하기
 
+<!--
 All of your application JavaScript files must be served by the server with the [`Content-Type` header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) set to `text/javascript` or another [JavaScript-compatible MIME-type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#textjavascript).
 
 Most servers and hosting services already do this by default.
@@ -528,6 +585,18 @@ Failed to load module script: The server responded with a non-JavaScript MIME ty
 ```
 
 If this is the case, you will need to check your server configuration and reconfigure it to serve `.js` files with `Content-Type: text/javascript`. See your server's manual for instructions on how to do this.
+-->
+애플리케이션을 실행하는 JavaScript 파일은 모두 [`Content-Type` 헤더](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type) 값이 `text/javascript` 이거나 [JavaScript와 호환되는 MIME 타입](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types#textjavascript) 이어야 합니다.
+
+대부분의 서버나 호스팅 서비스는 알아서 이렇게 처리하고 있을 것입니다.
+
+이 설정이 되어 있지 않은 서버에서는 애플리케이션 실행이 중단되면서 이런 에러가 발생할 수 있습니다:
+
+```
+Failed to load module script: The server responded with a non-JavaScript MIME type of "text/plain". Strict MIME type checking is enforced for module scripts per HTML spec.
+```
+
+이런 에러가 발생하면 서버가 `.js` 파일을 `Content-Type: Text/javascript`로 서비스하고 있는지 확인해 보세요.
 
 
 {@a cors}
@@ -860,33 +929,38 @@ for the missing files. Look at where it _tried_ to find those files and adjust t
 
 {@a deploy-url}
 
+<!--
 ## The `deploy` url
+-->
+## `deploy` URL
 
+<!--
 A command line option used to specify the base path for resolving relative URLs for assets such as images, scripts, and style sheets at _compile_ time. For example: `ng build --deploy-url /my/assets`.
+-->
+애플리케이션을 빌드할 때 기본 경로를 지정하면 이미지, 스크립트, 스타일 시트 파일를 참조하는 URL이 모두 _컴파일_ 시점에 결정됩니다. `ng build --deploy-url /my/assets` 라는 명령을 실행했다고 합시다.
 
+<!--
 The effects of defining a `deploy url` and `base href` can overlap.
 * Both can be used for initial scripts, stylesheets, lazy scripts, and css resources.
+-->
+이렇게 실행하면 `deploy url`과 `base href` 설정을 덮어 씁니다.
 
+* 초기 실행에 필요한 스크립트, 스타일시트, 지연로딩되는 스크립트, CSS 리소스 모두에 해당됩니다.
+
+<!--
 However, defining a `base href` has a few unique effects.
 * Defining a `base href` can be used for locating relative template (HTML) assets, and relative fetch/XMLHttpRequests.
+-->
+그런데 `base href`는 조금 다르게 동작할 수 있습니다.
 
+* `base href`를 지정하면 리소스 뿐 아니라 XMLHttpRequest도 영향을 받습니다.
+
+<!--
 The `base href` can also be used to define the Angular router's default base (see [APP_BASE_HREF](https://angular.io/api/common/APP_BASE_HREF)). Users with more complicated setups may need to manually configure the `APP_BASE_HREF` token within the application. (e.g., application routing base is / but assets/scripts/etc. are at /assets/).
+-->
+`base href`는 Angular 라우터에서도 설정할 수 있습니다([APP_BASE_HREF](https://angular.io/api/common/APP_BASE_HREF)를 참고하세요). 이 방식은 설정이 복잡하거나 애플리케이션 안에서 `APP_BASE_HREF` 토큰을 수동으로 설정해야 할 때 사용합니다. 애플리케이션 기본 경로는 / 이지만 리소스 파일의 위치는 /assets/ 일 때와 같은 경우가 그렇습니다.
 
+<!--
 Unlike the `base href` which can be defined in a single place, the `deploy url` needs to be hard-coded into an application at build time. This means specifying a `deploy url` will decrease build speed, but this is the unfortunate cost of using an option that embeds itself throughout an application. That is why a `base href` is generally the better option.
-
-
-{@a deploy-url}
-
-## The `deploy` url
-
-A command line option used to specify the base path for resolving relative URLs for assets such as images, scripts, and style sheets at _compile_ time. For example: `ng build --deploy-url /my/assets`.
-
-The effects of defining a `deploy url` and `base href` can overlap.
-* Both can be used for initial scripts, stylesheets, lazy scripts, and css resources.
-
-However, defining a `base href` has a few unique effects.
-* Defining a `base href` can be used for locating relative template (HTML) assets, and relative fetch/XMLHttpRequests.
-
-The `base href` can also be used to define the Angular router's default base (see [APP_BASE_HREF](api/common/APP_BASE_HREF)). Users with more complicated setups may need to manually configure the `APP_BASE_HREF` token within the application. (e.g., application routing base is / but assets/scripts/etc. are at /assets/).
-
-Unlike the `base href` which can be defined in a single place, the `deploy url` needs to be hard-coded into an application at build time. This means specifying a `deploy url` will decrease build speed, but this is the unfortunate cost of using an option that embeds itself throughout an application. That is why a `base href` is generally the better option.
+-->
+`base href`에 원하는 위치를 간단하게 지정하는 것과 달리, `deploy url`은 애플리케이션을 빌드할 때 하드코딩되어 코드 안에 들어갑니다. 그래서 `deploy url`을 지정하면 빌드 시간이 조금 더 걸릴 수 있습니다. 이런 이유 때문에 일반적으로는 `deploy url`보다 `base href`를 사용하는 것이 좋습니다.

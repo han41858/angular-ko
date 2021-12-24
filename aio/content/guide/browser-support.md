@@ -72,13 +72,23 @@ Angular는 [Sauce Labs](https://saucelabs.com/)와 [BrowserStack](https://www.br
 
 
 {@a ie11}
+<!--
 ## Configuring Angular CLI for compatibility with IE11
+-->
+## IE11 호환성 설정하기
 
+<!--
 While Angular supports all browsers listed above, in order to improve the build times and output,  Angular CLI applications don't support IE11 by default.
 
 Angular CLI uses [`browserlist`](https://github.com/browserslist/browserslist) to configure browser support for applications.
 
 You can enable the IE11 support by following the instructions in the `.browserslistrc` file at the root of your project.
+-->
+Angular는 위에서 언급한 브라우저를 모두 지원하지만, 빌드 시간을 줄이고 빌드 결과물을 최적화 하기 위해 IE11 지원은 기본 상태에서 꺼져 있습니다.
+
+Angular CLI는 [`browserlist`](https://github.com/browserslist/browserslist)를 사용해서 애플리케이션이 지원할 브라우저를 설정합니다.
+
+IE11를 지원하려면 프로젝트 최상위 폴더에 있는 `.browserlistrc` 파일을 수정하면 됩니다.
 
 
 {@a polyfills}

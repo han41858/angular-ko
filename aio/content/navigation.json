@@ -1025,16 +1025,11 @@
           "tooltip": "브라우저 지원사항과 폴리필에 대해 확인해 보세요."
         },
         {
-          "url": "guide/browser-support",
-          "/title": "Browser Support",
-          "title": "브라우저 지원",
-          "/tooltip": "Browser support and polyfills guide.",
-          "tooltip": "브라우저 지원과 폴리필에 대해 설명합니다."
-        },
-        {
           "url": "guide/update-to-latest-version",
-          "title": "Update to Version 13",
-          "tooltip": "Support to update your application to version 13"
+          "/title": "Update to Version 13",
+          "title": "13 버전으로 업데이트하기",
+          "/tooltip": "Support to update your application to version 13",
+          "tooltip": "애플리케이션을 13 버전으로 업데이트하는 방법을 안내합니다."
         },
         {
           "url": "guide/deprecations",
