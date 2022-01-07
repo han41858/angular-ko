@@ -2128,7 +2128,7 @@ A previous compilation and rendering pipeline used by Angular. It has since been
 [Ivy](#ivy) and is no longer in use. View Engine was deprecated in version 9 and removed in version
 13.
 -->
-Angular가 이전에 사용하던 컴팦일, 렌더링 파이프라인 엔진입니다.
+Angular가 이전에 사용하던 컴파일, 렌더링 파이프라인 엔진입니다.
 View Engine은 9버전부터 지원 중단이 결정되었고, 13버전 부터는 [Ivy](#ivy)로 완전히 대체되어 지금은 더이상 사용되지 않습니다.
 
 
