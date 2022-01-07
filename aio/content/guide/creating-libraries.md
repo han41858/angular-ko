@@ -115,7 +115,7 @@ Your library should supply documentation (typically a README file) for installat
 
 라이브러리 프로젝트가 어떻게 구성되는지 자세하게 알아보려면 [프로젝트 파일 구조 가이드](guide/file-structure) 문서의 [라이브러리 프로젝트 파일 구조](guide/file-structure#library-project-files) 섹션을 참고하세요.
 
-한 워크스페이스에 여러 프로젝트를 두눈 모노레포(monorepo) 모델을 사용할 수 있씁니다.
+한 워크스페이스에 여러 프로젝트를 두는 모노레포(monorepo) 모델을 사용할 수 있습니다.
 [워크스페이스에 프로젝트 여러개 구성하기](guide/file-structure#multiple-projects) 문서를 참고하세요.
 
 </div>
