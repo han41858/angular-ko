@@ -6,8 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import {animate, animateChild, AnimationPlayer, AUTO_STYLE, group, query, sequence, stagger, state, style, transition, trigger, ɵAnimationGroupPlayer as AnimationGroupPlayer} from '@angular/animations';
-import {AnimationDriver, ɵAnimationEngine} from '@angular/animations/browser';
-import {matchesElement} from '@angular/animations/browser/src/render/shared';
+import {AnimationDriver, ɵAnimationEngine, ɵnormalizeKeyframes as normalizeKeyframes} from '@angular/animations/browser';
 import {TransitionAnimationPlayer} from '@angular/animations/browser/src/render/transition_animation_engine';
 import {ENTER_CLASSNAME, LEAVE_CLASSNAME} from '@angular/animations/browser/src/util';
 import {MockAnimationDriver, MockAnimationPlayer} from '@angular/animations/browser/testing';
@@ -19,7 +18,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HostListener} from '../../src/metadata/directives';
 
 (function() {
-// these tests are only mean't to be run within the DOM (for now)
+// these tests are only meant to be run within the DOM (for now)
 if (isNode) return;
 
 describe('animation query tests', function() {
@@ -188,8 +187,8 @@ describe('animation query tests', function() {
       fixture.detectChanges();
 
       const expectedKeyframes = [
-        {backgroundColor: 'blue', offset: 0},
-        {backgroundColor: 'red', offset: 1},
+        new Map<string, string|number>([['backgroundColor', 'blue'], ['offset', 0]]),
+        new Map<string, string|number>([['backgroundColor', 'red'], ['offset', 1]]),
       ];
 
       players = getLog();
@@ -494,43 +493,43 @@ describe('animation query tests', function() {
           expect(p1.delay).toEqual(0);
           expect(p1.duration).toEqual(0);
           expect(p1.keyframes).toEqual([
-            {opacity: '0.01', offset: 0},
-            {opacity: '0.01', offset: 1},
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 0]]),
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 1]]),
           ]);
 
           expect(p2.delay).toEqual(0);
           expect(p2.duration).toEqual(0);
           expect(p2.keyframes).toEqual([
-            {opacity: '0.01', offset: 0},
-            {opacity: '0.01', offset: 1},
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 0]]),
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 1]]),
           ]);
 
           expect(p3.delay).toEqual(0);
           expect(p3.duration).toEqual(0);
           expect(p3.keyframes).toEqual([
-            {opacity: '0.01', offset: 0},
-            {opacity: '0.01', offset: 1},
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 0]]),
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 1]]),
           ]);
 
           expect(p4.delay).toEqual(0);
           expect(p4.duration).toEqual(1000);
           expect(p4.keyframes).toEqual([
-            {opacity: '0.01', offset: 0},
-            {opacity: '1', offset: 1},
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 0]]),
+            new Map<string, string|number>([['opacity', '1'], ['offset', 1]]),
           ]);
 
           expect(p5.delay).toEqual(1000);
           expect(p5.duration).toEqual(1000);
           expect(p5.keyframes).toEqual([
-            {opacity: '0.01', offset: 0},
-            {opacity: '1', offset: 1},
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 0]]),
+            new Map<string, string|number>([['opacity', '1'], ['offset', 1]]),
           ]);
 
           expect(p6.delay).toEqual(1500);
           expect(p6.duration).toEqual(1000);
           expect(p6.keyframes).toEqual([
-            {opacity: '0.01', offset: 0},
-            {opacity: '1', offset: 1},
+            new Map<string, string|number>([['opacity', '0.01'], ['offset', 0]]),
+            new Map<string, string|number>([['opacity', '1'], ['offset', 1]]),
           ]);
         });
 
@@ -566,11 +565,17 @@ describe('animation query tests', function() {
       const [p1, p2] = players;
       expect(p1.delay).toEqual(0);
       expect(p1.duration).toEqual(0);
-      expect(p1.keyframes).toEqual([{opacity: '0.5', offset: 0}, {opacity: '0.5', offset: 1}]);
+      expect(p1.keyframes).toEqual([
+        new Map<string, string|number>([['opacity', '0.5'], ['offset', 0]]),
+        new Map<string, string|number>([['opacity', '0.5'], ['offset', 1]])
+      ]);
 
       expect(p2.delay).toEqual(0);
       expect(p2.duration).toEqual(1000);
-      expect(p2.keyframes).toEqual([{opacity: '0.5', offset: 0}, {opacity: '1', offset: 1}]);
+      expect(p2.keyframes).toEqual([
+        new Map<string, string|number>([['opacity', '0.5'], ['offset', 0]]),
+        new Map<string, string|number>([['opacity', '1'], ['offset', 1]])
+      ]);
     });
 
     it('should properly apply stagger after various other steps within a query', () => {
@@ -681,12 +686,14 @@ describe('animation query tests', function() {
         const staggerDelay = 100 * i;
         const duration = 1000 + staggerDelay;
 
-        expect(kf[0]).toEqual({opacity: '0', offset: 0});
+        expect(kf[0]).toEqual(new Map<string, string|number>([['opacity', '0'], ['offset', 0]]));
         if (limit > 1) {
           const offsetAtStaggerDelay = staggerDelay / duration;
-          expect(kf[1]).toEqual({opacity: '0', offset: offsetAtStaggerDelay});
+          expect(kf[1]).toEqual(
+              new Map<string, string|number>([['opacity', '0'], ['offset', offsetAtStaggerDelay]]));
         }
-        expect(kf[limit]).toEqual({opacity: '1', offset: 1});
+        expect(kf[limit]).toEqual(
+            new Map<string, string|number>([['opacity', '1'], ['offset', 1]]));
         expect(player.duration).toEqual(duration);
       }
     });
@@ -783,10 +790,13 @@ describe('animation query tests', function() {
       engine.flush();
 
       const players = getLog();
-      expect(players.length).toEqual(1);
-      const player = players[0];
+      expect(players.length).toEqual(2);
+      const player = players[1];
 
-      expect(player.keyframes).toEqual([{height: '0px', offset: 0}, {height: '444px', offset: 1}]);
+      expect(player.keyframes).toEqual([
+        new Map<string, string|number>([['height', '0px'], ['offset', 0]]),
+        new Map<string, string|number>([['height', '444px'], ['offset', 1]])
+      ]);
       player.finish();
 
       expect(player.element.style.height).toEqual('444px');
@@ -839,7 +849,10 @@ describe('animation query tests', function() {
       expect(p3.element.innerText.trim()).toEqual('2');
 
       players.forEach(p => {
-        expect(p.keyframes).toEqual([{opacity: '0', offset: 0}, {opacity: '0.5', offset: 1}]);
+        expect(p.keyframes).toEqual([
+          new Map<string, string|number>([['opacity', '0'], ['offset', 0]]),
+          new Map<string, string|number>([['opacity', '0.5'], ['offset', 1]])
+        ]);
       });
     });
 
@@ -956,7 +969,10 @@ describe('animation query tests', function() {
       expect(p3.element.innerText.trim()).toEqual('0');
 
       players.forEach(p => {
-        expect(p.keyframes).toEqual([{opacity: '1', offset: 0}, {opacity: '0.5', offset: 1}]);
+        expect(p.keyframes).toEqual([
+          new Map<string, string|number>([['opacity', '1'], ['offset', 0]]),
+          new Map<string, string|number>([['opacity', '0.5'], ['offset', 1]])
+        ]);
       });
     });
 
@@ -1066,8 +1082,8 @@ describe('animation query tests', function() {
       for (let i = 0; i < 5; i++) {
         let player = players[i]!;
         expect(player.keyframes).toEqual([
-          {opacity: '0', offset: 0},
-          {opacity: '1', offset: 1},
+          new Map<string, string|number>([['opacity', '0'], ['offset', 0]]),
+          new Map<string, string|number>([['opacity', '1'], ['offset', 1]]),
         ]);
 
         let elm = player.element;
@@ -1086,8 +1102,8 @@ describe('animation query tests', function() {
       for (let i = 0; i < 5; i++) {
         let player = players[i]!;
         expect(player.keyframes).toEqual([
-          {opacity: '1', offset: 0},
-          {opacity: '0', offset: 1},
+          new Map<string, string|number>([['opacity', '1'], ['offset', 0]]),
+          new Map<string, string|number>([['opacity', '0'], ['offset', 1]]),
         ]);
 
         let elm = player.element;
@@ -1152,14 +1168,16 @@ describe('animation query tests', function() {
          const [p1, p2, p3, p4] = players;
 
          // p1 && p2 are the starting players for item3 and item4
-         expect(p1.previousStyles)
-             .toEqual({opacity: AUTO_STYLE, width: AUTO_STYLE, height: AUTO_STYLE});
-         expect(p2.previousStyles)
-             .toEqual({opacity: AUTO_STYLE, width: AUTO_STYLE, height: AUTO_STYLE});
+         expect(p1.previousStyles).toEqual(new Map([
+           ['opacity', AUTO_STYLE], ['width', AUTO_STYLE], ['height', AUTO_STYLE]
+         ]));
+         expect(p2.previousStyles).toEqual(new Map([
+           ['opacity', AUTO_STYLE], ['width', AUTO_STYLE], ['height', AUTO_STYLE]
+         ]));
 
          // p3 && p4 are the following players for item3 and item4
-         expect(p3.previousStyles).toEqual({});
-         expect(p4.previousStyles).toEqual({});
+         expect(p3.previousStyles).toEqual(new Map());
+         expect(p4.previousStyles).toEqual(new Map());
        });
 
     it('should not remove a parent container if its contents are queried into by an ancestor element',
@@ -1614,9 +1632,13 @@ describe('animation query tests', function() {
 
          players.forEach(p => {
            expect(p.keyframes).toEqual([
-             {opacity: '0', width: '0px', height: '0px', offset: 0},
-             {opacity: '1', width: '0px', height: '0px', offset: .5},
-             {opacity: AUTO_STYLE, width: AUTO_STYLE, height: '200px', offset: 1}
+             new Map<string, string|number>(
+                 [['opacity', '0'], ['width', '0px'], ['height', '0px'], ['offset', 0]]),
+             new Map<string, string|number>(
+                 [['opacity', '1'], ['width', '0px'], ['height', '0px'], ['offset', .5]]),
+             new Map<string, string|number>([
+               ['opacity', AUTO_STYLE], ['width', AUTO_STYLE], ['height', '200px'], ['offset', 1]
+             ])
            ]);
          });
        });
@@ -1869,17 +1891,29 @@ describe('animation query tests', function() {
       const elm1 = cmp.elm1;
       const elm2 = cmp.elm2;
 
-      const [p1, p2] = getLog();
-      expect(p1.delay).toEqual(0);
-      expect(p1.element).toEqual(elm1.nativeElement);
-      expect(p1.duration).toEqual(1000);
-      expect(p1.keyframes).toEqual([{width: '0px', offset: 0}, {width: '100px', offset: 1}]);
+      const players = getLog();
 
-      expect(p2.delay).toEqual(0);
-      expect(p2.element).toEqual(elm2.nativeElement);
-      expect(p2.duration).toEqual(2000);
-      expect(p2.keyframes).toEqual([
-        {height: '0px', offset: 0}, {height: '0px', offset: .5}, {height: '100px', offset: 1}
+      // players:
+      //  - _scp (skipped child player): player for the child animation
+      //  - pp (parent player): player for parent animation (from 0px to 100px)
+      //  - pcp (parent child player):
+      //      player for child animation executed by parent via query and animateChild
+      const [_scp, pp, pcp] = players;
+      expect(pp.delay).toEqual(0);
+      expect(pp.element).toEqual(elm1.nativeElement);
+      expect(pp.duration).toEqual(1000);
+      expect(pp.keyframes).toEqual([
+        new Map<string, string|number>([['width', '0px'], ['offset', 0]]),
+        new Map<string, string|number>([['width', '100px'], ['offset', 1]])
+      ]);
+
+      expect(pcp.delay).toEqual(0);
+      expect(pcp.element).toEqual(elm2.nativeElement);
+      expect(pcp.duration).toEqual(2000);
+      expect(pcp.keyframes).toEqual([
+        new Map<string, string|number>([['height', '0px'], ['offset', 0]]),
+        new Map<string, string|number>([['height', '0px'], ['offset', .5]]),
+        new Map<string, string|number>([['height', '100px'], ['offset', 1]])
       ]);
     });
 
@@ -1929,36 +1963,45 @@ describe('animation query tests', function() {
          const elements = parent.querySelectorAll('.item');
 
          const players = getLog();
-         expect(players.length).toEqual(7);
-         const [pA, pc1, pc2, pc3, pc4, pc5, pZ] = players;
+         expect(players.length).toEqual(12);
 
-         expect(pA.element).toEqual(parent);
-         expect(pA.delay).toEqual(0);
-         expect(pA.duration).toEqual(1000);
+         // players:
+         //  - _sc1p, _sc2p, _sc3p, _sc4p (skipped child n (1 to 4) players):
+         //     players for the children animations
+         //  - pp1 (parent player 1): player for parent animation (from opacity 0 to opacity 1)
+         //  - pc1p, pc2p, pc3p, pc4p, pc5p  (parent child n (1 to 4) player):
+         //     players for children animations executed by parent via query and animateChild
+         //  - pp2 (parent player 2): player for parent animation (from opacity 1 to opacity 0)
+         const [_sc1p, _sc2p, _sc3p, _sc4p, _sc5p, pp1, pc1p, pc2p, pc3p, pc4p, pc5p, pp2] =
+             players;
 
-         expect(pc1.element).toEqual(elements[0]);
-         expect(pc1.delay).toEqual(0);
-         expect(pc1.duration).toEqual(4000);
+         expect(pp1.element).toEqual(parent);
+         expect(pp1.delay).toEqual(0);
+         expect(pp1.duration).toEqual(1000);
 
-         expect(pc2.element).toEqual(elements[1]);
-         expect(pc2.delay).toEqual(0);
-         expect(pc2.duration).toEqual(4000);
+         expect(pc1p.element).toEqual(elements[0]);
+         expect(pc1p.delay).toEqual(0);
+         expect(pc1p.duration).toEqual(4000);
 
-         expect(pc3.element).toEqual(elements[2]);
-         expect(pc3.delay).toEqual(0);
-         expect(pc3.duration).toEqual(4000);
+         expect(pc2p.element).toEqual(elements[1]);
+         expect(pc2p.delay).toEqual(0);
+         expect(pc2p.duration).toEqual(4000);
 
-         expect(pc4.element).toEqual(elements[3]);
-         expect(pc4.delay).toEqual(0);
-         expect(pc4.duration).toEqual(4000);
+         expect(pc3p.element).toEqual(elements[2]);
+         expect(pc3p.delay).toEqual(0);
+         expect(pc3p.duration).toEqual(4000);
 
-         expect(pc5.element).toEqual(elements[4]);
-         expect(pc5.delay).toEqual(0);
-         expect(pc5.duration).toEqual(4000);
+         expect(pc4p.element).toEqual(elements[3]);
+         expect(pc4p.delay).toEqual(0);
+         expect(pc4p.duration).toEqual(4000);
 
-         expect(pZ.element).toEqual(parent);
-         expect(pZ.delay).toEqual(4000);
-         expect(pZ.duration).toEqual(1000);
+         expect(pc5p.element).toEqual(elements[4]);
+         expect(pc5p.delay).toEqual(0);
+         expect(pc5p.duration).toEqual(4000);
+
+         expect(pp2.element).toEqual(parent);
+         expect(pp2.delay).toEqual(4000);
+         expect(pp2.duration).toEqual(1000);
        });
 
     it('should silently continue if a sub trigger is animated that doesn\'t exist', () => {
@@ -2111,17 +2154,27 @@ describe('animation query tests', function() {
       engine.flush();
 
       const players = getLog();
-      expect(players.length).toEqual(4);
-      const [pA, pc1, pc2, pZ] = players;
+      expect(players.length).toEqual(6);
 
-      expect(pc1.delay).toEqual(0);
-      expect(pc1.duration).toEqual(2800);
+      // players:
+      //  - _scwp (skipped child w player): player for the child animation (trigger w)
+      //  - _schp (skipped child h player): player for the child animation (trigger h)
+      //  - _pp1 (parent player 1): player for parent animation (from opacity 0 to opacity 1)
+      //  - pcwp (parent child w player):
+      //      player for child w animation executed by parent via query and animateChild
+      //  - pchp (parent child h player):
+      //      player for child w animation executed by parent via query and animateChild
+      //  - pp2 (parent player 2): player for parent animation (from opacity 1 to opacity 0)
+      const [_scwp, _schp, _pp1, pcwp, pchp, pp2] = players;
 
-      expect(pc2.delay).toEqual(0);
-      expect(pc2.duration).toEqual(2500);
+      expect(pcwp.delay).toEqual(0);
+      expect(pcwp.duration).toEqual(2800);
 
-      expect(pZ.delay).toEqual(2800);
-      expect(pZ.duration).toEqual(1000);
+      expect(pchp.delay).toEqual(0);
+      expect(pchp.duration).toEqual(2500);
+
+      expect(pp2.delay).toEqual(2800);
+      expect(pp2.duration).toEqual(1000);
     });
 
     it('should skip a sub animation when a zero duration value is passed in', () => {
@@ -2164,14 +2217,21 @@ describe('animation query tests', function() {
       engine.flush();
 
       const players = getLog();
-      expect(players.length).toEqual(2);
-      const [pA, pZ] = players;
+      expect(players.length).toEqual(3);
 
-      expect(pA.delay).toEqual(0);
-      expect(pA.duration).toEqual(1000);
+      // players:
+      //  - _scp (skipped child player): player for the child animation
+      //  - pp1 (parent player 1): player for parent animation (from opacity 0 to opacity 1)
+      //  - ( the player for the child animation executed by parent via query
+      //      and animateChild is skipped entirely )
+      //  - pp2 (parent player 2): player for parent animation (from opacity 1 to opacity 0)
+      const [_scp, pp1, pp2] = players;
 
-      expect(pZ.delay).toEqual(1000);
-      expect(pZ.duration).toEqual(1000);
+      expect(pp1.delay).toEqual(0);
+      expect(pp1.duration).toEqual(1000);
+
+      expect(pp2.delay).toEqual(1000);
+      expect(pp2.duration).toEqual(1000);
     });
 
     it('should only allow a sub animation to be used up by a parent trigger once', () => {
@@ -2216,14 +2276,23 @@ describe('animation query tests', function() {
       engine.flush();
 
       const players = getLog();
-      expect(players.length).toEqual(3);
+      expect(players.length).toEqual(5);
 
-      const [p1, p2, p3] = players;
+      // players:
+      //  - _scp (skipped child player): player for the child animation
+      // (note: parent2 is evaluated first because it is inside of parent1)
+      //  - p2p (parent 2 player): player for parent animation (from opacity 0 to opacity 1)
+      //  - p2cp (parent 2 child player):
+      //      player for child animation executed by parent 2 via query and animateChild
+      //  - p1p (parent 1 player): player for parent animation (from opacity 0 to opacity 1)
+      //  - p1cp (parent 1 child player):
+      //      player for child animation executed by parent 1 via query and animateChild
+      const [_scp, p2p, p2cp, p1p, p1cp] = players;
 
-      // parent2 is evaluated first because it is inside of parent1
-      expect(p1.element.classList.contains('parent2')).toBeTruthy();
-      expect(p2.element.classList.contains('child')).toBeTruthy();
-      expect(p3.element.classList.contains('parent1')).toBeTruthy();
+      expect(p2p.element.classList.contains('parent2')).toBeTruthy();
+      expect(p2cp.element.classList.contains('child')).toBeTruthy();
+      expect(p1p.element.classList.contains('parent1')).toBeTruthy();
+      expect(p1cp.element.classList.contains('child')).toBeTruthy();
     });
 
     it('should emulate a leave animation on the nearest sub host elements when a parent is removed',
@@ -2364,13 +2433,18 @@ describe('animation query tests', function() {
          fixture.detectChanges();
 
          let players = getLog();
-         expect(players.length).toEqual(1);
-         const [player] = players;
+         expect(players.length).toEqual(2);
 
-         expect(player.element.classList.contains('inner-div')).toBeTruthy();
-         expect(player.keyframes).toEqual([
-           {opacity: '0', offset: 0},
-           {opacity: '1', offset: 1},
+         // players:
+         //  - _scp (skipped child player): player for the child animation
+         //  - pcp (parent child player):
+         //     player for child animation executed by parent via query and animateChild
+         const [_scp, pcp] = players;
+
+         expect(pcp.element.classList.contains('inner-div')).toBeTruthy();
+         expect(pcp.keyframes).toEqual([
+           new Map<string, string|number>([['opacity', '0'], ['offset', 0]]),
+           new Map<string, string|number>([['opacity', '1'], ['offset', 1]]),
          ]);
        });
 
@@ -2454,8 +2528,8 @@ describe('animation query tests', function() {
          expect(player.element.classList.contains('parent')).toBeTruthy();
          expect(realPlayer.element.classList.contains('inner-div')).toBeTruthy();
          expect(realPlayer.keyframes).toEqual([
-           {opacity: '0', offset: 0},
-           {opacity: '1', offset: 1},
+           new Map<string, string|number>([['opacity', '0'], ['offset', 0]]),
+           new Map<string, string|number>([['opacity', '1'], ['offset', 1]]),
          ]);
        });
 
@@ -3052,13 +3126,13 @@ describe('animation query tests', function() {
              AnimationGroupPlayer;
          const childPlayer = groupPlayer.players.find(player => {
            if (player instanceof MockAnimationPlayer) {
-             return matchesElement(player.element, '.child');
+             return player.element.classList.contains('child');
            }
            return false;
          }) as MockAnimationPlayer;
 
-         const keyframes = childPlayer.keyframes.map(kf => {
-           delete kf['offset'];
+         const keyframes = normalizeKeyframes(childPlayer.keyframes).map(kf => {
+           kf.delete('offset');
            return kf;
          });
 
@@ -3141,11 +3215,26 @@ describe('animation query tests', function() {
          fixture.detectChanges();
          engine.flush();
          const players = getLog();
-         expect(players.length).toEqual(5);
-         const [p1, p2, p3, p4, p5] = players;
+         expect(players.length).toEqual(6);
 
-         expect(p5.keyframes).toEqual([
-           {offset: 0, width: '0px'}, {offset: .67, width: '0px'}, {offset: 1, width: '200px'}
+         // players:
+         //  - _sgcp (skipped grand child player): player for the grand child animation
+         //  - _psp (parent self player): player for parent self animation (opacity 0)
+         //  - _pgcp1 (parent grand child player 1):
+         //     player for child animation executed by parent via query (opacity 0)
+         //  - _pp1 (parent player 1): player for parent animation (from opacity 0 to opacity 1)
+         //  - _pgcp2 (parent grand child player 2):
+         //     player for child animation executed by parent via query and animate
+         //     (from opacity 0 to opacity 1)
+         //  - pgcp3 (parent grand child player 3):
+         //     player for child animation executed by parent via query and animateChild
+         //     (from 0px to 200px)
+         const [_sgcp, _psp, _pgcp1, _pp1, _pgcp2, pgcp3] = players;
+
+         expect(pgcp3.keyframes).toEqual([
+           new Map<string, string|number>([['offset', 0], ['width', '0px']]),
+           new Map<string, string|number>([['offset', .67], ['width', '0px']]),
+           new Map<string, string|number>([['offset', 1], ['width', '200px']]),
          ]);
        });
 
@@ -3207,11 +3296,16 @@ describe('animation query tests', function() {
       fixture.detectChanges();
 
       const players = getLog();
-      expect(players.length).toEqual(2);
+      expect(players.length).toEqual(3);
 
-      const [p1, p2] = players;
-      expect(p1.element.classList.contains('container')).toBeTruthy();
-      expect(p2.element.classList.contains('item')).toBeTruthy();
+      // players:
+      //  - _scp (skipped child player): player for the child animation
+      //  - pp (parent player): player for parent animation (from opacity 0 to opacity 1)
+      //  - pcp (parent child player):
+      //      player for child animation executed by parent via query and animateChild
+      const [_scp, pp, pcp] = players;
+      expect(pp.element.classList.contains('container')).toBeTruthy();
+      expect(pcp.element.classList.contains('item')).toBeTruthy();
     });
 
     it('should scope :leave queries between sub animations', () => {
@@ -3273,12 +3367,176 @@ describe('animation query tests', function() {
       fixture.detectChanges();
 
       const players = getLog();
-      expect(players.length).toEqual(2);
+      expect(players.length).toEqual(3);
 
-      const [p1, p2] = players;
-      expect(p1.element.classList.contains('container')).toBeTruthy();
-      expect(p2.element.classList.contains('item')).toBeTruthy();
+      // players:
+      //  - _scp (skipped child player): player for the child animation
+      //  - pp (parent player): player for parent animation (from opacity 0 to opacity 1)
+      //  - pcp (parent child player):
+      //      player for child animation executed by parent via query and animateChild
+      const [_scp, pp, pcp] = players;
+      expect(pp.element.classList.contains('container')).toBeTruthy();
+      expect(pcp.element.classList.contains('item')).toBeTruthy();
     });
+
+    it('should correctly remove a leaving element queried/animated by a parent queried via animateChild',
+       fakeAsync(() => {
+         @Component({
+           selector: 'cmp',
+           template: `
+            <div class="grand-parent" [@grandParentAnimation]="childPresent">
+              <div class="parent" [@parentAnimation]="childPresent">
+              <div *ngIf="childPresent" class="child"></div>
+              </div>
+            </div>
+          `,
+           animations: [
+             trigger(
+                 'grandParentAnimation',
+                 [transition('true <=> false', query('@parentAnimation', animateChild()))]),
+             trigger(
+                 'parentAnimation',
+                 [transition(
+                     'true => false', query(':leave.child', animate('.2s', style({opacity: 0}))))])
+           ]
+         })
+         class Cmp {
+           public childPresent = true;
+         }
+
+         TestBed.configureTestingModule({declarations: [Cmp]});
+
+         const engine = TestBed.inject(ɵAnimationEngine);
+         const fixture = TestBed.createComponent(Cmp);
+         const cmp = fixture.componentInstance;
+         fixture.detectChanges();
+
+         let children = fixture.debugElement.nativeElement.querySelectorAll('.child');
+         expect(children.length).toEqual(1);
+
+         cmp.childPresent = false;
+         fixture.detectChanges();
+         flushMicrotasks();
+
+         engine.players.forEach(player => player.finish());
+
+         children = fixture.debugElement.nativeElement.querySelectorAll('.child');
+         expect(children.length).toEqual(0);
+       }));
+
+    it('should correctly animate state styles of the root element applied via animate inside a group (independently of the order)',
+       () => {
+         @Component({
+        selector: 'cmp',
+        template: `
+          <div class="parent" [@parent]="exp">
+            <div class="child" *ngIf="exp"></div>
+          </div>
+        `,
+        animations: [
+          trigger('parent', [
+            state('true', style({ backgroundColor: 'red' })),
+            state('false', style({ backgroundColor: 'blue' })),
+            transition('true <=> false', [
+              group([
+                animate(500),
+                query(':leave', [
+                  animate(500, style({ opacity: 0 }))
+                ], { optional: true }),
+                query(':enter', [
+                  style({ opacity: 0 }),
+                  animate(500, style({ opacity: '*' }))
+                ], { optional: true }),
+              ])
+            ])
+          ])
+        ]
+      })
+      class Cmp {
+           public exp = true;
+         }
+
+         TestBed.configureTestingModule({declarations: [Cmp]});
+
+         const fixture = TestBed.createComponent(Cmp);
+         const cmp = fixture.componentInstance;
+         fixture.detectChanges();
+
+         cmp.exp = false;
+         fixture.detectChanges();
+
+         const players = getLog();
+         expect(players.length).toEqual(3);
+         // players:
+         //  - _pp1 (parent player 1): player for parent animation (from background red to red)
+         //  - pp2 (parent player 2): player for parent animation (from background red to blue)
+         //  - _cp (child player): player for child animation (from current opacity to 0)
+         const [_pp1, pp2, _cp] = players;
+
+         expect(pp2.element.classList.contains('parent')).toBeTruthy();
+         const expectedKeyframes = [
+           new Map<string, string|number>([['backgroundColor', 'red'], ['offset', 0]]),
+           new Map<string, string|number>([['backgroundColor', 'blue'], ['offset', 1]])
+         ];
+         expect(pp2.keyframes).toEqual(expectedKeyframes);
+       });
+
+    it('should correctly animate state styles of the root element applied via animate inside a sequence (independently of the order)',
+       () => {
+         @Component({
+        selector: 'cmp',
+        template: `
+          <div class="parent" [@parent]="exp">
+            <div class="child" *ngIf="exp"></div>
+          </div>
+        `,
+        animations: [
+          trigger('parent', [
+            state('true', style({ backgroundColor: 'red' })),
+            state('false', style({ backgroundColor: 'blue' })),
+            transition('true <=> false', [
+              sequence([
+                query(':enter', [
+                  style({ opacity: 0 }),
+                  animate(500, style({ opacity: '*' }))
+                ], { optional: true }),
+                animate(500),
+                query(':leave', [
+                  animate(500, style({ opacity: 0 }))
+                ], { optional: true }),
+              ])
+            ])
+          ])
+        ]
+      })
+      class Cmp {
+           public exp = false;
+         }
+
+         TestBed.configureTestingModule({declarations: [Cmp]});
+
+         const fixture = TestBed.createComponent(Cmp);
+         const cmp = fixture.componentInstance;
+         fixture.detectChanges();
+
+         cmp.exp = true;
+         fixture.detectChanges();
+
+         const players = getLog();
+         expect(players.length).toEqual(3);
+         // players:
+         //  - _pp1 (parent player 1): player for parent animation (from background blue to blue)
+         //  - _cp (child player): player for child animation (from opacity 0 to *)
+         //  - pp2 (parent player 2): player for parent animation (from background blue to red)
+         const [_pp1, _cp, pp2] = players;
+
+         expect(pp2.element.classList.contains('parent')).toBeTruthy();
+         const expectedKeyframes = [
+           new Map<string, string|number>([['backgroundColor', 'blue'], ['offset', 0]]),
+           new Map<string, string|number>([['backgroundColor', 'red'], ['offset', 1]]),
+         ];
+         expect(pp2.keyframes).toEqual(expectedKeyframes);
+       });
   });
 
   describe('animation control flags', () => {
@@ -3310,14 +3568,14 @@ describe('animation query tests', function() {
            })
            class Cmp {
              exp: any = '';
-             disableExp = false;
+             disabledExp = false;
            }
 
            TestBed.configureTestingModule({declarations: [Cmp]});
 
            const fixture = TestBed.createComponent(Cmp);
            const cmp = fixture.componentInstance;
-           cmp.disableExp = true;
+           cmp.disabledExp = true;
            fixture.detectChanges();
            resetLog();
 
@@ -3364,14 +3622,14 @@ describe('animation query tests', function() {
            })
            class Cmp {
              exp: any = '';
-             disableExp = false;
+             disabledExp = false;
            }
 
            TestBed.configureTestingModule({declarations: [Cmp]});
 
            const fixture = TestBed.createComponent(Cmp);
            const cmp = fixture.componentInstance;
-           cmp.disableExp = true;
+           cmp.disabledExp = true;
            fixture.detectChanges();
            resetLog();
 
@@ -3385,6 +3643,63 @@ describe('animation query tests', function() {
            expect(p1.duration).toEqual(500);
            expect(p1.element.classList.contains('child')).toBeTrue();
            expect(p2.duration).toEqual(1000);
+           expect(p2.element.classList.contains('parent')).toBeTrue();
+         });
+
+      it('should disable the animation for the given element regardless of existing parent element animation queries or child element animation queries',
+         () => {
+           @Component({
+             selector: 'some-cmp',
+             template: `
+              <div class="parent" [@parentAnimation]="exp">
+                <div class="child" [@.disabled]="disabledExp" [@childAnimation]="exp">
+                  <div class="grand-child" [@grandChildAnimation]="exp"></div>
+                </div>
+              </div>
+            `,
+             animations: [
+               trigger(
+                   'parentAnimation',
+                   [
+                     transition(
+                         '* => go',
+                         [query('@*', animateChild()), animate(1500, style({opacity: 0}))]),
+                   ]),
+               trigger(
+                   'childAnimation',
+                   [
+                     transition('* => go', [animate(1000, style({opacity: 0}))]),
+                   ]),
+               trigger(
+                   'grandChildAnimation',
+                   [
+                     transition('* => go', [animate(500, style({opacity: 0}))]),
+                   ]),
+             ]
+           })
+           class Cmp {
+             exp: any = '';
+             disabledExp = false;
+           }
+
+           TestBed.configureTestingModule({declarations: [Cmp]});
+
+           const fixture = TestBed.createComponent(Cmp);
+           const cmp = fixture.componentInstance;
+           cmp.disabledExp = true;
+           fixture.detectChanges();
+           resetLog();
+
+           cmp.exp = 'go';
+           fixture.detectChanges();
+
+           const players = getLog();
+           expect(players.length).toEqual(2);
+
+           const [p1, p2] = players;
+           expect(p1.duration).toEqual(500);
+           expect(p1.element.classList.contains('grand-child')).toBeTrue();
+           expect(p2.duration).toEqual(1500);
            expect(p2.element.classList.contains('parent')).toBeTrue();
          });
     });

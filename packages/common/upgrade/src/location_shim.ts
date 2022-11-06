@@ -297,7 +297,7 @@ export class $locationShim {
 
   private stripBaseUrl(base: string, url: string) {
     if (url.startsWith(base)) {
-      return url.substr(base.length);
+      return url.slice(base.length);
     }
     return undefined;
   }
@@ -360,7 +360,7 @@ export class $locationShim {
       try {
         fn(url, state, oldUrl, oldState);
       } catch (e) {
-        err(e);
+        err(e as Error);
       }
     });
   }
@@ -437,7 +437,7 @@ export class $locationShim {
 
   private composeUrls() {
     this.$$url = this.urlCodec.normalize(this.$$path, this.$$search, this.$$hash);
-    this.$$absUrl = this.getServerBase() + this.$$url.substr(1);  // remove '/' from front of URL
+    this.$$absUrl = this.getServerBase() + this.$$url.slice(1);  // remove '/' from front of URL
     this.updateBrowser = true;
   }
 

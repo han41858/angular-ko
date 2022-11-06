@@ -46,6 +46,7 @@ export class HashLocationStrategy extends LocationStrategy implements OnDestroy 
     }
   }
 
+  /** @nodoc */
   ngOnDestroy(): void {
     while (this._removeListenerFns.length) {
       this._removeListenerFns.pop()!();
@@ -97,6 +98,10 @@ export class HashLocationStrategy extends LocationStrategy implements OnDestroy 
 
   override back(): void {
     this._platformLocation.back();
+  }
+
+  override getState(): unknown {
+    return this._platformLocation.getState();
   }
 
   override historyGo(relativePosition: number = 0): void {

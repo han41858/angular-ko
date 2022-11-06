@@ -1,4 +1,3 @@
-/* tslint:disable:no-unused-variable */
 // #docregion
 import { Directive, ElementRef } from '@angular/core';
 
@@ -6,7 +5,7 @@ import { Directive, ElementRef } from '@angular/core';
   selector: '[appHighlight]'
 })
 export class HighlightDirective {
-    constructor(el: ElementRef) {
-       el.nativeElement.style.backgroundColor = 'yellow';
+    constructor(private el: ElementRef) {
+       this.el.nativeElement.style.backgroundColor = 'yellow';
     }
 }

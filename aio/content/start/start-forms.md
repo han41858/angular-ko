@@ -27,14 +27,12 @@ The form model determines the status of the form.
 1. Import the `FormBuilder` service from the `@angular/forms` package.
   This service provides convenient methods for generating controls.
 
-  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="imports">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="imports"></code-example>
 
 1. Inject the `FormBuilder` service in the `CartComponent` `constructor()`.
   This service is part of the `ReactiveFormsModule` module, which you've already imported.
 
-  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="inject-form-builder">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="inject-form-builder"></code-example>
 
 1. To gather the user's name and address, use the `FormBuilder` `group()` method to set the `checkoutForm` property to a form model containing `name` and `address` fields.
 
@@ -46,8 +44,7 @@ The form model determines the status of the form.
 
   The entire cart component class is as follows:
 
-  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts"></code-example>
 -->
 이번 섹션에서는 컴포넌트 클래스에 주문 폼 모델을 구성하는 방법을 안내합니다.
 폼 모델은 폼의 상태를 결정합니다.
@@ -55,29 +52,26 @@ The form model determines the status of the form.
 1. `cart.component.ts` 파일을 엽니다.
 
 1. `@angular/forms` 패키지로 제공되는 `FormBuilder` 서비스를 불러옵니다.
-  이 서비스를 활용하면 폼 컨트롤을 간단하게 생성할 수 있습니다.
+   이 서비스를 활용하면 폼 컨트롤을 간단하게 생성할 수 있습니다.
 
-  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="imports">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="imports"></code-example>
 
 1. `FormBuilder` 서비스를 `CartComponent` `constructor()`에 의존성으로 주입합니다.
-  이 서비스는 `ReactiveFormsModule`이 제공하는 서비스이며, 이 모듈은 미리 애플리케이션에 로드되어 있습니다.
+   이 서비스는 `ReactiveFormsModule`이 제공하는 서비스이며, 이 모듈은 미리 애플리케이션에 로드되어 있습니다.
 
-  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="inject-form-builder">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="inject-form-builder"></code-example>
 
 1. 사용자의 이름과 주소를 입력받으려면 `FormBuilder` `group()` 메서드로 `name`과 `address` 필드가 있는 폼 모델을 생성한 후에 `checkoutForm` 프로퍼티에 할당하면 됩니다.
 
   <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts" region="checkout-form-group"></code-example>
 
 1. 폼을 처리하는 `onSubmit()` 메서드를 정의합니다.
-  이 메서드는 사용자가 입력한 이름과 주소를 제출하는 동작을 합니다.
-  그리고 이 메서드는 `CartService` `clearCart()` 메서드를 사용해서 폼을 초기화하고 장바구니를 비웁니다.
+   이 메서드는 사용자가 입력한 이름과 주소를 제출하는 동작을 합니다.
+   그리고 이 메서드는 `CartService` `clearCart()` 메서드를 사용해서 폼을 초기화하고 장바구니를 비웁니다.
 
-  장바구니 컴포넌트 클래스의 전체 코드는 이렇습니다:
+   장바구니 컴포넌트 클래스의 전체 코드는 이렇습니다:
 
-  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.ts" path="getting-started/src/app/cart/cart.component.ts"></code-example>
 
 
 <!--
@@ -92,24 +86,21 @@ Use the following steps to add a checkout form at the bottom of the Cart view.
 
 1. Use a `formGroup` property binding to bind `checkoutForm` to the HTML `<form>`.
 
-  <code-example header="src/app/cart/cart.component.html" path="getting-started/src/app/cart/cart.component.3.html" region="checkout-form">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.html" path="getting-started/src/app/cart/cart.component.3.html" region="checkout-form"></code-example>
 
 1. On the `form` tag, use an `ngSubmit` event binding to listen for the form submission and call the `onSubmit()` method with the `checkoutForm` value.
 
-  <code-example path="getting-started/src/app/cart/cart.component.html" header="src/app/cart/cart.component.html (cart component template detail)" region="checkout-form-1">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.html (cart component template detail)" path="getting-started/src/app/cart/cart.component.html" region="checkout-form-1"></code-example>
 
 1. Add `<input>` fields for `name` and `address`, each with a `formControlName` attribute that binds to the `checkoutForm` form controls for `name` and `address` to their `<input>` fields.
   The complete component is as follows:
 
-  <code-example path="getting-started/src/app/cart/cart.component.html" header="src/app/cart/cart.component.html" region="checkout-form-2">
-  </code-example>
+  <code-example header="src/app/cart/cart.component.html" path="getting-started/src/app/cart/cart.component.html" region="checkout-form-2"></code-example>
 
 After putting a few items in the cart, users can review their items, enter their name and address, and submit their purchase.
 
 <div class="lightbox">
-  <img src='generated/images/guide/start/cart-with-items-and-form.png' alt="Cart view with checkout form">
+  <img alt="Cart view with checkout form" src="generated/images/guide/start/cart-with-items-and-form.png">
 </div>
 
 To confirm submission, open the console to see an object containing the name and address you submitted.
@@ -157,5 +148,6 @@ You have a complete online store application with a product catalog, a shopping 
 이제 온라인샵 애플리케이션에는 상품 목록을 표시하는 화면, 장바구니 기능, 주문 기능이 완성되었습니다.
 
 * 애플리케이션을 Firebase나 로컬 환경에 배포하는 방법을 알아보려면 [배포](start/start-deployment "Try it: Deployment") 문서를 확인해 보세요.
+
 
 @reviewed 2021-09-15

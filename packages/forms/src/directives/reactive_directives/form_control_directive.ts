@@ -8,7 +8,7 @@
 
 import {Directive, EventEmitter, forwardRef, Inject, InjectionToken, Input, OnChanges, OnDestroy, Optional, Output, Self, SimpleChanges} from '@angular/core';
 
-import {FormControl} from '../../model';
+import {FormControl} from '../../model/form_control';
 import {NG_ASYNC_VALIDATORS, NG_VALIDATORS} from '../../validators';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '../control_value_accessor';
 import {NgControl} from '../ng_control';
@@ -123,9 +123,6 @@ export class FormControlDirective extends NgControl implements OnChanges, OnDest
         cleanUpControl(previousForm, this, /* validateControlPresenceOnChange */ false);
       }
       setUpControl(this.form, this);
-      if (this.control.disabled && this.valueAccessor!.setDisabledState) {
-        this.valueAccessor!.setDisabledState!(true);
-      }
       this.form.updateValueAndValidity({emitEvent: false});
     }
     if (isPropertyUpdated(changes, this.viewModel)) {

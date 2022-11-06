@@ -21,7 +21,10 @@ import {ComponentRef} from './linker/component_factory';
  *
  * @publicApi
  */
-export const APP_ID = new InjectionToken<string>('AppId');
+export const APP_ID = new InjectionToken<string>('AppId', {
+  providedIn: 'root',
+  factory: _appIdRandomProviderFactory,
+});
 
 export function _appIdRandomProviderFactory() {
   return `${_randomChar()}${_randomChar()}${_randomChar()}`;
@@ -51,7 +54,10 @@ export const PLATFORM_INITIALIZER = new InjectionToken<Array<() => void>>('Platf
  * A token that indicates an opaque platform ID.
  * @publicApi
  */
-export const PLATFORM_ID = new InjectionToken<Object>('Platform ID');
+export const PLATFORM_ID = new InjectionToken<Object>('Platform ID', {
+  providedIn: 'platform',
+  factory: () => 'unknown',  // set a default platform name, when none set explicitly
+});
 
 /**
  * A [DI token](guide/glossary#di-token "DI token definition") that provides a set of callbacks to
@@ -72,3 +78,15 @@ export const APP_BOOTSTRAP_LISTENER =
  * @publicApi
  */
 export const PACKAGE_ROOT_URL = new InjectionToken<string>('Application Packages Root URL');
+
+// We keep this token here, rather than the animations package, so that modules that only care
+// about which animations module is loaded (e.g. the CDK) can retrieve it without having to
+// include extra dependencies. See #44970 for more context.
+
+/**
+ * A [DI token](guide/glossary#di-token "DI token definition") that indicates which animations
+ * module has been loaded.
+ * @publicApi
+ */
+export const ANIMATION_MODULE_TYPE =
+    new InjectionToken<'NoopAnimations'|'BrowserAnimations'>('AnimationModuleType');

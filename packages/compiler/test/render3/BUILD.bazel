@@ -9,16 +9,14 @@ ts_library(
     deps = [
         "//packages:types",
         "//packages/compiler",
-        "//packages/compiler/test:test_utils",
         "//packages/compiler/test/expression_parser/utils",
-        "//packages/compiler/testing",
         "//packages/core",
     ],
 )
 
 jasmine_node_test(
     name = "test",
-    bootstrap = ["//tools/testing:node_es5"],
+    bootstrap = ["//tools/testing:node_es2015"],
     deps = [
         ":test_lib",
     ],

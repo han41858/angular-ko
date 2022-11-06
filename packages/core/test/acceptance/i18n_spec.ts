@@ -20,12 +20,11 @@ import {TestBed} from '@angular/core/testing';
 import {clearTranslations, loadTranslations} from '@angular/localize';
 import {By, ɵDomRendererFactory2 as DomRendererFactory2} from '@angular/platform-browser';
 import {expect} from '@angular/platform-browser/testing/src/matchers';
-import {onlyInIvy} from '@angular/private/testing';
 import {BehaviorSubject} from 'rxjs';
 
 
 
-onlyInIvy('Ivy i18n logic').describe('runtime i18n', () => {
+describe('runtime i18n', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AppComp, DirectiveWithTplRef, UppercasePipe],
@@ -71,6 +70,22 @@ onlyInIvy('Ivy i18n logic').describe('runtime i18n', () => {
     fixture.componentRef.instance.count = 5;
     fixture.detectChanges();
     expect(fixture.nativeElement.innerHTML).toEqual(`<div> Bonjour John! Emails: 5 </div>`);
+  });
+
+  it('should support named interpolations with the same name', () => {
+    loadTranslations(
+        {[computeMsgId(' Hello {$PH_NAME} {$PH_NAME_1}! ')]: ' Bonjour {$PH_NAME} {$PH_NAME_1}! '});
+    const fixture = initWithTemplate(AppComp, `
+      <div i18n>
+        Hello {{ name // i18n(ph="ph_name") }} {{ description // i18n(ph="ph_name") }}!
+      </div>
+    `);
+    expect(fixture.nativeElement.innerHTML).toEqual(`<div> Bonjour Angular Web Framework! </div>`);
+    fixture.componentRef.instance.name = 'Other';
+    fixture.componentRef.instance.description = 'Backend Framework';
+    fixture.detectChanges();
+    expect(fixture.nativeElement.innerHTML)
+        .toEqual(`<div> Bonjour Other Backend Framework! </div>`);
   });
 
   it('should support interpolations with custom interpolation config', () => {
@@ -543,10 +558,6 @@ onlyInIvy('Ivy i18n logic').describe('runtime i18n', () => {
       TestBed.configureTestingModule({
         providers: [
           {provide: DOCUMENT, useFactory: _document, deps: []},
-          // TODO(FW-811): switch back to default server renderer (i.e. remove the line
-          // below) once it starts to support Ivy namespace format (URIs) correctly. For
-          // now, use `DomRenderer` that supports Ivy namespace format.
-          {provide: RendererFactory2, useClass: DomRendererFactory2}
         ],
       });
     });
@@ -2480,7 +2491,7 @@ onlyInIvy('Ivy i18n logic').describe('runtime i18n', () => {
       @Component({selector: 'div-query', template: '<ng-container #vc></ng-container>'})
       class DivQuery {
         // TODO(issue/24571): remove '!'.
-        @ContentChild(TemplateRef, {static: true}) template !: TemplateRef<any>;
+        @ContentChild(TemplateRef, {static: true}) template!: TemplateRef<any>;
 
         // TODO(issue/24571): remove '!'.
         @ViewChild('vc', {read: ViewContainerRef, static: true}) vc!: ViewContainerRef;
@@ -3093,6 +3104,7 @@ function initWithTemplate(compType: Type<any>, template: string) {
 @Component({selector: 'app-comp', template: ``})
 class AppComp {
   name = `Angular`;
+  description = `Web Framework`;
   visible = true;
   count = 0;
 }

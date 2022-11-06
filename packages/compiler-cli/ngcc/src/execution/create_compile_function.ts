@@ -55,7 +55,8 @@ export function getCreateCompileFn(
         return;
       }
 
-      logger.info(`Compiling ${entryPoint.name} : ${formatProperty} as ${format}`);
+      logger.info(
+          `- ${entryPoint.name} [${formatProperty}/${format}] (${entryPoint.repositoryUrl})`);
 
       const bundle = makeEntryPointBundle(
           fileSystem, entryPoint, sharedFileCache, moduleResolutionCache, formatPath, isCore,

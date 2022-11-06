@@ -35,34 +35,39 @@ Angular 프로젝트에 커스텀 스키매틱을 정의해서 활용할 수 있
 <!--
 The public API for schematics defines classes that represent the basic concepts.
 
-* The virtual file system is represented by a `Tree`.   The `Tree` data structure contains a *base* (a set of files that already exists) and a *staging area* (a list of changes to be applied to the base).
-When making modifications, you don't actually change the base, but add those modifications to the staging area.
+*   The virtual file system is represented by a `Tree`.
+    The `Tree` data structure contains a *base* \(a set of files that already exists\) and a *staging area* \(a list of changes to be applied to the base\).
+    When making modifications, you don't actually change the base, but add those modifications to the staging area.
 
-* A `Rule` object defines a function that takes a `Tree`, applies transformations, and returns a new `Tree`. The main file for a schematic, `index.ts`, defines a set of rules that implement the schematic's logic.
+*   A `Rule` object defines a function that takes a `Tree`, applies transformations, and returns a new `Tree`.
+    The main file for a schematic, `index.ts`, defines a set of rules that implement the schematic's logic.
 
-* A transformation is represented by an `Action`. There are four action types: `Create`, `Rename`, `Overwrite`, and `Delete`.
+*   A transformation is represented by an `Action`.
+    There are four action types: `Create`, `Rename`, `Overwrite`, and `Delete`.
 
-* Each schematic runs in a context, represented by a `SchematicContext` object.
+*   Each schematic runs in a context, represented by a `SchematicContext` object.
 
 The context object passed into a rule provides access to utility functions and metadata that the schematic might need to work with, including a logging API to help with debugging.
-The context also defines a *merge strategy* that determines how changes are merged from the staged tree into the base tree. A change can be accepted or ignored, or throw an exception.
+The context also defines a *merge strategy* that determines how changes are merged from the staged tree into the base tree.
+A change can be accepted or ignored, or throw an exception.
 -->
 스키매틱의 퍼블릭 API는 아래와 같은 컨셉을 클래스로 정의한 것입니다.
 
-* 가상 파일 시스템은 `Tree`로 표현합니다. 이 `Tree` 데이터 구조에는 지금 프로젝트에 있는 파일을 의미하는 *베이스(base)*가 있고, 수정된 내용을 모아두는 *스테이징 영역(staging area)*이 있습니다.
-스키매틱이 실행될 때 수정하는 것은 베이스가 아닙니다.
-수정사항은 스테이징 영역에 누적됩니다.
+*   가상 파일 시스템은 `Tree`로 표현합니다.
+    이 `Tree` 데이터 구조에는 지금 프로젝트에 있는 파일을 의미하는 *베이스(base)*가 있고, 수정된 내용을 모아두는 *스테이징 영역(staging area)*이 있습니다.
+    스키매틱이 실행될 때 수정하는 것은 베이스가 아닙니다.
+    수정사항은 스테이징 영역에 누적됩니다.
 
-* `Rule` 객체는 `Tree` 인자를 받아서 변환작업을 수행하고 다시 `Tree`를 반환하는 함수입니다.
-이 문서에서는 `Rule` 객체를 `index.ts` 파일에 정의하는데, 이 객체가 스키매틱 로직의 핵심입니다.
+*   `Rule` 객체는 `Tree` 인자를 받아서 변환작업을 수행하고 다시 `Tree`를 반환하는 함수입니다.
+    이 문서에서는 `Rule` 객체를 `index.ts` 파일에 정의하는데, 이 객체가 스키매틱 로직의 핵심입니다.
 
-* 변환작업은 `Action`이라고 합니다.
-액션 타입은 `Create`, `Rename`, `Overwrite`, `Delete` 이렇게 4종류입니다.
+*   변환작업은 `Action`이라고 합니다.
+    액션 타입은 `Create`, `Rename`, `Overwrite`, `Delete` 이렇게 4종류입니다.
 
-* 스키매틱이 실행되는 컨텍스트는 `SchematicContext` 객체로 표현합니다.
+*   스키매틱이 실행되는 컨텍스트는 `SchematicContext` 객체로 표현합니다.
 
 룰은 인자로 컨텍스트 객체를 인자로 받기 때문에 컨텍스트 객체를 활요하면 디버깅용 로그 API 등 스키매틱에 필요한 유틸리티 함수나 메타데이터를 참조할 수 있습니다.
-컨텍스트에는 *머지 정책(merge strategy)*도 정의되어 있습니다.
+컨텍스트에는 *머지 정책\(merge strategy\)* 도 정의되어 있습니다.
 이 정책은 스테이징 트리에서 베이스 트리로 수정사항을 반영할 때 어떤 정책을 따를지 지정하는 것입니다.
 스키매틱은 변경사항을 베이스 트리에 반영할 수 있지만, 무시할 수도 있고, 에러를 발생시킬 수도 있습니다.
 
@@ -76,24 +81,27 @@ The context also defines a *merge strategy* that determines how changes are merg
 When you create a new blank schematic with the [Schematics CLI](#cli), the generated entry function is a *rule factory*.
 A `RuleFactory` object defines a higher-order function that creates a `Rule`.
 
-<code-example language="TypeScript" header="index.ts">
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+<code-example header="index.ts" language="typescript">
+
+import { Rule, SchematicContext, Tree } from '&commat;angular-devkit/schematics';
 
 // You don't have to export the function as default.
 // You can also have more than one rule factory per file.
 export function helloWorld(_options: any): Rule {
- return (tree: Tree, _context: SchematicContext) => {
+ return (tree: Tree, _context: SchematicContext) =&gt; {
    return tree;
  };
 }
+
 </code-example>
 
 Your rules can make changes to your projects by calling external tools and implementing logic.
 You need a rule, for example, to define how a template in the schematic is to be merged into the hosting project.
 
-Rules can make use of utilities provided with the `@schematics/angular` package. Look for helper functions for working with modules, dependencies, TypeScript, AST, JSON, Angular CLI workspaces and projects, and more.
+Rules can make use of utilities provided with the `@schematics/angular` package.
+Look for helper functions for working with modules, dependencies, TypeScript, AST, JSON, Angular CLI workspaces and projects, and more.
 
-<code-example language="TypeScript" header="index.ts">
+<code-example header="index.ts" language="typescript">
 
 import {
   JsonAstObject,
@@ -103,32 +111,34 @@ import {
   normalize,
   parseJsonAst,
   strings,
-} from '&#64;angular-devkit/core';
+} from '&commat;angular-devkit/core';
 
 </code-example>
 -->
 [스키매틱 CLI](#cli)로 스키매틱을 새로 만들 때 이 스키매틱의 진입 점은 *룰 팩토리* 입니다.
 `RuleFactory` 객체는 말 그대로 `Rule`을 반환하는 상위 함수입니다.
 
-<code-example language="TypeScript" header="index.ts">
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+<code-example header="index.ts" language="typescript">
+
+import { Rule, SchematicContext, Tree } from '&commat;angular-devkit/schematics';
 
 // 이 함수를 export로 지정하지 않아도 됩니다.
 // 그리고 파일 하나에 룰 팩토리를 여러개 정의해도 됩니다.
 export function helloWorld(_options: any): Rule {
- return (tree: Tree, _context: SchematicContext) => {
+ return (tree: Tree, _context: SchematicContext) =&gt; {
    return tree;
  };
 }
+
 </code-example>
 
 룰은 자체 로직이나 외부 툴을 사용해서 프로젝트를 수정할 수 있습니다.
 결국 스키매틱이 프로젝트에 어떻게 반영될지 정의하는 것은 룰이기 때문에 룰을 잘 정의하는 것이 중요합니다.
 
 룰은 `@schematics/angular` 패키지처럼 유틸리티로 활용될 수도 있습니다.
-모듈, 의존성 패키지, TypeScript, AST(Abstract Syntax Tree), JSON, Angular CLI 워크스페이스, 프로젝트 등에 다양하게 활용할 수 있는 헬퍼 함수에 대해서도 확인해 보세요.
+모듈, 의존성 패키지, TypeScript, AST\(Abstract Syntax Tree\), JSON, Angular CLI 워크스페이스, 프로젝트 등에 다양하게 활용할 수 있는 헬퍼 함수에 대해서도 확인해 보세요.
 
-<code-example language="TypeScript" header="index.ts">
+<code-example header="index.ts" language="typescript">
 
 import {
   JsonAstObject,
@@ -138,7 +148,7 @@ import {
   normalize,
   parseJsonAst,
   strings,
-} from '&#64;angular-devkit/core';
+} from '&commat;angular-devkit/core';
 
 </code-example>
 
@@ -155,14 +165,8 @@ Define variable or enumerated data types for the schema using TypeScript interfa
 
 The schema defines the types and default values of variables used in the schematic.
 For example, the hypothetical "Hello World" schematic might have the following schema.
--->
-룰은 실행하는 시점이나 템플릿에서 활용될 때 입력값을 추가로 받을 수 있습니다.
-이 때 사용하는 입력값의 종류, 기본값, 사용할 수 있는 값은 스키매틱의 JSON 스키마 파일인 `<스키매틱>/schema.json` 파일에 정의합니다.
-그리고 TypeScript 인터페이스를 사용해서 이 스키마에 사용할 수 있는 enum 데이터 타입을 더 지정할 수도 있습니다.
 
-아래 스키마 파일은 "Hello World" 스키매틱에 사용되는 값의 종류와 기본값을 정의하는 파일입니다.
-
-<code-example language="json" header="src/hello-world/schema.json">
+<code-example header="src/hello-world/schema.json" language="json">
 
 {
     "properties": {
@@ -178,11 +182,31 @@ For example, the hypothetical "Hello World" schematic might have the following s
 }
 </code-example>
 
-
-<!--
-See examples of schema files for the Angular CLI command schematics in [`@schematics/angular`](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json).
+See examples of schema files for the Angular CLI command schematics in [`@schematics/angular`](https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json).
 -->
-스키마 파일에 대해 더 알아보려면 Angular CLI 명령 스키마가 정의되어 있는 [`@schematics/angular` 파일](https://github.com/angular/angular-cli/blob/master/packages/schematics/angular/application/schema.json)을 확인해보는 것도 좋습니다.
+룰은 실행하는 시점이나 템플릿에서 활용될 때 입력값을 추가로 받을 수 있습니다.
+이 때 사용하는 입력값의 종류, 기본값, 사용할 수 있는 값은 스키매틱의 JSON 스키마 파일인 `<스키매틱>/schema.json` 파일에 정의합니다.
+그리고 TypeScript 인터페이스를 사용해서 이 스키마에 사용할 수 있는 enum 데이터 타입을 더 지정할 수도 있습니다.
+
+아래 스키마 파일은 "Hello World" 스키매틱에 사용되는 값의 종류와 기본값을 정의하는 파일입니다.
+
+<code-example header="src/hello-world/schema.json" language="json">
+
+{
+    "properties": {
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "default": "world"
+        },
+        "useColor": {
+            "type": "boolean"
+        }
+    }
+}
+</code-example>
+
+스키마 파일에 대해 더 알아보려면 Angular CLI 명령 스키마가 정의되어 있는 [`@schematics/angular` 파일](https://github.com/angular/angular-cli/blob/main/packages/schematics/angular/application/schema.json)을 확인해보는 것도 좋습니다.
 
 
 <!--
@@ -196,11 +220,31 @@ Configure schematic options to display a customizable question to the user.
 The prompts are displayed before the execution of the schematic, which then uses the response as the value for the option.
 This lets users direct the operation of the schematic without requiring in-depth knowledge of the full spectrum of available options.
 
-The "Hello World" schematic might, for example, ask the user for their name, and display that name in place of the default name "world". To define such a prompt, add an `x-prompt` property to the schema for the `name` variable.
+The "Hello World" schematic might, for example, ask the user for their name, and display that name in place of the default name "world".
+To define such a prompt, add an `x-prompt` property to the schema for the `name` variable.
 
-Similarly, you can add a prompt to let the user decide whether the schematic uses color when executing its hello action. The schema with both prompts would be as follows.
+Similarly, you can add a prompt to let the user decide whether the schematic uses color when executing its hello action.
+The schema with both prompts would be as follows.
+
+<code-example header="src/hello-world/schema.json" language="json">
+
+{
+    "properties": {
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "default": "world",
+            "x-prompt": "What is your name?"
+        },
+        "useColor": {
+            "type": "boolean",
+            "x-prompt": "Would you like the response in color?"
+        }
+    }
+}
+</code-example>
 -->
-스키매틱에 *프롬프트(prompt)*를 추가하면 스키매틱을 실행하면서 사용자와 직접 상호작용하면서 스키매틱 설정값을 사용자에게 받을 수도 있습니다.
+스키매틱에 *프롬프트\(prompt\)*를 추가하면 스키매틱을 실행하면서 사용자와 직접 상호작용하면서 스키매틱 설정값을 사용자에게 받을 수도 있습니다.
 프롬프트는 보통 스키매틱 로직을 실행하기 전에 입력값에 대한 정보를 제공하는 용도로 사용합니다.
 물론 사용자가 스키매틱 사용법에 익숙하다면 이 과정 없이 스키매틱을 바로 실행할 수도 있습니다.
 
@@ -211,7 +255,7 @@ Similarly, you can add a prompt to let the user decide whether the schematic use
 이 방식과 비슷하게 액션에 사용할 색상을 입력받는 것도 물론 가능합니다.
 스키마에는 프롬프트를 여러개 정의할 수 있습니다.
 
-<code-example language="json" header="src/hello-world/schema.json">
+<code-example header="src/hello-world/schema.json" language="json">
 
 {
     "properties": {
@@ -246,23 +290,45 @@ In this case, "yes" corresponds to `true` and "no" corresponds to `false`.
 
 There are three supported input types.
 
-| Input type | Description |
-| :----------- | :-------------------|
-| confirmation | A yes or no question; ideal for Boolean options. |
-| input | Textual input; ideal for string or number options. |
-| list | A predefined set of allowed values. |
+| Input type   | Details |
+|:---          |:----    |
+| confirmation | A yes or no question; ideal for Boolean options.   |
+| input        | Textual input; ideal for string or number options. |
+| list         | A predefined set of allowed values.                |
 
 In the short form, the type is inferred from the property's type and constraints.
 
-| Property Schema |	Prompt Type |
-| :--------------- | :------------- |
-| "type": "boolean" |	confirmation ("yes"=`true`, "no"=`false`) |
-| "type": "string"  |	input |
-| "type": "number"  |	input (only valid numbers accepted) |
-| "type": "integer" |	input (only valid numbers accepted) |
-| "enum": [...]   	| list 	(enum members become list selections) |
+| Property schema |	Prompt type |
+|:---             |:---         |
+| "type": "boolean"  | confirmation \("yes"=`true`, "no"=`false`\)  |
+| "type": "string"   | input                                        |
+| "type": "number"   | input \(only valid numbers accepted\)        |
+| "type": "integer"  | input \(only valid numbers accepted\)        |
+| "enum": [&hellip;] | list \(enum members become list selections\) |
 
 In the following example, the property takes an enumerated value, so the schematic automatically chooses the list type, and creates a menu from the possible values.
+
+<code-example header="schema.json" language="json">
+
+"style": {
+  "description": "The file extension or preprocessor to use for style files.",
+  "type": "string",
+  "default": "css",
+  "enum": [
+    "css",
+    "scss",
+    "sass",
+    "less",
+    "styl"
+  ],
+  "x-prompt": "Which stylesheet format would you like to use?"
+}
+
+</code-example>
+
+The prompt runtime automatically validates the provided response against the constraints provided in the JSON schema.
+If the value is not acceptable, the user is prompted for a new value.
+This ensures that any values passed to the schematic meet the expectations of the schematic's implementation, so that you do not need to add additional checks within the schematic's code.
 -->
 지금까지는 질문에 대한 답을 간단하게 선택하는 방식으로 프롬프트를 구현해봤습니다.
 대부분의 경우에 여기까지만 구현해도 충분합니다.
@@ -273,47 +339,42 @@ In the following example, the property takes an enumerated value, so the schemat
 
 입력 타입으로는 아래와 같이 3가지 종류를 사용할 수 있습니다.
 
-| 입력 타입 | 설명 |
-| :----------- | :-------------------|
-| confirmation | 예/아니오 - 불리언 타입일 때 사용합니다. |
-| input | 텍스트 입력 - 문자열이나 숫자 타입일 때 사용합니다. |
-| list | 미리 정해진 목록에서 선택할 때 사용합니다. |
+| 입력 타입        | 설명                             |
+|:-------------|:-------------------------------|
+| confirmation | 예/아니오 - 불리언 타입일 때 사용합니다.       |
+| input        | 텍스트 입력 - 문자열이나 숫자 타입일 때 사용합니다. |
+| list         | 미리 정해진 목록에서 선택할 때 사용합니다.       |
 
 간단한 문법을 사용하면 프로퍼티 타입에 따라 다음과 같이 입력 타입이 추론되어 동작합니다.
 
-| 프로퍼티 프키마 | 프롬프트 타입 Type |
-| :--------------- | :------------- |
-| "type": "boolean" | confirmation ("yes"=`true`, "no"=`false`) |
-| "type": "string"  | input |
-| "type": "number"  | input (형식에 맞을 때만 유효함) |
-| "type": "integer" | input (형식에 맞을 때만 유효함) |
-| "enum": [...]     | list  (enum으로 작성한 항목 중 선택) |
+| 프로퍼티 스키마           | 	프롬프트 타입                                    |
+|:-------------------|:--------------------------------------------|
+| "type": "boolean"  | confirmation \("yes"=`true`, "no"=`false`\) |
+| "type": "string"   | input                                       |
+| "type": "number"   | input \(형식에 맞을 때만 유효함\)                     |
+| "type": "integer"  | input \(형식에 맞을 때만 유효함\)                     |
+| "enum": [&hellip;] | list \(enum으로 작성한 항목 중 선택\)                 |
 
 그래서 아래와 같이 `enum` 배열로 스키마를 정의하면 프롬프트를 실행할 때 `list` 타입으로 동작합니다.
 
-<code-example language="json" header="schema.json">
+<code-example header="schema.json" language="json">
 
-    "style": {
-      "description": "The file extension or preprocessor to use for style files.",
-      "type": "string",
-      "default": "css",
-      "enum": [
-        "css",
-        "scss",
-        "sass",
-        "less",
-        "styl"
-      ],
-      "x-prompt": "Which stylesheet format would you like to use?"
-    }
+"style": {
+  "description": "The file extension or preprocessor to use for style files.",
+  "type": "string",
+  "default": "css",
+  "enum": [
+    "css",
+    "scss",
+    "sass",
+    "less",
+    "styl"
+  ],
+  "x-prompt": "Which stylesheet format would you like to use?"
+}
 
 </code-example>
 
-<!--
-The prompt runtime automatically validates the provided response against the constraints provided in the JSON schema.
-If the value is not acceptable, the user is prompted for a new value.
-This ensures that any values passed to the schematic meet the expectations of the schematic's implementation, so that you do not need to add additional checks within the schematic's code.
--->
 프로퍼티에 값을 입력하면 JSON 스키마에 정의된 규칙에 따라 입력값이 유효한지 자동으로 검사하며, 입력값이 유효하지 않으면 새로운 값을 다시 받습니다.
 그렇기 때문에 스키매틱이 받는 값은 이미 유효한 것으로 간주할 수 있습니다.
 스키매틱 구현 로직에 유효성 검사 로직을 따로 구현할 필요가 없습니다.
@@ -328,49 +389,79 @@ This ensures that any values passed to the schematic meet the expectations of th
 The `x-prompt` field syntax supports a long form for cases where you require additional customization and control over the prompt.
 In this form, the `x-prompt` field value is a JSON object with subfields that customize the behavior of the prompt.
 
-| Field |	Data Value |
-| :----------- | :------ |
-| type    | `confirmation`, `input`, or `list` (selected automatically in short form) |
-| message |	string (required) |
-| items   |	string and/or label/value object pair (only valid with type `list`) |
+| Field   | Data value |
+|:---     |:---        |
+| type    | `confirmation`, `input`, or `list` \(selected automatically in short form\) |
+| message | string \(required\)                                                         |
+| items   | string and/or label/value object pair \(only valid with type `list`\)       |
 
 The following example of the long form is from the JSON schema for the schematic that the CLI uses to [generate applications](https://github.com/angular/angular-cli/blob/ba8a6ea59983bb52a6f1e66d105c5a77517f062e/packages/schematics/angular/application/schema.json#L56).
 It defines the prompt that lets users choose which style preprocessor they want to use for the application being created.
 By using the long form, the schematic can provide more explicit formatting of the menu choices.
+
+<code-example header="package/schematics/angular/application/schema.json" language="json">
+
+"style": {
+  "description": "The file extension or preprocessor to use for style files.",
+  "type": "string",
+  "default": "css",
+  "enum": [
+    "css",
+    "scss",
+    "sass",
+    "less"
+  ],
+  "x-prompt": {
+    "message": "Which stylesheet format would you like to use?",
+    "type": "list",
+    "items": [
+      { "value": "css",  "label": "CSS" },
+      { "value": "scss", "label": "SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]" },
+      { "value": "sass", "label": "Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]" },
+      { "value": "less", "label": "Less   [ http://lesscss.org/                                            ]" }
+    ]
+  },
+},
+
+</code-example>
 -->
 프롬프트로 값을 받을 때 커스터마이징을 더 하려면 확장 문법을 사용할 수 있습니다.
 이 방식은 `x-prompt` 필드에 문자열 대신 JSON 객체를 사용해서 프롬프트의 세부 사항을 지정하는 방식입니다.
 
-| 필드 | 데이터 값 |
-| :----------- | :------ |
-| type    | `confirmation`, `input`, `list` (간단한 문법에서는 자동으로 선택됨) |
-| message | 문자열 (필수) |
-| items   | 문자열, label/value 객체 (타입이 `list`인 경우만) |
+| 필드      | 데이터 값                                                  |
+|:--------|:-------------------------------------------------------|
+| type    | `confirmation`, `input`, `list` \(간단한 문법에서는 자동으로 선택됨\) |
+| message | 문자열 \(필수\)                                             |
+| items   | 문자열, label/value 객체 \(타입이 `list`인 경우만\)                |
 
+아래 예제는 [애플리케이션을 생성](https://github.com/angular/angular-cli/blob/ba8a6ea59983bb52a6f1e66d105c5a77517f062e/packages/schematics/angular/application/schema.json#L56)하는 Angular CLI 동작의 일부를 확장 문법으로 구현한 JSON 스키매틱입니다.
+애플리케이션을 생성할 때 스타일 전처리기를 고르도록 유도하는데, 이 내용을 정의하고 있습니다.
+확장문법을 사용하면 선택하는 항목에 대해 더 명확한 설명을 제공할 수 있습니다.
 
-<code-example language="json" header="package/schematics/angular/application/schema.json">
+<code-example header="package/schematics/angular/application/schema.json" language="json">
 
-    "style": {
-      "description": "The file extension or preprocessor to use for style files.",
-      "type": "string",
-      "default": "css",
-      "enum": [
-        "css",
-        "scss",
-        "sass",
-        "less"
-      ],
-      "x-prompt": {
-        "message": "Which stylesheet format would you like to use?",
-        "type": "list",
-        "items": [
-          { "value": "css",  "label": "CSS" },
-          { "value": "scss", "label": "SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]" },
-          { "value": "sass", "label": "Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]" },
-          { "value": "less", "label": "Less   [ http://lesscss.org/                                            ]" }
-        ]
-      },
-    },
+"style": {
+  "description": "The file extension or preprocessor to use for style files.",
+  "type": "string",
+  "default": "css",
+  "enum": [
+    "css",
+    "scss",
+    "sass",
+    "less"
+  ],
+  "x-prompt": {
+    "message": "Which stylesheet format would you like to use?",
+    "type": "list",
+    "items": [
+      { "value": "css",  "label": "CSS" },
+      { "value": "scss", "label": "SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]" },
+      { "value": "sass", "label": "Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]" },
+      { "value": "less", "label": "Less   [ http://lesscss.org/                                            ]" }
+    ]
+  },
+},
+
 </code-example>
 
 <!--
@@ -382,12 +473,46 @@ By using the long form, the schematic can provide more explicit formatting of th
 The JSON schema that defines a schematic's options supports extensions to allow the declarative definition of prompts and their respective behavior.
 No additional logic or changes are required to the code of a schematic to support the prompts.
 The following JSON schema is a complete description of the long-form syntax for the `x-prompt` field.
+
+<code-example header="x-prompt schema" language="json">
+
+{
+    "oneOf": [
+        { "type": "string" },
+        {
+            "type": "object",
+            "properties": {
+                "type": { "type": "string" },
+                "message": { "type": "string" },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            { "type": "string" },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "label": { "type": "string" },
+                                    "value": { }
+                                },
+                                "required": [ "value" ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "required": [ "message" ]
+        }
+    ]
+}
+
+</code-example>
 -->
 확장 문법으로 프롬프트를 정의하는 문법은 모두 JSON 스키마로 정의되어 있습니다.
 그리고 스키매틱에 프롬프트를 자세하게 추가한다고 해도 스키매틱의 로직 자체를 수정할 필요는 없습니다.
 아래 JSON 스키마는 `x-prompt` 필드에 사용할 수 있는 확장 문법을 정의한 것입니다.
 
-<code-example language="json" header="x-prompt schema">
+<code-example header="x-prompt schema" language="json">
 
 {
     "oneOf": [
@@ -422,7 +547,7 @@ The following JSON schema is a complete description of the long-form syntax for 
 </code-example>
 
 
-{@a cli}
+<a id="cli"></a>
 
 <!--
 ## Schematics CLI
@@ -432,15 +557,13 @@ The following JSON schema is a complete description of the long-form syntax for 
 <!--
 Schematics come with their own command-line tool.
 Using Node 6.9 or later, install the Schematics command line tool globally:
--->
-스키매틱은 자체 커맨드라인 툴을 제공합니다.
-그래서 Node 6.9 이상 버전에서 다음 명령을 실행하면 스키매틱 커맨드라인 툴을 전역에 설치할 수 있습니다:
 
-<code-example language="bash">
-npm install -g @angular-devkit/schematics-cli
+<code-example format="shell" language="shell">
+
+npm install -g &commat;angular-devkit/schematics-cli
+
 </code-example>
 
-<!--
 This installs the `schematics` executable, which you can use to create a new schematics collection in its own project folder, add a new schematic to an existing collection, or extend an existing schematic.
 
 In the following sections, you will create a new schematics collection using the CLI to introduce the files and file structure, and some of the basic concepts.
@@ -449,6 +572,15 @@ The most common use of schematics, however, is to integrate an Angular library w
 Do this by creating the schematic files directly within the library project in an Angular workspace, without using the Schematics CLI.
 See [Schematics for Libraries](guide/schematics-for-libraries).
 -->
+스키매틱은 자체 커맨드라인 툴을 제공합니다.
+그래서 Node 6.9 이상 버전에서 다음 명령을 실행하면 스키매틱 커맨드라인 툴을 전역에 설치할 수 있습니다:
+
+<code-example format="shell" language="shell">
+
+npm install -g &commat;angular-devkit/schematics-cli
+
+</code-example>
+
 그러면 `schematics` 실행파일이 설치됩니다.
 이 파일을 사용하면 새로운 스키매틱 컬렉션을 생성할 수 있고, 이미 존재하는 컬렉션에 새 스키매틱을 추가할 수 있으며, 스키매틱 자체를 확장할 수도 있습니다.
 
@@ -468,19 +600,25 @@ See [Schematics for Libraries](guide/schematics-for-libraries).
 <!--
 The following command creates a new schematic named `hello-world` in a new project folder of the same name.
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 schematics blank --name=hello-world
+
 </code-example>
 
-The `blank` schematic is provided by the Schematics CLI. The command creates a new project folder (the root folder for the collection) and an initial named schematic in the collection.
+The `blank` schematic is provided by the Schematics CLI.
+The command creates a new project folder \(the root folder for the collection\) and an initial named schematic in the collection.
 
-Go to the collection folder, install your npm dependencies, and open your new collection in your favorite editor to see the generated files. For example, if you are using VSCode:
+Go to the collection folder, install your npm dependencies, and open your new collection in your favorite editor to see the generated files.
+For example, if you are using VS Code:
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 cd hello-world
 npm install
 npm run build
 code .
+
 </code-example>
 
 The initial schematic gets the same name as the project folder, and is generated in `src/hello-world`.
@@ -489,8 +627,10 @@ Each schematic name must be unique within the collection.
 -->
 다음 명령을 실행하면 `hello-world` 프로젝트가 생성되고 이 프로젝트 폴더 안에 `hello-world` 스키매틱이 생성됩니다.
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 schematics blank --name=hello-world
+
 </code-example>
 
 `blank` 스키매틱은 스키매틱 CLI가 제공하는 스키매틱입니다.
@@ -499,11 +639,13 @@ schematics blank --name=hello-world
 이제 컬렉션 폴더로 이동해서 npm 패키지들을 설치하고 맘에 드는 에디터로 이 폴더를 열어봅시다.
 VSCode를 사용하려면 이런 순서로 진행합니다:
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 cd hello-world
 npm install
 npm run build
 code .
+
 </code-example>
 
 처음 스키매틱을 생성할 때 지정한 이름으로 프로젝트 폴더가 생성되었고 스키매틱은 `src/hello-world`에 생성되었습니다.
@@ -520,30 +662,38 @@ code .
 Use the `schematics` command to run a named schematic.
 Provide the path to the project folder, the schematic name, and any mandatory options, in the following format.
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 schematics &lt;path-to-schematics-project&gt;:&lt;schematics-name&gt; --&lt;required-option&gt;=&lt;value&gt;
+
 </code-example>
 
 The path can be absolute or relative to the current working directory where the command is executed.
-For example, to run the schematic you just generated (which has no required options), use the following command.
+For example, to run the schematic you just generated \(which has no required options\), use the following command.
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 schematics .:hello-world
+
 </code-example>
 -->
 `schematics` 명령은 스키매틱을 실행할 때도 사용합니다.
 다음과 같이 실행하면 됩니다:
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 schematics &lt;스키매틱-프로젝트-경로&gt;:&lt;스키매틱-이름&gt; --&lt;필수-옵션&gt;=&lt;값&gt;
+
 </code-example>
 
 이 때 경로는 절대경로로 지정하거나 현재 폴더의 상대경로 모두 가능합니다.
 그래서 이전에 만든 스키매틱을 단순하게 실행하려면 다음 명령을 실행하면 됩니다.
-(이 스키매틱에는 필수 옵션이 없습니다.)
+\(이 스키매틱에는 필수 옵션이 없습니다.\)
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 schematics .:hello-world
+
 </code-example>
 
 
@@ -555,9 +705,11 @@ schematics .:hello-world
 <!--
 To add a schematic to an existing collection, use the same command you use to start a new schematics project, but run the command inside the project folder.
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 cd hello-world
 schematics blank --name=goodbye-world
+
 </code-example>
 
 The command generates the new named schematic inside your collection, with a main `index.ts` file and its associated test spec.
@@ -566,9 +718,11 @@ It also adds the name, description, and factory function for the new schematic t
 컬렉션에 스키매틱을 추가하려면 스키매틱 프로젝트를 생성한 것과 같은 명령을 실행하면 됩니다.
 하지만 이 경우에는 프로젝트 폴더 안에서 실행한다는 점이 다릅니다.
 
-<code-example language="bash">
+<code-example format="shell" language="shell">
+
 cd hello-world
 schematics blank --name=goodbye-world
+
 </code-example>
 
 이 명령을 실행하면 컬렉션 안에 `goodbye-world`라는 이름으로 스키매틱이 생성되면서, 스키매틱 로직을 작성하는 `index.ts` 파일과 스펙 파일이 생성됩니다.
@@ -585,10 +739,11 @@ The top level of the root project folder for a collection contains configuration
 The `src/` folder contains subfolders for named schematics in the collection, and a schema, `collection.json`, which describes the collected schematics.
 Each schematic is created with a name, description, and factory function.
 
-<code-example language="none">
+<code-example language="json">
+
 {
-  "$schema":
-     "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "&dollar;schema":
+     "../node_modules/&commat;angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "hello-world": {
       "description": "A blank schematic.",
@@ -596,24 +751,29 @@ Each schematic is created with a name, description, and factory function.
     }
   }
 }
+
 </code-example>
 
-* The `$schema` property specifies the schema that the CLI uses for validation.
-* The `schematics` property lists named schematics that belong to this collection.
-   Each schematic has a plain-text description, and points to the generated entry function in the main file.
-* The `factory` property points to the generated entry function. In this example, you invoke the `hello-world` schematic by calling the `helloWorld()` factory function.
-* The optional  `schema` property points to a JSON schema file that defines the command-line options available to the schematic.
-* The optional `aliases` array specifies one or more strings that can be used to invoke the schematic.
-   For example, the schematic for the Angular CLI “generate” command has an alias “g”, that lets you use the command `ng g`.
+*   The `$schema` property specifies the schema that the CLI uses for validation.
+*   The `schematics` property lists named schematics that belong to this collection.
+    Each schematic has a plain-text description, and points to the generated entry function in the main file.
+
+*   The `factory` property points to the generated entry function.
+    In this example, you invoke the `hello-world` schematic by calling the `helloWorld()` factory function.
+
+*   The optional  `schema` property points to a JSON schema file that defines the command-line options available to the schematic.
+*   The optional `aliases` array specifies one or more strings that can be used to invoke the schematic.
+    For example, the schematic for the Angular CLI "generate" command has an alias "g", that lets you use the command `ng g`.
 -->
 컬렉션을 구성하는 프로젝트 폴더의 최상위 경로에는 컬렉션 설정 파일과 `node_modules` 폴더, `src/` 폴더가 존재합니다.
 이 중 `src/` 폴더 안에는 컬렉션에 포함되는 스키매틱들이 각각의 이름으로 존재하며, 이 스키매틱들은 `collection.json` 스키마에 모두 등록되어 있습니다.
 이 스키마 파일에는 스키마의 이름, 설명, 팩토리 함수가 각각 지정되어 있습니다.
 
-<code-example language="none">
+<code-example language="json">
+
 {
-  "$schema":
-     "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "&dollar;schema":
+     "../node_modules/&commat;angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "hello-world": {
       "description": "A blank schematic.",
@@ -621,15 +781,19 @@ Each schematic is created with a name, description, and factory function.
     }
   }
 }
+
 </code-example>
 
-* `$schema` 프로퍼티는 CLI로 유효성을 검사할 때 필요한 기준 스키마를 지정합니다.
-* `schematics` 프로퍼티는 컬렉션 안에 존재하는 스키매틱을 나열합니다.
-   그리고 각 스키매틱에는 스키매틱 설명과 진입 함수가 정의된 메인 파일을 지정합니다.
-* `factory` 프로퍼티는 진입 함수의 위치를 지정합니다. 이 예제에서 보면 `hello-world` 스키매틱은 `hellowWorld()`를 진입 함수로 지정했습니다.
-* `schema` 프로퍼티는 생략할 수 있습니다. 이 프로퍼티는 스키매틱에 사용할 수 있는 옵션을 정의한 JSON 스키마 파일을 지정합니다.
-* `aliases` 프로퍼티는 생략할 수 있습니다. 이 프로퍼티는 스키매틱을 활용할 수 있는 또 다른 방법을 제공할 때 사용합니다.
-   예를 들어 Angular CLI `generate` 커맨드는 `g` 라는 별칭으로도 사용할 수 있습니다. `ng g`와 `ng generate`는 같은 동작을 합니다.
+*   `$schema` 프로퍼티는 CLI로 유효성을 검사할 때 필요한 기준 스키마를 지정합니다.
+*   `schematics` 프로퍼티는 컬렉션 안에 존재하는 스키매틱을 나열합니다.
+    그리고 각 스키매틱에는 스키매틱 설명과 진입 함수가 정의된 메인 파일을 지정합니다.
+
+*   `factory` 프로퍼티는 진입 함수의 위치를 지정합니다.
+    이 예제에서 보면 `hello-world` 스키매틱은 `hellowWorld()`를 진입 함수로 지정했습니다.
+
+*   `schema` 프로퍼티는 생략할 수 있습니다. 이 프로퍼티는 스키매틱에 사용할 수 있는 옵션을 정의한 JSON 스키마 파일을 지정합니다.
+*   `aliases` 프로퍼티는 생략할 수 있습니다. 이 프로퍼티는 스키매틱을 활용할 수 있는 또 다른 방법을 제공할 때 사용합니다.
+    예를 들어 Angular CLI `generate` 커맨드는 `g` 라는 별칭으로도 사용할 수 있습니다. `ng g`와 `ng generate`는 같은 동작을 합니다.
 
 
 <!--
@@ -641,24 +805,26 @@ Each schematic is created with a name, description, and factory function.
 When you use the Schematics CLI to create a blank schematics project, the new blank schematic is the first member of the collection, and has the same name as the collection.
 When you add a new named schematic to this collection, it is automatically added to the  `collection.json`  schema.
 
-In addition to the name and description, each schematic has a `factory` property that identifies the schematic’s entry point.
+In addition to the name and description, each schematic has a `factory` property that identifies the schematic's entry point.
 In the example, you invoke the schematic's defined functionality by calling the `helloWorld()` function in the main file,  `hello-world/index.ts`.
 
 <div class="lightbox">
-  <img src="generated/images/guide/schematics/collection-files.gif" alt="overview">
+
+<img alt="overview" src="generated/images/guide/schematics/collection-files.gif">
+
 </div>
 
 Each named schematic in the collection has the following main parts.
 
-| | |
-| :------------- | :-------------------------------------------|
+| Parts          | Details |
+|:---            |:---     |
 | `index.ts`     | Code that defines the transformation logic for a named schematic.  |
-| `schema.json`  | Schematic variable definition. |
-| `schema.d.ts`  | Schematic variables.  |
-| `files/`       | Optional component/template files to replicate. |
+| `schema.json`  | Schematic variable definition.                                     |
+| `schema.d.ts`  | Schematic variables.                                               |
+| `files/`       | Optional component/template files to replicate.                    |
 
 It is possible for a schematic to provide all of its logic in the `index.ts` file, without additional templates.
-You can create dynamic schematics for Angular, however, by providing components and templates in the `files/` folder, like those in standalone Angular projects.
+You can create dynamic schematics for Angular, however, by providing components and templates in the `files` folder, like those in standalone Angular projects.
 The logic in the index file configures these templates by defining rules that inject data and modify variables.
 -->
 스키매틱 CLI를 사용해서 빈 스키매틱 프로젝트를 생성하면 이 컬렉션에 생성되는 빈 스키매틱이 컬렉션의 첫번째 멤버가 됩니다.
@@ -668,18 +834,29 @@ The logic in the index file configures these templates by defining rules that in
 그래서 스키매틱의 진입점이 메인파일에 존재하는 `helloWorld()` 함수라면 다음과 같이 구조가 됩니다.
 
 <div class="lightbox">
-  <img src="generated/images/guide/schematics/collection-files.gif" alt="overview">
+
+<img alt="overview" src="generated/images/guide/schematics/collection-files.gif">
+
 </div>
 
 컬렉션에 존재하는 스키매틱은 다음과 같이 구성됩니다.
 
-| | |
-| :------------- | :-------------------------------------------|
-| `index.ts`     | 변환작업을 실행하는 코드를 작성합니다.  |
-| `schema.json`  | 스키매틱에 사용하는 입력값을 정의합니다. |
-| `schema.d.ts`  | 타입 정의 파일  |
-| `files/`       | 추가 컴포넌트/템플릿 파일 |
+| 파일            | 설명                     |
+|:--------------|:-----------------------|
+| `index.ts`    | 변환작업을 실행하는 코드를 작성합니다.  |
+| `schema.json` | 스키매틱에 사용하는 입력값을 정의합니다. |
+| `schema.d.ts` | 타입 정의 파일               |
+| `files/`      | 추가 컴포넌트/템플릿 파일         |
 
 스키매틱 로직은 추가 템플릿 없이 `index.ts` 파일에 모두 작성할 수도 있습니다.
 하지만 Angular처럼 동적으로 구성되는 스키매틱을 제공하려면 `files/` 폴더에 컴포넌트와 템플릿을 추가하는 구성방법도 있습니다.
 이 경우에도 인덱스 파일은 룰과 데이터를 사용해서 변환작업을 실행하지만, 추가 템플릿을 사용해서 스키매틱의 활용도를 다양하게 확장할 수 있습니다.
+
+
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

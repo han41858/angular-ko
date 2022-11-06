@@ -12,8 +12,8 @@
 
     <!-- CONTAINER -->
     <div class="homepage-container">
-      <!--<div class="hero-headline no-toc">The modern web<br>developer's platform</div>-->
-      <div class="hero-headline no-toc">모던 웹<br>개발 플랫폼</div>
+      <!--<h1 class="hero-headline no-title no-toc no-anchor" aria-label="Angular - The modern web developer's platform">The modern web<br>developer's platform</h1>-->
+      <h1 class="hero-headline no-title no-toc no-anchor" aria-label="Angular - The modern web developer's platform">모던 웹<br>개발 플랫폼</h1>
       <!--<a class="button hero-cta no-print" href="start">Get Started</a>-->
       <a class="button hero-cta no-print" href="start">시작하기</a>
     </div>
@@ -25,8 +25,6 @@
 <!-- MAIN CONTENT -->
 <article>
 
-  <h1 class="no-anchor no-toc" style="display: none"></h1>
-
   <div class="home-rows">
 
     <aio-announcement-bar></aio-announcement-bar>
@@ -35,20 +33,21 @@
     <div layout="row" layout-xs="column" class="home-row homepage-container">
       <div class="promo-img-container promo-1">
         <div>
-          <img height="222" width="340" src="generated/images/marketing/home/responsive-framework.svg" alt="responsive framework" loading="lazy">
+          <img height="222" width="340" src="generated/images/marketing/home/responsive-framework.svg" alt="" loading="lazy">
         </div>
       </div>
 
       <div class="text-container">
-        <div class="text-block promo-1-desc l-pad-top-2">
+        <section aria-labelledby="promo-1-title" class="text-block promo-1-desc l-pad-top-2">
           <!--
-          <div class="text-headline">Develop Across All Platforms</div>
+          <h2 id="promo-1-title" class="text-headline no-anchor">Develop Across All Platforms</h2>
           <p class="text-body">Learn one way to build applications with Angular and reuse your code and abilities to build apps for any deployment target. For web, mobile web, native mobile and native desktop.
           </p>
-		  -->
-		  <div class="text-headline">한 번의 개발로 모든 플랫폼에 적용하기</div>
-          <p class="text-body">Angular로 개발하면 모든 플랫폼에 재사용할 수 있는 애플리케이션을 개발할 수 있습니다. 웹, 모바일 웹, 네이티브 애플리케이션, 네이티브 데스크탑까지</p>
-        </div>
+          -->
+          <h2 id="promo-1-title" class="text-headline no-anchor">한 번의 개발로 모든 플랫폼에 적용하기</h2>
+          <p class="text-body">Angular로 개발하면 모든 플랫폼에 재사용할 수 있는 애플리케이션을 개발할 수 있습니다. 웹, 모바일 웹, 네이티브 애플리케이션, 네이티브 데스크탑까지
+          </p>
+        </section>
       </div>
     </div>
     <hr>
@@ -56,21 +55,21 @@
     <!-- Group 2 -->
     <div layout="row" layout-xs="column" class="home-row">
       <div class="text-container">
-        <div class="text-block">
+        <section aria-labelledby="promo-2-title" class="text-block">
           <!--
-          <div class="text-headline">Speed & Performance</div>
+          <h2 id="promo-2-title" class="text-headline no-anchor">Speed & Performance</h2>
           <p class="text-body">Achieve the maximum speed possible on the Web Platform today, and take it further, via Web Workers and server-side rendering.</p>
           <p class="text-body">Angular puts you in control over scalability. Meet huge data requirements by building data models on RxJS, Immutable.js or another push-model.</p>
-		  -->
-          <div class="text-headline">빠른 성능</div>
+          -->
+          <h2 id="promo-2-title" class="text-headline no-anchor">빠른 성능</h2>
           <p class="text-body">현존하는 웹 플랫폼 중 최고의 성능을 자랑합니다. 웹 워커와 서버 사이드 렌더링을 사용하면 더 빨라질 수 있습니다.</p>
           <p class="text-body">대규모 클라우드에도 활용할 수 있습니다. 대용량 데이터 구조는 RxJS, Immutable.js, 푸시 모델을 활용해서 처리할 수 있습니다.</p>
-        </div>
+        </section>
       </div>
 
       <div class="promo-img-container promo-2">
         <div>
-          <img height="222" width="323" src="generated/images/marketing/home/speed-performance.svg" alt="speed and performance" loading="lazy">
+          <img height="222" width="323" src="generated/images/marketing/home/speed-performance.svg" alt="" loading="lazy">
         </div>
       </div>
     </div>
@@ -79,19 +78,20 @@
     <!-- Group 3 -->
     <div layout="row" layout-xs="column" class="home-row">
       <div class="promo-img-container promo-3">
-        <div><img src="generated/images/marketing/home/joyful-development.svg" alt="IDE example" loading="lazy"></div>
+        <div><img src="generated/images/marketing/home/joyful-development.svg" alt="" loading="lazy"></div>
       </div>
 
       <div class="text-container">
-        <div class="text-block promo-3-desc">
+        <section aria-labelledby="promo-3-title" class="text-block promo-3-desc">
           <!--
-          <div class="text-headline">Incredible Tooling</div>
+          <h2 id="promo-3-title" class="text-headline no-anchor">Incredible Tooling</h2>
           <p class="text-body">Build features quickly with simple, declarative templates. Extend the template language with your own components and use a wide array of existing components. Get immediate Angular-specific help and feedback with nearly every IDE and editor. All this comes together so you can focus on building amazing apps rather than trying to make the code work.
-		  -->
-		  <div class="text-headline">강력한 개발 지원</div>
+          </p>
+          -->
+          <h2 id="promo-3-title" class="text-headline no-anchor">강력한 개발 지원</h2>
           <p class="text-body">IDE에서도 Angular 구성요소를 간단하게 추가할 수 있습니다. 커스텀 컴포넌트를 자유롭게 추가할 수 있고, Angular에서 제공하는 컴포넌트를 활용할 수도 있습니다. 이제 거의 모든 IDE와 에디터가 Angular에 특화된 도움말을 제공합니다. 훌륭한 앱을 만드는 것에만 집중하세요.
           </p>
-        </div>
+        </section>
       </div>
 
     </div>
@@ -100,36 +100,34 @@
     <!-- Group 4 -->
     <div layout="row" layout-xs="column" class="home-row">
       <div class="text-container">
-        <div class="text-block l-pad-top-2">
+        <section aria-labelledby="promo-4-title" class="text-block l-pad-top-2">
           <!--
-          <div class="text-headline">Loved by Millions</div>
+          <h2 id="promo-4-title" class="text-headline no-anchor">Loved by Millions</h2>
           <p class="text-body">From prototype through global deployment, Angular delivers the productivity and scalable infrastructure that supports Google's largest applications.</p>
-		  -->
-		  <div class="text-headline">수백만명이 이미 경험했습니다.</div>
+          -->
+          <h2 id="promo-4-title" class="text-headline no-anchor">수백만명이 이미 경험했습니다.</h2>
           <p class="text-body">프로토타입을 만드는 것부터 전세계에 배포되는 애플리케이션을 만들기까지, Angular에 Google의 클라우드 서비스를 활용하면 더 높은 생산성을 달성할 수 있고 클라우드 확장도 대응할 수 있습니다.</p>
-        </div>
+        </section>
       </div>
 
       <div class="promo-img-container promo-4">
         <div>
-          <img src="generated/images/marketing/home/loved-by-millions.svg" alt="angular on the map" width="455" height="228" loading="lazy">
+          <img src="generated/images/marketing/home/loved-by-millions.svg" alt="" width="455" height="228" loading="lazy">
         </div>
       </div>
     </div>
 
     <!-- CTA CARDS -->
     <div layout="row" layout-xs="column" class="home-row">
-      <a href="start">
-        <div class="card">
-          <img src="generated/images/marketing/home/code-icon.svg" alt="Get Started with Angular" width="70" height="70" loading="lazy">
-          <div class="card-text-container">
-            <!--
-            <div class="text-headline">Try it now</div>
-            <p>Explore Angular's capabilities with a ready-made sample app. No setup required.</p>
-            -->
-            <div class="text-headline">시작하기</div>
-            <p>Angular로 어떤 것들을 할 수 있는지 샘플 앱으로 확인해 보세요. 개발환경 설정은 필요 없습니다.</p>
-          </div>
+      <a href="start" class="card">
+        <img src="generated/images/marketing/home/code-icon.svg" alt="" width="70" height="70" loading="lazy">
+        <div class="card-text-container">
+          <!--
+          <div class="text-headline">Try it now</div>
+          <p>Explore Angular's capabilities with a ready-made sample app. No setup required.</p>
+          -->
+          <div class="text-headline">시작하기</div>
+          <p>Angular로 어떤 것들을 할 수 있는지 샘플 앱으로 확인해 보세요. 개발환경 설정은 필요 없습니다.</p>
         </div>
       </a>
     </div>

@@ -45,7 +45,6 @@ esbuild(
         "tsickle",
         "@babel/core",
         "reflect-metadata",
-        "canonical-path",
         "chokidar",
         "convert-source-map",
         "dependency-graph",
@@ -58,6 +57,7 @@ esbuild(
     ],
     format = "esm",
     platform = "node",
+    splitting = True,
     target = "node12",
     deps = PUBLIC_TARGETS,
 )
@@ -104,8 +104,9 @@ ts_library(
         "//packages/compiler-cli/src/ngtsc/translator",
         "//packages/compiler-cli/src/ngtsc/typecheck",
         "//packages/compiler-cli/src/ngtsc/typecheck/api",
+        "//packages/compiler-cli/src/ngtsc/util",
         "//packages/compiler-cli/src/transformers/downlevel_decorators_transform",
-        "@npm//@bazel/typescript",
+        "@npm//@bazel/concatjs",
         "@npm//@types/node",
         "@npm//@types/yargs",
         "@npm//chokidar",
@@ -131,7 +132,7 @@ pkg_npm(
     # Do not add more to this list.
     # Dependencies on the full npm_package cause long re-builds.
     visibility = [
-        "//integration:__pkg__",
+        "//integration:__subpackages__",
         "//packages/compiler-cli/integrationtest:__pkg__",
     ],
     deps = [
@@ -148,6 +149,16 @@ api_golden_test(
     ],
     entry_point = "angular/packages/compiler-cli/npm_package/src/ngtsc/diagnostics/src/error_code.d.ts",
     golden = "angular/goldens/public-api/compiler-cli/error_code.md",
+)
+
+api_golden_test(
+    name = "extended_template_diagnostic_name_api",
+    data = [
+        ":npm_package",
+        "//goldens:public-api",
+    ],
+    entry_point = "angular/packages/compiler-cli/npm_package/src/ngtsc/diagnostics/src/extended_template_diagnostic_name.d.ts",
+    golden = "angular/goldens/public-api/compiler-cli/extended_template_diagnostic_name.md",
 )
 
 api_golden_test(

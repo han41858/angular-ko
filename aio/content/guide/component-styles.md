@@ -4,12 +4,10 @@
 # 컴포넌트 스타일
 
 <!--
-Angular applications are styled with standard CSS. That means you can apply
-everything you know about CSS stylesheets, selectors, rules, and media queries
-directly to Angular applications.
+Angular applications are styled with standard CSS.
+That means you can apply everything you know about CSS stylesheets, selectors, rules, and media queries directly to Angular applications.
 
-Additionally, Angular can bundle *component styles*
-with components, enabling a more modular design than regular stylesheets.
+Additionally, Angular can bundle *component styles* with components, enabling a more modular design than regular stylesheets.
 
 This page describes how to load and apply these component styles.
 
@@ -31,15 +29,13 @@ Angular는 여기에 추가로 개별 컴포넌트에 *컴포넌트 스타일*�
 ## 컴포넌트 스타일 사용하기
 
 <!--
-For every Angular component you write, you can define not only an HTML template,
-but also the CSS styles that go with that template,
-specifying any selectors, rules, and media queries that you need.
+For every Angular component you write, you can define not only an HTML template, but also the CSS styles that go with that template, specifying any selectors, rules, and media queries that you need.
 
 One way to do this is to set the `styles` property in the component metadata.
 The `styles` property takes an array of strings that contain CSS code.
 Usually you give it one string, as in the following example:
 
-<code-example path="component-styles/src/app/hero-app.component.ts" header="src/app/hero-app.component.ts"></code-example>
+<code-example header="src/app/hero-app.component.ts" path="component-styles/src/app/hero-app.component.ts"></code-example>
 -->
 개발자가 만드는 모든 Angular 컴포넌트는 HTML 템플릿 외에 CSS 스타일도 지정할 수 있습니다.
 이 스타일 설정에는 기존에 사용하던 셀렉터, 룰, 미디어 쿼리도 그대로 사용할 수 있습니다.
@@ -47,69 +43,64 @@ Usually you give it one string, as in the following example:
 가장 간단한 방법은 컴포넌트 메타데이터에 `styles` 프로퍼티를 사용하는 것입니다.
 `styles` 프로퍼티에는 CSS 코드를 문자열 배열 형태로 지정하며, 다음과 같이 문자열 하나로도 간단하게 지정할 수 있습니다:
 
-<code-example path="component-styles/src/app/hero-app.component.ts" header="src/app/hero-app.component.ts"></code-example>
+<code-example header="src/app/hero-app.component.ts" path="component-styles/src/app/hero-app.component.ts"></code-example>
 
 
-<!--
-## Style scope
--->
-## 스타일 적용 범위
+## Component styling best practices
 
 <!--
-<div class="alert is-critical">
+<div class="alert is-helpful">
 
-The styles specified in `@Component` metadata _apply only within the template of that component_.
+See [View Encapsulation](guide/view-encapsulation) for information on how Angular scopes styles to specific components.
 
 </div>
 
-They are _not inherited_ by any components nested within the template nor by any content projected into the component.
-
-In this example, the `h1` style applies only to the `HeroAppComponent`,
-not to the nested `HeroMainComponent` nor to `<h1>` tags anywhere else in the application.
-
-This scoping restriction is a ***styling modularity feature***.
-
-* Use the CSS class names and selectors that make the most sense in the context of each component.
-
-
-* Class names and selectors are local to the component and don't collide with
-  classes and selectors used elsewhere in the application.
-
-
-* Changes to styles elsewhere in the application don't affect the component's styles.
-
-
-* Co-locate the CSS code of each component with the TypeScript and HTML code of the component,
-  which leads to a neat and tidy project structure.
-
-
-* Change or remove component CSS code without searching through the
-  whole application to find where else the code is used.
+You should consider the styles of a component to be private implementation details for that component.
+When consuming a common component, you should not override the component's styles any more than you should access the private members of a TypeScript class.
+While Angular's default style encapsulation prevents component styles from affecting other components, global styles affect all components on the page.
+This includes `::ng-deep`, which promotes a component style to a global style.
 -->
-<div class="alert is-critical">
+<div class="alert is-helpful">
 
-`@Component` 메타데이터에 지정한 스타일은 _그 컴포넌트의 템플릿에만_ 적용됩니다.
+컴포넌트에 적용되는 Angular 스타일 범위에 대해 알아보려면 [뷰 캡슐화(View Encapsulation)](guide/view-encapsulation) 문서를 참고하세요.
 
 </div>
 
-컴포넌트 스타일은 템플릿 안에 있는 자식 컴포넌트의 템플릿이나 이 컴포넌트에 프로젝트되는 컴포넌트에는 _적용되지 않습니다_.
+You should consider the styles of a component to be private implementation details for that component.
+When consuming a common component, you should not override the component's styles any more than you should access the private members of a TypeScript class.
+While Angular's default style encapsulation prevents component styles from affecting other components, global styles affect all components on the page.
+This includes `::ng-deep`, which promotes a component style to a global style.
 
-이 예제로 보면 `h1` 엘리먼트 스타일은 `HeroAppComponent`에만 적용되며, 자식 컴포넌트 `HeroMainComponent`나 컴포넌트 외부에 있는 `<h1>` 태그에는 적용되지 않습니다.
+### Authoring a component to support customization
 
-그래서 컴포넌트에 적용되는 스타일은 다음과 같은 ***스타일 모듈 규칙***을 따릅니다.
+As component author, you can explicitly design a component to accept customization in one of four different ways.
 
-* 컴포넌트를 구분하기 위해 적절한 CSS 클래스 이름과 셀렉터를 사용할 수 있습니다.
+#### 1. Use CSS Custom Properties (recommended)
 
-* 클래스 이름과 셀렉터는 컴포넌트 안에서만 유효하며, 컴포넌트 밖에 있는 클래스와 셀렉터에는 적용되지 않습니다.
+You can define a supported customization API for your component by defining its styles with CSS Custom Properties, alternatively known as CSS Variables.
+Anyone using your component can consume this API by defining values for these properties, customizing the final appearance of the component on the rendered page.
 
-* 컴포넌트 밖에서 스타일이 동적으로 변경되어도 컴포넌트에는 적용되지 않습니다.
+While this requires defining a custom property for each customization point, it creates a clear API contract that works in all style encapsulation modes.
 
-* 프로젝트 규모가 작거나 간단하게 테스트 하려면 CSS 코드를 TypeScript 코드나 HTML에 작성할 수 있습니다.
+#### 2. Declare global CSS with `@mixin`
 
-* 컴포넌트에 적용되는 CSS 코드는 컴포넌트 외부에 적용되지 않기 때문에 걱정없이 변경하거나 제거할 수 있습니다.
+While Angular's emulated style encapsulation prevents styles from escaping a component, it does not prevent global CSS from affecting the entire page.
+While component consumers should avoid directly overwriting the CSS internals of a component, you can offer a supported customization API via a CSS preprocessor like Sass.
 
+For example, a component may offer one or more supported mixins to customize various aspects of the component's appearance.
+While this approach uses global styles in it's implementation, it allows the component author to keep the mixins up to date with changes to the component's private DOM structure and CSS classes.
 
-{@a special-selectors}
+#### 3. Customize with CSS `::part`
+
+If your component uses [Shadow DOM](https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM), you can apply the `part` attribute to specify elements in your component's template.
+This allows consumers of the component to author arbitrary styles targeting those specific elements with [the `::part` pseudo-element](https://developer.mozilla.org/docs/Web/CSS/::part).
+
+While this lets you limit the elements within your template that consumers can customize, it does not limit which CSS properties are customizable.
+
+#### 4. Provide a TypeScript API
+
+You can define a TypeScript API for customizing styles, using template bindings to update CSS classes and styles.
+This is not recommended because the additional JavaScript cost of this style API incurs far more performance cost than CSS.
 
 <!--
 ## Special selectors
@@ -117,71 +108,73 @@ This scoping restriction is a ***styling modularity feature***.
 ## Angular 전용 셀렉터
 
 <!--
-Component styles have a few special *selectors* from the world of shadow DOM style scoping
-(described in the [CSS Scoping Module Level 1](https://www.w3.org/TR/css-scoping-1) page on the
-[W3C](https://www.w3.org) site).
+Component styles have a few special *selectors* from the world of shadow DOM style scoping \(described in the [CSS Scoping Module Level 1](https://www.w3.org/TR/css-scoping-1) page on the [W3C](https://www.w3.org) site\).
 The following sections describe these selectors.
 -->
 컴포넌트에 스타일 문법에는 섀도우 DOM에 적용할 수 있는 특별한 *셀렉터* 를 몇가지 사용할 수 있습니다.
 이 셀렉터들은 [W3C](https://www.w3.org) 사이트의 [CSS Scoping Module Level 1](https://www.w3.org/TR/css-scoping-1)에서 정의하는 표준 셀렉터입니다.
 
-
 ### :host
 
 <!--
-Every component is associated within an element that matches the component's selector. This element, into which the template is rendered, 
-is called the _host element_.
+Every component is associated within an element that matches the component's selector.
+This element, into which the template is rendered, is called the *host element*.
 The `:host` pseudo-class selector may be used to create styles that target the host element itself, as opposed to targeting elements inside the host.
 
-<code-example path="component-styles/src/app/host-selector-example.component.ts" header="src/app/host-selector-example.component.ts">
-</code-example>
+<code-example header="src/app/host-selector-example.component.ts" path="component-styles/src/app/host-selector-example.component.ts"></code-example>
 
-Creating the following style will target the component's host element. Any rule applied to this selector will affect the host element and all its descendants (in this case, italicizing all contained text).
+Creating the following style will target the component's host element.
+Any rule applied to this selector will affect the host element and all its descendants \(in this case, italicizing all contained text\).
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="host" header="src/app/hero-details.component.css"></code-example>
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="host"></code-example>
 
-The `:host` selector only targets the host element of a component. Any styles within the `:host` block of a child component will *not* affect parent components.
+The `:host` selector only targets the host element of a component.
+Any styles within the `:host` block of a child component will *not* affect parent components.
 
-Use the *function form* to apply host styles conditionally by
-including another selector inside parentheses after `:host`.
+Use the *function form* to apply host styles conditionally by including another selector inside parentheses after `:host`.
 
 In this example the host's content also becomes bold when the `active` CSS class is applied to the host element.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="hostfunction" header="src/app/hero-details.component.css"></code-example>
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="hostfunction"></code-example>
 
 The `:host` selector can also be combined with other selectors.
 Add selectors behind the `:host` to select child elements, for example using `:host h2` to target all `<h2>` elements inside a component's view.
 
 <div class="alert is-helpful">
 
-You should not add selectors (other than `:host-context`) in front of the `:host` selector to style a component based on the outer context of the component's view. Such selectors are not scoped to a component's view and will select the outer context, but it's not built-in behavior. Use `:host-context` selector for that purpose instead.
+You should not add selectors \(other than `:host-context`\) in front of the `:host` selector to style a component based on the outer context of the component's view.
+Such selectors are not scoped to a component's view and will select the outer context, but it's not built-in behavior.
+Use `:host-context` selector for that purpose instead.
 
 </div>
 -->
 컴포넌트는 컴포넌트 셀렉터와 같은 이름의 엘리먼트 안에 구성됩니다.
-이 엘리먼트는 이후에 템플릿에 렌더링되는데, 이 엘리먼트가 렌더링되는 위치를 _호스트 엘리먼트(host element)_라고 합니다.
+이 엘리먼트는 이후에 템플릿에 렌더링되는데, 이 엘리먼트가 렌더링되는 위치를 *호스트 엘리먼트\(host element)\*라고 합니다.
 `:host` 가상 클래스 셀렉터는 이 호스트 엘리먼트를 가리킵니다.
 대상 엘리먼트(targeting elements))는 호스트 엘리먼트 안에 들어가는 엘리먼트로, 호스트 엘리먼트와는 반대 개념입니다.
 
-<code-example path="component-styles/src/app/host-selector-example.component.ts" header="src/app/host-selector-example.component.ts">
-</code-example>
+<code-example header="src/app/host-selector-example.component.ts" path="component-styles/src/app/host-selector-example.component.ts"></code-example>
 
 컴포넌트의 호스트 엘리먼트에 스타일을 지정해 봅시다.
 `:host` 셀렉터를 붙여 지정하는 규칙은 호스트 엘리먼트와 그 자식 엘리먼트에 영향을 미칩니다.
 
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="host"></code-example>
+
 `:host` 셀렉터는 컴포넌트의 호스트 엘리먼트만 대상으로 지정할 수 있습니다.
 그래서 `:host` 블록 안에 선언한 스타일은 모두 부모 컴포넌트에 영향을 미치지 *않습니다*.
 
+조건에 따라 스타일을 적용해야 한다면 `:host` 뒤에 괄호를 붙이고 *함수 형태*를 작성하면 됩니다.
+
 아래 예제처럼 구현하면 호스트 엘리먼트에 `active` CSS 클래스가 지정되었을 때 텍스트를 굵게 표시합니다.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="hostfunction" header="src/app/hero-details.component.css"></code-example>
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="hostfunction"></code-example>
 
 `:host` 셀렉터는 다른 셀렉터와 조합해서 사용할 수 있습니다.
 그래서 `:host h2`와 같이 작성하면 모든 컴포넌트 뷰에 있는 엘리먼트 중에서 모든 `<h2>`를 대상으로 지정할 수 있습니다.
 
 <div class="alert is-helpful">
 
-`:host` 셀렉터 앞에는 다른 셀렉터(`:host-context` 제외)를 사용할 수 없습니다.
+`:host` 셀렉터 앞에는 다른 셀렉터\(`:host-context` 제외\)를 사용할 수 없습니다.
 `:host` 셀렉터는 컴포넌트의 뷰를 대상으로 하기 때문에 외부 컨텍스트를 지정할 수 없습니다.
 외부 컨텍스트와 연동하려면 `:host-context` 셀렉터를 사용해야 합니다.
 
@@ -191,21 +184,24 @@ You should not add selectors (other than `:host-context`) in front of the `:host
 ### :host-context
 
 <!--
-Sometimes it's useful to apply styles to elements within a component's template 
-based on some condition in an element that is an ancestor of the host element.
-For example, a CSS theme class could be applied to the document `<body>` element, and
-you want to change how your component looks based on that.
+Sometimes it's useful to apply styles to elements within a component's template based on some condition in an element that is an ancestor of the host element.
+For example, a CSS theme class could be applied to the document `<body>` element, and you want to change how your component looks based on that.
 
-Use the `:host-context()` pseudo-class selector, which works just like the function
-form of `:host()`. The `:host-context()` selector looks for a CSS class in any ancestor of the component host element,
-up to the document root. The `:host-context()` selector is only useful when combined with another selector.
+Use the `:host-context()` pseudo-class selector, which works just like the function form of `:host()`.
+The `:host-context()` selector looks for a CSS class in any ancestor of the component host element, up to the document root.
+The `:host-context()` selector is only useful when combined with another selector.
 
 The following example italicizes all text inside a component, but only
-if some _ancestor_ element of the host element has the CSS class `active`.
+if some *ancestor* element of the host element has the CSS class `active`.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="hostcontext" header="src/app/hero-details.component.css"></code-example>
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="hostcontext"></code-example>
 
-Note that only the host element and its descendants will be affected, not the ancestor with the assigned `active` class.
+<div class="alert is-helpful">
+
+**NOTE**: <br />
+Only the host element and its descendants will be affected, not the ancestor with the assigned `active` class.
+
+</div>
 -->
 때로는 호스트 엘리먼트의 부모 엘리먼트의 조건에 따라 컴포넌트 템플릿의 스타일을 적용해야 하는 경우가 있습니다.
 HTML 문서의 `<body>` 엘리먼트에 CSS 테마 관련 클래스가 지정된다면 이 조건에 따라 컴포넌트의 모습을 변형하는 경우가 그렇습니다.
@@ -216,13 +212,16 @@ HTML 문서의 `<body>` 엘리먼트에 CSS 테마 관련 클래스가 지정된
 
 아래 예제 코드는 호스트 엘리먼트의 _부모_ 엘리먼트 중에 `active` CSS 클래스가 지정되었을 때 텍스트에 이탤릭 스타일을 지정하는 예제 코드입니다.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="hostcontext" header="src/app/hero-details.component.css"></code-example>
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="hostcontext"></code-example>
 
+<div class="alert is-helpful">
+
+**참고**: <br />
 호스트 엘리먼트와 그 자식 엘리먼트만 영향을 받는다는 것이 중요합니다.
 `active` 클래스가 지정된 호스트 엘리먼트의 부모 엘리먼트는 영향을 받지 않습니다.
 
+</div>
 
-{@a deprecated-deep--and-ng-deep}
 
 <!--
 ### (deprecated) `/deep/`, `>>>`, and `::ng-deep`
@@ -232,31 +231,29 @@ HTML 문서의 `<body>` 엘리먼트에 CSS 테마 관련 클래스가 지정된
 <!--
 Component styles normally apply only to the HTML in the component's own template.
 
-Applying the `::ng-deep` pseudo-class to any CSS rule completely disables view-encapsulation for
-that rule. Any style with `::ng-deep` applied becomes a global style. In order to scope the specified style
-to the current component and all its descendants, be sure to include the `:host` selector before
-`::ng-deep`. If the `::ng-deep` combinator is used without the `:host` pseudo-class selector, the style
-can bleed into other components.
+Applying the `::ng-deep` pseudo-class to any CSS rule completely disables view-encapsulation for that rule.
+Any style with `::ng-deep` applied becomes a global style.
+In order to scope the specified style to the current component and all its descendants, be sure to include the `:host` selector before `::ng-deep`.
+If the `::ng-deep` combinator is used without the `:host` pseudo-class selector, the style can bleed into other components.
 
-The following example targets all `<h3>` elements, from the host element down
-through this component to all of its child elements in the DOM.
+The following example targets all `<h3>` elements, from the host element down through this component to all of its child elements in the DOM.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="deep" header="src/app/hero-details.component.css"></code-example>
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="deep"></code-example>
 
 The `/deep/` combinator also has the aliases `>>>`, and `::ng-deep`.
 
 <div class="alert is-important">
 
-Use `/deep/`, `>>>` and `::ng-deep` only with *emulated* view encapsulation.
-Emulated is the default and most commonly used view encapsulation. For more information, see the
-[View Encapsulation](guide/view-encapsulation) section.
+Use `/deep/`, `>>>`, and `::ng-deep` only with *emulated* view encapsulation.
+Emulated is the default and most commonly used view encapsulation.
+For more information, see the [View Encapsulation](guide/view-encapsulation) section.
 
 </div>
 
 <div class="alert is-important">
 
 The shadow-piercing descendant combinator is deprecated and [support is being removed from major browsers](https://www.chromestatus.com/feature/6750456638341120) and tools.
-As such we plan to drop support in Angular (for all 3 of `/deep/`, `>>>` and `::ng-deep`).
+As such we plan to drop support in Angular \(for all 3 of `/deep/`, `>>>`, and `::ng-deep`\).
 Until then `::ng-deep` should be preferred for a broader compatibility with the tools.
 
 </div>
@@ -269,14 +266,15 @@ Until then `::ng-deep` should be preferred for a broader compatibility with the 
 
 아래 예제는 컴포넌트 뷰 안에 있는 모든 자식 컴포넌트의 `<h3>` 엘리먼트에 이탤릭 속성을 지정하는 예제 코드입니다.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="deep" header="src/app/hero-details.component.css"></code-example>
+<code-example header="src/app/hero-details.component.css" path="component-styles/src/app/hero-details.component.css" region="deep"></code-example>
 
 `/deep/` 셀렉터는 `>>>`나 `::ng-deep` 문법으로도 사용할 수 있습니다.
 
 <div class="alert is-important">
 
 `/deep/`, `>>>`, `::ng-deep` 셀렉터는 *`Emulated`* 뷰 캡슐화 정책을 사용할 때만 사용하세요.
-이 정책은 뷰 캡슐화 정책의 기본값입니다. 좀 더 자세한 설명은 [뷰 캡슐화 정책](guide/view-encapsulation) 문서를 참고하세요.
+이 정책은 뷰 캡슐화 정책의 기본값입니다.
+좀 더 자세한 설명은 [뷰 캡슐화 정책](guide/view-encapsulation) 문서를 참고하세요.
 
 </div>
 
@@ -288,7 +286,7 @@ Until then `::ng-deep` should be preferred for a broader compatibility with the 
 </div>
 
 
-{@a loading-styles}
+<a id="loading-styles"></a>
 
 <!--
 ## Loading component styles
@@ -298,17 +296,19 @@ Until then `::ng-deep` should be preferred for a broader compatibility with the 
 <!--
 There are several ways to add styles to a component:
 
-* By setting `styles` or `styleUrls` metadata.
-* Inline in the template HTML.
-* With CSS imports.
+*   By setting `styles` or `styleUrls` metadata
+*   Inline in the template HTML
+*   With CSS imports
 
 The scoping rules outlined earlier apply to each of these loading patterns.
 -->
 컴포넌트에 스타일을 지정하려면 다음과 같은 방법을 활용할 수 있습니다.
 
-* 컴포넌트 메타데이터에 `style`이나 `styleUrls` 사용하기
-* 템플릿 HTML에 인라인으로 지정하기
-* 외부 CSS 파일 불러오기
+*   컴포넌트 메타데이터에 `style`이나 `styleUrls` 사용하기
+*   템플릿 HTML에 인라인으로 지정하기
+*   외부 CSS 파일 불러오기
+
+이 규칙에 대해 자세하게 알아봅시다.
 
 
 <!--
@@ -321,39 +321,44 @@ Add a `styles` array property to the `@Component` decorator.
 
 Each string in the array defines some CSS for this component.
 
-<code-example path="component-styles/src/app/hero-app.component.ts" header="src/app/hero-app.component.ts (CSS inline)">
-</code-example>
+<code-example header="src/app/hero-app.component.ts (CSS inline)" path="component-styles/src/app/hero-app.component.ts"></code-example>
 
 <div class="alert is-critical">
 
-Reminder: these styles apply _only to this component_.
-They are _not inherited_ by any components nested within the template nor by any content projected into the component.
+Reminder:
+These styles apply *only to this component*.
+They are *not inherited* by any components nested within the template nor by any content projected into the component.
 
 </div>
 
 The Angular CLI command [`ng generate component`](cli/generate) defines an empty `styles` array when you create the component with the `--inline-style` flag.
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 ng generate component hero-app --inline-style
+
 </code-example>
 -->
 `@Component` 데코레이터에는 `styles` 프로퍼티를 지정할 수 있습니다.
 
 이 프로퍼티는 문자열 배열을 사용하는데, 컴포넌트에 지정될 CSS 스타일을 문자열로 각각 지정합니다.
 
-<code-example path="component-styles/src/app/hero-app.component.ts" header="src/app/hero-app.component.ts (CSS inline)">
-</code-example>
+<code-example header="src/app/hero-app.component.ts (CSS inline)" path="component-styles/src/app/hero-app.component.ts"></code-example>
 
 <div class="alert is-critical">
 
-주의 : 이 방법으로 지정하는 스타일은 _이 컴포넌트에만_ 적용됩니다. 템플릿 안에 있는 자식 컴포넌트나, 이 컴포넌트에 프로젝트되는 다른 컨텐츠에도 적용되지 않습니다.
+주의:
+이 방법으로 지정하는 스타일은 *이 컴포넌트에만* 적용됩니다.
+템플릿 안에 있는 자식 컴포넌트나, 이 컴포넌트에 프로젝트되는 다른 컨텐츠에도 적용되지 않습니다.
 
 </div>
 
 Angular CLI로 [`ng generate component`](cli/generate) 명령을 실행할 때 `--inline-style` 플래그를 지정하면 `styles` 배열이 비어있는 상태에서 컴포넌트 코드 개발을 시작할 수 있습니다.
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 ng generate component hero-app --inline-style
+
 </code-example>
 
 
@@ -363,57 +368,60 @@ ng generate component hero-app --inline-style
 ### 컴포넌트 메타데이터에 외부 스타일 파일 불러오기
 
 <!--
-Load styles from external CSS files by adding a `styleUrls` property
-to a component's `@Component` decorator:
+Load styles from external CSS files by adding a `styleUrls` property to a component's `@Component` decorator:
 
 <code-tabs>
-  <code-pane header="src/app/hero-app.component.ts (CSS in file)" path="component-styles/src/app/hero-app.component.1.ts"></code-pane>
-  <code-pane header="src/app/hero-app.component.css" path="component-styles/src/app/hero-app.component.css"></code-pane>
+    <code-pane header="src/app/hero-app.component.ts (CSS in file)" path="component-styles/src/app/hero-app.component.1.ts"></code-pane>
+    <code-pane header="src/app/hero-app.component.css" path="component-styles/src/app/hero-app.component.css"></code-pane>
 </code-tabs>
 
 <div class="alert is-critical">
 
-Reminder: the styles in the style file apply _only to this component_.
-They are _not inherited_ by any components nested within the template nor by any content projected into the component.
+Reminder: the styles in the style file apply *only to this component*.
+They are *not inherited* by any components nested within the template nor by any content projected into the component.
 
 </div>
 
 <div class="alert is-helpful">
 
-  You can specify more than one styles file or even a combination of `styles` and `styleUrls`.
+You can specify more than one styles file or even a combination of `styles` and `styleUrls`.
 
 </div>
 
 When you use the Angular CLI command [`ng generate component`](cli/generate) without the `--inline-style` flag, it creates an empty styles file for you and references that file in the component's generated `styleUrls`.
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 ng generate component hero-app
+
 </code-example>
 -->
 컴포넌트의 `@Component` 데코레이터에 `styleUrls` 프로퍼티를 사용하면 컴포넌트 외부에 있는 CSS 파일을 불러와서 컴포넌트에 적용할 수 있습니다.
 
 <code-tabs>
-  <code-pane header="src/app/hero-app.component.ts (CSS in file)" path="component-styles/src/app/hero-app.component.1.ts"></code-pane>
-  <code-pane header="src/app/hero-app.component.css" path="component-styles/src/app/hero-app.component.css"></code-pane>
+    <code-pane header="src/app/hero-app.component.ts (CSS in file)" path="component-styles/src/app/hero-app.component.1.ts"></code-pane>
+    <code-pane header="src/app/hero-app.component.css" path="component-styles/src/app/hero-app.component.css"></code-pane>
 </code-tabs>
 
 <div class="alert is-critical">
 
-주의 : 이 방법으로 지정하는 스타일은 _이 컴포넌트에만_ 적용됩니다.
+주의 : 이 방법으로 지정하는 스타일은 *이 컴포넌트에만* 적용됩니다.
 템플릿 안에 있는 자식 컴포넌트나, 이 컴포넌트에 프로젝트되는 다른 컨텐츠에는 적용되지 않습니다.
 
 </div>
 
 <div class="alert is-helpful">
 
-  `styles`이나 `styleUrls` 프로퍼티에는 한 번에 여러 스타일을 지정하거나 여러 파일을 지정할 수 있습니다.
+`styles`이나 `styleUrls` 프로퍼티에는 한 번에 여러 스타일을 지정하거나 여러 파일을 지정할 수 있습니다.
 
 </div>
 
 Angular CLI로 [`ng generate component`](cli/generate) 명령을 실행할 때 `--inline-style` 플래그를 지정하지 않으면 컴포넌트 이름으로 스타일 파일을 만들고 컴포넌트 메타데이터의 `styleUrls`에서 이 파일을 참조합니다.
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 ng generate component hero-app
+
 </code-example>
 
 
@@ -424,16 +432,13 @@ ng generate component hero-app
 ### 템플릿 인라인 스타일
 
 <!--
-Embed CSS styles directly into the HTML template by putting them
-inside `<style>` tags.
+Embed CSS styles directly into the HTML template by putting them inside `<style>` tags.
 
-<code-example path="component-styles/src/app/hero-controls.component.ts" region="inlinestyles" header="src/app/hero-controls.component.ts">
-</code-example>
+<code-example header="src/app/hero-controls.component.ts" path="component-styles/src/app/hero-controls.component.ts" region="inlinestyles"></code-example>
 -->
 CSS 스타일은 `<style>` 태그를 사용해서 HTML 템플릿 안에 지정할 수도 있습니다.
 
-<code-example path="component-styles/src/app/hero-controls.component.ts" region="inlinestyles" header="src/app/hero-controls.component.ts">
-</code-example>
+<code-example header="src/app/hero-controls.component.ts" path="component-styles/src/app/hero-controls.component.ts" region="inlinestyles"></code-example>
 
 
 <!--
@@ -444,8 +449,7 @@ CSS 스타일은 `<style>` 태그를 사용해서 HTML 템플릿 안에 지정�
 <!--
 You can also write `<link>` tags into the component's HTML template.
 
-<code-example path="component-styles/src/app/hero-team.component.ts" region="stylelink" header="src/app/hero-team.component.ts">
-</code-example>
+<code-example header="src/app/hero-team.component.ts" path="component-styles/src/app/hero-team.component.ts" region="stylelink"></code-example>
 
 <div class="alert is-critical">
 
@@ -457,8 +461,7 @@ Once included, the CLI includes the stylesheet, whether the link tag's href URL 
 -->
 컴포넌트 HTML 템플릿에는 `<link>` 태그를 사용할 수도 있습니다.
 
-<code-example path="component-styles/src/app/hero-team.component.ts" region="stylelink" header="src/app/hero-team.component.ts">
-</code-example>
+<code-example header="src/app/hero-team.component.ts" path="component-styles/src/app/hero-team.component.ts" region="stylelink"></code-example>
 
 <div class="alert is-critical">
 
@@ -474,21 +477,18 @@ Angular CLI가 애플리케이션을 빌드할 때 링크로 연결된 스타일
 
 <!--
 Import CSS files into the CSS files using the standard CSS `@import` rule.
-For details, see [`@import`](https://developer.mozilla.org/en/docs/Web/CSS/@import)
-on the [MDN](https://developer.mozilla.org) site.
+For details, see [`@import`](https://developer.mozilla.org/en/docs/Web/CSS/@import) on the [MDN](https://developer.mozilla.org) site.
 
 In this case, the URL is relative to the CSS file into which you're importing.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="import" header="src/app/hero-details.component.css (excerpt)">
-</code-example>
+<code-example header="src/app/hero-details.component.css (excerpt)" path="component-styles/src/app/hero-details.component.css" region="import"></code-example>
 -->
 외부 CSS 파일을 불러올 때는 CSS 표준인 `@import`를 사용하는 방법도 있습니다.
 이 문법에 대해 자세하게 알아보려면 [MDN](https://developer.mozilla.org) 사이트의 [`@import`](https://developer.mozilla.org/en/docs/Web/CSS/@import) 문서를 참고하세요.
 
 이 경우에는 CSS 파일을 로드하는 컴포넌트에서 시작하는 상대 경로로 외부 CSS 파일의 URL을 지정합니다.
 
-<code-example path="component-styles/src/app/hero-details.component.css" region="import" header="src/app/hero-details.component.css (excerpt)">
-</code-example>
+<code-example header="src/app/hero-details.component.css (일부)" path="component-styles/src/app/hero-details.component.css" region="import"></code-example>
 
 
 <!--
@@ -497,13 +497,13 @@ In this case, the URL is relative to the CSS file into which you're importing.
 ### 전역 스타일 파일
 
 <!--
-When building with the CLI, you must configure the `angular.json` to include _all external assets_, including external style files.
+When building with the CLI, you must configure the `angular.json` to include *all external assets*, including external style files.
 
 Register **global** style files in the `styles` section which, by default, is pre-configured with the global `styles.css` file.
 
 See the [Styles configuration guide](guide/workspace-config#styles-and-scripts-configuration) to learn more.
 -->
-Angular CLI로 애플리케이션의 빌드 설정 파일인 `angular.json` 파일은 빌드에 포함될 _모든 외부 자원_ 을 지정하는데, 이 때 외부 스타일 파일을 지정할 수도 있습니다.
+Angular CLI로 애플리케이션의 빌드 설정 파일인 `angular.json` 파일은 빌드에 포함될 *모든 외부 자원* 을 지정하는데, 이 때 외부 스타일 파일을 지정할 수도 있습니다.
 
 이 때 `styles` 항목을 활용하면 **전역**으로 지정될 스타일 파일을 지정할 수 있으며, CLI로 생성한 프로젝트라면 `styles.css` 파일이 초기값으로 지정됩니다.
 
@@ -516,39 +516,35 @@ Angular CLI로 애플리케이션의 빌드 설정 파일인 `angular.json` 파�
 ### CSS 이외의 스타일 파일
 
 <!--
-If you're building with the CLI,
-you can write style files in [sass](https://sass-lang.com/), or [less](http://lesscss.org/), and specify those files in the `@Component.styleUrls` metadata with the appropriate extensions (`.scss`, `.less`) as in the following example:
+If you're building with the CLI, you can write style files in [sass](https://sass-lang.com), or [less](https://lesscss.org), and specify those files in the `@Component.styleUrls` metadata with the appropriate extensions \(`.scss`, `.less`\) as in the following example:
 
-<code-example>
-@Component({
+<code-example format="typescript" language="typescript">
+
+&commat;Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-...
+&hellip;
+
 </code-example>
 
 The CLI build process runs the pertinent CSS preprocessor.
 
-When generating a component file with `ng generate component`, the CLI emits an empty CSS styles file (`.css`) by default.
+When generating a component file with `ng generate component`, the CLI emits an empty CSS styles file \(`.css`\) by default.
 Configure the CLI to default to your preferred CSS preprocessor as explained in the [Workspace configuration guide](guide/workspace-config#generation-schematics).
-
-
-<div class="alert is-important">
-
-Style strings added to the `@Component.styles` array _must be written in CSS_ because the CLI cannot apply a preprocessor to inline styles.
-
-</div>
 -->
 Angular CLI를 사용한다면 [sass](http://sass-lang.com/)나 [less](http://lesscss.org/)를 사용할 수도 있으며, 이렇게 만든 스타일 파일은 `@Component.styleUrls` 메타데이터에 다음과 같이 지정할 수 있습니다:
 
-<code-example>
-@Component({
+<code-example format="typescript" language="typescript">
+
+&commat;Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-...
+&hellip;
+
 </code-example>
 
 그러면 Angular CLI에 정의된 CSS 프리프로세서를 통해 최종 결과물에는 CSS 스타일로 변환됩니다.
@@ -556,11 +552,10 @@ Angular CLI를 사용한다면 [sass](http://sass-lang.com/)나 [less](http://le
 `ng generate component` 명령으로 컴포넌트를 생성하면 비어있는 CSS 파일(`.css`)이 기본으로 생성됩니다.
 Angular CLI가 기본으로 사용할 CSS 전처리기를 지정하는 방법에 대해 알아보려면 [워크스페이스 환경설정 가이드](guide/workspace-config#generation-schematics) 문서를 참고하세요.
 
+<!-- links -->
 
-<div class="alert is-important">
+<!-- external links -->
 
-`@Component.styles`에 문자열로 지정하는 스타일은 _반드시 CSS 문법으로_ 지정해야 합니다. Angular CLI는 인라인 스타일을 처리할 때 CSS 프리프로세서를 별도로 사용하지 않습니다.
+<!-- end links -->
 
-</div>
-
-@reviewed 2021-09-17
+@reviewed 2022-02-28

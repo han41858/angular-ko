@@ -7,7 +7,9 @@
  */
 
 import {Inject, Injectable, InjectionToken, OnDestroy, Optional, ɵɵinject} from '@angular/core';
+
 import {DOCUMENT} from '../dom_tokens';
+
 import {LocationChangeListener, PlatformLocation} from './platform_location';
 import {joinWithSlash, normalizeQueryParams} from './util';
 
@@ -32,6 +34,7 @@ import {joinWithSlash, normalizeQueryParams} from './util';
 export abstract class LocationStrategy {
   abstract path(includeHash?: boolean): string;
   abstract prepareExternalUrl(internal: string): string;
+  abstract getState(): unknown;
   abstract pushState(state: any, title: string, url: string, queryParams: string): void;
   abstract replaceState(state: any, title: string, url: string, queryParams: string): void;
   abstract forward(): void;
@@ -43,7 +46,7 @@ export abstract class LocationStrategy {
   abstract getBaseHref(): string;
 }
 
-export function provideLocationStrategy(platformLocation: PlatformLocation) {
+export function provideLocationStrategy() {
   // See #23917
   const location = ɵɵinject(DOCUMENT).location;
   return new PathLocationStrategy(
@@ -129,6 +132,7 @@ export class PathLocationStrategy extends LocationStrategy implements OnDestroy 
     this._baseHref = href;
   }
 
+  /** @nodoc */
   ngOnDestroy(): void {
     while (this._removeListenerFns.length) {
       this._removeListenerFns.pop()!();
@@ -171,6 +175,10 @@ export class PathLocationStrategy extends LocationStrategy implements OnDestroy 
 
   override back(): void {
     this._platformLocation.back();
+  }
+
+  override getState(): unknown {
+    return this._platformLocation.getState();
   }
 
   override historyGo(relativePosition: number = 0): void {

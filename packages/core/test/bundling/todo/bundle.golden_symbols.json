@@ -6,12 +6,6 @@
     "name": "ChangeDetectionStrategy"
   },
   {
-    "name": "ComponentFactory"
-  },
-  {
-    "name": "ComponentRef"
-  },
-  {
     "name": "DefaultIterableDiffer"
   },
   {
@@ -27,7 +21,7 @@
     "name": "ElementRef"
   },
   {
-    "name": "ErrorHandler"
+    "name": "EnvironmentInjector"
   },
   {
     "name": "InjectFlags"
@@ -75,16 +69,10 @@
     "name": "NgForOf"
   },
   {
-    "name": "NgForOfContext"
-  },
-  {
     "name": "NgIf"
   },
   {
     "name": "NgIfContext"
-  },
-  {
-    "name": "NgModuleRef"
   },
   {
     "name": "NodeInjector"
@@ -102,34 +90,19 @@
     "name": "R3ViewContainerRef"
   },
   {
-    "name": "RecordViewTuple"
-  },
-  {
-    "name": "RendererFactory2"
-  },
-  {
     "name": "RootViewRef"
   },
   {
     "name": "RuntimeError"
   },
   {
-    "name": "SWITCH_ELEMENT_REF_FACTORY"
-  },
-  {
-    "name": "SWITCH_TEMPLATE_REF_FACTORY"
-  },
-  {
-    "name": "SWITCH_VIEW_CONTAINER_REF_FACTORY"
-  },
-  {
     "name": "Sanitizer"
   },
   {
-    "name": "SimpleChange"
+    "name": "SkipSelf"
   },
   {
-    "name": "SkipSelf"
+    "name": "TRACKED_LVIEWS"
   },
   {
     "name": "TemplateRef"
@@ -165,9 +138,6 @@
     "name": "VE_ViewContainerRef"
   },
   {
-    "name": "Version"
-  },
-  {
     "name": "ViewContainerRef"
   },
   {
@@ -183,25 +153,10 @@
     "name": "_CLEAN_PROMISE"
   },
   {
-    "name": "_DuplicateItemRecordList"
-  },
-  {
     "name": "_DuplicateMap"
   },
   {
     "name": "__forward_ref__"
-  },
-  {
-    "name": "__global"
-  },
-  {
-    "name": "__globalThis"
-  },
-  {
-    "name": "__self"
-  },
-  {
-    "name": "__window"
   },
   {
     "name": "_global"
@@ -244,6 +199,9 @@
   },
   {
     "name": "applyView"
+  },
+  {
+    "name": "applyViewChange"
   },
   {
     "name": "assertTemplate"
@@ -342,12 +300,6 @@
     "name": "detachView"
   },
   {
-    "name": "detectChangesInRootView"
-  },
-  {
-    "name": "detectChangesInternal"
-  },
-  {
     "name": "diPublicInInjector"
   },
   {
@@ -378,9 +330,6 @@
     "name": "extractDirectiveDef"
   },
   {
-    "name": "extractPipeDef"
-  },
-  {
     "name": "findAttrIndexInNode"
   },
   {
@@ -399,6 +348,9 @@
     "name": "getBeforeNodeForView"
   },
   {
+    "name": "getBindingsEnabled"
+  },
+  {
     "name": "getClosureSafeProperty"
   },
   {
@@ -406,6 +358,9 @@
   },
   {
     "name": "getComponentLViewByIndex"
+  },
+  {
+    "name": "getComponentViewByInstance"
   },
   {
     "name": "getConstant"
@@ -430,6 +385,9 @@
   },
   {
     "name": "getLView"
+  },
+  {
+    "name": "getLViewById"
   },
   {
     "name": "getLViewParent"
@@ -465,6 +423,9 @@
     "name": "getOrCreateTNode"
   },
   {
+    "name": "getOrCreateTViewCleanup"
+  },
+  {
     "name": "getOrCreateViewRefs"
   },
   {
@@ -483,6 +444,9 @@
     "name": "getParentInjectorView"
   },
   {
+    "name": "getPipeDef"
+  },
+  {
     "name": "getPreviousIndex"
   },
   {
@@ -499,6 +463,9 @@
   },
   {
     "name": "getTNode"
+  },
+  {
+    "name": "getTNodeFromLView"
   },
   {
     "name": "getTStylingRangeNext"
@@ -534,7 +501,16 @@
     "name": "initTNodeFlags"
   },
   {
+    "name": "injectElementRef"
+  },
+  {
     "name": "injectInjectorOnly"
+  },
+  {
+    "name": "injectTemplateRef"
+  },
+  {
+    "name": "injectViewContainerRef"
   },
   {
     "name": "insertBloom"
@@ -570,9 +546,6 @@
     "name": "isDirectiveHost"
   },
   {
-    "name": "isInCheckNoChangesMode"
-  },
-  {
     "name": "isInlineTemplate"
   },
   {
@@ -603,6 +576,9 @@
     "name": "isStylingValuePresent"
   },
   {
+    "name": "isTemplateNode"
+  },
+  {
     "name": "keyValueArrayGet"
   },
   {
@@ -625,6 +601,9 @@
   },
   {
     "name": "lookupTokenUsingModuleInjector"
+  },
+  {
+    "name": "lookupTokenUsingNodeInjector"
   },
   {
     "name": "makeParamDecorator"
@@ -673,6 +652,9 @@
   },
   {
     "name": "noSideEffects"
+  },
+  {
+    "name": "nonNull"
   },
   {
     "name": "notFoundValueOrThrow"
@@ -768,9 +750,6 @@
     "name": "setInputsFromAttrs"
   },
   {
-    "name": "setIsInCheckNoChangesMode"
-  },
-  {
     "name": "setSelectedIndex"
   },
   {
@@ -795,9 +774,6 @@
     "name": "stringifyCSSSelector"
   },
   {
-    "name": "stringifyForError"
-  },
-  {
     "name": "throwProviderNotFoundError"
   },
   {
@@ -811,6 +787,9 @@
   },
   {
     "name": "trackByIdentity"
+  },
+  {
+    "name": "uniqueIdCounter"
   },
   {
     "name": "unwrapRNode"
@@ -871,6 +850,9 @@
   },
   {
     "name": "ɵɵreference"
+  },
+  {
+    "name": "ɵɵresetView"
   },
   {
     "name": "ɵɵrestoreView"

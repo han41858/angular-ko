@@ -98,13 +98,15 @@ export function replaceImport(
     return node;
   }
 
-  return ts.updateNamedImports(node, [
+  const importPropertyName =
+      existingImportNode.propertyName ? ts.factory.createIdentifier(newImportName) : undefined;
+  const importName = existingImportNode.propertyName ? existingImportNode.name :
+                                                       ts.factory.createIdentifier(newImportName);
+
+  return ts.factory.updateNamedImports(node, [
     ...node.elements.filter(current => current !== existingImportNode),
     // Create a new import while trying to preserve the alias of the old one.
-    ts.createImportSpecifier(
-        existingImportNode.propertyName ? ts.createIdentifier(newImportName) : undefined,
-        existingImportNode.propertyName ? existingImportNode.name :
-                                          ts.createIdentifier(newImportName))
+    ts.factory.createImportSpecifier(false, importPropertyName, importName)
   ]);
 }
 

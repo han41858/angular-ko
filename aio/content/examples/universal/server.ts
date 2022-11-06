@@ -15,7 +15,7 @@ export function app() {
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // #docregion ngExpressEngine
-  // Universal express 엔진 (https://github.com/angular/universal/tree/master/modules/express-engine)
+  // Universal express 엔진 (https://github.com/angular/universal/tree/main/modules/express-engine)
   server.engine('html', ngExpressEngine({
     bootstrap: AppServerModule,
   }));

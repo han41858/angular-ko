@@ -1,4 +1,5 @@
-{@a top}
+<a id="top"></a>
+
 <!--
 # Testing
 -->
@@ -18,49 +19,40 @@ Testing your Angular application helps you check that your app is working as you
 <!--
 Before writing tests for your Angular app, you should have a basic understanding of the following concepts:
 
-* Angular fundamentals
-* JavaScript
-* HTML
-* CSS
-* [Angular CLI](/cli)
-
-<hr>
+*   Angular fundamentals
+*   JavaScript
+*   HTML
+*   CSS
+*   [Angular CLI](cli)
 
 The testing documentation offers tips and techniques for unit and integration testing Angular applications through a sample application created with the [Angular CLI](cli).
-This sample application is much like the one in the [_Tour of Heroes_ tutorial](tutorial).
+This sample application is much like the one in the [*Tour of Heroes* tutorial](tutorial).
 
 <div class="alert is-helpful">
 
-  For a hands-on experience, <live-example name="testing" stackblitz="specs" noDownload>run tests and explore the test code</live-example> in your browser as your read this guide.
-
-  If you'd like to experiment with the application that this guide describes, <live-example name="testing" noDownload>run it in your browser</live-example> or <live-example name="testing" downloadOnly>download and run it locally</live-example>.
+If you'd like to experiment with the application that this guide describes, <live-example name="testing" noDownload>run it in your browser</live-example> or <live-example name="testing" downloadOnly>download and run it locally</live-example>.
 
 </div>
 -->
 테스트를 작성하기 전에 이런 내용에 대해 미리 이해하고 있는 것이 좋습니다:
 
-* Angular 기본 개념
-* JavaScript
-* HTML
-* CSS
-* [Angular CLI](/cli)
-
-<hr>
+*   Angular 기본 개념
+*   JavaScript
+*   HTML
+*   CSS
+*   [Angular CLI](cli)
 
 이 문서는 [Angular CLI](cli)로 생성한 Angular 애플리케이션에 유닛 테스트와 통합 테스트를 적용하는 방법과 팁에 대해 안내합니다.
-예제 애플리케이션은 [_히어로들의 여행_ 튜토리얼](tutorial)과 비슷합니다.
+예제 애플리케이션은 [*히어로들의 여행* 튜토리얼](tutorial)과 비슷합니다.
 
 <div class="alert is-helpful">
 
-  이 문서에서 다루는 예제는 <live-example name="testing" stackblitz="specs" noDownload>테스트 코드 확인하고 실행하기</live-example>에서 직접 확인할 수 있습니다.
-
-  그리고 이 문서에서 다루는 테스트 기능은 <live-example stackblitz="specs" noDownload>tests</live-example>에서 확인할 수 있습니다.
+이 문서에서 다루는 테스트 기능은 <live-example name="testing" noDownload>브라우저에서 실행해보거나</live-example>, <live-example name="testing" downloadOnly>다운받아 로컬에서 실행</live-example>할 수 있습니다.
 
 </div>
 
 
-{@a setup}
-{@a set-up-testing}
+<a id="setup"></a>
 
 <!--
 ## Set up testing
@@ -68,27 +60,31 @@ This sample application is much like the one in the [_Tour of Heroes_ tutorial](
 ## 테스트 환경설정
 
 <!--
-The Angular CLI downloads and installs everything you need to test an Angular application with the [Jasmine test framework](https://jasmine.github.io/).
+The Angular CLI downloads and installs everything you need to test an Angular application with the [Jasmine test framework](https://jasmine.github.io).
 
 The project you create with the CLI is immediately ready to test.
 Just run the [`ng test`](cli/test) CLI command:
 
-<code-example language="sh">
-  ng test
+<code-example format="shell" language="shell">
+
+ng test
+
 </code-example>
 
-The `ng test` command builds the application in _watch mode_,
+The `ng test` command builds the application in *watch mode*,
 and launches the [Karma test runner](https://karma-runner.github.io).
 
 The console output looks a bit like this:
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 10% building modules 1/1 modules 0 active
-...INFO [karma]: Karma v1.7.1 server started at http://0.0.0.0:9876/
-...INFO [launcher]: Launching browser Chrome ...
-...INFO [launcher]: Starting browser Chrome
-...INFO [Chrome ...]: Connected on socket ...
-Chrome ...: Executed 3 of 3 SUCCESS (0.135 secs / 0.205 secs)
+&hellip;INFO [karma]: Karma v1.7.1 server started at http://0.0.0.0:9876/
+&hellip;INFO [launcher]: Launching browser Chrome &hellip;
+&hellip;INFO [launcher]: Starting browser Chrome
+&hellip;INFO [Chrome &hellip;]: Connected on socket &hellip;
+Chrome &hellip;: Executed 3 of 3 SUCCESS (0.135 secs / 0.205 secs)
+
 </code-example>
 
 The last line of the log is the most important.
@@ -97,35 +93,42 @@ It shows that Karma ran three tests that all passed.
 A Chrome browser also opens and displays the test output in the "Jasmine HTML Reporter" like this.
 
 <div class="lightbox">
-  <img src='generated/images/guide/testing/initial-jasmine-html-reporter.png' alt="Jasmine HTML Reporter in the browser">
+
+<img alt="Jasmine HTML Reporter in the browser" src="generated/images/guide/testing/initial-jasmine-html-reporter.png">
+
 </div>
 
 Most people find this browser output easier to read than the console log.
-Click on a test row to re-run just that test or click on a description to re-run the tests in the selected test group ("test suite").
+Click on a test row to re-run just that test or click on a description to re-run the tests in the selected test group \("test suite"\).
 
 Meanwhile, the `ng test` command is watching for changes.
 
 To see this in action, make a small change to `app.component.ts` and save.
 The tests run again, the browser refreshes, and the new test results appear.
 -->
-Angular 애플리케이션은 [Jasmine 테스트 프레임워크](https://jasmine.github.io/)로 테스트하는데, 애플리케이션을 테스트할 때 필요한 환경은 Angular CLI가 프로젝트를 생성하면서 모두 준비하기 때문에 바로 테스트할 수 있는 상태입니다.
+Angular 애플리케이션은 [Jasmine 테스트 프레임워크](https://jasmine.github.io)로 테스트하는데, 애플리케이션을 테스트할 때 필요한 환경은 Angular CLI가 프로젝트를 생성하면서 모두 준비하기 때문에 바로 테스트할 수 있는 상태입니다.
+
 프로젝트 최상위 폴더에서 [`ng test`](cli/test) 명령을 실행해 보세요:
 
-<code-example language="sh">
-  ng test
+<code-example format="shell" language="shell">
+
+ng test
+
 </code-example>
 
-`ng test` 명령을 실행하면 애플리케이션을 _워치 모드(watch mode)_ 로 빌드하고 [Karma 테스트 러너](https://karma-runner.github.io)를 실행합니다.
+`ng test` 명령을 실행하면 애플리케이션을 *워치 모드\(watch mode\)* 로 빌드하고 [Karma 테스트 러너](https://karma-runner.github.io)를 실행합니다.
 
 콘솔은 다음과 같이 출력될 것입니다:
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 10% building modules 1/1 modules 0 active
-...INFO [karma]: Karma v1.7.1 server started at http://0.0.0.0:9876/
-...INFO [launcher]: Launching browser Chrome ...
-...INFO [launcher]: Starting browser Chrome
-...INFO [Chrome ...]: Connected on socket ...
-Chrome ...: Executed 3 of 3 SUCCESS (0.135 secs / 0.205 secs)
+&hellip;INFO [karma]: Karma v1.7.1 server started at http://0.0.0.0:9876/
+&hellip;INFO [launcher]: Launching browser Chrome &hellip;
+&hellip;INFO [launcher]: Starting browser Chrome
+&hellip;INFO [Chrome &hellip;]: Connected on socket &hellip;
+Chrome &hellip;: Executed 3 of 3 SUCCESS (0.135 secs / 0.205 secs)
+
 </code-example>
 
 이 로그에서 마지막 줄이 가장 중요합니다.
@@ -135,11 +138,13 @@ Chrome ...: Executed 3 of 3 SUCCESS (0.135 secs / 0.205 secs)
 브라우저에서는 "Jasmine HTML Reporter"를 사용해서 다음과 같이 표시됩니다.
 
 <div class="lightbox">
-  <img src='generated/images/guide/testing/initial-jasmine-html-reporter.png' alt="브라우저에서 Jasmine HTML Reporter 확인하기">
+
+<img alt="Jasmine HTML Reporter in the browser" src="generated/images/guide/testing/initial-jasmine-html-reporter.png">
+
 </div>
 
 테스트 결과는 콘솔 로그로 확인하는 것보다 브라우저에서 확인하는 것이 더 편합니다.
-브라우저에서는 특정 테스트 스펙을 클릭해서 해당 스펙만 다시 실행해볼 수 있고, 테스트 그룹(test suite)을 클릭해서 그룹 단위로 다시 실행할 수도 있습니다.
+브라우저에서는 특정 테스트 스펙을 클릭해서 해당 스펙만 다시 실행해볼 수 있고, 테스트 그룹\(test suite\)을 클릭해서 그룹 단위로 다시 실행할 수도 있습니다.
 
 그리고 `ng test` 명령을 실행했기 때문에 코드가 변경되는 것도 감지합니다.
 
@@ -197,14 +202,14 @@ The CLI generated a test file for the `AppComponent` named `app.component.spec.t
 
 <div class="alert is-important">
 
-The test file extension **must be `.spec.ts`** so that tooling can identify it as a file with tests (also known as a _spec_ file).
+The test file extension **must be `.spec.ts`** so that tooling can identify it as a file with tests \(also known as a *spec* file\).
 
 </div>
 
 The `app.component.ts` and `app.component.spec.ts` files are siblings in the same folder.
-The root file names (`app.component`) are the same for both files.
+The root file names \(`app.component`\) are the same for both files.
 
-Adopt these two conventions in your own projects for _every kind_ of test file.
+Adopt these two conventions in your own projects for *every kind* of test file.
 -->
 `src/app` 폴더를 봅시다.
 
@@ -216,12 +221,12 @@ IDE와 같은 툴에서 스펙 파일을 구분하려면 테스트 파일의 확
 
 </div>
 
-두 파일을 보면 `app.component.ts` 파일과 `app.component.spec.ts` 파일은 같은 폴더에 이웃한 파일이며, 두 파일의 컴포넌트 이름 부분(`app.component`)이 같다는 것을 확인할 수 있습니다.
+두 파일을 보면 `app.component.ts` 파일과 `app.component.spec.ts` 파일은 같은 폴더에 이웃한 파일이며, 두 파일의 컴포넌트 이름 부분\(`app.component`\)이 같다는 것을 확인할 수 있습니다.
 
-이 룰은 프로젝트 안에 있는 _모든_ 테스트 파일에 적용하는 것이 좋습니다.
+이 룰은 프로젝트 안에 있는 *모든* 테스트 파일에 적용하는 것이 좋습니다.
 
 
-{@a q-spec-file-location}
+<a id="q-spec-file-location"></a>
 
 <!--
 #### Place your spec file next to the file it tests
@@ -232,23 +237,23 @@ IDE와 같은 툴에서 스펙 파일을 구분하려면 테스트 파일의 확
 It's a good idea to put unit test spec files in the same folder
 as the application source code files that they test:
 
-- Such tests are painless to find.
-- You see at a glance if a part of your application lacks tests.
-- Nearby tests can reveal how a part works in context.
-- When you move the source (inevitable), you remember to move the test.
-- When you rename the source file (inevitable), you remember to rename the test file.
+*   Such tests are painless to find
+*   You see at a glance if a part of your application lacks tests
+*   Nearby tests can reveal how a part works in context
+*   When you move the source \(inevitable\), you remember to move the test
+*   When you rename the source file \(inevitable\), you remember to rename the test file
 -->
 유닛 테스트 스펙 파일은 테스트하려는 파일과 같은 폴더에 두는 것이 좋습니다.
 이런 점에서 좋습니다:
 
-- 파일을 찾기 쉽습니다.
-- 애플리케이션에 테스트가 적용되지 않은 부분을 빠르게 찾을 수 있습니다.
-- 근처에 있는 테스트 파일이 어떤 컨텍스트에서 동작하는지 확인할 수 있습니다.
-- 소스 파일을 옮기면서 테스트 파일도 빠뜨리지 않고 옮길 수 있습니다.
-- 소스 파일의 이름을 변경할 때 테스트 파일도 빠뜨리지 않고 바꿀 수 있습니다.
+*   파일을 찾기 쉽습니다.
+*   애플리케이션에 테스트가 적용되지 않은 부분을 빠르게 찾을 수 있습니다.
+*   근처에 있는 테스트 파일이 어떤 컨텍스트에서 동작하는지 확인할 수 있습니다.
+*   소스 파일을 옮기면서 테스트 파일도 빠뜨리지 않고 옮길 수 있습니다.
+*   소스 파일의 이름을 변경할 때 테스트 파일도 빠뜨리지 않고 바꿀 수 있습니다.
 
 
-{@a q-specs-in-test-folder}
+<a id="q-specs-in-test-folder"></a>
 
 <!--
 #### Place your spec files in a test folder
@@ -274,7 +279,7 @@ next to their corresponding helper files.
 통합 테스트와 관련된 테스트 헬퍼도 이 폴더에 함께 두는 것이 좋습니다.
 
 
-{@a ci}
+<a id="ci"></a>
 
 <!--
 ## Set up continuous integration
@@ -283,7 +288,7 @@ next to their corresponding helper files.
 
 <!--
 One of the best ways to keep your project bug-free is through a test suite, but you might forget to run tests all the time.
-Continuous integration (CI) servers let you set up your project repository so that your tests run on every commit and pull request.
+Continuous integration \(CI\) servers let you set up your project repository so that your tests run on every commit and pull request.
 
 There are paid CI services like Circle CI and Travis CI, and you can also host your own for free using Jenkins and others.
 Although Circle CI and Travis CI are paid services, they are provided free for open source projects.
@@ -293,7 +298,7 @@ Contributions to the Angular repository are automatically run through a whole su
 This article explains how to configure your project to run Circle CI and Travis CI, and also update your test configuration to be able to run tests in the Chrome browser in either environment.
 -->
 프로젝트에서 발생하는 버그를 방지하려면 주기적으로 테스트를 실행하는 것이 좋지만, 매번 테스트를 실행해야 하는 것은 번거로운 일입니다.
-이 때 프로젝트 레파지토리에 CI(Continuous integration) 서버를 연결하면 이 레파지토리에 커밋이나 풀 리퀘스트가 있을 때마다 자동으로 테스트를 실행하게 할 수 있습니다.
+이 때 프로젝트 레파지토리에 CI\(Continuous integration\) 서버를 연결하면 이 레파지토리에 커밋이나 풀 리퀘스트가 있을 때마다 자동으로 테스트를 실행하게 할 수 있습니다.
 
 Circle CI와 Travis CI는 이런 경우에 사용하는 유료 CI 서비스입니다. 그리고 Jenkins와 같은 툴을 사용하면 무료 CI 환경을 구성할 수도 있습니다.
 Circle CI와 Travis CI는 기본적으로 유료 서비스지만, 오픈 소스 프로젝트에는 무료로 사용할 수 있습니다.
@@ -309,72 +314,71 @@ Angular 공식 레파지토리에 코드를 반영할 때도 Circle CI 테스트
 ### Circle CI 환경 설정하기
 
 <!--
-Step 1: Create a folder called `.circleci` at the project root.
+1.  Create a folder called `.circleci` at the project root.
+1.  In the new folder, create a file called `config.yml` with the following content:
 
-Step 2: In the new folder, create a file called `config.yml` with the following content:
+    <code-example format="yaml" language="yaml">
 
-```
-version: 2
-jobs:
-  build:
-    working_directory: ~/my-project
-    docker:
-      - image: circleci/node:10-browsers
-    steps:
-      - checkout
-      - restore_cache:
-          key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - run: npm install
-      - save_cache:
-          key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          paths:
-            - "node_modules"
-      - run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-```
+    version: 2
+    jobs:
+      build:
+        working_directory: ~/my-project
+        docker:
+          &hyphen; image: circleci/node:10-browsers
+        steps:
+          &hyphen; checkout
+          &hyphen; restore_cache:
+              key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          &hyphen; run: npm install
+          &hyphen; save_cache:
+              key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+              paths:
+                &hyphen; "node_modules"
+          &hyphen; run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
-This configuration caches `node_modules/` and uses [`npm run`](https://docs.npmjs.com/cli/run-script) to run CLI commands, because `@angular/cli` is not installed globally.
-The double dash (`--`) is needed to pass arguments into the `npm` script.
+    </code-example>
 
-Step 3: Commit your changes and push them to your repository.
+    This configuration caches `node_modules/` and uses [`npm run`](https://docs.npmjs.com/cli/run-script) to run CLI commands, because `@angular/cli` is not installed globally.
+    The double hyphen \(`--`\) characters is needed to pass arguments into the `npm` script.
 
-Step 4: [Sign up for Circle CI](https://circleci.com/docs/2.0/first-steps/) and [add your project](https://circleci.com/add-projects).
-Your project should start building.
+1.  Commit your changes and push them to your repository.
+1.  [Sign up for Circle CI](https://circleci.com/docs/2.0/first-steps) and [add your project](https://circleci.com/add-projects).
+    Your project should start building.
 
-* Learn more about Circle CI from [Circle CI documentation](https://circleci.com/docs/2.0/).
+    *   Learn more about Circle CI from [Circle CI documentation](https://circleci.com/docs/2.0).
 -->
-1단계: 프로젝트 최상위 폴더에 `.circleci` 폴더를 생성합니다.
+1.  프로젝트 최상위 폴더에 `.circleci` 폴더를 생성합니다.
+1.  이 폴더에 `config.yml` 파일을 생성하고 파일의 내용을 다음과 같이 작성합니다:
 
-2단계: 이 폴더에 `config.yml` 파일을 생성하고 파일의 내용을 다음과 같이 작성합니다:
+    <code-example format="yaml" language="yaml">
 
-```
-version: 2
-jobs:
-  build:
-    working_directory: ~/my-project
-    docker:
-      - image: circleci/node:10-browsers
-    steps:
-      - checkout
-      - restore_cache:
-          key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - run: npm install
-      - save_cache:
-          key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          paths:
-            - "node_modules"
-      - run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
-```
+    version: 2
+    jobs:
+      build:
+        working_directory: ~/my-project
+        docker:
+          &hyphen; image: circleci/node:10-browsers
+        steps:
+          &hyphen; checkout
+          &hyphen; restore_cache:
+              key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          &hyphen; run: npm install
+          &hyphen; save_cache:
+              key: my-project-{{ .Branch }}-{{ checksum "package-lock.json" }}
+              paths:
+                &hyphen; "node_modules"
+          &hyphen; run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
-이 환경설정 파일의 내용은 `node_modules/` 폴더의 내용을 캐싱하고 [`npm run`](https://docs.npmjs.com/cli/run-script)으로 Angular CLI 명령을 실행하는 것입니다.
-`@angular/cli`는 전역 범위에 필요하기 때문에 `npm install` 명령을 실행해서 설치했습니다.
-그리고 `npm` 스크립트에 옵션을 지정하려면 대시 2개(`--`)를 함께 사용해야 합니다.
+    </code-example>
 
-3단계: 변경사항을 커밋하고 레파지토리에 푸시합니다.
+    이 환경설정 파일의 내용은 `node_modules/` 폴더의 내용을 캐싱하고 [`npm run`](https://docs.npmjs.com/cli/run-script)으로 Angular CLI 명령을 실행하는 것입니다.
+    `@angular/cli`는 전역 범위에 필요하기 때문에 `npm install` 명령을 실행해서 설치했습니다.
+    그리고 `npm` 스크립트에 옵션을 지정하려면 대시 2개(`--`)를 함께 사용해야 합니다.
 
-4단계: [Circle CI에 회원가입](https://circleci.com/docs/2.0/first-steps/)한 뒤에 [프로젝트를 추가](https://circleci.com/add-projects)하면 프로젝트 빌드가 시작됩니다.
+1.  변경사항을 커밋하고 레파지토리에 푸시합니다.
+1.  [Circle CI에 회원가입](https://circleci.com/docs/2.0/first-steps)한 뒤에 [프로젝트를 추가](https://circleci.com/add-projects)하면 프로젝트 빌드가 시작됩니다.
 
-* 더 자세한 내용은 [Circle CI 문서](https://circleci.com/docs/2.0/)를 참고하세요.
+    *   더 자세한 내용은 [Circle CI 문서](https://circleci.com/docs/2.0)를 참고하세요.
 
 
 <!--
@@ -383,153 +387,247 @@ jobs:
 ### Travis CI 환경 설정하기
 
 <!--
-Step 1: Create a file called `.travis.yml` at the project root, with the following content:
+1.  Create a file called `.travis.yml` at the project root, with the following content:
 
-```
-language: node_js
-node_js:
-  - "10"
+    <code-example format="yaml" language="yaml">
 
-addons:
-  chrome: stable
+    language: node_js
+    node_js:
+      &hyphen; "10"
 
-cache:
-  directories:
-     - ./node_modules
+    addons:
+      chrome: stable
 
-install:
-  - npm install
+    cache:
+      directories:
+         &hyphen; ./node_modules
 
-script:
-  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-```
+    install:
+      &hyphen; npm install
 
-This does the same things as the CircleCI configuration, except that Travis doesn't come with Chrome, so use Chromium instead.
+    script:
+      &hyphen; npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
-Step 2: Commit your changes and push them to your repository.
+    </code-example>
 
-Step 3: [Sign up for Travis CI](https://travis-ci.org/auth) and [add your project](https://travis-ci.org/profile).
-You'll need to push a new commit to trigger a build.
+    This does the same things as the CircleCI configuration, except that Travis doesn't come with Chrome, so use Chromium instead.
 
-* Learn more about Travis CI testing from [Travis CI documentation](https://docs.travis-ci.com/).
+1.  Commit your changes and push them to your repository.
+1.  [Sign up for Travis CI](https://travis-ci.org/auth) and [add your project](https://travis-ci.org/profile).
+    You'll need to push a new commit to trigger a build.
+
+    *   Learn more about Travis CI testing from [Travis CI documentation](https://docs.travis-ci.com).
 -->
-1단계: 프로젝트 최상위 폴더에 `.travis.yml` 파일을 생성하고 내용을 다음과 같이 작성합니다:
+1.  프로젝트 최상위 폴더에 `.travis.yml` 파일을 생성하고 내용을 다음과 같이 작성합니다:
 
-```
-language: node_js
-node_js:
-  - "10"
+    <code-example format="yaml" language="yaml">
 
-addons:
-  chrome: stable
+    language: node_js
+    node_js:
+      &hyphen; "10"
 
-cache:
-  directories:
-     - ./node_modules
+    addons:
+      chrome: stable
 
-install:
-  - npm install
+    cache:
+      directories:
+         &hyphen; ./node_modules
 
-script:
-  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-```
+    install:
+      &hyphen; npm install
+
+    script:
+      &hyphen; npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+    </code-example>
+
+    이 환경설정 파일의 내용은 Circle CI에서 설정했던 내용과 같지만, Travis에는 Chrome이 설치되어있지 않기 때문에 Chromium을 추가로 설치했습니다.
+
+1.  변경사항을 커밋하고 레파지토리에 푸시합니다.
+1.  [Travis CI에 회원가입](https://travis-ci.org/auth)한 뒤에 [프로젝트를 추가](https://travis-ci.org/profile)합니다.
+    빌드를 실행하려면 레파지토리에 새로운 커밋이 푸시되어야 합니다.
+
+    *   더 자세한 내용은 [Travis CI 문서](https://docs.travis-ci.com)를 참고하세요.
 
 
-이 환경설정 파일의 내용은 Circle CI에서 설정했던 내용과 같지만, Travis에는 Chrome이 설치되어있지 않기 때문에 Chromium을 추가로 설치했습니다.
-
-2단계: 변경사항을 커밋하고 레파지토리에 푸시합니다.
-
-3단계: [Travis CI에 회원가입](https://travis-ci.org/auth)한 뒤에 [프로젝트를 추가](https://circleci.com/add-projects)합니다.
-빌드를 실행하려면 레파지토리에 새로운 커밋이 푸시되어야 합니다.
-
-* 더 자세한 내용은 [Travis CI 문서](https://docs.travis-ci.com/)를 참고하세요.
-
-
-
+<!--
 ### Configure project for GitLab CI
+-->
+### GitLab CI 환경 설정하기
 
-Step 1: Create a file called `.gitlab-ci.yml` at the project root, with the following content:
+<!--
+1.  Create a file called `.gitlab-ci.yml` at the project root, with the following content:
 
-```
-image: node:14.15-stretch
-variables:
-  FF_USE_FASTZIP: "true"
+    <code-example format="yaml" language="yaml">
 
-cache:
-  untracked: true
-  policy: push
-  key: ${CI_COMMIT_SHORT_SHA}
-  paths:
-    - node_modules/
+    image: node:14.15-stretch
+    variables:
+      FF_USE_FASTZIP: "true"
 
-.pull_cached_node_modules:
-  cache:
-    untracked: true
-    key: ${CI_COMMIT_SHORT_SHA}
-    policy: pull
+    cache:
+      untracked: true
+      policy: push
+      key: &dollar;{CI_COMMIT_SHORT_SHA}
+      paths:
+        &hyphen; node_modules/
 
-stages:
-  - setup
-  - test
+    .pull_cached_node_modules:
+      cache:
+        untracked: true
+        key: &dollar;{CI_COMMIT_SHORT_SHA}
+        policy: pull
 
-install:
-  stage: setup
-  script:
-    - npm ci
+    stages:
+      &hyphen; setup
+      &hyphen; test
 
-test:
-  stage: test
-  extends: .pull_cached_node_modules
-  before_script:
-    - apt-get update
-    - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    - apt install -y ./google-chrome*.deb;
-    - export CHROME_BIN=/usr/bin/google-chrome
-  script:
-    - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-```
+    install:
+      stage: setup
+      script:
+        &hyphen; npm ci
 
-This configuration caches `node_modules/` in the `install` job and re-uses the cached `node_modules/` in the `test` job.
+    test:
+      stage: test
+      extends: .pull_cached_node_modules
+      before_script:
+        &hyphen; apt-get update
+        &hyphen; wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        &hyphen; apt install -y ./google-chrome*.deb;
+        &hyphen; export CHROME_BIN=/usr/bin/google-chrome
+      script:
+        &hyphen; npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
-Step 2: [Sign up for GitLab CI](https://gitlab.com/users/sign_in) and [add your project](https://gitlab.com/projects/new).
-You'll need to push a new commit to trigger a build.
+    </code-example>
 
-Step 3: Commit your changes and push them to your repository.
+    This configuration caches `node_modules/` in the `install` job and re-uses the cached `node_modules/` in the `test` job.
 
-* Learn more about GitLab CI testing from [GitLab CI/CD documentation](https://docs.gitlab.com/ee/ci/).
+1.  [Sign up for GitLab CI](https://gitlab.com/users/sign_in) and [add your project](https://gitlab.com/projects/new).
+    You'll need to push a new commit to trigger a build.
 
+1.  Commit your changes and push them to your repository.
+    *   Learn more about GitLab CI testing from [GitLab CI/CD documentation](https://docs.gitlab.com/ee/ci).
+-->
+1.  `.gitlab-ci.yml` 파일을 만들고 이렇게 작성합니다:
+
+    <code-example format="yaml" language="yaml">
+
+    image: node:14.15-stretch
+    variables:
+      FF_USE_FASTZIP: "true"
+
+    cache:
+      untracked: true
+      policy: push
+      key: &dollar;{CI_COMMIT_SHORT_SHA}
+      paths:
+        &hyphen; node_modules/
+
+    .pull_cached_node_modules:
+      cache:
+        untracked: true
+        key: &dollar;{CI_COMMIT_SHORT_SHA}
+        policy: pull
+
+    stages:
+      &hyphen; setup
+      &hyphen; test
+
+    install:
+      stage: setup
+      script:
+        &hyphen; npm ci
+
+    test:
+      stage: test
+      extends: .pull_cached_node_modules
+      before_script:
+        &hyphen; apt-get update
+        &hyphen; wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        &hyphen; apt install -y ./google-chrome*.deb;
+        &hyphen; export CHROME_BIN=/usr/bin/google-chrome
+      script:
+        &hyphen; npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+    </code-example>
+
+    이렇게 설정하면 `install` 잡이 실행되면서 `node_modules/`에 npm 패키지들을 캐싱하며, 이렇게 캐싱된 패키지들은 `test` 잡에서도 활용됩니다.
+
+1.  [GitLab CI에 회원가입](https://gitlab.com/users/sign_in)을 하고 [프로젝트를 추가](https://gitlab.com/projects/new)합니다.
+    이제 새로운 커밋을 푸시하면 빌드가 시작됩니다.
+
+1.  코드를 수정하고 푸시해 보세요.
+    *   더 자세한 내용은 [GitLab CI/CD 문서](https://docs.gitlab.com/ee/ci)를 참고하세요.
+
+
+<!--
 ### Configure project for GitHub Actions
+-->
+### GitHub Actions 프로젝트 환경 설정하기
 
-Step 1: Create a folder called `.github/workflows` at root of your project
+<!--
+1.  Create a folder called `.github/workflows` at root of your project.
+1.  In the new folder, create a file called `main.yml` with the following content:
 
-Step 2: In the new folder, create a file called `main.yml` with the following content:
+    <code-example format="yaml" language="yaml">
 
-```yml
-name: CI Angular app through Github Actions
-on: push
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
+    name: CI Angular app through Github Actions
+    on: push
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+        steps:
+          &hyphen; uses: actions/checkout&commat;v2
+          &hyphen; name: Use Node.js 14.x
+            uses: actions/setup-node&commat;v1
+            with:
+              node-version: 14.x
 
-      - name: Setup
-        run: npm ci
+          &hyphen; name: Setup
+            run: npm ci
 
-      - name: Test
-        run: |
-          npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-```
+          &hyphen; name: Test
+            run: &verbar;
+              npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
-Step 3: [Sign up for GitHub](https://github.com/join) and [add your project](https://github.com/new). You'll need to push a new commit to trigger a build.
+    </code-example>
 
-Step 4: Commit your changes and push them to your repository.
+1.  [Sign up for GitHub](https://github.com/join) and [add your project](https://github.com/new).
+    You'll need to push a new commit to trigger a build.
 
-* Learn more about GitHub Actions from [GitHub Actions documentation](https://docs.github.com/en/actions).
+1.  Commit your changes and push them to your repository.
+    *   Learn more about GitHub Actions from [GitHub Actions documentation](https://docs.github.com/en/actions)
+-->
+1.  프로젝트 최상위 폴더에 `.github/workflows` 폴더를 생성합니다.
+1.  새로 만든 폴더에 `main.yml` 파일을 생성하고 이 파일의 내용을 이렇게 작성합니다:
+
+    <code-example format="yaml" language="yaml">
+
+    name: CI Angular app through Github Actions
+    on: push
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+        steps:
+          &hyphen; uses: actions/checkout&commat;v2
+          &hyphen; name: Use Node.js 14.x
+            uses: actions/setup-node&commat;v1
+            with:
+              node-version: 14.x
+
+          &hyphen; name: Setup
+            run: npm ci
+
+          &hyphen; name: Test
+            run: &verbar;
+              npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+    </code-example>
+
+1.  [GitHub에 회원 가입](https://github.com/join)을 하고 [프로젝트를 추가](https://github.com/new)합니다.
+    이제 새로운 커밋을 푸시하면 빌드가 시작됩니다.
+
+1.  코드를 수정하고 푸시해 보세요.
+    *   더 자세한 내용은 [GitHub Actions 문서](https://docs.github.com/en/actions)를 참고하세요.
 
 
 <!--
@@ -540,12 +638,39 @@ Step 4: Commit your changes and push them to your repository.
 <!--
 While the CLI command `ng test` is generally running the CI tests in your environment, you might still need to adjust your configuration to run the Chrome browser tests.
 
-There is a configuration file for the [Karma JavaScript test runner](https://karma-runner.github.io/latest/config/configuration-file.html),
-which you must adjust to start Chrome without sandboxing.
+There is a configuration file for the [Karma JavaScript test runner](https://karma-runner.github.io/latest/config/configuration-file.html), which you must adjust to start Chrome without sandboxing.
 
 We'll be using [Headless Chrome](https://developers.google.com/web/updates/2017/04/headless-chrome#cli) in these examples.
 
-* In the Karma configuration file, `karma.conf.js`, add a custom launcher called ChromeHeadlessCI below browsers:
+*   In the Karma configuration file, `karma.conf.js`, add a custom launcher called ChromeHeadlessCI below browsers:
+
+    <code-example format="javascript" language="javascript">
+
+    browsers: ['ChromeHeadlessCI'],
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
+
+    </code-example>
+
+Now, run the following command to use the `--no-sandbox` flag:
+
+<code-example format="shell" language="shell">
+
+ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+</code-example>
+
+<div class="alert is-helpful">
+
+**NOTE**: <br />
+Right now, you'll also want to include the `--disable-gpu` flag if you're running on Windows.
+See [crbug.com/737678](https://crbug.com/737678).
+
+</div>
 -->
 로컬 개발환경에서 Angular CLI로 `ng test` 명령을 실행하면 Chrome 브라우저가 실행되고 이 브라우저에서 테스트가 실행됩니다.
 
@@ -554,51 +679,33 @@ We'll be using [Headless Chrome](https://developers.google.com/web/updates/2017/
 
 이번 섹션에서는 [Headless Chrome](https://developers.google.com/web/updates/2017/04/headless-chrome#cli)을 사용하는 방법에 대해 알아봅시다.
 
-* Karma 환경설정 파일 `karma.conf.js`에 커스텀 런처를 ChromeHeadlessCI를 추가합니다:
+*   Karma 환경설정 파일 `karma.conf.js`에 커스텀 런처를 ChromeHeadlessCI를 추가합니다:
 
-```
-browsers: ['ChromeHeadlessCI'],
-customLaunchers: {
-  ChromeHeadlessCI: {
-    base: 'ChromeHeadless',
-    flags: ['--no-sandbox']
-  }
-},
-```
+    <code-example format="javascript" language="javascript">
 
-<!--
-* In the root folder of your e2e tests project, create a new file named `protractor-ci.conf.js`. This new file extends the original `protractor.conf.js`.
--->
-* e2e 테스트 프로젝트의 최상위 폴더에 `protractor-ci.conf.js` 파일을 생성합니다. 이 파일은 기존에 존재하는 `protractor.conf.js` 파일을 확장하는 용도로 사용합니다.
+    browsers: ['ChromeHeadlessCI'],
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
 
-```
-const config = require('./protractor.conf').config;
+    </code-example>
 
-config.capabilities = {
-  browserName: 'chrome',
-  chromeOptions: {
-    args: ['--headless', '--no-sandbox']
-  }
-};
-
-exports.config = config;
-```
-
-<!--
-Now, run the following command to use the `--no-sandbox` flag:
--->
 그러면 아래 명령들은 `--no-sandbox` 플래그가 지정된 채로 실행됩니다.
 
-<code-example language="sh">
-  ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+<code-example format="shell" language="shell">
+
+ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+
 </code-example>
 
 <div class="alert is-helpful">
 
-   <!--
-   **Note:** Right now, you'll also want to include the `--disable-gpu` flag if you're running on Windows. See [crbug.com/737678](https://crbug.com/737678).
-   -->
-   **참고:** 개발 환경이 Windows라면 `--disable-gpu` 플래그를 사용하는 것이 나을 수 있습니다. 자세한 내용은 [이 링크](https://crbug.com/737678)를 참고하세요.
+**참고**: <br />
+개발 환경이 Windows라면 `--disable-gpu` 플래그를 사용하는 것이 나을 수 있습니다.
+자세한 내용은 [이 링크](https://crbug.com/737678)를 참고하세요.
 
 </div>
 
@@ -609,24 +716,37 @@ Now, run the following command to use the `--no-sandbox` flag:
 ## 참고
 
 <!--
-After you've set up your application for testing, you might find the following testing  guides useful.
+After you've set up your application for testing, you might find the following testing guides useful.
 
-* [Code coverage](guide/testing-code-coverage)&mdash;find out how much of your app your tests are covering and how to specify required amounts.
-* [Testing services](guide/testing-services)&mdash;learn how to test the services your application uses.
-* [Basics of testing components](guide/testing-components-basics)&mdash;discover the basics of testing Angular components.
-* [Component testing scenarios](guide/testing-components-scenarios)&mdash;read about the various kinds of component testing scenarios and use cases.
-* [Testing attribute directives](guide/testing-attribute-directives)&mdash;learn about how to test your attribute directives.
-* [Testing pipes](guide/testing-pipes)&mdash;find out how to test pipes.
-* [Debugging tests](guide/test-debugging)&mdash;uncover common testing bugs.
-* [Testing utility APIs](guide/testing-utility-apis)&mdash;get familiar with Angular testing features.
+|                                                                    | Details |
+|:---                                                                |:---     |
+| [Code coverage](guide/testing-code-coverage)                       | How much of your app your tests are covering and how to specify required amounts. |
+| [Testing services](guide/testing-services)                         | How to test the services your application uses.                                   |
+| [Basics of testing components](guide/testing-components-basics)    | Basics of testing Angular components.                                             |
+| [Component testing scenarios](guide/testing-components-scenarios)  | Various kinds of component testing scenarios and use cases.                       |
+| [Testing attribute directives](guide/testing-attribute-directives) | How to test your attribute directives.                                            |
+| [Testing pipes](guide/testing-pipes)                               | How to test pipes.                                                                |
+| [Debugging tests](guide/test-debugging)                            | Common testing bugs.                                                              |
+| [Testing utility APIs](guide/testing-utility-apis)                 | Angular testing features.                                                         |
 -->
 애플리케이션에 테스트를 적용하고 나면 이런 내용에 대해 알아보는 것도 좋습니다.
 
-* [코드 커버리지](guide/testing-code-coverage) &mdash; 테스트 코드가 애플리케이션을 얼마나 검사하고 있는지, 특정 기준으로 이 수치를 보장해야 할 때 사용합니다.
-* [서비스 테스트하기](guide/testing-services) &mdash; 서비스를 테스트하는 방법에 대해 알아보세요.
-* [컴포넌트 테스트하기 기본](guide/testing-components-basics) &mdash; Angular 컴포넌트를 테스트할 때 필요한 기본 개념에 대해 알아보세요.
-* [컴포넌트 테스트 시나리오](guide/testing-components-scenarios) &mdash; 컴포넌트의 형태에 따라 테스트하는 방법에 대해 알아보세요.
-* [어트리뷰트 디렉티브 테스트하기](guide/testing-attribute-directives) &mdash; 어트리뷰트 디렉티브를 테스트하는 방법에 대해 알아보세요.
-* [파이프 테스트하기](guide/testing-pipes) &mdash; 파이프를 테스트하는 방법에 대해 알아보세요.
-* [테스트 디버깅하기](guide/test-debugging) &mdash; 테스트 스펙을 작성할 때 발생하는 버그의 원인을 확인해 보세요.
-* [유틸리티 API 테스트하기](guide/testing-utility-apis) &mdash; Angular가 제공하는 테스트 기능에 대해 알아보세요.
+|                                                        | 설명                                                          |
+|:-------------------------------------------------------|:------------------------------------------------------------|
+| [코드 커버리지](guide/testing-code-coverage)                 | 테스트 코드가 애플리케이션을 얼마나 검사하고 있는지, 특정 기준으로 이 수치를 보장해야 할 때 사용합니다. |
+| [서비스 테스트하기](guide/testing-services)                    | 서비스를 테스트하는 방법에 대해 알아보세요.                                    |
+| [컴포넌트 테스트하기 기본](guide/testing-components-basics)       | Angular 컴포넌트를 테스트할 때 필요한 기본 개념에 대해 알아보세요.                   |
+| [컴포넌트 테스트 시나리오](guide/testing-components-scenarios)    | 컴포넌트의 형태에 따라 테스트하는 방법에 대해 알아보세요.                            |
+| [어트리뷰트 디렉티브 테스트하기](guide/testing-attribute-directives) | 어트리뷰트 디렉티브를 테스트하는 방법에 대해 알아보세요.                             |
+| [파이프 테스트하기](guide/testing-pipes)                       | 파이프를 테스트하는 방법에 대해 알아보세요.                                    |
+| [테스트 디버깅하기](guide/test-debugging)                      | 테스트 스펙을 작성할 때 발생하는 버그의 원인을 확인해 보세요.                         |
+| [테스트 유틸리티 API](guide/testing-utility-apis)             | Angular가 제공하는 테스트 기능에 대해 알아보세요.                             |
+
+
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

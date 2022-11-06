@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import {compileInjectable, ConstantPool, createR3ProviderExpression, outputAst as o, R3DeclareInjectableMetadata, R3InjectableMetadata, R3PartialDeclaration} from '@angular/compiler';
+import {compileInjectable, ConstantPool, createMayBeForwardRefExpression, ForwardRefHandling, outputAst as o, R3DeclareInjectableMetadata, R3InjectableMetadata, R3PartialDeclaration} from '@angular/compiler';
 
 import {AstObject} from '../../ast/ast_value';
 import {FatalLinkerError} from '../../fatal_linker_error';
 
-import {PartialLinker} from './partial_linker';
+import {LinkedDefinition, PartialLinker} from './partial_linker';
 import {extractForwardRef, getDependency, wrapReference} from './util';
 
 /**
@@ -19,10 +19,9 @@ import {extractForwardRef, getDependency, wrapReference} from './util';
 export class PartialInjectableLinkerVersion1<TExpression> implements PartialLinker<TExpression> {
   linkPartialDeclaration(
       constantPool: ConstantPool,
-      metaObj: AstObject<R3PartialDeclaration, TExpression>): o.Expression {
+      metaObj: AstObject<R3PartialDeclaration, TExpression>): LinkedDefinition {
     const meta = toR3InjectableMeta(metaObj);
-    const def = compileInjectable(meta, /* resolveForwardRefs */ false);
-    return def.expression;
+    return compileInjectable(meta, /* resolveForwardRefs */ false);
   }
 }
 
@@ -43,8 +42,9 @@ export function toR3InjectableMeta<TExpression>(
     type: wrapReference(typeExpr.getOpaque()),
     internalType: typeExpr.getOpaque(),
     typeArgumentCount: 0,
-    providedIn: metaObj.has('providedIn') ? extractForwardRef(metaObj.getValue('providedIn')) :
-                                            createR3ProviderExpression(o.literal(null), false),
+    providedIn: metaObj.has('providedIn') ?
+        extractForwardRef(metaObj.getValue('providedIn')) :
+        createMayBeForwardRefExpression(o.literal(null), ForwardRefHandling.None),
   };
 
   if (metaObj.has('useClass')) {

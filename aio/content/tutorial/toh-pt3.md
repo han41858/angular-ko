@@ -44,39 +44,43 @@ The `HeroDetailComponent` will present details of a selected hero.
 <!--
 Use the Angular CLI to generate a new component named `hero-detail`.
 
-<code-example language="sh">
-  ng generate component hero-detail
+<code-example format="shell" language="shell">
+
+ng generate component hero-detail
+
 </code-example>
 
 The command scaffolds the following:
 
-* Creates a directory `src/app/hero-detail`.
+*   Creates a directory `src/app/hero-detail`.
 
 Inside that directory four files are generated:
 
-* A CSS file for the component styles.
-* An HTML file for the component template.
-* A TypeScript file with a component class named `HeroDetailComponent`.
-* A test file for the `HeroDetailComponent` class.
+*   A CSS file for the component styles.
+*   An HTML file for the component template.
+*   A TypeScript file with a component class named `HeroDetailComponent`.
+*   A test file for the `HeroDetailComponent` class.
 
 The command also adds the `HeroDetailComponent` as a declaration in the `@NgModule` decorator of the `src/app/app.module.ts` file.
 -->
 Angular CLI로 `hero-detail` 컴포넌트를 생성합니다.
 
-<code-example language="sh">
-  ng generate component hero-detail
+<code-example format="shell" language="shell">
+
+ng generate component hero-detail
+
 </code-example>
 
 이 명령은 다음 순서로 실행됩니다:
 
-* `src/app/hero-detail` 폴더를 생성합니다.
+*   `src/app/hero-detail` 폴더를 생성합니다.
 
 그리고 이 폴더에 4개의 파일을 생성합니다:
 
-* 컴포넌트 스타일을 지정하는 CSS 파일
-* 컴포넌트 템플릿을 정의하는 HTML 파일
-* 컴포넌트 클래스 `HeroDetailComponent`가 정의된 TypeScript 파일
-* `HeroDetailComponent` 클래스 파일을 테스트하는 파일
+*   컴포넌트 스타일을 지정하는 CSS 파일
+*   컴포넌트 템플릿을 정의하는 HTML 파일
+*   컴포넌트 클래스 `HeroDetailComponent`가 정의된 TypeScript 파일
+*   `HeroDetailComponent` 클래스 파일을 테스트하는 파일
 
 이 명령을 실행하면 `HeroDetailComponent`가 자동으로 `src/app/app.module.ts` 파일에 있는 `@NgModule`에 등록됩니다.
 
@@ -90,22 +94,22 @@ Angular CLI로 `hero-detail` 컴포넌트를 생성합니다.
 Cut the HTML for the hero detail from the bottom of the `HeroesComponent` template and paste it over the generated boilerplate in the `HeroDetailComponent` template.
 
 The pasted HTML refers to a `selectedHero`.
-The new `HeroDetailComponent` can present _any_ hero, not just a selected hero.
+The new `HeroDetailComponent` can present *any* hero, not just a selected hero.
 So replace "selectedHero" with "hero" everywhere in the template.
 
 When you're done, the `HeroDetailComponent` template should look like this:
 
-<code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.html" header="src/app/hero-detail/hero-detail.component.html"></code-example>
+<code-example header="src/app/hero-detail/hero-detail.component.html" path="toh-pt3/src/app/hero-detail/hero-detail.component.html"></code-example>
 -->
 `HeroesComponent` 아래쪽에 히어로의 상세정보를 표시하는 HTML 템플릿을 잘라내서 `HeroDetailComponent` 템플릿에 붙여넣습니다.
 
 이 때 붙여넣은 HTML 에는 `selectedHero`를 참조하는 부분이 있습니다.
-그런데 새로 만든 `HeroDetailComponent`는 선택된 히어로가 아니라 히어로 _한 명의_ 상세정보를 표시합니다.
+그런데 새로 만든 `HeroDetailComponent`는 선택된 히어로가 아니라 히어로 *한 명의* 상세정보를 표시합니다.
 템플릿에 있는 `selectedHero`는 모두 `hero`로 변경합니다.
 
 그러면 `HeroDetailComponent`의 템플릿이 다음과 같이 작성될 것입니다:
 
-<code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.html" header="src/app/hero-detail/hero-detail.component.html"></code-example>
+<code-example header="src/app/hero-detail/hero-detail.component.html" path="toh-pt3/src/app/hero-detail/hero-detail.component.html"></code-example>
 
 
 <!--
@@ -120,24 +124,22 @@ which is of type `Hero`.
 Open the `HeroDetailComponent` class file and import the `Hero` symbol.
 
 <code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.ts"
-region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (import Hero)">
-</code-example>
+region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (import Hero)"></code-example>
 
 The `hero` property
-[must be an _Input_ property](guide/inputs-outputs "Input and Output properties"),
+[must be an `Input` property](guide/inputs-outputs "Input and Output properties"),
 annotated with the `@Input()` decorator,
-because the _external_ `HeroesComponent` [will bind to it](#heroes-component-template) like this.
+because the *external* `HeroesComponent` [will bind to it](#heroes-component-template) like this.
 
-<code-example path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding">
-</code-example>
+<code-example path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding"></code-example>
 
 Amend the `@angular/core` import statement to include the `Input` symbol.
 
-<code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" region="import-input" header="src/app/hero-detail/hero-detail.component.ts (import Input)"></code-example>
+<code-example header="src/app/hero-detail/hero-detail.component.ts (import Input)" path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" region="import-input"></code-example>
 
 Add a `hero` property, preceded by the `@Input()` decorator.
 
-<code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" header="src/app/hero-detail/hero-detail.component.ts" region="input-hero"></code-example>
+<code-example header="src/app/hero-detail/hero-detail.component.ts" path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" region="input-hero"></code-example>
 
 That's the only change you should make to the `HeroDetailComponent` class.
 There are no more properties. There's no presentation logic.
@@ -148,22 +150,20 @@ This component only receives a hero object through its `hero` property and displ
 `HeroDetailComponent` 클래스 파일을 열어서 `Hero` 심볼을 로드합니다.
 
 <code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.ts"
-region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (Hero 심볼 로드하기)">
-</code-example>
+region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (import Hero)"></code-example>
 
 이 때 `hero` 프로퍼티의 값은 _외부_ 컴포넌트인 `HeroesComponent`에서 [바인딩되어](#heroes-component-template) 전달됩니다.
 따라서 `hero` 프로퍼티는 `@Input()` 데코레이터를 사용해서 [_입력_ 프로퍼티](guide/inputs-outputs "Input and Output properties")로 선언해야 합니다.
 
-<code-example path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding">
-</code-example>
+<code-example path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding"></code-example>
 
 `@angular/core` 패키지에서 `Input` 심볼을 로드합니다.
 
-<code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" region="import-input" header="src/app/hero-detail/hero-detail.component.ts (Input 로드하기)"></code-example>
+<code-example header="src/app/hero-detail/hero-detail.component.ts (import Input)" path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" region="import-input"></code-example>
 
 그리고 `@Input()` 데코레이터와 함께 `hero` 프로퍼티를 선언합니다.
 
-<code-example path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" header="src/app/hero-detail/hero-detail.component.ts" region="input-hero"></code-example>
+<code-example header="src/app/hero-detail/hero-detail.component.ts" path="toh-pt3/src/app/hero-detail/hero-detail.component.ts" region="input-hero"></code-example>
 
 `HeroDetailComponent` 클래스는 여기까지 수정하면 됩니다.
 더 추가할 프로퍼티는 없으며 클래스에 추가할 로직도 없습니다.
@@ -179,23 +179,25 @@ region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (Hero 
 The `HeroesComponent` used to display the hero details on its own, before you removed that portion of the template.
 This section guides you through delegating logic to the `HeroDetailComponent`.
 
-
 The two components will have a parent/child relationship.
 The parent `HeroesComponent` will control the child `HeroDetailComponent`
 by sending it a new hero to display whenever
 the user selects a hero from the list.
 
-You won't change the `HeroesComponent` _class_ but you will change its _template_.
+You won't change the `HeroesComponent` *class* but you will change its *template*.
 -->
-The `HeroesComponent` used to display the hero details on its own, before you removed that portion of the template.
-This section guides you through delegating logic to the `HeroDetailComponent`.
+`HeroesComponent`는 이 컴포넌트 안에 히어로의 상세정보를 표시합니다.
+이번 섹션에서는 이 기능을 `HeroDetailComponent`에 구현해 봅시다.
 
 이제 `HeroesComponent`와 `HeroDetailComponent`는 부모/자식 관계가 되었습니다.
 부모 컴포넌트인 `HeroesComponent`는 자식 컴포넌트인 `HeroDetailComponent`를 관리합니다.
 부모 컴포넌트의 히어로 목록에서 히어로를 선택하면 이 히어로의 정보를 `HeroDetailComponent`로 보내서 히어로의 정보를 표시하게 할 것입니다.
 
+`HeroesComponent`의 *클래스*는 수정하지 않습니다.
+수정하는 것은 *템플릿* 입니다.
 
-{@a heroes-component-template}
+
+<a id="heroes-component-template"></a>
 
 <!--
 ### Update the `HeroesComponent` template
@@ -208,17 +210,15 @@ Add an `<app-hero-detail>` element near the bottom of the `HeroesComponent` temp
 
 Bind the `HeroesComponent.selectedHero` to the element's `hero` property like this.
 
-<code-example path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding" header="heroes.component.html (HeroDetail binding)">
-
-</code-example>
+<code-example header="heroes.component.html (HeroDetail binding)" path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding"></code-example>
 
 `[hero]="selectedHero"` is an Angular [property binding](guide/property-binding).
 
-It's a _one way_ data binding from
+It's a *one way* data binding from
 the `selectedHero` property of the `HeroesComponent` to the `hero` property of the target element, which maps to the `hero` property of the `HeroDetailComponent`.
 
 Now when the user clicks a hero in the list, the `selectedHero` changes.
-When the `selectedHero` changes, the _property binding_ updates `hero`
+When the `selectedHero` changes, the *property binding* updates `hero`
 and the `HeroDetailComponent` displays the new hero.
 
 The revised `HeroesComponent` template should look like this:
@@ -233,16 +233,16 @@ The browser refreshes and the application starts working again as it did before.
 
 그리고 `HeroesComponent.selectedHero` 프로퍼티를 이 엘리먼트의 `hero` 프로퍼티에 다음과 같이 바인딩합니다.
 
-<code-example path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding" header="heroes.component.html (HeroDetail 바인딩)">
+<code-example header="heroes.component.html (HeroDetail binding)" path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding"></code-example>
 
-</code-example>
+`[hero]="selectedHero"` is an Angular [property binding](guide/property-binding).
 
 `[hero]="selectedHero"`는 Angular가 제공하는 [프로퍼티 바인딩](guide/property-binding) 문법입니다.
 
-이렇게 작성하면 `HeroesComponent`의 `selectedHero` 프로퍼티가 `HeroDetailComponent`의 `hero` 프로퍼티로 _단방향_ 데이터 바인딩됩니다.
+이렇게 작성하면 `HeroesComponent`의 `selectedHero` 프로퍼티가 `HeroDetailComponent`의 `hero` 프로퍼티로 *단방향* 데이터 바인딩됩니다.
 
 이제 사용자가 목록에서 선택하면 `selectedHero`의 값이 변경됩니다.
-그리고 `selectedHero` 값이 변경되면 _프로퍼티 바인딩 된_ `HeroDetailComponent`의 `hero` 프로퍼티도 변경되면서 선택된 히어로의 상세정보가 화면에 표시됩니다.
+그리고 `selectedHero` 값이 변경되면 *프로퍼티 바인딩 된* `HeroDetailComponent`의 `hero` 프로퍼티도 변경되면서 선택된 히어로의 상세정보가 화면에 표시됩니다.
 
 이렇게 수정하고 나면 `HeroesComponent` 템플릿 코드는 다음과 같이 변경됩니다:
 
@@ -294,24 +294,33 @@ without touching the parent `HeroesComponent`.
 
 <!--
 Here are the code files discussed on this page.
+
+<code-tabs>
+
+  <code-pane header="src/app/hero-detail/hero-detail.component.ts" path="toh-pt3/src/app/hero-detail/hero-detail.component.ts"></code-pane>
+
+  <code-pane header="src/app/hero-detail/hero-detail.component.html" path="toh-pt3/src/app/hero-detail/hero-detail.component.html"></code-pane>
+
+  <code-pane header="src/app/heroes/heroes.component.html" path="toh-pt3/src/app/heroes/heroes.component.html"></code-pane>
+
+  <code-pane header="src/app/app.module.ts" path="toh-pt3/src/app/app.module.ts"></code-pane>
+
+</code-tabs>
 -->
 이 문서에서 다룬 코드는 다음과 같습니다.
 
 <code-tabs>
 
-  <code-pane header="src/app/hero-detail/hero-detail.component.ts" path="toh-pt3/src/app/hero-detail/hero-detail.component.ts">
-  </code-pane>
+  <code-pane header="src/app/hero-detail/hero-detail.component.ts" path="toh-pt3/src/app/hero-detail/hero-detail.component.ts"></code-pane>
 
-  <code-pane header="src/app/hero-detail/hero-detail.component.html" path="toh-pt3/src/app/hero-detail/hero-detail.component.html">
-  </code-pane>
+  <code-pane header="src/app/hero-detail/hero-detail.component.html" path="toh-pt3/src/app/hero-detail/hero-detail.component.html"></code-pane>
 
-  <code-pane header="src/app/heroes/heroes.component.html" path="toh-pt3/src/app/heroes/heroes.component.html">
-  </code-pane>
+  <code-pane header="src/app/heroes/heroes.component.html" path="toh-pt3/src/app/heroes/heroes.component.html"></code-pane>
 
-  <code-pane header="src/app/app.module.ts" path="toh-pt3/src/app/app.module.ts">
-  </code-pane>
+  <code-pane header="src/app/app.module.ts" path="toh-pt3/src/app/app.module.ts"></code-pane>
 
 </code-tabs>
+
 
 <!--
 ## Summary
@@ -319,18 +328,16 @@ Here are the code files discussed on this page.
 ## 정리
 
 <!--
-* You created a separate, reusable `HeroDetailComponent`.
+*   You created a separate, reusable `HeroDetailComponent`.
 
+*   You used a [property binding](guide/property-binding) to give the parent `HeroesComponent` control over the child `HeroDetailComponent`.
 
-* You used a [property binding](guide/property-binding) to give the parent `HeroesComponent` control over the child `HeroDetailComponent`.
-
-
-* You used the [`@Input` decorator](guide/inputs-outputs)
+*   You used the [`@Input` decorator](guide/inputs-outputs)
 to make the `hero` property available for binding
 by the external `HeroesComponent`.
 -->
-* 기존 컴포넌트의 일부를 분리해서 `HeroDetailComponent`를 만들었습니다. 이 컴포넌트는 다른 곳에 재사용할 수 있습니다.
+*   기존 컴포넌트의 일부를 분리해서 `HeroDetailComponent`를 만들었습니다. 이 컴포넌트는 다른 곳에 재사용할 수 있습니다.
 
-* 부모 컴포넌트 `HeroesComponent`에서 자식 컴포넌트 `HeroDetailComponent`로 데이터를 전달하기 위해 [프로퍼티 바인딩](guide/property-binding)을 사용했습니다.
+*   부모 컴포넌트 `HeroesComponent`에서 자식 컴포넌트 `HeroDetailComponent`로 데이터를 전달하기 위해 [프로퍼티 바인딩](guide/property-binding)을 사용했습니다.
 
-* `HeroDetailComponent`의 `hero` 프로퍼티 값을 컴포넌트 외부인 `HeroesComponent`에서 가져오기 위해 [`@Input` 데코레이터](guide/inputs-outputs)를 사용했습니다.
+*   `HeroDetailComponent`의 `hero` 프로퍼티 값을 컴포넌트 외부인 `HeroesComponent`에서 가져오기 위해 [`@Input` 데코레이터](guide/inputs-outputs)를 사용했습니다.

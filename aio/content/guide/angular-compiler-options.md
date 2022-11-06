@@ -9,16 +9,16 @@ When you use [AOT compilation](guide/aot-compiler), you can control how your app
 
 The template options object, `angularCompilerOptions`, is a sibling to the `compilerOptions` object that supplies standard options to the TypeScript compiler.
 
-<code-example language="json" header="tsconfig.json" path="angular-compiler-options/tsconfig.json" region="angular-compiler-options"></code-example>
+<code-example header="tsconfig.json" path="angular-compiler-options/tsconfig.json" region="angular-compiler-options"></code-example>
 -->
 [AOT 컴파일러](guide/aot-compiler)를 사용하는 환경이라면 [TypeScript 환경설정 파일](guide/typescript-configuration) `tsconfig.json` 에 컴파일러 옵션을 지정해서 애플리케이션의 템플릿이 어떻게 컴파일될지 지정할 수 있습니다.
 
 템플릿 컴파일 옵션을 지정하는 객체 `angularCompilerOptions`는 TypeScript 컴파일러의 기본 옵션을 지정하는 `compilerOptions` 객체와 같은 계층에 존재합니다.
 
-<code-example language="json" header="tsconfig.json" path="angular-compiler-options/tsconfig.json" region="angular-compiler-options"></code-example>
+<code-example header="tsconfig.json" path="angular-compiler-options/tsconfig.json" region="angular-compiler-options"></code-example>
 
 
-{@a tsconfig-extends}
+<a id="tsconfig-extends"></a>
 
 <!--
 ## Configuration inheritance with extends
@@ -34,7 +34,7 @@ The configuration options from the base file are loaded first, then overridden b
 
 For example:
 
-<code-example language="json" header="tsconfig.app.json" path="angular-compiler-options/tsconfig.app.json" region="angular-compiler-options-app"></code-example>
+<code-example header="tsconfig.app.json" path="angular-compiler-options/tsconfig.app.json" region="angular-compiler-options-app"></code-example>
 
 For more information, see the [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
 -->
@@ -45,7 +45,7 @@ TypeScript 환경설정 파일을 상속하면 상속 대상이 되는 파일을
 
 다음과 같이 사용하면 됩니다:
 
-<code-example language="json" header="tsconfig.app.json" path="angular-compiler-options/tsconfig.app.json" region="angular-compiler-options-app"></code-example>
+<code-example header="tsconfig.app.json" path="angular-compiler-options/tsconfig.app.json" region="angular-compiler-options-app"></code-example>
 
 더 자세한 내용은 [TypeScript 핸드북](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) 문서를 참고하세요.
 
@@ -64,21 +64,34 @@ AOT 템플릿 컴파일러 옵션에는 이런 항목들을 사용할 수 있습
 ### `allowEmptyCodegenFiles`
 
 <!--
-When `true`, generate all possible files even if they are empty. Default is `false`. Used by the Bazel build rules to simplify how Bazel rules track file dependencies. Do not use this option outside of the Bazel rules.
+When `true`, generate all possible files even if they are empty.
+Default is `false`.
+Used by the Bazel build rules to simplify how Bazel rules track file dependencies.
+Do not use this option outside of the Bazel rules.
 -->
 `true`로 설정하면 빈 파일도 빌드합니다.
 기본값은 `false`입니다.
 이 옵션은 파일간 의존성을 추적하는 Bazel 빌드 규칙을 간단하게 만들 때 사용합니다.
 Bazel 규칙이 아닌 곳에서는 사용하지 않는 것을 권장합니다.
 
-
 ### `annotationsAs`
 
 <!--
-Modifies how Angular-specific annotations are emitted to improve tree-shaking. Non-Angular annotations are not affected. One of `static fields` (the default) or `decorators`.
+Modifies how Angular-specific annotations are emitted to improve tree-shaking.
+Non-Angular annotations are not affected.
+One of `static fields` \(the default\) or `decorators`.
 
-*   By default, the compiler replaces decorators with a static field in the class, which allows advanced tree-shakers like [Closure compiler](https://github.com/google/closure-compiler) to remove unused classes.
-*   The `decorators` value leaves the decorators in place, which makes compilation faster. TypeScript emits calls to the `__decorate` helper. Use `--emitDecoratorMetadata` for runtime reflection (but note that the resulting code will not properly tree-shake.
+*   By default, the compiler replaces decorators with a static field in the class, which allows advanced tree-shakers like [Closure compiler](https://github.com/google/closure-compiler) to remove unused classes
+*   The `decorators` value leaves the decorators in place, which makes compilation faster.
+    TypeScript emits calls to the `__decorate` helper.
+    Use `--emitDecoratorMetadata` for runtime reflection.
+
+    <div class="alert is-helpful">
+
+    **NOTE**: <br />
+    That the resulting code will not properly tree-shake.
+
+    </div>
 -->
 Angular용 어노테이션이 트리 셰이킹의 영향을 어떻게 받을지 지정하는 옵션입니다.
 이 옵션값을 변경하더라도 Angular용이 아닌 어노테이션은 영향을 받지 않습니다.
@@ -90,25 +103,33 @@ Angular용 어노테이션이 트리 셰이킹의 영향을 어떻게 받을지 
 * `decorators`: 데코레이터를 그대로 둡니다.
   이렇게 설정하면 TypeScript가 `_decorate` 헬퍼를 사용하기 때문에 컴파일 시간이 짧아집니다.
   그리고 이렇게 빌드한 코드를 제대로 실행하려면 `--emitDecoratorMetadata` 옵션을 함께 설정해야 합니다.
+
+  <div class="alert is-helpful">
+
+  **참고**: <br />
   Angular 데코레이터는 트리 셰이킹의 대상이 되지 않습니다.
+
+  </div>
 
 
 ### `annotateForClosureCompiler`
 
 <!--
-When `true`, use [Tsickle](https://github.com/angular/tsickle) to annotate the emitted JavaScript with [JSDoc](https://jsdoc.app/) comments needed by the
-[Closure Compiler](https://github.com/google/closure-compiler). Default is `false`.
+When `true`, use [Tsickle](https://github.com/angular/tsickle) to annotate the emitted JavaScript with [JSDoc](https://jsdoc.app) comments needed by the [Closure Compiler](https://github.com/google/closure-compiler).
+Default is `false`.
 -->
 `true`로 설정하면 [Tsickle](https://github.com/angular/tsickle)을 사용해서 [Closure 컴파일러](https://github.com/google/closure-compiler)용 [JSDoc](https://jsdoc.app/) 주석을 생성합니다.
 기본값은 `false` 입니다.
 
-
 ### `compilationMode`
 
-Specifies the compilation mode to use. The following modes are available:
+Specifies the compilation mode to use.
+The following modes are available:
 
-*   `'full'`: generates fully AOT-compiled code according to the version of Angular that is currently being used.
-*   `'partial'`: generates code in a stable, but intermediate form suitable for a published library.
+| Modes       | Details |
+|:---         |:---     |
+| `'full'`    | Generates fully AOT-compiled code according to the version of Angular that is currently being used. |
+| `'partial'` | Generates code in a stable, but intermediate form suitable for a published library.                 |
 
 The default value is `'full'`.
 
@@ -116,11 +137,12 @@ The default value is `'full'`.
 ### `disableExpressionLowering`
 
 <!--
-When `true` (the default), transforms code that is or could be used in an annotation, to allow it to be imported from template factory modules. See [metadata rewriting](guide/aot-compiler#metadata-rewriting) for more information.
+When `true` \(the default\), transforms code that is or could be used in an annotation, to allow it to be imported from template factory modules.
+See [metadata rewriting](guide/aot-compiler#metadata-rewriting) for more information.
 
 When `false`, disables this rewriting, requiring the rewriting to be done manually.
 -->
-`true`로 설정하면 어노테이션에 사용되거나 사용될 수 있는 코드를 템플릿 팩토리 모듈용으로 변환합니다.
+`true` \(기본값\)로 설정하면 어노테이션에 사용되거나 사용될 수 있는 코드를 템플릿 팩토리 모듈용으로 변환합니다.
 자세한 내용은 [메타데이터 재구축](guide/aot-compiler#metadata-rewriting) 문서를 참고하세요.
 
 기본값은 `true`이며 `false`로 설정하면 메타데이터를 재구축하지 않습니다.
@@ -130,13 +152,14 @@ When `false`, disables this rewriting, requiring the rewriting to be done manual
 ### `disableTypeScriptVersionCheck`
 
 <!--
-When `true`, the compiler does not check the TypeScript version and does not report an error when an unsupported version of TypeScript is used. Not recommended, as unsupported versions of TypeScript might have undefined behavior. Default is `false`.
+When `true`, the compiler does not check the TypeScript version and does not report an error when an unsupported version of TypeScript is used.
+Not recommended, as unsupported versions of TypeScript might have undefined behavior.
+Default is `false`.
 -->
 `true`로 설정하면 컴파일러가 TypeScript 버전을 검사하지 않습니다.
 그리고 지원되지 않는 TypeScript 버전을 사용하더라도 에러를 발생시키지 않습니다.
 하지만 지원되지 않는 TypeScript 버전은 정상 동작을 보장할 수 없기 때문에 권장하지 않습니다.
 기본값은 `false`입니다.
-
 
 ### `enableI18nLegacyMessageIdFormat`
 
@@ -144,7 +167,8 @@ When `true`, the compiler does not check the TypeScript version and does not rep
 Instructs the Angular template compiler to generate legacy ids for messages that are tagged in templates by the `i18n` attribute.
 See [Mark text for translations][AioGuideI18nCommonPrepareMarkTextInComponentTemplate] for more information about marking messages for localization.
 
-Set this option to `false` unless your project relies upon translations that were previously generated using legacy IDs. Default is `true`.
+Set this option to `false` unless your project relies upon translations that were previously generated using legacy IDs.
+Default is `true`.
 
 The pre-Ivy message extraction tooling generated a variety of legacy formats for extracted message IDs.
 These message formats have a number of issues, such as whitespace handling and reliance upon information inside the original HTML of a template.
@@ -180,21 +204,24 @@ For library projects generated with the CLI, the development configuration defau
 
 Angular CLI로 라이브러리 프로젝트를 생성했을 때 개발 환경의 기본값은 `true`입니다.
 
-{@a enablelegacytemplate}
+<a id="enablelegacytemplate"></a>
 
 ### `enableLegacyTemplate`
 
 <!--
-When `true`, enables use of the `<template>` element, which was deprecated in Angular 4.0, in favor of `<ng-template>` (to avoid colliding with the DOM's element of the same name). Default is `false`. Might be required by some third-party Angular libraries.
+When `true`, enables use of the `<template>` element, which was deprecated in Angular 4.0, in favor of `<ng-template>` \(to avoid colliding with the DOM's element of the same name\).
+Default is `false`.
+Might be required by some third-party Angular libraries.
 -->
 `true`로 설정하면 Angular 4.0 부터 `<ng-template>`으로 대체된 `<template>` 엘리먼트 사용을 허용합니다.
 기본값은 `false`이며 `<template>` 엘리먼트는 DOM 엘리먼트와 이름이 겹치는 것을 막기 위해 지원이 중단되었지만, 서드 파티 Angular 라이브러리가 이 엘리먼트를 사용할 때 `true`로 설정하면 됩니다.
 
-
 ### `flatModuleId`
 
 <!--
-The module ID to use for importing a flat module (when `flatModuleOutFile` is `true`). References generated by the template compiler use this module name when importing symbols from the flat module. Ignored if `flatModuleOutFile` is `false`.
+The module ID to use for importing a flat module \(when `flatModuleOutFile` is `true`\).
+References generated by the template compiler use this module name when importing symbols from the flat module.
+Ignored if `flatModuleOutFile` is `false`.
 -->
 `flatModuleOutFile`을 `true`로 설정했을 때 사용하는 플랫 모듈의 ID를 지정합니다.
 이 ID는 플랫 모듈에서 심볼을 로드할 때 사용합니다.
@@ -203,9 +230,12 @@ The module ID to use for importing a flat module (when `flatModuleOutFile` is `t
 ### `flatModuleOutFile`
 
 <!--
-When `true`, generates a flat module index of the given file name and the corresponding flat module metadata. Use to create flat modules that are packaged similarly to `@angular/core` and `@angular/common`. When this option is used, the `package.json` for the library should refer to the generated flat module index instead of the library index file.
+When `true`, generates a flat module index of the given file name and the corresponding flat module metadata.
+Use to create flat modules that are packaged similarly to `@angular/core` and `@angular/common`.
+When this option is used, the `package.json` for the library should refer to the generated flat module index instead of the library index file.
 
-Produces only one `.metadata.json` file, which contains all the metadata necessary for symbols exported from the library index. In the generated `.ngfactory.js` files, the flat module index is used to import symbols that include both the public API from the library index as well as shrowded internal symbols.
+Produces only one `.metadata.json` file, which contains all the metadata necessary for symbols exported from the library index.
+In the generated `.ngfactory.js` files, the flat module index is used to import symbols that include both the public API from the library index as well as shrowded internal symbols.
 
 By default the `.ts` file supplied in the `files` field is assumed to be the library index.
 If more than one `.ts` file is specified, `libraryIndex` is used to select the file to use.
@@ -214,7 +244,7 @@ If more than one `.ts` file is supplied without a `libraryIndex`, an error is pr
 A flat module index `.d.ts` and `.js` is created with the given `flatModuleOutFile` name in the same location as the library index `.d.ts` file.
 
 For example, if a library uses the `public_api.ts` file as the library index of the module, the `tsconfig.json` `files` field would be `["public_api.ts"]`.
-The `flatModuleOutFile` option could then be set to (for example) `"index.js"`, which produces `index.d.ts` and `index.metadata.json` files.
+The `flatModuleOutFile` option could then be set to \(for example\) `"index.js"`, which produces `index.d.ts` and `index.metadata.json` files.
 The `module` field of the library's `package.json` would be `"index.js"` and the `typings` field would be `"index.d.ts"`.
 -->
 `true`로 설정하면 모듈 파일 이름에 맞게 플랫 모듈의 인덱스와 플랫 모듈 메타데이터를 생성합니다.
@@ -239,7 +269,8 @@ The `module` field of the library's `package.json` would be `"index.js"` and the
 ### `fullTemplateTypeCheck`
 
 <!--
-When `true` (recommended), enables the [binding expression validation](guide/aot-compiler#binding-expression-validation) phase of the template compiler, which uses TypeScript to validate binding expressions. For more information, see [Template type checking](guide/template-typecheck).
+When `true` \(recommended\), enables the [binding expression validation](guide/aot-compiler#binding-expression-validation) phase of the template compiler, which uses TypeScript to validate binding expressions.
+For more information, see [Template type checking](guide/template-typecheck).
 
 Default is `false`, but when you use the CLI command `ng new --strict`, it is set to `true` in the generated project's configuration.
 
@@ -264,9 +295,10 @@ The `fullTemplateTypeCheck` option has been deprecated in Angular 13 in favor of
 ### `generateCodeForLibraries`
 
 <!--
-When `true` (the default), generates factory files (`.ngfactory.js` and `.ngstyle.js`) for `.d.ts` files with a corresponding `.metadata.json` file.
+When `true` \(the default\), generates factory files \(`.ngfactory.js` and `.ngstyle.js`\) for `.d.ts` files with a corresponding `.metadata.json` file.
 
-When `false`, factory files are generated only for `.ts` files. Do this when using factory summaries.
+When `false`, factory files are generated only for `.ts` files.
+Do this when using factory summaries.
 -->
 `true`로 설정하면 `.d.ts`파일과 `.metadata.json` 파일과 연관되는 `.ngfactory.js`, `.ngstyle.js`과 같은 팩토리 파일을 생성합니다.
 기본값은 `true`입니다.
@@ -277,25 +309,28 @@ When `false`, factory files are generated only for `.ts` files. Do this when usi
 ### `preserveWhitespaces`
 
 <!--
-When `false` (the default), removes blank text nodes from compiled templates, which results in smaller emitted template factory modules. Set to `true` to preserve blank text nodes.
+When `false` \(the default\), removes blank text nodes from compiled templates, which results in smaller emitted template factory modules.
+Set to `true` to preserve blank text nodes.
 -->
 `false`로 설정하면 템플릿을 컴파일 한 후에 템플릿에 존재하는 빈 텍스트 노드를 제거하면서 템플릿 팩토리 모듈의 크기를 줄입니다.
 그리고 `true`로 설정하면 비어 있는 텍스트 노드를 그대로 유지합니다.
 
 기본값은 `false`입니다.
 
-
 ### `skipMetadataEmit`
 
 <!--
-When `true`, does not produce `.metadata.json` files. Default is `false`.
+When `true`, does not produce `.metadata.json` files.
+Default is `false`.
 
 The `.metadata.json` files contain information needed by the template compiler from a `.ts` file that is not included in the `.d.ts` file produced by the TypeScript compiler.
-This information includes, for example, the content of annotations (such as a component's template), which TypeScript emits to the `.js` file but not to the `.d.ts` file.
+This information includes, for example, the content of annotations \(such as a component's template\), which TypeScript emits to the `.js` file but not to the `.d.ts` file.
 
 You can set to `true` when using factory summaries, because the factory summaries include a copy of the information that is in the `.metadata.json` file.
 
-Set to `true` if you are using TypeScript's `--outFile` option, because the metadata files are not valid for this style of TypeScript output. However, we do not recommend using `--outFile` with Angular. Use a bundler, such as [webpack](https://webpack.js.org/), instead.
+Set to `true` if you are using TypeScript's `--outFile` option, because the metadata files are not valid for this style of TypeScript output.
+However, we do not recommend using `--outFile` with Angular.
+Use a bundler, such as [webpack](https://webpack.js.org), instead.
 -->
 `true`로 설정하면 `.metadata.json` 파일을 생성하지 않습니다.
 기본값은 `false`입니다.
@@ -315,7 +350,8 @@ TypeScript `--outFile` 옵션을 사용하는 경우에는 TypeScript가 생성�
 ### `skipTemplateCodegen`
 
 <!--
-When `true`, does not emit `.ngfactory.js` and `.ngstyle.js` files. This turns off most of the template compiler and disables the reporting of template diagnostics.
+When `true`, does not emit `.ngfactory.js` and `.ngstyle.js` files.
+This turns off most of the template compiler and disables the reporting of template diagnostics.
 
 Can be used to instruct the template compiler to produce `.metadata.json` files for distribution with an `npm` package while avoiding the production of `.ngfactory.js` and `.ngstyle.js` files that cannot be distributed to `npm`.
 
@@ -332,9 +368,12 @@ Angular CLI로 라이브러리 프로젝트를 생성했을 때 개발 환경의
 
 <!--
 When `true`, reports an error to the `.metadata.json` file if `"skipMetadataEmit"` is `false`.
-Default is `false`. Use only when `"skipMetadataEmit"` is `false` and `"skipTemplateCodegen"` is `true`.
+Default is `false`.
+Use only when `"skipMetadataEmit"` is `false` and `"skipTemplateCodegen"` is `true`.
 
-This option is intended to validate the `.metadata.json` files emitted for bundling with an `npm` package. The validation is strict and can emit errors for metadata that would never produce an error when used by the template compiler. You can choose to suppress the error emitted by this option for an exported symbol by including `@dynamic` in the comment documenting the symbol.
+This option is intended to validate the `.metadata.json` files emitted for bundling with an `npm` package.
+The validation is strict and can emit errors for metadata that would never produce an error when used by the template compiler.
+You can choose to suppress the error emitted by this option for an exported symbol by including `@dynamic` in the comment documenting the symbol.
 
 It is valid for `.metadata.json` files to contain errors.
 The template compiler reports these errors if the metadata is used to determine the contents of an annotation.
@@ -368,11 +407,12 @@ Angular CLI로 라이브러리 프로젝트를 생성했을 때 개발 환경의
 ### `strictInjectionParameters`
 
 <!--
-When `true` (recommended), reports an error for a supplied parameter whose injection type cannot be determined. When `false` (currently the default), constructor parameters of classes marked with `@Injectable` whose type cannot be resolved produce a warning.
+When `true` \(recommended\), reports an error for a supplied parameter whose injection type cannot be determined.
+When `false` \(currently the default\), constructor parameters of classes marked with `@Injectable` whose type cannot be resolved produce a warning.
 
 When you use the CLI command `ng new --strict`, it is set to `true` in the generated project's configuration.
 -->
-`true` 값으로 지정하면(권장) 의존성 객체의 타입을 결정할 수 없을 때 에러를 표시합니다.
+`true` 값\(권장\)으로 지정하면(권장) 의존성 객체의 타입을 결정할 수 없을 때 에러를 표시합니다.
 `false` 값으로 지정하면(기본값) 생성자에 주입되는 객체 중 `@Injectable`이 지정되었지만 타입을 결정할 수 없을 때 경고 메시지를 표시합니다.
 
 Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했다면 `true`로 지정되어 있습니다.
@@ -383,7 +423,8 @@ Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했�
 <!--
 When `true`, enables [strict template type checking](guide/template-typecheck#strict-mode).
 
-Additional strictness flags allow you to enable and disable specific types of strict template type checking. See [troubleshooting template errors](guide/template-typecheck#troubleshooting-template-errors).
+Additional strictness flags allow you to enable and disable specific types of strict template type checking.
+See [troubleshooting template errors](guide/template-typecheck#troubleshooting-template-errors).
 
 When you use the CLI command `ng new --strict`, it is set to `true` in the generated project's configuration.
 -->
@@ -398,13 +439,13 @@ Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했�
 ### `trace`
 
 <!--
-When `true`, prints extra information while compiling templates. Default is `false`.
+When `true`, prints extra information while compiling templates.
+Default is `false`.
 -->
 `true`로 설정하면 템플릿을 컴파일할 때 좀 더 많은 정보를 제공합니다.
 기본값은 `false`입니다.
 
-
-{@a cli-options}
+<a id="cli-options"></a>
 ## Command Line Options
 
 While most of the time you interact with the Angular Compiler indirectly using Angular CLI, when debugging certain issues, you might find it useful to invoke the Angular Compiler directly.
@@ -420,4 +461,4 @@ In addition to the configuration file, you can also use [`tsc` command line opti
 
 <!-- end links -->
 
-@reviewed 2021-10-13
+@reviewed 2022-02-28

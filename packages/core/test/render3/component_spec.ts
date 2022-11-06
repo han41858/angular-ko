@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {ViewEncapsulation, ɵɵdefineInjectable, ɵɵdefineInjector} from '../../src/core';
-import {createInjector} from '../../src/di/r3_injector';
+import {NgIf} from '@angular/common';
+
+import {ViewEncapsulation, ɵcreateInjector as createInjector, ɵɵdefineInjectable, ɵɵdefineInjector} from '../../src/core';
 import {AttributeMarker, markDirty, ɵɵadvance, ɵɵdefineComponent, ɵɵdirectiveInject, ɵɵproperty, ɵɵtemplate} from '../../src/render3/index';
 import {ɵɵelement, ɵɵelementEnd, ɵɵelementStart, ɵɵtext, ɵɵtextInterpolate} from '../../src/render3/instructions/all';
 import {RenderFlags} from '../../src/render3/interfaces/definition';
 
-import {NgIf} from './common_with_def';
 import {ComponentFixture, containerEl, createComponent, MockRendererFactory, renderComponent, requestAnimationFrame, toHtml} from './render_util';
 
 describe('component', () => {
@@ -180,7 +180,7 @@ it('should not invoke renderer destroy method for embedded views', () => {
       selectors: [['comp']],
       decls: 3,
       vars: 1,
-      directives: [NgIf],
+      dependencies: [NgIf],
       consts: [[AttributeMarker.Template, 'ngIf']],
       /**
        *  <div>Root view</div>

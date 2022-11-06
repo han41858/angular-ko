@@ -153,6 +153,13 @@
             "logo": "",
             "title": "NativeScript",
             "url": "https://docs.nativescript.org/angular/start/introduction"
+          },
+          "angular-miniprogram": {
+            "/desc": "MiniProgram Platform for Angular.",
+            "desc": "Angular용 MiniProgram 플랫폼",
+            "logo": "",
+            "title": "MiniProgram",
+            "url": "https://github.com/wszgrcy/angular-miniprogram"
           }
         }
       },
@@ -333,9 +340,9 @@
             "url": "https://github.com/chrisguttandin/angular-prerender"
           },
           "nx": {
-            "/desc": "Nx (Nrwl Extensions for Angular) is an open source toolkit built on top of Angular CLI to help enterprise teams develop Angular at scale.",
-            "desc": "Nx(Nrwl Extensions for Angular)는 Angular CLI를 활용해서 기업용 솔루션을 만들 수 있는 오픈 소스 툴입니다.",
-            "title": "Nx",
+            "/desc": "Nx is an open source build system featuring a lot of monorepo features that help enterprise teams develop Angular at scale.",
+            "desc": "Nx는 기업용 솔루션 규모에 활용할 수 있는 오픈 소스 빌드 시스템입니다.",
+            "title": "Nx - Smart, Fast and Extensible Build System",
             "logo": "https://nrwl.io/assets/nx-logo.png",
             "url": "https://nrwl.io/nx"
           },
@@ -616,6 +623,37 @@
             "desc": "Taiga UI는 트리 셰이킹이 완벽하게 동작하는 Angular UI Kit 입니다. 컴포넌트를 130개 이상, 디렉티브를 100개 이상 제공하며 이외에도 개발에 도움이 되는 유틸리티와 도구도 제공합니다. 쉽게 커스터마이징해서 사용할 수도 있습니다.",
             "title": "Taiga UI",
             "url": "https://taiga-ui.dev"
+          },
+          "coreui-angular": {
+            "/desc": "Open Source UI Components library for creating modern, beautiful, and responsive applications in half the time with high-performing and easy-to-customize UI components.",
+            "desc": "최신 기술로 유려한 디자인의 반응형 애플리메이션을 30분 안에 만들 수 있는 오픈 소스 UI 컴포넌트 라이브러리입니다. 커스터마이징 하기도 편합니다.",
+            "title": "CoreUI for Angular",
+            "url": "https://coreui.io/angular"
+          },
+          "poui": {
+            "/desc": "PO UI, Brazilian UI Components, focused on ease and productivity to Angular applications.",
+            "desc": "사용하기 쉽고 생산성 높은 PO UI, Brazilian UI 컴포넌트 입니다.",
+            "rev": true,
+            "title": "PO UI",
+            "url": "https://po-ui.io"
+          },
+          "ngx-gantt": {
+            "/desc": "A modern and powerful gantt chart component for Angular",
+            "desc": "강력한 기능을 제공하는 Angular용 간트 차트 컴포넌트입니다.",
+            "title": "Angular Gantt Chart Component",
+            "url": "https://github.com/worktile/ngx-gantt"
+          },
+          "ngx-youi": {
+            "/desc": "NGX-YOUI is an Angular UI Library that can be highly customized with content and styles. You can easily integrate with other CSS frameworks and UI Library, such as Tailwind, Bootstrap, PrimeNG, Angular Material etc.",
+            "desc": "NGX-YOUI는 자유롭게 커스터마이징 할 수 있는 Angular UI 라이브러리 입니다. Tailwind, Bootstrap, PrimeNG, Angular Material과도 함께 사용할 수 있습니다.",
+            "title": "NGX-YOUI",
+            "url": "https://ngx-youi.github.io/NGX-YOUI/"
+          },
+          "ngx-cookie-service": {
+            "/desc": "NGX Cookie Service is an Angular Library that can be used to read, set and delete browser cookies",
+            "desc": "NGX Cookie Service는 브라우저 쿠키를 읽고, 쓰고, 삭제할 때 사용하는 라이브러리입니다.",
+            "title": "NGX Cookie Service",
+            "url": "https://github.com/stevermeister/ngx-cookie-service"
           }
         }
       }
@@ -738,6 +776,12 @@
             "title": "Angular Projects - Second Edition",
             "desc": "Build modern web apps by exploring Angular with 10 different projects and cutting-edge technologies",
             "url": "https://www.packtpub.com/product/angular-projects-second-edition/9781800205260"
+          },
+          "rangle-angular-training-book": {
+            "title": "Rangle’s Angular Training Book",
+            "/desc": "It's a free book, drawn from years of collective experience and aligned with the best practices of modern software development. The book covers the most important Angular topics, from getting started with the Angular toolchain to writing Angular applications in a scalable and maintainable manner.",
+            "desc": "최신 소프트웨어 개발방법으로 입증된 모범사례를 모은 무료 책입니다. Angular를 시작하는 방법부터 확장 가능하고 유지보수하기 용이한 형태로 확대하는 주제를 방대하게 다룹니다.",
+            "url": "https://angular-training-guide.rangle.io/"
           }
         }
       },
@@ -770,6 +814,12 @@
             "/title": "Academia Binaria (español)",
             "title": "Academia Binaria (스페인어)",
             "url": "https://academia-binaria.com/"
+          },
+          "-KLIxHwg-glQLXni1hvA": {
+            "/desc": "How to write cost effective Angular tests without wasting time on slow and brittle techniques. This masterclass will show you the most effective testing strategies that will accelerate your learning and start you off on the right track. Brought to you by Shai Reznik (HiRez.io) totally free of charge.",
+            "desc": "시간낭비 없이 빠르고 효율적으로 Angular 테스트를 작성하는 방법을 다룹니다. Shai Reznik (HiRez.io)가 운영하며 무료입니다.",
+            "title": "Angular FREE Testing Masterclass - Cost Effective Angular Testing",
+            "url": "https://hirez.link/aio-cost-effective-angular-testing"
           },
           "-KN3uNQvxifu26D6WKJW": {
             "category": "Education",
@@ -901,6 +951,18 @@
             "desc": "개별 그룹에 특화되거나 온라인으로 진행하는 Angular 트레이닝 코스입니다.",
             "title": "Webucator",
             "url": "https://www.webucator.com/webdev-training/angular-training"
+          },
+          "decoded-frontend": {
+            "/desc": "YouTube Channel about Angular & Web Development",
+            "desc": "Angular와 웹 개발을 다루는 YouTube 애널입니다.",
+            "title": "Decoded Frontend",
+            "url": "https://www.youtube.com/DecodedFrontend"
+          },
+          "angular-university": {
+            "/desc": "A website to learn and keep up with the Angular ecosystem",
+            "desc": "Angular 생태계 최신 소식을 다루는 웹사이트입니다.",
+            "title": "Angular University",
+            "url": "https://angular-university.io/"
           },
           "-acceleb": {
             "/desc": "Customized, Instructor-Led Angular Training",

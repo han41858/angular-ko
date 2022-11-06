@@ -9,7 +9,7 @@
 import {FormatWidth, FormStyle, getLocaleDateFormat, getLocaleDateTimeFormat, getLocaleDayNames, getLocaleDayPeriods, getLocaleEraNames, getLocaleExtraDayPeriodRules, getLocaleExtraDayPeriods, getLocaleId, getLocaleMonthNames, getLocaleNumberSymbol, getLocaleTimeFormat, NumberSymbol, Time, TranslationWidth} from './locale_data_api';
 
 export const ISO8601_DATE_REGEX =
-    /^(\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
+    /^(\d{4,})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
 //    1        2       3         4          5          6          7          8  9     10      11
 const NAMED_FORMATS: {[localeId: string]: {[format: string]: string}} = {};
 const DATE_FORMATS_SPLIT =
@@ -93,9 +93,9 @@ export function formatDate(
   let text = '';
   parts.forEach(value => {
     const dateFormatter = getDateFormatter(value);
-    text += dateFormatter ?
-        dateFormatter(date, locale, dateTimezoneOffset) :
-        value === '\'\'' ? '\'' : value.replace(/(^'|'$)/g, '').replace(/''/g, '\'');
+    text += dateFormatter ? dateFormatter(date, locale, dateTimezoneOffset) :
+        value === '\'\''  ? '\'' :
+                            value.replace(/(^'|'$)/g, '').replace(/''/g, '\'');
   });
 
   return text;
@@ -223,14 +223,14 @@ function padNumber(
     strNum = '0' + strNum;
   }
   if (trim) {
-    strNum = strNum.substr(strNum.length - digits);
+    strNum = strNum.slice(strNum.length - digits);
   }
   return neg + strNum;
 }
 
 function formatFractionalSeconds(milliseconds: number, digits: number): string {
   const strMs = padNumber(milliseconds, 3);
-  return strMs.substr(0, digits);
+  return strMs.substring(0, digits);
 }
 
 /**

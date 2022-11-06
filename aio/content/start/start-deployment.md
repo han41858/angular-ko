@@ -21,27 +21,30 @@ This section builds on the previous steps in the [Getting Started](start "Try it
 <!--
 A best practice is to run your project locally before you deploy it. To run your project locally, you need the following installed on your computer:
 
-* [Node.js](https://nodejs.org/en/).
-* The [Angular CLI](https://cli.angular.io/).
+*   [Node.js](https://nodejs.org/en).
+*   The [Angular CLI](https://cli.angular.io).
     From the terminal, install the Angular CLI globally with:
 
-    ```sh
-    npm install -g @angular/cli
-    ```
+    <code-example format="shell" language="shell">
+
+    npm install -g &commat;angular/cli
+
+    </code-example>
 
     With the Angular CLI, you can use the command `ng` to create new workspaces, new projects, serve your application during development, or produce builds to share or distribute.
 -->
 애플리케이션을 배포하기 전에는 로컬에서 프로젝트를 실행해보는 것이 좋습니다.
 프로젝트를 로컬에서 실행하려면 이런 것들이 설치되어 있어야 합니다:
 
-* [Node.js](https://nodejs.org/en/)
-* [Angular CLI](https://cli.angular.io/)
-    
+*   [Node.js](https://nodejs.org/en).
+*   [Angular CLI](https://cli.angular.io).
     터미널 전역 범위에 Angular CLI를 설치하려면 이 명령을 입력하면 됩니다:
 
-    ```sh
-    npm install -g @angular/cli
-    ```
+    <code-example format="shell" language="shell">
+
+    npm install -g &commat;angular/cli
+
+    </code-example>
 
     Angular CLI를 설치하면 `ng` 명령어를 사용해서 워크스페이스를 생성하거나 프로젝트를 생성할 수 있고, 애플리케이션을 개발 모드로 실행할 수 있으며 빌드할 수도 있습니다.
 
@@ -52,76 +55,110 @@ A best practice is to run your project locally before you deploy it. To run your
 ## 로컬에서 실행해보기
 
 <!--
-1. Download the source code from your StackBlitz project by clicking the `Download Project` icon in the left menu, across from `Project`, to download your files.
+1.  Download the source code from your StackBlitz project by clicking the `Download Project` icon in the left menu, across from `Project`, to download your project as a zip archive.
 
-1. Create a new Angular CLI workspace using the [`ng new`](cli/new "CLI ng new command reference") command, where `my-project-name` is what you would like to call your project:
+    <div class="lightbox">
 
-    ```sh
-    ng new my-project-name
-    ```
-    
-    This command displays a series of configuration prompts. For this tutorial, accept the default settings for each prompt.
+    <img alt="Download the stackblitz project" src="generated/images/guide/start/download-project.png">
 
-1. In your newly CLI-generated application, replace the `/src` folder with the `/src` folder from your `StackBlitz` download.
+    </div>
 
-1. Use the following CLI command to run your application locally:
+1.  Unzip the archive and change directory to the newly created project. For example:
 
-    ```sh
+    <code-example format="shell" language="shell">
+
+    cd angular-ynqttp
+
+    </code-example>
+
+1.  To download and install npm packages, use the following npm CLI command:
+
+    <code-example format="shell" language="shell">
+
+    npm install
+
+    </code-example>
+
+1.  Use the following CLI command to run your application locally:
+
+    <code-example format="shell" language="shell">
+
     ng serve
-    ```
 
-1. To see your application in the  browser, go to http://localhost:4200/.
+    </code-example>
+
+1.  To see your application in the browser, go to http://localhost:4200/.
     If the default port 4200 is not available, you can specify another port with the port flag as in the following example:
 
-     ```sh
+     <code-example format="shell" language="shell">
+
     ng serve --port 4201
-    ```
+
+    </code-example>
 
     While serving your application, you can edit your code and see the changes update automatically in the browser.
     To stop the `ng serve` command, press `Ctrl`+`c`.
 -->
-1. StackBlitz 프로젝트의 소스 코드를 내려받으려면 화면 왼쪽 `Project` 메뉴에 있는 `Download Project` 아이콘을 클릭하면 됩니다.
+1.  StackBlitz 프로젝트의 소스 코드를 내려받으려면 화면 왼쪽 `Project` 메뉴에 있는 `Download Project` 아이콘을 클릭하면 됩니다.
 
-1. [`ng new`](cli/new "CLI ng new command reference") 명령을 실행해서 Angular CLI 워크스페이스를 생성합니다. 이 때 프로젝트 이름은 원하는 것을 지정하면 됩니다:
+    <div class="lightbox">
 
-    ```sh
-    ng new my-project-name
-    ```
-    
-    이 명령을 실행하면 환경설정 프롬프트가 몇 번 표시됩니다.
-    이번 튜토리얼에서는 기본값으로 진행합시다.
+    <img alt="Download the stackblitz project" src="generated/images/guide/start/download-project.png">
 
-1. 새로 만든 애플리케이션 안에 있는 `/src` 폴더를 `StackBlitz`에서 다운받은 `/src` 폴더로 교체합니다.
+    </div>
 
-1. 이 명령을 실행해서 애플리케이션을 로컬에서 실행합니다:
+1.  압축파일을 풀고 새로 생성된 프로젝트 폴더로 이동합니다:
 
-    ```sh
+    <code-example format="shell" language="shell">
+
+    cd angular-ynqttp
+
+    </code-example>
+
+1.  npm 패키지를 설치합니다. 이 명령을 실행하면 됩니다:
+
+    <code-example format="shell" language="shell">
+
+    npm install
+
+    </code-example>
+
+1.  아래 명령을 실행해서 애플리케이션을 로컬에서 실행합니다:
+
+    <code-example format="shell" language="shell">
+
     ng serve
-    ```
 
-1. 애플리케이션이 동작하는 것을 브라우저로 확인하려면 http://localhost:4200/ 로 접근하면 됩니다.
+    </code-example>
+
+1.  애플리케이션이 동작하는 것을 브라우저로 확인하려면 http://localhost:4200/ 로 접근하면 됩니다.
     기본 포트는 4200이지만 이 포트를 사용할 수 없다면 Angular CLI로 `serve` 명령을 실행할 때 플래그를 추가하면 됩니다:
 
-     ```sh
+     <code-example format="shell" language="shell">
+
     ng serve --port 4201
-    ```
 
-    애플리케이션을 이렇게 실행하고 나면, 코드를 수정했을 때 브라우저가 자동으로 갱신되면서 수정사항이 바로 반영됩니다.
-    `ng serve` 명령이 실행되는 것을 중단하려면 `Ctrl`+`c` 를 입력하면 됩니다.
+    </code-example>
+
+    While serving your application, you can edit your code and see the changes update automatically in the browser.
+    To stop the `ng serve` command, press `Ctrl`+`c`.
 
 
-{@a building}
+<a id="building"></a>
+
 <!--
 ## Building and hosting your application
 -->
 ## 애플리케이션 빌드하고 호스팅하기
 
 <!--
- 1. To build your application for production, use the `build` command. By default, this command uses the `production` build configuration.
+1.  To build your application for production, use the `build` command. By default, this command uses the `production` build configuration.
 
-    ```sh
+    <code-example format="shell" language="shell">
+
     ng build
-    ```
+
+    </code-example>
 
     This command creates a `dist` folder in the application root directory with all the files that a hosting service needs for serving your application.
 
@@ -131,15 +168,17 @@ A best practice is to run your project locally before you deploy it. To run your
 
     </div>
 
-1. Copy the contents of the `dist/my-project-name` folder to your web server.
+1.  Copy the contents of the `dist/my-project-name` folder to your web server.
     Because these files are static, you can host them on any web server capable of serving files; such as `Node.js`, Java, .NET, or any backend such as [Firebase](https://firebase.google.com/docs/hosting), [Google Cloud](https://cloud.google.com/solutions/web-hosting), or [App Engine](https://cloud.google.com/appengine/docs/standard/python/getting-started/hosting-a-static-website).
     For more information, see [Building & Serving](guide/build "Building and Serving Angular Apps") and [Deployment](guide/deployment "Deployment guide").
 -->
-1. 애플리케이션을 운영용으로 빌드하려면 `build` 명령을 사용하면 됩니다. 이 때 빌드 환경을 특별히 명시하지 않으면 `production` 환경이 기본으로 적용됩니다.
+1.  애플리케이션을 운영용으로 빌드하려면 `build` 명령을 사용하면 됩니다. 이 때 빌드 환경을 특별히 명시하지 않으면 `production` 환경이 기본으로 적용됩니다.
 
-    ```sh
+    <code-example format="shell" language="shell">
+
     ng build
-    ```
+
+    </code-example>
 
     이 명령을 실행하면 애플리케이션 최상위 폴더에 `dist` 폴더가 생성되면서 애플리케이션 호스팅에 필요한 파일들이 들어갑니다.
 
@@ -149,7 +188,7 @@ A best practice is to run your project locally before you deploy it. To run your
 
     </div>
 
-1. `dist/my-project-name` 폴더에 있는 파일들을 웹 서버로 복사합니다.
+1.  `dist/my-project-name` 폴더에 있는 파일들을 웹 서버로 복사합니다.
     이 파일들은 정적으로 제공되어야 하기 때문에 웹 서버에서도 파일을 정적으로 호스팅할 수 있어야 합니다.
     `Node.js`, Java, .NET는 물론이고 [Firebase](https://firebase.google.com/docs/hosting), [Google Cloud](https://cloud.google.com/solutions/web-hosting)나 [App Engine](https://cloud.google.com/appengine/docs/standard/python/getting-started/hosting-a-static-website)와 같은 백엔드 서비스를 모두 활용할 수 있습니다.
     더 자세한 내용을 확인하려면 [빌드하기 & 실행하기](guide/build "Building and Serving Angular Apps") 문서나 [배포하기](guide/deployment "Deployment guide") 문서를 참고하세요.
@@ -215,5 +254,6 @@ The Angular community also has an extensive [network of third-party tools and li
 UX/UI를 개선하려면 [Angular Material](https://material.angular.io/ "Angular Material web site")를 참고하세요.
 
 Angular에 활용할 수 있는 [서드파티 툴, 라이브러리 네트워크](resources "Angular resources list")도 확인해 보세요.
+
 
 @reviewed 2021-09-15

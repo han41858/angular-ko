@@ -67,6 +67,7 @@ export class DelegatingCompilerHost implements
   trace = this.delegateMethod('trace');
   useCaseSensitiveFileNames = this.delegateMethod('useCaseSensitiveFileNames');
   writeFile = this.delegateMethod('writeFile');
+  getModuleResolutionCache = this.delegateMethod('getModuleResolutionCache');
 }
 
 /**
@@ -231,6 +232,16 @@ export class NgCompilerHost extends DelegatingCompilerHost implements
    */
   isShim(sf: ts.SourceFile): boolean {
     return isShim(sf);
+  }
+
+  /**
+   * Check whether the given `ts.SourceFile` is a resource file.
+   *
+   * This simply returns `false` for the compiler-cli since resource files are not added as root
+   * files to the project.
+   */
+  isResource(sf: ts.SourceFile): boolean {
+    return false;
   }
 
   getSourceFile(

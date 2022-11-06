@@ -113,6 +113,11 @@ export interface R3DeclareDirectiveMetadata extends R3PartialDeclaration {
    * Whether the directive implements the `ngOnChanges` hook. Defaults to false.
    */
   usesOnChanges?: boolean;
+
+  /**
+   * Whether the directive is standalone. Defaults to false.
+   */
+  isStandalone?: boolean;
 }
 
 /**
@@ -144,7 +149,7 @@ export interface R3DeclareComponentMetadata extends R3DeclareDirectiveMetadata {
    * the template to each directive specifically, if the runtime instructions
    * support this.
    */
-  components?: R3DeclareUsedDirectiveMetadata[];
+  components?: R3DeclareDirectiveDependencyMetadata[];
 
   /**
    * List of directives which matched in the template, including sufficient
@@ -152,7 +157,15 @@ export interface R3DeclareComponentMetadata extends R3DeclareDirectiveMetadata {
    * the template to each directive specifically, if the runtime instructions
    * support this.
    */
-  directives?: R3DeclareUsedDirectiveMetadata[];
+  directives?: R3DeclareDirectiveDependencyMetadata[];
+
+  /**
+   * List of dependencies which matched in the template, including sufficient
+   * metadata for each directive/pipe to attribute bindings and references within
+   * the template to each directive specifically, if the runtime instructions
+   * support this.
+   */
+  dependencies?: R3DeclareTemplateDependencyMetadata[];
 
   /**
    * A map of pipe names to an expression referencing the pipe type (possibly a forward reference
@@ -177,7 +190,7 @@ export interface R3DeclareComponentMetadata extends R3DeclareDirectiveMetadata {
   changeDetection?: ChangeDetectionStrategy;
 
   /**
-   * An encapsulation policy for the template and CSS styles.
+   * An encapsulation policy for the component's styling.
    * Defaults to `ViewEncapsulation.Emulated`.
    */
   encapsulation?: ViewEncapsulation;
@@ -193,7 +206,12 @@ export interface R3DeclareComponentMetadata extends R3DeclareDirectiveMetadata {
   preserveWhitespaces?: boolean;
 }
 
-export interface R3DeclareUsedDirectiveMetadata {
+export type R3DeclareTemplateDependencyMetadata = R3DeclareDirectiveDependencyMetadata|
+    R3DeclarePipeDependencyMetadata|R3DeclareNgModuleDependencyMetadata;
+
+export interface R3DeclareDirectiveDependencyMetadata {
+  kind: 'directive'|'component';
+
   /**
    * Selector of the directive.
    */
@@ -221,6 +239,24 @@ export interface R3DeclareUsedDirectiveMetadata {
   exportAs?: string[];
 }
 
+export interface R3DeclarePipeDependencyMetadata {
+  kind: 'pipe';
+
+  name: string;
+
+  /**
+   * Reference to the pipe class (possibly a forward reference wrapped in a `forwardRef`
+   * invocation).
+   */
+  type: o.Expression|(() => o.Expression);
+}
+
+export interface R3DeclareNgModuleDependencyMetadata {
+  kind: 'ngmodule';
+
+  type: o.Expression|(() => o.Expression);
+}
+
 export interface R3DeclareQueryMetadata {
   /**
    * Name of the property on the class to update with query results.
@@ -233,8 +269,8 @@ export interface R3DeclareQueryMetadata {
   first?: boolean;
 
   /**
-   * Either an expression representing a type or `InjectionToken` for the query
-   * predicate, or a set of string selectors.
+   * Either an expression representing a type (possibly wrapped in a `forwardRef()`) or
+   * `InjectionToken` for the query predicate, or a set of string selectors.
    */
   predicate: o.Expression|string[];
 
@@ -337,6 +373,13 @@ export interface R3DeclarePipeMetadata extends R3PartialDeclaration {
    * Default: true.
    */
   pure?: boolean;
+
+  /**
+   * Whether the pipe is standalone.
+   *
+   * Default: false.
+   */
+  isStandalone?: boolean;
 }
 
 

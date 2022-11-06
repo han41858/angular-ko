@@ -15,22 +15,43 @@ export function createUrlTree(
     route: ActivatedRoute, urlTree: UrlTree, commands: any[], queryParams: Params|null,
     fragment: string|null): UrlTree {
   if (commands.length === 0) {
-    return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
+    return tree(urlTree.root, urlTree.root, urlTree.root, queryParams, fragment);
   }
 
   const nav = computeNavigation(commands);
 
   if (nav.toRoot()) {
-    return tree(urlTree.root, new UrlSegmentGroup([], {}), urlTree, queryParams, fragment);
+    return tree(urlTree.root, urlTree.root, new UrlSegmentGroup([], {}), queryParams, fragment);
   }
 
-  const startingPosition = findStartingPosition(nav, urlTree, route);
+  function createTreeUsingPathIndex(lastPathIndex: number) {
+    const startingPosition =
+        findStartingPosition(nav, urlTree, route.snapshot?._urlSegment, lastPathIndex);
 
-  const segmentGroup = startingPosition.processChildren ?
-      updateSegmentGroupChildren(
-          startingPosition.segmentGroup, startingPosition.index, nav.commands) :
-      updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, nav.commands);
-  return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
+    const segmentGroup = startingPosition.processChildren ?
+        updateSegmentGroupChildren(
+            startingPosition.segmentGroup, startingPosition.index, nav.commands) :
+        updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, nav.commands);
+    return tree(urlTree.root, startingPosition.segmentGroup, segmentGroup, queryParams, fragment);
+  }
+  // Note: The types should disallow `snapshot` from being `undefined` but due to test mocks, this
+  // may be the case. Since we try to access it at an earlier point before the refactor to add the
+  // warning for `relativeLinkResolution: 'legacy'`, this may cause failures in tests where it
+  // didn't before.
+  const result = createTreeUsingPathIndex(route.snapshot?._lastPathIndex);
+
+  // Check if application is relying on `relativeLinkResolution: 'legacy'`
+  if (typeof ngDevMode === 'undefined' || !!ngDevMode) {
+    const correctedResult = createTreeUsingPathIndex(route.snapshot?._correctedLastPathIndex);
+    if (correctedResult.toString() !== result.toString()) {
+      console.warn(
+          `relativeLinkResolution: 'legacy' is deprecated and will be removed in a future version of Angular. The link to ${
+              result.toString()} will change to ${
+              correctedResult.toString()} if the code is not updated before then.`);
+    }
+  }
+
+  return result;
 }
 
 function isMatrixParams(command: any): boolean {
@@ -46,7 +67,7 @@ function isCommandWithOutlets(command: any): command is {outlets: {[key: string]
 }
 
 function tree(
-    oldSegmentGroup: UrlSegmentGroup, newSegmentGroup: UrlSegmentGroup, urlTree: UrlTree,
+    oldRoot: UrlSegmentGroup, oldSegmentGroup: UrlSegmentGroup, newSegmentGroup: UrlSegmentGroup,
     queryParams: Params|null, fragment: string|null): UrlTree {
   let qp: any = {};
   if (queryParams) {
@@ -55,11 +76,12 @@ function tree(
     });
   }
 
-  if (urlTree.root === oldSegmentGroup) {
+  if (oldRoot === oldSegmentGroup) {
     return new UrlTree(newSegmentGroup, qp, fragment);
   }
 
-  return new UrlTree(replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), qp, fragment);
+  const newRoot = replaceSegment(oldRoot, oldSegmentGroup, newSegmentGroup);
+  return new UrlTree(newRoot, qp, fragment);
 }
 
 function replaceSegment(
@@ -150,13 +172,14 @@ class Position {
   }
 }
 
-function findStartingPosition(nav: Navigation, tree: UrlTree, route: ActivatedRoute): Position {
+function findStartingPosition(
+    nav: Navigation, tree: UrlTree, segmentGroup: UrlSegmentGroup,
+    lastPathIndex: number): Position {
   if (nav.isAbsolute) {
     return new Position(tree.root, true, 0);
   }
 
-  if (route.snapshot._lastPathIndex === -1) {
-    const segmentGroup = route.snapshot._urlSegment;
+  if (lastPathIndex === -1) {
     // Pathless ActivatedRoute has _lastPathIndex === -1 but should not process children
     // see issue #26224, #13011, #35687
     // However, if the ActivatedRoute is the root we should process children like above.
@@ -165,9 +188,8 @@ function findStartingPosition(nav: Navigation, tree: UrlTree, route: ActivatedRo
   }
 
   const modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
-  const index = route.snapshot._lastPathIndex + modifier;
-  return createPositionApplyingDoubleDots(
-      route.snapshot._urlSegment, index, nav.numberOfDoubleDots);
+  const index = lastPathIndex + modifier;
+  return createPositionApplyingDoubleDots(segmentGroup, index, nav.numberOfDoubleDots);
 }
 
 function createPositionApplyingDoubleDots(

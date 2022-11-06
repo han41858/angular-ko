@@ -1,4 +1,4 @@
-// tslint:disable: directive-selector forin no-input-rename
+/* eslint-disable @angular-eslint/directive-selector, guard-for-in, @angular-eslint/no-input-rename */
 import { Component, ContentChildren, Directive, EventEmitter,
          Injectable, Input, Output, Optional,
          HostBinding, HostListener,
@@ -95,7 +95,7 @@ export class BankAccountParentComponent {
 @Component({
   selector: 'lightswitch-comp',
   template: `
-    <button (click)="clicked()">Click me!</button>
+    <button type="button" (click)="clicked()">Click me!</button>
     <span>{{message}}</span>`
 })
 export class LightswitchComponent {
@@ -107,7 +107,7 @@ export class LightswitchComponent {
 
 @Component({
   selector: 'child-1',
-  template: `<span>Child-1({{text}})</span>`
+  template: '<span>Child-1({{text}})</span>'
 })
 export class Child1Component {
   @Input() text = 'Original';
@@ -131,7 +131,7 @@ export class Child3Component {
 
 @Component({
   selector: 'input-comp',
-  template: `<input [(ngModel)]="name">`
+  template: '<input [(ngModel)]="name">'
 })
 export class InputComponent {
   name = 'John';
@@ -178,13 +178,13 @@ export class InputValueBinderComponent {
 
 @Component({
   selector: 'parent-comp',
-  template: `Parent(<child-1></child-1>)`
+  template: 'Parent(<child-1></child-1>)'
 })
 export class ParentComponent { }
 
 @Component({
   selector: 'io-comp',
-  template: `<div class="hero" (click)="click()">Original {{hero.name}}</div>`
+  template: '<button type="button" class="hero" (click)="click()">Original {{hero.name}}</button>'
 })
 export class IoComponent {
   @Input() hero!: Hero;
@@ -212,7 +212,7 @@ export class IoParentComponent {
 
 @Component({
   selector: 'my-if-comp',
-  template: `MyIf(<span *ngIf="showMore">More</span>)`
+  template: 'MyIf(<span *ngIf="showMore">More</span>)'
 })
 export class MyIfComponent {
   showMore = false;
@@ -220,7 +220,7 @@ export class MyIfComponent {
 
 @Component({
   selector: 'my-service-comp',
-  template: `injected value: {{valueService.value}}`,
+  template: 'injected value: {{valueService.value}}',
   providers: [ValueService]
 })
 export class TestProvidersComponent {
@@ -230,7 +230,7 @@ export class TestProvidersComponent {
 
 @Component({
   selector: 'my-service-comp',
-  template: `injected value: {{valueService.value}}`,
+  template: 'injected value: {{valueService.value}}',
   viewProviders: [ValueService]
 })
 export class TestViewProvidersComponent {
@@ -325,7 +325,7 @@ export class MyIfChildComponent implements OnInit, OnChanges, OnDestroy {
     <label>Parent value:
       <input [(ngModel)]="parentValue">
     </label>
-    <button (click)="clicked()">{{toggleLabel}} Child</button><br>
+    <button type="button" (click)="clicked()">{{toggleLabel}} Child</button><br>
     <div *ngIf="showChild"
          style="margin: 4px; padding: 4px; background-color: aliceblue;">
       <my-if-child-1  [(value)]="parentValue"></my-if-child-1>
@@ -428,7 +428,6 @@ import { FormsModule } from '@angular/forms';
   imports: [BrowserModule, FormsModule],
   declarations: demoDeclarations,
   providers:    demoProviders,
-  entryComponents: [DemoComponent],
   bootstrap:       [DemoComponent]
 })
 export class DemoModule { }

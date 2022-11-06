@@ -195,7 +195,7 @@ export class HammerGesturesPlugin extends EventManagerPlugin {
     // If Hammer is not present but a loader is specified, we defer adding the event listener
     // until Hammer is loaded.
     if (!(window as any).Hammer && this.loader) {
-      this._loaderPromise = this._loaderPromise || this.loader();
+      this._loaderPromise = this._loaderPromise || zone.runOutsideAngular(() => this.loader!());
       // This `addEventListener` method returns a function to remove the added listener.
       // Until Hammer is loaded, the returned function needs to *cancel* the registration rather
       // than remove anything.
@@ -204,32 +204,34 @@ export class HammerGesturesPlugin extends EventManagerPlugin {
         cancelRegistration = true;
       };
 
-      this._loaderPromise
-          .then(() => {
-            // If Hammer isn't actually loaded when the custom loader resolves, give up.
-            if (!(window as any).Hammer) {
-              if (typeof ngDevMode === 'undefined' || ngDevMode) {
-                this.console.warn(
-                    `The custom HAMMER_LOADER completed, but Hammer.JS is not present.`);
-              }
-              deregister = () => {};
-              return;
-            }
+      zone.runOutsideAngular(
+          () => this._loaderPromise!
+                    .then(() => {
+                      // If Hammer isn't actually loaded when the custom loader resolves, give up.
+                      if (!(window as any).Hammer) {
+                        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+                          this.console.warn(
+                              `The custom HAMMER_LOADER completed, but Hammer.JS is not present.`);
+                        }
+                        deregister = () => {};
+                        return;
+                      }
 
-            if (!cancelRegistration) {
-              // Now that Hammer is loaded and the listener is being loaded for real,
-              // the deregistration function changes from canceling registration to removal.
-              deregister = this.addEventListener(element, eventName, handler);
-            }
-          })
-          .catch(() => {
-            if (typeof ngDevMode === 'undefined' || ngDevMode) {
-              this.console.warn(
-                  `The "${eventName}" event cannot be bound because the custom ` +
-                  `Hammer.JS loader failed.`);
-            }
-            deregister = () => {};
-          });
+                      if (!cancelRegistration) {
+                        // Now that Hammer is loaded and the listener is being loaded for real,
+                        // the deregistration function changes from canceling registration to
+                        // removal.
+                        deregister = this.addEventListener(element, eventName, handler);
+                      }
+                    })
+                    .catch(() => {
+                      if (typeof ngDevMode === 'undefined' || ngDevMode) {
+                        this.console.warn(
+                            `The "${eventName}" event cannot be bound because the custom ` +
+                            `Hammer.JS loader failed.`);
+                      }
+                      deregister = () => {};
+                    }));
 
       // Return a function that *executes* `deregister` (and not `deregister` itself) so that we
       // can change the behavior of `deregister` once the listener is added. Using a closure in
@@ -264,28 +266,6 @@ export class HammerGesturesPlugin extends EventManagerPlugin {
 }
 
 /**
- * In Ivy, support for Hammer gestures is optional, so applications must
- * import the `HammerModule` at root to turn on support. This means that
- * Hammer-specific code can be tree-shaken away if not needed.
- */
-export const HAMMER_PROVIDERS__POST_R3__ = [];
-
-/**
- * In View Engine, support for Hammer gestures is built-in by default.
- */
-export const HAMMER_PROVIDERS__PRE_R3__: Provider[] = [
-  {
-    provide: EVENT_MANAGER_PLUGINS,
-    useClass: HammerGesturesPlugin,
-    multi: true,
-    deps: [DOCUMENT, HAMMER_GESTURE_CONFIG, Console, [new Optional(), HAMMER_LOADER]]
-  },
-  {provide: HAMMER_GESTURE_CONFIG, useClass: HammerGestureConfig, deps: []},
-];
-
-export const HAMMER_PROVIDERS = HAMMER_PROVIDERS__PRE_R3__;
-
-/**
  * Adds support for HammerJS.
  *
  * Import this module at the root of your application so that Angular can work with
@@ -296,6 +276,16 @@ export const HAMMER_PROVIDERS = HAMMER_PROVIDERS__PRE_R3__;
  *
  * @publicApi
  */
-@NgModule({providers: HAMMER_PROVIDERS__PRE_R3__})
+@NgModule({
+  providers: [
+    {
+      provide: EVENT_MANAGER_PLUGINS,
+      useClass: HammerGesturesPlugin,
+      multi: true,
+      deps: [DOCUMENT, HAMMER_GESTURE_CONFIG, Console, [new Optional(), HAMMER_LOADER]]
+    },
+    {provide: HAMMER_GESTURE_CONFIG, useClass: HammerGestureConfig, deps: []},
+  ]
+})
 export class HammerModule {
 }

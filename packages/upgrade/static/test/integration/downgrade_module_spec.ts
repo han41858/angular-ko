@@ -10,7 +10,6 @@ import {AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, 
 import {fakeAsync, tick, waitForAsync} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {browserDetection} from '@angular/platform-browser/testing/src/browser_util';
 import {downgradeComponent, downgradeModule, UpgradeComponent} from '@angular/upgrade/static';
 
 import * as angular from '../../../src/common/src/angular1';
@@ -37,7 +36,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentA],
-             entryComponents: [Ng2ComponentA],
              imports: [BrowserModule],
            })
            class Ng2ModuleA {
@@ -46,7 +44,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentB],
-             entryComponents: [Ng2ComponentB],
              imports: [BrowserModule],
            })
            class Ng2ModuleB {
@@ -61,6 +58,53 @@ withEachNg1Version(() => {
 
            const downModA = doDowngradeModule(Ng2ModuleA);
            const downModB = doDowngradeModule(Ng2ModuleB);
+           const ng1Module = angular.module_('ng1', [downModA, downModB])
+                                 .directive('ng2A', downgradeComponent({
+                                              component: Ng2ComponentA,
+                                              downgradedModule: downModA,
+                                              propagateDigest,
+                                            }))
+                                 .directive('ng2B', downgradeComponent({
+                                              component: Ng2ComponentB,
+                                              downgradedModule: downModB,
+                                              propagateDigest,
+                                            }));
+
+           const element = html('<ng2-a></ng2-a> | <ng2-b></ng2-b>');
+           angular.bootstrap(element, [ng1Module.name]);
+
+           // Wait for the module to be bootstrapped.
+           setTimeout(() => expect(element.textContent).toBe('a | b'));
+         }));
+
+      it('should support downgrading modules by providing NgModule class to `downgradeModule` call',
+         waitForAsync(() => {
+           @Component({selector: 'ng2A', template: 'a'})
+           class Ng2ComponentA {
+           }
+
+           @Component({selector: 'ng2B', template: 'b'})
+           class Ng2ComponentB {
+           }
+
+           @NgModule({
+             declarations: [Ng2ComponentA],
+             imports: [BrowserModule],
+           })
+           class Ng2ModuleA {
+             ngDoBootstrap() {}
+           }
+
+           @NgModule({
+             declarations: [Ng2ComponentB],
+             imports: [BrowserModule],
+           })
+           class Ng2ModuleB {
+             ngDoBootstrap() {}
+           }
+
+           const downModA = downgradeModule(Ng2ModuleA);
+           const downModB = downgradeModule(Ng2ModuleB);
            const ng1Module = angular.module_('ng1', [downModA, downModB])
                                  .directive('ng2A', downgradeComponent({
                                               component: Ng2ComponentA,
@@ -104,7 +148,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng1ComponentA, Ng2ComponentA],
-             entryComponents: [Ng2ComponentA],
              imports: [BrowserModule],
            })
            class Ng2ModuleA {
@@ -113,7 +156,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentB],
-             entryComponents: [Ng2ComponentB],
              imports: [BrowserModule],
            })
            class Ng2ModuleB {
@@ -180,7 +222,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentA],
-             entryComponents: [Ng2ComponentA],
              imports: [BrowserModule],
            })
            class Ng2ModuleA {
@@ -189,7 +230,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentB],
-             entryComponents: [Ng2ComponentB],
              imports: [BrowserModule],
            })
            class Ng2ModuleB {
@@ -259,14 +299,12 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentA],
-             entryComponents: [Ng2ComponentA],
            })
            class Ng2ModuleA {
            }
 
            @NgModule({
              declarations: [Ng2ComponentB],
-             entryComponents: [Ng2ComponentB],
            })
            class Ng2ModuleB {
            }
@@ -369,7 +407,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentA, Ng2ComponentB],
-             entryComponents: [Ng2ComponentA, Ng2ComponentB],
              imports: [BrowserModule],
              providers: [
                {provide: 'FOO', useValue: 'Mod-foo'},
@@ -458,7 +495,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentA],
-             entryComponents: [Ng2ComponentA],
              imports: [BrowserModule],
              providers: [
                {provide: 'FOO', useValue: 'ModA-foo'},
@@ -473,7 +509,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2ComponentB],
-             entryComponents: [Ng2ComponentB],
              imports: [BrowserModule],
              providers: [
                {provide: 'FOO', useValue: 'ModB-foo'},
@@ -559,7 +594,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2AComponent, Ng2BComponent],
-             entryComponents: [Ng2AComponent],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -573,7 +607,9 @@ withEachNg1Version(() => {
                angular.module_('ng1', [lazyModuleName])
                    .directive(
                        'ng2', downgradeComponent({component: Ng2AComponent, propagateDigest}))
-                   .run(($rootScope: angular.IRootScopeService) => $rootScope.value = 0);
+                   .run([
+                     '$rootScope', ($rootScope: angular.IRootScopeService) => $rootScope.value = 0
+                   ]);
 
            const element = html('<div><ng2 [value]="value" ng-if="loadNg2"></ng2></div>');
            const $injector = angular.bootstrap(element, [ng1Module.name]);
@@ -616,7 +652,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
              providers: [
                Ng2Service,
@@ -670,7 +705,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -707,7 +741,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -749,7 +782,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -762,10 +794,13 @@ withEachNg1Version(() => {
            const ng1Module =
                angular.module_('ng1', [lazyModuleName])
                    .directive('ng2', downgradeComponent({component: Ng2Component, propagateDigest}))
-                   .run(($rootScope: angular.IRootScopeService) => {
-                     $rootScope.attrVal = 'bar';
-                     $rootScope.propVal = 'bar';
-                   });
+                   .run([
+                     '$rootScope',
+                     ($rootScope: angular.IRootScopeService) => {
+                       $rootScope.attrVal = 'bar';
+                       $rootScope.propVal = 'bar';
+                     }
+                   ]);
 
            const element = html('<ng2 attr-input="{{ attrVal }}" [prop-input]="propVal"></ng2>');
            const $injector = angular.bootstrap(element, [ng1Module.name]);
@@ -820,7 +855,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [TestComponent, WrapperComponent],
-             entryComponents: [TestComponent, WrapperComponent],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -871,7 +905,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -923,7 +956,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [TestComponent, WrapperComponent],
-             entryComponents: [TestComponent, WrapperComponent],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -1010,7 +1042,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -1153,7 +1184,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -1200,7 +1230,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -1267,7 +1296,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -1281,7 +1309,6 @@ withEachNg1Version(() => {
              ngDoBootstrap() {}
            }
 
-           const tickDelay = browserDetection.isIE ? 100 : 0;
            const bootstrapFn = (extraProviders: StaticProvider[]) =>
                platformBrowserDynamic(extraProviders).bootstrapModule(Ng2Module);
            const lazyModuleName = downgradeModule<Ng2Module>(bootstrapFn);
@@ -1295,8 +1322,8 @@ withEachNg1Version(() => {
            const $rootScope = $injector.get($ROOT_SCOPE) as angular.IRootScopeService;
 
            $rootScope.$apply('showNg2 = true');
-           tick(tickDelay);  // Wait for the module to be bootstrapped and `$evalAsync()` to
-                             // propagate inputs.
+           tick(0);  // Wait for the module to be bootstrapped and `$evalAsync()` to
+                     // propagate inputs.
 
            const injector = ($injector.get(LAZY_MODULE_REF) as LazyModuleRef).injector!;
            const injectorGet = injector.get;
@@ -1311,7 +1338,7 @@ withEachNg1Version(() => {
            expect(element.textContent).toBe('');
 
            $rootScope.$apply('showNg2 = true');
-           tick(tickDelay);  // Wait for `$evalAsync()` to propagate inputs.
+           tick(0);  // Wait for `$evalAsync()` to propagate inputs.
            expect(element.textContent).toBe('Count: 2 | In the zone: true');
 
            $rootScope.$destroy();
@@ -1327,7 +1354,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -1360,7 +1386,6 @@ withEachNg1Version(() => {
 
            @NgModule({
              declarations: [Ng2Component],
-             entryComponents: [Ng2Component],
              imports: [BrowserModule],
            })
            class Ng2Module {
@@ -1439,7 +1464,6 @@ withEachNg1Version(() => {
 
           @NgModule({
             declarations: [Ng2ComponentA],
-            entryComponents: [Ng2ComponentA],
             imports: [BrowserModule],
           })
           class Ng2ModuleA {
@@ -1448,7 +1472,6 @@ withEachNg1Version(() => {
 
           @NgModule({
             declarations: [Ng2ComponentB],
-            entryComponents: [Ng2ComponentB],
             imports: [BrowserModule],
           })
           class Ng2ModuleB {

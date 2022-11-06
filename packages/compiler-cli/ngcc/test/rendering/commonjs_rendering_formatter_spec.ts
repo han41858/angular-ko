@@ -17,7 +17,6 @@ import {getDeclaration, loadTestFiles} from '../../../src/ngtsc/testing';
 import {ImportManager} from '../../../src/ngtsc/translator';
 import {DecorationAnalyzer} from '../../src/analysis/decoration_analyzer';
 import {NgccReferencesRegistry} from '../../src/analysis/ngcc_references_registry';
-import {SwitchMarkerAnalyzer} from '../../src/analysis/switch_marker_analyzer';
 import {CommonJsReflectionHost} from '../../src/host/commonjs_host';
 import {CommonJsRenderingFormatter} from '../../src/rendering/commonjs_rendering_formatter';
 import {makeTestEntryPointBundle} from '../helpers/utils';
@@ -74,18 +73,6 @@ var BadIife = (function() {
   ];
 }());
 
-var compileNgModuleFactory = compileNgModuleFactory__PRE_R3__;
-var badlyFormattedVariable = __PRE_R3__badlyFormattedVariable;
-function compileNgModuleFactory__PRE_R3__(injector, options, moduleType) {
-  var compilerFactory = injector.get(CompilerFactory);
-  var compiler = compilerFactory.createCompiler([options]);
-  return compiler.compileModuleAsync(moduleType);
-}
-
-function compileNgModuleFactory__POST_R3__(injector, options, moduleType) {
-  ngDevMode && assertNgModuleType(moduleType);
-  return Promise.resolve(new R3NgModuleFactory(moduleType));
-}
 // Some other content
 exports.A = A;
 exports.B = B;
@@ -155,8 +142,6 @@ exports.D = D;
       const referencesRegistry = new NgccReferencesRegistry(host);
       const decorationAnalyses =
           new DecorationAnalyzer(fs, bundle, host, referencesRegistry).analyzeProgram();
-      const switchMarkerAnalyses = new SwitchMarkerAnalyzer(host, bundle.entryPoint.packagePath)
-                                       .analyzeProgram(bundle.src.program);
       const renderer = new CommonJsRenderingFormatter(fs, host, false);
       const importManager = new ImportManager(new NoopImportRewriter(), 'i');
       return {
@@ -165,7 +150,6 @@ exports.D = D;
         sourceFile: bundle.src.file,
         renderer,
         decorationAnalyses,
-        switchMarkerAnalyses,
         importManager
       };
     }
@@ -177,8 +161,8 @@ exports.D = D;
         renderer.addImports(
             output,
             [
-              {specifier: '@angular/core', qualifier: ts.createIdentifier('i0')},
-              {specifier: '@angular/common', qualifier: ts.createIdentifier('i1')}
+              {specifier: '@angular/core', qualifier: ts.factory.createIdentifier('i0')},
+              {specifier: '@angular/common', qualifier: ts.factory.createIdentifier('i1')}
             ],
             sourceFile);
         expect(output.toString()).toContain(`/* A copyright notice */
@@ -258,35 +242,14 @@ var A = (function() {`);
         const output = new MagicString(PROGRAM.contents);
         renderer.addConstants(output, 'var x = 3;', file);
         renderer.addImports(
-            output, [{specifier: '@angular/core', qualifier: ts.createIdentifier('i0')}], file);
+            output, [{specifier: '@angular/core', qualifier: ts.factory.createIdentifier('i0')}],
+            file);
         expect(output.toString()).toContain(`
 var core = require('@angular/core');
 var i0 = require('@angular/core');
 
 var x = 3;
 var A = (function() {`);
-      });
-    });
-
-    describe('rewriteSwitchableDeclarations', () => {
-      it('should switch marked declaration initializers', () => {
-        const {renderer, program, sourceFile, switchMarkerAnalyses} = setup(PROGRAM);
-        const file = getSourceFileOrError(program, _('/node_modules/test-package/some/file.js'));
-        const output = new MagicString(PROGRAM.contents);
-        renderer.rewriteSwitchableDeclarations(
-            output, file, switchMarkerAnalyses.get(sourceFile)!.declarations);
-        expect(output.toString())
-            .not.toContain(`var compileNgModuleFactory = compileNgModuleFactory__PRE_R3__;`);
-        expect(output.toString())
-            .toContain(`var badlyFormattedVariable = __PRE_R3__badlyFormattedVariable;`);
-        expect(output.toString())
-            .toContain(`var compileNgModuleFactory = compileNgModuleFactory__POST_R3__;`);
-        expect(output.toString())
-            .toContain(
-                `function compileNgModuleFactory__PRE_R3__(injector, options, moduleType) {`);
-        expect(output.toString())
-            .toContain(
-                `function compileNgModuleFactory__POST_R3__(injector, options, moduleType) {`);
       });
     });
 
@@ -507,9 +470,9 @@ SOME DEFINITION TEXT
       it('should transpile code to ES5', () => {
         const {renderer, sourceFile, importManager} = setup(PROGRAM);
 
-        const stmt1 = new DeclareVarStmt('foo', new LiteralExpr(42), null, [StmtModifier.Static]);
+        const stmt1 = new DeclareVarStmt('foo', new LiteralExpr(42), null, StmtModifier.Static);
         const stmt2 = new DeclareVarStmt('bar', new LiteralExpr(true));
-        const stmt3 = new DeclareVarStmt('baz', new LiteralExpr('qux'), undefined, []);
+        const stmt3 = new DeclareVarStmt('baz', new LiteralExpr('qux'));
 
         expect(renderer.printStatement(stmt1, sourceFile, importManager)).toBe('var foo = 42;');
         expect(renderer.printStatement(stmt2, sourceFile, importManager)).toBe('var bar = true;');

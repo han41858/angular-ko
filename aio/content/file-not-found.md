@@ -1,6 +1,6 @@
 <div class="center-layout-wide">
   <div class="nf-container l-flex-wrap flex-center">
-    <img src="assets/images/support/angular-404.svg" width="300" height="300" alt="not found"/>
+    <img alt="not found" src="assets/images/support/angular-404.svg" height="300" width="300"/>
     <div class="nf-response l-flex-wrap center">
       <!--<h1 class="no-anchor no-toc">Page Not Found</h1>-->
       <h1 class="no-anchor no-toc">문서를 찾을 수 없습니다.</h1>
@@ -10,3 +10,5 @@
   </div>
   <aio-file-not-found-search></aio-file-not-found-search>
 </div>
+
+@reviewed 2022-02-28

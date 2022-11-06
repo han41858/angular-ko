@@ -11,11 +11,16 @@ import {forkJoin, from, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {AsyncValidator, AsyncValidatorFn, ValidationErrors, Validator, ValidatorFn} from './directives/validators';
-import {AbstractControl} from './model';
+import {AbstractControl} from './model/abstract_model';
 
 function isEmptyInputValue(value: any): boolean {
-  // we don't check for string here so it also works with arrays
-  return value == null || value.length === 0;
+  /**
+   * Check if the object is a string or array before evaluating the length attribute.
+   * This avoids falsely rejecting objects that contain a custom length attribute.
+   * For example, the object {id: 1, length: 0, width: 0} should not be returned as empty.
+   */
+  return value == null ||
+      ((typeof value === 'string' || Array.isArray(value)) && value.length === 0);
 }
 
 function hasValidLength(value: any): boolean {
@@ -59,6 +64,26 @@ export const NG_VALIDATORS = new InjectionToken<Array<Validator|Function>>('NgVa
  * `AbstractControl`s.
  *
  * @see `NG_VALIDATORS`
+ *
+ * @usageNotes
+ *
+ * ### Provide a custom async validator directive
+ *
+ * The following example implements the `AsyncValidator` interface to create an
+ * async validator directive with a custom error key.
+ *
+ * ```typescript
+ * @Directive({
+ *   selector: '[customAsyncValidator]',
+ *   providers: [{provide: NG_ASYNC_VALIDATORS, useExisting: CustomAsyncValidatorDirective, multi:
+ * true}]
+ * })
+ * class CustomAsyncValidatorDirective implements AsyncValidator {
+ *   validate(control: AbstractControl): Promise<ValidationErrors|null> {
+ *     return Promise.resolve({'custom': true});
+ *   }
+ * }
+ * ```
  *
  * @publicApi
  */
@@ -192,7 +217,7 @@ export class Validators {
    * ### Validate that the field value is true
    *
    * ```typescript
-   * const control = new FormControl('', Validators.requiredTrue);
+   * const control = new FormControl('some value', Validators.requiredTrue);
    *
    * console.log(control.errors); // {required: true}
    * ```

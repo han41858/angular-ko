@@ -1,4 +1,3 @@
-/* tslint:disable use-input-property-decorator use-output-property-decorator */
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Item } from '../item';
@@ -16,7 +15,6 @@ export class ItemDetailComponent {
   displayNone = '';
   @Input() prefix = '';
 
-  // #docregion deleteRequest
   // 이 컴포넌트는 직접 히어로를 삭제하지 않고 히어로 삭제 요청을 보내기만 합니다.
   @Output() deleteRequest = new EventEmitter<Item>();
 
@@ -25,6 +23,5 @@ export class ItemDetailComponent {
     this.displayNone = this.displayNone ? '' : 'none';
     this.lineThrough = this.lineThrough ? '' : 'line-through';
   }
-  // #enddocregion deleteRequest
 
 }

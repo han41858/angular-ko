@@ -57,7 +57,7 @@ export class AfterViewComponent implements  AfterViewChecked, AfterViewInit {
   // #docregion do-something
   // 동작을 확인하기 위해 `comment` 값을 변경해 봅니다.
   private doSomething() {
-    const c = this.viewChild.hero.length > 10 ? `That's a long name` : '';
+    const c = this.viewChild.hero.length > 10 ? "That's a long name" : '';
     if (c !== this.comment) {
       // 컴포넌트의 뷰는 방금 검사를 마쳤기 때문에 한 싸이클 뒤에 실행합니다.
       this.logger.tick_then(() => this.comment = c);

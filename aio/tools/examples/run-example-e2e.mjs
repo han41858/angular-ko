@@ -26,15 +26,7 @@ const EXAMPLE_CONFIG_FILENAME = 'example-config.json';
 const DEFAULT_CLI_EXAMPLE_PORT = 4200;
 const DEFAULT_CLI_SPECS_CONCURRENCY = 1;
 const MAX_NO_OUTPUT_TIMEOUT = 1000 * 60 * 5;  // 5 minutes
-const IGNORED_EXAMPLES = [
-  // All of these `@angular/upgrade` related examples are relying on the SystemJS boilerplate.
-  // As of v13, Angular packages no longer include UMD bundles so these examples are no longer
-  // working. We temporarily disable them until we migrate them to actual CLI apps (if possible).
-  // TODO: re-enable examples once they can run with APF v13 package output.
-  "upgrade-module",
-  "upgrade-phonecat-2-hybrid",
-  "upgrade-phonecat-3-final",
-];
+const IGNORED_EXAMPLES = [];
 
 /**
  * Run Protractor End-to-End Tests for Doc Samples
@@ -46,7 +38,7 @@ const IGNORED_EXAMPLES = [
  *
  *  --exclude to exclude example app subdir names
  *    Can be used multiple times to exclude multiple patterns.
- *    NOTE: `--exclude` is always cosidered after `--filter`.
+ *    NOTE: `--exclude` is always considered after `--filter`.
  *    e.g. --exclude=bar  // Exclude all example apps with 'bar' in their folder names.
  *
  *  --setup to run yarn install, copy boilerplate and update webdriver
@@ -425,6 +417,7 @@ function getE2eSpecsFor(basePath, specFile, filter) {
   return globby(e2eSpecGlob, {cwd: basePath, nodir: true})
       .then(
           paths => paths.filter(file => !IGNORED_EXAMPLES.some(ignored => file.startsWith(ignored)))
+                       .sort()
                        .map(file => path.join(basePath, file)));
 }
 

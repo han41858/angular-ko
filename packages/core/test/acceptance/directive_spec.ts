@@ -7,8 +7,7 @@
  */
 
 import {CommonModule} from '@angular/common';
-import {Component, Directive, ElementRef, EventEmitter, NgModule, Output, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
-import {Input} from '@angular/core/src/metadata';
+import {Component, Directive, ElementRef, EventEmitter, Input, NgModule, Output, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 
@@ -316,7 +315,7 @@ describe('directives', () => {
       @Directive({selector: '[test]'})
       class MyDir {
         constructor() {
-          logs.push('MyDir.contructor');
+          logs.push('MyDir.constructor');
         }
 
         @Input('test') myInput = '';
@@ -340,7 +339,7 @@ describe('directives', () => {
       const fixture = TestBed.createComponent(MyComp);
       fixture.detectChanges();
 
-      expect(logs).toEqual(['MyDir.contructor']);
+      expect(logs).toEqual(['MyDir.constructor']);
     });
   });
 

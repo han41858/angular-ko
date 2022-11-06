@@ -105,8 +105,12 @@ describe('perform watch', () => {
     expect(fs.existsSync(genPath)).toBe(true);
     expect(fileExistsSpy!).toHaveBeenCalledWith(mainTsPath);
     expect(fileExistsSpy!).toHaveBeenCalledWith(utilTsPath);
-    expect(getSourceFileSpy!).toHaveBeenCalledWith(mainTsPath, ts.ScriptTarget.ES5);
-    expect(getSourceFileSpy!).toHaveBeenCalledWith(utilTsPath, ts.ScriptTarget.ES5);
+    expect(getSourceFileSpy!).toHaveBeenCalledWith(mainTsPath, jasmine.objectContaining({
+      languageVersion: ts.ScriptTarget.ES5
+    }));
+    expect(getSourceFileSpy!).toHaveBeenCalledWith(utilTsPath, jasmine.objectContaining({
+      languageVersion: ts.ScriptTarget.ES5
+    }));
 
     fileExistsSpy!.calls.reset();
     getSourceFileSpy!.calls.reset();
@@ -234,11 +238,11 @@ class MockWatchHost {
   nextTimeoutListenerId = 1;
   timeoutListeners: {[id: string]: (() => void)} = {};
   fileChangeListeners: Array<((event: FileChangeEvent, fileName: string) => void)|null> = [];
-  diagnostics: ng.Diagnostic[] = [];
+  diagnostics: ts.Diagnostic[] = [];
   constructor(public config: ng.ParsedConfiguration) {}
 
-  reportDiagnostics(diags: ng.Diagnostics) {
-    this.diagnostics.push(...(diags as ng.Diagnostic[]));
+  reportDiagnostics(diags: readonly ts.Diagnostic[]) {
+    this.diagnostics.push(...diags);
   }
   readConfiguration() {
     return this.config;

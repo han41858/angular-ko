@@ -5,13 +5,11 @@
 
 An NgModule is a class marked by the `@NgModule` decorator.
 `@NgModule` takes a metadata object that describes how to compile a component's template and how to create an injector at runtime.
-It identifies the module's own components, directives, and pipes,
-making some of them public, through the `exports` property, so that external components can use them.
+It identifies the module's own components, directives, and pipes, making some of them public, through the `exports` property, so that external components can use them.
 `@NgModule` can also add service providers to the application dependency injectors.
 
-For an example application showcasing all the techniques that NgModules related pages
-cover, see the <live-example></live-example>. For explanations on the individual techniques, visit the relevant NgModule pages under the NgModules
-section.
+For an example application showcasing all the techniques that NgModules related pages cover, see the <live-example></live-example>.
+For explanations on the individual techniques, visit the relevant NgModule pages under the NgModules section.
 -->
 **NgModule**을 구성하는 방법에 따라 애플리케이션이 조합되는 방식이 달라지기 때문에, NgModule은 인젝터(injector)와 컴파일러에 영향을 미칩니다.
 
@@ -32,14 +30,9 @@ NgModule은 `@NgModule` 데코레이터가 지정된 클래스입니다.
 Modules are a great way to organize an application and extend it with capabilities from external libraries.
 
 Angular libraries are NgModules, such as `FormsModule`, `HttpClientModule`, and `RouterModule`.
-Many third-party libraries are available as NgModules such as
-<a href="https://material.angular.io/">Material Design</a>,
-<a href="https://ionicframework.com/">Ionic</a>, and
-<a href="https://github.com/angular/angularfire2">AngularFire2</a>.
+Many third-party libraries are available as NgModules such as [Material Design](https://material.angular.io), [Ionic](https://ionicframework.com), and [AngularFire2](https://github.com/angular/angularfire2).
 
-NgModules consolidate components, directives, and pipes into
-cohesive blocks of functionality, each focused on a
-feature area, application business domain, workflow, or common collection of utilities.
+NgModules consolidate components, directives, and pipes into cohesive blocks of functionality, each focused on a feature area, application business domain, workflow, or common collection of utilities.
 
 Modules can also add services to the application.
 Such services might be internally developed, like something you'd develop yourself or come from outside sources, such as the Angular router and HTTP client.
@@ -48,23 +41,22 @@ Modules can be loaded eagerly when the application starts or lazy loaded asynchr
 
 NgModule metadata does the following:
 
-* Declares which components, directives, and pipes belong to the module.
-* Makes some of those components, directives, and pipes public so that other module's component templates can use them.
-* Imports other modules with the components, directives, and pipes that components in the current module need.
-* Provides services that other application components can use.
+*   Declares which components, directives, and pipes belong to the module
+*   Makes some of those components, directives, and pipes public so that other module's component templates can use them
+*   Imports other modules with the components, directives, and pipes that components in the current module need
+*   Provides services that other application components can use
 
 Every Angular application has at least one module, the root module.
 You [bootstrap](guide/bootstrapping) that module to launch the application.
 
 The root module is all you need in an application with few components.
-As the application grows, you refactor the root module into [feature modules](guide/feature-modules)
-that represent collections of related functionality.
+As the application grows, you refactor the root module into [feature modules](guide/feature-modules) that represent collections of related functionality.
 You then import these modules into the root module.
 -->
 모듈은 애플리케이션을 효율적으로 구성하기 위해 마련된 체계이며, 외부 라이브러리를 효율적으로 사용하기 위한 방법이기도 합니다.
 
 Angular에서 제공하는 `FormsModule`이나 `HttpClientModule`, `RouterModule`과 같은 라이브러리들도 NgModule입니다.
-그리고 <a href="https://material.angular.io/">Material Design</a>이나 <a href="https://ionicframework.com/">Ionic</a>, <a href="https://github.com/angular/angularfire2">AngularFire2</a>와 같이 NgModule 형태로 제공되는 서드파티 라이브러리도 있습니다.
+그리고 [Material Design](https://material.angular.io)이나 [Ionic](https://ionicframework.com), [AngularFire2](https://github.com/angular/angularfire2)와 같이 NgModule 형태로 제공되는 서드파티 라이브러리도 있습니다.
 
 NgModule은 컴포넌트와 디렉티브, 파이프 등 기능이 연관된 구성요소를 하나로 묶어 관리하는 단위이며, 기능의 측면이나 애플리케이션 비즈니스 도메인, 업무 흐름, 공통 유틸 등 해당 모듈이 담당하는 부분에만 집중하도록 구성합니다.
 
@@ -76,10 +68,10 @@ Angular 라우터나 HTTP 클라이언트 서비스도 이런 종류에 해당�
 
 NgModule 메타데이터는 다음과 같은 역할을 합니다:
 
-* 해당 모듈에 속한 컴포넌트, 디렉티브, 파이프가 어떤 것인지 정의합니다.
-* 모듈에 속한 컴포넌트, 디렉티브, 파이프 중 모듈 외부로 공개할 요소를 지정하면 다른 모듈의 컴포넌트 템플릿에서 이 구성요소를 사용할 수 있습니다.
-* 해당 모듈에 필요한 다른 모듈의 컴포넌트, 디렉티브, 파이프를 로드합니다.
-* 컴포넌트에 사용할 서비스 프로바이더를 등록합니다.
+*   해당 모듈에 속한 컴포넌트, 디렉티브, 파이프가 어떤 것인지 정의합니다.
+*   모듈에 속한 컴포넌트, 디렉티브, 파이프 중 모듈 외부로 공개할 요소를 지정하면 다른 모듈의 컴포넌트 템플릿에서 이 구성요소를 사용할 수 있습니다.
+*   해당 모듈에 필요한 다른 모듈의 컴포넌트, 디렉티브, 파이프를 로드합니다.
+*   컴포넌트에 사용할 서비스 프로바이더를 등록합니다.
 
 모든 Angular 앱은 반드시 최상위 모듈이 존재하며, 따라서 최소한 한 개 이상의 모듈을 갖는다고 할 수 있습니다.
 애플리케이션은 이 최상위 모듈을 [부트스트랩](guide/bootstrapping)하면서 시작됩니다.
@@ -97,24 +89,28 @@ NgModule 메타데이터는 다음과 같은 역할을 합니다:
 <!--
 The [Angular CLI](cli) generates the following basic `AppModule` when creating a new application.
 
-
 <code-example path="ngmodules/src/app/app.module.1.ts" header="src/app/app.module.ts (default AppModule)">
-// @NgModule decorator with its metadata
+
+// &commat;NgModule decorator with its metadata
+
 </code-example>
 
-At the top are the import statements. The next section is where you configure the `@NgModule` by stating what components and directives belong to it (`declarations`) as well as which other modules it uses (`imports`). For more information on the structure of an `@NgModule`, be sure to read [Bootstrapping](guide/bootstrapping).
+At the top are the import statements.
+The next section is where you configure the `@NgModule` by stating what components and directives belong to it \(`declarations`\) as well as which other modules it uses \(`imports`\).
+For more information on the structure of an `@NgModule`, be sure to read [Bootstrapping](guide/bootstrapping).
 -->
 [Angular CLI](cli)로 애플리케이션을 생성하면 기본 모듈인 `AppModule`이 다음과 같이 생성됩니다.
 
 <code-example path="ngmodules/src/app/app.module.1.ts" header="src/app/app.module.ts (default AppModule)">
-// @NgModule decorator with its metadata
+
+// &commat;NgModule decorator with its metadata
+
 </code-example>
 
 이 파일의 제일 위쪽에는 `import` 구문들이 있습니다.
 다음 문서에서는 컴포넌트와 디렉티브를 `@NgModule`에 포함시키는 `declations`와 `imports`에 대해 알아봅시다.
 `@NgModule`의 구조에 대해 자세하게 알아보려면 [부트스트랩](guide/bootstrapping) 문서를 참고하세요.
 
-<hr />
 
 <!--
 ## More on NgModules
@@ -123,13 +119,23 @@ At the top are the import statements. The next section is where you configure th
 
 <!--
 You may also be interested in the following:
-* [Feature Modules](guide/feature-modules).
-* [Entry Components](guide/entry-components).
-* [Providers](guide/providers).
-* [Types of NgModules](guide/module-types).
+
+*   [Feature Modules](guide/feature-modules)
+*   [Entry Components](guide/entry-components)
+*   [Providers](guide/providers)
+*   [Types of NgModules](guide/module-types)
 -->
 다음 내용을 더 확인해 보세요:
-* [기능 모듈](guide/feature-modules)
-* [진입 컴포넌트](guide/entry-components)
-* [프로바이더](guide/providers)
-* [NgModules의 타입](guide/module-types)
+
+*   [기능 모듈](guide/feature-modules)
+*   [진입 컴포넌트](guide/entry-components)
+*   [프로바이더](guide/providers)
+*   [NgModule의 종류](guide/module-types)
+
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

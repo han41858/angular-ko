@@ -7,6 +7,7 @@
  */
 
 import {Injector} from '../di/injector';
+import {EnvironmentInjector} from '../di/r3_injector';
 import {isType, Type} from '../interface/type';
 import {assertNodeInjector} from '../render3/assert';
 import {ComponentFactory as R3ComponentFactory} from '../render3/component_ref';
@@ -26,21 +27,13 @@ import {getParentInjectorIndex, getParentInjectorView, hasParentInjector} from '
 import {getNativeByTNode, unwrapRNode, viewAttachedToContainer} from '../render3/util/view_utils';
 import {ViewRef as R3ViewRef} from '../render3/view_ref';
 import {addToArray, removeFromArray} from '../util/array_utils';
-import {assertDefined, assertEqual, assertGreaterThan, assertLessThan} from '../util/assert';
-import {noop} from '../util/noop';
+import {assertDefined, assertEqual, assertGreaterThan, assertLessThan, throwError} from '../util/assert';
 
 import {ComponentFactory, ComponentRef} from './component_factory';
 import {createElementRef, ElementRef} from './element_ref';
 import {NgModuleRef} from './ng_module_factory';
 import {TemplateRef} from './template_ref';
 import {EmbeddedViewRef, ViewRef} from './view_ref';
-
-
-export const SWITCH_VIEW_CONTAINER_REF_FACTORY__POST_R3__ = injectViewContainerRef;
-const SWITCH_VIEW_CONTAINER_REF_FACTORY__PRE_R3__ = noop as typeof injectViewContainerRef;
-const SWITCH_VIEW_CONTAINER_REF_FACTORY: typeof injectViewContainerRef =
-    SWITCH_VIEW_CONTAINER_REF_FACTORY__PRE_R3__;
-
 /**
  * Represents a container where one or more views can be attached to a component.
  *
@@ -104,6 +97,24 @@ export abstract class ViewContainerRef {
    * @param templateRef The HTML template that defines the view.
    * @param context The data-binding context of the embedded view, as declared
    * in the `<ng-template>` usage.
+   * @param options Extra configuration for the created view. Includes:
+   *  * index: The 0-based index at which to insert the new view into this container.
+   *           If not specified, appends the new view as the last entry.
+   *  * injector: Injector to be used within the embedded view.
+   *
+   * @returns The `ViewRef` instance for the newly created view.
+   */
+  abstract createEmbeddedView<C>(templateRef: TemplateRef<C>, context?: C, options?: {
+    index?: number,
+    injector?: Injector
+  }): EmbeddedViewRef<C>;
+
+  /**
+   * Instantiates an embedded view and inserts it
+   * into this container.
+   * @param templateRef The HTML template that defines the view.
+   * @param context The data-binding context of the embedded view, as declared
+   * in the `<ng-template>` usage.
    * @param index The 0-based index at which to insert the new view into this container.
    * If not specified, appends the new view as the last entry.
    *
@@ -123,6 +134,10 @@ export abstract class ViewContainerRef {
    *  * ngModuleRef: an NgModuleRef of the component's NgModule, you should almost always provide
    *                 this to ensure that all expected providers are available for the component
    *                 instantiation.
+   *  * environmentInjector: an EnvironmentInjector which will provide the component's environment.
+   *                 you should almost always provide this to ensure that all expected providers
+   *                 are available for the component instantiation. This option is intended to
+   *                 replace the `ngModuleRef` parameter.
    *  * projectableNodes: list of DOM nodes that should be projected through
    *                      [`<ng-content>`](api/core/ng-content) of the new component instance.
    *
@@ -132,6 +147,7 @@ export abstract class ViewContainerRef {
     index?: number,
     injector?: Injector,
     ngModuleRef?: NgModuleRef<unknown>,
+    environmentInjector?: EnvironmentInjector|NgModuleRef<unknown>,
     projectableNodes?: Node[][],
   }): ComponentRef<C>;
 
@@ -155,7 +171,8 @@ export abstract class ViewContainerRef {
    */
   abstract createComponent<C>(
       componentFactory: ComponentFactory<C>, index?: number, injector?: Injector,
-      projectableNodes?: any[][], ngModuleRef?: NgModuleRef<any>): ComponentRef<C>;
+      projectableNodes?: any[][],
+      environmentInjector?: EnvironmentInjector|NgModuleRef<any>): ComponentRef<C>;
 
   /**
    * Inserts a view into this container.
@@ -202,7 +219,7 @@ export abstract class ViewContainerRef {
    * @internal
    * @nocollapse
    */
-  static __NG_ELEMENT_ID__: () => ViewContainerRef = SWITCH_VIEW_CONTAINER_REF_FACTORY;
+  static __NG_ELEMENT_ID__: () => ViewContainerRef = injectViewContainerRef;
 }
 
 /**
@@ -218,6 +235,8 @@ export function injectViewContainerRef(): ViewContainerRef {
 
 const VE_ViewContainerRef = ViewContainerRef;
 
+// TODO(alxhub): cleaning up this indirection triggers a subtle bug in Closure in g3. Once the fix
+// for that lands, this can be cleaned up.
 const R3ViewContainerRef = class ViewContainerRef extends VE_ViewContainerRef {
   constructor(
       private _lContainer: LContainer,
@@ -264,9 +283,27 @@ const R3ViewContainerRef = class ViewContainerRef extends VE_ViewContainerRef {
     return this._lContainer.length - CONTAINER_HEADER_OFFSET;
   }
 
+  override createEmbeddedView<C>(templateRef: TemplateRef<C>, context?: C, options?: {
+    index?: number,
+    injector?: Injector
+  }): EmbeddedViewRef<C>;
   override createEmbeddedView<C>(templateRef: TemplateRef<C>, context?: C, index?: number):
-      EmbeddedViewRef<C> {
-    const viewRef = templateRef.createEmbeddedView(context || <any>{});
+      EmbeddedViewRef<C>;
+  override createEmbeddedView<C>(templateRef: TemplateRef<C>, context?: C, indexOrOptions?: number|{
+    index?: number,
+    injector?: Injector
+  }): EmbeddedViewRef<C> {
+    let index: number|undefined;
+    let injector: Injector|undefined;
+
+    if (typeof indexOrOptions === 'number') {
+      index = indexOrOptions;
+    } else if (indexOrOptions != null) {
+      index = indexOrOptions.index;
+      injector = indexOrOptions.injector;
+    }
+
+    const viewRef = templateRef.createEmbeddedView(context || <any>{}, injector);
     this.insert(viewRef, index);
     return viewRef;
   }
@@ -285,16 +322,17 @@ const R3ViewContainerRef = class ViewContainerRef extends VE_ViewContainerRef {
   override createComponent<C>(
       componentFactory: ComponentFactory<C>, index?: number|undefined,
       injector?: Injector|undefined, projectableNodes?: any[][]|undefined,
-      ngModuleRef?: NgModuleRef<any>|undefined): ComponentRef<C>;
+      environmentInjector?: EnvironmentInjector|NgModuleRef<any>|undefined): ComponentRef<C>;
   override createComponent<C>(
       componentFactoryOrType: ComponentFactory<C>|Type<C>, indexOrOptions?: number|undefined|{
         index?: number,
         injector?: Injector,
         ngModuleRef?: NgModuleRef<unknown>,
+        environmentInjector?: EnvironmentInjector|NgModuleRef<unknown>,
         projectableNodes?: Node[][],
       },
       injector?: Injector|undefined, projectableNodes?: any[][]|undefined,
-      ngModuleRef?: NgModuleRef<any>|undefined): ComponentRef<C> {
+      environmentInjector?: EnvironmentInjector|NgModuleRef<any>|undefined): ComponentRef<C> {
     const isComponentFactory = componentFactoryOrType && !isType(componentFactoryOrType);
     let index: number|undefined;
 
@@ -331,30 +369,55 @@ const R3ViewContainerRef = class ViewContainerRef extends VE_ViewContainerRef {
         index?: number,
         injector?: Injector,
         ngModuleRef?: NgModuleRef<unknown>,
+        environmentInjector?: EnvironmentInjector | NgModuleRef<unknown>,
         projectableNodes?: Node[][],
       };
+      if (ngDevMode && options.environmentInjector && options.ngModuleRef) {
+        throwError(
+            `Cannot pass both environmentInjector and ngModuleRef options to createComponent().`);
+      }
       index = options.index;
       injector = options.injector;
       projectableNodes = options.projectableNodes;
-      ngModuleRef = options.ngModuleRef;
+      environmentInjector = options.environmentInjector || options.ngModuleRef;
     }
 
     const componentFactory: ComponentFactory<C> = isComponentFactory ?
         componentFactoryOrType as ComponentFactory<C>:
         new R3ComponentFactory(getComponentDef(componentFactoryOrType)!);
     const contextInjector = injector || this.parentInjector;
-    if (!ngModuleRef && (componentFactory as any).ngModule == null && contextInjector) {
-      // DO NOT REFACTOR. The code here used to have a `value || undefined` expression
-      // which seems to cause internal google apps to fail. This is documented in the
-      // following internal bug issue: go/b/142967802
-      const result = contextInjector.get(NgModuleRef, null);
+
+    // If an `NgModuleRef` is not provided explicitly, try retrieving it from the DI tree.
+    if (!environmentInjector && (componentFactory as any).ngModule == null) {
+      // For the `ComponentFactory` case, entering this logic is very unlikely, since we expect that
+      // an instance of a `ComponentFactory`, resolved via `ComponentFactoryResolver` would have an
+      // `ngModule` field. This is possible in some test scenarios and potentially in some JIT-based
+      // use-cases. For the `ComponentFactory` case we preserve backwards-compatibility and try
+      // using a provided injector first, then fall back to the parent injector of this
+      // `ViewContainerRef` instance.
+      //
+      // For the factory-less case, it's critical to establish a connection with the module
+      // injector tree (by retrieving an instance of an `NgModuleRef` and accessing its injector),
+      // so that a component can use DI tokens provided in MgModules. For this reason, we can not
+      // rely on the provided injector, since it might be detached from the DI tree (for example, if
+      // it was created via `Injector.create` without specifying a parent injector, or if an
+      // injector is retrieved from an `NgModuleRef` created via `createNgModuleRef` using an
+      // NgModule outside of a module tree). Instead, we always use `ViewContainerRef`'s parent
+      // injector, which is normally connected to the DI tree, which includes module injector
+      // subtree.
+      const _injector = isComponentFactory ? contextInjector : this.parentInjector;
+
+      // DO NOT REFACTOR. The code here used to have a `injector.get(NgModuleRef, null) ||
+      // undefined` expression which seems to cause internal google apps to fail. This is documented
+      // in the following internal bug issue: go/b/142967802
+      const result = _injector.get(EnvironmentInjector, null);
       if (result) {
-        ngModuleRef = result;
+        environmentInjector = result;
       }
     }
 
     const componentRef =
-        componentFactory.create(contextInjector, projectableNodes, undefined, ngModuleRef);
+        componentFactory.create(contextInjector, projectableNodes, undefined, environmentInjector);
     this.insert(componentRef.hostView, index);
     return componentRef;
   }

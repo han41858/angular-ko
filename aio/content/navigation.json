@@ -131,13 +131,20 @@
     {
       "/title": "Understanding Angular",
       "title": "Angular 이해하기",
-      "/tooltip": "Learn the concepts essential to becoming a proficient Angular developer.",
+      "/tooltip": "Learn the essential concepts to become a proficient Angular developer.",
       "tooltip": "Angular 전문가가 되기 위해 꼭 알아둬야 할 개념에 대해 학습해 보세요.",
       "children": [
         {
+          "/title": "Overview",
+          "title": "개요",
+          "url": "guide/understanding-angular-overview",
+          "/tooltip": "Learn about the most common parts of an Angular application.",
+          "tooltip": "Angular 애플리케이션의 기본 개념을 알아보세요."
+        },
+        {
           "/title": "Components",
           "title": "컴포넌트",
-          "/tooltip": "Building dynamic views with data binding",
+          "/tooltip": "Learn more about how to use data binding to build dynamic views",
           "tooltip": "데이터 바인딩을 활용해서 살아 움직이는 뷰 만들기",
           "children": [
             {
@@ -211,6 +218,13 @@
           "tooltip": "템플릿에는 데이터 바인딩, 템플릿 표현식, 디렉티브를 활용할 수 있습니다.",
           "children": [
             {
+              "url": "guide/template-overview",
+              "/title": "Overview",
+              "title": "개요",
+              "/tooltip": "Introduction to templates.",
+              "tooltip": "템플릿에 대해 알아봅시다."
+            },
+            {
               "url": "guide/template-syntax",
               "/title": "Introduction",
               "title": "소개",
@@ -232,39 +246,83 @@
               "tooltip": "컴포넌트, 디렉티브, 엘리먼트에서 발생하는 이벤트에 반응하기 위해 템플릿 실행문을 사용하는 방법에 대해 알아봅시다."
             },
             {
-              "url": "guide/pipes",
+              "/title": "Binding",
+              "title": "바인딩",
+              "/tooltip": "A binding connects a template and a component.",
+              "tooltip": "템플릿과 컴포넌트를 바인딩으로 연결해 봅시다.",
+              "children": [
+                {
+                  "url": "guide/binding-overview",
+                  "/title": "Understanding binding",
+                  "title": "바인딩 이해하기",
+                  "/tooltip": "Introductory guide to binding.",
+                  "tooltip": "바인딩의 기본 개념을 알아봅시다."
+                },
+                {
+                  "url": "guide/attribute-binding",
+                  "/title": "Attribute binding",
+                  "title": "어트리뷰트 바인딩",
+                  "/tooltip": "Learn how to use attribute binding.",
+                  "tooltip": "어트리뷰트 바인딩을 알아봅시다."
+                },
+                {
+                  "url": "guide/class-binding",
+                  "/title": "Class and style binding",
+                  "title": "클래스, 스타일 바인딩",
+                  "/tooltip": "Learn how to use class and style binding.",
+                  "tooltip": "클래스 바인딩, 스타일 바인딩을 알아봅시다."
+                },
+                {
+                  "url": "guide/event-binding",
+                  "/title": "Event binding",
+                  "title": "이벤트 바인딩",
+                  "/tooltip": "Learn how to use to event binding.",
+                  "tooltip": "이벤트 바인딩을 알아봅시다."
+                },
+                {
+                  "url": "guide/property-binding",
+                  "/title": "Property binding",
+                  "title": "프로퍼티 바인딩",
+                  "/tooltip": "Learn how to use property binding.",
+                  "tooltip": "프로퍼티 바인딩을 알아봅시다."
+                },
+                {
+                  "url": "guide/two-way-binding",
+                  "/title": "Two-way binding",
+                  "title": "양방향 바인딩",
+                  "/tooltip": "Learn how to share data between a class and a template.",
+                  "tooltip": "클래스와 템플릿이 데이터를 공유하는 방법을 알아봅시다."
+                }
+              ]
+            },
+            {
               "/title": "Pipes",
               "title": "파이프",
               "/tooltip": "Pipes transform displayed values within a template.",
-              "tooltip": "파이프는 템플릿에 표시되는 데이터의 형식을 변환할 때 사용합니다."
-            },
-            {
-              "url": "guide/property-binding",
-              "/title": "Property binding",
-              "title": "프로퍼티 바인딩",
-              "/tooltip": "Introductory guide to setting element or input properties.",
-              "tooltip": "엘리먼트의 입력 프로퍼티에 값을 할당하는 방법에 대해 알아봅시다."
-            },
-            {
-              "url": "guide/attribute-binding",
-              "/title": "Attribute, class, and style bindings",
-              "title": "어트리뷰트, 클래스, 스타일 바인딩",
-              "/tooltip": "Introductory guide to setting the value of HTML attributes.",
-              "tooltip": "HTML 어트리뷰트 값을 지정하는 방법에 대해 알아봅시다."
-            },
-            {
-              "url": "guide/event-binding",
-              "/title": "Event binding",
-              "title": "이벤트 바인딩",
-              "/tooltip": "Introductory guide to listening for user interaction.",
-              "tooltip": "사용자의 행동에 반응하는 방법에 대해 알아봅시다."
-            },
-            {
-              "url": "guide/two-way-binding",
-              "/title": "Two-way binding",
-              "title": "양방향 바인딩",
-              "/tooltip": "Introductory guide to sharing data between a class and a template.",
-              "tooltip": "클래스와 템플릿 양쪽에 데이터를 공유하는 방법에 대해 알아봅시다."
+              "tooltip": "파이프는 템플릿에 표시되는 데이터의 형식을 변환할 때 사용합니다.",
+              "children": [
+                {
+                  "url": "guide/pipes-overview",
+                  "/title": "Understanding pipes",
+                  "title": "파이프 이해하기",
+                  "/tooltip": "Introductory guide to pipes.",
+                  "tooltip": "파이프에 대해 알아봅시다."
+                },
+                {
+                  "url": "guide/pipe-template",
+                  "/title": "Using a pipe in a template",
+                  "title": "템플릿에 파이프 사용하기",
+                  "/tooltip": "Learn how to use a pipe in a template.",
+                  "tooltip": "템플릿에 파이프를 사용해 봅시다."
+                },
+                {
+                  "url": "guide/pipes-transform-data",
+                  "/title": "Transforming data with parameters and chained pipes",
+                  "title": "파이프 인자 사용하기, 체이닝하기",
+                  "/tooltip": "Learn how to use a pipe transform data.",
+                  "tooltip": "파이프로 데이터를 변환하는 방법을 알아봅시다."
+                }
+              ]
             },
             {
               "url": "guide/template-reference-variables",
@@ -336,15 +394,58 @@
       ]
     },
     {
-      "/title": "Developer Guides",
+      "/title": "Developer guides",
       "title": "개발자 가이드",
       "/tooltip": "Learn more about how to use Angular to build your applications.",
       "tooltip": "Angular 애플리케이션을 만드는 방법에 대해 자세하게 알아보세요.",
       "children": [
         {
-          "/title": "Routing & Navigation",
-          "title": "라우팅 & 네비게이션",
-          "/tooltip": "Build in-app navigation among views using the Angular Router.",
+          "url": "guide/developer-guide-overview",
+          "/title": "Overview",
+          "title": "개요",
+          "/tooltip": "A list of developer guides for building Angular applications.",
+          "tooltip": "Angular 애플리케이션을 개발할 때 활용할 수 있는 개발자 가이드를 확인해 보세요."
+        },
+        {
+          "/title": "Change detection",
+          "title": "변화 감지",
+          "/tooltip": "Learn how Angular updates the view based on data changes and how to keep your application fast",
+          "tooltip": "데이터가 변경되면 Angular가 화면을 어떻게 갱신하는지 확인해 보세요.",
+          "children": [
+            {
+              "url": "guide/change-detection",
+              "/title": "Overview",
+              "title": "개요",
+              "/tooltip": "Introduces the basics of Angular's change detection",
+              "tooltip": "Angular 변화 감지의 기본 개념을 알아봅시다."
+            },
+            {
+              "url": "guide/change-detection-zone-pollution",
+              "/title": "Zone Pollution",
+              "title": "Zone 오염",
+              "/tooltip": "Explains how Zone.js works and what are the common pitfalls that can slow an application down",
+              "tooltip": "Zone.js가 동작하는 방식을 알아보고 애플리케이션이 느려질 수 있는 경우를 대비해 봅시다."
+            },
+            {
+              "url": "guide/change-detection-slow-computations",
+              "/title": "Slow Computations",
+              "title": "느린 연산",
+              "/tooltip": "Learn how to make your application faster by discovering and optimizing slow calculations",
+              "tooltip": "느린 연산을 최적화해서 애플리케이션을 빠르게 만들어 봅시다."
+            },
+            {
+              "url": "guide/change-detection-skipping-subtrees",
+              "/title": "Skipping Component Subtrees",
+              "title": "컴포넌트 서브트리 생략하기",
+              "/tooltip": "Learn how to skip change detection in component subtrees using OnPush change detection strategy",
+              "tooltip": "OnPush 변화감지 정책을 사용해서 컴포넌트 서브트리에서 발생한 변화감지를 생략하는 방법을 알아봅시다."
+            }
+          ]
+        },
+        {
+          "/title": "Routing and Navigation",
+          "title": "라우팅, 네비게이션",
+          "/tooltip": "Learn how to use Angular Router to build in-app navigation between views.",
           "tooltip": "Angular 라우터를 사용해서 화면을 전환해 보세요.",
           "children": [
             {
@@ -410,6 +511,13 @@
               "title": "반응형 폼",
               "/tooltip": "Create a reactive form using FormBuilder, groups, and arrays.",
               "tooltip": "FormBuilder, 그룹, 배열을 사용해서 반응형 폼을 만들어 보세요."
+            },
+            {
+              "url": "guide/typed-forms",
+              "/title": "Strictly Typed Reactive Forms In Depth",
+              "title": "엄격한 타입의 반응형 폼",
+              "/tooltip": "A deep-dive into the reactive forms types.",
+              "tooltip": "반응형 폼의 타입 처리를 자세하게 알아봅시다."
             },
             {
               "url": "guide/form-validation",
@@ -513,83 +621,115 @@
           "children": [
             {
               "url": "guide/i18n-overview",
-              "title": "Overview",
-              "tooltip": "Introduces the Angular internationalization and lists topics that teach you how to localize your applications"
+              "/title": "Overview",
+              "title": "개요",
+              "/tooltip": "Introduces the Angular internationalization and lists topics that teach you how to localize your applications",
+              "tooltip": "Angular의 국제화에 대해 알아보고 애플리케이션에 적용해 보세요."
             },
             {
-              "title": "Common internationalization tasks",
-              "tooltip": "Task-based content on many of the common tasks associated with Angular internationalization, such as adding the locale package and formatting data for a locale",
+              "/title": "Common internationalization tasks",
+              "title": "국제화 기본 작업",
+              "/tooltip": "Task-based content on many of the common tasks associated with Angular internationalization, such as adding the locale package and formatting data for a locale",
+              "tooltip": "언어 패키지나 데이터 표현식을 도입하는 것 등 기본 작업을 알아봅시다.",
               "children": [
                 {
                   "url": "guide/i18n-common-overview",
-                  "title": "Overview",
-                  "tooltip": "Introduces the common Angular internationalization tasks and lists topics that teach you how to localize your applications"
+                  "/title": "Overview",
+                  "title": "개요",
+                  "/tooltip": "Introduces the common Angular internationalization tasks and lists topics that teach you how to localize your applications",
+                  "tooltip": "Angular 애플리케이션에 국제화를 도입하는 작업을 알아보세요."
                 },
                 {
                   "url": "guide/i18n-common-add-package",
-                  "title": "Add the localize package",
-                  "tooltip": "Add the Angular localize package"
+                  "/title": "Add the localize package",
+                  "title": "현지화 패키지 추가하기",
+                  "/tooltip": "Add the Angular localize package",
+                  "tooltip": "현지화 패키지를 추가해 봅시다."
                 },
                 {
                   "url": "guide/i18n-common-locale-id",
-                  "title": "Refer to locales by ID",
-                  "tooltip": "Reference using locale IDs"
+                  "/title": "Refer to locales by ID",
+                  "title": "현지화 ID 참조하기",
+                  "/tooltip": "Reference using locale IDs",
+                  "tooltip": "현지화 ID를 참조해 봅시다."
                 },
                 {
                   "url": "guide/i18n-common-format-data-locale",
-                  "title": "Format data based on locale",
-                  "tooltip": "Format data based on locale"
+                  "/title": "Format data based on locale",
+                  "title": "지역에 맞게 데이터 표현하기",
+                  "/tooltip": "Format data based on locale",
+                  "tooltip": "데이터를 지역에 맞게 표현해 봅시다."
                 },
                 {
                   "url": "guide/i18n-common-prepare",
-                  "title": "Prepare templates for translations",
-                  "tooltip": "Prepare content for translation"
+                  "/title": "Prepare component for translation",
+                  "title": "컴포넌트 번역 준비하기",
+                  "/tooltip": "Prepare component for translation",
+                  "tooltip": "컴포넌트를 번역할 준비를 해봅시다."
                 },
                 {
                   "url": "guide/i18n-common-translation-files",
-                  "title": "Work with translation files",
-                  "tooltip": "Work with translation files"
+                  "/title": "Work with translation files",
+                  "title": "번역 파일 작업하기",
+                  "/tooltip": "Work with translation files",
+                  "tooltip": "번역 파일을 작업해 봅시다."
                 },
                 {
                   "url": "guide/i18n-common-merge",
-                  "title": "Merge translations into the app",
-                  "tooltip": "Merge translations into your app"
+                  "/title": "Merge translations into the app",
+                  "title": "번역한 파일을 앱에 적용하기",
+                  "/tooltip": "Merge translations into your app",
+                  "tooltip": "번역한 파일을 앱에 적용해 봅시다."
                 },
                 {
                   "url": "guide/i18n-common-deploy",
-                  "title": "Deploy multiple locales",
-                  "tooltip": "Deploy multiple locale for your app"
+                  "/title": "Deploy multiple locales",
+                  "title": "다양한 언어로 배포하기",
+                  "/tooltip": "Deploy multiple locale for your app",
+                  "tooltip": "앱을 다양한 언어로 배포해 봅시다."
                 }
               ]
             },
             {
               "url": "guide/i18n-example",
-              "title": "Example Angular application",
-              "tooltip": "Example of a translated Angular application"
+              "/title": "Example Angular application",
+              "title": "국제화 샘플",
+              "tooltip": "Example of a translated Angular application",
+              "/tooltip": "샘플 애플리케이션을 확인해 보세요."
             },
             {
-              "title": "Optional internationalization practices",
-              "tooltip": "Task-based content on many of the optional pratices associated with Angular internationalization",
+              "/title": "Optional internationalization practices",
+              "title": "추가 국제화 작업",
+              "/tooltip": "Task-based content on many of the optional pratices associated with Angular internationalization",
+              "tooltip": "추가로 국제화를 적용하는 방법을 알아봅시다.",
               "children": [
                 {
                   "url": "guide/i18n-optional-overview",
-                  "title": "Overview",
-                  "tooltip": "Introduces the optional Angular internationalization tasks and lists topics that teach you how to manually configure localization settings for your applications"
+                  "/title": "Overview",
+                  "title": "개요",
+                  "/tooltip": "Introduces the optional Angular internationalization tasks and lists topics that teach you how to manually configure localization settings for your applications",
+                  "tooltip": "추가로 국제화를 적용하는 방법을 알아봅시다."
                 },
                 {
                   "url": "guide/i18n-optional-manual-runtime-locale",
-                  "title": "Set the runtime locale manually",
-                  "tooltip": "Set the runtime locale manually"
+                  "/title": "Set the runtime locale manually",
+                  "title": "런타임 언어 수동 적용하기",
+                  "/tooltip": "Set the runtime locale manually",
+                  "tooltip": "런타임 언어를 수동으로 적용해 봅시다."
                 },
                 {
                   "url": "guide/i18n-optional-import-global-variants",
-                  "title": "Import global variants of the locale data",
-                  "tooltip": "Import global variants of the locale data"
+                  "/title": "Import global variants of the locale data",
+                  "title": "국제화 데이터 로드하기",
+                  "/tooltip": "Import global variants of the locale data",
+                  "tooltip": "국제화 데이터를 로드해 봅시다."
                 },
                 {
                   "url": "guide/i18n-optional-manage-marked-text",
-                  "title": "Manage marked text with custom IDs",
-                  "tooltip": "Manage marked text with custom IDs"
+                  "/title": "Manage marked text with custom IDs",
+                  "title": "번역대상 텍스트와 커스텀 ID 관리하기",
+                  "/tooltip": "Manage marked text with custom IDs",
+                  "tooltip": "번역대상 텍스트와 커스텀 ID를 관리해봅시다."
                 }
               ]
             }
@@ -984,16 +1124,30 @@
               "/title": "Creating Libraries",
               "title": "라이브러리 만들기",
               "/tooltip": "Extend Angular by creating, publishing, and using your own libraries.",
-              "tooltip": "라이브러리를 직접 개발하고 배포하는 방법에 대해 알아보세요."
+              "tooltip": "라이브러리를 직접 개발하고 배포하는 방법에 대해 알아봅시다."
             },
             {
               "url": "guide/angular-package-format",
-              "/title": "Angular Package Format",
               "title": "Angular Package Format",
               "/tooltip": "Information about the Angular Package Format.",
-              "tooltip": "Angular Package Format에 대해 알아보세요."
+              "tooltip": "Angular 패키지 형식에 대해 알아보세요."
             }
           ]
+        }
+      ]
+    },
+    {
+      "/title": "Feature preview",
+      "title": "기능 미리보기",
+      "/tooltip": "Angular preview features and APIs",
+      "tooltip": "Angular에 도입될 수 있는 기능과 API를 확인해 보세요.",
+      "children": [
+        {
+          "url": "guide/standalone-components",
+          "/title": "Standalone components",
+          "title": "단독 컴포넌트",
+          "/tooltip": "Standalone components, directives and pipes",
+          "tooltip": "단독 컴포넌트, 디렉티브, 파이프에 대해 알아봅시다."
         }
       ]
     },
@@ -1404,6 +1558,21 @@
           ]
         },
         {
+          "/title": "Extended Diagnostic Reference",
+          "title": "확장 진단 참조",
+          "/tooltip": "Details of extended diagnostics that can be emitted by the Angular compiler",
+          "tooltip": "Angular 컴파일러가 활용하는 확장 진단에 대해 알아보세요.",
+          "children": [
+            {
+              "url": "extended-diagnostics",
+              "/title": "Extended Diagnostics Overview",
+              "title": "확장 진단 개요",
+              "/tooltip": "Overview of extended diagnostics, what they are, and how to configure them.",
+              "tooltip": "확장 진단이 무엇인지, 어떻게 설정하는지 확인해 보세요."
+            }
+          ]
+        },
+        {
           "/title": "Example applications",
           "title": "예제 애플리케이션",
           "/tooltip": "List of all of the example applications in the Angular documentation.",
@@ -1571,7 +1740,7 @@
           "/title": "Code of Conduct",
           "title": "커뮤니티 행동강령",
           "/tooltip": "Treating each other with respect.",
-          "tooltip": "친하게 지내요:)"
+          "tooltip": "친하게 지내요 :)"
         }
       ]
     },

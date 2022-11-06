@@ -18,8 +18,10 @@ export class DownloaderService {
     return this.http.get(filename, {responseType: 'text'})
       .pipe(
         tap( // HTTP 응답이나 에러를 로그로 출력합니다.
-          data => this.log(filename, data),
-          error => this.logError(filename, error)
+        {
+          next: (data) => this.log(filename, data),
+          error: (error) => this.logError(filename, error)
+        }
         )
       );
   }

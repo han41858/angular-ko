@@ -17,10 +17,14 @@ import { Component } from '@angular/core';
 export class VoteTakerComponent {
   agreed = 0;
   disagreed = 0;
-  voters = ['Narco', 'Celeritas', 'Bombasto'];
+  voters = ['Dr IQ', 'Celeritas', 'Bombasto'];
 
   onVoted(agreed: boolean) {
-    agreed ? this.agreed++ : this.disagreed++;
+    if (agreed) {
+      this.agreed++;
+    } else {
+      this.disagreed++;
+    }
   }
 }
 // #enddocregion

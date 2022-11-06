@@ -7,11 +7,11 @@
  */
 
 import {LocationStrategy} from '@angular/common';
-import {Attribute, Directive, ElementRef, HostBinding, HostListener, Input, OnChanges, OnDestroy, Renderer2, SimpleChanges} from '@angular/core';
+import {Attribute, Directive, ElementRef, HostBinding, HostListener, Input, OnChanges, OnDestroy, Renderer2, SimpleChanges, ɵcoerceToBoolean as coerceToBoolean} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
 
-import {QueryParamsHandling} from '../config';
 import {Event, NavigationEnd} from '../events';
+import {QueryParamsHandling} from '../models';
 import {Router} from '../router';
 import {ActivatedRoute} from '../router_state';
 import {Params} from '../shared';
@@ -35,7 +35,7 @@ import {UrlTree} from '../url_tree';
  * For example, `['/team', teamId, 'user', userName, {details: true}]`
  * generates a link to `/team/11/user/bob;details=true`.
  *
- * Multiple static segments can be merged into one term and combined with dynamic segements.
+ * Multiple static segments can be merged into one term and combined with dynamic segments.
  * For example, `['/team/11/user', userName, {details: true}]`
  *
  * The input that you provide to the link is treated as a delta to the current URL.
@@ -242,8 +242,8 @@ export class RouterLink implements OnChanges {
     }
 
     const extras = {
-      skipLocationChange: attrBoolValue(this.skipLocationChange),
-      replaceUrl: attrBoolValue(this.replaceUrl),
+      skipLocationChange: coerceToBoolean(this.skipLocationChange),
+      replaceUrl: coerceToBoolean(this.replaceUrl),
       state: this.state,
     };
     this.router.navigateByUrl(this.urlTree, extras);
@@ -261,7 +261,7 @@ export class RouterLink implements OnChanges {
       queryParams: this.queryParams,
       fragment: this.fragment,
       queryParamsHandling: this.queryParamsHandling,
-      preserveFragment: attrBoolValue(this.preserveFragment),
+      preserveFragment: coerceToBoolean(this.preserveFragment),
     });
   }
 }
@@ -406,8 +406,8 @@ export class RouterLinkWithHref implements OnChanges, OnDestroy {
     }
 
     const extras = {
-      skipLocationChange: attrBoolValue(this.skipLocationChange),
-      replaceUrl: attrBoolValue(this.replaceUrl),
+      skipLocationChange: coerceToBoolean(this.skipLocationChange),
+      replaceUrl: coerceToBoolean(this.replaceUrl),
       state: this.state
     };
     this.router.navigateByUrl(this.urlTree, extras);
@@ -431,11 +431,7 @@ export class RouterLinkWithHref implements OnChanges, OnDestroy {
       queryParams: this.queryParams,
       fragment: this.fragment,
       queryParamsHandling: this.queryParamsHandling,
-      preserveFragment: attrBoolValue(this.preserveFragment),
+      preserveFragment: coerceToBoolean(this.preserveFragment),
     });
   }
-}
-
-function attrBoolValue(s: any): boolean {
-  return s === '' || !!s;
 }

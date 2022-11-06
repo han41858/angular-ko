@@ -87,10 +87,12 @@ function overrideSetup() {
   });
 
   it('should have called `getHero`', () => {
-    expect(hdsSpy.getHero.calls.count()).toBe(1, 'getHero called once');
+    expect(hdsSpy.getHero.calls.count())
+      .withContext('getHero called once')
+      .toBe(1, 'getHero called once');
   });
 
-  it('should display stub hero\'s name', () => {
+  it("should display stub hero's name", () => {
     expect(page.nameDisplay.textContent).toBe(hdsSpy.testHero.name);
   });
 
@@ -100,19 +102,27 @@ function overrideSetup() {
 
        page.nameInput.value = newName;
 
-       // IE와 같이 오래된 브라우저에서는 CustomEvent 를 사용해야 합니다. 아래 문서를 참고하세요.
-       // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
        page.nameInput.dispatchEvent(new Event('input')); // tell Angular
 
-       expect(component.hero.name).toBe(newName, 'component hero has new name');
-       expect(hdsSpy.testHero.name).toBe(origName, 'service hero unchanged before save');
+       expect(component.hero.name)
+        .withContext('component hero has new name')
+        .toBe(newName);
+       expect(hdsSpy.testHero.name)
+        .withContext('service hero unchanged before save')
+        .toBe(origName);
 
        click(page.saveBtn);
-       expect(hdsSpy.saveHero.calls.count()).toBe(1, 'saveHero called once');
+       expect(hdsSpy.saveHero.calls.count())
+        .withContext('saveHero called once')
+        .toBe(1);
 
        tick();  // 비동기 저장 로직이 끝나는 것을 기다립니다.
-       expect(hdsSpy.testHero.name).toBe(newName, 'service hero has new name after save');
-       expect(page.navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+       expect(hdsSpy.testHero.name)
+        .withContext('service hero has new name after save')
+        .toBe(newName);
+       expect(page.navigateSpy.calls.any())
+        .withContext('router.navigate called')
+        .toBe(true);
      }));
   // #enddocregion override-tests
 
@@ -122,7 +132,9 @@ function overrideSetup() {
        // use `fixture.debugElement.injector` to get service from component
        const componentService = fixture.debugElement.injector.get(HeroDetailService);
 
-       expect(fixtureService).not.toBe(componentService, 'service injected from fixture');
+       expect(fixtureService)
+        .withContext('service injected from fixture')
+        .not.toBe(componentService);
      }));
 }
 
@@ -163,14 +175,16 @@ function heroModuleSetup() {
     });
 
     // #docregion selected-tests
-    it('should display that hero\'s name', () => {
+    it("should display that hero's name", () => {
       expect(page.nameDisplay.textContent).toBe(expectedHero.name);
     });
     // #enddocregion route-good-id
 
     it('should navigate when click cancel', () => {
       click(page.cancelBtn);
-      expect(page.navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+      expect(page.navigateSpy.calls.any())
+        .withContext('router.navigate called')
+        .toBe(true);
     });
 
     it('should save when click save but not navigate immediately', () => {
@@ -180,14 +194,20 @@ function heroModuleSetup() {
       const saveSpy = spyOn(hds, 'saveHero').and.callThrough();
 
       click(page.saveBtn);
-      expect(saveSpy.calls.any()).toBe(true, 'HeroDetailService.save called');
-      expect(page.navigateSpy.calls.any()).toBe(false, 'router.navigate not called');
+      expect(saveSpy.calls.any())
+        .withContext('HeroDetailService.save called')
+        .toBe(true);
+      expect(page.navigateSpy.calls.any())
+        .withContext('router.navigate not called')
+        .toBe(false);
     });
 
     it('should navigate when click save and save resolves', fakeAsync(() => {
          click(page.saveBtn);
          tick();  // 비동기 저장 작업이 종료될 때까지 기다립니다.
-         expect(page.navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+         expect(page.navigateSpy.calls.any())
+          .withContext('router.navigate called')
+          .toBe(true);
        }));
 
     // #docregion title-case-pipe
@@ -201,8 +221,6 @@ function heroModuleSetup() {
       nameInput.value = 'quick BROWN  fOx';
 
       // 엘리먼트의 값이 변경되었다는 것을 Angular에게 알리기 위해 DOM 이벤트를 생성합니다.
-      // IE와 같이 오래된 브라우저에서는 CustomEvent 를 사용해야 합니다. 아래 문서를 참고하세요.
-      // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
       nameInput.dispatchEvent(new Event('input'));
 
       // Angular가 화면을 갱신하도록 detectChanges() 함수를 실행합니다.
@@ -240,14 +258,18 @@ function heroModuleSetup() {
     });
 
     it('should try to navigate back to hero list', () => {
-      expect(page.gotoListSpy.calls.any()).toBe(true, 'comp.gotoList called');
-      expect(page.navigateSpy.calls.any()).toBe(true, 'router.navigate called');
+      expect(page.gotoListSpy.calls.any())
+        .withContext('comp.gotoList called')
+        .toBe(true);
+      expect(page.navigateSpy.calls.any())
+        .withContext('router.navigate called')
+        .toBe(true);
     });
   });
   // #enddocregion route-bad-id
 
   // Why we must use `fixture.debugElement.injector` in `Page()`
-  it('cannot use `inject` to get component\'s provided HeroDetailService', () => {
+  it("cannot use `inject` to get component's provided HeroDetailService", () => {
     let service: HeroDetailService;
     fixture = TestBed.createComponent(HeroDetailComponent);
     expect(
@@ -258,7 +280,9 @@ function heroModuleSetup() {
 
     // get `HeroDetailService` with component's own injector
     service = fixture.debugElement.injector.get(HeroDetailService);
-    expect(service).toBeDefined('debugElement.injector');
+    expect(service)
+      .withContext('debugElement.injector')
+      .toBeDefined();
   });
 }
 
@@ -285,7 +309,7 @@ function formsModuleSetup() {
   });
   // #enddocregion setup-forms-module
 
-  it('should display 1st hero\'s name', waitForAsync(() => {
+  it("should display 1st hero's name", waitForAsync(() => {
        const expectedHero = firstHero;
        activatedRoute.setParamMap({id: expectedHero.id});
        createComponent().then(() => {
@@ -316,7 +340,7 @@ function sharedModuleSetup() {
   });
   // #enddocregion setup-shared-module
 
-  it('should display 1st hero\'s name', waitForAsync(() => {
+  it("should display 1st hero's name", waitForAsync(() => {
        const expectedHero = firstHero;
        activatedRoute.setParamMap({id: expectedHero.id});
        createComponent().then(() => {

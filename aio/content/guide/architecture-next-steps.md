@@ -72,10 +72,10 @@ without deep knowledge of animation techniques or CSS.
 <!--
 Angular provides a framework for single-page applications, where most of the logic and data resides on the client.
 Most applications still need to access a server using the `HttpClient` to access and save data.
-For some platforms and applications, you might also want to use the PWA (Progressive Web App) model to improve the user experience.
+For some platforms and applications, you might also want to use the PWA \(Progressive Web App\) model to improve the user experience.
 
 *   [HTTP](guide/http): Communicate with a server to get data, save data, and invoke server-side actions with an HTTP client.
-*   [Server-side rendering](guide/universal): Angular Universal generates static application pages on the server through server-side rendering (SSR). This allows you to run your Angular application on the server in order to improve performance and show the first page quickly on mobile and low-powered devices, and also facilitate web crawlers.
+*   [Server-side rendering](guide/universal): Angular Universal generates static application pages on the server through server-side rendering \(SSR\). This allows you to run your Angular application on the server in order to improve performance and show the first page quickly on mobile and low-powered devices, and also facilitate web crawlers.
 *   [Service workers and PWA](guide/service-worker-intro): Use a service worker to reduce dependency on the network and significantly improve the user experience.
 *   [Web workers](guide/web-worker): Learn how to run CPU-intensive computations in a background thread.
 -->
@@ -96,11 +96,11 @@ Angular는 단일 페이지 애플리케이션을 만들때 사용하는 프레�
 
 <!--
 *   [CLI Command Reference](cli): The Angular CLI is a command-line tool that you use to create projects, generate application and library code, and perform a variety of ongoing development tasks such as testing, bundling, and deployment.
-*   [Compilation](guide/aot-compiler): Angular provides just-in-time (JIT) compilation for the development environment, and ahead-of-time (AOT) compilation for the production environment.
+*   [Compilation](guide/aot-compiler): Angular provides just-in-time \(JIT\) compilation for the development environment, and ahead-of-time \(AOT\) compilation for the production environment.
 *   [Testing platform](guide/testing): Run unit tests on your application parts as they interact with the Angular framework.
 *   [Deployment](guide/deployment): Learn techniques for deploying your Angular application to a remote server.
 *   [Security guidelines](guide/security): Learn about Angular's built-in protections against common web-application vulnerabilities and attacks such as cross-site scripting attacks.
-*   [Internationalization][AioGuideI18nOverview]: Make your application available in multiple languages with Angular's internationalization (i18n) tools.
+*   [Internationalization][AioGuideI18nOverview]: Make your application available in multiple languages with Angular's internationalization \(i18n\) tools.
 *   [Accessibility](guide/accessibility): Make your application accessible to all users.
 -->
 *   [CLI 커맨드](cli): Angular CLI는 프로젝트나 애플리케이션, 라이브러리를 생성하거나 앱 개발에 필요한 테스트, 번들링, 배포를 할 때 활용할 수 있습니다.
@@ -149,6 +149,8 @@ Angular는 단일 페이지 애플리케이션을 만들때 사용하는 프레�
 
 [AioGuideI18nOverview]: guide/i18n-overview "Angular Internationalization | Angular"
 
+<!-- external links -->
+
 <!-- end links -->
 
-@reviewed 2021-09-15
+@reviewed 2022-02-28

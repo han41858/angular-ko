@@ -4,10 +4,9 @@
 # Angular 버전 업데이트하기
 
 <!--
-This guide contains information to update to Angular version 13.
+This guide contains information to update to Angular version 14.
 -->
-이 문서는 Angular 버전을 13으로 업데이트하는 방법을 다룹니다.
-
+이 문서는 Angular 버전을 14로 업데이트하는 방법을 다룹니다.
 
 <!--
 ## Update Angular CLI applications
@@ -15,223 +14,147 @@ This guide contains information to update to Angular version 13.
 ## Angular CLI 애플리케이션 업데이트하기
 
 <!--
-For step-by-step instructions on how to update to the latest Angular release and leverage the Angular automated migration tools, use the interactive update guide at [update.angular.io][AngularUpdateMain].
+For step-by-step instructions on how to update to the latest Angular release and leverage the Angular automated migration tools, use the interactive update guide at [update.angular.io](https://update.angular.io).
 -->
-최신 Angular 버전에서 지원하는 자동화된 마이그레이션 툴 사용 방법을 단계별로 확인하려면 [update.angular.io][AngularUpdateMain] 가이드를 확인하세요.
+최신 Angular 버전에서 지원하는 자동화된 마이그레이션 툴 사용 방법을 단계별로 확인하려면 [update.angular.io](https://update.angular.io) 가이드를 확인하세요.
 
 
 <!--
-## Changes and deprecations in version 13
+## Changes and deprecations in version 14
 -->
-## 13 버전에서 변경된 점, 새롭게 지원이 중단된 기능
+## 14 버전에서 변경된 점, 지원이 중단된 기능
 
+<!--
 <div class="alert is-helpful">
 
-<!--
-For information about the deprecation and removal practices of Angular, see [Angular Release Practices][AioGuideReleasesDeprecationPractices].
--->
-지원이 중단되는 기능에 대해 자세하게 알아보려면 [Angular 릴리즈 정책][AioGuideReleasesDeprecationPractices] 문서를 참고하세요.
+For information about the deprecation and removal practices of Angular, see [Angular Release Practices](guide/releases#deprecation-practices).
 
 </div>
 
-<!--
-*   **Removal of View Engine**
+*   **Strictly Typed Reactive Forms**
 
-    Requires all applications and libraries to build using Ivy.
-    See the [Upcoming improvements to Angular library distribution][AngularBlog76c02f782aa4] blog.
+    The Reactive Forms types `AbstractControl`, `FormControl`, `FormGroup`, and `FormArray` now support a generic parameter which allows for strict typing of the controls. An automatic migration will convert existing usages of these types to special `Untyped` aliases which preserve the existing behavior.
+
+    The `initialValueIsDefault` option for `FormControl` construction has been deprecated in favor of the `nonNullable` option (which has identical behavior). This renaming aligns the `FormControl` constructor with other strictly typed APIs related to nullability.
+
+*   **`ComponentFactory` and `NgModuleFactory` cleanup**
+
+    Many APIs which use either `ComponentFactory` or `NgModuleFactory` have been deprecated and replaced with new APIs that use component or NgModule classes directly.
 -->
-*   **View Engine 제거**
+<div class="alert is-helpful">
 
-    이제 모든 애플리케이션과 라이브러리는 Ivy로 빌드합니다.
-    자세한 내용은 [Upcoming improvements to Angular library distribution][AngularBlog76c02f782aa4] 블로그 글을 참고하세요.
+지원이 중단되는 기능에 대해 자세하게 알아보려면 [Angular 릴리즈 정책](guide/releases#deprecation-practices) 문서를 참고하세요.
 
-<!--
-*   **Modernization of the Angular Package Format \(APF\)**
+</div>
 
-    Removed older output formats, including View Engine specific metadata.
--->
-*   **Angular 패키지 형식\(Angular Package Format, APF\) 최신화**
+*   **반응형 폼의 데이터 타입 강화**
 
-    View Engine용 메타데이터를 제거하며 오래된 패키지 형식을 개선했습니다.
+    반응형 폼 타입 `AbstractControl`, `FormControl`, `FormGroup`, `FormArray`는 이제 제네릭 인자를 받아서 폼 컨트롤에 사용할 데이터 타입을 명확하게 지정할 수 있습니다. 자동으로 마이그레이션하고 나면 기존 로직의 동작을 보장하기 위해 `Untyped`라는 접두사가 붙은 폼 컨트롤로 대체됩니다.
 
-<!--
-*   **Removal of IE11 Support**
+    `FormControl`을 생성할 때 사용하던 `initialValueIsDefault` 옵션은 `nonNullable` 옵션으로 대체되었지만, 동작은 동일합니다. 이 변경사항은 `FormControl` 인스턴스를 생성할 때부터 명확하게 `null` 값을 처리하는 방식을 지정하기 위해 도입되었습니다.
 
-    Removes all support for Microsoft Internet Explorer 11 \(IE11\).
-    See [Issue&nbsp;#41840][GithubAngularAngularIssues41840].
--->
-*   **IE11 지원 중단**
+*   **`ComponentFactory`, `NgModuleFactory` 지원 중단**
 
-    Microsoft Internet Explorer 11 \(IE11\) 지원이 중단되었습니다.
-    자세한 내용은 [이 이슈][GithubAngularAngularIssues41840]를 참고하세요.
-
-<!--
-*   **Testbed module teardown**
-
-    Adds the option in `initTestEnvironment` to completely remove test environments from an application.
-    See the [Improving Angular tests by enabling Angular testing module teardown][DevThisIsAngularImprovingAngularTestsByEnablingAngularTestingModuleTeardown38kh] article.
--->
-*   **테스트베드 모듈 초기화**
-
-    애플리케이션 테스트 환경에서 `initTestEnvironment` 옵션을 지정하면 테스트 환경을 완전히 초기화할 수 있습니다.
-    자세한 내용은 [Improving Angular tests by enabling Angular testing module teardown][DevThisIsAngularImprovingAngularTestsByEnablingAngularTestingModuleTeardown38kh] 문서를 참고하세요.
-
-<!--
-*   **`$localize` tagged message strings**
-
-    Adds documentation for the Angular `$localize` API and tagged message strings.
--->
-*   **`$localize` 태그 메시지 문자열**
-
-    `$localize` API와 태그 메시지 문자열 문서가 추가되었습니다.
-
-<!--
-*   **Disk Cache**
-
-    Enables the persistent build cache by default for all applications.
-    See [Issue&nbsp;#21545][GithubAngularAngularCliIssues21545].
--->
-*   **디스크 캐시**
-
-    모든 애플리케이션을 대상으로 항상 유지되는 빌드 캐시를 활용합니다.
-    자세한 내용은 [이 이슈][GithubAngularAngularCliIssues21545]를 참고하세요.
+    `ComponentFactory`나 `NgModuleFactory`는 사용이 중단되었고, 컴포넌트나 NgModule 클래스를 직접 사용하는 방식으로 변경되었습니다.
 
 
 <!--
-### Breaking changes in Angular version 13
+### Breaking changes in Angular version 14
 -->
-### Angular 13 버전에서 변경된 점
-
-{@a breaking-changes}
+### Angular 14 버전에서 크게 변경된 점
 
 <!--
-|                                                     | Details                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-|:---                                                 |:---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [**PR&nbsp;#43642**][GithubAngularAngularPull43642] | TypeScript versions older than `4.4.2` are no longer supported.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| [**PR&nbsp;#43740**][GithubAngularAngularPull43740] | NodeJS versions older than `v12.20.0` are no longer supported. The Angular packages now use the NodeJS package exports feature with subpath patterns and requires a NodeJS version above `14.15.0` or `16.10.0`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [PR&nbsp;#31187][GithubAngularAngularPull31187]     | Previously, the default url serializer dropped everything after and including a question mark in query parameters. That is, for a navigation to `/path?q=hello?&other=123`, the query parameters parsed to just `{q: 'hello'}`. This is incorrect, because the URI spec allows for question mark characers in query data. This change now correctly parses the query parameters for `/path?q=hello?&other=123` as `{v: 'hello?', other: '123'}`.                                                                                                                                                                                                                                         |
-| [PR&nbsp;#41730][GithubAngularAngularPull41730]     | The behavior of the `SpyLocation` used by the `RouterTestingModule` has changed to match the behavior of browsers. It no longer emits a `popstate` event when `Location.go` is called. In addition, `simulateHashChange` now triggers *both* a `hashchange` event and a `popstate` event. Tests that use `location.go` and expect the changes to be picked up by the `Router` should migrate to `simulateHashChange`. Each test is different in what it attempts to assert, so there is no single change that works for all tests. Each test that uses the `SpyLocation` to simulate changes in the browser URL should be evaluated on a case-by-case basis.                             |
-| [PR&nbsp;#42952][GithubAngularAngularPull42952]     | A new type called `FormControlStatus` has been introduced, which is a union of all possible status strings for form controls. `AbstractControl.status` has been narrowed from `string` to `FormControlStatus`, and `statusChanges` has been narrowed from `Observable<any>` to `Observable<FormControlStatus>`. Most applications should consume the new types seamlessly. Any breakage caused by this change is likely due to one of the following two problems: <ol><li>The app is comparing <code>AbstractControl.status</code> against a string which is not a valid status.</li><li>The app is using `statusChanges` events as if they were something other than strings.</li></ol> |
-| [PR&nbsp;#43087][GithubAngularAngularPull43087]     | Previously ,`null` and `undefined` inputs for `routerLink` were equivalent to empty string and there was no way to disable the navigation of the link. In addition, the `href` is changed from a property `HostBinding()` to an attribute binding \(`HostBinding('attr.href')`\). The effect of this change is that `DebugElement.properties['href']` now returns the `href` value returned by the native element which is the full URL rather than the internal value of the `RouterLink` `href` property.                                                                                                                                                                              |
-| [PR&nbsp;#43496][GithubAngularAngularPull43496]     | The router no longer replaces the browser URL when a new navigation cancels an ongoing navigation. The replacement of the browser URL often caused URL flicker and was only in place to support some AngularJS hybrid applications. Hybrid applications which rely on the presence of `navigationId` on each initial navigation handled by the Angular router should instead subscribe to `NavigationCancel` events and manually perform the `location.replaceState` to add `navigationId` to the Router state.<br />In addition, tests that assert `urlChanges` on the `SpyLocation` should be adjusted to account for the lack of the `replaceState` trigger.                          |
-| [PR&nbsp;#43507][GithubAngularAngularPull43507]     | The `WrappedValue` class is no longer imported from `@angular/core`. This change may result in compile errors or failures at runtime, if outdated libraries are used that rely on `WrappedValue`. Dependancy on `WrappedValue` should be removed since no replacement is available.                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [PR&nbsp;#43591][GithubAngularAngularPull43591]     | It is no longer possible to use `Route.loadChildren` with a string value. The following supporting classes were removed from `@angular/core`: <ul><li><code>NgModuleFactoryLoader</code></li><li><code>SystemJsNgModuleFactoryLoader</code></li></ul> The `@angular/router` package no longer exports the following symbols: <ul><li><code>SpyNgModuleFactoryLoader</code></li><li><code>DeprecatedLoadChildren</code></li></ul> The signature of the `setupTestingRouter` function from `@angular/core/testing` was changed to drop the `NgModuleFactoryLoader` parameter, since an value for that parameter can not be created.                                                        |
-| [PR&nbsp;#43668][GithubAngularAngularPull43668]     | The return type of `SwUpdate#activateUpdate` and `SwUpdate#checkForUpdate` changed to `Promise<boolean>`.<br />Although unlikely, this change may cause TypeScript type-checking to fail in some cases. If necessary, update your types to account for the new return type.                                                                                                                                                                                                                                                                                                                                                                                                              |
+<a id="breaking-changes"></a>
+
+| | Details |
+|:--- |:--- |
+| [**PR&nbsp;#45729**](https://github.com/angular/angular/pull/45729) | `initialNavigation: 'enabled'` was deprecated in v11 and is replaced by `initialNavigation: 'enabledBlocking'.`. |
+| [**PR&nbsp;#42803**](https://github.com/angular/angular/pull/42803) | Forms `email` input coercion: forms `email` input value will be considered as true if it is defined with any value rather than false and 'false'. |
+| [**PR&nbsp;#33729**](https://github.com/angular/angular/pull/33729) | Objects with a length key set to zero will no longer validate as empty. This is technically a breaking change, since objects with a key `length` and value `0` will no longer validate as empty. This is a very minor change, and any reliance on this behavior is probably a bug anyway. |
+| [**PR&nbsp;#44921**](https://github.com/angular/angular/pull/44921) | Do not run change detection when loading Hammer. This change may cause unit tests that are implicitly asserting on the specific number or the ordering of change detections to fail. |
+| [**PR&nbsp;#23020**](https://github.com/angular/angular/pull/23020) | Parameter types of `TransferState` usage have increased type safety, and this may reveal existing problematic calls. |
+| [**PR&nbsp;#43863**](https://github.com/angular/angular/pull/43863) | The type of `Navigation#initialUrl` has been narrowed to `UrlTree` from `string|UrlTree`, to reflect reality. |
+| [**PR&nbsp;#45114**](https://github.com/angular/angular/pull/45114) | The `AnimationDriver.getParentElement` method has become required, so any implementors of this interface are now required to provide an implementation for this method. |
+| [**PR&nbsp;#45176**](https://github.com/angular/angular/pull/45176) | The type of `Route.pathMatch` is now more strict. Places that use `pathMatch` will likely need to be updated to have an explicit `Route`/`Routes` type so that TypeScript does not infer the type as `string`. |
+| [**PR&nbsp;#44573**](https://github.com/angular/angular/pull/44573) | The router now takes only the first emitted value by the resolvers and then proceeds with navigation. This is now consistent with `Observables` returned by other guards: only the first value is used.|
+| [**PR&nbsp;#45394**](https://github.com/angular/angular/pull/45394) | TypeScript versions older than `4.6.0` are no longer supported. |
+| [**PR&nbsp;#45210**](https://github.com/angular/angular/pull/45210) | `HttpClient` will throw an error when headers are set on a JSONP request. |
+| [**PR&nbsp;#43834**](https://github.com/angular/angular/pull/43834) | Reactive form types such as `FormControl` and `FormGroup` now have generic type parameters and infer stricter types. A migration will convert existing usages to new `Untyped`-prefixed aliases which preserve the existing behavior. |
+| [**PR&nbsp;#45487**](https://github.com/angular/angular/pull/45487) | The deprecated `aotSummaries` field in the `TestBed` configuration has been removed. |
+| [**PR&nbsp;#45648**](https://github.com/angular/angular/pull/45648) | A new required class member `LocationStrategy#getState` has been added, that any implementers of this interface will need to provide. |
+| [**PR&nbsp;#45735**](https://github.com/angular/angular/pull/45735) | When a guard returns a `UrlTree`, the router would previously schedule the redirect navigation within a `setTimeout`. This timeout is now removed, which can result in test failures due to incorrectly written tests. |
 -->
-|                                                     | 설명 |
-|:---                                                 |:---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| [**PR&nbsp;#43642**][GithubAngularAngularPull43642] | TypeScript `4.4.2` 이전 버전은 더이상 지원하지 않습니다. |
-| [**PR&nbsp;#43740**][GithubAngularAngularPull43740] | NodeJS `v12.20.0` 이전 버전은 더이상 지원하지 않습니다. Angular 패키지는 NodeJS가 제공하는 폴더 체계와 패키지 형식으로 제공되기 때문에 `14.15.0`이나 `16.10.0` 이후 버전을 사용해야 합니다. |
-| [PR&nbsp;#31187][GithubAngularAngularPull31187]     | 이전까지는 기본 URL 직렬화 툴이 쿼리 인자 물음표(`?`) 뒤에 있는 모든 것을 제거했습니다. 그래서 `/path?q=hello?&other=123`라는 쿼리 인자는 `{q: 'hello'}`라고만 변환되었습니다. 하지만 URI 스펙에 따르면 이 동작은 잘못되었습니다. 이제는 `/path?q=hello?&other=123`이라는 쿼리 인자는 `{v: 'hello?', other: '123'}` 라고 변환됩니다. |
-| [PR&nbsp;#41730][GithubAngularAngularPull41730]     | `RouterTestingModule`이 제공하는`SpyLocation`가 브라우저에 적합한 동작을 하도록 변경되었습니다. 이제는 `Location.go`를 실행하더라도 `popstate` 이벤트가 발생하지 않습니다. 그리고 이제는 `simulateHashChange`가 `hashChange` 이벤트와 `popstate` 이벤트를 동시에 발생시킵니다. 테스트 로직에서 `location.go`를 사용하고 `Router`의 상태를 검사한다면 이 로직은 `simulateHashChange`로 마이그레이션해야 합니다. 이 때 개별 테스트 스펙은 무엇을 검사하는지 다르기 때문에 코드 한 줄을 수정해서 모든 테스트를 정상 실행하는 방법은 없습니다. `SpyLocation`을 사용해서 브라우저 URL의 변화를 유발하는 테스트 스펙이 있다면 각각 처리해야 합니다. |
-| [PR&nbsp;#42952][GithubAngularAngularPull42952]     | 폼 컨트롤에서 발생할 수 있는 모든 상태를 문자열로 표현할 수 있는 `FormControlStatus` 타입이 새로 도입되었습니다. `AbstractControl.status`는 `string` 타입의 `FormControlStatus` 타입으로 좁아지며(narrowed), `statusChanges`는 `Observable<any>` 타입에서 `Observable<FormControlStatus>` 타입으로 좁아졌습니다. 보통은 코드를 많이 수정하지 않아도 이 타입을 사용할 수 있을 것입니다. 하지만 이런 경우는 문제가 생길 수 있습니다: <ol><li><code>AbstractControl.status</code>와 유효하지 않은 상태를 문자열로 비교하는 경우</li><li>`statusChanges` 이벤트를 문자열로 다루지 않는 경우</li></ol> |
-| [PR&nbsp;#43087][GithubAngularAngularPull43087]     | 이전까지는 `routerLink`에 `null`이나 `undefined`를 사용하면 빈 문자열과 동일하게 처리되었기 때문에 링크를 비활성화하는 용도로 종종 사용했습니다. 그리고 `href` 프로퍼티는 `HostBinding('attr.href')`라는 방식으로 변경할 수 있었습니다. 이제는 `DebugElement.properties['href']`를 확인해보면 `RouterLink` 내부에서 사용하는 `href` 값이 아니라 엘리먼트에 있는 원래 URL을 반환합니다. |
-| [PR&nbsp;#43496][GithubAngularAngularPull43496]     | 이제는 화면 전환 중 취소되었을 때 브라우저 URL을 변경하지 않습니다. 브라우저 URL을 변경하면 화면이 깜빡이는 현상이 종종 발생했었기 때문에 AngularJS 하이브리드 애플리케이션에서만 사용했습니다.  하이브리드 애플리케이션은 개별 화면 전환마다 `navigationId`를 사용하는 방식이었기 때문이며, Angular 라우터 쪽에서는 `NavigationCancel` 이벤트를 직접 구독하고 라우터 상태에 `navigationId`를 반영하기 위해 `location.replaceState`를 사용해야 했습니다.<br />`SpyLocation`의 `urlChanges`를 활용하는 테스트 스펙은 `replaceState` 트리거가 동작하지 않는 것을 수정해야 합니다. |
-| [PR&nbsp;#43507][GithubAngularAngularPull43507]     | `@angular/core` 패키지가 제공하던 `WrappedValue` 클래스는 더이상 지원하지 않습니다. `WrappedValue`를 사용하는 라이브러리라면 이 변경사항 때문에 컴파일 시점이나 실행 시점에 오류가 발생할 수 있습니다. 이제 `WrappedValue`는 더이상 사용하지 않습니다. 관련 코드는 모두 제거하세요. |
-| [PR&nbsp;#43591][GithubAngularAngularPull43591]     | 이제는 `Route.loadChildren`에 문자열 방식을 사용할 수 없습니다. 그래서 `@angular/core`에 있던 이런 클래스들도 제거되었습니다: <ul><li><code>NgModuleFactoryLoader</code></li><li><code>SystemJsNgModuleFactoryLoader</code></li></ul> `@angular/router` 패키지에서도 이런 심볼들이 제거되었습니다: <ul><li><code>SpyNgModuleFactoryLoader</code></li><li><code>DeprecatedLoadChildren</code></li></ul> `@angular/core/testing`에 있던 `setupTestingRouter` 함수의 선언도 `NgModuleFactoryLoader`의 인자 형태로 변경되었습니다. |
-| [PR&nbsp;#43668][GithubAngularAngularPull43668]     | `SwUpdate#activateUpdate`와 `SwUpdate#checkForUpdate`의 반환 타입이 `Promise<boolean>`으로 변경되었습니다.<br />이 변경사항 때문에 TypeScript 타입 검사가 실패할 수 있습니다. 이 기능을 활용한다면 새로운 반환 타입을 사용하세요. |
+<a id="breaking-changes"></a>
+
+|                                                                     | 설명                                                                                                                                          |
+|:--------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------|
+| [**PR&nbsp;#45729**](https://github.com/angular/angular/pull/45729) | `initialNavigation: 'enabled'`는 11 버전부터 지원이 중단되었고 이제는 `initialNavigation: 'enabledBlocking'.`를 사용합니다.                                       |
+| [**PR&nbsp;#42803**](https://github.com/angular/angular/pull/42803) | 폼 `email` 입력값 교차 검증: 폼 `email` 입력값은 false나 `false`가 아닌 이상 참으로 간주합니다.                                                                        |
+| [**PR&nbsp;#33729**](https://github.com/angular/angular/pull/33729) | 객체의 `length` 키 값을 `0`으로 지정한 객체는 더이상 비어있는 것으로 간주하지 않습니다. 기술적으로는 큰 변경사항으로 보이지만, 이런 로직을 활용하는 것은 정상적인 로직이 아니기 때문에 큰 문제가 아닙니다.                   |
+| [**PR&nbsp;#44921**](https://github.com/angular/angular/pull/44921) | Hammer를 로딩할 때 변화 감지를 실행하지 마세요. 이 변경사항으로 유닛 테스트 중 일부가 실패할 수 있습니다.                                                                            |
+| [**PR&nbsp;#23020**](https://github.com/angular/angular/pull/23020) | `TransferState` 인자 타입의 안정성이 향상되었습니다. 기존 동작이 제대로 동작하지 않을 수 있습니다.                                                                             |
+| [**PR&nbsp;#43863**](https://github.com/angular/angular/pull/43863) | `Navigation#initialUrl` 타입이 `string`에서 `UrlTree`로 변경되었습니다. 실제로도 `UrlTree`를 많이 사용합니다.                                                        |
+| [**PR&nbsp;#45114**](https://github.com/angular/angular/pull/45114) | `AnimationDriver` 인터페이스를 상속하는 클래스는 이제 `AnimationDriver.getParentElement` 메서드를 필수로 구현해야 합니다.                                                 |
+| [**PR&nbsp;#45176**](https://github.com/angular/angular/pull/45176) | `Route.pathMatch`의 타입이 좀 더 엄격해졌습니다. `pathMath`를 사용하는 코드는 이제 `string` 대신 `Route`나 `Routes` 타입을 명확하게 지정해야 합니다.                                |
+| [**PR&nbsp;#44573**](https://github.com/angular/angular/pull/44573) | 라우터는 이제 리졸버가 첫번째로 보내는 값만으로 네비게이션 동작을 진행합니다. 다른 가드가 `Observable`를 활용하는 것과 같은 방식입니다.                                                          |
+| [**PR&nbsp;#45394**](https://github.com/angular/angular/pull/45394) | TypeScript 4.6.0 이전 버전은 이제 지원하지 않습니다.                                                                                                       |
+| [**PR&nbsp;#45210**](https://github.com/angular/angular/pull/45210) | `HttpClient` JSONP 요청에 헤더를 지정하면 에러가 발생합니다.                                                                                                  |
+| [**PR&nbsp;#43834**](https://github.com/angular/angular/pull/43834) | `FormControl`, `FormGroup`과 같은 반응형 폼 컨트롤에 제네릭이 추가되면서 더 엄격한 타입을 유추합니다. 자동으로 마이그레이션하고 나면 기존 로직의 동작을 보장하기 위해 `Untyped`라는 접두사가 붙은 폼 컨트롤로 대체됩니다. |
+| [**PR&nbsp;#45487**](https://github.com/angular/angular/pull/45487) | `TestBed` 환경설정 중 `aotSummaries` 필드의 지원이 중단되었고, 완전히 제거되었습니다.                                                                                 |
+| [**PR&nbsp;#45648**](https://github.com/angular/angular/pull/45648) | `LocationStrategy` 클래스에 `getState` 필수 멤버가 추가되었습니다. 이 클래스를 상속받는 클래스에서도 이 필드를 지정해야 합니다.                                                       |
+| [**PR&nbsp;#45735**](https://github.com/angular/angular/pull/45735) | 이전에는 가드가 `UrlTree`를 반환하면 라우터가 `setTimeout`을 사용해서 리다이렉트했습니다. 이제는 타이머가 제거되었기 때문에 일부 테스트 로직이 실패할 수 있습니다.                                       |
+
 
 
 <!--
 ### New deprecations
 -->
-### 새롭게 지원이 중단된 기능
-
-{@a deprecations}
+### 지원이 중단된 기능
 
 <!--
-| Removed                                                                                                             | Replacement                                                                                             | Details                                                                                                                                                                         |
-|:---                                                                                                                 |:---                                                                                                     |:---                                                                                                                                                                             |
-| [`getModuleFactory`][AioApiCoreGetmodulefactory]                                                                    | [`getNgModuleById`][AioApiCoreGetngmodulebyid]                                                          |                                                                                                                                                                                 |
-| Factory-based signature of [`ApplicationRef.bootstrap`][AioApiCoreApplicationrefBootstrap]                          | Type-based signature of [`ApplicationRef.bootstrap`][AioApiCoreApplicationrefBootstrap]                 | Use the Type-based signature in place of the Factory-based signature.                                                                                                           |
-| [`PlatformRef.bootstrapModuleFactory`][AioApiCorePlatformrefBootstrapmodulefactory]                                 | [`PlatformRef.bootstrapModule`][AioApiCorePlatformrefBootstrapmodule]                                   |                                                                                                                                                                                 |
-| [`ModuleWithComponentFactories`][AioApiCoreModulewithcomponentfactories]                                            | none                                                                                                    |                                                                                                                                                                                 |
-| [`Compiler`][AioApiCoreCompiler]                                                                                    | none                                                                                                    |                                                                                                                                                                                 |
-| [`CompilerFactory`][AioApiCoreCompilerfactory]                                                                      | none                                                                                                    |                                                                                                                                                                                 |
-| [`NgModuleFactory`][AioApiCoreNgmodulefactory]                                                                      | Non-factory based framework APIs                                                                        | Use the non-factory based framework APIs, such as [`PlatformRef.bootstrapModule`][AioApiCorePlatformrefBootstrapmodule] and [`createNgModuleRef`][AioApiCoreCreatengmoduleref]. |
-| Factory-based signature of [`ViewContainerRef.createComponent`][AioApiCoreViewcontainerrefCreatecomponent]          | Type-based signature of [`ViewContainerRef.createComponent`][AioApiCoreViewcontainerrefCreatecomponent] | Use the Type-based signature in place of the Factory-based signature.                                                                                                           |
-| `aotSummaries` parameter of the [`TestBed.initTestEnvironment` method][AioApiCoreTestingTestbedInittestenvironment] | none                                                                                                    |                                                                                                                                                                                 |
-| `aotSummaries` parameter of the [`TestModuleMetadata` type][AioApiCoreTestingTestmodulemetadata]                    | none                                                                                                    |                                                                                                                                                                                 |
-| [`renderModuleFactory`][AioApiPlatformServerRendermodulefactory]                                                    | [`renderModule`][AioApiPlatformServerRendermodule]                                                      |                                                                                                                                                                                 |
-| [`SwUpdate#activated`][AioApiServiceWorkerSwupdateActivated]                                                        | [`SwUpdate#activateUpdate()`][AioApiServiceWorkerSwupdateActivateupdate]                                | Use the return value of [`SwUpdate#activateUpdate()`][AioApiServiceWorkerSwupdateActivateupdate].                                                                               |
-| [`SwUpdate#available`][AioApiServiceWorkerSwupdateAvailable]                                                        | [`SwUpdate#versionUpdates`][AioApiServiceWorkerSwupdateVersionupdates]                                  |                                                                                                                                                                                 |
-| `bind-input="value"`                                                                                                | `[input]="value"`                                                                                       |                                                                                                                                                                                 |
-| `bind-animate-trigger="value"`                                                                                      | `[@trigger]="value"`                                                                                    |                                                                                                                                                                                 |
-| `on-click="onClick()"`                                                                                              | `(click)="onClick()"`                                                                                   |                                                                                                                                                                                 |
-| `bindon-ngModel="value"`                                                                                            | `[(ngModel)]="value"`                                                                                   |                                                                                                                                                                                 |
-| `ref-templateRef`                                                                                                   | `#templateRef`                                                                                          |                                                                                                                                                                                 |
+<a id="deprecations"></a>
+
+| Removed | Replacement | Details |
+| :--- | :--- |:--- |
+| [`FormControlOptions#initialValueIsDefault`](api/forms/FormControlOptions#initialValueIsDefault) | [`FormControlOptions#nonNullable`](api/forms/FormControlOptions#nonNullable) | The `initialValueIsDefault` option for `FormControl` construction has been deprecated in favor of the `nonNullable` option (which has identical behavior). This renaming aligns the `FormControl` constructor with other strictly typed APIs related to nullability. |
+| `ErrorEvent`s passed to [`TestRequest#error`](api/common/http/testing/TestRequest#error] | `ProgressEvent` | Http requests never emit an `ErrorEvent`. Use a `ProgressEvent` instead. |
+| [`getModuleFactory`](api/core/getModuleFactory) | `getNgModuleById` | `NgModuleFactory` itself is deprecated. |
+| [`ModuleWithComponentFactories`](api/core/ModuleWithComponentFactories) | n/a | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](guide/deprecations#jit-api-changes) for additional context. |
+| [`Compiler`](api/core/Compiler) | n/a | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](guide/deprecations#jit-api-changes) for additional context. |
+| [`CompilerFactory`](api/core/CompilerFactory) | n/a | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](guide/deprecations#jit-api-changes) for additional context. |
+| [`NgModuleFactory`](api/core/NgModuleFactory) | n/a | This class was mostly used as a part of ViewEngine-based JIT API and is no longer needed in Ivy JIT mode. See [JIT API changes due to ViewEngine deprecation](guide/deprecations#jit-api-changes) for additional context. Angular provides APIs that accept NgModule classes directly (such as [`PlatformRef.bootstrapModule`](api/core/PlatformRef#bootstrapModule) and [`createNgModuleRef`](api/core/createNgModuleRef)), consider switching to those APIs instead of using factory-based ones. |
+| [`ComponentFactory`](api/core/ComponentFactory) | n/a | Angular no longer requires `ComponentFactory`s. Other APIs allow Component classes to be used directly. |
+| [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver) | n/a | Angular no longer requires `ComponentFactory`s. Other APIs allow Component classes to be used directly. |
+| `useJit` and `missingTranslation` in [`CompilerOptions`](api/core/CompilerOptions) | n/a | Ivy JIT mode does not support these options. See [JIT API changes due to ViewEngine deprecation](guide/deprecations#jit-api-changes) for additional context. |
+| [`JitCompilerFactory`](api/platform-browser-dynamic/JitCompilerFactory) | n/a | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](guide/deprecations#jit-api-changes) for additional context. |
+| [`RESOURCE_CACHE_PROVIDER`](api/platform-browser-dynamic/RESOURCE_CACHE_PROVIDER) | n/a | This was previously necessary in some cases to test AOT-compiled components with View Engine, but is no longer since Ivy. |
+| `relativeLinkResolution` in the Router [`ExtraOptions`](api/router/ExtraOptions) | Switch to the default of `'corrected'` link resolution | This option was introduced to fix a bug with link resolution in a backwards compatible way. Existing apps which still depend on the buggy legacy behavior should switch to the new corrected behavior and stop passing this flag. |
+| `resolver` argument in [`RouterOutletContract.activateWith`](api/router/RouterOutletContract#activateWith) | n/a | `ComponentFactory` and `ComponentFactoryResolver` afre deprecated, and passing an argument for a resolver to retrieve a `ComponentFactory` is no longer required. |
+| [`OutletContext#resolver](api/router/OutletContext#resolver) | n/a | `ComponentFactory` and `ComponentFactoryResolver` are deprecated, and using a resolver to retrieve a `ComponentFactory` is no longer required. |
+| [`SwUpdate#activated`](api/service-worker/SwUpdate#activated) | Return value of [`SwUpdate#activateUpdate`](api/service-worker/SwUpdate#activateUpdate) | The `activated` property is deprecated. Existing usages can migrate to [`SwUpdate#activateUpdate`](api/service-worker/SwUpdate#activateUpdate). |
+| [`SwUpdate#available`](api/service-worker/SwUpdate#available) | [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates) | The behavior of [`SwUpdate#available`](api/service-worker/SwUpdate#available) can be achieved by filtering for the [`VersionReadyEvent`](api/service-worker/VersionReadyEvent) from [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates)
 -->
-| 항목 | 대체 방식 | 설명 |
-|:---                                                                                                                 |:---                                                                                                     |:---                                                                                                                                                                             |
-| [`getModuleFactory`][AioApiCoreGetmodulefactory]                                                                    | [`getNgModuleById`][AioApiCoreGetngmodulebyid]                                                          |                                                                                                                                                                                 |
-| 팩토리 기반의 [`ApplicationRef.bootstrap`][AioApiCoreApplicationrefBootstrap]                          | 타입 기반의 [`ApplicationRef.bootstrap`][AioApiCoreApplicationrefBootstrap]                 | 팩토리 기반 대신 타입 기반을 사용하세요. |
-| [`PlatformRef.bootstrapModuleFactory`][AioApiCorePlatformrefBootstrapmodulefactory]                                 | [`PlatformRef.bootstrapModule`][AioApiCorePlatformrefBootstrapmodule]                                   |                                                                                                                                                                                 |
-| [`ModuleWithComponentFactories`][AioApiCoreModulewithcomponentfactories]                                            | -                                                                                                    |                                                                                                                                                                                 |
-| [`Compiler`][AioApiCoreCompiler]                                                                                    | -                                                                                                    |                                                                                                                                                                                 |
-| [`CompilerFactory`][AioApiCoreCompilerfactory]                                                                      | -                                                                                                    |                                                                                                                                                                                 |
-| [`NgModuleFactory`][AioApiCoreNgmodulefactory]                                                                      | 팩토리 기반이 아닌 프레임워크 API                                                                        | [`PlatformRef.bootstrapModule`][AioApiCorePlatformrefBootstrapmodule]나 [`createNgModuleRef`][AioApiCoreCreatengmoduleref]와 같이 팩토리 기반이 아닌 프레임워크 API를 사용하세요. |
-| 팩토리 기반의 [`ViewContainerRef.createComponent`][AioApiCoreViewcontainerrefCreatecomponent]          | 타입 기반의 [`ViewContainerRef.createComponent`][AioApiCoreViewcontainerrefCreatecomponent] | 팩토리 기반 대신 타입 기반을 사용하세요. |
-| [`TestBed.initTestEnvironment` 메서드][AioApiCoreTestingTestbedInittestenvironment]의 `aotSummaries` 인자 | -                                                                                                    |                                                                                                                                                                                 |
-| [`TestModuleMetadata` 타입][AioApiCoreTestingTestmodulemetadata]의 `aotSummaries` 인자 | -                                                                                                    |                                                                                                                                                                                 |
-| [`renderModuleFactory`][AioApiPlatformServerRendermodulefactory]                                                    | [`renderModule`][AioApiPlatformServerRendermodule]                                                      |                                                                                                                                                                                 |
-| [`SwUpdate#activated`][AioApiServiceWorkerSwupdateActivated]                                                        | [`SwUpdate#activateUpdate()`][AioApiServiceWorkerSwupdateActivateupdate]                                | [`SwUpdate#activateUpdate()`][AioApiServiceWorkerSwupdateActivateupdate]의 반환값을 사용하세요. |
-| [`SwUpdate#available`][AioApiServiceWorkerSwupdateAvailable]                                                        | [`SwUpdate#versionUpdates`][AioApiServiceWorkerSwupdateVersionupdates]                                  |                                                                                                                                                                                 |
-| `bind-input="value"`                                                                                                | `[input]="value"`                                                                                       |                                                                                                                                                                                 |
-| `bind-animate-trigger="value"`                                                                                      | `[@trigger]="value"`                                                                                    |                                                                                                                                                                                 |
-| `on-click="onClick()"`                                                                                              | `(click)="onClick()"`                                                                                   |                                                                                                                                                                                 |
-| `bindon-ngModel="value"`                                                                                            | `[(ngModel)]="value"`                                                                                   |                                                                                                                                                                                 |
-| `ref-templateRef`                                                                                                   | `#templateRef`                                                                                          |                                                                                                                                                                                 |
+<a id="deprecations"></a>
+
+| 제거                                                                                                 | 대체방식                                                                                 | 설명                                                                                                                                                                                                                                                                                                                                |
+|:---------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`FormControlOptions#initialValueIsDefault`](api/forms/FormControlOptions#initialValueIsDefault)   | [`FormControlOptions#nonNullable`](api/forms/FormControlOptions#nonNullable)         | `FormControl`을 생성할 때 사용하던 `initialValueIsDefault` 옵션은 `nonNullable` 옵션으로 대체되었지만, 동작은 동일합니다. 이 변경사항은 `FormControl` 인스턴스를 생성할 때부터 명확하게 `null` 값을 처리하는 방식을 지정하기 위해 도입되었습니다.                                                                                                                                                          |
+| [`TestRequest#error`](api/common/http/testing/TestRequest#error)에 전달하는 `ErrorEvent`                | `ProgressEvent`                                                                      | Http 요청은 이제 `ErrorEvent`를 생성하지 않습니다. `ProgressEvent`를 활용하세요.                                                                                                                                                                                                                                                                      |
+| [`getModuleFactory`](api/core/getModuleFactory)                                                    | `getNgModuleById`                                                                    | `NgModuleFactory`는 지원이 중단되었습니다.                                                                                                                                                                                                                                                                                                   |
+| [`ModuleWithComponentFactories`](api/core/ModuleWithComponentFactories)                            | -                                                                                    | Ivy JIT 모드는 이 심볼을 활용하지 않습니다. 자세한 내용은 [지원이 중단되면서 변경되는 JIT API](guide/deprecations#jit-api-changes) 문서를 참고하세요.                                                                                                                                                                                                                      |
+| [`Compiler`](api/core/Compiler)                                                                    | -                                                                                    | Ivy JIT 모드는 이 심볼을 활용하지 않습니다. 자세한 내용은 [지원이 중단되면서 변경되는 JIT API](guide/deprecations#jit-api-changes) 문서를 참고하세요.                                                                                                                                                                                                                      |
+| [`CompilerFactory`](api/core/CompilerFactory)                                                      | -                                                                                    | Ivy JIT 모드는 이 심볼을 활용하지 않습니다. 자세한 내용은 [지원이 중단되면서 변경되는 JIT API](guide/deprecations#jit-api-changes) 문서를 참고하세요.                                                                                                                                                                                                                      |
+| [`NgModuleFactory`](api/core/NgModuleFactory)                                                      | -                                                                                    | 이 클래스는 ViewEngine 기반의 JIT API로 많이 사용되었으며, Ivy JIT 모드에서는 더이상 사용하지 않습니다. 자세한 내용은 [지원이 중단되면서 변경되는 JIT API](guide/deprecations#jit-api-changes) 문서를 참고하세요. 이제는 팩토리 기반 대신 [`PlatformRef.bootstrapModule`](api/core/PlatformRef#bootstrapModule), [`createNgModuleRef`](api/core/createNgModuleRef)처럼 NgModule 클래스를 직접 활용하는 API를 제공합니다. |
+| [`ComponentFactory`](api/core/ComponentFactory)                                                    | -                                                                                    | Angular는 더이상 `ComponentFactory`를 활용하지 않습니다. 컴포넌트 클래스가 제공하는 API를 직접 활용하세요.                                                                                                                                                                                                                                                         |
+| [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver)                                    | -                                                                                    | Angular는 더이상 `ComponentFactory`를 활용하지 않습니다. 컴포넌트 클래스가 제공하는 API를 직접 활용하세요.                                                                                                                                                                                                                                                         |
+| [`CompilerOptions`](api/core/CompilerOptions) 항목 중 `useJit`, `missingTranslation`                  | -                                                                                    | Ivy JIT 모드는 이 심볼을 활용하지 않습니다. 자세한 내용은 [지원이 중단되면서 변경되는 JIT API](guide/deprecations#jit-api-changes) 문서를 참고하세요.                                                                                                                                                                                                                      |
+| [`JitCompilerFactory`](api/platform-browser-dynamic/JitCompilerFactory)                            | -                                                                                    | Ivy JIT 모드는 이 심볼을 활용하지 않습니다. 자세한 내용은 [지원이 중단되면서 변경되는 JIT API](guide/deprecations#jit-api-changes) 문서를 참고하세요.                                                                                                                                                                                                                      |
+| [`RESOURCE_CACHE_PROVIDER`](api/platform-browser-dynamic/RESOURCE_CACHE_PROVIDER)                  | -                                                                                    | 이전에는 ViewEngine으로 AOT 컴파일 구성요소를 테스트할 때 사용했지만, Ivy가 도입된 이후에는 사용하지 않습니다.                                                                                                                                                                                                                                                            |
+| 라우터 [`ExtraOptions`](api/router/ExtraOptions)에 사용하는 `relativeLinkResolution`                       | `'corrected'`를 기본으로 사용하세요.                                                           | 이 옵션은 하위 호환성을 유지하기 위해 도입되었습니다. 이제는 기존 방식을 버리고 새로운 로직을 작성하는 것이 좋으며, 따라서 이 플래그도 더이상 사용하지 않습니다.                                                                                                                                                                                                                                      |
+| [`RouterOutletContract.activateWith`](api/router/RouterOutletContract#activateWith)의 `resolver` 인자 | -                                                                                    | `ComponentFactory`, `ComponentFactoryResolver`는 사용이 중단되었고, `ComponentFactory`에 리족버 인자를 전달하는 방식도 더이상 필요 없습니다.                                                                                                                                                                                                                      |
+| [`OutletContext#resolver](api/router/OutletContext#resolver)                                       | -                                                                                    | `ComponentFactory`, `ComponentFactoryResolver`는 사용이 중단되었고, `ComponentFactory`에 리족버 인자를 전달하는 방식도 더이상 필요 없습니다.                                                                                                                                                                                                                      |
+| [`SwUpdate#activated`](api/service-worker/SwUpdate#activated)                                      | [`SwUpdate#activateUpdate`](api/service-worker/SwUpdate#activateUpdate)의 반환값을 활용하세요. | `activated` 프로퍼티는 지원이 중단되었습니다. [`SwUpdate#activateUpdate`](api/service-worker/SwUpdate#activateUpdate)를 활용하는 방식으로 마이그레이션 하세요.                                                                                                                                                                                                     |
+| [`SwUpdate#available`](api/service-worker/SwUpdate#available)                                      | [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates)              | [`SwUpdate#available`](api/service-worker/SwUpdate#available) 여부는 [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates)로 전달되는 [`VersionReadyEvent`](api/service-worker/VersionReadyEvent)로 확인할 수 있습니다.                                                                                                          |
 
 
-<!-- links -->
-
-[AioApiCoreApplicationrefBootstrap]: api/core/ApplicationRef#bootstrap "bootstrap - ApplicationRef | Core - API | Angular"
-[AioApiCoreCompiler]: api/core/Compiler "Compiler | Core - API | Angular"
-[AioApiCoreCompilerfactory]: api/core/CompilerFactory "CompilerFactory | Core - API | Angular"
-[AioApiCoreCreatengmoduleref]: api/core/createNgModuleRef "createNgModuleRef | Core - API | Angular"
-[AioApiCoreGetmodulefactory]: api/core/getModuleFactory "getModuleFactory | Core - API | Angular"
-[AioApiCoreGetngmodulebyid]: api/core/getNgModuleById "getNgModuleById | Core - API | Angular"
-[AioApiCoreModulewithcomponentfactories]: api/core/ModuleWithComponentFactories "ModuleWithComponentFactories | Core - API | Angular"
-[AioApiCoreNgmodulefactory]: api/core/NgModuleFactory "NgModuleFactory | Core - API | Angular"
-[AioApiCorePlatformrefBootstrapmodulefactory]: api/core/PlatformRef#bootstrapModuleFactory "bootstrapModuleFactory - PlatformRef | Core - API | Angular"
-[AioApiCorePlatformrefBootstrapmodule]: api/core/PlatformRef#bootstrapModule "bootstrapModule - PlatformRef | Core - API | Angular"
-[AioApiCoreTestingTestbedInittestenvironment]: api/core/testing/TestBed#inittestenvironment "inittestenvironment - TestBed | Testing - Core - API | Angular"
-[AioApiCoreTestingTestmodulemetadata]: api/core/testing/TestModuleMetadata "TestModuleMetadata | Testing - Core - API | Angular"
-[AioApiCoreViewcontainerrefCreatecomponent]: api/core/ViewContainerRef#createComponent "createComponent - ViewContainerRef | Core - API | Angular"
-
-[AioApiPlatformServerRendermodulefactory]: api/platform-server/renderModuleFactory "renderModuleFactory | Platform server - API | Angular"
-[AioApiPlatformServerRendermodule]: api/platform-server/renderModule "renderModule | Platform server - API | Angular"
-
-[AioApiServiceWorkerSwupdateActivated]: api/service-worker/SwUpdate#activated "activated - SwUpdate | Service worker - API | Angular"
-[AioApiServiceWorkerSwupdateActivateupdate]: api/service-worker/SwUpdate#activateUpdate "activateUpdate - SwUpdate | Service worker - API | Angular"
-[AioApiServiceWorkerSwupdateAvailable]: api/service-worker/SwUpdate#available "available - SwUpdate | Service worker - API | Angular"
-[AioApiServiceWorkerSwupdateVersionupdates]: api/service-worker/SwUpdate#versionUpdates "versionUpdates - SwUpdate | Service worker - API | Angular"
-
-[AioGuideReleasesDeprecationPractices]: guide/releases#deprecation-practices "Deprecation practices - Angular versioning and releases | Angular"
-
-<!-- external links -->
-
-[AngularBlog76c02f782aa4]: https://blog.angular.io/76c02f782aa4 "Upcoming improvements to Angular library distribution | Angular Blog"
-
-[AngularUpdateMain]: https://update.angular.io " Angular Update Guide"
-
-[DevThisIsAngularImprovingAngularTestsByEnablingAngularTestingModuleTeardown38kh]: https://dev.to/this-is-angular/improving-angular-tests-by-enabling-angular-testing-module-teardown-38kh "Improving Angular tests by enabling Angular testing module teardown | This is Angular | DEV Community"
-
-[GithubAngularAngularIssues41840]: https://github.com/angular/angular/issues/41840 "RFC: Internet Explorer 11 support deprecation and removal #41840 | angular/angular | GitHub"
-
-[GithubAngularAngularPull31187]: https://github.com/angular/angular/pull/31187 "fix(router): Allow question marks in query param values #31187 | angular/angular | GitHub"
-[GithubAngularAngularPull41730]: https://github.com/angular/angular/pull/41730 "fix(common): synchronise location mock behavior with the navigators #41730 | angular/angular | GitHub"
-[GithubAngularAngularPull42952]: https://github.com/angular/angular/pull/42952 "feat(forms): Give form statuses a more specific type #42952 | angular/angular | GitHub"
-[GithubAngularAngularPull43087]: https://github.com/angular/angular/pull/43087 "fix(router): null/undefined routerLink should disable navigation #43087 | angular/angular | GitHub"
-[GithubAngularAngularPull43496]: https://github.com/angular/angular/pull/43496 "fix(router): Prevent URL flicker when new navigations cancel ongoing ... #43496 | angular/angular | GitHub"
-[GithubAngularAngularPull43507]: https://github.com/angular/angular/pull/43507 "perf(core): remove support for the deprecated WrappedValue #43507 | angular/angular | GitHub"
-[GithubAngularAngularPull43591]: https://github.com/angular/angular/pull/43591 "refactor(router): remove support for loadChildren string syntax #43591 | angular/angular | GitHub"
-[GithubAngularAngularPull43642]: https://github.com/angular/angular/pull/43642 "feat(core): drop support for TypeScript 4.2 and 4.3 #43642 | angular/angular | GitHub"
-[GithubAngularAngularPull43668]: https://github.com/angular/angular/pull/43668 "feat(service-worker): improve ergonomics of the SwUpdate APIs #43668 | angular/angular | GitHub"
-[GithubAngularAngularPull43740]: https://github.com/angular/angular/pull/43740 "feat(bazel): expose esm2020 and es2020 conditions in APF package exports #43740 | angular/angular | GitHub"
-
-[GithubAngularAngularCliIssues21545]: https://github.com/angular/angular-cli/issues/21545 "[RFC] Persistent build cache by default #21545 | angular/angular-cli | GitHub"
-
-<!-- end links -->
-
-@reviewed 2021-11-01
+@reviewed 2022-05-31

@@ -56,7 +56,7 @@ export class HeroService {
       .pipe(
         map(heroes => heroes[0]), // 배열에 있는 항목 중 하나만 반환합니다.
         tap(h => {
-          const outcome = h ? `fetched` : `did not find`;
+          const outcome = h ? 'fetched' : 'did not find';
           this.log(`${outcome} hero id=${id}`);
         }),
         catchError(this.handleError<Hero>(`getHero id=${id}`))
@@ -128,6 +128,7 @@ export class HeroService {
   /**
    * HTTP 요청이 실패한 경우를 처리합니다.
    * 애플리케이션 로직 흐름은 그대로 유지됩니다.
+   *
    * @param operation - 실패한 동작의 이름
    * @param result - 기본값으로 반환할 객체
    */

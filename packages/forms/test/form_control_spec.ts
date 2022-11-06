@@ -7,9 +7,8 @@
  */
 
 import {fakeAsync, tick} from '@angular/core/testing';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {FormArray} from '@angular/forms/src/model';
 import {asyncValidator, asyncValidatorReturningObservable} from './util';
 
 (function() {
@@ -59,7 +58,8 @@ describe('FormControl', () => {
     });
 
     it('should not treat objects as boxed values if they have more than two props', () => {
-      const c = new FormControl({value: '', disabled: true, test: 'test'}, null!, null!);
+      const c: FormControl =
+          new FormControl({value: '', disabled: true, test: 'test'} as any, null!, null!);
       expect(c.value).toEqual({value: '', disabled: true, test: 'test'});
       expect(c.disabled).toBe(false);
     });
@@ -175,7 +175,7 @@ describe('FormControl', () => {
     });
 
     it('should support single validator from options obj', () => {
-      const c = new FormControl(null, {validators: Validators.required});
+      const c: FormControl = new FormControl(null, {validators: Validators.required});
       expect(c.valid).toEqual(false);
       expect(c.errors).toEqual({required: true});
 
@@ -184,7 +184,8 @@ describe('FormControl', () => {
     });
 
     it('should support multiple validators from options obj', () => {
-      const c = new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]});
+      const c: FormControl =
+          new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]});
       expect(c.valid).toEqual(false);
       expect(c.errors).toEqual({required: true});
 
@@ -212,7 +213,7 @@ describe('FormControl', () => {
     });
 
     it('should set single validator', () => {
-      const c = new FormControl(null);
+      const c: FormControl = new FormControl(null);
       expect(c.valid).toEqual(true);
 
       c.setValidators(Validators.required);
@@ -814,6 +815,62 @@ describe('FormControl', () => {
       c.reset();
       expect(c.value).toBe(null);
     });
+
+    it('should reset to the initial value if specified in FormControlOptions', () => {
+      const c2 = new FormControl('foo', {nonNullable: true});
+      expect(c2.value).toBe('foo');
+      expect(c2.defaultValue).toBe('foo');
+
+      c2.setValue('bar');
+      expect(c2.value).toBe('bar');
+      expect(c2.defaultValue).toBe('foo');
+
+      c2.reset();
+      expect(c2.value).toBe('foo');
+      expect(c2.defaultValue).toBe('foo');
+
+      const c3 = new FormControl('foo', {nonNullable: false});
+      expect(c3.value).toBe('foo');
+      expect(c3.defaultValue).toBe(null);
+
+      c3.setValue('bar');
+      expect(c3.value).toBe('bar');
+      expect(c3.defaultValue).toBe(null);
+
+      c3.reset();
+      expect(c3.value).toBe(null);
+      expect(c3.defaultValue).toBe(null);
+    });
+
+    it('should look inside FormState objects for a default value', () => {
+      const c2 = new FormControl({value: 'foo', disabled: false}, {initialValueIsDefault: true});
+      expect(c2.value).toBe('foo');
+      expect(c2.defaultValue).toBe('foo');
+
+      c2.setValue('bar');
+      expect(c2.value).toBe('bar');
+      expect(c2.defaultValue).toBe('foo');
+
+      c2.reset();
+      expect(c2.value).toBe('foo');
+      expect(c2.defaultValue).toBe('foo');
+    });
+
+    it('should not alter the disabled state when resetting, even if a default value is provided',
+       () => {
+         const c2 = new FormControl({value: 'foo', disabled: true}, {nonNullable: true});
+         expect(c2.value).toBe('foo');
+         expect(c2.defaultValue).toBe('foo');
+         expect(c2.disabled).toBe(true);
+
+         c2.setValue('bar');
+         c2.enable();
+
+         c2.reset();
+         expect(c2.value).toBe('foo');
+         expect(c2.defaultValue).toBe('foo');
+         expect(c2.disabled).toBe(false);
+       });
 
     it('should update the value of any parent controls with passed value', () => {
       const g = new FormGroup({'one': c});
@@ -1467,6 +1524,57 @@ describe('FormControl', () => {
         c.markAsPending({emitEvent: false});
         expect(logger).toEqual([]);
       });
+    });
+  });
+
+  describe('can be extended', () => {
+    // We don't technically support extending Forms classes, but people do it anyway.
+    // We need to make sure that there is some way to extend them to avoid causing breakage.
+
+    class FCExt extends FormControl {
+      constructor(formState?: any|{
+        value?: any;
+        disabled?: boolean;
+      }, ...args: any) {
+        super(formState, ...args);
+      }
+    }
+
+    it('should perform basic FormControl operations', () => {
+      const nc = new FCExt({value: 'foo'});
+      nc.setValue('bar');
+      // There is no need to assert because, if this test compiles, then it is possible to correctly
+      // extend FormControl.
+    });
+  });
+
+  describe('inspecting the prototype still provides FormControl type', () => {
+    // The constructor should be a function with a prototype property of T.
+    // (This is the assumption we don't want to break.)
+    type Constructor<T> = Function&{prototype: T};
+
+    function isInstanceOf<T>(value: Constructor<T>, arg: unknown): arg is T {
+      // The implementation does not matter; we want to check whether this guard narrows the type.
+      return true;
+    }
+
+    // This is a nullable FormControl, and we want isInstanceOf to narrow the type.
+    const fcOrNull: FormControl|null = new FormControl(42);
+
+    it('and is appropriately narrowed', () => {
+      if (isInstanceOf(FormControl, fcOrNull)) {
+        // If the guard does not work, then this code will not compile due to null being in the
+        // type.
+        fcOrNull.setValue(7);
+      }
+    });
+  });
+
+  describe('Function.name', () => {
+    it('returns FormControl', () => {
+      // This is always true in the trivial case, but can be broken by various methods of overriding
+      // FormControl's exported constructor.
+      expect(FormControl.name).toBe('FormControl');
     });
   });
 });

@@ -56,17 +56,19 @@ describe('HighlightDirective', () => {
   it('should bind <input> background to value color', () => {
     // nativeElement를 사용하면 편합니다.
     const input = des[2].nativeElement as HTMLInputElement;
-    expect(input.style.backgroundColor).toBe('cyan', 'initial backgroundColor');
+    expect(input.style.backgroundColor)
+      .withContext('initial backgroundColor')
+      .toBe('cyan');
 
     input.value = 'green';
 
     // 입력 필드의 값을 변경하고 DOM 이벤트를 보내면 Angular가 이 이벤트에 반응합니다.
-    // IE와 같이 오래된 브라우저에서는 CustomEvent 를 사용해야 합니다. 아래 문서를 참고하세요.
-    // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    expect(input.style.backgroundColor).toBe('green', 'changed backgroundColor');
+    expect(input.style.backgroundColor)
+      .withContext('changed backgroundColor')
+      .toBe('green');
   });
 
 

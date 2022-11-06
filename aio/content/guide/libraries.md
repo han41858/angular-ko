@@ -11,11 +11,13 @@ Such a solution can be built as Angular *libraries* and these libraries can be p
 An Angular library is an Angular [project](guide/glossary#project) that differs from an application in that it cannot run on its own.
 A library must be imported and used in an application.
 
-Libraries extend Angular's base functionality. For example, to add [reactive forms](guide/reactive-forms) to an app, add the library package using `ng add @angular/forms`, then import the `ReactiveFormsModule` from the `@angular/forms` library in your application code.
-Similarly, adding the [service worker](guide/service-worker-intro) library to an Angular application is one of the steps for turning an application into a [Progressive Web App](https://developers.google.com/web/progressive-web-apps/) (PWA).
-[Angular Material](https://material.angular.io/) is an example of a large, general-purpose library that provides sophisticated, reusable, and adaptable UI components.
+Libraries extend Angular's base functionality.
+For example, to add [reactive forms](guide/reactive-forms) to an app, add the library package using `ng add @angular/forms`, then import the `ReactiveFormsModule` from the `@angular/forms` library in your application code.
+Similarly, adding the [service worker](guide/service-worker-intro) library to an Angular application is one of the steps for turning an application into a [Progressive Web App](https://developers.google.com/web/progressive-web-apps) \(PWA\).
+[Angular Material](https://material.angular.io) is an example of a large, general-purpose library that provides sophisticated, reusable, and adaptable UI components.
 
-Any application developer can use these and other libraries that have been published as npm packages by the Angular team or by third parties. See [Using Published Libraries](guide/using-libraries).
+Any application developer can use these and other libraries that have been published as npm packages by the Angular team or by third parties.
+See [Using Published Libraries](guide/using-libraries).
 -->
 애플리케이션마다 일반적으로 발생하는 문제들이 있습니다.
 사용자가 무언가 할 수 있는 화면을 구성하거나, 데이터를 표시하고, 데이터를 입력받는 기능은 어느 어플리케이션에나 필요합니다.
@@ -54,7 +56,8 @@ This complexity can pay off, however, when the library is being used in multiple
 
 <div class="alert is-helpful">
 
-Note that libraries are intended to be used by Angular applications.
+**NOTE**: <br />
+Libraries are intended to be used by Angular applications.
 To add Angular functionality to non-Angular web applications, use [Angular custom elements](guide/elements).
 
 </div>
@@ -74,10 +77,18 @@ npm 일반 저장소 뿐만 아니라 프라이빗 npm 기업용 저장소나 np
 관리하는 측면에서도 유지보수하면서 업데이트하는 시간이 일반 앱보다 더 많이 필요합니다.
 하지만 이 라이브러리가 여러 앱에 사용된다면, 개발에 들어가는 총 비용은 확실히 줄어들 것입니다.
 
-
 <div class="alert is-helpful">
 
+**참고**: <br />
 Angular 라이브러리는 Angular 앱이 로드해서 사용하는 것이 기본입니다.
 Angular가 아닌 웹 앱에서 Angular의 기능을 활용하려면 [Angular 커스텀 엘리먼트](guide/elements) 문서를 참고하세요.
 
 </div>
+
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

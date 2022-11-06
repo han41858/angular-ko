@@ -39,8 +39,10 @@ This ID is a string that looks like `UA-123456-12`.
 You can choose to use a descriptive string as the key value, or be assigned a random key when you run the CLI command.
 For example, the following command adds a configuration key named "tracking".
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 ng config --global cli.analyticsSharing.tracking UA-123456-12
+
 </code-example>
 
 To turn off this feature, run the following command:
@@ -63,8 +65,9 @@ ng config --global cli.analyticsSharing.tracking UA-123456-12
 
 이 기능을 끄러면 이렇게 실행하면 됩니다:
 
-<code-example language="sh">
-ng config --global --remove cli.analyticsSharing
+<code-example format="shell" language="shell">
+
+ng config --global cli.analyticsSharing undefined
 </code-example>
 
 
@@ -91,13 +94,23 @@ ng config --global cli.analyticsSharing.uuid ""
 전역 환경설정 파일에 커스텀 사용자 ID를 추가하면 해당 사용자가 사용한 명령이나 플래그값의 통계를 따로 확인할 수 있습니다.
 이 기능도 사용자마다 프로젝트에 활성화하면 됩니다.
 
-<code-example language="sh">
-ng config --global cli.analyticsSharing.user SOME_USER_NAME
+<code-example format="shell" language="shell">
+
+ng config --global cli.analyticsSharing.uuid SOME_USER_NAME
 </code-example>
 
 사용자 ID를 랜덤값으로 지정하려면 이렇게 실행하면 됩니다:
 
-<code-example language="sh">
-ng config --global cli.analyticsSharing.user ""
+<code-example format="shell" language="shell">
+
+ng config --global cli.analyticsSharing.uuid ""
+
 </code-example>
 
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

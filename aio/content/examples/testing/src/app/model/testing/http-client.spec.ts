@@ -86,13 +86,19 @@ describe('HttpClient testing', () => {
 
     // Make three requests in a row
     httpClient.get<Data[]>(testUrl)
-      .subscribe(d => expect(d.length).toEqual(0, 'should have no data'));
+      .subscribe(d => expect(d.length)
+        .withContext('should have no data')
+        .toEqual(0));
 
     httpClient.get<Data[]>(testUrl)
-      .subscribe(d => expect(d).toEqual([testData[0]], 'should be one element array'));
+      .subscribe(d => expect(d)
+        .withContext('should be one element array')
+        .toEqual([testData[0]]));
 
     httpClient.get<Data[]>(testUrl)
-      .subscribe(d => expect(d).toEqual(testData, 'should be expected data'));
+      .subscribe(d => expect(d)
+        .withContext('should be expected data')
+        .toEqual(testData));
 
     // get all pending requests that match the given URL
     const requests = httpTestingController.match(testUrl);
@@ -107,12 +113,16 @@ describe('HttpClient testing', () => {
   it('can test for 404 error', () => {
     const emsg = 'deliberate 404 error';
 
-    httpClient.get<Data[]>(testUrl).subscribe(
-      data => fail('should have failed with the 404 error'),
-      (error: HttpErrorResponse) => {
-        expect(error.status).toEqual(404, 'status');
-        expect(error.error).toEqual(emsg, 'message');
-      }
+    httpClient.get<Data[]>(testUrl).subscribe({
+      next: data => fail('should have failed with the 404 error'),
+      error: (error: HttpErrorResponse) => {
+        expect(error.status)
+          .withContext('status')
+          .toEqual(404);
+        expect(error.error)
+          .withContext('message')
+          .toEqual(emsg);
+      }}
     );
 
     const req = httpTestingController.expectOne(testUrl);
@@ -121,28 +131,20 @@ describe('HttpClient testing', () => {
     req.flush(emsg, { status: 404, statusText: 'Not Found' });
   });
 
-  it('can test for network error', () => {
-    const emsg = 'simulated network error';
+  it('can test for network error', done => {
+    // Create mock ProgressEvent with type `error`, raised when something goes wrong at
+    // the network level. Connection timeout, DNS error, offline, etc.
+    const errorEvent = new ProgressEvent('error');
 
-    httpClient.get<Data[]>(testUrl).subscribe(
-      data => fail('should have failed with the network error'),
-      (error: HttpErrorResponse) => {
-        expect(error.error.message).toEqual(emsg, 'message');
-      }
+    httpClient.get<Data[]>(testUrl).subscribe({
+      next: data => fail('should have failed with the network error'),
+      error: (error: HttpErrorResponse) => {
+        expect(error.error).toBe(errorEvent);
+        done();
+      }}
     );
 
     const req = httpTestingController.expectOne(testUrl);
-
-    // Create mock ErrorEvent, raised when something goes wrong at the network level.
-    // Connection timeout, DNS error, offline, etc
-    const errorEvent = new ErrorEvent('so sad', {
-      message: emsg,
-      // The rest of this is optional and not used.
-      // Just showing that you could provide this too.
-      filename: 'HeroService.ts',
-      lineno: 42,
-      colno: 21
-    });
 
     // Respond with mock error
     req.error(errorEvent);

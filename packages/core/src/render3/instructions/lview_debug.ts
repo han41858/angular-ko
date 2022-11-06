@@ -13,7 +13,6 @@ import {Sanitizer} from '../../sanitization/sanitizer';
 import {KeyValueArray} from '../../util/array_utils';
 import {assertDefined} from '../../util/assert';
 import {createNamedArrayType} from '../../util/named_array_type';
-import {initNgDevMode} from '../../util/ng_dev_mode';
 import {assertNodeInjector} from '../assert';
 import {getInjectorIndex, getParentInjectorLocation} from '../di';
 import {CONTAINER_HEADER_OFFSET, HAS_TRANSPLANTED_VIEWS, LContainer, MOVED_VIEWS, NATIVE} from '../interfaces/container';
@@ -25,12 +24,10 @@ import {LQueries, TQueries} from '../interfaces/query';
 import {Renderer3, RendererFactory3} from '../interfaces/renderer';
 import {RComment, RElement, RNode} from '../interfaces/renderer_dom';
 import {getTStylingRangeNext, getTStylingRangeNextDuplicate, getTStylingRangePrev, getTStylingRangePrevDuplicate, TStylingKey, TStylingRange} from '../interfaces/styling';
-import {CHILD_HEAD, CHILD_TAIL, CLEANUP, CONTEXT, DebugNode, DECLARATION_VIEW, DestroyHookData, FLAGS, HEADER_OFFSET, HookData, HOST, HostBindingOpCodes, INJECTOR, LContainerDebug as ILContainerDebug, LView, LViewDebug as ILViewDebug, LViewDebugRange, LViewDebugRangeContent, LViewFlags, NEXT, NodeInjectorDebug, PARENT, QUERIES, RENDERER, RENDERER_FACTORY, SANITIZER, T_HOST, TData, TView as ITView, TVIEW, TView, TViewType, TViewTypeAsString} from '../interfaces/view';
+import {CHILD_HEAD, CHILD_TAIL, CLEANUP, CONTEXT, DebugNode, DECLARATION_VIEW, DestroyHookData, FLAGS, HEADER_OFFSET, HookData, HOST, HostBindingOpCodes, ID, INJECTOR, LContainerDebug as ILContainerDebug, LView, LViewDebug as ILViewDebug, LViewDebugRange, LViewDebugRangeContent, LViewFlags, NEXT, NodeInjectorDebug, PARENT, QUERIES, RENDERER, RENDERER_FACTORY, SANITIZER, T_HOST, TData, TView as ITView, TVIEW, TView, TViewType, TViewTypeAsString} from '../interfaces/view';
 import {attachDebugObject} from '../util/debug_utils';
 import {getParentInjectorIndex, getParentInjectorView} from '../util/injector_utils';
 import {unwrapRNode} from '../util/view_utils';
-
-const NG_DEV_MODE = ((typeof ngDevMode === 'undefined' || !!ngDevMode) && initNgDevMode());
 
 /*
  * This file contains conditionally attached classes which provide human readable (debug) level
@@ -61,9 +58,11 @@ const NG_DEV_MODE = ((typeof ngDevMode === 'undefined' || !!ngDevMode) && initNg
  * ```
  */
 
-let LVIEW_COMPONENT_CACHE!: Map<string|null, Array<any>>;
-let LVIEW_EMBEDDED_CACHE!: Map<string|null, Array<any>>;
-let LVIEW_ROOT!: Array<any>;
+let LVIEW_COMPONENT_CACHE: Map<string|null, Array<any>>|undefined;
+let LVIEW_EMBEDDED_CACHE: Map<string|null, Array<any>>|undefined;
+let LVIEW_ROOT: Array<any>|undefined;
+let LVIEW_COMPONENT: Array<any>|undefined;
+let LVIEW_EMBEDDED: Array<any>|undefined;
 
 interface TViewDebug extends ITView {
   type: TViewType;
@@ -74,18 +73,26 @@ interface TViewDebug extends ITView {
  *
  * Simple slice will keep the same type, and we need it to be LView
  */
-export function cloneToLViewFromTViewBlueprint(tView: TView): LView {
+export function cloneToLViewFromTViewBlueprint<T>(tView: TView): LView<T> {
   const debugTView = tView as TViewDebug;
   const lView = getLViewToClone(debugTView.type, tView.template && tView.template.name);
   return lView.concat(tView.blueprint) as any;
 }
 
+class LRootView extends Array {}
+class LComponentView extends Array {}
+class LEmbeddedView extends Array {}
+
 function getLViewToClone(type: TViewType, name: string|null): Array<any> {
   switch (type) {
     case TViewType.Root:
-      if (LVIEW_ROOT === undefined) LVIEW_ROOT = new (createNamedArrayType('LRootView'))();
+      if (LVIEW_ROOT === undefined) LVIEW_ROOT = new LRootView();
       return LVIEW_ROOT;
     case TViewType.Component:
+      if (!ngDevMode || !ngDevMode.namedConstructors) {
+        if (LVIEW_COMPONENT === undefined) LVIEW_COMPONENT = new LComponentView();
+        return LVIEW_COMPONENT;
+      }
       if (LVIEW_COMPONENT_CACHE === undefined) LVIEW_COMPONENT_CACHE = new Map();
       let componentArray = LVIEW_COMPONENT_CACHE.get(name);
       if (componentArray === undefined) {
@@ -94,6 +101,10 @@ function getLViewToClone(type: TViewType, name: string|null): Array<any> {
       }
       return componentArray;
     case TViewType.Embedded:
+      if (!ngDevMode || !ngDevMode.namedConstructors) {
+        if (LVIEW_EMBEDDED === undefined) LVIEW_EMBEDDED = new LEmbeddedView();
+        return LVIEW_EMBEDDED;
+      }
       if (LVIEW_EMBEDDED_CACHE === undefined) LVIEW_EMBEDDED_CACHE = new Map();
       let embeddedArray = LVIEW_EMBEDDED_CACHE.get(name);
       if (embeddedArray === undefined) {
@@ -107,7 +118,7 @@ function getLViewToClone(type: TViewType, name: string|null): Array<any> {
 function nameSuffix(text: string|null|undefined): string {
   if (text == null) return '';
   const index = text.lastIndexOf('_Template');
-  return '_' + (index === -1 ? text : text.substr(0, index));
+  return '_' + (index === -1 ? text : text.slice(0, index));
 }
 
 /**
@@ -347,7 +358,7 @@ function processTNodeChildren(tNode: ITNode|null, buf: string[]) {
   }
 }
 
-const TViewData = NG_DEV_MODE && createNamedArrayType('TViewData') || null! as ArrayConstructor;
+class TViewData extends Array {}
 let TVIEWDATA_EMPTY: unknown[];  // can't initialize here or it will not be tree shaken, because
                                  // `LView` constructor could have side-effects.
 /**
@@ -360,24 +371,13 @@ export function cloneToTViewData(list: any[]): TData {
   return TVIEWDATA_EMPTY.concat(list) as any;
 }
 
-export const LViewBlueprint =
-    NG_DEV_MODE && createNamedArrayType('LViewBlueprint') || null! as ArrayConstructor;
-export const MatchesArray =
-    NG_DEV_MODE && createNamedArrayType('MatchesArray') || null! as ArrayConstructor;
-export const TViewComponents =
-    NG_DEV_MODE && createNamedArrayType('TViewComponents') || null! as ArrayConstructor;
-export const TNodeLocalNames =
-    NG_DEV_MODE && createNamedArrayType('TNodeLocalNames') || null! as ArrayConstructor;
-export const TNodeInitialInputs =
-    NG_DEV_MODE && createNamedArrayType('TNodeInitialInputs') || null! as ArrayConstructor;
-export const TNodeInitialData =
-    NG_DEV_MODE && createNamedArrayType('TNodeInitialData') || null! as ArrayConstructor;
-export const LCleanup =
-    NG_DEV_MODE && createNamedArrayType('LCleanup') || null! as ArrayConstructor;
-export const TCleanup =
-    NG_DEV_MODE && createNamedArrayType('TCleanup') || null! as ArrayConstructor;
-
-
+export class LViewBlueprint extends Array {}
+export class MatchesArray extends Array {}
+export class TViewComponents extends Array {}
+export class TNodeLocalNames extends Array {}
+export class TNodeInitialInputs extends Array {}
+export class LCleanup extends Array {}
+export class TCleanup extends Array {}
 
 export function attachLViewDebug(lView: LView) {
   attachDebugObject(lView, new LViewDebug(lView));
@@ -387,9 +387,9 @@ export function attachLContainerDebug(lContainer: LContainer) {
   attachDebugObject(lContainer, new LContainerDebug(lContainer));
 }
 
-export function toDebug(obj: LView): ILViewDebug;
-export function toDebug(obj: LView|null): ILViewDebug|null;
-export function toDebug(obj: LView|LContainer|null): ILViewDebug|ILContainerDebug|null;
+export function toDebug<T>(obj: LView<T>): ILViewDebug<T>;
+export function toDebug<T>(obj: LView<T>|null): ILViewDebug<T>|null;
+export function toDebug<T>(obj: LView<T>|LContainer|null): ILViewDebug<T>|ILContainerDebug|null;
 export function toDebug(obj: any): any {
   if (obj) {
     const debug = (obj as any).debug;
@@ -432,8 +432,8 @@ function toHtml(value: any, includeChildren: boolean = false): string|null {
   return null;
 }
 
-export class LViewDebug implements ILViewDebug {
-  constructor(private readonly _raw_lView: LView) {}
+export class LViewDebug<T = unknown> implements ILViewDebug<T> {
+  constructor(private readonly _raw_lView: LView<T>) {}
 
   /**
    * Flags associated with the `LView` unpacked into a more readable state.
@@ -453,8 +453,8 @@ export class LViewDebug implements ILViewDebug {
       indexWithinInitPhase: flags >> LViewFlags.IndexWithinInitPhaseShift,
     };
   }
-  get parent(): ILViewDebug|ILContainerDebug|null {
-    return toDebug(this._raw_lView[PARENT]);
+  get parent(): ILViewDebug<T>|ILContainerDebug|null {
+    return toDebug<T>(this._raw_lView[PARENT] as LView<T>| LContainer | null);
   }
   get hostHTML(): string|null {
     return toHtml(this._raw_lView[HOST], true);
@@ -462,7 +462,7 @@ export class LViewDebug implements ILViewDebug {
   get html(): string {
     return (this.nodes || []).map(mapToHTML).join('');
   }
-  get context(): {}|null {
+  get context(): T {
     return this._raw_lView[CONTEXT];
   }
   /**
@@ -498,8 +498,8 @@ export class LViewDebug implements ILViewDebug {
   get childHead(): ILViewDebug|ILContainerDebug|null {
     return toDebug(this._raw_lView[CHILD_HEAD]);
   }
-  get next(): ILViewDebug|ILContainerDebug|null {
-    return toDebug(this._raw_lView[NEXT]);
+  get next(): ILViewDebug<T>|ILContainerDebug|null {
+    return toDebug<T>(this._raw_lView[NEXT] as LView<T>| LContainer | null);
   }
   get childTail(): ILViewDebug|ILContainerDebug|null {
     return toDebug(this._raw_lView[CHILD_TAIL]);
@@ -512,6 +512,9 @@ export class LViewDebug implements ILViewDebug {
   }
   get tHost(): ITNode|null {
     return this._raw_lView[T_HOST];
+  }
+  get id(): number {
+    return this._raw_lView[ID];
   }
 
   get decls(): LViewDebugRange {
@@ -531,11 +534,11 @@ export class LViewDebug implements ILViewDebug {
   /**
    * Normalized view of child views (and containers) attached at this location.
    */
-  get childViews(): Array<ILViewDebug|ILContainerDebug> {
-    const childViews: Array<ILViewDebug|ILContainerDebug> = [];
+  get childViews(): Array<ILViewDebug<T>|ILContainerDebug> {
+    const childViews: Array<ILViewDebug<T>|ILContainerDebug> = [];
     let child = this.childHead;
     while (child) {
-      childViews.push(child);
+      childViews.push(child as ILViewDebug<T>| ILContainerDebug);
       child = child.next;
     }
     return childViews;

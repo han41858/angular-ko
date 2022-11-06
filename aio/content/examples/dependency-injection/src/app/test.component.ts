@@ -1,4 +1,3 @@
-/* tslint:disable */
 // Simulate a simple test
 // Reader should look to the testing chapter for the real thing
 
@@ -22,8 +21,8 @@ export class TestComponent {
 /////////////////////////////////////
 function runTests() {
 
-  const expectedHeroes = [{name: 'A'}, {name: 'B'}]
-  const mockService = <HeroService> {getHeroes: () => expectedHeroes }
+  const expectedHeroes = [{name: 'A'}, {name: 'B'}];
+  const mockService = {getHeroes: () => expectedHeroes } as HeroService;
 
   it('should have heroes when HeroListComponent created', () => {
     // 목 객체를 생성자에 전달하면 Angular 인젝터가 알아서 처리합니다.
@@ -36,8 +35,8 @@ function runTests() {
 
 //////////////////////////////////
 // Fake Jasmine infrastructure
-var testName: string;
-var testResults: {pass: string; message: string};
+let testName: string;
+let testResults: {pass: string, message: string};
 
 function expect(actual: any) {
   return {

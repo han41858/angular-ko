@@ -8,16 +8,17 @@
 
 import {DOCUMENT, ɵgetDOM as getDOM} from '@angular/common';
 import {ResourceLoader} from '@angular/compiler';
-import {APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Compiler, CompilerFactory, Component, InjectionToken, LOCALE_ID, NgModule, NgZone, PlatformRef, TemplateRef, Type, ViewChild, ViewContainerRef} from '@angular/core';
-import {ApplicationRef} from '@angular/core/src/application_ref';
+import {APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, Compiler, CompilerFactory, Component, InjectionToken, Injector, LOCALE_ID, NgModule, NgZone, PlatformRef, RendererFactory2, TemplateRef, Type, ViewChild, ViewContainerRef} from '@angular/core';
 import {ErrorHandler} from '@angular/core/src/error_handler';
 import {ComponentRef} from '@angular/core/src/linker/component_factory';
 import {getLocaleId} from '@angular/core/src/render3';
 import {BrowserModule} from '@angular/platform-browser';
+import {DomRendererFactory2} from '@angular/platform-browser/src/dom/dom_renderer';
 import {createTemplate, dispatchEvent, getContent} from '@angular/platform-browser/testing/src/browser_util';
 import {expect} from '@angular/platform-browser/testing/src/matchers';
-import {onlyInIvy} from '@angular/private/testing';
 
+import {ApplicationRef} from '../src/application_ref';
+import {createInjector} from '../src/di/create_injector';
 import {NoopNgZone} from '../src/zone/ng_zone';
 import {ComponentFixtureNoNgZone, inject, TestBed, waitForAsync, withModule} from '../testing';
 
@@ -67,7 +68,6 @@ class SomeComponent {
         providers: [{provide: ErrorHandler, useValue: errorHandler}, options.providers || []],
         imports: [platformModule],
         declarations: [options.component || SomeComponent],
-        entryComponents: [options.component || SomeComponent],
         bootstrap: options.bootstrap || []
       })
       class MyModule {
@@ -93,7 +93,6 @@ class SomeComponent {
              @NgModule({
                providers: [{provide: helloToken, useValue: 'component'}],
                declarations: [SomeComponent],
-               entryComponents: [SomeComponent],
              })
              class SomeModule {
              }
@@ -124,7 +123,6 @@ class SomeComponent {
              @NgModule({
                providers: [{provide: helloToken, useValue: 'component'}],
                declarations: [SomeComponent],
-               entryComponents: [SomeComponent],
              })
              class SomeModule {
              }
@@ -170,7 +168,7 @@ class SomeComponent {
         appRef.attachView(fixture.componentRef.hostView);
         appRef.tick();
         expect(fixture.componentInstance.reenterErr.message)
-            .toBe('ApplicationRef.tick is called recursively');
+            .toBe('NG0101: ApplicationRef.tick is called recursively');
       });
 
       describe('APP_BOOTSTRAP_LISTENER', () => {
@@ -208,9 +206,149 @@ class SomeComponent {
                  createRootEl();
                  expect(() => ref.bootstrap(SomeComponent))
                      .toThrowError(
-                         'Cannot bootstrap as there are still asynchronous initializers running. Bootstrap components in the `ngDoBootstrap` method of the root module.');
+                         'NG0405: Cannot bootstrap as there are still asynchronous initializers running. Bootstrap components in the `ngDoBootstrap` method of the root module.');
                })));
       });
+    });
+
+    describe('destroy', () => {
+      const providers = [
+        {provide: DOCUMENT, useFactory: () => document, deps: []},
+        // Use the `DomRendererFactory2` as a renderer factory instead of the
+        // `AnimationRendererFactory` one, which is configured as a part of the `ServerModule`, see
+        // platform module setup above. This simplifies the tests (so they are sync vs async when
+        // animations are in use) that verify that the DOM has been cleaned up after tests.
+        {provide: RendererFactory2, useClass: DomRendererFactory2},
+      ];
+      // This function creates a new Injector instance with the `ApplicationRef` as a provider, so
+      // that the instance of the `ApplicationRef` class is created on that injector (vs in the
+      // app-level injector). It is needed to verify `ApplicationRef.destroy` scenarios, which
+      // includes destroying an underlying injector.
+      function createApplicationRefInjector(parentInjector: Injector) {
+        @NgModule()
+        class RootModule {
+        }
+        const extraProviders = [{provide: ApplicationRef, useClass: ApplicationRef}];
+        return createInjector(RootModule, parentInjector, extraProviders);
+      }
+
+      function createApplicationRef(parentInjector: Injector) {
+        const injector = createApplicationRefInjector(parentInjector);
+        return injector.get(ApplicationRef);
+      }
+      it('should cleanup the DOM',
+         withModule(
+             {providers},
+             waitForAsync(
+                 inject([Injector, DOCUMENT], (parentInjector: Injector, doc: Document) => {
+                   createRootEl();
+
+                   const appRef = createApplicationRef(parentInjector);
+                   appRef.bootstrap(SomeComponent);
+
+                   // The component template content (`hello`) is present in the document body.
+                   expect(doc.body.textContent!.indexOf('hello') > -1).toBeTrue();
+
+                   appRef.destroy();
+
+                   // The component template content (`hello`) is *not* present in the document
+                   // body, i.e. the DOM has been cleaned up.
+                   expect(doc.body.textContent!.indexOf('hello') === -1).toBeTrue();
+                 }))));
+
+      it('should throw when trying to call `destroy` method on already destroyed ApplicationRef',
+         withModule(
+             {providers}, waitForAsync(inject([Injector], (parentInjector: Injector) => {
+               createRootEl();
+               const appRef = createApplicationRef(parentInjector);
+               appRef.bootstrap(SomeComponent);
+               appRef.destroy();
+
+               expect(() => appRef.destroy())
+                   .toThrowError(
+                       'NG0406: This instance of the `ApplicationRef` has already been destroyed.');
+             }))));
+
+      it('should invoke all registered `onDestroy` callbacks (internal API)',
+         withModule({providers}, waitForAsync(inject([Injector], (parentInjector: Injector) => {
+                      const onDestroyA = jasmine.createSpy('onDestroyA');
+                      const onDestroyB = jasmine.createSpy('onDestroyB');
+                      createRootEl();
+
+                      const appRef =
+                          createApplicationRef(parentInjector) as unknown as ApplicationRef &
+                          {onDestroy: Function};
+                      appRef.bootstrap(SomeComponent);
+                      appRef.onDestroy(onDestroyA);
+                      appRef.onDestroy(onDestroyB);
+                      appRef.destroy();
+
+                      expect(onDestroyA).toHaveBeenCalledTimes(1);
+                      expect(onDestroyB).toHaveBeenCalledTimes(1);
+                    }))));
+
+      it('should allow to unsubscribe a registered `onDestroy` callback (internal API)',
+         withModule({providers}, waitForAsync(inject([Injector], (parentInjector: Injector) => {
+                      createRootEl();
+
+                      const appRef =
+                          createApplicationRef(parentInjector) as unknown as ApplicationRef &
+                          {onDestroy: Function};
+                      appRef.bootstrap(SomeComponent);
+
+                      const onDestroyA = jasmine.createSpy('onDestroyA');
+                      const onDestroyB = jasmine.createSpy('onDestroyB');
+                      const unsubscribeOnDestroyA = appRef.onDestroy(onDestroyA);
+                      const unsubscribeOnDestroyB = appRef.onDestroy(onDestroyB);
+
+                      // Unsubscribe registered listeners.
+                      unsubscribeOnDestroyA();
+                      unsubscribeOnDestroyB();
+
+                      appRef.destroy();
+
+                      expect(onDestroyA).not.toHaveBeenCalled();
+                      expect(onDestroyB).not.toHaveBeenCalled();
+                    }))));
+
+      it('should correctly update the `destroyed` flag',
+         withModule({providers}, waitForAsync(inject([Injector], (parentInjector: Injector) => {
+                      createRootEl();
+
+                      const appRef = createApplicationRef(parentInjector);
+                      appRef.bootstrap(SomeComponent);
+
+                      expect(appRef.destroyed).toBeFalse();
+
+                      appRef.destroy();
+
+                      expect(appRef.destroyed).toBeTrue();
+                    }))));
+
+      it('should also destroy underlying injector',
+         withModule({providers}, waitForAsync(inject([Injector], (parentInjector: Injector) => {
+                      // This is a temporary type to represent an instance of an R3Injector, which
+                      // can be destroyed.
+                      // The type will be replaced with a different one once destroyable injector
+                      // type is available.
+                      type DestroyableInjector = Injector&{destroy?: Function, destroyed?: boolean};
+
+                      createRootEl();
+
+                      const injector =
+                          createApplicationRefInjector(parentInjector) as DestroyableInjector;
+
+                      const appRef = injector.get(ApplicationRef);
+                      appRef.bootstrap(SomeComponent);
+
+                      expect(appRef.destroyed).toBeFalse();
+                      expect(injector.destroyed).toBeFalse();
+
+                      appRef.destroy();
+
+                      expect(appRef.destroyed).toBeTrue();
+                      expect(injector.destroyed).toBeTrue();
+                    }))));
     });
 
     describe('bootstrapModule', () => {
@@ -277,7 +415,8 @@ class SomeComponent {
            return defaultPlatform.bootstrapModule(EmptyModule)
                .then(() => fail('expecting error'), (error) => {
                  expect(error.message)
-                     .toEqual('No ErrorHandler. Is platform module (BrowserModule) included?');
+                     .toEqual(
+                         'NG0402: No ErrorHandler. Is platform module (BrowserModule) included?');
                });
          }));
 
@@ -304,7 +443,7 @@ class SomeComponent {
            defaultPlatform.bootstrapModule(createModule({ngDoBootstrap: false}))
                .then(() => expect(false).toBe(true), (e) => {
                  const expectedErrMsg =
-                     `The module MyModule was bootstrapped, but it does not declare "@NgModule.bootstrap" components nor a "ngDoBootstrap" method. Please define one of these.`;
+                     `NG0403: The module MyModule was bootstrapped, but it does not declare "@NgModule.bootstrap" components nor a "ngDoBootstrap" method. Please define one of these.`;
                  expect(e.message).toEqual(expectedErrMsg);
                  expect(mockConsole.res[0].join('#')).toEqual('ERROR#Error: ' + expectedErrMsg);
                });
@@ -345,21 +484,20 @@ class SomeComponent {
         expect(loadResourceSpy).toHaveBeenCalledWith('/test-template.html');
       });
 
-      onlyInIvy('We only need to define `LOCALE_ID` for runtime i18n')
-          .it('should define `LOCALE_ID`', async () => {
-            @Component({
-              selector: 'i18n-app',
-              templateUrl: '',
-            })
-            class I18nComponent {
-            }
+      it('should define `LOCALE_ID`', async () => {
+        @Component({
+          selector: 'i18n-app',
+          templateUrl: '',
+        })
+        class I18nComponent {
+        }
 
-            const testModule = createModule(
-                {component: I18nComponent, providers: [{provide: LOCALE_ID, useValue: 'ro'}]});
-            await defaultPlatform.bootstrapModule(testModule);
+        const testModule = createModule(
+            {component: I18nComponent, providers: [{provide: LOCALE_ID, useValue: 'ro'}]});
+        await defaultPlatform.bootstrapModule(testModule);
 
-            expect(getLocaleId()).toEqual('ro');
-          });
+        expect(getLocaleId()).toEqual('ro');
+      });
 
       it('should wait for APP_INITIALIZER to set providers for `LOCALE_ID`', async () => {
         let locale: string = '';
@@ -520,12 +658,13 @@ class SomeComponent {
 
            vc.insert(hostView);
            expect(() => appRef.attachView(hostView))
-               .toThrowError('This view is already attached to a ViewContainer!');
+               .toThrowError('NG0902: This view is already attached to a ViewContainer!');
            hostView = vc.detach(0)!;
 
            appRef.attachView(hostView);
            expect(() => vc.insert(hostView))
-               .toThrowError('This view is already attached directly to the ApplicationRef!');
+               .toThrowError(
+                   'NG0902: This view is already attached directly to the ApplicationRef!');
          });
     });
   });

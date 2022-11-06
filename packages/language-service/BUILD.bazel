@@ -7,40 +7,11 @@ ts_library(
     srcs = [
         "api.ts",
         "index.ts",
+        "override_rename_ts_plugin.ts",
     ],
     prodmode_module = "commonjs",
     deps = [
         "@npm//@types/node",
-        "@npm//typescript",
-    ],
-)
-
-ts_library(
-    name = "language-service",
-    srcs = glob(
-        [
-            "src/**/*.ts",
-        ],
-        exclude = [
-            "src/ts_utils.ts",
-        ],
-    ),
-    deps = [
-        ":api",
-        ":ts_utils",
-        "//packages:types",
-        "//packages/compiler",
-        "//packages/compiler-cli",
-        "//packages/core",
-        "@npm//@types/node",
-        "@npm//typescript",
-    ],
-)
-
-ts_library(
-    name = "ts_utils",
-    srcs = ["src/ts_utils.ts"],
-    deps = [
         "@npm//typescript",
     ],
 )
@@ -54,7 +25,7 @@ pkg_npm(
     # Do not add more to this list.
     # Dependencies on the full npm_package cause long re-builds.
     visibility = [
-        "//integration:__pkg__",
+        "//integration:__subpackages__",
     ],
     deps = [
         ":api",

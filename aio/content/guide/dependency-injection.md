@@ -37,8 +37,10 @@ Angular 의존성 주입 시스템을 활용하면 애플리케이션을 유연�
 <!--
 To generate a new `HeroService` class in the `src/app/heroes` folder use the following [Angular CLI](cli) command.
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 ng generate service heroes/hero
+
 </code-example>
 
 This command creates the following default `HeroService`.
@@ -51,8 +53,7 @@ The metadata, `providedIn: 'root'`, means that the `HeroService` is visible thro
 
 Next, to get the hero mock data, add a `getHeroes()` method that returns the heroes from `mock.heroes.ts`.
 
-<code-example path="dependency-injection/src/app/heroes/hero.service.3.ts" header="src/app/heroes/hero.service.ts">
-</code-example>
+<code-example header="src/app/heroes/hero.service.ts" path="dependency-injection/src/app/heroes/hero.service.3.ts"></code-example>
 
 For clarity and maintainability, it is recommended that you define components and services in separate files.
 
@@ -61,8 +62,10 @@ If you define the component before the service, Angular returns a run-time null 
 -->
 `src/app/heroes` 폴더에 `HeroService`를 생성하려면 [Angular CLI](cli) 명령을 이렇게 실행하면 됩니다:
 
-<code-example language="sh">
+<code-example format="shell" language="shell">
+
 ng generate service heroes/hero
+
 </code-example>
 
 그러면 아래와 같은 기본 `HeroService` 클래스가 생성됩니다.
@@ -75,8 +78,7 @@ ng generate service heroes/hero
 
 이제 히어로의 목 데이터를 가져오기 위해 `getHeroes()` 메서드를 추가하고 `mock.heroes.ts` 파일의 내용을 반환해 봅시다:
 
-<code-example path="dependency-injection/src/app/heroes/hero.service.3.ts" header="src/app/heroes/hero.service.ts">
-</code-example>
+<code-example header="src/app/heroes/hero.service.ts" path="dependency-injection/src/app/heroes/hero.service.3.ts"></code-example>
 
 코드를 간결하게 작성해서 유지보수성을 높이기 위해 컴포넌트와 서비스는 별도 파일로 분리해서 작성하는 것을 권장합니다.
 
@@ -84,8 +86,8 @@ ng generate service heroes/hero
 컴포넌트를 서비스보다 먼저 정의하면 실행 시점에 null 참조 에러가 발생합니다.
 
 
-{@a injector-config}
-{@a bootstrap}
+<a id="injector-config"></a>
+<a id="bootstrap"></a>
 
 <!--
 ## Injecting services
@@ -100,9 +102,7 @@ The following example specifies the `HeroService` in the `HeroListComponent` con
 The type of `heroService` is `HeroService`.
 
 <code-example header="src/app/heroes/hero-list.component (constructor signature)" path="dependency-injection/src/app/heroes/hero-list.component.ts"
-region="ctor-signature">
-</code-example>
-
+region="ctor-signature"></code-example>
 
 For more information, see [Providing dependencies in modules](guide/providers) and [Hierarchical injectors](guide/hierarchical-dependency-injection).
 -->
@@ -113,13 +113,12 @@ For more information, see [Providing dependencies in modules](guide/providers) a
 `heroService`의 타입은 `HeroService` 입니다.
 
 <code-example header="src/app/heroes/hero-list.component (생성자)" path="dependency-injection/src/app/heroes/hero-list.component.ts"
-region="ctor-signature">
-</code-example>
+region="ctor-signature"></code-example>
 
 관련 내용을 확인하려면 [모듈 안에서 의존성 객체 제공하기](guide/providers) 문서와 [인젝터 계층](guide/hierarchical-dependency-injection) 문서를 참고하세요.
 
 
-{@a service-needs-service}
+<a id="service-needs-service"></a>
 
 <!--
 ## Using services in other services
@@ -137,23 +136,14 @@ When you create a class whose `constructor()` has parameters, specify the type a
 
 Here, the `constructor()` specifies a type of `Logger` and stores the instance of `Logger` in a private field called `logger`.
 
-
 The following code tabs feature the `Logger` service and two versions of `HeroService`.
 The first version of `HeroService` does not depend on the `Logger` service.
 The revised second version does depend on `Logger` service.
 
 <code-tabs>
-
-  <code-pane header="src/app/heroes/hero.service (v2)" path="dependency-injection/src/app/heroes/hero.service.2.ts">
-  </code-pane>
-
-  <code-pane header="src/app/heroes/hero.service (v1)" path="dependency-injection/src/app/heroes/hero.service.1.ts">
-  </code-pane>
-
-  <code-pane header="src/app/logger.service"
-  path="dependency-injection/src/app/logger.service.ts">
-  </code-pane>
-
+    <code-pane header="src/app/heroes/hero.service (v2)" path="dependency-injection/src/app/heroes/hero.service.2.ts"></code-pane>
+    <code-pane header="src/app/heroes/hero.service (v1)" path="dependency-injection/src/app/heroes/hero.service.1.ts"></code-pane>
+    <code-pane header="src/app/logger.service" path="dependency-injection/src/app/logger.service.ts"></code-pane>
 </code-tabs>
 
 In this example, the `getHeroes()` method uses the `Logger` service by logging a message when fetching heroes.
@@ -173,17 +163,9 @@ In this example, the `getHeroes()` method uses the `Logger` service by logging a
 그리고 두 번째 `HeroService`는 `Logger` 서비스를 의존성으로 주입받는 코드입니다.
 
 <code-tabs>
-
-  <code-pane header="src/app/heroes/hero.service (v2)" path="dependency-injection/src/app/heroes/hero.service.2.ts">
-  </code-pane>
-
-  <code-pane header="src/app/heroes/hero.service (v1)" path="dependency-injection/src/app/heroes/hero.service.1.ts">
-  </code-pane>
-
-  <code-pane header="src/app/logger.service"
-  path="dependency-injection/src/app/logger.service.ts">
-  </code-pane>
-
+    <code-pane header="src/app/heroes/hero.service (v2)" path="dependency-injection/src/app/heroes/hero.service.2.ts"></code-pane>
+    <code-pane header="src/app/heroes/hero.service (v1)" path="dependency-injection/src/app/heroes/hero.service.1.ts"></code-pane>
+    <code-pane header="src/app/logger.service" path="dependency-injection/src/app/logger.service.ts"></code-pane>
 </code-tabs>
 
 이 예제에서는 히어로 목록을 가져온다는 것을 로그로 남기기 위해 `getHeroes()` 메서드가 `Logger` 서비스를 활용했습니다.
@@ -195,9 +177,18 @@ In this example, the `getHeroes()` method uses the `Logger` service by logging a
 ## 다음 단계
 
 <!--
-* [Dependency providers](guide/dependency-injection-providers)
-* [DI tokens and providers](guide/dependency-injection-providers)
-* [Dependency Injection in Action](guide/dependency-injection-in-action)
+*   [Dependency providers](guide/dependency-injection-providers)
+*   [DI tokens and providers](guide/dependency-injection-providers)
+*   [Dependency Injection in Action](guide/dependency-injection-in-action)
 -->
-* [의존성 프로바이더](guide/dependency-injection-providers)
-* [실전 의존성 주입](guide/dependency-injection-in-action)
+*   [의존성 프로바이더](guide/dependency-injection-providers)
+*   [의존성 주입 토큰과 프로바이더](guide/dependency-injection-providers)
+*   [실전 의존성 주입](guide/dependency-injection-in-action)
+
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

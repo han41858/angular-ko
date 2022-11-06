@@ -1,5 +1,5 @@
 // TODO: Add unit tests for this file.
-// tslint:disable: no-output-native
+/* eslint-disable @angular-eslint/no-output-native */
 // #docregion
 import { Component, Output, OnInit, EventEmitter, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   selector: 'app-zippy',
   template: `
     <div class="zippy">
-      <div (click)="toggle()">Toggle</div>
+      <button type="button" (click)="toggle()">Toggle</button>
       <div [hidden]="!visible">
         <ng-content></ng-content>
       </div>

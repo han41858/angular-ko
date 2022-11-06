@@ -9,14 +9,13 @@ With template statements, your application can engage users through actions such
 
 <div class="alert is-helpful">
 
-See the <live-example name="template-syntax">Template syntax</live-example> for
-the syntax and code snippets in this guide.
+See the <live-example name="template-syntax">Template syntax</live-example> for the syntax and code snippets in this guide.
 
 </div>
 
-In the following example, the template statement `deleteHero()` appears in quotes to the right of the `=`&nbsp;symbol as in `(event)="statement"`.
+In the following example, the template statement `deleteHero()` appears in quotes to the right of the equals sign `=` character as in `(event)="statement"`.
 
-<code-example path="template-syntax/src/app/app.component.html" region="context-component-statement" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="template-syntax/src/app/app.component.html" region="context-component-statement"></code-example>
 
 When the user clicks the **Delete hero** button, Angular calls the `deleteHero()` method in the component class.
 
@@ -40,7 +39,7 @@ You can change anything in your application during a single event loop.
 
 아래 예제에서 `deleteHero()`라고 작성된 것처럼, 템플릿 실행문은 `(이벤트)="실행문"`이라는 형식으로 사용합니다.
 
-<code-example path="template-syntax/src/app/app.component.html" region="context-component-statement" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="template-syntax/src/app/app.component.html" region="context-component-statement"></code-example>
 
 이제 사용자가 **Delete hero** 버튼을 클릭하면 Angular가 컴포넌트 클래스에 있는 `deleteHero()` 메서드를 실행합니다.
 
@@ -62,27 +61,27 @@ You can change anything in your application during a single event loop.
 <!--
 Like [template expressions](guide/interpolation), template statements use a language that looks like JavaScript.
 However, the parser for template statements differs from the parser for template expressions.
-In addition, the template statements parser specifically supports both basic assignment, `=`, and chaining expressions with semicolons, `;`.
+In addition, the template statements parser specifically supports both basic assignment \(`=`\) and chaining expressions with semicolons \(`;`\).
 
 The following JavaScript and template expression syntax is not allowed:
 
-* `new`
-* increment and decrement operators, `++` and `--`
-* operator assignment, such as `+=` and `-=`
-* the bitwise operators, such as `|` and `&`
-* the [pipe operator](guide/pipes)
+*   `new`
+*   Increment and decrement operators, `++` and `--`
+*   Operator assignment, such as `+=` and `-=`
+*   The bitwise operators, such as `|` and `&`
+*   The [pipe operator](guide/pipes)
 -->
 [템플릿 표현식(template expressions)](guide/interpolation)과 비슷하게, 템플릿 실행문도 JavaScript와 비슷한 문법을 사용합니다.
 하지만 템플릿 실행문 파서는 템플릿 표현식과 다른 파서를 사용합니다.
-템플릿 표현식 파서의 기능과 더불어 템플릿 실행문 파서는 `=`와 같은 기본 할당 문법을 지원하며, 세미 콜론(`;`)도 지원하기 때문에 표현식을 체이닝할 수 있습니다.
+템플릿 표현식 파서의 기능과 더불어 템플릿 실행문 파서는 `=`와 같은 기본 할당 문법을 지원하며, 세미 콜론\(`;`\)도 지원하기 때문에 표현식을 체이닝할 수 있습니다.
 
 JavaScript 문법 중 이런 문법은 템플릿 실행문에 사용할 수 없습니다:
 
-* `new`
-* 증감 연산자 `++`, `--`
-* 복합대입 연산자 `+=`, `-=`
-* 비트 연산자 `|`, `&`
-* [파이프 연산자](guide/pipes)
+*   `new`
+*   증감 연산자 `++`, `--`
+*   복합대입 연산자 `+=`, `-=`
+*   비트 연산자 `|`, `&`
+*   [파이프 연산자](guide/pipes)
 
 
 <!--
@@ -91,18 +90,18 @@ JavaScript 문법 중 이런 문법은 템플릿 실행문에 사용할 수 없�
 ## 실행문의 컨텍스트
 
 <!--
-Statements have a context&mdash;a particular part of the application to which the statement belongs.
+Statements have a context &mdash;a particular part of the application to which the statement belongs.
 
 Statements can refer only to what's in the statement context, which is typically the component instance.
 For example, `deleteHero()` of `(click)="deleteHero()"` is a method of the component in the following snippet.
 
-<code-example path="template-syntax/src/app/app.component.html" region="context-component-statement" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="template-syntax/src/app/app.component.html" region="context-component-statement"></code-example>
 
 The statement context may also refer to properties of the template's own context.
 In the following example, the component's event handling method, `onSave()` takes the template's own `$event` object as an argument.
 On the next two lines, the `deleteHero()` method takes a [template input variable](guide/structural-directives#shorthand), `hero`, and `onSubmit()` takes a [template reference variable](guide/template-reference-variables), `#heroForm`.
 
-<code-example path="template-syntax/src/app/app.component.html" region="context-var-statement" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="template-syntax/src/app/app.component.html" region="context-var-statement"></code-example>
 
 In this example, the context of the `$event` object, `hero`, and `#heroForm` is the template.
 
@@ -114,13 +113,13 @@ In the preceding `deleteHero(hero)`, the `hero` is the template input variable, 
 템플릿 실행문의 컨텍스트는 일반적으로 컴포넌트 인스턴스와 같으며, 템플릿 실행문은 실행문 컨텍스트 안에 있는 것만 참조할 수 있습니다.
 그래서 클릭 이벤트를 컴포넌트에 정의된 `deleteHero()` 메서드와 바인딩 하려면 `(click)="deleteHero()"`라고 작성하면 됩니다.
 
-<code-example path="template-syntax/src/app/app.component.html" region="context-component-statement" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="template-syntax/src/app/app.component.html" region="context-component-statement"></code-example>
 
 템플릿 실행문의 컨텍스트 안에서는 템플릿 컨텍스트에 있는 프로퍼티도 참조할 수 있습니다.
 그래서 아래 예제처럼 컴포넌트의 이벤트 핸들링 메서드 `onSave()` 를 실행하면서 템플릿에 있는 `$event` 객체를 인자로 전달할 수 있습니다.
 아래 예제에서 `deleteHero()` 메서드를 실행하면서 [템플릿 입력 변수](guide/structural-directives#shorthand) `hero`를 인자로 사용했으며, `onSubmit()` 메서드를 실행하면서 [템플릿 참조 변수](guide/template-reference-variables) `#heroForm`을 사용했습니다.
 
-<code-example path="template-syntax/src/app/app.component.html" region="context-var-statement" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="template-syntax/src/app/app.component.html" region="context-var-statement"></code-example>
 
 이 예제에서 `$event` 객체, `hero`, `#heroForm`은 모두 템플릿 컨텍스트 안에 있는 객체들입니다.
 
@@ -131,25 +130,24 @@ In the preceding `deleteHero(hero)`, the `hero` is the template input variable, 
 <!--
 ## Statement best practices
 -->
-## 권장사항
+## 모범사례
 
 <!--
-* **Conciseness**
-
-  Use method calls or basic property assignments to keep template statements minimal.
-
-* **Work within the context**
-
-  The context of a template statement can be the component class instance or the template.
-  Because of this, template statements cannot refer to anything in the global namespace such as `window` or `document`.
-  For example, template statements can't call `console.log()` or `Math.max()`.
+| Practices               | Details |
+|:---                     |:---     |
+| Conciseness             | Use method calls or basic property assignments to keep template statements minimal.                                                                                                                                                                                                         |
+| Work within the context | The context of a template statement can be the component class instance or the template. Because of this, template statements cannot refer to anything in the global namespace such as `window` or `document`. For example, template statements can't call `console.log()` or `Math.max()`. |
 -->
-* **간결하게**
+| 가이드             | 설명                                                                                                                                                    |
+|:----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 간결하게            | 템플릿 실행문은 메서드를 실행하거나 간단판 프로퍼티 조작 정도로 최대한 간결하게 작성하는 것이 좋습니다.                                                                                            |
+| 컨텍스트 안에서만 작업하세요 | 템플릿 실행문의 컨텍스는 컴포넌트 클래스 인스턴스와 템플릿 범위입니다. 그래서 템플릿 실행문은 `window`나 `document` 같은 전역 네임스페이스에 접근할 수 없습니다. `console.log()`, `Math.max()`와 같은 로직은 실행할 수 없습니다. |
 
-  템플릿 실행문은 메서드를 실행하거나 간단판 프로퍼티 조작 정도로 최대한 간결하게 작성하는 것이 좋습니다.
 
-* **컨텍스트 안에서만 작업하세요**
+<!-- links -->
 
-  템플릿 실행문의 컨텍스는 컴포넌트 클래스 인스턴스와 템플릿 범위입니다.
-  그래서 템플릿 실행문은 `window`나 `document` 같은 전역 네임스페이스에 접근할 수 없습니다.
-  `console.log()`, `Math.max()`와 같은 로직은 실행할 수 없습니다.
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

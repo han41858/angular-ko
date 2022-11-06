@@ -11,11 +11,11 @@ import { TwainService } from './twain.service';
   // #docregion template
   template: `
     <p class="twain"><i>{{quote | async}}</i></p>
-    <button (click)="getQuote()">Next quote</button>
+    <button type="button" (click)="getQuote()">Next quote</button>
     <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>`,
   // #enddocregion template
   styles: [
-    `.twain { font-style: italic; } .error { color: red; }`
+    '.twain { font-style: italic; } .error { color: red; }'
   ]
 
 })

@@ -29,8 +29,11 @@ module.exports = function(config) {
       { pattern: 'node_modules/rxjs/**/*.js.map', included: false, watched: false },
 
       // Angular와 Angular 테스트 라이브러리를 로드합니다.
-      {pattern: 'node_modules/@angular/**/*.js', included: false, watched: false},
-      {pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: false},
+      { pattern: 'node_modules/@angular/**/*.mjs', included: false, watched: false },
+      { pattern: 'node_modules/@angular/**/*.mjs.map', included: false, watched: false },
+
+      { pattern: 'node_modules/tslib/tslib.js', included: false, watched: false },
+      { pattern: 'node_modules/systemjs-plugin-babel/**/*.js', included: false, watched: false },
 
       {pattern: 'systemjs.config.js', included: false, watched: false},
       'karma-test-shim.js',

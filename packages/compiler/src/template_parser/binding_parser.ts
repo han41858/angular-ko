@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {CompileDirectiveSummary, CompilePipeSummary} from '../compile_metadata';
 import {SecurityContext} from '../core';
 import {AbsoluteSourceSpan, ASTWithSource, BindingPipe, BindingType, BoundElementProperty, EmptyExpr, ParsedEvent, ParsedEventType, ParsedProperty, ParsedPropertyType, ParsedVariable, ParserError, RecursiveAstVisitor, TemplateBinding, VariableBinding} from '../expression_parser/ast';
 import {Parser} from '../expression_parser/parser';
 import {InterpolationConfig} from '../ml_parser/interpolation_config';
 import {mergeNsAndName} from '../ml_parser/tags';
+import {InterpolatedAttributeToken, InterpolatedTextToken} from '../ml_parser/tokens';
 import {ParseError, ParseErrorLevel, ParseLocation, ParseSourceSpan} from '../parse_util';
 import {ElementSchemaRegistry} from '../schema/element_schema_registry';
 import {CssSelector} from '../selector';
@@ -24,109 +24,89 @@ const STYLE_PREFIX = 'style';
 const TEMPLATE_ATTR_PREFIX = '*';
 const ANIMATE_PROP_PREFIX = 'animate-';
 
+export interface HostProperties {
+  [key: string]: string;
+}
+
+export interface HostListeners {
+  [key: string]: string;
+}
+
 /**
  * Parses bindings in templates and in the directive host area.
  */
 export class BindingParser {
-  pipesByName: Map<string, CompilePipeSummary>|null = null;
-
-  private _usedPipes: Map<string, CompilePipeSummary> = new Map();
-
   constructor(
       private _exprParser: Parser, private _interpolationConfig: InterpolationConfig,
-      private _schemaRegistry: ElementSchemaRegistry, pipes: CompilePipeSummary[]|null,
-      public errors: ParseError[]) {
-    // When the `pipes` parameter is `null`, do not check for used pipes
-    // This is used in IVY when we might not know the available pipes at compile time
-    if (pipes) {
-      const pipesByName: Map<string, CompilePipeSummary> = new Map();
-      pipes.forEach(pipe => pipesByName.set(pipe.name, pipe));
-      this.pipesByName = pipesByName;
-    }
-  }
+      private _schemaRegistry: ElementSchemaRegistry, public errors: ParseError[]) {}
 
   get interpolationConfig(): InterpolationConfig {
     return this._interpolationConfig;
   }
 
-  getUsedPipes(): CompilePipeSummary[] {
-    return Array.from(this._usedPipes.values());
-  }
-
-  createBoundHostProperties(dirMeta: CompileDirectiveSummary, sourceSpan: ParseSourceSpan):
+  createBoundHostProperties(properties: HostProperties, sourceSpan: ParseSourceSpan):
       ParsedProperty[]|null {
-    if (dirMeta.hostProperties) {
-      const boundProps: ParsedProperty[] = [];
-      Object.keys(dirMeta.hostProperties).forEach(propName => {
-        const expression = dirMeta.hostProperties[propName];
-        if (typeof expression === 'string') {
-          this.parsePropertyBinding(
-              propName, expression, true, sourceSpan, sourceSpan.start.offset, undefined, [],
-              // Use the `sourceSpan` for  `keySpan`. This isn't really accurate, but neither is the
-              // sourceSpan, as it represents the sourceSpan of the host itself rather than the
-              // source of the host binding (which doesn't exist in the template). Regardless,
-              // neither of these values are used in Ivy but are only here to satisfy the function
-              // signature. This should likely be refactored in the future so that `sourceSpan`
-              // isn't being used inaccurately.
-              boundProps, sourceSpan);
-        } else {
-          this._reportError(
-              `Value of the host property binding "${
-                  propName}" needs to be a string representing an expression but got "${
-                  expression}" (${typeof expression})`,
-              sourceSpan);
-        }
-      });
-      return boundProps;
+    const boundProps: ParsedProperty[] = [];
+    for (const propName of Object.keys(properties)) {
+      const expression = properties[propName];
+      if (typeof expression === 'string') {
+        this.parsePropertyBinding(
+            propName, expression, true, sourceSpan, sourceSpan.start.offset, undefined, [],
+            // Use the `sourceSpan` for  `keySpan`. This isn't really accurate, but neither is the
+            // sourceSpan, as it represents the sourceSpan of the host itself rather than the
+            // source of the host binding (which doesn't exist in the template). Regardless,
+            // neither of these values are used in Ivy but are only here to satisfy the function
+            // signature. This should likely be refactored in the future so that `sourceSpan`
+            // isn't being used inaccurately.
+            boundProps, sourceSpan);
+      } else {
+        this._reportError(
+            `Value of the host property binding "${
+                propName}" needs to be a string representing an expression but got "${
+                expression}" (${typeof expression})`,
+            sourceSpan);
+      }
     }
-    return null;
+    return boundProps;
   }
 
-  createDirectiveHostPropertyAsts(
-      dirMeta: CompileDirectiveSummary, elementSelector: string,
-      sourceSpan: ParseSourceSpan): BoundElementProperty[]|null {
-    const boundProps = this.createBoundHostProperties(dirMeta, sourceSpan);
-    return boundProps &&
-        boundProps.map((prop) => this.createBoundElementProperty(elementSelector, prop));
-  }
-
-  createDirectiveHostEventAsts(dirMeta: CompileDirectiveSummary, sourceSpan: ParseSourceSpan):
+  createDirectiveHostEventAsts(hostListeners: HostListeners, sourceSpan: ParseSourceSpan):
       ParsedEvent[]|null {
-    if (dirMeta.hostListeners) {
-      const targetEvents: ParsedEvent[] = [];
-      Object.keys(dirMeta.hostListeners).forEach(propName => {
-        const expression = dirMeta.hostListeners[propName];
-        if (typeof expression === 'string') {
-          // Use the `sourceSpan` for  `keySpan` and `handlerSpan`. This isn't really accurate, but
-          // neither is the `sourceSpan`, as it represents the `sourceSpan` of the host itself
-          // rather than the source of the host binding (which doesn't exist in the template).
-          // Regardless, neither of these values are used in Ivy but are only here to satisfy the
-          // function signature. This should likely be refactored in the future so that `sourceSpan`
-          // isn't being used inaccurately.
-          this.parseEvent(
-              propName, expression, sourceSpan, sourceSpan, [], targetEvents, sourceSpan);
-        } else {
-          this._reportError(
-              `Value of the host listener "${
-                  propName}" needs to be a string representing an expression but got "${
-                  expression}" (${typeof expression})`,
-              sourceSpan);
-        }
-      });
-      return targetEvents;
+    const targetEvents: ParsedEvent[] = [];
+    for (const propName of Object.keys(hostListeners)) {
+      const expression = hostListeners[propName];
+      if (typeof expression === 'string') {
+        // Use the `sourceSpan` for  `keySpan` and `handlerSpan`. This isn't really accurate, but
+        // neither is the `sourceSpan`, as it represents the `sourceSpan` of the host itself
+        // rather than the source of the host binding (which doesn't exist in the template).
+        // Regardless, neither of these values are used in Ivy but are only here to satisfy the
+        // function signature. This should likely be refactored in the future so that `sourceSpan`
+        // isn't being used inaccurately.
+        this.parseEvent(
+            propName, expression, /* isAssignmentEvent */ false, sourceSpan, sourceSpan, [],
+            targetEvents, sourceSpan);
+      } else {
+        this._reportError(
+            `Value of the host listener "${
+                propName}" needs to be a string representing an expression but got "${
+                expression}" (${typeof expression})`,
+            sourceSpan);
+      }
     }
-    return null;
+    return targetEvents;
   }
 
-  parseInterpolation(value: string, sourceSpan: ParseSourceSpan): ASTWithSource {
+  parseInterpolation(
+      value: string, sourceSpan: ParseSourceSpan,
+      interpolatedTokens: InterpolatedAttributeToken[]|InterpolatedTextToken[]|
+      null): ASTWithSource {
     const sourceInfo = sourceSpan.start.toString();
     const absoluteOffset = sourceSpan.fullStart.offset;
 
     try {
       const ast = this._exprParser.parseInterpolation(
-          value, sourceInfo, absoluteOffset, this._interpolationConfig)!;
+          value, sourceInfo, absoluteOffset, interpolatedTokens, this._interpolationConfig)!;
       if (ast) this._reportExpressionParserErrors(ast.errors, sourceSpan);
-      this._checkPipes(ast, sourceSpan);
       return ast;
     } catch (e) {
       this._reportError(`${e}`, sourceSpan);
@@ -147,7 +127,6 @@ export class BindingParser {
       const ast =
           this._exprParser.parseInterpolationExpression(expression, sourceInfo, absoluteOffset);
       if (ast) this._reportExpressionParserErrors(ast.errors, sourceSpan);
-      this._checkPipes(ast, sourceSpan);
       return ast;
     } catch (e) {
       this._reportError(`${e}`, sourceSpan);
@@ -223,11 +202,6 @@ export class BindingParser {
       const bindingsResult = this._exprParser.parseTemplateBindings(
           tplKey, tplValue, sourceInfo, absoluteKeyOffset, absoluteValueOffset);
       this._reportExpressionParserErrors(bindingsResult.errors, sourceSpan);
-      bindingsResult.templateBindings.forEach((binding) => {
-        if (binding.value instanceof ASTWithSource) {
-          this._checkPipes(binding.value, sourceSpan);
-        }
-      });
       bindingsResult.warnings.forEach((warning) => {
         this._reportError(warning, sourceSpan, ParseErrorLevel.WARNING);
       });
@@ -241,9 +215,7 @@ export class BindingParser {
   parseLiteralAttr(
       name: string, value: string|null, sourceSpan: ParseSourceSpan, absoluteOffset: number,
       valueSpan: ParseSourceSpan|undefined, targetMatchableAttrs: string[][],
-      // TODO(atscott): keySpan is only optional here so VE template parser implementation does not
-      // have to change This should be required when VE is removed.
-      targetProps: ParsedProperty[], keySpan?: ParseSourceSpan) {
+      targetProps: ParsedProperty[], keySpan: ParseSourceSpan) {
     if (isAnimationLabel(name)) {
       name = name.substring(1);
       if (keySpan !== undefined) {
@@ -269,9 +241,7 @@ export class BindingParser {
   parsePropertyBinding(
       name: string, expression: string, isHost: boolean, sourceSpan: ParseSourceSpan,
       absoluteOffset: number, valueSpan: ParseSourceSpan|undefined,
-      // TODO(atscott): keySpan is only optional here so VE template parser implementation does not
-      // have to change This should be required when VE is removed.
-      targetMatchableAttrs: string[][], targetProps: ParsedProperty[], keySpan?: ParseSourceSpan) {
+      targetMatchableAttrs: string[][], targetProps: ParsedProperty[], keySpan: ParseSourceSpan) {
     if (name.length === 0) {
       this._reportError(`Property name is missing in binding`, sourceSpan);
     }
@@ -309,10 +279,9 @@ export class BindingParser {
   parsePropertyInterpolation(
       name: string, value: string, sourceSpan: ParseSourceSpan,
       valueSpan: ParseSourceSpan|undefined, targetMatchableAttrs: string[][],
-      // TODO(atscott): keySpan is only optional here so VE template parser implementation does not
-      // have to change This should be required when VE is removed.
-      targetProps: ParsedProperty[], keySpan?: ParseSourceSpan): boolean {
-    const expr = this.parseInterpolation(value, valueSpan || sourceSpan);
+      targetProps: ParsedProperty[], keySpan: ParseSourceSpan,
+      interpolatedTokens: InterpolatedAttributeToken[]|InterpolatedTextToken[]|null): boolean {
+    const expr = this.parseInterpolation(value, valueSpan || sourceSpan, interpolatedTokens);
     if (expr) {
       this._parsePropertyAst(
           name, expr, sourceSpan, keySpan, valueSpan, targetMatchableAttrs, targetProps);
@@ -322,9 +291,9 @@ export class BindingParser {
   }
 
   private _parsePropertyAst(
-      name: string, ast: ASTWithSource, sourceSpan: ParseSourceSpan,
-      keySpan: ParseSourceSpan|undefined, valueSpan: ParseSourceSpan|undefined,
-      targetMatchableAttrs: string[][], targetProps: ParsedProperty[]) {
+      name: string, ast: ASTWithSource, sourceSpan: ParseSourceSpan, keySpan: ParseSourceSpan,
+      valueSpan: ParseSourceSpan|undefined, targetMatchableAttrs: string[][],
+      targetProps: ParsedProperty[]) {
     targetMatchableAttrs.push([name, ast.source!]);
     targetProps.push(
         new ParsedProperty(name, ast, ParsedPropertyType.DEFAULT, sourceSpan, keySpan, valueSpan));
@@ -332,7 +301,7 @@ export class BindingParser {
 
   private _parseAnimation(
       name: string, expression: string|null, sourceSpan: ParseSourceSpan, absoluteOffset: number,
-      keySpan: ParseSourceSpan|undefined, valueSpan: ParseSourceSpan|undefined,
+      keySpan: ParseSourceSpan, valueSpan: ParseSourceSpan|undefined,
       targetMatchableAttrs: string[][], targetProps: ParsedProperty[]) {
     if (name.length === 0) {
       this._reportError('Animation trigger is missing', sourceSpan);
@@ -360,7 +329,6 @@ export class BindingParser {
           this._exprParser.parseBinding(
               value, sourceInfo, absoluteOffset, this._interpolationConfig);
       if (ast) this._reportExpressionParserErrors(ast.errors, sourceSpan);
-      this._checkPipes(ast, sourceSpan);
       return ast;
     } catch (e) {
       this._reportError(`${e}`, sourceSpan);
@@ -432,22 +400,25 @@ export class BindingParser {
 
   // TODO: keySpan should be required but was made optional to avoid changing VE parser.
   parseEvent(
-      name: string, expression: string, sourceSpan: ParseSourceSpan, handlerSpan: ParseSourceSpan,
-      targetMatchableAttrs: string[][], targetEvents: ParsedEvent[], keySpan?: ParseSourceSpan) {
+      name: string, expression: string, isAssignmentEvent: boolean, sourceSpan: ParseSourceSpan,
+      handlerSpan: ParseSourceSpan, targetMatchableAttrs: string[][], targetEvents: ParsedEvent[],
+      keySpan: ParseSourceSpan) {
     if (name.length === 0) {
       this._reportError(`Event name is missing in binding`, sourceSpan);
     }
 
     if (isAnimationLabel(name)) {
-      name = name.substr(1);
+      name = name.slice(1);
       if (keySpan !== undefined) {
         keySpan = moveParseSourceSpan(
             keySpan, new AbsoluteSourceSpan(keySpan.start.offset + 1, keySpan.end.offset));
       }
-      this._parseAnimationEvent(name, expression, sourceSpan, handlerSpan, targetEvents, keySpan);
+      this._parseAnimationEvent(
+          name, expression, isAssignmentEvent, sourceSpan, handlerSpan, targetEvents, keySpan);
     } else {
       this._parseRegularEvent(
-          name, expression, sourceSpan, handlerSpan, targetMatchableAttrs, targetEvents, keySpan);
+          name, expression, isAssignmentEvent, sourceSpan, handlerSpan, targetMatchableAttrs,
+          targetEvents, keySpan);
     }
   }
 
@@ -458,12 +429,12 @@ export class BindingParser {
   }
 
   private _parseAnimationEvent(
-      name: string, expression: string, sourceSpan: ParseSourceSpan, handlerSpan: ParseSourceSpan,
-      targetEvents: ParsedEvent[], keySpan?: ParseSourceSpan) {
+      name: string, expression: string, isAssignmentEvent: boolean, sourceSpan: ParseSourceSpan,
+      handlerSpan: ParseSourceSpan, targetEvents: ParsedEvent[], keySpan: ParseSourceSpan) {
     const matches = splitAtPeriod(name, [name, '']);
     const eventName = matches[0];
     const phase = matches[1].toLowerCase();
-    const ast = this._parseAction(expression, handlerSpan);
+    const ast = this._parseAction(expression, isAssignmentEvent, handlerSpan);
     targetEvents.push(new ParsedEvent(
         eventName, phase, ParsedEventType.Animation, ast, sourceSpan, handlerSpan, keySpan));
 
@@ -486,11 +457,12 @@ export class BindingParser {
   }
 
   private _parseRegularEvent(
-      name: string, expression: string, sourceSpan: ParseSourceSpan, handlerSpan: ParseSourceSpan,
-      targetMatchableAttrs: string[][], targetEvents: ParsedEvent[], keySpan?: ParseSourceSpan) {
+      name: string, expression: string, isAssignmentEvent: boolean, sourceSpan: ParseSourceSpan,
+      handlerSpan: ParseSourceSpan, targetMatchableAttrs: string[][], targetEvents: ParsedEvent[],
+      keySpan: ParseSourceSpan) {
     // long format: 'target: eventName'
     const [target, eventName] = splitAtColon(name, [null!, name]);
-    const ast = this._parseAction(expression, handlerSpan);
+    const ast = this._parseAction(expression, isAssignmentEvent, handlerSpan);
     targetMatchableAttrs.push([name!, ast.source!]);
     targetEvents.push(new ParsedEvent(
         eventName, target, ParsedEventType.Regular, ast, sourceSpan, handlerSpan, keySpan));
@@ -498,13 +470,14 @@ export class BindingParser {
     // so don't add the event name to the matchableAttrs
   }
 
-  private _parseAction(value: string, sourceSpan: ParseSourceSpan): ASTWithSource {
+  private _parseAction(value: string, isAssignmentEvent: boolean, sourceSpan: ParseSourceSpan):
+      ASTWithSource {
     const sourceInfo = (sourceSpan && sourceSpan.start || '(unknown').toString();
     const absoluteOffset = (sourceSpan && sourceSpan.start) ? sourceSpan.start.offset : 0;
 
     try {
       const ast = this._exprParser.parseAction(
-          value, sourceInfo, absoluteOffset, this._interpolationConfig);
+          value, isAssignmentEvent, sourceInfo, absoluteOffset, this._interpolationConfig);
       if (ast) {
         this._reportExpressionParserErrors(ast.errors, sourceSpan);
       }
@@ -512,7 +485,6 @@ export class BindingParser {
         this._reportError(`Empty expressions are not allowed`, sourceSpan);
         return this._exprParser.wrapLiteralPrimitive('ERROR', sourceInfo, absoluteOffset);
       }
-      this._checkPipes(ast, sourceSpan);
       return ast;
     } catch (e) {
       this._reportError(`${e}`, sourceSpan);
@@ -529,25 +501,6 @@ export class BindingParser {
   private _reportExpressionParserErrors(errors: ParserError[], sourceSpan: ParseSourceSpan) {
     for (const error of errors) {
       this._reportError(error.message, sourceSpan);
-    }
-  }
-
-  // Make sure all the used pipes are known in `this.pipesByName`
-  private _checkPipes(ast: ASTWithSource, sourceSpan: ParseSourceSpan): void {
-    if (ast && this.pipesByName) {
-      const collector = new PipeCollector();
-      ast.visit(collector);
-      collector.pipes.forEach((ast, pipeName) => {
-        const pipeMeta = this.pipesByName!.get(pipeName);
-        if (!pipeMeta) {
-          this._reportError(
-              `The pipe '${pipeName}' could not be found`,
-              new ParseSourceSpan(
-                  sourceSpan.start.moveBy(ast.span.start), sourceSpan.start.moveBy(ast.span.end)));
-        } else {
-          this._usedPipes.set(pipeName, pipeMeta);
-        }
-      });
     }
   }
 

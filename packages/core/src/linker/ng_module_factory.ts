@@ -7,6 +7,7 @@
  */
 
 import {Injector} from '../di/injector';
+import {EnvironmentInjector} from '../di/r3_injector';
 import {Type} from '../interface/type';
 
 import {ComponentFactoryResolver} from './component_factory_resolver';
@@ -22,7 +23,7 @@ export abstract class NgModuleRef<T> {
   /**
    * The injector that contains all of the providers of the `NgModule`.
    */
-  abstract get injector(): Injector;
+  abstract get injector(): EnvironmentInjector;
 
   /**
    * The resolver that can retrieve component factories in a context of this module.
@@ -30,6 +31,9 @@ export abstract class NgModuleRef<T> {
    * Note: since v13, dynamic component creation via
    * [`ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)
    * does **not** require resolving component factory: component class can be used directly.
+   *
+   * @deprecated Angular no longer requires Component factories. Please use other APIs where
+   *     Component class can be used directly.
    */
   abstract get componentFactoryResolver(): ComponentFactoryResolver;
 

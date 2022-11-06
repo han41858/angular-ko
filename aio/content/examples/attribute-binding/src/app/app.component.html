@@ -21,7 +21,7 @@
 <div>
   <!-- #docregion attrib-binding-aria -->
   <!-- 웹 접근성 향상을 위해 ARIA 어트리뷰트를 지정할 수 있습니다. -->
-  <button [attr.aria-label]="actionName">{{actionName}} with Aria</button>
+  <button type="button" [attr.aria-label]="actionName">{{actionName}} with Aria</button>
   <!-- #enddocregion attrib-binding-aria -->
 </div>
 
@@ -68,7 +68,4 @@
   <!-- #enddocregion style-delegation -->
 </div>
 
-<!-- #docregion attribute-decorator -->
 <app-my-input-with-attribute-decorator type="number"></app-my-input-with-attribute-decorator>
-<!-- #enddocregion attribute-decorator -->
-

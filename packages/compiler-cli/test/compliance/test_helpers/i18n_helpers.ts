@@ -19,15 +19,18 @@ export function resetMessageIndex(): void {
 /**
  * Generate a string that represents expected i18n block content for a simple message.
  */
-export function i18nMsg(message: string, placeholders: Placeholder[], meta: Meta): string {
+export function i18nMsg(
+    message: string, placeholders: Placeholder[], options: Options, meta: Meta): string {
   const varName = `$I18N_${msgIndex++}$`;
   const closurePlaceholders = i18nPlaceholdersToString(placeholders);
+  const closureOptions = i18nOptionsToString(options);
   const locMessageWithPlaceholders = i18nMsgInsertLocalizePlaceholders(message, placeholders);
   return `
     let ${varName};
     if (typeof ngI18nClosureMode !== "undefined" && ngI18nClosureMode) {
         ${i18nMsgClosureMeta(meta)}
-        const $MSG_EXTERNAL_${msgIndex}$ = goog.getMsg("${message}"${closurePlaceholders});
+        const $MSG_EXTERNAL_${msgIndex}$ = goog.getMsg("${message}"${closurePlaceholders}${
+      closureOptions});
         ${varName} = $MSG_EXTERNAL_${msgIndex}$;
     }
     else {
@@ -35,17 +38,22 @@ export function i18nMsg(message: string, placeholders: Placeholder[], meta: Meta
     }`;
 }
 
+/** Describes options bag passed to `goog.getMsg()`. */
+export interface Options {
+  original_code?: Record<string /* placeholderName */, string /* original */>;
+}
+
 /**
  * Generate a string that represents expected i18n block content for a message that requires
  * post-processing.
  */
 export function i18nMsgWithPostprocess(
-    message: string, placeholders: Placeholder[], meta: Meta,
+    message: string, placeholders: Placeholder[], options: Options, meta: Meta,
     postprocessPlaceholders: Placeholder[]): string {
   const varName = `$I18N_${msgIndex}$`;
   const ppPlaceholders = i18nPlaceholdersToString(postprocessPlaceholders);
   return String.raw`
-        ${i18nMsg(message, placeholders, meta)}
+        ${i18nMsg(message, placeholders, options, meta)}
         ${varName} = $r3$.ɵɵi18nPostprocess($${varName}$${ppPlaceholders});
       `;
 }
@@ -53,17 +61,19 @@ export function i18nMsgWithPostprocess(
 /**
  * Generates a string that represents expected i18n block content for an ICU.
  */
-export function i18nIcuMsg(message: string, placeholders: Placeholder[]): string {
-  return i18nMsgWithPostprocess(message, [], {}, placeholders);
+export function i18nIcuMsg(message: string, placeholders: Placeholder[], options: Options): string {
+  return i18nMsgWithPostprocess(message, [], options, {}, placeholders);
 }
 
 /**
  * Describes placeholder type used in tests.
  *
- * Note: the type is an array (not an object), since it's important to preserve the order of
- * placeholders (so that we can compare it with generated output).
+ * - The first item is the placeholder name.
+ * - The second item is the identifier of the variable that contains the placeholder.
+ * - The third (optional) items is the id of the message that this placeholder references.
+ *   This is used for matching ICU placeholders to ICU messages.
  */
-export type Placeholder = [string, string];
+export type Placeholder = [name: string, indentifier: string, associatedId: string];
 
 /**
  * Describes message metadata object.
@@ -80,8 +90,15 @@ interface Meta {
  */
 function i18nPlaceholdersToString(placeholders: Placeholder[]): string {
   if (placeholders.length === 0) return '';
-  const result = placeholders.map(([key, value]) => `"${key}": ${quotedValue(value)}`);
+  const result = placeholders.map(([name, identifier]) => `"${name}": ${quotedValue(identifier)}`);
   return `, { ${result.join(',')} }`;
+}
+
+/** Convert an object of `goog.getMsg()` options to the expected string. */
+function i18nOptionsToString({original_code: originals = {}}: Options = {}): string {
+  if (Object.keys(originals).length === 0) return '';
+  const result = Object.entries(originals).map(([key, value]) => `"${key}": ${quotedValue(value)}`);
+  return `, { original_code: {\n${result.join(',\n')}\n} }`;
 }
 
 /**
@@ -90,11 +107,12 @@ function i18nPlaceholdersToString(placeholders: Placeholder[]): string {
 function i18nMsgInsertLocalizePlaceholders(message: string, placeholders: Placeholder[]): string {
   if (placeholders.length > 0) {
     message = message.replace(/{\$(.*?)}/g, function(_, name) {
-      const value = placeholders.find(([k, _]) => k === name)![1];
+      const placeholder = placeholders.find((p) => p[0] === name)!;
       // e.g. startDivTag -> START_DIV_TAG
       const key = name.replace(/[A-Z]/g, (ch: string) => '_' + ch).toUpperCase();
+      const associated = placeholder.length === 3 ? `@@${placeholder[2]}` : '';
       return '$' +
-          `{${quotedValue(value)}}:${key}:`;
+          `{${quotedValue(placeholder[1])}}:${key}${associated}:`;
     });
   }
   return message;
@@ -104,10 +122,10 @@ function i18nMsgInsertLocalizePlaceholders(message: string, placeholders: Placeh
  * Generate a string that represents expected Closure metadata output comment.
  */
 function i18nMsgClosureMeta(meta?: Meta): string {
-  if (!meta || !(meta.desc || meta.meaning)) return '';
+  if (!meta) return '';
   return `
     /**
-     ${meta.desc ? '* @desc ' + meta.desc : ''}
+     * ${meta.desc ? '@desc ' + meta.desc : '@suppress {msgDescriptions}'}
      ${meta.meaning ? '* @meaning ' + meta.meaning : ''}
      */
   `;
@@ -132,5 +150,5 @@ function i18nMsgLocalizeMeta(meta?: Meta): string {
  * placeholder value. Such special cases should not be wrapped in quotes.
  */
 function quotedValue(value: string): string {
-  return value.startsWith('$') ? value : `"${value}"`;
+  return value.startsWith('$') ? value : `"${value.replace(/"/g, '\\"')}"`;
 }

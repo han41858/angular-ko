@@ -120,7 +120,9 @@ function tests() {
 
   // #docregion tests
   it('can get RouterLinks from template', () => {
-    expect(routerLinks.length).toBe(3, 'should have 3 routerLinks');
+    expect(routerLinks.length)
+      .withContext('should have 3 routerLinks')
+      .toBe(3);
     expect(routerLinks[0].linkParams).toBe('/dashboard');
     expect(routerLinks[1].linkParams).toBe('/heroes');
     expect(routerLinks[2].linkParams).toBe('/about');
@@ -130,9 +132,11 @@ function tests() {
     const heroesLinkDe = linkDes[1];    // 히어로 목록으로 가는 링크를 표현하는 DebugElement
     const heroesLink = routerLinks[1];  // 히어로 목록으로 가는 링크와 연결된 디렉티브
 
-    expect(heroesLink.navigatedTo).toBeNull('should not have navigated yet');
+    expect(heroesLink.navigatedTo)
+      .withContext('should not have navigated yet')
+      .toBeNull();
 
-    heroesLinkDe.triggerEventHandler('click', null);
+    heroesLinkDe.triggerEventHandler('click');
     fixture.detectChanges();
 
     expect(heroesLink.navigatedTo).toBe('/heroes');

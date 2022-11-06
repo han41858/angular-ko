@@ -1,6 +1,6 @@
 // #docplaster
 // #docregion bare
-import { NgModule } from '@angular/core';
+import { DoBootstrap, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 // #enddocregion bare
 // #docregion upgrademodule
@@ -50,11 +50,7 @@ import { PhoneDetailComponent } from './phone-detail/phone-detail.component';
     CheckmarkPipe
     // #docregion phonelist, phonedetail
   ],
-  entryComponents: [
-    PhoneListComponent,
-    // #enddocregion phonelist
-    PhoneDetailComponent
-  ],
+  // #enddocregion phonelist
   // #docregion phone, routeparams
   providers: [
     Phone,
@@ -65,7 +61,7 @@ import { PhoneDetailComponent } from './phone-detail/phone-detail.component';
   // #enddocregion routeparams
 // #docregion bare, upgrademodule, httpclientmodule, phonelist
 })
-export class AppModule {
+export class AppModule implements DoBootstrap {
   // #enddocregion bare
   constructor(private upgrade: UpgradeModule) { }
   ngDoBootstrap() {

@@ -19,12 +19,12 @@ export class LoggingInterceptor implements HttpInterceptor {
     // 서버에서 받은 응답 옵저버블을 체이닝합니다.
     return next.handle(req)
       .pipe(
-        tap(
+        tap({
           // 서버에서 응답을 받으면 성공한 것으로 판단합니다.
-          event => ok = event instanceof HttpResponse ? 'succeeded' : '',
+          next: (event) => (ok = event instanceof HttpResponse ? 'succeeded' : ''),
           // 요청이 실패한 경우를 처리합니다. error 객체는 HttpErrorResponse 타입입니다.
-          error => ok = 'failed'
-        ),
+          error: (error) => (ok = 'failed')
+        }),
         // HTTP 요청이 성공한 경우와 실패한 경우 모두 응답 시간을 로그로 출력합니다.
         finalize(() => {
           const elapsed = Date.now() - started;

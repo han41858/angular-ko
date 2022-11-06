@@ -14,7 +14,7 @@ describe('Lazy Loading AngularJS Tests', () => {
     await browser.get('/');
   });
 
-  it('should display \'Angular Home\' when visiting the home page', async () => {
+  it("should display 'Angular Home' when visiting the home page", async () => {
     await pageElements.homePageHref.click();
 
     const paragraphText = await pageElements.homePageParagraph.getText();
@@ -22,7 +22,7 @@ describe('Lazy Loading AngularJS Tests', () => {
     expect(paragraphText).toEqual('Angular Home');
   });
 
-  it('should display \'Users Page\' page when visiting the AngularJS page at /users', async () => {
+  it("should display 'Users Page' page when visiting the AngularJS page at /users", async () => {
     await pageElements.ajsUsersPageHref.click();
     await loadAngularJS();
 
@@ -31,7 +31,7 @@ describe('Lazy Loading AngularJS Tests', () => {
     expect(paragraphText).toEqual('Users Page');
   });
 
-  it('should display \'Angular 404\' when visiting an invalid URL', async () => {
+  it("should display 'Angular 404' when visiting an invalid URL", async () => {
     await pageElements.notFoundPageHref.click();
 
     const paragraphText = await pageElements.notFoundPageParagraph.getText();
@@ -47,12 +47,16 @@ describe('Lazy Loading AngularJS Tests', () => {
     }
 
     // Might have to re-insert the 'NG_DEFER_BOOTSTRAP!' if the name has been changed since protractor loaded the page
-    if (!await browser.executeScript('window.name.includes(\'NG_DEFER_BOOTSTRAP!\')')) {
-        await browser.executeScript('window.name = \'NG_DEFER_BOOTSTRAP!\' + name');
+    if (!await browser.executeScript("window.name.includes('NG_DEFER_BOOTSTRAP!')")) {
+        await browser.executeScript("window.name = 'NG_DEFER_BOOTSTRAP!' + name");
     }
 
     // Wait for the AngularJS bundle to download and initialize
-    await browser.wait(ExpectedConditions.presenceOf(element(by.css('app-root app-angular-js'))), 5000, 'AngularJS app');
+    await browser.wait(
+      ExpectedConditions.presenceOf(element(by.css('app-root app-angular-js'))),
+      5000,
+      'AngularJS app'
+    );
 
     // Run the protractor pre-bootstrap logic and resumeBootstrap
     // Based on https://github.com/angular/protractor/blob/5.3.0/lib/browser.ts#L950-L969

@@ -7,10 +7,11 @@
  */
 import * as o from '../../output/output_ast';
 import {Identifiers as R3} from '../r3_identifiers';
-import {R3CompiledExpression} from '../util';
+import {convertFromMaybeForwardRefExpression, R3CompiledExpression} from '../util';
 import {R3DirectiveMetadata, R3HostMetadata, R3QueryMetadata} from '../view/api';
 import {createDirectiveType} from '../view/compiler';
 import {asLiteral, conditionallyCreateMapObjectLiteral, DefinitionMap} from '../view/util';
+
 import {R3DeclareDirectiveMetadata, R3DeclareQueryMetadata} from './api';
 import {toOptionalLiteralMap} from './util';
 
@@ -21,7 +22,7 @@ import {toOptionalLiteralMap} from './util';
  *
  * Do not include any prerelease in these versions as they are ignored.
  */
-const MINIMUM_PARTIAL_LINKER_VERSION = '12.0.0';
+const MINIMUM_PARTIAL_LINKER_VERSION = '14.0.0';
 
 /**
  * Compile a directive declaration defined by the `R3DirectiveMetadata`.
@@ -49,6 +50,10 @@ export function createDirectiveDefinitionMap(meta: R3DirectiveMetadata):
 
   // e.g. `type: MyDirective`
   definitionMap.set('type', meta.internalType);
+
+  if (meta.isStandalone) {
+    definitionMap.set('isStandalone', o.literal(meta.isStandalone));
+  }
 
   // e.g. `selector: 'some-dir'`
   if (meta.selector !== null) {
@@ -96,7 +101,9 @@ function compileQuery(query: R3QueryMetadata): o.LiteralMapExpr {
     meta.set('first', o.literal(true));
   }
   meta.set(
-      'predicate', Array.isArray(query.predicate) ? asLiteral(query.predicate) : query.predicate);
+      'predicate',
+      Array.isArray(query.predicate) ? asLiteral(query.predicate) :
+                                       convertFromMaybeForwardRefExpression(query.predicate));
   if (!query.emitDistinctChangesOnly) {
     // `emitDistinctChangesOnly` is special because we expect it to be `true`.
     // Therefore we explicitly emit the field, and explicitly place it only when it's `false`.

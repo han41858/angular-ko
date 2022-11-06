@@ -30,12 +30,13 @@ export class AnimationRendererFactory implements RendererFactory2 {
   constructor(
       private delegate: RendererFactory2, private engine: AnimationEngine, private _zone: NgZone) {
     engine.onRemovalComplete = (element: any, delegate: Renderer2) => {
-      // Note: if an component element has a leave animation, and the component
-      // a host leave animation, the view engine will call `removeChild` for the parent
+      // Note: if a component element has a leave animation, and a host leave animation,
+      // the view engine will call `removeChild` for the parent
       // component renderer as well as for the child component renderer.
       // Therefore, we need to check if we already removed the element.
-      if (delegate && delegate.parentNode(element)) {
-        delegate.removeChild(element.parentNode, element);
+      const parentNode = delegate?.parentNode(element);
+      if (parentNode) {
+        delegate.removeChild(parentNode, element);
       }
     };
   }
@@ -247,7 +248,7 @@ export class AnimationRenderer extends BaseAnimationRenderer implements Renderer
         value = value === undefined ? true : !!value;
         this.disableAnimations(el, value as boolean);
       } else {
-        this.engine.process(this.namespaceId, el, name.substr(1), value);
+        this.engine.process(this.namespaceId, el, name.slice(1), value);
       }
     } else {
       this.delegate.setProperty(el, name, value);
@@ -259,7 +260,7 @@ export class AnimationRenderer extends BaseAnimationRenderer implements Renderer
       callback: (event: any) => any): () => void {
     if (eventName.charAt(0) == ANIMATION_PREFIX) {
       const element = resolveElementFromTarget(target);
-      let name = eventName.substr(1);
+      let name = eventName.slice(1);
       let phase = '';
       // @listener.phase is for trigger animation callbacks
       // @@listener is for animation builder callbacks
@@ -291,6 +292,6 @@ function resolveElementFromTarget(target: 'window'|'document'|'body'|any): any {
 function parseTriggerCallbackName(triggerName: string) {
   const dotIndex = triggerName.indexOf('.');
   const trigger = triggerName.substring(0, dotIndex);
-  const phase = triggerName.substr(dotIndex + 1);
+  const phase = triggerName.slice(dotIndex + 1);
   return [trigger, phase];
 }

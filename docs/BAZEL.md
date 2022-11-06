@@ -3,7 +3,7 @@
 Note: this doc is for developing Angular, it is _not_ public
 documentation for building an Angular application with Bazel.
 
-The Bazel build tool (http://bazel.build) provides fast, reliable
+The Bazel build tool (https://bazel.build) provides fast, reliable
 incremental builds. We plan to migrate Angular's build scripts to
 Bazel.
 
@@ -48,9 +48,18 @@ new as of May 2017 and not very stable yet.
 
 ## Testing Angular
 
-- Test package in node: `yarn bazel test packages/core/test:test`
-- Test package in karma: `yarn bazel test packages/core/test:test_web`
-- Test all packages: `yarn bazel test packages/...`
+- Test package in node: `yarn test packages/core/test:test`
+- Test package in karma: `yarn test packages/core/test:test_web`
+- Test all packages: `yarn test packages/...`
+
+**Note**: The ellipsis in the last command above are not meant to be substituted by a package name, but
+are used by Bazel as a wildcard to execute all tests in the specified path. To execute all the tests for a
+single package, the commands are (exemplary):
+- `yarn test //packages/core/...` for all tests, or
+- `yarn test //packages/core/test:test` for a particular test suite.
+
+**Note**: The first test run will be much slower than future runs. This is because future runs will
+benefit from Bazel's capability to do incremental builds.
 
 You can use [ibazel] to get a "watch mode" that continuously
 keeps the outputs up-to-date as you save sources.
@@ -59,11 +68,8 @@ keeps the outputs up-to-date as you save sources.
 
 If you're experiencing problems with seemingly unrelated tests failing, it may be because you're not using the proper flags with your Bazel test runs in Angular.
 
-See also: [`//.bazelrc`](https://github.com/angular/angular/blob/master/.bazelrc) where `--define=angular_ivy_enabled=False` is defined as default.
-
 - `--config=debug`: build and launch in debug mode (see [debugging](#debugging) instructions below)
 - `--test_arg=--node_options=--inspect=9228`: change the inspector port.
-- `--config=view-engine` Enables ViewEngine mode if present, otherwise Ivy is used. This switches which compiler is used (ngc or ngtsc)
 - `--test_tag_filters=<tag>`: filter tests down to tags defined in the `tag` config of your rules in any given `BUILD.bazel`.
 
 
@@ -81,7 +87,7 @@ For additional info and testing options, see the
 [nodejs_test documentation](https://bazelbuild.github.io/rules_nodejs/Built-ins.html#nodejs_test).
 
 - Click on "Resume script execution" to let the code run until the first `debugger` statement or a previously set breakpoint.
-- If you're debugging an ivy test and you want to inspect the generated template instructions, find the template of your component in the call stack and click on `(source mapped from [CompName].js)` at the bottom of the code. You can also disable sourcemaps in the options or go to sources and look into ng:// namespace to see all the generated code.
+- If you're debugging a test and you want to inspect the generated template instructions, find the template of your component in the call stack and click on `(source mapped from [CompName].js)` at the bottom of the code. You can also disable sourcemaps in the options or go to sources and look into ng:// namespace to see all the generated code.
 
 ### Debugging a Node Test in VSCode
 
@@ -108,9 +114,9 @@ Apple+Shift+D on Mac) and click on the green play icon next to the configuration
 
 ### Debugging a Karma Test
 
-- Run test: `yarn bazel run packages/core/test:test_web`
-- Open chrome at: [http://localhost:9876/debug.html](http://localhost:9876/debug.html)
-- Open chrome inspector
+- Run test: `yarn bazel run packages/core/test:test_web_debug` (any `karma_web_test_suite` target has a `_debug` target)
+- Open any browser at: [http://localhost:9876/debug.html](http://localhost:9876/debug.html)
+- Open the browser's DevTools to debug the tests (after, for example, having focused on specific tests via `fit` and/or `fdescribe` or having added `debugger` statements in them)
 
 ### Debugging Bazel rules
 
@@ -277,7 +283,7 @@ e.g: `yarn bazel test packages/core/test/bundling/forms:symbol_test`
 #### mkdir missing
 If you see the following error::
 ```
- 
+
 ERROR: An error occurred during the fetch of repository 'npm':
    Traceback (most recent call last):
         File "C:/users/anusername/_bazel_anusername/idexbm2i/external/build_bazel_rules_nodejs/internal/npm_install/npm_install.bzl", line 618, column 15, in _yarn_install_impl
@@ -289,26 +295,7 @@ Error in fail: mkdir -p _ failed:
 ```
 The `msys64` library and associated tools (like `mkdir`) are required to build Angular.
 
-Make sure you have `C:\msys64\usr\bin` in the "system" `PATH` rather than the "user" `PATH`. 
-
-After that, a `git clean -xfd`, `yarn`, and `node scripts\build\build-packages-dist.js` should resolve this issue.
-
-#### mkdir missing
-If you see the following error::
-```
- 
-ERROR: An error occurred during the fetch of repository 'npm':
-   Traceback (most recent call last):
-        File "C:/users/anusername/_bazel_anusername/idexbm2i/external/build_bazel_rules_nodejs/internal/npm_install/npm_install.bzl", line 618, column 15, in _yarn_install_impl
-                _copy_file(repository_ctx, repository_ctx.attr.package_json)
-        File "C:/users/anusername/_bazel_anusername/idexbm2i/external/build_bazel_rules_nodejs/internal/npm_install/npm_install.bzl", line 345, column 17, in _copy_file
-                fail("mkdir -p %s failed: \nSTDOUT:\n%s\nSTDERR:\n%s" % (dirname, result.stdout, result.stderr))
-Error in fail: mkdir -p _ failed:
-
-```
-The `msys64` library and associated tools (like `mkdir`) are required to build Angular.
-
-Make sure you have `C:\msys64\usr\bin` in the "system" `PATH` rather than the "user" `PATH`. 
+Make sure you have `C:\msys64\usr\bin` in the "system" `PATH` rather than the "user" `PATH`.
 
 After that, a `git clean -xfd`, `yarn`, and `node scripts\build\build-packages-dist.js` should resolve this issue.
 

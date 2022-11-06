@@ -3,8 +3,6 @@
   Because of how the code is merged together using the doc regions,
   we need to indent the imports with the function below.
 */
-/* tslint:disable:no-shadowed-variable */
-/* tslint:disable:align */
 // #docregion
   import { Observable, of } from 'rxjs';
   import { ajax } from 'rxjs/ajax';
@@ -12,6 +10,7 @@
 
 // #enddocregion
 
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function docRegionDefault<T>(console: Console, ajax: (url: string) => Observable<T>) {
   // #docregion
   // API 요청 결과로 받은 객체에서 "response"를 반환합니다.

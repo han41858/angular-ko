@@ -6,7 +6,6 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import {ConstantPool} from '@angular/compiler';
-import {NOOP_PERF_RECORDER} from '@angular/compiler-cli/src/ngtsc/perf';
 import ts from 'typescript';
 
 import {ParsedConfiguration} from '../../..';
@@ -18,6 +17,7 @@ import {AbsoluteModuleStrategy, LocalIdentifierStrategy, LogicalProjectStrategy,
 import {SemanticSymbol} from '../../../src/ngtsc/incremental/semantic_graph';
 import {CompoundMetadataReader, CompoundMetadataRegistry, DtsMetadataReader, InjectableClassRegistry, LocalMetadataRegistry, ResourceRegistry} from '../../../src/ngtsc/metadata';
 import {PartialEvaluator} from '../../../src/ngtsc/partial_evaluator';
+import {NOOP_PERF_RECORDER} from '../../../src/ngtsc/perf';
 import {LocalModuleScopeRegistry, MetadataDtsModuleScopeResolver, TypeCheckScopeRegistry} from '../../../src/ngtsc/scope';
 import {DecoratorHandler} from '../../../src/ngtsc/transform';
 import {NgccReflectionHost} from '../host/ngcc_host';
@@ -90,7 +90,8 @@ export class DecorationAnalyzer {
   dtsModuleScopeResolver =
       new MetadataDtsModuleScopeResolver(this.dtsMetaReader, this.aliasingHost);
   scopeRegistry = new LocalModuleScopeRegistry(
-      this.metaRegistry, this.dtsModuleScopeResolver, this.refEmitter, this.aliasingHost);
+      this.metaRegistry, this.fullMetaReader, this.dtsModuleScopeResolver, this.refEmitter,
+      this.aliasingHost);
   fullRegistry = new CompoundMetadataRegistry([this.metaRegistry, this.scopeRegistry]);
   evaluator =
       new PartialEvaluator(this.reflectionHost, this.typeChecker, /* dependencyTracker */ null);
@@ -101,9 +102,9 @@ export class DecorationAnalyzer {
   handlers: DecoratorHandler<unknown, unknown, SemanticSymbol|null, unknown>[] = [
     new ComponentDecoratorHandler(
         this.reflectionHost, this.evaluator, this.fullRegistry, this.fullMetaReader,
-        this.scopeRegistry, this.scopeRegistry, this.typeCheckScopeRegistry, new ResourceRegistry(),
-        this.isCore, this.resourceManager, this.rootDirs,
-        !!this.compilerOptions.preserveWhitespaces,
+        this.scopeRegistry, this.dtsModuleScopeResolver, this.scopeRegistry,
+        this.typeCheckScopeRegistry, new ResourceRegistry(), this.isCore, this.resourceManager,
+        this.rootDirs, !!this.compilerOptions.preserveWhitespaces,
         /* i18nUseExternalIds */ true, this.bundle.enableI18nLegacyMessageIdFormat,
         /* usePoisonedData */ false,
         /* i18nNormalizeLineEndingsInICUs */ false, this.moduleResolver, this.cycleAnalyzer,

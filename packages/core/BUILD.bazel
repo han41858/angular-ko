@@ -1,6 +1,6 @@
 load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test")
 load("//tools:defaults.bzl", "api_golden_test", "api_golden_test_npm_package", "ng_module", "ng_package")
-load("//tools:tsec.bzl", "tsec_test")
+load("@npm//tsec:index.bzl", "tsec_test")
 load("//packages/common/locales:index.bzl", "generate_base_locale_file")
 
 package(default_visibility = ["//visibility:public"])
@@ -50,7 +50,6 @@ ng_package(
     name = "npm_package",
     srcs = [
         "package.json",
-        "//packages/core/testing:package.json",
     ],
     nested_packages = [
         "//packages/core/schematics:npm_package",
@@ -61,7 +60,7 @@ ng_package(
     # Do not add more to this list.
     # Dependencies on the full npm_package cause long re-builds.
     visibility = [
-        "//integration:__pkg__",
+        "//integration:__subpackages__",
         "//packages/bazel/test/ng_package:__pkg__",
         "//packages/compiler-cli/integrationtest:__pkg__",
         "//packages/compiler-cli/ngcc/test:__pkg__",
@@ -103,4 +102,14 @@ api_golden_test(
     ],
     entry_point = "angular/packages/core/src/render3/global_utils_api.d.ts",
     golden = "angular/goldens/public-api/core/global_utils.md",
+)
+
+api_golden_test(
+    name = "core_errors",
+    data = [
+        "//goldens:public-api",
+        "//packages/core",
+    ],
+    entry_point = "angular/packages/core/src/errors.d.ts",
+    golden = "angular/goldens/public-api/core/errors.md",
 )

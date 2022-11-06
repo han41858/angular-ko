@@ -13,11 +13,10 @@ import {TNodeType} from '@angular/core/src/render3/interfaces/node';
 import {HEADER_OFFSET} from '@angular/core/src/render3/interfaces/view';
 import {TestBed} from '@angular/core/testing';
 import {expect} from '@angular/platform-browser/testing/src/matchers';
-import {onlyInIvy} from '@angular/private/testing';
 
 import {matchDomElement, matchDomText, matchTI18n, matchTNode} from '../render3/matchers';
 
-onlyInIvy('Ivy specific').describe('Debug Representation', () => {
+describe('Debug Representation', () => {
   it('should generate a human readable version', () => {
     @Component({selector: 'my-comp', template: '<div id="123">Hello World</div>'})
     class MyComponent {
@@ -27,7 +26,7 @@ onlyInIvy('Ivy specific').describe('Debug Representation', () => {
     const fixture = TestBed.createComponent(MyComponent);
     fixture.detectChanges();
 
-    const hostView = getLContext(fixture.componentInstance)!.lView.debug!;
+    const hostView = getLContext(fixture.componentInstance)!.lView!.debug!;
     expect(hostView.hostHTML).toEqual(null);
     const myCompView = hostView.childViews[0] as LViewDebug;
     expect(myCompView.hostHTML).toContain('<div id="123">Hello World</div>');
@@ -47,7 +46,7 @@ onlyInIvy('Ivy specific').describe('Debug Representation', () => {
         const fixture = TestBed.createComponent(MyComponent);
         fixture.detectChanges();
 
-        const hostView = getLContext(fixture.componentInstance)!.lView.debug!;
+        const hostView = getLContext(fixture.componentInstance)!.lView!.debug!;
         const myComponentView = hostView.childViews[0] as LViewDebug;
         expect(myComponentView.decls).toEqual({
           start: HEADER_OFFSET,

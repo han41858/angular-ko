@@ -19,6 +19,7 @@ These examples demonstrate minimal, fundamental concepts.
 -->
 이 예제들은 아주 간단하게 기본 개념을 다루는 예제입니다.
 
+
 <!--
 ### Getting started application
 -->
@@ -68,23 +69,6 @@ For more information, see [Introduction to Angular concepts](guide/architecture)
 
 Angular 애플리케이션의 기본 구조를 다루는 애플리케이션입니다.
 자세한 내용은 [Angular 개요](guide/architecture) 문서를 참고하세요.
-
-
-<!--
-### Setting the document title
--->
-### 문서 제목 설정하기
-
-<!--
-<live-example name="set-document-title"></live-example>
-
-Demonstrates customizing the document title in the browser.
-For more information, see [Set the document title](guide/set-document-title).
--->
-<live-example name="set-document-title"></live-example>
-
-브라우저에 표시되는 문서 제목을 커스터마이징하는 방법을 다룹니다.
-자세한 내용은 [문서 제목 설정하기](guide/set-document-title) 문서를 참고하세요.
 
 
 <!--
@@ -231,7 +215,6 @@ For more information, see [Get data from a server](tutorial/toh-pt6).
 
 6단계와 마지막 단계 수정을 끝낸 애플리케이션입니다.
 자세한 내용은 [서버에서 데이터 받아오기](tutorial/toh-pt6) 문서를 참고하세요.
-
 
 
 <!--
@@ -425,11 +408,7 @@ For more information, see [Template reference variables](guide/template-referenc
 템플릿 참조 변수를 다루는 애플리케이션입니다.
 자세한 내용은 [템플릿 참조 변수](guide/template-reference-variables) 문서를 참고하세요.
 
-
-<!--
 ### `<ngcontainer>`
--->
-### `<ng-container>`
 
 <!--
 <live-example name="ngcontainer"></live-example>
@@ -543,9 +522,6 @@ For more information, see [User input](guide/user-input).
 
 사용자 입력에 반응하는 방법을 다루는 애플리케이션입니다.
 자세한 내용은 [사용자 입력](guide/user-input) 문서를 참고하세요.
-
-
-
 
 
 <!--
@@ -676,10 +652,6 @@ For more information, see [Hooking into the component lifecycle](guide/lifecycle
 
 `ngOnInit()`이나 `ngOnChanges()`와 같은 Angular 라이프싸이클 후킹 함수를 다루는 애플리케이션입니다.
 자세한 내용은 [컴포넌트 라이프싸이클 후킹](guide/lifecycle-hooks) 문서를 참고하세요.
-
-
-
-
 
 
 <!--
@@ -879,8 +851,6 @@ For more information, see [Building dynamic forms](guide/dynamic-form).
 자세한 내용은 [동적 폼 구성하기](guide/dynamic-form) 문서를 참고하세요.
 
 
-
-
 ## NgModules
 
 ### NgModules
@@ -971,6 +941,11 @@ Angular 라우터의 기본 테크닉을 다루는 애플리케이션입니다.
 
 
 <!--
+## Documentation
+-->
+## 문서 관련
+
+<!--
 ### Style guide for Documentation contributions
 -->
 ### 문서 작성 스타일 가이드
@@ -1036,19 +1011,13 @@ Angular 애플리케이션의 보안 관련 내용을 다루는 애플리케이�
 <!--
 For the sample application that the testing guides describe, see the <live-example noDownload name="testing">sample app</live-example>.
 
-For the tests featured in the testing guides, see <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>.
-
 Demonstrates techniques for testing Angular.
 For more information, see [Testing](guide/testing).
 -->
 테스트 문서에서 설명하는 예제 앱을 확인하려면 <live-example noDownload name="testing">sample app</live-example>를 확인해 보세요.
 
-테스트 문서에서 설명하는 테스트 기능을 확인하려면 <live-example name="testing" stackblitz="specs" noDownload>tests</live-example>를 확인해 보세요.
-
 Angular 앱을 테스트하는 방법을 다루는 애플리케이션입니다.
 자세한 내용은 [테스트](guide/testing) 문서를 참고하세요.
-
-
 
 <!--
 ## Hybrid Angular applications
@@ -1070,3 +1039,11 @@ For more information, see [AngularJS to Angular concepts: Quick reference](guide
 
 AngularJS와 Angular가 어떻게 다른지 다루는 애플리케이션입니다.
 자세한 내용은 [AngularJS와 Angular 컨셉 비교](guide/ajs-quick-reference) 문서를 참고하세요.
+
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

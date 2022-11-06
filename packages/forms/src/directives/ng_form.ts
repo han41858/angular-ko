@@ -8,7 +8,9 @@
 
 import {AfterViewInit, Directive, EventEmitter, forwardRef, Inject, Input, Optional, Self} from '@angular/core';
 
-import {AbstractControl, FormControl, FormGroup, FormHooks} from '../model';
+import {AbstractControl, FormHooks} from '../model/abstract_model';
+import {FormControl} from '../model/form_control';
+import {FormGroup} from '../model/form_group';
 import {composeAsyncValidators, composeValidators, NG_ASYNC_VALIDATORS, NG_VALIDATORS} from '../validators';
 
 import {ControlContainer} from './control_container';
@@ -16,7 +18,7 @@ import {Form} from './form_interface';
 import {NgControl} from './ng_control';
 import {NgModel} from './ng_model';
 import {NgModelGroup} from './ng_model_group';
-import {removeListItem, setUpControl, setUpFormContainer, syncPendingControls} from './shared';
+import {setUpControl, setUpFormContainer, syncPendingControls} from './shared';
 import {AsyncValidator, AsyncValidatorFn, Validator, ValidatorFn} from './validators';
 
 export const formDirectiveProvider: any = {
@@ -104,7 +106,7 @@ export class NgForm extends ControlContainer implements Form, AfterViewInit {
    */
   public readonly submitted: boolean = false;
 
-  private _directives: NgModel[] = [];
+  private _directives = new Set<NgModel>();
 
   /**
    * @description
@@ -191,7 +193,7 @@ export class NgForm extends ControlContainer implements Form, AfterViewInit {
           <FormControl>container.registerControl(dir.name, dir.control);
       setUpControl(dir.control, dir);
       dir.control.updateValueAndValidity({emitEvent: false});
-      this._directives.push(dir);
+      this._directives.add(dir);
     });
   }
 
@@ -217,7 +219,7 @@ export class NgForm extends ControlContainer implements Form, AfterViewInit {
       if (container) {
         container.removeControl(dir.name);
       }
-      removeListItem(this._directives, dir);
+      this._directives.delete(dir);
     });
   }
 
@@ -324,8 +326,7 @@ export class NgForm extends ControlContainer implements Form, AfterViewInit {
     }
   }
 
-  /** @internal */
-  _findContainer(path: string[]): FormGroup {
+  private _findContainer(path: string[]): FormGroup {
     path.pop();
     return path.length ? <FormGroup>this.form.get(path) : this.form;
   }

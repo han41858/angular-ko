@@ -50,11 +50,11 @@ export interface IsActiveMatchOptions {
    * - `'exact'`: all segments in each `UrlTree` must match.
    * - `'subset'`: a `UrlTree` will be determined to be active if it
    * is a subtree of the active route. That is, the active route may contain extra
-   * segments, but must at least have all the segements of the `UrlTree` in question.
+   * segments, but must at least have all the segments of the `UrlTree` in question.
    */
   paths: 'exact'|'subset';
   /**
-   * - 'exact'`: indicates that the `UrlTree` fragments must be equal.
+   * - `'exact'`: indicates that the `UrlTree` fragments must be equal.
    * - `'ignored'`: the fragments will not be compared when determining if a
    * `UrlTree` is active.
    */
@@ -227,6 +227,13 @@ export class UrlSegmentGroup {
   _sourceSegment?: UrlSegmentGroup;
   /** @internal */
   _segmentIndexShift?: number;
+  /**
+   * @internal
+   *
+   * Used only in dev mode to detect if application relies on `relativeLinkResolution: 'legacy'`
+   * Should be removed in when `relativeLinkResolution` is removed.
+   */
+  _segmentIndexShiftCorrected?: number;
   /** The parent node in the url tree */
   parent: UrlSegmentGroup|null = null;
 
@@ -293,7 +300,7 @@ export class UrlSegment {
       /** The matrix parameters associated with a segment */
       public parameters: {[name: string]: string}) {}
 
-  get parameterMap() {
+  get parameterMap(): ParamMap {
     if (!this._parameterMap) {
       this._parameterMap = convertToParamMap(this.parameters);
     }
@@ -686,7 +693,7 @@ class UrlParser {
 
       let outletName: string = undefined!;
       if (path.indexOf(':') > -1) {
-        outletName = path.substr(0, path.indexOf(':'));
+        outletName = path.slice(0, path.indexOf(':'));
         this.capture(outletName);
         this.capture(':');
       } else if (allowPrimary) {

@@ -52,6 +52,8 @@ const UNDEFINED = {};
  * Notice, we don't use the `new` operator because we explicitly want to have the `Injector`
  * resolve all of the object's dependencies automatically.
  *
+ * TODO: delete in v14.
+ *
  * @deprecated from v5 - slow and brings in a lot of code, Use `Injector.create` instead.
  * @publicApi
  */
@@ -360,7 +362,7 @@ export class ReflectiveInjector_ implements ReflectiveInjector {
     try {
       deps =
           ResolvedReflectiveFactory.dependencies.map(dep => this._getByReflectiveDependency(dep));
-    } catch (e) {
+    } catch (e: any) {
       if (e.addKey) {
         e.addKey(this, provider.key);
       }
@@ -371,7 +373,7 @@ export class ReflectiveInjector_ implements ReflectiveInjector {
     try {
       obj = factory(...deps);
     } catch (e) {
-      throw instantiationError(this, e, e.stack, provider.key);
+      throw instantiationError(this, e, (e as Error).stack, provider.key);
     }
 
     return obj;

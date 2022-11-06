@@ -6,18 +6,14 @@ ts_library(
     srcs = glob(["**/*.ts"]),
     deps = [
         "//packages:types",
-        "//packages/common",
         "//packages/compiler",
-        "//packages/compiler/testing",
-        "//packages/core/testing",
-        "//packages/platform-browser",
         "//packages/platform-browser/testing",
     ],
 )
 
 jasmine_node_test(
     name = "selector",
-    bootstrap = ["//tools/testing:node_es5"],
+    bootstrap = ["//tools/testing:node_es2015"],
     deps = [
         ":selector_lib",
     ],

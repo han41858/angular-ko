@@ -6,16 +6,16 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {AST, Call, LiteralPrimitive, ParseSourceSpan, PropertyRead, SafePropertyRead, TmplAstElement, TmplAstNode, TmplAstTemplate, TmplAstTextAttribute} from '@angular/compiler';
-import {AbsoluteFsPath} from '@angular/compiler-cli/src/ngtsc/file_system';
+import {AST, LiteralPrimitive, ParseSourceSpan, PropertyRead, SafePropertyRead, TmplAstElement, TmplAstNode, TmplAstTemplate, TmplAstTextAttribute} from '@angular/compiler';
 import ts from 'typescript';
 
+import {AbsoluteFsPath} from '../../../../src/ngtsc/file_system';
 import {ErrorCode} from '../../diagnostics';
 
 import {FullTemplateMapping, NgTemplateDiagnostic, TypeCheckableDirectiveMeta} from './api';
 import {GlobalCompletion} from './completion';
 import {DirectiveInScope, PipeInScope} from './scope';
-import {DirectiveSymbol, ElementSymbol, ShimLocation, Symbol, TemplateSymbol} from './symbols';
+import {ElementSymbol, Symbol, TcbLocation, TemplateSymbol} from './symbols';
 
 /**
  * Interface to the Angular Template Type Checker to extract diagnostics and intelligence from the
@@ -56,7 +56,7 @@ export interface TemplateTypeChecker {
    * Given a `shim` and position within the file, returns information for mapping back to a template
    * location.
    */
-  getTemplateMappingAtShimLocation(shimLocation: ShimLocation): FullTemplateMapping|null;
+  getTemplateMappingAtTcbLocation(tcbLocation: TcbLocation): FullTemplateMapping|null;
 
   /**
    * Get all `ts.Diagnostic`s currently available that pertain to the given component.
@@ -113,19 +113,19 @@ export interface TemplateTypeChecker {
 
 
   /**
-   * For the given expression node, retrieve a `ShimLocation` that can be used to perform
+   * For the given expression node, retrieve a `TcbLocation` that can be used to perform
    * autocompletion at that point in the expression, if such a location exists.
    */
   getExpressionCompletionLocation(
-      expr: PropertyRead|SafePropertyRead, component: ts.ClassDeclaration): ShimLocation|null;
+      expr: PropertyRead|SafePropertyRead, component: ts.ClassDeclaration): TcbLocation|null;
 
   /**
    * For the given node represents a `LiteralPrimitive`(the `TextAttribute` represents a string
-   * literal), retrieve a `ShimLocation` that can be used to perform autocompletion at that point in
+   * literal), retrieve a `TcbLocation` that can be used to perform autocompletion at that point in
    * the node, if such a location exists.
    */
   getLiteralCompletionLocation(
-      strNode: LiteralPrimitive|TmplAstTextAttribute, component: ts.ClassDeclaration): ShimLocation
+      strNode: LiteralPrimitive|TmplAstTextAttribute, component: ts.ClassDeclaration): TcbLocation
       |null;
 
   /**

@@ -78,30 +78,30 @@ For example, return a string if the target property expects a string, a number i
 <!--
 In the following example, the `childItem` property of the `ItemDetailComponent` expects a string.
 
-<code-example path="property-binding/src/app/app.component.html" region="model-property-binding" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="property-binding/src/app/app.component.html" region="model-property-binding"></code-example>
 
 Confirm this expectation by looking in the `ItemDetailComponent` where the `@Input()` type is `string`:
 
-<code-example path="property-binding/src/app/item-detail/item-detail.component.ts" region="input-type" header="src/app/item-detail/item-detail.component.ts (setting the @Input() type)"></code-example>
+<code-example header="src/app/item-detail/item-detail.component.ts (setting the @Input() type)" path="property-binding/src/app/item-detail/item-detail.component.ts" region="input-type"></code-example>
 
 The `parentItem` in `AppComponent` is a string, which means that the expression, `parentItem` within `[childItem]="parentItem"`, evaluates to a string.
 
-<code-example path="property-binding/src/app/app.component.ts" region="parent-data-type" header="src/app/app.component.ts"></code-example>
+<code-example header="src/app/app.component.ts" path="property-binding/src/app/app.component.ts" region="parent-data-type"></code-example>
 
 If `parentItem` were some other type, you would need to specify `childItem`  `@Input()` as that type as well.
 -->
 아래 예제에서 `ItemDetailComponent`에 있는 `childItem` 프로퍼티는 문자열을 받아야 합니다.
 
-<code-example path="property-binding/src/app/app.component.html" region="model-property-binding" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="property-binding/src/app/app.component.html" region="model-property-binding"></code-example>
 
 이 타입은 `ItemDetailComponent`에 `@Input()` 데코레이터가 붙은 `childItem` 프로퍼티 타입이 `string`인 것으로도 확인할 수 있습니다:
 
-<code-example path="property-binding/src/app/item-detail/item-detail.component.ts" region="input-type" header="src/app/item-detail/item-detail.component.ts (@Input() 프로퍼티에 지정된 타입)"></code-example>
+<code-example header="src/app/item-detail/item-detail.component.ts (setting the @Input() type)" path="property-binding/src/app/item-detail/item-detail.component.ts" region="input-type"></code-example>
 
 `AppComponent`에 정의된 `parentItem` 프로퍼티 타입은 문자열입니다.
 그래서 `[childItem]="parentItem"`에 사용된 `parentItem`도 문자열로 평가됩니다.
 
-<code-example path="property-binding/src/app/app.component.ts" region="parent-data-type" header="src/app/app.component.ts"></code-example>
+<code-example header="src/app/app.component.ts" path="property-binding/src/app/app.component.ts" region="parent-data-type"></code-example>
 
 만약 `parentItem`을 다른 타입으로 변경하면 `@Input()` 데코레이터가 지정된 `childItem` 타입도 변경되어야 합니다.
 
@@ -114,36 +114,45 @@ If `parentItem` were some other type, you would need to specify `childItem`  `@I
 <!--
 In this example, `ItemListComponent` is a child component of `AppComponent` and the `items` property expects an array of objects.
 
-<code-example path="property-binding/src/app/app.component.html" region="pass-object" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="property-binding/src/app/app.component.html" region="pass-object"></code-example>
 
 In the `ItemListComponent` the `@Input()`, `items`, has a type of `Item[]`.
 
-<code-example path="property-binding/src/app/item-list/item-list.component.ts" region="item-input" header="src/app/item-list.component.ts"></code-example>
+<code-example header="src/app/item-list.component.ts" path="property-binding/src/app/item-list/item-list.component.ts" region="item-input"></code-example>
 
 Notice that `Item` is an object that it has two properties; an `id` and a `name`.
 
-<code-example path="property-binding/src/app/item.ts" region="item-class" header="src/app/item.ts"></code-example>
+<code-example header="src/app/item.ts" path="property-binding/src/app/item.ts" region="item-class"></code-example>
 
 In `app.component.ts`, `currentItems` is an array of objects in the same shape as the `Item` object in `items.ts`, with an `id` and a `name`.
 
-<code-example path="property-binding/src/app/app.component.ts" region="pass-object" header="src/app.component.ts"></code-example>
+<code-example header="src/app.component.ts" path="property-binding/src/app/app.component.ts" region="pass-object"></code-example>
 
 By supplying an object in the same shape, you satisfy the expectations of `items` when Angular evaluates the expression `currentItems`.
 -->
 예제로 다루는 `ItemListComponent`는 `AppComponent`의 자식 컴포넌트이며 `items` 프로퍼티는 객체 배열을 받아야 합니다.
 
-<code-example path="property-binding/src/app/app.component.html" region="pass-object" header="src/app/app.component.html"></code-example>
+<code-example header="src/app/app.component.html" path="property-binding/src/app/app.component.html" region="pass-object"></code-example>
 
 `ItemListComponent`에서 `@Input()` 데코레이터가 지정된 `items` 타입도 `Item[]` 타입입니다.
 
-<code-example path="property-binding/src/app/item-list/item-list.component.ts" region="item-input" header="src/app/item-list.component.ts"></code-example>
+<code-example header="src/app/item-list.component.ts" path="property-binding/src/app/item-list/item-list.component.ts" region="item-input"></code-example>
 
 `Item` 객체에는 프로퍼티가 `id`, `name` 이렇게 2개 있습니다.
 
-<code-example path="property-binding/src/app/item.ts" region="item-class" header="src/app/item.ts"></code-example>
+<code-example header="src/app/item.ts" path="property-binding/src/app/item.ts" region="item-class"></code-example>
 
 `app.component.ts`에서 `currentItems`는 객체 배열이며 `items.ts`에 정의된 `Item` 모양과 똑같이 `id` 프로퍼티와 `name` 프로퍼티가 있습니다.
 
-<code-example path="property-binding/src/app/app.component.ts" region="pass-object" header="src/app.component.ts"></code-example>
+<code-example header="src/app.component.ts" path="property-binding/src/app/app.component.ts" region="pass-object"></code-example>
 
 그래서 객체의 형식이 같기 때문에 `currentItems` 표현식이 평가된 결과를 `items`에 바인딩할 수 있습니다.
+
+
+<!-- links -->
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

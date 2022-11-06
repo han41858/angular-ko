@@ -105,8 +105,12 @@ describe('WelcomeComponent', () => {
   it('should welcome the user', () => {
     fixture.detectChanges();
     const content = el.textContent;
-    expect(content).toContain('Welcome', '"Welcome ..."');
-    expect(content).toContain('Test User', 'expected name');
+    expect(content)
+      .withContext('"Welcome ..."')
+      .toContain('Welcome');
+    expect(content)
+      .withContext('expected name')
+      .toContain('Test User');
   });
 
   it('should welcome "Bubba"', () => {
@@ -119,12 +123,16 @@ describe('WelcomeComponent', () => {
     userService.isLoggedIn = false; // 환영 메시지는 아직 표시되지 않습니다.
     fixture.detectChanges();
     const content = el.textContent;
-    expect(content).not.toContain('Welcome', 'not welcomed');
-    expect(content).toMatch(/log in/i, '"log in"');
+    expect(content)
+      .withContext('not welcomed')
+      .not.toContain('Welcome');
+    expect(content)
+      .withContext('"log in"')
+      .toMatch(/log in/i);
   });
   // #enddocregion tests
 
-  it('should inject the component\'s UserService instance',
+  it("should inject the component's UserService instance",
     inject([UserService], (service: UserService) => {
     expect(service).toBe(componentUserService);
   }));

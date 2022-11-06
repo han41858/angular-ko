@@ -28,10 +28,10 @@ export class ConfigComponent {
   showConfig() {
     this.configService.getConfig()
   // #enddocregion v1, v2
-      .subscribe(
-        (data: Config) => this.config = { ...data }, // 성공한 경우 실행되는 함수
-        error => this.error = error // 에러가 발생한 경우 실행되는 함수
-      );
+      .subscribe({
+        next: (data: Config) => this.config = { ...data }, // 성공한 경우 실행되는 함수
+        error: error => this.error = error, // 에러가 발생한 경우 실행되는 함수
+      });
   }
 
   showConfig_v1() {
@@ -69,7 +69,7 @@ export class ConfigComponent {
   }
 // #enddocregion showConfigResponse
   makeError() {
-    this.configService.makeIntentionalError().subscribe(null, error => this.error = error );
+    this.configService.makeIntentionalError().subscribe({ error: error => this.error = error.message });
   }
 
   getType(val: any): string {

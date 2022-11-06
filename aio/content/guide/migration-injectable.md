@@ -9,121 +9,151 @@
 ### 이 문서는 어떤 내용을 다루나요?
 
 <!--
-  1. This schematic adds an `@Injectable()` decorator to classes which are provided in the
-     application but are not decorated.
-  2. The schematic updates providers which follow the `{provide: SomeToken}` pattern
-     to explicitly specify `useValue: undefined`.
+1.  This schematic adds an `@Injectable()` decorator to classes which are provided in the application but are not decorated.
+1.  The schematic updates providers which follow the `{provide: SomeToken}` pattern to explicitly specify `useValue: undefined`.
 
 **Example for missing `@Injectable()`**
 
-_Before migration:_
-```typescript
-export class MyService {...}
-export class MyOtherService {...}
-export class MyThirdClass {...}
-export class MyFourthClass {...}
-export class MyFifthClass {...}
+**Before migration**:
 
-@NgModule({
+<code-example format="typescript" language="typescript">
+
+export class MyService {&hellip;}
+export class MyOtherService {&hellip;}
+export class MyThirdClass {&hellip;}
+export class MyFourthClass {&hellip;}
+export class MyFifthClass {&hellip;}
+
+&commat;NgModule({
   providers: [
     MyService,
     {provide: SOME_TOKEN, useClass: MyOtherService},
     // The following classes do not need to be decorated because they
     // are never instantiated and just serve as DI tokens.
-    {provide: MyThirdClass, useValue: ...},
-    {provide: MyFourthClass, useFactory: ...},
-    {provide: MyFifthClass, useExisting: ...},
+    {provide: MyThirdClass, useValue: &hellip;},
+    {provide: MyFourthClass, useFactory: &hellip;},
+    {provide: MyFifthClass, useExisting: &hellip;},
   ]
 })
-```
 
-_After migration:_
-```ts
-@Injectable()
-export class MyService {...}
-@Injectable()
-export class MyOtherService {...}
-export class MyThirdClass {...}
-export class MyFourthClass {...}
-export class MySixthClass {...}
+</code-example>
 
-...
-```
+**After migration**:
 
-Note that `MyThirdClass`, `MyFourthClass` and `MyFifthClass` do not need to be decorated
-with `@Injectable()` because they are never instantiated, but just used as a [DI token][DI_TOKEN].
+<code-example format="typescript" language="typescript">
+
+&commat;Injectable()
+export class MyService {&hellip;}
+&commat;Injectable()
+export class MyOtherService {&hellip;}
+export class MyThirdClass {&hellip;}
+export class MyFourthClass {&hellip;}
+export class MySixthClass {&hellip;}
+
+&hellip;
+
+</code-example>
+
+<div class="alert is-helpful">
+
+**NOTE**: <br />
+`MyThirdClass`, `MyFourthClass`, and `MyFifthClass` do not need to be decorated with `@Injectable()` because they are never instantiated, but just used as a [DI token][AioGuideGlossaryDiToken].
+
+</div>
 
 **Example for provider needing `useValue: undefined`**
 
 This example shows a provider following the `{provide: X}` pattern.
 The provider needs to be migrated to a more explicit definition where `useValue: undefined` is specified.
 
-_Before migration_:
-```typescript
+**Before migration**:
+
+<code-example format="typescript" language="typescript">
+
 {provide: MyToken}
-```
-_After migration_:
-```typescript
+
+</code-example>
+
+**After migration**:
+
+<code-example format="typescript" language="typescript">
+
 {provide: MyToken, useValue: undefined}
-```
+
+</code-example>
 -->
-  1. 데코레이터 없이 등록된 프로바이더 클래스에 `@Injectable()` 데코레이터를 사용하는 방법
-
-  2. `{provide: SomeToken}` 패턴으로 작성된 코드를 `useValue: undefined` 패턴으로 수정하는 방법
-
+1.  데코레이터 없이 등록된 프로바이더 클래스에 `@Injectable()` 데코레이터를 사용하는 방법
+1.  `{provide: SomeToken}` 패턴으로 작성된 코드를 `useValue: undefined` 패턴으로 수정하는 방법
 
 **`@Injectable()`이 빠진 경우**
 
-_마이그레이션 전:_
-```typescript
-export class MyService {...}
-export class MyOtherService {...}
-export class MyThirdClass {...}
-export class MyFourthClass {...}
-export class MyFifthClass {...}
+**마이그레이션 전**:
 
-@NgModule({
+<code-example format="typescript" language="typescript">
+
+export class MyService {&hellip;}
+export class MyOtherService {&hellip;}
+export class MyThirdClass {&hellip;}
+export class MyFourthClass {&hellip;}
+export class MyFifthClass {&hellip;}
+
+&commat;NgModule({
   providers: [
     MyService,
     {provide: SOME_TOKEN, useClass: MyOtherService},
     // 아래 클래스들은 인스턴스가 새로 생성되지 않고 DI 토큰으로 바로 사용됩니다.
     // 따라서 데코레이터를 지정할 필요가 없습니다.
-    {provide: MyThirdClass, useValue: ...},
-    {provide: MyFourthClass, useFactory: ...},
-    {provide: MyFifthClass, useExisting: ...},
+    {provide: MyThirdClass, useValue: &hellip;},
+    {provide: MyFourthClass, useFactory: &hellip;},
+    {provide: MyFifthClass, useExisting: &hellip;},
   ]
 })
-```
 
-_마이그레이션 후:_
-```ts
-@Injectable()
-export class MyService {...}
-@Injectable()
-export class MyOtherService {...}
-export class MyThirdClass {...}
-export class MyFourthClass {...}
-export class MySixthClass {...}
+</code-example>
 
-...
-```
+**마이그레이션 후**:
 
-`MyThirdClass`, `MyFourthClass`, `MyFifthClass`는 새로운 인스턴스가 생성되지 않기 때문에 `@Injectable()` 데코레이터를 지정할 필요 없이 [DI 토큰][DI_TOKEN]으로 사용되었습니다.
+<code-example format="typescript" language="typescript">
 
+&commat;Injectable()
+export class MyService {&hellip;}
+&commat;Injectable()
+export class MyOtherService {&hellip;}
+export class MyThirdClass {&hellip;}
+export class MyFourthClass {&hellip;}
+export class MySixthClass {&hellip;}
+
+&hellip;
+
+</code-example>
+
+<div class="alert is-helpful">
+
+**참고**: <br />
+`MyThirdClass`, `MyFourthClass`, `MyFifthClass`는 새로운 인스턴스가 생성되지 않기 때문에 `@Injectable()` 데코레이터를 지정할 필요 없이 [DI 토큰][AioGuideGlossaryDiToken]으로 사용되었습니다.
+
+</div>
 
 **`useValue: undefined` 패턴이 필요한 프로바이더**
 
 이전에는 `{provide: X}` 패턴을 사용할 수 있었습니다.
 하지만 이제는 `useValue: undefined`를 명시적으로 명시해야 합니다.
 
-_마이그레이션 전_:
-```typescript
+**마이그레이션 전**:
+
+<code-example format="typescript" language="typescript">
+
 {provide: MyToken}
-```
-_마이그레이션 후_:
-```typescript
+
+</code-example>
+
+**마이그레이션 후**:
+
+<code-example format="typescript" language="typescript">
+
 {provide: MyToken, useValue: undefined}
-```
+
+</code-example>
 
 
 <!--
@@ -154,13 +184,15 @@ Angular 이전 버전까지, 특히 AOT 모드에서는 클래스에 데코레�
 <!--
 Consider the following pattern:
 
-```typescript
-@NgModule({
+<code-example format="typescript" language="typescript">
+
+&commat;NgModule({
   providers: [{provide: MyService}]
 })
-```
 
-Providers using this pattern will behave as if they provide `MyService` as [DI token][DI_TOKEN]
+</code-example>
+
+Providers using this pattern will behave as if they provide `MyService` as [DI token][AioGuideGlossaryDiToken]
 with the value of `undefined`.
 This is not the case in Ivy where such providers will be interpreted as if `useClass: MyService` is specified.
 This means that these providers will behave differently when updating to version 9 and above.
@@ -168,13 +200,15 @@ To ensure that the provider behaves the same as before, the DI value should be e
 -->
 이런 코드가 있다고 합시다:
 
-```typescript
-@NgModule({
+<code-example format="typescript" language="typescript">
+
+&commat;NgModule({
   providers: [{provide: MyService}]
 })
-```
 
-프로바이더를 등록할 때 이런 코드를 사용하면 `MyService`에 해당하는 [DI 토큰][DI_TOKEN] 값이 `undefined`가 됩니다.
+</code-example>
+
+프로바이더를 등록할 때 이런 코드를 사용하면 `MyService`에 해당하는 [DI 토큰][AioGuideGlossaryDiToken] 값이 `undefined`가 됩니다.
 이전 버전에서는 이런 코드를 사용해도 `useClass: Myservice`라는 코드로 처리했습니다.
 하지만 Angular 9 버전부터는 이런식으로 동작하지 않습니다.
 Angular 9 이후 버전부터 이전과 같은 방식으로 동작하려면 명시적으로 `useValue: undefined`를 지정해야 합니다.
@@ -218,4 +252,13 @@ Without explicit value, these providers can behave differently based on the Angu
 그리고 `{provide: X}` 패턴으로 작성된 프로바이더도 명확한 값을 지정해야 합니다.
 프로바이더에 명확한 값을 지정하지 않으면 라이브러리를 사용하는 Angular 버전에 따라 다르게 동작할 수 있습니다.
 
-[DI_TOKEN]: guide/glossary#di-token
+
+<!-- links -->
+
+[AioGuideGlossaryDiToken]: guide/glossary#di-token "DI token - Glossary | Angular"
+
+<!-- external links -->
+
+<!-- end links -->
+
+@reviewed 2022-02-28

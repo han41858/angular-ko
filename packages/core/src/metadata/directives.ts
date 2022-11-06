@@ -9,11 +9,11 @@
 import {ChangeDetectionStrategy} from '../change_detection/constants';
 import {Provider} from '../di/interface/provider';
 import {Type} from '../interface/type';
-import {compileComponent as render3CompileComponent, compileDirective as render3CompileDirective} from '../render3/jit/directive';
-import {compilePipe as render3CompilePipe} from '../render3/jit/pipe';
+import {compileComponent, compileDirective} from '../render3/jit/directive';
+import {compilePipe} from '../render3/jit/pipe';
 import {makeDecorator, makePropDecorator, TypeDecorator} from '../util/decorators';
-import {noop} from '../util/noop';
 
+import {SchemaMetadata} from './schema';
 import {ViewEncapsulation} from './view';
 
 
@@ -51,20 +51,52 @@ export interface DirectiveDecorator {
    *
    * ### Declaring directives
    *
-   * Directives are [declarables](guide/glossary#declarable).
-   * They must be declared by an NgModule
-   * in order to be usable in an app.
+   * In order to make a directive available to other components in your application, you should do
+   * one of the following:
+   *  - either mark the directive as [standalone](guide/standalone-components),
+   *  - or declare it in an NgModule by adding it to the `declarations` and `exports` fields.
    *
-   * A directive must belong to exactly one NgModule. Do not re-declare
-   * a directive imported from another module.
-   * List the directive class in the `declarations` field of an NgModule.
+   * ** Marking a directive as standalone **
+   *
+   * You can add the `standalone: true` flag to the Directive decorator metadata to declare it as
+   * [standalone](guide/standalone-components):
    *
    * ```ts
-   * declarations: [
-   *  AppComponent,
-   *  MyDirective
-   * ],
+   * @Directive({
+   *   standalone: true,
+   *   selector: 'my-directive',
+   * })
+   * class MyDirective {}
    * ```
+   *
+   * When marking a directive as standalone, please make sure that the directive is not already
+   * declared in an NgModule.
+   *
+   *
+   * ** Declaring a directive in an NgModule **
+   *
+   * Another approach is to declare a directive in an NgModule:
+   *
+   * ```ts
+   * @Directive({
+   *   selector: 'my-directive',
+   * })
+   * class MyDirective {}
+   *
+   * @NgModule({
+   *   declarations: [MyDirective, SomeComponent],
+   *   exports: [MyDirective], // making it available outside of this module
+   * })
+   * class SomeNgModule {}
+   * ```
+   *
+   * When declaring a directive in an NgModule, please make sure that:
+   *  - the directive is declared in exactly one NgModule.
+   *  - the directive is not standalone.
+   *  - you do not re-declare a directive imported from another module.
+   *  - the directive is included into the `exports` field as well if you want this directive to be
+   *    accessible for components outside of the NgModule.
+   *
    *
    * @Annotation
    */
@@ -288,6 +320,18 @@ export interface Directive {
    * To ensure the correct behavior, the app must import `@angular/compiler`.
    */
   jit?: true;
+
+  /**
+   * Angular directives marked as `standalone` do not need to be declared in an NgModule. Such
+   * directives don't depend on any "intermediate context" of an NgModule (ex. configured
+   * providers).
+   *
+   * More information about standalone components, directives and pipes can be found in [this
+   * guide](guide/standalone-components).
+   *
+   * @developerPreview
+   */
+  standalone?: boolean;
 }
 
 /**
@@ -297,7 +341,7 @@ export interface Directive {
  */
 export const Directive: DirectiveDecorator = makeDecorator(
     'Directive', (dir: Directive = {}) => dir, undefined, undefined,
-    (type: Type<any>, meta: Directive) => SWITCH_COMPILE_DIRECTIVE(type, meta));
+    (type: Type<any>, meta: Directive) => compileDirective(type, meta));
 
 /**
  * Component decorator interface
@@ -510,25 +554,26 @@ export interface Component extends Directive {
 
   /**
    * One or more animation `trigger()` calls, containing
-   * `state()` and `transition()` definitions.
+   * [`state()`](api/animations/state) and `transition()` definitions.
    * See the [Animations guide](/guide/animations) and animations API documentation.
    *
    */
   animations?: any[];
 
   /**
-   * An encapsulation policy for the template and CSS styles. One of:
-   * - `ViewEncapsulation.Emulated`: Use shimmed CSS that
-   * emulates the native behavior.
-   * - `ViewEncapsulation.None`: Use global CSS without any
-   * encapsulation.
-   * - `ViewEncapsulation.ShadowDom`: Use Shadow DOM v1 to encapsulate styles.
+   * An encapsulation policy for the component's styling.
+   * Possible values:
+   * - `ViewEncapsulation.Emulated`: Apply modified component styles in order to emulate
+   *                                 a native Shadow DOM CSS encapsulation behavior.
+   * - `ViewEncapsulation.None`: Apply component styles globally without any sort of encapsulation.
+   * - `ViewEncapsulation.ShadowDom`: Use the browser's native Shadow DOM API to encapsulate styles.
    *
-   * If not supplied, the value is taken from `CompilerOptions`. The default compiler option is
-   * `ViewEncapsulation.Emulated`.
+   * If not supplied, the value is taken from the `CompilerOptions`
+   * which defaults to `ViewEncapsulation.Emulated`.
    *
-   * If the policy is set to `ViewEncapsulation.Emulated` and the component has no `styles`
-   * or `styleUrls` specified, the policy is automatically switched to `ViewEncapsulation.None`.
+   * If the policy is `ViewEncapsulation.Emulated` and the component has no
+   * {@link Component#styles styles} nor {@link Component#styleUrls styleUrls},
+   * the policy is automatically switched to `ViewEncapsulation.None`.
    */
   encapsulation?: ViewEncapsulation;
 
@@ -553,6 +598,45 @@ export interface Component extends Directive {
    * overridden in compiler options.
    */
   preserveWhitespaces?: boolean;
+
+  /**
+   * Angular components marked as `standalone` do not need to be declared in an NgModule. Such
+   * components directly manage their own template dependencies (components, directives and pipes
+   * used in a template) via the imports property.
+   *
+   * More information about standalone components, directives and pipes can be found in [this
+   * guide](guide/standalone-components).
+   *
+   * @developerPreview
+   */
+  standalone?: boolean;
+
+  /**
+   * The imports property specifies the standalone component's template dependencies — those
+   * directives, components, and pipes that can be used within its template. Standalone components
+   * can import other standalone components, directives and pipes as well as existing NgModules.
+   *
+   * This property is only available for standalone components - specifying it for components
+   * declared in an NgModule generates a compilation error.
+   *
+   * More information about standalone components, directives and pipes can be found in [this
+   * guide](guide/standalone-components).
+   *
+   * @developerPreview
+   */
+  imports?: (Type<any>|any[])[];
+
+  /**
+   * The set of schemas that declare elements to be allowed in a standalone component. Elements and
+   * properties that are neither Angular components nor directives must be declared in a schema.
+   *
+   * This property is only available for standalone components - specifying it for components
+   * declared in an NgModule generates a compilation error.
+   *
+   * More information about standalone components, directives and pipes can be found in [this
+   * guide](guide/standalone-components).
+   */
+  schemas?: SchemaMetadata[];
 }
 
 /**
@@ -563,8 +647,7 @@ export interface Component extends Directive {
  */
 export const Component: ComponentDecorator = makeDecorator(
     'Component', (c: Component = {}) => ({changeDetection: ChangeDetectionStrategy.Default, ...c}),
-    Directive, undefined,
-    (type: Type<any>, meta: Component) => SWITCH_COMPILE_COMPONENT(type, meta));
+    Directive, undefined, (type: Type<any>, meta: Component) => compileComponent(type, meta));
 
 /**
  * Type of the Pipe decorator / constructor function.
@@ -625,6 +708,15 @@ export interface Pipe {
    * even if the arguments have not changed.
    */
   pure?: boolean;
+
+  /**
+   * Angular pipes marked as `standalone` do not need to be declared in an NgModule. Such
+   * pipes don't depend on any "intermediate context" of an NgModule (ex. configured providers).
+   *
+   * More information about standalone components, directives and pipes can be found in [this
+   * guide](guide/standalone-components).
+   */
+  standalone?: boolean;
 }
 
 /**
@@ -633,7 +725,7 @@ export interface Pipe {
  */
 export const Pipe: PipeDecorator = makeDecorator(
     'Pipe', (p: Pipe) => ({pure: true, ...p}), undefined, undefined,
-    (type: Type<any>, meta: Pipe) => SWITCH_COMPILE_PIPE(type, meta));
+    (type: Type<any>, meta: Pipe) => compilePipe(type, meta));
 
 
 /**
@@ -869,7 +961,7 @@ export interface HostListener {
  *   @HostListener('click', ['$event.target'])
  *   onClick(btn) {
  *     console.log('button', btn, 'number of clicks:', this.numberOfClicks++);
- *  }
+ *   }
  * }
  *
  * @Component({
@@ -880,19 +972,20 @@ export interface HostListener {
  *
  * ```
  *
- * The following example registers another DOM event handler that listens for key-press events.
+ * The following example registers another DOM event handler that listens for `Enter` key-press
+ * events on the global `window`.
  * ``` ts
  * import { HostListener, Component } from "@angular/core";
  *
  * @Component({
  *   selector: 'app',
- *   template: `<h1>Hello, you have pressed keys {{counter}} number of times!</h1> Press any key to
- * increment the counter.
+ *   template: `<h1>Hello, you have pressed enter {{counter}} number of times!</h1> Press enter key
+ * to increment the counter.
  *   <button (click)="resetCounter()">Reset Counter</button>`
  * })
  * class AppComponent {
  *   counter = 0;
- *   @HostListener('window:keydown', ['$event'])
+ *   @HostListener('window:keydown.enter', ['$event'])
  *   handleKeyDown(event: KeyboardEvent) {
  *     this.counter++;
  *   }
@@ -901,23 +994,17 @@ export interface HostListener {
  *   }
  * }
  * ```
+ * The list of valid key names for `keydown` and `keyup` events
+ * can be found here:
+ * https://www.w3.org/TR/DOM-Level-3-Events-key/#named-key-attribute-values
+ *
+ * Note that keys can also be combined, e.g. `@HostListener('keydown.shift.a')`.
+ *
+ * The global target names that can be used to prefix an event name are
+ * `document:`, `window:` and `body:`.
  *
  * @Annotation
  * @publicApi
  */
 export const HostListener: HostListenerDecorator =
     makePropDecorator('HostListener', (eventName?: string, args?: string[]) => ({eventName, args}));
-
-
-
-export const SWITCH_COMPILE_COMPONENT__POST_R3__ = render3CompileComponent;
-export const SWITCH_COMPILE_DIRECTIVE__POST_R3__ = render3CompileDirective;
-export const SWITCH_COMPILE_PIPE__POST_R3__ = render3CompilePipe;
-
-const SWITCH_COMPILE_COMPONENT__PRE_R3__ = noop;
-const SWITCH_COMPILE_DIRECTIVE__PRE_R3__ = noop;
-const SWITCH_COMPILE_PIPE__PRE_R3__ = noop;
-
-const SWITCH_COMPILE_COMPONENT: typeof render3CompileComponent = SWITCH_COMPILE_COMPONENT__PRE_R3__;
-const SWITCH_COMPILE_DIRECTIVE: typeof render3CompileDirective = SWITCH_COMPILE_DIRECTIVE__PRE_R3__;
-const SWITCH_COMPILE_PIPE: typeof render3CompilePipe = SWITCH_COMPILE_PIPE__PRE_R3__;

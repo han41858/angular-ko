@@ -48,25 +48,18 @@ For an example, see the [Angular Material][AngularMaterialMain] documentation.
 ### 라이브러리의 타입 정의
 
 <!--
-Typicaly, library packages include typings in `.d.ts` files; see examples in `node_modules/@angular/material`.
+Typically, library packages include typings in `.d.ts` files; see examples in `node_modules/@angular/material`.
 If the package of your library does not include typings and your IDE complains, you might need to install the `@types/<lib_name>` package with the library.
 
 For example, suppose you have a library named `d3`:
--->
-일반적으로 라이브러리 패키지에는 타입을 정의하는 `.d.ts` 파일이 존재합니다.
-`node_modules/@angular/material` 패키지에도 이 파일이 존재합니다.
-만약 설치한 라이브러리 패키지에 타입 정의 파일이 없어서 IDE에서 타입 관련 기능이 제대로 동작하지 않는다면 `@types/<라이브러리_이름>` 패키지가 별도로 존재하는지 찾아보는 것이 좋습니다.
-
-`d3` 라이브러리는 이 방식으로 타입 정의 파일을 추가할 수 있습니다:
 
 <code-example format="shell" language="shell">
 
 npm install d3 --save
-npm install @types/d3 --save-dev
+npm install &commat;types/d3 --save-dev
 
 </code-example>
 
-<!--
 Types defined in a `@types/` package for a library installed into the workspace are automatically added to the TypeScript configuration for the project that uses that library.
 TypeScript looks for types in the `node_modules/@types` directory by default, so you do not have to add each type package individually.
 
@@ -103,6 +96,19 @@ To do this:
 
 Define more typings as needed.
 -->
+일반적으로 라이브러리 패키지에는 타입을 정의하는 `.d.ts` 파일이 존재합니다.
+`node_modules/@angular/material` 패키지에도 이 파일이 존재합니다.
+만약 설치한 라이브러리 패키지에 타입 정의 파일이 없어서 IDE에서 타입 관련 기능이 제대로 동작하지 않는다면 `@types/<라이브러리_이름>` 패키지가 별도로 존재하는지 찾아보는 것이 좋습니다.
+
+`d3` 라이브러리는 이 방식으로 타입 정의 파일을 추가할 수 있습니다:
+
+<code-example format="shell" language="shell">
+
+npm install d3 --save
+npm install &commat;types/d3 --save-dev
+
+</code-example>
+
 `@types/` 패키지로 제공되는 타입 정의 파일들을 워크스페이스에 설치하면 프로젝트 TypeScript 설정에 따라 자동으로 추가됩니다.
 타입 정의 패키지가 설치되는 기본 위치는 `node_modules/@types` 입니다.
 이 위치에 설치된 패키지는 일일이 추가할 필요가 없습니다.
@@ -178,14 +184,7 @@ If a legacy JavaScript library is not imported into an application, you may add 
 Configure the Angular CLI to do this at build time using the `scripts` and `styles` options of the build target in the [`angular.json`][AioGuideWorkspaceConfig] workspace build configuration file.
 
 For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroduction] library
--->
-오래된 JavaScript 라이브러리들은 애플리케이션 코드에서 로드하지 않고 `<script>` 태그로 로드해서 전역 범위에 적용하는 경우가 있습니다.
-이런 라이브러리들은 [Angular CLI 환경 설정 파일][AioGuideWorkspaceConfig] `angular.json`에서 로드합니다.
 
-[Bootstrap 4][GetbootstrapDocs40GettingStartedIntroduction]의 경우를 봅시다.
-
-
-<!--
 1.  Install the library and the associated dependencies using the npm package manager:
 
     <code-example format="shell" language="shell">
@@ -195,18 +194,7 @@ For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroducti
     npm install bootstrap --save
 
     </code-example>
--->
-1.  npm 패키지 매니저로 라이브러리와 의존 패키지들을 설치합니다:
 
-    <code-example format="shell" language="shell">
-
-    npm install jquery --save
-    npm install popper.js --save
-    npm install bootstrap --save
-
-    </code-example>
-
-<!--
 1.  In the `angular.json` configuration file, add the associated script files to the `scripts` array:
 
     <code-example format="json" language="json">
@@ -218,7 +206,35 @@ For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroducti
     ],
 
     </code-example>
+
+1.  Add the `bootstrap.css` CSS file to the `styles` array:
+
+    <code-example format="css" language="css">
+
+    "styles": [
+      "node_modules/bootstrap/dist/css/bootstrap.css",
+      "src/styles.css"
+    ],
+
+    </code-example>
+
+1.  Run or restart the `ng serve` Angular CLI command to see Bootstrap 4 work in your application.
 -->
+오래된 JavaScript 라이브러리들은 애플리케이션 코드에서 로드하지 않고 `<script>` 태그로 로드해서 전역 범위에 적용하는 경우가 있습니다.
+이런 라이브러리들은 [Angular CLI 환경 설정 파일][AioGuideWorkspaceConfig] `angular.json`에서 로드합니다.
+
+[Bootstrap 4][GetbootstrapDocs40GettingStartedIntroduction]의 경우를 봅시다.
+
+1.  npm 패키지 매니저로 라이브러리와 의존 패키지들을 설치합니다:
+
+    <code-example format="shell" language="shell">
+
+    npm install jquery --save
+    npm install popper.js --save
+    npm install bootstrap --save
+
+    </code-example>
+
 1.  환경설정파일 `angular.json` 파일 `scripts` 배열에 로드할 스크립트 파일들을 지정합니다:
 
     <code-example format="json" language="json">
@@ -231,18 +247,6 @@ For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroducti
 
     </code-example>
 
-<!--
-1.  Add the `bootstrap.css` CSS file to the `styles` array:
-
-    <code-example format="css" language="css">
-
-    "styles": [
-      "node_modules/bootstrap/dist/css/bootstrap.css",
-      "src/styles.css"
-    ],
-
-    </code-example>
--->
 1.  `styles` 배열에 `bootstrap.css` CSS 파일을 추가합니다:
 
     <code-example format="css" language="css">
@@ -254,13 +258,9 @@ For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroducti
 
     </code-example>
 
-<!--
-1.  Run or restart the `ng serve` Angular CLI command to see Bootstrap 4 work in your application.
--->
 1.  Angular CLI `ng serve` 명령으로 애플리케이션을 실행하면 Bootstrap 4가 적용된 것을 확인할 수 있습니다.
 
 
-{@a using-runtime-global-libraries-inside-your-app}
 <!--
 ### Using runtime-global libraries inside your app
 -->
@@ -270,13 +270,13 @@ For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroducti
 After you import a library using the "scripts" array, do **not** import it using an import statement in your TypeScript code.
 The following code snippet is an example import statement.
 
-<code-example format="typscript" language="typescript">
+<code-example format="typescript" language="typescript">
 
-import * as $ from 'jquery';
+import * as &dollar; from 'jquery';
 
 </code-example>
 
-If you inport it using import statements, you have two different copies of the library: one imported as a global library, and one imported as a module.
+If you import it using import statements, you have two different copies of the library: one imported as a global library, and one imported as a module.
 This is especially bad for libraries with plugins, like JQuery, because each copy includes different plugins.
 
 Instead, run the `npm install @types/jquery` Angular CLI command to download typings for your library and then follow the library installation steps.
@@ -285,9 +285,9 @@ This gives you access to the global variables exposed by that library.
 "scripts" 배열로 로드하는 라이브러리는 TypeScript 코드에 `import` 구문으로 불러오면 **안됩니다**.
 이런 코드가 있다고 합시다.
 
-<code-example format="typscript" language="typescript">
+<code-example format="typescript" language="typescript">
 
-import * as $ from 'jquery';
+import * as &dollar; from 'jquery';
 
 </code-example>
 
@@ -307,8 +307,6 @@ TypeScript 코드에서 jQuery를 사용해야 한다면 `npm install @types/jqu
 If the global library you need to use does not have global typings, you can declare them manually as `any` in `src/typings.d.ts`.
 
 For example:
--->
-전역 컨텍스트에 사용하지만 타입 정의 파일이 없는 라이브러리라면 `src/typings.d.ts` 파일에서 강제로 `any` 타입을 지정할 수 있습니다.
 
 <code-example format="typescript" language="typescript">
 
@@ -316,21 +314,49 @@ declare var libraryName: any;
 
 </code-example>
 
-<!--
 Some scripts extend other libraries; for instance with JQuery plugins:
+
+<code-example format="typescript" language="typescript">
+
+&dollar;('.test').myPlugin();
+
+</code-example>
+
+In this case, the installed `@types/jquery` does not include `myPlugin`, so you need to add an interface in `src/typings.d.ts`.
+For example:
+
+<code-example format="typescript" language="typescript">
+
+interface JQuery {
+  myPlugin(options?: any): any;
+}
+
+</code-example>
+
+If you do not add the interface for the script-defined extension, your IDE shows an error:
+
+<code-example format="none" language="none">
+
+[TS][Error] Property 'myPlugin' does not exist on type 'JQuery'
+
+</code-example>
 -->
+전역 컨텍스트에 사용하지만 타입 정의 파일이 없는 라이브러리라면 `src/typings.d.ts` 파일에서 강제로 `any` 타입을 지정할 수 있습니다:
+
+<code-example format="typescript" language="typescript">
+
+declare var libraryName: any;
+
+</code-example>
+
 플러그인 형태로 확장할 수 있는 라이브러리들이 있습니다. JQuery의 경우에는 이렇게 사용하면 됩니다:
 
 <code-example format="typescript" language="typescript">
 
-$('.test').myPlugin();
+&dollar;('.test').myPlugin();
 
 </code-example>
 
-<!--
-In this case, the installed `@types/jquery` does not include `myPlugin`, so you need to add an interface in `src/typings.d.ts`.
-For example:
--->
 이런 경우에 `@types/jquery`에는 `myPlugin`이라는 것이 존재하기 때문에 `src/typings.d.ts` 파일을 다음과 같이 수정해야 합니다:
 
 <code-example format="typescript" language="typescript">
@@ -341,9 +367,6 @@ interface JQuery {
 
 </code-example>
 
-<!--
-If you do not add the interface for the script-defined extension, your IDE shows an error:
--->
 라이브러리의 타입을 제대로 지정하지 않으면 IDE에서 다음과 같은 에러가 발생할 수 있습니다:
 
 <code-example format="none" language="none">
@@ -351,6 +374,7 @@ If you do not add the interface for the script-defined extension, your IDE shows
 [TS][Error] Property 'myPlugin' does not exist on type 'JQuery'
 
 </code-example>
+
 
 <!-- links -->
 
@@ -375,4 +399,4 @@ If you do not add the interface for the script-defined extension, your IDE shows
 
 <!-- end links -->
 
-@reviewed 2021-11-01
+@reviewed 2022-01-05
