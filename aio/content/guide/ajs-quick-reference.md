@@ -40,6 +40,9 @@ The following table lists some of the key AngularJS template features with their
 |:---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |:---     |
 | <header>Bindings/interpolation</header> <code-example hideCopy format="html" language="html"> Your favorite hero is: {{vm.favoriteHero}} </code-example> In AngularJS, an expression in curly braces denotes one-way binding. This binds the value of the element to a property in the controller associated with this template. <br /> When using the `controller as` syntax, the binding is prefixed with the controller alias \(`vm` or `$ctrl`\) because you have to be specific about the source of the binding. | <header>Bindings/interpolation</header> <code-example hideCopy path="ajs-quick-reference/src/app/movie-list.component.html" region="interpolation"></code-example> In Angular, a template expression in curly braces still denotes one-way binding. This binds the value of the element to a property of the component. The context of the binding is implied and is always the associated component, so it needs no reference variable. <br /> For more information, see the [Interpolation][AioGuideInterpolation] guide. |
 
+
+<a id="filterspipes"></a>
+
 ### Filters &rarr; Pipes
 
 | AngularJS                                                                                                                                                                                                                                                                                                                                                             | Angular |
@@ -51,6 +54,9 @@ The following table lists some of the key AngularJS template features with their
 | AngularJS                                                                                                                                                                                                                                                                                                                | Angular |
 |:---                                                                                                                                                                                                                                                                                                                      |:---     |
 | <header>Local variables</header> <code-example hideCopy format="html" language="html"> &lt;tr ng-repeat="movie in vm.movies"&gt; &NewLine;&nbsp; &lt;td&gt; &NewLine;&nbsp;&nbsp;&nbsp; {{movie.title}} &NewLine;&nbsp; &lt;/td&gt; &NewLine;&lt;/tr&gt; </code-example> Here, `movie` is a user-defined local variable. | <header>Input variables</header> <code-example hideCopy path="ajs-quick-reference/src/app/app.component.html" region="local"></code-example> Angular has true template input variables that are explicitly defined using the `let` keyword. <br /> For more information, see the [Structural directive shorthand][AioGuideStructuralDirectivesStructuralDirectiveShorthand] section of [Structural Directives][AioGuideStructuralDirectives]. |
+
+
+<a id="template-directives"></a>
 
 <!--
 ## Template directives

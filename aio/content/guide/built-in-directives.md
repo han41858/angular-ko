@@ -45,6 +45,7 @@ The different types of Angular directives are as follows:
 
 
 <a id="attribute-directives"></a>
+<a id="built-in-attribute-directives"></a>
 
 <!--
 ## Built-in attribute directives
@@ -177,6 +178,7 @@ For more information, see the <live-example></live-example> `app.component.ts` a
 
 
 <a id="ngstyle"></a>
+<a id="setting-inline-styles-with-ngstyle"></a>
 
 <!--
 ## Setting inline styles with `NgStyle`
@@ -220,6 +222,7 @@ See the <live-example></live-example> `app.component.ts` and `app.component.html
 
 
 <a id="ngModel"></a>
+<a id="displaying-and-updating-properties-with-ngmodel"></a>
 
 <!--
 ## Displaying and updating properties with `ngModel`
@@ -314,6 +317,7 @@ Angular 컴포넌트에는 값 접근자나 `NgModel`을 사용할 필요 없이
 
 
 <a id="structural-directives"></a>
+<a id="built-in-structural-directives"></a>
 
 <!--
 ## Built-in structural directives
@@ -671,6 +675,7 @@ Angular가 제공하는 `<ng-container>`는 스타일이나 레이아웃에 영�
 
 
 <a id="ngSwitch"></a>
+<a id="switching-cases-with-ngswitch"></a>
 
 <!--
 ## Switching cases with `NgSwitch`

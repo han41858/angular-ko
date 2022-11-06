@@ -75,6 +75,8 @@ Here, a `<button>` further down the template refers to the `phone` variable.
 <code-example path="template-reference-variables/src/app/app.component.html" region="ref-phone" header="src/app/app.component.html"></code-example>
 
 
+<a id="how-angular-assigns-values-to-template-variables"></a>
+
 <!--
 ## How Angular assigns values to template variables
 -->

@@ -91,6 +91,7 @@ Angular 6.0 버전 이전에는 Angular CLI로 서비스를 생성했을 때 이
 
 
 <a id="forRoot"></a>
+<a id="the-forroot-pattern"></a>
 
 <!--
 ## The `forRoot()` pattern
@@ -155,6 +156,7 @@ Use `forRoot()` to separate providers from a module so you can import that modul
 
 
 <a id="forRoot-router"></a>
+<a id="forroot-and-the-router"></a>
 
 <!--
 ### `forRoot()` and the `Router`

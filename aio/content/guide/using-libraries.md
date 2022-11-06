@@ -261,6 +261,8 @@ For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroducti
 1.  Angular CLI `ng serve` 명령으로 애플리케이션을 실행하면 Bootstrap 4가 적용된 것을 확인할 수 있습니다.
 
 
+<a id="using-runtime-global-libraries-inside-your-app"></a>
+
 <!--
 ### Using runtime-global libraries inside your app
 -->

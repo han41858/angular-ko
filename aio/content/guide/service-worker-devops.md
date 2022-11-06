@@ -628,6 +628,8 @@ While its design attempts to minimize the impact of such problems, the Angular s
 이 안전장치를 활용하면 오동작하는 서비스 워커를 빠르게 비활성화할 수 있습니다.
 
 
+<a id="fail-safe"></a>
+
 <!--
 ### Fail-safe
 -->

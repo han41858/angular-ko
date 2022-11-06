@@ -904,6 +904,7 @@ ng generate module my-module --routing
 
 
 <a id="routing-refactor"></a>
+<a id="refactor-the-routing-configuration-into-a-routing-module"></a>
 
 <!--
 ### Refactor the routing configuration into a routing module
@@ -1615,6 +1616,7 @@ You also have to unsubscribe if your observable pipe has a delay with code you d
 
 
 <a id="snapshot"></a>
+<a id="snapshot-the-no-observable-alternative"></a>
 
 <!--
 #### `snapshot`: the no-observable alternative
@@ -1947,7 +1949,7 @@ The optional `foo` route parameter is harmless and the router continues to ignor
 `paramMap`은 사용자가 컴포넌트에 진입할 때마다 상황에 맞는 라우팅 인자를 전달하며, 이 경우에는 `id`도 포함됩니다.
 `ngOnInit()` 메서드에서 이 프로퍼티를 구독해서 받아온 `id` 값을 `selectedId`에 할당하고 히어로 정보를 요청해 봅시다.
 
-이제 템플릿은 [클래스 바인딩](guide/attribute-binding#class-binding)이 동작하면서 갱신됩니다.
+이제 템플릿은 [클래스 바인딩](guide/class-binding)이 동작하면서 갱신됩니다.
 그래서 클래스 바인딩에 사용된 평가식이 `true`를 반환하면 CSS 클래스 `selected`가 해당 DOM에 추가되고, 평가식이 `false`를 반환하면 해당 클래스가 제거됩니다.
 클래스 바인딩은 `<li>` 태그에 지정합니다:
 
@@ -2300,6 +2302,7 @@ In keeping with the [Separation of Concerns principle](https://blog.8thlight.com
 
 
 <a id="crisis-child-routes"></a>
+<a id="a-crisis-center-with-child-routes"></a>
 
 <!--
 ### A crisis center with child routes
@@ -3806,6 +3809,7 @@ ng generate guard can-deactivate
 
 <a id="Resolve"></a>
 <a id="resolve-guard"></a>
+<a id="resolve-pre-fetching-component-data"></a>
 
 <!--
 ### *Resolve*: pre-fetching component data
@@ -4279,6 +4283,7 @@ The completed admin route looks like this:
 
 
 <a id="preloading"></a>
+<a id="preloading-background-loading-of-feature-areas"></a>
 
 <!--
 ### Preloading: background loading of feature areas

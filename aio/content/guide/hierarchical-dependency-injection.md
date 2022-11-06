@@ -648,6 +648,9 @@ Understanding the idea of the `<#VIEW>` demarcation is especially significant wh
 
 컴포넌트 클래스에 등록되는 서비스 프로바이더가 어떤 범위까지 유효한지 `<#VIEW>`가 위치하는 곳을 기준으로 생각해 보세요.
 
+
+<a id="providing-services-in-component"></a>
+
 <!--
 ## Providing services in `@Component()`
 -->
@@ -1320,6 +1323,7 @@ Emoji from AnimalService: &#x1F436;
 
 
 <a id="modify-visibility"></a>
+<a id="modifying-service-visibility"></a>
 
 <!--
 ## Modifying service visibility

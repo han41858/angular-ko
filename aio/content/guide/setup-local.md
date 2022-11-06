@@ -73,6 +73,7 @@ Angular를 로컬 환경에 설치하려면 이런 것들이 필요합니다:
 
 
 <a id="install-cli"></a>
+<a id="install-the-angular-cli"></a>
 
 <!--
 ## Install the Angular CLI
@@ -118,6 +119,7 @@ npm install -g &commat;angular/cli<aio-angular-dist-tag class="pln"></aio-angula
 
 
 <a id="create-proj"></a>
+<a id="create-a-workspace-and-initial-application"></a>
 
 <!--
 ## Create a workspace and initial application

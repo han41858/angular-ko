@@ -124,6 +124,7 @@ For more information on how to choose, see the [next question](#how-do-i-choose)
 
 
 <a id="how-do-i-choose"></a>
+<a id="how-do-i-choose-which-static-flag-value-to-use-true-or-false"></a>
 
 <!--
 ### How do I choose which `static` flag value to use: `true` or `false`?
@@ -150,6 +151,7 @@ There are rarer cases where `{static: true}` flag might be necessary \(see [answ
 
 
 <a id="should-i-use-static-true"></a>
+<a id="is-there-a-case-where-i-should-use-static-true"></a>
 
 <!--
 ### Is there a case where I should use `{static: true}`?

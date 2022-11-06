@@ -223,6 +223,8 @@ HTML 문서의 `<body>` 엘리먼트에 CSS 테마 관련 클래스가 지정된
 </div>
 
 
+<a id="deprecated-deep--and-ng-deep"></a>
+
 <!--
 ### (deprecated) `/deep/`, `>>>`, and `::ng-deep`
 -->

@@ -104,6 +104,7 @@ Angular CLI로 만든 프로젝트에는 `AppComponent` 컴포넌트가 하나 �
 
 
 <a id="declarations"></a>
+<a id="the-declarations-array"></a>
 
 <!--
 ## The `declarations` array
@@ -161,8 +162,8 @@ declarations: [
 
 </code-example>
 
-A declarable can only belong to one module, so only declare it in one `@NgModule`.
-When you need it elsewhere, import the module that contains the declarable you need.
+선언가능한 항목들은 모듈 한 곳에만 포함되기 때문에 반드시 `@NgModule` 하나에만 선언되어야 합니다.
+이 항목을 다른 곳에 사용하려면 모듈 단위로 로드해야 합니다.
 
 
 <!--

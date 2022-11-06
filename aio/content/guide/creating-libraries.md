@@ -223,6 +223,7 @@ Here are some things to consider in migrating application functionality to a lib
 
 
 <a id="integrating-with-the-cli"></a>
+<a id="integrating-with-the-cli-using-code-generation-schematics"></a>
 
 <!--
 ## Integrating with the CLI using code-generation schematics
@@ -282,6 +283,9 @@ Angular Material 스키매틱은 CDK가 제공하는 [BreakpointObserver](https:
 
 더 자세한 내용은 [스키매틱 개요](guide/schematics) 문서나 [라이브러리용 스키매틱](guide/schematics-for-libraries) 문서를 참고하세요.
 
+
+<a id="publishing-your-library"></a>
+
 <!--
 ## Publishing your library
 -->
@@ -324,6 +328,7 @@ npm publish
 
 
 <a id="lib-assets"></a>
+<a id="managing-assets-in-a-library"></a>
 
 <!--
 ## Managing assets in a library
@@ -615,6 +620,8 @@ Read more in [Publishing npm Packages](https://docs.npmjs.com/getting-started/pu
 이전에 npm 저장소에 라이브러리를 배포한 적이 없다면 계정을 먼저 만들어야 합니다.
 자세한 내용은 [npm 패키지 배포하기](https://docs.npmjs.com/getting-started/publishing-npm-packages) 문서를 참고하세요.
 
+
+<a id="consuming-partial-ivy-code-outside-the-angular-cli"></a>
 
 <!--
 ## Consuming partial-Ivy code outside the Angular CLI

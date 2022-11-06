@@ -40,6 +40,8 @@ DOM 이벤트는 사용자가 링크를 클릭하거나 버튼을 클릭할 때,
 <live-example></live-example>을 실행해 보세요.
 
 
+<a id="binding-to-user-input-events"></a>
+
 <!--
 ## Binding to user input events
 -->

@@ -8,7 +8,9 @@ This page discusses build-specific configuration options for Angular projects.
 -->
 이 문서는 Angular 프로젝트 옵션 중 빌드/실행 설정과 관련된 내용에 대해 다룹니다.
 
+
 <a id="app-environments"></a>
+<a id="configuring-application-environments"></a>
 
 <!--
 ## Configuring application environments
@@ -287,6 +289,7 @@ export class AppComponent {
 </code-example>
 
 <a id="file-replacement"></a>
+<a id="configure-target-specific-file-replacements"></a>
 
 <!--
 ## Configure target-specific file replacements
@@ -442,6 +445,7 @@ ng build --configuration=staging
 
 <a id="size-budgets"></a>
 <a id="configure-size-budgets"></a>
+<a id="configuring-size-budgets"></a>
 
 <!--
 ## Configuring size budgets

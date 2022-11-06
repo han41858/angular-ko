@@ -39,6 +39,8 @@ Angular가 제공하는 애니메이션 시스템은 CSS를 활용하기 때문�
 애니메이션을 적용할 수 있는 프로퍼티 목록에 대해 알아보려면 [CSS Transitions](https://www.w3.org/TR/css-transitions-1/) 문서를 참고하세요.
 
 
+<a id="about-this-guide"></a>
+
 <!--
 ## About this guide
 -->

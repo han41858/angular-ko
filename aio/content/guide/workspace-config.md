@@ -130,6 +130,8 @@ The following configuration properties are a set of options that customize the A
 | `warnings`             | CLI가 콘솔에 출력하는 경고 메시지를 지정합니다.                                                      | [경고 옵션](#warnings-options)                           |
 
 
+<a id="analytics-sharing-options"></a>
+
 <!--
 ### Analytics sharing options
 -->
@@ -146,6 +148,8 @@ The following configuration properties are a set of options that customize the A
 | `tracking` | 사용통계 공유에 사용될 트래킹 ID를 지정합니다.                                 | `string` |
 | `uuid`     | 사용통계 공유에 사용될 UUID \(Universally Unique Identifier\)를 지정합니다. | `string` |
 
+
+<a id="cache-options"></a>
 
 <!--
 ### Cache options
@@ -165,6 +169,8 @@ The following configuration properties are a set of options that customize the A
 | `environment` | 어떤 환경설정으로 디스크 캐시를 사용할지 지정합니다. | `local` &verbar; `ci` &verbar; `all` | `local`          |
 | `path`        | 캐시 결과를 저장할 디렉토리를 지정합니다.       | `string`                             | `.angular/cache` |
 
+
+<a id="warnings-options"></a>
 
 <!--
 ### Warnings options
@@ -237,6 +243,7 @@ The following top-level configuration properties are available for each project,
 
 
 <a id="schematics"></a>
+<a id="generation-schematics"></a>
 
 <!--
 ## Generation schematics
@@ -266,6 +273,7 @@ Angular CLI로 `ng generate` 명령을 사용할 때 활용되는 스키매틱�
 
 
 <a id="architect"></a>
+<a id="project-tool-configuration-options"></a>
 
 <!--
 ## Project tool configuration options
@@ -541,6 +549,7 @@ The following sections provide more details of how these complex values are used
 
 
 <a id="asset-config"></a>
+<a id="assets-configuration"></a>
 
 <!--
 ### Assets configuration
@@ -703,6 +712,7 @@ The following example uses the `ignore` field to exclude certain files in the as
 
 
 <a id="style-script-config"></a>
+<a id="styles-and-scripts-configuration"></a>
 
 <!--
 ### Styles and scripts configuration
@@ -907,6 +917,8 @@ There are several options that can be used to fine-tune the optimization of an a
 | `fonts`   | 사용된 폰트를 최적화합니다. <div class="alert is-helpful"> **NOTE**: <br /> 인터넷 연결이 필요합니다. </div> | `boolean` &verbar; [폰트 최적화 옵션](#fonts-optimization-options)   | `true` |
 
 
+<a id="styles-optimization-options"></a>
+
 <!--
 #### Styles optimization options
 -->
@@ -923,6 +935,8 @@ There are several options that can be used to fine-tune the optimization of an a
 | `minify`         | 공백문자, 주석을 제거하고 일부 코드를 병합해서 CSS 코드를 압축합니다.                                                                              | `boolean` | `true` |
 | `inlineCritical` | [화면이 최초로 그려지는 성능\(First Contentful Paint\)](https://web.dev/first-contentful-paint)을 향상시키기 위해 주요 CSS를 추출하고 인라인으로 만듭니다. | `boolean` | `true` |
 
+
+<a id="fonts-optimization-options"></a>
 
 <!--
 #### Fonts optimization options

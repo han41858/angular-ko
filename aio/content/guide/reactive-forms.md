@@ -230,6 +230,8 @@ When using the `setValue()` method with a [form group](#grouping-form-controls "
 </div>
 
 
+<a id="grouping-form-controls"></a>
+
 <!--
 ## Grouping form controls
 -->
@@ -453,6 +455,7 @@ The following examples show how to refactor the `ProfileEditor` component to use
 
 
 <a id="basic-form-validation"></a>
+<a id="validating-form-input"></a>
 
 <!--
 ## Validating form input
@@ -500,6 +503,7 @@ The following example shows how to add a required validation to the `firstName` 
 
 
 <a id="dynamic-forms"></a>
+<a id="creating-dynamic-forms"></a>
 
 <!--
 ## Creating dynamic forms

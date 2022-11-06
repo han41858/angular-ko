@@ -286,6 +286,7 @@ In the case of an observable, the observable must complete, at which point the f
 
 
 <a id="adding-to-reactive-forms"></a>
+<a id="adding-custom-validators-to-reactive-forms"></a>
 
 <!--
 ### Adding custom validators to reactive forms
@@ -303,6 +304,7 @@ In reactive forms, add a custom validator by passing the function directly to th
 
 
 <a id="adding-to-template-driven-forms"></a>
+<a id="adding-custom-validators-to-template-driven-forms"></a>
 
 <!--
 ### Adding custom validators to template-driven forms

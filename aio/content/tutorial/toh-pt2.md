@@ -380,7 +380,7 @@ The finished `<li>` looks like this:
 
 </div>
 
-Angular가 제공하는 [클래스 바인딩](guide/attribute-binding#class-binding) 문법을 사용하면 특정 조건에 따라 CSS 클래스를 추가하거나 제거할 수 있습니다.
+Angular가 제공하는 [클래스 바인딩](guide/class-binding) 문법을 사용하면 특정 조건에 따라 CSS 클래스를 추가하거나 제거할 수 있습니다.
 스타일을 지정하려는 엘리먼트에 `[class.some-css-class]="some-condition"`와 같은 문법을 추가하면 됩니다.
 
 이 예제에서는 `HeroesComponent` 템플릿의 `<li>` 엘리먼트에 `[class.selected]`와 같은 문법으로 클래스를 바인딩합니다:

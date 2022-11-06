@@ -260,6 +260,8 @@ Angular versions v2 to v11 are no longer under support.
 Angular v2 버전부터 v11 버전은 지원이 중단되었습니다.
 
 
+<a id="lts-fixes"></a>
+
 <!--
 ### LTS fixes
 -->
@@ -277,6 +279,7 @@ As a general rule, a fix is considered for an LTS version if it resolves one of:
 *   LTS 지원이 시작된 이후 서드 파티 변경사항\(ex. 새 브라우저 버전 배포\)을 반영해야 할 때
 
 <a id="deprecation"></a>
+<a id="deprecation-practices"></a>
 
 <!--
 ## Deprecation practices

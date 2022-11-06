@@ -53,6 +53,7 @@ If you'd like to experiment with the application that this guide describes, <liv
 
 
 <a id="setup"></a>
+<a id="set-up-testing"></a>
 
 <!--
 ## Set up testing

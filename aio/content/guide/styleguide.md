@@ -915,6 +915,7 @@ Follows a familiar convention from other technology platforms.
 
 
 <a id="05-02"></a>
+<a id="component-selectors"></a>
 
 <!--
 ### Component selectors
@@ -1239,6 +1240,7 @@ Directives are easily identified.
 
 
 <a id="02-09"></a>
+<a id="pipe-names"></a>
 
 <!--
 ### Pipe names
@@ -3209,6 +3211,7 @@ Angular 안에서는 파이프가 1초에 여러번도 호출될 수 있기 때�
 ## 컴포넌트
 
 <a id="05-03"></a>
+<a id="style-05-03"></a>
 
 <!--
 ### Components as elements

@@ -788,6 +788,7 @@ Look at where it *tried* to find those files and adjust the base tag appropriate
 
 
 <a id="deploy-url"></a>
+<a id="the-deploy-url"></a>
 
 <!--
 ## The `deploy` url

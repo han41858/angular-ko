@@ -43,6 +43,7 @@ Angular에서 사용하는 용어들이 있습니다.
 
 
 <a id="aot"></a>
+<a id="ahead-of-time-aot-compilation"></a>
 
 <!--
 ## ahead-of-time (AOT) compilation
@@ -60,6 +61,8 @@ AOT 컴파일러는 Angular HTML 템플릿과 TypeScript 코드를 빌드 단계
 
 커맨드 라인 툴 `ngc`를 사용해서 컴파일하면 모듈 팩토리 코드를 그대로 부트스트랩할 수 있기 때문에, 클라이언트로 Angular 컴파일러 코드를 전달할 필요도 없습니다.
 
+
+<a id="angular-element"></a>
 
 <!--
 ## Angular element
@@ -128,6 +131,8 @@ To learn more, see [Service Worker and PWA][AioGuideServiceWorkerIntro].
 [서비스 워커와 PWA][AioGuideServiceWorkerIntro] 문서도 참고해 보세요.
 
 
+<a id="architect"></a>
+
 <!--
 ## Architect
 -->
@@ -158,6 +163,8 @@ For example, a custom builder can replace the third-party tools used by the buil
 `ng build`나 `ng test` 명령이 Angular CLI가 아니라 서드 파티 툴을 사용하도록 변경할 수도 있습니다.
 
 
+<a id="attribute-directive"></a>
+
 <!--
 ## attribute directive
 -->
@@ -174,6 +181,8 @@ Learn more in [Attribute Directives][AioGuideAttributeDirectives].
 
 자세한 내용은 [어트리뷰트 디렉티브][AioGuideAttributeDirectives] 문서를 참고하세요.
 
+
+<a id="binding"></a>
 
 <!--
 ## binding
@@ -217,6 +226,8 @@ Angular에서는 애플리케이션 최상위 NgModule(`AppModule`)에 지정된
 자세한 내용은 [부트스트랩][AioGuideBootstrapping] 문서를 참고하세요.
 
 
+<a id="builder"></a>
+
 <!--
 ## builder
 -->
@@ -244,6 +255,7 @@ The [workspace configuration][AioGuideWorkspaceConfig] file, `angular.json`, con
 
 <a id="case-conventions"></a>
 <a id="dash-case"></a>
+<a id="case-types"></a>
 
 <!--
 ## case types
@@ -273,6 +285,8 @@ Angular는 타입 이름을 대문자 컨벤션으로 사용합니다.
 | 밑줄_케이스(underscore_case) <br /> 스네이크_케이스(snake_case)                                           | Angular에서는 거의 사용되지 않습니다.                              | `convert_link_mode` |
 | 대문자_밑줄_케이스(UPPER_UNDERSCORE_CASE) <br /> 대문자_스네이크_케이스(UPPER_SNAKE_CASE, SCREAMING_SNAKE_CASE) | 전통적으로 상수에 사용했습니다. <br /> 이 방식도 괜찮지만, 캐멀 케이스를 더 권장합니다. | `FIX_ME`            |
 
+
+<a id="change-detection"></a>
 
 <!--
 ## change detection
@@ -313,6 +327,7 @@ Angular 프레임워크가 애플리케이션의 UI 상태와 데이터 상태�
 
 
 <a id="decorator"></a>
+<a id="class-decorator"></a>
 
 <!--
 ## class decorator
@@ -342,6 +357,8 @@ Angular 클래스 타입에 지정할 수 있는 데코레이터는 이런 것�
 *   `@NgModule()`
 
 
+<a id="class-field-decorator"></a>
+
 <!--
 ## class field decorator
 -->
@@ -353,6 +370,9 @@ Some examples are `@Input` and `@Output`.
 -->
 클래스 필드 앞에 지정하는 [데코레이터][AioGuideGlossaryDecoratorDecoration]를 의미합니다.
 해당 필드를 `@Input`, `@Output`과 같은 특정 타입으로 지정합니다.
+
+
+<a id="collection"></a>
 
 <!--
 ## collection
@@ -366,6 +386,7 @@ Angular에서는 [npm 패키지][AioGuideGlossaryNpmPackage]로 구성된 [스�
 
 
 <a id="cli"></a>
+<a id="command-line-interface-cli"></a>
 
 <!--
 ## command-line interface (CLI)
@@ -392,6 +413,8 @@ Angular CLI는 개발 단계, 빌드, 테스트, 번들링, 배포에 모두 사
 [스키매틱 CLI][AioGuideGlossarySchematicsCli] 섹션도 확인해 보세요.
 
 
+<a id="component"></a>
+
 <!--
 ## component
 -->
@@ -416,6 +439,8 @@ Angular 컴포넌트 클래스는 화면에 표시될 데이터를 제공하며 
 
 컴포넌트 클래스, 템플릿, 뷰에 대해 알아보려면 [Angular 개요][AioGuideArchitecture] 문서를 참고하세요.
 
+
+<a id="configuration"></a>
 
 <!--
 ## configuration
@@ -442,6 +467,8 @@ To learn more, see [Responding to changes in content][AioGuideLifecycleHooksResp
 
 자세한 내용은 [외부 컨텐츠 변경사항 감지하기][AioGuideLifecycleHooksRespondingToProjectedContentChanges] 문서를 참고하세요.
 
+
+<a id="custom-element"></a>
 
 <!--
 ## custom element
@@ -472,6 +499,8 @@ See also [dynamic component loading][AioGuideGlossaryDynamicComponentLoading].
 
 자세한 내용은 [Angular 엘리먼트][AioGuideGlossaryAngularElement] 섹션과 [컴포넌트 동적 로드하기][AioGuideGlossaryDynamicComponentLoading] 섹션을 참고하세요.
 
+
+<a id="data-binding"></a>
 
 <!--
 ## data binding
@@ -509,6 +538,8 @@ Angular [템플릿 문법][AioGuideTemplateSyntax]에서 다루는 데이터 바
 *   [ngModel을 활용하는 양방향 바인딩(Two-way data binding with ngModel)][AioGuideBuiltInDirectivesDisplayingAndUpdatingPropertiesWithNgmodel]
 
 
+<a id="declarable"></a>
+
 <!--
 ## declarable
 -->
@@ -542,6 +573,8 @@ Do not declare the following:
 *   Angular 구성요소가 아닌 클래스, 문자열, 숫자, 함수, 데이터 모델, 환경설정, 비즈니스 로직, 헬퍼 클래스
 
 
+<a id="decorator--decoration"></a>
+
 <!--
 ## decorator | decoration
 -->
@@ -567,6 +600,8 @@ Angular는 데코레이터에 메타데이터를 지정하는 방식으로 클�
 [클래스 데코레이터][AioGuideGlossaryClassDecorator], [클래스 필드 데코레이터][AioGuideGlossaryClassFieldDecorator]도 확인해 보세요.
 
 
+<a id="dependency-injection-di"></a>
+
 <!--
 ## dependency injection (DI)
 -->
@@ -587,6 +622,8 @@ Angular에서 의존성 객체는 일반적으로 서비스이지만, 특정 값
 자세한 내용은 [Angular의 의존성 주입][AioGuideDependencyInjection] 문서를 참고하세요.
 
 
+<a id="di-token"></a>
+
 <!--
 ## DI token
 -->
@@ -597,6 +634,8 @@ A lookup token associated with a dependency [provider][AioGuideGlossaryProvider]
 -->
 [의존성 주입][AioGuideGlossaryDependencyInjectionDi] 시스템에서 의존성 객체의 [프로바이더][AioGuideGlossaryProvider]를 찾을 때 사용하는 토큰입니다.
 
+
+<a id="directive"></a>
 
 <!--
 ## directive
@@ -670,6 +709,8 @@ Angular는 TypeScript를 특정 도메인 언어로 사용해서 Angular앱에 �
 [애니메이션][AioGuideAnimations], [폼][AioGuideForms], [라우팅과 네비게이션][AioGuideRouter] 등이 그렇습니다.
 
 
+<a id="dynamic-component-loading"></a>
+
 <!--
 ## dynamic component loading
 -->
@@ -686,6 +727,8 @@ See also [custom element][AioGuideGlossaryCustomElement], which provides an easi
 
 [커스텀 엘리먼트][AioGuideGlossaryCustomElement]를 사용해도 같은 효과를 낼 수 있으며, 커스텀 엘리먼트를 활용하는 방법이 좀 더 쉽습니다.
 
+
+<a id="eager-loading"></a>
 
 <!--
 ## eager loading
@@ -715,6 +758,9 @@ To learn more, see [Browser Support][AioGuideBrowserSupport].
 모든 브라우저가 ECMAScript 표준을 지원하는 것은 아니기 때문에 최신 기능을 활용하려면 [TypeScript][AioGuideGlossaryTypescript]와 같은 [트랜스파일러][AioGuideGlossaryTranspile]를 사용해서 브라우저 버전에 맞는 코드로 변환해야 합니다.
 
 자세한 내용을 알아보려면 [브라우저 지원][AioGuideBrowserSupport] 문서를 참고하세요.
+
+
+<a id="element"></a>
 
 <!--
 ## element
@@ -757,6 +803,9 @@ For example, the `@angular/core` package has two entry-point modules, which can 
 [npm 패키지][AioGuideNpmPackages]로 제공되어 개발자가 로드해서 사용하는 [JavaScript 모듈][AioGuideGlossaryModule]를 의미합니다.
 진입점이 되는 모듈은 일반적으로 다른 내부 모듈의 심볼을 불러와서 다시 외부로 공개(re-export) 하는 방식으로 구성됩니다.
 예를 들어 `@angular/core` 패키지에는 진입점이 되는 모듈이 2개 있는데, 각각 `@angular/core`와 `@angular/core/testing` 모듈을 로드합니다.
+
+
+<a id="form-control"></a>
 
 <!--
 ## form control
@@ -809,6 +858,9 @@ To learn more, see [Form Validation][AioGuideFormValidation].
 
 자세한 내용은 [폼 유효성 검사][AioGuideFormValidation] 문서를 참고하세요.
 
+
+<a id="immutability"></a>
+
 <!--
 ## immutability
 -->
@@ -823,6 +875,9 @@ The inability to alter the state of a value after its creation.
 [반응형 폼][AioGuideGlossaryReactiveForms]에서는 불변성을 기반으로 하기 때문에 개별 데이터가 변경될 때마다 기존 데이터 모델을 활용하지 않고 새로운 데이터 모델을 생성합니다.
 [템플릿 기반 폼][AioGuideGlossaryTemplateDrivenForms]은 `NgModel`과 [양방향 데이터 바인딩][AioGuideGlossaryDataBinding]을 활용해서 기존 데이터 모델 내부 값을 변경합니다.
 
+
+<a id="injectable"></a>
+
 <!--
 ## injectable
 -->
@@ -835,6 +890,9 @@ Other items, such as constant values, can also be injectable.
 -->
 [의존성 주입][AioGuideGlossaryDependencyInjectionDi] 메커니즘에 의해 의존성 객체로 주입될 수 있는 Angular 클래스나 객체를 의미합니다.
 의존성으로 주입되는 [서비스][AioGuideGlossaryService] 클래스는 반드시 `@Injectable()` [데코레이터][AioGuideGlossaryDecoratorDecoration]가 지정되어야 하며, 상수는 데코레이터가 지정되지 않아도 의존성 객체로 주입될 수 있습니다.
+
+
+<a id="injector"></a>
 
 <!--
 ## injector
@@ -860,6 +918,9 @@ Angular [의존성 주입][AioGuideGlossaryDependencyInjectionDi] 시스템 안�
 
 인젝터 계층에 대해 자세하게 알아보려면 [인젝터 계층][AioGuideHierarchicalDependencyInjection] 문서를 참고하세요.
 
+
+<a id="input"></a>
+
 <!--
 ## input
 -->
@@ -875,6 +936,9 @@ To learn more, see [`@Input()` and `@Output()` decorator functions][AioGuideInpu
 [템플릿 표현식][AioGuideGlossaryTemplateExpression]에서 등호(`=`) 오른쪽에 있는 데이터 값이 이 입력 프로퍼티를 통해 디렉티브 안쪽으로 전달됩니다.
 
 자세한 내용은 [입출력 프로퍼티][AioGuideInputsOutputs] 문서를 참고하세요.
+
+
+<a id="interpolation"></a>
 
 <!--
 ## interpolation
@@ -921,7 +985,9 @@ To learn more, see also [TypeScript][AioGuideGlossaryTypescript].
 -->
 [ECMAScript][AioGuideGlossaryEcmascript], [TypeScript][AioGuideGlossaryTypescript] 섹션을 참고하세요.
 
+
 <a id="jit"></a>
+<a id="just-in-time-jit-compilation"></a>
 
 <!--
 ## just-in-time (JIT) compilation
@@ -943,6 +1009,9 @@ JIT 컴파일러는 개발단계에 활용하면 좋기 때문에 Angular 8 버�
 
 [AOT 컴파일][AioGuideGlossaryAheadOfTimeAotCompilation]과 어떻게 다른지 확인해 보세요.
 
+
+<a id="lazy-loading"></a>
+
 <!--
 ## lazy loading
 -->
@@ -960,6 +1029,9 @@ Similarly, you can build custom elements that can be loaded into an Angular appl
 이와 반대로 [즉시 로딩][AioGuideGlossaryEagerLoading]되는 모듈은 애플리케이션이 실행되면서 로드되는 모듈을 의미하며, 애플리케이션 최상위 모듈이 즉시 로딩 모듈에 해당됩니다.
 
 [라우터][AioGuideGlossaryRouter]를 사용하면 부모 화면이 활성화되었을 때만 자식 화면을 지연로딩할 수 있으며, 커스텀 엘리먼트를 사용할 때 로드하는 방식도 활용할 수 있습니다.
+
+
+<a id="library"></a>
 
 <!--
 ## library
@@ -985,6 +1057,9 @@ Angular를 사용하지 않은 웹앱에서 Angular 기능을 사용하려면 An
 * [Angular CLI][AioGuideGlossaryCommandLineInterfaceCli] `add` 명령을 실행하면 현재 [워크스페이스][AioGuideGlossaryWorkspace]에 있는 애플리케이션에 라이브러리를 추가할 수 있습니다.
 
 [스키매틱][AioGuideGlossarySchematic] 섹션도 확인해 보세요.
+
+
+<a id="lifecycle-hook"></a>
 
 <!--
 ## lifecycle hook
@@ -1031,6 +1106,9 @@ Angular는 이런 순서로 라이프싸이클 후킹 메서드를 실행합니�
 | 8   | `ngOnDestroy`           | Just before the directive is destroyed.                     |
 
 To learn more, see [Lifecycle Hooks][AioGuideLifecycleHooks].
+
+
+<a id="module"></a>
 
 <!--
 ## module
@@ -1104,6 +1182,9 @@ Angular 애플리케이션에는 최상위 모듈이 반드시 존재합니다.
 
 자세한 내용은 [NgModule][AioGuideNgmodules] 문서를 참고하세요.
 
+
+<a id="npm-package"></a>
+
 <!--
 ## npm package
 -->
@@ -1126,6 +1207,9 @@ The most recent implementation is internally referred to as `ngtsc` because it i
 -->
 `ngc`는 TypeScript로 작성된 Angular 데코레이터, 메타데이터, 템플릿 코드를 JavaScript 코드로 변환하는 트랜스파일러입니다.
 이런 트랜스파일러 중에서 가장 많이 사용하는 것은 `ngtsc`인데, 이 트랜스파일러는 TypeScript 컴파일러 `tsc`에 Angular 코드를 변환하는 기능을 추가한 것입니다.
+
+
+<a id="observable"></a>
 
 <!--
 ## observable
@@ -1159,6 +1243,8 @@ Angular는 서드 파티 라이브러리 [Reactive Extensions(RxJS)][RxjsMain]�
 자세한 내용은 [옵저버블][AioGuideObservables] 문서를 참고하세요.
 
 
+<a id="observer"></a>
+
 <!--
 ## observer
 -->
@@ -1170,6 +1256,9 @@ The object defines the callbacks for the [subscriber][AioGuideGlossarySubscriber
 -->
 [옵저버블][AioGuideGlossaryObservable] `subscribe()` 메서드에 전달하는 객체입니다.
 이 개체에는 [구독자][AioGuideGlossarySubscriber]가 반응할 콜백 함수를 정의합니다.
+
+
+<a id="output"></a>
 
 <!--
 ## output
@@ -1186,6 +1275,9 @@ To learn more, see [`@Input()` and `@Output()` decorator functions][AioGuideInpu
 그래서 이 프로퍼티를 거쳐 디렉티브 *밖으로* 전달되는 데이터는 [템플릿 표현식][AioGuideGlossaryTemplateExpression]으로 받아서 처리할 수 있습니다.
 
 자세한 내용을 확인하려면 [입출력 프로퍼티][AioGuideInputsOutputs] 문서를 참고하세요.
+
+
+<a id="pipe"></a>
 
 <!--
 ## pipe
@@ -1246,6 +1338,9 @@ See [Browser Support][AioGuideBrowserSupport] for polyfills that support particu
 브라우저 JavaScript 호환성을 맞출 때 사용하는 [npm 패키지][AioGuideNpmPackages] 입니다.
 어떤 플랫폼에서 어떤 폴리필을 사용해야 하는지 알아보려면 [브라우저 지원][AioGuideBrowserSupport] 문서를 참고하세요.
 
+
+<a id="project"></a>
+
 <!--
 ## project
 -->
@@ -1269,6 +1364,9 @@ Angular CLI [`ng new`][AioCliNew] 명령을 실행해서 프로젝트를 생성�
 자세한 내용을 알아보려면 [프로젝트 파일 구조][AioGuideFileStructure] 문서를 참고하세요.
 
 [워크스페이스][AioGuideGlossaryWorkspace]에 있는 모든 프로젝트는 [`angular.json`][AioGuideWorkspaceConfig] 환경설정 파일의 영향을 받습니다.
+
+
+<a id="provider"></a>
 
 <!--
 ## provider
@@ -1296,6 +1394,9 @@ Angular의 기본 서비스는 모든 인젝터에 등록되어 있습니다.
 그래서 개발자는 애플리케이션에 추가로 필요한 프로바이더만 등록하면 됩니다.
 
 자세한 내용은 [서비스][AioGuideGlossaryService], [의존성 주입][AioGuideGlossaryDependencyInjectionDi] 섹션이나 [의존성 주입][AioGuideDependencyInjection] 문서를 참고하세요.
+
+
+<a id="reactive-forms"></a>
 
 <!--
 ## reactive forms
@@ -1350,6 +1451,9 @@ See an example of using a [resolve guard][AioGuideRouterTutorialTohResolvePreFet
 
 동적으로 데이터를 받아오는 예제를 확인하려면 [리졸브 가드][AioGuideRouterTutorialTohResolvePreFetchingComponentData] 문서를 참고하세요.
 
+
+<a id="route-guard"></a>
+
 <!--
 ## route guard
 -->
@@ -1365,6 +1469,9 @@ Learn more in the [Routing and Navigation][AioGuideRouterPreventingUnauthorizedA
 라우팅 가드를 사용하면 라우팅 규칙을 활성화할지 여부, 비활성화할지 여부, 지연로딩 대상 모듈을 로드할지 여부를 결정할 수 있습니다.
 
 자세한 내용은 [라우팅, 네비게이션][AioGuideRouterPreventingUnauthorizedAccess] 문서를 참고하세요.
+
+
+<a id="router"></a>
 
 <!--
 ## router
@@ -1406,6 +1513,9 @@ Angular dynamically renders the template based on the current router state.
 컴포넌트가 화면에 표시될 위치를 지정하는 [디렉티브][AioGuideGlossaryDirective]입니다.
 Angular는 라우터의 현재 상테에 따라 동적으로 템플릿을 렌더링합니다.
 
+
+<a id="routing-component"></a>
+
 <!--
 ## routing component
 -->
@@ -1420,6 +1530,9 @@ To learn more, see [Routing and Navigation][AioGuideRouter].
 
 자세한 내용은 [라우팅, 네비게이션][AioGuideRouter] 문서를 참고하세요.
 
+
+<a id="rule"></a>
+
 <!--
 ## rule
 -->
@@ -1429,6 +1542,9 @@ To learn more, see [Routing and Navigation][AioGuideRouter].
 In [schematics][AioGuideGlossarySchematic], a function that operates on a [file tree][AioGuideGlossaryTree] to create, delete, or modify files in a specific manner.
 -->
 [스키매틱(schematics)][AioGuideGlossarySchematic]에서 [파일 트리][AioGuideGlossaryTree]를 조작하면서 파일을 생성/삭제/수정하는 함수를 의미합니다.
+
+
+<a id="schematic"></a>
 
 <!--
 ## schematic
@@ -1467,6 +1583,9 @@ To learn more, see also [Integrating Libraries with the CLI][AioGuideCreatingLib
 
 자세한 내용을 확인하려면 [스키매틱][AioGuideSchematics] 문서와 [Angular CLI에 라이브러리 통합하기][AioGuideCreatingLibrariesIntegratingWithTheCliUsingCodeGenerationSchematics] 문서를 참고하세요.
 
+
+<a id="schematics-cli"></a>
+
 <!--
 ## Schematics CLI
 -->
@@ -1499,6 +1618,9 @@ npm install -g @angular-devkit/schematics-cli
 콜렉션 폴더는 스키매틱용 워크스페이스입니다.
 `schematics` 명령은 기존에 존재하는 콜렉션에 새 스키매틱을 추가하거나, 기존 스키매틱을 확장할 때도 사용합니다.
 
+
+<a id="scoped-package"></a>
+
 <!--
 ## scoped package
 -->
@@ -1520,6 +1642,9 @@ Import a scoped package in the same way that you import a normal package.
 패키지 그룹을 사용하는 방법은 일반 npm 패키지를 사용하는 방법과 같습니다.
 
 <code-example path="architecture/src/app/app.component.ts" header="architecture/src/app/app.component.ts (로드하기)" region="import"></code-example>
+
+
+<a id="server-side-rendering"></a>
 
 <!--
 ## server-side rendering
@@ -1543,6 +1668,9 @@ You can easily prepare an application for server-side rendering by using the [An
 
 [Angular CLI][AioGuideGlossaryCommandLineInterfaceCli]로 [Angular Universal][AioGuideGlossaryUniversal] 툴을 실행하면 Angular 애플리케이션에 서버 사이드 렌더링을 적용할 수 있습니다.
 이 때 `@nguniversal/express-engine` [스키매틱][AioGuideGlossarySchematic]을 사용합니다.
+
+
+<a id="service"></a>
 
 <!--
 ## service
@@ -1568,6 +1696,8 @@ Angular에서는 [`@Injectable()`][AioGuideGlossaryInjectable] 데코레이터�
 자세한 내용은 [서비스와 의존성 주입][AioGuideArchitectureServices] 문서를 참고하세요.
 
 
+<a id="structural-directive"></a>
+
 <!--
 ## structural directive
 -->
@@ -1582,6 +1712,9 @@ To learn more, see [Structural Directives][AioGuideStructuralDirectives].
 [디렉티브][AioGuideGlossaryDirective] 중에서 DOM을 조작해서 HTML 레이아웃을 추가하거나, 제거하거나, 변경하는 디렉티브입니다.
 
 자세한 내용을 알아보려면 [구조 디렉티브][AioGuideStructuralDirectives] 문서를 참고하세요.
+
+
+<a id="subscriber"></a>
 
 <!--
 ## subscriber
@@ -1614,6 +1747,8 @@ The `subscribe()` method takes an [observer][AioGuideGlossaryObserver] JavaScrip
 *   `complete`: 옵저버블이 종료된 것을 알립니다.
     데이터를 전달하지는 않으며, 옵저버블을 종료한 후에 스케쥴러에 정의된 데이터를 반환할 수 있습니다.
 
+
+<a id="target"></a>
 
 <!--
 ## target
@@ -1655,6 +1790,9 @@ You can then run the target using the [`ng run`][AioCliRun] Angular [CLI][AioGui
 필요하다면 커스텀 빌더를 정의해서 프로젝트에 추가할 수도 있습니다.
 이렇게 추가한 빌드 대상은 [`ng run`][AioGuideGlossaryCommandLineInterfaceCli] 명령으로 실행합니다.
 
+
+<a id="template"></a>
+
 <!--
 ## template
 -->
@@ -1684,6 +1822,8 @@ Angular 템플릿에서 사용할 수 있는 문법을 알아보려면 [템플�
 Angular가 제공하는 `TemplateRef` 객체를 활용하면 대체 템플릿이나 *임베디드* 뷰를 구성할 수 있습니다.
 이 객체는 여러 컴포넌트가 참조할 수도 잇습니다.
 
+
+<a id="template-driven-forms"></a>
 
 <!--
 ## template-driven forms
@@ -1720,6 +1860,9 @@ For an introduction and comparison of both forms approaches, see [Introduction t
 
 템플릿 기반 폼 방식 외에 반응형 폼 방식을 사용할 수도 있습니다.
 두 방식이 어떻게 다른지 알아보려면 [Angular 폼 소개][AioGuideFormsOverview] 문서를 참고하세요.
+
+
+<a id="template-expression"></a>
 
 <!--
 ## template expression
@@ -1799,6 +1942,9 @@ Read and learn more about [template input variables][AioGuideTemplateReferenceVa
 
 자세한 내용은 [템플릿 입력 변수][AioGuideTemplateReferenceVariables] 문서를 참고하세요.
 
+
+<a id="token"></a>
+
 <!--
 ## token
 -->
@@ -1811,6 +1957,9 @@ In Angular, a [DI token][AioGuideGlossaryDiToken] is used to find [providers][Ai
 테이블을 효율적으로 조회하기 위해 사용하는 임의의 식별자를 의미합니다.
 Angular에서는 [의존성 주입][AioGuideGlossaryDiToken] 시스템에서 [프로바이더][AioGuideGlossaryProvider]를 찾을 때 [DI 토큰][AioGuideGlossaryDependencyInjectionDi]을 사용합니다.
 
+
+<a id="transpile"></a>
+
 <!--
 ## transpile
 -->
@@ -1821,6 +1970,9 @@ The translation process that transforms one version of JavaScript to another ver
 -->
 특정 버전으로 작성된 JavaScript 코드를 다른 버전으로 변환하는 과정을 의미합니다.
 ES2015 문법으로 작성된 코드를 ES5 문법으로 변환하는 경우가 그렇습니다.
+
+
+<a id="tree"></a>
 
 <!--
 ## tree
@@ -1865,6 +2017,9 @@ To learn more, see [TypeScript configuration][AioGuideTypescriptConfiguration].
 TypeScript 프로젝트를 컴파일하기 위해 최상위 파일과 컴파일러 옵션을 정의한 파일입니다.
 자세한 내용을 알아보려면 [TypeScript 환경설정][AioGuideTypescriptConfiguration] 문서를 참고하세요.
 
+
+<a id="unidirectional-data-flow"></a>
+
 <!--
 ## unidirectional data flow
 -->
@@ -1905,6 +2060,9 @@ Angular 애플리케이션에 [서버 사이드 렌더링][AioGuideGlossaryServe
 이 때 정적 페이지는 브라우저에서 애플리케이션이 완전히 준비되기 전까지 빠르게 표시될 무언가를 제공하는 용도로 사용합니다.
 
 자세한 내용을 알아보려면 [Angular Universal: 서버 사이드 렌더링][AioGuideUniversal] 문서를 참고하세요.
+
+
+<a id="view"></a>
 
 <!--
 ## view
@@ -1951,6 +2109,7 @@ Angular가 이전에 사용하던 컴파일, 렌더링 파이프라인 엔진입
 View Engine은 9버전부터 지원 중단이 결정되었고, 13버전 부터는 [Ivy][AioGuideGlossaryIvy]로 완전히 대체되어 지금은 더이상 사용되지 않습니다.
 
 <a id="view-tree"></a>
+<a id="view-hierarchy"></a>
 
 <!--
 ## view hierarchy
@@ -1976,6 +2135,9 @@ Those components can be in the same NgModule as the hosting component, or belong
 어떤 뷰는 다른 컴포넌트 호스트 뷰 컨텍스트 안에 존재할 수 있습니다.
 이 관계는 NgModule 하나에서 가능하며, 여러 NgModule에 걸쳐서도 가능합니다.
 
+
+<a id="web-component"></a>
+
 <!--
 ## web component
 -->
@@ -1985,6 +2147,9 @@ Those components can be in the same NgModule as the hosting component, or belong
 See [custom element][AioGuideGlossaryCustomElement].
 -->
 [커스텀 엘리먼트][AioGuideGlossaryCustomElement]를 참고하세요.
+
+
+<a id="workspace"></a>
 
 <!--
 ## workspace
@@ -2010,6 +2175,9 @@ To learn more, see [Workspace Configuration][AioGuideWorkspaceConfig].
 
 자세한 내용을 알아보려면 [워크스페이스 환경설정][AioGuideWorkspaceConfig] 문서를 참고하세요.
 
+
+<a id="workspace-configuration"></a>
+
 <!--
 ## workspace configuration
 -->
@@ -2027,6 +2195,9 @@ Angular [워크스페이스][AioGuideGlossaryWorkspace] 최상위 폴더에 위�
 
 이 파일 외에도 [npm 패키지 매니저][AioGuideGlossaryNpmPackage]를 설정하는 `package.json` 파일과 [TypeScript 트랜스파일][AioGuideGlossaryTranspile]을 설정하는 `tsconfig.json` 파일, [TSLint][GithubPalantirTslint] 규칙을 설정하는 `tslint.json` 파일도 존재합니다.
 자세한 내용을 알아보려면 [워크스페이스와 프로젝트 파일 구조][AioGuideFileStructure] 문서를 참고하세요.
+
+
+<a id="zone"></a>
 
 <!--
 ## zone

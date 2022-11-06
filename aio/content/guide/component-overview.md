@@ -226,6 +226,8 @@ Angular는 템플릿 HTML에 사용된 컴포넌트 셀렉터를 기준으로 �
 <code-example path="component-overview/src/app/component-overview/component-overview.component.ts" region="selector"></code-example>
 
 
+<a id="defining-a-components-template"></a>
+
 <!--
 ## Defining a component's template
 -->

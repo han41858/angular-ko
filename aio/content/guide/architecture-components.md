@@ -137,6 +137,9 @@ A view hierarchy can include views from components in the same NgModule, but it 
 -->
 뷰는 보통 같은 NgModule에 있는 컴포넌트를 활용해서 뷰 계층으로 구성합니다. 그리고 자주 있는 경우는 아니지만 다른 NgModule에 있는 컴포넌트를 뷰에 불러올 수도 있습니다.
 
+
+<a id="template-syntax"></a>
+
 <!--
 ## Template syntax
 -->
@@ -175,6 +178,8 @@ The template-syntax elements tell Angular how to render the HTML to the screen, 
 * `{{hero.name}}`, `(click)`, `[hero]`와 같은 문법은 애플리케이션 데이터나 사용자의 동작을 DOM과 연결하는 문법입니다. 이 내용은 아래 [데이터 바인딩](#데이터-바인딩)에서 자세하게 알아봅니다.
 * `<app-hero-detail>` 태그는 Angular로 만든 `HeroDetailComponent`를 표현하는 엘리먼트입니다. 이 코드에는 표시되지 않았지만 `HeroDetailComponent`는 `HeroListComponent`의 자식 컴포넌트이며, 선택된 히어로의 상세 정보를 화면에 표시합니다. 이렇듯, Angular로 만든 커스텀 컴포넌트는 네이티브 HTML와 자연스럽게 어울립니다.
 
+
+<a id="data-binding"></a>
 
 <!--
 ### Data binding

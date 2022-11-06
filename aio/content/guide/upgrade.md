@@ -39,6 +39,8 @@ AngularJS 애플리케이션이 그 자체로 간결하고 최신 개발 툴을 
 이렇게 점진적으로 업그레이드하는 작업을 위해 Angular는 `upgrade` 모듈을 제공합니다.
 
 
+<a id="preparation"></a>
+
 <!--
 ## Preparation
 -->
@@ -95,6 +97,8 @@ Angular가 제공하는 `upgrade/static` 모듈을 사용해서 점진적으로 
 애플리케이션이 기능별로 구성되어 있다면 앱을 마이그레이션할 때도 기능단위로 작업할 수 있습니다.
 지금은 이렇게 구현되어 있지 않다고 해도 AngularJS 스타일 가이드는 최대한 따르는 것을 권장하며, 애플리케이션을 Angular 버전으로 업그레이드하는 것 뿐만 아니라 좋은 애플리케이션을 만드는 관점에서도 강력하게 권장합니다!
 
+
+<a id="using-a-module-loader"></a>
 
 <!--
 ### Using a Module Loader
@@ -163,6 +167,8 @@ TypeScript 컴파일러를 도입하고 나면 다음 과정을 진행하면 됩
 *   서비스나 컨트롤러는 *클래스*로 변경할 수 있습니다.
     클래스로 변경하고 나면 이후에 Angular 서비스나 컴포넌트 클래스로 변환하는 작업도 수월해집니다.
 
+
+<a id="using-component-directives"></a>
 
 <!--
 ### Using Component Directives
@@ -272,6 +278,8 @@ AngularJS 1.5 버전에는 컴포넌트 라이프싸이클 후킹 함수 `$onIni
 그래서 AngularJS에서 활용하는 컴포넌트 라이프싸이클 관련 로직은 Angular에도 그대로 활용할 수 있습니다.
 
 
+<a id="upgrading-with-ngupgrade"></a>
+
 <!--
 ## Upgrading with ngUpgrade
 -->
@@ -302,6 +310,8 @@ AngularJS는 2021년 12월 31일로 [수명을 다했습니다][AngularBlogFindi
 
 </div>
 
+
+<a id="how-ngupgrade-works"></a>
 
 <!--
 ### How ngUpgrade Works
@@ -479,6 +489,8 @@ Angular가 동작하는 영역은 `<a-component>` 템플릿 내부입니다.
 이 동작 방식은 Angular 템플릿에 사용하느느 AngularJS 컴포넌트 디렉티브에서도 마찬가지입니다.
 
 
+<a id="change-detection"></a>
+
 <!--
 #### Change Detection
 -->
@@ -601,6 +613,8 @@ Angular의 NgModule 안에서 `UpgradeModule` 심볼을 사용하면 AngularJS �
 </div>
 
 
+<a id="bootstrapping-hybrid-applications"></a>
+
 <!--
 ### Bootstrapping hybrid applications
 -->
@@ -712,6 +726,8 @@ AngularJS는 독립적인 최상위 템플릿을 구성합니다.
 이제 하이브리드 애플리케이션이 동작합니다!
 이제 AngularJS 코드로 작성한 애플리케이션에 Angular 코드를 추가할 준비는 끝났습니다.
 
+
+<a id="using-angular-components-from-angularjs-code"></a>
 
 <!--
 ### Using Angular Components from AngularJS Code
@@ -912,6 +928,8 @@ Angular 컴포넌트를 다운그레이드해서 사용할 때 어트리뷰트 �
 <code-example path="upgrade-module/src/index-downgrade-io.html" region="userepeatedcomponent"></code-example>
 
 
+<a id="using-angularjs-component-directives-from-angular-code"></a>
+
 <!--
 ### Using AngularJS Component Directives from Angular Code
 -->
@@ -1029,6 +1047,8 @@ AngularJS 컴포넌트에는 `scope`나 `controller`에 정의된 입출력 프�
 <code-example header="container.component.ts" path="upgrade-module/src/app/upgrade-io/container.component.ts"></code-example>
 
 
+<a id="projecting-angularjs-content-into-angular-components"></a>
+
 <!--
 ### Projecting AngularJS Content into Angular Components
 -->
@@ -1087,6 +1107,8 @@ Angular 컴포넌트에 프로젝션 된 AngularJS의 내용물은 여전히 "An
 </div>
 
 
+<a id="transcluding-angular-content-into-angularjs-component-directives"></a>
+
 <!--
 ### Transcluding Angular Content into AngularJS Component Directives
 -->
@@ -1126,6 +1148,8 @@ AngularJS 컴포넌트 디렉티브에 트랜스클루전하려면 컨텐츠가 
 
 <code-example header="container.component.ts" path="upgrade-module/src/app/a-to-ajs-transclusion/container.component.ts"></code-example>
 
+
+<a id="making-angularjs-dependencies-injectable-to-angular"></a>
 
 <!--
 ### Making AngularJS Dependencies Injectable to Angular
@@ -1217,6 +1241,8 @@ AngularJS로 작성한 `HeroesService`가 있다고 합시다:
 
 </div>
 
+
+<a id="making-angular-dependencies-injectable-to-angularjs"></a>
 
 <!--
 ### Making Angular Dependencies Injectable to AngularJS
@@ -1449,6 +1475,8 @@ AngularJS 라우팅 규칙에 사용할 커스텀 매처는 다음과 같이 정
 이제 AngularJS와 연결된 라우팅 규칙을 만나면 AngularJS 앱이 로드되고 부트스트랩된 이후에 AngularJS 라우팅 규칙이 다시 선택되어 앱을 화면에 표시합니다.
 결국 Angular와 Angular 프레임워크는 동시에 동작하는 모양이 됩니다.
 
+
+<a id="using-the-unified-angular-location-service"></a>
 
 <!--
 ## Using the Unified Angular Location Service

@@ -903,6 +903,8 @@ For example, a server might require an authorization token, or "Content-Type" he
 인증 토큰을 요구한다던가 요청으로 보낸 내용의 MIME 타입을 결정하기 위해 "Content-Type"을 지정해야 하는 경우가 그렇습니다.
 
 
+<a id="adding-headers"></a>
+
 <!--
 ##### Adding headers
 -->
@@ -1869,6 +1871,8 @@ If you think you'll reuse this debouncing logic, consider moving it to a utility
 </div>
 
 
+<a id="security-xsrf-protection"></a>
+
 <!--
 ## Security: XSRF protection
 -->
@@ -1938,6 +1942,7 @@ If your backend service uses different names for the XSRF token cookie or header
 
 
 <a id="testing-requests"></a>
+<a id="testing-http-requests"></a>
 
 <!--
 ## Testing HTTP requests

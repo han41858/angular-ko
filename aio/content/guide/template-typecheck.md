@@ -403,6 +403,8 @@ export class AppComponent {
 [커스텀 디렉티브에 향상된 템플릿 타입 검사 적용하기](guide/structural-directives#directive-type-checks) 문서를 참고하세요.
 
 
+<a id="strict-null-checks"></a>
+
 <!--
 ### Strict null checks
 -->

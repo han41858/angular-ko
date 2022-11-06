@@ -40,6 +40,8 @@ Angular 6 버전까지 지원이 중단되기로 계획되었던 기능들은 An
 </div>
 
 
+<a id="index"></a>
+
 <!--
 ## Index
 -->
@@ -116,6 +118,8 @@ v14 - v17
 
 Angular CDK와 Angular Material에서 지원이 중단되는 기능을 확인하려면 [이 체인지 로그](https://github.com/angular/components/blob/main/CHANGELOG.md)를 확인하세요.
 
+
+<a id="deprecated-apis"></a>
 
 <!--
 ## Deprecated APIs
@@ -456,6 +460,7 @@ For more information, see the [Ahead-of-Time Compilation](guide/aot-compiler) gu
 
 
 <a id="ngmodel-reactive"></a>
+<a id="ngmodel-with-reactive-forms"></a>
 
 <!--
 ### ngModel with reactive forms
@@ -585,6 +590,7 @@ Angular 11 버전부터 기본 동작이 변경되었습니다.
 
 
 <a id="loadChildren"></a>
+<a id="loadchildren-string-syntax"></a>
 
 <!--
 ### loadChildren string syntax
@@ -784,6 +790,7 @@ All of the `wtf*` APIs are deprecated and will be removed in a future version.
 
 
 <a id="entryComponents"></a>
+<a id="entrycomponents-and-analyze_for_entry_components-no-longer-required"></a>
 
 <!--
 ### `entryComponents` and `ANALYZE_FOR_ENTRY_COMPONENTS` no longer required
@@ -815,6 +822,7 @@ View Engine용 애플리케이션에 사용되는 애플리케이션을 만든�
 
 
 <a id="moduleWithProviders"></a>
+<a id="modulewithproviders-type-without-a-generic"></a>
 
 <!--
 ### `ModuleWithProviders` type without a generic

@@ -38,6 +38,7 @@ Before working with lifecycle hooks, you should have a basic understanding of th
 
 
 <a id="hooks-overview"></a>
+<a id="responding-to-lifecycle-events"></a>
 
 <!--
 ## Responding to lifecycle events
@@ -380,6 +381,7 @@ This example applies the `SpyDirective` from the previous example to the `Counte
 
 
 <a id="onchanges"></a>
+<a id="using-change-detection-hooks"></a>
 
 <!--
 ## Using change detection hooks
@@ -556,6 +558,7 @@ Be very careful about how much logic or computation you put into one of these me
 <a id="aftercontent-hooks"></a>
 
 <a id="content-projection"></a>
+<a id="responding-to-projected-content-changes"></a>
 
 <!--
 ### Responding to projected content changes
@@ -637,6 +640,8 @@ AngularJS에서는 이 테크닉을 *트랜스클루전\(transclusion\)* 이라�
 </div>
 
 
+<a id="using-aftercontent-hooks"></a>
+
 <!--
 #### Using AfterContent hooks
 -->
@@ -697,6 +702,7 @@ Angular는 *AfterView*를 실행하기 전에 *AfterContent* 후킹 함수를 �
 
 
 <a id="docheck"></a>
+<a id="defining-custom-change-detection"></a>
 
 <!--
 ## Defining custom change detection

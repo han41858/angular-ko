@@ -145,6 +145,7 @@ Here's another test that changes the component's `title` property *before* calli
 
 
 <a id="auto-detect-changes"></a>
+<a id="automatic-change-detection"></a>
 
 <!--
 #### Automatic change detection
@@ -381,7 +382,7 @@ This particular test suite supplies a minimal mock of the `UserService` that sat
 <code-example header="app/welcome/welcome.component.spec.ts" path="testing/src/app/welcome/welcome.component.spec.ts" region="user-service-stub"></code-example>
 
 
-<a id="get-injected-service"></a>
+<a id="get-injected-services"></a>
 
 <!--
 #### Get injected services
@@ -1909,6 +1910,8 @@ This test confirms that the component behaves as expected:
 
 <code-example header="app/hero/hero-detail.component.spec.ts (id가 없는 경우)" path="testing/src/app/hero/hero-detail.component.spec.ts" region="route-no-id" ></code-example>
 
+
+<a id="nested-component-tests"></a>
 
 <!--
 ## Nested component tests

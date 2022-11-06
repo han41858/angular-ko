@@ -40,6 +40,7 @@ See the <live-example></live-example> for a working example containing the code 
 -->
 ## 문법
 
+<!--
 Attribute binding syntax resembles [property binding](guide/property-binding), but instead of an element property between brackets, you precede the name of the attribute with the prefix `attr`, followed by a dot.
 Then, you set the attribute value with an expression that resolves to a string.
 
@@ -54,6 +55,23 @@ Then, you set the attribute value with an expression that resolves to a string.
 When the expression resolves to `null` or `undefined`, Angular removes the attribute altogether.
 
 </div>
+-->
+어트리뷰트 바인딩 문법은 [프로퍼티 바인딩](guide/property-binding) 문법과 비슷하지만, 대괄호\([, ]\) 사이에 엘리먼트 프로퍼티가 들어갑니다.
+이 프로퍼티 이름은 `attr.` 접두사로 시작합니다.
+그리고 이  뒤에 어트리뷰트에 할당될 값을 문자열로 지정하면 됩니다.
+
+<code-example format="html" language="html">
+
+&lt;p [attr.attribute-you-are-targeting]="expression"&gt;&lt;/p&gt;
+
+</code-example>
+
+<div class="alert is-helpful">
+
+표현식이 `null`이나 `undefined` 값이 되면 Angular는 이 어트리뷰트를 제거합니다.
+
+</div>
+
 
 
 <!--
@@ -71,6 +89,7 @@ To bind to an ARIA attribute, type the following:
 어트리뷰트 바인딩을 사용하는 목적 중 가장 중요한 것은 ARIA 어트리뷰트를 설정하는 것입니다:
 
 <code-example header="src/app/app.component.html" path="attribute-binding/src/app/app.component.html" region="attrib-binding-aria"></code-example>
+
 
 <a id="colspan"></a>
 

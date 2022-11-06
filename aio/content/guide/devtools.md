@@ -420,6 +420,8 @@ This view colors all the tiles in which Angular performed change detection in gr
 </div>
 
 
+<a id="import-recording"></a>
+
 <!--
 ### Import recording
 -->

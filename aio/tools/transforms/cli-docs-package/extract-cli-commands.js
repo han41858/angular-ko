@@ -5,7 +5,7 @@ const {CONTENTS_PATH} = require('../config');
 const cliGitRef = process.argv[2] || 'main';  // Can be a branch, commit or tag.
 const pkgContent = JSON.stringify({
   dependencies: {
-    '@angular/cli': `https://github.com/han41858/cli-builds#${cliGitRef}`
+    '@angular/cli': `https://github.com/angular/cli-builds#${cliGitRef}`,
   },
 }, null, 2);
 

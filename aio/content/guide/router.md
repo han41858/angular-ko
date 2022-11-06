@@ -133,6 +133,7 @@ import { SecondComponent } from './second/second.component';
 </code-example>
 
 <a id="basic-route"></a>
+<a id="defining-a-basic-route"></a>
 
 <!--
 ## Defining a basic route
@@ -330,6 +331,7 @@ To get information from a route:
 
 
 <a id="wildcard-route-how-to"></a>
+<a id="setting-up-wildcard-routes"></a>
 
 <!--
 ## Setting up wildcard routes
@@ -739,6 +741,8 @@ Angular 앱이 실행되는 시점에 로딩되지 않고 필요한 시점에 �
 자세한 내용은 지연 로딩과 사전 로딩에 대해 다루는 [NgModule 지연 로딩](guide/lazy-loading-ngmodules) 문서를 참고하세요.
 
 
+<a id="preventing-unauthorized-access"></a>
+
 <!--
 ## Preventing unauthorized access
 -->
@@ -843,6 +847,8 @@ export class YourGuard implements CanActivate {
 
 더 자세한 내용은 [라우팅 튜토리얼의 라우팅 가드 섹션](guide/router-tutorial-toh#milestone-5-route-guards)을 참고하세요.
 
+
+<a id="link-parameters-array"></a>
 
 <!--
 ## Link parameters array
