@@ -59,12 +59,6 @@ You should consider the styles of a component to be private implementation detai
 When consuming a common component, you should not override the component's styles any more than you should access the private members of a TypeScript class.
 While Angular's default style encapsulation prevents component styles from affecting other components, global styles affect all components on the page.
 This includes `::ng-deep`, which promotes a component style to a global style.
--->
-<div class="alert is-helpful">
-
-컴포넌트에 적용되는 Angular 스타일 범위에 대해 알아보려면 [뷰 캡슐화(View Encapsulation)](guide/view-encapsulation) 문서를 참고하세요.
-
-</div>
 
 You should consider the styles of a component to be private implementation details for that component.
 When consuming a common component, you should not override the component's styles any more than you should access the private members of a TypeScript class.
@@ -101,6 +95,54 @@ While this lets you limit the elements within your template that consumers can c
 
 You can define a TypeScript API for customizing styles, using template bindings to update CSS classes and styles.
 This is not recommended because the additional JavaScript cost of this style API incurs far more performance cost than CSS.
+-->
+<div class="alert is-helpful">
+
+컴포넌트에 적용되는 Angular 스타일 범위에 대해 알아보려면 [뷰 캡슐화(View Encapsulation)](guide/view-encapsulation) 문서를 참고하세요.
+
+</div>
+
+컴포넌트의 스타일은 해당 컴포넌트에만 적용되는 것으로 이해하는 것이 좋습니다.
+그래서 공통으로 사용하는 컴포넌트라면 이 컴포넌트를 상속받을 때도 TypeScript 클래스의 `private` 멤버인 것처럼 간주하고 오버라이드하지 않도록 주의해야 합니다.
+Angular는 기본적으로 어떤 컴포넌트 스타일이 다른 컴포넌트에 영향을 주지 않는 방식으로 동작합니다.
+전역 스타일이나 `::ng-deep`는 예외입니다.
+
+
+### 컴포넌트에 커스터마이징 기능 제공하기
+
+컴포넌트 제작자라면 여러가지 방식으로 컴포넌트를 커스터마이징할 수 있도록 이런 기능을 제공하는 것이 좋습니다.
+
+#### 1. CSS 커스텀 프로퍼티 제공하기 (권장)
+
+CSS 스타일과 연결되는 프로퍼티를 컴포넌트에 선언해서 API로 열어주는 것이 좋습니다.
+그러면 컴포넌트를 사용하는 개발자가 원하는 대로 CSS 값을 지정할 수 있습니다.
+
+커스터마이징 할 수 있는 기능마다 이렇게 커스텀 프로퍼티를 제공하면 뷰 캡슐화를 안전하게 유지할 수 있습니다.
+
+
+#### 2. 전역 CSS에 `@mixin` 선언하기
+
+Angular의 뷰 캡슐화 정책에 따르면 컴포넌트의 스타일이 전역 스타일에 영향을 주지는 않지만, 전역 범위에 지정하는 CSS는 컴포넌트에 적용될 수 있습니다.
+그래서 컴포넌트를 사용하는 개발자가 Sass를 사용한다면 컴포넌트 안에서 CSS 값을 직접 수정하지 않는 방식으로 커스터마이징 API를 지원할 수 있습니다.
+
+예를 들어 컴포넌트의 모습이 믹스인에 영향을 받는다고 해 봅시다.
+그러면 전역 스타일에서 이 믹스인을 조정하는 방식으로 컴포넌트 내부 DOM 구조나 CSS 클래스에 영향을 줄 숫 있습니다.
+
+
+#### 3. CSS `::part` 활용하기
+
+[Shadow DOM](https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM)을 활용하는 컴포넌트라면, 컴포넌트 템플릿에 `part` 어트리뷰트를 활용하는 방법을 고려해볼만 합니다.
+그러면 [`::part` 유사 엘리먼트](https://developer.mozilla.org/docs/Web/CSS/::part)를 활용해서 컴포넌트의 스타일을 지정할 수 있습니다.
+
+이 방식을 사용하면 컴포넌트 템플릿에 영향을 주지 않으면서 CSS 프로퍼티 값을 커스터마이징 할 수 있습니다.
+
+
+#### 4. TypeScript API 제공하기
+
+템플릿에서 CSS 클래스나 스타일을 바인딩하는 방식으로 TypeScript API를 제공할 수 있습니다.
+이 방식은 JavaScript 연산이 필요하기 때문에 CSS를 직접 사용하는 것과 비교해서 성능이 좋지 않아 권장하지 않습니다.
+
+
 
 <!--
 ## Special selectors

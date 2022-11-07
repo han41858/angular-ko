@@ -140,8 +140,8 @@ A best practice is to run your project locally before you deploy it. To run your
 
     </code-example>
 
-    While serving your application, you can edit your code and see the changes update automatically in the browser.
-    To stop the `ng serve` command, press `Ctrl`+`c`.
+    애플리케이션이 실행되는 중에 애플리케이션 코드가 수정되면 이 내용은 브라우저에 자동으로 반영됩니다.
+    `ng serve` 명령을 중단하려면 `Ctrl`+`c`를 입력하세요.
 
 
 <a id="building"></a>

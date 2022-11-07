@@ -24,9 +24,9 @@ Before learning template syntax, you should be familiar with the following:
 *   HTML
 *   CSS
 
-<!--todo: Do we still need the following section? It seems more relevant to those coming from AngularJS, which is now 7 versions ago. -->
-<!-- You may be familiar with the component/template duality from your experience with model-view-controller (MVC) or model-view-viewmodel (MVVM).
-In Angular, the component plays the part of the controller/viewmodel, and the template represents the view. -->
+<!-todo: Do we still need the following section? It seems more relevant to those coming from AngularJS, which is now 7 versions ago. ->
+<!- You may be familiar with the component/template duality from your experience with model-view-controller (MVC) or model-view-viewmodel (MVVM).
+In Angular, the component plays the part of the controller/viewmodel, and the template represents the view. ->
 
 Each Angular template in your application is a section of HTML to include as a part of the page that the browser displays.
 An Angular HTML template renders a view, or user interface, in the browser, just like regular HTML, but with a lot more functionality.
@@ -42,15 +42,13 @@ To see all of them working together in one application, see the comprehensive <l
 
 </div>
 -->
-Before learning template syntax, you should be familiar with the following:
+템플릿 문법에 대해 제대로 이해하려면 이런 내용을 이해하고 있어야 합니다:
 
-*   [Angular concepts](guide/architecture)
+*   [Angular 개요](guide/architecture)
 *   JavaScript
 *   HTML
 *   CSS
 
-<!-todo: Do we still need the following section? It seems more relevant to those coming from AngularJS, which is now 7 versions ago. ->
-<!- You may be familiar with the component/template duality from your experience with model-view-controller (MVC) or model-view-viewmodel (MVVM).
 Angular 템플릿은 브라우저에 표시되는 화면의 일부를 담당하는 HTML 뭉치입니다.
 Angular HTML 템플릿은 일반 HTML과 마찬가지로 화면을 렌더링하고, 사용자와 상호작용하는 것 외에도 다양하게 활용할 수 있습니다.
 

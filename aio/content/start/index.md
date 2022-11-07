@@ -25,7 +25,14 @@ StackBlitz는 브라우저 기반의 개발 환경이기 때문에 웹 브라우
 -->
 ## 사전지식
 
+<!--
 To get the most out of this tutorial you should already have a basic understanding of the following.
+
+*   [HTML](https://developer.mozilla.org/docs/Learn/HTML "Learning HTML: Guides and tutorials")
+*   [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript "JavaScript")
+*   [TypeScript](https://www.typescriptlang.org/ "The TypeScript language")
+-->
+이 튜토리얼을 제대로 이해하려면 이런 내용을 이해하고 있는 것이 좋습니다.
 
 *   [HTML](https://developer.mozilla.org/docs/Learn/HTML "Learning HTML: Guides and tutorials")
 *   [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript "JavaScript")
@@ -462,45 +469,45 @@ The Phone XL price is over &dollar;700, so the **Notify Me** button appears on t
     *   `product-alerts.component.html`
     *   `product-alerts.component.css`
 
-1.  Open `product-alerts.component.ts`.
-    The `@Component()` decorator indicates that the following class is a component.
-    `@Component()` also provides metadata about the component, including its selector, templates, and styles.
+1.  `product-alerts.component.ts` 파일을 엽니다.
+    `@Component()` 데코레이터는 이 클래스가 컴포넌트라는 것을 지정하는 역할을 합니다.
+    그리고 `@Component()` 데코레이터에는 컴포넌트에 사용할 셀렉터, 템플릿, 스타일 정보도 메타데이터로 함께 지정합니다.
 
     <code-example header="src/app/product-alerts/product-alerts.component.ts" path="getting-started/src/app/product-alerts/product-alerts.component.1.ts" region="as-generated"></code-example>
 
-    Key features in the `@Component()` are as follows:
+    `@Component()` 데코레이터의 이런 내용이 중요합니다:
 
-    *   The `selector`, `app-product-alerts`, identifies the component.
-        By convention, Angular component selectors begin with the prefix `app-`, followed by the component name.
+    *   컴포넌트를 구별할 `selector`는 `app-product-alerts`로 지정했습니다.
+        Angular 컴포넌트는 보통 `app-` 접두사를 붙이고 그 뒤에 컴포넌트 이름을 지정합니다.
 
-    *   The template and style filenames reference the component's HTML and CSS
-    *   The `@Component()` definition also exports the class, `ProductAlertsComponent`, which handles functionality for the component
+    *   컴포넌트 템플릿으로 사용할 HTML 파일과 스타일로 사용할 CSS 파일을 지정합니다.
+    *   `@Component()`는 `ProductAlertsComponent` 클래스에 지정했습니다. 컴포넌트의 기능은 이 클래스에 선언합니다.
 
-1.  To set up `ProductAlertsComponent` to receive product data, first import `Input` from `@angular/core`.
+1.  `ProductAlertsComponent`가 데이터를 받으려면 먼저 `@angular/core` 패키지에서 `Input` 심볼을 로드합니다.
 
     <code-example header="src/app/product-alerts/product-alerts.component.ts" path="getting-started/src/app/product-alerts/product-alerts.component.1.ts" region="imports"></code-example>
 
-1.  In the `ProductAlertsComponent` class definition, define a property named `product` with an `@Input()` decorator.
-    The `@Input()` decorator indicates that the property value passes in from the component's parent, `ProductListComponent`.
+1.  `ProductAlertsComponent` 클래스에 `product` 프로퍼티를 선언하고 이 프로퍼티에 `@Input()` 데코레이터를 지정합니다.
+    `@Input()` 데코레이터를 사용하면, 이 프로퍼티의 값은 부모 컴포넌트 `ProductListComponent`에서 전달된다는 것을 의미합니다.
 
     <code-example header="src/app/product-alerts/product-alerts.component.ts" path="getting-started/src/app/product-alerts/product-alerts.component.1.ts" region="input-decorator"></code-example>
 
-1.  Open `product-alerts.component.html` and replace the placeholder paragraph with a **Notify Me** button that appears if the product price is over &dollar;700.
+1.  `product-alerts.component.html` 파일을 열고 상품 가격이 &dollar;700을 넘을 때만 **Notify Me** 버튼을 표시하도록 수정합니다.
 
     <code-example header="src/app/product-alerts/product-alerts.component.html" path="getting-started/src/app/product-alerts/product-alerts.component.1.html"></code-example>
 
-1.  The generator automatically added the `ProductAlertsComponent` to the `AppModule` to make it available to other components in the application.
+1.  Angular CLI로 `ProductAlertsComponent`를 생성하면 이 컴포넌트는 `AppModule`에 자동으로 추가됩니다.
 
     <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="declare-product-alerts"></code-example>
 
-1.  Finally, to display `ProductAlertsComponent` as a child of `ProductListComponent`, add the `<app-product-alerts>` element to `product-list.component.html`.
+1.  마지막으로 `ProductListComponent`의 자식으로 `ProductListComponent`를 추가하기 위해 `product-list.component.html` 파일에 `<app-product-alerts>` 엘리먼트를 추가합니다.
+    이 때 현재 상ㅅ품을 프로퍼티바인딩으로 전달해 줍니다.
     Pass the current product as input to the component using property binding.
 
     <code-example header="src/app/product-list/product-list.component.html" path="getting-started/src/app/product-list/product-list.component.5.html" region="app-product-alerts"></code-example>
 
-The new product alert component takes a product as input from the product list.
-With that input, it shows or hides the **Notify Me** button, based on the price of the product.
-The Phone XL price is over &dollar;700, so the **Notify Me** button appears on that product.
+새로 만든 상품 알림 컴포넌트는 상품 목록의 하나를 입력 프로퍼티로 받습니다.
+이 때 **Notify Me** 버튼은 상품 가격에 따라 표시되거나/표시되지 않으며, Phone XL의 가격은 &dollar;700을 넘기 때문에 **Notify Me** 버튼이 표시되는 것을 확인할 수 있습니다.
 
 <div class="lightbox">
 

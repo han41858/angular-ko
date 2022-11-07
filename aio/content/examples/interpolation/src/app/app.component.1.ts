@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
       <!-- Hello, Padma -->
       <h1>Hello, {{customer}}</h1>
       <ul>
-        <!-- Ebony and Chiho in a list-->
+        <!-- 목록 안에 있는 Ebony와 Chiho -->
         <li *ngFor="let customer of customers">{{ customer.value }}</li>
       </ul>
     </div>
