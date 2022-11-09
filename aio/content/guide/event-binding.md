@@ -62,7 +62,7 @@ The event binding listens for the button's click events and calls the component'
 이벤트 바인딩 문법을 활용하면 키입력이나 마우스 이동, 클릭, 터치 이벤트에 반응할 수 있습니다.
 Angular 이벤트 바인딩 문법은 소괄호\(`(`, `)`\) 안에 **대상이 되는 이벤트**의 이름을 지정하고 등호\(`=`\)를 붙인 후 템플릿 실행문을 작성하면 됩니다.
 
-<code-example language="html" header="Event binding syntax">
+<code-example language="html" header="이벤트 바인딩 문법">
 &lt;button (click)="onSave()"&gt;Save&lt;/button&gt;
 </code-example>
 
@@ -128,7 +128,7 @@ Angular는 패시브 이벤트 리스너를 지원합니다.
 
 ```
 import './zone-flags';
-import 'zone.js';  // Included with Angular CLI.
+import 'zone.js';  // Angular CLI가 추가한 것
 ```
 
 여기까지 작업하고 나면 `scroll` 이벤트 리스너를 추가했을 때 이 리스너는 `passive`로 동작합니다.
