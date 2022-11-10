@@ -97,10 +97,17 @@ Angular에서 템플릿 변수를 선언하면 이 템플릿 변수가 선언된
 * `<ng-template>` 엘리먼트에 템플릿 변수를 선언하면 `TemplateRef` 인스턴스를 가리킵니다.
   `<ng-template>`에 대해 자세하세 알아보려면 [구조 디렉티브](guide/structural-directives) 문서의 [Angular가 아스테리스크 `*`를 활용하는 방법](guide/structural-directives#asterisk)을 참고하세요..
 
-## Variable specifying a name
 
+<!--
+## Variable specifying a name
+-->
+## 이름이 지정된 변수
+
+<!--
 * If the variable specifies a name on the right-hand side, such as `#var="ngModel"`, the variable refers to the directive or component on the element with a matching `exportAs` name.
-<!-- What does the second half of this mean?^^ Can we explain this more fully? Could I see a working example? -kw -->
+<!- What does the second half of this mean?^^ Can we explain this more fully? Could I see a working example? -kw ->
+-->
+* `#var="ngModel"`와 같이 변수 오른쪽에 이름을 지정하면 이 변수는 엘리먼트에 지정된 디렉티브나 컴포넌트 중 `exportAs` 이름에 해당하는 것을 가리킵니다.
 
 
 <!--

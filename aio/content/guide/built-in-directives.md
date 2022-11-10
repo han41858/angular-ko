@@ -33,7 +33,7 @@ Angular는 폼, 목록, 스타일 등에 적용할 수 있는 기본 디렉티�
 
 </div>
 
-The different types of Angular directives are as follows:
+디렉티브는 이런 종류들이 있습니다:
 
 | 디렉티브 종류                                                               | 설명                                       |
 |:----------------------------------------------------------------------|:-----------------------------------------|
@@ -686,7 +686,7 @@ Angular가 제공하는 `<ng-container>`는 스타일이나 레이아웃에 영�
 Like the JavaScript `switch` statement, `NgSwitch` displays one element from among several possible elements, based on a switch condition.
 Angular puts only the selected element into the DOM.
 
-<!-todo: API Flagged -->
+<!-todo: API Flagged ->
 
 `NgSwitch` is a set of three directives:
 
@@ -726,8 +726,6 @@ For example, you could replace the `<app-best-item>` switch case with a `<div>` 
 -->
 JavaScript `siwtch` 구문과 비슷하게, `NgSwitch`는 여러 엘리먼트 중에서 조건에 맞는 엘리먼트 하나를 DOM 트리에 추가하는 디렉티브입니다.
 
-<!-todo: API Flagged -->
-
 `NgSwitch`는 디렉티브 3개로 구성됩니다:
 
 | `NgSwitch` 디렉티브   | 설명                                                                     |
@@ -752,7 +750,7 @@ JavaScript `siwtch` 구문과 비슷하게, `NgSwitch`는 여러 엘리먼트 �
     아래 코드 2개를 보면서 부모 컴포넌트와 자식 컴포넌트가 어떻게 연결되는지 확인해 보세요.
     `StoutItemComponent`의 클래스 코드를 확인해보면 이렇습니다.
 
-    <code-example header="In each child component, here StoutItemComponent" path="built-in-directives/src/app/item-switch.component.ts" region="input"></code-example>
+    <code-example header="StoutItemComponent" path="built-in-directives/src/app/item-switch.component.ts" region="input"></code-example>
 
     <div class="lightbox">
 
@@ -766,6 +764,7 @@ JavaScript `siwtch` 구문과 비슷하게, `NgSwitch`는 여러 엘리먼트 �
 <code-example header="src/app/app.component.html" path="built-in-directives/src/app/app.component.html" region="NgSwitch-div"></code-example>
 
 
+<!--
 ## What's next
 -->
 ## 다음 단계
