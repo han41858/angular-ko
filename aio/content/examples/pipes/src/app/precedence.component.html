@@ -6,7 +6,7 @@
 <p>The following shows that a pipe has higher precedence than a ternary operator. If the pipe precedence were lower than the ternary operator precedence, the output would be in uppercase as in 'TRUE'. Instead "true" is lowercase: {{ true ? 'true' : 'false' | uppercase }}</p>
 <p>The following shows how parentheses help Angular evaluate the whole statement:
 <!-- #docregion precedence -->
-<!-- use parentheses in the third operand so the pipe applies to the whole expression -->
+<!-- 소괄호를 사용해야 표현식 전체의 실행 결과가 파이프로 전달됩니다. -->
 {{ (true ? 'true' : 'false') | uppercase }}
 <!-- #enddocregion precedence -->
 </p>
