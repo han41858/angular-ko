@@ -9,6 +9,7 @@
 import ts from 'typescript';
 
 import {ComponentDecoratorHandler, DirectiveDecoratorHandler, InjectableDecoratorHandler, NgModuleDecoratorHandler, NoopReferencesRegistry, PipeDecoratorHandler, ReferencesRegistry} from '../../annotations';
+import {InjectableClassRegistry} from '../../annotations/common';
 import {CycleAnalyzer, CycleHandlingStrategy, ImportGraph} from '../../cycles';
 import {COMPILER_ERRORS_WITH_GUIDES, ERROR_DETAILS_PAGE_BASE_URL, ErrorCode, ngErrorCode} from '../../diagnostics';
 import {checkForPrivateExports, ReferenceGraph} from '../../entry_point';
@@ -17,7 +18,7 @@ import {AbsoluteModuleStrategy, AliasingHost, AliasStrategy, DefaultImportTracke
 import {IncrementalBuildStrategy, IncrementalCompilation, IncrementalState} from '../../incremental';
 import {SemanticSymbol} from '../../incremental/semantic_graph';
 import {generateAnalysis, IndexedComponent, IndexingContext} from '../../indexer';
-import {ComponentResources, CompoundMetadataReader, CompoundMetadataRegistry, DirectiveMeta, DtsMetadataReader, InjectableClassRegistry, LocalMetadataRegistry, MetadataReader, PipeMeta, ResourceRegistry} from '../../metadata';
+import {ComponentResources, CompoundMetadataReader, CompoundMetadataRegistry, DirectiveMeta, DtsMetadataReader, HostDirectivesResolver, LocalMetadataRegistry, MetadataReader, MetadataReaderWithIndex, PipeMeta, ResourceRegistry} from '../../metadata';
 import {PartialEvaluator} from '../../partial_evaluator';
 import {ActivePerfRecorder, DelegatingPerfRecorder, PerfCheckpoint, PerfEvent, PerfPhase} from '../../perf';
 import {FileUpdate, ProgramDriver, UpdateMode} from '../../program_driver';
@@ -27,6 +28,7 @@ import {ComponentScopeReader, CompoundComponentScopeReader, LocalModuleScopeRegi
 import {StandaloneComponentScopeReader} from '../../scope/src/standalone';
 import {generatedFactoryTransform} from '../../shims';
 import {aliasTransformFactory, CompilationMode, declarationTransformFactory, DecoratorHandler, DtsTransformRegistry, ivyTransformFactory, TraitCompiler} from '../../transform';
+import {getModifiers} from '../../ts_compatibility';
 import {TemplateTypeCheckerImpl} from '../../typecheck';
 import {OptimizeFor, TemplateTypeChecker, TypeCheckingConfig} from '../../typecheck/api';
 import {ALL_DIAGNOSTIC_FACTORIES, ExtendedTemplateCheckerImpl} from '../../typecheck/extended';
@@ -255,6 +257,7 @@ export class NgCompiler {
   private cycleAnalyzer: CycleAnalyzer;
   readonly ignoreForDiagnostics: Set<ts.SourceFile>;
   readonly ignoreForEmit: Set<ts.SourceFile>;
+  readonly enableTemplateTypeChecker: boolean;
 
   /**
    * `NgCompiler` can be reused for multiple compilations (for resource-only changes), and each
@@ -313,10 +316,12 @@ export class NgCompiler {
       readonly programDriver: ProgramDriver,
       readonly incrementalStrategy: IncrementalBuildStrategy,
       readonly incrementalCompilation: IncrementalCompilation,
-      readonly enableTemplateTypeChecker: boolean,
+      enableTemplateTypeChecker: boolean,
       readonly usePoisonedData: boolean,
       private livePerfRecorder: ActivePerfRecorder,
   ) {
+    this.enableTemplateTypeChecker =
+        enableTemplateTypeChecker || (options._enableTemplateTypeChecker ?? false);
     this.constructionDiagnostics.push(
         ...this.adapter.constructionDiagnostics, ...verifyCompatibleTypeCheckOptions(this.options));
 
@@ -380,7 +385,7 @@ export class NgCompiler {
     perfRecorder.inPhase(PerfPhase.ResourceUpdate, () => {
       if (this.compilation === null) {
         // Analysis hasn't happened yet, so no update is necessary - any changes to resources will
-        // be captured by the inital analysis pass itself.
+        // be captured by the initial analysis pass itself.
         return;
       }
 
@@ -565,8 +570,8 @@ export class NgCompiler {
    *
    * Normally, this operation happens lazily whenever `getDiagnostics` or `prepareEmit` are called.
    * However, certain consumers may wish to allow for an asynchronous phase of analysis, where
-   * resources such as `styleUrls` are resolved asynchonously. In these cases `analyzeAsync` must be
-   * called first, and its `Promise` awaited prior to calling any other APIs of `NgCompiler`.
+   * resources such as `styleUrls` are resolved asynchronously. In these cases `analyzeAsync` must
+   * be called first, and its `Promise` awaited prior to calling any other APIs of `NgCompiler`.
    */
   async analyzeAsync(): Promise<void> {
     if (this.compilation !== null) {
@@ -958,11 +963,13 @@ export class NgCompiler {
       aliasingHost = new UnifiedModulesAliasingHost(this.adapter.unifiedModulesHost);
     }
 
+    const isCore = isAngularCorePackage(this.inputProgram);
+
     const evaluator =
         new PartialEvaluator(reflector, checker, this.incrementalCompilation.depGraph);
     const dtsReader = new DtsMetadataReader(checker, reflector);
     const localMetaRegistry = new LocalMetadataRegistry();
-    const localMetaReader: MetadataReader = localMetaRegistry;
+    const localMetaReader: MetadataReaderWithIndex = localMetaRegistry;
     const depScopeReader = new MetadataDtsModuleScopeResolver(dtsReader, aliasingHost);
     const metaReader = new CompoundMetadataReader([localMetaReader, dtsReader]);
     const ngModuleScopeRegistry = new LocalModuleScopeRegistry(
@@ -973,9 +980,11 @@ export class NgCompiler {
         new CompoundComponentScopeReader([ngModuleScopeRegistry, standaloneScopeReader]);
     const semanticDepGraphUpdater = this.incrementalCompilation.semanticDepGraphUpdater;
     const metaRegistry = new CompoundMetadataRegistry([localMetaRegistry, ngModuleScopeRegistry]);
-    const injectableRegistry = new InjectableClassRegistry(reflector);
+    const injectableRegistry = new InjectableClassRegistry(reflector, isCore);
+    const hostDirectivesResolver = new HostDirectivesResolver(metaReader);
 
-    const typeCheckScopeRegistry = new TypeCheckScopeRegistry(scopeReader, metaReader);
+    const typeCheckScopeRegistry =
+        new TypeCheckScopeRegistry(scopeReader, metaReader, hostDirectivesResolver);
 
 
     // If a flat module entrypoint was specified, then track references via a `ReferenceGraph` in
@@ -991,8 +1000,6 @@ export class NgCompiler {
     }
 
     const dtsTransforms = new DtsTransformRegistry();
-
-    const isCore = isAngularCorePackage(this.inputProgram);
 
     const resourceRegistry = new ResourceRegistry();
 
@@ -1010,25 +1017,27 @@ export class NgCompiler {
         CycleHandlingStrategy.UseRemoteScoping :
         CycleHandlingStrategy.Error;
 
+    const strictCtorDeps = this.options.strictInjectionParameters || false;
+
     // Set up the IvyCompilation, which manages state for the Ivy transformer.
     const handlers: DecoratorHandler<unknown, unknown, SemanticSymbol|null, unknown>[] = [
       new ComponentDecoratorHandler(
           reflector, evaluator, metaRegistry, metaReader, scopeReader, depScopeReader,
-          ngModuleScopeRegistry, typeCheckScopeRegistry, resourceRegistry, isCore,
+          ngModuleScopeRegistry, typeCheckScopeRegistry, resourceRegistry, isCore, strictCtorDeps,
           this.resourceManager, this.adapter.rootDirs, this.options.preserveWhitespaces || false,
           this.options.i18nUseExternalIds !== false,
           this.options.enableI18nLegacyMessageIdFormat !== false, this.usePoisonedData,
           this.options.i18nNormalizeLineEndingsInICUs === true, this.moduleResolver,
           this.cycleAnalyzer, cycleHandlingStrategy, refEmitter,
           this.incrementalCompilation.depGraph, injectableRegistry, semanticDepGraphUpdater,
-          this.closureCompilerEnabled, this.delegatingPerfRecorder),
+          this.closureCompilerEnabled, this.delegatingPerfRecorder, hostDirectivesResolver),
 
       // TODO(alxhub): understand why the cast here is necessary (something to do with `null`
       // not being assignable to `unknown` when wrapped in `Readonly`).
       // clang-format off
         new DirectiveDecoratorHandler(
             reflector, evaluator, metaRegistry, ngModuleScopeRegistry, metaReader,
-            injectableRegistry, isCore, semanticDepGraphUpdater,
+            injectableRegistry, refEmitter, isCore, strictCtorDeps, semanticDepGraphUpdater,
           this.closureCompilerEnabled, /** compileUndecoratedClassesWithAngularFeatures */ false,
           this.delegatingPerfRecorder,
         ) as Readonly<DecoratorHandler<unknown, unknown, SemanticSymbol | null,unknown>>,
@@ -1039,12 +1048,13 @@ export class NgCompiler {
           reflector, evaluator, metaRegistry, ngModuleScopeRegistry, injectableRegistry, isCore,
           this.delegatingPerfRecorder),
       new InjectableDecoratorHandler(
-          reflector, isCore, this.options.strictInjectionParameters || false, injectableRegistry,
+          reflector, evaluator, isCore, strictCtorDeps, injectableRegistry,
           this.delegatingPerfRecorder),
       new NgModuleDecoratorHandler(
           reflector, evaluator, metaReader, metaRegistry, ngModuleScopeRegistry, referencesRegistry,
           isCore, refEmitter, this.adapter.factoryTracker, this.closureCompilerEnabled,
-          injectableRegistry, this.delegatingPerfRecorder),
+          this.options.onlyPublishPublicTypingsForNgModules ?? false, injectableRegistry,
+          this.delegatingPerfRecorder),
     ];
 
     const traitCompiler = new TraitCompiler(
@@ -1062,8 +1072,8 @@ export class NgCompiler {
 
     const templateTypeChecker = new TemplateTypeCheckerImpl(
         this.inputProgram, notifyingDriver, traitCompiler, this.getTypeCheckingConfig(), refEmitter,
-        reflector, this.adapter, this.incrementalCompilation, scopeReader, typeCheckScopeRegistry,
-        this.delegatingPerfRecorder);
+        reflector, this.adapter, this.incrementalCompilation, metaReader, localMetaReader,
+        scopeReader, typeCheckScopeRegistry, this.delegatingPerfRecorder);
 
     // Only construct the extended template checker if the configuration is valid and usable.
     const extendedTemplateChecker = this.constructionDiagnostics.length === 0 ?
@@ -1106,8 +1116,9 @@ export function isAngularCorePackage(program: ts.Program): boolean {
       return false;
     }
     // It must be exported.
-    if (stmt.modifiers === undefined ||
-        !stmt.modifiers.some(mod => mod.kind === ts.SyntaxKind.ExportKeyword)) {
+    const modifiers = getModifiers(stmt);
+    if (modifiers === undefined ||
+        !modifiers.some(mod => mod.kind === ts.SyntaxKind.ExportKeyword)) {
       return false;
     }
     // It must declare ITS_JUST_ANGULAR.

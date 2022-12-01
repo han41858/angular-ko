@@ -35,6 +35,7 @@ v11 - v14
 v12 - v15
 v13 - v16
 v14 - v17
+v15 - v18
 -->
 
 | Area                                | API or Feature                                                                                             | May be removed in        |
@@ -57,6 +58,7 @@ v14 - v17
 | `@angular/core`                     | [`ComponentFactory`](#core)                                                                                | <!-- v13 --> v16         |
 | `@angular/core`                     | [`ComponentFactoryResolver`](#core)                                                                        | <!-- v13 --> v16         |
 | `@angular/core`                     | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](#core)                    | <!-- v13 --> v16         |
+| `@angular/core`                     | NgModule and `'any'` options for [`providedIn`](#core) | <!-- v15 --> v17 |
 | `@angular/platform-browser-dynamic` | [`JitCompilerFactory`](#platform-browser-dynamic)                                                          | <!-- v13 --> v16         |
 | `@angular/platform-browser-dynamic` | [`RESOURCE_CACHE_PROVIDER`](#platform-browser-dynamic)                                                     | <!-- v13 --> v16         |
 | `@angular/forms`                    | [`ngModel` with reactive forms](#ngmodel-reactive)                                                         | <!--  v6 --> v11         |
@@ -76,13 +78,18 @@ v14 - v17
 | `@angular/core/testing`             | [`async`](#testing)                                                                                        | <!--  v9 --> v12         |
 | `@angular/forms`                    | [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group)                                | <!-- v11 --> v14         |
 | `@angular/platform-server`          | [`renderModuleFactory`](#platform-server)                                                                  | <!-- v13 --> v15         |
+| `@angular/platform-server`          | [`ServerTransferStateModule`](#platform-server)                                                                  | <!-- v14 --> v16         |
+| `@angular/platform-browser`          | [`BrowserTransferStateModule`](#platform-browser)                                                                  | <!-- v14 --> v16         |
 | `@angular/router`                   | [`relativeLinkResolution`](#relativeLinkResolution)                                                        | <!-- v14 --> v16         |
 | `@angular/router`                     | [`resolver` argument in `RouterOutletContract.activateWith`](#router)                                                                        | <!-- v14 --> v16         |
 | `@angular/router`                     | [`resolver` field of the `OutletContext` class](#router)                                                                        | <!-- v14 --> v16         |
+| `@angular/router`                     | [`RouterLinkWithHref` directive](#router)                                                                        | <!-- v15 --> v17         |
+| `@angular/router`                     | [`provideRoutes` function](#router)                                                                        | <!-- v15 --> v17         |
 | `@angular/service-worker`           | [`SwUpdate#activated`](api/service-worker/SwUpdate#activated)                                              | <!-- v13 --> v16         |
 | `@angular/service-worker`           | [`SwUpdate#available`](api/service-worker/SwUpdate#available)                                              | <!-- v13 --> v16         |
 | template syntax                     | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)                                         | <!--  v7 --> unspecified |
 | template syntax                     | [`bind-`, `on-`, `bindon-`, and `ref-`](#bind-syntax)                                                      | <!-- v13 --> v15         |
+| `@angular/common`                   | [`DatePipe` - `DATE_PIPE_DEFAULT_TIMEZONE`](api/common/DATE_PIPE_DEFAULT_TIMEZONE)                         | <!-- v15 --> v17         |
 
 For information about Angular CDK and Angular Material deprecations, see the [changelog](https://github.com/angular/components/blob/main/CHANGELOG.md).
 
@@ -105,6 +112,7 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 |:---                                                                                           |:---                                                 |:---                   |:---     |
 | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | `{provide: DEFAULT_CURRENCY_CODE, useValue: 'USD'}` | v9                    | From v11 the default code will be extracted from the locale data given by `LOCALE_ID`, rather than `USD`. |
 | [`NgComponentOutlet.ngComponentOutletNgModuleFactory`](api/common/NgComponentOutlet)          | `NgComponentOutlet.ngComponentOutletNgModule`       | v14                   | Use the `ngComponentOutletNgModule` input instead. This input doesn't require resolving NgModule factory. |
+| [`DatePipe` - `DATE_PIPE_DEFAULT_TIMEZONE`](api/common/DATE_PIPE_DEFAULT_TIMEZONE) |`{ provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: '-1200' }` | v15                    | Use the `DATE_PIPE_DEFAULT_OPTIONS` injection token, which can configure multiple settings at once instead. |
 
 <a id="common-http"></a>
 
@@ -134,11 +142,13 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 | [`ModuleWithComponentFactories`](api/core/ModuleWithComponentFactories)                                    | none                                                                                                                                                              | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
 | [`Compiler`](api/core/Compiler)                                                                            | none                                                                                                                                                              | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
 | [`CompilerFactory`](api/core/CompilerFactory)                                                              | none                                                                                                                                                              | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
-| [`NgModuleFactory`](api/core/NgModuleFactory)                                                              | Use non-factory based framework APIs like [PlatformRef.bootstrapModule](api/core/PlatformRef#bootstrapModule) and [createNgModuleRef](api/core/createNgModuleRef) | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
+| [`NgModuleFactory`](api/core/NgModuleFactory)                                                              | Use non-factory based framework APIs like [PlatformRef.bootstrapModule](api/core/PlatformRef#bootstrapModule) and [createNgModule](api/core/createNgModule) | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
 | [Factory-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent) | [Type-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                                                           | v13                   | Angular no longer requires component factories to dynamically create components. Use different signature of the `createComponent` method, which allows passing Component class directly.                                                                           |
 | [`ComponentFactory`](api/core/ComponentFactory)                                                            | Use non-factory based framework APIs.                                                                                                                             | v13                   | Since Ivy, Component factories are not required. Angular provides other APIs where Component classes can be used directly.                                                                                                                                         |
 | [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver)                                            | Use non-factory based framework APIs.                                                                                                                             | v13                   | Since Ivy, Component factories are not required, thus there is no need to resolve them.                                                                                                                                                                            |
 | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](api/core/CompilerOptions) | none                                                                                                                                                              | v13                   | Since Ivy, those config options are unused, passing them has no effect.                                                                                                                                                                                            |
+| [`providedIn`](api/core/Injectable#providedIn) with NgModule | Prefer `'root'` providers, or use NgModule `providers` if scoping to an NgModule is necessary | v15 | none |
+| [`providedIn: 'any'`](api/core/Injectable#providedIn) | none | v15 | This option has confusing semantics and nearly zero usage. |
 
 <a id="testing"></a>
 
@@ -157,6 +167,17 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 |:---                                        |:---                               |:---                   |:---     |
 | [`resolver` argument in `RouterOutletContract.activateWith`](api/router/RouterOutletContract#activatewith) | No replacement needed | v14                   | Component factories are not required to create an instance of a component dynamically. Passing a factory resolver via `resolver` argument is no longer needed. |
 | [`resolver` field of the `OutletContext` class](api/router/OutletContext#resolver) | No replacement needed | v14                   | Component factories are not required to create an instance of a component dynamically. Passing a factory resolver via `resolver` class field is no longer needed. |
+| [`RouterLinkWithHref` directive](api/router/RouterLinkWithHref) | Use `RouterLink` instead. | v15                   | The `RouterLinkWithHref` directive code was merged into `RouterLink`. Now the `RouterLink` directive can be used for all elements that have `routerLink` attribute. |
+| [`provideRoutes` function](api/router/provideRoutes) | Use `ROUTES` `InjectionToken` instead. | v15                   | The `provideRoutes` helper function is minimally useful and can be unintentionally used instead of `provideRouter` due to similar spelling. |
+
+
+<a id="platform-browser"></a>
+
+### &commat;angular/platform-browser
+
+| API                                                              | Replacement                                        | Deprecation announced | Details |
+|:---                                                              |:---                                                |:---                   |:---     |
+| [`BrowserTransferStateModule`](api/platform-browser/BrowserTransferStateModule) | No replacement needed.  | v14.1                   | The `TransferState` class is available for injection without importing additional modules on the client side of a server-rendered application. |
 
 
 <a id="platform-browser-dynamic"></a>
@@ -175,6 +196,8 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 | API                                                              | Replacement                                        | Deprecation announced | Details |
 |:---                                                              |:---                                                |:---                   |:---     |
 | [`renderModuleFactory`](api/platform-server/renderModuleFactory) | [`renderModule`](api/platform-server/renderModule) | v13                   | This symbol is no longer necessary. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context. |
+| [`ServerTransferStateModule`](api/platform-server/ServerTransferStateModule) | No replacement needed.  | v14.1                   | The `TransferState` class is available for injection without importing additional modules during server side rendering, when `ServerModule` is imported or `renderApplication` function is used for bootstrap. |
+
 
 <a id="forms"></a>
 
@@ -371,7 +394,7 @@ These restrictions will be relaxed with the release of Ivy since it'll no longer
 
 Angular applications, and specifically applications that relied on the JIT compiler, used to require a polyfill for the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) APIs.
 
-The need for this polyfill was removed in Angular version 8.0 \([see #14473](https://github.com/angular/angular-cli/pull/14473)\), rendering the presence of the poylfill in most Angular applications unnecessary.
+The need for this polyfill was removed in Angular version 8.0 \([see #14473](https://github.com/angular/angular-cli/pull/14473)\), rendering the presence of the polyfill in most Angular applications unnecessary.
 Because the polyfill can be depended on by 3rd-party libraries, instead of removing it from all Angular projects, we are deprecating the requirement for this polyfill as of version 8.0.
 This should give library authors and application developers sufficient time to evaluate if they need the polyfill, and perform any refactoring necessary to remove the dependency on it.
 
@@ -485,8 +508,8 @@ IE11 will be supported in Angular v12 LTS releases through November 2022.
 
 ### Input setter coercion
 
-Since the `strictTemplates` flag has been introduced in Angular the compiler has been able to type-check input bindings to the declared input type of the corresponding directive.
-When a getter/setter pair is being used for the input it may be desirable to let the setter accept a broader set of types than what is returned by the getter, for example when the setter first converts the input value.
+Since the `strictTemplates` flag has been introduced in Angular, the compiler has been able to type-check input bindings to the declared input type of the corresponding directive.
+When a getter/setter pair is used for the input, the setter might need to accept more types than the getter returns, such as when the setter first converts the input value.
 However, until TypeScript 4.3 a getter/setter pair was required to have identical types so this pattern could not be accurately declared.
 
 To mitigate this limitation, it was made possible to declare [input setter coercion fields](guide/template-typecheck#input-setter-coercion) in directives that are used when type-checking input bindings.
@@ -536,8 +559,8 @@ Projects that currently have `fullTemplateTypeCheck: true` configured can migrat
 
 ## JIT API changes due to ViewEngine deprecation
 
-In ViewEngine, [JIT compilation](https://angular.io/guide/glossary#jit) required special providers \(like `Compiler`, `CompilerFactory`, etc.\) to be injected in the app and corresponding methods to be invoked.
-With Ivy, JIT compilation takes place implicitly if the Component, NgModule, etc have not already been [AOT compiled](https://angular.io/guide/glossary#aot).
+In ViewEngine, [JIT compilation](https://angular.io/guide/glossary#jit) required special providers \(such as `Compiler` or `CompilerFactory`\) to be injected in the app and corresponding methods to be invoked.
+With Ivy, JIT compilation takes place implicitly if the Component, NgModule, etc. have not already been [AOT compiled](https://angular.io/guide/glossary#aot).
 Those special providers were made available in Ivy for backwards-compatibility with ViewEngine to make the transition to Ivy smoother.
 Since ViewEngine is deprecated and will soon be removed, those symbols are now deprecated as well.
 
@@ -577,28 +600,12 @@ mockRequest.error(mockError);
 
 This section contains a complete list all of the currently deprecated CLI flags.
 
-### &commat;angular/cli
-
-| API/Option        | May be removed in | Details |
-|:---               |:---               |:---     |
-| `--prod`          | <!--v12--> v14    | Use `--configuration production` instead. |
-| `ng update --all` | <!--v11--> v14    | No longer has an effect.                  |
-
 ### &commat;angular-devkit/build-angular
 
 | API/Option                 | May be removed in | Details |
 |:---                        |:---               |:---     |
 | `deployUrl`                | <!--v13--> v15    | Use `baseHref` option, `APP_BASE_HREF` DI token or a combination of both instead. For more information, see [the deploy url](guide/deployment#the-deploy-url). |
-| `showCircularDependencies` | <!--v12--> v14    | The recommended method to detect circular dependencies in project code is to use either a lint rule or other external tooling.                                 |
 | Protractor builder         | <!--v12--> v14    | Deprecate as part of the Protractor deprecation.                                                                                                               |
-
-### &commat;angular-devkit/build-optimizer
-
-The entire NPM package is deprecated.
-It has always been experimental \(never hit `1.0.0`\) and has
-been an internal package for the Angular CLI.
-All the relevant functionality has been moved to
-`@angular-devkit/build-angular`
 
 <a id="removed"></a>
 
@@ -627,7 +634,7 @@ The string syntax has been replaced with dynamic import statements.
 The `DeprecatedLoadChildren` type was removed from `@angular/router`.
 Find more information about the replacement in the [`LoadChildrenCallback` documentation](api/router/LoadChildrenCallback).
 
-The supporting classes `NgModuleFactoryLoader`, `SystemJsNgModuleLoader` and `SystemJsNgModuleLoaderConfig` classes were removed from `@angular/core`, as well as `SpyNgModuleFactoryLoader` from `@angular/router`.
+The supporting classes `NgModuleFactoryLoader`, `SystemJsNgModuleLoader`, and `SystemJsNgModuleLoaderConfig` were removed from `@angular/core`, as well as `SpyNgModuleFactoryLoader` from `@angular/router`.
 
 ### `WrappedValue`
 

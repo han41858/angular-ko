@@ -76,7 +76,7 @@ Conversely, `customer` in the `<h1>` doesn't include Ebony or Chiho because the 
 
 ## Expression best practices
 
-When using template a expression, follow these best practices:
+When using a template expression, follow these best practices:
 
 * **Use short expressions**
 
@@ -84,7 +84,7 @@ Use property names or method calls whenever possible.  Keep application and busi
 
 * **Quick execution**
 
-Angular executes a template expression after every [change detection](guide/glossary#change-detection) cycle.  Many asynchronous activities trigger change detection cycles, such as promise resolutions, HTTP results, timer events, key presses and mouse moves.
+Angular executes a template expression after every [change detection](guide/glossary#change-detection) cycle.  Many asynchronous activities trigger change detection cycles, such as promise resolutions, HTTP results, timer events, key presses, and mouse moves.
 
 An expression should finish quickly to keep the user experience as efficient as possible, especially on slower devices.  Consider caching values when their computation requires greater resources.
 

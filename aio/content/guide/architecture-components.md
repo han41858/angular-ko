@@ -1,19 +1,23 @@
 # Introduction to components and templates
 
-A *component* controls a patch of screen called a [*view*](guide/glossary#view "Definition of view").
-For example, individual components define and control each of the following views from the [Tour of Heroes tutorial](tutorial):
+A *component* controls a patch of screen called a [*view*](guide/glossary#view "Definition of view"). It consists
+of a TypeScript class, an HTML template, and a CSS style sheet. The TypeScript class defines the interaction 
+of the HTML template and the rendered DOM structure, while the style sheet describes its appearance.
+
+An Angular application uses individual components to define and control different aspects of the application.
+For example, an application could include components to describe:
 
 *   The application root with the navigation links
 *   The list of heroes
 *   The hero editor
 
-You define a component's application logic &mdash;what it does to support the view&mdash; inside a class.
-The class interacts with the view through an API of properties and methods.
+In the following example, the `HeroListComponent` class includes:
 
-For example, `HeroListComponent` has a `heroes` property that holds an array of heroes.
-Its `selectHero()` method sets a `selectedHero` property when the user clicks to choose a hero from that list.
-The component acquires the heroes from a service, which is a TypeScript [parameter property](https://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties) on the constructor.
-The service is provided to the component through the dependency injection system.
+* A `heroes` property that holds an array of heroes.
+* A `selectedHero` property that holds the last hero selected by the user.
+* A `selectHero()` method sets a `selectedHero` property when the user clicks to choose a hero from that list.
+
+The component initializes the `heroes` property by using the `HeroService` service, which is a TypeScript [parameter property](https://www.typescriptlang.org/docs/handbook/2/classes.html#parameter-properties) on the constructor. Angular's dependency injection system provides the `HeroService` service to the component.
 
 <code-example header="src/app/hero-list.component.ts (class)" path="architecture/src/app/hero-list.component.ts" region="class"></code-example>
 
@@ -47,7 +51,7 @@ This example shows some of the most useful `@Component` configuration options:
 | Configuration options | Details |
 |:---                   |:---     |
 | `selector`            | A CSS selector that tells Angular to create and insert an instance of this component wherever it finds the corresponding tag in template HTML. For example, if an application's HTML contains `<app-hero-list></app-hero-list>`, then Angular inserts an instance of the `HeroListComponent` view between those tags. |
-| `templateUrl`         | The module-relative address of this component's HTML template. Alternatively, you can provide the HTML template inline, as the value of the `template` property.  This template defines the component's *host view*.                                                                                                  |
+| `templateUrl`         | The module-relative address of this component's HTML template. Alternatively, you can provide the HTML template inline, as the value of the `template` property. This template defines the component's *host view*.                                                                                                  |
 | `providers`           | An array of [providers](guide/glossary#provider) for services that the component requires. In the example, this tells Angular how to provide the `HeroService` instance that the component's constructor uses to get the list of heroes to display.                                                                   |
 
 ## Templates and views
@@ -61,7 +65,7 @@ This example shows some of the most useful `@Component` configuration options:
 You define a component's view with its companion template.
 A template is a form of HTML that tells Angular how to render the component.
 
-Views are typically arranged hierarchically, allowing you to modify or show and hide entire UI sections or pages as a unit.
+Views are typically organized hierarchically, allowing you to modify or show and hide entire UI sections or pages as a unit.
 The template immediately associated with a component defines that component's *host view*.
 The component can also define a *view hierarchy*, which contains *embedded views*, hosted by other components.
 
@@ -71,7 +75,7 @@ The component can also define a *view hierarchy*, which contains *embedded views
 
 </div>
 
-A view hierarchy can include views from components in the same NgModule, but it also can \(and often does\) include views from components that are defined in different NgModules.
+A view hierarchy can include views from components in the same NgModule and from those in different NgModules.
 
 ## Template syntax
 
@@ -82,16 +86,17 @@ For example, here is a template for the Tutorial's `HeroListComponent`.
 
 <code-example header="src/app/hero-list.component.html" path="architecture/src/app/hero-list.component.html" ></code-example>
 
-This template uses typical HTML elements like `<h2>` and  `<p>`, and also includes Angular template-syntax elements, `*ngFor`, `{{hero.name}}`, `(click)`, `[hero]`, and `<app-hero-detail>`.
+This template uses typical HTML elements like `<h2>` and  `<p>`. It also includes Angular template-syntax elements, `*ngFor`, `{{hero.name}}`, `(click)`, `[hero]`, and `<app-hero-detail>`.
 The template-syntax elements tell Angular how to render the HTML to the screen, using program logic and data.
 
 *   The `*ngFor` directive tells Angular to iterate over a list
 *   `{{hero.name}}`, `(click)`, and `[hero]` bind program data to and from the DOM, responding to user input.
     See more about [data binding](#data-binding) below.
 
-*   The `<app-hero-detail>` tag in the example is an element that represents a new component, `HeroDetailComponent`.
-    `HeroDetailComponent` \(code not shown\) defines the hero-detail child view of `HeroListComponent`.
-    Notice how custom components like this mix seamlessly with native HTML in the same layouts.
+*   The `<app-hero-detail>` element tag in the example represents a new component, `HeroDetailComponent`.
+    The `HeroDetailComponent`  defines the `hero-detail` portion of the rendered DOM structure specified by the `HeroListComponent` component.
+
+    Notice how these custom components mix with native HTML.
 
 ### Data binding
 
@@ -149,7 +154,7 @@ Data binding plays an important role in communication between a template and its
 Angular pipes let you declare display-value transformations in your template HTML.
 A class with the `@Pipe` decorator defines a function that transforms input values to output values for display in a view.
 
-Angular defines various pipes, such as the [date](api/common/DatePipe) pipe and [currency](api/common/CurrencyPipe) pipe; for a complete list, see the [Pipes API list](api?type=pipe).
+Angular defines various pipes, such as the [date](api/common/DatePipe) pipe and [currency](api/common/CurrencyPipe) pipe. For a complete list, see the [Pipes API list](api?type=pipe).
 You can also define new pipes.
 
 To specify a value transformation in an HTML template, use the [pipe operator (`|`)](guide/pipes).
@@ -207,8 +212,8 @@ The example template uses two built-in structural directives to add application 
 
 | Directives                                  | Details |
 |:---                                         |:---     |
-| [`*ngFor`](guide/built-in-directives#ngFor) | An iterative; it tells Angular to stamp out one `<li>` per hero in the `heroes` list. |
-| [`*ngIf`](guide/built-in-directives#ngIf)   | A conditional; it includes the `HeroDetail` component only if a selected hero exists. |
+| [`*ngFor`](guide/built-in-directives#ngFor) | An *iterative*, which tells Angular to create one `<li>` per hero in the `heroes` list. |
+| [`*ngIf`](guide/built-in-directives#ngIf)   | A *conditional*, which includes the `HeroDetail` component only if a selected hero exists. |
 
 #### Attribute directives
 
@@ -220,7 +225,10 @@ The `ngModel` directive, which implements two-way data binding, is an example of
 
 <code-example header="src/app/hero-detail.component.html (ngModel)" path="architecture/src/app/hero-detail.component.html" region="ngModel"></code-example>
 
-Angular has more pre-defined directives that either alter the layout structure \(for example, [ngSwitch](guide/built-in-directives#ngSwitch)\) or modify aspects of DOM elements and components \(for example, [ngStyle](guide/built-in-directives#ngstyle) and [ngClass](guide/built-in-directives#ngClass)\).
+Angular includes pre-defined directives that change: 
+
+* The layout structure, such as [ngSwitch](guide/built-in-directives#ngSwitch), and
+* Aspects of DOM elements and components, such as [ngStyle](guide/built-in-directives#ngstyle) and [ngClass](guide/built-in-directives#ngClass).
 
 <div class="alert is-helpful">
 

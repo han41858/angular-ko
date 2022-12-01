@@ -6,9 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {EnvironmentInjector, ImportedNgModuleProviders, NgModuleFactory, Provider, Type} from '@angular/core';
+import {EnvironmentInjector, EnvironmentProviders, InjectionToken, NgModuleFactory, Provider, ProviderToken, Type} from '@angular/core';
 import {Observable} from 'rxjs';
 
+import {DeprecatedLoadChildren} from './deprecated_load_children';
 import {ActivatedRouteSnapshot, RouterStateSnapshot} from './router_state';
 import {UrlSegment, UrlSegmentGroup, UrlTree} from './url_tree';
 
@@ -85,8 +86,24 @@ export type Data = {
  * @publicApi
  */
 export type ResolveData = {
-  [key: string|symbol]: any
+  [key: string|symbol]: any|ResolveFn<unknown>
 };
+
+/**
+ * An ES Module object with a default export of the given type.
+ *
+ * @see `Route#loadComponent`
+ * @see `LoadChildrenCallback`
+ *
+ * @publicApi
+ */
+export interface DefaultExport<T> {
+  /**
+   * Default exports are bound under the name `"default"`, per the ES Module spec:
+   * https://tc39.es/ecma262/#table-export-forms-mapping-to-exportentry-records
+   */
+  default: T;
+}
 
 /**
  *
@@ -112,11 +129,19 @@ export type ResolveData = {
  * }];
  * ```
  *
+ * If the lazy-loaded routes are exported via a `default` export, the `.then` can be omitted:
+ * ```
+ * [{
+ *   path: 'lazy',
+ *   loadChildren: () => import('./lazy-route/lazy.routes'),
+ * }];
+ *
  * @see [Route.loadChildren](api/router/Route#loadChildren)
  * @publicApi
  */
 export type LoadChildrenCallback = () => Type<any>|NgModuleFactory<any>|Routes|
-    Observable<Type<any>|Routes>|Promise<NgModuleFactory<any>|Type<any>|Routes>;
+    Observable<Type<any>|Routes|DefaultExport<Type<any>>|DefaultExport<Routes>>|
+    Promise<NgModuleFactory<any>|Type<any>|Routes|DefaultExport<Type<any>>|DefaultExport<Routes>>;
 
 /**
  *
@@ -125,14 +150,15 @@ export type LoadChildrenCallback = () => Type<any>|NgModuleFactory<any>|Routes|
  * @see `LoadChildrenCallback`
  * @publicApi
  */
-export type LoadChildren = LoadChildrenCallback;
+export type LoadChildren = LoadChildrenCallback|DeprecatedLoadChildren;
 
 /**
  *
  * How to handle query parameters in a router link.
  * One of:
- * - `merge` : Merge new with current parameters.
- * - `preserve` : Preserve current parameters.
+ * - `"merge"` : Merge new parameters with current parameters.
+ * - `"preserve"` : Preserve current parameters.
+ * - `""` : Replace current parameters with new parameters. This is the default behavior.
  *
  * @see `UrlCreationOptions#queryParamsHandling`
  * @see `RouterLink`
@@ -141,8 +167,19 @@ export type LoadChildren = LoadChildrenCallback;
 export type QueryParamsHandling = 'merge'|'preserve'|'';
 
 /**
- *
  * A policy for when to run guards and resolvers on a route.
+ *
+ * Guards and/or resolvers will always run when a route is activated or deactivated. When a route is
+ * unchanged, the default behavior is the same as `paramsChange`.
+ *
+ * `paramsChange` : Rerun the guards and resolvers when path or
+ * path param changes. This does not include query parameters. This option is the default.
+ * - `always` : Run on every execution.
+ * - `pathParamsChange` : Rerun guards and resolvers when the path params
+ * change. This does not compare matrix or query parameters.
+ * - `paramsOrQueryParamsChange` : Run when path, matrix, or query parameters change.
+ * - `pathParamsOrQueryParamsChange` : Rerun guards and resolvers when the path params
+ * change or query params have changed. This does not include matrix parameters.
  *
  * @see [Route.runGuardsAndResolvers](api/router/Route#runGuardsAndResolvers)
  * @publicApi
@@ -383,7 +420,7 @@ export interface Route {
    *
    * @see `PageTitleStrategy`
    */
-  title?: string|Type<Resolve<string>>;
+  title?: string|Type<Resolve<string>>|ResolveFn<string>;
 
   /**
    * The path to match against. Cannot be used together with a custom `matcher` function.
@@ -426,7 +463,8 @@ export interface Route {
   /**
    * An object specifying a lazy-loaded component.
    */
-  loadComponent?: () => Type<unknown>| Observable<Type<unknown>>| Promise<Type<unknown>>;
+  loadComponent?: () => Type<unknown>| Observable<Type<unknown>|DefaultExport<Type<unknown>>>|
+      Promise<Type<unknown>|DefaultExport<Type<unknown>>>;
   /**
    * Filled for routes `loadComponent` once the component is loaded.
    * @internal
@@ -448,30 +486,50 @@ export interface Route {
    */
   outlet?: string;
   /**
-   * An array of dependency-injection tokens used to look up `CanActivate()`
+   * An array of `CanActivateFn` or DI tokens used to look up `CanActivate()`
    * handlers, in order to determine if the current user is allowed to
    * activate the component. By default, any user can activate.
+   *
+   * When using a function rather than DI tokens, the function can call `inject` to get any required
+   * dependencies. This `inject` call must be done in a synchronous context.
    */
-  canActivate?: any[];
+  canActivate?: Array<CanActivateFn|any>;
   /**
-   * An array of DI tokens used to look up `CanActivateChild()` handlers,
+   * An array of `CanMatchFn` or DI tokens used to look up `CanMatch()`
+   * handlers, in order to determine if the current user is allowed to
+   * match the `Route`. By default, any route can match.
+   *
+   * When using a function rather than DI tokens, the function can call `inject` to get any required
+   * dependencies. This `inject` call must be done in a synchronous context.
+   */
+  canMatch?: Array<Type<CanMatch>|InjectionToken<CanMatchFn>|CanMatchFn>;
+  /**
+   * An array of `CanActivateChildFn` or DI tokens used to look up `CanActivateChild()` handlers,
    * in order to determine if the current user is allowed to activate
    * a child of the component. By default, any user can activate a child.
+   *
+   * When using a function rather than DI tokens, the function can call `inject` to get any required
+   * dependencies. This `inject` call must be done in a synchronous context.
    */
-  canActivateChild?: any[];
+  canActivateChild?: Array<CanActivateChildFn|any>;
   /**
-   * An array of DI tokens used to look up `CanDeactivate()`
+   * An array of `CanDeactivateFn` or DI tokens used to look up `CanDeactivate()`
    * handlers, in order to determine if the current user is allowed to
    * deactivate the component. By default, any user can deactivate.
    *
+   * When using a function rather than DI tokens, the function can call `inject` to get any required
+   * dependencies. This `inject` call must be done in a synchronous context.
    */
-  canDeactivate?: any[];
+  canDeactivate?: Array<CanDeactivateFn<any>|any>;
   /**
-   * An array of DI tokens used to look up `CanLoad()`
+   * An array of `CanLoadFn` or DI tokens used to look up `CanLoad()`
    * handlers, in order to determine if the current user is allowed to
    * load the component. By default, any user can load.
+   *
+   * When using a function rather than DI tokens, the function can call `inject` to get any required
+   * dependencies. This `inject` call must be done in a synchronous context.
    */
-  canLoad?: any[];
+  canLoad?: Array<CanLoadFn|any>;
   /**
    * Additional developer-defined data provided to the component via
    * `ActivatedRoute`. By default, no additional data is passed.
@@ -497,6 +555,8 @@ export interface Route {
    * - `always` : Run on every execution.
    * By default, guards and resolvers run only when the matrix
    * parameters of the route change.
+   *
+   * @see RunGuardsAndResolvers
    */
   runGuardsAndResolvers?: RunGuardsAndResolvers;
 
@@ -508,7 +568,7 @@ export interface Route {
    * route also has a `loadChildren` function which returns an `NgModuleRef`, this injector will be
    * used as the parent of the lazy loaded module.
    */
-  providers?: Array<Provider|ImportedNgModuleProviders>;
+  providers?: Array<Provider|EnvironmentProviders>;
 
   /**
    * Injector created from the static route providers
@@ -548,7 +608,7 @@ export interface LoadedRouterConfig {
  * ```
  * class UserToken {}
  * class Permissions {
- *   canActivate(user: UserToken, id: string): boolean {
+ *   canActivate(): boolean {
  *     return true;
  *   }
  * }
@@ -585,7 +645,7 @@ export interface LoadedRouterConfig {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canActivate` signature:
+ * You can alternatively provide an in-line function with the `CanActivateFn` signature:
  *
  * ```
  * @NgModule({
@@ -594,16 +654,10 @@ export interface LoadedRouterConfig {
  *       {
  *         path: 'team/:id',
  *         component: TeamComponent,
- *         canActivate: ['canActivateTeam']
+ *         canActivate: [(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true]
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canActivateTeam',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -615,6 +669,13 @@ export interface CanActivate {
       Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
 }
 
+/**
+ * The signature of a function used as a `canActivate` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanActivate`
+ * @see `Route`
+ */
 export type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
     Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
 
@@ -674,7 +735,7 @@ export type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSn
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canActivateChild` signature:
+ * You can alternatively provide an in-line function with the `CanActivateChildFn` signature:
  *
  * ```
  * @NgModule({
@@ -682,7 +743,7 @@ export type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSn
  *     RouterModule.forRoot([
  *       {
  *         path: 'root',
- *         canActivateChild: ['canActivateTeam'],
+ *         canActivateChild: [(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true],
  *         children: [
  *           {
  *             path: 'team/:id',
@@ -692,12 +753,6 @@ export type CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSn
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canActivateTeam',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -709,6 +764,13 @@ export interface CanActivateChild {
       Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
 }
 
+/**
+ * The signature of a function used as a `canActivateChild` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanActivateChild`
+ * @see `Route`
+ */
 export type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
     Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
 
@@ -766,7 +828,7 @@ export type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: Rou
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canDeactivate` signature:
+ * You can alternatively provide an in-line function with the `CanDeactivateFn` signature:
  *
  * ```
  * @NgModule({
@@ -775,17 +837,11 @@ export type CanActivateChildFn = (childRoute: ActivatedRouteSnapshot, state: Rou
  *       {
  *         path: 'team/:id',
  *         component: TeamComponent,
- *         canDeactivate: ['canDeactivateTeam']
+ *         canDeactivate: [(component: TeamComponent, currentRoute: ActivatedRouteSnapshot,
+ * currentState: RouterStateSnapshot, nextState: RouterStateSnapshot) => true]
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canDeactivateTeam',
- *       useValue: (component: TeamComponent, currentRoute: ActivatedRouteSnapshot, currentState:
- * RouterStateSnapshot, nextState: RouterStateSnapshot) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -799,10 +855,115 @@ export interface CanDeactivate<T> {
       |UrlTree;
 }
 
+/**
+ * The signature of a function used as a `canDeactivate` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanDeactivate`
+ * @see `Route`
+ */
 export type CanDeactivateFn<T> =
     (component: T, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot,
      nextState?: RouterStateSnapshot) =>
         Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
+
+/**
+ * @description
+ *
+ * Interface that a class can implement to be a guard deciding if a `Route` can be matched.
+ * If all guards return `true`, navigation continues and the `Router` will use the `Route` during
+ * activation. If any guard returns `false`, the `Route` is skipped for matching and other `Route`
+ * configurations are processed instead.
+ *
+ * The following example implements a `CanMatch` function that decides whether the
+ * current user has permission to access the users page.
+ *
+ *
+ * ```
+ * class UserToken {}
+ * class Permissions {
+ *   canAccess(user: UserToken, id: string, segments: UrlSegment[]): boolean {
+ *     return true;
+ *   }
+ * }
+ *
+ * @Injectable()
+ * class CanMatchTeamSection implements CanMatch {
+ *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *
+ *   canMatch(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
+ *     return this.permissions.canAccess(this.currentUser, route, segments);
+ *   }
+ * }
+ * ```
+ *
+ * Here, the defined guard function is provided as part of the `Route` object
+ * in the router configuration:
+ *
+ * ```
+ *
+ * @NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamComponent,
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
+ *         canMatch: [CanMatchTeamSection]
+ *       },
+ *       {
+ *         path: '**',
+ *         component: NotFoundComponent
+ *       }
+ *     ])
+ *   ],
+ *   providers: [CanMatchTeamSection, UserToken, Permissions]
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * If the `CanMatchTeamSection` were to return `false`, the router would continue navigating to the
+ * `team/:id` URL, but would load the `NotFoundComponent` because the `Route` for `'team/:id'`
+ * could not be used for a URL match but the catch-all `**` `Route` did instead.
+ *
+ * You can alternatively provide an in-line function with the `CanMatchFn` signature:
+ *
+ * ```
+ * @NgModule({
+ *   imports: [
+ *     RouterModule.forRoot([
+ *       {
+ *         path: 'team/:id',
+ *         component: TeamComponent,
+ *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
+ *         canMatch: [(route: Route, segments: UrlSegment[]) => true]
+ *       },
+ *       {
+ *         path: '**',
+ *         component: NotFoundComponent
+ *       }
+ *     ])
+ *   ],
+ * })
+ * class AppModule {}
+ * ```
+ *
+ * @publicApi
+ */
+export interface CanMatch {
+  canMatch(route: Route, segments: UrlSegment[]):
+      Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
+}
+
+/**
+ * The signature of a function used as a `CanMatch` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanMatch`
+ * @see `Route`
+ */
+export type CanMatchFn = (route: Route, segments: UrlSegment[]) =>
+    Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
 
 /**
  * @description
@@ -851,7 +1012,7 @@ export type CanDeactivateFn<T> =
  * export class AppRoutingModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `resolve()` signature:
+ * You can alternatively provide an in-line function with the `ResolveFn` signature:
  *
  * ```
  * export const myHero: Hero = {
@@ -865,17 +1026,11 @@ export type CanDeactivateFn<T> =
  *         path: 'detail/:id',
  *         component: HeroComponent,
  *         resolve: {
- *           hero: 'heroResolver'
+ *           hero: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => myHero
  *         }
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'heroResolver',
- *       useValue: (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => myHero
- *     }
- *   ]
  * })
  * export class AppModule {}
  * ```
@@ -930,6 +1085,15 @@ export interface Resolve<T> {
 }
 
 /**
+ * Function type definition for a data provider.
+ *
+ * @see `Route#resolve`.
+ * @publicApi
+ */
+export type ResolveFn<T> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) =>
+    Observable<T>|Promise<T>|T;
+
+/**
  * @description
  *
  * Interface that a class can implement to be a guard deciding if children can be loaded.
@@ -980,7 +1144,7 @@ export interface Resolve<T> {
  * class AppModule {}
  * ```
  *
- * You can alternatively provide an in-line function with the `canLoad` signature:
+ * You can alternatively provide an in-line function with the `CanLoadFn` signature:
  *
  * ```
  * @NgModule({
@@ -990,16 +1154,10 @@ export interface Resolve<T> {
  *         path: 'team/:id',
  *         component: TeamComponent,
  *         loadChildren: () => import('./team').then(mod => mod.TeamModule),
- *         canLoad: ['canLoadTeamSection']
+ *         canLoad: [(route: Route, segments: UrlSegment[]) => true]
  *       }
  *     ])
  *   ],
- *   providers: [
- *     {
- *       provide: 'canLoadTeamSection',
- *       useValue: (route: Route, segments: UrlSegment[]) => true
- *     }
- *   ]
  * })
  * class AppModule {}
  * ```
@@ -1011,5 +1169,65 @@ export interface CanLoad {
       Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
 }
 
+/**
+ * The signature of a function used as a `canLoad` guard on a `Route`.
+ *
+ * @publicApi
+ * @see `CanLoad`
+ * @see `Route`
+ */
 export type CanLoadFn = (route: Route, segments: UrlSegment[]) =>
     Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree;
+
+
+/**
+ * @description
+ *
+ * Options that modify the `Router` navigation strategy.
+ * Supply an object containing any of these properties to a `Router` navigation function to
+ * control how the navigation should be handled.
+ *
+ * @see [Router.navigate() method](api/router/Router#navigate)
+ * @see [Router.navigateByUrl() method](api/router/Router#navigatebyurl)
+ * @see [Routing and Navigation guide](guide/router)
+ *
+ * @publicApi
+ */
+export interface NavigationBehaviorOptions {
+  /**
+   * When true, navigates without pushing a new state into history.
+   *
+   * ```
+   * // Navigate silently to /view
+   * this.router.navigate(['/view'], { skipLocationChange: true });
+   * ```
+   */
+  skipLocationChange?: boolean;
+
+  /**
+   * When true, navigates while replacing the current state in history.
+   *
+   * ```
+   * // Navigate to /view
+   * this.router.navigate(['/view'], { replaceUrl: true });
+   * ```
+   */
+  replaceUrl?: boolean;
+
+  /**
+   * Developer-defined state that can be passed to any navigation.
+   * Access this value through the `Navigation.extras` object
+   * returned from the [Router.getCurrentNavigation()
+   * method](api/router/Router#getcurrentnavigation) while a navigation is executing.
+   *
+   * After a navigation completes, the router writes an object containing this
+   * value together with a `navigationId` to `history.state`.
+   * The value is written when `location.go()` or `location.replaceState()`
+   * is called before activating this route.
+   *
+   * Note that `history.state` does not pass an object equality test because
+   * the router adds the `navigationId` on each navigation.
+   *
+   */
+  state?: {[k: string]: any};
+}

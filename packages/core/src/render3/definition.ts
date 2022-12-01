@@ -7,8 +7,9 @@
  */
 
 import {ChangeDetectionStrategy} from '../change_detection/constants';
+import {NG_PROV_DEF} from '../di/interface/defs';
 import {Mutable, Type} from '../interface/type';
-import {NgModuleDef, NgModuleType} from '../metadata/ng_module_def';
+import {NgModuleDef} from '../metadata/ng_module_def';
 import {SchemaMetadata} from '../metadata/schema';
 import {ViewEncapsulation} from '../metadata/view';
 import {noSideEffects} from '../util/closure';
@@ -17,12 +18,13 @@ import {initNgDevMode} from '../util/ng_dev_mode';
 import {stringify} from '../util/stringify';
 
 import {NG_COMP_DEF, NG_DIR_DEF, NG_MOD_DEF, NG_PIPE_DEF} from './fields';
-import {ComponentDef, ComponentDefFeature, ComponentTemplate, ComponentType, ContentQueriesFunction, DependencyTypeList, DirectiveDef, DirectiveDefFeature, DirectiveDefList, DirectiveTypesOrFactory, HostBindingsFunction, PipeDef, PipeDefList, PipeTypesOrFactory, TypeOrFactory, ViewQueriesFunction} from './interfaces/definition';
+import {ComponentDef, ComponentDefFeature, ComponentTemplate, ComponentType, ContentQueriesFunction, DependencyTypeList, DirectiveDef, DirectiveDefFeature, DirectiveDefList, HostBindingsFunction, PipeDef, PipeDefList, TypeOrFactory, ViewQueriesFunction} from './interfaces/definition';
 import {TAttributes, TConstantsOrFactory} from './interfaces/node';
 import {CssSelectorList} from './interfaces/projection';
 
 
-let _renderCompCount = 0;
+/** Counter used to generate unique IDs for component definitions. */
+let componentDefCount = 0;
 
 
 /**
@@ -318,16 +320,17 @@ export function ɵɵdefineComponent<T>(componentDefinition: {
       features: componentDefinition.features as DirectiveDefFeature[] || null,
       data: componentDefinition.data || {},
       encapsulation: componentDefinition.encapsulation || ViewEncapsulation.Emulated,
-      id: 'c',
+      id: `c${componentDefCount++}`,
       styles: componentDefinition.styles || EMPTY_ARRAY,
       _: null,
       setInput: null,
       schemas: componentDefinition.schemas || null,
       tView: null,
+      findHostDirectiveDefs: null,
+      hostDirectives: null,
     };
     const dependencies = componentDefinition.dependencies;
     const feature = componentDefinition.features;
-    def.id += _renderCompCount++;
     def.inputs = invertObject(componentDefinition.inputs, declaredInputs),
     def.outputs = invertObject(componentDefinition.outputs),
     feature && feature.forEach((fn) => fn(def));
@@ -374,8 +377,6 @@ function nonNull<T>(value: T|null): value is T {
   return value !== null;
 }
 
-export const autoRegisterModuleById: {[id: string]: NgModuleType} = {};
-
 /**
  * @codeGenApi
  */
@@ -415,9 +416,6 @@ export function ɵɵdefineNgModule<T>(def: {
       schemas: def.schemas || null,
       id: def.id || null,
     };
-    if (def.id != null) {
-      autoRegisterModuleById[def.id!] = def.type as unknown as NgModuleType;
-    }
     return res;
   });
 }
@@ -741,6 +739,11 @@ export function getDirectiveDef<T>(type: any): DirectiveDef<T>|null {
 
 export function getPipeDef<T>(type: any): PipeDef<T>|null {
   return type[NG_PIPE_DEF] || null;
+}
+
+export function isStandalone<T>(type: Type<T>): boolean {
+  const def = getComponentDef(type) || getDirectiveDef(type) || getPipeDef(type);
+  return def !== null ? def.standalone : false;
 }
 
 export function getNgModuleDef<T>(type: any, throwNotFound: true): NgModuleDef<T>;

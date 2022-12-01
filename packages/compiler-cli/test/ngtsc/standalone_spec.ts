@@ -51,9 +51,9 @@ runInEachFileSystem(() => {
 
         const dtsCode = env.getContents('test.d.ts');
         expect(dtsCode).toContain(
-            'i0.ɵɵDirectiveDeclaration<TestDir, "[dir]", never, {}, {}, never, never, true>;');
+            'i0.ɵɵDirectiveDeclaration<TestDir, "[dir]", never, {}, {}, never, never, true, never>;');
         expect(dtsCode).toContain(
-            'i0.ɵɵComponentDeclaration<TestCmp, "test-cmp", never, {}, {}, never, never, true>;');
+            'i0.ɵɵComponentDeclaration<TestCmp, "test-cmp", never, {}, {}, never, never, true, never>;');
       });
 
       it('should compile a recursive standalone component', () => {
@@ -381,7 +381,75 @@ runInEachFileSystem(() => {
         expect(diags[0].relatedInformation).not.toBeUndefined();
         expect(getSourceCodeForDiagnostic(diags[0].relatedInformation![0])).toEqual('TestModule');
         expect(diags[0].relatedInformation![0].messageText)
-            .toContain('It can be imported using its NgModule');
+            .toMatch(/It can be imported using its '.*' NgModule instead./);
+      });
+
+      it('should error when a standalone component imports a ModuleWithProviders using a foreign function',
+         () => {
+           env.write('test.ts', `
+             import {Component, ModuleWithProviders, NgModule} from '@angular/core';
+
+             @NgModule({})
+             export class TestModule {}
+
+             declare function moduleWithProviders(): ModuleWithProviders<TestModule>;
+
+             @Component({
+               selector: 'test-cmp',
+               template: '<div></div>',
+               standalone: true,
+               imports: [moduleWithProviders()],
+             })
+             export class TestCmpWithLiteralImports {}
+
+             const IMPORTS = [moduleWithProviders()];
+
+             @Component({
+               selector: 'test-cmp',
+               template: '<div></div>',
+               standalone: true,
+               imports: IMPORTS,
+             })
+             export class TestCmpWithReferencedImports {}
+           `);
+           const diags = env.driveDiagnostics();
+           expect(diags.length).toBe(2);
+           expect(diags[0].code).toBe(ngErrorCode(ErrorCode.COMPONENT_UNKNOWN_IMPORT));
+           // The import occurs within the array literal, such that the error can be reported for
+           // the specific import that is rejected.
+           expect(getSourceCodeForDiagnostic(diags[0])).toEqual('moduleWithProviders()');
+
+           expect(diags[1].code).toBe(ngErrorCode(ErrorCode.COMPONENT_UNKNOWN_IMPORT));
+           // The import occurs in a referenced variable, which reports the error on the full
+           // `imports` expression.
+           expect(getSourceCodeForDiagnostic(diags[1])).toEqual('IMPORTS');
+         });
+
+      it('should error when a standalone component imports a ModuleWithProviders', () => {
+        env.write('test.ts', `
+          import {Component, ModuleWithProviders, NgModule} from '@angular/core';
+
+          @NgModule({})
+          export class TestModule {
+            static forRoot(): ModuleWithProviders<TestModule> {
+              return {ngModule: TestModule};
+            }
+          }
+
+          @Component({
+            selector: 'test-cmp',
+            template: '<div></div>',
+            standalone: true,
+            imports: [TestModule.forRoot()],
+          })
+          export class TestCmp {}
+        `);
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(1);
+        expect(diags[0].code).toBe(ngErrorCode(ErrorCode.COMPONENT_UNKNOWN_IMPORT));
+        // The static interpreter does not track source locations for locally evaluated functions,
+        // so the error is reported on the full `imports` expression.
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('[TestModule.forRoot()]');
       });
 
       it('should error when a standalone component imports a ModuleWithProviders using a foreign function',
@@ -480,14 +548,12 @@ runInEachFileSystem(() => {
            expect(diags[0].code).toBe(ngErrorCode(ErrorCode.COMPONENT_IMPORT_NOT_STANDALONE));
            expect(getSourceCodeForDiagnostic(diags[0])).toEqual('TestDir');
 
-           // The diagnostic produced here should suggest that the directive be imported via its
-           // NgModule instead.
            expect(diags[0].relatedInformation).not.toBeUndefined();
            expect(getSourceCodeForDiagnostic(diags[0].relatedInformation![0]))
                .toEqual('TestModule');
            expect(diags[0].relatedInformation![0].messageText)
                .toEqual(
-                   `It's declared in the NgModule 'TestModule', but is not exported. Consider exporting it.`);
+                   `It's declared in the 'TestModule' NgModule, but is not exported. Consider exporting it and importing the NgModule instead.`);
          });
 
       it('should type-check standalone component templates', () => {

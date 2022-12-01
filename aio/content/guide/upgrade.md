@@ -21,8 +21,8 @@ The `upgrade` module in Angular has been designed to make incremental upgrading 
 ## Preparation
 
 There are many ways to structure AngularJS applications.
-When you begin to upgrade these applications to Angular, some will turn out to be much more easy to work with than others.
-There are a few key techniques and patterns that you can apply to future proof applications even before you begin the migration.
+When you begin to upgrade these applications to Angular, some will turn out to be much easier to work with than others.
+There are a few key techniques and patterns that you can apply to future-proof applications even before you begin the migration.
 
 ### Follow the AngularJS Style Guide
 
@@ -309,7 +309,7 @@ You can remove the `ng-app` and `ng-strict-di` directives from the HTML and inst
 <code-example header="app.module.ts" path="upgrade-module/src/app/ajs-bootstrap/app.module.ts" region="bootstrap"></code-example>
 
 To begin converting your AngularJS application to a hybrid, you need to load the Angular framework.
-You can see how this can be done with SystemJS by following the instructions in [Setup for Upgrading to AngularJS][AioGuideUpgradeSetup] for selectively copying code from the [QuickStart github repository][GithubAngularQuickstart].
+You can see how this can be done with SystemJS by following the instructions in [Setup for Upgrading to AngularJS][AioGuideUpgradeSetup] for selectively copying code from the [QuickStart GitHub repository][GithubAngularQuickstart].
 
 You also need to install the `@angular/upgrade` package using `npm install @angular/upgrade --save` and add a mapping for the `@angular/upgrade/static` package:
 
@@ -364,7 +364,7 @@ The result is an AngularJS *directive*, which you can then register in the Angul
 <div class="alert is-helpful">
 
 By default, Angular change detection will also run on the component for everyAngularJS `$digest` cycle.
-If you want to only have change detection run when the inputs change, you can set `propagateDigest` to `false` when calling`downgradeComponent()`.
+If you want to only have change detection run when the inputs change, you can set `propagateDigest` to `false` when calling `downgradeComponent()`.
 
 </div>
 
@@ -374,7 +374,7 @@ Because `HeroDetailComponent` is an Angular component, you must also add it to t
 
 <div class="alert is-helpful">
 
-All Angular components, directives and pipes must be declared in an NgModule.
+All Angular components, directives, and pipes must be declared in an NgModule.
 
 </div>
 
@@ -556,7 +556,7 @@ For example, you might have a service called `HeroesService` in AngularJS:
 
 <code-example header="heroes.service.ts" path="upgrade-module/src/app/ajs-to-a-providers/heroes.service.ts"></code-example>
 
-You can upgrade the service using a Angular [factory provider][AioGuideDependencyInjectionProvidersFactoryProviders] that requests the service from the AngularJS `$injector`.
+You can upgrade the service using an Angular [factory provider][AioGuideDependencyInjectionProvidersFactoryProviders] that requests the service from the AngularJS `$injector`.
 
 Many developers prefer to declare the factory provider in a separate `ajs-upgraded-providers.ts` file so that they are all together, making it easier to reference them, create new ones and delete them once the upgrade is over.
 
@@ -634,7 +634,7 @@ This strategy reduces your initial bundle size, defers any potential impact from
 
 The steps below show you how to do the following:
 
-*   Setup a callback function for your AngularJS bundle.
+*   Set up a callback function for your AngularJS bundle.
 *   Create a service that lazy loads and bootstraps your AngularJS app.
 *   Create a routable component for AngularJS content
 *   Create a custom `matcher` function for AngularJS-specific URLs and configure the Angular `Router` with the custom matcher for AngularJS routes.
@@ -1171,7 +1171,7 @@ That is pretty exciting!
 You're not running any actual Angular components yet.
 That is next.
 
-<div class="alert is-helpful">
+<div class="callout is-helpful">
 
 <header>Why declare *angular* as *angular.IAngularStatic*?</header>
 
@@ -1183,7 +1183,7 @@ If you used `import * as angular from 'angular'` instead, you'd also have to loa
 This is a considerable effort and it often isn't worth it, especially since you are in the process of moving your code to Angular.
 Instead, declare `angular` as `angular.IAngularStatic` to indicate it is a global variable and still have full typing support.
 
-<div class="alert is-important">
+<div class="callout is-important">
 
 <header>Manually create a UMD bundle for your Angular application</header>
 
@@ -1687,7 +1687,6 @@ And for the phone list component, a few adjustments to the router make the `Rout
 [AioGuideAotCompiler]: guide/aot-compiler "Ahead-of-time (AOT) compilation | Angular"
 [AioGuideBuiltInDirectives]: guide/built-in-directives "Built-in directives | Angular"
 [AioGuideDependencyInjection]: guide/dependency-injection "Dependency injection in Angular | Angular"
-[AioGuideDependencyInjectionProvidersFactoryProviders]: guide/dependency-injection-providers#factory-providers "Using factory providers - Dependency providers | Angular"
 [AioGuideGlossaryLazyLoading]: guide/glossary#lazy-loading "lazy loading - Glossary | Angular"
 [AioGuideHierarchicalDependencyInjection]: guide/hierarchical-dependency-injection "Hierarchical injectors | Angular"
 [AioGuideLifecycleHooks]: guide/lifecycle-hooks "Lifecycle hooks | Angular"

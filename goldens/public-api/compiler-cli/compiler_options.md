@@ -8,6 +8,7 @@
 export interface BazelAndG3Options {
     annotateForClosureCompiler?: boolean;
     generateDeepReexports?: boolean;
+    onlyPublishPublicTypingsForNgModules?: boolean;
 }
 
 // @public
@@ -57,7 +58,6 @@ export interface MiscOptions {
 
 // @public
 export interface NgcCompatibilityOptions {
-    enableIvy?: boolean | 'ngtsc';
     generateNgFactoryShims?: boolean;
     generateNgSummaryShims?: boolean;
 }
