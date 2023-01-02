@@ -26,7 +26,7 @@ Before continuing with this topic, you should be familiar with the following:
 
 
 <!--
-## Creating reusable animations
+## Create reusable animations
 -->
 ## 애니메이션 정의하기
 
@@ -101,10 +101,4 @@ You might also be interested in the following:
 *   [라우팅 애니메이션](guide/route-animations)
 
 
-<!-- links -->
-
-<!-- external links -->
-
-<!-- end links -->
-
-@reviewed 2022-02-28
+@reviewed 2022-10-11

@@ -103,38 +103,6 @@ using an example application.
 
 
 <!--
-### Serving with `http-server`
--->
-### `http-server`로 애플리케이션 띄우기
-
-<!--
-Because `ng serve` does not work with service workers, you must use a separate HTTP server to test your project locally.
-Use any HTTP server.
-The following example uses the [http-server](https://www.npmjs.com/package/http-server) package from npm.
-To reduce the possibility of conflicts and avoid serving stale content, test on a dedicated port and disable caching.
-
-To serve the directory containing your web files with `http-server`, run the following command:
-
-<code-example format="shell" language="shell">
-
-http-server -p 8080 -c-1 dist/&lt;project-name&gt;
-
-</code-example>
--->
-`ng serve` 명령으로는 서비스 워커가 실행되지 않기 때문에 서비스 워커를 사용하려면 Angular 애플리케이션을 다른 HTTP 서버로 띄워야 합니다.
-그래서 이번 예제에서는 npm 패키지로 제공되는 [http-server](https://www.npmjs.com/package/http-server)를 사용해 봅시다.
-HTTP 서버가 제공하는 파일을 모두 최신 버전으로 사용하기 위해 캐시는 비활성화한 채로 서버를 실행합니다.
-
-웹 파일이 위치한 디렉토리로 이동한 후에 `http-server` 명령을 실행합니다:
-
-<code-example format="shell" language="shell">
-
-http-server -p 8080 -c-1 dist/&lt;project-name&gt;
-
-</code-example>
-
-
-<!--
 ### Initial load
 -->
 ### 초기 로드
@@ -184,7 +152,7 @@ To simulate a network issue, disable network interaction for your application.
 
 In Chrome:
 
-1.  Select **Tools** &gt; **Developer Tools** \(from the Chrome menu located at the top right corner\).
+1.  Select **Tools** &gt; **Developer Tools** \(from the Chrome menu located in the top right corner\).
 1.  Go to the **Network tab**.
 1.  Select **Offline** in the **Throttling** dropdown menu.
 

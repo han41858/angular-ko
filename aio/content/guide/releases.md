@@ -218,23 +218,6 @@ Angular는 일정한 주기로 릴리즈됩니다.
 Dates are offered as general guidance and are subject to change.
 
 </div>
-
-All major releases are typically supported for 18 months.
-
-| Support stage     | Support Timing | Details |
-|:---               |:---            |:---     |
-| Active            | 6 months       | Regularly-scheduled updates and patches are released                |
-| Long-term \(LTS\) | 12 months      | Only [critical fixes and security patches](#lts-fixes) are released |
-
-The following table provides the status for Angular versions under support.
-
-| Version | Status | Released   | Active ends | LTS ends   |
-|:---     |:---    |:---        |:---         |:---        |
-| ^14.0.0 | Active | 2022-06-02 | 2022-12-02  | 2023-12-02 |
-| ^13.0.0 | Active | 2021-11-04 | 2022-06-02  | 2023-05-04 |
-| ^12.0.0 | LTS    | 2021-05-12 | 2021-11-12  | 2022-11-12 |
-
-Angular versions v2 to v11 are no longer under support.
 -->
 <div class="alert is-helpful">
 
@@ -242,6 +225,39 @@ Angular versions v2 to v11 are no longer under support.
 
 </div>
 
+
+<!--
+### Release schedule
+-->
+### 릴리즈 일정
+
+<!--
+| Version | Date               |
+| :---    | :---               |
+| v14.1   | Week of 2022-07-18 |
+| v14.2   | Week of 2022-08-22 |
+| v15.0   | Week of 2022-11-18 |
+-->
+| 버전    | 일정           |
+|:------|:-------------|
+| v14.1 | 2022-07-18 주 |
+| v14.2 | 2022-08-22 주 |
+| v15.0 | 2022-11-18 주 |
+
+
+<!--
+### Support window
+-->
+### 지원 기간
+
+<!--
+All major releases are typically supported for 18 months.
+
+| Support stage     | Support Timing | Details |
+|:---               |:---            |:---     |
+| Active            | 6 months       | Regularly-scheduled updates and patches are released                |
+| Long-term \(LTS\) | 12 months      | Only [critical fixes and security patches](#lts-fixes) are released |
+-->
 메이저 릴리즈 지원은 보통 18개월동안 제공됩니다.
 
 | 지원 단계             | 지원 기간 | 설명                                      |
@@ -249,15 +265,30 @@ Angular versions v2 to v11 are no longer under support.
 | Active            | 6 개월  | 업데이트 버전과 패치가 정기적으로 제공됩니다.               |
 | Long-term \(LTS\) | 12 개월 | [심각한 버그 수정이나 보안 패치](#lts-fixes)만 제공됩니다. |
 
+
+<!--
+### Actively supported versions
+-->
+### 활성화 상태의 버전
+
+<!--
+The following table provides the status for Angular versions under support.
+
+| Version | Status | Released   | Active ends | LTS ends   |
+|:---     |:---    |:---        |:---         |:---        |
+| ^14.0.0 | Active | 2022-06-02 | 2022-12-02  | 2023-12-02 |
+| ^13.0.0 | LTS    | 2021-11-04 | 2022-06-02  | 2023-05-04 |
+
+Angular versions v2 to v12 are no longer under support.
+-->
 현재 지원되고 있는 Angular 버전은 이렇습니다.
 
 | 버전      | 상태     | 릴리즈 일자     | Active 지원 종료 | LTS 지원 종료  |
 |:--------|:-------|:-----------|:-------------|:-----------|
 | ^14.0.0 | Active | 2022-06-02 | 2022-12-02   | 2023-12-02 |
-| ^13.0.0 | Active | 2021-11-04 | 2022-06-02   | 2023-05-04 |
-| ^12.0.0 | LTS    | 2021-05-12 | 2021-11-12   | 2022-11-12 |
+| ^13.0.0 | LTS    | 2021-11-04 | 2022-06-02   | 2023-05-04 |
 
-Angular v2 버전부터 v11 버전은 지원이 중단되었습니다.
+Angular v2 버전부터 v12 버전은 지원이 중단되었습니다.
 
 
 <a id="lts-fixes"></a>
@@ -327,7 +358,7 @@ API 사용방법이나 기능이 크게 변하는\(breaking changes\) 릴리즈�
 ## 퍼블릭 API 진입점
 
 <!--
-Angular is a collection of many packages, sub-projects, and tools.
+Angular is a collection of many packages, subprojects, and tools.
 To prevent accidental use of private APIs and so that you can clearly understand what is covered by the practices described here &mdash; we document what is and is not considered our public API surface.
 For details, see [Supported Public API Surface of Angular](https://github.com/angular/angular/blob/main/docs/PUBLIC_API.md "Supported Public API Surface of Angular").
 
@@ -370,4 +401,4 @@ Angular 팀은 이런 위험부담에도 불구하고 도입할 필요가 있을
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2022-11-14

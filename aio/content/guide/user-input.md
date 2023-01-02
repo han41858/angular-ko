@@ -8,7 +8,7 @@
 
 <header>Marked for archiving</header>
 
-To ensure that you have the best experience possible, this topic is marked for archiving until we determine that it clearly conveys the most accurate information possible.
+To ensure that you have the best experience possible, this topic is marked for archiving until it clearly conveys the most accurate information possible.
 
 In the meantime, this topic might be helpful:
 [Event binding](guide/event-binding).
@@ -56,23 +56,28 @@ To bind to a DOM event, surround the DOM event name in parentheses and assign a 
 
 The following example shows an event binding that implements a click handler:
 
+<!- vale Angular.Google_WordListWarnings = NO ->
+
 <code-example header="src/app/click-me.component.ts" path="user-input/src/app/click-me.component.ts" region="click-me-button"></code-example>
+
+<!- vale Angular.Google_WordListWarnings = YES ->
 
 <a id="click"></a>
 
 The `(click)` to the left of the equals sign identifies the button's click event as the **target of the binding**.
-The text in quotes to the right of the equals sign is the **template statement**, which responds to the click event by calling the component's `onClickMe` method.
+The text in quotes to the right of the equals sign is the **template statement**. The statement responds to the click event by calling the component's `onClickMe` method.
 
 When writing a binding, be aware of a template statement's **execution context**.
 The identifiers in a template statement belong to a specific context object, usually the Angular component controlling the template.
-The example above shows a single line of HTML, but that HTML belongs to a larger component:
+The preceding example shows a single line of HTML, but that HTML belongs to a larger component:
 
 <code-example header="src/app/click-me.component.ts" path="user-input/src/app/click-me.component.ts" region="click-me-component"></code-example>
 
 When the user clicks the button, Angular calls the `onClickMe` method from `ClickMeComponent`.
 -->
 [DOM에서 발생하는 이벤트](https://developer.mozilla.org/docs/Web/Events)는 [Angular 이벤트 바인딩](guide/event-binding) 문법을 사용해서 반응할 수 있습니다.
-DOM에서 일어나는 이벤트는 대부분 사용자의 행동에 의해 발생합니다. 그래서 이 이벤트를 확인하면 사용자가 어떤 동작을 하고 있는지 알 수 있습니다.
+DOM에서 일어나는 이벤트는 대부분 사용자의 행동에 의해 발생합니다.
+그래서 이 이벤트를 확인하면 사용자가 어떤 동작을 하고 있는지 알 수 있습니다.
 
 DOM 이벤트를 바인딩 하려면 이벤트 이름을 괄호\(`(`, `)`\)로 감싸고 [템플릿 실행문](guide/template-statements)을 연결하면 됩니다.
 
@@ -108,7 +113,7 @@ The following code listens to the `keyup` event and passes the entire event payl
 
 <code-example header="src/app/keyup.components.ts (template v.1)" path="user-input/src/app/keyup.components.ts" region="key-up-component-1-template"></code-example>
 
-When a user presses and releases a key, the `keyup` event occurs, and Angular provides a corresponding DOM event object in the `$event` variable which this code passes as a parameter to the component's `onKey()` method.
+When a user presses and releases a key, the `keyup` event occurs. Angular then provides a corresponding DOM event object in the `$event` variable which this code passes as a parameter to the component's `onKey()` method.
 
 <code-example header="src/app/keyup.components.ts (class v.1)" path="user-input/src/app/keyup.components.ts" region="key-up-component-1-class-no-type"></code-example>
 
@@ -121,8 +126,12 @@ In this case, `target` refers to the [`<input>` element](https://developer.mozil
 After each call, the `onKey()` method appends the contents of the input box value to the list in the component's `values` property, followed by a separator character \(`|`\).
 The [interpolation](guide/interpolation) displays the accumulating input box changes from the `values` property.
 
-Suppose the user enters the letters "abc", and then backspaces to remove them one by one.
+<!- vale Angular.Angular_Spelling = NO ->
+
+Suppose the user enters the letters "abc" and then backspaces to remove them one by one.
 Here's what the UI displays:
+
+<!- vale Angular.Angular_Spelling = YES ->
 
 <code-example>
 
@@ -138,7 +147,7 @@ a &verbar; ab &verbar; abc &verbar; ab &verbar; a &verbar; &verbar;
 
 <div class="alert is-helpful">
 
-Alternatively, you could accumulate the individual keys themselves by substituting `event.key` for `event.target.value` in which case the same user input would produce:
+You could also accumulate the individual keys themselves by substituting `event.key` for `event.target.value` in which case the same user input would produce:
 
 <code-example>
 
@@ -200,7 +209,7 @@ a &verbar; b &verbar; c &verbar; backspace &verbar; backspace &verbar; backspace
 ### Type the `$event`
 
 <!--
-The example above casts the `$event` as an `any` type.
+The preceding example casts the `$event` as an `any` type.
 That simplifies the code at a cost.
 There is no type information that could reveal properties of the event object and prevent silly mistakes.
 
@@ -230,10 +239,9 @@ The `OnKey` method more clearly expresses what it expects from the template and 
 ### `$event` 객체를 그대로 전달하는 것이 좋을까요?
 
 <!--
-Typing the event object reveals a significant objection to passing the entire DOM event into the method:
-The component has too much awareness of the template details.
+Typing the event object reveals a significant objection to passing the entire DOM event into the method. Namely, the component has too much awareness of the template details.
 It can't extract information without knowing more than it should about the HTML implementation.
-That breaks the separation of concerns between the template \(*what the user sees*\) and the component \(*how the application processes user data*\).
+That breaks the separation of concerns between the template, *what the user sees*, and the component, *how the application processes user data*.
 
 The next section shows how to use template reference variables to address this problem.
 -->
@@ -251,9 +259,9 @@ The next section shows how to use template reference variables to address this p
 
 <!--
 There's another way to get the user data:
-Use Angular [**template reference variables**](guide/template-reference-variables).
+use Angular [**template reference variables**](guide/template-reference-variables).
 These variables provide direct access to an element from within the template.
-To declare a template reference variable, precede an identifier with a hash \(or pound\) character \(`#`\).
+To declare a template reference variable, precede an identifier with a hash/pound character \(`#`\).
 
 The following example uses a template reference variable to implement a keystroke loopback in a simple template.
 
@@ -262,7 +270,7 @@ The following example uses a template reference variable to implement a keystrok
 The template reference variable named `box`, declared on the `<input>` element, refers to the `<input>` element itself.
 The code uses the `box` variable to get the input element's `value` and display it with interpolation between `<p>` tags.
 
-The template is completely self contained.
+The template is completely self-contained.
 It doesn't bind to the component, and the component does nothing.
 
 Type something in the input box, and watch the display update with each keystroke.
@@ -273,13 +281,13 @@ Type something in the input box, and watch the display update with each keystrok
 
 </div>
 
-<div class="alert is-helpful">
+<div class="callout is-helpful">
 
 <header>This won't work at all unless you bind to an event.</header>
 
-Angular updates the bindings \(and therefore the screen\) only if the app does something in response to asynchronous events, such as keystrokes.
+Angular updates the bindings and screen only if the app does something in response to asynchronous events, such as keystrokes.
 This example code binds the `keyup` event to the number 0, the shortest template statement possible.
-While the statement does nothing useful, it satisfies Angular's requirement so that Angular will update the screen.
+While the statement does nothing useful, it satisfies Angular's condition so that Angular updates the screen.
 
 </div>
 
@@ -312,7 +320,7 @@ Angular에서 제공하는 [**템플릿 참조 변수**](guide/template-referenc
 
 </div>
 
-<div class="alert is-helpful">
+<div class="callout is-helpful">
 
 <header>이 예제는 이벤트 바인딩을 해야 동작합니다.</header>
 
@@ -336,7 +344,6 @@ Angular는 키입력과 같은 비동기 이벤트가 발생할 때만 바인딩
 <!--
 ## Key event filtering (with `key.enter`)
 -->
--->
 ## 키 입력 필터링 (`key.enter`)
 
 <!--
@@ -345,7 +352,7 @@ Sometimes only the *Enter* key matters, because it signals that the user has fin
 One way to reduce the noise would be to examine every `$event.keyCode` and take action only when the key is *Enter*.
 
 There's an easier way:
-Bind to Angular's `keyup.enter` pseudo-event.
+bind to Angular's `keyup.enter` pseudo-event.
 Then Angular calls the event handler only when the user presses *Enter*.
 
 <code-example header="src/app/keyup.components.ts (v3)" path="user-input/src/app/keyup.components.ts" region="key-up-component-3"></code-example>
@@ -380,7 +387,7 @@ Here's how it works.
 ## 포커스를 잃을 때
 
 <!--
-In the previous example, the current state of the input box is lost if the user mouses away and clicks elsewhere on the page without first pressing *Enter*.
+In the previous example, the current state of the input box is lost if the user mouses away and clicks elsewhere without first pressing *Enter*.
 The component's `value` property is updated only when the user presses *Enter*.
 
 To fix this issue, listen to both the *Enter* key and the `blur` event.
@@ -487,7 +494,7 @@ For example, you can use the following steps to make the scroll event passive.
 
     </code-example>
 
-After those steps, if you add event listeners for the `scroll` event, the listeners will be `passive`.
+After those steps, if you add event listeners for the `scroll` event, the listeners are going to be `passive`.
 -->
 이 문서에서 다룬 코드를 모두 살펴봅시다.
 

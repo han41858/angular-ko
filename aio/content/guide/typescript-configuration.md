@@ -56,34 +56,14 @@ For more information, see the [Configuration inheritance with extends](https://w
 
 <div class="alert is-helpful">
 
-For more information TypeScript configuration files, see the official [TypeScript wiki](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
+For more information TypeScript configuration files, see the official [TypeScript handbook](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
 For details about configuration inheritance, see the [Configuration inheritance with extends](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#configuration-inheritance-with-extends) section.
 
 </div>
 
 The initial `tsconfig.json` for an Angular workspace typically looks like the following example.
 
-<code-example lang="json" header="tsconfig.json" linenums="false">
-{
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
-  }
-}
-</code-example>
+<code-example header="tsconfig.json" path="getting-started/tsconfig.0.json"></code-example>
 -->
 Angular 워크스페이스에는 TypeScript 환경설정 파일이 여러개 존재합니다.
 최상위 `tsconfig.json` 파일에는 워크스페이스 안에 있는 모든 프로젝트에 적용되는 기본 TypeScript 옵션과 Angular 컴파일러 옵션을 지정합니다.
@@ -106,27 +86,7 @@ TypeScript 환경설정 파일에 대해 자세하게 알아보려면 공식 [Ty
 
 Angular 워크스페이스를 새로 생성했을 때 구성되는 `tsconfig.json` 파일의 내용은 이렇습니다.
 
-<code-example lang="json" header="tsconfig.json" linenums="false">
-{
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
-  }
-}
-</code-example>
+<code-example header="tsconfig.json" path="getting-started/tsconfig.0.json"></code-example>
 
 
 <a id="noImplicitAny"></a>
@@ -238,29 +198,18 @@ Angular도 이런 경우에 해당됩니다.
 </div>
 
 
-### `lib.d.ts`
+### `lib`
 
 <!--
-TypeScript includes a special declaration file called `lib.d.ts`.
-This file contains the ambient declarations for various common JavaScript constructs present in JavaScript runtimes and the DOM.
+TypeScript includes a default set of declaration files.
+These files contain the ambient declarations for various common JavaScript constructs present in JavaScript runtimes and the DOM.
 
-Based on the `--target`, TypeScript adds *additional* ambient declarations like `Promise` if the target is `es6`.
-
-By default, the target is `es2015`.
-If you are targeting `es5`, you still have newer type declarations due to the list of declaration files included:
-
-<code-example header="tsconfig.json (lib excerpt)" path="getting-started/tsconfig.0.json" region="lib"></code-example>
+For more information, see [lib](https://www.typescriptlang.org/tsconfig#lib) in the TypeScript guide.
 -->
-TypeScript에는 조금 특별한 타입 정의 파일인 `lib.d.ts`가 있습니다.
+TypeScript에는 조금 특별한 타입 정의 파일이 있습니다.
 이 파일은 실행 시점의 JavaScript 객체나 DOM 객체에 대한 타입을 제공합니다.
 
-TypeScript 컴파일에 사용하는 `--target` 옵션에 따라 타입 정의 파일이 _추가로_ 생성될 수도 있습니다.
-`--target` 옵션이 `es6`라면 `Promise`에 대한 타입 정의가 추가되는 식입니다.
-
-`target` 기본값은 `es2015` 입니다.
-`es5` 문법으로 빌드하려면 타입 정의 파일을 추가해야 합니다:
-
-<code-example header="tsconfig.json (lib 일부)" path="getting-started/tsconfig.0.json" region="lib"></code-example>
+자세한 내용은 [TypeScript lib 가이드 문서](https://www.typescriptlang.org/tsconfig#lib)를 참고하세요.
 
 
 <!--
@@ -304,9 +253,12 @@ Angular CLI는 애플리케이션을 빌드하기 위해 `tsconfig.app.json` 파
 ### `target`
 
 <!--
-By default, the target is `es2017`, which is supported in modern browsers.
+By default, the target is `ES2022`. To control ECMA syntax use the [Browserslist](https://github.com/browserslist/browserslist) configuration file.
+For more information, see the [configuring browser compatibility](/guide/build#configuring-browser-compatibility) guide.
 -->
-기본값은 `es2017`이며, 최신 브라우저는 모두 이 문법을 지원합니다.
+기본값에서 빌드 설정은 `ES2022` 입니다.
+ECMA 버전을 조정하려면 [Browserslist](https://github.com/browserslist/browserslist) 설정 파일을 변경하면 됩니다.
+[브라우저 호환성 설정](/guide/build#configuring-browser-compatibility) 가이드 문서를 참고하세요.
 
 
 <!-- links -->
@@ -315,4 +267,4 @@ By default, the target is `es2017`, which is supported in modern browsers.
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2022-10-24

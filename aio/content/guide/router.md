@@ -67,7 +67,7 @@ The CLI automatically appends `Component`, so if you were to write `first-compon
 
 <div class="alert is-helpful">
 
-<header<code>&lt;base href&gt;</code></header>
+<header><code>&lt;base href&gt;</code></header>
 
 This guide works with a CLI-generated Angular application.
 If you are working manually, make sure that you have `<base href="/">` in the `<head>` of your index.html file.
@@ -479,7 +479,7 @@ The `Router` sets the document's title using the `title` property from the `Rout
 
 <div class="alert is-helpful">
 
-**NOTE**: <br /> The `title` property follows the same rules as static route `data` and dynamic values that implement `Resolve`.
+**NOTE**: <br /> The `title` property follows the same rules as static route `data` and dynamic values that implement `ResolveFn`.
 
 </div>
 
@@ -752,34 +752,35 @@ Angular 앱이 실행되는 시점에 로딩되지 않고 필요한 시점에 �
 Use route guards to prevent users from navigating to parts of an application without authorization.
 The following route guards are available in Angular:
 
-*   [`CanActivate`](api/router/CanActivate)
-*   [`CanActivateChild`](api/router/CanActivateChild)
-*   [`CanDeactivate`](api/router/CanDeactivate)
-*   [`Resolve`](api/router/Resolve)
-*   [`CanLoad`](api/router/CanLoad)
+*   [`canActivate`](api/router/CanActivateFn)
+*   [`canActivateChild`](api/router/CanActivateChildFn)
+*   [`canDeactivate`](api/router/CanDeactivateFn)
+*   [`canMatch`](api/router/CanMatchFn)
+*   [`resolve`](api/router/ResolveFn)
+*   [`canLoad`](api/router/CanLoadFn)
 
 To use route guards, consider using [component-less routes](api/router/Route#componentless-routes) as this facilitates guarding child routes.
 
 Create a service for your guard:
 
+<!-- TODO: update CLI 
 <code-example format="shell" language="shell">
 
 ng generate guard your-guard
 
 </code-example>
+-->
 
-In your guard class, implement the guard you want to use.
-The following example uses `CanActivate` to guard the route.
+In your guard function, implement the guard you want to use.
+The following example uses `canActivate` to guard the route.
 
-<code-example header="Component (excerpt)">
+<code-example header="guard (excerpt)">
 
-export class YourGuard implements CanActivate {
-  canActivate(
+export const yourGuard: CanActivateFn = (
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean {
+    state: RouterStateSnapshot) => {
       // your  logic goes here
   }
-}
 
 </code-example>
 
@@ -791,7 +792,7 @@ Here, `canActivate` tells the router to mediate navigation to this particular ro
 {
   path: '/your-path',
   component: YourComponent,
-  canActivate: [YourGuard],
+  canActivate: [yourGuard],
 }
 
 </code-example>
@@ -966,7 +967,7 @@ The link parameters array affords the flexibility to represent any routing depth
 <!--
 When the router navigates to a new component view, it updates the browser's location and history with a URL for that view.
 
-Modern HTML5 browsers support [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries title="HTML5 browser history push-state"), a technique that changes a browser's location and history without triggering a server page request.
+Modern HTML5 browsers support [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries "HTML5 browser history push-state"), a technique that changes a browser's location and history without triggering a server page request.
 The router can compose a "natural" URL that is indistinguishable from one that would otherwise require a page load.
 
 Here's the Crisis Center URL in this "HTML5 pushState" style:
@@ -999,7 +1000,7 @@ You also have the option of switching to the `HashLocationStrategy` with an over
 
 <div class="alert is-helpful">
 
-For more information on providers and the bootstrap process, see [Dependency Injection](guide/dependency-injection#bootstrap).
+For more information on providers and the bootstrap process, see [Dependency Injection](guide/dependency-injection-providers).
 
 </div>
 -->
@@ -1039,7 +1040,7 @@ localhost:3002/src/#/crisis-center
 
 <div class="alert is-helpful">
 
-부트스트랩 과정에 대해 자세하게 알아보려면 [의존성 주입](guide/dependency-injection#bootstrap) 문서를 참고하세요.
+부트스트랩 과정에 대해 자세하게 알아보려면 [의존성 주입](guide/dependency-injection-providers) 문서를 참고하세요.
 
 </div>
 

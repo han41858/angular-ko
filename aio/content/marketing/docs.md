@@ -4,7 +4,7 @@
 <h1 class="no-toc">Angular 가이드문서 소개</h1>
 
 <!--
-Angular is an application design framework and development platform for creating efficient and sophisticated single-page apps.
+Angular is an application-design framework and development platform for creating efficient and sophisticated single-page apps.
 
 These Angular docs help you learn and use the Angular framework and development platform, from your first application to optimizing complex single-page apps for enterprises.
 Tutorials and guides include downloadable examples to accelerate your projects.
@@ -99,12 +99,12 @@ We want to hear from you. [Report problems or submit suggestions for future docs
 
 Contribute to Angular docs by creating
 [pull requests](https://github.com/angular/angular/pulls "Angular Github pull requests")
-on the Angular Github repository.
+on the Angular GitHub repository.
 See [Contributing to Angular](https://github.com/angular/angular/blob/main/CONTRIBUTING.md "Contributing guide")
 for information about submission guidelines.
 
 Our community values respectful, supportive communication.
-Please consult and adhere to the [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md "Contributor code of conduct").
+Please consult and adhere to the [Code of Conduct](https://github.com/angular/code-of-conduct/blob/main/CODE_OF_CONDUCT.md "Contributor code of conduct").
 -->
 <h3>저희는 여러분 곁에 있습니다!</h4>
 
@@ -114,4 +114,4 @@ Angular Github 코드 저장소에 [풀 리퀘스트](https://github.com/angular
 가이드라인에 대해 자세하게 알아보려면 [Angular에 기여하기](https://github.com/angular/angular/blob/main/CONTRIBUTING.md "Contributing guide") 문서를 참고하세요.
 
 Angular 커뮤니티는 활발하게 운영되고 있으며, 문제가 생겼을 때 커뮤니티에서 지원을 받을 수도 있습니다.
-[커뮤니티 활동 가이드](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md "커뮤니티 활동 가이드")를 준수하며 Angular 커뮤니티에 참여해보세요.
+[커뮤니티 활동 가이드](https://github.com/angular/code-of-conduct/blob/main/CODE_OF_CONDUCT.md "커뮤니티 활동 가이드")를 준수하며 Angular 커뮤니티에 참여해보세요.

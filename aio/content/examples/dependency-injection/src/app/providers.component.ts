@@ -154,7 +154,6 @@ export class Provider6bComponent {
 
 //////////////////////////////////////////
 
-// #docregion silent-logger
 // Logger 서비스와 모양이 같은 객체
 function silentLoggerFn() {}
 
@@ -162,15 +161,12 @@ export const SilentLogger = {
   logs: ['Silent logger says "Shhhhh!". Provided via "useValue"'],
   log: silentLoggerFn
 };
-// #enddocregion silent-logger
 
 @Component({
   selector: 'provider-7',
   template,
   providers:
-    // #docregion providers-7
     [{ provide: Logger, useValue: SilentLogger }]
-    // #enddocregion providers-7
 })
 export class Provider7Component {
   log: string;

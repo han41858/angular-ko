@@ -26,7 +26,7 @@ StackBlitz는 브라우저 기반의 개발 환경이기 때문에 웹 브라우
 ## 사전지식
 
 <!--
-To get the most out of this tutorial you should already have a basic understanding of the following.
+To get the most out of this tutorial, you should already have a basic understanding of the following.
 
 *   [HTML](https://developer.mozilla.org/docs/Learn/HTML "Learning HTML: Guides and tutorials")
 *   [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript "JavaScript")
@@ -52,20 +52,20 @@ Components define areas of responsibility in the UI that let you reuse sets of U
 
 A component consists of three things:
 
-|                           | Details |
+| Component Part            | Details |
 |:---                       |:---     |
-| A component class         | Handles data and functionality. |
-| An HTML template          | Determines the UI.              |
-| Component-specific styles | Define the look and feel.       |
+| A component class         | Handles data and functionality |
+| An HTML template          | Determines the UI              |
+| Component-specific styles | Define the look and feel       |
 
-This guide demonstrates building an application with the following components.
+This guide demonstrates building an application with the following components:
 
 | Components             | Details |
 |:---                    |:---     |
-| `<app-root>`           | The first component to load and the container for the other components. |
-| `<app-top-bar>`        | The store name and checkout button.                                     |
-| `<app-product-list>`   | The product list.                                                       |
-| `<app-product-alerts>` | A component that contains the application's alerts.                     |
+| `<app-root>`           | The first component to load and the container for the other components |
+| `<app-top-bar>`        | The store name and checkout button                                     |
+| `<app-product-list>`   | The product list                                                       |
+| `<app-product-alerts>` | A component that contains the application's alerts                     |
 
 <div class="lightbox">
 
@@ -80,11 +80,11 @@ Angular 애플리케이션은 컴포넌트(component) 단위로 구성합니다.
 
 컴포넌트는 3가지로 구성됩니다:
 
-|             | 설명                       |
-|:------------|:-------------------------|
-| 컴포넌트 클래스    | 데이터를 관리하고 동작을 처리합니다.     |
-| HTML 템플릿    | 화면을 구성합니다.               |
-| 컴포넌트용 스타일   | 화면이 어떤 모습으로 표시될 지 지정합니다. |
+| 구성요소      | 설명                       |
+|:----------|:-------------------------|
+| 컴포넌트 클래스  | 데이터를 관리하고 동작을 처리합니다.     |
+| HTML 템플릿  | 화면을 구성합니다.               |
+| 컴포넌트용 스타일 | 화면이 어떤 모습으로 표시될 지 지정합니다. |
 
 이 가이드 문서에서 다루는 애플리케이션을 구성하는 컴포넌트는 이런 것들이 있습니다.
 
@@ -369,7 +369,7 @@ The `ProductListComponent` also defines a `products` property that contains impo
 The next step is to create a new alert feature that uses product data from the `ProductListComponent`.
 The alert checks the product's price, and, if the price is greater than &dollar;700, displays a **Notify Me** button that lets users sign up for notifications when the product goes on sale.
 
-This section walks you through creating a child component, `ProductAlertsComponent` that can receive data from its parent component, `ProductListComponent`.
+This section walks you through creating a child component, `ProductAlertsComponent`, that can receive data from its parent component, `ProductListComponent`.
 
 1.  Click on the plus sign above the current terminal to create a new terminal to run the command to generate the component.
 
@@ -379,11 +379,11 @@ This section walks you through creating a child component, `ProductAlertsCompone
 
     </div>
 
-1.  In the new terminal, generate a new component named `product-alerts` by running the following command.
+1.  In the new terminal, generate a new component named `product-alerts` by running the following command:
 
     <code-example format="shell" language="shell">
 
-    ng generate component product-alerts
+    `ng generate component product-alerts`
   
     </code-example>
 
@@ -459,7 +459,7 @@ The Phone XL price is over &dollar;700, so the **Notify Me** button appears on t
 
     <code-example format="shell" language="shell">
 
-    ng generate component product-alerts
+    `ng generate component product-alerts`
   
     </code-example>
 

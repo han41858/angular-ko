@@ -212,7 +212,7 @@ The following steps demonstrate a typical implementation of conditional content 
 1.  [Create an attribute directive](guide/attribute-directives#building-an-attribute-directive) with a selector that matches the custom attribute for your template.
     In this directive, inject a `TemplateRef` instance.
 
-    <code-example header="content-projection/src/app/app.component.ts" path="content-projection/src/app/app.component.ts" region="zippycontentdirective"></code-example>
+    <code-example header="content-projection/src/app/example-zippy.component.ts" path="content-projection/src/app/example-zippy.component.ts" region="zippycontentdirective"></code-example>
 
     In the previous step, you added an `<ng-template>` element with a custom attribute, `appExampleZippyContent`.
     This code provides the logic that Angular will use when it encounters that custom attribute.
@@ -220,7 +220,7 @@ The following steps demonstrate a typical implementation of conditional content 
 
 1.  In the component you want to project content into, use `@ContentChild` to get the template of the projected content.
 
-    <code-example header="content-projection/src/app/app.component.ts" path="content-projection/src/app/app.component.ts" region="contentchild"></code-example>
+    <code-example header="content-projection/src/app/example-zippy.component.ts" path="content-projection/src/app/example-zippy.component.ts" region="contentchild"></code-example>
 
     Prior to this step, your application has a component that instantiates a template when certain conditions are met.
     You've also created a directive that provides a reference to that template.
@@ -267,14 +267,14 @@ The following steps demonstrate a typical implementation of conditional content 
 1.  템플릿에 사용할 [어트리뷰트 디렉티브를 생성합니다](guide/attribute-directives#building-an-attribute-directive).
     이 디렉티브에는 `TemplateRef` 인스턴스를 의존성으로 주입합니다.
 
-    <code-example header="content-projection/src/app/app.component.ts" path="content-projection/src/app/app.component.ts" region="zippycontentdirective"></code-example>
+    <code-example header="content-projection/src/app/example-zippy.component.ts" path="content-projection/src/app/example-zippy.component.ts" region="zippycontentdirective"></code-example>
 
     이전 단계에서 `<ng-template>` 엘리먼트에 커스텀 디렉티브 `appExampleZippyDirective`를 지정했습니다.
     이 디렉티브 코드는 Angular가 커스텀 어트리뷰트로 템플릿을 참조하기 위해 정의한 것입니다.
 
 1.  컨텐츠가 렌더링될 컴포넌트에서 `@ContentChild`를 사용해서 프로젝션될 컨텐츠 템플릿을 참조합니다.
 
-    <code-example header="content-projection/src/app/app.component.ts" path="content-projection/src/app/app.component.ts" region="contentchild"></code-example>
+    <code-example header="content-projection/src/app/example-zippy.component.ts" path="content-projection/src/app/example-zippy.component.ts" region="contentchild"></code-example>
 
     여기까지 진행하고 나면 컴포넌트는 특정 조건을 만족하는 템플릿만 인스턴스를 생성합니다.
     그리고 대상이 되는 템플릿은 커스텀 디렉티브를 지정해 두고 `@ComponentChild` 데코레이터를 사용해서 컴포넌트 클래스에 할당했습니다.

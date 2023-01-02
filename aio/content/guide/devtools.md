@@ -245,7 +245,7 @@ Angular DevTools를 설치하고 나면 현재 선택된 컴포넌트/디렉티�
 
 <!--
 Similar to browsers' DevTools, you can inspect the page to select a particular component or directive.
-Click the ***Inspect element*** icon at the top left corner within Angular DevTools and hover over a DOM element on the page.
+Click the ***Inspect element*** icon in the top left corner within Angular DevTools and hover over a DOM element on the page.
 The extension recognizes the associated directives and/or components and lets you select the corresponding element in the Component tree.
 -->
 브라우저 개발자 도구와 비슷하게, UI 화면에서 특정 컴포넌트/디렉티브를 선택할 수 있습니다.
@@ -279,7 +279,7 @@ The **Profiler** tab lets you preview the execution of Angular's change detectio
 
 <!--
 The Profiler lets you start profiling or import an existing profile.
-To start profiling your application, hover over the circle at the top-left corner within the **Profiler** tab and click **Start recording**.
+To start profiling your application, hover over the circle in the top-left corner within the **Profiler** tab and click **Start recording**.
 
 During profiling, Angular DevTools captures execution events, such as change detection and lifecycle hook execution.
 To finish recording, click the circle again to **Stop recording**.

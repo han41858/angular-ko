@@ -144,31 +144,38 @@ Alternatively, you might want to define a different [registration strategy](api/
 
 
 <!--
-### Forcing update activation
+### Updating to the latest version
 -->
-### 최신버전으로 직접 전환하기
+### 최신버전으로 업데이트하기
 
 <!--
-If the current tab needs to be updated to the latest application version immediately, it can ask to do so with the `activateUpdate()` method:
+You can update an existing tab to the latest version by reloading the page as soon as a new version is ready.
+To avoid disrupting the user's progress, it is generally a good idea to prompt the user and let them confirm that it is OK to reload the page and update to the latest version:
 
-<code-example header="prompt-update.service.ts" path="service-worker-getting-started/src/app/prompt-update.service.ts" region="sw-activate"></code-example>
+<code-example header="prompt-update.service.ts" path="service-worker-getting-started/src/app/prompt-update.service.ts" region="sw-version-ready"></code-example>
 
 <div class="alert is-important">
 
-Calling `activateUpdate()` without reloading the page could break lazy-loading in a currently running app, especially if the lazy-loaded chunks use filenames with hashes, which change every version.
-Therefore, it is recommended to reload the page once the promise returned by `activateUpdate()` is resolved.
+Calling {@link SwUpdate#activateUpdate SwUpdate#activateUpdate()} updates a tab to the latest version without reloading the page, but this could break the application.
+
+Updating without reloading can create a version mismatch between the [application shell](guide/glossary#app-shell) and other page resources, such as [lazy-loaded chunks](guide/glossary#lazy-loading), whose filenames may change between versions.
+
+You should only use `activateUpdate()`, if you are certain it is safe for your specific use case.
 
 </div>
 -->
-현재 탭에서 실행하고 있는 앱을 최신 버전으로 즉시 전환하려면 `activateUpdate()` 메소드를 실행하면 됩니다:
+새 버전이 준비되었다면 화면을 새로고침해서 현재 탭에 실행된 애플리케이션을 최신 버전으로 업데이트할 수 있습니다.
+이 때 사용자를 방해하지 않으려면 사용자에게 안내 메시지를 표시하고, 사용자가 동의했을 때 화면을 새로고침하는 것이 좋습니다.
 
-<code-example header="prompt-update.service.ts" path="service-worker-getting-started/src/app/prompt-update.service.ts" region="sw-activate"></code-example>
+<code-example header="prompt-update.service.ts" path="service-worker-getting-started/src/app/prompt-update.service.ts" region="sw-version-ready"></code-example>
 
 <div class="alert is-important">
 
-`activateUpdate()`를 실행한 후에 화면을 갱신하지 않으면 현재 실행중인 앱에 있는 지연 로딩이 모두 중단됩니다.
-왜냐하면 앱이 업데이트되면서 해시 문자열이 붙은 파일 이름이 변경될 수 있기 때문입니다.
-그래서 `activateUpdate()` Promise가 처리되고 난 후에는 화면을 새로 불러오는 것이 좋습니다.
+{@link SwUpdate#activateUpdate SwUpdate#activateUpdate()}를 실행하면 화면을 새로고침하지 않아도 애플리케이션을 최신버전으로 갱신할 수 있지만, 이 과정에서 애플리케이션 동작이 멈출 수 있습니다.
+
+그리고 업데이트를 제대로 하지 않으면 [애플리케이션 기본 틀](guide/glossary#app-shell) 버전이 일치하지 않거나, 리소스가 맞지 않는 경우, [지연로딩](guide/glossary#lazy-loading)을 하거나 버전이 변경되면서 파일 이름이 변경된 경우 오류가 발생할 수 있습니다.
+
+`activateUpdate()`는 애플리케이션이 확실하게 안정된 상태에서 실행해야 합니다.
 
 </div>
 

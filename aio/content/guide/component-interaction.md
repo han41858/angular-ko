@@ -321,7 +321,7 @@ The `CountdownLocalVarParentComponent` that hosts the timer component is as foll
 
 The parent component cannot data bind to the child's `start` and `stop` methods nor to its `seconds` property.
 
-Place a local variable, `#timer`, on the tag `<countdown-timer>` representing the child component.
+Place a local variable, `#timer`, on the tag `<app-countdown-timer>` representing the child component.
 That gives you a reference to the child component and the ability to access *any of its properties or methods* from within the parent template.
 
 This example wires parent buttons to the child's `start` and `stop` and uses interpolation to display the child's `seconds` property.
@@ -350,7 +350,7 @@ Here, the parent and child are working together.
 
 원래 부모 컴포넌트는 자식 컴포넌트의 `seconds` 프로퍼티나 `start`, `stop` 메소드에 직접 접근할 수 없습니다.
 
-하지만 `<countdown-timer>`를 템플릿 지역 변수 `#timer`로 선언하면 이 변수를 사용해서 자식 컴포넌트에 접근할 수 있습니다.
+하지만 `<app-countdown-timer>`를 템플릿 지역 변수 `#timer`로 선언하면 이 변수를 사용해서 자식 컴포넌트에 접근할 수 있습니다.
 이 템플릿 지역 변수는 자식 컴포넌트 자체를 가리키며, 템플릿 지역 변수를 선언한 후에는 부모 컴포넌트의 템플릿에서 *자식 컴포넌트의 프로퍼티나 메소드*에 자유롭게 접근할 수 있습니다.
 
 이 예제에서는 부모 컴포넌트에 있는 버튼을 각각 자식 컴포넌트의 `start` 함수와 `stop` 함수와 연결하며, `seconds` 프로퍼티를 직접 가져와서 부모 컴포넌트에서 활용합니다.
@@ -400,7 +400,7 @@ But it is limited because the parent-child wiring must be done entirely within t
 The parent component *itself* has no access to the child.
 
 You can't use the *local variable* technique if the parent component's *class* relies on the child component's *class*.
-The parent-child relationship of the components is not established within each components respective *class* with the *local variable* technique.
+The parent-child relationship of the components is not established within each component's respective *class* with the *local variable* technique.
 Because the *class* instances are not connected to one another, the parent *class* cannot access the child *class* properties and methods.
 
 When the parent component *class* requires that kind of access, ***inject*** the child component into the parent as a *ViewChild*.
@@ -509,7 +509,7 @@ Use [the same countdown timer tests](guide/component-interaction#countdown-tests
 ## 서비스를 사용해서 상호작용하기
 
 <!--
-A parent component and its children share a service whose interface enables bi-directional communication *within the family*.
+A parent component and its children share a service whose interface enables bidirectional communication *within the family*.
 
 The scope of the service instance is the parent component and its children.
 Components outside this component subtree have no access to the service or their communications.

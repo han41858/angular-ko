@@ -48,8 +48,8 @@ AngularJS 애플리케이션이 그 자체로 간결하고 최신 개발 툴을 
 
 <!--
 There are many ways to structure AngularJS applications.
-When you begin to upgrade these applications to Angular, some will turn out to be much more easy to work with than others.
-There are a few key techniques and patterns that you can apply to future proof applications even before you begin the migration.
+When you begin to upgrade these applications to Angular, some will turn out to be much easier to work with than others.
+There are a few key techniques and patterns that you can apply to future-proof applications even before you begin the migration.
 -->
 AngularJS 애플리케이션을 구성하는 방식은 다양하지만 이 중에서 Angular로 전환하기 쉬운 구조도 있습니다.
 이 섹션에서는 앱을 마이그레이션하기 전에 알아두면 좋을 테크닉을 소개합니다.
@@ -642,7 +642,7 @@ You can remove the `ng-app` and `ng-strict-di` directives from the HTML and inst
 <code-example header="app.module.ts" path="upgrade-module/src/app/ajs-bootstrap/app.module.ts" region="bootstrap"></code-example>
 
 To begin converting your AngularJS application to a hybrid, you need to load the Angular framework.
-You can see how this can be done with SystemJS by following the instructions in [Setup for Upgrading to AngularJS][AioGuideUpgradeSetup] for selectively copying code from the [QuickStart github repository][GithubAngularQuickstart].
+You can see how this can be done with SystemJS by following the instructions in [Setup for Upgrading to AngularJS][AioGuideUpgradeSetup] for selectively copying code from the [QuickStart GitHub repository][GithubAngularQuickstart].
 
 You also need to install the `@angular/upgrade` package using `npm install @angular/upgrade --save` and add a mapping for the `@angular/upgrade/static` package:
 
@@ -692,7 +692,7 @@ AngularJS 애플리케이션은 HTML 페이지에 있는 `ng-app` 디렉티브�
 <code-example header="app.module.ts" path="upgrade-module/src/app/ajs-bootstrap/app.module.ts" region="bootstrap"></code-example>
 
 그리고 AngularJS 애플리케이션을 하이브리드 모드로 시작하려면 Angular 프레임워크를 로드해야 합니다.
-이 작업은 SystemJS를 활용하며 자세한 과정은 [Setup for Upgrading to AngularJS][AioGuideUpgradeSetup]에서 확인할 수 있으며, [QuickStart github 저장소][GithubAngularQuickstart]에서 코드를 내려받아 필요한 부분만 적용할 수도 있습니다.
+이 작업은 SystemJS를 활용하며 자세한 과정은 [Setup for Upgrading to AngularJS][AioGuideUpgradeSetup]에서 확인할 수 있으며, [QuickStart GitHub 저장소][GithubAngularQuickstart]에서 코드를 내려받아 필요한 부분만 적용할 수도 있습니다.
 
 그 다음에는 `npm install @angular/upgrade --save` 명령을 실행해서 `@angular/upgrade` 패키지를 설치해야 합니다.
 패키지를 설치한 후에는 SystemJS 환경설정 파일에 다음과 같이 로드합니다:
@@ -757,7 +757,7 @@ The result is an AngularJS *directive*, which you can then register in the Angul
 <div class="alert is-helpful">
 
 By default, Angular change detection will also run on the component for everyAngularJS `$digest` cycle.
-If you want to only have change detection run when the inputs change, you can set `propagateDigest` to `false` when calling`downgradeComponent()`.
+If you want to only have change detection run when the inputs change, you can set `propagateDigest` to `false` when calling `downgradeComponent()`.
 
 </div>
 
@@ -767,7 +767,7 @@ Because `HeroDetailComponent` is an Angular component, you must also add it to t
 
 <div class="alert is-helpful">
 
-All Angular components, directives and pipes must be declared in an NgModule.
+All Angular components, directives, and pipes must be declared in an NgModule.
 
 </div>
 
@@ -1167,7 +1167,7 @@ For example, you might have a service called `HeroesService` in AngularJS:
 
 <code-example header="heroes.service.ts" path="upgrade-module/src/app/ajs-to-a-providers/heroes.service.ts"></code-example>
 
-You can upgrade the service using a Angular [factory provider][AioGuideDependencyInjectionProvidersFactoryProviders] that requests the service from the AngularJS `$injector`.
+You can upgrade the service using an Angular [factory provider][AioGuideDependencyInjectionProvidersFactoryProviders] that requests the service from the AngularJS `$injector`.
 
 Many developers prefer to declare the factory provider in a separate `ajs-upgraded-providers.ts` file so that they are all together, making it easier to reference them, create new ones and delete them once the upgrade is over.
 
@@ -1318,7 +1318,7 @@ This strategy reduces your initial bundle size, defers any potential impact from
 
 The steps below show you how to do the following:
 
-*   Setup a callback function for your AngularJS bundle.
+*   Set up a callback function for your AngularJS bundle.
 *   Create a service that lazy loads and bootstraps your AngularJS app.
 *   Create a routable component for AngularJS content
 *   Create a custom `matcher` function for AngularJS-specific URLs and configure the Angular `Router` with the custom matcher for AngularJS routes.
@@ -2264,7 +2264,7 @@ That is pretty exciting!
 You're not running any actual Angular components yet.
 That is next.
 
-<div class="alert is-helpful">
+<div class="callout is-helpful">
 
 <header>Why declare *angular* as *angular.IAngularStatic*?</header>
 
@@ -2276,7 +2276,7 @@ If you used `import * as angular from 'angular'` instead, you'd also have to loa
 This is a considerable effort and it often isn't worth it, especially since you are in the process of moving your code to Angular.
 Instead, declare `angular` as `angular.IAngularStatic` to indicate it is a global variable and still have full typing support.
 
-<div class="alert is-important">
+<div class="callout is-important">
 
 <header>Manually create a UMD bundle for your Angular application</header>
 
@@ -2357,7 +2357,7 @@ For an example on GitHub, see [UMD Angular bundle][GithubMgechevAngularUmdBundle
 대단하네요!
 이제 Angular 컴포넌트를 만들어 봅시다.
 
-<div class="alert is-helpful">
+<div class="callout is-helpful">
 
 <header>왜 *angular*를 *angular.IAngularStatic* 으로 선언할까요?</header>
 
@@ -2370,7 +2370,7 @@ For an example on GitHub, see [UMD Angular bundle][GithubMgechevAngularUmdBundle
 중요한 것은 AngularJS로 작성한 코드를 Angular로 옮기는 것이지 모듈을 로드하는 올바른 순서를 따지는 것이 아닙니다.
 `angular`를 `angular.IAngularStatic`으로 선언하면 이 과정을 간단하게 처리할 수 있습니다.
 
-<div class="alert is-important">
+<div class="callout is-important">
 
 <header>UMD 형식으로 수동 빌드하기</header>
 
@@ -3358,7 +3358,6 @@ Angular가 제공하는 컴포넌트 유닛 테스트 API를 다음과 같이 �
 [AioGuideAotCompiler]: guide/aot-compiler "Ahead-of-time (AOT) compilation | Angular"
 [AioGuideBuiltInDirectives]: guide/built-in-directives "Built-in directives | Angular"
 [AioGuideDependencyInjection]: guide/dependency-injection "Dependency injection in Angular | Angular"
-[AioGuideDependencyInjectionProvidersFactoryProviders]: guide/dependency-injection-providers#factory-providers "Using factory providers - Dependency providers | Angular"
 [AioGuideGlossaryLazyLoading]: guide/glossary#lazy-loading "lazy loading - Glossary | Angular"
 [AioGuideHierarchicalDependencyInjection]: guide/hierarchical-dependency-injection "Hierarchical injectors | Angular"
 [AioGuideLifecycleHooks]: guide/lifecycle-hooks "Lifecycle hooks | Angular"

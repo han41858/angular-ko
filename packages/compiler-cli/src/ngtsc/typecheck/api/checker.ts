@@ -14,7 +14,7 @@ import {ErrorCode} from '../../diagnostics';
 
 import {FullTemplateMapping, NgTemplateDiagnostic, TypeCheckableDirectiveMeta} from './api';
 import {GlobalCompletion} from './completion';
-import {DirectiveInScope, PipeInScope} from './scope';
+import {PotentialDirective, PotentialImport, PotentialPipe} from './scope';
 import {ElementSymbol, Symbol, TcbLocation, TemplateSymbol} from './symbols';
 
 /**
@@ -129,21 +129,40 @@ export interface TemplateTypeChecker {
       |null;
 
   /**
-   * Get basic metadata on the directives which are in scope for the given component.
+   * Get basic metadata on the directives which are in scope or can be imported for the given
+   * component.
    */
-  getDirectivesInScope(component: ts.ClassDeclaration): DirectiveInScope[]|null;
+  getPotentialTemplateDirectives(component: ts.ClassDeclaration): PotentialDirective[];
 
   /**
    * Get basic metadata on the pipes which are in scope for the given component.
    */
-  getPipesInScope(component: ts.ClassDeclaration): PipeInScope[]|null;
+  getPipesInScope(component: ts.ClassDeclaration): PotentialPipe[]|null;
 
   /**
-   * Retrieve a `Map` of potential template element tags, to either the `DirectiveInScope` that
+   * Retrieve a `Map` of potential template element tags, to either the `PotentialDirective` that
    * declares them (if the tag is from a directive/component), or `null` if the tag originates from
    * the DOM schema.
    */
-  getPotentialElementTags(component: ts.ClassDeclaration): Map<string, DirectiveInScope|null>;
+  getPotentialElementTags(component: ts.ClassDeclaration): Map<string, PotentialDirective|null>;
+
+  /**
+   * In the context of an Angular trait, generate potential imports for a directive.
+   */
+  getPotentialImportsFor(directive: PotentialDirective, inComponent: ts.ClassDeclaration):
+      ReadonlyArray<PotentialImport>;
+
+  /**
+   * Get the primary decorator for an Angular class (such as @Component). This does not work for
+   * `@Injectable`.
+   */
+  getPrimaryAngularDecorator(target: ts.ClassDeclaration): ts.Decorator|null;
+
+  /**
+   * Get the class of the NgModule that owns this Angular trait. If the result is `null`, that
+   * probably means the provided component is standalone.
+   */
+  getOwningNgModule(component: ts.ClassDeclaration): ts.ClassDeclaration|null;
 
   /**
    * Retrieve any potential DOM bindings for the given element.
@@ -188,8 +207,8 @@ export interface TemplateTypeChecker {
  */
 export enum OptimizeFor {
   /**
-   * Indicates that a consumer of a `TemplateTypeChecker` is only interested in results for a given
-   * file, and wants them as fast as possible.
+   * Indicates that a consumer of a `TemplateTypeChecker` is only interested in results for a
+   * given file, and wants them as fast as possible.
    *
    * Calling `TemplateTypeChecker` methods successively for multiple files while specifying
    * `OptimizeFor.SingleFile` can result in significant unnecessary overhead overall.
@@ -197,8 +216,8 @@ export enum OptimizeFor {
   SingleFile,
 
   /**
-   * Indicates that a consumer of a `TemplateTypeChecker` intends to query for results pertaining to
-   * the entire user program, and so the type-checker should internally optimize for this case.
+   * Indicates that a consumer of a `TemplateTypeChecker` intends to query for results pertaining
+   * to the entire user program, and so the type-checker should internally optimize for this case.
    *
    * Initial calls to retrieve type-checking information may take longer, but repeated calls to
    * gather information for the whole user program will be significantly faster with this mode of

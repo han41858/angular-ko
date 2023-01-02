@@ -16,9 +16,8 @@ import {LContainer} from './container';
 import {ComponentDef, ComponentTemplate, DirectiveDef, DirectiveDefList, HostBindingsFunction, PipeDef, PipeDefList, ViewQueriesFunction} from './definition';
 import {I18nUpdateOpCodes, TI18n, TIcu} from './i18n';
 import {TConstants, TNode} from './node';
-import {PlayerHandler} from './player';
 import {LQueries, TQueries} from './query';
-import {Renderer3, RendererFactory3} from './renderer';
+import {Renderer, RendererFactory} from './renderer';
 import {RComment, RElement} from './renderer_dom';
 import {TStylingKey, TStylingRange} from './styling';
 
@@ -168,16 +167,16 @@ export interface LView<T = unknown> extends Array<any> {
    * TView.cleanup saves an index to the necessary context in this array.
    *
    * After `LView` is created it is possible to attach additional instance specific functions at the
-   * end of the `lView[CLENUP]` because we know that no more `T` level cleanup functions will be
-   * addeded here.
+   * end of the `lView[CLEANUP]` because we know that no more `T` level cleanup functions will be
+   * added here.
    */
   [CLEANUP]: any[]|null;
 
   /**
    * - For dynamic views, this is the context with which to render the template (e.g.
    *   `NgForContext`), or `{}` if not defined explicitly.
-   * - For root view of the root component the context contains change detection data.
-   * - For non-root components, the context is the component instance,
+   * - For root view of the root component it's a reference to the component instance itself.
+   * - For components, the context is a reference to the component instance itself.
    * - For inline views, the context is null.
    */
   [CONTEXT]: T;
@@ -186,10 +185,10 @@ export interface LView<T = unknown> extends Array<any> {
   readonly[INJECTOR]: Injector|null;
 
   /** Factory to be used for creating Renderer. */
-  [RENDERER_FACTORY]: RendererFactory3;
+  [RENDERER_FACTORY]: RendererFactory;
 
   /** Renderer to be used for this view. */
-  [RENDERER]: Renderer3;
+  [RENDERER]: Renderer;
 
   /** An optional custom sanitizer. */
   [SANITIZER]: Sanitizer|null;
@@ -516,7 +515,7 @@ export const enum TViewType {
 
   /**
    * `TView` associated with a template. Such as `*ngIf`, `<ng-template>` etc... A `Component`
-   * can have zero or more `Embedede` `TView`s.
+   * can have zero or more `Embedded` `TView`s.
    */
   Embedded = 2,
 }
@@ -788,48 +787,6 @@ export interface TView {
    * view. This means that the view is likely corrupted and we should try to recover it.
    */
   incompleteFirstPass: boolean;
-}
-
-export const enum RootContextFlags {
-  Empty = 0b00,
-  DetectChanges = 0b01,
-  FlushPlayers = 0b10
-}
-
-
-/**
- * RootContext contains information which is shared for all components which
- * were bootstrapped with {@link renderComponent}.
- */
-export interface RootContext<T = unknown> {
-  /**
-   * A function used for scheduling change detection in the future. Usually
-   * this is `requestAnimationFrame`.
-   */
-  scheduler: (workFn: () => void) => void;
-
-  /**
-   * A promise which is resolved when all components are considered clean (not dirty).
-   *
-   * This promise is overwritten every time a first call to {@link markDirty} is invoked.
-   */
-  clean: Promise<null>;
-
-  /**
-   * RootComponents - The components that were instantiated by the call to
-   * {@link renderComponent}.
-   */
-  components: T[];
-
-  /**
-   * The player flushing handler to kick off all animations
-   */
-  playerHandler: PlayerHandler|null;
-
-  /**
-   * What render-related operations to run once a scheduler has been set
-   */
-  flags: RootContextFlags;
 }
 
 /** Single hook callback function. */

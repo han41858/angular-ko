@@ -4,31 +4,29 @@
 # 프로젝트 생성하기
 
 <!--
-You begin by creating an initial application using the Angular CLI.
-Throughout this tutorial, you'll modify and extend that starter application to create the Tour of Heroes application.
+Use the `ng new` command to start creating your **Tour of Heroes** application.
 
-In this part of the tutorial, you'll do the following:
+This tutorial:
 
-1.  Set up your environment.
-1.  Create a new workspace and initial application project.
-1.  Serve the application.
-1.  Make changes to the application.
+1.  Sets up your environment.
+2.  Creates a new workspace and initial application project.
+3.  Serves the application.
+4.  Makes changes to the new application.
 
 <div class="alert is-helpful">
 
-For the sample application that this page describes, see the <live-example></live-example>.
+To view the application's code, see the <live-example></live-example>.
 
 </div>
 -->
-Angular CLI를 사용하면 애플리케이션의 기본 틀을 구성할 수 있습니다.
-이렇게 만든 기본 틀을 기반으로 히어로들의 여행 앱을 구현해 봅시다.
+`ng new` 명령을 실행하면 **히어로들의 여행** 애플리케이션을 생성할 수 있습니다.
 
-이 문서에서는 다음 내용에 대해 다룹니다.
+이 튜토리얼에서는 이런 내용을 다룹니다:
 
 1.  개발환경 설정하기
-1.  애플리케이션 프로젝트 생성하기
-1.  애플리케이션 실행해보기
-1.  애플리케이션 개발 시작하기
+2.  워크스페이스, 애플리케이션 프로젝트 생성하기
+3.  애플리케이션 실행하기
+4.  애플리케이션 개발 시작하기
 
 <div class="alert is-helpful">
 
@@ -55,16 +53,15 @@ To set up your development environment, follow the instructions in [Local Enviro
 
 <!--
 You develop applications in the context of an Angular [workspace](guide/glossary#workspace).
-A workspace contains the files for one or more [projects](guide/glossary#project).
-A project is the set of files that comprise an application or a library.
-For this tutorial, you will create a new workspace.
+A *workspace* contains the files for one or more [projects](guide/glossary#project).
+A *project* is the set of files that make up an application or a library.
 
-To create a new workspace and an initial application project:
+To create a new workspace and an initial project:
 
-1.  Ensure that you are not already in an Angular workspace folder.
-    For example, if you have previously created the Getting Started workspace, change to the parent of that folder.
+1.  Ensure that you aren't already in an Angular workspace directory.
+    For example, if you're in the Getting Started workspace from an earlier exercise, navigate to its parent.
 
-1.  Run the CLI command `ng new` and provide the name `angular-tour-of-heroes`, as shown here:
+2.  Run `ng new` followed by the application name as shown here:
 
     <code-example format="shell" language="shell">
 
@@ -72,30 +69,30 @@ To create a new workspace and an initial application project:
 
     </code-example>
 
-1.  The `ng new` command prompts you for information about features to include in the initial application project.
+3.  `ng new` prompts you for information about features to include in the initial project.
     Accept the defaults by pressing the Enter or Return key.
 
-The Angular CLI installs the necessary Angular `npm` packages and other dependencies.
+`ng new` installs the necessary `npm` packages and other dependencies that Angular requires.
 This can take a few minutes.
 
-It also creates the following workspace and starter project files:
+`ng new` also creates the following workspace and starter project files:
 
-*   A new workspace, with a root folder named `angular-tour-of-heroes`
-*   An initial skeleton app project in the `src/app` subfolder
+*   A new workspace, with a root directory named `angular-tour-of-heroes`
+*   An initial skeleton application project in the `src/app` subdirectory
 *   Related configuration files
 
-The initial app project contains a simple Welcome application, ready to run.
+The initial application project contains a simple application that's ready to run.
 -->
 Angular 애플리케이션은 Angular [워크스페이스](guide/glossary#workspace) 안에서 개발합니다.
-워크스페이스는 여러 개의 [프로젝트](guide/glossary#project)로 구성되는 단위이며, 프로젝트는 애플리케이션이나 라이브러리를 구성하는 파일들의 집합을 의미합니다.
-이 튜토리얼에서는 새로운 워크스페이스를 만드는 것부터 시작합니다.
+*워크스페이스*는 하나 이상의 [프로젝트](guide/glossary#project)로 구성되는 단위입니다.
+그리고 *프로젝트*는 애플리케이션이나 라이브러리를 구성하는 파일들의 집합을 의미합니다.
 
 워크스페이스를 새로 만들고 애플리케이션을 구성하려면 다음 순서대로 진행합니다:
 
 1.  아직 Angular 워크스페이스 폴더 안에 있지 않은 것을 전제로 합니다.
     이전에 시작하기 문서를 진행하면서 이미 만든 워크스페이스가 있다면, 이 폴더 밖에서 작업하세요.
 
-1.  Angular CLI 명령 `ng new`를 실행해서 `angular-tour-of-heroes` 라는 이름으로 워크스페이스를 생성합니다:
+2.  `ng new` 명령을 실행해서 `angular-tour-of-heroes` 라는 이름으로 워크스페이스를 생성합니다:
 
     <code-example format="shell" language="shell">
 
@@ -103,7 +100,7 @@ Angular 애플리케이션은 Angular [워크스페이스](guide/glossary#worksp
 
     </code-example>
 
-1.  커맨드 창에서 `ng new` 명령을 실행하면 프로젝트에 어떤 설정값을 추가로 지정할지 물어봅니다.
+3.  `커맨드 창에서 `ng new` 명령을 실행하면 프로젝트에 어떤 설정값을 추가로 지정할지 물어봅니다.
     엔터키를 눌러서 기본값으로 진행합시다.
 
 이 과정을 진행하면 Angular CLI가 Angular `npm` 패키지와 서드파티 패키지를 설치하기 때문에 시간이 약간 걸릴 수 있습니다.
@@ -114,7 +111,7 @@ Angular 애플리케이션은 Angular [워크스페이스](guide/glossary#worksp
 *   서브 폴더 `src/app`를 생성하고 이 폴더에 애플리케이션 초기 코드를 생성합니다.
 *   환경설정파일을 생성합니다.
 
-이제 간단한 Welcome 앱이 완성되었습니다.
+이제 실행할 수 있을 정도로 간단한 애플리케이션 프로젝트이 만들어 졌습니다.
 
 
 <!--
@@ -134,8 +131,12 @@ ng serve --open
 
 <div class="alert is-helpful">
 
-The `ng serve` command builds the app, starts the development server,
-watches the source files, and rebuilds the application as you make changes to those files.
+The `ng serve` command:
+
+* Builds the application
+* Starts the development server
+* Watches the source files
+* Rebuilds the application as you make changes
 
 The `--open` flag opens a browser to `http://localhost:4200`.
 
@@ -154,9 +155,14 @@ ng serve --open
 
 <div class="alert is-helpful">
 
-`ng serve` 명령을 실행하면 개발서버가 시작되며, 이 서버는 변경된 파일의 내용을 자동으로 반영하는 워치 모드로 동작합니다.
+`ng serve` 명령을 실행하면:
 
-`ng serve` 명령을 실행할 때 `--open` 옵션을 함께 사용하면 서버의 주소인 `http://localhost:4200/` 를 기본 브라우저로 열 수 있습니다.
+* 애플리케이션을 빌드합니다.
+* 개발 서버를 시작합니다.
+* 소스 파일이 변경되는 것을 감지합니다.
+* 변경사항이 있을 때마다 애플리케이션을 다시 빌드합니다.
+
+`ng serve` 명령을 실행할 때 `--open` 옵션을 함께 사용하면 서버의 주소인 `http://localhost:4200` 를 기본 브라우저로 열 수 있습니다.
 
 </div>
 
@@ -188,25 +194,47 @@ They display data on the screen, listen for user input, and take action based on
 ## 애플리케이션 수정하기
 
 <!--
-Open the project in your favorite editor or IDE and navigate to the `src/app` folder to make some changes to the starter application.
-
-You'll find the implementation of the shell `AppComponent` distributed over three files:
+Open the project in your favorite editor or IDE. Navigate to the `src/app` directory to edit the starter application.
+In the IDE, locate these files, which make up the `AppComponent` that you just created:
 
 | Files                | Details |
 |:---                  |:---     |
 | `app.component.ts`   | The component class code, written in TypeScript. |
 | `app.component.html` | The component template, written in HTML.         |
 | `app.component.css`  | The component's private CSS styles.              |
--->
-자주 사용하는 에디터나 IDE로 프로젝트를 열고 `src/app` 폴더로 이동합니다. 이제부터 파일을 수정해 봅시다.
 
-`AppComponent`는 3개의 파일로 구성됩니다 :
+
+<div class="alert is-important">
+
+When you ran `ng new`, Angular created test specifications for your new application.
+Unfortunately, making these changes breaks your newly created specifications.
+
+That won't be a problem because Angular testing is outside the scope of this tutorial and won't be used.
+
+To learn more about testing with Angular, see [Testing](guide/testing).
+
+</div>
+-->
+자주 사용하는 에디터나 IDE로 프로젝트를 열고 `src/app` 폴더로 이동합니다.
+이 폴더를 보면 `AppComponent`를 구성하는 파일들을 확인할 수 있습니다:
 
 | 파일                   | 설명                              |
 |:---------------------|:--------------------------------|
-| `app.component.ts`   | TypeScript로 컴포넌트 클래스 코드를 작성합니다. |
-| `app.component.html` | HTML로 컴포넌트 템플릿을 작성합니다.          |
-| `app.component.css`  | 이 컴포넌트에만 적용되는 CSS 스타일을 작성합니다.   |
+| `app.component.ts`   | TypeScript로 작성된 컴포넌트 클래스 코드입니다. |
+| `app.component.html` | HTML로 작성된 컴포넌트 템플릿입니다.          |
+| `app.component.css`  | 이 컴포넌트에만 적용되는 CSS 스타일 파일입니다.    |
+
+
+<div class="alert is-important">
+
+When you ran `ng new`, Angular created test specifications for your new application.
+Unfortunately, making these changes breaks your newly created specifications.
+
+That won't be a problem because Angular testing is outside the scope of this tutorial and won't be used.
+
+To learn more about testing with Angular, see [Testing](guide/testing).
+
+</div>
 
 
 <!--
@@ -215,11 +243,11 @@ You'll find the implementation of the shell `AppComponent` distributed over thre
 ### 애플리케이션 제목 수정하기
 
 <!--
-Open the component class file \(`app.component.ts`\) and change the value of the `title` property to 'Tour of Heroes'.
+Open the `app.component.ts` and change the `title` property value to 'Tour of Heroes'.
 
 <code-example header="app.component.ts (class title property)" path="toh-pt0/src/app/app.component.ts" region="set-title"></code-example>
 
-Open the component template file \(`app.component.html`\) and delete the default template generated by the Angular CLI.
+Open `app.component.html` and delete the default template that `ng new` created.
 Replace it with the following line of HTML.
 
 <code-example header="app.component.html (template)" path="toh-pt0/src/app/app.component.html"></code-example>
@@ -229,11 +257,11 @@ This interpolation binding presents the component's `title` property value insid
 
 The browser refreshes and displays the new application title.
 -->
-컴포넌트 클래스 파일\(`app.component.ts`\)을 열어서 `title` 프로퍼티의 값을 'Tour of Heroes'로 바꿔봅시다.
+`app.component.ts` 파일을 열어서 `title` 프로퍼티의 값을 'Tour of Heroes'로 바꿔봅시다.
 
 <code-example header="app.component.ts (title 프로퍼티)" path="toh-pt0/src/app/app.component.ts" region="set-title"></code-example>
 
-그리고 컴포넌트 템플릿 파일\(`app.component.html`\)를 열어서 Angular CLI가 자동으로 생성한 기본 템플릿을 삭제하고 아래의 HTML코드로 교체합니다.
+`app.component.html` 파일을 열어서 Angular CLI가 자동으로 생성한 기본 템플릿을 삭제하고 아래의 HTML코드로 교체합니다.
 
 <code-example header="app.component.html (템플릿)" path="toh-pt0/src/app/app.component.html"></code-example>
 
@@ -252,7 +280,7 @@ The browser refreshes and displays the new application title.
 
 <!--
 Most apps strive for a consistent look across the application.
-The CLI generated an empty `styles.css` for this purpose.
+`ng new` created an empty `styles.css` for this purpose.
 Put your application-wide styles there.
 
 Open `src/styles.css` and add the code below to the file.
@@ -286,7 +314,7 @@ Here are the code files discussed on this page.
 <code-tabs>
     <code-pane header="src/app/app.component.ts" path="toh-pt0/src/app/app.component.ts"></code-pane>
     <code-pane header="src/app/app.component.html" path="toh-pt0/src/app/app.component.html"></code-pane>
-    <code-pane header="src/styles.css (excerpt)" path="toh-pt0/src/styles.1.css"></code-pane>
+    <code-pane header="src/styles.css (일부)" path="toh-pt0/src/styles.1.css"></code-pane>
 </code-tabs>
 
 
@@ -296,11 +324,11 @@ Here are the code files discussed on this page.
 ## 정리
 
 <!--
-*   You created the initial application structure using the Angular CLI
+*   You created the initial application structure using `ng new`.
 *   You learned that Angular components display data
 *   You used the double curly braces of interpolation to display the application title
 -->
-*   Angular CLI를 이용하면 애플리케이션의 기본 틀을 생성할 수 있습니다.
+*   `ng new` 명령을 실행하면 애플리케이션의 기본 틀을 생성할 수 있습니다.
 *   Angular 컴포넌트를 사용하면 컴포넌트에 있는 데이터를 화면에 표시할 수 있습니다.
 *   이중 중괄호를 사용하면 컴포넌트 프로퍼티 값을 템플릿에 바인딩 할 수 있습니다.
 

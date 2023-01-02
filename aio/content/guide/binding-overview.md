@@ -171,7 +171,7 @@ Conversely, `customer` in the `<h1>` doesn't include Ebony or Chiho because the 
 ## 모범사례
 
 <!--
-When using template a expression, follow these best practices:
+When using a template expression, follow these best practices:
 
 * **Use short expressions**
 
@@ -179,7 +179,7 @@ Use property names or method calls whenever possible.  Keep application and busi
 
 * **Quick execution**
 
-Angular executes a template expression after every [change detection](guide/glossary#change-detection) cycle.  Many asynchronous activities trigger change detection cycles, such as promise resolutions, HTTP results, timer events, key presses and mouse moves.
+Angular executes a template expression after every [change detection](guide/glossary#change-detection) cycle.  Many asynchronous activities trigger change detection cycles, such as promise resolutions, HTTP results, timer events, key presses, and mouse moves.
 
 An expression should finish quickly to keep the user experience as efficient as possible, especially on slower devices.  Consider caching values when their computation requires greater resources.
 -->
@@ -241,7 +241,7 @@ Angular 안에서 멱등성을 갖는 표현식은, 주어지는 값이 같다�
 * [Property binding](guide/property-binding)
 * [Event binding](guide/event-binding)
 -->
-* [프로퍼티 바인딩]guide/property-binding)
+* [프로퍼티 바인딩](guide/property-binding)
 * [이벤트 바인딩](guide/event-binding)
 
 @reviewed 2022-05-12

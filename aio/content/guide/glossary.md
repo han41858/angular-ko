@@ -41,6 +41,7 @@ Angular에서 사용하는 용어들이 있습니다.
 [Y][AioGuideGlossaryY]
 [Z][AioGuideGlossaryZ]
 
+<!-- vale Angular.Google_Headings = NO -->
 
 <a id="aot"></a>
 <a id="ahead-of-time-aot-compilation"></a>
@@ -51,7 +52,7 @@ Angular에서 사용하는 용어들이 있습니다.
 ## AOT(Ahead-of-time) 컴파일
 
 <!--
-The Angular ahead-of-time \(AOT\) compiler converts Angular HTML and TypeScript code into efficient JavaScript code during the build phase, before the browser downloads and runs that code.
+The Angular ahead-of-time \(AOT\) compiler converts Angular HTML and TypeScript code into efficient JavaScript code during the build phase. The build phase occurs before the browser downloads and runs the rendered code.
 This is the best compilation mode for production environments, with decreased load time and increased performance compared to [just-in-time (JIT) compilation][AioGuideGlossaryJustInTimeJitCompilation].
 
 By compiling your application using the `ngc` command-line tool, you can bootstrap directly to a module factory, so you do not need to include the Angular compiler in your JavaScript bundle.
@@ -106,6 +107,8 @@ To learn more, see [decorator][AioGuideGlossaryDecoratorDecoration].
 클래스에 메타데이터를 적용하는 구조를 의미합니다.
 [데코레이터][AioGuideGlossaryDecoratorDecoration] 섹션을 참고하세요.
 
+
+<a id="app-shell"></a>
 
 <!--
 ## app-shell
@@ -234,7 +237,7 @@ Angular에서는 애플리케이션 최상위 NgModule(`AppModule`)에 지정된
 ## 빌더(builder)
 
 <!--
-A function that uses the [Architect][AioGuideGlossaryArchitect] API to perform a complex process such as "build" or "test".
+A function that uses the [Architect][AioGuideGlossaryArchitect] API to perform a complex process such as `build` or `test`.
 The builder code is defined in an [npm package][AioGuideGlossaryNpmPackage].
 
 For example, [BrowserBuilder][GithubAngularAngularCliTreePrimaryPackagesAngularDevkitBuildAngularSrcBuildersBrowser] runs a [webpack][JsWebpackMain] build for a browser target and [KarmaBuilder][GithubAngularAngularCliTreePrimaryPackagesAngularDevkitBuildAngularSrcBuildersKarma] starts the Karma server and runs a webpack build for unit tests.
@@ -269,7 +272,7 @@ Here is a summary of the case types:
 |                                                                           | Details                                                                                                                                                                      | example             |
 |:---                                                                       |:---                                                                                                                                                                          |:---                 |
 | camelCase                                                                 | Symbols, properties, methods, pipe names, non-component directive selectors, constants. <br /> Standard or lower camel case uses lowercase on the first letter of the item.  | `selectedHero`      |
-| UpperCamelCase <br /> PascalCase                                          | Class names, including classes that define components, interfaces, NgModules, directives, and pipes. <br /> Upper camel case uses uppercase on the first letter of the item. | `HeroListComponent` |
+| UpperCamelCase <br /> PascalCase                                          | Class names, including classes that define components, interfaces, NgModules, directives, and pipes. <br /> Upper camel case uses uppercase on the first letter of the item. | `HeroComponent` |
 | dash-case <br /> kebab-case                                               | Descriptive part of file names, component selectors.                                                                                                                         | `app-hero-list`     |
 | underscore_case <br /> snake_case                                         | Not typically used in Angular. <br /> Snake case uses words connected with underscores.                                                                                      | `convert_link_mode` |
 | UPPER_UNDERSCORE_CASE <br /> UPPER_SNAKE_CASE <br /> SCREAMING_SNAKE_CASE | Traditional for constants. <br /> This case is acceptable, but camelCase is preferred. <br /> Upper snake case uses words in all capital letters connected with underscores. | `FIX_ME`            |
@@ -280,7 +283,7 @@ Angular는 타입 이름을 대문자 컨벤션으로 사용합니다.
 |                                                                                               | 설명                                                    | 예제                  |
 |:----------------------------------------------------------------------------------------------|:------------------------------------------------------|:--------------------|
 | 캐멀 케이스(camelCase)                                                                             | 심볼, 프로퍼티, 메서드, 파이프 이름, 디렉티브 셀렉터, 상수에 사용합니다.           | `selectedHero`      |
-| 대문자 캐멀 케이스(UpperCamelCase) <br /> 파스칼 케이스(PascalCase)                                         | 클래스, 컴포넌트 클래스, 인터페이스, NgModule, 디렉티브, 파이프에 사용합니다.     | `HeroListComponent` |
+| 대문자 캐멀 케이스(UpperCamelCase) <br /> 파스칼 케이스(PascalCase)                                         | 클래스, 컴포넌트 클래스, 인터페이스, NgModule, 디렉티브, 파이프에 사용합니다.     | `HeroComponent` |
 | 대시-케이스(dash-case), 케밥-케이스(kebab-case)                                                         | 파일 이름, 컴포넌트 셀렉터에 사용합니다.                               | `app-hero-list`     |
 | 밑줄_케이스(underscore_case) <br /> 스네이크_케이스(snake_case)                                           | Angular에서는 거의 사용되지 않습니다.                              | `convert_link_mode` |
 | 대문자_밑줄_케이스(UPPER_UNDERSCORE_CASE) <br /> 대문자_스네이크_케이스(UPPER_SNAKE_CASE, SCREAMING_SNAKE_CASE) | 전통적으로 상수에 사용했습니다. <br /> 이 방식도 괜찮지만, 캐멀 케이스를 더 권장합니다. | `FIX_ME`            |
@@ -546,24 +549,29 @@ Angular [템플릿 문법][AioGuideTemplateSyntax]에서 다루는 데이터 바
 ## 선언할 수 있는 항목(declarable)
 
 <!--
-A class type that you can add to the `declarations` list of an [NgModule][AioGuideGlossaryNgmodule].
-You can declare [components][AioGuideGlossaryComponent], [directives][AioGuideGlossaryDirective], and [pipes][AioGuideGlossaryPipe].
+A class that you can add to the `declarations` list of an [NgModule][AioGuideGlossaryNgmodule].
+You can declare [components][AioGuideGlossaryComponent], [directives][AioGuideGlossaryDirective], and [pipes][AioGuideGlossaryPipe], unless they have the `standalone` flag in their decorators set to `true`, which makes them standalone. Note: standalone components/directives/pipes are **not** declarables. More info about standalone classes can be found [below][AioGuideGlossaryStandalone].
 
 Do not declare the following:
 
-*   A class that is already declared in another NgModule
+*   A class already declared as [standalone][AioGuideGlossaryStandalone].
+*   A class that is already declared in another NgModule.
 *   An array of directives imported from another package.
-    For example, do not declare `FORMS_DIRECTIVES` from `@angular/forms`
+    For example, do not declare `FORMS_DIRECTIVES` from `@angular/forms`.
+*   NgModule classes.
+*   Service classes.
+*   Non-Angular classes and objects, such as strings, numbers, functions, entity models, configurations, business logic, and helper classes.
 
-*   NgModule classes
-*   Service classes
-*   Non-Angular classes and objects, such as strings, numbers, functions, entity models, configurations, business logic, and helper classes
+Note that declarables can also be declared as standalone and simply be imported inside other standalone components or existing NgModules, to learn more, see the [Standalone components guide][AioGuideStandalone].
 -->
 [NgModule][AioGuideGlossaryNgmodule] `declarations` 배열에 등록할 수 있는 클래스 타입을 의미합니다.
-이 배열에는 [컴포넌트][AioGuideGlossaryComponent], [디렉티브][AioGuideGlossaryDirective], [파이프][AioGuideGlossaryPipe]를 등록할 수 있습니다.
+이 배열에는 [컴포넌트][AioGuideGlossaryComponent], [디렉티브][AioGuideGlossaryDirective], [파이프][AioGuideGlossaryPipe]를 등록할 수 있지만, `standalone` 플래그를 `true`로 선언한 항목은 예외입니다.
+참고: 독립 컴포넌트/디렉티브/파이프는 선언할 수 있는 항목이 *아닙니다*.
+자세한 내용은 [아래][AioGuideGlossaryStandalone]를 참고하세요.
 
 이런 클래스는 등록할 수 없습니다:
 
+*   [독립][AioGuideGlossaryStandalone] 항목으로 선언된 클래스  
 *   다른 NgModule에 등록된 클래스
 *   다른 패키지에서 불러온 디렉티브 배열
     ex. `@angular/forms`에서 불러온 `FORMS_DIRECTIVES`
@@ -571,6 +579,9 @@ Do not declare the following:
 *   NgModule 클래스
 *   서비스 클래스
 *   Angular 구성요소가 아닌 클래스, 문자열, 숫자, 함수, 데이터 모델, 환경설정, 비즈니스 로직, 헬퍼 클래스
+
+독립적이라고 선언된 항목은 그 자체로 선언이 완료된 것이며 다른 독립 컴포넌트나 NgModule에 간단하게 로드할 수 있습니다.
+자세한 내용은 [독립 컴포넌트 가이드][AioGuideStandalone] 문서를 참고하세요.
 
 
 <a id="decorator--decoration"></a>
@@ -649,7 +660,7 @@ A directive class definition is immediately preceded by a `@Directive()` [decora
 A directive class is usually associated with an HTML element or attribute, and that element or attribute is often referred to as the directive itself.
 When Angular finds a directive in an HTML [template][AioGuideGlossaryTemplate], it creates the matching directive class instance and gives the instance control over that portion of the browser DOM.
 
-There are three categories of directive:
+Angular has three categories of directive:
 
 *   [Components][AioGuideGlossaryComponent] use `@Component()` to associate a template with a class.
     `@Component()` is an extension of `@Directive()`.
@@ -750,7 +761,7 @@ See also [lazy loading][AioGuideGlossaryLazyLoading].
 The [official JavaScript language specification][WikipediaWikiEcmascript].
 
 Not all browsers support the latest ECMAScript standard, but you can use a [transpiler][AioGuideGlossaryTranspile] to write code using the latest features, which will then be transpiled to code that runs on versions that are supported by browsers.
-A example of a [transpiler][AioGuideGlossaryTranspile] is [TypeScript][AioGuideGlossaryTypescript].
+An example of a [transpiler][AioGuideGlossaryTranspile] is [TypeScript][AioGuideGlossaryTypescript].
 To learn more, see [Browser Support][AioGuideBrowserSupport].
 -->
 [JavaScript 언어의 공식 스펙][WikipediaWikiEcmascript]을 의미합니다.
@@ -813,7 +824,7 @@ For example, the `@angular/core` package has two entry-point modules, which can 
 ## 폼 컨트롤(form control)
 
 <!--
-A instance of `FormControl`, which is a fundamental building block for Angular forms.
+An instance of `FormControl`, which is a fundamental building block for Angular forms.
 Together with `FormGroup` and `FormArray`, tracks the value, validation, and status of a form input element.
 
 Read more forms in the [Introduction to forms in Angular][AioGuideFormsOverview].
@@ -1347,7 +1358,7 @@ See [Browser Support][AioGuideBrowserSupport] for polyfills that support particu
 ## 프로젝트(project)
 
 <!--
-In the Angular CLI, a standalone application or [library][AioGuideGlossaryLibrary] that can be created or modified by a Angular CLI command.
+In the Angular CLI, a standalone application or [library][AioGuideGlossaryLibrary] that can be created or modified by an Angular CLI command.
 
 A project, as generated by the [`ng new`][AioCliNew], contains the set of source files, resources, and configuration files that you need to develop and test the application using the Angular CLI.
 Projects can also be created with the `ng generate application` and `ng generate library` commands.
@@ -1685,7 +1696,7 @@ The `@Injectable()` metadata allows the service class to be used with the [depen
 The injectable class is instantiated by a [provider][AioGuideGlossaryProvider].
 [Injectors][AioGuideGlossaryInjector] maintain lists of providers and use them to provide service instances when they are required by components or other services.
 
-For To learn more, see [Introduction to Services and Dependency Injection][AioGuideArchitectureServices].
+To learn more, see [Introduction to Services and Dependency Injection][AioGuideArchitectureServices].
 -->
 Angular에서는 [`@Injectable()`][AioGuideGlossaryInjectable] 데코레이터가 지정된 클래스를 의미하는데, 이 클래스는 UI와 관계없는 로직이나 코드를 캡슐화해서 애플리케이션에 재사용됩니다.
 애플리케이션 코드를 모듈화하거나 재사용하기에 유리하기 때문에 Angular 팀은 컴포넌트와 서비스를 확실하게 구분하기를 권장하고 있습니다.
@@ -1694,6 +1705,33 @@ Angular에서는 [`@Injectable()`][AioGuideGlossaryInjectable] 데코레이터�
 서비스 클래스를 생성하는 방법은 [프로바이더][AioGuideGlossaryProvider]에 정의하는데, 이 프로바이더는 [인젝터(injectors)][AioGuideGlossaryInjector]가 관리하며, 인젝터는 의존성 주입 요청을 받았을 때 프로바이더에 정해진 대로 서비스의 인스턴스를 생성해서 의존성으로 주입합니다.
 
 자세한 내용은 [서비스와 의존성 주입][AioGuideArchitectureServices] 문서를 참고하세요.
+
+
+<a id="standalone"></a>
+
+<!--
+## standalone
+-->
+## 독립 항목(standalone)
+
+<!--
+A configuration of [components][AioGuideGlossaryComponent], [directives][AioGuideGlossaryDirective], and [pipes][AioGuideGlossaryPipe] to indicate that this class can be imported directly without declaring it in any [NgModule][AioGuideGlossaryNgmodule].
+
+Standalone components, directives, and pipes differ from non-standalone ones by:
+ - having the `standalone` field of their decorator set to `true`.
+ - allowing their direct importing without the need to pass through NgModules.
+ - specifying their dependencies directly in their decorator.
+
+To learn more, see the [Standalone components guide][AioGuideStandalone].
+-->
+[컴포넌트][AioGuideGlossaryComponent], [디렉티브][AioGuideGlossaryDirective], [파이프][AioGuideGlossaryPipe]를 독립 항목으로 선언하면 [NgModule][AioGuideGlossaryNgmodule]에 등록하지 않아도 다른 곳에 로드해서 활용할 수 있습니다.
+
+독립 컴포넌트, 디렉티브, 파이프는 독립 항목이 아닌 것과 이런 점이 다릅니다:
+ - 데코레이터에 `standalone: true`가 지정됩니다.
+ - NgModule을 거치지 않고 바로 로드할 수 있습니다.
+ - 의존성은 데코레이터에 지정합니다.
+
+자세한 내용은 [독립 컴포넌트 가이드][AioGuideStandalone] 문서를 참고하세요.
 
 
 <a id="structural-directive"></a>
@@ -2223,6 +2261,8 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 
 존에 대해 알아보려면 [Brian Ford의 영상][YoutubeWatchV3iqtmusceU]을 참고하세요.
 
+<!-- vale Angular.Google_Headings = YES -->
+
 <!-- links -->
 
 [AioApiCommonDatepipe]: api/common/DatePipe "DatePipe | @angular/common - API | Angular"
@@ -2360,6 +2400,7 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 [AioGuideGlossaryScopedPackage]: guide/glossary#scoped-package "scoped package - Glossary | Angular"
 [AioGuideGlossaryServerSideRendering]: guide/glossary#server-side-rendering "server-side rendering - Glossary | Angular"
 [AioGuideGlossaryService]: guide/glossary#service "service - Glossary | Angular"
+[AioGuideGlossaryStandalone]: guide/glossary#standalone "standalone - Glossary | Angular"
 [AioGuideGlossaryStructuralDirective]: guide/glossary#structural-directive "structural directive - Glossary | Angular"
 [AioGuideGlossarySubscriber]: guide/glossary#subscriber "subscriber - Glossary | Angular"
 [AioGuideGlossaryT]: guide/glossary#target "T - Glossary | Angular"
@@ -2386,6 +2427,7 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 [AioGuideHierarchicalDependencyInjection]: guide/hierarchical-dependency-injection "Hierarchical injectors | Angular"
 
 [AioGuideInterpolation]: guide/interpolation "Text interpolation | Angular"
+
 <!-- [AioGuideInterpolationTemplateExpressions]: guide/interpolation#template-expressions "Template expressions - Text interpolation | Angular" -->
 
 [AioGuideNgmodules]: guide/ngmodules "NgModules | Angular"
@@ -2409,7 +2451,9 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 
 [AioGuideSetupLocal]: guide/setup-local "Setting up the local environment and workspace | Angular"
 
-[AioGuideStructuralDirectives]: guide/structural-directives "Writing structural directives | Angular"
+[AioGuideStandalone]: guide/standalone-components "Getting started with standalone components | Angular"
+
+[AioGuideStructuralDirectives]: guide/structural-directives "Structural directives | Angular"
 
 [AioGuideStyleguide0201]: guide/styleguide#02-01 "Style 02-01 - Angular coding style guide | Angular"
 

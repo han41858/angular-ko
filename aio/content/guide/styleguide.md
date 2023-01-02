@@ -172,7 +172,7 @@ A single component can be the default export for its file which facilitates lazy
 
 </div>
 
-The key is to make the code more reusable, easier to read, and less mistake prone.
+The key is to make the code more reusable, easier to read, and less mistake-prone.
 
 The following *negative* example defines the `AppComponent`, bootstraps the app,
 defines the `Hero` model object, and loads heroes from the server all in the same file.
@@ -1117,7 +1117,7 @@ Keeps the names of the properties defined in the directives that are bound to th
 <div class="s-why-last">
 
 **Why**? <br />
-The Angular HTML parser is case sensitive and recognizes lower camel case.
+The Angular HTML parser is case-sensitive and recognizes lower camel case.
 
 </div>
 
@@ -2805,7 +2805,7 @@ This is acceptable here because the service is stateless;that is, the consumers 
 <div class="s-why">
 
 **Why**? <br />
-`SharedModule` will contain components, directives and pipes that may need features from another common module; for example, `ngFor` in `CommonModule`.
+`SharedModule` will contain components, directives, and pipes that may need features from another common module; for example, `ngFor` in `CommonModule`.
 
 </div>
 
@@ -2824,7 +2824,7 @@ This is acceptable here because the service is stateless;that is, the consumers 
 <div class="s-why">
 
 **Why**? <br />
-`SharedModule` exists to make commonly used components, directives and pipes available for use in the templates of components in many other modules.
+`SharedModule` exists to make commonly used components, directives, and pipes available for use in the templates of components in many other modules.
 
 </div>
 

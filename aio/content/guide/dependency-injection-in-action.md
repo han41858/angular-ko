@@ -425,7 +425,7 @@ It's visually simple: a few properties and the logs produced by a logger.
 </div>
 
 The code behind it customizes how and where the DI framework provides dependencies.
-The use cases illustrate different ways to use the [*provide* object literal](guide/dependency-injection-providers#provide) to associate a definition object with a DI token.
+The use cases illustrate different ways to use the *provide* object literal to associate a definition object with a DI token.
 
 <code-example header="hero-of-the-month.component.ts" path="dependency-injection-in-action/src/app/hero-of-the-month.component.ts" region="hero-of-the-month"></code-example>
 
@@ -444,7 +444,7 @@ The `providers` array shows how you might use the different provider-definition 
 </div>
 
 하지만 이 코드는 의존성 주입 프레임워크에 활용되는 의존성 객체를 모두 커스터마이징 하기 위해 조금 복잡해졌습니다.
-그럼에도 불구하고 모든 프로바이더는 의존성 객체와 토큰을 [*provide* 객체 리터럴](guide/dependency-injection-providers#provide)로 등록하는데 각각 다른 방식을 사용한 것 뿐입니다.
+그럼에도 불구하고 모든 프로바이더는 의존성 객체와 토큰을 *provide* 객체 리터럴로 등록하는데 각각 다른 방식을 사용한 것 뿐입니다.
 
 <code-example header="hero-of-the-month.component.ts" path="dependency-injection-in-action/src/app/hero-of-the-month.component.ts" region="hero-of-the-month"></code-example>
 
@@ -675,9 +675,9 @@ Notice that this form of provider has a third key, `deps`, which specifies depen
 Use this technique to create a dependency object with a factory function whose inputs are a combination of *injected services* and *local state*.
 
 The dependency object \(returned by the factory function\) is typically a class instance, but can be other things as well.
-In this example, the dependency object is a string of the names of the runners up to the "Hero of the Month" contest.
+In this example, the dependency object is a string of the names of the runners-up to the "Hero of the Month" contest.
 
-In the example, the local state is the number `2`, the number of runners up that the component should show.
+In the example, the local state is the number `2`, the number of runners-up that the component should show.
 The state value is passed as an argument to `runnersUpFactory()`.
 The `runnersUpFactory()` returns the *provider factory function*, which can use both the passed-in state value and the injected services `Hero` and `HeroService`.
 
@@ -771,8 +771,10 @@ But they did neither.
 
 When you use a class this way, it's called a *class interface*.
 
-As mentioned in [DI Providers](guide/dependency-injection-providers#di-and-interfaces), an interface is not a valid DI token because it is a TypeScript artifact that doesn't exist at run time.
-Use this abstract class interface to get the strong typing of an interface, and also use it as a provider token in the way you would a normal class.
+As mentioned in [Configuring dependency providers](guide/dependency-injection-providers),
+an interface is not a valid DI token because it is a TypeScript artifact that doesn't exist at run time.
+Use this abstract class interface to get the strong typing of an interface,
+and also use it as a provider token in the way you would a normal class.
 
 A class interface should define *only* the members that its consumers are allowed to call.
 Such a narrowing interface helps decouple the concrete class from its consumers.
@@ -809,7 +811,7 @@ Look again at the TypeScript `MinimalLogger` class to confirm that it has no imp
 
 클래스가 이렇게 사용되는 것을 *클래스 인터페이스*라고 합니다.
 
-[의존성 주입 프로바이더](guide/dependency-injection-providers#di-and-interfaces)에서 언급했던 것처럼, 인터페이스는 TypeScript에만 있는 개념이며 애플리케이션이 실행되는 시점에는 존재하지 않기 때문에 의존성 주입 토큰으로 사용할 수 없습니다.
+[의존성 프로바이더 설정하기](guide/dependency-injection-providers)에서 언급했던 것처럼, 인터페이스는 TypeScript에만 있는 개념이며 애플리케이션이 실행되는 시점에는 존재하지 않기 때문에 의존성 주입 토큰으로 사용할 수 없습니다.
 그래서 인터페이스처럼 형태를 강제할 수 있고, 일반 클래스처럼 프로바이더 토큰으로 사용할 수 있는 추상 클래스 인터페이스를 사용하는 것입니다.
 
 그리고 클래스 인터페이스에는 이 클래스가 주입된 곳에서 *사용할 수 있는 멤버만* 정의하는 것이 좋습니다.
@@ -839,7 +841,7 @@ Look again at the TypeScript `MinimalLogger` class to confirm that it has no imp
 ### `InjectionToken` 객체
 
 <!--
-Dependency objects can be simple values like dates, numbers and strings, or shapeless objects like arrays and functions.
+Dependency objects can be simple values like dates, numbers, and strings, or shapeless objects like arrays and functions.
 
 Such objects don't have application interfaces and therefore aren't well represented by a class.
 They're better represented by a token that is both unique and symbolic, a JavaScript object that has a friendly name but won't conflict with another token that happens to have the same name.
@@ -941,7 +943,7 @@ That's why you call the `HeroService` from within the `ngOnInit` rather than the
 
 <!--
 Users want to see the heroes in alphabetical order.
-Rather than modify the original component, sub-class it and create a `SortedHeroesComponent` that sorts the heroes before presenting them.
+Rather than modify the original component, subclass it and create a `SortedHeroesComponent` that sorts the heroes before presenting them.
 The `SortedHeroesComponent` lets the base class fetch the heroes.
 
 Unfortunately, Angular cannot inject the `HeroService` directly into the base class.

@@ -3,6 +3,11 @@
 -->
 # 서비스 워커 설정
 
+<!--
+This topic describes the properties of the service worker configuration file.
+-->
+이 문서는 서비스 워커 설정 파일에 대해 설명합니다.
+
 
 <!--
 ## Prerequisites
@@ -12,6 +17,7 @@
 <!--
 A basic understanding of the following:
 
+*   [Service worker overview](https://developer.chrome.com/docs/workbox/service-worker-overview/)
 *   [Service Worker in Production](guide/service-worker-devops)
 
 The `ngsw-config.json` configuration file specifies which files and data URLs the Angular service worker should cache and how it should update the cached files and data.
@@ -71,12 +77,11 @@ Example patterns:
 | `/**/*.html` | Specifies all HTML files              |
 | `/*.html`    | Specifies only HTML files in the root |
 | `!/**/*.map` | Exclude all sourcemaps                |
-
-The following sections describe each property of the configuration file.
 -->
 이 문서의 내용을 제대로 이해하려면 다음 내용을 미리 확인하는 것이 좋습니다.
 
-*   [서비스 워커 활용](guide/service-worker-devops)
+*   [서비스 워커 개요](https://developer.chrome.com/docs/workbox/service-worker-overview/)
+*   [서비스 워커 활용하기](guide/service-worker-devops)
 
 `ngsw-config.json` 설정 파일은 Angular 서비스 워커가 캐싱할 파일과 데이터 URL을 지정하는 파일이며, 이 리소스들을 어떻게 업데이트할 것인지도 지정합니다.
 [Angular CLI](cli)로 `ng build` 명령을 실행하면 이 설정 파일이 자동으로 구성됩니다.
@@ -84,7 +89,7 @@ The following sections describe each property of the configuration file.
 
 <code-example format="shell" language="shell">
 
-./node_modules/.bin/ngsw-config ./dist/&lt;프로젝트-이름&gt; ./ngsw-config.json [/base/href]
+./node_modules/.bin/ngsw-config ./dist/&lt;project-name&gt; ./ngsw-config.json [/base/href]
 
 </code-example>
 
@@ -93,7 +98,7 @@ The following sections describe each property of the configuration file.
 
 <a id="glob-patterns"></a>
 
-설정 파일에는 다음과 같은 다중 파일 형식\(glob\)을 일부 사용할 수도 있습니다:
+설정 파일에는 다음과 같은 다중 파일 형식\(glob\)을 **일부** 사용할 수도 있습니다:
 
 | Glob 형식 | 설명                                            |
 |:--------|:----------------------------------------------|
@@ -104,7 +109,7 @@ The following sections describe each property of the configuration file.
 
 <div class="alert is-helpful">
 
-  **\*** 정규표현식에서 특수한 용도로 사용되는 문자 중 일부는 예외처리\(escaped\)되지 않으며, 정규표현식의 `^`/`$`가 자동으로 붙지 않습니다.
+**\*** 정규표현식에서 특수한 용도로 사용되는 문자 중 일부는 예외처리\(escaped\)되지 않으며, 정규표현식의 `^`/`$`가 자동으로 붙지 않습니다.
 
   *   `$`는 정규표현식에서 문자열 끝을 의미하는 기호이며, glob 패턴에서 정규표현식으로 변환될 때도 마찬가지입니다.
       문자 `$`를 사용하려면 `\\$`라고 사용해야 합니다.
@@ -115,14 +120,14 @@ The following sections describe each property of the configuration file.
 
       </div>
 
-  *   glob 패턴은 정규표현식으로 변환될 때 `^`, `$`를 자동으로 붙지 않습니다.
-      그래서 이 패턴은 요청 URL 일부와도 매칭될 수 있습니다.
-      URL 문자열 처음과 끝을 매칭하려면 `^`/`$`를 사용해야 합니다.
+  *  glob 패턴은 정규표현식으로 변환될 때 `^`, `$`를 자동으로 붙지 않습니다.
+     그래서 이 패턴은 요청 URL 일부와도 매칭될 수 있습니다.
+     URL 문자열 처음과 끝을 매칭하려면 `^`/`$`를 사용해야 합니다.
 
       <div class="alert is-important">
 
-      glob 패턴을 `/foo/bar/*.js`라고 사용하면 `.js` 와 `.json` 파일 모두와 매칭됩니다.
-      `.js` 파일만 매칭하려면 `/foo/bar/*.js$`라고 사용해야 합니다.
+     glob 패턴을 `/foo/bar/*.js`라고 사용하면 `.js` 와 `.json` 파일 모두와 매칭됩니다.
+     `.js` 파일만 매칭하려면 `/foo/bar/*.js$`라고 사용해야 합니다.
 
       </div>
 
@@ -136,10 +141,19 @@ The following sections describe each property of the configuration file.
 | `/*.html`    | 최상위 폴더에 있는 HTML 파일과 매칭됩니다. |
 | `!/**/*.map` | 소스맵 파일을 제외합니다.             |
 
-각각에 대해서는 설정 파일의 내용을 설명하면서 하나씩 알아봅시다.
+
+<!--
+## Service worker configuration properties
+-->
+## 서비스 워커 설정 프로퍼티
+
+<!--
+The following sections describe each property of the configuration file.
+-->
+설정 파일에 활용할 수 있는 프로퍼티에 대해 각각 알아봅시다.
 
 
-## `appData`
+### `appData`
 
 <!--
 This section enables you to pass any data you want that describes this particular version of the application.
@@ -153,7 +167,7 @@ Many applications use this section to provide additional information for the dis
 
 <a id="index-file"></a>
 
-## `index`
+### `index`
 
 <!--
 Specifies the file that serves as the index page to satisfy navigation requests.
@@ -163,12 +177,18 @@ Usually this is `/index.html`.
 보통 `/index.html`을 지정합니다.
 
 
-## `assetGroups`
+### `assetGroups`
 
 <!--
 *Assets* are resources that are part of the application version that update along with the application.
 They can include resources loaded from the page's origin as well as third-party resources loaded from CDNs and other external URLs.
 As not all such external URLs might be known at build time, URL patterns can be matched.
+
+<div class="alert is-important">
+
+  For the service worker to handle resources that are loaded from different origins, make sure that [CORS][MozillaDeveloperDocsWebHttpCors] is correctly configured on each origin's server.
+
+</div>
 
 This field contains an array of asset groups, each of which defines a set of asset resources and the policy by which they are cached.
 
@@ -218,10 +238,18 @@ interface AssetGroup {
 }
 
 </code-example>
+
+Each `AssetGroup` is defined by the following asset group properties.
 -->
 *애셋(Assets)* 은 앱 버전을 구성하는 리소스 파일을 의미하며, 앱이 업데이트될 때 함께 업데이트됩니다.
 이 때 애셋은 페이지에 포함된 리소스이거나 CDN 등에서 다운받은 서드파티 리소스일 수 있습니다.
 하지만 빌드 시점에 외부 리소스의 모든 URL을 정확히 지정할 수는 없기 때문에 패턴으로 URL을 매칭하는 방법을 사용하기도 합니다.
+
+<div class="alert is-important">
+
+서비스 워커가 오리진이 다른 곳에 있는 리소스를 제대로 불러오려면 각 오리진 서버에서 [CORS][MozillaDeveloperDocsWebHttpCors]를 제대로 설정해야 합니다.
+
+</div>
 
 이 섹션에는 애셋 그룹을 배열 형태로 정의합니다.
 이 때 애셋을 구성하는 파일을 모두 지정할 수 있으며, 애셋 그룹에 적용되는 캐싱 정책도 지정할 수 있습니다.
@@ -273,8 +301,9 @@ interface AssetGroup {
 
 </code-example>
 
+`AssetGroup`에 사용할 수 있는 프로퍼티는 다음 섹션에서 알아봅시다.
 
-### `name`
+#### `name`
 
 <!--
 A `name` is mandatory.
@@ -284,7 +313,7 @@ It identifies this particular group of assets between versions of the configurat
 이 항목은 애셋 그룹들 중에서 특정 애셋 그룹을 구별하기 위해 지정합니다.
 
 
-### `installMode`
+#### `installMode`
 
 <!--
 The `installMode` determines how these resources are initially cached.
@@ -307,7 +336,7 @@ Defaults to `prefetch`.
 기본값은 `prefetch`입니다.
 
 
-### `updateMode`
+#### `updateMode`
 
 <!--
 For resources already in the cache, the `updateMode` determines the caching behavior when a new version of the application is discovered.
@@ -331,7 +360,7 @@ Defaults to the value `installMode` is set to.
 기본값은 `installMode`에서 지정한 값이 적용됩니다.
 
 
-### `resources`
+#### `resources`
 
 <!--
 This section describes the resources to cache, broken up into the following groups:
@@ -349,7 +378,7 @@ This section describes the resources to cache, broken up into the following grou
 | `urls`  | 실행시점에 매칭될 URL이나 URL패턴을 지정합니다. 이 리소스들은 즉시 다운로드되지 않을 수 있고 해시값이 존재하지 않을 수 있지만, HTTP 헤더를 사용하는 방식으로 캐싱됩니다. 이 방식은 Google Fonts 서비스와 같이 CDN을 활용하는 부분에 적용하면 좋습니다.<br /> *\(이 방식에서는 glob 패턴을 반전하는 방식(`!`)이 동작하지 않으며, `?` 문자도 와일드카드로 동작하지 않습니다. `?` 문자는 `?` 문자 하나에만 매칭됩니다.\)* |
 
 
-### `cacheQueryOptions`
+#### `cacheQueryOptions`
 
 <!--
 These options are used to modify the matching behavior of requests.
@@ -370,7 +399,7 @@ Currently, only the following options are supported:
 | `ignoreSearch` | 쿼리 인자를 무시합니다. 기본값은 `false`입니다. |
 
 
-## `dataGroups`
+### `dataGroups`
 
 <!--
 Unlike asset resources, data requests are not versioned along with the application.
@@ -423,6 +452,8 @@ export interface DataGroup {
 }
 
 </code-example>
+
+Each `DataGroup` is defined by the following data group properties.
 -->
 애셋 리소스와는 다르게 API로 보내는 데이터 요청은 앱 버전으로 관리되지 않습니다.
 그래서 이런 요청은 자주 사용하는 API나 데이터 의존성 관계에 맞게 수동으로 캐싱하는 정책을 구성해야 합니다.
@@ -476,7 +507,10 @@ export interface DataGroup {
 
 </code-example>
 
-### `name`
+`DataGroup`에 사용할 수 있는 프로퍼티는 다음 섹션에서 알아봅시다.
+
+
+#### `name`
 
 <!--
 Similar to `assetGroups`, every data group has a `name` which uniquely identifies it.
@@ -484,7 +518,7 @@ Similar to `assetGroups`, every data group has a `name` which uniquely identifie
 데이터 그룹을 구분하는 용도로 사용합니다. `assetGroups`에 있는 `name`과 비슷합니다.
 
 
-### `urls`
+#### `urls`
 
 A list of URL patterns.
 URLs that match these patterns are cached according to this data group's policy.
@@ -493,7 +527,7 @@ Only non-mutating requests \(GET and HEAD\) are cached.
 *   Negative glob patterns are not supported
 *   `?` is matched literally; that is, it matches *only* the character `?`
 
-### `version`
+#### `version`
 
 <!--
 Occasionally APIs change formats in a way that is not backward-compatible.
@@ -512,27 +546,34 @@ API는 하위 호환성을 유지하지 못하면서 변경되기도 합니다.
 `version` 필드에는 정수값을 지정하며 기본값은 `1`입니다.
 
 
-### `cacheConfig`
+#### `cacheConfig`
 
 <!--
-This section defines the policy by which matching requests are cached.
+The following properties define the policy by which matching requests are cached.
 -->
 이 섹션에는 리소스를 캐싱하면서 적용할 정책을 지정합니다.
 
-#### `maxSize`
+
+##### `maxSize`
 
 <!--
-\(required\) The maximum number of entries, or responses, in the cache.
+**Required**
+
+The maximum number of entries, or responses, in the cache.
 Open-ended caches can grow in unbounded ways and eventually exceed storage quotas, calling for eviction.
 -->
-\(필수 항목\) 리소스나 HTTP 요청을 얼마나 많이 캐싱할 것인지 지정합니다.
+**필수**
+
+리소스나 HTTP 요청을 얼마나 많이 캐싱할 것인지 지정합니다.
 캐싱 한도를 설정하지 않으면 언젠가는 스토리지 용량을 넘어갈 수밖에 없기 때문에 꼭 지정해야 합니다.
 
 
-#### `maxAge`
+##### `maxAge`
 
 <!--
-(required) The `maxAge` parameter indicates how long responses are allowed to remain in the cache before being considered invalid and evicted.
+**Required**
+
+The `maxAge` parameter indicates how long responses are allowed to remain in the cache before being considered invalid and evicted.
 `maxAge` is a duration string, using the following unit suffixes:
 
 | Suffixes | Details |
@@ -545,7 +586,9 @@ Open-ended caches can grow in unbounded ways and eventually exceed storage quota
 
 For example, the string `3d12h` caches content for up to three and a half days.
 -->
-\(필수 항목\) `maxAge` 필드를 사용하면 캐싱하는 리소스가 언제 만료되는지 지정할 수 있습니다.
+**필수**
+
+`maxAge` 필드를 사용하면 캐싱하는 리소스가 언제 만료되는지 지정할 수 있습니다.
 `maxAge` 필드의 값은 다음 접미사를 사용해서 문자열로 지정합니다.
 
 | 접미사 | 설명  |
@@ -559,7 +602,7 @@ For example, the string `3d12h` caches content for up to three and a half days.
 그래서 `3d12h`라고 지정하면 캐싱된 리소스가 3.5일 이후에 만료됩니다.
 
 
-#### `timeout`
+##### `timeout`
 
 <!--
 This duration string specifies the network timeout.
@@ -591,7 +634,7 @@ Angular 서비스 워커는 이 필드로 지정된 만큼 네트워크 응답�
 그래서 `5s30u`라고 지정하면 네트워크 요청을 보내고 5.3초가 지나면 타임아웃된 것으로 처리합니다.
 
 
-#### `strategy`
+##### `strategy`
 
 <!--
 The Angular service worker can use either of two caching strategies for data resources.
@@ -603,15 +646,15 @@ The Angular service worker can use either of two caching strategies for data res
 
 <div class="alert is-helpful">
 
-You can also emulate a third strategy, [staleWhileRevalidate](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#stale-while-revalidate), which returns cached data \(if available\), but also fetches fresh data from the network in the background for next time.
+You can also emulate a third strategy, [staleWhileRevalidate](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/#stale-while-revalidate), which returns cached data if it is available, but also fetches fresh data from the network in the background for next time.
 To use this strategy set `strategy` to `freshness` and `timeout` to `0u` in `cacheConfig`.
 
 This essentially does the following:
 
 1.  Try to fetch from the network first.
-1.  If the network request does not complete after 0ms \(that is, immediately\), fall back to the cache \(ignoring cache age\).
-1.  Once the network request completes, update the cache for future requests.
-1.  If the resource does not exist in the cache, wait for the network request anyway.
+2.  If the network request does not complete immediately, that is after a timeout of 0&nbsp;ms, ignore the cache age and fall back to the cached value.
+3.  Once the network request completes, update the cache for future requests.
+4.  If the resource does not exist in the cache, wait for the network request anyway.
 
 </div>
 -->
@@ -638,7 +681,7 @@ Angular 서비스 워커는 캐싱하는 데이터 리소스를 대상으로 두
 </div>
 
 
-#### `cacheOpaqueResponses`
+##### `cacheOpaqueResponses`
 
 <!--
 Whether the Angular service worker should cache opaque responses or not.
@@ -647,8 +690,8 @@ If not specified, the default value depends on the data group's configured strat
 
 | Strategies                             | Details |
 |:---                                    |:---     |
-| Groups with the `freshness` strategy   | The default value is `true` \(cache opaque responses\). These groups will request the data anew every time, only falling back to the cached response when offline or on a slow network. Therefore, it doesn't matter if the service worker caches an error response.                                    |
-| Groups with the `performance` strategy | The default value is `false` \(do not cache opaque responses\). These groups would continue to return a cached response until `maxAge` expires, even if the error was due to a temporary network or server issue. Therefore, it would be problematic for the service worker to cache an error response. |
+| Groups with the `freshness` strategy   | The default value is `true` and the service worker caches opaque responses. These groups will request the data every time and only fall back to the cached response when offline or on a slow network. Therefore, it doesn't matter if the service worker caches an error response.                                    |
+| Groups with the `performance` strategy | The default value is `false` and the service worker doesn't cache opaque responses. These groups would continue to return a cached response until `maxAge` expires, even if the error was due to a temporary network or server issue. Therefore, it would be problematic for the service worker to cache an error response. |
 
 <div class="callout is-important">
 
@@ -683,7 +726,7 @@ If you are not able to implement CORS &mdash;for example, if you don't control t
 
 </div>
 
-### `cacheQueryOptions`
+#### `cacheQueryOptions`
 
 <!--
 See [assetGroups](#assetgroups) for details.
@@ -691,7 +734,7 @@ See [assetGroups](#assetgroups) for details.
 [assetGroups](#assetgroups) 섹션을 참고하세요.
 
 
-## `navigationUrls`
+### `navigationUrls`
 
 <!--
 This optional section enables you to specify a custom list of URLs that will be redirected to the index file.
@@ -700,22 +743,20 @@ This optional section enables you to specify a custom list of URLs that will be 
 
 
 <!--
-### Handling navigation requests
+#### Handling navigation requests
 -->
-### 네비게이션 요청 처리하기
+#### 네비게이션 요청 처리하기
 
 <!--
 The ServiceWorker redirects navigation requests that don't match any `asset` or `data` group to the specified [index file](#index-file).
 A request is considered to be a navigation request if:
 
+*   Its [method](https://developer.mozilla.org/docs/Web/API/Request/method) is `GET`
 *   Its [mode](https://developer.mozilla.org/docs/Web/API/Request/mode) is `navigation`
-*   It accepts a `text/html` response \(as determined by the value of the `Accept` header\)
-*   Its URL matches certain criteria \(see the following\)
-
-By default, these criteria are:
-
-*   The URL must not contain a file extension \(that is, a `.`\) in the last path segment
-*   The URL must not contain `__`
+*   It accepts a `text/html` response as determined by the value of the `Accept` header
+*   Its URL matches the following criteria:
+    *   The URL must not contain a file extension \(that is, a `.`\) in the last path segment
+    *   The URL must not contain `__`
 
 <div class="alert is-helpful">
 
@@ -723,17 +764,15 @@ To configure whether navigation requests are sent through to the network or not,
 
 </div>
 -->
-서비스 워커는 애셋이나 데이터 그룹에 해당되지 않는 URL을 모두 [인덱스 파일로](#index-file) 리다이렉트합니다.
+서비스 워커는 `asset`이나 `data` 그룹에 해당되지 않는 URL을 모두 [인덱스 파일로](#index-file) 리다이렉트합니다.
 이 때 이 요청이 다음과 같은 조건이라면 네비게이션 요청으로 간주합니다:
 
+*   [메서드](https://developer.mozilla.org/docs/Web/API/Request/method)가 `GET`인 경우
 *   [요청 모드](https://developer.mozilla.org/docs/Web/API/Request/mode)가 `navigation`인 경우
 *   `text/html` 응답을 받도록 헤더의 `Accept` 필드가 지정된 경우
-*   URL이 특정 조건을 만족하는 경우 \(아래 참고\)
-
-이 때 특정 조건이라는 것은 다음 조건을 의미합니다:
-
-*   마지막 URL 세그먼트가 파일 확장자\(`.`\)를 포함하지 않는 경우
-*   URL에 `__`가 존재하지 않는 경우`
+*   URL이 이런 조건을 만족하는 경우:
+    *   마지막 URL 세그먼트가 파일 확장자\(`.`\)를 포함하지 않는 경우
+    *   URL에 `__`가 존재하지 않는 경우`
 
 <div class="alert is-helpful">
 
@@ -743,13 +782,13 @@ To configure whether navigation requests are sent through to the network or not,
 
 
 <!--
-### Matching navigation request URLs
+#### Matching navigation request URLs
 -->
-### 네비게이션 요청 URL 처리하기
+#### 네비게이션 요청 URL 처리하기
 
 <!--
 While these default criteria are fine in most cases, it is sometimes desirable to configure different rules.
-For example, you might want to ignore specific routes \(that are not part of the Angular app\) and pass them through to the server.
+For example, you might want to ignore specific routes, such as those that are not part of the Angular app, and pass them through to the server.
 
 This field contains an array of URLs and [glob-like](#glob-patterns) URL patterns that are matched at runtime.
 It can contain both negative patterns \(that is, patterns starting with `!`\) and non-negative patterns and URLs.
@@ -795,7 +834,7 @@ If the field is omitted, it defaults to:
 
 <a id="navigation-request-strategy"></a>
 
-## `navigationRequestStrategy`
+### `navigationRequestStrategy`
 
 <!--
 This optional property enables you to configure how the service worker handles navigation requests:
@@ -811,7 +850,7 @@ This optional property enables you to configure how the service worker handles n
 | Possible values | Details |
 |:---             |:---     |
 | `'performance'` | The default setting. Serves the specified [index file](#index-file), which is typically cached.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `'freshness'`   | Passes the requests through to the network and falls back to the `performance` behavior when offline. This value is useful when the server redirects the navigation requests elsewhere using an HTTP redirect \(3xx status code\). Reasons for using this value include: <ul> <li> Redirecting to an authentication website when authentication is not handled by the application </li> <li> Redirecting specific URLs to avoid breaking existing links/bookmarks after a website redesign </li> <li> Redirecting to a different website, such as a server-status page, while a page is temporarily down </li> </ul> |
+| `'freshness'`   | Passes the requests through to the network and falls back to the `performance` behavior when offline. This value is useful when the server redirects the navigation requests elsewhere using a `3xx` HTTP redirect status code. Reasons for using this value include: <ul> <li> Redirecting to an authentication website when authentication is not handled by the application </li> <li> Redirecting specific URLs to avoid breaking existing links/bookmarks after a website redesign </li> <li> Redirecting to a different website, such as a server-status page, while a page is temporarily down </li> </ul> |
 
 <div class="alert is-important">
 
@@ -833,7 +872,7 @@ It is recommended that you use the default performance strategy whenever possibl
 | 값               | 설명                                                                                                                                                                                                                                                                                                                                       |
 |:----------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `'performance'` | 기본값입니다. 미리 지정된 [인덱스 파일](#index-file)을 사용하며, 이 파일은 보통 캐싱되어 있습니다.                                                                                                                                                                                                                                                                          |
-| `'freshness'`   | 네트워크가 연결되어 있으면 화면 전환 요청을 보냅니다. 네트워크에 연결되어 있지 않으면 `performance` 모드로 동작합니다. 이 값은 서버를 활용해서 리다이렉트 할 때\(3xx 상태 코드\) 사용하면 좋습니다. 이런 경우를 생각해 보세요: <ul> <li> 애플리케이션이 인증을 직접 처리하지 않아서 인증용 웹사이트로 리다이렉트 할 때 </li> <li> 웹사이트를 개편한 후에 존재하지 않는 링크/즐겨찾기로 들어오는 요청을 리다이렉트 할 때 </li> <li> 앱을 일시적으로 사용할 수 없을 때 서버에서 제공하는 화면이나 다른 웹사이트로 리다이렉트 할 때 </li> </ul> |
+| `'freshness'`   | 네트워크가 연결되어 있으면 화면 전환 요청을 보냅니다. 네트워크에 연결되어 있지 않으면 `performance` 모드로 동작합니다. 이 값은 서버를 활용해서 리다이렉트 할 때\(`3xx` 상태 코드\) 사용하면 좋습니다. 이런 경우를 생각해 보세요: <ul> <li> 애플리케이션이 인증을 직접 처리하지 않아서 인증용 웹사이트로 리다이렉트 할 때 </li> <li> 웹사이트를 개편한 후에 존재하지 않는 링크/즐겨찾기로 들어오는 요청을 리다이렉트 할 때 </li> <li> 앱을 일시적으로 사용할 수 없을 때 서버에서 제공하는 화면이나 다른 웹사이트로 리다이렉트 할 때 </li> </ul> |
 
 <div class="alert is-important">
 
@@ -850,6 +889,8 @@ It is recommended that you use the default performance strategy whenever possibl
 [GoogleDeveloperWebUpdates201503IntroductionToFetchResponseTypes]: https://developers.google.com/web/updates/2015/03/introduction-to-fetch#response_types
 
 [WhatwgFetchSpecConceptFilteredResponseOpaque]: https://fetch.spec.whatwg.org#concept-filtered-response-opaque
+
+[MozillaDeveloperDocsWebHttpCors]: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 
 <!-- end links -->
 

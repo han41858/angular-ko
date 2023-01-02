@@ -4,6 +4,12 @@
 # 라우팅 애니메이션
 
 <!--
+Routing enables users to navigate between different routes in an application.
+-->
+라우팅을 활용하면 애플리케이션에 적용되는 라우팅 규칙을 변경되면서 화면을 전환할 수 있습니다.
+
+
+<!--
 ## Prerequisites
 -->
 ## 사전지식
@@ -14,14 +20,26 @@ A basic understanding of the following concepts:
 *   [Introduction to Angular animations](guide/animations)
 *   [Transition and triggers](guide/transition-and-triggers)
 *   [Reusable animations](guide/reusable-animations)
+-->
+이 문서를 보기 전에 다음 내용은 미리 이해하고 있는 것이 좋습니다.
 
-Routing enables users to navigate between different routes in an application.
+*   [Angular 애니메이션 소개](guide/animations)
+*   [트랜지션, 트리거](guide/transition-and-triggers)
+*   [애니메이션 재사용하기](guide/reusable-animations)
+
+
+<!--
+## Enable routing transition animation
+-->
+## 라우팅 전환 애니메이션 활성화하기
+
+<!--
 When a user navigates from one route to another, the Angular router maps the URL path to a relevant component and displays its view.
 Animating this route transition can greatly enhance the user experience.
 
 The Angular router comes with high-level animation functions that let you animate the transitions between views when a route changes.
 To produce an animation sequence when switching between routes, you need to define nested animation sequences.
-Start with the top-level component that hosts the view, and nest additional animations in the components that host the embedded views.
+Start with the top-level component that hosts the view, and nest animations in the components that host the embedded views.
 
 To enable routing transition animation, do the following:
 
@@ -31,7 +49,7 @@ To enable routing transition animation, do the following:
 
 Illustrate a router transition animation by navigating between two routes, *Home* and *About* associated with the `HomeComponent` and `AboutComponent` views respectively.
 Both of these component views are children of the top-most view, hosted by `AppComponent`.
-We'll implement a router transition animation that slides in the new view to the right and slides out the old view when the user navigates between the two routes.
+Implement a router transition animation that slides in the new view to the right and slides out the old view when navigating between the two routes.
 
 <div class="lightbox">
 
@@ -95,10 +113,8 @@ The following configuration defines the possible routes for the application.
 The `home` and `about` paths are associated with the `HomeComponent` and `AboutComponent` views.
 The route configuration tells the Angular router to instantiate the `HomeComponent` and `AboutComponent` views when the navigation matches the corresponding path.
 
-In addition to `path` and `component`, the `data` property of each route defines the key animation-specific configuration associated with a route.
+The `data` property of each route defines the key animation-specific configuration associated with a route.
 The `data` property value is passed into `AppComponent` when the route changes.
-You can also pass additional data in route configuration that is consumed within the animation.
-The data property value has to match the transitions defined in the `routeAnimation` trigger, which we'll define shortly.
 
 <div class="alert is-helpful">
 
@@ -129,9 +145,7 @@ For example, the name *animation* used in the preceding example is an arbitrary 
 코드에서 보면 `home`과 `about` 경로는 각각 `HomeComponent`, `AboutComponent`와 연결되어 있습니다.
 그래서 URL이 변경되면 라우터가 `HomeComponent`, `AboutComponent` 인스턴스를 생성해서 화면에 표시합니다.
 
-그리고 라우팅 규칙에는 `path`, `component` 외에 `data` 프로퍼티를 사용할 수 있습니다.
-`AppComponent`가 등록된 라우팅 규칙에 `data` 프로퍼티를 추가하면 라우팅 규칙이 변경되는 시점에 이 데이터가 전달되기 때문에, 화면이 전환되는 동안 적용될 애니메이션에 이 데이터를 활용할 수 있습니다.
-이 문서에서는 데이터 값을 활용해서 `routeAnimation` 트리거에 활용해 봅시다.
+그리고 라우팅 규칙에 `data` 프로퍼티를 사용하면 `AppComponent`에서 이 프로퍼티 값을 받을 수 있습니다. 
 
 <div class="alert is-helpful">
 
@@ -152,7 +166,7 @@ After configuring the routes, add a `<router-outlet>` inside the root `AppCompon
 The `<router-outlet>` directive tells the Angular router where to render the views when matched with a route.
 
 The `ChildrenOutletContexts` holds information about outlets and activated routes.
-We can use the `data` property of each `Route` to animate our routing transitions.
+The `data` property of each `Route` can be used to animate routing transitions.
 
 <code-example header="src/app/app.component.html" path="animations/src/app/app.component.html" region="route-animations-outlet"></code-example>
 
@@ -162,8 +176,8 @@ Here's an example of an `AppComponent` method that detects when a route change h
 
 <code-example header="src/app/app.component.ts" path="animations/src/app/app.component.ts" region="get-route-animations-data"></code-example>
 
-Here, the `getRouteAnimationData()` method takes the value of the outlet and returns a string that represents the state of the animation based on the custom data of the current active route.
-Use this data to control which transition to execute for each route.
+The `getRouteAnimationData()` method takes the value of the outlet. It returns a string that represents the state of the animation based on the custom data of the current active route.
+Use this data to control which transition to run for each route.
 -->
 라우팅 규칙을 선언하고 나면 라우팅 규칙에 연결된 컴포넌트가 화면에 표시될 위치를 지정해야 합니다.
 이번 예제에서는 `AppComponent` 템플릿에 `<router-outlet>`를 추가하는 방식으로 지정합니다.
@@ -190,7 +204,7 @@ Use this data to control which transition to execute for each route.
 
 <!--
 Animations can be defined directly inside your components.
-For this example you are defining the animations in a separate file, which lets us re-use the animations.
+For this example you are defining the animations in a separate file, which allows re-use of animations.
 
 The following code snippet defines a reusable animation named `slideInAnimation`.
 
@@ -247,7 +261,7 @@ So, let's break down the animation definition and see more closely what it does&
 
 
 <!--
-### Styling the host and child components
+### Style the host and child components
 -->
 ### 호스트/자식 컴포넌트 스타일 지정하기
 
@@ -267,7 +281,7 @@ Adding these styles to the views animates the containers in place and prevents o
 
 
 <!--
-### Querying the view containers
+### Query the view containers
 -->
 ### 뷰 컨테이너 쿼리하기
 
@@ -337,10 +351,4 @@ You might also be interested in the following:
 *   [애니메이션 재사용하기](guide/reusable-animations)
 
 
-<!-- links -->
-
-<!-- external links -->
-
-<!-- end links -->
-
-@reviewed 2022-02-28
+@reviewed 2022-10-11

@@ -13,7 +13,18 @@ esbuild_config(
     config_file = "esbuild-esm.config.mjs",
     deps = [
         ":esbuild_base",
-        "@npm//@angular/dev-infra-private/shared-scripts/angular-linker:js_lib",
+        "@npm//@angular/build-tooling/shared-scripts/angular-linker:js_lib",
+    ],
+)
+
+esbuild_config(
+    name = "esbuild_config_esm_prod",
+    config_file = "esbuild-esm-prod.config.mjs",
+    deps = [
+        ":esbuild_base",
+        "//packages/compiler-cli/private",
+        "@npm//@angular/build-tooling/shared-scripts/angular-linker:js_lib",
+        "@npm//@angular/build-tooling/shared-scripts/angular-optimization:js_lib",
     ],
 )
 
@@ -42,7 +53,7 @@ esbuild_config(
     config_file = "esbuild-spec.config.mjs",
     deps = [
         ":esbuild_base",
-        "@npm//@angular/dev-infra-private/shared-scripts/angular-linker:js_lib",
+        "@npm//@angular/build-tooling/shared-scripts/angular-linker:js_lib",
     ],
 )
 

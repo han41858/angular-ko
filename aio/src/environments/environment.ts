@@ -5,7 +5,9 @@
 
 
 export const environment = {
-  gaId: 'UA-115919952-1', // Development id
+  legacyUniversalAnalyticsId: 'UA-115919952-1', // Development id
+  googleAnalyticsId: 'G-LN0HYLD9BL', // Development id
+
   production: false,
   mode: 'stable',
 };

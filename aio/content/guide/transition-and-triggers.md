@@ -1,19 +1,15 @@
 <!--
-# Animations transitions and triggers
+# Animation transitions and triggers
 -->
 # 트랜지션 & 트리거
 
 <!--
-You learned the basics of Angular animations in the [introduction](guide/animations) page.
-
-This guide goes into greater depth on special transition states such as `*` \(wildcard\) and `void`, and shows how these special states are used for elements entering and leaving a view.
-This chapter also explores multiple animation triggers, animation callbacks, and sequence-based animation using keyframes.
+This guide goes into depth on special transition states such as the `*` wildcard and `void`. It shows how these special states are used for elements entering and leaving a view.
+This section also explores multiple animation triggers, animation callbacks, and sequence-based animation using keyframes.
 -->
-이전에 살펴본 [Angular 애니메이션 소개](guide/animations) 문서에서는 Angular 애니메이션의 기본 개념에 대해 알아봤습니다.
-
-이 문서에서는 트랜지션에 대해 좀 더 깊이 들어가서 `*` 와일드카드 상태와 `void` 상태에 대해 알아봅시다. 이 상태들은 엘리먼트가 화면에 추가되거나 사라질 때 사용하는 특수 상태입니다.
+이 문서에서는 트랜지션에 대해 좀 더 깊이 들어가서 `*` 와일드카드 상태와 `void` 상태에 대해 알아봅시다.
+이 상태들은 엘리먼트가 화면에 추가되거나 사라질 때 사용하는 특수 상태입니다.
 그리고 이 문서에서는 애니메이션 트리거를 여러개 적용하는 방법, 애니메이션 콜백을 활용하는 방법, 키프레임을 사용해서 애니메이션을 정해진 순서대로 실행하는 방법도 알아봅시다.
-
 
 <!--
 ## Predefined states and wildcard matching
@@ -21,7 +17,7 @@ This chapter also explores multiple animation triggers, animation callbacks, and
 ## 미리 정의된 상태와 와일드카드 매칭
 
 <!--
-In Angular, transition states can be defined explicitly through the [`state()`](api/animations/state) function, or using the predefined `*` \(wildcard\) and `void` states.
+In Angular, transition states can be defined explicitly through the [`state()`](api/animations/state) function, or using the predefined `*` wildcard and `void` states.
 -->
 Angular에서 트랜지션 상태는 [`state()`](api/animations/state) 함수로 선언할 수 있지만 이 외에도 와일드카드\(`*`\) 상태와 보이드\(`void`\) 상태가 미리 정의되어 있습니다.
 
@@ -46,7 +42,7 @@ For example, a transition of `open => *` applies when the element's state change
 The following is another code sample using the wildcard state together with the previous example using the `open` and `closed` states.
 Instead of defining each state-to-state transition pair, any transition to `closed` takes 1 second, and any transition to `open` takes 0.5 seconds.
 
-This lets us add new states without having to include separate transitions for each one.
+This allows the addition of new states without having to include separate transitions for each one.
 
 <code-example header="src/app/open-close.component.ts" path="animations/src/app/open-close.component.ts" region="trigger-wildcard1"></code-example>
 
@@ -78,13 +74,13 @@ Use a double arrow syntax to specify state-to-state transitions in both directio
 
 
 <!--
-### Using wildcard state with multiple transition states
+### Use wildcard state with multiple transition states
 -->
 ### 상태 전환할 때 와일드카드 상태 활용하기
 
 <!--
 In the two-state button example, the wildcard isn't that useful because there are only two possible states, `open` and `closed`.
-In general, use wildcard states when an element in one particular state has multiple potential states that it can change to.
+In general, use wildcard states when an element has multiple potential states that it can change to.
 If the button can change from `open` to either `closed` or something like `inProgress`, using a wildcard state could reduce the amount of coding needed.
 
 <div class="lightbox">
@@ -98,8 +94,8 @@ If the button can change from `open` to either `closed` or something like `inPro
 The `* => *` transition applies when any change between two states takes place.
 
 Transitions are matched in the order in which they are defined.
-Thus, you can apply other transitions on top of the `* => *` \(any-to-any\) transition.
-For example, define style changes or animations that would apply just to `open => closed`, or just to `closed => open`, and then use `* => *` as a fallback for state pairings that aren't otherwise called out.
+Thus, you can apply other transitions on top of the `* => *` transition.
+For example, define style changes or animations that would apply just to `open => closed`, then use `* => *` as a fallback for state pairings that aren't otherwise called out.
 
 To do this, list the more specific transitions *before* `* => *`.
 -->
@@ -124,7 +120,7 @@ To do this, list the more specific transitions *before* `* => *`.
 
 
 <!--
-### Using wildcards with styles
+### Use wildcards with styles
 -->
 ### 스타일 적용할 때 와일드카드 사용하기
 
@@ -151,7 +147,7 @@ See [Animating entering and leaving a view](#enter-leave-view).
 [나타나거나 사라지는 애니메이션](#enter-leave-view) 섹션을 참고하세요.
 
 <!--
-### Combining wildcard and void states
+### Combine wildcard and void states
 -->
 ### 와일드카드 상태와 보이드 상태 함께 사용하기
 
@@ -170,7 +166,7 @@ Combine wildcard and void states in a transition to trigger animations that ente
 
 
 <!--
-## Animating entering and leaving a view
+## Animate entering and leaving a view
 -->
 ## 나타나거나 사라지는 애니메이션
 
@@ -201,7 +197,7 @@ In the preceding code, you applied the `void` state when the HTML element isn't 
 <a id="enter-leave-view"></a>
 
 <!--
-## :enter and :leave aliases
+## Aliases :enter and :leave
 -->
 ## :enter, :leave
 
@@ -217,7 +213,7 @@ transition ( ':leave', [ &hellip; ] );  // alias for * =&gt; void
 </code-example>
 
 It's harder to target an element that is entering a view because it isn't in the DOM yet.
-So, use the aliases `:enter` and `:leave` to target HTML elements that are inserted or removed from a view.
+Use the aliases `:enter` and `:leave` to target HTML elements that are inserted or removed from a view.
 -->
 `void => *`는 `:enter`로, `* => void`는 `:leave`로 대신 사용할 수 있습니다.
 `:enter`와 `:leave`는 별칭으로 미리 정의되어 있는 셀렉터 입니다.
@@ -234,9 +230,9 @@ transition ( ':leave', [ &hellip; ] );  // * =&gt; void 와 같은 의미
 
 
 <!--
-### Use of \*ngIf and \*ngFor with :enter and :leave
+### Use `*ngIf` and `*ngFor` with :enter and :leave
 -->
-### :enter, :leave를 \*ngIf, \*ngFor와 함께 사용하기
+### :enter, :leave를 `*ngIf`, `*ngFor`와 함께 사용하기
 
 <!--
 The `:enter` transition runs when any `*ngIf` or `*ngFor` views are placed on the page, and `:leave` runs when those views are removed from the page.
@@ -245,7 +241,7 @@ The `:enter` transition runs when any `*ngIf` or `*ngFor` views are placed on th
 
 **NOTE**: <br />
 Entering/leaving behaviors can sometime be confusing.
-As a rule of thumb consider that any element being added to the DOM by Angular passes via the `:enter` transition, but only elements being directly removed from the DOM by Angular pass via the `:leave` transition \(For example, an element's view is removed from the DOM because its parent is being removed from the DOM or the app's route has changed, then the element will not pass via the `:leave` transition\).
+As a rule of thumb consider that any element being added to the DOM by Angular passes via the `:enter` transition. Only elements being directly removed from the DOM by Angular pass via the `:leave` transition. For example, an element's view is removed from the DOM because its parent is being removed from the DOM.
 
 </div>
 
@@ -254,7 +250,7 @@ The HTML template contains the following code.
 
 <code-example header="src/app/insert-remove.component.html" path="animations/src/app/insert-remove.component.html" region="insert-remove"></code-example>
 
-In the component file, the `:enter` transition sets an initial opacity of 0, and then animates it to change that opacity to 1 as the element is inserted into the view.
+In the component file, the `:enter` transition sets an initial opacity of 0. It then animates it to change that opacity to 1 as the element is inserted into the view.
 
 <code-example header="src/app/insert-remove.component.ts" path="animations/src/app/insert-remove.component.ts" region="enter-leave-trigger"></code-example>
 
@@ -285,12 +281,12 @@ Note that this example doesn't need to use [`state()`](api/animations/state).
 
 
 <!--
-## :increment and :decrement in transitions
+## Transition :increment and :decrement
 -->
 ## :increment, :decrement
 
 <!--
-The `transition()` function takes additional selector values, `:increment` and `:decrement`.
+The `transition()` function takes other selector values, `:increment` and `:decrement`.
 Use these to kick off a transition when a numeric value has increased or decreased in value.
 
 <div class="alert is-helpful">
@@ -323,16 +319,16 @@ For more information on these methods, see the [complex sequences](guide/complex
 ## 불리언 값으로 트랜지션 시작하기
 
 <!--
-If a trigger contains a boolean value as a binding value, then this value can be matched using a `transition()` expression that compares `true` and `false`, or `1` and `0`.
+If a trigger contains a Boolean value as a binding value, then this value can be matched using a `transition()` expression that compares `true` and `false`, or `1` and `0`.
 
 <code-example header="src/app/open-close.component.html" path="animations/src/app/open-close.component.2.html" region="trigger-boolean"></code-example>
 
 In the code snippet above, the HTML template binds a `<div>` element to a trigger named `openClose` with a status expression of `isOpen`, and with possible values of `true` and `false`.
 This pattern is an alternative to the practice of creating two named states like `open` and `close`.
 
-In the component code, inside the `@Component` metadata under the `animations:` property, when the state evaluates to `true` \(meaning "open" here\), the associated HTML element's height is a wildcard style or default.
+Inside the `@Component` metadata under the `animations:` property, when the state evaluates to `true`, the associated HTML element's height is a wildcard style or default.
 In this case, the animation uses whatever height the element already had before the animation started.
-When the element is "closed", the element gets animated to a height of 0, which makes it invisible.
+When the element is `closed`, the element gets animated to a height of 0, which makes it invisible.
 
 <code-example header="src/app/open-close.component.ts" path="animations/src/app/open-close.component.2.ts" region="trigger-boolean"></code-example>
 -->
@@ -345,7 +341,7 @@ When the element is "closed", the element gets animated to a height of 0, which 
 
 그리고 컴포넌트 코드에서 `Component`의 메타데이터 `animations:` 프로퍼티에는 `true`로 평가되는 상태에 엘리먼트 높이를 와일드카드 스타일이나 기본값으로 지정합니다.
 이번 예제에서는 애니메이션이 시작하기 전에 갖고 있던 값을 그대로 사용했습니다.
-그리고 엘리먼트가 "close" 상태가 되면 높이를 0으로 만들어서 보이지 않게 구현했습니다.
+그리고 엘리먼트가 `close` 상태가 되면 높이를 0으로 만들어서 보이지 않게 구현했습니다.
 
 <code-example header="src/app/open-close.component.ts" path="animations/src/app/open-close.component.2.ts" region="trigger-boolean"></code-example>
 
@@ -370,18 +366,18 @@ Attach animation triggers to different elements, and the parent-child relationsh
 
 <!--
 Each time an animation is triggered in Angular, the parent animation always gets priority and child animations are blocked.
-For a child animation to run, the parent animation must query each of the elements containing child animations and then let the animations run using the [`animateChild()`](api/animations/animateChild) function.
+For a child animation to run, the parent animation must query each of the elements containing child animations. It then lets the animations run using the [`animateChild()`](api/animations/animateChild) function.
 -->
 Angular에서 애니메이션이 시작되면 부모 애니메이션이 항상 우선권을 가지며 자식 애니메이션은 중단됩니다.
 그래서 자식 애니메이션을 시작하려면 부모 애니메이션이 각각의 자식 애니메이션을 찾아서 [`animateChild()`](api/animations/animateChild)으로 실행해줘야 합니다.
 
 <!--
-#### Disabling an animation on an HTML element
+#### Disable an animation on an HTML element
 -->
 #### 애니메이션 비활성화하기
 
 <!--
-A special animation control binding called `@.disabled` can be placed on an HTML element to disable animations on that element, as well as any nested elements.
+A special animation control binding called `@.disabled` can be placed on an HTML element to turn off animations on that element, as well as any nested elements.
 When true, the `@.disabled` binding prevents all animations from rendering.
 
 The following code sample shows how to use this feature.
@@ -393,13 +389,14 @@ The following code sample shows how to use this feature.
 
 When the `@.disabled` binding is true, the `@childAnimation` trigger doesn't kick off.
 
-When an element within an HTML template has animations disabled using the `@.disabled` host binding, animations are disabled on all inner elements as well.
-You can't selectively disable multiple animations on a single element.
+When an element within an HTML template has animations turned off using the `@.disabled` host binding, animations are turned off on all inner elements as well.
+You can't selectively turn off multiple animations on a single element.<!-- vale off -->
 
-However, selective child animations can still be run on a disabled parent in one of the following ways:
+A selective child animations can still be run on a disabled parent in one of the following ways:
 
 *   A parent animation can use the [`query()`](api/animations/query) function to collect inner elements located in disabled areas of the HTML template.
     Those elements can still animate.
+<!- vale on -> 
 
 *   A child animation can be queried by a parent and then later animated with the `animateChild()` function
 -->
@@ -426,12 +423,12 @@ HTML 엘리먼트에 `@.disabled`를 바인딩하면 애니메이션을 비활�
 
 
 <!--
-#### Disabling all animations
+#### Disable all animations
 -->
 #### 모든 애니메이션 비활성화하기
 
 <!--
-To disable all animations for an Angular app, place the `@.disabled` host binding on the topmost Angular component.
+To turn off all animations for an Angular application, place the `@.disabled` host binding on the topmost Angular component.
 
 <code-example header="src/app/app.component.ts" path="animations/src/app/app.component.ts" region="toggle-app-animations"></code-example>
 
@@ -471,13 +468,12 @@ In this example, the trigger `openClose` appears as follows.
 <code-example header="src/app/open-close.component.html" path="animations/src/app/open-close.component.3.html" region="callbacks"></code-example>
 
 A potential use for animation callbacks could be to cover for a slow API call, such as a database lookup.
-For example, you could set up the **InProgress** button to have its own looping animation where it pulsates or does some other visual motion while the backend system operation finishes.
+For example, an **InProgress** button can be set up to have its own looping animation while the backend system operation finishes.
 
-Then, another animation can be called when the current animation finishes.
+Another animation can be called when the current animation finishes.
 For example, the button goes from the `inProgress` state to the `closed` state when the API call is completed.
 
-An animation can influence an end user to *perceive* the operation as faster, even when it isn't.
-Thus, a simple animation can be a cost-effective way to keep users happy, rather than seeking to improve the speed of a server call and having to compensate for circumstances beyond your control, such as an unreliable network connection.
+An animation can influence an end user to *perceive* the operation as faster, even when it is not.
 
 Callbacks can serve as a debugging tool, for example in conjunction with `console.warn()` to view the application's progress in a browser's Developer JavaScript Console.
 The following code snippet creates console log output for the original example, a button with the two states of `open` and `closed`.
@@ -501,7 +497,6 @@ The following code snippet creates console log output for the original example, 
 버튼이 `inProgress` 상태에서 깜빡이다가 API 호출이 완료되면 `closed` 상태가 되면서 다른 애니메이션을 시작할 수 있습니다.
 
 애니메이션을 활용하면 작업이 실제로 끝나지 않았더라도 작업이 좀 더 빠르게 진행되는 것처럼 느껴집니다.
-그래서 애니메이션을 약간만 추가해도 사용자의 만족도를 크게 개선할 수 있습니다. 서버의 실행속도나 네트워크 연결 상태와 같이 개선하기 어려운 문제를 신경쓰는 것보다 훨씬 효율적입니다.
 
 콜백 함수는 디버깅 용도로 사용할 수도 있습니다. 애니메이션 콜백 함수에 맞춰서 애플리케이션의 진행정보를 `console.warn()`과 같은 함수로 출력해볼 수도 있습니다.
 
@@ -518,12 +513,10 @@ The following code snippet creates console log output for the original example, 
 ## 키프레임(keyframes)
 
 <!--
-The previous section features a simple two-state transition.
-Let's now create an animation with multiple steps run in sequence using *keyframes*.
+To create an animation with multiple steps run in sequence, use *keyframes*.
 
-Angular's `keyframe()` function is similar to keyframes in CSS.
-Keyframes allow several style changes within a single timing segment.
-For example, the button, instead of fading, could change color several times over a single 2-second timespan.
+Angular's `keyframe()` function allows several style changes within a single timing segment.
+For example, the button, instead of fading, could change color several times over a single 2-second time span.
 
 <div class="lightbox">
 
@@ -536,9 +529,9 @@ The code for this color change might look like this.
 <code-example header="src/app/status-slider.component.ts" path="animations/src/app/status-slider.component.ts" region="keyframes"></code-example>
 -->
 이전 섹션에서는 두 상태를 전환하는 간단한 트랜지션에 대해 알아봤습니다.
-이번에는 키프레임을 사용해서 여러 단계로 실행되는 애니메이션을 만들어 봅시다.
 
-Angular의 `keyframe()` 함수는 CSS에서 사용하는 키프레임과 비슷합니다. 키프레임은 한 재생시간 안에서 여러번 스타일을 변경할 때 사용합니다.
+Angular의 `keyframe()` 함수는 CSS에서 사용하는 키프레임과 비슷합니다.
+키프레임은 한 재생시간 안에서 여러번 스타일을 변경할 때 사용합니다.
 예를 들면 버튼의 투명도를 조절하는 대신 2초에 걸쳐 색상을 변경하는 식으로 활용할 수 있습니다.
 
 <div class="lightbox">
@@ -559,7 +552,7 @@ Angular의 `keyframe()` 함수는 CSS에서 사용하는 키프레임과 비슷�
 
 <!--
 Keyframes include an `offset` that defines the point in the animation where each style change occurs.
-Offsets are relative measures from zero to one, marking the beginning and end of the animation, respectively and should be applied to each of the keyframe's steps if used at least once.
+Offsets are relative measures from zero to one, marking the beginning and end of the animation. They should be applied to each of the keyframe steps if used at least once.
 
 Defining offsets for keyframes is optional.
 If you omit them, evenly spaced offsets are automatically assigned.
@@ -658,13 +651,13 @@ For properties with a numeric value, define a unit by providing the value as a s
 *   Percentage:
     `'100%'`
 
-You can also provide the value as a number \(thus not providing a unit\), in such cases Angular assumes a default unit of pixels, or `px`.
+You can also provide the value as a number. In such cases Angular assumes a default unit of pixels, or `px`.
 Expressing 50 pixels as `50` is the same as saying `'50px'`.
 
 <div class="alert is-helpful">
 
 **NOTE**: <br />
-The string `"50"` would instead be considered invalid\).
+The string `"50"` would instead not be considered valid\).
 
 </div>
 -->
@@ -701,11 +694,11 @@ Angular 애니메이션은 웹 표준 애니메이션을 기반으로 동작합�
 ### 와일드카드로 프로퍼티값 자동 계산하기
 
 <!--
-Sometimes you don't know the value of a dimensional style property until runtime.
+Sometimes, the value of a dimensional style property isn't known until runtime.
 For example, elements often have widths and heights that depend on their content or the screen size.
 These properties are often challenging to animate using CSS.
 
-In these cases, you can use a special wildcard `*` property value under `style()`, so that the value of that particular style property is computed at runtime and then plugged into the animation.
+In these cases, you can use a special wildcard `*` property value under `style()`. The value of that particular style property is computed at runtime and then plugged into the animation.
 
 The following example has a trigger called `shrinkOut`, used when an HTML element leaves the page.
 The animation takes whatever height the element has before it leaves, and animates from that height to zero.
@@ -730,7 +723,7 @@ The animation takes whatever height the element has before it leaves, and animat
 ### 키프레임 정리
 
 <!--
-The `keyframes()` function in Angular allows you to specify multiple interim styles within a single transition, with an optional `offset` to define the point in the animation where each style change should occur.
+The `keyframes()` function in Angular allows you to specify multiple interim styles within a single transition. An optional `offset` can be used to define the point in the animation where each style change should occur.
 -->
 `keyframes()` 함수를 활용하면 한 트랜지션 안에서 여러 스타일을 다양하게 적용할 수 있습니다. 그리고 오프셋을 활용하면 각 스타일이 어느 시점에 적용될지도 지정할 수 있습니다.
 
@@ -755,10 +748,4 @@ You might also be interested in the following:
 *   [라우팅 애니메이션](guide/route-animations)
 
 
-<!-- links -->
-
-<!-- external links -->
-
-<!-- end links -->
-
-@reviewed 2022-02-28
+@reviewed 2022-10-11

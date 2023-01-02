@@ -604,6 +604,12 @@ export type UntypedFormGroup = FormGroup<any>;
 
 export const UntypedFormGroup: UntypedFormGroupCtor = FormGroup;
 
+/**
+ * @description
+ * Asserts that the given control is an instance of `FormGroup`
+ *
+ * @publicApi
+ */
 export const isFormGroup = (control: unknown): control is FormGroup => control instanceof FormGroup;
 
 /**
@@ -618,15 +624,14 @@ export const isFormGroup = (control: unknown): control is FormGroup => control i
  * @usageNotes
  *
  * ```
- * let numbers = new FormRecord({bill: '415-123-456'});
- * numbers.addControl('bob', '415-234-567');
+ * let numbers = new FormRecord({bill: new FormControl('415-123-456')});
+ * numbers.addControl('bob', new FormControl('415-234-567'));
  * numbers.removeControl('bill');
  * ```
  *
  * @publicApi
  */
-export class FormRecord<TControl extends AbstractControl<ɵValue<TControl>, ɵRawValue<TControl>> =
-                                             AbstractControl> extends
+export class FormRecord<TControl extends AbstractControl = AbstractControl> extends
     FormGroup<{[key: string]: TControl}> {}
 
 export interface FormRecord<TControl> {
@@ -707,5 +712,11 @@ export interface FormRecord<TControl> {
   getRawValue(): {[key: string]: ɵRawValue<TControl>};
 }
 
+/**
+ * @description
+ * Asserts that the given control is an instance of `FormRecord`
+ *
+ * @publicApi
+ */
 export const isFormRecord = (control: unknown): control is FormRecord =>
     control instanceof FormRecord;

@@ -28,7 +28,7 @@ Use class and style bindings to add and remove CSS class names from an element's
 <!--
 To create a single class binding, type the following:
 
-[class.sale]="onSale"
+`[class.sale]="onSale"`
 
 Angular adds the class when the bound expression, `onSale` is truthy, and it removes the class when the expression is falsy&mdash;with the exception of `undefined`.  See [styling delegation](guide/style-precedence#styling-delegation) for more information.
 -->
@@ -60,7 +60,7 @@ With the object format, Angular adds a class only if its associated value is tru
 
 <div class="alert is-important">
 
-With any object-like expression&mdash;such as `object`, `Array`, `Map`, or `Set`&mdash;the identity of the object must change for Angular to update the class list.
+With any object-like expression&mdash;such as `object`, `Array`, `Map`, or `Set` &mdash;the identity of the object must change for Angular to update the class list.
 Updating the property without changing object identity has no effect.
 
 </div>
@@ -115,9 +115,9 @@ The following table summarizes class binding syntax.
 <!--
 To create a single style binding, use the prefix `style` followed by a dot and the name of the CSS style.
 
-For example, set the ‘width’ style, type the following:  `[style.width]="width"`
+For example, to set the `width` style, type the following:  `[style.width]="width"`
 
-Angular sets the property to the value of the bound expression, which is usually a string.  Optionally, you can add a unit extension like `em` or `%`, which requires a number type.
+Angular sets the property to the value of the bound expression, which is usually a string. Optionally, you can add a unit extension like `em` or `%`, which requires a number type.
 
 1. To write a style in dash-case, type the following:
 

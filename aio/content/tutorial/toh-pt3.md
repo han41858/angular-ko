@@ -6,13 +6,13 @@
 <!--
 At the moment, the `HeroesComponent` displays both the list of heroes and the selected hero's details.
 
-Keeping all features in one component as the application grows will not be maintainable.
-You'll want to split up large components into smaller sub-components, each focused on a specific task or workflow.
+Keeping all features in one component as the application grows won't be maintainable.
+This tutorial splits up large components into smaller subcomponents, each focused on a specific task or workflow.
 
-In this page, you'll take the first step in that direction by moving the hero details into a separate, reusable `HeroDetailComponent`.
+The first step is to move the hero details into a separate, reusable `HeroDetailComponent` and end up with:
 
-The `HeroesComponent` will only present the list of heroes.
-The `HeroDetailComponent` will present details of a selected hero.
+* A `HeroesComponent` that presents the list of heroes.
+* A `HeroDetailComponent` that presents the details of a selected hero.
 
 <div class="alert is-helpful">
 
@@ -25,9 +25,10 @@ The `HeroDetailComponent` will present details of a selected hero.
 하지만 모든 기능을 컴포넌트 하나가 담당하면 애플리케이션이 커질수록 이 컴포넌트를 관리하기 점점 힘들어 집니다.
 그래서 컴포넌트가 복잡해지면 이 컴포넌트의 역할을 나눠서 일부 역할만 담당하도록 작은 컴포넌트로 나누는 것이 좋습니다.
 
-이 문서에서는 히어로의 상세정보를 표시하는 부분을 분리해서 `HeroDetailComponent`로 만들어 봅시다.
+이 문서에서는 히어로의 상세정보를 표시하는 부분을 분리해서 `HeroDetailComponent`로 만들어 봅시다:
 
-그러면 `HeroesComponent`는 히어로의 목록만 표시하고 이 목록에서 선택된 히어로는 `HeroDetailComponent`가 표시할 것입니다.
+* `HeroesComponent`는 히어로의 목록을 표시합니다.
+* `HeroDetailComponent`는 선택된 히어로의 세부정보를 표시합니다.
 
 <div class="alert is-helpful">
 
@@ -42,7 +43,7 @@ The `HeroDetailComponent` will present details of a selected hero.
 ## `HeroDetailComponent` 생성하기
 
 <!--
-Use the Angular CLI to generate a new component named `hero-detail`.
+Use this `ng generate` command to create a new component named `hero-detail`.
 
 <code-example format="shell" language="shell">
 
@@ -54,7 +55,7 @@ The command scaffolds the following:
 
 *   Creates a directory `src/app/hero-detail`.
 
-Inside that directory four files are generated:
+Inside that directory, four files are created:
 
 *   A CSS file for the component styles.
 *   An HTML file for the component template.
@@ -63,7 +64,7 @@ Inside that directory four files are generated:
 
 The command also adds the `HeroDetailComponent` as a declaration in the `@NgModule` decorator of the `src/app/app.module.ts` file.
 -->
-Angular CLI로 `hero-detail` 컴포넌트를 생성합니다.
+`ng generate` 명령을 실행해서 `hero-detail` 컴포넌트를 생성합니다.
 
 <code-example format="shell" language="shell">
 
@@ -91,11 +92,11 @@ ng generate component hero-detail
 ### 템플릿 작성하기
 
 <!--
-Cut the HTML for the hero detail from the bottom of the `HeroesComponent` template and paste it over the generated boilerplate in the `HeroDetailComponent` template.
+Cut the HTML for the hero detail from the bottom of the `HeroesComponent` template and paste it over the boilerplate content in the `HeroDetailComponent` template.
 
 The pasted HTML refers to a `selectedHero`.
 The new `HeroDetailComponent` can present *any* hero, not just a selected hero.
-So replace "selectedHero" with "hero" everywhere in the template.
+Replace `selectedHero` with `hero` everywhere in the template.
 
 When you're done, the `HeroDetailComponent` template should look like this:
 
@@ -129,7 +130,7 @@ region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (impor
 The `hero` property
 [must be an `Input` property](guide/inputs-outputs "Input and Output properties"),
 annotated with the `@Input()` decorator,
-because the *external* `HeroesComponent` [will bind to it](#heroes-component-template) like this.
+because the *external* `HeroesComponent` [binds to it](#heroes-component-template) like this.
 
 <code-example path="toh-pt3/src/app/heroes/heroes.component.html" region="hero-detail-binding"></code-example>
 
@@ -176,15 +177,14 @@ region="import-hero" header="src/app/hero-detail/hero-detail.component.ts (impor
 ## `HeroDetailComponent` 표시하기
 
 <!--
-The `HeroesComponent` used to display the hero details on its own, before you removed that portion of the template.
+The `HeroesComponent` used to display the hero details on its own, before you removed that part of the template.
 This section guides you through delegating logic to the `HeroDetailComponent`.
 
-The two components will have a parent/child relationship.
-The parent `HeroesComponent` will control the child `HeroDetailComponent`
-by sending it a new hero to display whenever
-the user selects a hero from the list.
+The two components have a parent/child relationship.
+The parent, `HeroesComponent`, controls the child, `HeroDetailComponent` by
+sending it a new hero to display whenever the user selects a hero from the list.
 
-You won't change the `HeroesComponent` *class* but you will change its *template*.
+You don't need to change the `HeroesComponent` *class*, instead change its *template*.
 -->
 `HeroesComponent`는 이 컴포넌트 안에 히어로의 상세정보를 표시합니다.
 이번 섹션에서는 이 기능을 `HeroDetailComponent`에 구현해 봅시다.
@@ -195,7 +195,6 @@ You won't change the `HeroesComponent` *class* but you will change its *template
 
 `HeroesComponent`의 *클래스*는 수정하지 않습니다.
 수정하는 것은 *템플릿* 입니다.
-
 
 <a id="heroes-component-template"></a>
 
@@ -214,12 +213,12 @@ Bind the `HeroesComponent.selectedHero` to the element's `hero` property like th
 
 `[hero]="selectedHero"` is an Angular [property binding](guide/property-binding).
 
-It's a *one way* data binding from
+It's a *one-way* data binding from
 the `selectedHero` property of the `HeroesComponent` to the `hero` property of the target element, which maps to the `hero` property of the `HeroDetailComponent`.
 
 Now when the user clicks a hero in the list, the `selectedHero` changes.
-When the `selectedHero` changes, the *property binding* updates `hero`
-and the `HeroDetailComponent` displays the new hero.
+When the `selectedHero` changes, the *property binding* updates `hero` and
+the `HeroDetailComponent` displays the new hero.
 
 The revised `HeroesComponent` template should look like this:
 

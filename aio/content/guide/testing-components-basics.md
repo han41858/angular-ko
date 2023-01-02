@@ -11,7 +11,7 @@ To adequately test a component, you should test that they work together as inten
 Such tests require creating the component's host element in the browser DOM, as Angular does, and investigating the component class's interaction with the DOM as described by its template.
 
 The Angular `TestBed` facilitates this kind of testing as you'll see in the following sections.
-But in many cases, *testing the component class alone*, without DOM involvement, can validate much of the component's behavior in an straightforward, more obvious way.
+But in many cases, *testing the component class alone*, without DOM involvement, can validate much of the component's behavior in a straightforward, more obvious way.
 
 <div class="alert is-helpful">
 
@@ -511,7 +511,7 @@ Some noteworthy observations:
 
 When you're filtering by CSS selector and only testing properties of a browser's *native element*, the `By.css` approach might be overkill.
 
-It's often straightforward and more clear to filter with a standard `HTMLElement` method such as `querySelector()` or `querySelectorAll()`.
+It's often more straightforward and clear to filter with a standard `HTMLElement` method such as `querySelector()` or `querySelectorAll()`.
 -->
 이 문서는 브라우저에서 실행되는 Angular 앱을 테스트하는 것으로 간주하고 있지만, 상황에 따라 다른 플랫폼에서 실행해야 하는 경우가 있습니다.
 
@@ -540,7 +540,6 @@ It's often straightforward and more clear to filter with a standard `HTMLElement
 그런데 브라우저에서는 엘리먼트를 찾을 때 `By.css`를 사용하는 것이 조금 과할 수 있습니다.
 
 상황에 따라 `HTMLElement`가 제공하는 `querySelector()`나 `querySelectorAll()`을 사용하는 것이 나을 수 있습니다.
-
 
 <!-- links -->
 

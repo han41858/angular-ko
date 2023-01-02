@@ -1,22 +1,16 @@
 // #docregion
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CanDeactivate,
+import { CanDeactivateFn,
          ActivatedRouteSnapshot,
          RouterStateSnapshot } from '@angular/router';
 
 import { CrisisDetailComponent } from './crisis-center/crisis-detail/crisis-detail.component';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class CanDeactivateGuard implements CanDeactivate<CrisisDetailComponent> {
-
-  canDeactivate(
+export const canDeactivateGuard: CanDeactivateFn<CrisisDetailComponent>  = (
     component: CrisisDetailComponent,
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
+  ): Observable<boolean> | boolean => {
     // 위기 관리 센터의 ID를 가져옵니다.
     console.log(route.paramMap.get('id'));
 
@@ -30,5 +24,4 @@ export class CanDeactivateGuard implements CanDeactivate<CrisisDetailComponent> 
     // 내용이 변경된 경우에는 사용자에게 물어보는 팝업을 띄웁니다.
     // 그리고 사용자가 응답한 값을 Observable 타입으로 반환합니다.
     return component.dialogService.confirm('Discard changes?');
-  }
-}
+  };

@@ -6,7 +6,7 @@
 <!--
 The web is used by a wide variety of people, including those who have visual or motor impairments.
 A variety of assistive technologies are available that make it much easier for these groups to interact with web-based software applications.
-In addition, designing an application to be more accessible generally improves the user experience for all users.
+Also, designing an application to be more accessible generally improves the user experience for all users.
 
 For an in-depth introduction to issues and techniques for designing accessible applications, see the [Accessibility](https://developers.google.com/web/fundamentals/accessibility/#what_is_accessibility) section of the Google's [Web Fundamentals](https://developers.google.com/web/fundamentals).
 
@@ -37,10 +37,10 @@ For the sample application that this page describes, see the <live-example></liv
 ## 접근성 어트리뷰트
 
 <!--
-Building accessible web experience often involves setting [ARIA attributes](https://developers.google.com/web/fundamentals/accessibility/semantics-aria) to provide semantic meaning where it might otherwise be missing.
+Building accessible web experience often involves setting [Accessible Rich Internet Applications \(ARIA\) attributes](https://developers.google.com/web/fundamentals/accessibility/semantics-aria) to provide semantic meaning where it might otherwise be missing.
 Use [attribute binding](guide/attribute-binding) template syntax to control the values of accessibility-related attributes.
 
-When binding to ARIA attributes in Angular, you must use the `attr.` prefix, as the ARIA specification depends specifically on HTML attributes rather than properties of DOM elements.
+When binding to ARIA attributes in Angular, you must use the `attr.` prefix. The ARIA specification depends specifically on HTML attributes rather than properties of DOM elements.
 
 <code-example format="html" language="html">
 
@@ -66,7 +66,7 @@ Static ARIA attributes require no extra syntax.
 
 NOTE:
 -->
-웹 접근성을 높이려면 보통 [ARIA 어트리뷰트](https://developers.google.com/web/fundamentals/accessibility/semantics-aria)를 지정해서 엘리먼트가 사용된 맥락의 의미를 추가하는 작업을 합니다.
+웹 접근성을 높이려면 보통 [Accessible Rich Internet Applications \(ARIA\) 어트리뷰트](https://developers.google.com/web/fundamentals/accessibility/semantics-aria)를 지정해서 엘리먼트가 사용된 맥락의 의미를 추가하는 작업을 합니다.
 그리고 이 어트리뷰트들은 이전에 살펴봤던 [어트리뷰트 바인딩](guide/attribute-binding) 템플릿 문법을 그대로 활용합니다.
 
 ARIA 어트리뷰트를 바인딩하려면 `attr.` 접두사를 꼭 붙여야 합니다.
@@ -137,7 +137,7 @@ Angular 팀이 유지보수하는 [Angular Material](https://material.angular.io
 ### 기본 엘리먼트 확장하기
 
 <!--
-Native HTML elements capture a number of standard interaction patterns that are important to accessibility.
+Native HTML elements capture several standard interaction patterns that are important to accessibility.
 When authoring Angular components, you should re-use these native elements directly when possible, rather than re-implementing well-supported behaviors.
 
 For example, instead of creating a custom element for a new variety of button, create a component that uses an attribute selector with a native `<button>` element.
@@ -162,8 +162,8 @@ You can see examples of this pattern in Angular Material:
 
 <!--
 Sometimes using the appropriate native element requires a container element.
-For example, the native `<input>` element cannot have children, so any custom text entry components need to wrap an `<input>` with additional elements.
-While you might just include the `<input>` in your custom component's template, this makes it impossible for users of the component to set arbitrary properties and attributes to the input element.
+For example, the native `<input>` element cannot have children, so any custom text entry components need to wrap an `<input>` with extra elements.
+By just including `<input>` in your custom component's template, it's impossible for your component's users  to set arbitrary properties and attributes to the `<input>` element.
 Instead, create a container component that uses content projection to include the native control in the component's API.
 
 You can see [`MatFormField`](https://material.angular.io/components/form-field/overview) as an example of this pattern.
@@ -171,7 +171,7 @@ You can see [`MatFormField`](https://material.angular.io/components/form-field/o
 기본 엘리먼트에 컨테이너 엘리먼트가 필요한 경우가 있습니다.
 `<input>` 엘리먼트와 관련된 텍스트를 표시하고 싶은데 `<input>` 엘리먼트는 자식 엘리먼트를 가질 수 없으니 `<input>`을 다른 엘리먼트로 감싸야 하는 경우가 그렇습니다.
 이 때 커스텀 컴포넌트 템플릿에 `<input>`을 그대로 추가해도 되지만 이렇게 구현하면 외부에서 `<input>` 엘리먼트에 프로퍼티나 어트리뷰트를 직접 설정하기 어렵습니다.
-그래서 이 경우에는 컨테이너 컴포넌트를 선언하고 외부에서 내용물 자체를 받아와서 프로젝션(projection)하는 방식이 더 좋습니다.
+그래서 이 경우에는 컨테이너 컴포넌트를 선언하고 외부에서 내용물 자체를 받아와서 프로젝션\(projection\)하는 방식이 더 좋습니다.
 
 이 패턴은 Angular Material에서 [`MatFormField`](https://material.angular.io/components/form-field/overview)에 사용되고 있습니다.
 
@@ -203,10 +203,11 @@ The following example shows how to make a progress bar accessible by using host 
 
   <code-example header="src/app/app.component.html" path="accessibility/src/app/app.component.html" region="template"></code-example>
 
+
+<!--
 ## Routing
-
-
-
+-->
+## 라우팅
 
 <!--
 ### Focus management after navigation
@@ -233,7 +234,7 @@ router.events.pipe(filter(e =&gt; e instanceof NavigationEnd)).subscribe(() =&gt
 
 </code-example>
 
-In a real application, the element that receives focus will depend on your specific application structure and layout.
+In a real application, the element that receives focus depends on your specific application structure and layout.
 The focused element should put users in a position to immediately move into the main content that has just been routed into view.
 You should avoid situations where focus returns to the `body` element after a route change.
 -->
@@ -255,9 +256,18 @@ mainHeader.focus();
 </code-example>
 
 
-### Active links identification
+<a id="active-links-identification"></a>
 
-CSS classes applied to active `RouterLink` elements (usually via `RouterLinkActive`) provide a visual indication regarding as to which link is currently active. Such indication doesn't apply to blind or visually impaired users, in order to provide such information the `aria-current` attribute should be applied to the element as well (for more information see [MDN aria-current](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-current)).
+<!--
+### Active links identification
+-->
+### 활성화된 링크 표시
+
+<!--
+CSS classes applied to active `RouterLink` elements, such as `RouterLinkActive`, provide a visual cue to identify the active link.
+Unfortunately, a visual cue doesn't help blind or visually impaired users.
+Applying the `aria-current` attribute to the element can help identify the active link.
+For more information, see [Mozilla Developer Network \(MDN\) aria-current](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-current)).
 
 The `RouterLinkActive` directive provides the `ariaCurrentWhenActive` input which sets the `aria-current` to a specified value when the link becomes active.
 
@@ -282,32 +292,69 @@ The following example shows how to apply the `active-page` class to active links
       </a>
     </nav>
 ```
+-->
+`RouterLinkActive`를 사용해서 활성화된 `RouterLink` 엘리먼트에 CSS 클래스를 추가하면 현재 어떤 링크가 활성화되었는지 시각적으로 표시할 수 있습니다.
+하지만 때로는 시각이 불편한 사용자에게는 다른 정보를 줘야할 때가 있습니다.
+이 때 엘리먼트에 `aria-current` 어트리뷰트를 활용하면 됩니다.
+자세한 내용은 [Mozilla Developer Network \(MDN\) aria-current](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-current) 문서를 참고하세요.
+
+`RouterLinkActive` 디렉티브는 `aria-current` 어트리뷰트를 감지하면 `ariaCurrentWhenActive`도 적용할 수 있습니다.
+
+아래 코드는 현재 활성화된 링크에 `aria-current` 어트리뷰트를 사용해서 `active-page` 클래스를 설정하는 예제 코드입니다.
+
+```html
+    <nav>
+      <a routerLink="home"
+         routerLinkActive="active-page"
+         ariaCurrentWhenActive="page">
+        Home
+      </a>
+      <a routerLink="about"
+         routerLinkActive="active-page"
+         ariaCurrentWhenActive="page">
+        About
+      </a>
+      <a routerLink="shop"
+         routerLinkActive="active-page"
+         ariaCurrentWhenActive="page">
+        Shop
+      </a>
+    </nav>
+```
+
+<!-- vale Angular.Angular_Spelling = NO -->
 
 <!--
-## Additional resources
+## More information
 -->
 ## 참고 자료
 
-* [Accessibility - Google Web Fundamentals](https://developers.google.com/web/fundamentals/accessibility)
-* [ARIA specification and authoring practices](https://www.w3.org/TR/wai-aria)
-* [Material Design - Accessibility](https://material.io/design/usability/accessibility.html)
-* [Smashing Magazine](https://www.smashingmagazine.com/search/?q=accessibility)
-* [Inclusive Components](https://inclusive-components.design)
-* [Accessibility Resources and Code Examples](https://dequeuniversity.com/resources)
-* [W3C - Web Accessibility Initiative](https://www.w3.org/WAI/people-use-web)
-* [Rob Dodson A11ycasts](https://www.youtube.com/watch?v=HtTyRajRuyY)
-<!--  
-* [Angular ESLint](https://github.com/angular-eslint/angular-eslint#functionality) provides linting rules that can help you make sure your code meets accessibility standards.
+*   [Accessibility - Google Web Fundamentals](https://developers.google.com/web/fundamentals/accessibility)
+*   [ARIA specification and authoring practices](https://www.w3.org/TR/wai-aria)
+*   [Material Design - Accessibility](https://material.io/design/usability/accessibility.html)
+*   [Smashing Magazine](https://www.smashingmagazine.com/search/?q=accessibility)
+*   [Inclusive Components](https://inclusive-components.design)
+*   [Accessibility Resources and Code Examples](https://dequeuniversity.com/resources)
+*   [W3C - Web Accessibility Initiative](https://www.w3.org/WAI/people-use-web)
+*   [Rob Dodson A11ycasts](https://www.youtube.com/watch?v=HtTyRajRuyY)
+<!--
+*   [Angular ESLint](https://github.com/angular-eslint/angular-eslint#functionality) provides linting rules that can help you make sure your code meets accessibility standards.
 -->
-* [Angular ESLint](https://github.com/angular-eslint/angular-eslint#functionality)를 활용하면 코딩 스타일을 통일시켜 가독성을 높일 수 있습니다.
+*   [Angular ESLint](https://github.com/angular-eslint/angular-eslint#functionality)를 활용하면 코딩 스타일을 통일시켜 가독성을 높일 수 있습니다.
+
+<!-- vale Angular.Angular_Spelling = YES -->
 
 <!--
 Books
 -->
 도서
 
-*   "A Web for Everyone: Designing Accessible User Experiences", Sarah Horton and Whitney Quesenbery
-*   "Inclusive Design Patterns", Heydon Pickering
+<!-- vale Angular.Google_Quotes = NO -->
+
+*   "A Web for Everyone: Designing Accessible User Experiences," Sarah Horton and Whitney Quesenbery
+*   "Inclusive Design Patterns," Heydon Pickering
+
+<!-- vale Angular.Google_Quotes = YES -->
 
 <!-- links -->
 

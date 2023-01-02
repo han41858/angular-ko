@@ -10,6 +10,7 @@ import {AST, ASTWithSource, BindingPipe, Call, ParseSourceSpan, PropertyRead, Pr
 import ts from 'typescript';
 
 import {AbsoluteFsPath} from '../../file_system';
+import {Reference} from '../../imports';
 import {ClassDeclaration} from '../../reflection';
 import {ComponentScopeKind, ComponentScopeReader} from '../../scope';
 import {isAssignment, isSymbolWithValueDeclaration} from '../../util/src/typescript';
@@ -134,14 +135,17 @@ export class SymbolBuilder {
             return null;
           }
           const isComponent = meta.isComponent ?? null;
+          const ref = new Reference<ClassDeclaration>(symbol.tsSymbol.valueDeclaration as any);
           const directiveSymbol: DirectiveSymbol = {
             ...symbol,
+            ref,
             tsSymbol: symbol.tsSymbol,
             selector: meta.selector,
             isComponent,
             ngModule,
             kind: SymbolKind.Directive,
             isStructural: meta.isStructural,
+            isInScope: true,
           };
           return directiveSymbol;
         })
@@ -360,8 +364,10 @@ export class SymbolBuilder {
       return null;
     }
 
+    const ref: Reference<ClassDeclaration> = new Reference(symbol.tsSymbol.valueDeclaration as any);
     const ngModule = this.getDirectiveModule(symbol.tsSymbol.valueDeclaration);
     return {
+      ref,
       kind: SymbolKind.Directive,
       tsSymbol: symbol.tsSymbol,
       tsType: symbol.tsType,
@@ -370,6 +376,7 @@ export class SymbolBuilder {
       isStructural,
       selector,
       ngModule,
+      isInScope: true,  // TODO: this should always be in scope in this context, right?
     };
   }
 

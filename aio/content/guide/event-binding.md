@@ -107,12 +107,14 @@ Angular also supports passive event listeners. For example, use the following st
 
 1. Create a file `zone-flags.ts` under `src` directory.
 2. Add the following line into this file.
+   ```typescript
+   (window as any)['__zone_symbol__PASSIVE_EVENTS'] = ['scroll'];
+   ```
 3. In the `src/polyfills.ts` file, before importing zone.js, import the newly created `zone-flags`.
-
-```
-import './zone-flags';
-import 'zone.js';  // Included with Angular CLI.
-```
+   ```typescript
+   import './zone-flags';
+   import 'zone.js';  // Included with Angular CLI.
+   ```
 
 After those steps, if you add event listeners for the `scroll` event, the listeners will be `passive`.
 -->
@@ -124,14 +126,69 @@ Angular는 패시브 이벤트 리스너를 지원합니다.
 
 1. `src` 디렉토리에 `zone-flags.ts` 파일을 만듭니다.
 2. 이 파일에 이런 코드를 작성합니다.
+   ```typescript
+   (window as any)['__zone_symbol__PASSIVE_EVENTS'] = ['scroll'];
+   ```
 3. `src/polyfills.ts` 파일에서 zone.js를 로드하기 전에 `zone-flags`를 먼저 로드합니다.
-
-```
-import './zone-flags';
-import 'zone.js';  // Angular CLI가 추가한 것
-```
+   ```typescript
+   import './zone-flags';
+   import 'zone.js';  // Included with Angular CLI.
+   ```
 
 여기까지 작업하고 나면 `scroll` 이벤트 리스너를 추가했을 때 이 리스너는 `passive`로 동작합니다.
+
+
+<!--
+## Binding to keyboard events
+-->
+## 키보드 이벤트 바인딩하기
+
+<!--
+You can bind to keyboard events using Angular's binding syntax. You can specify the key or code that you would like to bind to keyboard events. They `key` and `code` fields are a native part of the browser keyboard event object. By default, event binding assumes you want to use the `key` field on the keyboard event. You can also use the `code` field.
+
+Combinations of keys can be separated by a `.` (period). For example, `keydown.enter` will allow you to bind events to the `enter` key. You can also use modifier keys, such as `shift`, `alt`, `control`, and the `command` keys from Mac. The following example shows how to bind a keyboard event to `keydown.shift.t`.
+
+   ```typescript
+   <input (keydown.shift.t)="onKeydown($event)" />
+   ```
+
+Depending on the operating system, some key combinations might create special characters instead of the key combination that you expect. MacOS, for example, creates special characters when you use the option and shift keys together. If you bind to `keydown.shift.alt.t`, on macOS, that combination produces a `ˇ` character instead of a `t`, which doesn't match the binding and won't trigger your event handler. To bind to `keydown.shift.alt.t` on macOS, use the `code` keyboard event field to get the correct behavior, such as `keydown.code.shiftleft.altleft.keyt` shown in this example.
+   
+   ```typescript
+   <input (keydown.code.shiftleft.altleft.keyt)="onKeydown($event)" />
+   ```
+
+The `code` field is more specific than the `key` field. The `key` field always reports `shift`, whereas the `code` field will specify `leftshift` or `rightshift`. When using the `code` field, you might need to add separate bindings to catch all the behaviors you want. Using the `code` field avoids the need to handle OS specific behaviors such as the `shift + option` behavior on macOS.
+
+For more information, visit the full reference for [key](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values) and [code](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values) to help build out your event strings.
+-->
+키보드 이벤트도 Angular 바인딩 문법을 사용해서 바인딩할 수 있습니다.
+이때 특정 키나 코드만 바인딩하도록 지정할 수도 있는데, `key` 필드나 `code` 필드는 브라우저 키보드 이벤트 객체의 표준 필드입니다.
+일반적으로 `key` 필드를 사용하지만, 필요하다면 `code` 필드ㄹ르 사용해도 됩니다.
+
+바인딩 문법에 `.`를 활용하는 방식도 있습니다.
+키입력 이벤트 중 `enter` 키만 바인딩하려면 `keydown.enter`라고 지정하면 됩니다.
+`shift`, `alt`, `control`, `command` 키를 활용할 수도 있습니다.
+`keydown.shift.t`와 같은 방식으로 지정하면 됩니다.
+
+   ```typescript
+   <input (keydown.shift.t)="onKeydown($event)" />
+   ```
+
+그런데 운영체제에 따라 키조합이 동작하지 않고 특수문자가 입력되는 경우가 있습니다.
+예를 들어 MacOS에서 `keydown.shift.alt.t`라고 바인딩하면 `t` 대신 `ˇ` 문자가 입력되며 이벤트 핸들러도 제대로 동작하지 않을 수 있습니다.
+MacOS에서 `keydown.shift.alt.t`를 바인딩하려면 `code` 필드를 사용해서 `keydown.code.shiftleft.altleft.keyt`라고 지정해야 원하는대로 동작합니다.
+   
+   ```typescript
+   <input (keydown.code.shiftleft.altleft.keyt)="onKeydown($event)" />
+   ```
+
+`code` 필드는 `key` 필드보다 구체적이라고 할 수 있습니다.
+`key` 필드는 `shift` 키가 입력된 것만 감지하지만, `code` 필드를 사용하면 `leftshift`와 `rightshift`를 구분할 수 있습니다.
+그래서 `code` 필드를 사용한다면 바인딩이 가능한 경우를 모두 지정해야 합니다.
+다만, `code` 필드를 사용할 때 `shift + option`과 같이 특정 OS에서만 동작하는 바인딩은 피하는 것이 좋습니다.
+
+자세한 내용은 [key](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values), [code](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values) 문서를 참고하세요.
 
 
 <!--

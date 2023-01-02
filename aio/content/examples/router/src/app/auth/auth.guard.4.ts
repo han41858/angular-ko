@@ -1,48 +1,32 @@
 // #docplaster
 // #docregion
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
-  CanActivate, Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  CanActivateChild,
+  CanActivateFn, CanMatchFn, Router,
+  CanActivateChildFn,
   NavigationExtras,
   UrlTree
 } from '@angular/router';
 import { AuthService } from './auth.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(private authService: AuthService, private router: Router) {}
+export const authGuard: CanMatchFn|CanActivateFn|CanActivateChildFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): true|UrlTree {
-    const url: string = state.url;
-
-    return this.checkLogin(url);
+  if (authService.isLoggedIn) {
+    return true;
   }
 
-  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): true|UrlTree {
-    return this.canActivate(route, state);
-  }
+  // 더미 세션 ID를 생성합니다.
+  const sessionId = 123456789;
 
-  checkLogin(url: string): true|UrlTree {
-    if (this.authService.isLoggedIn) { return true; }
+  // 전역 쿼리 파라미터와 프래그먼트를 NavigationExtras 객체타입으로 전달합니다.
+  const navigationExtras: NavigationExtras = {
+    queryParams: { session_id: sessionId },
+    fragment: 'anchor'
+  };
 
-    // 리다이렉트할 URL을 저장해 둡니다.
-    this.authService.redirectUrl = url;
+  // 로그인 페이지로 이동하면서 인자를 함께 전달합니다.
+  return router.createUrlTree(['/login'], navigationExtras);
+};
 
-    // 더미 세션 ID를 생성합니다.
-    const sessionId = 123456789;
-
-    // 전역 쿼리 파라미터와 프래그먼트를 NavigationExtras 객체타입으로 전달합니다.
-    const navigationExtras: NavigationExtras = {
-      queryParams: { session_id: sessionId },
-      fragment: 'anchor'
-    };
-
-    // 로그인 페이지로 이동하면서 인자를 함께 전달합니다.
-    return this.router.createUrlTree(['/login'], navigationExtras);
-  }
-}

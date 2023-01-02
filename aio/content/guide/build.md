@@ -607,8 +607,9 @@ Angular CLI는 CommonJS 모듈 방식으로 구현된 패키지를 발견하면 
 
 </code-example>
 
-<a id="browser-compat"></a>
 
+<a id="browser-compat"></a>
+<a id="configuring-browser-compatibility"></a>
 
 <!--
 ## Configuring browser compatibility
@@ -616,65 +617,64 @@ Angular CLI는 CommonJS 모듈 방식으로 구현된 패키지를 발견하면 
 ## 브라우저 호환성 설정하기
 
 <!--
-The CLI uses [Autoprefixer](https://github.com/postcss/autoprefixer) to ensure compatibility with different browser and browser versions.
-You might find it necessary to target specific browsers or exclude certain browser versions from your build.
+The Angular CLI uses [Browserslist](https://github.com/browserslist/browserslist) to ensure compatibility with different browser versions. [Autoprefixer](https://github.com/postcss/autoprefixer) is used for CSS vendor prefixing and [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env) for JavaScript syntax transformations.
 
-Internally, Autoprefixer relies on a library called [Browserslist](https://github.com/browserslist/browserslist) to figure out which browsers to support with prefixing.
-Browserlist looks for configuration options in a `browserslist` property of the package configuration file, or in a configuration file named `.browserslistrc`.
-Autoprefixer looks for the `browserslist` configuration when it prefixes your CSS.
+Internally, the Angular CLI uses the below `browserslist` configuration which matches the [browsers that are supported](guide/browser-support) by Angular.
 
-*   Tell Autoprefixer what browsers to target by adding a browserslist property to the package configuration file, `package.json`:
+  <code-example format="none" language="text">
+  last 1 Chrome version
+  last 1 Firefox version
+  last 2 Edge major versions
+  last 2 Safari major versions
+  last 2 iOS major versions
+  Firefox ESR
+  </code-example>
 
-    <code-example format="json" language="json">
 
-    "browserslist": [
-      "&gt; 1%",
-      "last 2 versions"
-    ]
+To override the internal configuration, add a new file named `.browserslistrc`, to the project directory, that specifies the browsers you want to support:
 
-    </code-example>
+  <code-example format="none" language="text">
+  last 1 Chrome version
+  last 1 Firefox version
+  </code-example>
 
-*   Alternatively, you can add a new file, `.browserslistrc`, to the project directory, that specifies browsers you want to support:
+See the [browserslist repository](https://github.com/browserslist/browserslist) for more examples of how to target specific browsers and versions.
 
-    <code-example format="none" language="text">
+<div class="alert is-helpful">
 
-    &num;&num;&num; Supported Browsers
-    &gt; 1%
-    last 2 versions
+Use [browsersl.ist](https://browsersl.ist) to display compatible browsers for a `browserslist` query.
 
-    </code-example>
-
-See the [browserslist repo](https://github.com/browserslist/browserslist) for more examples of how to target specific browsers and versions.
+</div>
 -->
 Angular CLI는 브라우저 종류와 버전에 대한 호환성을 보장하기 위해 [Autoprefixer](https://github.com/postcss/autoprefixer)를 사용합니다.
-그래서 특정 브라우저에서 동작하기를 원하거나 특정 브라우저 버전을 배제하는 내용으로 빌드 옵션으로 설정할 수 있습니다.
+그리고 CSS 벤더 접두사를 붙일 때는 [Autoprefixer](https://github.com/postcss/autoprefixer)를 사용하며, JavaScript 문법을 변환할 때는 [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env)를 사용합니다. 
 
-Autoprefixer는 지원하는 브라우저를 지정할 때 내부적으로 [Browserslist](https://github.com/browserslist/browserslist)를 사용합니다.
-그리고 Browserlist는 프로젝트 패키지 설정 파일에 있는 `browserlist` 프로퍼티를 참조하거나 `.browserlistrc` 파일을 참조해서 지원할 브라우저 목록을 가져옵니다.
-최종적으로 Autoprefixer는 Browserlist가 구성한 목록으로 CSS 파일에 이 내용을 반영합니다.
+내부적으로는 Angular CLI가 `browserlist`를 사용해서 [지원하는 브라우저](guide/browser-support)를 결정합니다.
 
-*   Autoprefixer가 지원할 브라우저 목록을 지정하려면 `package.json` 파일에 `browserlist` 프로퍼티를 다음과 같이 지정하면 됩니다:
+  <code-example format="none" language="text">
+  last 1 Chrome version
+  last 1 Firefox version
+  last 2 Edge major versions
+  last 2 Safari major versions
+  last 2 iOS major versions
+  Firefox ESR
+  </code-example>
 
-    <code-example format="json" language="json">
 
-    "browserslist": [
-      "&gt; 1%",
-      "last 2 versions"
-    ]
+내부 설정을 오버라이드 하려면 프로젝트 디렉토리에 `.borwserlistrc` 파일을 생성하고 이런 내용을 추가하면 됩니다:
 
-    </code-example>
+  <code-example format="none" language="text">
+  last 1 Chrome version
+  last 1 Firefox version
+  </code-example>
 
-*   아니면, 프로젝트 폴더에 `.browserslistrc` 파일을 만들어서 지원하는 브라우저를 지정해도 됩니다:
+브라우저나 버전을 명시하는 방법을 더 알아보려면 [browserslist 코드저장소](https://github.com/browserslist/browserslist)를 참고하세요.
 
-    <code-example format="none" language="text">
+<div class="alert is-helpful">
 
-    &num;&num;&num; Supported Browsers
-    &gt; 1%
-    last 2 versions
+`browserslist` 쿼리 결과를 확인하려면 [browsersl.ist](https://browsersl.ist)를 참고하세요.
 
-    </code-example>
-
-See the [browserslist repo](https://github.com/browserslist/browserslist) for more examples of how to target specific browsers and versions.
+</div>
 
 
 <a id="proxy"></a>
@@ -1013,6 +1013,7 @@ module.exports = PROXY_CONFIG;
 
 </code-example>
 
+
 <!--
 ### Using corporate proxy
 -->
@@ -1097,16 +1098,10 @@ module.exports = setupForCorporateProxy(proxyConfig);
 
 </code-example>
 
-<a id="browser-compat"></a>
-
-## Configuring browser compatibility
-
-See [browser support guide](guide/browser-support).
-
 <!-- links -->
 
 <!-- external links -->
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2022-10-24

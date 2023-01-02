@@ -415,7 +415,7 @@ Angular 라이브러리는 해당 라이브러리가 활용하는 `@angular/*` �
 ## 로컬 환경에 활용하기
 
 <!--
-You don't have to publish your library to the npm package manager to use it the same workspace, but you do have to build it first.
+You don't have to publish your library to the npm package manager to use it in the same workspace, but you do have to build it first.
 
 To use your own library in an application:
 

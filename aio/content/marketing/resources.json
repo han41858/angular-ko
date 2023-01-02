@@ -100,6 +100,20 @@
             "title": "Angular Rocks",
             "url": "https://angularrocks.com"
           },
+          "angular-master-podcast": {
+            "/desc": "Listen / Code / Repeat. Everything you need to fall in love with Angular for a long time.",
+            "desc": "배우고 / 코딩하고 / 반복해 보세요. 오랫동안 Angular의 매력에 빠져들 것입니다.",
+            "logo": "https://ng-poland.pl/images/podcast/angular-master-podcast-logo.png",
+            "title": "Angular Master Podcast",
+            "url": "https://anchor.fm/angular-master/"
+          },
+          "javascript-master-podcast": {
+            "/desc": "Listen / Code / Repeat. Everything you need to know to become an informed JavaScript developer.",
+            "desc": "배우고 / 코딩하고 / 반복해 보세요. JavaScript 개발자로 성장할 수 있는 자료가 모두 모여 있습니다.",
+            "logo": "https://ng-poland.pl/images/podcast/javascript-master-podcast-logo.png",
+            "title": "JavaScript Master Podcast",
+            "url": "https://anchor.fm/javascript-master/"
+          },
           "happy-angular": {
             "/desc": "A weekly German podcast for Angular on the go",
             "desc": "독일에서 격주로 진행되는 팟캐스트입니다.",
@@ -152,7 +166,7 @@
             "desc": "NativeScript는 Angular와 TypeScript를 활용해서 iOS와 안드로이드 환경에 동작하는 네이티브 앱을 만드는 프레임워크입니다. npm 패키지를 그대로 사용할 수 있는 환경에서 네이티브 API에도 자유롭게 접근할 수 있으며, CocoaPod와 Gradle도 활용할 수 있습니다. Teleric이 만든 오픈소스이며, 활발하게 운영되고 있습니다.",
             "logo": "",
             "title": "NativeScript",
-            "url": "https://docs.nativescript.org/angular/start/introduction"
+            "url": "https://docs.nativescript.org/tutorial/angular.html"
           },
           "angular-miniprogram": {
             "/desc": "MiniProgram Platform for Angular.",
@@ -276,7 +290,7 @@
             "desc": "Amexio Canvas는 드래그 앤 드랍으로 반응형 웹을 만드는 환경입니다. 사용자의 동작에 따라 코드가 자동으로 생성되며, 구현 내용을 바로 테스트할 수 있는 환경도 갖추고 있습니다. MateriL Design 테마도 50가지 이상 제공하고 있습니다. 작성한 코드를 Github 저장소로 커밋할 수도 있습니다.",
             "/title": "Amexio Canvas Web Based Drag and Drop IDE by MetaMagic",
             "title": "MetaMagic에서 제공하는 드래그 앤 드랍 방식의 Amexio Canvas Web IDE",
-            "url": "https://amexio.tech/"
+            "url": "https://api.amexio.org/"
           }
         }
       },
@@ -782,6 +796,12 @@
             "/desc": "It's a free book, drawn from years of collective experience and aligned with the best practices of modern software development. The book covers the most important Angular topics, from getting started with the Angular toolchain to writing Angular applications in a scalable and maintainable manner.",
             "desc": "최신 소프트웨어 개발방법으로 입증된 모범사례를 모은 무료 책입니다. Angular를 시작하는 방법부터 확장 가능하고 유지보수하기 용이한 형태로 확대하는 주제를 방대하게 다룹니다.",
             "url": "https://angular-training-guide.rangle.io/"
+          },
+          "angular-from-scratch": {
+            "title": "Angular from Scratch",
+            "/desc": "Learn Angular from Scratch, building a sales application",
+            "desc": "애플리케이션을 만들면서 Angular를 기초부터 학습해 보세요.",
+            "url": "https://leanpub.com/book-angular"
           }
         }
       },
@@ -939,6 +959,13 @@
             "desc": "Whether you're already an architect or you'd like to become one, come learn how to keep your apps clean and fast (especially at the enterprise level). Four weeks of training includes live office hours every week with an Angular GDE, diversity discounts, and scholarships available!",
             "title": "Angular Architect Training",
             "url": "https://www.angularnation.net/"
+          },
+          "platzi": {
+            "/desc": "An online education platform with a complete path in Angular and TypeScript from zero to advanced. Platzi helps students from all over the world acquire new, in-demand skills.",
+            "desc": "처음부터 숙련자 레벨까지, Angular와 TypeScript의 모든 것을 학습할 수 있는 온라인 교육 플랫폼입니다. Platzi는 전세계 모든 학습자들에게 꼭 필요한 기술 습득을 돕고 싶습니다.",
+            "/title": "Platzi (Español)",
+            "title": "Platzi (스페인어)",
+            "url": "https://platzi.com/angular-io"
           }
         }
       },
@@ -963,6 +990,12 @@
             "desc": "Angular 생태계 최신 소식을 다루는 웹사이트입니다.",
             "title": "Angular University",
             "url": "https://angular-university.io/"
+          },
+          "angular-master-dev": {
+            "/desc": "Angular Architecture: Strategic Design with Nx - Online Video Course",
+            "desc": "Angular Architecture: Strategic Design with Nx - 온라인 영상 코스",
+            "title": "Angular Master",
+            "url": "https://angularmaster.dev/"
           },
           "-acceleb": {
             "/desc": "Customized, Instructor-Led Angular Training",

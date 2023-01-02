@@ -7,7 +7,7 @@
  */
 
 import {CssSelector, SelectorMatcher, TmplAstElement, TmplAstTemplate} from '@angular/compiler';
-import {DirectiveInScope, ElementSymbol, TemplateSymbol, TemplateTypeChecker, TypeCheckableDirectiveMeta} from '@angular/compiler-cli/src/ngtsc/typecheck/api';
+import {ElementSymbol, PotentialDirective, TemplateSymbol, TemplateTypeChecker, TypeCheckableDirectiveMeta} from '@angular/compiler-cli/src/ngtsc/typecheck/api';
 import ts from 'typescript';
 
 import {DisplayInfoKind, unsafeCastDisplayInfoKindToScriptElementKind} from './display_parts';
@@ -116,7 +116,7 @@ export interface DirectiveAttributeCompletion {
   /**
    * The directive whose selector gave rise to this completion.
    */
-  directive: DirectiveInScope;
+  directive: PotentialDirective;
 }
 
 /**
@@ -135,7 +135,7 @@ export interface DirectiveInputCompletion {
   /**
    * The directive which has this input.
    */
-  directive: DirectiveInScope;
+  directive: PotentialDirective;
 
   /**
    * The field name on the directive class which corresponds to this input.
@@ -164,7 +164,7 @@ export interface DirectiveOutputCompletion {
   /**
    *The directive which has this output.
    */
-  directive: DirectiveInScope;
+  directive: PotentialDirective;
 
   /**
    * The field name on the directive class which corresponds to this output.
@@ -251,7 +251,8 @@ export function buildAttributeCompletionTable(
 
   // Next, explore hypothetical directives and determine if the addition of any single attributes
   // can cause the directive to match the element.
-  const directivesInScope = checker.getDirectivesInScope(component);
+  const directivesInScope =
+      checker.getPotentialTemplateDirectives(component).filter(d => d.isInScope);
   if (directivesInScope !== null) {
     const elementSelector = makeElementSelector(element);
 
@@ -328,7 +329,7 @@ export function buildAttributeCompletionTable(
           }
         }
       } else {
-        // Hypothetically matching a structural directive is a litle different than a plain
+        // Hypothetically matching a structural directive is a little different than a plain
         // directive. Use of the '*' structural directive syntactic sugar means that the actual
         // directive is applied to a plain <ng-template> node, not the existing element with any
         // other attributes it might already have.

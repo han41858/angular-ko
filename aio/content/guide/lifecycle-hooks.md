@@ -85,7 +85,7 @@ Use them to perform the following kinds of operations.
 
 | Hook method               | Purpose                                                                                                                                                                                                                                                                                                                                                | Timing |
 |:---                       |:---                                                                                                                                                                                                                                                                                                                                                    |:---    |
-| `ngOnChanges()`           | Respond when Angular sets or resets data-bound input properties. The method receives a `SimpleChanges` object of current and previous property values. <br /> <div class="alert is-helpful"> **NOTE**: <br /> This happens very frequently, so any operation you perform here impacts performance significantly. </div> See details in [Using change detection hooks](#onchanges) in this document. | Called before `ngOnInit()` \(if the component has bound inputs\) and whenever one or more data-bound input properties change. <br /> <div class="alert is-helpful"> **NOTE**: <br /> If your component has no inputs or you use it without providing any inputs, the framework will not call `ngOnChanges()`. </div> |
+| `ngOnChanges()`           | Respond when Angular sets or resets data-bound input properties. The method receives a `SimpleChanges` object of current and previous property values. <br /> <div class="alert is-helpful"> **NOTE**: <br /> This happens frequently, so any operation you perform here impacts performance significantly. </div> See details in [Using change detection hooks](#onchanges) in this document. | Called before `ngOnInit()` \(if the component has bound inputs\) and whenever one or more data-bound input properties change. <br /> <div class="alert is-helpful"> **NOTE**: <br /> If your component has no inputs or you use it without providing any inputs, the framework will not call `ngOnChanges()`. </div> |
 | `ngOnInit()`              | Initialize the directive or component after Angular first displays the data-bound properties and sets the directive or component's input properties. See details in [Initializing a component or directive](#oninit) in this document.                                                                                                                 | Called once, after the first `ngOnChanges()`. `ngOnInit()` is still called even when `ngOnChanges()` is not \(which is the case when there are no template-bound inputs\).                                                                                              |
 | `ngDoCheck()`             | Detect and act upon changes that Angular can't or won't detect on its own. See details and example in [Defining custom change detection](#docheck) in this document.                                                                                                                                                                                   | Called immediately after `ngOnChanges()` on every change detection run, and immediately after `ngOnInit()` on the first run.                                                                                                                                            |
 | `ngAfterContentInit()`    | Respond after Angular projects external content into the component's view, or into the view that a directive is in. <br /> See details and example in [Responding to changes in content](#aftercontent) in this document.                                                                                                                              | Called *once* after the first `ngDoCheck()`.                                                                                                                                                                                                                            |
@@ -242,12 +242,16 @@ The sequence of log messages follows the prescribed hook calling order:
 |:---        |:---                   |
 | 1          | `OnChanges`           |
 | 2          | `OnInit`              |
-| 3-5        | `DoCheck`             |
-| 6          | `AfterContentInit`    |
-| 7-9        | `AfterContentChecked` |
-| 10         | `AfterViewInit`       |
-| 11-13      | `AfterViewChecked`    |
-| 14         | `OnDestroy`           |
+| 3          | `DoCheck`             |
+| 4          | `AfterContentInit`    |
+| 5          | `AfterContentChecked` |
+| 6          | `AfterViewInit`       |
+| 7          | `AfterViewChecked`    |
+| 8          | `DoCheck`             |
+| 9          | `AfterContentChecked` |
+| 10         | `AfterViewChecked`    |
+| 11         | `OnDestroy`           |
+
 
 <div class="alert is-helpful">
 
@@ -256,7 +260,7 @@ The input properties are available to the `onInit()` method for further initiali
 
 </div>
 
-Had the user clicked the *Update Hero* button, the log would show another `OnChanges` and two more triplets of `DoCheck`, `AfterContentChecked` and `AfterViewChecked`.
+Had the user clicked the *Update Hero* button, the log would show another `OnChanges` and two more triplets of `DoCheck`, `AfterContentChecked`, and `AfterViewChecked`.
 Notice that these three hooks fire *often*, so it is important to keep their logic as lean as possible.
 -->
 Angular가 라이프싸이클 후킹 메서드를 어떤 순서로 실행하는지 확인하려면 `PeekABooComponent`를 확인하면 됩니다.
@@ -273,16 +277,19 @@ Angular가 라이프싸이클 후킹 메서드를 어떤 순서로 실행하는�
 
 라이프싸이클 후킹 메서드가 실행된 순서는 이렇습니다:
 
-| 실행 순서 | 로그 메시지                |
-|:------|:----------------------|
-| 1     | `OnChanges`           |
-| 2     | `OnInit`              |
-| 3-5   | `DoCheck`             |
-| 6     | `AfterContentInit`    |
-| 7-9   | `AfterContentChecked` |
-| 10    | `AfterViewInit`       |
-| 11-13 | `AfterViewChecked`    |
-| 14    | `OnDestroy`           |
+| 실행 순서  | 로그 메시지                |
+|:-------|:----------------------|
+| 1      | `OnChanges`           |
+| 2      | `OnInit`              |
+| 3      | `DoCheck`             |
+| 4      | `AfterContentInit`    |
+| 5      | `AfterContentChecked` |
+| 6      | `AfterViewInit`       |
+| 7      | `AfterViewChecked`    |
+| 8      | `DoCheck`             |
+| 9      | `AfterContentChecked` |
+| 10     | `AfterViewChecked`    |
+| 11     | `OnDestroy`           |
 
 <div class="alert is-helpful">
 
@@ -313,8 +320,8 @@ The example does not perform any initialization or clean-up.
 It just tracks the appearance and disappearance of an element in the view by recording when the directive itself is instantiated and destroyed.
 
 A spy directive like this can provide insight into a DOM object that you cannot change directly.
-You can't touch the implementation of a built-in `<div>`, or modify a third party component.
-You can, however watch these elements with a directive.
+You can't access the implementation of a built-in `<div>`, or modify a third party component.
+You do have the option to watch these elements with a directive.
 
 The directive defines `ngOnInit()` and `ngOnDestroy()` hooks
 that log messages to the parent using an injected `LoggerService`.
@@ -533,8 +540,8 @@ The `LoggerService.tick_then()` statement postpones the log update for one turn 
 #### 성능 저하에 주의하세요.
 
 <!--
-When you run the *AfterView* sample, notice how frequently Angular calls `AfterViewChecked()`-often when there are no changes of interest.
-Be very careful about how much logic or computation you put into one of these methods.
+When you run the *AfterView* sample, notice how frequently Angular calls `AfterViewChecked()` - often when there are no changes of interest.
+Be careful about how much logic or computation you put into one of these methods.
 
 <div class="lightbox">
 
@@ -581,7 +588,7 @@ AngularJS developers know this technique as *transclusion*.
 The *AfterContent* sample explores the `AfterContentInit()` and `AfterContentChecked()` hooks that Angular calls *after* Angular projects external content into the component.
 
 Consider this variation on the [previous *AfterView*](#afterview) example.
-This time, instead of including the child view within the template, it imports the content from the `AfterContentComponent`'s parent.
+This time, instead of including the child view within the template, it imports the content from the `AfterContentComponent` hook's parent.
 The following is the parent's template.
 
 <code-example header="AfterContentParentComponent (template excerpt)" path="lifecycle-hooks/src/app/after-content-parent.component.ts" region="parent-template"></code-example>
@@ -727,7 +734,7 @@ The results are illuminating.
 
 </div>
 
-While the `ngDoCheck()` hook can detect when the hero's `name` has changed, it is very expensive.
+While the `ngDoCheck()` hook can detect when the hero's `name` has changed, it is an expensive hook.
 This hook is called with enormous frequency &mdash;after *every* change detection cycle no matter where the change occurred.
 It's called over twenty times in this example before the user can do anything.
 

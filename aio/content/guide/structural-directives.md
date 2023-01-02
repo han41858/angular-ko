@@ -6,9 +6,9 @@
 <!--
 This guide is about structural directives and provides conceptual information on how such directives work, how Angular interprets their shorthand syntax, and how to add template guard properties to catch template type errors.
 
-Structural directives are directives which change the DOM layout by adding and removing DOM element.
+Structural directives are directives which change the DOM layout by adding and removing DOM elements.
 
-Angular provides a set of built-in structural directives (such as `NgIf`, `NgFor`, `NgSwitch` and others) which are commonly used in all Angular projects. For more information see [Built-in directives](guide/built-in-directives).
+Angular provides a set of built-in structural directives (such as `NgIf`, `NgForOf`, `NgSwitch` and others) which are commonly used in all Angular projects. For more information see [Built-in directives](guide/built-in-directives).
 
 <div class="alert is-helpful">
 
@@ -20,7 +20,7 @@ For the example application that this page describes, see the <live-example name
 
 구조 디렉티브는 DOM 엘리먼트를 추가하거나 제거하는 방식으로 DOM 레이아웃을 조작합니다.
 
-Angular는 `NgIf`나 `NgFor`, `NgSwitch`와 같은 기본 구조 디렉티브를 제공하며, 이 디렉티브들은 Angular 프로젝트에 자주 사용됩니다.
+Angular는 `NgIf`나 `NgForOf`, `NgSwitch`와 같은 기본 구조 디렉티브를 제공하며, 이 디렉티브들은 Angular 프로젝트에 자주 사용됩니다.
 자세한 내용은 [기본 디렉티브](guide/built-in-directives) 문서를 참고하세요.
 
 <div class="alert is-helpful">
@@ -424,6 +424,7 @@ Angular는 구조 디렉티브의 단순 문법을 만나면 이렇게 변환합
 | `keyExp`                        | <code-example format="typescript" hideCopy language="typescript"> [prefixKey] "expression" (let-prefixKey="export") </code-example> <div class="alert is-helpful"> **참고**: <br /> `prefix`는 `key`에 붙어야 합니다. </div> |
 | `let`                           | <code-example format="typescript" hideCopy language="typescript"> let-local="export" </code-example>                                                                                                                          |
 
+
 <!--
 ### Shorthand examples
 -->
@@ -503,35 +504,27 @@ The value of the property can be either a general type-narrowing function based 
 
 For example, consider the following structural directive that takes the result of a template expression as an input:
 
-<code-example format="typescript" header="IfLoadedDirective" language="typescript">
-
-export type Loaded&lt;T&gt; = { type: 'loaded', data: T };
-export type Loading = { type: 'loading' };
-export type LoadingState&lt;T&gt; = Loaded&lt;T&gt; | Loading;
-export class IfLoadedDirective&lt;T&gt; {
-    &commat;Input('ifLoaded') set state(state: LoadingState&lt;T&gt;) {}
-    static ngTemplateGuard_state&lt;T&gt;(dir: IfLoadedDirective&lt;T&gt;, expr: LoadingState&lt;T&gt;): expr is Loaded&lt;T&gt; { return true; };
-}
-
-export interface Person {
-  name: string;
-}
-
-&commat;Component({
-  template: `&lt;div *ifLoaded="state">{{ state.data }}&lt;/div>`,
-})
-export class AppComponent {
-  state: LoadingState&lt;Person&gt;;
-}
-
-</code-example>
+<code-tabs linenums="true">
+  <code-pane
+    header="src/app/if-loaded.directive.ts"
+    path="structural-directives/src/app/if-loaded.directive.ts">
+  </code-pane>
+  <code-pane
+    header="src/app/loading-state.ts"
+    path="structural-directives/src/app/loading-state.ts">
+  </code-pane>
+  <code-pane
+    header="src/app/hero.component.ts"
+    path="structural-directives/src/app/hero.component.ts">
+  </code-pane>
+</code-tabs>
 
 In this example, the `LoadingState<T>` type permits either of two states, `Loaded<T>` or `Loading`.
-The expression used as the directive's `state` input is of the umbrella type `LoadingState`, as it's unknown what the loading state is at that point.
+The expression used as the directive's `state` input (aliased as `appIfLoaded`) is of the umbrella type `LoadingState`, as it's unknown what the loading state is at that point.
 
-The `IfLoadedDirective` definition declares the static field `ngTemplateGuard_state`, which expresses the narrowing behavior.
-Within the `AppComponent` template, the `*ifLoaded` structural directive should render this template only when `state` is actually `Loaded<Person>`.
-The type guard lets the type checker infer that the acceptable type of `state` within the template is a `Loaded<T>`, and further infer that `T` must be an instance of `Person`.
+The `IfLoadedDirective` definition declares the static field `ngTemplateGuard_appIfLoaded`, which expresses the narrowing behavior.
+Within the `AppComponent` template, the `*appIfLoaded` structural directive should render this template only when `state` is actually `Loaded<Hero>`.
+The type guard lets the type checker infer that the acceptable type of `state` within the template is a `Loaded<T>`, and further infer that `T` must be an instance of `Hero`.
 -->
 구조 디렉티브는 구조 디렉티브의 표현식 결과가 실행 시점에 어떻게 결정되느냐에 따라 템플릿을 화면에 렌더링합니다.
 그래서 컴파일 시점에 템플릿의 타입을 미리 검사하려면 디렉티브와 연결되는 표현식이 어떤 타입을 갖는지 지정해야 합니다.
@@ -548,36 +541,27 @@ The type guard lets the type checker infer that the acceptable type of `state` w
 
 예제 코드를 확인해 보세요:
 
-<code-example format="typescript" header="IfLoadedDirective" language="typescript">
-
-export type Loaded&lt;T&gt; = { type: 'loaded', data: T };
-export type Loading = { type: 'loading' };
-export type LoadingState&lt;T&gt; = Loaded&lt;T&gt; | Loading;
-export class IfLoadedDirective&lt;T&gt; {
-    &commat;Input('ifLoaded') set state(state: LoadingState&lt;T&gt;) {}
-    static ngTemplateGuard_state&lt;T&gt;(dir: IfLoadedDirective&lt;T&gt;, expr: LoadingState&lt;T&gt;): expr is Loaded&lt;T&gt; { return true; };
-}
-
-export interface Person {
-  name: string;
-}
-
-&commat;Component({
-  template: `&lt;div *ifLoaded="state">{{ state.data }}&lt;/div>`,
-})
-export class AppComponent {
-  state: LoadingState&lt;Person&gt;;
-}
-
-</code-example>
+<code-tabs linenums="true">
+  <code-pane
+    header="src/app/if-loaded.directive.ts"
+    path="structural-directives/src/app/if-loaded.directive.ts">
+  </code-pane>
+  <code-pane
+    header="src/app/loading-state.ts"
+    path="structural-directives/src/app/loading-state.ts">
+  </code-pane>
+  <code-pane
+    header="src/app/hero.component.ts"
+    path="structural-directives/src/app/hero.component.ts">
+  </code-pane>
+</code-tabs>
 
 이 예제에서 `LoadingState<T>` 타입은 `Loaded<T>`와 `Loading` 상태 2개만 허용합니다.
 그래서 디렉티브의 `state` 타입을 `LoadingState`로 지정하면 이 때는 로딩 상태를 알 수 없습니다.
 
-이 때 `IfLoadedDirective`에 정적 필드 `ngTemplateGuard_state`를 추가해 봅시다.
-그러면 `*ifLoaded` 구조 디렉티브는 `state` 값이 정확하게 `Loaded<Person>` 타입에 해당될 때만 엘리먼트를 화면에 렌더링합니다.
+이 때 `IfLoadedDirective`에 정적 필드 `ngTemplateGuard_appIfLoaded`를 추가해 봅시다.
+그러면 `*appIfLoaded` 구조 디렉티브는 `state` 값이 정확하게 `Loaded<Person>` 타입에 해당될 때만 엘리먼트를 화면에 렌더링합니다.
 결국 타입 가드는 템플릿에 사용된 `state` 값의 타입이 `Loaded<T>` 이며, 이 때 `T`는 `Person`이라는 것으로 제한할 수 있습니다.
-
 
 <a id="narrowing-context-type"></a>
 
@@ -590,38 +574,32 @@ export class AppComponent {
 If your structural directive provides a context to the instantiated template, you can properly type it inside the template by providing a static `ngTemplateContextGuard` function.
 The following snippet shows an example of such a function.
 
-<code-example format="typescript" header="myDirective.ts" language="typescript">
-
-&commat;Directive({&hellip;})
-export class ExampleDirective {
-    // Make sure the template checker knows the type of the context with which the
-    // template of this directive will be rendered
-    static ngTemplateContextGuard(
-      dir: ExampleDirective, ctx: unknown
-    ): ctx is ExampleContext { return true; };
-
-    // &hellip;
-}
-
-</code-example>
+<code-tabs linenums="true">
+  <code-pane
+    header="src/app/trigonometry.directive.ts"
+    path="structural-directives/src/app/trigonometry.directive.ts">
+  </code-pane>
+  <code-pane
+    header="src/app/app.component.html (appTrigonometry)"
+    path="structural-directives/src/app/app.component.html"
+    region="appTrigonometry">
+  </code-pane>
+</code-tabs>
 -->
 커스텀 구조 디렉티브가 새로운 컨텍스트를 만들도록 정의했다면, 정적 `ngTemplateContextGuard` 함수를 사용해서 타입을 정확하게 지정할 수 있습니다.
 아래 코드를 살펴봅시다.
 
-<code-example format="typescript" header="myDirective.ts" language="typescript">
-
-&commat;Directive({&hellip;})
-export class ExampleDirective {
-    // 디렉티브가 렌더링할 템플릿의 타입을 정확하게 지정합니다.
-    // 이 정보는 템플릿 타입 검사기도 활용합니다.
-    static ngTemplateContextGuard(
-      dir: ExampleDirective, ctx: unknown
-    ): ctx is ExampleContext { return true; };
-
-    // &hellip;
-}
-
-</code-example>
+<code-tabs linenums="true">
+  <code-pane
+    header="src/app/trigonometry.directive.ts"
+    path="structural-directives/src/app/trigonometry.directive.ts">
+  </code-pane>
+  <code-pane
+    header="src/app/app.component.html (appTrigonometry)"
+    path="structural-directives/src/app/app.component.html"
+    region="appTrigonometry">
+  </code-pane>
+</code-tabs>
 
 
 <!-- links -->

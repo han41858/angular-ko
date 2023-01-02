@@ -24,8 +24,15 @@ Angular 애플리케이션을 빌드할 때 애플리케이션 자체의 렌더�
 ## 1단계: 애플리케이션 생성하기
 
 <!--
-Do this with the following CLI command:
+Do this with the following Angular CLI command:
 
+<code-example format="shell" language="shell">
+
+ng new my-app --routing
+
+</code-example>
+
+For an existing application, you have to manually add the `RouterModule` and defining a `<router-outlet>` within your application.
 -->
 Angular CLI로 다음 명령을 실행하면 애플리케이션을 생성할 수 있습니다:
 
@@ -35,18 +42,16 @@ ng new my-app --routing
 
 </code-example>
 
-<!--
-For an existing application, you have to manually add the `RouterModule` and defining a `<router-outlet>` within your application.
--->
 이미 생성된 애플리케이션이라면 `RouterModule`을 추가하고 템플릿에 `<router-outlet>`을 추가하면 됩니다.
 
+
 <!--
-## Step 2: Create the app shell
+## Step 2: Create the application shell
 -->
 ## 2단계: 애플리케이션 기본 틀 생성하기
 
 <!--
-Use the CLI to automatically create the application shell.
+Use the Angular CLI to automatically create the application shell.
 -->
 다음 명령을 실행하면 애플리케이션의 기본 틀이 생성됩니다.
 
@@ -113,12 +118,12 @@ After running this command you can see that the `angular.json` configuration fil
 </code-example>
 
 <!--
-## Step 3: Verify the app is built with the shell content
+## Step 3: Verify the application is built with the shell content
 -->
 ## 3단계: 빌드 확인하기
 
 <!--
-Use the CLI to build the `app-shell` target.
+Use the Angular CLI to build the `app-shell` target.
 -->
 이제 다음 명령을 실행해서 `app-shell`이 제대로 빌드되는지 확인해 봅시다.
 

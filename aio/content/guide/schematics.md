@@ -10,7 +10,7 @@ Schematics are packaged into [collections](guide/glossary#collection) and instal
 
 The schematic collection can be a powerful tool for creating, modifying, and maintaining any software project, but is particularly useful for customizing Angular projects to suit the particular needs of your own organization.
 You might use schematics, for example, to generate commonly-used UI patterns or specific components, using predefined templates or layouts.
-Use schematics to enforce architectural rules and conventions, making your projects consistent and inter-operative.
+Use schematics to enforce architectural rules and conventions, making your projects consistent and interoperative.
 -->
 스키매틱은 복잡한 로직을 쉽게 작성할 수 있도록 미리 템플릿을 정의해두고 이 템플릿을 바탕으로 코드를 생성하는 툴을 의미합니다.
 그래서 이 스키매틱을 잘 활용하면 프로젝트에 수많은 기능을 편하게 추가할 수 있습니다.
@@ -34,8 +34,8 @@ You can modify these schematics, and define new ones to do things like update yo
 
 Schematics that are included in the `@schematics/angular` collection are run by default by the commands `ng generate` and `ng add`.
 The package contains named schematics that configure the options that are available to the CLI for `ng generate` sub-commands, such as `ng generate component` and `ng generate service`.
-The subcommands for `ng generate` are shorthand for the corresponding schematic.
-To specify a particular schematic \(or collection of schematics\) to generate, using the long form:
+The sub-commands for `ng generate` are shorthand for the corresponding schematic.
+To specify and generate a particular schematic, or a collection of schematics, using the long form:
 
 <code-example format="shell" language="shell">
 
@@ -80,7 +80,7 @@ ng generate 스키매틱-이름 --collection 콜렉션-이름
 ### Angular CLI용 스키매틱 설정하기
 
 <!--
-A JSON schema associated with a schematic tells the Angular CLI what options are available to commands and subcommands, and determines the defaults.
+A JSON schema associated with a schematic tells the Angular CLI what options are available to commands and sub-commands, and determines the defaults.
 These defaults can be overridden by providing a different value for an option on the command line.
 See [Workspace Configuration](guide/workspace-config) for information about how to change the generation option defaults for your workspace.
 
@@ -103,7 +103,7 @@ Angular CLI로 프로젝트를 생성할 때 사용하는 기본 스키매틱의
 As a library developer, you can create your own collections of custom schematics to integrate your library with the Angular CLI.
 
 *   An *add schematic* lets developers install your library in an Angular workspace using `ng add`
-*   *Generation schematics* can tell the `ng generate` subcommands how to modify projects, add configurations and scripts, and scaffold artifacts that are defined in your library
+*   *Generation schematics* can tell the `ng generate` sub-commands how to modify projects, add configurations and scripts, and scaffold artifacts that are defined in your library
 *   An *update schematic* can tell the `ng update` command how to update your library's dependencies and adjust for breaking changes when you release a new version
 
 For more details of what these look like and how to create them, see:
@@ -129,19 +129,19 @@ For more details of what these look like and how to create them, see:
 ### 추가(add) 스키매틱
 
 <!--
-An add schematic is typically supplied with a library, so that the library can be added to an existing project with `ng add`.
+An *add schematic* is typically supplied with a library, so that the library can be added to an existing project with `ng add`.
 The `add` command uses your package manager to download new dependencies, and invokes an installation script that is implemented as a schematic.
 
 For example, the [`@angular/material`](https://material.angular.io/guide/schematics) schematic tells the `add` command to install and set up Angular Material and theming, and register new starter components that can be created with `ng generate`.
 Look at this one as an example and model for your own add schematic.
 
 Partner and third party libraries also support the Angular CLI with add schematics.
-For example, `@ng-bootstrap/schematics` adds [ng-bootstrap](https://ng-bootstrap.github.io)  to an app, and  `@clr/angular` installs and sets up [Clarity from VMWare](https://vmware.github.io/clarity/documentation/v1.0/get-started).
+For example, `@ng-bootstrap/schematics` adds [ng-bootstrap](https://ng-bootstrap.github.io)  to an app, and  `@clr/angular` installs and sets up [Clarity from VMWare](https://clarity.design/documentation/get-started).
 
-An add schematic can also update a project with configuration changes, add additional dependencies \(such as polyfills\), or scaffold package-specific initialization code.
+An *add schematic* can also update a project with configuration changes, add additional dependencies \(such as polyfills\), or scaffold package-specific initialization code.
 For example, the `@angular/pwa` schematic turns your application into a PWA by adding an application manifest and service worker.
 -->
-라이브러리에 추가 스키매틱이 정의되어 있다면 `ng add` 명령으로 이 라이브러리를 설치하고 추가로 필요한 작업을 자동으로 할 수 있습니다.
+라이브러리에 *추가 스키매틱*이 정의되어 있다면 `ng add` 명령으로 이 라이브러리를 설치하고 추가로 필요한 작업을 자동으로 할 수 있습니다.
 Angular 라이브러리가 제공하는 스키매틱 중에서는 추가 스키매틱이 가장 많습니다.
 `ng add` 명령을 실행하면 패키지 매니저가 새로운 패키지를 설치한 후에 스키매틱에 정의된 설치 스크립트를 실행합니다.
 
@@ -150,9 +150,9 @@ Angular 라이브러리가 제공하는 스키매틱 중에서는 추가 스키�
 이 방식이 추가 스키매틱을 활용하는 전형적인 패턴이라고 할 수 있습니다.
 
 Angular의 파트너나 유명 서드파티가 제공하는 라이브러리는 보통 Angular CLI용 추가 스키매틱을 제공합니다.
-[ng-bootstrap](https://ng-bootstrap.github.io)이 제공하는 `@ng-bootstrap/schematics`가 그렇고 [VMWare Clarity](https://vmware.github.io/clarity/documentation/v1.0/get-started)가 제공하는 `@clr/angular`가 그렇습니다.
+[ng-bootstrap](https://ng-bootstrap.github.io)이 제공하는 `@ng-bootstrap/schematics`가 그렇고 [VMWare Clarity](https://clarity.design/documentation/get-started)가 제공하는 `@clr/angular`가 그렇습니다.
 
-추가 스키매틱은 프로젝트 코드를 직접 수정하는 경우가 있습니다.
+*추가 스키매틱*은 프로젝트 코드를 직접 수정할 수 있습니다.
 추가 의존성 패키지를 설치하거나 폴리필을 추가하고 패키지 초기화 코드를 실행하는 경우가 그렇습니다.
 애플리케이션을 PWA로 전환하기 위해 `@angular/pwa` 패키지를 추가하면 앱에 매니페스트 파일과 서비스 워커를 자동으로 추가합니다.
 
@@ -200,15 +200,15 @@ ng generate &commat;angular/material:table &lt;component-name&gt;
 <code-example format="shell" language="shell">
 
 ng update
-    We analyzed your package.json, there are some packages to update:
+We analyzed your package.json, there are some packages to update:
 
-      Name                               Version                  Command to update
-     &hyphen;-------------------------------------------------------------------------------
-      &commat;angular/cdk                       7.2.2 -&gt; 7.3.1           ng update &commat;angular/cdk
-      &commat;angular/cli                       7.2.3 -&gt; 7.3.0           ng update &commat;angular/cli
-      &commat;angular/core                      7.2.2 -&gt; 7.2.3           ng update &commat;angular/core
-      &commat;angular/material                  7.2.2 -&gt; 7.3.1           ng update &commat;angular/material
-      rxjs                               6.3.3 -&gt; 6.4.0           ng update rxjs
+    Name                                      Version                     Command to update
+    &hyphen;-------------------------------------------------------------------------------
+    &commat;angular/cdk                       7.2.2 -&gt; 7.3.1           ng update &commat;angular/cdk
+    &commat;angular/cli                       7.2.3 -&gt; 7.3.0           ng update &commat;angular/cli
+    &commat;angular/core                      7.2.2 -&gt; 7.2.3           ng update &commat;angular/core
+    &commat;angular/material                  7.2.2 -&gt; 7.3.1           ng update &commat;angular/material
+    rxjs                                      6.3.3 -&gt; 6.4.0           ng update rxjs
 
     There might be additional packages that are outdated.
     Run "ng update --all" to try to update all at the same time.
@@ -247,13 +247,13 @@ If either package contains an update schematic that covers migration from the ex
 ng update
     We analyzed your package.json, there are some packages to update:
 
-      Name                               Version                  Command to update
-     &hyphen;-------------------------------------------------------------------------------
-      &commat;angular/cdk                       7.2.2 -&gt; 7.3.1           ng update &commat;angular/cdk
-      &commat;angular/cli                       7.2.3 -&gt; 7.3.0           ng update &commat;angular/cli
-      &commat;angular/core                      7.2.2 -&gt; 7.2.3           ng update &commat;angular/core
-      &commat;angular/material                  7.2.2 -&gt; 7.3.1           ng update &commat;angular/material
-      rxjs                               6.3.3 -&gt; 6.4.0           ng update rxjs
+    Name                                      Version                     Command to update
+    &hyphen;-------------------------------------------------------------------------------
+    &commat;angular/cdk                       7.2.2 -&gt; 7.3.1           ng update &commat;angular/cdk
+    &commat;angular/cli                       7.2.3 -&gt; 7.3.0           ng update &commat;angular/cli
+    &commat;angular/core                      7.2.2 -&gt; 7.2.3           ng update &commat;angular/core
+    &commat;angular/material                  7.2.2 -&gt; 7.3.1           ng update &commat;angular/material
+    rxjs                                      6.3.3 -&gt; 6.4.0           ng update rxjs
 
     There might be additional packages that are outdated.
     Run "ng update --all" to try to update all at the same time.

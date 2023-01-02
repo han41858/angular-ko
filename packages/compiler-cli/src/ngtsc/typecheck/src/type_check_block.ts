@@ -550,7 +550,7 @@ class TcbReferenceOp extends TcbOp {
 
   override execute(): ts.Identifier {
     const id = this.tcb.allocateId();
-    let initializer =
+    let initializer: ts.Expression =
         this.target instanceof TmplAstTemplate || this.target instanceof TmplAstElement ?
         this.scope.resolve(this.target) :
         this.scope.resolve(this.host, this.target);
@@ -864,7 +864,7 @@ class TcbDomSchemaCheckerOp extends TcbOp {
       if (binding.type === BindingType.Property) {
         if (binding.name !== 'style' && binding.name !== 'class') {
           // A direct binding to a property.
-          const propertyName = ATTR_TO_PROP[binding.name] || binding.name;
+          const propertyName = ATTR_TO_PROP.get(binding.name) ?? binding.name;
           this.tcb.domSchemaChecker.checkProperty(
               this.tcb.id, this.element, propertyName, binding.sourceSpan, this.tcb.schemas,
               this.tcb.hostIsStandalone);
@@ -880,14 +880,14 @@ class TcbDomSchemaCheckerOp extends TcbOp {
  * Mapping between attributes names that don't correspond to their element property names.
  * Note: this mapping has to be kept in sync with the equally named mapping in the runtime.
  */
-const ATTR_TO_PROP: {[name: string]: string} = {
+const ATTR_TO_PROP = new Map(Object.entries({
   'class': 'className',
   'for': 'htmlFor',
   'formaction': 'formAction',
   'innerHtml': 'innerHTML',
   'readonly': 'readOnly',
   'tabindex': 'tabIndex',
-};
+}));
 
 /**
  * A `TcbOp` which generates code to check "unclaimed inputs" - bindings on an element which were
@@ -930,7 +930,7 @@ class TcbUnclaimedInputsOp extends TcbOp {
             elId = this.scope.resolve(this.element);
           }
           // A direct binding to a property.
-          const propertyName = ATTR_TO_PROP[binding.name] || binding.name;
+          const propertyName = ATTR_TO_PROP.get(binding.name) ?? binding.name;
           const prop = ts.factory.createElementAccessExpression(
               elId, ts.factory.createStringLiteral(propertyName));
           const stmt = ts.factory.createBinaryExpression(
@@ -1305,7 +1305,7 @@ class Scope {
    */
   resolve(
       node: TmplAstElement|TmplAstTemplate|TmplAstVariable|TmplAstReference,
-      directive?: TypeCheckableDirectiveMeta): ts.Expression {
+      directive?: TypeCheckableDirectiveMeta): ts.Identifier|ts.NonNullExpression {
     // Attempt to resolve the operation locally.
     const res = this.resolveLocal(node, directive);
     if (res !== null) {
@@ -1317,10 +1317,19 @@ class Scope {
       //
       // In addition, returning a clone prevents the consumer of `Scope#resolve` from
       // attaching comments at the declaration site.
+      let clone: ts.Identifier|ts.NonNullExpression;
 
-      const clone = ts.getMutableClone(res);
-      ts.setSyntheticTrailingComments(clone, []);
-      return clone;
+      if (ts.isIdentifier(res)) {
+        clone = ts.factory.createIdentifier(res.text);
+      } else if (ts.isNonNullExpression(res)) {
+        clone = ts.factory.createNonNullExpression(res.expression);
+      } else {
+        throw new Error(`Could not resolve ${node} to an Identifier or a NonNullExpression`);
+      }
+
+      ts.setOriginalNode(clone, res);
+      (clone as any).parent = clone.parent;
+      return ts.setSyntheticTrailingComments(clone, []);
     } else if (this.parent !== null) {
       // Check with the parent.
       return this.parent.resolve(node, directive);
@@ -1530,7 +1539,7 @@ class Scope {
         // `TcbDirectiveCtorOp`. If not we, we fallback to using `any` – see below.
         directiveOp = new TcbDirectiveCtorOp(this.tcb, this, node, dir);
       } else {
-        // If inlining is not available, then we give up on infering the generic params, and use
+        // If inlining is not available, then we give up on inferring the generic params, and use
         // `any` type for the directive's generic parameters.
         directiveOp = new TcbGenericDirectiveTypeWithAnyParamsOp(this.tcb, this, node, dir);
       }

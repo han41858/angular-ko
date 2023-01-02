@@ -10,24 +10,21 @@ A service is typically a class with a narrow, well-defined purpose.
 It should do something specific and do it well.
 
 Angular distinguishes components from services to increase modularity and reusability.
-By separating a component's view-related functionality from other kinds of processing, you can make your component classes lean and efficient.
 
-Ideally, a component's job is to enable the user experience and nothing more.
-A component should present properties and methods for data binding, in order to mediate between the view \(rendered by the template\) and the application logic \(which often includes some notion of a *model*\).
+Ideally, a component's job is to enable only the user experience.
+A component should present properties and methods for data binding to mediate between the view and the application logic. The view is what the template renders and the application logic is what includes the notion of a *model*.
 
-A component can delegate certain tasks to services, such as fetching data from the server, validating user input, or logging directly to the console.
-By defining such processing tasks in an *injectable service class*, you make those tasks available to any component.
+A component should use services for tasks that don't involve the view or application logic. Services are good for tasks such as fetching data from the server, validating user input, or logging directly to the console. By defining such processing tasks in an *injectable service class*, you make those tasks available to any component.
 You can also make your application more adaptable by injecting different providers of the same kind of service, as appropriate in different circumstances.
 
 Angular doesn't *enforce* these principles.
-Angular does help you *follow* these principles by making it easy to factor your application logic into services and make those services available to components through *dependency injection*.
+Instead, Angular helps you *follow* these principles by making it easy to factor your application logic into services. In Angular, *dependency injection* makes those services available to components.
 -->
 *서비스* 는 앱에서 공통으로 사용하는 상수나 함수, 기능을 모아놓은 단위입니다.
 좁은 의미로 보면 클래스 하나만을 서비스라고 하는 경우도 있지만, 보통 넓은 의미로 사용합니다.
 좀 더 자세하게 알아봅시다.
 
 Angular는 컴포넌트와 서비스를 확실하게 구분해서 모듈화와 재사용 효율성을 높이는 것을 권장합니다.
-컴포넌트에서 뷰와 관련된 로직을 다른 로직과 분리하면 컴포넌트 클래스를 간결하게 구성할 수 있으며, 결과적으로 컴포넌트 클래스를 유연하고 효율적으로 유지할 수 있습니다.
 
 이상적인 경우를 따지면 컴포넌트에는 해당 뷰에서 일어나는 사용자의 행동에 관련된 로직만 두는 것이 좋습니다.
 컴포넌트에는 화면에 사용되는 프로퍼티나 데이터 바인딩에 사용하는 메소드만 정의하는 것이 좋으며, 컴포넌트는 템플릿이 렌더링된 뷰와 *모델* 을 정의하는 애플리케이션 로직을 중개하는 역할만 하는 것이 좋습니다.
@@ -79,11 +76,11 @@ That service in turn might depend on the `HttpClient` service to fetch heroes as
 </div>
 
 <!--
-DI is wired into the Angular framework and used everywhere to provide new components with the services or other things they need.
-Components consume services; that is, you can *inject* a service into a component, giving the component access to that service class.
+Dependency injection (DI) is the part of the Angular framework that provides components with access to services and other resources.
+Angular provides the ability for you to *inject* a service into a component to give that component access to the service.
 
-To define a class as a service in Angular, use the `@Injectable()` decorator to provide the metadata that allows Angular to inject it into a component as a *dependency*.
-Similarly, use the `@Injectable()` decorator to indicate that a component or other class \(such as another service, a pipe, or an NgModule\) *has* a dependency.
+The `@Injectable()` decorator defines a class as a service in Angular and allows Angular to inject it into a component as a *dependency*.
+Likewise, the `@Injectable()` decorator indicates that a component, class, pipe, or NgModule *has* a dependency on a service.
 
 *   The *injector* is the main mechanism.
     Angular creates an application-wide injector for you during the bootstrap process, and additional injectors as needed.
@@ -113,9 +110,8 @@ When all requested services have been resolved and returned, Angular can call th
 
 The process of `HeroService` injection looks something like this.
 -->
-DI는 서비스와 같은 객체를 Angular 프레임워크와 묶는 개념이며, 이렇게 프레임워크에 추가된 객체는 컴포넌트가 생성될 때 자유롭게 주입할 수 있습니다.
-컴포넌트는 서비스를 활용합니다.
-이 말은, 서비스를 컴포넌트에 *의존성으로 주입*하면 컴포넌트에서 서비스 클래스에 접근할 수 있다는 말입니다.
+의존성 주입(Dependency injection, DI)은 컴포넌트가 서비스와 같은 리소스에 접근할 수 있도록 Angular 프레임워크가 연결하는 기능입니다.
+서비스를 컴포넌트에 *의존성으로 주입*하면 컴포넌트에서 서비스 클래스에 접근할 수 있습니다.
 
 그래서 Angular에 정의하는 서비스 클래스는 `@Injectable()` 데코레이터를 사용해서 메타데이터를 지정하며, 이 메타데이터는 Angular가 서비스를 컴포넌트에 *의존성으로 주입*할 때 활용됩니다.
 이 때 `@Injectable()` 데코레이터는 서비스뿐 아니라 컴포넌트나 파이프, NgModule에도 사용할 수 있습니다.

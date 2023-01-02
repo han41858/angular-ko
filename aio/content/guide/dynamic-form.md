@@ -339,10 +339,16 @@ The following figure shows the final form.
 -->
 ## 다음 단계
 
-| 단계                                         | 설명                                                                                                                                                                                                                                                                  |
-|:------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+<!--
+| Steps                                           | Details |
+|:---                                             |:---     |
+| Different types of forms and control collection | This tutorial shows how to build a questionnaire, which is just one kind of dynamic form. The example uses `FormGroup` to collect a set of controls. For an example of a different type of dynamic form, see the section [Creating dynamic forms](guide/reactive-forms#creating-dynamic-forms "Create dynamic forms with arrays") in the Reactive Forms guide. That example also shows how to use `FormArray` instead of `FormGroup` to collect a set of controls. |
+| Validating user input                           | The section [Validating form input](guide/reactive-forms#validating-form-input "Basic input validation") introduces the basics of how input validation works in reactive forms. <br /> The [Form validation guide](guide/form-validation "Form validation guide") covers the topic in more depth.                                                                                                                                                                 |
+-->
+| 단계                  | 설명                                                                                                                                                                                                                                                                  |
+|:--------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 종류 확장하기, 개별 컨트롤 만들기 | 이번 예제에서는 설문지를 만들어보며 동적 폼을 구성해 봤으며, 폼 컨트롤을 구성하기 위해 `FormGroup`을 사용했습니다. 동적 폼에 다른 종류의 컨트롤을 추가하려면 반응형 폼 문서의 [동적 폼 구성하기](guide/reactive-forms#creating-dynamic-forms "Create dynamic forms with arrays") 섹션을 참고하세요. 이 섹션에서는 폼 컨트롤을 배열로 묶어서 구성하는 `FormArray`에 대해서도 다룹니다. |
-| 폼 유효성 검사하기 | 반응형 폼 문서의 [폼 유효성 검사하기](guide/reactive-forms#validating-form-input "Basic input validation") 섹션을 참고하면 반응형 폼에 유효성 검사를 어떻게 적용할 수 있는지 알 수 있습니다. 이 문서보다 자세한 내용에 대해 알아보려면 [폼 유효성 검사하기](guide/form-validation "Form validation guide") 문서를 참고하세요.                          |
+| 폼 유효성 검사하기          | 반응형 폼 문서의 [폼 유효성 검사하기](guide/reactive-forms#validating-form-input "Basic input validation") 섹션을 참고하면 반응형 폼에 유효성 검사를 어떻게 적용할 수 있는지 알 수 있습니다. 이 문서보다 자세한 내용에 대해 알아보려면 [폼 유효성 검사하기](guide/form-validation "Form validation guide") 문서를 참고하세요.                          |
 
 <!-- links -->
 

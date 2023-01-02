@@ -67,57 +67,120 @@ v11 - v14
 v12 - v15
 v13 - v16
 v14 - v17
+v15 - v18
 -->
 
-| 분류                                  | API, 기능                                                                                                    | 지원 중단            |
-|:------------------------------------|:-----------------------------------------------------------------------------------------------------------|:-----------------|
-| `@angular/common`                   | [`ReflectiveInjector`](#reflectiveinjector)                                                                | <!--  v8 --> v11 |
-| `@angular/common`                   | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation)              | <!--  v9 --> v11 |
-| `@angular/common`                   | [`NgComponentOutlet.ngComponentOutletNgModuleFactory`](#common)                                            | <!-- v14 --> v17 |
-| `@angular/common/http`              | [`XhrFactory`](api/common/http/XhrFactory)                                                                 | <!-- v12 --> v15 |
-| `@angular/common/http/testing`      | [`TestRequest` accepting `ErrorEvent` for error simulation](#testrequest-errorevent)                       | <!-- v13 --> v16 |
-| `@angular/core`                     | [`DefaultIterableDiffer`](#core)                                                                           | <!--  v7 --> v11 |
-| `@angular/core`                     | [`ReflectiveKey`](#core)                                                                                   | <!--  v8 --> v11 |
-| `@angular/core`                     | [`RenderComponentType`](#core)                                                                             | <!--  v7 --> v11 |
-| `@angular/core`                     | [Factory-based signature of `ApplicationRef.bootstrap`](#core)                                             | <!-- v13 --> v15 |
-| `@angular/core`                     | [`PlatformRef.bootstrapModuleFactory`](#core)                                                              | <!-- v13 --> v15 |
-| `@angular/core`                     | [`getModuleFactory`](#core)                                                                                | <!-- v13 --> v16 |
-| `@angular/core`                     | [`ModuleWithComponentFactories`](#core)                                                                    | <!-- v13 --> v16 |
-| `@angular/core`                     | [`Compiler`](#core)                                                                                        | <!-- v13 --> v16 |
-| `@angular/core`                     | [`CompilerFactory`](#core)                                                                                 | <!-- v13 --> v16 |
-| `@angular/core`                     | [`NgModuleFactory`](#core)                                                                                 | <!-- v13 --> v16 |
-| `@angular/core`                     | [`ComponentFactory`](#core)                                                                                | <!-- v13 --> v16 |
-| `@angular/core`                     | [`ComponentFactoryResolver`](#core)                                                                        | <!-- v13 --> v16 |
-| `@angular/core`                     | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](#core)                    | <!-- v13 --> v16 |
-| `@angular/platform-browser-dynamic` | [`JitCompilerFactory`](#platform-browser-dynamic)                                                          | <!-- v13 --> v16 |
-| `@angular/platform-browser-dynamic` | [`RESOURCE_CACHE_PROVIDER`](#platform-browser-dynamic)                                                     | <!-- v13 --> v16 |
-| `@angular/forms`                    | [`ngModel` with reactive forms](#ngmodel-reactive)                                                         | <!--  v6 --> v11 |
-| `@angular/upgrade`                  | [`@angular/upgrade`](#upgrade)                                                                             | <!--  v8 --> v11 |
-| `@angular/upgrade`                  | [`getAngularLib`](#upgrade-static)                                                                         | <!--  v8 --> v11 |
-| `@angular/upgrade`                  | [`setAngularLib`](#upgrade-static)                                                                         | <!--  v8 --> v11 |
-| `@angular/upgrade`                  | [Factory-based signature of `downgradeModule`](#upgrade-static)                                            | <!-- v13 --> v15 |
-| 템플릿 문법                              | [`<template>`](#template-tag)                                                                              | <!--  v7 --> v11 |
-| 폴리필                                 | [reflect-metadata](#reflect-metadata)                                                                      | <!--  v8 --> v11 |
-| `@angular/compiler-cli`             | [Input setter coercion](#input-setter-coercion)                                                            | <!-- v13 --> v15 |
-| `@angular/compiler-cli`             | [`fullTemplateTypeCheck`](#full-template-type-check)                                                       | <!-- v13 --> v15 |
-| `@angular/core`                     | [`defineInjectable`](#core)                                                                                | <!--  v8 --> v11 |
-| `@angular/core`                     | [`entryComponents`](api/core/NgModule#entryComponents)                                                     | <!--  v9 --> v11 |
-| `@angular/core`                     | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)                                    | <!--  v9 --> v11 |
-| `@angular/core`                     | [Factory-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent) | <!-- v13 --> v15 |
-| `@angular/core/testing`             | [`TestBed.get`](#testing)                                                                                  | <!--  v9 --> v12 |
-| `@angular/core/testing`             | [`async`](#testing)                                                                                        | <!--  v9 --> v12 |
-| `@angular/forms`                    | [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group)                                | <!-- v11 --> v14 |
-| `@angular/platform-server`          | [`renderModuleFactory`](#platform-server)                                                                  | <!-- v13 --> v15 |
-| `@angular/router`                   | [`relativeLinkResolution`](#relativeLinkResolution)                                                        | <!-- v14 --> v16 |
-| `@angular/router`                   | [`resolver` argument in `RouterOutletContract.activateWith`](#router)                                      | <!-- v14 --> v16 |
-| `@angular/router`                   | [`resolver` field of the `OutletContext` class](#router)                                                   | <!-- v14 --> v16 |
-| `@angular/service-worker`           | [`SwUpdate#activated`](api/service-worker/SwUpdate#activated)                                              | <!-- v13 --> v16 |
-| `@angular/service-worker`           | [`SwUpdate#available`](api/service-worker/SwUpdate#available)                                              | <!-- v13 --> v16 |
-| 템플릿 문법                              | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)                                         | <!--  v7 --> 미확정 |
-| 템플릿 문법                              | [`bind-`, `on-`, `bindon-`, and `ref-`](#bind-syntax)                                                      | <!-- v13 --> v15 |
+<!--
+| Area                                | API or Feature                                                                                             | May be removed in        |
+|:---                                 |:---                                                                                                        |:---                      |
+| `@angular/common`                   | [`ReflectiveInjector`](#reflectiveinjector)                                                                | <!--  v8 --> v11         |
+| `@angular/common`                   | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation)              | <!--  v9 --> v11         |
+| `@angular/common`                   | [`NgComponentOutlet.ngComponentOutletNgModuleFactory`](#common)                                            | <!-- v14 --> v17         |
+| `@angular/common/http`              | [`XhrFactory`](api/common/http/XhrFactory)                                                                 | <!-- v12 --> v15         |
+| `@angular/common/http/testing`      | [`TestRequest` accepting `ErrorEvent` for error simulation](#testrequest-errorevent)                       | <!-- v13 --> v16         |
+| `@angular/core`                     | [`DefaultIterableDiffer`](#core)                                                                           | <!--  v7 --> v11         |
+| `@angular/core`                     | [`ReflectiveKey`](#core)                                                                                   | <!--  v8 --> v11         |
+| `@angular/core`                     | [`RenderComponentType`](#core)                                                                             | <!--  v7 --> v11         |
+| `@angular/core`                     | [Factory-based signature of `ApplicationRef.bootstrap`](#core)                                             | <!-- v13 --> v15         |
+| `@angular/core`                     | [`PlatformRef.bootstrapModuleFactory`](#core)                                                              | <!-- v13 --> v15         |
+| `@angular/core`                     | [`getModuleFactory`](#core)                                                                                | <!-- v13 --> v16         |
+| `@angular/core`                     | [`ModuleWithComponentFactories`](#core)                                                                    | <!-- v13 --> v16         |
+| `@angular/core`                     | [`Compiler`](#core)                                                                                        | <!-- v13 --> v16         |
+| `@angular/core`                     | [`CompilerFactory`](#core)                                                                                 | <!-- v13 --> v16         |
+| `@angular/core`                     | [`NgModuleFactory`](#core)                                                                                 | <!-- v13 --> v16         |
+| `@angular/core`                     | [`ComponentFactory`](#core)                                                                                | <!-- v13 --> v16         |
+| `@angular/core`                     | [`ComponentFactoryResolver`](#core)                                                                        | <!-- v13 --> v16         |
+| `@angular/core`                     | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](#core)                    | <!-- v13 --> v16         |
+| `@angular/core`                     | NgModule and `'any'` options for [`providedIn`](#core) | <!-- v15 --> v17 |
+| `@angular/platform-browser-dynamic` | [`JitCompilerFactory`](#platform-browser-dynamic)                                                          | <!-- v13 --> v16         |
+| `@angular/platform-browser-dynamic` | [`RESOURCE_CACHE_PROVIDER`](#platform-browser-dynamic)                                                     | <!-- v13 --> v16         |
+| `@angular/forms`                    | [`ngModel` with reactive forms](#ngmodel-reactive)                                                         | <!--  v6 --> v11         |
+| `@angular/upgrade`                  | [`@angular/upgrade`](#upgrade)                                                                             | <!--  v8 --> v11         |
+| `@angular/upgrade`                  | [`getAngularLib`](#upgrade-static)                                                                         | <!--  v8 --> v11         |
+| `@angular/upgrade`                  | [`setAngularLib`](#upgrade-static)                                                                         | <!--  v8 --> v11         |
+| `@angular/upgrade`                  | [Factory-based signature of `downgradeModule`](#upgrade-static)                                            | <!-- v13 --> v15         |
+| template syntax                     | [`<template>`](#template-tag)                                                                              | <!--  v7 --> v11         |
+| polyfills                           | [reflect-metadata](#reflect-metadata)                                                                      | <!--  v8 --> v11         |
+| `@angular/compiler-cli`             | [Input setter coercion](#input-setter-coercion)                                                            | <!-- v13 --> v15         |
+| `@angular/compiler-cli`             | [`fullTemplateTypeCheck`](#full-template-type-check)                                                       | <!-- v13 --> v15         |
+| `@angular/core`                     | [`defineInjectable`](#core)                                                                                | <!--  v8 --> v11         |
+| `@angular/core`                     | [`entryComponents`](api/core/NgModule#entryComponents)                                                     | <!--  v9 --> v11         |
+| `@angular/core`                     | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)                                    | <!--  v9 --> v11         |
+| `@angular/core`                     | [Factory-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent) | <!-- v13 --> v15         |
+| `@angular/core/testing`             | [`TestBed.get`](#testing)                                                                                  | <!--  v9 --> v12         |
+| `@angular/core/testing`             | [`async`](#testing)                                                                                        | <!--  v9 --> v12         |
+| `@angular/forms`                    | [`FormBuilder.group` legacy options parameter](api/forms/FormBuilder#group)                                | <!-- v11 --> v14         |
+| `@angular/platform-server`          | [`renderModuleFactory`](#platform-server)                                                                  | <!-- v13 --> v15         |
+| `@angular/platform-server`          | [`ServerTransferStateModule`](#platform-server)                                                                  | <!-- v14 --> v16         |
+| `@angular/platform-browser`          | [`BrowserTransferStateModule`](#platform-browser)                                                                  | <!-- v14 --> v16         |
+| `@angular/router`                   | [`relativeLinkResolution`](#relativeLinkResolution)                                                        | <!-- v14 --> v16         |
+| `@angular/router`                     | [`resolver` argument in `RouterOutletContract.activateWith`](#router)                                                                        | <!-- v14 --> v16         |
+| `@angular/router`                     | [`resolver` field of the `OutletContext` class](#router)                                                                        | <!-- v14 --> v16         |
+| `@angular/router`                     | [`RouterLinkWithHref` directive](#router)                                                                        | <!-- v15 --> v17         |
+| `@angular/router`                     | [`provideRoutes` function](#router)                                                                        | <!-- v15 --> v17         |
+| `@angular/service-worker`           | [`SwUpdate#activated`](api/service-worker/SwUpdate#activated)                                              | <!-- v13 --> v16         |
+| `@angular/service-worker`           | [`SwUpdate#available`](api/service-worker/SwUpdate#available)                                              | <!-- v13 --> v16         |
+| template syntax                     | [`/deep/`, `>>>`, and `::ng-deep`](#deep-component-style-selector)                                         | <!--  v7 --> unspecified |
+| template syntax                     | [`bind-`, `on-`, `bindon-`, and `ref-`](#bind-syntax)                                                      | <!-- v13 --> v15         |
+| `@angular/common`                   | [`DatePipe` - `DATE_PIPE_DEFAULT_TIMEZONE`](api/common/DATE_PIPE_DEFAULT_TIMEZONE)                         | <!-- v15 --> v17         |
+
+For information about Angular CDK and Angular Material deprecations, see the [changelog](https://github.com/angular/components/blob/main/CHANGELOG.md).
+-->
+
+| 분류                                  | API, 기능                                                                                       | 지원 중단                    |
+|:------------------------------------|:----------------------------------------------------------------------------------------------|:-------------------------|
+| `@angular/common`                   | [`ReflectiveInjector`](#reflectiveinjector)                                                   | <!--  v8 --> v11         |
+| `@angular/common`                   | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | <!--  v9 --> v11         |
+| `@angular/common`                   | [`NgComponentOutlet.ngComponentOutletNgModuleFactory`](#common)                               | <!-- v14 --> v17         |
+| `@angular/common/http`              | [`XhrFactory`](api/common/http/XhrFactory)                                                    | <!-- v12 --> v15         |
+| `@angular/common/http/testing`      | [`TestRequest` accepting `ErrorEvent` for error simulation](#testrequest-errorevent)          | <!-- v13 --> v16         |
+| `@angular/core`                     | [`DefaultIterableDiffer`](#core)                                                              | <!--  v7 --> v11         |
+| `@angular/core`                     | [`ReflectiveKey`](#core)                                                                      | <!--  v8 --> v11         |
+| `@angular/core`                     | [`RenderComponentType`](#core)                                                                | <!--  v7 --> v11         |
+| `@angular/core`                     | [Factory-based signature of `ApplicationRef.bootstrap`](#core)                                | <!-- v13 --> v15         |
+| `@angular/core`                     | [`PlatformRef.bootstrapModuleFactory`](#core)                                                 | <!-- v13 --> v15         |
+| `@angular/core`                     | [`getModuleFactory`](#core)                                                                   | <!-- v13 --> v16         |
+| `@angular/core`                     | [`ModuleWithComponentFactories`](#core)                                                       | <!-- v13 --> v16         |
+| `@angular/core`                     | [`Compiler`](#core)                                                                           | <!-- v13 --> v16         |
+| `@angular/core`                     | [`CompilerFactory`](#core)                                                                    | <!-- v13 --> v16         |
+| `@angular/core`                     | [`NgModuleFactory`](#core)                                                                    | <!-- v13 --> v16         |
+| `@angular/core`                     | [`ComponentFactory`](#core)                                                                   | <!-- v13 --> v16         |
+| `@angular/core`                     | [`ComponentFactoryResolver`](#core)                                                           | <!-- v13 --> v16         |
+| `@angular/core`                     | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](#core)       | <!-- v13 --> v16         |
+| `@angular/core`                     | NgModule [`providedIn`](#core)의 `'any'` 옵션                                                    | <!-- v15 --> v17         |
+| `@angular/platform-browser-dynamic` | [`JitCompilerFactory`](#platform-browser-dynamic)                                             | <!-- v13 --> v16         |
+| `@angular/platform-browser-dynamic` | [`RESOURCE_CACHE_PROVIDER`](#platform-browser-dynamic)                                        | <!-- v13 --> v16         |
+| `@angular/forms`                    | [`ngModel` with reactive forms](#ngmodel-reactive)                                            | <!--  v6 --> v11         |
+| `@angular/upgrade`                  | [`@angular/upgrade`](#upgrade)                                                                | <!--  v8 --> v11         |
+| `@angular/upgrade`                  | [`getAngularLib`](#upgrade-static)                                                            | <!--  v8 --> v11         |
+| `@angular/upgrade`                  | [`setAngularLib`](#upgrade-static)                                                            | <!--  v8 --> v11         |
+| `@angular/upgrade`                  | [팩토리 기반의 `downgradeModule`](#upgrade-static)                                                  | <!-- v13 --> v15         |
+| 템플릿 문법                              | [`<template>`](#template-tag)                                                                 | <!--  v7 --> v11         |
+| 폴리필                                 | [reflect-metadata](#reflect-metadata)                                                         | <!--  v8 --> v11         |
+| `@angular/compiler-cli`             | [입력값 세터 강제하기](#input-setter-coercion)                                                         | <!-- v13 --> v15         |
+| `@angular/compiler-cli`             | [`fullTemplateTypeCheck`](#full-template-type-check)                                          | <!-- v13 --> v15         |
+| `@angular/core`                     | [`defineInjectable`](#core)                                                                   | <!--  v8 --> v11         |
+| `@angular/core`                     | [`entryComponents`](api/core/NgModule#entryComponents)                                        | <!--  v9 --> v11         |
+| `@angular/core`                     | [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)                       | <!--  v9 --> v11         |
+| `@angular/core`                     | [팩토리 기반의 `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)       | <!-- v13 --> v15         |
+| `@angular/core/testing`             | [`TestBed.get`](#testing)                                                                     | <!--  v9 --> v12         |
+| `@angular/core/testing`             | [`async`](#testing)                                                                           | <!--  v9 --> v12         |
+| `@angular/forms`                    | [`FormBuilder.group` 레거시 옵션 인자](api/forms/FormBuilder#group)                                  | <!-- v11 --> v14         |
+| `@angular/platform-server`          | [`renderModuleFactory`](#platform-server)                                                     | <!-- v13 --> v15         |
+| `@angular/platform-server`          | [`ServerTransferStateModule`](#platform-server)                                               | <!-- v14 --> v16         |
+| `@angular/platform-browser`         | [`BrowserTransferStateModule`](#platform-browser)                                             | <!-- v14 --> v16         |
+| `@angular/router`                   | [`relativeLinkResolution`](#relativeLinkResolution)                                           | <!-- v14 --> v16         |
+| `@angular/router`                   | [`RouterOutletContract.activateWith`의 `resolver` 인자](#router)                                 | <!-- v14 --> v16         |
+| `@angular/router`                   | [`OutletContext` 클래스의 `resolver` 필드](#router)                                                 | <!-- v14 --> v16         |
+| `@angular/router`                   | [`RouterLinkWithHref` 디렉티브](#router)                                                          | <!-- v15 --> v17         |
+| `@angular/router`                   | [`provideRoutes` 함수](#router)                                                                 | <!-- v15 --> v17         |
+| `@angular/service-worker`           | [`SwUpdate#activated`](api/service-worker/SwUpdate#activated)                                 | <!-- v13 --> v16         |
+| `@angular/service-worker`           | [`SwUpdate#available`](api/service-worker/SwUpdate#available)                                 | <!-- v13 --> v16         |
+| 템플릿 문법                              | [`/deep/`, `>>>`, `::ng-deep`](#deep-component-style-selector)                                | <!--  v7 --> unspecified |
+| 템플릿 문법                              | [`bind-`, `on-`, `bindon-`, `ref-`](#bind-syntax)                                             | <!-- v13 --> v15         |
+| `@angular/common`                   | [`DatePipe` - `DATE_PIPE_DEFAULT_TIMEZONE`](api/common/DATE_PIPE_DEFAULT_TIMEZONE)            | <!-- v15 --> v17         |
 
 Angular CDK와 Angular Material에서 지원이 중단되는 기능을 확인하려면 [이 체인지 로그](https://github.com/angular/components/blob/main/CHANGELOG.md)를 확인하세요.
-
 
 <a id="deprecated-apis"></a>
 
@@ -155,11 +218,13 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 |:---                                                                                           |:---                                                 |:---                   |:---     |
 | [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | `{provide: DEFAULT_CURRENCY_CODE, useValue: 'USD'}` | v9                    | From v11 the default code will be extracted from the locale data given by `LOCALE_ID`, rather than `USD`. |
 | [`NgComponentOutlet.ngComponentOutletNgModuleFactory`](api/common/NgComponentOutlet)          | `NgComponentOutlet.ngComponentOutletNgModule`       | v14                   | Use the `ngComponentOutletNgModule` input instead. This input doesn't require resolving NgModule factory. |
+| [`DatePipe` - `DATE_PIPE_DEFAULT_TIMEZONE`](api/common/DATE_PIPE_DEFAULT_TIMEZONE) |`{ provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: '-1200' }` | v15                    | Use the `DATE_PIPE_DEFAULT_OPTIONS` injection token, which can configure multiple settings at once instead. |
 -->
-| API                                                                                           | 대체 방식                                               | 지원중단 발표 | 설명                                                                    |
-|:----------------------------------------------------------------------------------------------|:----------------------------------------------------|:--------|:----------------------------------------------------------------------|
-| [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | `{provide: DEFAULT_CURRENCY_CODE, useValue: 'USD'}` | v9      | `LOCALE_ID`의 기본값은 `USD` 였지만 v11부터는 기본값을 지정하지 않습니다.                    |
-| [`NgComponentOutlet.ngComponentOutletNgModuleFactory`](api/common/NgComponentOutlet)          | `NgComponentOutlet.ngComponentOutletNgModule`       | v14     | `ngComponentOutletNgModule`을 대신 사용하세요. 이 방식은 NgModule 팩토리를 활용하지 않습니다. |
+| API                                                                                           | 대체 방식                                                                   | 지원중단 발표 | 설명                                                                    |
+|:---                                                                                           |:------------------------------------------------------------------------|:--------|:----------------------------------------------------------------------|
+| [`CurrencyPipe` - `DEFAULT_CURRENCY_CODE`](api/common/CurrencyPipe#currency-code-deprecation) | `{provide: DEFAULT_CURRENCY_CODE, useValue: 'USD'}`                     | v9      | `LOCALE_ID`의 기본값은 `USD` 였지만 v11부터는 기본값을 지정하지 않습니다.                    |
+| [`NgComponentOutlet.ngComponentOutletNgModuleFactory`](api/common/NgComponentOutlet)          | `NgComponentOutlet.ngComponentOutletNgModule`                           | v14     | `ngComponentOutletNgModule`을 대신 사용하세요. 이 방식은 NgModule 팩토리를 활용하지 않습니다. |
+| [`DatePipe` - `DATE_PIPE_DEFAULT_TIMEZONE`](api/common/DATE_PIPE_DEFAULT_TIMEZONE) | `{ provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { timezone: '-1200' }` | v15     | `DATE_PIPE_DEFAULT_OPTIONS` 인젝션 토큰으로 한 번에 설정하세요.                      |
 
 
 <a id="common-http"></a>
@@ -196,33 +261,38 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 | [`ModuleWithComponentFactories`](api/core/ModuleWithComponentFactories)                                    | none                                                                                                                                                              | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
 | [`Compiler`](api/core/Compiler)                                                                            | none                                                                                                                                                              | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
 | [`CompilerFactory`](api/core/CompilerFactory)                                                              | none                                                                                                                                                              | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
-| [`NgModuleFactory`](api/core/NgModuleFactory)                                                              | Use non-factory based framework APIs like [PlatformRef.bootstrapModule](api/core/PlatformRef#bootstrapModule) and [createNgModuleRef](api/core/createNgModuleRef) | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
+| [`NgModuleFactory`](api/core/NgModuleFactory)                                                              | Use non-factory based framework APIs like [PlatformRef.bootstrapModule](api/core/PlatformRef#bootstrapModule) and [createNgModule](api/core/createNgModule) | v13                   | Ivy JIT mode doesn't require accessing this symbol. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context.                                                                                                                  |
 | [Factory-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent) | [Type-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                                                           | v13                   | Angular no longer requires component factories to dynamically create components. Use different signature of the `createComponent` method, which allows passing Component class directly.                                                                           |
 | [`ComponentFactory`](api/core/ComponentFactory)                                                            | Use non-factory based framework APIs.                                                                                                                             | v13                   | Since Ivy, Component factories are not required. Angular provides other APIs where Component classes can be used directly.                                                                                                                                         |
 | [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver)                                            | Use non-factory based framework APIs.                                                                                                                             | v13                   | Since Ivy, Component factories are not required, thus there is no need to resolve them.                                                                                                                                                                            |
 | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](api/core/CompilerOptions) | none                                                                                                                                                              | v13                   | Since Ivy, those config options are unused, passing them has no effect.                                                                                                                                                                                            |
+| [`providedIn`](api/core/Injectable#providedIn) with NgModule | Prefer `'root'` providers, or use NgModule `providers` if scoping to an NgModule is necessary | v15 | none |
+| [`providedIn: 'any'`](api/core/Injectable#providedIn) | none | v15 | This option has confusing semantics and nearly zero usage. |
 -->
-| API                                                                                                        | 대체 방식                                                                                                                                                             | 지원중단 발표 | 설명                                                                                                                                                                                            |
-|:-----------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`DefaultIterableDiffer`](api/core/DefaultIterableDiffer)                                                  | -                                                                                                                                                                 | v4      | public API에서 제거되었습니다.                                                                                                                                                                         |
-| [`ReflectiveInjector`](api/core/ReflectiveInjector)                                                        | [`Injector.create()`](api/core/Injector#create)                                                                                                                   | v5      | [`ReflectiveInjector`](#reflectiveinjector)를 참고하세요.                                                                                                                                           |
-| [`ReflectiveKey`](api/core/ReflectiveKey)                                                                  | -                                                                                                                                                                 | v5      | -                                                                                                                                                                                             |
-| [`defineInjectable`](api/core/defineInjectable)                                                            | `ɵɵdefineInjectable`                                                                                                                                              | v8      | 빌드 후 생성된 코드에서만 사용됩니다. 소스 코드에서는 이 API를 사용하면 안됩니다.                                                                                                                                              |
-| [`entryComponents`](api/core/NgModule#entryComponents)                                                     | -                                                                                                                                                                 | v9      | [`entryComponents`](#entryComponents)를 참고하세요.                                                                                                                                                 |
-| [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)                                    | -                                                                                                                                                                 | v9      | [`ANALYZE_FOR_ENTRY_COMPONENTS`](#entryComponents)를 참고하세요.                                                                                                                                    |
-| [`async`](api/core/testing/async)                                                                          | [`waitForAsync`](api/core/testing/waitForAsync)                                                                                                                   | v11     | `@angular/core/testing` 패키지로 제공되는 [`async`](api/core/testing/async) 함수는 표준 JavaScript `async` 문법과 혼동을 피하기 위해 `waitForAsync`라는 이름으로 변경되었습니다. `async()` 함수는 지원을 중단하기로 결정되었며 이후 버전에서는 제거될 예정입니다. |
-| [`getModuleFactory`](api/core/getModuleFactory)                                                            | [`getNgModuleById`](api/core/getNgModuleById)                                                                                                                     | v13     | Ivy는 팩토리를 거치지 않아도 NgModule 클래스와 직접 연동할 수 있습니다.                                                                                                                                                |
-| `ViewChildren.emitDistinctChangesOnly` / `ContentChildren.emitDistinctChangesOnly`                         | - \([issue #40091](https://github.com/angular/angular/issues/40091) 참고\)                                                                                          |         | 이 플래그는 [issue #40091](https://github.com/angular/angular/issues/40091) 버그를 해결하기 위해 임시로 도입되었으며 이제 사용되지 않습니다.                                                                                   |
-| 팩토리 기반으로 제공되는 [`ApplicationRef.bootstrap`](api/core/ApplicationRef#bootstrap)                              | 타입 기반으로 제공되는 [`ApplicationRef.bootstrap`](api/core/ApplicationRef#bootstrap)                                                                                      | v13     | Ivy를 사용할 때는 컴포넌트 팩토리를 사용하지 않고 컴포넌트 타입을 직접 참조합니다.                                                                                                                                              |
-| [`PlatformRef.bootstrapModuleFactory`](api/core/PlatformRef#bootstrapModuleFactory)                        | [`PlatformRef.bootstrapModule`](api/core/PlatformRef#bootstrapModule)                                                                                             | v13     | Ivy를 사용할 때는 NgModule 팩토리를 사용하지 않고 NgModule 타입을 직접 참조합니다.                                                                                                                                      |
-| [`ModuleWithComponentFactories`](api/core/ModuleWithComponentFactories)                                    | -                                                                                                                                                                 | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                       |
-| [`Compiler`](api/core/Compiler)                                                                            | -                                                                                                                                                                 | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                       |
-| [`CompilerFactory`](api/core/CompilerFactory)                                                              | -                                                                                                                                                                 | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                       |
-| [`NgModuleFactory`](api/core/NgModuleFactory)                                                              | Use non-factory based framework APIs like [PlatformRef.bootstrapModule](api/core/PlatformRef#bootstrapModule) and [createNgModuleRef](api/core/createNgModuleRef) | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                       |
-| [팩토리 기반으로 제공되는 `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)              | [Type-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                                                           | v13     | Angular는 동적으로 컴포넌트를 생성할 때 더이상 컴포넌트 팩토리를 사용하지 않습니다. 컴포넌트 클래스를 직접 활용하는 `createComponent` 메소드를 사용하세요.                                                                                            |
-| [`ComponentFactory`](api/core/ComponentFactory)                                                            | Use non-factory based framework APIs.                                                                                                                             | v13     | Ivy를 사용할 때는 컴포넌트 팩토리를 사용하지 않고 컴포넌트 타입을 직접 참조합니다.                                                                                                                                              |
-| [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver)                                            | Use non-factory based framework APIs.                                                                                                                             | v13     | Ivy를 사용할때는 컴포넌트 팩토리를 사용하지 않기 때문에, 더이상 사용하지 않습니다.                                                                                                                                              |
-| [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](api/core/CompilerOptions) | -                                                                                                                                                                 | v13     | Ivy를 사용하면서 옵션도 사용하지 않습니다. 여기에 옵션을 지정해도 동작하지 않습니다.                                                                                                                                             |
+| API                                                                                                        | 대체 방식                                                                                                                     | 지원중단 발표 | 설명                                                                                                                                                                                            |
+|:-----------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:--------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`DefaultIterableDiffer`](api/core/DefaultIterableDiffer)                                                  | -                                                                                                                         | v4      | public API에서 제거되었습니다.                                                                                                                                                                         |
+| [`ReflectiveInjector`](api/core/ReflectiveInjector)                                                        | [`Injector.create()`](api/core/Injector#create)                                                                           | v5      | [`ReflectiveInjector`](#reflectiveinjector)를 참고하세요.                                                                                                                                           |
+| [`ReflectiveKey`](api/core/ReflectiveKey)                                                                  | -                                                                                                                         | v5      | -                                                                                                                                                                                             |
+| [`defineInjectable`](api/core/defineInjectable)                                                            | `ɵɵdefineInjectable`                                                                                                      | v8      | 빌드 후 생성된 코드에서만 사용됩니다. 소스 코드에서는 이 API를 사용하면 안됩니다.                                                                                                                                              |
+| [`entryComponents`](api/core/NgModule#entryComponents)                                                     | -                                                                                                                         | v9      | [`entryComponents`](#entryComponents)를 참고하세요.                                                                                                                                                 |
+| [`ANALYZE_FOR_ENTRY_COMPONENTS`](api/core/ANALYZE_FOR_ENTRY_COMPONENTS)                                    | -                                                                                                                         | v9      | [`ANALYZE_FOR_ENTRY_COMPONENTS`](#entryComponents)를 참고하세요.                                                                                                                                    |
+| [`async`](api/core/testing/async)                                                                          | [`waitForAsync`](api/core/testing/waitForAsync)                                                                           | v11     | `@angular/core/testing` 패키지로 제공되는 [`async`](api/core/testing/async) 함수는 표준 JavaScript `async` 문법과 혼동을 피하기 위해 `waitForAsync`라는 이름으로 변경되었습니다. `async()` 함수는 지원을 중단하기로 결정되었며 이후 버전에서는 제거될 예정입니다. |
+| [`getModuleFactory`](api/core/getModuleFactory)                                                            | [`getNgModuleById`](api/core/getNgModuleById)                                                                             | v13     | Ivy는 팩토리를 거치지 않아도 NgModule 클래스와 직접 연동할 수 있습니다.                                                                                                                                                |
+| `ViewChildren.emitDistinctChangesOnly` / `ContentChildren.emitDistinctChangesOnly`                         | none \([issue #40091](https://github.com/angular/angular/issues/40091) 참고\)                                               |         | 이 플래그는 [issue #40091](https://github.com/angular/angular/issues/40091) 버그를 해결하기 위해 임시로 도입되었으며 이제 사용되지 않습니다.                                                                                   |
+| 팩토리 기반의 [`ApplicationRef.bootstrap`](api/core/ApplicationRef#bootstrap)                                    | 타입 기반의 [`ApplicationRef.bootstrap`](api/core/ApplicationRef#bootstrap)                                                    | v13     | Ivy를 사용할 때는 컴포넌트 팩토리를 사용하지 않고 컴포넌트 타입을 직접 참조합니다.                                                                                                                                              |
+| [`PlatformRef.bootstrapModuleFactory`](api/core/PlatformRef#bootstrapModuleFactory)                        | [`PlatformRef.bootstrapModule`](api/core/PlatformRef#bootstrapModule)                                                     | v13     | Ivy를 사용할 때는 NgModule 팩토리를 사용하지 않고 NgModule 타입을 직접 참조합니다.                                                                                                                                      |
+| [`ModuleWithComponentFactories`](api/core/ModuleWithComponentFactories)                                    | -                                                                                                                         | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                        |
+| [`Compiler`](api/core/Compiler)                                                                            | -                                                                                                                         | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                        |
+| [`CompilerFactory`](api/core/CompilerFactory)                                                              | -                                                                                                                         | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                        |
+| [`NgModuleFactory`](api/core/NgModuleFactory)                                                              | 팩토리 기반이 아닌 [PlatformRef.bootstrapModule](api/core/PlatformRef#bootstrapModule), [createNgModule](api/core/createNgModule) | v13     | Ivy JIT 모드에서는 이 심볼을 사용하지 않습니다. 자세한 내용은 [ViewEngine 지원 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요.                                                                                        |
+| [팩토리 기반의 `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                    | [타입 기반의 `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                                    | v13     | Angular는 동적으로 컴포넌트를 생성할 때 더이상 컴포넌트 팩토리를 사용하지 않습니다. 컴포넌트 클래스를 직접 활용하는 `createComponent` 메소드를 사용하세요.                                                                                            |
+| [`ComponentFactory`](api/core/ComponentFactory)                                                            | 팩토리 기반이 아닌 API                                                                                                            | v13     | Ivy를 사용할 때는 컴포넌트 팩토리를 사용하지 않고 컴포넌트 타입을 직접 참조합니다.                                                                                                                                              |
+| [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver)                                            | 팩토리 기반이 아닌 API                                                                                                            | v13     | Since Ivy, Component factories are not required, thus there is no need to resolve them.                                                                                                       |
+| [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](api/core/CompilerOptions) | -                                                                                                                         | v13     | Ivy를 사용할때는 컴포넌트 팩토리를 사용하지 않기 때문에, 더이상 사용하지 않습니다.                                                                                                                                              |
+| NgModule의 [`providedIn`](api/core/Injectable#providedIn)                                                   | NgModule 계층에 등록하려면  `root` 프로바이더나 NgModule의 `providers` 필드를 활용하세요.                                                        | v15     | -                                                                                                                                                                                             |
+| [`providedIn: 'any'`](api/core/Injectable#providedIn)                                                      | -                                                                                                                         | v15     | 이 옵션은 혼란스러웠으며 거의 사용되지도 않았습니다.                                                                                                                                                                 |
+
 
 <a id="testing"></a>
 
@@ -249,11 +319,29 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 |:---                                        |:---                               |:---                   |:---     |
 | [`resolver` argument in `RouterOutletContract.activateWith`](api/router/RouterOutletContract#activatewith) | No replacement needed | v14                   | Component factories are not required to create an instance of a component dynamically. Passing a factory resolver via `resolver` argument is no longer needed. |
 | [`resolver` field of the `OutletContext` class](api/router/OutletContext#resolver) | No replacement needed | v14                   | Component factories are not required to create an instance of a component dynamically. Passing a factory resolver via `resolver` class field is no longer needed. |
+| [`RouterLinkWithHref` directive](api/router/RouterLinkWithHref) | Use `RouterLink` instead. | v15                   | The `RouterLinkWithHref` directive code was merged into `RouterLink`. Now the `RouterLink` directive can be used for all elements that have `routerLink` attribute. |
+| [`provideRoutes` function](api/router/provideRoutes) | Use `ROUTES` `InjectionToken` instead. | v15                   | The `provideRoutes` helper function is minimally useful and can be unintentionally used instead of `provideRouter` due to similar spelling. |
 -->
-| API                                                                                                     | 대체 방식 | 지원중단 발표 | 설명                                                                                                                                                                |
-|:--------------------------------------------------------------------------------------------------------|:------|:--------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`RouterOutletContract.activateWith`에 사용하는 `resolver` 인자](api/router/RouterOutletContract#activatewith) | -     | v14     | Component factories are not required to create an instance of a component dynamically. Passing a factory resolver via `resolver` argument is no longer needed.    |
-| [`OutletContext` 클래스의 `resolver` 필드](api/router/OutletContext#resolver)                                 | -     | v14     | Component factories are not required to create an instance of a component dynamically. Passing a factory resolver via `resolver` class field is no longer needed. |
+| API                                                                                                     | 대체 방식                             | 지원중단 발표 | 설명                                                                                                             |
+|:--------------------------------------------------------------------------------------------------------|:----------------------------------|:--------|:---------------------------------------------------------------------------------------------------------------|
+| [`RouterOutletContract.activateWith`에 사용하는 `resolver` 인자](api/router/RouterOutletContract#activatewith) | -                                 | v14     | 컴포넌트 팩토리는 컴포넌트 인스턴스를 동적으로 생성하지 않습니다. 그래서 더이상 `resolver` 인자를 전달하지 않아도 됩니다.                                      |
+| [`OutletContext` 클래스의 `resolver` 필드](api/router/OutletContext#resolver)                                 | -                                 | v14     | 컴포넌트 팩토리는 컴포넌트 인스턴스를 동적으로 생성하지 않습니다. 그래서 더이상 `resolver` 인자를 전달하지 않아도 됩니다.                                      |
+| [`RouterLinkWithHref` 디렉티브](api/router/RouterLinkWithHref)                                              | `RouterLink`를 사용하세요.              | v15     | `RouterLinkWithHref` 디렉티브는 `RouterLink`와 합쳐졌습니다. 이제 `routerLink` 어트리뷰트가 적용된 엘리먼트는 모두 `RouterLink` 디렉티브로 사용합니다. |
+| [`provideRoutes` 함수](api/router/provideRoutes)                                                          | `ROUTES` `InjectionToken`를 사용하세요. | v15     | `provideRoutes` 헬퍼 함수는 활용도가 적었고, 비슷한 철자의 `provideRouter`와 헷갈리는 경우가 많았습니다.                                      |
+
+
+<a id="platform-browser"></a>
+
+### &commat;angular/platform-browser
+
+<!--
+| API                                                              | Replacement                                        | Deprecation announced | Details |
+|:---                                                              |:---                                                |:---                   |:---     |
+| [`BrowserTransferStateModule`](api/platform-browser/BrowserTransferStateModule) | No replacement needed.  | v14.1                   | The `TransferState` class is available for injection without importing additional modules on the client side of a server-rendered application. |
+-->
+| API                                                                             | 대체 방식 | 지원중단 발표  | 설명                                                                       |
+|:--------------------------------------------------------------------------------|:------|:---------|:-------------------------------------------------------------------------|
+| [`BrowserTransferStateModule`](api/platform-browser/BrowserTransferStateModule) | -     | v14.1    | 서버 사이드 렌더링을 활용하는 애플리케이션이라면 추가 모듈 로딩 없이도 `TransferState` 클래스를 활용할 수 있습니다. |
 
 
 <a id="platform-browser-dynamic"></a>
@@ -280,10 +368,13 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 | API                                                              | Replacement                                        | Deprecation announced | Details |
 |:---                                                              |:---                                                |:---                   |:---     |
 | [`renderModuleFactory`](api/platform-server/renderModuleFactory) | [`renderModule`](api/platform-server/renderModule) | v13                   | This symbol is no longer necessary. See [JIT API changes due to ViewEngine deprecation](#jit-api-changes) for additional context. |
+| [`ServerTransferStateModule`](api/platform-server/ServerTransferStateModule) | No replacement needed.  | v14.1                   | The `TransferState` class is available for injection without importing additional modules during server side rendering, when `ServerModule` is imported or `renderApplication` function is used for bootstrap. |
 -->
-| API                                                              | 대체 방식                                              | 지원중단 발표 | 설명                                                                                                 |
-|:-----------------------------------------------------------------|:---------------------------------------------------|:--------|:---------------------------------------------------------------------------------------------------|
-| [`renderModuleFactory`](api/platform-server/renderModuleFactory) | [`renderModule`](api/platform-server/renderModule) | v13     | 이 심볼은 더이상 사용하지 않습니다. [ViewEngine 지원이 중단되면서 변경되는 JIT API](#jit-api-changes) 섹션을 참고하세요. |
+| API                                                                          | 대체 방식                                              | 지원중단 발표 | 설명                                                                                                                                       |
+|:-----------------------------------------------------------------------------|:---------------------------------------------------|:--------|:-----------------------------------------------------------------------------------------------------------------------------------------|
+| [`renderModuleFactory`](api/platform-server/renderModuleFactory)             | [`renderModule`](api/platform-server/renderModule) | v13     | 이 심볼은 더이상 사용하지 않습니다. [ViewEngine이 지원중단되면서 변경되는 JIT API](#jit-api-changes) 문서를 참고하세요.                                                     |
+| [`ServerTransferStateModule`](api/platform-server/ServerTransferStateModule) | -                                                  | v14.1   | 서버 사이드 렌더링을 활용하는 애플리케이션이라면 추가 모듈 로딩 없이도 `TransferState` 클래스를 활용할 수 있습니다. 이 경우에는 부트스트랩할 때 `ServerModule`이나 `renderApplication` 함수가 로딩됩니다. |
+
 
 <a id="forms"></a>
 
@@ -652,10 +743,10 @@ Angular 8 버전부터는 이전까지 사용하던 [`loadChildren`](api/router/
 
 <div class="alert is-helpful">
 
-**Declaration syntax**: <br />
-It's important to follow the route declaration syntax `loadChildren: () => import('...').then(m => m.ModuleName)` to allow `ngc` to discover the lazy-loaded module and the associated `NgModule`.
-You can find the complete list of allowed syntax constructs [here](https://github.com/angular/angular-cli/blob/a491b09800b493fe01301387fa9a025f7c7d4808/packages/ngtools/webpack/src/transformers/import_factory.ts#L104-L113).
-These restrictions will be relaxed with the release of Ivy since it'll no longer use `NgFactories`.
+**선언 문법**: <br />
+`ngc`가 지연로딩되는 모듈을 제대로 로딩하려면 `loadChildren: () => import('...').then(m => m.ModuleName)` 라는 문법을 사용해야 합니다.
+이 방법 외에 다른 방법을 사용하려면 [여기](https://github.com/angular/angular-cli/blob/a491b09800b493fe01301387fa9a025f7c7d4808/packages/ngtools/webpack/src/transformers/import_factory.ts#L104-L113)를 참고하세요.
+이 문법은 Ivy가 도입되면서 더이상 `NgFactories`를 사용하지 않기 때문에 변경된 것입니다.
 
 </div>
 
@@ -670,7 +761,7 @@ These restrictions will be relaxed with the release of Ivy since it'll no longer
 <!--
 Angular applications, and specifically applications that relied on the JIT compiler, used to require a polyfill for the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) APIs.
 
-The need for this polyfill was removed in Angular version 8.0 \([see #14473](https://github.com/angular/angular-cli/pull/14473)\), rendering the presence of the poylfill in most Angular applications unnecessary.
+The need for this polyfill was removed in Angular version 8.0 \([see #14473](https://github.com/angular/angular-cli/pull/14473)\), rendering the presence of the polyfill in most Angular applications unnecessary.
 Because the polyfill can be depended on by 3rd-party libraries, instead of removing it from all Angular projects, we are deprecating the requirement for this polyfill as of version 8.0.
 This should give library authors and application developers sufficient time to evaluate if they need the polyfill, and perform any refactoring necessary to remove the dependency on it.
 
@@ -890,8 +981,8 @@ IE11 will be supported in Angular v12 LTS releases through November 2022.
 ### 입력값 세터 강제
 
 <!--
-Since the `strictTemplates` flag has been introduced in Angular the compiler has been able to type-check input bindings to the declared input type of the corresponding directive.
-When a getter/setter pair is being used for the input it may be desirable to let the setter accept a broader set of types than what is returned by the getter, for example when the setter first converts the input value.
+Since the `strictTemplates` flag has been introduced in Angular, the compiler has been able to type-check input bindings to the declared input type of the corresponding directive.
+When a getter/setter pair is used for the input, the setter might need to accept more types than the getter returns, such as when the setter first converts the input value.
 However, until TypeScript 4.3 a getter/setter pair was required to have identical types so this pattern could not be accurately declared.
 
 To mitigate this limitation, it was made possible to declare [input setter coercion fields](guide/template-typecheck#input-setter-coercion) in directives that are used when type-checking input bindings.
@@ -970,8 +1061,8 @@ Angular 9 이전버전 까지는 [`fullTemplateTypeCheck` 컴파일러 옵션](g
 ## ViewEngine 지원이 중단되면서 변경되는 JIT API
 
 <!--
-In ViewEngine, [JIT compilation](https://angular.io/guide/glossary#jit) required special providers \(like `Compiler`, `CompilerFactory`, etc.\) to be injected in the app and corresponding methods to be invoked.
-With Ivy, JIT compilation takes place implicitly if the Component, NgModule, etc have not already been [AOT compiled](https://angular.io/guide/glossary#aot).
+In ViewEngine, [JIT compilation](https://angular.io/guide/glossary#jit) required special providers \(such as `Compiler` or `CompilerFactory`\) to be injected in the app and corresponding methods to be invoked.
+With Ivy, JIT compilation takes place implicitly if the Component, NgModule, etc. have not already been [AOT compiled](https://angular.io/guide/glossary#aot).
 Those special providers were made available in Ivy for backwards-compatibility with ViewEngine to make the transition to Ivy smoother.
 Since ViewEngine is deprecated and will soon be removed, those symbols are now deprecated as well.
 
@@ -1055,47 +1146,18 @@ This section contains a complete list all of the currently deprecated CLI flags.
 -->
 이 섹션은 Angular CLI에서 지원이 중단된 기능을 설명합니다.
 
-### &commat;angular/cli
-
-<!--
-| API/Option        | May be removed in | Details |
-|:---               |:---               |:---     |
-| `--prod`          | <!-v12-> v14    | Use `--configuration production` instead. |
-| `ng update --all` | <!-v11-> v14    | No longer has an effect.                  |
--->
-| API/옵션            | 지원 중단          | 설명                                   |
-|:------------------|:---------------|:-------------------------------------|
-| `--prod`          | <!--v12--> v14 | `--configuration production`를 사용하세요. |
-| `ng update --all` | <!--v11--> v14 | 더이상 동작하지 않습니다.                       |
-
 ### &commat;angular-devkit/build-angular
 
 <!--
 | API/Option                 | May be removed in | Details |
 |:---                        |:---               |:---     |
 | `deployUrl`                | <!-v13-> v15    | Use `baseHref` option, `APP_BASE_HREF` DI token or a combination of both instead. For more information, see [the deploy url](guide/deployment#the-deploy-url). |
-| `showCircularDependencies` | <!-v12-> v14    | The recommended method to detect circular dependencies in project code is to use either a lint rule or other external tooling.                                 |
 | Protractor builder         | <!-v12-> v14    | Deprecate as part of the Protractor deprecation.                                                                                                               |
 -->
-| API/옵션                     | 지원 중단          | 설명                                                                                                                 |
-|:---------------------------|:---------------|:-------------------------------------------------------------------------------------------------------------------|
-| `deployUrl`                | <!--v13--> v15 | `baseHref` 옵션이나 `APP_BASE_HREF` DI 토큰을 사용하는 것을 권장합니다. 자세한 내용은 [배포 URL](guide/deployment#the-deploy-url) 문서를 참고하세요. |
-| `showCircularDependencies` | <!--v12--> v14 | 순환참조는 Lint 규칙이나 다른 툴로 검출하는 것을 권장합니다.                                                                               |
-| Protractor 빌더              | <!--v12--> v14 | Protractor가 지원 중단되면서 함께 지원이 중단되었습니다.                                                                               |
-
-
-### &commat;angular-devkit/build-optimizer
-
-<!--
-The entire NPM package is deprecated.
-It has always been experimental \(never hit `1.0.0`\) and has
-been an internal package for the Angular CLI.
-All the relevant functionality has been moved to
-`@angular-devkit/build-angular`
--->
-이 NPM 패키지는 지원이 중단되었습니다.
-이 패키지는 Angular CLI를 지원하기 위한 임시 패키지였으며 `1.0.0` 버전이 매겨진 적도 없습니다.
-필요한 기능은 `@angular-devkit/build-angular`로 옮겨졌습니다.
+| API/옵션        | 지원 중단              | 설명                                                                                                                 |
+|:--------------|:-------------------|:-------------------------------------------------------------------------------------------------------------------|
+| `deployUrl`   | <!--v13--> v15     | `baseHref` 옵션이나 `APP_BASE_HREF` DI 토큰을 사용하는 것을 권장합니다. 자세한 내용은 [배포 URL](guide/deployment#the-deploy-url) 문서를 참고하세요. |
+| Protractor 빌더 | <!--v12--> v14     | Protractor가 지원 중단되면서 함께 지원이 중단되었습니다.                                                                               |
 
 
 <a id="removed"></a>
@@ -1152,7 +1214,7 @@ The string syntax has been replaced with dynamic import statements.
 The `DeprecatedLoadChildren` type was removed from `@angular/router`.
 Find more information about the replacement in the [`LoadChildrenCallback` documentation](api/router/LoadChildrenCallback).
 
-The supporting classes `NgModuleFactoryLoader`, `SystemJsNgModuleLoader` and `SystemJsNgModuleLoaderConfig` classes were removed from `@angular/core`, as well as `SpyNgModuleFactoryLoader` from `@angular/router`.
+The supporting classes `NgModuleFactoryLoader`, `SystemJsNgModuleLoader`, and `SystemJsNgModuleLoaderConfig` were removed from `@angular/core`, as well as `SpyNgModuleFactoryLoader` from `@angular/router`.
 -->
 이제는 `loadChildren` 으로 지연로딩을 구현할 때 문자열 방식을 사용할 수 없고, `import`를 사용해서 동적으로 구성해야 합니다.
 이와 함께 `DeprecatedLoadChildren` 타입도 `@angular/router` 패키지에서 제거되었습니다.
@@ -1184,6 +1246,7 @@ If you rely on the behavior that the same object instance should cause change de
 
 *   객체를 복제해서 사용하세요. 다른 객체가 됩니다.
 *   강제로 갱신하려면 [`ChangeDetectorRef.detectChanges()`](api/core/ChangeDetectorRef#detectchanges)를 직접 실행하세요.
+
 
 <!-- links -->
 

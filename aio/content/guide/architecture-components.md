@@ -4,44 +4,53 @@
 # 컴포넌트와 템플릿 소개
 
 <!--
-A *component* controls a patch of screen called a [*view*](guide/glossary#view "Definition of view").
-For example, individual components define and control each of the following views from the [Tour of Heroes tutorial](tutorial):
+A *component* controls a patch of screen called a [*view*](guide/glossary#view "Definition of view"). It consists
+of a TypeScript class, an HTML template, and a CSS style sheet. The TypeScript class defines the interaction 
+of the HTML template and the rendered DOM structure, while the style sheet describes its appearance.
+
+An Angular application uses individual components to define and control different aspects of the application.
+For example, an application could include components to describe:
 
 *   The application root with the navigation links
 *   The list of heroes
 *   The hero editor
 
-You define a component's application logic &mdash;what it does to support the view&mdash; inside a class.
-The class interacts with the view through an API of properties and methods.
+In the following example, the `HeroListComponent` class includes:
 
-For example, `HeroListComponent` has a `heroes` property that holds an array of heroes.
-Its `selectHero()` method sets a `selectedHero` property when the user clicks to choose a hero from that list.
-The component acquires the heroes from a service, which is a TypeScript [parameter property](https://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties) on the constructor.
-The service is provided to the component through the dependency injection system.
+* A `heroes` property that holds an array of heroes.
+* A `selectedHero` property that holds the last hero selected by the user.
+* A `selectHero()` method sets a `selectedHero` property when the user clicks to choose a hero from that list.
+
+The component initializes the `heroes` property by using the `HeroService` service, which is a TypeScript [parameter property](https://www.typescriptlang.org/docs/handbook/2/classes.html#parameter-properties) on the constructor. Angular's dependency injection system provides the `HeroService` service to the component.
 
 <code-example header="src/app/hero-list.component.ts (class)" path="architecture/src/app/hero-list.component.ts" region="class"></code-example>
 
 Angular creates, updates, and destroys components as the user moves through the application.
 Your application can take action at each moment in this lifecycle through optional [lifecycle hooks](guide/lifecycle-hooks), like `ngOnInit()`.
 -->
-*컴포넌트(component)*는 [*뷰(view)*](guide/glossary#view "Definition of view")라고 하는 화면의 일부를 구성합니다.
-[히어로들의 여행 튜토리얼](tutorial)을 예로 들면 이 튜토리얼에서 다루는 컴포넌트들이 다음과 같은 뷰를 각각 정의하고 있습니다:
+A *component* controls a patch of screen called a [*view*](guide/glossary#view "Definition of view"). It consists
+of a TypeScript class, an HTML template, and a CSS style sheet. The TypeScript class defines the interaction 
+of the HTML template and the rendered DOM structure, while the style sheet describes its appearance.
 
-* 네비게이션 링크가 표시되는 앱 최상위 메뉴
-* 히어로 목록
-* 히어로 에디터
+An Angular application uses individual components to define and control different aspects of the application.
+For example, an application could include components to describe:
 
-뷰에서 사용할 애플리케이션 로직은 컴포넌트에 정의하며, 뷰는 클래스의 프로퍼티와 메소드를 활용해서 클래스와 상호작용 합니다.
+*   The application root with the navigation links
+*   The list of heroes
+*   The hero editor
 
-예를 들면 `HeroListComponent`는 히어로의 목록을 받아서 저장하도록 `heroes` 프로퍼티를 선언할 수 있습니다.
-이 프로퍼티에 저장된 목록은 화면에 표시되며, 사용자가 화면에서 히어로 목록 중 하나를 클릭했을 때 `selectHero()` 메소드가 `selectedHero` 프로퍼티를 갱신하도록 구현할 수 있습니다.
-컴포넌트는 생성자에 TypeScript [인자 프로퍼티(parameter property)](https://www.typescriptlang.org/docs/handbook/classes.html#parameter-properties)를 지정해서 서비스를 의존성으로 주입받을 수 있으며, 히어로 데이터는 이 서비스를 통해 가져옵니다.
+In the following example, the `HeroListComponent` class includes:
 
-<code-example header="src/app/hero-list.component.ts (클래스)" path="architecture/src/app/hero-list.component.ts" region="class"></code-example>
+* A `heroes` property that holds an array of heroes.
+* A `selectedHero` property that holds the last hero selected by the user.
+* A `selectHero()` method sets a `selectedHero` property when the user clicks to choose a hero from that list.
 
-Angular는 사용자의 동작에 따라 컴포넌트를 생성하고 갱신하며 종료시킵니다.
-그리고 컴포넌트가 동작하는 각 라이프싸이클은 [라이프싸이클 후킹 함수](guide/lifecycle-hooks)로 가로채서 각 시점에 필요한 동작을 실행할 수 있습니다.
-예를 들어 컴포넌트가 생성되는 시점을 활용하려면 `ngOnInit()` 함수를 정의하면 됩니다.
+The component initializes the `heroes` property by using the `HeroService` service, which is a TypeScript [parameter property](https://www.typescriptlang.org/docs/handbook/2/classes.html#parameter-properties) on the constructor. Angular's dependency injection system provides the `HeroService` service to the component.
+
+<code-example header="src/app/hero-list.component.ts (class)" path="architecture/src/app/hero-list.component.ts" region="class"></code-example>
+
+Angular creates, updates, and destroys components as the user moves through the application.
+Your application can take action at each moment in this lifecycle through optional [lifecycle hooks](guide/lifecycle-hooks), like `ngOnInit()`.
 
 
 <!--
@@ -75,7 +84,7 @@ This example shows some of the most useful `@Component` configuration options:
 | Configuration options | Details |
 |:---                   |:---     |
 | `selector`            | A CSS selector that tells Angular to create and insert an instance of this component wherever it finds the corresponding tag in template HTML. For example, if an application's HTML contains `<app-hero-list></app-hero-list>`, then Angular inserts an instance of the `HeroListComponent` view between those tags. |
-| `templateUrl`         | The module-relative address of this component's HTML template. Alternatively, you can provide the HTML template inline, as the value of the `template` property.  This template defines the component's *host view*.                                                                                                  |
+| `templateUrl`         | The module-relative address of this component's HTML template. Alternatively, you can provide the HTML template inline, as the value of the `template` property. This template defines the component's *host view*.                                                                                                  |
 | `providers`           | An array of [providers](guide/glossary#provider) for services that the component requires. In the example, this tells Angular how to provide the `HeroService` instance that the component's constructor uses to get the list of heroes to display.                                                                   |
 -->
 Angular 컴포넌트는 컴포넌트 클래스에 `@Component` 데코레이터를 붙여서 정의하며, 이 때 데코레이터 함수에 컴포넌트의 특성을 정의하는 메타데이터를 함께 전달합니다.
@@ -117,7 +126,7 @@ Angular 컴포넌트는 컴포넌트 클래스에 `@Component` 데코레이터�
 You define a component's view with its companion template.
 A template is a form of HTML that tells Angular how to render the component.
 
-Views are typically arranged hierarchically, allowing you to modify or show and hide entire UI sections or pages as a unit.
+Views are typically organized hierarchically, allowing you to modify or show and hide entire UI sections or pages as a unit.
 The template immediately associated with a component defines that component's *host view*.
 The component can also define a *view hierarchy*, which contains *embedded views*, hosted by other components.
 -->
@@ -133,9 +142,10 @@ The component can also define a *view hierarchy*, which contains *embedded views
 </div>
 
 <!--
-A view hierarchy can include views from components in the same NgModule, but it also can \(and often does\) include views from components that are defined in different NgModules.
+A view hierarchy can include views from components in the same NgModule and from those in different NgModules.
 -->
-뷰는 보통 같은 NgModule에 있는 컴포넌트를 활용해서 뷰 계층으로 구성합니다. 그리고 자주 있는 경우는 아니지만 다른 NgModule에 있는 컴포넌트를 뷰에 불러올 수도 있습니다.
+뷰는 보통 같은 NgModule에 있는 컴포넌트를 활용해서 뷰 계층으로 구성합니다.
+다른 NgModule에 있는 컴포넌트를 뷰에 불러올 수도 있습니다.
 
 
 <a id="template-syntax"></a>
@@ -153,30 +163,37 @@ For example, here is a template for the Tutorial's `HeroListComponent`.
 
 <code-example header="src/app/hero-list.component.html" path="architecture/src/app/hero-list.component.html" ></code-example>
 
-This template uses typical HTML elements like `<h2>` and  `<p>`, and also includes Angular template-syntax elements, `*ngFor`, `{{hero.name}}`, `(click)`, `[hero]`, and `<app-hero-detail>`.
+This template uses typical HTML elements like `<h2>` and  `<p>`. It also includes Angular template-syntax elements, `*ngFor`, `{{hero.name}}`, `(click)`, `[hero]`, and `<app-hero-detail>`.
 The template-syntax elements tell Angular how to render the HTML to the screen, using program logic and data.
 
 *   The `*ngFor` directive tells Angular to iterate over a list
 *   `{{hero.name}}`, `(click)`, and `[hero]` bind program data to and from the DOM, responding to user input.
     See more about [data binding](#data-binding) below.
 
-*   The `<app-hero-detail>` tag in the example is an element that represents a new component, `HeroDetailComponent`.
-    `HeroDetailComponent` \(code not shown\) defines the hero-detail child view of `HeroListComponent`.
-    Notice how custom components like this mix seamlessly with native HTML in the same layouts.
+*   The `<app-hero-detail>` element tag in the example represents a new component, `HeroDetailComponent`.
+    The `HeroDetailComponent`  defines the `hero-detail` portion of the rendered DOM structure specified by the `HeroListComponent` component.
+
+    Notice how these custom components mix with native HTML.
 -->
 템플릿은 자주 사용하는 HTML 문법과 비슷하며, 여기에 Angular가 제공하는 [템플릿 문법](guide/template-syntax)을 사용할 수 있습니다.
 템플릿 문법은 애플리케이션이나 DOM 데이터에 따라 HTML을 조작하면서 뷰를 원하는대로 표시합니다.
-그리고 템플릿은 애플리케이션 데이터나 DOM 데이터를 _데이터 바인딩_ 해서 표시할 수 있고, 이 때 *파이프* 를 사용해서 원하는 형식으로 표현할 수도 있으며, *디렉티브* 를 활용해서 간단한 로직을 더할수도 있습니다.
+그리고 템플릿은 애플리케이션 데이터나 DOM 데이터를 *데이터 바인딩* 해서 표시할 수 있고, 이 때 *파이프* 를 사용해서 원하는 형식으로 표현할 수도 있으며, *디렉티브* 를 활용해서 간단한 로직을 더할수도 있습니다.
 
 예를 들어 튜토리얼에서 살펴봤던 `HeroListComponent`의 템플릿은 다음과 같이 정의되어 있습니다:
 
 <code-example header="src/app/hero-list.component.html" path="architecture/src/app/hero-list.component.html" ></code-example>
 
-이 템플릿에는 일반적으로 HTML 문서에 사용되는 `<h2>`나 `<p>` 엘리먼트가 사용되었으며, `*ngFor`나 `{{hero.name}}`, `(click)`, `[hero]`, `<app-hero-detail>`와 같은 문법은 Angular의 템플릿 문법을 활용한 것입니다. 템플릿 문법을 사용하면 HTML를 화면에 렌더링할 때 애플리케이션의 로직이나 데이터를 활용할 수 있습니다.
+이 템플릿에는 일반적으로 HTML 문서에 사용되는 `<h2>`나 `<p>` 엘리먼트가 사용되었으며, `*ngFor`나 `{{hero.name}}`, `(click)`, `[hero]`, `<app-hero-detail>`와 같은 문법은 Angular의 템플릿 문법을 활용한 것입니다.
+템플릿 문법을 사용하면 HTML를 화면에 렌더링할 때 애플리케이션의 로직이나 데이터를 활용할 수 있습니다.
 
-* `*ngFor` 디렉티브를 활용하면 템플릿에서 배열을 순회할 수 있습니다.
-* `{{hero.name}}`, `(click)`, `[hero]`와 같은 문법은 애플리케이션 데이터나 사용자의 동작을 DOM과 연결하는 문법입니다. 이 내용은 아래 [데이터 바인딩](#데이터-바인딩)에서 자세하게 알아봅니다.
-* `<app-hero-detail>` 태그는 Angular로 만든 `HeroDetailComponent`를 표현하는 엘리먼트입니다. 이 코드에는 표시되지 않았지만 `HeroDetailComponent`는 `HeroListComponent`의 자식 컴포넌트이며, 선택된 히어로의 상세 정보를 화면에 표시합니다. 이렇듯, Angular로 만든 커스텀 컴포넌트는 네이티브 HTML와 자연스럽게 어울립니다.
+*   `*ngFor` 디렉티브를 활용하면 템플릿에서 배열을 순회할 수 있습니다.
+*   `{{hero.name}}`, `(click)`, `[hero]`와 같은 문법은 애플리케이션 데이터나 사용자의 동작을 DOM과 연결하는 문법입니다.
+    이 내용은 아래 [데이터 바인딩](#데이터-바인딩)에서 자세하게 알아봅니다.
+
+*   `<app-hero-detail>` 태그는 Angular로 만든 `HeroDetailComponent`를 표현하는 엘리먼트입니다.
+    이 코드에는 표시되지 않았지만 `HeroDetailComponent`는 `HeroListComponent`의 자식 컴포넌트이며, 선택된 히어로의 상세 정보를 화면에 표시합니다.
+
+    이렇듯, Angular로 만든 커스텀 컴포넌트는 네이티브 HTML와 자연스럽게 어울립니다.
 
 
 <a id="data-binding"></a>
@@ -296,7 +313,7 @@ Here's an example from the `HeroDetailComponent` template that uses two-way data
 Angular pipes let you declare display-value transformations in your template HTML.
 A class with the `@Pipe` decorator defines a function that transforms input values to output values for display in a view.
 
-Angular defines various pipes, such as the [date](api/common/DatePipe) pipe and [currency](api/common/CurrencyPipe) pipe; for a complete list, see the [Pipes API list](api?type=pipe).
+Angular defines various pipes, such as the [date](api/common/DatePipe) pipe and [currency](api/common/CurrencyPipe) pipe. For a complete list, see the [Pipes API list](api?type=pipe).
 You can also define new pipes.
 
 To specify a value transformation in an HTML template, use the [pipe operator (`|`)](guide/pipes).
@@ -328,7 +345,8 @@ For example, you can pass the desired format to the `date` pipe.
 파이프는 원래값을 입력받고 새로운 형식의 값을 반환하는 함수에 `@Pipe` 데코레이터를 사용해서 Angular에 등록합니다.
 
 Angular는 여러가지 파이프를 기본으로 제공하는데, 이 중 [날짜](api/common/DatePipe) 파이프와 [통화](api/common/CurrencyPipe) 파이프는 자주 사용하게 될 것입니다.
-Angular에서 제공하는 파이프 목록을 확인하려면 [파이프 API 목록](https://angular.io/api?type=pipe) 문서를 참고하세요. 필요하다면 파이프를 새로 정의해서 사용할 수도 있습니다.
+Angular에서 제공하는 파이프 목록을 확인하려면 [파이프 API 목록](https://angular.io/api?type=pipe) 문서를 참고하세요.
+필요하다면 파이프를 새로 정의해서 사용할 수도 있습니다.
 
 HTML 템플릿에 파이프를 적용할 때는 [파이프 연산자 (|)](guide/pipes)를 다음과 같이 사용합니다:
 
@@ -353,6 +371,7 @@ HTML 템플릿에 파이프를 적용할 때는 [파이프 연산자 (|)](guide/
 &lt;p&gt;The time is {{today &verbar; date:'shortTime'}}&lt;/p&gt;
 
 </code-example>
+
 
 <!--
 ### Directives
@@ -406,8 +425,8 @@ The example template uses two built-in structural directives to add application 
 
 | Directives                                  | Details |
 |:---                                         |:---     |
-| [`*ngFor`](guide/built-in-directives#ngFor) | An iterative; it tells Angular to stamp out one `<li>` per hero in the `heroes` list. |
-| [`*ngIf`](guide/built-in-directives#ngIf)   | A conditional; it includes the `HeroDetail` component only if a selected hero exists. |
+| [`*ngFor`](guide/built-in-directives#ngFor) | An *iterative*, which tells Angular to create one `<li>` per hero in the `heroes` list. |
+| [`*ngIf`](guide/built-in-directives#ngIf)   | A *conditional*, which includes the `HeroDetail` component only if a selected hero exists. |
 -->
 구조 디렉티브는 DOM 엘리먼트를 추가하거나 제거, 치환하는 용도로 사용합니다.
 Angular가 제공하는 구조 디렉티브를 템플릿에 사용하는 예제 코드를 확인해 보세요:
@@ -433,7 +452,10 @@ The `ngModel` directive, which implements two-way data binding, is an example of
 
 <code-example header="src/app/hero-detail.component.html (ngModel)" path="architecture/src/app/hero-detail.component.html" region="ngModel"></code-example>
 
-Angular has more pre-defined directives that either alter the layout structure \(for example, [ngSwitch](guide/built-in-directives#ngSwitch)\) or modify aspects of DOM elements and components \(for example, [ngStyle](guide/built-in-directives#ngstyle) and [ngClass](guide/built-in-directives#ngClass)\).
+Angular includes pre-defined directives that change: 
+
+* The layout structure, such as [ngSwitch](guide/built-in-directives#ngSwitch), and
+* Aspects of DOM elements and components, such as [ngStyle](guide/built-in-directives#ngstyle) and [ngClass](guide/built-in-directives#ngClass).
 
 <div class="alert is-helpful">
 
@@ -449,13 +471,17 @@ Learn more in the [Attribute Directives](guide/attribute-directives) and [Struct
 
 <code-example header="src/app/hero-detail.component.html (ngModel)" path="architecture/src/app/hero-detail.component.html" region="ngModel"></code-example>
 
-이 외에도 Angular가 제공하는 기본 디렉티브 중에는 조건에 따라 레이아웃을 선택해서 표시하는 [ngSwitch](guide/built-in-directives#ngSwitch)나, 컴포넌트에 스타일이나 지정하는 [ngStyle](guide/built-in-directives#ngstyle), 컴포넌트에 CSS 스타일을 지정하는 [ngClass](guide/built-in-directives#ngClass)도 있습니다.
+이 외에도:
+
+* [ngSwitch](guide/built-in-directives#ngSwitch)와 같이 레이아웃 구조를 조작하는 디렉티브가 있고
+* 컴포넌트에 스타일이나 지정하는 [ngStyle](guide/built-in-directives#ngstyle), 컴포넌트에 CSS 스타일을 지정하는 [ngClass](guide/built-in-directives#ngClass)도 있습니다.
 
 <div class="alert is-helpful">
 
-더 자세한 내용은 [어트리뷰트 디렉티브](guide/attribute-directives)와 [구조 디렉티브](guide/structural-directives) 가이드 문서를 확인해 보세요.
+자세한 내용은 [어트리뷰트 디렉티브](guide/attribute-directives)와 [구조 디렉티브](guide/structural-directives) 가이드 문서를 확인해 보세요.
 
 </div>
+
 
 <!-- links -->
 

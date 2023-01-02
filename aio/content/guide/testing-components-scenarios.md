@@ -29,7 +29,7 @@ If you'd like to experiment with the application that this guide describes, <liv
 ## 컴포넌트 바인딩
 
 <!--
-In the example app, the `BannerComponent` presents static title text in the HTML template.
+In the example application, the `BannerComponent` presents static title text in the HTML template.
 
 After a few changes, the `BannerComponent` presents a dynamic title by binding to the component's `title` property like this.
 
@@ -317,7 +317,7 @@ Please call "TestBed.compileComponents" before your test.
 <!--
 Components often have service dependencies.
 
-The `WelcomeComponent` displays a welcome message to the logged in user.
+The `WelcomeComponent` displays a welcome message to the logged-in user.
 It knows who the user is based on a property of the injected `UserService`:
 
 <code-example header="app/welcome/welcome.component.ts" path="testing/src/app/welcome/welcome.component.ts"></code-example>
@@ -356,7 +356,7 @@ But not the real `UserService`.
 
 <!--
 A *component-under-test* doesn't have to be injected with real services.
-In fact, it is usually better if they are test doubles \(stubs, fakes, spies, or mocks\).
+In fact, it is usually better if they are test doubles such as, stubs, fakes, spies, or mocks.
 The purpose of the spec is to test the component, not the service, and real services can be trouble.
 
 Injecting the real `UserService` could be a nightmare.
@@ -390,7 +390,7 @@ This particular test suite supplies a minimal mock of the `UserService` that sat
 #### 의존성으로 주입한 서비스 참조하기
 
 <!--
-The tests need access to the \(stub\) `UserService` injected into the `WelcomeComponent`.
+The tests need access to the stub `UserService` injected into the `WelcomeComponent`.
 
 Angular has a hierarchical injection system.
 There can be injectors at multiple levels, from the root injector created by the `TestBed` down through the component tree.
@@ -713,26 +713,26 @@ fakeAsync(() =&gt; { /* 테스트 코드 */ })
 #### `tick()` 함수
 
 <!--
-You do have to call [tick()](api/core/testing/tick) to advance the \(virtual\) clock.
+You do have to call [tick()](api/core/testing/tick) to advance the virtual clock.
 
 Calling [tick()](api/core/testing/tick) simulates the passage of time until all pending asynchronous activities finish.
 In this case, it waits for the error handler's `setTimeout()`.
 
-The [tick()](api/core/testing/tick) function accepts milliseconds and tickOptions as parameters, the millisecond \(defaults to 0 if not provided\) parameter represents how much the virtual clock advances.
+The [tick()](api/core/testing/tick) function accepts `millis` and `tickOptions` as parameters. The `millis` parameter specifies how much the virtual clock advances and defaults to `0` if not provided.
 For example, if you have a `setTimeout(fn, 100)` in a `fakeAsync()` test, you need to use `tick(100)` to trigger the fn callback.
-The tickOptions is an optional parameter with a property called `processNewMacroTasksSynchronously` \(defaults to true\) that represents whether to invoke new generated macro tasks when ticking.
+The optional `tickOptions` parameter has a property named `processNewMacroTasksSynchronously`. The `processNewMacroTasksSynchronously` property represents whether to invoke new generated macro tasks when ticking and defaults to `true`.
 
 <code-example path="testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick"></code-example>
 
 The [tick()](api/core/testing/tick) function is one of the Angular testing utilities that you import with `TestBed`.
 It's a companion to `fakeAsync()` and you can only call it within a `fakeAsync()` body.
 -->
-[tick()](api/core/testing/tick) 함수는 \(가상\) 시계를 앞으로 감는 용도로 사용합니다.
+[tick()](api/core/testing/tick) 함수는 가상 시계를 앞으로 감는 용도로 사용합니다.
 
 그래서 [tick()](api/core/testing/tick) 함수를 실행하면 다음 비동기 작업이 있는 시점까지 시간이 지난 것으로 간주할 수 있습니다.
 위 섹션에서 다룬 코드에서는 에러가 처리되는 `setTimeout()` 시점으로 이동합니다.
 
-[tick()](api/core/testing/tick) 함수는 밀리초 단위 숫자나 `tickOptions` 객체를 인자로 받아서 원하는 시간 만큼 이동할 수 있으며, 인자 없이 사용하면 0이 사용됩니다.
+[tick()](api/core/testing/tick) 함수는 밀리초 단위 숫자\(`millis`\)나 `tickOptions` 객체를 인자로 받아서 원하는 시간 만큼 이동할 수 있으며, 인자 없이 사용하면 0이 사용됩니다.
 그래서 아래 코드처럼 `fakeAsync()` 안에서 `setTimeout(fn, 100)`을 사용한 후에 `tick()`을 실행하면 타이머 콜백 함수를 실행할 수 있습니다.
 `tickOptions`는 옵션 객체이며 `processNewMacroTasksSynchronously` 프로퍼티를 지정할 수 있습니다.
 이 옵션의 기본값은 `true`이고, `true`를 사용하면 다음 매크로 태스크를 즉시 실행합니다.
@@ -745,21 +745,22 @@ It's a companion to `fakeAsync()` and you can only call it within a `fakeAsync()
 #### tickOptions
 
 <!--
+In this example, you have a new macro task, the nested `setTimeout` function. By default, when the `tick` is setTimeout, `outside` and `nested` will both be triggered.
+
 <code-example path="testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick-new-macro-task-sync"></code-example>
 
-In this example, you have a new macro task \(nested setTimeout\), by default, when the `tick` is setTimeout `outside` and `nested` will both be triggered.
+In some case, you don't want to trigger the new macro task when ticking. You can use `tick(millis, {processNewMacroTasksSynchronously: false})` to not invoke a new macro task.
 
 <code-example path="testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick-new-macro-task-async"></code-example>
-
-And in some case, you don't want to trigger the new macro task when ticking, you can use `tick(milliseconds, {processNewMacroTasksSynchronously: false})` to not invoke new macro task.
 -->
+이 예제에서 `setTimeout` 함수 안에는 매크로 태스크가 하나 있습니다.
+기본적으로는 `outside`와 `nested`가 동시에 실행됩니다.
+
 <code-example path="testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick-new-macro-task-sync"></code-example>
-
-위 예제에서 `setTimeout()` 안에는 또다른 매크로 태스크(setTimeout)이 있는데, `setTimeout` 밖에서 `tick` 함수를 실행하면 `setTimeout` 콜백과 그 안쪽에 있는 `setTimeout` 콜백이 동시에 실행됩니다.
-
-<code-example path="testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick-new-macro-task-async"></code-example>
 
 상황에 따라 원하는 타이머만 실행하려면 `tick(밀리초, {processNewMacroTasksSynchronously: false})`라고 실행하면 됩니다.
+
+<code-example path="testing/src/app/demo/async-helper.spec.ts" region="fake-async-test-tick-new-macro-task-async"></code-example>
 
 
 <!--
@@ -1288,7 +1289,7 @@ RxJS 마블 테스트는 이 문서에서 다루는 내용 말고도 수많은 �
 
 <!--
 A component with inputs and outputs typically appears inside the view template of a host component.
-The host uses a property binding to set the input property and an event binding tolisten to events raised by the output property.
+The host uses a property binding to set the input property and an event binding to listen to events raised by the output property.
 
 The testing goal is to verify that such bindings work as expected.
 The tests should set input values and listen for output events.
@@ -1474,12 +1475,12 @@ The test triggered a "click" event.
 
 <code-example path="testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="trigger-event-handler"></code-example>
 
-The test assumes \(correctly in this case\) that the runtime event handler &mdash;the component's `click()` method&mdash; doesn't care about the event object.
+In this case, the test correctly assumes that the runtime event handler, the component's `click()` method, doesn't care about the event object.
 
 <div class="alert is-helpful">
 
 Other handlers are less forgiving.
-For example, the `RouterLink` directive expects an object with a `button` property that identifies which mouse button \(if any\) was pressed during the click.
+For example, the `RouterLink` directive expects an object with a `button` property that identifies which mouse button, if any, was pressed during the click.
 The `RouterLink` directive throws an error if the event object is missing.
 
 </div>
@@ -1540,7 +1541,7 @@ Make that consistent and straightforward by encapsulating the *click-triggering*
 
 The first parameter is the *element-to-click*.
 If you want, pass a custom event object as the second parameter.
-The default is a \(partial\) [left-button mouse event object](https://developer.mozilla.org/docs/Web/API/MouseEvent/button) accepted by many handlers including the `RouterLink` directive.
+The default is a partial [left-button mouse event object](https://developer.mozilla.org/docs/Web/API/MouseEvent/button) accepted by many handlers including the `RouterLink` directive.
 
 <div class="alert is-important">
 
@@ -1615,7 +1616,7 @@ This testing module configuration shows three important differences:
 
 The `createComponent` returns a `fixture` that holds an instance of `TestHostComponent` instead of an instance of `DashboardHeroComponent`.
 
-Creating the `TestHostComponent` has the side-effect of creating a `DashboardHeroComponent` because the latter appears within the template of the former.
+Creating the `TestHostComponent` has the side effect of creating a `DashboardHeroComponent` because the latter appears within the template of the former.
 The query for the hero element \(`heroEl`\) still finds it in the test DOM, albeit at greater depth in the element tree than before.
 
 The tests themselves are almost identical to the stand-alone version:
@@ -2216,7 +2217,7 @@ This is a skill you might need to test a more sophisticated component, one that 
 #### 이런 테스트는 어떤 점이 좋나요?
 
 <!--
-Stubbed `RouterLink` tests can confirm that a component with links and an outlet is setup properly, that the component has the links it should have, and that they are all pointing in the expected direction.
+Stubbed `RouterLink` tests can confirm that a component with links and an outlet is set up properly, that the component has the links it should have, and that they are all pointing in the expected direction.
 These tests do not concern whether the application will succeed in navigating to the target component when the user clicks a link.
 
 Stubbing the RouterLink and RouterOutlet is the best option for such limited testing goals.
@@ -2379,7 +2380,7 @@ So when you call `createComponent()`, the `TestBed` compiles implicitly.
 That's not a problem when the source code is in memory.
 But the `BannerComponent` requires external files that the compiler must read from the file system, an inherently *asynchronous* operation.
 
-If the `TestBed` were allowed to continue, the tests would run and fail mysteriously before the compiler could finished.
+If the `TestBed` were allowed to continue, the tests would run and fail mysteriously before the compiler could finish.
 
 The preemptive error message tells you to compile explicitly with `compileComponents()`.
 -->
@@ -2602,8 +2603,8 @@ In addition to the support it receives from the default testing module `CommonMo
 
 *   `NgModel` and friends in the `FormsModule` to enable two-way data binding
 *   The `TitleCasePipe` from the `shared` folder
-*   Router services \(which these tests are stubbing\)
-*   Hero data access services \(also stubbed\)
+*   The Router services that these tests are stubbing out
+*   The Hero data access services that are also stubbed out
 
 One approach is to configure the testing module from the individual pieces as in this example:
 
@@ -2662,7 +2663,7 @@ The test configuration can use the `SharedModule` too as seen in this alternativ
 
 <code-example header="app/hero/hero-detail.component.spec.ts (SharedModule setup)" path="testing/src/app/hero/hero-detail.component.spec.ts" region="setup-shared-module"></code-example>
 
-It's a bit tighter and smaller, with fewer import statements \(not shown\).
+It's a bit tighter and smaller, with fewer import statements, which are not shown in this example.
 -->
 `FormsModule`과 `TitleCasePipe`가 애플리케이션 곳곳에 사용된다면 이 부분을 `SharedModule`로 만들어두고 재사용하는 것이 편합니다.
 
@@ -2762,7 +2763,7 @@ The `TestBed.overrideComponent` method can replace the component's `providers` w
 
 <code-example header="app/hero/hero-detail.component.spec.ts (Override setup)" path="testing/src/app/hero/hero-detail.component.spec.ts" region="setup-override"></code-example>
 
-Notice that `TestBed.configureTestingModule` no longer provides a \(fake\) `HeroService` because it's [not needed](#spy-stub).
+Notice that `TestBed.configureTestingModule` no longer provides a fake `HeroService` because it's [not needed](#spy-stub).
 -->
 `HeroDetailComponent`는 컴포넌트 자체에서 `HeroDetailService`를 등록하고 있습니다.
 
@@ -2803,7 +2804,6 @@ Angular는 컴포넌트를 생성할 때 픽스쳐 인젝터의 자식 인젝터
 
 `TestBed.configureTestingModule()`에는 이제 `HeroService`를 대체하는 코드가 없습니다.
 이 코드는 이제 [필요하지 않습니다](#spy-stub).
-
 
 <a id="override-component-method"></a>
 

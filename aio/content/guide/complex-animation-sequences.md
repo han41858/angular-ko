@@ -285,6 +285,29 @@ Angular가 `*ngFor`에 적용하는 애니메이션은 목록의 순서가 변�
 
 
 <!--
+## Animations and Component View Encapsulation
+-->
+## 애니베이션, 컴포넌트 뷰 캡슐화
+
+<!--
+Angular animations are based on the components DOM structure and do not directly take [View Encapsulation](/guide/view-encapsulation) into account, this means that components using `ViewEncapsulation.Emulated` behave exactly as if they were using `ViewEncapsulation.None` (`ViewEncapsulation.ShadowDom` behaves differently as we'll discuss shortly).
+
+For example if the `query()` function (which you'll see more of in the rest of the Animations guide) were to be applied at the top of a tree of components using the emulated view encapsulation, such query would be able to identify (and thus animate) DOM elements on any depth of the tree.
+
+On the other hand the `ViewEncapsulation.ShadowDom` changes the component's DOM structure by "hiding" DOM elements inside [`ShadowRoot`](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot) elements. Such DOM manipulations do prevent some of the animations implementation to work properly since it relies on simple DOM structures and doesn't take `ShadowRoot` elements into account. Therefore it is advised to avoid applying animations to views incorporating components using the ShadowDom view encapsulation.
+-->
+Angular 애니메이션은 컴포넌트 DOM을 기반으로 하지만, [뷰 캡슐화](guide/view-encapsulation)를 적용받지는 않습니다.
+그래서 `ViewEncapsulation.Emulated`가 지정된 컴포넌트와 `ViewEncapsulation.None`가 지정된 컴포넌트는 정확히 동일하게 동작합니다.
+(`ViewEncapsulation.ShadowDom`는 조금 다릅니다.)
+
+예를 들어 `query()` 함수는 뷰 캡슐화가 적용된 컴포넌트의 최상위 계층에 적용되며, 이것은 DOM 엘리먼트의 최상위 계층에 적용되는 것과 동일합니다.
+
+하지만 `ViewEncapsulation.ShadowDom`는 DOM 엘리먼트를 [`ShadowRoot`](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot) 엘리먼트 안쪽으로 감춥니다.
+그래서 기존 DOM 구조에 적용된 간단한 애니메이션이라도 `ShadowRoot` 엘리먼트 안쪽에는 적용되지 않습니다.
+그래서 ShadowDom 캡슐화를 사용한다면 애니메이션 사용을 자제하는 것을 권장합니다.
+
+
+<!--
 ## Animation sequence summary
 -->
 ## 애니메이션 시퀀스 정리

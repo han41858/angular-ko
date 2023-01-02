@@ -1,44 +1,20 @@
 // #docregion can-activate-child
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import {
-  CanActivate, Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  CanActivateChild,
+  CanActivateFn, CanMatchFn, Router,
+  CanActivateChildFn,
   UrlTree
 } from '@angular/router';
 import { AuthService } from './auth.service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class AuthGuard implements CanActivate, CanActivateChild {
-  constructor(private authService: AuthService, private router: Router) {}
+export const authGuard: CanMatchFn|CanActivateFn|CanActivateChildFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): true|UrlTree {
-    const url: string = state.url;
-
-    return this.checkLogin(url);
+  if (authService.isLoggedIn) {
+    return true;
   }
 
-  canActivateChild(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): true|UrlTree {
-    return this.canActivate(route, state);
-  }
-
-// #enddocregion can-activate-child
-  checkLogin(url: string): true|UrlTree {
-    if (this.authService.isLoggedIn) { return true; }
-
-    // 로그인한 후에 이동할 URL을 저장해 둡니다.
-    this.authService.redirectUrl = url;
-
-    // 로그인 페이지로 이동합니다.
-    return this.router.parseUrl('/login');
-  }
-// #docregion can-activate-child
-}
-// #enddocregion
+  // 로그인 페이지로 이동합니다.
+  return router.parseUrl('/login');
+};

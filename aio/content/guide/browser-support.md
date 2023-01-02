@@ -51,6 +51,20 @@ Angular is built on the latest standards of the web platform.
 Targeting such a wide range of browsers is challenging because they do not support all features of modern browsers.
 You compensate by loading polyfill scripts \("polyfills"\) for the browsers that you must support.
 See instructions on how to include polyfills into your project below.
+
+<div class="alert is-important">
+
+The suggested polyfills are the ones that run full Angular applications.
+You might need additional polyfills to support features not covered by this list.
+
+</div>
+
+<div class="alert is-helpful">
+
+**NOTE**: <br />
+Polyfills cannot magically transform an old, slow browser into a modern, fast one.
+
+</div>
 -->
 Angular는 최신 웹 플랫폼 표준을 준수하며 만들어졌습니다.
 하지만 최신 브라우저들이 대부분 지원하는 기능을 제대로 지원하지 않는 일부 브라우저에서는 Angular 애플리케이션의 기능 중 일부가 제대로 동작하지 않을 수 있습니다.
@@ -62,12 +76,12 @@ Angular는 최신 웹 플랫폼 표준을 준수하며 만들어졌습니다.
 이 문서에서 소개하는 폴리필은 Angular 애플리케이션을 제대로 동작시키기 위해 필요한 것들입니다.
 그래서 필요한 기능이 더 있다면 또 다른 폴리필을 추가해야 할 수도 있습니다.
 
+</div>
+
 <div class="alert is-helpful">
 
 **참고**: <br />
 다만, 오래되고 느린 브라우저에 폴리필을 사용했다고 해서 최신 스펙으로 동작하고 속도도 빠른 브라우저로 짠 변신하는 것은 아닙니다.
-
-</div>
 
 </div>
 
@@ -81,20 +95,50 @@ Angular는 최신 웹 플랫폼 표준을 준수하며 만들어졌습니다.
 The [Angular CLI](cli) provides support for polyfills.
 If you are not using the CLI to create your projects, see [Polyfill instructions for non-CLI users](#non-cli).
 
-When you create a project with the `ng new` command, a `src/polyfills.ts` configuration file is created as part of your project folder.
-This file incorporates the mandatory and many of the optional polyfills as JavaScript `import` statements.
+The `polyfills` options of the [browser](cli/build) and [test](cli/test) builder can be a full path for a file \(Example: `src/polyfills.ts`\) or,
+relative to the current workspace or module specifier \(Example: `zone.js`\).
 
-*   The npm packages for the mandatory polyfills \(such as `zone.js`\) are installed automatically for you when you create your project with `ng new`, and their corresponding `import` statements are already enabled in the `src/polyfills.ts` configuration file
-*   If you need an *optional* polyfill, you must install its npm package, then uncomment or create the corresponding import statement in the `src/polyfills.ts` configuration file
+If you create a TypeScript file, make sure to include it in the `files` property of your `tsconfig` file.
+
+<code-example language="jsonc" syntax="jsonc">
+
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    ...
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ]
+  ...
+}
+
+</code-example>
 -->
 [Angular CLI](cli)는 폴리필을 지원합니다.
 프로젝트를 생성할 때 Angular CLI를 사용하지 않았다면 [Angular CLI를 사용하지 않은 환경에서 폴리필 설정하기](#non-cli) 섹션을 참고하세요.
 
-Angular CLI `ng new` 명령으로 프로젝트를 설정했다면 폴리필 설정이 이미 `src/polyfills.ts` 파일에 구성되어 있습니다.
-이 파일에는 필수 폴리필과 옵션 폴리필이 JavaScript `import`로 로드하도록 구성되어 있습니다.
+[browser](cli/build) 빌더와 [test](cli/test) 빌더에 `polyfills` 옵션을 사용할 때는 `src/polyfills.ts`와 같이 현재 워크스페이스을 기준으로 하는 상대주소와 `zone.js`와 같이 모듈을 의미하도록 지정하면 됩니다.
 
-* `ng new` 명령으로 프로젝트를 생성하면 `zone.js`와 같은 필수 폴리필이 `src/polyfills.ts` 환경설정 파일에서 `import` 구문으로 로드됩니다.
-* *옵션* 폴리필이 필요하면 해당 npm 패키지를 설치한 후에 `src/polyfills.ts` 파일에서 `import` 구문을 찾아서 주석을 해제하거나 추가하면 됩니다.
+TypeScript 파일을 새로 만들었다면 `tsconfig` 파일의 `files` 프로퍼티를 다음과 같이 지정하면 됩니다.
+
+<code-example language="jsonc" syntax="jsonc">
+
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    ...
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ]
+  ...
+}
+
+</code-example>
+
 
 <a id="non-cli"></a>
 
@@ -167,4 +211,4 @@ Angular CLI를 사용하지 않는다면 호스트 웹 페이지 파일 `index.h
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2022-11-04

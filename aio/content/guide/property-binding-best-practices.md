@@ -4,7 +4,7 @@
 # 프로퍼티 바인딩 모범 사례
 
 <!--
-By following a few guidelines, you can use property binding in a way that helps you minimize bugs and keep your code readable.
+By following a few guidelines, you can use property binding in a way that helps you reduce bugs and keep your code readable.
 
 <div class="alert is-helpful">
 
@@ -63,11 +63,19 @@ Angular가 이런 경우를 감지하면 에러를 발생시킵니다.
 ## 정확한 타입 반환하기
 
 <!--
-A template expression should evaluate to the type of value that the target property expects.
-For example, return a string if the target property expects a string, a number if it expects a number, or an object if it expects an object.
+A template expression should result in the type of value that the target property expects.
+For example, return:
+
+*   a `string`, if the target property expects a string
+*   a `number`, if it expects a number
+*   an `object`, if it expects an object.
 -->
 템플릿 표현식이 평가된 결과는 바인딩 대상 프로퍼티의 타입과 같아야 합니다.
-바인딩 대상 프로퍼티가 문자열이라면 템플릿 표현식도 문자열을 반환해야 하며, 숫자, 객체인 경우도 마찬가지입니다.
+예를 들면:
+
+*   문자열인 경우 `string` 타입
+*   숫자인 경우 `number` 타입
+*   객체인 경우 `object` 타입
 
 
 <!--
@@ -120,7 +128,7 @@ In the `ItemListComponent` the `@Input()`, `items`, has a type of `Item[]`.
 
 <code-example header="src/app/item-list.component.ts" path="property-binding/src/app/item-list/item-list.component.ts" region="item-input"></code-example>
 
-Notice that `Item` is an object that it has two properties; an `id` and a `name`.
+Notice that `Item` is an object that it has two properties, an `id` and a `name`.
 
 <code-example header="src/app/item.ts" path="property-binding/src/app/item.ts" region="item-class"></code-example>
 
@@ -128,7 +136,7 @@ In `app.component.ts`, `currentItems` is an array of objects in the same shape a
 
 <code-example header="src/app.component.ts" path="property-binding/src/app/app.component.ts" region="pass-object"></code-example>
 
-By supplying an object in the same shape, you satisfy the expectations of `items` when Angular evaluates the expression `currentItems`.
+By supplying an object in the same shape, you meet the expectations of `items` when Angular evaluates the expression `currentItems`.
 -->
 예제로 다루는 `ItemListComponent`는 `AppComponent`의 자식 컴포넌트이며 `items` 프로퍼티는 객체 배열을 받아야 합니다.
 
@@ -147,7 +155,6 @@ By supplying an object in the same shape, you satisfy the expectations of `items
 <code-example header="src/app.component.ts" path="property-binding/src/app/app.component.ts" region="pass-object"></code-example>
 
 그래서 객체의 형식이 같기 때문에 `currentItems` 표현식이 평가된 결과를 `items`에 바인딩할 수 있습니다.
-
 
 <!-- links -->
 

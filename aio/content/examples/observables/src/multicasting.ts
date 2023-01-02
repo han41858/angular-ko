@@ -159,8 +159,8 @@ export function docRegionMulticastSequence(console: Console, runSequence: boolea
   // (2초 후): 2nd subscribe: 2
   // (3초 후): Emitting 3
   // (3초 후): 1st subscribe: 3
-  // (3초 후): 1st sequence finished
   // (3초 후): 2nd subscribe: 3
+  // (3초 후): 1st sequence finished
   // (3초 후): 2nd sequence finished
 
   // #enddocregion multicast_sequence
