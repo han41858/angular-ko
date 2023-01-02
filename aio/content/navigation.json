@@ -1648,18 +1648,24 @@
           ]
         },
         {
-          "title": "Documentation editing workflow",
-          "tooltip": "Describes the documentation editing processes in detail.",
+          "/title": "Documentation editing workflow",
+          "title": "문서 수정 과정",
+          "/tooltip": "Describes the documentation editing processes in detail.",
+          "tooltip": "문서를 수정하는 과정을 자세하게 알아봅시다.",
           "children": [
             {
               "url": "guide/doc-update-overview",
-              "title": "Overview",
-              "tooltip": "An overview of documentation authoring process."
+              "/title": "Overview",
+              "title": "개요",
+              "/tooltip": "An overview of documentation authoring process.",
+              "tooltip": "문서를 수정하는 과정을 알아봅시다."
             },
             {
               "url": "guide/doc-prepare-to-edit",
-              "title": "Prepare to edit documentation",
-              "tooltip": "Set up your development system to edit angular.io."
+              "/title": "Prepare to edit documentation",
+              "title": "문서 수정 준비하기",
+              "/tooltip": "Set up your development system to edit angular.io.",
+              "tooltip": "angular.io 문서를 수정하기 위해 개발 환경을 구성해 봅시다."
             },
             {
               "url": "guide/doc-select-issue",
