@@ -215,7 +215,7 @@ Although it's not necessary for validation, it should be retained to for accessi
 
 <a id="reactive-component-class"></a>
 
-<code-example header="reactive/hero-form-reactive.component.ts (validator functions)" path="form-validation/src/app/reactive/hero-form-reactive.component.1.ts" region="form-group"></code-example>
+<code-example header="reactive/hero-form-reactive.component.ts (유효성 검사 함수)" path="form-validation/src/app/reactive/hero-form-reactive.component.1.ts" region="form-group"></code-example>
 
 이 예제 코드에서 `name` 폼 컨트롤에는 `Validators.required`와 `Validators.minLength(4)` 기본 유효성 검사 함수, `forbiddenNameValidator` 커스텀 유효성 검사 함수가 지정되었습니다.
 커스텀 유효성 검사 함수에 대해 자세하게 알아보려면 아래 [커스텀 유효성 검사 함수](#custom-validators) 섹션을 참고하세요.
@@ -228,7 +228,7 @@ Although it's not necessary for validation, it should be retained to for accessi
 
 이제 템플릿에 있는 `name` 입력 필드 값이 변경되었을 때 템플릿 기반 폼 때와 비슷한 결과가 표시되도록 만들어 봅시다.
 
-<code-example header="reactive/hero-form-reactive.component.html (name with error msg)" path="form-validation/src/app/reactive/hero-form-reactive.component.html" region="name-with-error-msg"></code-example>
+<code-example header="reactive/hero-form-reactive.component.html (에러 메시지가 표시되는 name)" path="form-validation/src/app/reactive/hero-form-reactive.component.html" region="name-with-error-msg"></code-example>
 
 코드를 보면, 이 예제 코드는 템플릿 기반 폼 때처럼 디렉티브로 폼 컨트롤에 접근하지 않습니다.
 반응형 폼은 디렉티브 대신 컴포넌트 클래스에 정의한 `name` 게터 메서드를 사용합니다.
@@ -300,7 +300,7 @@ In reactive forms, add a custom validator by passing the function directly to th
 -->
 반응형 폼에서는 `FormControl`에 커스텀 유효성 검사 함수를 직접 지정합니다.
 
-<code-example header="reactive/hero-form-reactive.component.ts (validator functions)" path="form-validation/src/app/reactive/hero-form-reactive.component.1.ts" region="custom-validator"></code-example>
+<code-example header="reactive/hero-form-reactive.component.ts (유효성 검사 함수)" path="form-validation/src/app/reactive/hero-form-reactive.component.1.ts" region="custom-validator"></code-example>
 
 
 <a id="adding-to-template-driven-forms"></a>
@@ -795,7 +795,11 @@ new FormControl('', {updateOn: 'blur'});
 
 </code-example>
 
+
+<!--
 ## Interaction with native HTML form validation
+-->
+## 기본 HTML 폼 유효성 검사와 연동하기
 
 <!--
 By default, Angular disables [native HTML form validation](https://developer.mozilla.org/docs/Web/Guide/HTML/Constraint_validation) by adding the `novalidate` attribute on the enclosing `<form>` and uses directives to match these attributes with validator functions in the framework.

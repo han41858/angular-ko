@@ -78,7 +78,7 @@ Before doing this tutorial, you should have a basic understanding to the followi
 *   Fundamental concepts of [Angular app design](guide/architecture "Introduction to Angular app-design concepts")
 *   Basic knowledge of [reactive forms](guide/reactive-forms "Reactive forms guide")
 -->
-Before doing this tutorial, you should have a basic understanding to the following.
+이 튜토리얼을 보기 전에 이런 내용을 먼저 이해하는 것이 좋습니다:
 
 *   [TypeScript](https://www.typescriptlang.org/ "The TypeScript language"), HTML 사용방법
 *   [Angular 개요](guide/architecture "Introduction to Angular app-design concepts") 문서에서 설명하는 Angular 기본 개념
@@ -291,7 +291,7 @@ To display an instance of the dynamic form, the `AppComponent` shell template pa
 The example provides a model for a job application for heroes, but there are no references to any specific hero question other than the objects returned by `QuestionService`.
 This separation of model and data lets you repurpose the components for any type of survey, as long as it's compatible with the *question* object model.
 -->
-To display an instance of the dynamic form, the `AppComponent` shell template passes the `questions` array returned by the `QuestionService` to the form container component, `<app-dynamic-form>`.
+동적 폼 인스턴스를 화면에 표시하려면 `AppComponent` 템플릿에 폼 컨테이너 `<app-dynamic-form>`를 추가하면서 `QuestionService`를 반환하는 `questions` 배열을 지정해야 합니다.
 
 <code-example header="app.component.ts" path="dynamic-form/src/app/app.component.ts"></code-example>
 

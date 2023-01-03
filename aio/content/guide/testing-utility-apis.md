@@ -175,7 +175,10 @@ type MetadataOverride&lt;T&gt; = {
 
 <a id="component-fixture-api-summary"></a>
 
+<!--
 ## The `ComponentFixture`
+-->
+## `ComponentFixture`
 
 <!--
 The `TestBed.createComponent<T>` creates an instance of the component `T` and returns a strongly typed `ComponentFixture` for that component.
@@ -216,7 +219,10 @@ Here are the most important properties for testers, in order of likely utility.
 
 <a id="component-fixture-methods"></a>
 
+<!--
 ### `ComponentFixture` methods
+-->
+### `ComponentFixture` 메서드
 
 <!--
 The *fixture* methods cause Angular to perform certain tasks on the component tree.

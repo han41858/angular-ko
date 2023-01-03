@@ -1006,7 +1006,7 @@ For more information on providers and the bootstrap process, see [Dependency Inj
 -->
 화면에 새로운 컴포넌트를 표시하게 되면 브라우저의 주소와 히스토리가 변경됩니다.
 
-최신 HTML5 브라우저는 [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries title="HTML5 browser history push-state") API를 제공합니다.
+최신 HTML5 브라우저는 [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries "HTML5 browser history push-state") API를 제공합니다.
 이 API를 활용하면 서버로 새로운 페이지 요청을 보내지 않으면서 브라우저의 주소나 히스토리를 변경할 수 있습니다.
 그리고 Angular 라우터는 새로운 페이지 로드가 필요한 URL과 구별하지 않으면서 자연스러운 URL을 처리할 수 있습니다.
 
@@ -1170,7 +1170,7 @@ URL은 여러가지 요소로 구성되며, URL의 각 영역은 이렇게 나�
 foo://example.com:8042/over/there?name=ferret#nose
 &bsol;&lowbar;/   &bsol;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;/&bsol;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;/ &bsol;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;&lowbar;/ &bsol;&lowbar;&lowbar;/
  &verbar;           &verbar;            &verbar;            &verbar;        &verbar;
-스킴       도메인        경로         쿼리    프래그먼트
+스킴       도메인          경로         쿼리    프래그먼트
 
 </code-example>
 

@@ -46,7 +46,10 @@ Usually you give it one string, as in the following example:
 <code-example header="src/app/hero-app.component.ts" path="component-styles/src/app/hero-app.component.ts"></code-example>
 
 
+<!--
 ## Component styling best practices
+-->
+## 컴포넌트 스타일 모범사례
 
 <!--
 <div class="alert is-helpful">

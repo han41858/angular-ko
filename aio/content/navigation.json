@@ -392,7 +392,7 @@
             {
               "url": "guide/dependency-injection",
               "/title": "Understanding dependency injection",
-              "title": "Angular의 의존성 주입",
+              "title": "의존성 주입 이해하기",
               "/tooltip": "Angular's dependency injection system creates and delivers dependent services to Angular-created classes.",
               "tooltip": "Angular는 의존성으로 주입하는 클래스를 직접 만들어서 목표 클래스에 주입합니다."
             },
@@ -441,8 +441,10 @@
           "tooltip": "단독 컴포넌트, 디렉티브, 파이프"
         },
         {
-          "title": "Change detection",
-          "tooltip": "Learn how Angular updates the view based on data changes and how to keep your application fast",
+          "/title": "Change detection",
+          "title": "변화 감지",
+          "/tooltip": "Learn how Angular updates the view based on data changes and how to keep your application fast",
+          "tooltip": "데이터가 변경되었을 때 Angular가 화면을 어떻게 갱신하는지 확인해 보세요.",
           "children": [
             {
               "url": "guide/change-detection",
@@ -1741,8 +1743,10 @@
         },
         {
           "url": "guide/localizing-angular",
-          "title": "Angular doc localization guidelines",
-          "tooltip": "Learn about the guidelines for localizing Angular documentation."
+          "/title": "Angular doc localization guidelines",
+          "title": "Angular 문서 번역 가이드",
+          "/tooltip": "Learn about the guidelines for localizing Angular documentation.",
+          "tooltip": "Angular 문서를 번역하는 가이드라인을 확인해 보세요."
         },
         {
           "url": "guide/localized-documentation",

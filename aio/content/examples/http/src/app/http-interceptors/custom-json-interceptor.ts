@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 
 // #docregion custom-json-interceptor
-// The JsonParser class acts as a base class for custom parsers and as the DI token.
+// JsonParser 클래스는 커스텀 파서를 구현한 클래스이며 DI 토큰으로 동작합니다.
 @Injectable()
 export abstract class JsonParser {
   abstract parse(text: string): any;
@@ -15,7 +15,7 @@ export class CustomJsonInterceptor implements HttpInterceptor {
 
   intercept(httpRequest: HttpRequest<any>, next: HttpHandler) {
     if (httpRequest.responseType === 'json') {
-      // If the expected response type is JSON then handle it here.
+      // 응답 타입이 JSON이면 처리합니다.
       return this.handleJsonResponse(httpRequest, next);
     } else {
       return next.handle(httpRequest);
@@ -23,9 +23,9 @@ export class CustomJsonInterceptor implements HttpInterceptor {
   }
 
   private handleJsonResponse(httpRequest: HttpRequest<any>, next: HttpHandler) {
-    // Override the responseType to disable the default JSON parsing.
+    // 기본 JSON 파싱 로직을 비활성화하도록 오버라이드합니다.
     httpRequest = httpRequest.clone({responseType: 'text'});
-    // Handle the response using the custom parser.
+    // 커스텀 파서로 응답을 처리합니다.
     return next.handle(httpRequest).pipe(map(event => this.parseJsonResponse(event)));
   }
 

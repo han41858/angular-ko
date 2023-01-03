@@ -1556,11 +1556,11 @@ Here's the previous test, rewritten using the click helper.
 
 <code-example header="app/dashboard/dashboard-hero.component.spec.ts (test with click helper)" path="testing/src/app/dashboard/dashboard-hero.component.spec.ts" region="click-test-3"></code-example>
 -->
-Clicking a button, an anchor, or an arbitrary HTML element is a common test task.
+버튼이나 `<a>` 엘리먼트를 클릭하는 것은 기본 테스트 작업 중 하나입니다.
 
-Make that consistent and straightforward by encapsulating the *click-triggering* process in a helper such as the following `click()` function:
+일관되게 *클릭을 트리거링하는* 과정은 `click()` 헬퍼 함수로 구성해 봅시다:
 
-<code-example header="testing/index.ts (click helper)" path="testing/src/testing/index.ts" region="click-event"></code-example>
+<code-example header="testing/index.ts (클릭 헬퍼)" path="testing/src/testing/index.ts" region="click-event"></code-example>
 
 첫 번째 인자는 클릭할 엘리먼트입니다.
 그리고 필요한 경우에는 두 번째 인자로 커스텀 이벤트 객체를 전달할 수 있습니다.
@@ -2253,7 +2253,10 @@ A future guide update explains how to write such tests with the `RouterTestingMo
 
 <a id="page-object"></a>
 
+<!--
 ## Use a `page` object
+-->
+## `page` 객체 사용하기
 
 <!--
 The `HeroDetailComponent` is a simple view with a title, two hero fields, and two buttons.
@@ -2564,7 +2567,10 @@ The `compileComponents()` method returns a promise so you can perform the synchr
 <code-example header="app/banner/banner-external.component.spec.ts (beforeEach() 하나로 구성하기)" path="testing/src/app/banner/banner-external.component.spec.ts" region="one-before-each"></code-example>
 
 
+<!--
 #### `compileComponents()` is harmless
+-->
+#### `compileComponents()`는 위험하지 않습니다.
 
 <!--
 There's no harm in calling `compileComponents()` when it's not required.

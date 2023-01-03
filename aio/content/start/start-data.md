@@ -103,6 +103,7 @@ This section walks you through creating the `CartService` that tracks products a
 
 <a id="product-details-use-cart-service"></a>
 
+<!--
 ### Use the cart service
 -->
 ### 장바구니 서비스 활용하기

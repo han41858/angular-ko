@@ -230,12 +230,17 @@ HTTP 프로토콜로 데이터를 요청하는 서비스는 데이터를 리모�
 컴포넌트에 정의한 구독 함수는 필요한 로직만 간단하게 실행합니다.
 이 함수는 서비스에서 가져온 데이터를 파싱해서 컴포넌트 `config` 객체에 할당합니다.
 
-<code-example header="app/config/config.component.ts (showConfig v.1)" path="http/src/app/config/config.component.ts" region="v1"></code-example>
+<code-example header="app/config/config.component.ts (showConfig() v.1)" path="http/src/app/config/config.component.ts" region="v1"></code-example>
+
 
 <a id="always-subscribe"></a>
 
+<!--
 ### Starting the request
+-->
+### 요청 보내기
 
+<!--
 For all `HttpClient` methods, the method doesn't begin its HTTP request until you call `subscribe()` on the observable the method returns.
 
 This is true for *all* `HttpClient` *methods*.
@@ -270,6 +275,42 @@ req.subscribe();
 </code-example>
 
 </div>
+-->
+`HttpClient`가 제공하는 모든 메서드는 메서드가 반환하는 옵저버블을 `subscribe()` 하기 전까지는 실제 HTTP 요청을 보내지 않습니다.
+
+*모든* `HttpClient` *메서드*가 이렇습니다.
+
+<div class="alert is-helpful">
+
+컴포넌트가 종료되면 반드시 옵저버블을 구독 해지해야 합니다.
+
+</div>
+
+`HttpClient` 메서드가 반환하는 옵저버블은 모두 *콜드* 옵저버블입니다.
+그래서 `HttpClient` 메서드를 실행해도 HTTP 요청은 *즉시 실행되지 않으며*, 무언가 일어나기 전에 `tap`이나 `catchError` 연산자를 붙여 추가 작업을 할 수 있습니다.
+
+옵저버블은 `subscribe()`를 실행해야 실제로 서버로 요청을 보냅니다.
+
+HTTP 요청은 모두 이런 식으로 동작합니다.
+
+<div class="alert is-helpful">
+
+`subscribe()` 요청은 모두 별개로 동작합니다.
+그래서 `subscribe()`를 두 번 실행하면 HTTP 요청도 두 번 발생합니다.
+
+<code-example format="javascript" language="javascript">
+
+const req = http.get&lt;Heroes&gt;('/api/heroes');
+// 요청 횟수: 0 - .subscribe()가 실행되지 않았습니다.
+req.subscribe();
+// 요청 횟수: 1
+req.subscribe();
+// 요청 횟수: 2
+
+</code-example>
+
+</div>
+
 
 
 <a id="typed-response"></a>
@@ -341,7 +382,7 @@ Angular 앱에서는 서버가 보낸 데이터의 타입을 예상하기만 할
 
 그리고 `HttpClient.get()` 메서드를 실행할 때 제네릭으로 타입을 지정합니다.
 
-<code-example header="app/config/config.service.ts (getConfig v.2)" path="http/src/app/config/config.service.ts" region="getConfig_2"></code-example>
+<code-example header="app/config/config.service.ts (getConfig() v.2)" path="http/src/app/config/config.service.ts" region="getConfig_2"></code-example>
 
 <div class="alert is-helpful">
 
@@ -352,7 +393,7 @@ Angular 앱에서는 서버가 보낸 데이터의 타입을 예상하기만 할
 
 컴포넌트 메서드는 이제 데이터의 타입을 명확하게 지정할 수 있기 때문에 이후에 사용하기도 편합니다:
 
-<code-example header="app/config/config.component.ts (showConfig v.2)" path="http/src/app/config/config.component.ts" region="v2"></code-example>
+<code-example header="app/config/config.component.ts (showConfig() v.2)" path="http/src/app/config/config.component.ts" region="v2"></code-example>
 
 응답으로 받은 JSON 객체의 프로퍼티에 접근하려면 이 객체에 정확한 타입을 지정해야 합니다.
 컴포넌트의 구독 콜백 함수에 이 내용을 빠뜨리면 응답으로 받은 데이터를 명시적으로 `any` 타입으로 캐스팅해야 사용할 수 있습니다.
@@ -682,7 +723,7 @@ The following code updates the `getConfig()` method, using a [pipe](guide/pipes 
 이 핸들러 함수는 사용자가 이해할 수 있는 메시지를 담아 RxJS `ErrorObservable`을 보냅니다.
 아래 코드는 `HttpClient.get()` 함수 실행 결과를 [파이프](guide/pipes "Pipes guide")로 연결해서 에러 처리 함수로 보내는 `getConfig()` 메서드 코드입니다.
 
-<code-example header="app/config/config.service.ts (getConfig v.3 with error handler)" path="http/src/app/config/config.service.ts" region="getConfig_3"></code-example>
+<code-example header="app/config/config.service.ts (에러 핸들러가 추가된 getConfig() v.3)" path="http/src/app/config/config.service.ts" region="getConfig_3"></code-example>
 
 
 <a id="retry"></a>
@@ -704,8 +745,8 @@ The following example shows how to pipe a failed request to the `retry()` operat
 
 <code-example header="app/config/config.service.ts (getConfig with retry)" path="http/src/app/config/config.service.ts" region="getConfig"></code-example>
 -->
-Sometimes the error is transient and goes away automatically if you try again.
-For example, network interruptions are common in mobile scenarios, and trying again can produce a successful result.
+어떤 경우에는 에러가 발생한 것을 그대로 처리하지 않고 자동으로 재시도하는 것이 나은 경우가 있습니다.
+모바일 장비는 네트워크 오류가 자주 발생하기 때문에 이런 재시도 방식도 효율적입니다.
 
 HTTP 요청을 보냈을 때 발생한 에러가 일시적인 원인 때문이라면 자동으로 재시도를 하는것도 좋습니다.
 모바일 디바이스인 경우에는 네트워크가 끊어지는 상황이 많기 때문에 이런 경우도 자연스럽게 처리하면 사용자가 더 편하게 앱을 사용할 수 있습니다.
@@ -959,7 +1000,7 @@ import {HttpParams} from "&commat;angular/common/http";
 <code-example linenums="false" path="http/src/app/heroes/heroes.service.ts" region="searchHeroes"></code-example>
 
 이 코드는 검색어가 전달되면 HTML URL 인코딩된 형태로 옵션 객체를 생성합니다.
-그래서 "cat"이라는 검색어가 전달되면 GET 요청을 보내는 URL은 `api/heroes?name=cat`dl ehlqslek.
+그래서 "cat"이라는 검색어가 전달되면 GET 요청을 보내는 URL은 `api/heroes?name=cat`이 됩니다.
 
 `HttpParams` 객체는 이뮤터블 객체입니다.
 그래서 옵션 항목의 값을 변경하려면 `.set()` 메서드를 실행했을 때 생성되는 객체를 활용하면 됩니다.
@@ -1141,7 +1182,7 @@ There are many more interceptors in the complete sample code.
 
 그리고 `AppModule`에 작성했던 프로바이더 배열 을 다음과 같이 수정합니다:
 
-<code-example header="app/app.module.ts (interceptor providers)" path="http/src/app/app.module.ts" region="interceptor-providers"></code-example>
+<code-example header="app/app.module.ts (인터셉터 프로바이더)" path="http/src/app/app.module.ts" region="interceptor-providers"></code-example>
 
 이제 새로운 인터셉터를 추가했을 때 `httpInterceptorProviders`에 등록하기만 하면, `AppModule`은 따로 수정하지 않아도 됩니다.
 
@@ -1620,10 +1661,10 @@ The `results$` observable makes the request when subscribed.
 이렇게 수정하면 데이터가 인터셉터에 캐싱되었는지 여부와 관계없이 [`sendRequest()`](#send-request) 메서드를 실행해서 HTTP 요청을 보냅니다.
 `results$` 옵저버블을 구독해야 옵저버블이 시작된다는 것을 잊지 마세요.
 
-*   If there's no cached value, the interceptor returns `results$`.
-*   If there is a cached value, the code *pipes* the cached response onto `results$`. This produces a recomposed observable that emits two responses, so subscribers will see a sequence of these two responses:  
-  *   The cached response that's emitted immediately
-  *   The response from the server, that's emitted later
+*   캐싱된 값이 없으면 인터셉터는 `results$`를 반환합니다.
+*   캐싱된 값이 있으면 캐싱된 응답을 `results$`에 파이프로 연결합니다. 이 때 옵저버블은 2개의 응답을 순차적으로 처리합니다:
+  *   캐싱된 응답을 즉시 반환됩니다.
+  *   서버에서 새로 응답을 받으면 이 응답은 나중에 반환됩니다.
 
 
 <a id="report-progress"></a>
@@ -1758,7 +1799,7 @@ See [Using interceptors to request multiple values](#cache-refresh) for more abo
 아래 템플릿 코드는 사용자가 입력한 검색어로 npm 패키지를 검색하는 코드입니다.
 사용자가 입력 필드에 npm 패키지 이름을 입력하면 `PackageSearchComponent`가 이 값으로 검색 요청을 보냅니다.
 
-<code-example header="app/package-search/package-search.component.html (search)" path="http/src/app/package-search/package-search.component.html" region="search"></code-example>
+<code-example header="app/package-search/package-search.component.html (검색)" path="http/src/app/package-search/package-search.component.html" region="search"></code-example>
 
 이 코드를 보면 `keyup` 이벤트가 컴포넌트 `search()` 메서드와 바인딩되었기 때문에 키입력 이벤트가 발생할 때마다 `search()` 메서드가 실행됩니다.
 
@@ -2119,7 +2160,7 @@ The lambda function `() => 3` passed during the creation of the `HttpContextToke
 Angular는 이런 메타데이터를 `HttpContextToken` 이라는 컨텍스트에 저장하고 전달할 수 있습니다.
 컨텍스트 토큰은 `new` 연산자를 사용해서 이렇게 정의합니다:
 
-<code-example header="creating a context token" path="http/src/app/http-interceptors/retry-interceptor.ts" region="context-token"></code-example>
+<code-example header="컨텍스트 토큰 생성하기" path="http/src/app/http-interceptors/retry-interceptor.ts" region="context-token"></code-example>
 
 이 코드에서 람다 함수 `() => 3`는 `HttpContextToken`을 생성할 때 이런 용도로 사용됩니다:
 
@@ -2141,7 +2182,7 @@ When making a request, you can provide an `HttpContext` instance, in which you h
 -->
 이제 요청을 보낼 때 `HttpContext` 인스턴스를 지정하면 됩니다.
 
-<code-example header="setting context values" path="http/src/app/http-interceptors/retry-interceptor.ts" region="set-context"></code-example>
+<code-example header="컨텍스트 지정하기" path="http/src/app/http-interceptors/retry-interceptor.ts" region="set-context"></code-example>
 
 
 <!--
@@ -2158,7 +2199,7 @@ If you have not explicitly set a value for the token, Angular returns the defaul
 인터셉터 안에서 요청의 컨텍스트 토큰값을 확인하려면 `HttpContext.get()` 메서드를 사용하면 됩니다.
 토큰에 지정된 값이 없다면 기본값을 활용합니다.
 
-<code-example header="reading context values in an interceptor" path="http/src/app/http-interceptors/retry-interceptor.ts" region="reading-context"></code-example>
+<code-example header="인터셉터 안에서 컨텍스트 읽기" path="http/src/app/http-interceptors/retry-interceptor.ts" region="reading-context"></code-example>
 
 
 <!--
@@ -2177,7 +2218,7 @@ For instance, the `RetryInterceptor` example could use a second context token to
 그래서 이 방법을 활용하면 인터셉터마다 적절한 동작을 구현하는 용도로도 활용할 수 있습니다.
 `RetryInterceptor` 예제에서는 두 번째 컨텍스트 토큰을 활용해서, 요청을 보내고 받을 때까지 에러가 몇 번 발생했는지도 확인할 수 있습니다:
 
-<code-example header="coordinating operations through the context" path="http/src/app/http-interceptors/retry-interceptor.ts" region="mutable-context"></code-example>
+<code-example header="컨텍스트에서 조정하기" path="http/src/app/http-interceptors/retry-interceptor.ts" region="mutable-context"></code-example>
 
 <!-- links -->
 

@@ -114,6 +114,7 @@ You can also see an illustration of this in the animations live example \(introd
 -->
 ## 여러 엘리먼트에 있는 애니메이션 시작하기: `query()`, `stagger()`
 
+<!--
 After having queried child elements via `query()`, the `stagger()` function lets you define a timing gap between each queried item that is animated and thus animates elements with a delay between them.
 
 The following example demonstrates how to use the `query()` and `stagger()` functions to animate a list \(of heroes\) adding each in sequence, with a slight delay, from top to bottom.
@@ -124,6 +125,19 @@ The following example demonstrates how to use the `query()` and `stagger()` func
 
 *   Use `stagger()` to delay each animation by 30 milliseconds
 *   Animate each element on screen for 0.5 seconds using a custom-defined easing curve, simultaneously fading it in and un-transforming it
+
+<code-example header="src/app/hero-list-page.component.ts" path="animations/src/app/hero-list-page.component.ts" region="page-animations"></code-example>
+-->
+`query()`를 사용해서 자식 엘리먼트들을 쿼리하고 나면, `stagger()` 함수를 사용해서 개별 대상의 애니메이션이 실행될 사이 간격을 지정할 수 있습니다.
+
+다음 예제는 히어로 목록을 순차적으로 위부터 아래까지 애니메이션으로 재생하는 `query()`, `stagger()` 함수 예제 코드입니다.
+
+*   화면에 나타나는 조건으로 엘리먼트를 찾으려면 `query()` 를 사용합니다.
+*   이 엘리먼트들은 `style()`을 사용해서 엘리먼트의 스타일을 지정합니다.
+    그래서 처음에는 투명한 상태였다가 `transform`을 사용해서 화면에 나타나면서 모습이 변경됩니다.
+
+*   개별 애니메이션마다 30ms 지연시키기 위해 `stagger()`을 사용합니다.
+*   개별 엘리먼트에는 0.5초 커스텀 가속도 커브가 지정되었기 때문에 병렬로 실행됩니다.
 
 <code-example header="src/app/hero-list-page.component.ts" path="animations/src/app/hero-list-page.component.ts" region="page-animations"></code-example>
 

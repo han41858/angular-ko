@@ -74,7 +74,11 @@ The running application displays three heroes:
 
 </div>
 
+
+<!--
 ### Test it for Pass data from parent to child with input binding
+-->
+### 입력 바인딩으로 전달한 데이터 테스트하기
 
 <!--
 E2E test that all children were instantiated and displayed as expected:

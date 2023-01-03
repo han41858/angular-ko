@@ -45,11 +45,11 @@ export class RetryInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
         // #enddocregion reading-context
         tap({
-              // An error has occurred, so increment this request's ERROR_COUNT.
+              // 에러가 발생하면 ERROR_COUNT를 증가시킵니다.
              error: () => req.context.set(ERROR_COUNT, req.context.get(ERROR_COUNT) + 1)
             }),
         // #docregion reading-context
-        // Retry the request a configurable number of times.
+        // 지정된 횟수만큼 재시도합니다.
         retry(retryCount),
     );
   }

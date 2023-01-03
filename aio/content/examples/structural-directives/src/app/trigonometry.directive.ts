@@ -22,8 +22,8 @@ export class TrigonometryDirective {
     private readonly templateRef: TemplateRef<TrigonometryContext>
   ) {}
 
-  // Make sure the template checker knows the type of the context with which the
-  // template of this directive will be rendered
+  // 템플릿 체커는 어떤 디렉티브가 템플릿에 사용되는지 알 수 있기 때문에
+  // 컨텍스트의 타입을 정확하게 파악할 수 있습니다.
   static ngTemplateContextGuard(
     directive: TrigonometryDirective,
     context: unknown

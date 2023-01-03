@@ -137,8 +137,8 @@ describe('HttpClient testing', () => {
 
   // #docregion network-error
   it('can test for network error', done => {
-    // Create mock ProgressEvent with type `error`, raised when something goes wrong
-    // at network level. e.g. Connection timeout, DNS error, offline, etc.
+    // 네트워크 계층에서 발생한 에러를 만들기 위해 `error` 타입으로 목 ProgressEvent를 생성합니다.
+    // 타임아웃, DNS 에러, 서버 오프라인과 같은 경우가 이런 경우입니다.
     const mockError = new ProgressEvent('error');
 
     httpClient.get<Data[]>(testUrl).subscribe({

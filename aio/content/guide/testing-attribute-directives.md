@@ -122,9 +122,9 @@ A few techniques are noteworthy:
 
 </div>
 
-Here are some tests of this component:
+이 컴포넌트를 테스트하는 코드 일부는 이렇습니다:
 
-<code-example header="app/shared/highlight.directive.spec.ts (selected tests)" path="testing/src/app/shared/highlight.directive.spec.ts" region="selected-tests"></code-example>
+<code-example header="app/shared/highlight.directive.spec.ts (일부 테스트)" path="testing/src/app/shared/highlight.directive.spec.ts" region="selected-tests"></code-example>
 
 이 컴포넌트는 이렇게 테스트할 수 있습니다:
 

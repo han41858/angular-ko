@@ -390,7 +390,7 @@ The following code sample shows how to use this feature.
 When the `@.disabled` binding is true, the `@childAnimation` trigger doesn't kick off.
 
 When an element within an HTML template has animations turned off using the `@.disabled` host binding, animations are turned off on all inner elements as well.
-You can't selectively turn off multiple animations on a single element.<!-- vale off -->
+You can't selectively turn off multiple animations on a single element.<!- vale off ->
 
 A selective child animations can still be run on a disabled parent in one of the following ways:
 
