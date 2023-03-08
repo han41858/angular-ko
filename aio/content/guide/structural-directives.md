@@ -168,7 +168,7 @@ There are no easy answers to these questions. Prohibiting multiple structural di
 There's an easy solution for this use case: put the `*ngIf` on a container element that wraps the `*ngFor` element. One or both elements can be an `<ng-container>` so that no extra DOM elements are generated.
 -->
 조건이 참일 때만 어떤 HTML 블록을 반복하는 경우는 Angular 애플리케이션을 개발할 때 자주 사용하는 경우입니다.
-이 때 한 엘리먼트에 `*ngFor`와 `*ngIf`를 동시에 사용하는 것이 맞지 않나 생각할 숭 ㅣㅆ습니다.
+이 때 한 엘리먼트에 `*ngFor`와 `*ngIf`를 동시에 사용하는 것이 맞지 않나 생각할 수 있습니다.
 하지만 `*ngFor`와 `*ngIf`는 모두 구조 디렉티브이기 때문에 컴파일러가 에러로 처리합니다.
 _구조_ 디렉티브는 엘리먼트 하나에 한번만 사용하세요.
 
