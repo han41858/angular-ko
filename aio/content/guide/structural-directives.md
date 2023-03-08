@@ -262,7 +262,7 @@ The complete directive is as follows:
 
 1.  클래스 파일을 열고 `Input`, `TemplateRef`, `ViewContainerRef` 심볼을 로드합니다.
 
-    <code-example header="src/app/unless.directive.ts (기본 ㅋ ㅗ드)" path="structural-directives/src/app/unless.directive.ts" region="skeleton"></code-example>
+    <code-example header="src/app/unless.directive.ts (기본 코드)" path="structural-directives/src/app/unless.directive.ts" region="skeleton"></code-example>
 
 1.  디렉티브 생성자에 `private` 멤버로 `TemplateRef`, `ViewContainerRef`를 의존성으로 주입합니다.
 
