@@ -10,44 +10,43 @@ export class PopupService {
               private applicationRef: ApplicationRef,
               private componentFactoryResolver: ComponentFactoryResolver) {}
 
-  // Previous dynamic-loading method required you to set up infrastructure
-  // before adding the popup to the DOM.
+  // 이전에는 DOM에 팝업을 추가하기 전에 동적으로 로딩하는 메서드를 직접 정의해야 했습니다.
   showAsComponent(message: string) {
-    // Create element
+    // 엘리먼트를 생성합니다.
     const popup = document.createElement('popup-component');
 
-    // Create the component and wire it up with the element
+    // 컴포넌트를 생성하고 엘리먼트와 연결합니다.
     const factory = this.componentFactoryResolver.resolveComponentFactory(PopupComponent);
     const popupComponentRef = factory.create(this.injector, [], popup);
 
-    // Attach to the view so that the change detector knows to run
+    // 변화 감지가 동작할 수 있도록 화면과 연결합니다.
     this.applicationRef.attachView(popupComponentRef.hostView);
 
-    // Listen to the close event
+    // 이벤트를 감지합니다.
     popupComponentRef.instance.closed.subscribe(() => {
       document.body.removeChild(popup);
       this.applicationRef.detachView(popupComponentRef.hostView);
     });
 
-    // Set the message
+    // 메시지 문구를 설정합니다.
     popupComponentRef.instance.message = message;
 
-    // Add to the DOM
+    // DOM에 추가합니다.
     document.body.appendChild(popup);
   }
 
-  // This uses the new custom-element method to add the popup to the DOM.
+  // 이제는 이런 방식으로 커스텀 엘리먼트를 사용할 수 있습니다.
   showAsElement(message: string) {
-    // Create element
+    // 엘리먼트를 생성합니다.
     const popupEl: NgElement & WithProperties<PopupComponent> = document.createElement('popup-element') as any;
 
-    // Listen to the close event
+    // 이벤트를 감지합니다.
     popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
 
-    // Set the message
+    // 메시지 문구를 설정합니다.
     popupEl.message = message;
 
-    // Add to the DOM
+    // DOM에 추가합니다.
     document.body.appendChild(popupEl);
   }
 }

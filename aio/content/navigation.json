@@ -205,7 +205,7 @@
             },
             {
               "url": "guide/elements",
-              "title": "Angular elements",
+              "title": "Angular Elements",
               "/tooltip": "Convert components to Custom Elements.",
               "tooltip": "컴포넌트를 커스텀 엘리먼트로 변환해 보세요."
             }

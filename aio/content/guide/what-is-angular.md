@@ -318,7 +318,7 @@ The Angular CLI is the fastest, straightforward, and recommended way to develop 
 The Angular CLI makes some tasks trouble-free.
 For example:
 
-<!-- vale Angular.Google_WordListSuggestions = NO -->
+<!- vale Angular.Google_WordListSuggestions = NO ->
 
 | Command                     | Details |
 |:---                         |:---     |
@@ -328,7 +328,7 @@ For example:
 | [ng test](cli/test)         | Runs unit tests on a given project.                                   |
 | [ng e2e](cli/e2e)           | Builds and serves an Angular application, then runs end-to-end tests. |
 
-<!-- vale Angular.Google_WordListSuggestions = YES -->
+<!- vale Angular.Google_WordListSuggestions = YES ->
 
 The Angular CLI is a valuable tool for building out your applications.
 

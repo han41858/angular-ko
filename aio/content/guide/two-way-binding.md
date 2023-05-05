@@ -159,7 +159,7 @@ For more information on how to use two-way binding in forms, see Angular [NgMode
 양방향 바인딩 문법은 프로퍼티 바인딩 문법과 이벤트 바인딩 문법을 짧게 줄여놓은 것입니다.
 두 바인딩 문법은 아래 코드처럼 풀어서 작성할 수도 있습니다.
 
-<code-example header="src/app/app.component.html (expanded)" path="two-way-binding/src/app/app.component.html" region="two-way-2"></code-example>
+<code-example header="src/app/app.component.html (풀어 쓴 코드)" path="two-way-binding/src/app/app.component.html" region="two-way-2"></code-example>
 
 `$event` 변수에는 `SizerComponent.sizeChange` 이벤트로 보낸 데이터가 담겨 있습니다.
 이 변수의 값은 `AppComponent.fontSizePx`에 할당됩니다.

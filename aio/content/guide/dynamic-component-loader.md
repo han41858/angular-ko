@@ -125,6 +125,9 @@ Take a closer look at the methods in `ad-banner.component.ts`.
 Passing an array of components to `AdBannerComponent` allows for a dynamic list of ads without static elements in the template.
 
 With its `getAds()` method, `AdBannerComponent` cycles through the array of `AdItems` and loads a new component every 3 seconds by calling `loadComponent()`.
+
+
+<code-example header="src/app/ad-banner.component.ts (excerpt)" path="dynamic-component-loader/src/app/ad-banner.component.ts" region="class"></code-example>
 -->
 `ad-banner.component.ts`에 정의된 메소드들을 좀 더 자세하게 봅시다.
 
@@ -136,7 +139,7 @@ With its `getAds()` method, `AdBannerComponent` cycles through the array of `AdI
 `AdBannerComponent`는 `getAds()` 메소드를 사용해서 `AdItems` 배열을 각각 순회하는데, 3초마다 `loadComponent()` 메소드를 실행해서 컴포넌트를 하나씩 뷰에 표시합니다.
 
 
-<code-example header="src/app/ad-banner.component.ts (excerpt)" path="dynamic-component-loader/src/app/ad-banner.component.ts" region="class"></code-example>
+<code-example header="src/app/ad-banner.component.ts (일부)" path="dynamic-component-loader/src/app/ad-banner.component.ts" region="class"></code-example>
 
 이 코드에서 `loadComponent()` 메소드의 로직은 조금 복잡합니다.
 하나씩 확인해 봅시다. 제일 먼저 어떤 광고를 표시할지 결정합니다.
