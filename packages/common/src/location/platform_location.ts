@@ -6,7 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {Inject, Injectable, InjectionToken, ɵɵinject} from '@angular/core';
+import {inject, Injectable, InjectionToken} from '@angular/core';
+
 import {getDOM} from '../dom_adapter';
 import {DOCUMENT} from '../dom_tokens';
 
@@ -32,11 +33,7 @@ import {DOCUMENT} from '../dom_tokens';
  *
  * @publicApi
  */
-@Injectable({
-  providedIn: 'platform',
-  // See #23917
-  useFactory: useBrowserPlatformLocation
-})
+@Injectable({providedIn: 'platform', useFactory: () => inject(BrowserPlatformLocation)})
 export abstract class PlatformLocation {
   abstract getBaseHrefFromDOM(): string;
   abstract getState(): unknown;
@@ -68,10 +65,6 @@ export abstract class PlatformLocation {
   historyGo?(relativePosition: number): void {
     throw new Error('Not implemented');
   }
-}
-
-export function useBrowserPlatformLocation() {
-  return ɵɵinject(BrowserPlatformLocation);
 }
 
 /**
@@ -106,25 +99,21 @@ export interface LocationChangeListener {
  * `PlatformLocation` encapsulates all of the direct calls to platform APIs.
  * This class should not be used directly by an application developer. Instead, use
  * {@link Location}.
+ *
+ * @publicApi
  */
 @Injectable({
   providedIn: 'platform',
-  // See #23917
-  useFactory: createBrowserPlatformLocation,
+  useFactory: () => new BrowserPlatformLocation(),
 })
 export class BrowserPlatformLocation extends PlatformLocation {
-  public readonly location!: Location;
-  private _history!: History;
+  private _location: Location;
+  private _history: History;
+  private _doc = inject(DOCUMENT);
 
-  constructor(@Inject(DOCUMENT) private _doc: any) {
+  constructor() {
     super();
-    this._init();
-  }
-
-  // This is moved to its own method so that `MockPlatformLocationStrategy` can overwrite it
-  /** @internal */
-  _init() {
-    (this as {location: Location}).location = window.location;
+    this._location = window.location;
     this._history = window.history;
   }
 
@@ -145,44 +134,36 @@ export class BrowserPlatformLocation extends PlatformLocation {
   }
 
   override get href(): string {
-    return this.location.href;
+    return this._location.href;
   }
   override get protocol(): string {
-    return this.location.protocol;
+    return this._location.protocol;
   }
   override get hostname(): string {
-    return this.location.hostname;
+    return this._location.hostname;
   }
   override get port(): string {
-    return this.location.port;
+    return this._location.port;
   }
   override get pathname(): string {
-    return this.location.pathname;
+    return this._location.pathname;
   }
   override get search(): string {
-    return this.location.search;
+    return this._location.search;
   }
   override get hash(): string {
-    return this.location.hash;
+    return this._location.hash;
   }
   override set pathname(newPath: string) {
-    this.location.pathname = newPath;
+    this._location.pathname = newPath;
   }
 
   override pushState(state: any, title: string, url: string): void {
-    if (supportsState()) {
-      this._history.pushState(state, title, url);
-    } else {
-      this.location.hash = url;
-    }
+    this._history.pushState(state, title, url);
   }
 
   override replaceState(state: any, title: string, url: string): void {
-    if (supportsState()) {
-      this._history.replaceState(state, title, url);
-    } else {
-      this.location.hash = url;
-    }
+    this._history.replaceState(state, title, url);
   }
 
   override forward(): void {
@@ -200,11 +181,4 @@ export class BrowserPlatformLocation extends PlatformLocation {
   override getState(): unknown {
     return this._history.state;
   }
-}
-
-export function supportsState(): boolean {
-  return !!window.history.pushState;
-}
-export function createBrowserPlatformLocation() {
-  return new BrowserPlatformLocation(ɵɵinject(DOCUMENT));
 }

@@ -6,16 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {InjectionToken} from '../di/injection_token';
 import {isLView} from '../render3/interfaces/type_checks';
 import {RENDERER} from '../render3/interfaces/view';
 import {getCurrentTNode, getLView} from '../render3/state';
 import {getComponentLViewByIndex} from '../render3/util/view_utils';
 
 import {RendererStyleFlags2, RendererType2} from './api_flags';
-
-
-export const Renderer2Interceptor = new InjectionToken<Renderer2[]>('Renderer2Interceptor');
 
 
 /**
@@ -143,7 +139,6 @@ export abstract class Renderer2 {
    * in the host element's DOM.
    * @param node The child node to query.
    * @returns The parent node, or null if there is no parent.
-   * For WebWorkers, always returns true.
    * This is because the check is synchronous,
    * and the caller can't rely on checking for null.
    */
@@ -152,7 +147,6 @@ export abstract class Renderer2 {
    * Implement this callback to get the next sibling node of a given node
    * in the host element's DOM.
    * @returns The sibling node, or null if there is no sibling.
-   * For WebWorkers, always returns a value.
    * This is because the check is synchronous,
    * and the caller can't rely on checking for null.
    */

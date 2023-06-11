@@ -124,8 +124,6 @@
 /docs/js/latest/api/platform-browser/index/Title-class.html --> /api/platform-browser/Title
 /docs/js/latest/api/platform-server/index/PlatformState-class --> /api/platform-server/PlatformState
 /docs/js/latest/api/platform-server/index/PlatformState-class.html --> /api/platform-server/PlatformState
-/docs/js/latest/api/platform-webworker --> /api/platform-webworker
-/docs/js/latest/api/platform-webworker/index/MessageBus-class --> /api/platform-webworker/MessageBus
 /docs/js/latest/api/router/index/ActivatedRoute-interface --> /api/router/ActivatedRoute
 /docs/js/latest/api/router/index/CanActivate-interface.html --> /api/router/CanActivate
 /docs/js/latest/api/router/index/CanActivateChild-interface --> /api/router/CanActivateChild
@@ -214,9 +212,11 @@
 /guide/service-worker-configref --> /guide/service-worker-config
 /guide/setup --> /guide/setup-local
 /guide/setup-systemjs-anatomy --> /guide/file-structure
+/guide/update-to-latest-version --> /guide/update-to-version-16
 /guide/updating-to-version-10 --> https://v10.angular.io/guide/updating-to-version-10
 /guide/updating-to-version-11 --> https://v11.angular.io/guide/updating-to-version-11
-/guide/updating-to-version-12 --> /guide/update-to-latest-version
+/guide/updating-to-version-12 --> https://v12.angular.io/guide/updating-to-version-12
+/guide/updating-to-version-13 --> https://v13.angular.io/guide/update-to-latest-version
 /guide/set-document-title --> /guide/router#setting-the-page-title
 /guide/webpack --> https://v5.angular.io/guide/webpack
 /index.html?foo=bar --> /?foo=bar
@@ -231,5 +231,13 @@
 /styleguide --> /guide/styleguide
 /testing --> /guide/testing
 /testing/first-app-tests.html --> /guide/testing
+/tutorial/index --> /tutorial/tour-of-heroes/index
+/tutorial/toh-pt0 --> /tutorial/tour-of-heroes/toh-pt0
+/tutorial/toh-pt1 --> /tutorial/tour-of-heroes/toh-pt1
+/tutorial/toh-pt2 --> /tutorial/tour-of-heroes/toh-pt2
+/tutorial/toh-pt3 --> /tutorial/tour-of-heroes/toh-pt3
+/tutorial/toh-pt4 --> /tutorial/tour-of-heroes/toh-pt4
+/tutorial/toh-pt5 --> /tutorial/tour-of-heroes/toh-pt5
+/tutorial/toh-pt6 --> /tutorial/tour-of-heroes/toh-pt6
 /cli/usage-analytics-gathering --> /cli/analytics
 /analytics --> /cli/analytics

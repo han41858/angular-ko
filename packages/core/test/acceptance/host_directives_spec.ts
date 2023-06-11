@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {AfterViewChecked, AfterViewInit, Component, Directive, ElementRef, EventEmitter, forwardRef, inject, Inject, InjectionToken, Input, OnChanges, OnInit, Output, SimpleChanges, Type, ViewChild, ViewContainerRef} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, Directive, ElementRef, EventEmitter, forwardRef, inject, Inject, InjectionToken, Input, OnChanges, OnInit, Output, SimpleChanges, Type, ViewChild, ViewContainerRef} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 
@@ -919,6 +919,44 @@ describe('host directives', () => {
          expect(() => TestBed.createComponent(App))
              .toThrowError(/NG0200: Circular dependency in DI detected for HostDir/);
        });
+
+    it('should inject a valid ChangeDetectorRef when attached to a component', () => {
+      type InternalChangeDetectorRef = ChangeDetectorRef&{_lView: unknown};
+
+      @Directive({standalone: true})
+      class HostDir {
+        changeDetectorRef = inject(ChangeDetectorRef) as InternalChangeDetectorRef;
+      }
+
+      @Component({selector: 'my-comp', hostDirectives: [HostDir], template: ''})
+      class Comp {
+        changeDetectorRef = inject(ChangeDetectorRef) as InternalChangeDetectorRef;
+      }
+
+      @Component({template: '<my-comp></my-comp>'})
+      class App {
+        @ViewChild(HostDir) hostDir!: HostDir;
+        @ViewChild(Comp) comp!: Comp;
+      }
+
+      TestBed.configureTestingModule({declarations: [App, Comp]});
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+
+      const hostDirectiveCdr = fixture.componentInstance.hostDir.changeDetectorRef;
+      const componentCdr = fixture.componentInstance.comp.changeDetectorRef;
+
+      // We can't assert that the change detectors are the same by comparing
+      // them directly, because a new one is created each time. Instead of we
+      // compare that they're associated with the same LView.
+      expect(hostDirectiveCdr._lView).toBeTruthy();
+      expect(componentCdr._lView).toBeTruthy();
+      expect(hostDirectiveCdr._lView).toBe(componentCdr._lView);
+      expect(() => {
+        hostDirectiveCdr.markForCheck();
+        hostDirectiveCdr.detectChanges();
+      }).not.toThrow();
+    });
   });
 
   describe('outputs', () => {
@@ -3175,6 +3213,66 @@ describe('host directives', () => {
       }
 
       TestBed.configureTestingModule({declarations: [App, Dir]});
+
+      expect(() => {
+        const fixture = TestBed.createComponent(App);
+        fixture.detectChanges();
+      }).not.toThrow();
+    });
+
+    it('should not throw when exposing an aliased binding', () => {
+      @Directive({
+        outputs: ['opened: triggerOpened'],
+        selector: '[trigger]',
+        standalone: true,
+      })
+      class Trigger {
+        opened = new EventEmitter();
+      }
+
+      @Directive({
+        standalone: true,
+        selector: '[host]',
+        hostDirectives: [{directive: Trigger, outputs: ['triggerOpened']}]
+      })
+      class Host {
+      }
+
+      @Component({template: '<div host></div>', standalone: true, imports: [Host]})
+      class App {
+      }
+
+      expect(() => {
+        const fixture = TestBed.createComponent(App);
+        fixture.detectChanges();
+      }).not.toThrow();
+    });
+
+    it('should not throw when exposing an inherited aliased binding', () => {
+      @Directive({standalone: true})
+      abstract class Base {
+        opened = new EventEmitter();
+      }
+
+      @Directive({
+        outputs: ['opened: triggerOpened'],
+        selector: '[trigger]',
+        standalone: true,
+      })
+      class Trigger extends Base {
+      }
+
+      @Directive({
+        standalone: true,
+        selector: '[host]',
+        hostDirectives: [{directive: Trigger, outputs: ['triggerOpened: hostOpened']}]
+      })
+      class Host {
+      }
+
+      @Component({template: '<div host></div>', standalone: true, imports: [Host]})
+      class App {
+      }
 
       expect(() => {
         const fixture = TestBed.createComponent(App);

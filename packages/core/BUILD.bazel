@@ -33,6 +33,7 @@ ng_module(
         "//packages/core/src/di/interface",
         "//packages/core/src/interface",
         "//packages/core/src/reflection",
+        "//packages/core/src/signals",
         "//packages/core/src/util",
         "//packages/zone.js/lib:zone_d_ts",
         "@npm//rxjs",
@@ -47,6 +48,7 @@ tsec_test(
 
 ng_package(
     name = "npm_package",
+    package_name = "@angular/core",
     srcs = [
         "package.json",
     ],
@@ -59,10 +61,12 @@ ng_package(
     # Do not add more to this list.
     # Dependencies on the full npm_package cause long re-builds.
     visibility = [
+        "//aio:__pkg__",
+        "//aio/content/examples:__subpackages__",
+        "//aio/tools/examples:__pkg__",
         "//integration:__subpackages__",
         "//packages/bazel/test/ng_package:__pkg__",
         "//packages/compiler-cli/integrationtest:__pkg__",
-        "//packages/compiler-cli/ngcc/test:__pkg__",
         "//packages/compiler-cli/test:__pkg__",
         "//packages/compiler-cli/test/diagnostics:__pkg__",
         "//packages/compiler-cli/test/transformers:__pkg__",
@@ -71,6 +75,7 @@ ng_package(
     ],
     deps = [
         ":core",
+        "//packages/core/rxjs-interop",
         "//packages/core/testing",
     ],
 )
@@ -97,6 +102,7 @@ api_golden_test(
         "//packages/core/src/di/interface",
         "//packages/core/src/interface",
         "//packages/core/src/reflection",
+        "//packages/core/src/signals",
         "//packages/core/src/util",
     ],
     entry_point = "angular/packages/core/src/render3/global_utils_api.d.ts",
@@ -111,4 +117,16 @@ api_golden_test(
     ],
     entry_point = "angular/packages/core/src/errors.d.ts",
     golden = "angular/goldens/public-api/core/errors.md",
+)
+
+filegroup(
+    name = "files_for_docgen",
+    srcs = glob([
+        "*.ts",
+        "src/**/*.ts",
+    ]) + [
+        "PACKAGE.md",
+        "global/index.ts",
+        "global/PACKAGE.md",
+    ],
 )

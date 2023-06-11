@@ -14,6 +14,7 @@
 import {
   Component,
   Directive,
+  EnvironmentInjector,
   InjectFlags,
   InjectionToken,
   InjectOptions,
@@ -104,6 +105,13 @@ export interface TestBed {
   /** @deprecated from v9.0.0 use TestBed.inject */
   get(token: any, notFoundValue?: any): any;
 
+  /**
+   * Runs the given function in the `EnvironmentInjector` context of `TestBed`.
+   *
+   * @see EnvironmentInjector#runInContext
+   */
+  runInInjectionContext<T>(fn: () => T): T;
+
   execute(tokens: any[], fn: Function, context?: any): any;
 
   overrideModule(ngModule: Type<any>, override: MetadataOverride<NgModule>): TestBed;
@@ -119,13 +127,12 @@ export interface TestBed {
   /**
    * Overwrites all providers for the given token with the given provider definition.
    */
-  overrideProvider(token: any, provider: {
-    useFactory: Function,
-    deps: any[],
-  }): TestBed;
-  overrideProvider(token: any, provider: {useValue: any;}): TestBed;
-  overrideProvider(token: any, provider: {useFactory?: Function, useValue?: any, deps?: any[]}):
+  overrideProvider(token: any, provider: {useFactory: Function, deps: any[], multi?: boolean}):
       TestBed;
+  overrideProvider(token: any, provider: {useValue: any, multi?: boolean}): TestBed;
+  overrideProvider(
+      token: any,
+      provider: {useFactory?: Function, useValue?: any, deps?: any[], multi?: boolean}): TestBed;
 
   overrideTemplateUsingTestingModule(component: Type<any>, template: string): TestBed;
 
@@ -325,6 +332,15 @@ export class TestBedImpl implements TestBed {
     return TestBedImpl.INSTANCE.inject(token, notFoundValue, flags);
   }
 
+  /**
+   * Runs the given function in the `EnvironmentInjector` context of `TestBed`.
+   *
+   * @see EnvironmentInjector#runInContext
+   */
+  static runInInjectionContext<T>(fn: () => T): T {
+    return TestBedImpl.INSTANCE.runInInjectionContext(fn);
+  }
+
   static createComponent<T>(component: Type<T>): ComponentFixture<T> {
     return TestBedImpl.INSTANCE.createComponent(component);
   }
@@ -449,7 +465,7 @@ export class TestBedImpl implements TestBed {
 
   configureCompiler(config: {providers?: any[]; useJit?: boolean;}): this {
     if (config.useJit != null) {
-      throw new Error('the Render3 compiler JiT mode is not configurable !');
+      throw new Error('JIT compiler is not configurable via TestBed APIs.');
     }
 
     if (config.providers !== undefined) {
@@ -459,7 +475,7 @@ export class TestBedImpl implements TestBed {
   }
 
   configureTestingModule(moduleDef: TestModuleMetadata): this {
-    this.assertNotInstantiated('R3TestBed.configureTestingModule', 'configure the test module');
+    this.assertNotInstantiated('TestBed.configureTestingModule', 'configure the test module');
 
     // Trigger module scoping queue flush before executing other TestBed operations in a test.
     // This is needed for the first test invocation to ensure that globally declared modules have
@@ -516,6 +532,10 @@ export class TestBedImpl implements TestBed {
     return this.inject(token, notFoundValue, flags);
   }
 
+  runInInjectionContext<T>(fn: () => T): T {
+    return this.inject(EnvironmentInjector).runInContext(fn);
+  }
+
   execute(tokens: any[], fn: Function, context?: any): any {
     const params = tokens.map(t => this.inject(t));
     return fn.apply(context, params);
@@ -535,7 +555,7 @@ export class TestBedImpl implements TestBed {
 
   overrideTemplateUsingTestingModule(component: Type<any>, template: string): this {
     this.assertNotInstantiated(
-        'R3TestBed.overrideTemplateUsingTestingModule',
+        'TestBed.overrideTemplateUsingTestingModule',
         'Cannot override template when the test module has already been instantiated');
     this.compiler.overrideTemplateUsingTestingModule(component, template);
     return this;
@@ -578,11 +598,8 @@ export class TestBedImpl implements TestBed {
       throw new Error(`It looks like '${stringify(type)}' has not been compiled.`);
     }
 
-    // TODO: Don't cast as `InjectionToken<boolean>`, proper type is boolean[]
-    const noNgZone = this.inject(ComponentFixtureNoNgZone as InjectionToken<boolean>, false);
-    // TODO: Don't cast as `InjectionToken<boolean>`, proper type is boolean[]
-    const autoDetect: boolean =
-        this.inject(ComponentFixtureAutoDetect as InjectionToken<boolean>, false);
+    const noNgZone = this.inject(ComponentFixtureNoNgZone, false);
+    const autoDetect: boolean = this.inject(ComponentFixtureAutoDetect, false);
     const ngZone: NgZone|null = noNgZone ? null : this.inject(NgZone, null);
     const componentFactory = new ComponentFactory(componentDef);
     const initComponent = () => {

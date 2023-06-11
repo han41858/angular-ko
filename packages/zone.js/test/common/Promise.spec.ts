@@ -63,31 +63,6 @@ describe(
         log = [];
       });
 
-      xit('should allow set es6 Promise after load ZoneAwarePromise', (done) => {
-        const ES6Promise = require('es6-promise').Promise;
-        const NativePromise = global[zoneSymbol('Promise')];
-
-        try {
-          global['Promise'] = ES6Promise;
-          Zone.assertZonePatched();
-          expect(global[zoneSymbol('Promise')]).toBe(ES6Promise);
-          const promise = Promise.resolve(0);
-          console.log('promise', promise);
-          promise
-              .then(value => {
-                expect(value).toBe(0);
-                done();
-              })
-              .catch(error => {
-                fail(error);
-              });
-        } finally {
-          global['Promise'] = NativePromise;
-          Zone.assertZonePatched();
-          expect(global[zoneSymbol('Promise')]).toBe(NativePromise);
-        }
-      });
-
       it('should pretend to be a native code', () => {
         expect(String(Promise).indexOf('[native code]') >= 0).toBe(true);
       });
@@ -360,37 +335,45 @@ describe(
           });
 
           it('should output error to console if ignoreConsoleErrorUncaughtError is false',
-             (done) => {
-               Zone.current.fork({name: 'promise-error'}).run(() => {
-                 (Zone as any)[Zone.__symbol__('ignoreConsoleErrorUncaughtError')] = false;
+             async () => {
+               await jasmine.spyOnGlobalErrorsAsync(() => {
                  const originalConsoleError = console.error;
-                 console.error = jasmine.createSpy('consoleErr');
-                 const p = new Promise((resolve, reject) => {
-                   throw new Error('promise error');
+                 Zone.current.fork({name: 'promise-error'}).run(() => {
+                   (Zone as any)[Zone.__symbol__('ignoreConsoleErrorUncaughtError')] = false;
+                   console.error = jasmine.createSpy('consoleErr');
+                   const p = new Promise((resolve, reject) => {
+                     throw new Error('promise error');
+                   });
                  });
-                 setTimeout(() => {
-                   expect(console.error).toHaveBeenCalled();
-                   console.error = originalConsoleError;
-                   done();
-                 }, 10);
+                 return new Promise(res => {
+                   setTimeout(() => {
+                     expect(console.error).toHaveBeenCalled();
+                     console.error = originalConsoleError;
+                     res();
+                   });
+                 });
                });
              });
 
           it('should not output error to console if ignoreConsoleErrorUncaughtError is true',
-             (done) => {
-               Zone.current.fork({name: 'promise-error'}).run(() => {
-                 (Zone as any)[Zone.__symbol__('ignoreConsoleErrorUncaughtError')] = true;
+             async () => {
+               await jasmine.spyOnGlobalErrorsAsync(() => {
                  const originalConsoleError = console.error;
-                 console.error = jasmine.createSpy('consoleErr');
-                 const p = new Promise((resolve, reject) => {
-                   throw new Error('promise error');
+                 Zone.current.fork({name: 'promise-error'}).run(() => {
+                   (Zone as any)[Zone.__symbol__('ignoreConsoleErrorUncaughtError')] = true;
+                   console.error = jasmine.createSpy('consoleErr');
+                   const p = new Promise((resolve, reject) => {
+                     throw new Error('promise error');
+                   });
                  });
-                 setTimeout(() => {
-                   expect(console.error).not.toHaveBeenCalled();
-                   console.error = originalConsoleError;
-                   (Zone as any)[Zone.__symbol__('ignoreConsoleErrorUncaughtError')] = false;
-                   done();
-                 }, 10);
+                 return new Promise(res => {
+                   setTimeout(() => {
+                     expect(console.error).not.toHaveBeenCalled();
+                     console.error = originalConsoleError;
+                     (Zone as any)[Zone.__symbol__('ignoreConsoleErrorUncaughtError')] = false;
+                     res();
+                   });
+                 });
                });
              });
 

@@ -9,10 +9,9 @@
 import {Type} from '@angular/compiler';
 import ts from 'typescript';
 
-import {ImportRewriter} from '../../imports';
-import {ClassDeclaration} from '../../reflection';
+import {ImportRewriter, ReferenceEmitter} from '../../imports';
+import {ClassDeclaration, ReflectionHost} from '../../reflection';
 import {ImportManager, translateType} from '../../translator';
-import {createPropertyDeclaration, updateClassDeclaration} from '../../ts_compatibility';
 
 import {DtsTransform} from './api';
 import {addImports} from './utils';
@@ -55,10 +54,12 @@ export class DtsTransformRegistry {
 }
 
 export function declarationTransformFactory(
-    transformRegistry: DtsTransformRegistry, importRewriter: ImportRewriter,
+    transformRegistry: DtsTransformRegistry, reflector: ReflectionHost,
+    refEmitter: ReferenceEmitter, importRewriter: ImportRewriter,
     importPrefix?: string): ts.TransformerFactory<ts.SourceFile> {
   return (context: ts.TransformationContext) => {
-    const transformer = new DtsTransformer(context, importRewriter, importPrefix);
+    const transformer =
+        new DtsTransformer(context, reflector, refEmitter, importRewriter, importPrefix);
     return (fileOrBundle) => {
       if (ts.isBundle(fileOrBundle)) {
         // Only attempt to transform source files.
@@ -78,7 +79,8 @@ export function declarationTransformFactory(
  */
 class DtsTransformer {
   constructor(
-      private ctx: ts.TransformationContext, private importRewriter: ImportRewriter,
+      private ctx: ts.TransformationContext, private reflector: ReflectionHost,
+      private refEmitter: ReferenceEmitter, private importRewriter: ImportRewriter,
       private importPrefix?: string) {}
 
   /**
@@ -99,7 +101,7 @@ class DtsTransformer {
     };
 
     // Recursively scan through the AST and process all nodes as desired.
-    sf = ts.visitNode(sf, visitor);
+    sf = ts.visitNode(sf, visitor, ts.isSourceFile) || sf;
 
     // Add new imports for this file.
     return addImports(imports, sf);
@@ -134,14 +136,15 @@ class DtsTransformer {
         // not yet been incorporated. Otherwise, `newClazz.members` holds the latest class members.
         const inputMembers = (clazz === newClazz ? elements : newClazz.members);
 
-        newClazz = transform.transformClass(newClazz, inputMembers, imports);
+        newClazz = transform.transformClass(
+            newClazz, inputMembers, this.reflector, this.refEmitter, imports);
       }
     }
 
     // If some elements have been transformed but the class itself has not been transformed, create
     // an updated class declaration with the updated elements.
     if (elementsChanged && clazz === newClazz) {
-      newClazz = updateClassDeclaration(
+      newClazz = ts.factory.updateClassDeclaration(
           /* node */ clazz,
           /* modifiers */ clazz.modifiers,
           /* name */ clazz.name,
@@ -182,6 +185,7 @@ export class IvyDeclarationDtsTransform implements DtsTransform {
 
   transformClass(
       clazz: ts.ClassDeclaration, members: ReadonlyArray<ts.ClassElement>,
+      reflector: ReflectionHost, refEmitter: ReferenceEmitter,
       imports: ImportManager): ts.ClassDeclaration {
     const original = ts.getOriginalNode(clazz) as ClassDeclaration;
 
@@ -192,9 +196,10 @@ export class IvyDeclarationDtsTransform implements DtsTransform {
 
     const newMembers = fields.map(decl => {
       const modifiers = [ts.factory.createModifier(ts.SyntaxKind.StaticKeyword)];
-      const typeRef = translateType(decl.type, imports);
+      const typeRef =
+          translateType(decl.type, original.getSourceFile(), reflector, refEmitter, imports);
       markForEmitAsSingleLine(typeRef);
-      return createPropertyDeclaration(
+      return ts.factory.createPropertyDeclaration(
           /* modifiers */ modifiers,
           /* name */ decl.name,
           /* questionOrExclamationToken */ undefined,
@@ -202,7 +207,7 @@ export class IvyDeclarationDtsTransform implements DtsTransform {
           /* initializer */ undefined);
     });
 
-    return updateClassDeclaration(
+    return ts.factory.updateClassDeclaration(
         /* node */ clazz,
         /* modifiers */ clazz.modifiers,
         /* name */ clazz.name,

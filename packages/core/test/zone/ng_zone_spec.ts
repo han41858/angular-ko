@@ -9,19 +9,17 @@
 import {EventEmitter, NgZone} from '@angular/core';
 import {fakeAsync, flushMicrotasks, inject, waitForAsync} from '@angular/core/testing';
 import {Log} from '@angular/core/testing/src/testing_internal';
-import {browserDetection} from '@angular/platform-browser/testing/src/browser_util';
 
 import {global} from '../../src/util/global';
 import {scheduleMicroTask} from '../../src/util/microtask';
 import {getNativeRequestAnimationFrame} from '../../src/util/raf';
 import {NoopNgZone} from '../../src/zone/ng_zone';
 
-const needsLongerTimers = browserDetection.isSlow || browserDetection.isEdge;
 const resultTimer = 1000;
 // Schedules a macrotask (using a timer)
 function macroTask(fn: (...args: any[]) => void, timer = 1): void {
   // adds longer timers for passing tests in IE and Edge
-  setTimeout(fn, needsLongerTimers ? timer : 1);
+  setTimeout(fn, 1);
 }
 
 let _log: Log;
@@ -976,7 +974,7 @@ function commonTests() {
       let logs: string[] = [];
 
       beforeEach(() => {
-        patchedImmediate = setImmediate;
+        patchedImmediate = global.setImmediate;
         global.setImmediate = global[Zone.__symbol__('setImmediate')];
         coalesceZone = new NgZone({shouldCoalesceEventChangeDetection: true});
         logs = [];
@@ -1115,7 +1113,7 @@ function commonTests() {
       let logs: string[] = [];
 
       beforeEach(() => {
-        patchedImmediate = setImmediate;
+        patchedImmediate = global.setImmediate;
         global.setImmediate = global[Zone.__symbol__('setImmediate')];
         coalesceZone = new NgZone({shouldCoalesceRunChangeDetection: true});
         logs = [];

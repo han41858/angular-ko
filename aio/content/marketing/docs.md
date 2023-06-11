@@ -1,35 +1,30 @@
-<h1 class="no-toc">Introduction to the Angular Docs</h1>
+<h1 class="no-toc">Introduction to the Angular docs</h1>
 
 Angular is an application-design framework and development platform for creating efficient and sophisticated single-page apps.
 
-These Angular docs help you learn and use the Angular framework and development platform, from your first application to optimizing complex single-page apps for enterprises.
-Tutorials and guides include downloadable examples to accelerate your projects.
+These Angular docs help you learn and use the Angular framework and development platform, from your first application to optimizing complex single-page applications for enterprises.
+Tutorials and guides include downloadable examples to help you start your projects.
 
 <div class="card-container">
+  <a href="tutorial/first-app" class="docs-card" title="Work through a full tutorial">
+    <section>Build your first Angular app</section>
+    <p>Work through a full tutorial to create your first application.</p>
+    <p class="card-footer">Homes App Tutorial</p>
+  </a>
   <a href="guide/what-is-angular" class="docs-card" title="Angular Platform Overview">
     <section>What is Angular</section>
     <p>Get a high-level overview of the Angular platform.</p>
     <p class="card-footer">Platform overview</p>
   </a>
-  <a href="start" class="docs-card" title="Getting started">
-    <section>Getting started</section>
-    <p>Examine and work with a small ready-made Angular app, without any setup.</p>
-    <p class="card-footer">Try it now</p>
-  </a>
   <a href="guide/architecture" class="docs-card" title="Angular Concepts">
     <section>Learn and Explore</section>
-    <p>Learn about the fundamental design concepts and architecture of Angular apps.</p>
+    <p>Learn about the fundamental design concepts and architecture of Angular applications.</p>
     <p class="card-footer">Introduction to Angular concepts</p>
   </a>
   <a href="guide/setup-local" class="docs-card" title="Angular Local Environment Setup">
     <section>Set up your environment</section>
     <p>Set up your local environment for development with the Angular CLI.</p>
     <p class="card-footer">Local setup</p>
-  </a>
-  <a href="tutorial" class="docs-card" title="Work through a full tutorial">
-    <section>Hello World</section>
-    <p>Work through a full tutorial to create your first app.</p>
-    <p class="card-footer">Tour of Heroes tutorial</p>
   </a>
 </div>
 
@@ -42,7 +37,7 @@ Most Angular code can be written with just the latest JavaScript, using [types](
 
 ## Feedback
 
-<h3>You can sit with us!</h3>
+<!-- vale Angular.Google_We = NO -->
 
 We want to hear from you. [Report problems or submit suggestions for future docs](https://github.com/angular/angular/issues/new/choose "Angular GitHub repository new issue form").
 
@@ -54,3 +49,5 @@ for information about submission guidelines.
 
 Our community values respectful, supportive communication.
 Please consult and adhere to the [Code of Conduct](https://github.com/angular/code-of-conduct/blob/main/CODE_OF_CONDUCT.md "Contributor code of conduct").
+
+<!-- vale Angular.Google_We = YES -->

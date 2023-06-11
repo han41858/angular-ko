@@ -8,9 +8,9 @@
 
 import {InjectionToken} from '@angular/core';
 
+import {OnSameUrlNavigation} from './models';
 import {UrlSerializer, UrlTree} from './url_tree';
 
-const NG_DEV_MODE = typeof ngDevMode === 'undefined' || !!ngDevMode;
 
 /**
  * Error handler that is invoked when a navigation error occurs.
@@ -20,6 +20,7 @@ const NG_DEV_MODE = typeof ngDevMode === 'undefined' || !!ngDevMode;
  * the exception.
  *
  * @publicApi
+ * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
  */
 export type ErrorHandler = (error: any) => any;
 
@@ -74,13 +75,13 @@ export interface RouterConfigOptions {
   canceledNavigationResolution?: 'replace'|'computed';
 
   /**
-   * Define what the router should do if it receives a navigation request to the current URL.
-   * Default is `ignore`, which causes the router ignores the navigation.
-   * This can disable features such as a "refresh" button.
-   * Use this option to configure the behavior when navigating to the
-   * current URL. Default is 'ignore'.
+   * Configures the default for handling a navigation request to the current URL.
+   *
+   * If unset, the `Router` will use `'ignore'`.
+   *
+   * @see `OnSameUrlNavigation`
    */
-  onSameUrlNavigation?: 'reload'|'ignore';
+  onSameUrlNavigation?: OnSameUrlNavigation;
 
   /**
    * Defines how the router merges parameters, data, and resolved data from parent to child
@@ -197,12 +198,19 @@ export interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOpti
   initialNavigation?: InitialNavigation;
 
   /**
+   * When true, enables binding information from the `Router` state directly to the inputs of the
+   * component in `Route` configurations.
+   */
+  bindToComponentInputs?: boolean;
+
+  /**
    * A custom error handler for failed navigations.
    * If the handler returns a value, the navigation Promise is resolved with this value.
    * If the handler throws an exception, the navigation Promise is rejected with the exception.
    *
+   * @deprecated Subscribe to the `Router` events and watch for `NavigationError` instead.
    */
-  errorHandler?: ErrorHandler;
+  errorHandler?: (error: any) => any;
 
   /**
    * Configures a preloading strategy.
@@ -229,6 +237,8 @@ export interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOpti
    * - `'URIError'` - Error thrown when parsing a bad URL.
    * - `'UrlSerializer'` - UrlSerializer that’s configured with the router.
    * - `'url'` -  The malformed URL that caused the URIError
+   *
+   * @deprecated URI parsing errors should be handled in the `UrlSerializer` instead.
    * */
   malformedUriErrorHandler?:
       (error: URIError, urlSerializer: UrlSerializer, url: string) => UrlTree;
@@ -239,8 +249,8 @@ export interface ExtraOptions extends InMemoryScrollingOptions, RouterConfigOpti
  *
  * @publicApi
  */
-export const ROUTER_CONFIGURATION =
-    new InjectionToken<ExtraOptions>(NG_DEV_MODE ? 'router config' : '', {
+export const ROUTER_CONFIGURATION = new InjectionToken<ExtraOptions>(
+    (typeof ngDevMode === 'undefined' || ngDevMode) ? 'router config' : '', {
       providedIn: 'root',
       factory: () => ({}),
     });

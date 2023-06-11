@@ -7,9 +7,11 @@
  */
 
 import {ResourceLoader} from '@angular/compiler';
-import {Compiler, Component, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, Directive, Inject, Injectable, InjectionToken, Injector, Input, NgModule, Optional, Pipe, SkipSelf, Type, ɵstringify as stringify} from '@angular/core';
+import {Compiler, Component, ComponentFactoryResolver, CUSTOM_ELEMENTS_SCHEMA, Directive, Inject, Injectable, InjectionToken, Injector, Input, NgModule, Optional, Pipe, SkipSelf, Type} from '@angular/core';
 import {fakeAsync, getTestBed, inject, TestBed, tick, waitForAsync, withModule} from '@angular/core/testing';
 import {expect} from '@angular/platform-browser/testing/src/matchers';
+
+import {TransferState} from '../public_api';
 
 // Services, and components for the tests.
 
@@ -46,18 +48,6 @@ class MyIfComp {
 class ChildChildComp {
 }
 
-@Component({
-  selector: 'child-comp',
-  template: `<span>Original {{childBinding}}(<child-child-comp></child-child-comp>)</span>`,
-})
-@Injectable()
-class ChildWithChildComp {
-  childBinding: string;
-  constructor() {
-    this.childBinding = 'Child';
-  }
-}
-
 class FancyService {
   value: string = 'real value';
   getAsyncValue() {
@@ -92,7 +82,6 @@ class TestViewProvidersComp {
 
 @Directive({selector: '[someDir]', host: {'[title]': 'someDir'}})
 class SomeDirective {
-  // TODO(issue/24571): remove '!'.
   @Input() someDir!: string;
 }
 
@@ -349,6 +338,9 @@ const bTok = new InjectionToken<string>('b');
                  const fixture = TestBed.createComponent(TestComponent);
                  expect(fixture.nativeElement).toHaveText('from external template');
                });
+
+        it('should always pass to satisfy jasmine always wanting an `it` block under a `describe`',
+           () => {});
       });
 
       describe('overwriting metadata', () => {
@@ -762,7 +754,6 @@ const bTok = new InjectionToken<string>('b');
               testDir = this;
             }
 
-            // TODO(issue/24571): remove '!'.
             @Input('test') test!: string;
           }
 
@@ -1058,6 +1049,11 @@ Did you run and wait for 'resolveComponentResources()'?`);
                .toThrowError(
                    /Cannot override template when the test module has already been instantiated/);
          });
+    });
+
+    it('TransferState re-export can be used as a type and contructor', () => {
+      const transferState: TransferState = new TransferState();
+      expect(transferState).toBeDefined();
     });
   });
 }

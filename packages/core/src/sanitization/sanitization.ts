@@ -6,9 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {XSS_SECURITY_URL} from '../error_details_base_url';
 import {RuntimeError, RuntimeErrorCode} from '../errors';
 import {getDocument} from '../render3/interfaces/document';
-import {SANITIZER} from '../render3/interfaces/view';
+import {ENVIRONMENT} from '../render3/interfaces/view';
 import {getLView} from '../render3/state';
 import {renderStringify} from '../render3/util/stringify_utils';
 import {TrustedHTML, TrustedScript, TrustedScriptURL} from '../util/security/trusted_type_defs';
@@ -120,8 +121,7 @@ export function ɵɵsanitizeResourceUrl(unsafeResourceUrl: any): TrustedScriptUR
   }
   throw new RuntimeError(
       RuntimeErrorCode.UNSAFE_VALUE_IN_RESOURCE_URL,
-      ngDevMode &&
-          'unsafe value used in a resource URL context (see https://g.co/ng/security#xss)');
+      ngDevMode && `unsafe value used in a resource URL context (see ${XSS_SECURITY_URL})`);
 }
 
 /**
@@ -260,5 +260,5 @@ export function validateAgainstEventAttributes(name: string) {
 
 function getSanitizer(): Sanitizer|null {
   const lView = getLView();
-  return lView && lView[SANITIZER];
+  return lView && lView[ENVIRONMENT].sanitizer;
 }

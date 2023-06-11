@@ -11,18 +11,32 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const EXAMPLE_CONFIG_NAME = 'example-config.json';
 
 export class ExampleZipper {
-  constructor(sourceDirName, outputDirName) {
+  constructor(exampleDirName, outputDirName) {
     this.examplesPackageJson = path.join(__dirname, '../examples/shared/package.json');
     this.examplesSystemjsConfig = path.join(__dirname, '../examples/shared/boilerplate/systemjs/src/systemjs.config.js');
     this.examplesSystemjsLoaderConfig = path.join(__dirname, '../examples/shared/boilerplate/systemjs/src/systemjs-angular-loader.js');
     this.exampleTsconfig = path.join(__dirname, '../examples/shared/boilerplate/systemjs/src/tsconfig.json');
 
-    let gpathStackblitz = path.join(sourceDirName, '**/*stackblitz.json');
-    let gpathZipper = path.join(sourceDirName, '**/zipper.json');
-    let configFileNames = globbySync([gpathStackblitz, gpathZipper], { ignore: ['**/node_modules/**'] });
+    const configFileNames = this._findConfigurationFileNames(exampleDirName);
+    if (configFileNames.length == 0) {
+      throw new Error(`Missing zip configuration file(s) from example directory ${this.examplePath}. Did you forget to include a stackblitz.json/zipper.json?`);
+    }
+
     configFileNames.forEach((configFileName) => {
-      this._zipExample(configFileName, sourceDirName, outputDirName);
+      this._zipExample(configFileName, exampleDirName, outputDirName);
     });
+  }
+
+  _findConfigurationFileNames(exampleDirName) {
+    const gpathStackblitz = path.join(exampleDirName, '*stackblitz.json');
+    const gpathZipper = path.join(exampleDirName, 'zipper.json');
+
+    const configFileNames = globbySync([gpathStackblitz, gpathZipper], {
+      dot: true // Include subpaths that begin with '.' when using a wildcard inclusion.
+                // Needed to include the bazel .cache folder on Linux.
+    });
+
+    return configFileNames;
   }
 
   _changeTypeRoots(tsconfig) {
@@ -43,8 +57,9 @@ export class ExampleZipper {
     return archive;
   }
 
-  _getExampleType(sourceFolder) {
-    const filePath = path.join(sourceFolder, EXAMPLE_CONFIG_NAME);
+  _getExampleType(exampleDirName) {
+    const filePath = path.join(exampleDirName, EXAMPLE_CONFIG_NAME);
+
     try {
       return this._loadJson(filePath).projectType || 'cli';
     } catch (err) { // empty file, so it is cli
@@ -73,9 +88,8 @@ export class ExampleZipper {
     let json = this._loadJson(configFileName);
     const basePath = json.basePath || '';
     const jsonFileName = configFileName.replace(/^.*[\\\/]/, '');
-    let relativeDirName = path.dirname(path.relative(sourceDirName, configFileName));
+    let relativeDirName = path.basename(sourceDirName);
     let exampleZipName;
-    const exampleType = this._getExampleType(path.join(sourceDirName, relativeDirName));
     if (relativeDirName.indexOf('/') !== -1) { // Special example
       exampleZipName = relativeDirName.split('/').join('-');
     } else {
@@ -83,7 +97,8 @@ export class ExampleZipper {
     }
 
     const exampleDirName = path.dirname(configFileName);
-    const outputFileName = path.join(outputDirName, relativeDirName, exampleZipName + '.zip');
+    const exampleType = this._getExampleType(exampleDirName);
+    const outputFileName = path.join(outputDirName, exampleZipName + '.zip');
     let defaultIncludes = ['**/*.ts', '**/*.js', '**/*.es6', '**/*.css', '**/*.html', '**/*.md', '**/*.json', '**/*.png', '**/*.svg'];
     let alwaysIncludes = [
       '.editorconfig',
@@ -111,7 +126,7 @@ export class ExampleZipper {
       '!**/npm-debug.log',
       '!**/example-config.json',
       '!**/wallaby.js',
-      '!**/e2e/protractor-puppeteer.conf.js',
+      '!**/e2e/protractor-bazel.conf.js',
       // AOT related files
       '!**/aot/**/*.*',
       '!**/*-aot.*'
@@ -152,7 +167,11 @@ export class ExampleZipper {
 
     gpaths.push(...alwaysExcludes);
 
-    let fileNames = globbySync(gpaths, { ignore: ['**/node_modules/**'] });
+    let fileNames = globbySync(gpaths, {
+      ignore: ['**/node_modules/**'],
+      dot: true // Include subpaths that begin with '.' when using a wildcard inclusion.
+                // Needed to include the bazel .cache folder on Linux.
+    });
 
     let zip = this._createZipArchive(outputFileName);
     fileNames.forEach((fileName) => {
@@ -164,18 +183,25 @@ export class ExampleZipper {
       // zip.append(fs.createReadStream(fileName), { name: relativePath });
       let output = regionExtractor()(content, extn).contents;
 
-      zip.append(output, { name: relativePath } );
+      appendToZip(zip, output, { name: relativePath });
     });
 
     // also a systemjs config
     if (exampleType === 'systemjs') {
-      zip.append(fs.readFileSync(this.examplesSystemjsConfig, 'utf8'), { name: 'src/systemjs.config.js' });
-      zip.append(fs.readFileSync(this.examplesSystemjsLoaderConfig, 'utf8'), { name: 'src/systemjs-angular-loader.js' });
+      appendToZip(zip, fs.readFileSync(this.examplesSystemjsConfig, 'utf8'), { name: 'src/systemjs.config.js' });
+      appendToZip(zip, fs.readFileSync(this.examplesSystemjsLoaderConfig, 'utf8'), { name: 'src/systemjs-angular-loader.js' });
       // a modified tsconfig
       let tsconfig = fs.readFileSync(this.exampleTsconfig, 'utf8');
-      zip.append(this._changeTypeRoots(tsconfig), {name: 'src/tsconfig.json'});
+      appendToZip(zip, this._changeTypeRoots(tsconfig), {name: 'src/tsconfig.json' });
     }
 
     zip.finalize();
   }
+}
+
+// Fix the timestamp on zip entries in order create reproducible zip
+// files, which improves remote Bazel cache performance.
+function appendToZip(zip, source, data) {
+  const FIXED_DATE = new Date(0);
+  zip.append(source, {...data, date: FIXED_DATE});
 }

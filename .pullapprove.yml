@@ -53,11 +53,6 @@
 # @angular/framework-global-approvers-for-docs-only-changes
 # =========================================================
 #  Used for approving minor documentation-only changes that don't require engineering review.
-#
-# josmar-crwdstffng
-# ileil
-# TeriGlover
-# bob-watson
 
 version: 3
 
@@ -127,12 +122,18 @@ groups:
           'packages/animations/**/{*,.*}',
           'packages/platform-browser/animations/**/{*,.*}',
           'aio/content/guide/animations.md',
+          'aio/content/guide/add-an-animation.md',
+          'aio/content/guide/animate-state-style.md',
+          'aio/content/guide/animation-api-summary.md',
+          'aio/content/guide/understanding-angular-animation.md',
           'aio/content/examples/animations/**/{*,.*}',
           'aio/content/images/guide/animations/**/{*,.*}',
           'aio/content/guide/complex-animation-sequences.md',
           'aio/content/guide/reusable-animations.md',
           'aio/content/guide/route-animations.md',
-          'aio/content/guide/transition-and-triggers.md'
+          'aio/content/guide/transition-and-triggers.md',
+          'aio/content/guide/animations-attach-to-html-template.md',
+          'aio/content/guide/animation-transition-timing.md'
           ])
     reviewers:
       users:
@@ -148,7 +149,7 @@ groups:
     <<: *defaults
     conditions:
       - >
-        contains_any_globs(files.exclude('packages/compiler-cli/ngcc/*'), [
+        contains_any_globs(files, [
           'packages/compiler/**/{*,.*}',
           'packages/examples/compiler/**/{*,.*}',
           'aio/content/examples/angular-compiler-options/**/{*,.*}',
@@ -156,25 +157,15 @@ groups:
           'aio/content/guide/angular-compiler-options.md',
           'aio/content/guide/aot-compiler.md',
           'aio/content/guide/aot-metadata-errors.md',
-          'aio/content/guide/template-typecheck.md'
+          'aio/content/guide/template-typecheck.md',
+          'aio/content/extended-diagnostics/*.md'
           ])
     reviewers:
       users:
         - alxhub
         - AndrewKushnir
         - atscott
-        - JoostK
-
-  # =========================================================
-  #  Framework: Compiler / ngcc
-  # =========================================================
-  fw-ngcc:
-    <<: *defaults
-    conditions:
-      - files.include('packages/compiler-cli/ngcc/*')
-    reviewers:
-      users:
-        - alxhub
+        - crisbeto
         - JoostK
 
   # =========================================================
@@ -213,6 +204,7 @@ groups:
           'aio/content/guide/architecture-services.md',
           'aio/content/guide/architecture.md',
           'aio/content/examples/architecture/**/{*,.*}',
+          'aio/content/guide/rxjs-interop.md',
           'aio/content/images/guide/architecture/**/{*,.*}',
           'aio/content/guide/attribute-directives.md',
           'aio/content/examples/attribute-directives/**/{*,.*}',
@@ -226,31 +218,12 @@ groups:
           'aio/content/images/guide/change-detection/**/{*,.*}',
           'aio/content/guide/class-binding.md',
           'aio/content/guide/cheatsheet.md',
-          'aio/content/guide/component/component-content-projection-complex.md',
-          'aio/content/guide/component/component-content-projection-conditional.md',
-          'aio/content/guide/component/component-content-projection-multi-slot.md',
-          'aio/content/guide/component/component-content-projection-overview.md',
-          'aio/content/guide/component/component-content-projection-single-slot.md',
-          'aio/content/guide/component/component-create-cli.md',
-          'aio/content/guide/component/component-create-manual.md',
-          'aio/content/guide/component/component-example-dynamic-load.md',
-          'aio/content/guide/component/component-example-interaction.md',
-          'aio/content/guide/component/component-example.md',
-          'aio/content/guide/component/component-exchange-data.md',
-          'aio/content/guide/component/component-lifecycle-overview.md',
-          'aio/content/guide/component/component-overview.md',
-          'aio/content/guide/component/component-share-data-overview.md',
-          'aio/content/guide/component/component-share-data-to-child.md',
-          'aio/content/guide/component/component-share-data-to-parent.md',
-          'aio/content/guide/component/component-structure.md',
-          'aio/content/guide/component/component-style-overview.md',
-          'aio/content/guide/component/component-style-view-encapsulate.md',
-          'aio/content/guide/component/component-style.md',
-          'aio/content/guide/component/component-use-overview.md',
           'aio/content/guide/component-interaction.md',
           'aio/content/examples/component-interaction/**/{*,.*}',
           'aio/content/images/guide/component-interaction/**/{*,.*}',
           'aio/content/guide/component-overview.md',
+          'aio/content/errors/*.md',
+          'aio/content/examples/errors/**/{*,.*}',
           'aio/content/examples/component-overview/**/{*,.*}',
           'aio/content/guide/component-styles.md',
           'aio/content/guide/developer-guide-overview.md',
@@ -276,7 +249,6 @@ groups:
           'aio/content/examples/dynamic-component-loader/**/{*,.*}',
           'aio/content/images/guide/dynamic-component-loader/**/{*,.*}',
           'aio/content/guide/example-apps-list.md',
-          'aio/content/guide/entry-components.md',
           'aio/content/guide/feature-modules.md',
           'aio/content/examples/feature-modules/**/{*,.*}',
           'aio/content/images/guide/feature-modules/**/{*,.*}',
@@ -291,8 +263,6 @@ groups:
           'aio/content/guide/lazy-loading-ngmodules.md',
           'aio/content/examples/lazy-loading-ngmodules/**/{*,.*}',
           'aio/content/images/guide/lazy-loading-ngmodules/**/{*,.*}',
-          'aio/content/guide/lifecycle-hook/lifecycle-hook-example.md',
-          'aio/content/guide/lifecycle-hook/lifecycle-hook-overview.md',
           'aio/content/guide/lifecycle-hooks.md',
           'aio/content/examples/lifecycle-hooks/**/{*,.*}',
           'aio/content/images/guide/lifecycle-hooks/**/{*,.*}',
@@ -349,6 +319,7 @@ groups:
           'aio/content/guide/singleton-services.md',
           'aio/content/guide/sharing-ngmodules.md',
           'aio/content/guide/standalone-components.md',
+          'aio/content/guide/standalone-migration.md',
           'aio/content/guide/structural-directives.md',
           'aio/content/examples/structural-directives/**/{*,.*}',
           'aio/content/guide/svg-in-templates.md',
@@ -362,13 +333,16 @@ groups:
           'aio/content/guide/view-encapsulation.md',
           'aio/content/examples/view-encapsulation/**/{*,.*}',
           'aio/content/images/guide/view-encapsulation/**/{*,.*}',
-          'aio/content/special-elements/**/{*,.*}'
+          'aio/content/special-elements/**/{*,.*}',
+          'aio/content/guide/hydration.md',
+          'aio/content/guide/signals.md'
           ])
     reviewers:
       users:
         - alxhub
         - AndrewKushnir
         - atscott
+        - crisbeto
         - dylhunn
         - jessicajaniuk
         - pkozlowski-opensource
@@ -404,6 +378,21 @@ groups:
           'packages/common/http/**/{*,.*}',
           'packages/examples/http/**/{*,.*}',
           'aio/content/guide/http.md',
+          'aio/content/guide/understanding-communicating-with-http.md',
+          'aio/content/guide/http-configure-http-url-parameters.md',
+          'aio/content/guide/http-handle-request-errors.md',
+          'aio/content/guide/http-intercept-requests-and-responses.md',
+          'aio/content/guide/http-interceptor-use-cases.md',
+          'aio/content/guide/http-make-jsonp-request.md',
+          'aio/content/guide/http-optimize-server-interaction.md',
+          'aio/content/guide/http-pass-metadata-to-interceptors.md',
+          'aio/content/guide/http-request-data-from-server.md',
+          'aio/content/guide/http-security-xsrf-protection.md',
+          'aio/content/guide/http-send-data-to-server.md',
+          'aio/content/guide/http-server-communication.md',
+          'aio/content/guide/http-setup-server-communication.md',
+          'aio/content/guide/http-test-requests.md',
+          'aio/content/guide/http-track-show-request-progress.md',
           'aio/content/examples/http/**/{*,.*}',
           'aio/content/images/guide/http/**/{*,.*}'
           ])
@@ -843,6 +832,9 @@ groups:
           'aio/content/images/guide/setup-local/**/{*,.*}',
           'aio/content/tutorial/**/{*,.*}',
           'aio/content/images/guide/toh/**/{*,.*}',
+          'aio/content/demos/first-app/**/{*,.*}',
+          'aio/content/examples/first-app-*/**/{*,.*}',
+          'aio/content/images/guide/faa/**/{*,.*}',
           'aio/content/examples/toh-pt0/**/{*,.*}',
           'aio/content/examples/toh-pt1/**/{*,.*}',
           'aio/content/examples/toh-pt2/**/{*,.*}',
@@ -853,6 +845,7 @@ groups:
           'aio/content/examples/getting-started-v0/**/{*,.*}',
           'aio/content/examples/getting-started/**/{*,.*}',
           'aio/content/start/**/{*,.*}',
+          'aio/content/guide/quick-start.md',
           'aio/content/images/guide/start/**/{*,.*}',
           'aio/content/examples/what-is-angular/**/{*,.*}',
           'aio/content/guide/what-is-angular.md'
@@ -870,6 +863,7 @@ groups:
     conditions:
       - >
         contains_any_globs(files.exclude("aio/content/marketing/contributors.json"), [
+          'aio/content/examples/marketing-first-app/**/{*,.*}',
           'aio/content/guide/roadmap.md',
           'aio/content/marketing/**/{*,.*}',
           'aio/content/images/marketing/**/{*,.*}',
@@ -933,6 +927,10 @@ groups:
           'aio/content/guide/migration-module-with-providers.md',
           'aio/content/guide/static-query-migration.md',
           'aio/content/guide/update-to-latest-version.md',
+          'aio/content/guide/versions.md',
+          'aio/content/guide/update-to-version-14.md',
+          'aio/content/guide/update-to-version-15.md',
+          'aio/content/guide/update-to-version-16.md',
           ])
     reviewers:
       users:
@@ -1006,6 +1004,7 @@ groups:
           'aio/content/guide/workspace-config.md',
           'aio/content/guide/migration-solution-style-tsconfig.md',
           'aio/content/guide/migration-update-libraries-tslib.md',
+          'aio/content/guide/esbuild.md',
           ])
     reviewers:
       users:
@@ -1071,6 +1070,7 @@ groups:
           'aio/tests/**/{*,.*}',
           'aio/tools/**/{*,.*}',
           'aio/tools/examples/shared/boilerplate/cli/.vscode/**/{*,.*}',
+          'aio/content/BUILD.bazel',
           'aio/content/images/guide/contributors-guide/**/{*,.*}',
           'aio/content/guide/contributors-guide-overview.md',
           'aio/content/guide/docs-style-guide.md',
@@ -1160,10 +1160,12 @@ groups:
           'tools/bazel-repo-patches/**/{*,.*}',
           'tools/circular_dependency_test/**/{*,.*}',
           'tools/contributing-stats/**/{*,.*}',
+          'tools/esm-interop/**/{*,.*}',
           'tools/gulp-tasks/**/{*,.*}',
           'tools/legacy-saucelabs/**/{*,.*}',
           'tools/rxjs/**/{*,.*}',
           'tools/saucelabs/**/{*,.*}',
+          'tools/saucelabs-daemon/**/{*,.*}',
           'tools/symbol-extractor/**/{*,.*}',
           'tools/testing/**/{*,.*}',
           'tools/tslint/**/{*,.*}',
@@ -1190,11 +1192,8 @@ groups:
           'goldens/public-api/**/{*,.*}',
           'docs/NAMING.md',
           'aio/content/guide/angular-package-format.md',
-          'aio/content/errors/*.md',
-          'aio/content/extended-diagnostics/*.md',
           'aio/content/guide/glossary.md',
           'aio/content/guide/styleguide.md',
-          'aio/content/examples/errors/**/{*,.*}',
           'aio/content/examples/styleguide/**/{*,.*}',
           'aio/content/images/guide/styleguide/{*,.*}'
           ])
@@ -1281,6 +1280,7 @@ groups:
         - andrewseguin
         - dgp1130
         - ~jelbourn
+        - jessicajaniuk
         - josephperrott
 
   ####################################################################################
@@ -1371,7 +1371,6 @@ groups:
         - devversion # Paul Gschwendtner
         - dgp1130 # Doug Parker
         - dylhunn # Dylan Hunn
-        - filipesilva # Filipe Silva
         - jelbourn # Jeremy Elbourn
         - jessicajaniuk # Jessica Janiuk
         - JiaLiPassion # Jia Li
@@ -1381,6 +1380,5 @@ groups:
         - mgechev # Minko Gechev
         - mmalerba # Miles Malerba
         - pkozlowski-opensource # Pawel Kozlowski
-        - Splaktar # Michael Prentice
         - twerske # Emma Twersky
         - zarend # Zach Arend

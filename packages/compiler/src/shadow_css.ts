@@ -27,9 +27,8 @@ const animationKeywords = new Set([
 ]);
 
 /**
- * The following class is a port of shadowCSS from webcomponents.js to TypeScript.
- *
- * Please make sure to keep to edits in sync with the source file.
+ * The following class has its origin from a port of shadowCSS from webcomponents.js to TypeScript.
+ * It has since diverge in many ways to tailor Angular's needs.
  *
  * Source:
  * https://github.com/webcomponents/webcomponentsjs/blob/4efecd7e0e/src/ShadowCSS/ShadowCSS.js
@@ -70,28 +69,8 @@ const animationKeywords = new Set([
     }
 
   * encapsulation: Styles defined within ShadowDOM, apply only to
-  dom inside the ShadowDOM. Polymer uses one of two techniques to implement
-  this feature.
-
-  By default, rules are prefixed with the host element tag name
-  as a descendant selector. This ensures styling does not leak out of the 'top'
-  of the element's ShadowDOM. For example,
-
-  div {
-      font-weight: bold;
-    }
-
-  becomes:
-
-  x-foo div {
-      font-weight: bold;
-    }
-
-  becomes:
-
-
-  Alternatively, if WebComponents.ShadowCSS.strictStyling is set to true then
-  selectors are scoped by adding an attribute selector suffix to each
+  dom inside the ShadowDOM.
+  The selectors are scoped by adding an attribute selector suffix to each
   simple selector that contains the host element tag name. Each element
   in the element's ShadowDOM template is also given the scope attribute.
   Thus, these rules match only elements that have the scope attribute.
@@ -152,23 +131,37 @@ const animationKeywords = new Set([
   in comments in lieu of the next selector when running under polyfill.
 */
 export class ShadowCss {
-  strictStyling: boolean = true;
-
   /*
-   * Shim some cssText with the given selector. Returns cssText that can
-   * be included in the document via WebComponents.ShadowCSS.addCssToDocument(css).
+   * Shim some cssText with the given selector. Returns cssText that can be included in the document
    *
-   * When strictStyling is true:
-   * - selector is the attribute added to all elements inside the host,
-   * - hostSelector is the attribute added to the host itself.
+   * The selector is the attribute added to all elements inside the host,
+   * The hostSelector is the attribute added to the host itself.
    */
   shimCssText(cssText: string, selector: string, hostSelector: string = ''): string {
-    const commentsWithHash = extractCommentsWithHash(cssText);
-    cssText = stripComments(cssText);
-    cssText = this._insertDirectives(cssText);
+    // **NOTE**: Do not strip comments as this will cause component sourcemaps to break
+    // due to shift in lines.
 
+    // Collect comments and replace them with a placeholder, this is done to avoid complicating
+    // the rule parsing RegExp and keep it safer.
+    const comments: string[] = [];
+    cssText = cssText.replace(_commentRe, (m) => {
+      if (m.match(_commentWithHashRe)) {
+        comments.push(m);
+      } else {
+        // Replace non hash comments with empty lines.
+        // This is done so that we do not leak any senstive data in comments.
+        const newLinesMatches = m.match(_newLinesRe);
+        comments.push((newLinesMatches?.join('') ?? '') + '\n');
+      }
+
+      return COMMENT_PLACEHOLDER;
+    });
+
+    cssText = this._insertDirectives(cssText);
     const scopedCssText = this._scopeCssText(cssText, selector, hostSelector);
-    return [scopedCssText, ...commentsWithHash].join('\n');
+    // Add back comments at the original position.
+    let commentIdx = 0;
+    return scopedCssText.replace(_commentWithHashPlaceHolderRe, () => comments[commentIdx++]);
   }
 
   private _insertDirectives(cssText: string): string {
@@ -372,7 +365,6 @@ export class ShadowCss {
    *
    **/
   private _insertPolyfillDirectivesInCssText(cssText: string): string {
-    // Difference with webcomponents.js: does not handle comments
     return cssText.replace(_cssContentNextSelectorRe, function(...m: string[]) {
       return m[2] + '{';
     });
@@ -394,7 +386,6 @@ export class ShadowCss {
    *
    **/
   private _insertPolyfillRulesInCssText(cssText: string): string {
-    // Difference with webcomponents.js: does not handle comments
     return cssText.replace(_cssContentRuleRe, (...m: string[]) => {
       const rule = m[0].replace(m[1], '').replace(m[2], '');
       return m[4] + rule;
@@ -440,7 +431,6 @@ export class ShadowCss {
    *
    **/
   private _extractUnscopedRulesFromCssText(cssText: string): string {
-    // Difference with webcomponents.js: does not handle comments
     let r = '';
     let m: RegExpExecArray|null;
     _cssContentUnscopedRuleRe.lastIndex = 0;
@@ -462,7 +452,7 @@ export class ShadowCss {
     return cssText.replace(_cssColonHostRe, (_, hostSelectors: string, otherSelectors: string) => {
       if (hostSelectors) {
         const convertedSelectors: string[] = [];
-        const hostSelectorArray = hostSelectors.split(',').map(p => p.trim());
+        const hostSelectorArray = hostSelectors.split(',').map((p) => p.trim());
         for (const hostSelector of hostSelectorArray) {
           if (!hostSelector) break;
           const convertedSelector =
@@ -492,7 +482,7 @@ export class ShadowCss {
    * .foo<scopeName> .bar { ... }
    */
   private _convertColonHostContext(cssText: string): string {
-    return cssText.replace(_cssColonHostContextReGlobal, selectorText => {
+    return cssText.replace(_cssColonHostContextReGlobal, (selectorText) => {
       // We have captured a selector that contains a `:host-context` rule.
 
       // For backward compatibility `:host-context` may contain a comma separated list of selectors.
@@ -506,12 +496,12 @@ export class ShadowCss {
       // Execute `_cssColonHostContextRe` over and over until we have extracted all the
       // `:host-context` selectors from this selector.
       let match: RegExpExecArray|null;
-      while (match = _cssColonHostContextRe.exec(selectorText)) {
+      while ((match = _cssColonHostContextRe.exec(selectorText))) {
         // `match` = [':host-context(<selectors>)<rest>', <selectors>, <rest>]
 
         // The `<selectors>` could actually be a comma separated list: `:host-context(.one, .two)`.
         const newContextSelectors =
-            (match[1] ?? '').trim().split(',').map(m => m.trim()).filter(m => m !== '');
+            (match[1] ?? '').trim().split(',').map((m) => m.trim()).filter((m) => m !== '');
 
         // We must duplicate the current selector group for each of these new selectors.
         // For example if the current groups are:
@@ -535,8 +525,7 @@ export class ShadowCss {
         repeatGroups(contextSelectorGroups, newContextSelectors.length);
         for (let i = 0; i < newContextSelectors.length; i++) {
           for (let j = 0; j < contextSelectorGroupsLength; j++) {
-            contextSelectorGroups[j + (i * contextSelectorGroupsLength)].push(
-                newContextSelectors[i]);
+            contextSelectorGroups[j + i * contextSelectorGroupsLength].push(newContextSelectors[i]);
           }
         }
 
@@ -548,7 +537,7 @@ export class ShadowCss {
       // selectors that `:host-context` can match. See `combineHostContextSelectors()` for more
       // info about how this is done.
       return contextSelectorGroups
-          .map(contextSelectors => combineHostContextSelectors(contextSelectors, selectorText))
+          .map((contextSelectors) => combineHostContextSelectors(contextSelectors, selectorText))
           .join(', ');
     });
   }
@@ -567,11 +556,11 @@ export class ShadowCss {
       let selector = rule.selector;
       let content = rule.content;
       if (rule.selector[0] !== '@') {
-        selector =
-            this._scopeSelector(rule.selector, scopeSelector, hostSelector, this.strictStyling);
+        selector = this._scopeSelector(rule.selector, scopeSelector, hostSelector);
       } else if (
           rule.selector.startsWith('@media') || rule.selector.startsWith('@supports') ||
-          rule.selector.startsWith('@document') || rule.selector.startsWith('@layer')) {
+          rule.selector.startsWith('@document') || rule.selector.startsWith('@layer') ||
+          rule.selector.startsWith('@container')) {
         content = this._scopeSelectors(rule.content, scopeSelector, hostSelector);
       } else if (rule.selector.startsWith('@font-face') || rule.selector.startsWith('@page')) {
         content = this._stripScopingSelectors(rule.content);
@@ -602,24 +591,21 @@ export class ShadowCss {
    * ```
    */
   private _stripScopingSelectors(cssText: string): string {
-    return processRules(cssText, rule => {
+    return processRules(cssText, (rule) => {
       const selector = rule.selector.replace(_shadowDeepSelectors, ' ')
                            .replace(_polyfillHostNoCombinatorRe, ' ');
       return new CssRule(selector, rule.content);
     });
   }
 
-  private _scopeSelector(
-      selector: string, scopeSelector: string, hostSelector: string, strict: boolean): string {
+  private _scopeSelector(selector: string, scopeSelector: string, hostSelector: string): string {
     return selector.split(',')
-        .map(part => part.trim().split(_shadowDeepSelectors))
+        .map((part) => part.trim().split(_shadowDeepSelectors))
         .map((deepParts) => {
           const [shallowPart, ...otherParts] = deepParts;
           const applyScope = (shallowPart: string) => {
             if (this._selectorNeedsScoping(shallowPart, scopeSelector)) {
-              return strict ?
-                  this._applyStrictSelectorScope(shallowPart, scopeSelector, hostSelector) :
-                  this._applySelectorScope(shallowPart, scopeSelector, hostSelector);
+              return this._applySelectorScope(shallowPart, scopeSelector, hostSelector);
             } else {
               return shallowPart;
             }
@@ -641,19 +627,13 @@ export class ShadowCss {
     return new RegExp('^(' + scopeSelector + ')' + _selectorReSuffix, 'm');
   }
 
-  private _applySelectorScope(selector: string, scopeSelector: string, hostSelector: string):
-      string {
-    // Difference from webcomponents.js: scopeSelector could not be an array
-    return this._applySimpleSelectorScope(selector, scopeSelector, hostSelector);
-  }
-
   // scope via name and [is=name]
   private _applySimpleSelectorScope(selector: string, scopeSelector: string, hostSelector: string):
       string {
     // In Android browser, the lastIndex is not reset when the regex is used in String.replace()
     _polyfillHostRe.lastIndex = 0;
     if (_polyfillHostRe.test(selector)) {
-      const replaceBy = this.strictStyling ? `[${hostSelector}]` : scopeSelector;
+      const replaceBy = `[${hostSelector}]`;
       return selector
           .replace(
               _polyfillHostNoCombinatorRe,
@@ -672,7 +652,7 @@ export class ShadowCss {
 
   // return a selector with [name] suffix on each simple selector
   // e.g. .foo.bar > .zot becomes .foo[name].bar[name] > .zot[name]  /** @internal */
-  private _applyStrictSelectorScope(selector: string, scopeSelector: string, hostSelector: string):
+  private _applySelectorScope(selector: string, scopeSelector: string, hostSelector: string):
       string {
     const isRe = /\[is=([^\]]*)\]/g;
     scopeSelector = scopeSelector.replace(isRe, (_: string, ...parts: string[]) => parts[0]);
@@ -728,6 +708,15 @@ export class ShadowCss {
     while ((res = sep.exec(selector)) !== null) {
       const separator = res[1];
       const part = selector.slice(startIndex, res.index).trim();
+
+      // A space following an escaped hex value and followed by another hex character
+      // (ie: ".\fc ber" for ".über") is not a separator between 2 selectors
+      // also keep in mind that backslashes are replaced by a placeholder by SafeSelector
+      // These escaped selectors happen for example when esbuild runs with optimization.minify.
+      if (part.match(_placeholderRe) && selector[res.index + 1]?.match(/[a-fA-F\d]/)) {
+        continue;
+      }
+
       shouldScope = shouldScope || part.indexOf(_polyfillHostNoCombinator) > -1;
       const scopedPart = shouldScope ? _scopeSelectorPart(part) : part;
       scopedSelector += `${scopedPart} ${separator} `;
@@ -776,7 +765,7 @@ class SafeSelector {
   }
 
   restore(content: string): string {
-    return content.replace(/__ph-(\d+)__/g, (_ph, index) => this.placeholders[+index]);
+    return content.replace(_placeholderRe, (_ph, index) => this.placeholders[+index]);
   }
 
   content(): string {
@@ -830,20 +819,18 @@ const _polyfillHostRe = /-shadowcsshost/gim;
 const _colonHostRe = /:host/gim;
 const _colonHostContextRe = /:host-context/gim;
 
+const _newLinesRe = /\r?\n/g;
 const _commentRe = /\/\*[\s\S]*?\*\//g;
+const _commentWithHashRe = /\/\*\s*#\s*source(Mapping)?URL=/g;
+const COMMENT_PLACEHOLDER = '%COMMENT%';
+const _commentWithHashPlaceHolderRe = new RegExp(COMMENT_PLACEHOLDER, 'g');
 
-function stripComments(input: string): string {
-  return input.replace(_commentRe, '');
-}
-
-const _commentWithHashRe = /\/\*\s*#\s*source(Mapping)?URL=[\s\S]+?\*\//g;
-
-function extractCommentsWithHash(input: string): string[] {
-  return input.match(_commentWithHashRe) || [];
-}
+const _placeholderRe = /__ph-(\d+)__/g;
 
 const BLOCK_PLACEHOLDER = '%BLOCK%';
-const _ruleRe = /(\s*)([^;\{\}]+?)(\s*)((?:{%BLOCK%}?\s*;?)|(?:\s*;))/g;
+const _ruleRe = new RegExp(
+    `(\\s*(?:${COMMENT_PLACEHOLDER}\\s*)*)([^;\\{\\}]+?)(\\s*)((?:{%BLOCK%}?\\s*;?)|(?:\\s*;))`,
+    'g');
 const CONTENT_PAIRS = new Map([['{', '}']]);
 
 const COMMA_IN_PLACEHOLDER = '%COMMA_IN_PLACEHOLDER%';
@@ -891,6 +878,7 @@ function escapeBlocks(
   let blockStartIndex = -1;
   let openChar: string|undefined;
   let closeChar: string|undefined;
+
   for (let i = 0; i < input.length; i++) {
     const char = input[i];
     if (char === '\\') {
@@ -914,12 +902,14 @@ function escapeBlocks(
       resultParts.push(input.substring(nonBlockStartIndex, blockStartIndex));
     }
   }
+
   if (blockStartIndex !== -1) {
     escapedBlocks.push(input.substring(blockStartIndex));
     resultParts.push(placeholder);
   } else {
     resultParts.push(input.substring(nonBlockStartIndex));
   }
+
   return new StringWithEscapedBlocks(resultParts.join(''), escapedBlocks);
 }
 
@@ -1051,7 +1041,6 @@ function unescapeQuotes(str: string, isQuoted: boolean): string {
  *
  * And so on...
  *
- * @param hostMarker the string that selects the host element.
  * @param contextSelectors an array of context selectors that will be combined.
  * @param otherSelectors the rest of the selectors that are not context selectors.
  */

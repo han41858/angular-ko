@@ -11,10 +11,10 @@ import {FormBuilder, NonNullableFormBuilder, ReactiveFormsModule, UntypedFormBui
 import {of} from 'rxjs';
 
 (function() {
-function syncValidator(_: any /** TODO #9100 */): any /** TODO #9100 */ {
+function syncValidator() {
   return null;
 }
-function asyncValidator(_: any /** TODO #9100 */) {
+function asyncValidator() {
   return Promise.resolve(null);
 }
 
@@ -187,6 +187,22 @@ describe('Form Builder', () => {
 
     expect(g.validator).toBe(null);
     expect(g.asyncValidator).toBe(null);
+  });
+
+  it('should create groups with shorthand parameters and with right typings', () => {
+    const form = b.group({
+      shorthand: [3, Validators.required],
+      shorthand2: [5, {validators: Validators.required}],
+    });
+
+    expect((form.get('shorthand')?.value)).toEqual(3);
+    expect(((form.get('shorthand2')!.value ?? 0) + 0)).toEqual(5);
+
+
+    const form2 = b.group({
+      shorthand2: [5, {updateOn: 'blur'}],
+    });
+    expect(((form2.get('shorthand2')!.value ?? 0) + 0)).toEqual(5);
   });
 
   it('should create control arrays', () => {

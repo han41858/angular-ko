@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {writeFileSync} from 'fs';
+import fs from 'fs';
 import {join} from 'path';
 
 import {CldrData} from '../cldr-data';
@@ -21,37 +21,33 @@ import {BASE_LOCALE} from './base-locale';
  * Generates locale files for each available CLDR locale and writes it to the
  * specified directory.
  */
-function main(outputDir: string) {
+async function main(outputDir: string|undefined) {
+  if (outputDir === undefined) {
+    throw Error('No output directory specified.');
+  }
+
   const cldrData = new CldrData();
   const baseLocaleData = cldrData.getLocaleData(BASE_LOCALE)!;
   const baseCurrencies = generateBaseCurrencies(baseLocaleData);
   const extraLocaleDir = join(outputDir, 'extra');
   const globalLocaleDir = join(outputDir, 'global');
 
-  console.info(`Writing locales to: ${outputDir}`);
-
   // Generate locale files for all locales we have data for.
-  cldrData.availableLocales.forEach(localeData => {
+  await Promise.all(cldrData.availableLocales.flatMap(async (localeData) => {
     const locale = localeData.locale;
     const localeFile = generateLocale(locale, localeData, baseCurrencies);
     const localeExtraFile = generateLocaleExtra(locale, localeData);
     const localeGlobalFile = generateLocaleGlobalFile(locale, localeData, baseCurrencies);
 
-    writeFileSync(join(outputDir, `${locale}.ts`), localeFile);
-    writeFileSync(join(extraLocaleDir, `${locale}.ts`), localeExtraFile);
-    writeFileSync(join(globalLocaleDir, `${locale}.js`), localeGlobalFile);
-  });
+    return [
+      fs.promises.writeFile(join(outputDir, `${locale}.ts`), localeFile),
+      fs.promises.writeFile(join(extraLocaleDir, `${locale}.ts`), localeExtraFile),
+      fs.promises.writeFile(join(globalLocaleDir, `${locale}.js`), localeGlobalFile),
+    ];
+  }));
 }
 
-
-if (require.main === module) {
-  // The first argument is expected to be a path resolving to a directory
-  // where all locales should be generated into.
-  const outputDir = process.argv[2];
-
-  if (outputDir === undefined) {
-    throw Error('No output directory specified.');
-  }
-
-  main(outputDir);
-}
+main(process.argv[2]).catch(err => {
+  console.error(err);
+  process.exitCode = 1;
+});
