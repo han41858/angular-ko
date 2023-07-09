@@ -318,7 +318,7 @@ karma_test(
     ],
     test_entry_point = ":browser_disable_wrap_uncaught_promise_rejection_entry_point.ts",
     test_srcs = [
-        "common/promise-disable-wrap-uncaught-promise-rejection.spec.ts",
         "browser_disable_wrap_uncaught_promise_rejection_entry_point.ts",
+        "common/promise-disable-wrap-uncaught-promise-rejection.spec.ts",
     ],
 )
