@@ -12,7 +12,6 @@ import {AnimationGroupPlayer} from '@angular/animations/src/players/animation_gr
 import {Component, ViewChild} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {browserDetection} from '@angular/platform-browser/testing/src/browser_util';
 
 (function() {
 // these tests are only meant to be run within the DOM (for now)
@@ -70,20 +69,18 @@ describe('animation integration tests using web animations', function() {
 
     webPlayer.finish();
 
-    if (!browserDetection.isOldChrome) {
-      cmp.exp = false;
-      fixture.detectChanges();
-      engine.flush();
+    cmp.exp = false;
+    fixture.detectChanges();
+    engine.flush();
 
-      expect(engine.players.length).toEqual(1);
-      webPlayer =
-          (engine.players[0] as TransitionAnimationPlayer).getRealPlayer() as ɵWebAnimationsPlayer;
+    expect(engine.players.length).toEqual(1);
+    webPlayer =
+        (engine.players[0] as TransitionAnimationPlayer).getRealPlayer() as ɵWebAnimationsPlayer;
 
-      expect(webPlayer.keyframes).toEqual([
-        new Map<string, string|number>([['height', '100px'], ['offset', 0]]),
-        new Map<string, string|number>([['height', '0px'], ['offset', 1]])
-      ]);
-    }
+    expect(webPlayer.keyframes).toEqual([
+      new Map<string, string|number>([['height', '100px'], ['offset', 0]]),
+      new Map<string, string|number>([['height', '0px'], ['offset', 1]])
+    ]);
   });
 
   it('should compute (!) animation styles for a container that is being inserted', () => {
@@ -567,6 +564,74 @@ describe('animation integration tests using web animations', function() {
     expect(elm.style.getPropertyValue('width')).toEqual('300px');
     expect(elm.style.getPropertyValue('font-size')).toEqual('14px');
   });
+
+  it('should apply correct state transitions for both CamelCase and kebab-case CSS properties',
+     () => {
+       @Component({
+         selector: 'ani-cmp',
+         template: `
+          <div id="camelCaseDiv" [@camelCaseTrigger]="status"></div>
+          <div id="kebab-case-div" [@kebab-case-trigger]="status"></div>
+        `,
+         animations: [
+           trigger(
+               'camelCaseTrigger',
+               [
+                 state('active', style({
+                         'backgroundColor': 'green',
+                       })),
+                 transition(
+                     'inactive => active',
+                     [
+                       style({
+                         'backgroundColor': 'red',
+                       }),
+                       animate(500),
+                     ]),
+               ]),
+           trigger(
+               'kebab-case-trigger',
+               [
+                 state('active', style({
+                         'background-color': 'green',
+                       })),
+                 transition(
+                     'inactive => active',
+                     [
+                       style({
+                         'background-color': 'red',
+                       }),
+                       animate(500),
+                     ]),
+               ]),
+         ]
+       })
+       class Cmp {
+         public status: 'active'|'inactive' = 'inactive';
+       }
+
+       TestBed.configureTestingModule({declarations: [Cmp]});
+
+       const engine = TestBed.inject(ɵAnimationEngine);
+       const fixture = TestBed.createComponent(Cmp);
+       const cmp = fixture.componentInstance;
+       fixture.detectChanges();
+
+       cmp.status = 'active';
+       fixture.detectChanges();
+       engine.flush();
+
+       expect(engine.players.length).toEqual(2);
+       const [camelCaseWebPlayer, kebabCaseWebPlayer] = engine.players.map(
+           player => (player as TransitionAnimationPlayer).getRealPlayer() as ɵWebAnimationsPlayer);
+
+       [camelCaseWebPlayer, kebabCaseWebPlayer].forEach(webPlayer => {
+         expect(webPlayer.keyframes).toEqual([
+           new Map<string, string|number>([['backgroundColor', 'red'], ['offset', 0]]),
+           new Map<string, string|number>([['backgroundColor', 'green'], ['offset', 1]])
+         ]);
+       });
+     });
 });
 })();
 

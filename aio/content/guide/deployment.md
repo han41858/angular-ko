@@ -277,7 +277,7 @@ To deploy your Angular application to [GitHub Pages](https://help.github.com/art
 
 1.  When the build is complete, make a copy of `docs/index.html` and name it `docs/404.html`.
 1.  Commit your changes and push.
-1.  On the GitHub project page, go to Settings and scroll down to the GitHub Pages section to configure the site to [publish from the docs folder](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#choosing-a-publishing-source).
+1.  On the GitHub project page, go to Settings and select the Pages option from the left sidebar to configure the site to [publish from the docs folder](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#choosing-a-publishing-source).
 1.  Click Save.
 1.  Click on the GitHub Pages link at the top of the GitHub Pages section to see your deployed application.
     The format of the link is `https://<user_name>.github.io/<project_name>`.
@@ -506,7 +506,7 @@ The `production` configuration engages the following build optimization features
 | Features                                              | Details |
 |:---                                                   |:---     |
 | [Ahead-of-Time (AOT) Compilation](guide/aot-compiler) | Pre-compiles Angular component templates.                                |
-| [Production mode](#enable-prod-mode)                  | Deploys the production environment which enables *production mode*.      |
+| [Production mode](#prod-mode)                         | Optimizes the application for the best runtime performance |
 | Bundling                                              | Concatenates your many application and library files into a few bundles. |
 | Minification                                          | Removes excess whitespace, comments, and optional tokens.                |
 | Uglification                                          | Rewrites code to use short, cryptic variable and function names.         |
@@ -519,7 +519,7 @@ See [`ng build`](cli/build) for more about CLI build options and what they do.
 | 기능                                            | 설명                                            |
 |:----------------------------------------------|:----------------------------------------------|
 | [Ahead-of-Time (AOT) 컴파일](guide/aot-compiler) | Angular 컴포넌트의 템플릿을 미리 컴파일합니다.                 |
-| [운영 모드](#enable-prod-mode) 활성화                | 애플리케이션이 동작하는 환경을 *운영 모드* 로 변경합니다.             |
+| [운영 모드](#prod-mode) 활성화                       | 애플리케이션이 동작하는 환경을 *운영 모드* 로 변경합니다.             |
 | 번들링(Bundling)                                 | 애플리케이션 파일과 라이브러리 파일들을 묶어서 몇개의 번들링 파일로 생성합니다. |
 | 코드 압축(Minification)                           | 공백 문자, 주석, 옵션 토큰을 제거합니다.                      |
 | 난독화(Uglification)                             | 변수와 함수 이름을 난독화하고 길이도 짧게 줄입니다.                 |
@@ -528,38 +528,32 @@ See [`ng build`](cli/build) for more about CLI build options and what they do.
 이 때 활용할 수 있는 Angular CLI 빌드 옵션은 [`ng build`](cli/build) 문서를 참고하세요.
 
 
-<a id="enable-prod-mode"></a>
+<a id="prod-mode"></a>
 
 <!--
-### Enable runtime production mode
+### Production mode at runtime
 -->
-### 운영 모드 활성화하기
+### 운영모드 활성화하기
 
 <!--
-In addition to build optimizations, Angular also has a runtime production mode.
-Angular applications run in development mode by default, as you can see by the following message on the browser console:
+When you run an application locally using `ng serve`, Angular uses the development mode configuration
+at runtime. The development mode at runtime enables extra safety checks, more detailed error messages
+and debugging utilities, such as the [expression-changed-after-checked](errors/NG0100) detection. Angular outputs
+a message in the browser console to indicate that the development mode is enabled.
 
-<code-example format="output" hideCopy language="shell">
+Those extra checks are helpful during the development, but they require an extra code in a bundle, which is
+undesirable in production. To ensure that there are no implications on the bundle size, the build optimizer
+removes the development-only code from the bundle when building in production mode.
 
-Angular is running in development mode.
-Call `enableProdMode()` to enable production mode.
-
-</code-example>
-
-*Production mode* improves application performance by disabling development-only safety checks and debugging utilities, such as the expression-changed-after-checked detection.
 Building your application with the production configuration automatically enables Angular's runtime production mode.
 -->
-빌드 최적화와 함께 Angular에도 운영 모드가 존재합니다.
-Angular 애플리케이션은 기본적으로 개발모드로 동작하며, 이 모드에서는 브라우저 콘솔에 다음과 같은 메시지가 출력됩니다:
+`ng serve` 명령으로 애플리케이션을 로컬 개발환경에서 실행하면 이 애플리케이션은 개발모드로 동작합니다.
+이 개발모드에서는 운영모드와 비교해서 안전검사가 몇가지 활성화되며, 에러 메시지가 자세하게 표시되고, [변화가 반영된 이후에 다시 값이 변경되는 것을 감지](errors/NG0100)하는 기능도 동작합니다.
+그리고 브라우저 콘솔에도 메시지가 표시되기 때문에 Angular 애플리케이션이 개발 모드로 동작하고 있다는 것을 확실하게 확인할 수 있습니다.
 
-<code-example format="output" hideCopy language="shell">
+이런 부가 기능들은 애플리케이션 개발단계에서는 도움이 되지만, 추가 코드가 필요하기 때문에 운영모드에서는 효율적이지 않습니다. 
+그리고 운영모드에서는 빌드 결과물의 크기를 줄여야 하기 때문에 개발단계에서만 필요한 코드는 운영모드에 포함되지 않는 것이 좋습니다.
 
-Angular is running in development mode.
-Call `enableProdMode()` to enable production mode.
-
-</code-example>
-
-애플리케이션이 동작하는 환경을 *운영 모드* 로 변경하면 개발 모드에서 동작하는 이중 변화 감지 로직이 생략되기 때문에 애플리케이션 실행속도가 조금 더 빨라집니다.
 애플리케이션을 운영 환경으로 빌드하면 Angular의 런타임 운영모드도 자동으로 활성화됩니다.
 
 

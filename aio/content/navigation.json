@@ -1,24 +1,14 @@
 {
   "TopBar": [
     {
-      "url": "features",
-      "/title": "Features",
-      "title": "특징"
-    },
-    {
       "url": "docs",
       "/title": "Docs",
       "title": "문서"
     },
     {
       "url": "resources",
-      "/title": "Resources",
-      "title": "리소스"
-    },
-    {
-      "url": "events",
-      "/title": "Events",
-      "title": "행사 정보"
+      "/title": "Community",
+      "title": "커뮤니티"
     },
     {
       "url": "https://blog.angular.io/",
@@ -259,6 +249,13 @@
                   "tooltip": "바인딩의 기본 개념을 알아봅시다."
                 },
                 {
+                  "url": "guide/property-binding",
+                  "/title": "Property binding",
+                  "title": "프로퍼티 바인딩",
+                  "/tooltip": "Learn how to use property binding.",
+                  "tooltip": "프로퍼티 바인딩을 알아봅시다."
+                },
+                {
                   "url": "guide/attribute-binding",
                   "/title": "Attribute binding",
                   "title": "어트리뷰트 바인딩",
@@ -278,13 +275,6 @@
                   "title": "이벤트 바인딩",
                   "/tooltip": "Learn how to use to event binding.",
                   "tooltip": "이벤트 바인딩을 알아봅시다."
-                },
-                {
-                  "url": "guide/property-binding",
-                  "/title": "Property binding",
-                  "title": "프로퍼티 바인딩",
-                  "/tooltip": "Learn how to use property binding.",
-                  "tooltip": "프로퍼티 바인딩을 알아봅시다."
                 },
                 {
                   "url": "guide/two-way-binding",
@@ -434,11 +424,26 @@
           "tooltip": "Angular 애플리케이션을 개발할 때 활용할 수 있는 개발자 가이드를 확인해 보세요."
         },
         {
-          "url": "guide/standalone-components",
-          "/title": "Standalone components",
+          "/title": "Standalone",
           "title": "단독 컴포넌트",
-          "/tooltip": "Standalone components, directives, and pipes",
-          "tooltip": "단독 컴포넌트, 디렉티브, 파이프"
+          "/tooltip": "Learn about Angular's standalone APIs and how to convert your application to them.",
+          "tooltip": "애플리케이션에 단독 API를 적용해 보세요.",
+          "children": [
+            {
+              "url": "guide/standalone-components",
+              "/title": "Standalone components",
+              "title": "단독 컴포넌트",
+              "/tooltip": "Standalone components, directives, and pipes",
+              "tooltip": "단독 컴포넌트, 디렉티브, 파이프"
+            },
+            {
+              "url": "guide/standalone-migration",
+              "/title": "Migrating to standalone",
+              "title": "단독 컴포넌트로 마이그레이션하기",
+              "/tooltip": "Migrate your application to Angular's standalone APIs",
+              "tooltip": "단독 API 사용해서 애플리케이션 마이그레이션하기"
+            }
+          ]
         },
         {
           "/title": "Change detection",
@@ -570,11 +575,25 @@
           ]
         },
         {
+          "url": "guide/esbuild",
+          "/title": "esbuild-based Builds",
+          "title": "esbuild 기반으로 빌드하기",
+          "/tooltip": "Getting started with the CLI's esbuild-based build system.",
+          "tooltip": "Angular CLI에서 esbuild 기반으로 빌드하는 방법을 확인해 보세요."
+        },
+        {
           "url": "guide/http",
           "/title": "HTTP client",
           "title": "HTTP 클라이언트",
           "/tooltip": "Use HTTP to talk to a remote server.",
           "tooltip": "HTTP로 서버와 통신해보세요."
+        },
+        {
+          "url": "guide/hydration",
+          "/title": "Hydration",
+          "title": "하이드레이션",
+          "/tooltip": "How to enable hydration on your server rendered applications.",
+          "tooltip": "서버에서 렌더링한 애플리케이션에 하이드레이션을 적용해 보세요."
         },
         {
           "url": "guide/image-directive",
@@ -895,7 +914,64 @@
           "/title": "Prerendering",
           "title": "사전 렌더링",
           "/tooltip": "Prerender HTML server-side with Angular Universal.",
-          "tooltip": "Angular Universal을 사용하면 HTML을 서버에서 사전 렌더링 할 수 있습니다."
+          "tooltip": "Angular Universal을 활용하면 HTML 문서를 서버에서 사전 렌더링 할 수 있습니다."
+        },
+        {
+          "/title": "Angular Libraries",
+          "title": "Angular 라이브러리",
+          "/tooltip": "Extending Angular with shared libraries.",
+          "tooltip": "라이브러리를 활용해서 Angular 앱을 확장해 보세요.",
+          "children": [
+            {
+              "url": "guide/libraries",
+              "/title": "Libraries overview",
+              "title": "라이브러리 개요",
+              "/tooltip": "Understand how and when to use or create libraries.",
+              "tooltip": "라이브러리는 언제, 어떻게 만드는지 학습해 봅시다."
+            },
+            {
+              "url": "guide/using-libraries",
+              "/title": "Using published libraries",
+              "title": "배포된 라이브러리 활용하기",
+              "/tooltip": "Integrate published libraries into an app.",
+              "tooltip": "이미 배포된 라이브러리를 앱에 적용해 봅시다."
+            },
+            {
+              "url": "guide/creating-libraries",
+              "/title": "Creating libraries",
+              "title": "라이브러리 만들기",
+              "/tooltip": "Extend Angular by creating, publishing, and using your own libraries.",
+              "tooltip": "라이브러리를 만들고 배포해 보세요."
+            },
+            {
+              "url": "guide/angular-package-format",
+              "/title": "Angular package format",
+              "title": "Angular 패키지 형식",
+              "/tooltip": "Information about the Angular Package Format.",
+              "tooltip": "Angular 패키지 형식에 대해 알아 봅시다."
+            }
+          ]
+        },
+        {
+          "/title": "Feature preview",
+          "title": "기능 미리보기",
+          "/tooltip": "Angular preview features and APIs",
+          "tooltip": "앞으로 제공될 기능, API",
+          "children": [
+            {
+              "url": "guide/signals",
+              "title": "Signals",
+              "/tooltip": "Angular signals for optimized change detection",
+              "tooltip": "변화감지를 최적화하기 위한 Signal 프로젝트"
+            },
+            {
+              "url": "guide/rxjs-interop",
+              "/title": "RxJS Interop for Signals",
+              "title": "Signal용 RxJS 인터옵",
+              "/tooltip": "Angular signals and Observable interop",
+              "tooltip": "Angular Signal에서 활용하는 Observable 인터옵을 확인해 보세요."
+            }
+          ]
         }
       ]
     },
@@ -1070,62 +1146,174 @@
       "tooltip": "튜토리얼을 진행하면서 Angular의 개념과 개발 패턴을 알아보세요.",
       "children": [
         {
+          "/title": "Tutorial: Your first Angular app",
+          "title": "튜토리얼: 첫번째 Angular 앱",
+          "/tooltip": "Learn how to get started in Angular by building an Angular app",
+          "tooltip": "Angular 앱을 어떻게 개발하는지 처음부터 확인해 보세요.",
+          "children": [
+            {
+              "url": "tutorial/first-app",
+              "/title": "Introduction",
+              "title": "소개",
+              "/tooltip": "Introduction to the first Angular app and tutorial",
+              "tooltip": "첫번째 Angular 앱, 튜토리얼 소개"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-01",
+              "title": "Hello world",
+              "/tooltip": "Start coding in Angular with Hello World",
+              "tooltip": "Hello World와 함께 Angular 프로그래밍을 시작해 봅시다."
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-02",
+              "/title": "Create home component",
+              "title": "홈 컴포넌트 만들기",
+              "/tooltip": "Create the app's HomeComponent",
+              "tooltip": "애플리케이션의 홈 컴포넌트를 만들어 봅시다."
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-03",
+              "/title": "Create housing location component",
+              "title": "컴포넌트 추가하기",
+              "/tooltip": "Create the app's HousingLocation",
+              "tooltip": "HousingLocation 컴포넌트 만들기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-04",
+              "/title": "Create an interface",
+              "title": "인터페이스 만들기",
+              "/tooltip": "Create an interface for your app",
+              "tooltip": "앱에서 사용하는 인터페이스 만들기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-05",
+              "/title": "Add inputs to components",
+              "title": "컴포넌트에 입력 프로퍼티 추가하기",
+              "/tooltip": "Add inputs to components in your app",
+              "tooltip": "컴포넌트에 입력 프로퍼티 추가하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-06",
+              "/title": "Add property binding to components",
+              "title": "프로퍼티 바인딩하기",
+              "/tooltip": "Add property binding to components in your app",
+              "tooltip": "프로퍼티 바인딩하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-07",
+              "/title": "Add dynamic values to templates",
+              "title": "템플릿에 동적으로 값 연결하기",
+              "/tooltip": "Add dynamic values to your templates in your app",
+              "tooltip": "템플릿에 동적으로 값 연결하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-08",
+              "/title": "Use *ngFor in templates",
+              "title": "템플릿에 *ngFor 사용하기",
+              "/tooltip": "Use *ngFor in your templates in your app",
+              "tooltip": "템플릿에 *ngFor 사용하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-09",
+              "/title": "Angular services",
+              "title": "Angular 서비스",
+              "/tooltip": "Add an Angular service to your app",
+              "tooltip": "Angular 서비스 생성하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-10",
+              "/title": "Add routing",
+              "title": "라우팅 추가하기",
+              "/tooltip": "Add routing to your app",
+              "tooltip": "라우팅 추가하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-11",
+              "/title": "Customize the details page",
+              "title": "상세화면 커스터마이징하기",
+              "/tooltip": "Add styles, links and more to the details page",
+              "tooltip": "상세화면에 스타일, 링크 추가하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-12",
+              "/title": "Integrate Angular forms",
+              "title": "Angular 폼 적용하기",
+              "/tooltip": "Add an Angular form to your app",
+              "tooltip": "Angular 폼 적용하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-13",
+              "/title": "Add search functionality",
+              "title": "검색 기능 추가하기",
+              "/tooltip": "Add search functionality to your app",
+              "tooltip": "검색 기능 추가하기"
+            },
+            {
+              "url": "tutorial/first-app/first-app-lesson-14",
+              "/title": "Add HTTP communication",
+              "title": "HTTP 통신 추가하기",
+              "/tooltip": "Add HTTP communication to your app",
+              "tooltip": "HTTP 통신 추가하기"
+            }
+          ]
+        },
+        {
           "/title": "Tutorial: Tour of Heroes",
           "title": "튜토리얼: 히어로들의 여행",
           "/tooltip": "The Tour of Heroes app is used as a reference point in many Angular examples.",
-          "tooltip": "히어로들의 여행 튜토리얼을 진행하면서 Angular가 제공하는 기능을 알아보세요.",
+          "tooltip": "The Tour of Heroes app is used as a reference point in many Angular examples.",
           "children": [
             {
-              "url": "tutorial",
+              "url": "tutorial/tour-of-heroes",
               "/title": "Introduction",
               "title": "소개",
               "/tooltip": "Introduction to the Tour of Heroes app and tutorial",
               "tooltip": "히어로들의 여행 튜토리얼 앱에 대해 소개합니다."
             },
             {
-              "url": "tutorial/toh-pt0",
+              "url": "tutorial/tour-of-heroes/toh-pt0",
               "/title": "Create a project",
               "title": "프로젝트 생성하기",
               "/tooltip": "Creating the application shell",
               "tooltip": "애플리케이션의 기본 틀을 만들어 봅시다."
             },
             {
-              "url": "tutorial/toh-pt1",
+              "url": "tutorial/tour-of-heroes/toh-pt1",
               "/title": "1. The hero editor",
               "title": "1. 히어로 에디터",
               "/tooltip": "Part 1: Build a simple editor",
               "tooltip": "1단계: 간단한 에디터 만들기"
             },
             {
-              "url": "tutorial/toh-pt2",
+              "url": "tutorial/tour-of-heroes/toh-pt2",
               "/title": "2. Display a list",
               "title": "2. 목록 표시하기",
               "/tooltip": "Part 2: Build a master/detail page with a list of heroes.",
               "tooltip": "2단계: 히어로의 목록을 표시하는 마스터/상세정보 페이지를 만들어 봅시다."
             },
             {
-              "url": "tutorial/toh-pt3",
+              "url": "tutorial/tour-of-heroes/toh-pt3",
               "/title": "3. Create a feature component",
               "title": "3. 기능 컴포넌트 만들기",
               "/tooltip": "Part 3: Refactor the master/detail views into separate components.",
               "tooltip": "3단계: 마스터/상세정보 화면을 개별 컴포넌트로 리팩토링해 봅시다."
             },
             {
-              "url": "tutorial/toh-pt4",
+              "url": "tutorial/tour-of-heroes/toh-pt4",
               "/title": "4. Add services",
               "title": "4. 서비스 추가하기",
               "/tooltip": "Part 4: Create a reusable service to manage hero data.",
               "tooltip": "4단계: 히어로 데이터를 처리하는 로직은 재사용할 수 있게 서비스로 만들어 봅시다."
             },
             {
-              "url": "tutorial/toh-pt5",
+              "url": "tutorial/tour-of-heroes/toh-pt5",
               "/title": "5. Add navigation",
               "title": "5. 네비게이션 추가하기",
               "/tooltip": "Part 5: Add the Angular router and navigate among the views.",
               "tooltip": "5단계: Angular 라우터를 추가하고 화면을 전환해 봅시다."
             },
             {
-              "url": "tutorial/toh-pt6",
+              "url": "tutorial/tour-of-heroes/toh-pt6",
               "/title": "6. Get data from a server",
               "title": "6. 서버에서 데이터 받아오기",
               "/tooltip": "Part 6: Use HTTP to retrieve and save hero data.",
@@ -1136,59 +1324,24 @@
         {
           "url": "guide/forms",
           "/title": "Building a template-driven form",
-          "title": "템플릿 기반 폼  구성하기",
+          "title": "템플릿 기반 폼 구성하기",
           "/tooltip": "Create a template-driven form using directives and Angular template syntax.",
-          "tooltip": "디렉티브와 Angular 템플릿 문법을 활용해서 템플릿 기반 폼을 구성해 보세요."
-        },
-        {
-          "/title": "Angular Libraries",
-          "title": "Angular 라이브러리",
-          "/tooltip": "Extending Angular with shared libraries.",
-          "tooltip": "라이브러리로 Angular 생태계를 확장해 보세요.",
-          "children": [
-            {
-              "url": "guide/libraries",
-              "/title": "Libraries overview",
-              "title": "라이브러리 개요",
-              "/tooltip": "Understand how and when to use or create libraries.",
-              "tooltip": "라이브러리를 어떻게 만들고 언제 활용할 수 있는지, 가져다 사용하는 것과 만들어서 사용하는 것이 어떻게 다른지 확인해 보세요."
-            },
-            {
-              "url": "guide/using-libraries",
-              "/title": "Using published libraries",
-              "title": "라이브러리 가져다 사용하기",
-              "/tooltip": "Integrate published libraries into an app.",
-              "tooltip": "앱에 라이브러리를 추가해서 기능을 확장해 보세요."
-            },
-            {
-              "url": "guide/creating-libraries",
-              "/title": "Creating libraries",
-              "title": "라이브러리 만들기",
-              "/tooltip": "Extend Angular by creating, publishing, and using your own libraries.",
-              "tooltip": "라이브러리를 직접 개발하고 배포하는 방법에 대해 알아봅시다."
-            },
-            {
-              "url": "guide/angular-package-format",
-              "title": "Angular package format",
-              "/tooltip": "Information about the Angular Package Format.",
-              "tooltip": "Angular 패키지 형식에 대해 알아보세요."
-            }
-          ]
+          "tooltip": "디렉티브와 템플릿 문법을 활용해서 템플릿 기반의 폼을 구성하는 방법을 알아봅시다."
         }
       ]
     },
     {
-      "/title": "Release Information",
+      "/title": "Updates and releases",
       "title": "릴리즈 정보",
       "/tooltip": "Angular release practices, updating, and upgrading.",
       "tooltip": "Angular의 릴리즈 정책, 업데이트, 업그레이드",
       "children": [
         {
-          "url": "guide/releases",
-          ".title": "Release practices",
-          "title": "릴리즈 정책",
-          "/tooltip": "Angular versioning, release, support, and deprecation policies and practices.",
-          "tooltip": "Angular의 버전, 릴리즈, 지원, 지원중단 정책을 확인해 보세요."
+          "url": "guide/update-to-version-16",
+          "/title": "Update Angular to the latest version",
+          "title": "최신 버전 적용하기",
+          "/tooltip": "Update your Angular application to the latest version.",
+          "tooltip": "Angular 애플리케이션에 최신 Angular 버전을 적용해 보세요."
         },
         {
           "url": "guide/roadmap",
@@ -1198,18 +1351,25 @@
           "tooltip": "Angular 팀의 로드맵"
         },
         {
+          "url": "guide/releases",
+          "/title": "Release practices",
+          "title": "릴리즈 정책",
+          "/tooltip": "Angular versioning, release, support, and deprecation policies and practices.",
+          "tooltip": "Angular 버전, 배포, 지원, 지원중단 정책을 확인해 보세요."
+        },
+        {
+          "url": "guide/versions",
+          "/title": "Version compatibility",
+          "title": "버전 호환성",
+          "/tooltip": "Angular, Node.js, TypeScript, and RxJS version compatibility.",
+          "tooltip": "Angular, Node.js, TypeScript, RxJS 버전 호환성을 확인해 보세요."
+        },
+        {
           "url": "guide/browser-support",
           "/title": "Browser support",
           "title": "브라우저 지원",
           "/tooltip": "Browser support and polyfills guide.",
           "tooltip": "브라우저 지원사항과 폴리필에 대해 확인해 보세요."
-        },
-        {
-          "url": "guide/update-to-latest-version",
-          "/title": "Update to version 14",
-          "title": "13 버전으로 업데이트하기",
-          "/tooltip": "Support to update your application to version 14",
-          "tooltip": "애플리케이션을 13 버전으로 업데이트하는 방법을 안내합니다."
         },
         {
           "url": "guide/deprecations",
@@ -1409,13 +1569,6 @@
                   "title": "기능 모듈의 종류",
                   "/tooltip": "Description of the different types of feature modules.",
                   "tooltip": "기능 모듈을 어떻게 분류할 수 있는지 알아봅시다."
-                },
-                {
-                  "url": "guide/entry-components",
-                  "/title": "Entry components",
-                  "title": "진입 컴포넌트",
-                  "/tooltip": "All about entry components in Angular.",
-                  "tooltip": "진입 컴포넌트에 대해 알아봅시다."
                 },
                 {
                   "url": "guide/feature-modules",
@@ -1672,9 +1825,9 @@
             {
               "url": "guide/doc-select-issue",
               "/title": "Select a documentation issue",
-              "title": "GitHub UI 업데이트하기",
-              "/tooltip": "The procedures used to identify and select a documenation issue.",
-              "tooltip": "GitHub UI로 표시되는 항목들을 업데이트해 보세요."
+              "title": "이슈 선택하기",
+              "/tooltip": "The procedures used to identify and select a documentation issue.",
+              "tooltip": "문서 이슈를 선택하는 과정을 알아봅시다."
             },
             {
               "url": "guide/doc-update-start",

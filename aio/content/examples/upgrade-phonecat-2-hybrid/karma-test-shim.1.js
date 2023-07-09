@@ -35,14 +35,14 @@ System.config({
   // npm:이 systemjs.config의 `paths`에 미리 정의되었다고 간주합니다.
   // Angular 테스트 프레임워크를 맵핑합니다.
   map: {
-    '@angular/core/testing': 'npm:@angular/core/fesm2015/testing.mjs',
-    '@angular/common/testing': 'npm:@angular/common/fesm2015/testing.mjs',
-    '@angular/common/http/testing': 'npm:@angular/common/fesm2015/http/testing.mjs',
-    '@angular/compiler/testing': 'npm:@angular/compiler/fesm2015/testing.mjs',
-    '@angular/platform-browser/testing': 'npm:@angular/platform-browser/fesm2015/testing.mjs',
-    '@angular/platform-browser-dynamic/testing': 'npm:@angular/platform-browser-dynamic/fesm2015/testing.mjs',
-    '@angular/router/testing': 'npm:@angular/router/fesm2015/testing.mjs',
-    '@angular/forms/testing': 'npm:@angular/forms/fesm2015/testing.mjs',
+    '@angular/core/testing': 'npm:@angular/core/fesm2022/testing.mjs',
+    '@angular/common/testing': 'npm:@angular/common/fesm2022/testing.mjs',
+    '@angular/common/http/testing': 'npm:@angular/common/fesm2022/http/testing.mjs',
+    '@angular/compiler/testing': 'npm:@angular/compiler/fesm2022/testing.mjs',
+    '@angular/platform-browser/testing': 'npm:@angular/platform-browser/fesm2022/testing.mjs',
+    '@angular/platform-browser-dynamic/testing': 'npm:@angular/platform-browser-dynamic/fesm2022/testing.mjs',
+    '@angular/router/testing': 'npm:@angular/router/fesm2022/testing.mjs',
+    '@angular/forms/testing': 'npm:@angular/forms/fesm2022/testing.mjs',
   },
 });
 

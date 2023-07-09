@@ -46,21 +46,21 @@
   <hr />
 
   <h2>Property binding and interpolation</h2>
-  <p><img alt="Interpolated item" src="{{itemImageUrl}}"> is the <i>interpolated</i> image.</p>
-  <p><img alt="Property Bound item" [src]="itemImageUrl"> is the <i>property bound</i> image.</p>
+  <p><img alt="Interpolated item" src="{{itemImageUrl}}"> is the <em>interpolated</em> image.</p>
+  <p><img alt="Property Bound item" [src]="itemImageUrl"> is the <em>property bound</em> image.</p>
 
-  <p><span>"{{interpolationTitle}}" is the <i>interpolated</i> title.</span></p>
-  <p>"<span [innerHTML]="propertyTitle"></span>" is the <i>property bound</i> title.</p>
+  <p><span>"{{interpolationTitle}}" is the <em>interpolated</em> title.</span></p>
+  <p>"<span [innerHTML]="propertyTitle"></span>" is the <em>property bound</em> title.</p>
 
   <hr />
 
   <h2>Malicious content</h2>
 
-  <p><span>"{{evilTitle}}" is the <i>interpolated</i> evil title.</span></p>
+  <p><span>"{{evilTitle}}" is the <em>interpolated</em> evil title.</span></p>
 
   <!--
   Angular가 아래와 같이 위험한 코드를 발견하면 경고를 표시합니다.
   WARNING: 안전성 검사를 우회하는 방법은 http://g.co/ng/security#xss 를 참고하세요.
  -->
-  <p>"<span [innerHTML]="evilTitle"></span>" is the <i>property bound</i> evil title.</p>
+  <p>"<span [innerHTML]="evilTitle"></span>" is the <em>property bound</em> evil title.</p>
 </div>

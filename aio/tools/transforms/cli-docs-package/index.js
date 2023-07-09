@@ -1,12 +1,9 @@
 const {resolve} = require('canonical-path');
-const semver = require('semver');
 const Package = require('dgeni').Package;
 const basePackage = require('../angular-base-package');
 const contentPackage = require('../content-package');
 const {CONTENTS_PATH, TEMPLATES_PATH, requireFolder} = require('../config');
-const CLI_SOURCE_ROOT = resolve(CONTENTS_PATH, 'cli-src');
-const CLI_SOURCE_PATH = resolve(CLI_SOURCE_ROOT, 'node_modules/@angular/cli');
-const CLI_SOURCE_HELP_PATH = resolve(CLI_SOURCE_PATH, 'help');
+const CLI_SOURCE_HELP_PATH = resolve(CONTENTS_PATH, 'cli/help');
 
 // Define the dgeni package for generating the docs
 module.exports =
@@ -26,11 +23,12 @@ module.exports =
             {
               basePath: CLI_SOURCE_HELP_PATH,
               include: resolve(CLI_SOURCE_HELP_PATH, '*.json'),
+              exclude: resolve(CLI_SOURCE_HELP_PATH, 'build-info.json'),
               fileReader: 'cliCommandFileReader'
             },
             {
               basePath: CONTENTS_PATH,
-              include: resolve(CONTENTS_PATH, 'cli/**'),
+              include: resolve(CONTENTS_PATH, 'cli/**/*.md'),
               fileReader: 'contentFileReader'
             },
           ]);
@@ -47,12 +45,10 @@ module.exports =
 
         .config(function(renderDocsProcessor) {
 
-          const cliPackage = require(resolve(CLI_SOURCE_PATH, 'package.json'));
-          const repoUrlParts = cliPackage.repository.url.replace(/\.git$/, '').split('/');
-          const version = semver.clean(cliPackage.version);
-          const repo = repoUrlParts.pop();
-          const owner = repoUrlParts.pop();
-          const cliVersionInfo = {gitRepoInfo: {owner, repo}, currentVersion: {raw: version}};
+          const {branchName} = require(resolve(CLI_SOURCE_HELP_PATH, 'build-info.json'));
+          const repo = 'angular-cli';
+          const owner = 'angular';
+          const cliVersionInfo = {gitRepoInfo: {owner, repo}, currentVersion: {branchName}};
 
           // Add the cli version data to the renderer, for use in things like github links
           renderDocsProcessor.extraData.cliVersionInfo = cliVersionInfo;
@@ -65,3 +61,4 @@ module.exports =
           postProcessHtml.docTypes =
               postProcessHtml.docTypes.concat(['cli-command', 'cli-overview']);
         });
+

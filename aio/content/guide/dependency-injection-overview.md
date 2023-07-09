@@ -37,12 +37,12 @@ Angular에서 의존성으로 주입되는 객체는 보통 서비스지만, 문
 <!--
 You should be familiar with the Angular apps in general, and have the fundamental knowledge of Components, Directives, and NgModules. It's highly recommended that you complete the following tutorial:
 
-[Tour of Heroes application and tutorial](tutorial)
+[Tour of Heroes application and tutorial](tutorial/tour-of-heroes)
 -->
 Angular 애플리케이션의 기본 컨셉인 컴포넌트, 디렉티브, NgModule에 대해 익숙해야 합니다.
 이 튜토리얼을 참고하는 것을 적극 권장합니다:
 
-[히어로들의 여행 애플리케이션, 튜토리얼](tutorial)
+[히어로들의 여행 애플리케이션, 튜토리얼](tutorial/tour-of-heroes)
 
 
 <!--

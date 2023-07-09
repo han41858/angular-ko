@@ -1,14 +1,13 @@
 
-import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector } from '@angular/core';
+import { ApplicationRef, createComponent, EnvironmentInjector, Injectable } from '@angular/core';
 import { NgElement, WithProperties } from '@angular/elements';
 import { PopupComponent } from './popup.component';
 
 
 @Injectable()
 export class PopupService {
-  constructor(private injector: Injector,
-              private applicationRef: ApplicationRef,
-              private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(private injector: EnvironmentInjector,
+              private applicationRef: ApplicationRef) {}
 
   // 이전에는 DOM에 팝업을 추가하기 전에 동적으로 로딩하는 메서드를 직접 정의해야 했습니다.
   showAsComponent(message: string) {
@@ -16,8 +15,7 @@ export class PopupService {
     const popup = document.createElement('popup-component');
 
     // 컴포넌트를 생성하고 엘리먼트와 연결합니다.
-    const factory = this.componentFactoryResolver.resolveComponentFactory(PopupComponent);
-    const popupComponentRef = factory.create(this.injector, [], popup);
+    const popupComponentRef = createComponent(PopupComponent, {environmentInjector: this.injector, hostElement: popup});
 
     // 변화 감지가 동작할 수 있도록 화면과 연결합니다.
     this.applicationRef.attachView(popupComponentRef.hostView);

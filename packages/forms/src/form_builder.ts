@@ -9,7 +9,6 @@
 import {inject, Injectable} from '@angular/core';
 
 import {AsyncValidatorFn, ValidatorFn} from './directives/validators';
-import {ReactiveFormsModule} from './form_providers';
 import {AbstractControl, AbstractControlOptions, FormHooks} from './model/abstract_model';
 import {FormArray, UntypedFormArray} from './model/form_array';
 import {FormControl, FormControlOptions, FormControlState, UntypedFormControl} from './model/form_control';
@@ -37,6 +36,14 @@ type ValidatorConfig = ValidatorFn|AsyncValidatorFn|ValidatorFn[]|AsyncValidator
  * compiler will infer this as an array, not as a tuple.
  */
 type PermissiveControlConfig<T> = Array<T|FormControlState<T>|ValidatorConfig>;
+
+/**
+ * Helper type to allow the compiler to accept [XXXX, { updateOn: string }] as a valid shorthand
+ * argument for .group()
+ */
+interface PermissiveAbstractControlOptions extends Omit<AbstractControlOptions, 'updateOn'> {
+  updateOn?: string;
+}
 
 /**
  * ControlConfig<T> is a tuple containing a value of type T, plus optional validators and async
@@ -82,7 +89,7 @@ export type ɵElement<T, N extends null> =
   // FormControlState object container, which produces a nullable control.
   [T] extends [FormControlState<infer U>] ? FormControl<U|N> :
   // A ControlConfig tuple, which produces a nullable control.
-  [T] extends [PermissiveControlConfig<infer U>] ? FormControl<Exclude<U, ValidatorConfig>|N> :
+  [T] extends [PermissiveControlConfig<infer U>] ? FormControl<Exclude<U, ValidatorConfig| PermissiveAbstractControlOptions>|N> :
   FormControl<T|N>;
 
 // clang-format on
@@ -99,13 +106,13 @@ export type ɵElement<T, N extends null> =
  *
  * @publicApi
  */
-@Injectable({providedIn: ReactiveFormsModule})
+@Injectable({providedIn: 'root'})
 export class FormBuilder {
   private useNonNullable: boolean = false;
 
   /**
    * @description
-   * Returns a FormBuilder in which automatically constructed @see FormControl} elements
+   * Returns a FormBuilder in which automatically constructed `FormControl` elements
    * have `{nonNullable: true}` and are non-nullable.
    *
    * **Constructing non-nullable controls**
@@ -362,7 +369,7 @@ export class FormBuilder {
  * @publicApi
  */
 @Injectable({
-  providedIn: ReactiveFormsModule,
+  providedIn: 'root',
   useFactory: () => inject(FormBuilder).nonNullable,
 })
 export abstract class NonNullableFormBuilder {
@@ -406,9 +413,9 @@ export abstract class NonNullableFormBuilder {
 }
 
 /**
- * UntypedFormBuilder is the same as @see FormBuilder, but it provides untyped controls.
+ * UntypedFormBuilder is the same as `FormBuilder`, but it provides untyped controls.
  */
-@Injectable({providedIn: ReactiveFormsModule})
+@Injectable({providedIn: 'root'})
 export class UntypedFormBuilder extends FormBuilder {
   /**
    * Like `FormBuilder#group`, except the resulting group is untyped.

@@ -6,7 +6,7 @@
 # 애플리케이션 코드를 얼마나 많이 테스트하고 있는지 확인하기
 
 <!--
-The CLI can run unit tests and create code coverage reports.
+The Angular CLI can run unit tests and create code coverage reports.
 Code coverage reports show you any parts of your code base that might not be properly tested by your unit tests.
 
 <div class="alert is-helpful">
@@ -23,10 +23,10 @@ ng test --no-watch --code-coverage
 
 </code-example>
 
-When the tests are complete, the command creates a new `/coverage` folder in the project.
+When the tests are complete, the command creates a new `/coverage` directory in the project.
 Open the `index.html` file to see a report with your source code and code coverage values.
 
-If you want to create code-coverage reports every time you test, set the following option in the CLI configuration file, `angular.json`:
+If you want to create code-coverage reports every time you test, set the following option in the Angular CLI configuration file, `angular.json`:
 
 <code-example format="json" language="json">
 
@@ -104,9 +104,17 @@ coverageReporter: {
 
 </code-example>
 
+
+<div class="alert is-helpful">
+
+Read more about creating and fine tunning Karma configuration in the [testing guide](guide/testing#configuration).
+
+</div>
+
+
 The `check` property causes the tool to enforce a minimum of 80% code coverage when the unit tests are run in the project.
 
-Find more information about the different coverage configuration options [here](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md).
+Read more on coverage configuration options in the [karma coverage documentation](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md).
 -->
 코드 커버리지 퍼센트 값을 보면 애플리케이션 코드를 얼마나 테스트하는지 확인할 수 있습니다.
 팀에서 이 값을 어느 정도 이상으로 유지하려고 할 때 이 값을 강제할 수 있습니다.
@@ -135,10 +143,17 @@ coverageReporter: {
 
 </code-example>
 
+
+<div class="alert is-helpful">
+
+Karma 설정파일을 생성하고 커스터마이징 하는 방법을 알아보려면 [테스트 문서](guide/testing#configuration)를 참고하세요.
+
+</div>
+
+
 이렇게 `check` 프로퍼티를 지정하면 프로젝트를 대상으로 유닛 테스트를 실행할 때 80% 코드 커버리지르 강제할 수 있습니다.
 
-코드 커버리지 환경설정 옵션에 대해 자세하게 알아보려면 [이 문서](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md)를 참고하세요.
-
+코드 커버리지 환경설정 옵션에 대해 자세하게 알아보려면 [카르마 커버리지 문서](https://github.com/karma-runner/karma-coverage/blob/master/docs/configuration.md)를 참고하세요.
 
 <!-- links -->
 
@@ -146,4 +161,4 @@ coverageReporter: {
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-01-17

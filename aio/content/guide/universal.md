@@ -4,55 +4,40 @@
 # 서버 사이드 렌더링 (Server-side Rendering, SSR): Angular Universal
 
 <!--
-This guide describes **Angular Universal**, a technology that renders Angular applications on the server.
+This guide describes **Angular Universal**, a technology that allows Angular to render applications on the server.
 
-A normal Angular application executes in the *browser*, rendering pages in the DOM in response to user actions.
-Angular Universal executes on the *server*, generating *static* application pages that later get bootstrapped on the client.
-This means that the application generally renders more quickly, giving users a chance to view the application layout before it becomes fully interactive.
+By default, Angular renders applications only in a *browser*. Angular Universal allows Angular to render an application on the *server*, generating *static* HTML contents, which represents an application state. Once the HTML contents is rendered in a browser, Angular bootstraps an application and reuses the information available in the server-generated HTML.
 
-For a more detailed look at different techniques and concepts surrounding SSR, check out this [article](https://developers.google.com/web/updates/2019/02/rendering-on-the-web).
+With server-side rendering an application generally renders in a browser faster, giving users a chance to view the application UI before it becomes fully interactive. See ([the "Why use Server-Side Rendering?" section](#why-do-it)) below for addition information.
 
-Easily prepare an application for server-side rendering using the [Angular CLI](guide/glossary#cli).
-The CLI schematic `@nguniversal/express-engine` performs the required steps, as described.
+Also for a more detailed look at different techniques and concepts surrounding SSR, check out this [article](https://developers.google.com/web/updates/2019/02/rendering-on-the-web).
+
+You can enable server-side rendering in your Angular application using the `@nguniversal/express-engine` schematic as described below.
 
 <div class="alert is-helpful">
 
 Angular Universal requires an [active LTS or maintenance LTS](https://nodejs.org/about/releases) version of Node.js.
-See the `engines` property in the [package.json](https://unpkg.com/browse/@angular/platform-server/package.json) file to learn about the currently supported versions.
-
-</div>
-
-<div class="alert is-helpful">
-
-**NOTE**: <br />
-<live-example downloadOnly>Download the finished sample code</live-example>, which runs in a [Node.js® Express](https://expressjs.com) server.
+For information see the [version compatibility](guide/versions) guide to learn about the currently supported versions.
 
 </div>
 -->
-이 문서는 **Angular Universal**에 대해 소개합니다.
-Angular Universal은 Angular 애플리케이션을 서버에서 실행하는 테크닉입니다.
+이 문서는 Angular 애플리케이션을 서버에서 렌더링하는 기술인 **Angular Universal** 을 설명합니다.
 
-일반적으로 Angular 애플리케이션은 *브라우저* 에서 실행됩니다.
-DOM에 페이지가 렌더링되고 사용자의 동작에 반응하는 것도 모두 브라우저에서 이루어집니다.
-하지만 이와 다르게 Angular Universal은 *서버* 에 미리 *정적* 으로 생성해둔 애플리케이션을 클라이언트가 실행하고, 그 이후에 클라이언트에서 앱을 다시 부트스트랩하는 테크닉입니다.
-이 방식을 사용하면 애플리케이션을 좀 더 빠르게 실행할 수 있기 때문에 사용자가 보는 애플리케이션 화면도 빠르게 띄울 수 있습니다.
+기본적으로 Angular는 *브라우저*에서 애플리케이션을 렌더링합니다.
+그리고 Angular Universal을 활용하면 Angular는 *서버*에서도 애플리케이션을 렌더링할 수 있기 때문에, 애플리케이션 상태에 따라 *정적* HTML 문서를 생성할 수 있습니다.
+이렇게 생성된 HTML 문서가 브라우저에 렌더링되고 나면, Angular가 애플리케이션을 부트스트랩 하면서 서버에서 만든 HTML를 그대로 사용할지, 새로 렌더링할지 판단합니다.
 
-이와 비슷한 방식이나 SSR 컨셉에 대해서 더 알아보려면 [이 문서](https://developers.google.com/web/updates/2019/02/rendering-on-the-web)를 참고하세요.
+애플리케이션을 서버에서 렌더링 해두면 보통은 브라우저에서 렌더링하는 것보다 빠르기 때문에, 사용자가 애플리케이션 화면을 빠르게 확인할 수 있으며 이후 반응도 빠르게 수행할 수 있습니다.
+자세한 내용은 아래 [왜 서버에서 렌더링 하나요?](#why-do-it) 섹션을 참고하세요.
 
-서버 사이드 렌더링은 [Angular CLI](guide/glossary#cli)를 활용해도 간단하게 적용할 수 있습니다.
-Angular CLI 스키매틱 중 `@nguniversal/express-engine`를 활용하는 방법인데, 아래에서 자세하게 설명합니다.
+그리고 서버 사이드 렌더링에 대해 더 다양하고 깊이 있게 확인하려면 [이 글](https://developers.google.com/web/updates/2019/02/rendering-on-the-web)을 확인해 보세요.
+
+Angular 애플리케이션에 서버 사이드 렌더링을 적용하려면 아래에서 설명하는 대로 `@nguniversal/express-engine` 스키매틱을 활용하면 됩니다.
 
 <div class="alert is-helpful">
 
 Angular Universal을 사용하려면 [활성 LTS나 유지보수 중인 LTS](https://nodejs.org/about/releases) 버전으로 관리되는 Node.js가 필요합니다.
 지원하는 버전을 확인하려면 [package.json](https://unpkg.com/browse/@angular/platform-server/package.json) 파일의 `engines` 프로퍼티를 확인해 보세요.
-
-</div>
-
-<div class="alert is-helpful">
-
-**참고**: <br />
-<live-example downloadOnly>완성된 샘플 코드를 다운</live-example>받고 [Node.js® Express](https://expressjs.com) 서버에서 직접 실행해볼 수 있습니다.
 
 </div>
 
@@ -65,12 +50,36 @@ Angular Universal을 사용하려면 [활성 LTS나 유지보수 중인 LTS](htt
 ## Universal 튜토리얼
 
 <!--
-The [Tour of Heroes tutorial](tutorial) is the foundation for this walkthrough.
+The [Tour of Heroes tutorial](tutorial/tour-of-heroes) is the foundation for this walkthrough.
 
 In this example, the Angular CLI compiles and bundles the Universal version of the application with the [Ahead-of-Time (AOT) compiler](guide/aot-compiler).
 A Node.js Express web server compiles HTML pages with Universal based on client requests.
 
-To create the server-side application module, `app.server.module.ts`, run the following CLI command.
+<div class="alert is-helpful">
+
+<live-example downloadOnly>Download the finished sample code</live-example>, which runs in a [Node.js® Express](https://expressjs.com) server.
+
+</div>
+-->
+[히어로들의 여행 튜토리얼](tutorial/tour-of-heroes) 앱에 Angular Universal을 적용해 봅시다.
+
+이 앱은 Angular CLI로 컴파일 할 때 [AOT 컴파일러](guide/aot-compiler)를 사용합니다.
+그리고 이렇게 빌드한 결과물은 Node.js Express 서버로 서비스해 봅시다.
+
+<div class="alert is-helpful">
+
+<live-example downloadOnly>예제 앱을 다운로드</live-example> 받으면 [Node.js® Express](https://expressjs.com) 서버에서 실행할 수 있습니다.
+
+</div>
+
+
+<!--
+### Step 1. Enable Server-Side Rendering
+-->
+### 1단계. 서버 사이드 렌더링 활성화하기
+
+<!--
+Run the following command to add SSR support into your application:
 
 <code-example format="shell" language="shell">
 
@@ -78,7 +87,7 @@ ng add &commat;nguniversal/express-engine
 
 </code-example>
 
-The command creates the following folder structure.
+The command updates the application code to enable SSR and adds extra files to the project structure (files that are marked with the `*` symbol).
 
 <div class='filetree'>
     <div class='file'>
@@ -102,7 +111,18 @@ The command creates the following folder structure.
         </div>
         <div class='children'>
             <div class='file'>
-              app.server.module.ts &nbsp;&nbsp;&nbsp; // &lt;-- &ast; server-side application module
+              app.config.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt; client-side application configuration (standalone app only)
+            </div>
+            <div class='file'>
+              app.module.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt; client-side application module (NgModule app only)
+            </div>
+        </div>
+        <div class='children'>
+            <div class='file'>
+              app.config.server.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- &ast; server-side application configuration (standalone app only)
+            </div>
+            <div class='file'>
+              app.module.server.ts &nbsp;&nbsp;&nbsp; // &lt;-- &ast; server-side application module (NgModule app only)
             </div>
         </div>
         <div class='file'>
@@ -122,15 +142,8 @@ The command creates the following folder structure.
         </div>
     </div>
 </div>
-
-The files marked with `*` are new and not in the original tutorial sample.
 -->
-이 문서에서는 [히어로들의 여행](tutorial) 앱에 Universal을 적용해 봅시다.
-
-이 앱은 Angular CLI로 컴파일 할 때 [AOT 컴파일러](guide/aot-compiler)를 사용합니다.
-그리고 이렇게 빌드한 결과물은 Node.js Express 서버로 서비스해 봅시다.
-
-서버 사이드 앱 모듈을 생성하려면 다음 명령을 실행해서 `app.server.module.ts`를 생성합니다.
+애플리케이션 폴더에서 아래 명령을 실행하면 SSR 기능을 적용할 수 있습니다:
 
 <code-example format="shell" language="shell">
 
@@ -138,7 +151,7 @@ ng add &commat;nguniversal/express-engine
 
 </code-example>
 
-그러면 다음과 같은 폴더 구조가 생성됩니다.
+이 명령을 실행하면 SSR 동작에 필요한 파일들(`*` 심볼이 지정된 파일)을 추가하면서 애플리케이션 코드를 자동으로 수정하고 SSR 기능을 활성화합니다.
 
 <div class='filetree'>
     <div class='file'>
@@ -146,7 +159,7 @@ ng add &commat;nguniversal/express-engine
     </div>
     <div class='children'>
         <div class='file'>
-          index.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- 애플리케이션 웹 페이지
+          index.html &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- 앱 웹 페이지
         </div>
         <div class='file'>
           main.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- 클라이언트 앱을 부트스트랩하는 파일
@@ -155,41 +168,109 @@ ng add &commat;nguniversal/express-engine
           main.server.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- &ast; 서버 앱을 부트스트랩하는 파일
         </div>
         <div class='file'>
-          style.css &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- 앱 전역 스타일 파일
+          style.css &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- 애플리케이션 전역 스타일
         </div>
         <div class='file'>
           app/ &nbsp;&hellip; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- 애플리케이션 코드
         </div>
         <div class='children'>
             <div class='file'>
-              app.server.module.ts &nbsp;&nbsp;&nbsp; // &lt;-- &ast; 서버 사이드 애플리케이션 모듈
+              app.config.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt; 클라이언트 사이드 환경설정 파일(단독 앱인 경우)
+            </div>
+            <div class='file'>
+              app.module.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt; 클라이언트 사이드 애플리케이션 모듈(NgModule 앱인 경우)
+            </div>
+        </div>
+        <div class='children'>
+            <div class='file'>
+              app.config.server.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- &ast; 서버 사이드 애플리케이션 환경설정 파일(단독 앱인 경우)
+            </div>
+            <div class='file'>
+              app.module.server.ts &nbsp;&nbsp;&nbsp; // &lt;-- &ast; 서버 사이드 애플리케이션 모듈(NgModule 앱인 경우)
             </div>
         </div>
         <div class='file'>
-          server.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- &ast; Express 웹 서버
+          server.ts &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- &ast; express 웹 서버
         </div>
         <div class='file'>
-          tsconfig.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 기본 환경설정 파일
+          tsconfig.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 기본 설정파일
         </div>
         <div class='file'>
-          tsconfig.app.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 브라우저용 환경설정 파일
+          tsconfig.app.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 브라우저 애플리케이션 환경설정
         </div>
         <div class='file'>
-          tsconfig.server.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 서버용 환경설정 파일
+          tsconfig.server.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 서버 애플리케이션 환경설정
         </div>
         <div class='file'>
-          tsconfig.spec.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 스펙용 환경설정 파일
+          tsconfig.spec.json &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // &lt;-- TypeScript 테스트 환경설정
         </div>
     </div>
 </div>
 
-이 중 `*` 표시가 된 파일이 새로 추가된 파일입니다.
+
+<!--
+### Step 2. Enable Client Hydration
+-->
+### 2단계. 클라이언트 하이드레이션 활성화하기
+
+<!--
+<div class="alert is-important">
+
+The hydration feature is available for [developer preview](/guide/releases#developer-preview). It's ready for you to try, but it might change before it is stable.
+
+</div>
+
+Hydration is the process that restores the server side rendered application on the client. This includes things like reusing the server rendered DOM structures, persisting the application state, transferring application data that was retrieved already by the server, and other processes. Learn more about hydration in [this guide](guide/hydration).
+
+You can enable hydration by updating the `app.module.ts` file. Import the `provideClientHydration` function from `@angular/platform-browser` and add the function call to the `providers` section of the `AppModule` as shown below.
+
+```typescript
+import {provideClientHydration} from '@angular/platform-browser';
+// ...
+
+@NgModule({
+  // ...
+  providers: [ provideClientHydration() ],  // add this line
+  bootstrap: [ AppComponent ]
+})
+export class AppModule {
+  // ...
+}
+```
+-->
+<div class="alert is-important">
+
+하이드레이션은 [개발자 프리뷰](/guide/releases#developer-preview)에서만 사용할 수 있습니다.
+지금도 사용할 수는 있지만, 안정 버전에서는 사용방법이 변경될 수 있습니다.
+
+</div>
+
+하이드레이션\(hydration\)은 서버 사이드에서 렌더링 된 애플리케이션을 클라이언트에 띄우는 과정을 의미합니다.
+이 과정 중에는 서버에러 렌더링한 DOM 구조를 다시 사용하거나, 애플리케이션의 상태를 유지하고, 서버에서 렌더링할 때 사용하던 애플리케이션 데이터를 전달하는 등의 과정을 수행합니다.
+자세한 내용은 [이 문서](guide/hydration)를 참고하세요.
+
+하이드레이션을 활성화하려면 `app.module.ts` 파일을 수정하면 됩니다.
+아래 코드처럼 `@angular/platform-browser`에서 `provideClientHydration`을 불러온 다음에 `AppModule`의 `providers` 섹션에 이 함수를 실행하는 코드를 추가하면 됩니다.
+
+```typescript
+import {provideClientHydration} from '@angular/platform-browser';
+// ...
+
+@NgModule({
+  // ...
+  providers: [ provideClientHydration() ],  // 이 줄을 추가됩니다.
+  bootstrap: [ AppComponent ]
+})
+export class AppModule {
+  // ...
+}
+```
 
 
 <!--
-### Universal in action
+### Step 3. Start the server
 -->
-### Universal 앱 실행하기
+### 3단계, 서버 실행하기
 
 <!--
 To start rendering your application with Universal on your local system, use the following command.
@@ -199,8 +280,23 @@ To start rendering your application with Universal on your local system, use the
 npm run dev:ssr
 
 </code-example>
+-->
+로컬 개발 환경에서 Angular 앱을 Universal로 렌더링하려면 다음 명령을 실행하면 됩니다.
 
-Open a browser and navigate to `http://localhost:4200`.
+<code-example format="shell" language="shell">
+
+npm run dev:ssr
+
+</code-example>
+
+
+<!--
+### Step 4. Run your application in a browser
+-->
+### 4단계, 브라우저에서 애플리케이션 실행하기
+
+<!--
+Once the web server starts, open a browser and navigate to `http://localhost:4200`.
 You should see the familiar Tour of Heroes dashboard page.
 
 Navigation using `routerLinks` works correctly because they use the built-in anchor \(`<a>`\) elements.
@@ -213,9 +309,6 @@ If you throttle your network speed so that the client-side scripts take longer t
 *   The search box on the Dashboard page is ignored
 *   The *Back* and *Save* buttons on the Details page don't work
 
-User events other than `routerLink` clicks aren't supported.
-You must wait for the full client application to bootstrap and run, or buffer the events using libraries like [preboot](https://github.com/angular/preboot), which lets you replay these events once the client-side scripts load.
-
 The transition from the server-rendered application to the client application happens quickly on a development machine, but you should always test your applications in real-world scenarios.
 
 You can simulate a slower network to see the transition more clearly as follows:
@@ -226,14 +319,6 @@ You can simulate a slower network to see the transition more clearly as follows:
 
 The server-rendered application still launches quickly but the full client application might take seconds to load.
 -->
-로컬 개발 환경에서 Angular 앱을 Universal로 렌더링하려면 다음 명령을 실행하면 됩니다.
-
-<code-example format="shell" language="shell">
-
-npm run dev:ssr
-
-</code-example>
-
 명령을 실행하고 나면 브라우저를 열어서 http://localhost:4200/에 접속해 보세요.
 이전에 봤던 히어로들의 여행 대시보드 화면이 표시될 것입니다.
 
@@ -246,9 +331,6 @@ npm run dev:ssr
 *   히어로를 추가하거나 삭제할 수 없습니다.
 *   대시보드 화면에 있는 검색창이 동작하지 않습니다.
 *   히어로 상세정보 화면에 있는 *Back*, *Save* 버튼이 동작하지 않습니다.
-
-네트워크 속도를 제한하면 `routerLink`를 클릭하는 것 이외의 기능이 동작하지 않습니다.
-이 때는 클라이언트 앱이 모두 부트스트랩되어 실행될 때까지 기다리거나 [preboot](https://github.com/angular/preboot)와 같은 라이브러리를 활용해서 이벤트를 캐싱해놨다가 클라이언트 스크립트가 로드된 후에 다시 한 번 처리해야 합니다.
 
 서버에서 렌더링된 앱을 클라이언트용으로 전환하는 것은 간단하지만 실제로 운영되고 있는 앱이라면 이 앱을 확실하게 테스트해야 합니다.
 
@@ -264,7 +346,7 @@ npm run dev:ssr
 <a id="why-do-it"></a>
 
 <!--
-## Why use server-side rendering?
+## Why use Server-Side Rendering?
 -->
 ## 서버 사이드 렌더링은 왜 필요한가요?
 
@@ -357,6 +439,7 @@ Angular Universal을 사용하면 설치형 앱과 거의 비슷하게 동작하
 
 <a id="how-does-it-work"></a>
 
+<!--
 ## Universal web servers
 -->
 ## Universal 웹 서버
@@ -371,7 +454,7 @@ The sample web server for this guide is based on the popular [Express](https://e
 <div class="alert is-helpful">
 
 **NOTE**: <br />
-*Any* web server technology can serve a Universal application as long as it can call Universal's `renderModule()` function.
+*Any* web server technology can serve a Universal application as long as it can call Angular `platform-server` package [`renderModule`](api/platform-server/renderModule) or [`renderApplication`](api/platform-server/renderApplication) functions.
 The principles and decision points discussed here apply to any web server technology.
 
 </div>
@@ -380,13 +463,12 @@ Universal applications use the Angular `platform-server` package \(as opposed to
 server implementations of the DOM, `XMLHttpRequest`, and other low-level features that don't rely on a browser.
 
 The server \([Node.js Express](https://expressjs.com) in this guide's example\) passes client requests for application pages to the NgUniversal `ngExpressEngine`.
-Under the hood, this calls Universal's `renderModule()` function, while providing caching and other helpful utilities.
+Under the hood, the render functions, while providing caching and other helpful utilities.
 
-The `renderModule()` function takes as inputs a *template* HTML page \(usually `index.html`\), an Angular *module* containing components, and a *route* that determines which components to display.
-The route comes from the client's request to the server.
+The render functions takes as inputs a *template* HTML page \(usually `index.html`\), and Angular *module* containing components or a function that when invoked returns a `Promise` that resolves to an `ApplicationRef`, and a *route* that determines which components to display. The route comes from the client's request to the server.
 
 Each request results in the appropriate view for the requested route.
-The `renderModule()` function renders the view within the `<app>` tag of the template, creating a finished HTML page for the client.
+The render function renders the view within the `<app>` tag of the template, creating a finished HTML page for the client.
 
 Finally, the server returns the rendered page to the client.
 -->
@@ -399,7 +481,7 @@ Universal 웹 서버는 애플리케이션 페이지 요청을 받았을 때 [Un
 <div class="alert is-helpful">
 
 **참고**: <br />
-Angular Universal이 제공하는 `renderModule()` 함수를 실행할수만 있다면 *아무* 웹 서버를 사용해도 Universal 앱을 제공할 수 있습니다.
+Angular `platform-server` 패키지의 [`renderModule`](api/platform-server/renderModule) 함수나 [`renderApplication`](api/platform-server/renderApplication) 함수를 실행할수만 있다면 *아무* 웹 서버를 사용해도 Universal 앱을 제공할 수 있습니다.
 이 섹션에서는 웹 서버를 결정하는 기준에 대해서 조금 더 자세하게 알아봅시다.
 
 </div>
@@ -408,13 +490,12 @@ Universal 애플리케이션은 \(`platform-browser` 대신\) Angular가 제공�
 이 패키지는 서버에서 DOM에 접근할 수 있는 기능이나 `XMLHttpRequest` 와 같이 브라우저의 기능이 필요한 로직에 사용됩니다.
 
 이 문서에서 다루는 것처럼 [Node.js Express](https://expressjs.com)를 사용하는 서버라면 클라이언트에서 보내는 애플리케이션 페이지 요청을 NgUniversal이 제공하는 `ngExpressEngine` 으로 전달합니다.
-그러면 Universal의 `renderModuleFactory()` 함수가 실행되면서 페이지를 구성합니다.
+그러면 렌더링 함수가 실행되면서 페이지를 구성합니다.
 
-`renderModuleFactory()` 함수는 HTML *템플릿* 페이지\(일반적으로 `index.html`\)를 바탕으로 Angular 컴포넌트로 구성된 *모듈*을 생성하며, *라우팅 규칙*에 맞게 컴포넌트를 화면에 표시합니다.
-이 때 라우팅 규칙은 클라이언트가 서버로 보낸 것이 사용됩니다.
+렌더링 함수는 HTML *템플릿* 페이지\(일반적으로 `index.html`\)를 바탕으로 Angular 컴포넌트로 구성된 *모듈*을 생성하며, 모듈 안에 있는 컴포넌트와 함수를 모두 처리한 후에 `ApplicationRef`를 `Promise` 형태로 반환하고, *라우팅 규칙*에 맞게 컴포넌트를 화면에 표시합니다.
 
 클라이언트가 보낸 요청의 결과는 해당 라우팅 규칙과 연결된 애플리케이션 페이지가 됩니다.
-그래서 `renderModuleFactory()` 함수는 템플릿의 `<app>` 태그에 뷰를 렌더링하며, 결과적으로 온전하게 HTML로 구성된 페이지가 생성됩니다.
+그래서 렌더링 함수는 템플릿의 `<app>` 태그에 뷰를 렌더링하며, 결과적으로 온전하게 HTML로 구성된 페이지가 생성됩니다.
 
 이제 렌더링된 페이지를 클라이언트가 받으면 브라우저에 이 페이지가 표시됩니다.
 
@@ -451,6 +532,20 @@ Angular는 이런 객체를 참조해야 하는 상황을 대비해서 [`Localti
 결국 서버에서 렌더링된 페이지에서는 사용자가 링크를 클릭한다는 방식을 활용할 수 없기 때문에, 이와 유사한 UX를 제공할 수 있도록 구현방식을 수정해야 할 수도 있습니다.
 
 
+<a id="service-worker"></a>
+<!--
+### Universal and the Angular Service Worker
+-->
+### Universal과 Angular 서비스 워커
+
+<!--
+If you are using Universal in conjunction with the Angular service worker, the behavior is different than the normal server side rendering behavior. The initial server request will be rendered on the server as expected. However, after that initial request, subsequent requests are handled by the service worker. For subsequent requests, the `index.html` file is served statically and bypasses server side rendering.
+-->
+Angular Universal과 Angular 서비스 워커를 사용한다면, 서버 사이드 렌더링 동작이 일반 서버와는 조금 다릅니다.
+맨 처음 서버로 요청이 도착하면 서버는 이미 렌더링 된 애플리케이션을 응답으로 보냅니다.
+그리고 그 다음부터 생성되는 요청은 서비스 워커가 처리하며, `index.html` 파일은 정적으로 처리하고 서버 사이드 렌더링을 통하지 않습니다.
+
+
 <a id="universal-engine"></a>
 
 <!--
@@ -463,46 +558,36 @@ The important bit in the `server.ts` file is the `ngExpressEngine()` function.
 
 <code-example header="server.ts" path="universal/server.ts" region="ngExpressEngine"></code-example>
 
-The `ngExpressEngine()` function is a wrapper around Universal's `renderModule()` function which turns a client's requests into server-rendered HTML pages.
+The `ngExpressEngine()` function is a wrapper around the Angular `platform-server` package [`renderModule`](api/platform-server/renderModule) and [`renderApplication`](api/platform-server/renderApplication) functions which turns a client's requests into server-rendered HTML pages.
+
 It accepts an object with the following properties:
 
 | Properties       | Details |
 |:---              |:---     |
-| `bootstrap`      | The root `NgModule` or `NgModule` factory to use for bootstrapping the application when rendering on the server. For the example application, it is `AppServerModule`. It's the bridge between the Universal server-side renderer and the Angular application. |
+| `bootstrap`      | The root `NgModule` or function that when invoked returns a `Promise` that resolves to an `ApplicationRef` of the application when rendering on the server. For the example application, it is `AppServerModule`. It's the bridge between the Universal server-side renderer and the Angular application. |
 | `extraProviders` | This property is optional and lets you specify dependency providers that apply only when rendering the application on the server. Do this when your application needs information that can only be determined by the currently running server instance.       |
 
 The `ngExpressEngine()` function returns a `Promise` callback that resolves to the rendered page.
 It's up to the engine to decide what to do with that page.
 This engine's `Promise` callback returns the rendered page to the web server, which then forwards it to the client in the HTTP response.
-
-<div class="alert is-helpful">
-
-**NOTE**: <br />
-These wrappers help hide the complexity of the `renderModule()` function.
-There are more wrappers for different backend technologies at the [Universal repository](https://github.com/angular/universal).
-
-</div>
 -->
-`ngExpressEngine()` 함수는 Universal이 제공하는 `renderModule()` 함수를 랩핑한 함수이며, `renderModuleFactory()` 함수는 클라이언트의 요청을 서버가 렌더링한 HTML 페이지로 변경해서 요청하는 함수입니다.
+`server.ts` 파일에서는 `ngExpressEngine()` 함수가 중요합니다.
 
 <code-example header="server.ts" path="universal/server.ts" region="ngExpressEngine"></code-example>
 
-| 프로퍼티             | 설명                                                                                                                                                                   |
-|:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `bootstrap`      | 서버에서 렌더링할 때 사용할 최상위 `NgModule`이나 `NgModule` 팩토리를 지정합니다. 그래서 `AppServerModule`와 같은 모듈을 지정할 수 있습니다. 이 때 지정되는 모듈은 Universal 서버사이드 렌더러와 Angular 애플리케이션을 연결하는 다리 역할을 합니다. |
-| `extraProviders` | 서버에서 렌더링할 때 필요한 의존성 프로바이더를 등록할 수 있으며, 생략할 수 있습니다. 서버 인스턴스가 어떤 환경에서 실행되는지 확인하는 용도로 활용할 수 있습니다.                                                                        |
+`ngExpressEngine()` 함수는 Angular `platform-server` 패키지의 [`renderModule`](api/platform-server/renderModule) 함수와 [`renderApplication`](api/platform-server/renderApplication) 함수를 랩핑한 함수입니다.
+이 함수는 서버에서 렌더링 된 HTML 화면을 클라이언트로 전달하는 함수입니다.
+
+`ngExpressEngine()` 함수는 옵션 객체를 인자로 받습니다:
+
+| 프로퍼티             | 설명                                                                                                                                                                                                                  |
+|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `bootstrap`      | 서버에서 렌더링할 때 사용할 최상위 `NgModule`이나 `NgModule` 팩토리를 지정하면 서버에서 렌더링된 `ApplicationRef` 객체를 `Promise`로 반환합니다. 그래서 `AppServerModule`와 같은 모듈을 지정할 수 있습니다. 이 때 지정되는 모듈은 Universal 서버사이드 렌더러와 Angular 애플리케이션을 연결하는 다리 역할을 합니다. |
+| `extraProviders` | 서버에서 렌더링할 때 필요한 의존성 프로바이더를 등록할 수 있으며, 생략할 수 있습니다. 서버 인스턴스가 어떤 환경에서 실행되는지 확인하는 용도로 활용할 수 있습니다.                                                                                                                       |
 
 `ngExpressEngine()` 함수는 렌더링된 페이지를 `Promise` 콜백 형태로 반환합니다.
 그리고 이 페이지를 어떻게 활용할 것인지는 서버에서 사용하는 엔진에 따라 달라집니다.
 단순하게 구현하면, `Promise` 콜백 형태로 전달된 페이지를 웹 서버로 반환하고 웹 서버가 HTTP 응답으로 클라이언트에 전달하면 됩니다.
-
-<div class="alert is-helpful">
-
-**참고**: <br />
-`renderModule()` 함수를 직접 사용하는 것보다는 `ngExpressEngine()` 랩핑 헬퍼를 사용하는 것이 편합니다.
-이와 비슷한 방식으로 제공되는 랩퍼 함수들을 알아보려면 [Universal 레파지토리](https://github.com/angular/universal)를 참고하세요.
-
-</div>
 
 
 <!--
@@ -643,7 +728,7 @@ You don't need to do anything to make relative URLs work on the server.
 
 If, for some reason, you are not using an `@nguniversal/*-engine` package, you might need to handle it yourself.
 
-The recommended solution is to pass the full request URL to the `options` argument of [renderModule()](api/platform-server/renderModule) or [renderModuleFactory()](api/platform-server/renderModuleFactory) \(depending on what you use to render `AppServerModule` on the server\).
+The recommended solution is to pass the full request URL to the `options` argument of [renderModule](api/platform-server/renderModule).
 This option is the least intrusive as it does not require any changes to the application.
 Here, "request URL" refers to the URL of the request as a response to which the application is being rendered on the server.
 For example, if the client requested `https://my-server.com/dashboard` and you are rendering the application on the server to respond to that request, `options.url` should be set to `https://my-server.com/dashboard`.
@@ -660,7 +745,7 @@ Now, on every HTTP request made as part of rendering the application on the serv
 
 하지만 이유가 있어서 `@nguniversal/*-engine` 패키지를 사용할 수 없다면 이 과정을 직접 처리해야 합니다.
 
-이 때 권장하는 방법은 항상 전체 URL을 [renderModule()](api/platform-server/renderModule), [renderModuleFactory()](api/platform-server/renderModuleFactory)의 `options` 인자로 전달하는 것입니다.
+이 때 권장하는 방법은 항상 전체 URL을 [renderModule](api/platform-server/renderModule)의 `options` 인자로 전달하는 것입니다.
 대상은 `AppServerModule`에 어떤 것을 지정했는지에 따라 다릅니다.
 이 옵션값은 앱이 수정되더라도 변경될 일이 거의 없기 때문에 관리하기도 편합니다.
 `https://my-server.com/dashboard` 라는 주소에 대응하는 앱을 서버에서 렌더링하는 상황이라면 `options.url` 도 `https://my-server.com/dashboard` 와 함께 지정하는 방식입니다.
@@ -695,4 +780,4 @@ Now, on every HTTP request made as part of rendering the application on the serv
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-04-25

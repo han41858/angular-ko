@@ -8,7 +8,7 @@
  */
 
 import {SECURITY_SCHEMA} from '@angular/compiler/src/schema/dom_security_schema';
-import {LView} from '@angular/core/src/render3/interfaces/view';
+import {ENVIRONMENT, LView} from '@angular/core/src/render3/interfaces/view';
 import {enterView, leaveView} from '@angular/core/src/render3/state';
 
 import {bypassSanitizationTrustHtml, bypassSanitizationTrustResourceUrl, bypassSanitizationTrustScript, bypassSanitizationTrustStyle, bypassSanitizationTrustUrl} from '../../src/sanitization/bypass';
@@ -16,7 +16,9 @@ import {getUrlSanitizer, ɵɵsanitizeHtml, ɵɵsanitizeResourceUrl, ɵɵsanitize
 import {SecurityContext} from '../../src/sanitization/security';
 
 function fakeLView(): LView {
-  return [null, {}] as LView;
+  const fake = [null, {}] as LView;
+  fake[ENVIRONMENT] = {} as any;
+  return fake;
 }
 
 describe('sanitization', () => {
@@ -52,8 +54,7 @@ describe('sanitization', () => {
   });
 
   it('should sanitize resourceUrl', () => {
-    const ERROR =
-        'NG0904: unsafe value used in a resource URL context (see https://g.co/ng/security#xss)';
+    const ERROR = /NG0904: unsafe value used in a resource URL context.*/;
     expect(() => ɵɵsanitizeResourceUrl('http://server')).toThrowError(ERROR);
     expect(() => ɵɵsanitizeResourceUrl('javascript:true')).toThrowError(ERROR);
     expect(() => ɵɵsanitizeResourceUrl(bypassSanitizationTrustHtml('javascript:true')))
@@ -106,8 +107,7 @@ describe('sanitization', () => {
   });
 
   it('should sanitize resourceUrls via sanitizeUrlOrResourceUrl', () => {
-    const ERROR =
-        'NG0904: unsafe value used in a resource URL context (see https://g.co/ng/security#xss)';
+    const ERROR = /NG0904: unsafe value used in a resource URL context.*/;
     expect(() => ɵɵsanitizeUrlOrResourceUrl('http://server', 'iframe', 'src')).toThrowError(ERROR);
     expect(() => ɵɵsanitizeUrlOrResourceUrl('javascript:true', 'iframe', 'src'))
         .toThrowError(ERROR);

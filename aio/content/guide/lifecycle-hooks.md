@@ -1,7 +1,7 @@
 <!--
-# Lifecycle hooks
+# Component Lifecycle
 -->
-# 라이프싸이클 후킹 함수
+# 컴포넌트 라이프싸이클
 
 <!--
 A component instance has a lifecycle that starts when Angular instantiates the component class and renders the component view along with its child views.
@@ -164,14 +164,14 @@ Use the `ngOnInit()` method to perform the following initialization tasks.
 
 | Initialization tasks                                         | Details |
 |:---                                                          |:---     |
-| Perform complex initializations outside of the constructor   | Components should be cheap and safe to construct. You should not, for example, fetch data in a component constructor. You shouldn't worry that a new component will try to contact a remote server when created under test or before you decide to display it. <br /> An `ngOnInit()` is a good place for a component to fetch its initial data. For an example, see the [Tour of Heroes tutorial](tutorial/toh-pt4#oninit).                                                                                                                    |
+| Perform complex initializations outside of the constructor   | Components should be cheap and safe to construct. You should not, for example, fetch data in a component constructor. You shouldn't worry that a new component will try to contact a remote server when created under test or before you decide to display it. <br /> An `ngOnInit()` is a good place for a component to fetch its initial data. For an example, see the [Tour of Heroes tutorial](tutorial/tour-of-heroes/toh-pt4#oninit).                                                                                                                    |
 | Set up the component after Angular sets the input properties | Constructors should do no more than set the initial local variables to simple values. <br /> Keep in mind that a directive's data-bound input properties are not set until *after construction*. If you need to initialize the directive based on those properties, set them when `ngOnInit()` runs. <div class="alert is-helpful"> The `ngOnChanges()` method is your first opportunity to access those properties. Angular calls `ngOnChanges()` before `ngOnInit()`, but also many times after that. It only calls `ngOnInit()` once. </div> |
 -->
 `ngOnInit()` 메서드를 활용하면 다음과 같은 초기화 작업을 실행할 수 있습니다.
 
 | 초기화 작업                   | 설명                                                                                                                                                                                                                                                                                                                                                                                                  |
 |:-------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 생성자에 넣지 않은 복잡한 초기화 작업    | 일반적으로 컴포넌트는 가볍고 간단하게 생성할 수 있어야 합니다. 그래서 초기화 로직이 복잡하다면 이 로직은 생성자에 작성하지 않는 것이 좋습니다. 외부에서 데이터를 받아와야 하는 로직도 마찬가지입니다.  이런 로직이 생성자에 있으면 테스트 환경에서 컴포넌트를 생성하거나 화면에 컴포넌트가 표시되기 전에도 외부로 HTTP 요청이 발생할 수 있습니다. <br /> 데이터를 외부에서 받아오고 컴포넌트를 초기화하는 로직은 `ngOnInit()`에 작성하는 것이 좋습니다. [히어로들의 여행 튜토리얼](tutorial/toh-pt4#oninit)에서도 이 내용을 확인할 수 있습니다.                                                                  |
+| 생성자에 넣지 않은 복잡한 초기화 작업    | 일반적으로 컴포넌트는 가볍고 간단하게 생성할 수 있어야 합니다. 그래서 초기화 로직이 복잡하다면 이 로직은 생성자에 작성하지 않는 것이 좋습니다. 외부에서 데이터를 받아와야 하는 로직도 마찬가지입니다.  이런 로직이 생성자에 있으면 테스트 환경에서 컴포넌트를 생성하거나 화면에 컴포넌트가 표시되기 전에도 외부로 HTTP 요청이 발생할 수 있습니다. <br /> 데이터를 외부에서 받아오고 컴포넌트를 초기화하는 로직은 `ngOnInit()`에 작성하는 것이 좋습니다. [히어로들의 여행 튜토리얼](tutorial/tour-of-heroes/toh-pt4#oninit)에서도 이 내용을 확인할 수 있습니다.                                                                  |
 | 입력 프로퍼티 값을 할당한 후의 초기화 작업 | 생성자에서는 지역 변수를 할당하는 것 이외의 로직은 작성하지 않는 것이 좋습니다. <br /> 디렉티브에 바인딩되는 입력 프로퍼티 값은 *생성자가 실행된 후에* 할당된다는 것을 명심하세요. 이 프로퍼티 값에 따라 디렉티브를 초기화해야 한다면 생성자가 아니라 `ngOnInit()`에서 해야 합니다. <div class="alert is-helpful"> 입력 프로퍼티에 데이터가 전달되는 것을 가장 먼저 확인할 수 있는 메서드는 `ngOnChanges())` 메서드입니다. 하지만 `ngOnChanges()`는 `ngOnInit()` 이전뿐 아니라 그 이후에도 여러번 실행됩니다. `ngOnInit()`은 한번만 실행되기 때문에 초기화 로직은 이 메서드에 작성하는 것이 좋습니다. </div> |
 
 
@@ -183,7 +183,15 @@ Use the `ngOnInit()` method to perform the following initialization tasks.
 ## 인스턴스 종료하기
 
 <!--
-Put cleanup logic in `ngOnDestroy()`, the logic that must run before Angular destroys the directive.
+Angular provides several ways to clean up when an instance is destroyed.
+-->
+컴포넌트 인스턴스가 종료될 때 이 컴포넌트를 정리할 수 있는 방법은 몇가지가 있습니다.
+
+
+### `ngOnDestroy`
+
+<!--
+You can put cleanup logic in `ngOnDestroy()`, the logic that must run before Angular destroys the directive.
 
 This is the place to free resources that won't be garbage-collected automatically.
 You risk memory leaks if you neglect to do so.
@@ -204,6 +212,87 @@ Angular가 디렉티브나 컴포넌트를 종료하기 전에 실행해야 하�
 *   디렉티브가 전역이나 애플리케이션 서비스에 등록한 콜백 정리
 
 `ngOnDestroy()` 메서드는 컴포넌트나 디렉티브가 종료된다는 것을 애플리케이션 다른 영역으로 전달하는 용도로도 사용할 수 있습니다.
+
+### DestroyRef
+
+<!--
+In addition to to `ngOnDestroy()`, you can inject Angular's `DestroyRef` and register callback functions to be called when the enclosing context is destroyed. This can be useful for building reusable utilities that require cleanup.
+
+Register a callback with the `DestroyRef`:
+
+```ts
+@Component(...)
+class Counter {
+  count = 0;
+  constructor() {
+    // Start a timer to increment the counter every second.
+    const id = setInterval(() => this.count++, 1000);
+
+    // Stop the timer when the component is destroyed.
+    const destroyRef = inject(DestroyRef);
+    destroyRef.onDestroy(() => clearInterval(id));
+  }
+}
+```
+
+Like `ngOnDestroy`, `DestroyRef` works in any Angular service, directive, component, or pipe.
+-->
+`ngOnDestroy()` 외에도, `DestroyRef`를 의존성 객체로 받아 콜백 함수를 등록하면 컴포넌트 종료 시점에 실행할 수 있습니다.
+이 방식은 정리 로직이 필요한 유틸 함수에 사용하면 좋습니다.
+
+이렇게 등록하면 됩니다:
+
+```ts
+@Component(...)
+class Counter {
+  count = 0;
+  constructor() {
+    // 1초마다 카운터를 세는 타이머를 시작합니다.
+    const id = setInterval(() => this.count++, 1000);
+
+    // 컴포넌트가 종료될 때 타이머를 종료합니다.
+    const destroyRef = inject(DestroyRef);
+    destroyRef.onDestroy(() => clearInterval(id));
+  }
+}
+```
+
+`ngOnDestroy`와 마찬가지로, `DestroyRef`는 Angular 서비스, 디렉티브, 컴포넌트, 파이프에 사용할 수 있습니다.
+
+
+### `takeUntilDestroyed`
+
+<!--
+<div class="alert is-important">
+
+`takeUntilDestroyed` is available for [developer preview](/guide/releases#developer-preview). It's ready for you to try, but it might change before it is stable.
+
+</div>
+
+When using RxJS Observables in components or directives, you may want to complete any observables when the component or directive is destroyed. Angular's `@angular/core/rxjs-interop` package provides an operator, `takeUntilDestroyed`, to simplify this common task:
+
+```ts
+data$ = http.get('...').pipe(takeUntilDestroyed());
+```
+
+By default, `takeUntilDestroyed` must be called in an injection context so that it can access `DestroyRef`. If an injection context isn't available, you can explicitly provide a `DestroyRef`.
+-->
+<div class="alert is-important">
+
+`takeUntilDestroyed`은 [개발자 프리뷰](/guide/releases#developer-preview)에서만 사용할 수 있습니다.
+사용할 수는 있지만, 이후에 사용방법이 변경될 수 있습니다.
+
+</div>
+
+컴포넌트나 디렉티브 안에서 RxJS 옵저버블을 사용한다면, 이 컴포넌트/디렉티브가 종료될 때 옵저버블을 종료해야 할 수 있습니다.
+이 때 `@angular/core/rxjs-interop` 패키지에 있는 `takeUntilDestroyed` 연산자를 사용하면 됩니다:
+
+```ts
+data$ = http.get('...').pipe(takeUntilDestroyed());
+```
+
+기본적으로 `takeUntilDestroyed`는 의존성 컨텍스트 안에서 실행되기 때문에 `DestroyRef`에도 접근할 수 있습니다.
+의존성 컨텍스트를 사용할 수 없으면 `DestroyRef`를 명시적으로 사용해야 합니다.
 
 
 <!--

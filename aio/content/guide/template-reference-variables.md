@@ -220,7 +220,7 @@ Here, `ref2` is declared in the child scope created by `*ngIf`, and is not acces
 ## 템플릿 입력 변수(Template input variable)
 
 <!--
-A _template input variable_ is a variable with a value that is set when an instance of that template is created. See: [Writing structural directives](https://angular.io/guide/structural-directives)
+A _template input variable_ is a variable with a value that is set when an instance of that template is created. See: [Writing structural directives](/guide/structural-directives)
 
 Template input variables can be seen in action in the long-form usage of `NgFor`:
 
@@ -280,9 +280,8 @@ _템플릿 입력 변수_ 는 템플릿 인스턴스마다 값을 받는 변수�
 ## 다음 단계
 
 <!--
-[Writing structural directives](https://angular.io/guide/structural-directives)
+[Writing structural directives](/guide/structural-directives)
 -->
 [구조 디렉티브 만들기](https://angular.io/guide/structural-directives)
-
 
 @reviewed 2022-05-12

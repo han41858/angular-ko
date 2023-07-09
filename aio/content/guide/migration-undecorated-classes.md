@@ -346,23 +346,10 @@ You can either add `@Directive()` with a selector or move the Angular-specific f
 셀렉터 없이 사용하는 데코레이터는 Angular 9 버전에 추가되었기 때문에 Angular 9 이전 버전에 활용되는 라이브러리를 만든다면 `@Directive()` 데코레이터에서 셀렉터를 생략할 수 없습니다.
 이런 경우라면 `@Directive()`에 셀렉터를 추가하거나, Angular 관련 기능을 자식 클래스로 옮겨야 합니다.
 
-
-<!--
-## What about applications using non-migrated libraries?
--->
-## 마이그레이션이 적용되지 않은 라이브러리는 어떻게 사용하나요?
-
-<!--
-The [Angular compatibility compiler](guide/glossary#ngcc) \(`ngcc`\) should automatically transform any non-migrated libraries to generate the proper code.
--->
-[Angular 호환성 컴파일러(Angular compatibility compiler, ngcc)](guide/glossary#ngcc)는 마이그레이션이 적용되지 않은 코드도 제대로 동작할 수 있도록 코드를 자동으로 변환합니다.
-그대로 사용해도 문제 없습니다.
-
-
 <!-- links -->
 
 <!-- external links -->
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-02-16

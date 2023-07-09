@@ -16,7 +16,7 @@ This topic uses the following pictographs.
 |:---         |:--- |
 | <code>&#x1F33A;</code> | red hibiscus \(`🌺`\)  |
 | <code>&#x1F33B;</code> | sunflower \(`🌻`\)     |
-| <code>&#x1F33C;</code> | yellow flower \(`🌼`\) |
+| <code>&#x1F337;</code> | tulip \(`🌷`\)         |
 | <code>&#x1F33F;</code> | fern \(`🌿`\)          |
 | <code>&#x1F341;</code> | maple leaf \(`🍁`\)    |
 | <code>&#x1F433;</code> | whale \(`🐳`\)         |
@@ -39,16 +39,16 @@ With hierarchical dependency injection, you can isolate sections of the applicat
 **참고**:<br />
 이 문서에서는 이런 픽토그램을 사용합니다.
 
-| HTML 요소                | 픽토그램             |
-|:-----------------------|:-----------------|
-| <code>&#x1F33A;</code> | 무궁화 \(`🌺`\) |
-| <code>&#x1F33B;</code> | 해바라기 \(`🌻`\)    |
-| <code>&#x1F33C;</code> | 노란 꽃 \(`🌼`\)    |
-| <code>&#x1F33F;</code> | 양치식물 \(`🌿`\)    |
-| <code>&#x1F341;</code> | 단풍잎 \(`🍁`\)     |
-| <code>&#x1F433;</code> | 고래 \(`🐳`\)      |
-| <code>&#x1F436;</code> | 강아지 \(`🐶`\)     |
-| <code>&#x1F994;</code> | 고슴도치  \(`🦔`\)   |
+| HTML 요소                | 픽토그램           |
+|:-----------------------|:---------------|
+| <code>&#x1F33A;</code> | 무궁화 \(`🌺`\)   |
+| <code>&#x1F33B;</code> | 해바라기 \(`🌻`\)  |
+| <code>&#x1F337;</code> | 튤립 \(`🌷`\)    |
+| <code>&#x1F33F;</code> | 양치식물 \(`🌿`\)  |
+| <code>&#x1F341;</code> | 단풍잎 \(`🍁`\)   |
+| <code>&#x1F433;</code> | 고래 \(`🐳`\)    |
+| <code>&#x1F436;</code> | 강아지 \(`🐶`\)   |
+| <code>&#x1F994;</code> | 고슴도치  \(`🦔`\) |
 
 </div>
 
@@ -452,12 +452,12 @@ Additionally, you can combine all of the modifiers except `@Host()` and `@Self()
 This way, if it can't be resolved at runtime, Angular resolves the service as `null`, rather than throwing an error.
 In the following example, the service, `OptionalService`, isn't provided in the service, `@NgModule()`, or component class, so it isn't available anywhere in the app.
 
-<code-example header="resolution-modifiers/src/app/optional/optional.component.ts" path="resolution-modifiers/src/app/optional/optional.component.ts" region="optional-component"></code-example>
+<code-example header="src/app/optional/optional.component.ts" path="resolution-modifiers/src/app/optional/optional.component.ts" region="optional-component"></code-example>
 -->
 `@Optional()` 데코레이터를 사용하면 Angular가 서비스 프로바이더를 찾지 못했을 때 에러가 발생하는 대신 `null` 값을 주입합니다.
 아래 예제에서 `OptionalService`는 `@NgModule()`이나 컴포넌트 클래스 어디에도 프로바이더가 등록되어 있지 않지만 에러 없이 실행됩니다.
 
-<code-example header="resolution-modifiers/src/app/optional/optional.component.ts" path="resolution-modifiers/src/app/optional/optional.component.ts" region="optional-component"></code-example>
+<code-example header="src/app/optional/optional.component.ts" path="resolution-modifiers/src/app/optional/optional.component.ts" region="optional-component"></code-example>
 
 ### `@Self()`
 
@@ -469,14 +469,14 @@ To avoid errors in this situation, combine `@Self()` with `@Optional()`.
 
 For example, in the following `SelfComponent`, notice the injected `LeafService` in the constructor.
 
-<code-example header="resolution-modifiers/src/app/self-no-data/self-no-data.component.ts" path="resolution-modifiers/src/app/self-no-data/self-no-data.component.ts" region="self-no-data-component"></code-example>
+<code-example header="src/app/self-no-data/self-no-data.component.ts" path="resolution-modifiers/src/app/self-no-data/self-no-data.component.ts" region="self-no-data-component"></code-example>
 
 In this example, there is a parent provider and injecting the service will return the value, however, injecting the service with `@Self()` and `@Optional()` will return `null` because `@Self()` tells the injector to stop searching in the current host element.
 
 Another example shows the component class with a provider for `FlowerService`.
-In this case, the injector looks no further than the current `ElementInjector` because it finds the `FlowerService` and returns the yellow flower <code>&#x1F33C;</code>.
+In this case, the injector looks no further than the current `ElementInjector` because it finds the `FlowerService` and returns the tulip <code>&#x1F337;</code>.
 
-<code-example header="resolution-modifiers/src/app/self/self.component.ts" path="resolution-modifiers/src/app/self/self.component.ts" region="self-component"></code-example>
+<code-example header="src/app/self/self.component.ts" path="resolution-modifiers/src/app/self/self.component.ts" region="self-component"></code-example>
 -->
 `@Self()` 데코레이터를 사용하면 Angular는 현재 계층의 컴포넌트/디렉티브의 `ElementInjector`에서만 서비스 프로바이더를 찾습니다.
 
@@ -485,15 +485,15 @@ In this case, the injector looks no further than the current `ElementInjector` b
 
 아래 예제에서 `SelfComponent`는 `LeafService`가 현재 계층에 존재할 때만 의존성으로 주입받습니다.
 
-<code-example header="resolution-modifiers/src/app/self-no-data/self-no-data.component.ts" path="resolution-modifiers/src/app/self-no-data/self-no-data.component.ts" region="self-no-data-component"></code-example>
+<code-example header="src/app/self-no-data/self-no-data.component.ts" path="resolution-modifiers/src/app/self-no-data/self-no-data.component.ts" region="self-no-data-component"></code-example>
 
 이렇게 구현하면 부모 컴포넌트에 서비스 프로바이더가 있더라도 `null`이 주입됩니다.
 왜냐하면 현재 계층에서만 서비스 프로바이더를 탐색하도록 `@Self()` 데코레이터를 사용했기 때문입니다.
 
 아래 코드에서는 컴포넌트 클래스에 `FlowerService`의 프로바이더가 등록되어 있습니다.
-그러면 현재 계층의 `ElementInjector`에서 서비스 프로바이더를 찾을 수 있기 때문에 `FlowerService`에 노란꽃\(<code>&#x1F33C;</code>\)이 주입됩니다.
+그러면 현재 계층의 `ElementInjector`에서 서비스 프로바이더를 찾을 수 있기 때문에 `FlowerService`에 튤립\(<code>&#x1F337;</code>\)이 주입됩니다.
 
-<code-example header="resolution-modifiers/src/app/self/self.component.ts" path="resolution-modifiers/src/app/self/self.component.ts" region="self-component"></code-example>
+<code-example header="src/app/self/self.component.ts" path="resolution-modifiers/src/app/self/self.component.ts" region="self-component"></code-example>
 
 ### `@SkipSelf()`
 
@@ -504,12 +504,12 @@ So if the parent `ElementInjector` were using the fern <code>&#x1F33F;</code> va
 
 To see this in code, assume that the following value for `emoji` is what the parent component were using, as in this service:
 
-<code-example header="resolution-modifiers/src/app/leaf.service.ts" path="resolution-modifiers/src/app/leaf.service.ts" region="leafservice"></code-example>
+<code-example header="src/app/leaf.service.ts" path="resolution-modifiers/src/app/leaf.service.ts" region="leafservice"></code-example>
 
 Imagine that in the child component, you had a different value, maple leaf <code>&#x1F341;</code> but you wanted to use the parent's value instead.
 This is when you'd use `@SkipSelf()`:
 
-<code-example header="resolution-modifiers/src/app/skipself/skipself.component.ts" path="resolution-modifiers/src/app/skipself/skipself.component.ts" region="skipself-component"></code-example>
+<code-example header="src/app/skipself/skipself.component.ts" path="resolution-modifiers/src/app/skipself/skipself.component.ts" region="skipself-component"></code-example>
 
 In this case, the value you'd get for `emoji` would be fern <code>&#x1F33F;</code>, not maple leaf <code>&#x1F341;</code>.
 -->
@@ -520,11 +520,11 @@ In this case, the value you'd get for `emoji` would be fern <code>&#x1F33F;</cod
 이 내용을 코드로 봅시다.
 아래 코드에서 `LeafService` 안에 지정된 `emoji`의 값은 양치식물\(<code>&#x1F33F;</code>\)입니다:
 
-<code-example header="resolution-modifiers/src/app/leaf.service.ts" path="resolution-modifiers/src/app/leaf.service.ts" region="leafservice"></code-example>
+<code-example header="src/app/leaf.service.ts" path="resolution-modifiers/src/app/leaf.service.ts" region="leafservice"></code-example>
 
 자식 컴포넌트에는 이 값이 단풍잎\(<code>&#x1F341;</code>\)으로 지정되어 있지만, 현재 계층이 아니라 부모 계층에서 주입하는 값을 사용하도록 구현하려면 `@SkipSelf()` 데코레이터를 다음과 같이 사용하면 됩니다:
 
-<code-example header="resolution-modifiers/src/app/skipself/skipself.component.ts" path="resolution-modifiers/src/app/skipself/skipself.component.ts" region="skipself-component"></code-example>
+<code-example header="src/app/skipself/skipself.component.ts" path="resolution-modifiers/src/app/skipself/skipself.component.ts" region="skipself-component"></code-example>
 
 그래서 이 코드가 실행되었을 때 받는 서비스의 `emoji` 프로퍼티 값은 단풍잎\(<code>&#x1F341;</code>\)이 아니라 양치식물\(<code>&#x1F33F;</code>\) 입니다.
 
@@ -567,18 +567,18 @@ class Person {
 Even if there is a service instance further up the tree, Angular won't continue looking
 Use `@Host()` as follows:
 
-<code-example header="resolution-modifiers/src/app/host/host.component.ts" path="resolution-modifiers/src/app/host/host.component.ts" region="host-component"></code-example>
+<code-example header="src/app/host/host.component.ts" path="resolution-modifiers/src/app/host/host.component.ts" region="host-component"></code-example>
 
-Since `HostComponent` has `@Host()` in its constructor, no matter what the parent of `HostComponent` might have as a `flower.emoji` value, the `HostComponent` will use yellow flower <code>&#x1F33C;</code>.
+Since `HostComponent` has `@Host()` in its constructor, no matter what the parent of `HostComponent` might have as a `flower.emoji` value, the `HostComponent` will use tulip <code>&#x1F337;</code>.
 -->
 `@Host()` 데코레이터를 사용하면 의존성으로 주입하는 객체의 프로바이더를 찾는 범위를 호스트 엘리먼트까지로 제한합니다.
 그 위쪽에 실제로 서비스 인스턴스가 있더라도 이 인스턴스는 탐색대상이 아닙니다.
 `@Host()`는 이렇게 사용합니다:
 
-<code-example header="resolution-modifiers/src/app/host/host.component.ts" path="resolution-modifiers/src/app/host/host.component.ts" region="host-component"></code-example>
+<code-example header="src/app/host/host.component.ts" path="resolution-modifiers/src/app/host/host.component.ts" region="host-component"></code-example>
 
 `HostComponent`의 생성자에는 `@Host()` 데코레이터가 사용되었기 때문에 `HostComponent`의 부모 계층에 있는 `flower.emoji`의 값은 고려할 대상이 아닙니다.
-`HostComponent`에는 노란 꽃\(<code>&#x1F33C;</code>\)이 주입됩니다.
+`HostComponent`에는 튤립\(<code>&#x1F337;</code>\)이 주입됩니다.
 
 
 <!--
@@ -740,7 +740,7 @@ In the logical tree, you'll see `@Provide`, `@Inject`, and `@NgModule`, which ar
 <!--
 The example application has a `FlowerService` provided in `root` with an `emoji` value of red hibiscus <code>&#x1F33A;</code>.
 
-<code-example header="providers-viewproviders/src/app/flower.service.ts" path="providers-viewproviders/src/app/flower.service.ts" region="flowerservice"></code-example>
+<code-example header="src/app/flower.service.ts" path="providers-viewproviders/src/app/flower.service.ts" region="flowerservice"></code-example>
 
 Consider an application with only an `AppComponent` and a `ChildComponent`.
 The most basic rendered view would look like nested HTML elements such as the following:
@@ -776,11 +776,11 @@ Knowledge of this structure can inform how you provide and inject your services,
 
 Now, consider that `<app-root>` injects the `FlowerService`:
 
-<code-example header="providers-viewproviders/src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.1.ts" region="injection"></code-example>
+<code-example header="src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.1.ts" region="injection"></code-example>
 
 Add a binding to the `<app-root>` template to visualize the result:
 
-<code-example header="providers-viewproviders/src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-flower"></code-example>
+<code-example header="src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-flower"></code-example>
 
 The output in the view would be:
 
@@ -866,11 +866,11 @@ In the example case, the constraints are:
 
 `<app-root>`에 `FlowerService`를 주입해 봅시다:
 
-<code-example header="providers-viewproviders/src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.1.ts" region="injection"></code-example>
+<code-example header="src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.1.ts" region="injection"></code-example>
 
 그리고 `<app-root>` 템플릿은 이렇게 작성합니다:
 
-<code-example header="providers-viewproviders/src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-flower"></code-example>
+<code-example header="src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-flower"></code-example>
 
 이 예제 앱은 이렇게 표시됩니다:
 
@@ -925,14 +925,14 @@ Emoji from FlowerService: &#x1F33A;
 <!--
 Now, in the `ChildComponent` class, add a provider for `FlowerService` to demonstrate more complex resolution rules in the upcoming sections:
 
-<code-example header="providers-viewproviders/src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.1.ts" region="flowerservice"></code-example>
+<code-example header="src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.1.ts" region="flowerservice"></code-example>
 
 Now that the `FlowerService` is provided in the `@Component()` decorator, when the `<app-child>` requests the service, the injector has only to look as far as the `ElementInjector` in the `<app-child>`.
 It won't have to continue the search any further through the injector tree.
 
 The next step is to add a binding to the `ChildComponent` template.
 
-<code-example header="providers-viewproviders/src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="flower-binding"></code-example>
+<code-example header="src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="flower-binding"></code-example>
 
 To render the new values, add `<app-child>` to the bottom of the `AppComponent` template so the view also displays the sunflower:
 
@@ -952,8 +952,8 @@ In the logical tree, this is represented as follows:
   &lt;#VIEW&gt;
     &lt;p&gt;Emoji from FlowerService: {{flower.emoji}} (&#x1F33A;)&lt;/p&gt;
     &lt;app-child &commat;Provide(FlowerService="&#x1F33B;")
-               &commat;Inject(FlowerService)=&gt;"&#x1F33B;"&gt; &lt;!-- 검색이 여기에서 끝납니다. --&gt;
-      &lt;#VIEW&gt; &lt;!-- 검색이 여기에서 시작됩니다. --&gt;
+               &commat;Inject(FlowerService)=&gt;"&#x1F33B;"&gt; &lt;!-- search ends here --&gt;
+      &lt;#VIEW&gt; &lt;!-- search starts here --&gt;
         &lt;h2&gt;Parent Component&lt;/h2&gt;
         &lt;p&gt;Emoji from FlowerService: {{flower.emoji}} (&#x1F33B;)&lt;/p&gt;
       &lt;/#VIEW&gt;
@@ -970,14 +970,14 @@ It stops as soon as it finds the `FlowerService` and never sees the red hibiscus
 -->
 이제 `ChildComponent` 클래스에 `FlowerService`의 프로바이더를 등록해서 의존성 토큰 규칙을 조금 복잡하게 만들어 봅시다:
 
-<code-example header="providers-viewproviders/src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.1.ts" region="flowerservice"></code-example>
+<code-example header="src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.1.ts" region="flowerservice"></code-example>
 
 이제는 `FlowerService`의 프로바이더가 `@Component()` 데코레이터에 등록되었기 때문에 `<app-child>`가 의존성으로 요청하는 서비스의 인스턴스는 `<app-child>`에 구성되는 `ElementInjector`만 봐도 찾을 수 있습니다.
 아직까지는 인젝터 트리를 따라 올라갈 필요가 없습니다.
 
 이 서비스를 `ChildComponent`의 템플릿에 다음과 같이 바인딩합니다.
 
-<code-example header="providers-viewproviders/src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="flower-binding"></code-example>
+<code-example header="src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="flower-binding"></code-example>
 
 그리고 화면에 `AppComponent` 템플릿 제일 아래에 `<app-child>`를 추가하면 다음과 같은 문구가 표시됩니다:
 
@@ -1038,11 +1038,11 @@ The example application features a second service, the `AnimalService` to demons
 
 First, create an `AnimalService` with an `emoji` property of whale <code>&#x1F433;</code>:
 
-<code-example header="providers-viewproviders/src/app/animal.service.ts" path="providers-viewproviders/src/app/animal.service.ts" region="animal-service"></code-example>
+<code-example header="src/app/animal.service.ts" path="providers-viewproviders/src/app/animal.service.ts" region="animal-service"></code-example>
 
 Following the same pattern as with the `FlowerService`, inject the `AnimalService` in the `AppComponent` class:
 
-<code-example header="providers-viewproviders/src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.ts" region="inject-animal-service"></code-example>
+<code-example header="src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.ts" region="inject-animal-service"></code-example>
 
 <div class="alert is-helpful">
 
@@ -1054,16 +1054,16 @@ You can leave all the `FlowerService` related code in place as it will allow a c
 Add a `viewProviders` array and inject the `AnimalService` in the `<app-child>` class, too, but give `emoji` a different value.
 Here, it has a value of dog <code>&#x1F436;</code>.
 
-<code-example header="providers-viewproviders/src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.ts" region="provide-animal-service"></code-example>
+<code-example header="src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.ts" region="provide-animal-service"></code-example>
 
 Add bindings to the `ChildComponent` and the `AppComponent` templates.
 In the `ChildComponent` template, add the following binding:
 
-<code-example header="providers-viewproviders/src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="animal-binding"></code-example>
+<code-example header="src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="animal-binding"></code-example>
 
 Additionally, add the same to the `AppComponent` template:
 
-<code-example header="providers-viewproviders/src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-animal"></code-example>
+<code-example header="src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-animal"></code-example>
 
 Now you should see both values in the browser:
 
@@ -1116,11 +1116,11 @@ It doesn't need to continue searching the `ElementInjector` tree, nor does it ne
 
 먼저, `emoji` 프로퍼티 값이 고래\(<code>&#x1F433;</code>\)인 `AnimalService` 서비스를 생성합니다:
 
-<code-example header="providers-viewproviders/src/app/animal.service.ts" path="providers-viewproviders/src/app/animal.service.ts" region="animal-service"></code-example>
+<code-example header="src/app/animal.service.ts" path="providers-viewproviders/src/app/animal.service.ts" region="animal-service"></code-example>
 
 그리고 `FlowerService` 때와 마찬가지로 `AnimalService`도 `AppComponent` 클래스에 의존성으로 주입합니다:
 
-<code-example header="providers-viewproviders/src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.ts" region="inject-animal-service"></code-example>
+<code-example header="src/app/app.component.ts" path="providers-viewproviders/src/app/app.component.ts" region="inject-animal-service"></code-example>
 
 <div class="alert is-helpful">
 
@@ -1132,15 +1132,15 @@ It doesn't need to continue searching the `ElementInjector` tree, nor does it ne
 `<app-child>` 클래스의 `viewProviders` 배열에 `AnimalService`를 추가하는데 `emoji`에는 다른 값을 할당해 봅시다.
 이번 예제에서는 강아지\(<code>&#x1F436;</code>\)를 할당했습니다.
 
-<code-example header="providers-viewproviders/src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.ts" region="provide-animal-service"></code-example>
+<code-example header="src/app/child.component.ts" path="providers-viewproviders/src/app/child/child.component.ts" region="provide-animal-service"></code-example>
 
 그리고 `AppComponent` 템플릿에 `ChildComponent`를 바인딩하고 `ChildComponent` 템플릿에는 다음과 같은 내용을 추가합니다:
 
-<code-example header="providers-viewproviders/src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="animal-binding"></code-example>
+<code-example header="src/app/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="animal-binding"></code-example>
 
 그리고 같은 내용을 `AppComponent` 템플릿에도 추가합니다:
 
-<code-example header="providers-viewproviders/src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-animal"></code-example>
+<code-example header="src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="binding-animal"></code-example>
 
 그러면 브라우저에 이런 내용이 표시됩니다.
 
@@ -1185,20 +1185,20 @@ To see the difference between using `providers` and `viewProviders`, add another
 `InspectorComponent` will be a child of the `ChildComponent`.
 In `inspector.component.ts`, inject the `FlowerService` and `AnimalService` in the constructor:
 
-<code-example header="providers-viewproviders/src/app/inspector/inspector.component.ts" path="providers-viewproviders/src/app/inspector/inspector.component.ts" region="injection"></code-example>
+<code-example header="src/app/inspector/inspector.component.ts" path="providers-viewproviders/src/app/inspector/inspector.component.ts" region="injection"></code-example>
 
 You do not need a `providers` or `viewProviders` array.
 Next, in `inspector.component.html`, add the same markup from previous components:
 
-<code-example header="providers-viewproviders/src/app/inspector/inspector.component.html" path="providers-viewproviders/src/app/inspector/inspector.component.html" region="binding"></code-example>
+<code-example header="src/app/inspector/inspector.component.html" path="providers-viewproviders/src/app/inspector/inspector.component.html" region="binding"></code-example>
 
 Remember to add the `InspectorComponent` to the `AppModule` `declarations` array.
 
-<code-example header="providers-viewproviders/src/app/app.module.ts" path="providers-viewproviders/src/app/app.module.ts" region="appmodule"></code-example>
+<code-example header="src/app/app.module.ts" path="providers-viewproviders/src/app/app.module.ts" region="appmodule"></code-example>
 
 Next, make sure your `child.component.html` contains the following:
 
-<code-example header="providers-viewproviders/src/app/child/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="child-component"></code-example>
+<code-example header="src/app/child/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="child-component"></code-example>
 
 The first two lines, with the bindings, are there from previous steps.
 The new parts are  `<ng-content>` and `<app-inspector>`.
@@ -1206,7 +1206,7 @@ The new parts are  `<ng-content>` and `<app-inspector>`.
 
 Next, add the following to `app.component.html` to take advantage of content projection.
 
-<code-example header="providers-viewproviders/src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="content-projection"></code-example>
+<code-example header="src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="content-projection"></code-example>
 
 The browser now renders the following, omitting the previous examples for brevity:
 
@@ -1243,13 +1243,18 @@ The `AnimalService` in the logical tree would look like this:
             &commat;Inject(AnimalService=&gt;"&#x1F436;")&gt;
         &lt;!-- ^^using viewProviders means AnimalService is available in &lt;#VIEW&gt;--&gt;
         &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F436;)&lt;/p&gt;
-        &lt;app-inspector&gt;
-          &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F436;)&lt;/p&gt;
-        &lt;/app-inspector&gt;
+  
+        &lt;div class="container"&gt;
+          &lt;h3&gt;Content projection&lt;/h3&gt;
+          &lt;app-inspector &commat;Inject(AnimalService) animal=&gt;"&#x1F433;"&gt;
+            &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F433;)&lt;/p&gt;
+          &lt;/app-inspector&gt;
+        &lt;/div&gt;
+  
       &lt;/#VIEW&gt;
       &lt;app-inspector&gt;
         &lt;#VIEW&gt;
-          &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F433;)&lt;/p&gt;
+          &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F436;)&lt;/p&gt;
         &lt;/#VIEW&gt;
       &lt;/app-inspector&gt;
     &lt;/app-child&gt;
@@ -1264,20 +1269,20 @@ The `<app-inspector>` can only see the dog <code>&#x1F436;</code> if it is also 
 `providers`와 `viewProviders`가 어떻게 다른지 알아보기 위해 예제 앱에 `InspectorComponent`라는 컴포넌트를 추가해 봅시다.
 `InspectorComponent`는 `ChildComponent`의 자식 컴포넌트로 구성하는데, `inspector.component.ts` 파일의 생성자에 `FlowerService`와 `AnimalService`를 의존성으로 주입합니다:
 
-<code-example header="providers-viewproviders/src/app/inspector/inspector.component.ts" path="providers-viewproviders/src/app/inspector/inspector.component.ts" region="injection"></code-example>
+<code-example header="src/app/inspector/inspector.component.ts" path="providers-viewproviders/src/app/inspector/inspector.component.ts" region="injection"></code-example>
 
 이 컴포넌트에는 `providers`나 `viewProviders`를 사용할 필요가 없습니다.
 그리고 `inspector.component.html`에 이전과 같은 내용을 추가합니다:
 
-<code-example header="providers-viewproviders/src/app/inspector/inspector.component.html" path="providers-viewproviders/src/app/inspector/inspector.component.html" region="binding"></code-example>
+<code-example header="src/app/inspector/inspector.component.html" path="providers-viewproviders/src/app/inspector/inspector.component.html" region="binding"></code-example>
 
 `AppModule`의 `declarations` 배열에 `InspectorComponent`를 등록해야 한다는 것을 잊지 마세요.
 
-<code-example header="providers-viewproviders/src/app/app.module.ts" path="providers-viewproviders/src/app/app.module.ts" region="appmodule"></code-example>
+<code-example header="src/app/app.module.ts" path="providers-viewproviders/src/app/app.module.ts" region="appmodule"></code-example>
 
 그리고 `child.component.html` 파일을 다음과 같이 수정합니다:
 
-<code-example header="providers-viewproviders/src/app/child/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="child-component"></code-example>
+<code-example header="src/app/child/child.component.html" path="providers-viewproviders/src/app/child/child.component.html" region="child-component"></code-example>
 
 처음 두 줄에는 이전에 설명했던 대로 바인딩이 사용되었습니다.
 그리고 그 다음에는 `<ng-content>`와 `<app-inspector>`가 추가되었습니다.
@@ -1285,7 +1290,7 @@ The `<app-inspector>` can only see the dog <code>&#x1F436;</code> if it is also 
 
 이제 템플릿 조각을 프로젝션하기 위해 `app.component.html` 파일을 다음과 같이 수정합니다.
 
-<code-example header="providers-viewproviders/src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="content-projection"></code-example>
+<code-example header="src/app/app.component.html" path="providers-viewproviders/src/app/app.component.html" region="content-projection"></code-example>
 
 그러면 브라우저가 다음과 같이 렌더링됩니다.
 간단하게 표시하기 위해 이전에 설명한 내용은 생략했습니다:
@@ -1325,13 +1330,18 @@ Emoji from AnimalService: &#x1F436;
             &commat;Inject(AnimalService=&gt;"&#x1F436;")&gt;
         &lt;!-- ^^viewProviders를 사용한다는 것은 &lt;#VIEW&gt;에서 AnimalService를 사용할 수 있도록 등록하는 것을 의미합니다.--&gt;
         &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F436;)&lt;/p&gt;
-        &lt;app-inspector&gt;
-          &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F436;)&lt;/p&gt;
-        &lt;/app-inspector&gt;
+
+        &lt;div class="container"&gt;
+          &lt;h3&gt;Content projection&lt;/h3&gt;
+          &lt;app-inspector &commat;Inject(AnimalService) animal=&gt;"&#x1F433;"&gt;
+            &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F433;)&lt;/p&gt;
+          &lt;/app-inspector&gt;
+        &lt;/div&gt;
+  
       &lt;/#VIEW&gt;
       &lt;app-inspector&gt;
         &lt;#VIEW&gt;
-          &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F433;)&lt;/p&gt;
+          &lt;p&gt;Emoji from AnimalService: {{animal.emoji}} (&#x1F436;)&lt;/p&gt;
         &lt;/#VIEW&gt;
       &lt;/app-inspector&gt;
     &lt;/app-child&gt;
@@ -1512,7 +1522,7 @@ Emoji from FlowerService: &#x1F33A;
 The `<app-child>` currently provides the `AnimalService` in the `viewProviders` array with the value of dog <code>&#x1F436;</code>.
 Because the injector has only to look at the `ElementInjector` of the `<app-child>` for the `AnimalService`, it never sees the whale <code>&#x1F433;</code>.
 
-As in the `FlowerService` example, if you add `@SkipSelf()` to the constructor for the `AnimalService`, the injector won't look in the  `ElementInjector` or the current `<app-child>` for the `AnimalService`.
+As in the `FlowerService` example, if you add `@SkipSelf()` to the constructor for the `AnimalService`, the injector won't look in the  `ElementInjector` of the current `<app-child>` for the `AnimalService`.
 
 <code-example format="typescript" language="typescript">
 

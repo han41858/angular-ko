@@ -517,21 +517,32 @@ Angular CLI로 생성한 `app-routing.module.ts` 파일을 보면, `imports` 배
 
 <!--
 Preloading improves UX by loading parts of your application in the background.
-You can preload modules or component data.
+You can preload modules, standalone components or component data. 
 -->
 사전 로딩을 활용하면 애플리케이션 코드를 백그라운드에서 로드할 수 있습니다.
-모듈이나 컴포넌트 데이터가 사전 로딩 대상이 될 수 있습니다.
+모듈이나 독립 컴포넌트, 컴포넌트 데이터가 사전 로딩 대상이 될 수 있습니다.
 
 <!--
-### Preloading modules
+### Preloading modules and standalone components
 -->
-### 모듈 사전 로딩하기
+### 모듈, 독립 컴포넌트 사전로딩하기
 
 <!--
-Preloading modules improves UX by loading parts of your application in the background. By doing this, users don't have to wait for the elements to download when they activate a route.
+Preloading modules and standalone components improves UX by loading parts of your application in the background. By doing this, users don't have to wait for the elements to download when they activate a route.
 
-To enable preloading of all lazy loaded modules, import the `PreloadAllModules` token from the Angular `router`.
+To enable preloading of all lazy loaded modules and standalone components, import the `PreloadAllModules` token from the Angular `router`.
+-->
+모듈을 사전 로딩하면 사용자를 방해하지 않으면서 애플리케이션의 일부를 백그라운드에서 받아두고, 이후에 화면을 즉시 전환할 수 있기 때문에 UX를 향상시킬 수 있습니다.
 
+지연 로딩되는 모든 모듈을 사전 로딩하려면 Angular `router`에 `PreloadAllModules` 토큰을 지정하면 됩니다.
+
+
+<!--
+### Module based application
+-->
+### 모듈 기반의 애플리케이션
+
+<!--
 <code-example header="AppRoutingModule (excerpt)">
 
 import { PreloadAllModules } from '&commat;angular/router';
@@ -551,10 +562,6 @@ RouterModule.forRoot(
 
 </code-example>
 -->
-모듈을 사전 로딩하면 사용자를 방해하지 않으면서 애플리케이션의 일부를 백그라운드에서 받아두고, 이후에 화면을 즉시 전환할 수 있기 때문에 UX를 향상시킬 수 있습니다.
-
-지연 로딩되는 모든 모듈을 사전 로딩하려면 Angular `router`에 `PreloadAllModules` 토큰을 지정하면 됩니다.
-
 <code-example header="AppRoutingModule (일부)">
 
 import { PreloadAllModules } from '&commat;angular/router';
@@ -571,6 +578,39 @@ RouterModule.forRoot(
     preloadingStrategy: PreloadAllModules
   }
 )
+
+</code-example>
+
+
+<!--
+### Standalone application
+-->
+### 독립 애플리케이션
+
+<!--
+For standalone applications configure preloading strategies by adding `withPreloading` to  `provideRouter`s RouterFeatures in `app.config.ts`
+-->
+독립 애플리케이션을 사전 로딩하려면 `app.config.ts` 파일의 `provideRouter` 설정에 `withPreloading` 을 지정하면 됩니다.
+
+<code-example header="`app.config.ts`">
+
+import { ApplicationConfig } from '@angular/core';
+import {
+  PreloadAllModules,
+  provideRouter
+  withPreloading,
+} from '@angular/router';
+
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      routes,
+      withPreloading(PreloadAllModules)
+    ),
+  ],
+};
 
 </code-example>
 
@@ -603,7 +643,7 @@ ng generate service &lt;service-name&gt;
 
 </code-example>
 
-In the newly created service, implement the `Resolve` interface provided by the `&commat;angular/router` package:
+In the newly created service, implement the `Resolve` interface provided by the `@angular/router` package:
 
 <code-example header="Resolver service (excerpt)">
 
@@ -824,4 +864,4 @@ You might also be interested in the following:
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2022-05-07

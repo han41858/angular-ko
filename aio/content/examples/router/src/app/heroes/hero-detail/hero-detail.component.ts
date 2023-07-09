@@ -1,14 +1,12 @@
 // #docplaster
 // #docregion
-import { switchMap } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
-// #docregion imports-route-info
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-// #enddocregion imports-route-info
-import { Observable } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
 
-import { HeroService } from '../hero.service';
-import { Hero } from '../hero';
+import {Hero} from '../hero';
+import {HeroService} from '../hero.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -18,22 +16,13 @@ import { Hero } from '../hero';
 export class HeroDetailComponent implements OnInit {
   hero$!: Observable<Hero>;
 
-  // #docregion activated-route
-  constructor(
-    private route: ActivatedRoute,
-  // #enddocregion activated-route
-    private router: Router,
-    private service: HeroService
-  // #docregion activated-route
-  ) {}
-  // #enddocregion activated-route
+  constructor(private route: ActivatedRoute, private router: Router, private service: HeroService) {
+  }
 
 
   ngOnInit() {
     this.hero$ = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.service.getHero(params.get('id')!))
-    );
+        switchMap((params: ParamMap) => this.service.getHero(params.get('id')!)));
   }
 
   // #docregion redirect
@@ -41,7 +30,7 @@ export class HeroDetailComponent implements OnInit {
     const heroId = hero ? hero.id : null;
     // HeroList 컴포넌트에 하이라이트를 표시하기 위해 히어로의 id가 존재하면 전달합니다.
     // 'foo' 프로퍼티는 사용하지 않지만 이렇게 전달할 수도 있습니다.
-    this.router.navigate(['/superheroes', { id: heroId, foo: 'foo' }]);
+    this.router.navigate(['/superheroes', {id: heroId, foo: 'foo'}]);
   }
   // #enddocregion redirect
 }

@@ -1,5 +1,7 @@
 load("//tools:defaults.bzl", "jasmine_node_test", "ts_library")
 
+package(default_visibility = ["//visibility:public"])
+
 ts_library(
     name = "fake_async_lib",
     srcs = [
@@ -15,8 +17,15 @@ ts_library(
 
 jasmine_node_test(
     name = "test",
-    bootstrap = ["//tools/testing:node_es2015"],
+    bootstrap = ["//tools/testing:node"],
     deps = [
         ":fake_async_lib",
     ],
+)
+
+filegroup(
+    name = "files_for_docgen",
+    srcs = glob([
+        "**/*.ts",
+    ]),
 )

@@ -43,14 +43,14 @@ This tells Angular to provide the service in the application root.
 
 <code-example path="providers/src/app/user.service.0.ts"  header="src/app/user.service.ts"></code-example>
 
-For more detailed information on services, see the [Services](tutorial/toh-pt4) chapter of the [Tour of Heroes tutorial](tutorial).
+For more detailed information on services, see the [Services](tutorial/tour-of-heroes/toh-pt4) chapter of the [Tour of Heroes tutorial](tutorial/tour-of-heroes).
 -->
 Angular 6.0 버전부터 Angular CLI로 서비스를 생성하면 `@Injectable()`데코레이터의 `providedIn` 메타데이터 값이 `root`로 설정됩니다.
 그래서 이 서비스는 앱 전역에서 사용할 수 있습니다.
 
 <code-example path="providers/src/app/user.service.0.ts"  header="src/app/user.service.ts"></code-example>
 
-더 자세한 내용은 [히어로들의 여행](tutorial) 튜토리얼의 [서비스](tutorial/toh-pt4) 챕터를 참고하세요.
+더 자세한 내용은 [히어로들의 여행](tutorial/tour-of-heroes) 튜토리얼의 [서비스](tutorial/tour-of-heroes/toh-pt4) 챕터를 참고하세요.
 
 
 <!--

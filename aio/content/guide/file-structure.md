@@ -154,7 +154,7 @@ Subfolders contain the application source and application-specific configuration
 | `favicon.ico`             | An icon to use for this application in the bookmark bar.                                                                                                                                                                                                                                                                                                   |
 | `index.html`              | The main HTML page that is served when someone visits your site. The CLI automatically adds all JavaScript and CSS files when building your app, so you typically don't need to add any `<script>` or` <link>` tags here manually.                                                                                                                         |
 | `main.ts`                 | The main entry point for your application. Compiles the application with the [JIT compiler](guide/glossary#jit) and bootstraps the application's root module \(AppModule\) to run in the browser. You can also use the [AOT compiler](guide/aot-compiler) without changing any code by appending the `--aot` flag to the CLI `build` and `serve` commands. |
-| `styles.sass`             | Lists CSS files that supply styles for a project. The extension reflects the style preprocessor you have configured for the project.                                                                                                                                                                                                                       |
+| `styles.css`             | Lists CSS files that supply styles for a project. The extension reflects the style preprocessor you have configured for the project.                                                                                                                                                                                                                       |
 
 <div class="alert is-helpful">
 
@@ -169,28 +169,26 @@ For more information, see [Strict mode](guide/strict-mode).
 Inside the `src` folder, the `app` folder contains your project's logic and data.
 Angular components, templates, and styles go here.
 
-| `src/app/` files            | Purpose                                                                                                                                                                                                                                                    |
-|:---                         |:---                                                                                                                                                                                                                                                        |
-| `app/app.component.ts`      | Defines the logic for the application's root component, named `AppComponent`. The view associated with this root component becomes the root of the [view hierarchy](guide/glossary#view-hierarchy) as you add components and services to your application. |
-| `app/app.component.html`    | Defines the HTML template associated with the root `AppComponent`.                                                                                                                                                                                         |
-| `app/app.component.css`     | Defines the base CSS stylesheet for the root `AppComponent`.                                                                                                                                                                                               |
-| `app/app.component.spec.ts` | Defines a unit test for the root `AppComponent`.                                                                                                                                                                                                           |
-| `app/app.module.ts`         | Defines the root module, named `AppModule`, that tells Angular how to assemble the application. Initially declares only the `AppComponent`. As you add more components to the app, they must be declared here.                                             |
+| `src/app/` files | Purpose |
+|---|---|
+| `app/app.config.ts` | Defines the application config logic that tells Angular how to assemble the application. As you add more providers to the app, they must be declared here.<br><br>_Only generated when using the `--standalone` option._ |
+| `app/app.component.ts` | Defines the logic for the application's root component, named `AppComponent`. The view associated with this root component becomes the root of the [view hierarchy](guide/glossary#view-hierarchy) as you add components and services to your application. |
+| `app/app.component.html` | Defines the HTML template associated with the root `AppComponent`. |
+| `app/app.component.css` | Defines the base CSS stylesheet for the root `AppComponent`. |
+| `app/app.component.spec.ts` | Defines a unit test for the root `AppComponent`. |
+| `app/app.module.ts` | Defines the root module, named `AppModule`, that tells Angular how to assemble the application. Initially declares only the `AppComponent`. As you add more components to the app, they must be declared here.<br><br>_Only generated when using the `--standalone` option._ |
 -->
 `src/` 폴더에는 애플리케이션을 실행하거나 테스트할 때 필요한 파일들이 존재합니다.
 그리고 이 폴더의 하위 폴더에는 해당 애플리케이션에만 적용되는 환경설정 파일이나 애플리케이션을 구성하는 파일이 존재합니다.
 
-| 앱 지원 파일         | 용도                                                                                                                                                                                                                             |
-|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `app/`          | 애플리케이션 로직과 데이터를 관리하는 컴포넌트 파일이 구성됩니다. 자세한 내용은 [아래](#app-src)를 참고하세요.                                                                                                                                                            |
-| `assets/`       | 애플리케이션을 빌드할 때 그대로 복사할 이미지 파일이나 리소스 파일이 존재합니다.                                                                                                                                                                                  |
-| `environments/` | 환경에 맞게 적용될 빌드 환경설정 옵션이 존재합니다. 아무 접미사 없는 파일이 기본으로 적용되는 파일이며, 운영용 빌드 환경설정 파일은 "prod" 접미사가 붙습니다. 추가로 필요하면 다른 빌드 환경설정을 추가할 수도 있습니다.                                                                                                |
-| `favicon.ico`   | 애플리케이션이 즐겨찾기에 추가될 때 표시될 아이콘입니다.                                                                                                                                                                                                |
-| `index.html`    | 웹사이트에 접근한 사용자가 보게 되는 메인 HTML 파일입니다. 앱에 사용되는 JavaScript 파일과 CSS 파일은 Angular CLI가 빌드시점에 자동으로 `index.html` 파일에 추가하기 때문에 `<script>` 태그나 `<link>` 태그를 수동으로 작성할 필요는 없습니다.                                                            |
-| `main.ts`       | 애플리케이션의 메인 진입점입니다. [JIT 컴파일러](guide/glossary#jit)를 사용하면 이 파일을 기준으로 애플리케이션의 최상위 모듈(AppModule)이 부트스트랩됩니다. Angular CLI로 `build`, `serve` 명령을 실행할 때 `--aot` 플래그를 사용하면 [AOT 컴파일러](guide/aot-compiler)가 사용되는데, 이 컴파일러의 진입점도 이 파일입니다. |
-| `polyfills.ts`  | 오래된 브라우저를 지원하기 위한 폴리필 스크립트를 작성합니다.                                                                                                                                                                                             |
-| `styles.sass`   | 프로젝트에 적용될 CSS 파일 목록을 지정합니다. 프로젝트에 지정된 기본 스타일 전처리기에 따라서 확장자가 달라질 수 있습니다.                                                                                                                                                        |
-| `test.ts`       | 유닛 테스트를 실행할 때 진입점이 될 파일입니다. 이 파일은 수정할 일이 거의 없습니다.                                                                                                                                                                              |
+| 앱 지원 파일       | 용도                                                                                                                                                                                                                             |
+|:--------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `app/`        | 애플리케이션 로직과 데이터를 관리하는 컴포넌트 파일이 구성됩니다. 자세한 내용은 [아래](#app-src)를 참고하세요.                                                                                                                                                            |
+| `assets/`     | 애플리케이션을 빌드할 때 그대로 복사할 이미지 파일이나 리소스 파일이 존재합니다.                                                                                                                                                                                  |
+| `favicon.ico` | 애플리케이션이 즐겨찾기에 추가될 때 표시될 아이콘입니다.                                                                                                                                                                                                |
+| `index.html`  | 웹사이트에 접근한 사용자가 보게 되는 메인 HTML 파일입니다. 앱에 사용되는 JavaScript 파일과 CSS 파일은 Angular CLI가 빌드시점에 자동으로 `index.html` 파일에 추가하기 때문에 `<script>` 태그나 `<link>` 태그를 수동으로 작성할 필요는 없습니다.                                                            |
+| `main.ts`     | 애플리케이션의 메인 진입점입니다. [JIT 컴파일러](guide/glossary#jit)를 사용하면 이 파일을 기준으로 애플리케이션의 최상위 모듈(AppModule)이 부트스트랩됩니다. Angular CLI로 `build`, `serve` 명령을 실행할 때 `--aot` 플래그를 사용하면 [AOT 컴파일러](guide/aot-compiler)가 사용되는데, 이 컴파일러의 진입점도 이 파일입니다. |
+| `styles.css`  | 프로젝트에 적용될 CSS 파일 목록을 지정합니다. 프로젝트에 지정된 기본 스타일 전처리기에 따라서 확장자가 달라질 수 있습니다.                                                                                                                                                        |
 
 <div class="alert is-helpful">
 
@@ -205,13 +203,14 @@ Angular components, templates, and styles go here.
 그리고 `src/app/` 폴더에는 프로젝트 로직과 데이터를 관리하는 파일들이 위치합니다.
 Angular 컴포넌트 코드와 템플릿, 스타일 파일도 `app/` 폴더 안에 구성됩니다.
 
-| `src/app/` 파일               | 용도                                                                                                                                                  |
-|:----------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `app/app.component.ts`      | 앱 최상위 컴포넌트 `AppComponent`를 정의합니다. 사용자가 보는 화면은 이 최상위 컴포넌트를 기준으로 구성된 [뷰 계층](guide/glossary#view-hierarchy)이며, 개발자가 구현한 컴포넌트와 서비스도 최상위 컴포넌트 안에서 동작합니다. |
-| `app/app.component.html`    | 최상위 컴포넌트 `AppComponent`의 HTML 템플릿을 정의합니다.                                                                                                           |
-| `app/app.component.css`     | 최상위 컴포넌트 `AppComponent`의 CSS 스타일을 정의합니다.                                                                                                            |
-| `app/app.component.spec.ts` | 최상위 컴포넌트 `AppComponent`의 유닛 테스트 스펙을 정의합니다.                                                                                                          |
-| `app/app.module.ts`         | 애플리케이션 구성이 시작될 최상위 모듈 `AppModule`을 정의합니다. 프로젝트를 생성한 시점에는 `AppComponent`만 존재하지만, 앱이 커질수록 컴포넌트도 계속 늘어날 것입니다.                                          |
+| `src/app/` 파일               | 용도                                                                                                                                                                                                                       |
+|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `app/app.config.ts`         | Defines the application config logic that tells Angular how to assemble the application. As you add more providers to the app, they must be declared here.<br><br>_Only generated when using the `--standalone` option._ |
+| `app/app.component.ts`      | 앱 최상위 컴포넌트 `AppComponent`를 정의합니다. 사용자가 보는 화면은 이 최상위 컴포넌트를 기준으로 구성된 [뷰 계층](guide/glossary#view-hierarchy)이며, 개발자가 구현한 컴포넌트와 서비스도 최상위 컴포넌트 안에서 동작합니다.                                                                      |
+| `app/app.component.html`    | 최상위 컴포넌트 `AppComponent`의 HTML 템플릿을 정의합니다.                                                                                                                                                                                |
+| `app/app.component.css`     | 최상위 컴포넌트 `AppComponent`의 CSS 스타일을 정의합니다.                                                                                                                                                                                 |
+| `app/app.component.spec.ts` | 최상위 컴포넌트 `AppComponent`의 유닛 테스트 스펙을 정의합니다.                                                                                                                                                                               |
+| `app/app.module.ts`         | 애플리케이션 구성이 시작될 최상위 모듈 `AppModule`을 정의합니다. 프로젝트를 생성한 시점에는 `AppComponent`만 존재하지만, 앱이 커질수록 컴포넌트도 계속 늘어날 것입니다.<br><br>_`--standalone` 옵션을 사용할 때만 생성됩니다._                                                                     |
 
 
 <!--
@@ -342,7 +341,7 @@ When you create projects this way, the file structure of the workspace is entire
                   &hellip; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --(library-specific config)
                 </div>
                 <div class="file">
-                  src &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --source and support files for library)
+                  src &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --(source and support files for library)
                 </div>
             </div>
         </div>
@@ -442,4 +441,4 @@ Angular CLI로 `ng generate library my-lib` 명령을 실행하면 이 라이브
 
 <!-- end links -->
 
-@reviewed 2022-10-24
+@reviewed 2023-04-24

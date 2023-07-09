@@ -346,18 +346,49 @@ Content Security Policy \(CSP\) is a defense-in-depth technique to prevent XSS.
 To enable CSP, configure your web server to return an appropriate `Content-Security-Policy` HTTP header.
 Read more about content security policy at the [Web Fundamentals guide](https://developers.google.com/web/fundamentals/security/csp) on the Google Developers website.
 
-The minimal policy required for brand-new Angular is:
+The minimal policy required for a brand-new Angular application is:
 
 <code-example format="none" language="none">
 
-default-src 'self'; style-src 'self' 'unsafe-inline';
+default-src 'self'; style-src 'self' 'nonce-randomNonceGoesHere'; script-src 'self' 'nonce-randomNonceGoesHere';
 
 </code-example>
 
-| Sections                            | Details |
-|:---                                 |:---     |
-| `default-src 'self';`               | Allows the page to load all its required resources from the same origin.                                                                                                                                                  |
-| `style-src 'self' 'unsafe-inline';` | Allows the page to load global styles from the same origin \(`'self'`\) and enables components to load their styles \(`'unsafe-inline'` - see [`angular/angular#6361`](https://github.com/angular/angular/issues/6361)\). |
+When serving your Angular application, the server should include a  randomly-generated nonce in the HTTP header for each request.
+You must provide this nonce to Angular so that the framework can render `<style>` elements.
+You can set the nonce for Angular in one of two ways:
+
+1. Set the `ngCspNonce` attribute on the root application element as `<app ngCspNonce="randomNonceGoesHere"></app>`. Use this approach if you have access to server-side templating that can add the nonce both to the header and the `index.html` when constructing the response.
+2. Provide the nonce using the `CSP_NONCE` injection token. Use this approach if you have access to the nonce at runtime and you want to be able to cache the `index.html`.
+
+<code-example format="typescript" language="typescript">
+
+import {bootstrapApplication, CSP_NONCE} from '&commat;angular/core';
+import {AppComponent} from './app/app.component';
+
+bootstrapApplication(AppComponent, {
+  providers: [{
+    provide: CSP_NONCE,
+    useValue: globalThis.myRandomNonceValue
+  }]
+});
+
+</code-example>
+
+<div class="callout is-helpful">
+
+Always ensure that the nonces you provide are <strong>unique per request</strong> and that they are not predictable or guessable.
+If an attacker can predict future nonces, they can circumvent the protections offered by CSP.
+
+</div>
+
+If you cannot generate nonces in your project, you can allow inline styles by adding `'unsafe-inline'` to the `style-src` section of the CSP header.
+
+| Sections                | Details |
+|:---                     |:---     |
+| `default-src 'self';`   | Allows the page to load all its required resources from the same origin. |
+| `style-src 'self' 'nonce-randomNonceGoesHere';`     | Allows the page to load global styles from the same origin \(`'self'`\) and styles inserted by Angular with the `nonce-randomNonceGoesHere`. |
+| `script-src 'self' 'nonce-randomNonceGoesHere';`     | Allows the page to load JavaScript from the same origin \(`'self'`\) and scripts inserted by the Angular CLI with the `nonce-randomNonceGoesHere`. This is only required if you're using critical CSS inlining. |
 
 Angular itself requires only these settings to function correctly.
 As your project grows, you may need to expand your CSP settings to accommodate extra features specific to your application.
@@ -370,19 +401,53 @@ CSP를 활성화하려면 웹서버가 응답을 반환할 때 HTTP 헤더에 `C
 
 <code-example format="none" language="none">
 
-default-src 'self'; style-src 'self' 'unsafe-inline';
+default-src 'self'; style-src 'self' 'nonce-randomNonceGoesHere'; script-src 'self' 'nonce-randomNonceGoesHere';
 
 </code-example>
 
-| 섹션                                  | 설명                                                                                                                                                     |
-|:------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `default-src 'self';`               | 모든 리소스가 오리진이 같을 때만 페이지 로드를 허용합니다.                                                                                                                      |
-| `style-src 'self' 'unsafe-inline';` | 전역 스타일은 동일 오리진 \(`'self'`\), 컴포넌트는 개별 스타일\(`'unsafe-inline'` [`angular/angular#6361`](https://github.com/angular/angular/issues/6361)을 참고하세요\)도 허용합니다. |
+개발 서버로 Angular 애플리케이션을 실행하면 서버는 매번 요청마다 HTTP 헤더에 무작위로 생성된 임시 변수(nonce)를 추가할 수 있습니다.
+그러면 Angular 에서도 이 임시 변수를 엘리먼트에 지정할 수 있습니다.
+두가지 방식을 활용할 수 있습니다:
+
+1. 최상위 애플리케이션 엘리먼트에 `ngCspNonce` 애트리뷰트를 추가해서 `<app ngCspNonce="randomNonceGoesHere"></app>`로 지정합니다. 이 방식은 서버 사이드에서 템플릿을 구성하는 경우 헤더와 `index.html`에 모두 임시 변수를 추가할 수 있는 경우에 사용합니다.
+2. 임시 변수를 `CSP_NONCE` 의존성 주입 토큰으로 활용할 수 있습니다. 이 방식은 임시 변수를 실행시점에 확인할 수 있거나, 캐싱된 `index.html` 파일을 활용하는 경우에 사용합니다.
+   
+<code-example format="typescript" language="typescript">
+
+import {bootstrapApplication, CSP_NONCE} from '&commat;angular/core';
+import {AppComponent} from './app/app.component';
+
+bootstrapApplication(AppComponent, {
+  providers: [{
+    provide: CSP_NONCE,
+    useValue: globalThis.myRandomNonceValue
+  }]
+});
+
+</code-example>
+
+<div class="callout is-helpful">
+
+임시 변수가 <strong>보내는 요청마다 달라지는지</strong>, 예측할 수 없는 값인지 반드시 확인하세요.
+이 임시 변수를 예측할 수 있다면 사이트 공격자가 CSP 보호 기능을 우회할 수 있습니다.
+
+</div>
+
+프로젝트에서 임시 변수를 활용하지 않는다면, CSP 헤더의 `style-src` 섹션에 `unsafe-inline`를 인라인 스타일로 추가하면 됩니다.
+
+| 섹션                                               | 설명                                                                                                                                |
+|:-------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------|
+| `default-src 'self';`                            | 같은 오리진에 있는 리소스 로드를 모두 허용합니다.                                                                                                      |
+| `style-src 'self' 'nonce-randomNonceGoesHere';`  | 같은 오리진\(`'self'`\)에 존재하는 전역 스타일과 `nonce-randomNonceGoesHere`가 지정된 스타일 로드를 허용합니다.                                                  |
+| `script-src 'self' 'nonce-randomNonceGoesHere';` | 같은 오리진\(`'self'`\)에 존재하는 JavaScript와 Angular CLI로 `nonce-randomNonceGoesHere`가 추가된 스크립트 로드를 허용합니다. 이 방식은 CSS를 인라인으로 사용할 때만 필요합니다. |
 
 Angular는 이 값들만 허용합니다.
-하지만 프로젝트가 점점 커지면 애플리케이션 상황에 따라 이 설정을 변경해야 하는 경우도 있습니다.
+프로젝트가 점점 커지면 애플리케이션 상황에 따라 이 설정을 변경해야 하는 경우도 있습니다.
+
 
 <a id="trusted-types"></a>
+
+<!-- vale Angular.Google_Headings = NO -->
 
 <!--
 ### Enforcing Trusted Types
@@ -390,7 +455,7 @@ Angular는 이 값들만 허용합니다.
 ### 안전한 타입 강제하기
 
 <!--
-We recommend the use of [Trusted Types](https://w3c.github.io/webappsec-trusted-types/dist/spec) as a way to help secure your applications from cross-site scripting attacks.
+We recommend the use of [Trusted Types](https://w3c.github.io/trusted-types/dist/spec/) as a way to help secure your applications from cross-site scripting attacks.
 Trusted Types is a [web platform](https://en.wikipedia.org/wiki/Web_platform) feature that can help you prevent cross-site scripting attacks by enforcing safer coding practices.
 Trusted Types can also help simplify the auditing of application code.
 
@@ -459,7 +524,7 @@ To learn more about troubleshooting Trusted Type configurations, the following r
 
 </div>
 -->
-크로스 사이트 스크립트 공격을 방어하려면 [안전한 타입\(Trusted Types\)](https://w3c.github.io/webappsec-trusted-types/dist/spec) 사용을 권장합니다.
+크로스 사이트 스크립트 공격을 방어하려면 [안전한 타입\(Trusted Types\)](https://w3c.github.io/trusted-types/dist/spec/) 사용을 권장합니다.
 안전한 타입이란 [웹 플랫폼](https://en.wikipedia.org/wiki/Web_platform)이 정의하는 기능이며, 이 타입을 사용하면 크로스 사이트 스크립트 공격을 방어할 뿐 아니라 애플리케이션 코드를 간단하게 유지하는 데에도 도움을 줍니다.
 
 <div class="callout is-helpful">
@@ -661,6 +726,8 @@ Open Web Application Security Project \(OWASP\)에서 제공하는 CSRF 방어 �
 Dave Smith가 [AngularConnect 2016에서 발표한 XSRF에 대한 이야기](https://www.youtube.com/watch?v=9inczw6qtpY "Cross Site Request Funkery Securing Your Angular Apps From Evil Doers")도 도움이 될 것입니다.
 
 
+<!-- vale Angular.Google_Acronyms = YES -->
+
 <a id="xssi"></a>
 
 <!--
@@ -711,4 +778,4 @@ Angular 애플리케이션은 반드시 일반적인 웹 애플리케이션이 �
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-05-16

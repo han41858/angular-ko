@@ -15,7 +15,7 @@ export class BypassSecurityComponent {
 
   // #docregion trust-url
   constructor(private sanitizer: DomSanitizer) {
-    // javscript: 와 같은 코드가 직접 실행되는 것은 위험합니다.
+    // javascript: 와 같은 코드가 직접 실행되는 것은 위험합니다.
     // 그래서 Angular는 이 코드를 데이터 바인딩할 때 자동으로 안전성 검사를 실행하지만,
     // 이 코드를 안전한 것으로 간주하고 안전성 검사를 실행하지 않을 수도 있습니다.
     this.dangerousUrl = 'javascript:alert("Hi there")';

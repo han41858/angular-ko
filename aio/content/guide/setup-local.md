@@ -53,7 +53,7 @@ To install Angular on your local system, you need the following:
 
 | Requirements                         | Details |
 |:---                                  |:---     |
-| Node.js <a id="nodejs"></a>          | Angular requires an [active LTS or maintenance LTS](https://nodejs.org/about/releases) version of Node.js.  <div class="alert is-helpful"> For information about specific version requirements, see the `engines` key in the [package.json](https://unpkg.com/browse/@angular/core/package.json) file. </div> For more information on installing Node.js, see [nodejs.org](https://nodejs.org "Nodejs.org"). If you are unsure what version of Node.js runs on your system, run `node -v` in a terminal window. |
+| Node.js <a id="nodejs"></a>          | Angular requires an [active LTS or maintenance LTS](https://nodejs.org/about/releases) version of Node.js. <div class="alert is-helpful">For information see the [version compatibility](guide/versions) guide.</div> For more information on installing Node.js, see [nodejs.org](https://nodejs.org "Nodejs.org"). If you are unsure what version of Node.js runs on your system, run `node -v` in a terminal window. |
 | npm package manager <a id="npm"></a> | Angular, the Angular CLI, and Angular applications depend on [npm packages](https://docs.npmjs.com/getting-started/what-is-npm) for many features and functions. To download and install npm packages, you need an npm package manager. This guide uses the [npm client](https://docs.npmjs.com/cli/install) command line interface, which is installed with `Node.js` by default. To check that you have the npm client installed, run `npm -v` in a terminal window.                                          |
 -->
 Angular 프레임워크를 사용하려면 다음 내용을 미리 알고 있어야 합니다:
@@ -66,10 +66,10 @@ Angular 프레임워크를 사용하려면 다음 내용을 미리 알고 있어
 
 Angular를 로컬 환경에 설치하려면 이런 것들이 필요합니다:
 
-| 항목                                   | 설명                                                                                                                                                                                                                                                                                                                                                                                                |
-|:-------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Node.js <a id="nodejs"></a>          | Angular를 실행하려면 [현재 활성 LTS 버전이거나 유지보수 중인 LTS 버전](https://nodejs.org/about/releases)의 Node.js가 필요합니다. <div class="alert is-helpful"> 정확히 어떤 버전이 필요한지 확인하려면 [package.json](https://unpkg.com/browse/@angular/core/package.json) 파일의 `engines` 필드를 확인해 보세요. </div> Node.js 설치방법을 확인하려면 [nodejs.org](https://nodejs.org "Nodejs.org")를 참고하세요. 시스템에 설치된 Node.js 버전을 확인하려면 터미널에서 `node -v` 명령을 실행하면 됩니다. |
-| npm package manager <a id="npm"></a> | Angular, Angular CLI, Angular 애플리케이션은 모두 [npm 패키지](https://docs.npmjs.com/getting-started/what-is-npm)를 활용하는 방식으로 동작합니다. 그래서 npm 패키지를 다운받기 위해 npm 패키지 매니저가 필요합니다. 이 가이드 문서에서는 [npm 클라이언트](https://docs.npmjs.com/cli/install) 커맨드라인 인터페이스를 사용하는데, 이 툴은 Node.js를 설치할 때 함께 설치됩니다. npm이 설치되었는지 확인하려면 터미널에서 `npm -v` 명령을 실행하면 됩니다.                                                                    |
+| 항목                                   | 설명                                                                                                                                                                                                                                                                                                                             |
+|:-------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Node.js <a id="nodejs"></a>          | Angular를 실행하려면 [현재 활성 LTS 버전이거나 유지보수 중인 LTS 버전](https://nodejs.org/about/releases)의 Node.js가 필요합니다. <div class="alert is-helpful">자세한 내용은 [버전 호환성](guide/versions) 문서를 참고하세요.</div> Node.js 설치방법을 확인하려면 [nodejs.org](https://nodejs.org "Nodejs.org")를 참고하세요. 로컬 환경에서 실행되는 Node.js 버전을 확인하려면 터미널에서 `node -v`를 실행하면 됩니다.        |
+| npm package manager <a id="npm"></a> | Angular, Angular CLI, Angular 애플리케이션은 모두 [npm 패키지](https://docs.npmjs.com/getting-started/what-is-npm)를 활용하는 방식으로 동작합니다. 그래서 npm 패키지를 다운받기 위해 npm 패키지 매니저가 필요합니다. 이 가이드 문서에서는 [npm 클라이언트](https://docs.npmjs.com/cli/install) 커맨드라인 인터페이스를 사용하는데, 이 툴은 Node.js를 설치할 때 함께 설치됩니다. npm이 설치되었는지 확인하려면 터미널에서 `npm -v` 명령을 실행하면 됩니다. |
 
 
 <a id="install-cli"></a>
@@ -81,7 +81,7 @@ Angular를 로컬 환경에 설치하려면 이런 것들이 필요합니다:
 ## Angular CLI 설치하기
 
 <!--
-You use the Angular CLI to create projects, generate application and library code, and perform a variety of ongoing development tasks such as testing, bundling, and deployment.
+You can use the Angular CLI to create projects, generate application and library code, and perform a variety of ongoing development tasks such as testing, bundling, and deployment.
 
 To install the Angular CLI, open a terminal window and run the following command:
 
@@ -235,7 +235,7 @@ Angular CLI는 서버 기능을 내장하고 있기 때문에 로컬 환경에�
 <!--
 *   For a more thorough introduction to the fundamental concepts and terminology of Angular single-page app architecture and design principles, read the [Angular Concepts](guide/architecture) section.
 
-*   Work through the [Tour of Heroes Tutorial](tutorial), a complete hands-on exercise that introduces you to the app development process using the Angular CLI and walks through important subsystems.
+*   Work through the [Tour of Heroes Tutorial](tutorial/tour-of-heroes), a complete hands-on exercise that introduces you to the app development process using the Angular CLI and walks through important subsystems.
 
 *   To learn more about using the Angular CLI, see the [CLI Overview](cli "CLI Overview").
     In addition to creating the initial workspace and app scaffolding, use the CLI to generate Angular code such as components and services.
@@ -245,7 +245,7 @@ Angular CLI는 서버 기능을 내장하고 있기 때문에 로컬 환경에�
 -->
 *   Angular가 어떤 개념과 철학으로 개발되었는지, 단일 페이지 앱을 구성하는 전체 구조를 확인하려면 [Angular의 컨셉](guide/architecture) 문서를 참고하세요.
 
-*   [히어로들의 여행 튜토리얼](tutorial)은 실습 과정입니다. 이 튜토리얼을 진행하면 직접 앱을 만들어보면서 Angular CLI와 Angular 앱의 구성요소에 대해 자세하게 알아볼 수 있습니다.
+*   [히어로들의 여행 튜토리얼](tutorial/tour-of-heroes)은 실습 과정입니다. 이 튜토리얼을 진행하면 직접 앱을 만들어보면서 Angular CLI와 Angular 앱의 구성요소에 대해 자세하게 알아볼 수 있습니다.
 
 *   Angular CLI를 활용하는 방법에 대해 더 알아보려면 [Angular CLI 개요](cli "CLI Overview") 문서를 참고하세요.
     워크스페이스와 애플리케이션 기본 틀을 만드는 것 외에도 Angular CLI를 활용하면 컴포넌트와 서비스도 간단하게 생성할 수 있습니다.

@@ -91,12 +91,12 @@ The Tour of Heroes is a comprehensive tutorial that guides you through the proce
 <live-example name="toh-pt6"></live-example>
 
 Completed Tour of Heroes example application.
-For more information, see [Tour of Heroes app and tutorial](tutorial).
+For more information, see [Tour of Heroes app and tutorial](tutorial/tour-of-heroes).
 -->
 <live-example name="toh-pt6"></live-example>
 
 히어로들의 여행 애플리케이션을 완성한 코드입니다.
-자세한 내용은 [히어로들의 여행 튜토리얼](tutorial) 문서를 참고하세요.
+자세한 내용은 [히어로들의 여행 튜토리얼](tutorial/tour-of-heroes) 문서를 참고하세요.
 
 
 <!--
@@ -108,12 +108,12 @@ For more information, see [Tour of Heroes app and tutorial](tutorial).
 <live-example name="toh-pt0"></live-example>
 
 Initial Tour of Heroes example application for beginning the tutorial.
-For more information, see [Create a new project](tutorial/toh-pt0).
+For more information, see [Create a new project](tutorial/tour-of-heroes/toh-pt0).
 -->
 <live-example name="toh-pt0"></live-example>
 
 튜토리얼을 시작하면서 만든 히어로들의 여행 애플리케이션입니다.
-자세한 내용은 [새 프로젝트 생성하기](tutorial/toh-pt0) 문서를 참고하세요.
+자세한 내용은 [새 프로젝트 생성하기](tutorial/tour-of-heroes/toh-pt0) 문서를 참고하세요.
 
 
 <!--
@@ -125,12 +125,12 @@ For more information, see [Create a new project](tutorial/toh-pt0).
 <live-example name="toh-pt1"></live-example>
 
 First step of the Tour of Heroes example application.
-For more information, see [The hero editor](tutorial/toh-pt1).
+For more information, see [The hero editor](tutorial/tour-of-heroes/toh-pt1).
 -->
 <live-example name="toh-pt1"></live-example>
 
 1단계 수정을 끝낸 애플리케이션입니다.
-자세한 내용은 [히어로 에디터](tutorial/toh-pt1) 문서를 참고하세요.
+자세한 내용은 [히어로 에디터](tutorial/tour-of-heroes/toh-pt1) 문서를 참고하세요.
 
 
 <!--
@@ -142,12 +142,12 @@ For more information, see [The hero editor](tutorial/toh-pt1).
 <live-example name="toh-pt2"></live-example>
 
 Second step of the Tour of Heroes example application.
-For more information, see [Display a selection list](tutorial/toh-pt2).
+For more information, see [Display a selection list](tutorial/tour-of-heroes/toh-pt2).
 -->
 <live-example name="toh-pt2"></live-example>
 
 2단계 수정을 끝낸 애플리케이션입니다.
-자세한 내용은 [목록 표시하기](tutorial/toh-pt2) 문서를 참고하세요.
+자세한 내용은 [목록 표시하기](tutorial/tour-of-heroes/toh-pt2) 문서를 참고하세요.
 
 <!--
 ### Tour of Heroes: Create a feature component
@@ -158,12 +158,12 @@ For more information, see [Display a selection list](tutorial/toh-pt2).
 <live-example name="toh-pt3"></live-example>
 
 Third step of the Tour of Heroes example application.
-For more information, see [Create a feature component](tutorial/toh-pt3).
+For more information, see [Create a feature component](tutorial/tour-of-heroes/toh-pt3).
 -->
 <live-example name="toh-pt3"></live-example>
 
 3단계 수정을 끝낸 애플리케이션입니다.
-자세한 내용은 [컴포넌트 만들기](tutorial/toh-pt3) 문서를 참고하세요.
+자세한 내용은 [컴포넌트 만들기](tutorial/tour-of-heroes/toh-pt3) 문서를 참고하세요.
 
 
 <!--
@@ -175,12 +175,12 @@ For more information, see [Create a feature component](tutorial/toh-pt3).
 <live-example name="toh-pt4"></live-example>
 
 Fourth step of the Tour of Heroes example application.
-For more information, see [Add services](tutorial/toh-pt4).
+For more information, see [Add services](tutorial/tour-of-heroes/toh-pt4).
 -->
 <live-example name="toh-pt4"></live-example>
 
 4단계 수정을 끝낸 애플리케이션입니다.
-자세한 내용은 [서비스 추가하기](tutorial/toh-pt4) 문서를 참고하세요.
+자세한 내용은 [서비스 추가하기](tutorial/tour-of-heroes/toh-pt4) 문서를 참고하세요.
 
 
 <!--
@@ -192,12 +192,12 @@ For more information, see [Add services](tutorial/toh-pt4).
 <live-example name="toh-pt5"></live-example>
 
 Fifth step of the Tour of Heroes example application.
-For more information, see [Add in-app navigation with routing](tutorial/toh-pt5).
+For more information, see [Add in-app navigation with routing](tutorial/tour-of-heroes/toh-pt5).
 -->
 <live-example name="toh-pt5"></live-example>
 
 5단계 수정을 끝낸 애플리케이션입니다.
-자세한 내용은 [네비게이션 추가하기](tutorial/toh-pt5) 문서를 참고하세요.
+자세한 내용은 [네비게이션 추가하기](tutorial/tour-of-heroes/toh-pt5) 문서를 참고하세요.
 
 
 <!--
@@ -209,12 +209,12 @@ For more information, see [Add in-app navigation with routing](tutorial/toh-pt5)
 <live-example name="toh-pt6"></live-example>
 
 Sixth and final step of the Tour of Heroes example application.
-For more information, see [Get data from a server](tutorial/toh-pt6).
+For more information, see [Get data from a server](tutorial/tour-of-heroes/toh-pt6).
 -->
 <live-example name="toh-pt6"></live-example>
 
 6단계와 마지막 단계 수정을 끝낸 애플리케이션입니다.
-자세한 내용은 [서버에서 데이터 받아오기](tutorial/toh-pt6) 문서를 참고하세요.
+자세한 내용은 [서버에서 데이터 받아오기](tutorial/tour-of-heroes/toh-pt6) 문서를 참고하세요.
 
 
 <!--

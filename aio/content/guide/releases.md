@@ -215,7 +215,7 @@ Angular는 일정한 주기로 릴리즈됩니다.
 <!--
 <div class="alert is-helpful">
 
-Dates are offered as general guidance and are subject to change.
+Approximate dates are offered as general guidance and are subject to change.
 
 </div>
 -->
@@ -233,16 +233,16 @@ Dates are offered as general guidance and are subject to change.
 
 <!--
 | Version | Date               |
-| :---    | :---               |
-| v14.1   | Week of 2022-07-18 |
-| v14.2   | Week of 2022-08-22 |
-| v15.0   | Week of 2022-11-18 |
+|:--------|:-------------------|
+| v16.1   | Week of 2023-06-12 |
+| v16.2   | Week of 2023-07-24 |
+| v17.0   | Week of 2023-11-06 |
 -->
 | 버전    | 일정           |
 |:------|:-------------|
-| v14.1 | 2022-07-18 주 |
-| v14.2 | 2022-08-22 주 |
-| v15.0 | 2022-11-18 주 |
+| v16.1 | 2023-06-12 주 |
+| v16.2 | 2023-07-24 주 |
+| v17.0 | 2023-11-06 주 |
 
 
 <!--
@@ -275,21 +275,22 @@ All major releases are typically supported for 18 months.
 The following table provides the status for Angular versions under support.
 
 | Version | Status | Released   | Active ends | LTS ends   |
-|:---     |:---    |:---        |:---         |:---        |
-| ^14.0.0 | Active | 2022-06-02 | 2022-12-02  | 2023-12-02 |
-| ^13.0.0 | LTS    | 2021-11-04 | 2022-06-02  | 2023-05-04 |
+|:--------|:-------|:-----------|:------------|:-----------|
+| ^16.0.0 | Active | 2023-05-03 | 2023-11-03  | 2024-11-08 |
+| ^15.0.0 | LTS    | 2022-11-18 | 2023-05-03  | 2024-05-18 |
+| ^14.0.0 | LTS    | 2022-06-02 | 2022-11-18  | 2023-11-18 |
 
-Angular versions v2 to v12 are no longer under support.
+Angular versions v2 to v13 are no longer supported.
 -->
 현재 지원되고 있는 Angular 버전은 이렇습니다.
 
 | 버전      | 상태     | 릴리즈 일자     | Active 지원 종료 | LTS 지원 종료  |
-|:--------|:-------|:-----------|:-------------|:-----------|
-| ^14.0.0 | Active | 2022-06-02 | 2022-12-02   | 2023-12-02 |
-| ^13.0.0 | LTS    | 2021-11-04 | 2022-06-02   | 2023-05-04 |
+|:--------|:-------|:-----------|:------------|:-----------|
+| ^16.0.0 | Active | 2023-05-03 | 2023-11-03  | 2024-11-08 |
+| ^15.0.0 | LTS    | 2022-11-18 | 2023-05-03  | 2024-05-18 |
+| ^14.0.0 | LTS    | 2022-06-02 | 2022-11-18  | 2023-11-18 |
 
-Angular v2 버전부터 v12 버전은 지원이 중단되었습니다.
-
+Angular v2 버전부터 v13 버전은 지원이 중단되었습니다.
 
 <a id="lts-fixes"></a>
 
@@ -401,4 +402,4 @@ Angular 팀은 이런 위험부담에도 불구하고 도입할 필요가 있을
 
 <!-- end links -->
 
-@reviewed 2022-11-14
+@reviewed 2023-05-03

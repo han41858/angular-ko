@@ -4,6 +4,7 @@ import u from './utils.mjs';
 
 
 // Constants
+const BAZEL_DIST_DIR = '../dist/bin/aio/build';
 const DIST_DIR = 'dist';
 const FIREBASE_JSON_PATH = 'firebase.json';
 const NGSW_JSON_PATH = `${DIST_DIR}/ngsw.json`;
@@ -34,13 +35,20 @@ export default exp;
 // Helpers
 function build({deployedUrl, deployEnv}) {
   u.logSectionHeader('Build the AIO app.');
-  u.yarn(`build --configuration=${deployEnv} --progress=false`);
+  u.yarn(`build-prod --aio_build_config=${deployEnv}`);
 
-  u.logSectionHeader('Add any mode-specific files into the AIO distribution.');
-  sh.cp('-rf', `src/extra-files/${deployEnv}/.`, DIST_DIR);
+  u.logSectionHeader('Remove write protection on the Bazel AIO distribution.');
+  sh.chmod('-R', 'u+w', BAZEL_DIST_DIR);
 
   u.logSectionHeader('Update opensearch descriptor for AIO with `deployedUrl`.');
   u.yarn(`set-opensearch-url ${deployedUrl.replace(/[^/]$/, '$&/')}`); // The URL must end with `/`.
+
+  // Firebase requires that the distributable be in the same folder as firebase.json.
+  u.logSectionHeader('Copy AIO distributable from Bazel output tree to aio/dist.');
+  sh.cp('-rf', BAZEL_DIST_DIR, DIST_DIR);
+
+  u.logSectionHeader('Add any mode-specific files into the AIO distribution.');
+  sh.cp('-rf', `src/extra-files/${deployEnv}/.`, DIST_DIR);
 }
 
 function checkPayloadSize() {

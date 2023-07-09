@@ -233,11 +233,10 @@ HTML 엘리먼트는 CSS 클래스나 스타일을 여러개 지정할 수 있�
 ## 다음 단계
 
 <!--
-* [Component styles](https://angular.io/guide/component-styles)
-* [Introduction to Angular animations](https://angular.io/guide/animations)
+* [Component styles](/guide/component-styles)
+* [Introduction to Angular animations](/guide/animations)
 -->
-* [컴포넌트 스타일](https://angular.io/guide/component-styles)
-* [Angular 애니메이션 소개](https://angular.io/guide/animations)
-
+* [컴포넌트 스타일](/guide/component-styles)
+* [Angular 애니메이션 소개](/guide/animations)
 
 @reviewed 2022-05-09

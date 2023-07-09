@@ -6,11 +6,11 @@ export function docRegionDelaySequence(console: Console) {
   // #docregion delay_sequence
   function sequenceSubscriber(observer: Observer<number>) {
     const seq = [1, 2, 3];
-    let timeoutId: any;
+    let clearTimer: VoidFunction | undefined;
 
     // 배열을 순회하면서 배열의 항목을 1초마다 하나씩 발행합니다.
     function doInSequence(arr: number[], idx: number) {
-      timeoutId = setTimeout(() => {
+      const timeout = setTimeout(() => {
         observer.next(arr[idx]);
         if (idx === arr.length - 1) {
           observer.complete();
@@ -18,6 +18,7 @@ export function docRegionDelaySequence(console: Console) {
           doInSequence(arr, ++idx);
         }
       }, 1000);
+      clearTimer = () => clearTimeout(timeout);
     }
 
     doInSequence(seq, 0);
@@ -25,7 +26,7 @@ export function docRegionDelaySequence(console: Console) {
     // 구독이 해지되면 타이머를 중지합니다.
     return {
       unsubscribe() {
-        clearTimeout(timeoutId);
+        clearTimer?.();
       }
     };
   }
@@ -84,9 +85,9 @@ export function docRegionMulticastSequence(console: Console, runSequence: boolea
     const seq = [1, 2, 3];
     // 구독중인 옵저버를 추적합니다.
     const observers: Observer<unknown>[] = [];
-    // 한 번 생성된 데이터는 모든 구독자에게 멀티캐스팅되기 때문에
-    // 타이머 id는 하나로 관리합니다.
-    let timeoutId: any;
+    // 각 구독자에게 멀티캐스트되는 값은 한 세트이기 때문에
+    // 타이머는 하나만 사용합니다.
+    let clearTimer: VoidFunction | undefined;
 
     // 구독자 함수를 반환합니다.
     // 이 함수는 subscribe()가 실행될 때 함께 실행됩니다.
@@ -114,14 +115,14 @@ export function docRegionMulticastSequence(console: Console, runSequence: boolea
           observers.splice(observers.indexOf(observer), 1);
           // 구독자가 없으면 타이머를 종료합니다.
           if (observers.length === 0) {
-            clearTimeout(timeoutId);
+            clearTimer?.();
           }
         }
       };
 
       // 배열을 순회하면서 1초마다 하나씩 스트림을 발행합니다.
       function doSequence(sequenceObserver: Observer<number>, arr: number[], idx: number) {
-        timeoutId = setTimeout(() => {
+        const timeout = setTimeout(() => {
           console.log('Emitting ' + arr[idx]);
           sequenceObserver.next(arr[idx]);
           if (idx === arr.length - 1) {
@@ -130,6 +131,7 @@ export function docRegionMulticastSequence(console: Console, runSequence: boolea
             doSequence(sequenceObserver, arr, ++idx);
           }
         }, 1000);
+        clearTimer = () => clearTimeout(timeout);
       }
     };
   }

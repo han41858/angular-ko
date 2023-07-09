@@ -14,9 +14,9 @@ Choose from the following modes:
 
 | Modes                         | Details |
 |:---                           |:---     |
-| `ViewEncapsulation.ShadowDom` | Angular uses the browser's built-in [Shadow DOM API](https://developer.mozilla.org/docs/Web/Web_Components/Shadow_DOM) to enclose the component's view inside a ShadowRoot, used as the component's host element, and apply the provided styles in an isolated manner. <div class="alert is-important"> `ViewEncapsulation.ShadowDom` only works on browsers that have built-in support for the shadow DOM \(see [Can I use - Shadow DOM v1](https://caniuse.com/shadowdomv1)\). Not all browsers support it, which is why the `ViewEncapsulation.Emulated` is the recommended and default mode. </div> |
-| `ViewEncapsulation.Emulated`  | Angular modifies the component's CSS selectors so that they are only applied to the component's view and do not affect other elements in the application, *emulating* Shadow DOM behavior. For more details, see [Inspecting generated CSS](guide/view-encapsulation#inspect-generated-css).                                                                                                                                                                                                                                                                                                           |
-| `ViewEncapsulation.None`      | Angular does not apply any sort of view encapsulation meaning that any styles specified for the component are actually globally applied and can affect any HTML element present within the application. This mode is essentially the same as including the styles into the HTML itself.                                                                                                                                                                                                                                                                                                                   |
+| `ViewEncapsulation.ShadowDom` | Angular uses the browser's built-in [Shadow DOM API](https://developer.mozilla.org/docs/Web/Web_Components/Shadow_DOM) to enclose the component's view inside a ShadowRoot, used as the component's host element, and apply the provided styles in an isolated manner. |
+| `ViewEncapsulation.Emulated`  | Angular modifies the component's CSS selectors so that they are only applied to the component's view and do not affect other elements in the application, *emulating* Shadow DOM behavior. For more details, see [Inspecting generated CSS](guide/view-encapsulation#inspect-generated-css). |
+| `ViewEncapsulation.None`      | Angular does not apply any sort of view encapsulation meaning that any styles specified for the component are actually globally applied and can affect any HTML element present within the application. This mode is essentially the same as including the styles into the HTML itself. |
 -->
 Angular에서는 컴포넌트에 적용된 CSS 스타일이 컴포넌트 뷰를 대상으로 캡슐화되기 때문에 애플리케이션에 있는 다른 컴포넌트에 영향을 주지 않습니다.
 
@@ -24,12 +24,11 @@ Angular에서는 컴포넌트에 적용된 CSS 스타일이 컴포넌트 뷰를 
 
 뷰 캡슐화 모드는 이런 것들이 있습니다:
 
-| 모드                            | 설명                                                                                                                                                                                                                                                                                                                                                  |
-|:------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ViewEncapsulation.ShadowDom` | 브라우저 기본 [섀도우 DOM](https://developer.mozilla.org/docs/Web/Web_Components/Shadow_DOM)을 활용해서 뷰를 캡슐화 합니다. <div class="alert is-important"> `ShadowDom` 모드는 브라우저가 섀도우 DOM을 지원할 때만 정상 동작합니다. 지원하는 브라우저 목록을 확인하려면 [Can I use 사이트의 Shadow DOM v1](https://caniuse.com/shadowdomv1) 문서를 참고하세요. 섀도우 DOM은 아직 모든 환경에 사용할 수 없기 때문에 `Emulated` 모드가 기본값입니다. </div> |
-| `ViewEncapsulation.Emulated`  | 컴포넌트 CSS 셀렉터를 조정해서 섀도우 DOM처럼 캡슐화합니다. 자세한 내용은 [자동생성된 CSS 확인하기](guide/view-encapsulation#inspect-generated-css) 섹션을 참고하세요.                                                                                                                                                                                                                            |
-| `ViewEncapsulation.None`      | 뷰 캡슐화를 하지 않습니다. 컴포넌트에 지정한 스타일은 컴포넌트 뿐 아니라 전역 범위에 적용됩니다. 컴포넌트는 캡슐화되지 않으며, HTML 문서에 직접 컴포넌트 스타일을 지정한 것과 같은 효과를 냅니다.                                                                                                                                                                                                                                   |
-
+| 모드                            | 설명                                                                                                                       |
+|:------------------------------|:-------------------------------------------------------------------------------------------------------------------------|
+| `ViewEncapsulation.ShadowDom` | 브라우저 기본 [섀도우 DOM](https://developer.mozilla.org/docs/Web/Web_Components/Shadow_DOM)을 활용해서 뷰를 캡슐화 합니다.                    |
+| `ViewEncapsulation.Emulated`  | 컴포넌트 CSS 셀렉터를 조정해서 섀도우 DOM처럼 캡슐화합니다. 자세한 내용은 [자동생성된 CSS 확인하기](guide/view-encapsulation#inspect-generated-css) 섹션을 참고하세요. |
+| `ViewEncapsulation.None`      | 뷰 캡슐화를 하지 않습니다. 컴포넌트에 지정한 스타일은 컴포넌트 뿐 아니라 전역 범위에 적용됩니다. 컴포넌트는 캡슐화되지 않으며, HTML 문서에 직접 컴포넌트 스타일을 지정한 것과 같은 효과를 냅니다.        |
 
 <a id="inspect-generated-css"></a>
 
@@ -38,7 +37,7 @@ Angular에서는 컴포넌트에 적용된 CSS 스타일이 컴포넌트 뷰를 
 -->
 ## 자동생성된 CSS 확인하기
 
-<!- vale on ->
+<!-- vale on -->
 
 <!--
 When using the emulated view encapsulation, Angular pre-processes all the component's styles so that they are only applied to the component's view.
@@ -346,4 +345,4 @@ Angular는 `NoEncapsulationComponent` 스타일과 `EmulatedEncapsulationCompone
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-04-21

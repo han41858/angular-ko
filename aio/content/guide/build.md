@@ -18,14 +18,15 @@ This page discusses build-specific configuration options for Angular projects.
 ## 애플리케이션 개발환경 구성하기
 
 <!--
-You can define different named build configurations for your project, such as *staging* and *production*, with different defaults.
+You can define different named build configurations for your project, such as `development` and `staging`, with different defaults.
 
 Each named configuration can have defaults for any of the options that apply to the various [builder targets](guide/glossary#target), such as `build`, `serve`, and `test`.
 The [Angular CLI](cli) `build`, `serve`, and `test` commands can then replace files with appropriate versions for your intended target environment.
 -->
-프로젝트에는 기본환경 설정 외에도 *staging*이나 *production*과 같이 특정 동작환경을 위한 프로젝트 환경설정을 구성할 수 있습니다.
+프로젝트에는 기본환경 설정 외에도 `development`나 `staging`과 같이 특정 동작환경을 위한 프로젝트 환경설정을 구성할 수 있습니다.
 
 그리고 이 환경설정들은 [Angular CLI](cli)로 `build`, `serve`, `test` 명령을 실행할 때 각각 적용할 수 있는데, Angular CLI 명령을 실행하면서 특정 환경을 지정하면 기본 환경설정 파일 대신 해당 환경설정 파일을 기반으로 CLI 명령이 실행됩니다.
+
 
 <!--
 ### Configure environment-specific defaults
@@ -33,10 +34,26 @@ The [Angular CLI](cli) `build`, `serve`, and `test` commands can then replace fi
 ### 환경설정 기본값 지정하기
 
 <!--
-A project's `src/environments/` folder contains the base configuration file, `environment.ts`, which provides a default environment.
-You can add override defaults for additional environments, such as production and staging, in target-specific configuration files.
+Using the Angular CLI, start by running the [generate environments command](cli/generate#environments-command) shown here to create the `src/environments/` directory and configure the project to use these files.
+-->
+Angular CLI를 사용한다면, [환경변수를 생성하는 명령](cli/generate#environments-command)을 실행해서 `src/environments/` 디렉토리를 생성하고 이 안에 생성되는 파일을 프로젝트에 활용하도록 구성하면 됩니다.
+
+<code-example format="shell" language="shell">
+
+ng generate environments
+
+</code-example>
+
+<!--
+The project's `src/environments/` directory contains the base configuration file, `environment.ts`, which provides configuration for `production`, the default environment.
+You can override default values for additional environments, such as `development` and `staging`, in target-specific configuration files.
 
 For example:
+-->
+프로젝트에 있는 `src/environments/` 디렉토리에는 기본 환경설정 파일인 `environment.ts` 파일이 존재하는데, 이 파일에는 `production` 옵션이 기본으로 선언되어 있습니다.
+이후에 추가로 `development`나 `staging` 환경을 선언하게 되면 이 설정값을 오버라이드 하는 방식으로 동작합니다.
+
+이런 방식으로 구성합니다:
 
 <div class="filetree">
     <div class="file">
@@ -47,7 +64,7 @@ For example:
           environment.ts
         </div>
         <div class="file">
-          environment.prod.ts
+          environment.development.ts
         </div>
         <div class="file">
           environment.staging.ts
@@ -55,75 +72,26 @@ For example:
     </div>
 </div>
 
+<!--
 The base file `environment.ts`, contains the default environment settings.
 For example:
+-->
+기본 `environment.ts` 파일에는 기본 환경설정 값이 존재합니다.
+예를 들면:
 
 <code-example format="typescript" language="typescript">
 
 export const environment = {
-  production: false
+  production: true
 };
 
 </code-example>
 
+<!--
 The `build` command uses this as the build target when no environment is specified.
 You can add further variables, either as additional properties on the environment object, or as separate objects.
 For example, the following adds a default for a variable to the default environment:
-
-<code-example format="typescript" language="typescript">
-
-export const environment = {
-  production: false,
-  apiUrl: 'http://my-api-url'
-};
-
-</code-example>
-
-You can add target-specific configuration files, such as `environment.prod.ts`.
-The following content sets default values for the production build target:
-
-<code-example format="typescript" language="typescript">
-
-export const environment = {
-  production: true,
-  apiUrl: 'http://my-prod-url'
-};
-
-</code-example>
 -->
-프로젝트의 기본 환경설정 파일은 `src/environments/` 폴더에 존재하는 `environment.ts` 파일입니다.
-그리고 `production`이나 `staging`과 같은 환경을 위해 설정 파일을 따로 구성한다면, 이 파일을 오버라이드하는 방식으로 새로운 설정 파일을 구성할 수 있습니다.
-
-예를 들면 이런 식입니다:
-
-<div class="filetree">
-    <div class="file">
-        myProject/src/environments
-    </div>
-    <div class="children">
-        <div class="file">
-          environment.ts
-        </div>
-        <div class="file">
-          environment.prod.ts
-        </div>
-        <div class="file">
-          environment.staging.ts
-        </div>
-    </div>
-</div>
-
-기본 환경설정 파일 `environment.ts` 파일에는 환경설정의 기본이 되는 내용들이 존재합니다.
-기본 설정은 이렇습니다:
-
-<code-example format="typescript" language="typescript">
-
-export const environment = {
-  production: false
-};
-
-</code-example>
-
 빌드 환경을 따로 지정하지 않은 상태로 `build` 명령을 실행하면 `environment.ts` 파일이 기본으로 사용됩니다.
 물론 이 파일은 좀 더 많은 설정값을 갖도록 확장할 수도 있고, 필요하다면 다른 객체를 더 선언해서 사용하는 것도 가능합니다.
 그래서 기본 환경 설정 객체에 다음과 같이 새로운 프로퍼티를 추가할 수도 있습니다:
@@ -131,20 +99,24 @@ export const environment = {
 <code-example format="typescript" language="typescript">
 
 export const environment = {
-  production: false,
-  apiUrl: 'http://my-api-url'
+  production: true,
+  apiUrl: 'http://my-prod-url'
 };
 
 </code-example>
 
-그리고 `environment.prod.ts` 파일에는 해당 환경에 맞는 설정값을 지정할 수 있습니다.
-위에서 살펴본 `environment` 객체를 운영용 환경에 맞게 오버라이드하면 다음과 같이 같이 구성할 수 있습니다:
+<!--
+You can add target-specific configuration files, such as `environment.development.ts`.
+The following content sets default values for the development build target:
+-->
+그리고 `environment.development.ts` 파일에는 해당 환경에 맞는 설정값을 지정할 수 있습니다.
+위에서 살펴본 `environment` 객체를 개발환경에 맞게 오버라이드해서 다음과 같이 같이 구성할 수 있습니다:
 
 <code-example format="typescript" language="typescript">
 
 export const environment = {
-  production: true,
-  apiUrl: 'http://my-prod-url'
+  production: false,
+  apiUrl: 'http://my-api-url'
 };
 
 </code-example>
@@ -156,7 +128,9 @@ export const environment = {
 ### 애플리케이션 코드에서 환경변수 사용하기
 
 <!--
-The following application structure configures build targets for production and staging environments:
+The following application structure configures build targets for `development` and `staging` environments:
+-->
+`development` 환경과 `staging` 환경을 포함해서 총 3가지 빌드 환경을 구성한다면 다음과 같이 구성할 수 있습니다:
 
 <div class="filetree">
     <div class="file">
@@ -182,7 +156,7 @@ The following application structure configures build targets for production and 
               environment.ts
             </div>
             <div class="file">
-              environment.prod.ts
+              environment.development.ts
             </div>
             <div class="file">
               environment.staging.ts
@@ -191,7 +165,10 @@ The following application structure configures build targets for production and 
     </div>
 </div>
 
+<!--
 To use the environment configurations you have defined, your components must import the original environments file:
+-->
+컴포넌트 코드에서 환경변수를 참조하려면 기본 환경설정 파일인 `environment.ts` 파일을 로드해야 합니다:
 
 <code-example format="typescript" language="typescript">
 
@@ -199,94 +176,55 @@ import { environment } from './../environments/environment';
 
 </code-example>
 
+<!--
 This ensures that the build and serve commands can find the configurations for specific build targets.
 
 The following code in the component file \(`app.component.ts`\) uses an environment variable defined in the configuration files.
 
 <code-example format="typescript" language="typescript">
 
-import { Component } from '&commat;angular/core';
-import { environment } from './../environments/environment';
+  import { Component } from '&commat;angular/core';
+  import { environment } from './../environments/environment';
 
-&commat;Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-  constructor() {
-    console.log(environment.production); // Logs false for default environment
+  &commat;Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+  })
+  export class AppComponent {
+    constructor() {
+      console.log(environment.production); // Logs false for development environment
+    }
+
+    title = 'app works!';
   }
-  title = 'app works!';
-}
 
 </code-example>
 -->
-`production` 환경과 `staging` 환경을 포함해서 총 3가지 빌드 환경을 구성한다면 다음과 같이 구성할 수 있습니다:
-
-<div class="filetree">
-    <div class="file">
-        src
-    </div>
-    <div class="children">
-        <div class="file">
-          app
-        </div>
-        <div class="children">
-            <div class="file">
-              app.component.html
-            </div>
-            <div class="file">
-              app.component.ts
-            </div>
-        </div>
-        <div class="file">
-          environments
-        </div>
-        <div class="children">
-            <div class="file">
-              environment.ts
-            </div>
-            <div class="file">
-              environment.prod.ts
-            </div>
-            <div class="file">
-              environment.staging.ts
-            </div>
-        </div>
-    </div>
-</div>
-
-그리고 컴포넌트 코드에서 환경변수를 참조하려면 기본 환경설정 파일인 `environment.ts` 파일을 로드해야 합니다:
-
-<code-example format="typescript" language="typescript">
-
-import { environment } from './../environments/environment';
-
-</code-example>
-
 그러면 `ng build` 명령이나 `ng serve` 명령이 실행될 때 기본 환경설정 파일을 로드하기 때문에, 애플리케이션 코드에서 이 환경설정 파일의 내용을 참조할 수 있습니다.
 
 아래 코드는 컴포넌트 파일\(`app.component.ts`\)에서 환경변수를 참조하고 이 환경변수 객체에 있느 프로퍼티를 콘솔에 출력하는 코드입니다.
 
 <code-example format="typescript" language="typescript">
 
-import { Component } from '&commat;angular/core';
-import { environment } from './../environments/environment';
+  import { Component } from '&commat;angular/core';
+  import { environment } from './../environments/environment';
 
-&commat;Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-  constructor() {
-    console.log(environment.production); // 기본 환경설정 파일을 참조했기 때문에 false를 출력합니다.
+  &commat;Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+  })
+  export class AppComponent {
+    constructor() {
+      console.log(environment.production); // 개발환경에 설정된 값인 false 를 출력합니다.
+    }
+
+    title = 'app works!';
   }
-  title = 'app works!';
-}
 
 </code-example>
+
 
 <a id="file-replacement"></a>
 <a id="configure-target-specific-file-replacements"></a>
@@ -303,73 +241,6 @@ This is useful for including target-specific code or variables in a build that t
 By default no files are replaced.
 You can add file replacements for specific build targets.
 For example:
-
-<code-example format="json" language="json">
-
-"configurations": {
-  "production": {
-    "fileReplacements": [
-      {
-        "replace": "src/environments/environment.ts",
-        "with": "src/environments/environment.prod.ts"
-      }
-    ],
-    &hellip;
-
-</code-example>
-
-This means that when you build your production configuration with `ng build --configuration production`, the `src/environments/environment.ts` file is replaced with the target-specific version of the file, `src/environments/environment.prod.ts`.
-
-You can add additional configurations as required.
-To add a staging environment, create a copy of `src/environments/environment.ts` called `src/environments/environment.staging.ts`, then add a `staging` configuration to `angular.json`:
-
-<code-example format="json" language="json">
-
-"configurations": {
-  "production": { &hellip; },
-  "staging": {
-    "fileReplacements": [
-      {
-        "replace": "src/environments/environment.ts",
-        "with": "src/environments/environment.staging.ts"
-      }
-    ]
-  }
-}
-
-</code-example>
-
-You can add more configuration options to this target environment as well.
-Any option that your build supports can be overridden in a build target configuration.
-
-To build using the staging configuration, run the following command:
-
-<code-example format="shell" language="shell">
-
-ng build --configuration=staging
-
-</code-example>
-
-You can also configure the `serve` command to use the targeted build configuration if you add it to the "serve:configurations" section of `angular.json`:
-
-<code-example format="json" language="json">
-
-"serve": {
-  "builder": "&commat;angular-devkit/build-angular:dev-server",
-  "options": {
-    "browserTarget": "your-project-name:build"
-  },
-  "configurations": {
-    "production": {
-      "browserTarget": "your-project-name:build:production"
-    },
-    "staging": {
-      "browserTarget": "your-project-name:build:staging"
-    }
-  }
-},
-
-</code-example>
 -->
 Angular CLI 환경설정 파일인 `angular.json` 파일에는 각 빌드 환경마다 `fileReplacements` 섹션이 존재하는데, 이 값을 설정하면 해당 빌드 환경에 해당하는 파일로 환경설정 파일을 교체할 수 있습니다.
 그래서 `production` 환경이나 `staging` 환경에 해당하는 환경설정을 기본 환경설정 파일과 별개로 구성한 뒤에, Angular CLI 명령을 실행할 때 적절한 환경설정 파일로 교체해서 실행할 수 있습니다.
@@ -378,42 +249,56 @@ Angular CLI 환경설정 파일인 `angular.json` 파일에는 각 빌드 환경
 
 <code-example format="json" language="json">
 
-"configurations": {
-  "production": {
-    "fileReplacements": [
-      {
-        "replace": "src/environments/environment.ts",
-        "with": "src/environments/environment.prod.ts"
-      }
-    ],
-    &hellip;
+  "configurations": {
+    "development": {
+      "fileReplacements": [
+          {
+            "replace": "src/environments/environment.ts",
+            "with": "src/environments/environment.development.ts"
+          }
+        ],
+        &hellip;
 
 </code-example>
 
-이렇게 설정하면 프로젝트를 운영용 환경으로 빌드할 때\(`ng build --configuration production`\) `src/environments/environment.ts` 파일을 `src/environments/environment.prod.ts` 파일로 교체한 후에 Angular CLI 명령이 실행됩니다.
+<!--
+This means that when you build your development configuration with `ng build --configuration development`, the `src/environments/environment.ts` file is replaced with the target-specific version of the file, `src/environments/environment.development.ts`.
+
+You can add additional configurations as required.
+To add a staging environment, create a copy of `src/environments/environment.ts` called `src/environments/environment.staging.ts`, then add a `staging` configuration to `angular.json`:
+-->
+이렇게 설정하면 프로젝트를 운영용 환경으로 빌드할 때\(`ng build --configuration development`\) `src/environments/environment.ts` 파일을 `src/environments/environment.development.ts` 파일로 교체한 후에 Angular CLI 명령이 실행됩니다.
 
 이 설정은 원하는 대로 추가할 수 있습니다.
 `staging` 환경을 추가로 구성해야 한다면 `src/environments/environment.ts` 파일을 복사해서 `src/environments/environment.staging.ts` 파일을 만들고, `staging` 환경에 대한 설정을 `angular.json` 파일에 다음과 같이 추가하면 됩니다:
 
 <code-example format="json" language="json">
 
-"configurations": {
-  "production": { &hellip; },
-  "staging": {
-    "fileReplacements": [
-      {
-        "replace": "src/environments/environment.ts",
-        "with": "src/environments/environment.staging.ts"
-      }
-    ]
+  "configurations": {
+    "development": { &hellip; },
+    "production": { &hellip; },
+    "staging": {
+      "fileReplacements": [
+        {
+          "replace": "src/environments/environment.ts",
+          "with": "src/environments/environment.staging.ts"
+        }
+      ]
+    }
   }
-}
 
 </code-example>
 
+<!--
+You can add more configuration options to this target environment as well.
+Any option that your build supports can be overridden in a build target configuration.
+
+To build using the staging configuration, run the following command:
+-->
 빌드 환경은 얼마든지 추가할 수 있기 때문에, 빌드 환경에 어울리는 설정값을 자유롭게 지정할 수 있습니다.
 
 이제 `staging` 환경으로 애플리케이션을 빌드하려면 다음 명령을 실행하면 됩니다:
+
 
 <code-example format="shell" language="shell">
 
@@ -421,24 +306,30 @@ ng build --configuration=staging
 
 </code-example>
 
+<!--
+You can also configure the `serve` command to use the targeted build configuration if you add it to the "serve:configurations" section of `angular.json`:
+-->
 그리고 새로 추가한 환경으로 `ng serve` 명령을 실행하려면 `angular.json` 파일의 "serve:configurations" 섹션 내용을 다음과 같이 수정하면 됩니다:
 
 <code-example format="json" language="json">
 
-"serve": {
-  "builder": "&commat;angular-devkit/build-angular:dev-server",
-  "options": {
-    "browserTarget": "your-project-name:build"
-  },
-  "configurations": {
-    "production": {
-      "browserTarget": "your-project-name:build:production"
+  "serve": {
+    "builder": "&commat;angular-devkit/build-angular:dev-server",
+    "options": {
+      "browserTarget": "your-project-name:build"
     },
-    "staging": {
-      "browserTarget": "your-project-name:build:staging"
+    "configurations": {
+      "development": {
+        "browserTarget": "your-project-name:build:development"
+      },
+      "production": {
+        "browserTarget": "your-project-name:build:production"
+      },
+      "staging": {
+        "browserTarget": "your-project-name:build:staging"
+      }
     }
-  }
-},
+  },
 
 </code-example>
 
@@ -457,47 +348,6 @@ As applications grow in functionality, they also grow in size.
 The CLI lets you set size thresholds in your configuration to ensure that parts of your application stay within size boundaries that you define.
 
 Define your size boundaries in the CLI configuration file, `angular.json`, in a `budgets` section for each [configured environment](#app-environments).
-
-<code-example format="json" language="json">
-
-{
-  &hellip;
-  "configurations": {
-    "production": {
-      &hellip;
-      budgets: []
-    }
-  }
-}
-
-</code-example>
-
-You can specify size budgets for the entire app, and for particular parts.
-Each budget entry configures a budget of a given type.
-Specify size values in the following formats:
-
-| Size value      | Details |
-|:---             |:---     |
-| `123` or `123b` | Size in bytes.                                                              |
-| `123kb`         | Size in kilobytes.                                                          |
-| `123mb`         | Size in megabytes.                                                          |
-| `12%`           | Percentage of size relative to baseline. \(Not valid for baseline values.\) |
-
-When you configure a budget, the build system warns or reports an error when a given part of the application reaches or exceeds a boundary size that you set.
-
-Each budget entry is a JSON object with the following properties:
-
-| Property       | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-|:---            |:---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| type           | The type of budget. One of: <table> <thead> <tr> <th> Value </th> <th> Details </th> </tr> </thead> <tbody> <tr> <td> <code>bundle</code> </td> <td> The size of a specific bundle. </td> </tr> <tr> <td> <code>initial</code> </td> <td> The size of JavaScript needed for bootstrapping the application. Defaults to warning at 500kb and erroring at 1mb. </td> </tr> <tr> <td> <code>allScript</code> </td> <td> The size of all scripts. </td> </tr> <tr> <td> <code>all</code> </td> <td> The size of the entire application. </td> </tr> <tr> <td> <code>anyComponentStyle</code> </td> <td> This size of any one component stylesheet. Defaults to warning at 2kb and erroring at 4kb. </td> </tr> <tr> <td> <code>anyScript</code> </td> <td> The size of any one script. </td> </tr> <tr> <td> <code>any</code> </td> <td> The size of any file. </td> </tr> </tbody> </table> |
-| name           | The name of the bundle \(for `type=bundle`\).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| baseline       | The baseline size for comparison.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| maximumWarning | The maximum threshold for warning relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| maximumError   | The maximum threshold for error relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| minimumWarning | The minimum threshold for warning relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| minimumError   | The minimum threshold for error relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| warning        | The threshold for warning relative to the baseline \(min &amp max\).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| error          | The threshold for error relative to the baseline \(min &amp max\).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 -->
 애플리케이션에 기능이 많아지면 용량도 자연스럽게 커집니다.
 이 때 이 애플리케이션이 빌드된 결과물의 크기를 일정 수준으로 정해놓고, 기준 용량을 넘어가면 경고를 표시하거나 에러를 표시하게 할 수 있습니다.
@@ -511,17 +361,45 @@ Each budget entry is a JSON object with the following properties:
   "configurations": {
     "production": {
       &hellip;
-      budgets: []
+      "budgets": []
     }
   }
 }
 
 </code-example>
 
+<!--
+You can specify size budgets for the entire app, and for particular parts.
+Each budget entry configures a budget of a given type.
+Specify size values in the following formats:
+
+| Size value      | Details                                                                     |
+| :-------------- | :-------------------------------------------------------------------------- |
+| `123` or `123b` | Size in bytes.                                                              |
+| `123kb`         | Size in kilobytes.                                                          |
+| `123mb`         | Size in megabytes.                                                          |
+| `12%`           | Percentage of size relative to baseline. \(Not valid for baseline values.\) |
+
+When you configure a budget, the build system warns or reports an error when a given part of the application reaches or exceeds a boundary size that you set.
+
+Each budget entry is a JSON object with the following properties:
+
+| Property       | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| :------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| type           | The type of budget. One of: <table> <thead> <tr> <th> Value </th> <th> Details </th> </tr> </thead> <tbody> <tr> <td> <code>bundle</code> </td> <td> The size of a specific bundle. </td> </tr> <tr> <td> <code>initial</code> </td> <td> The size of JavaScript needed for bootstrapping the application. Defaults to warning at 500kb and erroring at 1mb. </td> </tr> <tr> <td> <code>allScript</code> </td> <td> The size of all scripts. </td> </tr> <tr> <td> <code>all</code> </td> <td> The size of the entire application. </td> </tr> <tr> <td> <code>anyComponentStyle</code> </td> <td> This size of any one component stylesheet. Defaults to warning at 2kb and erroring at 4kb. </td> </tr> <tr> <td> <code>anyScript</code> </td> <td> The size of any one script. </td> </tr> <tr> <td> <code>any</code> </td> <td> The size of any file. </td> </tr> </tbody> </table> |
+| name           | The name of the bundle \(for `type=bundle`\).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| baseline       | The baseline size for comparison.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| maximumWarning | The maximum threshold for warning relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| maximumError   | The maximum threshold for error relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| minimumWarning | The minimum threshold for warning relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| minimumError   | The minimum threshold for error relative to the baseline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| warning        | The threshold for warning relative to the baseline \(min &amp max\).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| error          | The threshold for error relative to the baseline \(min &amp max\).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+-->
 기준 용량은 앱 전체에 지정할 수도 있고 일부에만 지정할 수도 있는데, 이 기준은 `type` 프로퍼티로 설정합니다.
 그리고 기준 용량은 다음과 같은 형식으로 지정합니다:
 
-| 기준 용량 설정        | 설명                                      |
+| 용량 설정           | 설명                                      |
 |:----------------|:----------------------------------------|
 | `123` 또는 `123b` | 바이트(byte) 단위                            |
 | `123kb`         | 킬로바이트(KB) 단위                            |
@@ -622,7 +500,7 @@ The Angular CLI uses [Browserslist](https://github.com/browserslist/browserslist
 Internally, the Angular CLI uses the below `browserslist` configuration which matches the [browsers that are supported](guide/browser-support) by Angular.
 
   <code-example format="none" language="text">
-  last 1 Chrome version
+  last 2 Chrome versions
   last 1 Firefox version
   last 2 Edge major versions
   last 2 Safari major versions
@@ -630,13 +508,7 @@ Internally, the Angular CLI uses the below `browserslist` configuration which ma
   Firefox ESR
   </code-example>
 
-
-To override the internal configuration, add a new file named `.browserslistrc`, to the project directory, that specifies the browsers you want to support:
-
-  <code-example format="none" language="text">
-  last 1 Chrome version
-  last 1 Firefox version
-  </code-example>
+To override the internal configuration, run [`ng generate config browserslist`](cli/generate#config-command), which generates a `.browserslistrc` configuration file in the the project directory.
 
 See the [browserslist repository](https://github.com/browserslist/browserslist) for more examples of how to target specific browsers and versions.
 
@@ -652,7 +524,7 @@ Angular CLI는 브라우저 종류와 버전에 대한 호환성을 보장하기
 내부적으로는 Angular CLI가 `browserlist`를 사용해서 [지원하는 브라우저](guide/browser-support)를 결정합니다.
 
   <code-example format="none" language="text">
-  last 1 Chrome version
+  last 2 Chrome version
   last 1 Firefox version
   last 2 Edge major versions
   last 2 Safari major versions
@@ -661,12 +533,7 @@ Angular CLI는 브라우저 종류와 버전에 대한 호환성을 보장하기
   </code-example>
 
 
-내부 설정을 오버라이드 하려면 프로젝트 디렉토리에 `.borwserlistrc` 파일을 생성하고 이런 내용을 추가하면 됩니다:
-
-  <code-example format="none" language="text">
-  last 1 Chrome version
-  last 1 Firefox version
-  </code-example>
+내부 설정을 오버라이드 하려면 [`ng generate config browserslist`](cli/generate#config-command) 명령을 실행해서 프로젝트 폴더에 `.browserslistrc` 파일을 생성하면 됩니다.
 
 브라우저나 버전을 명시하는 방법을 더 알아보려면 [browserslist 코드저장소](https://github.com/browserslist/browserslist)를 참고하세요.
 
@@ -706,14 +573,14 @@ For example, to divert all calls for `http://localhost:4200/api` to a server run
 
     <code-example format="json" language="json">
 
-    &hellip;
-    "architect": {
-      "serve": {
-        "builder": "&commat;angular-devkit/build-angular:dev-server",
-        "options": {
-          "browserTarget": "your-application-name:build",
-          "proxyConfig": "src/proxy.conf.json"
-        },
+      &hellip;
+      "architect": {
+        "serve": {
+          "builder": "&commat;angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "your-application-name:build",
+            "proxyConfig": "src/proxy.conf.json"
+          },
     &hellip;
 
     </code-example>
@@ -899,73 +766,36 @@ Proxy log levels are `info` \(the default\), `debug`, `warn`, `error`, and `sile
 <!--
 You can proxy multiple entries to the same target by defining the configuration in JavaScript.
 
-Set the proxy configuration file to `proxy.conf.js` \(instead of `proxy.conf.json`\), and specify configuration files as in the following example.
-
-<code-example format="javascript" language="javascript">
-
-const PROXY_CONFIG = [
-    {
-        context: [
-            "/my",
-            "/many",
-            "/endpoints",
-            "/i",
-            "/need",
-            "/to",
-            "/proxy"
-        ],
-        target: "http://localhost:3000",
-        secure: false
-    }
-]
-
-module.exports = PROXY_CONFIG;
-
-</code-example>
-
-In the CLI configuration file, `angular.json`, point to the JavaScript proxy configuration file:
-
-<code-example format="json" language="json">
-
-&hellip;
-"architect": {
-  "serve": {
-    "builder": "&commat;angular-devkit/build-angular:dev-server",
-    "options": {
-      "browserTarget": "your-application-name:build",
-      "proxyConfig": "src/proxy.conf.js"
-    },
-&hellip;
-
-</code-example>
+Set the proxy configuration file to `proxy.conf.mjs` \(instead of `proxy.conf.json`\), and specify configuration files as in the following example.
 -->
 JavaScript 파일을 사용하면 원하는 주소에 해당하는 요청에만 프록시 설정을 적용할 수 있습니다.
 
-이 방법을 사용하려면 `proxy.conf.json` 파일 대신 `proxy.conf.js` 파일에 프록시를 설정합니다.
+이 방법을 사용하려면 `proxy.conf.json` 파일 대신 `proxy.conf.mjs` 파일에 프록시를 설정합니다.
 이 내용은 다음과 같이 작성합니다.
 
 <code-example format="javascript" language="javascript">
 
-const PROXY_CONFIG = [
-    {
-        context: [
-            "/my",
-            "/many",
-            "/endpoints",
-            "/i",
-            "/need",
-            "/to",
-            "/proxy"
-        ],
-        target: "http://localhost:3000",
-        secure: false
-    }
-]
-
-module.exports = PROXY_CONFIG;
+export default [
+  {
+    context: [
+        '/my',
+        '/many',
+        '/endpoints',
+        '/i',
+        '/need',
+        '/to',
+        '/proxy'
+    ],
+    target: 'http://localhost:3000',
+    secure: false
+  }
+];
 
 </code-example>
 
+<!--
+In the CLI configuration file, `angular.json`, point to the JavaScript proxy configuration file:
+-->
 이 파일로 프록시를 설정하려면 Angular CLI 설정 파일 `angular.json` 파일에 이 파일을 지정하면 됩니다:
 
 <code-example format="json" language="json">
@@ -976,7 +806,7 @@ module.exports = PROXY_CONFIG;
     "builder": "&commat;angular-devkit/build-angular:dev-server",
     "options": {
       "browserTarget": "your-application-name:build",
-      "proxyConfig": "src/proxy.conf.js"
+      "proxyConfig": "src/proxy.conf.mjs"
     },
 &hellip;
 
@@ -995,21 +825,19 @@ If you need to optionally bypass the proxy, or dynamically change the request be
 
 <code-example format="javascript" language="javascript">
 
-const PROXY_CONFIG = {
-    "/api/proxy": {
-        "target": "http://localhost:3000",
-        "secure": false,
-        "bypass": function (req, res, proxyOptions) {
-            if (req.headers.accept.indexOf("html") !== -1) {
-                console.log("Skipping proxy for browser request.");
-                return "/index.html";
-            }
-            req.headers["X-Custom-Header"] = "yes";
+export default {
+  '/api/proxy': {
+    "target": 'http://localhost:3000',
+    "secure": false,
+    "bypass": function (req, res, proxyOptions) {
+        if (req.headers.accept.includes('html')) {
+            console.log('Skipping proxy for browser request.');
+            return '/index.html';
         }
+        req.headers['X-Custom-Header'] = 'yes';
     }
-}
-
-module.exports = PROXY_CONFIG;
+  }
+};
 
 </code-example>
 
@@ -1022,41 +850,6 @@ module.exports = PROXY_CONFIG;
 <!--
 If you work behind a corporate proxy, the backend cannot directly proxy calls to any URL outside your local network.
 In this case, you can configure the backend proxy to redirect calls through your corporate proxy using an agent:
-
-<code-example format="shell" language="shell">
-
-npm install --save-dev https-proxy-agent
-
-</code-example>
-
-When you define an environment variable `http_proxy` or `HTTP_PROXY`, an agent is automatically added to pass calls through your corporate proxy when running `npm start`.
-
-Use the following content in the JavaScript configuration file.
-
-<code-example format="javascript" language="javascript">
-
-var HttpsProxyAgent = require('https-proxy-agent');
-var proxyConfig = [{
-  context: '/api',
-  target: 'http://your-remote-server.com:3000',
-  secure: false
-}];
-
-function setupForCorporateProxy(proxyConfig) {
-  var proxyServer = process.env.http_proxy &verbar;&verbar; process.env.HTTP_PROXY;
-  if (proxyServer) {
-    var agent = new HttpsProxyAgent(proxyServer);
-    console.log('Using corporate proxy server: ' + proxyServer);
-    proxyConfig.forEach(function(entry) {
-      entry.agent = agent;
-    });
-  }
-  return proxyConfig;
-}
-
-module.exports = setupForCorporateProxy(proxyConfig);
-
-</code-example>
 -->
 개발환경에 사내용 프록시를 사용한다면 로컬 네트워크에서 회사 외부 URL로 직접 프록시 요청을 보낼 수 없습니다.
 이 경우에는 사내 프록시를 통과해서 리다이렉트 요청을 보내야 합니다.
@@ -1069,32 +862,38 @@ npm install --save-dev https-proxy-agent
 
 </code-example>
 
+<!--
+When you define an environment variable `http_proxy` or `HTTP_PROXY`, an agent is automatically added to pass calls through your corporate proxy when running `npm start`.
+
+Use the following content in the JavaScript configuration file.
+-->
 이제 환경변수 객체에 `http_proxy`나 `HTTP_PROXY` 프로퍼티를 선언하면 위에서 설치한 에이전트가 HTTP 요청을 사내 프록시를 통과하도록 재요청합니다.
 
 JavaScript 프록시 설정 파일은 다음과 같이 작성합니다.
 
 <code-example format="javascript" language="javascript">
 
-var HttpsProxyAgent = require('https-proxy-agent');
-var proxyConfig = [{
+import HttpsProxyAgent from 'https-proxy-agent';
+
+const proxyConfig = [{
   context: '/api',
   target: 'http://your-remote-server.com:3000',
   secure: false
 }];
 
-function setupForCorporateProxy(proxyConfig) {
-  var proxyServer = process.env.http_proxy &verbar;&verbar; process.env.HTTP_PROXY;
+export default (proxyConfig) => {
+  const proxyServer = process.env.http_proxy &verbar;&verbar; process.env.HTTP_PROXY;
   if (proxyServer) {
-    var agent = new HttpsProxyAgent(proxyServer);
+    const agent = new HttpsProxyAgent(proxyServer);
     console.log('Using corporate proxy server: ' + proxyServer);
-    proxyConfig.forEach(function(entry) {
-      entry.agent = agent;
-    });
-  }
-  return proxyConfig;
-}
 
-module.exports = setupForCorporateProxy(proxyConfig);
+    for (const entry of proxyConfig) {
+      entry.agent = agent;
+    }
+  }
+
+  return proxyConfig;
+};
 
 </code-example>
 
@@ -1104,4 +903,4 @@ module.exports = setupForCorporateProxy(proxyConfig);
 
 <!-- end links -->
 
-@reviewed 2022-10-24
+@reviewed 2023-01-17

@@ -78,14 +78,32 @@
       {"type": 301, "source": "/guide/ivy", "destination": "https://v12.angular.io/guide/ivy"},
       {"type": 301, "source": "/guide/updating-to-version-10", "destination": "https://v10.angular.io/guide/updating-to-version-10"},
       {"type": 301, "source": "/guide/updating-to-version-11", "destination": "https://v11.angular.io/guide/updating-to-version-11"},
-      {"type": 301, "source": "/guide/updating-to-version-12", "destination": "/guide/update-to-latest-version"},
+      {"type": 301, "source": "/guide/updating-to-version-12", "destination": "https://v12.angular.io/guide/updating-to-version-12"},
+      {"type": 301, "source": "/guide/updating-to-version-13", "destination": "https://v13.angular.io/guide/update-to-latest-version"},
       {"type": 301, "source": "/guide/set-document-title", "destination": "/guide/router#setting-the-page-title"},
+
+      // Update Angular guide refactor to name individual update topics.
+      // This redirects the generic link to the current version's topic.
+      // The destination value must be updated with each new major version.
+      // When changing this value, be sure to update or add the corresponding
+      //  test in angular/aio/tests/deployment/shared/URLS_TO_REDIRECT.txt
+      {"type": 301, "source": "/guide/update-to-latest-version", "destination": "/guide/update-to-version-16"},
 
       // Renaming of Getting Started topics
       {"type": 301, "source": "/start/data", "destination": "/start/start-data"},
       {"type": 301, "source": "/start/deployment", "destination": "/start/start-deployment"},
       {"type": 301, "source": "/start/forms", "destination": "/start/start-forms"},
       {"type": 301, "source": "/start/routing", "destination": "/start/start-routing"},
+
+      // Tutorials moved to subdirectories
+      {"type": 301, "source": "/tutorial/index",   "destination": "/tutorial/tour-of-heroes/index"},
+      {"type": 301, "source": "/tutorial/toh-pt0", "destination": "/tutorial/tour-of-heroes/toh-pt0"},
+      {"type": 301, "source": "/tutorial/toh-pt1", "destination": "/tutorial/tour-of-heroes/toh-pt1"},
+      {"type": 301, "source": "/tutorial/toh-pt2", "destination": "/tutorial/tour-of-heroes/toh-pt2"},
+      {"type": 301, "source": "/tutorial/toh-pt3", "destination": "/tutorial/tour-of-heroes/toh-pt3"},
+      {"type": 301, "source": "/tutorial/toh-pt4", "destination": "/tutorial/tour-of-heroes/toh-pt4"},
+      {"type": 301, "source": "/tutorial/toh-pt5", "destination": "/tutorial/tour-of-heroes/toh-pt5"},
+      {"type": 301, "source": "/tutorial/toh-pt6", "destination": "/tutorial/tour-of-heroes/toh-pt6"},
 
       // some top level guide pages on old site were moved below the guide folder
       {"type": 301, "source": "/styleguide", "destination": "/guide/styleguide"},
@@ -150,7 +168,6 @@
       // URLs that use the old scheme before we moved the docs to the angular/angular repo
       {"type": 301, "source": "/docs/*/latest", "destination": "/docs"},
       {"type": 301, "source": "/docs/*/latest/api/", "destination": "/api"},
-      {"type": 301, "source": "/docs/*/latest/api/:package", "destination": "/api/:package"},
       {"type": 301, "source": "/docs/*/latest/api/testing/:api-*",  "destination": "/api/core/testing/:api"},
       {"type": 301, "source": "/docs/*/latest/api/:package/:api-*", "destination": "/api/:package/:api"},
       {"type": 301, "source": "/docs/*/latest/api/:package/index/:api-*", "destination": "/api/:package/:api"},

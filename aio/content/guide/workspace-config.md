@@ -497,6 +497,7 @@ Some extra options can only be set through the configuration file, either by dir
 | `scripts`                  | An object containing JavaScript script files to add to the global context of the project. The scripts are loaded exactly as if you had added them in a `<script>` tag inside `index.html`. See more in the [Styles and scripts configuration](#style-script-config) section.                            |
 | `budgets`                  | Default size-budget type and thresholds for all or parts of your application. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See [Configure size budgets](guide/build#configure-size-budgets). \(Not available in `test` section.\) |
 | `fileReplacements`         | An object containing files and their compile-time replacements. See more in [Configure target-specific file replacements](guide/build#configure-target-specific-file-replacements).                                                                                                                     |
+|`index`                    | Configures the generation of the application's HTML index. See more in [Index configuration](#index-config). \(Only available in `browser` section.\)                                                                                                         |                                                                                                        |
 -->
 이 환경설정 파일의 내용은 [`ng build`](cli/build), [`ng serve`](cli/serve), [`ng test`](cli/test) 명령에 적용됩니다.
 이 명령에 사용할 수 있는 옵션의 목록은 [Angular CLI](cli) 문서를 참고하세요.
@@ -511,6 +512,7 @@ Some extra options can only be set through the configuration file, either by dir
 | `scripts`                  | 프로젝트 전역에 사용되는 JavaScript 파일을 지정합니다. 이 때 지정되는 JavaScript 파일들은 `index.html`에 `<script>` 태그로 자동 추가됩니다. 자세한 내용은 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요.                                            |
 | `budgets`                  | 애플리케이션 빌드 결과물의 한계 크기를 지정합니다. 애플리케이션을 빌드해서 생성되는 빌드 결과물의 크기가 이 옵션에서 지정된 값보다 크면 경고 메시지나 에러 메시지를 출력합니다. 자세한 내용은 [빌드 결과물 크기 지정하기](guide/build#configure-size-budgets) 문서를 참고하세요. \(`test` 환경설정에는 적용되지 않습니다.\) |
 | `fileReplacements`         | 컴파일 시점에 기본 옵션을 대체할 파일을 지정합니다. 자세한 내용은 [빌드 환경에 맞게 환경설정 파일 교체하기](guide/build#configure-target-specific-file-replacements) 문서를 참고하세요.                                                                       |
+| `index`                    | 애플리케이션의 기본 HTML 파일이 어떻게 생성될지 지정합니다. 자세한 내용은 [Index 환경설정](#index-config) 섹션을 참고하세요. \(`browser` 섹션에서만 사용할 수 있습니다.\)                                                                                       |                                                                                                        |
 
 
 <a id="complex-config"></a>
@@ -521,12 +523,14 @@ Some extra options can only be set through the configuration file, either by dir
 ## 복잡한 환경설정 값들
 
 <!--
-The `assets`, `styles`, and `scripts` options can have either simple path string values, or object values with specific fields.
+The `assets`, `index`, `styles`, and `scripts` options can have either simple path string values, or object values with specific fields.
 The `sourceMap` and `optimization` options can be set to a simple Boolean value with a command flag. They can also be given a complex value using the configuration file.
+
 The following sections provide more details of how these complex values are used in each case.
 -->
-`assets`, `styles`, `scripts` 필드에는 경로를 지정하거나 미리 정해져 있는 형식으로 객체를 할당하는 방식으로 사용합니다.
+`assets`, `index`, `styles`, `scripts` 필드에는 경로를 지정하거나 미리 정해져 있는 형식으로 객체를 할당하는 방식으로 사용합니다.
 그런데 `sourceMap`이나 `optimization` 옵션에는 간단하게 불리언 값을 지정할 수도 있지만 복잡한 값으로 구성할 수도 있습니다.
+
 어떻게 활용할 수 있는지 알아봅시다.
 
 
@@ -875,7 +879,7 @@ Sass를 사용한다면 `includePaths` 필드를 지정해서 추가 컴포넌�
 The `optimization` browser builder option can be either a Boolean or an Object for more fine-tune configuration.
 This option enables various optimizations of the build output, including:
 
-<!-- vale Angular.Angular_Spelling = NO-->
+<!- vale Angular.Angular_Spelling = NO->
 
 *   Minification of scripts and styles
 *   Tree-shaking
@@ -883,7 +887,7 @@ This option enables various optimizations of the build output, including:
 *   Inlining of critical CSS
 *   Fonts inlining
 
-<!-- vale Angular.Angular_Spelling = YES-->
+<!- vale Angular.Angular_Spelling = YES->
 
 Several options can be used to fine-tune the optimization of an application.
 
@@ -941,6 +945,8 @@ Several options can be used to fine-tune the optimization of an application.
 | Options  | Details                                                                                                                                                                                                                                                                    | Value type | Default value |
 |:---      |:---                                                                                                                                                                                                                                                                        |:---        |:---           |
 | `inline` | Reduce [render blocking requests](https://web.dev/render-blocking-resources) by inlining external Google Fonts and Adobe Fonts CSS definitions in the application's HTML index file. <div class="alert is-helpful"> **NOTE**: <br /> This requires internet access. </div> | `boolean`  | `true`        |
+
+<!- vale Angular.Angular_Spelling = YES ->
 
 You can supply a value such as the following to apply optimization to one or the other:
 
@@ -1053,6 +1059,42 @@ These are useful if you only want source maps to map error stack traces in error
 이 옵션은 에러를 처리할 때는 소스맵을 활용하지만 개발자 도구에 노출되는 것을 방지할 때 사용하면 됩니다.
 
 </div>
+
+
+<a id="index-config"></a>
+
+<!--
+### Index configuration
+-->
+### Index 환경설정
+
+<!--
+Configures the generation of the application's HTML index.
+
+The `index` option can be either a String or an Object for more fine-tune configuration.
+
+When supplying the value as a String the filename of the specified path will be used for the generated file and will be created in the root of the application's configured output path.
+-->
+애플리케이션의 HTML 인덱스 생성방식을 지정할 수 있습니다.
+
+`index` 옵션은 문자열이나 객체 형식으로 지정할 수 있습니다.
+
+
+<!--
+#### Index options
+-->
+#### Index 옵션
+
+<!--
+| Options  | Details                                                                                                                                                                          | Value type | Default value |
+|:---      |:---                                                                                                                                                                              |:---        |:---           |
+| `input`  | The path of a file to use for the application's generated HTML index.                                                                                                            | `string`   |               |
+| `output` | The output path of the application's generated HTML index file. The full provided path will be used and will be considered relative to the application's configured output path. | `string`   | `index.html`  |
+-->
+| 옵션       | 설명                                                                    | 타입       | 기본값          |
+|:---------|:----------------------------------------------------------------------|:---------|:-------------|
+| `input`  | 애플리케이션을 빌드하면서 불러올 HTML 인덱스 파일의 위치를 지정합니다.                             | `string` |              |
+| `output` | HTML 인덱스 파일이 생성될 경로를 지정합니다. 이 때 애플리케이션의 빌드 결과물이 생성되는 폴더의 상대주소로 지정합니다. | `string` | `index.html` |
 
 
 <!-- links -->

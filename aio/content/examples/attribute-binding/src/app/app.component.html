@@ -54,8 +54,8 @@
 <!-- #docregion dynamic-priority -->
 <h3>동적 vs 정적</h3>
 
-<!-- `classExpression`이 동적으로 처리되기 때문에 `class`보다 우선순위가 높습니다. -->
-<div class="special" [class]="classExpression">Some text.</div>
+<!-- `[class.special]` 가 false로 평가되기 때문에 `class="special"` 의 평가 결과가 적용됩니다. -->
+<div class="special" [class.special]="false">Some text.</div>
 
 <!-- `styleExpression`이 동적으로 처리되기 때문에 `style="border: dotted darkblue 3px"`보다 우선순위가 높습니다 -->
 <div style="border: dotted darkblue 3px" [style]="styleExpression">Some text.</div>

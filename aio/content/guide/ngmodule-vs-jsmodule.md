@@ -149,8 +149,8 @@ It then configures the `@NgModule` with the following arrays:
 *   `providers`: Providers of services that components in other NgModules can use.
   There are no providers in a newly generated root NgModule.
 
-*   `bootstrap`: The [entry component](guide/entry-components "Specifying an entry component") that Angular creates and inserts into the `index.html` host web page, thereby bootstrapping the application.
-  This entry component, `AppComponent`, appears in both the `declarations` and the `bootstrap` arrays.
+*   `bootstrap`: The component that Angular creates and inserts into the `index.html` host web page, thereby bootstrapping the application.
+  This component, `AppComponent`, appears in both the `declarations` and the `bootstrap` arrays.
 -->
 새 프로젝트를 생성할 때 [Angular CLI](cli)가 자동으로 생성한 최상위 모듈 `AppModule`을 보면 Angular가 두 가지 모듈을 어떻게 활용하고 있는지 확인할 수 있습니다:
 
@@ -168,8 +168,8 @@ It then configures the `@NgModule` with the following arrays:
 *   `providers`: NgModule에 등록된 컴포넌트에서 사용할 서비스의 프로바이더를 등록합니다.
     앱 프로젝트를 새로 만들었을 때 최상위 NgModule에 등록된 프로바이더는 없습니다.
 
-*   `bootstrap`: Angular가 부트스트랩될 때 호스트 웹 페이지 `index.html`에 생성해서 집어넣을 [진입 컴포넌트](guide/entry-components "Specifying an entry component")를 지정합니다.
-    기본 진입 컴포넌트는 `AppComponent`이며, 이 컴포넌트는 `declarations` 배열과 `bootstrap` 배열에 모두 등록되어 있습니다.
+*   `bootstrap`: Angular가 부트스트랩될 때 호스트 웹 페이지 `index.html`에 생성해서 집어넣을 컴포넌트를 지정합니다.
+    기본 컴포넌트는 `AppComponent`이며, 이 컴포넌트는 `declarations` 배열과 `bootstrap` 배열에 모두 등록되어 있습니다.
 
 
 <!--

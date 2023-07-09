@@ -1,11 +1,10 @@
 // #docplaster
-import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import {Component, DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
+import {By} from '@angular/platform-browser';
+import {provideRouter, Router, RouterLink} from '@angular/router';
 
-import { RouterLinkDirectiveStub } from '../testing';
-
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 
 // #docregion component-stubs
 @Component({selector: 'app-banner', template: ''})
@@ -29,10 +28,10 @@ describe('AppComponent & TestModule', () => {
     // #docregion testbed-stubs
     TestBed
         .configureTestingModule({
-          declarations: [
-            AppComponent, RouterLinkDirectiveStub, BannerStubComponent, RouterOutletStubComponent,
-            WelcomeStubComponent
-          ]
+          imports: [RouterLink],
+          providers: [provideRouter([])],
+          declarations:
+              [AppComponent, BannerStubComponent, RouterOutletStubComponent, WelcomeStubComponent]
         })
         // #enddocregion testbed-stubs
         .compileComponents()
@@ -55,8 +54,9 @@ describe('AppComponent & NO_ERRORS_SCHEMA', () => {
             // #enddocregion no-errors-schema
             BannerStubComponent,
             // #docregion no-errors-schema
-            RouterLinkDirectiveStub
           ],
+          providers: [provideRouter([])],
+          imports: [RouterLink],
           schemas: [NO_ERRORS_SCHEMA]
         })
         // #enddocregion no-errors-schema, mixed-setup
@@ -70,21 +70,25 @@ describe('AppComponent & NO_ERRORS_SCHEMA', () => {
 });
 
 //////// Testing w/ real root module //////
-// Tricky because we are disabling the router and its configuration
-// Better to use RouterTestingModule
-import { AppModule } from './app.module';
-import { AppRoutingModule } from './app-routing.module';
+import {AppModule} from './app.module';
+import {AppRoutingModule} from './app-routing.module';
 
 describe('AppComponent & AppModule', () => {
   beforeEach(waitForAsync(() => {
     TestBed
-        .configureTestingModule({imports: [AppModule]})
+        .configureTestingModule({
+          imports: [AppModule],
+        })
 
         // Get rid of app's Router configuration otherwise many failures.
         // Doing so removes Router declarations; add the Router stubs
         .overrideModule(AppModule, {
           remove: {imports: [AppRoutingModule]},
-          add: {declarations: [RouterLinkDirectiveStub, RouterOutletStubComponent]}
+          add: {
+            declarations: [RouterOutletStubComponent],
+            imports: [RouterLink],
+            providers: [provideRouter([])],
+          }
         })
 
         .compileComponents()
@@ -99,7 +103,7 @@ describe('AppComponent & AppModule', () => {
 });
 
 function tests() {
-  let routerLinks: RouterLinkDirectiveStub[];
+  let routerLinks: RouterLink[];
   let linkDes: DebugElement[];
 
   // #docregion test-setup
@@ -107,10 +111,10 @@ function tests() {
     fixture.detectChanges(); // 초기 데이터 바인딩을 실행합니다.
 
     // RouterLinkStubDirective가 사용된 DebugElement를 쿼리합니다.
-    linkDes = fixture.debugElement.queryAll(By.directive(RouterLinkDirectiveStub));
+    linkDes = fixture.debugElement.queryAll(By.directive(RouterLink));
 
     // DebugElement의 인젝터를 사용해서 개별 디렉티브 인스턴스를 참조합니다.
-    routerLinks = linkDes.map(de => de.injector.get(RouterLinkDirectiveStub));
+    routerLinks = linkDes.map(de => de.injector.get(RouterLink));
   });
   // #enddocregion test-setup
 
@@ -120,26 +124,21 @@ function tests() {
 
   // #docregion tests
   it('can get RouterLinks from template', () => {
-    expect(routerLinks.length)
-      .withContext('should have 3 routerLinks')
-      .toBe(3);
-    expect(routerLinks[0].linkParams).toBe('/dashboard');
-    expect(routerLinks[1].linkParams).toBe('/heroes');
-    expect(routerLinks[2].linkParams).toBe('/about');
+    expect(routerLinks.length).withContext('should have 3 routerLinks').toBe(3);
+    expect(routerLinks[0].href).toBe('/dashboard');
+    expect(routerLinks[1].href).toBe('/heroes');
+    expect(routerLinks[2].href).toBe('/about');
   });
 
-  it('can click Heroes link in template', () => {
-    const heroesLinkDe = linkDes[1];    // 히어로 목록으로 가는 링크를 표현하는 DebugElement
-    const heroesLink = routerLinks[1];  // 히어로 목록으로 가는 링크와 연결된 디렉티브
+  it('can click Heroes link in template', fakeAsync(() => {
+       const heroesLinkDe = linkDes[1];  // 히어로 목록으로 가는 링크를 표현하는 DebugElement
 
-    expect(heroesLink.navigatedTo)
-      .withContext('should not have navigated yet')
-      .toBeNull();
+       TestBed.inject(Router).resetConfig([{path: '**', children: []}]);
+       heroesLinkDe.triggerEventHandler('click', {button: 0});
+       tick();
+       fixture.detectChanges();
 
-    heroesLinkDe.triggerEventHandler('click');
-    fixture.detectChanges();
-
-    expect(heroesLink.navigatedTo).toBe('/heroes');
-  });
+       expect(TestBed.inject(Router).url).toBe('/heroes');
+     }));
   // #enddocregion tests
 }

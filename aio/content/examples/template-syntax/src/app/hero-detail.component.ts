@@ -19,9 +19,9 @@ import { Hero } from './hero';
 })
 export class HeroDetailComponent {
   hero = new Hero(-1, '', 'Zzzzzzzz'); // 기본 상태에서 히어로는 자고 있습니다.
-  // heroImageUrl = 'https://wpclipart.com/cartoon/people/hero/hero_silhoutte_T.png';
+  // heroImageUrl = 'https://wpclipart.com/cartoon/people/hero/hero_silhoutte.png.html';
   // Public Domain terms of use: https://wpclipart.com/terms.html
-  heroImageUrl = 'assets/images/hero.png';
+  heroImageUrl = 'assets/images/hero.svg';
   lineThrough = '';
   @Input() prefix = '';
 

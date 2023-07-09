@@ -4,21 +4,21 @@
 # Angular 로드맵
 
 <!--
-<p class="roadmap-last-updated">Last updated: 2022-11-05</p>
+<p class="roadmap-last-updated">Last updated: 2023-05-03</p>
 
-Angular receives a large number of feature requests, both from inside Google and from the broader open-source community.
+Angular receives many feature requests, both from inside Google and the broader open-source community.
 At the same time, our list of projects contains plenty of maintenance tasks, code refactorings, and potential performance improvements.
-We bring together representatives from developer relations, product management, and engineering to prioritize this list.
+We bring together developer relations, product management, and engineering representatives to prioritize this list.
 As new projects come into the queue, we regularly position them based on relative priority to other projects.
 As work gets done, projects move up in the queue.
 
 The following projects are not associated with a particular Angular version.
 We will release them on completion, and they will be part of a specific version based on our release schedule, following semantic versioning.
-For example, features are released in the next minor after they are complete, or the next major if they include breaking changes.
+For example, we release features in the next minor after completion or the next major if they include breaking changes.
 -->
-<p class="roadmap-last-updated">최근 업데이트: 2022-11-05</p>
+<p class="roadmap-last-updated">최근 수정: 2023-05-03</p>
 
-Angular는 Google 내부에서와 오픈 소스 커뮤니티로부터 수많은 기능 추가 요청을 받고 있습니다.
+Angular는 Google 내부와 오픈 소스 커뮤니티로부터 수많은 기능 추가 요청을 받고 있습니다.
 동시에 저희는 프로젝트를 유지하기 위한 작업과 코드 리팩토링, 성능 개선작업 등도 함께 수행하고 있습니다.
 또, 개발자들과 소통하는 행사를 준비하기도 하고 솔루션을 관리하는 일들의 우선 순위를 정하기도 합니다.
 새로 작업해야 하는 프로젝트 요청이 오면 다른 프로젝트와 비교해서 우선순위를 조정하는 경우도 있습니다.
@@ -27,42 +27,59 @@ Angular는 Google 내부에서와 오픈 소스 커뮤니티로부터 수많은 
 개발이 완료된 프로젝트는 릴리즈 일정에 맞춰 다음 마이너 버전이나 다음 메이저 버전에 들어갑니다.
 기능 추가는 다음 마이너 버전에 들어가며, 큰 변동사항은 다음 메이저 버전에 들어갑니다.
 
+
 <!--
 ## In progress
 -->
 ## 진행중
 
 <!--
-### Explore hydration and server-side rendering usability improvements
+### Explore hydration and server-side rendering improvements
 -->
-### Explore hydration and server-side rendering usability improvements
+### 하이드레이션, 서버 사이드 렌더링 개선
 
 <!--
-As the first step of this project we will implement non-destructive hydration. This technique will allow us to reuse the server-side rendered DOM and rather than rerendering it only attach event listeners and create data structures required by the Angular runtime. As the next step, we are going to further explore the dynamically evolving space of partial hydration and resumability. Each of the approaches has their trade-offs and we'd like to make an informed decision what's the most optimal long-term solution for Angular.
+In v16, we released a developer preview of non-destructive full hydration, see the [hydration guide](guide/hydration) and the [blog post](https://blog.angular.io/whats-next-for-server-side-rendering-in-angular-2a6f27662b67) for additional information. We're already seeing significant improvements to Core Web Vitals, including [LCP](https://web.dev/lcp) and [CLS](https://web.dev/cls). In lab tests, we consistently observed 45% better LCP of a real-world app.
+
+As the next step, we will iterate on polishing full hydration and further explore the dynamically evolving space of partial hydration and resumability. These more advanced patterns carry their own trade-offs; we'll share updates as we progress.
 -->
-이 프로젝트의 첫 단계로, 비파괴 하이드레이션\(hydration\)을 도입했습니다.
-이 기술을 활용하면 서버 쪽에서 렌더링된 DOM을 재사용할 수 있으며, 이벤트 리스너만 연결해둔 상태로 화면을 다시 렌더링하지 않아도 Angular 런타임에 필요한 데이터 구조를 생성할 수 있습니다.
-이후에는 부분 하이드레이션이나 재개 가능성을 동적으로 도입하는 것을 좀 더 연구할 예정입니다.
-각 접근 방식에는 장단점이 있기 때문에 어떤 방법이 가장 효율적인지 장기적으로 연구해 보겠습니다.
+Angular v16부터는 기존 코드에 영향을 크게 미치지 않는 하이드레이션을 개발자 프리뷰로 도입했습니다.
+자세한 내용은 [하이드레이션 문서](guide/hydration)와 [블로그](https://blog.angular.io/whats-next-for-server-side-rendering-in-angular-2a6f27662b67)를 참고하세요.
+그리고 [LCP](https://web.dev/lcp)와 [CLS](https://web.dev/cls) 같은 핵심 웹 성능(Core Web Vital)을 크게 개선하는 개선사항을 준비하고 있습니다.
+테스트 결과로 보면 약 45% 개선된 LCP 성능을 확인했습니다.
+
+그 다음 단계는 하이드레이션을 더 확장시키는 것입니다.
+이 방향은 장단점이 있습니다.
+진행되는 과정은 수시로 공유드리겠습니다.
 
 
 <!--
-### Improve runtime performance and make Zone.js optional
+### Improve runtime performance and developer experience with a new reactivity model
 -->
-### 실행 성능 개선, Zone.js를 옵션으로 전환하기
+### 실행 성능 개선, 새 반응형 모델 도입
 
 <!--
-As part of this effort we are revisiting Angular's reactivity model to make Zone.js optional and improve runtime performance. By default Angular runs change detection globally, traversing the entire component tree. We're exploring options to run change detection only in affected components. This way, we simplify the framework, improve debugging, and reduce application bundle size. Additionally, this lets us take advantage of built-in async/await syntax, which currently Zone.js does not support.
+In v16, we shared a developer preview of Angular Signals which fully implemented make Zone.js optional. The feature resulted from hundreds of discussions, conversations with developers, feedback sessions, user experience studies, and a series of [RFCs](https://github.com/angular/angular/discussions/49685), which received over 1,000 comments. As part of the release, we made a signals library and an RxJS interoperability package available. Next, after addressing the feedback we received from developers, we’ll continue implementing the proposals from the RFC.
 -->
-Angular 팀은 현재 Angular 애플리케이션에 Zone.js가 필수인 것을 걷어내는 작업을 계획하고 있습니다.
-이 작업이 끝나면 프레임워크가 더 간단해지고, 디버깅이 쉬워지며, 애플리케이션을 빌드한 후의 용량도 줄어들 것입니다.
-그리고 현재 Zone.js가 지원하지 않는 async/await 문법도 활용할 수 있게 될 것입니다.
+Angular v16부터는 Zone.js를 제거하기 위한 Angular Signal을 개발자 프리뷰로 도입했습니다.
+이 프로젝트 도입을 위해 수백건의 논의가 이루어지고 있으며, 개발자들의 의견을 받고, [RFCs](https://github.com/angular/angular/discussions/49685)를 통해 1,000개 이상의 논의를 이어가고 있습니다.
+이 개선사항으로 RxJS와 상호 호환될 수 있는 새로운 Signal 라이브러리를 도입했습니다.
+이 단계에서 개발자들의 피드백을 더 받아보고 다음 방향을 수립할 예정입니다.
 
-Angular 팀은 현재 Zone.js를 활용하는 Angular의 반응형 모델을 다시 분석하면서 실행 성능 개선을 준비하고 있습니다.
-기본적으로 Angular는 변화감지를 전역 범위에서 실행하며 전체 컴포넌트 트리를 순회합니다.
-이제는 영향이 미치는 범위까지만 개별 변화 감지를 실행하도록 개선하려고 합니다.
-이 작업이 완료되면 Angular 프레임워크는 더 단순해질 것이며, 디버깅하기 편해지고, 애플리케이션 빌드 결과물의 크기도 줄어들 것입니다.
-그리고 Zone.js는 제공하지 않는 브라우저 내장 async/await 문법도 사용할 수 있게 될 것입니다.
+
+<!--
+### Explore ergonomic component-level code-splitting APIs
+-->
+### 컴포넌트 계층 코드 분리 API
+
+<!--
+A common problem with web apps is their slow initial load time.
+A way to improve it is to apply more granular code-splitting on a component level.
+We will be working on more ergonomic code-splitting APIs to encourage this practice.
+-->
+웹앱의 문제 중 하나는 최초 실행 시간이 오래 걸린다는 것입니다.
+이를 개선하기 위해, 컴포넌트 계층에서 코드를 나눌 수 있는 기능을 도입했습니다.
+지금은 이 API들의 사용성을 개선하는 작업을 하고 있습니다.
 
 
 <!--
@@ -71,10 +88,10 @@ Angular 팀은 현재 Zone.js를 활용하는 Angular의 반응형 모델을 다
 ### 단독 컴포넌트 문서, 스키매틱 개선
 
 <!--
-We are working on developing an `ng new` collection for applications bootstrapped with a standalone component. Additionally, we are filling the documentation gaps of the simplified standalone component APIs.
+We released a developer preview of the `ng new --standalone` schematics collection, allowing you to create apps free of NgModules. Next, we'll iterate on the schematics to fill feature gaps and release a new tutorial based on standalone components.
 -->
-단독 컴포넌트를 애플리케이션 부트스트랩 단계부터 적용할 수 있도록 `ng new` 콜렉션을 개선하고 있습니다.
-그리고 API 문서도 보완하고 있습니다.
+개발자 프리뷰로 NgModule 밖에 앱을 만들 수 있는 `ng new --standalone` 스키매틱 컬렉션을 추가했습니다.
+그 다음 단계로, 누락된 기능을 보완하기 위한 스키매틱 작업을 진행하고 있으며, 튜토리얼 문서도 작성하고 있습니다.
 
 
 <!--
@@ -83,10 +100,12 @@ We are working on developing an `ng new` collection for applications bootstrappe
 ### 의존성 주입 디버깅 API 추가
 
 <!--
-To improve the debugging utilities of Angular and Angular DevTools, we'll work on APIs that provide access the dependency injection runtime. As part of the project we'll expose debugging methods that allow us to explore the injector hierarchy and the dependencies across their associated providers.
+To improve the debugging utilities of Angular and Angular DevTools, we'll work on APIs that provide access to the dependency injection runtime. As part of the project, we'll expose debugging methods that allow us to explore the injector hierarchy and the dependencies across their associated providers. As of v16, we have a design of a feature that enables us to plug into the dependency injection life-cycle. As the next step, we'll implement the functionality and provide integration with Angular DevTools.
 -->
 Angular, Angular DevTool의 활용도를 높이기 위해, 실행시점에 동작하는 의존성 주입 시스템에 접근할 수 있는 API를 준비하고 있습니다.
 이 프로젝트가 완료되면 이제 의존성 계층과 프로바이더를 직접 확인할 수 있을 것입니다.
+Angular v16부터는 라이프싸이클 실행 중에 의존성 주입 시스템에 접근할 수 있는 기능을 도입했습니다.
+그 다음 단계는, 이 기능을 더 개선하고 Angular DevTool과 연결시키는 것입니다.
 
 
 <!--
@@ -95,10 +114,11 @@ Angular, Angular DevTool의 활용도를 높이기 위해, 실행시점에 동�
 ### 언어 지원 서비스를 위한 단독 스트림라인
 
 <!--
-As part of this initiative we are going to implement automatic import of template dependencies for standalone components. Additionally, to enable smaller application bundles the language service will propose automatic removal of unused imports.
+As part of this initiative, the language service automatically imports components and pipes in standalone and NgModule-based apps. Additionally, to enable smaller app bundles, we'll work on allowing the language service to propose the automatic removal of unused imports.
 -->
-독립 컴포넌트의 템플릿 의존성을 자동으로 불러오는 기능을 준비하고 있습니다.
-작은 애플리케이션 규모에서는 사용하지 않는 `import` 구문을 자동으로 제거하는 기능도 준비하고 있습니다.
+이제 언어 서비스는 독립 컴포넌트나 NgModule 기반 앱에서 구성요소와 파이프를 자동으로 로드합니다.
+그리고 앱 빌드 결과물의 크기를 더 줄이기 위해, 사용하지 않는 import 구문은 자동으로 제거하는 기능을 도입하려고 합니다.
+
 
 <!--
 ### Investigate modern bundles
@@ -106,17 +126,11 @@ As part of this initiative we are going to implement automatic import of templat
 ### 최신 번들링 기술 검토
 
 <!--
-To improve development experience by speeding up build times, we plan to explore options to improve JavaScript bundles created by Angular CLI.
-As part of the project experiment with [esbuild](https://esbuild.github.io) and other open source solutions, compare them with the state-of-the-art tooling in Angular CLI, and report the findings. In Angular v15 we have experimental esbuild support in `ng build` and `ng build --watch`. We'll continue iterating on the solution until we're confident to release it as stable.
+In Angular v16, we released a developer preview of an esbuild-based builder with support for `ng build` and `ng serve`. The `ng serve` development server uses Vite and a multi-file compilation by esbuild and the Angular compiler. As the next step before we graduate the feature out of developer preview, we'll work on enabling internationalization support and fixing stability issues.
 -->
-빌드 속도를 개선해서 개발 경험을 향상시키기 위해 최신 JavaScript 번들링 기술을 조사하고 있습니다.
-[esbuild](https://esbuild.github.io) 등을 검토하고 있으며, Angular CLI와의 호환성도 검토하고 있습니다.
-최근에는 Angular 14 버전을 내면서 esbuild를 [시험 지원](https://github.com/angular/angular-cli/pull/22995)하기도 했습니다.
-지금은 그 다음 단계로 새로운 프로토타입을 개발하고 있으며 Sass 지원도 진행하고 있습니다.
-
-빌드 속도를 개선해서 개발 경험을 향상시키기 위해 최신 JavaScript 번들링 기술을 조사하고 있습니다.
-지금까지는 [esbuild](https://esbuild.github.io)등 오픈소스 솔루션을 시범 도입해서 확인하고 있는 단계이며, Angular v15 부터는 `ng build` 명령과 `ng build --watch` 명령에 esbuild를 활용합니다.
-이 작업은 안정화될 때까지 좀 더 지켜볼 예정입니다.
+Angular v16에는 `ng build`, `ng serve` 명령을 실행할 때 esbuild 기반으로 동작하는 빌더를 개발자 프리뷰로 도입했습니다.
+이제 `ng serve` 개발 서버는 Vite를 사용하며, esbuild와 Angular 컴파일러를 사용해서 여러 파일을 동시에 컴파일할 수 있습니다.
+개발자 프리뷰를 종료하는 시점에는 이슈를 좀 더 해결하고, 국제화(i18n, internationalization)에도 이 기능을 적용할 수 있을 것입니다.
 
 
 <!--
@@ -125,7 +139,7 @@ As part of the project experiment with [esbuild](https://esbuild.github.io) and 
 ### 새로운 CDK 기본 타입
 
 <!--
-We are working on new CDK primitives to facilitate creating custom components based on the WAI-ARIA design patterns for [Combobox](https://www.w3.org/TR/wai-aria-practices-1.1/#combobox). Angular v14 introduced stable [menu and dialog primitives](https://material.angular.io/cdk/categories) as part of this project and in v15 [Listbox](https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox).
+We are working on new CDK primitives to facilitate creating custom components based on the WAI-ARIA design patterns for [Combobox](https://www.w3.org/TR/wai-aria-practices-1.1/#combobox). Angular v14 introduced stable [menu and dialog primitives](https://material.angular.io/cdk/categories) as part of this project, and in v15 [Listbox](https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox).
 -->
 Angular 팀은 [리스트 박스](https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox)와 [콤보박스](https://www.w3.org/TR/wai-aria-practices-1.1/#combobox)가 WAI-ARIA 디자인 패턴을 잘 준수할 수 있도록 개선하는 작업을 진행하고 있습니다.
 이 프로젝트의 중간 결과물로 Angular 14 버전에는 [메뉴와 다이얼로그 기본 타입](https://material.angular.io/cdk/categories)이 추가되었으며, 15 버전에는 [리스트 박스](https://www.w3.org/TR/wai-aria-practices-1.1/#Listbox)가 추가되었습니다.
@@ -141,31 +155,54 @@ We are evaluating components in Angular Material against accessibility standards
 -->
 Angular Material로 제공되는 컴포넌트가 WCAG와 같은 표준을 만족할 수 있도록 접근성을 개선하는 작업을 진행하고 있습니다.
 
-<!--
-### Documentation refactoring
--->
-### 문서 리팩토링
 
 <!--
-Ensure all existing documentation fits into a consistent set of content types. Update excessive use of tutorial-style documentation into independent topics. We want to ensure the content outside the main tutorials is self-sufficient without being tightly coupled to a series of guides. In Q2 2022, we refactored the [template content](https://github.com/angular/angular/pull/45897). The next steps are to introduce better structure for components and dependency injection.
--->
-Angular 가이드 문서가 일관되게 작성되었는지 전체 문서를 점검하고 있습니다.
-그리고 튜토리얼 방식의 문서 중 복잡한 내용은 개별 주제로 분리하는 작업도 진행하고 있습니다.
-Angular 팀이 원하는 것은 메인 주제를 벗어나는 내용은 독립적으로 분리하는 것입니다.
-그래서 [템플릿](https://github.com/angular/angular/pull/45897) 문서의 내용을 리팩토링하는 작업을 2022년 2분기에 완료했습니다.
-다음 단계는 컴포넌트와 의존성 주입에 대한 문서를 손보는 것입니다.
-
 ### Investigate micro frontend architecture for scalable development processes
+-->
+### 확장 가능한 마이크로 프론트엔드 아키텍처 연구
 
-For the past couple of quarters we understood and defined the problem space. We are going to follow up with a series of blog posts on best practices when developing applications at scale.
+<!--
+We understood and defined the problem space for the past couple of quarters. We will follow up with a blog post on best practices when developing apps at scale. The project got delayed due to the prioritization of other initiatives.
+-->
+이 문제는 오랫동안 연구되던 것입니다.
+준비가 되고나면 앱을 대규모로 개발할 때 활용할 수 있는 모범 사례를 블로그 글로 공유하겠습니다.
+다른 개선사항을 먼저 처리하느라 약간 늦어졌습니다.
 
+
+<!--
 ### Update getting started tutorial
+-->
+### 시작하기 튜토리얼 갱신
 
-We're working on updating the Angular getting started experience with standalone components. As part of this initiative, we'd like to create a new textual and video tutorials.
+<!--
+Over the past two quarters, we developed a new video and textual tutorial based on standalone components. They are in the final review stages, and we expect to publish them by the end of Q2.
+-->
+지난 반년동안 단독 컴포넌트 튜토리얼을 위한 영상과 문서를 추가했습니다.
+지금은 마지막 리뷰 단계입니다.
 
-### Improvements in the image directive
 
-We released the Angular [image directive](https://developer.chrome.com/blog/angular-image-directive/) as stable in v15. We introduced a new fill mode feature that enables images to fit within their parent container rather than having explicit dimensions. Currently, this feature is in [developer preview](https://angular.io/guide/releases#developer-preview). Next we'll be working on collecting feedback from developers before we promote fill mode as stable.
+<!--
+### Token-based theming APIs
+-->
+### 토큰 기반의 테마 API
+
+<!--
+To provide better customization of our Angular material components and enable Material 3 capabilities, we'll be collaborating with Google's Material Design team on defining token-based theming APIs. As of Q2 2023, we're refactoring components to use the new API, finalizing the comprehensive set of tokens, and updating the Sass API based on the new tokens.
+-->
+Angular 매터리얼 컴포넌트를 커스터마이징하거나 Material 3 사용성을 도입하기 위해, Angular 팀은 Google 매터리얼 디자인 팀과 협업하면서 테마 API를 토큰 기반으로 변경하고 있습니다.
+2023년 2분기 현재, 새로운 API를 사용할 수 있도록 컴포넌트, Sass API를 리팩토링하고 있습니다.
+
+<!--
+### Modernize Angular's unit testing tooling
+-->
+### 유닛 테스트 환경 개선
+
+<!--
+In v12, we revisited the Angular end-to-end testing experience by replacing Protractor with modern alternatives such as Cypress, Nightwatch, and Webdriver.io. Next, we'd like to tackle `ng test` to modernize Angular's unit testing experience. In Q2, we introduced experimental [Jest](https://jestjs.io/) support and [announced](https://blog.angular.io/moving-angular-cli-to-jest-and-web-test-runner-ef85ef69ceca) the transition from Karma to the [Web Test Runner](https://modern-web.dev/docs/test-runner/overview/).
+-->
+Angulav 12 버전에는 기존까지 엔드 투 엔드 테스트에 사용하던 Protractor 대신 Cypress, Nightwatch, Webdriver.io와 같은 최신 기술을 도입했습니다.
+지금은 `ng test` 명령으로 연결되는 작업을 진행하고 있습니다.
+2분기쯤 되면 [Jest](https://jestjs.io/)를 실험적으로 도입할 수 있으며, Karma를 [웹 테스트 러너](https://modern-web.dev/docs/test-runner/overview/)로 전환하는 것에 대한 [블로그 글](https://blog.angular.io/moving-angular-cli-to-jest-and-web-test-runner-ef85ef69ceca)을 게시할 예정입니다.
 
 
 <!--
@@ -174,65 +211,18 @@ We released the Angular [image directive](https://developer.chrome.com/blog/angu
 ## 진행 예정
 
 <!--
-### Token-based theming APIs
+### Investigation for authoring format improvements
 -->
-### 토큰 기반의 테마 API
+### 저작권 개선을 위한 조사
 
 <!--
-To provide better customization of our Angular material components and enable Material 3 capabilities, we'll be collaborating with Google's Material Design team on defining token-based theming APIs.
+Based on our developer surveys' results we saw there are opportunities for improving the ergonomics of the component authoring format. The first step of the process will be to gather requirements and understand the problem space in advanced to an RFC. We'll share updates as we make progress. High priority in the future work will be backward compatibility and interoperability.
 -->
-Angular 매터리얼 컴포넌트를 커스터마이징하거나 Material 3 사용성을 도입하기 위해, Angular 팀은 Google 매터리얼 디자인 팀과 협업하면서 테마 API를 토큰 기반으로 변경하고 있습니다.
+개발자 설문조사 결과의 일환으로, 컴포넌트 저작권 형식을 개선하려고 합니다.
+그 첫단계로, RFC를 통해 요구사항을 수집하고 문제를 분석하고 있습니다.
+진행상황은 수시로 공유하겠습니다.
+이 프로젝트에서는 하위 호환성과 상호운용성을 보장하는 것이 가장 중요합니다.
 
-
-<!--
-### Modernize Angular's unit testing experience
--->
-### 유닛 테스트 환경 개선
-
-<!--
-In v12 we revisited the Angular end-to-end testing experience by replacing Protractor with modern alternatives such as Cypress, Nightwatch, and Webdriver.io. Next we'd like to tackle `ng test` to modernize Angular's unit testing experience.
--->
-Angulav 12 버전에는 기존까지 엔드 투 엔드 테스트에 사용하던 Protractor 대신 Cypress, Nightwatch, Webdriver.io와 같은 최신 기술을 도입했습니다.
-지금은 `ng test` 명령으로 연결되는 작업을 진행하고 있습니다.
-
-
-<!--
-### Revamp performance dashboards to detect regressions
--->
-### 성능 대시보드 개선
-
-<!--
-We have a set of benchmarks that we run against every code change to ensure Angular aligns with our performance standards.
-To ensure the runtime of the framework does not regress after a code change, we need to refine some of the existing infrastructure the dashboards step on.
--->
-저희는 Angular 코드가 변경될 때마다 성능 표준을 측정하는 벤치마크 대시보드를 운영하고 있습니다.
-지금은 재귀와 관련된 동작에 아쉬운 부분이 있기 때문에 이 대시보드를 개선하는 작업도 진행하고 있습니다.
-
-
-<!--
-### Improved build performance with ngc as a tsc plugin distribution
--->
-### ngc를 tsc 플러그인 형태로 전환해서 빌드 성능 개선
-
-<!--
-Distributing the Angular compiler as a plugin of the TypeScript compiler will substantially improve build performance for developers and reduce maintenance costs.
--->
-Angular 컴파일러를 TypeScript 컴파일러의 플러그인 형태로 전환하고 있습니다.
-빌드 성능은 향상되고 유지보수 비용도 줄어들 것입니다.
-
-
-<!--
-### Ergonomic component level code-splitting APIs
--->
-### 더 나은 컴포넌트 레벨 코드 분할
-
-<!--
-A common problem with web applications is their slow initial load time.
-A way to improve it is to apply more granular code-splitting on a component level.
-To encourage this practice, we will be working on more ergonomic code-splitting APIs.
--->
-웹 애플리케이션은 초기 로드 시간이 오래걸린다는 것이 일반적인 문제점입니다.
-이것을 개선하기 위해 컴포넌트 계층에서 코드를 나누는 작업을 하고 있습니다.
 
 <!--
 ### Ensure smooth adoption for future RxJS changes (version 8 and beyond)
@@ -240,8 +230,8 @@ To encourage this practice, we will be working on more ergonomic code-splitting 
 ### RxJS 도입 지원(8 버전부터)
 
 <!--
-We want to ensure Angular developers are taking advantage of the latest capabilities of RxJS and have a smooth transition to the next major releases of the framework.
-For this purpose, we will explore and document the scope of the changes in v7 and beyond RxJS, and plan an update strategy.
+We want to ensure Angular developers are taking advantage of the latest capabilities of RxJS and have a smooth transition to the subsequent major releases of the framework.
+For this purpose, we will explore and document the scope of the changes in v7 and beyond RxJS and plan an update strategy.
 -->
 Angular 팀은 RxJS의 메이저 버전이 새로 나오면 이 버전을 도입해서 최신 기능을 활용할 수 있도록 돕고 싶습니다.
 그래서 Angular 7 버전부터 RxJS를 방대하게 문서로 다루고 있으며 RxJS 업그레이드 정책도 확실하게 준비했습니다.
@@ -253,32 +243,72 @@ Angular 팀은 RxJS의 메이저 버전이 새로 나오면 이 버전을 도입
 ### 2차원 드래그-앤-드롭 지원
 
 <!--
-As part of this project we'd like to implement mixed orientation support for the Angular CDK drag and drop. This is one of the most highly [requested features](https://github.com/angular/components/issues/13372) in the repository.
-
-<details class="completed-details" open="true">
-  <summary>
-    <h2>Completed</h2>
-    <span class="actions">
-      <span class="action-expand">Show all</span>
-      <span class="action-collapse">Hide all</span>
-      <i class="material-icons expand">expand_more</i>
-    </span>
-  </summary>
-  <div class="details-content">
+As part of this project, we'd like to implement mixed orientation support for the Angular CDK drag and drop. This is one of the repository's most highly [requested features](https://github.com/angular/components/issues/13372).
 -->
 이 프로젝트는 Angular CDK 드래그&드롭을 개선하기 위한 것입니다.
-Angular 요구사항 중 [가장 많은 요청이 있던 기능](https://github.com/angular/components/issues/13372)입니다.
+Angular 레파지토리에 올라온 요구사항 중 [가장 많은 요청이 있던 기능](https://github.com/angular/components/issues/13372)입니다.
 
 <details class="completed-details" open="true">
-  <summary>
-    <h2>작업 완료</h2>
-    <span class="actions">
-      <span class="action-expand">펼치기</span>
-      <span class="action-collapse">숨기기</span>
-      <i class="material-icons expand">expand_more</i>
-    </span>
-  </summary>
-  <div class="details-content">
+ <summary>
+   <h2>Completed</h2>
+   <span class="actions">
+     <span class="action-expand">Show all</span>
+     <span class="action-collapse">Hide all</span>
+     <i class="material-icons expand">expand_more</i>
+   </span>
+ </summary>
+ <div class="details-content">
+
+
+<!--
+### Non-destructive full app hydration
+-->
+### 앱 하이드레이션 확장 적용
+
+<!--
+In v16, we released a developer preview of non-destructive full hydration, which allows Angular to reuse existing DOM nodes on a server-side rendered page, instead of re-creating an app from scratch. See additional information in the [hydration guide](guide/hydration).
+
+*Completed Q2 2023*
+-->
+Angular v16에는 서버 사이드에서 렌더링된 화면을 처음부터 다시 그리지 않고 기존 DOM 노드를 재사용할 수 있는 하이드레이션 기능을 개발자 프리뷰로 도입했습니다.
+자세한 내용은 [하이드레이션 문서](guide/hydration)를 참고하세요.
+
+*2023년 2분기에 완료*
+
+<!--
+### Improvements in the image directive
+-->
+### 이미지 디렉티브 개선
+
+<!--
+*Completed Q1 2023*
+
+We released the Angular [image directive](https://developer.chrome.com/blog/angular-image-directive/) as stable in v15. We introduced a new fill mode feature that enables images to fit within their parent container rather than having explicit dimensions. Over the past two months, the Chrome Aurora team backported the directive to v12 and newer.
+-->
+*2023년 1분기에 완료*
+
+Angular v15에 [이미지 디렉티브](https://developer.chrome.com/blog/angular-image-directive/)를 추가했습니다.
+이 디렉티브에는 명시적으로 지정하지 않아도 부모 컨테이너의 크기에 맞게 이미지를 채우는 기능도 들어있습니다.
+지난 2개월 동안은 Chrome Aurora 팀이 이 디렉티브 호환성을 v12 이상 버전에 적용하는 작업을 진행했습니다.
+
+
+<!--
+### Documentation refactoring
+-->
+### 문서 리팩토링
+
+<!--
+*Completed Q1 2023*
+
+Ensure all existing documentation fits into a consistent set of content types. Update excessive use of tutorial-style documentation into independent topics. We want to ensure the content outside the main tutorials is self-sufficient without being tightly coupled to a series of guides. In Q2 2022, we refactored the [template content](https://github.com/angular/angular/pull/45897) and dependency injection. In Q1 2023, we improved the HTTP guides, and with this, we're putting the documentation refactoring project on hold.
+-->
+*2023년 1분기에 완료*
+
+모든 문서가 적절한 분류로 나뉘어져 있는지 확인했습니다.
+그리고 튜토리얼 형식의 문서는 별개 주제로 분리했습니다.
+저희가 원하는 방향은 기본 자습서가 아닌 자습서는 다른 가이드와 엮이지 않고 단독으로도 볼 수 있도록 분리하는 것입니다.
+2022년 2분기에는 [템플릿 문서](https://github.com/angular/angular/pull/45897)와 의존성 주입 문서를 리팩토링했습니다.
+2023년 1분기에는 HTTP 문서까지 개선한 후에 이 프로젝트를 잠시 멈췄습니다.
 
 
 <!--
@@ -359,7 +389,7 @@ Angular 팀은 Chrome DevTools 개발자들과 협력하며 스택 트레이스�
 
 [MDC Web](https://material.io/develop/web) is a library created by the Google Material Design team that provides reusable primitives for building Material Design components.
 The Angular team is incorporating these primitives into Angular Material.
-Using MDC Web aligns Angular Material more closely with the Material Design specification, expand accessibility, improve component quality, and improve the velocity of our team.
+Using MDC Web aligns Angular Material more closely with the Material Design specification, expands accessibility, improves component quality, and improves the velocity of our team.
 -->
 *2022년 4분기에 완료*
 
@@ -376,11 +406,11 @@ Angular 팀은 이 작업을 Angular Material과 통합하고 있습니다.
 <!--
 *Completed Q4 2022*
 
-In the process of making Angular simpler, we are working on [introducing APIs](https://angular.io/guide/standalone-components) that allow developers to initialize applications, instantiate components, and use the router without NgModules. Angular v14 introduces developer preview of the APIs for standalone components, directives, and pipes. In the next few quarters we'll collect feedback from developers and finalize the project making the APIs stable. As the next step we will work on improving use cases such as `TestBed`, Angular elements, etc.
+In the process of making Angular simpler, we are working on [introducing APIs](/guide/standalone-components) that allow developers to initialize applications, instantiate components, and use the router without NgModules. Angular v14 introduces developer preview of the APIs for standalone components, directives, and pipes. In the next few quarters we'll collect feedback from developers and finalize the project making the APIs stable. As the next step we will work on improving use cases such as `TestBed`, Angular elements, etc.
 -->
 *Completed Q4 2022*
 
-In the process of making Angular simpler, we are working on [introducing APIs](https://angular.io/guide/standalone-components) that allow developers to initialize applications, instantiate components, and use the router without NgModules. Angular v14 introduces developer preview of the APIs for standalone components, directives, and pipes. In the next few quarters we'll collect feedback from developers and finalize the project making the APIs stable. As the next step we will work on improving use cases such as `TestBed`, Angular elements, etc.
+In the process of making Angular simpler, we are working on [introducing APIs](/guide/standalone-components) that allow developers to initialize apps, instantiate components, and use the router without NgModules. Angular v14 introduces developer preview of the APIs for standalone components, directives, and pipes. In the next few quarters we'll collect feedback from developers and finalize the project making the APIs stable. As the next step we will work on improving use cases such as `TestBed`, Angular elements, etc.
 
 
 <!--
@@ -408,7 +438,7 @@ Angular 컴포넌트의 캡슐화를 개선하기 위해 컴포넌트 인스턴�
 *Completed Q2 2022*
 
 Develop and publish an in-depth guide on change detection.
-Develop content for performance profiling of Angular applications.
+Develop content for performance profiling of Angular apps.
 Cover how change detection interacts with Zone.js and explain when it gets triggered, how to profile its duration, as well as common practices for performance optimization.
 -->
 *2022년 2분기에 완료*
@@ -547,14 +577,14 @@ As the next step, we need to finalize the recommendations and compile a list of 
 
 Earlier in 2020, we shared an [RFC](https://github.com/angular/angular/issues/38366) for Ivy library distribution.
 After invaluable feedback from the community, we developed a design of the project.
-We are now investing in the development of Ivy library distribution, including an update of the library package format to use Ivy compilation, unblock the deprecation of the View Engine library format, and [ngcc](guide/glossary#ngcc).
+We are now investing in the development of Ivy library distribution, including an update of the library package format to use Ivy compilation, unblock the deprecation of the View Engine library format, and ngcc.
 -->
 *2021년 3분기에 완료*
 
 2020년 초에 저희는 Ivy 라이브러리를 배포한다는 [RFC](https://github.com/angular/angular/issues/38366)를 공유했습니다.
 그 이후로 커뮤니티에서 받은 피드백을 참고해서 프로젝트를 좀 더 진행했습니다.
 이제 Angular 팀이 배포하는 라이브러리들은 Ivy로 개발되며 Ivy와 호환성을 맞추어 컴파일됩니다.
-View Engine 라이브러리 형식과 [ngcc](guide/glossary#ngcc)은 더이상 사용하지 않습니다.
+View Engine 라이브러리 형식과 ngcc는 더이상 사용하지 않습니다.
 
 
 <!--
@@ -615,13 +645,12 @@ As part of this project we will investigate what the blockers are to moving forw
 *Completed Q2 2021*
 
 We are working on development tooling for Angular that provides utilities for debugging and performance profiling.
-This project aims to help developers understand the component structure and the change detection in an Angular application.
+This project aims to help developers understand the component structure and the change detection in an Angular app.
 -->
 *2021년 2분기에 완료*
 
 Angular 애플리케이션을 디버깅하거나 성능을 분석할 때 활용할 툴을 준비했습니다.
 이 툴을 활용하면 컴포넌트 구조를 쉽게 이해할 수 있고 Angular 애플리케이션의 변화 감지도 분석하기 쉬워집니다.
-
 
 
 
@@ -667,8 +696,8 @@ We want to unify commit message requirements and conformance across Angular repo
 *Completed Q2 2021*
 
 The goal of this project is to improve the experience and remove legacy dependency by transitioning the language service to Ivy.
-Today the language service still uses the View Engine compiler and type checking, even for Ivy applications.
-We want to use the Ivy template parser and improved type checking for the Angular Language service to match application behavior.
+Today the language service still uses the View Engine compiler and type checking, even for Ivy apps.
+We want to use the Ivy template parser and improved type checking for the Angular Language service to match app behavior.
 This migration is also a step towards unblocking the removal of View Engine, which will simplify Angular, reduce the npm package size, and improve the maintainability of the framework.
 -->
 *2021년 2분기에 완료*
@@ -687,7 +716,7 @@ This migration is also a step towards unblocking the removal of View Engine, whi
 *Completed Q2 2021*
 
 In collaboration with the Google security team, we are adding support for the new [Trusted Types](https://web.dev/trusted-types) API.
-This web platform API helps developers build more secure web applications.
+This web platform API helps developers build more secure web apps.
 -->
 *2021년 2분기에 완료*
 
@@ -711,15 +740,16 @@ To ensure stability, we will continue iterating on the implementation to enable 
 11버전 릴리즈와 함께 Angular CLI가 활용하는 webpack 버전을 5 preview로 변경했습니다.
 안정성과 빌드 속도가 향상되었으며 빌드 결과물의 용량도 줄어들었습니다.
 
+
 <!--
-### Faster apps by inlining critical styles in Universal applications
+### Faster apps by inlining critical styles in Universal apps
 -->
 ### Universal 애플리케이션에 초기 인라인 스타일을 내장하면서 속도 향상
 
 <!--
 *Completed Q1 2021*
 
-Loading external stylesheets is a blocking operation, which means that the browser cannot start rendering your application until it loads all the referenced CSS.
+Loading external stylesheets is a blocking operation, which means that the browser cannot start rendering your app until it loads all the referenced CSS.
 Having render-blocking resources in the header of a page can significantly impact its load performance, for example, its [first contentful paint](https://web.dev/first-contentful-paint).
 To make apps faster, we have been collaborating with the Google Chrome team on inlining critical CSS and loading the rest of the styles asynchronously.
 -->
@@ -811,7 +841,7 @@ As part of this project we want to identify the core use cases and concepts for 
 *Completed Q4 2020*
 
 With the deprecation of TSLint we will be moving to ESLint.
-As part of the process, we will work on ensuring backward compatibility with our current recommended TSLint configuration, implement a migration strategy for existing Angular applications and introduce new tooling to the Angular CLI toolchain.
+As part of the process, we will work on ensuring backward compatibility with our current recommended TSLint configuration, implement a migration strategy for existing Angular apps and introduce new tooling to the Angular CLI toolchain.
 -->
 *2020년 4분기에 완료*
 
@@ -836,7 +866,7 @@ After that, we will commit up to 20% of our engineering capacity to keep up with
 이제는 새로운 작업을 더 빠르게 처리하기 위해 엔지니어링 역량을 20% 더 투자하려는 계획을 갖고 있습니다.
 
 
-  </div>
+ </div>
 </details>
 
 <!-- links -->
@@ -845,4 +875,4 @@ After that, we will commit up to 20% of our engineering capacity to keep up with
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-05-03

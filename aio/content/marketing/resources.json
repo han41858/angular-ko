@@ -1,7 +1,7 @@
 {
   "커뮤니티": {
     "/Community": "",
-    "order": 3,
+    "order": 1,
     "subCategories": {
       "추천 커뮤니티": {
         "/Community Curations": "",
@@ -67,6 +67,12 @@
             "desc": "Come learn technical skills and network at this monthly, multi-series, multi-event, multi-timezone online meetup.",
             "url": "https://angularcommunity.net",
             "title": "Angular Community Meetup"
+          },
+          "This-is-Angular": {
+            "/desc": "Inclusive Angular publication free from conflict of interest. This publication is all about sharing Angular knowledge for free and not at all about money or KPIs. Cross-posts are welcome. Part of This is Learning.",
+            "desc": "Inclusive Angular publication free from conflict of interest. This publication is all about sharing Angular knowledge for free and not at all about money or KPIs. Cross-posts are welcome. Part of This is Learning.",
+            "url": "https://dev.to/this-is-angular",
+            "title": "This is Angular"
           }
         }
       },
@@ -141,7 +147,7 @@
   },
   "개발": {
     "/Development": "",
-    "order": 1,
+    "order": 3,
     "subCategories": {
       "크로스 플랫폼 개발": {
         "/Cross-Platform Development": "",
@@ -340,6 +346,13 @@
             "title": "Compodoc",
             "url": "https://github.com/compodoc/compodoc"
           },
+          "docgeni": {
+            "/desc": "A modern, powerful and out of the box documentation generator for Angular component lib and markdown docs.",
+            "desc": "Angular 컴포넌트 라이브러리와 마크다운 문서를 생성할 수 있는 강력한 툴입니다.",
+            "logo": "",
+            "title": "Docgeni",
+            "url": "https://github.com/docgeni/docgeni"
+          },
           "angular-playground": {
             "/desc": "UI development environment for building, testing, and documenting Angular applications.",
             "desc": "로컬 환경에서 간단하게 Angular 애플리케이션을 만들거나 테스트해보고, 문서를 작성할 수 있는 환경입니다.",
@@ -466,7 +479,7 @@
           },
           "a6b": {
             "/desc": "Material design inspired UI components for building great web apps. For mobile and desktop.",
-            "desc": "머티리얼 디자인을 적용한 UI 컴포넌트입니다. 모바일과 데스크탑에서 모두 사용할 수 있습니다.",
+            "desc": "매터리얼 디자인을 적용한 UI 컴포넌트입니다. 모바일과 데스크탑에서 모두 사용할 수 있습니다.",
             "logo": "",
             "title": "Vaadin",
             "url": "https://vaadin.com/elements"
@@ -480,7 +493,7 @@
           },
           "ab": {
             "/desc": "Material Design components for Angular",
-            "desc": "공식 Angular 머티리얼 디자인 컴포넌트입니다.",
+            "desc": "공식 Angular 매터리얼 디자인 컴포넌트입니다.",
             "logo": "",
             "title": "Angular Material",
             "url": "https://material.angular.io/"
@@ -684,8 +697,8 @@
           "-KLIzGEp8Mh5W-FkiQnL": {
             "/desc": "A no-nonsense beginner's guide to building web applications with Angular and TypeScript",
             "desc": "Angular와 TypeScript로 웹 애플리케이션을 만드는 방법에 대해 안내하는 입문자용 가이드입니다.",
-            "title": "Learning Angular - Third Edition",
-            "url": "https://www.packtpub.com/product/learning-angular-third-edition/9781839210662"
+            "title": "Learning Angular - Fourth Edition",
+            "url": "https://www.amazon.com/dp/1803240601"
           },
           "3ab": {
             "/desc": "More than 15 books from O'Reilly about Angular",
@@ -789,7 +802,7 @@
           "angular-projects": {
             "title": "Angular Projects - Second Edition",
             "desc": "Build modern web apps by exploring Angular with 10 different projects and cutting-edge technologies",
-            "url": "https://www.packtpub.com/product/angular-projects-second-edition/9781800205260"
+            "url": "https://www.amazon.com/dp/1800205260"
           },
           "rangle-angular-training-book": {
             "title": "Rangle’s Angular Training Book",
@@ -966,6 +979,12 @@
             "/title": "Platzi (Español)",
             "title": "Platzi (스페인어)",
             "url": "https://platzi.com/angular-io"
+          },
+          "angular-gettin-started": {
+            "/desc": "Want to learn #Angular, but not sure where to start? Check out this in-depth “Angular for Beginners Course“ created by Angular #GDE @SantoshYadavDev.",
+            "desc": "#Angular를 배우고 싶지만, 어디서부터 시작해야 할지 모르나요? 그렇다면 Angular #GDE @SantoshYadavDev 가 진행하는 “Angular for Beginners Course“ 를 확인해 보세요.",
+            "title": "Angular for Beginners Course",
+            "url": "https://youtu.be/3qBXWUpoPHo"
           }
         }
       },
@@ -1113,11 +1132,11 @@
             "title": "Angular.Schule (독일어)",
             "url": "https://angular.schule/"
           },
-          "strbrw": {
+          "simplified": {
             "/desc": "Angular and RxJS trainings, Code Reviews and consultancy. We help software engineers all over the world to create better web-applications...",
-            "desc": "Angular와 RxJS에 대해 안내하며 코드 리뷰와 컨설팅도 제공합니다. 웹 애플리케이션 세상이 좀 더 나아지길 바라며 전세계의 소프트웨어 엔지니어를 돕고 있습니다.",
-            "title": "StrongBrew",
-            "url": "https://strongbrew.io/"
+            "desc": "Angular와 RxJS에 대해 안내하며 코드 리뷰와 컨설팅도 제공합니다. 웹 애플리케이션 세상이 좀 더 나아지길 바라며 전세계의 소프트웨어 엔지니어를 돕고 있습니다...",
+            "title": "Simplified Courses",
+            "url": "https://simplified.courses/"
           },
           "angular.de": {
             "/desc": "Onsite Angular Training delivered by the greatest community in the german speaking area in Germany, Austria and Switzerland. We also regularly post articles and tutorials on our blog.",

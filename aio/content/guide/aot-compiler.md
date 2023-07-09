@@ -130,22 +130,20 @@ When it needs to create a `TypicalComponent` instance, Angular calls the factory
 
 <!--
 There are three phases of AOT compilation.
-* Phase 1 is *code analysis*.
-   In this phase, the TypeScript compiler and  *AOT collector* create a representation of the source. The collector does not attempt to interpret the metadata it collects. It represents the metadata as best it can and records errors when it detects a metadata syntax violation.
 
-* Phase 2 is *code generation*.
-    In this phase, the compiler's `StaticReflector` interprets the metadata collected in phase 1, performs additional validation of the metadata, and throws an error if it detects a metadata restriction violation.
-
-* Phase 3 is *template type checking*.
-   In this optional phase, the Angular *template compiler* uses the TypeScript compiler to validate the binding expressions in templates. You can enable this phase explicitly by setting the `fullTemplateTypeCheck` configuration option; see [Angular compiler options](guide/angular-compiler-options).
+|     | Phase                  | Details |
+|:--- |:---                    |:---     |
+| 1   | code analysis          | In this phase, the TypeScript compiler and *AOT collector* create a representation of the source. The collector does not attempt to interpret the metadata it collects. It represents the metadata as best it can and records errors when it detects a metadata syntax violation.                        |
+| 2   | code generation        | In this phase, the compiler's `StaticReflector` interprets the metadata collected in phase 1, performs additional validation of the metadata, and throws an error if it detects a metadata restriction violation.                                                                                        |
+| 3   | template type checking | In this optional phase, the Angular *template compiler* uses the TypeScript compiler to validate the binding expressions in templates. You can enable this phase explicitly by setting the `strictTemplates` configuration option; see [Angular compiler options](guide/angular-compiler-options). |
 -->
 AOT 컴파일러는 3단계로 동작합니다.
 
-|     | 페이즈       | 설명                                                                                                                                                                                                                       |
-|:--- |:----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1   | 코드 분석     | TypeScript 컴파일러와 *AOT 콜렉터* 가 소스 코드에서 필요한 정보를 수집합니다. 이 단계에서 콜렉터가 메타데이터를 직접 처리하지는 않으며, 단지 수집하기만 합니다. 그리고 이렇게 수집한 메타데이터를 최적화하는데, 메타데이터 문법이 잘못되면 이 단계에서 에러를 발생시킵니다.                                                          |
-| 2   | 코드 생성     | 페이즈 1에서 수집한 메타데이터를 컴파일러의 `StaticReflector`가 처리하면서 메타데이터 유효성을 추가로 검사합니다. 이 때 에러가 추가로 발견되면 역시 에러를 발생시킵니다.                                                                                                                  |
-| 3   | 템플릿 문법 검사 | 이 페이즈는 생략될 수 있습니다. 이 페이즈에서는 Angular *템플릿 컴파일러*가 TypeScript 컴파일러를 사용해서 템플릿에 사용된 바인딩 표현식을 검증합니다. 이 페이즈는 `fullTemplateTypeCheck` 컴파일 옵션을 설정하면 명시적으로 활성화할 수 있습니다; [Angular 컴파일러 옵션](guide/angular-compiler-options)를 참고하세요. |
+|     | 단계        | 설명                                                                                                                                                                                                                   |
+|:--- |:----------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1   | 코드 분석     | 이 단계에서는 TypeScript 컴파일러와 *AOT 콜렉터*가 소스 코드를 보완하는 코드를 생성합니다. 콜렉터는 이 단계에서 메타데이터를 해석하지는 않으며, 메타데이터를 보충하거나 메타데이터의 문법 오류만 감지합니다.                                                                                           |
+| 2   | 코드 생성     | 이 단계에서는 컴파일러의 `StaticReflector`가 1단계에서 수집한 메타데이터를 해석하고, 메타데이터의 유효성을 추가로 검사하며, 메타데이터에 오류가 발생하면 에러를 발생시키고 멈춥니다.                                                                                                        |
+| 3   | 템플릿 타입 검사 | 이 단계는 생략될 수 있습니다. 이 단계에서는 Angular *템플릿 컴파일러*가 TypeScript 컴파일러를 사용해서 템플릿에 사용된 바인딩 표현식을 검증합니다. 이 단계는 `fullTemplateTypeCheck` 컴파일 옵션을 설정하면 명시적으로 활성화할 수 있습니다; [Angular 컴파일러 옵션](guide/angular-compiler-options)를 참고하세요. |
 
 
 <!--
@@ -159,7 +157,8 @@ You write metadata in a *subset* of TypeScript that must conform to the followin
 *   Limit [expression syntax](#expression-syntax) to the supported subset of JavaScript
 *   Only reference exported symbols after [code folding](#code-folding)
 *   Only call [functions supported](#supported-functions) by the compiler
-*   Decorated and data-bound class members must be public
+*   Input/Outputs and data-bound class members must be public or protected.
+
 
 For additional guidelines and instructions on preparing an application for AOT compilation, see [Angular: Writing AOT-friendly applications](https://medium.com/sparkles-blog/angular-writing-aot-friendly-applications-7b64c8afbe3f).
 -->
@@ -168,7 +167,7 @@ For additional guidelines and instructions on preparing an application for AOT c
 *   JavaScript 문법 중 [표현식(expression syntax)](#expression-syntax)은 일부만 사용할 수 있습니다.
 *   [코드를 폴딩](#code-folding)한 이후에 존재하는 심볼만 참조할 수 있습니다.
 *   컴파일러가 지원하는 [일부 함수](#supported-functions)만 사용할 수 있습니다.
-*   데코레이터가 사용되거나 데이터 바인딩되는 클래스 멤버는 public으로 지정되어야 합니다.
+*   데코레이터가 사용되거나 데이터 바인딩되는 클래스 멤버는 public이나 protected로 지정되어야 합니다.
 
 메타데이터의 제약사항이나 애플리케이션을 AOT 빌드하기 위해 필요한 내용에 대해 더 알아보려면 [Angular: Writing AOT-friendly applications](https://medium.com/sparkles-blog/angular-writing-aot-friendly-applications-7b64c8afbe3f) 글을 참고하세요.
 
@@ -528,35 +527,25 @@ _콜렉터_ 는 메타데이터를 이해하는 것이 아니라 메타데이터
 다만, *문법* 은 맞지만 *잘못 사용된 메타데이터는 컴파일러가 처리하면서 에러로 판단할 수 있습니다.
 
 <!--
-### Public symbols
+### Public or protected symbols
 -->
-### public 심볼
+### 심볼은 public 이거나 protected
 
 <!--
 The compiler can only reference *exported symbols*.
 
-*   Decorated component class members must be public.
-    You cannot make an `@Input()` property private or protected.
+*   Decorated component class members must be public or protected.
+    You cannot make an `@Input()` property private.
 
-*   Data bound properties must also be public
+*   Data bound properties must also be public or protected
 -->
-컴파일러는 *파일 외부로 오픈된(exported) 심볼* 만 참조할 수 있습니다.
+컴파일러는 *외부로 공개된 심볼만* 참조할 수 있습니다.
 
-* 컴포넌트 클래스 멤버 중 데코레이터가 사용된 멤버는 반드시 public이어야 합니다. 그래서 `@Input()` 프로퍼티도 private이나 protected로 지정되면 안됩니다.
-* 데이터 바인딩으로 연결된 프로퍼티도 반드시 public이어야 합니다.
+*   컴포넌트 클래스 멤버 중 데코레이터가 사용된 멤버는 반드시 public이거나 protected여야 합니다.
+    `@Input()` 프로퍼티는 private로 지정할 수 없습니다.
 
-<!--<code-example format="typescript" language="typescript">
+*   데이터 바인딩으로 연결된 프로퍼티는 public이거나 protected여야 합니다.
 
-// BAD CODE - title is private
-&commat;Component({
-  selector: 'app-root',
-  template: '&lt;h1&gt;{{title}}&lt;/h1&gt;'
-})
-export class AppComponent {
-  private title = 'My App'; // Bad
-}
-
-</code-example>-->
 
 <a id="supported-functions"></a>
 

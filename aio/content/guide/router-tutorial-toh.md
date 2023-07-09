@@ -37,11 +37,11 @@ Along the way, it highlights key features of the router such as:
 *   The `canDeactivate` guard \(ask permission to discard unsaved changes\)
 *   The `resolve` guard \(pre-fetching route data\)
 *   Lazy loading an `NgModule`
-*   The `canLoad` guard \(check before loading feature module assets\)
+*   The `canMatch` guard \(check before loading feature module assets\)
 
 This guide proceeds as a sequence of milestones as if you were building the application step-by-step, but assumes you are familiar with basic [Angular concepts](guide/architecture).
 For a general introduction to angular, see the [Getting Started](start).
-For a more in-depth overview, see the [Tour of Heroes](tutorial) tutorial.
+For a more in-depth overview, see the [Tour of Heroes](tutorial/tour-of-heroes) tutorial.
 -->
 이 가이드 문서에서는 화면이 여러 개인 애플리케이션을 구현해 봅니다.
 이 과정을 진행하면서 라우터와 관련해서 알아둬야 할 내용은 이런 것들이 있습니다:
@@ -55,11 +55,11 @@ For a more in-depth overview, see the [Tour of Heroes](tutorial) tutorial.
 *   저장되지 않은 변경사항을 폐기할지 결정하기 위해 `canDeactivate` 가드를 사용합니다.
 *   라우터 데이터를 미리 가져오기 위해 `resolve` 가드를 사용합니다.
 *   `NgModule`을 지연로딩합니다.
-*   기능 모듈을 로딩할지 결정하기 위해 `canLoad` 가드를 사용합니다.
+*   기능 모듈을 로딩할지 결정하기 위해 `canMatch` 가드를 사용합니다.
 
 이 문서를 읽는 독자가 [Angular의 기본 개념](guide/architecture)에 대해 익숙하다고 가정하고 차근차근 라우터에 대해 알아봅시다.
 [시작하기](start) 문서를 먼저 보고 이 문서를 보는 것도 좋습니다.
-튜토리얼 전체 개요를 확인하려면 [히어로들의 여행 튜토리얼](tutorial) 문서를 참고하세요.
+튜토리얼 전체 개요를 확인하려면 [히어로들의 여행 튜토리얼](tutorial/tour-of-heroes) 문서를 참고하세요.
 
 
 <!--
@@ -75,7 +75,7 @@ To complete this tutorial, you should have a basic understanding of the followin
 *   CSS
 *   [Angular CLI](cli)
 
-You might find the [Tour of Heroes tutorial](tutorial) helpful, but it is not required.
+You might find the [Tour of Heroes tutorial](tutorial/tour-of-heroes) helpful, but it is not required.
 -->
 이 문서를 제대로 이해하려면 이런 내용을 미리 알고 있는 것이 좋습니다:
 
@@ -84,7 +84,7 @@ You might find the [Tour of Heroes tutorial](tutorial) helpful, but it is not re
 *   CSS
 *   [Angular CLI](cli)
 
-[히어로들의 여행 튜토리얼](tutorial) 문서를 보는 것도 도움이 되지만 꼭 필요한 것은 아닙니다.
+[히어로들의 여행 튜토리얼](tutorial/tour-of-heroes) 문서를 보는 것도 도움이 되지만 꼭 필요한 것은 아닙니다.
 
 
 <!--
@@ -517,7 +517,7 @@ Because a wildcard route is the least specific route, place it last in the route
 
 </div>
 
-To test this feature, add a button with a `RouterLink` to the `HeroListComponent` template and set the link to a non-existant route called `"/sidekicks"`.
+To test this feature, add a button with a `RouterLink` to the `HeroListComponent` template and set the link to a non-existent route called `"/sidekicks"`.
 
 <code-example header="src/app/hero-list/hero-list.component.html (excerpt)" path="router/src/app/hero-list/hero-list.component.1.html"></code-example>
 
@@ -909,7 +909,6 @@ ng generate module my-module --routing
 <!--
 ### Refactor the routing configuration into a routing module
 -->
--->
 ### 라우팅 환경설정 리팩토링하기
 
 <!--
@@ -1024,7 +1023,7 @@ This milestone covers the following:
 *   Navigating imperatively from one component to another
 *   Passing required and optional information in route parameters
 
-This sample application recreates the heroes feature in the "Services" section of the [Tour of Heroes tutorial](tutorial/toh-pt4 "Tour of Heroes: Services"), and reuses much of the code from the <live-example name="toh-pt4" title="Tour of Heroes: Services example code"></live-example>.
+This sample application recreates the heroes feature in the "Services" section of the [Tour of Heroes tutorial](tutorial/tour-of-heroes/toh-pt4 "Tour of Heroes: Services"), and reuses much of the code from the <live-example name="toh-pt4" title="Tour of Heroes: Services example code"></live-example>.
 
 A typical application has multiple feature areas, each dedicated to a particular business purpose with its own folder.
 
@@ -1036,7 +1035,7 @@ This section shows you how refactor the application into different feature modul
 *   화면 전환 로직을 수정합니다.
 *   필수/옵션 정보를 라우팅 인자로 전달합니다.
 
-이번 마일스톤에서 다루는 예제 앱은 [히어로들의 여행 튜토리얼]<live-example name="toh-pt4" title="Tour of Heroes: Services example code"></live-example> 예제 앱의 ["서비스" 섹션](tutorial/toh-pt4 "Tour of Heroes: Services") 코드를 많이 참고했습니다.
+이번 마일스톤에서 다루는 예제 앱은 [히어로들의 여행 튜토리얼]<live-example name="toh-pt4" title="Tour of Heroes: Services example code"></live-example> 예제 앱의 ["서비스" 섹션](tutorial/tour-of-heroes/toh-pt4 "Tour of Heroes: Services") 코드를 많이 참고했습니다.
 
 일반적으로 애플리케이션은 특정 기능들의 묶음으로 구성되며, 용도에 맞게 폴더별로 존재하기도 합니다.
 
@@ -3028,7 +3027,7 @@ A guard's return value controls the router's behavior:
 <div class="alert is-helpful">
 
 **Note:** The guard can also tell the router to navigate elsewhere, effectively canceling the current navigation.
-When doing so inside a guard, the guard should return `UrlTree`;
+When doing so inside a guard, the guard should return `UrlTree`.
 
 </div>
 
@@ -3037,7 +3036,7 @@ But in many cases, the guard can't produce an answer synchronously.
 The guard could ask the user a question, save changes to the server, or fetch fresh data.
 These are all asynchronous operations.
 
-Accordingly, a routing guard can return an `Observable<boolean>` or a `Promise<boolean>` and the router will wait for the observable to resolve to `true` or `false`.
+Accordingly, a routing guard can return an `Observable<boolean>` or a `Promise<boolean>` and the router will wait for the observable or the promise to resolve to `true` or `false`.
 
 <div class="alert is-helpful">
 
@@ -3046,7 +3045,7 @@ The observable provided to the `Router` automatically completes after it retriev
 
 </div>
 
-The router supports multiple guard interfaces:
+The router supports multiple guard methods:
 
 | Guard interfaces                                  | Details |
 |:---                                               |:---     |
@@ -3054,13 +3053,12 @@ The router supports multiple guard interfaces:
 | [`canActivateChild`](api/router/CanActivateChildFn) | To mediate navigation *to* a child route                            |
 | [`canDeactivate`](api/router/CanDeactivateFn)       | To mediate navigation *away* from the current route                 |
 | [`resolve`](api/router/ResolveFn)                   | To perform route data retrieval *before* route activation           |
-| [`canLoad`](api/router/CanLoadFn)                   | To mediate navigation *to* a feature module loaded *asynchronously* |
-| [`canMatch`](api/router/CanMatchFn)                 | To control whether a `Route` should be used at all, even if the `path` matches the URL segment. |
+| [`canMatch`](api/router/CanMatchFn)                 | To control whether a `Route` should be used at all, even if the `path` matches the URL segment |
 
 You can have multiple guards at every level of a routing hierarchy.
 The router checks the `canDeactivate` guards first, from the deepest child route to the top.
 Then it checks the `canActivate` and `canActivateChild` guards from the top down to the deepest child route.
-If the feature module is loaded asynchronously, the `canLoad` guard is checked before the module is loaded.
+If the feature module is loaded asynchronously, the `canMatch` guard is checked before the module is loaded.
 
 With the exception of `canMatch`, if *any* guard returns false, pending guards that have not completed are canceled, and the entire navigation is canceled. If a `canMatch` guard returns `false`, the `Router` continues
 processing the rest of the `Routes` to see if a different `Route` config matches the URL. You can think of this 
@@ -3118,13 +3116,12 @@ There are several examples over the next few sections.
 | [`canActivateChild`](api/router/CanActivateChild) | *앞으로 적용될* 자식 라우팅 규칙에 개입합니다.                |
 | [`canDeactivate`](api/router/CanDeactivate)       | 현재 적용된 라우팅 규칙을 *벗어날 때* 개입합니다.              |
 | [`resolve`](api/router/Resolve)                   | *앞으로 적용될* 라우팅 규칙에 필요한 데이터를 먼저 처리할 때 사용합니다. |
-| [`canLoad`](api/router/CanLoad)                   | *비동기로* 로드되는 기능 모듈로 *이동할 때* 개입합니다.          |
 | [`canMatch`](api/router/CanMatchFn)               | `path`와 관계없이 적용될 `Router`를 제어할 때 사용합니다.    |
 
 라우팅 가드는 라우팅 규칙 계층 구조 어디에라도 자유롭게 여러개씩도 적용할 수 있습니다.
 라우터는 가장 안쪽에 있는 자식 라우팅 규칙부터 위쪽 계층으로 향하면서 `canDeactivated` 가드가 먼저 실행됩니다.
 그리고 최상위 계층부터 자식 라우팅 규칙으로 향하면서 `canActivate`, `canActivateChild` 가드가 실행됩니다.
-이 때 기능 모듈이 비동기로 로드된다면 이 모듈을 로드하기 전에 `canLoad` 가드가 실행됩니다.
+이 때 기능 모듈이 비동기로 로드된다면 이 모듈을 로드하기 전에 `canMatch` 가드가 실행됩니다.
 
 `canMatch` 외에는, 가드 하나가 `false`를 반환하면 아직 완료되지 않은 가드는 모두 취소되고 네비게이션 자체가 취소됩니다.
 그리고 `canMatch` 가드가 `false`를 반환하면 `Router`가 나머지 `Routes`중에서 현재 URL과 매칭되는 `Route`를 찾는 작업을 계속합니다.
@@ -3393,17 +3390,15 @@ The new admin feature should be accessible only to authenticated users.
 
 Write a `canActivate()` guard method to redirect anonymous users to the login page when they try to enter the admin area.
 
-Create a new file named `auth.guard.ts` function in the `auth` folder. The `auth.guard.ts` file will contain the `authGuard` function.
+Create a new file named `auth.guard.ts` in the `auth` folder. The `auth.guard.ts` file will contain the `authGuard` function.
 
-<!- TODO(atscott): update schematics to generate functional guards
 <code-example format="shell" language="shell">
 
 ng generate guard auth/auth
 
 </code-example>
- ->
 
-To demonstrate the fundamentals, this example only logs to the console, `returns` true immediately, and lets navigation proceed:
+To demonstrate the fundamentals, this example only logs to the console, returns `true` immediately, and lets navigation proceed:
 
 <code-example header="src/app/auth/auth.guard.ts (excerpt)" path="router/src/app/auth/auth.guard.1.ts"></code-example>
 
@@ -3477,15 +3472,9 @@ Revise the `authGuard` to call the `AuthService`.
 
 <code-example header="src/app/auth/auth.guard.ts (v2)" path="router/src/app/auth/auth.guard.2.ts"></code-example>
 
-Notice that you inject the `AuthService` and the `Router` in the constructor.
-You haven't provided the `AuthService` yet but it's good to know that you can inject helpful services into routing guards.
-
-This guard returns a synchronous boolean result.
-If the user is logged in, it returns true and the navigation continues.
-
-The `ActivatedRouteSnapshot` contains the *future* route that will be activated and the `RouterStateSnapshot` contains the *future* `RouterState` of the application, should you pass through the guard check.
-
-If the user is not logged in, you store the attempted URL the user came from using the `RouterStateSnapshot.url` and tell the router to redirect to a login page &mdash; a page you haven't created yet.
+This guard returns a synchronous boolean result or a `UrlTree`.
+If the user is logged in, it returns `true` and the navigation continues.
+Otherwise, it redirects to a login page; a page you haven't created yet.
 Returning a `UrlTree` tells the `Router` to cancel the current navigation and schedule a new one to redirect the user.
 -->
 `AuthGuard`에 인증 기능을 임시로 구현해 봅시다.
@@ -3517,13 +3506,8 @@ ng generate service auth/auth
 
 <code-example header="src/app/auth/auth.guard.ts (v2)" path="router/src/app/auth/auth.guard.2.ts"></code-example>
 
-`authGuard`에는 `AuthService`와 `Router`가 의존성 객체로 주입됩니다.
-라우팅 가드에 필요하다면 다른 서비스도 의존성으로 주입해서 활용할 수 있습니다.
-
-이 라우팅 가드는 불리언 결과값을 즉시 반환합니다.
+이 라우팅 가드는 불리언 결과값이나 `UrlTree`를 즉시 반환합니다.
 사용자가 로그인한 상태라면 `true`를 반환하고 네비게이션 동작도 계속 진행될 것입니다.
-
-`ActivatedRouteSnapshot`에서는 _앞으로 적용될_ 라우팅 규칙에 대한 정보를 참조할 수 있으며, `RouterStateSnapshot`에서는 _앞으로 적용될_ 애플리케이션의 `RouterState` 정보를 참조할 수 있기 때문에, 라우팅 가드 로직에 필요하다면 이 객체들을 활용하는 것도 좋습니다.
 
 그리고 사용자가 로그인하지 않은 상태라면 이동하려는 주소를 `AuthService.redirectUrl` 프로퍼티에 저장한 후에 로그인 페이지로 리다이렉션합니다&mdash;이 화면은 아직 만들지 않았습니다.
 라우팅 가드가 `UrlTree`를 반환하면 라우터는 현재 진행되고 있는 네비게이션 동작을 취소하고 반환하는 `UrlTree`로 사용자를 리다이렉션합니다.
@@ -3547,8 +3531,8 @@ ng generate component auth/login
 
 </code-example>
 
-Register a `/login` route in the `auth/auth-routing.module.ts`.
-In `app.module.ts`, import and add the `AuthModule` to the `AppModule` imports.
+Register a `/login` route in the `auth/auth-routing.module.ts` file.
+In `app.module.ts`, import and add `AuthModule` to the `AppModule` imports array.
 
 <code-tabs>
     <code-pane header="src/app/app.module.ts" path="router/src/app/app.module.ts" region="auth"></code-pane>
@@ -3578,27 +3562,6 @@ ng generate component auth/login
 </code-tabs>
 
 
-<a id="can-match-guard"></a>
-
-<!--
-### `canMatch`: Controlling `Route` matching based on application conditions
--->
-### `canMatch`: 애플리케이션 상태에 따라 매칭되는 `Route` 제어하기
-
-<!--
-As an alternative to using a `canActivate` guard which redirects the user to a new page if they do not have access, you can instead
-use a `canMatch` guard to control whether the `Router` even attempts to activate a `Route`. This allows you to have
-multiple `Route` configurations which share the same `path` but are matched based on different conditions. In addition, this approach
-can allow the `Router` to match the wildcard `Route` instead.
-
-<code-example path="router/src/app/admin/admin-routing.module.2.ts" header="src/app/admin/admin-routing.module.ts (guarded admin route)" region="can-match"></code-example>
--->
-`canActivate` 가드를 사용해서 사용자가 화면에 접근할 수 있을지 결정할 수 있는 방법은 `canMatch` 가드를 사용하는 방법도 가능합니다.
-이 방식은 `path`는 같지만 여러 조건에 따라 `Route` 여러개 중에서 하나를 결정해야 할 때 더 유용합니다.
-이런 경우라면 와일드카드 `Route`를 사용하는 것도 좋습니다.
-
-<code-example path="router/src/app/admin/admin-routing.module.2.ts" header="src/app/admin/admin-routing.module.ts (guarded admin route)" region="can-match"></code-example>
-
 
 <a id="can-activate-child-guard"></a>
 
@@ -3615,13 +3578,6 @@ The key difference is that it runs before any child route is activated.
 You protected the admin feature module from unauthorized access.
 You should also protect child routes *within* the feature module.
 
-Extend the `authGuard` to protect when navigating between the `admin` routes.
-Open `auth.guard.ts` and add the `CanActivateChildFn` interface to the imported tokens from the router package.
-
-Next, indicate the method acts as a `canActivateChild` guard as well by adding `|CanActivateChildFn` to the type.
-
-<code-example header="src/app/auth/auth.guard.ts (excerpt)" path="router/src/app/auth/auth.guard.3.ts" region="can-activate-child"></code-example>
-
 Add the same `authGuard` to the `component-less` admin route to protect all other child routes at one time
 instead of adding the `authGuard` to each route individually.
 
@@ -3633,13 +3589,6 @@ instead of adding the `authGuard` to each route individually.
 
 관리자 모듈은 이제 로그인하지 않은 사용자가 접근할 수 없도록 보호처리 되었습니다.
 기능 모듈 사용을 이렇게 제한하면 *그 안에 있는* 자식 라우팅 규칙도 함께 제한해야 합니다.
-
-`authGuard`를 수정해서 `admin` 라우팅 규칙 안에서 발생하는 네비게이션을 제한해 봅시다.
-`auth.guard.ts` 파일을 열고 `canActivatedChild` 인터페이스를 불러옵니다.
-
-그 다음에는 `|CanActivateChildFn`이라고 입력해서 `canActivateChild` 가드를 적용합니다.
-
-<code-example header="src/app/auth/auth.guard.ts (일부)" path="router/src/app/auth/auth.guard.3.ts" region="can-activate-child"></code-example>
 
 이제 `AuthGuard`는 개별 라우팅 규칙에 지정하지 않고 그 상위 계층에 추가해도 자식 라우팅 규칙을 모두 보호할 수 있습니다.
 
@@ -3762,22 +3711,20 @@ ng generate service dialog
 
 
 <a id="canDeactivate"></a>
-<!--
+
 Create a guard that checks for the presence of a `canDeactivate()` method in a component —any component.
 
-<!- TODO: Update CLI schematic for guards
 <code-example format="shell" language="shell">
 
 ng generate guard can-deactivate
 
 </code-example>
-->
 
 Paste the following code into your guard.
 
 <code-example header="src/app/can-deactivate.guard.ts" path="router/src/app/can-deactivate.guard.ts"></code-example>
 
-While the guard doesn't have to know which component has a deactivate method, it can detect that the `CrisisDetailComponent` component has the `canDeactivate()` method and call it.
+While the guard doesn't have to know which component has a `deactivate` method, it can detect that the `CrisisDetailComponent` component has the `canDeactivate()` method and call it.
 The guard not knowing the details of any component's deactivation method makes the guard reusable.
 
 Alternatively, you could make a component-specific `canDeactivate` guard for the `CrisisDetailComponent`.
@@ -3811,7 +3758,7 @@ ng generate guard can-deactivate
 
 <code-example header="src/app/can-deactivate.guard.ts" path="router/src/app/can-deactivate.guard.ts"></code-example>
 
-이 가드는 어떤 컴포넌트에 `canDeactivate` 메서드가 있는지 미리 알 필요가 없으며, 컴포넌트에 `canDeactivate()` 메서드가 있을 때만 이 메서드를 실행합니다.
+이 가드는 어떤 컴포넌트에 `deactivate` 메서드가 있는지 미리 알 필요가 없으며, 컴포넌트에 `canDeactivate()` 메서드가 있을 때만 이 메서드를 실행합니다.
 이렇게 구현하면 가드를 재사용하기도 편합니다.
 
 이 방법 대신 `CrisisDetailComponent`를 대상으로만 동작하는 `canDeactivate` 가드를 만들 수도 있습니다.
@@ -3886,13 +3833,11 @@ A `crisisDetailResolver` could retrieve a `Crisis` or navigate away, if the `Cri
 
 Create a `crisis-detail-resolver.ts` file within the `Crisis Center` feature area. This file will contain the `crisisDetailResolver` function.
 
-<!- TODO: Update CLI schematic for resolvers
 <code-example format="shell" language="shell">
 
-ng generate service crisis-center/crisis-detail-resolver
+ng generate resolver crisis-center/crisis-detail-resolver
 
 </code-example>
- ->
 
 <code-example header="src/app/crisis-center/crisis-detail-resolver.ts" path="router/src/app/crisis-center/crisis-detail-resolver.1.ts"></code-example>
 
@@ -3961,7 +3906,7 @@ Guards
 
 <code-example format="shell" language="shell">
 
-ng generate service crisis-center/crisis-detail-resolver
+ng generate resolver crisis-center/crisis-detail-resolver
 
 </code-example>
 
@@ -4249,12 +4194,12 @@ In `app.module.ts`, remove the `AdminModule` import statement from the top of th
 `app.module.ts` 파일에서 `AdminModule`을 로드하는 코드를 제거하고 `imports` 배열에도 `AdminModule`을 제거하세요.
 
 
-<a id="can-load-guard"></a>
+<a id="can-match-guard"></a>
 
 <!--
-### `canLoad`: guarding unauthorized loading of feature modules
+### `canMatch`: guarding unauthorized access of feature modules
 -->
-### `canLoad`: 권한없는 사용자가 모듈 로딩하는 것을 제한하기
+### `canLoad`: 권한없는 사용자의 접근 제한하기
 
 <!--
 You're already protecting the `AdminModule` with a `canActivate` guard that prevents unauthorized users from accessing the admin feature area.
@@ -4263,17 +4208,13 @@ It redirects to the login page if the user is not authorized.
 But the router is still loading the `AdminModule` even if the user can't visit any of its components.
 Ideally, you'd only load the `AdminModule` if the user is logged in.
 
-Add a `canLoad` guard that only loads the `AdminModule` once the user is logged in *and* attempts to access the admin feature area.
+A `canMatch` guard controls whether the `Router` attempts to match a `Route`. This lets you have
+multiple `Route` configurations that share the same `path` but are matched based on different conditions. This approach
+allows the `Router` to match the wildcard `Route` instead.
 
-The existing `authGuard` already has the essential logic to support the `canLoad` guard.
+The existing `authGuard` contains the logic to support the `canMatch` guard.
 
-1.  Open `auth.guard.ts`.
-1.  Import the `CanLoadFn` interface from `@angular/router`.
-1.  Add it to the `authGuard` function's type.
-
-<code-example header="src/app/auth/auth.guard.ts (canLoad guard)" path="router/src/app/auth/auth.guard.ts" region="canLoad"></code-example>
-
-Now add the `authGuard` to the `canLoad` array property for the `admin` route.
+Finally, add the `authGuard` to the `canMatch` array property for the `admin` route.
 The completed admin route looks like this:
 
 <code-example header="app-routing.module.ts (lazy admin route)" path="router/src/app/app-routing.module.5.ts" region="admin"></code-example>
@@ -4284,18 +4225,14 @@ The completed admin route looks like this:
 하지만 `CanActivate`만 사용하면 사용자가 `AdminModule`에 있는 컴포넌트를 사용하지 않아도 `AdminModule`을 로드합니다.
 사용자가 로그인하지 않은 상태라면 `AdminModule`을 아예 로드하지 않는 것이 가장 좋습니다.
 
-이런 경우에 `canLoad` 가드를 사용하면 사용자가 로그인하고, 관리자 모듈에 대한 권한이 있을 때만 `AdminModule`을 로드합니다.
+`canMatch` 가드는 `Router`가 어떤 `Route`와 매칭되는지 결정하는 동작을 제어합니다.
+그래서 같은 `path`에 연결된 `Route`가 여러개 있을 때도 조건에 따라 어떤 라우팅 규칙을 매칭할지 결정할 수도 있습니다.
+이 방식은 와일드카드 `Route`를 매칭하는 시점에도 활용할 수 있습니다.
 
-이전에 작성한 `authGuard`에는 `CanLoad` 가드를 사용에 사용할 수 있는 메서드가 이미 구현되어 있습니다.
+`authGuard`에는 `canMatch` 가드에 해당하는 로직이 이미 작성되어 있습니다.
 
-1.  `auth.guard.ts` 파일을 엽니다.
-1.  `@angular/router` 패키지로 제공되는 `CanLoadFn` 인터페이스를 로드합니다.
-1.  그리고 `canLoad()` 메서드를 이렇게 정의하면 됩니다:
-
-<code-example header="src/app/auth/auth.guard.ts (canLoad 가드)" path="router/src/app/auth/auth.guard.ts" region="canLoad"></code-example>
-
-이제 `admin` 주소의 `canLoad` 배열 프로퍼티에 `authGuard`를 추가합니다.
-여기까지 작성하고 나면 `admin` 주소에 해당하는 라우팅 규칙이 이렇게 마무리됩니다:
+이 가드를 적용하려면 `admin` 라우팅 규칙에 `canMatch` 배열 프로퍼티를 추가하고 `authGuard`를 추가하며 ㄴ됩니다.
+최종 코드는 이렇습니다:
 
 <code-example header="app-routing.module.ts (지연로딩되는 admin 라우팅 규칙)" path="router/src/app/app-routing.module.5.ts" region="admin"></code-example>
 
@@ -4417,8 +4354,6 @@ Add the `PreloadAllModules` token to the `forRoot()` call:
 This configures the `Router` preloader to immediately load all lazy loaded routes (routes with a `loadChildren` property).
 
 When you visit `http://localhost:4200`, the `/heroes` route loads immediately upon launch and the router starts loading the `CrisisCenterModule` right after the `HeroesModule` loads.
-
-Currently, the `AdminModule` does not preload because `canLoad` is blocking it.
 -->
 라우팅 규칙을 변경해서 `CrisisCenterModule`를 지연로딩하도록 수정해 봅시다.
 이 과정은 `AdminModule`에 지연로딩을 적용할 때와 같습니다.
@@ -4449,31 +4384,6 @@ Currently, the `AdminModule` does not preload because `canLoad` is blocking it.
 이렇게 설정하면 애플리케이션이 실행된 후에 지연로딩해야 하는 모듈을 모두 사전로딩합니다.
 
 그래서 `http://localhost:4200`이나 `/heroes` 주소에 접근하면 라우터가 `HeroesModule`을 로드한 후에 `CrisisCenterModule`을 로드합니다.
-
-다만, `AdminModule`은 `canLoad`로 보호되고 있기 때문에 사전로딩되지 않습니다.
-
-
-<a id="preload-canload"></a>
-
-<!--
-#### `canLoad` blocks preload of children
--->
-#### `CanLoad`는 자식 라우팅 규칙의 사전로딩을 막습니다.
-
-<!--
-The `PreloadAllModules` strategy does not load feature areas protected by a [canLoad](#can-load-guard) guard.
-
-You added a `canLoad` guard to the route in the `AdminModule` a few steps back to block loading of that module until the user is authorized.
-That `canLoad` guard takes precedence over the preload strategy for loading children routes.
-
-If you want to preload a module as well as guard against unauthorized access, remove the `canLoad()` guard method and rely on the [canActivate()](#can-activate-guard) guard alone.
--->
-`PreloadAllModules` 정책을 지정해도 [canLoad](#can-load-guard) 가드가 보호하는 모듈은 사전로딩하지 않습니다.
-
-`AdminModule` 라우팅 규칙은 로그인하지 않은 사용자가 접근하는 것을 막기 위해 `canLoad` 가드가 사용되었습니다.
-이 때 `canLoad` 가드는 자식 라우팅 규칙의 사전로딩 정책보다 우선 순위로 동작합니다. 
-
-그래서 로그인하지 않은 사용자를 막으면서 사전로딩도 하려면 `canLoad()` 가드 메서드를 제거하고 [`canActivate()`](#can-activate-guard) 가드만 사용해야 합니다.
 
 
 <a id="custom-preloading"></a>
@@ -4517,7 +4427,9 @@ An implementation of `preload` must return an `Observable`.
 If the route does preload, it returns the observable returned by calling the loader function.
 If the route does not preload, it returns an `Observable` of `null`.
 
-In this sample, the  `preload()` method loads the route if the route's `data.preload` flag is truthy.
+In this sample, the  `preload()` method loads the route if the route's `data.preload` flag is truthy. We also skip loading the
+`Route` if there is a `canMatch` guard because the user might
+not have access to it.
 
 As a side effect, `SelectivePreloadingStrategyService` logs the `path` of a selected route in its public `preloadedModules` array.
 
@@ -4576,6 +4488,7 @@ ng generate service selective-preloading-strategy
 그리고 사전로딩하지 않아야 한다면 `of(null)` 옵저버블을 반환하면 됩니다.
 
 이번 예제에서는 라우팅 규칙에 있는 `data.preload` 플래그가 참으로 평가될 때 모듈을 사전로딩하도록 구현했습니다.
+그리고 사용자가 접근할 필요가 없는 라우팅 규칙은 `canMatch` 가드를 사용해서 로딩하지 않도록 구현했습니다.
 
 이 동작과 함께 `SelectivePreloadingStrategyService`는 사전로딩하는 라우팅 규칙의 주소를 콘솔에 출력하고 `public preloadedModules` 배열 프로퍼티에 추가합니다.
 

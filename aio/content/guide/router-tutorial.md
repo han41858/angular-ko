@@ -66,7 +66,7 @@ To complete this tutorial, you should have a basic understanding of the followin
 *   CSS
 *   [Angular CLI](cli)
 
-You might find the [Tour of Heroes tutorial](tutorial) helpful, but it is not required.
+You might find the [Tour of Heroes tutorial](tutorial/tour-of-heroes) helpful, but it is not required.
 -->
 이 문서를 제대로 이해하려면 이런 내용을 미리 알고 있는 것이 좋습니다:
 
@@ -75,7 +75,7 @@ You might find the [Tour of Heroes tutorial](tutorial) helpful, but it is not re
 *   CSS
 *   [Angular CLI](cli)
 
-[히어로들의 여행 튜토리얼](tutorial) 문서를 보는 것도 도움이 되지만 꼭 필요한 것은 아닙니다.
+[히어로들의 여행 튜토리얼](tutorial/tour-of-heroes) 문서를 보는 것도 도움이 되지만 꼭 필요한 것은 아닙니다.
 
 
 <!--

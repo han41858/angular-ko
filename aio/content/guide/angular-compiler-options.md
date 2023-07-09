@@ -79,7 +79,7 @@ Bazel 규칙이 아닌 곳에서는 사용하지 않는 것을 권장합니다.
 <!--
 Modifies how Angular-specific annotations are emitted to improve tree-shaking.
 Non-Angular annotations are not affected.
-One of `static fields` or `decorators`. The default value is `static fields`. 
+One of `static fields` or `decorators`. The default value is `static fields`.
 
 *   By default, the compiler replaces decorators with a static field in the class, which allows advanced tree-shakers like [Closure compiler](https://github.com/google/closure-compiler) to remove unused classes
 *   The `decorators` value leaves the decorators in place, which makes compilation faster.
@@ -321,6 +321,12 @@ Set to `true` to preserve blank text nodes.
 
 기본값은 `false`입니다.
 
+<div class="alert is-helpful">
+
+When using hydration, it is recommended that you use `preserveWhitespaces: false`, which is the default value. If you choose to enable preserving whitespaces by adding `preserveWhitespaces: true` to your tsconfig, it is possible you may encounter issues with hydration. This is not yet a fully supported configuration. Ensure this is also consistently set between the server and client tsconfig files. See the [hydration guide](guide/hydration#preserve-whitespaces) for more details.
+
+</div>
+
 ### `skipMetadataEmit`
 
 <!--
@@ -426,7 +432,7 @@ Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했�
 <!--
 When `true`, enables [strict template type checking](guide/template-typecheck#strict-mode).
 
-The strictness flags that this open enables allow you to turn on and off specific types of strict template type checking.
+The strictness flags that this option enables allow you to turn on and off specific types of strict template type checking.
 See [troubleshooting template errors](guide/template-typecheck#troubleshooting-template-errors).
 
 When you use the Angular CLI command `ng new --strict`, it is set to `true` in the new project's configuration.
@@ -459,8 +465,8 @@ Besides the configuration file, you can also use [`tsc` command line options](ht
 
 <!-- links -->
 
-[AioGuideI18nCommonPrepareMarkTextInComponentTemplate]: guide/i18n-common-prepare#mark-text-in-component-template "Mark text in component template - Prepare templates for translations | Angular"
+[AioGuideI18nCommonPrepareMarkTextInComponentTemplate]: guide/i18n-common-prepare#mark-text-in-component-template "Mark text in component template - Prepare component for translation | Angular"
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-04-19

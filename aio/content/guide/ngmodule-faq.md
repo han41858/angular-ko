@@ -260,7 +260,7 @@ Don't export the following:
 
 *   Non-declarable objects such as services, functions, configurations, and entity models.
 *   Components that are only loaded dynamically by the router or by bootstrapping.
-    Such [entry components](guide/ngmodule-faq#q-entry-component-defined) can never be selected in another component's template.
+    Such components can never be selected in another component's template.
     While there's no harm in exporting them, there's also no benefit.
 
 *   Pure service modules that don't have public \(exported\) declarations.
@@ -274,8 +274,8 @@ Don't export the following:
 
 *   컴포넌트, 디렉티브, 파이프가 아닌 객체 : 서비스, 함수, config 설정, 데이터 모델
 *   라우터나 부트스트랩 대상으로 지정되어 동적으로 로딩되는 컴포넌트.
-    [진입 컴포넌트](guide/ngmodule-faq#q-entry-component-defined)는 다른 컴포넌트 템플릿에 사용될 필요가 없습니다.
-    진입 컴포넌트를 모듈 외부로 공개해도 별 문제는 없지만, 아무 이득없이 모듈 외부로 공개할 필요도 없습니다.
+    일부 컴포넌트는 다른 컴포넌트 템플릿에 사용될 필요가 없습니다.
+    이런 컴포넌트는 모듈 외부로 공개해도 별 문제는 없지만, 아무 이득없이 모듈 외부로 공개할 필요도 없습니다.
 
 *   public `declarations` 배열이 없는 서비스 모듈.
     `HttpClientModule`과 같은 모듈은 불러와서 다시 공개할 이유가 없습니다.
@@ -839,50 +839,6 @@ Here is a custom constructor for an NgModule called `GreetingModule`.
 <code-example header="src/app/greeting/greeting.module.ts (Constructor)" path="ngmodules/src/app/greeting/greeting.module.ts" region="ctor"></code-example>
 
 
-<a id="q-entry-component-defined"></a>
-
-<!--
-## What is an `entry component`?
--->
-## 진입 컴포넌트(entry component)가 뭔가요?
-
-<!--
-An entry component is any component that Angular loads *imperatively* by type.
-
-A component loaded *declaratively* by way of its selector is *not* an entry component.
-
-Angular loads a component declaratively when using the component's selector to locate the element in the template.
-Angular then creates the HTML representation of the component and inserts it into the DOM at the selected element.
-These aren't entry components.
-
-The bootstrapped root `AppComponent` is an *entry component*.
-True, its selector matches an element tag in `index.html`.
-But `index.html` isn't a component template and the `AppComponent` selector doesn't match an element in any component template.
-
-Components in route definitions are also *entry components*.
-A route definition refers to a component by its *type*.
-The router ignores a routed component's selector, if it even has one, and loads the component dynamically into a `RouterOutlet`.
-
-For more information, see [Entry Components](guide/entry-components).
--->
-진입 컴포넌트는 Angular가 *직접* 로드하는 컴포넌트입니다.
-
-반대로 일반 컴포넌트는 템플릿에 셀렉터를 사용되었을 때 로드됩니다.
-
-템플릿에 컴포넌트의 셀렉터가 사용되면 Angular가 컴포넌트를 로드합니다.
-그리고 컴포넌트의 템플릿을 생성하고 DOM에 추가합니다.
-이런 컴포넌트는 진입 컴포넌트가 아닙니다.
-
-애플리케이션이 부트스트랩될 때 로드되는 `AppComponent`는 *진입 컴포넌트* 입니다.
-사실 `index.html`에는 `AppComponent` 셀렉터가 지정되어 있긴 하지만, `index.html` 파일은 컴포넌트의 템플릿이 아니며, `AppComponent`의 셀렉터는 컴포넌트 템플릿 어디에도 사용되지 않습니다.
-
-라우팅 대상이 되는 컴포넌트도 *진입 컴포넌트* 입니다.
-라우팅 룰을 정의할 때 주소에 해당하는 컴포넌트를 지정하는데, 이렇게 사용되는 컴포넌트는 셀렉터가 지정되어 있다고 해도 무시되며, 지정된 주소로 이동할 때 `RouterOutlet`에 동적으로 로드됩니다.
-
-좀 더 자세한 내용을 확인하려면 [진입 컴포넌트](guide/entry-components) 문서를 참고하세요.
-
-
-<!--
 ## What kinds of modules should I have and how should I use them?
 -->
 ## 모듈의 종류는 어떤 것이 있으며, 어떻게 사용해야 하나요?

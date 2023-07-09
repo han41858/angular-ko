@@ -1151,15 +1151,6 @@ Angular가 제공하는 라이브러리는 `@angular`라는 이름으로 시작�
 
 [NgModule][AioGuideGlossaryNgmodule]과는 어떻게 다른지도 확인해 보세요.
 
-## ngcc
-
-<!--
-Angular compatibility compiler.
-If you build your application using [Ivy][AioGuideGlossaryIvy], but it depends on libraries that have not been compiled with Ivy, the Angular CLI uses `ngcc` to automatically update the dependent libraries to use Ivy.
--->
-Angular 호환성 컴파일러(compatibility compiler)를 의미합니다.
-[Ivy][AioGuideGlossaryIvy]로 개발한 애플리케이션에 Ivy로 컴파일되지 않은 라이브러리를 사용하면 Angular CLI가 `ngcc`를 사용해서 Ivy에 맞게 자동으로 조정합니다.
-
 ## NgModule
 
 <!--
@@ -2156,7 +2147,7 @@ View Engine은 9버전부터 지원 중단이 결정되었고, 13버전 부터�
 
 <!--
 A tree of related views that can be acted on as a unit.
-The root view referenced as the *host view* of a component.
+The root view is referenced as the *host view* of a component.
 A host view is the root of a tree of *embedded views*, collected in a `ViewContainerRef` view container attached to an anchor element in the hosting component.
 The view hierarchy is a key part of Angular [change detection][AioGuideGlossaryChangeDetection].
 
@@ -2376,7 +2367,7 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 [AioGuideGlossaryLibrary]: guide/glossary#library "library - Glossary | Angular"
 [AioGuideGlossaryM]: guide/glossary#module "M - Glossary | Angular"
 [AioGuideGlossaryModule]: guide/glossary#module "module - Glossary | Angular"
-[AioGuideGlossaryN]: guide/glossary#ngcc "N - Glossary | Angular"
+[AioGuideGlossaryN]: guide/glossary#ngmodule "N - Glossary | Angular"
 [AioGuideGlossaryNgmodule]: guide/glossary#ngmodule "NgModule - Glossary | Angular"
 [AioGuideGlossaryNpmPackage]: guide/glossary#npm-package "npm package - Glossary | Angular"
 [AioGuideGlossaryO]: guide/glossary#observable "O - Glossary | Angular"
@@ -2503,4 +2494,4 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-02-16

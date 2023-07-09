@@ -1,4 +1,4 @@
-load("//tools:defaults.bzl", "pkg_npm", "ts_library")
+load("//tools:defaults.bzl", "esbuild", "extract_types", "pkg_npm", "ts_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -6,30 +6,68 @@ ts_library(
     name = "api",
     srcs = [
         "api.ts",
-        "index.ts",
-        "override_rename_ts_plugin.ts",
     ],
-    prodmode_module = "commonjs",
     deps = [
+        "@npm//typescript",
+    ],
+)
+
+ts_library(
+    name = "factory_lib",
+    srcs = ["plugin-factory.ts"],
+    deps = [
+        ":api",
         "@npm//@types/node",
         "@npm//typescript",
     ],
 )
 
+esbuild(
+    name = "factory_bundle",
+    entry_point = ":plugin-factory.ts",
+    external = ["./bundles/language-service.js"],
+    format = "cjs",
+    deps = [":factory_lib"],
+)
+
+esbuild(
+    name = "api_bundle",
+    entry_point = ":api.ts",
+    format = "cjs",
+    deps = [":api"],
+)
+
+extract_types(
+    name = "types",
+    deps = [
+        ":api",
+        ":factory_lib",
+    ],
+)
+
 pkg_npm(
     name = "npm_package",
-    srcs = ["package.json"],
+    package_name = "@angular/language-service",
+    srcs = [
+        "index.d.ts",
+        "index.js",
+        "package.json",
+    ],
     tags = [
         "release-with-framework",
     ],
     # Do not add more to this list.
     # Dependencies on the full npm_package cause long re-builds.
     visibility = [
+        "//aio:__pkg__",
+        "//aio/content/examples:__subpackages__",
+        "//aio/tools/examples:__pkg__",
         "//integration:__subpackages__",
     ],
     deps = [
-        ":api",
-        # min bundle is not used at the moment; omit from package to speed up build
+        ":api_bundle",
+        ":factory_bundle",
+        ":types",
         "//packages/language-service/bundles:language-service.js",
     ],
 )
