@@ -215,7 +215,7 @@ The `heroes.component.css` styles apply only to the `HeroesComponent` and don't 
 -->
 히어로 목록은 보기 좋게 표시하는 것이 좋으며, 사용자가 어떤 항목에 마우스를 올리거나 선택하면 시각적인 반응을 보여주는 것도 좋습니다.
 
-[첫번째 튜토리얼](tutorial/toh-pt0#app-wide-styles)에서는 `styles.css` 파일에 애플리케이션 전역 스타일을 지정했습니다.
+[첫번째 튜토리얼](tutorial/tour-of-heroes/toh-pt0#app-wide-styles)에서는 `styles.css` 파일에 애플리케이션 전역 스타일을 지정했습니다.
 하지만 이 스타일시트에는 히어로의 목록을 꾸미는 스타일이 존재하지 않습니다.
 
 이 때 `styles.css`에 더 많은 스타일을 추가할 수도 있지만, 이렇게 작성하면 컴포넌트를 추가할때마다 스타일시트의 내용이 점점 많아집니다.

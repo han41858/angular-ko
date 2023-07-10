@@ -266,6 +266,7 @@ All major releases are typically supported for 18 months.
 | Long-term \(LTS\) | 12 개월 | [심각한 버그 수정이나 보안 패치](#lts-fixes)만 제공됩니다. |
 
 
+<a id="actively-supported-versions"></a>
 <!--
 ### Actively supported versions
 -->

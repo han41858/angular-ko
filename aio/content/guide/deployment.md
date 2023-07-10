@@ -157,7 +157,7 @@ You can read more by following the links associated with the package names below
 
 If you're deploying to a self-managed server or there's no builder for your favorite cloud platform, you can either create a builder that allows you to use the `ng deploy` command, or read through this guide to learn how to manually deploy your application.
 -->
-Angular CLI 8.3.0 버전부터 도입된 `ng deploy` 명령을 실행하면 `deploy` [CLI 빌더](https://angular.io/guide/cli-builder)가 실행됩니다.
+Angular CLI 8.3.0 버전부터 도입된 `ng deploy` 명령을 실행하면 `deploy` [CLI 빌더](guide/cli-builder)가 실행됩니다.
 프로젝트에서 `ng add [패키지 이름]` 명령을 실행하면 플랫폼에 따라 다르게 활용할 수 있는 서드 파티 빌더를 설치해서 활용할 수 있습니다.
 
 배포 기능을 제공하는 패키지를 설치하면 워크스페이스 환경설정 파일 `angular.json` 파일에서 지정된 프로젝트에 해당하는 `deploy` 섹션이 자동으로 수정되기 때문에 `ng deploy` 명령으로 실행할 수 있습니다.
@@ -765,7 +765,7 @@ Look at where it *tried* to find those files and adjust the base tag appropriate
 
 <div class="alert is-helpful">
 
-[`APP_BASE_HREF`](api/common/APP_BASE_HREF "API: APP_BASE_HREF")를 사용하면 이 설정을 대체할 수 있습니다.
+[`APP_BASE_HREF`](api/common/APP_BASE_HREF "API: APP_BASE_HREF") 를 사용하면 이 설정을 대체할 수 있습니다.
 
 </div>
 

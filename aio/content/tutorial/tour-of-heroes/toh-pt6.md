@@ -164,7 +164,9 @@ ng generate service InMemoryData
 
 나중에 서버가 준비되면 인-메모리 Web API를 제거하기만 하면 클라이언트가 보내는 요청이 서버에서 이전과 같이 처리될 것입니다.
 
+
 <a id="import-heroes"></a>
+<a id="heroes-and-http"></a>
 
 <!--
 ## Heroes and HTTP

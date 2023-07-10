@@ -1825,6 +1825,7 @@ This test expects the component to try to navigate to the `HeroListComponent`.
 <code-example header="app/hero/hero-detail.component.spec.ts (유효하지 않은 id)" path="testing/src/app/hero/hero-detail.component.spec.ts" region="route-bad-id"></code-example>
 
 
+<a id="nested-component-tests"></a>
 <!--
 ## Nested component tests
 -->

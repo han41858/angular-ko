@@ -870,6 +870,7 @@ Sass를 사용한다면 `includePaths` 필드를 지정해서 추가 컴포넌�
 </div>
 
 
+<a id="optimization-configuration"></a>
 <!--
 ### Optimization configuration
 -->

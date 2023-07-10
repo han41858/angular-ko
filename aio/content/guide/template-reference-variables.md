@@ -247,7 +247,7 @@ When an `<ng-template>` is instantiated, multiple named values can be passed whi
 ```
 -->
 _템플릿 입력 변수_ 는 템플릿 인스턴스마다 값을 받는 변수입니다.
-자세한 내용은 [구조 디렉티브 만들기](https://angular.io/guide/structural-directives) 문서를 참고하세요.
+자세한 내용은 [구조 디렉티브 만들기](guide/structural-directives) 문서를 참고하세요.
 
 `NgFor`를 사용하는 경우라면 템플릿 입력변수가 이렇게 사용됩니다:
 

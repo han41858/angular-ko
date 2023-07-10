@@ -150,6 +150,7 @@ TOTAL: 3 SUCCESS
 그러면 테스트가 다시 실행되면서 브라우저도 갱신되고, 새로운 결과 화면이 표시될 것입니다.
 
 
+<a id="configuration"></a>
 <!--
 ## Configuration
 -->

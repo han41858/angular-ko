@@ -345,7 +345,7 @@ For example, you can pass the desired format to the `date` pipe.
 파이프는 원래값을 입력받고 새로운 형식의 값을 반환하는 함수에 `@Pipe` 데코레이터를 사용해서 Angular에 등록합니다.
 
 Angular는 여러가지 파이프를 기본으로 제공하는데, 이 중 [날짜](api/common/DatePipe) 파이프와 [통화](api/common/CurrencyPipe) 파이프는 자주 사용하게 될 것입니다.
-Angular에서 제공하는 파이프 목록을 확인하려면 [파이프 API 목록](https://angular.io/api?type=pipe) 문서를 참고하세요.
+Angular에서 제공하는 파이프 목록을 확인하려면 [파이프 API 목록](api?type=pipe) 문서를 참고하세요.
 필요하다면 파이프를 새로 정의해서 사용할 수도 있습니다.
 
 HTML 템플릿에 파이프를 적용할 때는 [파이프 연산자 (|)](guide/pipes)를 다음과 같이 사용합니다:

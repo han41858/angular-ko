@@ -132,6 +132,7 @@ import { SecondComponent } from './second/second.component';
 
 </code-example>
 
+
 <a id="basic-route"></a>
 <a id="defining-a-basic-route"></a>
 
@@ -276,37 +277,18 @@ To get information from a route:
 
 라우팅 규칙으로 전달된 데이터를 참조해 봅시다:
 
-1.  컴포넌트가 정의된 파일에 `ActivatedRoute`와 `ParamMap` 심볼을 로드합니다.
+1.  `provideRouter` 메서드에 `withComponentInputBinding`을 추가합니다.
 
-    <code-example header="컴포넌트 클래스 (일부)" path="router/src/app/heroes/hero-detail/hero-detail.component.ts" region="imports-route-info"></code-example>
+    <code-example header="provideRouter feature" path="router/src/app/app-routing.module.11.ts" region="withComponentInputBinding"></code-example>
 
-    이 `import` 구문으로 로드한 클래스를 활용하면 컴포넌트에 필요한 정보를 참조할 수 있습니다.
-    각각에 대해 자세하게 알아보려면 개별 API 문서를 참고하세요:
+1.  컴포넌트 프로퍼티에 `Input` 데코레이터를 지정합니다.
 
-    *   [`Router`](api/router)
-    *   [`ActivatedRoute`](api/router/ActivatedRoute)
-    *   [`ParamMap`](api/router/ParamMap)
-
-1.  생성자에 `ActivatedRoute` 인스턴스를 의존성으로 주입합니다:
-
-    <code-example header="컴포넌트 클래스 (일부)" path="router/src/app/heroes/hero-detail/hero-detail.component.ts" region="activated-route"></code-example>
-
-1.  `ngOnInit()` 메소드에서 `ActivatedRoute` 객체 안에 있는 `id` 인자를 참조합니다:
-
-    <code-example header="컴포넌트 코드 (일부)">
-
-    ngOnInit() {
-      this.route.queryParams.subscribe(params =&gt; {
-        this.name = params['name'];
-      });
-    }
-
-    </code-example>
+    <code-example header="컴포넌트의 입력 프로퍼티 (일부)" path="router/src/app/heroes/hero-detail/hero-detail.component.4.ts" region="id-input"></code-example>
 
     <div class="alert is-helpful">
 
-    **NOTE**: <br />
-    The preceding example uses a variable, `name`, and assigns it the value based on the `name` parameter.
+    **참고:** <br>
+    라우팅 규칙 데이터는 키-값 형태로 컴포넌트 입력으로 받을 수도 있습니다. 정적 데이터, 주소에 있는 인자, 매트릭스 인자, 쿼리 인자 모두 활용할 수 있습니다.
 
     </div>
 
@@ -547,6 +529,7 @@ The `goToItems()` method interprets the destination URI as relative to the activ
 `goToItems()` 메서드는 최종 목적지를 결정한 후에 현재 활성화된 라우팅 규칙의 상대 주소 `items`로 이동합니다.
 
 
+<a id="accessing-query-parameters-and-fragments"></a>
 <!--
 ## Accessing query parameters and fragments
 -->

@@ -127,7 +127,6 @@ You may also be interested in the following:
 다음 내용을 더 확인해 보세요:
 
 *   [기능 모듈](guide/feature-modules)
-*   [진입 컴포넌트](guide/entry-components)
 *   [프로바이더](guide/providers)
 *   [NgModule의 종류](guide/module-types)
 

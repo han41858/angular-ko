@@ -118,7 +118,7 @@ npm install &commat;example/my-builder
 | `tsconfig.json`          | [TypeScript 환경설정 파일](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) |
 
 빌더는 npm 저장소에 배포할 수 있습니다.
-자세한 내용은 [라이브러리 배포하기](https://angular.io/guide/creating-libraries#publishing-your-library) 문서를 참고하세요.
+자세한 내용은 [라이브러리 배포하기](guide/creating-libraries#publishing-your-library) 문서를 참고하세요.
 그리고 이렇게 배포한 빌더는 다음과 같은 명령으로 설치할 수 있습니다.
 
 <code-example format="shell" language="shell">

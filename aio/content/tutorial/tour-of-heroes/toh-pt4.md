@@ -378,6 +378,7 @@ and have [`HttpClient.get()`](guide/http) return an `Observable`.
 Angular가 제공하는 [`HttpClient.get` 메소드는 `Observable`을 반환하기 때문에](guide/http) 이렇게 구현하는 것이 가장 자연스럽습니다.
 
 
+<a id="observable-heroservice"></a>
 <!--
 ### Observable `HeroService`
 -->
