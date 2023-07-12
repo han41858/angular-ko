@@ -34,7 +34,7 @@ Angular adds the class when the bound expression, `onSale` is truthy, and it rem
 -->
 클래스 바인딩은 이렇게 사용합니다:
 
-[class.sale]="onSale"
+`[class.sale]="onSale"`
 
 그러면 `onSale`이 참으로 평가될 때 `sale` 클래스를 엘리먼트에 추가하며, `onSale`이 거짓이나 `undefined`로 평가되면 `sale` 클래스를 엘리먼트에서 제거합니다.
 자세한 내용은 [스타일 위임](guide/style-precedence#styling-delegation) 문서를 참고하세요.
