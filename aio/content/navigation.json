@@ -360,7 +360,7 @@
             {
               "url": "guide/directive-composition-api",
               "/title": "Directive composition API",
-              "title": "디렉티브 컴포지션 API",
+              "title": "디렉티브 연결 API",
               "/tooltip": "Apply directive to host elements.",
               "tooltip": "호스트 엘리먼트에 디렉티브를 적용해 보세요."
             }

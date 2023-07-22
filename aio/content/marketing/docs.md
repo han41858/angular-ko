@@ -50,7 +50,7 @@ Angular 가이드 문서는 프로토타입부터 대규모 기업용 앱에도 
   </a>
   <a href="guide/architecture" class="docs-card" title="Angular Concepts">
     <section>가이드문서 학습하기</section>
-    <p>Learn about the fundamental design concepts and architecture of Angular applications.</p>
+    <p>Angular 애플리케이션의 기본 설계 방식을 살펴보고 아키텍처를 구성해 보세요.</p>
     <p class="card-footer">Angular 개요</p>
   </a>
   <a href="guide/setup-local" class="docs-card" title="Angular Local Environment Setup">
