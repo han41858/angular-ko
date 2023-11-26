@@ -136,11 +136,11 @@ yarn_install(
     # with bin symlinks in the external repository. This is needed to link the shared
     # set of deps for example e2es.
     exports_directories_only = False,
-    manual_build_file_contents = """\
-filegroup(
-    name = "node_modules_files",
-    srcs = ["node_modules"],
-)
+    manual_build_file_contents = """\\\r
+filegroup(\r
+    name = "node_modules_files",\r
+    srcs = ["node_modules"],\r
+)\r
 """,
     package_json = "//aio/tools/examples/shared:package.json",
     yarn = YARN_LABEL,
