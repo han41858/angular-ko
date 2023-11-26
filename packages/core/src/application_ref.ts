@@ -8,8 +8,9 @@
 
 import './util/ng_jit_mode';
 
+import {setThrowInvalidWriteToSignalError} from '@angular/core/primitives/signals';
 import {Observable, of, Subscription} from 'rxjs';
-import {distinctUntilChanged, share, switchMap} from 'rxjs/operators';
+import {distinctUntilChanged, first, share, switchMap} from 'rxjs/operators';
 
 import {ApplicationInitStatus} from './application_init';
 import {PLATFORM_INITIALIZER} from './application_tokens';
@@ -26,13 +27,14 @@ import {ErrorHandler} from './error_handler';
 import {formatRuntimeError, RuntimeError, RuntimeErrorCode} from './errors';
 import {DEFAULT_LOCALE_ID} from './i18n/localization';
 import {LOCALE_ID} from './i18n/tokens';
+import {ImagePerformanceWarning} from './image_performance_warning';
 import {InitialRenderPendingTasks} from './initial_render_pending_tasks';
 import {Type} from './interface/type';
 import {COMPILER_OPTIONS, CompilerOptions} from './linker/compiler';
 import {ComponentFactory, ComponentRef} from './linker/component_factory';
 import {ComponentFactoryResolver} from './linker/component_factory_resolver';
 import {InternalNgModuleRef, NgModuleFactory, NgModuleRef} from './linker/ng_module_factory';
-import {InternalViewRef, ViewRef} from './linker/view_ref';
+import {ViewRef} from './linker/view_ref';
 import {isComponentResourceResolutionQueueEmpty, resolveComponentResources} from './metadata/resource_loading';
 import {assertNgModuleType} from './render3/assert';
 import {ComponentFactory as R3ComponentFactory} from './render3/component_ref';
@@ -42,7 +44,7 @@ import {setLocaleId} from './render3/i18n/i18n_locale_id';
 import {setJitOptions} from './render3/jit/jit_options';
 import {createNgModuleRefWithProviders, EnvironmentNgModuleRefAdapter, NgModuleFactory as R3NgModuleFactory} from './render3/ng_module_ref';
 import {publishDefaultGlobalUtils as _publishDefaultGlobalUtils} from './render3/util/global_utils';
-import {setThrowInvalidWriteToSignalError} from './signals';
+import {ViewRef as InternalViewRef} from './render3/view_ref';
 import {TESTABILITY} from './testability/testability';
 import {isPromise} from './util/lang';
 import {stringify} from './util/stringify';
@@ -76,7 +78,7 @@ const PLATFORM_DESTROY_LISTENERS =
  * @publicApi
  */
 export const APP_BOOTSTRAP_LISTENER =
-    new InjectionToken<Array<(compRef: ComponentRef<any>) => void>>('appBootstrapListener');
+    new InjectionToken<ReadonlyArray<(compRef: ComponentRef<any>) => void>>('appBootstrapListener');
 
 export function compileNgModuleFactory<M>(
     injector: Injector, options: CompilerOptions,
@@ -151,6 +153,7 @@ export function isBoundToModule<C>(cf: ComponentFactory<C>): boolean {
 /**
  * A token for third-party components that can register themselves with NgProbe.
  *
+ * @deprecated
  * @publicApi
  */
 export class NgProbeToken {
@@ -188,10 +191,10 @@ function createOrReusePlatformInjector(providers: StaticProvider[] = []): Inject
   // is already bootstrapped and no additional actions are required.
   if (_platformInjector) return _platformInjector;
 
+  publishDefaultGlobalUtils();
   // Otherwise, setup a new platform injector and run platform initializers.
   const injector = createPlatformInjector(providers);
   _platformInjector = injector;
-  publishDefaultGlobalUtils();
   publishSignalConfiguration();
   runPlatformInitializers(injector);
   return injector;
@@ -284,6 +287,10 @@ export function internalCreateApplication(config: {
           const appRef = envInjector.get(ApplicationRef);
           if (rootComponent !== undefined) {
             appRef.bootstrap(rootComponent);
+          }
+          if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            const imagePerformanceService = envInjector.get(ImagePerformanceWarning);
+            imagePerformanceService.start();
           }
           return appRef;
         });
@@ -389,7 +396,7 @@ export function getPlatform(): PlatformRef|null {
  *
  * @publicApi
  *
- * @see provideZoneChangeDetection
+ * @see {@link provideZoneChangeDetection}
  */
 export interface NgZoneOptions {
   /**
@@ -819,7 +826,7 @@ export class ApplicationRef {
   private _destroyed = false;
   private _destroyListeners: Array<() => void> = [];
   /** @internal */
-  _views: InternalViewRef[] = [];
+  _views: InternalViewRef<unknown>[] = [];
   private readonly internalErrorHandler = inject(INTERNAL_APPLICATION_ERROR_HANDLER);
   private readonly zoneIsStable = inject(ZONE_IS_STABLE_OBSERVABLE);
 
@@ -1071,7 +1078,7 @@ export class ApplicationRef {
    */
   attachView(viewRef: ViewRef): void {
     (typeof ngDevMode === 'undefined' || ngDevMode) && this.warnIfDestroyed();
-    const view = (viewRef as InternalViewRef);
+    const view = (viewRef as InternalViewRef<unknown>);
     this._views.push(view);
     view.attachToAppRef(this);
   }
@@ -1081,7 +1088,7 @@ export class ApplicationRef {
    */
   detachView(viewRef: ViewRef): void {
     (typeof ngDevMode === 'undefined' || ngDevMode) && this.warnIfDestroyed();
-    const view = (viewRef as InternalViewRef);
+    const view = (viewRef as InternalViewRef<unknown>);
     remove(this._views, view);
     view.detachFromAppRef();
   }
@@ -1100,8 +1107,7 @@ export class ApplicationRef {
               'Please check that the `APP_BOOTSTRAP_LISTENER` token is configured as a ' +
               '`multi: true` provider.');
     }
-    listeners.push(...this._bootstrapListeners);
-    listeners.forEach((listener) => listener(componentRef));
+    [...this._bootstrapListeners, ...listeners].forEach((listener) => listener(componentRef));
   }
 
   /** @internal */
@@ -1283,15 +1289,15 @@ export function internalProvideZoneChangeDetection(ngZoneFactory: () => NgZone):
  * `BootstrapOptions` instead.
  *
  * @usageNotes
- * ```typescript=
+ * ```typescript
  * bootstrapApplication(MyApp, {providers: [
  *   provideZoneChangeDetection({eventCoalescing: true}),
  * ]});
  * ```
  *
  * @publicApi
- * @see bootstrapApplication
- * @see NgZoneOptions
+ * @see {@link bootstrapApplication}
+ * @see {@link NgZoneOptions}
  */
 export function provideZoneChangeDetection(options?: NgZoneOptions): EnvironmentProviders {
   const zoneProviders =
@@ -1301,4 +1307,26 @@ export function provideZoneChangeDetection(options?: NgZoneOptions): Environment
                                                       [],
     zoneProviders,
   ]);
+}
+
+let whenStableStore: WeakMap<ApplicationRef, Promise<void>>|undefined;
+/**
+ * Returns a Promise that resolves when the application becomes stable after this method is called
+ * the first time.
+ */
+export function whenStable(applicationRef: ApplicationRef): Promise<void> {
+  whenStableStore ??= new WeakMap();
+  const cachedWhenStable = whenStableStore.get(applicationRef);
+  if (cachedWhenStable) {
+    return cachedWhenStable;
+  }
+
+  const whenStablePromise =
+      applicationRef.isStable.pipe(first((isStable) => isStable)).toPromise().then(() => void 0);
+  whenStableStore.set(applicationRef, whenStablePromise);
+
+  // Be a good citizen and clean the store `onDestroy` even though we are using `WeakMap`.
+  applicationRef.onDestroy(() => whenStableStore?.delete(applicationRef));
+
+  return whenStablePromise;
 }

@@ -62,6 +62,7 @@
           "files": [
             {
               "expected": "local_ref_before_listener_template.js",
+              "templatePipelineExpected": "local_ref_before_listener.pipeline.js",
               "generated": "local_ref_before_listener.js"
             }
           ],
@@ -209,8 +210,7 @@
               "expected": "event_explicit_access_template.js",
               "generated": "event_explicit_access.js"
             }
-          ],
-          "failureMessage": "Incorrect event listener"
+          ]
         }
       ]
     },
@@ -292,7 +292,42 @@
           "files": [
             {
               "expected": "embedded_view_listener_context_template.js",
+              "templatePipelineExpected": "embedded_view_listener_context_template.pipeline.js",
               "generated": "embedded_view_listener_context.js"
+            }
+          ],
+          "failureMessage": "Incorrect template"
+        }
+      ]
+    },
+    {
+      "description": "should generate a simple two-way binding",
+      "inputFiles": [
+        "simple_two_way.ts"
+      ],
+      "expectations": [
+        {
+          "files": [
+            {
+              "expected": "simple_two_way_template.js",
+              "generated": "simple_two_way.js"
+            }
+          ],
+          "failureMessage": "Incorrect template"
+        }
+      ]
+    },
+    {
+      "description": "should generate a nested two-way binding",
+      "inputFiles": [
+        "nested_two_way.ts"
+      ],
+      "expectations": [
+        {
+          "files": [
+            {
+              "expected": "nested_two_way_template.js",
+              "generated": "nested_two_way.js"
             }
           ],
           "failureMessage": "Incorrect template"

@@ -12,6 +12,9 @@
     "name": "APP_INITIALIZER"
   },
   {
+    "name": "AfterRenderEventManager"
+  },
+  {
     "name": "AnonymousSubject"
   },
   {
@@ -30,6 +33,9 @@
     "name": "BLOOM_MASK"
   },
   {
+    "name": "BODY"
+  },
+  {
     "name": "BROWSER_MODULE_PROVIDERS"
   },
   {
@@ -42,7 +48,7 @@
     "name": "BrowserXhr"
   },
   {
-    "name": "CACHE_STATE"
+    "name": "CACHE_OPTIONS"
   },
   {
     "name": "CIRCULAR"
@@ -58,6 +64,9 @@
   },
   {
     "name": "CSP_NONCE"
+  },
+  {
+    "name": "ChainedInjector"
   },
   {
     "name": "ChangeDetectionStrategy"
@@ -111,7 +120,13 @@
     "name": "DefaultIfEmptySubscriber"
   },
   {
+    "name": "DistinctUntilChangedOperator"
+  },
+  {
     "name": "DistinctUntilChangedSubscriber"
+  },
+  {
+    "name": "DoOperator"
   },
   {
     "name": "DomAdapter"
@@ -129,16 +144,10 @@
     "name": "EMPTY_PAYLOAD"
   },
   {
-    "name": "ENABLED_SSR_FEATURES"
-  },
-  {
     "name": "ENVIRONMENT_INITIALIZER"
   },
   {
     "name": "EVENT_MANAGER_PLUGINS"
-  },
-  {
-    "name": "EffectManager"
   },
   {
     "name": "ElementRef"
@@ -177,7 +186,13 @@
     "name": "GenericBrowserDomAdapter"
   },
   {
+    "name": "HAS_CHILD_VIEWS_TO_REFRESH"
+  },
+  {
     "name": "HAS_TRANSPLANTED_VIEWS"
+  },
+  {
+    "name": "HEADERS"
   },
   {
     "name": "HTTP_ROOT_INTERCEPTOR_FNS"
@@ -193,6 +208,12 @@
   },
   {
     "name": "HttpResponseBase"
+  },
+  {
+    "name": "HttpStatusCode"
+  },
+  {
+    "name": "HydrationFeatureKind"
   },
   {
     "name": "INJECTOR2"
@@ -309,9 +330,6 @@
     "name": "NODES"
   },
   {
-    "name": "NOOP_CLEANUP_FN"
-  },
-  {
     "name": "NOT_FOUND"
   },
   {
@@ -363,6 +381,9 @@
     "name": "Observable"
   },
   {
+    "name": "PERF_MARK_STANDALONE"
+  },
+  {
     "name": "PLATFORM_DESTROY_LISTENERS"
   },
   {
@@ -378,6 +399,9 @@
     "name": "R3Injector"
   },
   {
+    "name": "REACTIVE_LVIEW_CONSUMER_NODE"
+  },
+  {
     "name": "REFERENCE_NODE_BODY"
   },
   {
@@ -390,10 +414,7 @@
     "name": "REMOVE_STYLES_ON_COMPONENT_DESTROY"
   },
   {
-    "name": "ReactiveLViewConsumer"
-  },
-  {
-    "name": "ReactiveNode"
+    "name": "RESPONSE_TYPE"
   },
   {
     "name": "RefCountOperator"
@@ -408,9 +429,6 @@
     "name": "RendererStyleFlags2"
   },
   {
-    "name": "RootViewRef"
-  },
-  {
     "name": "RuntimeError"
   },
   {
@@ -418,6 +436,15 @@
   },
   {
     "name": "SKIP_HYDRATION_ATTR_NAME"
+  },
+  {
+    "name": "SKIP_HYDRATION_ATTR_NAME_LOWER_CASE"
+  },
+  {
+    "name": "STATUS"
+  },
+  {
+    "name": "STATUS_TEXT"
   },
   {
     "name": "SafeSubscriber"
@@ -495,6 +522,9 @@
     "name": "TransferState"
   },
   {
+    "name": "URL2"
+  },
+  {
     "name": "USE_VALUE"
   },
   {
@@ -508,12 +538,6 @@
   },
   {
     "name": "ViewRef"
-  },
-  {
-    "name": "Watch"
-  },
-  {
-    "name": "WeakRefImpl"
   },
   {
     "name": "ZONE_IS_STABLE_OBSERVABLE"
@@ -553,9 +577,6 @@
   },
   {
     "name": "_locateOrCreateTextNode"
-  },
-  {
-    "name": "_nextReactiveId"
   },
   {
     "name": "_platformInjector"
@@ -603,6 +624,9 @@
     "name": "applyView"
   },
   {
+    "name": "assertConsumerNode"
+  },
+  {
     "name": "attachPatchData"
   },
   {
@@ -639,13 +663,10 @@
     "name": "clearElementContents"
   },
   {
-    "name": "clearViewRefreshFlag"
-  },
-  {
     "name": "collectNativeNodes"
   },
   {
-    "name": "commitLViewConsumerIfHasProducers"
+    "name": "collectNativeNodesInLContainer"
   },
   {
     "name": "concatStringsWithSpace"
@@ -658,6 +679,12 @@
   },
   {
     "name": "connectableObservableDescriptor"
+  },
+  {
+    "name": "consumerIsLive"
+  },
+  {
+    "name": "consumerPollProducersForChange"
   },
   {
     "name": "convertToBitFlags"
@@ -687,9 +714,6 @@
     "name": "createTextNode"
   },
   {
-    "name": "currentConsumer"
-  },
-  {
     "name": "deepForEach"
   },
   {
@@ -702,7 +726,19 @@
     "name": "detachMovedView"
   },
   {
-    "name": "detectChangesInternal"
+    "name": "detectChangesInChildComponents"
+  },
+  {
+    "name": "detectChangesInComponent"
+  },
+  {
+    "name": "detectChangesInEmbeddedViews"
+  },
+  {
+    "name": "detectChangesInView"
+  },
+  {
+    "name": "detectChangesInViewIfAttached"
   },
   {
     "name": "diPublicInInjector"
@@ -721,6 +757,9 @@
   },
   {
     "name": "enterView"
+  },
+  {
+    "name": "epoch"
   },
   {
     "name": "executeCheckHooks"
@@ -753,6 +792,9 @@
     "name": "forwardRef"
   },
   {
+    "name": "freeConsumers"
+  },
+  {
     "name": "from"
   },
   {
@@ -772,9 +814,6 @@
   },
   {
     "name": "getComponentLViewByIndex"
-  },
-  {
-    "name": "getComponentLViewForHydration"
   },
   {
     "name": "getCurrentTNode"
@@ -798,10 +837,10 @@
     "name": "getFactoryDef"
   },
   {
-    "name": "getFirstLContainer"
+    "name": "getFilteredHeaders"
   },
   {
-    "name": "getHeadersMap"
+    "name": "getFirstLContainer"
   },
   {
     "name": "getInjectableDef"
@@ -811,6 +850,9 @@
   },
   {
     "name": "getInjectorIndex"
+  },
+  {
+    "name": "getLNodeForHydration"
   },
   {
     "name": "getLView"
@@ -835,9 +877,6 @@
   },
   {
     "name": "getNullInjector"
-  },
-  {
-    "name": "getOrCreateCurrentLViewConsumer"
   },
   {
     "name": "getOrCreateInjectable"
@@ -873,9 +912,6 @@
     "name": "getPromiseCtor"
   },
   {
-    "name": "getReactiveLViewConsumer"
-  },
-  {
     "name": "getSegmentHead"
   },
   {
@@ -894,6 +930,12 @@
     "name": "hasInSkipHydrationBlockFlag"
   },
   {
+    "name": "hasSkipHydrationAttrOnRElement"
+  },
+  {
+    "name": "hasSkipHydrationAttrOnTNode"
+  },
+  {
     "name": "hostReportError"
   },
   {
@@ -904,9 +946,6 @@
   },
   {
     "name": "importProvidersFrom"
-  },
-  {
-    "name": "inNotificationPhase"
   },
   {
     "name": "includeViewProviders"
@@ -960,9 +999,6 @@
     "name": "isArrayLike"
   },
   {
-    "name": "isBrowser"
-  },
-  {
     "name": "isComponentDef"
   },
   {
@@ -994,6 +1030,9 @@
   },
   {
     "name": "isObject"
+  },
+  {
+    "name": "isPlatformBrowser"
   },
   {
     "name": "isPlatformServer"
@@ -1060,6 +1099,9 @@
   },
   {
     "name": "map"
+  },
+  {
+    "name": "markAncestorsForTraversal"
   },
   {
     "name": "markViewDirty"
@@ -1131,25 +1173,28 @@
     "name": "onLeave"
   },
   {
+    "name": "performanceMark"
+  },
+  {
+    "name": "populateDehydratedViewsInLContainerImpl"
+  },
+  {
     "name": "processInjectorTypesWithProviders"
   },
   {
-    "name": "profiler"
+    "name": "producerRemoveLiveConsumerAtIndex"
   },
   {
-    "name": "promise"
+    "name": "producerUpdateValueVersion"
+  },
+  {
+    "name": "profiler"
   },
   {
     "name": "provideZoneChangeDetection"
   },
   {
     "name": "refCount"
-  },
-  {
-    "name": "refreshComponent"
-  },
-  {
-    "name": "refreshContainsDirtyView"
   },
   {
     "name": "refreshContentQueries"
@@ -1227,6 +1272,9 @@
     "name": "setInjectImplementation"
   },
   {
+    "name": "setSegmentHead"
+  },
+  {
     "name": "setSelectedIndex"
   },
   {
@@ -1284,9 +1332,6 @@
     "name": "updateMicroTaskStatus"
   },
   {
-    "name": "updateViewsToRefresh"
-  },
-  {
     "name": "urlParsingNode"
   },
   {
@@ -1294,6 +1339,12 @@
   },
   {
     "name": "walkProviderTree"
+  },
+  {
+    "name": "whenStable"
+  },
+  {
+    "name": "whenStableStore"
   },
   {
     "name": "writeDirectClass"

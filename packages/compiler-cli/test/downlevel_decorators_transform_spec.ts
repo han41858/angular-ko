@@ -98,7 +98,7 @@ describe('downlevel decorator transform', () => {
        MyService.ctorParameters = () => [
            { type: ClassInject }
        ];
-       MyService = tslib_1.__decorate([
+       exports.MyService = MyService = tslib_1.__decorate([
         (0, core_1.Injectable)()
        ], MyService);
        `);
@@ -121,7 +121,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
            { type: ClassInject }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
        `);
@@ -144,7 +144,7 @@ describe('downlevel decorator transform', () => {
        MyComp.ctorParameters = () => [
          { type: ClassInject }
        ];
-       MyComp = tslib_1.__decorate([
+       exports.MyComp = MyComp = tslib_1.__decorate([
         (0, core_1.Component)({ template: 'hello' })
        ], MyComp);`);
   });
@@ -166,7 +166,7 @@ describe('downlevel decorator transform', () => {
        MyPipe.ctorParameters = () => [
          { type: ClassInject }
        ];
-       MyPipe = tslib_1.__decorate([
+       exports.MyPipe = MyPipe = tslib_1.__decorate([
         (0, core_1.Pipe)({ selector: 'hello' })
        ], MyPipe);
        `);
@@ -180,7 +180,7 @@ describe('downlevel decorator transform', () => {
 
     expect(diagnostics.length).toBe(0);
     expect(output).toContain(dedent`
-       MyClass = tslib_1.__decorate([
+       exports.MyClass = MyClass = tslib_1.__decorate([
          SomeUnknownDecorator()
        ], MyClass);
      `);
@@ -195,7 +195,7 @@ describe('downlevel decorator transform', () => {
 
     expect(diagnostics.length).toBe(0);
     expect(output).toContain(dedent`
-       MyClass = tslib_1.__decorate([
+       exports.MyClass = MyClass = tslib_1.__decorate([
          DecoratorBuilder().customClassDecorator
        ], MyClass);
      `);
@@ -274,7 +274,9 @@ describe('downlevel decorator transform', () => {
             (0, core_1.Injectable)()
           ], ShouldBeProcessed);
         }
-      };`);
+      };
+      exports.Wrapper = Wrapper;
+    `);
   });
 
   // Angular is not concerned with type information for decorated class members. Instead,
@@ -323,7 +325,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
          { type: other_file_1.MyOtherClass }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)(),
         tslib_1.__metadata("design:paramtypes", [other_file_1.MyOtherClass])
        ], MyDir);
@@ -350,7 +352,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
          { type: other_file_1.MyOtherClass }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -375,7 +377,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
          { type: externalFile.MyOtherClass }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -401,7 +403,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
          { type: other.OtherClass }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -422,7 +424,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
          { type: Document, decorators: [{ type: core_1.Inject, args: [core_1.DOCUMENT,] }] }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -443,7 +445,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
          { type: core_1.NgZone, decorators: [{ type: core_1.Optional }] }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -464,7 +466,7 @@ describe('downlevel decorator transform', () => {
 
     expect(diagnostics.length).toBe(0);
     expect(output).toContain(dedent`
-       MyDir = tslib_1.__decorate([
+      exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
         ], MyDir);
      `);
@@ -556,7 +558,7 @@ describe('downlevel decorator transform', () => {
        MyDir.ctorParameters = () => [
          { type: external_1.Dep }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -574,13 +576,14 @@ describe('downlevel decorator transform', () => {
 
     expect(diagnostics.length).toBe(0);
     expect(output).toContain(dedent`
-       let MyDir = MyDir_1 = class MyDir {
+       let MyDir = class MyDir {
        constructor(parentDir) { }
        };
+       exports.MyDir = MyDir;
        MyDir.ctorParameters = () => [
-         { type: MyDir, decorators: [{ type: core_1.Optional }, { type: core_1.SkipSelf }, { type: core_1.Inject, args: [MyDir_1,] }] }
+         { type: MyDir, decorators: [{ type: core_1.Optional }, { type: core_1.SkipSelf }, { type: core_1.Inject, args: [MyDir,] }] }
        ];
-       MyDir = MyDir_1 = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -634,7 +637,7 @@ describe('downlevel decorator transform', () => {
          { type: undefined, decorators: [{ type: core_1.Inject, args: ['$default',] }] },
          { type: undefined, decorators: [{ type: core_1.Inject, args: ['$keyCodes',] }] }
        ];
-       MyDir = tslib_1.__decorate([
+       exports.MyDir = MyDir = tslib_1.__decorate([
         (0, core_1.Directive)()
        ], MyDir);
      `);
@@ -691,7 +694,7 @@ describe('downlevel decorator transform', () => {
        MyComp.ctorParameters = () => [
          { type: Values }
        ];
-       MyComp = tslib_1.__decorate([
+       exports.MyComp = MyComp = tslib_1.__decorate([
         (0, core_1.Component)({ template: 'hello' })
        ], MyComp);
        `);

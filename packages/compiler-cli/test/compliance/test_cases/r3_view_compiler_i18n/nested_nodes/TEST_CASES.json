@@ -83,7 +83,8 @@
             "verifyUniqueConsts"
           ]
         }
-      ]
+      ],
+      "skipForTemplatePipeline": true
     },
     {
       "description": "should support interpolation with custom interpolation config",
@@ -153,7 +154,8 @@
             "verifyUniqueConsts"
           ]
         }
-      ]
+      ],
+      "skipForTemplatePipeline": true
     },
     {
       "description": "should handle i18n attributes in nested templates",
@@ -162,6 +164,13 @@
       ],
       "expectations": [
         {
+          "files": [
+            {
+              "generated": "nested_templates.js",
+              "expected": "nested_templates.template.js",
+              "templatePipelineExpected": "nested_templates.pipeline.js"
+            }
+          ],
           "extraChecks": [
             "verifyPlaceholdersIntegrity",
             "verifyUniqueConsts"
@@ -181,7 +190,8 @@
             "verifyUniqueConsts"
           ]
         }
-      ]
+      ],
+      "skipForTemplatePipeline": true
     },
     {
       "description": "should handle i18n context in nested templates",
@@ -195,7 +205,8 @@
             "verifyUniqueConsts"
           ]
         }
-      ]
+      ],
+      "skipForTemplatePipeline": true
     },
     {
       "description": "should handle i18n attribute with directives",
@@ -204,6 +215,13 @@
       ],
       "expectations": [
         {
+          "files": [
+            {
+              "generated": "directives.js",
+              "expected": "directives.template.js",
+              "templatePipelineExpected": "directives.pipeline.js"
+            }
+          ],
           "extraChecks": [
             "verifyPlaceholdersIntegrity",
             "verifyUniqueConsts"
@@ -223,7 +241,8 @@
             "verifyUniqueConsts"
           ]
         }
-      ]
+      ],
+      "skipForTemplatePipeline": true
     }
   ]
 }

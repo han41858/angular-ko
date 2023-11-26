@@ -3,8 +3,8 @@
 <p align="center">
   <img src="aio/src/assets/images/logos/angular/angular.png" alt="angular-logo" width="120px" height="120px"/>
   <br>
-  <i>Angular is a development platform for building mobile and desktop web applications
-    <br> using TypeScript/JavaScript and other languages.</i>
+  <em>Angular is a development platform for building mobile and desktop web applications
+    <br> using TypeScript/JavaScript and other languages.</em>
   <br>
 </p>
 
@@ -129,7 +129,7 @@ Help us keep Angular open and inclusive. Please read and follow our [Code of Con
 
 Join the conversation and help the community.
 
-- [Twitter][twitter]
+- [X (formerly Twitter)][X (formerly Twitter)]
 - [Discord][discord]
 - [Gitter][gitter]
 - [YouTube][youtube]
@@ -152,13 +152,13 @@ Join the conversation and help the community.
 [forms]: https://angular.io/guide/forms-overview
 [api]: https://angular.io/api
 [angularelements]: https://angular.io/guide/elements
-[ssr]: https://angular.io/guide/universal
+[ssr]: https://angular.io/guide/ssr
 [schematics]: https://angular.io/guide/schematics
 [lazyloading]: https://angular.io/guide/lazy-loading-ngmodules
 [node.js]: https://nodejs.org/
 [npm]: https://www.npmjs.com/get-npm
 [codeofconduct]: CODE_OF_CONDUCT.md
-[twitter]: https://www.twitter.com/angular
+[X (formerly Twitter)]: https://www.twitter.com/angular
 [discord]: https://discord.gg/angular
 [gitter]: https://gitter.im/angular/angular
 [stackoverflow]: https://stackoverflow.com/questions/tagged/angular

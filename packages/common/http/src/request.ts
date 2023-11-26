@@ -10,7 +10,6 @@ import {HttpContext} from './context';
 import {HttpHeaders} from './headers';
 import {HttpParams} from './params';
 
-
 /**
  * Construction interface for `HttpRequest`s.
  *
@@ -23,6 +22,7 @@ interface HttpRequestInit {
   params?: HttpParams;
   responseType?: 'arraybuffer'|'blob'|'json'|'text';
   withCredentials?: boolean;
+  transferCache?: {includeHeaders?: string[]}|boolean;
 }
 
 /**
@@ -113,6 +113,8 @@ export class HttpRequest<T> {
    *
    * Progress events are expensive (change detection runs on each event) and so
    * they should only be requested if the consumer intends to monitor them.
+   *
+   * Note: The `FetchBackend` doesn't support progress report on uploads.
    */
   readonly reportProgress: boolean = false;
 
@@ -152,7 +154,29 @@ export class HttpRequest<T> {
    */
   readonly urlWithParams: string;
 
-  constructor(method: 'DELETE'|'GET'|'HEAD'|'JSONP'|'OPTIONS', url: string, init?: {
+  /**
+   * The HttpTransferCache option for the request
+   */
+  readonly transferCache?: {includeHeaders?: string[]}|boolean;
+
+  constructor(method: 'GET'|'HEAD', url: string, init?: {
+    headers?: HttpHeaders,
+    context?: HttpContext,
+    reportProgress?: boolean,
+    params?: HttpParams,
+    responseType?: 'arraybuffer'|'blob'|'json'|'text',
+    withCredentials?: boolean,
+    /**
+     * This property accepts either a boolean to enable/disable transferring cache for eligible
+     * requests performed using `HttpClient`, or an object, which allows to configure cache
+     * parameters, such as which headers should be included (no headers are included by default).
+     *
+     * Setting this property will override the options passed to `provideClientHydration()` for this
+     * particular request
+     */
+    transferCache?: {includeHeaders?: string[]}|boolean
+  });
+  constructor(method: 'DELETE'|'JSONP'|'OPTIONS', url: string, init?: {
     headers?: HttpHeaders,
     context?: HttpContext,
     reportProgress?: boolean,
@@ -160,7 +184,24 @@ export class HttpRequest<T> {
     responseType?: 'arraybuffer'|'blob'|'json'|'text',
     withCredentials?: boolean,
   });
-  constructor(method: 'POST'|'PUT'|'PATCH', url: string, body: T|null, init?: {
+  constructor(method: 'POST', url: string, body: T|null, init?: {
+    headers?: HttpHeaders,
+    context?: HttpContext,
+    reportProgress?: boolean,
+    params?: HttpParams,
+    responseType?: 'arraybuffer'|'blob'|'json'|'text',
+    withCredentials?: boolean,
+    /**
+     * This property accepts either a boolean to enable/disable transferring cache for eligible
+     * requests performed using `HttpClient`, or an object, which allows to configure cache
+     * parameters, such as which headers should be included (no headers are included by default).
+     *
+     * Setting this property will override the options passed to `provideClientHydration()` for this
+     * particular request
+     */
+    transferCache?: {includeHeaders?: string[]}|boolean
+  });
+  constructor(method: 'PUT'|'PATCH', url: string, body: T|null, init?: {
     headers?: HttpHeaders,
     context?: HttpContext,
     reportProgress?: boolean,
@@ -175,6 +216,15 @@ export class HttpRequest<T> {
     params?: HttpParams,
     responseType?: 'arraybuffer'|'blob'|'json'|'text',
     withCredentials?: boolean,
+    /**
+     * This property accepts either a boolean to enable/disable transferring cache for eligible
+     * requests performed using `HttpClient`, or an object, which allows to configure cache
+     * parameters, such as which headers should be included (no headers are included by default).
+     *
+     * Setting this property will override the options passed to `provideClientHydration()` for this
+     * particular request
+     */
+    transferCache?: {includeHeaders?: string[]}|boolean
   });
   constructor(
       method: string, readonly url: string, third?: T|{
@@ -184,6 +234,7 @@ export class HttpRequest<T> {
         params?: HttpParams,
         responseType?: 'arraybuffer'|'blob'|'json'|'text',
         withCredentials?: boolean,
+        transferCache?: {includeHeaders?: string[]}|boolean
       }|null,
       fourth?: {
         headers?: HttpHeaders,
@@ -192,6 +243,7 @@ export class HttpRequest<T> {
         params?: HttpParams,
         responseType?: 'arraybuffer'|'blob'|'json'|'text',
         withCredentials?: boolean,
+        transferCache?: {includeHeaders?: string[]}|boolean
       }) {
     this.method = method.toUpperCase();
     // Next, need to figure out which argument holds the HttpRequestInit
@@ -232,6 +284,9 @@ export class HttpRequest<T> {
       if (!!options.params) {
         this.params = options.params;
       }
+
+      // We do want to assign transferCache even if it's falsy (false is valid value)
+      this.transferCache = options.transferCache;
     }
 
     // If no headers have been passed in, construct a new HttpHeaders instance.
@@ -274,7 +329,7 @@ export class HttpRequest<T> {
    * Transform the free-form body into a serialized format suitable for
    * transmission to the server.
    */
-  serializeBody(): ArrayBuffer|Blob|FormData|string|null {
+  serializeBody(): ArrayBuffer|Blob|FormData|URLSearchParams|string|null {
     // If no body is present, no need to serialize it.
     if (this.body === null) {
       return null;

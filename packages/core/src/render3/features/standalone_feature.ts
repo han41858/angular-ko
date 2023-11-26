@@ -10,6 +10,7 @@ import {ɵɵdefineInjectable as defineInjectable} from '../../di/interface/defs'
 import {internalImportProvidersFrom} from '../../di/provider_collection';
 import {EnvironmentInjector} from '../../di/r3_injector';
 import {OnDestroy} from '../../interface/lifecycle_hooks';
+import {performanceMark} from '../../util/performance';
 import {ComponentDef} from '../interfaces/definition';
 import {createEnvironmentInjector} from '../ng_module_ref';
 
@@ -19,7 +20,7 @@ import {createEnvironmentInjector} from '../ng_module_ref';
  * collected from the imports graph rooted at a given standalone component.
  */
 class StandaloneService implements OnDestroy {
-  cachedInjectors = new Map<string, EnvironmentInjector|null>();
+  cachedInjectors = new Map<ComponentDef<unknown>, EnvironmentInjector|null>();
 
   constructor(private _injector: EnvironmentInjector) {}
 
@@ -28,16 +29,16 @@ class StandaloneService implements OnDestroy {
       return null;
     }
 
-    if (!this.cachedInjectors.has(componentDef.id)) {
+    if (!this.cachedInjectors.has(componentDef)) {
       const providers = internalImportProvidersFrom(false, componentDef.type);
       const standaloneInjector = providers.length > 0 ?
           createEnvironmentInjector(
               [providers], this._injector, `Standalone[${componentDef.type.name}]`) :
           null;
-      this.cachedInjectors.set(componentDef.id, standaloneInjector);
+      this.cachedInjectors.set(componentDef, standaloneInjector);
     }
 
-    return this.cachedInjectors.get(componentDef.id)!;
+    return this.cachedInjectors.get(componentDef)!;
   }
 
   ngOnDestroy() {
@@ -60,6 +61,10 @@ class StandaloneService implements OnDestroy {
   });
 }
 
+const PERF_MARK_STANDALONE = {
+  detail: {feature: 'NgStandalone'}
+};
+
 /**
  * A feature that acts as a setup code for the {@link StandaloneService}.
  *
@@ -71,6 +76,7 @@ class StandaloneService implements OnDestroy {
  * @codeGenApi
  */
 export function ɵɵStandaloneFeature(definition: ComponentDef<unknown>) {
+  performanceMark('mark_use_counter', PERF_MARK_STANDALONE);
   definition.getStandaloneInjector = (parentInjector: EnvironmentInjector) => {
     return parentInjector.get(StandaloneService).getOrCreateStandaloneInjector(definition);
   };

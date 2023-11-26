@@ -238,7 +238,8 @@ export interface ImportedTypeValueReference {
    */
   nestedPath: string[]|null;
 
-  valueDeclaration: DeclarationNode;
+  // This field can be null in local compilation mode when resolving is not possible.
+  valueDeclaration: DeclarationNode|null;
 }
 
 /**
@@ -418,6 +419,11 @@ export interface FunctionDefinition {
    * Generic type parameters of the function.
    */
   typeParameters: ts.TypeParameterDeclaration[]|null;
+
+  /**
+   * Number of known signatures of the function.
+   */
+  signatureCount: number;
 }
 
 /**
@@ -461,6 +467,11 @@ export interface Import {
    * This could either be an absolute module name (@angular/core for example) or a relative path.
    */
   from: string;
+
+  /**
+   * TypeScript node that represents this import.
+   */
+  node: ts.ImportDeclaration;
 }
 
 /**

@@ -92,6 +92,13 @@
       ],
       "expectations": [
         {
+          "files": [
+            {
+              "generated": "self_closing_tags.js",
+              "expected": "self_closing_tags.template.js",
+              "templatePipelineExpected": "self_closing_tags.pipeline.js"
+            }
+          ],
           "extraChecks": [
             "verifyPlaceholdersIntegrity",
             "verifyUniqueConsts"
@@ -160,6 +167,13 @@
       ],
       "expectations": [
         {
+          "files": [
+            {
+              "generated": "structural_directives.js",
+              "expected": "structural_directives.template.js",
+              "templatePipelineExpected": "structural_directives.pipeline.js"
+            }
+          ],
           "extraChecks": [
             "verifyPlaceholdersIntegrity",
             "verifyUniqueConsts"

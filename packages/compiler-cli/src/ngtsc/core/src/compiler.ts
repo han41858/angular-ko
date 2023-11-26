@@ -12,9 +12,10 @@ import {ComponentDecoratorHandler, DirectiveDecoratorHandler, InjectableDecorato
 import {InjectableClassRegistry} from '../../annotations/common';
 import {CycleAnalyzer, CycleHandlingStrategy, ImportGraph} from '../../cycles';
 import {COMPILER_ERRORS_WITH_GUIDES, ERROR_DETAILS_PAGE_BASE_URL, ErrorCode, FatalDiagnosticError, ngErrorCode} from '../../diagnostics';
+import {DocEntry, DocsExtractor} from '../../docs';
 import {checkForPrivateExports, ReferenceGraph} from '../../entry_point';
 import {absoluteFromSourceFile, AbsoluteFsPath, LogicalFileSystem, resolve} from '../../file_system';
-import {AbsoluteModuleStrategy, AliasingHost, AliasStrategy, DefaultImportTracker, ImportRewriter, LocalIdentifierStrategy, LogicalProjectStrategy, ModuleResolver, NoopImportRewriter, PrivateExportAliasingHost, R3SymbolsImportRewriter, Reference, ReferenceEmitStrategy, ReferenceEmitter, RelativePathStrategy, UnifiedModulesAliasingHost, UnifiedModulesStrategy} from '../../imports';
+import {AbsoluteModuleStrategy, AliasingHost, AliasStrategy, DefaultImportTracker, DeferredSymbolTracker, ImportRewriter, LocalIdentifierStrategy, LogicalProjectStrategy, ModuleResolver, NoopImportRewriter, PrivateExportAliasingHost, R3SymbolsImportRewriter, Reference, ReferenceEmitStrategy, ReferenceEmitter, RelativePathStrategy, UnifiedModulesAliasingHost, UnifiedModulesStrategy} from '../../imports';
 import {IncrementalBuildStrategy, IncrementalCompilation, IncrementalState} from '../../incremental';
 import {SemanticSymbol} from '../../incremental/semantic_graph';
 import {generateAnalysis, IndexedComponent, IndexingContext} from '../../indexer';
@@ -257,6 +258,7 @@ export class NgCompiler {
   readonly ignoreForDiagnostics: Set<ts.SourceFile>;
   readonly ignoreForEmit: Set<ts.SourceFile>;
   readonly enableTemplateTypeChecker: boolean;
+  private readonly enableBlockSyntax: boolean;
 
   /**
    * `NgCompiler` can be reused for multiple compilations (for resource-only changes), and each
@@ -320,7 +322,8 @@ export class NgCompiler {
       private livePerfRecorder: ActivePerfRecorder,
   ) {
     this.enableTemplateTypeChecker =
-        enableTemplateTypeChecker || (options._enableTemplateTypeChecker ?? false);
+        enableTemplateTypeChecker || (options['_enableTemplateTypeChecker'] ?? false);
+    this.enableBlockSyntax = options['_enableBlockSyntax'] ?? true;
     this.constructionDiagnostics.push(
         ...this.adapter.constructionDiagnostics, ...verifyCompatibleTypeCheckOptions(this.options));
 
@@ -655,6 +658,32 @@ export class NgCompiler {
   }
 
   /**
+   * Gets information for the current program that may be used to generate API
+   * reference documentation. This includes Angular-specific information, such
+   * as component inputs and outputs.
+   *
+   * @param entryPoint Path to the entry point for the package for which API
+   *     docs should be extracted.
+   */
+  getApiDocumentation(entryPoint: string): DocEntry[] {
+    const compilation = this.ensureAnalyzed();
+    const checker = this.inputProgram.getTypeChecker();
+    const docsExtractor = new DocsExtractor(checker, compilation.metaReader);
+
+    const entryPointSourceFile = this.inputProgram.getSourceFiles().find(sourceFile => {
+      // TODO: this will need to be more specific than `.includes`, but the exact path comparison
+      //     will be easier to figure out when the pipeline is running end-to-end.
+      return sourceFile.fileName.includes(entryPoint);
+    });
+
+    if (!entryPointSourceFile) {
+      throw new Error(`Entry point "${entryPoint}" not found in program sources.`);
+    }
+
+    return docsExtractor.extractAll(entryPointSourceFile);
+  }
+
+  /**
    * Collect i18n messages into the `Xi18nContext`.
    */
   xi18n(ctx: Xi18nContext): void {
@@ -913,14 +942,35 @@ export class NgCompiler {
   }
 
   private makeCompilation(): LazyCompilationState {
+    const isCore = isAngularCorePackage(this.inputProgram);
+
+    // Note: If this compilation builds `@angular/core`, we always build in full compilation
+    // mode. Code inside the core package is always compatible with itself, so it does not
+    // make sense to go through the indirection of partial compilation
+    let compilationMode: CompilationMode = CompilationMode.FULL;
+    if (!isCore) {
+      switch (this.options.compilationMode) {
+        case 'full':
+          compilationMode = CompilationMode.FULL;
+          break;
+        case 'partial':
+          compilationMode = CompilationMode.PARTIAL;
+          break;
+        case 'experimental-local':
+          compilationMode = CompilationMode.LOCAL;
+          break;
+      }
+    }
+
     const checker = this.inputProgram.getTypeChecker();
 
-    const reflector = new TypeScriptReflectionHost(checker);
+    const reflector =
+        new TypeScriptReflectionHost(checker, compilationMode === CompilationMode.LOCAL);
 
     // Construct the ReferenceEmitter.
     let refEmitter: ReferenceEmitter;
     let aliasingHost: AliasingHost|null = null;
-    if (this.adapter.unifiedModulesHost === null || !this.options._useHostForImportGeneration) {
+    if (this.adapter.unifiedModulesHost === null || !this.options['_useHostForImportGeneration']) {
       let localImportStrategy: ReferenceEmitStrategy;
 
       // The strategy used for local, in-project imports depends on whether TS has been configured
@@ -973,8 +1023,6 @@ export class NgCompiler {
       aliasingHost = new UnifiedModulesAliasingHost(this.adapter.unifiedModulesHost);
     }
 
-    const isCore = isAngularCorePackage(this.inputProgram);
-
     const evaluator =
         new PartialEvaluator(reflector, checker, this.incrementalCompilation.depGraph);
     const dtsReader = new DtsMetadataReader(checker, reflector);
@@ -1015,23 +1063,7 @@ export class NgCompiler {
 
     const resourceRegistry = new ResourceRegistry();
 
-    // Note: If this compilation builds `@angular/core`, we always build in full compilation
-    // mode. Code inside the core package is always compatible with itself, so it does not
-    // make sense to go through the indirection of partial compilation
-    let compilationMode: CompilationMode = CompilationMode.FULL;
-    if (!isCore) {
-      switch (this.options.compilationMode) {
-        case 'full':
-          compilationMode = CompilationMode.FULL;
-          break;
-        case 'partial':
-          compilationMode = CompilationMode.PARTIAL;
-          break;
-        case 'experimental-local':
-          compilationMode = CompilationMode.LOCAL;
-          break;
-      }
-    }
+    const deferredSymbolsTracker = new DeferredSymbolTracker(this.inputProgram.getTypeChecker());
 
     // Cycles are handled in full compilation mode by "remote scoping".
     // "Remote scoping" does not work well with tree shaking for libraries.
@@ -1041,6 +1073,28 @@ export class NgCompiler {
         CycleHandlingStrategy.Error;
 
     const strictCtorDeps = this.options.strictInjectionParameters || false;
+    const supportJitMode = this.options['supportJitMode'] ?? true;
+    const supportTestBed = this.options['supportTestBed'] ?? true;
+
+    // Libraries compiled in partial mode could potentially be used with TestBed within an
+    // application. Since this is not known at library compilation time, support is required to
+    // prevent potential downstream application testing breakage.
+    if (supportTestBed === false && compilationMode === CompilationMode.PARTIAL) {
+      throw new Error(
+          'TestBed support ("supportTestBed" option) cannot be disabled in partial compilation mode.');
+    }
+    if (supportJitMode === false && compilationMode === CompilationMode.PARTIAL) {
+      throw new Error(
+          'JIT mode support ("supportJitMode" option) cannot be disabled in partial compilation mode.');
+    }
+
+    // Currently forbidOrphanComponents depends on the code generated behind ngJitMode flag. Until
+    // we come up with a better design for these flags, it is necessary to have the JIT mode in
+    // order for forbidOrphanComponents to be able to work properly.
+    if (supportJitMode === false && this.options.forbidOrphanComponents) {
+      throw new Error(
+          'JIT mode support ("supportJitMode" option) cannot be disabled when forbidOrphanComponents is set to true');
+    }
 
     // Set up the IvyCompilation, which manages state for the Ivy transformer.
     const handlers: DecoratorHandler<unknown, unknown, SemanticSymbol|null, unknown>[] = [
@@ -1053,7 +1107,9 @@ export class NgCompiler {
           this.options.i18nNormalizeLineEndingsInICUs === true, this.moduleResolver,
           this.cycleAnalyzer, cycleHandlingStrategy, refEmitter, referencesRegistry,
           this.incrementalCompilation.depGraph, injectableRegistry, semanticDepGraphUpdater,
-          this.closureCompilerEnabled, this.delegatingPerfRecorder, hostDirectivesResolver),
+          this.closureCompilerEnabled, this.delegatingPerfRecorder, hostDirectivesResolver,
+          supportTestBed, compilationMode, deferredSymbolsTracker,
+          !!this.options.forbidOrphanComponents, this.enableBlockSyntax),
 
       // TODO(alxhub): understand why the cast here is necessary (something to do with `null`
       // not being assignable to `unknown` when wrapped in `Readonly`).
@@ -1063,21 +1119,23 @@ export class NgCompiler {
             injectableRegistry, refEmitter, referencesRegistry, isCore, strictCtorDeps, semanticDepGraphUpdater,
           this.closureCompilerEnabled,
           this.delegatingPerfRecorder,
+          supportTestBed, compilationMode,
         ) as Readonly<DecoratorHandler<unknown, unknown, SemanticSymbol | null,unknown>>,
       // clang-format on
       // Pipe handler must be before injectable handler in list so pipe factories are printed
       // before injectable factories (so injectable factories can delegate to them)
       new PipeDecoratorHandler(
           reflector, evaluator, metaRegistry, ngModuleScopeRegistry, injectableRegistry, isCore,
-          this.delegatingPerfRecorder),
+          this.delegatingPerfRecorder, supportTestBed, compilationMode),
       new InjectableDecoratorHandler(
           reflector, evaluator, isCore, strictCtorDeps, injectableRegistry,
-          this.delegatingPerfRecorder),
+          this.delegatingPerfRecorder, supportTestBed, compilationMode),
       new NgModuleDecoratorHandler(
           reflector, evaluator, metaReader, metaRegistry, ngModuleScopeRegistry, referencesRegistry,
           exportedProviderStatusResolver, semanticDepGraphUpdater, isCore, refEmitter,
           this.closureCompilerEnabled, this.options.onlyPublishPublicTypingsForNgModules ?? false,
-          injectableRegistry, this.delegatingPerfRecorder),
+          injectableRegistry, this.delegatingPerfRecorder, supportTestBed, supportJitMode,
+          compilationMode),
     ];
 
     const traitCompiler = new TraitCompiler(

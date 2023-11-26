@@ -8,6 +8,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { DoCheck } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import * as i0 from '@angular/core';
+import { ɵIMAGE_CONFIG as IMAGE_CONFIG } from '@angular/core';
+import { ɵImageConfig as ImageConfig } from '@angular/core';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { IterableDiffers } from '@angular/core';
@@ -141,9 +143,9 @@ export class DatePipe implements PipeTransform {
 // @public
 export interface DatePipeConfig {
     // (undocumented)
-    dateFormat: string;
+    dateFormat?: string;
     // (undocumented)
-    timezone: string;
+    timezone?: string;
 }
 
 // @public
@@ -311,16 +313,12 @@ export class I18nSelectPipe implements PipeTransform {
     static ɵpipe: i0.ɵɵPipeDeclaration<I18nSelectPipe, "i18nSelect", true>;
 }
 
-// @public
-export const IMAGE_CONFIG: InjectionToken<ImageConfig>;
+export { IMAGE_CONFIG }
 
 // @public
 export const IMAGE_LOADER: InjectionToken<ImageLoader>;
 
-// @public
-export type ImageConfig = {
-    breakpoints?: number[];
-};
+export { ImageConfig }
 
 // @public
 export type ImageLoader = (config: ImageLoaderConfig) => string;
@@ -491,7 +489,7 @@ export class NgClass implements DoCheck {
 }
 
 // @public
-export class NgComponentOutlet implements OnChanges, OnDestroy {
+export class NgComponentOutlet implements OnChanges, DoCheck, OnDestroy {
     constructor(_viewContainerRef: ViewContainerRef);
     // (undocumented)
     ngComponentOutlet: Type<any> | null;
@@ -500,15 +498,19 @@ export class NgComponentOutlet implements OnChanges, OnDestroy {
     // (undocumented)
     ngComponentOutletInjector?: Injector;
     // (undocumented)
+    ngComponentOutletInputs?: Record<string, unknown>;
+    // (undocumented)
     ngComponentOutletNgModule?: Type<any>;
     // @deprecated (undocumented)
     ngComponentOutletNgModuleFactory?: NgModuleFactory<any>;
+    // (undocumented)
+    ngDoCheck(): void;
     // (undocumented)
     ngOnChanges(changes: SimpleChanges): void;
     // (undocumented)
     ngOnDestroy(): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<NgComponentOutlet, "[ngComponentOutlet]", never, { "ngComponentOutlet": { "alias": "ngComponentOutlet"; "required": false; }; "ngComponentOutletInjector": { "alias": "ngComponentOutletInjector"; "required": false; }; "ngComponentOutletContent": { "alias": "ngComponentOutletContent"; "required": false; }; "ngComponentOutletNgModule": { "alias": "ngComponentOutletNgModule"; "required": false; }; "ngComponentOutletNgModuleFactory": { "alias": "ngComponentOutletNgModuleFactory"; "required": false; }; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NgComponentOutlet, "[ngComponentOutlet]", never, { "ngComponentOutlet": { "alias": "ngComponentOutlet"; "required": false; }; "ngComponentOutletInputs": { "alias": "ngComponentOutletInputs"; "required": false; }; "ngComponentOutletInjector": { "alias": "ngComponentOutletInjector"; "required": false; }; "ngComponentOutletContent": { "alias": "ngComponentOutletContent"; "required": false; }; "ngComponentOutletNgModule": { "alias": "ngComponentOutletNgModule"; "required": false; }; "ngComponentOutletNgModuleFactory": { "alias": "ngComponentOutletNgModuleFactory"; "required": false; }; }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<NgComponentOutlet, never>;
 }
@@ -599,19 +601,25 @@ export abstract class NgLocalization {
 
 // @public
 export class NgOptimizedImage implements OnInit, OnChanges, OnDestroy {
-    set disableOptimizedSrcset(value: string | boolean | undefined);
-    // (undocumented)
-    get disableOptimizedSrcset(): boolean;
-    set fill(value: string | boolean | undefined);
-    // (undocumented)
-    get fill(): boolean;
-    set height(value: string | number | undefined);
-    // (undocumented)
-    get height(): number | undefined;
+    disableOptimizedSrcset: boolean;
+    fill: boolean;
+    height: number | undefined;
     loaderParams?: {
         [key: string]: any;
     };
     loading?: 'lazy' | 'eager' | 'auto';
+    // (undocumented)
+    static ngAcceptInputType_disableOptimizedSrcset: unknown;
+    // (undocumented)
+    static ngAcceptInputType_fill: unknown;
+    // (undocumented)
+    static ngAcceptInputType_height: unknown;
+    // (undocumented)
+    static ngAcceptInputType_ngSrc: string | i0.ɵSafeValue;
+    // (undocumented)
+    static ngAcceptInputType_priority: unknown;
+    // (undocumented)
+    static ngAcceptInputType_width: unknown;
     // (undocumented)
     ngOnChanges(changes: SimpleChanges): void;
     // (undocumented)
@@ -620,15 +628,11 @@ export class NgOptimizedImage implements OnInit, OnChanges, OnDestroy {
     ngOnInit(): void;
     ngSrc: string;
     ngSrcset: string;
-    set priority(value: string | boolean | undefined);
-    // (undocumented)
-    get priority(): boolean;
+    priority: boolean;
     sizes?: string;
-    set width(value: string | number | undefined);
+    width: number | undefined;
     // (undocumented)
-    get width(): number | undefined;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<NgOptimizedImage, "img[ngSrc]", never, { "ngSrc": { "alias": "ngSrc"; "required": false; }; "ngSrcset": { "alias": "ngSrcset"; "required": false; }; "sizes": { "alias": "sizes"; "required": false; }; "width": { "alias": "width"; "required": false; }; "height": { "alias": "height"; "required": false; }; "loading": { "alias": "loading"; "required": false; }; "priority": { "alias": "priority"; "required": false; }; "loaderParams": { "alias": "loaderParams"; "required": false; }; "disableOptimizedSrcset": { "alias": "disableOptimizedSrcset"; "required": false; }; "fill": { "alias": "fill"; "required": false; }; "src": { "alias": "src"; "required": false; }; "srcset": { "alias": "srcset"; "required": false; }; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NgOptimizedImage, "img[ngSrc]", never, { "ngSrc": { "alias": "ngSrc"; "required": true; }; "ngSrcset": { "alias": "ngSrcset"; "required": false; }; "sizes": { "alias": "sizes"; "required": false; }; "width": { "alias": "width"; "required": false; }; "height": { "alias": "height"; "required": false; }; "loading": { "alias": "loading"; "required": false; }; "priority": { "alias": "priority"; "required": false; }; "loaderParams": { "alias": "loaderParams"; "required": false; }; "disableOptimizedSrcset": { "alias": "disableOptimizedSrcset"; "required": false; }; "fill": { "alias": "fill"; "required": false; }; "src": { "alias": "src"; "required": false; }; "srcset": { "alias": "srcset"; "required": false; }; }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<NgOptimizedImage, never>;
 }

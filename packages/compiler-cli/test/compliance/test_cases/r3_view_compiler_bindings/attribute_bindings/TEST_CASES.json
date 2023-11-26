@@ -66,7 +66,11 @@
         {
           "failureMessage": "Incorrect template",
           "files": [
-            "chain_multiple_bindings_for_multiple_elements.js"
+            {
+              "expected": "chain_multiple_bindings_for_multiple_elements_template.js",
+              "templatePipelineExpected": "chain_multiple_bindings_for_multiple_elements_template.pipeline.js",
+              "generated": "chain_multiple_bindings_for_multiple_elements.js"
+            }
           ]
         }
       ]
@@ -80,7 +84,11 @@
         {
           "failureMessage": "Incorrect template",
           "files": [
-            "chain_multiple_bindings_with_child_elements.js"
+            {
+              "expected": "chain_multiple_bindings_with_child_elements_template.js",
+              "templatePipelineExpected": "chain_multiple_bindings_with_child_elements_template.pipeline.js",
+              "generated": "chain_multiple_bindings_with_child_elements.js"
+            }
           ]
         }
       ]
@@ -94,7 +102,11 @@
         {
           "failureMessage": "Incorrect attribute array",
           "files": [
-            "exclude_bindings_from_consts.js"
+            {
+              "expected": "exclude_bindings_from_consts_template.js",
+              "templatePipelineExpected": "exclude_bindings_from_consts_template.pipeline.js",
+              "generated": "exclude_bindings_from_consts.js"
+            }
           ]
         }
       ]

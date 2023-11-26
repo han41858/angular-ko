@@ -15,7 +15,7 @@ aio-api-list {
 
     /* API FILTER MENU */
     aio-select {
-      width: 200px;
+      width: 220px;
 
       @media screen and (max-width: 600px) {
         width: 100%;
@@ -108,6 +108,7 @@ aio-api-list {
       }
 
       li {
+        font-family: "Roboto Mono", monospace;
         @include mixins.font-size(14);
         margin: 8px 0;
         @include mixins.line-height(14);

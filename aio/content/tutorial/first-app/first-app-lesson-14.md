@@ -1,31 +1,20 @@
-# Lesson 14 - Add HTTP communication to your app
+# Lesson 14: Add HTTP communication to your app
 
 This tutorial demonstrates how to integrate HTTP and an API into your app. 
 
 Up until this point your app has read data from a static array in an Angular service. The next step is to use a JSON server that your app will communicate with over HTTP. The HTTP request will simulate the experience of working with data from a server.
 
-**Time required:** expect to spend about 20 minutes to complete this lesson.
+**Estimated time**: ~15 minutes
 
-## Before you start
+**Starting code:** <live-example name="first-app-lesson-13"></live-example>
 
-This lesson starts with the code from the previous lesson, so you can:
+**Completed code:** <live-example name="first-app-lesson-14"></live-example>
 
-*   Use the code that you created in Lesson 13 in your integrated development environment (IDE).
-*   Start with the code example from the previous lesson. Choose the <live-example name="first-app-lesson-13"></live-example> from Lesson 13 where you can:
-    *   Use the *live example* in StackBlitz, where the StackBlitz interface is your IDE.
-    *   Use the *download example* and open it in your IDE.
+## What you'll learn
 
-If you haven't reviewed the introduction, visit the [Introduction to Angular tutorial](tutorial/first-app) to make sure you have everything you need to complete this lesson.
+Your app will use data from a JSON server
 
-## After you finish
-
-*  Your app will use data from a JSON server
-
-## Lesson steps
-
-Perform these steps in the terminal on your local computer.
-
-### Step 1 - Configure the JSON server
+## Step 1 - Configure the JSON server
 JSON Server is an open source tool used to create mock REST APIs. You'll use it to serve the housing location data that is currently stored in the housing service.
 
 1.  Install `json-server` from npm by using the following command.
@@ -44,7 +33,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Acme Fresh Start Housing",
                     "city": "Chicago",
                     "state": "IL",
-                    "photo": "/assets/bernard-hermant-CLKGGwIBTaY-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/bernard-hermant-CLKGGwIBTaY-unsplash.jpg",
                     "availableUnits": 4,
                     "wifi": true,
                     "laundry": true
@@ -54,7 +43,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "A113 Transitional Housing",
                     "city": "Santa Monica",
                     "state": "CA",
-                    "photo": "/assets/brandon-griggs-wR11KBaB86U-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/brandon-griggs-wR11KBaB86U-unsplash.jpg",
                     "availableUnits": 0,
                     "wifi": false,
                     "laundry": true
@@ -64,7 +53,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Warm Beds Housing Support",
                     "city": "Juneau",
                     "state": "AK",
-                    "photo": "/assets/i-do-nothing-but-love-lAyXdl1-Wmc-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/i-do-nothing-but-love-lAyXdl1-Wmc-unsplash.jpg",
                     "availableUnits": 1,
                     "wifi": false,
                     "laundry": false
@@ -74,7 +63,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Homesteady Housing",
                     "city": "Chicago",
                     "state": "IL",
-                    "photo": "/assets/ian-macdonald-W8z6aiwfi1E-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/ian-macdonald-W8z6aiwfi1E-unsplash.jpg",
                     "availableUnits": 1,
                     "wifi": true,
                     "laundry": false
@@ -84,7 +73,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Happy Homes Group",
                     "city": "Gary",
                     "state": "IN",
-                    "photo": "/assets/krzysztof-hepner-978RAXoXnH4-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/krzysztof-hepner-978RAXoXnH4-unsplash.jpg",
                     "availableUnits": 1,
                     "wifi": true,
                     "laundry": false
@@ -94,7 +83,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Hopeful Apartment Group",
                     "city": "Oakland",
                     "state": "CA",
-                    "photo": "/assets/r-architecture-JvQ0Q5IkeMM-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/r-architecture-JvQ0Q5IkeMM-unsplash.jpg",
                     "availableUnits": 2,
                     "wifi": true,
                     "laundry": true
@@ -104,7 +93,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Seriously Safe Towns",
                     "city": "Oakland",
                     "state": "CA",
-                    "photo": "/assets/phil-hearing-IYfp2Ixe9nM-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/phil-hearing-IYfp2Ixe9nM-unsplash.jpg",
                     "availableUnits": 5,
                     "wifi": true,
                     "laundry": true
@@ -114,7 +103,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Hopeful Housing Solutions",
                     "city": "Oakland",
                     "state": "CA",
-                    "photo": "/assets/r-architecture-GGupkreKwxA-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/r-architecture-GGupkreKwxA-unsplash.jpg",
                     "availableUnits": 2,
                     "wifi": true,
                     "laundry": true
@@ -124,7 +113,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Seriously Safe Towns",
                     "city": "Oakland",
                     "state": "CA",
-                    "photo": "/assets/saru-robert-9rP3mxf8qWI-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/saru-robert-9rP3mxf8qWI-unsplash.jpg",
                     "availableUnits": 10,
                     "wifi": false,
                     "laundry": false
@@ -134,7 +123,7 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
                     "name": "Capital Safe Towns",
                     "city": "Portland",
                     "state": "OR",
-                    "photo": "/assets/webaliser-_TPTXZd9mOo-unsplash.jpg",
+                    "photo": "https://angular.io/assets/images/tutorials/faa/webaliser-_TPTXZd9mOo-unsplash.jpg",
                     "availableUnits": 6,
                     "wifi": true,
                     "laundry": true
@@ -155,16 +144,16 @@ JSON Server is an open source tool used to create mock REST APIs. You'll use it 
 
 If you have any trouble with your configuration, you can find more details in the [official documentation](https://www.npmjs.com/package/json-server).
 
-### Step 2 - Update service to use web server instead of local array
+## Step 2 - Update service to use web server instead of local array
 The data source has been configured, the next step is to update your web app to connect to it use the data.
 
 1.  In `src/app/housing.service.ts`, make the following changes:
 
     1.  Update the code to remove `housingLocationList` property and the array containing the data.
 
-    1.  Add a string property called and set the value to `'http://localhost:3000/locations'`
+    1.  Add a string property called `url` and set its value to `'http://localhost:3000/locations'`
         
-        <code-example anguage="javascript" format="javascript">
+        <code-example language="javascript" format="javascript">
         url = 'http://localhost:3000/locations';
         </code-example>
 
@@ -174,24 +163,28 @@ The data source has been configured, the next step is to update your web app to 
 
         <code-example header="" path="first-app-lesson-14/src/app/housing.service.ts" region="update-getAllHousingLocations"></code-example>
 
-        The code now uses asynchronous code to make a `get` request over `HTTP`. Notice, for this example, the code uses fetch. For more advanced use cases consider using `HttpClient` provided by Angular.
+        The code now uses asynchronous code to make a **GET** request over HTTP.
+        
+        <div class="callout is-helpful">
+        For this example, the code uses `fetch`. For more advanced use cases consider using `HttpClient` provided by Angular.
+        </div>
 
     1.  Update the `getHousingLocationsById` function to make a call to the web server you configured.
 
         <code-example header="" path="first-app-lesson-14/src/app/housing.service.ts" region="update-getHousingLocationById"></code-example>
 
-    1. Once all the updates are complete, your updated service will match the following code.
+    1. Once all the updates are complete, your updated service should match the following code.
 
         <code-example header="Final version of housing.service.ts" path="first-app-lesson-14/src/app/housing.service.ts"></code-example>
 
-### Step 3 - Update the components to use asynchronous calls to the housing service
-The server is now reading data from the `HTTP` request but the components that rely on the service now have errors because they were programmed to use the synchronous version of the service.
+## Step 3 - Update the components to use asynchronous calls to the housing service
+The server is now reading data from the HTTP request but the components that rely on the service now have errors because they were programmed to use the synchronous version of the service.
 
-1.  In `src/app/home/home.component.ts`, update the constructor to use the new asynchronous version of the `getAllHousingLocations` method.
+1.  In `src/app/home/home.component.ts`, update the `constructor` to use the new asynchronous version of the `getAllHousingLocations` method.
 
     <code-example header="" path="first-app-lesson-14/src/app/home/home.component.ts" region="update-home-component-constructor"></code-example>
 
-1.  In `src/app/details/details.component.ts`, update the constructor to use the new asynchronous version of the `getHousingLocationById` method.
+1.  In `src/app/details/details.component.ts`, update the `constructor` to use the new asynchronous version of the `getHousingLocationById` method.
 
     <code-example header="" path="first-app-lesson-14/src/app/details/details.component.ts" region="update-details-component-constructor"></code-example>
 
@@ -205,3 +198,5 @@ In this lesson, you updated your app to:
 * use asynchronous service methods to retrieve data.
 
 Congratulations! You've successfully completed this tutorial and are ready to continue your journey with building even more complex Angular Apps. If you would like to learn more, please consider completing some of Angular's other developer [tutorials](tutorial) and [guides](/guide/developer-guide-overview).
+
+@reviewed 2023-07-12

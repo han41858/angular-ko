@@ -330,20 +330,35 @@ export function createSourceSpan(node: ts.Node): ParseSourceSpan {
  * Collate the factory and definition compiled results into an array of CompileResult objects.
  */
 export function compileResults(
-    fac: CompileResult, def: R3CompiledExpression, metadataStmt: Statement|null,
-    propName: string): CompileResult[] {
+    fac: CompileResult, def: R3CompiledExpression, metadataStmt: Statement|null, propName: string,
+    additionalFields: CompileResult[]|null, deferrableImports: Set<ts.ImportDeclaration>|null,
+    debugInfo: Statement|null = null): CompileResult[] {
   const statements = def.statements;
+
   if (metadataStmt !== null) {
     statements.push(metadataStmt);
   }
-  return [
-    fac, {
+
+  if (debugInfo !== null) {
+    statements.push(debugInfo);
+  }
+
+  const results = [
+    fac,
+    {
       name: propName,
       initializer: def.expression,
       statements: def.statements,
       type: def.type,
-    }
+      deferrableImports,
+    },
   ];
+
+  if (additionalFields !== null) {
+    results.push(...additionalFields);
+  }
+
+  return results;
 }
 
 export function toFactoryMetadata(

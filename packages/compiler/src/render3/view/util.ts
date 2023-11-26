@@ -21,7 +21,7 @@ import {isI18nAttribute} from './i18n/util';
 /**
  * Checks whether an object key contains potentially unsafe chars, thus the key should be wrapped in
  * quotes. Note: we do not wrap all keys into quotes, as it may have impact on minification and may
- * bot work in some cases when object keys are mangled by minifier.
+ * not work in some cases when object keys are mangled by a minifier.
  *
  * TODO(FW-1136): this is a temporary solution, we need to come up with a better way of working with
  * inputs that contain potentially unsafe chars.
@@ -48,6 +48,9 @@ export const NON_BINDABLE_ATTR = 'ngNonBindable';
 
 /** Name for the variable keeping track of the context returned by `ɵɵrestoreView`. */
 export const RESTORED_VIEW_CONTEXT_NAME = 'restoredCtx';
+
+/** Special value representing a direct access to a template's context. */
+export const DIRECT_CONTEXT_REFERENCE = '#context';
 
 /**
  * Maximum length of a single instruction chain. Because our output AST uses recursion, we're
@@ -110,6 +113,7 @@ const CHAINABLE_INSTRUCTIONS = new Set([
   R3.textInterpolate7,
   R3.textInterpolate8,
   R3.textInterpolateV,
+  R3.templateCreate,
 ]);
 
 /**
@@ -166,6 +170,7 @@ export function conditionallyCreateDirectiveBindingLiteral(
     map: Record<string, string|{
       classPropertyName: string;
       bindingPropertyName: string;
+      transformFunction: o.Expression|null;
     }>, keepDeclared?: boolean): o.Expression|null {
   const keys = Object.getOwnPropertyNames(map);
 
@@ -178,26 +183,37 @@ export function conditionallyCreateDirectiveBindingLiteral(
     let declaredName: string;
     let publicName: string;
     let minifiedName: string;
-    let needsDeclaredName: boolean;
+    let expressionValue: o.Expression;
+
     if (typeof value === 'string') {
       // canonical syntax: `dirProp: publicProp`
       declaredName = key;
       minifiedName = key;
       publicName = value;
-      needsDeclaredName = false;
+      expressionValue = asLiteral(publicName);
     } else {
       minifiedName = key;
       declaredName = value.classPropertyName;
       publicName = value.bindingPropertyName;
-      needsDeclaredName = publicName !== declaredName;
+
+      if (keepDeclared && (publicName !== declaredName || value.transformFunction != null)) {
+        const expressionKeys = [asLiteral(publicName), asLiteral(declaredName)];
+
+        if (value.transformFunction != null) {
+          expressionKeys.push(value.transformFunction);
+        }
+
+        expressionValue = o.literalArr(expressionKeys);
+      } else {
+        expressionValue = asLiteral(publicName);
+      }
     }
+
     return {
       key: minifiedName,
       // put quotes around keys that contain potentially unsafe characters
       quoted: UNSAFE_OBJECT_KEY_NAME_REGEXP.test(minifiedName),
-      value: (keepDeclared && needsDeclaredName) ?
-          o.literalArr([asLiteral(publicName), asLiteral(declaredName)]) :
-          asLiteral(publicName)
+      value: expressionValue,
     };
   }));
 }
@@ -246,7 +262,13 @@ export class DefinitionMap<T = any> {
 
   set(key: keyof T, value: o.Expression|null): void {
     if (value) {
-      this.values.push({key: key as string, value, quoted: false});
+      const existing = this.values.find(value => value.key === key);
+
+      if (existing) {
+        existing.value = value;
+      } else {
+        this.values.push({key: key as string, value, quoted: false});
+      }
     }
   }
 

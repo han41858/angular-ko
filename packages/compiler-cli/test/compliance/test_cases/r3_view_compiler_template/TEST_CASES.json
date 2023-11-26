@@ -11,6 +11,7 @@
           "files": [
             {
               "expected": "nested_template_context_template.js",
+              "templatePipelineExpected": "nested_template_context.pipeline.js",
               "generated": "nested_template_context.js"
             }
           ],
@@ -79,6 +80,7 @@
           "files": [
             {
               "expected": "ng_for_parent_context_variables_template.js",
+              "templatePipelineExpected": "ng_for_parent_context_variables.pipeline.js",
               "generated": "ng_for_parent_context_variables.js"
             }
           ],
@@ -205,7 +207,11 @@
       "expectations": [
         {
           "extraChecks": [
-            ["verifyUniqueFunctions", "Template", 16]
+            [
+              "verifyUniqueFunctions",
+              "Template",
+              16
+            ]
           ]
         }
       ]
@@ -218,7 +224,11 @@
       "expectations": [
         {
           "extraChecks": [
-            ["verifyUniqueFunctions", "Template", 4]
+            [
+              "verifyUniqueFunctions",
+              "Template",
+              4
+            ]
           ]
         }
       ]
@@ -231,7 +241,11 @@
       "expectations": [
         {
           "extraChecks": [
-            ["verifyUniqueFunctions", "listener", 3]
+            [
+              "verifyUniqueFunctions",
+              "listener",
+              3
+            ]
           ]
         }
       ]
@@ -317,6 +331,17 @@
               "generated": "self_closing_tags_nested.js"
             }
           ],
+          "failureMessage": "Incorrect template"
+        }
+      ]
+    },
+    {
+      "description": "should handle structural directive on ng-template",
+      "inputFiles": [
+        "template_with_structural_directive.ts"
+      ],
+      "expectations": [
+        {
           "failureMessage": "Incorrect template"
         }
       ]

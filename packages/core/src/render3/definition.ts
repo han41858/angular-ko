@@ -18,7 +18,7 @@ import {initNgDevMode} from '../util/ng_dev_mode';
 import {stringify} from '../util/stringify';
 
 import {NG_COMP_DEF, NG_DIR_DEF, NG_MOD_DEF, NG_PIPE_DEF} from './fields';
-import {ComponentDef, ComponentDefFeature, ComponentTemplate, ComponentType, ContentQueriesFunction, DependencyTypeList, DirectiveDef, DirectiveDefFeature, DirectiveDefListOrFactory, HostBindingsFunction, PipeDef, PipeDefListOrFactory, TypeOrFactory, ViewQueriesFunction} from './interfaces/definition';
+import {ComponentDef, ComponentDefFeature, ComponentTemplate, ContentQueriesFunction, DependencyTypeList, DirectiveDef, DirectiveDefFeature, DirectiveDefListOrFactory, HostBindingsFunction, InputTransformFunction, PipeDef, PipeDefListOrFactory, TypeOrFactory, ViewQueriesFunction} from './interfaces/definition';
 import {TAttributes, TConstantsOrFactory} from './interfaces/node';
 import {CssSelectorList} from './interfaces/projection';
 import {stringifyCSSSelectorList} from './node_selector_matcher';
@@ -35,7 +35,7 @@ interface DirectiveDefinition<T> {
   /**
    * A map of input names.
    *
-   * The format is in: `{[actualPropertyName: string]:(string|[string, string])}`.
+   * The format is in: `{[actualPropertyName: string]:(string|[string, string, Function])}`.
    *
    * Given:
    * ```
@@ -45,6 +45,9 @@ interface DirectiveDefinition<T> {
    *
    *   @Input('publicInput2')
    *   declaredInput2: string;
+   *
+   *   @Input({transform: (value: boolean) => value ? 1 : 0})
+   *   transformedInput3: number;
    * }
    * ```
    *
@@ -53,6 +56,11 @@ interface DirectiveDefinition<T> {
    * {
    *   publicInput1: 'publicInput1',
    *   declaredInput2: ['declaredInput2', 'publicInput2'],
+   *   transformedInput3: [
+   *     'transformedInput3',
+   *     'transformedInput3',
+   *     (value: boolean) => value ? 1 : 0
+   *   ]
    * }
    * ```
    *
@@ -61,6 +69,11 @@ interface DirectiveDefinition<T> {
    * {
    *   minifiedPublicInput1: 'publicInput1',
    *   minifiedDeclaredInput2: [ 'publicInput2', 'declaredInput2'],
+   *   minifiedTransformedInput3: [
+   *     'transformedInput3',
+   *     'transformedInput3',
+   *     (value: boolean) => value ? 1 : 0
+   *   ]
    * }
    * ```
    *
@@ -75,7 +88,7 @@ interface DirectiveDefinition<T> {
    *    this reason `NgOnChanges` will be deprecated and removed in future version and this
    *    API will be simplified to be consistent with `output`.
    */
-  inputs?: {[P in keyof T]?: string|[string, string]};
+  inputs?: {[P in keyof T]?: string|[string, string, InputTransformFunction?]};
 
   /**
    * A map of output names.
@@ -163,6 +176,11 @@ interface DirectiveDefinition<T> {
    * Whether this directive/component is standalone.
    */
   standalone?: boolean;
+
+  /**
+   * Whether this directive/component is signal-based.
+   */
+  signals?: boolean;
 }
 
 interface ComponentDefinition<T> extends Omit<DirectiveDefinition<T>, 'features'> {
@@ -304,6 +322,7 @@ export function ɵɵdefineComponent<T>(componentDefinition: ComponentDefinition<
       pipeDefs: null!,       // assigned in noSideEffects
       dependencies: baseDef.standalone && componentDefinition.dependencies || null,
       getStandaloneInjector: null,
+      signals: componentDefinition.signals ?? false,
       data: componentDefinition.data || {},
       encapsulation: componentDefinition.encapsulation || ViewEncapsulation.Emulated,
       styles: componentDefinition.styles || EMPTY_ARRAY,
@@ -321,23 +340,6 @@ export function ɵɵdefineComponent<T>(componentDefinition: ComponentDefinition<
 
     return def;
   });
-}
-
-/**
- * Generated next to NgModules to monkey-patch directive and pipe references onto a component's
- * definition, when generating a direct reference in the component file would otherwise create an
- * import cycle.
- *
- * See [this explanation](https://hackmd.io/Odw80D0pR6yfsOjg_7XCJg?view) for more details.
- *
- * @codeGenApi
- */
-export function ɵɵsetComponentScope(
-    type: ComponentType<any>, directives: Type<any>[]|(() => Type<any>[]),
-    pipes: Type<any>[]|(() => Type<any>[])): void {
-  const def = type.ɵcmp as ComponentDef<any>;
-  def.directiveDefs = extractDefListOrFactory(directives, /* pipeDef */ false);
-  def.pipeDefs = extractDefListOrFactory(pipes, /* pipeDef */ true);
 }
 
 export function extractDirectiveDef(type: Type<any>): DirectiveDef<any>|ComponentDef<any>|null {
@@ -388,37 +390,6 @@ export function ɵɵdefineNgModule<T>(def: {
       id: def.id || null,
     };
     return res;
-  });
-}
-
-/**
- * Adds the module metadata that is necessary to compute the module's transitive scope to an
- * existing module definition.
- *
- * Scope metadata of modules is not used in production builds, so calls to this function can be
- * marked pure to tree-shake it from the bundle, allowing for all referenced declarations
- * to become eligible for tree-shaking as well.
- *
- * @codeGenApi
- */
-export function ɵɵsetNgModuleScope(type: any, scope: {
-  /** List of components, directives, and pipes declared by this module. */
-  declarations?: Type<any>[]|(() => Type<any>[]);
-
-  /** List of modules or `ModuleWithProviders` imported by this module. */
-  imports?: Type<any>[] | (() => Type<any>[]);
-
-  /**
-   * List of modules, `ModuleWithProviders`, components, directives, or pipes exported by this
-   * module.
-   */
-  exports?: Type<any>[] | (() => Type<any>[]);
-}): unknown {
-  return noSideEffects(() => {
-    const ngModuleDef = getNgModuleDef(type, true);
-    ngModuleDef.declarations = scope.declarations || EMPTY_ARRAY;
-    ngModuleDef.imports = scope.imports || EMPTY_ARRAY;
-    ngModuleDef.exports = scope.exports || EMPTY_ARRAY;
   });
 }
 
@@ -478,13 +449,13 @@ export function ɵɵsetNgModuleScope(type: any, scope: {
 
  */
 function invertObject<T>(
-    obj?: {[P in keyof T]?: string|[string, string]},
-    secondary?: {[key: string]: string}): {[P in keyof T]: string} {
+    obj?: {[P in keyof T]?: string|[string, string, ...unknown[]]},
+    secondary?: Record<string, string>): {[P in keyof T]: string} {
   if (obj == null) return EMPTY_OBJ as any;
   const newLookup: any = {};
   for (const minifiedKey in obj) {
     if (obj.hasOwnProperty(minifiedKey)) {
-      let publicName: string|[string, string] = obj[minifiedKey]!;
+      let publicName: string|[string, string, ...unknown[]] = obj[minifiedKey]!;
       let declaredName = publicName;
       if (Array.isArray(publicName)) {
         declaredName = publicName[1];
@@ -620,8 +591,11 @@ function getNgDirectiveDef<T>(directiveDefinition: DirectiveDefinition<T>):
     hostAttrs: directiveDefinition.hostAttrs || null,
     contentQueries: directiveDefinition.contentQueries || null,
     declaredInputs,
+    inputTransforms: null,
+    inputConfig: directiveDefinition.inputs || EMPTY_OBJ,
     exportAs: directiveDefinition.exportAs || null,
     standalone: directiveDefinition.standalone === true,
+    signals: directiveDefinition.signals === true,
     selectors: directiveDefinition.selectors || EMPTY_ARRAY,
     viewQuery: directiveDefinition.viewQuery || null,
     features: directiveDefinition.features || null,
@@ -630,6 +604,7 @@ function getNgDirectiveDef<T>(directiveDefinition: DirectiveDefinition<T>):
     hostDirectives: null,
     inputs: invertObject(directiveDefinition.inputs, declaredInputs),
     outputs: invertObject(directiveDefinition.outputs),
+    debugInfo: null,
   };
 }
 
@@ -638,13 +613,13 @@ function initFeatures(definition:|Mutable<DirectiveDef<unknown>, keyof Directive
   definition.features?.forEach((fn) => fn(definition));
 }
 
-function extractDefListOrFactory(
+export function extractDefListOrFactory(
     dependencies: TypeOrFactory<DependencyTypeList>|undefined,
     pipeDef: false): DirectiveDefListOrFactory|null;
-function extractDefListOrFactory(
+export function extractDefListOrFactory(
     dependencies: TypeOrFactory<DependencyTypeList>|undefined, pipeDef: true): PipeDefListOrFactory|
     null;
-function extractDefListOrFactory(
+export function extractDefListOrFactory(
     dependencies: TypeOrFactory<DependencyTypeList>|undefined, pipeDef: boolean): unknown {
   if (!dependencies) {
     return null;
@@ -689,6 +664,7 @@ function getComponentId(componentDef: ComponentDef<unknown>): string {
     componentDef.decls,
     componentDef.encapsulation,
     componentDef.standalone,
+    componentDef.signals,
     componentDef.exportAs,
     JSON.stringify(componentDef.inputs),
     JSON.stringify(componentDef.outputs),

@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import {AnimationOptions, AnimationPlayer, AUTO_STYLE, NoopAnimationPlayer, ɵAnimationGroupPlayer as AnimationGroupPlayer, ɵPRE_STYLE as PRE_STYLE, ɵStyleDataMap} from '@angular/animations';
+import {ɵWritable as Writable} from '@angular/core';
 
 import {AnimationTimelineInstruction} from '../dsl/animation_timeline_instruction';
 import {AnimationTransitionFactory} from '../dsl/animation_transition_factory';
@@ -48,7 +49,7 @@ interface TriggerListener {
   callback: (event: any) => any;
 }
 
-export interface QueueInstruction {
+interface QueueInstruction {
   element: any;
   triggerName: string;
   fromState: StateValue;
@@ -58,9 +59,9 @@ export interface QueueInstruction {
   isFallbackTransition: boolean;
 }
 
-export const REMOVAL_FLAG = '__ng_removed';
+const REMOVAL_FLAG = '__ng_removed';
 
-export interface ElementAnimationState {
+interface ElementAnimationState {
   setForRemoval: boolean;
   setForMove: boolean;
   hasAnimation: boolean;
@@ -69,7 +70,7 @@ export interface ElementAnimationState {
   previousTriggersValues?: Map<string, string>;
 }
 
-export class StateValue {
+class StateValue {
   public value: string;
   public options: AnimationOptions;
 
@@ -106,10 +107,10 @@ export class StateValue {
   }
 }
 
-export const VOID_VALUE = 'void';
-export const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
+const VOID_VALUE = 'void';
+const DEFAULT_STATE_VALUE = new StateValue(VOID_VALUE);
 
-export class AnimationTransitionNamespace {
+class AnimationTransitionNamespace {
   public players: TransitionAnimationPlayer[] = [];
 
   private _triggers = new Map<string, AnimationTrigger>();
@@ -508,17 +509,9 @@ export class AnimationTransitionNamespace {
     this.players.forEach(p => p.destroy());
     this._signalRemovalForInnerTriggers(this.hostElement, context);
   }
-
-  elementContainsData(element: any): boolean {
-    let containsData = false;
-    if (this._elementListeners.has(element)) containsData = true;
-    containsData =
-        (this._queue.find(entry => entry.element === element) ? true : false) || containsData;
-    return containsData;
-  }
 }
 
-export interface QueuedTransition {
+interface QueuedTransition {
   element: any;
   instruction: AnimationTransitionInstruction;
   player: TransitionAnimationPlayer;
@@ -640,19 +633,18 @@ export class TransitionAnimationEngine {
 
   destroy(namespaceId: string, context: any) {
     if (!namespaceId) return;
+    this.afterFlush(() => {});
 
-    const ns = this._fetchNamespace(namespaceId);
-
-    this.afterFlush(() => {
+    this.afterFlushAnimationsDone(() => {
+      const ns = this._fetchNamespace(namespaceId);
       this.namespacesByHostElement.delete(ns.hostElement);
-      delete this._namespaceLookup[namespaceId];
       const index = this._namespaceList.indexOf(ns);
       if (index >= 0) {
         this._namespaceList.splice(index, 1);
       }
+      ns.destroy(context);
+      delete this._namespaceLookup[namespaceId];
     });
-
-    this.afterFlushAnimationsDone(() => ns.destroy(context));
   }
 
   private _fetchNamespace(id: string) {
@@ -1314,16 +1306,6 @@ export class TransitionAnimationEngine {
     return rootPlayers;
   }
 
-  elementContainsData(namespaceId: string, element: any) {
-    let containsData = false;
-    const details = element[REMOVAL_FLAG] as ElementAnimationState;
-    if (details && details.setForRemoval) containsData = true;
-    if (this.playersByElement.has(element)) containsData = true;
-    if (this.playersByQueriedElement.has(element)) containsData = true;
-    if (this.statesByElement.has(element)) containsData = true;
-    return this._fetchNamespace(namespaceId).elementContainsData(element) || containsData;
-  }
-
   afterFlush(callback: () => any) {
     this._flushFns.push(callback);
   }
@@ -1515,7 +1497,7 @@ export class TransitionAnimationPlayer implements AnimationPlayer {
     this._queuedCallbacks.clear();
     this._containsRealPlayer = true;
     this.overrideTotalTime(player.totalTime);
-    (this as {queued: boolean}).queued = false;
+    (this as Writable<this>).queued = false;
   }
 
   getRealPlayer() {

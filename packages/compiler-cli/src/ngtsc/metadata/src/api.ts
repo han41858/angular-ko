@@ -132,7 +132,16 @@ export enum MatchSource {
 }
 
 /** Metadata for a single input mapping. */
-export type InputMapping = InputOrOutput&{required: boolean};
+export type InputMapping = InputOrOutput&{
+  required: boolean;
+  transform: InputTransform|null
+};
+
+/** Metadata for an input's transform function. */
+export interface InputTransform {
+  node: ts.Node;
+  type: Reference<ts.TypeNode>;
+}
 
 /**
  * Metadata collected for a directive within an NgModule's scope.
@@ -183,6 +192,11 @@ export interface DirectiveMeta extends T2DirectiveMeta, DirectiveTypeCheckMeta {
    * Whether the directive is a standalone entity.
    */
   isStandalone: boolean;
+
+  /**
+   * Whether the directive is a signal entity.
+   */
+  isSignal: boolean;
 
   /**
    * For standalone components, the list of imported types.

@@ -13,11 +13,14 @@ import {inject, InjectionToken} from '../di';
 import {RuntimeError, RuntimeErrorCode} from '../errors';
 import {EventEmitter} from '../event_emitter';
 import {global} from '../util/global';
-import {scheduleMicroTask} from '../util/microtask';
 import {noop} from '../util/noop';
 import {getNativeRequestAnimationFrame} from '../util/raf';
 
 import {AsyncStackTaggingZoneSpec} from './async-stack-tagging';
+
+// The below is needed as otherwise a number of targets fail in G3 due to:
+// ERROR - [JSC_UNDEFINED_VARIABLE] variable Zone is undeclared
+declare const Zone: any;
 
 /**
  * An injectable service for executing work inside or outside of the Angular zone.
@@ -169,11 +172,17 @@ export class NgZone {
     forkInnerZoneWithAngularBehavior(self);
   }
 
+  /**
+    This method checks whether the method call happens within an Angular Zone instance.
+  */
   static isInAngularZone(): boolean {
     // Zone needs to be checked, because this method might be called even when NoopNgZone is used.
     return typeof Zone !== 'undefined' && Zone.current.get('isAngularZone') === true;
   }
 
+  /**
+    Assures that the method is called within the Angular Zone, otherwise throws an error.
+  */
   static assertInAngularZone(): void {
     if (!NgZone.isInAngularZone()) {
       throw new RuntimeError(
@@ -182,6 +191,9 @@ export class NgZone {
     }
   }
 
+  /**
+    Assures that the method is called outside of the Angular Zone, otherwise throws an error.
+  */
   static assertNotInAngularZone(): void {
     if (NgZone.isInAngularZone()) {
       throw new RuntimeError(
@@ -407,6 +419,10 @@ function forkInnerZoneWithAngularBehavior(zone: NgZonePrivate) {
     onInvokeTask:
         (delegate: ZoneDelegate, current: Zone, target: Zone, task: Task, applyThis: any,
          applyArgs: any): any => {
+          if (shouldBeIgnoredByZone(applyArgs)) {
+            return delegate.invokeTask(target, task, applyThis, applyArgs);
+          }
+
           try {
             onEnter(zone);
             return delegate.invokeTask(target, task, applyThis, applyArgs);
@@ -547,7 +563,7 @@ export function isStableFactory() {
 
         // Check whether there are no pending macro/micro tasks in the next tick
         // to allow for NgZone to update the state.
-        scheduleMicroTask(() => {
+        queueMicrotask(() => {
           if (!_stable && !zone.hasPendingMacrotasks && !zone.hasPendingMicrotasks) {
             _stable = true;
             observer.next(true);
@@ -572,4 +588,19 @@ export function isStableFactory() {
     };
   });
   return merge(isCurrentlyStable, isStable.pipe(share()));
+}
+
+function shouldBeIgnoredByZone(applyArgs: unknown): boolean {
+  if (!Array.isArray(applyArgs)) {
+    return false;
+  }
+
+  // We should only ever get 1 arg passed through to invokeTask.
+  // Short circuit here incase that behavior changes.
+  if (applyArgs.length !== 1) {
+    return false;
+  }
+
+  // Prevent triggering change detection when the __ignore_ng_zone__ flag is detected.
+  return applyArgs[0].data?.['__ignore_ng_zone__'] === true;
 }

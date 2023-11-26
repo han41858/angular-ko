@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {RuntimeError, RuntimeErrorCode} from '../errors';
 import {assertDefined, assertEqual, assertNumber, throwError} from '../util/assert';
 
 import {getComponentDef, getNgModuleDef} from './definition';
@@ -27,10 +28,13 @@ export function assertTNodeForLView(tNode: TNode, lView: LView) {
 
 export function assertTNodeForTView(tNode: TNode, tView: TView) {
   assertTNode(tNode);
-  tNode.hasOwnProperty('tView_') &&
-      assertEqual(
-          (tNode as any as {tView_: TView}).tView_, tView,
-          'This TNode does not belong to this TView.');
+  const tData = tView.data;
+  for (let i = HEADER_OFFSET; i < tData.length; i++) {
+    if (tData[i] === tNode) {
+      return;
+    }
+  }
+  throwError('This TNode does not belong to this TView.');
 }
 
 export function assertTNode(tNode: TNode) {
@@ -108,8 +112,7 @@ export function assertDirectiveDef<T>(obj: any): asserts obj is DirectiveDef<T> 
   }
 }
 
-export function assertIndexInDeclRange(lView: LView, index: number) {
-  const tView = lView[1];
+export function assertIndexInDeclRange(tView: TView, index: number) {
   assertBetween(HEADER_OFFSET, tView.bindingStartIndex, index);
 }
 
@@ -138,6 +141,24 @@ export function assertParentView(lView: LView|null, errMessage?: string) {
       errMessage || 'Component views should always have a parent view (component\'s host view)');
 }
 
+export function assertNoDuplicateDirectives(directives: DirectiveDef<unknown>[]): void {
+  // The array needs at least two elements in order to have duplicates.
+  if (directives.length < 2) {
+    return;
+  }
+
+  const seenDirectives = new Set<DirectiveDef<unknown>>();
+
+  for (const current of directives) {
+    if (seenDirectives.has(current)) {
+      throw new RuntimeError(
+          RuntimeErrorCode.DUPLICATE_DIRECTIVE,
+          `Directive ${current.type.name} matches multiple times on the same element. ` +
+              `Directives can only match an element once.`);
+    }
+    seenDirectives.add(current);
+  }
+}
 
 /**
  * This is a basic sanity check that the `injectorIndex` seems to point to what looks like a

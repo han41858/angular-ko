@@ -10,7 +10,8 @@ import {EnvironmentProviders, inject, InjectionToken, makeEnvironmentProviders, 
 
 import {HttpBackend, HttpHandler} from './backend';
 import {HttpClient} from './client';
-import {HTTP_INTERCEPTOR_FNS, HttpInterceptorFn, HttpInterceptorHandler, legacyInterceptorFnFactory} from './interceptor';
+import {FetchBackend} from './fetch';
+import {HTTP_INTERCEPTOR_FNS, HttpInterceptorFn, HttpInterceptorHandler, legacyInterceptorFnFactory, PRIMARY_HTTP_BACKEND} from './interceptor';
 import {jsonpCallbackContext, JsonpCallbackContext, JsonpClientBackend, jsonpInterceptorFn} from './jsonp';
 import {HttpXhrBackend} from './xhr';
 import {HttpXsrfCookieExtractor, HttpXsrfTokenExtractor, XSRF_COOKIE_NAME, XSRF_ENABLED, XSRF_HEADER_NAME, xsrfInterceptorFn} from './xsrf';
@@ -27,6 +28,7 @@ export enum HttpFeatureKind {
   NoXsrfProtection,
   JsonpSupport,
   RequestsMadeViaParent,
+  Fetch,
 }
 
 /**
@@ -55,12 +57,26 @@ function makeHttpFeature<KindT extends HttpFeatureKind>(
  * feature functions to `provideHttpClient`. For example, HTTP interceptors can be added using the
  * `withInterceptors(...)` feature.
  *
+ * <div class="alert is-helpful">
+ *
+ * It's strongly recommended to enable
+ * [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) for applications that use
+ * Server-Side Rendering for better performance and compatibility. To enable `fetch`, add
+ * `withFetch()` feature to the `provideHttpClient()` call at the root of the application:
+ *
+ * ```
+ * provideHttpClient(withFetch());
+ * ```
+ *
+ * </div>
+ *
  * @see {@link withInterceptors}
  * @see {@link withInterceptorsFromDi}
  * @see {@link withXsrfConfiguration}
  * @see {@link withNoXsrfProtection}
  * @see {@link withJsonpSupport}
  * @see {@link withRequestsMadeViaParent}
+ * @see {@link withFetch}
  */
 export function provideHttpClient(...features: HttpFeature<HttpFeatureKind>[]):
     EnvironmentProviders {
@@ -231,5 +247,32 @@ export function withRequestsMadeViaParent(): HttpFeature<HttpFeatureKind.Request
         return handlerFromParent;
       },
     },
+  ]);
+}
+
+
+/**
+ * Configures the current `HttpClient` instance to make requests using the fetch API.
+ *
+ * This `FetchBackend` requires the support of the Fetch API which is available on all evergreen
+ * browsers and on NodeJS from v18 onward.
+ *
+ * Note: The Fetch API doesn't support progress report on uploads.
+ *
+ * @publicApi
+ */
+export function withFetch(): HttpFeature<HttpFeatureKind.Fetch> {
+  if ((typeof ngDevMode === 'undefined' || ngDevMode) && typeof fetch !== 'function') {
+    // TODO: Create a runtime error
+    // TODO: Use ENVIRONMENT_INITIALIZER to contextualize the error message (browser or server)
+    throw new Error(
+        'The `withFetch` feature of HttpClient requires the `fetch` API to be available. ' +
+        'If you run the code in a Node environment, make sure you use Node v18.10 or later.');
+  }
+
+  return makeHttpFeature(HttpFeatureKind.Fetch, [
+    FetchBackend,
+    {provide: HttpBackend, useExisting: FetchBackend},
+    {provide: PRIMARY_HTTP_BACKEND, useExisting: FetchBackend},
   ]);
 }

@@ -309,7 +309,7 @@ The test must become *asynchronous*.
 #### Async test with `fakeAsync()`
 
 To use `fakeAsync()` functionality, you must import `zone.js/testing` in your test setup file.
-If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
+If you created your project with the Angular CLI, `zone-testing` has already been added for you.
 
 The following test confirms the expected behavior when the service returns an `ErrorObservable`.
 
@@ -483,7 +483,7 @@ Then you can assert that the quote element displays the expected text.
 #### Async test with `waitForAsync()`
 
 To use `waitForAsync()` functionality, you must import `zone.js/testing` in your test setup file.
-If you created your project with the Angular CLI, `zone-testing` is already imported in `src/test.ts`.
+If you created your project with the Angular CLI, `zone-testing` has already been added for you.
 
 Here's the previous `fakeAsync()` test, re-written with the `waitForAsync()` utility.
 
@@ -605,7 +605,7 @@ Each symbol \(`-`, `x`, `|`, `#`\) marks the passing of one frame.
 
 A *cold* observable doesn't produce values until you subscribe to it.
 Most of your application observables are cold.
-All [*HttpClient*](guide/http) methods return cold observables.
+All [*HttpClient*](guide/understanding-communicating-with-http) methods return cold observables.
 
 A *hot* observable is already producing values *before* you subscribe to it.
 The [`Router.events`](api/router/Router#events) observable, which reports router activity, is a *hot* observable.
@@ -1315,4 +1315,4 @@ Explore the options and combinations on your own.
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-09-07

@@ -6,8 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {ChangeDetectorRef, ComponentRef, DebugElement, ElementRef, getDebugNode, NgZone, RendererFactory2} from '@angular/core';
+import {ChangeDetectorRef, ComponentRef, DebugElement, ElementRef, getDebugNode, NgZone, RendererFactory2, ɵDeferBlockDetails as DeferBlockDetails, ɵFlushableEffectRunner as FlushableEffectRunner, ɵgetDeferBlocks as getDeferBlocks} from '@angular/core';
 import {Subscription} from 'rxjs';
+
+import {DeferBlockFixture} from './defer';
 
 
 /**
@@ -51,9 +53,10 @@ export class ComponentFixture<T> {
   private _onMicrotaskEmptySubscription: Subscription|null = null;
   private _onErrorSubscription: Subscription|null = null;
 
+  /** @nodoc */
   constructor(
       public componentRef: ComponentRef<T>, public ngZone: NgZone|null,
-      private _autoDetect: boolean) {
+      private effectRunner: FlushableEffectRunner|null, private _autoDetect: boolean) {
     this.changeDetectorRef = componentRef.changeDetectorRef;
     this.elementRef = componentRef.location;
     this.debugElement = <DebugElement>getDebugNode(this.elementRef.nativeElement);
@@ -88,7 +91,7 @@ export class ComponentFixture<T> {
               // If so check whether there are no pending macrotasks before resolving.
               // Do this check in the next tick so that ngZone gets a chance to update the state of
               // pending macrotasks.
-              scheduleMicroTask(() => {
+              queueMicrotask(() => {
                 if (!ngZone.hasPendingMacrotasks) {
                   if (this._promise !== null) {
                     this._resolve!(true);
@@ -121,6 +124,7 @@ export class ComponentFixture<T> {
    * Trigger a change detection cycle for the component.
    */
   detectChanges(checkNoChanges: boolean = true): void {
+    this.effectRunner?.flush();
     if (this.ngZone != null) {
       // Run the change detection inside the NgZone so that any async tasks as part of the change
       // detection are captured by the zone and can be waited for in isStable.
@@ -131,6 +135,9 @@ export class ComponentFixture<T> {
       // Running without zone. Just do the change detection.
       this._tick(checkNoChanges);
     }
+    // Run any effects that were created/dirtied during change detection. Such effects might become
+    // dirty in response to input signals changing.
+    this.effectRunner?.flush();
   }
 
   /**
@@ -180,6 +187,24 @@ export class ComponentFixture<T> {
     }
   }
 
+  /**
+   * Retrieves all defer block fixtures in the component fixture.
+   *
+   * @developerPreview
+   */
+  getDeferBlocks(): Promise<DeferBlockFixture[]> {
+    const deferBlocks: DeferBlockDetails[] = [];
+    const lView = (this.componentRef.hostView as any)['_lView'];
+    getDeferBlocks(lView, deferBlocks);
+
+    const deferBlockFixtures = [];
+    for (const block of deferBlocks) {
+      deferBlockFixtures.push(new DeferBlockFixture(block, this));
+    }
+
+    return Promise.resolve(deferBlockFixtures);
+  }
+
 
   private _getRenderer() {
     if (this._renderer === undefined) {
@@ -224,8 +249,4 @@ export class ComponentFixture<T> {
       this._isDestroyed = true;
     }
   }
-}
-
-function scheduleMicroTask(fn: Function) {
-  Zone.current.scheduleMicroTask('scheduleMicrotask', fn);
 }

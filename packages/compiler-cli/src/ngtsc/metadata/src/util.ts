@@ -84,10 +84,9 @@ export function readMapType<T>(
       return;
     }
     const value = valueTransform(member.type);
-    if (value === null) {
-      return null;
+    if (value !== null) {
+      obj[member.name.text] = value;
     }
-    obj[member.name.text] = value;
   });
   return obj;
 }
@@ -129,7 +128,7 @@ export function extractDirectiveTypeCheckMeta(
   const stringLiteralInputFields = new Set<ClassPropertyName>();
   const undeclaredInputFields = new Set<ClassPropertyName>();
 
-  for (const classPropertyName of inputs.classPropertyNames) {
+  for (const {classPropertyName, transform} of inputs) {
     const field = members.find(member => member.name === classPropertyName);
     if (field === undefined || field.node === null) {
       undeclaredInputFields.add(classPropertyName);
@@ -140,6 +139,9 @@ export function extractDirectiveTypeCheckMeta(
     }
     if (field.nameNode !== null && ts.isStringLiteral(field.nameNode)) {
       stringLiteralInputFields.add(classPropertyName);
+    }
+    if (transform !== null) {
+      coercedInputFields.add(classPropertyName);
     }
   }
 
