@@ -12,7 +12,7 @@ Angular DevTools는 Angular 12 이후 버전부터 [최적화 옵션을 끄고(<
 
 <div class="video-container">
 
-<iframe allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen frameborder="0" src="https://www.youtube.com/embed/bavWOHZM6zE"></iframe>
+<iframe allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" title="DevTools Overview" allowfullscreen frameborder="0" src="https://www.youtube.com/embed/bavWOHZM6zE"></iframe>
 
 </div>
 

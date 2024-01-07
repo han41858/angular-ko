@@ -22,6 +22,7 @@ import {ROUTER_SCROLLER, RouterScroller} from './router_scroller';
 import {ActivatedRoute} from './router_state';
 import {UrlSerializer} from './url_tree';
 import {afterNextNavigation} from './utils/navigations';
+import {CREATE_VIEW_TRANSITION, createViewTransition, VIEW_TRANSITION_OPTIONS, ViewTransitionsFeatureOptions} from './utils/view_transition';
 
 
 /**
@@ -53,7 +54,7 @@ import {afterNextNavigation} from './utils/navigations';
  * );
  * ```
  *
- * @see `RouterFeatures`
+ * @see {@link RouterFeatures}
  *
  * @publicApi
  * @param routes A set of `Route`s to use for the application routing table.
@@ -130,7 +131,7 @@ const routerIsProvidedDevModeCheck = {
  * ```
  *
  * @deprecated If necessary, provide routes using the `ROUTES` `InjectionToken`.
- * @see `ROUTES`
+ * @see {@link ROUTES}
  * @publicApi
  */
 export function provideRoutes(routes: Routes): Provider[] {
@@ -143,8 +144,8 @@ export function provideRoutes(routes: Routes): Provider[] {
 /**
  * A type alias for providers returned by `withInMemoryScrolling` for use with `provideRouter`.
  *
- * @see `withInMemoryScrolling`
- * @see `provideRouter`
+ * @see {@link withInMemoryScrolling}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -167,8 +168,8 @@ export type InMemoryScrollingFeature = RouterFeature<RouterFeatureKind.InMemoryS
  * );
  * ```
  *
- * @see `provideRouter`
- * @see `ViewportScroller`
+ * @see {@link provideRouter}
+ * @see {@link ViewportScroller}
  *
  * @publicApi
  * @param options Set of configuration parameters to customize scrolling behavior, see
@@ -235,7 +236,7 @@ const BOOTSTRAP_DONE = new InjectionToken<Subject<void>>(
  *
  * When set to `EnabledBlocking`, the initial navigation starts before the root
  * component is created. The bootstrap is blocked until the initial navigation is complete. This
- * value is required for [server-side rendering](guide/universal) to work.
+ * value is required for [server-side rendering](guide/ssr) to work.
  *
  * When set to `EnabledNonBlocking`, the initial navigation starts after the root component has been
  * created. The bootstrap is not blocked on the completion of the initial navigation.
@@ -244,7 +245,7 @@ const BOOTSTRAP_DONE = new InjectionToken<Subject<void>>(
  * before the root component gets created. Use if there is a reason to have more control over when
  * the router starts its initial navigation due to some complex initialization logic.
  *
- * @see `ExtraOptions`
+ * @see {@link ExtraOptions}
  */
 const enum InitialNavigation {
   EnabledBlocking,
@@ -260,8 +261,8 @@ const INITIAL_NAVIGATION = new InjectionToken<InitialNavigation>(
  * A type alias for providers returned by `withEnabledBlockingInitialNavigation` for use with
  * `provideRouter`.
  *
- * @see `withEnabledBlockingInitialNavigation`
- * @see `provideRouter`
+ * @see {@link withEnabledBlockingInitialNavigation}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -272,9 +273,9 @@ export type EnabledBlockingInitialNavigationFeature =
  * A type alias for providers returned by `withEnabledBlockingInitialNavigation` or
  * `withDisabledInitialNavigation` functions for use with `provideRouter`.
  *
- * @see `withEnabledBlockingInitialNavigation`
- * @see `withDisabledInitialNavigation`
- * @see `provideRouter`
+ * @see {@link withEnabledBlockingInitialNavigation}
+ * @see {@link withDisabledInitialNavigation}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -285,7 +286,7 @@ export type InitialNavigationFeature =
  * Configures initial navigation to start before the root component is created.
  *
  * The bootstrap is blocked until the initial navigation is complete. This value is required for
- * [server-side rendering](guide/universal) to work.
+ * [server-side rendering](guide/ssr) to work.
  *
  * @usageNotes
  *
@@ -301,7 +302,7 @@ export type InitialNavigationFeature =
  * );
  * ```
  *
- * @see `provideRouter`
+ * @see {@link provideRouter}
  *
  * @publicApi
  * @returns A set of providers for use with `provideRouter`.
@@ -349,8 +350,8 @@ export function withEnabledBlockingInitialNavigation(): EnabledBlockingInitialNa
  * A type alias for providers returned by `withDisabledInitialNavigation` for use with
  * `provideRouter`.
  *
- * @see `withDisabledInitialNavigation`
- * @see `provideRouter`
+ * @see {@link withDisabledInitialNavigation}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -377,7 +378,7 @@ export type DisabledInitialNavigationFeature =
  * );
  * ```
  *
- * @see `provideRouter`
+ * @see {@link provideRouter}
  *
  * @returns A set of providers for use with `provideRouter`.
  *
@@ -403,8 +404,8 @@ export function withDisabledInitialNavigation(): DisabledInitialNavigationFeatur
 /**
  * A type alias for providers returned by `withDebugTracing` for use with `provideRouter`.
  *
- * @see `withDebugTracing`
- * @see `provideRouter`
+ * @see {@link withDebugTracing}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -428,7 +429,7 @@ export type DebugTracingFeature = RouterFeature<RouterFeatureKind.DebugTracingFe
  * );
  * ```
  *
- * @see `provideRouter`
+ * @see {@link provideRouter}
  *
  * @returns A set of providers for use with `provideRouter`.
  *
@@ -465,8 +466,8 @@ const ROUTER_PRELOADER = new InjectionToken<RouterPreloader>(
  * A type alias that represents a feature which enables preloading in Router.
  * The type is used to describe the return value of the `withPreloading` function.
  *
- * @see `withPreloading`
- * @see `provideRouter`
+ * @see {@link withPreloading}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -490,7 +491,7 @@ export type PreloadingFeature = RouterFeature<RouterFeatureKind.PreloadingFeatur
  * );
  * ```
  *
- * @see `provideRouter`
+ * @see {@link provideRouter}
  *
  * @param preloadingStrategy A reference to a class that implements a `PreloadingStrategy` that
  *     should be used.
@@ -509,8 +510,8 @@ export function withPreloading(preloadingStrategy: Type<PreloadingStrategy>): Pr
 /**
  * A type alias for providers returned by `withRouterConfig` for use with `provideRouter`.
  *
- * @see `withRouterConfig`
- * @see `provideRouter`
+ * @see {@link withRouterConfig}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -536,7 +537,7 @@ export type RouterConfigurationFeature =
  * );
  * ```
  *
- * @see `provideRouter`
+ * @see {@link provideRouter}
  *
  * @param options A set of parameters to configure Router, see `RouterConfigOptions` for
  *     additional information.
@@ -554,8 +555,8 @@ export function withRouterConfig(options: RouterConfigOptions): RouterConfigurat
 /**
  * A type alias for providers returned by `withHashLocation` for use with `provideRouter`.
  *
- * @see `withHashLocation`
- * @see `provideRouter`
+ * @see {@link withHashLocation}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -578,25 +579,25 @@ export type RouterHashLocationFeature = RouterFeature<RouterFeatureKind.RouterHa
  * );
  * ```
  *
- * @see `provideRouter`
- * @see `HashLocationStrategy`
+ * @see {@link provideRouter}
+ * @see {@link HashLocationStrategy}
  *
  * @returns A set of providers for use with `provideRouter`.
  *
  * @publicApi
  */
-export function withHashLocation(): RouterConfigurationFeature {
+export function withHashLocation(): RouterHashLocationFeature {
   const providers = [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
   ];
-  return routerFeature(RouterFeatureKind.RouterConfigurationFeature, providers);
+  return routerFeature(RouterFeatureKind.RouterHashLocationFeature, providers);
 }
 
 /**
  * A type alias for providers returned by `withNavigationErrorHandler` for use with `provideRouter`.
  *
- * @see `withNavigationErrorHandler`
- * @see `provideRouter`
+ * @see {@link withNavigationErrorHandler}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
@@ -607,7 +608,8 @@ export type NavigationErrorHandlerFeature =
  * Subscribes to the Router's navigation events and calls the given function when a
  * `NavigationError` happens.
  *
- * This function is run inside application's injection context so you can use the `inject` function.
+ * This function is run inside application's [injection context](guide/dependency-injection-context)
+ * so you can use the [`inject`](api/core/inject) function.
  *
  * @usageNotes
  *
@@ -624,9 +626,9 @@ export type NavigationErrorHandlerFeature =
  * );
  * ```
  *
- * @see `NavigationError`
- * @see `inject`
- * @see `EnvironmentInjector#runInContext`
+ * @see {@link NavigationError}
+ * @see {@link core/inject}
+ * @see {@link runInInjectionContext}
  *
  * @returns A set of providers for use with `provideRouter`.
  *
@@ -652,13 +654,23 @@ export function withNavigationErrorHandler(fn: (error: NavigationError) => void)
 /**
  * A type alias for providers returned by `withComponentInputBinding` for use with `provideRouter`.
  *
- * @see `withComponentInputBinding`
- * @see `provideRouter`
+ * @see {@link withComponentInputBinding}
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
 export type ComponentInputBindingFeature =
     RouterFeature<RouterFeatureKind.ComponentInputBindingFeature>;
+
+/**
+ * A type alias for providers returned by `withViewTransitions` for use with `provideRouter`.
+ *
+ * @see {@link withViewTransitions}
+ * @see {@link provideRouter}
+ *
+ * @publicApi
+ */
+export type ViewTransitionsFeature = RouterFeature<RouterFeatureKind.ViewTransitionsFeature>;
 
 /**
  * Enables binding information from the `Router` state directly to the inputs of the component in
@@ -690,18 +702,57 @@ export function withComponentInputBinding(): ComponentInputBindingFeature {
 }
 
 /**
+ * Enables view transitions in the Router by running the route activation and deactivation inside of
+ * `document.startViewTransition`.
+ *
+ * Note: The View Transitions API is not available in all browsers. If the browser does not support
+ * view transitions, the Router will not attempt to start a view transition and continue processing
+ * the navigation as usual.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable the feature:
+ * ```
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withViewTransitions())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @returns A set of providers for use with `provideRouter`.
+ * @see https://developer.chrome.com/docs/web-platform/view-transitions/
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
+ * @experimental
+ */
+export function withViewTransitions(options?: ViewTransitionsFeatureOptions):
+    ViewTransitionsFeature {
+  const providers = [
+    {provide: CREATE_VIEW_TRANSITION, useValue: createViewTransition},
+    {
+      provide: VIEW_TRANSITION_OPTIONS,
+      useValue: {skipNextTransition: !!options?.skipInitialTransition, ...options}
+    },
+  ];
+  return routerFeature(RouterFeatureKind.ViewTransitionsFeature, providers);
+}
+
+/**
  * A type alias that represents all Router features available for use with `provideRouter`.
  * Features can be enabled by adding special functions to the `provideRouter` call.
  * See documentation for each symbol to find corresponding function name. See also `provideRouter`
  * documentation on how to use those functions.
  *
- * @see `provideRouter`
+ * @see {@link provideRouter}
  *
  * @publicApi
  */
-export type RouterFeatures =
-    PreloadingFeature|DebugTracingFeature|InitialNavigationFeature|InMemoryScrollingFeature|
-    RouterConfigurationFeature|NavigationErrorHandlerFeature|ComponentInputBindingFeature;
+export type RouterFeatures = PreloadingFeature|DebugTracingFeature|InitialNavigationFeature|
+    InMemoryScrollingFeature|RouterConfigurationFeature|NavigationErrorHandlerFeature|
+    ComponentInputBindingFeature|ViewTransitionsFeature|RouterHashLocationFeature;
 
 /**
  * The list of features as an enum to uniquely type each feature.
@@ -716,4 +767,5 @@ export const enum RouterFeatureKind {
   RouterHashLocationFeature,
   NavigationErrorHandlerFeature,
   ComponentInputBindingFeature,
+  ViewTransitionsFeature,
 }

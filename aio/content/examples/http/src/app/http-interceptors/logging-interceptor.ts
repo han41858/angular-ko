@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpEvent, HttpInterceptor, HttpHandler,
-  HttpRequest, HttpResponse
+  HttpInterceptor, HttpHandler, HttpRequest, HttpResponse
 } from '@angular/common/http';
 
 // #docregion excerpt
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs';
 import { MessageService } from '../message.service';
 
 @Injectable()
@@ -23,7 +22,7 @@ export class LoggingInterceptor implements HttpInterceptor {
           // 서버에서 응답을 받으면 성공한 것으로 판단합니다.
           next: (event) => (ok = event instanceof HttpResponse ? 'succeeded' : ''),
           // 요청이 실패한 경우를 처리합니다. error 객체는 HttpErrorResponse 타입입니다.
-          error: (error) => (ok = 'failed')
+          error: (_error) => (ok = 'failed')
         }),
         // HTTP 요청이 성공한 경우와 실패한 경우 모두 응답 시간을 로그로 출력합니다.
         finalize(() => {

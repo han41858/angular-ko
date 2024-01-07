@@ -22,34 +22,35 @@ A basic understanding of the information in [Introduction to Angular service wor
 이 문서의 내용을 제대로 이해하려면 [Angular 서비스 워커](guide/service-worker-intro)에서 설명하는 기본 내용을 미리 보는 것이 좋습니다.
 
 
+<a id="cli-command"></a>
+
 <!--
 ## Adding a service worker to your project
 -->
 ## 프로젝트에 서비스 워커 추가하기
 
 <!--
-To set up the Angular service worker in your project, use the CLI command `ng add @angular/pwa`.
-It takes care of configuring your application to use service workers by adding the `@angular/service-worker` package along
-with setting up the necessary support files.
+To set up the Angular service worker in your project, run the following CLI command.
 
 <code-example format="shell" language="shell">
 
-ng add @angular/pwa --project &lt;project-name&gt;
+ng add @angular/pwa
 
 </code-example>
 
-The preceding command completes the following actions:
+The CLI configures your application to use service workers with the following actions:
 
 1.  Adds the `@angular/service-worker` package to your project.
 1.  Enables service worker build support in the CLI.
-1.  Imports and registers the service worker in the application module.
+1.  Imports and registers the service worker with the application's root providers.
 1.  Updates the `index.html` file:
     *   Includes a link to add the `manifest.webmanifest` file
     *   Adds a meta tag for `theme-color`
 1.  Installs icon files to support the installed Progressive Web App \(PWA\).
-1.  Creates the service worker configuration file called [`ngsw-config.json`](guide/service-worker-config), which specifies the caching behaviors and other settings.
+1.  Creates the service worker configuration file called [`ngsw-config.json`](guide/service-worker-config), 
+which specifies the caching behaviors and other settings.
 
- Now, build the project:
+Now, build the project:
 
 <code-example format="shell" language="shell">
 
@@ -59,25 +60,25 @@ ng build
 
 The CLI project is now set up to use the Angular service worker.
 -->
-프로젝트에 Angular 서비스 워커를 추기하려면 Angular CLI 명령 `ng add @angular/pwa`를 실행하면 됩니다.
-그러면 Angular CLI가 프로젝트에 `@angular/service-worker` 패키지를 추가하고 서비스 워커가 동작하기 위해 필요한 환경을 자동으로 구성합니다.
+프로젝트에 Angular 서비스 워커를 적용하려면 Angular CLI로 이런 명령을 실행하면 됩니다.
 
 <code-example format="shell" language="shell">
 
-ng add @angular/pwa --project &lt;project-name&gt;
+ng add @angular/pwa
 
 </code-example>
 
-명령을 실행하면 다음과 같은 순서로 실행됩니다:
+그러면 Angular CLI가 애플리케이션 서비스 워커를 적용하면서 이런 동작을 실행합니다:
 
 1.  프로젝트에 `@angular/service-worker` 패키지를 추가합니다.
 1.  Angular CLI로 빌드할 때 서비스 워커를 활성화하도록 설정합니다.
-1.  서비스 워커를 앱 모듈에 등록합니다.
-1.  `index.html` 파일을 수정합니다:
-    *   `manifest.json` 파일에 대한 링크를 추가합니다.
+1.  서비스 워커를 로드하고 애플리케이션 최상위 프로바이더에 등록합니다.
+1.  `index.html` 파일을 이렇게 수정합니다:
+    *   `manifest.webmanifest` 파일에 대한 링크를 추가합니다.
     *   `theme-color` 메타 태그를 추가합니다.
 1.  프로그레시브 웹 앱\(Progressive Web App, PWA\)으로 설치되었을 때 필요한 아이콘 파일을 설치합니다.
-1.  서비스 워커 환경설정 파일 [`ngsw-config.json`](guide/service-worker-config)을 생성합니다. 이 파일은 캐싱 정책을 비롯한 서비스 워커의 동작을 정의하는 파일입니다.
+1.  서비스 워커 환경설정 파일 [`ngsw-config.json`](guide/service-worker-config)을 생성합니다.
+이 파일은 캐싱 정책을 비롯한 서비스 워커의 동작을 정의하는 파일입니다.
 
 그리고 프로젝트를 빌드해봅시다:
 
@@ -98,8 +99,61 @@ ng build
 <!--
 This section demonstrates a service worker in action,
 using an example application.
+
+<div class="alert is-helpful">
+
+To play along,
+<live-example downloadOnly>download the example code</live-example>.
+
+Unzip the download, change to that directory, and enter the following commands in a terminal window,
+
+<code-example format="shell" language="shell">
+
+npm install           # install node packages
+ng add @angular/pwa   # setup to use service worker
+ng build              # build the app for production; code is in the /dist folder
+
+</code-example>
+
+The Angular development server (`ng serve`) doesn't support service worker applications.
+The [`http-server package`](https://www.npmjs.com/package/http-server) from npm does.
+You can run it without installing it like this:
+
+<code-example format="shell" language="shell">
+
+npx http-server -p 8080 -c-1 dist/
+
+</code-example>
+
+</div>
 -->
 이번 섹션에서는 예제 애플리케이션에 서비스 워커를 사용해봅시다.
+
+<div class="alert is-helpful">
+
+직접 실행해보려면 <live-example downloadOnly>download the example code</live-example>를 참고하세요.
+
+예제 프로젝트를 다운받은 후에 압축을 해제하고 이런 명령을 실행하면 됩니다.
+
+<code-example format="shell" language="shell">
+
+npm install           # node 패키지들을 설치합니다.
+ng add @angular/pwa   # 서비스 워커를 활성화합니다.
+ng build              # 애플리케이션을 빌드하빈다. 빌드 결과물은 /dist 폴더에 생성됩니다.
+
+</code-example>
+
+The Angular development server (`ng serve`) doesn't support service worker applications.
+The [`http-server package`](https://www.npmjs.com/package/http-server) from npm does.
+You can run it without installing it like this:
+
+<code-example format="shell" language="shell">
+
+npx http-server -p 8080 -c-1 dist/
+
+</code-example>
+
+</div>
 
 
 <!--
@@ -108,7 +162,7 @@ using an example application.
 ### 초기 로드
 
 <!--
-With the server running, point your browser at `http://localhost:8080`.
+With the server running on port `8080`, point your browser at `http://localhost:8080`.
 Your application should load normally.
 
 <div class="alert is-helpful">
@@ -284,7 +338,7 @@ Make a change to the application, and watch the service worker install the updat
 1.  Close the application tab, but not the window.
     This should also close the Developer Tools.
 
-1.  Shut down `http-server`.
+1.  Shut down `http-server` (Ctrl-c).
 1.  Open `src/app/app.component.html` for editing.
 1.  Change the text `Welcome to {{title}}!` to `Bienvenue à {{title}}!`.
 1.  Build and run the server again:
@@ -306,7 +360,7 @@ Make a change to the application, and watch the service worker install the updat
 1.  윈도우창 말고 애플리케이션이 실행되고 있는 탭을 닫습니다.
     이 때 닫은 탭과 연결된 개발자 도구도 함께 닫힙니다.
 
-1.  `http-server` 서버를 중지합니다.
+1.  Ctrl-c를 눌러서 `http-server` 서버를 중지합니다.
 1.  `src/app/app.component.html` 파일을 엽니다.
 1.  `Welcome to {{title}}!`를 `Bienvenue à {{title}}!`로 변경합니다.
 1.  애플리케이션을 다시 빌드하고 서버를 실행합니다:
@@ -314,7 +368,7 @@ Make a change to the application, and watch the service worker install the updat
     <code-example format="shell" language="shell">
 
     ng build
-    http-server -p 8080 -c-1 dist/&lt;project-name&gt;
+    npx http-server -p 8080 -c-1 dist/
 
     </code-example>
 
@@ -336,11 +390,21 @@ Now look at how the browser and service worker handle the updated application.
     </div>
 
     What went wrong?
-    Nothing, actually.
+    _Nothing, actually!_
+    
     The Angular service worker is doing its job and serving the version of the application that it has **installed**, even though there is an update available.
     In the interest of speed, the service worker doesn't wait to check for updates before it serves the application that it has cached.
 
+    <br>
+
     Look at the `http-server` logs to see the service worker requesting `/ngsw.json`.
+
+    <code-example format="shell" language="shell">
+
+    [2023-09-07T00:37:24.372Z]  "GET /ngsw.json?ngsw-cache-bust=0.9365263935102124" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+    </code-example>
+
     This is how the service worker checks for updates.
 
 1.  Refresh the page.
@@ -364,11 +428,20 @@ Now look at how the browser and service worker handle the updated application.
 
     </div>
 
-    무언가 잘못된 걸까요? 아닙니다.
+    무언가 잘못된 걸까요? _아닙니다._
     Angular 서비스 워커는 이미 **설치된** 애플리케이션을 실행하는 원래 역할을 다하고 있을 뿐입니다.
     애플리케이션을 빠르게 실행하기 위해서, 이미 애플리케이션을 실행하고 있는 상태라면 서비스 워커는 새로운 업데이트가 있는지 확인하지 않습니다.
 
+    <br>
+
     `http-server`가 출력한 로그를 확인해보면 서비스 워커가 `ngsw.json` 파일을 요청한 것을 확인할 수 있습니다.
+
+    <code-example format="shell" language="shell">
+
+    [2023-09-07T00:37:24.372Z]  "GET /ngsw.json?ngsw-cache-bust=0.9365263935102124" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+
+    </code-example>
+
     서비스 워커는 이 파일의 내용을 보고 업데이트를 해야 할지 판단합니다.
 
 1.  페이지를 새로고침 해봅시다.
@@ -391,14 +464,13 @@ Now look at how the browser and service worker handle the updated application.
 <!--
 You might also be interested in the following:
 
-*   [App Shell](guide/app-shell)
 *   [Communicating with service workers](guide/service-worker-communications)
+*   [App Shell](guide/app-shell)
 -->
-이제 다음 내용을 확인해 보세요:
+이제 이런 내용을 확인해 보세요:
 
-*   [앱 기본 틀](guide/app-shell)
 *   [서비스 워커로 통신하기](guide/service-worker-communications)
-
+*   [앱 기본 틀](guide/app-shell)
 
 <!-- links -->
 
@@ -406,4 +478,4 @@ You might also be interested in the following:
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-09-06

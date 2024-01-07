@@ -107,6 +107,15 @@ export enum ErrorCode {
    */
   HOST_DIRECTIVE_MISSING_REQUIRED_BINDING = 2019,
 
+  /**
+   * Raised when a component specifies both a `transform` function on an input
+   * and has a corresponding `ngAcceptInputType_` member for the same input.
+   */
+  CONFLICTING_INPUT_TRANSFORM = 2020,
+
+  /** Raised when a component has both `styleUrls` and `styleUrl`. */
+  COMPONENT_INVALID_STYLE_URLS = 2021,
+
   SYMBOL_NOT_EXPORTED = 3001,
   /**
    * Raised when a relationship between directives and/or pipes would cause a cyclic import to be
@@ -192,10 +201,9 @@ export enum ErrorCode {
   WARN_NGMODULE_ID_UNNECESSARY = 6100,
 
   /**
-   * Not actually raised by the compiler, but reserved for documentation of a View Engine error when
-   * a View Engine build depends on an Ivy-compiled NgModule.
+   * 6999 was previously assigned to NGMODULE_VE_DEPENDENCY_ON_IVY_LIB
+   * To prevent any confusion, let's not reassign it.
    */
-  NGMODULE_VE_DEPENDENCY_ON_IVY_LIB = 6999,
 
   /**
    * An element name failed validation against the DOM schema.
@@ -251,6 +259,32 @@ export enum ErrorCode {
    * A directive usage isn't binding to one or more required inputs.
    */
   MISSING_REQUIRED_INPUTS = 8008,
+
+  /**
+   * The tracking expression of a `for` loop block is accessing a variable that is unavailable,
+   * for example:
+   *
+   * ```
+   * <ng-template let-ref>
+   *   @for (item of items; track ref) {}
+   * </ng-template>
+   * ```
+   */
+  ILLEGAL_FOR_LOOP_TRACK_ACCESS = 8009,
+
+  /**
+   * The trigger of a `defer` block cannot access its trigger element,
+   * either because it doesn't exist or it's in a different view.
+   *
+   * ```
+   * @defer (on interaction(trigger)) {...}
+   *
+   * <ng-template>
+   *   <button #trigger></button>
+   * </ng-template>
+   * ```
+   */
+  INACCESSIBLE_DEFERRED_TRIGGER_ELEMENT = 8010,
 
   /**
    * A two way binding in a template has an incorrect syntax,
@@ -344,6 +378,16 @@ export enum ErrorCode {
   SKIP_HYDRATION_NOT_STATIC = 8108,
 
   /**
+   * Signal functions should be invoked when interpolated in templates.
+   *
+   * For example:
+   * ```
+   * {{ mySignal() }}
+   * ```
+   */
+  INTERPOLATED_SIGNAL_NOT_INVOKED = 8109,
+
+  /**
    * The template type-checking engine would need to generate an inline type check block for a
    * component, but the current type-checking environment doesn't support it.
    */
@@ -376,4 +420,16 @@ export enum ErrorCode {
    * type inference.
    */
   SUGGEST_SUBOPTIMAL_TYPE_INFERENCE = 10002,
+
+  /**
+   * A string is imported from another file to be used as template string for a component in local
+   * compilation mode.
+   */
+  LOCAL_COMPILATION_IMPORTED_TEMPLATE_STRING = 11001,
+
+  /**
+   * A string is imported from another file to be used as styles string for a component in local
+   * compilation mode.
+   */
+  LOCAL_COMPILATION_IMPORTED_STYLES_STRING = 11002,
 }

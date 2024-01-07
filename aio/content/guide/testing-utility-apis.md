@@ -350,4 +350,4 @@ Angular가 제공하는 `By` 클래스는 정적 메서드를 3종류로 제공�
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-09-07

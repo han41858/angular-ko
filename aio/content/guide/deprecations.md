@@ -182,29 +182,26 @@ v16 - v19
 | `@angular/core`                     | [`NgModuleFactory`](#core)                                                                                 | v13           | v16         |
 | `@angular/core`                     | [`ComponentFactory`](#core)                                                                                | v13           | v16         |
 | `@angular/core`                     | [`ComponentFactoryResolver`](#core)                                                                        | v13           | v16         |
-| `@angular/core`                     | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](#core)                    | v13           | v16         |
 | `@angular/platform-browser-dynamic` | [`JitCompilerFactory`](#platform-browser-dynamic)                                                          | v13           | v16         |
 | `@angular/platform-browser-dynamic` | [`RESOURCE_CACHE_PROVIDER`](#platform-browser-dynamic)                                                     | v13           | v16         |
 | `@angular/platform-server`          | [`ServerTransferStateModule`](#platform-server)                                                            | v14           | v16         |
 | `@angular/service-worker`           | [`SwUpdate#activated`](api/service-worker/SwUpdate#activated)                                              | v13           | v16         |
 | `@angular/service-worker`           | [`SwUpdate#available`](api/service-worker/SwUpdate#available)                                              | v13           | v16         |
 -->
-| 분류                                  | API, 기능                                                                                 | 지원 중단 공지   | 제거     |
-|:------------------------------------|:----------------------------------------------------------------------------------------|:-----------|:-------|
-| `@angular/common/http/testing`      | [에러를 시뮬레이션할 때 `ErrorEvent`를 받는 `TestRequest`](#testrequest-errorevent)                  | v13        | v16    |
-| `@angular/core`                     | [`getModuleFactory`](#core)                                                             | v13        | v16    |
-| `@angular/core`                     | [`ModuleWithComponentFactories`](#core)                                                 | v13        | v16    |
-| `@angular/core`                     | [`Compiler`](#core)                                                                     | v13        | v16    |
-| `@angular/core`                     | [`CompilerFactory`](#core)                                                              | v13        | v16    |
-| `@angular/core`                     | [`NgModuleFactory`](#core)                                                              | v13        | v16    |
-| `@angular/core`                     | [`ComponentFactory`](#core)                                                             | v13        | v16    |
-| `@angular/core`                     | [`ComponentFactoryResolver`](#core)                                                     | v13        | v16    |
-| `@angular/core`                     | [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](#core) | v13        | v16    |
-| `@angular/platform-browser-dynamic` | [`JitCompilerFactory`](#platform-browser-dynamic)                                       | v13        | v16    |
-| `@angular/platform-browser-dynamic` | [`RESOURCE_CACHE_PROVIDER`](#platform-browser-dynamic)                                  | v13        | v16    |
-| `@angular/platform-server`          | [`ServerTransferStateModule`](#platform-server)                                         | v14        | v16    |
-| `@angular/service-worker`           | [`SwUpdate#activated`](api/service-worker/SwUpdate#activated)                           | v13        | v16    |
-| `@angular/service-worker`           | [`SwUpdate#available`](api/service-worker/SwUpdate#available)                           | v13        | v16    |
+| 분류                                  | API, 기능                                                                                         | 지원 중단 공지  | 제거    |
+|:------------------------------------|:------------------------------------------------------------------------------------------------|:----------|:------|
+| `@angular/common/http/testing`      | [에러를 시뮬레이션할 때 `ErrorEvent`를 받는 `TestRequest`](#testrequest-errorevent)                          | v13       | v16   |
+| `@angular/core`                     | [`getModuleFactory`](#core)                                                                     | v13       | v16   |
+| `@angular/core`                     | [`ModuleWithComponentFactories`](#core)                                                         | v13       | v16   |
+| `@angular/core`                     | [`Compiler`](#core)                                                                             | v13       | v16   |
+| `@angular/core`                     | [`CompilerFactory`](#core)                                                                      | v13       | v16   |
+| `@angular/core`                     | [`NgModuleFactory`](#core)                                                                      | v13       | v16   |
+| `@angular/core`                     | [`ComponentFactory`](#core)                                                                     | v13       | v16   |
+| `@angular/core`                     | [`ComponentFactoryResolver`](#core)                                                             | v13       | v16   |
+| `@angular/platform-browser-dynamic` | [`JitCompilerFactory`](#platform-browser-dynamic)                                               | v13       | v16   |
+| `@angular/platform-browser-dynamic` | [`RESOURCE_CACHE_PROVIDER`](#platform-browser-dynamic)                                          | v13       | v16   |
+| `@angular/platform-server`          | [`ServerTransferStateModule`](#platform-server)                                                 | v14       | v16   |
+| `@angular/platform-browser`         | [`BrowserModule.withServerTransition`](api/platform-browser/BrowserModule#withservertransition) | v16       | v18   |
 
 
 <!--
@@ -262,6 +259,25 @@ v16 - v19
 
 
 <!--
+### Deprecated features that can be removed in v19 or later
+-->
+### 19 버전이나 그 이후에 지원이 중단되는 기능
+
+<!--
+| Area                                | API or Feature                                                                                             | Deprecated in | May be removed in |
+|:---                                 |:---                                                                                                        |:---           |:---               |
+| `@angular/animations` | `AnimationDriver.NOOP` | v17 | v19 |
+| `@angular/core` | `PACKAGE_ROOT_URL` | v17 | v19 |
+| `@angular/core` | `NgProbeToken` | v17 | v19 |
+-->
+| 분류                    | API, 기능     | 지원 중단 발표 | 지원 중단 |
+|:----------------------|:-----------------------|:---------|:------|
+| `@angular/animations` | `AnimationDriver.NOOP` | v17      | v19   |
+| `@angular/core`       | `PACKAGE_ROOT_URL`     | v17      | v19   |
+| `@angular/core`       | `NgProbeToken`         | v17      | v19   |
+
+
+<!--
 ### Deprecated features with no planned removal version
 -->
 ### 중단될 예정이지만 시기가 결정되지 않은 기능
@@ -305,6 +321,23 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 </div>
 
 
+<a id="animations"></a>
+
+<!--
+### &commat;angular/animations
+-->
+### &commat;angular/animations
+
+<!--
+| API                                                                                           | Replacement                                         | Deprecation announced | Details |
+|:---                                                                                           |:---                                                 |:---                   |:---     |
+| [AnimationDriver.NOOP](api/animations/browser/AnimationDriver#NOOP) | `NoopAnimationDriver` | v17 | Create a new  `NoopAnimationDriver` directly instead of calling `AnimationDriver.NOOP`
+-->
+| API                                                                 | 대체 방식                 | 지원 중단 발표 | 설명                                                               |
+|:--------------------------------------------------------------------|:----------------------|:---------|:-----------------------------------------------------------------|
+| [AnimationDriver.NOOP](api/animations/browser/AnimationDriver#NOOP) | `NoopAnimationDriver` | v17      | `AnimationDriver.NOOP`을 사용하지 말고 `NoopAnimationDriver`를 직접 사용하세요. | 
+
+
 <a id="common"></a>
 
 ### &commat;angular/common
@@ -345,11 +378,11 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 | [Factory-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent) | [Type-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                                                           | v13                   | Angular no longer requires component factories to dynamically create components. Use different signature of the `createComponent` method, which allows passing Component class directly.                                                                           |
 | [`ComponentFactory`](api/core/ComponentFactory)                                                            | Use non-factory based framework APIs.                                                                                                                             | v13                   | Since Ivy, Component factories are not required. Angular provides other APIs where Component classes can be used directly.                                                                                                                                         |
 | [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver)                                            | Use non-factory based framework APIs.                                                                                                                             | v13                   | Since Ivy, Component factories are not required, thus there is no need to resolve them.                                                                                                                                                                            |
-| [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](api/core/CompilerOptions) | none                                                                                                                                                              | v13                   | Since Ivy, those config options are unused, passing them has no effect.                                                                                                                                                                                            |
 | [`providedIn`](api/core/Injectable#providedIn) with NgModule | Prefer `'root'` providers, or use NgModule `providers` if scoping to an NgModule is necessary | v15 | none |
 | [`providedIn: 'any'`](api/core/Injectable#providedIn) | none | v15 | This option has confusing semantics and nearly zero usage. |
 | [`EnvironmentInjector.runInContext`](api/core/EnvironmentInjector#runInContext) | `runInInjectionContext`  | v16 | `runInInjectionContext` is a more flexible operation which supports element injectors as well |
 | [`@Component.moduleId`](api/core/Component#moduleId) | none | v16 |
+| [`NgProbeToken`](api/core/NgProbeToken) | none | v16 | `ng.prob` was replaced by `ng.getComponent` since Ivy
 -->
 | API                                                                                                        | 대체 방식                                                                                                                     | 지원 중단 발표 | 설명                                                                                                                                                                                            |
 |:-----------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------|:---------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -369,12 +402,11 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 | [팩토리 기반의 `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                    | [Type-based signature of `ViewContainerRef.createComponent`](api/core/ViewContainerRef#createComponent)                   | v13      | Angular는 동적으로 컴포넌트를 생성할 때 더이상 컴포넌트 팩토리를 사용하지 않습니다. 컴포넌트 클래스를 직접 활용하는 `createComponent` 메소드를 사용하세요.                                                                                            |
 | [`ComponentFactory`](api/core/ComponentFactory)                                                            | 팩토리 기반이 아닌 API                                                                                                            | v13      | Ivy를 사용할때는 컴포넌트 팩토리를 사용하지 않습니다. 컴포넌트 클래스 API를 직접 사용하세요.                                                                                                                                       |
 | [`ComponentFactoryResolver`](api/core/ComponentFactoryResolver)                                            | 팩토리 기반이 아닌 API                                                                                                            | v13      | Ivy를 사용할때는 컴포넌트 팩토리를 사용하지 않기 때문에, 더이상 사용하지 않습니다.                                                                                                                                              |
-| [`CompilerOptions.useJit and CompilerOptions.missingTranslation config options`](api/core/CompilerOptions) | -                                                                                                                         | v13      | Ivy를 사용할 때는 사용하지 않습니다.                                                                                                                                                                        |
 | NgModule의 [`providedIn`](api/core/Injectable#providedIn)                                                   | NgModule 계층에 등록하려면  `root` 프로바이더나 NgModule의 `providers` 필드를 활용하세요.                                                        | v15      | -                                                                                                                                                                                             |
 | [`providedIn: 'any'`](api/core/Injectable#providedIn)                                                      | -                                                                                                                         | v15      | 이 옵션은 혼란스러웠으며 거의 사용되지도 않았습니다.                                                                                                                                                                 |
 | [`EnvironmentInjector.runInContext`](api/core/EnvironmentInjector#runInContext)                            | `runInInjectionContext`                                                                                                   | v16      | `runInInjectionContext`를 사용하는 것이 더 편합니다.                                                                                                                                                      |
 | [`@Component.moduleId`](api/core/Component#moduleId)                                                       | -                                                                                                                         | v16      |                                                                                                                                                                                               |
-
+| [`NgProbeToken`](api/core/NgProbeToken) | -                                                                                                                         | v16 | `ng.prob`는 Ivy가 도입되면서`ng.getComponent`로 변경되었습니다.                                                                                                                                              |
 
 <a id="testing"></a>
 
@@ -401,14 +433,12 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 |:---                                        |:---                               |:---                   |:---     |
 | [`RouterLinkWithHref` directive](api/router/RouterLinkWithHref) | Use `RouterLink` instead. | v15                   | The `RouterLinkWithHref` directive code was merged into `RouterLink`. Now the `RouterLink` directive can be used for all elements that have `routerLink` attribute. |
 | [`provideRoutes` function](api/router/provideRoutes) | Use `ROUTES` `InjectionToken` instead. | v15                   | The `provideRoutes` helper function is minimally useful and can be unintentionally used instead of `provideRouter` due to similar spelling. |
-| [`setupTestingRouter` function](api/router/testing/setupTestingRouter) | Use `provideRouter` or `RouterModule` instead. | v15.1                   | The `setupTestingRouter` function is not necessary. The `Router` is initialized based on the DI configuration in tests as it would be in production. |
 | [class and `InjectionToken` guards and resolvers](api/router/DeprecatedGuard) | Use plain JavaScript functions instead. | v15.2                   | Functional guards are simpler and more powerful than class and token-based guards. |
 -->
 | API                                                              | 대체 방식                                   | 지원 중단 발표 | 설명                                                                                                             |
 |:-----------------------------------------------------------------|:----------------------------------------|:---------|:---------------------------------------------------------------------------------------------------------------|
 | [`RouterLinkWithHref` 디렉티브](api/router/RouterLinkWithHref)       | `RouterLink`를 사용하세요.                    | v15      | `RouterLinkWithHref` 디렉티브는 `RouterLink`와 합쳐졌습니다. 이제 `routerLink` 어트리뷰트가 적용된 엘리먼트는 모두 `RouterLink` 디렉티브로 사용합니다. |
 | [`provideRoutes` 함수](api/router/provideRoutes)                   | `ROUTES` `InjectionToken`를 사용하세요.       | v15      | `provideRoutes` 헬퍼 함수는 거의 사용되지 않았고, 비슷한 철자인 `provideRouter`와 혼동될 여지가 있었습니다.                                    |
-| [`setupTestingRouter` 함수](api/router/testing/setupTestingRouter) | `provideRouter`나 `RouterModule`를 사용하세요. | v15.1    | `setupTestingRouter` 함수는 더이상 사용되지 않습니다. `Router`는 테스트 환경에 의존성으로 주입될 때 운영모드처럼 초기화됩니다.                           |
 | [함수나 `InjectionToken` 기반의 가드, 리졸버](api/router/DeprecatedGuard)      | 일반 JavaScript 함수를 사용하세요.                | v15.2    | 클래스나 토큰 기반의 가드보다는 함수를 사용하는 가드가 더 간단하고 확장하기 좋습니다.                                                               |
 
 
@@ -476,22 +506,6 @@ In the [API reference section](api) of this site, deprecated APIs are indicated 
 |:-------------------------------------------------------------|:-----------------------------------------------------------------------------|:--------|:----|
 | [반응형 폼이 제공하는 `ngModel`](#ngmodel-reactive)                   | [`FormControlDirective`](api/forms/FormControlDirective)                     | v6      | -   |
 | [`FormBuilder.group` 레거시 옵션 인자](api/forms/FormBuilder#group) | [`AbstractControlOptions` parameter value](api/forms/AbstractControlOptions) | v11     | -   |
-
-
-<a id="service-worker"></a>
-
-### &commat;angular/service-worker
-
-<!--
-| API                                                           | Replacement                                                                            | Deprecation announced | Details |
-|:---                                                           |:---                                                                                    |:---                   |:---     |
-| [`SwUpdate#activated`](api/service-worker/SwUpdate#activated) | [`SwUpdate#activateUpdate()` return value](api/service-worker/SwUpdate#activateUpdate) | v13                   | The return value of `SwUpdate#activateUpdate()` indicates whether an update was successfully activated.                                                                    |
-| [`SwUpdate#available`](api/service-worker/SwUpdate#available) | [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates)                | v13                   | The behavior of `SwUpdate#available` can be rebuilt by filtering for `VersionReadyEvent` events on [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates) |
--->
-| API                                                           | 대체 방식                                                                         | 지원중단 발표 | 설명                                                                                                                                         |
-|:--------------------------------------------------------------|:------------------------------------------------------------------------------|:--------|:-------------------------------------------------------------------------------------------------------------------------------------------|
-| [`SwUpdate#activated`](api/service-worker/SwUpdate#activated) | [`SwUpdate#activateUpdate()` 반환값](api/service-worker/SwUpdate#activateUpdate) | v13     | 업데이트가 성공적으로 끝났는지 여부는 `SwUpdate#activateUpdate()`의 반환값으로 전달됩니다.                                                                             |
-| [`SwUpdate#available`](api/service-worker/SwUpdate#available) | [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates)       | v13     | `SwUpdate#available` 동작은 [`SwUpdate#versionUpdates`](api/service-worker/SwUpdate#versionUpdates)로 전달되는 `VersionReadyEvent`에 따라 달라질 수 있습니다. |
 
 
 <a id="upgrade"></a>
@@ -632,9 +646,9 @@ Support for using the `ngModel` input property and `ngModelChange` event with re
 
 Now deprecated:
 
-<code-example path="deprecation-guide/src/app/app.component.html" region="deprecated-example"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.html" region="deprecated-example"></code-example>
 
-<code-example path="deprecation-guide/src/app/app.component.ts" region="deprecated-example"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.ts" region="deprecated-example"></code-example>
 
 This support was deprecated for several reasons.
 First, developers found this pattern confusing.
@@ -646,13 +660,14 @@ Setting the value in the template violates the template-agnostic principles behi
 
 To update your code before support is removed, decide whether to stick with reactive form directives \(and get/set values using reactive forms patterns\) or switch to template-driven directives.
 
-**After** \(choice 1 - use reactive forms\):
+**After** \(choice 1 - with reactive forms\):
 
-<code-example path="deprecation-guide/src/app/app.component.html" region="reactive-form-example"></code-example>
+<!- Standalone Reactive Forms are not ready as of 2023-09-25; move example to deprecated ->
+<code-example path="deprecation-guide/src/deprecated/app.component.html" region="reactive-form-example"></code-example>
 
 <code-example path="deprecation-guide/src/app/app.component.ts" region="reactive-form-example"></code-example>
 
-**After** \(choice 2 - use template-driven forms\):
+**After** \(choice 2 - with template-driven forms\):
 
 <code-example path="deprecation-guide/src/app/app.component.html" region="template-driven-form-example"></code-example>
 
@@ -661,7 +676,7 @@ To update your code before support is removed, decide whether to stick with reac
 By default, when you use this pattern, you get a deprecation warning once in dev mode.
 You can choose to silence this warning by configuring `ReactiveFormsModule` at import time:
 
-<code-example path="deprecation-guide/src/app/app.module.ts" region="reactive-form-no-warning"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" region="reactive-form-no-warning"></code-example>
 
 Alternatively, you can choose to surface a separate warning for each instance of this pattern with a configuration value of `"always"`.
 This may help to track down where in the code the pattern is being used as the code is being updated.
@@ -670,9 +685,9 @@ This may help to track down where in the code the pattern is being used as the c
 
 이전에는 이렇게 사용했습니다:
 
-<code-example path="deprecation-guide/src/app/app.component.html" region="deprecated-example"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.html" region="deprecated-example"></code-example>
 
-<code-example path="deprecation-guide/src/app/app.component.ts" region="deprecated-example"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.ts" region="deprecated-example"></code-example>
 
 이 기능이 지원 중단된 이유가 몇가지 있습니다.
 첫 번째는 개발자들이 이 패턴을 혼란스러워 했기 때문입니다.
@@ -688,7 +703,7 @@ This may help to track down where in the code the pattern is being used as the c
 
 **수정 후** \(선택 1 - 반응형 폼 사용하기\):
 
-<code-example path="deprecation-guide/src/app/app.component.html" region="reactive-form-example"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.html" region="reactive-form-example"></code-example>
 
 <code-example path="deprecation-guide/src/app/app.component.ts" region="reactive-form-example"></code-example>
 
@@ -701,7 +716,7 @@ This may help to track down where in the code the pattern is being used as the c
 이렇게 수정하지 않고 사용하면 개발 모드에서 지원이 중단된다는 경고 메시지가 표시됩니다.
 이 경고는 `ReactiveFormsModule`를 로드하는 시점에 아래 코드처럼 지정하면 끌 수 있습니다:
 
-<code-example path="deprecation-guide/src/app/app.module.ts" region="reactive-form-no-warning"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" region="reactive-form-no-warning"></code-example>
 
 아니면 이 설정은 `"always"`로 설정해두고 하나씩 바꿔가는 것도 좋습니다.
 
@@ -819,36 +834,29 @@ They should all be configured using other methods, all of which have been
 documented.
 
 The following strategies are meant to be configured by registering the
-application strategy in DI via the `providers` in the root `NgModule` or
-`bootstrapApplication`:
+application strategy in DI via the `providers` in the configuration of `bootstrapApplication()` for a "Standalone" app or 
+in the root `app.module` of an NgModule app:
 * `routeReuseStrategy`
-* `titleStrategy`
-* `urlHandlingStrategy`
 
-The following options are meant to be configured using the options
-available in `RouterModule.forRoot` or `provideRouter` and `withRouterConfig`.
+The following options are meant to be configured using the options object
+of `withRouterConfig()` passed to `provideRouter` for a "Standalone" app or
+passed to `RouterModule.forRoot()` in the root `app.module` of an NgModule app:
 * `onSameUrlNavigation`
-* `paramsInheritanceStrategy`
-* `urlUpdateStrategy`
-* `canceledNavigationResolution`
 * `errorHandler`
 
-The following options are deprecated in entirely:
+The following options are deprecated entirely:
 * `malformedUriErrorHandler` - URI parsing errors should be handled in the `UrlSerializer` instead.
 * `errorHandler` - Subscribe to the `Router` events and filter for `NavigationError` instead.
 -->
 `Router`의 public 프로퍼티들은 새 값을 할당할 수 없으며, 다른 메서드를 통해야 값을 변경할 수 있습니다.
 
-아래 정책들은 최상위 `NgModule`이나 `bootstrapApplication`을 사용할 때 구성됩니다:
-* `routeReuseStrategy`
-* `titleStrategy`
-* `urlHandlingStrategy`
+아래 정책은 최상위 NgModule이나 "단독" 앱의 `bootstrapApplication()`을 실행할 때 구성됩니다:
 
-그리고 아래 옵션들은 `RouterModule.forRoot`, `provideRouter`, `withRouterConfig` 에서만 사용할 수 있습니다:
+* `routeReuseStrategy`
+
+그리고 아래 옵션들은 최상위 NgModule의 `RouterModule.forRoot()`, "단독" 앱의 `provideRouter`로 전달하는 `withRouterConfig()` 에서만 사용할 수 있습니다:
+
 * `onSameUrlNavigation`
-* `paramsInheritanceStrategy`
-* `urlUpdateStrategy`
-* `canceledNavigationResolution`
 * `errorHandler`
 
 아래 옵션들은 지원이 중단되었습니다:
@@ -880,11 +888,22 @@ goals as `CanLoad` but with the addition of allowing the navigation to match oth
 <a id="loadchildren-string-syntax"></a>
 
 <!--
-### `loadChildren` string syntax
+### `loadChildren` string syntax (NgModule)
 -->
-### loadChildren 문법
+### `loadChildren` 문자열 문법 (NgModule)
 
 <!--
+<div class="alert is-critical">
+
+This deprecation notice applies only to lazy loading of [NgModules](guide/ngmodules).
+
+["Standalone"](guide/standalone-components) applications do not reference modules. 
+They can lazy load a component with `loadComponent` 
+or an array of child routes with `loadChildren` as 
+[discussed here](guide/standalone-components#routing-and-lazy-loading). 
+
+</div>
+
 When Angular first introduced lazy routes, there wasn't browser support for dynamically loading additional JavaScript.
 Angular created its own scheme using the syntax `loadChildren: './lazy/lazy.module#LazyModule'` and built tooling to support it.
 Now that ECMAScript dynamic import is supported in many browsers, Angular is moving toward this new syntax.
@@ -893,11 +912,11 @@ In version 8, the string syntax for the [`loadChildren`](api/router/LoadChildren
 
 **Before**:
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="lazyload-deprecated-syntax"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="lazyload-deprecated-syntax"></code-example>
 
 **After**:
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="lazyload-syntax"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="lazyload-syntax"></code-example>
 
 <div class="alert is-helpful">
 
@@ -915,6 +934,15 @@ These restrictions will be relaxed with the release of Ivy since it'll no longer
 
 </div>
 -->
+<div class="alert is-critical">
+
+이 항목은 지연로딩하는 [NgModules](guide/ngmodules)에만 유효합니다.
+
+["단독"](guide/standalone-components) 애플리케이션은 모듈을 사용하지 않으며, `loadComponent`나 `loadChildren`으로 지연로딩합니다.
+자세한 내용은 [이 문서](guide/standalone-components#routing-and-lazy-loading)를 참고하세요.
+
+</div>
+
 Angular에 지연 라우팅이 처음 등장했을 때는 브라우저가 JavaScript 리소스를 추가로, 동적으로 로딩하는 기능이 없었습니다.
 그래서 Angular는 이 기능을 구현하기 위해 독자적으로 `loadChildren: './lazy/lazy.module#LazyModule'`와 같은 문법을 만들어냈습니다.
 하지만 이제는 ECMAScript의 동적 로딩 기능을 브라우저 계층에서 지원하는 경우가 많아졌습니다.
@@ -924,11 +952,11 @@ Angular 8 버전부터는 이전까지 사용하던 [`loadChildren`](api/router/
 
 **수정 전**
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="lazyload-deprecated-syntax"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="lazyload-deprecated-syntax"></code-example>
 
 **수정 후**
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="lazyload-syntax"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="lazyload-syntax"></code-example>
 
 <div class="alert is-helpful">
 
@@ -997,7 +1025,7 @@ See the [dedicated migration guide for static queries](guide/static-query-migrat
 <!--
 The following pattern is deprecated:
 
-<code-example path="deprecation-guide/src/app/app.component.ts" language="typescript" region="template-with-input-deprecated"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.ts" language="typescript" region="template-with-input-deprecated"></code-example>
 
 Rather than using this pattern, separate the two decorators into their own
 properties and add fallback logic as in the following example:
@@ -1006,7 +1034,7 @@ properties and add fallback logic as in the following example:
 -->
 다음과 같이 사용하던 방식은 더이상 사용되지 않습니다:
 
-<code-example path="deprecation-guide/src/app/app.component.ts" language="typescript" region="template-with-input-deprecated"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.ts" language="typescript" region="template-with-input-deprecated"></code-example>
 
 이 방법보다는 두 데코레이터를 따로 나눠서 다음과 같이 구현하는 것이 좋습니다:
 
@@ -1024,7 +1052,7 @@ properties and add fallback logic as in the following example:
 In the following example, the two-way binding means that `optionName`
 should be written when the `valueChange` event fires.
 
-<code-example path="deprecation-guide/src/app/app.component.1.html" region="two-way-template-deprecated"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.html" region="two-way-template-deprecated"></code-example>
 
 However, in practice, Angular ignores two-way bindings to template variables.
 Starting in version 8, attempting to write to template variables is deprecated.
@@ -1034,7 +1062,7 @@ In a future version, we will throw to indicate that the write is not supported.
 -->
 아래와 같이 작성된 코드가 있다면, 이 코드는 `valueChange` 이벤트가 발생했을 때 `optionName`의 값이 변경된다는 양방향 바인딩을 의미합니다.
 
-<code-example path="deprecation-guide/src/app/app.component.1.html" region="two-way-template-deprecated"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.component.html" region="two-way-template-deprecated"></code-example>
 
 하지만 Angular는 템플릿 변수가 양방향 바인딩으로 연결되되더라도 템플릿 변수에 값을 할당하는 로직은 처리하지 않습니다.
 그리고 이제 Angular 8 버전부터는 템플릿 변수에 값을 할당하는 로직 자체를 작성할 수 없습니다.
@@ -1128,11 +1156,11 @@ For example:
 
 **Before**:
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="ModuleWithProvidersNonGeneric"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="ModuleWithProvidersNonGeneric"></code-example>
 
 **After**:
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="ModuleWithProvidersGeneric"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="ModuleWithProvidersGeneric"></code-example>
 -->
 `@angular/router`나 `@ngrx/store`와 같은 일부 Angular 라이브러리에는 `ModuleWithProviders` 타입을 반환하는 API가 있었습니다.
 `forRoot()`를 사용하는 패턴이 보통 그랬습니다.
@@ -1145,29 +1173,11 @@ Angular CLI를 사용할 수 없다면 애플리케이션에 존재하는 코드
 
 **수정 전**
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="ModuleWithProvidersNonGeneric"></code-example>
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="ModuleWithProvidersNonGeneric"></code-example>
 
 **수정 후**
 
-<code-example path="deprecation-guide/src/app/app.module.ts" language="typescript" region="ModuleWithProvidersGeneric"></code-example>
-
-<!--
-
-### Internet Explorer 11
-
-Angular support for Microsoft's Internet Explorer 11 \(IE11\) is deprecated and will be removed in Angular v13.
-Ending IE11 support allows Angular to take advantage of web platform APIs present only in evergreen browsers, resulting in better APIs for developers and more capabilities for application users.
-An additional motivation behind this removal is the drop in global usage of IE11 to just ~1% \(as of March 2021\).
-For full rationale and discussion behind this deprecation, see [RFC: Internet Explorer 11 support deprecation and removal](https://github.com/angular/angular/issues/41840).
-
-<div class="alert is-helpful">
-
-**NOTE**: <br />
-IE11 will be supported in Angular v12 LTS releases through November 2022.
-
-</div>
-
--->
+<code-example path="deprecation-guide/src/deprecated/app.module.ts" language="typescript" region="ModuleWithProvidersGeneric"></code-example>
 
 
 <a id="input-setter-coercion"></a>
@@ -1188,11 +1198,11 @@ This means that input coercion fields are no longer needed, as their effects can
 
 For example, the following directive:
 
-<code-example path="deprecation-guide/src/app/submit-button/submit-button.component.ts" language="typescript" region="submitButtonNarrow"></code-example>
+<code-example path="deprecation-guide/src/app/submit-button.component.ts" language="typescript" region="submitButtonNarrow"></code-example>
 
 can be refactored as follows:
 
-<code-example path="deprecation-guide/src/app/submit-button/submit-button.component.ts" language="typescript" region="submitButton"></code-example>
+<code-example path="deprecation-guide/src/app/submit-button.component.ts" language="typescript" region="submitButton"></code-example>
 -->
 `strictTemplates` 플래그가 도입되면서 컴파일러는 디렉티브 입력으로 바인딩되는 값의 타입을 직접 검사할 수 있게 되었습니다.
 이전에는 게터/세터를 선언할 때 게터의 타입 범위보다 세터의 타입을 더 넓게 지정하는 경우가 있었습니다.
@@ -1205,12 +1215,11 @@ can be refactored as follows:
 
 그래서 이런 디렉티브가 있다면:
 
-<code-example path="deprecation-guide/src/app/submit-button/submit-button.component.ts" language="typescript" region="submitButtonNarrow"></code-example>
+<code-example path="deprecation-guide/src/app/submit-button.component.ts" language="typescript" region="submitButtonNarrow"></code-example>
 
 이렇게 수정하면 됩니다:
 
-<code-example path="deprecation-guide/src/app/submit-button/submit-button.component.ts" language="typescript" region="submitButton"></code-example>
-
+<code-example path="deprecation-guide/src/app/submit-button.component.ts" language="typescript" region="submitButton"></code-example>
 
 <a id="full-template-type-check"></a>
 
@@ -1451,4 +1460,4 @@ If you rely on the behavior that the same object instance should cause change de
 
 <!-- end links -->
 
-@reviewed 2023-05-03
+@reviewed 2023-09-26

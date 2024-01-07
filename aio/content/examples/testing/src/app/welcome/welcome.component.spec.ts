@@ -7,7 +7,7 @@ import { WelcomeComponent } from './welcome.component';
 // #docregion mock-user-service
 class MockUserService {
   isLoggedIn = true;
-  user = { name: 'Test User'};
+  user = { name: 'Test User' };
 }
 // #enddocregion mock-user-service
 
@@ -19,10 +19,7 @@ describe('WelcomeComponent (class only)', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       // 테스트할 컴포넌트와 의존성으로 주입될 서비스를 프로바이더에 등록합니다.
-      providers: [
-        WelcomeComponent,
-        { provide: UserService, useClass: MockUserService }
-      ]
+      providers: [WelcomeComponent, { provide: UserService, useClass: MockUserService }],
     });
     // TestBed를 사용해서 컴포넌트 인스턴스와 서비스 인스턴스를 참조합니다.
     comp = TestBed.inject(WelcomeComponent);
@@ -50,7 +47,6 @@ describe('WelcomeComponent (class only)', () => {
 });
 
 describe('WelcomeComponent', () => {
-
   let comp: WelcomeComponent;
   let fixture: ComponentFixture<WelcomeComponent>;
   let componentUserService: UserService; // the actually injected service
@@ -72,17 +68,17 @@ describe('WelcomeComponent', () => {
 
     // #docregion config-test-module
     TestBed.configureTestingModule({
-       declarations: [ WelcomeComponent ],
-    // #enddocregion setup
-    // providers: [ UserService ],  // NO! 프로바이더에 실제 서비스 클래스를 등록하면 안됩니다!
-                                    // 목 서비스를 등록하세요.
-    // #docregion setup
-       providers: [ { provide: UserService, useValue: userServiceStub } ],
+      imports: [WelcomeComponent],
+      // #enddocregion setup
+      // providers: [ UserService ],  // NO! 프로바이더에 실제 서비스 클래스를 등록하면 안됩니다!
+      // 목 서비스를 등록하세요.
+      // #docregion setup
+      providers: [{ provide: UserService, useValue: userServiceStub }],
     });
     // #enddocregion config-test-module
 
     fixture = TestBed.createComponent(WelcomeComponent);
-    comp    = fixture.componentInstance;
+    comp = fixture.componentInstance;
 
     // #enddocregion setup
     // #docregion injected-service
@@ -105,12 +101,8 @@ describe('WelcomeComponent', () => {
   it('should welcome the user', () => {
     fixture.detectChanges();
     const content = el.textContent;
-    expect(content)
-      .withContext('"Welcome ..."')
-      .toContain('Welcome');
-    expect(content)
-      .withContext('expected name')
-      .toContain('Test User');
+    expect(content).withContext('"Welcome ..."').toContain('Welcome');
+    expect(content).withContext('expected name').toContain('Test User');
   });
 
   it('should welcome "Bubba"', () => {
@@ -123,19 +115,19 @@ describe('WelcomeComponent', () => {
     userService.isLoggedIn = false; // 환영 메시지는 아직 표시되지 않습니다.
     fixture.detectChanges();
     const content = el.textContent;
-    expect(content)
-      .withContext('not welcomed')
-      .not.toContain('Welcome');
+    expect(content).withContext('not welcomed').not.toContain('Welcome');
     expect(content)
       .withContext('"log in"')
       .toMatch(/log in/i);
   });
   // #enddocregion tests
 
-  it("should inject the component's UserService instance",
-    inject([UserService], (service: UserService) => {
-    expect(service).toBe(componentUserService);
-  }));
+  it("should inject the component's UserService instance", inject(
+    [UserService],
+    (service: UserService) => {
+      expect(service).toBe(componentUserService);
+    },
+  ));
 
   it('TestBed and Component UserService should be the same', () => {
     expect(userService).toBe(componentUserService);

@@ -1,10 +1,10 @@
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import { Rule } from '@angular-devkit/schematics';
+import { addRootImport } from '@schematics/angular/utility';
+import { Schema } from './schema';
 
-// 트리를 그대로 반환합니다.
-export function ngAdd(): Rule {
-  return (tree: Tree, context: SchematicContext) => {
-    context.addTask(new NodePackageInstallTask());
-    return tree;
-  };
+export function ngAdd(options: Schema): Rule {
+  // Add an import `MyLibModule` from `my-lib` to the root of the user's project.
+  // `my-lib` 패키지에 있는 `MyLibModule`을 프로젝트 최상단에 로드합니다.
+  return addRootImport(options.project, ({code, external}) =>
+    code`${external('MyLibModule', 'my-lib')}`);
 }

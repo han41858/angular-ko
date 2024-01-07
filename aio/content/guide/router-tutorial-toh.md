@@ -1071,6 +1071,8 @@ Follow these steps:
 
     *   Change the component class name to `HeroListComponent`.
     *   Change the `selector` to `app-hero-list`.
+    *   Change the `templateUrl` to `./hero-list.component.html`.
+    *   Change the `styleUrls` to `./hero-list.component.css`.
 
         <div class="alert is-helpful">
 
@@ -2996,6 +2998,29 @@ Setting the popup `RouterOutlet` to `null` clears the outlet and removes the sec
 이 값이 라우팅 규칙과 매칭되지는 않지만, 사용할 수 있는 값은 맞습니다.
 팝업이 표시되는 `RouterOutlet`에 `null` 값을 지정하면 라우터가 라우팅 영역의 내용을 비우며, 현재 URL에서 2차 라우팅 규칙에 해당하는 부분도 제거합니다.
 
+
+<div class="alert is-critical">
+
+**Note:** All commands in the array passed to `Router.navigate()` target a _specific segment_ in the `UrlTree`. 
+We specify the parent of the `ActivatedRoute` as the `relativeTo` option because we want to remove `'popup'` from the segment which holds its reference.
+It's important to always be aware of which segments the commands will be applied to.
+
+</div>
+
+<div class="alert is-helpful">
+
+When `relativeTo` is not provided to the `Router.navigate()` method, the commands are processed starting at the root.
+We could omit the `relativeTo` option in this particular example because the `'popup'` outlet appears at the root level of the configuration.
+  
+</div>
+
+<div class="alert is-helpful">
+
+If you want to close an outlet which appears at any segment depth, you could accomplish
+this by creating a `UrlTree` from the current URL, recursively clearing segment `children` matching the outlet name, and finally 
+calling `Router.navigateByUrl()` with the `root` segment of the current `UrlTree`.
+
+</div>
 
 <a id="guards"></a>
 <a id="milestone-5-route-guards"></a>

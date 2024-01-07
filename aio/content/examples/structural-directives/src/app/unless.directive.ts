@@ -1,13 +1,14 @@
 // #docplaster
 // #docregion
 // #docregion no-docs, skeleton
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import {Directive, Input, TemplateRef, ViewContainerRef} from '@angular/core';
 
 // #enddocregion skeleton
 /**
- * 평가 결과가 참으로 평가되면 DOM에서 템플릿을 제거합니다.
  * 평가 결과가 거짓으로 평가되면 DOM에 템플릿을 추가합니다.
 // #enddocregion no-docs
+ *
+ * `appUnless`에 할당된 표현식이 참으로 평가되면 템플릿 엘리먼트를 DOM에서 제거합니다.
  *
  * <div *appUnless="errorCount" class="success">
  *   Congrats! Everything is great!
@@ -21,7 +22,10 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 // #docregion no-docs
  */
 // #docregion skeleton
-@Directive({ selector: '[appUnless]'})
+@Directive({
+  standalone: true,
+  selector: '[appUnless]',
+})
 export class UnlessDirective {
   // #enddocregion skeleton
   private hasView = false;
@@ -29,7 +33,8 @@ export class UnlessDirective {
   // #docregion ctor
   constructor(
     private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef) { }
+    private viewContainer: ViewContainerRef,
+  ) {}
   // #enddocregion ctor
 
   // #docregion set

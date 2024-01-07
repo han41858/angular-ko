@@ -69,7 +69,7 @@ The following JavaScript and template expression syntax is not allowed:
 *   Increment and decrement operators, `++` and `--`
 *   Operator assignment, such as `+=` and `-=`
 *   The bitwise operators, such as `|` and `&`
-*   The [pipe operator](guide/pipes)
+*   The [pipe operator](guide/pipes-overview)
 -->
 [템플릿 표현식(template expressions)](guide/interpolation)과 비슷하게, 템플릿 실행문도 JavaScript와 비슷한 문법을 사용합니다.
 하지만 템플릿 실행문 파서는 템플릿 표현식과 다른 파서를 사용합니다.
@@ -81,7 +81,7 @@ JavaScript 문법 중 이런 문법은 템플릿 실행문에 사용할 수 없�
 *   증감 연산자 `++`, `--`
 *   복합대입 연산자 `+=`, `-=`
 *   비트 연산자 `|`, `&`
-*   [파이프 연산자](guide/pipes)
+*   [파이프 연산자](guide/pipes-overview)
 
 
 <!--
@@ -150,4 +150,4 @@ In the preceding `deleteHero(hero)`, the `hero` is the template input variable, 
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-08-14

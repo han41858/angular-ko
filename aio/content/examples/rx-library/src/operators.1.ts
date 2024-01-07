@@ -4,8 +4,7 @@
   we need to indent the imports with the function below.
 */
 // #docregion
-  import { of, pipe } from 'rxjs';
-  import { filter, map } from 'rxjs/operators';
+  import { of, filter, map, pipe } from 'rxjs';
 
 // #enddocregion
 
@@ -15,7 +14,7 @@ export function docRegionDefault(console: Console) {
 
   // 옵저버블을 처리하는 함수를 정의합니다.
   const squareOddVals = pipe(
-    filter((n: number) => n % 2 !== 0),
+    filter((n: number) => n % 2 === 1),
     map(n => n * n)
   );
 

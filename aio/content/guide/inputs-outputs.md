@@ -92,26 +92,26 @@ To use `@Input()`, you must configure the parent and child.
 <!--
 To use the `@Input()` decorator in a child component class, first import `Input` and then decorate the property with `@Input()`, as in the following example.
 
-<code-example header="src/app/item-detail/item-detail.component.ts" path="inputs-outputs/src/app/item-detail/item-detail.component.ts" region="use-input"></code-example>
+<code-example header="src/app/item-detail.component.ts" path="inputs-outputs/src/app/item-detail.component.ts" region="use-input"></code-example>
 
 In this case, `@Input()` decorates the property <code class="no-auto-link">item</code>, which has a type of `string`, however, `@Input()` properties can have any type, such as `number`, `string`, `boolean`, or `object`.
 The value for `item` comes from the parent component.
 
 Next, in the child component template, add the following:
 
-<code-example header="src/app/item-detail/item-detail.component.html" path="inputs-outputs/src/app/item-detail/item-detail.component.html" region="property-in-template"></code-example>
+<code-example header="src/app/item-detail.component.html" path="inputs-outputs/src/app/item-detail.component.html" region="property-in-template"></code-example>
 -->
 자식 컴포넌트에서 `@Input()` 데코레이터를 사용하려면 먼저 `Input` 심볼을 로드해야합니다.
 이렇게 구성하면 됩니다.
 
-<code-example header="src/app/item-detail/item-detail.component.ts" path="inputs-outputs/src/app/item-detail/item-detail.component.ts" region="use-input"></code-example>
+<code-example header="src/app/item-detail.component.ts" path="inputs-outputs/src/app/item-detail.component.ts" region="use-input"></code-example>
 
 이렇게 구현하면 `@Input()` 데코레이터는 `string` 타입으로 선언된 <code class="no-auto-link">item</code> 프로퍼티가 입력 프로퍼티라는 것을 지정하는데, `@Input()` 프로퍼티에는 `number`, `string`, `boolean`, `object` 등 어떠한 타입이라도 자유롭게 전달될 수 있습니다.
 `item` 프로퍼티에 맞는 타입으로 데이터를 전달하는 것은 부모 컴포넌트의 몫입니다.
 
 다음에는 자식 컴포넌트 템플릿에 이런 코드를 추가합니다:
 
-<code-example header="src/app/item-detail/item-detail.component.html" path="inputs-outputs/src/app/item-detail/item-detail.component.html" region="property-in-template"></code-example>
+<code-example header="src/app/item-detail.component.html" path="inputs-outputs/src/app/item-detail.component.html" region="property-in-template"></code-example>
 
 
 <!--
@@ -248,7 +248,7 @@ The `EventEmitter` then relays the data to the parent component.
 1.  In the component class, decorate a property with `@Output()`.
     The following example `newItemEvent` `@Output()` has a type of `EventEmitter`, which means it's an event.
 
-    <code-example header="src/app/item-output/item-output.component.ts" path="inputs-outputs/src/app/item-output/item-output.component.ts" region="item-output"></code-example>
+    <code-example header="src/app/item-output.component.ts" path="inputs-outputs/src/app/item-output.component.ts" region="item-output"></code-example>
 
     The different parts of the preceding declaration are as follows:
 
@@ -263,7 +263,7 @@ The `EventEmitter` then relays the data to the parent component.
 
 1.  Create an `addNewItem()` method in the same component class:
 
-    <code-example header="src/app/item-output/item-output.component.ts" path="inputs-outputs/src/app/item-output/item-output.component.ts" region="item-output-class"></code-example>
+    <code-example header="src/app/item-output.component.ts" path="inputs-outputs/src/app/item-output.component.ts" region="item-output-class"></code-example>
 
     The `addNewItem()` function uses the `@Output()`, `newItemEvent`, to raise an event with the value the user types into the `<input>`.
 -->
@@ -281,7 +281,7 @@ The `EventEmitter` then relays the data to the parent component.
 1.  컴포넌트 클래스에서 프로퍼티에 `@Output()` 데코레이터를 지정합니다.
     아래 예제 코드는 `EventEmitter` 타입으로 선언된 `newItemEvent` 프로퍼티에 `@Output()` 데코레이터를 지정한 코드입니다.
 
-    <code-example header="src/app/item-output/item-output.component.ts" path="inputs-outputs/src/app/item-output/item-output.component.ts" region="item-output"></code-example>
+    <code-example header="src/app/item-output.component.ts" path="inputs-outputs/src/app/item-output.component.ts" region="item-output"></code-example>
 
     이전 예제와는 이런 점이 다릅니다:
 
@@ -296,7 +296,7 @@ The `EventEmitter` then relays the data to the parent component.
 
 1.  자식 컴포넌트 클래스에 `addNewItem()` 메서드를 추가합니다:
 
-    <code-example header="src/app/item-output/item-output.component.ts" path="inputs-outputs/src/app/item-output/item-output.component.ts" region="item-output-class"></code-example>
+    <code-example header="src/app/item-output.component.ts" path="inputs-outputs/src/app/item-output.component.ts" region="item-output-class"></code-example>
 
     `addNewItem()` 함수는 `@Output()` 데코레이터가 지정된 `newItemEvent`를 활용해서 이벤트를 발생시키며, 이 때 `<input>` 엘리먼트에 사용자가 입력한 값을 함께 전달합니다.
 
@@ -310,7 +310,7 @@ The child's template has two controls.
 The first is an HTML `<input>` with a [template reference variable](guide/template-reference-variables), `#newItem`, where the user types in an item name.
 The `value` property of the `#newItem` variable stores what the user types into the `<input>`.
 
-<code-example header="src/app/item-output/item-output.component.html" path="inputs-outputs/src/app/item-output/item-output.component.html" region="child-output"></code-example>
+<code-example header="src/app/item-output.component.html" path="inputs-outputs/src/app/item-output.component.html" region="child-output"></code-example>
 
 The second element is a `<button>` with a `click` [event binding](guide/event-binding).
 
@@ -321,7 +321,7 @@ The `addNewItem()` method takes as its argument the value of the `#newItem.value
 하나는 사용자가 값을 입력할 수 있는 HTML `<input>` 엘리먼트이며, 이 엘리먼트에는 [템플릿 참조 변수](guide/template-reference-variables) `newItem`이 지정되어 있습니다.
 사용자가 `<input>` 엘리먼트에 입력한 값을 참조하려면 `#newItem` 변수의 `value` 프로퍼티를 참조하면 됩니다.
 
-<code-example header="src/app/item-output/item-output.component.html" path="inputs-outputs/src/app/item-output/item-output.component.html" region="child-output"></code-example>
+<code-example header="src/app/item-output.component.html" path="inputs-outputs/src/app/item-output.component.html" region="child-output"></code-example>
 
 그리고 다른 엘리먼트는 `click` [이벤트가 바인딩 된](guide/event-binding) `<button>` 엘리먼트입니다.
 
@@ -353,6 +353,29 @@ The `addItem()` method takes an argument in the form of a string and then adds t
 -->
 ### 부모 컴포넌트 템플릿 설정하기
 
+<!--
+1.  In the parent's template, bind the parent's method to the child's event.
+1.  Put the child selector, here `<app-item-output>`, within the parent component's template, `app.component.html`.
+
+    <code-example header="src/app/app.component.html" path="inputs-outputs/src/app/app.component.html" region="output-parent"></code-example>
+
+    The event binding, `(newItemEvent)='addItem($event)'`, connects the event in the child, `newItemEvent`, to the method in the parent, `addItem()`.
+
+    The `$event` contains the data that the user types into the `<input>` in the child template UI.
+
+    To see the `@Output()` working, add the following to the parent's template:
+
+    <code-example format="html" language="html">
+
+    &lt;ul&gt;
+      &lt;li *ngFor="let item of items"&gt;{{item}}&lt;/li&gt;
+    &lt;/ul&gt;
+
+    </code-example>
+
+    The `*ngFor` iterates over the items in the `items` array.
+    When you enter a value in the child's `<input>` and click the button, the child emits the event and the parent's `addItem()` method pushes the value to the `items` array and new item renders in the list.
+-->
 1.  부모 컴포넌트 메서드와 자식 컴포넌트의 이벤트는 부모 컴포넌트 템플릿에서 바인딩 합니다.
 1.  부모 컴포넌트 템플릿 파일 `app.component.html`에 자식 컴포넌트 셀렉터 `<app-item-output>`를 추가합니다.
 
@@ -374,6 +397,7 @@ The `addItem()` method takes an argument in the form of a string and then adds t
 
     `*ngFor`는 `items` 배열을 순회하며 템플릿을 반복해서 렌더링합니다.
     이제 사용자가 자식 컴포넌트 템플릿에서 `<input>`에 값을 입력하고 버튼을 누르면 자식 컴포넌트에서 이벤트가 발생하며, 이벤트가 발생하면 이 이벤트와 바인딩된 부모 컴포넌트 `addItem()` 메서드가 실행되면서 `items` 배열에 새로운 항목이 추가되고 화면에 렌더링됩니다.
+
 
 <!--
 ## Using `@Input()` and `@Output()` together
@@ -422,10 +446,74 @@ To combine property and event bindings using the banana-in-a-box syntax, `[()]`,
 프로퍼티 바인딩과 이벤트 바인딩을 결합한 _상자 안에 있는 바나나 (`[()]`)_ 문법에 대해 자세하게 알아보려면 [양방향 바인딩](guide/two-way-binding) 문서를 참고하세요.
 
 
+<!--
+## Additional Configurations
+-->
+## 추가 설정
+
+<!--
+### Configuring the child component input as required field
+-->
+### 자식 컴포넌트에서 입력 프로퍼티를 필수로 받기
+
+<!--
+To make `Input` property as required for a child component while passing values from parent component, first import `Input` and then decorate the property with `@Input({ required: true })`, as in the following example:
+
+<code-example header="src/app/item-details-metadata.component.ts" path="inputs-outputs/src/app/item-details-metadata.component.ts" region="use-input-metadata-required"></code-example>
+
+Next, in the parent template add the following: 
+
+<code-example header="src/app/app.component.html" path="inputs-outputs/src/app/app.component.html" region="input-parent-metadata"></code-example>
+
+If required inputs in a child component are not specified in the parent component template will result a compile time error: 
+
+<div class="alert is-helpful">
+NG8008: Required input item from component ItemDetailMetadataComponent must be specified.
+</div>
+-->
+자식 컴포넌트의 입력 프로퍼티를 필수 항목으로 지정하려면 `@Input({ required: true })`라고 지정하면 됩니다:
+
+<code-example header="src/app/item-details-metadata.component.ts" path="inputs-outputs/src/app/item-details-metadata.component.ts" region="use-input-metadata-required"></code-example>
+
+그리고 부모 템플릿에 이 내용을 추가하면 됩니다: 
+
+<code-example header="src/app/app.component.html" path="inputs-outputs/src/app/app.component.html" region="input-parent-metadata"></code-example>
+
+부모 컴포넌트 템플릿에서 자식 컴포넌트의 필수 입력 프로퍼티를 전달하지 않으면 컴파일 시점에 이런 에러가 발생합니다: 
+
+<div class="alert is-helpful">
+NG8008: Required input item from component ItemDetailMetadataComponent must be specified.
+</div>
+
+
+<!--
+### Configuring the child component input with transform functions
+-->
+### 자식 컴포넌트에서 입력 프로퍼티 값을 변환해야 할 때
+
+<!--
+To transform an `Input` property from string to boolean to a child component while passing values from parent component. first import `booleanAttribute` and then decorate the property with `@Input({ transform: booleanAttribute })`, as in the following example:
+
+<code-example header="src/app/item-details-metadata.component.ts" path="inputs-outputs/src/app/item-details-metadata.component.ts" region="use-input-metadata-boolean-transform"></code-example>
+
+<code-example header="src/app/app.component.html" path="inputs-outputs/src/app/app.component.html" region="input-parent-metadata"></code-example>
+
+Similarly, you can use predefined functions from the `angular/core` library to convert string to number as well, see `numberAttribute`.
+-->
+자식 컴포넌트에서 입력 프로퍼티로 불리언 문자열을 받아서 이 값을 진짜 불리언 값으로 변환해야 한다고 합시다.
+그러면 `booleanAttribute` 함수를 로드한 다음 `@Input({ transform: booleanAttribute })`라고 지정하면 됩니다:
+
+<code-example header="src/app/item-details-metadata.component.ts" path="inputs-outputs/src/app/item-details-metadata.component.ts" region="use-input-metadata-boolean-transform"></code-example>
+
+<code-example header="src/app/app.component.html" path="inputs-outputs/src/app/app.component.html" region="input-parent-metadata"></code-example>
+
+이와 비슷하게, 문자열로 받은 숫자값을 진짜 숫자 타입으로 변환하려면 `angular/core` 라이브러리로 제공되는 `numberAttribute` 함수를 사용하면 됩니다.
+
+
 <!-- links -->
 
 <!-- external links -->
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-09-01

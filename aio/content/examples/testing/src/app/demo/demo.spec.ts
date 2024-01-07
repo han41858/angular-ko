@@ -1,10 +1,5 @@
 // #docplaster
-import {
-  LightswitchComponent,
-  MasterService,
-  ValueService,
-  ReversePipe
-} from './demo';
+import { LightswitchComponent, MasterService, ValueService, ReversePipe } from './demo';
 
 ///////// Fakes /////////
 export class FakeValueService extends ValueService {
@@ -12,28 +7,27 @@ export class FakeValueService extends ValueService {
 }
 ////////////////////////
 describe('demo (no TestBed):', () => {
-
   // #docregion ValueService
   // Angular가 제공하는 테스트 유틸리티를 사용하지 않고 Jasmine을 그대로 사용합니다.
   describe('ValueService', () => {
     let service: ValueService;
-    beforeEach(() => { service = new ValueService(); });
+    beforeEach(() => {
+      service = new ValueService();
+    });
 
     it('#getValue should return real value', () => {
       expect(service.getValue()).toBe('real value');
     });
 
-    it('#getObservableValue should return value from observable',
-      (done: DoneFn) => {
-      service.getObservableValue().subscribe(value => {
+    it('#getObservableValue should return value from observable', (done: DoneFn) => {
+      service.getObservableValue().subscribe((value) => {
         expect(value).toBe('observable value');
         done();
       });
     });
 
-    it('#getPromiseValue should return value from a promise',
-      (done: DoneFn) => {
-      service.getPromiseValue().then(value => {
+    it('#getPromiseValue should return value from a promise', (done: DoneFn) => {
+      service.getPromiseValue().then((value) => {
         expect(value).toBe('promise value');
         done();
       });
@@ -57,15 +51,14 @@ describe('demo (no TestBed):', () => {
     });
 
     it('#getValue should return faked value from a fake object', () => {
-      const fake =  { getValue: () => 'fake value' };
+      const fake = { getValue: () => 'fake value' };
       masterService = new MasterService(fake as ValueService);
       expect(masterService.getValue()).toBe('fake value');
     });
 
     it('#getValue should return stubbed value from a spy', () => {
       // `getValue` 메소드가 정의된 스파이 객체를 정의합니다.
-      const valueServiceSpy =
-        jasmine.createSpyObj('ValueService', ['getValue']);
+      const valueServiceSpy = jasmine.createSpyObj('ValueService', ['getValue']);
 
       // `getValue` 스파이 메소드가 반환할 값을 정의합니다.
       const stubValue = 'stub value';
@@ -73,14 +66,11 @@ describe('demo (no TestBed):', () => {
 
       masterService = new MasterService(valueServiceSpy);
 
-      expect(masterService.getValue())
-        .withContext('service returned stub value')
-        .toBe(stubValue);
+      expect(masterService.getValue()).withContext('service returned stub value').toBe(stubValue);
       expect(valueServiceSpy.getValue.calls.count())
         .withContext('spy method was called once')
         .toBe(1);
-      expect(valueServiceSpy.getValue.calls.mostRecent().returnValue)
-        .toBe(stubValue);
+      expect(valueServiceSpy.getValue.calls.mostRecent().returnValue).toBe(stubValue);
     });
   });
   // #enddocregion MasterService
@@ -91,21 +81,17 @@ describe('demo (no TestBed):', () => {
       // #docregion no-before-each-setup-call
       const { masterService, stubValue, valueServiceSpy } = setup();
       // #enddocregion no-before-each-setup-call
-      expect(masterService.getValue())
-        .withContext('service returned stub value')
-        .toBe(stubValue);
+      expect(masterService.getValue()).withContext('service returned stub value').toBe(stubValue);
       expect(valueServiceSpy.getValue.calls.count())
         .withContext('spy method was called once')
         .toBe(1);
-      expect(valueServiceSpy.getValue.calls.mostRecent().returnValue)
-        .toBe(stubValue);
+      expect(valueServiceSpy.getValue.calls.mostRecent().returnValue).toBe(stubValue);
     });
     // #enddocregion no-before-each-test
 
     // #docregion no-before-each-setup
     function setup() {
-      const valueServiceSpy =
-        jasmine.createSpyObj('ValueService', ['getValue']);
+      const valueServiceSpy = jasmine.createSpyObj('ValueService', ['getValue']);
       const stubValue = 'stub value';
       const masterService = new MasterService(valueServiceSpy);
 
@@ -118,7 +104,9 @@ describe('demo (no TestBed):', () => {
   describe('ReversePipe', () => {
     let pipe: ReversePipe;
 
-    beforeEach(() => { pipe = new ReversePipe(); });
+    beforeEach(() => {
+      pipe = new ReversePipe();
+    });
 
     it('transforms "abc" to "cba"', () => {
       expect(pipe.transform('abc')).toBe('cba');
@@ -128,24 +116,17 @@ describe('demo (no TestBed):', () => {
       const palindrome = 'able was I ere I saw elba';
       expect(pipe.transform(palindrome)).toBe(palindrome);
     });
-
   });
 
   // #docregion Lightswitch
   describe('LightswitchComp', () => {
     it('#clicked() should toggle #isOn', () => {
       const comp = new LightswitchComponent();
-      expect(comp.isOn)
-        .withContext('off at first')
-        .toBe(false);
+      expect(comp.isOn).withContext('off at first').toBe(false);
       comp.clicked();
-      expect(comp.isOn)
-        .withContext('on after click')
-        .toBe(true);
+      expect(comp.isOn).withContext('on after click').toBe(true);
       comp.clicked();
-      expect(comp.isOn)
-        .withContext('off after second click')
-        .toBe(false);
+      expect(comp.isOn).withContext('off after second click').toBe(false);
     });
 
     it('#clicked() should set #message to "is on"', () => {
@@ -154,11 +135,8 @@ describe('demo (no TestBed):', () => {
         .withContext('off at first')
         .toMatch(/is off/i);
       comp.clicked();
-      expect(comp.message)
-        .withContext('on after clicked')
-        .toMatch(/is on/i);
+      expect(comp.message).withContext('on after clicked').toMatch(/is on/i);
     });
   });
   // #enddocregion Lightswitch
-
 });

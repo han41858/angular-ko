@@ -82,12 +82,10 @@ The guide assumes that you're familiar with building basic Angular apps, as desc
 
 <!--
 The main Angular modules for animations are `@angular/animations` and `@angular/platform-browser`.
-When you create a new project using the CLI, these dependencies are automatically added to your project.
 
 To get started with adding Angular animations to your project, import the animation-specific modules along with standard Angular functionality.
 -->
 Angular 애니메이션 모듈은 `@angular/animations`과 `@angular/platform-browser`로 구성됩니다.
-Angular CLI로 프로젝트를 생성하면 이 패키지들은 자동으로 프로젝트에 설치됩니다.
 
 프로젝트에 Angular 애니메이션을 추가하려면 먼저 애니메이션과 관련된 모듈을 Angular 애플리케이션에 추가해야 합니다.
 
@@ -98,18 +96,45 @@ Angular CLI로 프로젝트를 생성하면 이 패키지들은 자동으로 프
 ### 1단계: 애니메이션 모듈 활성화하기
 
 <!--
-Import `BrowserAnimationsModule`, which introduces the animation capabilities into your Angular root application module.
--->
-Angular 애플리케이션 최상위 모듈에 `BrowserAnimationsModule`을 추가합니다.
+Import `provideAnimations` from `@angular/platform-browser/animations` and add it to the providers list in the `bootstrapApplication` function call.
+```ts
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideAnimations(),
+  ]
+});
+```
+
+For `NgModule` based applications import `BrowserAnimationsModule`, which introduces the animation capabilities into your Angular root application module.
 
 <code-example header="src/app/app.module.ts" path="animations/src/app/app.module.1.ts"></code-example>
 
 <div class="alert is-helpful">
 
-<!--
-**NOTE**: <br /> When you use the CLI to create your app, the root application module `app.module.ts` is placed in the `src/app` folder.
+**NOTE**: <br />
+When you use the CLI to create your app, the root application module `app.module.ts` is placed in the `src/app` folder.
+
+</div>
 -->
+`@angular/platform-browser/animations` 패키지에서 `provideAnimations`를 로드하고 이 함수를 `bootstrapApplication` 함수에 이렇게 추가합니다.
+
+```ts
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideAnimations(),
+  ]
+});
+```
+
+`NgModule` 기반으로 개발한 애플리케이션이라면 Angular 애플리케이션 최상위 모듈에서 `BrowserAnimationsModule`을 로드하면 됩니다.
+
+<code-example header="src/app/app.module.ts" path="animations/src/app/app.module.1.ts"></code-example>
+
+<div class="alert is-helpful">
+
+**참고**: <br />
 **참고:** Angular CLI로 애플리케이션을 생성했다면 최상위 모듈은 `src/app/app.module.ts` 파일에 정의되어 있습니다.
+
 </div>
 
 
@@ -661,4 +686,4 @@ Check out this [presentation](https://www.youtube.com/watch?v=rnTK9meY5us), show
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-08-16

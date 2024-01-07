@@ -4,34 +4,31 @@
 # 템플릿에 파이프 사용하기
 
 <!--
-To apply a pipe, use the pipe operator (`|`) within a template expression as shown in the following code example, along with the *name* of the pipe, which is `date` for the built-in [`DatePipe`](api/common/DatePipe).
+To apply a pipe, use the pipe operator (`|`) within a template expression as shown in the following code example.
 
-The tabs in the example show the following:
+<code-example header="birthday.component.html (template)" path="pipes/src/app/birthday.component.html"></code-example>
 
-*   `app.component.html` uses `date` in a separate template to display a birthday.
-*   `hero-birthday1.component.ts` uses the same pipe as part of an in-line template in a component that also sets the birthday value.
+The component's `birthday` value flows through the pipe operator (`|`) to the [`DatePipe`](api/common/DatePipe) whose pipe name is `date`.
+The pipe renders the date in the default format as **Apr 15, 1988**.
 
-<code-tabs>
-    <code-pane header="src/app/app.component.html" region="hero-birthday-template" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/hero-birthday1.component.ts" path="pipes/src/app/hero-birthday1.component.ts"></code-pane>
-</code-tabs>
+Look at the component class.
 
-The component's `birthday` value flows through the pipe operator, `|` to the [`date`](api/common/DatePipe) function.
+<code-example header="birthday.component.ts (class)" path="pipes/src/app/birthday.component.ts"></code-example>
+
+Because this is a [standalone component](guide/standalone-components), it imports the `DatePipe` from `@angular/common`, the source of all built-in pipes.
 -->
 파이프를 사용하려면 아래 예제 코드처럼 템플릿 표현식에 파이프 연산자(`|`)를 사용한 후에 파이프 *이름* 을 지정하면 됩니다.
-기본으로 제공되는 [`DatePipe`](api/common/DatePipe)를 사용하려면 `date`를 붙이는 식입니다.
 
-예제 코드를 확인해 보세요:
+<code-example header="birthday.component.html (템플릿)" path="pipes/src/app/birthday.component.html"></code-example>
 
-*   `app.component.html`에서는 생일을 표시하기 위해 `date` 파이프 이름을 사용했습니다.
-*   `hero-birthday1.component.ts`에서는 같은 파이프를 사용하는데 인라인 템플릿을 사용했습니다.
+그러면 컴포넌트의 `birthday` 값이 파이프 연산자(`|`)를 통해 파이프 이름이 `date`인 [`DatePipe`](api/common/DatePipe)로 전달됩니다.
+이 파이프는 날짜 데이터를 시스템 기본 형식인 **Apr 15, 1988** 라고 변환합니다.
 
-<code-tabs>
-    <code-pane header="src/app/app.component.html" region="hero-birthday-template" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/hero-birthday1.component.ts" path="pipes/src/app/hero-birthday1.component.ts"></code-pane>
-</code-tabs>
+컴포넌트 클래스는 이렇습니다.
 
-그러면 컴포넌트의 `birthday` 값이 파이프 연산자 `|`를 통해 [`date`](api/common/DatePipe) 함수로 전달됩니다.
+<code-example header="birthday.component.ts (클래스)" path="pipes/src/app/birthday.component.ts"></code-example>
+
+이 컴포넌트는 [단독 컴포넌트](guide/standalone-components)이기 때문에 `@angular/common`에서 `DatePipe`를 직접 불러왔습니다.
 
 
-@reviewed 2022-04-07
+@reviewed 2023-08-14

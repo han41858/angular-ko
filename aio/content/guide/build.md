@@ -508,7 +508,7 @@ Internally, the Angular CLI uses the below `browserslist` configuration which ma
   Firefox ESR
   </code-example>
 
-To override the internal configuration, run [`ng generate config browserslist`](cli/generate#config-command), which generates a `.browserslistrc` configuration file in the the project directory.
+To override the internal configuration, run [`ng generate config browserslist`](cli/generate#config-command), which generates a `.browserslistrc` configuration file in the project directory.
 
 See the [browserslist repository](https://github.com/browserslist/browserslist) for more examples of how to target specific browsers and versions.
 
@@ -596,6 +596,19 @@ For a description of all options, see [webpack DevServer documentation](https://
 If you edit the proxy configuration file, you must relaunch the `ng serve` process to make your changes effective.
 
 </div>
+
+<div class="alert is-important">
+
+As of Node version 17, Node will not always resolve `http://localhost:<port>` to `http://127.0.0.1:<port>`
+depending on each machine's configuration.
+
+If you get an `ECONNREFUSED` error using a proxy targeting a `localhost` URL,
+you can fix this issue by updating the target from `http://localhost:<port>` to `http://127.0.0.1:<port>`.
+
+See [the http proxy middleware documentation](https://github.com/chimurai/http-proxy-middleware#nodejs-17-econnrefused-issue-with-ipv6-and-localhost-705)
+for more information.
+
+</div>
 -->
 Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용하기 때문에 특정 백엔드 주소로 향하는 HTTP 요청에 대해 [프록시를 설정](https://webpack.js.org/configuration/dev-server/#devserverproxy) 할 수 있습니다.
 이 프록시 설정은 빌드할 때 `--proxy-config` 옵션을 사용하거나 `angular.json` 파일에 지정해 두는 방식으로 사용합니다.
@@ -640,6 +653,19 @@ Angular CLI가 제공하는 개발 서버는 `webpack` 개발 서버를 사용�
 
 **참고**: <br />
 프록시 설정 파일의 내용을 변경하면 이 내용을 반영하기 위해 `ng serve` 명령을 다시 실행해야 합니다.
+
+</div>
+
+<div class="alert is-important">
+
+As of Node version 17, Node will not always resolve `http://localhost:<port>` to `http://127.0.0.1:<port>`
+depending on each machine's configuration.
+
+If you get an `ECONNREFUSED` error using a proxy targeting a `localhost` URL,
+you can fix this issue by updating the target from `http://localhost:<port>` to `http://127.0.0.1:<port>`.
+
+See [the http proxy middleware documentation](https://github.com/chimurai/http-proxy-middleware#nodejs-17-econnrefused-issue-with-ipv6-and-localhost-705)
+for more information.
 
 </div>
 

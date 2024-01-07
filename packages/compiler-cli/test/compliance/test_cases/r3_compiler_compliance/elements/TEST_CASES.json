@@ -253,7 +253,8 @@
         {
           "failureMessage": "Incorrect generated template."
         }
-      ]
+      ],
+      "skipForTemplatePipeline": true
     }
   ]
 }

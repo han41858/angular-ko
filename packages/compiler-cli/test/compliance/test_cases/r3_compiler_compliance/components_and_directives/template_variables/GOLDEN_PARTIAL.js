@@ -3,7 +3,7 @@
  ****************************************************************************************************/
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import * as i0 from "@angular/core";
-class ForOfDirective {
+export class ForOfDirective {
     constructor(view, template) {
         this.view = view;
         this.template = template;
@@ -12,11 +12,10 @@ class ForOfDirective {
 }
 ForOfDirective.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, deps: [{ token: i0.ViewContainerRef }, { token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive });
 ForOfDirective.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: ForOfDirective, selector: "[forOf]", inputs: { forOf: "forOf" }, usesOnChanges: true, ngImport: i0 });
-export { ForOfDirective };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, decorators: [{
             type: Directive,
             args: [{ selector: '[forOf]' }]
-        }], ctorParameters: function () { return [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }]; }, propDecorators: { forOf: [{
+        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }], propDecorators: { forOf: [{
                 type: Input
             }] } });
 
@@ -48,14 +47,13 @@ export declare class ForOfDirective {
 import { Component, NgModule } from '@angular/core';
 import { ForOfDirective } from './for_of';
 import * as i0 from "@angular/core";
-class MyComponent {
+export class MyComponent {
     constructor() {
         this.items = [{ data: 42 }, { data: 42 }];
     }
 }
 MyComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-MyComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: MyComponent, selector: "my-component", ngImport: i0, template: `<svg><g *for="let item of items"><circle></circle></g></svg>`, isInline: true, dependencies: [{ kind: "directive", type: i0.forwardRef(function () { return ForOfDirective; }), selector: "[forOf]", inputs: ["forOf"] }] });
-export { MyComponent };
+MyComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: MyComponent, selector: "my-component", ngImport: i0, template: `<svg><g *for="let item of items"><circle></circle></g></svg>`, isInline: true, dependencies: [{ kind: "directive", type: i0.forwardRef(() => ForOfDirective), selector: "[forOf]", inputs: ["forOf"] }] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyComponent, decorators: [{
             type: Component,
             args: [{
@@ -63,12 +61,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDE
                     template: `<svg><g *for="let item of items"><circle></circle></g></svg>`
                 }]
         }] });
-class MyModule {
+export class MyModule {
 }
 MyModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
 MyModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, declarations: [MyComponent, ForOfDirective] });
 MyModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule });
-export { MyModule };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, decorators: [{
             type: NgModule,
             args: [{ declarations: [MyComponent, ForOfDirective] }]
@@ -97,7 +94,7 @@ export declare class MyModule {
  ****************************************************************************************************/
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import * as i0 from "@angular/core";
-class ForOfDirective {
+export class ForOfDirective {
     constructor(view, template) {
         this.view = view;
         this.template = template;
@@ -106,11 +103,10 @@ class ForOfDirective {
 }
 ForOfDirective.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, deps: [{ token: i0.ViewContainerRef }, { token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive });
 ForOfDirective.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: ForOfDirective, selector: "[forOf]", inputs: { forOf: "forOf" }, usesOnChanges: true, ngImport: i0 });
-export { ForOfDirective };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, decorators: [{
             type: Directive,
             args: [{ selector: '[forOf]' }]
-        }], ctorParameters: function () { return [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }]; }, propDecorators: { forOf: [{
+        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }], propDecorators: { forOf: [{
                 type: Input
             }] } });
 
@@ -142,14 +138,13 @@ export declare class ForOfDirective {
 import { Component, NgModule } from '@angular/core';
 import { ForOfDirective } from './for_of';
 import * as i0 from "@angular/core";
-class MyComponent {
+export class MyComponent {
     constructor() {
         this.items = [{ name: 'one' }, { name: 'two' }];
     }
 }
 MyComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-MyComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: MyComponent, selector: "my-component", ngImport: i0, template: `<ul><li *for="let item of items">{{item.name}}</li></ul>`, isInline: true, dependencies: [{ kind: "directive", type: i0.forwardRef(function () { return ForOfDirective; }), selector: "[forOf]", inputs: ["forOf"] }] });
-export { MyComponent };
+MyComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: MyComponent, selector: "my-component", ngImport: i0, template: `<ul><li *for="let item of items">{{item.name}}</li></ul>`, isInline: true, dependencies: [{ kind: "directive", type: i0.forwardRef(() => ForOfDirective), selector: "[forOf]", inputs: ["forOf"] }] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyComponent, decorators: [{
             type: Component,
             args: [{
@@ -157,12 +152,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDE
                     template: `<ul><li *for="let item of items">{{item.name}}</li></ul>`
                 }]
         }] });
-class MyModule {
+export class MyModule {
 }
 MyModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
 MyModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, declarations: [MyComponent, ForOfDirective] });
 MyModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule });
-export { MyModule };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, decorators: [{
             type: NgModule,
             args: [{ declarations: [MyComponent, ForOfDirective] }]
@@ -191,7 +185,7 @@ export declare class MyModule {
  ****************************************************************************************************/
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import * as i0 from "@angular/core";
-class ForOfDirective {
+export class ForOfDirective {
     constructor(view, template) {
         this.view = view;
         this.template = template;
@@ -200,11 +194,10 @@ class ForOfDirective {
 }
 ForOfDirective.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, deps: [{ token: i0.ViewContainerRef }, { token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive });
 ForOfDirective.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: ForOfDirective, selector: "[forOf]", inputs: { forOf: "forOf" }, usesOnChanges: true, ngImport: i0 });
-export { ForOfDirective };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, decorators: [{
             type: Directive,
             args: [{ selector: '[forOf]' }]
-        }], ctorParameters: function () { return [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }]; }, propDecorators: { forOf: [{
+        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }], propDecorators: { forOf: [{
                 type: Input
             }] } });
 
@@ -236,7 +229,7 @@ export declare class ForOfDirective {
 import { Component, NgModule } from '@angular/core';
 import { ForOfDirective } from './for_of';
 import * as i0 from "@angular/core";
-class MyComponent {
+export class MyComponent {
     constructor() {
         this.items = [
             { name: 'one', infos: [{ description: '11' }, { description: '12' }] },
@@ -255,8 +248,7 @@ MyComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "
         </li>
       </ul>
     </li>
-  </ul>`, isInline: true, dependencies: [{ kind: "directive", type: i0.forwardRef(function () { return ForOfDirective; }), selector: "[forOf]", inputs: ["forOf"] }] });
-export { MyComponent };
+  </ul>`, isInline: true, dependencies: [{ kind: "directive", type: i0.forwardRef(() => ForOfDirective), selector: "[forOf]", inputs: ["forOf"] }] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyComponent, decorators: [{
             type: Component,
             args: [{
@@ -274,12 +266,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDE
   </ul>`
                 }]
         }] });
-class MyModule {
+export class MyModule {
 }
 MyModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
 MyModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, declarations: [MyComponent, ForOfDirective] });
 MyModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule });
-export { MyModule };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, decorators: [{
             type: NgModule,
             args: [{ declarations: [MyComponent, ForOfDirective] }]
@@ -311,7 +302,7 @@ export declare class MyModule {
  ****************************************************************************************************/
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import * as i0 from "@angular/core";
-class ForOfDirective {
+export class ForOfDirective {
     constructor(view, template) {
         this.view = view;
         this.template = template;
@@ -320,11 +311,10 @@ class ForOfDirective {
 }
 ForOfDirective.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, deps: [{ token: i0.ViewContainerRef }, { token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive });
 ForOfDirective.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: ForOfDirective, selector: "[forOf]", inputs: { forOf: "forOf" }, usesOnChanges: true, ngImport: i0 });
-export { ForOfDirective };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: ForOfDirective, decorators: [{
             type: Directive,
             args: [{ selector: '[forOf]' }]
-        }], ctorParameters: function () { return [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }]; }, propDecorators: { forOf: [{
+        }], ctorParameters: () => [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }], propDecorators: { forOf: [{
                 type: Input
             }] } });
 

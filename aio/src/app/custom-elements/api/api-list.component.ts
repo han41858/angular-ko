@@ -47,6 +47,7 @@ export class ApiListComponent implements OnInit {
   //   { value: 'decorator', title: 'Decorator' },
   //   { value: 'directive', title: 'Directive' },
   //   { value: 'element', title: 'Element'},
+  //   { value: 'block', title: 'Block'},
   //   { value: 'enum', title: 'Enum' },
   //   { value: 'function', title: 'Function' },
   //   { value: 'interface', title: 'Interface' },
@@ -62,6 +63,7 @@ export class ApiListComponent implements OnInit {
     { value: 'decorator', title: '데코레이터' },
     { value: 'directive', title: '디렉티브' },
     { value: 'element', title: '엘리먼트'},
+    { value: 'block', title: '블록'},
     { value: 'enum', title: '열거값' },
     { value: 'function', title: '함수' },
     { value: 'interface', title: '인터페이스' },
@@ -74,6 +76,7 @@ export class ApiListComponent implements OnInit {
   // statuses: Option[] = [
   //   { value: 'all', title: 'All' },
   //   { value: 'stable', title: 'Stable'},
+  //   { value: 'developer-preview', title: 'Developer Preview'},
   //   { value: 'deprecated', title: 'Deprecated' },
   //   { value: 'security-risk', title: 'Security Risk' }
   // ];
@@ -81,6 +84,7 @@ export class ApiListComponent implements OnInit {
   statuses: Option[] = [
     { value: 'all', title: '전체' },
     { value: 'stable', title: '안정 버전'},
+    { value: 'developer-preview', title: '개발자 프리뷰'},
     { value: 'deprecated', title: '지원 중단' },
     { value: 'security-risk', title: '보안 위험' }
   ];
@@ -141,7 +145,10 @@ export class ApiListComponent implements OnInit {
     const matchesQuery = (item: ApiItem) =>
       sectionNameMatches || item.name.indexOf(query) !== -1;
     const matchesStatus = (item: ApiItem) =>
-      status === 'all' || status === item.stability || (status === 'security-risk' && item.securityRisk);
+      status === 'all' ||
+      status === item.stability ||
+      (status === 'security-risk' && item.securityRisk) ||
+      (status === 'developer-preview' && item.developerPreview);
     const matchesType = (item: ApiItem) =>
       type === 'all' || type === item.docType;
 

@@ -43,7 +43,7 @@ Start with the top-level component that hosts the view, and nest animations in t
 
 To enable routing transition animation, do the following:
 
-1.  Import the routing module into the application and create a routing configuration that defines the possible routes.
+1.  Create a routing configuration that defines the possible routes. For NgModule based applications, this will include creating a `RouterModule` and adding it to the main `AppModule`.
 1.  Add a router outlet to tell the Angular router where to place the activated components in the DOM.
 1.  Define the animation.
 
@@ -71,9 +71,9 @@ Angular 라우터가 제공하는 애니메이션 기능은 라우팅 규칙이 
 
 화면 전환 애니메이션을 적용하려면 다음과 같이 작업합니다:
 
-1.  애플리케이션에 라우팅 모듈을 로드하고 라우팅 규칙을 등록합니다.
-1.  라우팅 규칙과 연결된 컴포넌트가 DOM에 표시되도록 라우팅 영역\(router outlet\)을 추가합니다
-1.  애니메이션을 정의합니다.
+1. 라우팅 규칙을 정의합니다. NgModule 방식으로 개발한 애플리케이션이라면 이 라우팅 규칙이 `RouterModule`에 등록되며 `AppModule`로 로드할 것입니다. 
+1. 라우팅 규칙과 연결된 컴포넌트가 DOM에 표시되도록 라우팅 영역\(router outlet\)을 추가합니다
+1. 애니메이션을 정의합니다.
 
 *Home* 화면에서 *About* 화면으로 이동하는 동안 `HomeComponent`와 `AboutComponent`에 애니메이션이 어떻게 적용되는지 살펴봅시다.
 두 컴포넌트는 `AppComponent`의 자식 컴포넌트입니다.
@@ -92,15 +92,27 @@ Angular 라우터가 제공하는 애니메이션 기능은 라우팅 규칙이 
 ## 라우팅 규칙 설정
 
 <!--
-To begin, configure a set of routes using methods available in the `RouterModule` class.
-This route configuration tells the router how to navigate.
+To begin, configure a set of routes. This route configuration tells the router how to navigate.
 
-Use the `RouterModule.forRoot` method to define a set of routes.
-Also, add `RouterModule` to the `imports` array of the main module, `AppModule`.
+- Create an array called `routes` in `app.routes.ts` to define a set of routes. 
+- Add the routes to the `provideRouter` function in the providers array in `app.config.ts`.
+
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes)
+  ]
+};
+```
 
 <div class="alert is-helpful">
 
 **NOTE**: <br />
+For `NgModule` based applications:
+
+Use the `RouterModule.forRoot` method to define a set of routes.
+Also, add `RouterModule` to the `imports` array of the main module, `AppModule`.
+
 Use the `RouterModule.forRoot` method in the root module, `AppModule`, to register top-level application routes and providers.
 For feature modules, call the `RouterModule.forChild` method instead.
 
@@ -108,7 +120,7 @@ For feature modules, call the `RouterModule.forChild` method instead.
 
 The following configuration defines the possible routes for the application.
 
-<code-example header="src/app/app.module.ts" path="animations/src/app/app.module.ts" region="route-animation-data"></code-example>
+<code-example header="src/app/app.routes.ts" path="animations/src/app/app.routes.ts" region="route-animation-data"></code-example>
 
 The `home` and `about` paths are associated with the `HomeComponent` and `AboutComponent` views.
 The route configuration tells the Angular router to instantiate the `HomeComponent` and `AboutComponent` views when the navigation matches the corresponding path.
@@ -124,15 +136,28 @@ For example, the name *animation* used in the preceding example is an arbitrary 
 
 </div>
 -->
-먼저, `RouterModule` 클래스가 제공하는 메소드를 사용해서 라우팅 규칙을 정의합니다.
-라우터는 이 라우팅 규칙에 정의된 대로 화면을 전환합니다.
+먼저, 라우팅 규칙을 정의합니다.
+라우터는 라우팅 규칙 설정에 따라 화면을 전환합니다.
 
-이 예제에서는 `RouterModule.forRoot()` 함수를 사용해서 최상위 라우팅 규칙을 정의합니다.
-이 함수로 지정하는 라우팅 규칙은 `AppModule`의 `imports` 배열에 추가해서 등록합니다.
+- `app.routes.ts` 파일을 만들고 `routes`라는 배열을 정의합니다.
+- 이렇게 정의한 라우팅 규칙을 `app.config.ts` 배열에 `provideRouter` 함수로 등록합니다.
+
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes)
+  ]
+};
+```
 
 <div class="alert is-helpful">
 
 **참고**: <br />
+`NgModule` 기반으로 개발한 애플리케이션은:
+
+라우팅 규칙을 정의할 때 `RouterModule.forRoot` 메서드를 사용하세요.
+그런 후에 `RouterModule`을 메인 모듈 `AppModule`의 `imports` 배열에 추가하면 됩니다.
+
 `RouterModule.forRoot()` 메소드 실행 결과를 `AppModule`에 등록하면 앱 전역에 라우팅 규칙과 라우팅 관련 서비스 프로바이더가 등록됩니다.
 그래서 자식 모듈에서는 자연스럽게 서비스 프로바이더를 사용할 수 있으며, 라우팅 규칙을 지정하려면 `RouterModule.forChild()` 메소드를 사용하면 됩니다.
 
@@ -140,7 +165,7 @@ For example, the name *animation* used in the preceding example is an arbitrary 
 
 이번 예제에서는 이렇게 정의합니다.
 
-<code-example header="src/app/app.module.ts" path="animations/src/app/app.module.ts" region="route-animation-data"></code-example>
+<code-example header="src/app/app.routes.ts" path="animations/src/app/app.routes.ts" region="route-animation-data"></code-example>
 
 코드에서 보면 `home`과 `about` 경로는 각각 `HomeComponent`, `AboutComponent`와 연결되어 있습니다.
 그래서 URL이 변경되면 라우터가 `HomeComponent`, `AboutComponent` 인스턴스를 생성해서 화면에 표시합니다.

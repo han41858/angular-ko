@@ -88,14 +88,10 @@ The following steps define this type of schematic.
 
     <code-example header="projects/my-lib/schematics/ng-add/index.ts (ng-add Rule Factory)" path="schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"></code-example>
 
-The only step needed to provide initial `ng add` support is to trigger an installation task using the `SchematicContext`.
-The task uses the user's preferred package manager to add the library to the project's `package.json` configuration file, and install it in the project's `node_modules` directory.
-
-In this example, the function receives the current `Tree` and returns it without any modifications.
-If you need to, do additional setup when your package is installed, such as generating files, updating configuration, or any other initial setup your library requires.
+The Angular CLI will install the latest version of the library automatically, and this example is taking it a step further by adding the `MyLibModule` to the root of the application. The `addRootImport` function accepts a callback that needs to return a code block. You can write any code inside of the string tagged with the `code` function and any external symbol have to be wrapped with the `external` function to ensure that the appropriate import statements are generated.
 -->
 `ng add` 스키매틱을 정의하면 라이브러리 설치 과정을 확장할 수 있습니다.
-다음 순서로 진행해 봅시다.
+이런 순서로 진행해 봅시다.
 
 1.  `<라이브러리-최상위-폴더>/schematics/ng-add` 폴더로 이동합니다.
 1.  메인 파일 `index.ts`를 만듭니다.
@@ -103,14 +99,11 @@ If you need to, do additional setup when your package is installed, such as gene
 
     <code-example header="projects/my-lib/schematics/ng-add/index.ts (ng-add 룰 팩토리)" path="schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"></code-example>
 
-`ng add` 스키매틱에 필요한 것은 `SchematicContext`를 활용해서 설치 작업을 시작하는 것 뿐입니다.
-그러면 사용자가 설정한 기본 패키지 매니저로 `node_modules` 폴더에 라이브러리를 설치하며, 프로젝트에 있는 `package.json` 설정 파일을 수정합니다.
-
-위에서 작성한 예제 코드는 `Tree` 객체를 받지만 이 객체를 수정하지 않고 그대로 반환합니다.
-필요하다면 라이브러리 패키지를 설치한 이후에 어떤 파일을 생성한다던지, 환경설정 파일을 수정한다던지, 라이브러리 초기화 작업을 실행할 수 있습니다.
+그러면 Angular CLI가 이 라이브러리의 최신 버전을 자동으로 찾아서 설치할 수 있기 때문에, 애플리케이션 최상위에 `MyLibModule`을 추가하는 방식으로 간단하게 활용할 수 있습니다.
+콜백 함수를 추가로 실행하려면 `addRootImport` 함수를 사용하면 됩니다.
+`code` 태그 안에는 어떠한 코드라도 작성할 수 있으며, 외부로 공개되는 심볼들은 모두 `external` 함수로 래핑되어야 합니다.
 
 
-<!--
 ### Define dependency type
 -->
 ### 의존성 타입 정의하기

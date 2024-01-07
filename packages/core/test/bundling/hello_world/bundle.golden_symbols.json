@@ -9,6 +9,9 @@
     "name": "APP_INITIALIZER"
   },
   {
+    "name": "AfterRenderEventManager"
+  },
+  {
     "name": "AnonymousSubject"
   },
   {
@@ -34,6 +37,9 @@
   },
   {
     "name": "CONTAINER_HEADER_OFFSET"
+  },
+  {
+    "name": "ChainedInjector"
   },
   {
     "name": "ComponentFactory"
@@ -63,6 +69,9 @@
     "name": "DOCUMENT2"
   },
   {
+    "name": "DistinctUntilChangedOperator"
+  },
+  {
     "name": "DistinctUntilChangedSubscriber"
   },
   {
@@ -81,9 +90,6 @@
     "name": "ENVIRONMENT_INITIALIZER"
   },
   {
-    "name": "EffectManager"
-  },
-  {
     "name": "ElementRef"
   },
   {
@@ -97,6 +103,9 @@
   },
   {
     "name": "GenericBrowserDomAdapter"
+  },
+  {
+    "name": "HAS_CHILD_VIEWS_TO_REFRESH"
   },
   {
     "name": "HAS_TRANSPLANTED_VIEWS"
@@ -189,9 +198,6 @@
     "name": "NG_TEMPLATE_SELECTOR"
   },
   {
-    "name": "NOOP_CLEANUP_FN"
-  },
-  {
     "name": "NOT_FOUND"
   },
   {
@@ -234,6 +240,9 @@
     "name": "NodeInjectorFactory"
   },
   {
+    "name": "NoopNgZone"
+  },
+  {
     "name": "NullInjector"
   },
   {
@@ -261,10 +270,7 @@
     "name": "R3Injector"
   },
   {
-    "name": "ReactiveLViewConsumer"
-  },
-  {
-    "name": "ReactiveNode"
+    "name": "REACTIVE_LVIEW_CONSUMER_NODE"
   },
   {
     "name": "RefCountOperator"
@@ -274,9 +280,6 @@
   },
   {
     "name": "RendererFactory2"
-  },
-  {
-    "name": "RootViewRef"
   },
   {
     "name": "RuntimeError"
@@ -348,12 +351,6 @@
     "name": "ViewRef"
   },
   {
-    "name": "Watch"
-  },
-  {
-    "name": "WeakRefImpl"
-  },
-  {
     "name": "ZONE_IS_STABLE_OBSERVABLE"
   },
   {
@@ -382,9 +379,6 @@
   },
   {
     "name": "_injectImplementation"
-  },
-  {
-    "name": "_nextReactiveId"
   },
   {
     "name": "_platformInjector"
@@ -420,6 +414,9 @@
     "name": "applyView"
   },
   {
+    "name": "assertConsumerNode"
+  },
+  {
     "name": "attachPatchData"
   },
   {
@@ -444,13 +441,10 @@
     "name": "cleanUpView"
   },
   {
-    "name": "clearViewRefreshFlag"
-  },
-  {
     "name": "collectNativeNodes"
   },
   {
-    "name": "commitLViewConsumerIfHasProducers"
+    "name": "collectNativeNodesInLContainer"
   },
   {
     "name": "concatStringsWithSpace"
@@ -463,6 +457,12 @@
   },
   {
     "name": "connectableObservableDescriptor"
+  },
+  {
+    "name": "consumerIsLive"
+  },
+  {
+    "name": "consumerPollProducersForChange"
   },
   {
     "name": "convertToBitFlags"
@@ -492,9 +492,6 @@
     "name": "createTView"
   },
   {
-    "name": "currentConsumer"
-  },
-  {
     "name": "deepForEach"
   },
   {
@@ -504,7 +501,19 @@
     "name": "detachMovedView"
   },
   {
-    "name": "detectChangesInternal"
+    "name": "detectChangesInChildComponents"
+  },
+  {
+    "name": "detectChangesInComponent"
+  },
+  {
+    "name": "detectChangesInEmbeddedViews"
+  },
+  {
+    "name": "detectChangesInView"
+  },
+  {
+    "name": "detectChangesInViewIfAttached"
   },
   {
     "name": "diPublicInInjector"
@@ -520,6 +529,9 @@
   },
   {
     "name": "enterView"
+  },
+  {
+    "name": "epoch"
   },
   {
     "name": "executeCheckHooks"
@@ -541,6 +553,9 @@
   },
   {
     "name": "forwardRef"
+  },
+  {
+    "name": "freeConsumers"
   },
   {
     "name": "from"
@@ -609,9 +624,6 @@
     "name": "getNullInjector"
   },
   {
-    "name": "getOrCreateCurrentLViewConsumer"
-  },
-  {
     "name": "getOrCreateInjectable"
   },
   {
@@ -645,9 +657,6 @@
     "name": "getPromiseCtor"
   },
   {
-    "name": "getReactiveLViewConsumer"
-  },
-  {
     "name": "getSimpleChangesStore"
   },
   {
@@ -667,9 +676,6 @@
   },
   {
     "name": "importProvidersFrom"
-  },
-  {
-    "name": "inNotificationPhase"
   },
   {
     "name": "includeViewProviders"
@@ -783,6 +789,9 @@
     "name": "map"
   },
   {
+    "name": "markAncestorsForTraversal"
+  },
+  {
     "name": "markViewDirty"
   },
   {
@@ -843,19 +852,16 @@
     "name": "processInjectorTypesWithProviders"
   },
   {
+    "name": "producerRemoveLiveConsumerAtIndex"
+  },
+  {
+    "name": "producerUpdateValueVersion"
+  },
+  {
     "name": "profiler"
   },
   {
-    "name": "promise"
-  },
-  {
     "name": "refCount"
-  },
-  {
-    "name": "refreshComponent"
-  },
-  {
-    "name": "refreshContainsDirtyView"
   },
   {
     "name": "refreshContentQueries"
@@ -964,9 +970,6 @@
   },
   {
     "name": "updateMicroTaskStatus"
-  },
-  {
-    "name": "updateViewsToRefresh"
   },
   {
     "name": "urlParsingNode"

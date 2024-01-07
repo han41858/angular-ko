@@ -47,58 +47,13 @@ Angular는 [Sauce Labs](https://saucelabs.com/)와 함께 유닛 테스트를 �
 ## 폴리필 (Polyfills)
 
 <!--
-Angular is built on the latest standards of the web platform.
-Targeting such a wide range of browsers is challenging because they do not support all features of modern browsers.
-You compensate by loading polyfill scripts \("polyfills"\) for the browsers that you must support.
-See instructions on how to include polyfills into your project below.
-
-<div class="alert is-important">
-
-The suggested polyfills are the ones that run full Angular applications.
-You might need additional polyfills to support features not covered by this list.
-
-</div>
-
-<div class="alert is-helpful">
-
-**NOTE**: <br />
-Polyfills cannot magically transform an old, slow browser into a modern, fast one.
-
-</div>
--->
-Angular는 최신 웹 플랫폼 표준을 준수하며 만들어졌습니다.
-하지만 최신 브라우저들이 대부분 지원하는 기능을 제대로 지원하지 않는 일부 브라우저에서는 Angular 애플리케이션의 기능 중 일부가 제대로 동작하지 않을 수 있습니다.
-이 문제는 폴리필 스크립트를 로드하는 방법으로 해결할 수 있습니다.
-개발자들이 자주 사용하는 폴리필은 아래 문단을 참고하세요.
-
-<div class="alert is-important">
-
-이 문서에서 소개하는 폴리필은 Angular 애플리케이션을 제대로 동작시키기 위해 필요한 것들입니다.
-그래서 필요한 기능이 더 있다면 또 다른 폴리필을 추가해야 할 수도 있습니다.
-
-</div>
-
-<div class="alert is-helpful">
-
-**참고**: <br />
-다만, 오래되고 느린 브라우저에 폴리필을 사용했다고 해서 최신 스펙으로 동작하고 속도도 빠른 브라우저로 짠 변신하는 것은 아닙니다.
-
-</div>
-
-
-<!--
-## Enabling polyfills with CLI projects
--->
-## Angular CLI로 만든 프로젝트에 폴리필 활성화하기
-
-<!--
 The [Angular CLI](cli) provides support for polyfills.
-If you are not using the CLI to create your projects, see [Polyfill instructions for non-CLI users](#non-cli).
+When a new project is created, the CLI also creates an `src/polyfills.ts` file.
+If your application requires any polyfills, you can add them to the `src/polyfills.ts` file.
 
-The `polyfills` options of the [browser](cli/build) and [test](cli/test) builder can be a full path for a file \(Example: `src/polyfills.ts`\) or,
-relative to the current workspace or module specifier \(Example: `zone.js`\).
+If you are not using the CLI to create your projects, see [Polyfills for non-CLI users](#non-cli) section.
 
-If you create a TypeScript file, make sure to include it in the `files` property of your `tsconfig` file.
+If you create a TypeScript file for a custom polyfill, make sure to include it in the `files` property of your `tsconfig` file.
 
 <code-example language="jsonc" syntax="jsonc">
 
@@ -117,11 +72,20 @@ If you create a TypeScript file, make sure to include it in the `files` property
 </code-example>
 -->
 [Angular CLI](cli)는 폴리필을 지원합니다.
+새로 만든 프로젝트를 보면 `src/polyfills.ts` 파일이 그 역할을 합니다.
+
 프로젝트를 생성할 때 Angular CLI를 사용하지 않았다면 [Angular CLI를 사용하지 않은 환경에서 폴리필 설정하기](#non-cli) 섹션을 참고하세요.
 
-[browser](cli/build) 빌더와 [test](cli/test) 빌더에 `polyfills` 옵션을 사용할 때는 `src/polyfills.ts`와 같이 현재 워크스페이스을 기준으로 하는 상대주소와 `zone.js`와 같이 모듈을 의미하도록 지정하면 됩니다.
-
 TypeScript 파일을 새로 만들었다면 `tsconfig` 파일의 `files` 프로퍼티를 다음과 같이 지정하면 됩니다.
+
+
+
+When a new project is created, the CLI also creates an `src/polyfills.ts` file.
+If your application requires any polyfills, you can add them to the `src/polyfills.ts` file.
+
+If you are not using the CLI to create your projects, see [Polyfills for non-CLI users](#non-cli) section.
+
+If you create a TypeScript file for a custom polyfill, make sure to include it in the `files` property of your `tsconfig` file.
 
 <code-example language="jsonc" syntax="jsonc">
 

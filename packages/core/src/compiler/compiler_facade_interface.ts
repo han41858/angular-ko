@@ -80,12 +80,14 @@ export type InputMap = {
     bindingPropertyName: string,
     classPropertyName: string,
     required: boolean,
+    transformFunction: InputTransformFunction,
   };
 };
 
 export type Provider = unknown;
 export type Type = Function;
 export type OpaqueValue = unknown;
+export type InputTransformFunction = any;
 
 export enum FactoryTarget {
   Directive = 0,
@@ -172,6 +174,7 @@ export interface R3DirectiveMetadataFacade {
   providers: Provider[]|null;
   viewQueries: R3QueryMetadataFacade[];
   isStandalone: boolean;
+  isSignal: boolean;
   hostDirectives: R3HostDirectiveMetadataFacade[]|null;
 }
 
@@ -190,7 +193,11 @@ export interface R3ComponentMetadataFacade extends R3DirectiveMetadataFacade {
 export interface R3DeclareDirectiveFacade {
   selector?: string;
   type: Type;
-  inputs?: {[classPropertyName: string]: string|[string, string]};
+  inputs?: {
+    [classPropertyName: string]: string|
+    [bindingPropertyName: string,
+        classPropertyName: string, transformFunction?: InputTransformFunction]
+  };
   outputs?: {[classPropertyName: string]: string};
   host?: {
     attributes?: {[key: string]: OpaqueValue};
@@ -207,6 +214,7 @@ export interface R3DeclareDirectiveFacade {
   usesOnChanges?: boolean;
   isStandalone?: boolean;
   hostDirectives?: R3HostDirectiveMetadataFacade[]|null;
+  isSignal?: boolean;
 }
 
 export interface R3DeclareComponentFacade extends R3DeclareDirectiveFacade {

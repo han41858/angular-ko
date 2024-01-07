@@ -45,21 +45,9 @@ See the <live-example></live-example> for a working example containing the code 
 <!--
 Property binding moves a value in one direction, from a component's property into a target element property.
 
-<div class="alert is-helpful">
-
-For more information on listening for events, see [Event binding](guide/event-binding).
-
-</div>
-
 To read a target element property or call one of its methods, see the API reference for [ViewChild](api/core/ViewChild) and [ContentChild](api/core/ContentChild).
 -->
 프로퍼티 바인딩에서 데이터는 컴포넌트 프로퍼티에서 대상 엘리먼트 프로퍼티로, 한방향으로만 움직입니다.
-
-<div class="alert is-helpful">
-
-이벤트를 감지하는 방법에 대해 자세하게 알아보려면 [이벤트 바인딩](guide/event-binding) 문서를 참고하세요.
-
-</div>
 
 대상 엘리먼트의 프로퍼티를 읽거나 메서드를 실행하려면 [ViewChild](api/core/ViewChild) API 문서와 [ContentChild](api/core/ContentChild) API 문서를 참고하세요.
 
@@ -70,6 +58,12 @@ To read a target element property or call one of its methods, see the API refere
 ## 프로퍼티에 바인딩하기
 
 <!--
+<div class="alert is-helpful">
+
+For information on listening for events, see [Event binding](guide/event-binding).
+
+</div>
+
 To bind to an element's property, enclose it in square brackets, `[]`, which identifies the property as a target property.
 
 A target property is the DOM property to which you want to assign a value.
@@ -90,12 +84,18 @@ The brackets, `[]`, cause Angular to evaluate the right-hand side of the assignm
 
 Without the brackets, Angular treats the right-hand side as a string literal and sets the property to that static value.
 
-To assign a string to a property, type the following code:
+To assign a string to a component's property (such as the `childItem` of the `ItemDetailComponent`), you use the same bracket assignment notation:
 
 <code-example path="property-binding/src/app/app.component.html" region="no-evaluation" header="src/app.component.html"></code-example>
 
 Omitting the brackets renders the string `parentItem`, not the value of `parentItem`.
 -->
+<div class="alert is-helpful">
+
+이벤트를 감지하는 방법에 대해 자세하게 알아보려면 [이벤트 바인딩](guide/event-binding) 문서를 참고하세요.
+
+</div>
+
 엘리먼트 프로퍼티를 바인딩하려면 대상 프로퍼티를 대괄호로 감싸는 문법\(`[]`\)을 사용합니다.
 
 이 때 대상 프로퍼티는 값을 지정하려고 하는 DOM 프로퍼티입니다.
@@ -113,8 +113,6 @@ Omitting the brackets renders the string `parentItem`, not the value of `parentI
 그리고 대괄호를 사용하지 않으면 등호 오른쪽에 있는 문자열은 단순한 문자열 리터럴로 사용되어 프로퍼티에 바인딩됩니다.
 
 <code-example path="property-binding/src/app/app.component.html" region="no-evaluation" header="src/app.component.html"></code-example>
-
-위 예제에서 대상 프로퍼티에 바인딩되는 값은 `parentItem` 프로퍼티의 값이 아니라 `parentItem`이라는 문자열입니다.
 
 
 <!--
@@ -233,4 +231,4 @@ Because the value of the property `isUnchanged` is `true` in the `AppComponent`,
 * [클래스 & 스타일 바인딩](guide/class-binding)
 * [어트리뷰트 바인딩](guide/attribute-binding)
 
-@reviewed 2022-04-14
+@reviewed 2023-09-01

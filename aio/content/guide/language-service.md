@@ -304,6 +304,36 @@ Either directly install the "Eclipse IDE for Web and JavaScript developers" pack
 "Eclipse IDE for Web and JavaScript developers" 패키지를 설치하면 Angular 언어지원 서버가 이미 포함되어 있습니다.
 아니면 Eclipse 마켓에서 [Eclipse Wild Web Developer](https://marketplace.eclipse.org/content/wild-web-developer-html-css-javascript-typescript-nodejs-angular-json-yaml-kubernetes-xml)를 찾아 설치하세요.
 
+### Neovim
+
+<!--
+1. [Setup coc.nvim](https://github.com/neoclide/coc.nvim)
+
+2. [Configure the Angular Language Service](https://github.com/iamcco/coc-angular/issues/70#issuecomment-1616340751)
+-->
+1. [coc.nvim](https://github.com/neoclide/coc.nvim) 파일을 수정합니다.
+
+2. [Angular Language Service](https://github.com/iamcco/coc-angular/issues/70#issuecomment-1616340751)를다음과 같이 설정합니다.
+
+```
+{
+  "languageserver": {
+    "angular": {
+      "command": "ngserver",
+      "args": [
+        "--stdio",
+        "--tsProbeLocations",
+        "/usr/local/lib/node_modules/typescript/lib",
+        "--ngProbeLocations",
+        "/usr/local/lib/node_modules/@angular/language-server/bin"
+      ],
+      "filetypes": ["ts", "typescript", "html"],
+      "trace.server.verbosity": "verbose"
+    }
+  }
+}
+```
+
 
 <!--
 ## How the Language Service works
@@ -344,9 +374,15 @@ The Angular Language Services then looks at `data.---` within its context, asks 
 -->
 ## 참고
 
+<!--
+*   For more in-depth information on the implementation, see the [Angular Language Service API](https://github.com/angular/angular/blob/main/packages/language-service/src/types.ts)
+*   For more on the design considerations and intentions, see [design documentation here](https://github.com/angular/vscode-ng-language-service/wiki/Design)
+*   See also [Chuck Jazdzewski's presentation](https://www.youtube.com/watch?v=ez3R0Gi4z5A&t=368s) on the Angular Language Service from [ng-conf](https://www.ng-conf.org) 2017
+-->
 *   [언어지원 서비스 API](https://github.com/angular/angular/blob/main/packages/language-service/src/types.ts)를 직접 구현하는 방법에 대해 알아 보세요.
 *   언어지원 서비스가 어떤 철학으로 설계되었는지 확인하려면 [설계 문서](https://github.com/angular/vscode-ng-language-service/wiki/Design)를 참고하세요.
 *   [ng-conf](https://www.ng-conf.org/) 2017에서 [Chuck Jazdzewski가 발표한 영상](https://www.youtube.com/watch?v=ez3R0Gi4z5A&t=368s)을 찾아보는 것도 도움이 될 것입니다.
+
 
 <!-- links -->
 

@@ -1,37 +1,25 @@
-# Using observables to pass values
+<a id="using-observables-to-pass-values"></a>
 
 <!--
-Observables provide support for passing messages between parts of your application.
-They are used frequently in Angular and are a technique for event handling, asynchronous programming, and handling multiple values.
+# Using observables for streams of values
+-->
+# 연속해서 전달되는 데이터를 옵저버블로 처리하기
+
+<!--
+Observables are a technique for event handling, asynchronous programming, and handling multiple values emitted over time.
 
 The observer pattern is a software design pattern in which an object, called the *subject*, maintains a list of its dependents, called *observers*, and notifies them automatically of state changes.
 This pattern is similar \(but not identical\) to the [publish/subscribe](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) design pattern.
 
-Observables are declarative &mdash;that is, you define a function for publishing values, but it is not executed until a consumer subscribes to it.
-The subscribed consumer then receives notifications until the function completes, or until they unsubscribe.
-
-An observable can deliver multiple values of any type &mdash;literals, messages, or events, depending on the context.
-The API for receiving values is the same whether the values are delivered synchronously or asynchronously.
-Because setup and teardown logic are both handled by the observable, your application code only needs to worry about subscribing to consume values, and when done, unsubscribing.
-Whether the stream was keystrokes, an HTTP response, or an interval timer, the interface for listening to values and stopping listening is the same.
-
-Because of these advantages, observables are used extensively within Angular, and for application development as well.
+Angular apps tend to use the [RxJS library for Observables](https://rxjs.dev/). This overview covers just the basics of observables as implemented by that library.
 -->
-옵저버블을 사용하면 애플리케이션 한 곳에서 다른 곳으로 메시지를 보낼 수 있습니다.
-Angular에서는 이벤트 핸들링이나 비동기 로직, 여러 값을 연달아 처리할 때 등에 옵저버블을 자주 사용합니다.
+옵저버블은 이벤트 처리, 비동기 프로그래밍, 여러 값을 연달아 처리할 때 사용합니다.
 
 옵저버 패턴은 *옵저버\(observer\)* 라는 의존성 객체들의 목록을 관리하고, 이 옵저버가 *구독\(subject\)* 하고 있다가 상태가 변화하는 것을 감지하는 소프트웨어 디자인 패턴입니다.
 [구독/발행](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) 디자인 패턴과 비슷하지만 동일하지는 않습니다.
 
-옵저버블은 값을 발행하는 함수를 정의하는 것인데, 이 값은 구독자가 없으면 처리되지 않습니다.
-구독자가 있을 때만 이 구독자가 옵저버블이 발행한 값을 처리하며, 이 동작은 옵저버블이 종료되거나 구독이 끝날때까지 계속됩니다.
-
-옵저버블은 리터럴, 메시지, 이벤트 등 다양한 값을 여러번 전달할 수 있습니다.
-그리고 값을 받는 쪽에서는 동기든, 비동기든 같은 방식으로 값을 처리합니다.
-그래서 처리 로직을 자유롭게 쪼갤 수 있기 때문에, 애플리케이션 코드에서는 이 값을 어떻게 처리할지만 신경쓰면 됩니다.
-데이터가 전달되는 스트림이 키입력이든, HTTP 응답이든, 반복되는 타이머나 어떤 인터페이스를 통하더라도 처리하는 방법은 같습니다.
-
-이런 장점들 때문에 Angular는 옵저버블을 적극적으로 사용합니다.
+Angular 앱은 [RxJS 라이브러리](https://rxjs.dev/)를 활용합니다.
+이 라이브러리를 어떻게 활용하는지 간단하게 알아봅시다.
 
 
 <!--
@@ -40,27 +28,153 @@ Angular에서는 이벤트 핸들링이나 비동기 로직, 여러 값을 연�
 ## 용어 정의, 사용 방법
 
 <!--
-As a publisher, you create an `Observable` instance that defines a *subscriber* function.
-This is the function that is executed when a consumer calls the `subscribe()` method.
-The subscriber function defines how to obtain or generate values or messages to be published.
+Observables are declarative.  You define a function for publishing values &mdash; the *source* &mdash; but that function is not executed until a consumer subscribes to the observable by calling the observable's `subscribe` method.
 
-To execute the observable you have created and begin receiving notifications, you call its `subscribe()` method, passing an *observer*.
-This is a JavaScript object that defines the handlers for the notifications you receive.
-The `subscribe()` call returns a `Subscription` object that has an `unsubscribe()` method, which you call to stop receiving notifications.
+This *subscriber* then receives notifications from the observable until it completes, emits an error, or the consumer unsubscribes.
 
-Here's an example that demonstrates the basic usage model by showing how an observable could be used to provide geolocation updates.
+An observable can deliver multiple values of any type &mdash; literals, messages, or events &mdash; depending on the context. A stream of keystrokes, an HTTP response, and the ticks of an interval timer are among the typical observable sources. The observable API applies consistently across all of these diverse sources.
 
-<code-example header="Observe geolocation updates" class="no-auto-link" path="observables/src/geolocation.ts"></code-example>
+An observable can emit one, many, or no values while subscribed. It can emit synchronously (emit the first value immediately) or asynchronously (emit values over time).
+
+Because setup and teardown logic are both handled by the observable, your application code only needs to worry about subscribing to consume values and unsubscribing when done.
+
+[RxJS *Operators*](guide/rx-library#operators) enable transformations of observable values. An *Operator* takes an observable source, manipulates the values from that source in some useful way, and returns a new observable of the transformed values. When you subscribe to that new observable, you get the results of the intermediate transformations.
+
+This ability to progressively transform observable values - and even combine multiple observable sources into a consolidated observable - is one of the most powerful and appealing of RxJS features.
+
+Accordingly, observables are used extensively within Angular applications and within Angular itself. 
+
+<div class="alert is-helpful">
+
+To be fair, RxJS has a steep learning curve and sometimes bewildering behavior. Use them judiciously.
+
+</div>
 -->
-발행자는 *구독자* 함수를 사용해서 `Observable` 인스턴스를 생성합니다.
-구독자 함수는 구독자가 `subscribe()` 메소드를 사용할 때 실행되며, 이 함수에서 데이터나 메시지를 생성하고 발행합니다.
+옵저버블은 명확하게 선언하는 방식으로 사용합니다.
+값을 발행하는 함수는 *소스\(source\)* 라고 하는데, 이 함수는 누군가 이 옵저버블을 구독하는 쪽에서 옵저버블의 `subscribe()` 메서드를 실행해야 실행됩니다.
 
-그리고 구독자 함수를 `subscribe()`로 구독할 때 *옵저버(observer)*를 함께 전달하며, 옵저버는 옵저버블에서 발행된 데이터를 어떻게 처리할지 JavaScript 객체 형태로 정의한 것입니다.
-옵저버블의 `subscribe()` 함수를 실행하면 반환되는 `Subscription` 타입의 객체가 옵저버이며, 이 객체의 `unsubscribe()`를 실행하면 옵저버블 구독을 해지할 수 있습니다.
+옵저버블이 전달하는 값을 받는 객체를 *구독자\(subscriber\)* 라고 하며, 구독자는 옵저버블이 종료되거나 에러가 발생할 때, 구독을 종료할 때까지 옵저버블이 보내는 값을 계속 받습니다.
 
-다음 코드는 옵저버블을 사용해서 사용자의 접속 위치를 확인하는 예제 코드입니다.
+옵저버블은 기본 자료형, 메시지, 이벤트 등 다양한 종류의 값을 여러번 보낼 수 있습니다.
+그래서 연속된 키 입력, HTTP 응답, 타이머가 주기적으로 실행되는 것은 옵저버블을 활용하기 좋은 예입니다.
+옵저버블 API를 활용하면 소스가 다양하더라도 로직을 일관되게 작성할 수 있습니다.
 
-<code-example header="접속 위치 추적하기" class="no-auto-link" path="observables/src/geolocation.ts"></code-example>
+옵저버블은 값을 하나 이상, 필요하다면 아무 값도 발행하지 않을 수 있습니다.
+그리고 첫번째 값은 동기 방식으로 즉시 보낸다고 한다면, 이후 값들은 비동기로 보낸다고 할 수 있습니다.
+
+옵저버블을 생성하고 처리하는 로직은 옵저버블이 제공하는 방식을 활용하면 되기 때문에, 애플리케이션 코드에서는 이 옵저버블을 구독하고 그 이후에 받는 값을 어떻게 활용할 지, 원하는 값을 받고 난 후에는 어떻게 구독을 종료할지 고민하면 됩니다.
+
+옵저버블로 전달되는 값은 [RxJS *연산자*](guide/rx-library#operators)로 처리합니다.
+이 *연산자* 는 옵저버블 소스를 받아서 이 옵저버블이 전달하는 값을 원하는 대로 변환한 후에 새로운 옵저버블로 전달합니다.
+옵저버블을 새로 구독하는 구독자는 변환된 값을 그대로 받을 수 있습니다.
+
+옵저버블로 전달되는 값을 단계적으로 변환하거나, 여러 옵저버블 소스를 하나로 조합하는 기능은 RxJS가 제공하는 강력한 기능 중에서도 특히 흥미롭습니다.
+
+그래서 Angular와 Angular 애플리케이션은 모두 옵저버블을 다양하게 활용합니다. 
+
+<div class="alert is-helpful">
+
+솔직히 얘기하자면, RxJS를 학습하는 러닝 커브는 조금 가파르며, 동작하는 방식을 예상하기 어려울 수 있습니다.
+신중하게 도입을 검토하세요.
+
+</div>
+
+
+<!--
+## Observable
+-->
+## 옵저버블(Observable)
+
+<!--
+An observable is an object that can emit one or more values over time.
+
+Here's a simple observable that will emit `1`, then `2`, then `3`, and then completes.
+
+<code-example header="An observable emitting 3 integers" path="observables/src/subscribing.ts" region="observable"></code-example>
+
+<div class="alert is-helpful">
+
+The RxJS method, `of(...values)`, creates an `Observable` instance that synchronously delivers each of the values provided as arguments. 
+
+</div>
+-->
+옵저버블은 하나 이상의 값을 여러 시간에 걸쳐 발행하는 객체입니다.
+
+`1`, `2`, `3` 값을 전달하고 종료되는 옵저버블이라면 이렇습니다.
+
+<code-example header="An observable emitting 3 integers" path="observables/src/subscribing.ts" region="observable"></code-example>
+
+<div class="alert is-helpful">
+
+RxJS가 제공하는 `of(...값)` 메서드는 `Observable` 인스턴스를 생성하고 인자로 전달한 값을 동기 방식으로 전달합니다.
+
+</div>
+
+
+<!--
+### Naming conventions for observables
+-->
+### 옵저버블 명명 규칙
+
+<!--
+Notice the "&dollar;" on the end of the observable name. The "&dollar;" signifies that the variable is an observable "&dollar;tream" of values.
+
+This is a widely adopted naming convention for observables. 
+
+Not everyone likes it. Because Angular applications are written in TypeScript and code editors are good at revealing an object's type, you can usually tell  when a variable is an observable. Many feel the "&dollar;" suffix is unnecessary and potentially misleading.
+
+On the other hand, the trailing "&dollar;" can help you quickly identify observables when scanning the code. Also, if you want a property to hold the most recent value emitted from an observable, it can be convenient to use the source observable's root name without the "&dollar;".
+
+The Angular framework and tooling do not enforce this convention. Feel free to use it or not.
+-->
+옵저버블의 이름에는 뒤에 "&dollar;"를 붙입니다.
+이 때 "&dollar;"는 옵저버블 스트림("&dollar;"tream)을 의미합니다.
+
+보통은 옵저버블 이름을 이렇게 붙입니다. 
+
+하지만 반드시 그래야 하는 것은 아닙니다.
+Angular 애플리케이션은 TypeScript로 구현하며, 요즘 코드 에디터들은 객체의 타입을 명확하게 구분할 수 있기 때문에 어떤 변수가 옵저버블 타입인지는 바로 확인할 수 있습니다.
+그래서 "&dollar;" 접미사는 필요하지 않으며 오히려 헷갈린다는 의견도 있습니다.
+
+하지만 어떤 변수 이름에 "&dollar;"가 붙었다면, 코드를 훑어보는 중이라도 이 변수가 옵저버블이라는 것을 빠르게 확인할 수 있습니다.
+그리고 옵저버블로 전달받은 값 중 가장 최근에 받은 값을 변수에 저장해두려면, 옵저버블로 선언한 변수 이름 뒤에 "&dollar;"만 생략하면 일관성도 유지할 수 있습니다.
+
+Angular는 이 규칙을 강제하지는 않습니다.
+마음에 드는 대로 사용하세요 :)
+
+
+<!--
+## Subscribing
+-->
+## 구독(subscribing)
+
+<!--
+An observable begins publishing values only when someone subscribes to it. That "1-2-3" observable won't emit any numbers until you subscribe by calling the observable's `subscribe()` method.
+
+If you want to begin publishing but don't care about the values or when it completes, you can call subscribe with no arguments at all
+
+<code-example header="Start publishing" path="observables/src/subscribing.ts" region="no-params"></code-example>
+
+You're more likely interested in doing something with the values. Pass in a method - called a "next" handler - that does something every time the observable emits a value.
+
+<code-example header="Subscribe to emitted values" path="observables/src/subscribing.ts" region="next-param"></code-example>
+
+Passing a `next()` function into `subscribe` is a convenient syntax for this most typical case. If you also need to know when the observable emits an error or completes, you'll have to pass in an `Observer` instead.
+-->
+옵저버블은 누군가 옵저버블을 구독할 때 값을 발행하기 시작합니다.
+그래서 "1-2-3"라는 값을 발행하도록 설정된 옵저버블도 누군가 옵저버블의 `subscribe()` 메서드를 실행해서 구독하지 않는 한 값을 내보내지 않습니다.
+
+값을 확인하거나 옵저버블이 종료되는 것을 신경쓸 필요 없이 단순하게 옵저버블을 시작하고 싶은 경우라면 아무 인자 없이 `subscribe()` 메서드를 실행하면 됩니다.
+
+<code-example header="Start publishing" path="observables/src/subscribing.ts" region="no-params"></code-example>
+
+보통은 옵저버블이 전달하는 값으로 무언가 하고 싶은 경우가 대부분입니다.
+그렇다면 `next` 핸들러를 사용해서 옵저버블이 보내는 값을 처리할 수 있습니다.
+
+<code-example header="Subscribe to emitted values" path="observables/src/subscribing.ts" region="next-param"></code-example>
+
+`subscribe()`를 실행하면서 `next()` 함수를 함께 전달하는 방법은 옵저버블을 활용하는 방법 중 가장 간단한 방법입니다.
+이보다 복잡하게 옵저버블에서 발생하는 에러나 옵저버블이 종료되는 것을 처리하려면 `Observer` 객체를 사용해야 합니다.
 
 
 <!--
@@ -69,221 +183,59 @@ Here's an example that demonstrates the basic usage model by showing how an obse
 ## 옵저버 정의하기
 
 <!--
-A handler for receiving observable notifications implements the `Observer` interface.
-It is an object that defines callback methods to handle the three types of notifications that an observable can send:
+An observable has three types of notifications: "next", "error", and "complete".
+
+An `Observer` is an object whose properties contain handlers for these notifications.
 
 | Notification type | Details |
 |:---               |:---     |
-| `next`            | Required. A handler for each delivered value. Called zero or more times after execution starts.                                                           |
-| `error`           | Optional. A handler for an error notification. An error halts execution of the observable instance.                                                       |
-| `complete`        | Optional. A handler for the execution-complete notification. Delayed values can continue to be delivered to the next handler after execution is complete. |
+| `next`            | A handler for each delivered value. Called zero or more times after execution starts.                                                           |
+| `error`           | A handler for an error notification. An error halts execution of the observable instance and unsubscribes.                                                       |
+| `complete`        | A handler for the execution-complete notification. Do not expect `next` or `error` to be called again. Automatically unsubscribes. |
 
-An observer object can define any combination of these handlers.
-If you don't supply a handler for a notification type, the observer ignores notifications of that type.
--->
-옵저버블 스트림을 처리하려면 `Observer` 인터페이스로 옵저버를 정의해야 합니다.
-이 옵저버는 옵저버블이 보내는 세 종류의 알림을 처리하는 콜백 함수로 구성됩니다.
+Here is an example of passing an observer object to `subscribe`:
 
-| 알림 타입      | 설명                                                                                        |
-|:-----------|:------------------------------------------------------------------------------------------|
-| `next`     | 필수. 데이터 스트림을 처리하는 핸들러입니다. 옵저버블 구독을 시작한 후 여러번 실행됩니다.                                       |
-| `error`    | 필수는 아님. 에러 스트림을 처리하는 핸들러입니다. 에러 스트림이 전달되면 이후 옵저버블 로직이 실행되지 않습니다.                          |
-| `complete` | 필수는 아님. 옵저버블 종료 스트림을 처리하는 핸들러입니다. 옵저버블에서 지연 로직을 사용한다면 옵저버블이 종료된 이후에도 새로운 데이터가 전달될 수 있습니다. |
-
-옵저버 객체는 이 3가지 핸들러를 조합해서 정의합니다.
-특정 타입의 알림을 사용하지 않는다면, 이 타입에 해당하는 핸들러를 생략해도 됩니다.
-
-
-<!--
-## Subscribing
--->
-## 구독 (Subscribing)
-
-<!--
-An `Observable` instance begins publishing values only when someone subscribes to it.
-You subscribe by calling the `subscribe()` method of the instance, passing an observer object to receive the notifications.
+<code-example header="Subscribe with full observer object" path="observables/src/subscribing.ts" region="object-param"></code-example>
 
 <div class="alert is-helpful">
 
-In order to show how subscribing works, we need to create a new observable.
-There is a constructor that you use to create new instances, but for illustration, we can use some methods from the RxJS library that create simple observables of frequently used types:
+Alternatively, you can create the `Observer` object with functions named `next()`, `error()` and `complete()`. 
 
-| RxJS methods     | Details |
-|:---              |:---     |
-| `of(...items)`   | Returns an `Observable` instance that synchronously delivers the values provided as arguments.                        |
-| `from(iterable)` | Converts its argument to an `Observable` instance. This method is commonly used to convert an array to an observable. |
+<code-example path="observables/src/subscribing.ts" region="object-with-fns"></code-example>
+
+This works because JavaScript turns the function names into the property names.
 
 </div>
 
-Here's an example of creating and subscribing to a simple observable, with an observer that logs the received message to the console:
+All of the handler properties are optional.
+If you omit a handler for one of these properties, the observer ignores notifications of that type.
+-->
+옵저버블은 세 종류 알림을 처리합니다: "next", "error", "complete"
 
-<code-example header="Subscribe using observer" path="observables/src/subscribing.ts" region="observer"></code-example>
+`Observer`는 이 세 종류 알림을 처리하는 핸들러로 이루어진 객체입니다.
 
-Alternatively, the `subscribe()` method can accept callback function definitions in line, for `next`, `error`, and `complete` handlers.
-For example, the following `subscribe()` call is the same as the one that specifies the predefined observer:
+| 알림 종류      | 설명                                                                                      |
+|:-----------|:----------------------------------------------------------------------------------------|
+| `next`     | 옵저버블로 전달되는 값을 처리합니다. 옵저버블 구독이 시작된 후 한번도 실행되지 않을 수 있고, 여러번 실행될 수도 있습니다.                  |
+| `error`    | 옵저버블에서 에러가 발생한 것을 처리합니다. 옵저버블에서 에러가 발생하면 옵저버블 인스턴스가 종료되며 구독도 종료됩니다.                     |
+| `complete` | 옵저버블이 종료된 것을 처리합니다. 이 핸들러가 실행되고 나면 `next`나 `error`는 더이상 실행되지 않습니다. 옵저버블 구독은 자동으로 종료됩니다. |
 
-<code-example header="Subscribe with positional arguments" path="observables/src/subscribing.ts" region="sub_fn"></code-example>
+`subscribe()`에 옵저버를 전달하려면 이렇게 실행하면 됩니다:
 
-In either case, a `next` handler is required.
-The `error` and `complete` handlers are optional.
+<code-example header="Subscribe with full observer object" path="observables/src/subscribing.ts" region="object-param"></code-example>
 
 <div class="alert is-helpful">
 
-**NOTE**: <br />
-A `next()` function could receive, for instance, message strings, or event objects, numeric values, or structures, depending on context.
-As a general term, we refer to data published by an observable as a *stream*.
-Any type of value can be represented with an observable, and the values are published as a stream.
+`Observer` 객체를 명시적으로 생성하는 대신 `next()`, `error()`, `complete()`로 이루어진 객체를 사용해도 됩니다. 
 
-</div>
--->
-`Observable` 인스턴스는 누군가 이 옵저버블을 구독해야 데이터를 발행하기 시작합니다.
-옵저버블 인스턴스에서 제공하는 `subscribe()` 함수를 실행하면 구독을 시작할 수 있으며, 이 때 옵저버블을 처리하는 옵저버 객체를 함께 전달합니다.
+<code-example path="observables/src/subscribing.ts" region="object-with-fns"></code-example>
 
-<div class="alert is-helpful">
-
-구독이 동작하는 것을 확인하려면 새로운 옵저버블을 생성해야 합니다.
-이 때 활용할 수 있는 RxJS 함수는 여러가지지만, 이 문서에서는 간단하게 개념만 살펴볼 것이기 때문에 다음 함수들을 주로 사용할 것입니다:
-
-| RxJS 메서드     | 설명                                                                                    |
-|:-------------|:--------------------------------------------------------------------------------------|
-| `of(...배열)`  | 인자로 전달한 배열의 항목을 하나씩 전달하는 `Observable` 인스턴스를 생성합니다.                                    |
-| `from(이터러블)` | 인자로 전달한 이터러블의 항목을 하나씩 전달하는 `Observable` 인스턴스를 생성합니다. 이 메소드는 배열을 옵저버블로 변환할 때 자주 사용합니다. |
+JavaScript는 함수 이름을 프로퍼티 이름으로 변혼하기 때문에 문제없이 동작합니다.
 
 </div>
 
-옵저버블을 간단하게 생성하고 구독하는 예제를 살펴봅시다.
-옵저버는 메시지를 받으면 콘솔에 로그를 출력합니다:
-
-<code-example header="옵저버 객체로 구독하기" path="observables/src/subscribing.ts" region="observer"></code-example>
-
-이 예제처럼 `subscribe()` 메소드를 실행하면서 옵저버 객체를 전달하는 방식 대신, `subscribe()` 메소드를 실행하면서 인자로 `next`, `error`, `complete` 핸들러를 바로 지정할 수도 있습니다.
-아래 코드를 실행한 결과는 이전과 같습니다.
-
-<code-example header="함수의 인자로 구독하기" path="observables/src/subscribing.ts" region="sub_fn"></code-example>
-
-두 경우 모두 `next` 핸들러는 필수항목입니다.
-`error`와 `complete` 핸들러는 생략할 수 있습니다.
-
-<div class="alert is-helpful">
-
-**참고**: <br />
-이 때 `next()` 함수는 객체의 인스턴스나 문자열 형태의 메시지, 이벤트 객체, 숫자 등 어떠한 객체라도 자유롭게 받을 수 있습니다.
-이렇게 옵저버블로 발행되는 데이터를 *스트림(stream)* 이라고 합니다.
-옵저버블은 타입에 관계없이 자유롭게 데이터를 처리할 수 있으며, 이 데이터는 스트림이 되어 구독자에게 전달됩니다.
-
-</div>
-
-
-
-<!--
-## Creating observables
--->
-## 옵저버블 생성하기
-
-<!--
-Use the `Observable` constructor to create an observable stream of any type.
-The constructor takes as its argument the subscriber function to run when the observable's `subscribe()` method executes.
-A subscriber function receives an `Observer` object, and can publish values to the observer's `next()` method.
-
-For example, to create an observable equivalent to the `of(1, 2, 3)` above, you could do something like this:
-
-<code-example header="Create observable with constructor" path="observables/src/creating.ts" region="subscriber"></code-example>
-
-To take this example a little further, we can create an observable that publishes events.
-In this example, the subscriber function is defined inline.
-
-<code-example header="Create with custom fromEvent function" path="observables/src/creating.ts" region="fromevent"></code-example>
-
-Now you can use this function to create an observable that publishes keydown events:
-
-<code-example header="Use custom fromEvent function" path="observables/src/creating.ts" region="fromevent_use"></code-example>
--->
-옵저버블 스트림을 생성하려면 `Observable` 생성자를 사용하면 됩니다.
-이 때 생성자는 구독자 함수(subscriber function)를 인자로 받으며, 인자로 받은 함수에 정의된 내용으로 옵저버블 스트림을 생성합니다.
-구독자 함수는 `Observer` 객체를 인자로 받는데, 이 객체의 `next()` 메소드를 실행하면 옵저버블 스트림을 발행할 수 있습니다.
-
-예를 들어 `Observable.of(1, 2, 3)`과 같은 동작을 하는 옵저버블을 직접 구현하려면 다음과 같이 작성합니다:
-
-<code-example header="Create observable with constructor" path="observables/src/creating.ts" region="subscriber"></code-example>
-
-이 코드는 이벤트 객체를 발생하는 옵저버블을 만들 때도 활용할 수 있습니다.
-이 경우라면 다음과 같이 정의하면 됩니다.
-
-<code-example header="fromEvent() 함수로 옵저버블 생성하기" path="observables/src/creating.ts" region="fromevent"></code-example>
-
-이 함수를 사용해서 키다운 이벤트를 처리하려면 다음과 같이 작성합니다:
-
-<code-example header="fromEvent() 함수 활용하기" path="observables/src/creating.ts" region="fromevent_use"></code-example>
-
-
-<!--
-## Multicasting
--->
-## 멀티캐스팅 (Multicasting)
-
-<!--
-A typical observable creates a new, independent execution for each subscribed observer.
-When an observer subscribes, the observable wires up an event handler and delivers values to that observer.
-When a second observer subscribes, the observable then wires up a new event handler and delivers values to that second observer in a separate execution.
-
-Sometimes, instead of starting an independent execution for each subscriber, you want each subscription to get the same values &mdash;even if values have already started emitting.
-This might be the case with something like an observable of clicks on the document object.
-
-*Multicasting* is the practice of broadcasting to a list of multiple subscribers in a single execution.
-With a multicasting observable, you don't register multiple listeners on the document, but instead re-use the first listener and send values out to each subscriber.
-
-When creating an observable you should determine how you want that observable to be used and whether or not you want to multicast its values.
-
-Let's look at an example that counts from 1 to 3, with a one-second delay after each number emitted.
-
-<code-example header="Create a delayed sequence" path="observables/src/multicasting.ts" region="delay_sequence"></code-example>
-
-Notice that if you subscribe twice, there will be two separate streams, each emitting values every second.
-It looks something like this:
-
-<code-example header="Two subscriptions" path="observables/src/multicasting.ts" region="subscribe_twice"></code-example>
-
- Changing the observable to be multicasting could look something like this:
-
-<code-example header="Create a multicast subscriber" path="observables/src/multicasting.ts" region="multicast_sequence"></code-example>
-
-<div class="alert is-helpful">
-
-Multicasting observables take a bit more setup, but they can be useful for certain applications.
-Later we will look at tools that simplify the process of multicasting, allowing you to take any observable and make it multicasting.
-
-</div>
--->
-옵저버블은 일반적으로 옵저버블을 구독하는 옵저버끼리 영향을 주지 않는 단일 데이터를 생성합니다.
-그리고 이 데이터는 옵저버블을 구독하는 이벤트 핸들러에 각각 전달되며, 개별 옵저버가 이 데이터를 받아서 처리합니다.
-그래서 두 번째 옵저버가 구독을 시작하더라도 그 전에 구독한 옵저버와는 관련이 없습니다.
-
-그런데 어떤 경우에는, 이미 발생되어 처리된 데이터를 다른 구독자가 다시 받고 싶은 경우가 있습니다.
-이 경우는 도큐먼트 객체에서 일어나는 클릭 이벤트를 옵저버블로 처리하는 경우에도 적용할 수 있습니다.
-
-*멀티캐스팅*은 여러 구독자가 같은 실행 싸이클에서 실행될 수 있도록 브로드캐스팅(broadcasting)하는 방법입니다.
-멀티캐스팅 옵저버블을 사용하면 도큐먼트에 여러개의 리스너를 연결하지 않아도 모든 구독자들이 같은 데이터 객체를 처리할 수 있습니다.
-
-옵저버블을 어떻게 사용할지, 멀티캐스팅을 사용할지 여부는 옵저버블을 생성할 때 지정합니다.
-
-1부터 3까지 숫자를 세는 예제를 봅시다. 이 예제는 1초마다 각각의 숫자를 스트림으로 보냅니다.
-
-<code-example header="시퀀스 정의하기" path="observables/src/multicasting.ts" region="delay_sequence"></code-example>
-
-옵저버블을 두 번 구독하면 각각의 스트림은 독립적으로 생성되며, 매초마다 각각 새로운 데이터가 전달될 것입니다:
-
-<code-example header="두 번 구독하기" path="observables/src/multicasting.ts" region="subscribe_twice"></code-example>
-
-이 옵저버블을 멀티캐스팅 방식으로 바꿔봅시다:
-
-<code-example header="멀티캐스트 구독하기" path="observables/src/multicasting.ts" region="multicast_sequence"></code-example>
-
-<div class="alert is-helpful">
-
-멀티태스킹 옵저버블은 준비 과정이 조금 더 복잡합니다.
-이 과정은 이후에 다시 간단한 방법으로 살펴봅시다. 이후에 알아볼 방법을 사용하면 모든 옵저버블을 멀티태스킹으로 활용할 수도 있습니다.
-
-</div>
+모든 핸들러 프로퍼티는 생략할 수 있습니다.
+핸들러 프로퍼티를 생략하면, 옵저버는 해당 알림을 처리하지 않습니다.
 
 
 <!--
@@ -292,37 +244,66 @@ Later we will look at tools that simplify the process of multicasting, allowing 
 ## 에러 처리
 
 <!--
-Because observables produce values asynchronously, try/catch will not effectively catch errors.
-Instead, you handle errors by specifying an `error` callback on the observer.
+Because observables can produce values asynchronously, try/catch will not effectively catch errors.
+Instead, you handle errors by specifying an `error` function on the observer.
+
 Producing an error also causes the observable to clean up subscriptions and stop producing values.
-An observable can either produce values \(calling the `next` callback\), or it can complete, calling either the `complete` or `error` callback.
 
-<code-example format="typescript" language="typescript">
+<code-example  path="observables/src/subscribing.ts" region="next-or-error"></code-example>
 
-myObservable.subscribe({
-  next(num) { console.log('Next num: ' + num)},
-  error(err) { console.log('Received an error: ' + err)}
-});
-
-</code-example>
-
-Error handling \(and specifically recovering from an error\) is covered in more detail in a later section.
+Error handling \(and specifically recovering from an error\) is [covered in more detail in a later section](guide/rx-library#error-handling).
 -->
-옵저버블은 데이터를 비동기로 발행하기 때문에 try/catch로 에러를 처리할 수 없습니다.
-대신, 옵저버블에서 발행하는 에러 스트림은 옵저버의 `error` 콜백으로 처리합니다.
-그리고 옵저버블에서 에러가 발생하면 구독을 중단하고 새로운 값이 다시 생성되지 않도록 해야합니다.
-옵저버블에서 `next`로 데이터 스트림을 받았던 것과 비슷하게, 종료 스트림과 에러스트림은 각각 `complete` 콜백과 `error` 콜백으로 받을 수 있습니다.
+옵저버블은 값을 비동기로 발행하기 때문에 try/catch로 에러를 처리할 수 없습니다.
+대신, 옵저버블에서 발생하는 에러는 옵저버의 `error` 핸들러로 처리합니다.
 
-<code-example format="typescript" language="typescript">
+옵저버블에서 에러가 발생하면 해당 옵저버블을 구독하는 구독자들은 모두 구독이 중단되며 값도 더이상 전달되지 않습니다.
 
-myObservable.subscribe({
-  next(num) { console.log('Next num: ' + num)},
-  error(err) { console.log('Received an error: ' + err)}
-});
+<code-example  path="observables/src/subscribing.ts" region="next-or-error"></code-example>
 
-</code-example>
+에러 자체를 처리하거나 보완하는 로직을 작성하려면 [rx-library 문서의 에러 처리하기](guide/rx-library#error-handling) 섹션을 참고하세요.
 
-에러를 처리하는 방법과 에러 상태에서 벗어나는 방법은 다음 문서에서 자세히 알아봅니다.
+
+<!--
+## Creating observables
+-->
+## 옵저버블 생성하기
+
+<!--
+The RxJS library contains a number of functions for creating observables. Some of the most useful are [covered later](guide/rx-library#observable-creation-functions).
+
+You can also use the `Observable` constructor to create an observable stream of any type.
+The constructor takes as its argument the *subscriber function* to run when the observable's `subscribe()` method executes.
+
+A subscriber function receives an `Observer` object, and can publish values to the observer's `next()`, `error`, and `complete` handlers.
+
+For example, to create an observable equivalent to the `of(1, 2, 3)` above, you could write something like this:
+
+<code-example header="Create observable with constructor" path="observables/src/creating.ts" region="subscriber"></code-example>
+-->
+RxJS 라이브러리는 옵저버블을 생성하는 함수를 다양하게 제공합니다.
+이 중에서 자주 사용하는 것은 [다른 문서](guide/rx-library#observable-creation-functions)에서 더 다루겠습니다.
+
+옵저버블 스트림은 `Observable` 생성자를 사용해서 생성할 수 있습닏.ㅏ
+옵저버블의 `subscribe()` 메서드에 전달하는 *구독자 함수(subscriber function)* 는 생성자의 인자로 전달할 수도 있습니다.
+
+구독자 함수는 `Observer` 객체를 인자로 받으며, 이 객체는 각각 `next()`, `error()`, `complete()` 핸들러로 옵저버블 스트림을 전달합니다.
+
+위에서 살펴본 `of(1, 2, 3)`과 동일한 옵저버블은 이렇게도 만들 수 있습니다:
+
+<code-example header="Create observable with constructor" path="observables/src/creating.ts" region="subscriber"></code-example>
+
+
+<!--
+## Geolocation example
+-->
+## 위치정보 예제
+
+<!--
+The following example demonstrates the concepts above by showing how to create and consume an observable that reports geolocation updates.
+-->
+아래 예제 코드는 지리 정보 데이터를 발행하는 옵저버블을 생성하고 활용하는 예제 코드입니다.
+
+<code-example header="Observe geolocation updates" class="no-auto-link" path="observables/src/geolocation.ts"></code-example>
 
 
 <!-- links -->
@@ -331,4 +312,4 @@ myObservable.subscribe({
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-08-25

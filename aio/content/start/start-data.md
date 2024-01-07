@@ -475,7 +475,7 @@ To get shipping data, from `shipping.json`, You can use the `HttpClient` `get()`
 
     <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="get-shipping"></code-example>
 
-For more information about Angular's `HttpClient`, see the [Client-Server Interaction](guide/http "Server interaction through HTTP") guide.
+For more information about Angular's `HttpClient`, see the [Client-Server Interaction](guide/understanding-communicating-with-http "Server interaction through HTTP") guide.
 -->
 `shipping.json` 파일에 있는 배송가격 데이터를 불러오려면 `HttpClient` `get()` 메서드를 사용하면 됩니다.
 
@@ -483,7 +483,7 @@ For more information about Angular's `HttpClient`, see the [Client-Server Intera
 
     <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="get-shipping"></code-example>
 
-Angular `HttpClient`에 대해 더 자세하게 알아보려면 [클라이언트-서버 통신](guide/http "Server interaction through HTTP") 문서를 참고하세요.
+Angular `HttpClient`에 대해 더 자세하게 알아보려면 [클라이언트-서버 통신](guide/understanding-communicating-with-http "Server interaction through HTTP") 문서를 참고하세요.
 
 
 <!--

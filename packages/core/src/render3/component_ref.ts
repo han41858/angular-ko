@@ -26,11 +26,12 @@ import {assertDefined, assertGreaterThan, assertIndexInRange} from '../util/asse
 import {VERSION} from '../version';
 import {NOT_FOUND_CHECK_ONLY_ELEMENT_INJECTOR} from '../view/provider_flags';
 
-import {assertComponentType} from './assert';
+import {AfterRenderEventManager} from './after_render_hooks';
+import {assertComponentType, assertNoDuplicateDirectives} from './assert';
 import {attachPatchData} from './context_discovery';
 import {getComponentDef} from './definition';
+import {depsTracker} from './deps_tracker/deps_tracker';
 import {getNodeInjectable, NodeInjector} from './di';
-import {throwProviderNotFoundError} from './errors_di';
 import {registerPostOrderHooks} from './hooks';
 import {reportUnknownPropertyError} from './instructions/element_validation';
 import {markViewDirty} from './instructions/mark_view_dirty';
@@ -44,13 +45,13 @@ import {CONTEXT, HEADER_OFFSET, INJECTOR, LView, LViewEnvironment, LViewFlags, T
 import {MATH_ML_NAMESPACE, SVG_NAMESPACE} from './namespaces';
 import {createElementNode, setupStaticAttributes, writeDirectClass} from './node_manipulation';
 import {extractAttrsAndClassesFromSelector, stringifyCSSSelectorList} from './node_selector_matcher';
-import {EffectManager} from './reactivity/effect';
+import {EffectScheduler} from './reactivity/effect';
 import {enterView, getCurrentTNode, getLView, leaveView} from './state';
 import {computeStaticStyling} from './styling/static_styling';
 import {mergeHostAttrs, setUpAttributes} from './util/attrs_utils';
-import {stringifyForError} from './util/stringify_utils';
+import {debugStringifyTypeForError, stringifyForError} from './util/stringify_utils';
 import {getComponentLViewByIndex, getNativeByTNode, getTNode} from './util/view_utils';
-import {RootViewRef, ViewRef} from './view_ref';
+import {ViewRef} from './view_ref';
 
 export class ComponentFactoryResolver extends AbstractComponentFactoryResolver {
   /**
@@ -87,8 +88,8 @@ function getNamespace(elementName: string): string|null {
  * Injector that looks up a value using a specific injector, before falling back to the module
  * injector. Used primarily when creating components or embedded views dynamically.
  */
-class ChainedInjector implements Injector {
-  constructor(private injector: Injector, private parentInjector: Injector) {}
+export class ChainedInjector implements Injector {
+  constructor(public injector: Injector, public parentInjector: Injector) {}
 
   get<T>(token: ProviderToken<T>, notFoundValue?: T, flags?: InjectFlags|InjectOptions): T {
     flags = convertToBitFlags(flags);
@@ -118,8 +119,28 @@ export class ComponentFactory<T> extends AbstractComponentFactory<T> {
   override ngContentSelectors: string[];
   isBoundToModule: boolean;
 
-  override get inputs(): {propName: string; templateName: string;}[] {
-    return toRefArray(this.componentDef.inputs);
+  override get inputs(): {
+    propName: string,
+    templateName: string,
+    transform?: (value: any) => any,
+  }[] {
+    const componentDef = this.componentDef;
+    const inputTransforms = componentDef.inputTransforms;
+    const refArray = toRefArray(componentDef.inputs) as {
+      propName: string,
+      templateName: string,
+      transform?: (value: any) => any,
+    }[];
+
+    if (inputTransforms !== null) {
+      for (const input of refArray) {
+        if (inputTransforms.hasOwnProperty(input.propName)) {
+          input.transform = inputTransforms[input.propName];
+        }
+      }
+    }
+
+    return refArray;
   }
 
   override get outputs(): {propName: string; templateName: string;}[] {
@@ -143,6 +164,18 @@ export class ComponentFactory<T> extends AbstractComponentFactory<T> {
       injector: Injector, projectableNodes?: any[][]|undefined, rootSelectorOrNode?: any,
       environmentInjector?: NgModuleRef<any>|EnvironmentInjector|
       undefined): AbstractComponentRef<T> {
+    // Check if the component is orphan
+    if (ngDevMode && (typeof ngJitMode === 'undefined' || ngJitMode) &&
+        this.componentDef.debugInfo?.forbidOrphanRendering) {
+      if (depsTracker.isOrphanComponent(this.componentType)) {
+        throw new RuntimeError(
+            RuntimeErrorCode.RUNTIME_DEPS_ORPHAN_COMPONENT,
+            `Orphan component found! Trying to render the component ${
+                debugStringifyTypeForError(
+                    this.componentType)} without first loading the NgModule that declares it. It is recommended to make this component standalone in order to avoid this error. If this is not possible now, import the component's NgModule in the appropriate NgModule, or the standalone component in which you are trying to render this component. If this is a lazy import, load the NgModule lazily as well and use its module injector.`);
+      }
+    }
+
     environmentInjector = environmentInjector || this.ngModule;
 
     let realEnvironmentInjector = environmentInjector instanceof EnvironmentInjector ?
@@ -168,12 +201,14 @@ export class ComponentFactory<T> extends AbstractComponentFactory<T> {
     }
     const sanitizer = rootViewInjector.get(Sanitizer, null);
 
-    const effectManager = rootViewInjector.get(EffectManager, null);
+    const afterRenderEventManager = rootViewInjector.get(AfterRenderEventManager, null);
 
     const environment: LViewEnvironment = {
       rendererFactory,
       sanitizer,
-      effectManager,
+      // We don't use inline effects (yet).
+      inlineEffectRunner: null,
+      afterRenderEventManager,
     };
 
     const hostRenderer = rendererFactory.createRenderer(null, this.componentDef);
@@ -185,15 +220,24 @@ export class ComponentFactory<T> extends AbstractComponentFactory<T> {
             hostRenderer, rootSelectorOrNode, this.componentDef.encapsulation, rootViewInjector) :
         createElementNode(hostRenderer, elementName, getNamespace(elementName));
 
-    const rootFlags = this.componentDef.onPush ? LViewFlags.Dirty | LViewFlags.IsRoot :
-                                                 LViewFlags.CheckAlways | LViewFlags.IsRoot;
+    // Signal components use the granular "RefreshView"  for change detection
+    const signalFlags = (LViewFlags.SignalView | LViewFlags.IsRoot);
+    // Non-signal components use the traditional "CheckAlways or OnPush/Dirty" change detection
+    const nonSignalFlags = this.componentDef.onPush ? LViewFlags.Dirty | LViewFlags.IsRoot :
+                                                      LViewFlags.CheckAlways | LViewFlags.IsRoot;
+    const rootFlags = this.componentDef.signals ? signalFlags : nonSignalFlags;
+
+    let hydrationInfo: DehydratedView|null = null;
+    if (hostRNode !== null) {
+      hydrationInfo = retrieveHydrationInfo(hostRNode, rootViewInjector, true /* isRootView */);
+    }
 
     // Create the root view. Uses empty TView and ContentTemplate.
     const rootTView =
         createTView(TViewType.Root, null, null, 1, 0, null, null, null, null, null, null);
     const rootLView = createLView(
         null, rootTView, null, rootFlags, null, null, environment, hostRenderer, rootViewInjector,
-        null, null);
+        null, hydrationInfo);
 
     // rootView is the parent when bootstrapping
     // TODO(misko): it looks like we are entering view here but we don't really need to as
@@ -215,6 +259,7 @@ export class ComponentFactory<T> extends AbstractComponentFactory<T> {
         hostDirectiveDefs = new Map();
         rootComponentDef.findHostDirectiveDefs(rootComponentDef, rootDirectives, hostDirectiveDefs);
         rootDirectives.push(rootComponentDef);
+        ngDevMode && assertNoDuplicateDirectives(rootDirectives);
       } else {
         rootDirectives = [rootComponentDef];
       }
@@ -274,7 +319,11 @@ export class ComponentRef<T> extends AbstractComponentRef<T> {
       private _tNode: TElementNode|TContainerNode|TElementContainerNode) {
     super();
     this.instance = instance;
-    this.hostView = this.changeDetectorRef = new RootViewRef<T>(_rootLView);
+    this.hostView = this.changeDetectorRef = new ViewRef<T>(
+        _rootLView,
+        undefined, /* _cdRefInjectingView */
+        false,     /* notifyErrorHandler */
+    );
     this.componentType = componentType;
   }
 
@@ -323,13 +372,6 @@ export class ComponentRef<T> extends AbstractComponentRef<T> {
 /** Represents a HostFeature function. */
 type HostFeature = (<T>(component: T, componentDef: ComponentDef<T>) => void);
 
-// TODO: A hack to not pull in the NullInjector from @angular/core.
-export const NULL_INJECTOR: Injector = {
-  get: (token: any, notFoundValue?: any) => {
-    throwProviderNotFoundError(token, 'NullInjector');
-  }
-};
-
 /** Creates a TNode that can be used to instantiate a root component. */
 function createRootComponentTNode(lView: LView, rNode: RNode): TElementNode {
   const tView = lView[TVIEW];
@@ -362,17 +404,22 @@ function createRootComponentView(
   const tView = rootView[TVIEW];
   applyRootComponentStyling(rootDirectives, tNode, hostRNode, hostRenderer);
 
-  // Hydration info is on the host element and needs to be retreived
+  // Hydration info is on the host element and needs to be retrieved
   // and passed to the component LView.
   let hydrationInfo: DehydratedView|null = null;
   if (hostRNode !== null) {
     hydrationInfo = retrieveHydrationInfo(hostRNode, rootView[INJECTOR]!);
   }
   const viewRenderer = environment.rendererFactory.createRenderer(hostRNode, rootComponentDef);
+  let lViewFlags = LViewFlags.CheckAlways;
+  if (rootComponentDef.signals) {
+    lViewFlags = LViewFlags.SignalView;
+  } else if (rootComponentDef.onPush) {
+    lViewFlags = LViewFlags.Dirty;
+  }
   const componentView = createLView(
-      rootView, getOrCreateComponentTView(rootComponentDef), null,
-      rootComponentDef.onPush ? LViewFlags.Dirty : LViewFlags.CheckAlways, rootView[tNode.index],
-      tNode, environment, viewRenderer, null, null, hydrationInfo);
+      rootView, getOrCreateComponentTView(rootComponentDef), null, lViewFlags,
+      rootView[tNode.index], tNode, environment, viewRenderer, null, null, hydrationInfo);
 
   if (tView.firstCreatePass) {
     markAsComponentHost(tView, tNode, rootDirectives.length - 1);

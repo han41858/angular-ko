@@ -62,7 +62,7 @@ import {ViewRef} from '../render3/view_ref';
  */
 export abstract class ChangeDetectorRef {
   /**
-   * When a view uses the {@link ChangeDetectionStrategy#OnPush OnPush} (checkOnce)
+   * When a view uses the {@link ChangeDetectionStrategy#OnPush} (checkOnce)
    * change detection strategy, explicitly marks the view as changed so that
    * it can be checked again.
    *
@@ -90,8 +90,7 @@ export abstract class ChangeDetectorRef {
   abstract detach(): void;
 
   /**
-   * Checks this view and its children. Use in combination with {@link ChangeDetectorRef#detach
-   * detach}
+   * Checks this view and its children. Use in combination with {@link ChangeDetectorRef#detach}
    * to implement local change detection checks.
    *
    * <!-- TODO: Add a link to a chapter on detach/reattach/local digest -->
@@ -105,6 +104,10 @@ export abstract class ChangeDetectorRef {
    *
    * Use in development mode to verify that running change detection doesn't introduce
    * other changes. Calling it in production mode is a noop.
+   *
+   * @deprecated This is a test-only API that does not have a place in production interface.
+   * `checkNoChanges` is already part of an `ApplicationRef` tick when the app is running in dev
+   * mode. For more granular `checkNoChanges` validation, use `ComponentFixture`.
    */
   abstract checkNoChanges(): void;
 

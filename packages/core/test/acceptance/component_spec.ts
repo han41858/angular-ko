@@ -7,7 +7,7 @@
  */
 
 import {DOCUMENT, NgIf} from '@angular/common';
-import {ApplicationRef, Component, ComponentRef, createComponent, createEnvironmentInjector, Directive, ElementRef, EmbeddedViewRef, EnvironmentInjector, forwardRef, inject, Injectable, InjectionToken, Injector, Input, NgModule, OnDestroy, reflectComponentType, Renderer2, Type, ViewChild, ViewContainerRef, ViewEncapsulation, ɵsetDocument} from '@angular/core';
+import {ApplicationRef, Component, ComponentRef, createComponent, createEnvironmentInjector, Directive, ElementRef, EmbeddedViewRef, EnvironmentInjector, forwardRef, inject, Injectable, InjectionToken, Injector, Input, NgModule, OnDestroy, reflectComponentType, Renderer2, Type, ViewChild, ViewContainerRef, ViewEncapsulation, ɵsetClassDebugInfo, ɵsetDocument, ɵɵdefineComponent} from '@angular/core';
 import {stringifyForError} from '@angular/core/src/render3/util/stringify_utils';
 import {TestBed} from '@angular/core/testing';
 import {expect} from '@angular/platform-browser/testing/src/matchers';
@@ -924,6 +924,8 @@ describe('component', () => {
 
   describe('reflectComponentType', () => {
     it('should create an ComponentMirror for a standalone component', () => {
+      function transformFn() {}
+
       @Component({
         selector: 'standalone-component',
         standalone: true,
@@ -937,6 +939,7 @@ describe('component', () => {
         outputs: ['output-a', 'output-b:output-alias-b'],
       })
       class StandaloneComponent {
+        @Input({alias: 'input-alias-c', transform: transformFn}) inputC: unknown;
       }
 
       const mirror = reflectComponentType(StandaloneComponent)!;
@@ -946,7 +949,8 @@ describe('component', () => {
       expect(mirror.isStandalone).toEqual(true);
       expect(mirror.inputs).toEqual([
         {propName: 'input-a', templateName: 'input-a'},
-        {propName: 'input-b', templateName: 'input-alias-b'}
+        {propName: 'input-b', templateName: 'input-alias-b'},
+        {propName: 'inputC', templateName: 'input-alias-c', transform: transformFn},
       ]);
       expect(mirror.outputs).toEqual([
         {propName: 'output-a', templateName: 'output-a'},
@@ -958,6 +962,8 @@ describe('component', () => {
     });
 
     it('should create an ComponentMirror for a non-standalone component', () => {
+      function transformFn() {}
+
       @Component({
         selector: 'non-standalone-component',
         template: `
@@ -970,6 +976,7 @@ describe('component', () => {
         outputs: ['output-a', 'output-b:output-alias-b'],
       })
       class NonStandaloneComponent {
+        @Input({alias: 'input-alias-c', transform: transformFn}) inputC: unknown;
       }
 
       const mirror = reflectComponentType(NonStandaloneComponent)!;
@@ -979,7 +986,8 @@ describe('component', () => {
       expect(mirror.isStandalone).toEqual(false);
       expect(mirror.inputs).toEqual([
         {propName: 'input-a', templateName: 'input-a'},
-        {propName: 'input-b', templateName: 'input-alias-b'}
+        {propName: 'input-b', templateName: 'input-alias-b'},
+        {propName: 'inputC', templateName: 'input-alias-c', transform: transformFn},
       ]);
       expect(mirror.outputs).toEqual([
         {propName: 'output-a', templateName: 'output-a'},
@@ -1006,6 +1014,25 @@ describe('component', () => {
         expect(reflectComponentType(ADirective)).toBe(null);
         expect(reflectComponentType(AnInjectiable)).toBe(null);
       });
+    });
+  });
+
+  it('should attach debug info to component using ɵsetClassDebugInfo runtime', () => {
+    class Comp {
+      static ɵcmp = ɵɵdefineComponent({type: Comp, decls: 0, vars: 0, template: () => ''});
+    }
+    ɵsetClassDebugInfo(Comp, {
+      className: 'Comp',
+      filePath: 'comp.ts',
+      lineNumber: 11,
+      forbidOrphanRendering: true,
+    });
+
+    expect(Comp.ɵcmp.debugInfo).toEqual({
+      className: 'Comp',
+      filePath: 'comp.ts',
+      lineNumber: 11,
+      forbidOrphanRendering: true,
     });
   });
 });

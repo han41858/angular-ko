@@ -94,8 +94,7 @@ export abstract class Renderer2 {
    * If null or undefined, the view engine won't call it.
    * This is used as a performance optimization for production mode.
    */
-  // TODO(issue/24571): remove '!'.
-  destroyNode!: ((node: any) => void)|null;
+  destroyNode: ((node: any) => void)|null = null;
   /**
    * Appends a child to a given parent node in the host element DOM.
    * @param parent The parent node.
@@ -241,4 +240,15 @@ export function injectRenderer2(): Renderer2 {
   const tNode = getCurrentTNode()!;
   const nodeAtIndex = getComponentLViewByIndex(tNode.index, lView);
   return (isLView(nodeAtIndex) ? nodeAtIndex : lView)[RENDERER] as Renderer2;
+}
+
+/**
+ * This enum is meant to be used by `ɵtype` properties of the different renderers implemented
+ * by the framework
+ *
+ * We choose to not add `ɵtype` to `Renderer2` to no expose it to the public API.
+ */
+export const enum AnimationRendererType {
+  Regular = 0,
+  Delegated = 1,
 }

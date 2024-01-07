@@ -4,7 +4,7 @@
 # Angular 로드맵
 
 <!--
-<p class="roadmap-last-updated">Last updated: 2023-05-03</p>
+<p class="roadmap-last-updated">Last updated: 2023-10-24</p>
 
 Angular receives many feature requests, both from inside Google and the broader open-source community.
 At the same time, our list of projects contains plenty of maintenance tasks, code refactorings, and potential performance improvements.
@@ -16,7 +16,7 @@ The following projects are not associated with a particular Angular version.
 We will release them on completion, and they will be part of a specific version based on our release schedule, following semantic versioning.
 For example, we release features in the next minor after completion or the next major if they include breaking changes.
 -->
-<p class="roadmap-last-updated">최근 수정: 2023-05-03</p>
+<p class="roadmap-last-updated">최근 수정: 2023-10-24</p>
 
 Angular는 Google 내부와 오픈 소스 커뮤니티로부터 수많은 기능 추가 요청을 받고 있습니다.
 동시에 저희는 프로젝트를 유지하기 위한 작업과 코드 리팩토링, 성능 개선작업 등도 함께 수행하고 있습니다.
@@ -34,78 +34,86 @@ Angular는 Google 내부와 오픈 소스 커뮤니티로부터 수많은 기능
 ## 진행중
 
 <!--
-### Explore hydration and server-side rendering improvements
--->
-### 하이드레이션, 서버 사이드 렌더링 개선
-
-<!--
-In v16, we released a developer preview of non-destructive full hydration, see the [hydration guide](guide/hydration) and the [blog post](https://blog.angular.io/whats-next-for-server-side-rendering-in-angular-2a6f27662b67) for additional information. We're already seeing significant improvements to Core Web Vitals, including [LCP](https://web.dev/lcp) and [CLS](https://web.dev/cls). In lab tests, we consistently observed 45% better LCP of a real-world app.
-
-As the next step, we will iterate on polishing full hydration and further explore the dynamically evolving space of partial hydration and resumability. These more advanced patterns carry their own trade-offs; we'll share updates as we progress.
--->
-Angular v16부터는 기존 코드에 영향을 크게 미치지 않는 하이드레이션을 개발자 프리뷰로 도입했습니다.
-자세한 내용은 [하이드레이션 문서](guide/hydration)와 [블로그](https://blog.angular.io/whats-next-for-server-side-rendering-in-angular-2a6f27662b67)를 참고하세요.
-그리고 [LCP](https://web.dev/lcp)와 [CLS](https://web.dev/cls) 같은 핵심 웹 성능(Core Web Vital)을 크게 개선하는 개선사항을 준비하고 있습니다.
-테스트 결과로 보면 약 45% 개선된 LCP 성능을 확인했습니다.
-
-그 다음 단계는 하이드레이션을 더 확장시키는 것입니다.
-이 방향은 장단점이 있습니다.
-진행되는 과정은 수시로 공유드리겠습니다.
-
-
-<!--
 ### Improve runtime performance and developer experience with a new reactivity model
 -->
 ### 실행 성능 개선, 새 반응형 모델 도입
 
 <!--
-In v16, we shared a developer preview of Angular Signals which fully implemented make Zone.js optional. The feature resulted from hundreds of discussions, conversations with developers, feedback sessions, user experience studies, and a series of [RFCs](https://github.com/angular/angular/discussions/49685), which received over 1,000 comments. As part of the release, we made a signals library and an RxJS interoperability package available. Next, after addressing the feedback we received from developers, we’ll continue implementing the proposals from the RFC.
+This project rethinks the Angular reactivity model by introducing Signals as a reactivity primitive.
+Fully implemented the project will make Zone.js optional. The initial planning resulted in hundreds of discussions, conversations with developers, feedback sessions, user experience studies, and a series of [RFCs](https://github.com/angular/angular/discussions/49685), which received over 1,000 comments.
+
+As part of the v17 release, we graduated the Angular Signals library from developer preview. Next we’ll continue implementing the proposals from the RFC. The first steps will be introducing signal-based inputs and queries.
 -->
-Angular v16부터는 Zone.js를 제거하기 위한 Angular Signal을 개발자 프리뷰로 도입했습니다.
-이 프로젝트 도입을 위해 수백건의 논의가 이루어지고 있으며, 개발자들의 의견을 받고, [RFCs](https://github.com/angular/angular/discussions/49685)를 통해 1,000개 이상의 논의를 이어가고 있습니다.
-이 개선사항으로 RxJS와 상호 호환될 수 있는 새로운 Signal 라이브러리를 도입했습니다.
-이 단계에서 개발자들의 피드백을 더 받아보고 다음 방향을 수립할 예정입니다.
+이 프로젝트는 신호를 기본 타입으로 활용해서 Angular의 반응형 모델을 새롭게 정의하는 것이 목적입니다.
+이 프로젝트가 완전히 자리잡으면 Zone.js는 필수 요소가 아니게 될 것입니다.
+프로젝트 도입을 위해 수백건의 논의가 이루어지고 있으며, 개발자들의 의견을 받고, [RFCs](https://github.com/angular/angular/discussions/49685)를 통해 1,000개 이상의 논의를 이어가고 있습니다.
+
+v17 버전이 릴리즈되면서 Angular Signal 라이브러리는 개발자 프리뷰로 도입되었습니다.
+지금은 RFC로 들어오는 제안들을 구현하는 작업을 더 하고 있습니다.
+신호 기반으로 입력을 받고 쿼리하는 기능부터 작업을 시작할 것으로 예상합니다.
 
 
 <!--
-### Explore ergonomic component-level code-splitting APIs
+### Ergonomic deferred loading
 -->
-### 컴포넌트 계층 코드 분리 API
+### 자연스러운 지연 로딩
 
 <!--
-A common problem with web apps is their slow initial load time.
-A way to improve it is to apply more granular code-splitting on a component level.
-We will be working on more ergonomic code-splitting APIs to encourage this practice.
+In v17 we shipped deferrable views in developer preview, which provide an ergonomic API for deferred code loading. As the next step we'll be iterating on community feedback before officially making this feature stable.
 -->
-웹앱의 문제 중 하나는 최초 실행 시간이 오래 걸린다는 것입니다.
-이를 개선하기 위해, 컴포넌트 계층에서 코드를 나눌 수 있는 기능을 도입했습니다.
-지금은 이 API들의 사용성을 개선하는 작업을 하고 있습니다.
+v17 버전에서 지연로딩할 수 있는 뷰를 개발자 프리뷰로 도입했습니다.
+이 기능을 확정하기 전까지는 커뮤니티 피드백을 참고하며 작업을 이어갈 예정입니다.
 
 
 <!--
-### Improve documentation and schematics for standalone components
+### Built-in control flow
 -->
-### 단독 컴포넌트 문서, 스키매틱 개선
+### 기본 제어 흐름
 
 <!--
-We released a developer preview of the `ng new --standalone` schematics collection, allowing you to create apps free of NgModules. Next, we'll iterate on the schematics to fill feature gaps and release a new tutorial based on standalone components.
+In v17 we shipped a developer preview version of a new control flow. It brings significant performance improvements and better ergonomics for template authoring. We also provided a migration of existing `*ngIf`, `*ngFor`, and `*ngSwitch` which you can run to move your project to the new implementation. As the next steps we'll be working on addressing community feedback before officially completing this project and graduating it from developer preview.
 -->
-개발자 프리뷰로 NgModule 밖에 앱을 만들 수 있는 `ng new --standalone` 스키매틱 컬렉션을 추가했습니다.
-그 다음 단계로, 누락된 기능을 보완하기 위한 스키매틱 작업을 진행하고 있으며, 튜토리얼 문서도 작성하고 있습니다.
+v17 버전에서 새로운 제어 흐름을 개발자 프리뷰로 도입했습니다.
+이 기능을 활용하면 템플릿을 더 간단하게 작성하면서도 성능이 극적으로 향상되는 것을 확인할 수 있습니다.
+기존에 작업했던 `*ngIf`, `*ngFor`, `*ngSwitch`를 새로운 방식으로 마이그레이션 할 수 있는 툴도 제공합니다.
+다음 단계는 개발자 프리뷰를 졸업할 때까지 커뮤니티 피드백을 받으며 작업을 마무리하는 것입니다.
 
 
 <!--
-### Introduce dependency injection debugging APIs
+### iframe support in Angular DevTools
 -->
-### 의존성 주입 디버깅 API 추가
+### Angular DevTools에서 iframe 지원하기
 
 <!--
-To improve the debugging utilities of Angular and Angular DevTools, we'll work on APIs that provide access to the dependency injection runtime. As part of the project, we'll expose debugging methods that allow us to explore the injector hierarchy and the dependencies across their associated providers. As of v16, we have a design of a feature that enables us to plug into the dependency injection life-cycle. As the next step, we'll implement the functionality and provide integration with Angular DevTools.
+We are working on making it possible to debug and profile Angular apps embedded within an iframe on the page. This feature will allow you to select an iframe and inspect it directly within Angular DevTools.
 -->
-Angular, Angular DevTool의 활용도를 높이기 위해, 실행시점에 동작하는 의존성 주입 시스템에 접근할 수 있는 API를 준비하고 있습니다.
-이 프로젝트가 완료되면 이제 의존성 계층과 프로바이더를 직접 확인할 수 있을 것입니다.
-Angular v16부터는 라이프싸이클 실행 중에 의존성 주입 시스템에 접근할 수 있는 기능을 도입했습니다.
-그 다음 단계는, 이 기능을 더 개선하고 Angular DevTool과 연결시키는 것입니다.
+화면에 iframe 안쪽으로 Angular 앱이 들어간 경우, 이 Angular 앱을 디버깅하거나 분석할 수 있도록 작업하고 있습니다.
+이 작업이 끝나고 나면 Angular DevTool에서 iframe 하나를 선택하고 그 안에 있는 Angular 앱을 디버깅할 수 있을 것입니다.
+
+
+<!--
+### Enabling hybrid rendering by default
+-->
+### 하이브리드 렌더링을 기본으로 활성화
+
+<!--
+We are working on more developer experience improvements which will allow us to enable hybrid (server-side rendering and static site generation) rendering by default for new projects. In particular, we're focused on route-level rendering strategy configuration and improving developer experience for i18n support.
+-->
+더 나은 개발자 경험을 위해, 새 프로젝트를 생성할 때 서버 사이드 렌더링과 정적 사이트 생성을 동시에 하는 하이브리드 렌더링을 기본으로 활성화하려고 합니다.
+특히, 라우팅 계층의 렌더링 정책 설정과 i18n 지원에 중점을 두고 있습니다.
+
+
+<!--
+### Automation for transition of existing hybrid rendering projects to esbuild and vite
+-->
+### 기존에 있던 하이브리드 렌더링 프로젝트를 esbuild와 vite로 전환하기
+
+<!--
+In v17 we shipped a vite and esbuild-based application builder and enabled it for new projects by default. It improves build time for projects using hybrid rendering with up to 87%. Next, we'll be working on developing schematics that migrate existing projects using hybrid rendering to the new build pipeline.
+-->
+v17 버전에는 애플리케이션 빌더로 vite와 esbuild가 도입되었으며, 새로 생성하는 프로젝트에는 이 빌더들이 기본으로 사용됩니다.
+그래서 하이브리드 렌더링이 적용된 프로젝트라면 최대 87%까지 빌드 시간을 줄일 수 있습니다.
+다음으로 작업할 것은 하이브리드 렌더링이 적용된 프로젝트를 새로운 빌드 파이프라인으로 전환할 수 있도록 스키매틱을 개발하는 것입니다.
 
 
 <!--
@@ -118,20 +126,6 @@ As part of this initiative, the language service automatically imports component
 -->
 이제 언어 서비스는 독립 컴포넌트나 NgModule 기반 앱에서 구성요소와 파이프를 자동으로 로드합니다.
 그리고 앱 빌드 결과물의 크기를 더 줄이기 위해, 사용하지 않는 import 구문은 자동으로 제거하는 기능을 도입하려고 합니다.
-
-
-<!--
-### Investigate modern bundles
--->
-### 최신 번들링 기술 검토
-
-<!--
-In Angular v16, we released a developer preview of an esbuild-based builder with support for `ng build` and `ng serve`. The `ng serve` development server uses Vite and a multi-file compilation by esbuild and the Angular compiler. As the next step before we graduate the feature out of developer preview, we'll work on enabling internationalization support and fixing stability issues.
--->
-Angular v16에는 `ng build`, `ng serve` 명령을 실행할 때 esbuild 기반으로 동작하는 빌더를 개발자 프리뷰로 도입했습니다.
-이제 `ng serve` 개발 서버는 Vite를 사용하며, esbuild와 Angular 컴파일러를 사용해서 여러 파일을 동시에 컴파일할 수 있습니다.
-개발자 프리뷰를 종료하는 시점에는 이슈를 좀 더 해결하고, 국제화(i18n, internationalization)에도 이 기능을 적용할 수 있을 것입니다.
-
 
 <!--
 ### New CDK primitives
@@ -162,23 +156,12 @@ Angular Material로 제공되는 컴포넌트가 WCAG와 같은 표준을 만족
 ### 확장 가능한 마이크로 프론트엔드 아키텍처 연구
 
 <!--
-We understood and defined the problem space for the past couple of quarters. We will follow up with a blog post on best practices when developing apps at scale. The project got delayed due to the prioritization of other initiatives.
+We understood and defined the problem space for the past couple of quarters. As the most widely adopted solution we identified is module federation and we suggest it as an option in the rare cases when micro frontend architecture is a feasible solution. Currently, we're working with the community on providing a third-party extension for the Angular CLI via import maps that work with the new application builder, enabling a solution comparable to module federation in webpack.
 -->
 이 문제는 오랫동안 연구되던 것입니다.
-준비가 되고나면 앱을 대규모로 개발할 때 활용할 수 있는 모범 사례를 블로그 글로 공유하겠습니다.
-다른 개선사항을 먼저 처리하느라 약간 늦어졌습니다.
-
-
-<!--
-### Update getting started tutorial
--->
-### 시작하기 튜토리얼 갱신
-
-<!--
-Over the past two quarters, we developed a new video and textual tutorial based on standalone components. They are in the final review stages, and we expect to publish them by the end of Q2.
--->
-지난 반년동안 단독 컴포넌트 튜토리얼을 위한 영상과 문서를 추가했습니다.
-지금은 마지막 리뷰 단계입니다.
+저희가 확인한 것 중 가장 널리 도입된 방법은 모듈 페더레이션 방식이며, 따라서 저희는 마이크로 프론트엔드 아키텍처가 어려운 아주 일부 경우에 대해 이 방식을 제안합니다.
+현재는 커뮤니티와 협력하며 Angular CLI를 서드 파티로 확장할 수 있는 작업을 하고 있습니다.
+애플리케이션 빌더가 모듈을 로드하는 맵을 활용하거나, webpack 모듈 페더레이션 성능과 비슷한 솔루션을 만들고 있습니다.
 
 
 <!--
@@ -186,11 +169,7 @@ Over the past two quarters, we developed a new video and textual tutorial based 
 -->
 ### 토큰 기반의 테마 API
 
-<!--
-To provide better customization of our Angular material components and enable Material 3 capabilities, we'll be collaborating with Google's Material Design team on defining token-based theming APIs. As of Q2 2023, we're refactoring components to use the new API, finalizing the comprehensive set of tokens, and updating the Sass API based on the new tokens.
--->
-Angular 매터리얼 컴포넌트를 커스터마이징하거나 Material 3 사용성을 도입하기 위해, Angular 팀은 Google 매터리얼 디자인 팀과 협업하면서 테마 API를 토큰 기반으로 변경하고 있습니다.
-2023년 2분기 현재, 새로운 API를 사용할 수 있도록 컴포넌트, Sass API를 리팩토링하고 있습니다.
+To provide better customization of our Angular material components and enable Material 3 capabilities, we'll be collaborating with Google's Material Design team on defining token-based theming APIs. As of Q4 2023, we're refactoring components to use the new API, finalizing the comprehensive set of tokens, and updating the Sass API based on the new tokens.
 
 <!--
 ### Modernize Angular's unit testing tooling
@@ -209,6 +188,59 @@ Angulav 12 버전에는 기존까지 엔드 투 엔드 테스트에 사용하던
 ## Future
 -->
 ## 진행 예정
+
+<!--
+### Signal debugging in Angular DevTools
+-->
+### Angular DevTools로 Signal 디버깅하기
+
+<!--
+With the evolution of Signals in Angular, we'll be also working on a better tooling for debugging them. High on the priority list is a UI for inspecting and debugging Signal-based components.
+-->
+Angular에 Signal이 도입되는 큰 변화를 준비하면서, 디버깅 툴도 함께 준비하고 있습니다.
+신호 기반의 컴포넌트를 검사하고 디버깅하는 UI 작업이 가장 우선순위가 높습니다.
+
+
+<!--
+### Improved hot-module replacement support (HMR)
+-->
+### 핫 모듈 교환(Hot-module replacement, HMR) 지원
+
+<!--
+In v11 we launched initial support for HMR in Angular. Having the new implementation of `ng serve` based on vite and esbuild, we'll explore more advanced HMR for templates, styles, and TypeScript code.
+-->
+HMR은 v11 버전부터 최초로 지원하기 시작했습니다.
+이제는 `ng serve`가 vite와 esbuild를 기반으로 동작하기 때문에, 템플릿, 스타일, TypeScript 코드에 HMR을 더 활용하도록 작업할 예정입니다.
+
+
+<!--
+### Exploration of streamed server-side rendering
+-->
+### 서버 사이드 렌더링 스트림 연구
+
+<!--
+Over the past few releases we've been working on making Angular's server-side rendering story more robust. On our priority list is to explore streamed server-side rendering for zoneless application.
+-->
+지난 몇번의 릴리즈 동안 Angular 팀은 Angular의 서버 사이드 렌더링을 더욱 강력하게 만들기 위해 노력했습니다.
+다음 작업은 zone이 제거된 애플리케이션의 서버사이드 렌더링 스트림을 연구하는 것입니다.
+
+
+<!--
+### Exploration of partial hydration
+-->
+### 부분 하이드레이션 연구
+
+<!--
+In v17 we graduated hydration from developer preview and we've been consistently observing 40-50% improvements in LCP. As the next step, we'll explore how we can partially hydrate applications using deferrable views.
+
+As part of this effort, we'll be also evaluating the trade-offs of more fine-grained hydration and resumability. We'll share updates as we progress.
+-->
+하이드레이션은 v17 버전부터 개발자 프리뷰를 끝냈고, 이 기능이 정식으로 도입되면서 LCP를 기준으로 평균 40~50% 성능 개선을 확인했습니다.
+다음 단계는 지연 로딩하는 뷰를 위해 부분 하이드레이션을 연구하는 것입니다.
+
+다행히 작업이 잘 진행되면서 하이드레이션과 재사용성 사이의 장단점을 확인할 수 있었습니다.
+진행상황을 곧 공유하겠습니다.
+
 
 <!--
 ### Investigation for authoring format improvements
@@ -261,19 +293,111 @@ Angular 레파지토리에 올라온 요구사항 중 [가장 많은 요청이 �
 
 
 <!--
+### Update getting started tutorial
+-->
+### 시작하기 튜토리얼 갱신
+
+<!--
+*Completed Q4 2023*
+
+Over the past two quarters, we developed a new video and textual tutorial based on standalone components. They are now launched and available on https://angular.io/start.
+-->
+*2023년 4분기에 완료*
+
+반년동안 단독 컴포넌트 기반의 튜토리얼을 새롭게 준비했습니다.
+지금 https://angular.io/start 를 확인해 보세요.
+
+
+<!--
+### Investigate modern bundlers
+-->
+### 모던 번들러 도입
+
+<!--
+*Completed Q4 2023*
+
+In Angular v16, we released a developer preview of an esbuild-based builder with support for `ng build` and `ng serve`. The `ng serve` development server uses Vite and a multi-file compilation by esbuild and the Angular compiler. In v17 we graduated the build tooling from developer preview and enabled it by default for new projects.
+-->
+*2023년 4분기에 완료*
+
+Angular v16 버전에는 `ng build`, `ng serve` 명령에 esbuild 기반의 번들러를 개발자 프리뷰로 도입했었습니다.
+`ng serve` 개발 서버는 Vite를 사용하며 esbuild와 Angular 컴파일러를 조합하여 파일 여러개를 동시에 컴파일할 수 있습니다.
+그리고 v17 버전에는 이 빌드 툴들이 개발자 프리뷰를 졸업하고 새 프로젝트를 생성할 때 기본으로 적용됩니다.
+
+
+<!--
+### Introduce dependency injection debugging APIs
+-->
+### 의존성 주입 디버깅 API
+
+<!--
+*Completed Q4 2023*
+
+To improve the debugging utilities of Angular and Angular DevTools, we'll work on APIs that provide access to the dependency injection runtime. As part of the project, we'll expose debugging methods that allow us to explore the injector hierarchy and the dependencies across their associated providers. As of v17, we shipped a feature that enables us to plug into the dependency injection life-cycle. We also launched a visualization of the injector tree and inspection of the providers declared inside each individual node,
+-->
+*2023년 4분기에 완료*
+
+Angular와 Angular DevTools의 활용도를 높이기 위해, 런타임에 의존성 주입 정보를 제공하는 API를 추가했습니다.
+이 프로젝트가 진행되면서 인젝터 계층을 탐색할 수 있는 디버깅 메서드를 추가했고, 관련 프로바이더도 확인할 수 있습니다.
+v17 버전에는 의존성 주입 라이프 싸이클에 직접 개입할 수 있는 기능을 추가했습니다.
+인젝터 트리를 시각적으로 확인하거나 개별 인젝터에 등록된 프로바이더를 확인할 수 있는 기능도 추가했습니다.
+
+
+<!--
+### Improve documentation and schematics for standalone components
+-->
+### 단독 컴포넌트 관련 문서, 스키매틱 개선
+
+<!--
+*Completed Q4 2023*
+
+We released a developer preview of the `ng new --standalone` schematics collection, allowing you to create apps free of NgModules. In v17 we switched the new application authoring format to standalone APIs and changed the documentation to reflect the recommendation. Additionally, we shipped schematics which support updating existing applications to standalone components, directives, and pipes. Even though NgModules will stick around for foreseeable future, we recommend you to explore the benefits of the new APIs to improve developer experience and benefit from the new features we build for them.
+-->
+*2023년 4분기에 완료*
+
+`ng new --standalone` 스키매틱 컬렉션이 개발자 프리뷰로 도입되었으며, 이 스키매틱을 활용하면 NgModule이 하나도 없는 앱을 구성할 수 있습니다.
+그리고 v17 버전에는 애플리케이션 전체 구성을 변경해서 단독 컴포넌트용 API를 기본으로 권장하며, 관련 문서도 수정했습니다.
+기존에 이 방식이 아닌 애플리케이션을 단독 컴포넌트, 단독 디렉티브, 단독 파이프로 변환할 수 있는 스키매틱도 준비했습니다.
+NgModule은 당분간 유지될 예정이지만, 새로운 방식이 얼마나 괜찮은지 시도해보는 것을 권장합니다.
+
+
+<!--
+### Explore hydration and server-side rendering improvements
+-->
+### 하이드레이션, 서버 사이드 렌더링 개선 연구
+
+<!--
+*Completed Q4 2023*
+
+In v16, we released a developer preview of non-destructive full hydration, see the [hydration guide](guide/hydration) and the [blog post](https://blog.angular.io/whats-next-for-server-side-rendering-in-angular-2a6f27662b67) for additional information. We're already seeing significant improvements to Core Web Vitals, including [LCP](https://web.dev/lcp) and [CLS](https://web.dev/cls). In lab tests, we consistently observed 45% better LCP of a real-world app.
+
+In v17 we launched hydration outside developer preview and did a series of improvements in the server-side rendering story, including: route discovery at runtime for SSG, up to 87% faster build times for hybrid rendered applications, prompt that enables hybrid rendering for new projects.
+-->
+*2023년 4분기에 완료*
+
+v16 버전에는 비파괴적이면서 완전한 하이드레이션을 개발자 프리뷰로 추가했습니다.
+자세한 내용은 [하이드레이션 가이드](guide/hydration)와 [블로그 글](https://blog.angular.io/whats-next-for-server-side-rendering-in-angular-2a6f27662b67)을 참고하세요.
+저희가 실험한 바로는, LCP를 기준으로 평균 45%의 성능 향상을 확인했습니다.
+
+v17 버전에는 하이드레이션이 개발자 프리뷰를 졸업했으며, 실행 시점의 SSG(Server-side Generation)와 같은 기능들이 개선되면서 하이브리드 렌더링되는 애플리케이션의 빌드 시간을 최대 87%까지 줄일 수 있었습니다.
+이제 프로젝트를 새로 생성하면 하이브리드 렌더링이 기본으로 활성화됩니다.
+
+
+<!--
 ### Non-destructive full app hydration
 -->
 ### 앱 하이드레이션 확장 적용
 
 <!--
-In v16, we released a developer preview of non-destructive full hydration, which allows Angular to reuse existing DOM nodes on a server-side rendered page, instead of re-creating an app from scratch. See additional information in the [hydration guide](guide/hydration).
-
 *Completed Q2 2023*
+
+In v16, we released a developer preview of non-destructive full hydration, which allows Angular to reuse existing DOM nodes on a server-side rendered page, instead of re-creating an app from scratch. See additional information in the [hydration guide](guide/hydration).
 -->
+*2023년 2분기에 완료*
+
 Angular v16에는 서버 사이드에서 렌더링된 화면을 처음부터 다시 그리지 않고 기존 DOM 노드를 재사용할 수 있는 하이드레이션 기능을 개발자 프리뷰로 도입했습니다.
 자세한 내용은 [하이드레이션 문서](guide/hydration)를 참고하세요.
 
-*2023년 2분기에 완료*
 
 <!--
 ### Improvements in the image directive

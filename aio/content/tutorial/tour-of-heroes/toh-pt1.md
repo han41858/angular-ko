@@ -234,8 +234,8 @@ The browser refreshes and now the hero's name is displayed in capital letters.
 
 The word `uppercase` in the interpolation binding after the pipe <code>&verbar;</code> character, activates the built-in `UppercasePipe`.
 
-[Pipes](guide/pipes) are a good way to format strings, currency amounts, dates, and other display data.
-Angular ships with several built-in pipes and you can create your own.
+[Pipes](guide/pipes-overview) are a good way to format strings, currency amounts, dates, and other display data.
+Angular ships with several built-in pipes, and you can create your own.
 -->
 다음과 같이 `hero.name` 바인딩 문법을 수정합니다:
 
@@ -245,7 +245,7 @@ Angular ships with several built-in pipes and you can create your own.
 
 문자열 바인딩\(interpolation binding\)에서 파이프 연산자 <code>&verbar;</code> 바로 뒤에 있는 `uppercase` 는 Angluar의 기본 파이프인 `UppercasePipe`를 가리킵니다.
 
-[파이프](guide/pipes)는 문자열의 형식을 지정하거나, 통화 단위를 변경하고, 날짜나 데이터가 표시되는 형식을 변경할 때 사용합니다.
+[파이프](guide/pipes-overview)는 문자열의 형식을 지정하거나, 통화 단위를 변경하고, 날짜나 데이터가 표시되는 형식을 변경할 때 사용합니다.
 
 
 <!--
@@ -488,5 +488,15 @@ Here are the code files discussed on this page.
 *   Angular가 `ngModel` 디렉티브를 제대로 인식하고 동작할 수 있도록 `AppModule`에 `FormsModule`을 로드했습니다.
 *   컴포넌트는 반드시 `@NgModule`중 하나에 등록되어야 합니다. 이 때 Angular CLI를 사용하면 더 편합니다.
 
+
+<!--
+## Next steps
+-->
+## 다음 단계
+
+<!--
+*  [2. Display a list](tutorial/tour-of-heroes/toh-pt2)
+-->
+*  [2. 목록 표시하기](tutorial/tour-of-heroes/toh-pt2)
 
 @reviewed 2022-02-28

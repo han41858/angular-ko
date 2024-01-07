@@ -27,7 +27,7 @@ Here are detailed comparisons of the differences.
 Observables are often compared to promises.
 Here are some key differences:
 
-*   Observables are declarative; computation does not start until subscription.
+*   Observable execution is deferred; computation does not start until subscription.
     Promises execute immediately on creation.
     This makes observables useful for defining recipes that can be run whenever you need the result.
 
@@ -35,16 +35,16 @@ Here are some key differences:
     Promises provide one.
     This makes observables useful for getting multiple values over time.
 
-*   Observables differentiate between chaining and subscription.
-    Promises only have `.then()` clauses.
-    This makes observables useful for creating complex transformation recipes to be used by other part of the system, without causing the work to be executed.
+*   Observable values can be transformed with operators as well as in the subscription.  The rich variety of RxJS operators observables enables complex transformations that can be passed around to other parts of the system, without causing the work to be executed prematurely.
+    
+    Promises have `.then()` clauses which can transform values but only after the work is done.
 
-*   Observables `subscribe()` is responsible for handling errors.
-    Promises push errors to the child promises.
-    This makes observables useful for centralized and predictable error handling.
+*   Observables and Promises handle errors differently with roughly comparable efficacy.
+
+The following sections explore these points in greater detail.
 -->
 옵저버블은 Promise와 자주 비교됩니다.
-간단하게 살펴보면 다음과 같은 점이 다릅니다:
+간단하게 살펴보면 이런 점이 다릅니다:
 
 *   옵저버블은 명시적으로 구독하기 전까지는 실행되지 않지만, Promise는 객체를 생성할 때 바로 실행됩니다.
     데이터를 받는 쪽에서 원하는 시점을 결정하는 경우라면 옵저버블이 더 효율적입니다.
@@ -55,8 +55,9 @@ Here are some key differences:
 *   옵저버블은 체이닝과 구독을 구별하지만, Promise는 `.then()` 하나로 사용합니다.
     다른 곳에서 가져온 데이터를 복잡하게 가공해야 한다면 옵저버블이 더 효율적입니다.
 
-*   옵저버블에서 제공하는 `subscribe()`는 에러도 함께 처리할 수 있습니다.
-    Promise는 `.catch()`를 사용하는 위치에 따라 에러를 처리하는 로직이 달라져야 하지만, 옵저버블은 에러 처리 로직을 한 군데에 집중할 수 있습니다.
+*   옵저버블과 Promise는 오류를 처리하는 방식이 다르지만 효율성은 비슷합니다.
+
+이어지는 섹션에서 자세하게 확인해 봅시다.
 
 
 <!--
@@ -66,56 +67,71 @@ Here are some key differences:
 
 <!--
 *   Observables are not executed until a consumer subscribes.
-    The `subscribe()` executes the defined behavior once, and it can be called again.
-    Each subscription has its own computation.
-    Resubscription causes recomputation of values.
+    
+    The `subscribe()` initiates the observable's behavior which may execute synchronously or asynchronously and could produce one, many or no values over time.
+
+    For "unicast" observables, if you call `subscribe` again, you get a new observable execution with its own production of values.
+    Calling `subscribe` on a "multicast" observable (e.g., `Subject` or an observable with the `shareReplay` operator) simply adds another *subscriber* to the already running observable.
+
+    The `subscribe` call is the end-of-the-line. You cannot continue to manipulate values after `subscribe(...)`.
 
     <code-example header="src/observables.ts (observable)" path="comparing-observables/src/observables.ts" region="observable"></code-example>
 
-*   Promises execute immediately, and just once.
-    The computation of the result is initiated when the promise is created.
-    There is no way to restart work.
-    All `then` clauses \(subscriptions\) share the same computation.
+*   Promises execute immediately when they are created. There is no deferred execution and, therefore, no equivalent to `subscribe()`.
+
+    A promise is always asynchronous and can produce at most one value.
+    
+    There is no way to restart a promise and it retains its result value for the life of the promise.
+
+    You can chain additional `then` clauses to a promise.
 
     <code-example header="src/promises.ts (promise)" path="comparing-observables/src/promises.ts" region="promise"></code-example>
 -->
 *   옵저버블은 구독자가 구독하기 전까지 실행되지 않습니다.
-    그리고 `subscribe()`가 실행되면 스트림이 전달될 때마다 지정된 옵저버블 처리 로직을 실행합니다.
-    옵저버블은 구독될 때마다 새로운 실행 컨텍스트를 생성하며, 이 때마다 옵저버블이 처음부터 다시 실행됩니다.
+
+    그리고 `subscribe()`가 실행되면 스트림이 전달될 때마다 지정된 옵저버블 처리 로직을 동기/비동기로 실행하면서 하나 이상의 값을 내보냅니다.
+
+    "유니캐스트(unicast)" 옵저버블은 `subscribe`를 다시 실행하면 옵저버블이 새롭게 실행되면서 새로운 값을 내보냅니다.
+    그리고 `Subject`나 `shareReplay` 연산자가 사용된 "멀티캐스트(multicast)" 옵저버블은 `subscribe`를 다시 실행하면 기존에 실행되던 옵저버블에 구독자만 추가하는 효과를 냅니다.
+
+    `subscribe`는 마지막에 위치합니다. `subscribe(...)` 이후에는 무언가 덧붙일 수 없습니다.
 
     <code-example header="src/observables.ts (옵저버블)" path="comparing-observables/src/observables.ts" region="observable"></code-example>
 
-*   Promise는 생성되자마자 딱 한 번만 실행됩니다.
-    Promise에 지정된 로직도 Promise가 생성될 때 한 번만 실행되며, 이 로직을 다시 실행하는 방법은 없습니다.
-    Promise에서 체이닝하는 `then`은 모두 같은 객체를 공유합니다.
+*   Promise는 생성되자마자 딱 한 번만 실행됩니다. `subscribe()`처럼 실행이 지연되는 경우는 없습니다.
+
+    Promise는 언제나 비동기로 처리되며 값을 하나만 내보낼 수 있습니다.
+
+    이미 완료된 Promise를 재시작하는 방법은 없으며, 최종 값만 유지됩니다.
+
+    Promise는 `then`으로 체이닝할 수 있습니다.
 
     <code-example header="src/promises.ts (Promise)" path="comparing-observables/src/promises.ts" region="promise"></code-example>
 
 
-<!--
-### Chaining
--->
-### 체이닝
+<a id="chaining"></a>
 
 <!--
-*   Observables differentiate between transformation function such as a map and subscription.
-    Only subscription activates the subscriber function to start computing the values.
-
-    <code-example header="src/observables.ts (chain)" path="comparing-observables/src/observables.ts" region="chain"></code-example>
-
-*   Promises do not differentiate between the last `.then` clauses \(equivalent to subscription\) and intermediate `.then` clauses \(equivalent to map\).
-
-    <code-example header="src/promises.ts (chain)" path="comparing-observables/src/promises.ts" region="chain"></code-example>
+### Transformations
 -->
-*   옵저버블은 데이터를 조작하는 것과 구독하는 것을 구별합니다.
-    옵저버블은 구독자가 있을 때만 옵저버블 로직을 실행합니다.
+### 변환 작업
 
-    <code-example header="src/observables.ts (체이닝)" path="comparing-observables/src/observables.ts" region="chain"></code-example>
+<!--
+*   Developers can transform values both in the *subscription* and in piped *operators*. There are large number of RxJS operators to suit many complex scenarios, including numerous ways to combine and split observables.
 
-*   Promise는 구독을 의미하는 마지막 `.then`과 데이터 조작을 의미하는 중간 `.then`을 구분하지 않습니다.
+    <code-example header="src/observables.ts (operators and multiple values)" path="comparing-observables/src/observables.ts" region="operators"></code-example>
 
-    <code-example header="src/promises.ts (체이닝)" path="comparing-observables/src/promises.ts" region="chain"></code-example>
+*   Promises do not have an equivalent to `subscribe()`. You can transform the emitted value of a promise through one or more `.then` clauses. Promises have a small set of combiners (e.g., `all`, `any`, `race`).
 
+    <code-example header="src/promises.ts (chained .then)" path="comparing-observables/src/promises.ts" region="chain"></code-example>
+-->
+*   옵저버블로 전달되는 값은 값을 *구독자 함수*와 중간에 체이닝한 *연산자*에서 변환할 수 있습니다. RxJS는 다양한 경우에 활용할 수 있는 연산자는 방대하게 지원합니다. 옵저버블을 조합하거나 나누는 연산자도 있습니다.
+
+    <code-example header="src/observables.ts (값을 변환하는 연산자)" path="comparing-observables/src/observables.ts" region="operators"></code-example>
+
+*   Promise는 `subscribe()`와 다릅니다. Promise로 전달되는 값을 변환하려면 `.then`을 사용하면 됩니다. Promise에도 `all`, `any`, `race`와 같이 값을 조합할 수 있는 연산자가 있습니다.
+
+    <code-example header="src/promises.ts (.then 으로 체이닝하기)" path="comparing-observables/src/promises.ts" region="chain"></code-example>
 
 
 
@@ -146,19 +162,23 @@ Here are some key differences:
 ### 에러 처리
 
 <!--
-*   Observable execution errors are delivered to the subscriber's error handler, and the subscriber automatically unsubscribes from the observable.
+*   Observable execution errors can be handled with the `catchError()` operator or in the `subscribe`.
+
+    `catchError` can put the observable back on the normal path where it continues to produce values or it can rethrow the error. An uncaught error unsubscribes all subscribers.
 
     <code-example header="src/observables.ts (error)" path="comparing-observables/src/observables.ts" region="error"></code-example>
 
-*   Promises push errors to the child promises.
+*   Promise errors can be handled with a `.catch()` or in the second argument of a `.then()`.
 
     <code-example header="src/promises.ts (error)" path="comparing-observables/src/promises.ts" region="error"></code-example>
 -->
-*   옵저버블은 구독자의 에러 핸들러 함수에서 에러를 처리하며, 에러가 발생하면 구독자가 자동으로 구독을 해지합니다.
+*   옵저버블에서 발생하는 에러는 `catchError()` 연산자나 `subscribe` 함수에서 처리할 수 있습니다.
+
+    `catchError` 연산자 안에서는 에러가 발생한 옵저버블을 정상 옵저버블로 변환하여 반환하거나 그대로 에러 스트림으로 반환할 수 있습니다. 처리되지 않은 에러는 모든 구독자에게 전달되며 구독을 종료됩니다.
 
     <code-example header="src/observables.ts (error)" path="comparing-observables/src/observables.ts" region="error"></code-example>
 
-*   Promise는 자식 Promise를 생성하고 이 객체에 에러를 보냅니다.
+*   Promise는 `.catch()` 함수로 에러를 처리하거나, `.then()`의 두 번째 인자로 처리합니다.
 
     <code-example header="src/promises.ts (error)" path="comparing-observables/src/promises.ts" region="error"></code-example>
 
@@ -269,4 +289,4 @@ In the following examples, <code>&rarr;</code> implies asynchronous value delive
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-08-25

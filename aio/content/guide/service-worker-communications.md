@@ -4,9 +4,10 @@
 # 서비스 워커 통신
 
 <!--
-Importing `ServiceWorkerModule` into your `AppModule` doesn't just register the service worker, it also provides a few services you can use to interact with the service worker and control the caching of your application.
+Enabling service worker support does more than just register the service worker; it also provides services you can use to interact with the service worker and control the caching of your application.
 -->
-`AppModule`에 `ServiceWorkerModule`을 로드하는 것만으로는 서비스 워커를 제대로 등록했다고 할 수 없습니다. 서비스 워커를 제대로 사용하려면 애플리케이션의 데이터를 캐싱할 수 있도록 서비스 워커가 제공하는 서비스를 활용해서 어떤 동작을 실행하도록 해야 합니다.
+서비스 워커를 등록하는 것만으로 서비스 워커를 활성화했다고 할 수는 없습니다.
+서비스 워커를 제대로 활용하려면 이 서비스 워커가 애플리케이션과 상호작용하면서 적절하게 캐싱하도록 제어해야 합니다.
 
 
 <!--
@@ -97,7 +98,7 @@ The check might fail, which will cause a rejection of the `Promise`.
 
 <div class="alert is-important">
 
-In order to avoid negatively affecting the initial rendering of the page, `ServiceWorkerModule` waits for up to 30 seconds by default for the application to stabilize, before registering the ServiceWorker script.
+In order to avoid negatively affecting the initial rendering of the page, by default the Angular service worker service waits for up to 30 seconds for the application to stabilize before registering the ServiceWorker script.
 Constantly polling for updates, for example, with [setInterval()](https://developer.mozilla.org/docs/Web/API/WindowOrWorkerGlobalScope/setInterval) or RxJS' [interval()](https://rxjs.dev/api/index/function/interval), prevents the application from stabilizing and the ServiceWorker script is not registered with the browser until the 30 seconds upper limit is reached.
 
 <div class="alert is-helpful">
@@ -125,7 +126,7 @@ Alternatively, you might want to define a different [registration strategy](api/
 
 <div class="alert is-important">
 
-애플리케이션 첫 화면이 느리게 뜨는 것을 방지하기 위해 `ServiceWorkerModule`은 앱이 안정화되기까지 30초를 기다린 후에 서비스 워커 스크립트를 시작합니다.
+애플리케이션 첫 화면이 느리게 뜨는 것을 방지하기 위해, 기본적으로 Angular 서비스 워커 서비스는 애플리케이션이 안정되기까지 30초를 기다린 후에 서비스 워커 스크립트를 시작합니다.
 앱이 업데이트 되었는지 확인하기 위해 [setInterval()](https://developer.mozilla.org/docs/Web/API/WindowOrWorkerGlobalScope/setInterval)이나 RxJS [interval()](https://rxjs.dev/api/index/function/interval)을 사용하면 앱이 안정화되지 않습니다.
 그래서 서비스 워커 스크립트도 30초가 지나기 전까지는 브라우저에 등록되지 않습니다.
 

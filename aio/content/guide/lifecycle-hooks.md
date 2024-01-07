@@ -216,7 +216,7 @@ Angular가 디렉티브나 컴포넌트를 종료하기 전에 실행해야 하�
 ### DestroyRef
 
 <!--
-In addition to to `ngOnDestroy()`, you can inject Angular's `DestroyRef` and register callback functions to be called when the enclosing context is destroyed. This can be useful for building reusable utilities that require cleanup.
+In addition to `ngOnDestroy()`, you can inject Angular's `DestroyRef` and register callback functions to be called when the enclosing context is destroyed. This can be useful for building reusable utilities that require cleanup.
 
 Register a callback with the `DestroyRef`:
 
@@ -275,12 +275,12 @@ When using RxJS Observables in components or directives, you may want to complet
 data$ = http.get('...').pipe(takeUntilDestroyed());
 ```
 
-By default, `takeUntilDestroyed` must be called in an injection context so that it can access `DestroyRef`. If an injection context isn't available, you can explicitly provide a `DestroyRef`.
+By default, `takeUntilDestroyed` must be called in an [injection context](/guide/dependency-injection-context) so that it can access `DestroyRef`. If an injection context isn't available, you can explicitly provide a `DestroyRef`.
 -->
 <div class="alert is-important">
 
 `takeUntilDestroyed`은 [개발자 프리뷰](/guide/releases#developer-preview)에서만 사용할 수 있습니다.
-사용할 수는 있지만, 이후에 사용방법이 변경될 수 있습니다.
+그리고 이후에 사용방법이 변경될 수 있습니다.
 
 </div>
 
@@ -291,8 +291,144 @@ By default, `takeUntilDestroyed` must be called in an injection context so that 
 data$ = http.get('...').pipe(takeUntilDestroyed());
 ```
 
-기본적으로 `takeUntilDestroyed`는 의존성 컨텍스트 안에서 실행되기 때문에 `DestroyRef`에도 접근할 수 있습니다.
+기본적으로 `takeUntilDestroyed`는 [의존성 컨텍스트](/guide/dependency-injection-context) 안에서 실행되기 때문에 `DestroyRef`에도 접근할 수 있습니다.
 의존성 컨텍스트를 사용할 수 없으면 `DestroyRef`를 명시적으로 사용해야 합니다.
+
+
+<!--
+## Reading and writing the DOM
+-->
+## DOM 읽고 쓰기
+
+<!--
+Sometimes it's necessary to use browser-only APIs to manually read or write the DOM. This can be challenging to do with the [lifecycle events](#lifecycle-event-sequence) above, as they will also run during [server-side rendering and pre-rendering](guide/glossary#server-side-rendering). For this purpose, Angular provides `afterRender` and `afterNextRender`. These functions can be used unconditionally, but will only have an effect on the browser. Both functions accept a callback that will run after the next [change detection](/guide/glossary#change-detection) cycle (including any nested cycles) has completed.
+
+<div class="alert is-important">
+
+`afterRender` and `afterNextRender` are available for [developer preview](/guide/releases#developer-preview). They are ready for you to try, but they might change before they are stable.
+
+</div>
+
+| Function | Purpose | Timing |
+| ------ | ------- | ------ |
+| `afterNextRender` | Perform one-time initialization, or observe a single, specific change to the DOM. <br /> <div class="alert is-helpful">As a rule of thumb, you should use `afterRender` instead if you need to manually read or write any layout data such as size or location.</div> See details in [One-time initialization](#one-time-initialization) in this document. | _Once_ after the next change detection cycle. |
+| `afterRender` | Synchronize state with the DOM.  See details in [Handling synchronization](#handling-synchronization) in this document. | After _every_ change detection cycle that follows. |
+-->
+때로는 DOM을 읽거나 쓰기 위해 브라우저에만 있는 API를 활용해야 하는 경우가 있습니다.
+그런데 이런 작업은 [서버 사이드 렌더링이나 사전 렌더링](guide/glossary#server-side-rendering)의 영향을 받기 때문에 이전에 설명한 [라이프싸이클 이벤트](#lifecycle-event-sequence)로는 구현하기 어려울 수 있습니다.
+이런 경우를 위해 Angular는 `afterRender`와 `afterNextRender`를 제공합니다.
+이 함수들은 조건없이 사용할 수 있지만, 브라우저에만 영향을 줍니다.
+이 함수들은 콜백 함수를 인자로 받으며, 콜백 함수는 [변화 감지](/guide/glossary#change-detection) 싸이클이 완료된 후에 실행됩니다.
+
+<div class="alert is-important">
+
+`afterRender`와 `afterNextRender`는 [개발자 프리뷰](/guide/releases#developer-preview)에서만 사용할 수 있습니다.
+그리고 이후에 사용방법이 변경될 수 있습니다.
+
+</div>
+
+| 함수                | 용도                                                                                                                                                                                              | 타이밍              |
+|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|
+| `afterNextRender` | 처음 초기화할 때, 옵저버블을 한 번만 실행할 때, DOM을 처음 구성할 때. <br /> <div class="alert is-helpful">일반적으로 `afterRender`는 DOM의 크기나 위치를 읽거나 조정할 때 사용합니다.</div> 자세한 내용은 [최초 초기화](#one-time-initialization) 섹션을 참고하세요. | 변화가 감지된 후에 _한 번_ |
+| `afterRender`     | DOM 상태와 동기화할 때. 자세한 내용은 [동기화 처리](#handling-synchronization) 섹션을 참고하세요                                                                                                                           | 변화가 감지된 후에 _매 번_ |
+
+
+<!--
+### One-time initialization
+-->
+### 최초 초기화
+
+<!--
+Generally, you will want to use `afterNextRender` to perform any one-time initialization, such as for a third-party library, or for browser-only APIs.
+-->
+일반적으로 `afterNextRender`는 서드 파티 라이브러리는 사용하거나 브라우저 전용 API를 사용해서 최초 초기화를 수행할 때 사용합니다.
+
+```ts
+@Component({
+  selector: 'my-chart-cmp',
+  template: `<div #chart>{{ ... }}</div>`,
+})
+export class MyChartCmp {
+  @ViewChild('chart') chartRef: ElementRef;
+  chart: MyChart|null;
+
+  constructor() {
+    afterNextRender(() => {
+      this.chart = new MyChart(this.chartRef.nativeElement);
+    }, {phase: AfterRenderPhase.Write});
+  }
+}
+```
+
+<!--
+Instead of attempting to recreate their behaviors with `afterRender`, you should prefer to use built-in browser APIs like `ResizeObserver` and `IntersectionObserver` wherever possible. You can use `afterNextRender` to safely initialize such APIs on the browser only.
+-->
+`afterRender`를 너무 많이 사용하는 것보다는 `ResizeObserver`나 `IntersectionObserver`와 같은 브라우저 내장 API를 활용하는 것이 좋은 경우도 있습니다.
+`afterNextRender`를 사용하면 브라우저 API만 적용되도록 코드를 작성할 수 있습니다.
+
+```ts
+@Component({
+  selector: 'my-cmp',
+  template: `<span #content>{{ ... }}</span>`,
+})
+export class MyComponent {
+  resizeObserver: ResizeObserver|null = null;
+  @ViewChild('content') contentRef: ElementRef;
+
+  constructor() {
+    afterNextRender(() => {
+      this.resizeObserver = new ResizeObserver(() => {
+        console.log('Content was resized');
+      });
+
+      this.resizeObserver.observe(this.contentRef.nativeElement);
+    }, {phase: AfterRenderPhase.Write});
+  }
+
+  ngOnDestroy() {
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
+  }
+}
+```
+
+<div class="alert is-important">
+
+<!--
+As a rule of thumb, `afterNextRender` should be used to observe _discrete_ changes to the DOM, such as element creation or deletion. For manually reading or writing data that tends to change frequently, such as size or location, you should generally prefer to use `afterRender` instead.
+-->
+일반적으로 `afterNextRender`는 엘리먼트가 추가되거나 제거되는 경우처럼 DOM의 _명확한_ 변경사항을 추적할 때 사용해야 합니다.
+엘리먼트의 크기나 위치가 변하는 것을 주기적으로 검사하는 것을 의도했다면 `afterRender`를 사용하는 것이 더 좋습니다.
+
+</div>
+
+
+<!--
+### Handling synchronization
+-->
+### 동기화 처리
+
+<!--
+As an escape hatch for when the browser does not provide a better API to do so, you can use `afterRender` to perform any additional read or writes to the DOM every time Angular finishes mutating it.
+-->
+브라우저가 별다른 API를 제공하지 않는다면, Angular가 DOM 변경을 완료할 때마다 `afterRender`를 사용해서 DOM을 참조하거나 조작할 수 있습니다.
+
+```ts
+@Component({
+  selector: 'my-cmp',
+  template: `<span #content>{{ ... }}</span>`,
+})
+export class MyComponent {
+  @ViewChild('content') contentRef: ElementRef;
+
+  constructor() {
+    afterRender(() => {
+      const elem = this.contentRef.nativeElement;
+      console.log(`content position: (${elem.offsetLeft}, ${elem.offsetTop})`);
+    }, {phase: AfterRenderPhase.Read});
+  }
+}
+```
 
 
 <!--

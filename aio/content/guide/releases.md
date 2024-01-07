@@ -235,13 +235,13 @@ Approximate dates are offered as general guidance and are subject to change.
 | Version | Date               |
 |:--------|:-------------------|
 | v16.1   | Week of 2023-06-12 |
-| v16.2   | Week of 2023-07-24 |
+| v16.2   | Week of 2023-08-07 |
 | v17.0   | Week of 2023-11-06 |
 -->
 | 버전    | 일정           |
 |:------|:-------------|
 | v16.1 | 2023-06-12 주 |
-| v16.2 | 2023-07-24 주 |
+| v16.2 | 2023-08-07 주 |
 | v17.0 | 2023-11-06 주 |
 
 
@@ -277,21 +277,21 @@ The following table provides the status for Angular versions under support.
 
 | Version | Status | Released   | Active ends | LTS ends   |
 |:--------|:-------|:-----------|:------------|:-----------|
-| ^16.0.0 | Active | 2023-05-03 | 2023-11-03  | 2024-11-08 |
+| ^17.0.0 | Active | 2023-11-08 | 2024-05-08  | 2025-05-15 |
+| ^16.0.0 | LTS    | 2023-05-03 | 2023-11-08  | 2024-11-08 |
 | ^15.0.0 | LTS    | 2022-11-18 | 2023-05-03  | 2024-05-18 |
-| ^14.0.0 | LTS    | 2022-06-02 | 2022-11-18  | 2023-11-18 |
 
-Angular versions v2 to v13 are no longer supported.
+Angular versions v2 to v14 are no longer supported.
 -->
 현재 지원되고 있는 Angular 버전은 이렇습니다.
 
 | 버전      | 상태     | 릴리즈 일자     | Active 지원 종료 | LTS 지원 종료  |
 |:--------|:-------|:-----------|:------------|:-----------|
-| ^16.0.0 | Active | 2023-05-03 | 2023-11-03  | 2024-11-08 |
+| ^17.0.0 | Active | 2023-11-08 | 2024-05-08  | 2025-05-15 |
+| ^16.0.0 | LTS    | 2023-05-03 | 2023-11-08  | 2024-11-08 |
 | ^15.0.0 | LTS    | 2022-11-18 | 2023-05-03  | 2024-05-18 |
-| ^14.0.0 | LTS    | 2022-06-02 | 2022-11-18  | 2023-11-18 |
 
-Angular v2 버전부터 v13 버전은 지원이 중단되었습니다.
+Angular v2 버전부터 v14 버전은 지원이 중단되었습니다.
 
 <a id="lts-fixes"></a>
 
@@ -395,6 +395,23 @@ The policies and practices that are described in this document do not apply to A
 개발자 프리뷰가 붙은 기능들은 이 문섯에서 설명한 지원 중단 정책의 영향을 받지 않습니다.
 그래서 패치 버전이 변경될 때에도 API 사용방법이 변경될 수 있습니다.
 Angular 팀은 이런 위험부담에도 불구하고 도입할 필요가 있을 때만 개발자 프리뷰를 제공하겠습니다.
+
+
+<!--
+## Experimental
+-->
+## 실험실
+
+<!--
+These are APIs might not become stable at all or have significant changes before becoming stable.
+
+The policies and practices that are described in this document do not apply to APIs marked as experimental. Such APIs can change at any time, even in new patch versions of the framework. Teams should decide for themselves whether the benefits of using experimental APIs are worth the risk of breaking changes outside of our normal use of semantic versioning.
+-->
+API 중에는 아직 확정되지 않았거나 확정되기 전에 크게 보완해야 하는 API가 있습니다.
+
+이 문서에서 설명하는 정책과 사레는 실험적으로 도입된 API에는 적용되지 않습니다.
+실험실 API는 프레임워크가 패치되면서 언제든지 변경될 수 있습니다.
+Angular 개발자들은 이후에 큰 변동이 있을 가능성을 감수하면서도 실험실 API를 활용해서 재미있는 기능을 활용해볼지 스스로 결정해야 합니다.
 
 
 <!-- links -->

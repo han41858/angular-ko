@@ -431,12 +431,12 @@ For more information, see the [ng-container section](guide/built-in-directives#n
 <live-example name="pipes"></live-example>
 
 Demonstrates Angular pipes.
-For more information, see [Transforming Data Using Pipes](guide/pipes).
+For more information, see [Transforming Data Using Pipes](guide/pipes-overview).
 -->
 <live-example name="pipes"></live-example>
 
 Angular 파이프를 다루는 애플리케이션입니다.
-자세한 내용은 [파이프로 데이터 변환하기](guide/pipes) 문서를 참고하세요.
+자세한 내용은 [파이프로 데이터 변환하기](guide/pipes-overview) 문서를 참고하세요.
 
 
 <!--
@@ -973,12 +973,12 @@ Angular 문서를 작성할 때 기준이 될 스타일을 다루는 애플리�
 <live-example name="http"></live-example>
 
 Demonstrates server interaction using HTTP.
-For more information, see [Communicating with backend services using HTTP](guide/http).
+For more information, see [Communicating with backend services using HTTP](guide/understanding-communicating-with-http).
 -->
 <live-example name="http"></live-example>
 
 HTTP를 사용해서 서버와 통신하는 내용을 다루는 애플리케이션입니다.
-자세한 내용은 [백엔드와 HTTP 통신하기](guide/http) 문서를 참고하세요.
+자세한 내용은 [백엔드와 HTTP 통신하기](guide/understanding-communicating-with-http) 문서를 참고하세요.
 
 
 <!--
@@ -1046,4 +1046,4 @@ AngularJS와 Angular가 어떻게 다른지 다루는 애플리케이션입니�
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-08-14

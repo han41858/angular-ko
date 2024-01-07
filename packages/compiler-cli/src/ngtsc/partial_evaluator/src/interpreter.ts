@@ -216,7 +216,7 @@ export class StaticInterpreter {
   private visitIdentifier(node: ts.Identifier, context: Context): ResolvedValue {
     const decl = this.host.getDeclarationOfIdentifier(node);
     if (decl === null) {
-      if (node.originalKeywordKind === ts.SyntaxKind.UndefinedKeyword) {
+      if (ts.identifierToKeywordKind(node) === ts.SyntaxKind.UndefinedKeyword) {
         return undefined;
       } else {
         // Check if the symbol here is imported.

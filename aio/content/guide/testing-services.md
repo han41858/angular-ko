@@ -272,7 +272,7 @@ Although this testing guide follows the traditional style and the default [CLI s
 ## HTTP 서비스 테스트하기
 
 <!--
-Data services that make HTTP calls to remote servers typically inject and delegate to the Angular [`HttpClient`](guide/http) service for XHR calls.
+Data services that make HTTP calls to remote servers typically inject and delegate to the Angular [`HttpClient`](guide/http-test-requests) service for XHR calls.
 
 You can test a data service with an injected `HttpClient` spy as you would test any service with a dependency.
 
@@ -289,7 +289,7 @@ Neglecting to do so produces an asynchronous uncaught observable error that the 
 
 </div>
 -->
-리모트 서버로 HTTP 요청을 보내는 데이터 서비스는 Angular [`HttpClient`](guide/http) 객체를 의존성으로 주입받고 이 객체로 XHR 요청을 보냅니다.
+리모트 서버로 HTTP 요청을 보내는 데이터 서비스는 Angular [`HttpClient`](guide/http-test-requests) 객체를 의존성으로 주입받고 이 객체로 XHR 요청을 보냅니다.
 
 이런 서비스는 이렇게 테스트할 수 있습니다.
 
@@ -315,15 +315,14 @@ Extended interactions between a data service and the `HttpClient` can be complex
 
 The `HttpClientTestingModule` can make these testing scenarios more manageable.
 
-While the *code sample* accompanying this guide demonstrates `HttpClientTestingModule`, this page defers to the [Http guide](guide/http#testing-http-requests), which covers testing with the `HttpClientTestingModule` in detail.
+While the *code sample* accompanying this guide demonstrates `HttpClientTestingModule`, this page defers to the [Http guide](guide/http-test-requests), which covers testing with the `HttpClientTestingModule` in detail.
 -->
 목 스파이로 데이터 서비스나 `HttpClient`를 직접 조작하는 것은 복잡하고 어렵습니다.
 
 이런 경우에는 `HttpClientTestingModule`을 사용하는 것이 좋습니다.
 
-이 문서에서 `HttpClientTestingModule`를 다루는 방식은 [Http 가이드](guide/http#testing-http-requests) 문서에서와는 조금 다릅니다.
+이 문서에서 `HttpClientTestingModule`를 다루는 방식은 [Http 가이드](guide/http-test-requests) 문서에서와는 조금 다릅니다.
 자세한 내용은 해당 문서를 참고하세요.
-
 
 
 <!-- links -->

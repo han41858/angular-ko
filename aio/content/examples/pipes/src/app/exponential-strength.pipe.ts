@@ -1,4 +1,3 @@
-// #docregion
 import { Pipe, PipeTransform } from '@angular/core';
 /*
  * 히어로의 힘을 증폭합니다.
@@ -9,7 +8,10 @@ import { Pipe, PipeTransform } from '@angular/core';
  *   {{ 2 | exponentialStrength:10 }}
  *   변환 결과: 1024
 */
-@Pipe({name: 'exponentialStrength'})
+@Pipe({
+  standalone: true,
+  name: 'exponentialStrength'
+})
 export class ExponentialStrengthPipe implements PipeTransform {
   transform(value: number, exponent = 1): number {
     return Math.pow(value, exponent);

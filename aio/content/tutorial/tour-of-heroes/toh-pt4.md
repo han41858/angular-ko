@@ -33,19 +33,17 @@ For the sample application that this page describes, see the <live-example></liv
 ## 왜 서비스를 사용할까요?
 
 <!--
-Components shouldn't fetch or save data directly and they certainly shouldn't knowingly present fake data.
+Components shouldn't fetch or save data directly, and they certainly shouldn't knowingly present fake data.
 They should focus on presenting data and delegate data access to a service.
 
 This tutorial creates a `HeroService` that all application classes can use to get heroes.
 Instead of creating that service with the [`new` keyword](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/new), use the [*dependency injection*](guide/dependency-injection) that Angular supports to inject it into the `HeroesComponent` constructor.
 
 Services are a great way to share information among classes that *don't know each other*.
-Create a `MessageService` next and inject it in these two places.
-
-*   Inject in `HeroService`, which uses the service to send a message
-*   Inject in `MessagesComponent`, which displays that message, and also displays the ID when the user clicks a hero
+Create a `HeroService` next and inject it in the `HeroesComponent`, to provide hero data.
 -->
-컴포넌트는 데이터를 직접 가져오거나 직접 저장하도록 요청하지 않는 것이 좋습니다. 그리고 사용하는 데이터가 실제 데이터인지 가짜 데이터인지 알 필요도 없습니다.
+컴포넌트는 데이터를 직접 가져오거나 직접 저장하도록 요청하지 않는 것이 좋습니다.
+그리고 사용하는 데이터가 실제 데이터인지 가짜 데이터인지 알 필요도 없습니다.
 컴포넌트는 데이터를 표시하는 것에만 집중하는 것이 좋으며, 데이터를 처리하는 로직은 서비스에게 맡겨두는 것이 좋습니다.
 
 이 튜토리얼에서는 히어로의 데이터를 처리하는 `HeroService`를 만들어 봅니다.
@@ -53,10 +51,7 @@ Create a `MessageService` next and inject it in these two places.
 이 서비스는 Angular가 제공하는 [*의존성 주입*](guide/dependency-injection) 메커니즘에 따라 `HeroesComponent`의 생성자로 주입될 것입니다.
 
 여러 클래스에 사용되는 정보를 공유하려면 서비스를 사용하는 방법이 가장 좋습니다.
-`MessageService`를 만들고 다음 두 곳에 이 서비스를 주입해서 활용해 봅시다:
-
-*   `HeroService`가 메시지를 보낼 때 사용합니다.
-*   이 메시지는 `MessagesComponent`가 받아서 화면에 표시합니다.
+`MessageService`를 만들고 `HeroesComponent`에 이 서비스를 주입해서 활용해 봅시다.
 
 
 <!--
@@ -357,7 +352,7 @@ synchronous, because that would block the browser as it waits to return data.
 
 In this tutorial, `HeroService.getHeroes()` returns an `Observable` so that it can
 use the Angular `HttpClient.get` method to fetch the heroes
-and have [`HttpClient.get()`](guide/http) return an `Observable`.
+and have [`HttpClient.get()`](guide/understanding-communicating-with-http) return an `Observable`.
 -->
 위에서 작성한 `HeroService.getHeroes()` 메소드는 *동기 방식으로 동작하기 때문에*, 이 함수의 실행 결과는 바로 반환됩니다.
 그래서 `HeroesComponent`의 `heroes` 프로퍼티에 값이 할당될 때도 동기 방식으로 할당됩니다.
@@ -375,7 +370,7 @@ and have [`HttpClient.get()`](guide/http) return an `Observable`.
 비동기 동작은 콜백 함수를 사용해서 처리할 수 있습니다. `Promise`를 반환하도록 처리할 수도 있습니다. 그리고 `Observable`을 반환할 수도 있습니다.
 
 이 튜토리얼에서는 `HeroService.getHeroes()` 함수가 `Observable`을 반환하도록 구현해 봅시다.
-Angular가 제공하는 [`HttpClient.get` 메소드는 `Observable`을 반환하기 때문에](guide/http) 이렇게 구현하는 것이 가장 자연스럽습니다.
+Angular가 제공하는 [`HttpClient.get` 메소드는 `Observable`을 반환하기 때문에](guide/understanding-communicating-with-http) 이렇게 구현하는 것이 가장 자연스럽습니다.
 
 
 <a id="observable-heroservice"></a>
@@ -801,5 +796,16 @@ Here are the code files discussed on this page.
 *   클래스끼리 데이터를 주고받지만 결합도를 낮추기 위해 `MessageService`를 만들었습니다.
 *   `HeroService`는 컴포넌트에 의존성으로 주입되지만 또 다른 서비스인 `MessageService`를 의존성으로 주입받기도 합니다.
 
+
+
+<!--
+## Next steps
+-->
+## 다음 단계
+
+<!--
+*  [5. Add navigation](tutorial/tour-of-heroes/toh-pt5)
+-->
+*  [5. 네비게이션 추가하기](tutorial/tour-of-heroes/toh-pt5)
 
 @reviewed 2022-02-28

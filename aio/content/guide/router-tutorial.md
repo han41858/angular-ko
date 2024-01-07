@@ -195,37 +195,6 @@ Angular CLI를 사용해서 *angular-router-sample* 라는 이름으로 애플�
 
     ng serve
 
-    </code-example>
-
-1.  브라우저를 열고 `http://localhost:4200` 주소로 이동해 보세요.
-
-    웹 화면이 뜨면 컴포넌트 2개가 함께 표시되는 것을 확인할 수 있습니다.
-
-
-<!--
-## Import `RouterModule` from `@angular/router`
--->
-## `@angular/router` 패키지에서 `RouterModule` 로드하기
-
-<!--
-Routing lets you display specific views of your application depending on the URL path.
-To add this functionality to your sample application, you need to update the `app.module.ts` file to use the module, `RouterModule`.
-You import this module from `@angular/router`.
-
-1.  From your code editor, open the `app.module.ts` file.
-1.  Add the following `import` statement.
-
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="router-import"></code-example>
--->
-애플리케이션 화면은 URL 주소로 결정됩니다.
-예제로 만드는 애플리케이션에 이런 기능을 추가하려면 `app.module.ts` 파일이 `RouterModule`을 활용하는 방식으로 수정해야 합니다.
-이 모듈은 `@angular/router` 패키지로 제공됩니다.
-
-1.  에디터로 `app.module.ts` 파일을 엽니다.
-1.  `import` 구문을 다음과 같이 추가합니다.
-
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="router-import"></code-example>
-
 
 <!--
 ## Define your routes
@@ -243,36 +212,93 @@ Each route typically has two properties.
 The first property, `path`, is a string that specifies the URL path for the route.
 The second property, `component`, is a string that specifies what component your application should display for that path.
 
-1.  From your code editor, open the `app.module.ts` file.
-1.  Locate the `@NgModule()` section.
-1.  Replace the `imports` array in that section with the following.
+1. From your code editor, create and open the `app.routes.ts` file.
+1. Create and export a routes list for your application:
 
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="import-basic"></code-example>
+```
+import {Routes} from '@angular/router';
 
-This code adds the `RouterModule` to the `imports` array.
-Next, the code uses the `forRoot()` method of the `RouterModule` to define your two routes.
-This method takes an array of JavaScript objects, with each object defining the properties of a route.
-The `forRoot()` method ensures that your application only instantiates one `RouterModule`.
-For more information, see [Singleton Services](guide/singleton-services#forroot-and-the-router).
+export const routes = [];
+```
+1. Add two routes for your first two components:
+
+```
+  {path: 'crisis-list', component: CrisisListComponent},
+  {path: 'heroes-list', component: HeroesListComponent},
+```
+
+This routes list is an array of JavaScript objects, with each object defining the properties of a route.
 -->
 이번 섹션에서는 라우팅 규칙을 2개 정의해 봅시다:
 
 *   `/crisis-center` 라우팅 규칙은 `crisis-center` 컴포넌트를 표시합니다.
 *   `/heroes-list` 라우팅 규칙은 `heroes-list` 컴포넌트를 표시합니다.
 
-라우팅 규칙은 JavaScript 객체로 정의합니다.
-개별 라우팅 규칙에는 프로퍼티가 2개 있는데, `path`에는 라우팅 규칙과 연결될 URL 주소를 문자열로 지정하고, `component`에는 해당 주소로 접근했을 때 표시될 컴포넌트를 지정합니다.
+라우팅 규칙은 JavaScript 객체 형식이며, 이 객체에는 프로퍼티가 2개 있습니다.
+`path`는 라우팅 규칙과 매칭될 URL을 지정합니다.
+`component`는 `path`가 매칭되었을 때 사용할 컴포넌트를 지정합니다.
 
-1.  에디터로 `app.module.ts` 파일을 엽니다.
-1.  `@NgModule()` 섹션을 찾습니다.
-1.  `imports` 배열을 이런 내용으로 수정합니다.
+1. 코드 에디터를 열고 `pp.routes.ts` 파일을 생성한 후에 이 파일을 엽니다.
+1. 이 파일에 라우팅 규칙을 등록할 준비를 합니다:
 
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="import-basic"></code-example>
+```
+import {Routes} from '@angular/router';
 
-`imports` 배열에 `RouterModule`을 추가하면서 `RouterModule` `forRoot()` 메서드를 사용해서 라우팅 규칙을 2개 정의했습니다.
-`forRoot()` 메서드는 JavaScript 객체 배열을 인자로 받아서 개별 객채마다 라우팅 규칙을 정의합니다.
-`forRoot()` 메서드를 실행하면 애플리케이션에 `RouterModule` 인스턴스가 전역 범위에 하나 생성됩니다.
-자세한 내용은 [싱글턴 서비스](guide/singleton-services#forroot-and-the-router) 문서를 참고하세요.
+export const routes = [];
+```
+1. 라우팅 규칙과 컴포넌트들을 연결합니다:
+
+```
+  {path: 'crisis-list', component: CrisisListComponent},
+  {path: 'heroes-list', component: HeroesListComponent},
+```
+
+
+<!--
+## Import `provideRouter` from `@angular/router`
+-->
+## `@angular/router` 패키지에서 `provideRouter` 로드하기
+
+<!--
+Routing lets you display specific views of your application depending on the URL path.
+To add this functionality to your sample application, you need to update the `app.config.ts` file to use the router providers function, `provideRouter`.
+You import this provider function from `@angular/router`.
+
+1.  From your code editor, open the `app.config.ts` file.
+1.  Add the following import statements:
+
+```
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+```
+
+2. Update the providers in the `appConfig`:
+
+```
+providers: [provideRouter(routes)]
+```
+
+For `NgModule` based applications, put the `provideRouter` in the `providers` list of the `AppModule`, or whichever module is passed to `bootstrapModule` in the application.
+-->
+라우팅을 활용하면 URL 경로에 맞는 화면을 화면에 표시할 수 있습니다.
+예제 애플리케이션에 이 기능을 추가하려면 `app.config.ts` 파일을 수정해서 `provideRouter`로 라우팅 규칙을 등록해야 합니다.
+이 함수는 `@angular/router` 패키지로 제공됩니다.
+
+1.  코드 에디터에서 `app.config.ts` 파일을 엽니다.
+1.  이 파일에 아래 내용을 추가합니다:
+
+```
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+```
+
+2. `appConfig`의 프로바이더 설정을 수정합니다:
+
+```
+providers: [provideRouter(routes)]
+```
+
+`NgModule` 기반으로 개발된 애플리케이션이라면 `AppModule`의 `providers` 목록에 `provideRouter()` 함수를 사용하면 됩니다.
 
 
 <!--
@@ -295,6 +321,12 @@ To implement this functionality, you add the `router-outlet` directive to your t
 1.  Add the `router-outlet` directive.
 
     <code-example header="src/app/app.component.html" path="router-tutorial/src/app/app.component.html" region="router-outlet"></code-example>
+
+1. Add `RouterOutlet` to the imports of the `AppComponent` in `app.component.ts`
+
+```
+imports: [RouterOutlet],
+```
 
 View your updated application in your browser.
 You should see only the application title.
@@ -331,6 +363,12 @@ http://localhost:4200/heroes-list
 1.  `router-outlet` 디렉티브를 추가합니다.
 
     <code-example header="src/app/app.component.html" path="router-tutorial/src/app/app.component.html" region="router-outlet"></code-example>
+
+1. `app.componen.ts` 파일에 정의된 `AppComponent`에 `RouterOutlet`을 로드합니다.
+
+```
+imports: [RouterOutlet],
+```
 
 브라우저에서 변경된 내용을 확인해 보세요.
 이제 애플리케이션에는 제목만 표시됩니다.
@@ -373,6 +411,8 @@ You'll add that functionality in the next section.
     This HTML uses an Angular directive, `routerLink`.
     This directive connects the routes you defined to your template files.
 
+1. Add the `RouterLink` directive to the imports list of `AppComponent` in `app.component.ts`.
+
 1.  Open the `app.component.css` file and add the following styles.
 
     <code-example header="src/app/app.component.css" path="router-tutorial/src/app/app.component.css"></code-example>
@@ -391,7 +431,9 @@ When you click on a link, the corresponding component appears.
     이 코드는 Angular `routerLink` 디렉티브를 활용합니다.
     `routerLink` 디렉티브는 라우팅 규칙과 템플릿을 연결하는 역할을 합니다.
 
-1.  `app.component.css` 파일을 열고 이런 스타일을 추가합니다.
+1. `app.component.ts` 파일에 정의된 `AppComponent`에 `RouterLink` 디렉티브를 로드합니다. 
+
+1. `app.component.css` 파일을 열고 이런 스타일을 추가합니다.
 
     <code-example header="src/app/app.component.css" path="router-tutorial/src/app/app.component.css"></code-example>
 
@@ -412,6 +454,7 @@ Add this functionality using Angular's `routerLinkActive` directive.
 1.  Update the anchor tags to include the `routerLinkActive` directive.
 
     <code-example header="src/app/app.component.html" path="router-tutorial/src/app/app.component.html" region="routeractivelink"></code-example>
+1. Add the `RouterLinkActive` directive to the `imports` list of `AppComponent` in `app.component.ts`.
 
 View your application again.
 As you click one of the buttons, the style for that button updates automatically, identifying the active component to the user.
@@ -427,6 +470,7 @@ Angular `routerLinkActive` 디렉티브를 활용하면 현재 애플리케이�
 1.  앵커 태그에 `routerLinkActive` 디렉티브를 이렇게 추가합니다.
 
     <code-example header="src/app/app.component.html" path="router-tutorial/src/app/app.component.html" region="routeractivelink"></code-example>
+1. `app.component.ts` 파일에 정의된 `AppComponent`의 `imports` 배열에 `RouterLinkActive` 디렉티브를 추가합니다.
 
 브라우저에서 애플리케이션을 다시 확인해 보세요.
 이제 버튼을 클릭하면 현재 사용자가 보고 있는 컴포넌트에 따라 버튼의 스타일이 자동으로 지정됩니다.
@@ -446,10 +490,12 @@ Angular `routerLinkActive` 디렉티브를 활용하면 현재 애플리케이�
 <!--
 In this step of the tutorial, you add a route that redirects the user to display the `/heroes-list` component.
 
-1.  From your code editor, open the `app.module.ts` file.
-1.  In the `imports` array, update the `RouterModule` section as follows.
+1.  From your code editor, open the `app.routes.ts` file.
+1.  Update the `routes` section as follows.
 
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="import-redirect"></code-example>
+```
+  {path: '', redirectTo: '/heroes-list', pathMatch: 'full'},
+```
 
     Notice that this new route uses an empty string as its path.
     In addition, it replaces the `component` property with two new ones:
@@ -463,10 +509,12 @@ Now when you open your application, it displays the `heroes-list` component by d
 -->
 이번 섹션에서는 `/heroes-list` 컴포넌트를 표시하도록 리다이렉트하는 라우팅 규칙을 추가해 봅시다.
 
-1.  에디터로 `app.module.ts` 파일을 엽니다.
-1.  `imports` 배열의 `RouterModule` 섹션을 아래 내용으로 수정합니다.
+1.  에디터로 `app.routes.ts` 파일을 엽니다.
+1.  `routes` 부분을 이렇게 수정합니다.
 
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="import-redirect"></code-example>
+```
+  {path: '', redirectTo: '/heroes-list', pathMatch: 'full'},
+```
 
     새로 추가한 라우팅 규칙은 `path`에 빈 문자열이 사용되었습니다.
     그리고 `component` 프로퍼티 대신 다른 프로퍼티를 사용합니다:
@@ -501,10 +549,11 @@ In this section, you'll create a 404 page and update your route configuration to
 
     <code-example header="src/app/page-not-found/page-not-found.component.html" path="router-tutorial/src/app/page-not-found/page-not-found.component.html"></code-example>
 
-1.  Open the `app.module.ts` file.
-    In the `imports` array, update the `RouterModule` section as follows.
+1.  Open the `app.routes.ts` file and add the following route to the routes list:
 
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="import-wildcard"></code-example>
+```
+  {path: '**', component: PageNotFoundComponent}
+```
 
     The new route uses a path, `**`.
     This path is how Angular identifies a wildcard route.
@@ -518,7 +567,7 @@ In this section, you'll create a 404 page and update your route configuration to
     </div>
 
 Try navigating to a non-existing route on your application, such as `http://localhost:4200/powers`.
-This route doesn't match anything defined in your `app.module.ts` file.
+This route doesn't match anything defined in your `app.routes.ts` file.
 However, because you defined a wildcard route, the application automatically displays your `PageNotFound` component.
 -->
 개발자가 정의하지 않은 라우팅 규칙으로 사용자가 접근하는 경우가 있을 수 있습니다.
@@ -537,9 +586,11 @@ However, because you defined a wildcard route, the application automatically dis
 
     <code-example header="src/app/page-not-found/page-not-found.component.html" path="router-tutorial/src/app/page-not-found/page-not-found.component.html"></code-example>
 
-1.  `app.module.ts` 파일을 열고 이 파일의 `imports` 배열 `RouterModule` 섹션을 이런 내용으로 수정합니다.
+1.  `app.routes.ts` 파일을 열고 아래와 같은 라우팅 규칙을 추가합니다:
 
-    <code-example header="src/app/app.module.ts" path="router-tutorial/src/app/app.module.ts" region="import-wildcard"></code-example>
+```
+  {path: '**', component: PageNotFoundComponent}
+```
 
     `**`라는 주소로 라우팅 규칙을 추가합니다.
     이 라우팅 규칙은 와일드카드 라우팅 규칙(wildcard route)라고 하며, 라우팅 규칙에 등록되지 않은 주소는 모두 이 라우팅 규칙과 매칭됩니다.
@@ -552,7 +603,7 @@ However, because you defined a wildcard route, the application automatically dis
     </div>
 
 이제 `http://localhost:4200/powers` 와 같이 등록되지 않은 주소로 접근해 보세요.
-해당 주소와 매칭된 라우팅 규칙이 `app.module.ts` 파일에 존재하지 않지만 애플리케이션에는 와일드카드 라우팅 규칙이 등록되어 있기 때문에 자동으로 `PageNotFound` 컴포넌트가 화면에 표시됩니다.
+해당 주소와 매칭된 라우팅 규칙이 `app.routes.ts` 파일에 존재하지 않지만 애플리케이션에는 와일드카드 라우팅 규칙이 등록되어 있기 때문에 자동으로 `PageNotFound` 컴포넌트가 화면에 표시됩니다.
 
 
 <!--
@@ -584,4 +635,4 @@ For more information about routing, see the following topics:
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-10-24

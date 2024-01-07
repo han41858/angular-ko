@@ -4,16 +4,17 @@ on:
   pull_request_target:
     types: [opened, reopened, synchronize]
 
-permissions:
-  pull-requests: read
-  statuses: write
+permissions: {}
 
 jobs:
   trigger:
+    permissions:
+      pull-requests: read
+      statuses: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-      - uses: angular/dev-infra/github-actions/google-internal-tests@5f06c4774df908ed69e1441f4ec63b898acf0c68
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: angular/dev-infra/github-actions/google-internal-tests@1173ab9b7174e4ec6ff3a3455226ca75594edaa0
         with:
           run-tests-guide-url: http://go/angular-g3sync-start
           github-token: ${{ secrets.GITHUB_TOKEN }}

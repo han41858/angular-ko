@@ -67,6 +67,7 @@ export interface RElement extends RNode {
   className: string;
   tagName: string;
   textContent: string|null;
+  hasAttribute(name: string): boolean;
   getAttribute(name: string): string|null;
   setAttribute(name: string, value: string|TrustedHTML|TrustedScript|TrustedScriptURL): void;
   removeAttribute(name: string): void;
@@ -101,7 +102,3 @@ export interface RTemplate extends RElement {
   tagName: 'TEMPLATE';
   content: RNode;
 }
-
-// Note: This hack is necessary so we don't erroneously get a circular dependency
-// failure based on types.
-export const unusedValueExportToPlacateAjd = 1;

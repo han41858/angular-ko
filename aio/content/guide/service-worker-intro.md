@@ -76,7 +76,7 @@ The file, called `ngsw.json` \(not to be confused with the [web app manifest](ht
 When an update to the application is deployed, the contents of the manifest change, informing the service worker that a new version of the application should be downloaded and cached.
 This manifest is generated from a CLI-generated configuration file called `ngsw-config.json`.
 
-Installing the Angular service worker is as straightforward as including an `NgModule`.
+Installing the Angular service worker is as straightforward as [running an Angular CLI command](guide/service-worker-getting-started#cli-command).
 In addition to registering the Angular service worker with the browser, this also makes a few services available for injection which interact with the service worker and can be used to control it.
 For example, an application can ask to be notified when a new update becomes available, or an application can ask the service worker to check the server for available updates.
 -->
@@ -110,7 +110,7 @@ Angular에서는 이 역할을 `ngsw.json` 파일이 담당하는데, 이 매니
 그래서 애플리케이션의 새로운 버전이 배포되면 이 매니페스트 파일의 내용도 바뀌기 때문에, 자연스럽게 서비스 워커는 애플리케이션의 새로운 버전이 배포되었으니 새로 다운로드 받고 캐싱해야 한다는 것을 알 수 있습니다.
 Angular CLI를 사용해서 생성한 프로젝트에 존재하는 기본 매니페스트 파일의 이름은 `ngsw-config.json`입니다.
 
-Angular 애플리케이션에 Angular 서비스 워커를 적용하는 것은 `NgModule`을 로드하는 것만큼이나 아주 간단합니다.
+Angular 애플리케이션에 Angular 서비스 워커를 적용하는 것은 [Angular CLI 명령을 실행](guide/service-worker-getting-started#cli-command)하는 것만큼이나 아주 간단합니다.
 그리고 Angular 서비스 워커를 브라우저에 등록하면 애플리케이션에 몇가지 서비스가 자동으로 등록되기 때문에, 이 서비스를 활용하면 개발자가 서비스 워커를 직접 조작할 수 있습니다.
 이 방식을 활용하면 애플리케이션의 새로운 버전이 배포되었을 때 알림을 받도록 할 수도 있고, 원하는 시점에 서비스 워커를 사용해서 새로운 업데이트가 있는지 직접 확인할 수도 있습니다.
 
@@ -154,7 +154,7 @@ More specifically:
 
 *   The browser does not download the service worker script and the `ngsw.json` manifest file
 *   Active attempts to interact with the service worker, such as calling `SwUpdate.checkForUpdate()`, return rejected promises
-*   The observable events of related services, such as `SwUpdate.available`, are not triggered
+*   The observable events of related services, such as `SwUpdate.versionUpdates`, are not triggered
 
 It is highly recommended that you ensure that your application works even without service worker support in the browser.
 Although an unsupported browser ignores service worker caching, it still reports errors if the application attempts to interact with the service worker.
@@ -172,7 +172,7 @@ Angular 서비스 워커를 제대로 활용하려면 서비스 워커를 지원
 
 *   브라우저는 서비스 워커 스크립트와 `ngsw.json` 매니페스트 파일을 내려받지 않습니다.
 *   이미 동작하고 있는 서비스 워커가 실행하는 `SwUpdate.checkForUpdate()`와 같은 동작은 모두 `rejected` 상태의 Promise로 반환됩니다.
-*   이미 동작하고 있는 서비스 워커에서 발생하는 `SwUpdate.available`와 같은 옵저버블은 트리거되지 않습니다.
+*   이미 동작하고 있는 서비스 워커에서 발생하는 `SwUpdate.versionUpdates`와 같은 옵저버블은 트리거되지 않습니다.
 
 그래서 애플리케이션은 서비스 워커를 지원하지 않는 브라우저에서도 온전히 동작할 수 있게 구현하는 것이 중요합니다.
 브라우저가 서비스 워커를 지원하지 않아서 캐싱 기능이 제대로 동작하지 않는다고 해도 앱은 계속해서 서비스 워커를 사용하려고 하기 때문에 에러 메시지가 계속 표시될 것입니다.
@@ -190,11 +190,11 @@ Angular 서비스 워커를 제대로 활용하려면 서비스 워커를 지원
 <!--
 The rest of the articles in this section specifically address the Angular implementation of service workers.
 
-*   [App Shell](guide/app-shell)
 *   [Service Worker Communication](guide/service-worker-communications)
 *   [Service Worker Notifications](guide/service-worker-notifications)
 *   [Service Worker in Production](guide/service-worker-devops)
 *   [Service Worker Configuration](guide/service-worker-config)
+*   [App Shell](guide/app-shell)
 
 For more information about service workers in general, see [Service Workers: an Introduction](https://developers.google.com/web/fundamentals/primers/service-workers).
 
@@ -207,11 +207,11 @@ For additional recommendations and examples, see:
 -->
 Angular가 제공하는 서비스 워커를 활용하는 방법을 더 알아보려면 다음 자료를 참고하세요.
 
-*   [애플리케이션 기본 틀](guide/app-shell)
 *   [서비스 워커 통신](guide/service-worker-communications)
 *   [서비스 워커 알림 \(Notification\)](guide/service-worker-notifications)
 *   [운영환경에 서비스 워커 활용하기](guide/service-worker-devops)
 *   [서비스 워커 설정](guide/service-worker-config)
+*   [애플리케이션 기본 틀](guide/app-shell)
 
 그리고 서비스 워커의 일반적인 내용에 대해 알아보려면 [Service Workers: an Introduction](https://developers.google.com/web/fundamentals/primers/service-workers) 문서를 참고하세요.
 
@@ -224,7 +224,7 @@ Angular가 제공하는 서비스 워커를 활용하는 방법을 더 알아보
 
 
 <!--
-## Next steps
+## Next step
 -->
 ## 더 알아보기
 
@@ -240,4 +240,4 @@ Angular에서 서비스 워커를 시작하는 방법은 [서비스 워커 시�
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-09-06

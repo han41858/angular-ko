@@ -12,7 +12,7 @@ describe('BannerComponent (external files)', () => {
     // #docregion setup-may-fail
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        declarations: [ BannerComponent ],
+        imports: [BannerComponent],
       }); // missing call to compileComponents()
       fixture = TestBed.createComponent(BannerComponent);
     });
@@ -27,8 +27,8 @@ describe('BannerComponent (external files)', () => {
     // #docregion async-before-each
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        declarations: [ BannerComponent ],
-      }).compileComponents();  // 템플릿과 CSS를 컴파일합니다.
+        imports: [BannerComponent],
+      }).compileComponents(); // 템플릿과 CSS를 컴파일합니다.
     });
     // #enddocregion async-before-each
 
@@ -36,7 +36,7 @@ describe('BannerComponent (external files)', () => {
     // #docregion sync-before-each
     beforeEach(() => {
       fixture = TestBed.createComponent(BannerComponent);
-      component = fixture.componentInstance;  // BannerComponent 인스턴스를 참조합니다.
+      component = fixture.componentInstance; // BannerComponent 인스턴스를 참조합니다.
       h1 = fixture.nativeElement.querySelector('h1');
     });
     // #enddocregion sync-before-each
@@ -48,7 +48,7 @@ describe('BannerComponent (external files)', () => {
     // #docregion one-before-each
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        declarations: [ BannerComponent ],
+        imports: [BannerComponent],
       }).compileComponents();
       fixture = TestBed.createComponent(BannerComponent);
       component = fixture.componentInstance;

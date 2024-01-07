@@ -30,7 +30,11 @@ As background for this guide, you should already be familiar with [Angular React
 ## 엄격한 타입의 폼 개요
 
 <!--
-<iframe width="560" height="315" src="https://www.youtube.com/embed/L-odCf4MfJc" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="video-container">
+
+<iframe src="https://www.youtube.com/embed/L-odCf4MfJc" title="Angular Typed Forms" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+</div>
 
 With Angular reactive forms, you explicitly specify a *form model*. As a simple example, consider this basic user login form:
 
@@ -55,7 +59,11 @@ In addition to the added safety, the types enable a variety of other improvement
 
 These improvements currently apply only to *reactive* forms (not [*template-driven* forms](guide/forms "Forms Guide")).
 -->
-<iframe width="560" height="315" src="https://www.youtube.com/embed/L-odCf4MfJc" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="video-container">
+
+<iframe src="https://www.youtube.com/embed/L-odCf4MfJc" title="Angular Typed Forms" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+</div>
 
 Angular 반응형 폼을 사용할 때는 *폼 모델*을 명시적으로 정의해야 합니다.
 기본 로그인 폼이라면 이렇습니다:

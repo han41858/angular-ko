@@ -311,6 +311,13 @@
                   "title": "파이프 인자 사용하기, 체이닝하기",
                   "/tooltip": "Learn how to use a pipe transform data.",
                   "tooltip": "파이프로 데이터를 변환하는 방법을 알아봅시다."
+                },
+                {
+                  "url": "guide/pipe-precedence",
+                  "/title": "Pipe precedence in template expressions",
+                  "title": "파이프 우선순위",
+                  "/tooltip": "How to use pipes within a ternary operator expression.",
+                  "tooltip": "삼항 연산자와 파이프는 같이 사용하려면 어떻게 해야 하는지알아봅시다."
                 }
               ]
             },
@@ -398,6 +405,13 @@
               "/title": "Defining dependency providers",
               "title": "의존성 주입 프로바이더",
               "/tooltip": "A provider factory function is a plain function that Angular can call to create a dependency."
+            },
+            {
+              "url": "guide/dependency-injection-context",
+              "/title": "Injection context",
+              "title": "의존성 객체의 컨텍스트",
+              "/tooltip": "Dependency injection depends on a runtime context to work.",
+              "tooltip": "의존성 주입은 실행 시점의 컨텍스트에 영향을 받습니다."
             },
             {
               "url": "guide/hierarchical-dependency-injection",
@@ -582,11 +596,110 @@
           "tooltip": "Angular CLI에서 esbuild 기반으로 빌드하는 방법을 확인해 보세요."
         },
         {
-          "url": "guide/http",
           "/title": "HTTP client",
           "title": "HTTP 클라이언트",
           "/tooltip": "Use HTTP to talk to a remote server.",
-          "tooltip": "HTTP로 서버와 통신해보세요."
+          "tooltip": "HTTP로 서버와 통신해 보세요.",
+          "children": [
+            {
+              "url": "guide/understanding-communicating-with-http",
+              "/title": "Understanding HTTP",
+              "title": "HTTP 이해하기",
+              "/tooltip": "Understanding communicating with backend services using HTTP",
+              "tooltip": "HTTP를 사용해서 백엔드 서비스와 통신하는 방법을 알아봅시다."
+            },
+            {
+              "url": "guide/http-setup-server-communication",
+              "/title": "Setup for server communication",
+              "title": "준비하기",
+              "/tooltip": "Setup a server communication for HTTP",
+              "tooltip": "서버와 HTTP 통신하기 위한 준비"
+            },
+            {
+              "url": "guide/http-request-data-from-server",
+              "/title": "Request data from a server",
+              "title": "서버로 데이터 요청하기",
+              "/tooltip": "Learn how to request data from the server via the HTTP client",
+              "tooltip": "HTTP 클라이언트를 사용해서 서버로 데이터를 요청하려면 어떻게 해야 하는지 알아봅시다."
+            },
+            {
+              "url": "guide/http-make-jsonp-request",
+              "/title": "Make a JSONP request",
+              "title": "JSONP 요청하기",
+              "/tooltip": "Make a cross-origin request via JSONP",
+              "tooltip": "JSONP를 사용해서 크로스 오리진 요청을 보내봅시다."
+            },
+            {
+              "url": "guide/http-handle-request-errors",
+              "/title": "Handle request errors",
+              "title": "에러 처리하기",
+              "/tooltip": "Error handling",
+              "tooltip": "에러 처리하기"
+            },
+            {
+              "url": "guide/http-send-data-to-server",
+              "/title": "Send data to a server",
+              "title": "서버로 데이터 보내기",
+              "/tooltip": "Learn how to send data to a server via the HTTP client",
+              "tooltip": "HTTP 클라이언트를 사용해서 서버로 데이터를 보내려면 어떻게 해야 하는지 알아봅시다."
+            },
+            {
+              "url": "guide/http-configure-http-url-parameters",
+              "/title": "Configure URL parameters",
+              "title": "URL 인자 구성하기",
+              "/tooltip": "Learn how to configure parameters of the URL when sending requests over HTTP",
+              "tooltip": "HTTP로 요청을 보낼때 URL 인자를 구성하려면 어떻게 해야 하는지 알아봅시다."
+            },
+            {
+              "url": "guide/http-intercept-requests-and-responses",
+              "/title": "Intercept requests and responses",
+              "title": "요청/응답 가로채기",
+              "/tooltip": "Learn how to use HTTP interceptors to transform requests and responses",
+              "tooltip": "HTTP 인터셉터를 활용하면 HTTP 요청이나 응답을 가로챌 수 있습니다."
+            },
+            {
+              "url": "guide/http-interceptor-use-cases",
+              "/title": "Interceptor use-cases",
+              "title": "인터셉터 활용사례",
+              "/tooltip": "Learn when to use HTTP interceptors",
+              "tooltip": "HTTP 인터셉터를 어떻게 활용할 수 있을지 알아봅시다."
+            },
+            {
+              "url": "guide/http-pass-metadata-to-interceptors",
+              "/title": "Pass metadata to interceptors",
+              "title": "인터셉터에 메타데이터 전달하기",
+              "/tooltip": "Learn how to pass metadata to interceptors",
+              "tooltip": "인터셉터에 메타데이터를 전달해 봅시다."
+            },
+            {
+              "url": "guide/http-track-show-request-progress",
+              "/title": "Track and show request progress",
+              "title": "요청하고 진행률 추적하기",
+              "/tooltip": "Learn how to track and show progress when sending HTTP requests",
+              "tooltip": "HTTP 요청을 보낸 후 진행률을 어떻게 추적할 수 있는지 알아봅시다."
+            },
+            {
+              "url": "guide/http-optimize-server-interaction",
+              "/title": "Optimize server communication",
+              "title": "서버 요청 최적화하기",
+              "/tooltip": "Learn how to use debouncing to optimize server interaction",
+              "tooltip": "서버로 보내는 요청을 어떻게 최적화하는지 알아봅시다."
+            },
+            {
+              "url": "guide/http-security-xsrf-protection",
+              "/title": "Cross-Site Request Forgery (XSRF) protection",
+              "title": "사이트 간 요청 위조(XSRF) 방어하기",
+              "/tooltip": "Learn how to secure your website against Cross-Site Request Forgery",
+              "tooltip": "사이트 간 요청 위조(Cross-Site Request Forgery, XSRF)를 어떻게 방어하는지 알아봅시다."
+            },
+            {
+              "url": "guide/http-test-requests",
+              "/title": "Test requests",
+              "title": "요청 테스트하기",
+              "/tooltip": "Learn how to test logic that uses the HTTP client",
+              "tooltip": "HTTP 클라이언트를 활용하는 로직은 어떻게 테스트할 수 있는지 알아봅시다."
+            }
+          ]
         },
         {
           "url": "guide/hydration",
@@ -594,6 +707,13 @@
           "title": "하이드레이션",
           "/tooltip": "How to enable hydration on your server rendered applications.",
           "tooltip": "서버에서 렌더링한 애플리케이션에 하이드레이션을 적용해 보세요."
+        },
+        {
+          "url": "guide/defer",
+          "/title": "Deferrable views",
+          "title": "뷰 지연로딩하기",
+          "/tooltip": "How to defer load components, directives, and pipes.",
+          "tooltip": "컴포넌트, 디렉티브, 파이프를 지연로딩해 봅시다."
         },
         {
           "url": "guide/image-directive",
@@ -771,13 +891,6 @@
                   "tooltip": "추가로 국제화를 적용하는 방법을 알아봅시다."
                 },
                 {
-                  "url": "guide/i18n-optional-manual-runtime-locale",
-                  "/title": "Set the runtime locale manually",
-                  "title": "런타임 언어 수동 적용하기",
-                  "/tooltip": "Set the runtime locale manually",
-                  "tooltip": "런타임 언어를 수동으로 적용해 봅시다."
-                },
-                {
                   "url": "guide/i18n-optional-import-global-variants",
                   "/title": "Import global variants of the locale data",
                   "title": "국제화 데이터 로드하기",
@@ -859,13 +972,6 @@
               "tooltip": "CLI로 Angular 프로젝트를 만들면서 서비스 워커를 시작할 수 있습니다. 브라우저에서 서비스 워커 동작을 확인할 수도 있습니다."
             },
             {
-              "url": "guide/app-shell",
-              "/title": "App shell",
-              "title": "앱 기본 틀",
-              "/tooltip": "Render a portion of your app quickly to improve the startup experience.",
-              "tooltip": "Render a portion of your app quickly to improve the startup experience."
-            },
-            {
               "url": "guide/service-worker-communications",
               "/title": "Service worker communication",
               "title": "서비스 워커 통신",
@@ -892,6 +998,13 @@
               "title": "서비스 워커 설정",
               "/tooltip": "Configuring service worker caching behavior.",
               "tooltip": "서비스 워커 캐시 설정하기"
+            },
+            {
+              "url": "guide/app-shell",
+              "/title": "App shell",
+              "title": "앱 기본 틀",
+              "/tooltip": "Render a portion of your app quickly to improve the startup experience.",
+              "tooltip": "애플리케이션을 빨리 렌더링해서 초기 실행 성능을 올려봅시다."
             }
           ]
         },
@@ -903,11 +1016,11 @@
           "tooltip": "백그라운드 작업에 웹 워커를 활용해 보세요."
         },
         {
-          "url": "guide/universal",
+          "url": "guide/ssr",
           "/title": "Server-side rendering",
           "title": "서버 사이드 렌더링",
-          "/tooltip": "Render HTML server-side with Angular Universal.",
-          "tooltip": "Angular Universal을 사용해서 HTML을 서버에서 렌더링 해 보세요."
+          "/tooltip": "Render HTML server-side.",
+          "tooltip": "HTML을 서버에서 렌더링 해 보세요."
         },
         {
           "url": "guide/prerendering",
@@ -958,6 +1071,13 @@
           "/tooltip": "Angular preview features and APIs",
           "tooltip": "앞으로 제공될 기능, API",
           "children": [
+            {
+              "url": "guide/control_flow",
+              "/title": "Built-in control flow",
+              "title": "기본 제어 흐름",
+              "/tooltip": "Angular built-in control flow: if, for and switch",
+              "tooltip": "Angular의 기본 제어 방식이 변경됩니다: if, for, switch"
+            },
             {
               "url": "guide/signals",
               "title": "Signals",
@@ -1442,13 +1562,6 @@
                   "tooltip": "Angular 애플리케이션의 구성요소를 확인해 보세요."
                 },
                 {
-                  "url": "guide/architecture-modules",
-                  "/title": "Intro to modules",
-                  "title": "모듈",
-                  "/tooltip": "About NgModules.",
-                  "tooltip": "NgModule"
-                },
-                {
                   "url": "guide/architecture-components",
                   "/title": "Intro to components",
                   "title": "컴포넌트",
@@ -1456,11 +1569,11 @@
                   "tooltip": "컴포넌트, 템플릿, 뷰"
                 },
                 {
-                  "url": "guide/architecture-next-steps",
-                  "/title": "Next steps",
-                  "title": "다음 단계",
-                  "/tooltip": "Beyond the basics.",
-                  "tooltip": "더 나아가기"
+                  "url": "guide/architecture-services",
+                  "/title": "Intro to services and DI",
+                  "title": "서비스와 의존성 주입",
+                  "/tooltip": "About services and dependency injection.",
+                  "tooltip": "서비스, 의존성 주입에 대해 알아봅시다"
                 },
                 {
                   "url": "guide/binding-syntax",
@@ -1482,6 +1595,13 @@
                   "title": "템플릿 변수",
                   "/tooltip": "Introductory guide to referring to DOM elements within a template.",
                   "tooltip": "템플릿에서 DOM 엘리먼트를 가리킬 때 사용하는 템플릿 변수에 대해 설명합니다."
+                },
+                {
+                  "url": "guide/architecture-next-steps",
+                  "/title": "Next steps",
+                  "title": "다음 단계",
+                  "/tooltip": "Beyond the basics.",
+                  "tooltip": "더 나아가기"
                 }
               ]
             },
@@ -1903,8 +2023,10 @@
         },
         {
           "url": "guide/localized-documentation",
-          "title": "Localized documentation",
-          "tooltip": "A list of localized versions of the Angular documentation",
+          "/title": "Localized documentation",
+          "title": "번역본",
+          "/tooltip": "A list of localized versions of the Angular documentation",
+          "tooltip": "Angular 가이드 문서가 번역된 목록",
           "hidden": true
         }
       ]
@@ -1971,8 +2093,8 @@
           "url": "https://github.com/angular/angular/issues",
           "/title": "Report Issues",
           "title": "이슈 등록하기",
-          "/tooltip": "Post issues and suggestions on github.",
-          "tooltip": "github에 이슈 등록, 개선 제안하기."
+          "/tooltip": "Post issues and suggestions on GitHub.",
+          "tooltip": "GitHub에 이슈 등록, 개선 제안하기."
         },
         {
           "url": "https://github.com/angular/code-of-conduct/blob/main/CODE_OF_CONDUCT.md",
@@ -1980,6 +2102,13 @@
           "title": "커뮤니티 행동강령",
           "/tooltip": "Treating each other with respect.",
           "tooltip": "친하게 지내요 :)"
+        },
+        {
+          "url": "https://policies.google.com/privacy",
+          "/title": "Privacy Policy",
+          "title": "개인정보 보호 정책",
+          "/tooltip": "Learn about Google's privacy policy.",
+          "tooltip": "Google의 개인정보 보호 정책을 확인해 보세요."
         }
       ]
     },
@@ -2024,10 +2153,6 @@
       "/title": "Languages",
       "title": "다른 언어",
       "children": [
-        {
-          "title": "Español",
-          "url": "http://docs.angular.lat/"
-        },
         {
           "title": "简体中文版",
           "url": "https://angular.cn/"

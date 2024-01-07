@@ -40,15 +40,17 @@ export {Sanitizer} from './sanitization/sanitizer';
 export {createNgModule, createNgModuleRef, createEnvironmentInjector} from './render3/ng_module_ref';
 export {createComponent, reflectComponentType, ComponentMirror} from './render3/component';
 export {isStandalone} from './render3/definition';
+export {AfterRenderRef, AfterRenderOptions, AfterRenderPhase, afterRender, afterNextRender} from './render3/after_render_hooks';
 export {ApplicationConfig, mergeApplicationConfig} from './application_config';
 export {makeStateKey, StateKey, TransferState} from './transfer_state';
+export {booleanAttribute, numberAttribute} from './util/coercion';
 
 import {global} from './util/global';
 if (typeof ngDevMode !== 'undefined' && ngDevMode) {
   // This helper is to give a reasonable error message to people upgrading to v9 that have not yet
   // installed `@angular/localize` in their app.
   // tslint:disable-next-line: no-toplevel-property-access
-  global.$localize = global.$localize || function() {
+  global.$localize ??= function() {
     throw new Error(
         'It looks like your application or one of its dependencies is using i18n.\n' +
         'Angular 9 introduced a global `$localize()` function that needs to be loaded.\n' +

@@ -1630,7 +1630,7 @@ npm install -g @angular-devkit/schematics-cli
 
 <!--
 A way to group related [npm packages][AioGuideNpmPackages].
-NgModules are delivered within scoped packages whose names begin with the Angular *scope name* `@angular`.
+Angular objects are delivered from npm packages whose names begin with the Angular *scope name* `@angular`.
 For example, `@angular/core`, `@angular/common`, `@angular/forms`, and `@angular/router`.
 
 Import a scoped package in the same way that you import a normal package.
@@ -1638,7 +1638,7 @@ Import a scoped package in the same way that you import a normal package.
 <code-example path="architecture/src/app/app.component.ts" header="architecture/src/app/app.component.ts (import)" region="import"></code-example>
 -->
 관련된 [npm 패키지][AioGuideNpmPackages]를 묶은 단위입니다.
-패키지 그룹 안에 있는 NgModule은 Angular의 *그룹 이름* `@angular`로 시작합니다.
+npm 패키지 그룹 안에 있는 객체들은 Angular의 *그룹 이름* `@angular`로 시작합니다.
 `@angular/core`, `@angular/common`, `@angular/forms`, `@angular/router`들이 그렇습니다.
 
 패키지 그룹을 사용하는 방법은 일반 npm 패키지를 사용하는 방법과 같습니다.
@@ -1660,7 +1660,7 @@ It can also pre-generate pages as HTML files that you serve later.
 This technique can improve performance on mobile and low-powered devices and improve the user experience by showing a static first page quickly while the client-side application is loading.
 The static version can also make your application more visible to web crawlers.
 
-You can easily prepare an application for server-side rendering by using the [Angular CLI][AioGuideGlossaryCommandLineInterfaceCli] to run the [Angular Universal][AioGuideGlossaryUniversal] tool, using the `@nguniversal/express-engine` [schematic][AioGuideGlossarySchematic].
+You can easily prepare an application for server-side rendering by using the [Angular CLI][AioGuideGlossaryCommandLineInterfaceCli]  `ng add @angular/ssr` command.
 -->
 애플리케이션 화면을 서버에 정적으로 빌드해두고, 브라우저 요청이 있을 때 이 화면을 그대로 제공하는 방식입니다.
 미리 생성해둔 화면은 HTML 파일 형태로 제공됩니다.
@@ -1668,8 +1668,9 @@ You can easily prepare an application for server-side rendering by using the [An
 이 방식을 활용하면 모바일 디바이스나 저사양 디바이스의 성능을 향상시킬 수 있으며, 첫 번째 화면이 정적으로 빠르게 표시되기 때문에 애플리케이션이 시작되는 시간도 짧아집니다.
 애플리케이션 화면이 정적으로 제공되면 웹 크롤러에 대응할 수도 있습니다.
 
-[Angular CLI][AioGuideGlossaryCommandLineInterfaceCli]로 [Angular Universal][AioGuideGlossaryUniversal] 툴을 실행하면 Angular 애플리케이션에 서버 사이드 렌더링을 적용할 수 있습니다.
-이 때 `@nguniversal/express-engine` [스키매틱][AioGuideGlossarySchematic]을 사용합니다.
+You can easily prepare an application for server-side rendering by using the [Angular CLI][AioGuideGlossaryCommandLineInterfaceCli]  `ng add @angular/ssr` command.
+
+Angular 애플리케이션에 서버 사이드 렌더링 기능을 추가하려면 [Angular CLI][AioGuideGlossaryCommandLineInterfaceCli]로 `ng add @angular/ssr` 명령을 실행하면 됩니다.
 
 
 <a id="service"></a>
@@ -2076,19 +2077,23 @@ Angular 개발모드에서 이런 상황이 발생하면 `ExpressionChangedAfter
 이 에러를 해결하려면 [라이프싸이클 후킹][AioGuideLifecycleHooks] 메서드를 사용해서 새로운 변화 감지 싸이클을 시작해야 합니다.
 변화 감지 싸이클이 시작되더라도 방향은 이전과 같지만, 새로운 싸이클에는 새로운 값이 반영됩니다.
 
-## Universal
+
+<!--
+## Server-side rendering
+-->
+## 서버 사이드 렌더링
 
 <!--
 A tool for implementing [server-side rendering][AioGuideGlossaryServerSideRendering] of an Angular application.
 When integrated with an app, Universal generates and serves static pages on the server in response to requests from browsers.
 The initial static page serves as a fast-loading placeholder while the full application is being prepared for normal execution in the browser.
-To learn more, see [Angular Universal: server-side rendering][AioGuideUniversal].
+To learn more, see [Angular server-side rendering][AioGuideSSR].
 -->
 Angular 애플리케이션에 [서버 사이드 렌더링][AioGuideGlossaryServerSideRendering]을 적용할 때 사용하는 툴입니다.
 앱에 Universal이 적용되면 Universal이 정적 페이지를 서버에 생성하고 브라우저의 요청에 따라 이 페이지를 제공합니다.
 이 때 정적 페이지는 브라우저에서 애플리케이션이 완전히 준비되기 전까지 빠르게 표시될 무언가를 제공하는 용도로 사용합니다.
 
-자세한 내용을 알아보려면 [Angular Universal: 서버 사이드 렌더링][AioGuideUniversal] 문서를 참고하세요.
+자세한 내용을 알아보려면 [Angular 서버 사이드 렌더링][AioGuideSSR] 문서를 참고하세요.
 
 
 <a id="view"></a>
@@ -2404,7 +2409,7 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 [AioGuideGlossaryTree]: guide/glossary#tree "tree - Glossary | Angular"
 [AioGuideGlossaryTypescript]: guide/glossary#typescript "TypeScript - Glossary | Angular"
 [AioGuideGlossaryU]: guide/glossary#unidirectional-data-flow "U - Glossary | Angular"
-[AioGuideGlossaryUniversal]: guide/glossary#universal "Universal - Glossary | Angular"
+[AioGuideGlossarySSR]: guide/glossary#server-side-rendering "Server-side rendering - Glossary | Angular"
 [AioGuideGlossaryV]: guide/glossary#view "V - Glossary | Angular"
 [AioGuideGlossaryView]: guide/glossary#view "view - Glossary | Angular"
 [AioGuideGlossaryViewHierarchy]: guide/glossary#view-hierarchy "view hierarchy - Glossary | Angular"
@@ -2427,7 +2432,7 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 
 [AioGuideObservables]: guide/observables "Using observables to pass values | Angular"
 
-[AioGuidePipes]: guide/pipes "Transforming Data Using Pipes | Angular"
+[AioGuidePipes]: guide/pipes-overview "Transforming Data Using Pipes | Angular"
 
 [AioGuidePropertyBinding]: guide/property-binding "Property binding | Angular"
 
@@ -2455,7 +2460,7 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 
 [AioGuideTypescriptConfiguration]: guide/typescript-configuration "TypeScript configuration | Angular"
 
-[AioGuideUniversal]: guide/universal "Server-side rendering (SSR) with Angular Universal | Angular"
+[AioGuideSSR]: guide/ssr "Server-side rendering (SSR) with Angular | Angular"
 
 [AioGuideWorkspaceConfig]: guide/workspace-config "Angular workspace configuration | Angular"
 [AioGuideWorkspaceConfigProjectToolConfigurationOptions]: guide/workspace-config#project-tool-configuration-options "Project tool configuration options - Angular workspace configuration | Angular"
@@ -2494,4 +2499,4 @@ Angular 애플리케이션은 데이터가 변경되거나 [데이터 바인딩]
 
 <!-- end links -->
 
-@reviewed 2023-02-16
+@reviewed 2023-08-14

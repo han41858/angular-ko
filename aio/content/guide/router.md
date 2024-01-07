@@ -1,7 +1,7 @@
 <!--
 # Common Routing Tasks
 -->
-# 일반 라우팅 동작
+# 기본 라우팅 동작
 
 <!--
 This topic describes how to implement many of the common tasks associated with adding the Angular router to your application.
@@ -12,27 +12,20 @@ This topic describes how to implement many of the common tasks associated with a
 <a id="basics"></a>
 
 <!--
-## Generate an application with routing enabled
+## Generate an application
 -->
-## 라우팅 가능한 상태로 앱 생성하기
+## 애플리케이션 생성하기
 
 <!--
-The following command uses the Angular CLI to generate a basic Angular application with an application routing module, called `AppRoutingModule`, which is an NgModule where you can configure your routes.
+The following command uses the Angular CLI to generate a basic Angular application with application routes.
 The application name in the following example is `routing-app`.
-
-<code-example format="shell" language="shell">
-
-ng new routing-app --routing --defaults
-
-</code-example>
 -->
-Angular CLI로 다음과 같은 명령을 실행하면 Angular 앱을 생성하면서 `AppRoutingModule` 이라고 하는 라우팅 모듈을 함께 생성합니다.
-이 모듈은 애플리케이션의 라우팅 규칙을 관리하는 NgModule입니다.
-`routing-app` 이라는 이름으로 앱을 생성하는 명령은 이렇습니다.
+Angular 애플리케이션과 기본 라우팅 규칙을 생성하려면 Angular CLI를 사용하면 됩니다.
+`routing-app` 이라는 이름으로 애플리케이션을 생성해 봅시다.
 
 <code-example format="shell" language="shell">
 
-ng new routing-app --routing --defaults
+ng new routing-app
 
 </code-example>
 
@@ -70,8 +63,6 @@ The CLI automatically appends `Component`, so if you were to write `first-compon
 <header><code>&lt;base href&gt;</code></header>
 
 This guide works with a CLI-generated Angular application.
-If you are working manually, make sure that you have `<base href="/">` in the `<head>` of your index.html file.
-This assumes that the `app` folder is the application root, and uses `"/"`.
 
 </div>
 -->
@@ -102,8 +93,6 @@ Angular CLI는 컴포넌트를 생성할 때 자동으로 접미사를 붙이기
 <header<code>&lt;base href&gt;</code></header>
 
 이 가이드문서는 Angular CLI로 생성한 Angular 앱을 다룹니다.
-만약 Angular CLI를 사용하지 않는다면 index.html 파일의 `<head>` 태그에 `<base href="/">` 를 추가해야 합니다.
-이 태그를 추가하면 `app` 폴더가 애플리케이션 최상위 주소 `"/"` 와 연결됩니다.
 
 </div>
 
@@ -114,23 +103,14 @@ Angular CLI는 컴포넌트를 생성할 때 자동으로 접미사를 붙이기
 ### 컴포넌트 로드하기
 
 <!--
-To use your new components, import them into `AppRoutingModule` at the top of the file, as follows:
-
-<code-example header="AppRoutingModule (excerpt)">
-
-import { FirstComponent } from './first/first.component';
-import { SecondComponent } from './second/second.component';
-
-</code-example>
+To use your new components, import them into `app.routes.ts` at the top of the file, as follows:
 -->
-새로 만든 컴포넌트를 사용하려면 `AppRoutingModule` 파일 제일 위쪽에서 이 컴포넌트들을 로드해야 합니다:
+새로 만든 컴포넌트를 사용하려면 `pp.routes.ts` 파일 제일 위쪽에서 이 컴포넌트들을 로드해야 합니다:
 
-<code-example header="AppRoutingModule (일부)">
-
-import { FirstComponent } from './first/first.component';
-import { SecondComponent } from './second/second.component';
-
-</code-example>
+```
+import {FirstComponent} from './first/first.component';
+import {SecondComponent} from './second/second.component';
+```
 
 
 <a id="basic-route"></a>
@@ -144,20 +124,27 @@ import { SecondComponent } from './second/second.component';
 <!--
 There are three fundamental building blocks to creating a route.
 
-Import the `AppRoutingModule` into `AppModule` and add it to the `imports` array.
+Import the routes into `app.config.ts` and add it to the `provideRouter` function.
 
 The Angular CLI performs this step for you.
 However, if you are creating an application manually or working with an existing, non-CLI application, verify that the imports and configuration are correct.
-The following is the default `AppModule` using the CLI with the `--routing` flag.
+The following is the default `ApplicationConfig` using the CLI.
 
-<code-example header="Default CLI AppModule with routing" path="router/src/app/app.module.8.ts"></code-example>
+```
+export const appConfig: ApplicationConfig = {
+  providers: [provideRouter(routes)]
+};
+```
 
-1.  Import `RouterModule` and `Routes` into your routing module.
+1.  Set up a `Routes` array for your routes
 
     The Angular CLI performs this step automatically.
-    The CLI also sets up a `Routes` array for your routes and configures the `imports` and `exports` arrays for `@NgModule()`.
 
-    <code-example header="CLI application routing module" path="router/src/app/app-routing.module.7.ts"></code-example>
+```
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [];
+```
 
 1.  Define your routes in your `Routes` array.
 
@@ -165,7 +152,12 @@ The following is the default `AppModule` using the CLI with the `--routing` flag
     The first property, `path`, defines the URL path for the route.
     The second property, `component`, defines the component Angular should use for the corresponding path.
 
-    <code-example header="AppRoutingModule (excerpt)" path="router/src/app/app-routing.module.8.ts" region="routes"></code-example>
+```
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+];
+```
 
 1.  Add your routes to your application.
 
@@ -176,43 +168,104 @@ The following is the default `AppModule` using the CLI with the `--routing` flag
     Next, update your component template to include `<router-outlet>`.
     This element informs Angular to update the application view with the component for the selected route.
 
-    <code-example header="Template with routerLink and router-outlet" path="router/src/app/app.component.7.html"></code-example>
+```
+<h1>Angular Router App</h1>
+<nav>
+  <ul>
+    <li><a routerLink="/first-component" routerLinkActive="active" ariaCurrentWhenActive="page">First Component</a></li>
+    <li><a routerLink="/second-component" routerLinkActive="active" ariaCurrentWhenActive="page">Second Component</a></li>
+  </ul>
+</nav>
+<!- The routed views render in the <router-outlet>->
+<router-outlet></router-outlet>
+```
+
+   You also need to add the `RouterLink`, `RouterLinkActive`, and `RouterOutlet` to the imports array of `AppComponent`.
+
+```
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'routing-app';
+}
+```
 -->
-라우팅 규칙은 세가지 요소로 구성됩니다.
+라우팅 규칙은 세 가지 요소로 구성됩니다.
 
-`AppModule`이 정의된 파일에 `AppRoutingModule`을 로드하고 이 라우팅 모듈을 `AppModule` `imports` 배열에 추가합니다.
+`app.config.ts` 파일에 불러온 라우팅 규칙들은 `provideRouter` 함수로 추가해야 합니다.
 
-Angular CLI로 앱을 생성했다면 이 과정은 이미 처리되어 있습니다.
-하지만 앱을 직접 생성했거나 이미 있는 앱을 기반으로 작업한다면 라우팅 모듈이 제대로 로드 되었는지, `imports` 배열에 추가되었는지 꼭 확인해야 합니다.
-아래 코드는 `--routing` 플래그를 붙여서 Angular CLI로 앱을 생성했을 때 자동으로 생성된 `AppModule` 코드입니다.
+이 단계는 Angular CLI가 알아서 해줍니다.
+하지만 Angular CLI를 사용하지 않고 애플리케이션을 직접 생성했거나 기존에 있던 프로젝트에 작업하는 경우에는 이 작업이 잘 되어 있는지 꼭 확인해야 합니다.
+Angular CLI로 생성되는 기본 `ApplicationConfig`는 이렇습니다.
 
-<code-example header="Angular CLI가 자동으로 생성한 AppModule" path="router/src/app/app.module.8.ts"></code-example>
+```
+export const appConfig: ApplicationConfig = {
+  providers: [provideRouter(routes)]
+};
+```
 
-1.  라우팅 모듈이 정의된 파일에 `RouterModule`와 `Routes`를 로드합니다.
+1.  라우팅 규칙을 정의할 `Routes` 배열을 선언합니다.
 
-    이 과정도 Angular CLI가 자동으로 처리했을 것입니다.
-    `Routes` 배열을 생성하는 것과 `@NgModule()`의 `imports` 배열과 `exports` 배열을 구성하는 것도 Angular CLI가 처리합니다.
+    이 작업은 Angular CLI가 자동으로 해줍니다.
 
-    <code-example header="Angular CLI가 생성한 라우팅 모듈" path="router/src/app/app-routing.module.7.ts"></code-example>
+```
+import { Routes } from '@angular/router';
 
-1.  이제 라우팅 규칙을 `Routes` 배열에 등록합니다.
+export const routes: Routes = [];
+```
 
-    라우팅 규칙(route)은 이 배열에 JavaScript 객체 형태로 등록하며, 이 객체는 프로퍼티가 2개 존재합니다.
-    첫번째로 `path` 프로퍼티는 라우팅 규칙에 해당하는 URL 주소를 지정합니다.
-    그리고 `component` 프로퍼티는 해당 URL 주소에 연결될 컴포넌트를 지정합니다.
+1.  라우팅 규칙을 `Routes` 배열에 등록합니다.
 
-    <code-example header="AppRoutingModule (일부)" path="router/src/app/app-routing.module.8.ts" region="routes"></code-example>
+    라우팅 규칙은 JavaScript 객체 형식이며, 이 객체에는 프로퍼티가 2개 있습니다.
+    `path`는 라우팅 규칙과 매칭될 URL을 지정합니다.
+    `component`는 `path`가 매칭되었을 때 사용할 컴포넌트를 지정합니다.
 
-1.  라우팅 규칙을 애플리케이션에 등록합니다.
+```
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+];
+```
 
-    라우팅 규칙을 모두 정의했다면 이 규칙을 애플리케이션에 등록해야 합니다.
-    먼저 두 컴포넌트와 연결되는 링크를 추가합니다.
-    링크는 `<a>` 엘리먼트에 `routerLink` 어트리뷰트를 사용하는 방식으로 구현합니다.
-    이 어트리뷰트에는 사용자가 링크를 클릭했을 때 이동할 주소를 지정합니다.
-    그리고 컴포넌트 템플릿에 `<router-outlet>`을 추가합니다.
-    `<router-outlet>` 엘리먼트는 Angular가 애플리케이션 화면을 전환할 때 관련 컴포넌트가 표시될 위치를 지정하는 엘리먼트입니다.
+1.  라우팅 규칙을 애플리케이션에 적용합니다.
 
-    <code-example header="router-outlet이 추가된 템플릿" path="router/src/app/app.component.7.html"></code-example>
+    라우팅 규칙을 정의했으면 애플리케이션에 추가해 봅시다.
+    먼저, 컴포넌트 두 개로 연결되는 링크를 추가합니다.
+    `<a>` 태그에 `routerLink` 어트리뷰트로 원하는 주소를 지정하면 됩니다.
+    그 다음에는 컴포넌트 템플릿에 `<router-outlet>`을 추가합니다.
+    Angular는 브라우저 주소가 변경되었을 때 이 엘리먼트가 있는 곳에 컴포넌트를 표시합니다.
+
+```
+<h1>Angular Router App</h1>
+<nav>
+  <ul>
+    <li><a routerLink="/first-component" routerLinkActive="active" ariaCurrentWhenActive="page">First Component</a></li>
+    <li><a routerLink="/second-component" routerLinkActive="active" ariaCurrentWhenActive="page">Second Component</a></li>
+  </ul>
+</nav>
+<!-- <router-outlet>안에 라우팅 주소와 연결된 컴포넌트가 표시됩니다. -->
+<router-outlet></router-outlet>
+```
+
+   `RouterLink`, `RouterLinkActive`, `RouterLet`은 모두 `AppComponent`의 `import` 배열에서 불러옵니다.
+
+```
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'routing-app';
+}
+```
 
 
 <a id="route-order"></a>
@@ -263,7 +316,9 @@ To get information from a route:
 
     **NOTE:** <br>
     You can bind all route data with key, value pairs to component inputs: static or resolved route data, path parameters, matrix parameters, and query parameters.
-
+    <br>
+    If you want to use the parent components route info you will need to set the router {@link paramsInheritanceStrategy} option:
+    `withRouterConfig({paramsInheritanceStrategy: 'always'})`
     </div>
 -->
 때로는 사용자가 화면을 전환할 때 교체되는 컴포넌트 사이에 정보를 전달해야 할 때가 있습니다.
@@ -289,7 +344,9 @@ To get information from a route:
 
     **참고:** <br>
     라우팅 규칙 데이터는 키-값 형태로 컴포넌트 입력으로 받을 수도 있습니다. 정적 데이터, 주소에 있는 인자, 매트릭스 인자, 쿼리 인자 모두 활용할 수 있습니다.
-
+    <br>
+    부모 컴포넌트의 라우팅 규칙을 활용하려면 라우터 옵션으로 {@link paramsInheritanceStrategy} 를 설정해야 합니다:
+    `withRouterConfig({paramsInheritanceStrategy: 'always'})`
     </div>
 
 
@@ -308,11 +365,9 @@ The Angular router selects this route any time the requested URL doesn't match a
 
 To set up a wildcard route, add the following code to your `routes` definition.
 
-<code-example header="AppRoutingModule (excerpt)">
-
+```
 { path: '**', component: &lt;component-name&gt; }
-
-</code-example>
+```
 
 The two asterisks, `**`, indicate to Angular that this `routes` definition is a wildcard route.
 For the component property, you can define any component in your application.
@@ -349,14 +404,26 @@ For more detail on why order matters for routes, see [Route order](guide/router#
 <!--
 To display a 404 page, set up a [wildcard route](guide/router#wildcard-route-how-to) with the `component` property set to the component you'd like to use for your 404 page as follows:
 
-<code-example header="AppRoutingModule (excerpt)" path="router/src/app/app-routing.module.8.ts" region="routes-with-wildcard"></code-example>
+```
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+  { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+];
+```
 
 The last route with the `path` of `**` is a wildcard route.
 The router selects this route if the requested URL doesn't match any of the paths earlier in the list and sends the user to the `PageNotFoundComponent`.
 -->
 404 에러 페이지를 표시하려면 [와일드카드 라우팅 규칙](guide/router#wildcard-route-how-to)을 등록할 때 `component`에 원하는 컴포넌트를 지정하면 됩니다:
 
-<code-example header="AppRoutingModule (일부)" path="router/src/app/app-routing.module.8.ts" region="routes-with-wildcard"></code-example>
+```
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+  { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+];
+```
 
 마지막에 등록된 `path`가 `**`인 라우팅 규칙이 와일드카드 라우팅 규칙입니다.
 이제 접속하려는 URL과 매칭되는 라우팅 규칙을 발견하지 못하면 이 라우팅 규칙이 적용되면서 `PageNotFoundComponent`가 화면에 표시됩니다.
@@ -370,7 +437,14 @@ The router selects this route if the requested URL doesn't match any of the path
 <!--
 To set up a redirect, configure a route with the `path` you want to redirect from, the `component` you want to redirect to, and a `pathMatch` value that tells the router how to match the URL.
 
-<code-example header="AppRoutingModule (excerpt)" path="router/src/app/app-routing.module.8.ts" region="redirect"></code-example>
+```
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+  { path: '',   redirectTo: '/first-component', pathMatch: 'full' }, // redirect to `first-component`
+  { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+];
+```
 
 In this example, the third route is a redirect so that the router defaults to the `first-component` route.
 Notice that this redirect precedes the wildcard route.
@@ -380,7 +454,14 @@ For more details on `pathMatch` see [Spotlight on `pathMatch`](guide/router-tuto
 -->
 리다이렉션하는 라우팅 규칙을 등록하려면 `path`에 대상이 될 주소를 지정하고 `redirectTo`에 리다이렉션할 주소를 지정한 뒤에 `pathMatch`에 원하는 리다이렉션할 때 적용할 규칙을 지정합니다.
 
-<code-example header="AppRoutingModule (일부)" path="router/src/app/app-routing.module.8.ts" region="redirect"></code-example>
+```
+const routes: Routes = [
+  { path: 'first-component', component: FirstComponent },
+  { path: 'second-component', component: SecondComponent },
+  { path: '',   redirectTo: '/first-component', pathMatch: 'full' }, // redirect to `first-component`
+  { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+];
+```
 
 이 예제에서 세번째 추가된 라우팅 규칙은 기본 주소로 접근했을 때 `first-component` 주소로 이동하도록 작성한 리다이렉션 라우팅 규칙입니다.
 이 규칙이 와일드카드 라우팅 앞에 온다는 것도 확인해 보세요.
@@ -404,7 +485,18 @@ This means you're adding a second `<router-outlet>` to your app, because it is i
 In this example, there are two additional child components, `child-a`, and `child-b`.
 Here, `FirstComponent` has its own `<nav>` and a second `<router-outlet>` in addition to the one in `AppComponent`.
 
-<code-example header="In the template" path="router/src/app/app.component.8.html" region="child-routes"></code-example>
+```
+<h2>First Component</h2>
+
+<nav>
+  <ul>
+    <li><a routerLink="child-a">Child A</a></li>
+    <li><a routerLink="child-b">Child B</a></li>
+  </ul>
+</nav>
+
+<router-outlet></router-outlet>
+```
 
 A child route is like any other route, in that it needs both a `path` and a `component`.
 The one difference is that you place child routes in a `children` array within the parent route.
@@ -419,12 +511,40 @@ The one difference is that you place child routes in a `children` array within t
 아래 예제 코드에는 자식 컴포넌트가 `child-a`, `child-b` 2개 존재합니다.
 그리고 `FirstComponent`에는 `<nav>`가 존재하며 `AppComponent`에 있는 `<router-outlet>` 외에 또다른 `<router-outlet>`이 추가되어 있습니다.
 
-<code-example header="템플릿에서" path="router/src/app/app.component.8.html" region="child-routes"></code-example>
+```
+<h2>First Component</h2>
+
+<nav>
+  <ul>
+    <li><a routerLink="child-a">Child A</a></li>
+    <li><a routerLink="child-b">Child B</a></li>
+  </ul>
+</nav>
+
+<router-outlet></router-outlet>
+```
 
 자식 라우팅 규칙도 일반 라우팅 규칙과 마찬가지로 `path`, `component` 프로퍼티로 정의합니다.
 자식 라우팅 규칙은 부모 라우팅 규칙이 있고, 부모 라우팅 규칙의 `children` 배열에 정의한다는 점만 다릅니다.
 
-<code-example header="AppRoutingModule (일부)" path="router/src/app/app-routing.module.9.ts" region="child-routes"></code-example>
+```
+const routes: Routes = [
+  {
+    path: 'first-component',
+    component: FirstComponent, // this is the component with the <router-outlet> in the template
+    children: [
+      {
+        path: 'child-a', // child route path
+        component: ChildAComponent, // child route component that the router renders
+      },
+      {
+        path: 'child-b',
+        component: ChildBComponent, // another child route component that the router renders
+      },
+    ],
+  },
+];
+```
 
 
 <a id="setting-the-page-title"></a>
@@ -438,7 +558,29 @@ The one difference is that you place child routes in a `children` array within t
 Each page in your application should have a unique title so that they can be identified in the browser history.
 The `Router` sets the document's title using the `title` property from the `Route` config.
 
-<code-example header="AppRoutingModule (excerpt)" path="router/src/app/app-routing.module.10.ts" region="page-title"></code-example>
+```
+const routes: Routes = [
+  {
+    path: 'first-component',
+    title: 'First component',
+    component: FirstComponent,  // this is the component with the <router-outlet> in the template
+    children: [
+      {
+        path: 'child-a',  // child route path
+        title: resolvedChildATitle,
+        component: ChildAComponent,  // child route component that the router renders
+      },
+      {
+        path: 'child-b',
+        title: 'child b',
+        component: ChildBComponent,  // another child route component that the router renders
+      },
+    ],
+  },
+];
+
+const resolvedChildATitle: ResolveFn<string> = () => Promise.resolve('child a');
+```
 
 <div class="alert is-helpful">
 
@@ -448,12 +590,56 @@ The `Router` sets the document's title using the `title` property from the `Rout
 
 You can also provide a custom title strategy by extending the `TitleStrategy`.
 
-<code-example header="AppRoutingModule (excerpt)" path="router/src/app/app-routing.module.10.ts" region="custom-page-title"></code-example>
+```
+@Injectable({providedIn: 'root'})
+export class TemplatePageTitleStrategy extends TitleStrategy {
+  constructor(private readonly title: Title) {
+    super();
+  }
+
+  override updateTitle(routerState: RouterStateSnapshot) {
+    const title = this.buildTitle(routerState);
+    if (title !== undefined) {
+      this.title.setTitle(`My Application | ${title}`);
+    }
+  }
+}
+
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    {provide: TitleStrategy, useClass: TemplatePageTitleStrategy},
+  ]
+};
+```
 -->
 애플리케이션의 개별 화면들은 유일한 이름을 가져야 브라우저 히스토리에서 확인할 수 있습니다.
 그렇다면 `Router`에서 `Route`를 설정할 때 `title` 프로퍼티로 화면의 이름을 설정할 수 있습니다.
 
-<code-example header="AppRoutingModule (일부)" path="router/src/app/app-routing.module.10.ts" region="page-title"></code-example>
+```
+const routes: Routes = [
+  {
+    path: 'first-component',
+    title: 'First component',
+    component: FirstComponent,  // this is the component with the <router-outlet> in the template
+    children: [
+      {
+        path: 'child-a',  // child route path
+        title: resolvedChildATitle,
+        component: ChildAComponent,  // child route component that the router renders
+      },
+      {
+        path: 'child-b',
+        title: 'child b',
+        component: ChildBComponent,  // another child route component that the router renders
+      },
+    ],
+  },
+];
+
+const resolvedChildATitle: ResolveFn<string> = () => Promise.resolve('child a');
+```
 
 <div class="alert is-helpful">
 
@@ -463,7 +649,29 @@ You can also provide a custom title strategy by extending the `TitleStrategy`.
 
 그리고 `TitleStrategy`를 활용하면 커스텀 정책을 사용할 수도 있습니다.
 
-<code-example header="AppRoutingModule (일부)" path="router/src/app/app-routing.module.10.ts" region="custom-page-title"></code-example>
+```
+@Injectable({providedIn: 'root'})
+export class TemplatePageTitleStrategy extends TitleStrategy {
+  constructor(private readonly title: Title) {
+    super();
+  }
+
+  override updateTitle(routerState: RouterStateSnapshot) {
+    const title = this.buildTitle(routerState);
+    if (title !== undefined) {
+      this.title.setTitle(`My Application | ${title}`);
+    }
+  }
+}
+
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    {provide: TitleStrategy, useClass: TemplatePageTitleStrategy},
+  ]
+};
+```
 
 
 <a id="using-relative-paths"></a>
@@ -479,7 +687,16 @@ The following example shows a relative route to another component, `second-compo
 `FirstComponent` and `SecondComponent` are at the same level in the tree, however, the link to `SecondComponent` is situated within the `FirstComponent`, meaning that the router has to go up a level and then into the second directory to find the `SecondComponent`.
 Rather than writing out the whole path to get to `SecondComponent`, use the `../` notation to go up a level.
 
-<code-example header="In the template" path="router/src/app/app.component.8.html" region="relative-route"></code-example>
+```
+<h2>First Component</h2>
+
+<nav>
+  <ul>
+    <li><a routerLink="../second-component">Relative Route to second component</a></li>
+  </ul>
+</nav>
+<router-outlet></router-outlet>
+```
 
 In addition to `../`, use `./` or no leading slash to specify the current level.
 -->
@@ -489,7 +706,16 @@ In addition to `../`, use `./` or no leading slash to specify the current level.
 결국 상위 계층으로 한단계 이동한 후에 `SecondComponent`를 찾아야 합니다.
 이 때 `SecondComponent`로 이동하는 전체 경로를 사용하는 대신 상대 주소를 가리키는 방식으로 `../` 라는 표현을 사용했습니다.
 
-<code-example header="In the template" path="router/src/app/app.component.8.html" region="relative-route"></code-example>
+```
+<h2>First Component</h2>
+
+<nav>
+  <ul>
+    <li><a routerLink="../second-component">Relative Route to second component</a></li>
+  </ul>
+</nav>
+<router-outlet></router-outlet>
+```
 
 `../`와 비슷하게 `./`, `.`를 사용하면 현재 라우팅 계층의 빈 주소를 가리킵니다.
 
@@ -505,7 +731,11 @@ In the component class, import `NavigationExtras` from the `@angular/router`.
 Then use `relativeTo` in your navigation method.
 After the link parameters array, which here contains `items`, add an object with the `relativeTo` property set to the `ActivatedRoute`, which is `this.route`.
 
-<code-example header="RelativeTo" path="router/src/app/app.component.4.ts" region="relative-to">
+```
+  goToItems() {
+    this.router.navigate(['items'], { relativeTo: this.route });
+  }
+```
 
 The `navigate()` arguments configure the router to use the current route as a basis upon which to append `items`.
 
@@ -520,11 +750,13 @@ The `goToItems()` method interprets the destination URI as relative to the activ
 아래 예제에서 `items`로 지정된 링크 인자 배열 뒤에 객체 옵션을 추가하고 이 객체에 `relativeTo` 프로퍼티로 `ActivatedRoute`를 지정합니다.
 이 예제의 경우에는 `this.route` 입니다.
 
-<code-example header="RelativeTo" path="router/src/app/app.component.4.ts" region="relative-to">
+```
+  goToItems() {
+    this.router.navigate(['items'], { relativeTo: this.route });
+  }
+```
 
 그러면 `navigate()` 함수가 실행되면서 `items` 주소로 이동할 때 현재 라우팅 규칙에 대한 상대 주소로 이 주소를 처리합니다.
-
-</code-example>
 
 `goToItems()` 메서드는 최종 목적지를 결정한 후에 현재 활성화된 라우팅 규칙의 상대 주소 `items`로 이동합니다.
 
@@ -693,10 +925,10 @@ gotoItems(hero: Hero) {
 ## 지연 로딩
 
 <!--
-You can configure your routes to lazy load modules, which means that Angular only loads modules as needed, rather than loading all modules when the application launches.
+You can configure your routes to be lazy loaded, which means that Angular only loads routs as needed, rather than loading all routes when the application launches.
 Additionally, preload parts of your application in the background to improve the user experience.
 
-For more information on lazy loading and preloading see the dedicated guide [Lazy loading NgModules](guide/lazy-loading-ngmodules).
+For more information on lazy loading and preloading see the dedicated guide [Lazy loading](guide/lazy-loading-ngmodules).
 -->
 Angular 앱이 실행되는 시점에 로딩되지 않고 필요한 시점에 따로 로딩되는 모듈을 지연 로딩되는 모듈(lazy load module)이라고 합니다.
 모듈을 지연로딩하면 앱 초기 실행시간이 짧아지기 때문에 사용자에게 좀 더 나은 사용성을 제공할 수 있습니다.
@@ -746,7 +978,7 @@ export const yourGuardFunction: CanActivateFn = (
 </code-example>
 In your routing module, use the appropriate property in your `routes` configuration.
 Here, `canActivate` tells the router to mediate navigation to this particular route.
-<code-example header="Routing module (excerpt)">
+<code-example header="Routes configuration (excerpt)">
 {
   path: '/your-path',
   component: YourComponent,
@@ -794,7 +1026,7 @@ export class YourGuard implements CanActivate {
 그리고 라우팅 모듈에서 `routes` 배열에 라우팅 가드가 동작할 프로퍼티를 지정하면 됩니다.
 이번 예제에서는 `canActivate` 프로퍼티를 사용해서 해당 라우팅 규칙을 보호하는 방식으로 구현했습니다.
 
-<code-example header="라우팅 모듈 (일부)">
+<code-example header="라우팅 규칙 설정 (일부)">
 
 {
   path: '/your-path',
@@ -822,22 +1054,32 @@ A link parameters array holds the following ingredients for router navigation:
 
 Bind the `RouterLink` directive to such an array like this:
 
-<code-example header="src/app/app.component.ts (h-anchor)" path="router/src/app/app.component.3.ts" region="h-anchor"></code-example>
+```
+<a [routerLink]="['/heroes']">Heroes</a>
+```
 
 The following is a two-element array when specifying a route parameter:
 
-<code-example header="src/app/heroes/hero-list/hero-list.component.html (nav-to-detail)" path="router/src/app/heroes/hero-list/hero-list.component.1.html" region="nav-to-detail"></code-example>
+```
+<a [routerLink]="['/hero', hero.id]">
+  <span class="badge">{{ hero.id }}</span>{{ hero.name }}
+</a>
+```
 
 Provide optional route parameters in an object, as in `{ foo: 'foo' }`:
 
-<code-example header="src/app/app.component.ts (cc-query-params)" path="router/src/app/app.component.3.ts" region="cc-query-params"></code-example>
+```
+<a [routerLink]="['/crisis-center', { foo: 'foo' }]">Crisis Center</a>
+```
 
 These three examples cover the needs of an application with one level of routing.
 However, with a child router, such as in the crisis center, you create new link array possibilities.
 
 The following minimal `RouterLink` example builds upon a specified [default child route](guide/router-tutorial-toh#a-crisis-center-with-child-routes) for the crisis center.
 
-<code-example header="src/app/app.component.ts (cc-anchor-w-default)" path="router/src/app/app.component.3.ts" region="cc-anchor-w-default"></code-example>
+```
+<a [routerLink]="['/crisis-center']">Crisis Center</a>
+```
 
 Review the following:
 
@@ -848,7 +1090,9 @@ Review the following:
 
 Consider the following router link that navigates from the root of the application down to the Dragon Crisis:
 
-<code-example header="src/app/app.component.ts (Dragon-anchor)" path="router/src/app/app.component.3.ts" region="Dragon-anchor"></code-example>
+```
+<a [routerLink]="['/crisis-center', 1]">Dragon Crisis</a>
+```
 
 *   The first item in the array identifies the parent route \(`/crisis-center`\)
 *   There are no parameters for this parent route
@@ -859,7 +1103,17 @@ Consider the following router link that navigates from the root of the applicati
 
 You could also redefine the `AppComponent` template with Crisis Center routes exclusively:
 
-<code-example header="src/app/app.component.ts (template)" path="router/src/app/app.component.3.ts" region="template"></code-example>
+```
+template: `
+  <h1 class="title">Angular Router</h1>
+  <nav>
+    <a [routerLink]="['/crisis-center']">Crisis Center</a>
+    <a [routerLink]="['/crisis-center/1', { foo: 'foo' }]">Dragon Crisis</a>
+    <a [routerLink]="['/crisis-center/2']">Shark Crisis</a>
+  </nav>
+  <router-outlet></router-outlet>
+`
+```
 
 In summary, you can write applications with one, two or more levels of routing.
 The link parameters array affords the flexibility to represent any routing depth and any legal sequence of route paths, \(required\) router parameters, and \(optional\) route parameter objects.
@@ -871,22 +1125,32 @@ The link parameters array affords the flexibility to represent any routing depth
 
 `RouterLink` 디렉티브가 적용된 링크가 하나 있다고 합시다:
 
-<code-example header="src/app/app.component.ts (링크 엘리먼트)" path="router/src/app/app.component.3.ts" region="h-anchor"></code-example>
+```
+<a [routerLink]="['/heroes']">Heroes</a>
+```
 
 이 링크가 동작하면서 인자를 함께 전달하려면 디렉티브에 바인딩되는 배열을 다음과 같이 수정하면 됩니다:
 
-<code-example header="src/app/heroes/hero-list/hero-list.component.html (상세정보로 이동하는 링크)" path="router/src/app/heroes/hero-list/hero-list.component.1.html" region="nav-to-detail"></code-example>
+```
+<a [routerLink]="['/hero', hero.id]">
+  <span class="badge">{{ hero.id }}</span>{{ hero.name }}
+</a>
+```
 
 라우팅 인자는 `{ foo: 'foo' }`와 같은 객체 형태도 전달할 수 있습니다:
 
-<code-example header="src/app/app.component.ts (쿼리 인자)" path="router/src/app/app.component.3.ts" region="cc-query-params"></code-example>
+```
+<a [routerLink]="['/crisis-center', { foo: 'foo' }]">Crisis Center</a>
+```
 
 이 세가지 예제를 활용하면 한 계층에서 발생하는 라우팅 동작을 거의 구현할 수 있습니다.
 그런데 위기대응센터 화면처럼 자식 라우터가 있다면 조금 다릅니다.
 
 아래 코드는 위기대응센터 화면에 사용했던 [기본 자식 라우팅 규칙](guide/router-tutorial-toh#a-crisis-center-with-child-routes) 링크를 정의한 코드입니다.
 
-<code-example header="src/app/app.component.ts (위기대응센터 기본 링크)" path="router/src/app/app.component.3.ts" region="cc-anchor-w-default"></code-example>
+```
+<a [routerLink]="['/crisis-center']">Crisis Center</a>
+```
 
 이 코드에서 이런 내용을 확인할 수 있습니다:
 
@@ -897,7 +1161,9 @@ The link parameters array affords the flexibility to represent any routing depth
 
 이번에는 위기대응센터 화면에 있는 링크 중에서 Dragon 위기로 이동하는 링크를 살펴봅시다:
 
-<code-example header="src/app/app.component.ts (Dragon 링크)" path="router/src/app/app.component.3.ts" region="Dragon-anchor"></code-example>
+```
+<a [routerLink]="['/crisis-center', 1]">Dragon Crisis</a>
+```
 
 *   배열의 첫번째 항목은 부모 라우팅 규칙 `/crisis-center`를 의미합니다.
 *   부모 라우팅 규칙에 전달되는 라우팅 인자는 없습니다.
@@ -908,7 +1174,17 @@ The link parameters array affords the flexibility to represent any routing depth
 
 그러면 `AppComponent` 템플릿을 이렇게 정의할 수 있습니다:
 
-<code-example header="src/app/app.component.ts (템플릿)" path="router/src/app/app.component.3.ts" region="template"></code-example>
+```
+template: `
+  <h1 class="title">Angular Router</h1>
+  <nav>
+    <a [routerLink]="['/crisis-center']">Crisis Center</a>
+    <a [routerLink]="['/crisis-center/1', { foo: 'foo' }]">Dragon Crisis</a>
+    <a [routerLink]="['/crisis-center/2']">Shark Crisis</a>
+  </nav>
+  <router-outlet></router-outlet>
+`
+```
 
 정리하자면, 애플리케이션은 라우팅 계층의 깊이와 관계없이 자유롭게 화면을 전환할 수 있습니다.
 링크 인자 배열을 활용하면 원하는 계층으로 이동하면서, 필수/옵션 라우팅 인자를 함께 전달할 수 있습니다.
@@ -953,7 +1229,7 @@ The router supports both styles with two `LocationStrategy` providers:
 | `PathLocationStrategy` | The default "HTML5 pushState" style. |
 | `HashLocationStrategy` | The "hash URL" style.                |
 
-The `RouterModule.forRoot()` function sets the `LocationStrategy` to the `PathLocationStrategy`, which makes it the default strategy.
+The `provideRouter` function sets the `LocationStrategy` to the `PathLocationStrategy`, which makes it the default strategy.
 You also have the option of switching to the `HashLocationStrategy` with an override during the bootstrapping process.
 
 <div class="alert is-helpful">
@@ -993,7 +1269,7 @@ localhost:3002/src/#/crisis-center
 | `PathLocationStrategy` | HTML5 pushState 스타일을 사용합니다. 이 값이 기본값입니다. |
 | `HashLocationStrategy` | 해시 URL 스타일을 사용합니다.                       |
 
-기본 상태에서는 `RouterModule.forRoot()` 함수에서 `LocationStrategy`를 `PathLocationStrategy`로 설정하고 있습니다.
+기본 상태에서는 `provideRouter()` 함수에서 `LocationStrategy`를 `PathLocationStrategy`로 설정하고 있습니다.
 `HashLocationStrategy`를 사용하려면 앱을 부트스트랩 할 때 이 값을 지정하면 됩니다.
 
 <div class="alert is-helpful">
@@ -1162,13 +1438,25 @@ foo://example.com:8042/over/there?name=ferret#nose
 ### `HashLocationStrategy`
 
 <!--
-Use `HashLocationStrategy` by providing the `useHash: true` in an object as the second argument of the `RouterModule.forRoot()` in the `AppModule`.
+Use `HashLocationStrategy` by adding the `withHashLocation` feature to the `provideRouter` function  of the `provideRouter` in the `ApplicationConfiguration`.
 
-<code-example header="src/app/app.module.ts (hash URL strategy)" path="router/src/app/app.module.6.ts"></code-example>
+```
+  providers: [
+    provideRouter(appRoutes, withHashLocation())
+  ]
+```
+
+When using `RouterModule.forRoot`, this is configured with the `useHash: true` in the second argument: `RouterModule.forRoot(routes, {useHash: true})`.
 -->
-`AppModule`에서 `RouterModule.forRoot()`를 실행할 때 `useHash: true` 옵션을 지정하는 방법으로도 `HashLocationStrategy` 정책을 사용할 수 있습니다.
+`AppModule`에서 `provideRouter()`를 실행할 때 `useHash: true` 옵션을 지정하는 방법으로도 `HashLocationStrategy` 정책을 사용할 수 있습니다.
 
-<code-example header="src/app/app.module.ts (해시 URL 정책)" path="router/src/app/app.module.6.ts"></code-example>
+```
+  providers: [
+    provideRouter(appRoutes, withHashLocation())
+  ]
+```
+
+`RouterModule.forRoot()`를 사용하는 경우라면 `RouterModule.forRoot(routes, {useHash: true})`라고 지정하면 됩니다.
 
 
 <!-- links -->
@@ -1177,4 +1465,4 @@ Use `HashLocationStrategy` by providing the `useHash: true` in an object as the 
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-10-24

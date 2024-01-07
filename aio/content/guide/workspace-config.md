@@ -283,12 +283,17 @@ Angular defines default builders for use with specific commands, or with the gen
 The JSON schemas that define the options and defaults for each of these default builders are collected in the [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/builders.json) package.
 The schemas configure options for the following builders.
 
+<!- vale Angular.Google_WordListWarnings = NO ->
+
+*   [application](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/application/schema.json)
 *   [app-shell](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/app-shell/schema.json)
 *   [browser](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/browser/schema.json)
 *   [dev-server](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/dev-server/schema.json)
 *   [extract-i18n](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/extract-i18n/schema.json)
 *   [karma](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/karma/schema.json)
 *   [server](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/server/schema.json)
+
+<!- vale Angular.Google_WordListWarnings = YES ->
 -->
 Angular는 Angular CLI를 사용할 때 활용할 빌더와 기본 옵션을 미리 지정해두었습니다.
 Angular CLI 명령의 기본 옵션과 기본 빌드 대상은 [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/builders.json) 패키지에 정의되어 있으며, 다음 빌더들이 활용됩니다.
@@ -296,6 +301,7 @@ Angular CLI 명령의 기본 옵션과 기본 빌드 대상은 [`@angular-devkit
 
 <!-- vale Angular.Google_WordListWarnings = NO -->
 
+*   [application](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/application/schema.json)
 *   [app-shell](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/app-shell/schema.json)
 *   [browser](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/browser/schema.json)
 *   [dev-server](https://github.com/angular/angular-cli/blob/main/packages/angular_devkit/build_angular/src/builders/dev-server/schema.json)
@@ -412,7 +418,7 @@ It has the following top-level properties.
 
 | PROPERTY        | Details                                                                                                                                                                                                                                                                                                              |
 |:---             |:---                                                                                                                                                                                                                                                                                                                      |
-| `builder`       | The npm package for the build tool used to create this target. The default builder for an application \(`ng build myApp`\) is `@angular-devkit/build-angular:browser`, which uses the [webpack](https://webpack.js.org) package bundler. <div class="alert is-helpful"> **NOTE**: A different builder is used for building a library \(`ng build myLib`\). </div> |
+| `builder`       | The npm package for the build tool used to create this target. The default builder for an application \(`ng build myApp`\) is `@angular-devkit/build-angular:application`, which uses the [esbuild](https://esbuild.github.io/) package bundler. <div class="alert is-helpful"> **NOTE**: A different builder is used for building a library \(`ng build myLib`\). </div> |
 | `options`       | This section contains default build target options, used when no named alternative configuration is specified. See the [Default build targets](#default-build-targets) section.                                                                                                                                                |
 | `configurations`| This section defines and names alternative configurations for different intended destinations. It contains a section for each named configuration, which sets the default options for that intended environment. See the [Alternate build configurations](#build-configs) section.                                             |
 -->
@@ -421,7 +427,7 @@ It has the following top-level properties.
 
 | 프로퍼티             | 설명                                                                                                                                                                                                                                                                        |
 |:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `builder`        | 앱을 빌드할 때 사용하는 npm 패키지를 지정합니다. 애플리케이션을 빌드할 때\(`ng build myApp`\) 사용되는 기본값은 [webpack](https://webpack.js.org) 패키지 번들러를 기반으로 동작하는 `@angular-devkit/build-angular:browser` 입니다. <div class="alert is-helpful"> **참고**: 라이브러리르 빌드할 때\(`ng build myLib`\)는 다른 빌더가 사용됩니다. </div> |
+| `builder`        | 앱을 빌드할 때 사용하는 npm 패키지를 지정합니다. 애플리케이션을 빌드할 때\(`ng build myApp`\) 사용되는 기본값은 [esbuild](https://esbuild.github.io/) 패키지 번들러를 기반으로 동작하는 `@angular-devkit/build-angular:application` 입니다. <div class="alert is-helpful"> **참고**: 라이브러리르 빌드할 때\(`ng build myLib`\)는 다른 빌더가 사용됩니다. </div> |
 | `options`        | 빌드할 때 기본 빌드 대상에 적용될 옵션을 지정합니다. 자세한 내용은 [기본 빌드 대상](#default-build-targets) 섹션을 참고하세요.                                                                                                                                                                                      |
 | `configurations` | 환경 설정을 대체할 수 있는 옵션을 지정합니다. 이 옵션을 사용하면 애플리케이션을 여러 환경에서 동작할 수 있도록 빌드할 때 각기 다른 설정 파일을 지정할 수 있습니다. 자세한 내용은 [빌드 옵션 변경](#build-configs) 섹션을 참고하세요.                                                                                                                              |
 
@@ -489,10 +495,10 @@ For details of those options and their possible values, see the [Angular CLI Ref
 
 Some extra options can only be set through the configuration file, either by direct editing or with the [`ng config`](cli/config) command.
 
-| Options properties         | Details |
-|:---                        |:---     |
-| `assets`                   | An object containing paths to static assets to add to the global context of the project. The default paths point to the project's icon file and its `assets` directory. See more in the [Assets configuration](#asset-config) section.                                                                     |
-| `styles`                   | An array of style files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors: [sass/scss](https://sass-lang.com) and [less](http://lesscss.org). See more in the [Styles and scripts configuration](#style-script-config) section.             |
+| Options properties         | Details                                                                                                                                                                                                                                                                                                 |
+|:---                        |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `assets`                   | An object containing paths to static assets to add to the global context of the project. The default paths point to the project's icon file and its `assets` directory. See more in the [Assets configuration](#asset-config) section.                                                                  |
+| `styles`                   | An array of style files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors: [sass/scss](https://sass-lang.com) and [less](https://lesscss.org). See more in the [Styles and scripts configuration](#style-script-config) section.            |
 | `stylePreprocessorOptions` | An object containing option-value pairs to pass to style preprocessors. See more in the [Styles and scripts configuration](#style-script-config) section.                                                                                                                                               |
 | `scripts`                  | An object containing JavaScript script files to add to the global context of the project. The scripts are loaded exactly as if you had added them in a `<script>` tag inside `index.html`. See more in the [Styles and scripts configuration](#style-script-config) section.                            |
 | `budgets`                  | Default size-budget type and thresholds for all or parts of your application. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See [Configure size budgets](guide/build#configure-size-budgets). \(Not available in `test` section.\) |
@@ -507,7 +513,7 @@ Some extra options can only be set through the configuration file, either by dir
 | 옵션값                        | 설명                                                                                                                                                                                                       |
 |:---------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `assets`                   | 프로젝트 전역에 사용되는 정적 리소스를 지정합니다. 기본 경로는 `asssets` 입니다. 자세한 내용은 아래 [애셋 환경설정](#asset-config) 섹션을 참고하세요.                                                                                                        |
-| `styles`                   | 프로젝트 전역에 사용되는 스타일 파일을 지정합니다. Angular는 기본 CSS는 물론이고 [sass/scss](https://sass-lang.com), [less](http://lesscss.org) 도 기본으로 지원합니다. 자세한 내용은 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요.                |
+| `styles`                   | 프로젝트 전역에 사용되는 스타일 파일을 지정합니다. Angular는 기본 CSS는 물론이고 [sass/scss](https://sass-lang.com), [less](https://lesscss.org) 도 기본으로 지원합니다. 자세한 내용은 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요.                |
 | `stylePreprocessorOptions` | 스타일 전처리기에 전달할 옵션을 키-값 형태로 지정합니다. 자세한 내용은 아래 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요.                                                                                                            |
 | `scripts`                  | 프로젝트 전역에 사용되는 JavaScript 파일을 지정합니다. 이 때 지정되는 JavaScript 파일들은 `index.html`에 `<script>` 태그로 자동 추가됩니다. 자세한 내용은 [스타일, 스크립트 환경설정](#style-script-config) 섹션을 참고하세요.                                            |
 | `budgets`                  | 애플리케이션 빌드 결과물의 한계 크기를 지정합니다. 애플리케이션을 빌드해서 생성되는 빌드 결과물의 크기가 이 옵션에서 지정된 값보다 크면 경고 메시지나 에러 메시지를 출력합니다. 자세한 내용은 [빌드 결과물 크기 지정하기](guide/build#configure-size-budgets) 문서를 참고하세요. \(`test` 환경설정에는 적용되지 않습니다.\) |
@@ -801,7 +807,7 @@ You can mix simple and complex file references for styles and scripts.
 #### 스타일 전처리기 옵션
 
 <!--
-In Sass you can make use of the `includePaths` feature for both component and global styles. This allows you to add extra base paths that are checked for imports.
+In Sass, you can make use of the `includePaths` feature for both component and global styles. This allows you to add extra base paths that are checked for imports.
 
 To add paths, use the `stylePreprocessorOptions` option:
 
@@ -928,14 +934,25 @@ Several options can be used to fine-tune the optimization of an application.
 |:---              |:---                                                                                                                      |:---        |:---           |
 | `minify`         | Minify CSS definitions by removing extraneous whitespace and comments, merging identifiers, and minimizing values.        | `boolean`  | `true`        |
 | `inlineCritical` | Extract and inline critical CSS definitions to improve [First Contentful Paint](https://web.dev/first-contentful-paint). | `boolean`  | `true`        |
+
+<div class="alert is-helpful">
+
+[Angular CLI](cli "CLI command reference") uses `Critters` to perform critical CSS inlining. For more information about this package see the [Critters README](https://github.com/GoogleChromeLabs/critters#readme).
+
+</div>
 -->
 | 옵션               | 설명                                                                                                                     | 값 타입      | 기본값    |
 |:-----------------|:-----------------------------------------------------------------------------------------------------------------------|:----------|:-------|
 | `minify`         | 공백문자, 주석을 제거하고 일부 코드를 병합해서 CSS 코드를 압축합니다.                                                                              | `boolean` | `true` |
 | `inlineCritical` | [화면이 최초로 그려지는 성능\(First Contentful Paint\)](https://web.dev/first-contentful-paint)을 향상시키기 위해 주요 CSS를 추출하고 인라인으로 만듭니다. | `boolean` | `true` |
 
+<div class="alert is-helpful">
 
-<a id="fonts-optimization-options"></a>
+[Angular CLI](cli "CLI command reference") 중요 CSS 인라인을 처리할 때 `Critters`를 활용합니다.
+이 패키지에 대해 자세하게 알아보려면 [Critters README](https://github.com/GoogleChromeLabs/critters#readme) 문서를 참고하세요.
+
+</div>
+
 
 <!--
 #### Fonts optimization options
@@ -966,7 +983,7 @@ You can supply a value such as the following to apply optimization to one or the
 
 <div class="alert is-helpful">
 
-For [Universal](guide/glossary#universal), you can reduce the code rendered in the HTML page by setting styles optimization to `true`.
+For [SSR](guide/glossary#server-side-rendering), you can reduce the code rendered in the HTML page by setting styles optimization to `true`.
 
 </div>
 -->
@@ -991,7 +1008,7 @@ For [Universal](guide/glossary#universal), you can reduce the code rendered in t
 
 <div class="alert is-helpful">
 
-스타일 최적화 옵션을 `true`로 설정하고 Angular [Universal](guide/glossary#universal)을 함께 활용하면 HTML 페이지를 렌더링하기 위해 필요한 코드의 양을 줄일 수 있습니다.
+스타일 최적화 옵션을 `true`로 설정하고 [SSR](guide/glossary#server-side-rendering)을 함께 활용하면 HTML 페이지를 렌더링하기 위해 필요한 코드의 양을 줄일 수 있습니다.
 
 </div>
 
@@ -1106,4 +1123,4 @@ When supplying the value as a String the filename of the specified path will be 
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-10-24

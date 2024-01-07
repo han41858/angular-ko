@@ -142,9 +142,9 @@ An `ngFor` then lists each `customer` in the `customers` array.
 
 <code-example path="interpolation/src/app/app.component.1.ts" region="var-collision" header="src/app/app.component.ts"></code-example>
 
-The `customer` within the `ngFor` is in the context of an `<ng-template>` and so refers to the `customer` in the `customers` array, in this case Ebony and Chiho.
-This list does not feature Padma because `customer` outside of the `ngFor` is in a different context.
-Conversely, `customer` in the `<h1>` doesn't include Ebony or Chiho because the context for this `customer` is the class and the class value for `customer` is Padma.
+The `customer` within the `ngFor` is in the context of the implicit `<ng-template>` defined by the _ngFor_.  It refers to each `customer` in the `customers` array and displays "Ebony" and "Chiho".  "Padma" is not displayed because that name is not in that array.
+
+On the other hand, the `<h1>` displays "Padma" which is bound to the value of the `customer` property in the component class.
 -->
 템플릿 표현식이 실행되는 컨텍스트 안에서는 템플릿 변수, 디렉티브의 컨텍스트 객체, 컴포넌트 멤버 이름이 충돌할 수 있습니다.
 그래서 이들 안에서 같은 이름을 사용하면 아래 우선순위에 따라 참조되는 항목을 결정합니다:
@@ -160,8 +160,11 @@ Conversely, `customer` in the `<h1>` doesn't include Ebony or Chiho because the 
 
 <code-example path="interpolation/src/app/app.component.1.ts" region="var-collision" header="src/app/app.component.ts"></code-example>
 
+`ngFor` 안에 있는 `customer`는 `<ng-template>` 안에 선언된 컨텍스트
+
 그러면 `ngFor` 안에서 사용하는 `customer`는 `<ng-template>` 컨텍스트 안에 존재하기 때문에 `customers` 배역에 있는 항목을 가리키며, 이 예제에서는 Ebony와 Chiho를 가리킵니다.
-하지만 `ngFor` 밖에 있는 `customer`는 컨텍슷트가 다르기 때문에 Padma를 가리킵니다.
+하지만 `ngFor` 밖에 있는 `customer`는 컨텍스트가 다르기 때문에 "Padma"를 가리킵니다.
+
 반대로, `<h1>` 안에 있는 `customer`는 컴포넌트 클래스에 있는 `customer`를 가리키기 때문에 Ebony나 Chiho와 같은 값이 될 수 없습니다.
 
 
@@ -244,4 +247,4 @@ Angular 안에서 멱등성을 갖는 표현식은, 주어지는 값이 같다�
 * [프로퍼티 바인딩](guide/property-binding)
 * [이벤트 바인딩](guide/event-binding)
 
-@reviewed 2022-05-12
+@reviewed 2023-09-01

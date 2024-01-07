@@ -135,38 +135,29 @@ Enter the following command where `customer-app` is the name of your app:
 
 <code-example format="shell" language="shell">
 
-ng new customer-app --routing
+ng new customer-app --no-standalone
 
 </code-example>
 
-This creates an application called `customer-app` and the `--routing` flag generates a file called `app-routing.module.ts`. This is one of the files you need for setting up lazy loading for your feature module.
+This creates an application called `customer-app` with a file called `app-routing.module.ts`. This is one of the files you need for setting up lazy loading for your feature module.
 Navigate into the project by issuing the command `cd customer-app`.
-
-<div class="alert is-helpful">
-
-The `--routing` option requires Angular CLI version 8.1 or higher.
-See [Keeping Up to Date](guide/updating).
-
-</div>
 -->
 아직 프로젝트를 만들지 않았다면 Angular CLI를 사용해서 새로운 애플리케이션을 생성합니다. 이미 있는 앱을 활용하려면 [라우터 설정하기](#config-routes) 부분으로 넘어가세요.
+
+<!-- vale Angular.Google_WordListWarnings = NO -->
+
 애플리케이션은 다음 명령을 실행해서 생성합니다:
+
+<!-- vale Angular.Google_WordListWarnings = YES -->
 
 <code-example format="shell" language="shell">
 
-ng new customer-app --routing
+ng new customer-app --no-standalone
 
 </code-example>
 
-이 명령을 실행하면 `customer-app` 이라는 이름으로 애플리케이션이 생성되는데, 이 때 옵션으로 `--routing` 플래그를 설정했기 때문에 `app-routing.module.ts` 파일이 함께 생성됩니다. 이 파일은 기능 모듈을 지연 로딩하도록 설정할 때 사용합니다.
-애플리케이션이 생성되고 나면 `cd customer-app` 명령을 실행해서 프로젝트 폴더로 이동합니다.
-
-<div class="alert is-helpful">
-
-Angular/CLI 8.1 이후 버전에서는 `--routing` 옵션이 꼭 필요합니다.
-[최신버전 유지하기](guide/updating) 문서를 참고하세요.
-
-</div>
+이 명령을 실행하면 `customer-app` 이라는 이름으로 애플리케이션이 생성되며, `app-routing.module.ts` 파일이 함께 생성됩니다.
+이 파일은 기능 모듈을 지연 로딩하도록 설정할 때 사용합니다.
 
 
 <!--
@@ -200,7 +191,7 @@ The import path is the relative path to the module.
 
 <header>String-based lazy loading</header>
 
-In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](guide/deprecations#loadchildren-string-syntax) in favor of the `import()` syntax.
+In Angular version 8, the string syntax for the `loadChildren` route specification [was deprecated](guide/deprecations#loadChildren) in favor of the `import()` syntax.
 You can opt into using string-based lazy loading \(`loadChildren: './path/to/module#Module'`\) by including the lazy-loaded routes in your `tsconfig` file, which includes the lazy-loaded files in the compilation.
 
 By default the Angular CLI generates projects with stricter file inclusions intended to be used with the `import()` syntax.
@@ -231,7 +222,7 @@ ng generate module customers --route customers --module app.module
 
 <header>문자열 기반의 지연 로딩</header>
 
-Angular 8 버전부터 문자열을 사용해서 `loadChildren` 라우팅 규칙을 정의하는 방식이 [지원 중단](guide/deprecations#loadchildren-string-syntax)되고 `import()` 문법을 활용하는 방식이 도입되었습니다.
+Angular 8 버전부터 문자열을 사용해서 `loadChildren` 라우팅 규칙을 정의하는 방식이 [지원 중단](guide/deprecations#loadChildren)되고 `import()` 문법을 활용하는 방식이 도입되었습니다.
 하지만 `tsconfig` 파일의 설정을 조정하면 `loadChildren: './path/to/module#Module'`과 같이 문자열을 사용하는 방식도 사용할 수 있습니다.
 
 Angular CLI는 기본적으로 엄격한 파일 로딩 방식을 활용하기 위해 `import()` 문법으로 기본 코드를 구성합니다.
@@ -864,4 +855,4 @@ You might also be interested in the following:
 
 <!-- end links -->
 
-@reviewed 2022-05-07
+@reviewed 2023-10-24

@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {CssSelector, ParseSourceFile, ParseSourceSpan, parseTemplate, R3TargetBinder, SchemaMetadata, SelectorMatcher, TmplAstElement, Type} from '@angular/compiler';
+import {CssSelector, ParseSourceFile, ParseSourceSpan, parseTemplate, ParseTemplateOptions, R3TargetBinder, SchemaMetadata, SelectorMatcher, TmplAstElement} from '@angular/compiler';
 import ts from 'typescript';
 
 import {absoluteFrom, AbsoluteFsPath, getSourceFileOrError, LogicalFileSystem} from '../../file_system';
 import {TestFile} from '../../file_system/testing';
 import {AbsoluteModuleStrategy, LocalIdentifierStrategy, LogicalProjectStrategy, ModuleResolver, Reference, ReferenceEmitter, RelativePathStrategy} from '../../imports';
 import {NOOP_INCREMENTAL_BUILD} from '../../incremental';
-import {ClassPropertyMapping, CompoundMetadataReader, DirectiveMeta, HostDirectivesResolver, InputMapping, MatchSource, MetadataReaderWithIndex, MetaKind, NgModuleIndex} from '../../metadata';
+import {ClassPropertyMapping, CompoundMetadataReader, DirectiveMeta, HostDirectivesResolver, InputMapping, InputTransform, MatchSource, MetadataReaderWithIndex, MetaKind, NgModuleIndex} from '../../metadata';
 import {NOOP_PERF_RECORDER} from '../../perf';
 import {TsCreateProgramDriver} from '../../program_driver';
 import {ClassDeclaration, isNamedClassDeclaration, TypeScriptReflectionHost} from '../../reflection';
@@ -236,7 +236,10 @@ export interface TestDirective extends Partial<Pick<
   inputs?: {
     [fieldName: string]:
         string|{
-          classPropertyName: string, bindingPropertyName: string, required: boolean
+          classPropertyName: string;
+          bindingPropertyName: string;
+          required: boolean;
+          transform: InputTransform|null;
         }
   };
   outputs?: {[fieldName: string]: string};
@@ -266,7 +269,7 @@ export type TestDeclaration = TestDirective|TestPipe;
 
 export function tcb(
     template: string, declarations: TestDeclaration[] = [], config?: Partial<TypeCheckingConfig>,
-    options?: {emitSpans?: boolean}): string {
+    options?: {emitSpans?: boolean}, templateParserOptions?: ParseTemplateOptions): string {
   const codeLines = [`export class Test<T extends string> {}`];
 
   (function addCodeLines(currentDeclarations) {
@@ -287,7 +290,11 @@ export function tcb(
   const sf = getSourceFileOrError(program, rootFilePath);
   const clazz = getClass(sf, 'Test');
   const templateUrl = 'synthetic.html';
-  const {nodes} = parseTemplate(template, templateUrl);
+  const {nodes, errors} = parseTemplate(template, templateUrl, templateParserOptions);
+
+  if (errors !== null) {
+    throw new Error('Template parse errors: \n' + errors.join('\n'));
+  }
 
   const {matcher, pipes} =
       prepareDeclarations(declarations, decl => getClass(sf, decl.name), new Map());
@@ -666,6 +673,7 @@ function getDirectiveMetaFromDeclaration(
     queries: decl.queries || [],
     isStructural: false,
     isStandalone: !!decl.isStandalone,
+    isSignal: !!decl.isSignal,
     baseClass: null,
     animationTriggerNames: null,
     decorator: null,
@@ -719,6 +727,7 @@ function makeScope(program: ts.Program, sf: ts.SourceFile, decls: TestDeclaratio
         isStructural: false,
         animationTriggerNames: null,
         isStandalone: false,
+        isSignal: false,
         imports: null,
         schemas: null,
         decorator: null,
@@ -789,4 +798,6 @@ export class NoopOobRecorder implements OutOfBandDiagnosticRecorder {
   suboptimalTypeInference(): void {}
   splitTwoWayBinding(): void {}
   missingRequiredInputs(): void {}
+  illegalForLoopTrackAccess(): void {}
+  inaccessibleDeferredTriggerElement(): void {}
 }

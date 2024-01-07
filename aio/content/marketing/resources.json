@@ -133,13 +133,6 @@
             "logo": "",
             "title": "NgRuAir",
             "url": "https://github.com/ngRuAir/ngruair"
-          },
-          "ngxp": {
-            "/desc": "Weekly technical-adjacent podcast by Brooke Avery & Erik Slack. Don't just code in Angular, come enjoy the Angular Experience!",
-            "desc": "Brooke Avery & Erik Slack이 진행하는 기술 기반 팟캐스트입니다. Angular 코드만 다루는 것이 아니라 Angular 사용경험 전반을 다룹니다.",
-            "logo": "",
-            "title": "Angular Experience (NgXP)",
-            "url": "https://ngxp.show"
           }
         }
       }
@@ -316,8 +309,8 @@
             "/desc": "Server-side Rendering for Angular apps.",
             "desc": "Angular 애플리케이션에 서버사이드 렌더링 기능을 더해보세요.",
             "logo": "https://cloud.githubusercontent.com/assets/1016365/10639063/138338bc-7806-11e5-8057-d34c75f3cafc.png",
-            "title": "Angular Universal",
-            "url": "https://angular.io/guide/universal"
+            "title": "Angular SSR",
+            "url": "https://angular.io/guide/ssr"
           },
           "c1": {
             "/desc": "Lightweight development only Node.js® server",
@@ -681,6 +674,12 @@
             "desc": "NGX Cookie Service는 브라우저 쿠키를 읽고, 쓰고, 삭제할 때 사용하는 라이브러리입니다.",
             "title": "NGX Cookie Service",
             "url": "https://github.com/stevermeister/ngx-cookie-service"
+          },
+          "flowbite": {
+            "/desc": "Open-source UI component library built with the utility-classes from Tailwind CSS and with official support for Angular.",
+            "desc": "Tailwind CSS와 Angular팀이 공식적으로 협업해서 만든 유틸리티용 오픈소스 UI 컴포넌트 라이브러리입니다.",
+            "title": "Flowbite",
+            "url": "https://flowbite.com/docs/getting-started/angular/"
           }
         }
       }
@@ -792,17 +791,18 @@
             "logo": ""
           },
           "butter-cms": {
-            "/title":"How to integrate ButterCMS into Angular 2+ App",
+            "/title": "How to integrate ButterCMS into Angular 2+ App",
             "title": "Angular 2+ 앱에 ButterCMS 통합하기",
             "/desc": "Integrate a Headless CMS into your Angular App, create blog posts and pages",
             "desc": "Angular 앱에 헤드리스 CMS를 통합해 보세요. 블로그를 편하게 관리할 수 있습니다.",
-            "url":"https://medium.com/orlyknop/how-to-integrate-buttercms-into-angular-2-app-a1baaa51402",
+            "url": "https://medium.com/orlyknop/how-to-integrate-buttercms-into-angular-2-app-a1baaa51402",
             "logo": ""
           },
           "angular-projects": {
-            "title": "Angular Projects - Second Edition",
-            "desc": "Build modern web apps by exploring Angular with 10 different projects and cutting-edge technologies",
-            "url": "https://www.amazon.com/dp/1800205260"
+            "title": "Angular Projects - Third Edition",
+            "/desc": "Build modern web apps in Angular 16 with 10 different projects and cutting-edge technologies",
+            "desc": "Angular 16으로 웹 앱 프로젝트 10개를 만들어 보면서 최신 스타일과 기술을 배워봅시다.",
+            "url": "https://amazon.com/dp/1803239115"
           },
           "rangle-angular-training-book": {
             "title": "Rangle’s Angular Training Book",
@@ -985,6 +985,12 @@
             "desc": "#Angular를 배우고 싶지만, 어디서부터 시작해야 할지 모르나요? 그렇다면 Angular #GDE @SantoshYadavDev 가 진행하는 “Angular for Beginners Course“ 를 확인해 보세요.",
             "title": "Angular for Beginners Course",
             "url": "https://youtu.be/3qBXWUpoPHo"
+          },
+          "angular-challenges": {
+            "/desc": "Learn angular its ecosystem and open-source by practising on real-life examples.",
+            "desc": "Angular 생태계에 바로 사용할 수 있는 오픈소스 라이브러리를 확인하고 현업에 적용해 보세요.",
+            "title": "Angular Challenges",
+            "url": "https://angular-challenges.vercel.app/"
           }
         }
       },

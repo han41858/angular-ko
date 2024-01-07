@@ -973,4 +973,8 @@ Here are the code files discussed on this page.
 *   히어로 목록 화면에서 사용자가 선택한 히어로의 정보를 히어로 상세정보 화면으로 전달하기 위해 라우터 링크 배열을 활용했습니다.
 *   여러 컴포넌트에 사용하는 로직을 중복해서 구현하지 않고 `HeroService`로 옮겨서 재사용할 수 있도록 변경했습니다.
 
+## Next steps
+
+*  [6. Get data from a server](tutorial/tour-of-heroes/toh-pt6)
+
 @reviewed 2022-02-28

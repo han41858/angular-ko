@@ -4,7 +4,7 @@
 # 파이프 테스트하기
 
 <!--
-You can test [pipes](guide/pipes) without the Angular testing utilities.
+You can test [pipes](guide/pipes-overview) without the Angular testing utilities.
 
 <div class="alert is-helpful">
 
@@ -12,7 +12,7 @@ If you'd like to experiment with the application that this guide describes, <liv
 
 </div>
 -->
-[파이프](guide/pipes)는 Angular 전용 테스트 기능을 활용하지 않아도 테스트할 수 있습니다.
+[파이프](guide/pipes-overview)는 Angular 전용 테스트 기능을 활용하지 않아도 테스트할 수 있습니다.
 
 <div class="alert is-helpful">
 
@@ -87,4 +87,4 @@ Consider adding component tests such as this one:
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-09-07

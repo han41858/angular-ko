@@ -333,4 +333,8 @@ Here are the code files discussed on this page.
 *   이중 중괄호를 사용하면 컴포넌트 프로퍼티 값을 템플릿에 바인딩 할 수 있습니다.
 
 
-@reviewed 2022-02-28
+## Next steps
+
+*  [1. The hero editor](tutorial/tour-of-heroes/toh-pt1)
+
+@reviewed 2023-08-30

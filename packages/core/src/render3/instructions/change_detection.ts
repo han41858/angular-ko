@@ -6,42 +6,86 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {consumerAfterComputation, consumerBeforeComputation, consumerPollProducersForChange, ReactiveNode} from '@angular/core/primitives/signals';
+
+import {RuntimeError, RuntimeErrorCode} from '../../errors';
 import {assertDefined, assertEqual} from '../../util/assert';
 import {assertLContainer} from '../assert';
 import {getComponentViewByInstance} from '../context_discovery';
 import {executeCheckHooks, executeInitAndCheckHooks, incrementInitPhaseFlags} from '../hooks';
-import {CONTAINER_HEADER_OFFSET, HAS_TRANSPLANTED_VIEWS, LContainer, MOVED_VIEWS} from '../interfaces/container';
+import {CONTAINER_HEADER_OFFSET, HAS_CHILD_VIEWS_TO_REFRESH, HAS_TRANSPLANTED_VIEWS, LContainer, MOVED_VIEWS} from '../interfaces/container';
 import {ComponentTemplate, RenderFlags} from '../interfaces/definition';
-import {CONTEXT, DESCENDANT_VIEWS_TO_REFRESH, ENVIRONMENT, FLAGS, InitPhaseState, LView, LViewFlags, PARENT, TVIEW, TView} from '../interfaces/view';
+import {CONTEXT, EFFECTS_TO_SCHEDULE, ENVIRONMENT, FLAGS, InitPhaseState, LView, LViewFlags, PARENT, REACTIVE_TEMPLATE_CONSUMER, TVIEW, TView, TViewType} from '../interfaces/view';
+import {getOrBorrowReactiveLViewConsumer, maybeReturnReactiveLViewConsumer, ReactiveLViewConsumer} from '../reactive_lview_consumer';
 import {enterView, isInCheckNoChangesMode, leaveView, setBindingIndex, setIsInCheckNoChangesMode} from '../state';
 import {getFirstLContainer, getNextLContainer} from '../util/view_traversal_utils';
-import {clearViewRefreshFlag, getComponentLViewByIndex, isCreationMode, markViewForRefresh, resetPreOrderHookFlags, viewAttachedToChangeDetector} from '../util/view_utils';
+import {getComponentLViewByIndex, isCreationMode, markAncestorsForTraversal, markViewForRefresh, resetPreOrderHookFlags, viewAttachedToChangeDetector} from '../util/view_utils';
 
 import {executeTemplate, executeViewQueryFn, handleError, processHostBindingOpCodes, refreshContentQueries} from './shared';
 
+/**
+ * The maximum number of times the change detection traversal will rerun before throwing an error.
+ */
+const MAXIMUM_REFRESH_RERUNS = 100;
+
 export function detectChangesInternal<T>(
     tView: TView, lView: LView, context: T, notifyErrorHandler = true) {
-  const rendererFactory = lView[ENVIRONMENT].rendererFactory;
+  const environment = lView[ENVIRONMENT];
+  const rendererFactory = environment.rendererFactory;
+  const afterRenderEventManager = environment.afterRenderEventManager;
 
   // Check no changes mode is a dev only mode used to verify that bindings have not changed
   // since they were assigned. We do not want to invoke renderer factory functions in that mode
   // to avoid any possible side-effects.
   const checkNoChangesMode = !!ngDevMode && isInCheckNoChangesMode();
 
-  if (!checkNoChangesMode && rendererFactory.begin) rendererFactory.begin();
+  if (!checkNoChangesMode) {
+    rendererFactory.begin?.();
+    afterRenderEventManager?.begin();
+  }
+
   try {
     refreshView(tView, lView, tView.template, context);
+    detectChangesInViewWhileDirty(lView);
   } catch (error) {
     if (notifyErrorHandler) {
       handleError(lView, error);
     }
     throw error;
   } finally {
-    if (!checkNoChangesMode && rendererFactory.end) rendererFactory.end();
+    if (!checkNoChangesMode) {
+      rendererFactory.end?.();
 
-    // One final flush of the effects queue to catch any effects created in `ngAfterViewInit` or
-    // other post-order hooks.
-    !checkNoChangesMode && lView[ENVIRONMENT].effectManager?.flush();
+      // One final flush of the effects queue to catch any effects created in `ngAfterViewInit` or
+      // other post-order hooks.
+      environment.inlineEffectRunner?.flush();
+
+      // Invoke all callbacks registered via `after*Render`, if needed.
+      afterRenderEventManager?.end();
+    }
+  }
+}
+
+function detectChangesInViewWhileDirty(lView: LView) {
+  let retries = 0;
+  // If after running change detection, this view still needs to be refreshed or there are
+  // descendants views that need to be refreshed due to re-dirtying during the change detection
+  // run, detect changes on the view again. We run change detection in `Targeted` mode to only
+  // refresh views with the `RefreshView` flag.
+  while (lView[FLAGS] & (LViewFlags.RefreshView | LViewFlags.HasChildViewsToRefresh) ||
+         lView[REACTIVE_TEMPLATE_CONSUMER]?.dirty) {
+    if (retries === MAXIMUM_REFRESH_RERUNS) {
+      throw new RuntimeError(
+          RuntimeErrorCode.INFINITE_CHANGE_DETECTION,
+          ngDevMode &&
+              'Infinite change detection while trying to refresh views. ' +
+                  'There may be components which each cause the other to require a refresh, ' +
+                  'causing an infinite loop.');
+    }
+    retries++;
+    // Even if this view is detached, we still detect changes in targeted mode because this was
+    // the root of the change detection run.
+    detectChangesInView(lView, ChangeDetectionMode.Targeted);
   }
 }
 
@@ -67,6 +111,25 @@ export function detectChanges(component: {}): void {
   detectChangesInternal(view[TVIEW], view, component);
 }
 
+/**
+ * Different modes of traversing the logical view tree during change detection.
+ *
+ *
+ * The change detection traversal algorithm switches between these modes based on various
+ * conditions.
+ */
+const enum ChangeDetectionMode {
+  /**
+   * In `Global` mode, `Dirty` and `CheckAlways` views are refreshed as well as views with the
+   * `RefreshTransplantedView` flag.
+   */
+  Global,
+  /**
+   * In `Targeted` mode, only views with the `RefreshTransplantedView`
+   * flag are refreshed.
+   */
+  Targeted,
+}
 
 /**
  * Processes a view in update mode. This includes a number of steps in a specific order:
@@ -87,9 +150,20 @@ export function refreshView<T>(
   // since they were assigned. We do not want to execute lifecycle hooks in that mode.
   const isInCheckNoChangesPass = ngDevMode && isInCheckNoChangesMode();
 
-  !isInCheckNoChangesPass && lView[ENVIRONMENT].effectManager?.flush();
+  !isInCheckNoChangesPass && lView[ENVIRONMENT].inlineEffectRunner?.flush();
 
+
+  // Start component reactive context
+  // - We might already be in a reactive context if this is an embedded view of the host.
+  // - We might be descending into a view that needs a consumer.
   enterView(lView);
+  let prevConsumer: ReactiveNode|null = null;
+  let currentConsumer: ReactiveLViewConsumer|null = null;
+  if (!isInCheckNoChangesPass && viewShouldHaveReactiveConsumer(tView)) {
+    currentConsumer = getOrBorrowReactiveLViewConsumer(lView);
+    prevConsumer = consumerBeforeComputation(currentConsumer);
+  }
+
   try {
     resetPreOrderHookFlags(lView);
 
@@ -122,7 +196,7 @@ export function refreshView<T>(
     // insertion points. This is needed to avoid the situation where the template is defined in this
     // `LView` but its declaration appears after the insertion component.
     markTransplantedViewsForRefresh(lView);
-    refreshEmbeddedViews(lView);
+    detectChangesInEmbeddedViews(lView, ChangeDetectionMode.Global);
 
     // Content query results must be refreshed before content hooks are called.
     if (tView.contentQueries !== null) {
@@ -152,7 +226,7 @@ export function refreshView<T>(
     // Refresh child component views.
     const components = tView.components;
     if (components !== null) {
-      refreshChildComponents(lView, components);
+      detectChangesInChildComponents(lView, components, ChangeDetectionMode.Global);
     }
 
     // View queries must execute after refreshing child components because a template in this view
@@ -189,6 +263,16 @@ export function refreshView<T>(
       tView.firstUpdatePass = false;
     }
 
+    // Schedule any effects that are waiting on the update pass of this view.
+    if (lView[EFFECTS_TO_SCHEDULE]) {
+      for (const notifyEffect of lView[EFFECTS_TO_SCHEDULE]) {
+        notifyEffect();
+      }
+
+      // Once they've been run, we can drop the array.
+      lView[EFFECTS_TO_SCHEDULE] = null;
+    }
+
     // Do not reset the dirty state when running in check no changes mode. We don't want components
     // to behave differently depending on whether check no changes is enabled or not. For example:
     // Marking an OnPush component as dirty from within the `ngAfterViewInit` hook in order to
@@ -198,26 +282,52 @@ export function refreshView<T>(
     if (!isInCheckNoChangesPass) {
       lView[FLAGS] &= ~(LViewFlags.Dirty | LViewFlags.FirstLViewPass);
     }
-    clearViewRefreshFlag(lView);
+  } catch (e) {
+    // If refreshing a view causes an error, we need to remark the ancestors as needing traversal
+    // because the error might have caused a situation where views below the current location are
+    // dirty but will be unreachable because the "has dirty children" flag in the ancestors has been
+    // cleared during change detection and we failed to run to completion.
+
+    markAncestorsForTraversal(lView);
+    throw e;
   } finally {
+    if (currentConsumer !== null) {
+      consumerAfterComputation(currentConsumer, prevConsumer);
+      maybeReturnReactiveLViewConsumer(currentConsumer);
+    }
     leaveView();
   }
+}
+
+/**
+ * Indicates if the view should get its own reactive consumer node.
+ *
+ * In the current design, all embedded views share a consumer with the component view. This allows
+ * us to refresh at the component level rather than at a per-view level. In addition, root views get
+ * their own reactive node because root component will have a host view that executes the
+ * component's host bindings. This needs to be tracked in a consumer as well.
+ *
+ * To get a more granular change detection than per-component, all we would just need to update the
+ * condition here so that a given view gets a reactive consumer which can become dirty independently
+ * from its parent component. For example embedded views for signal components could be created with
+ * a new type "SignalEmbeddedView" and the condition here wouldn't even need updating in order to
+ * get granular per-view change detection for signal components.
+ */
+function viewShouldHaveReactiveConsumer(tView: TView) {
+  return tView.type !== TViewType.Embedded;
 }
 
 /**
  * Goes over embedded views (ones created through ViewContainerRef APIs) and refreshes
  * them by executing an associated template function.
  */
-export function refreshEmbeddedViews(lView: LView) {
+function detectChangesInEmbeddedViews(lView: LView, mode: ChangeDetectionMode) {
   for (let lContainer = getFirstLContainer(lView); lContainer !== null;
        lContainer = getNextLContainer(lContainer)) {
+    lContainer[HAS_CHILD_VIEWS_TO_REFRESH] = false;
     for (let i = CONTAINER_HEADER_OFFSET; i < lContainer.length; i++) {
       const embeddedLView = lContainer[i];
-      const embeddedTView = embeddedLView[TVIEW];
-      ngDevMode && assertDefined(embeddedTView, 'TView must be allocated');
-      if (viewAttachedToChangeDetector(embeddedLView)) {
-        refreshView(embeddedTView, embeddedLView, embeddedTView.template, embeddedLView[CONTEXT]!);
-      }
+      detectChangesInViewIfAttached(embeddedLView, mode);
     }
   }
 }
@@ -227,7 +337,7 @@ export function refreshEmbeddedViews(lView: LView) {
  *
  * @param lView The `LView` that may have transplanted views.
  */
-export function markTransplantedViewsForRefresh(lView: LView) {
+function markTransplantedViewsForRefresh(lView: LView) {
   for (let lContainer = getFirstLContainer(lView); lContainer !== null;
        lContainer = getNextLContainer(lContainer)) {
     if (!lContainer[HAS_TRANSPLANTED_VIEWS]) continue;
@@ -244,68 +354,87 @@ export function markTransplantedViewsForRefresh(lView: LView) {
 }
 
 /**
- * Refreshes components by entering the component view and processing its bindings, queries, etc.
+ * Detects changes in a component by entering the component view and processing its bindings,
+ * queries, etc. if it is CheckAlways, OnPush and Dirty, etc.
  *
  * @param componentHostIdx  Element index in LView[] (adjusted for HEADER_OFFSET)
  */
-function refreshComponent(hostLView: LView, componentHostIdx: number): void {
+function detectChangesInComponent(
+    hostLView: LView, componentHostIdx: number, mode: ChangeDetectionMode): void {
   ngDevMode && assertEqual(isCreationMode(hostLView), false, 'Should be run in update mode');
   const componentView = getComponentLViewByIndex(componentHostIdx, hostLView);
-  // Only attached components that are CheckAlways or OnPush and dirty should be refreshed
-  if (viewAttachedToChangeDetector(componentView)) {
-    const tView = componentView[TVIEW];
-    if (componentView[FLAGS] & (LViewFlags.CheckAlways | LViewFlags.Dirty)) {
-      refreshView(tView, componentView, tView.template, componentView[CONTEXT]);
-    } else if (componentView[DESCENDANT_VIEWS_TO_REFRESH] > 0) {
-      // Only attached components that are CheckAlways or OnPush and dirty should be refreshed
-      refreshContainsDirtyView(componentView);
-    }
-  }
+  detectChangesInViewIfAttached(componentView, mode);
 }
 
 /**
- * Refreshes all transplanted views marked with `LViewFlags.RefreshTransplantedView` that are
- * children or descendants of the given lView.
+ * Visits a view as part of change detection traversal.
  *
- * @param lView The lView which contains descendant transplanted views that need to be refreshed.
+ * If the view is detached, no additional traversal happens.
  */
-function refreshContainsDirtyView(lView: LView) {
-  for (let lContainer = getFirstLContainer(lView); lContainer !== null;
-       lContainer = getNextLContainer(lContainer)) {
-    for (let i = CONTAINER_HEADER_OFFSET; i < lContainer.length; i++) {
-      const embeddedLView = lContainer[i];
-      if (viewAttachedToChangeDetector(embeddedLView)) {
-        if (embeddedLView[FLAGS] & LViewFlags.RefreshView) {
-          const embeddedTView = embeddedLView[TVIEW];
-          ngDevMode && assertDefined(embeddedTView, 'TView must be allocated');
-          refreshView(
-              embeddedTView, embeddedLView, embeddedTView.template, embeddedLView[CONTEXT]!);
-
-        } else if (embeddedLView[DESCENDANT_VIEWS_TO_REFRESH] > 0) {
-          refreshContainsDirtyView(embeddedLView);
-        }
-      }
-    }
+function detectChangesInViewIfAttached(lView: LView, mode: ChangeDetectionMode) {
+  if (!viewAttachedToChangeDetector(lView)) {
+    return;
   }
+  detectChangesInView(lView, mode);
+}
 
+/**
+ * Visits a view as part of change detection traversal.
+ *
+ * The view is refreshed if:
+ * - If the view is CheckAlways or Dirty and ChangeDetectionMode is `Global`
+ * - If the view has the `RefreshTransplantedView` flag
+ *
+ * The view is not refreshed, but descendants are traversed in `ChangeDetectionMode.Targeted` if the
+ * view HasChildViewsToRefresh flag is set.
+ */
+function detectChangesInView(lView: LView, mode: ChangeDetectionMode) {
+  const isInCheckNoChangesPass = ngDevMode && isInCheckNoChangesMode();
   const tView = lView[TVIEW];
-  // Refresh child component views.
-  const components = tView.components;
-  if (components !== null) {
-    for (let i = 0; i < components.length; i++) {
-      const componentView = getComponentLViewByIndex(components[i], lView);
-      // Only attached components that are CheckAlways or OnPush and dirty should be refreshed
-      if (viewAttachedToChangeDetector(componentView) &&
-          componentView[DESCENDANT_VIEWS_TO_REFRESH] > 0) {
-        refreshContainsDirtyView(componentView);
-      }
+  const flags = lView[FLAGS];
+  const consumer = lView[REACTIVE_TEMPLATE_CONSUMER];
+
+  // Refresh CheckAlways views in Global mode.
+  let shouldRefreshView: boolean =
+      !!(mode === ChangeDetectionMode.Global && flags & LViewFlags.CheckAlways);
+
+  // Refresh Dirty views in Global mode, as long as we're not in checkNoChanges.
+  // CheckNoChanges never worked with `OnPush` components because the `Dirty` flag was
+  // cleared before checkNoChanges ran. Because there is now a loop for to check for
+  // backwards views, it gives an opportunity for `OnPush` components to be marked `Dirty`
+  // before the CheckNoChanges pass. We don't want existing errors that are hidden by the
+  // current CheckNoChanges bug to surface when making unrelated changes.
+  shouldRefreshView ||= !!(
+      flags & LViewFlags.Dirty && mode === ChangeDetectionMode.Global && !isInCheckNoChangesPass);
+
+  // Always refresh views marked for refresh, regardless of mode.
+  shouldRefreshView ||= !!(flags & LViewFlags.RefreshView);
+
+  // Refresh views when they have a dirty reactive consumer, regardless of mode.
+  shouldRefreshView ||= !!(consumer?.dirty && consumerPollProducersForChange(consumer));
+
+  // Mark the Flags and `ReactiveNode` as not dirty before refreshing the component, so that they
+  // can be re-dirtied during the refresh process.
+  if (consumer) {
+    consumer.dirty = false;
+  }
+  lView[FLAGS] &= ~(LViewFlags.HasChildViewsToRefresh | LViewFlags.RefreshView);
+
+  if (shouldRefreshView) {
+    refreshView(tView, lView, tView.template, lView[CONTEXT]);
+  } else if (flags & LViewFlags.HasChildViewsToRefresh) {
+    detectChangesInEmbeddedViews(lView, ChangeDetectionMode.Targeted);
+    const components = tView.components;
+    if (components !== null) {
+      detectChangesInChildComponents(lView, components, ChangeDetectionMode.Targeted);
     }
   }
 }
 
 /** Refreshes child components in the current view (update mode). */
-export function refreshChildComponents(hostLView: LView, components: number[]): void {
+function detectChangesInChildComponents(
+    hostLView: LView, components: number[], mode: ChangeDetectionMode): void {
   for (let i = 0; i < components.length; i++) {
-    refreshComponent(hostLView, components[i]);
+    detectChangesInComponent(hostLView, components[i], mode);
   }
 }

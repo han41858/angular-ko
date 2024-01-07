@@ -28,9 +28,12 @@ The component initializes the `heroes` property by using the `HeroService` servi
 Angular creates, updates, and destroys components as the user moves through the application.
 Your application can take action at each moment in this lifecycle through optional [lifecycle hooks](guide/lifecycle-hooks), like `ngOnInit()`.
 -->
-A *component* controls a patch of screen called a [*view*](guide/glossary#view "Definition of view"). It consists
-of a TypeScript class, an HTML template, and a CSS style sheet. The TypeScript class defines the interaction 
-of the HTML template and the rendered DOM structure, while the style sheet describes its appearance.
+컴포넌트는 [*뷰(view)*](guide/glossary#view "Definition of view")라고 하는 화면 일부를 제어합니다.
+
+
+A *component* controls a patch of screen called a [*view*](guide/glossary#view "Definition of view").
+It consists of a TypeScript class, an HTML template, and a CSS style sheet.
+The TypeScript class defines the interaction of the HTML template and the rendered DOM structure, while the style sheet describes its appearance.
 
 An Angular application uses individual components to define and control different aspects of the application.
 For example, an application could include components to describe:
@@ -83,8 +86,10 @@ This example shows some of the most useful `@Component` configuration options:
 
 | Configuration options | Details |
 |:---                   |:---     |
+| `standalone`          | `true` when this is a self-describing, ["Standalone"](guide/standalone-components) component.  If `false` or unspecified, the component must be declared in an [ngModule](guide/ngmodules) which is an older style. Prefer `true` if you can. |
 | `selector`            | A CSS selector that tells Angular to create and insert an instance of this component wherever it finds the corresponding tag in template HTML. For example, if an application's HTML contains `<app-hero-list></app-hero-list>`, then Angular inserts an instance of the `HeroListComponent` view between those tags. |
-| `templateUrl`         | The module-relative address of this component's HTML template. Alternatively, you can provide the HTML template inline, as the value of the `template` property. This template defines the component's *host view*.                                                                                                  |
+| `templateUrl`         | The relative address of this component's HTML template. Alternatively, you can provide the HTML template inline, as the value of the `template` property. This template defines the component's *host view*.                                                                                                  |
+| `imports`             | An array of the components, directives, and packages that your template references. Essential for "Standalone" components.                                                                  |
 | `providers`           | An array of [providers](guide/glossary#provider) for services that the component requires. In the example, this tells Angular how to provide the `HeroService` instance that the component's constructor uses to get the list of heroes to display.                                                                   |
 -->
 Angular 컴포넌트는 컴포넌트 클래스에 `@Component` 데코레이터를 붙여서 정의하며, 이 때 데코레이터 함수에 컴포넌트의 특성을 정의하는 메타데이터를 함께 전달합니다.
@@ -104,11 +109,13 @@ Angular 컴포넌트는 컴포넌트 클래스에 `@Component` 데코레이터�
 이 예제에 사용된 `@Component` 데코레이터의 메타데이터는 다른 컴포넌트에서도 많이 사용합니다:
 
 
-| 설정 옵션         | 설명                                                                                                                                                                                  |
-|:--------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `selector`    | 컴포넌트 인스턴스가 DOM 트리의 어떤 자리에 위치할지 CSS 셀렉터로 지정합니다. 위 코드에서는 HTML 문서의 `<app-hero-list></app-hero-list>`라고 작성한 위치에 `HeroListComponent`의 인스턴스가 생성되며, 이 엘리먼트가 `HeroListComponent`의 뷰로 대체됩니다. |
-| `templateUrl` | 컴포넌트의 HTML 템플릿을 외부 파일에 정의할 때, 이 템플릿 파일의 위치를 지정합니다. 템플릿을 인라인으로 구성하려면 이 프로퍼티 대신 `template` 프로퍼티를 사용하면 됩니다. 템플릿은 컴포넌트의 *호스트 뷰* 를 정의합니다.                                                |
-| `providers`   | 컴포넌트가 생성될 때 의존성으로 주입되는 서비스의 [프로바이더](guide/glossary#provider)를 지정합니다. 위 코드에서는 화면에 표시할 히어로의 목록을 가져오기 위해 생성자에서 `HeroService`를 의존성으로 주입받는데, 이 `HeroService`의 인스턴스를 어떻게 받아올지 지정합니다.     |
+| 설정 옵션         | 설명                                                                                                                                                                                          |
+|:--------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `standalone`  | `true` 라고 지정하면, ["단독"](guide/standalone-components) 컴포넌트라는 것을 의미합니다. `false` 값을 지정하거나 지정하지 않으면 이 컴포넌트가 어떤 [ngModule](guide/ngmodules) 안에 등록된다는 것을 의미합니다. 이 방식은 예전 방식이기 때문에 `true` 값을 권장합니다. |
+| `selector`    | 컴포넌트 인스턴스가 DOM 트리의 어떤 자리에 위치할지 CSS 셀렉터로 지정합니다. 위 코드에서는 HTML 문서의 `<app-hero-list></app-hero-list>`라고 작성한 위치에 `HeroListComponent`의 인스턴스가 생성되며, 이 엘리먼트가 `HeroListComponent`의 뷰로 대체됩니다.         |
+| `templateUrl` | 컴포넌트의 HTML 템플릿을 외부 파일에 정의할 때, 이 템플릿 파일의 위치를 지정합니다. 템플릿을 인라인으로 구성하려면 이 프로퍼티 대신 `template` 프로퍼티를 사용하면 됩니다. 템플릿은 컴포넌트의 *호스트 뷰* 를 정의합니다.                                                        |
+| `imports`     | 템플릿에서 컴포넌트, 디렉티브, 기타 패키지를 활용한다면 로드합니다. "단독" 컴포넌트라면 꼭 지정해야 합니다.                                                                                                                              |
+| `providers`   | 컴포넌트가 생성될 때 의존성으로 주입되는 서비스의 [프로바이더](guide/glossary#provider)를 지정합니다. 위 코드에서는 화면에 표시할 히어로의 목록을 가져오기 위해 생성자에서 `HeroService`를 의존성으로 주입받는데, 이 `HeroService`의 인스턴스를 어떻게 받아올지 지정합니다.              |
 
 
 <!--
@@ -140,12 +147,6 @@ The component can also define a *view hierarchy*, which contains *embedded views
 <img alt="Component tree" class="left" src="generated/images/guide/architecture/component-tree.png">
 
 </div>
-
-<!--
-A view hierarchy can include views from components in the same NgModule and from those in different NgModules.
--->
-뷰는 보통 같은 NgModule에 있는 컴포넌트를 활용해서 뷰 계층으로 구성합니다.
-다른 NgModule에 있는 컴포넌트를 뷰에 불러올 수도 있습니다.
 
 
 <a id="template-syntax"></a>
@@ -316,7 +317,7 @@ A class with the `@Pipe` decorator defines a function that transforms input valu
 Angular defines various pipes, such as the [date](api/common/DatePipe) pipe and [currency](api/common/CurrencyPipe) pipe. For a complete list, see the [Pipes API list](api?type=pipe).
 You can also define new pipes.
 
-To specify a value transformation in an HTML template, use the [pipe operator (`|`)](guide/pipes).
+To specify a value transformation in an HTML template, use the [pipe operator (`|`)](guide/pipes-overview).
 
 <code-example format="html" language="html">
 
@@ -348,7 +349,7 @@ Angular는 여러가지 파이프를 기본으로 제공하는데, 이 중 [날�
 Angular에서 제공하는 파이프 목록을 확인하려면 [파이프 API 목록](api?type=pipe) 문서를 참고하세요.
 필요하다면 파이프를 새로 정의해서 사용할 수도 있습니다.
 
-HTML 템플릿에 파이프를 적용할 때는 [파이프 연산자 (|)](guide/pipes)를 다음과 같이 사용합니다:
+HTML 템플릿에 파이프를 적용할 때는 [파이프 연산자 (|)](guide/pipes-overview)를 다음과 같이 사용합니다:
 
 <code-example format="html" language="html">
 
@@ -489,4 +490,4 @@ Learn more in the [Attribute Directives](guide/attribute-directives) and [Struct
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-09-25

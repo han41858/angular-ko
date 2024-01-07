@@ -61,19 +61,6 @@ The following options are available for configuring the AOT template compiler.
 AOT 템플릿 컴파일러 옵션에는 이런 항목들을 사용할 수 있습니다.
 
 
-### `allowEmptyCodegenFiles`
-
-<!--
-When `true`, create all possible files even if they are empty.
-Default is `false`.
-Used by the Bazel build rules to simplify how Bazel rules track file dependencies.
-Do not use this option outside of the Bazel rules.
--->
-`true`로 설정하면 빈 파일도 빌드합니다.
-기본값은 `false`입니다.
-이 옵션은 파일간 의존성을 추적하는 Bazel 빌드 규칙을 간단하게 만들 때 사용합니다.
-Bazel 규칙이 아닌 곳에서는 사용하지 않는 것을 권장합니다.
-
 ### `annotationsAs`
 
 <!--
@@ -239,9 +226,9 @@ Use to create flat modules that are packaged similarly to `@angular/core` and `@
 When this option is used, the `package.json` for the library should refer to the created flat module index instead of the library index file.
 
 Produces only one `.metadata.json` file, which contains all the metadata necessary for symbols exported from the library index.
-In the created `.ngfactory.js` files, the flat module index is used to import symbols. Symbols that include both the public API from the library index as well as shrouded internal symbols.
+In the created `.ngfactory.js` files, the flat module index is used to import symbols. Symbols that include both the public API from the library index and shrouded internal symbols.
 
-By default the `.ts` file supplied in the `files` field is assumed to be the library index.
+By default, the `.ts` file supplied in the `files` field is assumed to be the library index.
 If more than one `.ts` file is specified, `libraryIndex` is used to select the file to use.
 If more than one `.ts` file is supplied without a `libraryIndex`, an error is produced.
 
@@ -276,7 +263,7 @@ The `module` field of the library's `package.json` would be `"index.js"` and the
 When `true`, the recommended value, enables the [binding expression validation](guide/aot-compiler#binding-expression-validation) phase of the template compiler. This phase uses TypeScript to verify binding expressions.
 For more information, see [Template type checking](guide/template-typecheck).
 
-Default is `false`, but when you use the Angular CLI command `ng new --strict`, it is set to `true` in the new project's configuration.
+Default is `false`, but set to `true` in the created workspace configuration when creating a project using the Angular CLI.
 
 <div class="alert is-important">
 
@@ -288,7 +275,7 @@ The `fullTemplateTypeCheck` option has been deprecated in Angular 13 in favor of
 이 옵션은 `true`로 설정하는 것을 권장합니다.
 더 자세한 내용은 [템플릿 타입 검사](guide/template-typecheck) 문서를 참고하세요.
 
-이 옵션의 기본값은 `false`지만, Angular CLI `ng new --strict` 명령을 실행하면 프로젝트 `true` 값으로 설정됩니다.
+이 옵션의 기본값은 `false`지만, Angular CLI로 프로젝트를 생성할 때 `true` 값을 지정할 수 있습니다.
 
 <div class="alert is-important">
 
@@ -420,12 +407,12 @@ When `true`, reports an error for a supplied parameter whose injection type cann
 When `false`, constructor parameters of classes marked with `@Injectable` whose type cannot be resolved produce a warning.
 The recommended value is `true`, but the default value is `false`.
 
-When you use the Angular CLI command `ng new --strict`, it is set to `true` in the created project's configuration.
+Set to `true` in the created workspace configuration when creating a project using the Angular CLI.
 -->
 `true` 값\(권장\)으로 지정하면(권장) 의존성 객체의 타입을 결정할 수 없을 때 에러를 표시합니다.
 `false` 값으로 지정하면(기본값) 생성자에 주입되는 객체 중 `@Injectable`이 지정되었지만 타입을 결정할 수 없을 때 경고 메시지를 표시합니다.
 
-Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했다면 `true`로 지정되어 있습니다.
+Angular CLI로 프로젝트를 생성할 때 기본값은 `true` 입니다.
 
 ### `strictTemplates`
 
@@ -435,14 +422,14 @@ When `true`, enables [strict template type checking](guide/template-typecheck#st
 The strictness flags that this option enables allow you to turn on and off specific types of strict template type checking.
 See [troubleshooting template errors](guide/template-typecheck#troubleshooting-template-errors).
 
-When you use the Angular CLI command `ng new --strict`, it is set to `true` in the new project's configuration.
+Set to `true` in the created workspace configuration when creating a project using the Angular CLI.
 -->
 `true`로 설정하면 [더 엄격한 템플릿 타입 검사](guide/template-typecheck#strict-mode)를 활성화 합니다.
 
 세부 검사 옵션은 추가 옵션을 지정해서 제어할 수 있습니다.
 [템플릿 에러 해결하기](guide/template-typecheck#troubleshooting-template-errors) 문서를 참고하세요.
 
-Angular CLI로 프로젝트를 생성할 때 `ng new --strict` 라고 생성했다면 `true`로 지정되어 있습니다.
+Angular CLI로 프로젝트를 생성할 때 기본값은 `true` 입니다.
 
 ### `trace`
 
@@ -454,6 +441,7 @@ Default is `false`.
 기본값은 `false`입니다.
 
 <a id="cli-options"></a>
+
 ## Command line options
 
 Most of the time you interact with the Angular Compiler indirectly using Angular CLI. When debugging certain issues, you might find it useful to invoke the Angular Compiler directly.
@@ -469,4 +457,4 @@ Besides the configuration file, you can also use [`tsc` command line options](ht
 
 <!-- end links -->
 
-@reviewed 2023-04-19
+@reviewed 2023-10-24

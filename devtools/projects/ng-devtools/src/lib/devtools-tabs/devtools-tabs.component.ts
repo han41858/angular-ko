@@ -7,8 +7,7 @@
  */
 
 import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatLegacySlideToggleChange as MatSlideToggleChange} from '@angular/material/legacy-slide-toggle';
-import {MatLegacyTabNav as MatTabNav} from '@angular/material/legacy-tabs';
+import {MatTabNav} from '@angular/material/tabs';
 import {Events, MessageBus, Route} from 'protocol';
 import {Subscription} from 'rxjs';
 
@@ -28,11 +27,12 @@ export class DevToolsTabsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DirectiveExplorerComponent) directiveExplorer: DirectiveExplorerComponent;
   @ViewChild('navBar', {static: true}) navbar: MatTabNav;
 
-  activeTab: 'Components'|'Profiler'|'Router Tree' = 'Components';
+  activeTab: 'Components'|'Profiler'|'Router Tree'|'Injector Tree' = 'Components';
 
   inspectorRunning = false;
   routerTreeEnabled = false;
   showCommentNodes = false;
+  timingAPIEnabled = false;
 
   private _currentThemeSubscription: Subscription;
   currentTheme: Theme;
@@ -51,10 +51,12 @@ export class DevToolsTabsComponent implements OnInit, OnDestroy, AfterViewInit {
     this._messageBus.on('updateRouterTree', (routes) => {
       this.routes = routes || [];
     });
+
+    this.navbar.stretchTabs = false;
   }
 
   get tabs(): string[] {
-    const alwaysShown = ['Components', 'Profiler'];
+    const alwaysShown = ['Components', 'Profiler', 'Injector Tree'];
     return this.routes.length === 0 ? alwaysShown : [...alwaysShown, 'Router Tree'];
   }
 
@@ -86,7 +88,6 @@ export class DevToolsTabsComponent implements OnInit, OnDestroy, AfterViewInit {
   emitInspectorEvent(): void {
     if (this.inspectorRunning) {
       this._messageBus.emit('inspectorStart');
-      this.changeTab('Components');
     } else {
       this._messageBus.emit('inspectorEnd');
       this._messageBus.emit('removeHighlightOverlay');
@@ -97,8 +98,9 @@ export class DevToolsTabsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.inspectorRunning = !this.inspectorRunning;
   }
 
-  toggleTimingAPI(change: MatSlideToggleChange): void {
-    change.checked ? this._messageBus.emit('enableTimingAPI') :
-                     this._messageBus.emit('disableTimingAPI');
+  toggleTimingAPI(): void {
+    this.timingAPIEnabled = !this.timingAPIEnabled;
+    this.timingAPIEnabled ? this._messageBus.emit('enableTimingAPI') :
+                            this._messageBus.emit('disableTimingAPI');
   }
 }

@@ -5,7 +5,7 @@
 
 <!--
 Many forms, such as questionnaires, can be very similar to one another in format and intent.
-To make it faster and easier to generate different versions of such a form, you can create a *dynamic form template* based on metadata that describes the business object model.
+To make it faster and easier to generate different versions of such a form, you can create a _dynamic form template_ based on metadata that describes the business object model.
 Then, use the template to generate new forms automatically, according to changes in the data model.
 
 The technique is particularly useful when you have a type of form whose content must change frequently to meet rapidly changing business and regulatory requirements.
@@ -37,7 +37,7 @@ See the <live-example name="dynamic-form"></live-example>.
 </div>
 -->
 설문지를 폼으로 구현한다면 설문지마다 구성 형식과 의도가 비슷한 경우가 대부분일 것입니다.
-이런 경우라면 업무 효율성을 위해 비즈니스 객체 모델을 메타데이터로 정의하고 *동적 폼 템플릿(dynamic form template)*을 구성해둔 뒤에 개별 폼을 빠르게 자동으로 생성하는 것이 더 좋습니다.
+이런 경우라면 업무 효율성을 위해 비즈니스 객체 모델을 메타데이터로 정의하고 _동적 폼 템플릿(dynamic form template)_ 을 구성해둔 뒤에 개별 폼을 빠르게 자동으로 생성하는 것이 더 좋습니다.
 
 내용이 계속 바뀌고 이 변화에 빠르게 대응해야 하는 업무일수록 이 방식이 특히 효율적입니다.
 개별 질문마다 사용자에게 입력을 설문지가 대표적인 경우입니다.
@@ -74,15 +74,15 @@ See the <live-example name="dynamic-form"></live-example>.
 <!--
 Before doing this tutorial, you should have a basic understanding to the following.
 
-*   [TypeScript](https://www.typescriptlang.org/ "The TypeScript language") and HTML5 programming
-*   Fundamental concepts of [Angular app design](guide/architecture "Introduction to Angular app-design concepts")
-*   Basic knowledge of [reactive forms](guide/reactive-forms "Reactive forms guide")
+* [TypeScript](https://www.typescriptlang.org/ 'The TypeScript language') and HTML5 programming
+* Fundamental concepts of [Angular app design](guide/architecture 'Introduction to Angular app-design concepts')
+* Basic knowledge of [reactive forms](guide/reactive-forms 'Reactive forms guide')
 -->
 이 튜토리얼을 보기 전에 이런 내용을 먼저 이해하는 것이 좋습니다:
 
-*   [TypeScript](https://www.typescriptlang.org/ "The TypeScript language"), HTML 사용방법
-*   [Angular 개요](guide/architecture "Introduction to Angular app-design concepts") 문서에서 설명하는 Angular 기본 개념
-*   [반응형 폼](guide/reactive-forms "Reactive forms guide")에 대한 기본 지식
+* [TypeScript](https://www.typescriptlang.org/ 'The TypeScript language'), HTML 사용방법
+* [Angular 개요](guide/architecture 'Introduction to Angular app-design concepts') 문서에서 설명하는 Angular 기본 개념
+* [반응형 폼](guide/reactive-forms 'Reactive forms guide')에 대한 기본 지식
 
 
 <!--
@@ -92,18 +92,20 @@ Before doing this tutorial, you should have a basic understanding to the followi
 
 <!--
 Dynamic forms are based on reactive forms.
-To give the application access reactive forms directives, the [root module](guide/bootstrapping "Learn about bootstrapping an app from the root module.") imports `ReactiveFormsModule` from the `@angular/forms` library.
+
+To give the application access reactive forms directives, import `ReactiveFormsModule` from the `@angular/forms` library into the necessary components.
 
 The following code from the example shows the setup in the root module.
 -->
 동적 폼은 반응형 폼을 기반으로 구성합니다.
-그래서 애플리케이션에 반응형 폼을 구성하려면 `@angular/forms` 패키지로 제공하는 `ReactiveFormsModule`을 [앱 최상위 모듈](guide/bootstrapping "Learn about bootstrapping an app from the root module.")에 로드해야 합니다.
 
-최상위 모듈은 이렇게 설정하면 됩니다.
+그래서 애플리케이션에 반응형 폼을 구성하려면 `@angular/forms` 패키지로 제공하는 `ReactiveFormsModule`을 컴포넌트에 로드해야 합니다.
+
+이렇게 설정하면 됩니다.
 
 <code-tabs>
-    <code-pane header="app.module.ts" path="dynamic-form/src/app/app.module.ts"></code-pane>
-    <code-pane header="main.ts" path="dynamic-form/src/main.ts"></code-pane>
+    <code-pane header="dynamic-form.component.ts" path="dynamic-form/src/app/dynamic-form.component.ts"></code-pane>
+    <code-pane header="dynamic-form-question.component.ts" path="dynamic-form/src/app/dynamic-form-question.component.ts"></code-pane>
 </code-tabs>
 
 
@@ -119,7 +121,7 @@ A dynamic form requires an object model that can describe all scenarios needed b
 The example hero-application form is a set of questions &mdash;that is, each control in the form must ask a question and accept an answer.
 
 The data model for this type of form must represent a question.
-The example includes the `DynamicFormQuestionComponent`, which defines a  question as the fundamental object in the model.
+The example includes the `DynamicFormQuestionComponent`, which defines a question as the fundamental object in the model.
 
 The following `QuestionBase` is a base class for a set of controls that can represent the question and its answer in the form.
 
@@ -143,8 +145,8 @@ The following `QuestionBase` is a base class for a set of controls that can repr
 From this base, the example derives two new classes, `TextboxQuestion` and `DropdownQuestion`, that represent different control types.
 When you create the form template in the next step, you instantiate these specific question types in order to render the appropriate controls dynamically.
 
-| Control type                    | Details |
-|:---                             |:---     |
+| Control type                    | Details                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| :------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `TextboxQuestion` control type  | Presents a question and lets users enter input. <code-example header="src/app/question-textbox.ts" path="dynamic-form/src/app/question-textbox.ts"></code-example> The `TextboxQuestion` control type is represented in a form template using an `<input>` element. The `type` attribute of the element is defined based on the `type` field specified in the `options` argument \(for example `text`, `email`, `url`\). |
 | `DropdownQuestion` control type | Presents a list of choices in a select box. <code-example header="src/app/question-dropdown.ts" path="dynamic-form/src/app/question-dropdown.ts"></code-example>                                                                                                                                                                                                                                                         |
 -->
@@ -154,7 +156,7 @@ When you create the form template in the next step, you instantiate these specif
 | 컨트롤 타입                    | 설명                                                                                                                                                                                                                                                                                       |
 |:--------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `TextboxQuestion` 컨트롤 타입  | 사용자가 질문에 직접 답을 입력할 때 사용합니다. <code-example header="src/app/question-textbox.ts" path="dynamic-form/src/app/question-textbox.ts"></code-example> `TextboxQuestion` 타입은 폼 템플릿을 구성할 때 `<input>` 엘리먼트를 사용합니다. 이 때 엘리먼트의 `type` 어트리뷰트는 `option`으로 받으며 `text`, `email`, `url`과 같은 형식을 사용할 것입니다. |
-| `DropdownQuestion` 컨트롤 타입 | 셀렉트 박스에서 항목 하나를 고를 때 사용합니다. <code-example header="src/app/question-dropdown.ts" path="dynamic-form/src/app/question-dropdown.ts"></code-example>                                                                                                                         |
+| `DropdownQuestion` 컨트롤 타입 | 셀렉트 박스에서 항목 하나를 고를 때 사용합니다. <code-example header="src/app/question-dropdown.ts" path="dynamic-form/src/app/question-dropdown.ts"></code-example>                                                                                                                                         |
 
 
 <!--
@@ -188,7 +190,7 @@ The dynamic form itself is represented by a container component, which you add i
 Each question is represented in the form component's template by an `<app-question>` tag, which matches an instance of `DynamicFormQuestionComponent`.
 
 The `DynamicFormQuestionComponent` is responsible for rendering the details of an individual question based on values in the data-bound question object.
-The form relies on a [`[formGroup]` directive](api/forms/FormGroupDirective "API reference") to connect the template HTML to the underlying control objects.
+The form relies on a [`[formGroup]` directive](api/forms/FormGroupDirective 'API reference') to connect the template HTML to the underlying control objects.
 The `DynamicFormQuestionComponent` creates form groups and populates them with controls defined in the question model, specifying display and validation rules.
 
 <code-tabs>
@@ -199,7 +201,7 @@ The `DynamicFormQuestionComponent` creates form groups and populates them with c
 The goal of the `DynamicFormQuestionComponent` is to present question types defined in your model.
 You only have two types of questions at this point but you can imagine many more.
 The `ngSwitch` statement in the template determines which type of question to display.
-The switch uses directives with the [`formControlName`](api/forms/FormControlName "FormControlName directive API reference") and [`formGroup`](api/forms/FormGroupDirective "FormGroupDirective API reference") selectors.
+The switch uses directives with the [`formControlName`](api/forms/FormControlName 'FormControlName directive API reference') and [`formGroup`](api/forms/FormGroupDirective 'FormGroupDirective API reference') selectors.
 Both directives are defined in `ReactiveFormsModule`.
 -->
 이번 예제에서 동적 폼은 그 자체로 컨테이너 컴포넌트의 역할도 합니다.
@@ -207,7 +209,7 @@ Both directives are defined in `ReactiveFormsModule`.
 개별 질문은 폼 컴포넌트 템플릿에 `<app-question>` 태그를 사용하는데, 이 태그는 `DynamicFormQuestionComponent`를 의미합니다.
 
 `DynamicFormQuestionComponent`는 바인딩된 질문 객체에 따라 개별 질문과 대답을 렌더링하는 역할을 합니다.
-그리고 템플릿 HTML과 폼 컨트롤 객체를 연결할 때는 [`[formGroup]` 디렉티브](api/forms/FormGroupDirective "API reference")를 활용합니다.
+그리고 템플릿 HTML과 폼 컨트롤 객체를 연결할 때는 [`[formGroup]` 디렉티브](api/forms/FormGroupDirective 'API reference')를 활용합니다.
 결국 `DynamicFormQuestionComponent`는 사전에 정의된 질문 모델에 따라 전체 폼 그룹을 구성하며 화면에 표시하고 유효성을 검사합니다.
 
 <code-tabs>
@@ -218,7 +220,7 @@ Both directives are defined in `ReactiveFormsModule`.
 `DynamicFormQuestionComponent`는 데이터 모델로 정의한 질문들을 표시하는 역할을 합니다.
 지금 단계에서는 질문의 종류가 두가지밖에 없지만, 이후에 이 종류는 얼마든지 확장할 수 있습니다.
 이 때 질문 종류에 맞는 컴포넌트를 사용하려면 템플릿에 `ngSwitch`를 사용하면 됩니다.
-그리고 개별 스위치는 [`formControlName`](api/forms/FormControlName "FormControlName directive API reference") 디렉티브와 [`formGroup`](api/forms/FormGroupDirective "FormGroupDirective API reference") 디렉티브를 함께 사용합니다.
+그리고 개별 스위치는 [`formControlName`](api/forms/FormControlName 'FormControlName directive API reference') 디렉티브와 [`formGroup`](api/forms/FormGroupDirective 'FormGroupDirective API reference') 디렉티브를 함께 사용합니다.
 두 디렉티브 모두 `ReactiveFormsModule`이 제공하는 디렉티브입니다.
 
 
@@ -289,7 +291,7 @@ To display an instance of the dynamic form, the `AppComponent` shell template pa
 <code-example header="app.component.ts" path="dynamic-form/src/app/app.component.ts"></code-example>
 
 The example provides a model for a job application for heroes, but there are no references to any specific hero question other than the objects returned by `QuestionService`.
-This separation of model and data lets you repurpose the components for any type of survey, as long as it's compatible with the *question* object model.
+This separation of model and data lets you repurpose the components for any type of survey, as long as it's compatible with the _question_ object model.
 -->
 동적 폼 인스턴스를 화면에 표시하려면 `AppComponent` 템플릿에 폼 컨테이너 `<app-dynamic-form>`를 추가하면서 `QuestionService`를 반환하는 `questions` 배열을 지정해야 합니다.
 
@@ -308,8 +310,8 @@ This separation of model and data lets you repurpose the components for any type
 The form template uses dynamic data binding of metadata to render the form without making any hardcoded assumptions about specific questions.
 It adds both control metadata and validation criteria dynamically.
 
-To ensure valid input, the *Save* button is disabled until the form is in a valid state.
-When the form is valid, click *Save* and the application renders the current form values as JSON.
+To ensure valid input, the _Save_ button is disabled until the form is in a valid state.
+When the form is valid, click _Save_ and the application renders the current form values as JSON.
 
 The following figure shows the final form.
 
@@ -322,8 +324,8 @@ The following figure shows the final form.
 지금까지 구현한 폼 템플릿은 컴포넌트에 바인딩된 동적 데이터를 기반으로 폼을 구성하며, 개별 질문에 대해 하드코딩된 내용은 아무것도 없습니다.
 그래서 폼 컨트롤의 메타데이터나 유효성 검사 규칙도 동적으로 구성할 수 있습니다.
 
-이 상황에서 폼에 입력된 값이 유효하다는 것을 보장하기 위해 *Save* 버튼은 폼 전체가 유효한 상태가 되어야만 활성화해야 합니다.
-폼이 유효한 상태가 된 이후에 *Save* 버튼을 클릭하면 폼에 입력된 데이터를 JSON 형태로 표시할 것입니다.
+이 상황에서 폼에 입력된 값이 유효하다는 것을 보장하기 위해 _Save_ 버튼은 폼 전체가 유효한 상태가 되어야만 활성화해야 합니다.
+폼이 유효한 상태가 된 이후에 _Save_ 버튼을 클릭하면 폼에 입력된 데이터를 JSON 형태로 표시할 것입니다.
 
 폼이 모두 구성되면 이런 모습이 됩니다.
 
@@ -340,15 +342,15 @@ The following figure shows the final form.
 ## 다음 단계
 
 <!--
-| Steps                                           | Details |
-|:---                                             |:---     |
-| Different types of forms and control collection | This tutorial shows how to build a questionnaire, which is just one kind of dynamic form. The example uses `FormGroup` to collect a set of controls. For an example of a different type of dynamic form, see the section [Creating dynamic forms](guide/reactive-forms#creating-dynamic-forms "Create dynamic forms with arrays") in the Reactive Forms guide. That example also shows how to use `FormArray` instead of `FormGroup` to collect a set of controls. |
-| Validating user input                           | The section [Validating form input](guide/reactive-forms#validating-form-input "Basic input validation") introduces the basics of how input validation works in reactive forms. <br /> The [Form validation guide](guide/form-validation "Form validation guide") covers the topic in more depth.                                                                                                                                                                 |
+| Steps                                           | Details                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| :---------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Different types of forms and control collection | This tutorial shows how to build a questionnaire, which is just one kind of dynamic form. The example uses `FormGroup` to collect a set of controls. For an example of a different type of dynamic form, see the section [Creating dynamic forms](guide/reactive-forms#creating-dynamic-forms 'Create dynamic forms with arrays') in the Reactive Forms guide. That example also shows how to use `FormArray` instead of `FormGroup` to collect a set of controls. |
+| Validating user input                           | The section [Validating form input](guide/reactive-forms#validating-form-input 'Basic input validation') introduces the basics of how input validation works in reactive forms. <br /> The [Form validation guide](guide/form-validation 'Form validation guide') covers the topic in more depth.                                                                                                                                                                  |
 -->
 | 단계                  | 설명                                                                                                                                                                                                                                                                  |
 |:--------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 종류 확장하기, 개별 컨트롤 만들기 | 이번 예제에서는 설문지를 만들어보며 동적 폼을 구성해 봤으며, 폼 컨트롤을 구성하기 위해 `FormGroup`을 사용했습니다. 동적 폼에 다른 종류의 컨트롤을 추가하려면 반응형 폼 문서의 [동적 폼 구성하기](guide/reactive-forms#creating-dynamic-forms "Create dynamic forms with arrays") 섹션을 참고하세요. 이 섹션에서는 폼 컨트롤을 배열로 묶어서 구성하는 `FormArray`에 대해서도 다룹니다. |
-| 폼 유효성 검사하기          | 반응형 폼 문서의 [폼 유효성 검사하기](guide/reactive-forms#validating-form-input "Basic input validation") 섹션을 참고하면 반응형 폼에 유효성 검사를 어떻게 적용할 수 있는지 알 수 있습니다. 이 문서보다 자세한 내용에 대해 알아보려면 [폼 유효성 검사하기](guide/form-validation "Form validation guide") 문서를 참고하세요.                          |
+| 종류 확장하기, 개별 컨트롤 만들기 | 이번 예제에서는 설문지를 만들어보며 동적 폼을 구성해 봤으며, 폼 컨트롤을 구성하기 위해 `FormGroup`을 사용했습니다. 동적 폼에 다른 종류의 컨트롤을 추가하려면 반응형 폼 문서의 [동적 폼 구성하기](guide/reactive-forms#creating-dynamic-forms 'Create dynamic forms with arrays') 섹션을 참고하세요. 이 섹션에서는 폼 컨트롤을 배열로 묶어서 구성하는 `FormArray`에 대해서도 다룹니다. |
+| 폼 유효성 검사하기          | 반응형 폼 문서의 [폼 유효성 검사하기](guide/reactive-forms#validating-form-input 'Basic input validation') 섹션을 참고하면 반응형 폼에 유효성 검사를 어떻게 적용할 수 있는지 알 수 있습니다. 이 문서보다 자세한 내용에 대해 알아보려면 [폼 유효성 검사하기](guide/form-validation 'Form validation guide') 문서를 참고하세요.                           |
 
 <!-- links -->
 
@@ -356,4 +358,4 @@ The following figure shows the final form.
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-08-30

@@ -9,6 +9,9 @@
     "name": "APP_INITIALIZER"
   },
   {
+    "name": "AfterRenderEventManager"
+  },
+  {
     "name": "AnonymousSubject"
   },
   {
@@ -46,6 +49,9 @@
   },
   {
     "name": "CSP_NONCE"
+  },
+  {
+    "name": "ChainedInjector"
   },
   {
     "name": "ChangeDetectionStrategy"
@@ -87,6 +93,9 @@
     "name": "DefaultDomRenderer2"
   },
   {
+    "name": "DistinctUntilChangedOperator"
+  },
+  {
     "name": "DistinctUntilChangedSubscriber"
   },
   {
@@ -109,9 +118,6 @@
   },
   {
     "name": "EVENT_MANAGER_PLUGINS"
-  },
-  {
-    "name": "EffectManager"
   },
   {
     "name": "ElementRef"
@@ -139,6 +145,9 @@
   },
   {
     "name": "GenericBrowserDomAdapter"
+  },
+  {
+    "name": "HAS_CHILD_VIEWS_TO_REFRESH"
   },
   {
     "name": "HAS_TRANSPLANTED_VIEWS"
@@ -243,9 +252,6 @@
     "name": "NG_TEMPLATE_SELECTOR"
   },
   {
-    "name": "NOOP_CLEANUP_FN"
-  },
-  {
     "name": "NOT_FOUND"
   },
   {
@@ -291,6 +297,9 @@
     "name": "Observable"
   },
   {
+    "name": "PERF_MARK_STANDALONE"
+  },
+  {
     "name": "PLATFORM_DESTROY_LISTENERS"
   },
   {
@@ -306,13 +315,10 @@
     "name": "R3Injector"
   },
   {
+    "name": "REACTIVE_LVIEW_CONSUMER_NODE"
+  },
+  {
     "name": "REMOVE_STYLES_ON_COMPONENT_DESTROY"
-  },
-  {
-    "name": "ReactiveLViewConsumer"
-  },
-  {
-    "name": "ReactiveNode"
   },
   {
     "name": "RefCountOperator"
@@ -325,9 +331,6 @@
   },
   {
     "name": "RendererStyleFlags2"
-  },
-  {
-    "name": "RootViewRef"
   },
   {
     "name": "RuntimeError"
@@ -408,12 +411,6 @@
     "name": "ViewRef"
   },
   {
-    "name": "Watch"
-  },
-  {
-    "name": "WeakRefImpl"
-  },
-  {
     "name": "ZONE_IS_STABLE_OBSERVABLE"
   },
   {
@@ -451,9 +448,6 @@
   },
   {
     "name": "_locateOrCreateTextNode"
-  },
-  {
-    "name": "_nextReactiveId"
   },
   {
     "name": "_platformInjector"
@@ -498,6 +492,9 @@
     "name": "applyView"
   },
   {
+    "name": "assertConsumerNode"
+  },
+  {
     "name": "attachPatchData"
   },
   {
@@ -522,13 +519,10 @@
     "name": "cleanUpView"
   },
   {
-    "name": "clearViewRefreshFlag"
-  },
-  {
     "name": "collectNativeNodes"
   },
   {
-    "name": "commitLViewConsumerIfHasProducers"
+    "name": "collectNativeNodesInLContainer"
   },
   {
     "name": "concatStringsWithSpace"
@@ -541,6 +535,12 @@
   },
   {
     "name": "connectableObservableDescriptor"
+  },
+  {
+    "name": "consumerIsLive"
+  },
+  {
+    "name": "consumerPollProducersForChange"
   },
   {
     "name": "convertToBitFlags"
@@ -564,9 +564,6 @@
     "name": "createTView"
   },
   {
-    "name": "currentConsumer"
-  },
-  {
     "name": "deepForEach"
   },
   {
@@ -576,7 +573,19 @@
     "name": "detachMovedView"
   },
   {
-    "name": "detectChangesInternal"
+    "name": "detectChangesInChildComponents"
+  },
+  {
+    "name": "detectChangesInComponent"
+  },
+  {
+    "name": "detectChangesInEmbeddedViews"
+  },
+  {
+    "name": "detectChangesInView"
+  },
+  {
+    "name": "detectChangesInViewIfAttached"
   },
   {
     "name": "diPublicInInjector"
@@ -592,6 +601,9 @@
   },
   {
     "name": "enterView"
+  },
+  {
+    "name": "epoch"
   },
   {
     "name": "executeCheckHooks"
@@ -619,6 +631,9 @@
   },
   {
     "name": "forwardRef"
+  },
+  {
+    "name": "freeConsumers"
   },
   {
     "name": "from"
@@ -693,9 +708,6 @@
     "name": "getNullInjector"
   },
   {
-    "name": "getOrCreateCurrentLViewConsumer"
-  },
-  {
     "name": "getOrCreateInjectable"
   },
   {
@@ -729,9 +741,6 @@
     "name": "getPromiseCtor"
   },
   {
-    "name": "getReactiveLViewConsumer"
-  },
-  {
     "name": "getSimpleChangesStore"
   },
   {
@@ -751,9 +760,6 @@
   },
   {
     "name": "importProvidersFrom"
-  },
-  {
-    "name": "inNotificationPhase"
   },
   {
     "name": "includeViewProviders"
@@ -876,6 +882,9 @@
     "name": "map"
   },
   {
+    "name": "markAncestorsForTraversal"
+  },
+  {
     "name": "markViewDirty"
   },
   {
@@ -936,22 +945,19 @@
     "name": "processInjectorTypesWithProviders"
   },
   {
-    "name": "profiler"
+    "name": "producerRemoveLiveConsumerAtIndex"
   },
   {
-    "name": "promise"
+    "name": "producerUpdateValueVersion"
+  },
+  {
+    "name": "profiler"
   },
   {
     "name": "provideZoneChangeDetection"
   },
   {
     "name": "refCount"
-  },
-  {
-    "name": "refreshComponent"
-  },
-  {
-    "name": "refreshContainsDirtyView"
   },
   {
     "name": "refreshContentQueries"
@@ -1066,9 +1072,6 @@
   },
   {
     "name": "updateMicroTaskStatus"
-  },
-  {
-    "name": "updateViewsToRefresh"
   },
   {
     "name": "urlParsingNode"

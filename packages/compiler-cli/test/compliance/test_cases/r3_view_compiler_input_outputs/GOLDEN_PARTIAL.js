@@ -3,11 +3,10 @@
  ****************************************************************************************************/
 import { Component, Input, NgModule, Output } from '@angular/core';
 import * as i0 from "@angular/core";
-class MyComponent {
+export class MyComponent {
 }
 MyComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
 MyComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: MyComponent, selector: "my-component", inputs: { componentInput: "componentInput", originalComponentInput: ["renamedComponentInput", "originalComponentInput"] }, outputs: { componentOutput: "componentOutput", originalComponentOutput: "renamedComponentOutput" }, ngImport: i0, template: '', isInline: true });
-export { MyComponent };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyComponent, decorators: [{
             type: Component,
             args: [{ selector: 'my-component', template: '' }]
@@ -22,12 +21,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDE
                 type: Output,
                 args: ['renamedComponentOutput']
             }] } });
-class MyModule {
+export class MyModule {
 }
 MyModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
 MyModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, declarations: [MyComponent] });
 MyModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule });
-export { MyModule };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, decorators: [{
             type: NgModule,
             args: [{ declarations: [MyComponent] }]
@@ -56,11 +54,10 @@ export declare class MyModule {
  ****************************************************************************************************/
 import { Directive, Input, NgModule, Output } from '@angular/core';
 import * as i0 from "@angular/core";
-class MyDirective {
+export class MyDirective {
 }
 MyDirective.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyDirective, deps: [], target: i0.ɵɵFactoryTarget.Directive });
 MyDirective.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", type: MyDirective, selector: "[my-directive]", inputs: { directiveInput: "directiveInput", originalDirectiveInput: ["renamedDirectiveInput", "originalDirectiveInput"] }, outputs: { directiveOutput: "directiveOutput", originalDirectiveOutput: "renamedDirectiveOutput" }, ngImport: i0 });
-export { MyDirective };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyDirective, decorators: [{
             type: Directive,
             args: [{ selector: '[my-directive]' }]
@@ -75,12 +72,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDE
                 type: Output,
                 args: ['renamedDirectiveOutput']
             }] } });
-class MyModule {
+export class MyModule {
 }
 MyModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
 MyModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, declarations: [MyDirective] });
 MyModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule });
-export { MyModule };
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, decorators: [{
             type: NgModule,
             args: [{ declarations: [MyDirective] }]
@@ -97,6 +93,56 @@ export declare class MyDirective {
     originalDirectiveOutput: any;
     static ɵfac: i0.ɵɵFactoryDeclaration<MyDirective, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<MyDirective, "[my-directive]", never, { "directiveInput": { "alias": "directiveInput"; "required": false; }; "originalDirectiveInput": { "alias": "renamedDirectiveInput"; "required": false; }; }, { "directiveOutput": "directiveOutput"; "originalDirectiveOutput": "renamedDirectiveOutput"; }, never, never, false, never>;
+}
+export declare class MyModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<MyModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<MyModule, [typeof MyDirective], never, never>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<MyModule>;
+}
+
+/****************************************************************************************************
+ * PARTIAL FILE: input_transform.js
+ ****************************************************************************************************/
+import { Directive, Input, NgModule } from '@angular/core';
+import * as i0 from "@angular/core";
+function toNumber(value) {
+    return value ? 1 : 0;
+}
+export class MyDirective {
+}
+MyDirective.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyDirective, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+MyDirective.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "16.1.0", version: "0.0.0-PLACEHOLDER", type: MyDirective, selector: "[my-directive]", inputs: { functionDeclarationInput: ["functionDeclarationInput", "functionDeclarationInput", toNumber], inlineFunctionInput: ["inlineFunctionInput", "inlineFunctionInput", (value, _) => value ? 1 : 0] }, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyDirective, decorators: [{
+            type: Directive,
+            args: [{ selector: '[my-directive]' }]
+        }], propDecorators: { functionDeclarationInput: [{
+                type: Input,
+                args: [{ transform: toNumber }]
+            }], inlineFunctionInput: [{
+                type: Input,
+                args: [{ transform: (value, _) => value ? 1 : 0 }]
+            }] } });
+export class MyModule {
+}
+MyModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+MyModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, declarations: [MyDirective] });
+MyModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: MyModule, decorators: [{
+            type: NgModule,
+            args: [{ declarations: [MyDirective] }]
+        }] });
+
+/****************************************************************************************************
+ * PARTIAL FILE: input_transform.d.ts
+ ****************************************************************************************************/
+import * as i0 from "@angular/core";
+export declare class MyDirective {
+    functionDeclarationInput: any;
+    inlineFunctionInput: any;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MyDirective, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<MyDirective, "[my-directive]", never, { "functionDeclarationInput": { "alias": "functionDeclarationInput"; "required": false; }; "inlineFunctionInput": { "alias": "inlineFunctionInput"; "required": false; }; }, {}, never, never, false, never>;
+    static ngAcceptInputType_functionDeclarationInput: number | string;
+    static ngAcceptInputType_inlineFunctionInput: string | number;
 }
 export declare class MyModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<MyModule, never>;

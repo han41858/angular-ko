@@ -1,9 +1,10 @@
 // #docplaster
 // #docregion
-import { Component } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+import {Component} from '@angular/core';
+import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 
 @Component({
+  standalone: true,
   selector: 'app-bypass-security',
   templateUrl: './bypass-security.component.html',
 })
@@ -29,8 +30,7 @@ export class BypassSecurityComponent {
     // YouTube URL에 ID를 조합한 문자열은 안전한 URL입니다.
     // 그렇다면 이렇게 조합된 URL은 언제나 안전하다고 간주하고 자동으로 실행되는 안전성 검사를 생략할 수 있습니다.
     this.dangerousVideoUrl = 'https://www.youtube.com/embed/' + id;
-    this.videoUrl =
-        this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousVideoUrl);
+    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.dangerousVideoUrl);
   }
   // #enddocregion trust-video-url
 }

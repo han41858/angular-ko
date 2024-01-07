@@ -97,6 +97,16 @@ export class WhitespaceVisitor implements html.Visitor {
   visitExpansionCase(expansionCase: html.ExpansionCase, context: any): any {
     return expansionCase;
   }
+
+  visitBlock(block: html.Block, context: any): any {
+    return new html.Block(
+        block.name, block.parameters, visitAllWithSiblings(this, block.children), block.sourceSpan,
+        block.nameSpan, block.startSourceSpan, block.endSourceSpan);
+  }
+
+  visitBlockParameter(parameter: html.BlockParameter, context: any) {
+    return parameter;
+  }
 }
 
 function createWhitespaceProcessedTextToken({type, parts, sourceSpan}: TextToken): TextToken {

@@ -46,7 +46,7 @@ export abstract class ViewRef extends ChangeDetectorRef {
  * a view cannot. Change the structure of elements by inserting, moving, or
  * removing nested views in a view container.
  *
- * @see `ViewContainerRef`
+ * @see {@link ViewContainerRef}
  *
  * @usageNotes
  *
@@ -99,11 +99,6 @@ export abstract class EmbeddedViewRef<C> extends ViewRef {
    * The root nodes for this embedded view.
    */
   abstract get rootNodes(): any[];
-}
-
-export interface InternalViewRef extends ViewRef {
-  detachFromAppRef(): void;
-  attachToAppRef(appRef: ViewRefTracker): void;
 }
 
 /**

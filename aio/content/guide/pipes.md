@@ -94,35 +94,31 @@ To use pipes you should have a basic understanding of the following:
 ## 템플릿에 파이프 사용하기
 
 <!--
-To apply a pipe, use the pipe \(`|`) character within a template expression as shown in the following code example, along with the *name* of the pipe, which is `date` for the built-in [`DatePipe`](api/common/DatePipe).
-The tabs in the example show the following:
+To apply a pipe, use the pipe operator (`|`) within a template expression as shown in the following code example.
 
-| Files                         | Details |
-|:---                           |:---     |
-| `app.component.html`          | Uses `date` in a separate template to display a birthday.                                           |
-| `hero-birthday1.component.ts` | Uses the same pipe as part of an in-line template in a component that also sets the birthday value. |
+<code-example header="birthday.component.html (template)" path="pipes/src/app/birthday.component.html"></code-example>
 
-<code-tabs>
-    <code-pane header="src/app/app.component.html" region="hero-birthday-template" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/hero-birthday1.component.ts" path="pipes/src/app/hero-birthday1.component.ts"></code-pane>
-</code-tabs>
+The component's `birthday` value flows through the pipe operator (`|`) to the [`DatePipe`](api/common/DatePipe) whose pipe name is `date`.
+The pipe renders the date in the default format as **Apr 15, 1988**.
 
-The component's `birthday` value flows through the pipe operator, `|` to the [`date`](api/common/DatePipe) function.
+Look at the component class.
+
+<code-example header="birthday.component.ts (class)" path="pipes/src/app/birthday.component.ts"></code-example>
+
+Because this is a [standalone component](guide/standalone-components), it imports the `DatePipe` from `@angular/common`, the source of all built-in pipes.
 -->
 파이프를 사용하려면 템플릿 표현식에 파이프 연산자\(`|`\)를 사용하고 파이프 *이름*을 지정하면 됩니다.
-`date` 프로퍼티에 [`DatePipe`](api/common/DatePipe)를 적용해 봅시다:
 
-| 파일                            | 설명                                         |
-|:------------------------------|:-------------------------------------------|
-| `app.component.html`          | `date` 프로퍼티를 사용해서 생일을 템플릿에 표시합니다.          |
-| `hero-birthday1.component.ts` | 인라인 템플릿에 날짜 파이프를 사용해서 새애일이 표시되는 형식을 변환합니다. |
+<code-example header="birthday.component.html (템플릿)" path="pipes/src/app/birthday.component.html"></code-example>
 
-<code-tabs>
-    <code-pane header="src/app/app.component.html" region="hero-birthday-template" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/hero-birthday1.component.ts" path="pipes/src/app/hero-birthday1.component.ts"></code-pane>
-</code-tabs>
+그러면 컴포넌트의 `birthday` 값이 파이프 연산자(`|`)를 통해 파이프 이름이 `date`인 [`DatePipe`](api/common/DatePipe)로 전달됩니다.
+이 파이프는 날짜 데이터를 시스템 기본 형식인 **Apr 15, 1988** 라고 변환합니다.
 
-컴포넌트 `birthday` 값은 파이프 연산자 `|`를 거쳐 [DatePipe](api/common/DatePipe)로 전달됩니다.
+컴포넌트 클래스는 이렇습니다.
+
+<code-example header="birthday.component.ts (클래스)" path="pipes/src/app/birthday.component.ts"></code-example>
+
+이 컴포넌트는 [단독 컴포넌트](guide/standalone-components)이기 때문에 `@angular/common`에서 `DatePipe`를 직접 불러왔습니다.
 
 
 <a id="parameterizing-a-pipe"></a>
@@ -133,105 +129,106 @@ The component's `birthday` value flows through the pipe operator, `|` to the [`d
 ## 추가 형식 지정하기, 체이닝하기
 
 <!--
-Use optional parameters to fine-tune a pipe's output.
-For example, use the [`CurrencyPipe`](api/common/CurrencyPipe "API reference") with a country code such as EUR as a parameter.
-The template expression `{{ amount | currency:'EUR' }}` transforms the `amount` to currency in euros.
-Follow the pipe name \(`currency`\) with a colon \(`:`\) character and the parameter value \(`'EUR'`\).
+Some pipes have *optional* parameters to fine-tune the pipe's output.
 
-If the pipe accepts multiple parameters, separate the values with colons.
-For example, `{{ amount | currency:'EUR':'Euros '}}` adds the second parameter, the string literal `'Euros '`, to the output string.
-Use any valid template expression as a parameter, such as a string literal or a component property.
+For example, the [`CurrencyPipe`](api/common/CurrencyPipe "API reference") accepts a country code as a parameter.
+To specify the parameter, follow the pipe name (`currency`) with a colon (`:`) and the parameter value (a country code).
 
-Some pipes require at least one parameter and allow more optional parameters, such as [`SlicePipe`](api/common/SlicePipe "API reference for SlicePipe").
-For example, `{{ slice:1:5 }}` creates a new array or string containing a subset of the elements starting with element `1` and ending with element `5`.
+The template expression `{{ amount | currency:'EUR' }}` displays the amount, prefixed with the Euros symbol (€).
+
+Some pipes accept multiple *optional* parameters. Pass each parameter to the pipe, separated by colons.
+
+For example, `{{ amount | currency:'EUR':'Euros '}}` displays the amount with the label "Euros" (the second parameter) instead of the Euros symbol.
+
+Some pipes, such as [`SlicePipe`](/api/common/SlicePipe "API reference for SlicePipe"), *require* at least one parameter and may allow more *optional* parameters. 
+
+The expression `{{ anArray | slice:1:5 }}` displays a new string containing a subset of the elements starting with element `1` and ending with element `5`.
 -->
-파이프에는 추가 형식을 인자로 전달할 수 있습니다.
-그래서 [`CurrencyPipe`](api/common/CurrencyPipe "API reference")를 사용할 때 EUR 같은 통화 단위를 직접 지정할 수 있습니다.
-템플릿 표현식에  `{{ amount | currency:'EUR' }}` 라고 사용하면 `amount`에 있는 숫자가 유로 단위로 표시됩니다.
-파이프 이름\(`current`\) 뒤에 붙은 콜론\(`:`\) 다음에 전달하는 것이 추가 형식 인자\(`'EUR'`\) 입니다.
+파이프 중에는 변환값을 조정하는 인자를 *추가로* 받는 파이프도 있습니다.
 
-파이프에 인자를 여러개 전달할 수 있다면 이 인자들은 콜론으로 구분합니다.
-그래서 `{{ amount | currency:'EUR':'Euros '}}` 와 같이 사용하면 두번째 인자로 전달한 `'Euros '`가 문자열 뒤에 붙습니다.
-템플릿 표현식 문법에 맞기만 하면 템플릿에 선언한 문자열 리터럴이나 컴포넌트 프로퍼티에 모두 파이프를 적용할 수 있습니다.
+[`CurrencyPipe`](api/common/CurrencyPipe "API reference")를 예를 들면, 이 파이프는 국가 코드를 인자로 받습니다.
+추가 인자는 파이프 이름(`currency`) 뒤에 콜론(`:`)를 붙이고 전달하면 됩니다.
 
-파이프 중에는 인자 하나는 반드시 지정해야 하는 경우가 있습니다.
-[`SlicePipe`](api/common/SlicePipe "API reference for SlicePipe")가 그런데, `{{ slice:1:5 }}`라고 사용하면 배열이나 문자열에서 `1`번째 엘리먼트부터 `5`번째 엘리먼트까지를 반환합니다.
+템플릿 표현식에  `{{ amount | currency:'EUR' }}` 라고 사용하면 `amount`에 있는 숫자가 유로 단위로 변환된 후에 유로 기호(€)를 붙여 표시됩니다.
+
+파이프 중에는 *추가* 인자를 여러개 받는 파이프도 있습니다.
+개별 인자는 콜론으로 구분합니다.
+
+그래서 `{{ amount | currency:'EUR':'Euros '}}` 라고 사용하면 숫자를 유로 단위로 변환한 후에 유로 기호 대신 "Euros"가 붙습니다.
+
+그리고 [`SlicePipe`](/api/common/SlicePipe "API reference for SlicePipe")와 같이, 최대 개수는 제한이 없지만 최소한 인자 하나를 *필수로* 요구하는 파이프도 있습니다. 
+
+`{{ anArray | slice:1:5 }}`라고 사용하면 배열이나 문자열에서 `1`번째 엘리먼트부터 `5`번째 엘리먼트까지를 반환합니다.
 
 
 <!--
-### Example: Formatting a date
+## Example: Formatting a date
 -->
-### 예제: 날짜 형식 지정하기
+## 예제: 날짜 형식 지정하기
 
 <!--
-The tabs in the following example demonstrates toggling between two different formats \(`'shortDate'` and `'fullDate'`\):
-
-*   The `app.component.html` template uses a format parameter for the [`DatePipe`](api/common/DatePipe) \(named `date`\) to show the date as **04/15/88**.
-*   The `hero-birthday2.component.ts` component binds the pipe's format parameter to the component's `format` property in the `template` section, and adds a button for a click event bound to the component's `toggleFormat()` method.
-*   The `hero-birthday2.component.ts` component's `toggleFormat()` method toggles the component's `format` property between a short form \(`'shortDate'`\) and a longer form \(`'fullDate'`\).
+The following example demonstrates two ways to format a hero's birthdate with the [`DatePipe`](api/common/DatePipe "API reference").
 
 <code-tabs>
-    <code-pane header="src/app/app.component.html" region="format-birthday" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/hero-birthday2.component.ts (template)" region="template" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
-    <code-pane header="src/app/hero-birthday2.component.ts (class)" region="class" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
+    <code-pane header="birthday-formatting.component.html (template)" path="pipes/src/app/birthday-formatting.component.html"></code-pane>
+    <code-pane header="birthday-formatting.component.ts (class)" path="pipes/src/app/birthday-formatting.component.ts"></code-pane>
 </code-tabs>
 
-Clicking the **Toggle Format** button alternates the date format between **04/15/1988** and **Friday, April 15, 1988**.
+In the template, the first expression passes the birthdate to the `DatePipe` *with a literal* date format parameter, "shortDate". The output is **04/15/88**.
 
-<div class="alert is-helpful">
+The second expression passes the birthdate to the `DatePipe` with a date format parameter *bound to a component property* (`format`). 
 
-For `date` pipe format options, see [DatePipe](api/common/DatePipe "DatePipe API Reference page").
+Clicking the "Toggle" button switches that property value between two of the [many possible pre-defined formats](api/common/DatePipe#pre-defined-format-options), `'mediumDate'` and `'fullDate'`. The output is either **April 15, 1988** or **Friday, April 15, 1988**.
 
-</div>
+The page displays the birthdate in the specified format.
 -->
-아래 예제에서 탭을 변경해보면 두 종류 형식\(`'shortDate'`, `'fullDate'`\)으로 날짜 형식을 지정한 것을 확인할 수 있습니다.
-
-*   `app.component.html` 템플릿에는 **04/15/88**이라는 형식으로 표시하기 위해 [`DatePipe`](api/common/DatePipe)를 사용했습니다.
-*   `hero-birthday2.componen.ts`에는 컴포넌트에 있는 `format` 프로퍼티를 사용해서 파이프의 날짜 형식을 지정합니다. 그리고 화면에서 버튼을 클릭하면 `toggleFormat()` 메소드가 실행되면서 날짜 형식을 변경합니다.
-*   `hero-birthday2.component.ts`에 정의된 `toggleFormat()`는 컴포넌트 `format` 프로퍼티를 두 종류 날짜 형식\(`'shortDate'`, `'fullDate'`\)으로 변경합니다.
+아래 코드는 히어로의 생일을 [`DatePipe`](api/common/DatePipe "API reference")로 변환해서 표시하는 예제 코드입니다.
 
 <code-tabs>
-    <code-pane header="src/app/app.component.html" region="format-birthday" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/hero-birthday2.component.ts (template)" region="template" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
-    <code-pane header="src/app/hero-birthday2.component.ts (class)" region="class" path="pipes/src/app/hero-birthday2.component.ts"></code-pane>
+    <code-pane header="birthday-formatting.component.html (템플릿)" path="pipes/src/app/birthday-formatting.component.html"></code-pane>
+    <code-pane header="birthday-formatting.component.ts (클래스)" path="pipes/src/app/birthday-formatting.component.ts"></code-pane>
 </code-tabs>
 
-이제 화면에서 **Toggle Format** 버튼을 클릭하면 날짜 형식이 **04/15/1988**이라고 표시되거나 **Friday, April 15, 1988**라고 표시되는 것을 확인할 수 있습니다.
+템플릿에서 첫번째 표현식은 `DatePipe`의 추가 인자로 "shortDate"를 지정했습니다. 화면에는 **04/15/88**라고 표시됩니다.
 
-<div class="alert is-helpful">
+두번째 표현식은 `DatePipe`의 추가 인자로 *컴포넌트 프로프티(`format`)* 를 바인딩했습니다. 
 
-For `date` pipe format options, see [DatePipe](api/common/DatePipe "DatePipe API Reference page").
-
-</div>
+사용자가 화면에서 "Toggle" 버튼을 클릭하면 [사전에 정의된 형식](api/common/DatePipe#pre-defined-format-options) 중에서 `'mediumDate'`과 `'fullDate'`를 전환합니다.
+그래서 화면에는 **April 15, 1988** 나 **Friday, April 15, 1988** 가 표시됩니다.
 
 
 <!--
-### Example: Applying two formats by chaining pipes
+## Example: Chaining two pipes together
 -->
-### 예제: 파이프 체이닝
+## 예제: 파이프 체이닝
 
 <!--
-Chain pipes so that the output of one pipe becomes the input to the next.
+Connect multiple pipes, using "pipe chaining syntax", so that the output of one pipe becomes the input to the next.
 
-In the following example, chained pipes first apply a format to a date value, then convert the formatted date to uppercase characters.
-The first tab for the `src/app/app.component.html` template chains `DatePipe` and `UpperCasePipe` to display the birthday as **APR 15, 1988**.
-The second tab for the `src/app/app.component.html` template passes the `fullDate` parameter to `date` before chaining to `uppercase`, which produces **FRIDAY, APRIL 15, 1988**.
+The following example passes the birthdate to the `DatePipe` and then forwards the result to the [`UpperCasePipe`](api/common/UpperCasePipe "API reference") pipe, using "pipe chaining syntax".
+
+Once again, it demonstrates the `DatePipe` both *with* and *without* a format parameter. Note that both results (**APR 15, 1988** and **FRIDAY, APRIL 15, 1988**) are in uppercase.
 
 <code-tabs>
-    <code-pane header="src/app/app.component.html (1)" region="chained-birthday" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/app.component.html (2)" region="chained-parameter-birthday" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="birthday-pipe-chaining.component.html (template)" path="pipes/src/app/birthday-pipe-chaining.component.html"></code-pane>
+    <code-pane header="birthday-pipe-chaining.component.ts (class)" path="pipes/src/app/birthday-pipe-chaining.component.ts"></code-pane>
 </code-tabs>
+
+Switch to the class file to see that this is a [standalone component](guide/standalone-components); it imports the two pipes from `@angular/common`, the source of all built-in pipes.
 -->
-파이프는 하나를 통과한 결과를 다른 파이프로 전달하는 방식으로 체이닝할 수 있습니다.
+한 파이프에서 나온 출력값을 다른 파이프의 입력으로 전달하면서 파이프 여러개를 한 번에 연결하는 것을 파이프 체이닝이라고 합니다.
 
-아래 예제는 첫번째 파이프로 날짜 데이터의 형식을 지정한 후에, 이렇게 변환된 문자열을 다른 파이프로 전달해서 대문자로 변환하는 예제입니다.
-첫번째 탭은 `src/app/app.component.html` 템플릿 파일에서 `DatePipe`와 `UpperCasePipe`를 사용해서 **APR 15, 1988**이라고 표시하는 코드입니다.
-그리고 두번째 탭은 `src/app/app.component.html` 템플릿 파일에서 `date` 프로퍼티를 `fullDate` 형식으로 변환한 후에 `uppercase` 파이프를 한 번 더 사용해서 **FRIDAY, APRIL 15, 1988**이라고 표시하는 코드입니다.
+아레 예제는 히어로의 생일 데이터를 `DatePipe`로 전달한 후에 [`UpperCasePipe`](api/common/UpperCasePipe "API reference")로 다시 전달하는 파이프 체이닝 예제입니다.
+
+다시 한 번 언급하지만, `DatePipe`는 날짜 형식을 인자로 받거나 생략할 수 있습니다.
+그래서 화며에는 이전 예제의 결과값이 대문자로 변환되어 **APR 15, 1988** and **FRIDAY, APRIL 15, 1988**가 표시됩니다.
 
 <code-tabs>
-    <code-pane header="src/app/app.component.html (1)" region="chained-birthday" path="pipes/src/app/app.component.html"></code-pane>
-    <code-pane header="src/app/app.component.html (2)" region="chained-parameter-birthday" path="pipes/src/app/app.component.html"></code-pane>
+    <code-pane header="birthday-pipe-chaining.component.html (템플릿)" path="pipes/src/app/birthday-pipe-chaining.component.html"></code-pane>
+    <code-pane header="birthday-pipe-chaining.component.ts (클래스)" path="pipes/src/app/birthday-pipe-chaining.component.ts"></code-pane>
 </code-tabs>
+
+이 클래스는 [단독 컴포넌트](guide/standalone-components)이기 때문에 파이프를 로드하기 위해 `@angular/common` 패키지를 참조합니다.
 
 
 <a id="Custom-pipes"></a>
@@ -704,7 +701,7 @@ Angular가 제공하는 [`AsyncPipe`](api/common/AsyncPipe "API description of A
 ## HTTP 요청 캐싱하기
 
 <!--
-To [communicate with backend services using HTTP](guide/http "Communicating with backend services using HTTP"), the `HttpClient` service uses observables and offers the `HttpClient.get()` method to fetch data from a server.
+To [communicate with backend services using HTTP](guide/understanding-communicating-with-http "Communicating with backend services using HTTP"), the `HttpClient` service uses observables and offers the `HttpClient.get()` method to fetch data from a server.
 The asynchronous method sends an HTTP request, and returns an observable that emits the requested data for the response.
 
 As shown in the previous section, use the impure `AsyncPipe` to accept an observable as input and subscribe to the input automatically.
@@ -749,7 +746,7 @@ The built-in [JsonPipe](api/common/JsonPipe "API description for JsonPipe") prov
 
 </div>
 -->
-[백엔드 서비스와 HTTP로 통신](guide/http "Communicating with backend services using HTTP")하려면 `HttpClient` 서비스가 제공하는 `HttpClient.get()`와 같은 함수로 서버에서 데이터를 받아와야 하는데 이런 함수는 옵저버블을 반환합니다.
+[백엔드 서비스와 HTTP로 통신](guide/understanding-communicating-with-http "Communicating with backend services using HTTP")하려면 `HttpClient` 서비스가 제공하는 `HttpClient.get()`와 같은 함수로 서버에서 데이터를 받아와야 하는데 이런 함수는 옵저버블을 반환합니다.
 
 이전 섹션에서 알아본 것처럼 `AsyncPipe`는 순수하지 않은 파이프이며, 파이프 인자로 받은 옵저버블을 자동으로 구독하며 옵저버블로 전달된 데이터를 추출하는 것도 자동으로 합니다.
 이 방식을 활용하면 HTTP 요청을 보내고 캐싱하는 파이프를 만들 수 있습니다.
@@ -800,19 +797,58 @@ Heroes as JSON: [ { "name": "Windstorm", "canFly": true }, { "name": "Bombasto",
 ## 파이프와 우선순위
 
 <!--
-The pipe operator has a higher precedence than the ternary operator \(`?:`\), which means `a ? b : c | x` is parsed as `a ? b : (c | x)`.
-The pipe operator cannot be used without parentheses in the first and second operands of `?:`.
+Sometimes you want to choose between two values, based on some condition, before passing the choice to the pipe. You could use the JavaScript ternary operator (`?:`) in the template to make that choice.
 
-Due to precedence, if you want a pipe to apply to the result of a ternary, wrap the entire expression in parentheses; for example, `(a ? b : c) | x`.
+Beware! The pipe operator has a higher precedence than the JavaScript ternary operator (`?:`).
 
-<code-example header="src/app/precedence.component.html" path="pipes/src/app/precedence.component.html" region="precedence"></code-example>
+If you simply write the expression as if it were evaluated left-to-right, you might be surprised by the result. For example, 
+```
+condition ? a : b | pipe 
+```
+is parsed as 
+```
+condition ? a : (b | pipe)
+``` 
+The value of `b` passes through `pipe`; the value of `a` *will not*.
+
+If you want the pipe to apply to the result of the ternary expression, wrap the entire expression in parentheses. For example, 
+```
+(condition ? a : b) | pipe
+```
+In general, you should always use parentheses to be sure Angular evaluates the expression as you intend.
+
+The "Pipes and Precedence" section of the <live-example noDownload>pipes example</live-example> explores this issue in more detail.
 -->
-파이프 연산자는 삼항연산자\(`?:`\)보다 우선순위가 높기 때문에 `a ? b : c | x` 라고 작성하면 `a ? b : (c | x)`로 처리됩니다.
-이 경우에 괄호를 사용하지 않고서는 삼항연산자의 첫 번째 항목이나 두 번째 항목에 파이프를 적용할 수 없습니다.
+때로는 파이프에 전달할 값을 둘 중에 선택해야 하는 경우가 있습니다.
+이런 경우에는 보통 JavaScript 삼항 연산자(`?:`)를 사용합니다.
 
-이런 우선순위를 고려해서 삼항연산자의 결과에 파이프를 적용하려면 괄호를 사용해서 `(a ? b : c) | x`라고 작성해야 합니다.
+하지만 조심하세요!
+파이프 연산자는 JavaScript 삼항 연산자보다 우선순위가 높습니다.
 
-<code-example header="src/app/precedence.component.html" path="pipes/src/app/precedence.component.html" region="precedence"></code-example>
+그래서 왼쪽부터 오른쪽으로 평가되겠구나 생각하고 표현식을 작성하면 예상치 못할 결과를 확인할 수 있습니다.
+예를 들면,
+
+```
+조건 ? a : b | pipe 
+```
+
+는 이렇게 파싱됩니다.
+
+```
+조건 ? a : (b | pipe)
+``` 
+
+결국 `b` 값이 `pipe`로 전달되며, `a`가 파이프로 전달되는 경우는 *없습니다.*
+
+삼항 연산자를 활용해서 값을 결정하고 그 값을 파이프로 전달하려면 이렇게 작성해야 합니다.
+
+```
+(조건 ? a : b) | pipe
+```
+
+표현식을 의도한대로 실행하려면 항상 괄호(`(`, `)`)를 사용하는 것이 좋습니다.
+
+이 내용을 더 자세하게 확인하려면 <live-example noDownload>파이프 예제</live-example>의 "Pipes and Precedence" 섹션을 참고하세요.
 
 
 <!-- links -->
@@ -821,4 +857,4 @@ Due to precedence, if you want a pipe to apply to the result of a ternary, wrap 
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-08-14

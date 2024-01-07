@@ -7,11 +7,13 @@
 // @public
 export const enum RuntimeErrorCode {
     // (undocumented)
-    BROWER_MODULE_ALREADY_LOADED = 5100,
+    ANIMATION_RENDERER_ASYNC_LOADING_FAILURE = 5300,
+    // (undocumented)
+    BROWSER_MODULE_ALREADY_LOADED = 5100,
     // (undocumented)
     NO_PLUGIN_FOR_EVENT = 5101,
     // (undocumented)
-    ROOT_NODE_NOT_FOUND = 5104,
+    ROOT_NODE_NOT_FOUND = -5104,
     // (undocumented)
     SANITIZATION_UNEXPECTED_CTX = 5202,
     // (undocumented)

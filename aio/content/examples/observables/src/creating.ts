@@ -1,5 +1,3 @@
-// #docplaster
-
 import { Observable, Observer } from 'rxjs';
 
 export function docRegionSubscriber(console: Console) {
@@ -32,38 +30,5 @@ export function docRegionSubscriber(console: Console) {
   // 3
   // Finished sequence
   // #enddocregion subscriber
-}
-
-// #docregion fromevent
-
-function fromEvent<T extends keyof HTMLElementEventMap>(target: HTMLElement, eventName: T) {
-  return new Observable<HTMLElementEventMap[T]>((observer) => {
-    const handler = (e: HTMLElementEventMap[T]) => observer.next(e);
-
-    // 대상 엘리먼트에 이벤트 핸들러를 추가합니다.
-    target.addEventListener(eventName, handler);
-
-    return () => {
-      // 이벤트 핸들러를 제거합니다.
-      target.removeEventListener(eventName, handler);
-    };
-  });
-}
-
-// #enddocregion fromevent
-
-export function docRegionFromEvent(document: Document) {
-  // #docregion fromevent_use
-
-  const ESC_CODE = 'Escape';
-  const nameInput = document.getElementById('name') as HTMLInputElement;
-
-  const subscription = fromEvent(nameInput, 'keydown').subscribe((e: KeyboardEvent) => {
-    if (e.code === ESC_CODE) {
-      nameInput.value = '';
-    }
-  });
-  // #enddocregion fromevent_use
-  return subscription;
 }
 

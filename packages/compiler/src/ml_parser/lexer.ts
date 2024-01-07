@@ -89,6 +89,12 @@ export interface TokenizeOptions {
    * If true, do not convert CRLF to LF.
    */
   preserveLineEndings?: boolean;
+
+  /**
+   * Whether to tokenize @ block syntax. Otherwise considered text,
+   * or ICU tokens if `tokenizeExpansionForms` is enabled.
+   */
+  tokenizeBlocks?: boolean;
 }
 
 export function tokenize(
@@ -136,8 +142,8 @@ class _Tokenizer {
   private _expansionCaseStack: TokenType[] = [];
   private _inInterpolation: boolean = false;
   private readonly _preserveLineEndings: boolean;
-  private readonly _escapedString: boolean;
   private readonly _i18nNormalizeLineEndingsInICUs: boolean;
+  private readonly _tokenizeBlocks: boolean;
   tokens: Token[] = [];
   errors: TokenError[] = [];
   nonNormalizedIcuExpressions: Token[] = [];
@@ -159,8 +165,8 @@ class _Tokenizer {
     this._cursor = options.escapedString ? new EscapedCharacterCursor(_file, range) :
                                            new PlainCharacterCursor(_file, range);
     this._preserveLineEndings = options.preserveLineEndings || false;
-    this._escapedString = options.escapedString || false;
     this._i18nNormalizeLineEndingsInICUs = options.i18nNormalizeLineEndingsInICUs || false;
+    this._tokenizeBlocks = options.tokenizeBlocks ?? true;
     try {
       this._cursor.init();
     } catch (e) {
@@ -197,6 +203,12 @@ class _Tokenizer {
           } else {
             this._consumeTagOpen(start);
           }
+        } else if (this._tokenizeBlocks && this._attemptCharCode(chars.$AT)) {
+          this._consumeBlockStart(start);
+        } else if (
+            this._tokenizeBlocks && !this._inInterpolation && !this._isInExpansionCase() &&
+            !this._isInExpansionForm() && this._attemptCharCode(chars.$RBRACE)) {
+          this._consumeBlockEnd(start);
         } else if (!(this._tokenizeIcu && this._tokenizeExpansionForm())) {
           // In (possibly interpolated) text the end of the text is given by `isTextEnd()`, while
           // the premature end of an interpolation is given by the start of a new HTML element.
@@ -210,6 +222,101 @@ class _Tokenizer {
     }
     this._beginToken(TokenType.EOF);
     this._endToken([]);
+  }
+
+  private _getBlockName(): string {
+    // This allows us to capture up something like `@else if`, but not `@ if`.
+    let spacesInNameAllowed = false;
+    const nameCursor = this._cursor.clone();
+
+    this._attemptCharCodeUntilFn(code => {
+      if (chars.isWhitespace(code)) {
+        return !spacesInNameAllowed;
+      }
+      if (isBlockNameChar(code)) {
+        spacesInNameAllowed = true;
+        return false;
+      }
+      return true;
+    });
+    return this._cursor.getChars(nameCursor).trim();
+  }
+
+  private _consumeBlockStart(start: CharacterCursor) {
+    this._beginToken(TokenType.BLOCK_OPEN_START, start);
+    const startToken = this._endToken([this._getBlockName()]);
+
+    if (this._cursor.peek() === chars.$LPAREN) {
+      // Advance past the opening paren.
+      this._cursor.advance();
+      // Capture the parameters.
+      this._consumeBlockParameters();
+      // Allow spaces before the closing paren.
+      this._attemptCharCodeUntilFn(isNotWhitespace);
+
+      if (this._attemptCharCode(chars.$RPAREN)) {
+        // Allow spaces after the paren.
+        this._attemptCharCodeUntilFn(isNotWhitespace);
+      } else {
+        startToken.type = TokenType.INCOMPLETE_BLOCK_OPEN;
+        return;
+      }
+    }
+
+    if (this._attemptCharCode(chars.$LBRACE)) {
+      this._beginToken(TokenType.BLOCK_OPEN_END);
+      this._endToken([]);
+    } else {
+      startToken.type = TokenType.INCOMPLETE_BLOCK_OPEN;
+    }
+  }
+
+  private _consumeBlockEnd(start: CharacterCursor) {
+    this._beginToken(TokenType.BLOCK_CLOSE, start);
+    this._endToken([]);
+  }
+
+  private _consumeBlockParameters() {
+    // Trim the whitespace until the first parameter.
+    this._attemptCharCodeUntilFn(isBlockParameterChar);
+
+    while (this._cursor.peek() !== chars.$RPAREN && this._cursor.peek() !== chars.$EOF) {
+      this._beginToken(TokenType.BLOCK_PARAMETER);
+      const start = this._cursor.clone();
+      let inQuote: number|null = null;
+      let openParens = 0;
+
+      // Consume the parameter until the next semicolon or brace.
+      // Note that we skip over semicolons/braces inside of strings.
+      while ((this._cursor.peek() !== chars.$SEMICOLON && this._cursor.peek() !== chars.$EOF) ||
+             inQuote !== null) {
+        const char = this._cursor.peek();
+
+        // Skip to the next character if it was escaped.
+        if (char === chars.$BACKSLASH) {
+          this._cursor.advance();
+        } else if (char === inQuote) {
+          inQuote = null;
+        } else if (inQuote === null && chars.isQuote(char)) {
+          inQuote = char;
+        } else if (char === chars.$LPAREN && inQuote === null) {
+          openParens++;
+        } else if (char === chars.$RPAREN && inQuote === null) {
+          if (openParens === 0) {
+            break;
+          } else if (openParens > 0) {
+            openParens--;
+          }
+        }
+
+        this._cursor.advance();
+      }
+
+      this._endToken([this._cursor.getChars(start)]);
+
+      // Skip to the next parameter.
+      this._attemptCharCodeUntilFn(isBlockParameterChar);
+    }
   }
 
   /**
@@ -578,7 +685,6 @@ class _Tokenizer {
   }
 
   private _consumeAttributeValue() {
-    let value: string;
     if (this._cursor.peek() === chars.$SQ || this._cursor.peek() === chars.$DQ) {
       const quoteChar = this._cursor.peek();
       this._consumeQuote(quoteChar);
@@ -811,6 +917,11 @@ class _Tokenizer {
       }
     }
 
+    if (this._tokenizeBlocks && !this._inInterpolation && !this._isInExpansion() &&
+        (this._cursor.peek() === chars.$AT || this._cursor.peek() === chars.$RBRACE)) {
+      return true;
+    }
+
     return false;
   }
 
@@ -837,6 +948,10 @@ class _Tokenizer {
     const start = this._cursor.clone();
     this._attemptUntilChar(char);
     return this._cursor.getChars(start);
+  }
+
+  private _isInExpansion(): boolean {
+    return this._isInExpansionCase() || this._isInExpansionForm();
   }
 
   private _isInExpansionCase(): boolean {
@@ -898,6 +1013,14 @@ function compareCharCodeCaseInsensitive(code1: number, code2: number): boolean {
 
 function toUpperCaseCharCode(code: number): number {
   return code >= chars.$a && code <= chars.$z ? code - chars.$a + chars.$A : code;
+}
+
+function isBlockNameChar(code: number): boolean {
+  return chars.isAsciiLetter(code) || chars.isDigit(code) || code === chars.$_;
+}
+
+function isBlockParameterChar(code: number): boolean {
+  return code !== chars.$SEMICOLON && isNotWhitespace(code);
 }
 
 function mergeTextTokens(srcTokens: Token[]): Token[] {

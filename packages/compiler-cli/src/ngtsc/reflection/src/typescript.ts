@@ -17,7 +17,7 @@ import {isNamedClassDeclaration} from './util';
  */
 
 export class TypeScriptReflectionHost implements ReflectionHost {
-  constructor(protected checker: ts.TypeChecker) {}
+  constructor(protected checker: ts.TypeChecker, private readonly isLocalCompilation = false) {}
 
   getDecoratorsOfDeclaration(declaration: DeclarationNode): Decorator[]|null {
     const decorators =
@@ -77,7 +77,7 @@ export class TypeScriptReflectionHost implements ReflectionHost {
         }
       }
 
-      const typeValueReference = typeToValue(typeNode, this.checker);
+      const typeValueReference = typeToValue(typeNode, this.checker, this.isLocalCompilation);
 
       return {
         name,
@@ -176,9 +176,13 @@ export class TypeScriptReflectionHost implements ReflectionHost {
                                      [ts.factory.createReturnStatement(node.body)];
     }
 
+    const type = this.checker.getTypeAtLocation(node);
+    const signatures = this.checker.getSignaturesOfType(type, ts.SignatureKind.Call);
+
     return {
       node,
       body,
+      signatureCount: signatures.length,
       typeParameters: node.typeParameters === undefined ? null : Array.from(node.typeParameters),
       parameters: node.parameters.map(param => {
         const name = parameterName(param.name);
@@ -251,7 +255,11 @@ export class TypeScriptReflectionHost implements ReflectionHost {
       return null;
     }
 
-    return {from: importDecl.moduleSpecifier.text, name: getExportedName(decl, id)};
+    return {
+      from: importDecl.moduleSpecifier.text,
+      name: getExportedName(decl, id),
+      node: importDecl,
+    };
   }
 
   /**
@@ -300,6 +308,7 @@ export class TypeScriptReflectionHost implements ReflectionHost {
     return {
       from: importDeclaration.moduleSpecifier.text,
       name: id.text,
+      node: namespaceDeclaration.parent.parent,
     };
   }
 
@@ -655,7 +664,7 @@ function getFarLeftIdentifier(propertyAccess: ts.PropertyAccessExpression): ts.I
  * Return the ImportDeclaration for the given `node` if it is either an `ImportSpecifier` or a
  * `NamespaceImport`. If not return `null`.
  */
-function getContainingImportDeclaration(node: ts.Node): ts.ImportDeclaration|null {
+export function getContainingImportDeclaration(node: ts.Node): ts.ImportDeclaration|null {
   return ts.isImportSpecifier(node) ? node.parent!.parent!.parent! :
       ts.isNamespaceImport(node)    ? node.parent.parent :
                                       null;

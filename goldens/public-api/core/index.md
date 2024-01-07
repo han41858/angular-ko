@@ -5,6 +5,7 @@
 ```ts
 
 import { Observable } from 'rxjs';
+import { SIGNAL } from '@angular/core/primitives/signals';
 import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
 
@@ -25,6 +26,31 @@ export interface AfterContentInit {
 }
 
 // @public
+export function afterNextRender(callback: VoidFunction, options?: AfterRenderOptions): AfterRenderRef;
+
+// @public
+export function afterRender(callback: VoidFunction, options?: AfterRenderOptions): AfterRenderRef;
+
+// @public
+export interface AfterRenderOptions {
+    injector?: Injector;
+    phase?: AfterRenderPhase;
+}
+
+// @public
+export enum AfterRenderPhase {
+    EarlyRead = 0,
+    MixedReadWrite = 2,
+    Read = 3,
+    Write = 1
+}
+
+// @public
+export interface AfterRenderRef {
+    destroy(): void;
+}
+
+// @public
 export interface AfterViewChecked {
     ngAfterViewChecked(): void;
 }
@@ -38,7 +64,7 @@ export interface AfterViewInit {
 export const ANIMATION_MODULE_TYPE: InjectionToken<"NoopAnimations" | "BrowserAnimations">;
 
 // @public
-export const APP_BOOTSTRAP_LISTENER: InjectionToken<((compRef: ComponentRef<any>) => void)[]>;
+export const APP_BOOTSTRAP_LISTENER: InjectionToken<readonly ((compRef: ComponentRef<any>) => void)[]>;
 
 // @public
 export const APP_ID: InjectionToken<string>;
@@ -104,6 +130,9 @@ export function asNativeElements(debugEls: DebugElement[]): any;
 export function assertInInjectionContext(debugFn: Function): void;
 
 // @public
+export function assertNotInReactiveContext(debugFn: Function, extraContext?: string): void;
+
+// @public
 export function assertPlatform(requiredToken: any): PlatformRef;
 
 // @public
@@ -122,6 +151,9 @@ export interface AttributeDecorator {
 }
 
 // @public
+export function booleanAttribute(value: unknown): boolean;
+
+// @public
 export interface BootstrapOptions {
     ngZone?: NgZone | 'zone.js' | 'noop';
     ngZoneEventCoalescing?: boolean;
@@ -136,6 +168,7 @@ export enum ChangeDetectionStrategy {
 
 // @public
 export abstract class ChangeDetectorRef {
+    // @deprecated
     abstract checkNoChanges(): void;
     abstract detach(): void;
     abstract detectChanges(): void;
@@ -180,10 +213,8 @@ export abstract class CompilerFactory {
 
 // @public
 export type CompilerOptions = {
-    useJit?: boolean;
     defaultEncapsulation?: ViewEncapsulation;
     providers?: StaticProvider[];
-    missingTranslation?: MissingTranslationStrategy;
     preserveWhitespaces?: boolean;
 };
 
@@ -199,7 +230,8 @@ export interface Component extends Directive {
     preserveWhitespaces?: boolean;
     schemas?: SchemaMetadata[];
     standalone?: boolean;
-    styles?: string[];
+    styles?: string | string[];
+    styleUrl?: string;
     styleUrls?: string[];
     template?: string;
     templateUrl?: string;
@@ -222,6 +254,7 @@ export abstract class ComponentFactory<C> {
     abstract get inputs(): {
         propName: string;
         templateName: string;
+        transform?: (value: any) => any;
     }[];
     abstract get ngContentSelectors(): string[];
     abstract get outputs(): {
@@ -243,6 +276,7 @@ export interface ComponentMirror<C> {
     get inputs(): ReadonlyArray<{
         readonly propName: string;
         readonly templateName: string;
+        readonly transform?: (value: any) => any;
     }>;
     get isStandalone(): boolean;
     get ngContentSelectors(): ReadonlyArray<string>;
@@ -481,6 +515,7 @@ export interface Directive {
         name: string;
         alias?: string;
         required?: boolean;
+        transform?: (value: any) => any;
     } | string)[];
     jit?: true;
     outputs?: string[];
@@ -519,6 +554,9 @@ export function effect(effectFn: (onCleanup: EffectCleanupRegisterFn) => void, o
 export type EffectCleanupFn = () => void;
 
 // @public
+export type EffectCleanupRegisterFn = (cleanupFn: EffectCleanupFn) => void;
+
+// @public
 export interface EffectRef {
     destroy(): void;
 }
@@ -539,7 +577,7 @@ export abstract class EmbeddedViewRef<C> extends ViewRef {
 export function enableProdMode(): void;
 
 // @public
-export const ENVIRONMENT_INITIALIZER: InjectionToken<() => void>;
+export const ENVIRONMENT_INITIALIZER: InjectionToken<readonly (() => void)[]>;
 
 // @public
 export abstract class EnvironmentInjector implements Injector {
@@ -789,7 +827,7 @@ export abstract class Injector {
     // @deprecated (undocumented)
     static create(providers: StaticProvider[], parent?: Injector): Injector;
     static create(options: {
-        providers: StaticProvider[];
+        providers: Array<Provider | StaticProvider>;
         parent?: Injector;
         name?: string;
     }): Injector;
@@ -822,6 +860,7 @@ export interface InjectorType<T> extends Type<T> {
 export interface Input {
     alias?: string;
     required?: boolean;
+    transform?: (value: any) => any;
 }
 
 // @public (undocumented)
@@ -1013,7 +1052,7 @@ export abstract class NgModuleRef<T> {
     abstract onDestroy(callback: () => void): void;
 }
 
-// @public
+// @public @deprecated
 export class NgProbeToken {
     constructor(name: string, token: any);
     // (undocumented)
@@ -1029,15 +1068,12 @@ export class NgZone {
         shouldCoalesceEventChangeDetection?: boolean | undefined;
         shouldCoalesceRunChangeDetection?: boolean | undefined;
     });
-    // (undocumented)
     static assertInAngularZone(): void;
-    // (undocumented)
     static assertNotInAngularZone(): void;
     // (undocumented)
     readonly hasPendingMacrotasks: boolean;
     // (undocumented)
     readonly hasPendingMicrotasks: boolean;
-    // (undocumented)
     static isInAngularZone(): boolean;
     readonly isStable: boolean;
     readonly onError: EventEmitter<any>;
@@ -1058,6 +1094,9 @@ export interface NgZoneOptions {
 
 // @public
 export const NO_ERRORS_SCHEMA: SchemaMetadata;
+
+// @public
+export function numberAttribute(value: unknown, fallbackValue?: number): number;
 
 // @public
 export interface OnChanges {
@@ -1103,7 +1142,7 @@ export interface OutputDecorator {
     new (alias?: string): any;
 }
 
-// @public
+// @public @deprecated
 export const PACKAGE_ROOT_URL: InjectionToken<string>;
 
 // @public
@@ -1132,7 +1171,7 @@ export interface PipeTransform {
 export const PLATFORM_ID: InjectionToken<Object>;
 
 // @public
-export const PLATFORM_INITIALIZER: InjectionToken<(() => void)[]>;
+export const PLATFORM_INITIALIZER: InjectionToken<readonly (() => void)[]>;
 
 // @public
 export const platformCore: (extraProviders?: StaticProvider[] | undefined) => PlatformRef;
@@ -1593,7 +1632,6 @@ export abstract class ViewRef extends ChangeDetectorRef {
 // @public
 export interface WritableSignal<T> extends Signal<T> {
     asReadonly(): Signal<T>;
-    mutate(mutatorFn: (value: T) => void): void;
     set(value: T): void;
     update(updateFn: (value: T) => T): void;
 }

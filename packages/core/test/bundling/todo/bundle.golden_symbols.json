@@ -12,6 +12,9 @@
     "name": "APP_INITIALIZER"
   },
   {
+    "name": "AfterRenderEventManager"
+  },
+  {
     "name": "AnonymousSubject"
   },
   {
@@ -58,6 +61,9 @@
   },
   {
     "name": "CSP_NONCE"
+  },
+  {
+    "name": "ChainedInjector"
   },
   {
     "name": "ChangeDetectionStrategy"
@@ -108,6 +114,9 @@
     "name": "DefaultIterableDifferFactory"
   },
   {
+    "name": "DistinctUntilChangedOperator"
+  },
+  {
     "name": "DistinctUntilChangedSubscriber"
   },
   {
@@ -135,9 +144,6 @@
     "name": "EVENT_MANAGER_PLUGINS"
   },
   {
-    "name": "EffectManager"
-  },
-  {
     "name": "ElementRef"
   },
   {
@@ -160,6 +166,9 @@
   },
   {
     "name": "GenericBrowserDomAdapter"
+  },
+  {
+    "name": "HAS_CHILD_VIEWS_TO_REFRESH"
   },
   {
     "name": "HAS_TRANSPLANTED_VIEWS"
@@ -273,9 +282,6 @@
     "name": "NG_TEMPLATE_SELECTOR"
   },
   {
-    "name": "NOOP_CLEANUP_FN"
-  },
-  {
     "name": "NOT_FOUND"
   },
   {
@@ -295,6 +301,9 @@
   },
   {
     "name": "NgForOf"
+  },
+  {
+    "name": "NgForOfContext"
   },
   {
     "name": "NgIf"
@@ -328,6 +337,9 @@
   },
   {
     "name": "NoneEncapsulationDomRenderer"
+  },
+  {
+    "name": "NoopNgZone"
   },
   {
     "name": "NullInjector"
@@ -366,13 +378,10 @@
     "name": "R3ViewContainerRef"
   },
   {
+    "name": "REACTIVE_LVIEW_CONSUMER_NODE"
+  },
+  {
     "name": "REMOVE_STYLES_ON_COMPONENT_DESTROY"
-  },
-  {
-    "name": "ReactiveLViewConsumer"
-  },
-  {
-    "name": "ReactiveNode"
   },
   {
     "name": "RefCountOperator"
@@ -385,9 +394,6 @@
   },
   {
     "name": "RendererStyleFlags2"
-  },
-  {
-    "name": "RootViewRef"
   },
   {
     "name": "RuntimeError"
@@ -525,16 +531,13 @@
     "name": "ViewRef"
   },
   {
-    "name": "Watch"
-  },
-  {
-    "name": "WeakRefImpl"
-  },
-  {
     "name": "ZONE_IS_STABLE_OBSERVABLE"
   },
   {
     "name": "_DOM"
+  },
+  {
+    "name": "_DuplicateItemRecordList"
   },
   {
     "name": "_DuplicateMap"
@@ -582,10 +585,10 @@
     "name": "_locateOrCreateTextNode"
   },
   {
-    "name": "_nextReactiveId"
+    "name": "_platformInjector"
   },
   {
-    "name": "_platformInjector"
+    "name": "_populateDehydratedViewsInLContainer"
   },
   {
     "name": "_processI18nInsertBefore"
@@ -604,6 +607,9 @@
   },
   {
     "name": "activeConsumer"
+  },
+  {
+    "name": "addLViewToLContainer"
   },
   {
     "name": "addPropertyAlias"
@@ -637,6 +643,9 @@
   },
   {
     "name": "applyViewChange"
+  },
+  {
+    "name": "assertConsumerNode"
   },
   {
     "name": "assertTemplate"
@@ -675,19 +684,16 @@
     "name": "cleanUpView"
   },
   {
-    "name": "clearViewRefreshFlag"
+    "name": "collectNativeNodes"
   },
   {
-    "name": "collectNativeNodes"
+    "name": "collectNativeNodesInLContainer"
   },
   {
     "name": "collectStylingFromDirectives"
   },
   {
     "name": "collectStylingFromTAttrs"
-  },
-  {
-    "name": "commitLViewConsumerIfHasProducers"
   },
   {
     "name": "computeStaticStyling"
@@ -703,6 +709,12 @@
   },
   {
     "name": "connectableObservableDescriptor"
+  },
+  {
+    "name": "consumerIsLive"
+  },
+  {
+    "name": "consumerPollProducersForChange"
   },
   {
     "name": "convertToBitFlags"
@@ -741,9 +753,6 @@
     "name": "createTView"
   },
   {
-    "name": "currentConsumer"
-  },
-  {
     "name": "deepForEach"
   },
   {
@@ -762,7 +771,19 @@
     "name": "detachView"
   },
   {
-    "name": "detectChangesInternal"
+    "name": "detectChangesInChildComponents"
+  },
+  {
+    "name": "detectChangesInComponent"
+  },
+  {
+    "name": "detectChangesInEmbeddedViews"
+  },
+  {
+    "name": "detectChangesInView"
+  },
+  {
+    "name": "detectChangesInViewIfAttached"
   },
   {
     "name": "diPublicInInjector"
@@ -778,6 +799,9 @@
   },
   {
     "name": "enterView"
+  },
+  {
+    "name": "epoch"
   },
   {
     "name": "executeCheckHooks"
@@ -817,6 +841,9 @@
   },
   {
     "name": "forwardRef"
+  },
+  {
+    "name": "freeConsumers"
   },
   {
     "name": "from"
@@ -912,9 +939,6 @@
     "name": "getOrCreateComponentTView"
   },
   {
-    "name": "getOrCreateCurrentLViewConsumer"
-  },
-  {
     "name": "getOrCreateInjectable"
   },
   {
@@ -957,9 +981,6 @@
     "name": "getPromiseCtor"
   },
   {
-    "name": "getReactiveLViewConsumer"
-  },
-  {
     "name": "getSelectedIndex"
   },
   {
@@ -990,6 +1011,9 @@
     "name": "handleError"
   },
   {
+    "name": "hasInSkipHydrationBlockFlag"
+  },
+  {
     "name": "hasParentInjector"
   },
   {
@@ -1006,9 +1030,6 @@
   },
   {
     "name": "importProvidersFrom"
-  },
-  {
-    "name": "inNotificationPhase"
   },
   {
     "name": "includeViewProviders"
@@ -1191,6 +1212,9 @@
     "name": "map"
   },
   {
+    "name": "markAncestorsForTraversal"
+  },
+  {
     "name": "markAsComponentHost"
   },
   {
@@ -1275,19 +1299,16 @@
     "name": "processInjectorTypesWithProviders"
   },
   {
+    "name": "producerRemoveLiveConsumerAtIndex"
+  },
+  {
+    "name": "producerUpdateValueVersion"
+  },
+  {
     "name": "profiler"
   },
   {
-    "name": "promise"
-  },
-  {
     "name": "refCount"
-  },
-  {
-    "name": "refreshComponent"
-  },
-  {
-    "name": "refreshContainsDirtyView"
   },
   {
     "name": "refreshContentQueries"
@@ -1339,9 +1360,6 @@
   },
   {
     "name": "scheduleArray"
-  },
-  {
-    "name": "scheduleMicroTask"
   },
   {
     "name": "searchTokensOnInjector"
@@ -1410,6 +1428,9 @@
     "name": "shimStylesContent"
   },
   {
+    "name": "shouldAddViewToDom"
+  },
+  {
     "name": "shouldSearchParent"
   },
   {
@@ -1446,10 +1467,10 @@
     "name": "unwrapRNode"
   },
   {
-    "name": "updateMicroTaskStatus"
+    "name": "updateAncestorTraversalFlagsOnAttach"
   },
   {
-    "name": "updateViewsToRefresh"
+    "name": "updateMicroTaskStatus"
   },
   {
     "name": "urlParsingNode"

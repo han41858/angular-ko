@@ -165,6 +165,15 @@ export class I18nMetaVisitor implements html.Visitor {
     return expansionCase;
   }
 
+  visitBlock(block: html.Block, context: any) {
+    html.visitAll(this, block.children, context);
+    return block;
+  }
+
+  visitBlockParameter(parameter: html.BlockParameter, context: any) {
+    return parameter;
+  }
+
   /**
    * Parse the general form `meta` passed into extract the explicit metadata needed to create a
    * `Message`.

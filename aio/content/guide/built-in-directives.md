@@ -16,8 +16,8 @@ See the <live-example></live-example> for a working example containing the code 
 
 The different types of Angular directives are as follows:
 
-| Directive Types                                                                   | Details |
-|:---                                                                               |:---     |
+| Directive Types                                                                   | Details                                                                           |
+| :-------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------- |
 | [Components](guide/component-overview)                                            | Used with a template. This type of directive is the most common directive type.   |
 | [Attribute directives](guide/built-in-directives#built-in-attribute-directives)   | Change the appearance or behavior of an element, component, or another directive. |
 | [Structural directives](guide/built-in-directives#built-in-structural-directives) | Change the DOM layout by adding and removing DOM elements.                        |
@@ -55,11 +55,12 @@ Angular는 폼, 목록, 스타일 등에 적용할 수 있는 기본 디렉티�
 <!--
 Attribute directives listen to and modify the behavior of other HTML elements, attributes, properties, and components.
 
-Many NgModules such as the [`RouterModule`](guide/router "Routing and Navigation") and the [`FormsModule`](guide/forms "Forms") define their own attribute directives.
+Many attribute directives are defined through modules such as the [`CommonModule`](api/common/CommonModule), [`RouterModule`](guide/router 'Routing and Navigation') and [`FormsModule`](guide/forms 'Forms').
+
 The most common attribute directives are as follows:
 
-| Common directives                              | Details |
-|:---                                            |:---     |
+| Common directives                              | Details                                            |
+| :--------------------------------------------- | :------------------------------------------------- |
 | [`NgClass`](guide/built-in-directives#ngClass) | Adds and removes a set of CSS classes.             |
 | [`NgStyle`](guide/built-in-directives#ngstyle) | Adds and removes a set of HTML styles.             |
 | [`NgModel`](guide/built-in-directives#ngModel) | Adds two-way data binding to an HTML form element. |
@@ -73,8 +74,7 @@ They do not have special access to any private APIs that other directives can't 
 -->
 어트리뷰트 디렉티브는 HTML 엘리먼트, 어트리뷰트, 프로퍼티, 컴포넌트의 동작을 변경합니다.
 
-[`RouterModule`](guide/router "Routing and Navigation")이나 [`FormsModule`](guide/forms "Forms")과 같이 어트리뷰트 디렉티브를 제공하는 NgModule도 많습니다.
-이 중 자주 사용하는 어트리뷰트 디렉티브는 이런 것들이 있습니다:
+[`RouterModule`](guide/router "Routing and Navigation")이나 [`FormsModule`](guide/forms "Forms")과 같이 어트리뷰트 디렉티브를 [`CommonModule`](api/common/CommonModule)로 묶어서 모듈 형태로 관리할 수도 있습니다.
 
 | 디렉티브                          | 설명                                |
 |:-----------------------------------------------|:----------------------------------|
@@ -102,7 +102,7 @@ Add or remove multiple CSS classes simultaneously with `ngClass`.
 
 <div class="alert is-helpful">
 
-To add or remove a *single* class, use [class binding](guide/class-binding) rather than `NgClass`.
+To add or remove a _single_ class, use [class binding](guide/class-binding) rather than `NgClass`.
 
 </div>
 -->
@@ -113,6 +113,21 @@ To add or remove a *single* class, use [class binding](guide/class-binding) rath
 클래스를 하나만 추가하거나 제거한다면 `NgClass`보다 [클래스 바인딩](guide/class-binding)을 사용하는 것이 더 좋습니다.
 
 </div>
+
+
+<!--
+### Import `CommonModule` in the component
+-->
+### 컴포넌트에 `CommonModule` 로드하기
+
+<!--
+To use `NgClass`, import `CommonModule` and add it to the component's `imports` list.
+
+<code-example header="src/app/app.component.ts (CommonModule import)" path="built-in-directives/src/app/app.component.ts" region="import-common-module"></code-example>
+-->
+`NgClass`를 사용하려면 `CommonModule`를 로드해서 컴포넌트의 `imports` 배열에 추가하면 됩니다.
+
+<code-example header="src/app/app.component.ts (CommonModule 로드하기)" path="built-in-directives/src/app/app.component.ts" region="import-common-module"></code-example>
 
 
 <!--
@@ -186,6 +201,17 @@ For more information, see the <live-example></live-example> `app.component.ts` a
 ## `NgStyle`로 인라인 스타일 지정하기
 
 <!--
+### Import `CommonModule` in the component
+-->
+### 컴포넌트에 `CommonModule` 로드하기
+
+`NgStyle`을 사용하려면 `CommonModule`를 로드해서 컴포넌트의 `imports` 배열에 추가하면 됩니다.
+
+<code-example header="src/app/app.component.ts (CommonModule 로드하기)" path="built-in-directives/src/app/app.component.ts" region="import-common-module"></code-example>
+
+### Using `NgStyle` in your component
+
+<!--
 Use `NgStyle` to set multiple inline styles simultaneously, based on the state of the component.
 
 1.  To use `NgStyle`, add a method to the component class.
@@ -232,9 +258,9 @@ See the <live-example></live-example> `app.component.ts` and `app.component.html
 <!--
 Use the `NgModel` directive to display a data property and update that property when the user makes changes.
 
-1.  Import `FormsModule`  and add it to the NgModule's `imports` list.
+1.  Import `FormsModule` and add it to the AppComponent's `imports` list.
 
-    <code-example header="src/app/app.module.ts (FormsModule import)" path="built-in-directives/src/app/app.module.ts" region="import-forms-module"></code-example>
+    <code-example header="src/app/app.component.ts (FormsModule import)" path="built-in-directives/src/app/app.component.ts" region="import-forms-module"></code-example>
 
 1.  Add an `[(ngModel)]` binding on an HTML `<form>` element and set it equal to the property, here `name`.
 
@@ -258,9 +284,9 @@ Here are all variations in action, including the uppercase version:
 -->
 `NgModel` 디렉티브를 활용하면 데이터 프로퍼티의 값을 화면에 표시할 수 있으며, 사용자가 이 값을 변경했을 때 클래스 프로퍼티에 반영할 수 있습니다.
 
-1.  NgModule `imports` 목록에 `FormsModule`를 불러와서 추가합니다.
+1.  AppComponent `imports` 목록에 `FormsModule`를 불러와서 추가합니다.
 
-    <code-example header="src/app/app.module.ts (FormsModule 불러오기)" path="built-in-directives/src/app/app.module.ts" region="import-forms-module"></code-example>
+    <code-example header="src/app/app.component.ts (FormsModule 로드하기)" path="built-in-directives/src/app/app.component.ts" region="import-forms-module"></code-example>
 
 1.  HTML `<form>` 엘리먼트에 `[(ngModel)]` 바인딩 문법을 추가하고 이 바인딩 오른쪽에 프로퍼티를 할당합니다. 이 예제에서는 `name`을 지정합니다.
 
@@ -290,7 +316,7 @@ Here are all variations in action, including the uppercase version:
 
 <!--
 The `NgModel` directive works for an element supported by a [ControlValueAccessor](api/forms/ControlValueAccessor).
-Angular provides *value accessors* for all of the basic HTML form elements.
+Angular provides _value accessors_ for all of the basic HTML form elements.
 For more information, see [Forms](guide/forms).
 
 To apply `[(ngModel)]` to a non-form built-in element or a third-party custom component, you have to write a value accessor.
@@ -298,12 +324,12 @@ For more information, see the API documentation on [DefaultValueAccessor](api/fo
 
 <div class="alert is-helpful">
 
-When you write an Angular component, you don't need a value accessor or `NgModel` if you  name the value and event properties according to Angular's [two-way binding syntax](guide/two-way-binding#how-two-way-binding-works).
+When you write an Angular component, you don't need a value accessor or `NgModel` if you name the value and event properties according to Angular's [two-way binding syntax](guide/two-way-binding#how-two-way-binding-works).
 
 </div>
 -->
 `NgModel` 디렉티브는 [ControlValueAccessor](api/forms/ControlValueAccessor)가 제공되는 엘리먼트에서만 제대로 동작합니다.
-그리고 Angular는 표준 HTML 폼 엘리먼트에 대해서는 모두 *값 접근자* 를 제공합니다.
+그리고 Angular는 표준 HTML 폼 엘리먼트에 대해서는 모두 _값 접근자_ 를 제공합니다.
 자세한 내용은 [폼](guide/forms) 문서를 참고하세요.
 
 표준 폼 엘리먼트가 아닌 엘리먼트나 서드 파티 컴포넌트에 `[(ngModel)]`을 적용하려면 값 접근자를 직접 구현해야 합니다.
@@ -330,8 +356,8 @@ They shape or reshape the DOM's structure, typically by adding, removing, and ma
 
 This section introduces the most common built-in structural directives:
 
-| Common built-in structural directives            | Details |
-|:---                                              |:---     |
+| Common built-in structural directives            | Details                                                          |
+| :----------------------------------------------- | :--------------------------------------------------------------- |
 | [`NgIf`](guide/built-in-directives#ngIf)         | Conditionally creates or disposes of subviews from the template. |
 | [`NgFor`](guide/built-in-directives#ngFor)       | Repeat a node for each item in a list.                           |
 | [`NgSwitch`](guide/built-in-directives#ngSwitch) | A set of directives that switch among alternative views.         |
@@ -343,13 +369,28 @@ For more information, see [Structural Directives](guide/structural-directives).
 
 이번 섹션에서는 구조 디렉티브 중 가장 많이 사용하는 이런 디렉티브들을 알아봅시다:
 
-| 기본 구조 디렉티브        | 설명                                            |
+| 기본 구조 디렉티브                                       | 설명                                            |
 |:-------------------------------------------------|:----------------------------------------------|
 | [`NgIf`](guide/built-in-directives#ngIf)         | 조건에 따라 템플릿의 일부를 DOM 트리에 추가하거나 DOM 트리에서 제거합니다. |
 | [`NgFor`](guide/built-in-directives#ngFor)       | 배열에 있는 항목마다 템플릿 일부를 반복합니다.                    |
 | [`NgSwitch`](guide/built-in-directives#ngSwitch) | 조건에 맞는 화면을 DOM 트리에 추가합니다.                    |
 
 자세한 내용은 [구조 디렉티브](guide/structural-directives) 문서를 참고하세요.
+
+
+<!--
+### Import `CommonModule` in the component
+-->
+### 컴포넌트에 `CommonModule` 로드하기
+
+<!--
+To use built-in structural directives, import `CommonModule` and add it to the component's `imports` list.
+
+<code-example header="src/app/app.component.ts (CommonModule import)" path="built-in-directives/src/app/app.component.ts" region="import-common-module"></code-example>
+-->
+구조 디렉티브를 사용하려면 컴포넌트 `imports` 배열에 `CommonModule`을 추가하면 됩니다.
+
+<code-example header="src/app/app.component.ts (CommonModule 로드하기)" path="built-in-directives/src/app/app.component.ts" region="import-common-module"></code-example>
 
 
 <a id="ngIf"></a>
@@ -436,10 +477,10 @@ Use the `NgFor` directive to present a list of items.
 
 The string `"let item of items"` instructs Angular to do the following:
 
-*   Store each item in the `items` array in the local `item` looping variable
-*   Make each item available to the templated HTML for each iteration
-*   Translate `"let item of items"` into an `<ng-template>` around the host element
-*   Repeat the `<ng-template>` for each `item` in the list
+- Store each item in the `items` array in the local `item` looping variable
+- Make each item available to the templated HTML for each iteration
+- Translate `"let item of items"` into an `<ng-template>` around the host element
+- Repeat the `<ng-template>` for each `item` in the list
 
 For more information see the [Structural directive shorthand](guide/structural-directives#shorthand) section of [Structural directives](guide/structural-directives).
 -->
@@ -452,10 +493,10 @@ For more information see the [Structural directive shorthand](guide/structural-d
 
 Angular는 `"let item of items"`라는 문자열을 이렇게 처리합니다:
 
-*   `items` 배열에 있는 개별 항목을 지역 변수 `item`에 할당합니다.
-*   `item` 변수는 반복되는 HTML 템플릿 안에서만 사용할 수 있습니다.
-*   `"let item of items"`라는 문자열이 `<ng-template>`으로 변환됩니다.
-*   배열에 있는 항목마다 `<ng-template>`이 반복됩니다.
+- `items` 배열에 있는 개별 항목을 지역 변수 `item`에 할당합니다.
+- `item` 변수는 반복되는 HTML 템플릿 안에서만 사용할 수 있습니다.
+- `"let item of items"`라는 문자열이 `<ng-template>`으로 변환됩니다.
+- 배열에 있는 항목마다 `<ng-template>`이 반복됩니다.
 
 자세한 내용은 [구조 디렉티브](guide/structural-directives) 문서의 [구조 디렉티브 단축문법](guide/structural-directives#shorthand) 섹션을 참고하세요.
 
@@ -473,8 +514,8 @@ In the following example, the selector is `<app-item-detail>`.
 
 Reference a template input variable, such as `item`, in the following locations:
 
-*   Within the `ngFor` host element
-*   Within the host element descendants to access the item's properties
+- Within the `ngFor` host element
+- Within the host element descendants to access the item's properties
 
 The following example references `item` first in an interpolation and then passes in a binding to the `item` property of the `<app-item-detail>` component.
 
@@ -489,8 +530,8 @@ For more information about template input variables, see [Structural directive s
 
 이 때 템플릿 입력 변수 `item`은 이런 범위에서 참조할 수 있습니다:
 
-*   `ngFor`가 적용된 호스트 엘리먼트 안쪽에서
-*   호스트 엘리먼트의 자식 엘리먼트에서
+- `ngFor`가 적용된 호스트 엘리먼트 안쪽에서
+- 호스트 엘리먼트의 자식 엘리먼트에서
 
 아래 코드는 `item`을 문자열 바인딩하면서 한 번, `<app-item-detail>` 컴포넌트의 `item` 프로퍼티에 바인딩할 때 한 번 참조했습니다.
 
@@ -571,8 +612,8 @@ With the `*ngFor` `trackBy` property, Angular can change and re-render only thos
 **Change ids** creates new items with new `item.id`s.
 In the following illustration of the `trackBy` effect, **Reset items** creates new items with the same `item.id`s.
 
-*   With no `trackBy`, both buttons trigger complete DOM element replacement.
-*   With `trackBy`, only changing the `id` triggers element replacement.
+- With no `trackBy`, both buttons trigger complete DOM element replacement.
+- With `trackBy`, only changing the `id` triggers element replacement.
 
 <div class="lightbox">
 
@@ -598,8 +639,8 @@ In the following illustration of the `trackBy` effect, **Reset items** creates n
 `trackBy`가 동작하는 것을 확인해 보세요.
 **Reset items** 버튼을 누르면 `item.id`를 원래대로 되돌립니다.
 
-*   `trackBy`가 사용되지 않은 쪽에서는 버튼을 누르면 DOM 엘리먼트가 전부 교체됩니다.
-*   `trackBy`를 사용하면 실제로 `id`가 변경된 엘리먼트만 교체됩니다.
+- `trackBy`가 사용되지 않은 쪽에서는 버튼을 누르면 DOM 엘리먼트가 전부 교체됩니다.
+- `trackBy`를 사용하면 실제로 `id`가 변경된 엘리먼트만 교체됩니다.
 
 <div class="lightbox">
 
@@ -690,8 +731,8 @@ Angular puts only the selected element into the DOM.
 
 `NgSwitch` is a set of three directives:
 
-| `NgSwitch` directives | Details |
-|:---                   |:---     |
+| `NgSwitch` directives | Details                                                                                                                                                                |
+| :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `NgSwitch`            | An attribute directive that changes the behavior of its companion directives.                                                                                          |
 | `NgSwitchCase`        | Structural directive that adds its element to the DOM when its bound value equals the switch value and removes its bound value when it doesn't equal the switch value. |
 | `NgSwitchDefault`     | Structural directive that adds its element to the DOM when there is no selected `NgSwitchCase`.                                                                        |
@@ -707,7 +748,7 @@ Angular puts only the selected element into the DOM.
 
     <code-example header="src/app/app.component.ts" path="built-in-directives/src/app/app.component.ts" region="item"></code-example>
 
-1.  In each child component, add an `item` [input property](guide/inputs-outputs#input "Input property") which is bound to the `currentItem` of the parent component.
+1.  In each child component, add an `item` [input property](guide/inputs-outputs#input 'Input property') which is bound to the `currentItem` of the parent component.
     The following two snippets show the parent component and one of the child components.
     The other child components are identical to `StoutItemComponent`.
 
@@ -745,7 +786,7 @@ JavaScript `siwtch` 구문과 비슷하게, `NgSwitch`는 여러 엘리먼트 �
 
     <code-example header="src/app/app.component.ts" path="built-in-directives/src/app/app.component.ts" region="item"></code-example>
 
-1.  자식 컴포넌트에 `item` [입력 프로퍼티](guide/inputs-outputs#input "Input property")를 선언합니다.
+1.  자식 컴포넌트에 `item` [입력 프로퍼티](guide/inputs-outputs#input 'Input property')를 선언합니다.
     이 프로퍼티에는 부모 컴포넌트에서 바인딩되는 `currentItem`이 할당됩니다.
     아래 코드 2개를 보면서 부모 컴포넌트와 자식 컴포넌트가 어떻게 연결되는지 확인해 보세요.
     `StoutItemComponent`의 클래스 코드를 확인해보면 이렇습니다.

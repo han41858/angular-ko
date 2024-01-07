@@ -19,7 +19,7 @@ Angular 애플리케이션을 빌드할 때 애플리케이션 자체의 렌더�
 자세한 내용은 [앱 기본 틀 모델](https://developers.google.com/web/fundamentals/architecture/app-shell) 문서를 참고하세요.
 
 <!--
-## Step 1: Prepare the application
+## Step 1: Generate an application
 -->
 ## 1단계: 애플리케이션 생성하기
 
@@ -28,21 +28,21 @@ Do this with the following Angular CLI command:
 
 <code-example format="shell" language="shell">
 
-ng new my-app --routing
+ng new my-app
 
 </code-example>
 
-For an existing application, you have to manually add the `RouterModule` and defining a `<router-outlet>` within your application.
+For an existing application, you have to manually add the `Router` and defining a `<router-outlet>` within your application.
 -->
 Angular CLI로 다음 명령을 실행하면 애플리케이션을 생성할 수 있습니다:
 
 <code-example format="shell" language="shell">
 
-ng new my-app --routing
+ng new my-app
 
 </code-example>
 
-이미 생성된 애플리케이션이라면 `RouterModule`을 추가하고 템플릿에 `<router-outlet>`을 추가하면 됩니다.
+이미 생성된 애플리케이션이라면 `Router`를 추가하고 템플릿에 `<router-outlet>`을 추가하면 됩니다.
 
 
 <!--
@@ -64,72 +64,49 @@ ng generate app-shell
 <!--
 For more information about this command, see [App shell command](cli/generate#app-shell-command).
 
-After running this command you can see that the `angular.json` configuration file has been updated to add two new targets, with a few other changes.
+The command updates the application code and adds extra files to the project structure.
+
+<code-example language="text">
+
+  src
+  ├── app
+  │   ├── app.config.server.ts               # server application configuration
+  │   └── app-shell                          # app-shell component
+  │       ├── app-shell.component.html
+  │       ├── app-shell.component.scss
+  │       ├── app-shell.component.spec.ts
+  │       └── app-shell.component.ts
+  └── main.server.ts                         # main server application bootstrapping
+
+</code-example>
 -->
 이 명령에 대해 자세하게 알아보려면 [앱 셸 명령](cli/generate#app-shell-command) 문서를 참고하세요.
 
-이 명령을 실행하고 나면 `angular.json` 설정 파일에 다음 두 빌드 대상이 추가됩니다.
+이 명령을 실행하면 애플리케이션 코드를 수정하며 프로젝트에 몇개 파일을 추가합니다.
 
-<code-example language="json">
+<code-example language="text">
 
-"server": {
-  "builder": "&commat;angular-devkit/build-angular:server",
-  "defaultConfiguration": "production",
-  "options": {
-    "outputPath": "dist/my-app/server",
-    "main": "src/main.server.ts",
-    "tsConfig": "tsconfig.server.json"
-  },
-  "configurations": {
-    "development": {
-      "outputHashing": "none",
-    },
-    "production": {
-      "outputHashing": "media",
-      "fileReplacements": [
-        {
-          "replace": "src/environments/environment.ts",
-          "with": "src/environments/environment.prod.ts"
-        }
-      ],
-      "sourceMap": false,
-      "optimization": true
-    }
-  }
-},
-"app-shell": {
-  "builder": "&commat;angular-devkit/build-angular:app-shell",
-  "defaultConfiguration": "production",
-  "options": {
-    "route": "shell"
-  },
-  "configurations": {
-    "development": {
-      "browserTarget": "my-app:build:development",
-      "serverTarget": "my-app:server:development",
-    },
-    "production": {
-      "browserTarget": "my-app:build:production",
-      "serverTarget": "my-app:server:production"
-    }
-  }
-}
+  src
+  ├── app
+  │   ├── app.config.server.ts               # 서버 애플리케이션 설정파일
+  │   └── app-shell                          # app-shell 컴포넌트
+  │       ├── app-shell.component.html
+  │       ├── app-shell.component.scss
+  │       ├── app-shell.component.spec.ts
+  │       └── app-shell.component.ts
+  └── main.server.ts                         # 서버 애플리케이션 메인 부트스트랩 파일
 
 </code-example>
+
 
 <!--
 ## Step 3: Verify the application is built with the shell content
 -->
 ## 3단계: 빌드 확인하기
 
-<!--
-Use the Angular CLI to build the `app-shell` target.
--->
-이제 다음 명령을 실행해서 `app-shell`이 제대로 빌드되는지 확인해 봅시다.
-
 <code-example format="shell" language="shell">
 
-ng run my-app:app-shell:development
+ng build --configuration=development
 
 </code-example>
 
@@ -141,7 +118,7 @@ Or to use the production configuration.
 
 <code-example format="shell" language="shell">
 
-ng run my-app:app-shell:production
+ng build
 
 </code-example>
 
@@ -158,4 +135,4 @@ Look for default text `app-shell works!` to show that the application shell rout
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-10-20

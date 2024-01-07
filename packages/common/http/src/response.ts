@@ -21,6 +21,8 @@ export enum HttpEventType {
 
   /**
    * An upload progress event was received.
+   *
+   * Note: The `FetchBackend` doesn't support progress report on uploads.
    */
   UploadProgress,
 
@@ -86,6 +88,8 @@ export interface HttpDownloadProgressEvent extends HttpProgressEvent {
 
 /**
  * An upload progress event.
+ *
+ * Note: The `FetchBackend` doesn't support progress report on uploads.
  *
  * @publicApi
  */
@@ -354,7 +358,7 @@ export class HttpErrorResponse extends HttpResponseBase implements Error {
  * As per https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
  * @publicApi
  */
-export const enum HttpStatusCode {
+export enum HttpStatusCode {
   Continue = 100,
   SwitchingProtocols = 101,
   Processing = 102,

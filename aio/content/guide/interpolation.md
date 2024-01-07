@@ -68,4 +68,4 @@ In the following example, Angular evaluates the `title` and `itemImageUrl` prope
 * [프로퍼티 바인딩](guide/property-binding)
 * [이벤트 바인딩](guide/event-binding)
 
-@reviewed 2022-04-14
+@reviewed 2023-09-01

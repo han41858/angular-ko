@@ -46,17 +46,18 @@ import {assertComponentDef} from './errors';
  * const applicationRef = await bootstrapApplication(RootComponent);
  *
  * // Locate a DOM node that would be used as a host.
- * const host = document.getElementById('hello-component-host');
+ * const hostElement = document.getElementById('hello-component-host');
  *
  * // Get an `EnvironmentInjector` instance from the `ApplicationRef`.
  * const environmentInjector = applicationRef.injector;
  *
  * // We can now create a `ComponentRef` instance.
- * const componentRef = createComponent(HelloComponent, {host, environmentInjector});
+ * const componentRef = createComponent(HelloComponent, {hostElement, environmentInjector});
  *
  * // Last step is to register the newly created ref using the `ApplicationRef` instance
  * // to include the component view into change detection cycles.
  * applicationRef.attachView(componentRef.hostView);
+ * componentRef.changeDetectorRef.detectChanges();
  * ```
  *
  * @param component Component class reference.
@@ -106,7 +107,11 @@ export interface ComponentMirror<C> {
   /**
    * The inputs of the component.
    */
-  get inputs(): ReadonlyArray<{readonly propName: string, readonly templateName: string}>;
+  get inputs(): ReadonlyArray<{
+    readonly propName: string,
+    readonly templateName: string,
+    readonly transform?: (value: any) => any,
+  }>;
   /**
    * The outputs of the component.
    */
@@ -120,6 +125,11 @@ export interface ComponentMirror<C> {
    * Note: an extra flag, not present in `ComponentFactory`.
    */
   get isStandalone(): boolean;
+  /**
+   * // TODO(signals): Remove internal and add public documentation
+   * @internal
+   */
+  get isSignal(): boolean;
 }
 
 /**
@@ -173,7 +183,11 @@ export function reflectComponentType<C>(component: Type<C>): ComponentMirror<C>|
     get type(): Type<C> {
       return factory.componentType;
     },
-    get inputs(): ReadonlyArray<{propName: string, templateName: string}> {
+    get inputs(): ReadonlyArray<{
+      propName: string,
+      templateName: string,
+      transform?: (value: any) => any,
+    }> {
       return factory.inputs;
     },
     get outputs(): ReadonlyArray<{propName: string, templateName: string}> {
@@ -184,6 +198,9 @@ export function reflectComponentType<C>(component: Type<C>): ComponentMirror<C>|
     },
     get isStandalone(): boolean {
       return componentDef.standalone;
+    },
+    get isSignal(): boolean {
+      return componentDef.signals;
     },
   };
 }

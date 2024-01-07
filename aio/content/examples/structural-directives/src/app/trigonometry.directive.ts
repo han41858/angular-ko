@@ -1,6 +1,9 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import {Directive, Input, TemplateRef, ViewContainerRef} from '@angular/core';
 
-@Directive({ selector: '[appTrigonometry]' })
+@Directive({
+  standalone: true,
+  selector: '[appTrigonometry]',
+})
 export class TrigonometryDirective {
   private isViewCreated = false;
   private readonly context = new TrigonometryContext();
@@ -19,14 +22,14 @@ export class TrigonometryDirective {
 
   constructor(
     private readonly viewContainerRef: ViewContainerRef,
-    private readonly templateRef: TemplateRef<TrigonometryContext>
+    private readonly templateRef: TemplateRef<TrigonometryContext>,
   ) {}
 
   // 템플릿 체커는 어떤 디렉티브가 템플릿에 사용되는지 알 수 있기 때문에
   // 컨텍스트의 타입을 정확하게 파악할 수 있습니다.
   static ngTemplateContextGuard(
     directive: TrigonometryDirective,
-    context: unknown
+    context: unknown,
   ): context is TrigonometryContext {
     return true;
   }
