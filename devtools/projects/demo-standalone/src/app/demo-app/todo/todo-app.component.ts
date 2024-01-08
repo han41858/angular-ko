@@ -19,10 +19,8 @@ import {DialogComponent} from './dialog.component';
 @Component({
   selector: 'app-todo-demo',
   standalone: true,
-  imports: [
-    RouterLink, RouterOutlet, MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule,
-    CommonModule
-  ],
+  imports:
+      [RouterLink, RouterOutlet, MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule],
   styles: [`
       nav {
         padding-top: 20px;
@@ -52,8 +50,8 @@ import {DialogComponent} from './dialog.component';
   `
 })
 export class TodoAppComponent {
-  name: string;
-  animal: string;
+  name!: string;
+  animal!: string;
 
   constructor(public dialog: MatDialog) {}
 

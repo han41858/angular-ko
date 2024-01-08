@@ -7,9 +7,12 @@
  */
 
 import {ConstantPool} from '../../constant_pool';
+import {InputFlags} from '../../core';
 import {BindingType, Interpolation} from '../../expression_parser/ast';
+import {splitNsName} from '../../ml_parser/tags';
 import * as o from '../../output/output_ast';
 import {ParseSourceSpan} from '../../parse_util';
+import {CssSelector} from '../../selector';
 import * as t from '../r3_ast';
 import {Identifiers as R3} from '../r3_identifiers';
 import {ForwardRefHandling} from '../util';
@@ -26,7 +29,7 @@ import {isI18nAttribute} from './i18n/util';
  * TODO(FW-1136): this is a temporary solution, we need to come up with a better way of working with
  * inputs that contain potentially unsafe chars.
  */
-const UNSAFE_OBJECT_KEY_NAME_REGEXP = /[-.]/;
+export const UNSAFE_OBJECT_KEY_NAME_REGEXP = /[-.]/;
 
 /** Name of the temporary to use during data binding */
 export const TEMPORARY_NAME = '_t';
@@ -166,12 +169,19 @@ export function asLiteral(value: any): o.Expression {
   return o.literal(value, o.INFERRED_TYPE);
 }
 
+/**
+ * Serializes inputs and outputs for `defineDirective` and `defineComponent`.
+ *
+ * This will attempt to generate optimized data structures to minimize memory or
+ * file size of fully compiled applications.
+ */
 export function conditionallyCreateDirectiveBindingLiteral(
     map: Record<string, string|{
       classPropertyName: string;
       bindingPropertyName: string;
       transformFunction: o.Expression|null;
-    }>, keepDeclared?: boolean): o.Expression|null {
+      isSignal: boolean,
+    }>, forInputs?: boolean): o.Expression|null {
   const keys = Object.getOwnPropertyNames(map);
 
   if (keys.length === 0) {
@@ -196,14 +206,33 @@ export function conditionallyCreateDirectiveBindingLiteral(
       declaredName = value.classPropertyName;
       publicName = value.bindingPropertyName;
 
-      if (keepDeclared && (publicName !== declaredName || value.transformFunction != null)) {
-        const expressionKeys = [asLiteral(publicName), asLiteral(declaredName)];
+      const differentDeclaringName = publicName !== declaredName;
+      const hasTransform = value.transformFunction !== null;
 
-        if (value.transformFunction != null) {
-          expressionKeys.push(value.transformFunction);
+      // Build up input flags
+      let flags: o.Expression|null = null;
+      if (value.isSignal) {
+        flags = bitwiseAndInputFlagsExpr(InputFlags.SignalBased, flags);
+      }
+      if (value.transformFunction !== null) {
+        flags = bitwiseAndInputFlagsExpr(InputFlags.HasTransform, flags);
+      }
+
+      // Inputs, compared to outputs, will track their declared name (for `ngOnChanges`), or support
+      // transform functions, or store flag information if there is any.
+      if (forInputs && (differentDeclaringName || hasTransform || flags !== null)) {
+        const flagsExpr = flags ?? o.importExpr(R3.InputFlags).prop(InputFlags[InputFlags.None]);
+        const result: o.Expression[] = [flagsExpr, asLiteral(publicName)];
+
+        if (differentDeclaringName || hasTransform) {
+          result.push(asLiteral(declaredName));
+
+          if (hasTransform) {
+            result.push(value.transformFunction!);
+          }
         }
 
-        expressionValue = o.literalArr(expressionKeys);
+        expressionValue = o.literalArr(result);
       } else {
         expressionValue = asLiteral(publicName);
       }
@@ -216,6 +245,23 @@ export function conditionallyCreateDirectiveBindingLiteral(
       value: expressionValue,
     };
   }));
+}
+
+/** Gets an output AST expression referencing the given flag. */
+function getInputFlagExpr(flag: InputFlags): o.Expression {
+  return o.importExpr(R3.InputFlags).prop(InputFlags[flag]);
+}
+
+/** Combines a given input flag with an existing flag expression, if present. */
+function bitwiseAndInputFlagsExpr(flag: InputFlags, expr: o.Expression|null): o.Expression {
+  if (expr === null) {
+    return getInputFlagExpr(flag);
+  }
+  return new o.BinaryOperatorExpr(
+      o.BinaryOperator.BitwiseAnd,
+      expr,
+      getInputFlagExpr(flag),
+  );
 }
 
 /**
@@ -278,6 +324,31 @@ export class DefinitionMap<T = any> {
 }
 
 /**
+ * Creates a `CssSelector` from an AST node.
+ */
+export function createCssSelectorFromNode(node: t.Element|t.Template): CssSelector {
+  const elementName = node instanceof t.Element ? node.name : 'ng-template';
+  const attributes = getAttrsForDirectiveMatching(node);
+  const cssSelector = new CssSelector();
+  const elementNameNoNs = splitNsName(elementName)[1];
+
+  cssSelector.setElement(elementNameNoNs);
+
+  Object.getOwnPropertyNames(attributes).forEach((name) => {
+    const nameNoNs = splitNsName(name)[1];
+    const value = attributes[name];
+
+    cssSelector.addAttribute(nameNoNs, value);
+    if (name.toLowerCase() === 'class') {
+      const classes = value.trim().split(/\s+/);
+      classes.forEach(className => cssSelector.addClassName(className));
+    }
+  });
+
+  return cssSelector;
+}
+
+/**
  * Extract a map of properties to values for a given element or template node, which can be used
  * by the directive matching machinery.
  *
@@ -286,8 +357,7 @@ export class DefinitionMap<T = any> {
  * object maps a property name to its (static) value. For any bindings, this map simply maps the
  * property name to an empty string.
  */
-export function getAttrsForDirectiveMatching(elOrTpl: t.Element|
-                                             t.Template): {[name: string]: string} {
+function getAttrsForDirectiveMatching(elOrTpl: t.Element|t.Template): {[name: string]: string} {
   const attributesMap: {[name: string]: string} = {};
 
 

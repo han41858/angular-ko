@@ -19,10 +19,10 @@ import {FlatNode} from '../../property-resolver/element-property-resolver';
   styleUrls: ['./property-view-body.component.scss'],
 })
 export class PropertyViewBodyComponent {
-  @Input() controller: DirectivePropertyResolver;
-  @Input() directiveInputControls: DirectiveTreeData;
-  @Input() directiveOutputControls: DirectiveTreeData;
-  @Input() directiveStateControls: DirectiveTreeData;
+  @Input({required: true}) controller!: DirectivePropertyResolver;
+  @Input({required: true}) directiveInputControls!: DirectiveTreeData;
+  @Input({required: true}) directiveOutputControls!: DirectiveTreeData;
+  @Input({required: true}) directiveStateControls!: DirectiveTreeData;
 
   @Output() inspect = new EventEmitter<{node: FlatNode; directivePosition: DirectivePosition}>();
 
@@ -86,29 +86,33 @@ export class PropertyViewBodyComponent {
       <mat-expansion-panel>
         <mat-expansion-panel-header collapsedHeight="35px" expandedHeight="35px">
           <mat-panel-title>
-
             <mat-chip-listbox>
               <mat-chip matTooltipPosition="left" matTooltip="Dependency injection token" (click)="$event.stopPropagation();">{{dependency.token}}</mat-chip>
             </mat-chip-listbox>
           </mat-panel-title>
-
           <mat-panel-description>
             <mat-chip-listbox>
               <div class="di-flags">
-                <mat-chip [highlighted]="true" color="primary" *ngIf="dependency.flags?.optional">Optional</mat-chip>
-                <mat-chip [highlighted]="true" color="primary" *ngIf="dependency.flags?.host">Host</mat-chip>
-                <mat-chip [highlighted]="true" color="primary" *ngIf="dependency.flags?.self">Self</mat-chip>
-                <mat-chip [highlighted]="true" color="primary" *ngIf="dependency.flags?.skipSelf">SkipSelf</mat-chip>
+                @if (dependency.flags?.optional) {
+                  <mat-chip [highlighted]="true" color="primary">Optional</mat-chip>
+                }
+                @if (dependency.flags?.host) {
+                  <mat-chip [highlighted]="true" color="primary">Host</mat-chip>
+                }
+                @if (dependency.flags?.self) {
+                  <mat-chip [highlighted]="true" color="primary">Self</mat-chip>
+                }
+                @if (dependency.flags?.skipSelf) {
+                  <mat-chip [highlighted]="true" color="primary">SkipSelf</mat-chip>
+                }
               </div>
             </mat-chip-listbox>
           </mat-panel-description>
-
         </mat-expansion-panel-header>
-
         <ng-resolution-path [path]="dependency.resolutionPath"></ng-resolution-path>
       </mat-expansion-panel>
     </mat-accordion>
-  `,
+    `,
   styles: [`
     .di-flags {
       display: flex;
@@ -134,14 +138,15 @@ export class PropertyViewBodyComponent {
     `]
 })
 export class DependencyViewerComponent {
-  @Input() dependency: SerializedInjectedService;
+  @Input({required: true}) dependency!: SerializedInjectedService;
 }
 
 @Component({
   selector: 'ng-injected-services',
   template: `
-    <ng-dependency-viewer *ngFor="let dependency of dependencies; trackBy: dependencyPosition" [dependency]="dependency">
-  `,
+    @for (dependency of dependencies; track dependency.position[0]) {
+      <ng-dependency-viewer [dependency]="dependency" />
+   }`,
   styles: [`
       ng-dependency-viewer {
         border-bottom: 1px solid color-mix(in srgb, currentColor, #bdbdbd 85%);
@@ -150,13 +155,9 @@ export class DependencyViewerComponent {
     `]
 })
 export class InjectedServicesComponent {
-  @Input() controller: DirectivePropertyResolver;
+  @Input({required: true}) controller!: DirectivePropertyResolver;
 
   get dependencies(): SerializedInjectedService[] {
     return this.controller.directiveMetadata?.dependencies ?? [];
-  }
-
-  dependencyPosition(_index, dependency: SerializedInjectedService) {
-    return dependency.position[0];
   }
 }

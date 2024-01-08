@@ -47,6 +47,17 @@ export class DelegatingCompilerHost implements
   resolveModuleNameLiterals;
   resolveTypeReferenceDirectiveReferences;
 
+  // jsDocParsingMode is not a method like the other elements above
+  // TODO: ignore usage can be dropped once 5.2 support is dropped
+  get jsDocParsingMode() {
+    // @ts-ignore
+    return this.delegate.jsDocParsingMode;
+  }
+  set jsDocParsingMode(mode) {
+    // @ts-ignore
+    this.delegate.jsDocParsingMode = mode;
+  }
+
   constructor(protected delegate: ts.CompilerHost) {
     // Excluded are 'getSourceFile', 'fileExists' and 'writeFile', which are actually implemented by
     // `TypeCheckProgramHost` below.
@@ -113,7 +124,7 @@ class UpdatedProgramHost extends DelegatingCompilerHost {
   }
 
   getSourceFile(
-      fileName: string, languageVersion: ts.ScriptTarget,
+      fileName: string, languageVersionOrOptions: ts.ScriptTarget|ts.CreateSourceFileOptions,
       onError?: ((message: string) => void)|undefined,
       shouldCreateNewSourceFile?: boolean|undefined): ts.SourceFile|undefined {
     // Try to use the same `ts.SourceFile` as the original program, if possible. This guarantees
@@ -123,7 +134,7 @@ class UpdatedProgramHost extends DelegatingCompilerHost {
       // Something went wrong and a source file is being requested that's not in the original
       // program. Just in case, try to retrieve it from the delegate.
       delegateSf = this.delegate.getSourceFile(
-          fileName, languageVersion, onError, shouldCreateNewSourceFile)!;
+          fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile)!;
     }
     if (delegateSf === undefined) {
       return undefined;

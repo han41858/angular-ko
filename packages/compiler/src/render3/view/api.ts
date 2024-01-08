@@ -7,7 +7,7 @@
  */
 
 import {ChangeDetectionStrategy, ViewEncapsulation} from '../../core';
-import {InterpolationConfig} from '../../ml_parser/interpolation_config';
+import {InterpolationConfig} from '../../ml_parser/defaults';
 import * as o from '../../output/output_ast';
 import {ParseSourceSpan} from '../../parse_util';
 import * as t from '../r3_ast';
@@ -226,6 +226,11 @@ export interface R3ComponentMetadata<DeclarationT extends R3TemplateDependency> 
      * element without selector is present.
      */
     ngContentSelectors: string[];
+
+    /**
+     * Whether the template preserves whitespaces from the user's code.
+     */
+    preserveWhitespaces?: boolean;
   };
 
   declarations: DeclarationT[];
@@ -314,6 +319,13 @@ export interface R3InputMetadata {
   classPropertyName: string;
   bindingPropertyName: string;
   required: boolean;
+  isSignal: boolean;
+  /**
+   * Transform function for the input.
+   *
+   * Null if there is no transform, or if this is a signal input.
+   * Signal inputs capture their transform as part of the `InputSignal`.
+   */
   transformFunction: o.Expression|null;
 }
 

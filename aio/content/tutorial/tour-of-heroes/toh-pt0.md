@@ -4,7 +4,8 @@
 # 프로젝트 생성하기
 
 <!--
-Use the `ng new` command to start creating your **Tour of Heroes** application.
+Use the `ng new` command to start creating your **Tour of Heroes** application. <br>
+<b>Please note:</b> Starting in Angular version 17 new projects will be [standalone by default](https://angular.io/guide/standalone-components). To create a project with the using `NgModule` use the option `ng new --no-standalone`
 
 This tutorial:
 
@@ -19,7 +20,9 @@ To view the application's code, see the <live-example></live-example>.
 
 </div>
 -->
-`ng new` 명령을 실행하면 **히어로들의 여행** 애플리케이션을 생성할 수 있습니다.
+`ng new` 명령을 실행하면 **히어로들의 여행** 애플리케이션을 생성할 수 있습니다. <br>
+<b>참고하세요:</b> Angular v17 버전부터는 [단독 컴포넌트를 기본으로](https://angular.io/guide/standalone-components) 프로젝트가 생성됩니다.
+`NgModule` 기반으로 프로젝트를 생성하려면 `ng new --no-standalone` 이라는 명령으로 생성하세요.
 
 이 튜토리얼에서는 이런 내용을 다룹니다:
 

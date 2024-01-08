@@ -609,6 +609,7 @@ describe('type check blocks', () => {
           bindingPropertyName: 'fieldA',
           classPropertyName: 'fieldA',
           required: false,
+          isSignal: false,
           transform: {
             node: ts.factory.createFunctionDeclaration(
                 undefined, undefined, undefined, undefined, [], undefined, undefined),
@@ -787,6 +788,7 @@ describe('type check blocks', () => {
       enableTemplateTypeChecker: false,
       useInlineTypeConstructors: true,
       suggestionsForSuboptimalTypeInference: false,
+      controlFlowPreventingContentProjection: 'warning',
     };
 
     describe('config.applyTemplateContextGuards', () => {
@@ -1532,6 +1534,10 @@ describe('type check blocks', () => {
               'else if ((_t2()) === "two") { "" + ((this).two()); } ' +
               'else { "" + ((this).default()); } }');
     });
+
+    it('should handle an empty switch block', () => {
+      expect(tcb('@switch (expr) {}')).toContain('if (true) { ((this).expr); }');
+    });
   });
 
   describe('for loop blocks', () => {
@@ -1545,7 +1551,7 @@ describe('type check blocks', () => {
       `;
 
       const result = tcb(TEMPLATE);
-      expect(result).toContain('for (const item of ((this).items)!) { var _t1 = item;');
+      expect(result).toContain('for (const _t1 of ((this).items)!) {');
       expect(result).toContain('"" + ((this).main(_t1))');
       expect(result).toContain('"" + ((this).empty())');
     });
@@ -1558,12 +1564,12 @@ describe('type check blocks', () => {
       `;
 
       const result = tcb(TEMPLATE);
-      expect(result).toContain('for (const item of ((this).items)!) { var _t1 = item;');
+      expect(result).toContain('for (const _t1 of ((this).items)!) {');
       expect(result).toContain('var _t2: number = null!;');
-      expect(result).toContain('var _t3: number = null!;');
-      expect(result).toContain('var _t4: number = null!;');
-      expect(result).toContain('var _t5: number = null!;');
-      expect(result).toContain('var _t6: number = null!;');
+      expect(result).toContain('var _t3: boolean = null! as boolean;');
+      expect(result).toContain('var _t4: boolean = null! as boolean;');
+      expect(result).toContain('var _t5: boolean = null! as boolean;');
+      expect(result).toContain('var _t6: boolean = null! as boolean;');
       expect(result).toContain('var _t7: number = null!;');
       expect(result).toContain('"" + (_t2) + (_t3) + (_t4) + (_t5) + (_t6) + (_t7)');
     });
@@ -1576,12 +1582,12 @@ describe('type check blocks', () => {
       `;
 
       const result = tcb(TEMPLATE);
-      expect(result).toContain('for (const item of ((this).items)!) { var _t1 = item;');
+      expect(result).toContain('for (const _t1 of ((this).items)!) {');
       expect(result).toContain('var _t2: number = null!;');
-      expect(result).toContain('var _t3: number = null!;');
-      expect(result).toContain('var _t4: number = null!;');
-      expect(result).toContain('var _t5: number = null!;');
-      expect(result).toContain('var _t6: number = null!;');
+      expect(result).toContain('var _t3: boolean = null! as boolean;');
+      expect(result).toContain('var _t4: boolean = null! as boolean;');
+      expect(result).toContain('var _t5: boolean = null! as boolean;');
+      expect(result).toContain('var _t6: boolean = null! as boolean;');
       expect(result).toContain('var _t7: number = null!;');
       expect(result).toContain('"" + (_t2) + (_t3) + (_t4) + (_t5) + (_t6) + (_t7)');
     });
@@ -1592,7 +1598,7 @@ describe('type check blocks', () => {
       `;
 
       const result = tcb(TEMPLATE);
-      expect(result).toContain('for (const item of ((this).items)!) { var _t1 = item;');
+      expect(result).toContain('for (const _t1 of ((this).items)!) {');
       expect(result).toContain('var _t2: number = null!;');
       expect(result).toContain('"" + (((this).$index)) + (_t2)');
     });
@@ -1609,20 +1615,16 @@ describe('type check blocks', () => {
       `;
 
       const result = tcb(TEMPLATE);
-      expect(result).toContain(
-          'for (const item of ((this).items)!) { var _t1 = item; var _t2: number = null!;');
+      expect(result).toContain('for (const _t1 of ((this).items)!) { var _t2: number = null!;');
       expect(result).toContain('"" + (_t1) + (_t2)');
-      expect(result).toContain(
-          'for (const inner of ((_t1).items)!) { var _t8 = inner; var _t9: number = null!;');
-      expect(result).toContain('"" + (_t1) + (_t2) + (_t8) + (_t9)');
+      expect(result).toContain('for (const _t3 of ((_t1).items)!) { var _t4: number = null!;');
+      expect(result).toContain('"" + (_t1) + (_t2) + (_t3) + (_t4)');
     });
 
     it('should generate the tracking expression of a for loop', () => {
       const result = tcb(`@for (item of items; track trackingFn($index, item, prop)) {}`);
-
-      expect(result).toContain(
-          'for (const item of ((this).items)!) { var _t1: number = null!; var _t2 = item;');
-      expect(result).toContain('(this).trackingFn(_t1, _t2, ((this).prop));');
+      expect(result).toContain('for (const _t1 of ((this).items)!) { var _t2: number = null!;');
+      expect(result).toContain('(this).trackingFn(_t2, _t1, ((this).prop));');
     });
   });
 });

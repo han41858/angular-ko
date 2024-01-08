@@ -146,9 +146,9 @@ Now that we have the basic structure for the component, let’s learn more about
 #### 상태
 
 <!--
-When defining data that you want the component to manage, this can be accomplished by declaring it by defining [class fields](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields).
+When defining data that you want the component to manage, this can be accomplished by declaring it by defining [class fields](https://www.typescriptlang.org/docs/handbook/2/classes.html#fields).
 
-In the example of a `todo-list-item.component.ts`, there are two properties we want to track: `taskTitle` and `isComplete`. Using the [class field syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields), they can be defined as follows:
+In the example of a `todo-list-item.component.ts`, there are two properties we want to track: `taskTitle` and `isComplete`. Using the [class field syntax](https://www.typescriptlang.org/docs/handbook/2/classes.html#fields), they can be defined as follows:
 
 ```ts
 // 📄 todo-list-item.component.ts
@@ -159,10 +159,10 @@ export class TodoList {
 }
 ```
 -->
-컴포넌트가 관리해야할 데이터가 있다면 [클래스 필드](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields)로 선언하면 됩니다.
+컴포넌트가 관리해야할 데이터가 있다면 [클래스 필드](https://www.typescriptlang.org/docs/handbook/2/classes.html#fields)로 선언하면 됩니다.
 
 `todo-list-item.component.ts` 예제에서 관리하려는 프로퍼티는 `taskTitle`, `isComplete` 이렇게 2개 입니다.
-그래서 [클래스 필드 문법](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields)으로 이 프로퍼티들을 클래스에 선언했습니다:
+그래서 [클래스 필드 문법](https://www.typescriptlang.org/docs/handbook/2/classes.html#fields)으로 이 프로퍼티들을 클래스에 선언했습니다:
 
 ```ts
 // 📄 todo-list-item.component.ts
@@ -577,8 +577,8 @@ import { Component } from '@angular/core';
 import { CalculatorService } from './calculator.service';
 
 @Component({
-  selector: 'app-receipt’,
-  template: `<p>The total is {{ totalCost }}</h1>`,
+  selector: 'app-receipt',
+  template: `<h1>The total is {{ totalCost }}</h1>`,
 })
 export class Receipt {
   private calculatorService = inject(CalculatorService);
@@ -621,7 +621,7 @@ import { CalculatorService } from './calculator.service';
 
 @Component({
   selector: 'app-receipt',
-  template: `<p>The total is {{ totalCost }}</h1>`,
+  template: `<h1>The total is {{ totalCost }}</h1>`,
 })
 export class Receipt {
   private calculatorService = inject(CalculatorService);

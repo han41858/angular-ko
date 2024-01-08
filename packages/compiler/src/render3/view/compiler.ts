@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+
 import {convertPropertyBinding} from '../../compiler_util/expression_converter';
 import {ConstantPool} from '../../constant_pool';
 import * as core from '../../core';
@@ -118,6 +119,12 @@ function addFeatures(
       break;
     }
   }
+  // Note: host directives feature needs to be inserted before the
+  // inheritance feature to ensure the correct execution order.
+  if (meta.hostDirectives?.length) {
+    features.push(o.importExpr(R3.HostDirectivesFeature).callFn([createHostDirectivesFeatureArg(
+        meta.hostDirectives)]));
+  }
   if (meta.usesInheritance) {
     features.push(o.importExpr(R3.InheritDefinitionFeature));
   }
@@ -130,10 +137,6 @@ function addFeatures(
   // TODO: better way of differentiating component vs directive metadata.
   if (meta.hasOwnProperty('template') && meta.isStandalone) {
     features.push(o.importExpr(R3.StandaloneFeature));
-  }
-  if (meta.hostDirectives?.length) {
-    features.push(o.importExpr(R3.HostDirectivesFeature).callFn([createHostDirectivesFeatureArg(
-        meta.hostDirectives)]));
   }
   if (features.length) {
     definitionMap.set('features', o.literalArr(features));
@@ -507,14 +510,18 @@ function createBaseDirectiveTypeParams(meta: R3DirectiveMetadata): o.Type[] {
 function getInputsTypeExpression(meta: R3DirectiveMetadata): o.Expression {
   return o.literalMap(Object.keys(meta.inputs).map(key => {
     const value = meta.inputs[key];
-    return {
-      key,
-      value: o.literalMap([
-        {key: 'alias', value: o.literal(value.bindingPropertyName), quoted: true},
-        {key: 'required', value: o.literal(value.required), quoted: true}
-      ]),
-      quoted: true
-    };
+    const values = [
+      {key: 'alias', value: o.literal(value.bindingPropertyName), quoted: true},
+      {key: 'required', value: o.literal(value.required), quoted: true},
+    ];
+
+    // TODO(legacy-partial-output-inputs): Consider always emitting this information,
+    // or leaving it as is.
+    if (value.isSignal) {
+      values.push({key: 'isSignal', value: o.literal(value.isSignal), quoted: true});
+    }
+
+    return {key, value: o.literalMap(values), quoted: true};
   }));
 }
 
@@ -600,6 +607,7 @@ function createHostBindingsFunction(
     const hostJob = ingestHostBinding(
         {
           componentName: name,
+          componentSelector: selector,
           properties: bindings,
           events: eventBindings,
           attributes: hostBindingsMetadata.attributes,
@@ -616,6 +624,10 @@ function createHostBindingsFunction(
 
     return emitHostBindingFunction(hostJob);
   }
+
+  let bindingId = 0;
+  const getNextBindingId = () => `${bindingId++}`;
+
   const bindingContext = o.variable(CONTEXT_NAME);
   const styleBuilder = new StylingBuilder(bindingContext);
 
@@ -679,7 +691,7 @@ function createHostBindingsFunction(
   for (const binding of allOtherBindings) {
     // resolve literal arrays and literal objects
     const value = binding.expression.visit(getValueConverter());
-    const bindingExpr = bindingFn(bindingContext, value);
+    const bindingExpr = bindingFn(bindingContext, value, getNextBindingId);
 
     const {bindingName, instruction, isAttribute} = getBindingNameAndInstruction(binding);
 
@@ -766,10 +778,13 @@ function createHostBindingsFunction(
         totalHostVarsCount +=
             Math.max(call.allocateBindingSlots - MIN_STYLING_BINDING_SLOTS_REQUIRED, 0);
 
+        const {params, stmts} =
+            convertStylingCall(call, bindingContext, bindingFn, getNextBindingId);
+        updateVariables.push(...stmts);
         updateInstructions.push({
           reference: instruction.reference,
-          paramsOrFn: convertStylingCall(call, bindingContext, bindingFn),
-          span: null
+          paramsOrFn: params,
+          span: null,
         });
       }
     });
@@ -799,13 +814,22 @@ function createHostBindingsFunction(
   return null;
 }
 
-function bindingFn(implicit: any, value: AST) {
-  return convertPropertyBinding(null, implicit, value, 'b');
+function bindingFn(implicit: any, value: AST, getNextBindingIdFn: () => string) {
+  return convertPropertyBinding(null, implicit, value, getNextBindingIdFn());
 }
 
 function convertStylingCall(
-    call: StylingInstructionCall, bindingContext: any, bindingFn: Function) {
-  return call.params(value => bindingFn(bindingContext, value).currValExpr);
+    call: StylingInstructionCall, bindingContext: any, bindingFn: Function,
+    getNextBindingIdFn: () => string) {
+  const stmts: o.Statement[] = [];
+  const params = call.params(value => {
+    const result = bindingFn(bindingContext, value, getNextBindingIdFn);
+    if (Array.isArray(result.stmts) && result.stmts.length > 0) {
+      stmts.push(...result.stmts);
+    }
+    return result.currValExpr;
+  });
+  return {params, stmts};
 }
 
 function getBindingNameAndInstruction(binding: ParsedProperty):
@@ -961,6 +985,19 @@ function compileStyles(styles: string[], selector: string, hostSelector: string)
   return styles.map(style => {
     return shadowCss!.shimCssText(style, selector, hostSelector);
   });
+}
+
+/**
+ * Encapsulates a CSS stylesheet with emulated view encapsulation.
+ * This allows a stylesheet to be used with an Angular component that
+ * is using the `ViewEncapsulation.Emulated` mode.
+ *
+ * @param style The content of a CSS stylesheet.
+ * @returns The encapsulated content for the style.
+ */
+export function encapsulateStyle(style: string): string {
+  const shadowCss = new ShadowCss();
+  return shadowCss.shimCssText(style, CONTENT_ATTR, HOST_ATTR);
 }
 
 function createHostDirectivesType(meta: R3DirectiveMetadata): o.Type {

@@ -121,6 +121,40 @@ describe('control flow - for', () => {
     expect(fixture.nativeElement.textContent).toBe('1|2|3|');
   });
 
+  it('should be able to access a directive property that is reassigned in a lifecycle hook', () => {
+    @Directive({
+      selector: '[dir]',
+      exportAs: 'dir',
+      standalone: true,
+    })
+    class Dir {
+      data = [1];
+
+      ngDoCheck() {
+        this.data = [2];
+      }
+    }
+
+    @Component({
+      selector: 'app-root',
+      standalone: true,
+      imports: [Dir],
+      template: `
+        <div [dir] #dir="dir"></div>
+
+        @for (x of dir.data; track $index) {
+          {{x}}
+        }
+      `,
+    })
+    class TestComponent {
+    }
+
+    const fixture = TestBed.createComponent(TestComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent.trim()).toBe('2');
+  });
+
   describe('trackBy', () => {
     it('should have access to the host context in the track function', () => {
       let offsetReads = 0;
@@ -277,6 +311,52 @@ describe('control flow - for', () => {
       fixture.detectChanges();
       expect(fixture.nativeElement.textContent).toBe('5(0)|3(1)|7(2)|');
     });
+
+    it('should correctly attach and detach views with duplicated keys', () => {
+      const BEFORE = [
+        {'name': 'Task 14', 'id': 14},
+        {'name': 'Task 14', 'id': 14},
+        {'name': 'Task 70', 'id': 70},
+        {'name': 'Task 34', 'id': 34},
+
+      ];
+
+      const AFTER = [
+        {'name': 'Task 70', 'id': 70},
+        {'name': 'Task 14', 'id': 14},
+        {'name': 'Task 28', 'id': 28},
+      ];
+
+      @Component({
+        standalone: true,
+        template: ``,
+        selector: 'child-cmp',
+      })
+      class ChildCmp {
+      }
+
+      @Component({
+        standalone: true,
+        imports: [ChildCmp],
+        template: `
+          @for(task of tasks; track task.id) {
+            <child-cmp/>
+          }
+        `,
+      })
+      class TestComponent {
+        tasks = BEFORE;
+      }
+
+      const fixture = TestBed.createComponent(TestComponent);
+      fixture.detectChanges();
+
+      const cmp = fixture.componentInstance;
+      const nativeElement = fixture.debugElement.nativeElement;
+      cmp.tasks = AFTER;
+      fixture.detectChanges();
+      expect(nativeElement.querySelectorAll('child-cmp').length).toBe(3);
+    });
   });
 
   describe('content projection', () => {
@@ -308,6 +388,71 @@ describe('control flow - for', () => {
       expect(fixture.nativeElement.textContent).toBe('Main: Before  After Slot: 123');
     });
 
+    it('should project an @empty block with a single root node into the root node slot', () => {
+      @Component({
+        standalone: true,
+        selector: 'test',
+        template: 'Main: <ng-content/> Slot: <ng-content select="[foo]"/>',
+      })
+      class TestComponent {
+      }
+
+      @Component({
+        standalone: true,
+        imports: [TestComponent],
+        template: `
+        <test>Before @for (item of items; track $index) {} @empty {
+          <span foo>Empty</span>
+        } After</test>
+      `
+      })
+      class App {
+        items = [];
+      }
+
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.textContent).toBe('Main: Before  After Slot: Empty');
+    });
+
+    it('should allow @for and @empty blocks to be projected into different slots', () => {
+      @Component({
+        standalone: true,
+        selector: 'test',
+        template:
+            'Main: <ng-content/> Loop slot: <ng-content select="[loop]"/> Empty slot: <ng-content select="[empty]"/>',
+      })
+      class TestComponent {
+      }
+
+      @Component({
+        standalone: true,
+        imports: [TestComponent],
+        template: `
+        <test>Before @for (item of items; track $index) {
+          <span loop>{{item}}</span>
+        } @empty {
+          <span empty>Empty</span>
+        } After</test>
+      `
+      })
+      class App {
+        items = [1, 2, 3];
+      }
+
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.textContent)
+          .toBe('Main: Before  After Loop slot: 123 Empty slot: ');
+
+      fixture.componentInstance.items = [];
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent)
+          .toBe('Main: Before  After Loop slot:  Empty slot: Empty');
+    });
+
     it('should project an @for with multiple root nodes into the catch-all slot', () => {
       @Component({
         standalone: true,
@@ -335,6 +480,37 @@ describe('control flow - for', () => {
       fixture.detectChanges();
 
       expect(fixture.nativeElement.textContent).toBe('Main: Before one1two1one2two2 After Slot: ');
+    });
+
+    it('should project an @for with an ng-container root node', () => {
+      @Component({
+        standalone: true,
+        selector: 'test',
+        template: 'Main: <ng-content/> Slot: <ng-content select="[foo]"/>',
+      })
+      class TestComponent {
+      }
+
+      @Component({
+        standalone: true,
+        imports: [TestComponent],
+        template: `
+        <test>Before @for (item of items; track $index) {
+          <ng-container foo>
+            <span>{{item}}</span>
+            <span>|</span>
+          </ng-container>
+        } After</test>
+      `
+      })
+      class App {
+        items = [1, 2, 3];
+      }
+
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.textContent).toBe('Main: Before  After Slot: 1|2|3|');
     });
 
     // Right now the template compiler doesn't collect comment nodes.

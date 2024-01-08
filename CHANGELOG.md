@@ -1,3 +1,412 @@
+<a name="17.1.0-next.5"></a>
+# 17.1.0-next.5 (2023-12-21)
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [3a689c2050](https://github.com/angular/angular/commit/3a689c20509ed5972b3831988fc0014d293d0cc3) | fix | correctly intercept index in loop tracking function ([#53604](https://github.com/angular/angular/pull/53604)) |
+| [df8a825910](https://github.com/angular/angular/commit/df8a825910951bebf34a4eede42f3ce5cd3e6fb7) | fix | project empty block root node ([#53620](https://github.com/angular/angular/pull/53620)) |
+| [478d622265](https://github.com/angular/angular/commit/478d6222650884478314985e3d5132587c4f670c) | fix | project empty block root node in template pipeline ([#53620](https://github.com/angular/angular/pull/53620)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [aecb675fa5](https://github.com/angular/angular/commit/aecb675fa5059e510e0223e00fa114d92e799b04) | fix | avoid repeated work when parsing version ([#53598](https://github.com/angular/angular/pull/53598)) |
+| [872e7f25fe](https://github.com/angular/angular/commit/872e7f25fea8a01f980e4e406ad382a9e187ce5c) | fix | tree shake version class ([#53598](https://github.com/angular/angular/pull/53598)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [d49333edc3](https://github.com/angular/angular/commit/d49333edc3fe170c57d953aa2d8df58d0db379e0) | fix | cf migration - detect and error when result is invalid i18n nesting ([#53638](https://github.com/angular/angular/pull/53638)) ([#53639](https://github.com/angular/angular/pull/53639)) |
+| [8e2178792d](https://github.com/angular/angular/commit/8e2178792d474e84817c27851cd6b9600deb15b5) | fix | cf migration - ensure full check runs for all imports ([#53637](https://github.com/angular/angular/pull/53637)) |
+| [22b95de9bc](https://github.com/angular/angular/commit/22b95de9bcb92267b8f848a1aafa71af70d5577b) | fix | cf migration - fix bug in attribute formatting ([#53636](https://github.com/angular/angular/pull/53636)) |
+| [b40bb22a66](https://github.com/angular/angular/commit/b40bb22a66a3c2ae478778f3ef0be0ce971a1b2c) | fix | cf migration - improve import declaration handling ([#53622](https://github.com/angular/angular/pull/53622)) |
+| [8bf752539f](https://github.com/angular/angular/commit/8bf752539f6b4b5955e3d61a76423910af55181b) | fix | cf migration - preserve indentation on attribute strings ([#53625](https://github.com/angular/angular/pull/53625)) |
+| [7bb312fcf6](https://github.com/angular/angular/commit/7bb312fcf612c57d6606ae14f21707f10d8ff9ce) | fix | cf migration - stop removing empty newlines from i18n blocks ([#53578](https://github.com/angular/angular/pull/53578)) |
+| [db6b4a6bc4](https://github.com/angular/angular/commit/db6b4a6bc479b0fac0a4a99e1a202c38d1ea8944) | fix | Fix cf migration bug with parsing for loop conditions properly ([#53558](https://github.com/angular/angular/pull/53558)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [502f300757](https://github.com/angular/angular/commit/502f3007575a5445c2876c92548415cb003582b1) | fix | Should not freeze original object used for route data ([#53635](https://github.com/angular/angular/pull/53635)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.8"></a>
+# 17.0.8 (2023-12-21)
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [de5c9ca8e9](https://github.com/angular/angular/commit/de5c9ca8e9a026ad752aab348bd137f647cc3cc9) | fix | correctly intercept index in loop tracking function ([#53604](https://github.com/angular/angular/pull/53604)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [d79489255a](https://github.com/angular/angular/commit/d79489255a48a55b136746856af0d8be51bbe665) | fix | avoid repeated work when parsing version ([#53598](https://github.com/angular/angular/pull/53598)) |
+| [513fee871e](https://github.com/angular/angular/commit/513fee871eb5d1c8a12bfe64878276b1d9c07705) | fix | tree shake version class ([#53598](https://github.com/angular/angular/pull/53598)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [eb7c29c7b6](https://github.com/angular/angular/commit/eb7c29c7b64a64853c7f7691912835240b62dfeb) | fix | cf migration - detect and error when result is invalid i18n nesting ([#53638](https://github.com/angular/angular/pull/53638)) |
+| [ed936ba0e9](https://github.com/angular/angular/commit/ed936ba0e9d5323095aa486dc58d8b088b4d64cc) | fix | cf migration - detect and error when result is invalid i18n nesting ([#53638](https://github.com/angular/angular/pull/53638)) ([#53639](https://github.com/angular/angular/pull/53639)) |
+| [5c2f2539e2](https://github.com/angular/angular/commit/5c2f2539e27bd18fd586c5977d853cd827f7b004) | fix | cf migration - ensure full check runs for all imports ([#53637](https://github.com/angular/angular/pull/53637)) |
+| [817dc1b27f](https://github.com/angular/angular/commit/817dc1b27fcf32db8f8d8417bdd46a1763460f11) | fix | cf migration - fix bug in attribute formatting ([#53636](https://github.com/angular/angular/pull/53636)) |
+| [7ac60bab9a](https://github.com/angular/angular/commit/7ac60bab9a4bb7a5af037a2de47339bd7837b157) | fix | cf migration - improve import declaration handling ([#53622](https://github.com/angular/angular/pull/53622)) |
+| [c3f85e51a9](https://github.com/angular/angular/commit/c3f85e51a970aa458b920835573fa4e392e6f909) | fix | cf migration - preserve indentation on attribute strings ([#53625](https://github.com/angular/angular/pull/53625)) |
+| [e73205ff5a](https://github.com/angular/angular/commit/e73205ff5ae4c382924266520f271b56972a0db6) | fix | cf migration - stop removing empty newlines from i18n blocks ([#53578](https://github.com/angular/angular/pull/53578)) |
+| [886aa7b2a9](https://github.com/angular/angular/commit/886aa7b2a99a301eb6e35dc1a59ef918f0bea348) | fix | Fix cf migration bug with parsing for loop conditions properly ([#53558](https://github.com/angular/angular/pull/53558)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [0696ab6a5b](https://github.com/angular/angular/commit/0696ab6a5bea8acd6dafde488151150bf3332b79) | fix | Should not freeze original object used for route data ([#53635](https://github.com/angular/angular/pull/53635)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.1.0-next.4"></a>
+# 17.1.0-next.4 (2023-12-13)
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [b98d8f79ed](https://github.com/angular/angular/commit/b98d8f79ed4979fb91661dbdfb6266a917b41474) | fix | handle ambient types in input transform function ([#51474](https://github.com/angular/angular/pull/51474)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [9e5456912a](https://github.com/angular/angular/commit/9e5456912a699315f1f5e8458d35df946c01dc12) | fix | generate less type checking code in for loops ([#53515](https://github.com/angular/angular/pull/53515)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [2565121851](https://github.com/angular/angular/commit/25651218512becb3a491b1c94d643a5066a6d3cb) | fix | Avoid refreshing a host view twice when using transplanted views ([#53021](https://github.com/angular/angular/pull/53021)) |
+| [629343f247](https://github.com/angular/angular/commit/629343f24741760e76d98ea1005debaf4775bfc7) | fix | Multiple subscribers to ApplicationRef.isStable should all see values ([#53541](https://github.com/angular/angular/pull/53541)) |
+| [42f4f70e97](https://github.com/angular/angular/commit/42f4f70e97b47f7ffcf15e8af2c1a3fa3f393903) | fix | remove signal equality check short-circuit ([#53446](https://github.com/angular/angular/pull/53446)) |
+| [f35adcb9b2](https://github.com/angular/angular/commit/f35adcb9b255741515d54bbce694f4cd34aac249) | fix | update feature usage marker ([#53542](https://github.com/angular/angular/pull/53542)) |
+| [1fc5442947](https://github.com/angular/angular/commit/1fc5442947b07be7c11fe7c79b9e69f9458c8108) | perf | avoid changes Observable creation on QueryList ([#53498](https://github.com/angular/angular/pull/53498)) |
+| [e3a6bf9b6c](https://github.com/angular/angular/commit/e3a6bf9b6c3bef03df9bfc8f05b817bc875cbad6) | perf | optimize memory allocation when reconcilling lists ([#52245](https://github.com/angular/angular/pull/52245)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [a02767956a](https://github.com/angular/angular/commit/a02767956a00e0b44b690411f01584f6660c83ea) | fix | CF Migration - ensure bound ngIfElse cases ignore line breaks ([#53435](https://github.com/angular/angular/pull/53435)) |
+| [6aa1bb78e8](https://github.com/angular/angular/commit/6aa1bb78e8b9ca866b3c2d84f4005a0e67f2b6bc) | fix | cf migration - undo changes when html fails to parse post migration ([#53530](https://github.com/angular/angular/pull/53530)) |
+| [cc02852ac4](https://github.com/angular/angular/commit/cc02852ac44bfea13e8b9d5768694a094fc2c4b5) | fix | CF migration only remove newlines of changed template content ([#53508](https://github.com/angular/angular/pull/53508)) |
+| [ce1076785c](https://github.com/angular/angular/commit/ce1076785c98ecc9660637cafa4a62a63be8d315) | fix | cf migration validate structure of ngswitch before migrating ([#53530](https://github.com/angular/angular/pull/53530)) |
+| [1f5c8bf116](https://github.com/angular/angular/commit/1f5c8bf116783c25234ab7fa301a0be842e58007) | fix | ensure we do not overwrite prior template replacements in migration ([#53393](https://github.com/angular/angular/pull/53393)) |
+| [79f791543b](https://github.com/angular/angular/commit/79f791543b607eea1bb6a28b9c744760ba4fd028) | fix | fix cf migration import removal when errors occur ([#53502](https://github.com/angular/angular/pull/53502)) |
+### platform-browser
+| Commit | Type | Description |
+| -- | -- | -- |
+| [fdb9cb7a5b](https://github.com/angular/angular/commit/fdb9cb7a5be4695abaa60efc89ecd50ddb9e9e6e) | fix | Get correct base path when using "." as base href when serving from the file:// protocol. ([#53547](https://github.com/angular/angular/pull/53547)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [48c5041687](https://github.com/angular/angular/commit/48c50416872313f23d2759232c990cf8d2de6996) | fix | provide more actionable error message when route is not matched in production mode ([#53523](https://github.com/angular/angular/pull/53523)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.7"></a>
+# 17.0.7 (2023-12-13)
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [4fd5409090](https://github.com/angular/angular/commit/4fd5409090b5556ecde3b4e2e1f09955e71443f4) | fix | handle ambient types in input transform function ([#51474](https://github.com/angular/angular/pull/51474)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [a603338fe8](https://github.com/angular/angular/commit/a603338fe800a133c64b1573f2f805978c947725) | fix | generate less type checking code in for loops ([#53515](https://github.com/angular/angular/pull/53515)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [58ed76be93](https://github.com/angular/angular/commit/58ed76be937c23713e05609da3195ebafeb49794) | fix | Avoid refreshing a host view twice when using transplanted views ([#53021](https://github.com/angular/angular/pull/53021)) |
+| [c16b5e8290](https://github.com/angular/angular/commit/c16b5e82901b28b8ca0b72009c56aaeca68c58b0) | fix | Multiple subscribers to ApplicationRef.isStable should all see values ([#53541](https://github.com/angular/angular/pull/53541)) |
+| [17dbf8b8e2](https://github.com/angular/angular/commit/17dbf8b8e2a0979515d07341b4a869a78fab8583) | fix | remove signal equality check short-circuit ([#53446](https://github.com/angular/angular/pull/53446)) |
+| [5b4add27b6](https://github.com/angular/angular/commit/5b4add27b6d9d3ba55740818dc00659b6d462b87) | fix | update feature usage marker ([#53542](https://github.com/angular/angular/pull/53542)) |
+| [68d111c841](https://github.com/angular/angular/commit/68d111c8416dff43a83bb9de1241b4847d80eae7) | perf | avoid changes Observable creation on QueryList ([#53498](https://github.com/angular/angular/pull/53498)) |
+| [044cb553b4](https://github.com/angular/angular/commit/044cb553b4b8ed2f5f9a80131c5da84b3c964d9f) | perf | optimize memory allocation when reconcilling lists ([#52245](https://github.com/angular/angular/pull/52245)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [96ab999698](https://github.com/angular/angular/commit/96ab999698ca186b8e2b95177ea6f2c84e43628a) | fix | CF Migration - ensure bound ngIfElse cases ignore line breaks ([#53435](https://github.com/angular/angular/pull/53435)) |
+| [c9a1c6f1c7](https://github.com/angular/angular/commit/c9a1c6f1c7455431755dc31e00d72864931bf819) | fix | cf migration - undo changes when html fails to parse post migration ([#53530](https://github.com/angular/angular/pull/53530)) |
+| [b75aca1d74](https://github.com/angular/angular/commit/b75aca1d747e1bb55d4f3f6996bb2cb363e34f5b) | fix | CF migration only remove newlines of changed template content ([#53508](https://github.com/angular/angular/pull/53508)) |
+| [e88a12d5b3](https://github.com/angular/angular/commit/e88a12d5b3cf0e7c55c15c6820362d4d1e25ecaa) | fix | cf migration validate structure of ngswitch before migrating ([#53530](https://github.com/angular/angular/pull/53530)) |
+| [543df3dca5](https://github.com/angular/angular/commit/543df3dca52597aae298a01271337949d891dc65) | fix | ensure we do not overwrite prior template replacements in migration ([#53393](https://github.com/angular/angular/pull/53393)) |
+| [d232ea143f](https://github.com/angular/angular/commit/d232ea143f99fffc190c126d01920e965ffde3a3) | fix | fix cf migration import removal when errors occur ([#53502](https://github.com/angular/angular/pull/53502)) |
+### platform-browser
+| Commit | Type | Description |
+| -- | -- | -- |
+| [d5c631bf36](https://github.com/angular/angular/commit/d5c631bf3663b414b6d7734352804e594bfa2772) | fix | Get correct base path when using "." as base href when serving from the file:// protocol. ([#53547](https://github.com/angular/angular/pull/53547)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [e750e4edcf](https://github.com/angular/angular/commit/e750e4edcfe812bcee82d4a2f53fd8acd8792f08) | fix | provide more actionable error message when route is not matched in production mode ([#53523](https://github.com/angular/angular/pull/53523)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.1.0-next.3"></a>
+# 17.1.0-next.3 (2023-12-06)
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [5613051a8b](https://github.com/angular/angular/commit/5613051a8bd2626ae347292807b2bf21085c4c02) | fix | allow TS jsDocParsingMode host option to be programmatically set again ([#53292](https://github.com/angular/angular/pull/53292)) |
+| [77ac4cd324](https://github.com/angular/angular/commit/77ac4cd32491d0c994cb4ea50372601c955cec3d) | fix | generate proper code for nullish coalescing in styling host bindings ([#53305](https://github.com/angular/angular/pull/53305)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [e620b3a724](https://github.com/angular/angular/commit/e620b3a724cb615af24b7779c0ab492d24efb8cc) | fix | add compiler option to disable control flow content projection diagnostic ([#53311](https://github.com/angular/angular/pull/53311)) |
+| [d7a83f9521](https://github.com/angular/angular/commit/d7a83f95213cdd5d3ceefbc95fa1190856b0198c) | fix | avoid conflicts with built-in global variables in for loop blocks ([#53319](https://github.com/angular/angular/pull/53319)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [77939a3bd3](https://github.com/angular/angular/commit/77939a3bd39073d07e24797a4632ec2d2a6b92e0) | fix | cleanup signal consumers for all views ([#53351](https://github.com/angular/angular/pull/53351)) |
+| [899f6c4a12](https://github.com/angular/angular/commit/899f6c4a12127f87aeedf47ee128ce949ebe717c) | fix | handle hydration of multiple nodes projected in a single slot ([#53270](https://github.com/angular/angular/pull/53270)) |
+| [4b23221b4e](https://github.com/angular/angular/commit/4b23221b4e5f8be7bcffc8ace255143653550d3d) | fix | support hydration for cases when content is re-projected using ng-template ([#53304](https://github.com/angular/angular/pull/53304)) |
+| [82609d471c](https://github.com/angular/angular/commit/82609d471c9802b847a5654918eca1ba3ebb29b3) | fix | support swapping hydrated views in `@for` loops ([#53274](https://github.com/angular/angular/pull/53274)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [1c1e8c477b](https://github.com/angular/angular/commit/1c1e8c477b8d5c8deecf05744bd1d5f7c86d2e14) | fix | CF migration - ensure NgIfElse attributes are properly removed ([#53298](https://github.com/angular/angular/pull/53298)) |
+| [2998d482dd](https://github.com/angular/angular/commit/2998d482dd3f1f5ff7f08260c3947ded74dac126) | fix | CF Migration - Fix case of aliases on i18n ng-templates preventing removal ([#53299](https://github.com/angular/angular/pull/53299)) |
+| [aad5e5bd0e](https://github.com/angular/angular/commit/aad5e5bd0e7f6581f51fc3a23c98a7f11219a8f8) | fix | CF Migration add support for ngIf with just a then ([#53297](https://github.com/angular/angular/pull/53297)) |
+| [6f75471307](https://github.com/angular/angular/commit/6f75471307a9458d0cffd0ee2bbf4190640c3c3a) | fix | CF Migration fix missing alias for bound ngifs ([#53296](https://github.com/angular/angular/pull/53296)) |
+| [2a5a8f6f05](https://github.com/angular/angular/commit/2a5a8f6f052961c010a68a05d868f50220f2fcf2) | fix | Change CF Migration ng-template placeholder generation and handling ([#53394](https://github.com/angular/angular/pull/53394)) |
+| [03e2f1bb25](https://github.com/angular/angular/commit/03e2f1bb25693d1a5f4e53fc4f4cd1937cf6bda1) | fix | fix regexp for else and then in cf migration ([#53257](https://github.com/angular/angular/pull/53257)) |
+| [f4a96a9160](https://github.com/angular/angular/commit/f4a96a9160927903c38e172f6375c4bc5f8e0905) | fix | handle aliases on bound ngIf migrations ([#53261](https://github.com/angular/angular/pull/53261)) |
+| [5a0ed28c9d](https://github.com/angular/angular/commit/5a0ed28c9d3f1c7507feee482e37c3346d52b033) | fix | handle nested ng-template replacement safely in CF migration ([#53368](https://github.com/angular/angular/pull/53368)) |
+| [01b18a4248](https://github.com/angular/angular/commit/01b18a4248f068df33c0ca8a2d62ef2fc69f941c) | fix | handle templates outside of component in cf migration ([#53368](https://github.com/angular/angular/pull/53368)) |
+| [9834fd2738](https://github.com/angular/angular/commit/9834fd27387ed5edc65bed56aa003fc45d250420) | fix | remove setting that removes comments in CF migration ([#53350](https://github.com/angular/angular/pull/53350)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [5c1d441029](https://github.com/angular/angular/commit/5c1d4410298e20cb03d7a1ddf7931538b6a181b4) | feat | Add info property to `NavigationExtras` ([#53303](https://github.com/angular/angular/pull/53303)) |
+| [50d7916278](https://github.com/angular/angular/commit/50d79162785bb8d3e158a7a4a3733f4c75d3b127) | feat | Add router configuration to resolve navigation promise on error ([#48910](https://github.com/angular/angular/pull/48910)) |
+| [1940280d27](https://github.com/angular/angular/commit/1940280d27bb3ece585d6345dbd742d208f46912) | fix | Ensure canMatch guards run on wildcard routes ([#53239](https://github.com/angular/angular/pull/53239)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.6"></a>
+# 17.0.6 (2023-12-06)
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [a2e5f483f5](https://github.com/angular/angular/commit/a2e5f483f5a869c0cca205f092049e252a02b710) | fix | generate proper code for nullish coalescing in styling host bindings ([#53305](https://github.com/angular/angular/pull/53305)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [66ecf4c274](https://github.com/angular/angular/commit/66ecf4c2748b43b7e53af00499b153bbe70dd684) | fix | add compiler option to disable control flow content projection diagnostic ([#53387](https://github.com/angular/angular/pull/53387)) |
+| [74e6ce5d23](https://github.com/angular/angular/commit/74e6ce5d233c8763b6c437fab5d81d7b89ae6cd4) | fix | add diagnostic for control flow that prevents content projection ([#53387](https://github.com/angular/angular/pull/53387)) |
+| [6ec7a42b95](https://github.com/angular/angular/commit/6ec7a42b9578aa34a66bb7c81ac491bb18f98941) | fix | avoid conflicts with built-in global variables in for loop blocks ([#53319](https://github.com/angular/angular/pull/53319)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [0a53f96094](https://github.com/angular/angular/commit/0a53f9609462fc59cf20c7fe1436d153c23e0412) | fix | cleanup signal consumers for all views ([#53351](https://github.com/angular/angular/pull/53351)) |
+| [4fc1581bbc](https://github.com/angular/angular/commit/4fc1581bbcd98e607eb2bbd9976c64c92a70d827) | fix | handle hydration of multiple nodes projected in a single slot ([#53270](https://github.com/angular/angular/pull/53270)) |
+| [14e66533ec](https://github.com/angular/angular/commit/14e66533ec49184723a66652253e9ae863a972e0) | fix | support hydration for cases when content is re-projected using ng-template ([#53304](https://github.com/angular/angular/pull/53304)) |
+| [8e366e8911](https://github.com/angular/angular/commit/8e366e8911434d5b91e83e215320caae72f6adf8) | fix | support swapping hydrated views in `@for` loops ([#53274](https://github.com/angular/angular/pull/53274)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [45064f1ae1](https://github.com/angular/angular/commit/45064f1ae1ceb9c5a1f1053077f77370e3e9fdb2) | fix | CF migration - ensure NgIfElse attributes are properly removed ([#53298](https://github.com/angular/angular/pull/53298)) |
+| [a6275cfa54](https://github.com/angular/angular/commit/a6275cfa54d680d6612a1c91e5d3f6b86b828fbc) | fix | CF Migration - Fix case of aliases on i18n ng-templates preventing removal ([#53299](https://github.com/angular/angular/pull/53299)) |
+| [58a96e0f50](https://github.com/angular/angular/commit/58a96e0f50f2d59376aa357188ad0792b39e4e70) | fix | CF Migration add support for ngIf with just a then ([#53297](https://github.com/angular/angular/pull/53297)) |
+| [26e40c7f89](https://github.com/angular/angular/commit/26e40c7f8916612034b03dae4f74e53b61d39d86) | fix | CF Migration fix missing alias for bound ngifs ([#53296](https://github.com/angular/angular/pull/53296)) |
+| [836aeba01d](https://github.com/angular/angular/commit/836aeba01db526676610802daff4e8ebca8cef1e) | fix | Change CF Migration ng-template placeholder generation and handling ([#53394](https://github.com/angular/angular/pull/53394)) |
+| [72d22ba7ee](https://github.com/angular/angular/commit/72d22ba7eea87e2873a765aa69b3d923b9d6cc6d) | fix | fix regexp for else and then in cf migration ([#53257](https://github.com/angular/angular/pull/53257)) |
+| [7a2facae8a](https://github.com/angular/angular/commit/7a2facae8af3240b21fc17857a770dad793b7b6d) | fix | handle aliases on bound ngIf migrations ([#53261](https://github.com/angular/angular/pull/53261)) |
+| [5104a89b30](https://github.com/angular/angular/commit/5104a89b3035fb07ce23e09974dc9998ef6932ca) | fix | handle nested ng-template replacement safely in CF migration ([#53368](https://github.com/angular/angular/pull/53368)) |
+| [2a4e3f5373](https://github.com/angular/angular/commit/2a4e3f5373dfbc2a1634d67e646c30d8bbe4fea8) | fix | handle templates outside of component in cf migration ([#53368](https://github.com/angular/angular/pull/53368)) |
+| [0db75ab5b1](https://github.com/angular/angular/commit/0db75ab5b1c8c79a0e7ca1d6094092f0cb3e3939) | fix | remove setting that removes comments in CF migration ([#53350](https://github.com/angular/angular/pull/53350)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [13ade13a15](https://github.com/angular/angular/commit/13ade13a15f0c5b5f782d2fda0f7a96b3c606198) | fix | Ensure canMatch guards run on wildcard routes ([#53239](https://github.com/angular/angular/pull/53239)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.1.0-next.2"></a>
+# 17.1.0-next.2 (2023-11-29)
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [79ff91a813](https://github.com/angular/angular/commit/79ff91a813e544929cb5eb5f9aab762a9f3d0435) | fix | allow TS jsDocParsingMode host option to be programmatically set ([#53126](https://github.com/angular/angular/pull/53126)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [4c1d69e288](https://github.com/angular/angular/commit/4c1d69e2880f22745c820eee630d10071e4fa86b) | fix | add diagnostic for control flow that prevents content projection ([#53190](https://github.com/angular/angular/pull/53190)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [58cf389d80](https://github.com/angular/angular/commit/58cf389d8095dd522a998b6b9a7d7b8da1656644) | fix | avoid stale provider info when TestBed.overrideProvider is used ([#52918](https://github.com/angular/angular/pull/52918)) |
+| [c7c7ea9813](https://github.com/angular/angular/commit/c7c7ea9813f6dcf91c096bb37d36bfe0c715a04f) | fix | inherit host directives ([#52992](https://github.com/angular/angular/pull/52992)) |
+| [b35c6731e5](https://github.com/angular/angular/commit/b35c6731e51de9c33707010fc780cbaa559be6c3) | fix | Reattached views that are dirty from a signal update should refresh ([#53001](https://github.com/angular/angular/pull/53001)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [dbca1c9d61](https://github.com/angular/angular/commit/dbca1c9d618be4d195d779ef80606c6d22f7c977) | fix | Add ngForTemplate support to control flow migration ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [53912fdf74](https://github.com/angular/angular/commit/53912fdf74e1224f95edc3dd550c51451e613c44) | fix | allows colons in ngIf else cases to migrate ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [fadfee4324](https://github.com/angular/angular/commit/fadfee43247acec7e450d5cc929a0a6780a54bd1) | fix | cf migration fix migrating empty switch default ([#53237](https://github.com/angular/angular/pull/53237)) |
+| [b2aeaf5d97](https://github.com/angular/angular/commit/b2aeaf5d97327842a5bb657e9f02bb4f1358304b) | fix | CF migration log warning when collection aliasing detected in `@for` ([#53238](https://github.com/angular/angular/pull/53238)) |
+| [c6326289f8](https://github.com/angular/angular/commit/c6326289f87089b3415ba0f3e371206b8a396b66) | fix | cf migration removes unnecessary bound ngifelse attribute ([#53236](https://github.com/angular/angular/pull/53236)) |
+| [e6f10e81d2](https://github.com/angular/angular/commit/e6f10e81d2486b5cc1f468777b7e1057d3f09dc5) | fix | control flow migration formatting fixes ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [6291c8db09](https://github.com/angular/angular/commit/6291c8db092c0ab67f6789cc03c19dfa0bdc251d) | fix | fix off by one issue with template removal in CF migration ([#53255](https://github.com/angular/angular/pull/53255)) |
+| [f1b7d40057](https://github.com/angular/angular/commit/f1b7d400575a6a02a2fc2b642c2b8c15cca9b3c4) | fix | fixes CF migration i18n ng-template offsets ([#53212](https://github.com/angular/angular/pull/53212)) |
+| [a738b48717](https://github.com/angular/angular/commit/a738b48717e16613b34c3e50480cd49f2a31858f) | fix | fixes control flow migration common module removal ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [a3599515bb](https://github.com/angular/angular/commit/a3599515bb2513fbcb2899284c7f6b4bc021ddaf) | fix | properly handle ngIfThen cases in CF migration ([#53256](https://github.com/angular/angular/pull/53256)) |
+| [8a52674faa](https://github.com/angular/angular/commit/8a52674faacefd4042726383fdf0aed59a04fb7e) | fix | Update CF migration to skip templates with duplicate ng-template names ([#53204](https://github.com/angular/angular/pull/53204)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [29e0834c4d](https://github.com/angular/angular/commit/29e0834c4deecfa8bf384b5e4359796c8123afcd) | fix | Resolvers in different parts of the route tree should be able to execute together ([#52934](https://github.com/angular/angular/pull/52934)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.5"></a>
+# 17.0.5 (2023-11-29)
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [6be88040d1](https://github.com/angular/angular/commit/6be88040d134b8c8d7efd2068296f68b8b7efbdd) | fix | avoid stale provider info when TestBed.overrideProvider is used ([#52918](https://github.com/angular/angular/pull/52918)) |
+| [dee50f1d78](https://github.com/angular/angular/commit/dee50f1d78d009f74edfa53f11fd6998b1af5441) | fix | inherit host directives ([#52992](https://github.com/angular/angular/pull/52992)) |
+| [07920d96d4](https://github.com/angular/angular/commit/07920d96d4e9831fd14ff01a3dd44af1017b28ca) | fix | Reattached views that are dirty from a signal update should refresh ([#53001](https://github.com/angular/angular/pull/53001)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [aab7fb8654](https://github.com/angular/angular/commit/aab7fb865486b94d6aabbe548894f8083f4e6cfe) | fix | Add ngForTemplate support to control flow migration ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [dbd6f386ea](https://github.com/angular/angular/commit/dbd6f386ea81e7f29bc1cb34fb8efbba8c290ea8) | fix | allows colons in ngIf else cases to migrate ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [5b9f896009](https://github.com/angular/angular/commit/5b9f896009d9c57c91d44e1cb7adf80c29fbfb4c) | fix | cf migration fix migrating empty switch default ([#53237](https://github.com/angular/angular/pull/53237)) |
+| [2b3d3b0fe1](https://github.com/angular/angular/commit/2b3d3b0fe10134739ec9982a776837a273ec8e1d) | fix | CF migration log warning when collection aliasing detected in `@for` ([#53238](https://github.com/angular/angular/pull/53238)) |
+| [dffeac8386](https://github.com/angular/angular/commit/dffeac8386bed73ef0b2337c33f122af9884bb82) | fix | cf migration removes unnecessary bound ngifelse attribute ([#53236](https://github.com/angular/angular/pull/53236)) |
+| [00cb3339ba](https://github.com/angular/angular/commit/00cb3339bab738100e4164339420f2492be91fd1) | fix | control flow migration formatting fixes ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [c22af72f75](https://github.com/angular/angular/commit/c22af72f753b9ad3886561228a0cfd938a2a6de9) | fix | fix off by one issue with template removal in CF migration ([#53255](https://github.com/angular/angular/pull/53255)) |
+| [ba6d7fe018](https://github.com/angular/angular/commit/ba6d7fe0184dd1d9dbab088d767097948b78d9a4) | fix | fixes CF migration i18n ng-template offsets ([#53212](https://github.com/angular/angular/pull/53212)) |
+| [8f6affdd64](https://github.com/angular/angular/commit/8f6affdd64c6022c6a96fddac564c0ec05c5da9b) | fix | fixes control flow migration common module removal ([#53076](https://github.com/angular/angular/pull/53076)) |
+| [6ae408847c](https://github.com/angular/angular/commit/6ae408847ce5943ff34c7432a76533b69f08cb63) | fix | properly handle ngIfThen cases in CF migration ([#53256](https://github.com/angular/angular/pull/53256)) |
+| [0fcef65cea](https://github.com/angular/angular/commit/0fcef65cea8a7687afdf90e6e0e0c396f5792606) | fix | Update CF migration to skip templates with duplicate ng-template names ([#53204](https://github.com/angular/angular/pull/53204)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [91486aaf07](https://github.com/angular/angular/commit/91486aaf0754cb38bc9846f1d9532b1a0941f53a) | fix | Resolvers in different parts of the route tree should be able to execute together ([#52934](https://github.com/angular/angular/pull/52934)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.1.0-next.1"></a>
+# 17.1.0-next.1 (2023-11-20)
+### common
+| Commit | Type | Description |
+| -- | -- | -- |
+| [29c5416d14](https://github.com/angular/angular/commit/29c5416d14638a05a894269aa5dbe67e98754418) | fix | remove `load` on image once it fails to load ([#52990](https://github.com/angular/angular/pull/52990)) |
+| [7affa57754](https://github.com/angular/angular/commit/7affa5775427e92ef6e949c879765b7c8aa172da) | fix | scan images once page is loaded ([#52991](https://github.com/angular/angular/pull/52991)) |
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [ec2d6e7b9c](https://github.com/angular/angular/commit/ec2d6e7b9c2b386247d1320ee89f8e3ac5e5a0dd) | fix | changed after checked error in for loops ([#52935](https://github.com/angular/angular/pull/52935)) |
+| [406049b95e](https://github.com/angular/angular/commit/406049b95e5234f17a7a18839ac848640f53fdde) | fix | generate i18n instructions for blocks ([#52958](https://github.com/angular/angular/pull/52958)) |
+| [d9d566d315](https://github.com/angular/angular/commit/d9d566d31540582d73201675d0b8ed901261669e) | fix | nested for loops incorrectly calculating computed variables ([#52931](https://github.com/angular/angular/pull/52931)) |
+| [5fb707f81a](https://github.com/angular/angular/commit/5fb707f81aee43751e61d2ed0861afc9b85bc85a) | fix | produce placeholder for blocks in i18n bundles ([#52958](https://github.com/angular/angular/pull/52958)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [b4d022e230](https://github.com/angular/angular/commit/b4d022e230ca141b12437949d11dc384bfe5c082) | fix | add diagnostic for control flow that prevents content projection ([#52726](https://github.com/angular/angular/pull/52726)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [ed0fbd4071](https://github.com/angular/angular/commit/ed0fbd4071339b1af22d82bac07d51c6c41790cd) | fix | cleanup loading promise when no dependencies are defined ([#53031](https://github.com/angular/angular/pull/53031)) |
+| [1ce31d819b](https://github.com/angular/angular/commit/1ce31d819b2e4f4425a41f07167a6edce98e77e1) | fix | handle local refs when `getDeferBlocks` is invoked in tests ([#52973](https://github.com/angular/angular/pull/52973)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [e33f6e0f1a](https://github.com/angular/angular/commit/e33f6e0f1a483cad908fa6d7376d62332797499c) | fix | control flow migration fails for async pipe with unboxing of observable ([#52756](https://github.com/angular/angular/pull/52756)) ([#52972](https://github.com/angular/angular/pull/52972)) |
+| [5564d020cd](https://github.com/angular/angular/commit/5564d020cdcea8273b65cf69c45c3f935195af66) | fix | Fixes control flow migration if then else case ([#53006](https://github.com/angular/angular/pull/53006)) |
+| [28f6cbf9c9](https://github.com/angular/angular/commit/28f6cbf9c91f957b4926fe34610387e1f1919d4f) | fix | fixes migrations of nested switches in control flow ([#53010](https://github.com/angular/angular/pull/53010)) |
+| [e090b48bf8](https://github.com/angular/angular/commit/e090b48bf8534761d46523be57a7889a325bcdec) | fix | tweaks to formatting in control flow migration ([#53058](https://github.com/angular/angular/pull/53058)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.4"></a>
+# 17.0.4 (2023-11-20)
+### common
+| Commit | Type | Description |
+| -- | -- | -- |
+| [7f1c55755d](https://github.com/angular/angular/commit/7f1c55755d94444aa2c07fc62c276bb158e69f24) | fix | remove `load` on image once it fails to load ([#52990](https://github.com/angular/angular/pull/52990)) |
+| [fafcb0d23f](https://github.com/angular/angular/commit/fafcb0d23f1f687a2fe5c8349b916586ffadc375) | fix | scan images once page is loaded ([#52991](https://github.com/angular/angular/pull/52991)) |
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [98376f2c09](https://github.com/angular/angular/commit/98376f2c09e9c28d1473123a2a1f4fb1c9d1cb1e) | fix | changed after checked error in for loops ([#52935](https://github.com/angular/angular/pull/52935)) |
+| [291deac663](https://github.com/angular/angular/commit/291deac6636a6f99a98dd0c9096ebe3b0547bb9e) | fix | generate i18n instructions for blocks ([#52958](https://github.com/angular/angular/pull/52958)) |
+| [49dca36880](https://github.com/angular/angular/commit/49dca36880a1c1c394533e8a94db9c5ef412ebd2) | fix | nested for loops incorrectly calculating computed variables ([#52931](https://github.com/angular/angular/pull/52931)) |
+| [f01b7183d2](https://github.com/angular/angular/commit/f01b7183d2064f41c0f5e30ee976cc91c15e06c5) | fix | produce placeholder for blocks in i18n bundles ([#52958](https://github.com/angular/angular/pull/52958)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [f671f86ac2](https://github.com/angular/angular/commit/f671f86ac28d434b2fd492ef005749fe0275ece9) | fix | add diagnostic for control flow that prevents content projection ([#52726](https://github.com/angular/angular/pull/52726)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [db1a8ebdb4](https://github.com/angular/angular/commit/db1a8ebdb4da8673107ba4ba08c42d484b733c03) | fix | cleanup loading promise when no dependencies are defined ([#53031](https://github.com/angular/angular/pull/53031)) |
+| [31a1575334](https://github.com/angular/angular/commit/31a1575334ef78822d947ed858d8365ca5665f2f) | fix | handle local refs when `getDeferBlocks` is invoked in tests ([#52973](https://github.com/angular/angular/pull/52973)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [ac9cd6108f](https://github.com/angular/angular/commit/ac9cd6108f6fe25e9c7a11db9816c6e07d241515) | fix | control flow migration fails for async pipe with unboxing of observable ([#52756](https://github.com/angular/angular/pull/52756)) ([#52972](https://github.com/angular/angular/pull/52972)) |
+| [13bf5b7007](https://github.com/angular/angular/commit/13bf5b700739aadb2e5a210441fb815a8501ad65) | fix | Fixes control flow migration if then else case ([#53006](https://github.com/angular/angular/pull/53006)) |
+| [492ad4698a](https://github.com/angular/angular/commit/492ad4698aaef51a3d24ae90f617a2ba3fae901e) | fix | fixes migrations of nested switches in control flow ([#53010](https://github.com/angular/angular/pull/53010)) |
+| [0fad36eff2](https://github.com/angular/angular/commit/0fad36eff2b228baa3b8868810d4ac86eb6db459) | fix | tweaks to formatting in control flow migration ([#53058](https://github.com/angular/angular/pull/53058)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.1.0-next.0"></a>
+# 17.1.0-next.0 (2023-11-15)
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [56a76d73e0](https://github.com/angular/angular/commit/56a76d73e037aeea1975808d5c51608fd23d4fa6) | fix | modify `getConstructorDependencies` helper to work with reflection host after the previous change ([#52215](https://github.com/angular/angular/pull/52215)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [94096c6ede](https://github.com/angular/angular/commit/94096c6ede67436a349ae07901f2bb418bf9f461) | feat | support TypeScript 5.3 ([#52572](https://github.com/angular/angular/pull/52572)) |
+| [bdd61c768a](https://github.com/angular/angular/commit/bdd61c768a28b56c68634b99c036986499829f45) | fix | replace assertion with more intentional error ([#52234](https://github.com/angular/angular/pull/52234)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [726530a9af](https://github.com/angular/angular/commit/726530a9af9c8daf7295cc3548f24e70f380d70e) | feat | Allow `onSameUrlNavigation: 'ignore'` in `navigateByUrl` ([#52265](https://github.com/angular/angular/pull/52265)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.3"></a>
+# 17.0.3 (2023-11-15)
+### animations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [f5872c9921](https://github.com/angular/angular/commit/f5872c992181a2c231890b83f92ec03ec9606802) | fix | prevent the AsyncAnimationRenderer from calling the delegate when there is no element. ([#52570](https://github.com/angular/angular/pull/52570)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [6a1d4ed667](https://github.com/angular/angular/commit/6a1d4ed6670f5965a654e40997aa266a99925f50) | fix | handle non-container environment injector cases ([#52774](https://github.com/angular/angular/pull/52774)) |
+| [5de7575be8](https://github.com/angular/angular/commit/5de7575be83b9829e65ad245034ee7ab1d966044) | fix | reset cached scope for components that were overridden using TestBed ([#52916](https://github.com/angular/angular/pull/52916)) |
+### http
+| Commit | Type | Description |
+| -- | -- | -- |
+| [7c066a4af4](https://github.com/angular/angular/commit/7c066a4af4faae25ee722c19576c63c3833066ee) | fix | Use the response `content-type` to set the blob `type`. ([#52840](https://github.com/angular/angular/pull/52840)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [4e200bf13b](https://github.com/angular/angular/commit/4e200bf13b284fa89bbb0854cbb85dc8fe94d8bb) | fix | Add missing support for ngForOf ([#52903](https://github.com/angular/angular/pull/52903)) |
+| [d033540d0f](https://github.com/angular/angular/commit/d033540d0f874a7a05b79c00e3151ed076fa71c3) | fix | Add support for bound versions of NgIfElse and NgIfThenElse ([#52869](https://github.com/angular/angular/pull/52869)) |
+| [aa2d815648](https://github.com/angular/angular/commit/aa2d815648dbf3303cfe72bf976a4a87de406ee0) | fix | Add support for removing imports post migration ([#52763](https://github.com/angular/angular/pull/52763)) |
+| [3831942771](https://github.com/angular/angular/commit/38319427711f4dab4e4d64ff48aecc7727085031) | fix | Fixes issue with multiple if elses with same template ([#52863](https://github.com/angular/angular/pull/52863)) |
+| [e1f84a31dc](https://github.com/angular/angular/commit/e1f84a31dcac413251329c3b695a253234c6aae6) | fix | passed in paths will be respected in nx workspaces ([#52796](https://github.com/angular/angular/pull/52796)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.2"></a>
+# 17.0.2 (2023-11-09)
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [7a95cccf50](https://github.com/angular/angular/commit/7a95cccf50c01a3733c6015551f8864e246d9239) | fix | add interpolatedSignalNotInvoked to diagnostics ([#52687](https://github.com/angular/angular/pull/52687)) |
+| [a548c0333e](https://github.com/angular/angular/commit/a548c0333ecc993073ee7df054119a6fdde1d27b) | fix | incorrect inferred type of for loop implicit variables ([#52732](https://github.com/angular/angular/pull/52732)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [2cea80c6e2](https://github.com/angular/angular/commit/2cea80c6e21c113d12c38c4b3219c5f3f5944bd8) | fix | error code in image performance warning ([#52727](https://github.com/angular/angular/pull/52727)) |
+| [b16fc2610a](https://github.com/angular/angular/commit/b16fc2610a37b7407713e1e0018d92372f1349e9) | fix | limit rate of markers invocations ([#52742](https://github.com/angular/angular/pull/52742)) |
+| [44c48a4835](https://github.com/angular/angular/commit/44c48a48358c92c32301b578966a8e1ee9a867d8) | fix | properly update collection with repeated keys in `@for` ([#52697](https://github.com/angular/angular/pull/52697)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
 <a name="17.0.1"></a>
 # 17.0.1 (2023-11-08)
 ### http
@@ -10,7 +419,7 @@
 | [70d30c28e0](https://github.com/angular/angular/commit/70d30c28e04f4ead51145e4e47df342492bfb336) | fix | Add support for ng-templates with i18n attributes ([#52597](https://github.com/angular/angular/pull/52597)) |
 | [4f125c5f9a](https://github.com/angular/angular/commit/4f125c5f9ae572a8216ec1fbb88f52e47b875e1e) | fix | Switches to multiple passes to fix several reported bugs ([#52592](https://github.com/angular/angular/pull/52592)) |
 
-Web Frameworks: the internet frontier.<br/>  
+Web Frameworks: the internet frontier.<br/>
 These are the voyages of the framework Angular.<br/>
 Its continuing mission:<br/>
 To explore strange, new technologies.<br/>

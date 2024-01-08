@@ -14,7 +14,7 @@
 export {
   compileNgModuleFactory as ɵcompileNgModuleFactory,
   isBoundToModule as ɵisBoundToModule
-} from './application_ref';
+} from './application/application_ref';
 export {
   injectChangeDetectorRef as ɵinjectChangeDetectorRef,
 } from './change_detection/change_detector_ref';
@@ -52,7 +52,6 @@ export {
   ComponentRef as ɵRender3ComponentRef,
   ComponentType as ɵComponentType,
   CssSelectorList as ɵCssSelectorList,
-  detectChanges as ɵdetectChanges,
   DirectiveDef as ɵDirectiveDef,
   DirectiveType as ɵDirectiveType,
   getDirectives as ɵgetDirectives,
@@ -316,6 +315,7 @@ export {
 export { AfterRenderEventManager as ɵAfterRenderEventManager, internalAfterNextRender as ɵinternalAfterNextRender } from './render3/after_render_hooks';
 export {depsTracker as ɵdepsTracker, USE_RUNTIME_DEPS_TRACKER_FOR_JIT as ɵUSE_RUNTIME_DEPS_TRACKER_FOR_JIT} from './render3/deps_tracker/deps_tracker';
 export {generateStandaloneInDeclarationsError as ɵgenerateStandaloneInDeclarationsError} from './render3/jit/module';
-export {getAsyncClassMetadata as ɵgetAsyncClassMetadata} from './render3/metadata';
+export {getAsyncClassMetadataFn as ɵgetAsyncClassMetadataFn} from './render3/metadata';
+export {InputFlags as ɵɵInputFlags} from './render3/interfaces/definition';
 
 // clang-format on

@@ -197,6 +197,27 @@ Angular DevTools에서 컴포넌트를 선택하면 소스 탭으로 이동하�
 
 </div>
 
+<!--
+### View injected services of components
+-->
+### 컴포넌트에 주입된 서비스 확인하기
+
+<!--
+Starting in Angular 17, services that are injected in a component or directive context are viewable in the property viewer. After you select a particular component, if that component has dependencies, you'll be able to see them listed under the *"Injected Services"* bar.
+
+By clicking on a service, an expansion panel will appear that visualizes the resolution path that Angular used to resolve that service.
+-->
+Angular v17부터는 컴포넌트나 디렉티브 컨텍스트 안에 의존성으로 주입되는 서비스를 프로퍼티 뷰어에서 확인할 수 있습니다.
+어떤 컴포넌트를 선택했는데 의존성 객체가 있다면 *"Injected Services"* 에서 목록을 확인할 수 있습니다.
+
+이 화면에서 서비스를 클릭하면 상세정보가 표시됩니다.
+
+<div class="lightbox">
+
+<img alt="A screenshot of Angular DevTools components tab showing injected services for a selected component." src="generated/images/guide/devtools/di-component-deps.png">
+
+</div>
+
 
 <!--
 ### Update property value
@@ -440,10 +461,77 @@ Then, import the file in the initial view of the profiler by clicking the **Choo
 
 </div>
 
+
+<!--
+## Inspect your injectors
+-->
+## 인젝터 확인하기
+
+<!--
+*Note: The Injector Tree is available for Angular Applications built with version 17 or higher.*
+-->
+*참고: 인젝터 트리는 Angular v17 이후 버전으로 개발된 Angular 애플리케이션에서 확인할 수 있습니다.*
+
+
+<!--
+### View the injector hierarchy of your application
+-->
+### 인젝터 계층 확인하기
+
+<!--
+The **Injector Tree** tab lets you explore the structure of the Injectors configured in your application. Here you will see two trees representing the [injector hiearchy](guide/hierarchical-dependency-injection) of your application. One tree is your environment hierarchy, the other is your element hierachy.
+-->
+**인젝터 트리** 탭을 활용하면 애플리케이션의 인젝터들이 어떤 구조로 구성되어 있는지 확인할 수 있습니다.
+이 탭에서는 [인젝터 계층](guide/hierarchical-dependency-injection)을 두 개의 트리로 확인할 수 있습니다.
+하나는 동작환경을 기준으로 한 계층이고, 다른 하나는 엘리먼트를 기준으로 한 계층입니다.
+
+<div class="lightbox">
+
+<img alt="A screenshot showing the injector tree tab in Angular Devtools visualizing the injector graph for an example application." src="generated/images/guide/devtools/di-injector-tree.png">
+
+</div>
+
+
+<!--
+### Visualize resolution paths
+-->
+### 의존성 객체 결정 과정을 시각적으로 확인하기
+
+<!--
+When a specific injector is selected, the path that Angular's depenedency injection algorithm traverses from that injector to the root is highlighted. For element injectors, this includes highlighting the environment injectors that the dependency injection algorithm jumps to when a dependency cannot be resolved in the element hierarchy. See [resolution rules](guide/hierarchical-dependency-injection#resolution-rules) for more details about how Angular resolves resolution paths.
+-->
+인젝터 하나를 선택하면 Angular의 의존성 주입 알고리즘을 따라가면서 최상위까지 하이라이트표시 됩니다.
+그리고 엘리먼트 인젝터를 선택하면 해당 계층에서 의존성 객체를 찾지 못했을 때 상위 계층으로 넘어가는 것도 확인할 수 있습니다.
+자세한 내용을 확인하려면 [의존성 객체 결정 규칙](guide/hierarchical-dependency-injection#resolution-rules) 문서를 확인하세요.
+
+<div class="lightbox">
+
+<img alt="A screenshot showing how the injector tree visualize highlights resolution paths when an injector is selected." src="generated/images/guide/devtools/di-injector-tree-selected.png">
+
+</div>
+
+
+<!--
+### View injector providers
+-->
+### 인젝터 프로바이더 확인하기
+
+<!--
+Clicking an injector that has configured providers will display those providers in a list on the right of the injector tree view. Here you can view the provided token and it's type.
+-->
+인젝터를 클릭하면 이 인젝터에 등록된 프로바이더 목록을 확인할 수 있습니다.
+프로바이더 목록에서는 토큰과 타입을 확인할 수 있습니다.
+
+<div class="lightbox">
+
+<img alt="A screenshot showing how providers are made visible when an injector is selected." src="generated/images/guide/devtools/di-injector-tree-providers.png">
+
+</div>
+
 <!-- links -->
 
 <!-- external links -->
 
 <!-- end links -->
 
-@reviewed 2022-02-28
+@reviewed 2023-11-08
