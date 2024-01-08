@@ -1,8 +1,8 @@
-<docs-decorative-header title="Angular Roadmap" imgSrc="assets/images/roadmap.svg"> <!-- markdownlint-disable-line -->
+<docs-decorative-header title="Angular Roadmap" imgSrc="adev/src/assets/images/roadmap.svg"> <!-- markdownlint-disable-line -->
 Learn how the Angular team is building momentum on the web.
 </docs-decorative-header>
 
-As an open source project, Angular’s daily commits, PRs and momentum is all trackable GitHub. To increase transparency into how this daily work connects to the framework’s future, our roadmap brings together the team’s current and future planned vision.
+As an open source project, Angular’s daily commits, PRs and momentum is all trackable on GitHub. To increase transparency into how this daily work connects to the framework’s future, our roadmap brings together the team’s current and future planned vision.
 
 The following projects are not associated with a particular Angular version. We will release them on completion, and they will be part of a specific version based on our release schedule, following semantic versioning. For example, we release features in the next minor after completion or the next major if they include breaking changes.
 
@@ -22,7 +22,7 @@ Start developing with the latest Angular features from our roadmap. This list re
 | [Explore Angular Signals](guide/signals)                                      | [Migrate your Angular Material to MDC](https://material.angular.io/guide/mdc-migration) |
 | [Learn about Hydration](guide/hydration)                                      | [Migrate to Standalone APIs](reference/migrations/standalone)                           |
 | [Deferrable views](https://github.com/angular/angular/discussions/50716)      | [Improve image performance with NgOptimizedImage](guide/image-optimization)             |
-| [Built-in control flow](https://github.com/angular/angular/discussions/50719) | [Try out Inject](di)                                                                    |
+| [Built-in control flow](https://github.com/angular/angular/discussions/50719) | [Try out Inject](tutorials/learn-angular/inject-based-di)                               |
 |                                                                               | [New CDK directives](https://material.angular.io/cdk/categories)                        |
 
 ## Improving the Angular developer experience

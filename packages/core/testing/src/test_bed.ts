@@ -23,11 +23,12 @@ import {
   Pipe,
   PlatformRef,
   ProviderToken,
+  runInInjectionContext,
   Type,
   ɵconvertToBitFlags as convertToBitFlags,
   ɵDeferBlockBehavior as DeferBlockBehavior,
   ɵflushModuleScopingQueueAsMuchAsPossible as flushModuleScopingQueueAsMuchAsPossible,
-  ɵgetAsyncClassMetadata as getAsyncClassMetadata,
+  ɵgetAsyncClassMetadataFn as getAsyncClassMetadataFn,
   ɵgetUnknownElementStrictMode as getUnknownElementStrictMode,
   ɵgetUnknownPropertyStrictMode as getUnknownPropertyStrictMode,
   ɵRender3ComponentFactory as ComponentFactory,
@@ -557,7 +558,7 @@ export class TestBedImpl implements TestBed {
   }
 
   runInInjectionContext<T>(fn: () => T): T {
-    return this.inject(EnvironmentInjector).runInContext(fn);
+    return runInInjectionContext(this.inject(EnvironmentInjector), fn);
   }
 
   execute(tokens: any[], fn: Function, context?: any): any {
@@ -616,7 +617,7 @@ export class TestBedImpl implements TestBed {
     const rootElId = `root${_nextRootElementId++}`;
     testComponentRenderer.insertRootElement(rootElId);
 
-    if (getAsyncClassMetadata(type)) {
+    if (getAsyncClassMetadataFn(type)) {
       throw new Error(
           `Component '${type.name}' has unresolved metadata. ` +
           `Please call \`await TestBed.compileComponents()\` before running this test.`);
@@ -628,16 +629,14 @@ export class TestBedImpl implements TestBed {
       throw new Error(`It looks like '${stringify(type)}' has not been compiled.`);
     }
 
-    const noNgZone = this.inject(ComponentFixtureNoNgZone, false);
-    const autoDetect: boolean = this.inject(ComponentFixtureAutoDetect, false);
-    const ngZone: NgZone|null = noNgZone ? null : this.inject(NgZone, null);
     const componentFactory = new ComponentFactory(componentDef);
     const initComponent = () => {
       const componentRef =
           componentFactory.create(Injector.NULL, [], `#${rootElId}`, this.testModuleRef);
-      return new ComponentFixture<any>(
-          componentRef, ngZone, this.inject(ZoneAwareQueueingScheduler, null), autoDetect);
+      return this.runInInjectionContext(() => new ComponentFixture<any>(componentRef));
     };
+    const noNgZone = this.inject(ComponentFixtureNoNgZone, false);
+    const ngZone = noNgZone ? null : this.inject(NgZone, null);
     const fixture = ngZone ? ngZone.run(initComponent) : initComponent();
     this._activeFixtures.push(fixture);
     return fixture;

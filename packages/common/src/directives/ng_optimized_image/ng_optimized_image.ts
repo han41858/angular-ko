@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {booleanAttribute, Directive, ElementRef, inject, Injector, Input, NgZone, numberAttribute, OnChanges, OnDestroy, OnInit, PLATFORM_ID, Renderer2, SimpleChanges, ɵformatRuntimeError as formatRuntimeError, ɵIMAGE_CONFIG as IMAGE_CONFIG, ɵIMAGE_CONFIG_DEFAULTS as IMAGE_CONFIG_DEFAULTS, ɵImageConfig as ImageConfig, ɵperformanceMark as performanceMark, ɵRuntimeError as RuntimeError, ɵSafeValue as SafeValue, ɵunwrapSafeValue as unwrapSafeValue} from '@angular/core';
+import {booleanAttribute, Directive, ElementRef, inject, Injector, Input, NgZone, numberAttribute, OnChanges, OnDestroy, OnInit, PLATFORM_ID, Renderer2, SimpleChanges, ɵformatRuntimeError as formatRuntimeError, ɵIMAGE_CONFIG as IMAGE_CONFIG, ɵIMAGE_CONFIG_DEFAULTS as IMAGE_CONFIG_DEFAULTS, ɵImageConfig as ImageConfig, ɵperformanceMarkFeature as performanceMarkFeature, ɵRuntimeError as RuntimeError, ɵSafeValue as SafeValue, ɵunwrapSafeValue as unwrapSafeValue} from '@angular/core';
 
 import {RuntimeErrorCode} from '../../errors';
 import {isPlatformServer} from '../../platform_id';
@@ -302,7 +302,7 @@ export class NgOptimizedImage implements OnInit, OnChanges, OnDestroy {
 
   /** @nodoc */
   ngOnInit() {
-    performanceMark('mark_use_counter', {'detail': {'feature': 'NgOptimizedImage'}});
+    performanceMarkFeature('NgOptimizedImage');
 
     if (ngDevMode) {
       const ngZone = this.injector.get(NgZone);
@@ -746,8 +746,9 @@ function assertGreaterThanZero(dir: NgOptimizedImage, inputValue: unknown, input
  */
 function assertNoImageDistortion(
     dir: NgOptimizedImage, img: HTMLImageElement, renderer: Renderer2) {
-  const removeListenerFn = renderer.listen(img, 'load', () => {
-    removeListenerFn();
+  const removeLoadListenerFn = renderer.listen(img, 'load', () => {
+    removeLoadListenerFn();
+    removeErrorListenerFn();
     const computedStyle = window.getComputedStyle(img);
     let renderedWidth = parseFloat(computedStyle.getPropertyValue('width'));
     let renderedHeight = parseFloat(computedStyle.getPropertyValue('height'));
@@ -828,6 +829,15 @@ function assertNoImageDistortion(
       }
     }
   });
+
+  // We only listen to the `error` event to remove the `load` event listener because it will not be
+  // fired if the image fails to load. This is done to prevent memory leaks in development mode
+  // because image elements aren't garbage-collected properly. It happens because zone.js stores the
+  // event listener directly on the element and closures capture `dir`.
+  const removeErrorListenerFn = renderer.listen(img, 'error', () => {
+    removeLoadListenerFn();
+    removeErrorListenerFn();
+  });
 }
 
 /**
@@ -870,8 +880,9 @@ function assertEmptyWidthAndHeight(dir: NgOptimizedImage) {
  */
 function assertNonZeroRenderedHeight(
     dir: NgOptimizedImage, img: HTMLImageElement, renderer: Renderer2) {
-  const removeListenerFn = renderer.listen(img, 'load', () => {
-    removeListenerFn();
+  const removeLoadListenerFn = renderer.listen(img, 'load', () => {
+    removeLoadListenerFn();
+    removeErrorListenerFn();
     const renderedHeight = img.clientHeight;
     if (dir.fill && renderedHeight === 0) {
       console.warn(formatRuntimeError(
@@ -882,6 +893,12 @@ function assertNonZeroRenderedHeight(
               `To fix this problem, make sure the container element has the CSS 'position' ` +
               `property defined and the height of the element is not zero.`));
     }
+  });
+
+  // See comments in the `assertNoImageDistortion`.
+  const removeErrorListenerFn = renderer.listen(img, 'error', () => {
+    removeLoadListenerFn();
+    removeErrorListenerFn();
   });
 }
 

@@ -69,11 +69,11 @@ process.
     <tr>
       <td rowspan="2">Rendering</td>
       <td><code>afterNextRender</code></td>
-      <td>Runs once the next time that **all* components have been rendered to the DOM.</td>
+      <td>Runs once the next time that <strong>all</strong> components have been rendered to the DOM.</td>
     </tr>
     <tr>
       <td><code>afterRender</code></td>
-      <td>Runs every time **all** components have been rendered to the DOM.</td>
+      <td>Runs every time <strong>all</strong> components have been rendered to the DOM.</td>
     </tr>
     <tr>
       <td>Destruction</td>
@@ -257,12 +257,12 @@ export class UserProfile {
     // Use the `Write` phase to write to a geometric property.
     afterNextRender(() => {
       nativeElement.style.padding = computePadding();
-    }, AfterRenderPhase.Write);
+    }, {phase: AfterRenderPhase.Write});
 
     // Use the `Read` phase to read geometric properties after all writes have occured.
     afterNextRender(() => {
       this.elementHeight = nativeElement.getBoundingClientRect().height;
-    }, AfterRenderPhase.Read);
+    }, {phase: AfterRenderPhase.Read});
   }
 }
 ```
@@ -302,7 +302,8 @@ The following diagrams show the execution order of Angular's lifecycle hooks.
 
 ### During initialization
 
-```mermaid
+<!-- TODO(josephperrott): enable this mermaid chart -->
+```
 graph TD;
 id[constructor]-->CHANGE;
 subgraph CHANGE [Change detection]
@@ -319,7 +320,8 @@ CHANGE--Rendering-->afterRender
 
 ### Subsequent updates
 
-```mermaid
+<!-- TODO(josephperrott): enable this mermaid chart -->
+```
 graph TD;
 subgraph CHANGE [Change detection]
 direction TB

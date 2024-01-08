@@ -52,6 +52,10 @@ export function matchWithChecks(
 
 export function match(
     segmentGroup: UrlSegmentGroup, route: Route, segments: UrlSegment[]): MatchResult {
+  if (route.path === '**') {
+    return createWildcardMatchResult(segments);
+  }
+
   if (route.path === '') {
     if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
       return {...noMatch};
@@ -88,6 +92,16 @@ export function match(
   };
 }
 
+function createWildcardMatchResult(segments: UrlSegment[]): MatchResult {
+  return {
+    matched: true,
+    parameters: segments.at(-1)?.parameters ?? {},
+    consumedSegments: segments,
+    remainingSegments: [],
+    positionalParamSegments: {},
+  };
+}
+
 export function split(
     segmentGroup: UrlSegmentGroup, consumedSegments: UrlSegment[], slicedSegments: UrlSegment[],
     config: Route[]) {
@@ -105,7 +119,7 @@ export function split(
     const s = new UrlSegmentGroup(
         segmentGroup.segments,
         addEmptyPathsToChildrenIfNeeded(
-            segmentGroup, consumedSegments, slicedSegments, config, segmentGroup.children));
+            segmentGroup, slicedSegments, config, segmentGroup.children));
     return {segmentGroup: s, slicedSegments};
   }
 
@@ -114,8 +128,7 @@ export function split(
 }
 
 function addEmptyPathsToChildrenIfNeeded(
-    segmentGroup: UrlSegmentGroup, consumedSegments: UrlSegment[], slicedSegments: UrlSegment[],
-    routes: Route[],
+    segmentGroup: UrlSegmentGroup, slicedSegments: UrlSegment[], routes: Route[],
     children: {[name: string]: UrlSegmentGroup}): {[name: string]: UrlSegmentGroup} {
   const res: {[name: string]: UrlSegmentGroup} = {};
   for (const r of routes) {
@@ -182,9 +195,6 @@ export function isImmediateMatch(
   if (getOutlet(route) !== outlet &&
       (outlet === PRIMARY_OUTLET || !emptyPathMatch(rawSegment, segments, route))) {
     return false;
-  }
-  if (route.path === '**') {
-    return true;
   }
   return match(rawSegment, route, segments).matched;
 }

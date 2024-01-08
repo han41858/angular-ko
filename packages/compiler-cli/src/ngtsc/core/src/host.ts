@@ -62,6 +62,17 @@ export class DelegatingCompilerHost implements
   resolveModuleNameLiterals;
   resolveTypeReferenceDirectiveReferences;
 
+  // jsDocParsingMode is not a method like the other elements above
+  // TODO: ignore usage can be dropped once 5.2 support is dropped
+  get jsDocParsingMode() {
+    // @ts-ignore
+    return this.delegate.jsDocParsingMode;
+  }
+  set jsDocParsingMode(mode) {
+    // @ts-ignore
+    this.delegate.jsDocParsingMode = mode;
+  }
+
   constructor(protected delegate: ExtendedTsCompilerHost) {
     // Excluded are 'getSourceFile' and 'fileExists', which are actually implemented by
     // NgCompilerHost
@@ -252,7 +263,7 @@ export class NgCompilerHost extends DelegatingCompilerHost implements
   }
 
   getSourceFile(
-      fileName: string, languageVersion: ts.ScriptTarget,
+      fileName: string, languageVersionOrOptions: ts.ScriptTarget|ts.CreateSourceFileOptions,
       onError?: ((message: string) => void)|undefined,
       shouldCreateNewSourceFile?: boolean|undefined): ts.SourceFile|undefined {
     // Is this a previously known shim?
@@ -263,8 +274,8 @@ export class NgCompilerHost extends DelegatingCompilerHost implements
     }
 
     // No, so it's a file which might need shims (or a file which doesn't exist).
-    const sf =
-        this.delegate.getSourceFile(fileName, languageVersion, onError, shouldCreateNewSourceFile);
+    const sf = this.delegate.getSourceFile(
+        fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
     if (sf === undefined) {
       return undefined;
     }

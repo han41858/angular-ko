@@ -6,6 +6,7 @@
 
 import { Observable } from 'rxjs';
 import { SIGNAL } from '@angular/core/primitives/signals';
+import { SignalNode } from '@angular/core/primitives/signals';
 import { Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
 
@@ -874,6 +875,16 @@ export interface InputDecorator {
 }
 
 // @public
+export interface InputSignal<ReadT, WriteT = ReadT> extends Signal<ReadT> {
+    // (undocumented)
+    [ɵINPUT_SIGNAL_BRAND_READ_TYPE]: ReadT;
+    // (undocumented)
+    [ɵINPUT_SIGNAL_BRAND_WRITE_TYPE]: WriteT;
+    // (undocumented)
+    [SIGNAL]: InputSignalNode<ReadT, WriteT>;
+}
+
+// @public
 export function isDevMode(): boolean;
 
 // @public
@@ -1637,20 +1648,19 @@ export interface WritableSignal<T> extends Signal<T> {
 }
 
 // @public
-export function ɵɵdefineInjectable<T>(opts: {
-    token: unknown;
-    providedIn?: Type<any> | 'root' | 'platform' | 'any' | 'environment' | null;
-    factory: () => T;
-}): unknown;
-
-// @public
-export function ɵɵinject<T>(token: ProviderToken<T>): T;
+export function ɵinputFunctionForApiGuard<ReadT>(): InputSignal<ReadT | undefined>;
 
 // @public (undocumented)
-export function ɵɵinject<T>(token: ProviderToken<T>, flags?: InjectFlags): T | null;
+export function ɵinputFunctionForApiGuard<ReadT>(initialValue: ReadT, opts?: ɵInputOptionsWithoutTransform<ReadT>): InputSignal<ReadT>;
+
+// @public (undocumented)
+export function ɵinputFunctionForApiGuard<ReadT, WriteT>(initialValue: ReadT, opts: ɵInputOptionsWithTransform<ReadT, WriteT>): InputSignal<ReadT, WriteT>;
 
 // @public
-export function ɵɵinjectAttribute(attrNameToInject: string): string | null;
+export function ɵinputFunctionRequiredForApiGuard<ReadT>(opts?: ɵInputOptionsWithoutTransform<ReadT>): InputSignal<ReadT>;
+
+// @public (undocumented)
+export function ɵinputFunctionRequiredForApiGuard<ReadT, WriteT>(opts: ɵInputOptionsWithTransform<ReadT, WriteT>): InputSignal<ReadT, WriteT>;
 
 // (No @packageDocumentation comment for this package)
 
