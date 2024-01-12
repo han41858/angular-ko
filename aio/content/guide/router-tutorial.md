@@ -194,6 +194,8 @@ Angular CLI를 사용해서 *angular-router-sample* 라는 이름으로 애플�
     <code-example format="shell" language="shell">
 
     ng serve
+    
+    </code-example>
 
 
 <!--

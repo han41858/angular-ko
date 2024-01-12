@@ -1271,7 +1271,7 @@ Learn about it on the web, starting with the [official documentation](https://rx
 
 *콜드\(cold\)* 옵저버블은 누군가가 옵저버블을 구독하기 전까지는 데이터를 전달하지 않습니다.
 그리고 애플리케이션에서 사용하는 옵저버블 대부분은 콜드 옵저버블입니다.
-[*HttpClient*](guide/http) 메서드들도 모두 콜드 옵저버블을 반환합니다.
+[*HttpClient*](guide/understanding-communicating-with-http) 메서드들도 모두 콜드 옵저버블을 반환합니다.
 
 *핫\(hot\)* 옵저버블은 누군가 옵저버블을 구독하지 않아도 데이터를 보냅니다.
 라우터의 상태를 옵저버블로 전달하는 [`Router.events`](api/router/Router#events) 프로퍼티가 *핫* 옵저버블입니다.

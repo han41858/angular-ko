@@ -286,7 +286,6 @@ The result is the same; only the preparation is different.
 <code-tabs>
     <code-pane header="popup.component.ts" path="elements/src/app/popup.component.ts"></code-pane>
     <code-pane header="popup.service.ts" path="elements/src/app/popup.service.ts"></code-pane>
-    <code-pane header="app.module.ts" path="elements/src/app/app.module.ts"></code-pane>
     <code-pane header="app.component.ts" path="elements/src/app/app.component.ts"></code-pane>
 </code-tabs>
 -->

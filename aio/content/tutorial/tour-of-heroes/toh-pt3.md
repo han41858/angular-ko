@@ -81,7 +81,6 @@ ng generate component hero-detail
 - 컴포넌트 클래스 `HeroDetailComponent`가 정의된 TypeScript 파일
 - `HeroDetailComponent` 클래스 파일을 테스트하는 파일
 
-이 명령을 실행하면 `HeroDetailComponent`가 자동으로 `src/app/app.module.ts` 파일에 있는 `@NgModule`에 등록됩니다.
 
 
 <!--
@@ -299,8 +298,6 @@ Here are the code files discussed on this page.
   <code-pane header="src/app/hero-detail/hero-detail.component.html" path="toh-pt3/src/app/hero-detail/hero-detail.component.html"></code-pane>
 
   <code-pane header="src/app/heroes/heroes.component.html" path="toh-pt3/src/app/heroes/heroes.component.html"></code-pane>
-
-  <code-pane header="src/app/app.module.ts" path="toh-pt3/src/app/app.module.ts"></code-pane>
 
 </code-tabs>
 -->

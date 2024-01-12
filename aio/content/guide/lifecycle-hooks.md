@@ -71,7 +71,7 @@ Angular `core` 라이브러리의 *라이프싸이클 훅* 인터페이스에 �
 
 
 <a id="hooks-purpose-timing"></a>
-
+<a id="lifecycle-event-sequence"></a>
 <!--
 ### Lifecycle event sequence
 -->
@@ -333,6 +333,7 @@ Sometimes it's necessary to use browser-only APIs to manually read or write the 
 | `afterRender`     | DOM 상태와 동기화할 때. 자세한 내용은 [동기화 처리](#handling-synchronization) 섹션을 참고하세요                                                                                                                           | 변화가 감지된 후에 _매 번_ |
 
 
+<a id="one-time-initialization"></a>
 <!--
 ### One-time initialization
 -->
@@ -403,6 +404,7 @@ As a rule of thumb, `afterNextRender` should be used to observe _discrete_ chang
 </div>
 
 
+<a id="handling-synchronization"></a>
 <!--
 ### Handling synchronization
 -->
@@ -443,7 +445,6 @@ The following examples demonstrate the call sequence and relative frequency of t
 
 
 <a id="peek-a-boo"></a>
-
 <!--
 ### Sequence and frequency of all lifecycle events
 -->

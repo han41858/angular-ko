@@ -501,7 +501,24 @@ Here, `FirstComponent` has its own `<nav>` and a second `<router-outlet>` in add
 A child route is like any other route, in that it needs both a `path` and a `component`.
 The one difference is that you place child routes in a `children` array within the parent route.
 
-<code-example header="AppRoutingModule (excerpt)" path="router/src/app/app-routing.module.9.ts" region="child-routes"></code-example>
+```
+const routes: Routes = [
+  {
+    path: 'first-component',
+    component: FirstComponent, // this is the component with the <router-outlet> in the template
+    children: [
+      {
+        path: 'child-a', // child route path
+        component: ChildAComponent, // child route component that the router renders
+      },
+      {
+        path: 'child-b',
+        component: ChildBComponent, // another child route component that the router renders
+      },
+    ],
+  },
+];
+```
 -->
 애플리케이션이 점점 복잡해지다 보면 특정 컴포넌트 안에서 동작하는 라우팅 규칙을 추가하고 싶은 경우도 있습니다.
 이렇게 중첩된 라우팅 규칙을 자식 라우팅 규칙(child route)이라고 합니다.

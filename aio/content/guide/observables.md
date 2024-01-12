@@ -238,6 +238,7 @@ JavaScript는 함수 이름을 프로퍼티 이름으로 변혼하기 때문에 
 핸들러 프로퍼티를 생략하면, 옵저버는 해당 알림을 처리하지 않습니다.
 
 
+<a id="error-handling"></a>
 <!--
 ## Error handling
 -->

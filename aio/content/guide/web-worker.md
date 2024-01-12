@@ -142,7 +142,7 @@ ng generate web-worker app
 <div class="alert is-important">
 
 애플리케이션이 실행되는 환경이나 플랫폼에 따라 웹 워커를 지원하지 않을 수 있습니다.
-[서버 사이드 렌더링](guide/universal) 할 때 사용하는 `@angular/platform-server`도 웹 워커를 지원하지 않습니다.
+[서버 사이드 렌더링](guide/ssr) 할 때 사용하는 `@angular/platform-server`도 웹 워커를 지원하지 않습니다.
 그래서 웹 워커가 동작하지 않는 환경에서도 필요한 작업을 실행할 수 있는 보완 로직을 항상 준비해야 합니다.
 
 </div>

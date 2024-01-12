@@ -954,6 +954,7 @@ Several options can be used to fine-tune the optimization of an application.
 </div>
 
 
+<a id="fonts-optimization-options"></a>
 <!--
 #### Fonts optimization options
 -->

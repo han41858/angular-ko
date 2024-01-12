@@ -193,9 +193,9 @@ Angular가 제공하는 NgModule 체계는 JavaScript에서 객체를 묶어 관
 JavaScript에서는 각각의 *파일* 이 하나의 모듈이며, 이 파일에 정의된 모든 객체가 이 모듈 안에 속한다고 할 수 있습니다.
 그리고 모듈 안에 있는 객체를 외부로 공개하려면 `export` 키워드를 사용하며, 다른 JavaScript 모듈에서는 *import 구문*을 사용해서 이 객체에 접근할 수 있습니다.
 
-<code-example path="architecture/src/app/app.module.ts" region="imports"></code-example>
+<code-example path="architecture/src/app/mini-app.ts" region="imports"></code-example>
 
-<code-example path="architecture/src/app/app.module.ts" region="export"></code-example>
+<code-example path="architecture/src/app/mini-app.ts" region="export"></code-example>
 
 <div class="alert is-helpful">
 

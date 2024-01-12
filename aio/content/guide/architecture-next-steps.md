@@ -82,8 +82,8 @@ Angular는 단일 페이지 애플리케이션을 만들때 사용하는 프레�
 하지만 서버에서 데이터를 추가로 받아오거나 데이터를 서버에 저장하려면 `HttpClient`가 필요할 할 때도 있습니다.
 사용자의 UX를 향상시키기 위해 PWA(Progressive Web App)을 도입해야 할 수도 있습니다.
 
-*   [HTTP](guide/http): 서버에서 데이터를 가져오거나 서버로 데이터를 보낼 때 사용하는 HTTP 서비스입니다.
-*   [서버사이드 렌더링](guide/universal): Angular Universal을 사용하면 서버사이드 렌더링(Server-side rendering, SSR) 기법으로 앱을 정적으로 서버에 빌드해 둘 수 있습니다. 이 방식을 활용하면 앱 성능이 향상되며 모바일과 저사양 장비에서도 첫번째 페이지를 더 빠르게 띄울  수 있습니다. 웹 크롤러도 대응할 수 있습니다.
+*   [HTTP](guide/understanding-communicating-with-http): 서버에서 데이터를 가져오거나 서버로 데이터를 보낼 때 사용하는 HTTP 서비스입니다.
+*   [서버사이드 렌더링](guide/ssr): Angular Universal을 사용하면 서버사이드 렌더링(Server-side rendering, SSR) 기법으로 앱을 정적으로 서버에 빌드해 둘 수 있습니다. 이 방식을 활용하면 앱 성능이 향상되며 모바일과 저사양 장비에서도 첫번째 페이지를 더 빠르게 띄울  수 있습니다. 웹 크롤러도 대응할 수 있습니다.
 *   [서비스 워커와 PWA](guide/service-worker-intro): 네트워크 사용량을 줄이고 사용자의 UX를 대폭 향상시키려면 서비스 워커를 활용하는 것도 좋습니다.
 *   [웹 워커](guide/web-worker): CPU 부하가 많이 걸리는 작업은 백그라운드 스레드에서 실행할 수 있습니다.
 

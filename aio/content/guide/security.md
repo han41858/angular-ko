@@ -718,7 +718,7 @@ See also Dave Smith's [talk on XSRF at AngularConnect 2016](https://www.youtube.
 `evil.com`가 실행하는 악성 코드는 이 쿠키에 접근할 수 없습니다.
 
 Angular가 제공하는 `HttpClient`도 이 방식을 활용합니다.
-자세한 내용은 [HttpClient 가이드 문서](guide/http#security-xsrf-protection)를 참고하세요.
+자세한 내용은 [HttpClient 가이드 문서](guide/http-security-xsrf-protection)를 참고하세요.
 
 Open Web Application Security Project \(OWASP\)에서 제공하는 CSRF 방어 방법에 대해 알아보려면 [Cross-Site Request Forgery (CSRF)](https://owasp.org/www-community/attacks/csrf)나 [Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) 문서를 참고하세요.
 [Robust Defenses for Cross-Site Request Forgery](https://seclab.stanford.edu/websec/csrf/csrf.pdf)에도 자세하게 설명되어 있습니다.

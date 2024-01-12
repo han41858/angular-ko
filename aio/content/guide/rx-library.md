@@ -33,6 +33,7 @@ These utility functions can be used for:
 *   여러 스트림을 하나로 합쳐서 처리할 때
 
 
+<a id="observable-creation-functions"></a>
 <!--
 ## Observable creation functions
 -->
@@ -280,6 +281,7 @@ RxJS는 방대한 연산자를 제공하지만, 자주 사용하는 것들은 �
 연산자 전체 목록과 예제를 확인하려면 [RxJS API 문서](https://rxjs.dev/api)를 참고하세요.
 
 
+<a id="error-handling"></a>
 <!--
 ## Error handling
 -->

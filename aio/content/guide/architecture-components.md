@@ -56,6 +56,7 @@ Angular creates, updates, and destroys components as the user moves through the 
 Your application can take action at each moment in this lifecycle through optional [lifecycle hooks](guide/lifecycle-hooks), like `ngOnInit()`.
 
 
+<a id="component-metadata"></a>
 <!--
 ## Component metadata
 -->
@@ -118,6 +119,7 @@ Angular 컴포넌트는 컴포넌트 클래스에 `@Component` 데코레이터�
 | `providers`   | 컴포넌트가 생성될 때 의존성으로 주입되는 서비스의 [프로바이더](guide/glossary#provider)를 지정합니다. 위 코드에서는 화면에 표시할 히어로의 목록을 가져오기 위해 생성자에서 `HeroService`를 의존성으로 주입받는데, 이 `HeroService`의 인스턴스를 어떻게 받아올지 지정합니다.              |
 
 
+<a id="templates-and-views"></a>
 <!--
 ## Templates and views
 -->
@@ -305,6 +307,7 @@ Here's an example from the `HeroDetailComponent` template that uses two-way data
 </div>
 
 
+<a id="pipes"></a>
 <!--
 ### Pipes
 -->
@@ -374,6 +377,7 @@ HTML 템플릿에 파이프를 적용할 때는 [파이프 연산자 (|)](guide/
 </code-example>
 
 
+<a id="directives"></a>
 <!--
 ### Directives
 -->

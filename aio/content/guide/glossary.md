@@ -1907,6 +1907,8 @@ Angular가 [데이터 바인딩][AioGuideGlossaryDataBinding]을 평가하는 �
 <!--todo: have Alex review this -->
 <!-- Read about how to write template expressions in the [template expressions][AioGuideInterpolationTemplateExpressions] section of the [Interpolation][AioGuideInterpolation] guide. -->
 
+
+<a id="template-reference-variable"></a>
 <!--
 ## template reference variable
 -->

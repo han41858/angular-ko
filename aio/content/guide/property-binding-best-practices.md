@@ -104,7 +104,7 @@ If `parentItem` were some other type, you would need to specify `childItem`  `@I
 
 이 타입은 `ItemDetailComponent`에 `@Input()` 데코레이터가 붙은 `childItem` 프로퍼티 타입이 `string`인 것으로도 확인할 수 있습니다:
 
-<code-example header="src/app/item-detail/item-detail.component.ts (setting the @Input() type)" path="property-binding/src/app/item-detail/item-detail.component.ts" region="input-type"></code-example>
+<code-example header="src/app/item-detail.component.ts (setting the @Input() type)" path="property-binding/src/app/item-detail.component.ts" region="input-type"></code-example>
 
 `AppComponent`에 정의된 `parentItem` 프로퍼티 타입은 문자열입니다.
 그래서 `[childItem]="parentItem"`에 사용된 `parentItem`도 문자열로 평가됩니다.
@@ -144,7 +144,7 @@ By supplying an object in the same shape, you meet the expectations of `items` w
 
 `ItemListComponent`에서 `@Input()` 데코레이터가 지정된 `items` 타입도 `Item[]` 타입입니다.
 
-<code-example header="src/app/item-list.component.ts" path="property-binding/src/app/item-list/item-list.component.ts" region="item-input"></code-example>
+<code-example header="src/app/item-list.component.ts" path="property-binding/src/app/item-list.component.ts" region="item-input"></code-example>
 
 `Item` 객체에는 프로퍼티가 `id`, `name` 이렇게 2개 있습니다.
 

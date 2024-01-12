@@ -106,7 +106,7 @@ To get the most out of these developer guides, you should review the following t
     <p>Angular에서 폼을 사용하는 방법은 2가지 입니다 : 템플릿 기반 폼, 반응형 폼</p>
     <p class="card-footer">폼</p>
   </a>
-  <a href="guide/http" class="docs-card" title="Angular HTTP client developer guide">
+  <a href="guide/understanding-communicating-with-http" class="docs-card" title="Angular HTTP client developer guide">
     <section>HTTP</section>
     <p>HTTP 클라이언트 서비스를 사용해서 서버와 통신하는 방법을 알아보세요.</p>
     <p class="card-footer">HTTP 클라이언트</p>
@@ -136,7 +136,7 @@ To get the most out of these developer guides, you should review the following t
     <p>백그라운드 스레드에서 CPU 연산이 많이 필요한 작업을 하기 위해 웹 워커를 사용하는 방법을 알아보세요.</p>
     <p class="card-footer">웹 워커</p>
   </a>
-  <a href="guide/universal" class="docs-card" title="Server-side rendering">
+  <a href="guide/ssr" class="docs-card" title="Server-side rendering">
     <section>서버 사이드 렌더링</section>
     <p>정적 애플리케이션 화면을 만들기 위해 Angular Universal을 어떻게 활용하는지 알아보세요.</p>
     <p class="card-footer">서버 사이드 렌더링</p>
