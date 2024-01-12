@@ -193,9 +193,7 @@ export class CompilerFacadeImpl implements CompilerFacade {
       declarations: facade.declarations.map(convertDeclarationFacadeToMetadata),
       declarationListEmitMode: DeclarationListEmitMode.Direct,
       deferBlocks,
-
-      // TODO: leaving empty in JIT mode for now,
-      // to be implemented as one of the next steps.
+      deferrableTypes: new Map(),
       deferrableDeclToImportDecl: new Map(),
 
       styles: [...facade.styles, ...template.styles],
@@ -335,8 +333,10 @@ function convertDirectiveFacadeToMetadata(facade: R3DirectiveMetadataFacade): R3
             bindingPropertyName: ann.alias || field,
             classPropertyName: field,
             required: ann.required || false,
-            // TODO(signals): Support JIT signal inputs via decorator transform.
-            isSignal: false,
+            // For JIT, decorators are used to declare signal inputs. That is because of
+            // a technical limitation where it's not possible to statically reflect class
+            // members of a directive/component at runtime before instantiating the class.
+            isSignal: !!ann.isSignal,
             transformFunction: ann.transform != null ? new WrappedNodeExpr(ann.transform) : null,
           };
         } else if (isOutput(ann)) {
@@ -475,9 +475,7 @@ function convertDeclareComponentFacadeToMetadata(
                                                       null,
     animations: decl.animations !== undefined ? new WrappedNodeExpr(decl.animations) : null,
     deferBlocks,
-
-    // TODO: leaving empty in JIT mode for now,
-    // to be implemented as one of the next steps.
+    deferrableTypes: new Map(),
     deferrableDeclToImportDecl: new Map(),
 
     changeDetection: decl.changeDetection ?? ChangeDetectionStrategy.Default,

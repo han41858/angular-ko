@@ -203,13 +203,6 @@ export function generateStandaloneInDeclarationsError(type: Type<any>, location:
   return `${prefix} ${location}, ${suffix}`;
 }
 
-export function generateStandaloneInDeclarationsError(type: Type<any>, location: string) {
-  const prefix = `Unexpected "${stringifyForError(type)}" found in the "declarations" array of the`;
-  const suffix = `"${stringifyForError(type)}" is marked as standalone and can't be declared ` +
-      'in any NgModule - did you intend to import it instead (by adding it to the "imports" array)?';
-  return `${prefix} ${location}, ${suffix}`;
-}
-
 function verifySemanticsOfNgModuleDef(
     moduleType: NgModuleType, allowDuplicateDeclarationsInRoot: boolean,
     importingModule?: NgModuleType): void {

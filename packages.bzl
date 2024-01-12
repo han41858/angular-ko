@@ -82,7 +82,6 @@ DOCS_ENTRYPOINTS = [
     "core/src/di/interface",
     "core/src/interface",
     "core/src/reflection",
-    "core/src/signals",
     "core/src/util",
     "core/testing",
     "elements",

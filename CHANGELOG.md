@@ -1,3 +1,75 @@
+<a name="17.1.0-rc.0"></a>
+# 17.1.0-rc.0 (2024-01-10)
+### common
+| Commit | Type | Description |
+| -- | -- | -- |
+| [1be6b0a58a](https://github.com/angular/angular/commit/1be6b0a58a9e96f9f0bda8acb63c701f792e469b) | fix | remove unused parameters from the ngClass constructor ([#53831](https://github.com/angular/angular/pull/53831)) |
+| [dd052dc0d6](https://github.com/angular/angular/commit/dd052dc0d6116b0a42b33d6456efaf9c234239dc) | fix | server-side rendering error when using in-memory scrolling ([#53683](https://github.com/angular/angular/pull/53683)) |
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [2dedc4a969](https://github.com/angular/angular/commit/2dedc4a96968e3d5ed3541b1eac54707f7b24c87) | fix | generate less code for advance instructions ([#53845](https://github.com/angular/angular/pull/53845)) |
+| [e5f02052cb](https://github.com/angular/angular/commit/e5f02052cbd49ea793aedc56d622dde99f24240f) | fix | ignore empty switch blocks ([#53776](https://github.com/angular/angular/pull/53776)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [1a6eaa0fea](https://github.com/angular/angular/commit/1a6eaa0fea1024b919e17ac9d2e8c07df7916de8) | fix | input transform in local compilation mode ([#53645](https://github.com/angular/angular/pull/53645)) |
+| [33b5707ee9](https://github.com/angular/angular/commit/33b5707ee9e4539668398640f3fa8d2b5e20eb8b) | fix | interpolatedSignalNotInvoked diagnostic ([#53585](https://github.com/angular/angular/pull/53585)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [863be4b698](https://github.com/angular/angular/commit/863be4b6981dc60ca0610b0e61d2ba1f5759e2a3) | feat | expose new `input` API for signal-based inputs ([#53872](https://github.com/angular/angular/pull/53872)) |
+| [dfcf0d5882](https://github.com/angular/angular/commit/dfcf0d5882c1ef74c6fc5038bfbd736ac887f9cc) | fix | `afterRender` hooks now only run on `ApplicationRef.tick` ([#52455](https://github.com/angular/angular/pull/52455)) |
+| [69b384c0d1](https://github.com/angular/angular/commit/69b384c0d16f631741339d8757c32ef08260cfce) | fix | `SignalNode` reactive node incorrectly exposing unset field ([#53571](https://github.com/angular/angular/pull/53571)) |
+| [2b9a850789](https://github.com/angular/angular/commit/2b9a8507896a2dd1a13187c2b10f6f535cb8c001) | fix | allow effect to be used inside an ErrorHandler ([#53713](https://github.com/angular/angular/pull/53713)) |
+| [32f908ab70](https://github.com/angular/angular/commit/32f908ab70f1b9ed3f92df1cae05ddde68932404) | fix | do not accidentally inherit input transforms when overridden ([#53571](https://github.com/angular/angular/pull/53571)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [d0b95d5877](https://github.com/angular/angular/commit/d0b95d5877023026a3e5c3344a6663a3c5323028) | fix | Fix empty switch case offset bug in cf migration ([#53839](https://github.com/angular/angular/pull/53839)) |
+### platform-server
+| Commit | Type | Description |
+| -- | -- | -- |
+| [f4bd5a33d2](https://github.com/angular/angular/commit/f4bd5a33d2ccfc4e72a17e5414e20ca1e9bb1157) | fix | Do not delete global Event ([#53659](https://github.com/angular/angular/pull/53659)) |
+### router
+| Commit | Type | Description |
+| -- | -- | -- |
+| [a5a9b408e2](https://github.com/angular/angular/commit/a5a9b408e2eb64dcf1d3ca16da4897649dd2fc34) | feat | Add transient info to RouterLink input ([#53784](https://github.com/angular/angular/pull/53784)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
+<a name="17.0.9"></a>
+# 17.0.9 (2024-01-10)
+### common
+| Commit | Type | Description |
+| -- | -- | -- |
+| [c22b513b3f](https://github.com/angular/angular/commit/c22b513b3f45c49baf4d6e571735aa4aa33b7845) | fix | remove unused parameters from the ngClass constructor ([#53831](https://github.com/angular/angular/pull/53831)) |
+| [bd9f89d1c8](https://github.com/angular/angular/commit/bd9f89d1c8e295f00ef3399c6bedca4e2ce0e89e) | fix | server-side rendering error when using in-memory scrolling ([#53683](https://github.com/angular/angular/pull/53683)) |
+### compiler
+| Commit | Type | Description |
+| -- | -- | -- |
+| [92fd6cc42e](https://github.com/angular/angular/commit/92fd6cc42e0a217f4575404ea8e2af462f14ae18) | fix | generate less code for advance instructions ([#53845](https://github.com/angular/angular/pull/53845)) |
+| [6a41961fbd](https://github.com/angular/angular/commit/6a41961fbdf921f7a3ab82e92185eab751c0d153) | fix | ignore empty switch blocks ([#53776](https://github.com/angular/angular/pull/53776)) |
+### compiler-cli
+| Commit | Type | Description |
+| -- | -- | -- |
+| [7309463697](https://github.com/angular/angular/commit/7309463697110d848781bfe81f04b6070c759928) | fix | interpolatedSignalNotInvoked diagnostic ([#53585](https://github.com/angular/angular/pull/53585)) |
+### core
+| Commit | Type | Description |
+| -- | -- | -- |
+| [441db5123f](https://github.com/angular/angular/commit/441db5123f368c5fe3a505a79b97309e8400250f) | fix | `afterRender` hooks now only run on `ApplicationRef.tick` ([#52455](https://github.com/angular/angular/pull/52455)) |
+| [f9120d79cb](https://github.com/angular/angular/commit/f9120d79cb88a9f14c4baa6981f71a5afbd984e1) | fix | allow effect to be used inside an ErrorHandler ([#53713](https://github.com/angular/angular/pull/53713)) |
+### migrations
+| Commit | Type | Description |
+| -- | -- | -- |
+| [e92c86b77f](https://github.com/angular/angular/commit/e92c86b77ff7d400c034740ee0ad68acb626a22f) | fix | Fix empty switch case offset bug in cf migration ([#53839](https://github.com/angular/angular/pull/53839)) |
+### platform-server
+| Commit | Type | Description |
+| -- | -- | -- |
+| [91cb16fde9](https://github.com/angular/angular/commit/91cb16fde9ff68bcdc760428c47f4ebf3e476bd2) | fix | Do not delete global Event ([#53659](https://github.com/angular/angular/pull/53659)) |
+
+<!-- CHANGELOG SPLIT MARKER -->
+
 <a name="17.1.0-next.5"></a>
 # 17.1.0-next.5 (2023-12-21)
 ### compiler

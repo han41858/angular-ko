@@ -42,9 +42,9 @@ jasmine_node_test(
 js_library(
     name = "create-example-lib",
     srcs = [
-        "constants.mjs",
         "create-example.mjs",
         "create-example-cli.mjs",
+        "constants.mjs",
     ] + glob(["shared/**"]),
     deps = [
         "@aio_npm//@bazel/buildozer",

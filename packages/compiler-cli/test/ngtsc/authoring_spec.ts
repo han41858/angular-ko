@@ -36,6 +36,99 @@ runInEachFileSystem(() => {
       expect(js).toContain('inputs: { data: [i0.ɵɵInputFlags.SignalBased, "data"] }');
     });
 
+    it('should fail if @Input is applied on signal input member', () => {
+      env.write('test.ts', `
+        import {Directive, Input, input} from '@angular/core';
+
+        @Directive()
+        export class TestDir {
+          @Input() data = input('test');
+        }
+      `);
+      const diagnostics = env.driveDiagnostics();
+      expect(diagnostics).toEqual([jasmine.objectContaining({
+        messageText: `Using @Input with a signal input is not allowed.`,
+      })]);
+    });
+
+    it('should fail if signal input is also declared in `inputs` decorator field.', () => {
+      env.write('test.ts', `
+        import {Directive, input} from '@angular/core';
+
+        @Directive({
+          inputs: ['data'],
+        })
+        export class TestDir {
+          data = input('test');
+        }
+      `);
+      const diagnostics = env.driveDiagnostics();
+      expect(diagnostics).toEqual([
+        jasmine.objectContaining({
+          messageText: 'Input "data" is also declared as non-signal in @Directive.',
+        }),
+      ]);
+    });
+
+    it('should fail if signal input declares a non-statically analyzable alias', () => {
+      env.write('test.ts', `
+        import {Directive, input} from '@angular/core';
+
+        const ALIAS = 'bla';
+
+        @Directive({
+          inputs: ['data'],
+        })
+        export class TestDir {
+          data = input('test', {alias: ALIAS});
+        }
+      `);
+      const diagnostics = env.driveDiagnostics();
+      expect(diagnostics).toEqual([
+        jasmine.objectContaining({
+          messageText: 'Alias needs to be a string that is statically analyzable.',
+        }),
+      ]);
+    });
+
+    it('should fail if signal input declares a non-statically analyzable options', () => {
+      env.write('test.ts', `
+        import {Directive, input} from '@angular/core';
+
+        const OPTIONS = {};
+
+        @Directive({
+          inputs: ['data'],
+        })
+        export class TestDir {
+          data = input('test', OPTIONS);
+        }
+      `);
+      const diagnostics = env.driveDiagnostics();
+      expect(diagnostics).toEqual([
+        jasmine.objectContaining({
+          messageText: 'Argument needs to be an object literal that is statically analyzable.',
+        }),
+      ]);
+    });
+
+    it('should fail if signal input is declared on static member', () => {
+      env.write('test.ts', `
+        import {Directive, input} from '@angular/core';
+
+        @Directive()
+        export class TestDir {
+          static data = input('test');
+        }
+      `);
+      const diagnostics = env.driveDiagnostics();
+      expect(diagnostics).toEqual([
+        jasmine.objectContaining({
+          messageText: 'Input "data" is incorrectly declared as static member of "TestDir".',
+        }),
+      ]);
+    });
+
     it('should handle an alias configured, primitive valued input', () => {
       env.write('test.ts', `
         import {Directive, input} from '@angular/core';

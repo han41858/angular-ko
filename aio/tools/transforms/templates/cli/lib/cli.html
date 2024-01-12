@@ -8,21 +8,13 @@
 
 {% macro renderArguments(arguments, level = 2) %}
 {% if arguments.length %}
-<!--
 <h{$ level $} class="no-anchor">Arguments</h{$ level $}>
--->
-<h{$ level $} class="no-anchor">인자</h{$ level $}>
 <table class="is-full-width list-table property-table">
   <thead>
     <tr>
-      <!--
       <th style="width:15%">Argument</th>
       <th style="width:40%">Description</th>
       <th>Value Type</th>
-      -->
-      <th style="width:15%">인자</th>
-      <th style="width:40%">설명</th>
-      <th>타입</th>
     </tr>
   </thead>
   <tbody>
@@ -42,23 +34,14 @@
 
 {% macro renderNamedOptions(options, level = 2) %}
 {% if options.length %}
-<!--
 <h{$ level $} class="no-anchor">Options</h{$ level $}>
--->
-<h{$ level $} class="no-anchor">옵션</h{$ level $}>
 <table class="is-full-width list-table property-table">
   <thead>
     <tr>
-      <!--
       <th style="width:15%">Option</th>
       <th style="width:40%">Description</th>
       <th>Value Type</th>
       <th>Default Value</th>
-      -->
-      <th style="width:15%">옵션</th>
-      <th style="width:40%">설명</th>
-      <th>타입</th>
-      <th>기본값</th>
       </tr>
   </thead>
   <tbody>
@@ -70,18 +53,13 @@
       <td>
         {% if option.deprecated %}
           {% if option.deprecated === true %}
-            <!--<p><strong>Deprecated</strong></p>-->
-            <p><strong>지원 중단</strong></p>
+            <p><strong>Deprecated</strong></p>
           {% else %}
-            <!-- {$ ('**Deprecated:** ' + option.deprecated) | marked $} -->
-            {$ ('**지원 중단:** ' + option.deprecated) | marked $}
+            {$ ('**Deprecated:** ' + option.deprecated) | marked $}
           {% endif %}
         {% endif %}
         {$ option.description | marked $}
-        <!-- {% if option.default !== undefined %}<p><span class="cli-default">Default:</span> <code class="no-auto-link">{$ option.default $}</code></p>{% endif %} -->
-        {% if option.default !== undefined %}<p><span class="cli-default">기본값:</span> <code class="no-auto-link">{$ option.default $}</code></p>{% endif %}
-        <!-- {% if option.aliases.length %}<p><span class="cli-aliases">Aliases:</span> {% for alias in option.aliases %}{$ renderOptionName(alias) $}{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %} -->
-        {% if option.aliases.length %}<p><span class="cli-aliases">별칭:</span> {% for alias in option.aliases %}{$ renderOptionName(alias) $}{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+        {% if option.aliases.length %}<p><span class="cli-aliases">Aliases:</span> {% for alias in option.aliases %}{$ renderOptionName(alias) $}{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
       </td>
       <td><code class="no-auto-link">{$ renderOptionValues(option.type, option.enum) $}</td>
       <td>{% if option.default !== undefined and option.default !== '' %}<code class="no-auto-link">{$ option.default $}</code>{% endif %}</td>
@@ -110,8 +88,7 @@
 
 {%- macro renderSubcommands(container) -%}
 {% if container.subcommands.length %}
-<!--<h2><a id="{$ container.name $}-commands"></a>{$ container.name | title $} commands</h2>-->
-<h2><a id="{$ container.name $}-commands"></a>{$ container.name | title $} 목록</h2>
+<h2><a id="{$ container.name $}-commands"></a>{$ container.name | title $} commands</h2>
 {% for subcommand in container.subcommands %}
 <h3><a id="{$ subcommand.name $}-command"></a>{$ subcommand.name $}</h3>
 {$ renderSyntax(subcommand, name) $}

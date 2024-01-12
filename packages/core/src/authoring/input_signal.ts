@@ -8,11 +8,14 @@
 
 import {producerAccessed, SIGNAL} from '@angular/core/primitives/signals';
 
+import {RuntimeError, RuntimeErrorCode} from '../errors';
 import {Signal} from '../render3/reactivity/api';
 
 import {INPUT_SIGNAL_NODE, InputSignalNode, REQUIRED_UNSET_VALUE} from './input_signal_node';
 
 /**
+ * @developerPreview
+ *
  * Options for signal inputs.
  */
 export interface InputOptions<ReadT, WriteT> {
@@ -31,11 +34,19 @@ export interface InputOptions<ReadT, WriteT> {
   transform?: (v: WriteT) => ReadT;
 }
 
-/** Signal input options without the transform option. */
+/**
+ * Signal input options without the transform option.
+ *
+ * @developerPreview
+ */
 export type InputOptionsWithoutTransform<ReadT> =
     // Note: We still keep a notion of `transform` for auto-completion.
     Omit<InputOptions<ReadT, ReadT>, 'transform'>&{transform?: undefined};
-/** Signal input options with the transform option required. */
+/**
+ * Signal input options with the transform option required.
+ *
+ * @developerPreview
+ */
 export type InputOptionsWithTransform<ReadT, WriteT> =
     Required<Pick<InputOptions<ReadT, WriteT>, 'transform'>>&InputOptions<ReadT, WriteT>;
 
@@ -48,11 +59,13 @@ export const ɵINPUT_SIGNAL_BRAND_WRITE_TYPE = /* @__PURE__ */ Symbol();
  * An input signal is similar to a non-writable signal except that it also
  * carries additional type-information for transforms, and that Angular internally
  * updates the signal whenever a new value is bound.
+ *
+ * @developerPreview
  */
 export interface InputSignal<ReadT, WriteT = ReadT> extends Signal<ReadT> {
+  [SIGNAL]: InputSignalNode<ReadT, WriteT>;
   [ɵINPUT_SIGNAL_BRAND_READ_TYPE]: ReadT;
   [ɵINPUT_SIGNAL_BRAND_WRITE_TYPE]: WriteT;
-  [SIGNAL]: InputSignalNode<ReadT, WriteT>;
 }
 
 /**
@@ -77,8 +90,9 @@ export function createInputSignal<ReadT, WriteT>(
     producerAccessed(node);
 
     if (node.value === REQUIRED_UNSET_VALUE) {
-      // TODO: Use a runtime error w/ error guide.
-      throw new Error('Input is required, but no value set yet.');
+      throw new RuntimeError(
+          RuntimeErrorCode.REQUIRED_INPUT_NO_VALUE,
+          ngDevMode && 'Input is required but no value is available yet.');
     }
 
     return node.value;
