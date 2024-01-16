@@ -209,7 +209,11 @@ For more information, see the <live-example></live-example> `app.component.ts` a
 
 <code-example header="src/app/app.component.ts (CommonModule 로드하기)" path="built-in-directives/src/app/app.component.ts" region="import-common-module"></code-example>
 
+
+<!--
 ### Using `NgStyle` in your component
+-->
+### 컴포넌트에 `NgStyle` 사용하기
 
 <!--
 Use `NgStyle` to set multiple inline styles simultaneously, based on the state of the component.

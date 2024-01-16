@@ -1590,13 +1590,6 @@
                   "tooltip": "이벤트 바인딩에 대해 알아보세요."
                 },
                 {
-                  "url": "guide/template-reference-variables",
-                  "/title": "Template variables",
-                  "title": "템플릿 변수",
-                  "/tooltip": "Introductory guide to referring to DOM elements within a template.",
-                  "tooltip": "템플릿에서 DOM 엘리먼트를 가리킬 때 사용하는 템플릿 변수에 대해 설명합니다."
-                },
-                {
                   "url": "guide/architecture-next-steps",
                   "/title": "Next steps",
                   "title": "다음 단계",
