@@ -15,7 +15,7 @@ export class HeroService {
 
   someMethod() {
     runInInjectionContext(this.environmentInjector, () => {
-      inject(SomeService); // Do what you need with the injected service
+      inject(SomeService); // 서비스 인스턴슬를 받아온 후에 원하는 동작을 실행합니다.
     });
   }
 }

@@ -84,8 +84,8 @@ For `NgModule` based applications, you can provide dependencies with the `Module
 
 </div>
 -->
-Injectors in Angular have rules that you can leverage to achieve the desired visibility of injectables in your applications.
-By understanding these rules, you can determine whether to declare a provider at the application level, in a Component, or in a Directive.
+Angular 안에서는 인젝터가 구성되는 방식에 따라 접근할 수 있는 인젝터와 의존성 객체가 달라지는 규칙이 있습니다.
+이 규칙을 제대로 이해해야 프로바이더를 애플리케이션 계층에 등록해야 할지, 컴포넌트나 디렉티브 계층에 등록해야 할지 정확하게 판단할 수 있습니다.
 
 Angular의 인젝터 계층은 두 종류로 구분할 수 있습니다:
 
@@ -199,9 +199,10 @@ Child `ModuleInjector` hierarchies are created when lazy loading other `@NgModul
 * `@Injectable()`의 `providedIn` 프로퍼티에 `root`나 `platform`를 지정합니다.
 * `@NgModule()`의 `providers` 배열에 등록합니다.
 
-`ModuleInjector` is configured by the `@NgModule.providers` and `NgModule.imports` property. `ModuleInjector` is a flattening of all the providers arrays that can be reached by following the `NgModule.imports` recursively.
+`ModuleInjector`는 `@NgModule.providers`와 `NgModule.imports` 프로퍼티에서 구성합니다.
+`NgModule.imports`에서 불러온 프로바이더 배열은 `ModuleInjector`에서 모두 접근할 수 있습니다.
 
-Child `ModuleInjector` hierarchies are created when lazy loading other `@NgModules`.
+지연 로딩되는 `@NgModule`이 있다면 자식 `ModuleInjector` 계층이 구성됩니다.
 
 
 <!--
