@@ -1,5 +1,9 @@
+<!--
 # Migrate an existing Angular project to standalone
+-->
+# Angular 프로젝트를 단독(standalone) 스타일로 마이그레이션하기
 
+<!--
 As of version 15.2.0, Angular offers a [schematic](guide/schematics) to help project authors convert existing projects to [the new standalone APIs](guide/standalone-components). The schematic aims to transform as much code as possible automatically, but it may require some manual fixes by the project author. Run the schematic with the following command:
 
 <code-example format="shell" language="shell">
@@ -7,23 +11,59 @@ As of version 15.2.0, Angular offers a [schematic](guide/schematics) to help pro
 ng generate @angular/core:standalone
 
 </code-example>
+-->
+Angular는 15.2.0 버전부터 NgModule 방식으로 개발한 프로젝트를 [새로 도입된 단독(standalone) 스타일의 API](guide/standalone-components)로 마이그레이션할 수 있는 [스키매틱(schematic)](guide/schematics)을 제공합니다.
+이 스키매틱을 활용하면 코드를 자동으로 변환할 수 있지만, 수동으로 손을 봐야 할 수도 있습니다.
+스키매틱을 실행하려면 아래 명령을 실행하면 됩니다:
 
+<code-example format="shell" language="shell">
+
+ng generate @angular/core:standalone
+
+</code-example>
+
+
+<!--
 ## Prerequisites
+-->
+## 사전지식
 
+<!--
 Before using the schematic, please ensure that the project:
 1. Is using Angular 15.2.0 or later.
 2. Builds without any compilation errors.
 3. Is on a clean Git branch and all work is saved.
+-->
+스키매틱을 사용하려면 프로젝트가 다음 조건을 만족해야 합니다:
 
+1. Angular 버전이 15.2.0 이후 버전이어야 합니다.
+2. 컴파일 에러 없이 빌드되는 상태여야 합니다.
+3. 저장되지 않은 작업 없이 Git 브랜치 상태가 클린 상태여야 합니다.
+
+
+<!--
 ## Schematic options
+-->
+## 스키매틱 옵션
 
+<!--
 | Option              | Details                                                    |
 |:---                 |:---                                                        |
 | `mode`              | The transformation to perform. See [Migration modes](#migration-modes) below for details on the available options. |
 | `path`              | The path to migrate, relative to the project root. You can use this option to migrate sections of your project incrementally. |
+-->
+| 옵션              | 설명                                                    |
+|:---                 |:---                                                        |
+| `mode`              | 동작 방식을 지정합니다. 자세한 내용은 아래 [마이그레이션 모드](#migration-modes) 섹션을 참고하세요. |
+| `path`              | 마이그레이션 할 위치를 프로젝트 최상위 폴더를 기준으로 상대주소로 지정합니다. 이 옵션은 프로젝트 코드를 조금씩 전환하는 경우에 사용합니다. |
 
+
+<!--
 ## Migrations steps
+-->
+## 마이그레이션 단계
 
+<!--
 The migration process is composed of three steps. You'll have to run it multiple times and check manually that the project builds and behaves as expected.
 
 <div class="callout is-helpful">
@@ -40,24 +80,77 @@ Run the migration in the order listed below, verifying that your code builds and
 2. Run `ng g @angular/core:standalone` and select "Remove unnecessary NgModule classes"
 3. Run `ng g @angular/core:standalone` and select "Bootstrap the project using standalone APIs"
 4. Run any linting and formatting checks, fix any failures, and commit the result
+-->
+마이그레이션 과정은 세 단계로 진행됩니다.
+이 과정을 진행하는 동안 프로젝트가 잘 빌드되고 동작하는지 여러번 반복하면서 확인해야 합니다.
 
+<div class="callout is-helpful">
+
+<header>참고</header>
+
+보통은 스키매틱이 코드를 자동으로 변환할 수 있지만, 개발자가 개입해야 하는 경우가 있을 수 있습니다.
+그래서 마이그레이션 과정의 각 단계마다 수동으로 작업할 것도 미리 감안해야 합니다.
+그리고 스키매틱이 작성한 코드는 프로젝트의 포매팅 룰과 맞지 않을 수 있습니다.
+
+</div>
+
+마이그레이션을 다음 순서대로 실행하면서 각 단계마다 코드가 제대로 빌드되는지 확인해 보세요:
+1. `ng g @angular/core:standalone`를 실행하고 "Convert all components, directives and pipes to standalone"를 선택합니다.
+2. `ng g @angular/core:standalone`를 실행하고 "Remove unnecessary NgModule classes"를 선택합니다.
+3. `ng g @angular/core:standalone`를 실행하고 "Bootstrap the project using standalone APIs"를 선택합니다.
+4. 린트 툴이나 포매팅 툴을 실행한 후에 코드 수정을 마무리하고 커밋합니다.
+
+
+<!--
 ## After the migration
+-->
+## 마이그레이션을 실행한 후
 
+<!--
 Congratulations, your application has been converted to standalone 🎉. These are some optional follow-up steps you may want to take now:
 * Find and remove any remaining `NgModule` declarations: since the ["Remove unnecessary NgModules" step](#remove-unnecessary-ngmodules) cannot remove all modules automatically, you may have to remove the remaining declarations manually.
 * Run the project's unit tests and fix any failures.
 * Run any code formatters, if the project uses automatic formatting.
 * Run any linters in your project and fix new warnings. Some linters support a `--fix` flag that may resolve some of your warnings automatically.
+-->
+축하합니다.
+애플리케이션이 단독(standalone) 스타일로 전환되었습니다 🎉.
+아래 작업이 필요한지 고려해 보세요:
 
+* 남아있는 `NgModule` 선언을 찾고 없앨지 고려해 보세요. ["Remove unnecessary NgModules" 단계](#remove-unnecessary-ngmodules)에서 제거되지 않은 모듈이 있다면 수동으로 제거해야 합니다.
+* 단위 테스트를 실행하고 문제가 있다면 수정합니다.
+* 코드 포매팅 툴을 실행하고 필요하다면 수정합니다.
+* 린트 툴을 실행하고 필요하다면 수정합니다. `--fix` 플래그를 지원하는 린트 툴이라면 문제를 자동으로 수정할 수 있습니다.
+
+
+<a id="migration-modes"></a>
+<!--
 ## Migration modes
+-->
+## 마이그레이션 모드
+
+<!--
 The migration has the following modes:
 1. Convert declarations to standalone.
 2. Remove unnecessary NgModules.
 3. Switch to standalone bootstrapping API.
 You should run these migrations in the order given.
+-->
+마이그레이션 모드는 3가지가 있습니다:
 
+1. 구성요소 선언을 단독 스타일로 전환합니다.
+2. 사용하지 않는 NgModule을 제거합니다.
+3. 부트스트랩 API를 단독 스타일로 전환합니다.
+
+마이그레이션은 지정된 순서대로 실행해야 합니다.
+
+
+<!--
 ### Convert declarations to standalone
+-->
+### 구성요소 선언을 단독 스타일로 전환합니다.
 
+<!--
 In this mode, the migration converts all components, directives and pipes to standalone by setting `standalone: true` and adding dependencies to their `imports` array.
 
 <div class="callout is-helpful">
@@ -110,8 +203,71 @@ export class GreeterComponent {
   showGreeting = true;
 }
 ```
+-->
+이 모드로 실행하면 컴포넌트, 디렉티브, 파이프 설정에 `standalone: true`를 추가해서 구성요소를 단독 스타일로 전환하고, 관련된 의존성 객체를 `imports` 배열에 등록합니다.
 
+<div class="callout is-helpful">
+
+이 단계에서는 NgModule이 컴포넌트를 부트스트랩하는 것을 수정하지 않습니다.
+왜냐하면 이 단계에서는 단독 스타일일 때 사용하는 `bootstrapApplication` 보다는 최상위 모듈을 사용하는`bootstrapModule`이 사용되었을 가능성이 높기 때문입니다.
+이 코드는 이후 ["부트스트랩 API를 단독 스타일로 전환합니다."](#switch-to-standalone-bootstrapping-api) 단계에서 자동으로 수정됩니다.
+
+</div>
+
+**변경 전:**
+```typescript
+// shared.module.ts
+@NgModule({
+  imports: [CommonModule],
+  declarations: [GreeterComponent],
+  exports: [GreeterComponent]
+})
+export class SharedModule {}
+```
+
+```typescript
+// greeter.component.ts
+@Component({
+  selector: 'greeter',
+  template: '<div *ngIf="showGreeting">Hello</div>',
+})
+export class GreeterComponent {
+  showGreeting = true;
+}
+```
+
+**변경 후:**
+```typescript
+// shared.module.ts
+@NgModule({
+  imports: [CommonModule, GreeterComponent],
+  exports: [GreeterComponent]
+})
+export class SharedModule {}
+```
+
+```typescript
+// greeter.component.ts
+@Component({
+  selector: 'greeter',
+  template: '<div *ngIf="showGreeting">Hello</div>',
+  standalone: true,
+  imports: [NgIf]
+})
+export class GreeterComponent {
+  showGreeting = true;
+}
+```
+
+
+<a id="remove-unnecessary-ngmodules"></a>
+
+<!--
 ### Remove unnecessary NgModules
+-->
+### 사용하지 않는 NgModule을 제거합니다.
+
+<!--
 After converting all declarations to standalone, many NgModules can be safely removed. This step deletes such module declarations and as many corresponding references as possible. If the migration cannot delete a reference automatically, it leaves the following TODO comment so that you can delete the NgModule manually:
 ```typescript
 /* TODO(standalone-migration): clean up removed NgModule reference manually */
@@ -139,8 +295,48 @@ export class ImporterModule {}
 // importer.module.ts
 // Does not exist!
 ```
+-->
+모든 구성요소들을 단독 스타일로 전환하고 나면 이제 NgModule을 대부분 안전하게 제거할 수 있습니다.
+이 단계에서는 모듈에 등록한 구성요소들을 분리하면서 최대한 많은 모듈을 제거합니다.
+마이그레이션 툴이 이 작업을 자동으로 실행하지 못하면 아래와 같은 TODO 주석을 생성합니다:
 
+```typescript
+/* TODO(standalone-migration): clean up removed NgModule reference manually */
+```
+
+모듈을 안전하게 제거할 수 있는 조건은 이렇습니다:
+* `declarations`이 없을 것
+* `providers`가 없을 것
+* `bootstrap` 컴포넌트가 없을 것
+* `ModuleWithProviders` 심볼을 사용하는 `imports`가 없을 것, 이 심볼을 사용하는 모듈은 제거할 수 없습니다.
+* 클래스 멤버가 없을 것. 빈 생성자는 무시합니다.
+
+
+**변경 전:**
+```typescript
+// importer.module.ts
+@NgModule({
+  imports: [FooComponent, BarPipe],
+  exports: [FooComponent, BarPipe]
+})
+export class ImporterModule {}
+```
+
+**변경 후:**
+```typescript
+// importer.module.ts
+// Does not exist!
+```
+
+
+<a id="switch-to-standalone-bootstrapping-api"></a>
+
+<!--
 ### Switch to standalone bootstrapping API
+-->
+### 부트스트랩 API를 단독 스타일로 전환합니다.
+
+<!--
 This step converts any usages of  `bootstrapModule` to the new, standalone-based `bootstrapApplication`. It also switches the root component to `standalone: true` and deletes the root NgModule. If the root module has any `providers` or `imports`, the migration attempts to copy as much of this configuration as possible into the new bootstrap call.
 
 **Before:**
@@ -189,16 +385,91 @@ import { AppComponent } from './app/app.component';
 
 bootstrapApplication(AppComponent).catch(e => console.error(e));
 ```
+-->
+기존에 NgModule 방식에서 사용하던 `bootstrapModule`을 단독 스타일 방식 API인 `bootstrapApplication`으로 변경합니다.
+그리고 최상위 컴포넌트에 `standalone: true`를 추가하고 최상위 NgModule을 제거합니다.
+만약 최상위 모듈에 `providers`나 `imports`가 있다면 마이그레이션 툴이 적절한 코드로 변환합니다.
 
+**변경 전:**
+```typescript
+// ./app/app.module.ts
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
+
+```typescript
+// ./app/app.component.ts
+@Component({ selector: 'app', template: 'hello' })
+export class AppComponent {}
+```
+
+```typescript
+// ./main.ts
+import { platformBrowser } from '@angular/platform-browser';
+import { AppModule } from './app/app.module';
+
+platformBrowser().bootstrapModule(AppModule).catch(e => console.error(e));
+```
+
+**변경 후:**
+```typescript
+// ./app/app.module.ts
+// 제거됩니다!
+```
+
+```typescript
+// ./app/app.component.ts
+@Component({ selector: 'app', template: 'hello', standalone: true })
+export class AppComponent {}
+```
+
+```typescript
+// ./main.ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+
+bootstrapApplication(AppComponent).catch(e => console.error(e));
+```
+
+
+<!--
 ## Common problems
+-->
+## 제대로 동작하지 않는 경우
+
+<!--
 Some common problems that may prevent the schematic from working correctly include:
 * Compilation errors - if the project has compilation errors, Angular cannot analyze and migrate it correctly.
 * Files not included in a tsconfig - the schematic determines which files to migrate by analyzing your project's `tsconfig.json` files. The schematic excludes any files not captured by a tsconfig.
 * Code that cannot be statically analyzed - the schematic uses static analysis to understand your code and determine where to make changes. The migration may skip any classes with metadata that cannot be statically analyzed at build time.
+-->
+이런 경우에는 스키매틱이 정상적으로 동작하지 않을 수 있습니다:
 
+* 컴파일 에러 - 프로젝트에 컴파일 에러가 있으면 Angular가 코드를 제대로 분석하거나 수정할 수 없습니다.
+* tsconfig에 파일이 등록되지 않은 경우 - 스키매틱은 프로젝트의 `tsconfig.json` 파일에 등록된 파일들을 분석하고 마이그레이션 할지 판단합니다. 그래서 tsconfig에 등록되지 않은 파일은 스키매틱이 처리할 수 없습니다.
+* 정적으로 분석할 수 없는 코드 - 스키매틱이 코드를 분석하고 수정할지 결정하기 위해 정적 코드 분석 툴을 사용합니다. 그래서 빌드 시점에 정적으로 분석할 수 없는 메타데이터는 스키매틱이 처리하지 않습니다.time.
+
+
+<!--
 ## Limitations
+-->
+## 한계
+
+<!--
 Due to the size and complexity of the migration, there are some cases that the schematic cannot handle:
 * Because unit tests are not ahead-of-time (AoT) compiled, `imports` added to components in unit tests might not be entirely correct.
 * The schematic relies on direct calls to Angular APIs. The schematic cannot recognize custom wrappers around Angular APIs. For example, if there you define a custom `customConfigureTestModule` function that wraps `TestBed.configureTestingModule`, components it declares may not be recognized.
+-->
+마이그레이션 복잡도에 따라 스키매틱이 처리할 수 없는 경우가 있습니다:
+
+* 유닛 테스트는 AOT 빌드의 대상이 아니기 때문에 유닛 테스트 실행중 컴포넌트의 `imports` 가 제대로 동작하지 않을 수 있습니다.
+* 스키매틱은 Angular API를 직접 실행합니다. 그래서 Angular API를 래핑한 함수가 있다면 스키매틱은 이것을 제대로 인식할 수 없습니다. 예를 들어 `TestBed.configureTestingModule`을 `customConfigureTestModule` 이라는 함수로 랩핑했다면 스키매틱이 처리할 수 없습니다.
+
 
 @reviewed 2023-02-15
