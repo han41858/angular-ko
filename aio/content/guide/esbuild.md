@@ -404,6 +404,7 @@ Building libraries with the new build system via `ng-packagr` is also not yet po
 `ng-packagr`로 라이브러리를 빌드하는 기능도 아직 준비중입니다.
 
 
+<a id="esm-default-imports-vs-namespace-imports"></a>
 <!--
 ## ESM default imports vs. namespace imports
 -->
