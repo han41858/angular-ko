@@ -139,7 +139,7 @@ npx http-server -p 8080 -c-1 dist/
 
 npm install           # node 패키지들을 설치합니다.
 ng add @angular/pwa   # 서비스 워커를 활성화합니다.
-ng build              # 애플리케이션을 빌드하빈다. 빌드 결과물은 /dist 폴더에 생성됩니다.
+ng build              # 애플리케이션을 빌드합니다. 빌드 결과물은 /dist 폴더에 생성됩니다.
 
 </code-example>
 
