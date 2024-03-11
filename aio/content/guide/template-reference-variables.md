@@ -282,6 +282,6 @@ _템플릿 입력 변수_ 는 템플릿 인스턴스마다 값을 받는 변수�
 <!--
 [Writing structural directives](/guide/structural-directives)
 -->
-[구조 디렉티브 만들기](https://angular.io/guide/structural-directives)
+[구조 디렉티브 만들기](/guide/structural-directives)
 
 @reviewed 2022-05-12

@@ -305,7 +305,7 @@ Over the past two quarters, we developed a new video and textual tutorial based 
 *2023년 4분기에 완료*
 
 반년동안 단독 컴포넌트 기반의 튜토리얼을 새롭게 준비했습니다.
-지금 https://angular.io/start 를 확인해 보세요.
+지금 https://angular.kr/start 를 확인해 보세요.
 
 
 <!--
