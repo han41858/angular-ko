@@ -817,7 +817,7 @@ That is why a `base href` is generally the better option.
 
 *   `base href`를 지정하면 리소스 뿐 아니라 XMLHttpRequest도 영향을 받습니다.
 
-`base href`는 Angular 라우터에서도 설정할 수 있습니다\([APP_BASE_HREF](https://angular.io/api/common/APP_BASE_HREF\)를 참고하세요).
+`base href`는 Angular 라우터에서도 설정할 수 있습니다\([APP_BASE_HREF](api/common/APP_BASE_HREF) 를 참고하세요\).
 이 방식은 설정이 복잡하거나 애플리케이션 안에서 `APP_BASE_HREF` 토큰을 수동으로 설정해야 할 때 사용합니다.
 애플리케이션 기본 경로는 / 이지만 리소스 파일의 위치는 /assets/ 일 때와 같은 경우가 그렇습니다.
 
