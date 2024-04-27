@@ -234,7 +234,7 @@ In the future, a schematic will make this migration process easier for existing 
 `application` 빌더도 Angular CLI로 애플리케이션을 생성했다면 기본으로 설치되는 `@angular-devkit/build-angular` 패키지로 제공됩니다.
 Angular v17 버전부터 `ng new`로 애플리케이션을 생성하면 이 빌더가 기본 빌더입니다.
 
-이전버전에서 만든 Angular 애플리케이션의 설정 파일 `angular.json`에는 이런 내용이 있습니다:
+이전 버전에서 만든 Angular 애플리케이션의 설정 파일 `angular.json`에는 이런 내용이 있습니다:
 
 <code-example language="json" hideCopy="true">
 ...
