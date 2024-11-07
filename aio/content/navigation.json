@@ -1074,7 +1074,7 @@
             {
               "url": "guide/control_flow",
               "/title": "Built-in control flow",
-              "title": "기본 제어 흐름",
+              "title": "기본 제어문",
               "/tooltip": "Angular built-in control flow: if, for and switch",
               "tooltip": "Angular의 기본 제어 방식이 변경됩니다: if, for, switch"
             },
