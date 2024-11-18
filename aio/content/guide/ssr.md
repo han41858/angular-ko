@@ -10,6 +10,8 @@ Server-side rendering (SSR) is a process that involves rendering pages on the se
 첫 화면을 그릴 때는 미리 생성된 HTML 문서는 브라우저로 전달하여 바로 표시하고, 그 후에는 Angular가 이 문서를 재활용해서 애플리케이션 화면을 띄웁니다.
 
 
+<a id="why-use-ssr"></a>
+
 <!--
 ## Why use SSR?
 -->
@@ -158,6 +160,8 @@ Hydration is the process that restores the server side rendered application on t
 자세한 내용은 [하이드레이션](guide/hydration) 문서를 참고하세요.
 
 
+<a id="caching-data-when-using-httpclient"></a>
+
 <!--
 ## Caching data when using HttpClient
 -->
@@ -248,7 +252,8 @@ export class MyComponent {
 
   constructor() {
     afterNextRender(() => {
-      // 이 코드는 서버에서 실행되지 않고 브라우저에서만 실행되며, `scrollHeight`가 존재하는지 확인하면 더 안전합니다.
+      // 이 코드는 서버에서 실행되지 않고 브라우저에서만 실행됩니다.
+      // `scrollHeight`가 존재하는지 확인하면 더 안전합니다.
       console.log('content height: ' + this.contentRef.nativeElement.scrollHeight);
     });
   }

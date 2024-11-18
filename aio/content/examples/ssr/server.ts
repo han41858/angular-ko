@@ -28,7 +28,7 @@ export function app(): express.Express {
   server.get('*.*', express.static(browserDistFolder, {maxAge: '1y'}));
 
   // #docregion navigation-request
-  // All regular routes use the Angular engine
+  // 모든 GET 요청을 Angular 엔진으로 보냅니다.
   server.get('*', (req, res, next) => {
     const {protocol, originalUrl, baseUrl, headers} = req;
 
