@@ -1,19 +1,46 @@
+<!--
 # Hydration
+-->
+# 하이드레이션(Hydration)
 
+<!--
 ## What is hydration
+-->
+## 하이드레이션이란?
 
+<!--
 Hydration is the process that restores the server side rendered application on the client. This includes things like reusing the server rendered DOM structures, persisting the application state, transferring application data that was retrieved already by the server, and other processes.
+-->
+하이드레이션은 서버에서 미리 렌더링 한 애플리케이션을 클라이언트에서 온전하게 전환하는 과정을 의미합니다.
+이 과정 중에는 서버에서 렌더링 할 때 사용했던 DOM 구조를 재사용하거나, 기존에 사용되던 애플리케이션의 상태를 유지할 수 있으며, 서버에서 활용하던 데이터를 재활용할 수도 있습니다.
 
+<!--
 ## Why is hydration important?
+-->
+## 하이드레이션이 왜 중요한가요?
 
+<!--
 Hydration improves application performance by avoiding extra work to re-create DOM nodes. Instead, Angular tries to match existing DOM elements to the applications structure at runtime and reuses DOM nodes when possible. This results in a performance improvement that can be measured using [Core Web Vitals (CWV)](https://web.dev/learn-core-web-vitals/) statistics, such as reducing the First-contentful paint [FCP](https://developer.chrome.com/en/docs/lighthouse/performance/first-contentful-paint/) and Largest Contentful Paint ([LCP](https://web.dev/lcp/)), as well as Cumulative Layout Shift ([CLS](https://web.dev/cls/)). Improving these numbers also affects things like SEO performance.
 
 Without hydration enabled, server side rendered Angular applications will destroy and re-render the application's DOM, which may result in a visible UI flicker. This re-rendering can negatively impact [Core Web Vitals](https://web.dev/learn-core-web-vitals/) like [LCP](https://web.dev/lcp/) and cause a layout shift. Enabling hydration allows the existing DOM to be re-used and prevents a flicker.
+-->
+하이드레이션을 활용하면 Angular가 실행 시점에 필요한 DOM 엘리먼트가 있는지 확인하고, 존재하면 이 DOM 노드를 재활용하면서 불필요한 DOM 노드 생성을 줄일 수 있기 때문에 애플리케이션 성능을 개선할 수 있습니다.
+따라서 [FCP(First Contentful Paint)](https://developer.chrome.com/en/docs/lighthouse/performance/first-contentful-paint/)나 [LCP(Largest Contentful Paint)](https://web.dev/lcp/), [CLS(Cumulative LayoutShift)](https://web.dev/cls/)에 도움을 줄 수 있기 때문에 [코어 웹 바이탈(Core Web Vitals, CWV)](https://web.dev/learn-core-web-vitals/) 점수를 높일 수 있습니다.
+물론 검색엔진 최적화에도 도움이 됩니다.
+
+하이드레이션을 사용하지 않으면 서버에서 미리 렌더링 한 애플리케이션은 다시 사용하지 않고 종료되며, 애플리케이션에서 사용하는 DOM을 처음부터 다시 그리기 때문에 화면이 깜빡일 수 있습니다.
+이 과정은 [코어 웹 바이탈](https://web.dev/learn-core-web-vitals/) 점수에 크게 영향을 주며, 특히 레이아웃이 변경되면 [LCP](https://web.dev/lcp/) 측면에서도 불리합니다.
+화면이 깜빡이는 것을 방지하려면 하이드레이션을 활용하세요.
+
 
 <a id="how-to-enable"></a>
 
+<!--
 ## How do you enable hydration in Angular
+-->
+## 하이드레이션 활성화하기
 
+<!--
 Before you can get started with hydration, you must have a server side rendered (SSR) application. Follow the [Angular SSR Guide](/guide/ssr) to enable server side rendering first. Once you have SSR working with your application, you can enable hydration by visiting your main app component or module and importing `provideClientHydration` from `@angular/platform-browser`. You'll then add that provider to your app's bootstrapping providers list.
 
 ```typescript
@@ -66,11 +93,72 @@ While running an application in dev mode, you can confirm hydration is enabled b
 Angular calculates the stats based on all components rendered on a page, including those that come from third-party libraries.
 
 </div>
+-->
+하이드레이션은 서버 사이드 렌더링(Server side rendering, SSR) 애플리케이션에만 적용할 수 있습니다.
+[Angular SSR 문서](/guide/ssr)를 보고 서버 사이드 렌더링을 먼저 활성화 하세요.
+SSR을 적용하고 나면 메인 앱 컴포넌트나 최상위 모듈에서 `@angular/platform-browser` 패키지로 제공되는 `provideClientHydration`을 로드해서 앱 부트스트래핑 프로바이더 목록에 추가하면 됩니다.
+
+```typescript
+import {
+  bootstrapApplication,
+  provideClientHydration,
+} from '@angular/platform-browser';
+...
+
+bootstrapApplication(RootCmp, {
+  providers: [provideClientHydration()]
+});
+```
+
+NgModule 방식을 사용하는 앱이라면 최상위 앱 모듈의 프로바이더 목록에 `provideClientHydration`을 추가하면 됩니다.
+
+```typescript
+import {provideClientHydration} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+
+@NgModule({
+  declarations: [RootCmp],
+  exports: [RootCmp],
+  bootstrap: [RootCmp],
+  providers: [provideClientHydration()],
+})
+export class AppModule {}
+```
+
+<div class="alert is-helpful">
+
+**중요**: `provideClientHydration()`을 실행할 때 **서버** 에서 애플리케이션을 부트스트랩할 때 필요한 프로바이더들이 모두 등록되었는지 확인하세요. `ng new` 명령을 실행해서 만든 애플리케이션의 기본 구조라면 최상위 `AppModule` 에서 `provideClientHydration()`을 실행하는 것으로 충분합니다.
+서버에 필요한 모듈은 이 모듈이 자동으로 준비하기 때문입니다.
+프로젝트 구조를 수동으로 구성한 경우라면 서버의 부트스트랩 설정이 유효한지 꼭 확인하세요.
+
+</div>
+
+이런 단계를 거친 후 서버를 시작하면 브라우저로 애플리케이션을 로드할 수 있습니다.
+
+<div class="alert is-helpful">
+
+  하이드레이션이 온전히 동작하려면 DOM을 직접 조작하거나 `ngSkipHydration`을 활용해야 할 수 있습니다. 자세한 내용은 [제약조건](#constraints), [DOM을 직접 조작하는 경우](#dom-manipulation), [특정 컴포넌트에 하이드레이션 생략하기](#ngskiphydration) 섹션을 참고하세요.
+
+</div>
+
+애플리케이션이 개발 모드로 동작하고 있을 때 브라우저에서 개발자 도구를 열고 콘솔을 확인하면 하이드레이션이 제대로 활성화되었는지 확인할 수 있습니다.
+하이드레이션이 활성화되면 컴포넌트의 개수나 하이드레이션 대상 노드의 개수와 같은 통계가 표시됩니다.
+
+<div class="alert is-helpful">
+
+이 때 제공되는 정보는 서드 파티 라이브러리를 포함하여 화면에 렌더링되는 모든 컴포넌트를 포함합니다.
+
+</div>
+
 
 <a id="constraints"></a>
 
+<!--
 ## Constraints
+-->
+## 제약조건
 
+<!--
 Hydration imposes a few constraints on your application that are not present without hydration enabled. Your application must have the same generated DOM structure on both the server and the client. The process of hydration expects the DOM tree to have the same structure in both places. This also includes whitespaces and comment nodes that Angular produces during the rendering on the server. Those whitespaces and nodes must be present in the HTML generated by the server-side rendering process.
 
 <div class="alert is-important">
@@ -80,21 +168,58 @@ The HTML produced by the server side rendering operation **must not** be altered
 </div>
 
 If there is a mismatch between server and client DOM tree structures, the hydration process will encounter problems attempting to match up what was expected to what is actually present in the DOM. Components that do direct DOM manipulation using native DOM APIs are the most common culprit.
+-->
+하이드레이션을 활성화 한 후에 생기는 제약조건이 몇가지 있습니다.
+서버에 미리 렌더링 된 애플리케이션과 클라이언트에서 전환하는 애플리케이션의 DOM 구조가 같아야 합니다.
+하이드레이션은 이런 상황에 맞게 설계되었기 때문입니다.
+공백문자나 주석 노드도 포함해서 말입니다.
+클라이언트에서 렌더링 할 애플리케이션 DOM에 공백문자나 주석 노드가 있다면, 이것들은 서버에서 렌더링 하는 DOM에도 존재해야 합니다.
+
+<div class="alert is-important">
+
+서버에서 미리 렌더링하는 HTML 문서는 서버와 클라이언트가 전환될 때 **변경되면 안됩니다**.
+
+</div>
+
+서버 DOM과 클라이언트 DOM 구조가 다르면, 하이드레이션에서 양쪽의 구조를 매칭할 때 문제가 발생합니다.
+네이티브 DOM API를 활용해서 DOM을 직접 조작한 경우에 보통 이런 문제가 발생합니다.
+
 
 <a id="dom-manipulation"></a>
 
+<!--
 ### Direct DOM Manipulation
+-->
+### DOM을 직접 조작하는 경우
 
+<!--
 If you have components that manipulate the DOM using native DOM APIs or use `innerHTML` or `outerHTML`, the hydration process will encounter errors. Specific cases where DOM manipulation is a problem are situations like accessing the `document`, querying for specific elements, and injecting additional nodes using `appendChild`. Detaching DOM nodes and moving them to other locations will also result in errors.
 
 This is because Angular is unaware of these DOM changes and cannot resolve them during the hydration process. Angular will expect a certain structure, but it will encounter a different structure when attempting to hydrate. This mismatch will result in hydration failure and throw a DOM mismatch error ([see below](#errors)).
 
 It is best to refactor your component to avoid this sort of DOM manipulation. Try to use Angular APIs to do this work, if you can. If you cannot refactor this behavior, use the `ngSkipHydration` attribute ([described below](#ngskiphydration)) until you can refactor into a hydration friendly solution.
+-->
+네이티브 DOM API를 이용하거나 `innerHTML`, `outerHTML`을 활용하면 하이드레이션 과정이 실패할 가능성이 높습니다.
+`document`에 직접 접근해서 특정 엘리먼트를 찾아오고 `appendChild`로 노드를 추가하는 경우라면 특히 더 그렇습니다.
+DOM 노드를 제거하거나 다른 위치로 옮기는 것도 문제가 됩니다.
+
+이런 상황이 생기면 Angular는 DOM이 변경된 것을 파악할 수 없기 때문에 하이드레이션 과정을 진행할 수 없어서
+[DOM 불일치 에러](#errors)가 발생합니다.
+
+네이티브 API로 DOM을 직접 조작하지 않도록 컴포넌트를 구성하는 것이 가장 좋습니다.
+그리고 꼭 DOM을 조작해야 한다면 Angular API를 활용하는 것이 좋습니다.
+Angular API로 리팩토링할 수 없는 경우라면 [아래](#ngskiphydration)에서 설명하는 `ngSkipHydration` 어트리뷰트를 사용하세요.
+
 
 <a id="valid-html"></a>
+<a id="valid-html-structure"></a>
 
+<!--
 ### Valid HTML structure
+-->
+### 유효한 HTML 구조
 
+<!--
 There are a few cases where if you have a component template that does not have valid HTML structure, this could result in a DOM mismatch error during hydration.
 
 As an example, here are some of the most common cases of this issue.
@@ -105,10 +230,27 @@ As an example, here are some of the most common cases of this issue.
 * `<a>` inside another `<a>`
 
 If you are uncertain about whether your HTML is valid, you can use a [syntax validator](https://validator.w3.org/) to check it.
+-->
+컴포넌트 템플릿에 유효하지 않은 HTML 구조를 사용하면 DOM 불일치 에러가 발생합니다.
+
+이런 경우가 그렇습니다.
+
+* `<table>` 에 `<tbody>`를 생략한 경우
+* `<p>` 안쪽에 `<div>` 를 사용한 경우
+* `<h1>` 안쪽에 `<a>` 를 사용한 경우
+* `<a>` 안쪽에 또다른 `<a>` 를 사용한 경우
+
+HTML 문법을 제대로 사용했는지 확실하지 않다면 [문법 검사기](https://validator.w3.org/)로 확인해보는 것도 좋습니다.
+
 
 <a id="preserve-whitespaces"></a>
-### Preserve Whitespaces Configuration
 
+<!--
+### Preserve Whitespaces Configuration
+-->
+### 공백문자 유지하기
+
+<!--
 When using the hydration feature, we recommend using the default setting of `false` for `preserveWhitespaces`. If this setting is not in your tsconfig, the value will be `false` and no changes are required. If you choose to enable preserving whitespaces by adding `preserveWhitespaces: true` to your tsconfig, it is possible you may encounter issues with hydration. This is not yet a fully supported configuration.
 
 <div class="alert is-helpful">
@@ -118,39 +260,89 @@ Make sure that this setting is set **consistently** in `tsconfig.server.json` fo
 If you choose to set this setting in your tsconfig, we recommend to set it only in `tsconfig.app.json` which by default the `tsconfig.server.json` will inherit it from.
 
 </div>
+-->
+하이드레이션을 활용한다면 `preserveWhitespaces` 옵션을 `false`로 사용하기를 권장합니다.
+tsconfig에 이 옵션을 따로 설정하지 않았다면 기본값은 `false`이기 때문에 문제가 없습니다.
+하지만 tsconfig에 `preserveWhitespaces: true` 옵션을 설정했다면 하이드레이션 과정에 문제가 발생할 수 있습니다.
+이 옵션은 아직 완전히 지원되지 않습니다.
+
+<div class="alert is-helpful">
+
+이 옵션은 서버에 적용되는 `tsconfig.server.json` 파일과 브라우저 빌드에 적용되는 `tsconfig.app.json` 파일에 모두 적용되어야 합니다.
+설정값이 다르면 하이드레이션이 실패할 수 있습니다.
+
+`tsconfig.app.json` 파일에 설정값을 지정하고 `tsconfig.server.json` 파일은 설정값을 상속받는 것이 가장 좋습니다.
+
+</div>
+
 
 <a id="cdn-configuration"></a>
+
+<!--
 ### CDN Optimizations
+-->
+### CDN 최적화
 
 <!--
 Many CDNs offer a feature that will try to optimize your rendered application by stripping all nodes from the rendered DOM that it thinks are unnecessary, which includes comment nodes. Comment nodes are an essential part of Angular's functioning and are critical for hydration to work. You will need to disable this CDN feature in order to ensure your application loads and hydrates.
 
 If CDN optimization is enabled and you have hydration enabled, when you attempt to load the page you will encounter error [NG0507](https://angular.io/errors/NG0507). If you see this error, you should go and disable the CDN optimization.
 -->
-Many CDNs offer a feature that will try to optimize your rendered application by stripping all nodes from the rendered DOM that it thinks are unnecessary, which includes comment nodes. Comment nodes are an essential part of Angular's functioning and are critical for hydration to work. You will need to disable this CDN feature in order to ensure your application loads and hydrates.
+일반적으로 CDN 서비스는 렌더링 된 DOM에서 필요없다고 생각되는 노드는 자동으로 제거하는 최적화를 수행합니다.
+이 때 주석 노드도 해당될 수 있습니다.
+주석 노드는 Angular가 동작하기 위해 필요한 경우가 많으며, 하이드레이션이 동작하기 위해서는 더욱 그렇습니다.
+하이드레이션을 제대로 수행하려면 이런 CDN 최적화 기능을 비활성화해야 합니다.
 
-If CDN optimization is enabled and you have hydration enabled, when you attempt to load the page you will encounter error [NG0507](/errors/NG0507). If you see this error, you should go and disable the CDN optimization.
+애플리케이션에 하이드레이션이 적용되었는데 CDN 최적화 기능이 동작하면 [NG0507](/errors/NG0507) 에러가 발생할 수 있습니다.
+이 오류가 발생하면 CDN 최적화 기능을 비활성화하세요.
 
 
+<!--
 ### Custom or Noop Zone.js are not yet supported
+-->
+### 커스텀 Zone.js는 지원하지 않습니다.
 
+<!--
 Hydration relies on a signal from Zone.js when it becomes stable inside an application, so that Angular can start the serialization process on the server or post-hydration cleanup on the client to remove DOM nodes that remained unclaimed.
 
 Providing a custom or a "noop" Zone.js implementation may lead to a different timing of the "stable" event, thus triggering the serialization or the cleanup too early or too late. This is not yet a fully supported configuration and you may need to adjust the timing of the `onStable` event in the custom Zone.js implementation.
+-->
+하이드레이션은 Zone.js이 안정상태일 때 보내는 시그널에 반응하기 때문에, 서버에서 직렬화 과정을 거치거나 클라이언트쪽에서 하이드레이션 이후에 정리 과정을 거치면서 DOM 노드를 제거하면 문제가 생길 수 있습니다.
+
+그래서 Zone.js에 영향을 미치는 커스텀 동작이나 Zone.js를 무효화하도록 구현하면 "안정" 이벤트가 발생하는 시점에 영향을 주면서 직렬화나 정리 과정의 타이밍이 틀어질 수 있습니다.
+아직은 이런 경우를 완벽하게 지원하지 않습니다.
+커스텀 Zone.js를 꼭 사용해야 한다면 `onStable` 이벤트 시점을 조절해야 할 수 있습니다.
+
 
 
 <a id="errors"></a>
 
+<!--
 ## Errors
+-->
+## 에러
 
+<!--
 There are several hydration related errors you may encounter ranging from node mismatches to cases when the `ngSkipHydration` was used on an invalid host node. The most common error case that may occur is due to direct DOM manipulation using native APIs that results in hydration being unable to find or match the expected DOM tree structure on the client that was rendered by the server. The other case you may encounter this type of error was mentioned in the [Valid HTML structure](#valid-html) section earlier. So, make sure the HTML in your templates are using valid structure, and you'll avoid that error case.
 
 For a full reference on hydration related errors, visit the [Errors Reference Guide](/errors).
+-->
+호스트 노드에 `ngSkipHydration`을 잘못 사용하면 하이드레이션 에러가 발생할 수 있습니다.
+대부분은 네이티브 API를 활용하여 DOM을 직접 조작한 경우에 서버와 클라이언트의 노드가 일치하지 않아 발생합니다.
+아니면 [유효한 HTML 구조](#valid-html)가 아닌 경우에도 발생할 수 있습니다.
+템플릿에 사용한 HTML 문법이 적절한지 꼭 확인하세요.
+
+하이드레이션 에러를 자세하게 확인하려면 [에러 참조 가이드](/errors)를 참고하세요.
+
 
 <a id="ngskiphydration"></a>
 
+<!--
 ## How to skip hydration for particular components
+-->
+## 특정 컴포넌트에 하이드레이션 생략하기
 
+<!--
 Some components may not work properly with hydration enabled due to some of the aforementioned issues, like [Direct DOM Manipulation](#dom-manipulation). As a workaround, you can add the `ngSkipHydration` attribute to a component's tag in order to skip hydrating the entire component.
 
 ```html
@@ -178,17 +370,67 @@ This will fix rendering issues, but it means that for this component (and its ch
 The `ngSkipHydration` attribute can only be used on component host nodes. Angular throws an error if this attribute is added to other nodes.
 
 Keep in mind that adding the `ngSkipHydration` attribute to your root application component would effectively disable hydration for your entire application. Be careful and thoughtful about using this attribute. It is intended as a last resort workaround. Components that break hydration should be considered bugs that need to be fixed.
+-->
+컴포넌트가 [직접 DOM을 조작](#dom-manipulation) 한다면 하이드레이션이 제대로 동작하지 않을 수 있습니다.
+이런 경우라면 컴포넌트 태그에 `ngSkipHydration` 어트리뷰트를 추가해서 하이드레이션을 적용하지 않는 컴포넌트로 지정할 수 있습니다.
+
+```html
+<example-cmp ngSkipHydration />
+```
+
+아니면 호스트에 바인딩할 수도 있습니다.
+
+```typescript
+@Component({
+  ...
+  host: {ngSkipHydration: 'true'},
+})
+class ExampleCmp {}
+```
+
+`ngSkipHydration` 어트리뷰트를 지정하면 이 컴포넌트부터 이 컴포넌트의 자식 컴포넌트에는 하이드레이션을 적용하지 않습니다.
+이는 컴포넌트를 완전히 종료하고 다시 렌더링한다는 것을 의미합니다.
+
+<div class="alert is-helpful">
+
+이렇게 하면 하이드레이션이 중단되는 문제를 피할 수 있지만 하이드레이션의 이점을 온전히 취할 수 없습니다.
+하이드레이션 과정이 중간에 끊어진다면 하이드레이션을 건너뛰지 않고, 하이드레이션에 방해가 되지 않도록 코드를 수정하는 것이 좋습니다.
+
+</div>
+
+`ngSkipHydration` 어트리뷰트는 컴포넌트의 호스트 노드에만 사용할 수 있습니다.
+다른 노드에 사용하면 Angular가 에러를 발생시킵니다.
+
+애플리케이션 최상위 컴포넌트에 `ngSkipHydration` 어트리뷰트를 적용하면 애플리케이션 전체 범위에 하이드레이션이 비활성화된다는 것을 의미합니다.
+그래서 이 어트리뷰트는 신중하게 사용해야 하며, 최후의 수단으로만 사용해야 합니다.
+하이드레이션이 중단되는 컴포넌트는 버그로 다뤄서 수정해야 할 문제입니다.
+
 
 <a id="i18n"></a>
 
 ## I18N
 
+<!--
 We don't yet support internationalization with hydration, but support is coming.
 Currently, Angular would skip hydration for components that use i18n blocks, effectively
 re-rendering those components from scratch.
+-->
+아직 i18n 기능에는 하이드레이션을 적용할 수 없지만 곧 지원될 예정입니다.
+지금은 Angular가 i18n 블록을 사용하는 컴포넌트를 확인하면 하이드레이션을 생략하고 처음부터 다시 렌더링합니다.
 
+
+<!--
 ## Third Party Libraries with DOM Manipulation
+-->
+## DOM을 조작하는 서드 파티 라이브러리
 
+<!--
 There are a number of third party libraries that depend on DOM manipulation to be able to render. D3 charts is a prime example. These libraries worked without hydration, but they may cause DOM mismatch errors when hydration is enabled. For now, if you encounter DOM mismatch errors using one of these libraries, you can add the `ngSkipHydration` attribute to the component that renders using that library.
+-->
+서드 파티 라이브러리 중에는 DOM을 직접 조작하는 라이브러리가 있습니다.
+대표적으로 D3 차트 라이브러리가 그렇습니다.
+이런 라이브러리는 하이드레이션이 없을 때는 잘 동작하지만, 하이드레이션을 활성화하면 DOM 불일치 에러가 발생할 수 있습니다.
+DOM을 직접 조작하는 라이브러리를 사용하다가 DOM 불일치 에러가 발생하면 이런 라이브러리를 활용하는 컴포넌트에 `ngSkipHydration` 어트리뷰트를 추가하세요.
+
 
 @reviewed 2023-08-14
