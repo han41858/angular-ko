@@ -9,9 +9,13 @@
     &.docs-animate-content {
       animation: fade-in 500ms;
     }
+
+    & {
+      word-break: keep-all; // for korean word break
+    }
   }
 
-  //applying styles when TOC position got translated to the top right 
+  //applying styles when TOC position got translated to the top right
   @include mq.for-large-desktop-up{
     display: flex;
     justify-content: center;

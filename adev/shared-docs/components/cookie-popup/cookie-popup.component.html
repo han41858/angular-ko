@@ -1,21 +1,21 @@
 @if (!hasAccepted()) {
 <div class="docs-cookies-popup docs-invert-mode">
-  <p>This site uses cookies from Google to deliver its services and to analyze traffic.</p>
+  <p>이 사이트는 서비스를 개선하고 트래픽을 분석하기 위해 Google의 쿠키를 사용합니다.</p>
 
   <div>
     <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener">
-      <button class="docs-primary-btn" [attr.text]="'Learn more'" aria-label="Learn More">
-        Learn more
+      <button class="docs-primary-btn" [attr.text]="'더 알아보기'" aria-label="더 알아보기">
+        더 알아보기
       </button>
     </a>
     <button
       type="button"
       (click)="accept()"
       class="docs-primary-btn"
-      [attr.text]="'Ok, Got it'"
-      aria-label="Ok, Got it"
+      [attr.text]="'알겠습니다.'"
+      aria-label="알겠습니다."
     >
-      Ok, Got it
+      알겠습니다.
     </button>
   </div>
 </div>

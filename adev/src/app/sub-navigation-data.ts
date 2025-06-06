@@ -32,7 +32,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
     children: [
       {
         // label: 'What is Angular?',
-        label: 'Angular란 무엇인가?',
+        label: 'Angular란?',
         path: 'overview',
         contentPath: 'introduction/what-is-angular',
       },
@@ -44,7 +44,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
       },
       {
         // label: 'Essentials',
-        label: '기초지식',
+        label: '핵심',
         children: [
           {
             // label: 'Overview',
