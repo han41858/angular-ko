@@ -44,7 +44,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
       },
       {
         // label: 'Essentials',
-        label: '핵심',
+        label: '핵심 가이드',
         children: [
           {
             // label: 'Overview',
