@@ -55,11 +55,11 @@
           (click)="answerRevealed() ? handleResetAnswer() : handleRevealAnswer()"
           [disabled]="!canRevealAnswer()"
           class="docs-reveal-answer-button adev-reveal-desktop-button docs-primary-btn"
-          [attr.text]="answerRevealed() ? 'Reset' : 'Reveal Answer'"
-          [attr.aria-label]="answerRevealed() ? 'Reset' : 'Reveal Answer'"
+          [attr.text]="answerRevealed() ? '초기화' : '정답 확인하기'"
+          [attr.aria-label]="answerRevealed() ? '초기화' : '정답 확인하기'"
           [class.adev-reset-answer-button]="answerRevealed()"
         >
-          {{ answerRevealed() ? 'Reset' : 'Reveal Answer' }}
+          {{ answerRevealed() ? '초기화' : '정답 확인하기' }}
         </button>
       }
 
@@ -108,11 +108,11 @@
             (click)="answerRevealed() ? handleResetAnswer() : handleRevealAnswer()"
             [disabled]="!canRevealAnswer()"
             class="docs-reveal-answer-button adev-reveal-mobile-button docs-primary-btn"
-            [attr.text]="answerRevealed() ? 'Reset' : 'Reveal Answer'"
-            [attr.aria-label]="answerRevealed() ? 'Reset' : 'Reveal Answer'"
+            [attr.text]="answerRevealed() ? '초기화' : '정답 확인하기'"
+            [attr.aria-label]="answerRevealed() ? '초기화' : '정답 확인하기'"
             [class.adev-reset-answer-button]="answerRevealed()"
           >
-            {{ answerRevealed() ? 'Reset' : 'Reveal Answer' }}
+            {{ answerRevealed() ? '초기화' : '정답 확인하기' }}
           </button>
         }
       </div>

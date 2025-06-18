@@ -87,10 +87,12 @@ export class AlertManager {
     let message = '';
     switch (reason) {
       case AlertReason.OUT_OF_MEMORY:
-        message = `Your browser is currently limiting the memory available to run the Angular Tutorials or Playground. If you have multiple tabs open with Tutorials or Playground, please close some of them and refresh this page.`;
+        // message = `Your browser is currently limiting the memory available to run the Angular Tutorials or Playground. If you have multiple tabs open with Tutorials or Playground, please close some of them and refresh this page.`;
+        message = `현재 브라우저가 사용할 수 있는 메모리는 Angular 튜토리얼이나 놀이터를 실행하기 부족합니다. 튜토리얼이나 놀이터를 띄운 창이 여러개라면 몇 개를 닫고 이 화면을 새로고침 해보세요.`;
         break;
       case AlertReason.MOBILE:
-        message = `You are running the embedded editor in a mobile device, this may result in an Out of memory error.`;
+        // message = `You are running the embedded editor in a mobile device, this may result in an Out of memory error.`;
+        message = `현재 모바일 기기에서 내장 편집기를 실행하고 있습니다. 메모리 부족 에러가 발생할 수 있습니다.`;
         break;
     }
 
@@ -98,7 +100,8 @@ export class AlertManager {
       panelClass: 'docs-invert-mode',
       data: {
         message,
-        actionText: 'I understand',
+        // actionText: 'I understand',
+        actionText: '이해했습니다.',
       } satisfies ErrorSnackBarData,
     });
   }
