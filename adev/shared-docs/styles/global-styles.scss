@@ -145,3 +145,9 @@ $theme: mat.m2-define-light-theme((color: (primary: $primary,
     }
   }
 }
+
+
+html {
+  word-break: keep-all;
+  white-space: normal;
+}
