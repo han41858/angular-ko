@@ -49,7 +49,7 @@ import {
 } from '../../editor/index';
 import {SplitResizerHandler} from './split-resizer-handler.service';
 
-const INTRODUCTION_LABEL = 'Introduction';
+const INTRODUCTION_LABEL = '소개';
 
 @Component({
   selector: 'adev-tutorial',

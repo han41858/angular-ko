@@ -1,5 +1,5 @@
 {
-  "title": "Learn Angular",
+  "title": "Angular 알아보기",
   "type": "editor",
   "nextTutorial": "first-app",
   "openFiles": ["src/app/app.ts"]
