@@ -7,5 +7,5 @@ import {Component} from '@angular/core';
   `,
 })
 export class App {
-  // add the boolean property here
+  // 불리언 프로퍼티는 여기에 추가합니다.
 }
