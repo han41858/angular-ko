@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.routes.ts", "src/app/home/home.ts"],
-  "title": "Define a route",
+  "title": "라우팅 규칙 정의하기",
   "type": "editor"
 }

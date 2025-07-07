@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts"],
-  "title": "Link to a route with RouterLink",
+  "title": "라우팅 규칙을 RouterLink와 연결해 보세요",
   "type": "editor"
 }
