@@ -103,7 +103,7 @@ class App {}
 
 <docs-workflow>
 
-<docs-step title="`input() 프로퍼티를 선언해 보세요">
+<docs-step title="`input()` 프로퍼티를 선언해 보세요">
 
 `user.ts` 파일을 열어서 `User` 컴포넌트에 입력 프로퍼티로 `name`을 `string` 타입으로 선언해 보세요.
 아직은 초기값을 지정하지 않을 것이기 때문에 인자 없이 `input()`을 실행해 봅니다.
