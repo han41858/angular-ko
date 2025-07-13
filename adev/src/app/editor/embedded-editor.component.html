@@ -20,7 +20,7 @@
                 <!-- Preview Section: for larger screens -->
                 <div class="adev-preview-section">
                   <div class="adev-preview-header">
-                    <span>Preview</span>
+                    <span>미리보기</span>
                   </div>
                   @if (!displayPreviewInMatTabGroup()) {
                     <docs-tutorial-preview />
@@ -43,9 +43,9 @@
                     <docs-tutorial-preview />
                   </mat-tab>
                 }
-                <mat-tab label="Console">
+                <mat-tab label="콘솔">
                   <ng-template mat-tab-label>
-                    Console
+                    콘솔
                     @if (errorsCount()) {
                       <docs-icon class="docs-icon_high-contrast">error</docs-icon>
                       <span>
@@ -58,7 +58,7 @@
                     class="docs-tutorial-terminal"
                   />
                 </mat-tab>
-                <mat-tab label="Terminal">
+                <mat-tab label="터미널">
                   <docs-tutorial-terminal
                     [type]="TerminalType.INTERACTIVE"
                     class="docs-tutorial-terminal"
