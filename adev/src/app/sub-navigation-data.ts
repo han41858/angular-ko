@@ -107,7 +107,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Dependent state with linkedSignal',
-            label: 'linkedSignal을 활용한 의존 상태',
+            label: 'linkedSignal을 활용한 의존 상태 관리',
             path: 'guide/signals/linked-signal',
             contentPath: 'guide/signals/linked-signal',
           },
