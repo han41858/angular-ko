@@ -113,7 +113,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Async reactivity with resources',
-            label: 'resource를 활용한 비동기 반응성',
+            label: 'Resource를 활용한 비동기 반응성',
             path: 'guide/signals/resource',
             contentPath: 'guide/signals/resource',
           },
