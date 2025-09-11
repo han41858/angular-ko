@@ -18,9 +18,9 @@ export class AppComponent {
     injector: Injector,
     public popup: PopupService,
   ) {
-    // Convert `PopupComponent` to a custom element.
+    // `PopupComponent`를 커스텀 엘리먼트로 변환합니다.
     const PopupElement = createCustomElement(PopupComponent, {injector});
-    // Register the custom element with the browser.
+    // 커스텀 엘리먼트를 브라우저에 등록합니다.
     customElements.define('popup-element', PopupElement);
   }
 }
