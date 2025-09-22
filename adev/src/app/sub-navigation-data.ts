@@ -221,7 +221,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Binding dynamic text, properties and attributes',
-            label: '텍스트, 프로퍼티, 어트리뷰트 동적으로 바인딩하기',
+            label: '텍스트, 프로퍼티, 어트리뷰트를 동적으로 바인딩하기',
             path: 'guide/templates/binding',
             contentPath: 'guide/templates/binding',
           },
