@@ -201,7 +201,7 @@ const conditionalCount = computed(() => {
 ```
 
 이제 `showCount` 시그널의 값이 `false`일 때 `conditionalCount` 시그널의 값을 읽으면 `count` 시그널은 _실행되지도 않고_ "Nothing to see here" 메시지가 반환됩니다.
-이 말은, 나중ㅇ ㅔ`count` 시그널이 변경되더라도 `conditionalCount`는 연산을 다시 하지 않는 다는 것을 의미합니다.
+이 말은, 나중에 `count` 시그널이 변경되더라도 `conditionalCount`는 연산을 다시 하지 않는 다는 것을 의미합니다.
 
 그리고 `showCount` 시그널의 값이 `true` 일 때 `conditionCount` 시그널의 값을 읽으면, 시그널의 증분 함수가 실행되면서 `showCount`가 `true`인 분기를 타게 되고, `count` 시그널의 값을 문자열에 담아 반환합니다.
 그리고 `count` 시그널이 변경되면 `conditionalCount` 시그널에 캐싱된 값도 유효하지 않은 것으로 판단합니다.
