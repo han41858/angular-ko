@@ -251,7 +251,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Slotting child content with ng-content',
-            label: '자식 컴포넌트로 채우기: ng-content',
+            label: '부모 컴포넌트에서 받아 렌더링하기: ng-content',
             path: 'guide/templates/ng-content',
             contentPath: 'guide/templates/ng-content',
           },
