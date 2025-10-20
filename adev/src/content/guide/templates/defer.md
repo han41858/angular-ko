@@ -38,7 +38,7 @@ Deferrable views support a variety of triggers, prefetching options, and sub-blo
 <!--
 ## Which dependencies are deferred?
 -->
-## 어떤 패키지를 지연 로딩 할 수 있나요?
+## 어떤 항목을 지연 로딩 할 수 있나요?
 
 <!--
 Components, directives, pipes, and any component CSS styles can be deferred when loading an application.
