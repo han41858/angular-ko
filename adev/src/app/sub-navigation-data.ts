@@ -275,7 +275,7 @@ const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Deferred loading with @defer',
-            label: '지연 로딩하기: @defer',
+            label: '뷰 지연 로딩: @defer',
             path: 'guide/templates/defer',
             contentPath: 'guide/templates/defer',
           },
