@@ -38,7 +38,7 @@ import {StoutItemComponent} from './item-switch.component';
     NgFor, // <-- import into the component
     // #enddocregion import-ng-for
     // #docregion import-ng-style
-    NgStyle, // <-- import into the component
+    NgStyle, // <-- 컴포넌트에 심볼을 로드합니다
     // #enddocregion import-ng-style
     // #docregion import-ng-switch
     NgSwitch, // <-- import into the component
@@ -46,10 +46,10 @@ import {StoutItemComponent} from './item-switch.component';
     NgSwitchDefault,
     // #enddocregion import-ng-switch
     // #docregion import-ng-class
-    NgClass, // <-- import into the component
+    NgClass, // <-- 컴포넌트에 심볼을 로드합니다
     // #enddocregion import-ng-class
     // #docregion import-forms-module
-    FormsModule, // <--- import into the component
+    FormsModule, // <--- 컴포넌트에 심볼을 로드합니다
     // #enddocregion import-forms-module
     JsonPipe,
     ItemDetailComponent,
@@ -104,7 +104,7 @@ export class AppComponent implements OnInit {
 
   // #docregion setClasses
   setCurrentClasses() {
-    // CSS classes: added/removed per current state of component properties
+    // CSS 클래스: 컴포넌트 프로퍼티 값에 따라 지정되거나 제거됩니다.
     this.currentClasses = {
       saveable: this.canSave,
       modified: !this.isUnchanged,
@@ -115,7 +115,7 @@ export class AppComponent implements OnInit {
 
   // #docregion setStyles
   setCurrentStyles() {
-    // CSS styles: set per current state of component properties
+    // CSS 스타일: 컴포넌트 프로퍼티 값에 따라 지정됩니다.
     this.currentStyles = {
       'font-style': this.canSave ? 'italic' : 'normal',
       'font-weight': !this.isUnchanged ? 'bold' : 'normal',
