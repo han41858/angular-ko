@@ -32,9 +32,9 @@ import {CodeMirrorEditor} from './code-mirror-editor.service';
 import {DiagnosticWithLocation, DiagnosticsState} from './services/diagnostics-state.service';
 import {DownloadManager} from '../download-manager.service';
 import {StackBlitzOpener} from '../stackblitz-opener.service';
-import {ClickOutside, IconComponent} from '@angular/docs';
+import {IconComponent} from '@angular/docs';
 import {CdkMenu, CdkMenuItem, CdkMenuTrigger} from '@angular/cdk/menu';
-import {IDXLauncher} from '../idx-launcher.service';
+import {FirebaseStudioLauncher} from '../firebase-studio-launcher.service';
 import {MatTooltip} from '@angular/material/tooltip';
 import {injectEmbeddedTutorialManager} from '../inject-embedded-tutorial-manager';
 
@@ -51,15 +51,7 @@ const ANGULAR_DEV = 'https://angular.dev';
   templateUrl: './code-editor.component.html',
   styleUrls: ['./code-editor.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatTabsModule,
-    MatTooltip,
-    IconComponent,
-    ClickOutside,
-    CdkMenu,
-    CdkMenuItem,
-    CdkMenuTrigger,
-  ],
+  imports: [MatTabsModule, MatTooltip, IconComponent, CdkMenu, CdkMenuItem, CdkMenuTrigger],
 })
 export class CodeEditor {
   readonly restrictedMode = input(false);
@@ -77,7 +69,7 @@ export class CodeEditor {
   private readonly diagnosticsState = inject(DiagnosticsState);
   private readonly downloadManager = inject(DownloadManager);
   private readonly stackblitzOpener = inject(StackBlitzOpener);
-  private readonly idxLauncher = inject(IDXLauncher);
+  private readonly firebaseStudioLauncher = inject(FirebaseStudioLauncher);
   private readonly title = inject(Title);
   private readonly location = inject(Location);
   private readonly environmentInjector = inject(EnvironmentInjector);
@@ -99,11 +91,11 @@ export class CodeEditor {
 
   readonly TerminalType = TerminalType;
 
-  readonly displayErrorsBox = signal<boolean>(false);
-  readonly errors = signal<DiagnosticWithLocation[]>([]);
-  readonly files = this.codeMirrorEditor.openFiles;
-  readonly isCreatingFile = signal<boolean>(false);
-  readonly isRenamingFile = signal<boolean>(false);
+  protected readonly displayErrorsBox = signal<boolean>(false);
+  protected readonly errors = signal<DiagnosticWithLocation[]>([]);
+  protected readonly files = this.codeMirrorEditor.openFiles;
+  protected readonly isCreatingFile = signal<boolean>(false);
+  protected readonly isRenamingFile = signal<boolean>(false);
 
   constructor() {
     afterRenderEffect(() => {
@@ -131,10 +123,11 @@ export class CodeEditor {
     });
   }
 
-  openCurrentSolutionInIDX(): void {
-    this.idxLauncher.openCurrentSolutionInIDX();
+  protected openCurrentSolutionInFirebaseStudio(): void {
+    this.firebaseStudioLauncher.openCurrentSolutionInFirebaseStudio();
   }
-  async openCurrentCodeInStackBlitz(): Promise<void> {
+
+  protected async openCurrentCodeInStackBlitz(): Promise<void> {
     const title = this.title.getTitle();
 
     const path = this.location.path();
@@ -144,43 +137,39 @@ export class CodeEditor {
     await this.stackblitzOpener.openCurrentSolutionInStackBlitz({title, description});
   }
 
-  async downloadCurrentCodeEditorState(): Promise<void> {
+  protected async downloadCurrentCodeEditorState(): Promise<void> {
     const embeddedTutorialManager = await injectEmbeddedTutorialManager(this.environmentInjector);
     const name = embeddedTutorialManager.tutorialId();
     await this.downloadManager.downloadCurrentStateOfTheSolution(name);
   }
 
-  closeErrorsBox(): void {
+  protected closeErrorsBox(): void {
     this.displayErrorsBox.set(false);
   }
 
-  closeRenameFile(): void {
-    this.isRenamingFile.set(false);
-  }
+  protected canRenameFile = (filename: string) => this.canDeleteFile(filename);
 
-  canRenameFile = (filename: string) => this.canDeleteFile(filename);
-
-  canDeleteFile(filename: string) {
+  protected canDeleteFile(filename: string) {
     return !REQUIRED_FILES.has(filename) && !this.restrictedMode();
   }
 
-  canCreateFile = () => !this.restrictedMode();
+  protected canCreateFile = () => !this.restrictedMode();
 
-  async deleteFile(filename: string) {
+  protected async deleteFile(filename: string) {
     await this.codeMirrorEditor.deleteFile(filename);
     this.matTabGroup().selectedIndex = 0;
   }
 
-  onAddButtonClick() {
+  protected onAddButtonClick() {
     this.isCreatingFile.set(true);
     this.matTabGroup().selectedIndex = this.files().length;
   }
 
-  onRenameButtonClick() {
+  protected onRenameButtonClick() {
     this.isRenamingFile.set(true);
   }
 
-  async renameFile(event: SubmitEvent, oldPath: string) {
+  protected async renameFile(event: SubmitEvent, oldPath: string) {
     const renameFileInput = this.renameFileInputRef();
     if (!renameFileInput) return;
 
@@ -188,12 +177,7 @@ export class CodeEditor {
 
     const renameFileInputValue = renameFileInput.nativeElement.value;
 
-    if (renameFileInputValue) {
-      if (renameFileInputValue.includes('..')) {
-        alert('File name can not contain ".."');
-        return;
-      }
-
+    if (this.validateFileName(renameFileInputValue)) {
       // src is hidden from users, here we manually add it to the new filename
       const newFile = 'src/' + renameFileInputValue;
 
@@ -208,20 +192,15 @@ export class CodeEditor {
     this.isRenamingFile.set(false);
   }
 
-  async createFile(event: SubmitEvent) {
+  protected async createFile(event?: SubmitEvent) {
     const fileInput = this.createFileInputRef();
     if (!fileInput) return;
 
-    event.preventDefault();
+    event?.preventDefault();
 
     const newFileInputValue = fileInput.nativeElement.value;
 
-    if (newFileInputValue) {
-      if (newFileInputValue.includes('..')) {
-        alert('File name can not contain ".."');
-        return;
-      }
-
+    if (this.validateFileName(newFileInputValue)) {
       // src is hidden from users, here we manually add it to the new filename
       const newFile = 'src/' + newFileInputValue;
 
@@ -234,6 +213,21 @@ export class CodeEditor {
     }
 
     this.isCreatingFile.set(false);
+  }
+
+  private validateFileName(fileName: string): boolean {
+    if (!fileName) {
+      return false;
+    }
+    if (fileName.split('/').pop()?.indexOf('.') === 0) {
+      alert('File must contain a name.');
+      return false;
+    }
+    if (fileName.includes('..')) {
+      alert('File name can not contain ".."');
+      return false;
+    }
+    return true;
   }
 
   private listenToDiagnosticsChange(): void {

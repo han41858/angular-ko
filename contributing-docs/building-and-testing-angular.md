@@ -1,17 +1,28 @@
 # Building and Testing Angular
 
 This document describes how to set up your development environment to build and test Angular.
-It also explains the basic mechanics of using `git`, `node`, and `yarn`.
+It also explains the basic mechanics of using `git`, `node`, and `pnpm`.
 
-* [Prerequisite Software](#prerequisite-software)
-* [Getting the Sources](#getting-the-sources)
-* [Installing NPM Modules](#installing-npm-modules)
-* [Building](#building)
-* [Running Tests Locally](#running-tests-locally)
-* [Formatting your Source Code](#formatting-your-source-code)
-* [Linting/verifying your Source Code](#lintingverifying-your-source-code)
-* [Publishing Snapshot Builds](#publishing-snapshot-builds)
-* [Bazel Support](#bazel-support)
+- [Building and Testing Angular](#building-and-testing-angular)
+  - [Prerequisite Software](#prerequisite-software)
+  - [Getting the Sources](#getting-the-sources)
+  - [Installing NPM Modules](#installing-npm-modules)
+  - [Building](#building)
+  - [Running Tests Locally](#running-tests-locally)
+    - [Testing changes against a local library/project](#testing-changes-against-a-local-libraryproject)
+    - [Building and serving a project](#building-and-serving-a-project)
+      - [Cache](#cache)
+      - [Invoking the Angular CLI](#invoking-the-angular-cli)
+  - [Formatting your source code](#formatting-your-source-code)
+  - [Linting/verifying your Source Code](#lintingverifying-your-source-code)
+  - [Publishing Snapshot Builds](#publishing-snapshot-builds)
+    - [Publishing to GitHub Repos](#publishing-to-github-repos)
+  - [Bazel Support](#bazel-support)
+    - [IDEs](#ides)
+      - [VS Code](#vs-code)
+      - [WebStorm / IntelliJ](#webstorm--intellij)
+    - [Remote Build Execution and Remote Caching](#remote-build-execution-and-remote-caching)
+      - [--config=remote flag](#--configremote-flag)
 
 See the [contribution guidelines](https://github.com/angular/angular/blob/main/CONTRIBUTING.md)
 if you'd like to contribute to Angular.
@@ -21,24 +32,24 @@ if you'd like to contribute to Angular.
 Before you can build and test Angular, you must install and configure the
 following on your development machine:
 
-* [Git](https://git-scm.com/) and/or the [**GitHub app**](https://desktop.github.com/) (for Mac and
+- [Git](https://git-scm.com/) and/or the [**GitHub app**](https://desktop.github.com/) (for Mac and
   Windows);
   [GitHub's Guide to Installing Git](https://help.github.com/articles/set-up-git) is a good source
   of information.\
   **Windows Users**: Git Bash or an equivalent shell is required\
-  *Windows Powershell and cmd shells are not
-  supported [#46780](https://github.com/angular/angular/issues/46780) so some commands might fail*
+  _Windows Powershell and cmd shells are not
+  supported [#46780](https://github.com/angular/angular/issues/46780) so some commands might fail_
 
-* [Node.js](https://nodejs.org), (version specified in [`.nvmrc`](../.nvmrc)) which is used to run a
+- [Node.js](https://nodejs.org), (version specified in [`.nvmrc`](../.nvmrc)) which is used to run a
   development web server,
-  run tests, and generate distributable files.  
+  run tests, and generate distributable files.
   `.nvmrc` is read by [nvm](https://github.com/nvm-sh/nvm) commands like `nvm install`
   and `nvm use`.
 
-* [Yarn](https://yarnpkg.com) (version specified in the engines field
+- [pnpm](https://pnpm.io/) (version specified in the engines field
   of [`package.json`](../package.json)) which is used to install dependencies.
 
-* On Windows: [MSYS2](https://www.msys2.org/) which is used by Bazel. Follow
+- On Windows: [MSYS2](https://www.msys2.org/) which is used by Bazel. Follow
   the [instructions](https://bazel.build/install/windows#installing-compilers-and-language-runtimes)
 
 ## Getting the Sources
@@ -69,7 +80,7 @@ Next, install the JavaScript modules needed to build and test Angular:
 
 ```shell
 # Install Angular project dependencies (package.json)
-yarn install
+pnpm install
 ```
 
 ## Building
@@ -77,10 +88,10 @@ yarn install
 To build Angular run:
 
 ```shell
-yarn build
+pnpm build
 ```
 
-* Results are put in the `dist/packages-dist` folder.
+- Results are put in the `dist/packages-dist` folder.
 
 ## Running Tests Locally
 
@@ -90,7 +101,7 @@ To see how to run and debug Angular tests locally please refer to the
 Bazel [Testing Angular](./building-with-bazel.md#testing-angular) section.
 
 Note that you should execute all test suites before submitting a PR to
-GitHub (`yarn test //packages/...`).
+GitHub (`pnpm test //packages/...`).
 
 However, affected tests will be executed on our CI infrastructure. So if you forgot to run some
 affected tests which would fail, GitHub will indicate the error state and present you the failures.
@@ -105,12 +116,12 @@ PRs can only be merged if the code is formatted properly and all tests are passi
 
 Often for developers the best way to ensure the changes they have made work as expected is to run
 use changes in another library or project. To do this developers can build Angular locally, and
-using `yarn link` build a local project with the created artifacts.
+using `pnpm link` build a local project with the created artifacts.
 
 This can be done by running:
 
 ```sh
-yarn ng-dev misc build-and-link <path-to-local-project-root>
+pnpm ng-dev misc build-and-link <path-to-local-project-root>
 ```
 
 ### Building and serving a project
@@ -120,7 +131,7 @@ yarn ng-dev misc build-and-link <path-to-local-project-root>
 When making changes to Angular packages and testing in a local library/project you need to
 run `ng cache disable` to disable the Angular CLI disk cache. If you are making changes that are not
 reflected in your locally served library/project, verify if you
-have [CLI Cache](https://angular.io/guide/workspace-config#cache-options) disabled.
+have [CLI Cache](https://angular.dev/reference/configs/workspace-config#cache-options) disabled.
 
 #### Invoking the Angular CLI
 
@@ -140,17 +151,17 @@ If the source code is not properly formatted, the CI will fail and the PR cannot
 
 You can automatically format your code by running:
 
-- `yarn ng-dev format changed [shaOrRef]`: format only files changed since the provided
+- `pnpm ng-dev format changed [shaOrRef]`: format only files changed since the provided
   sha/ref. `shaOrRef` defaults to `main`.
-- `yarn ng-dev format all`: format _all_ source code
-- `yarn ng-dev format files <files..>`: format only provided files
+- `pnpm ng-dev format all`: format _all_ source code
+- `pnpm ng-dev format files <files..>`: format only provided files
 
 ## Linting/verifying your Source Code
 
 You can check that your code is properly formatted and adheres to coding style by running:
 
-``` shell
-$ yarn lint
+```shell
+pnpm lint
 ```
 
 ## Publishing Snapshot Builds
@@ -167,19 +178,19 @@ snapshots of the Angular packages created based on the code in the Pull Request.
 
 You can also manually publish `*-builds` snapshots just like our CI build does for upstream
 builds. Before being able to publish the packages, you need to build them locally by running the
-`yarn build` command.
+`pnpm build` command.
 
 First time, you need to create the GitHub repositories:
 
-``` shell
+```shell
 $ export TOKEN=[get one from https://github.com/settings/tokens]
-$ CREATE_REPOS=1 ./scripts/ci/publish-build-artifacts.sh [GitHub username]
+$ CREATE_REPOS=1 ./scripts/ci/publish-snapshot-build-artifacts.sh [GitHub username]
 ```
 
 For subsequent snapshots, just run:
 
-``` shell
-$ ./scripts/ci/publish-build-artifacts.sh [GitHub username]
+```shell
+$ ./scripts/ci/publish-snapshot-build-artifacts.sh [GitHub username]
 ```
 
 The script will publish the build snapshot to a branch with the same name as your current branch,

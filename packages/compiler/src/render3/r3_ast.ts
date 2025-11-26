@@ -12,6 +12,7 @@ import {
   ASTWithSource,
   BindingType,
   BoundElementProperty,
+  LiteralMap,
   ParsedEvent,
   ParsedEventType,
 } from '../expression_parser/ast';
@@ -133,7 +134,7 @@ export class BoundEvent implements Node {
     const target: string | null =
       event.type === ParsedEventType.Regular ? event.targetOrPhase : null;
     const phase: string | null =
-      event.type === ParsedEventType.Animation ? event.targetOrPhase : null;
+      event.type === ParsedEventType.LegacyAnimation ? event.targetOrPhase : null;
     if (event.keySpan === undefined) {
       throw new Error(
         `Unexpected state: keySpan must be defined for bound event but was not for ${event.name}: ${event.sourceSpan}`,
@@ -165,9 +166,11 @@ export class Element implements Node {
     public directives: Directive[],
     public children: Node[],
     public references: Reference[],
+    public isSelfClosing: boolean,
     public sourceSpan: ParseSourceSpan,
     public startSourceSpan: ParseSourceSpan,
     public endSourceSpan: ParseSourceSpan | null,
+    readonly isVoid: boolean,
     public i18n?: I18nMeta,
   ) {}
   visit<Result>(visitor: Visitor<Result>): Result {
@@ -250,7 +253,8 @@ export class InteractionDeferredTrigger extends DeferredTrigger {
 
 export class ViewportDeferredTrigger extends DeferredTrigger {
   constructor(
-    public reference: string | null,
+    readonly reference: string | null,
+    readonly options: LiteralMap | null,
     nameSpan: ParseSourceSpan,
     sourceSpan: ParseSourceSpan,
     prefetchSpan: ParseSourceSpan | null,
@@ -550,6 +554,7 @@ export class Component implements Node {
     public directives: Directive[],
     public children: Node[],
     public references: Reference[],
+    public isSelfClosing: boolean,
     public sourceSpan: ParseSourceSpan,
     public startSourceSpan: ParseSourceSpan,
     public endSourceSpan: ParseSourceSpan | null,
@@ -592,6 +597,7 @@ export class Template implements Node {
     public children: Node[],
     public references: Reference[],
     public variables: Variable[],
+    public isSelfClosing: boolean,
     public sourceSpan: ParseSourceSpan,
     public startSourceSpan: ParseSourceSpan,
     public endSourceSpan: ParseSourceSpan | null,
@@ -609,6 +615,7 @@ export class Content implements Node {
     public selector: string,
     public attributes: TextAttribute[],
     public children: Node[],
+    public isSelfClosing: boolean,
     public sourceSpan: ParseSourceSpan,
     public startSourceSpan: ParseSourceSpan,
     public endSourceSpan: ParseSourceSpan | null,
@@ -797,7 +804,7 @@ export function visitAll<Result>(visitor: Visitor<Result>, nodes: Node[]): Resul
   const result: Result[] = [];
   if (visitor.visit) {
     for (const node of nodes) {
-      visitor.visit(node) || node.visit(visitor);
+      visitor.visit(node);
     }
   } else {
     for (const node of nodes) {

@@ -16,6 +16,7 @@ import {
   OnInit,
   Pipe,
   PipeTransform,
+  provideZoneChangeDetection,
   TemplateRef,
   ViewContainerRef,
 } from '../../src/core';
@@ -30,6 +31,11 @@ class MultiplyPipe implements PipeTransform {
 }
 
 describe('control flow - if', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideZoneChangeDetection()],
+    });
+  });
   it('should add and remove views based on conditions change', () => {
     @Component({template: '@if (show) {Something} @else {Nothing}'})
     class TestComponent {
@@ -294,14 +300,13 @@ describe('control flow - if', () => {
 
   it('should support a condition with the a binary expression with the in keyword', () => {
     @Component({
-      standalone: true,
       template: `
-          @if (key in {foo: 'bar'}) {
-            has {{key}}
-          } @else {
-            no {{key}}
-          }
-        `,
+        @if (key in {foo: 'bar'}) {
+          has {{key}}
+        } @else {
+          no {{key}}
+        }
+      `,
     })
     class TestComponent {
       key: string | number = 'foo';
@@ -314,6 +319,30 @@ describe('control flow - if', () => {
     fixture.componentInstance.key = 42;
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent.trim()).toBe('no 42');
+  });
+
+  it('should expose expression value through alias on @else if', () => {
+    @Component({
+      template: `
+        @if (value === 0; as alias) {
+          Zero evaluates to {{alias}}
+        } @else if (value | multiply: 2; as alias) {
+          {{value}} aliased to {{alias}}
+        }
+      `,
+      imports: [MultiplyPipe],
+    })
+    class TestComponent {
+      value = 0;
+    }
+
+    const fixture = TestBed.createComponent(TestComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent.trim()).toBe('Zero evaluates to true');
+
+    fixture.componentInstance.value = 4;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent.trim()).toBe('4 aliased to 8');
   });
 
   describe('content projection', () => {

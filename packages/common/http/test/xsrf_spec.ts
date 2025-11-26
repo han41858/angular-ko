@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {DOCUMENT} from '../..';
 import {HttpHeaders} from '../src/headers';
 import {HttpRequest} from '../src/request';
 import {
@@ -70,6 +71,23 @@ describe('HttpXsrfInterceptor', () => {
     expect(req.request.headers.has('X-XSRF-TOKEN')).toEqual(false);
     req.flush({});
   });
+
+  it('does not apply XSRF protection when request is absolute', () => {
+    interceptor
+      .intercept(new HttpRequest('POST', 'https://example.com/test', {}), backend)
+      .subscribe();
+    const req = backend.expectOne('https://example.com/test');
+    expect(req.request.headers.has('X-XSRF-TOKEN')).toBeFalse();
+    req.flush({});
+  });
+
+  it('does not apply XSRF protection when request is protocol relative', () => {
+    interceptor.intercept(new HttpRequest('POST', '//example.com/test', {}), backend).subscribe();
+    const req = backend.expectOne('//example.com/test');
+    expect(req.request.headers.has('X-XSRF-TOKEN')).toBeFalse();
+    req.flush({});
+  });
+
   it('does not overwrite existing header', () => {
     interceptor
       .intercept(
@@ -122,7 +140,15 @@ describe('HttpXsrfCookieExtractor', () => {
     document = {
       cookie: 'XSRF-TOKEN=test',
     };
-    extractor = new HttpXsrfCookieExtractor(document, 'XSRF-TOKEN');
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: DOCUMENT,
+          useValue: document,
+        },
+      ],
+    });
+    extractor = TestBed.inject(HttpXsrfCookieExtractor);
   });
   it('parses the cookie from document.cookie', () => {
     expect(extractor.getToken()).toEqual('test');

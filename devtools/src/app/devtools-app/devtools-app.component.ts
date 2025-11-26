@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Component, ElementRef, viewChild} from '@angular/core';
+import {Component, ElementRef, signal, viewChild} from '@angular/core';
 
 import {IFrameMessageBus} from '../../iframe-message-bus';
 import {DevToolsComponent} from '../../../projects/ng-devtools';
-import {SplitAreaDirective} from '../../../projects/ng-devtools/src/lib/vendor/angular-split/lib/component/splitArea.directive';
-import {SplitComponent} from '../../../projects/ng-devtools/src/lib/vendor/angular-split/lib/component/split.component';
+import {SplitAreaDirective} from '../../../projects/ng-devtools/src/lib/shared/split/splitArea.directive';
+import {SplitComponent} from '../../../projects/ng-devtools/src/lib/shared/split/split.component';
 
 @Component({
   templateUrl: './devtools-app.component.html',
@@ -21,4 +21,5 @@ import {SplitComponent} from '../../../projects/ng-devtools/src/lib/vendor/angul
 export class AppDevToolsComponent {
   messageBus: IFrameMessageBus | null = null;
   readonly iframe = viewChild<ElementRef>('ref');
+  readonly resizingDevtools = signal(false);
 }

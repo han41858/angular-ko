@@ -34,6 +34,8 @@ export interface RxResourceOptions<T, R> extends BaseResourceOptions<T, R> {
  * Like `resource` but uses an RxJS based `loader` which maps the request to an `Observable` of the
  * resource's value.
  *
+ * @see [Using rxResource for async data](ecosystem/rxjs-interop#using-rxresource-for-async-data)
+ *
  * @experimental
  */
 export function rxResource<T, R>(
@@ -55,11 +57,11 @@ export function rxResource<T, R>(opts: RxResourceOptions<T, R>): ResourceRef<T |
     ...opts,
     loader: undefined,
     stream: (params) => {
-      let sub: Subscription;
+      let sub: Subscription | undefined;
 
       // Track the abort listener so it can be removed if the Observable completes (as a memory
       // optimization).
-      const onAbort = () => sub.unsubscribe();
+      const onAbort = () => sub?.unsubscribe();
       params.abortSignal.addEventListener('abort', onAbort);
 
       // Start off stream as undefined.

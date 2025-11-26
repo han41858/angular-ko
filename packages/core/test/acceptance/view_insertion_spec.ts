@@ -15,6 +15,7 @@ import {
   Injectable,
   Injector,
   Input,
+  provideZoneChangeDetection,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -24,6 +25,11 @@ import {TestBed} from '../../testing';
 import {By} from '@angular/platform-browser';
 
 describe('view insertion', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideZoneChangeDetection()],
+    });
+  });
   describe('of a simple template', () => {
     it('should insert into an empty container, at the front, in the middle, and at the end', () => {
       let _counter = 0;
@@ -970,8 +976,8 @@ describe('view insertion', () => {
       fixture.detectChanges();
 
       // We try to render the same template twice to ensure that we get consistent error messages.
-      expect(tryRender).toThrowError(/No provider for DoesNotExist/);
-      expect(tryRender).toThrowError(/No provider for DoesNotExist/);
+      expect(tryRender).toThrowError(/NG0201\: No provider found for `DoesNotExist`/);
+      expect(tryRender).toThrowError(/NG0201\: No provider found for `DoesNotExist`/);
     });
   });
 });

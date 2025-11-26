@@ -1,4 +1,4 @@
-# Component input properties 
+# Component input properties
 
 Sometimes app development requires you to send data into a component. This data can be used to customize a component or perhaps send information from a parent component to a child component.
 
@@ -25,10 +25,10 @@ When you are ready to pass in a value through an `input`, values can be set in t
   ...
   template: `<app-user occupation="Angular Developer"></app-user>`
 })
-class App {}
+export class App {}
 </docs-code>
 
-The `input` function returns an `InputSignal`. You can read the value by calling the signal. 
+The `input` function returns an `InputSignal`. You can read the value by calling the signal.
 
 <docs-code header="user.ts" language="angular-ts">
 @Component({

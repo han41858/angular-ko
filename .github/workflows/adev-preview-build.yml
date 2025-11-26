@@ -15,24 +15,24 @@ permissions: read-all
 
 jobs:
   adev-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-8core
     if: |
       (github.event.action == 'labeled' && github.event.label.name == 'adev: preview') ||
       (github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'adev: preview'))
     steps:
       - name: Initialize environment
-        uses: angular/dev-infra/github-actions/npm/checkout-and-setup-node@d8615e0a8fe169efadb68bddf338514f18317b9b
+        uses: angular/dev-infra/github-actions/npm/checkout-and-setup-node@f47684669736e28fd77eab64e65b2952c8a948ee
       - name: Setup Bazel
-        uses: angular/dev-infra/github-actions/bazel/setup@d8615e0a8fe169efadb68bddf338514f18317b9b
+        uses: angular/dev-infra/github-actions/bazel/setup@f47684669736e28fd77eab64e65b2952c8a948ee
       - name: Setup Bazel RBE
-        uses: angular/dev-infra/github-actions/bazel/configure-remote@d8615e0a8fe169efadb68bddf338514f18317b9b
+        uses: angular/dev-infra/github-actions/bazel/configure-remote@f47684669736e28fd77eab64e65b2952c8a948ee
       - name: Install node modules
-        run: yarn install --frozen-lockfile
-      - name: Build adev to ensure it continues to work
-        run: yarn bazel build //adev:build --full_build_adev --config=release
-      - uses: angular/dev-infra/github-actions/previews/pack-and-upload-artifact@d8615e0a8fe169efadb68bddf338514f18317b9b
+        run: pnpm install --frozen-lockfile
+      - name: Build adev
+        run: pnpm bazel build //adev:build.production
+      - uses: angular/dev-infra/github-actions/previews/pack-and-upload-artifact@f47684669736e28fd77eab64e65b2952c8a948ee
         with:
           workflow-artifact-name: 'adev-preview'
           pull-number: '${{github.event.pull_request.number}}'
           artifact-build-revision: '${{github.event.pull_request.head.sha}}'
-          deploy-directory: './dist/bin/adev/build/browser'
+          deploy-directory: './dist/bin/adev/dist/browser'

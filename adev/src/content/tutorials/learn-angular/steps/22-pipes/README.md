@@ -18,7 +18,7 @@ import {UpperCasePipe} from '@angular/common';
 template: `{{ loudMessage | uppercase }}`,
 imports: [UpperCasePipe],
 })
-class App {
+export class App {
 loudMessage = 'we think you are doing great!'
 }
 </docs-code>
@@ -41,8 +41,8 @@ Next, update `@Component()` decorator `imports` to include a reference to `Lower
 
 <docs-code language="ts" highlight="[3]">
 @Component({
-    ...
-    imports: [LowerCasePipe]
+  ...
+  imports: [LowerCasePipe]
 })
 </docs-code>
 

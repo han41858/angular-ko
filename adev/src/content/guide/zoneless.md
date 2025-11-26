@@ -11,8 +11,6 @@ The main advantages to removing ZoneJS as a dependency are:
 
 ## Enabling Zoneless in an application
 
-The API for enabling Zoneless is currently in developer preview. The shape of the API and underlying behavior can change in patch versions.
-
 ```typescript
 // standalone bootstrap
 bootstrapApplication(MyApp, {providers: [
@@ -88,7 +86,6 @@ is "stable" and can be serialized. If there are asynchronous tasks that should p
 not using ZoneJS must make Angular aware of these with the [PendingTasks](/api/core/PendingTasks) service. Serialization
 will wait for the first moment that all pending tasks have been removed.
 
-
 The two most straightforward uses of pending tasks are the `run` method:
 
 ```typescript
@@ -99,7 +96,7 @@ taskService.run(async () => {
 });
 ```
 
-For more complicated use-cases, you can manuall add and remove a pending tasks:
+For more complicated use-cases, you can manually add and remove a pending task:
 
 ```typescript
 const taskService = inject(PendingTasks);
@@ -114,7 +111,7 @@ try {
 ```
 
 In addition, the [pendingUntilEvent](/api/core/rxjs-interop/pendingUntilEvent#) helper in `rxjs-interop` ensures
-the application remains unstable until the observable emits, complets, errors, or is unsubscribed.
+the application remains unstable until the observable emits, completes, errors, or is unsubscribed.
 
 ```typescript
 readonly myObservableState = someObservable.pipe(pendingUntilEvent());

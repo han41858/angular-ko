@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {XhrFactory} from '../../index';
 import {HttpRequest} from '../src/request';
 import {
   HttpDownloadProgressEvent,
@@ -19,6 +20,7 @@ import {
   HttpUploadProgressEvent,
 } from '../src/response';
 import {HttpXhrBackend} from '../src/xhr';
+import {TestBed} from '@angular/core/testing';
 import {Observable} from 'rxjs';
 import {toArray} from 'rxjs/operators';
 
@@ -26,15 +28,16 @@ import {MockXhrFactory} from './xhr_mock';
 
 function trackEvents(obs: Observable<HttpEvent<any>>): HttpEvent<any>[] {
   const events: HttpEvent<any>[] = [];
-  obs.subscribe(
-    (event) => events.push(event),
-    (err) => events.push(err),
-  );
+  obs.subscribe({
+    next: (event) => events.push(event),
+    error: (err) => events.push(err),
+  });
   return events;
 }
 
 const TEST_POST = new HttpRequest('POST', '/test', 'some body', {
   responseType: 'text',
+  timeout: 1000,
 });
 
 const TEST_POST_WITH_JSON_BODY = new HttpRequest(
@@ -52,8 +55,11 @@ describe('XhrBackend', () => {
   let factory: MockXhrFactory = null!;
   let backend: HttpXhrBackend = null!;
   beforeEach(() => {
-    factory = new MockXhrFactory();
-    backend = new HttpXhrBackend(factory);
+    TestBed.configureTestingModule({
+      providers: [{provide: XhrFactory, useClass: MockXhrFactory}],
+    });
+    factory = TestBed.inject(XhrFactory) as MockXhrFactory;
+    backend = TestBed.inject(HttpXhrBackend);
   });
   it('emits status immediately', () => {
     const events = trackEvents(backend.handle(TEST_POST));
@@ -65,6 +71,10 @@ describe('XhrBackend', () => {
     expect(factory.mock.method).toBe('POST');
     expect(factory.mock.responseType).toBe('text');
     expect(factory.mock.url).toBe('/test');
+  });
+  it('sets timeout correctly', () => {
+    backend.handle(TEST_POST).subscribe();
+    expect(factory.mock.timeout).toBe(1000);
   });
   it('sets outgoing body correctly', () => {
     backend.handle(TEST_POST).subscribe();
@@ -167,19 +177,23 @@ describe('XhrBackend', () => {
     expect(res.body!.data).toBe('some data');
   });
   it('emits unsuccessful responses via the error path', (done) => {
-    backend.handle(TEST_POST).subscribe(undefined, (err: HttpErrorResponse) => {
-      expect(err instanceof HttpErrorResponse).toBe(true);
-      expect(err.error).toBe('this is the error');
-      done();
+    backend.handle(TEST_POST).subscribe({
+      error: (err: HttpErrorResponse) => {
+        expect(err instanceof HttpErrorResponse).toBe(true);
+        expect(err.error).toBe('this is the error');
+        done();
+      },
     });
     factory.mock.mockFlush(HttpStatusCode.BadRequest, 'Bad Request', 'this is the error');
   });
   it('emits real errors via the error path', (done) => {
-    backend.handle(TEST_POST).subscribe(undefined, (err: HttpErrorResponse) => {
-      expect(err instanceof HttpErrorResponse).toBe(true);
-      expect(err.error instanceof Error).toBeTrue();
-      expect(err.url).toBe('/test');
-      done();
+    backend.handle(TEST_POST).subscribe({
+      error: (err: HttpErrorResponse) => {
+        expect(err instanceof HttpErrorResponse).toBe(true);
+        expect(err.error instanceof Error).toBeTrue();
+        expect(err.url).toBe('/test');
+        done();
+      },
     });
     factory.mock.mockErrorEvent(new Error('blah'));
   });
@@ -187,7 +201,8 @@ describe('XhrBackend', () => {
     backend.handle(TEST_POST).subscribe({
       error: (error: HttpErrorResponse) => {
         expect(error instanceof HttpErrorResponse).toBeTrue();
-        expect(error.error instanceof Error).toBeTrue();
+        expect(error.error instanceof DOMException).toBeTrue();
+        expect((error.error as DOMException).name).toBe('TimeoutError');
         expect(error.url).toBe('/test');
         done();
       },
@@ -209,9 +224,11 @@ describe('XhrBackend', () => {
     factory.mock.mockFlush(HttpStatusCode.Ok, 'OK', 'Done');
   });
   it('emits an error when browser cancels a request', (done) => {
-    backend.handle(TEST_POST).subscribe(undefined, (err: HttpErrorResponse) => {
-      expect(err instanceof HttpErrorResponse).toBe(true);
-      done();
+    backend.handle(TEST_POST).subscribe({
+      error: (err: HttpErrorResponse) => {
+        expect(err instanceof HttpErrorResponse).toBe(true);
+        done();
+      },
     });
     factory.mock.mockAbortEvent();
   });
@@ -375,20 +392,6 @@ describe('XhrBackend', () => {
       factory.mock.responseURL = '/response/url';
       factory.mock.mockFlush(HttpStatusCode.Ok, 'OK', 'Test');
     });
-    it('from X-Request-URL header if XHR.responseURL is not present', (done) => {
-      backend
-        .handle(TEST_POST)
-        .pipe(toArray())
-        .subscribe((events) => {
-          expect(events.length).toBe(2);
-          expect(events[1].type).toBe(HttpEventType.Response);
-          const response = events[1] as HttpResponse<string>;
-          expect(response.url).toBe('/response/url');
-          done();
-        });
-      factory.mock.mockResponseHeaders = 'X-Request-URL: /response/url\n';
-      factory.mock.mockFlush(HttpStatusCode.Ok, 'OK', 'Test');
-    });
     it('falls back on Request.url if neither are available', (done) => {
       backend
         .handle(TEST_POST)
@@ -421,9 +424,11 @@ describe('XhrBackend', () => {
       backend
         .handle(TEST_POST)
         .pipe(toArray())
-        .subscribe(undefined, (error: HttpErrorResponse) => {
-          expect(error.status).toBe(0);
-          done();
+        .subscribe({
+          error: (error: HttpErrorResponse) => {
+            expect(error.status).toBe(0);
+            done();
+          },
         });
       factory.mock.mockFlush(0, 'CORS 0 status');
     });

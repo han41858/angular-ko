@@ -6,7 +6,9 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {InjectionToken} from '../di';
 import {resolveForwardRef} from '../di/forward_ref';
+import {InternalInjectFlags} from '../di/interface/injector';
 import {ClassProvider, Provider} from '../di/interface/provider';
 import {isClassProvider, isTypeProvider, SingleProvider} from '../di/provider_collection';
 import {providerToFactory} from '../di/r3_injector';
@@ -115,8 +117,12 @@ function resolveProvider(
       tNode.providerIndexes >> TNodeProviderIndexes.CptViewProvidersCountShift;
 
     if (isTypeProvider(provider) || !provider.multi) {
-      // Single provider case: the factory is created and pushed immediately
-      const factory = new NodeInjectorFactory(providerFactory, isViewProvider, ɵɵdirectiveInject);
+      const factory = new NodeInjectorFactory(
+        providerFactory,
+        isViewProvider,
+        ɵɵdirectiveInject,
+        ngDevMode ? providerName(provider) : null,
+      );
       const existingFactoryIndex = indexOf(
         token,
         tInjectables,
@@ -204,6 +210,7 @@ function resolveProvider(
           isViewProvider,
           isComponent,
           providerFactory,
+          provider,
         );
         if (!isViewProvider && doesViewProvidersFactoryExist) {
           lInjectablesBlueprint[existingViewProvidersFactoryIndex].providerFactory = factory;
@@ -319,6 +326,7 @@ function indexOf(item: any, arr: any[], begin: number, end: number) {
 function multiProvidersFactoryResolver(
   this: NodeInjectorFactory,
   _: undefined,
+  flags: InternalInjectFlags | undefined,
   tData: TData,
   lData: LView,
   tNode: TDirectiveHostNode,
@@ -334,7 +342,8 @@ function multiProvidersFactoryResolver(
 function multiViewProvidersFactoryResolver(
   this: NodeInjectorFactory,
   _: undefined,
-  tData: TData,
+  _flags: InternalInjectFlags | undefined,
+  _tData: TData,
   lView: LView,
   tNode: TDirectiveHostNode,
 ): any[] {
@@ -382,6 +391,7 @@ function multiFactory(
   factoryFn: (
     this: NodeInjectorFactory,
     _: undefined,
+    flags: InternalInjectFlags | undefined,
     tData: TData,
     lData: LView,
     tNode: TDirectiveHostNode,
@@ -390,11 +400,38 @@ function multiFactory(
   isViewProvider: boolean,
   isComponent: boolean,
   f: () => any,
+  provider: Provider,
 ): NodeInjectorFactory {
-  const factory = new NodeInjectorFactory(factoryFn, isViewProvider, ɵɵdirectiveInject);
+  const factory = new NodeInjectorFactory(
+    factoryFn,
+    isViewProvider,
+    ɵɵdirectiveInject,
+    ngDevMode ? providerName(provider) : null,
+  );
   factory.multi = [];
   factory.index = index;
   factory.componentProviders = 0;
   multiFactoryAdd(factory, f, isComponent && !isViewProvider);
   return factory;
+}
+
+function providerName(provider: Provider): string | null {
+  if (Array.isArray(provider)) {
+    return null;
+  }
+  if (isTypeProvider(provider)) {
+    return provider.name;
+  } else if (isClassProvider(provider)) {
+    if (provider.provide instanceof InjectionToken) {
+      return `('${provider.provide.toString()}':${provider.useClass.name})`;
+    }
+
+    return provider.useClass.name;
+  } else if (provider.provide instanceof InjectionToken) {
+    return provider.provide.toString();
+  } else if (typeof provider.provide === 'string') {
+    return provider.provide;
+  } else {
+    return null;
+  }
 }

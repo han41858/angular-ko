@@ -24,7 +24,10 @@ export function extractAttributes(job: CompilationJob): void {
           extractAttributeOp(unit, op, elements);
           break;
         case ir.OpKind.Property:
-          if (!op.isAnimationTrigger) {
+          if (
+            op.bindingKind !== ir.BindingKind.LegacyAnimation &&
+            op.bindingKind !== ir.BindingKind.Animation
+          ) {
             let bindingKind: ir.BindingKind;
             if (op.i18nMessage !== null && op.templateKind === null) {
               // If the binding has an i18n context, it is an i18n attribute, and should have that
@@ -51,6 +54,22 @@ export function extractAttributes(job: CompilationJob): void {
               lookupElement(elements, op.target),
             );
           }
+          break;
+        case ir.OpKind.Control:
+          ir.OpList.insertBefore<ir.CreateOp>(
+            // Deliberately null i18nMessage value
+            ir.createExtractedAttributeOp(
+              op.target,
+              ir.BindingKind.Property,
+              null,
+              'field',
+              /* expression */ null,
+              /* i18nContext */ null,
+              /* i18nMessage */ null,
+              op.securityContext,
+            ),
+            lookupElement(elements, op.target),
+          );
           break;
         case ir.OpKind.TwoWayProperty:
           ir.OpList.insertBefore<ir.CreateOp>(
@@ -94,7 +113,7 @@ export function extractAttributes(job: CompilationJob): void {
           }
           break;
         case ir.OpKind.Listener:
-          if (!op.isAnimationListener) {
+          if (!op.isLegacyAnimationListener) {
             const extractedAttributeOp = ir.createExtractedAttributeOp(
               op.target,
               ir.BindingKind.Property,

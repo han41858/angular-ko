@@ -10,9 +10,9 @@ To prepare your project for translation, complete the following actions.
 
 In a component template, the i18n metadata is the value of the `i18n` attribute.
 
-<docs-code language="html">
+```html
 <element i18n="{i18n_metadata}">{string_to_translate}</element>
-</docs-code>
+```
 
 Use the `i18n` attribute to mark a static text message in your component templates for translation.
 Place it on every element tag that contains fixed text you want to translate.
@@ -23,20 +23,19 @@ HELPFUL: The `i18n` attribute is a custom attribute that the Angular tools and c
 
 The following `<h1>` tag displays a simple English language greeting, "Hello i18n!".
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="greeting"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="greeting"/>
 
 To mark the greeting for translation, add the `i18n` attribute to the `<h1>` tag.
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute"/>
-
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute"/>
 
 ### using conditional statement with `i18n`
 
 The following `<div>` tag will display translated text as part of `div` and `aria-label` based on toggle status
 
 <docs-code-multifile>
-    <docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html"  visibleRegion="i18n-conditional"/>
-    <docs-code header="src/app/app.component.ts" path="adev/src/content/examples/i18n/src/app/app.component.ts" visibleLines="[[14,21],[33,37]]"/>
+    <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html"  visibleRegion="i18n-conditional"/>
+    <docs-code header="app.component.ts" path="adev/src/content/examples/i18n/src/app/app.component.ts" visibleLines="[[14,21],[33,37]]"/>
 </docs-code-multifile>
 
 ### Translate inline text without HTML element
@@ -53,9 +52,9 @@ The following example shows the `<ng-container>` element transformed into a non-
 
 In a component template, the i18n metadata is the value of the `i18n-{attribute_name}` attribute.
 
-<docs-code language="html">
+```html
 <element i18n-{attribute_name}="{i18n_metadata}" {attribute_name}="{attribute_value}" />
-</docs-code>
+```
 
 The attributes of HTML elements include text that should be translated along with the rest of the displayed text in the component template.
 
@@ -64,16 +63,16 @@ Use the following syntax to assign a meaning, description, and custom ID.
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 i18n-{attribute_name}="{meaning}|{description}@@{id}"
-</docs-code>
+```
 
 ### `i18n-title` example
 
 To translate the title of an image, review this example.
 The following example displays an image with a `title` attribute.
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-title"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-title"/>
 
 To mark the title attribute for translation, complete the following action.
 
@@ -81,7 +80,7 @@ To mark the title attribute for translation, complete the following action.
 
    The following example displays how to mark the `title` attribute on the `img` tag by adding `i18n-title`.
 
-   <docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-title-translate"/>
+   <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-title-translate"/>
 
 ## Mark text in component code
 
@@ -125,15 +124,13 @@ $localize`string_to_translate ${variable_name}:placeholder_name:`;
 return this.show ? $localize`Show Tabs` : $localize`Hide tabs`;
 </docs-code>
 
-
-
 ## i18n metadata for translation
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 {meaning}|{description}@@{custom_id}
-</docs-code>
+```
 
 The following parameters provide context and additional information to reduce confusion for your translator.
 
@@ -153,7 +150,7 @@ Add a _description_ of the text message as the value of the `i18n` attribute or 
 
 The following example shows the value of the `i18n` attribute.
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-desc"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-desc"/>
 
 The following example shows the value of the [`$localize`][ApiLocalizeInitLocalize] tagged message string with a description.
 
@@ -174,7 +171,7 @@ For example, you may want to specify that the `<h1>` tag is a site header that y
 
 The following example shows how to specify that the `<h1>` tag must be translated as a header or referenced elsewhere.
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-meaning"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/doc-files/app.component.html" visibleRegion="i18n-attribute-meaning"/>
 
 The result is any text marked with `site header`, as the _meaning_ is translated exactly the same way.
 
@@ -217,11 +214,10 @@ An ICU expression includes a component property, an ICU clause, and the case sta
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 
 { component_property, icu_clause, case_statements }
-
-</docs-code>
+```
 
 The component property defines the variable.
 An ICU clause defines the type of conditional text.
@@ -243,21 +239,19 @@ Use the `plural` clause to mark expressions that may not be meaningful if transl
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 
 { component_property, plural, pluralization_categories }
-
-</docs-code>
+```
 
 After the pluralization category, enter the default text \(English\) surrounded by open curly brace \(`{`\) and close curly brace \(`}`\) characters.
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 
 pluralization_category { }
-
-</docs-code>
+```
 
 The following pluralization categories are available for English and may change based on the locale.
 
@@ -274,11 +268,10 @@ If none of the pluralization categories match, Angular uses `other` to match the
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 
 other { default_quantity }
-
-</docs-code>
+```
 
 HELPFUL: For more information about pluralization categories, see [Choosing plural category names][UnicodeCldrIndexCldrSpecPluralRulesTocChoosingPluralCategoryNames] in the [CLDR - Unicode Common Locale Data Repository][UnicodeCldrMain].
 
@@ -302,34 +295,31 @@ If you want to display the following phrase in English, where `x` is a number.
 
 <!--todo: replace output docs-code with screen capture image --->
 
-<docs-code language="html">
+```html
 
 updated x minutes ago
-
-</docs-code>
+```
 
 And you also want to display the following phrases based on the cardinality of `x`.
 
 <!--todo: replace output docs-code with screen capture image --->
 
-<docs-code language="html">
+```html
 
 updated just now
-
-</docs-code>
+```
 
 <!--todo: replace output docs-code with screen capture image --->
 
-<docs-code language="html">
+```html
 
 updated one minute ago
-
-</docs-code>
+```
 
 Use HTML markup and [interpolations](guide/templates/binding#render-dynamic-text-with-text-interpolation).
 The following code example shows how to use the `plural` clause to express the previous three situations in a `<span>` element.
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-plural"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-plural"/>
 
 Review the following details in the previous code example.
 
@@ -349,11 +339,10 @@ The `select` clause marks choices for alternate text based on your defined strin
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 
 { component_property, select, selection_categories }
-
-</docs-code>
+```
 
 Translate all of the alternates to display alternate text based on the value of a variable.
 
@@ -361,11 +350,10 @@ After the selection category, enter the text \(English\) surrounded by open curl
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 
 selection_category { text }
-
-</docs-code>
+```
 
 Different locales have different grammatical constructions that increase the difficulty of translation.
 Use HTML markup.
@@ -373,11 +361,10 @@ If none of the selection categories match, Angular uses `other` to match the sta
 
 <!--todo: replace with docs-code -->
 
-<docs-code language="html">
+```html
 
 other { default_value }
-
-</docs-code>
+```
 
 #### `gender` example
 
@@ -385,29 +372,26 @@ If you want to display the following phrase in English.
 
 <!--todo: replace output docs-code with screen capture image --->
 
-<docs-code language="html">
+```html
 
 The author is other
-
-</docs-code>
+```
 
 And you also want to display the following phrases based on the `gender` property of the component.
 
 <!--todo: replace output docs-code with screen capture image --->
 
-<docs-code language="html">
+```html
 
 The author is female
-
-</docs-code>
+```
 
 <!--todo: replace output docs-code with screen capture image --->
 
-<docs-code language="html">
+```html
 
 The author is male
-
-</docs-code>
+```
 
 The following code example shows how to bind the `gender` property of the component and use the `select` clause to express the previous three situations in a `<span>` element.
 
@@ -422,14 +406,14 @@ The `gender` property binds the outputs to each of following string values.
 The `select` clause maps the values to the appropriate translations.
 The following code example shows `gender` property used with the select clause.
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-select"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-select"/>
 
 #### `gender` and `minutes` example
 
 Combine different clauses together, such as the `plural` and `select` clauses.
 The following code example shows nested clauses based on the `gender` and `minutes` examples.
 
-<docs-code header="src/app/app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-nested"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" visibleRegion="i18n-nested"/>
 
 ## What's next
 

@@ -1,40 +1,34 @@
-load("//tools:defaults.bzl", "karma_web_test_suite", "zone_compatible_jasmine_node_test")
-load("//tools:defaults2.bzl", "ts_project")
+load("//tools:defaults.bzl", "ts_project", "zoneless_jasmine_test", "zoneless_web_test_suite")
 
 ts_project(
     name = "test_lib",
     testonly = True,
     srcs = glob(["**/*.ts"]),
-    interop_deps = [
-        "//packages/common",
-        "//packages/common/testing",
-        "//packages/platform-browser",
-        "//packages/platform-browser/testing",
-        "//packages/private/testing",
-    ],
     # Visible to //:saucelabs_unit_tests_poc target
     visibility = ["//:__pkg__"],
     deps = [
         "//:node_modules/rxjs",
-        "//packages/core:core_rjs",
-        "//packages/core/rxjs-interop:rxjs-interop_rjs",
-        "//packages/core/testing:testing_rjs",
-        "//packages/router:router_rjs",
-        "//packages/router/testing:testing_rjs",
+        "//packages/common",
+        "//packages/common/testing",
+        "//packages/core",
+        "//packages/core/rxjs-interop",
+        "//packages/core/testing",
+        "//packages/platform-browser",
+        "//packages/platform-browser/testing",
+        "//packages/private/testing",
+        "//packages/router",
+        "//packages/router/testing",
     ],
 )
 
-# Tests rely on `async/await` for change detection.
-# This syntax needs to be downleveled until ZoneJS supports it.
-zone_compatible_jasmine_node_test(
+zoneless_jasmine_test(
     name = "test",
-    bootstrap = ["//tools/testing:node"],
-    deps = [
+    data = [
         ":test_lib",
     ],
 )
 
-karma_web_test_suite(
+zoneless_web_test_suite(
     name = "test_web",
     deps = [
         ":test_lib",

@@ -19,17 +19,9 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "externalDependencies": ["path"],
-            "define": {
-              // We need this until xterm 5.6.0 is released
-              // see https://github.com/xtermjs/xterm.js/pull/4940
-              "self": "this"
-            },
-            // Ensures we don't escape sandbox to the workspace root with the full node modules that
-            // might contain e.g. `@angular/core` from npm.
-            "preserveSymlinks": true,
+            "externalDependencies": ["path", "xhr2"],
             "outputMode": "static",
-            "outputPath": "dist/angular-dev",
+            "outputPath": "dist",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "server": "src/main.server.ts",
@@ -39,16 +31,15 @@
             "assets": [
               "src/favicon.ico",
               "src/robots.txt",
-              "src/assets",
               "src/llms.txt",
-              "src/llms-full.txt"
+              "src/assets",
+              "src/assets/images/v21-event"
             ],
             "styles": ["@angular/docs/styles/global-styles.scss", "./src/local-styles.scss"],
             "scripts": [],
             "webWorkerTsConfig": "tsconfig.worker.json",
             "optimization": {
               "fonts": {
-                // TODO(josephperrott): enabled inline scripts
                 "inline": false
               }
             }
@@ -66,7 +57,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "angular-dev:build:production"
@@ -84,24 +75,14 @@
             }
           }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "angular-dev:build"
-          }
-        },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "tsConfig": "tsconfig.spec.json",
-            "include": ["src/app"],
-            "karmaConfig": "karma.conf.js",
-            "main": "test-main.ts",
-            "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["@angular/docs/styles/global-styles.scss"],
-            "scripts": [],
-            "webWorkerTsConfig": "tsconfig.worker.json"
+          "builder": "@angular/build:unit-test",
+           "options": {
+            "runner": "karma",
+            "browsers": ["ChromeHeadlessNoSandbox"],
+            "include": [
+              "src/app/**/*.spec.ts"
+            ]
           }
         }
       }
@@ -110,8 +91,6 @@
   "cli": {
     "analytics": "dca119a9-da31-47f7-a6cb-b60541037021",
     "cache": {
-      // Disable build caching as the cache folder will just be dropped
-      // when run under Bazel sandboxed execution.
       "enabled": false
     }
   }

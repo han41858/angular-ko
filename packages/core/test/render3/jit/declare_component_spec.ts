@@ -374,16 +374,32 @@ describe('component declaration jit compilation', () => {
     });
   });
 
-  it('should honor custom interpolation config', () => {
+  it('should bind directive inputs as regular property (not DOM property) in the presence of pipes', () => {
+    // https://github.com/angular/angular/issues/62573
     const def = ɵɵngDeclareComponent({
       version: '18.0.0',
       type: TestClass,
-      template: '{% foo %}',
-      interpolation: ['{%', '%}'],
+      isStandalone: true,
+      dependencies: [
+        {
+          kind: 'directive',
+          type: TestDir,
+          selector: '[dir]',
+          inputs: ['dir'],
+        },
+        {
+          kind: 'pipe',
+          type: TestPipe,
+          name: 'test',
+        },
+      ],
+      template: `<div [dir]="'test' | test"></div>`,
     }) as ComponentDef<TestClass>;
 
     expectComponentDef(def, {
-      template: functionContaining([/textInterpolate[^(]*\(ctx.foo\)/]),
+      template: functionContaining([/property[^(]*\('dir',/]),
+      directives: [TestDir],
+      pipes: [TestPipe],
     });
   });
 

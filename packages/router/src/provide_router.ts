@@ -11,6 +11,8 @@ import {
   LOCATION_INITIALIZED,
   LocationStrategy,
   ViewportScroller,
+  Location,
+  ɵNavigationAdapterForLocation,
 } from '@angular/common';
 import {
   APP_BOOTSTRAP_LISTENER,
@@ -26,8 +28,11 @@ import {
   provideAppInitializer,
   Provider,
   runInInjectionContext,
-  Type,
   ɵperformanceMarkFeature as performanceMarkFeature,
+  ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION as IS_ENABLED_BLOCKING_INITIAL_NAVIGATION,
+  ɵpublishExternalGlobalUtil,
+  provideEnvironmentInitializer,
+  Type,
 } from '@angular/core';
 import {of, Subject} from 'rxjs';
 
@@ -49,6 +54,9 @@ import {
   VIEW_TRANSITION_OPTIONS,
   ViewTransitionsFeatureOptions,
 } from './utils/view_transition';
+import {getLoadedRoutes, getRouterInstance, navigateByUrl} from './router_devtools';
+import {StateManager} from './statemanager/state_manager';
+import {NavigationStateManager} from './statemanager/navigation_state_manager';
 
 /**
  * Sets up providers necessary to enable `Router` functionality for the application.
@@ -78,6 +86,7 @@ import {
  *   }
  * );
  * ```
+ * @see [Router](guide/routing)
  *
  * @see {@link RouterFeatures}
  *
@@ -87,19 +96,26 @@ import {
  * @returns A set of providers to setup a Router.
  */
 export function provideRouter(routes: Routes, ...features: RouterFeatures[]): EnvironmentProviders {
+  if (typeof ngDevMode === 'undefined' || ngDevMode) {
+    // Publish this util when the router is provided so that the devtools can use it.
+    ɵpublishExternalGlobalUtil('ɵgetLoadedRoutes', getLoadedRoutes);
+    ɵpublishExternalGlobalUtil('ɵgetRouterInstance', getRouterInstance);
+    ɵpublishExternalGlobalUtil('ɵnavigateByUrl', navigateByUrl);
+  }
+
   return makeEnvironmentProviders([
     {provide: ROUTES, multi: true, useValue: routes},
     typeof ngDevMode === 'undefined' || ngDevMode
       ? {provide: ROUTER_IS_PROVIDED, useValue: true}
       : [],
-    {provide: ActivatedRoute, useFactory: rootRoute, deps: [Router]},
+    {provide: ActivatedRoute, useFactory: rootRoute},
     {provide: APP_BOOTSTRAP_LISTENER, multi: true, useFactory: getBootstrapListener},
     features.map((feature) => feature.ɵproviders),
   ]);
 }
 
-export function rootRoute(router: Router): ActivatedRoute {
-  return router.routerState.root;
+export function rootRoute(): ActivatedRoute {
+  return inject(Router).routerState.root;
 }
 
 /**
@@ -126,10 +142,12 @@ function routerFeature<FeatureKind extends RouterFeatureKind>(
  * An Injection token used to indicate whether `provideRouter` or `RouterModule.forRoot` was ever
  * called.
  */
-export const ROUTER_IS_PROVIDED = new InjectionToken<boolean>('', {
-  providedIn: 'root',
-  factory: () => false,
-});
+export const ROUTER_IS_PROVIDED = new InjectionToken<boolean>(
+  typeof ngDevMode !== 'undefined' && ngDevMode ? 'Router is provided' : '',
+  {
+    factory: () => false,
+  },
+);
 
 const routerIsProvidedDevModeCheck = {
   provide: ENVIRONMENT_INITIALIZER,
@@ -223,6 +241,58 @@ export function withInMemoryScrolling(
   return routerFeature(RouterFeatureKind.InMemoryScrollingFeature, providers);
 }
 
+/**
+ * Enables the use of the browser's `History` API for navigation.
+ *
+ * @description
+ * This function provides a `Location` strategy that uses the browser's `History` API.
+ * It is required when using features that rely on `history.state`. For example, the
+ * `state` object in `NavigationExtras` is passed to `history.pushState` or
+ * `history.replaceState`.
+ *
+ * @usageNotes
+ *
+ * ```typescript
+ * const appRoutes: Routes = [
+ *   { path: 'page', component: PageComponent },
+ * ];
+ *
+ * bootstrapApplication(AppComponent, {
+ *   providers: [
+ *     provideRouter(appRoutes, withPlatformNavigation())
+ *   ]
+ * });
+ * ```
+ *
+ * @returns A `RouterFeature` that enables the platform navigation.
+ */
+export function withPlatformNavigation() {
+  const devModeLocationCheck =
+    typeof ngDevMode === 'undefined' || ngDevMode
+      ? [
+          provideEnvironmentInitializer(() => {
+            const locationInstance = inject(Location);
+            if (!(locationInstance instanceof ɵNavigationAdapterForLocation)) {
+              const locationConstructorName = (locationInstance as any).constructor.name;
+              let message =
+                `'withPlatformNavigation' provides a 'Location' implementation that ensures navigation APIs are consistently used.` +
+                ` An instance of ${locationConstructorName} was found instead.`;
+              if (locationConstructorName === 'SpyLocation') {
+                message += ` One of 'RouterTestingModule' or 'provideLocationMocks' was likely used. 'withPlatformNavigation' does not work with these because they override the Location implementation.`;
+              }
+              throw new Error(message);
+            }
+          }),
+        ]
+      : [];
+  const providers = [
+    {provide: StateManager, useExisting: NavigationStateManager},
+    {provide: Location, useClass: ɵNavigationAdapterForLocation},
+    devModeLocationCheck,
+  ];
+  return routerFeature(RouterFeatureKind.InMemoryScrollingFeature, providers);
+}
+
 export function getBootstrapListener() {
   const injector = inject(Injector);
   return (bootstrappedComponentRef: ComponentRef<unknown>) => {
@@ -290,7 +360,7 @@ const enum InitialNavigation {
 
 const INITIAL_NAVIGATION = new InjectionToken<InitialNavigation>(
   typeof ngDevMode === 'undefined' || ngDevMode ? 'initial navigation' : '',
-  {providedIn: 'root', factory: () => InitialNavigation.EnabledNonBlocking},
+  {factory: () => InitialNavigation.EnabledNonBlocking},
 );
 
 /**
@@ -347,6 +417,7 @@ export type InitialNavigationFeature =
  */
 export function withEnabledBlockingInitialNavigation(): EnabledBlockingInitialNavigationFeature {
   const providers = [
+    {provide: IS_ENABLED_BLOCKING_INITIAL_NAVIGATION, useValue: true},
     {provide: INITIAL_NAVIGATION, useValue: InitialNavigation.EnabledBlocking},
     provideAppInitializer(() => {
       const injector = inject(Injector);
@@ -528,6 +599,8 @@ export type PreloadingFeature = RouterFeature<RouterFeatureKind.PreloadingFeatur
  *     should be used.
  * @returns A set of providers for use with `provideRouter`.
  *
+ * @see [Preloading strategy](guide/routing/customizing-route-behavior#preloading-strategy)
+ *
  * @publicApi
  */
 export function withPreloading(preloadingStrategy: Type<PreloadingStrategy>): PreloadingFeature {
@@ -573,6 +646,8 @@ export type RouterConfigurationFeature =
  * @param options A set of parameters to configure Router, see `RouterConfigOptions` for
  *     additional information.
  * @returns A set of providers for use with `provideRouter`.
+ *
+ * @see [Router configuration options](guide/routing/customizing-route-behavior#router-configuration-options)
  *
  * @publicApi
  */
@@ -661,6 +736,7 @@ export type NavigationErrorHandlerFeature =
  * @see {@link NavigationError}
  * @see {@link /api/core/inject inject}
  * @see {@link runInInjectionContext}
+ * @see [Centralize error handling in withNavigationErrorHandler](guide/routing/data-resolvers#centralize-error-handling-in-withnavigationerrorhandler)
  *
  * @returns A set of providers for use with `provideRouter`.
  *
@@ -771,6 +847,7 @@ export function withComponentInputBinding(): ComponentInputBindingFeature {
  * @returns A set of providers for use with `provideRouter`.
  * @see https://developer.chrome.com/docs/web-platform/view-transitions/
  * @see https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API
+ * @see [Route transition animations](guide/routing/route-transition-animations)
  * @developerPreview 19.0
  */
 export function withViewTransitions(

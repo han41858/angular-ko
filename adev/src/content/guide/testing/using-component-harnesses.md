@@ -8,9 +8,9 @@ TIP: This guide assumes you've already read the [component harnesses overview gu
 
 The [Component Dev Kit (CDK)](https://material.angular.dev/cdk/categories) is a set of behavior primitives for building components. To use the component harnesses, first install `@angular/cdk` from npm. You can do this from your terminal using the Angular CLI:
 
-<docs-code language="shell">
-  ng add @angular/cdk
-</docs-code>
+```shell
+ng add @angular/cdk
+```
 
 ## Test harness environments and loaders
 
@@ -71,6 +71,12 @@ const myComponentHarness = await loader.getHarness(MyComponent);
 const myComponentHarnesses = await loader.getHarnesses(MyComponent);
 </docs-code>
 
+In addition to `getHarness` and `getAllHarnesses`, `HarnessLoader` has several other useful methods for querying for harnesses:
+
+- `getHarnessAtIndex(...)`: Gets the harness for a component that matches the given criteria at a specific index.
+- `countHarnesses(...)`: Counts the number of component instances that match the given criteria.
+- `hasHarness(...)`: Checks if at least one component instance matches the given criteria.
+
 As an example, consider a reusable dialog-button component that opens a dialog on click. It contains the following components, each with a corresponding harness:
 
 - `MyDialogButton` (composes the `MyButton` and `MyDialog` with a convenient API)
@@ -85,27 +91,27 @@ let loader: HarnessLoader;
 let rootLoader: HarnessLoader;
 
 beforeEach(() => {
-  fixture = TestBed.createComponent(MyDialogButton);
-  loader = TestbedHarnessEnvironment.loader(fixture);
-  rootLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+fixture = TestBed.createComponent(MyDialogButton);
+loader = TestbedHarnessEnvironment.loader(fixture);
+rootLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
 });
 
 it('loads harnesses', async () => {
-  // Load a harness for the bootstrapped component with `harnessForFixture`
-  dialogButtonHarness =
-    await TestbedHarnessEnvironment.harnessForFixture(fixture, MyDialogButtonHarness);
+// Load a harness for the bootstrapped component with `harnessForFixture`
+dialogButtonHarness =
+await TestbedHarnessEnvironment.harnessForFixture(fixture, MyDialogButtonHarness);
 
-  // The button element is inside the fixture's root element, so we use `loader`.
-  const buttonHarness = await loader.getHarness(MyButtonHarness);
+// The button element is inside the fixture's root element, so we use `loader`.
+const buttonHarness = await loader.getHarness(MyButtonHarness);
 
-  // Click the button to open the dialog
-  await buttonHarness.click();
+// Click the button to open the dialog
+await buttonHarness.click();
 
-  // The dialog is appended to `document.body`, outside of the fixture's root element,
-  // so we use `rootLoader` in this case.
-  const dialogHarness = await rootLoader.getHarness(MyDialogHarness);
+// The dialog is appended to `document.body`, outside of the fixture's root element,
+// so we use `rootLoader` in this case.
+const dialogHarness = await rootLoader.getHarness(MyDialogHarness);
 
-  // ... make some assertions
+// ... make some assertions
 });
 </docs-code>
 

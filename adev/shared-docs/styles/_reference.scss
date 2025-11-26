@@ -200,6 +200,15 @@
             margin-block-start: 1rem;
           }
         }
+
+        .docs-member-tag {
+          color: var(--page-background);
+          background-color: var(--quaternary-contrast);
+          width: max-content;
+          border-radius: 0.25rem;
+          padding: 0.1rem 0.25rem;
+          margin-block-start: 1rem;
+        }
       }
     }
   }
@@ -373,6 +382,12 @@
 
     // "CLI member card"-specific styles
     .docs-reference-member-card {
+      .docs-reference-option-aliases {
+        span {
+          padding-right: 0.4rem;
+        }
+      }
+
       .docs-ref-content {
         padding: 1rem 0;
 
@@ -387,7 +402,6 @@
             display: block;
             font-size: 0.875rem;
             margin-block-end: 0.2rem;
-            white-space: nowrap;
 
             &:not(:first-child) {
               margin-block-start: 1rem;

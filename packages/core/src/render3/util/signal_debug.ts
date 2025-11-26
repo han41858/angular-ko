@@ -5,32 +5,31 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-import {
-  REACTIVE_LVIEW_CONSUMER_NODE,
-  ReactiveLViewConsumer,
-  TEMPORARY_CONSUMER_NODE,
-} from '../reactive_lview_consumer';
+import {ReactiveLViewConsumer} from '../reactive_lview_consumer';
 import {assertTNode, assertLView} from '../assert';
 import {getFrameworkDIDebugData} from '../debug/framework_injector_profiler';
 import {NodeInjector, getNodeInjectorTNode, getNodeInjectorLView} from '../di';
-import {REACTIVE_TEMPLATE_CONSUMER, HOST, LView} from '../interfaces/view';
-import {EffectNode, EffectRefImpl, ROOT_EFFECT_NODE, VIEW_EFFECT_NODE} from '../reactivity/effect';
+import {REACTIVE_TEMPLATE_CONSUMER, HOST, LView, CONTEXT} from '../interfaces/view';
+import {EffectNode, EffectRefImpl} from '../reactivity/effect';
 import {Injector} from '../../di/injector';
 import {R3Injector} from '../../di/r3_injector';
 import {throwError} from '../../util/assert';
 import {
   ComputedNode,
   ReactiveNode,
+  ReactiveNodeKind,
   SIGNAL,
-  SIGNAL_NODE,
   SignalNode,
 } from '../../../primitives/signals';
 import {isLView} from '../interfaces/type_checks';
 
 export interface DebugSignalGraphNode {
-  kind: string;
+  kind: ReactiveNodeKind;
+  id: string;
+  epoch: number;
   label?: string;
   value?: unknown;
+  debuggableFn?: () => unknown;
 }
 
 export interface DebugSignalGraphEdge {
@@ -86,6 +85,9 @@ function getTemplateConsumer(injector: NodeInjector): ReactiveLViewConsumer | nu
   return null;
 }
 
+const signalDebugMap = new WeakMap<ReactiveNode, string>();
+let counter = 0;
+
 function getNodesAndEdgesFromSignalMap(signalMap: ReadonlyMap<ReactiveNode, ReactiveNode[]>): {
   nodes: DebugSignalGraphNode[];
   edges: DebugSignalGraphEdge[];
@@ -97,27 +99,47 @@ function getNodesAndEdgesFromSignalMap(signalMap: ReadonlyMap<ReactiveNode, Reac
   for (const [consumer, producers] of signalMap.entries()) {
     const consumerIndex = nodes.indexOf(consumer);
 
+    let id = signalDebugMap.get(consumer);
+    if (!id) {
+      counter++;
+      id = counter.toString();
+      signalDebugMap.set(consumer, id);
+    }
+
     // collect node
-    if (isComputedNode(consumer) || isSignalNode(consumer)) {
+    if (isComputedNode(consumer)) {
       debugSignalGraphNodes.push({
         label: consumer.debugName,
         value: consumer.value,
         kind: consumer.kind,
+        epoch: consumer.version,
+        debuggableFn: consumer.computation,
+        id,
+      });
+    } else if (isSignalNode(consumer)) {
+      debugSignalGraphNodes.push({
+        label: consumer.debugName,
+        value: consumer.value,
+        kind: consumer.kind,
+        epoch: consumer.version,
+        id,
       });
     } else if (isTemplateEffectNode(consumer)) {
       debugSignalGraphNodes.push({
         label: consumer.debugName ?? consumer.lView?.[HOST]?.tagName?.toLowerCase?.(),
         kind: consumer.kind,
-      });
-    } else if (isEffectNode(consumer)) {
-      debugSignalGraphNodes.push({
-        label: consumer.debugName,
-        kind: consumer.kind,
+        epoch: consumer.version,
+        // The `lView[CONTEXT]` is a reference to an instance of the component's class.
+        // We get the constructor so that `inspect(.constructor)` shows the component class.
+        debuggableFn: consumer.lView?.[CONTEXT]?.constructor as (() => unknown) | undefined,
+        id,
       });
     } else {
       debugSignalGraphNodes.push({
         label: consumer.debugName,
         kind: consumer.kind,
+        epoch: consumer.version,
+        id,
       });
     }
 
@@ -137,13 +159,17 @@ function extractEffectsFromInjector(injector: Injector): ReactiveNode[] {
     diResolver = lView;
   }
 
-  const resolverToEffects = getFrameworkDIDebugData().resolverToEffects as Map<
-    Injector | LView<unknown>,
-    EffectRefImpl[]
-  >;
+  const resolverToEffects = getFrameworkDIDebugData().resolverToEffects;
   const effects = resolverToEffects.get(diResolver) ?? [];
 
-  return effects.map((effect: EffectRefImpl) => effect[SIGNAL]);
+  return effects.map((effect) => {
+    if (effect instanceof EffectRefImpl) {
+      return effect[SIGNAL] as ReactiveNode;
+    } else {
+      // Narrowing down afterRenderEffect phases
+      return effect.signal[SIGNAL] as ReactiveNode;
+    }
+  });
 }
 
 function extractSignalNodesAndEdgesFromRoots(
@@ -155,7 +181,11 @@ function extractSignalNodesAndEdgesFromRoots(
       continue;
     }
 
-    const producerNodes = (node.producerNode ?? []) as ReactiveNode[];
+    const producerNodes = [];
+    for (let link = node.producers; link !== undefined; link = link.nextProducer) {
+      const producer = link.producer;
+      producerNodes.push(producer);
+    }
     signalDependenciesMap.set(node, producerNodes);
     extractSignalNodesAndEdgesFromRoots(producerNodes, signalDependenciesMap);
   }

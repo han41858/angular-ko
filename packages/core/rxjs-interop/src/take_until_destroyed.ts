@@ -18,6 +18,8 @@ import {takeUntil} from 'rxjs/operators';
  *     passed explicitly to use `takeUntilDestroyed` outside of an [injection
  * context](guide/di/dependency-injection-context). Otherwise, the current `DestroyRef` is injected.
  *
+ * @see [Unsubscribing with takeUntilDestroyed](ecosystem/rxjs-interop/take-until-destroyed)
+ *
  * @publicApi 19.0
  */
 export function takeUntilDestroyed<T>(destroyRef?: DestroyRef): MonoTypeOperatorFunction<T> {
@@ -27,11 +29,11 @@ export function takeUntilDestroyed<T>(destroyRef?: DestroyRef): MonoTypeOperator
   }
 
   const destroyed$ = new Observable<void>((subscriber) => {
-    if ((destroyRef as unknown as {destroyed: boolean}).destroyed) {
+    if (destroyRef.destroyed) {
       subscriber.next();
       return;
     }
-    const unregisterFn = destroyRef!.onDestroy(subscriber.next.bind(subscriber));
+    const unregisterFn = destroyRef.onDestroy(subscriber.next.bind(subscriber));
     return unregisterFn;
   });
 

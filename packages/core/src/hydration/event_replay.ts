@@ -72,6 +72,9 @@ function shouldEnableEventReplay(injector: Injector) {
 /**
  * Returns a set of providers required to setup support for event replay.
  * Requires hydration to be enabled separately.
+ *
+ * @see [Capturing and replaying event](guide/hydration#capturing-and-replaying-events)
+ *
  */
 export function withEventReplay(): Provider[] {
   const providers: Provider[] = [
@@ -145,11 +148,11 @@ export function withEventReplay(): Provider[] {
 
             appsWithEventReplay.add(appRef);
 
+            const appId = injector.get(APP_ID);
             appRef.onDestroy(() => {
               appsWithEventReplay.delete(appRef);
               // Ensure that we're always safe calling this in the browser.
               if (typeof ngServerMode !== 'undefined' && !ngServerMode) {
-                const appId = injector.get(APP_ID);
                 // `_ejsa` should be deleted when the app is destroyed, ensuring that
                 // no elements are still captured in the global list and are not prevented
                 // from being garbage collected.

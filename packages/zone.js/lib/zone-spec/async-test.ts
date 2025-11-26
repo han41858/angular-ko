@@ -8,8 +8,7 @@
 
 import {__symbol__, ZoneType} from '../zone-impl';
 
-const __global: any =
-  (typeof window !== 'undefined' && window) || (typeof self !== 'undefined' && self) || global;
+const __global: any = globalThis;
 class AsyncTestZoneSpec implements ZoneSpec {
   // Needs to be a getter and not a plain property in order run this just-in-time. Otherwise
   // `__symbol__` would be evaluated during top-level execution prior to the Zone prefix being
@@ -248,7 +247,7 @@ export function patchAsyncTest(Zone: ZoneType): void {
               throw e;
             };
           }
-          runInTestZone(fn, this, done, (err: any) => {
+          runInTestZone(fn, this, undefined, done, (err: any) => {
             if (typeof err === 'string') {
               return done.fail(new Error(err));
             } else {
@@ -261,9 +260,9 @@ export function patchAsyncTest(Zone: ZoneType): void {
       // is finished. This will be correctly consumed by the Mocha framework with
       // it('...', async(myFn)); or can be used in a custom framework.
       // Not using an arrow function to preserve context passed from call site
-      return function (this: unknown) {
+      return function (this: unknown, ...args: unknown[]) {
         return new Promise<void>((finishCallback, failCallback) => {
-          runInTestZone(fn, this, finishCallback, failCallback);
+          runInTestZone(fn, this, args, finishCallback, failCallback);
         });
       };
     };
@@ -271,6 +270,7 @@ export function patchAsyncTest(Zone: ZoneType): void {
     function runInTestZone(
       fn: Function,
       context: any,
+      applyArgs: unknown[] | undefined,
       finishCallback: Function,
       failCallback: Function,
     ) {
@@ -329,7 +329,7 @@ export function patchAsyncTest(Zone: ZoneType): void {
         proxyZoneSpec.setDelegate(testZoneSpec);
         (testZoneSpec as any).patchPromiseForTest();
       });
-      return Zone.current.runGuarded(fn, context);
+      return Zone.current.runGuarded(fn, context, applyArgs);
     }
   });
 }

@@ -337,7 +337,7 @@ describe('quick info', () => {
           expectQuickInfo({
             templateOverride: `<div (click)="myClick($e¦vent)"></div>`,
             expectedSpanText: '$event',
-            expectedDisplayString: '(parameter) $event: MouseEvent',
+            expectedDisplayString: '(parameter) $event: PointerEvent',
           });
         });
       });
@@ -350,10 +350,10 @@ describe('quick info', () => {
           expectedSpanText: 'chart',
           expectedDisplayString: '(reference) chart: HTMLDivElement',
         });
-        expect(toText(documentation)).toEqual(
-          'Provides special properties (beyond the regular HTMLElement ' +
-            'interface it also has available to it by inheritance) for manipulating <div> elements.\n\n' +
-            '[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)',
+        expect(toText(documentation)).toContain(
+          'The **`HTMLDivElement`** interface provides special properties ' +
+            '(beyond the regular HTMLElement interface it also has available to it by inheritance) ' +
+            'for manipulating div elements.',
         );
       });
 
@@ -384,7 +384,7 @@ describe('quick info', () => {
           expectedSpanText: 'click',
           expectedDisplayString:
             '(event) HTMLDivElement.addEventListener<"click">(type: "click", listener: ' +
-            '(this: HTMLDivElement, ev: MouseEvent) => any, options?: boolean | ' +
+            '(this: HTMLDivElement, ev: PointerEvent) => any, options?: boolean | ' +
             'AddEventListenerOptions): void (+1 overload)',
         });
       });
@@ -648,7 +648,7 @@ describe('quick info', () => {
         expectQuickInfo({
           templateOverride: `<div (click)="void myClick($e¦vent)"></div>`,
           expectedSpanText: '$event',
-          expectedDisplayString: '(parameter) $event: MouseEvent',
+          expectedDisplayString: '(parameter) $event: PointerEvent',
         });
       });
 
@@ -867,11 +867,19 @@ describe('quick info', () => {
         });
       });
 
-      it('if block alias variable', () => {
+      it('if block alias function call variable', () => {
         expectQuickInfo({
           templateOverride: `@if (someObject.some¦Signal(); as aliasName) {}`,
           expectedSpanText: 'someSignal',
           expectedDisplayString: '(property) someSignal: WritableSignal\n() => number',
+        });
+      });
+
+      it('else if block alias variable', () => {
+        expectQuickInfo({
+          templateOverride: `@if (false) {} @else if (constNames; as al¦iasName) {}`,
+          expectedSpanText: 'aliasName',
+          expectedDisplayString: '(variable) aliasName: [{ readonly name: "name"; }]',
         });
       });
     });
@@ -943,13 +951,7 @@ describe('quick info', () => {
         expectedDisplayString: string;
         expectedSpanText: string;
       }) {
-        const project = env.addProject(
-          'host-bindings',
-          {'host-bindings.ts': source},
-          {
-            typeCheckHostBindings: true,
-          },
-        );
+        const project = env.addProject('host-bindings', {'host-bindings.ts': source});
         const appFile = project.openFile('host-bindings.ts');
 
         appFile.moveCursorToText(moveTo);
@@ -996,7 +998,7 @@ describe('quick info', () => {
             }
           })
           export class AppCmp {
-            handleClick(event: MouseEvent) {}
+            handleClick(event: PointerEvent) {}
           }
         `;
 
@@ -1004,7 +1006,7 @@ describe('quick info', () => {
           source,
           moveTo: `'(click)': 'handleC¦lick($event)'`,
           expectedSpanText: 'handleClick',
-          expectedDisplayString: '(method) AppCmp.handleClick(event: MouseEvent): void',
+          expectedDisplayString: '(method) AppCmp.handleClick(event: PointerEvent): void',
         });
       });
 
@@ -1020,7 +1022,7 @@ describe('quick info', () => {
             }
           })
           export class AppCmp {
-            handleClick(event: MouseEvent) {}
+            handleClick(event: PointerEvent) {}
           }
         `;
 
@@ -1028,7 +1030,7 @@ describe('quick info', () => {
           source,
           moveTo: `'(click)': 'handleClick($ev¦ent)'`,
           expectedSpanText: '$event',
-          expectedDisplayString: '(parameter) $event: MouseEvent',
+          expectedDisplayString: '(parameter) $event: PointerEvent',
         });
       });
 
@@ -1168,6 +1170,106 @@ describe('quick info', () => {
       template.moveCursorToText('{{myVa¦lue}}');
       const quickInfo = template.getQuickInfoAtPosition();
       expect(toText(quickInfo!.displayParts)).toEqual('(property) SomeCmp.myValue: string');
+    });
+  });
+
+  describe('selectorless', () => {
+    beforeEach(() => {
+      initMockFileSystem('Native');
+      env = LanguageServiceTestEnv.setup();
+      project = env.addProject(
+        'test',
+        {
+          'app.ts': `
+            import {Component, Directive, EventEmitter, Input, Output} from '@angular/core';
+
+            @Component({template: ''})
+            export class TestComponent {
+              @Input() name!: string;
+              @Output() testEvent = new EventEmitter<string>();
+            }
+
+            @Directive()
+            export class TestDirective {
+              @Input() value!: number;
+              @Output() dirEvent = new EventEmitter<number>();
+            }
+
+            @Component({templateUrl: './app.html'})
+            export class AppCmp {
+              stringValue = 'hello';
+              numberValue = 123;
+              handleEvent() {}
+            }
+          `,
+          'app.html': 'Will be overridden',
+        },
+        {_enableSelectorless: true},
+      );
+    });
+
+    it('should work for selectorless components', () => {
+      expectQuickInfo({
+        templateOverride: '<TestComp¦onent/>',
+        expectedSpanText: '<TestComponent/>',
+        expectedDisplayString: '(component) TestComponent',
+      });
+    });
+
+    it('should work for selectorless directives', () => {
+      expectQuickInfo({
+        templateOverride: '<div @Test¦Directive></div>',
+        expectedSpanText: '@TestDirective',
+        expectedDisplayString: '(directive) TestDirective',
+      });
+    });
+
+    it('should work for selectorless component input', () => {
+      expectQuickInfo({
+        templateOverride: '<TestComponent [na¦me]="stringValue"/>',
+        expectedSpanText: 'name',
+        expectedDisplayString: '(property) TestComponent.name: string',
+      });
+    });
+
+    it('should work for selectorless component output', () => {
+      expectQuickInfo({
+        templateOverride: '<TestComponent (testEv¦ent)="handleEvent()"/>',
+        expectedSpanText: 'testEvent',
+        expectedDisplayString: '(event) TestComponent.testEvent: EventEmitter<string>',
+      });
+    });
+
+    it('should work for selectorless directive input', () => {
+      expectQuickInfo({
+        templateOverride: '<div @TestDirective([val¦ue]="numberValue")></div>',
+        expectedSpanText: 'value',
+        expectedDisplayString: '(property) TestDirective.value: number',
+      });
+    });
+
+    it('should work for selectorless directive output', () => {
+      expectQuickInfo({
+        templateOverride: '<div @TestDirective((dirEv¦ent)="handleEvent()")></div>',
+        expectedSpanText: 'dirEvent',
+        expectedDisplayString: '(event) TestDirective.dirEvent: EventEmitter<number>',
+      });
+    });
+
+    it('should work for selectorless component references', () => {
+      expectQuickInfo({
+        templateOverride: '<TestComponent #r¦ef/>',
+        expectedSpanText: 'ref',
+        expectedDisplayString: '(reference) ref: TestComponent',
+      });
+    });
+
+    it('should work for selectorless directive references', () => {
+      expectQuickInfo({
+        templateOverride: '<div @TestDirective(#r¦ef)></div>',
+        expectedSpanText: 'ref',
+        expectedDisplayString: '(reference) ref: TestDirective',
+      });
     });
   });
 

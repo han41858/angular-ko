@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {runfiles} from '@bazel/runfiles';
 import {readFile} from 'fs/promises';
 import {JSDOM} from 'jsdom';
-import {configureMarkedGlobally} from '../marked/configuration.mjs';
 import {getRenderable} from '../processing.mjs';
 import {renderEntry} from '../rendering.mjs';
-import {initHighlighter} from '../shiki/shiki.mjs';
 import {setSymbols} from '../symbol-context.mjs';
+import {resolve} from 'path';
+import {initHighlighter} from '../../../shared/shiki.mjs';
+import {setHighlighterInstance} from '../shiki/shiki.mjs';
 
 // Note: The tests will probably break if the schema of the api extraction changes.
 // All entries in the fake-entries are extracted from Angular's api.
@@ -24,14 +24,13 @@ describe('markdown to html', () => {
   const entries2 = new Map<string, string>();
 
   beforeAll(async () => {
-    await initHighlighter();
-    await configureMarkedGlobally();
+    setHighlighterInstance(await initHighlighter());
 
-    const entryContent = await readFile(runfiles.resolvePackageRelative('fake-entries.json'), {
+    const entryContent = await readFile(resolve('./fake-entries.json'), {
       encoding: 'utf-8',
     });
     const entryJson = JSON.parse(entryContent) as any;
-    const symbols = new Map<string, string>([
+    const symbols = Object.fromEntries([
       ['AfterRenderPhase', 'core'],
       ['afterRender', 'core'],
       ['EmbeddedViewRef', 'core'],
@@ -44,7 +43,7 @@ describe('markdown to html', () => {
     ]);
     setSymbols(symbols);
     for (const entry of entryJson.entries) {
-      const renderableJson = getRenderable(entry, '@angular/fakeentry', 'angular/angular');
+      const renderableJson = await getRenderable(entry, '@angular/fakeentry', 'angular/angular');
       const fragment = JSDOM.fragment(await renderEntry(renderableJson));
       entries.set(entry['name'], fragment);
       entries2.set(entry['name'], await renderEntry(renderableJson));
@@ -80,12 +79,14 @@ describe('markdown to html', () => {
 
     // In the description
     const descriptionItem = entry.querySelector('.docs-reference-description')!;
-    expect(descriptionItem.innerHTML).toContain('<a href="/api/core/afterRender">afterRender</a>');
+    expect(descriptionItem.innerHTML).toContain(
+      '<a href="/api/core/afterRender"><code>afterRender</code></a>',
+    );
 
     // In the card
     const cardItem = entry.querySelectorAll('.docs-reference-card-item')[1];
     expect(cardItem.innerHTML).toContain(
-      '<a href="/api/core/AfterRenderPhase#MixedReadWrite">AfterRenderPhase.MixedReadWrite</a>',
+      '<a href="/api/core/AfterRenderPhase#MixedReadWrite"><code>AfterRenderPhase.MixedReadWrite</code></a>',
     );
   });
 });

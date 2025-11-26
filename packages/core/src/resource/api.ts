@@ -71,7 +71,9 @@ export interface Resource<T> {
    *
    * This function is reactive.
    */
-  hasValue(): this is Resource<Exclude<T, undefined>>;
+  hasValue(this: T extends undefined ? this : never): this is Resource<Exclude<T, undefined>>;
+
+  hasValue(): boolean;
 }
 
 /**
@@ -83,7 +85,11 @@ export interface Resource<T> {
  */
 export interface WritableResource<T> extends Resource<T> {
   readonly value: WritableSignal<T>;
-  hasValue(): this is WritableResource<Exclude<T, undefined>>;
+  hasValue(
+    this: T extends undefined ? this : never,
+  ): this is WritableResource<Exclude<T, undefined>>;
+
+  hasValue(): boolean;
 
   /**
    * Convenience wrapper for `value.set`.
@@ -113,8 +119,9 @@ export interface WritableResource<T> extends Resource<T> {
  * @experimental
  */
 export interface ResourceRef<T> extends WritableResource<T> {
-  hasValue(): this is ResourceRef<Exclude<T, undefined>>;
+  hasValue(this: T extends undefined ? this : never): this is ResourceRef<Exclude<T, undefined>>;
 
+  hasValue(): boolean;
   /**
    * Manually destroy the resource, which cancels pending requests and returns it to `idle` state.
    */
@@ -161,7 +168,7 @@ export interface BaseResourceOptions<T, R> {
    * A reactive function which determines the request to be made. Whenever the request changes, the
    * loader will be triggered to fetch a new value for the resource.
    *
-   * If a request function isn't provided, the loader won't rerun unless the resource is reloaded.
+   * If a params function isn't provided, the loader won't rerun unless the resource is reloaded.
    */
   params?: () => R;
 
@@ -220,7 +227,15 @@ export interface StreamingResourceOptions<T, R> extends BaseResourceOptions<T, R
 /**
  * @experimental
  */
-export type ResourceOptions<T, R> = PromiseResourceOptions<T, R> | StreamingResourceOptions<T, R>;
+export type ResourceOptions<T, R> = (
+  | PromiseResourceOptions<T, R>
+  | StreamingResourceOptions<T, R>
+) & {
+  /**
+   * A debug name for the reactive node. Used in Angular DevTools to identify the node.
+   */
+  debugName?: string;
+};
 
 /**
  * @experimental

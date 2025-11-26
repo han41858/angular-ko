@@ -11,18 +11,17 @@
         <mat-tab #tab>
           <ng-template mat-tab-label>
             @if (tab.isActive && isRenamingFile()) {
-              <form
-                (submit)="renameFile($event, file.filename)"
-                (docsClickOutside)="closeRenameFile()"
-              >
+              <form (submit)="renameFile($event, file.filename)">
                 <input
                   name="rename-file"
                   class="adev-rename-file-input"
+                  [value]="file.filename.replace('src/', '')"
                   #renameFileInput
                   (keydown)="$event.stopPropagation()"
+                  (blur)="isRenamingFile.set(false)"
                 />
               </form>
-            } @else if(restrictedMode()) {
+            } @else if (restrictedMode()) {
               {{ file.filename.replace('src/app/', '') }}
             } @else {
               {{ file.filename.replace('src/', '') }}
@@ -30,8 +29,11 @@
 
             @if (tab.isActive && canRenameFile(file.filename)) {
               <button
+                type="button"
                 class="docs-rename-file"
                 aria-label="rename file"
+                matTooltip="Rename file"
+                matTooltipPosition="above"
                 (click)="onRenameButtonClick()"
               >
                 <docs-icon>edit</docs-icon>
@@ -39,8 +41,11 @@
             }
             @if (tab.isActive && canDeleteFile(file.filename)) {
               <button
+                type="button"
                 class="docs-delete-file"
                 aria-label="Delete file"
+                matTooltip="Delete file"
+                matTooltipPosition="above"
                 (click)="deleteFile(file.filename)"
               >
                 <docs-icon>delete</docs-icon>
@@ -58,6 +63,7 @@
                 class="adev-new-file-input"
                 #createFileInput
                 (keydown)="$event.stopPropagation()"
+                (blur)="createFile()"
               />
             </form>
           </ng-template>
@@ -66,7 +72,14 @@
     </mat-tab-group>
 
     @if (canCreateFile()) {
-      <button class="adev-add-file" (click)="onAddButtonClick()" aria-label="Add a new file">
+      <button
+        type="button"
+        class="adev-add-file"
+        (click)="onAddButtonClick()"
+        aria-label="Add a new file"
+        matTooltip="Add a new file"
+        matTooltipPosition="above"
+      >
         <docs-icon>add</docs-icon>
       </button>
     }
@@ -83,9 +96,13 @@
   <!-- launcher dropdown window -->
   <ng-template #launcherMenu>
     <div class="adev-editor-dropdown" cdkMenu>
-      <button cdkMenuItem (click)="openCurrentSolutionInIDX()">
-        <span>Open in IDX </span>
-        <img class="icon" src="assets/images/tutorials/common/idx_logo.svg" height="32" />
+      <button cdkMenuItem (click)="openCurrentSolutionInFirebaseStudio()">
+        <span>Open in Firebase Studio </span>
+        <img
+          class="icon"
+          src="assets/images/tutorials/common/firebase-studio_logo.svg"
+          height="32"
+        />
       </button>
       <button cdkMenuItem (click)="openCurrentCodeInStackBlitz()">Open in StackBlitz</button>
     </div>

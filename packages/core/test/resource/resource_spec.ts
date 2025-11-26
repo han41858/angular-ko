@@ -14,12 +14,12 @@ import {
   EnvironmentInjector,
   Injector,
   resource,
+  ResourceRef,
   ResourceStatus,
   signal,
 } from '../../src/core';
 import {TestBed} from '../../testing';
-
-import type {PromiseConstructor} from '../../src/util/promise_with_resolvers';
+import {promiseWithResolvers} from '../../src/util/promise_with_resolvers';
 
 abstract class MockBackend<T, R> {
   protected pending = new Map<
@@ -236,6 +236,44 @@ describe('resource', () => {
     expect(effectRuns).toBe(1);
   });
 
+  it('should not trigger consumers on every value change via hasValue()', async () => {
+    const testResource = resource<number | undefined, unknown>({
+      loader: () => Promise.resolve(undefined),
+      injector: TestBed.inject(Injector),
+    });
+
+    let effectRuns = 0;
+    effect(
+      () => {
+        testResource.hasValue();
+        effectRuns++;
+      },
+      {injector: TestBed.inject(Injector)},
+    );
+
+    TestBed.tick();
+    // Starts off without a value
+    expect(testResource.hasValue()).toBeFalse();
+    // Effect should run the first time.
+    expect(effectRuns).toBe(1);
+
+    // Set value to something defined
+    testResource.set(0);
+    TestBed.tick();
+    // Value is now defined
+    expect(testResource.hasValue()).toBeTrue();
+    // The effect should have been re-run.
+    expect(effectRuns).toBe(2);
+
+    // Set value to something else defined
+    testResource.set(1);
+    TestBed.tick();
+    // Value is still defined
+    expect(testResource.hasValue()).toBeTrue();
+    // The effect should not rerun.
+    expect(effectRuns).toBe(2);
+  });
+
   it('should update computed signals', async () => {
     const backend = new MockEchoBackend();
     const counter = signal(0);
@@ -299,7 +337,7 @@ describe('resource', () => {
     const res = resource({
       params: request,
       loader: async ({params}) => {
-        const p = (Promise as unknown as PromiseConstructor).withResolvers<number>();
+        const p = promiseWithResolvers<number>();
         resolve.push(() => p.resolve(params));
         return p.promise;
       },
@@ -729,6 +767,34 @@ describe('resource', () => {
     expect(res.error()).toEqual(new Error('fail'));
   });
 
+  it('should allow to set a value on when in error state', async () => {
+    const appRef = TestBed.inject(ApplicationRef);
+    let res = resource({
+      stream: async () => signal({error: new Error('fail')}),
+      injector: TestBed.inject(Injector),
+    });
+
+    await appRef.whenStable();
+    expect(res.status()).toBe('error');
+
+    res.set('new value');
+    expect(res.status()).toBe('local');
+    expect(res.value()).toBe('new value');
+
+    // also via setting the value on the signal directly
+    res = resource({
+      stream: async () => signal({error: new Error('fail')}),
+      injector: TestBed.inject(Injector),
+    });
+
+    await appRef.whenStable();
+    expect(res.status()).toBe('error');
+
+    res.value.set('new value');
+    expect(res.status()).toBe('local');
+    expect(res.value()).toBe('new value');
+  });
+
   it('should transition across streamed states', async () => {
     const appRef = TestBed.inject(ApplicationRef);
     const stream = signal<{value: number} | {error: Error}>({value: 1});
@@ -875,6 +941,81 @@ describe('resource', () => {
     expect(echoResource.hasValue()).toBeTrue();
     expect(echoResource.value()).toEqual({});
     expect(echoResource.error()).toEqual(undefined);
+  });
+
+  describe('types', () => {
+    it('should narrow hasValue() when the value can be undefined', () => {
+      const result: ResourceRef<number | undefined> = resource({
+        params: () => 1,
+        loader: async ({params}) => params,
+        injector: TestBed.inject(Injector),
+      });
+
+      if (result.hasValue()) {
+        const _value: number = result.value();
+      } else if (result.isLoading()) {
+        // @ts-expect-error
+        const _value: number = result.value();
+      } else if (result.error()) {
+      }
+
+      const readonly = result.asReadonly();
+      if (readonly.hasValue()) {
+        const _value: number = readonly.value();
+      } else if (readonly.isLoading()) {
+        // @ts-expect-error
+        const _value: number = readonly.value();
+      } else if (readonly.error()) {
+      }
+    });
+
+    it('should not narrow hasValue() when a default value is provided', () => {
+      const result: ResourceRef<number> = resource({
+        params: () => 1,
+        loader: async ({params}) => params,
+        injector: TestBed.inject(Injector),
+        defaultValue: 0,
+      });
+
+      if (result.hasValue()) {
+        const _value: number = result.value();
+      } else if (result.isLoading()) {
+        const _value: number = result.value();
+      } else if (result.error()) {
+      }
+
+      const readonly = result.asReadonly();
+      if (readonly.hasValue()) {
+        const _value: number = readonly.value();
+      } else if (readonly.isLoading()) {
+        const _value: number = readonly.value();
+      } else if (readonly.error()) {
+      }
+    });
+
+    it('should not narrow hasValue() when the resource type is unknown', () => {
+      const result: ResourceRef<unknown> = resource({
+        params: () => 1 as unknown,
+        loader: async ({params}) => params,
+        injector: TestBed.inject(Injector),
+        defaultValue: 0,
+      });
+
+      if (result.hasValue()) {
+        const _value: unknown = result.value();
+      } else if (result.isLoading()) {
+        const _value: unknown = result.value();
+      } else if (result.error()) {
+      }
+
+      const readonly = result.asReadonly();
+      if (readonly.hasValue()) {
+        const _value: unknown = readonly.value();
+      } else if (readonly.isLoading()) {
+        const _value: unknown = readonly.value();
+      } else if (readonly.error()) {
+      }
+    });
   });
 });
 

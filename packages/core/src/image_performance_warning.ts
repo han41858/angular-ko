@@ -10,7 +10,7 @@ import {IMAGE_CONFIG, ImageConfig} from './application/application_tokens';
 import {Injectable} from './di';
 import {inject} from './di/injector_compatibility';
 import {formatRuntimeError, RuntimeErrorCode} from './errors';
-import {OnDestroy} from './interface/lifecycle_hooks';
+import {OnDestroy} from './change_detection/lifecycle_hooks';
 import {getDocument} from './render3/interfaces/document';
 
 // A delay in milliseconds before the scan is run after onLoad, to avoid any
@@ -102,7 +102,17 @@ export class ImagePerformanceWarning implements OnDestroy {
     const images = getDocument().querySelectorAll('img');
     let lcpElementFound,
       lcpElementLoadedCorrectly = false;
-    images.forEach((image) => {
+    // Important: do not refactor this to use `images.forEach` or
+    // `for (const ... of ...)`, because images might be a custom internal
+    // data structure — such as a lazily evaluated query result in Domino.
+    // (This naturally would never be a case in any browser).
+    for (let index = 0; index < images.length; index++) {
+      const image = images[index];
+
+      if (!image) {
+        continue;
+      }
+
       if (!this.options?.disableImageSizeWarning) {
         // Image elements using the NgOptimizedImage directive are excluded,
         // as that directive has its own version of this check.
@@ -122,7 +132,7 @@ export class ImagePerformanceWarning implements OnDestroy {
           }
         }
       }
-    });
+    }
     if (
       lcpElementFound &&
       !lcpElementLoadedCorrectly &&

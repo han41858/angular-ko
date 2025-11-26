@@ -9,7 +9,6 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, SchemaMetadata, SecurityContext} from '../core';
 import {isNgContainer, isNgContent} from '../ml_parser/tags';
 import {dashCaseToCamelCase} from '../util';
-
 import {SECURITY_SCHEMA} from './dom_security_schema';
 import {ElementSchemaRegistry} from './element_schema_registry';
 
@@ -74,8 +73,8 @@ const OBJECT = 'object';
 //
 // =================================================================================================
 
-const SCHEMA: string[] = [
-  '[Element]|textContent,%ariaAtomic,%ariaAutoComplete,%ariaBusy,%ariaChecked,%ariaColCount,%ariaColIndex,%ariaColSpan,%ariaCurrent,%ariaDescription,%ariaDisabled,%ariaExpanded,%ariaHasPopup,%ariaHidden,%ariaKeyShortcuts,%ariaLabel,%ariaLevel,%ariaLive,%ariaModal,%ariaMultiLine,%ariaMultiSelectable,%ariaOrientation,%ariaPlaceholder,%ariaPosInSet,%ariaPressed,%ariaReadOnly,%ariaRelevant,%ariaRequired,%ariaRoleDescription,%ariaRowCount,%ariaRowIndex,%ariaRowSpan,%ariaSelected,%ariaSetSize,%ariaSort,%ariaValueMax,%ariaValueMin,%ariaValueNow,%ariaValueText,%classList,className,elementTiming,id,innerHTML,*beforecopy,*beforecut,*beforepaste,*fullscreenchange,*fullscreenerror,*search,*webkitfullscreenchange,*webkitfullscreenerror,outerHTML,%part,#scrollLeft,#scrollTop,slot' +
+export const SCHEMA: string[] = [
+  '[Element]|textContent,%ariaActiveDescendantElement,%ariaAtomic,%ariaAutoComplete,%ariaBusy,%ariaChecked,%ariaColCount,%ariaColIndex,%ariaColIndexText,%ariaColSpan,%ariaControlsElements,%ariaCurrent,%ariaDescribedByElements,%ariaDescription,%ariaDetailsElements,%ariaDisabled,%ariaErrorMessageElements,%ariaExpanded,%ariaFlowToElements,%ariaHasPopup,%ariaHidden,%ariaInvalid,%ariaKeyShortcuts,%ariaLabel,%ariaLabelledByElements,%ariaLevel,%ariaLive,%ariaModal,%ariaMultiLine,%ariaMultiSelectable,%ariaOrientation,%ariaOwnsElements,%ariaPlaceholder,%ariaPosInSet,%ariaPressed,%ariaReadOnly,%ariaRelevant,%ariaRequired,%ariaRoleDescription,%ariaRowCount,%ariaRowIndex,%ariaRowIndexText,%ariaRowSpan,%ariaSelected,%ariaSetSize,%ariaSort,%ariaValueMax,%ariaValueMin,%ariaValueNow,%ariaValueText,%classList,className,elementTiming,id,innerHTML,*beforecopy,*beforecut,*beforepaste,*fullscreenchange,*fullscreenerror,*search,*webkitfullscreenchange,*webkitfullscreenerror,outerHTML,%part,#scrollLeft,#scrollTop,slot' +
     /* added manually to avoid breaking changes */
     ',*message,*mozfullscreenchange,*mozfullscreenerror,*mozpointerlockchange,*mozpointerlockerror,*webglcontextcreationerror,*webglcontextlost,*webglcontextrestored',
   '[HTMLElement]^[Element]|accessKey,autocapitalize,!autofocus,contentEditable,dir,!draggable,enterKeyHint,!hidden,!inert,innerText,inputMode,lang,nonce,*abort,*animationend,*animationiteration,*animationstart,*auxclick,*beforexrselect,*blur,*cancel,*canplay,*canplaythrough,*change,*click,*close,*contextmenu,*copy,*cuechange,*cut,*dblclick,*drag,*dragend,*dragenter,*dragleave,*dragover,*dragstart,*drop,*durationchange,*emptied,*ended,*error,*focus,*formdata,*gotpointercapture,*input,*invalid,*keydown,*keypress,*keyup,*load,*loadeddata,*loadedmetadata,*loadstart,*lostpointercapture,*mousedown,*mouseenter,*mouseleave,*mousemove,*mouseout,*mouseover,*mouseup,*mousewheel,*paste,*pause,*play,*playing,*pointercancel,*pointerdown,*pointerenter,*pointerleave,*pointermove,*pointerout,*pointerover,*pointerrawupdate,*pointerup,*progress,*ratechange,*reset,*resize,*scroll,*securitypolicyviolation,*seeked,*seeking,*select,*selectionchange,*selectstart,*slotchange,*stalled,*submit,*suspend,*timeupdate,*toggle,*transitioncancel,*transitionend,*transitionrun,*transitionstart,*volumechange,*waiting,*webkitanimationend,*webkitanimationiteration,*webkitanimationstart,*webkittransitionend,*wheel,outerText,!spellcheck,%style,#tabIndex,title,!translate,virtualKeyboardPolicy',
@@ -263,7 +262,7 @@ const SCHEMA: string[] = [
   ':math:semantics^:math:|',
 ];
 
-const _ATTR_TO_PROP = new Map(
+export const _ATTR_TO_PROP = new Map(
   Object.entries({
     'class': 'className',
     'for': 'htmlFor',
@@ -271,6 +270,56 @@ const _ATTR_TO_PROP = new Map(
     'innerHtml': 'innerHTML',
     'readonly': 'readOnly',
     'tabindex': 'tabIndex',
+
+    // https://www.w3.org/TR/wai-aria-1.3/#accessibilityroleandproperties-correspondence
+    'aria-activedescendant': 'ariaActiveDescendantElement',
+    'aria-atomic': 'ariaAtomic',
+    'aria-autocomplete': 'ariaAutoComplete',
+    'aria-busy': 'ariaBusy',
+    'aria-checked': 'ariaChecked',
+    'aria-colcount': 'ariaColCount',
+    'aria-colindex': 'ariaColIndex',
+    'aria-colindextext': 'ariaColIndexText',
+    'aria-colspan': 'ariaColSpan',
+    'aria-controls': 'ariaControlsElements',
+    'aria-current': 'ariaCurrent',
+    'aria-describedby': 'ariaDescribedByElements',
+    'aria-description': 'ariaDescription',
+    'aria-details': 'ariaDetailsElements',
+    'aria-disabled': 'ariaDisabled',
+    'aria-errormessage': 'ariaErrorMessageElements',
+    'aria-expanded': 'ariaExpanded',
+    'aria-flowto': 'ariaFlowToElements',
+    'aria-haspopup': 'ariaHasPopup',
+    'aria-hidden': 'ariaHidden',
+    'aria-invalid': 'ariaInvalid',
+    'aria-keyshortcuts': 'ariaKeyShortcuts',
+    'aria-label': 'ariaLabel',
+    'aria-labelledby': 'ariaLabelledByElements',
+    'aria-level': 'ariaLevel',
+    'aria-live': 'ariaLive',
+    'aria-modal': 'ariaModal',
+    'aria-multiline': 'ariaMultiLine',
+    'aria-multiselectable': 'ariaMultiSelectable',
+    'aria-orientation': 'ariaOrientation',
+    'aria-owns': 'ariaOwnsElements',
+    'aria-placeholder': 'ariaPlaceholder',
+    'aria-posinset': 'ariaPosInSet',
+    'aria-pressed': 'ariaPressed',
+    'aria-readonly': 'ariaReadOnly',
+    'aria-required': 'ariaRequired',
+    'aria-roledescription': 'ariaRoleDescription',
+    'aria-rowcount': 'ariaRowCount',
+    'aria-rowindex': 'ariaRowIndex',
+    'aria-rowindextext': 'ariaRowIndexText',
+    'aria-rowspan': 'ariaRowSpan',
+    'aria-selected': 'ariaSelected',
+    'aria-setsize': 'ariaSetSize',
+    'aria-sort': 'ariaSort',
+    'aria-valuemax': 'ariaValueMax',
+    'aria-valuemin': 'ariaValueMin',
+    'aria-valuenow': 'ariaValueNow',
+    'aria-valuetext': 'ariaValueText',
   }),
 );
 

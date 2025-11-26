@@ -20,7 +20,7 @@ import {assertIndexInRange, assertNotSame} from '../../util/assert';
 import {escapeCommentText} from '../../util/dom';
 import {normalizeDebugBindingName, normalizeDebugBindingValue} from '../../ng_reflect';
 import {stringify} from '../../util/stringify';
-import {assertFirstCreatePass, assertLView} from '../assert';
+import {assertFirstCreatePass, assertHasParent, assertLView} from '../assert';
 import {attachPatchData} from '../context_discovery';
 import {getNodeInjectable, getOrCreateNodeInjectorForNode} from '../di';
 import {throwMultipleComponentError} from '../errors';
@@ -38,9 +38,9 @@ import {
   TNodeType,
 } from '../interfaces/node';
 import {Renderer} from '../interfaces/renderer';
-import {RComment, RElement} from '../interfaces/renderer_dom';
+import {RComment, RElement, RNode} from '../interfaces/renderer_dom';
 import {SanitizerFn} from '../interfaces/sanitization';
-import {isComponentDef, isComponentHost} from '../interfaces/type_checks';
+import {isComponentDef, isComponentHost, isDirectiveHost} from '../interfaces/type_checks';
 import {
   CONTEXT,
   ENVIRONMENT,
@@ -57,24 +57,33 @@ import {
 import {assertTNodeType} from '../node_assert';
 import {isNodeMatchingSelectorList} from '../node_selector_matcher';
 import {profiler} from '../profiler';
-import {ProfilerEvent} from '../profiler_types';
+import {ProfilerEvent} from '../../../primitives/devtools';
 import {
   getCurrentDirectiveIndex,
+  getCurrentTNode,
+  getElementDepthCount,
   getSelectedIndex,
+  increaseElementDepthCount,
+  isCurrentTNodeParent,
   isInCheckNoChangesMode,
   setCurrentDirectiveIndex,
+  setCurrentTNode,
+  setCurrentTNodeAsNotParent,
   setSelectedIndex,
+  wasLastNodeCreated,
 } from '../state';
 import {NO_CHANGE} from '../tokens';
 import {INTERPOLATION_DELIMITER} from '../util/misc_utils';
 import {renderStringify} from '../util/stringify_utils';
 import {getComponentLViewByIndex, getNativeByTNode, unwrapLView} from '../util/view_utils';
 
-import {clearElementContents} from '../dom_node_manipulation';
+import {clearElementContents, setupStaticAttributes} from '../dom_node_manipulation';
 import {createComponentLView} from '../view/construction';
 import {selectIndexInternal} from './advance';
 import {handleUnknownPropertyError, isPropertyValid, matchingSchemas} from './element_validation';
 import {writeToDirectiveInput} from './write_to_directive_input';
+import {isDetachedByI18n} from '../../i18n/utils';
+import {appendChild} from '../node_manipulation';
 
 export function executeTemplate<T>(
   tView: TView,
@@ -168,7 +177,10 @@ export function locateHostElement(
 
   // When using native Shadow DOM, do not clear host element to allow native slot
   // projection.
-  const preserveContent = preserveHostContent || encapsulation === ViewEncapsulation.ShadowDom;
+  const preserveContent =
+    preserveHostContent ||
+    encapsulation === ViewEncapsulation.ShadowDom ||
+    encapsulation === ViewEncapsulation.ExperimentalIsolatedShadowDom;
   const rootElement = renderer.selectRootElement(elementOrSelector, preserveContent);
   applyRootElementTransform(rootElement as HTMLElement);
   return rootElement;
@@ -225,8 +237,7 @@ export function enableApplyRootElementTransformImpl() {
  * object lookup) for performance reasons - the series of `if` checks seems to be the fastest way of
  * mapping property names. Do NOT change without benchmarking.
  *
- * Note: this mapping has to be kept in sync with the equally named mapping in the template
- * type-checking machinery of ngtsc.
+ * Note: this mapping has to be kept in sync with the equivalent mappings in the compiler.
  */
 function mapPropName(name: string): string {
   if (name === 'class') return 'className';
@@ -256,6 +267,11 @@ export function setPropertyAndInputs<T>(
     return; // Stop propcessing if we've matched at least one input.
   }
 
+  // If the property is going to a DOM node, we have to remap it.
+  if (tNode.type & TNodeType.AnyRNode) {
+    propName = mapPropName(propName);
+  }
+
   setDomProperty(tNode, lView, propName, value, renderer, sanitizer);
 }
 
@@ -278,7 +294,6 @@ export function setDomProperty<T>(
 ) {
   if (tNode.type & TNodeType.AnyRNode) {
     const element = getNativeByTNode(tNode, lView) as RElement | RComment;
-    propName = mapPropName(propName);
 
     if (ngDevMode) {
       validateAgainstEventProperties(propName);
@@ -332,7 +347,7 @@ function setNgReflectProperty(lView: LView, tNode: TNode, attrName: string, valu
   }
 }
 
-function setNgReflectProperties(
+export function setNgReflectProperties(
   lView: LView,
   tView: TView,
   tNode: TNode,
@@ -554,6 +569,66 @@ function setInputsFromAttrs<T>(
   }
 }
 
+/** Shared code between instructions that indicate the start of an element. */
+export function elementLikeStartShared(
+  tNode: TElementNode | TElementContainerNode,
+  lView: LView,
+  index: number,
+  name: string,
+  locateOrCreateNativeNode: (
+    tView: TView,
+    lView: LView,
+    tNode: TNode,
+    name: string,
+    index: number,
+  ) => RNode,
+) {
+  const adjustedIndex = HEADER_OFFSET + index;
+  const tView = lView[TVIEW];
+  const native = locateOrCreateNativeNode(tView, lView, tNode, name, index);
+  lView[adjustedIndex] = native;
+  setCurrentTNode(tNode, true);
+
+  // It's important that this runs before we've instantiated the directives.
+  const isElement = tNode.type === TNodeType.Element;
+  if (isElement) {
+    setupStaticAttributes(lView[RENDERER], native as RElement, tNode);
+
+    // any immediate children of a component or template container must be pre-emptively
+    // monkey-patched with the component view data so that the element can be inspected
+    // later on using any element discovery utility methods (see `element_discovery.ts`)
+    if (getElementDepthCount() === 0 || isDirectiveHost(tNode)) {
+      attachPatchData(native, lView);
+    }
+    increaseElementDepthCount();
+  } else {
+    attachPatchData(native, lView);
+  }
+
+  if (wasLastNodeCreated() && (!isElement || !isDetachedByI18n(tNode))) {
+    // In the i18n case, the translation may have removed this element, so only add it if it is not
+    // detached. See `TNodeType.Placeholder` and `LFrame.inI18n` for more context.
+    appendChild(tView, lView, native, tNode);
+  }
+
+  return tNode;
+}
+
+/** Shared code between instructions that indicate the end of an element. */
+export function elementLikeEndShared(tNode: TNode): TNode {
+  let currentTNode = tNode;
+
+  if (isCurrentTNodeParent()) {
+    setCurrentTNodeAsNotParent();
+  } else {
+    ngDevMode && assertHasParent(getCurrentTNode());
+    currentTNode = currentTNode.parent!;
+    setCurrentTNode(currentTNode, false);
+  }
+
+  return currentTNode;
+}
+
 ///////////////////////////////
 //// Bindings & interpolations
 ///////////////////////////////
@@ -630,7 +705,12 @@ export function handleUncaughtError(lView: LView, error: any): void {
   if (!injector) {
     return;
   }
-  const errorHandler = injector.get(INTERNAL_APPLICATION_ERROR_HANDLER, null);
+  let errorHandler: ((e: any) => void) | null;
+  try {
+    errorHandler = injector.get(INTERNAL_APPLICATION_ERROR_HANDLER, null);
+  } catch {
+    errorHandler = null;
+  }
   errorHandler?.(error);
 }
 

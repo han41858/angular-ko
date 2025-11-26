@@ -13,8 +13,6 @@ import {
   SafePropertyRead,
   SafeKeyedRead,
   KeyedRead,
-  PropertyWrite,
-  KeyedWrite,
   Binary,
   BindingPipe,
   SafeCall,
@@ -61,7 +59,7 @@ interface ParseResult {
   position: number;
 }
 
-function parse(template: string): ParseResult {
+function parse(template: string, enableSelectorless = false): ParseResult {
   const position = template.indexOf('¦');
   if (position < 0) {
     throw new Error(`Template "${template}" does not contain the cursor`);
@@ -78,6 +76,7 @@ function parse(template: string): ParseResult {
       leadingTriviaChars: [],
       preserveWhitespaces: true,
       alwaysAttemptHtmlToR3AstConversion: true,
+      enableSelectorless,
     }),
     position,
   };
@@ -269,8 +268,8 @@ describe('getTargetAtPosition for template AST', () => {
     // When the template target returns a property read, we only use the LHS downstream because the
     // RHS would have its own node in the AST that would have been returned instead. The LHS of the
     // `PropertyWrite` is the same as the `PropertyRead`.
-    expect(node instanceof PropertyRead || node instanceof PropertyWrite).toBeTrue();
-    expect((node as PropertyRead | PropertyWrite).name).toBe('bar');
+    expect(node instanceof PropertyRead).toBeTrue();
+    expect((node as PropertyRead).name).toBe('bar');
   });
 
   it('should locate template bound event key', () => {
@@ -466,8 +465,8 @@ describe('getTargetAtPosition for template AST', () => {
     expect(parent instanceof BoundAttribute || parent instanceof BoundEvent).toBe(true);
     const {node} = context as SingleNodeTarget;
     expect(isExpressionNode(node!)).toBe(true);
-    expect(node instanceof PropertyRead || node instanceof PropertyWrite).toBeTrue();
-    expect((node as PropertyRead | PropertyWrite).name).toBe('bar');
+    expect(node instanceof PropertyRead).toBeTrue();
+    expect((node as PropertyRead).name).toBe('bar');
   });
 
   it('should locate switch value in ICUs', () => {
@@ -566,22 +565,22 @@ describe('getTargetAtPosition for expression AST', () => {
     expect(node).toBeInstanceOf(SafeKeyedRead);
   });
 
-  it('should locate property write', () => {
+  it('should locate property assignments', () => {
     const {errors, nodes, position} = parse(`<div (foo)="b¦ar=$event"></div>`);
     expect(errors).toBe(null);
     const {context} = getTargetAtPosition(nodes, position)!;
     const {node} = context as SingleNodeTarget;
     expect(isExpressionNode(node!)).toBe(true);
-    expect(node).toBeInstanceOf(PropertyWrite);
+    expect(node).toBeInstanceOf(PropertyRead);
   });
 
-  it('should locate keyed write', () => {
+  it('should locate keyed assignments', () => {
     const {errors, nodes, position} = parse(`<div (foo)="bar['baz']¦=$event"></div>`);
     expect(errors).toBe(null);
     const {context} = getTargetAtPosition(nodes, position)!;
     const {node} = context as SingleNodeTarget;
     expect(isExpressionNode(node!)).toBe(true);
-    expect(node).toBeInstanceOf(KeyedWrite);
+    expect(node).toBeInstanceOf(KeyedRead);
   });
 
   it('should locate binary', () => {
@@ -933,6 +932,46 @@ describe('findNodeAtPosition for microsyntax expression', () => {
     expect(context.kind).toBe(TargetNodeKind.ElementInBodyContext);
     expect((context as SingleNodeTarget).node).toBeInstanceOf(Element);
   });
+
+  it('should locate a component in its tag context', () => {
+    const {errors, nodes, position} = parse(`<Comp¦ attr/>`, true);
+    expect(errors).toBe(null);
+    const {context} = getTargetAtPosition(nodes, position)!;
+    expect(context.kind).toBe(TargetNodeKind.ComponentInTagContext);
+    expect((context as SingleNodeTarget).node).toBeInstanceOf(Component);
+  });
+
+  it('should locate a component in its body context', () => {
+    const {errors, nodes, position} = parse(`<Comp ¦ attr/>`, true);
+    expect(errors).toBe(null);
+    const {context} = getTargetAtPosition(nodes, position)!;
+    expect(context.kind).toBe(TargetNodeKind.ComponentInBodyContext);
+    expect((context as SingleNodeTarget).node).toBeInstanceOf(Component);
+  });
+
+  it('should locate a directive in its name context', () => {
+    const {errors, nodes, position} = parse(`<div @Dir¦></div>`, true);
+    expect(errors).toBe(null);
+    const {context} = getTargetAtPosition(nodes, position)!;
+    expect(context.kind).toBe(TargetNodeKind.DirectiveInNameContext);
+    expect((context as SingleNodeTarget).node).toBeInstanceOf(Directive);
+  });
+
+  it('should locate a directive in its body context when there are bindings', () => {
+    const {errors, nodes, position} = parse(`<div @Dir([foo]="bar" ¦)></div>`, true);
+    expect(errors).toBe(null);
+    const {context} = getTargetAtPosition(nodes, position)!;
+    expect(context.kind).toBe(TargetNodeKind.DirectiveInBodyContext);
+    expect((context as SingleNodeTarget).node).toBeInstanceOf(Directive);
+  });
+
+  it('should locate a directive in its body context when there are no bindings', () => {
+    const {errors, nodes, position} = parse(`<div @Dir(¦)></div>`, true);
+    expect(errors).toBe(null);
+    const {context} = getTargetAtPosition(nodes, position)!;
+    expect(context.kind).toBe(TargetNodeKind.DirectiveInBodyContext);
+    expect((context as SingleNodeTarget).node).toBeInstanceOf(Directive);
+  });
 });
 
 describe('unclosed elements', () => {
@@ -1072,6 +1111,23 @@ describe('blocks', () => {
     const {node} = context as SingleNodeTarget;
     expect(isTemplateNode(node!)).toBe(true);
     expect(node).toBeInstanceOf(ForLoopBlock);
+  });
+
+  it('should visit alias declaration of else if block', () => {
+    const {nodes, position} = parse(`@if (false) {} @else if (title; as fo¦o) { }`);
+    const {context} = getTargetAtPosition(nodes, position)!;
+    const {node} = context as SingleNodeTarget;
+    expect(node).toBeInstanceOf(Variable);
+    expect((node as Variable).name).toBe('foo');
+  });
+
+  it('should visit alias usage of else if block', () => {
+    const {nodes, position} = parse(`@if (false) {} @else if (title; as foo) { {{ fo¦o }} }`);
+    const {context} = getTargetAtPosition(nodes, position)!;
+    const {node} = context as SingleNodeTarget;
+    expect(isExpressionNode(node!)).toBe(true);
+    expect(node).toBeInstanceOf(PropertyRead);
+    expect((node as PropertyRead).name).toBe('foo');
   });
 
   it('should visit LHS of expression in for blocks', () => {

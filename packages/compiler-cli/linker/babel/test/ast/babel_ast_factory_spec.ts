@@ -62,7 +62,7 @@ describe('BabelAstFactory', () => {
     it('should create an assignment node using the target and value expressions', () => {
       const target = expression.ast`x`;
       const value = expression.ast`42`;
-      const assignment = factory.createAssignment(target, value);
+      const assignment = factory.createAssignment(target, '=', value);
       expect(generate(assignment).code).toEqual('x = 42');
     });
   });
@@ -393,6 +393,18 @@ describe('BabelAstFactory', () => {
     it('should create an uninitialized variable declaration statement node for the given variable name and a null initializer', () => {
       const varDecl = factory.createVariableDeclaration('foo', null, 'let');
       expect(generate(varDecl).code).toEqual('let foo;');
+    });
+  });
+
+  describe('createRegularExpressionLiteral()', () => {
+    it('should create a regular expressions without flags', () => {
+      const regex = factory.createRegularExpressionLiteral('^\\d+-foo$', null);
+      expect(generate(regex).code).toEqual('/^\\d+-foo$/');
+    });
+
+    it('should create a regular expressions with flags', () => {
+      const regex = factory.createRegularExpressionLiteral('^\\d+-foo$', 'gi');
+      expect(generate(regex).code).toEqual('/^\\d+-foo$/gi');
     });
   });
 

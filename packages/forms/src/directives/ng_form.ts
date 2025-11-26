@@ -22,12 +22,7 @@ import {
   ɵWritable as Writable,
 } from '@angular/core';
 
-import {
-  AbstractControl,
-  FormHooks,
-  FormResetEvent,
-  FormSubmittedEvent,
-} from '../model/abstract_model';
+import {AbstractControl, FormHooks, FormSubmittedEvent} from '../model/abstract_model';
 import {FormControl} from '../model/form_control';
 import {FormGroup} from '../model/form_group';
 import {
@@ -123,7 +118,7 @@ const resolvedPromise = (() => Promise.resolve())();
  * @publicApi
  */
 @Directive({
-  selector: 'form:not([ngNoForm]):not([formGroup]),ng-form,[ngForm]',
+  selector: 'form:not([ngNoForm]):not([formGroup]):not([formArray]),ng-form,[ngForm]',
   providers: [formDirectiveProvider],
   host: {'(submit)': 'onSubmit($event)', '(reset)': 'onReset()'},
   outputs: ['ngSubmit'],
@@ -366,7 +361,6 @@ export class NgForm extends ControlContainer implements Form, AfterViewInit {
   resetForm(value: any = undefined): void {
     this.form.reset(value);
     this.submittedReactive.set(false);
-    this.form._events.next(new FormResetEvent(this.form));
   }
 
   private _setUpdateStrategy() {

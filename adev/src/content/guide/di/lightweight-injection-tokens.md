@@ -1,7 +1,7 @@
 # Optimizing client application size with lightweight injection tokens
 
 This page provides a conceptual overview of a dependency injection technique that is recommended for library developers.
-Designing your library with *lightweight injection tokens* helps optimize the bundle size of client applications that use your library.
+Designing your library with _lightweight injection tokens_ helps optimize the bundle size of client applications that use your library.
 
 You can manage the dependency structure among your components and injectable services to optimize bundle size by using tree-shakable providers.
 This normally ensures that if a provided component or service is never actually used by the application, the compiler can remove its code from the bundle.
@@ -22,17 +22,18 @@ To prevent the retention of unused components, your library should use the light
 To better explain the condition under which token retention occurs, consider a library that provides a library-card component.
 This component contains a body and can contain an optional header:
 
-<docs-code language="html">
+```angular-html
 
 <lib-card>;
-  <lib-header>…</lib-header>;
+<lib-header>…</lib-header>;
 </lib-card>;
-
-</docs-code>
+```
 
 In a likely implementation, the `<lib-card>` component uses `@ContentChild()` or `@ContentChildren()` to get `<lib-header>` and `<lib-body>`, as in the following:
 
-<docs-code language="typescript" highlight="[12]">
+```ts {highlight: [14]}
+import {Component, ContentChild} from '@angular/core';
+
 @Component({
   selector: 'lib-header',
   …,
@@ -44,26 +45,25 @@ class LibHeaderComponent {}
   …,
 })
 class LibCardComponent {
-  @ContentChild(LibHeaderComponent) header: LibHeaderComponent|null = null;
+  @ContentChild(LibHeaderComponent) header: LibHeaderComponent | null = null;
 }
-
-</docs-code>
+```
 
 Because `<lib-header>` is optional, the element can appear in the template in its minimal form, `<lib-card></lib-card>`.
 In this case, `<lib-header>` is not used and you would expect it to be tree-shaken, but that is not what happens.
 This is because `LibCardComponent` actually contains two references to the `LibHeaderComponent`:
 
-<docs-code language="typescript">
+```ts
 @ContentChild(LibHeaderComponent) header: LibHeaderComponent;
-</docs-code>
+```
 
-* One of these reference is in the *type position*-- that is, it specifies `LibHeaderComponent` as a type: `header: LibHeaderComponent;`.
-* The other reference is in the *value position*-- that is, LibHeaderComponent is the value of the `@ContentChild()` parameter decorator: `@ContentChild(LibHeaderComponent)`.
+- One of these reference is in the _type position_-- that is, it specifies `LibHeaderComponent` as a type: `header: LibHeaderComponent;`.
+- The other reference is in the _value position_-- that is, LibHeaderComponent is the value of the `@ContentChild()` parameter decorator: `@ContentChild(LibHeaderComponent)`.
 
 The compiler handles token references in these positions differently:
 
-* The compiler erases *type position* references after conversion from TypeScript, so they have no impact on tree-shaking.
-* The compiler must keep *value position* references at runtime, which **prevents** the component from being tree-shaken.
+- The compiler erases _type position_ references after conversion from TypeScript, so they have no impact on tree-shaking.
+- The compiler must keep _value position_ references at runtime, which **prevents** the component from being tree-shaken.
 
 In the example, the compiler retains the `LibHeaderComponent` token that occurs in the value position.
 This prevents the referenced component from being tree-shaken, even if the application does not actually use `<lib-header>` anywhere.
@@ -74,18 +74,18 @@ If `LibHeaderComponent` 's code, template, and styles combine to become too larg
 The tree-shaking problem arises when a component is used as an injection token.
 There are two cases when that can happen:
 
-* The token is used in the value position of a [content query](guide/components/queries#content-queries).
-* The token is used as a type specifier for constructor injection.
+- The token is used in the value position of a [content query](guide/components/queries#content-queries).
+- The token is used as a type specifier for constructor injection.
 
 In the following example, both uses of the `OtherComponent` token cause retention of `OtherComponent`, preventing it from being tree-shaken when it is not used:
 
-<docs-code language="typescript" highlight="[[2],[4]]">
+```ts {highlight: [[2],[4]]}
 class MyComponent {
   constructor(@Optional() other: OtherComponent) {}
 
-  @ContentChild(OtherComponent) other: OtherComponent|null;
+  @ContentChild(OtherComponent) other: OtherComponent | null;
 }
-</docs-code>
+```
 
 Although tokens used only as type specifiers are removed when converted to JavaScript, all tokens used for dependency injection are needed at runtime.
 These effectively change `constructor(@Optional() other: OtherComponent)` to `constructor(@Optional() @Inject(OtherComponent) other)`.
@@ -100,14 +100,12 @@ The abstract class is retained, not tree-shaken, but it is small and has no mate
 
 The following example shows how this works for the `LibHeaderComponent`:
 
-<docs-code language="typescript" language="[[1],[6],[17]]">
+```ts {highlight: [[1],[5], [15]]}
 abstract class LibHeaderToken {}
 
 @Component({
   selector: 'lib-header',
-  providers: [
-    {provide: LibHeaderToken, useExisting: LibHeaderComponent}
-  ]
+  providers: [{provide: LibHeaderToken, useExisting: LibHeaderComponent}],
   …,
 })
 class LibHeaderComponent extends LibHeaderToken {}
@@ -117,9 +115,9 @@ class LibHeaderComponent extends LibHeaderToken {}
   …,
 })
 class LibCardComponent {
-  @ContentChild(LibHeaderToken) header: LibHeaderToken|null = null;
+  @ContentChild(LibHeaderToken) header: LibHeaderToken | null = null;
 }
-</docs-code>
+```
 
 In this example, the `LibCardComponent` implementation no longer refers to `LibHeaderComponent` in either the type position or the value position.
 This lets full tree-shaking of `LibHeaderComponent` take place.
@@ -132,9 +130,9 @@ You can safely use that token as the provider in the component definition, allow
 To summarize, the lightweight injection token pattern consists of the following:
 
 1. A lightweight injection token that is represented as an abstract class.
-1. A component definition that implements the abstract class.
-1. Injection of the lightweight pattern, using `@ContentChild()` or `@ContentChildren()`.
-1. A provider in the implementation of the lightweight injection token which associates the lightweight injection token with the implementation.
+2. A component definition that implements the abstract class.
+3. Injection of the lightweight pattern, using `@ContentChild()` or `@ContentChildren()`.
+4. A provider in the implementation of the lightweight injection token which associates the lightweight injection token with the implementation.
 
 ### Use the lightweight injection token for API definition
 
@@ -146,17 +144,14 @@ This lets the parent communicate with the child, if it is present, in a type-saf
 For example, the `LibCardComponent` now queries `LibHeaderToken` rather than `LibHeaderComponent`.
 The following example shows how the pattern lets `LibCardComponent` communicate with the `LibHeaderComponent` without actually referring to `LibHeaderComponent`:
 
-<docs-code language="typescript" highlight="[[3],[13,16],[27]]">
+```ts {highlight: [[2],[9],[11],[19]]}
 abstract class LibHeaderToken {
   abstract doSomething(): void;
 }
 
 @Component({
   selector: 'lib-header',
-  providers: [
-    {provide: LibHeaderToken, useExisting: LibHeaderComponent}
-  ]
-  …,
+  providers: [{provide: LibHeaderToken, useExisting: LibHeaderComponent}],
 })
 class LibHeaderComponent extends LibHeaderToken {
   doSomething(): void {
@@ -166,10 +161,9 @@ class LibHeaderComponent extends LibHeaderToken {
 
 @Component({
   selector: 'lib-card',
-  …,
 })
-class LibCardComponent implement AfterContentInit {
-  @ContentChild(LibHeaderToken) header: LibHeaderToken|null = null;
+class LibCardComponent implements AfterContentInit {
+  @ContentChild(LibHeaderToken) header: LibHeaderToken | null = null;
 
   ngAfterContentInit(): void {
     if (this.header !== null) {
@@ -177,7 +171,7 @@ class LibCardComponent implement AfterContentInit {
     }
   }
 }
-</docs-code>
+```
 
 In this example, the parent queries the token to get the child component, and stores the resulting component reference if it is present.
 Before calling a method in the child, the parent component checks to see if the child component is present.

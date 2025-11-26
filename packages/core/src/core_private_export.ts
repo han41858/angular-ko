@@ -41,7 +41,8 @@ export {
   internalProvideZoneChangeDetection as ɵinternalProvideZoneChangeDetection,
   PROVIDED_NG_ZONE as ɵPROVIDED_NG_ZONE,
 } from './change_detection/scheduling/ng_zone_scheduling';
-export {ChangeDetectionSchedulerImpl as ɵChangeDetectionSchedulerImpl} from './change_detection/scheduling/zoneless_scheduling_impl';
+export {PROVIDED_ZONELESS as ɵPROVIDED_ZONELESS} from './change_detection/scheduling/zoneless_scheduling';
+export {provideZonelessChangeDetectionInternal as ɵprovideZonelessChangeDetectionInternal} from './change_detection/scheduling/zoneless_scheduling_impl';
 export {
   ChangeDetectionScheduler as ɵChangeDetectionScheduler,
   NotificationSource as ɵNotificationSource,
@@ -93,6 +94,7 @@ export {
   IS_HYDRATION_DOM_REUSE_ENABLED as ɵIS_HYDRATION_DOM_REUSE_ENABLED,
   IS_INCREMENTAL_HYDRATION_ENABLED as ɵIS_INCREMENTAL_HYDRATION_ENABLED,
   JSACTION_BLOCK_ELEMENT_MAP as ɵJSACTION_BLOCK_ELEMENT_MAP,
+  IS_ENABLED_BLOCKING_INITIAL_NAVIGATION as ɵIS_ENABLED_BLOCKING_INITIAL_NAVIGATION,
 } from './hydration/tokens';
 export {
   HydrationStatus as ɵHydrationStatus,
@@ -100,6 +102,7 @@ export {
   HydrationInfo as ɵHydrationInfo,
   readHydrationInfo as ɵreadHydrationInfo,
   SSR_CONTENT_INTEGRITY_MARKER as ɵSSR_CONTENT_INTEGRITY_MARKER,
+  resetIncrementalHydrationEnabledWarnedForTests as ɵresetIncrementalHydrationEnabledWarnedForTests,
 } from './hydration/utils';
 export {
   CurrencyIndex as ɵCurrencyIndex,
@@ -120,8 +123,7 @@ export {
   resolveComponentResources as ɵresolveComponentResources,
   restoreComponentResolutionQueue as ɵrestoreComponentResolutionQueue,
 } from './metadata/resource_loading';
-export {PendingTasksInternal as ɵPendingTasksInternal} from './pending_tasks';
-export {ALLOW_MULTIPLE_PLATFORMS as ɵALLOW_MULTIPLE_PLATFORMS} from './platform/platform';
+export {PendingTasksInternal as ɵPendingTasksInternal} from './pending_tasks_internal';
 export {ENABLE_ROOT_COMPONENT_BOOTSTRAP as ɵENABLE_ROOT_COMPONENT_BOOTSTRAP} from './platform/bootstrap';
 export {ReflectionCapabilities as ɵReflectionCapabilities} from './reflection/reflection_capabilities';
 export {AnimationRendererType as ɵAnimationRendererType} from './render/api';
@@ -171,3 +173,6 @@ export {getClosestComponentName as ɵgetClosestComponentName} from './internal/g
 export {getComponentDef as ɵgetComponentDef} from './render3/def_getters';
 export {DEHYDRATED_BLOCK_REGISTRY as ɵDEHYDRATED_BLOCK_REGISTRY} from './defer/registry';
 export {TimerScheduler as ɵTimerScheduler} from './defer/timer_scheduler';
+export {ɵassertType} from './type_checking';
+export {ANIMATIONS_DISABLED as ɵANIMATIONS_DISABLED} from './animation/interfaces';
+export {allLeavingAnimations as ɵallLeavingAnimations} from './animation/longest_animation';

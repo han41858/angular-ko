@@ -10,31 +10,40 @@
 import type {} from 'zone.js';
 
 const _Zone: any = typeof Zone !== 'undefined' ? Zone : null;
-const fakeAsyncTestModule = _Zone && _Zone[_Zone.__symbol__('fakeAsyncTest')];
+function getFakeAsyncTestModule() {
+  return _Zone && _Zone[_Zone.__symbol__('fakeAsyncTest')];
+}
 
-const fakeAsyncTestModuleNotLoadedErrorMessage = `zone-testing.js is needed for the fakeAsync() test helper but could not be found.
-        Please make sure that your environment includes zone.js/testing`;
+function withFakeAsyncTestModule(fn: (fakeAsyncTestModule: any) => any): any {
+  const fakeAsyncTestModule = getFakeAsyncTestModule();
+  if (!fakeAsyncTestModule) {
+    throw new Error(`zone-testing.js is needed for the fakeAsync() test helper but could not be found.
+        Please make sure that your environment includes zone.js/testing`);
+  }
+  return fn(fakeAsyncTestModule);
+}
 
 /**
+ * IMPORTANT: This API requires Zone.js
+ *
  * Clears out the shared fake async zone for a test.
  * To be called in a global `beforeEach`.
  *
  * @publicApi
  */
 export function resetFakeAsyncZone(): void {
-  if (fakeAsyncTestModule) {
-    return fakeAsyncTestModule.resetFakeAsyncZone();
-  }
-  throw new Error(fakeAsyncTestModuleNotLoadedErrorMessage);
+  withFakeAsyncTestModule((v) => v.resetFakeAsyncZone());
 }
 
 export function resetFakeAsyncZoneIfExists(): void {
-  if (fakeAsyncTestModule && (Zone as any)['ProxyZoneSpec']?.isLoaded()) {
-    fakeAsyncTestModule.resetFakeAsyncZone();
+  if (getFakeAsyncTestModule() && (Zone as any)['ProxyZoneSpec']?.isLoaded()) {
+    getFakeAsyncTestModule().resetFakeAsyncZone();
   }
 }
 
 /**
+ * IMPORTANT: This API requires Zone.js
+ *
  * Wraps a function to be executed in the `fakeAsync` zone:
  * - Microtasks are manually executed by calling `flushMicrotasks()`.
  * - Timers are synchronous; `tick()` simulates the asynchronous passage of time.
@@ -59,13 +68,12 @@ export function resetFakeAsyncZoneIfExists(): void {
  * @publicApi
  */
 export function fakeAsync(fn: Function, options?: {flush?: boolean}): (...args: any[]) => any {
-  if (fakeAsyncTestModule) {
-    return fakeAsyncTestModule.fakeAsync(fn, options);
-  }
-  throw new Error(fakeAsyncTestModuleNotLoadedErrorMessage);
+  return withFakeAsyncTestModule((v) => v.fakeAsync(fn, options));
 }
 
 /**
+ * IMPORTANT: This API requires Zone.js
+ *
  * Simulates the asynchronous passage of time for the timers in the `fakeAsync` zone.
  *
  * The microtasks queue is drained at the very start of this function and after any timer callback
@@ -135,13 +143,12 @@ export function tick(
     processNewMacroTasksSynchronously: true,
   },
 ): void {
-  if (fakeAsyncTestModule) {
-    return fakeAsyncTestModule.tick(millis, tickOptions);
-  }
-  throw new Error(fakeAsyncTestModuleNotLoadedErrorMessage);
+  return withFakeAsyncTestModule((m) => m.tick(millis, tickOptions));
 }
 
 /**
+ * IMPORTANT: This API requires Zone.js
+ *
  * Flushes any pending microtasks and simulates the asynchronous passage of time for the timers in
  * the `fakeAsync` zone by
  * draining the macrotask queue until it is empty.
@@ -153,32 +160,27 @@ export function tick(
  * @publicApi
  */
 export function flush(maxTurns?: number): number {
-  if (fakeAsyncTestModule) {
-    return fakeAsyncTestModule.flush(maxTurns);
-  }
-  throw new Error(fakeAsyncTestModuleNotLoadedErrorMessage);
+  return withFakeAsyncTestModule((m) => m.flush(maxTurns));
 }
 
 /**
+ * IMPORTANT: This API requires Zone.js
+ *
  * Discard all remaining periodic tasks.
  *
  * @publicApi
  */
 export function discardPeriodicTasks(): void {
-  if (fakeAsyncTestModule) {
-    return fakeAsyncTestModule.discardPeriodicTasks();
-  }
-  throw new Error(fakeAsyncTestModuleNotLoadedErrorMessage);
+  return withFakeAsyncTestModule((m) => m.discardPeriodicTasks());
 }
 
 /**
+ * IMPORTANT: This API requires Zone.js
+ *
  * Flush any pending microtasks.
  *
  * @publicApi
  */
 export function flushMicrotasks(): void {
-  if (fakeAsyncTestModule) {
-    return fakeAsyncTestModule.flushMicrotasks();
-  }
-  throw new Error(fakeAsyncTestModuleNotLoadedErrorMessage);
+  return withFakeAsyncTestModule((m) => m.flushMicrotasks());
 }

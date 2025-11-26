@@ -14,8 +14,11 @@ import {
   Injectable,
   ɵPendingTasksInternal as PendingTasks,
   ɵRuntimeError as RuntimeError,
+  Signal,
   Type,
+  untracked,
   ɵINTERNAL_APPLICATION_ERROR_HANDLER,
+  ɵformatRuntimeError as formatRuntimeError,
 } from '@angular/core';
 import {Observable, Subject, Subscription, SubscriptionLike} from 'rxjs';
 
@@ -176,6 +179,13 @@ export class Router {
    */
   readonly componentInputBindingEnabled: boolean = !!inject(INPUT_BINDER, {optional: true});
 
+  /**
+   * Signal of the current `Navigation` object when the router is navigating, and `null` when idle.
+   *
+   * Note: The current navigation becomes to null after the NavigationEnd event is emitted.
+   */
+  readonly currentNavigation = this.navigationTransitions.currentNavigation.asReadonly();
+
   constructor() {
     this.resetConfig(this.config);
 
@@ -192,7 +202,8 @@ export class Router {
     const subscription = this.navigationTransitions.events.subscribe((e) => {
       try {
         const currentTransition = this.navigationTransitions.currentTransition;
-        const currentNavigation = this.navigationTransitions.currentNavigation;
+        const currentNavigation = untracked(this.navigationTransitions.currentNavigation);
+
         if (currentTransition !== null && currentNavigation !== null) {
           this.stateManager.handleRouterEvent(e, currentNavigation);
           if (
@@ -322,6 +333,9 @@ export class Router {
 
     const urlTree = this.parseUrl(url);
     this.scheduleNavigation(urlTree, source, restoredState, extras).catch((e) => {
+      if (this.disposed) {
+        return;
+      }
       this.injector.get(ɵINTERNAL_APPLICATION_ERROR_HANDLER)(e);
     });
   }
@@ -334,16 +348,18 @@ export class Router {
   /**
    * Returns the current `Navigation` object when the router is navigating,
    * and `null` when idle.
+   *
+   * @deprecated 20.2 Use the `currentNavigation` signal instead.
    */
   getCurrentNavigation(): Navigation | null {
-    return this.navigationTransitions.currentNavigation;
+    return untracked(this.navigationTransitions.currentNavigation);
   }
 
   /**
    * The `Navigation` object of the most recent navigation to succeed and `null` if there
    *     has not been a successful navigation yet.
    */
-  get lastSuccessfulNavigation(): Navigation | null {
+  get lastSuccessfulNavigation(): Signal<Navigation | null> {
     return this.navigationTransitions.lastSuccessfulNavigation;
   }
 
@@ -404,7 +420,7 @@ export class Router {
    *
    * @usageNotes
    *
-   * ```
+   * ```ts
    * // create /team/33/user/11
    * router.createUrlTree(['/team', 33, 'user', 11]);
    *
@@ -434,10 +450,10 @@ export class Router {
    *
    * // navigate to /team/44/user/22
    * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
-   *
+   * ```
    * Note that a value of `null` or `undefined` for `relativeTo` indicates that the
    * tree should be created relative to the root.
-   * ```
+   *
    */
   createUrlTree(commands: readonly any[], navigationExtras: UrlCreationOptions = {}): UrlTree {
     const {relativeTo, queryParams, fragment, queryParamsHandling, preserveFragment} =
@@ -480,7 +496,13 @@ export class Router {
       }
       relativeToUrlSegmentGroup = this.currentUrlTree.root;
     }
-    return createUrlTreeFromSegmentGroup(relativeToUrlSegmentGroup, commands, q, f ?? null);
+    return createUrlTreeFromSegmentGroup(
+      relativeToUrlSegmentGroup,
+      commands,
+      q,
+      f ?? null,
+      this.urlSerializer,
+    );
   }
 
   /**
@@ -566,7 +588,13 @@ export class Router {
   parseUrl(url: string): UrlTree {
     try {
       return this.urlSerializer.parse(url);
-    } catch {
+    } catch (e) {
+      this.console.warn(
+        formatRuntimeError(
+          RuntimeErrorCode.ERROR_PARSING_URL,
+          ngDevMode && `Error parsing URL ${url}. Falling back to '/' instead. \n` + e,
+        ),
+      );
       return this.urlSerializer.parse('/');
     }
   }

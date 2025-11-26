@@ -59,7 +59,7 @@ describe('TypeScriptAstFactory', () => {
         items: [target, value],
         generate,
       } = setupExpressions(`x`, `42`);
-      const assignment = factory.createAssignment(target, value);
+      const assignment = factory.createAssignment(target, '=', value);
       expect(generate(assignment)).toEqual('x = 42');
     });
   });
@@ -472,6 +472,20 @@ describe('TypeScriptAstFactory', () => {
       const {generate} = setupStatements();
       const varDecl = factory.createVariableDeclaration('foo', null, 'let');
       expect(generate(varDecl)).toEqual('let foo;');
+    });
+  });
+
+  describe('createRegularExpressionLiteral()', () => {
+    it('should create a regular expressions without flags', () => {
+      const {generate} = setupStatements();
+      const regex = factory.createRegularExpressionLiteral('^\\d+-foo$', null);
+      expect(generate(regex)).toEqual('/^\\d+-foo$/');
+    });
+
+    it('should create a regular expressions with flags', () => {
+      const {generate} = setupStatements();
+      const regex = factory.createRegularExpressionLiteral('^\\d+-foo$', 'gi');
+      expect(generate(regex)).toEqual('/^\\d+-foo$/gi');
     });
   });
 

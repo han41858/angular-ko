@@ -9,10 +9,10 @@
 import {getSystemPath, normalize, virtualFs} from '@angular-devkit/core';
 import {TempScopedNodeJsSyncHost} from '@angular-devkit/core/node/testing';
 import {HostTree} from '@angular-devkit/schematics';
-import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing';
-import {runfiles} from '@bazel/runfiles';
+import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing/index.js';
+import {rmSync} from 'node:fs';
 import fs from 'fs';
-import shx from 'shelljs';
+import {resolve} from 'path';
 
 describe('all migrations', () => {
   let runner: SchematicTestRunner;
@@ -21,7 +21,7 @@ describe('all migrations', () => {
   let tmpDirPath: string;
   let previousWorkingDir: string;
 
-  const migrationCollectionPath = runfiles.resolvePackageRelative('../migrations.json');
+  const migrationCollectionPath = resolve('../migrations.json');
   const allMigrationSchematics = Object.keys(
     (JSON.parse(fs.readFileSync(migrationCollectionPath, 'utf8')) as any).schematics,
   );
@@ -41,17 +41,17 @@ describe('all migrations', () => {
     );
     writeFile('/tsconfig.json', `{}`);
 
-    previousWorkingDir = shx.pwd();
+    previousWorkingDir = process.cwd();
     tmpDirPath = getSystemPath(host.root);
 
     // Switch into the temporary directory path. This allows us to run
     // the schematic against our custom unit test tree.
-    shx.cd(tmpDirPath);
+    process.chdir(tmpDirPath);
   });
 
   afterEach(() => {
-    shx.cd(previousWorkingDir);
-    shx.rm('-r', tmpDirPath);
+    process.chdir(previousWorkingDir);
+    rmSync(tmpDirPath, {recursive: true});
   });
 
   function writeFile(filePath: string, contents: string) {
@@ -103,7 +103,7 @@ describe('all migrations', () => {
         error = e;
       }
 
-      expect(error).toBe(null);
+      expect(error).toBe(null, migrationName);
     });
   }
 });

@@ -76,7 +76,7 @@ tests into a single `tests` directory.
 
 ### Organize your project by feature areas
 
-Organize your project into subdirectories based on the features or your application or common themes
+Organize your project into subdirectories based on the features of your application or common themes
 to the code in those directories. For example, the project structure for a movie theater site,
 MovieReel, might look like this:
 
@@ -95,7 +95,7 @@ Avoid creating subdirectories based on the type of code that lives in those dire
 example, avoid creating directories like `components`, `directives`, and `services`.
 
 Avoid putting so many files into one directory that it becomes hard to read or navigate. As the
-number files in a directory grows, consider splitting further into additional sub-directories.
+number of files in a directory grows, consider splitting further into additional sub-directories.
 
 ### One concept per file
 
@@ -112,10 +112,10 @@ When in doubt, go with the approach that leads to smaller files.
 
 Prefer using the `inject` function over injecting constructor parameters. The `inject` function works the same way as constructor parameter injection, but offers several style advantages:
 
-*   `inject` is generally more readable, especially when a class injects many dependencies.
-*   It's more syntactically straightforward to add comments to injected dependencies
-*   `inject` offers better type inference.
-*   When targeting ES2022+ with [`useDefineForClassFields`](https://www.typescriptlang.org/tsconfig/#useDefineForClassFields), you can avoid separating field declaration and initialization when fields read on injected dependencies.
+- `inject` is generally more readable, especially when a class injects many dependencies.
+- It's more syntactically straightforward to add comments to injected dependencies
+- `inject` offers better type inference.
+- When targeting ES2022+ with [`useDefineForClassFields`](https://www.typescriptlang.org/tsconfig/#useDefineForClassFields), you can avoid separating field declaration and initialization when fields read on injected dependencies.
 
 [You can refactor existing code to `inject` with an automatic tool](reference/migrations/inject-function).
 
@@ -164,8 +164,7 @@ accommodate [JavaScript-like expressions](guide/templates/expression-syntax).
 You should take advantage of these expressions to capture relatively straightforward logic directly
 in template expressions.
 
-When the code in a template gets too complex, though, refactor logic into the TypeScript code (
-typically with a [computed](guide/signals#computed-signals)).
+When the code in a template gets too complex, though, refactor logic into the TypeScript code (typically with a [computed](guide/signals#computed-signals)).
 
 There's no one hard-and-fast rule that determines what constitutes "complex". Use your best
 judgement.
@@ -190,7 +189,7 @@ export class UserProfile {
 }
 ```
 
-### Use `readonly` on properties that are initialized by Angular
+### Use `readonly` for properties that shouldn't change
 
 Mark component and directive properties initialized by Angular as `readonly`. This includes
 properties initialized by `input`, `model`, `output`, and queries. The readonly access modifier
@@ -201,6 +200,7 @@ ensures that the value set by Angular is not overwritten.
 export class UserProfile {
   readonly userId = input();
   readonly userSaved = output();
+  readonly userName = model();
 }
 ```
 
@@ -217,14 +217,20 @@ export class UserProfile {
 
 ### Prefer `class` and `style` over `ngClass` and `ngStyle`
 
-Prefer `class` and `style` bindings over using the `NgClass` and `NgStyle` directives.
+Prefer `class` and `style` bindings over using the [`NgClass`](/api/common/NgClass) and [`NgStyle`](/api/common/NgStyle) directives.
 
 ```html
 <!-- PREFER -->
 <div [class.admin]="isAdmin" [class.dense]="density === 'high'">
+<div [style.color]="textColor" [style.background-color]="backgroundColor">
+<!-- OR -->
+<div [class]="{admin: isAdmin, dense: density === 'high'}">
+<div [style]="{'color': textColor, 'background-color': backgroundColor}">
+
 
 <!-- AVOID -->
 <div [ngClass]="{admin: isAdmin, dense: density === 'high'}">
+<div [ngStyle]="{'color': textColor, 'background-color': backgroundColor}">
 ```
 
 Both `class` and `style` bindings use a more straightforward syntax that aligns closely with
@@ -233,6 +239,8 @@ developers familiar with basic HTML.
 
 Additionally, the `NgClass` and `NgStyle` directives incur an additional performance cost compared
 to the built-in `class` and `style` binding syntax.
+
+For more details, refer to the [bindings guide](/guide/templates/binding#css-class-and-style-property-bindings)
 
 ### Name event handlers for what they _do_, not for the triggering event
 

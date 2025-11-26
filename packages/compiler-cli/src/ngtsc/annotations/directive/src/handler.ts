@@ -74,10 +74,16 @@ import {
   ReferencesRegistry,
   resolveProvidersRequiringFactory,
   toFactoryMetadata,
+  UndecoratedMetadataExtractor,
   validateHostDirectives,
 } from '../../common';
 
-import {extractDirectiveMetadata, extractHostBindingResources, HostBindingNodes} from './shared';
+import {
+  extractDirectiveMetadata,
+  extractHostBindingResources,
+  getDirectiveUndecoratedMetadataExtractor,
+  HostBindingNodes,
+} from './shared';
 import {DirectiveSymbol} from './symbol';
 import {JitDeclarationRegistry} from '../../common/src/jit_declaration_registry';
 import {
@@ -153,10 +159,17 @@ export class DirectiveDecoratorHandler
     private readonly implicitStandaloneValue: boolean,
     private readonly usePoisonedData: boolean,
     private readonly typeCheckHostBindings: boolean,
-  ) {}
+    private readonly emitDeclarationOnly: boolean,
+  ) {
+    this.undecoratedMetadataExtractor = getDirectiveUndecoratedMetadataExtractor(
+      reflector,
+      importTracker,
+    );
+  }
 
   readonly precedence = HandlerPrecedence.PRIMARY;
   readonly name = 'DirectiveDecoratorHandler';
+  private readonly undecoratedMetadataExtractor: UndecoratedMetadataExtractor;
 
   detect(
     node: ClassDeclaration,
@@ -209,6 +222,7 @@ export class DirectiveDecoratorHandler
       /* defaultSelector */ null,
       this.strictStandalone,
       this.implicitStandaloneValue,
+      this.emitDeclarationOnly,
     );
     // `extractDirectiveMetadata` returns `jitForced = true` when the `@Directive` has
     // set `jit: true`. In this case, compilation of the decorator is skipped. Returning
@@ -238,7 +252,14 @@ export class DirectiveDecoratorHandler
         hostDirectives: directiveResult.hostDirectives,
         rawHostDirectives: directiveResult.rawHostDirectives,
         classMetadata: this.includeClassMetadata
-          ? extractClassMetadata(node, this.reflector, this.isCore, this.annotateForClosureCompiler)
+          ? extractClassMetadata(
+              node,
+              this.reflector,
+              this.isCore,
+              this.annotateForClosureCompiler,
+              undefined,
+              this.undecoratedMetadataExtractor,
+            )
           : null,
         baseClass: readBaseClass(node, this.reflector, this.evaluator),
         typeCheckMeta: extractDirectiveTypeCheckMeta(node, directiveResult.inputs, this.reflector),
@@ -305,6 +326,8 @@ export class DirectiveDecoratorHandler
       // Instead, we statically analyze their imports to make a direct determination.
       assumedToExportProviders: false,
       isExplicitlyDeferred: false,
+      selectorlessEnabled: false,
+      localReferencedSymbols: null,
     });
 
     this.resourceRegistry.registerResources(analysis.resources, node);
@@ -327,7 +350,8 @@ export class DirectiveDecoratorHandler
     if (!ts.isClassDeclaration(node) || (meta.isPoisoned && !this.usePoisonedData)) {
       return;
     }
-    const scope = this.typeCheckScopeRegistry.getTypeCheckScope(node);
+    const ref = new Reference(node);
+    const scope = this.typeCheckScopeRegistry.getTypeCheckScope(ref);
     if (scope.isPoisoned && !this.usePoisonedData) {
       // Don't type-check components that had errors in their scopes, unless requested.
       return;
@@ -342,15 +366,16 @@ export class DirectiveDecoratorHandler
       meta.hostBindingNodes.listenerDecorators,
     );
 
-    if (hostElement !== null) {
+    if (hostElement !== null && scope.directivesOnHost !== null) {
       const binder = new R3TargetBinder<TypeCheckableDirectiveMeta>(scope.matcher);
       const hostBindingsContext: HostBindingsContext = {
         node: hostElement,
+        directives: scope.directivesOnHost,
         sourceMapping: {type: 'direct', node},
       };
 
       ctx.addDirective(
-        new Reference(node),
+        ref,
         binder,
         scope.schemas,
         null,

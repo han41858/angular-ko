@@ -88,6 +88,8 @@ export interface TutorialConfigBase {
 
   /** The path to the tutorial answer folder when it's external to the tutorial */
   answerSrc?: string;
+  /** Root of the answer folder, so that proper relative paths can be computed, like in {@link openFiles}. */
+  answerRootDir?: string;
 
   /** An array of files to be open in the editor */
   openFiles?: string[];
@@ -149,7 +151,7 @@ export type PlaygroundRouteData = {
   starterTemplate?: PlaygroundTemplate;
 };
 
-export type PlaygroundTemplate = Required<Pick<NavigationItem, 'path' | 'label'>>;
+export type PlaygroundTemplate = Required<Pick<NavigationItem, 'path' | 'label'>> & {id: string};
 
 // Note: only the fields being used are defined in this type
 export interface PackageJson {

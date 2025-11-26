@@ -14,10 +14,14 @@ import {parseR3 as parse} from './view/util';
 
 // Transform an IVY AST to a flat list of nodes to ease testing
 class R3AstHumanizer implements t.Visitor<void> {
-  result: any[] = [];
+  result: (string | number | null)[][] = [];
 
   visitElement(element: t.Element) {
-    this.result.push(['Element', element.name]);
+    const res = ['Element', element.name];
+    this.result.push(res);
+    if (element.isSelfClosing) {
+      res.push('#selfClosing');
+    }
     this.visitAll([
       element.attributes,
       element.inputs,
@@ -29,7 +33,11 @@ class R3AstHumanizer implements t.Visitor<void> {
   }
 
   visitTemplate(template: t.Template) {
-    this.result.push(['Template']);
+    const res = ['Template'];
+    if (template.isSelfClosing) {
+      res.push('#selfClosing');
+    }
+    this.result.push(res);
     this.visitAll([
       template.attributes,
       template.inputs,
@@ -43,7 +51,11 @@ class R3AstHumanizer implements t.Visitor<void> {
   }
 
   visitContent(content: t.Content) {
-    this.result.push(['Content', content.selector]);
+    const res = ['Content', content.selector];
+    this.result.push(res);
+    if (content.isSelfClosing) {
+      res.push('#selfClosing');
+    }
     this.visitAll([content.attributes, content.children]);
   }
 
@@ -138,7 +150,13 @@ class R3AstHumanizer implements t.Visitor<void> {
     } else if (trigger instanceof t.InteractionDeferredTrigger) {
       this.result.push(['InteractionDeferredTrigger', trigger.reference]);
     } else if (trigger instanceof t.ViewportDeferredTrigger) {
-      this.result.push(['ViewportDeferredTrigger', trigger.reference]);
+      const result = ['ViewportDeferredTrigger', trigger.reference];
+
+      if (trigger.options !== null) {
+        result.push(unparse(trigger.options));
+      }
+
+      this.result.push(result);
     } else if (trigger instanceof t.NeverDeferredTrigger) {
       this.result.push(['NeverDeferredTrigger']);
     } else {
@@ -175,7 +193,11 @@ class R3AstHumanizer implements t.Visitor<void> {
   }
 
   visitComponent(component: t.Component) {
-    this.result.push(['Component', component.componentName, component.tagName, component.fullName]);
+    const res = ['Component', component.componentName, component.tagName, component.fullName];
+    if (component.isSelfClosing) {
+      res.push('#selfClosing');
+    }
+    this.result.push(res);
     this.visitAll([
       component.attributes,
       component.inputs,
@@ -269,6 +291,14 @@ describe('R3 template transform', () => {
         ['TextAttribute', 'select', 'a'],
       ]);
     });
+
+    it('should indicate whether an element is void', () => {
+      const nodes = parse('<input><div></div>').nodes as t.Element[];
+      expect(nodes[0].name).toBe('input');
+      expect(nodes[0].isVoid).toBe(true);
+      expect(nodes[1].name).toBe('div');
+      expect(nodes[1].isVoid).toBe(false);
+    });
   });
 
   describe('Bound text nodes', () => {
@@ -349,6 +379,61 @@ describe('R3 template transform', () => {
       expectFromHtml('<div [style.someStyle]="v"></div>').toEqual([
         ['Element', 'div'],
         ['BoundAttribute', BindingType.Style, 'someStyle', 'v'],
+      ]);
+    });
+
+    it('should parse class bindings with various characters', () => {
+      expectFromHtml(
+        `<foo [class.text-primary/80]="expr" ` +
+          `[class.data-active:text-green-300/80]="expr2" ` +
+          `[class.data-[size='large']:p-8] = "expr3" some-attr/>`,
+      ).toEqual([
+        ['Element', 'foo', '#selfClosing'],
+        ['TextAttribute', 'some-attr', ''],
+        ['BoundAttribute', BindingType.Class, 'text-primary/80', 'expr'],
+        ['BoundAttribute', BindingType.Class, 'data-active:text-green-300/80', 'expr2'],
+        ['BoundAttribute', BindingType.Class, `data-[size='large']:p-8`, 'expr3'],
+      ]);
+    });
+  });
+
+  describe('animation bindings', () => {
+    it('should support animate.enter', () => {
+      expectFromHtml('<div animate.enter="foo"></div>').toEqual([
+        ['Element', 'div'],
+        ['TextAttribute', 'animate.enter', 'foo'],
+      ]);
+
+      expectFromHtml(`<div [animate.enter]="['foo', 'bar']"></div>`).toEqual([
+        ['Element', 'div'],
+        ['BoundAttribute', 6, 'animate.enter', '["foo", "bar"]'],
+      ]);
+
+      expectFromHtml(`<div (animate.enter)="animateFn($event)"></div>`).toEqual([
+        ['Element', 'div'],
+        ['BoundEvent', 3, 'animate.enter', null, 'animateFn($event)'],
+      ]);
+    });
+
+    it('should support animate.leave', () => {
+      expectFromHtml('<div animate.leave="foo"></div>').toEqual([
+        ['Element', 'div'],
+        ['TextAttribute', 'animate.leave', 'foo'],
+      ]);
+
+      expectFromHtml(`<div [animate.leave]="['foo', 'bar']"></div>`).toEqual([
+        ['Element', 'div'],
+        ['BoundAttribute', 6, 'animate.leave', '["foo", "bar"]'],
+      ]);
+
+      expectFromHtml(`<div (animate.leave)="animateFn($event)"></div>`).toEqual([
+        ['Element', 'div'],
+        ['BoundEvent', 3, 'animate.leave', null, 'animateFn($event)'],
+      ]);
+
+      expectFromHtml(`<div (animateXYZ)="animateFn()"></div>`).toEqual([
+        ['Element', 'div'],
+        ['BoundEvent', 0, 'animateXYZ', null, 'animateFn()'],
       ]);
     });
   });
@@ -572,6 +657,10 @@ describe('R3 template transform', () => {
         'v + 1',
         'foo.bar?.baz',
         `foo.bar?.['baz']`,
+        'foo?.bar.baz[0]',
+        'foo?.bar.baz[0].boo[0]',
+        'foo?.bar.baz()',
+        '(foo?.bar).baz', // not null-safe and would crash at runtime, but may not report an error without `strictNullChecks`
         'true',
         '123',
         'a.b()',
@@ -594,6 +683,13 @@ describe('R3 template transform', () => {
         expect(() => parse(`<div [(prop)]="${expression}"></div>`))
           .withContext(expression)
           .toThrowError(/Unsupported expression in a two-way binding/);
+      }
+
+      const supportedExpressions = ['(foo?.bar ?? bar).baz'];
+      for (const expression of supportedExpressions) {
+        expect(() => parse(`<div [(prop)]="${expression}"></div>`))
+          .withContext(expression)
+          .not.toThrowError();
       }
     });
 
@@ -620,7 +716,7 @@ describe('R3 template transform', () => {
     it('should parse bound animation events when event name is empty', () => {
       expectFromHtml('<div (@)="onAnimationEvent($event)"></div>', true).toEqual([
         ['Element', 'div'],
-        ['BoundEvent', ParsedEventType.Animation, '', null, 'onAnimationEvent($event)'],
+        ['BoundEvent', ParsedEventType.LegacyAnimation, '', null, 'onAnimationEvent($event)'],
       ]);
       expect(() => parse('<div (@)></div>')).toThrowError(
         /Animation event name is missing in binding/,
@@ -746,6 +842,61 @@ describe('R3 template transform', () => {
         ['Text', 'Parent '],
         ['Element', 'span'],
         ['Text', 'Child'],
+      ]);
+    });
+  });
+
+  describe('parser errors', () => {
+    it('should only report errors on the node on which the error occurred', () => {
+      const errors = parse(
+        `
+        <input (input)="foo(12#3)">
+        <button (click)="bar()"></button>
+        <span (mousedown)="baz()"></span>
+      `,
+        {
+          ignoreError: true,
+        },
+      ).errors;
+
+      expect(errors.length).toBe(3);
+      expect(errors[0].msg).toContain('Parser Error: Missing expected )');
+      expect(errors[1].msg).toContain('Invalid character [#]');
+      expect(errors[2].msg).toContain(`Unexpected token ')'`);
+    });
+
+    it('should report parsing errors on the specific interpolated expressions', () => {
+      const errors = parse(
+        `
+          bunch of text bunch of text bunch of text bunch of text bunch of text bunch of text
+          bunch of text bunch of text bunch of text bunch of text
+
+          {{foo[0}} bunch of text bunch of text bunch of text bunch of text {{.bar}}
+
+          bunch of text
+          bunch of text
+          bunch of text
+          bunch of text
+          bunch of text {{one + #two + baz}}
+        `,
+        {
+          ignoreError: true,
+        },
+      ).errors;
+
+      expect(errors.map((e) => e.span.toString())).toEqual([
+        '{{foo[0}}',
+        '{{.bar}}',
+        '{{one + #two + baz}}',
+      ]);
+
+      expect(errors.map((e) => e.msg)).toEqual([
+        jasmine.stringContaining('Missing expected ] at the end of the expression [foo[0]'),
+        jasmine.stringContaining('Unexpected token . at column 1 in [.bar]'),
+        jasmine.stringContaining(
+          'Private identifiers are not supported. Unexpected private identifier: ' +
+            '#two at column 7 in [one + #two + baz]',
+        ),
       ]);
     });
   });
@@ -948,7 +1099,7 @@ describe('R3 template transform', () => {
           '@error {Loading failed :(}',
       ).toEqual([
         ['DeferredBlock'],
-        ['Element', 'calendar-cmp'],
+        ['Element', 'calendar-cmp', '#selfClosing'],
         ['BoundAttribute', 0, 'date', 'current'],
         ['DeferredBlockPlaceholder'],
         ['Text', 'Placeholder content!'],
@@ -967,7 +1118,7 @@ describe('R3 template transform', () => {
           '<!-- Show this on error --> @error {Loading failed :(}',
       ).toEqual([
         ['DeferredBlock'],
-        ['Element', 'calendar-cmp'],
+        ['Element', 'calendar-cmp', '#selfClosing'],
         ['BoundAttribute', 0, 'date', 'current'],
         ['DeferredBlockPlaceholder'],
         ['Text', 'Placeholder content!'],
@@ -991,7 +1142,7 @@ describe('R3 template transform', () => {
         expectFromR3Nodes(parse(template, {preserveWhitespaces: true}).nodes).toEqual([
           // Note: we also expect the whitespace nodes between the blocks to be ignored here.
           ['DeferredBlock'],
-          ['Element', 'calendar-cmp'],
+          ['Element', 'calendar-cmp', '#selfClosing'],
           ['BoundAttribute', 0, 'date', 'current'],
           ['DeferredBlockPlaceholder'],
           ['Text', 'Placeholder content!'],
@@ -1009,7 +1160,7 @@ describe('R3 template transform', () => {
           '@loading (after 100ms; minimum 1.5s){Loading...}',
       ).toEqual([
         ['DeferredBlock'],
-        ['Element', 'calendar-cmp'],
+        ['Element', 'calendar-cmp', '#selfClosing'],
         ['BoundAttribute', 0, 'date', 'current'],
         ['DeferredBlockLoading', 'after 100ms', 'minimum 1500ms'],
         ['Text', 'Loading...'],
@@ -1021,7 +1172,7 @@ describe('R3 template transform', () => {
         '@defer {<calendar-cmp [date]="current"/>}' + '@placeholder (minimum 1.5s){Placeholder...}',
       ).toEqual([
         ['DeferredBlock'],
-        ['Element', 'calendar-cmp'],
+        ['Element', 'calendar-cmp', '#selfClosing'],
         ['BoundAttribute', 0, 'date', 'current'],
         ['DeferredBlockPlaceholder', 'minimum 1500ms'],
         ['Text', 'Placeholder...'],
@@ -1117,7 +1268,7 @@ describe('R3 template transform', () => {
         ['ViewportDeferredTrigger', 'container'],
         ['ImmediateDeferredTrigger'],
         ['BoundDeferredTrigger', 'isDataLoaded()'],
-        ['Element', 'calendar-cmp'],
+        ['Element', 'calendar-cmp', '#selfClosing'],
         ['BoundAttribute', 0, 'date', 'current'],
         ['DeferredBlockPlaceholder', 'minimum 500ms'],
         ['Text', 'Placeholder content!'],
@@ -1147,7 +1298,7 @@ describe('R3 template transform', () => {
             'interaction(button), viewport(container); prefetch on immediate; ' +
             'prefetch when isDataLoaded(); hydrate when shouldHydrate(); hydrate on viewport){',
         ],
-        ['Element', 'calendar-cmp'],
+        ['Element', 'calendar-cmp', '#selfClosing'],
         ['TextAttribute', '[date]', 'current'],
         ['Text', '}'],
         ['Text', '@loading (minimum 1s; after 100ms){'],
@@ -1176,7 +1327,30 @@ describe('R3 template transform', () => {
         ['ViewportDeferredTrigger', null],
         ['Text', 'hello'],
         ['DeferredBlockPlaceholder'],
-        ['Element', 'implied-trigger'],
+        ['Element', 'implied-trigger', '#selfClosing'],
+      ]);
+    });
+
+    it('should parse a viewport trigger with an options parameter', () => {
+      expectFromHtml(
+        '@defer (on viewport({trigger: foo, rootMargin: "123px", threshold: [1, 2, 3]})){hello}',
+      ).toEqual([
+        ['DeferredBlock'],
+        ['ViewportDeferredTrigger', 'foo', '{rootMargin: "123px", threshold: [1, 2, 3]}'],
+        ['Text', 'hello'],
+      ]);
+    });
+
+    it('should parse a viewport trigger with an options parameter, but without a trigger', () => {
+      expectFromHtml('@defer (on viewport({rootMargin: "123px"})){hello}').toEqual([
+        ['DeferredBlock'],
+        ['ViewportDeferredTrigger', null, '{rootMargin: "123px"}'],
+        ['Text', 'hello'],
+      ]);
+      expectFromHtml('@defer (on viewport({rootMargin: "123px"})){hello}').toEqual([
+        ['DeferredBlock'],
+        ['ViewportDeferredTrigger', null, '{rootMargin: "123px"}'],
+        ['Text', 'hello'],
       ]);
     });
 
@@ -1350,6 +1524,26 @@ describe('R3 template transform', () => {
       it('should report if `viewport` trigger has more than one parameter', () => {
         expect(() => parse('@defer (on viewport(a, b)) {hello}')).toThrowError(
           /"viewport" trigger can only have zero or one parameters/,
+        );
+      });
+
+      it('should report if `viewport` trigger with an object literal parameter has a "trigger" that is not an identifier', () => {
+        expect(() => parse('@defer (on viewport({trigger: "str"})) {hello}')).toThrowError(
+          /"trigger" option of the "viewport" trigger must be an identifier/,
+        );
+      });
+
+      it('should report if `viewport` trigger has a variable options parameter', () => {
+        expect(() =>
+          parse('@defer (on viewport({threshold: [1, someVar, 3]})) {hello}'),
+        ).toThrowError(
+          /Options of the "viewport" trigger must be an object literal containing only literal values/,
+        );
+      });
+
+      it('should report if `viewport` trigger options parameter contains the `root` property', () => {
+        expect(() => parse('@defer (on viewport({root: foo})) {hello}')).toThrowError(
+          /The "root" option is not supported in the options parameter of the "viewport" trigger/,
         );
       });
 
@@ -1640,7 +1834,7 @@ describe('R3 template transform', () => {
           `
               @switch (cond) {
                 @case (x()) {X case}
-                @foo {Foo}
+                @if (true) {Foo}
               }
             `,
           {ignoreError: true},
@@ -1650,7 +1844,7 @@ describe('R3 template transform', () => {
         expect(result.errors.map((e) => e.msg)).toEqual([
           '@switch block can only contain @case and @default blocks',
         ]);
-        expect(switchNode.unknownBlocks.map((b) => b.name)).toEqual(['foo']);
+        expect(switchNode.unknownBlocks.map((b) => b.name)).toEqual(['if']);
       });
 
       it('should report if @case or @default is used outside of a switch block', () => {
@@ -2057,6 +2251,12 @@ describe('R3 template transform', () => {
         );
       });
 
+      it('should report a pipe in a track expression', () => {
+        expect(() => parse(`@for (item of items; track item.id | json) {}`)).toThrowError(
+          /Cannot use pipes in track expressions/,
+        );
+      });
+
       it('should report an empty `let` parameter', () => {
         expect(() => parse(`@for (item of items.foo.bar; track item.id; let ) {}`)).toThrowError(
           /Invalid @for loop "let" parameter. Parameter should match the pattern "<name> = <variable name>"/,
@@ -2246,6 +2446,24 @@ describe('R3 template transform', () => {
       ]);
     });
 
+    it('should parse an else if block with an aliased expression', () => {
+      expectFromHtml(`
+        @if (cond.expr; as foo) {
+          Main case was true!
+        } @else if (other.expr; as bar) {
+          Other case was true!
+        }
+        `).toEqual([
+        ['IfBlock'],
+        ['IfBlockBranch', 'cond.expr'],
+        ['Variable', 'foo', 'foo'],
+        ['Text', ' Main case was true! '],
+        ['IfBlockBranch', 'other.expr'],
+        ['Variable', 'bar', 'bar'],
+        ['Text', ' Other case was true! '],
+      ]);
+    });
+
     describe('validations', () => {
       it('should report an if block without a condition', () => {
         expect(() =>
@@ -2290,14 +2508,6 @@ describe('R3 template transform', () => {
           @if (foo) {hello} @else\nif (bar) {goodbye}
         `),
         ).toThrowError(/Unrecognized block @else\nif/);
-      });
-
-      it('should report an else if block that has an `as` expression', () => {
-        expect(() =>
-          parse(`
-          @if (foo) {hello} @else if (bar; as alias) {goodbye}
-        `),
-        ).toThrowError(/"as" expression is only allowed on the primary @if block/);
       });
 
       it('should report an @else if block used without an @if block', () => {
@@ -2358,12 +2568,6 @@ describe('R3 template transform', () => {
     });
   });
 
-  describe('unknown blocks', () => {
-    it('should parse unknown blocks', () => {
-      expectFromHtml('@unknown {}', true /* ignoreError */).toEqual([['UnknownBlock', 'unknown']]);
-    });
-  });
-
   describe('@let declarations', () => {
     it('should parse a let declaration', () => {
       expectFromHtml('@let foo = 123 + 456;').toEqual([['LetDeclaration', 'foo', '123 + 456']]);
@@ -2421,7 +2625,7 @@ describe('R3 template transform', () => {
         ['Text', 'Hello: '],
         ['Component', 'MyComp', null, 'MyComp'],
         ['Element', 'span'],
-        ['Component', 'OtherComp', null, 'OtherComp'],
+        ['Component', 'OtherComp', null, 'OtherComp', '#selfClosing'],
       ]);
     });
 
@@ -2456,7 +2660,7 @@ describe('R3 template transform', () => {
       ).toEqual([
         ['Template'],
         ['BoundAttribute', 0, 'ngIf', 'true'],
-        ['Component', 'MyComp', null, 'MyComp'],
+        ['Component', 'MyComp', null, 'MyComp', '#selfClosing'],
         ['Directive', 'Dir'],
         ['TextAttribute', 'static', '1'],
         ['BoundAttribute', 0, 'bound', 'expr'],
@@ -2515,7 +2719,7 @@ describe('R3 template transform', () => {
         ['Directive', 'Dir'],
         ['TextAttribute', 'a', '1'],
         ['BoundAttribute', 0, 'b', 'two'],
-        ['BoundAttribute', 5, 'd', 'd'],
+        ['BoundAttribute', BindingType.TwoWay, 'd', 'd'],
         ['BoundEvent', 0, 'c', null, 'c()'],
         ['BoundEvent', 2, 'dChange', null, 'd'],
       ]);
@@ -2621,5 +2825,20 @@ describe('R3 template transform', () => {
         expect(() => parseSelectorless('<div @Dir(#foo #foo)></div>')).toThrowError(pattern);
       });
     });
+  });
+
+  it('should report an error for attribute bindings on ng-container', () => {
+    const template = `<ng-container [attr.title]="'test'"></ng-container>`;
+    const errors = parse(template, {ignoreError: true}).errors;
+    expect(errors.length).toBe(1);
+    expect(errors[0].msg).toBe(
+      'Attribute bindings are not supported on ng-container. Use property bindings instead.',
+    );
+  });
+
+  it('should not report an error on non-attr bindings on ng-container', () => {
+    const template = `<ng-container *ngIf"test" [ngTemplateOutlet]="foo"></ng-container>`;
+    const errors = parse(template, {ignoreError: true}).errors;
+    expect(errors.length).toBe(0);
   });
 });

@@ -7,7 +7,6 @@
  */
 
 import {ChangeDetectionStrategy, ViewEncapsulation} from '../../core';
-import {InterpolationConfig} from '../../ml_parser/defaults';
 import * as o from '../../output/output_ast';
 import {ParseSourceSpan} from '../../parse_util';
 import * as t from '../r3_ast';
@@ -91,11 +90,6 @@ export interface R3DirectiveMetadata {
    * Whether or not the component or directive inherits from another class
    */
   usesInheritance: boolean;
-
-  /**
-   * Whether or not the component or directive inherits its entire decorator from its base class.
-   */
-  fullInheritance: boolean;
 
   /**
    * Reference name under which to export the directive's type in a template,
@@ -275,11 +269,6 @@ export interface R3ComponentMetadata<DeclarationT extends R3TemplateDependency>
   i18nUseExternalIds: boolean;
 
   /**
-   * Overrides the default interpolation start and end delimiters ({{ and }}).
-   */
-  interpolation: InterpolationConfig;
-
-  /**
    * Strategy used for detecting changes in the component.
    *
    * In global compilation mode the value is ChangeDetectionStrategy if available as it is
@@ -293,6 +282,11 @@ export interface R3ComponentMetadata<DeclarationT extends R3TemplateDependency>
    * Used to generate debugging information.
    */
   relativeTemplatePath: string | null;
+
+  /**
+   * Whether any of the component's dependencies are directives.
+   */
+  hasDirectiveDependencies: boolean;
 
   /**
    * The imports expression as appears on the component decorate for standalone component. This

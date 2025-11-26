@@ -173,6 +173,17 @@ export enum ErrorCode {
    */
   INCORRECT_NAMED_TEMPLATE_DEPENDENCY_TYPE = 2025,
 
+  /**
+   * Raised for `@Component` fields that aren't supported in a selectorless context.
+   */
+  UNSUPPORTED_SELECTORLESS_COMPONENT_FIELD = 2026,
+
+  /**
+   * A component is using both the `animations` property and `animate.enter` or `animate.leave`
+   * in the template.
+   */
+  COMPONENT_ANIMATIONS_CONFLICT = 2027,
+
   SYMBOL_NOT_EXPORTED = 3001,
   /**
    * Raised when a relationship between directives and/or pipes would cause a cyclic import to be
@@ -190,6 +201,7 @@ export enum ErrorCode {
   CONFIG_EXTENDED_DIAGNOSTICS_IMPLIES_STRICT_TEMPLATES = 4003,
   CONFIG_EXTENDED_DIAGNOSTICS_UNKNOWN_CATEGORY_LABEL = 4004,
   CONFIG_EXTENDED_DIAGNOSTICS_UNKNOWN_CHECK = 4005,
+  CONFIG_EMIT_DECLARATION_ONLY_UNSUPPORTED = 4006,
 
   /**
    * Raised when a host expression has a parse error, such as a host listener or host binding
@@ -418,6 +430,16 @@ export enum ErrorCode {
   DEFER_IMPLICIT_TRIGGER_INVALID_PLACEHOLDER = 8020,
 
   /**
+   * Raised when an `@defer` block defines unreachable or redundant triggers.
+   * Examples: multiple main triggers, 'on immediate' together with other mains or any prefetch,
+   * prefetch timer delay that is not earlier than the main timer, or an identical prefetch
+   */
+  DEFER_TRIGGER_MISCONFIGURATION = 8021,
+
+  /** Raised when the user has an unsupported binding on a `Field` directive. */
+  FORM_FIELD_UNSUPPORTED_BINDING = 8022,
+
+  /**
    * A two way binding in a template has an incorrect syntax,
    * parentheses outside brackets. For example:
    *
@@ -589,6 +611,37 @@ export enum ErrorCode {
    * A structural directive is used in a template, but the directive is not imported.
    */
   MISSING_STRUCTURAL_DIRECTIVE = 8116,
+
+  /**
+   * A function in a text interpolation is not invoked.
+   *
+   * For example:
+   * ```html
+   * <p> {{ firstName }} </p>
+   * ```
+   *
+   * The `firstName` function is not invoked. Instead, it should be:
+   * ```html
+   * <p> {{ firstName() }} </p>
+   * ```
+   */
+  UNINVOKED_FUNCTION_IN_TEXT_INTERPOLATION = 8117,
+
+  /**
+   * A required initializer is being invoked in a forbidden context such as a property initializer
+   * or a constructor.
+   *
+   * For example:
+   * ```ts
+   * class MyComponent {
+   *  myInput = input.required();
+   *  somValue = this.myInput(); // Error
+   *
+   *  constructor() {
+   *    this.myInput(); // Error
+   *  }
+   */
+  FORBIDDEN_REQUIRED_INITIALIZER_INVOCATION = 8118,
 
   /**
    * The template type-checking engine would need to generate an inline type check block for a

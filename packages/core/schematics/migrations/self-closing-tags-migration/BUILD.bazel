@@ -1,5 +1,4 @@
-load("//tools:defaults.bzl", "jasmine_node_test")
-load("//tools:defaults2.bzl", "ts_project")
+load("//tools:defaults.bzl", "jasmine_test", "ts_project")
 
 ts_project(
     name = "migration",
@@ -7,19 +6,6 @@ ts_project(
         ["**/*.ts"],
         exclude = ["*.spec.ts"],
     ),
-    interop_deps = [
-        "//packages/compiler",
-        "//packages/compiler-cli",
-        "//packages/compiler-cli/private",
-        "//packages/compiler-cli/src/ngtsc/annotations",
-        "//packages/compiler-cli/src/ngtsc/annotations/directive",
-        "//packages/compiler-cli/src/ngtsc/file_system",
-        "//packages/compiler-cli/src/ngtsc/imports",
-        "//packages/compiler-cli/src/ngtsc/metadata",
-        "//packages/compiler-cli/src/ngtsc/reflection",
-        "//packages/core/schematics/utils",
-        "//packages/core/schematics/utils/tsurge",
-    ],
     visibility = [
         "//packages/core/schematics/ng-generate/self-closing-tags-migration:__pkg__",
         "//packages/language-service/src/refactorings:__pkg__",
@@ -27,6 +13,11 @@ ts_project(
     deps = [
         "//:node_modules/@types/node",
         "//:node_modules/typescript",
+        "//packages/compiler",
+        "//packages/compiler-cli",
+        "//packages/compiler-cli/private",
+        "//packages/core/schematics/utils",
+        "//packages/core/schematics/utils/tsurge",
     ],
 )
 
@@ -36,17 +27,15 @@ ts_project(
     srcs = glob(
         ["**/*.spec.ts"],
     ),
-    interop_deps = [
+    deps = [
         ":migration",
         "//packages/compiler-cli",
-        "//packages/compiler-cli/src/ngtsc/file_system/testing",
         "//packages/core/schematics/utils/tsurge",
     ],
-    deps = [],
 )
 
-jasmine_node_test(
+jasmine_test(
     name = "test",
-    srcs = [":test_lib"],
+    data = [":test_lib"],
     env = {"FORCE_COLOR": "3"},
 )

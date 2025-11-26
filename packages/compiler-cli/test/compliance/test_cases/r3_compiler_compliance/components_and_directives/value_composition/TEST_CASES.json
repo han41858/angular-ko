@@ -60,7 +60,11 @@
           ]
         }
       ],
-      "compilationModeFilter": ["full compile", "local compile"]
+      "compilationModeFilter": [
+        "full compile",
+        "local compile",
+        "declaration-only emit"
+      ]
     },
     {
       "description": "should support complex selectors",
@@ -271,6 +275,26 @@
         {
           "failureMessage": "Invalid tagged template literal binding",
           "files": ["tagged_template_literals.js"]
+        }
+      ]
+    },
+    {
+      "description": "should optimize regular expressions without flags",
+      "inputFiles": ["regular_expression_without_global_flag.ts"],
+      "expectations": [
+        {
+          "failureMessage": "Invalid template",
+          "files": ["regular_expression_without_global_flag.js"]
+        }
+      ]
+    },
+    {
+      "description": "should not optimize global regular expressions",
+      "inputFiles": ["regular_expression_with_global_flag.ts"],
+      "expectations": [
+        {
+          "failureMessage": "Invalid template",
+          "files": ["regular_expression_with_global_flag.js"]
         }
       ]
     }

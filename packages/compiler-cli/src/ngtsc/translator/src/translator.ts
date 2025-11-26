@@ -45,6 +45,16 @@ const BINARY_OPERATORS = /* @__PURE__ */ new Map<o.BinaryOperator, BinaryOperato
   [o.BinaryOperator.NullishCoalesce, '??'],
   [o.BinaryOperator.Exponentiation, '**'],
   [o.BinaryOperator.In, 'in'],
+  [o.BinaryOperator.Assign, '='],
+  [o.BinaryOperator.AdditionAssignment, '+='],
+  [o.BinaryOperator.SubtractionAssignment, '-='],
+  [o.BinaryOperator.MultiplicationAssignment, '*='],
+  [o.BinaryOperator.DivisionAssignment, '/='],
+  [o.BinaryOperator.RemainderAssignment, '%='],
+  [o.BinaryOperator.ExponentiationAssignment, '**='],
+  [o.BinaryOperator.AndAssignment, '&&='],
+  [o.BinaryOperator.OrAssignment, '||='],
+  [o.BinaryOperator.NullishCoalesceAssignment, '??='],
 ]);
 
 export type RecordWrappedNodeFn<TExpression> = (node: o.WrappedNodeExpr<TExpression>) => void;
@@ -140,39 +150,6 @@ export class ExpressionTranslatorVisitor<TFile, TStatement, TExpression>
     return identifier;
   }
 
-  visitWriteVarExpr(expr: o.WriteVarExpr, context: Context): TExpression {
-    const assignment = this.factory.createAssignment(
-      this.setSourceMapRange(this.factory.createIdentifier(expr.name), expr.sourceSpan),
-      expr.value.visitExpression(this, context),
-    );
-    return context.isStatement
-      ? assignment
-      : this.factory.createParenthesizedExpression(assignment);
-  }
-
-  visitWriteKeyExpr(expr: o.WriteKeyExpr, context: Context): TExpression {
-    const exprContext = context.withExpressionMode;
-    const target = this.factory.createElementAccess(
-      expr.receiver.visitExpression(this, exprContext),
-      expr.index.visitExpression(this, exprContext),
-    );
-    const assignment = this.factory.createAssignment(
-      target,
-      expr.value.visitExpression(this, exprContext),
-    );
-    return context.isStatement
-      ? assignment
-      : this.factory.createParenthesizedExpression(assignment);
-  }
-
-  visitWritePropExpr(expr: o.WritePropExpr, context: Context): TExpression {
-    const target = this.factory.createPropertyAccess(
-      expr.receiver.visitExpression(this, context),
-      expr.name,
-    );
-    return this.factory.createAssignment(target, expr.value.visitExpression(this, context));
-  }
-
   visitInvokeFunctionExpr(ast: o.InvokeFunctionExpr, context: Context): TExpression {
     return this.setSourceMapRange(
       this.factory.createCallExpression(
@@ -210,6 +187,13 @@ export class ExpressionTranslatorVisitor<TFile, TStatement, TExpression>
 
   visitLiteralExpr(ast: o.LiteralExpr, _context: Context): TExpression {
     return this.setSourceMapRange(this.factory.createLiteral(ast.value), ast.sourceSpan);
+  }
+
+  visitRegularExpressionLiteral(ast: o.RegularExpressionLiteralExpr, context: any) {
+    return this.setSourceMapRange(
+      this.factory.createRegularExpressionLiteral(ast.body, ast.flags),
+      ast.sourceSpan,
+    );
   }
 
   visitLocalizedString(ast: o.LocalizedString, context: Context): TExpression {
@@ -367,9 +351,20 @@ export class ExpressionTranslatorVisitor<TFile, TStatement, TExpression>
     if (!BINARY_OPERATORS.has(ast.operator)) {
       throw new Error(`Unknown binary operator: ${o.BinaryOperator[ast.operator]}`);
     }
+
+    const operator = BINARY_OPERATORS.get(ast.operator)!;
+
+    if (ast.isAssignment()) {
+      return this.factory.createAssignment(
+        ast.lhs.visitExpression(this, context),
+        operator,
+        ast.rhs.visitExpression(this, context),
+      );
+    }
+
     return this.factory.createBinaryExpression(
       ast.lhs.visitExpression(this, context),
-      BINARY_OPERATORS.get(ast.operator)!,
+      operator,
       ast.rhs.visitExpression(this, context),
     );
   }

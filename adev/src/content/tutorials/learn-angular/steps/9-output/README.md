@@ -1,4 +1,4 @@
-# Component output properties 
+# Component output properties
 
 When working with components it may be required to notify other components that something has happened. Perhaps a button has been clicked, an item has been added/removed from a list or some other important update has occurred. In this scenario components need to communicate with parent components.
 
@@ -10,12 +10,12 @@ In this activity, you'll learn how to use the `output()` function to communicate
 
 <hr />
 
-To create the communication path from child to parent components, use the `output` function to initiaize a class property.
+To create the communication path from child to parent components, use the `output` function to initialize a class property.
 
 <docs-code header="child.ts" language="ts">
 @Component({...})
 class Child {
-    incrementCountEvent = output<number>();
+  incrementCountEvent = output<number>();
 }
 </docs-code>
 
@@ -23,13 +23,12 @@ Now the component can generate events that can be listened to by the parent comp
 
 <docs-code header="child.ts" language="ts">
 class Child {
-    ...
+  ...
 
-    onClick() {
-        this.count++;
-        this.incrementCountEvent.emit(this.count);
-    }
-
+onClick() {
+this.count++;
+this.incrementCountEvent.emit(this.count);
+}
 }
 </docs-code>
 

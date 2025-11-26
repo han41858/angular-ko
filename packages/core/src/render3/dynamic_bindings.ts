@@ -16,6 +16,9 @@ import {TVIEW} from './interfaces/view';
 import {getCurrentTNode, getLView, getSelectedTNode, nextBindingIndex} from './state';
 import {stringifyForError} from './util/stringify_utils';
 import {createOutputListener} from './view/directive_outputs';
+import {markViewDirty} from './instructions/mark_view_dirty';
+import {getComponentLViewByIndex} from './util/view_utils';
+import {NotificationSource} from '../change_detection/scheduling/zoneless_scheduling';
 
 /** Symbol used to store and retrieve metadata about a binding. */
 export const BINDING: unique symbol = /* @__PURE__ */ Symbol('BINDING');
@@ -70,6 +73,9 @@ function inputBindingUpdate(targetDirectiveIdx: number, publicName: string, valu
     const tView = lView[TVIEW];
     const tNode = getSelectedTNode();
 
+    const componentLView = getComponentLViewByIndex(tNode.index, lView);
+    markViewDirty(componentLView, NotificationSource.SetInput);
+
     // TODO(pk): don't check on each and every binding, just assert in dev mode
     const targetDef = tView.directiveRegistry![targetDirectiveIdx];
     if (ngDevMode && !targetDef) {
@@ -111,6 +117,7 @@ function inputBindingUpdate(targetDirectiveIdx: number, publicName: string, valu
  *   bindings: [inputBinding('disabled', isDisabled)]
  * });
  * ```
+ * @see [Binding inputs, outputs and setting host directives at creation](guide/components/programmatic-rendering#binding-inputs-outputs-and-setting-host-directives-at-creation)
  */
 export function inputBinding(publicName: string, value: () => unknown): Binding {
   // Note: ideally we would use a class here, but it seems like they
@@ -143,6 +150,7 @@ export function inputBinding(publicName: string, value: () => unknown): Binding 
  *   ],
  * });
  * ```
+ * @see [Binding inputs, outputs and setting host directives at creation](guide/components/programmatic-rendering#binding-inputs-outputs-and-setting-host-directives-at-creation)
  */
 export function outputBinding<T>(eventName: string, listener: (event: T) => unknown): Binding {
   // Note: ideally we would use a class here, but it seems like they
@@ -180,6 +188,7 @@ export function outputBinding<T>(eventName: string, listener: (event: T) => unkn
  *   ],
  * });
  * ```
+ * @see [Binding inputs, outputs and setting host directives at creation](guide/components/programmatic-rendering#binding-inputs-outputs-and-setting-host-directives-at-creation)
  */
 export function twoWayBinding(publicName: string, value: WritableSignal<unknown>): Binding {
   const input = inputBinding(publicName, value) as BindingInternal;

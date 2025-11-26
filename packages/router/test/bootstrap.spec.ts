@@ -24,6 +24,7 @@ import {
   inject,
   Injectable,
   NgModule,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import {TestBed} from '@angular/core/testing';
 import {isNode} from '@angular/private/testing';
@@ -36,6 +37,7 @@ import {
   RouterOutlet,
   withEnabledBlockingInitialNavigation,
 } from '../index';
+import {useAutoTick} from './helpers';
 
 // This is needed, because all files under `packages/` are compiled together as part of the
 // [legacy-unit-tests-saucelabs][1] CI job, including the `lib.webworker.d.ts` typings brought in by
@@ -48,6 +50,7 @@ import {
 declare var window: Window;
 
 describe('bootstrap', () => {
+  useAutoTick();
   let log: any[] = [];
   let testProviders: any[] = null!;
 
@@ -103,6 +106,7 @@ describe('bootstrap', () => {
     navigationEndPromise = promise;
     log = [];
     testProviders = [
+      provideZonelessChangeDetection(),
       {provide: DOCUMENT, useValue: doc},
       {provide: ViewportScroller, useClass: isNode ? NullViewportScroller : ViewportScroller},
       {provide: PlatformLocation, useClass: MockPlatformLocation},
@@ -146,6 +150,7 @@ describe('bootstrap', () => {
         const router = res.injector.get(Router);
         expect(router.navigated).toEqual(false);
         expect(router.getCurrentNavigation()).toBeNull();
+        expect(router.currentNavigation()).toBeNull();
         expect(log).toContain('TestModule');
         expect(log).toContain('NavigationError');
       });
@@ -341,17 +346,7 @@ describe('bootstrap', () => {
         const router: Router = ref.injector.get(Router);
         expect(router.routerState.snapshot.root.firstChild).toBeNull();
         // ResolveEnd has not been emitted yet because bootstrap returned too early
-        expect(log).toEqual([
-          'TestModule',
-          'RootCmp',
-          'NavigationStart',
-          'RoutesRecognized',
-          'GuardsCheckStart',
-          'ChildActivationStart',
-          'ActivationStart',
-          'GuardsCheckEnd',
-          'ResolveStart',
-        ]);
+        expect(log).not.toContain('ResolveEnd');
       });
 
     await Promise.all([bootstrapPromise, navigationEndPromise]);
@@ -390,17 +385,7 @@ describe('bootstrap', () => {
         const router: Router = ref.injector.get(Router);
         expect(router.routerState.snapshot.root.firstChild).toBeNull();
         // ResolveEnd has not been emitted yet because bootstrap returned too early
-        expect(log).toEqual([
-          'TestModule',
-          'RootCmp',
-          'NavigationStart',
-          'RoutesRecognized',
-          'GuardsCheckStart',
-          'ChildActivationStart',
-          'ActivationStart',
-          'GuardsCheckEnd',
-          'ResolveStart',
-        ]);
+        expect(log).not.toContain('ResolveEnd');
       });
 
     await Promise.all([bootstrapPromise, navigationEndPromise]);

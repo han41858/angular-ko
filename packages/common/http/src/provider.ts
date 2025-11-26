@@ -14,15 +14,10 @@ import {
   Provider,
 } from '@angular/core';
 
-import {HttpBackend, HttpHandler} from './backend';
+import {HttpBackend, HttpHandler, HttpInterceptorHandler} from './backend';
 import {HttpClient} from './client';
 import {FETCH_BACKEND, FetchBackend} from './fetch';
-import {
-  HTTP_INTERCEPTOR_FNS,
-  HttpInterceptorFn,
-  HttpInterceptorHandler,
-  legacyInterceptorFnFactory,
-} from './interceptor';
+import {HTTP_INTERCEPTOR_FNS, HttpInterceptorFn, legacyInterceptorFnFactory} from './interceptor';
 import {
   jsonpCallbackContext,
   JsonpCallbackContext,
@@ -30,14 +25,7 @@ import {
   jsonpInterceptorFn,
 } from './jsonp';
 import {HttpXhrBackend} from './xhr';
-import {
-  HttpXsrfCookieExtractor,
-  HttpXsrfTokenExtractor,
-  XSRF_COOKIE_NAME,
-  XSRF_ENABLED,
-  XSRF_HEADER_NAME,
-  xsrfInterceptorFn,
-} from './xsrf';
+import {XSRF_COOKIE_NAME, XSRF_ENABLED, XSRF_HEADER_NAME, xsrfInterceptorFn} from './xsrf';
 
 /**
  * Identifies a particular kind of `HttpFeature`.
@@ -94,7 +82,7 @@ function makeHttpFeature<KindT extends HttpFeatureKind>(
  * ```
  *
  * </div>
- *
+ * @see [HTTP Client](guide/http/setup)
  * @see {@link withInterceptors}
  * @see {@link withInterceptorsFromDi}
  * @see {@link withXsrfConfiguration}
@@ -122,7 +110,6 @@ export function provideHttpClient(
 
   const providers: Provider[] = [
     HttpClient,
-    HttpXhrBackend,
     HttpInterceptorHandler,
     {provide: HttpHandler, useExisting: HttpInterceptorHandler},
     {
@@ -136,8 +123,6 @@ export function provideHttpClient(
       useValue: xsrfInterceptorFn,
       multi: true,
     },
-    {provide: XSRF_ENABLED, useValue: true},
-    {provide: HttpXsrfTokenExtractor, useClass: HttpXsrfCookieExtractor},
   ];
 
   for (const feature of features) {
@@ -171,7 +156,7 @@ export function withInterceptors(
 }
 
 const LEGACY_INTERCEPTOR_FN = new InjectionToken<HttpInterceptorFn>(
-  ngDevMode ? 'LEGACY_INTERCEPTOR_FN' : '',
+  typeof ngDevMode !== undefined && ngDevMode ? 'LEGACY_INTERCEPTOR_FN' : '',
 );
 
 /**
@@ -275,6 +260,7 @@ export function withJsonpSupport(): HttpFeature<HttpFeatureKind.JsonpSupport> {
  * "bubble up" until either reaching the root level or an `HttpClient` which was not configured with
  * this option.
  *
+ * @see [HTTP client setup](guide/http/setup#withrequestsmadeviaparent)
  * @see {@link provideHttpClient}
  * @publicApi 19.0
  */
@@ -299,6 +285,8 @@ export function withRequestsMadeViaParent(): HttpFeature<HttpFeatureKind.Request
  * Configures the current `HttpClient` instance to make requests using the fetch API.
  *
  * Note: The Fetch API doesn't support progress report on uploads.
+ *
+ * @see [Advanced fetch Options](guide/http/making-requests#advanced-fetch-options)
  *
  * @publicApi
  */

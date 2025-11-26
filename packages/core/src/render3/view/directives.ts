@@ -8,7 +8,7 @@
 
 import {RuntimeError, RuntimeErrorCode} from '../../errors';
 import {Writable} from '../../interface/type';
-import {DoCheck, OnChanges, OnInit} from '../../interface/lifecycle_hooks';
+import {DoCheck, OnChanges, OnInit} from '../../change_detection/lifecycle_hooks';
 import {
   assertGreaterThan,
   assertGreaterThanOrEqual,
@@ -451,6 +451,7 @@ function configureViewWithDirective<T>(
     directiveFactory,
     isComponentDef(def),
     ɵɵdirectiveInject,
+    ngDevMode ? def.type.name : null,
   );
   tView.blueprint[directiveIndex] = nodeInjectorFactory;
   lView[directiveIndex] = nodeInjectorFactory;

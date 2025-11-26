@@ -11,9 +11,9 @@ import {
   createNgModule,
   Directive,
   DoCheck,
+  EnvironmentInjector,
   Injector,
   Input,
-  NgModuleFactory,
   NgModuleRef,
   OnChanges,
   OnDestroy,
@@ -41,15 +41,15 @@ import {
  * * `ngComponentOutletInjector`: Optional custom {@link Injector} that will be used as parent for
  * the Component. Defaults to the injector of the current view container.
  *
+ * * `ngComponentOutletEnvironmentInjector`: Optional custom {@link EnvironmentInjector} which will
+ * provide the component's environment.
+ *
  * * `ngComponentOutletContent`: Optional list of projectable nodes to insert into the content
  * section of the component, if it exists.
  *
  * * `ngComponentOutletNgModule`: Optional NgModule class reference to allow loading another
  * module dynamically, then loading a component from that module.
  *
- * * `ngComponentOutletNgModuleFactory`: Deprecated config option that allows providing optional
- * NgModule factory to allow loading another module dynamically, then loading a component from that
- * module. Use `ngComponentOutletNgModule` instead.
  *
  * ### Syntax
  *
@@ -96,20 +96,15 @@ import {
   exportAs: 'ngComponentOutlet',
 })
 export class NgComponentOutlet<T = any> implements OnChanges, DoCheck, OnDestroy {
-  // TODO(crisbeto): this should be `Type<T>`, but doing so broke a few
-  // targets in a TGP so we need to do it in a major version.
   /** Component that should be rendered in the outlet. */
-  @Input() ngComponentOutlet: Type<any> | null = null;
+  @Input() ngComponentOutlet: Type<T> | null = null;
 
   @Input() ngComponentOutletInputs?: Record<string, unknown>;
   @Input() ngComponentOutletInjector?: Injector;
-  @Input() ngComponentOutletContent?: any[][];
+  @Input() ngComponentOutletEnvironmentInjector?: EnvironmentInjector;
+  @Input() ngComponentOutletContent?: Node[][];
 
   @Input() ngComponentOutletNgModule?: Type<any>;
-  /**
-   * @deprecated This input is deprecated, use `ngComponentOutletNgModule` instead.
-   */
-  @Input() ngComponentOutletNgModuleFactory?: NgModuleFactory<any>;
 
   private _componentRef: ComponentRef<T> | undefined;
   private _moduleRef: NgModuleRef<any> | undefined;
@@ -135,10 +130,7 @@ export class NgComponentOutlet<T = any> implements OnChanges, DoCheck, OnDestroy
     // Note: square brackets property accessor is safe for Closure compiler optimizations (the
     // `changes` argument of the `ngOnChanges` lifecycle hook retains the names of the fields that
     // were changed).
-    return (
-      changes['ngComponentOutletNgModule'] !== undefined ||
-      changes['ngComponentOutletNgModuleFactory'] !== undefined
-    );
+    return changes['ngComponentOutletNgModule'] !== undefined;
   }
 
   private _needToReCreateComponentInstance(changes: SimpleChanges): boolean {
@@ -149,6 +141,7 @@ export class NgComponentOutlet<T = any> implements OnChanges, DoCheck, OnDestroy
       changes['ngComponentOutlet'] !== undefined ||
       changes['ngComponentOutletContent'] !== undefined ||
       changes['ngComponentOutletInjector'] !== undefined ||
+      changes['ngComponentOutletEnvironmentInjector'] !== undefined ||
       this._needToReCreateNgModuleInstance(changes)
     );
   }
@@ -171,10 +164,6 @@ export class NgComponentOutlet<T = any> implements OnChanges, DoCheck, OnDestroy
               this.ngComponentOutletNgModule,
               getParentInjector(injector),
             );
-          } else if (this.ngComponentOutletNgModuleFactory) {
-            this._moduleRef = this.ngComponentOutletNgModuleFactory.create(
-              getParentInjector(injector),
-            );
           } else {
             this._moduleRef = undefined;
           }
@@ -184,6 +173,7 @@ export class NgComponentOutlet<T = any> implements OnChanges, DoCheck, OnDestroy
           injector,
           ngModuleRef: this._moduleRef,
           projectableNodes: this.ngComponentOutletContent,
+          environmentInjector: this.ngComponentOutletEnvironmentInjector,
         });
       }
     }

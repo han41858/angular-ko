@@ -13,6 +13,7 @@ import {
   consumerPollProducersForChange,
   getActiveConsumer,
   ReactiveNode,
+  setActiveConsumer,
 } from '../../../primitives/signals';
 
 import {RuntimeError, RuntimeErrorCode} from '../../errors';
@@ -66,7 +67,7 @@ import {
 
 import {isDestroyed} from '../interfaces/type_checks';
 import {profiler} from '../profiler';
-import {ProfilerEvent} from '../profiler_types';
+import {ProfilerEvent} from '../../../primitives/devtools';
 import {executeViewQueryFn, refreshContentQueries} from '../queries/query_execution';
 import {runEffectsInView} from '../reactivity/view_effect_runner';
 import {executeTemplate} from './shared';
@@ -207,7 +208,10 @@ export function refreshView<T>(
     } else if (getActiveConsumer() === null) {
       // If the current view should not have a reactive consumer but we don't have an active consumer,
       // we still need to create a temporary consumer to track any signal reads in this template.
-      // This is a rare case that can happen with `viewContainerRef.createEmbeddedView(...).detectChanges()`.
+      // This is a rare case that can happen with
+      // - `viewContainerRef.createEmbeddedView(...).detectChanges()`.
+      // - `viewContainerRef.createEmbeddedView(...)` without any other dirty marking on the parent,
+      //   flagging the parent component for traversal but not triggering a full `refreshView`.
       // This temporary consumer marks the first parent that _should_ have a consumer for refresh.
       // Once that refresh happens, the signals will be tracked in the parent consumer and we can destroy
       // the temporary one.
@@ -422,9 +426,11 @@ function detectChangesInComponent(
   profiler(ProfilerEvent.ComponentStart);
 
   const componentView = getComponentLViewByIndex(componentHostIdx, hostLView);
-  detectChangesInViewIfAttached(componentView, mode);
-
-  profiler(ProfilerEvent.ComponentEnd, componentView[CONTEXT] as any as {});
+  try {
+    detectChangesInViewIfAttached(componentView, mode);
+  } finally {
+    profiler(ProfilerEvent.ComponentEnd, componentView[CONTEXT] as any as {});
+  }
 }
 
 /**
@@ -490,16 +496,22 @@ function detectChangesInView(lView: LView, mode: ChangeDetectionMode) {
   if (shouldRefreshView) {
     refreshView(tView, lView, tView.template, lView[CONTEXT]);
   } else if (flags & LViewFlags.HasChildViewsToRefresh) {
-    if (!isInCheckNoChangesPass) {
-      runEffectsInView(lView);
-    }
-    detectChangesInEmbeddedViews(lView, ChangeDetectionMode.Targeted);
-    const components = tView.components;
-    if (components !== null) {
-      detectChangesInChildComponents(lView, components, ChangeDetectionMode.Targeted);
-    }
-    if (!isInCheckNoChangesPass) {
-      addAfterRenderSequencesForView(lView);
+    // Set active consumer to null to avoid inheriting an improper reactive context
+    const prevConsumer = setActiveConsumer(null);
+    try {
+      if (!isInCheckNoChangesPass) {
+        runEffectsInView(lView);
+      }
+      detectChangesInEmbeddedViews(lView, ChangeDetectionMode.Targeted);
+      const components = tView.components;
+      if (components !== null) {
+        detectChangesInChildComponents(lView, components, ChangeDetectionMode.Targeted);
+      }
+      if (!isInCheckNoChangesPass) {
+        addAfterRenderSequencesForView(lView);
+      }
+    } finally {
+      setActiveConsumer(prevConsumer);
     }
   }
 }
@@ -541,8 +553,11 @@ function processHostBindingOpCodes(tView: TView, lView: LView): void {
         setBindingRootForHostBindings(bindingRootIndx, directiveIdx);
         const context = lView[directiveIdx];
         profiler(ProfilerEvent.HostBindingsUpdateStart, context);
-        hostBindingFn(RenderFlags.Update, context);
-        profiler(ProfilerEvent.HostBindingsUpdateEnd, context);
+        try {
+          hostBindingFn(RenderFlags.Update, context);
+        } finally {
+          profiler(ProfilerEvent.HostBindingsUpdateEnd, context);
+        }
       }
     }
   } finally {

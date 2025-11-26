@@ -71,7 +71,7 @@ describe('event replay', () => {
 
   beforeAll(async () => {
     globalThis.window = globalThis as unknown as Window & typeof globalThis;
-    await import('@angular/core/primitives/event-dispatch/contract_bundle_min.js' as string);
+    await import('../../core/primitives/event-dispatch/contract_bundle_min.js' as string);
   });
 
   beforeEach(() => {
@@ -93,7 +93,6 @@ describe('event replay', () => {
 
     @Component({
       selector: 'app',
-      standalone: true,
       template: `
         <button id="btn" (click)="onClick()" #localRef></button>
       `,
@@ -120,7 +119,6 @@ describe('event replay', () => {
 
     @Component({
       selector: 'app',
-      standalone: true,
       template: `
         <button id="btn-1" (click)="onClick()"></button>
       `,
@@ -131,7 +129,6 @@ describe('event replay', () => {
 
     @Component({
       selector: 'app-2',
-      standalone: true,
       template: `
         <button id="btn-2" (click)="onClick()"></button>
       `,
@@ -183,7 +180,6 @@ describe('event replay', () => {
   it('should cleanup `window._ejsas[appId]` once app is destroyed', async () => {
     @Component({
       selector: 'app',
-      standalone: true,
       template: `
         <button id="btn" (click)="onClick()"></button>
       `,
@@ -207,7 +203,16 @@ describe('event replay', () => {
     appRef.tick();
     const appId = appRef.injector.get(APP_ID);
 
+    // Important: This is done intentionally because `ApplicationRef` registers
+    // `onDestroy` callbacks, and we want to ensure that they execute successfully
+    // without resulting in any errors. This is necessary because the bodies of
+    // these `onDestroy` callbacks use the `ngServerMode` variable.
+    // Prior to setting this flag, the unit test was throwing a "destroyed injector"
+    // error — but we weren't capturing it because we hadn't explicitly set the flag to false.
+    globalThis['ngServerMode'] = false;
     appRef.destroy();
+    globalThis['ngServerMode'] = undefined;
+
     // This ensure that `_ejsas` for the current application is cleaned up
     // once the application is destroyed.
     expect(window._ejsas![appId]).toBeUndefined();
@@ -218,7 +223,6 @@ describe('event replay', () => {
     const innerOnClickSpy = jasmine.createSpy();
     @Component({
       selector: 'app-card',
-      standalone: true,
       template: `
         <div class="card">
           <button id="inner-button" (click)="onClick()"></button>
@@ -233,7 +237,6 @@ describe('event replay', () => {
     @Component({
       selector: 'app',
       imports: [CardComponent],
-      standalone: true,
       template: `
         <app-card>
           <h2>Card Title</h2>
@@ -387,7 +390,6 @@ describe('event replay', () => {
 
   it('should remove jsaction attributes, but continue listening to events.', async () => {
     @Component({
-      standalone: true,
       selector: 'app',
       template: `
             <div (click)="onClick()" id="1">
@@ -415,7 +417,6 @@ describe('event replay', () => {
 
   it(`should add 'nonce' attribute to event record script when 'ngCspNonce' is provided`, async () => {
     @Component({
-      standalone: true,
       selector: 'app',
       template: `
             <div (click)="onClick()">
@@ -444,7 +445,6 @@ describe('event replay', () => {
 
     @Component({
       selector: 'app',
-      standalone: true,
       template: `
         <button id="btn" (click)="onClick()"></button>
       `,
@@ -502,7 +502,6 @@ describe('event replay', () => {
     it('should propagate events', async () => {
       const onClickSpy = jasmine.createSpy();
       @Component({
-        standalone: true,
         selector: 'app',
         template: `
             <div id="top" (click)="onClick()">
@@ -534,7 +533,6 @@ describe('event replay', () => {
 
     it('should not propagate events if stopPropagation is called', async () => {
       @Component({
-        standalone: true,
         selector: 'app',
         template: `
             <div id="top" (click)="onClick($event)">
@@ -568,7 +566,6 @@ describe('event replay', () => {
       let latestTarget: EventTarget | null = null;
       let latestCurrentTarget: EventTarget | null = null;
       @Component({
-        standalone: true,
         selector: 'app',
         template: `
             <div id="top" (click)="onClick($event)">
@@ -610,7 +607,6 @@ describe('event replay', () => {
   describe('event dispatch script', () => {
     it('should not be present on a page when hydration is disabled', async () => {
       @Component({
-        standalone: true,
         selector: 'app',
         template: '<input (click)="onClick()" />',
       })
@@ -627,7 +623,6 @@ describe('event replay', () => {
 
     it('should not be present on a page if there are no events to replay', async () => {
       @Component({
-        standalone: true,
         selector: 'app',
         template: 'Some text',
       })
@@ -655,7 +650,6 @@ describe('event replay', () => {
 
     it('should not replay mouse events', async () => {
       @Component({
-        standalone: true,
         selector: 'app',
         template: '<div (mouseenter)="doThing()"><div>',
       })
@@ -673,7 +667,6 @@ describe('event replay', () => {
 
     it('should not be present on a page where event replay is not enabled', async () => {
       @Component({
-        standalone: true,
         selector: 'app',
         template: '<input (click)="onClick()" />',
       })
@@ -693,7 +686,6 @@ describe('event replay', () => {
 
     it('should be retained if there are events to replay', async () => {
       @Component({
-        standalone: true,
         selector: 'app',
         template: '<input (click)="onClick()" />',
       })
