@@ -1,11 +1,13 @@
 <!--
 # Pipes
 -->
+
 # 파이프(Pipes)
 
 <!--
 ## Overview
 -->
+
 ## 개요
 
 <!--
@@ -51,6 +53,7 @@ When Angular renders the component, it will ensure that the appropriate date for
 
 See the [in-depth guide on i18n](/guide/i18n) to learn more about how Angular localizes values.
 -->
+
 파이프는 Angular 템플릿 표현식의 특수 연산자입니다.
 파이프는 템플릿에 표시되는 데이터 형식을 변환하는 함수이며, 한 번 선언해 둔 뒤에 여러 템플릿에 사용할 수 있습니다.
 파이프는 [Unix의 파이프](<https://en.wikipedia.org/wiki/Pipeline_(Unix)>)에서 영감을 받아 파이프 기호(`|`)를 사용합니다.
@@ -97,10 +100,10 @@ Angular는 컴포넌트를 렌더링하면서 사용자 환경에 맞는 통화�
 
 Angular 현지화에 대한 내용은 [i18n 심화 가이드](/guide/i18n) 문서를 참고하세요.
 
-
 <!--
 ### Built-in Pipes
 -->
+
 ### 기본 파이프
 
 <!--
@@ -122,28 +125,29 @@ Angular includes a set of built-in pipes in the `@angular/common` package:
 | [`TitleCasePipe`](api/common/TitleCasePipe)   | Transforms text to title case.                                                                |
 | [`UpperCasePipe`](api/common/UpperCasePipe)   | Transforms text to all upper case.                                                            |
 -->
+
 `@angular/common` 패키지로 제공되는 기본 파이프는 이런 것들이 있습니다:
 
-| 이름                                            | 설명                                                    |
-|-----------------------------------------------|-------------------------------------------------------|
-| [`AsyncPipe`](api/common/AsyncPipe)           | `Promise`나 RxJS `Observable` 에서 값을 읽습니다.              |
-| [`CurrencyPipe`](api/common/CurrencyPipe)     | 지역 설정에 따라 숫자를 통화 형식으로 변환합니다.                          |
-| [`DatePipe`](api/common/DatePipe)             | 지역 설정에 따라 `Date` 값의 출력 형식을 변환합니다.                     |
-| [`DecimalPipe`](api/common/DecimalPipe)       | 지역 설정에 따라 숫자 형식을 변환합니다.                               |
-| [`I18nPluralPipe`](api/common/I18nPluralPipe) | 지역 설정에 따라 복수에 해당하는 문자열을 맵핑합니다.                        |
-| [`I18nSelectPipe`](api/common/I18nSelectPipe) | 원하는 값을 반환하는 커스텀 셀렉터 키를 맵핑합니다.                         |
+| 이름                                          | 설명                                                                             |
+| --------------------------------------------- | -------------------------------------------------------------------------------- |
+| [`AsyncPipe`](api/common/AsyncPipe)           | `Promise`나 RxJS `Observable` 에서 값을 읽습니다.                                |
+| [`CurrencyPipe`](api/common/CurrencyPipe)     | 지역 설정에 따라 숫자를 통화 형식으로 변환합니다.                                |
+| [`DatePipe`](api/common/DatePipe)             | 지역 설정에 따라 `Date` 값의 출력 형식을 변환합니다.                             |
+| [`DecimalPipe`](api/common/DecimalPipe)       | 지역 설정에 따라 숫자 형식을 변환합니다.                                         |
+| [`I18nPluralPipe`](api/common/I18nPluralPipe) | 지역 설정에 따라 복수에 해당하는 문자열을 맵핑합니다.                            |
+| [`I18nSelectPipe`](api/common/I18nSelectPipe) | 원하는 값을 반환하는 커스텀 셀렉터 키를 맵핑합니다.                              |
 | [`JsonPipe`](api/common/JsonPipe)             | 객체를 `JSON.stringify` 결과 문자열로 변환합니다. 디버깅 용으로 자주 사용합니다. |
-| [`KeyValuePipe`](api/common/KeyValuePipe)     | 객체나 Map을 키-값 쌍 배열로 변환합니다.                             |
-| [`LowerCasePipe`](api/common/LowerCasePipe)   | 문자를 모두 소문자로 변환합니다.                                    |
-| [`PercentPipe`](api/common/PercentPipe)       | 지역 설정에 따라 숫자를 백분율 문자열로 변환합니다.                         |
-| [`SlicePipe`](api/common/SlicePipe)           | 주어진 콜렉션을 나눠서 새로운 배열이나 문자열을 반환합니다.                     |
-| [`TitleCasePipe`](api/common/TitleCasePipe)   | 단어의 첫글자를 대문자로 변환합니다.                                  |
-| [`UpperCasePipe`](api/common/UpperCasePipe)   | 문자를 모두 대문자로 변환합니다.                                    |
-
+| [`KeyValuePipe`](api/common/KeyValuePipe)     | 객체나 Map을 키-값 쌍 배열로 변환합니다.                                         |
+| [`LowerCasePipe`](api/common/LowerCasePipe)   | 문자를 모두 소문자로 변환합니다.                                                 |
+| [`PercentPipe`](api/common/PercentPipe)       | 지역 설정에 따라 숫자를 백분율 문자열로 변환합니다.                              |
+| [`SlicePipe`](api/common/SlicePipe)           | 주어진 콜렉션을 나눠서 새로운 배열이나 문자열을 반환합니다.                      |
+| [`TitleCasePipe`](api/common/TitleCasePipe)   | 단어의 첫글자를 대문자로 변환합니다.                                             |
+| [`UpperCasePipe`](api/common/UpperCasePipe)   | 문자를 모두 대문자로 변환합니다.                                                 |
 
 <!--
 ## Using pipes
 -->
+
 ## 파이프 활용하기
 
 <!--
@@ -155,6 +159,7 @@ Angular's pipe operator uses the vertical bar character (`|`), within a template
 
 In this example, the value of `amount` is passed into the `CurrencyPipe` where the pipe name is `currency`. It then renders the default currency for the user’s locale.
 -->
+
 파이프는 템플릿 표현식 안에서 세로 막대 기호(`|`)를 사용하면 됩니다.
 파이프 기호 왼쪽에는 변환 함수로 전달할 값을 지정하며, 파이프 기호 오른쪽에는 적용할 파이프 이름과 추가 인자를 지정합니다.
 
@@ -165,10 +170,10 @@ In this example, the value of `amount` is passed into the `CurrencyPipe` where t
 이 예제를 보면, `amount` 값이 `currency` 라는 이름으로 사용되는 `CurrencyPipe`로 전달된다는 것을 확인할 수 있습니다.
 파이프 변환 결과는 지역 설정에 맞는 기본 통화 형식으로 표시됩니다.
 
-
 <!--
 ### Combining multiple pipes in the same expression
 -->
+
 ### 한 표현식에서 파이프 여러개 사용하기
 
 <!--
@@ -180,6 +185,7 @@ The following example demonstrates a combination of pipes to display a localized
 <p>The event will occur on {{ scheduledOn | date | uppercase }}.</p>
 ```
 -->
+
 파이프는 왼쪽부터 오른쪽으로 여러 개를 연달아서 적용할 수 있습니다.
 
 아래 예제 코드는 날짜를 지역 설정에 따라 표시한 후 대문자로 변환하는 예제 코드입니다:
@@ -188,10 +194,10 @@ The following example demonstrates a combination of pipes to display a localized
 <p>The event will occur on {{ scheduledOn | date | uppercase }}.</p>
 ```
 
-
 <!--
 ### Passing parameters to pipes
 -->
+
 ### 파이프에 인자 전달하기
 
 <!--
@@ -211,6 +217,7 @@ For example, we can also pass a second optional parameter to control the timezon
 <p>The event will occur at {{ scheduledOn | date:'hh:mm':'UTC' }}.</p>
 ```
 -->
+
 파이프 중에는 변환 결과를 커스터마이징하는 인자를 추가로 받는 경우가 있습니다.
 인자를 전달하려면 파이프 이름 뒤에 콜론(`:`)을 붙이고 인자를 지정하면 됩니다.
 
@@ -223,15 +230,14 @@ For example, we can also pass a second optional parameter to control the timezon
 인자를 여러개 받는 파이프도 있습니다.
 이 경우는 콜론(`:`)을 더 사용하면 됩니다:
 
-
 ```angular-html
 <p>The event will occur at {{ scheduledOn | date:'hh:mm':'UTC' }}.</p>
 ```
 
-
 <!--
 ## How pipes work
 -->
+
 ## 파이프는 어떻게 동작할까요
 
 <!--
@@ -261,6 +267,7 @@ In this example:
 1. `CurrencyPipe` is added to the `imports` array
 1. The `amount` data is passed to the `currency` pipe
 -->
+
 개념적으로 볼 때, 파이프는 입력된 값을 변환해서 반환하는 함수입니다.
 
 ```angular-ts
@@ -287,10 +294,10 @@ export class AppComponent {
 1. `imports` 배열에 `CurrencyPipe`를 추가합니다.
 1. `currency` 파이프로 `amount` 데이터를 전달합니다.
 
-
 <!--
 ### Pipe operator precedence
 -->
+
 ### 파이프 연산자 우선순위
 
 <!--
@@ -321,6 +328,7 @@ It will be parsed instead as:
 
 Always use parentheses in your expressions when operator precedence may be ambiguous.
 -->
+
 파이프 연산자는 `+`, `-`, `*`, `/`, `%`, `&&`, `||`, `??` 와 같은 이진 연산자보다 우선순위가 낮습니다.
 
 ```angular-html
@@ -348,10 +356,10 @@ Always use parentheses in your expressions when operator precedence may be ambig
 
 연산자 우선순위가 모호하다면 반드시 괄호를 사용하세요.
 
-
 <!--
 ### Change detection with pipes
 -->
+
 ### 파이프가 변화를 감지하는 방식
 
 <!--
@@ -359,17 +367,18 @@ By default, all pipes are considered `pure`, which means that it only executes w
 
 As a result, this means that mutations to object properties or array items are not detected unless the entire object or array reference is replaced with a different instance. If you want this level of change detection, refer to [detecting changes within arrays or objects](#detecting-change-within-arrays-or-objects).
 -->
+
 기본적으로 파이프는 순수 함수(pure function)입니다.
 `String`, `Number`, `Boolean`, `Symbol`과 같은 기본 타입이나 `Array`, `Object`, `Function`, `Date`와 같은 객체를 입력값으로 받습니다.
 순수 파이프는 입력값이 변경되지 않으면 변환 함수를 실행하지 않기 때문에 성능면에서 유리합니다.
 
 그래서 객체나 배열은 참조 자체가 변경되지 않으면 데이터가 변경된 것으로 인식하지 않습니다.
-참조는 동일하지만 내부 데이터가 변경된 경우라면 [배열이나 객체 내부 변화 감지하기](#detecting-change-within-arrays-or-objects) 섹션을 참고하세요.
-
+참조는 동일하지만 내부 데이터가 변경된 경우라면 [배열이나 객체 내부 변화 감지하기](#배열과-객체의-변화-감지하기) 섹션을 참고하세요.
 
 <!--
 ## Creating custom pipes
 -->
+
 ## 커스텀 파이프 정의하기
 
 <!--
@@ -396,6 +405,7 @@ export class KebabCasePipe implements PipeTransform {
 }
 ```
 -->
+
 TypeScript 클래스에 `@Pipe` 데코레이터를 붙이면 커스텀 파이프를 정의할 수 있습니다.
 커스텀 파이프는 두 가지를 꼭 지정해야 합니다:
 
@@ -423,6 +433,7 @@ export class KebabCasePipe implements PipeTransform {
 <!--
 ### Using the `@Pipe` decorator
 -->
+
 ### `@Pipe` 데코레이터 활용하기
 
 <!--
@@ -439,6 +450,7 @@ export class MyCustomTransformationPipe {}
 
 The `@Pipe` decorator requires a `name` that controls how the pipe is used in a template.
 -->
+
 커스텀 파이프를 생성하려면 `@angular/core` 패키지에서 `Pipe` 심볼을 로드해서 TypeScript 클래스에 데코레이터로 지정하면 됩니다.
 
 ```angular-ts
@@ -452,10 +464,10 @@ export class MyCustomTransformationPipe {}
 
 `@Pipe` 데코레이터는 템플릿에서 사용할 수 있도록 `name`을 반드시 지정해야 합니다.
 
-
 <!--
 ### Naming convention for custom pipes
 -->
+
 ### 커스텀 파이프의 명명규칙
 
 <!--
@@ -464,15 +476,16 @@ The naming convention for custom pipes consists of two conventions:
 - `name` - camelCase is recommended. Do not use hyphens.
 - `class name` - PascalCase version of the `name` with `Pipe` appended to the end
 -->
+
 커스텀 파이프는 다음과 같은 명명규칙을 따르면 됩니다:
 
 - `name` - 캐멀 케이스(camelCase)를 추천합니다. 하이픈은 사용하지 마세요.
 - `class name` - `name`을 파스칼 케이스(PascalCase)로 변환한 후 `Pipe`를 붙이세요.
 
-
 <!--
 ### Implement the `PipeTransform` interface
 -->
+
 ## `PipeTransform` 인터페이스 확장하기
 
 <!--
@@ -489,6 +502,7 @@ export class MyCustomTransformationPipe implements PipeTransform {}
 
 Implementing this interface ensures that your pipe class has the correct structure.
 -->
+
 커스텀 파이프는 `@angular/core` 패키지로 제공되는 `PipeTransform` 인터페이스를 확장해야 합니다.
 
 ```angular-ts
@@ -502,10 +516,10 @@ export class MyCustomTransformationPipe implements PipeTransform {}
 
 이 인터페이스를 활용하면 파이프 구현 요건에 맞게 파이프 클래스를 구현할 수 있습니다.
 
-
 <!--
 ### Transforming the value of a pipe
 -->
+
 ### 입력받은 값 변환하기
 
 <!--
@@ -524,6 +538,7 @@ export class MyCustomTransformationPipe implements PipeTransform {
 }
 ```
 -->
+
 파이프의 변환 과정은 `transform` 메서드에서 이루어집니다.
 파이프로 전달한 값이 이 메서드의 인자로 전달되며, 값을 변환한 후에 함수의 반환값으로 반환하면 됩니다.
 
@@ -540,10 +555,10 @@ export class MyCustomTransformationPipe implements PipeTransform {
 }
 ```
 
-
 <!--
 ### Adding parameters to a custom pipe
 -->
+
 ### 커스텀 파이프의 옵션 인자 추가하기
 
 <!--
@@ -568,6 +583,7 @@ export class MyCustomTransformationPipe implements PipeTransform {
 }
 ```
 -->
+
 파이프에 추가로 전달한 옵션은 `transform` 메서드의 추가 인자로 받을 수 있습니다:
 
 ```angular-ts
@@ -589,10 +605,10 @@ export class MyCustomTransformationPipe implements PipeTransform {
 }
 ```
 
-
 <!--
 ### Detecting change within arrays or objects
 -->
+
 ### 배열과 객체의 변화 감지하기
 
 <!--
@@ -616,6 +632,7 @@ export class JoinNamesImpurePipe implements PipeTransform {
 
 Angular developers often adopt the convention of including `Impure` in the pipe `name` and class name to indicate the potential performance pitfall to other developers.
 -->
+
 파이프가 배열이나 객체 내부의 변화를 감지하려면 `@Pipe` 데코레이터에 `pure` 플래그를 `false`로 지정해서 순수하지 않은 함수라고 표시하면 됩니다.
 
 순수하지 않은 함수는 파이프는 꼭 필요한 경우가 아닌 한 사용하지 마세요.

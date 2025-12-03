@@ -1,6 +1,7 @@
 <!--
 # Async reactivity with resources
 -->
+
 # `Resource` 를 활용한 비동기 반응성
 
 <!--
@@ -49,6 +50,7 @@ The `loader` property defines a `ResourceLoader`— an async function that retri
 
 `Resource` has a `value` signal that contains the results of the loader.
 -->
+
 주의: `resource` 는 아직 [실험 단계](reference/releases#experimental) 입니다.
 지금 사용해 볼 수는 있지만 이후에 안정 버전이 나오면서 변경될 수 있습니다.
 
@@ -98,13 +100,14 @@ const firstName = computed(() => {
 
 `loader` 프로퍼티에는 어떤 값을 받아오는 비동기 함수인 `ResourceLoader`를 지정합니다.
 리소스는 `params` 연산 함수가 새 값을 계산할 때마다 로더 함수를 실행하면서 그 값을 인자로 전달합니다.
-자세한 내용은 [Resource 로더](#resource-loaders) 문서를 참고하세요.
+자세한 내용은 [Resource 로더](#리소스-로더) 문서를 참고하세요.
 
 `Resource` 객체에는 로더의 결과를 담는 `value` 시그널도 있습니다.
 
 <!--
 ## Resource loaders
 -->
+
 ## 리소스 로더
 
 <!--
@@ -120,23 +123,24 @@ The `ResourceLoaderParams` object contains three properties: `params`, `previous
 
 If the `params` computation returns `undefined`, the loader function does not run and the resource status becomes `'idle'`.
 -->
+
 리소스를 생성할 때 `ResourceLoader`를 지정합니다.
 이 로더는 `ResourceLoaderParams` 객체를 인자로 받는 비동기 함수이며, 값을 하나 반환합니다.
 
 `ResourceLoaderParams` 객체에는 `params`, `previous`, `abortSignal` 프로퍼티가 있습니다.
 
-| 프로퍼니          | 설명                                                                                                                                    |
-|---------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| `params`      | 리소스의 `params` 연산 함수                                                                                                                   |
-| `previous`    | `status` 프로퍼티와 이전 `ResourceStatus` 값이 담겨 전달되는 객체입니다.                                                                                  |
-| `abortSignal` | [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)에 대해 자세하게 알아보려면 [요청 취소하기](#aborting-requests) 섹션을 참고하세요. |
+| 프로퍼니      | 설명                                                                                                                                                        |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `params`      | 리소스의 `params` 연산 함수                                                                                                                                 |
+| `previous`    | `status` 프로퍼티와 이전 `ResourceStatus` 값이 담겨 전달되는 객체입니다.                                                                                    |
+| `abortSignal` | [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)에 대해 자세하게 알아보려면 [요청 취소하기](#요청-취소하기) 섹션을 참고하세요. |
 
 `params` 연산 함수가 `undefined`를 반환하면, 로더 함수가 실행되지 않으며 리소스의 상태는 `'idle'`로 유지됩니다.
-
 
 <!--
 ### Aborting requests
 -->
+
 ### 요청 취소하기
 
 <!--
@@ -159,6 +163,7 @@ const userResource = resource({
 
 See [`AbortSignal` on MDN](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) for more details on request cancellation with `AbortSignal`.
 -->
+
 리소스가 로드되는 동안 `params` 연산 함수가 변경되면 리소스는 완료되지 않은 로딩을 취소합니다.
 
 그리고 `ResourceLoaderParams`의 `abortSignal`을 지정하면 중단된 요청에 응답할 수 있습니다.
@@ -178,10 +183,10 @@ const userResource = resource({
 
 `AbortSignal`을 사용해서 요청을 취소하는 방법을 자세하게 알아보려면 [MDN의 `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) 문서를 참고하세요.
 
-
 <!--
 ### Reloading
 -->
+
 ### 재시도
 
 <!--
@@ -200,6 +205,7 @@ const userResource = resource({
 userResource.reload();
 ```
 -->
+
 리소스 객체의 `reload` 메서드를 실행하면 `loader` 함수를 다시 실행할 수 있습니다.
 
 ```typescript
@@ -215,10 +221,10 @@ const userResource = resource({
 userResource.reload();
 ```
 
-
 <!--
 ## Resource status
 -->
+
 ## 리소스 상태
 
 <!--
@@ -245,37 +251,39 @@ The `status` signal provides a specific `ResourceStatus` that describes the stat
 
 You can use this status information to conditionally display user interface elements, such loading indicators and error messages.
 -->
+
 리소스 객체는 비동기 로더를 실행하면서 여러 상태로 변화합니다.
 
-| 프로퍼티        | 설명                                                    |
-|-------------|-------------------------------------------------------|
-| `value`     | 리소스 객체의 최종 값, 값을 받지 못했으면 `undefined`                  |
-| `hasValue`  | 리소스가 값을 갖고 있는지 여부                                     |
+| 프로퍼티    | 설명                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------ |
+| `value`     | 리소스 객체의 최종 값, 값을 받지 못했으면 `undefined`                                |
+| `hasValue`  | 리소스가 값을 갖고 있는지 여부                                                       |
 | `error`     | 리소스 로더를 실행하다가 발생한 가장 최근 에러, 에러가 발생하지 않았다면 `undefined` |
-| `isLoading` | 리소스 로더가 실행중인지 여부                                      |
-| `status`    | 리소스의 세부 `ResourceStatus`, 아래에서 설명                     |
+| `isLoading` | 리소스 로더가 실행중인지 여부                                                        |
+| `status`    | 리소스의 세부 `ResourceStatus`, 아래에서 설명                                        |
 
 `status` 시그널에는 시그널의 상태를 문자열로 더 자세하게 표현하는 `ResourceStatus` 값이 존재합니다.
 
-| 상태            | `value()`   | 설명                                        |
-|---------------|:------------|-------------------------------------------|
-| `'idle'`      | `undefined` | 리소스에 유효한 요청이 없으며, 로더가 실행되지 않았음            |
-| `'error'`     | `undefined` | 로더 실행 중 에러가 발생했음                          |
-| `'loading'`   | `undefined` | `params` 값이 변경되어 로더가 실행중                 |
-| `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행중           |
-| `'resolved'`  | 계산된 값       | 로더 실행 종료                                  |
-| `'local'`     | 직접 설정된 값    | 리소스의 `.set()`, `.update()` 메서드로 값이 설정되 상태 |
+| 상태          | `value()`      | 설명                                                     |
+| ------------- | :------------- | -------------------------------------------------------- |
+| `'idle'`      | `undefined`    | 리소스에 유효한 요청이 없으며, 로더가 실행되지 않았음    |
+| `'error'`     | `undefined`    | 로더 실행 중 에러가 발생했음                             |
+| `'loading'`   | `undefined`    | `params` 값이 변경되어 로더가 실행중                     |
+| `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행중        |
+| `'resolved'`  | 계산된 값      | 로더 실행 종료                                           |
+| `'local'`     | 직접 설정된 값 | 리소스의 `.set()`, `.update()` 메서드로 값이 설정되 상태 |
 
 이 상태값들은 사용자에게 표시하는 용도로 활용하거나, 로딩 인디케이터, 에러 메시지를 활용하는 용도로 활용할 수 있습니다.
-
 
 <!--
 ## Reactive data fetching with `httpResource`
 -->
+
 ## 반응형으로 데이터 불러오기: `httpResource`
 
 <!--
 [`httpResource`](/guide/http/http-resource) is a wrapper around `HttpClient` that gives you the request status and response as signals. It makes HTTP requests through the Angular HTTP stack, including interceptors.
 -->
+
 [`httpResource`](/guide/http/http-resource)는 요청 결과를 시그널로 보내는 `HttpClient` 래퍼(wrapper)입니다.
 이 래퍼는 인터셉터를 포함하여 Angular HTTP 스택을 그대로 활용합니다.
