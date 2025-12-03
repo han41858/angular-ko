@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: prepare pnpm
+        run: corepack enable pnpm
       - name: check env
         run: node -v && pnpm -v
       - name: install dependencies
