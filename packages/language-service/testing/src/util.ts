@@ -85,6 +85,7 @@ export function createModuleAndProjectWithDeclarations(
   projectFiles: ProjectFiles,
   angularCompilerOptions: TestableOptions = {},
   standaloneFiles: ProjectFiles = {},
+  tsCompilerOptions = {},
 ): Project {
   const externalClasses: string[] = [];
   const externalImports: string[] = [];
@@ -108,6 +109,31 @@ export function createModuleAndProjectWithDeclarations(
         export class AppModule {}
       `;
   projectFiles['app-module.ts'] = moduleContents;
+  return env.addProject(
+    projectName,
+    {...projectFiles, ...standaloneFiles},
+    angularCompilerOptions,
+    tsCompilerOptions,
+  );
+}
+
+export function createProjectWithStandaloneDeclarations(
+  env: LanguageServiceTestEnv,
+  projectName: string,
+  projectFiles: ProjectFiles,
+  angularCompilerOptions: TestableOptions = {},
+  standaloneFiles: ProjectFiles = {},
+): Project {
+  const externalClasses: string[] = [];
+  const externalImports: string[] = [];
+  for (const [fileName, fileContents] of Object.entries(projectFiles)) {
+    if (!fileName.endsWith('.ts')) {
+      continue;
+    }
+    const className = getFirstClassDeclaration(fileContents);
+    externalClasses.push(className);
+    externalImports.push(`import {${className}} from './${fileName.replace('.ts', '')}';`);
+  }
   return env.addProject(projectName, {...projectFiles, ...standaloneFiles}, angularCompilerOptions);
 }
 

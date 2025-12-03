@@ -1,10 +1,4 @@
-/* To learn more about this file see: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 {
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  },
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
@@ -16,27 +10,20 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "preserveSymlinks": true,
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
     "lib": ["ES2022", "dom"],
     "types": ["node", "dom-navigation"],
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "jsx": "react",
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment",
-    // TODO(crisbeto): temporarily disabled while adding support for TS 5.4. Should be re-enabled.
     "skipLibCheck": true,
     "paths": {
       "@angular/docs": ["./shared-docs"],
-      "@angular/*": ["../packages/*"]
+      "@angular/*": ["../packages/*/index"]
     }
   },
   "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true

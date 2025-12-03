@@ -1,13 +1,17 @@
-import {ApplicationRef, createComponent, EnvironmentInjector, Injectable} from '@angular/core';
+import {
+  ApplicationRef,
+  createComponent,
+  EnvironmentInjector,
+  inject,
+  Injectable,
+} from '@angular/core';
 import {NgElement, WithProperties} from '@angular/elements';
 import {PopupComponent} from './popup.component';
 
 @Injectable()
 export class PopupService {
-  constructor(
-    private injector: EnvironmentInjector,
-    private applicationRef: ApplicationRef,
-  ) {}
+  private readonly injector = inject(EnvironmentInjector);
+  private readonly applicationRef = inject(ApplicationRef);
 
   // 동적 로딩 방식을 활용하려면 DOM에 추가하기 전에 필요한 설정을 사전에 모두 해둬야 합니다.
   showAsComponent(message: string) {

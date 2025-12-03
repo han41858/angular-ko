@@ -38,8 +38,8 @@ export interface SignalNode<T> extends ReactiveNode {
 }
 
 export type SignalBaseGetter<T> = (() => T) & {readonly [SIGNAL]: unknown};
-type SignalSetter<T> = (newValue: T) => void;
-type SignalUpdater<T> = (updateFn: (value: T) => T) => void;
+export type SignalSetter<T> = (newValue: T) => void;
+export type SignalUpdater<T> = (updateFn: (value: T) => T) => void;
 
 // Note: Closure *requires* this to be an `interface` and not a type, which is why the
 // `SignalBaseGetter` type exists to provide the correct shape.
@@ -70,17 +70,6 @@ export function createSignal<T>(
   const set = (newValue: T) => signalSetFn(node, newValue);
   const update = (updateFn: (value: T) => T) => signalUpdateFn(node, updateFn);
   return [getter, set, update];
-}
-
-/**
- * Creates a `Signal` getter, setter, and updater function.
- * @deprecated use createSignal
- */
-export function createSignalTuple<T>(
-  initialValue: T,
-  equal?: ValueEqualityFn<T>,
-): [SignalGetter<T>, SignalSetter<T>, SignalUpdater<T>] {
-  return createSignal(initialValue, equal);
 }
 
 export function setPostSignalSetFn(fn: ReactiveHookFn | null): ReactiveHookFn | null {

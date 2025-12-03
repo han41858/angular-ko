@@ -11,6 +11,8 @@ import {HttpHeaders} from './headers';
 /**
  * Type enumeration for the different kinds of `HttpEvent`.
  *
+ * @see [Receiving raw progress event](guide/http/making-requests#receiving-raw-progress-events)
+ *
  * @publicApi
  */
 export enum HttpEventType {
@@ -50,6 +52,8 @@ export enum HttpEventType {
 /**
  * Base interface for progress events.
  *
+ * @see [Receiving raw progress events](guide/http/making-requests#receiving-raw-progress-events)
+ *
  * @publicApi
  */
 export interface HttpProgressEvent {
@@ -73,6 +77,8 @@ export interface HttpProgressEvent {
 /**
  * A download progress event.
  *
+ * @see [Receiving raw progress events](guide/http/making-requests#receiving-raw-progress-events)
+ *
  * @publicApi
  */
 export interface HttpDownloadProgressEvent extends HttpProgressEvent {
@@ -91,6 +97,8 @@ export interface HttpDownloadProgressEvent extends HttpProgressEvent {
  *
  * Note: The `FetchBackend` doesn't support progress report on uploads.
  *
+ * @see [Receiving raw progress events](guide/http/making-requests#receiving-raw-progress-events)
+ *
  * @publicApi
  */
 export interface HttpUploadProgressEvent extends HttpProgressEvent {
@@ -101,6 +109,8 @@ export interface HttpUploadProgressEvent extends HttpProgressEvent {
  * An event indicating that the request was sent to the server. Useful
  * when a request may be retried multiple times, to distinguish between
  * retries on the final event stream.
+ *
+ * @see [Receiving raw progress events](guide/http/making-requests#receiving-raw-progress-events)
  *
  * @publicApi
  */
@@ -113,6 +123,8 @@ export interface HttpSentEvent {
  *
  * Grouping all custom events under this type ensures they will be handled
  * and forwarded by all implementations of interceptors.
+ *
+ * @see [Receiving raw progress events](guide/http/making-requests#receiving-raw-progress-events)
  *
  * @publicApi
  */
@@ -138,13 +150,15 @@ export interface HttpJsonParseError {
  *
  * Typed according to the expected type of the response.
  *
+ * @see [Intercepting response events](guide/http/interceptors#intercepting-response-events)
  * @publicApi
  */
 export type HttpEvent<T> =
   | HttpSentEvent
   | HttpHeaderResponse
   | HttpResponse<T>
-  | HttpProgressEvent
+  | HttpDownloadProgressEvent
+  | HttpUploadProgressEvent
   | HttpUserEvent<T>;
 
 /**
@@ -167,6 +181,8 @@ export abstract class HttpResponseBase {
    * Textual description of response status code, defaults to OK.
    *
    * Do not depend on this.
+   *
+   * @deprecated With HTTP/2 and later versions, this will incorrectly remain set to 'OK' even when the status code of a response is not 200.
    */
   readonly statusText: string;
 
@@ -186,6 +202,28 @@ export abstract class HttpResponseBase {
   readonly type!: HttpEventType.Response | HttpEventType.ResponseHeader;
 
   /**
+   * Indicates whether the HTTP response was redirected during the request.
+   * This property is only available when using the Fetch API using `withFetch()`
+   * When using the default XHR Request this property will be `undefined`
+   */
+  readonly redirected?: boolean;
+
+  /**
+   * Indicates the type of the HTTP response, based on how the request was made and how the browser handles the response.
+   *
+   * This corresponds to the `type` property of the Fetch API's `Response` object, which can indicate values such as:
+   * - `'basic'`: A same-origin response, allowing full access to the body and headers.
+   * - `'cors'`: A cross-origin response with CORS enabled, exposing only safe response headers.
+   * - `'opaque'`: A cross-origin response made with `no-cors`, where the response body and headers are inaccessible.
+   * - `'opaqueredirect'`: A response resulting from a redirect followed in `no-cors` mode.
+   * - `'error'`: A response representing a network error or similar failure.
+   *
+   * This property is only available when using the Fetch-based backend (via `withFetch()`).
+   * When using Angular's (XHR) backend, this value will be `undefined`.
+   */
+  readonly responseType?: ResponseType;
+
+  /**
    * Super-constructor for all responses.
    *
    * The single parameter accepted is an initialization hash. Any properties
@@ -197,6 +235,8 @@ export abstract class HttpResponseBase {
       status?: number;
       statusText?: string;
       url?: string;
+      redirected?: boolean;
+      responseType?: ResponseType;
     },
     defaultStatus: number = 200,
     defaultStatusText: string = 'OK',
@@ -207,7 +247,8 @@ export abstract class HttpResponseBase {
     this.status = init.status !== undefined ? init.status : defaultStatus;
     this.statusText = init.statusText || defaultStatusText;
     this.url = init.url || null;
-
+    this.redirected = init.redirected;
+    this.responseType = init.responseType;
     // Cache the ok value to avoid defining a getter.
     this.ok = this.status >= 200 && this.status < 300;
   }
@@ -219,6 +260,8 @@ export abstract class HttpResponseBase {
  *
  * `HttpHeaderResponse` is a `HttpEvent` available on the response
  * event stream, only when progress events are requested.
+ *
+ * @see [Receiving raw progress events](guide/http/making-requests#receiving-raw-progress-events)
  *
  * @publicApi
  */
@@ -244,7 +287,12 @@ export class HttpHeaderResponse extends HttpResponseBase {
    * given parameter hash.
    */
   clone(
-    update: {headers?: HttpHeaders; status?: number; statusText?: string; url?: string} = {},
+    update: {
+      headers?: HttpHeaders;
+      status?: number;
+      statusText?: string;
+      url?: string;
+    } = {},
   ): HttpHeaderResponse {
     // Perform a straightforward initialization of the new HttpHeaderResponse,
     // overriding the current parameters with new ones if given.
@@ -264,6 +312,8 @@ export class HttpHeaderResponse extends HttpResponseBase {
  * `HttpResponse` is a `HttpEvent` available on the response event
  * stream.
  *
+ * @see [Interacting with the server response events](guide/http/making-requests#interacting-with-the-server-response-events)
+ *
  * @publicApi
  */
 export class HttpResponse<T> extends HttpResponseBase {
@@ -282,6 +332,8 @@ export class HttpResponse<T> extends HttpResponseBase {
       status?: number;
       statusText?: string;
       url?: string;
+      redirected?: boolean;
+      responseType?: ResponseType;
     } = {},
   ) {
     super(init);
@@ -296,6 +348,8 @@ export class HttpResponse<T> extends HttpResponseBase {
     status?: number;
     statusText?: string;
     url?: string;
+    redirected?: boolean;
+    responseType?: ResponseType;
   }): HttpResponse<T>;
   clone<V>(update: {
     body?: V | null;
@@ -303,6 +357,8 @@ export class HttpResponse<T> extends HttpResponseBase {
     status?: number;
     statusText?: string;
     url?: string;
+    redirected?: boolean;
+    responseType?: ResponseType;
   }): HttpResponse<V>;
   clone(
     update: {
@@ -311,6 +367,8 @@ export class HttpResponse<T> extends HttpResponseBase {
       status?: number;
       statusText?: string;
       url?: string;
+      redirected?: boolean;
+      responseType?: ResponseType;
     } = {},
   ): HttpResponse<any> {
     return new HttpResponse<any>({
@@ -319,6 +377,8 @@ export class HttpResponse<T> extends HttpResponseBase {
       status: update.status !== undefined ? update.status : this.status,
       statusText: update.statusText || this.statusText,
       url: update.url || this.url || undefined,
+      redirected: update.redirected ?? this.redirected,
+      responseType: update.responseType ?? this.responseType,
     });
   }
 }
@@ -333,6 +393,8 @@ export class HttpResponse<T> extends HttpResponseBase {
  * the state of the HTTP layer when the error occurred. The error property
  * will contain either a wrapped Error object or the error response returned
  * from the server.
+ *
+ * @see [Handling request failure](guide/http/making-requests#handling-request-failure)
  *
  * @publicApi
  */
@@ -352,6 +414,8 @@ export class HttpErrorResponse extends HttpResponseBase implements Error {
     status?: number;
     statusText?: string;
     url?: string;
+    redirected?: boolean;
+    responseType?: ResponseType;
   }) {
     // Initialize with a default status of 0 / Unknown Error.
     super(init, 0, 'Unknown Error');
@@ -362,6 +426,7 @@ export class HttpErrorResponse extends HttpResponseBase implements Error {
     if (this.status >= 200 && this.status < 300) {
       this.message = `Http failure during parsing for ${init.url || '(unknown url)'}`;
     } else {
+      // TODO: Cleanup G3 to update the tests that rely on having the status text in the Error message.
       this.message = `Http failure response for ${init.url || '(unknown url)'}: ${init.status} ${
         init.statusText
       }`;

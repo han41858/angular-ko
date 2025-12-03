@@ -3,7 +3,7 @@
 </docs-decorative-header>
 
 <!--
-In Angular, you use *signals* to create and manage state. A signal is a lightweight wrapper around a value.
+In Angular, you use _signals_ to create and manage state. A signal is a lightweight wrapper around a value.
 
 Use the `signal` function to create a signal for holding local state:
 
@@ -21,12 +21,12 @@ firstName.set('Jaime');
 
 // You can also use the `update` method to change the value
 // based on the previous value.
-firstName.update(name => name.toUpperCase()); 
+firstName.update(name => name.toUpperCase());
 ```
 
-Angular tracks where signals are read and when they're updated. The framework uses this information to do additional work, such as updating the DOM with new state. This ability to respond to changing signal values over time is known as *reactivity*.
+Angular tracks where signals are read and when they're updated. The framework uses this information to do additional work, such as updating the DOM with new state. This ability to respond to changing signal values over time is known as _reactivity_.
 -->
-Angular는 *시그널(signal)* 을 사용해서 상태를 만들고 관리합니다.
+Angular는 _시그널(signal)_ 을 사용해서 상태를 만들고 관리합니다.
 시그널은 어떤 값을 간단하게 감싸는 객체라고 생각하면 됩니다.
 
 `signal` 함수를 사용하면 시그널을 생성하고 상태를 저장할 수 있습니다:
@@ -49,7 +49,7 @@ firstName.update(name => name.toUpperCase());
 
 Angular는 시그널이 어디에 사용되고 언제 갱신되는지 계속 추적합니다.
 그래서 상태가 변경되면 DOM을 갱신하는 등 필요한 작업을 수행합니다.
-이렇게 시그널을 생성해서 애플리케이션이 시그널에 반응하는 방식을 *반응성(reactivity)* 이라고 합니다.
+이렇게 시그널을 생성해서 애플리케이션이 시그널에 반응하는 방식을 _반응성(reactivity)_ 이라고 합니다.
 
 
 <!--
@@ -67,7 +67,7 @@ const firstName = signal('Morgan');
 const firstNameCapitalized = computed(() => firstName().toUpperCase());
 
 console.log(firstNameCapitalized()); // MORGAN
-``` 
+```
 
 A `computed` signal is read-only; it does not have a `set` or an `update` method. Instead, the value of the `computed` signal automatically changes when any of the signals it reads change:
 

@@ -10,9 +10,9 @@ TIP: This guide assumes you've already read the [Essentials Guide](essentials). 
 
 Every component must have:
 
-* A TypeScript class with _behaviors_ such as handling user input and fetching data from a server
-* An HTML template that controls what renders into the DOM
-* A [CSS selector](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) that defines how the component is used in HTML
+- A TypeScript class with _behaviors_ such as handling user input and fetching data from a server
+- An HTML template that controls what renders into the DOM
+- A [CSS selector](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) that defines how the component is used in HTML
 
 You provide Angular-specific information for a component by adding a `@Component` [decorator](https://www.typescriptlang.org/docs/handbook/decorators.html) on top of the TypeScript class:
 
@@ -60,9 +60,9 @@ Both `templateUrl` and `styleUrl` are relative to the directory in which the com
 
 컴포넌트는 다음 구성요소를 반드시 갖습니다:
 
-* TypeScript 클래스 &mdash; 사용자 입력을 다루거나 서버에서 데이터를 받아오는 등 _동작_ 을 정의합니다.
-* HTML 템플릿 &mdash; DOM에 렌더링 될 HTML 구조를 구성합니다.
-* [CSS 셀렉터](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) &mdash; 컴포넌트가 HTML 문서에 적용될 이름을 지정합니다.
+- TypeScript 클래스 &mdash; 사용자 입력을 다루거나 서버에서 데이터를 받아오는 등 _동작_ 을 정의합니다.
+- HTML 템플릿 &mdash; DOM에 렌더링 될 HTML 구조를 구성합니다.
+- [CSS 셀렉터](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) &mdash; 컴포넌트가 HTML 문서에 적용될 이름을 지정합니다.
 
 TypeScript 클레스 위에 `@Component` [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html)를 붙이면 이 클래스가 Angular 컴포넌트라고 지정할 수 있습니다.
 
@@ -124,7 +124,7 @@ export class ProfilePhoto { }
 To use a component, [directive](guide/directives), or [pipe](guide/templates/pipes), you must add
 it to the `imports` array in the `@Component` decorator:
 
-```angular-ts
+```ts
 import {ProfilePhoto} from './profile-photo';
 
 @Component({
@@ -136,13 +136,13 @@ import {ProfilePhoto} from './profile-photo';
 export class UserProfile { }
 ```
 
-By default, Angular components are *standalone*, meaning that you can directly add them to the `imports` array of other components. Components created with an earlier version of Angular may instead specify `standalone: false` in their `@Component` decorator. For these components, you instead import the `NgModule` in which the component is defined. See the full [`NgModule` guide](guide/ngmodules) for details.
+By default, Angular components are _standalone_, meaning that you can directly add them to the `imports` array of other components. Components created with an earlier version of Angular may instead specify `standalone: false` in their `@Component` decorator. For these components, you instead import the `NgModule` in which the component is defined. See the full [`NgModule` guide](guide/ngmodules) for details.
 
 Important: In Angular versions before 19.0.0, the `standalone` option defaults to `false`.
 -->
 컴포넌트나 [디렉티브](guide/directives), [파이프](guide/templates/pipes)를 사용하려면 `@Component` 데코레이터의 `imports` 배열에 로드해야 합니다.
 
-```angular-ts
+```ts
 import {ProfilePhoto} from './profile-photo';
 
 @Component({
@@ -153,10 +153,10 @@ import {ProfilePhoto} from './profile-photo';
 export class UserProfile { }
 ```
 
-기본적으로 Angular 컴포넌트는 *독립(standalone) 컴포넌트* 입니다.
+기본적으로 Angular 컴포넌트는 _독립(standalone) 컴포넌트_ 입니다.
 그래서 컴포넌트의 `imports` 배열에 다른 컴포넌트를 자유롭게 추가할 수 있습니다.
 이전 방식으로 만든 컴포넌트는 `Component` 데코레이터에 `standalone: false`를 지정할 수 있습니다.
-이런 종류의 컴포넌트는 컴포넌트를 등록=할 때 `NgModule`을 사용해야 합니다.
+이런 종류의 컴포넌트는 컴포넌트를 등록할 때 `NgModule`을 사용해야 합니다.
 자세한 내용은 [`NgModule` 가이드](guide/ngmodules) 문서를 참고하세요.
 
 중요: Angular 19.0.0 이전 버전에서 `standalone` 옵션의 기본값은 `false` 입니다.
@@ -189,8 +189,8 @@ You show a component by creating a matching HTML element in the template of _oth
 export class ProfilePhoto { }
 
 @Component({
-  imports: [ProfilePhoto],
-  template: `<profile-photo />`
+imports: [ProfilePhoto],
+template: `<profile-photo />`
 })
 export class UserProfile { }
 </docs-code>

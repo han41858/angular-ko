@@ -51,12 +51,12 @@ If you're starting a new project, you'll most likely want to create a local proj
 ### 환경설정 조건
 
 <!--
-- **Node.js** - [v20.11.1 or newer](/reference/versions)
+- **Node.js** - [v20.19.0 or newer](/reference/versions)
 - **Text editor** - We recommend [Visual Studio Code](https://code.visualstudio.com/)
 - **Terminal** - Required for running Angular CLI commands
 - **Development Tool** - To improve your development workflow, we recommend the [Angular Language Service](/tools/language-service)
 -->
-- **Node.js** - [v20.11.1 이거나 이후 버전](/reference/versions)
+- **Node.js** - [v20.19.0 이거나 이후 버전](/reference/versions)
 - **텍스트 에디터** - [Visual Studio Code](https://code.visualstudio.com/)를 추천합니다.
 - **터미널** - Angular CLI 명령을 실행하기 위해 필요합니다.
 - **개발 툴** - 개발 워크플로를 향상시키기 위해 [Angular Language Service](/tools/language-service) 사용을 권장합니다.
@@ -84,21 +84,25 @@ Open a terminal (if you're using [Visual Studio Code](https://code.visualstudio.
 <docs-code-multifile>
   <docs-code
     header="npm"
+    language="shell"
     >
     npm install -g @angular/cli
     </docs-code>
   <docs-code
     header="pnpm"
+    language="shell"
     >
     pnpm install -g @angular/cli
     </docs-code>
   <docs-code
     header="yarn"
+    language="shell"
     >
     yarn global add @angular/cli
     </docs-code>
   <docs-code
     header="bun"
+    language="shell"
     >
     bun install -g @angular/cli
     </docs-code>
@@ -113,21 +117,25 @@ If you are having issues running this command in Windows or Unix, check out the 
 <docs-code-multifile>
   <docs-code
     header="npm"
+    language="shell"
     >
     npm install -g @angular/cli
     </docs-code>
   <docs-code
     header="pnpm"
+    language="shell"
     >
     pnpm install -g @angular/cli
     </docs-code>
   <docs-code
     header="yarn"
+    language="shell"
     >
     yarn global add @angular/cli
     </docs-code>
   <docs-code
     header="bun"
+    language="shell"
     >
     bun install -g @angular/cli
     </docs-code>
@@ -145,11 +153,9 @@ Windows나 Unix에서 명령을 실행하다가 에러가 발생하면 [CLI docs
 <!--
 In your terminal, run the CLI command `ng new` with the desired project name. In the following examples, we'll be using the example project name of `my-first-angular-app`.
 
-<docs-code language="shell">
-
+```shell
 ng new <project-name>
-
-</docs-code>
+```
 
 You will be presented with some configuration options for your project. Use the arrow and enter keys to navigate and select which options you desire.
 
@@ -157,7 +163,7 @@ If you don't have any preferences, just hit the enter key to take the default op
 
 After you select the configuration options and the CLI runs through the setup, you should see the following message:
 
-```shell
+```text
 ✔ Packages installed successfully.
     Successfully initialized git.
 ```
@@ -167,11 +173,11 @@ At this point, you're now ready to run your project locally!
 터미널에서 Angular CLI `ng new` 명령을 실행하면서 프로젝트 이름을 지정하세요.
 이 문서에서는 `my-first-angular-app`라는 프로젝트 이름을 사용하겠습니다.
 
-<docs-code language="shell">
+```shell
 
 ng new <프로젝트-이름>
 
-</docs-code>
+```
 
 프로젝트를 생성하면서 몇가지 옵션을 선택하게 됩니다.
 화살표 키와 엔터 키를 사용해서 원하는 옵션을 고르면 됩니다.
@@ -196,23 +202,19 @@ ng new <프로젝트-이름>
 <!--
 In your terminal, switch to your new Angular project.
 
-<docs-code language="shell">
-
+```shell
 cd my-first-angular-app
+```
 
-</docs-code>
+All of your dependencies should be installed at this point (which you can verify by checking for the existence of a `node_modules` folder in your project), so you can start your project by running the command:
 
-All of your dependencies should be installed at this point (which you can verify by checking for the existent for a `node_modules` folder in your project), so you can start your project by running the command:
-
-<docs-code language="shell">
-
+```shell
 npm start
-
-</docs-code>
+```
 
 If everything is successful, you should see a similar confirmation message in your terminal:
 
-```shell
+```text
 Watch mode enabled. Watching for file changes...
 NOTE: Raw file sizes do not reflect development server per-request transformations.
   ➜  Local:   http://localhost:4200/
@@ -223,23 +225,19 @@ And now you can visit the path in `Local` (e.g., `http://localhost:4200`) to see
 -->
 터미널에서 Angular 프로젝트 위치로 이동합니다.
 
-<docs-code language="shell">
-
+```shell
 cd my-first-angular-app
-
-</docs-code>
+```
 
 이 시점에는 앱 실행에 필요한 의존성 패키지들이 모두 설치되었기 때문에(프로젝트 폴더에 `node_modules` 폴더가 있는지 확인해 보세요), 아래 명령을 실행하면 프로젝트를 실행할 수 있습니다:
 
-<docs-code language="shell">
-
+```shell
 npm start
-
-</docs-code>
+```
 
 프로젝트가 문제없이 실행되면 터미널에서 아래와 비슷한 메시지를 확인할 수 있습니다:
 
-```shell
+```text
 Watch mode enabled. Watching for file changes...
 NOTE: Raw file sizes do not reflect development server per-request transformations.
   ➜  Local:   http://localhost:4200/
@@ -248,6 +246,17 @@ NOTE: Raw file sizes do not reflect development server per-request transformatio
 
 위 메시지에서 `Local`에 해당하는 `http://localhost:4200` 에 접속하면 애플리케이션이 실행되는 것을 확인할 수 있습니다.
 코딩 즐겁게 해봅시다! 🎉
+
+
+<!--
+### Using AI for Development
+-->
+### AI 활용하기
+
+<!--
+To get started with building in your preferred AI powered IDE, [check out Angular prompt rules and best practices](/ai/develop-with-ai).
+-->
+AI 기능이 지원되는 IDE를 활용하려면 [Angular 프롬프트 규칙, 모범사례](/ai/develop-with-ai) 문서를 참고하세요.
 
 
 <!--

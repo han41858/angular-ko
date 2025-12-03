@@ -127,6 +127,10 @@ function varsUsedByOp(op: (ir.CreateOp | ir.UpdateOp) & ir.ConsumesVarsTrait): n
         slots += op.expression.expressions.length;
       }
       return slots;
+    case ir.OpKind.Control:
+      // 1 for the [field] binding itself.
+      // 1 for the control bindings object containing bound field states properties.
+      return 2;
     case ir.OpKind.TwoWayProperty:
       // Two-way properties can only have expressions so they only need one variable slot.
       return 1;

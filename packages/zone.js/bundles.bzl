@@ -11,9 +11,21 @@ BUNDLES_ENTRY_POINTS = {
         "es2015": _DIR + "browser/rollup-main",
     },
     "zone-mix": {
+        "external": [
+            "timers",
+            "crypto",
+            "events",
+            "fs",
+        ],
         "entrypoint": _DIR + "mix/rollup-mix",
     },
     "zone-node": {
+        "external": [
+            "timers",
+            "crypto",
+            "events",
+            "fs",
+        ],
         "entrypoint": _DIR + "node/rollup-main",
     },
     "async-test": {
@@ -43,9 +55,6 @@ BUNDLES_ENTRY_POINTS = {
     "zone-error": {
         "entrypoint": _DIR + "common/rollup-error-rewrite",
     },
-    "zone-legacy": {
-        "entrypoint": _DIR + "browser/rollup-browser-legacy",
-    },
     "zone-bluebird": {
         "entrypoint": _DIR + "extra/rollup-bluebird",
     },
@@ -56,6 +65,10 @@ BUNDLES_ENTRY_POINTS = {
         "entrypoint": _DIR + "extra/rollup-cordova",
     },
     "zone-patch-electron": {
+        "external": [
+            "electron",
+            "@electron/remote/dist/src/renderer/callbacks-registry",
+        ],
         "entrypoint": _DIR + "extra/rollup-electron",
     },
     "zone-patch-fetch": {
@@ -86,6 +99,9 @@ BUNDLES_ENTRY_POINTS = {
         "entrypoint": _DIR + "browser/rollup-webapis-rtc-peer-connection",
     },
     "zone-patch-rxjs": {
+        "external": [
+            "rxjs",
+        ],
         "entrypoint": _DIR + "rxjs/rollup-rxjs",
     },
     "webapis-shadydom": {

@@ -81,7 +81,7 @@ export class ProfilePhoto {}
 ## 호스트 엘리먼트 바인딩하기
 
 <!--
-A component can bind properties, attributes, and events to its host element.
+A component can bind properties, attributes, styles and events to its host element.
 This behaves identically to bindings on elements inside the component's template, but instead defined with the `host` property in the `@Component` decorator:
 
 ```angular-ts
@@ -91,6 +91,7 @@ This behaves identically to bindings on elements inside the component's template
     'role': 'slider',
     '[attr.aria-valuenow]': 'value',
     '[class.active]': 'isActive()',
+    '[style.background]' : `hasError() ? 'red' : 'green'`,
     '[tabIndex]': 'disabled ? -1 : 0',
     '(keydown)': 'updateValue($event)',
   },
@@ -99,13 +100,14 @@ export class CustomSlider {
   value: number = 0;
   disabled: boolean = false;
   isActive = signal(false);
+  hasError = signal(false);
   updateValue(event: KeyboardEvent) { /* ... */ }
 
   /* ... */
 }
 ```
 -->
-컴포넌트는 프로퍼티나 어트리뷰트, 이벤트를 호스트 엘리먼트와 바인딩할 수 있습니다.
+컴포넌트는 프로퍼티나 어트리뷰트, 스타일, 이벤트를 호스트 엘리먼트와 바인딩할 수 있습니다.
 이 바인딩은 컴포넌트 템플릿의 엘리먼트에서 바인딩해도 되지만, `@Component` 데코레이터의 `host` 프로퍼티를 활용할 수도 있습니다.:
 
 ```angular-ts
@@ -115,6 +117,7 @@ export class CustomSlider {
     'role': 'slider',
     '[attr.aria-valuenow]': 'value',
     '[class.active]': 'isActive()',
+    '[style.background]' : `hasError() ? 'red' : 'green'`,
     '[tabIndex]': 'disabled ? -1 : 0',
     '(keydown)': 'updateValue($event)',
   },
@@ -123,6 +126,7 @@ export class CustomSlider {
   value: number = 0;
   disabled: boolean = false;
   isActive = signal(false);
+  hasError = signal(false);
   updateValue(event: KeyboardEvent) { /* ... */ }
 
   /* ... */
@@ -139,9 +143,9 @@ export class CustomSlider {
 You can alternatively bind to the host element by applying the `@HostBinding` and `@HostListener`
 decorator to class members.
 
-`@HostBinding` lets you bind host properties and attributes to properties and methods:
+`@HostBinding` lets you bind host properties and attributes to properties and getters:
 
-```angular-ts
+```ts
 @Component({
   /* ... */
 })
@@ -150,7 +154,7 @@ export class CustomSlider {
   value: number = 0;
 
   @HostBinding('tabIndex')
-  getTabIndex() {
+  get tabIndex() {
     return this.disabled ? -1 : 0;
   }
 
@@ -170,14 +174,16 @@ export class CustomSlider {
 }
 ```
 
-**Always prefer using the `host` property over `@HostBinding` and `@HostListener`.** These
+<docs-callout critical title="Prefer using the `host` property over the decorators">
+  **Always prefer using the `host` property over `@HostBinding` and `@HostListener`.** These
 decorators exist exclusively for backwards compatibility.
+</docs-callout>
 -->
 `@HostBinding` 이나 `@HostListener` 데코레이터를 사용해서 호스트 엘리먼트와 클래스 멤버를 바인딩하는 방법도 있습니다.
 
 `@HostBinding` 을 사용하면 호스트 엘리먼트의 프로퍼티를 클래스 프로퍼티와 바인딩하거나, 호스트 엘리먼트의 어트리뷰트를 메서드와 바인딩 할 수 있습니다:
 
-```angular-ts
+```ts
 @Component({
   /* ... */
 })
@@ -186,7 +192,7 @@ export class CustomSlider {
   value: number = 0;
 
   @HostBinding('tabIndex')
-  getTabIndex() {
+  get tabIndex() {
     return this.disabled ? -1 : 0;
   }
 
@@ -206,8 +212,10 @@ export class CustomSlider {
 }
 ```
 
+<docs-callout critical title="Prefer using the `host` property over the decorators">
 `@HostBinding` 이나 `@HostListener` 보다는 `host` 프로퍼티를 사용하세요.
 이 데코레이터들은 이전 버전과 호환성을 유지하기 위해 사용됩니다.
+</docs-callout>
 
 
 <!--
@@ -263,3 +271,59 @@ export class ProfilePhoto { /* ... */ }
 - 두 값이 모두 정적이면 인스턴스 바인딩의 우선순위가 높습니다.
 - 한 값은 정적이고 다른 값은 동적이면, 동적인 값이 사용됩니다.
 - 두 값이 모두 동적이면, 컴포넌트 호스트 바인딩의 우선순위가 높습니다.
+
+
+## Styling with CSS custom properties
+
+Developers often rely on [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties) to enable a flexible configuration of their component's styles.
+You can set such custom properties on a host element with a [style binding][style binding](guide/templates/binding#css-style-properties).
+
+```angular-ts
+@Component({
+  /* ... */
+  host: {
+    '[style.--my-background]': 'color()',
+  }
+})
+export class MyComponent {
+  color = signal('lightgreen');
+}
+```
+
+In this example, the `--my-background` CSS custom property is bound to the `color` signal. The value of the custom property will automatically update whenever the `color` signal changes. This will affect the current component and all its children that rely on this custom property.
+
+### Setting custom properties on children compoents
+
+Alternatively, it is also possible to set css custom properties on the host element of children components with a [style binding](guide/templates/binding#css-style-properties).
+
+```angular-ts
+@Component({
+  selector: 'my-component',
+  template: `<my-child [style.--my-background]="color()">`,
+})
+export class MyComponent {
+  color = signal('lightgreen');
+}
+```
+
+## Injecting host element attributes
+
+Components and directives can read static attributes from their host element by using `HostAttributeToken` together with the [`inject`](api/core/inject) function.
+
+```ts
+import { Component, HostAttributeToken, inject } from '@angular/core';
+
+@Component({
+  selector: 'app-button',
+  ...,
+})
+export class Button {
+  variation = inject(new HostAttributeToken('variation'));
+}
+```
+
+```angular-html
+<app-button variation="primary">Click me</app-button>
+```
+
+HELPFUL: `HostAttributeToken` throws an error if the attribute is missing, unless the injection is marked as optional.

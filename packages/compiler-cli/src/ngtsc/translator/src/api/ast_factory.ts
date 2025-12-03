@@ -33,9 +33,10 @@ export interface AstFactory<TStatement, TExpression> {
    * Create an assignment expression (e.g. `lhsExpr = rhsExpr`).
    *
    * @param target an expression that evaluates to the left side of the assignment.
+   * @param operator binary assignment operator that will be applied.
    * @param value an expression that evaluates to the right side of the assignment.
    */
-  createAssignment(target: TExpression, value: TExpression): TExpression;
+  createAssignment(target: TExpression, operator: BinaryOperator, value: TExpression): TExpression;
 
   /**
    * Create a binary expression (e.g. `lhs && rhs`).
@@ -272,6 +273,14 @@ export interface AstFactory<TStatement, TExpression> {
   ): TStatement;
 
   /**
+   * Create a regular expression literal (e.g. `/\d+/g`).
+   *
+   * @param body Body of the regex.
+   * @param flags Flags of the regex, if any.
+   */
+  createRegularExpressionLiteral(body: string, flags: string | null): TExpression;
+
+  /**
    * Attach a source map range to the given node.
    *
    * @param node the node to which the range should be attached.
@@ -317,7 +326,17 @@ export type BinaryOperator =
   | '||'
   | '+'
   | '??'
-  | 'in';
+  | 'in'
+  | '='
+  | '+='
+  | '-='
+  | '*='
+  | '/='
+  | '%='
+  | '**='
+  | '&&='
+  | '||='
+  | '??=';
 
 /**
  * The original location of the start or end of a node created by the `AstFactory`.

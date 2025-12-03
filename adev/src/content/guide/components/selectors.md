@@ -238,15 +238,14 @@ prefix your components with `yt-`, with components like `yt-menu`, `yt-player`, 
 your selectors like this makes it immediately clear where a particular component comes from. By
 default, the Angular CLI uses `app-`.
 
-Angular uses the `ng` selector prefix for its own framework APIs. Never use `ng` as a selector
-prefix for your own custom components.
+IMPORTANT: Angular uses the `ng` selector prefix for its own framework APIs. Never use `ng` as a selector prefix for your own custom components.
 -->
 Angular 팀은 프로젝트에 정의된 모든 커스텀 컴포넌트에 짧고 일관된 접두사 사용을 권장합니다.
 예를 들어 Angular로 YouTube를 만든다면 `yt-` 접두사를 사용해서 컴포넌트를 `yt-menu`, `yt-player` 와 같이 만드는 식입니다.
 셀렉터의 접두사를 네임스페이스처럼 사용하면 컴포넌트가 어떤 라이브러리에서 왔는지 쉽게 구분할 수 있습니다.
 Angular CLI로 생성한 프로젝트의 기본 접두사는 `app-` 입니다.
 
-Angular 프레임워크 자체 API의 셀렉터 접두사는 `ng` 입니다.
+중요: Angular 프레임워크 자체 API의 셀렉터 접두사는 `ng` 입니다.
 그래서 커스텀 컴포넌트에 `ng` 접두사를 사용하면 안됩니다.
 
 

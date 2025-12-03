@@ -6,7 +6,8 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Component, importProvidersFrom} from '../../../src/core';
+import '@angular/compiler';
+import {Component, importProvidersFrom, provideZoneChangeDetection} from '../../../src/core';
 import {bootstrapApplication, provideProtractorTestingSupport} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
 
@@ -29,7 +30,6 @@ import {PlaygroundComponent} from './playground';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterModule],
   template: '<router-outlet></router-outlet>',
 })
@@ -56,6 +56,7 @@ const ROUTES = [
 
 bootstrapApplication(RootComponent, {
   providers: [
+    provideZoneChangeDetection(),
     provideProtractorTestingSupport(), //
     importProvidersFrom(RouterModule.forRoot(ROUTES)),
   ],

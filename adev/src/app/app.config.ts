@@ -11,7 +11,6 @@ import {provideHttpClient, withFetch} from '@angular/common/http';
 import {
   ApplicationConfig,
   ErrorHandler,
-  VERSION,
   inject,
   provideZonelessChangeDetection,
   provideEnvironmentInitializer,
@@ -32,7 +31,8 @@ import {AnalyticsService} from './core/services/analytics/analytics.service';
 import {ContentLoader} from './core/services/content-loader.service';
 import {CustomErrorHandler} from './core/services/errors-handling/error-handler';
 import {ExampleContentLoader} from './core/services/example-content-loader.service';
-import {routerProviders} from './router_providers';
+import {routerProviders} from './routing/router_providers';
+import {TYPESCRIPT_VFS_WORKER_PROVIDER} from './editor/code-editor/workers/factory-provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -52,5 +52,6 @@ export const appConfig: ApplicationConfig = {
       useFactory: (document: Document) => windowProvider(document),
       deps: [DOCUMENT],
     },
+    TYPESCRIPT_VFS_WORKER_PROVIDER,
   ],
 };

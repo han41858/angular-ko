@@ -6,8 +6,13 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {CssSelector, SchemaMetadata, SelectorMatcher} from '@angular/compiler';
-import ts from 'typescript';
+import {
+  CssSelector,
+  DirectiveMatcher,
+  SchemaMetadata,
+  SelectorlessMatcher,
+  SelectorMatcher,
+} from '@angular/compiler';
 
 import {Reference} from '../../imports';
 import {
@@ -16,21 +21,21 @@ import {
   HostDirectivesResolver,
   MetadataReader,
   MetaKind,
+  NgModuleMeta,
   PipeMeta,
 } from '../../metadata';
 import {ClassDeclaration} from '../../reflection';
-
-import {ComponentScopeKind, ComponentScopeReader} from './api';
+import {ComponentScopeKind, ComponentScopeReader, SelectorlessScope} from './api';
 
 /**
  * The scope that is used for type-check code generation of a component template.
  */
 export interface TypeCheckScope {
   /**
-   * A `SelectorMatcher` instance that contains the flattened directive metadata of all directives
+   * A `DirectiveMatcher` instance that contains the flattened directive metadata of all directives
    * that are in the compilation scope of the declaring NgModule.
    */
-  matcher: SelectorMatcher<DirectiveMeta[]>;
+  matcher: DirectiveMatcher<DirectiveMeta> | null;
 
   /**
    * All of the directives available in the compilation scope of the declaring NgModule.
@@ -52,6 +57,11 @@ export interface TypeCheckScope {
    * (contained semantic errors during its production).
    */
   isPoisoned: boolean;
+
+  /**
+   * Directives that have been set on the host of the scope.
+   */
+  directivesOnHost: DirectiveMeta[] | null;
 }
 
 /**
@@ -80,62 +90,65 @@ export class TypeCheckScopeRegistry {
    * contains an error, then 'error' is returned. If the component is not declared in any NgModule,
    * an empty type-check scope is returned.
    */
-  getTypeCheckScope(node: ClassDeclaration): TypeCheckScope {
-    const matcher = new SelectorMatcher<DirectiveMeta[]>();
+  getTypeCheckScope(ref: Reference<ClassDeclaration>): TypeCheckScope {
     const directives: DirectiveMeta[] = [];
     const pipes = new Map<string, PipeMeta>();
+    const scope = this.scopeReader.getScopeForComponent(ref.node);
+    const hostMeta = this.getTypeCheckDirectiveMetadata(ref);
+    const directivesOnHost = hostMeta === null ? null : this.combineWithHostDirectives(hostMeta);
 
-    const scope = this.scopeReader.getScopeForComponent(node);
     if (scope === null) {
       return {
-        matcher,
+        matcher: null,
         directives,
         pipes,
         schemas: [],
         isPoisoned: false,
+        directivesOnHost,
       };
     }
 
     const isNgModuleScope = scope.kind === ComponentScopeKind.NgModule;
+    const isSelectorlessScope = scope.kind === ComponentScopeKind.Selectorless;
     const cacheKey = isNgModuleScope ? scope.ngModule : scope.component;
-    const dependencies = isNgModuleScope ? scope.compilation.dependencies : scope.dependencies;
 
     if (this.scopeCache.has(cacheKey)) {
       return this.scopeCache.get(cacheKey)!;
     }
 
-    let allDependencies = dependencies;
-    if (
-      !isNgModuleScope &&
-      Array.isArray(scope.deferredDependencies) &&
-      scope.deferredDependencies.length > 0
-    ) {
-      allDependencies = [...allDependencies, ...scope.deferredDependencies];
-    }
-    for (const meta of allDependencies) {
-      if (meta.kind === MetaKind.Directive && meta.selector !== null) {
-        const extMeta = this.getTypeCheckDirectiveMetadata(meta.ref);
-        if (extMeta === null) {
-          continue;
-        }
+    let matcher: DirectiveMatcher<DirectiveMeta>;
 
-        // Carry over the `isExplicitlyDeferred` flag from the dependency info.
-        const directiveMeta = this.applyExplicitlyDeferredFlag(extMeta, meta.isExplicitlyDeferred);
-        matcher.addSelectables(CssSelector.parse(meta.selector), [
-          ...this.hostDirectivesResolver.resolve(directiveMeta),
-          directiveMeta,
-        ]);
+    if (isSelectorlessScope) {
+      matcher = this.getSelectorlessMatcher(scope);
 
-        directives.push(directiveMeta);
-      } else if (meta.kind === MetaKind.Pipe) {
-        if (!ts.isClassDeclaration(meta.ref.node)) {
-          throw new Error(
-            `Unexpected non-class declaration ${ts.SyntaxKind[meta.ref.node.kind]} for pipe ${
-              meta.ref.debugName
-            }`,
-          );
+      for (const [name, dep] of scope.dependencies) {
+        if (dep.kind === MetaKind.Directive) {
+          directives.push(dep);
+        } else {
+          // Pipes should be available under the imported name in selectorless.
+          pipes.set(name, dep);
         }
-        pipes.set(meta.name, meta);
+      }
+    } else {
+      const dependencies = isNgModuleScope ? scope.compilation.dependencies : scope.dependencies;
+      let allDependencies = dependencies;
+
+      if (
+        !isNgModuleScope &&
+        Array.isArray(scope.deferredDependencies) &&
+        scope.deferredDependencies.length > 0
+      ) {
+        allDependencies = [...allDependencies, ...scope.deferredDependencies];
+      }
+
+      matcher = this.getSelectorMatcher(allDependencies);
+
+      for (const dep of allDependencies) {
+        if (dep.kind === MetaKind.Directive) {
+          directives.push(dep);
+        } else if (dep.kind === MetaKind.Pipe && dep.name !== null) {
+          pipes.set(dep.name, dep);
+        }
       }
     }
 
@@ -144,11 +157,13 @@ export class TypeCheckScopeRegistry {
       directives,
       pipes,
       schemas: scope.schemas,
+      directivesOnHost,
       isPoisoned:
         scope.kind === ComponentScopeKind.NgModule
           ? scope.compilation.isPoisoned || scope.exported.isPoisoned
           : scope.isPoisoned,
     };
+
     this.scopeCache.set(cacheKey, typeCheckScope);
     return typeCheckScope;
   }
@@ -172,5 +187,47 @@ export class TypeCheckScopeRegistry {
     isExplicitlyDeferred: boolean,
   ): T {
     return isExplicitlyDeferred === true ? {...meta, isExplicitlyDeferred} : meta;
+  }
+
+  private getSelectorMatcher(
+    allDependencies: (DirectiveMeta | PipeMeta | NgModuleMeta)[],
+  ): SelectorMatcher<DirectiveMeta[]> {
+    const matcher = new SelectorMatcher<DirectiveMeta[]>();
+
+    for (const meta of allDependencies) {
+      if (meta.kind === MetaKind.Directive && meta.selector !== null) {
+        const extMeta = this.getTypeCheckDirectiveMetadata(meta.ref);
+        if (extMeta === null) {
+          continue;
+        }
+
+        // Carry over the `isExplicitlyDeferred` flag from the dependency info.
+        const directiveMeta = this.applyExplicitlyDeferredFlag(extMeta, meta.isExplicitlyDeferred);
+        matcher.addSelectables(
+          CssSelector.parse(meta.selector),
+          this.combineWithHostDirectives(directiveMeta),
+        );
+      }
+    }
+
+    return matcher;
+  }
+
+  private getSelectorlessMatcher(scope: SelectorlessScope): SelectorlessMatcher<DirectiveMeta> {
+    const registry = new Map<string, DirectiveMeta[]>();
+
+    for (const [name, dep] of scope.dependencies) {
+      const extMeta =
+        dep.kind === MetaKind.Directive ? this.getTypeCheckDirectiveMetadata(dep.ref) : null;
+      if (extMeta !== null) {
+        registry.set(name, this.combineWithHostDirectives(extMeta));
+      }
+    }
+
+    return new SelectorlessMatcher(registry);
+  }
+
+  private combineWithHostDirectives(meta: DirectiveMeta): DirectiveMeta[] {
+    return [...this.hostDirectivesResolver.resolve(meta), meta];
   }
 }

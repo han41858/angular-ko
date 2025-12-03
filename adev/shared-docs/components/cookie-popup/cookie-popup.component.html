@@ -1,22 +1,28 @@
 @if (!hasAccepted()) {
-<div class="docs-cookies-popup docs-invert-mode">
-  <p>이 사이트는 서비스를 개선하고 트래픽을 분석하기 위해 Google의 쿠키를 사용합니다.</p>
+  <div class="docs-cookies-popup docs-invert-mode">
+    <p>이 사이트는 서비스를 개선하고 트래픽을 분석하기 위해 Google의 쿠키를 사용합니다.</p>
 
-  <div>
-    <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener">
-      <button class="docs-primary-btn" [attr.text]="'더 알아보기'" aria-label="더 알아보기">
+    <div>
+      <a
+        href="https://policies.google.com/technologies/cookies"
+        target="_blank"
+        rel="noopener"
+        class="docs-primary-btn"
+        aria-label="Learn more about how Google uses cookies"
+        text="더 알아보기"
+      >
         더 알아보기
+      </a>
+
+      <button
+        type="button"
+        (click)="accept()"
+        class="docs-primary-btn"
+        text="알겠습니다"
+        aria-label="알겠습니다"
+      >
+        알겠습니다
       </button>
-    </a>
-    <button
-      type="button"
-      (click)="accept()"
-      class="docs-primary-btn"
-      [attr.text]="'알겠습니다.'"
-      aria-label="알겠습니다."
-    >
-      알겠습니다.
-    </button>
+    </div>
   </div>
-</div>
 }

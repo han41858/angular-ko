@@ -7,6 +7,7 @@
  */
 
 import {CommonModule} from '@angular/common';
+import {loadTranslations} from '@angular/localize';
 import {
   ChangeDetectorRef,
   Component,
@@ -16,6 +17,7 @@ import {
   inject,
   Input,
   OnDestroy,
+  provideZoneChangeDetection,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -25,6 +27,11 @@ import {By} from '@angular/platform-browser';
 import {expect} from '@angular/private/testing/matchers';
 
 describe('projection', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideZoneChangeDetection()],
+    });
+  });
   function getElementHtml(element: HTMLElement) {
     return element.innerHTML
       .replace(/<!--(\W|\w)*?-->/g, '')
@@ -2039,5 +2046,32 @@ describe('projection', () => {
         );
       },
     );
+
+    it('should translate elements inside fallback content', () => {
+      @Component({
+        selector: 'projection',
+        template: `
+          <ng-content>
+            <span i18n="@@MY_ID">a <b>b</b> c</span>
+          </ng-content>
+        `,
+      })
+      class Projection {}
+
+      @Component({
+        imports: [Projection],
+        template: `<projection/>`,
+      })
+      class App {}
+
+      loadTranslations({
+        MY_ID: '1 {$START_BOLD_TEXT}2{$CLOSE_BOLD_TEXT} 3',
+      });
+
+      const fixture = TestBed.createComponent(App);
+      expect(getElementHtml(fixture.nativeElement)).toContain(
+        `<projection><span>1 <b>2</b> 3</span></projection>`,
+      );
+    });
   });
 });

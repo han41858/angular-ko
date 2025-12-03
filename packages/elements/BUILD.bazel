@@ -1,5 +1,4 @@
-load("//tools:defaults.bzl", "api_golden_test_npm_package", "generate_api_docs", "ng_package")
-load("//tools:defaults2.bzl", "ng_project")
+load("//tools:defaults.bzl", "api_golden_test_npm_package", "generate_api_docs", "ng_package", "ng_project")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -11,19 +10,16 @@ ng_project(
             "src/**/*.ts",
         ],
     ),
-    interop_deps = [
-        "//packages/core",
-        "//packages/platform-browser",
-    ],
     deps = [
         "//:node_modules/rxjs",
+        "//:node_modules/zone.js",
+        "//packages/core",
     ],
 )
 
 ng_package(
-    name = "npm_package",
-    package_name = "@angular/elements",
     srcs = ["package.json"],
+    package = "@angular/elements",
     tags = [
         "release-with-framework",
     ],
@@ -44,8 +40,8 @@ api_golden_test_npm_package(
         ":npm_package",
         "//goldens:public-api",
     ],
-    golden_dir = "angular/goldens/public-api/elements",
-    npm_package = "angular/packages/elements/npm_package",
+    golden_dir = "goldens/public-api/elements",
+    npm_package = "packages/elements/npm_package",
 )
 
 filegroup(

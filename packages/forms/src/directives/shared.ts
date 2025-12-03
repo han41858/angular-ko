@@ -34,7 +34,6 @@ import {AsyncValidatorFn, Validator, ValidatorFn} from './validators';
 export const CALL_SET_DISABLED_STATE = new InjectionToken(
   typeof ngDevMode === 'undefined' || ngDevMode ? 'CallSetDisabledState' : '',
   {
-    providedIn: 'root',
     factory: () => setDisabledStateDefault,
   },
 );
@@ -371,7 +370,7 @@ export function isBuiltInAccessor(valueAccessor: ControlValueAccessor): boolean 
 }
 
 export function syncPendingControls(
-  form: FormGroup,
+  form: AbstractControl,
   directives: Set<NgControl> | NgControl[],
 ): void {
   form._syncPendingControls();

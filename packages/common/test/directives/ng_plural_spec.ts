@@ -19,6 +19,7 @@ describe('ngPlural', () => {
   }
 
   function detectChangesAndExpectText<T>(text: string): void {
+    fixture.changeDetectorRef.markForCheck();
     fixture.detectChanges();
     expect(fixture.nativeElement).toHaveText(text);
   }
@@ -142,26 +143,26 @@ describe('ngPlural', () => {
     getComponent().switchValue = 3;
     detectChangesAndExpectText('you have a few messages.');
   }));
-});
 
-it('should be available as a standalone directive', () => {
-  @Component({
-    selector: 'test-component',
-    imports: [NgPlural, NgPluralCase],
-    template:
-      '<ul [ngPlural]="switchValue">' +
-      '<ng-template ngPluralCase="=0"><li>no messages</li></ng-template>' +
-      '<ng-template ngPluralCase="=1"><li>one message</li></ng-template>' +
-      '</ul>',
-  })
-  class TestComponent {
-    switchValue = 1;
-  }
+  it('should be available as a standalone directive', () => {
+    @Component({
+      selector: 'test-component',
+      imports: [NgPlural, NgPluralCase],
+      template:
+        '<ul [ngPlural]="switchValue">' +
+        '<ng-template ngPluralCase="=0"><li>no messages</li></ng-template>' +
+        '<ng-template ngPluralCase="=1"><li>one message</li></ng-template>' +
+        '</ul>',
+    })
+    class TestComponent {
+      switchValue = 1;
+    }
 
-  const fixture = TestBed.createComponent(TestComponent);
-  fixture.detectChanges();
+    const fixture = TestBed.createComponent(TestComponent);
+    fixture.detectChanges();
 
-  expect(fixture.nativeElement.textContent).toBe('one message');
+    expect(fixture.nativeElement.textContent).toBe('one message');
+  });
 });
 
 @Injectable()

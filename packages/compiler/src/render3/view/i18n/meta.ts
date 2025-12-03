@@ -10,18 +10,13 @@ import {WhitespaceVisitor, visitAllWithSiblings} from '../../../ml_parser/html_w
 import {computeDecimalDigest, computeDigest, decimalDigest} from '../../../i18n/digest';
 import * as i18n from '../../../i18n/i18n_ast';
 import {createI18nMessageFactory, VisitNodeFn} from '../../../i18n/i18n_parser';
-import {I18nError} from '../../../i18n/parse_util';
 import * as html from '../../../ml_parser/ast';
-import {
-  DEFAULT_CONTAINER_BLOCKS,
-  DEFAULT_INTERPOLATION_CONFIG,
-  InterpolationConfig,
-} from '../../../ml_parser/defaults';
 import {ParseTreeResult} from '../../../ml_parser/parser';
 import * as o from '../../../output/output_ast';
 import {isTrustedTypesSink} from '../../../schema/trusted_types_sinks';
 
 import {hasI18nAttrs, I18N_ATTR, I18N_ATTR_PREFIX, icuFromI18nMessage} from './util';
+import {ParseError} from '../../../parse_util';
 
 export type I18nMeta = {
   id?: string;
@@ -62,13 +57,11 @@ const setI18nRefs = (originalNodeMap: Map<html.Node, html.Node>): VisitNodeFn =>
 export class I18nMetaVisitor implements html.Visitor {
   // whether visited nodes contain i18n information
   public hasI18nMeta: boolean = false;
-  private _errors: I18nError[] = [];
+  private _errors: ParseError[] = [];
 
   constructor(
-    private interpolationConfig: InterpolationConfig = DEFAULT_INTERPOLATION_CONFIG,
     private keepI18nAttrs = false,
     private enableI18nLegacyMessageIdFormat = false,
-    private containerBlocks: Set<string> = DEFAULT_CONTAINER_BLOCKS,
     private readonly preserveSignificantWhitespace: boolean = true,
 
     // When dropping significant whitespace we need to retain empty tokens or
@@ -87,8 +80,6 @@ export class I18nMetaVisitor implements html.Visitor {
   ): i18n.Message {
     const {meaning, description, customId} = this._parseMetadata(meta);
     const createI18nMessage = createI18nMessageFactory(
-      this.interpolationConfig,
-      this.containerBlocks,
       this.retainEmptyTokens,
       /* preserveExpressionWhitespace */ this.preserveSignificantWhitespace,
     );
@@ -305,7 +296,7 @@ export class I18nMetaVisitor implements html.Visitor {
   }
 
   private _reportError(node: html.Node, msg: string): void {
-    this._errors.push(new I18nError(node.sourceSpan, msg));
+    this._errors.push(new ParseError(node.sourceSpan, msg));
   }
 }
 

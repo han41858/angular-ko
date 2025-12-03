@@ -26,7 +26,11 @@ import {
   setInjectorProfilerContext,
 } from './debug/injector_profiler';
 import {getFactoryDef} from './definition_factory';
-import {throwCyclicDependencyError, throwProviderNotFoundError} from './errors_di';
+import {
+  cyclicDependencyError,
+  cyclicDependencyErrorWithDetails,
+  throwProviderNotFoundError,
+} from './errors_di';
 import {NG_ELEMENT_ID, NG_FACTORY_DEF} from './fields';
 import {registerPreOrderHooks} from './hooks';
 import {AttributeMarker} from './interfaces/attribute_marker';
@@ -662,7 +666,7 @@ function searchTokensOnInjector<T>(
     isHostSpecialCase,
   );
   if (injectableIdx !== null) {
-    return getNodeInjectable(lView, currentTView, injectableIdx, tNode as TElementNode);
+    return getNodeInjectable(lView, currentTView, injectableIdx, tNode as TElementNode, flags);
   } else {
     return NOT_FOUND;
   }
@@ -717,6 +721,11 @@ export function locateDirectiveOrProvider<T>(
 }
 
 /**
+ * Used in ngDevMode to keep the injection path in case of cycles in DI.
+ */
+let injectionPath: string[] = [];
+
+/**
  * Retrieve or instantiate the injectable from the `LView` at particular `index`.
  *
  * This function checks to see if the value has already been instantiated and if so returns the
@@ -728,13 +737,20 @@ export function getNodeInjectable(
   tView: TView,
   index: number,
   tNode: TDirectiveHostNode,
+  flags?: InternalInjectFlags,
 ): any {
   let value = lView[index];
   const tData = tView.data;
   if (value instanceof NodeInjectorFactory) {
     const factory: NodeInjectorFactory = value;
+    ngDevMode && injectionPath.push(factory.name ?? 'unknown');
     if (factory.resolving) {
-      throwCyclicDependencyError(stringifyForError(tData[index]));
+      const token = stringifyForError(tData[index]);
+      if (ngDevMode) {
+        throw cyclicDependencyErrorWithDetails(token, injectionPath);
+      } else {
+        throw cyclicDependencyError(token);
+      }
     }
     const previousIncludeViewProviders = setIncludeViewProviders(factory.canSeeViewProviders);
     factory.resolving = true;
@@ -765,7 +781,7 @@ export function getNodeInjectable(
     try {
       ngDevMode && emitInjectorToCreateInstanceEvent(token);
 
-      value = lView[index] = factory.factory(undefined, tData, lView, tNode);
+      value = lView[index] = factory.factory(undefined, flags, tData, lView, tNode);
 
       ngDevMode && emitInstanceCreatedByInjectorEvent(value);
 
@@ -787,6 +803,7 @@ export function getNodeInjectable(
       setIncludeViewProviders(previousIncludeViewProviders);
       factory.resolving = false;
       leaveDI();
+      ngDevMode && (injectionPath = []);
     }
   }
   return value;

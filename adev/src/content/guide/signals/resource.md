@@ -28,7 +28,17 @@ const userResource = resource({
 });
 
 // Create a computed signal based on the result of the resource's loader function.
-const firstName = computed(() => userResource.value().firstName);
+const firstName = computed(() => {
+  if (userResource.hasValue()) {
+    // `hasValue` serves 2 purposes:
+    // - It acts as type guard to strip `undefined` from the type
+    // - If protects against reading a throwing `value` when the resource is in error state
+    return userResource.value().firstName;
+  }
+
+  // fallback in case the resource value is `undefined` or if the resource is in error state
+  return undefined;
+});
 ```
 
 The `resource` function accepts a `ResourceOptions` object with two main properties: `params` and `loader`.
@@ -67,7 +77,17 @@ const userResource = resource({
 });
 
 // 리소스의 로더 함수의 실행 결과로 연산 시그널을 생성합니다.
-const firstName = computed(() => userResource.value().firstName);
+const firstName = computed(() => {
+  if (userResource.hasValue()) {
+    // `hasValue`는 두가지 용도로 사용합니다:
+    // - `undefined` 타입을 걸러내는 타입 가드 역할을 합니다.
+    // - 자원이 에러 상태일 때 값을 읽는 것을 방지합니다.
+    return userResource.value().firstName;
+  }
+
+  // 자원이 `undefined`이거나 에러 상태일 때는 아래줄을 실행합니다.
+  return undefined;
+});
 ```
 
 `resource` 함수는 `ResourceOptions` 객체를 인자로 받는데, 이 객체에는 `params`와 `loader` 프로퍼티가 있습니다.
@@ -129,10 +149,10 @@ const userId: Signal<string> = getUserId();
 
 const userResource = resource({
   params: () => ({id: userId()}),
-  loader: ({request, abortSignal}): Promise<User> => {
+  loader: ({params, abortSignal}): Promise<User> => {
     // fetch cancels any outstanding HTTP requests when the given `AbortSignal`
     // indicates that the request has been aborted.
-    return fetch(`users/${request.id}`, {signal: abortSignal});
+    return fetch(`users/${params.id}`, {signal: abortSignal});
   },
 });
 ```
@@ -149,9 +169,9 @@ const userId: Signal<string> = getUserId();
 
 const userResource = resource({
   params: () => ({id: userId()}),
-  loader: ({request, abortSignal}): Promise<User> => {
+  loader: ({params, abortSignal}): Promise<User> => {
     // fetch는 `AbortSignal`을 통해 중단 요청이 들어올 때 미처리된 모든 `HTTP 요청을 취소합니다.
-    return fetch(`users/${request.id}`, {signal: abortSignal});
+    return fetch(`users/${params.id}`, {signal: abortSignal});
   },
 });
 ```
@@ -218,7 +238,7 @@ The `status` signal provides a specific `ResourceStatus` that describes the stat
 | ------------- | :---------------- | ---------------------------------------------------------------------------- |
 | `'idle'`      | `undefined`       | The resource has no valid request and the loader has not run.                |
 | `'error'`     | `undefined`       | The loader has encountered an error.                                         |
-| `'loading'`   | `undefined`       | The loader is running as a result of the `request` value changing.           |
+| `'loading'`   | `undefined`       | The loader is running as a result of the `params` value changing.            |
 | `'reloading'` | Previous value    | The loader is running as a result calling of the resource's `reload` method. |
 | `'resolved'`  | Resolved value    | The loader has completed.                                                    |
 | `'local'`     | Locally set value | The resource's value has been set locally via `.set()` or `.update()`        |
@@ -241,9 +261,21 @@ You can use this status information to conditionally display user interface elem
 |---------------|:------------|-------------------------------------------|
 | `'idle'`      | `undefined` | 리소스에 유효한 요청이 없으며, 로더가 실행되지 않았음            |
 | `'error'`     | `undefined` | 로더 실행 중 에러가 발생했음                          |
-| `'loading'`   | `undefined` | `request` 값이 변경되어 로더가 실행중                 |
+| `'loading'`   | `undefined` | `params` 값이 변경되어 로더가 실행중                 |
 | `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행중           |
 | `'resolved'`  | 계산된 값       | 로더 실행 종료                                  |
 | `'local'`     | 직접 설정된 값    | 리소스의 `.set()`, `.update()` 메서드로 값이 설정되 상태 |
 
 이 상태값들은 사용자에게 표시하는 용도로 활용하거나, 로딩 인디케이터, 에러 메시지를 활용하는 용도로 활용할 수 있습니다.
+
+
+<!--
+## Reactive data fetching with `httpResource`
+-->
+## 반응형으로 데이터 불러오기: `httpResource`
+
+<!--
+[`httpResource`](/guide/http/http-resource) is a wrapper around `HttpClient` that gives you the request status and response as signals. It makes HTTP requests through the Angular HTTP stack, including interceptors.
+-->
+[`httpResource`](/guide/http/http-resource)는 요청 결과를 시그널로 보내는 `HttpClient` 래퍼(wrapper)입니다.
+이 래퍼는 인터셉터를 포함하여 Angular HTTP 스택을 그대로 활용합니다.

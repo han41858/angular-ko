@@ -5,8 +5,8 @@ import { Directive, model } from '@angular/core';
 import * as i0 from "@angular/core";
 export class TestDir {
     constructor() {
-        this.counter = model(0);
-        this.name = model.required();
+        this.counter = model(0, Object.assign({}, (ngDevMode ? { debugName: "counter" } : {})));
+        this.name = model.required(Object.assign({}, (ngDevMode ? { debugName: "name" } : {})));
     }
 }
 TestDir.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, deps: [], target: i0.ɵɵFactoryTarget.Directive });
@@ -14,7 +14,7 @@ TestDir.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "17.1.0", version: "0.0.
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, decorators: [{
             type: Directive,
             args: [{}]
-        }] });
+        }], propDecorators: { counter: [{ type: i0.Input, args: [{ isSignal: true, alias: "counter", required: false }] }, { type: i0.Output, args: ["counterChange"] }], name: [{ type: i0.Input, args: [{ isSignal: true, alias: "name", required: true }] }, { type: i0.Output, args: ["nameChange"] }] } });
 
 /****************************************************************************************************
  * PARTIAL FILE: model_directive_definition.d.ts
@@ -34,8 +34,8 @@ import { Component, model } from '@angular/core';
 import * as i0 from "@angular/core";
 export class TestComp {
     constructor() {
-        this.counter = model(0);
-        this.name = model.required();
+        this.counter = model(0, Object.assign({}, (ngDevMode ? { debugName: "counter" } : {})));
+        this.name = model.required(Object.assign({}, (ngDevMode ? { debugName: "name" } : {})));
     }
 }
 TestComp.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestComp, deps: [], target: i0.ɵɵFactoryTarget.Component });
@@ -45,7 +45,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDE
             args: [{
                     template: 'Works',
                 }]
-        }] });
+        }], propDecorators: { counter: [{ type: i0.Input, args: [{ isSignal: true, alias: "counter", required: false }] }, { type: i0.Output, args: ["counterChange"] }], name: [{ type: i0.Input, args: [{ isSignal: true, alias: "name", required: true }] }, { type: i0.Output, args: ["nameChange"] }] } });
 
 /****************************************************************************************************
  * PARTIAL FILE: model_component_definition.d.ts
@@ -65,8 +65,8 @@ import { Directive, EventEmitter, Input, model, Output } from '@angular/core';
 import * as i0 from "@angular/core";
 export class TestDir {
     constructor() {
-        this.counter = model(0);
-        this.modelWithAlias = model(false, { alias: 'alias' });
+        this.counter = model(0, Object.assign({}, (ngDevMode ? { debugName: "counter" } : {})));
+        this.modelWithAlias = model(false, Object.assign(Object.assign({}, (ngDevMode ? { debugName: "modelWithAlias" } : {})), { alias: 'alias' }));
         this.decoratorInput = true;
         this.decoratorInputWithAlias = true;
         this.decoratorOutput = new EventEmitter();
@@ -80,7 +80,7 @@ TestDir.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "17.1.0", version: "0.0.
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, decorators: [{
             type: Directive,
             args: [{}]
-        }], propDecorators: { decoratorInput: [{
+        }], propDecorators: { counter: [{ type: i0.Input, args: [{ isSignal: true, alias: "counter", required: false }] }, { type: i0.Output, args: ["counterChange"] }], modelWithAlias: [{ type: i0.Input, args: [{ isSignal: true, alias: "alias", required: false }] }, { type: i0.Output, args: ["aliasChange"] }], decoratorInput: [{
                 type: Input
             }], decoratorInputWithAlias: [{
                 type: Input,

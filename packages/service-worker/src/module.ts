@@ -11,6 +11,10 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {provideServiceWorker, SwRegistrationOptions} from './provider';
 
 /**
+ *
+ * @see [Custom service worker script](ecosystem/service-workers/custom-service-worker-scripts)
+ * @see [Service worker configuration](ecosystem/service-workers/getting-started#service-worker-configuration)
+ *
  * @publicApi
  */
 @NgModule()

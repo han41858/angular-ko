@@ -29,10 +29,10 @@ When you are ready to pass in a value through an `input`, values can be set in t
   ...
   template: `<app-user occupation="Angular Developer"></app-user>`
 })
-class App {}
+export class App {}
 </docs-code>
 
-The `input` function returns an `InputSignal`. You can read the value by calling the signal. 
+The `input` function returns an `InputSignal`. You can read the value by calling the signal.
 
 <docs-code header="user.ts" language="angular-ts">
 @Component({
@@ -88,7 +88,7 @@ class User {
   ...
   template: `<app-user occupation="Angular Developer"></app-user>`
 })
-class App {}
+export class App {}
 </docs-code>
 
 `input` 함수는 `InputSignal`을 반환합니다.

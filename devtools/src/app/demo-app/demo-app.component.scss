@@ -1,2 +1,6 @@
-@use 'external/npm/node_modules/todomvc-app-css/index.css';
-@use 'external/npm/node_modules/todomvc-common/base.css';
+@use 'todomvc-app-css/index.css';
+@use 'todomvc-common/base.css';
+
+body {
+  font-weight: 500;
+}

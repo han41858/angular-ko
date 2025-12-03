@@ -22,7 +22,9 @@ import {
 import {NavigationTransitions} from './navigation_transition';
 import {UrlSerializer} from './url_tree';
 
-export const ROUTER_SCROLLER = new InjectionToken<RouterScroller>('');
+export const ROUTER_SCROLLER = new InjectionToken<RouterScroller>(
+  typeof ngDevMode !== 'undefined' && ngDevMode ? 'Router Scroller' : '',
+);
 
 @Injectable()
 export class RouterScroller implements OnDestroy {
@@ -85,12 +87,13 @@ export class RouterScroller implements OnDestroy {
   private consumeScrollEvents() {
     return this.transitions.events.subscribe((e) => {
       if (!(e instanceof Scroll)) return;
+      const instantScroll: ScrollOptions = {behavior: 'instant'};
       // a popstate event. The pop state event will always ignore anchor scrolling.
       if (e.position) {
         if (this.options.scrollPositionRestoration === 'top') {
-          this.viewportScroller.scrollToPosition([0, 0]);
+          this.viewportScroller.scrollToPosition([0, 0], instantScroll);
         } else if (this.options.scrollPositionRestoration === 'enabled') {
-          this.viewportScroller.scrollToPosition(e.position);
+          this.viewportScroller.scrollToPosition(e.position, instantScroll);
         }
         // imperative navigation "forward"
       } else {

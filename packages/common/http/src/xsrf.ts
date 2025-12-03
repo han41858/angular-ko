@@ -9,7 +9,6 @@
 import {DOCUMENT, ɵparseCookieValue as parseCookieValue} from '../../index';
 import {
   EnvironmentInjector,
-  Inject,
   inject,
   Injectable,
   InjectionToken,
@@ -22,39 +21,39 @@ import {HttpHandlerFn, HttpInterceptor} from './interceptor';
 import {HttpRequest} from './request';
 import {HttpEvent} from './response';
 
-export const XSRF_ENABLED = new InjectionToken<boolean>(ngDevMode ? 'XSRF_ENABLED' : '');
+export const XSRF_ENABLED = new InjectionToken<boolean>(
+  typeof ngDevMode !== undefined && ngDevMode ? 'XSRF_ENABLED' : '',
+  {
+    factory: () => true,
+  },
+);
 
 export const XSRF_DEFAULT_COOKIE_NAME = 'XSRF-TOKEN';
-export const XSRF_COOKIE_NAME = new InjectionToken<string>(ngDevMode ? 'XSRF_COOKIE_NAME' : '', {
-  providedIn: 'root',
-  factory: () => XSRF_DEFAULT_COOKIE_NAME,
-});
+export const XSRF_COOKIE_NAME = new InjectionToken<string>(
+  typeof ngDevMode !== undefined && ngDevMode ? 'XSRF_COOKIE_NAME' : '',
+  {
+    providedIn: 'root',
+    factory: () => XSRF_DEFAULT_COOKIE_NAME,
+  },
+);
 
 export const XSRF_DEFAULT_HEADER_NAME = 'X-XSRF-TOKEN';
-export const XSRF_HEADER_NAME = new InjectionToken<string>(ngDevMode ? 'XSRF_HEADER_NAME' : '', {
-  providedIn: 'root',
-  factory: () => XSRF_DEFAULT_HEADER_NAME,
-});
-
-/**
- * Retrieves the current XSRF token to use with the next outgoing request.
- *
- * @publicApi
- */
-export abstract class HttpXsrfTokenExtractor {
-  /**
-   * Get the XSRF token to use with an outgoing request.
-   *
-   * Will be called for every request, so the token may change between requests.
-   */
-  abstract getToken(): string | null;
-}
+export const XSRF_HEADER_NAME = new InjectionToken<string>(
+  typeof ngDevMode !== undefined && ngDevMode ? 'XSRF_HEADER_NAME' : '',
+  {
+    providedIn: 'root',
+    factory: () => XSRF_DEFAULT_HEADER_NAME,
+  },
+);
 
 /**
  * `HttpXsrfTokenExtractor` which retrieves the token from a cookie.
  */
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class HttpXsrfCookieExtractor implements HttpXsrfTokenExtractor {
+  private readonly cookieName = inject(XSRF_COOKIE_NAME);
+  private readonly doc = inject(DOCUMENT);
+
   private lastCookieString: string = '';
   private lastToken: string | null = null;
 
@@ -62,11 +61,6 @@ export class HttpXsrfCookieExtractor implements HttpXsrfTokenExtractor {
    * @internal for testing
    */
   parseCount: number = 0;
-
-  constructor(
-    @Inject(DOCUMENT) private doc: any,
-    @Inject(XSRF_COOKIE_NAME) private cookieName: string,
-  ) {}
 
   getToken(): string | null {
     if (typeof ngServerMode !== 'undefined' && ngServerMode) {
@@ -82,11 +76,30 @@ export class HttpXsrfCookieExtractor implements HttpXsrfTokenExtractor {
   }
 }
 
+/**
+ * Retrieves the current XSRF token to use with the next outgoing request.
+ *
+ * @publicApi
+ */
+@Injectable({providedIn: 'root', useExisting: HttpXsrfCookieExtractor})
+export abstract class HttpXsrfTokenExtractor {
+  /**
+   * Get the XSRF token to use with an outgoing request.
+   *
+   * Will be called for every request, so the token may change between requests.
+   */
+  abstract getToken(): string | null;
+}
+
+/**
+ * Regex to match absolute URLs, including protocol-relative URLs.
+ */
+const ABSOLUTE_URL_REGEX = /^(?:https?:)?\/\//i;
+
 export function xsrfInterceptorFn(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
-  const lcUrl = req.url.toLowerCase();
   // Skip both non-mutating requests and absolute URLs.
   // Non-mutating requests don't require a token, and absolute URLs require special handling
   // anyway as the cookie set
@@ -95,8 +108,7 @@ export function xsrfInterceptorFn(
     !inject(XSRF_ENABLED) ||
     req.method === 'GET' ||
     req.method === 'HEAD' ||
-    lcUrl.startsWith('http://') ||
-    lcUrl.startsWith('https://')
+    ABSOLUTE_URL_REGEX.test(req.url)
   ) {
     return next(req);
   }
@@ -116,7 +128,7 @@ export function xsrfInterceptorFn(
  */
 @Injectable()
 export class HttpXsrfInterceptor implements HttpInterceptor {
-  constructor(private injector: EnvironmentInjector) {}
+  private readonly injector = inject(EnvironmentInjector);
 
   intercept(initialRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return runInInjectionContext(this.injector, () =>

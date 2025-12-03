@@ -43,6 +43,8 @@ import {HttpParams} from './params';
  * @param includeRequestsWithAuthHeaders Enables caching of requests containing either `Authorization`
  *     or `Proxy-Authorization` headers. By default, these requests are excluded from caching.
  *
+ * @see [Configuring the caching options](guide/ssr#configuring-the-caching-options)
+ *
  * @publicApi
  */
 export type HttpTransferCacheOptions = {
@@ -79,7 +81,7 @@ export type HttpTransferCacheOptions = {
  * @publicApi
  */
 export const HTTP_TRANSFER_CACHE_ORIGIN_MAP = new InjectionToken<Record<string, string>>(
-  ngDevMode ? 'HTTP_TRANSFER_CACHE_ORIGIN_MAP' : '',
+  typeof ngDevMode !== undefined && ngDevMode ? 'HTTP_TRANSFER_CACHE_ORIGIN_MAP' : '',
 );
 
 /**
@@ -113,7 +115,7 @@ interface CacheOptions extends HttpTransferCacheOptions {
 }
 
 const CACHE_OPTIONS = new InjectionToken<CacheOptions>(
-  ngDevMode ? 'HTTP_TRANSFER_STATE_CACHE_OPTIONS' : '',
+  typeof ngDevMode !== undefined && ngDevMode ? 'HTTP_TRANSFER_STATE_CACHE_OPTIONS' : '',
 );
 
 /**
@@ -215,21 +217,28 @@ export function transferCacheInterceptorFn(
     );
   }
 
-  // Request not found in cache. Make the request and cache it if on the server.
-  return next(req).pipe(
-    tap((event: HttpEvent<unknown>) => {
-      if (event instanceof HttpResponse && typeof ngServerMode !== 'undefined' && ngServerMode) {
-        transferState.set<TransferHttpResponse>(storeKey, {
-          [BODY]: event.body,
-          [HEADERS]: getFilteredHeaders(event.headers, headersToInclude),
-          [STATUS]: event.status,
-          [STATUS_TEXT]: event.statusText,
-          [REQ_URL]: requestUrl,
-          [RESPONSE_TYPE]: req.responseType,
-        });
-      }
-    }),
-  );
+  const event$ = next(req);
+
+  if (typeof ngServerMode !== 'undefined' && ngServerMode) {
+    // Request not found in cache. Make the request and cache it if on the server.
+    return event$.pipe(
+      tap((event: HttpEvent<unknown>) => {
+        // Only cache successful HTTP responses.
+        if (event instanceof HttpResponse) {
+          transferState.set<TransferHttpResponse>(storeKey, {
+            [BODY]: event.body,
+            [HEADERS]: getFilteredHeaders(event.headers, headersToInclude),
+            [STATUS]: event.status,
+            [STATUS_TEXT]: event.statusText,
+            [REQ_URL]: requestUrl,
+            [RESPONSE_TYPE]: req.responseType,
+          });
+        }
+      }),
+    );
+  }
+
+  return event$;
 }
 
 /** @returns true when the requests contains autorization related headers. */
@@ -314,6 +323,8 @@ function generateHash(value: string): string {
  * bootstrapping of the application in the browser thus avoiding duplicate requests and reducing
  * load time.
  *
+ * @see [Caching data when using HttpClient](guide/ssr#configuring-the-caching-options)
+ *
  */
 export function withHttpTransferCache(cacheOptions: HttpTransferCacheOptions): Provider[] {
   return [
@@ -372,7 +383,6 @@ function appendMissingHeadersDetection(
           warningProduced.add(key);
           const truncatedUrl = truncateMiddle(url);
 
-          // TODO: create Error guide for this warning
           console.warn(
             formatRuntimeError(
               RuntimeErrorCode.HEADERS_ALTERED_BY_TRANSFER_CACHE,

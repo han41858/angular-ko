@@ -1,16 +1,16 @@
-load("//tools:defaults.bzl", "protractor_web_test_suite")
-load("//tools:defaults2.bzl", "ts_project")
+load("@devinfra//bazel/spec-bundling:index.bzl", "spec_bundle")
+load("@rules_browsers//protractor_test:index.bzl", "protractor_test")
+load("//tools:defaults.bzl", "ts_project")
 
 def example_test(
         name,
         srcs,
         server,
         data = [],
-        interop_deps = [],
         deps = [],
+        external = [],
         tsconfig = "//modules/playground:tsconfig_e2e",
-        use_legacy_webdriver_types = True,
-        **kwargs):
+        use_legacy_webdriver_types = True):
     # Reliance on the Control Flow in Selenium Webdriver is not recommended long-term,
     # especially with the deprecation of Protractor. New tests should not use the legacy
     # webdriver types but rather use the actual `@types/jasmine` types.
@@ -23,23 +23,35 @@ def example_test(
         srcs = srcs,
         tsconfig = tsconfig,
         deps = deps + [
-            "//:node_modules/protractor",
-            "//:node_modules/@types/selenium-webdriver",
-        ],
-        interop_deps = interop_deps + [
-            "@npm//@angular/build-tooling/bazel/benchmark/driver-utilities",
+            "//modules:node_modules/protractor",
+            "//modules:node_modules/@types/selenium-webdriver",
+            "//modules/utilities:utilities",
         ],
     )
 
-    protractor_web_test_suite(
-        name = "protractor_tests",
-        data = data + ["@npm//source-map"],
-        on_prepare = "//modules/playground/e2e_test:start-server.js",
-        server = server,
+    spec_bundle(
+        name = "%s_bundle" % name,
+        testonly = True,
+        srcs = ["//modules/playground:tsconfig_e2e"],
         deps = [
-            ":%s_lib" % name,
-            "@npm//selenium-webdriver",
-            "@npm//yargs",
+            "%s_lib" % name,
         ],
-        **kwargs
+        tags = [
+            "manual",
+        ],
+        config = {
+            "resolveExtensions": [".js", ".mjs"],
+            "tsconfig": "./modules/playground/tsconfig-e2e.json",
+        },
+        external = external + ["protractor", "selenium-webdriver"],
+    )
+
+    protractor_test(
+        name = name,
+        deps = [":%s_bundle" % name],
+        server = server,
+        data = data + [
+            "//modules:node_modules/selenium-webdriver",
+            "//modules:node_modules/yargs",
+        ],
     )

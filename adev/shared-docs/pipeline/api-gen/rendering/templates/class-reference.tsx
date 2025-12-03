@@ -10,7 +10,7 @@ import {Fragment, h} from 'preact';
 import {PipeEntry} from '../entities.mjs';
 import {
   ClassEntryRenderable,
-  DecoratorEntryRenderable,
+  InterfaceEntryRenderable,
   PipeEntryRenderable,
 } from '../entities/renderables.mjs';
 import {ClassMemberList} from './class-member-list';
@@ -24,12 +24,14 @@ import {SectionDescription} from './section-description';
 import {SectionUsageNotes} from './section-usage-notes';
 import {SectionApi} from './section-api';
 import {SectionHeading} from './section-heading';
-import {codeToHtml} from '../shiki/shiki.mjs';
 import {RawHtml} from './raw-html';
+import {DeprecationWarning} from './deprecation-warning';
+import {codeToHtml} from '../../../shared/shiki.mjs';
+import {getHighlighterInstance} from '../shiki/shiki.mjs';
 
 /** Component to render a class API reference document. */
 export function ClassReference(
-  entry: ClassEntryRenderable | DecoratorEntryRenderable | PipeEntryRenderable,
+  entry: ClassEntryRenderable | InterfaceEntryRenderable | PipeEntryRenderable,
 ) {
   return (
     <div className={API_REFERENCE_CONTAINER}>
@@ -38,12 +40,17 @@ export function ClassReference(
         <>
           <div className={SECTION_CONTAINER + ' docs-reference-api-section'}>
             <SectionHeading name="Pipe usage" />
-            <RawHtml value={codeToHtml((entry as PipeEntry).usage, 'angular-html')} />
+            <RawHtml
+              value={codeToHtml(getHighlighterInstance(), (entry as PipeEntry).usage, {
+                language: 'angular-html',
+              })}
+            />
           </div>
         </>
       ) : (
         ''
       )}
+      <DeprecationWarning entry={entry} />
       <SectionApi entry={entry} />
       {entry.members.length > 0 ? (
         <div class={REFERENCE_MEMBERS}>

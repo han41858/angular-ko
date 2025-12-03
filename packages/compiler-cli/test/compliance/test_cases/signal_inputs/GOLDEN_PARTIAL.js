@@ -5,8 +5,8 @@ import { Directive, input } from '@angular/core';
 import * as i0 from "@angular/core";
 export class TestDir {
     constructor() {
-        this.counter = input(0);
-        this.name = input.required();
+        this.counter = input(0, Object.assign({}, (ngDevMode ? { debugName: "counter" } : {})));
+        this.name = input.required(Object.assign({}, (ngDevMode ? { debugName: "name" } : {})));
     }
 }
 TestDir.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, deps: [], target: i0.ɵɵFactoryTarget.Directive });
@@ -14,7 +14,7 @@ TestDir.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "17.1.0", version: "0.0.
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, decorators: [{
             type: Directive,
             args: [{}]
-        }] });
+        }], propDecorators: { counter: [{ type: i0.Input, args: [{ isSignal: true, alias: "counter", required: false }] }], name: [{ type: i0.Input, args: [{ isSignal: true, alias: "name", required: true }] }] } });
 
 /****************************************************************************************************
  * PARTIAL FILE: input_directive_definition.d.ts
@@ -34,8 +34,8 @@ import { Component, input } from '@angular/core';
 import * as i0 from "@angular/core";
 export class TestComp {
     constructor() {
-        this.counter = input(0);
-        this.name = input.required();
+        this.counter = input(0, Object.assign({}, (ngDevMode ? { debugName: "counter" } : {})));
+        this.name = input.required(Object.assign({}, (ngDevMode ? { debugName: "name" } : {})));
     }
 }
 TestComp.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestComp, deps: [], target: i0.ɵɵFactoryTarget.Component });
@@ -45,7 +45,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDE
             args: [{
                     template: 'Works',
                 }]
-        }] });
+        }], propDecorators: { counter: [{ type: i0.Input, args: [{ isSignal: true, alias: "counter", required: false }] }], name: [{ type: i0.Input, args: [{ isSignal: true, alias: "name", required: true }] }] } });
 
 /****************************************************************************************************
  * PARTIAL FILE: input_component_definition.d.ts
@@ -68,9 +68,9 @@ function convertToBoolean(value) {
 }
 export class TestDir {
     constructor() {
-        this.counter = input(0);
-        this.signalWithTransform = input(false, { transform: convertToBoolean });
-        this.signalWithTransformAndAlias = input(false, { alias: 'publicNameSignal', transform: convertToBoolean });
+        this.counter = input(0, Object.assign({}, (ngDevMode ? { debugName: "counter" } : {})));
+        this.signalWithTransform = input(false, Object.assign(Object.assign({}, (ngDevMode ? { debugName: "signalWithTransform" } : {})), { transform: convertToBoolean }));
+        this.signalWithTransformAndAlias = input(false, Object.assign(Object.assign({}, (ngDevMode ? { debugName: "signalWithTransformAndAlias" } : {})), { alias: 'publicNameSignal', transform: convertToBoolean }));
         this.decoratorInput = true;
         this.decoratorInputWithAlias = true;
         this.decoratorInputWithTransformAndAlias = true;
@@ -81,7 +81,7 @@ TestDir.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "17.1.0", version: "0.0.
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, decorators: [{
             type: Directive,
             args: [{}]
-        }], propDecorators: { decoratorInput: [{
+        }], propDecorators: { counter: [{ type: i0.Input, args: [{ isSignal: true, alias: "counter", required: false }] }], signalWithTransform: [{ type: i0.Input, args: [{ isSignal: true, alias: "signalWithTransform", required: false }] }], signalWithTransformAndAlias: [{ type: i0.Input, args: [{ isSignal: true, alias: "publicNameSignal", required: false }] }], decoratorInput: [{
                 type: Input
             }], decoratorInputWithAlias: [{
                 type: Input,
@@ -117,9 +117,7 @@ function convertToBoolean(value) {
 }
 export class TestDir {
     constructor() {
-        this.name = input.required({
-            transform: convertToBoolean,
-        });
+        this.name = input.required(Object.assign(Object.assign({}, (ngDevMode ? { debugName: "name" } : {})), { transform: convertToBoolean }));
     }
 }
 TestDir.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, deps: [], target: i0.ɵɵFactoryTarget.Directive });
@@ -127,7 +125,7 @@ TestDir.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "17.1.0", version: "0.0.
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, decorators: [{
             type: Directive,
             args: [{}]
-        }] });
+        }], propDecorators: { name: [{ type: i0.Input, args: [{ isSignal: true, alias: "name", required: true }] }] } });
 
 /****************************************************************************************************
  * PARTIAL FILE: transform_not_captured.d.ts
@@ -150,12 +148,10 @@ const toBoolean = (v) => v === true || v !== '';
 const complexTransform = (defaultVal) => (v) => v || defaultVal;
 export class TestDir {
     constructor() {
-        this.name = input.required({
-            transform: (v) => v === true || v !== '',
-        });
-        this.name2 = input.required({ transform: toBoolean });
-        this.genericTransform = input.required({ transform: complexTransform(1) });
-        this.genericTransform2 = input.required({ transform: complexTransform(null) });
+        this.name = input.required(Object.assign(Object.assign({}, (ngDevMode ? { debugName: "name" } : {})), { transform: (v) => v === true || v !== '' }));
+        this.name2 = input.required(Object.assign(Object.assign({}, (ngDevMode ? { debugName: "name2" } : {})), { transform: toBoolean }));
+        this.genericTransform = input.required(Object.assign(Object.assign({}, (ngDevMode ? { debugName: "genericTransform" } : {})), { transform: complexTransform(1) }));
+        this.genericTransform2 = input.required(Object.assign(Object.assign({}, (ngDevMode ? { debugName: "genericTransform2" } : {})), { transform: complexTransform(null) }));
     }
 }
 TestDir.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, deps: [], target: i0.ɵɵFactoryTarget.Directive });
@@ -163,7 +159,7 @@ TestDir.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "17.1.0", version: "0.0.
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "0.0.0-PLACEHOLDER", ngImport: i0, type: TestDir, decorators: [{
             type: Directive,
             args: [{}]
-        }] });
+        }], propDecorators: { name: [{ type: i0.Input, args: [{ isSignal: true, alias: "name", required: true }] }], name2: [{ type: i0.Input, args: [{ isSignal: true, alias: "name2", required: true }] }], genericTransform: [{ type: i0.Input, args: [{ isSignal: true, alias: "genericTransform", required: true }] }], genericTransform2: [{ type: i0.Input, args: [{ isSignal: true, alias: "genericTransform2", required: true }] }] } });
 
 /****************************************************************************************************
  * PARTIAL FILE: complex_transform_functions.d.ts

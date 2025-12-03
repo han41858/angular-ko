@@ -76,18 +76,19 @@ bootstrapApplication(App, {
 ```
 
 ### How event replay works
+
 Event Replay is a feature that improves user experience by capturing user events that were triggered before the hydration process is complete. Then those events are replayed, ensuring none of that interaction was lost.
 
 The Event Replay is divided into three main phases:
 
 - **Capturing user interactions**<br>
-Prior to **Hydration**, Event Replay captures and stores all interactions that the user may perform, such as clicks and other browser native events.
+  Prior to **Hydration**, Event Replay captures and stores all interactions that the user may perform, such as clicks and other browser native events.
 
 - **Storing events**<br>
-The **Event Contract** keeps in memory all the interactions recorded in the previous step, ensuring that they are not lost for later replay.
+  The **Event Contract** keeps in memory all the interactions recorded in the previous step, ensuring that they are not lost for later replay.
 
 - **Relaunch of events**<br>
-Once **Hydration** is complete, Angular re-invokes the captured events.
+  Once **Hydration** is complete, Angular re-invokes the captured events.
 
 Event replay supports _native browser events_, for example `click`, `mouseover`, and `focusin`. If you'd like to learn more about JSAction, the library that powers event replay, you can read more [on the readme](https://github.com/angular/angular/tree/main/packages/core/primitives/event-dispatch#readme).
 
@@ -177,7 +178,7 @@ Application stability is an important part of the hydration process. Hydration a
 
 ## I18N
 
-HELPFUL: Support for internationalization with hydration is currently in [developer preview](/reference/releases#developer-preview). By default, Angular will skip hydration for components that use i18n blocks, effectively re-rendering those components from scratch.
+HELPFUL: By default, Angular will skip hydration for components that use i18n blocks, effectively re-rendering those components from scratch.
 
 To enable hydration for i18n blocks, you can add [`withI18nSupport`](/api/platform-browser/withI18nSupport) to your `provideClientHydration` call.
 
@@ -195,6 +196,7 @@ bootstrapApplication(AppComponent, {
 ```
 
 ## Consistent rendering across server-side and client-side
+
 Avoid introducing `@if` blocks and other conditionals that display different content when server-side rendering than client-side rendering, such as using an `@if` block with Angular's `isPlatformBrowser` function. These rendering differences cause layout shifts, negatively impacting end-user experience and core web vitals.
 
 ## Third Party Libraries with DOM Manipulation
@@ -203,7 +205,7 @@ There are a number of third party libraries that depend on DOM manipulation to b
 
 ## Third Party Scripts with DOM Manipulation
 
-Many third party scripts, such as ad trackers and analytics, modify the DOM before hydration can occur. These scripts may cause hydration errors because the page no longer matches the structure expected by Angular. Prefer deferring this type of script until after hydration whenever possible. Consider using [`AfterNextRender`](api/core/afterNextRender) to delay the script until post-hydration processes have occured.
+Many third party scripts, such as ad trackers and analytics, modify the DOM before hydration can occur. These scripts may cause hydration errors because the page no longer matches the structure expected by Angular. Prefer deferring this type of script until after hydration whenever possible. Consider using [`AfterNextRender`](api/core/afterNextRender) to delay the script until post-hydration processes have occurred.
 
 ## Incremental Hydration
 

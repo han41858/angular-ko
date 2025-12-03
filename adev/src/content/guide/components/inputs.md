@@ -11,7 +11,7 @@ TIP: If you're familiar with other web frameworks, input properties are similar 
 When you use a component, you commonly want to pass some data to it. A component specifies the data that it accepts by declaring
 **inputs**:
 
-<docs-code language="ts" highlight="[7]">
+```ts {highlight:[5]}
 import {Component, input} from '@angular/core';
 
 @Component({/*...*/})
@@ -19,7 +19,7 @@ export class CustomSlider {
   // Declare an input named 'value' with a default value of zero.
   value = input(0);
 }
-</docs-code>
+```
 
 This lets you bind to the property in a template:
 
@@ -29,7 +29,7 @@ This lets you bind to the property in a template:
 
 If an input has a default value, TypeScript infers the type from the default value:
 
-```typescript
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   // TypeScript infers that this input is a number, returning InputSignal<number>.
@@ -41,7 +41,7 @@ You can explicitly declare a type for the input by specifying a generic paramete
 
 If an input without a default value is not set, its value is `undefined`:
 
-```typescript
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   // Produces an InputSignal<number | undefined> because `value` may not be set.
@@ -64,7 +64,7 @@ When extending a component class, **inputs are inherited by the child class.**
 컴포넌트를 사용하다 보면 컴포넌트에 데이터를 전달하는 경우가 자주 있습니다.
 이 경우 컴포넌트의 **입력 프로퍼티** 를 활용하면 됩니다:
 
-<docs-code language="ts" highlight="[7]">
+```ts {highlight:[5]}
 import {Component, input} from '@angular/core';
 
 @Component({/*...*/})
@@ -72,7 +72,7 @@ export class CustomSlider {
 // `value` 라는 이름으로 입력 프로퍼티를 선언하고 기본값 0을 할당합니다.
 value = input(0);
 }
-</docs-code>
+```
 
 그러면 템플릿에서 이렇게 프로퍼티 바인딩 할 수 있습니다:
 
@@ -82,7 +82,7 @@ value = input(0);
 
 입력 프로퍼티에 기본값이 있으면 TypeScript는 기본값을 기준으로 타입을 추론합니다:
 
-```typescript
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   // TypeScript는 숫자를 입력받는 것을 기준으로 InputSignal<number> 타입으로 추론합니다.
@@ -94,7 +94,7 @@ export class CustomSlider {
 
 입력 프로퍼티에 기본값을 할당하지 않으면 `undefined`로 추론됩니다.
 
-```typescript
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   // 입력 프로퍼티 `value`의 기본값이 할당되지 않았기 때문에 타입은 InputSignal<number | undefined> 으로 추론됩니다.
@@ -121,25 +121,25 @@ export class CustomSlider {
 <!--
 The `input` function returns an `InputSignal`. You can read the value by calling the signal:
 
-<docs-code language="ts" highlight="[5]">
-import {Component, input} from '@angular/core';
+```ts {highlight:[5]}
+import {Component, input, computed} from '@angular/core';
 
 @Component({/*...*/})
 export class CustomSlider {
-  // Declare an input named 'value' with a default value of zero. 
+  // Declare an input named 'value' with a default value of zero.
   value = input(0);
 
   // Create a computed expression that reads the value input
-  label = computed(() => `The slider's value is ${this.value()}`); 
+  label = computed(() => `The slider's value is ${this.value()}`);
 }
-</docs-code>
+```
 
 Signals created by the `input` function are read-only.
 -->
 `input` 함수는 `InputSignal`을 반환합니다.
 이 시그널의 값을 읽으려면 시그널을 실행하면 됩니다:
 
-<docs-code language="ts" highlight="[5]">
+```ts {highlight:[5]}
 import {Component, input} from '@angular/core';
 
 @Component({/*...*/})
@@ -150,7 +150,7 @@ value = input(0);
 // `value` 입력 프로퍼티를 기반으로 연산 시그널을 생성합니다.
 label = computed(() => `The slider's value is ${this.value()}`);
 }
-</docs-code>
+```
 
 `input` 함수로 만든 시그널은 읽기 전용 시그널입니다.
 
@@ -163,13 +163,13 @@ label = computed(() => `The slider's value is ${this.value()}`);
 <!--
 You can declare that an input is `required` by calling `input.required` instead of `input`:
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({/*...*/})
 export class CustomSlider {
   // Declare a required input named value. Returns an `InputSignal<number>`.
   value = input.required<number>();
 }
-</docs-code>
+```
 
 Angular enforces that required inputs _must_ be set when the component is used in a template. If you try to use a component without specifying all of its required inputs, Angular reports an error at build-time.
 
@@ -177,13 +177,13 @@ Required inputs do not automatically include `undefined` in the generic paramete
 -->
 입력 프로퍼티 값을 필수 항목으로 지정하려면 `input` 함수 대신 `input.required` 함수를 사용하면 됩니다:
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({/*...*/})
 export class CustomSlider {
   // `value` 라는 이름으로 입력 프로퍼티를 선언하고 `InputSignal<number>`를 할당합니다.
   value = input.required<number>();
 }
-</docs-code>
+```
 
 이렇게 구현하면 템플릿에 컴포넌트가 사용될 때 입력값을 _반드시_ 지정해야 합니다.
 입력값 없이 컴포넌트를 사용하면 빌드 시점에 오류가 발생합니다.
@@ -210,7 +210,7 @@ The `input` function accepts a config object as a second parameter that lets you
 <!--
 You can specify a `transform` function to change the value of an input when it's set by Angular.
 
-<docs-code language="ts" highlight="[6]">
+```ts {highlight:[6]}
 @Component({
   selector: 'custom-slider',
   /*...*/
@@ -222,7 +222,7 @@ export class CustomSlider {
 function trimString(value: string | undefined): string {
   return value?.trim() ?? '';
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider [label]="systemVolume" />
@@ -238,7 +238,7 @@ The most common use-case for input transforms is to accept a wider range of valu
 -->
 입력 프로퍼티로 받은 값을 변환해서 할당하려면 `transform` 함수를 사용하면 됩니다.
 
-<docs-code language="ts" highlight="[6]">
+```ts {highlight:[6]}
 @Component({
   selector: 'custom-slider',
   /*...*/
@@ -250,7 +250,7 @@ export class CustomSlider {
 function trimString(value: string | undefined): string {
 return value?.trim() ?? '';
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider [label]="systemVolume" />
@@ -275,7 +275,7 @@ return value?.trim() ?? '';
 <!--
 When you specify an input transform, the type of the transform function's parameter determines the types of values that can be set to the input in a template.
 
-<docs-code language="ts">
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   widthPx = input('', {transform: appendPx});
@@ -284,13 +284,13 @@ export class CustomSlider {
 function appendPx(value: number): string {
   return `${value}px`;
 }
-</docs-code>
+```
 
 In the example above, the `widthPx` input accepts a `number` while the `InputSignal` property returns a `string`.
 -->
 입력 프로퍼티 변환 함수를 지정할 때, 변환 함수의 인자 타입에 따라 템플릿에서 입력 프로퍼티에 할당할 수 있는 타입이 결정됩니다.
 
-<docs-code language="ts">
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   widthPx = input('', {transform: appendPx});
@@ -299,7 +299,7 @@ export class CustomSlider {
 function appendPx(value: number): string {
 return `${value}px`;
 }
-</docs-code>
+```
 
 위 코드처럼 구현하면 입력 프로퍼티 `widthPx`가 `InputSignal`로 문자열을 반환받더라도 `number` 타입을 인자로 받습니다.
 
@@ -312,15 +312,15 @@ return `${value}px`;
 <!--
 Angular includes two built-in transform functions for the two most common scenarios: coercing values to boolean and numbers.
 
-<docs-code language="ts">
+```ts
 import {Component, input, booleanAttribute, numberAttribute} from '@angular/core';
 
 @Component({/*...*/})
 export class CustomSlider {
-  disabled = input(false, {transform: booleanAttribute}); 
-  value = input(0, {transform: numberAttribute}); 
+  disabled = input(false, {transform: booleanAttribute});
+  value = input(0, {transform: numberAttribute});
 }
-</docs-code>
+```
 
 `booleanAttribute` imitates the behavior of standard HTML [boolean attributes](https://developer.mozilla.org/docs/Glossary/Boolean/HTML), where the
 _presence_ of the attribute indicates a "true" value. However, Angular's `booleanAttribute` treats the literal string `"false"` as the boolean `false`.
@@ -329,7 +329,7 @@ _presence_ of the attribute indicates a "true" value. However, Angular's `boolea
 -->
 불리언 타입과 숫자 타입을 변환하는 작업은 자주 사용되기 때문에 Angular가 기본 변환 함수를 제공합니다.
 
-<docs-code language="ts">
+```ts
 import {Component, input, booleanAttribute, numberAttribute} from '@angular/core';
 
 @Component({/*...*/})
@@ -337,7 +337,7 @@ export class CustomSlider {
 disabled = input(false, {transform: booleanAttribute});
 value = input(0, {transform: numberAttribute});
 }
-</docs-code>
+```
 
 `booleanAttribute`는 표준 HTML [불리언 어트리뷰트](https://developer.mozilla.org/docs/Glossary/Boolean/HTML)를 따라해서 어트리뷰트 값이 _존재하면_ "true" 값으로 변환합니다.
 그리고 `booleanAttribute`가 `"false"` 문자열을 받으면 불리언 `false` 값으로 변환합니다.
@@ -354,12 +354,12 @@ value = input(0, {transform: numberAttribute});
 <!--
 You can specify the `alias` option to change the name of an input in templates.
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({/*...*/})
 export class CustomSlider {
   value = input(0, {alias: 'sliderValue'});
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider [sliderValue]="50" />
@@ -371,12 +371,12 @@ While you should generally avoid aliasing inputs for components, this feature ca
 -->
 템플릿에 사용하는 입력 프로퍼티 이름을 다르게 사용하려면 `alias` 옵션을 사용하면 됩니다.
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({/*...*/})
 export class CustomSlider {
   value = input(0, {alias: 'sliderValue'});
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider [sliderValue]="50" />
@@ -399,14 +399,14 @@ When creating a component, you can define a model input similarly to how you cre
 
 Both types of input allow someone to bind a value into the property. However, **model inputs allow the component author to write values into the property**. If the property is bound with a two-way binding, the new value propagates to that binding.
 
-```typescript
+```ts
 @Component({ /* ... */})
 export class CustomSlider {
   // Define a model input named "value".
   value = model(0);
 
   increment() {
-    // Update the model input with a new value, propagating the value to any bindings. 
+    // Update the model input with a new value, propagating the value to any bindings.
     this.value.update(oldValue => oldValue + 10);
   }
 }
@@ -419,7 +419,7 @@ export class CustomSlider {
   template: `<custom-slider [(value)]="volume" />`,
 })
 export class MediaControls {
-  // Create a writable signal for the `volume` local state. 
+  // Create a writable signal for the `volume` local state.
   volume = signal(0);
 }
 ```
@@ -438,7 +438,7 @@ See [Two-way binding](guide/templates/two-way-binding) for more details on two-w
 그런데 **모델 입력 프로퍼티는 컴포넌트 밖으로도 값을 전달할 수 있습니다.**
 그래서 이 프로퍼티는 양방향으로 바인딩 할 수 있습니다.
 
-```typescript
+```ts
 @Component({ /* ... */})
 export class CustomSlider {
   // `value`라는 이름으로 모델 입력 프로퍼티를 선언합니다.
@@ -521,7 +521,7 @@ export class MediaControls {
 <!--
 When you declare a model input in a component or directive, Angular automatically creates a corresponding [output](guide/components/outputs) for that model. The output's name is the model input's name suffixed with "Change".
 
-```angular-ts
+```ts
 @Directive({ /* ... */ })
 export class CustomCheckbox {
   // This automatically creates an output named "checkedChange".
@@ -537,7 +537,7 @@ See [Custom events with outputs](guide/components/outputs) for more details on o
 컴포넌트나 디렉티브에 모델 입력 프로퍼티를 선언하면 Angular는 해당 모델에 해당하는 [출력 프로퍼티](guide/components/outputs)를 Angular가 자동으로 생성합니다.
 이 출력 프로퍼티의 이름은 입력 프로퍼티 이름에 "Change" 접미사를 붙인 것으로 결정됩니다.
 
-```angular-ts
+```ts
 @Directive({ /* ... */ })
 export class CustomCheckbox {
   // "checkedChange" 출력 프로퍼티가 자동으로 생성됩니다.
@@ -606,12 +606,12 @@ TIP: While the Angular team recommends using the signal-based `input` function f
 
 You can alternatively declare component inputs by adding the `@Input` decorator to a property:
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({...})
 export class CustomSlider {
   @Input() value = 0;
 }
-</docs-code>
+```
 
 Binding to an input is the same in both signal-based and decorator-based inputs:
 
@@ -623,12 +623,12 @@ Binding to an input is the same in both signal-based and decorator-based inputs:
 
 입력 프로퍼티는 `@Input` 데코레이터를 사용해서 선언할 수도 있습니다:
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({...})
 export class CustomSlider {
   @Input() value = 0;
 }
-</docs-code>
+```
 
 템플릿에서 바인딩하는 방법은 시그널을 기반으로 할 때와 같습니다:
 
@@ -656,23 +656,23 @@ The `@Input` decorator accepts a config object that lets you change the way that
 <!--
 You can specify the `required` option to enforce that a given input must always have a value.
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({...})
 export class CustomSlider {
   @Input({required: true}) value = 0;
 }
-</docs-code>
+```
 
 If you try to use a component without specifying all of its required inputs, Angular reports an error at build-time.
 -->
 `required` 옵션을 지정하면 입력 프로퍼티 값을 필수 항목으로 지정할 수 있습니다.
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({...})
 export class CustomSlider {
   @Input({required: true}) value = 0;
 }
-</docs-code>
+```
 
 이제 템플릿에서 필수값을 지정하지 않고 컴포넌트를 사용하면 빌드 시점에 에러가 발생합니다.
 
@@ -685,7 +685,7 @@ export class CustomSlider {
 <!--
 You can specify a `transform` function to change the value of an input when it's set by Angular. This transform function works identically to transform functions for signal-based inputs described above.
 
-<docs-code language="ts" highlight="[6]">
+```ts {highlight:[6]}
 @Component({
   selector: 'custom-slider',
   ...
@@ -694,13 +694,15 @@ export class CustomSlider {
   @Input({transform: trimString}) label = '';
 }
 
-function trimString(value: string | undefined) { return value?.trim() ?? ''; }
-</docs-code>
+function trimString(value: string | undefined) {
+  return value?.trim() ?? '';
+}
+```
 -->
 입력 프로퍼티로 들어오는 값을 변환해서 사용하고 싶다면 `transform` 함수를 지정하면 됩니다.
 이 변환 함수는 시그널 기반에서 다뤘던 것과 동일합니다.
 
-<docs-code language="ts" highlight="[6]">
+```ts {highlight:[6]}
 @Component({
   selector: 'custom-slider',
   ...
@@ -709,8 +711,10 @@ export class CustomSlider {
   @Input({transform: trimString}) label = '';
 }
 
-function trimString(value: string | undefined) { return value?.trim() ?? ''; }
-</docs-code>
+function trimString(value: string | undefined) {
+  return value?.trim() ?? '';
+}
+```
 
 
 <!--
@@ -721,12 +725,12 @@ function trimString(value: string | undefined) { return value?.trim() ?? ''; }
 <!--
 You can specify the `alias` option to change the name of an input in templates.
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({...})
 export class CustomSlider {
   @Input({alias: 'sliderValue'}) value = 0;
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider [sliderValue]="50" />
@@ -738,12 +742,12 @@ Input aliases work the same way as for signal-based inputs described above.
 -->
 입력 프로퍼티에 별칭을 지정하려면 `alias` 옵션을 지정하면 됩니다.
 
-<docs-code language="ts" highlight="[3]">
+```ts {highlight:[3]}
 @Component({...})
 export class CustomSlider {
   @Input({alias: 'sliderValue'}) value = 0;
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider [sliderValue]="50" />
@@ -762,29 +766,31 @@ export class CustomSlider {
 <!--
 When using decorator-based inputs, a property implemented with a getter and setter can be an input:
 
-<docs-code language="ts">
+```ts
 export class CustomSlider {
   @Input()
   get value(): number {
     return this.internalValue;
   }
 
-set value(newValue: number) { this.internalValue = newValue; }
+  set value(newValue: number) { this.internalValue = newValue; }
 
-private internalValue = 0; }
-</docs-code>
+  private internalValue = 0;
+}
+```
 
 You can even create a _write-only_ input by only defining a public setter:
 
-<docs-code language="ts">
+```ts
 export class CustomSlider {
   @Input()
   set value(newValue: number) {
     this.internalValue = newValue;
   }
 
-private internalValue = 0; }
-</docs-code>
+  private internalValue = 0;
+}
+```
 
 **Prefer using input transforms instead of getters and setters** if possible.
 
@@ -792,29 +798,31 @@ Avoid complex or costly getters and setters. Angular may invoke an input's sette
 -->
 데코레이터 기반으로 입력 프로퍼티를 선언하면서 입력 프로퍼티의 게터와 세터를 추가로 구현할 수 있습니다:
 
-<docs-code language="ts">
+```ts
 export class CustomSlider {
   @Input()
   get value(): number {
     return this.internalValue;
   }
 
-set value(newValue: number) { this.internalValue = newValue; }
+  set value(newValue: number) { this.internalValue = newValue; }
 
-private internalValue = 0; }
-</docs-code>
+  private internalValue = 0;
+}
+```
 
 그리고 public 세터를 정의하면 _쓰기 전용_ 입력 프로퍼티를 만들 수도 있습니다:
 
-<docs-code language="ts">
+```ts
 export class CustomSlider {
   @Input()
   set value(newValue: number) {
     this.internalValue = newValue;
   }
 
-private internalValue = 0; }
-</docs-code>
+  private internalValue = 0;
+}
+```
 
 가능하다면 **게터, 세터 대신 입력 프로퍼티 변환 함수를 사용하세요**.
 Angular는 입력 프로퍼티의 세터를 여러번 실행할 수 있으며, 이 세터가 DOM을 조작하는 것처럼 성능에 영향을 많이 주는 경우에는 전체 애플리케이션 성능에 부정적인 영향을 미칠 수 있습니다.
@@ -828,45 +836,45 @@ Angular는 입력 프로퍼티의 세터를 여러번 실행할 수 있으며, �
 <!--
 In addition to the `@Input` decorator, you can also specify a component's inputs with the `inputs` property in the `@Component` decorator. This can be useful when a component inherits a property from a base class:
 
-<docs-code language="ts" highlight="[4]">
+```ts {highlight:[4]}
 // `CustomSlider` inherits the `disabled` property from `BaseSlider`.
 @Component({
   ...,
   inputs: ['disabled'],
 })
 export class CustomSlider extends BaseSlider { }
-</docs-code>
+```
 
 You can additionally specify an input alias in the `inputs` list by putting the alias after a colon in the string:
 
-<docs-code language="ts" highlight="[4]">
+```ts {highlight:[4]}
 // `CustomSlider` inherits the `disabled` property from `BaseSlider`.
 @Component({
   ...,
   inputs: ['disabled: sliderDisabled'],
 })
 export class CustomSlider extends BaseSlider { }
-</docs-code>
+```
 -->
 `@Input` 데코레이터에는 `inputs` 프로퍼티를 활용해서 입력 프로퍼티를 직접 지정할 수도 있습니다.
 이 방식은 컴포넌트를 기본 클래스에서 상속받을 때 유용합니다:
 
-<docs-code language="ts" highlight="[4]">
+```ts {highlight:[4]}
 // `CustomSlider`는 `BaseSlider`에서 `disabled` 프로퍼티를 상속받습니다.
 @Component({
   ...,
   inputs: ['disabled'],
 })
 export class CustomSlider extends BaseSlider { }
-</docs-code>
+```
 
 그리고 입력 프로퍼티를 선언할 때 콜론(`:`)을 사용하면 별칭을 함께 지정할 수도 있습니다:
 
-<docs-code language="ts" highlight="[4]">
+```ts {highlight:[4]}
 // `CustomSlider`는 `BaseSlider`에서 `disabled` 프로퍼티를 상속받습니다.
 @Component({
   ...,
   inputs: ['disabled: sliderDisabled'],
 })
 export class CustomSlider extends BaseSlider { }
-</docs-code>
+```

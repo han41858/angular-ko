@@ -47,7 +47,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 @Component({ ... })
 export class UserProfileComponent {
   readonly userId: string;
-  private activatedRoute = inject(ActivatedRoute);
+  private route = inject(ActivatedRoute);
 
   constructor() {
     // Example URL: https://www.angular.dev/users/123?role=admin&status=active#contact
@@ -180,6 +180,43 @@ export class ProductListComponent implements OnInit {
 In this example, users can use a select element to sort the product list by name or price. The associated change handler updates the URL’s query parameters, which in turn triggers a change event that can read the updated query parameters and update the product list.
 
 For more information, check out the [official docs on QueryParamsHandling](/api/router/QueryParamsHandling).
+
+### Matrix Parameters
+
+Matrix parameters are optional parameters that belong to a specific URL segment, rather than applying to the entire route. Unlike query parameters which appear after a `?` and apply globally, matrix parameters use semicolons (`;`) and are scoped to individual path segments.
+
+Matrix parameters are useful when you need to pass auxiliary data to a specific route segment without affecting the route definition or matching behavior. Like query parameters, they don't need to be defined in your route configuration.
+
+```ts
+// URL format: /path;key=value
+// Multiple parameters: /path;key1=value1;key2=value2
+
+// Navigate with matrix parameters
+this.router.navigate(['/awesome-products', { view: 'grid', filter: 'new' }]);
+// Results in URL: /awesome-products;view=grid;filter=new
+```
+
+**Using ActivatedRoute**
+
+```ts
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component(/* ... */)
+export class AwesomeProducts  {
+  private route = inject(ActivatedRoute);
+
+  constructor() {
+    // Access matrix parameters via params
+    this.route.params.subscribe((params) => {
+      const view = params['view']; // e.g., 'grid'
+      const filter = params['filter']; // e.g., 'new'
+    });
+  }
+}
+```
+
+NOTE: As an alternative to using `ActivatedRoute`, matrix parameters are also bound to component inputs when using the `withComponentInputBinding`.
 
 ## Detect active current route with RouterLinkActive
 

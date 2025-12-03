@@ -8,12 +8,12 @@ TIP: This guide assumes you've already read the [Essentials Guide](essentials). 
 
 Angular components can define custom events by assigning a property to the `output` function:
 
-<docs-code language="ts" highlight="3">
+```ts {highlight:[3]}
 @Component({/*...*/})
 export class ExpandablePanel {
   panelClosed = output<void>();
 }
-</docs-code>
+```
 
 ```angular-html
 <expandable-panel (panelClosed)="savePanelState()" />
@@ -21,9 +21,9 @@ export class ExpandablePanel {
 
 The `output` function returns an `OutputEmitterRef`. You can emit an event by calling the `emit` method on the `OutputEmitterRef`:
 
-<docs-code language="ts" highlight="">
+```ts
   this.panelClosed.emit();
-</docs-code>
+```
 
 Angular refers to properties initialized with the `output` function as **outputs**. You can use outputs to raise custom events, similar to native browser events like `click`.
 
@@ -39,12 +39,12 @@ The `output` function has special meaning to the Angular compiler. **You can exc
 
 컴포넌트는 `output` 함수로 출력 프로퍼티를 선언해서 커스텀 이벤트를 정의할 수 있습니다:
 
-<docs-code language="ts" highlight="3">
+```ts {highlight:[3]}
 @Component({/*...*/})
 export class ExpandablePanel {
   panelClosed = output<void>();
 }
-</docs-code>
+```
 
 ```angular-html
 <expandable-panel (panelClosed)="savePanelState()" />
@@ -53,9 +53,9 @@ export class ExpandablePanel {
 `output` 함수를 실행하면 `OutputEmitterRef` 객체를 반환합니다.
 그리고 `OutputEmitterRef` 객체의 `emit` 메서드를 실행하면 이벤트를 보낼 수 있습니다:
 
-<docs-code language="ts" highlight="">
+```ts
   this.panelClosed.emit();
-</docs-code>
+```
 
 Angular에서 `output` 함수로 초기화한 프로퍼티를 **출력 프로퍼티(outputs)** 라고 합니다.
 출력 프로퍼티는 `click`과 같은 네이티브 브라우저 이벤트와 비슷하게 동작하는 커스텀 이벤트를 발생시키는 용도로 사용합니다.
@@ -78,7 +78,7 @@ Angular에서 `output` 함수로 초기화한 프로퍼티를 **출력 프로퍼
 <!--
 You can pass event data when calling `emit`:
 
-<docs-code language="ts" highlight="">
+```ts
 // You can emit primitive values.
 this.valueChanged.emit(7);
 
@@ -87,26 +87,40 @@ this.thumbDropped.emit({
   pointerX: 123,
   pointerY: 456,
 })
-</docs-code>
+```
 
 When defining an event listener in a template, you can access the event data from the `$event` variable:
 
 ```angular-html
 <custom-slider (valueChanged)="logValue($event)" />
 ```
+
+Receive the event data in the parent component:
+
+```ts
+@Component({
+ /*...*/
+})
+export class App {
+  logValue(value: number) {
+    ...
+  }
+}
+
+```
 -->
 `emit` 메서드를 실행하면서 이벤트 데이터를 보낼 수 있습니다:
 
-<docs-code language="ts" highlight="">
+```ts
 // 기본 자료형을 보낼 수 있습니다.
 this.valueChanged.emit(7);
 
 // 커스텀 이벤트 객체를 보낼 수도 있습니다.
 this.thumbDropped.emit({
-pointerX: 123,
-pointerY: 456,
+  pointerX: 123,
+  pointerY: 456,
 })
-</docs-code>
+```
 
 이벤트 데이터를 활용하려면 템플릿에서 이벤트 리스너를 연결할 때 `$event` 변수를 인자로 전달하면 됩니다:
 
@@ -114,8 +128,20 @@ pointerY: 456,
 <custom-slider (valueChanged)="logValue($event)" />
 ```
 
+부모 컴포넌트에서는 이렇게 이벤트 데이터를 받습니다:
 
-<!--
+```ts
+@Component({
+ /*...*/
+})
+export class App {
+  logValue(value: number) {
+    ...
+  }
+}
+
+```
+
 ## Customizing output names
 -->
 ## 별칭으로 사용하기
@@ -123,12 +149,12 @@ pointerY: 456,
 <!--
 The `output` function accepts a parameter that lets you specify a different name for the event in a template:
 
-<docs-code language="ts" highlight="">
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   changed = output({alias: 'valueChanged'});
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider (valueChanged)="saveVolume()" />
@@ -175,7 +201,7 @@ someComponentRef.instance.someEventProperty.subscribe(eventData => {
 
 Angular automatically cleans up event subscriptions when it destroys components with subscribers. Alternatively, you can manually unsubscribe from an event. The `subscribe` function returns an `OutputRefSubscription` with an `unsubscribe` method:
 
-```typescript
+```ts
 const eventSubscription = someComponent.someEventProperty.subscribe(eventData => {
   console.log(eventData);
 });
@@ -200,7 +226,7 @@ someComponentRef.instance.someEventProperty.subscribe(eventData => {
 필요하다면 이벤트를 직접 구독 중지할 수도 있습니다.
 `subscribe` 함수가 반환하는 `OutputRefSubscription` 객체의 `unsubscribe` 메서드를 실행하면 됩니다:
 
-```typescript
+```ts
 const eventSubscription = someComponent.someEventProperty.subscribe(eventData => {
   console.log(eventData);
 });
@@ -255,12 +281,12 @@ original decorator-based `@Output` API remains fully supported.
 
 You can alternatively define custom events by assigning a property to a new `EventEmitter` and adding the `@Output` decorator:
 
-<docs-code language="ts" highlight="">
+```ts
 @Component({/*...*/})
 export class ExpandablePanel {
   @Output() panelClosed = new EventEmitter<void>();
 }
-</docs-code>
+```
 
 You can emit an event by calling the `emit` method on the `EventEmitter`.
 -->
@@ -268,12 +294,12 @@ You can emit an event by calling the `emit` method on the `EventEmitter`.
 
 커스텀 이벤트는 프로퍼티에 `@Output` 데코레이터를 붙이고 `EventEmitter` 인스턴스를 생성하는 방식으로 선언할 수도 있습니다:
 
-<docs-code language="ts" highlight="">
+```ts
 @Component({/*...*/})
 export class ExpandablePanel {
   @Output() panelClosed = new EventEmitter<void>();
 }
-</docs-code>
+```
 
 이 경우는 `EventEmitter` 객체의 `emit` 메서드를 실행해서 이벤트를 보낼 수 있습니다.
 
@@ -286,12 +312,12 @@ export class ExpandablePanel {
 <!--
 The `@Output` decorator accepts a parameter that lets you specify a different name for the event in a template:
 
-<docs-code language="ts" highlight="">
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   @Output('valueChanged') changed = new EventEmitter<number>();
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider (valueChanged)="saveVolume()" />
@@ -301,12 +327,12 @@ This alias does not affect usage of the property in TypeScript code.
 -->
 템플릿에서 이벤트 이름을 출력 프로퍼티와 다르게 사용하려면 `@Output` 데코레이터에 별칭을 지정하면 됩니다:
 
-<docs-code language="ts" highlight="">
+```ts
 @Component({/*...*/})
 export class CustomSlider {
   @Output('valueChanged') changed = new EventEmitter<number>();
 }
-</docs-code>
+```
 
 ```angular-html
 <custom-slider (valueChanged)="saveVolume()" />
@@ -323,45 +349,45 @@ export class CustomSlider {
 <!--
 In addition to the `@Output` decorator, you can also specify a component's outputs with the `outputs` property in the `@Component` decorator. This can be useful when a component inherits a property from a base class:
 
-<docs-code language="ts" highlight="">
+```ts
 // `CustomSlider` inherits the `valueChanged` property from `BaseSlider`.
 @Component({
   /*...*/
   outputs: ['valueChanged'],
 })
 export class CustomSlider extends BaseSlider {}
-</docs-code>
+```
 
 You can additionally specify an output alias in the `outputs` list by putting the alias after a colon in the string:
 
-<docs-code language="ts" highlight="">
+```ts
 // `CustomSlider` inherits the `valueChanged` property from `BaseSlider`.
 @Component({
   /*...*/
   outputs: ['valueChanged: volumeChanged'],
 })
 export class CustomSlider extends BaseSlider {}
-</docs-code>
+```
 -->
 `@Output` 데코레이터를 사용하는 방법 외에도, `@Component` 데코레이터의 `outputs` 프로퍼티를 사용하면 컴포넌트 출력 프로퍼티를 선언할 수 있습니다.
 이 방식은 컴포넌트를 상속받는 경우에 유용합니다:
 
-<docs-code language="ts" highlight="">
+```ts
 // `CustomSlider` 는 `BaseSlider` 에 있는 `valueChanged` 프로퍼티를 상속받습니다.
 @Component({
   /*...*/
   outputs: ['valueChanged'],
 })
 export class CustomSlider extends BaseSlider {}
-</docs-code>
+```
 
 그리고 `outputs`를 선언하면서 콜론을 붙이고 문자열을 붙이면 출력 프로퍼티의 별칭을 지정할 수 있습니다:
 
-<docs-code language="ts" highlight="">
+```ts
 // `CustomSlider` 는 `BaseSlider` 에 있는 `valueChanged` 프로퍼티를 상속받습니다.
 @Component({
   /*...*/
   outputs: ['valueChanged: volumeChanged'],
 })
 export class CustomSlider extends BaseSlider {}
-</docs-code>
+```

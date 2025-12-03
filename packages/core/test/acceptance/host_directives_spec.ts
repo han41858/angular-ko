@@ -21,6 +21,7 @@ import {
   OnChanges,
   OnInit,
   Output,
+  provideZoneChangeDetection,
   SimpleChanges,
   Type,
   ViewChild,
@@ -34,6 +35,12 @@ import {By} from '@angular/platform-browser';
 import {getComponent, getDirectives} from '../../src/render3/util/discovery_utils';
 
 describe('host directives', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideZoneChangeDetection()],
+    });
+  });
+
   it('should apply a basic host directive', () => {
     const logs: string[] = [];
 
@@ -1174,7 +1181,7 @@ describe('host directives', () => {
 
       TestBed.configureTestingModule({declarations: [App, Host]});
       expect(() => TestBed.createComponent(App)).toThrowError(
-        /NG0200: Circular dependency in DI detected for HostDir/,
+        /NG0200: Circular dependency detected for `HostDir`/,
       );
     });
 

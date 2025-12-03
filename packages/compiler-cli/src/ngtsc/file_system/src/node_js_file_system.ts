@@ -9,7 +9,7 @@
 import fs from 'fs';
 import {createRequire} from 'module';
 import * as p from 'path';
-import {fileURLToPath} from 'url';
+import * as url from 'url';
 
 import {
   AbsoluteFsPath,
@@ -66,7 +66,10 @@ export class NodeJSPathManipulation implements PathManipulation {
 // CommonJS/ESM interop for determining the current file name and containing dir.
 const isCommonJS = typeof __filename !== 'undefined';
 const currentFileUrl = isCommonJS ? null : import.meta.url;
-const currentFileName = isCommonJS ? __filename : fileURLToPath(currentFileUrl!);
+// Note, when this code loads in the browser, `url` may be an empty `{}` due to the Closure shims.
+const currentFileName: string | null = isCommonJS
+  ? __filename
+  : (url.fileURLToPath?.(currentFileUrl!) ?? null);
 
 /**
  * A wrapper around the Node.js file-system that supports readonly operations and path manipulation.
@@ -77,7 +80,10 @@ export class NodeJSReadonlyFileSystem extends NodeJSPathManipulation implements 
     if (this._caseSensitive === undefined) {
       // Note the use of the real file-system is intentional:
       // `this.exists()` relies upon `isCaseSensitive()` so that would cause an infinite recursion.
-      this._caseSensitive = !fs.existsSync(this.normalize(toggleCase(currentFileName)));
+      this._caseSensitive =
+        currentFileName !== null
+          ? !fs.existsSync(this.normalize(toggleCase(currentFileName)))
+          : true;
     }
     return this._caseSensitive;
   }
@@ -88,6 +94,9 @@ export class NodeJSReadonlyFileSystem extends NodeJSPathManipulation implements 
     return fs.readFileSync(path, 'utf8');
   }
   readFileBuffer(path: AbsoluteFsPath): Uint8Array {
+    // TODO: go/ts59upgrade - Remove the suppression after TS 5.9.2 upgrade
+    //   TS2322: Type 'Buffer' is not assignable to type 'Uint8Array<ArrayBufferLike>'.
+    // @ts-ignore
     return fs.readFileSync(path);
   }
   readdir(path: AbsoluteFsPath): PathSegment[] {

@@ -20,7 +20,7 @@ Most developers prefer to format their templates with newlines and indentation t
 
 ```angular-html
 <section>
-  <h3>User profile</p>
+  <h3>User profile</h3>
   <label>
     User name
     <input>
@@ -32,7 +32,7 @@ This template contains whitespace between all of the elements. The following sni
 
 ```angular-html
 <!- Total Whitespace: 20 ->
-<section>###<h3>User profile</p>###<label>#####User name#####<input>###</label>#</section>
+<section>###<h3>User profile</h3>###<label>#####User name#####<input>###</label>#</section>
 ```
 
 Preserving the whitespace as written in the template would result in many unnecessary [text nodes](https://developer.mozilla.org/en-US/docs/Web/API/Text) and increase page rendering overhead. By ignoring this whitespace between elements, Angular performs less work when rendering the template on the page, improving overall performance.
@@ -41,7 +41,7 @@ Preserving the whitespace as written in the template would result in many unnece
 
 ```angular-html
 <section>
-  <h3>User profile</p>
+  <h3>User profile</h3>
   <label>
     User name
     <input>
@@ -54,7 +54,7 @@ Preserving the whitespace as written in the template would result in many unnece
 
 ```angular-html
 <!-- 전체 공백문자: 20 -->
-<section>###<h3>User profile</p>###<label>#####User name#####<input>###</label>#</section>
+<section>###<h3>User profile</h3>###<label>#####User name#####<input>###</label>#</section>
 ```
 
 이런 공백문자를 모두 유지하는 것은 [텍스트 노드](https://developer.mozilla.org/en-US/docs/Web/API/Text)를 불필요하게 생성하며, 화면 렌더링 성능도 나빠집니다.

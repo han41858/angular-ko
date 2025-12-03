@@ -123,18 +123,6 @@ class TypeTranslatorVisitor implements o.ExpressionVisitor, o.TypeVisitor {
     return ts.factory.createTypeQueryNode(ts.factory.createIdentifier(ast.name));
   }
 
-  visitWriteVarExpr(expr: o.WriteVarExpr, context: Context): never {
-    throw new Error('Method not implemented.');
-  }
-
-  visitWriteKeyExpr(expr: o.WriteKeyExpr, context: Context): never {
-    throw new Error('Method not implemented.');
-  }
-
-  visitWritePropExpr(expr: o.WritePropExpr, context: Context): never {
-    throw new Error('Method not implemented.');
-  }
-
   visitInvokeFunctionExpr(ast: o.InvokeFunctionExpr, context: Context): never {
     throw new Error('Method not implemented.');
   }
@@ -197,7 +185,11 @@ class TypeTranslatorVisitor implements o.ExpressionVisitor, o.TypeVisitor {
     throw new Error('Method not implemented.');
   }
 
-  visitDynamicImportExpr(ast: o.outputAst.DynamicImportExpr, context: any) {
+  visitDynamicImportExpr(ast: o.DynamicImportExpr, context: any) {
+    throw new Error('Method not implemented.');
+  }
+
+  visitRegularExpressionLiteral(ast: o.RegularExpressionLiteralExpr, context: any) {
     throw new Error('Method not implemented.');
   }
 

@@ -75,9 +75,11 @@ export class WhitespaceVisitor implements html.Visitor {
         visitAllWithSiblings(this, element.attrs),
         visitAllWithSiblings(this, element.directives),
         element.children,
+        element.isSelfClosing,
         element.sourceSpan,
         element.startSourceSpan,
         element.endSourceSpan,
+        element.isVoid,
         element.i18n,
       );
       this.originalNodeMap?.set(newElement, element);
@@ -89,9 +91,11 @@ export class WhitespaceVisitor implements html.Visitor {
       element.attrs,
       element.directives,
       visitAllWithSiblings(this, element.children),
+      element.isSelfClosing,
       element.sourceSpan,
       element.startSourceSpan,
       element.endSourceSpan,
+      element.isVoid,
       element.i18n,
     );
     this.originalNodeMap?.set(newElement, element);
@@ -220,6 +224,7 @@ export class WhitespaceVisitor implements html.Visitor {
         visitAllWithSiblings(this, node.attrs),
         visitAllWithSiblings(this, node.directives),
         node.children,
+        node.isSelfClosing,
         node.sourceSpan,
         node.startSourceSpan,
         node.endSourceSpan,
@@ -236,6 +241,7 @@ export class WhitespaceVisitor implements html.Visitor {
       node.attrs,
       node.directives,
       visitAllWithSiblings(this, node.children),
+      node.isSelfClosing,
       node.sourceSpan,
       node.startSourceSpan,
       node.endSourceSpan,

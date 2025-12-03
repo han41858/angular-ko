@@ -9,14 +9,14 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {Navigation} from './navigation.component';
-import {RouterTestingModule} from '@angular/router/testing';
+import {provideRouter} from '@angular/router';
 import {By} from '@angular/platform-browser';
-import {PagePrefix} from '../../enums/pages';
 import {Theme, ThemeManager} from '../../services/theme-manager.service';
 import {Version, signal} from '@angular/core';
 import {of} from 'rxjs';
 import {VersionManager} from '../../services/version-manager.service';
 import {Search, WINDOW} from '@angular/docs';
+import {PAGE_PREFIX} from '../../constants/pages';
 
 describe('Navigation', () => {
   let component: Navigation;
@@ -30,6 +30,7 @@ describe('Navigation', () => {
 
   const fakeVersionManager = {
     currentDocsVersion: signal('v17'),
+    currentDocsVersionMode: signal('stable'),
     versions: signal<Version[]>([]),
   };
 
@@ -38,8 +39,9 @@ describe('Navigation', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Navigation, RouterTestingModule],
+      imports: [Navigation],
       providers: [
+        provideRouter([]),
         {
           provide: WINDOW,
           useValue: fakeWindow,
@@ -60,7 +62,7 @@ describe('Navigation', () => {
   });
 
   it('should append active class to DOCS_ROUTE when DOCS_ROUTE is active', () => {
-    component.activeRouteItem.set(PagePrefix.DOCS);
+    component.activeRouteItem.set(PAGE_PREFIX.DOCS);
 
     fixture.detectChanges();
 
@@ -83,7 +85,7 @@ describe('Navigation', () => {
 
   it('should call themeManager.setTheme(dark) when user tries to set dark theme', () => {
     const openThemePickerButton = fixture.debugElement.query(
-      By.css('button[aria-label^="Open theme picker"]'),
+      By.css('button[aria-label^="Change theme. Current theme:"]'),
     ).nativeElement;
     const setThemeSpy = spyOn(fakeThemeManager, 'setTheme');
 

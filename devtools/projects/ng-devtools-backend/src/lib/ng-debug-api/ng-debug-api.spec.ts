@@ -6,15 +6,18 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ɵDirectiveDebugMetadata, ɵGlobalDevModeUtils} from '@angular/core';
+import {ɵFrameworkAgnosticGlobalUtils} from '@angular/core';
 import {
   ngDebugDependencyInjectionApiIsSupported,
   ngDebugProfilerApiIsSupported,
   ngDebugRoutesApiIsSupported,
+  ngDebugSignalGraphApiIsSupported,
+  ngDebugSignalPropertiesInspectionApiIsSupported,
+  ngDebugTransferStateApiIsSupported,
 } from './ng-debug-api';
 import {Framework} from '../component-tree/core-enums';
 
-type Ng = ɵGlobalDevModeUtils['ng'];
+type Ng = ɵFrameworkAgnosticGlobalUtils;
 
 /** Add a root element to the body. */
 const mockRoot = () => {
@@ -25,16 +28,35 @@ const mockRoot = () => {
 };
 
 /** Creates an `ng` object with a `getDirectiveMetadata` mock. */
-const fakeNgGlobal = (framework: Framework): Partial<Record<keyof Ng, () => void>> => ({
-  getComponent(): {} {
-    return {};
-  },
-  getDirectiveMetadata(): Partial<ɵDirectiveDebugMetadata> {
+const fakeNgGlobal = (framework: Framework): Partial<Ng> => {
+  const base: Partial<Ng> = {
+    getComponent<T>(_element: any): any {
+      return {};
+    },
+    getDirectiveMetadata(_directiveOrComponentInstance: any): any {
+      return {
+        framework,
+      };
+    },
+  };
+
+  // Only Angular and ACX have route debug functions
+  if (framework === Framework.Angular || framework === Framework.ACX) {
     return {
-      framework,
+      ...base,
+      ɵgetLoadedRoutes(route: any): any {
+        return [];
+      },
+      ɵnavigateByUrl(router: any, url: string): any {},
+      ɵgetRouterInstance(injector: any): any {
+        return {};
+      },
     };
-  },
-});
+  }
+
+  // Wiz does not have route debug functions
+  return base;
+};
 
 describe('ng-debug-api', () => {
   afterEach(() => {
@@ -111,6 +133,63 @@ describe('ng-debug-api', () => {
       (globalThis as any).ng = fakeNgGlobal(Framework.Wiz);
 
       expect(ngDebugRoutesApiIsSupported()).toBeFalse();
+    });
+  });
+
+  describe('ngDebugSignalGraphIsSupported', () => {
+    beforeEach(() => mockRoot());
+
+    it('should support Signal Graph API with getSignalGraph', () => {
+      (globalThis as any).ng = fakeNgGlobal(Framework.Angular);
+      (globalThis as any).ng.ɵgetSignalGraph = () => {};
+      expect(ngDebugSignalGraphApiIsSupported()).toBeTrue();
+    });
+
+    it('should not support Signal Graph API with no getSignalGraph', () => {
+      (globalThis as any).ng = fakeNgGlobal(Framework.ACX);
+      (globalThis as any).ng.ɵgetSignalGraph = 'not implemented';
+      expect(ngDebugSignalGraphApiIsSupported()).toBeFalse();
+
+      (globalThis as any).ng = fakeNgGlobal(Framework.ACX);
+      (globalThis as any).ng.ɵgetSignalGraph = undefined;
+      expect(ngDebugSignalGraphApiIsSupported()).toBeFalse();
+    });
+  });
+
+  describe('ngDebugTransferStateApiIsSupported', () => {
+    beforeEach(() => mockRoot());
+
+    it('should support Transfer State API with getTransferState', () => {
+      (globalThis as any).ng = fakeNgGlobal(Framework.Angular);
+      (globalThis as any).ng.ɵgetTransferState = () => {};
+      expect(ngDebugTransferStateApiIsSupported()).toBeTrue();
+    });
+
+    it('should not support Transfer State API with no getTransferState', () => {
+      (globalThis as any).ng = fakeNgGlobal(Framework.ACX);
+      (globalThis as any).ng.ɵgetTransferState = 'not implemented';
+      expect(ngDebugTransferStateApiIsSupported()).toBeFalse();
+
+      (globalThis as any).ng = fakeNgGlobal(Framework.ACX);
+      (globalThis as any).ng.ɵgetTransferState = undefined;
+      expect(ngDebugTransferStateApiIsSupported()).toBeFalse();
+    });
+  });
+
+  describe('ngDebugSignalPropertiesInspectionApiIsSupported', () => {
+    beforeEach(() => mockRoot());
+
+    it('should support signal properties inspection API', () => {
+      (globalThis as any).ng = fakeNgGlobal(Framework.Angular);
+      expect(ngDebugSignalPropertiesInspectionApiIsSupported()).toBeTrue();
+    });
+
+    it('should NOT support signal properties inspection API', () => {
+      (globalThis as any).ng = fakeNgGlobal(Framework.Wiz);
+      expect(ngDebugSignalPropertiesInspectionApiIsSupported()).toBeFalse();
+
+      (globalThis as any).ng = fakeNgGlobal(Framework.ACX);
+      expect(ngDebugSignalPropertiesInspectionApiIsSupported()).toBeFalse();
     });
   });
 });

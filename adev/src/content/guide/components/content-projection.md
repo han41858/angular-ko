@@ -22,7 +22,7 @@ export class CustomCard {/* ... */}
 ```angular-ts
 @Component({
   selector: 'custom-card',
-  template: '<div class="card-shadow"> <ng-content></ng-content> </div>',
+  template: '<div class="card-shadow"> <ng-content/> </div>',
 })
 export class CustomCard {/* ... */}
 ```
@@ -72,7 +72,7 @@ placeholder that tells Angular where to render content. Angular's compiler proce
 all `<ng-content>` elements at build-time. You cannot insert, remove, or modify `<ng-content>` at
 run time. You cannot add directives, styles, or arbitrary attributes to `<ng-content>`.
 
-You should not conditionally include `<ng-content>` with `@if`, `@for`, or `@switch`. Angular always
+IMPORTANT: You should not conditionally include `<ng-content>` with `@if`, `@for`, or `@switch`. Angular always
 instantiates and creates DOM nodes for content rendered to a `<ng-content>` placeholder, even if
 that `<ng-content>` placeholder is hidden. For conditional rendering of component content,
 see [Template fragments](api/core/ng-template).
@@ -95,7 +95,7 @@ export class CustomCard {/* ... */}
 ```angular-ts
 @Component({
   selector: 'custom-card',
-  template: '<div class="card-shadow"> <ng-content></ng-content> </div>',
+  template: '<div class="card-shadow"> <ng-content/> </div>',
 })
 export class CustomCard {/* ... */}
 ```
@@ -136,7 +136,7 @@ export class CustomCard {/* ... */}
 컴포넌트 밖에서 컴포넌트 안으로 전달되는 모든 내용을 컴포넌트의 **내용물(content)** 라고 합니다.
 컴포넌트 템플릿에 존재하는 엘리먼트를 의미하는 **뷰(view)** 와는 다릅니다.
 
-**`<ng-content>` 엘리먼트는 컴포넌트도 아니고 DOM 엘리먼트도 아닙니다.**
+중요: **`<ng-content>` 엘리먼트는 컴포넌트도 아니고 DOM 엘리먼트도 아닙니다.**
 이 엘리먼트는 Angular에게 프로젝션되는 내용물의 위치를 지정하는 용도로만 사용되는 특별한 플레이스홀더(placeholder)입니다.
 Angular 컴파일러는 `<ng-content>` 엘리먼트를 빌드 시점에 처리합니다.
 `<ng-content>`는 실행 시점에 추가하거나, 제거하거나, 수정할 수 없습니다.
@@ -157,21 +157,48 @@ Angular supports projecting multiple different elements into different `<ng-cont
 based on CSS selector. Expanding the card example from above, you could create two placeholders for
 a card title and a card body by using the `select` attribute:
 
-```angular-html
-<!- Component template ->
-<div class="card-shadow">
-  <ng-content select="card-title"></ng-content>
-  <div class="card-divider"></div>
-  <ng-content select="card-body"></ng-content>
-</div>
+```angular-ts
+@Component({
+  selector: 'card-title',
+  template: `<ng-content>card-title</ng-content>`,
+})
+export class CardTitle {}
+
+@Component({
+  selector: 'card-body',
+  template: `<ng-content>card-body</ng-content>`,
+})
+export class CardBody {}
 ```
 
-```angular-html
+```angular-ts
+<!- Component template ->
+Component({
+  selector: 'custom-card',
+  template: `
+  <div class="card-shadow">
+    <ng-content select="card-title"></ng-content>
+    <div class="card-divider"></div>
+    <ng-content select="card-body"></ng-content>
+  </div>
+  `,
+})
+export class CustomCard {}
+```
+
+```angular-ts
 <!- Using the component ->
-<custom-card>
-  <card-title>Hello</card-title>
-  <card-body>Welcome to the example</card-body>
-</custom-card>
+@Component({
+  selector: 'app-root',
+  imports: [CustomCard, CardTitle, CardBody],
+  template: `
+    <custom-card>
+      <card-title>Hello</card-title>
+      <card-body>Welcome to the example</card-body>
+    </custom-card>
+`,
+})
+export class App {}
 ```
 
 ```angular-html
@@ -229,21 +256,48 @@ elements that don't match one of the component's placeholders do not render into
 `<ng-content>` 플레이스홀더에 CSS 셀렉터를 지정하면 내용물을 여러개 전달할 수 있습니다.
 위에서 다룬 카드 예제를 다시 보자면, `select` 어트리뷰트로 플레이스홀더를 구분하면 됩니다:
 
-```angular-html
-<!-- 컴포넌트 템플릿 -->
-<div class="card-shadow">
-  <ng-content select="card-title"></ng-content>
-  <div class="card-divider"></div>
-  <ng-content select="card-body"></ng-content>
-</div>
+```angular-ts
+@Component({
+  selector: 'card-title',
+  template: `<ng-content>card-title</ng-content>`,
+})
+export class CardTitle {}
+
+@Component({
+  selector: 'card-body',
+  template: `<ng-content>card-body</ng-content>`,
+})
+export class CardBody {}
 ```
 
-```angular-html
+```angular-ts
+<!-- 컴포넌트 템플릿 -->
+Component({
+  selector: 'custom-card',
+  template: `
+  <div class="card-shadow">
+    <ng-content select="card-title"></ng-content>
+    <div class="card-divider"></div>
+    <ng-content select="card-body"></ng-content>
+  </div>
+  `,
+})
+export class CustomCard {}
+```
+
+```angular-ts
 <!-- 컴포넌트 사용 코드 -->
-<custom-card>
-  <card-title>Hello</card-title>
-  <card-body>Welcome to the example</card-body>
-</custom-card>
+@Component({
+  selector: 'app-root',
+  imports: [CustomCard, CardTitle, CardBody],
+  template: `
+    <custom-card>
+      <card-title>Hello</card-title>
+      <card-body>Welcome to the example</card-body>
+    </custom-card>
+`,
+})
+export class App {}
 ```
 
 ```angular-html
@@ -301,7 +355,7 @@ elements that don't match one of the component's placeholders do not render into
 ## 폴백 컨텐츠
 
 <!--
-Angular can show *fallback content* for a component's `<ng-content>` placeholder if that component doesn't have any matching child content. You can specify fallback content by adding child content to the `<ng-content>` element itself.
+Angular can show _fallback content_ for a component's `<ng-content>` placeholder if that component doesn't have any matching child content. You can specify fallback content by adding child content to the `<ng-content>` element itself.
 
 ```angular-html
 <!- Component template ->
@@ -331,7 +385,7 @@ Angular can show *fallback content* for a component's `<ng-content>` placeholder
 </custom-card>
 ```
 -->
-컴포넌트에 매칭되는 자식 컨텐츠가 없다면, 컴포넌트 `<ng-content>`에 표시되는 *폴백 컨텐츠(fallback content)* 를 표시할 수 있습니다.
+컴포넌트에 매칭되는 자식 컨텐츠가 없다면, 컴포넌트 `<ng-content>`에 표시되는 _폴백 컨텐츠(fallback content)_ 를 표시할 수 있습니다.
 `<ng-content>` 엘리먼트 안에 내용을 구성하면 됩니다.
 
 ```angular-html

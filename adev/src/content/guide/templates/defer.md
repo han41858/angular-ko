@@ -81,9 +81,9 @@ Angular 컴파일러는 `@defer` 블록에 사용된 개별 컴포넌트, 디렉
 ### `@defer`
 
 <!--
-This is the primary block that defines the section of content that is lazily loaded. It is not rendered initially– deferred content loads and renders once the specified [trigger](/guide/defer#triggers) occurs or the `when` condition is met.
+This is the primary block that defines the section of content that is lazily loaded. It is not rendered initially– deferred content loads and renders once the specified [trigger](/guide/templates/defer#triggers) occurs or the `when` condition is met.
 
-By default, a @defer block is triggered when the browser state becomes [idle](/guide/defer#idle).
+By default, a `@defer` block is triggered when the browser state becomes [idle](/guide/templates/defer#idle).
 
 ```angular-html
 @defer {
@@ -92,9 +92,9 @@ By default, a @defer block is triggered when the browser state becomes [idle](/g
 ```
 -->
 지연 로딩 뷰를 정의하는 기본 블록입니다.
-지연 로딩되는 뷰는 화면의 첫 렌더링에 포함되지 않고, [트리거(trigger)](/guide/defer#triggers)가 동작하거나 `when` 조건이 맞을 때만 로딩되어 렌더링됩니다.
+지연 로딩되는 뷰는 화면의 첫 렌더링에 포함되지 않고, [트리거(trigger)](/guide/templates/defer#triggers)가 동작하거나 `when` 조건이 맞을 때만 로딩되어 렌더링됩니다.
 
-기본적으로 `@defer` 블록은 브라우저가 [대기(idle)] (/guide/defer#idle) 상태가 되었을 때 트리거됩니다.
+기본적으로 `@defer` 블록은 브라우저가 [대기(idle)] (/guide/templates/defer#idle) 상태가 되었을 때 트리거됩니다.
 
 ```angular-html
 @defer {
@@ -121,7 +121,7 @@ The `@placeholder` is an optional block that declares what content to show befor
 }
 ```
 
-While optional, certain triggers may require the presence of either a `@placeholder` or a [template reference variable](/guide/templates/variables#template-reference-variables) to function. See the [Triggers](/guide/defer#triggers) section for more details.
+While optional, certain triggers may require the presence of either a `@placeholder` or a [template reference variable](/guide/templates/variables#template-reference-variables) to function. See the [Triggers](/guide/templates/defer#triggers) section for more details.
 
 Angular replaces placeholder content with the main content once loading is complete. You can use any content in the placeholder section including plain HTML, components, directives, and pipes. Keep in mind the _dependencies of the placeholder block are eagerly loaded_.
 
@@ -150,7 +150,7 @@ This `minimum` parameter is specified in time increments of milliseconds (ms) or
 ```
 
 `@placeholder` 블록이 필수인 것은 아니지만, 어떤 트리거는 `@placeholder`나 [템플릿 참조 변수](/guide/templates/variables#template-reference-variables)가 필요합니다.
-자세한 내용은 [트리거](/guide/defer#triggers) 섹션을 참고하세요.
+자세한 내용은 [트리거](/guide/templates/defer#triggers) 섹션을 참고하세요.
 
 `@defer` 블록은 로딩된 후에 `@placeholder` 블록을 대체하며 렌더링됩니다.
 그리고 `@placeholder` 블록에는 일반 HTML, 컴포넌트, 디렉티브, 파이프를 자유롭게 사용할 수 있습니다.
@@ -359,6 +359,24 @@ Alternatively, you can specify a [template reference variable](/guide/templates/
   <greetings-cmp />
 }
 ```
+
+If you want to customize the options of the `IntersectionObserver`, the `viewport` trigger supports passing in an object literal. The literal supports all properties from the second parameter of `IntersectionObserver`, except for `root`. When using the object literal notation, you have to pass your trigger using the `trigger` property.
+
+```angular-html
+<div #greeting>Hello!</div>
+
+<!- With options and a trigger ->
+@defer (on viewport({trigger: greeting, rootMargin: '100px', threshold: 0.5})) {
+<greetings-cmp />
+}
+
+<!-- With options and an implied trigger -->
+@defer (on viewport({rootMargin: '100px', threshold: 0.5})) {
+<greetings-cmp />
+} @placeholder {
+  <div>Implied trigger</div>
+}
+```
 -->
 `viewport` 트리거는 [Intersection Observer API](https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API)를 활용해서 특정 항목이 뷰포트에 진입할 때 동작합니다.
 이 때 특정 항목은 `@placeholder` 항목이거나 명시적으로 지정한 엘리먼트가 됩니다.
@@ -382,6 +400,27 @@ Alternatively, you can specify a [template reference variable](/guide/templates/
   <greetings-cmp />
 }
 ```
+
+`IntersectionObserver` 옵션을 커스터마이징하려면 `viewport` 트리거로 객체 리터럴을 전달하면 됩니다.
+이 리터럴은 `root`를 제외하고 `IntersectionObserver`의 두 번째 인자의 모든 프로퍼티를 지원합니다.
+객체 리터럴 표기법을 사용할 때는 `trigger` 프로퍼티로 트리거를 전달함녀 됩니다.
+
+```angular-html
+<div #greeting>Hello!</div>
+
+<!-- With options and a trigger -->
+@defer (on viewport({trigger: greeting, rootMargin: '100px', threshold: 0.5})) {
+  <greetings-cmp />
+}
+
+<!-- With options and an implied trigger -->
+@defer (on viewport({rootMargin: '100px', threshold: 0.5})) {
+  <greetings-cmp />
+} @placeholder {
+  <div>Implied trigger</div>
+}
+```
+
 
 #### `interaction`
 
@@ -691,6 +730,18 @@ NgModule 기반으로 등록된 컴포넌트, 디렉티브, 파이프는 지연 
 
 
 <!--
+## Compatibility between `@defer` blocks and Hot Module Reload (HMR)
+-->
+## `@defer` 블록과 핫 모듈 갱신(HMR) 호환성
+
+<!--
+When Hot Module Replacement (HMR) is active, all `@defer` block chunks are fetched eagerly, overriding any configured triggers. To restore the standard trigger behavior, you must disable HMR by serving your application with the `--no-hmr` flag.
+-->
+핫 모듈 대체(Hot Module Replacement, HMR)이 활성화되면 `@defer` 블록 청크는 설정에 관계없이 모두 즉시 로딩됩니다.
+표준 트리거 동작을 복원하려면 애플리케이션을 실행할 때 `--no-hmr` 플래그를 지정해서 HMR 기능을 비활성화해야 합니다.
+
+
+<!--
 ## How does `@defer` work with server-side rendering (SSR) and static-site generation (SSG)?
 -->
 ## 서버 사이드 렌더링(SSR), 정적 사이트 생성(SSG)인 경우는 `@defer`가 어떻게 동작하나요?
@@ -736,3 +787,52 @@ In the event this is necessary, avoid `immediate`, `timer`, `viewport`, and cust
 이 경우는 누적 레이아웃 이동(cumulative layout shift, CLS)이 발생하면서 Core Web Vital에 부정적인 영향을 줍니다.
 
 꼭 필요한 경우라면, 첫 화면 로딩을 방해할 수 있는 `immediate`, `timer`, `viewport`, 커스텀 `when` 트리거 사용을 피하세요.
+
+
+<!--
+### Keep accessibility in mind
+-->
+### 접근성을 항상 고려하세요
+
+<!--
+When using `@defer` blocks, consider the impact on users with assistive technologies like screen readers.
+Screen readers that focus on a deferred section will initially read the placeholder or loading content, but may not announce changes when the deferred content loads.
+
+To ensure deferred content changes are announced to screen readers, you can wrap your `@defer` block in an element with a live region:
+
+```angular-html
+<div aria-live="polite" aria-atomic="true">
+  @defer (on timer(2000)) {
+    <user-profile [user]="currentUser" />
+  } @placeholder {
+    Loading user profile...
+  } @loading {
+    Please wait...
+  } @error {
+    Failed to load profile
+  }
+</div>
+```
+
+This ensures that changes are announced to the user when transitions (placeholder &rarr; loading &rarr; content/error) occur.
+-->
+`@defer` 블록을 사용하면 스크린 리더와 같은 보조 기술을 사용하는 사용자에게 큰 영향을 줄 수 있습니다.
+스크린 리더는 지연 로딩되는 섹션의 플레이스홀더나 로딩중이라는 것은 읽을 수 있지만, 이후에 내용물이 갱신되고 나면 변경사항을 알리지 않을 수도 있습니다.
+
+화면이 변경된 것을 스크린 리더에게 명확하게 알리려면, `@defer` 블록을 `aria-live` 어트리뷰트로 랩핑하면 됩니다:
+
+```angular-html
+<div aria-live="polite" aria-atomic="true">
+  @defer (on timer(2000)) {
+    <user-profile [user]="currentUser" />
+  } @placeholder {
+    Loading user profile...
+  } @loading {
+    Please wait...
+  } @error {
+    Failed to load profile
+  }
+</div>
+```
+
+이렇게 구현하면 화면이 변경될 때 변경사항을 사용자에게 제대로 알릴 수 있습니다.

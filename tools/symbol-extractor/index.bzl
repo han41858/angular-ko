@@ -3,7 +3,7 @@
 # Use of this source code is governed by an MIT-style license that can be
 # found in the LICENSE file at https://angular.dev/license
 
-load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_test")
+load("//tools:defaults.bzl", "js_binary", "js_test")
 
 """
   This test verifies that a set of top level symbols from a javascript file match a gold file.
@@ -13,7 +13,7 @@ def js_expected_symbol_test(name, bundles_dir, golden, data = [], **kwargs):
     """This test verifies that a set of top level symbols from a javascript file match a gold file.
     """
     all_data = data + [
-        Label("//tools/symbol-extractor:lib_rjs"),
+        Label("//tools/symbol-extractor:lib"),
         bundles_dir,
         golden,
     ]

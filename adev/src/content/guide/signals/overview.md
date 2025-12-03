@@ -452,7 +452,54 @@ data.set(['test']);
 
 동일성 평가 함수는 값을 쓸 수 있는(writable) 시그널과 연산(computed) 시그널에 모두 사용할 수 있습니다.
 
-도움말: 동일성 평가 함수의 기본값은 참조 비교([`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is))입니다.
+
+<!--
+### Type checking signals
+-->
+### 타입 검사 시그널
+
+<!--
+You can use `isSignal` to check if a value is a `Signal`:
+
+```ts
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+
+isSignal(count); // true
+isSignal(doubled); // true
+isSignal(42); // false
+```
+
+To specifically check if a signal is writable, use `isWritableSignal`:
+
+```ts
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+
+isWritableSignal(count); // true
+isWritableSignal(doubled); // false
+```
+-->
+어떤 값이 `Signal`인지 확인하려면 `isSignal`을 활용하면 됩니다:
+
+```ts
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+
+isSignal(count); // true
+isSignal(doubled); // true
+isSignal(42); // false
+```
+
+그리고 이 시그널이 쓰기 가능한 시그널인지 확인하려면 `isWritableSignal`을 활용하면 됩니다:
+
+```ts
+const count = signal(0);
+const doubled = computed(() => count() * 2);
+
+isWritableSignal(count); // true
+isWritableSignal(doubled); // false
+```
 
 
 <!--

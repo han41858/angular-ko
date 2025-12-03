@@ -21,6 +21,14 @@ describe('type check blocks', () => {
     expect(tcb('{{hello}} {{world}}')).toContain('"" + (((this).hello)) + (((this).world));');
   });
 
+  it('should generate an animation leave function call', () => {
+    const TEMPLATE = '<p (animate.leave)="animateFn($event)"></p>';
+    const results = tcb(TEMPLATE);
+    expect(results).toContain(
+      '($event: i1.AnimationCallbackEvent): any => { (this).animateFn($event); };',
+    );
+  });
+
   it('should generate literal map expressions', () => {
     const TEMPLATE = '{{ method({foo: a, bar: b}) }}';
     expect(tcb(TEMPLATE)).toContain('(this).method({ "foo": ((this).a), "bar": ((this).b) })');
@@ -39,6 +47,12 @@ describe('type check blocks', () => {
   it('should handle unary - operator', () => {
     const TEMPLATE = `{{-1}}`;
     expect(tcb(TEMPLATE)).toContain('(-1)');
+  });
+
+  it('should assert the type for DOM events bound on void elements', () => {
+    const result = tcb(`<input (input)="handleInput($event.target.value)">`);
+    expect(result).toContain('i1.ɵassertType<typeof _t1>($event.target);');
+    expect(result).toContain('(this).handleInput((((($event).target)).value));');
   });
 
   it('should handle keyed property access', () => {
@@ -73,6 +87,19 @@ describe('type check blocks', () => {
     expect(tcb('{{void a}}')).toContain('void (((this).a))');
     expect(tcb('{{!(void a)}}')).toContain('!((void (((this).a))))');
     expect(tcb('{{!(void a === "object")}}')).toContain('!(((void (((this).a))) === ("object")))');
+  });
+
+  it('should handle assignment expressions', () => {
+    expect(tcb('<b (click)="a = b"></b>')).toContain('(((this).a)) = (((this).b));');
+    expect(tcb('<b (click)="a += b"></b>')).toContain('(((this).a)) += (((this).b));');
+    expect(tcb('<b (click)="a -= b"></b>')).toContain('(((this).a)) -= (((this).b));');
+    expect(tcb('<b (click)="a *= b"></b>')).toContain('(((this).a)) *= (((this).b));');
+    expect(tcb('<b (click)="a /= b"></b>')).toContain('(((this).a)) /= (((this).b));');
+    expect(tcb('<b (click)="a %= b"></b>')).toContain('(((this).a)) %= (((this).b));');
+    expect(tcb('<b (click)="a **= b"></b>')).toContain('(((this).a)) **= (((this).b));');
+    expect(tcb('<b (click)="a &&= b"></b>')).toContain('(((this).a)) &&= (((this).b));');
+    expect(tcb('<b (click)="a ||= b"></b>')).toContain('(((this).a)) ||= (((this).b));');
+    expect(tcb('<b (click)="a ??= b"></b>')).toContain('(((this).a)) ??= (((this).b));');
   });
 
   it('should handle exponentiation expressions', () => {
@@ -179,6 +206,11 @@ describe('type check blocks', () => {
     expect(tcb('{{ tag`${a} - ${b} - ${c}` }}')).toContain(
       '"" + (((this).tag) `${((this).a)} - ${((this).b)} - ${((this).c)}`);',
     );
+  });
+
+  it('should generate regular expressions', () => {
+    const TEMPLATE = '{{ /\\d+/g.test("123") }}';
+    expect(tcb(TEMPLATE)).toContain('(((/\\d+/g)).test("123"))');
   });
 
   describe('type constructors', () => {
@@ -358,7 +390,7 @@ describe('type check blocks', () => {
     const block = tcb(TEMPLATE);
     expect(block).not.toContain('"div"');
     expect(block).toContain(
-      'var _t2 = document.createElement("button"); ' + 'var _t1 = _t2; ' + '_t2.addEventListener',
+      'var _t1 = document.createElement("button"); ' + 'var _t2 = _t1; ' + '_t1.addEventListener',
     );
   });
 
@@ -427,6 +459,50 @@ describe('type check blocks', () => {
     expect(block).toContain('(_t3).a');
     expect(block).not.toContain('NoBindings');
     expect(block).not.toContain('NoReference');
+  });
+
+  it('should not bind inputs outside of microsyntax to a structural directive', () => {
+    const TEMPLATE = `
+      <my-dir *ngFor="let foo of foos" [ngForTrackBy]="foo"></my-dir>
+    `;
+    const DIRECTIVES: TestDeclaration[] = [
+      {
+        type: 'directive',
+        name: 'NgFor',
+        selector: '[ngFor][ngForOf]',
+        inputs: {ngForOf: 'ngForOf', ngForTrackBy: 'ngForTrackBy'},
+      },
+      {
+        type: 'directive',
+        name: 'MyDir',
+        selector: 'my-dir',
+        inputs: {ngForTrackBy: 'ngForTrackBy'},
+      },
+    ];
+    const block = tcb(TEMPLATE, DIRECTIVES);
+    expect(block).toContain('var _t1 = null! as i0.NgFor');
+    expect(block).toContain('_t1.ngForOf = (((this).foos))');
+    expect(block).not.toContain('_t1.ngForTrackBy');
+    expect(block).toContain('var _t4 = null! as i0.MyDir');
+    expect(block).toContain('_t4.ngForTrackBy =');
+  });
+
+  it('should bind inputs to a structural directive when used on ng-template', () => {
+    const TEMPLATE = `
+      <ng-template ngFor [ngForOf]="foos" let-foo [ngForTrackBy]="foo"></ng-template>
+    `;
+    const DIRECTIVES: TestDeclaration[] = [
+      {
+        type: 'directive',
+        name: 'NgFor',
+        selector: '[ngFor][ngForOf]',
+        inputs: {ngForOf: 'ngForOf', ngForTrackBy: 'ngForTrackBy'},
+      },
+    ];
+    const block = tcb(TEMPLATE, DIRECTIVES);
+    expect(block).toContain('var _t1 = null! as i0.NgFor');
+    expect(block).toContain('_t1.ngForOf = (((this).foos))');
+    expect(block).toContain('_t1.ngForTrackBy = (((this).foo))');
   });
 
   it('should generate a forward element reference correctly', () => {
@@ -1050,6 +1126,7 @@ describe('type check blocks', () => {
       unusedStandaloneImports: 'warning',
       allowSignalsInTwoWayBindings: true,
       checkTwoWayBoundEvents: true,
+      allowDomEventAssertion: true,
     };
 
     describe('config.applyTemplateContextGuards', () => {
@@ -1428,6 +1505,14 @@ describe('type check blocks', () => {
       });
     });
 
+    it('should _not_ assert the type for DOM events bound on void elements when disabled', () => {
+      const result = tcb(`<input (input)="handleInput($event.target.value)">`, undefined, {
+        ...BASE_CONFIG,
+        allowDomEventAssertion: false,
+      });
+      expect(result).not.toContain('ɵassertType');
+    });
+
     describe('config.allowSignalsInTwoWayBindings', () => {
       it('should not unwrap signals in two-way binding expressions', () => {
         const TEMPLATE = `<div twoWay [(input)]="value"></div>`;
@@ -1771,6 +1856,20 @@ describe('type check blocks', () => {
 
       expect(tcb(TEMPLATE)).toContain('((this).shouldShow()) && (((this).isVisible));');
     });
+
+    it('should generate options for `viewport` trigger', () => {
+      const TEMPLATE = `
+        @defer (on viewport({rootMargin: '123px'})) {
+          {{main()}}
+        } @placeholder {
+          <div>{{placeholder()}}</div>
+        }
+      `;
+
+      expect(tcb(TEMPLATE)).toContain(
+        'new IntersectionObserver(null!, { "rootMargin": "123px" }); "" + ((this).main()); "" + ((this).placeholder());',
+      );
+    });
   });
 
   describe('conditional blocks', () => {
@@ -1829,6 +1928,33 @@ describe('type check blocks', () => {
 
       expect(tcb(TEMPLATE)).toContain(
         'var _t1 = ((((this).expr)) === (1)); if (((((this).expr)) === (1)) && _t1) { "" + (_t1); } } }',
+      );
+    });
+
+    it('should generate an else if block with an `as` expression', () => {
+      const TEMPLATE = `@if (expr === 1) {
+        {{expr}}
+      } @else if (expr === 2; as alias) {
+        {{alias}}
+      }`;
+
+      expect(tcb(TEMPLATE)).toContain(
+        'var _t1 = ((((this).expr)) === (2)); if ((((this).expr)) === (1)) { "" + (((this).expr)); } ' +
+          'else if (((((this).expr)) === (2)) && _t1) { "" + (_t1); }',
+      );
+    });
+
+    it('should generate block where `@if` and `@else if` have the same alias name', () => {
+      const TEMPLATE = `@if (expr === 1; as alias) {
+        {{alias}}
+      } @else if (expr === 2; as alias) {
+        {{alias}}
+      }`;
+
+      expect(tcb(TEMPLATE)).toContain(
+        'var _t1 = ((((this).expr)) === (1)); var _t2 = ((((this).expr)) === (2)); ' +
+          'if (((((this).expr)) === (1)) && _t1) { "" + (_t1); } ' +
+          'else if (((((this).expr)) === (2)) && _t2) { "" + (_t2); }',
       );
     });
 
@@ -2165,6 +2291,7 @@ describe('type check blocks', () => {
           name: 'Comp',
           isComponent: true,
           selector: null,
+          isStandalone: true,
           inputs: {dynamic: 'dynamic', static: 'static'},
         },
       ];
@@ -2181,6 +2308,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: null,
+          isStandalone: true,
           inputs: {dynamic: 'dynamic', static: 'static'},
         },
       ];
@@ -2197,6 +2325,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: null,
+          isStandalone: true,
           inputs: {dynamic: 'dynamic', static: 'static'},
         },
       ];
@@ -2213,6 +2342,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: null,
+          isStandalone: true,
           inputs: {someInput: 'someInput'},
           ngTemplateGuards: [
             {
@@ -2236,6 +2366,7 @@ describe('type check blocks', () => {
           name: 'Comp',
           isComponent: true,
           selector: null,
+          isStandalone: true,
           inputs: {claimed: 'claimed'},
         },
       ];
@@ -2253,6 +2384,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: null,
+          isStandalone: true,
           inputs: {claimed: 'claimed'},
         },
       ];
@@ -2270,6 +2402,7 @@ describe('type check blocks', () => {
           name: 'Comp',
           isComponent: true,
           selector: null,
+          isStandalone: true,
           outputs: {someEvent: 'someEvent'},
         },
       ];
@@ -2287,6 +2420,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: null,
+          isStandalone: true,
           outputs: {someEvent: 'someEvent'},
         },
       ];
@@ -2305,6 +2439,7 @@ describe('type check blocks', () => {
           name: 'Comp',
           isComponent: true,
           selector: null,
+          isStandalone: true,
         },
       ];
       const block = selectorlessTcb(TEMPLATE, DIRECTIVES);
@@ -2322,6 +2457,7 @@ describe('type check blocks', () => {
           name: 'Comp',
           isComponent: true,
           selector: null,
+          isStandalone: true,
         },
       ];
       const block = selectorlessTcb(TEMPLATE, DIRECTIVES);
@@ -2339,6 +2475,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: null,
+          isStandalone: true,
         },
       ];
       const block = selectorlessTcb(TEMPLATE, DIRECTIVES);
@@ -2353,6 +2490,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: '[my-dir]',
+          isStandalone: true,
           inputs: {dirInput: 'dirInput'},
         },
       ];
@@ -2370,6 +2508,7 @@ describe('type check blocks', () => {
           name: 'Comp',
           isComponent: true,
           selector: null,
+          isStandalone: true,
         },
       ];
       const block = selectorlessTcb(TEMPLATE, DIRECTIVES);
@@ -2385,6 +2524,7 @@ describe('type check blocks', () => {
           type: 'directive',
           name: 'Dir',
           selector: null,
+          isStandalone: true,
         },
       ];
       const block = selectorlessTcb(TEMPLATE, DIRECTIVES);
@@ -2402,6 +2542,7 @@ describe('type check blocks', () => {
           isComponent: true,
           selector: null,
           isGeneric: true,
+          isStandalone: true,
           inputs: {input: 'input'},
         },
       ];
@@ -2421,6 +2562,7 @@ describe('type check blocks', () => {
           name: 'Dir',
           selector: null,
           isGeneric: true,
+          isStandalone: true,
           inputs: {input: 'input'},
         },
       ];
@@ -2430,6 +2572,233 @@ describe('type check blocks', () => {
       );
       expect(block).toContain('var _t1 = _ctor1({ "input": (((this).value)) });');
       expect(block).toContain('_t1.input = (((this).value));');
+    });
+  });
+
+  describe('signal forms', () => {
+    let FieldMock: TestDirective;
+
+    beforeEach(() => {
+      setup([]);
+
+      FieldMock = {
+        type: 'directive',
+        name: 'Field',
+        selector: '[field]',
+        bestGuessOwningModule: {
+          specifier: '@angular/forms/signals',
+          resolutionContext: '',
+        },
+        inputs: {
+          field: 'field',
+        },
+      };
+    });
+
+    it('should generate a string field for an input without a type', () => {
+      const block = tcb('<input [field]="f"/>', [FieldMock]);
+      expect(block).toContain('var _t1 = null! as string;');
+      expect(block).toContain('_t1 = ((this).f)().value();');
+      expect(block).toContain('var _t2 = null! as i0.Field;');
+      expect(block).toContain('_t2.field = (((this).f));');
+    });
+
+    [
+      {inputType: 'text', expectedType: 'string'},
+      {inputType: 'radio', expectedType: 'string'},
+      {inputType: 'checkbox', expectedType: 'boolean'},
+      {inputType: 'number', expectedType: 'string | number'},
+      {inputType: 'range', expectedType: 'string | number'},
+      {inputType: 'datetime-local', expectedType: 'string | number'},
+      {inputType: 'date', expectedType: 'string | number | Date | null'},
+      {inputType: 'month', expectedType: 'string | number | Date | null'},
+      {inputType: 'time', expectedType: 'string | number | Date | null'},
+      {inputType: 'week', expectedType: 'string | number | Date | null'},
+      {inputType: 'unknown', expectedType: 'string'},
+    ].forEach(({inputType, expectedType}) => {
+      it(`should generate a '${expectedType}' field for an input with a '${inputType}' type`, () => {
+        const block = tcb(`<input type="${inputType}" [field]="f"/>`, [FieldMock]);
+        expect(block).toContain(`var _t1 = null! as ${expectedType};`);
+        expect(block).toContain('_t1 = ((this).f)().value();');
+        expect(block).toContain('var _t2 = null! as i0.Field;');
+        expect(block).toContain('_t2.field = (((this).f));');
+      });
+    });
+
+    it('should generate a string field for a textarea', () => {
+      const block = tcb('<textarea [field]="f"></textarea>', [FieldMock]);
+      expect(block).toContain('var _t1 = null! as string;');
+      expect(block).toContain('_t1 = ((this).f)().value();');
+      expect(block).toContain('var _t2 = null! as i0.Field;');
+      expect(block).toContain('_t2.field = (((this).f));');
+    });
+
+    it('should generate a string field for a select', () => {
+      const block = tcb('<select [field]="f"></select>', [FieldMock]);
+      expect(block).toContain('var _t1 = null! as string;');
+      expect(block).toContain('_t1 = ((this).f)().value();');
+      expect(block).toContain('var _t2 = null! as i0.Field;');
+      expect(block).toContain('_t2.field = (((this).f));');
+    });
+
+    it('should generate a custom value control', () => {
+      const block = tcb('<custom-control [field]="f"/>', [
+        FieldMock,
+        {
+          type: 'directive',
+          name: 'CustomControl',
+          selector: 'custom-control',
+          inputs: {
+            value: {
+              classPropertyName: 'value',
+              bindingPropertyName: 'value',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+          },
+          outputs: {
+            valueChange: 'valueChange',
+          },
+        },
+      ]);
+
+      expect(block).toContain('var _t1 = null! as i0.CustomControl;');
+      expect(block).toContain(
+        '_t1.value[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = i1.ɵunwrapWritableSignal((((((this).f)()).value)));',
+      );
+      expect(block).toContain('var _t2 = null! as i0.Field;');
+      expect(block).toContain('_t2.field = (((this).f));');
+    });
+
+    it('should generate a custom checkbox control', () => {
+      const block = tcb('<custom-control [field]="f"/>', [
+        FieldMock,
+        {
+          type: 'directive',
+          name: 'CustomControl',
+          selector: 'custom-control',
+          inputs: {
+            checked: {
+              classPropertyName: 'checked',
+              bindingPropertyName: 'checked',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+          },
+          outputs: {
+            checkedChange: 'checkedChange',
+          },
+        },
+      ]);
+
+      expect(block).toContain('var _t1 = null! as i0.CustomControl;');
+      expect(block).toContain(
+        '_t1.checked[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = i1.ɵunwrapWritableSignal((((((this).f)()).value)));',
+      );
+      expect(block).toContain('var _t2 = null! as i0.Field;');
+      expect(block).toContain('_t2.field = (((this).f));');
+    });
+
+    it('should add implicit bindings to other field-related inputs on a custom control', () => {
+      const block = tcb('<custom-control [field]="f"/>', [
+        FieldMock,
+        {
+          type: 'directive',
+          name: 'CustomControl',
+          selector: 'custom-control',
+          inputs: {
+            value: {
+              classPropertyName: 'value',
+              bindingPropertyName: 'value',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+            required: {
+              classPropertyName: 'required',
+              bindingPropertyName: 'required',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+            disabled: {
+              classPropertyName: 'disabled',
+              bindingPropertyName: 'disabled',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+            name: {
+              classPropertyName: 'name',
+              bindingPropertyName: 'name',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+          },
+          outputs: {
+            valueChange: 'valueChange',
+          },
+        },
+      ]);
+
+      expect(block).toContain('var _t1 = null! as i0.CustomControl;');
+      expect(block).toContain(
+        '_t1.value[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = i1.ɵunwrapWritableSignal((((((this).f)()).value)));',
+      );
+      expect(block).toContain(
+        '_t1.required[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = ((((this).f)()).required());',
+      );
+      expect(block).toContain(
+        '_t1.disabled[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = ((((this).f)()).disabled());',
+      );
+      expect(block).toContain(
+        '_t1.name[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = ((((this).f)()).name());',
+      );
+      expect(block).toContain('var _t2 = null! as i0.Field;');
+      expect(block).toContain('_t2.field = (((this).f));');
+    });
+
+    it('should produce safe reads for the fields that are optional', () => {
+      const block = tcb('<custom-control [field]="f"/>', [
+        FieldMock,
+        {
+          type: 'directive',
+          name: 'CustomControl',
+          selector: 'custom-control',
+          inputs: {
+            value: {
+              classPropertyName: 'value',
+              bindingPropertyName: 'value',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+            max: {
+              classPropertyName: 'max',
+              bindingPropertyName: 'max',
+              required: false,
+              isSignal: true,
+              transform: null,
+            },
+          },
+          outputs: {
+            valueChange: 'valueChange',
+          },
+        },
+      ]);
+
+      expect(block).toContain('var _t1 = null! as i0.CustomControl;');
+      expect(block).toContain(
+        '_t1.value[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = i1.ɵunwrapWritableSignal((((((this).f)()).value)));',
+      );
+      expect(block).toContain(
+        '_t1.max[i1.ɵINPUT_SIGNAL_BRAND_WRITE_TYPE] = ((0 as any ? (((((this).f)()).max))!() : undefined));',
+      );
+      expect(block).toContain('var _t2 = null! as i0.Field;');
+      expect(block).toContain('_t2.field = (((this).f));');
     });
   });
 });

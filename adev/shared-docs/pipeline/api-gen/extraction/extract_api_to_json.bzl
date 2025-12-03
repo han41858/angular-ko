@@ -31,9 +31,6 @@ def _extract_api_to_json(ctx):
     args.add(json_output.path)
 
     # Pass the import path map
-    # TODO: consider module_mappings_aspect to deal with path mappings instead of manually
-    # specifying them
-    # https://github.com/bazelbuild/rules_nodejs/blob/5.x/internal/linker/link_node_modules.bzl#L236
     path_map = {}
     for target, path in ctx.attr.import_map.items():
         files = target.files.to_list()
@@ -45,8 +42,7 @@ def _extract_api_to_json(ctx):
     # Pass the set of (optional) extra entries
     args.add_joined(ctx.files.extra_entries, join_with = ",")
 
-    # Define an action that runs the nodejs_binary executable. This is
-    # the main thing that this rule does.
+    # Define an action that runs the executable.
     ctx.actions.run(
         inputs = depset(ctx.files.srcs + ctx.files.extra_entries),
         executable = ctx.executable._extract_api_to_json,

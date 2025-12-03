@@ -16,13 +16,13 @@ In Angular you bind to events with the parentheses syntax `()`. On a given eleme
 
 ```angular-ts
 @Component({
-    ...
-    template: `<button (click)="greet()">`
+  ...
+  template: `<button (click)="greet()">`
 })
-class App {
-    greet() {
-        console.log('Hello, there 👋');
-    }
+export class App {
+  greet() {
+    console.log('Hello, there 👋');
+  }
 }
 ```
 
@@ -33,11 +33,11 @@ Alright, your turn to give this a try:
 <docs-workflow>
 
 <docs-step title="Add an event handler">
-Add the `onMouseOver` event handler function in the `App` class. Use the following code as the implementation:
+Add the `showSecretMessage()` event handler function in the `App` class. Use the following code as the implementation:
 
 ```ts
-onMouseOver() {
-    this.message = 'Way to go 🚀';
+showSecretMessage() {
+  this.message = 'Way to go 🚀';
 }
 ```
 
@@ -47,7 +47,7 @@ onMouseOver() {
 Update the template code in `app.ts` to bind to the `mouseover` event of the `section` element.
 
 ```angular-html
-<section (mouseover)="onMouseOver()">
+<section (mouseover)="showSecretMessage()">
 ```
 
 </docs-step>

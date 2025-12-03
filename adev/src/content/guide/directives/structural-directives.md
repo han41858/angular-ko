@@ -182,13 +182,13 @@ export class SelectDirective {
 
 </docs-step>
 <docs-step title="Add the 'selectFrom' input">
-Add a `selectFrom` `@Input()` property.
+Add a `selectFrom` `input()` property.
 
 ```ts
 export class SelectDirective {
   // ...
 
-  @Input({required: true}) selectFrom!: DataSource;
+  selectFrom = input.required<DataSource>();
 }
 ```
 
@@ -247,13 +247,13 @@ export class SelectDirective {
 
 </docs-step>
 <docs-step title="'selectFrom' 입력 프로퍼티 추가하기">
-`selecttFrom` `@Input()` 프로퍼티를 추가합니다.
+`selecttFrom` `input()` 프로퍼티를 추가합니다.
 
 ```ts
 export class SelectDirective {
   // ...
 
-  @Input({required: true}) selectFrom!: DataSource;
+  selectFrom = input.required<DataSource>();
 }
 ```
 
@@ -291,7 +291,7 @@ When you write your own structural directives, use the following syntax:
 
 <docs-code hideCopy language="typescript">
 
-*:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )*"
+_:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_"
 
 </docs-code>
 
@@ -315,7 +315,7 @@ let = "let" :local "=" :export ";"?
 
 <docs-code hideCopy language="typescript">
 
-*:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )*"
+_:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_"
 
 </docs-code>
 
@@ -344,11 +344,11 @@ let = "let" :local "=" :export ";"?
 <!--
 Angular translates structural directive shorthand into the normal binding syntax as follows:
 
-| Shorthand | Translation |
-|:--- |:--- |
-| `prefix` and naked `expression` | `[prefix]="expression"` |
-| `keyExp` | `[prefixKey]="expression"` (The `prefix` is added to the `key`) |
-| `let local` | `let-local="export"` |
+| Shorthand                       | Translation                                                     |
+| :------------------------------ | :-------------------------------------------------------------- |
+| `prefix` and naked `expression` | `[prefix]="expression"`                                         |
+| `keyExp`                        | `[prefixKey]="expression"` (The `prefix` is added to the `key`) |
+| `let local`                     | `let-local="export"`                                            |
 -->
 Angular는 구조 디렉티브 단축 문법을 다음과 같이 일반 바인딩 문법으로 변환해서 처리합니다:
 
@@ -367,13 +367,13 @@ Angular는 구조 디렉티브 단축 문법을 다음과 같이 일반 바인�
 <!--
 The following table provides shorthand examples:
 
-| Shorthand | How Angular interprets the syntax |
-|:--- |:--- |
-| `*myDir="let item of [1,2,3]"` | `<ng-template myDir let-item [myDirOf]="[1, 2, 3]">` |
+| Shorthand                                                             | How Angular interprets the syntax                                                                             |
+| :-------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
+| `*myDir="let item of [1,2,3]"`                                        | `<ng-template myDir let-item [myDirOf]="[1, 2, 3]">`                                                          |
 | `*myDir="let item of [1,2,3] as items; trackBy: myTrack; index as i"` | `<ng-template myDir let-item [myDirOf]="[1,2,3]" let-items="myDirOf" [myDirTrackBy]="myTrack" let-i="index">` |
-| `*ngComponentOutlet="componentClass";` | `<ng-template [ngComponentOutlet]="componentClass">` |
-| `*ngComponentOutlet="componentClass; inputs: myInputs";` | `<ng-template [ngComponentOutlet]="componentClass" [ngComponentOutletInputs]="myInputs">` |
-| `*myDir="exp as value"` | `<ng-template [myDir]="exp" let-value="myDir">` |
+| `*ngComponentOutlet="componentClass";`                                | `<ng-template [ngComponentOutlet]="componentClass">`                                                          |
+| `*ngComponentOutlet="componentClass; inputs: myInputs";`              | `<ng-template [ngComponentOutlet]="componentClass" [ngComponentOutletInputs]="myInputs">`                     |
+| `*myDir="exp as value"`                                               | `<ng-template [myDir]="exp" let-value="myDir">`                                                               |
 -->
 단축 문법이 어떻게 사용되는지 몇가지 예제를 살펴봅시다:
 
@@ -397,18 +397,18 @@ You can improve template type checking for custom directives by adding template 
 These guards help the Angular template type checker find mistakes in the template at compile time, which can avoid runtime errors.
 Two different types of guards are possible:
 
-* `ngTemplateGuard_(input)` lets you control how an input expression should be narrowed based on the type of a specific input.
-* `ngTemplateContextGuard` is used to determine the type of the context object for the template, based on the type of the directive itself.
+- `ngTemplateGuard_(input)` lets you control how an input expression should be narrowed based on the type of a specific input.
+- `ngTemplateContextGuard` is used to determine the type of the context object for the template, based on the type of the directive itself.
 
 This section provides examples of both kinds of guards.
-For more information, see [Template type checking](tools/cli/template-typecheck "Template type-checking guide").
+For more information, see [Template type checking](tools/cli/template-typecheck 'Template type-checking guide').
 -->
 디렉티브를 정의할 때 템플릿 가드를 추가하면 템플릿 타입 검사를 강화할 수 있습니다.
 이 가드를 추가하면 컴파일 시점에 Angular 템플릿 타입 검사기가 동작하면서 실수를 찾아낼 수 있기 때문에, 실행 시점에 에러가 발생하는 것을 방지합니다.
 가드는 두가지 종류가 있습니다:
 
-* `ngTemplateGuard_(input)` - 입력값의 타입에 따라 입력 표현식 타입을 좁힐 수 있습니다.
-* `ngTemplateContextGuard` - 디렉티브 자체 타입에 따라 템플릿 컨텍스트 객체의 타입을 결정합니다.
+- `ngTemplateGuard_(input)` - 입력값의 타입에 따라 입력 표현식 타입을 좁힐 수 있습니다.
+-`ngTemplateContextGuard` - 디렉티브 자체 타입에 따라 템플릿 컨텍스트 객체의 타입을 결정합니다.
 
 이번 섹션에서는 두 가드의 예제만 다룹니다.
 더 자세한 내용은 [템플릿 타입 검사](tools/cli/template-typecheck "Template type-checking guide") 문서를 참고하세요.
@@ -424,8 +424,8 @@ A structural directive in a template controls whether that template is rendered 
 
 There are two narrowings which are possible with input guards:
 
-* Narrowing the input expression based on a TypeScript type assertion function.
-* Narrowing the input expression based on its truthiness.
+- Narrowing the input expression based on a TypeScript type assertion function.
+- Narrowing the input expression based on its truthiness.
 
 To narrow the input expression by defining a type assertion function:
 
@@ -435,9 +435,9 @@ To narrow the input expression by defining a type assertion function:
 // expression is narrowed to `User`.
 @Directive(...)
 class ActorIsUser {
-  @Input() actor: User|Robot;
+  actor = input<User | Robot>();
 
-  static ngTemplateGuard_actor(dir: ActorIsUser, expr: User|Robot): expr is User {
+  static ngTemplateGuard_actor(dir: ActorIsUser, expr: User | Robot): expr is User {
     // The return statement is unnecessary in practice, but included to
     // prevent TypeScript errors.
     return true;
@@ -452,7 +452,7 @@ Some directives only render their templates when an input is truthy. It's not po
 ```ts
 @Directive(...)
 class CustomIf {
-  @Input() condition!: any;
+  condition = input.required<boolean>();
 
   static ngTemplateGuard_condition: 'binding';
 }
@@ -465,8 +465,8 @@ The template type-checker will behave as if the expression bound to `condition` 
 
 입력 가드로 타입을 좁히는 방법은 두 가지 입니다:
 
-* TypeScript 타입 경고(assertion) 함수를 사용하는 방법해서 입력 표현식 타입을 좁히는 방법
-* 입력 표현식의 참/거짓 여부로 입력 표현식 타입을 좁히는 방법
+- TypeScript 타입 경고(assertion) 함수를 사용하는 방법해서 입력 표현식 타입을 좁히는 방법
+-입력 표현식의 참/거짓 여부로 입력 표현식 타입을 좁히는 방법
 
 타입 경고 함수를 사용하는 방식은 이렇습니다:
 
@@ -475,9 +475,9 @@ The template type-checker will behave as if the expression bound to `condition` 
 // 이 경우 `actor` 표현식의 타입을 `User`로 좁힐 수 있습니다.
 @Directive(...)
 class ActorIsUser {
-  @Input() actor: User|Robot;
+  actor = input<User | Robot>();
 
-  static ngTemplateGuard_actor(dir: ActorIsUser, expr: User|Robot): expr is User {
+  static ngTemplateGuard_actor(dir: ActorIsUser, expr: User | Robot): expr is User {
     // 반환 구문은 필요없지만, TypeScript 에러를 방지하기 위해 선언합니다.
     return true;
   }
@@ -492,7 +492,7 @@ class ActorIsUser {
 ```ts
 @Directive(...)
 class CustomIf {
-  @Input() condition!: any;
+  condition = input.required<boolean>();
 
   static ngTemplateGuard_condition: 'binding';
 }
@@ -521,7 +521,7 @@ export interface SelectTemplateContext<T> {
 export class SelectDirective<T> {
   // The directive's generic type `T` will be inferred from the `DataSource` type
   // passed to the input.
-  @Input({required: true}) selectFrom!: DataSource<T>;
+  selectFrom = input.required<DataSource<T>>();
 
   // Narrow the type of the context using the generic type of the directive.
   static ngTemplateContextGuard<T>(dir: SelectDirective<T>, ctx: any): ctx is SelectTemplateContext<T> {
@@ -546,7 +546,7 @@ export interface SelectTemplateContext<T> {
 @Directive(...)
 export class SelectDirective<T> {
   // 입력으로 받은 `DataSource`을 제네릭 `T` 타입으로 선언합니다.
-  @Input({required: true}) selectFrom!: DataSource<T>;
+  selectFrom = input.required<DataSource<T>>();
 
   // 디렉티브의 제네릭 타입을 활용해서 컨텍스트의 타입을 좁힙니다.
   static ngTemplateContextGuard<T>(dir: SelectDirective<T>, ctx: any): ctx is SelectTemplateContext<T> {

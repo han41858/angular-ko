@@ -17,14 +17,11 @@ import {
   APP_BOOTSTRAP_LISTENER,
   ComponentRef,
   inject,
-  Inject,
   InjectionToken,
   ModuleWithProviders,
   NgModule,
   NgZone,
-  Optional,
   Provider,
-  SkipSelf,
   ɵRuntimeError as RuntimeError,
 } from '@angular/core';
 
@@ -75,7 +72,7 @@ export const ROUTER_PROVIDERS: Provider[] = [
   {provide: UrlSerializer, useClass: DefaultUrlSerializer},
   Router,
   ChildrenOutletContexts,
-  {provide: ActivatedRoute, useFactory: rootRoute, deps: [Router]},
+  {provide: ActivatedRoute, useFactory: rootRoute},
   RouterConfigLoader,
   // Only used to warn when `provideRoutes` is used without `RouterModule` or `provideRouter`. Can
   // be removed when `provideRoutes` is removed.
@@ -149,7 +146,6 @@ export class RouterModule {
           ? {
               provide: ROUTER_FORROOT_GUARD,
               useFactory: provideForRootGuard,
-              deps: [[Router, new Optional(), new SkipSelf()]],
             }
           : [],
         config?.errorHandler
@@ -227,7 +223,9 @@ function providePathLocationStrategy(): Provider {
   return {provide: LocationStrategy, useClass: PathLocationStrategy};
 }
 
-export function provideForRootGuard(router: Router): any {
+export function provideForRootGuard(): any {
+  const router = inject(Router, {optional: true, skipSelf: true});
+
   if (router) {
     throw new RuntimeError(
       RuntimeErrorCode.FOR_ROOT_CALLED_TWICE,

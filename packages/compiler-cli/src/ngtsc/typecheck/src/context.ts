@@ -46,9 +46,10 @@ import {ReferenceEmitEnvironment} from './reference_emit_environment';
 import {TypeCheckShimGenerator} from './shim';
 import {DirectiveSourceManager} from './source';
 import {requiresInlineTypeCheckBlock, TcbInliningRequirement} from './tcb_util';
-import {generateTypeCheckBlock, TcbGenericContextBehavior} from './type_check_block';
+import {generateTypeCheckBlock} from './type_check_block';
 import {TypeCheckFile} from './type_check_file';
 import {generateInlineTypeCtor, requiresInlineTypeCtor} from './type_constructor';
+import {TcbGenericContextBehavior} from './ops/context';
 
 export interface ShimTypeCheckingData {
   /**
@@ -259,7 +260,13 @@ export class TypeCheckContextImpl implements TypeCheckContext {
 
     const boundTarget = binder.bind({
       template: templateContext?.nodes,
-      host: hostBindingContext?.node,
+      host:
+        hostBindingContext === null
+          ? undefined
+          : {
+              node: hostBindingContext.node,
+              directives: hostBindingContext.directives,
+            },
     });
 
     if (this.inlining === InliningMode.InlineOps) {

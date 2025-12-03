@@ -52,13 +52,6 @@ class SerializeExpressionVisitor implements expr.AstVisitor {
     return `${ast.receiver.visit(this, context)}[${ast.key.visit(this, context)}]`;
   }
 
-  visitKeyedWrite(ast: expr.KeyedWrite, context: any): string {
-    return `${ast.receiver.visit(this, context)}[${ast.key.visit(
-      this,
-      context,
-    )}] = ${ast.value.visit(this, context)}`;
-  }
-
   visitLiteralArray(ast: expr.LiteralArray, context: any): string {
     return `[${ast.expressions.map((e) => e.visit(this, context)).join(', ')}]`;
   }
@@ -108,14 +101,6 @@ class SerializeExpressionVisitor implements expr.AstVisitor {
     }
   }
 
-  visitPropertyWrite(ast: expr.PropertyWrite, context: any): string {
-    if (ast.receiver instanceof expr.ImplicitReceiver) {
-      return `${ast.name} = ${ast.value.visit(this, context)}`;
-    } else {
-      return `${ast.receiver.visit(this, context)}.${ast.name} = ${ast.value.visit(this, context)}`;
-    }
-  }
-
   visitSafePropertyRead(ast: expr.SafePropertyRead, context: any): string {
     return `${ast.receiver.visit(this, context)}?.${ast.name}`;
   }
@@ -142,6 +127,10 @@ class SerializeExpressionVisitor implements expr.AstVisitor {
 
   visitVoidExpression(ast: expr.VoidExpression, context: any) {
     return `void ${ast.expression.visit(this, context)}`;
+  }
+
+  visitRegularExpressionLiteral(ast: expr.RegularExpressionLiteral, context: any) {
+    return `/${ast.body}/${ast.flags || ''}`;
   }
 
   visitASTWithSource(ast: expr.ASTWithSource, context: any): string {

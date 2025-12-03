@@ -10,7 +10,7 @@ import {
   AbsoluteSourceSpan,
   BindingPipe,
   PropertyRead,
-  PropertyWrite,
+  AST,
   TmplAstBoundAttribute,
   TmplAstBoundEvent,
   TmplAstComponent,
@@ -28,6 +28,8 @@ import {
   TmplAstTextAttribute,
   TmplAstVariable,
   TmplAstViewportDeferredTrigger,
+  ParseSourceSpan,
+  BindingType,
 } from '@angular/compiler';
 import ts from 'typescript';
 
@@ -65,8 +67,9 @@ export interface OutOfBandDiagnosticRecorder {
    *
    * @param id the type-checking ID of the template which contains the unknown pipe.
    * @param ast the `BindingPipe` invocation of the pipe which could not be found.
+   * @param isStandalone whether the host component is standalone.
    */
-  missingPipe(id: TypeCheckId, ast: BindingPipe): void;
+  missingPipe(id: TypeCheckId, ast: BindingPipe, isStandalone: boolean): void;
 
   /**
    * Reports usage of a pipe imported via `@Component.deferredImports` outside
@@ -172,11 +175,7 @@ export interface OutOfBandDiagnosticRecorder {
   ): void;
 
   /** Reports cases where users are writing to `@let` declarations. */
-  illegalWriteToLetDeclaration(
-    id: TypeCheckId,
-    node: PropertyWrite,
-    target: TmplAstLetDeclaration,
-  ): void;
+  illegalWriteToLetDeclaration(id: TypeCheckId, node: AST, target: TmplAstLetDeclaration): void;
 
   /** Reports cases where users are accessing an `@let` before it is defined.. */
   letUsedBeforeDefinition(id: TypeCheckId, node: PropertyRead, target: TmplAstLetDeclaration): void;
@@ -239,16 +238,41 @@ export interface OutOfBandDiagnosticRecorder {
       | TmplAstInteractionDeferredTrigger
       | TmplAstViewportDeferredTrigger,
   ): void;
+
+  /**
+   * Reports an unsupported binding on a form `Field` node.
+   */
+  formFieldUnsupportedBinding(
+    id: TypeCheckId,
+    node: TmplAstBoundAttribute | TmplAstTextAttribute,
+  ): void;
 }
 
 export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecorder {
-  private _diagnostics: TemplateDiagnostic[] = [];
+  private readonly _diagnostics: TemplateDiagnostic[] = [];
 
   /**
    * Tracks which `BindingPipe` nodes have already been recorded as invalid, so only one diagnostic
    * is ever produced per node.
    */
-  private recordedPipes = new Set<BindingPipe>();
+  private readonly recordedPipes = new Set<BindingPipe>();
+
+  /** Common pipes that can be suggested to users. */
+  private readonly pipeSuggestions = new Map<string, string>([
+    ['async', 'AsyncPipe'],
+    ['uppercase', 'UpperCasePipe'],
+    ['lowercase', 'LowerCasePipe'],
+    ['json', 'JsonPipe'],
+    ['slice', 'SlicePipe'],
+    ['number', 'DecimalPipe'],
+    ['percent', 'PercentPipe'],
+    ['titlecase', 'TitleCasePipe'],
+    ['currency', 'CurrencyPipe'],
+    ['date', 'DatePipe'],
+    ['i18nPlural', 'I18nPluralPipe'],
+    ['i18nSelect', 'I18nSelectPipe'],
+    ['keyvalue', 'KeyValuePipe'],
+  ]);
 
   constructor(private resolver: TypeCheckSourceResolver) {}
 
@@ -273,13 +297,10 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
     );
   }
 
-  missingPipe(id: TypeCheckId, ast: BindingPipe): void {
+  missingPipe(id: TypeCheckId, ast: BindingPipe, isStandalone: boolean): void {
     if (this.recordedPipes.has(ast)) {
       return;
     }
-
-    const mapping = this.resolver.getTemplateSourceMapping(id);
-    const errorMsg = `No pipe found with name '${ast.name}'.`;
 
     const sourceSpan = this.resolver.toTemplateParseSourceSpan(id, ast.nameSpan);
     if (sourceSpan === null) {
@@ -287,6 +308,25 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
         `Assertion failure: no SourceLocation found for usage of pipe '${ast.name}'.`,
       );
     }
+
+    const mapping = this.resolver.getTemplateSourceMapping(id);
+    let errorMsg = `No pipe found with name '${ast.name}'.`;
+
+    if (this.pipeSuggestions.has(ast.name)) {
+      const suggestedClassName = this.pipeSuggestions.get(ast.name)!;
+      const suggestedImport = '@angular/common';
+
+      if (isStandalone) {
+        errorMsg +=
+          `\nTo fix this, import the "${suggestedClassName}" class from "${suggestedImport}"` +
+          ` and add it to the "imports" array of the component.`;
+      } else {
+        errorMsg +=
+          `\nTo fix this, import the "${suggestedClassName}" class from "${suggestedImport}"` +
+          ` and add it to the "imports" array of the module declaring the component.`;
+      }
+    }
+
     this._diagnostics.push(
       makeTemplateDiagnostic(
         id,
@@ -532,11 +572,33 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
       isComponent ? 'component' : 'directive'
     } ${directiveName} must be specified.`;
 
+    let span: ParseSourceSpan;
+    let name: string | null;
+
+    if (element instanceof TmplAstElement || element instanceof TmplAstDirective) {
+      name = element.name;
+    } else if (element instanceof TmplAstComponent) {
+      name = element.componentName;
+    } else {
+      name = null;
+    }
+
+    if (name === null) {
+      span = element.startSourceSpan;
+    } else {
+      // Only highlight the tag name since highlighting the entire start tag can be noisy.
+      const start = element.startSourceSpan.start.moveBy(1);
+      const end = element.startSourceSpan.end.moveBy(
+        start.offset + name.length - element.startSourceSpan.end.offset,
+      );
+      span = new ParseSourceSpan(start, end);
+    }
+
     this._diagnostics.push(
       makeTemplateDiagnostic(
         id,
         this.resolver.getTemplateSourceMapping(id),
-        element.startSourceSpan,
+        span,
         ts.DiagnosticCategory.Error,
         ngErrorCode(ErrorCode.MISSING_REQUIRED_INPUTS),
         message,
@@ -651,11 +713,7 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
     );
   }
 
-  illegalWriteToLetDeclaration(
-    id: TypeCheckId,
-    node: PropertyWrite,
-    target: TmplAstLetDeclaration,
-  ): void {
+  illegalWriteToLetDeclaration(id: TypeCheckId, node: AST, target: TmplAstLetDeclaration): void {
     const sourceSpan = this.resolver.toTemplateParseSourceSpan(id, node.sourceSpan);
     if (sourceSpan === null) {
       throw new Error(`Assertion failure: no SourceLocation found for property write.`);
@@ -720,7 +778,8 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
         ts.DiagnosticCategory.Error,
         ngErrorCode(ErrorCode.MISSING_NAMED_TEMPLATE_DEPENDENCY),
         // Wording is meant to mimic the wording TS uses in their diagnostic for missing symbols.
-        `Cannot find name "${node instanceof TmplAstDirective ? node.name : node.componentName}".`,
+        `Cannot find name "${node instanceof TmplAstDirective ? node.name : node.componentName}". ` +
+          `Selectorless references are only supported to classes or non-type import statements.`,
       ),
     );
   }
@@ -736,7 +795,7 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
         node.startSourceSpan,
         ts.DiagnosticCategory.Error,
         ngErrorCode(ErrorCode.INCORRECT_NAMED_TEMPLATE_DEPENDENCY_TYPE),
-        `Incorrect reference type. Type must be an ${node instanceof TmplAstComponent ? '@Component' : '@Directive'}.`,
+        `Incorrect reference type. Type must be a standalone ${node instanceof TmplAstComponent ? '@Component' : '@Directive'}.`,
       ),
     );
   }
@@ -777,7 +836,7 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
         trigger.sourceSpan,
         ts.DiagnosticCategory.Error,
         ngErrorCode(ErrorCode.DEFER_IMPLICIT_TRIGGER_MISSING_PLACEHOLDER),
-        'Trigger with no parameters can only be placed on an @defer that has a @placeholder block',
+        'Trigger with no target can only be placed on an @defer that has a @placeholder block',
       ),
     );
   }
@@ -796,8 +855,43 @@ export class OutOfBandDiagnosticRecorderImpl implements OutOfBandDiagnosticRecor
         trigger.sourceSpan,
         ts.DiagnosticCategory.Error,
         ngErrorCode(ErrorCode.DEFER_IMPLICIT_TRIGGER_INVALID_PLACEHOLDER),
-        'Trigger with no parameters can only be placed on an @defer that has a ' +
+        'Trigger with no target can only be placed on an @defer that has a ' +
           '@placeholder block with exactly one root element node',
+      ),
+    );
+  }
+
+  formFieldUnsupportedBinding(
+    id: TypeCheckId,
+    node: TmplAstBoundAttribute | TmplAstTextAttribute,
+  ): void {
+    let message: string;
+
+    if (node instanceof TmplAstBoundAttribute) {
+      let name: string;
+
+      if (node.type === BindingType.Property) {
+        name = `[${node.name}]`;
+      } else if (node.type === BindingType.Attribute) {
+        name = `[attr.${node.name}]`;
+      } else {
+        // We shouldn't hit this, but we have this logic as a fallback.
+        name = node.name;
+      }
+
+      message = `Binding to '${name}' is not allowed on nodes using the '[field]' directive`;
+    } else {
+      message = `Setting the '${node.name}' attribute is not allowed on nodes using the '[field]' directive`;
+    }
+
+    this._diagnostics.push(
+      makeTemplateDiagnostic(
+        id,
+        this.resolver.getTemplateSourceMapping(id),
+        node.sourceSpan,
+        ts.DiagnosticCategory.Error,
+        ngErrorCode(ErrorCode.FORM_FIELD_UNSUPPORTED_BINDING),
+        message,
       ),
     );
   }

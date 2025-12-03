@@ -2,7 +2,7 @@
 </docs-decorative-header>
 
 <!--
-Now that you have been introduced to main concepts of Angular - you're ready to put what you learned into practices with our interactive tutorials and learn more with our in-depth guides.
+Now that you have been introduced to the main concepts of Angular - you're ready to put what you learned into practice with our interactive tutorials and learn more with our in-depth guides.
 -->
 이제 Angular의 기본 컨셉은 간단하게 소개했습니다.
 이제 심화 가이드 문서를 확인하면서 튜토리얼을 직접 실습해 보세요.

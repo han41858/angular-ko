@@ -7,11 +7,10 @@
  */
 
 import {
-  DOCUMENT,
   LocationChangeEvent,
   LocationChangeListener,
   PlatformLocation,
-  ɵPlatformNavigation as PlatformNavigation,
+  PlatformNavigation,
 } from '../../index';
 import {Inject, inject, Injectable, InjectionToken, Optional} from '@angular/core';
 import {Subject} from 'rxjs';

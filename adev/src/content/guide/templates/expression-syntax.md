@@ -26,43 +26,42 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 ### 지원하는 타입
 
 <!--
-| Literal type           | Example values                  |
-| ---------------------- | ------------------------------- |
-| String                 | `'Hello'`, `"World"`            |
-| Boolean                | `true`, `false`                 |
-| Number                 | `123`, `3.14`                   |
-| Object                 | `{name: 'Alice'}`               |
-| Array                  | `['Onion', 'Cheese', 'Garlic']` |
-| null                   | `null`                          |
-| Template string        | `` `Hello ${name}` ``           |
-| Tagged template string | `` tag`Hello ${name}` ``        |
--->
-| 변수 타입           | 예시                              |
-|-----------------|---------------------------------|
-| 문자열             | `'Hello'`, `"World"`            |
-| 불리언             | `true`, `false`                 |
-| 숫자              | `123`, `3.14`                   |
-| 객체              | `{name: 'Alice'}`               |
-| 배열              | `['Onion', 'Cheese', 'Garlic']` |
+| Literal type    | Example values                  |
+| --------------- | ------------------------------- |
+| String          | `'Hello'`, `"World"`            |
+| Boolean         | `true`, `false`                 |
+| Number          | `123`, `3.14`                   |
+| Object          | `{name: 'Alice'}`               |
+| Array           | `['Onion', 'Cheese', 'Garlic']` |
 | null            | `null`                          |
-| 템플릿 문자열         | `` `Hello ${name}` ``           |
-| 태그가 지정된 템플릿 문자열 | `` tag`Hello ${name}` ``        |
+| Template string | `` `Hello ${name}` ``           |
+| RegExp          | `/\d+/`                         |
+-->
+| 변수 타입   | 예시                              |
+|---------|---------------------------------|
+| 문자열     | `'Hello'`, `"World"`            |
+| 불리언     | `true`, `false`                 |
+| 숫자      | `123`, `3.14`                   |
+| 객체      | `{name: 'Alice'}`               |
+| 배열      | `['Onion', 'Cheese', 'Garlic']` |
+| null    | `null`                          |
+| 템플릿 문자열 | `` `Hello ${name}` ``           |
+| 정규표현식   | `/\d+/`                         |
 
 
 <!--
-### Unsupported literals
+### Unsupported value literals
 -->
-### 지원하지 않는 타임
+### 지원하지 않는 타입
 
 <!--
-| Literal type           | Example value            |
-| ---------------------- | ------------------------ |
-| RegExp                 | `/\d+/`                  |
-| Tagged template string | `` tag`Hello ${name}` `` |
+| Literal type | Example values |
+| ------------ | -------------- |
+| BigInt       | `1n`           |
 -->
-| 변수 타입           | 예시      |
-|-----------------|---------|
-| 정규표현식           | `/\d+/` |
+| 변수 타입  | 예시   |
+|--------|------|
+| BigInt | `1n` |
 
 
 <!--
@@ -115,33 +114,40 @@ For example, `@for` blocks make several local variables corresponding to informa
 <!--
 Angular supports the following operators from standard JavaScript.
 
-| Operator              | Example(s)                               |
-| --------------------- | ---------------------------------------- |
-| Add / Concatenate     | `1 + 2`                                  |
-| Subtract              | `52 - 3`                                 |
-| Multiply              | `41 * 6`                                 |
-| Divide                | `20 / 4`                                 |
-| Remainder (Modulo)    | `17 % 5`                                 |
-| Exponentiation        | `10 ** 3`                                |
-| Parenthesis           | `9 * (8 + 4)`                            |
-| Conditional (Ternary) | `a > b ? true : false`                   |
-| And (Logical)         | `&&`                                     |
-| Or (Logical)          | `\|\|`                                   |
-| Not (Logical)         | `!`                                      |
-| Nullish Coalescing    | `possiblyNullValue ?? 'default'`         |
-| Comparison Operators  | `<`, `<=`, `>`, `>=`, `==`, `===`, `!==` |
-| Unary Negation        | `-x`                                     |
-| Unary Plus            | `+y`                                     |
-| Property Accessor     | `person['name']`                         |
-| typeof                | `typeof 42`                              |
-| void                  | `void 1`                                 |
-| in                    | `'model' in car`                         |
+| Operator                      | Example(s)                                     |
+| ----------------------------- | ---------------------------------------------- |
+| Add / Concatenate             | `1 + 2`                                        |
+| Subtract                      | `52 - 3`                                       |
+| Multiply                      | `41 * 6`                                       |
+| Divide                        | `20 / 4`                                       |
+| Remainder (Modulo)            | `17 % 5`                                       |
+| Exponentiation                | `10 ** 3`                                      |
+| Parenthesis                   | `9 * (8 + 4)`                                  |
+| Conditional (Ternary)         | `a > b ? true : false`                         |
+| And (Logical)                 | `&&`                                           |
+| Or (Logical)                  | `\|\|`                                         |
+| Not (Logical)                 | `!`                                            |
+| Nullish Coalescing            | `possiblyNullValue ?? 'default'`               |
+| Comparison Operators          | `<`, `<=`, `>`, `>=`, `==`, `===`, `!==`, `!=` |
+| Unary Negation                | `-x`                                           |
+| Unary Plus                    | `+y`                                           |
+| Property Accessor             | `person['name']`                               |
+| Assignment                    | `a = b`                                        |
+| Addition Assignment           | `a += b`                                       |
+| Subtraction Assignment        | `a -= b`                                       |
+| Multiplication Assignment     | `a *= b`                                       |
+| Division Assignment           | `a /= b`                                       |
+| Remainder Assignment          | `a %= b`                                       |
+| Exponentiation Assignment     | `a **= b`                                      |
+| Logical AND Assignment        | `a &&= b`                                      |
+| Logical OR Assignment         | `a \|\|= b`                                    |
+| Nullish Coalescing Assignment | `a ??= b`                                      |
 
 Angular expressions additionally also support the following non-standard operators:
 
 | Operator                        | Example(s)                     |
 | ------------------------------- | ------------------------------ |
-| [Pipe](/guide/templates/pipes) | `{{ total \| currency }}`      |
+| [Pipe](/guide/templates/pipes)  | `{{ total \| currency }}`      |
 | Optional chaining\*             | `someObj.someProp?.nestedProp` |
 | Non-null assertion (TypeScript) | `someObj!.someProp`            |
 
@@ -149,35 +155,42 @@ NOTE: Optional chaining behaves differently from the standard JavaScript version
 -->
 Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산자를 사용할 수 있습니다.
 
-| 연산자            | 예시                                       |
-|----------------|------------------------------------------|
-| 더하기 / 문자열 연결하기 | `1 + 2`                                  |
-| 빼기             | `52 - 3`                                 |
-| 곱하기            | `41 * 6`                                 |
-| 나누기            | `20 / 4`                                 |
-| 나머지 구하기        | `17 % 5`                                 |
-| 지수 연산          | `10 ** 3`                                |
-| 소괄호            | `9 * (8 + 4)`                            |
-| 삼항 연산자         | `a > b ? true : false`                   |
-| And 논리 연산      | `&&`                                     |
-| Or 논리 연산       | `\|\|`                                   |
-| Not 논리 연산      | `!`                                      |
-| Null 병합        | `possiblyNullValue ?? 'default'`         |
-| 비교 연산자         | `<`, `<=`, `>`, `>=`, `==`, `===`, `!==` |
-| 단항 부정          | `-x`                                     |
-| 단항 플러스         | `+y`                                     |
-| 프로퍼티 접근        | `person['name']`                         |
-| typeof         | `typeof 42`                              |
-| void           | `void 1`                                 |
-| in             | `'model' in car`                         |
+| 연산자                         | 예시                                          |
+|-----------------------------|------------------------------------------------|
+| 더하기 / 문자열 연결하기              | `1 + 2`                                        |
+| 빼기                          | `52 - 3`                                       |
+| 곱하기                         | `41 * 6`                                       |
+| 나누기                         | `20 / 4`                                       |
+| 나머지 구하기                     | `17 % 5`                                       |
+| 지수 연산                       | `10 ** 3`                                      |
+| 소괄호                         | `9 * (8 + 4)`                                  |
+| 삼항 연산자                      | `a > b ? true : false`                         |
+| AND 논리 연산                   | `&&`                                           |
+| Or 논리 연산                    | `\|\|`                                         |
+| Not 논리 연산                   | `!`                                            |
+| Null 병합(Nullish Coalescing) | `possiblyNullValue ?? 'default'`               |
+| 비교 연산자                      | `<`, `<=`, `>`, `>=`, `==`, `===`, `!==`, `!=` |
+| 단항 마이너스                     | `-x`                                           |
+| 단항 플러스                      | `+y`                                           |
+| 프로퍼티 접근                     | `person['name']`                               |
+| 할당                          | `a = b`                                        |
+| 더하기 할당                      | `a += b`                                       |
+| 빼기 할당                       | `a -= b`                                       |
+| 곱하기 할당                      | `a *= b`                                       |
+| 나누기 할당                      | `a /= b`                                       |
+| 나머지 구하기 할당                  | `a %= b`                                       |
+| 지수 할당                       | `a **= b`                                      |
+| AND 논리 연산 할당                | `a &&= b`                                      |
+| OR 논리 연산 할당                 | `a \|\|= b`                                    |
+| Null 병합 할당                  | `a ??= b`                                      |
 
 그리고 표준 JavaScript 연산자 외에 다음과 같은 연산자도 지원합니다:
 
-| 연산자                                        | 예시                             |
-|--------------------------------------------|--------------------------------|
-| [Pipe](/guide/templates/pipes)             | `{{ total \| currency }}`      |
-| 옵셔널 체이닝\*                                  | `someObj.someProp?.nestedProp` |
-| null 보장 연산자 (TypeScript) | `someObj!.someProp`            |
+| 연산자                            | 예시                             |
+|--------------------------------|--------------------------------|
+| [Pipe](/guide/templates/pipes) | `{{ total \| currency }}`      |
+| 옵셔널 체이닝\*                      | `someObj.someProp?.nestedProp` |
+| null 보정 연산자 (TypeScript)       | `someObj!.someProp`            |
 
 참고: 옵셔널 체이닝(Optional chaining)의 동작은 표준 JavaScript와 조금 다릅니다. Angular에서는 옵셔널 체이닝이 끊길 때 `undefined` 대신 `null`을 반환합니다.
 
@@ -191,26 +204,18 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | Operator              | Example(s)                        |
 | --------------------- | --------------------------------- |
 | All bitwise operators | `&`, `&=`, `~`, `\|=`, `^=`, etc. |
-| Assignment operators  | `=`                               |
 | Object destructuring  | `const { name } = person`         |
 | Array destructuring   | `const [firstItem] = items`       |
 | Comma operator        | `x = (x++, x)`                    |
-| in                    | `'model' in car`                  |
-| typeof                | `typeof 42`                       |
-| void                  | `void 1`                          |
 | instanceof            | `car instanceof Automobile`       |
 | new                   | `new Car()`                       |
 -->
 | 연산자        | 예시                            |
 |------------|-------------------------------|
 | 비트 연산자     | `&`, `&=`, `~`, `\|=`, `^=` 등 |
-| 할당 연산자     | `=`                           |
 | 객체 분해 할당   | `const { name } = person`     |
 | 배열 분해 할당   | `const [firstItem] = items`   |
 | 쉼표 연산자     | `x = (x++, x)`                |
-| in         | `'model' in car`              |
-| typeof     | `typeof 42`                   |
-| void       | `void 1`                      |
 | instanceof | `car instanceof Automobile`   |
 | new        | `new Car()`                   |
 
@@ -265,7 +270,7 @@ Generally speaking, declarations are not supported in Angular expressions. This 
 # 이벤트 리스너 실행문
 
 <!--
-Event handlers are **statements** rather than expressions. While they support all of the same syntax as Angular expressions, the are two key differences:
+Event handlers are **statements** rather than expressions. While they support all of the same syntax as Angular expressions, there are two key differences:
 
 1. Statements **do support** assignment operators (but not destructing assignments)
 1. Statements **do not support** pipes

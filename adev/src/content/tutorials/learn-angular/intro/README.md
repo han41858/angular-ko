@@ -31,3 +31,14 @@ Angular를 이해하려면 HTML, CSS, JavaScript 기본 지식이 필요합니�
 진행하다가 막히면 화면 위쪽에 있는 "정답 확인하기"를 클릭해 보세요.
 
 좋습니다, 이제 [시작해 봅시다](/tutorials/learn-angular/1-components-in-angular).
+
+
+<!--
+## Using AI for Development
+-->
+## AI 활용하기
+
+<!--
+In case you're following this tutorial in your preferred AI powered IDE, [check out Angular prompt rules and best practices](/ai/develop-with-ai).
+-->
+AI 기능을 지원하는 IDE로 튜토리얼을 따라가려면 [Angular 프롬프트 규칙과 모범사례](/ai/develop-with-ai) 문서를 참고하세요.

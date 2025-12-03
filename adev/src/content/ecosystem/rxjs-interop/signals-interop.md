@@ -1,12 +1,12 @@
 # RxJS interop with Angular signals
 
-The `@angular/rxjs-interop` package offers APIs that help you integrate RxJS and Angular signals.
+The `@angular/core/rxjs-interop` package offers APIs that help you integrate RxJS and Angular signals.
 
 ## Create a signal from an RxJs Observable with `toSignal`
 
 Use the `toSignal` function to create a signal which tracks the value of an Observable. It behaves similarly to the `async` pipe in templates, but is more flexible and can be used anywhere in an application.
 
-```ts
+```angular-ts
 import { Component } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { interval } from 'rxjs';
@@ -55,6 +55,31 @@ By default, `toSignal` automatically unsubscribes from the Observable when the c
 
 To override this behavior, you can pass the `manualCleanup` option. You can use this setting for Observables that complete themselves naturally.
 
+#### Custom equality comparison
+
+Some observables may emit values that are **equals** even though they differ by reference or minor detail. The `equal` option lets you define a **custom equal function** to determine when two consecutive values should be considered the same.
+
+When two emitted values are considered equal, the resulting signal **does not update**. This prevents redundant computations, DOM updates, or effects from re-running unnecessarily.
+
+```ts
+import { Component } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { interval, map } from 'rxjs';
+
+@Component(/* ... */)
+export class EqualExample {
+  temperature$ = interval(1000).pipe(
+    map(() => ({ temperature: Math.floor(Math.random() * 3) + 20 }) ) // 20, 21, or 22 randomly
+  );
+
+  // Only update if the temperature changes
+  temperature = toSignal(this.temperature$, {
+    initialValue: { temperature : 20  },
+    equal: (prev, curr) => prev.temperature === curr.temperature
+  });
+}
+```
+
 ### Error and Completion
 
 If an Observable used in `toSignal` produces an error, that error is thrown when the signal is read.
@@ -69,7 +94,7 @@ Use the `toObservable` utility to create an `Observable` which tracks the value 
 import { Component, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 
-@Component(...)
+@Component(/* ... */)
 export class SearchResults {
   query: Signal<string> = inject(QueryService).query;
   query$ = toObservable(this.query);
@@ -102,3 +127,34 @@ mySignal.set(3);
 ```
 
 Here, only the last value (3) will be logged.
+
+## Using `rxResource` for async data
+
+IMPORTANT: `rxResource` is [experimental](reference/releases#experimental). It's ready for you to try, but it might change before it is stable.
+
+Angular's [`resource` function](/guide/signals/resource) gives you a way to incorporate async data into your application's signal-based code. Building on top of this pattern, `rxResource` lets you define a resource where the source of your data is defined in terms of an RxJS `Observable`. Instead of accepting a `loader` function, `rxResource` accepts a `stream` function that accepts an RxJS `Observable`.
+
+```typescript
+import {Component, inject} from '@angular/core';
+import {rxResource} from '@angular/core/rxjs-interop';
+
+@Component(/* ... */)
+export class UserProfile {
+  // This component relies on a service that exposes data through an RxJS Observable.
+  private userData = inject(MyUserDataClient);
+
+  protected userId = input<string>();
+
+  private userResource = rxResource({
+    params: () => ({ userId: this.userId() }),
+
+    // The `stream` property expects a factory function that returns
+    // a data stream as an RxJS Observable.
+    stream: ({params}) => this.userData.load(params.userId),
+  });
+}
+```
+
+The `stream` property accepts a factory function for an RxJS `Observable`. This factory function is passed the resource's `params` value and returns an `Observable`. The resource calls this factory function every time the `params` computation produces a new value. See [Resource loaders](/guide/signals/resource#resource-loaders) for more details on the parameters passed to the factory function.
+
+In all other ways, `rxResource` behaves like and provides the same APIs as `resource` for specifying parameters, reading values, checking loading state, and examining errors.

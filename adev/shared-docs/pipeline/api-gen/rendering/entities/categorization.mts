@@ -84,10 +84,13 @@ export function isEnumEntry(entry: DocEntry): entry is EnumEntry {
 }
 
 /** Gets whether the given entry represents an interface. */
+export function isInterfaceEntry(
+  entry: MemberEntryRenderable,
+): entry is InterfaceEntryRenderable & MemberEntryRenderable;
 export function isInterfaceEntry(entry: DocEntryRenderable): entry is InterfaceEntryRenderable;
 export function isInterfaceEntry(entry: DocEntry): entry is InterfaceEntry;
-export function isInterfaceEntry(entry: DocEntry): entry is InterfaceEntry {
-  return entry.entryType === EntryType.Interface;
+export function isInterfaceEntry(entry: DocEntry | MemberEntryRenderable): entry is InterfaceEntry {
+  return (entry as DocEntry).entryType === EntryType.Interface;
 }
 
 /** Gets whether the given member entry is a method entry. */
@@ -142,7 +145,10 @@ export function isDeprecatedEntry<T extends HasJsDocTags>(entry: T): boolean {
 }
 
 export function getDeprecatedEntry<T extends HasJsDocTags>(entry: T) {
-  return entry.jsdocTags.find((tag) => tag.name === 'deprecated')?.comment ?? null;
+  const comment = entry.jsdocTags.find((tag) => tag.name === 'deprecated')?.comment;
+
+  // Dropping the eventual version number in front of the comment.
+  return comment?.match(/(?:\d+(?:\.\d+)?\s*)?(.*)/s)?.[1] ?? null;
 }
 
 /** Gets whether the given entry has a given JsDoc tag. */

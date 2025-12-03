@@ -16,21 +16,27 @@ import {
   addHtmlUsageNotes,
   setEntryFlags,
 } from './jsdoc-transforms.mjs';
+import {addRenderableMembers} from './member-transforms.mjs';
 import {addModuleName} from './module-name.mjs';
 import {addRepo} from './repo.mjs';
 
 /** Given an unprocessed type alias entry, get the fully renderable type alias entry. */
-export function getTypeAliasRenderable(
+export async function getTypeAliasRenderable(
   typeAliasEntry: TypeAliasEntry,
   moduleName: string,
   repo: string,
-): TypeAliasEntryRenderable {
+): Promise<TypeAliasEntryRenderable> {
   return setEntryFlags(
-    addRenderableCodeToc(
+    await addRenderableCodeToc(
       addHtmlAdditionalLinks(
         addHtmlUsageNotes(
           addHtmlJsDocTagComments(
-            addHtmlDescription(addRepo(addModuleName(typeAliasEntry, moduleName), repo)),
+            addHtmlDescription(
+              await addRenderableMembers(
+                addRepo(addModuleName(typeAliasEntry, moduleName), repo),
+                typeAliasEntry.name,
+              ),
+            ),
           ),
         ),
       ),

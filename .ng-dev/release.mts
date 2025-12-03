@@ -8,15 +8,16 @@ export const release: ReleaseConfig = {
   npmPackages: [
     {name: '@angular/animations'},
     {name: '@angular/common'},
-    {name: '@angular/compiler'},
     {name: '@angular/compiler-cli'},
+    {name: '@angular/compiler'},
     {name: '@angular/core'},
     {name: '@angular/elements'},
     {name: '@angular/forms'},
+    {name: '@angular/language-server'},
     {name: '@angular/language-service'},
     {name: '@angular/localize'},
-    {name: '@angular/platform-browser'},
     {name: '@angular/platform-browser-dynamic'},
+    {name: '@angular/platform-browser'},
     {name: '@angular/platform-server'},
     {name: '@angular/router'},
     {name: '@angular/service-worker'},
@@ -29,7 +30,14 @@ export const release: ReleaseConfig = {
     return performNpmReleaseBuild();
   },
   releaseNotes: {
-    hiddenScopes: ['bazel', 'dev-infra', 'docs-infra', 'zone.js', 'devtools'],
+    hiddenScopes: [
+      'dev-infra',
+      'docs-infra',
+      'zone.js',
+      'devtools',
+      'vscode-extension',
+      'benchpress',
+    ],
   },
   releasePrLabels: ['area: build & ci', 'action: merge', 'PullApprove: disable'],
 };

@@ -13,6 +13,7 @@ import {
   ElementRef,
   HostBinding,
   Input,
+  provideZoneChangeDetection,
   Renderer2,
   ViewChild,
   ViewContainerRef,
@@ -29,6 +30,11 @@ import {By, DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {isBrowser} from '@angular/private/testing';
 
 describe('styling', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideZoneChangeDetection()],
+    });
+  });
   describe('apply in prioritization order', () => {
     it('should perform static bindings', () => {
       @Component({
@@ -3969,6 +3975,56 @@ describe('styling', () => {
 
     const span = fixture.nativeElement.querySelector('span') as HTMLElement;
     expect(getComputedStyle(span).getPropertyValue('font-size')).toBe('10px');
+  });
+
+  it('should class bindings to classes with special characters in a template', () => {
+    const className = `data-active:text-green-300/80`;
+
+    @Component({template: `<div [class.${className}]="value"></div>`})
+    class Cmp {
+      value = false;
+    }
+
+    const fixture = TestBed.createComponent(Cmp);
+    fixture.detectChanges();
+
+    const div = fixture.nativeElement.querySelector('div');
+    expect(div.classList).not.toContain(className);
+
+    fixture.componentInstance.value = true;
+    fixture.detectChanges();
+    expect(div.classList).toContain(className);
+
+    fixture.componentInstance.value = false;
+    fixture.detectChanges();
+    expect(div.classList).not.toContain(className);
+  });
+
+  it('should class bindings to classes with special characters in a host binding', () => {
+    const className = `data-active:text-green-300/80`;
+
+    @Component({
+      template: ``,
+      host: {
+        [`[class.${className}]`]: 'value',
+      },
+    })
+    class Cmp {
+      value = false;
+    }
+
+    const fixture = TestBed.createComponent(Cmp);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.classList).not.toContain(className);
+
+    fixture.componentInstance.value = true;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList).toContain(className);
+
+    fixture.componentInstance.value = false;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.classList).not.toContain(className);
   });
 
   describe('regression', () => {

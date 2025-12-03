@@ -20,19 +20,19 @@ import {
   viewChildren,
 } from '@angular/core';
 
-import {WINDOW} from '../../providers/index';
-import {ClickOutside} from '../../directives/index';
-import {Search} from '../../services/index';
+import {WINDOW} from '../../providers';
+import {ClickOutside, SearchItem} from '../../directives';
+import {Search, SearchHistory} from '../../services';
 
 import {TextField} from '../text-field/text-field.component';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {ActiveDescendantKeyManager} from '@angular/cdk/a11y';
-import {SearchItem} from '../../directives/search-item/search-item.directive';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Router, RouterLink} from '@angular/router';
 import {fromEvent} from 'rxjs';
 import {AlgoliaIcon} from '../algolia-icon/algolia-icon.component';
-import {RelativeLink} from '../../pipes/relative-link.pipe';
+import {RelativeLink} from '../../pipes';
+import {SearchHistoryComponent} from '../search-history/search-history.component';
 
 @Component({
   selector: 'docs-search-dialog',
@@ -45,16 +45,18 @@ import {RelativeLink} from '../../pipes/relative-link.pipe';
     AlgoliaIcon,
     RelativeLink,
     RouterLink,
+    SearchHistoryComponent,
   ],
   templateUrl: './search-dialog.component.html',
   styleUrls: ['./search-dialog.component.scss'],
 })
 export class SearchDialog {
-  onClose = output();
-  dialog = viewChild.required<ElementRef<HTMLDialogElement>>('searchDialog');
-  items = viewChildren(SearchItem);
-  textField = viewChild(TextField);
+  readonly onClose = output();
+  readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('searchDialog');
+  readonly items = viewChildren(SearchItem);
+  readonly textField = viewChild(TextField);
 
+  readonly history = inject(SearchHistory);
   private readonly search = inject(Search);
   private readonly relativeLink = new RelativeLink();
   private readonly router = inject(Router);
@@ -65,8 +67,9 @@ export class SearchDialog {
     this.injector,
   ).withWrap();
 
-  searchQuery = this.search.searchQuery;
-  searchResults = this.search.searchResults;
+  readonly searchQuery = this.search.searchQuery;
+  readonly resultsResource = this.search.resultsResource;
+  readonly searchResults = this.search.searchResults;
 
   // We use a FormControl instead of relying on NgModel+signal to avoid
   // the issue https://github.com/angular/angular/issues/13568
@@ -80,7 +83,7 @@ export class SearchDialog {
       this.searchQuery.set(value);
     });
 
-    // Thinkig about refactoring this to a single afterRenderEffect ?
+    // Thinking about refactoring this to a single afterRenderEffect ?
     // Answer: It won't have the same behavior
     effect(() => {
       this.items();

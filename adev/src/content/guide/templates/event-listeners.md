@@ -239,7 +239,7 @@ export class AppComponent{
 }
 ```
 
-If the event handler statement evaluates to `false`, Angular automatically calls `preventDefault()`, similar to [native event handler attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes#event_handler_attributes). *Always prefer explicitly calling `preventDefault`*, as this approach makes the code's intent obvious.
+If the event handler statement evaluates to `false`, Angular automatically calls `preventDefault()`, similar to [native event handler attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes#event_handler_attributes). _Always prefer explicitly calling `preventDefault`_, as this approach makes the code's intent obvious.
 -->
 이벤트 핸들러를 실행하면서 브라우저의 기본 동작을 중단해야 한다면 이벤트 객체의 [`preventDefault` 메서드](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault)를 실행하면 됩니다:
 
@@ -259,5 +259,223 @@ export class AppComponent{
 ```
 
 Angular에서는 [기본 이벤트 핸들러 어트리뷰트](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes#event_handler_attributes)와 비슷하게, 이벤트 핸들러 실행문이 `false`로 평가되면 `preventDefault()`를 자동으로 실행합니다.
-*`preventDefault()` 실행이 필요한 경우라면 반드시 명시적으로 이 메서드를 실행하세요.*
+_`preventDefault()` 실행이 필요한 경우라면 반드시 명시적으로 이 메서드를 실행하세요._
 그래야 코드의 의도가 명확해집니다.
+
+
+<!--
+## Extend event handling
+-->
+## 이벤트 핸들링 확장하기
+
+<!--
+Angular’s event system is extensible via custom event plugins registered with the `EVENT_MANAGER_PLUGINS` injection token.
+-->
+Angular 이벤트 처리 시스템은 커스텀 이벤트 플러그인을 `EVENT_MANAGER_PLUGINS` 의존성 토큰으로 등록해서 확장할 수 있습니다.
+
+
+<!--
+### Implementing Event Plugin
+-->
+### 이벤트 플러그인 구현하기
+
+<!--
+To create a custom event plugin, extend the `EventManagerPlugin` class and implement the required methods.
+
+```ts
+import { Injectable } from '@angular/core';
+import { EventManagerPlugin } from '@angular/platform-browser';
+
+@Injectable()
+export class DebounceEventPlugin extends EventManagerPlugin {
+  constructor() {
+    super(document);
+  }
+
+  // Define which events this plugin supports
+  override supports(eventName: string) {
+    return /debounce/.test(eventName);
+  }
+
+  // Handle the event registration
+  override addEventListener(
+    element: HTMLElement,
+    eventName: string,
+    handler: Function
+  ) {
+    // Parse the event: e.g., "click.debounce.500"
+    // event: "click", delay: 500
+    const [event, method , delay = 300 ] = eventName.split('.');
+
+    let timeoutId: number;
+
+    const listener = (event: Event) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+          handler(event);
+      }, delay);
+    };
+
+    element.addEventListener(event, listener);
+
+    // Return cleanup function
+    return () => {
+      clearTimeout(timeoutId);
+      element.removeEventListener(event, listener);
+    };
+  }
+}
+```
+
+Register your custom plugin using the `EVENT_MANAGER_PLUGINS` token in your application's providers:
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { DebounceEventPlugin } from './debounce-event-plugin';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    {
+      provide: EVENT_MANAGER_PLUGINS,
+      useClass: DebounceEventPlugin,
+      multi: true
+    }
+  ]
+});
+```
+
+Once registered, you can use your custom event syntax in templates, as well as with the `host` property:
+
+```angular-ts
+@Component({
+  template: `
+    <input
+      type="text"
+      (input.debounce.500)="onSearch($event.target.value)"
+      placeholder="Search..."
+    />
+  `,
+  ...
+})
+export class Search {
+ onSearch(query: string): void {
+    console.log('Searching for:', query);
+  }
+}
+```
+
+```ts
+@Component({
+  ...,
+  host: {
+    '(click.debounce.500)': 'handleDebouncedClick()',
+  },
+})
+export class AwesomeCard {
+  handleDebouncedClick(): void {
+   console.log('Debounced click!');
+  }
+}
+```
+-->
+커스텀 이벤트 플러그인을 만들려면 `EventManagerPlugin` 클래스를 상속받아 필수 메서드를 구현하면 됩니다.
+
+```ts
+import { Injectable } from '@angular/core';
+import { EventManagerPlugin } from '@angular/platform-browser';
+
+@Injectable()
+export class DebounceEventPlugin extends EventManagerPlugin {
+  constructor() {
+    super(document);
+  }
+
+  // 플러그인이 처리할 이벤트를 지정합니다.
+  override supports(eventName: string) {
+    return /debounce/.test(eventName);
+  }
+
+  // 이벤트 리스너를 등록합니다.
+  override addEventListener(
+    element: HTMLElement,
+    eventName: string,
+    handler: Function
+  ) {
+    // 이벤트를 파싱합니다:
+    // "click.debounce.500" -> event: "click", delay: 500
+    const [event, method , delay = 300 ] = eventName.split('.');
+
+    let timeoutId: number;
+
+    const listener = (event: Event) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+          handler(event);
+      }, delay);
+    };
+
+    element.addEventListener(event, listener);
+
+    // 정리 함수를 반환합니다.
+    return () => {
+      clearTimeout(timeoutId);
+      element.removeEventListener(event, listener);
+    };
+  }
+}
+```
+
+이후에는 애플리케이션의 프로바이더 목록에 `EVENT_MANAGER_PLUGINS` 토큰과 커스텀 플러그인을 등록하면 됩니다.
+
+```ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { DebounceEventPlugin } from './debounce-event-plugin';
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    {
+      provide: EVENT_MANAGER_PLUGINS,
+      useClass: DebounceEventPlugin,
+      multi: true
+    }
+  ]
+});
+```
+
+이렇게 한 번 등록하고 나면, 템플릿에서 커스텀 이벤트 문법을 사용할 수 있으며, `host` 프로퍼티를 활용해도 됩니다:
+
+```angular-ts
+@Component({
+  template: `
+    <input
+      type="text"
+      (input.debounce.500)="onSearch($event.target.value)"
+      placeholder="Search..."
+    />
+  `,
+  ...
+})
+export class Search {
+ onSearch(query: string): void {
+    console.log('Searching for:', query);
+  }
+}
+```
+
+```ts
+@Component({
+  ...,
+  host: {
+    '(click.debounce.500)': 'handleDebouncedClick()',
+  },
+})
+export class AwesomeCard {
+  handleDebouncedClick(): void {
+   console.log('Debounced click!');
+  }
+}
+```

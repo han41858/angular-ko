@@ -8,21 +8,24 @@ The Angular compiler includes "extended diagnostics" which identify many of thes
 
 Currently, Angular supports the following extended diagnostics:
 
-| Code     | Name                                                              |
-| :------- | :---------------------------------------------------------------- |
-| `NG8101` | [`invalidBananaInBox`](extended-diagnostics/NG8101)               |
-| `NG8102` | [`nullishCoalescingNotNullable`](extended-diagnostics/NG8102)     |
-| `NG8103` | [`missingControlFlowDirective`](extended-diagnostics/NG8103)      |
-| `NG8104` | [`textAttributeNotBinding`](extended-diagnostics/NG8104)          |
-| `NG8105` | [`missingNgForOfLet`](extended-diagnostics/NG8105)                |
-| `NG8106` | [`suffixNotSupported`](extended-diagnostics/NG8106)               |
-| `NG8107` | [`optionalChainNotNullable`](extended-diagnostics/NG8107)         |
-| `NG8108` | [`skipHydrationNotStatic`](extended-diagnostics/NG8108)           |
-| `NG8109` | [`interpolatedSignalNotInvoked`](extended-diagnostics/NG8109)     |
-| `NG8111` | [`uninvokedFunctionInEventBinding`](extended-diagnostics/NG8111)  |
-| `NG8113` | [`unusedStandaloneImports`](extended-diagnostics/NG8113)          |
-| `NG8114` | [`unparenthesizedNullishCoalescing`](extended-diagnostics/NG8114) |
-| `NG8116` | [`missingStructuralDirective`](extended-diagnostics/NG8116)       |
+| Code     | Name                                                                  |
+| :------- | :-------------------------------------------------------------------- |
+| `NG8101` | [`invalidBananaInBox`](extended-diagnostics/NG8101)                   |
+| `NG8102` | [`nullishCoalescingNotNullable`](extended-diagnostics/NG8102)         |
+| `NG8103` | [`missingControlFlowDirective`](extended-diagnostics/NG8103)          |
+| `NG8104` | [`textAttributeNotBinding`](extended-diagnostics/NG8104)              |
+| `NG8105` | [`missingNgForOfLet`](extended-diagnostics/NG8105)                    |
+| `NG8106` | [`suffixNotSupported`](extended-diagnostics/NG8106)                   |
+| `NG8107` | [`optionalChainNotNullable`](extended-diagnostics/NG8107)             |
+| `NG8108` | [`skipHydrationNotStatic`](extended-diagnostics/NG8108)               |
+| `NG8109` | [`interpolatedSignalNotInvoked`](extended-diagnostics/NG8109)         |
+| `NG8111` | [`uninvokedFunctionInEventBinding`](extended-diagnostics/NG8111)      |
+| `NG8113` | [`unusedStandaloneImports`](extended-diagnostics/NG8113)              |
+| `NG8114` | [`unparenthesizedNullishCoalescing`](extended-diagnostics/NG8114)     |
+| `NG8115` | [`uninvokedTrackFunction`](extended-diagnostics/NG8115)               |
+| `NG8116` | [`missingStructuralDirective`](extended-diagnostics/NG8116)           |
+| `NG8117` | [`uninvokedFunctionInTextInterpolation`](extended-diagnostics/NG8117) |
+| `NG8021` | [`deferTriggerMisconfiguration`](extended-diagnostics/NG8021)         |
 
 ## Configuration
 
@@ -37,23 +40,19 @@ Each diagnostic can be configured as either:
 
 Check severity can be configured as an [Angular compiler option](reference/configs/angular-compiler-options):
 
-<docs-code language="json">
+```json
+
 {
   "angularCompilerOptions": {
     "extendedDiagnostics": {
-      // The categories to use for specific diagnostics.
       "checks": {
-        // Maps check name to its category.
         "invalidBananaInBox": "suppress"
       },
-
-      // The category to use for any diagnostics not listed in `checks` above.
       "defaultCategory": "error"
     }
-
+  }
 }
-}
-</docs-code>
+```
 
 The `checks` field maps the name of individual diagnostics to their associated category.
 See [Diagnostics](#diagnostics) for a complete list of extended diagnostics and the name to use for configuring them.

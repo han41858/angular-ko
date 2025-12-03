@@ -49,34 +49,25 @@ export interface DirectiveDecorator {
    *
    * ### Declaring directives
    *
-   * In order to make a directive available to other components in your application, you should do
-   * one of the following:
-   *  - either mark the directive as [standalone](guide/components/importing),
-   *  - or declare it in an NgModule by adding it to the `declarations` and `exports` fields.
-   *
-   * ** Marking a directive as standalone **
-   *
-   * You can add the `standalone: true` flag to the Directive decorator metadata to declare it as
-   * [standalone](guide/components/importing):
+   * By default, directives are marked as [standalone](guide/components/importing), which makes
+   * them available to other components in your application.
    *
    * ```ts
    * @Directive({
-   *   standalone: true,
    *   selector: 'my-directive',
    * })
-   * class MyDirective {}
    * ```
    *
-   * When marking a directive as standalone, please make sure that the directive is not already
-   * declared in an NgModule.
-   *
+   * Please make sure that directives marked as standalone are not already declared in an NgModule.
    *
    * ** Declaring a directive in an NgModule **
-   *
-   * Another approach is to declare a directive in an NgModule:
+   * If you want to declare a directive in an ngModule, add the `standalone: false` flag to the
+   * Directive decorator metadata and add the directive to the `declarations` and `exports`
+   * fields of your ngModule.
    *
    * ```ts
    * @Directive({
+   *   standalone: false,
    *   selector: 'my-directive',
    * })
    * class MyDirective {}
@@ -109,6 +100,12 @@ export interface DirectiveDecorator {
 /**
  * Directive decorator and metadata.
  *
+ * @see [Built-in directives](guide/directives)
+ * @see [Including inputs and outputs](guide/directives/directive-composition-api#including-inputs-and-outputs)
+ * @see [Assigning a reference to an Angular directive](guide/templates/variables#assigning-a-reference-to-an-angular-directive)
+ * @see [Referencing component children with queries](guide/components/queries)
+ * @see [Binding to the host element](guide/components/host-elements#binding-to-the-host-element)
+ * @see [Host directive semantics](guide/directives/directive-composition-api#host-directive-semantics)
  * @Annotation
  * @publicApi
  */
@@ -537,6 +534,11 @@ export interface ComponentDecorator {
 /**
  * Supplies configuration metadata for an Angular component.
  *
+ * @see [Anatomy of a component](guide/components)
+ * @see [ChangeDetectionStrategy](guide/components/advanced-configuration#changedetectionstrategy)
+ * @see [Using the viewProviders array](guide/di/hierarchical-dependency-injection#using-the-viewproviders-array)
+ * @see [Style scoping](guide/components/styling#style-scoping)
+ *
  * @publicApi
  */
 export interface Component extends Directive {
@@ -557,16 +559,6 @@ export interface Component extends Directive {
    *
    */
   viewProviders?: Provider[];
-
-  /**
-   * The module ID of the module that contains the component.
-   * The component must be able to resolve relative URLs for templates and styles.
-   * SystemJS exposes the `__moduleName` variable within each module.
-   * In CommonJS, this can  be set to `module.id`.
-   *
-   * @deprecated This option does not have any effect. Will be removed in Angular v17.
-   */
-  moduleId?: string;
 
   /**
    * The relative path or absolute URL of a template file for an Angular component.
@@ -604,6 +596,7 @@ export interface Component extends Directive {
    * [`state()`](api/animations/state) and `transition()` definitions.
    * See the [Animations guide](guide/animations) and animations API documentation.
    *
+   * @deprecated 20.2 Use `animate.enter` or `animate.leave` instead. Intent to remove in v23
    */
   animations?: any[];
 
@@ -623,13 +616,6 @@ export interface Component extends Directive {
    * the policy is automatically switched to `ViewEncapsulation.None`.
    */
   encapsulation?: ViewEncapsulation;
-
-  /**
-   * Overrides the default interpolation start and end delimiters (`{{` and `}}`).
-   *
-   * @deprecated use Angular's default interpolation delimiters instead.
-   */
-  interpolation?: [string, string];
 
   /**
    * True to preserve or false to remove potentially superfluous whitespace characters
@@ -724,7 +710,7 @@ export interface PipeDecorator {
    * to a template. To make it a member of an NgModule,
    * list it in the `declarations` field of the `NgModule` metadata.
    *
-   * @see [Style Guide: Pipe Names](style-guide#02-09)
+   * @see [Pipes](/guide/templates/pipes)
    *
    */
   (obj: Pipe): TypeDecorator;
@@ -949,6 +935,9 @@ export interface HostBindingDecorator {
    * change detection, and if a binding changes it updates the host element of the directive.
    *
    * @usageNotes
+   *
+   * NOTE:  **Always** prefer using the `host` property over `@HostBinding`.
+   * This decorator exist exclusively for backwards compatibility.
    *
    * The following example creates a directive that sets the `valid` and `invalid`
    * class, a style color, and an id on the DOM element that has an `ngModel` directive on it.

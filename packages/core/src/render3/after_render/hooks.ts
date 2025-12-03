@@ -129,7 +129,9 @@ export interface AfterRenderOptions {
  * }
  * ```
  *
- * @developerPreview
+ * @see [afterEveryRender and afterNextRender](guide/components/lifecycle#aftereveryrender-and-afternextrender)
+ *
+ * @publicApi 20.0
  */
 export function afterEveryRender<E = never, W = never, M = never>(
   spec: {
@@ -191,7 +193,7 @@ export function afterEveryRender<E = never, W = never, M = never>(
  * }
  * ```
  *
- * @publicApi
+ * @publicApi 20.0
  */
 export function afterEveryRender(
   callback: VoidFunction,
@@ -308,7 +310,8 @@ export function afterEveryRender(
  * }
  * ```
  *
- * @developerPreview
+ * @publicApi 20.0
+ * @see [afterEveryRender and afterNextRender](guide/components/lifecycle#aftereveryrender-and-afternextrender)
  */
 export function afterNextRender<E = never, W = never, M = never>(
   spec: {
@@ -389,7 +392,10 @@ export function afterNextRender(
       },
   options?: AfterRenderOptions,
 ): AfterRenderRef {
-  !options?.injector && assertInInjectionContext(afterNextRender);
+  if (ngDevMode && !options?.injector) {
+    assertInInjectionContext(afterNextRender);
+  }
+
   const injector = options?.injector ?? inject(Injector);
 
   if (typeof ngServerMode !== 'undefined' && ngServerMode) {

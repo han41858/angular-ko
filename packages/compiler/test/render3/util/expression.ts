@@ -59,10 +59,6 @@ class ExpressionSourceHumanizer extends e.RecursiveAstVisitor implements t.Visit
     this.recordAst(ast);
     super.visitKeyedRead(ast, null);
   }
-  override visitKeyedWrite(ast: e.KeyedWrite) {
-    this.recordAst(ast);
-    super.visitKeyedWrite(ast, null);
-  }
   override visitLiteralPrimitive(ast: e.LiteralPrimitive) {
     this.recordAst(ast);
     super.visitLiteralPrimitive(ast, null);
@@ -99,10 +95,6 @@ class ExpressionSourceHumanizer extends e.RecursiveAstVisitor implements t.Visit
     this.recordAst(ast);
     super.visitPropertyRead(ast, null);
   }
-  override visitPropertyWrite(ast: e.PropertyWrite) {
-    this.recordAst(ast);
-    super.visitPropertyWrite(ast, null);
-  }
   override visitSafePropertyRead(ast: e.SafePropertyRead) {
     this.recordAst(ast);
     super.visitSafePropertyRead(ast, null);
@@ -134,6 +126,10 @@ class ExpressionSourceHumanizer extends e.RecursiveAstVisitor implements t.Visit
   override visitParenthesizedExpression(ast: e.ParenthesizedExpression, context: any): void {
     this.recordAst(ast);
     super.visitParenthesizedExpression(ast, null);
+  }
+  override visitRegularExpressionLiteral(ast: e.RegularExpressionLiteral, context: any): void {
+    this.recordAst(ast);
+    super.visitRegularExpressionLiteral(ast, null);
   }
 
   visitTemplate(ast: t.Template) {
@@ -183,6 +179,8 @@ class ExpressionSourceHumanizer extends e.RecursiveAstVisitor implements t.Visit
   visitDeferredTrigger(trigger: t.DeferredTrigger): void {
     if (trigger instanceof t.BoundDeferredTrigger) {
       this.recordAst(trigger.value);
+    } else if (trigger instanceof t.ViewportDeferredTrigger && trigger.options !== null) {
+      this.recordAst(trigger.options);
     }
   }
 

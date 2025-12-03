@@ -12,7 +12,7 @@ import * as o from '../../output/output_ast';
 import {ParseError, ParseSourceSpan} from '../../parse_util';
 import {CssSelector} from '../../directive_matching';
 import {ShadowCss} from '../../shadow_css';
-import {CompilationJobKind} from '../../template/pipeline/src/compilation';
+import {CompilationJobKind, TemplateCompilationMode} from '../../template/pipeline/src/compilation';
 import {emitHostBindingFunction, emitTemplateFn, transform} from '../../template/pipeline/src/emit';
 import {ingestComponent, ingestHostBinding} from '../../template/pipeline/src/ingest';
 import {BindingParser} from '../../template_parser/binding_parser';
@@ -36,6 +36,7 @@ import {asLiteral, conditionallyCreateDirectiveBindingLiteral, DefinitionMap} fr
 const COMPONENT_VARIABLE = '%COMP%';
 const HOST_ATTR = `_nghost-${COMPONENT_VARIABLE}`;
 const CONTENT_ATTR = `_ngcontent-${COMPONENT_VARIABLE}`;
+const ANIMATE_LEAVE = `animate.leave`;
 
 function baseDirectiveFields(
   meta: R3DirectiveMetadata,
@@ -102,6 +103,16 @@ function baseDirectiveFields(
   return definitionMap;
 }
 
+function hasAnimationHostBinding(
+  meta: R3DirectiveMetadata | R3ComponentMetadata<R3TemplateDependency>,
+): boolean {
+  return (
+    meta.host.attributes[ANIMATE_LEAVE] !== undefined ||
+    meta.host.properties[ANIMATE_LEAVE] !== undefined ||
+    meta.host.listeners[ANIMATE_LEAVE] !== undefined
+  );
+}
+
 /**
  * Add features to the definition map.
  */
@@ -134,9 +145,6 @@ function addFeatures(
   if (meta.usesInheritance) {
     features.push(o.importExpr(R3.InheritDefinitionFeature));
   }
-  if (meta.fullInheritance) {
-    features.push(o.importExpr(R3.CopyDefinitionFeature));
-  }
   if (meta.lifecycle.usesOnChanges) {
     features.push(o.importExpr(R3.NgOnChangesFeature));
   }
@@ -146,6 +154,7 @@ function addFeatures(
       o.importExpr(R3.ExternalStylesFeature).callFn([o.literalArr(externalStyleNodes)]),
     );
   }
+
   if (features.length) {
     definitionMap.set('features', o.literalArr(features));
   }
@@ -217,11 +226,17 @@ export function compileComponentFromMetadata(
     allDeferrableDepsFn = o.variable(fnName);
   }
 
+  const compilationMode =
+    meta.isStandalone && !meta.hasDirectiveDependencies
+      ? TemplateCompilationMode.DomOnly
+      : TemplateCompilationMode.Full;
+
   // First the template is ingested into IR:
   const tpl = ingestComponent(
     meta.name,
     meta.template.nodes,
     constantPool,
+    compilationMode,
     meta.relativeContextFilePath,
     meta.i18nUseExternalIds,
     meta.defer,
@@ -230,7 +245,7 @@ export function compileComponentFromMetadata(
     getTemplateSourceLocationsEnabled(),
   );
 
-  // Then the IR is transformed to prepare it for cod egeneration.
+  // Then the IR is transformed to prepare it for code generation.
   transform(tpl, CompilationJobKind.Tmpl);
 
   // Finally we emit the template function:

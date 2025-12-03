@@ -5,10 +5,22 @@
 ```ts
 
 // @public (undocumented)
-export type ComputationFn<S, D> = (source: S, previous?: {
-    source: S;
-    value: D;
-}) => D;
+export const BASE_EFFECT_NODE: Omit<BaseEffectNode, 'fn' | 'destroy' | 'cleanup' | 'run'>;
+
+// @public (undocumented)
+export interface BaseEffectNode extends ReactiveNode {
+    // (undocumented)
+    cleanup(): void;
+    // (undocumented)
+    destroy(): void;
+    // (undocumented)
+    fn: () => void;
+    // (undocumented)
+    run(): void;
+}
+
+// @public (undocumented)
+export type ComputationFn<S, D> = (source: S, previous?: PreviousValue<S, D>) => D;
 
 // @public
 export interface ComputedNode<T> extends ReactiveNode {
@@ -43,17 +55,20 @@ export function createLinkedSignal<S, D>(sourceFn: () => S, computationFn: Compu
 // @public
 export function createSignal<T>(initialValue: T, equal?: ValueEqualityFn<T>): [SignalGetter<T>, SignalSetter<T>, SignalUpdater<T>];
 
-// @public @deprecated
-export function createSignalTuple<T>(initialValue: T, equal?: ValueEqualityFn<T>): [SignalGetter<T>, SignalSetter<T>, SignalUpdater<T>];
-
 // @public (undocumented)
 export function createWatch(fn: (onCleanup: WatchCleanupRegisterFn) => void, schedule: (watch: Watch) => void, allowSignalWrites: boolean): Watch;
 
 // @public
 export function defaultEquals<T>(a: T, b: T): boolean;
 
+// @public
+export function finalizeConsumerAfterComputation(node: ReactiveNode): void;
+
 // @public (undocumented)
 export function getActiveConsumer(): ReactiveNode | null;
+
+// @public
+export function installDevToolsSignalFormatter(): void;
 
 // @public (undocumented)
 export function isInNotificationPhase(): boolean;
@@ -82,6 +97,12 @@ export function linkedSignalSetFn<S, D>(node: LinkedSignalNode<S, D>, newValue: 
 
 // @public (undocumented)
 export function linkedSignalUpdateFn<S, D>(node: LinkedSignalNode<S, D>, updater: (value: D) => D): void;
+
+// @public (undocumented)
+export type PreviousValue<S, D> = {
+    source: S;
+    value: D;
+};
 
 // @public
 export function producerAccessed(node: ReactiveNode): void;
@@ -121,21 +142,30 @@ export interface ReactiveNode {
     // (undocumented)
     consumerMarkedDirty(node: unknown): void;
     consumerOnSignalRead(node: unknown): void;
+    consumers: ReactiveLink | undefined;
+    // (undocumented)
+    consumersTail: ReactiveLink | undefined;
     debugName?: string;
     dirty: boolean;
-    kind: string;
+    kind: ReactiveNodeKind;
     lastCleanEpoch: Version;
-    liveConsumerIndexOfThis: number[] | undefined;
-    liveConsumerNode: ReactiveNode[] | undefined;
-    nextProducerIndex: number;
-    producerIndexOfThis: number[] | undefined;
-    producerLastReadVersion: Version[] | undefined;
     producerMustRecompute(node: unknown): boolean;
-    producerNode: ReactiveNode[] | undefined;
     // (undocumented)
     producerRecomputeValue(node: unknown): void;
+    producers: ReactiveLink | undefined;
+    producersTail: ReactiveLink | undefined;
+    recomputing: boolean;
     version: Version;
 }
+
+// @public (undocumented)
+export type ReactiveNodeKind = 'signal' | 'computed' | 'effect' | 'template' | 'linkedSignal' | 'afterRenderEffectPhase' | 'unknown';
+
+// @public
+export function resetConsumerBeforeComputation(node: ReactiveNode): void;
+
+// @public (undocumented)
+export function runEffect(node: BaseEffectNode): void;
 
 // @public (undocumented)
 export function runPostProducerCreatedFn(node: ReactiveNode): void;
@@ -192,6 +222,11 @@ export function untracked<T>(nonReactiveReadsFn: () => T): T;
 
 // @public
 export type ValueEqualityFn<T> = (a: T, b: T) => boolean;
+
+// @public (undocumented)
+export type Version = number & {
+    __brand: 'Version';
+};
 
 // @public (undocumented)
 export interface Watch {

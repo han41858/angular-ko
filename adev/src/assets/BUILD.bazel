@@ -1,4 +1,4 @@
-load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
+load("//adev/shared-docs:defaults.bzl", "copy_to_directory")
 load("//adev/shared-docs/pipeline/api-gen/manifest:generate_api_manifest.bzl", "generate_api_manifest")
 
 package(default_visibility = ["//adev:__subpackages__"])
@@ -8,6 +8,7 @@ copy_to_directory(
     srcs = [
         "//adev/src/content",
         "//adev/src/content/ai",
+        "//adev/src/content/aria:aria_docs",
         "//adev/src/content/best-practices",
         "//adev/src/content/best-practices/runtime-performance",
         "//adev/src/content/cdk:cdk_docs",
@@ -15,12 +16,15 @@ copy_to_directory(
         "//adev/src/content/ecosystem",
         "//adev/src/content/ecosystem/rxjs-interop",
         "//adev/src/content/ecosystem/service-workers",
+        "//adev/src/content/events",
         "//adev/src/content/guide",
         "//adev/src/content/guide/animations",
+        "//adev/src/content/guide/aria",
         "//adev/src/content/guide/components",
         "//adev/src/content/guide/di",
         "//adev/src/content/guide/directives",
         "//adev/src/content/guide/forms",
+        "//adev/src/content/guide/forms/signals",
         "//adev/src/content/guide/http",
         "//adev/src/content/guide/i18n",
         "//adev/src/content/guide/ngmodules",
@@ -41,11 +45,16 @@ copy_to_directory(
         "//adev/src/content/reference/migrations",
         "//adev/src/content/tools",
         "//adev/src/content/tools/cli",
+        "//adev/src/content/tools/devtools",
         "//adev/src/content/tools/libraries",
         "//adev/src/content/tutorials",
         "//adev/src/content/tutorials/deferrable-views:deferrable-views-guides",
         "//adev/src/content/tutorials/first-app:first-app-guides",
         "//adev/src/content/tutorials/learn-angular:learn-angular-guides",
+        "//adev/src/content/tutorials/signal-forms",
+        "//adev/src/content/tutorials/signal-forms:signal-forms-guides",
+        "//adev/src/content/tutorials/signals",
+        "//adev/src/content/tutorials/signals:signals-guides",
         "//packages/animations:animations_docs",
         "//packages/animations/browser:animations_browser_docs",
         "//packages/animations/browser/testing:animations_browser_testing_docs",
@@ -60,6 +69,8 @@ copy_to_directory(
         "//packages/core/testing:core_testing_docs",
         "//packages/elements:elements_docs",
         "//packages/forms:forms_docs",
+        "//packages/forms/signals:forms_signals_docs",
+        "//packages/forms/signals/compat:forms_signals_compat_docs",
         "//packages/localize:localize_docs",
         "//packages/localize/src/localize:localize_init_docs",
         "//packages/platform-browser:platform-browser_docs",
@@ -74,8 +85,8 @@ copy_to_directory(
         "//packages/router/testing:router_testing_docs",
         "//packages/router/upgrade:router_upgrade_docs",
         "//packages/service-worker:service-worker_docs",
-        "//packages/ssr:ssr_docs",
-        "//packages/ssr:ssr_node_docs",
+        "//packages/ssr/docs:ssr_docs",
+        "//packages/ssr/docs:ssr_node_docs",
         "//packages/upgrade:upgrade_docs",
         "//packages/upgrade/static:upgrade_static_docs",
         "//packages/upgrade/static/testing:upgrade_static_testing_docs",
@@ -84,6 +95,7 @@ copy_to_directory(
     ],
     replace_prefixes = {
         "adev/src/content/cli/help/cli_docs_html": "cli/",
+        "adev/src/content/aria/aria_docs_html": "api/",
         "adev/src/content/cdk/cdk_docs_html": "api/",
         "adev/src/content": "",
         "packages/**/": "api/",
@@ -99,6 +111,8 @@ copy_to_directory(
         "//adev/src/content/tutorials/homepage",
         "//adev/src/content/tutorials/learn-angular",
         "//adev/src/content/tutorials/playground",
+        "//adev/src/content/tutorials/signal-forms",
+        "//adev/src/content/tutorials/signals",
     ],
     replace_prefixes = {
         "adev/**/tutorials/*/": "",
@@ -108,6 +122,7 @@ copy_to_directory(
 generate_api_manifest(
     name = "docs_api_manifest",
     srcs = [
+        "//adev/src/content/aria:aria_extracted_apis",
         "//adev/src/content/cdk:cdk_extracted_apis",
         "//packages:docs_extracted_apis",
     ],
@@ -117,6 +132,18 @@ copy_to_directory(
     name = "api",
     srcs = [
         ":docs_api_manifest",
+    ],
+    replace_prefixes = {
+        "**/": "",
+    },
+)
+
+copy_to_directory(
+    name = "context",
+    srcs = [
+        "//adev/src/context",
+        "//adev/src/context:llms_full",
+        "//packages/core/resources:best-practices.md",
     ],
     replace_prefixes = {
         "**/": "",

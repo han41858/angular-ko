@@ -9,9 +9,9 @@
 import {getSystemPath, logging, normalize, virtualFs} from '@angular-devkit/core';
 import {TempScopedNodeJsSyncHost} from '@angular-devkit/core/node/testing';
 import {HostTree} from '@angular-devkit/schematics';
-import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing';
-import {runfiles} from '@bazel/runfiles';
-import shx from 'shelljs';
+import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing/index.js';
+import {resolve} from 'path';
+import {rmSync} from 'node:fs';
 
 describe('control flow migration (ng update)', () => {
   let runner: SchematicTestRunner;
@@ -29,9 +29,9 @@ describe('control flow migration (ng update)', () => {
   function runMigration(path: string | undefined = undefined, format: boolean = true) {
     return runner.runSchematic('control-flow-migration', {path, format}, tree);
   }
-
+  const migrationsJsonPath = resolve('../migrations.json');
   beforeEach(() => {
-    runner = new SchematicTestRunner('test', runfiles.resolvePackageRelative('../migrations.json'));
+    runner = new SchematicTestRunner('test', migrationsJsonPath);
     host = new TempScopedNodeJsSyncHost();
     tree = new UnitTestTree(new HostTree(host));
 
@@ -54,17 +54,17 @@ describe('control flow migration (ng update)', () => {
       }),
     );
 
-    previousWorkingDir = shx.pwd();
+    previousWorkingDir = process.cwd();
     tmpDirPath = getSystemPath(host.root);
 
     // Switch into the temporary directory path. This allows us to run
     // the schematic against our custom unit test tree.
-    shx.cd(tmpDirPath);
+    process.chdir(tmpDirPath);
   });
 
   afterEach(() => {
-    shx.cd(previousWorkingDir);
-    shx.rm('-r', tmpDirPath);
+    process.chdir(previousWorkingDir);
+    rmSync(tmpDirPath, {recursive: true});
   });
 
   describe('ngIf', () => {
@@ -1391,6 +1391,101 @@ describe('control flow migration (ng update)', () => {
           `  <ng-template #elseBlock>Else Content</ng-template>`,
           `</div>`,
           `<ng-container *ngTemplateOutlet="elseBlock"></ng-container>`,
+        ].join('\n'),
+      );
+    });
+
+    it('should migrate but not remove ng-templates when referenced elsewhere with a trailing semicolon', async () => {
+      writeFile(
+        '/comp.ts',
+        `
+        import {Component} from '@angular/core';
+        import {NgIf} from '@angular/common';
+
+        @Component({
+          templateUrl: './comp.html'
+        })
+        class Comp {
+          show = false;
+        }
+      `,
+      );
+
+      writeFile(
+        '/comp.html',
+        [
+          `<div>`,
+          `<span *ngIf="show; then thenBlock; else elseBlock">Ignored</span>`,
+          `<ng-template #thenBlock><div>THEN Stuff</div></ng-template>`,
+          `<ng-template #elseBlock>Else Content</ng-template>`,
+          `</div>`,
+          `<ng-container *ngTemplateOutlet="elseBlock;"></ng-container>`,
+        ].join('\n'),
+      );
+
+      await runMigration();
+      const content = tree.readContent('/comp.html');
+
+      expect(content).toBe(
+        [
+          `<div>`,
+          `  @if (show) {`,
+          `    <div>THEN Stuff</div>`,
+          `  } @else {`,
+          `    Else Content`,
+          `  }`,
+          `  <ng-template #elseBlock>Else Content</ng-template>`,
+          `</div>`,
+          `<ng-container *ngTemplateOutlet="elseBlock;"></ng-container>`,
+        ].join('\n'),
+      );
+    });
+
+    it('should migrate but not remove ng-templates when referenced elsewhere with a trailing semicolon including leading whitespace character', async () => {
+      writeFile(
+        '/comp.ts',
+        `
+        import {Component} from '@angular/core';
+        import {NgIf} from '@angular/common';
+
+        @Component({
+          templateUrl: './comp.html'
+        })
+        class Comp {
+          show = false;
+        }
+      `,
+      );
+
+      writeFile(
+        '/comp.html',
+        [
+          `<div>`,
+          `<span *ngIf="show; then thenBlock; else elseBlock">Ignored</span>`,
+          `<ng-template #thenBlock><div>THEN Stuff</div></ng-template>`,
+          `<ng-template #elseBlock let-ctx>{{ ctx }} Else Content</ng-template>`,
+          `</div>`,
+          `<ng-container *ngTemplateOutlet="
+              elseBlock;
+              context: $implicit: 'Hello'"></ng-container>`,
+        ].join('\n'),
+      );
+
+      await runMigration();
+      const content = tree.readContent('/comp.html');
+      expect(content).toBe(
+        [
+          `<div>`,
+          `  @if (show) {`,
+          `    <div>THEN Stuff</div>`,
+          `  } @else {`,
+          `    {{ ctx }} Else Content`,
+          `  }`,
+          `  <ng-template #elseBlock let-ctx>{{ ctx }} Else Content</ng-template>`,
+          `</div>`,
+          `<ng-container *ngTemplateOutlet="
+              elseBlock;
+              context: $implicit: 'Hello'"></ng-container>`,
         ].join('\n'),
       );
     });
@@ -5074,6 +5169,44 @@ describe('control flow migration (ng update)', () => {
         '@if (show) {<div>Some greek characters: θδ!</div>}',
       );
     });
+
+    it('should migrate multiple ngIf directives with same else template and preserve template outlet', async () => {
+      writeFile(
+        '/comp.ts',
+        `
+        import {Component} from '@angular/core';
+        import {NgIf} from '@angular/common';
+
+        @Component({
+          imports: [NgIf],
+          template: \`
+            <div *ngIf="1 == 1; else elseTemplate">
+              <h1>TEST</h1>
+            </div>
+            <div *ngIf="1 == 1; else elseTemplate">
+              <h1>TEST</h1>
+            </div>
+
+            <ng-container [ngTemplateOutlet]="elseTemplate"></ng-container>
+            <ng-template #elseTemplate>
+              <h1>Test</h1>
+              <div>Test</div>
+            </ng-template>
+          \`
+        })
+        class Comp {
+        }
+      `,
+      );
+
+      await runMigration();
+      const content = tree.readContent('/comp.ts');
+
+      expect(content.replace(/\s+/g, ' ')).toContain(
+        `<ng-container [ngTemplateOutlet]="elseTemplate"></ng-container>`,
+      );
+      expect(content.replace(/\s+/g, ' ')).toContain(`<ng-template #elseTemplate>`);
+    });
   });
 
   describe('formatting', () => {
@@ -6849,8 +6982,9 @@ describe('control flow migration (ng generate)', () => {
     return runner.runSchematic('control-flow-migration', {path, format}, tree);
   }
 
+  const collectionJsonPath = resolve('../collection.json');
   beforeEach(() => {
-    runner = new SchematicTestRunner('test', runfiles.resolvePackageRelative('../collection.json'));
+    runner = new SchematicTestRunner('test', collectionJsonPath);
     host = new TempScopedNodeJsSyncHost();
     tree = new UnitTestTree(new HostTree(host));
 
@@ -6873,23 +7007,21 @@ describe('control flow migration (ng generate)', () => {
       }),
     );
 
-    previousWorkingDir = shx.pwd();
+    previousWorkingDir = process.cwd();
     tmpDirPath = getSystemPath(host.root);
 
     // Switch into the temporary directory path. This allows us to run
     // the schematic against our custom unit test tree.
-    shx.cd(tmpDirPath);
+    process.chdir(tmpDirPath);
   });
 
   afterEach(() => {
-    shx.cd(previousWorkingDir);
-    shx.rm('-r', tmpDirPath);
+    process.chdir(previousWorkingDir);
+    rmSync(tmpDirPath, {recursive: true});
   });
 
   describe('path', () => {
-    it('should throw an error if no files match the passed-in path', async () => {
-      let error: string | null = null;
-
+    it('should warn if no files match the passed-in path', async () => {
       writeFile(
         'dir.ts',
         `
@@ -6899,15 +7031,8 @@ describe('control flow migration (ng generate)', () => {
       `,
       );
 
-      try {
-        await runMigration('./foo');
-      } catch (e: any) {
-        error = e.message;
-      }
-
-      expect(error).toMatch(
-        /Could not find any files to migrate under the path .*\/foo\. Cannot run the control flow migration/,
-      );
+      await runMigration('./foo');
+      expect(warnOutput).toContain('Control flow migration did not find any files to migrate');
     });
 
     it('should throw an error if a path outside of the project is passed in', async () => {

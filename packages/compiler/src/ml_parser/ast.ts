@@ -103,9 +103,11 @@ export class Element extends NodeWithI18n {
     public attrs: Attribute[],
     readonly directives: Directive[],
     public children: Node[],
+    readonly isSelfClosing: boolean,
     sourceSpan: ParseSourceSpan,
     public startSourceSpan: ParseSourceSpan,
     public endSourceSpan: ParseSourceSpan | null = null,
+    readonly isVoid: boolean,
     i18n?: I18nMeta,
   ) {
     super(sourceSpan, i18n);
@@ -152,6 +154,7 @@ export class Component extends NodeWithI18n {
     public attrs: Attribute[],
     readonly directives: Directive[],
     readonly children: Node[],
+    readonly isSelfClosing: boolean,
     sourceSpan: ParseSourceSpan,
     readonly startSourceSpan: ParseSourceSpan,
     public endSourceSpan: ParseSourceSpan | null = null,

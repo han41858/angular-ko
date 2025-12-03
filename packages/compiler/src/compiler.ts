@@ -50,7 +50,6 @@ export * from './i18n/index';
 export * from './injectable_compiler_2';
 export {publishFacade} from './jit_compiler_facade';
 export * from './ml_parser/ast';
-export {DEFAULT_INTERPOLATION_CONFIG, InterpolationConfig} from './ml_parser/defaults';
 export * from './ml_parser/html_parser';
 export * from './ml_parser/html_tags';
 export {LexerRange} from './ml_parser/lexer';
@@ -99,6 +98,7 @@ export {
   ReadKeyExpr,
   ReadPropExpr,
   ReadVarExpr,
+  RegularExpressionLiteralExpr,
   ReturnStatement,
   Statement,
   StatementVisitor,
@@ -116,9 +116,6 @@ export {
   UnaryOperatorExpr,
   VoidExpr,
   WrappedNodeExpr,
-  WriteKeyExpr,
-  WritePropExpr,
-  WriteVarExpr,
 } from './output/output_ast';
 export {JitEvaluator} from './output/output_jit';
 export {SourceMap} from './output/source_map';
@@ -237,6 +234,7 @@ export {
   parseTemplate,
   ParseTemplateOptions,
 } from './render3/view/template';
+export {CombinedRecursiveAstVisitor} from './combined_visitor';
 
 // Note: BindingParser is intentionally exported as a type only, because it should
 // be constructed through `makeBindingParser`, rather than its constructor.
@@ -251,6 +249,8 @@ export * from './version';
 export {outputAst};
 export {CompilerFacadeImpl} from './jit_compiler_facade';
 export {FactoryTarget} from './compiler_facade_interface';
+export {QueryFlags} from './render3/view/query_generation';
+export {setEnableTemplateSourceLocations} from './render3/view/config';
 
 // This file only reexports content of the `src` folder. Keep it that way.
 

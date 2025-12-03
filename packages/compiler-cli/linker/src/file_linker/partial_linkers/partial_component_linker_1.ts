@@ -10,10 +10,8 @@ import {
   compileComponentFromMetadata,
   ConstantPool,
   DeclarationListEmitMode,
-  DEFAULT_INTERPOLATION_CONFIG,
   DeferBlockDepsEmitMode,
   ForwardRefHandling,
-  InterpolationConfig,
   makeBindingParser,
   outputAst as o,
   ParsedTemplate,
@@ -95,7 +93,6 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
     metaObj: AstObject<R3DeclareComponentMetadata, TExpression>,
     version: string,
   ): R3ComponentMetadata<R3TemplateDependencyMetadata> {
-    const interpolation = parseInterpolationConfig(metaObj);
     const templateSource = metaObj.getValue('template');
     const isInline = metaObj.has('isInline') ? metaObj.getBoolean('isInline') : false;
     const templateInfo = this.getTemplateInfo(templateSource, isInline);
@@ -109,7 +106,6 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
 
     const template = parseTemplate(templateInfo.code, templateInfo.sourceUrl, {
       escapedString: templateInfo.isEscaped,
-      interpolationConfig: interpolation,
       range: templateInfo.range,
       enableI18nLegacyMessageIdFormat: false,
       preserveWhitespaces: metaObj.has('preserveWhitespaces')
@@ -180,6 +176,18 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
       }
     }
 
+    const baseMeta = toR3DirectiveMeta(metaObj, this.code, this.sourceUrl, version);
+    const deferBlockDependencies = this.createR3ComponentDeferMetadata(metaObj, template);
+    let hasDirectiveDependencies = false;
+
+    for (const depFn of deferBlockDependencies.blocks.values()) {
+      // We don't know what kind of dependency is referenced inside
+      // the defer blocks so consider any of them as directives.
+      if (depFn !== null) {
+        hasDirectiveDependencies = true;
+      }
+    }
+
     // Process the new style field:
     if (metaObj.has('dependencies')) {
       for (const dep of metaObj.getArray('dependencies')) {
@@ -189,6 +197,7 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
         switch (depObj.getString('kind')) {
           case 'directive':
           case 'component':
+            hasDirectiveDependencies = true;
             declarations.push(makeDirectiveMetadata(depObj, typeExpr));
             break;
           case 'pipe':
@@ -203,6 +212,7 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
             });
             break;
           case 'ngmodule':
+            hasDirectiveDependencies = true;
             declarations.push({
               kind: R3TemplateDependencyKind.NgModule,
               type: typeExpr,
@@ -216,7 +226,7 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
     }
 
     return {
-      ...toR3DirectiveMeta(metaObj, this.code, this.sourceUrl, version),
+      ...baseMeta,
       viewProviders: metaObj.has('viewProviders') ? metaObj.getOpaque('viewProviders') : null,
       template: {
         nodes: template.nodes,
@@ -226,11 +236,10 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
       styles: metaObj.has('styles')
         ? metaObj.getArray('styles').map((entry) => entry.getString())
         : [],
-      defer: this.createR3ComponentDeferMetadata(metaObj, template),
+      defer: deferBlockDependencies,
       encapsulation: metaObj.has('encapsulation')
         ? parseEncapsulation(metaObj.getValue('encapsulation'))
         : ViewEncapsulation.Emulated,
-      interpolation,
       changeDetection: metaObj.has('changeDetection')
         ? parseChangeDetectionStrategy(metaObj.getValue('changeDetection'))
         : ChangeDetectionStrategy.Default,
@@ -239,6 +248,7 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
       relativeTemplatePath: null,
       i18nUseExternalIds: false,
       declarations,
+      hasDirectiveDependencies: !baseMeta.isStandalone || hasDirectiveDependencies,
     };
   }
 
@@ -322,8 +332,8 @@ export class PartialComponentLinkerVersion1<TStatement, TExpression>
   private createR3ComponentDeferMetadata(
     metaObj: AstObject<R3DeclareComponentMetadata, TExpression>,
     template: ParsedTemplate,
-  ): R3ComponentDeferMetadata {
-    const result: R3ComponentDeferMetadata = {
+  ): R3ComponentDeferMetadata & {mode: DeferBlockDepsEmitMode.PerBlock} {
+    const result: R3ComponentDeferMetadata & {mode: DeferBlockDepsEmitMode.PerBlock} = {
       mode: DeferBlockDepsEmitMode.PerBlock,
       blocks: new Map<TmplAstDeferredBlock, o.Expression | null>(),
     };
@@ -363,27 +373,6 @@ interface TemplateInfo {
   sourceUrl: string;
   range: Range;
   isEscaped: boolean;
-}
-
-/**
- * Extract an `InterpolationConfig` from the component declaration.
- */
-function parseInterpolationConfig<TExpression>(
-  metaObj: AstObject<R3DeclareComponentMetadata, TExpression>,
-): InterpolationConfig {
-  if (!metaObj.has('interpolation')) {
-    return DEFAULT_INTERPOLATION_CONFIG;
-  }
-
-  const interpolationExpr = metaObj.getValue('interpolation');
-  const values = interpolationExpr.getArray().map((entry) => entry.getString());
-  if (values.length !== 2) {
-    throw new FatalLinkerError(
-      interpolationExpr.expression,
-      'Unsupported interpolation config, expected an array containing exactly two strings',
-    );
-  }
-  return InterpolationConfig.fromArray(values as [string, string]);
 }
 
 /**

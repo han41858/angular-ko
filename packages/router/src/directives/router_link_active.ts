@@ -13,10 +13,10 @@ import {
   Directive,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   OnChanges,
   OnDestroy,
-  Optional,
   Output,
   QueryList,
   Renderer2,
@@ -96,7 +96,12 @@ import {RouterLink} from './router_link';
  * <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home Page</a>
  * ```
  *
+ * NOTE: RouterLinkActive is a `ContentChildren` query.
+ * Content children queries do not retrieve elements or directives that are in other components' templates, since a component's template is always a black box to its ancestors.
+ *
  * @ngModule RouterModule
+ *
+ * @see [Detect active current route with RouterLinkActive](guide/routing/read-route-state#detect-active-current-route-with-routerlinkactive)
  *
  * @publicApi
  */
@@ -152,12 +157,13 @@ export class RouterLinkActive implements OnChanges, OnDestroy, AfterContentInit 
    */
   @Output() readonly isActiveChange: EventEmitter<boolean> = new EventEmitter();
 
+  private link = inject(RouterLink, {optional: true});
+
   constructor(
     private router: Router,
     private element: ElementRef,
     private renderer: Renderer2,
     private readonly cdr: ChangeDetectorRef,
-    @Optional() private link?: RouterLink,
   ) {
     this.routerEventsSubscription = router.events.subscribe((s: Event) => {
       if (s instanceof NavigationEnd) {

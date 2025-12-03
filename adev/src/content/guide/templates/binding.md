@@ -37,9 +37,27 @@ In this example, when the snippet is rendered to the page, Angular will replace 
 <p>Your color preference is dark.</p>
 ```
 
-In addition to evaluating the expression at first render, Angular also updates the rendered content when the expression's value changes.
+Bindings that change over time should read values from [signals](/guide/signals). Angular tracks the signals read in the template, and updates the rendered page when those signal values change.
 
-Continuing the theme example, if a user clicks on a button that changes the value of `theme` to `'light'` after the page loads, the page updates accordingly to:
+```angular-ts
+@Component({
+  template: `
+    <!-- Does not necessarily update when `welcomeMessage` changes. -->
+    <p>{{ welcomeMessage }}</p>
+
+    <p>Your color preference is {{ theme() }}.</p> <!-- Always updates when the value of the `name` signal changes. -->
+  `
+  ...
+})
+export class AppComponent {
+  welcomeMessage = "Welcome, enjoy this app that we built for you";
+  theme = signal('dark');
+}
+```
+
+For more details, see the [Signals guide](/guide/signals).
+
+Continuing the theme example, if a user clicks on a button that updates the `theme` signal to `'light'` after the page loads, the page updates accordingly to:
 
 ```angular-html
 <!- Rendered Output ->
@@ -71,9 +89,28 @@ export class AppComponent {
 <p>Your color preference is dark.</p>
 ```
 
-그리고 표현식이 처음 렌더링 된 후에는, Angular가 표현식 값이 변경되는 것을 자동으로 감지하고 화면을 갱신합니다.
+시간이 경과하며 값이 변경된다면 [시그널](/guide/signals)을 활용하면 됩니다.
+시그널이 템플릿에 사용되면 Angular가 이 시그널을 추적하면서 값이 변경될 때마다 화면도 자동으로 갱신합니다.
 
-만약 사용자가 버튼을 눌러서 `theme` 프로퍼티의 값이 `'light'`로 변경되었다면, 이제 화면은 다음과 같이 갱신됩니다:
+```angular-ts
+@Component({
+  template: `
+    <!-- `welcomeMessage` 가 변경되더라도 갱신되지 않습니다. -->
+    <p>{{ welcomeMessage }}</p>
+
+    <p>Your color preference is {{ theme() }}.</p> <!-- `name` 시그널 값이 변경되면 언제나 갱신됩니다. -->
+  `
+  ...
+})
+export class AppComponent {
+  welcomeMessage = "Welcome, enjoy this app that we built for you";
+  theme = signal('dark');
+}
+```
+
+자세한 내용은 [시그널 문서](/guide/signals)를 참고하세요.
+
+예시를 좀 더 보면, 화면이 표시된 후에 사용자가 버튼을 클릭하면 `theme` 시그널이 `'light'` 값으로 변경됩니다:
 
 ```angular-html
 <!-- 렌더링 결과 -->
@@ -111,7 +148,7 @@ Every HTML element has a corresponding DOM representation. For example, each `<b
 
 ```angular-html
 <!- Bind the `disabled` property on the button element's DOM object ->
-<button [disabled]="isFormValid">Save</button>
+<button [disabled]="isFormValid()">Save</button>
 ```
 
 In this example, every time `isFormValid` changes, Angular automatically sets the `disabled` property of the `HTMLButtonElement` instance.
@@ -122,7 +159,7 @@ Angular 측면에서 보면, 프로퍼티와 바인딩된 값은 엘리먼트의
 
 ```angular-html
 <!-- `disabled` 프로퍼티는 버튼 엘리먼트의 DOM 객체와 바인딩 됩니다. -->
-<button [disabled]="isFormValid">Save</button>
+<button [disabled]="isFormValid()">Save</button>
 ```
 
 이렇게 구현하면 `isFormValid` 값이 변경될 때마다 Angular가 자동으로 `HTMLButtonElement` 인스턴스에 있는 `disabled` 프로퍼티 값을 변경합니다.
@@ -138,7 +175,7 @@ When an element is an Angular component, you can use property bindings to set co
 
 ```angular-html
 <!- Bind the `value` property on the `MyListbox` component instance. ->
-<my-listbox [value]="mySelection" />
+<my-listbox [value]="mySelection()" />
 ```
 
 In this example, every time `mySelection` changes, Angular automatically sets the `value` property of the `MyListbox` instance.
@@ -147,14 +184,14 @@ You can bind to directive properties as well.
 
 ```angular-html
 <!- Bind to the `ngSrc` property of the `NgOptimizedImage` directive  ->
-<img [ngSrc]="profilePhotoUrl" alt="The current user's profile photo">
+<img [ngSrc]="profilePhotoUrl()" alt="The current user's profile photo">
 ```
 -->
 바인딩하려는 프로퍼티가 Angular 컴포넌트라면, 대괄호를 사용하는 프로퍼티 바인딩은 컴포넌트의 입력 프로퍼티와 바인딩됩니다.
 
 ```angular-html
 <!-- `MyListbox` 컴포넌트 인스턴스에 있는 `value` 프로퍼티와 바인딩 됩니다. -->
-<my-listbox [value]="mySelection" />
+<my-listbox [value]="mySelection()" />
 ```
 
 이렇게 구현하면 `mySelection` 값이 변경될 때마다 Angular가 자동으로 `MyListbox` 인스턴스의 `value` 프로퍼티 값을 변경합니다.
@@ -163,7 +200,7 @@ You can bind to directive properties as well.
 
 ```angular-html
 <!-- `NgOptimizedImage` 디렉티브의 `ngSrc` 프로퍼티와 바인딩 됩니다.  -->
-<img [ngSrc]="profilePhotoUrl" alt="The current user's profile photo">
+<img [ngSrc]="profilePhotoUrl()" alt="The current user's profile photo">
 ```
 
 
@@ -173,22 +210,22 @@ You can bind to directive properties as well.
 ### 어트리뷰트
 
 <!--
-When you need to set HTML attributes that do not have corresponding DOM properties, such as ARIA attributes or SVG attributes, you can bind attributes to elements in your template with the `attr.` prefix.
+When you need to set HTML attributes that do not have corresponding DOM properties, such as SVG attributes, you can bind attributes to elements in your template with the `attr.` prefix.
 
 ```angular-html
 <!- Bind the `role` attribute on the `<ul>` element to the component's `listRole` property. ->
-<ul [attr.role]="listRole">
+<ul [attr.role]="listRole()">
 ```
 
 In this example, every time `listRole` changes, Angular automatically sets the `role` attribute of the `<ul>` element by calling `setAttribute`.
 
 If the value of an attribute binding is `null`, Angular removes the attribute by calling `removeAttribute`.
 -->
-ARIA 어트리뷰트나 SVG 어트리뷰트와 같이 연관된 DOM 프로퍼티가 존재하지 않는 경우에는 템플릿 엘리먼트에 `attr.` 접두사를 붙여서 어트리뷰트와 바인딩 할 수 있습니다.
+SVG 어트리뷰트와 같이 연관된 DOM 프로퍼티가 존재하지 않는 경우에는 템플릿 엘리먼트에 `attr.` 접두사를 붙여서 어트리뷰트와 바인딩 할 수 있습니다.
 
 ```angular-html
-<!-- 컴포넌트의 `listRole` 프로퍼티와 `<ul>` 엘리먼트의 `role` 어트리뷰트를 바인딩합니다. -->
-<ul [attr.role]="listRole">
+<!-- Bind the `role` attribute on the `<ul>` element to the component's `listRole` property. -->
+<ul [attr.role]="listRole()">
 ```
 
 이렇게 구현하면 `listRole` 값이 변경될 때마다 Angular가 자동으로 `<ul>` 엘리먼트의 `setAttribute`를 실행해서 `role` 어트리뷰트 값을 변경합니다.
@@ -206,20 +243,14 @@ You can also use text interpolation syntax in properties and attributes by using
 
 ```angular-html
 <!- Binds a value to the `alt` property of the image element's DOM object. ->
-<img src="profile-photo.jpg" alt="Profile photo of {{ firstName }}" >
-```
-
-To bind to an attribute with the text interpolation syntax, prefix the attribute name with `attr.`
-
-```angular-html
-<button attr.aria-label="Save changes to {{ objectType }}">
+<img src="profile-photo.jpg" alt="Profile photo of {{ firstName() }}" >
 ```
 -->
 프로퍼티나 어트리뷰트 이름에 대괄호를 사용하는 대신 이중 중괄호를 사용하면 프로퍼티나 어트리뷰트에 문자열 바인딩을 연결할 수 있습니다.
 
 ```angular-html
 <!-- 이미지 엘리먼트의 DOM 객체와 `alt` 프로퍼티를 바인딩합니다. -->
-<img src="profile-photo.jpg" alt="Profile photo of {{ firstName }}" >
+<img src="profile-photo.jpg" alt="Profile photo of {{ firstName() }}" >
 ```
 
 어트리뷰트에 문자열 바인딩을 사용하려면 어트리뷰트 이름 앞에 `attr.` 접두사를 사용하면 됩니다.
@@ -249,7 +280,7 @@ You can create a CSS class binding to conditionally add or remove a CSS class on
 
 ```angular-html
 <!- When `isExpanded` is truthy, add the `expanded` CSS class. ->
-<ul [class.expanded]="isExpanded">
+<ul [class.expanded]="isExpanded()">
 ```
 
 You can also bind directly to the `class` property. Angular accepts three types of value:
@@ -264,18 +295,18 @@ You can also bind directly to the `class` property. Angular accepts three types 
 @Component({
   template: `
     <ul [class]="listClasses"> ... </ul>
-    <section [class]="sectionClasses"> ... </section>
-    <button [class]="buttonClasses"> ... </button>
+    <section [class]="sectionClasses()"> ... </section>
+    <button [class]="buttonClasses()"> ... </button>
   `,
   ...
 })
 export class UserProfile {
   listClasses = 'full-width outlined';
-  sectionClasses = ['expandable', 'elevated'];
-  buttonClasses = {
+  sectionClasses = signal(['expandable', 'elevated']);
+  buttonClasses = signal({
     highlighted: true,
     embiggened: false,
-  };
+  });
 }
 ```
 
@@ -293,12 +324,12 @@ When using static CSS classes, directly binding `class`, and binding specific cl
 
 ```angular-ts
 @Component({
-  template: `<ul class="list" [class]="listType" [class.expanded]="isExpanded"> ...`,
+  template: `<ul class="list" [class]="listType()" [class.expanded]="isExpanded()"> ...`,
   ...
 })
 export class Listbox {
-  listType = 'box';
-  isExpanded = true;
+  listType = signal('box');
+  isExpanded = signal(true);
 }
 ```
 
@@ -313,12 +344,14 @@ Angular does not guarantee any specific order of CSS classes on rendered element
 When binding `class` to an array or an object, Angular compares the previous value to the current value with the triple-equals operator (`===`). You must create a new object or array instance when you modify these values in order for Angular to apply any updates.
 
 If an element has multiple bindings for the same CSS class, Angular resolves collisions by following its style precedence order.
+
+NOTE: Class bindings do not support space-separated class names in a single key. They also don't support mutations on objects as the reference of the binding remains the same. If you need one or the other, use the [ngClass](/api/common/NgClass) directive.
 -->
 바인딩되는 값이 [참인지, 거짓인지](https://developer.mozilla.org/en-US/docs/Glossary/Truthy)에 따라 CSS 클래스를 조건부로 적용할 수 있습니다.
 
 ```angular-html
-<!-- `esExpanded`가 참으로 평가되면 `expanded` CSS 클래스가 추가됩니다. -->
-<ul [class.expanded]="isExpanded">
+<!-- When `isExpanded` is truthy, add the `expanded` CSS class. -->
+<ul [class.expanded]="isExpanded()">
 ```
 
 `class` 프로퍼티를 직접 바인딩하는 방법도 있습니다.
@@ -334,18 +367,18 @@ If an element has multiple bindings for the same CSS class, Angular resolves col
 @Component({
   template: `
     <ul [class]="listClasses"> ... </ul>
-    <section [class]="sectionClasses"> ... </section>
-    <button [class]="buttonClasses"> ... </button>
+    <section [class]="sectionClasses()"> ... </section>
+    <button [class]="buttonClasses()"> ... </button>
   `,
   ...
 })
 export class UserProfile {
   listClasses = 'full-width outlined';
-  sectionClasses = ['expandable', 'elevated'];
-  buttonClasses = {
+  sectionClasses = signal(['expandable', 'elevated']);
+  buttonClasses = signal({
     highlighted: true,
     embiggened: false,
-  };
+  });
 }
 ```
 
@@ -363,12 +396,12 @@ export class UserProfile {
 
 ```angular-ts
 @Component({
-  template: `<ul class="list" [class]="listType" [class.expanded]="isExpanded"> ...`,
+  template: `<ul class="list" [class]="listType()" [class.expanded]="isExpanded()"> ...`,
   ...
 })
 export class Listbox {
-  listType = 'box';
-  isExpanded = true;
+  listType = signal('box');
+  isExpanded = signal(true);
 }
 ```
 
@@ -385,6 +418,10 @@ export class Listbox {
 
 엘리먼트에 같은 CSS가 여러번 바인딩되면, 우선순위에 따라 충돌을 해결합니다.
 
+참고: 클래스 바인딩은 키 하나에 공백으로 구분되는 여러개 클래스 이름을 지정할 수 없습니다.
+그리고 바인딩 객체의 참조가 동일하게 유지되기 때문에 객체 변경도 지원하지 않습니다.
+둘 중 하나가 필요한 경우에는 [ngClass](/api/common/NgClass) 디렉티브를 사용하세요.
+
 
 <!--
 ### CSS style properties
@@ -396,14 +433,14 @@ You can also bind to CSS style properties directly on an element.
 
 ```angular-html
 <!- Set the CSS `display` property based on the `isExpanded` property. ->
-<section [style.display]="isExpanded ? 'block' : 'none'">
+<section [style.display]="isExpanded() ? 'block' : 'none'">
 ```
 
 You can further specify units for CSS properties that accept units.
 
 ```angular-html
 <!- Set the CSS `height` property to a pixel value based on the `sectionHeightInPixels` property. ->
-<section [style.height.px]="sectionHeightInPixels">
+<section [style.height.px]="sectionHeightInPixels()">
 ```
 
 You can also set multiple style values in one binding. Angular accepts the following types of value:
@@ -416,17 +453,17 @@ You can also set multiple style values in one binding. Angular accepts the follo
 ```angular-ts
 @Component({
   template: `
-    <ul [style]="listStyles"> ... </ul>
-    <section [style]="sectionStyles"> ... </section>
+    <ul [style]="listStyles()"> ... </ul>
+    <section [style]="sectionStyles()"> ... </section>
   `,
   ...
 })
 export class UserProfile {
-  listStyles = 'display: flex; padding: 8px';
-  sectionStyles = {
+  listStyles = signal('display: flex; padding: 8px');
+  sectionStyles = signal({
     border: '1px solid black',
     'font-weight': 'bold',
-  };
+  });
 }
 ```
 
@@ -445,14 +482,14 @@ If an element has multiple bindings for the same style property, Angular resolve
 
 ```angular-html
 <!-- `isExpanded` 프로퍼티 값에 따라 CSS `display` 프로퍼티 값을 설정합니다. -->
-<section [style.display]="isExpanded ? 'block' : 'none'">
+<section [style.display]="isExpanded() ? 'block' : 'none'">
 ```
 
 이 때 단위를 함께 지정할 수 있습니다.
 
 ```angular-html
 <!-- `sectionHeightInPixels` 프로퍼티 값에 따라 CSS `height` 프로퍼티를 픽셀 단위로 설정합니다. -->
-<section [style.height.px]="sectionHeightInPixels">
+<section [style.height.px]="sectionHeightInPixels()">
 ```
 
 바인딩 구문 하나에 여러 스타일을 바인딩할 수도 있습니다.
@@ -466,17 +503,17 @@ If an element has multiple bindings for the same style property, Angular resolve
 ```angular-ts
 @Component({
   template: `
-    <ul [style]="listStyles"> ... </ul>
-    <section [style]="sectionStyles"> ... </section>
+    <ul [style]="listStyles()"> ... </ul>
+    <section [style]="sectionStyles()"> ... </section>
   `,
   ...
 })
 export class UserProfile {
-  listStyles = 'display: flex; padding: 8px';
-  sectionStyles = {
+  listStyles = signal('display: flex; padding: 8px');
+  sectionStyles = signal({
     border: '1px solid black',
     'font-weight': 'bold',
-  };
+  });
 }
 ```
 
@@ -491,3 +528,36 @@ export class UserProfile {
 그래서 객체 내부의 값이 변경되었다면 새 객체를 사용해야 변경사항이 제대로 반영됩니다.
 
 엘리먼트에 같은 스타일 프로퍼티가 여러번 바인딩되면, 우선순위에 따라 충돌을 해결합니다.
+
+
+<!--
+## ARIA attributes
+-->
+## ARIA 어트리뷰트
+
+<!--
+Angular supports binding string values to ARIA attributes.
+
+```angular-html
+<button type="button" [aria-label]="actionLabel()">
+  {{ actionLabel() }}
+</button>
+```
+
+Angular writes the string value to the element’s `aria-label` attribute and removes it when the bound value is `null`.
+
+Some ARIA features expose DOM properties or directive inputs that accept structured values (such as element references). Use standard property bindings for those cases. See the [accessibility guide](best-practices/a11y#aria-attributes-and-properties) for examples and additional guidance.
+-->
+ARIA 어트리뷰트에 문자열을 바인딩 할 수 있습니다.
+
+```angular-html
+<button type="button" [aria-label]="actionLabel()">
+  {{ actionLabel() }}
+</button>
+```
+
+Angular는 바인딩 된 값에 따라 해당 문자열을 엘리먼트의 `aria-label` 어트리뷰트에 지정하고, 바인딩 된 값이 `null`이면 어트리뷰트를 제거합니다.
+
+일부 ARIA 기능은 엘리먼트 참조와 같이 어떤 형식을 요구하는 경우가 있습니다.
+이런 경우는 일반적인 프로퍼티 바인딩을 사용하세요.
+자세한 내용은 [접근성 가이드](best-practices/a11y#aria-attributes-and-properties)에서 예제와 함께 확인할 수 있습니다.

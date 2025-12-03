@@ -216,6 +216,8 @@ mapping each component input name to a `SimpleChange` object. Each `SimpleChange
 input's previous value, its current value, and a flag for whether this is the first time the input
 has changed.
 
+You can optionally pass the current class or this as the first generic argument for stronger type checking.
+
 ```ts
 @Component({
   /* ... */
@@ -223,12 +225,11 @@ has changed.
 export class UserProfile {
   name = input('');
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (const inputName in changes) {
-      const inputValues = changes[inputName];
-      console.log(`Previous ${inputName} == ${inputValues.previousValue}`);
-      console.log(`Current ${inputName} == ${inputValues.currentValue}`);
-      console.log(`Is first ${inputName} change == ${inputValues.firstChange}`);
+  ngOnChanges(changes: SimpleChanges<UserProfile>) {
+    if (changes.name) {
+      console.log(`Previous: ${changes.name.previousValue}`);
+      console.log(`Current: ${changes.name.currentValue}`);
+      console.log(`Is first ${changes.name.firstChange}`);
     }
   }
 }
@@ -241,6 +242,8 @@ TypeScript property name as a key, rather than the alias.
 이 객체는 컴포넌트 입력 프로퍼티 이름마다 `SimpleChange` 객체로 값을 표현하는  [`Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type) 객체입니다.
 개별 `SimpleChange` 객체는 입력 프로퍼티의 이전 값과 현재값, 이 값이 처음 변경된 것인지 표시하는 플래그 값을 갖습니다.
 
+타입 검사를 강화하려면 첫번째 제네릭 인자로 클래스를 전달할 수도 있습니다.
+
 ```ts
 @Component({
   /* ... */
@@ -248,12 +251,11 @@ TypeScript property name as a key, rather than the alias.
 export class UserProfile {
   name = input('');
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (const inputName in changes) {
-      const inputValues = changes[inputName];
-      console.log(`Previous ${inputName} == ${inputValues.previousValue}`);
-      console.log(`Current ${inputName} == ${inputValues.currentValue}`);
-      console.log(`Is first ${inputName} change == ${inputValues.firstChange}`);
+  ngOnChanges(changes: SimpleChanges<UserProfile>) {
+    if (changes.name) {
+      console.log(`Previous: ${changes.name.previousValue}`);
+      console.log(`Current: ${changes.name.currentValue}`);
+      console.log(`Is first ${changes.name.firstChange}`);
     }
   }
 }
@@ -320,6 +322,21 @@ export class UserProfile {
 이 방식은 어떤 컴포넌트가 종료될 때 해당 컴포넌트 외부에서 무언가 실행해야 할 때 사용합니다.
 
 그리고 컴포넌트를 종료하는 코드를 `ngOnDestroy` 메서드 밖에 두고 사용할 때도 활용할 수 있습니다.
+
+<!--
+##### Detecting instance destruction
+-->
+##### 인스턴스 분해 감지하기
+
+<!--
+`DestroyRef` provides a `destroyed` property that allows checking whether a given instance has already been destroyed. This is useful for avoiding operations on destroyed components, especially when dealing with delayed or asynchronous logic.
+
+By checking `destroyRef.destroyed`, you can prevent executing code after the instance has been cleaned up, avoiding potential errors such as `NG0911: View has already been destroyed.`.
+-->
+`DestroyRef` 객체의 `destroyed` 프로퍼티를 활용하면 인스턴스가 종료되었는지 확인할 수 있습니다.
+이 프로퍼티는 특히 비동기 로직이 동작할 때 컴포넌트가 종료되었는지 확인해야 할 때 유용합니다.
+
+`destroyRef.destroyed` 프로퍼티를 확인하면 인스턴스가 종료되었는지 확인할 수 있기 때문에, `NG0911: View has already been destroyed.` 에러를 사전에 방지할 수 있습니다.
 
 
 ### ngDoCheck
@@ -457,9 +474,9 @@ Angular에서 DOM을 조작하는 방법은 [DOM API 활용하기](guide/compone
 
 
 <!--
-#### after*Render phases
+#### after\*Render phases
 -->
-#### after*Render 단계
+#### after\*Render 단계
 
 <!--
 When using `afterEveryRender` or `afterNextRender`, you can optionally split the work into phases. The
@@ -508,8 +525,8 @@ There are four phases, run in the following order:
 | Phase            | Description                                                                                                                                                                                           |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `earlyRead`      | Use this phase to read any layout-affecting DOM properties and styles that are strictly necessary for subsequent calculation. Avoid this phase if possible, preferring the `write` and `read` phases. |
-| `mixedReadWrite` | Default phase. Use for any operations need to both read and write layout-affecting properties and styles. Avoid this phase if possible, preferring the explicit `write` and `read` phases.            |
 | `write`          | Use this phase to write layout-affecting DOM properties and styles.                                                                                                                                   |
+| `mixedReadWrite` | Default phase. Use for any operations need to both read and write layout-affecting properties and styles. Avoid this phase if possible, preferring the explicit `write` and `read` phases.            |
 | `read`           | Use this phase to read any layout-affecting DOM properties.                                                                                                                                           |
 -->
 `afterEveryRender` 함수와 `afterNextRender` 함수를 사용할 때 실행되는 과정은 단계별로 나눠볼 수 있습니다.
@@ -555,8 +572,8 @@ export class UserProfile {
 | 단계               | 설명                                                                                                                                 |
 |------------------|------------------------------------------------------------------------------------------------------------------------------------|
 | `earlyRead`      | 다음 단계에서 필요한 DOM 속성과 스타일 값을 읽을 때 사용합니다. 가능하다면, 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다.                                      |
-| `mixedReadWrite` | 기본 단계입니다. 레이아웃 프로퍼티나 스타일 값을 참조하여 `read` 단계와 `write` 단계를 준비하는 로직을 작성합니다. 가능하다면 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다. |
 | `write`          | 레이아웃 DOM 프로퍼티나 스타일 값을 설정할 때 사용합니다. |
+| `mixedReadWrite` | 기본 단계입니다. 레이아웃 프로퍼티나 스타일 값을 참조하여 `read` 단계와 `write` 단계를 준비하는 로직을 작성합니다. 가능하다면 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다. |
 | `read`           | 레이아웃 DOM 프로퍼티를 읽을 때 사용합니다. |
 
 

@@ -13,6 +13,7 @@ import {
   inject,
   PLATFORM_ID,
   signal,
+  isDevMode,
 } from '@angular/core';
 import {NavigationEnd, NavigationSkipped, Router, RouterOutlet} from '@angular/router';
 import {filter, map} from 'rxjs/operators';
@@ -54,11 +55,11 @@ export class AppComponent {
   private readonly router = inject(Router);
   private readonly headerService = inject(HeaderService);
 
-  isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  protected isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
-  displaySecondaryNav = signal(false);
-  displayFooter = signal(false);
-  displaySearchDialog = inject(IS_SEARCH_DIALOG_OPEN);
+  protected readonly displaySecondaryNav = signal(false);
+  protected readonly displayFooter = signal(false);
+  protected readonly displaySearchDialog = inject(IS_SEARCH_DIALOG_OPEN);
 
   constructor() {
     this.closeSearchDialogOnNavigationSkipped();
@@ -80,7 +81,7 @@ export class AppComponent {
       });
   }
 
-  focusFirstHeading(): void {
+  protected focusFirstHeading(): void {
     const h1 = this.document.querySelector<HTMLHeadingElement>('h1:not(docs-top-level-banner h1)');
     h1?.focus();
   }
@@ -94,6 +95,13 @@ export class AppComponent {
     if (event.key === ESCAPE && this.displaySearchDialog()) {
       event.preventDefault();
       this.displaySearchDialog.set(false);
+    }
+
+    if (isDevMode() && event.key === 'o' && (event.metaKey || event.ctrlKey)) {
+      // In debug this shortcut allows us to open the same page on adev
+      // Helpful to compare differences
+      event.preventDefault();
+      window.open(`https://angular.dev/${location.pathname}`, '_blank');
     }
   }
 

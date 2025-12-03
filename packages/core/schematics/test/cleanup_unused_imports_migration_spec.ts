@@ -9,9 +9,9 @@
 import {getSystemPath, normalize, virtualFs} from '@angular-devkit/core';
 import {TempScopedNodeJsSyncHost} from '@angular-devkit/core/node/testing';
 import {HostTree} from '@angular-devkit/schematics';
-import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing';
-import {runfiles} from '@bazel/runfiles';
-import shx from 'shelljs';
+import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing/index.js';
+import {resolve} from 'node:path';
+import {rmSync} from 'node:fs';
 
 describe('cleanup unused imports schematic', () => {
   let runner: SchematicTestRunner;
@@ -29,8 +29,9 @@ describe('cleanup unused imports schematic', () => {
     return runner.runSchematic('cleanup-unused-imports', {}, tree);
   }
 
+  const collectionJsonPath = resolve('../collection.json');
   beforeEach(() => {
-    runner = new SchematicTestRunner('test', runfiles.resolvePackageRelative('../collection.json'));
+    runner = new SchematicTestRunner('test', collectionJsonPath);
     host = new TempScopedNodeJsSyncHost();
     tree = new UnitTestTree(new HostTree(host));
     logs = [];
@@ -44,13 +45,13 @@ describe('cleanup unused imports schematic', () => {
       }),
     );
 
-    previousWorkingDir = shx.pwd();
+    previousWorkingDir = process.cwd();
     tmpDirPath = getSystemPath(host.root);
     runner.logger.subscribe((log) => logs.push(log.message));
 
     // Switch into the temporary directory path. This allows us to run
     // the schematic against our custom unit test tree.
-    shx.cd(tmpDirPath);
+    process.chdir(tmpDirPath);
 
     writeFile(
       'directives.ts',
@@ -70,8 +71,8 @@ describe('cleanup unused imports schematic', () => {
   });
 
   afterEach(() => {
-    shx.cd(previousWorkingDir);
-    shx.rm('-r', tmpDirPath);
+    process.chdir(previousWorkingDir);
+    rmSync(tmpDirPath, {recursive: true});
   });
 
   it('should clean up an array where some imports are not used', async () => {
@@ -305,5 +306,28 @@ describe('cleanup unused imports schematic', () => {
     expect(logs.pop()).toBe('Removed 2 imports in 1 file');
     expect(contents).toContain(' imports: [/* Start */ One/* End */],');
     expect(contents).toContain(`import {One} from './directives';`);
+  });
+
+  it('should handle all items except the first one being removed', async () => {
+    writeFile(
+      'comp.ts',
+      `
+        import {Component} from '@angular/core';
+        import {One, Two, Three} from './directives';
+
+        @Component({
+          imports: [Three, One, Two],
+          template: '<div three></div>',
+        })
+        export class Comp {}
+      `,
+    );
+
+    await runMigration();
+
+    const contents = tree.readContent('comp.ts');
+    expect(logs.pop()).toBe('Removed 2 imports in 1 file');
+    expect(contents).toContain('imports: [Three],');
+    expect(contents).toContain(`import {Three} from './directives';`);
   });
 });

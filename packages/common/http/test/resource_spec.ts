@@ -15,6 +15,7 @@ import {
   httpResource,
   HttpContext,
   HttpContextToken,
+  HttpResourceRef,
 } from '../index';
 import {HttpTestingController, provideHttpClientTesting} from '../testing';
 
@@ -105,6 +106,15 @@ describe('httpResource', () => {
           'fast': 'yes',
         },
         withCredentials: true,
+        keepalive: true,
+        cache: 'force-cache',
+        priority: 'high',
+        mode: 'cors',
+        redirect: 'follow',
+        credentials: 'include',
+        integrity: 'sha256-abc123',
+        referrer: 'https://example.com',
+        referrerPolicy: 'strict-origin-when-cross-origin',
       }),
       {injector: TestBed.inject(Injector)},
     );
@@ -114,6 +124,15 @@ describe('httpResource', () => {
     expect(req.request.body).toEqual({message: 'Hello, backend!'});
     expect(req.request.headers.get('X-Special')).toBe('true');
     expect(req.request.withCredentials).toBe(true);
+    expect(req.request.keepalive).toBe(true);
+    expect(req.request.cache).toBe('force-cache');
+    expect(req.request.priority).toBe('high');
+    expect(req.request.mode).toBe('cors');
+    expect(req.request.redirect).toBe('follow');
+    expect(req.request.credentials).toBe('include');
+    expect(req.request.integrity).toBe('sha256-abc123');
+    expect(req.request.referrer).toBe('https://example.com');
+    expect(req.request.referrerPolicy).toBe('strict-origin-when-cross-origin');
 
     req.flush([]);
 
@@ -201,7 +220,16 @@ describe('httpResource', () => {
         reportProgress: true,
         context: new HttpContext().set(CTX_TOKEN, 'bar'),
         withCredentials: true,
+        keepalive: true,
         transferCache: {includeHeaders: ['Y-Tag']},
+        referrerPolicy: 'no-referrer',
+        timeout: 1234,
+        priority: 'high',
+        integrity: 'sha256-abc123',
+        mode: 'cors',
+        redirect: 'follow',
+        credentials: 'include',
+        cache: 'no-store',
       }),
       {
         injector: TestBed.inject(Injector),
@@ -215,7 +243,16 @@ describe('httpResource', () => {
     expect(req.request.withCredentials).toEqual(true);
     expect(req.request.context.get(CTX_TOKEN)).toEqual('bar');
     expect(req.request.reportProgress).toEqual(true);
+    expect(req.request.keepalive).toBe(true);
     expect(req.request.transferCache).toEqual({includeHeaders: ['Y-Tag']});
+    expect(req.request.timeout).toBe(1234);
+    expect(req.request.referrerPolicy).toBe('no-referrer');
+    expect(req.request.priority).toBe('high');
+    expect(req.request.integrity).toBe('sha256-abc123');
+    expect(req.request.mode).toBe('cors');
+    expect(req.request.redirect).toBe('follow');
+    expect(req.request.credentials).toBe('include');
+    expect(req.request.cache).toBe('no-store');
   });
 
   it('should allow mapping data to an arbitrary type', async () => {
@@ -302,5 +339,65 @@ describe('httpResource', () => {
     TestBed.tick();
     req = backend.expectOne('/data');
     req.flush([]);
+  });
+
+  it('should reset past request data when using set()', async () => {
+    const backend = TestBed.inject(HttpTestingController);
+    const res = httpResource(() => '/data', {injector: TestBed.inject(Injector)});
+    TestBed.tick();
+    const req = backend.expectOne('/data');
+    req.flush([]);
+    await TestBed.inject(ApplicationRef).whenStable();
+
+    res.set([]);
+
+    expect(res.headers()).toBe(undefined);
+    expect(res.progress()).toBe(undefined);
+    expect(res.statusCode()).toBe(undefined);
+  });
+
+  describe('types', () => {
+    it('should narrow hasValue() when the value can be undefined', () => {
+      const result: HttpResourceRef<number | undefined> = httpResource(() => '/data', {
+        injector: TestBed.inject(Injector),
+        parse: () => 0,
+      });
+
+      if (result.hasValue()) {
+        const _value: number = result.value();
+      } else if (result.isLoading()) {
+        // @ts-expect-error
+        const _value: number = result.value();
+      } else if (result.error()) {
+      }
+    });
+
+    it('should not narrow hasValue() when a default value is provided', () => {
+      const result: HttpResourceRef<number> = httpResource(() => '/data', {
+        injector: TestBed.inject(Injector),
+        parse: () => 0,
+        defaultValue: 0,
+      });
+
+      if (result.hasValue()) {
+        const _value: number = result.value();
+      } else if (result.isLoading()) {
+        const _value: number = result.value();
+      } else if (result.error()) {
+      }
+    });
+
+    it('should not narrow hasValue() when the resource type is unknown', () => {
+      const result: HttpResourceRef<unknown> = httpResource(() => '/data', {
+        injector: TestBed.inject(Injector),
+      });
+
+      if (result.hasValue()) {
+        const _value: unknown = result.value();
+      } else if (result.isLoading()) {
+        const _value: unknown = result.value();
+      } else if (result.error()) {
+      }
+    });
   });
 });

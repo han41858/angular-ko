@@ -48,7 +48,6 @@ describe('TypingsLoader', () => {
   } as unknown as WebContainer;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     service = TestBed.inject(TypingsLoader);
   });
 
@@ -56,7 +55,7 @@ describe('TypingsLoader', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should read files from directory when a glob pattern is found', async () => {
+  it('should read files from directory', async () => {
     await service.retrieveTypeDefinitions(fakeWebContainer);
 
     expect(
@@ -64,21 +63,13 @@ describe('TypingsLoader', () => {
     ).toBeTrue();
   });
 
-  it("should read type definition file when its path doesn't contain a glob pattern", async () => {
-    await service.retrieveTypeDefinitions(fakeWebContainer);
-
-    expect(
-      service
-        .typings()
-        .some(({path}) => path.endsWith(fakePackageJson.exports['./something'].types)),
-    ).toBeTrue();
-  });
-
-  it('should only contain type definitions files', async () => {
+  it('should only contain type definitions files or package metadata', async () => {
     await service.retrieveTypeDefinitions(fakeWebContainer);
 
     for (const {path} of service.typings()) {
-      expect(path.endsWith('.d.ts')).toBeTrue();
+      const isDts = path.endsWith('.d.ts');
+      const isPackageJson = path.endsWith('/package.json');
+      expect(isDts || isPackageJson).toBeTrue();
     }
   });
 

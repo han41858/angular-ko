@@ -162,6 +162,7 @@ function setup(
     /* implicitStandaloneValue */ true,
     /* typeCheckHostBindings */ true,
     /* enableSelectorless */ false,
+    /* emitDeclarationOnly */ false,
   );
   return {reflectionHost, handler, resourceLoader, metaRegistry};
 }
@@ -1013,7 +1014,6 @@ runInEachFileSystem(() => {
             import {SomeModule} from './some_where';
 
             @Component({
-              standalone: true,
               selector: 'main',
               template: '<span>Hi!</span>',
               imports: [SomeModule],
@@ -1104,7 +1104,6 @@ runInEachFileSystem(() => {
             import {SomeModule} from './some_where';
 
             @Component({
-              standalone: true,
               selector: 'main',
               template: '<span>Hi!</span>',
               schemas: [CUSTOM_ELEMENTS_SCHEMA],

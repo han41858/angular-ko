@@ -15,7 +15,7 @@ Component templates aren't just static HTML— they can use data from your compo
 ## 동적 텍스트 표시하기
 
 <!--
-In Angular, a *binding* creates a dynamic connection between a component's template and its data. This connection ensures that changes to the component's data automatically update the rendered template.
+In Angular, a _binding_ creates a dynamic connection between a component's template and its data. This connection ensures that changes to the component's data automatically update the rendered template.
 
 You can create a binding to show some dynamic text in a template by using double curly-braces:
 
@@ -24,7 +24,7 @@ You can create a binding to show some dynamic text in a template by using double
   selector: 'user-profile',
   template: `<h1>Profile for {{userName()}}</h1>`,
 })
-export class TodoListItem {
+export class UserProfile {
   userName = signal('pro_programmer_123');
 }
 ```
@@ -58,7 +58,7 @@ Angular는 컴포넌트 템플릿과 컴포넌트 데이터를 *바인딩해서*
   selector: 'user-profile',
   template: `<h1>Profile for {{userName()}}</h1>`,
 })
-export class TodoListItem {
+export class UserProfile {
   userName = signal('pro_programmer_123');
 }
 ```
@@ -94,7 +94,7 @@ Angular supports binding dynamic values into DOM properties with square brackets
 @Component({
   /*...*/
   // Set the `disabled` property of the button based on the value of `isValidUserId`.
-  template: `<button [disabled]="isValidUserId()">Save changes</button>`,
+  template: `<button [disabled]="!isValidUserId()">Save changes</button>`,
 })
 export class UserProfile {
   isValidUserId = signal(false);
@@ -108,7 +108,7 @@ You can also bind to HTML _attributes_ by prefixing the attribute name with `att
 <ul [attr.role]="listRole()">
 ```
 
-Angular automatically updates DOM properties and attribute when the bound value changes.
+Angular automatically updates DOM properties and attributes when the bound value changes.
 -->
 대괄호(`[`, `]`)를 사용하면 DOM 프로퍼티를 동적으로 바인딩할 수 있습니다:
 
@@ -116,7 +116,7 @@ Angular automatically updates DOM properties and attribute when the bound value 
 @Component({
   /*...*/
   // `isValidUserId` 시그널 값에 따라 `disabled` 프로퍼티 값을 설정합니다.
-  template: `<button [disabled]="isValidUserId()">Save changes</button>`,
+  template: `<button [disabled]="!isValidUserId()">Save changes</button>`,
 })
 export class UserProfile {
   isValidUserId = signal(false);
@@ -126,7 +126,7 @@ export class UserProfile {
 그리고 `attr.` 접두사를 붙이면 HTML _어트리뷰트_ 를 바인딩할 수 있습니다:
 
 ```angular-html
-<!-- `listRole` 시그널 값을 `<ul>` 엘리먼트의 `role` 어트리뷰트에 바인딩합니다. -->
+<!-- Bind the `role` attribute on the `<ul>` element to value of `listRole`. -->
 <ul [attr.role]="listRole()">
 ```
 
@@ -144,12 +144,12 @@ Angular lets you add event listeners to an element in your template with parenth
 ```angular-ts
 @Component({
   /*...*/
-  // Add an 'click' event handler that calls the `cancelSubscription` method. 
+  // Add an 'click' event handler that calls the `cancelSubscription` method.
   template: `<button (click)="cancelSubscription()">Cancel subscription</button>`,
 })
 export class UserProfile {
   /* ... */
-  
+
   cancelSubscription() { /* Your event handling code goes here. */  }
 }
 ```
@@ -159,12 +159,12 @@ If you need to pass the [event](https://developer.mozilla.org/docs/Web/API/Event
 ```angular-ts
 @Component({
   /*...*/
-  // Add an 'click' event handler that calls the `cancelSubscription` method. 
+  // Add an 'click' event handler that calls the `cancelSubscription` method.
   template: `<button (click)="cancelSubscription($event)">Cancel subscription</button>`,
 })
 export class UserProfile {
   /* ... */
-  
+
   cancelSubscription(event: Event) { /* Your event handling code goes here. */  }
 }
 ```
@@ -231,7 +231,7 @@ The `@if` block also supports an optional `@else` block:
   <!-- ... -->
 } @else {
   <h2>User settings</h2>
-  <!-- ... -->  
+  <!-- ... -->
 }
 ```
 

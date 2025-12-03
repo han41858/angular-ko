@@ -21,14 +21,14 @@ import {addModuleName} from './module-name.mjs';
 import {addRepo} from './repo.mjs';
 
 /** Given an unprocessed enum entry, get the fully renderable enum entry. */
-export function getEnumRenderable(
+export async function getEnumRenderable(
   classEntry: EnumEntry,
   moduleName: string,
   repo: string,
-): EnumEntryRenderable {
+): Promise<EnumEntryRenderable> {
   return setEntryFlags(
-    addRenderableCodeToc(
-      addRenderableMembers(
+    await addRenderableCodeToc(
+      await addRenderableMembers(
         addHtmlAdditionalLinks(
           addHtmlUsageNotes(
             addHtmlJsDocTagComments(
@@ -36,6 +36,7 @@ export function getEnumRenderable(
             ),
           ),
         ),
+        classEntry.name,
       ),
     ),
   );

@@ -52,9 +52,11 @@ import {LView, TData} from './view';
  * ```
  */
 export const enum NodeInjectorOffset {
+  /* tslint:disable:no-duplicate-enum-values */
   TNODE = 8,
   PARENT = 8,
   BLOOM_SIZE = 8,
+  /* tslint:enable: no-duplicate-enum-values */
   SIZE = 9,
 }
 
@@ -261,6 +263,10 @@ export class NodeInjectorFactory {
       this: NodeInjectorFactory,
       _: undefined,
       /**
+       * Flags that control the injection behavior.
+       */
+      flags: InternalInjectFlags | undefined,
+      /**
        * array where injectables tokens are stored. This is used in
        * case of an error reporting to produce friendlier errors.
        */
@@ -280,6 +286,8 @@ export class NodeInjectorFactory {
      */
     isViewProvider: boolean,
     injectImplementation: null | (<T>(token: ProviderToken<T>, flags?: InternalInjectFlags) => T),
+    // Expect `null` in devmode
+    public name: string | null,
   ) {
     ngDevMode && assertDefined(factory, 'Factory not specified');
     ngDevMode && assertEqual(typeof factory, 'function', 'Expected factory function.');

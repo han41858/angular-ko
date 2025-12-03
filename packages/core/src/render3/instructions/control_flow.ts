@@ -23,10 +23,12 @@ import {CONTAINER_HEADER_OFFSET, LContainer} from '../interfaces/container';
 import {ComponentTemplate} from '../interfaces/definition';
 import {LocalRefExtractor, TAttributes, TNode, TNodeFlags} from '../interfaces/node';
 import {
+  ANIMATIONS,
   CONTEXT,
   DECLARATION_COMPONENT_VIEW,
   HEADER_OFFSET,
   HYDRATION,
+  INJECTOR,
   LView,
   TVIEW,
   TView,
@@ -38,14 +40,17 @@ import {NO_CHANGE} from '../tokens';
 import {getConstant, getTNode} from '../util/view_utils';
 import {createAndRenderEmbeddedLView, shouldAddViewToDom} from '../view_manipulation';
 
-import {declareTemplate} from './template';
+import {AnimationLViewData} from '../../animation/interfaces';
+import {removeDehydratedViews} from '../../hydration/cleanup';
 import {
   addLViewToLContainer,
   detachView,
   getLViewFromLContainer,
   removeLViewFromLContainer,
 } from '../view/container';
-import {removeDehydratedViews} from '../../hydration/cleanup';
+import {declareNoDirectiveHostTemplate} from './template';
+import {removeFromAnimationQueue} from '../../animation/queue';
+import {allLeavingAnimations} from '../../animation/longest_animation';
 
 /**
  * Creates an LContainer for an ng-template representing a root node
@@ -79,7 +84,7 @@ export function ɵɵconditionalCreate(
   const lView = getLView();
   const tView = getTView();
   const attrs = getConstant<TAttributes>(tView.consts, attrsIndex);
-  declareTemplate(
+  declareNoDirectiveHostTemplate(
     lView,
     tView,
     index,
@@ -128,7 +133,7 @@ export function ɵɵconditionalBranchCreate(
   const tView = getTView();
   const attrs = getConstant<TAttributes>(tView.consts, attrsIndex);
 
-  declareTemplate(
+  declareNoDirectiveHostTemplate(
     lView,
     tView,
     index,
@@ -316,7 +321,7 @@ export function ɵɵrepeaterCreate(
   const metadata = new RepeaterMetadata(hasEmptyBlock, boundTrackBy);
   hostLView[HEADER_OFFSET + index] = metadata;
 
-  declareTemplate(
+  declareNoDirectiveHostTemplate(
     lView,
     tView,
     index + 1,
@@ -334,7 +339,7 @@ export function ɵɵrepeaterCreate(
     ngDevMode &&
       assertDefined(emptyVars, 'Missing number of bindings for the empty repeater block.');
 
-    declareTemplate(
+    declareNoDirectiveHostTemplate(
       lView,
       tView,
       index + 2,
@@ -417,9 +422,11 @@ class LiveCollectionLContainerImpl extends LiveCollection<
       index,
       shouldAddViewToDom(this.templateTNode, dehydratedView),
     );
+    clearDetachAnimationList(this.lContainer, index);
   }
   override detach(index: number): LView<RepeaterContext<unknown>> {
     this.needsIndexUpdate ||= index !== this.length - 1;
+    maybeInitDetachAnimationList(this.lContainer, index);
     return detachExistingView<RepeaterContext<unknown>>(this.lContainer, index);
   }
   override create(index: number, value: unknown): LView<RepeaterContext<unknown>> {
@@ -492,7 +499,7 @@ export function ɵɵrepeater(collection: Iterable<unknown> | undefined | null): 
     }
 
     const liveCollection = metadata.liveCollection;
-    reconcile(liveCollection, collection, metadata.trackByFn);
+    reconcile(liveCollection, collection, metadata.trackByFn, prevConsumer);
 
     // Warn developers about situations where the entire collection was re-created as part of the
     // reconciliation pass. Note that this warning might be "overreacting" and report cases where
@@ -565,6 +572,42 @@ function getLContainer(lView: LView, index: number): LContainer {
   ngDevMode && assertLContainer(lContainer);
 
   return lContainer;
+}
+
+function clearDetachAnimationList(lContainer: LContainer, index: number): void {
+  if (lContainer.length <= CONTAINER_HEADER_OFFSET) return;
+
+  const indexInContainer = CONTAINER_HEADER_OFFSET + index;
+  const viewToDetach = lContainer[indexInContainer];
+  const animations = viewToDetach
+    ? (viewToDetach[ANIMATIONS] as AnimationLViewData | undefined)
+    : undefined;
+  if (
+    viewToDetach &&
+    animations &&
+    animations.detachedLeaveAnimationFns &&
+    animations.detachedLeaveAnimationFns.length > 0
+  ) {
+    const injector = viewToDetach[INJECTOR];
+    removeFromAnimationQueue(injector, animations);
+    allLeavingAnimations.delete(viewToDetach);
+    animations.detachedLeaveAnimationFns = undefined;
+  }
+}
+
+// Initialize the detach leave animation list for a view about to be detached, but only
+// if it has leave animations.
+function maybeInitDetachAnimationList(lContainer: LContainer, index: number): void {
+  if (lContainer.length <= CONTAINER_HEADER_OFFSET) return;
+
+  const indexInContainer = CONTAINER_HEADER_OFFSET + index;
+  const viewToDetach = lContainer[indexInContainer];
+  const animations = viewToDetach
+    ? (viewToDetach[ANIMATIONS] as AnimationLViewData | undefined)
+    : undefined;
+  if (animations && animations.leave && animations.leave.size > 0) {
+    animations.detachedLeaveAnimationFns = [];
+  }
 }
 
 function detachExistingView<T>(lContainer: LContainer, index: number): LView<T> {

@@ -16,24 +16,21 @@ import {
   addHtmlUsageNotes,
   setEntryFlags,
 } from './jsdoc-transforms.mjs';
-import {addRenderableMembers} from './member-transforms.mjs';
 import {addModuleName} from './module-name.mjs';
 import {addRepo} from './repo.mjs';
 
 /** Given an unprocessed class entry, get the fully renderable class entry. */
-export function getDecoratorRenderable(
-  classEntry: DecoratorEntry,
+export async function getDecoratorRenderable(
+  decoratorEntry: DecoratorEntry,
   moduleName: string,
   repo: string,
-): DecoratorEntryRenderable {
+): Promise<DecoratorEntryRenderable> {
   return setEntryFlags(
-    addRenderableCodeToc(
-      addRenderableMembers(
-        addHtmlAdditionalLinks(
-          addHtmlUsageNotes(
-            addHtmlJsDocTagComments(
-              addHtmlDescription(addRepo(addModuleName(classEntry, moduleName), repo)),
-            ),
+    await addRenderableCodeToc(
+      addHtmlAdditionalLinks(
+        addHtmlUsageNotes(
+          addHtmlJsDocTagComments(
+            addHtmlDescription(addRepo(addModuleName(decoratorEntry, moduleName), repo)),
           ),
         ),
       ),

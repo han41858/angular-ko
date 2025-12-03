@@ -9,9 +9,9 @@
 import {getSystemPath, normalize, virtualFs} from '@angular-devkit/core';
 import {TempScopedNodeJsSyncHost} from '@angular-devkit/core/node/testing';
 import {HostTree} from '@angular-devkit/schematics';
-import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing';
-import {runfiles} from '@bazel/runfiles';
-import shx from 'shelljs';
+import {SchematicTestRunner, UnitTestTree} from '@angular-devkit/schematics/testing/index.js';
+import {resolve} from 'node:path';
+import {rmSync} from 'node:fs';
 
 describe('inject migration', () => {
   let runner: SchematicTestRunner;
@@ -35,8 +35,9 @@ describe('inject migration', () => {
     return runner.runSchematic('inject-migration', options, tree);
   }
 
+  const collectionJsonPath = resolve('../collection.json');
   beforeEach(() => {
-    runner = new SchematicTestRunner('test', runfiles.resolvePackageRelative('../collection.json'));
+    runner = new SchematicTestRunner('test', collectionJsonPath);
     host = new TempScopedNodeJsSyncHost();
     tree = new UnitTestTree(new HostTree(host));
 
@@ -49,14 +50,14 @@ describe('inject migration', () => {
       }),
     );
 
-    previousWorkingDir = shx.pwd();
+    previousWorkingDir = process.cwd();
     tmpDirPath = getSystemPath(host.root);
-    shx.cd(tmpDirPath);
+    process.chdir(tmpDirPath);
   });
 
   afterEach(() => {
-    shx.cd(previousWorkingDir);
-    shx.rm('-r', tmpDirPath);
+    process.chdir(previousWorkingDir);
+    rmSync(tmpDirPath, {recursive: true});
   });
 
   ['Directive', 'Component', 'Pipe', 'NgModule'].forEach((decorator) => {
@@ -120,7 +121,7 @@ describe('inject migration', () => {
     ]);
   });
 
-  it('should account for string tokens in @Inject()', async () => {
+  it('should account for string literal tokens in @Inject()', async () => {
     writeFile(
       '/dir.ts',
       [
@@ -141,6 +142,35 @@ describe('inject migration', () => {
       `@Directive()`,
       `class MyDir {`,
       `  private foo = inject<number>('not-officially-supported' as any);`,
+      `}`,
+    ]);
+  });
+
+  it('should account for string tokens in @Inject()', async () => {
+    writeFile(
+      '/dir.ts',
+      [
+        `import { Directive, Inject } from '@angular/core';`,
+        ``,
+        `const token = 'not-officially-supported'`,
+        ``,
+        `@Directive()`,
+        `class MyDir {`,
+        `  constructor(@Inject(token) private foo: number) {}`,
+        `}`,
+      ].join('\n'),
+    );
+
+    await runMigration();
+
+    expect(tree.readContent('/dir.ts').split('\n')).toEqual([
+      `import { Directive, inject } from '@angular/core';`,
+      ``,
+      `const token = 'not-officially-supported'`,
+      ``,
+      `@Directive()`,
+      `class MyDir {`,
+      `  private foo = inject<number>(token as any);`,
       `}`,
     ]);
   });
@@ -381,6 +411,56 @@ describe('inject migration', () => {
     ]);
   });
 
+  it('should only migrate the specified file', async () => {
+    writeFile(
+      '/dir.ts',
+      [
+        `import { Directive } from '@angular/core';`,
+        `import { Foo } from 'foo';`,
+        ``,
+        `@Directive()`,
+        `class MyDir {`,
+        `  constructor(private foo: Foo) {}`,
+        `}`,
+      ].join('\n'),
+    );
+
+    writeFile(
+      '/other-dir.ts',
+      [
+        `import { Directive } from '@angular/core';`,
+        `import { Foo } from 'foo';`,
+        ``,
+        `@Directive()`,
+        `class MyOtherDir {`,
+        `  constructor(private foo: Foo) {}`,
+        `}`,
+      ].join('\n'),
+    );
+
+    await runMigration({path: '/dir.ts'});
+
+    expect(tree.readContent('/dir.ts').split('\n')).toEqual([
+      `import { Directive, inject } from '@angular/core';`,
+      `import { Foo } from 'foo';`,
+      ``,
+      `@Directive()`,
+      `class MyDir {`,
+      `  private foo = inject(Foo);`,
+      `}`,
+    ]);
+
+    expect(tree.readContent('/other-dir.ts').split('\n')).toEqual([
+      `import { Directive } from '@angular/core';`,
+      `import { Foo } from 'foo';`,
+      ``,
+      `@Directive()`,
+      `class MyOtherDir {`,
+      `  constructor(private foo: Foo) {}`,
+      `}`,
+    ]);
+  });
+
   it('should not migrate classes decorated with a non-Angular decorator', async () => {
     writeFile(
       '/dir.ts',
@@ -446,6 +526,37 @@ describe('inject migration', () => {
       `    TestBed.createComponent(MyComp);`,
       `  });`,
       `});`,
+    ]);
+  });
+
+  it('should migrate destructuring property', async () => {
+    writeFile(
+      '/dir.ts',
+      [
+        `import { Directive, ElementRef } from '@angular/core';`,
+        ``,
+        `@Directive()`,
+        `class MyDir {`,
+        `  constructor({nativeElement}: ElementRef) {`,
+        `    console.log(nativeElement);`,
+        `  }`,
+        `}`,
+      ].join('\n'),
+    );
+
+    await runMigration();
+
+    expect(tree.readContent('/dir.ts').split('\n')).toEqual([
+      `import { Directive, ElementRef, inject } from '@angular/core';`,
+      ``,
+      `@Directive()`,
+      `class MyDir {`,
+      `  nativeElement = inject(ElementRef).nativeElement;`,
+      ``,
+      `  constructor() {`,
+      `    console.log(this.nativeElement);`,
+      `  }`,
+      `}`,
     ]);
   });
 

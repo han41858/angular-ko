@@ -61,7 +61,7 @@ runInEachFileSystem(() => {
       {
         fileName,
         templates: {
-          'TestCmp': `<div>{{ mySignal1 }} {{ mySignal2 }}</div>`,
+          'TestCmp': `<div>{{ mySignal1 }} {{ mySignal2 }} {{ !mySignal3 }}</div>`,
         },
         source: `
           import {signal, Signal} from '@angular/core';
@@ -69,6 +69,7 @@ runInEachFileSystem(() => {
           export class TestCmp {
             mySignal1 = signal<number>(0);
             mySignal2: Signal<number>;
+            mySignal3 = signal<number>(0);
           }`,
       },
     ]);
@@ -81,11 +82,12 @@ runInEachFileSystem(() => {
       {} /* options */,
     );
     const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
-    expect(diags.length).toBe(2);
+    expect(diags.length).toBe(3);
     expect(diags[0].category).toBe(ts.DiagnosticCategory.Warning);
     expect(diags[0].code).toBe(ngErrorCode(ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED));
     expect(getSourceCodeForDiagnostic(diags[0])).toBe(`mySignal1`);
     expect(getSourceCodeForDiagnostic(diags[1])).toBe(`mySignal2`);
+    expect(getSourceCodeForDiagnostic(diags[2])).toBe(`mySignal3`);
   });
 
   it('should produce a warning when a readonly signal is not invoked', () => {
@@ -625,6 +627,72 @@ runInEachFileSystem(() => {
     expect(getSourceCodeForDiagnostic(diags[0])).toBe(`myNestedSignal`);
   });
 
+  // See https://github.com/angular/angular/issues/63739
+  it('should produce a warning if the template contains a directive with the same input name, but on a different node', () => {
+    const fileName = absoluteFrom('/main.ts');
+    const {program, templateTypeChecker} = setup([
+      {
+        fileName,
+        templates: {
+          'TestCmp': `
+          <!-- The below "myInput" binding should be ignored, as it corresponds with TestDir -->
+          <div dir [myInput]="dirSignal"></div>
+
+          <!-- The below "myInput" binding should be reported, as it does not correspond with TestDir -->
+          <div [myInput]="divSignal"></div>
+
+          <!-- The below "myInput" binding applies to the "div" element so it should be reported -->
+          <div *dir [myInput]="structuralSignal"></div>
+          `,
+        },
+        source: `
+          import {signal, input} from '@angular/core';
+
+          export class TestDir {
+            myInput = input.required();
+          }
+          export class TestCmp {
+            dirSignal = signal(0);
+            divSignal = signal(0);
+            structuralSignal = signal(0);
+          }`,
+        declarations: [
+          {
+            type: 'directive',
+            name: 'TestDir',
+            selector: '[dir]',
+            inputs: {
+              myInput: {
+                isSignal: true,
+                bindingPropertyName: 'myInput',
+                classPropertyName: 'myInput',
+                required: true,
+                transform: null,
+              },
+            },
+          },
+        ],
+      },
+    ]);
+    const sf = getSourceFileOrError(program, fileName);
+    const component = getClass(sf, 'TestCmp');
+    const extendedTemplateChecker = new ExtendedTemplateCheckerImpl(
+      templateTypeChecker,
+      program.getTypeChecker(),
+      [interpolatedSignalFactory],
+      {},
+      /* options */
+    );
+    const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
+    expect(diags.length).toBe(2);
+    expect(diags[0].category).toBe(ts.DiagnosticCategory.Warning);
+    expect(diags[0].code).toBe(ngErrorCode(ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED));
+    expect(getSourceCodeForDiagnostic(diags[0])).toBe(`divSignal`);
+    expect(diags[1].category).toBe(ts.DiagnosticCategory.Warning);
+    expect(diags[1].code).toBe(ngErrorCode(ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED));
+    expect(getSourceCodeForDiagnostic(diags[1])).toBe(`structuralSignal`);
+  });
+
   [
     ['dom property', 'id'],
     ['class', 'class.green'],
@@ -638,13 +706,15 @@ runInEachFileSystem(() => {
         {
           fileName,
           templates: {
-            'TestCmp': `<div [${binding}]="mySignal"></div>`,
+            'TestCmp': `<div [${binding}]="mySignal"></div>
+            <div [${binding}]="!negatedSignal"></div>`,
           },
           source: `
           import {signal} from '@angular/core';
 
           export class TestCmp {
             mySignal = signal<number>(0);
+            negatedSignal = signal<number>(0);
           }`,
         },
       ]);
@@ -657,10 +727,11 @@ runInEachFileSystem(() => {
         {} /* options */,
       );
       const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
-      expect(diags.length).toBe(1);
+      expect(diags.length).toBe(2);
       expect(diags[0].category).toBe(ts.DiagnosticCategory.Warning);
       expect(diags[0].code).toBe(ngErrorCode(ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED));
       expect(getSourceCodeForDiagnostic(diags[0])).toBe(`mySignal`);
+      expect(getSourceCodeForDiagnostic(diags[1])).toBe(`negatedSignal`);
     });
 
     it(`should not produce a warning when signal is invoked on ${name} binding`, () => {
@@ -669,13 +740,15 @@ runInEachFileSystem(() => {
         {
           fileName,
           templates: {
-            'TestCmp': `<div [${binding}]="mySignal()"></div>`,
+            'TestCmp': `<div [${binding}]="mySignal()"></div>
+            <div [${binding}]="!negatedSignal()"></div>`,
           },
           source: `
           import {signal} from '@angular/core';
 
           export class TestCmp {
             mySignal = signal<number>(0);
+            negatedSignal = signal<number>(0);
           }`,
         },
       ]);
@@ -844,6 +917,131 @@ runInEachFileSystem(() => {
         );
         const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
         expect(diags.length).toBe(0);
+      });
+
+      [false, true].forEach((negate) => {
+        // Control flow
+        it(`should produce a warning when a property named '${functionInstanceProperty}' of a not invoked signal is used in an @if control flow expression`, () => {
+          const fileName = absoluteFrom('/main.ts');
+          const {program, templateTypeChecker} = setup([
+            {
+              fileName,
+              templates: {
+                'TestCmp': `@if(${negate ? '!' : ''}myObject.mySignal.${functionInstanceProperty}) { <div>Show</div> }`,
+              },
+              source: `
+          import {signal} from '@angular/core';
+
+          export class TestCmp {
+            myObject = { mySignal: signal<{ ${functionInstanceProperty}: string }>({ ${functionInstanceProperty}: 'foo' }) };
+          }`,
+            },
+          ]);
+          const sf = getSourceFileOrError(program, fileName);
+          const component = getClass(sf, 'TestCmp');
+          const extendedTemplateChecker = new ExtendedTemplateCheckerImpl(
+            templateTypeChecker,
+            program.getTypeChecker(),
+            [interpolatedSignalFactory],
+            {},
+            /* options */
+          );
+          const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
+          expect(diags.length).toBe(1);
+          expect(diags[0].category).toBe(ts.DiagnosticCategory.Warning);
+          expect(diags[0].code).toBe(ngErrorCode(ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED));
+          expect(getSourceCodeForDiagnostic(diags[0])).toBe(`mySignal`);
+        });
+
+        it(`should not produce a warning when a property named '${functionInstanceProperty}' of an invoked signal is used in an @if control flow expression`, () => {
+          const fileName = absoluteFrom('/main.ts');
+          const {program, templateTypeChecker} = setup([
+            {
+              fileName,
+              templates: {
+                'TestCmp': `@if(${negate ? '!' : ''}myObject.mySignal().${functionInstanceProperty}) { <div>Show</div> }`,
+              },
+              source: `
+          import {signal} from '@angular/core';
+
+          export class TestCmp {
+            myObject = { mySignal: signal<{ ${functionInstanceProperty}: string }>({ ${functionInstanceProperty}: 'foo' }) };
+          }`,
+            },
+          ]);
+          const sf = getSourceFileOrError(program, fileName);
+          const component = getClass(sf, 'TestCmp');
+          const extendedTemplateChecker = new ExtendedTemplateCheckerImpl(
+            templateTypeChecker,
+            program.getTypeChecker(),
+            [interpolatedSignalFactory],
+            {},
+            /* options */
+          );
+          const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
+          expect(diags.length).toBe(0);
+        });
+
+        it(`should produce a warning when a property named '${functionInstanceProperty}' of a not invoked signal is used in an @switch control flow expression`, () => {
+          const fileName = absoluteFrom('/main.ts');
+          const {program, templateTypeChecker} = setup([
+            {
+              fileName,
+              templates: {
+                'TestCmp': `@switch(${negate ? '!' : ''}myObject.mySignal.${functionInstanceProperty}) { }`,
+              },
+              source: `
+          import {signal} from '@angular/core';
+
+          export class TestCmp {
+            myObject = { mySignal: signal<{ ${functionInstanceProperty}: string }>({ ${functionInstanceProperty}: 'foo' }) };
+          }`,
+            },
+          ]);
+          const sf = getSourceFileOrError(program, fileName);
+          const component = getClass(sf, 'TestCmp');
+          const extendedTemplateChecker = new ExtendedTemplateCheckerImpl(
+            templateTypeChecker,
+            program.getTypeChecker(),
+            [interpolatedSignalFactory],
+            {},
+            /* options */
+          );
+          const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
+          expect(diags.length).toBe(1);
+          expect(diags[0].category).toBe(ts.DiagnosticCategory.Warning);
+          expect(diags[0].code).toBe(ngErrorCode(ErrorCode.INTERPOLATED_SIGNAL_NOT_INVOKED));
+          expect(getSourceCodeForDiagnostic(diags[0])).toBe(`mySignal`);
+        });
+
+        it(`should not produce a warning when a property named '${functionInstanceProperty}' of an invoked signal is used in an @switch control flow expression`, () => {
+          const fileName = absoluteFrom('/main.ts');
+          const {program, templateTypeChecker} = setup([
+            {
+              fileName,
+              templates: {
+                'TestCmp': `@switch(${negate ? '!' : ''}myObject.mySignal().${functionInstanceProperty}) { }`,
+              },
+              source: `
+          import {signal} from '@angular/core';
+
+          export class TestCmp {
+            myObject = { mySignal: signal<{ ${functionInstanceProperty}: string }>({ ${functionInstanceProperty}: 'foo' }) };
+          }`,
+            },
+          ]);
+          const sf = getSourceFileOrError(program, fileName);
+          const component = getClass(sf, 'TestCmp');
+          const extendedTemplateChecker = new ExtendedTemplateCheckerImpl(
+            templateTypeChecker,
+            program.getTypeChecker(),
+            [interpolatedSignalFactory],
+            {},
+            /* options */
+          );
+          const diags = extendedTemplateChecker.getDiagnosticsForComponent(component);
+          expect(diags.length).toBe(0);
+        });
       });
     },
   );

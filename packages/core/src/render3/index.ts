@@ -6,7 +6,6 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 import {ɵɵdefineComponent, ɵɵdefineDirective, ɵɵdefineNgModule, ɵɵdefinePipe} from './definition';
-import {ɵɵCopyDefinitionFeature} from './features/copy_definition_feature';
 import {ɵɵHostDirectivesFeature} from './features/host_directives_feature';
 import {ɵɵInheritDefinitionFeature} from './features/inherit_definition_feature';
 import {ɵɵNgOnChangesFeature} from './features/ng_onchanges_feature';
@@ -30,7 +29,6 @@ import {
 } from './interfaces/public_definitions';
 import {ɵɵsetComponentScope, ɵɵsetNgModuleScope} from './scope';
 import {
-  Framework,
   BaseDirectiveDebugMetadata,
   AngularDirectiveDebugMetadata,
   AngularComponentDebugMetadata,
@@ -53,6 +51,7 @@ export {ɵɵgetInheritedFactory} from './di';
 export {getLocaleId, setLocaleId} from './i18n/i18n_locale_id';
 export {
   ɵɵadvance,
+  ɵɵariaProperty,
   ɵɵattribute,
   ɵɵinterpolate,
   ɵɵinterpolate1,
@@ -68,6 +67,14 @@ export {
   ɵɵclassProp,
   ɵɵcomponentInstance,
   ɵɵdirectiveInject,
+  ɵɵdomElement,
+  ɵɵdomElementStart,
+  ɵɵdomElementEnd,
+  ɵɵdomElementContainer,
+  ɵɵdomElementContainerStart,
+  ɵɵdomElementContainerEnd,
+  ɵɵdomTemplate,
+  ɵɵdomListener,
   ɵɵelement,
   ɵɵelementContainer,
   ɵɵelementContainerEnd,
@@ -86,6 +93,8 @@ export {
   ɵɵprojection,
   ɵɵprojectionDef,
   ɵɵproperty,
+  ɵɵcontrol,
+  ɵɵcontrolCreate,
   ɵɵcontentQuery,
   ɵɵcontentQuerySignal,
   ɵɵloadQuery,
@@ -151,6 +160,10 @@ export {
   ɵɵstoreLet,
   ɵɵreadContextLet,
   ɵɵattachSourceLocations,
+  ɵɵanimateEnter,
+  ɵɵanimateEnterListener,
+  ɵɵanimateLeave,
+  ɵɵanimateLeaveListener,
 } from './instructions/all';
 export {
   ɵɵdeferEnableTimerScheduling,
@@ -199,7 +212,6 @@ export {
   ComponentDef,
   ComponentTemplate,
   ComponentType,
-  Framework,
   BaseDirectiveDebugMetadata,
   AngularDirectiveDebugMetadata,
   AngularComponentDebugMetadata,
@@ -218,7 +230,6 @@ export {
   getRenderedText,
   PipeDef,
   ɵɵComponentDeclaration,
-  ɵɵCopyDefinitionFeature,
   ɵɵdefineComponent,
   ɵɵdefineDirective,
   ɵɵdefineNgModule,

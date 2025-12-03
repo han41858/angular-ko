@@ -52,7 +52,7 @@ import {
   getTemplateIndexForState,
 } from './utils';
 import {profiler} from '../render3/profiler';
-import {ProfilerEvent} from '../render3/profiler_types';
+import {ProfilerEvent} from '../../primitives/devtools';
 import {addLViewToLContainer, removeLViewFromLContainer} from '../render3/view/container';
 
 /**
@@ -72,7 +72,7 @@ export const DEFER_BLOCK_DEPENDENCY_INTERCEPTOR =
  * **INTERNAL**, token used for configuring defer block behavior.
  */
 export const DEFER_BLOCK_CONFIG = new InjectionToken<DeferBlockConfig>(
-  ngDevMode ? 'DEFER_BLOCK_CONFIG' : '',
+  typeof ngDevMode !== undefined && ngDevMode ? 'DEFER_BLOCK_CONFIG' : '',
 );
 
 /**

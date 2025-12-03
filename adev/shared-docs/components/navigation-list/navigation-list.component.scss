@@ -49,6 +49,7 @@
     max-width: calc(100% - 1rem);
     overflow: hidden;
     text-overflow: ellipsis;
+    text-wrap: balance;
   }
 
   .docs-nav-item-has-icon {
@@ -57,6 +58,32 @@
       content: 'chevron_right';
       font-size: 1.25rem;
       font-family: var(--icons);
+    }
+  }
+
+  .tag {
+    --label-theme: var(--symbolic-purple);
+    color: var(--label-theme);
+    background: color-mix(in srgb, var(--label-theme) 10%, white);
+    margin-inline-start: 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+
+    .docs-dark-mode & {
+      background: color-mix(in srgb, var(--label-theme) 17%, #272727);
+    }
+
+    .docs-light-mode & {
+      background: color-mix(in srgb, var(--label-theme) 10%, white);
+    }
+
+    &.docs-new-item {
+      --label-theme: var(--symbolic-green);
+    }
+
+    &.docs-updated-item {
+      --label-theme: var(--symbolic-blue);
     }
   }
 }
@@ -151,11 +178,19 @@ a,
   }
 }
 
-::ng-deep .API-tooltip{
-  .mat-mdc-tooltip-surface{
+::ng-deep .API-tooltip {
+  .mat-mdc-tooltip-surface {
     max-width: unset;
-    width:auto;
+    width: auto;
     word-break: keep-all;
     white-space: pre;
+  }
+}
+
+.docs-navigation-group {
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  background: var(--septenary-contrast);
+  &:not(:first-child) {
+    margin-top: 2rem;
   }
 }

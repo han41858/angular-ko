@@ -8,10 +8,9 @@
 
 import {Component} from '@angular/core';
 import {ExternalLink} from './external-link.directive';
-import {RouterLink} from '@angular/router';
+import {provideRouter, RouterLink} from '@angular/router';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {WINDOW} from '../../providers';
-import {RouterTestingModule} from '@angular/router/testing';
 import {By} from '@angular/platform-browser';
 
 describe('ExternalLink', () => {
@@ -24,8 +23,9 @@ describe('ExternalLink', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ExampleComponentWithLinks, RouterTestingModule],
+      imports: [ExampleComponentWithLinks],
       providers: [
+        provideRouter([]),
         {
           provide: WINDOW,
           useValue: fakeWindow,
@@ -41,11 +41,13 @@ describe('ExternalLink', () => {
       By.css('a[href="https://stackoverflow.com/questions/tagged/angular"]'),
     );
     expect(externalLink.attributes['target']).toEqual('_blank');
+    expect(externalLink.attributes['rel']).toEqual('noopener');
   });
 
   it('should not internal link have target=_blank attribute', () => {
     const internalLink = fixture.debugElement.query(By.css('a[href="/roadmap"]'));
     expect(internalLink.attributes['target']).toBeFalsy();
+    expect(internalLink.attributes['rel']).toBeFalsy();
   });
 
   it('should not set target=_blank attribute external link when anchor has got noBlankForExternalLink attribute', () => {
@@ -53,23 +55,28 @@ describe('ExternalLink', () => {
       By.css('a[href="https://github.com/angular/angular/issues"]'),
     );
     expect(externalLink.attributes['target']).toBeFalsy();
+    expect(externalLink.attributes['rel']).toBeFalsy();
   });
 });
 
 @Component({
   template: `
     <a
+      class="external"
       href="https://stackoverflow.com/questions/tagged/angular"
       title="Stack Overflow: where the community answers your technical Angular questions."
     >
       Stack Overflow
     </a>
-    <a routerLink="/roadmap" title="Roadmap">Roadmap</a>
+    <a class="internal" routerLink="/roadmap" title="Roadmap">Roadmap</a>
     <a
+      class="optout"
       href="https://github.com/angular/angular/issues"
       title="Post issues and suggestions on github"
       noBlankForExternalLink
-    ></a>
+    >
+      GitHub Issues
+    </a>
   `,
   imports: [ExternalLink, RouterLink],
 })

@@ -15,7 +15,6 @@ import {
   InjectionToken,
   NgZone,
   OnDestroy,
-  PLATFORM_ID,
   Renderer2,
   RendererFactory2,
   RendererStyleFlags2,
@@ -26,6 +25,7 @@ import {
   ɵTracingService as TracingService,
   ɵTracingSnapshot as TracingSnapshot,
   Optional,
+  ɵallLeavingAnimations as allLeavingAnimations,
 } from '@angular/core';
 
 import {RuntimeErrorCode} from '../errors';
@@ -63,9 +63,8 @@ const REMOVE_STYLES_ON_COMPONENT_DESTROY_DEFAULT = true;
  * @publicApi
  */
 export const REMOVE_STYLES_ON_COMPONENT_DESTROY = new InjectionToken<boolean>(
-  ngDevMode ? 'RemoveStylesOnCompDestroy' : '',
+  typeof ngDevMode !== undefined && ngDevMode ? 'RemoveStylesOnCompDestroy' : '',
   {
-    providedIn: 'root',
     factory: () => REMOVE_STYLES_ON_COMPONENT_DESTROY_DEFAULT,
   },
 );
@@ -143,7 +142,6 @@ export class DomRendererFactory2 implements RendererFactory2, OnDestroy {
     @Inject(APP_ID) private readonly appId: string,
     @Inject(REMOVE_STYLES_ON_COMPONENT_DESTROY) private removeStylesOnCompDestroy: boolean,
     @Inject(DOCUMENT) private readonly doc: Document,
-    @Inject(PLATFORM_ID) readonly platformId: Object,
     readonly ngZone: NgZone,
     @Inject(CSP_NONCE) private readonly nonce: string | null = null,
     @Inject(TracingService)
@@ -168,7 +166,8 @@ export class DomRendererFactory2 implements RendererFactory2, OnDestroy {
     if (
       typeof ngServerMode !== 'undefined' &&
       ngServerMode &&
-      type.encapsulation === ViewEncapsulation.ShadowDom
+      (type.encapsulation === ViewEncapsulation.ShadowDom ||
+        type.encapsulation === ViewEncapsulation.ExperimentalIsolatedShadowDom)
     ) {
       // Domino does not support shadow DOM.
       type = {...type, encapsulation: ViewEncapsulation.Emulated};
@@ -216,7 +215,18 @@ export class DomRendererFactory2 implements RendererFactory2, OnDestroy {
         case ViewEncapsulation.ShadowDom:
           return new ShadowDomRenderer(
             eventManager,
+            element,
+            type,
+            doc,
+            ngZone,
+            this.nonce,
+            platformIsServer,
+            tracingService,
             sharedStylesHost,
+          );
+        case ViewEncapsulation.ExperimentalIsolatedShadowDom:
+          return new ShadowDomRenderer(
+            eventManager,
             element,
             type,
             doc,
@@ -225,6 +235,7 @@ export class DomRendererFactory2 implements RendererFactory2, OnDestroy {
             platformIsServer,
             tracingService,
           );
+
         default:
           renderer = new NoneEncapsulationDomRenderer(
             eventManager,
@@ -270,7 +281,7 @@ class DefaultDomRenderer2 implements Renderer2 {
   constructor(
     private readonly eventManager: EventManager,
     private readonly doc: Document,
-    private readonly ngZone: NgZone,
+    protected readonly ngZone: NgZone,
     private readonly platformIsServer: boolean,
     private readonly tracingService: TracingService<TracingSnapshot> | null,
   ) {}
@@ -317,6 +328,7 @@ class DefaultDomRenderer2 implements Renderer2 {
   }
 
   removeChild(_parent: any, oldChild: any): void {
+    // child was removed
     oldChild.remove();
   }
 
@@ -476,6 +488,7 @@ class DefaultDomRenderer2 implements Renderer2 {
 }
 
 const AT_CHARCODE = (() => '@'.charCodeAt(0))();
+
 function checkNoSyntheticProp(name: string, nameKind: string) {
   if (name.charCodeAt(0) === AT_CHARCODE) {
     throw new RuntimeError(
@@ -496,7 +509,6 @@ class ShadowDomRenderer extends DefaultDomRenderer2 {
 
   constructor(
     eventManager: EventManager,
-    private sharedStylesHost: SharedStylesHost,
     private hostEl: any,
     component: RendererType2,
     doc: Document,
@@ -504,10 +516,16 @@ class ShadowDomRenderer extends DefaultDomRenderer2 {
     nonce: string | null,
     platformIsServer: boolean,
     tracingService: TracingService<TracingSnapshot> | null,
+    private sharedStylesHost?: SharedStylesHost,
   ) {
     super(eventManager, doc, ngZone, platformIsServer, tracingService);
     this.shadowRoot = (hostEl as any).attachShadow({mode: 'open'});
-    this.sharedStylesHost.addHost(this.shadowRoot);
+
+    // SharedStylesHost is used to add styles to the shadow root by ShadowDom.
+    // This is optional as it is not used by ExperimentalIsolatedShadowDom.
+    if (this.sharedStylesHost) {
+      this.sharedStylesHost.addHost(this.shadowRoot);
+    }
     let styles = component.styles;
     if (ngDevMode) {
       // We only do this in development, as for production users should not add CSS sourcemaps to components.
@@ -553,18 +571,23 @@ class ShadowDomRenderer extends DefaultDomRenderer2 {
   override appendChild(parent: any, newChild: any): void {
     return super.appendChild(this.nodeOrShadowRoot(parent), newChild);
   }
+
   override insertBefore(parent: any, newChild: any, refChild: any): void {
     return super.insertBefore(this.nodeOrShadowRoot(parent), newChild, refChild);
   }
+
   override removeChild(_parent: any, oldChild: any): void {
     return super.removeChild(null, oldChild);
   }
+
   override parentNode(node: any): any {
     return this.nodeOrShadowRoot(super.parentNode(this.nodeOrShadowRoot(node)));
   }
 
   override destroy() {
-    this.sharedStylesHost.removeHost(this.shadowRoot);
+    if (this.sharedStylesHost) {
+      this.sharedStylesHost.removeHost(this.shadowRoot);
+    }
   }
 }
 
@@ -603,8 +626,9 @@ class NoneEncapsulationDomRenderer extends DefaultDomRenderer2 {
     if (!this.removeStylesOnCompDestroy) {
       return;
     }
-
-    this.sharedStylesHost.removeStyles(this.styles, this.styleUrls);
+    if (allLeavingAnimations.size === 0) {
+      this.sharedStylesHost.removeStyles(this.styles, this.styleUrls);
+    }
   }
 }
 
