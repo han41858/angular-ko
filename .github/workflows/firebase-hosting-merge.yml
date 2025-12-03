@@ -13,11 +13,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: check env
-        run: node -v && yarn -v
+        run: node -v && pnpm -v
       - name: install dependencies
-        run: yarn
+        run: pnpm i
       - name: build
-        run: yarn docs:build --full_build_adev
+        run: pnpm adev:build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
