@@ -2,7 +2,7 @@
 # Creating and using services
 -->
 
-# 서비스 생성하고 활용하기
+# 서비스 생성하기, 활용하기
 
 <!--
 Services are reusable pieces of code that can be shared across your Angular application. They typically handle data fetching, business logic, or other functionality that multiple components need to access.
