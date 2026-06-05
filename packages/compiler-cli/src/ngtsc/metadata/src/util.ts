@@ -29,10 +29,9 @@ import {
   MetadataReader,
   NgModuleMeta,
   PipeMeta,
-  TemplateGuardMeta,
 } from './api';
-import {ClassPropertyMapping, ClassPropertyName} from './property_mapping';
 import {TypeEntityToDeclarationError} from '../../reflection/src/typescript';
+import {ClassPropertyMapping, ClassPropertyName, TemplateGuardMeta} from '@angular/compiler';
 
 export function extractReferencesFromType(
   checker: ts.TypeChecker,

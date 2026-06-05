@@ -2,8 +2,6 @@
 
 Angular provides three approaches to building forms: Signal Forms, Reactive Forms, and Template-driven Forms. Each has distinct patterns for managing state, validation, and data flow. This guide helps you understand the differences and choose the right approach for your project.
 
-NOTE: Signal Forms are [experimental](reference/releases#experimental) as of Angular v21. The API may change before stabilizing.
-
 ## Quick comparison
 
 | Feature          | Signal Forms                       | Reactive Forms                        | Template-driven Forms   |
@@ -15,14 +13,14 @@ NOTE: Signal Forms are [experimental](reference/releases#experimental) as of Ang
 | Setup            | Signal + schema function           | FormControl tree                      | NgModel in template     |
 | Best for         | Signal-based apps                  | Complex forms                         | Simple forms            |
 | Learning curve   | Medium                             | Medium-High                           | Low                     |
-| Status           | Experimental (v21+)                | Stable                                | Stable                  |
+| Status           | Stable (v22+)                      | Stable                                | Stable                  |
 
 ## By example: Login form
 
 The best way to understand the differences is to see the same form implemented in all three approaches.
 
 <docs-code-multifile>
-  <docs-code header="Signal forms" path="adev/src/content/examples/signal-forms/src/comparison/app/signal-forms.ts"/>
+  <docs-code language="angular-ts" header="Signal forms" path="adev/src/content/examples/signal-forms/src/comparison/app/signal-forms.ts"/>
   <docs-code header="Reactive forms" path="adev/src/content/examples/signal-forms/src/comparison/app/reactive-forms.ts"/>
   <docs-code header="Template-driven forms" path="adev/src/content/examples/signal-forms/src/comparison/app/template-driven-forms.ts"/>
 </docs-code-multifile>
@@ -54,7 +52,7 @@ This separates form state management from your component's data model. The form 
 Template-driven Forms stores data in component properties. You access values directly:
 
 ```ts
-const credentials = { email: this.email, password: this.password };
+const credentials = {email: this.email, password: this.password};
 ```
 
 This is the most direct approach but requires manually assembling values when you need them. Angular manages form state through directives in the template.
@@ -67,8 +65,8 @@ Signal Forms uses a schema function where you bind validators to field paths:
 
 ```ts
 loginForm = form(this.loginModel, (fieldPath) => {
-  required(fieldPath.email, { message: 'Email is required' });
-  email(fieldPath.email, { message: 'Enter a valid email address' });
+  required(fieldPath.email, {message: 'Email is required'});
+  email(fieldPath.email, {message: 'Enter a valid email address'});
 });
 ```
 
@@ -78,7 +76,7 @@ Reactive Forms attaches validators when creating controls:
 
 ```ts
 loginForm = new FormGroup({
-  email: new FormControl('', [Validators.required, Validators.email])
+  email: new FormControl('', [Validators.required, Validators.email]),
 });
 ```
 
@@ -99,7 +97,7 @@ TypeScript integration differs significantly between approaches, affecting how m
 Signal Forms infers types from your model structure:
 
 ```ts
-const loginModel = signal({ email: '', password: '' });
+const loginModel = signal({email: '', password: ''});
 const loginForm = form(loginModel);
 // TypeScript knows: loginForm.email exists and returns FieldState<string>
 ```
@@ -111,7 +109,7 @@ Reactive Forms requires explicit type annotations with typed forms:
 ```ts
 const loginForm = new FormGroup({
   email: new FormControl<string>(''),
-  password: new FormControl<string>('')
+  password: new FormControl<string>(''),
 });
 // TypeScript knows: loginForm.controls.email is FormControl<string>
 ```
@@ -132,9 +130,8 @@ TypeScript understands your component properties but has no knowledge of form st
 
 ### Use Signal Forms if:
 
-- You're building new signal-based applications (Angular v21+)
+- You're building new signal-based applications (Angular v22+)
 - You want type safety inferred from your model structure
-- You're comfortable working with experimental features
 - Schema-based validation appeals to you
 - Your team is familiar with signals
 

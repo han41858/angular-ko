@@ -7,7 +7,7 @@
  */
 
 import {DOCUMENT} from '@angular/common';
-import {inject, signal, Injectable, DestroyRef} from '@angular/core';
+import {inject, signal, DestroyRef, Service} from '@angular/core';
 
 import {TableOfContentsItem, TableOfContentsLevel} from '../interfaces/index';
 
@@ -19,7 +19,7 @@ import {TableOfContentsItem, TableOfContentsLevel} from '../interfaces/index';
  */
 export const TOC_SKIP_CONTENT_MARKER = 'toc-skip-content';
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class TableOfContentsLoader {
   // There are some cases when default browser anchor scrolls a little above the
   // heading In that cases wrong item was selected. The value found by trial and
@@ -44,7 +44,10 @@ export class TableOfContentsLoader {
 
   private getHeadingTitle(heading: HTMLHeadingElement): string {
     const div: HTMLDivElement = this.document.createElement('div');
+
     div.innerHTML = heading.innerHTML;
+    // Remove any existing copy link buttons to avoid including their text in the title
+    div.querySelectorAll('docs-copy-link-button').forEach((el) => el.remove());
 
     return (div.textContent || '').trim();
   }

@@ -7,12 +7,12 @@
  */
 
 import {
-  inject,
-  Injectable,
-  InjectionToken,
-  ɵformatRuntimeError as formatRuntimeError,
   DOCUMENT,
+  ɵformatRuntimeError as formatRuntimeError,
+  inject,
+  InjectionToken,
   OnDestroy,
+  Service,
 } from '@angular/core';
 
 import {RuntimeErrorCode} from '../../errors';
@@ -43,7 +43,7 @@ const INTERNAL_PRECONNECT_CHECK_BLOCKLIST = new Set(['localhost', '127.0.0.1', '
  * @publicApi
  */
 export const PRECONNECT_CHECK_BLOCKLIST = new InjectionToken<Array<string | string[]>>(
-  typeof ngDevMode !== undefined && ngDevMode ? 'PRECONNECT_CHECK_BLOCKLIST' : '',
+  typeof ngDevMode !== 'undefined' && ngDevMode ? 'PRECONNECT_CHECK_BLOCKLIST' : '',
 );
 
 /**
@@ -53,7 +53,7 @@ export const PRECONNECT_CHECK_BLOCKLIST = new InjectionToken<Array<string | stri
  * Note: this is a dev-mode only class, which should not appear in prod bundles,
  * thus there is no `ngDevMode` use in the code.
  */
-@Injectable({providedIn: 'root'})
+@Service()
 export class PreconnectLinkChecker implements OnDestroy {
   private document = inject(DOCUMENT);
 

@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import {SIGNAL} from './graph';
@@ -46,9 +46,9 @@ const formatter = {
     let value: unknown;
     try {
       value = sig();
-    } catch {
+    } catch (e: any) {
       // In case the signal throws, we don't want to break the formatting.
-      return ['span', 'Signal(⚠️ Error)'];
+      return ['span', `Signal(⚠️ Error)${e.message ? `: ${e.message}` : ''}`];
     }
 
     const kind = 'computation' in (sig[SIGNAL] as any) ? 'Computed' : 'Signal';
@@ -159,3 +159,6 @@ export function installDevToolsSignalFormatter() {
     globalThis.devtoolsFormatters.push(formatter);
   }
 }
+
+// This fixes the RollupError: Exported variable "global" is not defined.
+export {};

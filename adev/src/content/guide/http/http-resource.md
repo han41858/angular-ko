@@ -1,7 +1,5 @@
 # Reactive data fetching with `httpResource`
 
-IMPORTANT: `httpResource` is [experimental](reference/releases#experimental). It's ready for you to try, but it might change before it is stable.
-
 `httpResource` is a reactive wrapper around `HttpClient` that gives you the request status and response as signals. You can thus use these signals with `computed`, `effect`, `linkedSignal`, or any other reactive API. Because it's built on top of `HttpClient`, `httpResource` supports all the same features, such as interceptors.
 
 For more about Angular's `resource` pattern, see [Async reactivity with `resource`](/guide/signals/resource).
@@ -42,11 +40,11 @@ user = httpResource(() => ({
   mode: 'cors',
   redirect: 'error',
   priority: 'high',
-  cache : 'force-cache',
+  cache: 'force-cache',
   credentials: 'include',
   referrer: 'no-referrer',
   integrity: 'sha384-oqVuAfXRKap7fdgcCY5uykM6+R9GhEXAMPLEKEY=',
-  referrerPolicy: 'no-referrer'
+  referrerPolicy: 'no-referrer',
 }));
 ```
 
@@ -87,7 +85,7 @@ The following example uses Zod to parse and validate the response from the [Star
 ```ts
 const starWarsPersonSchema = z.object({
   name: z.string(),
-  height: z.number({ coerce: true }),
+  height: z.number({coerce: true}),
   edited: z.string().datetime(),
   films: z.array(z.string()),
 });
@@ -95,10 +93,9 @@ const starWarsPersonSchema = z.object({
 export class CharacterViewer {
   id = signal(1);
 
-  swPersonResource = httpResource(
-    () => `https://swapi.info/api/people/${this.id()}`,
-    { parse: starWarsPersonSchema.parse }
-  );
+  swPersonResource = httpResource(() => `https://swapi.info/api/people/${this.id()}`, {
+    parse: starWarsPersonSchema.parse,
+  });
 }
 ```
 
@@ -110,10 +107,7 @@ The following example shows a unit test for code using `httpResource`.
 
 ```ts
 TestBed.configureTestingModule({
-  providers: [
-    provideHttpClient(),
-    provideHttpClientTesting(),
-  ],
+  providers: [provideHttpClient(), provideHttpClientTesting()],
 });
 
 const id = signal(0);

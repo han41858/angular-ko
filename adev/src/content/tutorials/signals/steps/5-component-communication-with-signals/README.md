@@ -31,7 +31,8 @@ Update the template in `product-card` to display the signal input values.
 <div class="product-card">
   <h3>{{ name() }}</h3>
   <p class="price">\${{ price() }}</p>
-  <p class="status">Status:
+  <p class="status">
+    Status:
     @if (available()) {
       Available
     } @else {
@@ -49,18 +50,10 @@ Update the `product-card` usage in `app.ts` to pass dynamic signal values instea
 
 ```html
 <!-- Change from static values: -->
-<product-card
-  name="Static Product"
-  price="99"
-  available="true"
-/>
+<product-card name="Static Product" price="99" available="true" />
 
 <!-- To dynamic signals: -->
-<product-card
-  [name]="productName()"
-  [price]="productPrice()"
-  [available]="productAvailable()"
-/>
+<product-card [name]="productName()" [price]="productPrice()" [available]="productAvailable()" />
 ```
 
 The square brackets `[]` create property bindings that pass the current signal values to the child.

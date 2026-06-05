@@ -6,16 +6,20 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {DOCUMENT} from '../..';
+import {CSP_NONCE} from '@angular/core';
 import {HttpHeaders} from '../src/headers';
 import {
   JSONP_ERR_HEADERS_NOT_SUPPORTED,
   JSONP_ERR_NO_CALLBACK,
   JSONP_ERR_WRONG_METHOD,
   JSONP_ERR_WRONG_RESPONSE_TYPE,
+  JsonpCallbackContext,
   JsonpClientBackend,
 } from '../src/jsonp';
 import {HttpRequest} from '../src/request';
 import {HttpErrorResponse, HttpEventType} from '../src/response';
+import {TestBed} from '@angular/core/testing';
 import {toArray} from 'rxjs/operators';
 
 import {MockDocument} from './jsonp_mock';
@@ -34,9 +38,18 @@ describe('JsonpClientBackend', () => {
   }
 
   beforeEach(() => {
-    home = {};
-    document = new MockDocument();
-    backend = new JsonpClientBackend(home, document);
+    const mockDoc = new MockDocument();
+    TestBed.configureTestingModule({
+      providers: [
+        JsonpClientBackend,
+        {provide: JsonpCallbackContext, useValue: {}},
+        {provide: DOCUMENT, useValue: mockDoc},
+        {provide: CSP_NONCE, useValue: null},
+      ],
+    });
+    backend = TestBed.inject(JsonpClientBackend);
+    home = TestBed.inject(JsonpCallbackContext);
+    document = mockDoc;
   });
 
   it('handles a basic request', (done) => {
@@ -87,6 +100,33 @@ describe('JsonpClientBackend', () => {
     // executing.
     expect(document.mock!.ownerDocument).not.toEqual(document);
   });
+  describe('CSP nonce', () => {
+    it('sets nonce attribute on script element when CSP_NONCE token is provided', (done) => {
+      TestBed.resetTestingModule();
+      const mockDoc = new MockDocument();
+      TestBed.configureTestingModule({
+        providers: [
+          JsonpClientBackend,
+          {provide: JsonpCallbackContext, useValue: {}},
+          {provide: DOCUMENT, useValue: mockDoc},
+          {provide: CSP_NONCE, useValue: 'test-nonce-123'},
+        ],
+      });
+      const nonceBackend = TestBed.inject(JsonpClientBackend);
+      nonceBackend.handle(SAMPLE_REQ).subscribe();
+
+      expect(mockDoc.mock!.getAttribute('nonce')).toBe('test-nonce-123');
+      done();
+    });
+
+    it('does not set nonce attribute when CSP_NONCE token is not provided', (done) => {
+      backend.handle(SAMPLE_REQ).subscribe();
+
+      expect(document.mock!.getAttribute('nonce')).toBeNull();
+      done();
+    });
+  });
+
   describe('throws an error', () => {
     it('when request method is not JSONP', () =>
       expect(() => backend.handle(SAMPLE_REQ.clone<never>({method: 'GET'}))).toThrowError(

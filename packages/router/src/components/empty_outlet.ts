@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 import {RouterOutlet} from '../directives/router_outlet';
-import {PRIMARY_OUTLET} from '../shared';
 import {Route} from '../models';
+import {PRIMARY_OUTLET} from '../shared';
 export {ɵEmptyOutletComponent as EmptyOutletComponent};
 
 /**
@@ -23,10 +23,11 @@ export {ɵEmptyOutletComponent as EmptyOutletComponent};
  * to this `EmptyOutletComponent`.
  */
 @Component({
-  template: `<router-outlet/>`,
+  template: `<router-outlet />`,
   imports: [RouterOutlet],
   // Used to avoid component ID collisions with user code.
   exportAs: 'emptyRouterOutlet',
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class ɵEmptyOutletComponent {}
 

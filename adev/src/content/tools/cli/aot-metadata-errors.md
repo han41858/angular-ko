@@ -6,7 +6,7 @@ The following are metadata errors you may encounter, with explanations and sugge
 
 HELPFUL: The compiler encountered an expression it didn't understand while evaluating Angular metadata.
 
-Language features outside of the compiler's [restricted expression syntax](tools/cli/aot-compiler#expression-syntax)
+Language features outside of the compiler's [restricted expression syntax](tools/cli/aot-compiler)
 can produce this error, as seen in the following example:
 
 ```ts
@@ -23,7 +23,7 @@ const prop = typeof Fooish; // typeof is not valid in metadata
 You can use `typeof` and bracket notation in normal application code.
 You just can't use those features within expressions that define Angular metadata.
 
-Avoid this error by sticking to the compiler's [restricted expression syntax](tools/cli/aot-compiler#expression-syntax)
+Avoid this error by sticking to the compiler's [restricted expression syntax](tools/cli/aot-compiler)
 when writing Angular metadata
 and be wary of new or unusual TypeScript features.
 
@@ -62,9 +62,7 @@ let foo = 42; // initialized
 The compiler will [fold](tools/cli/aot-compiler#code-folding) the expression into the provider as if you had written this.
 
 ```ts
-providers: [
-  { provide: Foo, useValue: 42 }
-]
+providers: [{provide: Foo, useValue: 42}];
 ```
 
 Alternatively, you can fix it by exporting `foo` with the expectation that `foo` will be assigned at runtime when you actually know its value.
@@ -95,7 +93,7 @@ export let someTemplate: string; // exported but not initialized
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -119,7 +117,7 @@ export let someTemplate: string;
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -128,11 +126,11 @@ You'd also get this error if you imported `someTemplate` from some other module 
 
 ```ts
 // ERROR - not initialized there either
-import { someTemplate } from './config';
+import {someTemplate} from './config';
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -148,7 +146,7 @@ export let someTemplate = '<h1>Greetings from Angular</h1>';
 
 @Component({
   selector: 'my-component',
-  template: someTemplate
+  template: someTemplate,
 })
 export class MyComponent {}
 ```
@@ -173,7 +171,7 @@ abstract class MyStrategy { }
   …
 ```
 
-Angular generates a class factory in a separate module and that factory [can only access exported classes](tools/cli/aot-compiler#exported-symbols).
+Angular generates a class factory in a separate module and that factory [can only access exported classes](tools/cli/aot-compiler#public-or-protected-symbols).
 To correct this error, export the referenced class.
 
 ```ts
@@ -204,7 +202,7 @@ function myStrategy() { … }
   …
 ```
 
-Angular generates a class factory in a separate module and that factory [can only access exported functions](tools/cli/aot-compiler#exported-symbols).
+Angular generates a class factory in a separate module and that factory [can only access exported functions](tools/cli/aot-compiler#public-or-protected-symbols).
 To correct this error, export the function.
 
 ```ts
@@ -214,56 +212,6 @@ export function myStrategy() { … }
   …
   providers: [
     { provide: MyStrategy, useFactory: myStrategy }
-  ]
-  …
-```
-
-## Function calls are not supported
-
-HELPFUL: _Function calls are not supported. Consider replacing the function or lambda with a reference to an exported function._
-
-The compiler does not currently support [function expressions or lambda functions](tools/cli/aot-compiler#function-expression).
-For example, you cannot set a provider's `useFactory` to an anonymous function or arrow function like this.
-
-```ts
-// ERROR
-  …
-  providers: [
-    { provide: MyStrategy, useFactory: function() { … } },
-    { provide: OtherStrategy, useFactory: () => { … } }
-  ]
-  …
-```
-
-You also get this error if you call a function or method in a provider's `useValue`.
-
-```ts
-// ERROR
-import { calculateValue } from './utilities';
-
-  …
-  providers: [
-    { provide: SomeValue, useValue: calculateValue() }
-  ]
-  …
-```
-
-To correct this error, export a function from the module and refer to the function in a `useFactory` provider instead.
-
-```ts
-// CORRECTED
-import { calculateValue } from './utilities';
-
-export function myStrategy() { … }
-export function otherStrategy() { … }
-export function someValueFactory() {
-  return calculateValue();
-}
-  …
-  providers: [
-    { provide: MyStrategy, useFactory: myStrategy },
-    { provide: OtherStrategy, useFactory: otherStrategy },
-    { provide: SomeValue, useFactory: someValueFactory }
   ]
   …
 ```
@@ -378,14 +326,14 @@ This can happen if you use a number as a property name as in the following examp
 
 ```ts
 // ERROR
-provider: [{ provide: Foo, useValue: { 0: 'test' } }]
+provider: [{provide: Foo, useValue: {0: 'test'}}];
 ```
 
 Change the name of the property to something non-numeric.
 
 ```ts
 // CORRECTED
-provider: [{ provide: Foo, useValue: { '0': 'test' } }]
+provider: [{provide: Foo, useValue: {'0': 'test'}}];
 ```
 
 ## Unsupported enum member name

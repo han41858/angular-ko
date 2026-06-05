@@ -6,25 +6,30 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 import {
+  ɵAnimationGroupPlayer as AnimationGroupPlayer,
   animate,
   query,
   state,
   style,
   transition,
   trigger,
-  ɵAnimationGroupPlayer as AnimationGroupPlayer,
 } from '@angular/animations';
 import {
   AnimationDriver,
+  ɵTransitionAnimationPlayer as TransitionAnimationPlayer,
   ɵAnimationEngine,
   ɵWebAnimationsDriver,
   ɵWebAnimationsPlayer,
-  ɵTransitionAnimationPlayer as TransitionAnimationPlayer,
 } from '@angular/animations/browser';
-import {Component, ViewChild, provideZoneChangeDetection} from '../../src/core';
-import {TestBed} from '../../testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {isNode} from '@angular/private/testing';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewChild,
+  provideZoneChangeDetection,
+} from '../../src/core';
+import {TestBed} from '../../testing';
 
 (function () {
   // these tests are only meant to be run within the DOM (for now)
@@ -62,6 +67,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         public exp: boolean = false;
@@ -169,18 +175,19 @@ import {isNode} from '@angular/private/testing';
       @Component({
         selector: 'ani-cmp',
         template: `
-            <div [@myAnimation]="exp" #parent>
-              <div *ngFor="let item of items" class="child" style="line-height:20px">
-                - {{ item }}
-              </div>
+          <div [@myAnimation]="exp" #parent>
+            <div *ngFor="let item of items" class="child" style="line-height:20px">
+              - {{ item }}
             </div>
-          `,
+          </div>
+        `,
         animations: [
           trigger('myAnimation', [
             transition('* => *', [style({height: '!'}), animate(1000, style({height: '*'}))]),
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         public exp!: number;
@@ -245,21 +252,19 @@ import {isNode} from '@angular/private/testing';
           `
             .box {
               width: 500px;
-              overflow:hidden;
-              background:orange;
-              line-height:300px;
-              font-size:100px;
-              text-align:center;
+              overflow: hidden;
+              background: orange;
+              line-height: 300px;
+              font-size: 100px;
+              text-align: center;
             }
           `,
         ],
         template: `
-            <button (click)="toggle()">Open / Close</button>
-            <hr />
-            <div *ngIf="exp" @slide class="box">
-            ...
-            </div>
-          `,
+          <button (click)="toggle()">Open / Close</button>
+          <hr />
+          <div *ngIf="exp" @slide class="box">...</div>
+        `,
         animations: [
           trigger('slide', [
             state('void', style({height: '0px'})),
@@ -268,6 +273,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         exp = false;
@@ -322,28 +328,28 @@ import {isNode} from '@angular/private/testing';
         selector: 'my-app',
         styles: [
           `
-              .list .outer {
-                overflow:hidden;
-              }
-              .list .inner {
-                box-sizing: border-box;
-                height: 50px;
-              }
-            `,
+            .list .outer {
+              overflow: hidden;
+            }
+            .list .inner {
+              box-sizing: border-box;
+              height: 50px;
+            }
+          `,
         ],
         template: `
-              <button (click)="empty()">Empty</button>
-              <button (click)="middle()">Middle</button>
-              <button (click)="full()">Full</button>
-              <hr />
-              <div [@list]="exp" class="list">
-                <div *ngFor="let item of items" class="outer">
-                  <div class="inner">
-                    {{ item }}
-                  </div>
-                </div>
+          <button (click)="empty()">Empty</button>
+          <button (click)="middle()">Middle</button>
+          <button (click)="full()">Full</button>
+          <hr />
+          <div [@list]="exp" class="list">
+            <div *ngFor="let item of items" class="outer">
+              <div class="inner">
+                {{ item }}
               </div>
-            `,
+            </div>
+          </div>
+        `,
         animations: [
           trigger('list', [
             transition(':enter', []),
@@ -354,6 +360,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         items: any[] = [];
@@ -434,9 +441,7 @@ import {isNode} from '@angular/private/testing';
     it('should compute intermediate styles properly when an animation is cancelled', () => {
       @Component({
         selector: 'ani-cmp',
-        template: `
-          <div [@myAnimation]="exp" style="background-color: blue;">...</div>
-        `,
+        template: ` <div [@myAnimation]="exp" style="background-color: blue;">...</div> `,
         animations: [
           trigger('myAnimation', [
             transition('* => a', [
@@ -447,6 +452,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         public exp: string | undefined;
@@ -502,6 +508,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         public exp: string | undefined;
@@ -567,6 +574,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         @ViewChild('elm', {static: true}) public element: any;
@@ -611,6 +619,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         @ViewChild('elm', {static: true}) public element: any;
@@ -677,6 +686,7 @@ import {isNode} from '@angular/private/testing';
           ]),
         ],
         standalone: false,
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Cmp {
         public status: 'active' | 'inactive' = 'inactive';

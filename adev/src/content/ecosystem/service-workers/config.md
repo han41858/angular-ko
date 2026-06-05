@@ -85,7 +85,7 @@ For example, an asset group that matches `/foo.js` should appear before one that
 Each asset group specifies both a group of resources and a policy that governs them.
 This policy determines when the resources are fetched and what happens when changes are detected.
 
-Asset groups follow the Typescript interface shown here:
+Asset groups follow the TypeScript interface shown here:
 
 ```ts
 interface AssetGroup {
@@ -179,7 +179,7 @@ The first data group that matches the requested resource handles the request.
 It is recommended that you put the more specific data groups higher in the list.
 For example, a data group that matches `/api/foo.json` should appear before one that matches `/api/*.json`.
 
-Data groups follow this Typescript interface:
+Data groups follow this TypeScript interface:
 
 ```ts
 export interface DataGroup {
@@ -354,14 +354,12 @@ The URL query is ignored when matching.
 If the field is omitted, it defaults to:
 
 ```ts
-
 [
-'/**', // Include all URLs.
-'!/**/*.*', // Exclude URLs to files (containing a file extension in the last segment).
-'!/**/*__*', // Exclude URLs containing `__` in the last segment.
-'!/**/*__*/**', // Exclude URLs containing `__` in any other segment.
-]
-
+  '/**', // Include all URLs.
+  '!/**/*.*', // Exclude URLs to files (containing a file extension in the last segment).
+  '!/**/*__*', // Exclude URLs containing `__` in the last segment.
+  '!/**/*__*/**', // Exclude URLs containing `__` in any other segment.
+];
 ```
 
 ### `navigationRequestStrategy`
@@ -369,7 +367,6 @@ If the field is omitted, it defaults to:
 This optional property enables you to configure how the service worker handles navigation requests:
 
 ```json
-
 {
   "navigationRequestStrategy": "freshness"
 }

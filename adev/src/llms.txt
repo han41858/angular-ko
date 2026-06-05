@@ -48,6 +48,7 @@ Angular — Deliver web apps with confidence 🚀
 - [Understanding Dependency injection](https://angular.dev/guide/di/dependency-injection)
 - [Creating an injectable service](https://angular.dev/guide/di/creating-injectable-service)
 - [Configuring dependency providers](https://angular.dev/guide/di/dependency-injection-providers)
+- [Lazy loading services](https://angular.dev/guide/di/lazy-loading-services)
 - [Injection context](https://angular.dev/guide/di/dependency-injection-context)
 - [Hierarchical injectors](https://angular.dev/guide/di/hierarchical-dependency-injection)
 - [Optimizing Injection tokens](https://angular.dev/guide/di/lightweight-injection-tokens)
@@ -76,6 +77,7 @@ Angular — Deliver web apps with confidence 🚀
 ## Routing
 - [Routing overview](https://angular.dev/guide/routing)
 - [Define routes](https://angular.dev/guide/routing/define-routes)
+- [Route loading strategies](https://angular.dev/guide/routing/loading-strategies)
 - [Show routes with outlets](https://angular.dev/guide/routing/show-routes-with-outlets)
 - [Navigate to routes](https://angular.dev/guide/routing/navigate-to-routes)
 - [Read route state](https://angular.dev/guide/routing/read-route-state)
@@ -85,8 +87,8 @@ Angular — Deliver web apps with confidence 🚀
 ## Server Side Rendering (SSR)
 
 - [SSR Overview](https://angular.dev/guide/performance)
-- [SSR with Angular](https://angular.dev/guide/ssr)
-- [Build-time prerendering (SSG)](https://angular.dev/guide/prerendering)
+- [Server and hybrid rendering](https://angular.dev/guide/ssr)
+- [Rendering strategies in Angular](https://angular.dev/guide/routing/rendering-strategies)
 - [Hybrid rendering with server routing](https://angular.dev/guide/hybrid-rendering)
 - [Hydration](https://angular.dev/guide/hydration)
 - [Incremental Hydration](https://angular.dev/guide/incremental-hydration)

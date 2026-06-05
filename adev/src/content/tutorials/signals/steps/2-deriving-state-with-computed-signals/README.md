@@ -1,6 +1,6 @@
 # Deriving state with computed signals
 
-Now that you've learned [how to create and update signals](/tutorials/signals/1-creating-and-updating-your-first-signal), let's learn about computed signals. Computed signals are derived values that automatically update when their dependencies change. They're perfect for creating reactive calculations based on other signals.
+Now that you've learned [how to create and update signals](/tutorials/signals/1-creating-your-first-signal), let's learn about computed signals. Computed signals are derived values that automatically update when their dependencies change. They're perfect for creating reactive calculations based on other signals.
 
 In this activity, you'll learn how to use the `computed()` function to create derived state that updates automatically when the underlying signals change.
 
@@ -37,10 +37,14 @@ Add a computed signal that creates a descriptive message based on the user statu
 statusMessage = computed(() => {
   const status = this.userStatus();
   switch (status) {
-    case 'online': return 'Available for meetings and messages';
-    case 'away': return 'Temporarily away, will respond soon';
-    case 'offline': return 'Not available, check back later';
-    default: return 'Status unknown';
+    case 'online':
+      return 'Available for meetings and messages';
+    case 'away':
+      return 'Temporarily away, will respond soon';
+    case 'offline':
+      return 'Not available, check back later';
+    default:
+      return 'Status unknown';
   }
 });
 ```
@@ -66,31 +70,31 @@ This demonstrates how computed signals can perform calculations and combine mult
 <docs-step title="Display the computed values in the template">
 The template already has placeholders showing "Loading...". Replace them with your computed signals:
 
-1. For notifications, replace `Loading...` with an @if block:
+1. For notifications, replace `Loading...` with an `@if` block:
 
-```angular-html
-@if (notificationsEnabled()) {
-  Enabled
-} @else {
-  Disabled
-}
-```
+   ```angular-html
+   @if (notificationsEnabled()) {
+     Enabled
+   } @else {
+     Disabled
+   }
+   ```
 
-2. For the message, replace `Loading...` with:
+1. For the message, replace `Loading...` with:
 
-```angular-html
-{{ statusMessage() }}
-```
+   ```angular-html
+   {{ statusMessage() }}
+   ```
 
-3. For working hours, replace `Loading...` with an @if block:
+1. For working hours, replace `Loading...` with an `@if` block:
 
-```angular-html
-@if (isWithinWorkingHours()) {
-  Yes
-} @else {
-  No
-}
-```
+   ```angular-html
+   @if (isWithinWorkingHours()) {
+     Yes
+   } @else {
+     No
+   }
+   ```
 
 Notice how computed signals are called just like regular signals - with parentheses!
 </docs-step>

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {SemVerDSL} from 'semver-dsl';
+import semver from 'semver';
 
 import {getDirectiveName} from '../highlighter';
 import {ComponentInstanceType, ComponentTreeNode, DirectiveInstanceType} from '../interfaces';
@@ -19,10 +19,14 @@ const latest = () => {
   HEADER_OFFSET = 20;
 };
 
-SemVerDSL(VERSION).gte('10.0.0-next.4', latest);
+if (semver.gte(VERSION, '10.0.0-next.4')) {
+  latest();
+}
 
 // In g3 everyone has version 0.0.0, using the currently synced commits in the g3 codebase.
-SemVerDSL(VERSION).eq('0.0.0', latest);
+if (semver.eq(VERSION, '0.0.0')) {
+  latest();
+}
 
 const TYPE = 1;
 const ELEMENT = 0;
@@ -90,8 +94,7 @@ export class LTreeStrategy {
         element,
         directives: [],
         component: null,
-        hydration: null, // We know there is no hydration if we use the LTreeStrategy
-        defer: null, // neither there will be any defer
+        controlFlowBlock: null, // neither there will be any control flow block
       };
     }
     for (let i = tNode.directiveStart; i < tNode.directiveEnd; i++) {
@@ -116,8 +119,7 @@ export class LTreeStrategy {
       element,
       directives,
       component,
-      hydration: null, // We know there is no hydration if we use the LTreeStrategy
-      defer: null, // neither there will be any defer
+      controlFlowBlock: null, // neither there will be any control flow block
     };
   }
 
@@ -138,7 +140,7 @@ export class LTreeStrategy {
         const node = this._getNode(lView, tView.data, i);
 
         // TODO(mgechev): verify if this won't make us skip projected content.
-        if (node.component || node.directives.length) {
+        if (node.component || node.directives?.length) {
           nodes.push(node);
           this._extract(lViewItem, node.children);
         }

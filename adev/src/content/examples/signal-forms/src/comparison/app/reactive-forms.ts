@@ -1,5 +1,5 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
-import {FormGroup, FormControl, Validators, ReactiveFormsModule} from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -40,12 +40,9 @@ import {FormGroup, FormControl, Validators, ReactiveFormsModule} from '@angular/
         }
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid">
-        Sign In
-      </button>
+      <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
     </form>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
   loginForm = new FormGroup({

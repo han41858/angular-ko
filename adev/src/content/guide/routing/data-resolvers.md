@@ -6,6 +6,8 @@ Data resolvers allow you to fetch data before navigating to a route, ensuring th
 
 A data resolver is a service that implements the `ResolveFn` function. It runs before a route activates and can fetch data from APIs, databases, or other sources. The resolved data becomes available to the component through the `ActivatedRoute`.
 
+Data resolvers have access to [services provided at the route level](guide/di/defining-dependency-providers#route-providers) as well as route-specific information via the `route` argument.
+
 ## Why use data resolvers?
 
 Data resolvers solve common routing challenges:
@@ -24,18 +26,24 @@ It receives the `ActivatedRouteSnapshot` and `RouterStateSnapshot` as parameters
 Here is a resolver that gets the user information before rendering a route using the [`inject`](api/core/inject) function:
 
 ```ts
-import { inject } from '@angular/core';
-import { UserStore, SettingsStore } from './user-store';
-import type { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
-import type { User, Settings } from './types';
+import {inject} from '@angular/core';
+import {UserStore, SettingsStore} from './user-store';
+import type {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from '@angular/router';
+import type {User, Settings} from './types';
 
-export const userResolver: ResolveFn<User> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const userResolver: ResolveFn<User> = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
   const userStore = inject(UserStore);
   const userId = route.paramMap.get('id')!;
   return userStore.getUser(userId);
 };
 
-export const settingsResolver: ResolveFn<Settings> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const settingsResolver: ResolveFn<Settings> = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
   const settingsStore = inject(SettingsStore);
   const userId = route.paramMap.get('id')!;
   return settingsStore.getUserSettings(userId);
@@ -47,7 +55,7 @@ export const settingsResolver: ResolveFn<Settings> = (route: ActivatedRouteSnaps
 When you want to add one or more data resolvers to a route, you can add it under the `resolve` key in the route configuration. The `Routes` type defines the structure for route configurations:
 
 ```ts
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 
 export const routes: Routes = [
   {
@@ -55,9 +63,9 @@ export const routes: Routes = [
     component: UserDetail,
     resolve: {
       user: userResolver,
-      settings: settingsResolver
-    }
-  }
+      settings: settingsResolver,
+    },
+  },
 ];
 ```
 
@@ -70,17 +78,17 @@ You can learn more about the [`resolve` configuration in the API docs](api/route
 You can access the resolved data in a component by accessing the snapshot data from the `ActivatedRoute` using the `signal` function:
 
 ```angular-ts
-import { Component, inject, computed } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import type { User, Settings } from './types';
+import {Component, inject, computed} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {toSignal} from '@angular/core/rxjs-interop';
+import type {User, Settings} from './types';
 
 @Component({
   template: `
     <h1>{{ user().name }}</h1>
     <p>{{ user().email }}</p>
     <div>Theme: {{ settings().theme }}</div>
-  `
+  `,
 })
 export class UserDetail {
   private route = inject(ActivatedRoute);
@@ -95,29 +103,27 @@ export class UserDetail {
 A different approach to accessing the resolved data is to use `withComponentInputBinding()` when configuring your router with `provideRouter`. This allows resolved data to be passed directly as component inputs:
 
 ```ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { routes } from './app.routes';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {provideRouter, withComponentInputBinding} from '@angular/router';
+import {routes} from './app.routes';
 
 bootstrapApplication(App, {
-  providers: [
-    provideRouter(routes, withComponentInputBinding())
-  ]
+  providers: [provideRouter(routes, withComponentInputBinding())],
 });
 ```
 
 With this configuration, you can define inputs in your component that match the resolver keys using the `input` function and `input.required` for required inputs:
 
 ```angular-ts
-import { Component, input } from '@angular/core';
-import type { User, Settings } from './types';
+import {Component, input} from '@angular/core';
+import type {User, Settings} from './types';
 
 @Component({
   template: `
     <h1>{{ user().name }}</h1>
     <p>{{ user().email }}</p>
     <div>Theme: {{ settings().theme }}</div>
-  `
+  `,
 })
 export class UserDetail {
   user = input.required<User>();
@@ -142,24 +148,27 @@ There are three primary ways to handle errors with data resolvers:
 The [`withNavigationErrorHandler`](api/router/withNavigationErrorHandler) feature provides a centralized way to handle all navigation errors, including those from failed data resolvers. This approach keeps error handling logic in one place and prevents duplicate error handling code across resolvers.
 
 ```ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, withNavigationErrorHandler } from '@angular/router';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { routes } from './app.routes';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {provideRouter, withNavigationErrorHandler} from '@angular/router';
+import {inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {routes} from './app.routes';
 
 bootstrapApplication(App, {
   providers: [
-    provideRouter(routes, withNavigationErrorHandler((error) => {
-      const router = inject(Router);
+    provideRouter(
+      routes,
+      withNavigationErrorHandler((error) => {
+        const router = inject(Router);
 
-      if (error?.message) {
-        console.error('Navigation error occurred:', error.message)
-      }
+        if (error?.message) {
+          console.error('Navigation error occurred:', error.message);
+        }
 
-      router.navigate(['/error']);
-    }))
-  ]
+        router.navigate(['/error']);
+      }),
+    ),
+  ],
 });
 ```
 
@@ -179,10 +188,10 @@ export const userResolver: ResolveFn<User> = (route) => {
 You can also handle resolver errors by subscribing to router events and listening for `NavigationError` events. This approach gives you more granular control over error handling and allows you to implement custom error recovery logic.
 
 ```angular-ts
-import { Component, inject, signal } from '@angular/core';
-import { Router, NavigationError } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import {Component, inject, signal} from '@angular/core';
+import {Router, NavigationError} from '@angular/router';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {map} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -194,7 +203,7 @@ import { map } from 'rxjs';
       </div>
     }
     <router-outlet />
-  `
+  `,
 })
 export class App {
   private router = inject(Router);
@@ -202,20 +211,20 @@ export class App {
 
   private navigationErrors = toSignal(
     this.router.events.pipe(
-      map(event => {
+      map((event) => {
         if (event instanceof NavigationError) {
           this.lastFailedUrl.set(event.url);
-  
+
           if (event.error) {
-            console.error('Navigation error', event.error)
+            console.error('Navigation error', event.error);
           }
-  
+
           return 'Navigation failed. Please try again.';
         }
         return '';
-      })
+      }),
     ),
-    { initialValue: '' }
+    {initialValue: ''},
   );
 
   errorMessage = this.navigationErrors;
@@ -239,11 +248,11 @@ This approach is particularly useful when you need to:
 Here's an updated example of the `userResolver` that logs the error and navigates back to the generic `/users` page using the `Router` service:
 
 ```ts
-import { inject } from '@angular/core';
-import { ResolveFn, RedirectCommand, Router } from '@angular/router';
-import { catchError, of, EMPTY } from 'rxjs';
-import { UserStore } from './user-store';
-import type { User } from './types';
+import {inject} from '@angular/core';
+import {ResolveFn, RedirectCommand, Router} from '@angular/router';
+import {catchError, of, EMPTY} from 'rxjs';
+import {UserStore} from './user-store';
+import type {User} from './types';
 
 export const userResolver: ResolveFn<User | RedirectCommand> = (route) => {
   const userStore = inject(UserStore);
@@ -251,10 +260,10 @@ export const userResolver: ResolveFn<User | RedirectCommand> = (route) => {
   const userId = route.paramMap.get('id')!;
 
   return userStore.getUser(userId).pipe(
-    catchError(error => {
+    catchError((error) => {
       console.error('Failed to load user:', error);
       return of(new RedirectCommand(router.parseUrl('/users')));
-    })
+    }),
   );
 };
 ```
@@ -268,10 +277,8 @@ While data resolvers prevent loading states within components, they introduce a 
 To improve user experience during resolver execution, you can listen to router events and show loading indicators:
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import {Component, inject} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -280,7 +287,7 @@ import { map } from 'rxjs';
       <div class="loading-bar">Loading...</div>
     }
     <router-outlet />
-  `
+  `,
 })
 export class App {
   private router = inject(Router);
@@ -323,7 +330,7 @@ provideRouter([
         resolve: {
           posts: (route: ActivatedRouteSnapshot) => {
             const postService = inject(PostService);
-            const user = route.data['user'] as User; // parent data
+            const user = route.parent?.data['user'] as User; // parent data
             const userId = user.id;
             return postService.getPostByUser(userId);
           },

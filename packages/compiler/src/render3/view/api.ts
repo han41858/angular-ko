@@ -92,6 +92,11 @@ export interface R3DirectiveMetadata {
   usesInheritance: boolean;
 
   /**
+   * Whether or not the component or directive uses the private `ɵngControlCreate` hook.
+   */
+  controlCreate: {passThroughInput: string | null} | null;
+
+  /**
    * Reference name under which to export the directive's type in a template,
    * if any.
    */
@@ -116,6 +121,11 @@ export interface R3DirectiveMetadata {
    * Additional directives applied to the directive host.
    */
   hostDirectives: R3HostDirectiveMetadata[] | null;
+
+  /**
+   * Whether null should be used instead of undefined for optional chaining.
+   */
+  legacyOptionalChaining: boolean;
 }
 
 /**
@@ -192,8 +202,9 @@ export const enum DeclarationListEmitMode {
 /**
  * Information needed to compile a component for the render3 runtime.
  */
-export interface R3ComponentMetadata<DeclarationT extends R3TemplateDependency>
-  extends R3DirectiveMetadata {
+export interface R3ComponentMetadata<
+  DeclarationT extends R3TemplateDependency,
+> extends R3DirectiveMetadata {
   /**
    * Information about the component's template.
    */

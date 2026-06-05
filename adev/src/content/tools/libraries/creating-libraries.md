@@ -23,7 +23,7 @@ You should be very careful when choosing the name of your library if you want to
 See [Publishing your library](tools/libraries/creating-libraries#publishing-your-library).
 
 Avoid using a name that is prefixed with `ng-`, such as `ng-library`.
-The `ng-` prefix is a reserved keyword used from the Angular framework and its libraries.
+The `ng-` prefix is a reserved keyword used by the Angular framework and its libraries.
 The `ngx-` prefix is preferred as a convention used to denote that the library is suitable for use with Angular.
 It is also an excellent indication to consumers of the registry to differentiate between libraries of different JavaScript frameworks.
 
@@ -49,7 +49,7 @@ When you generate a new library, the workspace configuration file, `angular.json
     "prefix": "lib",
     "architect": {
       "build": {
-        "builder": "@angular-devkit/build-angular:ng-packagr",
+        "builder": "@angular/build:ng-packagr",
         …
 
 ```
@@ -152,7 +152,7 @@ In your Angular library, the distributable can include additional assets like th
 For more information [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md) and [embed assets in component styles](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md).
 
 IMPORTANT: When including additional assets like Sass mixins or pre-compiled CSS.
-You need to add these manually to the conditional ["exports"](tools/libraries/angular-package-format#quotexportsquot) in the `package.json` of the primary entrypoint.
+You need to add these manually to the conditional ["exports"](tools/libraries/angular-package-format#exports) in the `package.json` of the primary entrypoint.
 
 `ng-packagr` will merge handwritten `"exports"` with the auto-generated ones, allowing for library authors to configure additional export subpaths, or custom conditions.
 
@@ -196,7 +196,7 @@ To use your own library in an application:
 - In your applications, import from the library by name:
 
 ```ts
-  import { myExport } from 'my-lib';
+import {myExport} from 'my-lib';
 ```
 
 ### Building and rebuilding your library
@@ -228,7 +228,7 @@ ng build my-lib --watch
 
 IMPORTANT: The CLI `build` command uses a different builder and invokes a different build tool for libraries than it does for applications.
 
-- The build system for applications, `@angular-devkit/build-angular`, is based on `webpack`, and is included in all new Angular CLI projects
+- The build system for applications, `@angular/build`, is based on `esbuild`, and is included in all new Angular CLI projects
 - The build system for libraries is based on `ng-packagr`.
   It is only added to your dependencies when you add a library using `ng generate library my-lib`.
 
@@ -241,8 +241,8 @@ TypeScript path mappings should _not_ point to the library source `.ts` files.
 ### Linking libraries for local development
 
 This section explains how to use your package manager's local linking feature
-(such as [`npm link`](https://pnpm.io/cli/link) or [`pnpm link`](https://pnpm.io/cli/link)) to test a standalone Angular library with an external application during
-local development, without relying on the monorepo workspace structure or publishing to the NPM registry.
+(such as [`npm link`](https://docs.npmjs.com/cli/v11/commands/npm-link) or [`pnpm link`](https://pnpm.io/cli/link)) to test a standalone Angular library with an external application during
+local development, without relying on the monorepo workspace structure or publishing to the npm registry.
 
 NOTE: If your library and application are in the same Angular workspace (a monorepo setup), the standard monorepo workflow automatically handles the linking and is generally more efficient. This local linking approach is best when:
 
@@ -274,12 +274,10 @@ To use linked libraries, you need to configure your application's `angular.json`
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "prebundle": {
-              "exclude": [
-                "my-lib"
-              ]
+              "exclude": ["my-lib"]
             }
           }
         }
@@ -291,7 +289,7 @@ To use linked libraries, you need to configure your application's `angular.json`
 
 **Configuration options explained:**
 
-- `preserveSymlinks: true`: Instructs the build system to follow the symlinks created by your package manager's linking command instead of resolving to the symlink's original location. This is essential to to avoid multiple copies of the dependent node packages.
+- `preserveSymlinks: true`: Instructs the build system to follow the symlinks created by your package manager's linking command instead of resolving to the symlink's original location. This is essential to avoid multiple copies of the dependent node packages.
 - `sourceMap.vendor`: Enabling vendor source maps (especially `vendor: true`) for easier debugging of linked library code.
 - `prebundle.exclude`: By default, the Angular CLI can pre-bundle all node dependencies. Excluding your library ensures that the linked source code is properly watched and rebuilt when changes occur.
 
@@ -336,6 +334,6 @@ The Angular linker Babel plugin supports build caching, meaning that libraries o
 
 Example of integrating the plugin into a custom [webpack](https://webpack.js.org) build by registering the linker as a [Babel](https://babeljs.io) plugin using [babel-loader](https://webpack.js.org/loaders/babel-loader/#options).
 
-<docs-code header="webpack.config.mjs" path="adev/src/content/examples/angular-linker-plugin/webpack.config.mjs" visibleRegion="webpack-config"/>
+<docs-code header="webpack.config.mjs" path="adev/src/content/examples/angular-linker-plugin/webpack.config.mjs" region="webpack-config"/>
 
 HELPFUL: The Angular CLI integrates the linker plugin automatically, so if consumers of your library are using the CLI, they can install Ivy-native libraries from npm without any additional configuration.

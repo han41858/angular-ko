@@ -42,7 +42,7 @@ Update the status indicator to display the current user status by:
 1. Binding the signal to the class attribute with `[class]="userStatus()"`
 2. Displaying the status text by replacing `???` with `{{ userStatus() }}`
 
-```html
+```angular-html
 <!-- Update from: -->
 <div class="status-indicator offline">
   <span class="status-dot"></span>
@@ -83,12 +83,8 @@ The buttons are already in the template. Now connect them to your methods by add
 
 ```html
 <!-- Add bindings to the existing buttons: -->
-<button (click)="goOnline()" [disabled]="userStatus() === 'online'">
-  Go Online
-</button>
-<button (click)="goOffline()" [disabled]="userStatus() === 'offline'">
-  Go Offline
-</button>
+<button (click)="goOnline()" [disabled]="userStatus() === 'online'">Go Online</button>
+<button (click)="goOffline()" [disabled]="userStatus() === 'offline'">Go Offline</button>
 ```
 
 </docs-step>
@@ -110,9 +106,7 @@ The `update()` method takes a function that receives the current value and retur
 The toggle button is already in the template. Connect it to your `toggleStatus()` method:
 
 ```html
-<button (click)="toggleStatus()" class="toggle-btn">
-  Toggle Status
-</button>
+<button (click)="toggleStatus()" class="toggle-btn">Toggle Status</button>
 ```
 
 </docs-step>
@@ -122,9 +116,3 @@ The toggle button is already in the template. Connect it to your `toggleStatus()
 Congratulations! You've created your first signal and learned how to update it using both `set()` and `update()` methods. The `signal()` function creates a reactive value that Angular tracks, and when you update it, your UI automatically reflects the changes.
 
 Next, you'll learn [how to derive state from signals using computed](/tutorials/signals/2-deriving-state-with-computed-signals)!
-
-<docs-callout helpful title="About ChangeDetectionStrategy.OnPush">
-
-You might notice `ChangeDetectionStrategy.OnPush` in the component decorator throughout this tutorial. This is a performance optimization for Angular components that use signals. For now, you can safely ignore it—just know it helps your app run faster when using signals! You can learn more in the [change detection strategies API docs](/api/core/ChangeDetectionStrategy).
-
-</docs-callout>

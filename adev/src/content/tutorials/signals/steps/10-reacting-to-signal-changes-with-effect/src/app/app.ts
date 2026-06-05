@@ -1,5 +1,5 @@
 // TODO: Import effect from @angular/core
-import {Component, signal, computed, ChangeDetectionStrategy} from '@angular/core';
+import {Component, computed, signal} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,8 @@ import {Component, signal, computed, ChangeDetectionStrategy} from '@angular/cor
             Dark
           } @else {
             Light
-          } Theme
+          }
+          Theme
         </button>
 
         @if (!isLoggedIn()) {
@@ -27,7 +28,8 @@ import {Component, signal, computed, ChangeDetectionStrategy} from '@angular/cor
       <div class="info">
         <p>Current theme: {{ theme() }}</p>
         <p>User: {{ username() }}</p>
-        <p>Status:
+        <p>
+          Status:
           @if (isLoggedIn()) {
             Logged in
           } @else {
@@ -48,7 +50,6 @@ import {Component, signal, computed, ChangeDetectionStrategy} from '@angular/cor
     </div>
   `,
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   theme = signal<'light' | 'dark'>('light');

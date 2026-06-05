@@ -13,7 +13,6 @@ import {
 } from '@angular/cdk/scrolling';
 import {
   afterRenderEffect,
-  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -59,7 +58,9 @@ function framesBoundSignal<T>(source: Signal<ProfilerFrame[]>, defaultValue: T) 
   templateUrl: './frame-selector.component.html',
   styleUrls: ['./frame-selector.component.scss'],
   styles: `
-    :host { --max-bar-height: ${MAX_HEIGHT}px }
+    :host {
+      --max-bar-height: ${MAX_HEIGHT}px;
+    }
   `,
   imports: [
     MatTooltip,
@@ -71,7 +72,6 @@ function framesBoundSignal<T>(source: Signal<ProfilerFrame[]>, defaultValue: T) 
     ButtonComponent,
     DecimalPipe,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FrameSelectorComponent {
   private readonly tabUpdate = inject(TabUpdate);

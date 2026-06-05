@@ -51,7 +51,7 @@ runInEachFileSystem(() => {
       );
     });
 
-    it('should report a @let declaration that is not used', () => {
+    it('should report a @let declaration that is not used (with other @let declarations)', () => {
       const diags = diagnose(`
         @let used = 1;
         @let unused = 2;
@@ -61,10 +61,10 @@ runInEachFileSystem(() => {
       expect(diags.length).toBe(1);
       expect(diags[0].category).toBe(ts.DiagnosticCategory.Warning);
       expect(diags[0].code).toBe(ngErrorCode(ErrorCode.UNUSED_LET_DECLARATION));
-      expect(getSourceCodeForDiagnostic(diags[0])).toBe('@let unused = 2');
+      expect(getSourceCodeForDiagnostic(diags[0])).toBe('@let unused = 2;');
     });
 
-    it('should report a @let declaration that is not used', () => {
+    it('should report a solo @let declaration that is not used', () => {
       const diags = diagnose(`
         @let foo = 1;
 
@@ -77,7 +77,7 @@ runInEachFileSystem(() => {
       expect(diags.length).toBe(1);
       expect(diags[0].category).toBe(ts.DiagnosticCategory.Warning);
       expect(diags[0].code).toBe(ngErrorCode(ErrorCode.UNUSED_LET_DECLARATION));
-      expect(getSourceCodeForDiagnostic(diags[0])).toBe('@let foo = 1');
+      expect(getSourceCodeForDiagnostic(diags[0])).toBe('@let foo = 1;');
     });
 
     it('should not report a @let declaration that is only used in other @let declarations', () => {

@@ -25,10 +25,8 @@ import {TNode} from './interfaces/node';
 import {isLContainer, isLView} from './interfaces/type_checks';
 import {
   DECLARATION_COMPONENT_VIEW,
-  FLAGS,
   HEADER_OFFSET,
   LView,
-  LViewFlags,
   T_HOST,
   TVIEW,
   TView,
@@ -174,26 +172,6 @@ export function assertParentView(lView: LView | null, errMessage?: string) {
     lView,
     errMessage || "Component views should always have a parent view (component's host view)",
   );
-}
-
-export function assertNoDuplicateDirectives(directives: DirectiveDef<unknown>[]): void {
-  // The array needs at least two elements in order to have duplicates.
-  if (directives.length < 2) {
-    return;
-  }
-
-  const seenDirectives = new Set<DirectiveDef<unknown>>();
-
-  for (const current of directives) {
-    if (seenDirectives.has(current)) {
-      throw new RuntimeError(
-        RuntimeErrorCode.DUPLICATE_DIRECTIVE,
-        `Directive ${current.type.name} matches multiple times on the same element. ` +
-          `Directives can only match an element once.`,
-      );
-    }
-    seenDirectives.add(current);
-  }
 }
 
 /**

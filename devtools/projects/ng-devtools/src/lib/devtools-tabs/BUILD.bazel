@@ -1,4 +1,4 @@
-load("//devtools/tools:defaults.bzl", "ng_project", "ng_web_test_suite", "sass_binary", "ts_test_library")
+load("//devtools/tools:defaults.bzl", "ng_project", "sass_binary", "ts_test_library", "zoneless_web_test_suite")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -26,14 +26,15 @@ ng_project(
         "//:node_modules/@types/chrome",
         "//:node_modules/rxjs",
         "//devtools/projects/ng-devtools/src/lib/application-environment",
+        "//devtools/projects/ng-devtools/src/lib/application-providers:app_data",
         "//devtools/projects/ng-devtools/src/lib/application-providers:supported_apis",
         "//devtools/projects/ng-devtools/src/lib/application-services:frame_manager",
         "//devtools/projects/ng-devtools/src/lib/application-services:settings",
-        "//devtools/projects/ng-devtools/src/lib/application-services:theme",
         "//devtools/projects/ng-devtools/src/lib/devtools-tabs/directive-explorer",
         "//devtools/projects/ng-devtools/src/lib/devtools-tabs/injector-tree:injector_tree",
         "//devtools/projects/ng-devtools/src/lib/devtools-tabs/profiler",
         "//devtools/projects/ng-devtools/src/lib/devtools-tabs/router-tree",
+        "//devtools/projects/ng-devtools/src/lib/devtools-tabs/settings",
         "//devtools/projects/ng-devtools/src/lib/devtools-tabs/tab-update",
         "//devtools/projects/ng-devtools/src/lib/devtools-tabs/transfer-state",
         "//devtools/projects/ng-devtools/src/lib/shared/button",
@@ -52,6 +53,7 @@ ts_test_library(
         "//:node_modules/rxjs",
         "//:node_modules/tslib",
         "//devtools/projects/ng-devtools/src/lib/application-environment",
+        "//devtools/projects/ng-devtools/src/lib/application-providers:app_data",
         "//devtools/projects/ng-devtools/src/lib/application-services:frame_manager",
         "//devtools/projects/ng-devtools/src/lib/application-services:theme",
         "//devtools/projects/ng-devtools/src/lib/application-services:theme_types_lib",
@@ -62,7 +64,7 @@ ts_test_library(
     ],
 )
 
-ng_web_test_suite(
+zoneless_web_test_suite(
     name = "test",
     deps = [
         ":devtools_tabs_test",

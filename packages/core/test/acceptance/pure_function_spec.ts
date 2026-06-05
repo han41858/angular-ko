@@ -6,7 +6,9 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 import {CommonModule} from '@angular/common';
+import {By} from '@angular/platform-browser';
 import {
+  ChangeDetectionStrategy,
   Component,
   Directive,
   Input,
@@ -16,7 +18,6 @@ import {
   ViewChildren,
 } from '../../src/core';
 import {TestBed} from '../../testing';
-import {By} from '@angular/platform-browser';
 
 describe('components using pure function instructions internally', () => {
   beforeEach(() => {
@@ -29,6 +30,8 @@ describe('components using pure function instructions internally', () => {
       selector: 'my-comp',
       template: ``,
       standalone: false,
+
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class MyComp {
       @Input() names: string[] = [];
@@ -36,10 +39,10 @@ describe('components using pure function instructions internally', () => {
 
     it('should support an array literal with a binding', () => {
       @Component({
-        template: `
-                <my-comp [names]="['Nancy', customName, 'Bess']"></my-comp>
-              `,
+        template: ` <my-comp [names]="['Nancy', customName, 'Bess']"></my-comp> `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         showing = true;
@@ -77,10 +80,10 @@ describe('components using pure function instructions internally', () => {
 
     it('should support array literals in dynamic views', () => {
       @Component({
-        template: `
-                <my-comp *ngIf="showing" [names]="['Nancy', customName, 'Bess']"></my-comp>
-              `,
+        template: ` <my-comp *ngIf="showing" [names]="['Nancy', customName, 'Bess']"></my-comp> `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         showing = true;
@@ -102,6 +105,8 @@ describe('components using pure function instructions internally', () => {
         selector: 'many-prop-comp',
         template: ``,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class ManyPropComp {
         @Input() names1: string[] = [];
@@ -111,10 +116,12 @@ describe('components using pure function instructions internally', () => {
 
       @Component({
         template: `
-                <many-prop-comp [names1]="['Nancy', customName]" [names2]="[customName2]">
-                </many-prop-comp>
-              `,
+          <many-prop-comp [names1]="['Nancy', customName]" [names2]="[customName2]">
+          </many-prop-comp>
+        `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         showing = true;
@@ -142,10 +149,10 @@ describe('components using pure function instructions internally', () => {
     it('should support an array literals inside fn calls', () => {
       @Component({
         selector: 'parent-comp',
-        template: `
-                <my-comp [names]="someFn(['Nancy', customName])"></my-comp>
-              `,
+        template: ` <my-comp [names]="someFn(['Nancy', customName])"></my-comp> `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class ParentComp {
         customName = 'Bess';
@@ -158,10 +165,12 @@ describe('components using pure function instructions internally', () => {
 
       @Component({
         template: `
-                <parent-comp></parent-comp>
-                <parent-comp></parent-comp>
-              `,
+          <parent-comp></parent-comp>
+          <parent-comp></parent-comp>
+        `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {}
 
@@ -190,9 +199,11 @@ describe('components using pure function instructions internally', () => {
     it('should support an array literal with more than 1 binding', () => {
       @Component({
         template: `
-                <my-comp *ngIf="showing" [names]="['Nancy', customName, 'Bess', customName2]"></my-comp>
-              `,
+          <my-comp *ngIf="showing" [names]="['Nancy', customName, 'Bess', customName2]"></my-comp>
+        `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         showing = true;
@@ -235,16 +246,18 @@ describe('components using pure function instructions internally', () => {
     it('should work up to 8 bindings', () => {
       @Component({
         template: `
-                <my-comp [names]="['a', 'b', 'c', 'd', 'e', 'f', 'g', v8]"></my-comp>
-                <my-comp [names]="['a', 'b', 'c', 'd', 'e', 'f', v7, v8]"></my-comp>
-                <my-comp [names]="['a', 'b', 'c', 'd', 'e', v6, v7, v8]"></my-comp>
-                <my-comp [names]="['a', 'b', 'c', 'd', v5, v6, v7, v8]"></my-comp>
-                <my-comp [names]="['a', 'b', 'c', v4, v5, v6, v7, v8]"></my-comp>
-                <my-comp [names]="['a', 'b', v3, v4, v5, v6, v7, v8]"></my-comp>
-                <my-comp [names]="['a', v2, v3, v4, v5, v6, v7, v8]"></my-comp>
-                <my-comp [names]="[v1, v2, v3, v4, v5, v6, v7, v8]"></my-comp>
-              `,
+          <my-comp [names]="['a', 'b', 'c', 'd', 'e', 'f', 'g', v8]"></my-comp>
+          <my-comp [names]="['a', 'b', 'c', 'd', 'e', 'f', v7, v8]"></my-comp>
+          <my-comp [names]="['a', 'b', 'c', 'd', 'e', v6, v7, v8]"></my-comp>
+          <my-comp [names]="['a', 'b', 'c', 'd', v5, v6, v7, v8]"></my-comp>
+          <my-comp [names]="['a', 'b', 'c', v4, v5, v6, v7, v8]"></my-comp>
+          <my-comp [names]="['a', 'b', v3, v4, v5, v6, v7, v8]"></my-comp>
+          <my-comp [names]="['a', v2, v3, v4, v5, v6, v7, v8]"></my-comp>
+          <my-comp [names]="[v1, v2, v3, v4, v5, v6, v7, v8]"></my-comp>
+        `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         v1 = 'a';
@@ -309,10 +322,12 @@ describe('components using pure function instructions internally', () => {
     it('should work with pureFunctionV for 9+ bindings', () => {
       @Component({
         template: `
-                <my-comp [names]="['start', v0, v1, v2, v3, 'modified_' + v4, v5, v6, v7, v8, 'end']">
-                </my-comp>
-              `,
+          <my-comp [names]="['start', v0, v1, v2, v3, 'modified_' + v4, v5, v6, v7, v8, 'end']">
+          </my-comp>
+        `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         v0 = 'a';
@@ -388,6 +403,8 @@ describe('components using pure function instructions internally', () => {
       selector: 'object-comp',
       template: ``,
       standalone: false,
+
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class ObjectComp {
       @Input() config: any = [];
@@ -397,6 +414,8 @@ describe('components using pure function instructions internally', () => {
       @Component({
         template: '<object-comp [config]="{duration: 500, animation: name}"></object-comp>',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         name = 'slide';
@@ -428,11 +447,20 @@ describe('components using pure function instructions internally', () => {
     it('should support expressions nested deeply in object/array literals', () => {
       @Component({
         template: `
-        <object-comp [config]="{animation: name, actions: [{ opacity: 0, duration: 0}, {opacity: 1,
-        duration: duration }]}">
-        </object-comp>
-      `,
+          <object-comp
+            [config]="{
+              animation: name,
+              actions: [
+                {opacity: 0, duration: 0},
+                {opacity: 1, duration: duration},
+              ],
+            }"
+          >
+          </object-comp>
+        `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         name = 'slide';
@@ -507,11 +535,10 @@ describe('components using pure function instructions internally', () => {
 
     it('should support multiple view instances with multiple bindings', () => {
       @Component({
-        template: `
-        <object-comp *ngFor="let config of configs" [config]="config">
-        </object-comp>
-      `,
+        template: ` <object-comp *ngFor="let config of configs" [config]="config"> </object-comp> `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         configs = [
@@ -558,6 +585,8 @@ describe('components using pure function instructions internally', () => {
           <div [dir]="{}"></div>
         `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChildren(Dir) directives!: QueryList<Dir>;
@@ -578,6 +607,8 @@ describe('components using pure function instructions internally', () => {
           <div [dir]="[]"></div>
         `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChildren(Dir) directives!: QueryList<Dir>;
@@ -595,6 +626,8 @@ describe('components using pure function instructions internally', () => {
       @Component({
         template: `<div [dir]="{}"></div>`,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChild(Dir) directive!: Dir;
@@ -616,6 +649,8 @@ describe('components using pure function instructions internally', () => {
       @Component({
         template: `<div [dir]="[]"></div>`,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChild(Dir) directive!: Dir;
@@ -640,6 +675,8 @@ describe('components using pure function instructions internally', () => {
           <div [dir]="{foo: {}}"></div>
         `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChildren(Dir) directives!: QueryList<Dir>;
@@ -660,6 +697,8 @@ describe('components using pure function instructions internally', () => {
           <div [dir]="{foo: []}"></div>
         `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChildren(Dir) directives!: QueryList<Dir>;
@@ -680,6 +719,8 @@ describe('components using pure function instructions internally', () => {
           <div [dir]="{foo: getFoo()}"></div>
         `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChildren(Dir) directives!: QueryList<Dir>;

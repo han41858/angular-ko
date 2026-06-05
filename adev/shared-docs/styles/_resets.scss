@@ -46,6 +46,7 @@
     margin: 0;
     overflow-y: auto;
     overflow-x: hidden;
+    scrollbar-gutter: stable;
   }
 
   html,
@@ -350,7 +351,7 @@
 .ͼ1 .cm-button {
   background-image: linear-gradient(var(--octonary-contrast), var(--page-background));
 
-  &:focus {
+  &:focus-visible {
     background-image: linear-gradient(var(--senary-contrast), var(--page-background));
   }
 }

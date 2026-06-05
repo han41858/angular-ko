@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 import {TableCell} from '../util';
@@ -21,22 +21,24 @@ let trustedGreyColor: SafeStyle;
     <table>
       <tbody>
         @for (row of data; track $index) {
-        <tr>
-          @for (cell of row; track $index) {
-          <td [style.backgroundColor]="getColor(cell.row)">
-            @if (condition) {
-            <!--
+          <tr>
+            @for (cell of row; track $index) {
+              <td [style.backgroundColor]="getColor(cell.row)">
+                @if (condition) {
+                  <!--
                     Use static text in cells to avoid the need
                     to run a new change detection cycle.
                   -->
-            Cell }
-          </td>
-          }
-        </tr>
+                  Cell
+                }
+              </td>
+            }
+          </tr>
         }
       </tbody>
     </table>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class AppComponent {
   @Input() data: TableCell[][] = [];

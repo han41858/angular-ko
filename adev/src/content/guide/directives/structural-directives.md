@@ -31,7 +31,7 @@ Structural directives can be applied directly on an element by prefixing the dir
 You can use this with `SelectDirective` as follows:
 
 ```angular-html
-<p *select="let data from source">The data is: {{data}}</p>
+<p *select="let data; from: source">The data is: {{ data }}</p>
 ```
 
 This example shows the flexibility of structural directive shorthand syntax, which is sometimes called _microsyntax_.
@@ -40,11 +40,11 @@ When used in this way, only the structural directive and its bindings are applie
 
 ```angular-html
 <!-- Shorthand syntax: -->
-<p class="data-view" *select="let data from source">The data is: {{data}}</p>
+<p class="data-view" *select="let data; from: source">The data is: {{ data }}</p>
 
 <!-- Long-form syntax: -->
 <ng-template select let-data [selectFrom]="source">
-  <p class="data-view">The data is: {{data}}</p>
+  <p class="data-view">The data is: {{ data }}</p>
 </ng-template>
 ```
 
@@ -56,7 +56,7 @@ The second piece of syntax is a key-expression pair, `from source`. `from` is a 
 
 ## One structural directive per element
 
-You can only apply one structural directive per element when using the shorthand syntax. This is because there is only one `<ng-template>` element onto which that directive gets unwrapped. Multiple directives would require multiple nested `<ng-template>`, and it's unclear which directive should be first. `<ng-container>` can be used when to create wrapper layers when multiple structural directives need to be applied around the same physical DOM element or component, which allows the user to define the nested structure.
+You can only apply one structural directive per element when using the shorthand syntax. This is because there is only one `<ng-template>` element onto which that directive gets unwrapped. Multiple directives would require multiple nested `<ng-template>`, and it's unclear which directive should be first. `<ng-container>` can be used to create wrapper layers when multiple structural directives need to be applied around the same physical DOM element or component, which allows the user to define the nested structure.
 
 ## Creating a structural directive
 
@@ -73,10 +73,14 @@ ng generate directive select
 Angular creates the directive class and specifies the CSS selector, `[select]`, that identifies the directive in a template.
 </docs-step>
 <docs-step title="Make the directive structural">
-Import `TemplateRef`, and `ViewContainerRef`. Inject `TemplateRef` and `ViewContainerRef` in the directive as private properties.
+Import `TemplateRef`, `ViewContainerRef`, and `input`. Inject `TemplateRef` and `ViewContainerRef` in the directive as private properties.
 
 ```ts
-import {Directive, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Directive, TemplateRef, ViewContainerRef, inject, input} from '@angular/core';
+
+export interface DataSource<T> {
+  load(): Promise<T>;
+}
 
 @Directive({
   selector: '[select]',
@@ -85,7 +89,6 @@ export class SelectDirective {
   private templateRef = inject(TemplateRef);
   private viewContainerRef = inject(ViewContainerRef);
 }
-
 ```
 
 </docs-step>
@@ -95,8 +98,7 @@ Add a `selectFrom` `input()` property.
 ```ts
 export class SelectDirective {
   // ...
-
-  selectFrom = input.required<DataSource>();
+  selectFrom = input.required<DataSource<unknown>>();
 }
 ```
 
@@ -107,9 +109,8 @@ With `SelectDirective` now scaffolded as a structural directive with its input, 
 ```ts
 export class SelectDirective {
   // ...
-
   async ngOnInit() {
-    const data = await this.selectFrom.load();
+    const data = await this.selectFrom().load();
     this.viewContainerRef.createEmbeddedView(this.templateRef, {
       // Create the embedded view with a context object that contains
       // the data via the key `$implicit`.
@@ -128,11 +129,9 @@ That's it - `SelectDirective` is up and running. A follow-up step might be to [a
 
 When you write your own structural directives, use the following syntax:
 
-<docs-code hideCopy language="typescript">
-
-_:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_"
-
-</docs-code>
+```ts {hideCopy}
+_: prefix = "( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_";
+```
 
 The following patterns describe each portion of the structural directive grammar:
 

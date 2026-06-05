@@ -99,6 +99,14 @@ describe('HttpRequest', () => {
       const req = new HttpRequest('GET', '/test', {referrerPolicy: 'no-referrer'});
       expect(req.referrerPolicy).toBe('no-referrer');
     });
+    it('should allow setting upload and download progress options', () => {
+      const req = new HttpRequest('GET', '/test', {
+        reportUploadProgress: true,
+        reportDownloadProgress: true,
+      });
+      expect(req.reportUploadProgress).toBe(true);
+      expect(req.reportDownloadProgress).toBe(true);
+    });
   });
   describe('clone() copies the request', () => {
     const headers = new HttpHeaders({
@@ -109,6 +117,8 @@ describe('HttpRequest', () => {
       headers,
       context,
       reportProgress: true,
+      reportUploadProgress: true,
+      reportDownloadProgress: true,
       responseType: 'text',
       withCredentials: true,
       transferCache: true,
@@ -131,6 +141,9 @@ describe('HttpRequest', () => {
       expect(clone.headers.get('Test')).toBe('Test header');
 
       expect(clone.context).toBe(context);
+      expect(clone.reportProgress).toBe(true);
+      expect(clone.reportUploadProgress).toBe(true);
+      expect(clone.reportDownloadProgress).toBe(true);
       expect(clone.transferCache).toBe(true);
       expect(clone.keepalive).toBe(true);
       expect(clone.cache).toBe('only-if-cached');
@@ -153,6 +166,12 @@ describe('HttpRequest', () => {
     it('and updates the context', () => {
       const newContext = new HttpContext();
       expect(req.clone({context: newContext}).context).toBe(newContext);
+    });
+    it('and updates the split progress flags', () => {
+      const clone = req.clone({reportUploadProgress: false, reportDownloadProgress: false});
+      expect(clone.reportUploadProgress).toBe(false);
+      expect(clone.reportDownloadProgress).toBe(false);
+      expect(clone.reportProgress).toBe(true);
     });
     it('and updates the transferCache', () => {
       expect(req.clone({transferCache: false}).transferCache).toBe(false);
@@ -266,6 +285,23 @@ describe('HttpRequest', () => {
     it('sets parameters via setParams', () => {
       const req = baseReq.clone({setParams: {'test': 'false'}});
       expect(req.urlWithParams).toEqual('/test?test=false');
+    });
+    it('appends parameters before a fragment', () => {
+      const fragmentParams = new HttpParams({fromString: 'auth_token=secret'});
+      const req = baseReq.clone({params: fragmentParams, url: '/api/data/123#bypass'});
+      expect(req.urlWithParams).toEqual('/api/data/123?auth_token=secret#bypass');
+    });
+    it('appends parameters before a URL fragment', () => {
+      const req = baseReq.clone({params, url: '/test#fragment'});
+      expect(req.urlWithParams).toEqual('/test?test=true#fragment');
+    });
+    it('appends parameters before a URL fragment when URL has a query string', () => {
+      const req = baseReq.clone({params, url: '/test?other=false#fragment'});
+      expect(req.urlWithParams).toEqual('/test?other=false&test=true#fragment');
+    });
+    it('appends parameters before a URL fragment when URL has multiple hash characters', () => {
+      const req = baseReq.clone({params, url: '/test#frag1#frag2'});
+      expect(req.urlWithParams).toEqual('/test?test=true#frag1#frag2');
     });
   });
 });

@@ -6,42 +6,45 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {TestBed, tick} from '@angular/core/testing';
-import {DefaultUrlSerializer, Event, NavigationEnd, NavigationStart} from '../index';
-import {Subject} from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {
+  Event,
+  NavigationEnd,
+  NavigationStart,
+  provideRouter,
+  RedirectCommand,
+  Router,
+  withInMemoryScrolling,
+} from '../index';
+import {firstValueFrom, Subject} from 'rxjs';
 import {filter, switchMap, take} from 'rxjs/operators';
 
-import {Scroll} from '../src/events';
-import {RouterScroller} from '../src/router_scroller';
-import {ApplicationRef, ɵNoopNgZone as NoopNgZone} from '@angular/core';
-import {timeout} from './helpers';
+import {PrivateRouterEvents, Scroll} from '../src/events';
+import {ROUTER_SCROLLER, RouterScroller} from '../src/router_scroller';
+import {
+  ApplicationRef,
+  ɵWritable as Writable,
+  ɵIS_HYDRATION_DOM_REUSE_ENABLED as IS_HYDRATION_DOM_REUSE_ENABLED,
+} from '@angular/core';
+import {ViewportScroller} from '@angular/common';
+import {NavigationTransitions} from '../src/navigation_transition';
+import {timeout} from '@angular/private/testing';
 
-// TODO: add tests that exercise the `withInMemoryScrolling` feature of the provideRouter function
 describe('RouterScroller', () => {
   it('defaults to disabled', () => {
-    const events = new Subject<Event>();
-    const viewportScroller = jasmine.createSpyObj('viewportScroller', [
-      'getScrollPosition',
-      'scrollToPosition',
-      'scrollToAnchor',
-      'setHistoryScrollRestoration',
-    ]);
+    const viewportScroller = TestBed.inject(ViewportScroller);
+    spyOn(viewportScroller, 'getScrollPosition');
+    spyOn(viewportScroller, 'scrollToPosition');
+    spyOn(viewportScroller, 'scrollToAnchor');
+    spyOn(viewportScroller, 'setHistoryScrollRestoration');
     setScroll(viewportScroller, 0, 0);
-    const scroller = TestBed.runInInjectionContext(
-      () =>
-        new RouterScroller(
-          new DefaultUrlSerializer(),
-          {events} as any,
-          viewportScroller,
-          new NoopNgZone(),
-        ),
-    );
+    const scroller = TestBed.runInInjectionContext(() => new RouterScroller({}));
 
-    expect((scroller as any).options.scrollPositionRestoration).toBe('disabled');
-    expect((scroller as any).options.anchorScrolling).toBe('disabled');
+    expect(scroller['options'].scrollPositionRestoration).toBe('disabled');
+    expect(scroller['options'].anchorScrolling).toBe('disabled');
   });
 
-  function nextScrollEvent(events: Subject<Event>): Promise<Scroll> {
+  function nextScrollEvent(events: Subject<Event | PrivateRouterEvents>): Promise<Scroll> {
     return events
       .pipe(
         filter((e): e is Scroll => e instanceof Scroll),
@@ -117,7 +120,7 @@ describe('RouterScroller', () => {
       events.next(new NavigationEnd(2, '/a#anchor2', '/a#anchor2'));
       await nextScrollEvent(events);
       expect(viewportScroller.scrollToAnchor).toHaveBeenCalledWith('anchor2');
-      viewportScroller.scrollToAnchor.calls.reset();
+      (viewportScroller.scrollToAnchor as jasmine.Spy).calls.reset();
 
       // we never scroll to anchor when navigating back.
       events.next(new NavigationStart(3, '/a#anchor', 'popstate'));
@@ -141,7 +144,7 @@ describe('RouterScroller', () => {
       events.next(new NavigationEnd(2, '/a#anchor2', '/a#anchor2'));
       await nextScrollEvent(events);
       expect(viewportScroller.scrollToAnchor).toHaveBeenCalledWith('anchor2');
-      viewportScroller.scrollToAnchor.calls.reset();
+      (viewportScroller.scrollToAnchor as jasmine.Spy).calls.reset();
 
       // we never scroll to anchor when navigating back
       events.next(new NavigationStart(3, '/a#anchor', 'popstate', {navigationId: 1}));
@@ -149,6 +152,79 @@ describe('RouterScroller', () => {
       await nextScrollEvent(events);
       expect(viewportScroller.scrollToAnchor).not.toHaveBeenCalled();
       expect(viewportScroller.scrollToPosition).toHaveBeenCalledWith([0, 0], {behavior: 'instant'});
+    });
+  });
+
+  describe('SSR hydration', () => {
+    it('should not scroll to top on initial navigation when hydrating', async () => {
+      const {events, viewportScroller} = createRouterScroller(
+        {scrollPositionRestoration: 'enabled', anchorScrolling: 'disabled'},
+        [{provide: IS_HYDRATION_DOM_REUSE_ENABLED, useValue: true}],
+      );
+
+      // Simulate the initial navigation that happens during SSR hydration.
+      // The user may have already scrolled down on the server-rendered page,
+      // so the scroller must not reset the position to [0, 0].
+      events.next(new NavigationStart(1, '/a'));
+      events.next(new NavigationEnd(1, '/a', '/a'));
+      await TestBed.inject(ApplicationRef).whenStable();
+
+      expect(viewportScroller.scrollToPosition).not.toHaveBeenCalled();
+    });
+
+    it('should not scroll to top on initial navigation when hydrating (top mode)', async () => {
+      const {events, viewportScroller} = createRouterScroller(
+        {scrollPositionRestoration: 'top', anchorScrolling: 'disabled'},
+        [{provide: IS_HYDRATION_DOM_REUSE_ENABLED, useValue: true}],
+      );
+
+      events.next(new NavigationStart(1, '/a'));
+      events.next(new NavigationEnd(1, '/a', '/a'));
+      await TestBed.inject(ApplicationRef).whenStable();
+
+      expect(viewportScroller.scrollToPosition).not.toHaveBeenCalled();
+    });
+
+    it('should scroll to top on subsequent navigations after hydration', async () => {
+      const {events, viewportScroller} = createRouterScroller(
+        {scrollPositionRestoration: 'top', anchorScrolling: 'disabled'},
+        [{provide: IS_HYDRATION_DOM_REUSE_ENABLED, useValue: true}],
+      );
+
+      // Skip the initial navigation — no scroll event is emitted during hydration.
+      events.next(new NavigationStart(1, '/a'));
+      events.next(new NavigationEnd(1, '/a', '/a'));
+      await TestBed.inject(ApplicationRef).whenStable();
+
+      // A subsequent navigation should still scroll to top as normal.
+      events.next(new NavigationStart(2, '/b'));
+      events.next(new NavigationEnd(2, '/b', '/b'));
+      await nextScrollEvent(events);
+
+      expect(viewportScroller.scrollToPosition).toHaveBeenCalledWith([0, 0]);
+    });
+
+    it('should not scroll on immediate follow-up navigations triggered during hydration', async () => {
+      const {events, viewportScroller} = createRouterScroller(
+        {scrollPositionRestoration: 'top', anchorScrolling: 'disabled'},
+        [{provide: IS_HYDRATION_DOM_REUSE_ENABLED, useValue: true}],
+      );
+
+      // Fire both navigations during hydration — no scroll events are emitted for either.
+      events.next(new NavigationStart(1, '/a'));
+      events.next(new NavigationEnd(1, '/a', '/a'));
+      events.next(new NavigationStart(2, '/a'));
+      events.next(new NavigationEnd(2, '/a?filter=active', '/a?filter=active'));
+      await TestBed.inject(ApplicationRef).whenStable();
+
+      expect(viewportScroller.scrollToPosition).not.toHaveBeenCalled();
+
+      // A navigation after hydration settles should scroll normally.
+      events.next(new NavigationStart(3, '/b'));
+      events.next(new NavigationEnd(3, '/b', '/b'));
+      await nextScrollEvent(events);
+
+      expect(viewportScroller.scrollToPosition).toHaveBeenCalledWith([0, 0]);
     });
   });
 
@@ -173,7 +249,7 @@ describe('RouterScroller', () => {
           }),
         )
         .subscribe((e: Scroll) => {
-          viewportScroller.scrollToPosition(e.position);
+          viewportScroller.scrollToPosition(e.position!);
         });
 
       events.next(new NavigationStart(1, '/a'));
@@ -205,40 +281,96 @@ describe('RouterScroller', () => {
     });
   });
 
-  function createRouterScroller({
+  describe('scroll in NavigationBehaviorOptions', () => {
+    let router: Router;
+    let scrollToSpy: jasmine.Spy;
+    let viewportScroller: ViewportScroller;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        providers: [
+          provideRouter(
+            [{path: '**', children: []}],
+            withInMemoryScrolling({scrollPositionRestoration: 'enabled'}),
+          ),
+        ],
+      });
+      router = TestBed.inject(Router);
+      viewportScroller = TestBed.inject(ViewportScroller);
+      scrollToSpy = spyOn(viewportScroller, 'scrollToPosition');
+      TestBed.inject(ROUTER_SCROLLER, null, {optional: true})?.init();
+    });
+
+    it('skips scrolling', async () => {
+      TestBed.inject(Router).navigateByUrl('/initial', {scroll: 'manual'});
+      await firstValueFrom(router.events.pipe(filter((e) => e instanceof Scroll)));
+      expect(scrollToSpy).not.toHaveBeenCalled();
+    });
+
+    it('retains scroll skipping with redirect', async () => {
+      router.resetConfig([
+        {
+          path: 'initial',
+          children: [],
+          canActivate: [() => new RedirectCommand(router.parseUrl('/final'))],
+        },
+        {path: '**', children: []},
+      ]);
+      TestBed.inject(Router).navigateByUrl('/initial', {scroll: 'manual'});
+      await firstValueFrom(router.events.pipe(filter((e) => e instanceof Scroll)));
+      expect(scrollToSpy).not.toHaveBeenCalled();
+    });
+
+    it('can override scroll skipping with redirect', async () => {
+      router.resetConfig([
+        {
+          path: 'initial',
+          children: [],
+          canActivate: [
+            () => new RedirectCommand(router.parseUrl('/final'), {scroll: 'after-transition'}),
+          ],
+        },
+        {path: '**', children: []},
+      ]);
+      TestBed.inject(Router).navigateByUrl('/initial', {scroll: 'after-transition'});
+      await firstValueFrom(router.events.pipe(filter((e) => e instanceof Scroll)));
+      expect(scrollToSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+function createRouterScroller(
+  {
     scrollPositionRestoration,
     anchorScrolling,
   }: {
     scrollPositionRestoration: 'disabled' | 'enabled' | 'top';
     anchorScrolling: 'disabled' | 'enabled';
-  }) {
-    const events = new Subject<Event>();
-    const transitions: any = {events};
-
-    const viewportScroller = jasmine.createSpyObj('viewportScroller', [
-      'getScrollPosition',
-      'scrollToPosition',
-      'scrollToAnchor',
-      'setHistoryScrollRestoration',
-    ]);
-    setScroll(viewportScroller, 0, 0);
-
-    const scroller = TestBed.runInInjectionContext(
-      () =>
-        new RouterScroller(
-          new DefaultUrlSerializer(),
-          transitions,
-          viewportScroller,
-          new NoopNgZone(),
-          {scrollPositionRestoration, anchorScrolling},
-        ),
-    );
-    scroller.init();
-
-    return {events, viewportScroller};
+  },
+  extraProviders: any[] = [],
+) {
+  if (extraProviders.length > 0) {
+    TestBed.configureTestingModule({providers: extraProviders});
   }
 
-  function setScroll(viewportScroller: any, x: number, y: number) {
-    viewportScroller.getScrollPosition.and.returnValue([x, y]);
-  }
-});
+  const events = new Subject<Event | PrivateRouterEvents>();
+  (TestBed.inject(NavigationTransitions) as Writable<NavigationTransitions>).events = events;
+
+  const viewportScroller = TestBed.inject(ViewportScroller);
+  spyOn(viewportScroller, 'getScrollPosition');
+  spyOn(viewportScroller, 'scrollToPosition');
+  spyOn(viewportScroller, 'scrollToAnchor');
+  spyOn(viewportScroller, 'setHistoryScrollRestoration');
+  setScroll(viewportScroller, 0, 0);
+
+  const scroller = TestBed.runInInjectionContext(
+    () => new RouterScroller({scrollPositionRestoration, anchorScrolling}),
+  );
+  scroller.init();
+
+  return {events, viewportScroller};
+}
+
+function setScroll(viewportScroller: any, x: number, y: number) {
+  viewportScroller.getScrollPosition.and.returnValue([x, y]);
+}

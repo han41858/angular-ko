@@ -96,24 +96,20 @@ export const REDIRECT_ROUTES: Route[] = [
     redirectTo: '/guide/components/inputs',
   },
   {
-    path: 'guide/ngmodules',
-    redirectTo: '/guide/ngmodules/overview',
-  },
-  {
     path: 'guide/ngmodules/providers',
-    redirectTo: '/guide/ngmodules/overview',
+    redirectTo: '/guide/ngmodules',
   },
   {
     path: 'guide/ngmodules/singleton-services',
-    redirectTo: '/guide/ngmodules/overview',
+    redirectTo: '/guide/ngmodules',
   },
   {
     path: 'guide/ngmodules/lazy-loading',
-    redirectTo: '/guide/ngmodules/overview',
+    redirectTo: '/guide/ngmodules',
   },
   {
     path: 'guide/ngmodules/faq',
-    redirectTo: '/guide/ngmodules/overview',
+    redirectTo: '/guide/ngmodules',
   },
   {
     path: 'guide/components/anatomy-of-components',
@@ -132,13 +128,8 @@ export const REDIRECT_ROUTES: Route[] = [
     redirectTo: '/tools/cli/build-system-migration#hot-module-replacement',
   },
   {
-    path: 'guide',
-    children: [
-      {
-        path: 'pipes',
-        redirectTo: '/guide/templates/pipes',
-      },
-    ],
+    path: 'guide/pipes',
+    redirectTo: '/guide/templates/pipes',
   },
   {
     path: 'guide/experimental/zoneless',

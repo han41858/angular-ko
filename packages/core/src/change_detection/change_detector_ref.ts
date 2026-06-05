@@ -13,6 +13,7 @@ import {DECLARATION_COMPONENT_VIEW, LView} from '../render3/interfaces/view';
 import {getCurrentTNode, getLView} from '../render3/state';
 import {getComponentLViewByIndex} from '../render3/util/view_utils';
 import {ViewRef} from '../render3/view_ref';
+import {registerSpecialProvider} from '../render3/debug/special_providers';
 
 /**
  * Base class that provides change detection functionality.
@@ -98,18 +99,6 @@ export abstract class ChangeDetectorRef {
   abstract detectChanges(): void;
 
   /**
-   * Checks the change detector and its children, and throws if any changes are detected.
-   *
-   * Use in development mode to verify that running change detection doesn't introduce
-   * other changes. Calling it in production mode is a noop.
-   *
-   * @deprecated This is a test-only API that does not have a place in production interface.
-   * `checkNoChanges` is already part of an `ApplicationRef` tick when the app is running in dev
-   * mode. For more granular `checkNoChanges` validation, use `ComponentFixture`.
-   */
-  abstract checkNoChanges(): void;
-
-  /**
    * Re-attaches the previously detached view to the change detection tree.
    * Views are attached to the tree by default.
    *
@@ -124,6 +113,10 @@ export abstract class ChangeDetectorRef {
    */
   static __NG_ELEMENT_ID__: (flags: InternalInjectFlags) => ChangeDetectorRef =
     injectChangeDetectorRef;
+}
+
+if (typeof ngDevMode === 'undefined' || ngDevMode) {
+  registerSpecialProvider(ChangeDetectorRef);
 }
 
 /** Returns a ChangeDetectorRef (a.k.a. a ViewRef) */

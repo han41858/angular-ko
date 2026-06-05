@@ -15,16 +15,6 @@ Debugging in the default Node.js environment is often the quickest way to diagno
 
 ## Debugging in a browser
 
-Debugging in a browser is recommended for tests that rely on the DOM or other browser-specific APIs. This approach allows you to use the browser's own developer tools.
+The same way you start a debugging session with in Node, you can use `ng test` with the `--debug` flag with Vitest and [browser mode](/guide/testing/migrating-to-vitest#5-configure-browser-mode-optional).
 
-1.  Ensure you have a browser provider installed. See [Running tests in a browser](guide/testing/overview#running-tests-in-a-browser) for setup instructions.
-2.  Run the `ng test` command with both the `--browsers` and `--debug` flags:
-    ```shell
-    ng test --browsers=chromium --debug
-    ```
-3.  This command runs the tests in a headed browser and keeps it open after the tests finish, allowing you to inspect the output.
-4.  Open the browser's **Developer Tools**. On Windows, press `Ctrl-Shift-I`. On macOS, press `Command-Option-I`.
-5.  Go to the **Sources** tab.
-6.  Use `Control/Command-P` to search for and open your test file.
-7.  Set a breakpoint in your test.
-8.  Reload the test runner UI in the browser. The execution will now stop at your breakpoint.
+The test runner will start in debug mode and wait for you to open the browser devtools to debug the tests.

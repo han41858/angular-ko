@@ -4,7 +4,7 @@ The `@angular/animations` package is deprecated as of v20.2, which also introduc
 
 ## How to write animations in native CSS
 
-If you've never written any native CSS animations, there are a number of excellent guides to get you started. Here's a few of them:  
+If you've never written any native CSS animations, there are a number of excellent guides to get you started. Here are a few of them:  
 [MDN's CSS Animations guide](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations)  
 [W3Schools CSS3 Animations guide](https://www.w3schools.com/css/css3_animations.asp)  
 [The Complete CSS Animations Tutorial](https://www.lambdatest.com/blog/css-animations-tutorial/)  
@@ -14,7 +14,7 @@ and a couple of videos:
 [Learn CSS Animation in 9 Minutes](https://www.youtube.com/watch?v=z2LQYsZhsFw)  
 [Net Ninja CSS Animation Tutorial Playlist](https://www.youtube.com/watch?v=jgw82b5Y2MU&list=PL4cUxeGkcC9iGYgmEd2dm3zAKzyCGDtM5)
 
-Check some of these various guides and tutorials out, and then come back to this guide.
+Check out some of these guides and tutorials, then come back to this guide.
 
 ## Creating Reusable Animations
 
@@ -22,11 +22,11 @@ Just like with the animations package, you can create reusable animations that c
 
 #### With Animations Package
 
-<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" visibleRegion="animation-example"/>
+<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="animation-example"/>
 
 #### With Native CSS
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-shared"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-shared"/>
 
 Adding the class `animated-class` to an element would trigger the animation on that element.
 
@@ -38,13 +38,13 @@ The animations package allowed you to define various states using the [`state()`
 
 #### With Animations Package
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="state1"/>
+<docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="state1"/>
 
-This same behavior can be accomplished natively by using CSS classes either using a keyframe animation or transition styling.
+This same behavior can be accomplished natively by using CSS classes, either with a keyframe animation or transition styling.
 
 #### With Native CSS
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-states"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-states"/>
 
 Triggering the `open` or `closed` state is done by toggling classes on the element in your component. You can find examples of how to do this in our [template guide](guide/templates/binding#css-class-and-style-property-bindings).
 
@@ -56,11 +56,11 @@ The animations package `animate()` function allows for providing timing, like du
 
 Specify `animation-duration`, `animation-delay`, and `animation-timing-function` for a keyframe animation in CSS, or alternatively use the `animation` shorthand property.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="animation-timing"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-timing"/>
 
 Similarly, you can use `transition-duration`, `transition-delay`, and `transition-timing-function` and the `transition` shorthand for animations that are not using `@keyframes`.
 
-<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" visibleRegion="transition-timing"/>
+<docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="transition-timing"/>
 
 ### Triggering an Animation
 
@@ -69,17 +69,17 @@ The animations package required specifying triggers using the `trigger()` functi
 #### With Animations Package
 
 <docs-code-multifile>
-    <docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/animations-package/open-close.component.ts" />
-    <docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/animations-package/open-close.component.html" />
-    <docs-code header="open-close.component.css" path="adev/src/content/examples/animations/src/app/animations-package/open-close.component.css"/>
+    <docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/animations-package/open-close.ts" />
+    <docs-code header="open-close.html" path="adev/src/content/examples/animations/src/app/animations-package/open-close.html" />
+    <docs-code header="open-close.css" path="adev/src/content/examples/animations/src/app/animations-package/open-close.css"/>
 </docs-code-multifile>
 
 #### With Native CSS
 
-<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/open-close.component.ts">
-    <docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/native-css/open-close.component.ts" />
-    <docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/native-css/open-close.component.html" />
-    <docs-code header="open-close.component.css" path="adev/src/content/examples/animations/src/app/native-css/open-close.component.css"/>
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/open-close.ts">
+    <docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/native-css/open-close.ts" />
+    <docs-code header="open-close.html" path="adev/src/content/examples/animations/src/app/native-css/open-close.html" />
+    <docs-code header="open-close.css" path="adev/src/content/examples/animations/src/app/native-css/open-close.css"/>
 </docs-code-multifile>
 
 ## Transition and Triggers
@@ -97,19 +97,19 @@ The animations package offers the ability to animate things that have been histo
 #### With Animations Package
 
 <docs-code-multifile>
-    <docs-code header="auto-height.component.ts" path="adev/src/content/examples/animations/src/app/animations-package/auto-height.component.ts" />
-    <docs-code header="auto-height.component.html" path="adev/src/content/examples/animations/src/app/animations-package/auto-height.component.html" />
-    <docs-code header="auto-height.component.css" path="adev/src/content/examples/animations/src/app/animations-package/auto-height.component.css" />
+    <docs-code header="auto-height.ts" path="adev/src/content/examples/animations/src/app/animations-package/auto-height.ts" />
+    <docs-code header="auto-height.html" path="adev/src/content/examples/animations/src/app/animations-package/auto-height.html" />
+    <docs-code header="auto-height.css" path="adev/src/content/examples/animations/src/app/animations-package/auto-height.css" />
 </docs-code-multifile>
 
-You can use css-grid to animate to auto height.
+You can use CSS Grid to animate to auto height.
 
 #### With Native CSS
 
-<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/auto-height.component.ts">
-    <docs-code header="auto-height.component.ts" path="adev/src/content/examples/animations/src/app/native-css/auto-height.component.ts" />
-    <docs-code header="auto-height.component.html" path="adev/src/content/examples/animations/src/app/native-css/auto-height.component.html" />
-    <docs-code header="auto-height.component.css" path="adev/src/content/examples/animations/src/app/native-css/auto-height.component.css"  />
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/auto-height.ts">
+    <docs-code header="auto-height.ts" path="adev/src/content/examples/animations/src/app/native-css/auto-height.ts" />
+    <docs-code header="auto-height.html" path="adev/src/content/examples/animations/src/app/native-css/auto-height.html" />
+    <docs-code header="auto-height.css" path="adev/src/content/examples/animations/src/app/native-css/auto-height.css"  />
 </docs-code-multifile>
 
 If you don't have to worry about supporting all browsers, you can also check out `calc-size()`, which is the true solution to animating auto height. See [MDN's docs](https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size) and (this tutorial)[https://frontendmasters.com/blog/one-of-the-boss-battles-of-css-is-almost-won-transitioning-to-auto/] for more information.
@@ -121,29 +121,25 @@ The animations package offered the previously mentioned pattern matching for ent
 #### With Animations Package
 
 <docs-code-multifile>
-    <docs-code header="insert-remove.component.ts" path="adev/src/content/examples/animations/src/app/animations-package/insert-remove.component.ts" />
-    <docs-code header="insert-remove.component.html" path="adev/src/content/examples/animations/src/app/animations-package/insert-remove.component.html" />
-    <docs-code header="insert-remove.component.css" path="adev/src/content/examples/animations/src/app/animations-package/insert-remove.component.css" />
+    <docs-code header="insert-remove.ts" path="adev/src/content/examples/animations/src/app/animations-package/insert-remove.ts" />
+    <docs-code header="insert-remove.html" path="adev/src/content/examples/animations/src/app/animations-package/insert-remove.html" />
+    <docs-code header="insert-remove.css" path="adev/src/content/examples/animations/src/app/animations-package/insert-remove.css" />
 </docs-code-multifile>
-
-Here's how the same thing can be accomplished without the animations package using `animate.enter`.
 
 #### With Native CSS
 
-<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/insert.component.ts">
-    <docs-code header="insert.component.ts" path="adev/src/content/examples/animations/src/app/native-css/insert.component.ts" />
-    <docs-code header="insert.component.html" path="adev/src/content/examples/animations/src/app/native-css/insert.component.html" />
-    <docs-code header="insert.component.css" path="adev/src/content/examples/animations/src/app/native-css/insert.component.css"  />
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/insert.ts">
+    <docs-code header="insert.ts" path="adev/src/content/examples/animations/src/app/native-css/insert.ts" />
+    <docs-code header="insert.html" path="adev/src/content/examples/animations/src/app/native-css/insert.html" />
+    <docs-code header="insert.css" path="adev/src/content/examples/animations/src/app/native-css/insert.css"  />
 </docs-code-multifile>
-
-Use `animate.leave` to animate elements as they leave the view, which will apply the specified CSS classes to the element as it leaves the view.
 
 #### With Native CSS
 
-<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/remove.component.ts">
-    <docs-code header="remove.component.ts" path="adev/src/content/examples/animations/src/app/native-css/remove.component.ts" />
-    <docs-code header="remove.component.html" path="adev/src/content/examples/animations/src/app/native-css/remove.component.html" />
-    <docs-code header="remove.component.css" path="adev/src/content/examples/animations/src/app/native-css/remove.component.css"  />
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/remove.ts">
+    <docs-code header="remove.ts" path="adev/src/content/examples/animations/src/app/native-css/remove.ts" />
+    <docs-code header="remove.html" path="adev/src/content/examples/animations/src/app/native-css/remove.html" />
+    <docs-code header="remove.css" path="adev/src/content/examples/animations/src/app/native-css/remove.css"  />
 </docs-code-multifile>
 
 For more information on `animate.enter` and `animate.leave`, see the [Enter and Leave animations guide](guide/animations).
@@ -155,17 +151,17 @@ Along with the aforementioned `:enter` and `:leave`, there's also `:increment` a
 #### With Animations Package
 
 <docs-code-multifile>
-    <docs-code header="increment-decrement.component.ts" path="adev/src/content/examples/animations/src/app/animations-package/increment-decrement.component.ts" />
-    <docs-code header="increment-decrement.component.html" path="adev/src/content/examples/animations/src/app/animations-package/increment-decrement.component.html" />
-    <docs-code header="increment-decrement.component.css" path="adev/src/content/examples/animations/src/app/animations-package/increment-decrement.component.css" />
+    <docs-code header="increment-decrement.ts" path="adev/src/content/examples/animations/src/app/animations-package/increment-decrement.ts" />
+    <docs-code header="increment-decrement.html" path="adev/src/content/examples/animations/src/app/animations-package/increment-decrement.html" />
+    <docs-code header="increment-decrement.css" path="adev/src/content/examples/animations/src/app/animations-package/increment-decrement.css" />
 </docs-code-multifile>
 
 #### With Native CSS
 
-<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.component.ts">
-    <docs-code header="increment-decrement.component.ts" path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.component.ts" />
-    <docs-code header="increment-decrement.component.html" path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.component.html" />
-    <docs-code header="increment-decrement.component.css" path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.component.css" />
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.ts">
+    <docs-code header="increment-decrement.ts" path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.ts" />
+    <docs-code header="increment-decrement.html" path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.html" />
+    <docs-code header="increment-decrement.css" path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.css" />
 </docs-code-multifile>
 
 ### Parent / Child Animations
@@ -226,17 +222,17 @@ The `stagger()` function allowed you to delay the animation of each item in a li
 #### With Animations Package
 
 <docs-code-multifile>
-    <docs-code header="stagger.component.ts" path="adev/src/content/examples/animations/src/app/animations-package/stagger.component.ts" />
-    <docs-code header="stagger.component.html" path="adev/src/content/examples/animations/src/app/animations-package/stagger.component.html" />
-    <docs-code header="stagger.component.css" path="adev/src/content/examples/animations/src/app/animations-package/stagger.component.css" />
+    <docs-code header="stagger.ts" path="adev/src/content/examples/animations/src/app/animations-package/stagger.ts" />
+    <docs-code header="stagger.html" path="adev/src/content/examples/animations/src/app/animations-package/stagger.html" />
+    <docs-code header="stagger.css" path="adev/src/content/examples/animations/src/app/animations-package/stagger.css" />
 </docs-code-multifile>
 
 #### With Native CSS
 
-<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/stagger.component.ts">
-    <docs-code header="stagger.component.ts" path="adev/src/content/examples/animations/src/app/native-css/stagger.component.ts" />
-    <docs-code header="stagger.component.html" path="adev/src/content/examples/animations/src/app/native-css/stagger.component.html" />
-    <docs-code header="stagger.component.css" path="adev/src/content/examples/animations/src/app/native-css/stagger.component.css" />
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/stagger.ts">
+    <docs-code header="stagger.ts" path="adev/src/content/examples/animations/src/app/native-css/stagger.ts" />
+    <docs-code header="stagger.html" path="adev/src/content/examples/animations/src/app/native-css/stagger.html" />
+    <docs-code header="stagger.css" path="adev/src/content/examples/animations/src/app/native-css/stagger.css" />
 </docs-code-multifile>
 
 ### Parallel Animations
@@ -245,7 +241,9 @@ The animations package has a `group()` function to play multiple animations at t
 
 ```css
 .target-element {
-  animation: rotate 3s, fade-in 2s;
+  animation:
+    rotate 3s,
+    fade-in 2s;
 }
 ```
 
@@ -255,20 +253,20 @@ In this example, the `rotate` and `fade-in` animations fire at the same time.
 
 Items reordering in a list works out of the box using the previously described techniques. No additional special work is required. Items in a `@for` loop will be removed and re-added properly, which will fire off animations using `@starting-styles` for entry animations. Alternatively, you can use `animate.enter` for this same behavior. Use `animate.leave` to animate elements as they are removed, as seen in the example above.
 
-#### With Animations Package<
+#### With Animations Package
 
 <docs-code-multifile>
-    <docs-code header="reorder.component.ts" path="adev/src/content/examples/animations/src/app/animations-package/reorder.component.ts" />
-    <docs-code header="reorder.component.html" path="adev/src/content/examples/animations/src/app/animations-package/reorder.component.html" />
-    <docs-code header="reorder.component.css" path="adev/src/content/examples/animations/src/app/animations-package/reorder.component.css" />
+    <docs-code header="reorder.ts" path="adev/src/content/examples/animations/src/app/animations-package/reorder.ts" />
+    <docs-code header="reorder.html" path="adev/src/content/examples/animations/src/app/animations-package/reorder.html" />
+    <docs-code header="reorder.css" path="adev/src/content/examples/animations/src/app/animations-package/reorder.css" />
 </docs-code-multifile>
 
 #### With Native CSS
 
-<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/reorder.component.ts">
-    <docs-code header="reorder.component.ts" path="adev/src/content/examples/animations/src/app/native-css/reorder.component.ts" />
-    <docs-code header="reorder.component.html" path="adev/src/content/examples/animations/src/app/native-css/reorder.component.html" />
-    <docs-code header="reorder.component.css" path="adev/src/content/examples/animations/src/app/native-css/reorder.component.css" />
+<docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/reorder.ts">
+    <docs-code header="reorder.ts" path="adev/src/content/examples/animations/src/app/native-css/reorder.ts" />
+    <docs-code header="reorder.html" path="adev/src/content/examples/animations/src/app/native-css/reorder.html" />
+    <docs-code header="reorder.css" path="adev/src/content/examples/animations/src/app/native-css/reorder.css" />
 </docs-code-multifile>
 
 ## Migrating usages of AnimationPlayer

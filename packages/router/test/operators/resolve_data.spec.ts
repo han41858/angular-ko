@@ -8,10 +8,10 @@
 
 import {Component} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
-import {ActivatedRouteSnapshot, provideRouter, Router} from '../../index';
+import {ActivatedRouteSnapshot, provideRouter, Router, withRouterConfig} from '../../index';
 import {RouterTestingHarness} from '../../testing';
 import {EMPTY, interval, NEVER, of} from 'rxjs';
-import {useAutoTick} from '../helpers';
+import {useAutoTick} from '@angular/private/testing';
 
 describe('resolveData operator', () => {
   useAutoTick();
@@ -131,21 +131,24 @@ describe('resolveData operator', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        provideRouter([
-          {
-            path: 'a',
-            component: Empty,
-            data: {parent: 'parent'},
-            resolve: {other: () => 'other'},
-            children: [
-              {
-                path: 'b',
-                data: {child: 'child'},
-                component: Empty,
-              },
-            ],
-          },
-        ]),
+        provideRouter(
+          [
+            {
+              path: 'a',
+              component: Empty,
+              data: {parent: 'parent'},
+              resolve: {other: () => 'other'},
+              children: [
+                {
+                  path: 'b',
+                  data: {child: 'child'},
+                  component: Empty,
+                },
+              ],
+            },
+          ],
+          withRouterConfig({paramsInheritanceStrategy: 'emptyOnly'}),
+        ),
       ],
     });
     await RouterTestingHarness.create('/a/b');

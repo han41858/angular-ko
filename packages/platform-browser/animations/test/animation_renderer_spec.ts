@@ -17,6 +17,7 @@ import {
   ɵAnimationEngine as AnimationEngine,
   ɵAnimationRendererFactory as AnimationRendererFactory,
 } from '@angular/animations/browser';
+import {ChangeDetectionStrategy} from '@angular/compiler';
 import {
   APP_INITIALIZER,
   Component,
@@ -31,14 +32,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import {TestBed} from '@angular/core/testing';
+import {el, isNode, withBody} from '@angular/private/testing';
 import {bootstrapApplication, platformBrowser} from '../../index';
+import {DomRendererFactory2} from '../../src/dom/dom_renderer';
+import {provideAnimationsAsync} from '../async';
 import {
   BrowserAnimationsModule,
   ɵInjectableAnimationEngine as InjectableAnimationEngine,
 } from '../index';
-import {provideAnimationsAsync} from '../async';
-import {DomRendererFactory2} from '../../src/dom/dom_renderer';
-import {withBody, isNode, el} from '@angular/private/testing';
 
 (function () {
   if (isNode) return;
@@ -214,6 +215,7 @@ import {withBody, isNode, el} from '@angular/private/testing';
             ]),
           ],
           standalone: false,
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class Cmp {
           exp: any;
@@ -250,15 +252,16 @@ import {withBody, isNode, el} from '@angular/private/testing';
         @Component({
           selector: 'my-cmp',
           template: `
-               <div #elm1 *ngIf="exp1"></div>
-               <div #elm2 @animation1 *ngIf="exp2"></div>
-               <div #elm3 @animation2 *ngIf="exp3"></div>
-            `,
+            <div #elm1 *ngIf="exp1"></div>
+            <div #elm2 @animation1 *ngIf="exp2"></div>
+            <div #elm3 @animation2 *ngIf="exp3"></div>
+          `,
           animations: [
             trigger('animation1', [transition('a => b', [])]),
             trigger('animation2', [transition(':leave', [])]),
           ],
           standalone: false,
+          changeDetection: ChangeDetectionStrategy.Eager,
         })
         class Cmp {
           exp1: any = true;
@@ -338,9 +341,7 @@ import {withBody, isNode, el} from '@angular/private/testing';
     it('should provide hooks at the start and end of change detection', () => {
       @Component({
         selector: 'my-cmp',
-        template: `
-          <div [@myAnimation]="exp"></div>
-        `,
+        template: ` <div [@myAnimation]="exp"></div> `,
         animations: [trigger('myAnimation', [])],
         standalone: false,
       })

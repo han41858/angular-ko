@@ -13,6 +13,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewContainerRef,
+  ChangeDetectionStrategy,
 } from '../../src/core';
 import {TestBed} from '../../testing';
 
@@ -21,6 +22,8 @@ describe('TemplateRef', () => {
     @Component({
       template: `<ng-template #templateRef></ng-template>`,
       standalone: false,
+
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class App {
       @ViewChild('templateRef', {static: true}) templateRef!: TemplateRef<any>;
@@ -57,13 +60,15 @@ describe('TemplateRef', () => {
       @Component({
         selector: 'menu-content',
         template: `
-              <ng-template>
-                Header
-                <ng-content></ng-content>
-              </ng-template>
-            `,
+          <ng-template>
+            Header
+            <ng-content></ng-content>
+          </ng-template>
+        `,
         exportAs: 'menuContent',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class MenuContent {
         @ViewChild(TemplateRef, {static: true}) template!: TemplateRef<any>;
@@ -71,13 +76,15 @@ describe('TemplateRef', () => {
 
       @Component({
         template: `
-              <menu-content #menu="menuContent">
-                <button>Item one</button>
-                <button>Item two</button>
-                <ng-template [ngIf]="true"><button>Item three</button></ng-template>
-              </menu-content>
-            `,
+          <menu-content #menu="menuContent">
+            <button>Item one</button>
+            <button>Item two</button>
+            <ng-template [ngIf]="true"><button>Item three</button></ng-template>
+          </menu-content>
+        `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         @ViewChild(MenuContent) content!: MenuContent;
@@ -196,6 +203,8 @@ describe('TemplateRef', () => {
         selector: 'dynamic',
         template: '',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class DynamicCmp {
         @ViewChild('templateRef', {static: true}) templateRef!: TemplateRef<any>;
@@ -205,6 +214,8 @@ describe('TemplateRef', () => {
         selector: 'test',
         template: '',
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestCmp {
         constructor(public vcr: ViewContainerRef) {}
@@ -271,10 +282,12 @@ describe('TemplateRef', () => {
   describe('context', () => {
     @Component({
       template: `
-      <ng-template #templateRef let-name="name">{{name}}</ng-template>
-      <ng-container #containerRef></ng-container>
-    `,
+        <ng-template #templateRef let-name="name">{{ name }}</ng-template>
+        <ng-container #containerRef></ng-container>
+      `,
       standalone: false,
+
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class App {
       @ViewChild('templateRef') templateRef!: TemplateRef<any>;
@@ -327,6 +340,8 @@ describe('TemplateRef', () => {
           <ng-container #containerRef></ng-container>
         `,
         standalone: false,
+
+        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class ListenerTest {
         @ViewChild('templateRef') templateRef!: TemplateRef<any>;

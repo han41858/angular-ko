@@ -22,13 +22,14 @@ import {
   HasModuleName,
   HasRenderableJsDocTags,
   HasStableFlag,
+  MaybeJsDocTags,
 } from '../entities/traits.mjs';
 
 import {parseMarkdown} from '../../../shared/marked/parse.mjs';
 import {getHighlighterInstance} from '../shiki/shiki.mjs';
 import {
   getCurrentSymbol,
-  getSymbols,
+  getSymbolsAsApiEntries,
   getSymbolUrl,
   unknownSymbolMessage,
 } from '../symbol-context.mjs';
@@ -43,7 +44,7 @@ const jsDoclinkRegex = /\{\s*@link\s+([^}]+)\s*\}/;
 const jsDoclinkRegexGlobal = new RegExp(jsDoclinkRegex.source, 'g');
 
 /** Given an entity with a description, gets the entity augmented with an `htmlDescription`. */
-export function addHtmlDescription<T extends HasDescription & HasModuleName>(
+export function addHtmlDescription<T extends HasDescription & HasModuleName & MaybeJsDocTags>(
   entry: T,
 ): T & HasHtmlDescription {
   const firstParagraphRule = /(.*?)(?:\n\n|$)/s;
@@ -56,10 +57,17 @@ export function addHtmlDescription<T extends HasDescription & HasModuleName>(
         ?.comment ?? '';
   }
 
-  const description = !!entry.description ? entry.description : jsDocDescription;
-  const shortTextMatch = description.match(firstParagraphRule);
+  let description = entry.description || jsDocDescription;
+  let shortDescription = description.match(firstParagraphRule)?.[0] ?? '';
+
+  // For the cases where the @description tag is after a short description
+  if (jsDocDescription && description !== jsDocDescription) {
+    shortDescription = entry.description;
+    description = jsDocDescription;
+  }
+
   const htmlDescription = getHtmlForJsDocText(description).trim();
-  const shortHtmlDescription = getHtmlForJsDocText(shortTextMatch ? shortTextMatch[0] : '').trim();
+  const shortHtmlDescription = getHtmlForJsDocText(shortDescription).trim();
 
   return {...entry, htmlDescription, shortHtmlDescription};
 }
@@ -104,11 +112,12 @@ export function addHtmlUsageNotes<T extends HasJsDocTags>(entry: T): T & HasHtml
 }
 
 /** Given a markdown JsDoc text, gets the rendered HTML. */
-function getHtmlForJsDocText(text: string): string {
+export function getHtmlForJsDocText(text: string): string {
   const mdToParse = convertLinks(wrapExampleHtmlElementsWithCode(text));
   const parsed = parseMarkdown(mdToParse, {
-    apiEntries: getSymbols(),
+    apiEntries: getSymbolsAsApiEntries(),
     highlighter: getHighlighterInstance(),
+    definedRoutes: [],
   });
   return addApiLinksToHtml(parsed);
 }
@@ -119,7 +128,7 @@ export function setEntryFlags<T extends HasJsDocTags & HasModuleName>(
   const deprecationMessage = getDeprecatedEntry(entry);
   return {
     ...entry,
-    deprecated: getTagSinceVersion(entry, 'deprecated'),
+    deprecated: getTagSinceVersion(entry, 'deprecated', true),
     deprecationMessage: deprecationMessage
       ? getHtmlForJsDocText(deprecationMessage)
       : deprecationMessage,
@@ -136,6 +145,9 @@ function getHtmlAdditionalLinks<T extends HasJsDocTags>(entry: T): LinkEntryRend
     .filter((tag) => tag.name === JS_DOC_SEE_TAG)
     .map((tag) => tag.comment)
     .map((comment) => {
+      // TODO: Throw when the comment is an absolute link.
+      // With TS 5.9 this is not possible as the ts api that extracts comments from tags strips the "http" part of links.
+
       const markdownLinkMatch = comment.match(markdownLinkRule);
 
       if (markdownLinkMatch) {
@@ -201,10 +213,6 @@ function convertLinks(text: string) {
 }
 
 function parseAtLink(link: string): {label: string; url: string} | undefined {
-  // Because of microsoft/TypeScript/issues/59679
-  // getTextOfJSDocComment introduces an extra space between the symbol and a trailing ()
-  link = link.replace(/ \(\)$/, '');
-
   let [rawSymbol, description] = link.split(/\s(.+)/);
   if (rawSymbol.startsWith('#')) {
     rawSymbol = rawSymbol.substring(1);
@@ -213,6 +221,27 @@ function parseAtLink(link: string): {label: string; url: string} | undefined {
       throw Error(
         `Forbidden relative link: ${link}. Links should be absolute and start with a slash`,
       );
+    }
+
+    // Validate absolute `/api/...` links against the known symbol registry. This catches
+    // miscased symbol names (e.g. `/api/router/routerModule` instead of
+    // `/api/router/RouterModule`) at build time.
+    if (rawSymbol.startsWith('/api/')) {
+      const [pathPart] = rawSymbol.split('#');
+      const segments = pathPart.split('/').filter((s) => s.length > 0);
+      const symbolName = segments[segments.length - 1];
+      // Case-insensitive lookup: find the canonical symbol name in the registry.
+      const knownSymbols = Object.keys(getSymbolsAsApiEntries());
+      const canonicalSymbol = knownSymbols.find(
+        (s) => s.toLowerCase() === symbolName.toLowerCase(),
+      );
+      if (canonicalSymbol && canonicalSymbol !== symbolName) {
+        const expectedUrl = getSymbolUrl(canonicalSymbol);
+        throw Error(
+          `Broken @link: ${link}. Did you mean ${expectedUrl}? ` +
+            `Symbol names in API URLs are case-sensitive.`,
+        );
+      }
     }
 
     return {

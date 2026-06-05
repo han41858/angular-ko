@@ -17,31 +17,7 @@ import {inject, Injectable, ɵWritable as Writable} from '@angular/core';
 import {Subject} from 'rxjs';
 
 import {INITIAL_CONFIG} from './tokens';
-
-function parseUrl(
-  urlStr: string,
-  origin: string,
-): {
-  hostname: string;
-  protocol: string;
-  port: string;
-  pathname: string;
-  search: string;
-  hash: string;
-  href: string;
-} {
-  const {hostname, protocol, port, pathname, search, hash, href} = new URL(urlStr, origin);
-
-  return {
-    hostname,
-    href,
-    protocol,
-    port,
-    pathname,
-    search,
-    hash,
-  };
-}
+import {resolveUrl} from './url';
 
 /**
  * Server-side implementation of URL state. Implements `pathname`, `search`, and `hash`
@@ -65,14 +41,17 @@ export class ServerPlatformLocation implements PlatformLocation {
       return;
     }
     if (config.url) {
-      const url = parseUrl(config.url, this._doc.location.origin);
-      this.protocol = url.protocol;
-      this.hostname = url.hostname;
-      this.port = url.port;
-      this.pathname = url.pathname;
-      this.search = url.search;
-      this.hash = url.hash;
-      this.href = url.href;
+      const {protocol, hostname, port, pathname, search, hash, href} = resolveUrl(
+        config.url,
+        this._doc.location.origin,
+      );
+      this.protocol = protocol;
+      this.hostname = hostname;
+      this.port = port;
+      this.pathname = pathname;
+      this.search = search;
+      this.hash = hash;
+      this.href = href;
     }
   }
 
@@ -114,12 +93,13 @@ export class ServerPlatformLocation implements PlatformLocation {
 
   replaceState(state: any, title: string, newUrl: string): void {
     const oldUrl = this.url;
-    const parsedUrl = parseUrl(newUrl, this._doc.location.origin);
-    (this as Writable<this>).pathname = parsedUrl.pathname;
-    (this as Writable<this>).search = parsedUrl.search;
-    (this as Writable<this>).href = parsedUrl.href;
-    (this as Writable<this>).protocol = parsedUrl.protocol;
-    this.setHash(parsedUrl.hash, oldUrl);
+    const {pathname, search, hash, href, protocol} = resolveUrl(newUrl, this._doc.location.origin);
+    const writableThis = this as Writable<this>;
+    writableThis.pathname = pathname;
+    writableThis.search = search;
+    writableThis.href = href;
+    writableThis.protocol = protocol;
+    this.setHash(hash, oldUrl);
   }
 
   pushState(state: any, title: string, newUrl: string): void {

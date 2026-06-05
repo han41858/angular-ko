@@ -27,7 +27,7 @@ const emailDomain = login.value.email.domain;
 
 With strictly typed reactive forms, the above code does not compile, because there is no `domain` property on `email`.
 
-In addition to the added safety, the types enable a variety of other improvements, such as better autocomplete in IDEs, and an explicit way to specify form structure.
+In addition to the added safety, the types enable a variety of other improvements, such as better autocomplete in IDEs and an explicit way to specify form structure.
 
 These improvements currently apply only to _reactive_ forms (not [_template-driven_ forms](guide/forms/template-driven-forms)).
 
@@ -42,7 +42,7 @@ const login = new UntypedFormGroup({
 });
 ```
 
-Each `Untyped` symbol has exactly the same semantics as in previous Angular version. By removing the `Untyped` prefixes, you can incrementally enable the types.
+Each `Untyped` symbol has exactly the same semantics as in previous Angular versions. By removing the `Untyped` prefixes, you can incrementally enable the types.
 
 ## `FormControl`: Getting Started
 
@@ -52,7 +52,7 @@ The simplest possible form consists of a single control:
 const email = new FormControl('angularrox@gmail.com');
 ```
 
-This control will be automatically inferred to have the type `FormControl<string|null>`. TypeScript will automatically enforce this type throughout the [`FormControl` API](api/forms/FormControl), such as `email.value`, `email.valueChanges`, `email.setValue(...)`, etc.
+This control will be automatically inferred to have the type `FormControl<string|null>`. TypeScript will automatically enforce this type throughout the [`FormControl` API](api/forms/FormControl), such as `email.value`, `email.valueChanges`, and `email.setValue(...)`.
 
 ### Nullability
 
@@ -86,7 +86,7 @@ email.setValue('angularrox@gmail.com'); // Error!
 To prevent this, we explicitly specify the type as `string|null`:
 
 ```ts
-const email = new FormControl<string|null>(null);
+const email = new FormControl<string | null>(null);
 email.setValue('angularrox@gmail.com');
 ```
 
@@ -128,8 +128,8 @@ Consider again a login form:
 
 ```ts
 const login = new FormGroup({
-    email: new FormControl('', {nonNullable: true}),
-    password: new FormControl('', {nonNullable: true}),
+  email: new FormControl('', {nonNullable: true}),
+  password: new FormControl('', {nonNullable: true}),
 });
 ```
 
@@ -166,7 +166,7 @@ In this form, we explicitly specify the type, which allows us to make the `passw
 Some `FormGroup` usages do not fit the above pattern because the keys are not known ahead of time. The `FormRecord` class is designed for that case:
 
 ```ts
-const addresses = new FormRecord<FormControl<string|null>>({});
+const addresses = new FormRecord<FormControl<string | null>>({});
 addresses.addControl('Andrew', new FormControl('2340 Folsom St'));
 ```
 

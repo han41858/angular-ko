@@ -13,12 +13,12 @@ Fetching data from a backend often requires making a GET request using the [`Htt
 For example, to fetch configuration data from a hypothetical API using the `HttpClient.get()` method:
 
 ```ts
-http.get<Config>('/api/config').subscribe(config => {
+http.get<Config>('/api/config').subscribe((config) => {
   // process the configuration.
 });
 ```
 
-Note the generic type argument which specifies that the data returned by the server will be of type `Config`. This argument is optional, and if you omit it then the returned data will have type `Object`.
+Note the generic type argument which specifies that the data returned by the server will be of type `Config`. This argument is optional, and if you omit it, the returned data will have type `Object`.
 
 TIP: When dealing with data of uncertain structure and potential `undefined` or `null` values, consider using the `unknown` type instead of `Object` as the response type.
 
@@ -26,7 +26,7 @@ CRITICAL: The generic type of request methods is a type **assertion** about the 
 
 ## Fetching other types of data
 
-By default, `HttpClient` assumes that servers will return JSON data. When interacting with a non-JSON API, you can tell `HttpClient` what response type to expect and return when making the request. This is done with the `responseType` option.
+By default, `HttpClient` assumes that servers will return JSON data. When interacting with a non-JSON API, you can tell `HttpClient` what response type to expect when making the request. This is done with the `responseType` option.
 
 | **`responseType` value** | **Returned response type**                                                                                                                |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -38,7 +38,7 @@ By default, `HttpClient` assumes that servers will return JSON data. When intera
 For example, you can ask `HttpClient` to download the raw bytes of a `.jpeg` image into an `ArrayBuffer`:
 
 ```ts
-http.get('/images/dog.jpg', {responseType: 'arraybuffer'}).subscribe(buffer => {
+http.get('/images/dog.jpg', {responseType: 'arraybuffer'}).subscribe((buffer) => {
   console.log('The image is ' + buffer.byteLength + ' bytes large');
 });
 ```
@@ -51,12 +51,12 @@ This happens automatically if the options object passed to the request method is
 
 ## Mutating server state
 
-Server APIs which perform mutations often require making POST requests with a request body specifying the new state or the change to be made.
+Server APIs that perform mutations often require making POST requests with a request body specifying the new state or the change to be made.
 
 The [`HttpClient.post()`](api/common/http/HttpClient#post) method behaves similarly to `get()`, and accepts an additional `body` argument before its options:
 
 ```ts
-http.post<Config>('/api/config', newConfig).subscribe(config => {
+http.post<Config>('/api/config', newConfig).subscribe((config) => {
   console.log('Updated config:', config);
 });
 ```
@@ -81,11 +81,13 @@ Specify request parameters that should be included in the request URL using the 
 Passing an object literal is the simplest way of configuring URL parameters:
 
 ```ts
-http.get('/api/config', {
-  params: {filter: 'all'},
-}).subscribe(config => {
-  // ...
-});
+http
+  .get('/api/config', {
+    params: {filter: 'all'},
+  })
+  .subscribe((config) => {
+    // ...
+  });
 ```
 
 Alternatively, pass an instance of `HttpParams` if you need more control over the construction or serialization of the parameters.
@@ -95,11 +97,13 @@ IMPORTANT: Instances of `HttpParams` are _immutable_ and cannot be directly chan
 ```ts
 const baseParams = new HttpParams().set('filter', 'all');
 
-http.get('/api/config', {
-  params: baseParams.set('details', 'enabled'),
-}).subscribe(config => {
-  // ...
-});
+http
+  .get('/api/config', {
+    params: baseParams.set('details', 'enabled'),
+  })
+  .subscribe((config) => {
+    // ...
+  });
 ```
 
 You can instantiate `HttpParams` with a custom `HttpParameterCodec` that determines how `HttpClient` will encode the parameters into the URL.
@@ -111,11 +115,11 @@ By default, `HttpParams` uses the built-in [`HttpUrlEncodingCodec`](api/common/h
 You can provide your own implementation of [`HttpParameterCodec`](api/common/http/HttpParameterCodec) to customize how encoding and decoding are applied.
 
 ```ts
-import { HttpClient, HttpParams, HttpParameterCodec } from '@angular/common/http';
-import { inject } from '@angular/core';
+import {HttpClient, HttpParams, HttpParameterCodec} from '@angular/common/http';
+import {inject} from '@angular/core';
 
-export class CustomHttpParamEncoder  implements HttpParameterCodec {
-  encodeKey(key: string): string   {
+export class CustomHttpParamEncoder implements HttpParameterCodec {
+  encodeKey(key: string): string {
     return encodeURIComponent(key);
   }
 
@@ -139,10 +143,10 @@ export class ApiService {
     const params = new HttpParams({
       encoder: new CustomHttpParamEncoder(),
     })
-    .set('email', 'dev+alerts@example.com')
-    .set('q', 'a & b? c/d = e');
+      .set('email', 'dev+alerts@example.com')
+      .set('q', 'a & b? c/d = e');
 
-    return this.http.get('/api/items', { params });
+    return this.http.get('/api/items', {params});
   }
 }
 ```
@@ -154,27 +158,31 @@ Specify request headers that should be included in the request using the `header
 Passing an object literal is the simplest way of configuring request headers:
 
 ```ts
-http.get('/api/config', {
-  headers: {
-    'X-Debug-Level': 'verbose',
-  }
-}).subscribe(config => {
-  // ...
-});
+http
+  .get('/api/config', {
+    headers: {
+      'X-Debug-Level': 'verbose',
+    },
+  })
+  .subscribe((config) => {
+    // ...
+  });
 ```
 
-Alternatively, pass an instance of `HttpHeaders` if you need more control over the construction of headers
+Alternatively, pass an instance of `HttpHeaders` if you need more control over the construction of headers.
 
 IMPORTANT: Instances of `HttpHeaders` are _immutable_ and cannot be directly changed. Instead, mutation methods such as `append()` return a new instance of `HttpHeaders` with the mutation applied.
 
 ```ts
 const baseHeaders = new HttpHeaders().set('X-Debug-Level', 'minimal');
 
-http.get<Config>('/api/config', {
-  headers: baseHeaders.set('X-Debug-Level', 'verbose'),
-}).subscribe(config => {
-  // ...
-});
+http
+  .get<Config>('/api/config', {
+    headers: baseHeaders.set('X-Debug-Level', 'verbose'),
+  })
+  .subscribe((config) => {
+    // ...
+  });
 ```
 
 ## Interacting with the server response events
@@ -184,7 +192,7 @@ For convenience, `HttpClient` by default returns an `Observable` of the data ret
 To access the entire response, set the `observe` option to `'response'`:
 
 ```ts
-http.get<Config>('/api/config', {observe: 'response'}).subscribe(res => {
+http.get<Config>('/api/config', {observe: 'response'}).subscribe((res) => {
   console.log('Response status:', res.status);
   console.log('Body:', res.body);
 });
@@ -198,28 +206,30 @@ This happens automatically if the options object passed to the request method is
 
 ## Receiving raw progress events
 
-In addition to the response body or response object, `HttpClient` can also return a stream of raw _events_ corresponding to specific moments in the request lifecycle. These events include when the request is sent, when the response header is returned, and when the body is complete. These events can also include _progress events_ which report upload and download status for large request or response bodies.
+In addition to the response body or response object, `HttpClient` can also return a stream of raw _events_ corresponding to specific moments in the request lifecycle. These events include when the request is sent, when the response header is returned, and when the body is complete. These events can also include _progress events_ that report upload and download status for large request or response bodies.
 
 Progress events are disabled by default (as they have a performance cost) but can be enabled with the `reportProgress` option.
 
-NOTE: The optional `fetch` implementation of `HttpClient` does not report _upload_ progress events.
+NOTE: The default fetch backend of `HttpClient` does not report _upload_ progress events. If your app needs upload progress events, configure `HttpClient` with `withXhr()` in `provideHttpClient(...)`.
 
 To observe the event stream, set the `observe` option to `'events'`:
 
 ```ts
-http.post('/api/upload', myData, {
-  reportProgress: true,
-  observe: 'events',
-}).subscribe(event => {
-  switch (event.type) {
-    case HttpEventType.UploadProgress:
-      console.log('Uploaded ' + event.loaded + ' out of ' + event.total + ' bytes');
-      break;
-    case HttpEventType.Response:
-      console.log('Finished uploading!');
-      break;
-  }
-});
+http
+  .post('/api/upload', myData, {
+    reportProgress: true,
+    observe: 'events',
+  })
+  .subscribe((event) => {
+    switch (event.type) {
+      case HttpEventType.UploadProgress:
+        console.log('Uploaded ' + event.loaded + ' out of ' + event.total + ' bytes');
+        break;
+      case HttpEventType.Response:
+        console.log('Finished uploading!');
+        break;
+    }
+  });
 ```
 
 <docs-callout important title="Literal value for `observe`">
@@ -237,7 +247,7 @@ Each `HttpEvent` reported in the event stream has a `type` which distinguishes w
 | `HttpEventType.ResponseHeader`   | The head of the response has been received, including status and headers           |
 | `HttpEventType.DownloadProgress` | An `HttpDownloadProgressEvent` reporting progress on downloading the response body |
 | `HttpEventType.Response`         | The entire response has been received, including the response body                 |
-| `HttpEventType.User`             | A custom event from an Http interceptor.                                           |
+| `HttpEventType.User`             | A custom event from an HTTP interceptor.                                           |
 
 ## Handling request failure
 
@@ -262,21 +272,23 @@ To set a timeout for a request, you can set the `timeout` option to a number of 
 NOTE: The timeout will only apply to the backend HTTP request itself. It is not a timeout for the entire request handling chain. Therefore, this option is not affected by any delay introduced by interceptors.
 
 ```ts
-http.get('/api/config', {
-  timeout: 3000,
-}).subscribe({
-  next: config => {
-    console.log('Config fetched successfully:', config);
-  },
-  error: err => {
-    // If the request times out, an error will have been emitted.
-  }
-});
+http
+  .get('/api/config', {
+    timeout: 3000,
+  })
+  .subscribe({
+    next: (config) => {
+      console.log('Config fetched successfully:', config);
+    },
+    error: (err) => {
+      // If the request times out, an error will have been emitted.
+    },
+  });
 ```
 
 ## Advanced fetch options
 
-When using the `withFetch()` provider, Angular's `HttpClient` provides access to advanced fetch API options that can improve performance and user experience. These options are only available when using the fetch backend.
+Angular's `HttpClient` supports advanced fetch API options that can improve performance and user experience. These options are available when using the fetch backend, which is the default.
 
 ### Fetch options
 
@@ -287,9 +299,11 @@ The following options provide fine-grained control over request behavior when us
 The `keepalive` option allows a request to outlive the page that initiated it. This is particularly useful for analytics or logging requests that need to complete even if the user navigates away from the page.
 
 ```ts
-http.post('/api/analytics', analyticsData, {
-  keepalive: true
-}).subscribe();
+http
+  .post('/api/analytics', analyticsData, {
+    keepalive: true,
+  })
+  .subscribe();
 ```
 
 #### HTTP caching control
@@ -298,25 +312,31 @@ The `cache` option controls how the request interacts with the browser's HTTP ca
 
 ```ts
 //  Use cached response regardless of freshness
-http.get('/api/config', {
-  cache: 'force-cache'
-}).subscribe(config => {
-  // ...
-});
+http
+  .get('/api/config', {
+    cache: 'force-cache',
+  })
+  .subscribe((config) => {
+    // ...
+  });
 
 // Always fetch from network, bypass cache
-http.get('/api/live-data', {
-  cache: 'no-cache'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('/api/live-data', {
+    cache: 'no-cache',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // Use cached response only, fail if not in cache
-http.get('/api/static-data', {
-  cache: 'only-if-cached'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('/api/static-data', {
+    cache: 'only-if-cached',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 ```
 
 #### Request priority for Core Web Vitals
@@ -325,25 +345,31 @@ The `priority` option allows you to indicate the relative importance of a reques
 
 ```ts
 // High priority for critical resources
-http.get('/api/user-profile', {
-  priority: 'high'
-}).subscribe(profile => {
-  // ...
-});
+http
+  .get('/api/user-profile', {
+    priority: 'high',
+  })
+  .subscribe((profile) => {
+    // ...
+  });
 
 // Low priority for non-critical resources
-http.get('/api/recommendations', {
-  priority: 'low'
-}).subscribe(recommendations => {
-  // ...
-});
+http
+  .get('/api/recommendations', {
+    priority: 'low',
+  })
+  .subscribe((recommendations) => {
+    // ...
+  });
 
 // Auto priority (default) lets the browser decide
-http.get('/api/settings', {
-  priority: 'auto'
-}).subscribe(settings => {
-  // ...
-});
+http
+  .get('/api/settings', {
+    priority: 'auto',
+  })
+  .subscribe((settings) => {
+    // ...
+  });
 ```
 
 Available `priority` values:
@@ -360,25 +386,31 @@ The `mode` option controls how the request handles cross-origin requests and det
 
 ```ts
 // Same-origin requests only
-http.get('/api/local-data', {
-  mode: 'same-origin'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('/api/local-data', {
+    mode: 'same-origin',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // CORS-enabled cross-origin requests
-http.get('https://api.external.com/data', {
-  mode: 'cors'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('https://api.external.com/data', {
+    mode: 'cors',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // No-CORS mode for simple cross-origin requests
-http.get('https://external-api.com/public-data', {
-  mode: 'no-cors'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('https://external-api.com/public-data', {
+    mode: 'no-cors',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 ```
 
 Available `mode` values:
@@ -395,30 +427,36 @@ The `redirect` option specifies how to handle redirect responses from the server
 
 ```ts
 // Follow redirects automatically (default behavior)
-http.get('/api/resource', {
-  redirect: 'follow'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('/api/resource', {
+    redirect: 'follow',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // Prevent automatic redirects
-http.get('/api/resource', {
-  redirect: 'manual'
-}).subscribe(response => {
-  // Handle redirect manually
-});
+http
+  .get('/api/resource', {
+    redirect: 'manual',
+  })
+  .subscribe((response) => {
+    // Handle redirect manually
+  });
 
 // Treat redirects as errors
-http.get('/api/resource', {
-  redirect: 'error'
-}).subscribe({
-  next: data => {
-    // Success response
-  },
-  error: err => {
-    // Redirect responses will trigger this error handler
-  }
-});
+http
+  .get('/api/resource', {
+    redirect: 'error',
+  })
+  .subscribe({
+    next: (data) => {
+      // Success response
+    },
+    error: (err) => {
+      // Redirect responses will trigger this error handler
+    },
+  });
 ```
 
 Available `redirect` values:
@@ -435,40 +473,50 @@ The `credentials` option controls whether cookies, authorization headers, and ot
 
 ```ts
 // Include credentials for cross-origin requests
-http.get('https://api.example.com/protected-data', {
-  credentials: 'include'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('https://api.example.com/protected-data', {
+    credentials: 'include',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // Never send credentials (default for cross-origin)
-http.get('https://api.example.com/public-data', {
-  credentials: 'omit'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('https://api.example.com/public-data', {
+    credentials: 'omit',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // Send credentials only for same-origin requests
-http.get('/api/user-data', {
-  credentials: 'same-origin'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('/api/user-data', {
+    credentials: 'same-origin',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // withCredentials overrides credentials setting
-http.get('https://api.example.com/data', {
-  credentials: 'omit',        // This will be ignored
-  withCredentials: true       // This forces credentials: 'include'
-}).subscribe(data => {
-  // Request will include credentials despite credentials: 'omit'
-});
+http
+  .get('https://api.example.com/data', {
+    credentials: 'omit', // This will be ignored
+    withCredentials: true, // This forces credentials: 'include'
+  })
+  .subscribe((data) => {
+    // Request will include credentials despite credentials: 'omit'
+  });
 
 // Legacy approach (still supported)
-http.get('https://api.example.com/data', {
-  withCredentials: true
-}).subscribe(data => {
-  // Equivalent to credentials: 'include'
-});
+http
+  .get('https://api.example.com/data', {
+    withCredentials: true,
+  })
+  .subscribe((data) => {
+    // Equivalent to credentials: 'include'
+  });
 ```
 
 IMPORTANT: The `withCredentials` option takes precedence over the `credentials` option. If both are specified, `withCredentials: true` will always result in `credentials: 'include'`, regardless of the explicit `credentials` value.
@@ -487,18 +535,22 @@ The `referrer` option allows you to control what referrer information is sent wi
 
 ```ts
 // Send a specific referrer URL
-http.get('/api/data', {
-  referrer: 'https://example.com/page'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('/api/data', {
+    referrer: 'https://example.com/page',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 
 // Use the current page as referrer (default behavior)
-http.get('/api/analytics', {
-  referrer: 'about:client'
-}).subscribe(data => {
-  // ...
-});
+http
+  .get('/api/analytics', {
+    referrer: 'about:client',
+  })
+  .subscribe((data) => {
+    // ...
+  });
 ```
 
 The `referrer` option accepts:
@@ -515,14 +567,18 @@ The `referrerPolicy` option controls how much referrer information , the URL of 
 
 ```ts
 // Send no referrer information regardless of the current page
-http.get('/api/data', {
-  referrerPolicy: 'no-referrer'
-}).subscribe();
+http
+  .get('/api/data', {
+    referrerPolicy: 'no-referrer',
+  })
+  .subscribe();
 
 // Send origin only (e.g. https://example.com)
-http.get('/api/analytics', {
-  referrerPolicy: 'origin'
-}).subscribe();
+http
+  .get('/api/analytics', {
+    referrerPolicy: 'origin',
+  })
+  .subscribe();
 ```
 
 The `referrerPolicy` option accepts:
@@ -544,19 +600,21 @@ The `integrity` option allows you to verify that the response hasn't been tamper
 
 ```ts
 // Verify response integrity with SHA-256 hash
-http.get('/api/script.js', {
-  integrity: 'sha256-ABC123...',
-  responseType: 'text'
-}).subscribe(script => {
-  // Script content is verified against the hash
-});
+http
+  .get('/api/script.js', {
+    integrity: 'sha256-ABC123...',
+    responseType: 'text',
+  })
+  .subscribe((script) => {
+    // Script content is verified against the hash
+  });
 ```
 
 IMPORTANT: The `integrity` option requires an exact match between the response content and the provided hash. If the content doesn't match, the request will fail with a network error.
 
 TIP: Use subresource integrity when loading critical resources from external sources to ensure they haven't been modified. Generate hashes using tools like `openssl`.
 
-## Http `Observable`s
+## HTTP `Observable`s
 
 Each request method on `HttpClient` constructs and returns an `Observable` of the requested response type. Understanding how these `Observable`s work is important when using `HttpClient`.
 
@@ -577,7 +635,7 @@ TIP: Using the `async` pipe or the `toSignal` operation to subscribe to `Observa
 While `HttpClient` can be injected and used directly from components, generally we recommend you create reusable, injectable services which isolate and encapsulate data access logic. For example, this `UserService` encapsulates the logic to request data for a user by their id:
 
 ```ts
-@Injectable({providedIn: 'root'})
+@Service()
 export class UserService {
   private http = inject(HttpClient);
 
@@ -590,7 +648,7 @@ export class UserService {
 Within a component, you can combine `@if` with the `async` pipe to render the UI for the data only after it's finished loading:
 
 ```angular-ts
-import { AsyncPipe } from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   imports: [AsyncPipe],
@@ -601,7 +659,7 @@ import { AsyncPipe } from '@angular/common';
     }
   `,
 })
-export class UserProfileComponent {
+export class UserProfile {
   userId = input.required<string>();
   user$!: Observable<User>;
 

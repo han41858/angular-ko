@@ -2,7 +2,7 @@
 
 Angular introduced an improved API for inputs that is considered
 production ready as of v19.
-Read more about signal inputs and their benefits in the [dedicated guide](guide/signals/inputs).
+Read more about signal inputs and their benefits in the [dedicated guide](guide/components/inputs).
 
 To support existing teams that would like to use signal inputs, the Angular team
 provides an automated migration that converts `@Input` fields to the new `input()` API.
@@ -25,14 +25,14 @@ See more details in the section [below](#vscode-extension).
 
 **Before**
 
-```typescript
+```angular-ts
 import {Component, Input} from '@angular/core';
 
 @Component({
-  template: `Name: {{name ?? ''}}`
+  template: `Name: {{ name ?? '' }}`,
 })
 export class MyComponent {
-  @Input() name: string|undefined = undefined;
+  @Input() name: string | undefined = undefined;
 
   someMethod(): number {
     if (this.name) {
@@ -45,24 +45,24 @@ export class MyComponent {
 
 **After**
 
-<docs-code language="angular-ts" highlight="[[4],[7], [10,12]]">
+```angular-ts {[[4],[7], [10,12]]}
 import {Component, input} from '@angular/core';
 
 @Component({
-template: `Name: {{name() ?? ''}}`
+  template: `Name: {{ name() ?? '' }}`,
 })
 export class MyComponent {
-readonly name = input<string>();
+  readonly name = input<string>();
 
-someMethod(): number {
-const name = this.name();
-if (name) {
-return name.length;
+  someMethod(): number {
+    const name = this.name();
+    if (name) {
+      return name.length;
+    }
+    return -1;
+  }
 }
-return -1;
-}
-}
-</docs-code>
+```
 
 ## Configuration options
 

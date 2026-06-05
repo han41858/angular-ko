@@ -11,13 +11,16 @@ import {
   Expression,
   SchemaMetadata,
   ExternalReference,
+  MatchSource,
+  ClassPropertyName,
+  InputOrOutput,
+  ClassPropertyMapping,
+  TemplateGuardMeta,
 } from '@angular/compiler';
 import ts from 'typescript';
 
 import {Reference} from '../../imports';
 import {ClassDeclaration} from '../../reflection';
-
-import {ClassPropertyMapping, ClassPropertyName, InputOrOutput} from './property_mapping';
 
 /**
  * Metadata collected for an `NgModule`.
@@ -132,17 +135,6 @@ export enum MetaKind {
   Directive,
   Pipe,
   NgModule,
-}
-
-/**
- * Possible ways that a directive can be matched.
- */
-export enum MatchSource {
-  /** The directive was matched by its selector. */
-  Selector,
-
-  /** The directive was applied as a host directive. */
-  HostDirective,
 }
 
 /** Metadata for a single input mapping. */
@@ -339,25 +331,6 @@ export interface HostDirectiveMetaForGlobalMode extends HostDirectiveMeta {
  */
 export interface HostDirectiveMetaForLocalMode extends HostDirectiveMeta {
   directive: Expression;
-}
-
-/**
- * Metadata that describes a template guard for one of the directive's inputs.
- */
-export interface TemplateGuardMeta {
-  /**
-   * The input name that this guard should be applied to.
-   */
-  inputName: string;
-
-  /**
-   * Represents the type of the template guard.
-   *
-   * - 'invocation' means that a call to the template guard function is emitted so that its return
-   *   type can result in narrowing of the input type.
-   * - 'binding' means that the input binding expression itself is used as template guard.
-   */
-  type: 'invocation' | 'binding';
 }
 
 /**

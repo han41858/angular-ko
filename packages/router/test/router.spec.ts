@@ -179,7 +179,7 @@ describe('Router', () => {
 
     beforeEach(() => {
       const _logger: Logger = TestBed.inject(Logger);
-      empty = createEmptyStateSnapshot(null);
+      empty = createEmptyStateSnapshot(null, TestBed.inject(EnvironmentInjector));
       logger = _logger;
       events = [];
     });
@@ -212,7 +212,7 @@ describe('Router', () => {
 
         of(testTransition)
           .pipe(
-            checkGuardsOperator(TestBed.inject(EnvironmentInjector), (evt) => {
+            checkGuardsOperator((evt) => {
               events.push(evt);
             }),
           )
@@ -272,7 +272,7 @@ describe('Router', () => {
 
         of(testTransition)
           .pipe(
-            checkGuardsOperator(TestBed.inject(EnvironmentInjector), (evt) => {
+            checkGuardsOperator((evt) => {
               events.push(evt);
             }),
           )
@@ -330,7 +330,7 @@ describe('Router', () => {
 
         of(testTransition)
           .pipe(
-            checkGuardsOperator(TestBed.inject(EnvironmentInjector), (evt) => {
+            checkGuardsOperator((evt) => {
               events.push(evt);
             }),
           )
@@ -406,7 +406,7 @@ describe('Router', () => {
 
         of(testTransition)
           .pipe(
-            checkGuardsOperator(TestBed.inject(EnvironmentInjector), (evt) => {
+            checkGuardsOperator((evt) => {
               events.push(evt);
             }),
           )
@@ -896,7 +896,7 @@ function checkResolveData(
   of({
     guards: getAllRouteGuards(future, curr, new ChildrenOutletContexts(injector)),
   } as NavigationTransition)
-    .pipe(resolveDataOperator('emptyOnly', injector))
+    .pipe(resolveDataOperator('emptyOnly'))
     .subscribe(check, (e) => {
       throw e;
     });
@@ -913,7 +913,7 @@ function checkGuards(
   of({
     guards: getAllRouteGuards(future, curr, new ChildrenOutletContexts(injector)),
   } as NavigationTransition)
-    .pipe(checkGuardsOperator(injector))
+    .pipe(checkGuardsOperator())
     .subscribe({
       next(t) {
         if (t.guardsResult === null) throw new Error('Guard result expected');

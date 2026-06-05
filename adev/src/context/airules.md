@@ -13,7 +13,6 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 @Component({
   selector: '{{tag-name}}-root',
   templateUrl: '{{tag-name}}.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class {{ClassName}} {
   protected readonly isServerRunning = signal(true);
@@ -25,26 +24,26 @@ export class {{ClassName}} {
 
 ```css
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 
-    button {
-        margin-top: 10px;
-    }
+  button {
+    margin-top: 10px;
+  }
 }
 ```
 
 ```html
 <section class="container">
-    @if (isServerRunning()) {
-        <span>Yes, the server is running</span>
-    } @else {
-        <span>No, the server is not running</span>
-    }
-    <button (click)="toggleServerStatus()">Toggle Server Status</button>
+  @if (isServerRunning()) {
+  <span>Yes, the server is running</span>
+  } @else {
+  <span>No, the server is not running</span>
+  }
+  <button (click)="toggleServerStatus()">Toggle Server Status</button>
 </section>
 ```
 
@@ -87,7 +86,6 @@ Here is a link to the most recent Angular style guide https://angular.dev/style-
 - Use `input()` signal instead of decorators, learn more here https://angular.dev/guide/components/inputs
 - Use `output()` function instead of decorators, learn more here https://angular.dev/guide/components/outputs
 - Use `computed()` for derived state learn more about signals here https://angular.dev/guide/signals.
-- Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
 - Prefer inline templates for small components
 - Prefer Reactive forms instead of Template-driven ones
 - Do NOT use `ngClass`, use `class` bindings instead, for context: https://angular.dev/guide/templates/binding#css-class-and-style-property-bindings

@@ -6,17 +6,13 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {AggregateMetadataKey, MetadataKey} from '../api/metadata';
-import type {
-  AsyncValidationResult,
-  DisabledReason,
-  FieldContext,
-  LogicFn,
-  ValidationResult,
-} from '../api/types';
-import type {ValidationError} from '../api/validation_errors';
+import {ɵRuntimeError as RuntimeError} from '@angular/core';
+import {RuntimeErrorCode} from '../errors';
+
+import type {MetadataKey, ValidationError} from '../api/rules';
+import type {AsyncValidationResult, DisabledReason, LogicFn, ValidationResult} from '../api/types';
 import {setBoundPathDepthForResolution} from '../field/resolution';
-import {BoundPredicate, DYNAMIC, LogicContainer, Predicate} from './logic';
+import {type BoundPredicate, DYNAMIC, LogicContainer, type Predicate} from './logic';
 
 /**
  * Abstract base class for building a `LogicNode`.
@@ -48,14 +44,9 @@ export abstract class AbstractLogicNodeBuilder {
   /** Adds a rule for asynchronous validation errors for a field. */
   abstract addAsyncErrorRule(logic: LogicFn<any, AsyncValidationResult>): void;
 
-  /** Adds a rule to compute aggregate metadata for a field. */
-  abstract addAggregateMetadataRule<M>(
-    key: AggregateMetadataKey<unknown, M>,
-    logic: LogicFn<any, M>,
-  ): void;
+  /** Adds a rule to compute metadata for a field. */
+  abstract addMetadataRule<M>(key: MetadataKey<unknown, M, unknown>, logic: LogicFn<any, M>): void;
 
-  /** Adds a factory function to produce a data value associated with a field. */
-  abstract addMetadataFactory<D>(key: MetadataKey<D>, factory: (ctx: FieldContext<any>) => D): void;
   /**
    * Gets a builder for a child node associated with the given property key.
    * @param key The property key of the child.
@@ -69,6 +60,18 @@ export abstract class AbstractLogicNodeBuilder {
    * @returns True if the builder has been merged, false otherwise.
    */
   abstract hasLogic(builder: AbstractLogicNodeBuilder): boolean;
+
+  /**
+   * Checks whether this builder or any of its children have any logic rules defined.
+   * @returns True if rules exist, false otherwise.
+   */
+  abstract hasRules(): boolean;
+
+  /**
+   * Checks whether any of the children of this builder have any logic rules defined.
+   * @returns True if rules exist on any child, false otherwise.
+   */
+  abstract anyChildHasLogic(): boolean;
 
   /**
    * Builds the `LogicNode` from the accumulated rules and child builders.
@@ -114,35 +117,25 @@ export class LogicNodeBuilder extends AbstractLogicNodeBuilder {
   }
 
   override addSyncErrorRule(
-    logic: LogicFn<any, ValidationResult<ValidationError.WithField>>,
+    logic: LogicFn<any, ValidationResult<ValidationError.WithFieldTree>>,
   ): void {
     this.getCurrent().addSyncErrorRule(logic);
   }
 
   override addSyncTreeErrorRule(
-    logic: LogicFn<any, ValidationResult<ValidationError.WithField>>,
+    logic: LogicFn<any, ValidationResult<ValidationError.WithFieldTree>>,
   ): void {
     this.getCurrent().addSyncTreeErrorRule(logic);
   }
 
   override addAsyncErrorRule(
-    logic: LogicFn<any, AsyncValidationResult<ValidationError.WithField>>,
+    logic: LogicFn<any, AsyncValidationResult<ValidationError.WithFieldTree>>,
   ): void {
     this.getCurrent().addAsyncErrorRule(logic);
   }
 
-  override addAggregateMetadataRule<T>(
-    key: AggregateMetadataKey<any, T>,
-    logic: LogicFn<any, T>,
-  ): void {
-    this.getCurrent().addAggregateMetadataRule(key, logic);
-  }
-
-  override addMetadataFactory<D>(
-    key: MetadataKey<D>,
-    factory: (ctx: FieldContext<any>) => D,
-  ): void {
-    this.getCurrent().addMetadataFactory(key, factory);
+  override addMetadataRule<T>(key: MetadataKey<unknown, T, any>, logic: LogicFn<any, T>): void {
+    this.getCurrent().addMetadataRule(key, logic);
   }
 
   override getChild(key: PropertyKey): LogicNodeBuilder {
@@ -172,6 +165,14 @@ export class LogicNodeBuilder extends AbstractLogicNodeBuilder {
       return true;
     }
     return this.all.some(({builder: subBuilder}) => subBuilder.hasLogic(builder));
+  }
+
+  override hasRules(): boolean {
+    return this.all.length > 0;
+  }
+
+  override anyChildHasLogic(): boolean {
+    return this.all.some(({builder}) => builder.anyChildHasLogic());
   }
 
   /**
@@ -254,35 +255,25 @@ class NonMergeableLogicNodeBuilder extends AbstractLogicNodeBuilder {
   }
 
   override addSyncErrorRule(
-    logic: LogicFn<any, ValidationResult<ValidationError.WithField>>,
+    logic: LogicFn<any, ValidationResult<ValidationError.WithFieldTree>>,
   ): void {
     this.logic.syncErrors.push(setBoundPathDepthForResolution(logic, this.depth));
   }
 
   override addSyncTreeErrorRule(
-    logic: LogicFn<any, ValidationResult<ValidationError.WithField>>,
+    logic: LogicFn<any, ValidationResult<ValidationError.WithFieldTree>>,
   ): void {
     this.logic.syncTreeErrors.push(setBoundPathDepthForResolution(logic, this.depth));
   }
 
   override addAsyncErrorRule(
-    logic: LogicFn<any, AsyncValidationResult<ValidationError.WithField>>,
+    logic: LogicFn<any, AsyncValidationResult<ValidationError.WithFieldTree>>,
   ): void {
     this.logic.asyncErrors.push(setBoundPathDepthForResolution(logic, this.depth));
   }
 
-  override addAggregateMetadataRule<T>(
-    key: AggregateMetadataKey<unknown, T>,
-    logic: LogicFn<any, T>,
-  ): void {
-    this.logic.getAggregateMetadata(key).push(setBoundPathDepthForResolution(logic, this.depth));
-  }
-
-  override addMetadataFactory<D>(
-    key: MetadataKey<D>,
-    factory: (ctx: FieldContext<any>) => D,
-  ): void {
-    this.logic.addMetadataFactory(key, setBoundPathDepthForResolution(factory, this.depth));
+  override addMetadataRule<T>(key: MetadataKey<unknown, T, unknown>, logic: LogicFn<any, T>): void {
+    this.logic.getMetadata(key).push(setBoundPathDepthForResolution(logic, this.depth));
   }
 
   override getChild(key: PropertyKey): LogicNodeBuilder {
@@ -294,6 +285,19 @@ class NonMergeableLogicNodeBuilder extends AbstractLogicNodeBuilder {
 
   override hasLogic(builder: AbstractLogicNodeBuilder): boolean {
     return this === builder;
+  }
+
+  override hasRules(): boolean {
+    return this.logic.hasAnyLogic() || this.children.size > 0;
+  }
+
+  override anyChildHasLogic(): boolean {
+    for (const child of this.children.values()) {
+      if (child.hasRules()) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -320,6 +324,18 @@ export interface LogicNode {
    * @returns True if the builder has been merged, false otherwise.
    */
   hasLogic(builder: AbstractLogicNodeBuilder): boolean;
+
+  /**
+   * Checks whether this node or any of its children have any logic rules defined.
+   * @returns True if rules exist, false otherwise.
+   */
+  hasRules(): boolean;
+
+  /**
+   * Checks whether any of the children of this node have any logic rules defined.
+   * @returns True if rules exist on any child, false otherwise.
+   */
+  anyChildHasLogic(): boolean;
 }
 
 /**
@@ -378,14 +394,19 @@ class LeafLogicNode implements LogicNode {
     }
   }
 
-  /**
-   * Checks whether the logic from a particular `AbstractLogicNodeBuilder` has been merged into this
-   * node.
-   * @param builder The builder to check for.
-   * @returns True if the builder has been merged, false otherwise.
-   */
   hasLogic(builder: AbstractLogicNodeBuilder): boolean {
-    return this.builder?.hasLogic(builder) ?? false;
+    if (!this.builder) {
+      return false;
+    }
+    return this.builder.hasLogic(builder);
+  }
+
+  hasRules(): boolean {
+    return this.builder ? this.builder.hasRules() : false;
+  }
+
+  anyChildHasLogic(): boolean {
+    return this.builder ? this.builder.anyChildHasLogic() : false;
   }
 }
 
@@ -428,6 +449,14 @@ class CompositeLogicNode implements LogicNode {
   hasLogic(builder: AbstractLogicNodeBuilder): boolean {
     return this.all.some((node) => node.hasLogic(builder));
   }
+
+  hasRules(): boolean {
+    return this.all.some((node) => node.hasRules());
+  }
+
+  anyChildHasLogic(): boolean {
+    return this.all.some((child) => child.anyChildHasLogic());
+  }
 }
 
 /**
@@ -464,7 +493,10 @@ function getAllChildBuilders(
       ...(builder.children.has(key) ? [{builder: builder.getChild(key), predicates: []}] : []),
     ];
   } else {
-    throw new Error('Unknown LogicNodeBuilder type');
+    throw new RuntimeError(
+      RuntimeErrorCode.UNKNOWN_BUILDER_TYPE,
+      ngDevMode && 'Unknown LogicNodeBuilder type',
+    );
   }
 }
 
@@ -498,7 +530,10 @@ function createLogic(
   } else if (builder instanceof NonMergeableLogicNodeBuilder) {
     logic.mergeIn(builder.logic);
   } else {
-    throw new Error('Unknown LogicNodeBuilder type');
+    throw new RuntimeError(
+      RuntimeErrorCode.UNKNOWN_BUILDER_TYPE,
+      ngDevMode && 'Unknown LogicNodeBuilder type',
+    );
   }
   return logic;
 }

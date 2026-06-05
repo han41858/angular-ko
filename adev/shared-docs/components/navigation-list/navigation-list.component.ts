@@ -6,15 +6,14 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ChangeDetectionStrategy, Component, inject, input, output} from '@angular/core';
-import {NavigationItem} from '../../interfaces/index';
-import {NavigationState} from '../../services/index';
+import {NgTemplateOutlet} from '@angular/common';
+import {Component, inject, input, output} from '@angular/core';
+import {MatTooltip} from '@angular/material/tooltip';
 import {RouterLink, RouterLinkActive} from '@angular/router';
-import {IconComponent} from '../icon/icon.component';
+import {NavigationItem} from '../../interfaces/index';
 import {IsActiveNavigationItem} from '../../pipes';
-import {NgTemplateOutlet, TitleCasePipe} from '@angular/common';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {ReactiveFormsModule} from '@angular/forms';
+import {NavigationState} from '../../services/index';
+import {IconComponent} from '../icon/icon.component';
 
 @Component({
   selector: 'docs-navigation-list',
@@ -24,16 +23,14 @@ import {ReactiveFormsModule} from '@angular/forms';
     IconComponent,
     IsActiveNavigationItem,
     NgTemplateOutlet,
-    MatTooltipModule,
-    ReactiveFormsModule,
-    TitleCasePipe,
+    MatTooltip,
   ],
   templateUrl: './navigation-list.component.html',
   styleUrls: ['./navigation-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationList {
   readonly navigationItems = input.required<NavigationItem[]>();
+  readonly preserveOtherCategoryOrder = input.required<boolean>();
   readonly displayItemsToLevel = input(2);
   readonly collapsableLevel = input<number | undefined>();
   readonly expandableLevel = input(2);
@@ -41,7 +38,10 @@ export class NavigationList {
 
   readonly linkClicked = output<void>();
 
+  protected readonly labelTruncationThreshold = 27;
+
   private readonly navigationState = inject(NavigationState);
+  private readonly crossCategoryOrigin = this.navigationState.crossCategoryOrigin;
 
   readonly activeItem = this.navigationState.activeNavigationItem;
 
@@ -53,10 +53,19 @@ export class NavigationList {
     ) {
       return;
     }
+    const prevParentItem = this.crossCategoryOrigin();
+    if (prevParentItem) {
+      this.crossCategoryOrigin.set(undefined);
+      this.navigationState.toggleItem(prevParentItem);
+      return;
+    }
     this.navigationState.toggleItem(item);
   }
 
-  emitClickOnLink(): void {
+  emitClickOnLink(item: NavigationItem): void {
+    if (item.isCrossReferenced) {
+      this.crossCategoryOrigin.set(item.parent);
+    }
     this.linkClicked.emit();
   }
 
@@ -64,14 +73,17 @@ export class NavigationList {
     return items.some((item) => !!item.category);
   }
 
-  protected groupItems(items: NavigationItem[]): Map<string, NavigationItem[]> {
+  protected groupItems(
+    items: NavigationItem[],
+    preserveOtherCategoryOrder: boolean,
+  ): Map<string, NavigationItem[]> {
     const hasCategories = this.hasCategories(items);
     if (hasCategories) {
       const others: NavigationItem[] = [];
       const categorizedItems = new Map<string, NavigationItem[]>();
       for (const item of items) {
         const category = item.category || 'Other';
-        if (category === 'Other') {
+        if (!preserveOtherCategoryOrder && category === 'Other') {
           others.push(item);
           continue;
         }

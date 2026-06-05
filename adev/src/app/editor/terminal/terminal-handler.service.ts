@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {computed, inject, Injectable, signal, Signal, untracked} from '@angular/core';
+import {computed, inject, signal, Signal, untracked, Service} from '@angular/core';
 import {Terminal} from '@xterm/xterm';
 import {FitAddon} from '@xterm/addon-fit';
-import {InteractiveTerminal} from './interactive-terminal';
+import {InteractiveTerminal, adevTerminalDefaultOptions} from './interactive-terminal';
 import {WINDOW} from '@angular/docs';
 import {CommandValidator} from './command-validator.service';
 
@@ -18,7 +18,7 @@ export enum TerminalType {
   INTERACTIVE,
 }
 
-@Injectable({providedIn: 'root'})
+@Service()
 export class TerminalHandler {
   private readonly window = inject(WINDOW);
   private readonly commandValidator = inject(CommandValidator);
@@ -28,11 +28,18 @@ export class TerminalHandler {
     // Because colors are parsed
     // See https://github.com/xtermjs/xterm.js/blob/854e2736f66ca3e5d3ab5a7b65bf3fd6fba8b707/src/browser/services/ThemeService.ts#L125
     [TerminalType.READONLY]: signal({
-      instance: new Terminal({convertEol: true, disableStdin: true}),
+      instance: new Terminal({
+        ...adevTerminalDefaultOptions,
+        disableStdin: true,
+      }),
       fitAddon: new FitAddon(),
     }),
     [TerminalType.INTERACTIVE]: signal({
-      instance: new InteractiveTerminal(this.window, this.commandValidator),
+      instance: new InteractiveTerminal(
+        adevTerminalDefaultOptions,
+        this.window,
+        this.commandValidator,
+      ),
       fitAddon: new FitAddon(),
     }),
   };
@@ -59,10 +66,14 @@ export class TerminalHandler {
       instance.dispose();
       fitAddon = new FitAddon();
       if (type === TerminalType.READONLY) {
-        instance = new Terminal({convertEol: true, disableStdin: true});
+        instance = new Terminal({...adevTerminalDefaultOptions, disableStdin: true});
         this.terminals[type].set({instance, fitAddon});
       } else {
-        const newInstance = new InteractiveTerminal(this.window, this.commandValidator);
+        const newInstance = new InteractiveTerminal(
+          adevTerminalDefaultOptions,
+          this.window,
+          this.commandValidator,
+        );
         instance = newInstance;
         this.terminals[type].set({instance: newInstance, fitAddon});
       }

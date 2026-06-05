@@ -1,7 +1,5 @@
 <docs-decorative-header title="Forms with signals" imgSrc="adev/src/assets/images/signals.svg"> </docs-decorative-header>
 
-IMPORTANT: Signal Forms are [experimental](/reference/releases#experimental). The API may change in future releases. Avoid using experimental APIs in production applications without understanding the risks.
-
 Signal Forms manage form state using Angular signals to provide automatic synchronization between your data model and the UI with Angular Signals.
 
 This guide walks you through the core concepts to create forms with Signal Forms. Here's how it works:
@@ -32,29 +30,29 @@ Then, you pass your form model into the `form()` function to create a **field tr
 const loginForm = form(loginModel);
 
 // Access fields directly by property name
-loginForm.email
-loginForm.password
+loginForm.email;
+loginForm.password;
 ```
 
-### 3. Bind HTML inputs with `[field]` directive
+### 3. Bind HTML inputs with `[formField]` directive
 
-Next, you bind your HTML inputs to the form using the `[field]` directive, which creates two-way binding between them:
+Next, you bind your HTML inputs to the form using the `[formField]` directive, which creates two-way binding between them:
 
 ```html
-<input type="email" [field]="loginForm.email" />
-<input type="password" [field]="loginForm.password" />
+<input type="email" [formField]="loginForm.email" />
+<input type="password" [formField]="loginForm.password" />
 ```
 
 As a result, user changes (such as typing in the field) automatically updates the form.
 
-NOTE: The `[field]` directive also syncs field state for attributes like `required`, `disabled`, and `readonly` when appropriate.
+NOTE: The `[formField]` directive also syncs field state for attributes like `required`, `disabled`, and `readonly` when appropriate.
 
 ### 4. Read field values with `value()`
 
 You can access field state by calling the field as a function. This returns a `FieldState` object containing reactive signals for the field's value, validation status, and interaction state:
 
 ```ts
-loginForm.email() // Returns FieldState with value(), valid(), touched(), etc.
+loginForm.email(); // Returns FieldState with value(), valid(), touched(), etc.
 ```
 
 To read the field's current value, access the `value()` signal:
@@ -95,7 +93,7 @@ Here's a complete example:
 
 ## Basic usage
 
-The `[field]` directive works with all standard HTML input types. Here are the most common patterns:
+The `[formField]` directive works with all standard HTML input types. Here are the most common patterns:
 
 ### Text inputs
 
@@ -103,8 +101,8 @@ Text inputs work with various `type` attributes and textareas:
 
 ```html
 <!-- Text and email -->
-<input type="text" [field]="form.name" />
-<input type="email" [field]="form.email" />
+<input type="text" [formField]="form.name" />
+<input type="email" [formField]="form.email" />
 ```
 
 #### Numbers
@@ -113,7 +111,7 @@ Number inputs automatically convert between strings and numbers:
 
 ```html
 <!-- Number - automatically converts to number type -->
-<input type="number" [field]="form.age" />
+<input type="number" [formField]="form.age" />
 ```
 
 #### Date and time
@@ -122,8 +120,8 @@ Date inputs store values as `YYYY-MM-DD` strings, and time inputs use `HH:mm` fo
 
 ```html
 <!-- Date and time - stores as ISO format strings -->
-<input type="date" [field]="form.eventDate" />
-<input type="time" [field]="form.eventTime" />
+<input type="date" [formField]="form.eventDate" />
+<input type="time" [formField]="form.eventTime" />
 ```
 
 If you need to convert date strings to Date objects, you can do so by passing the field value into `Date()`:
@@ -138,7 +136,7 @@ Textareas work the same way as text inputs:
 
 ```html
 <!-- Textarea -->
-<textarea [field]="form.message" rows="4"></textarea>
+<textarea [formField]="form.message" rows="4"></textarea>
 ```
 
 ### Checkboxes
@@ -148,57 +146,57 @@ Checkboxes bind to boolean values:
 ```html
 <!-- Single checkbox -->
 <label>
-  <input type="checkbox" [field]="form.agreeToTerms" />
+  <input type="checkbox" [formField]="form.agreeToTerms" />
   I agree to the terms
 </label>
 ```
 
 #### Multiple checkboxes
 
-For multiple options, create a separate boolean `field` for each:
+For multiple options, create a separate boolean `formField` for each:
 
 ```html
 <label>
-  <input type="checkbox" [field]="form.emailNotifications" />
+  <input type="checkbox" [formField]="form.emailNotifications" />
   Email notifications
 </label>
 <label>
-  <input type="checkbox" [field]="form.smsNotifications" />
+  <input type="checkbox" [formField]="form.smsNotifications" />
   SMS notifications
 </label>
 ```
 
 ### Radio buttons
 
-Radio buttons work similarly to checkboxes. As long as the radio buttons use the same `[field]` value, Signal Forms will automatically bind the same `name` attribute to all of them:
+Radio buttons work similarly to checkboxes. As long as the radio buttons use the same `[formField]` value, Signal Forms will automatically bind the same `name` attribute to all of them:
 
 ```html
 <label>
-  <input type="radio" value="free" [field]="form.plan" />
+  <input type="radio" value="free" [formField]="form.plan" />
   Free
 </label>
 <label>
-  <input type="radio" value="premium" [field]="form.plan" />
+  <input type="radio" value="premium" [formField]="form.plan" />
   Premium
 </label>
 ```
 
-When a user selects a radio button, the form `field` stores the value from that radio button's `value` attribute. For example, selecting "Premium" sets `form.plan().value()` to `"premium"`.
+When a user selects a radio button, the form `formField` stores the value from that radio button's `value` attribute. For example, selecting "Premium" sets `form.plan().value()` to `"premium"`.
 
 ### Select dropdowns
 
 Select elements work with both static and dynamic options:
 
-```html
+```angular-html
 <!-- Static options -->
-<select [field]="form.country">
+<select [formField]="form.country">
   <option value="">Select a country</option>
   <option value="us">United States</option>
   <option value="ca">Canada</option>
 </select>
 
 <!-- Dynamic options with @for -->
-<select [field]="form.productId">
+<select [formField]="form.productId">
   <option value="">Select a product</option>
   @for (product of products; track product.id) {
     <option [value]="product.id">{{ product.name }}</option>
@@ -206,7 +204,7 @@ Select elements work with both static and dynamic options:
 </select>
 ```
 
-NOTE: Multiple select (`<select multiple>`) is not supported by the `[field]` directive at this time.
+NOTE: Multiple select (`<select multiple>`) is not supported by the `[formField]` directive at this time.
 
 ## Validation and state
 
@@ -233,8 +231,8 @@ Common validators include:
 You can also customize error messages by passing an options object as the second argument to the validator:
 
 ```ts
-required(schemaPath.email, { message: 'Email is required' });
-email(schemaPath.email, { message: 'Please enter a valid email address' });
+required(schemaPath.email, {message: 'Email is required'});
+email(schemaPath.email, {message: 'Please enter a valid email address'});
 ```
 
 Each form field exposes its validation state through signals. For example, you can check `field().valid()` to see if validation passes, `field().touched()` to see if the user has interacted with it, and `field().errors()` to get the list of validation errors.
@@ -269,3 +267,7 @@ To learn more about Signal Forms and how it works, check out the in-depth guides
 - [Form models](guide/forms/signals/models) - Creating and managing form data with signals
 - [Field state management](guide/forms/signals/field-state-management) - Working with validation state, interaction tracking, and field visibility
 - [Validation](guide/forms/signals/validation) - Built-in validators, custom validation rules, and async validation
+
+<docs-pill-row>
+  <docs-pill title="Modular design with dependency injection" href="essentials/dependency-injection" />
+</docs-pill-row>

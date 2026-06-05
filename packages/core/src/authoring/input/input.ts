@@ -77,6 +77,19 @@ export interface InputFunction {
     initialValue: undefined,
     opts: InputOptionsWithTransform<T | undefined, TransformT>,
   ): InputSignalWithTransform<T | undefined, TransformT>;
+  /**
+   * Declares an input of type `T` with an initial value and a transform function
+   * that accepts values of the same type.
+   */
+  <T>(initialValue: T, opts: InputOptionsWithTransform<T, unknown>): InputSignalWithTransform<T, T>;
+  /**
+   * Declares an input of type `T|undefined` without an initial value and with a transform
+   * function that accepts values of the same type.
+   */
+  <T>(
+    initialValue: undefined,
+    opts: InputOptionsWithTransform<T | undefined, unknown>,
+  ): InputSignalWithTransform<T | undefined, T | undefined>;
 
   /**
    * Initializes a required input.
@@ -149,6 +162,8 @@ export interface InputFunction {
  *
  * @publicAPI
  * @initializerApiFunction
+ *
+ * @see [Accepting data with input properties](guide/components/inputs)
  */
 export const input: InputFunction = (() => {
   // Note: This may be considered a side-effect, but nothing will depend on

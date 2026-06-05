@@ -71,20 +71,20 @@ HELPFUL: The schematic ignores NgModules which bootstrap a component during this
 // shared.module.ts
 @NgModule({
   imports: [CommonModule],
-  declarations: [GreeterComponent],
-  exports: [GreeterComponent]
+  declarations: [Greeter],
+  exports: [Greeter],
 })
 export class SharedModule {}
 ```
 
-```typescript
-// greeter.component.ts
+```angular-ts
+// greeter.ts
 @Component({
   selector: 'greeter',
   template: '<div *ngIf="showGreeting">Hello</div>',
   standalone: false,
 })
-export class GreeterComponent {
+export class Greeter {
   showGreeting = true;
 }
 ```
@@ -94,20 +94,20 @@ export class GreeterComponent {
 ```typescript
 // shared.module.ts
 @NgModule({
-  imports: [CommonModule, GreeterComponent],
-  exports: [GreeterComponent]
+  imports: [CommonModule, Greeter],
+  exports: [Greeter],
 })
 export class SharedModule {}
 ```
 
-```typescript
-// greeter.component.ts
+```angular-ts
+// greeter.ts
 @Component({
   selector: 'greeter',
   template: '<div *ngIf="showGreeting">Hello</div>',
-  imports: [NgIf]
+  imports: [NgIf],
 })
-export class GreeterComponent {
+export class Greeter {
   showGreeting = true;
 }
 ```
@@ -134,7 +134,7 @@ The migration considers a module safe to remove if that module:
 // importer.module.ts
 @NgModule({
   imports: [FooComponent, BarPipe],
-  exports: [FooComponent, BarPipe]
+  exports: [FooComponent, BarPipe],
 })
 export class ImporterModule {}
 ```
@@ -154,32 +154,34 @@ This step converts any usages of `bootstrapModule` to the new, standalone-based 
 
 ```typescript
 // ./app/app.module.ts
-import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
+import {NgModule} from '@angular/core';
+import {App} from './app';
 
 @NgModule({
-  declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  declarations: [App],
+  bootstrap: [App],
 })
 export class AppModule {}
 ```
 
 ```typescript
-// ./app/app.component.ts
+// ./app/app.ts
 @Component({
   selector: 'app',
   template: 'hello',
   standalone: false,
 })
-export class AppComponent {}
+export class App {}
 ```
 
 ```typescript
 // ./main.ts
-import { platformBrowser } from '@angular/platform-browser';
-import { AppModule } from './app/app.module';
+import {platformBrowser} from '@angular/platform-browser';
+import {AppModule} from './app/app.module';
 
-platformBrowser().bootstrapModule(AppModule).catch(e => console.error(e));
+platformBrowser()
+  .bootstrapModule(AppModule)
+  .catch((e) => console.error(e));
 ```
 
 **After:**
@@ -190,20 +192,20 @@ platformBrowser().bootstrapModule(AppModule).catch(e => console.error(e));
 ```
 
 ```typescript
-// ./app/app.component.ts
+// ./app/app.ts
 @Component({
   selector: 'app',
-  template: 'hello'
+  template: 'hello',
 })
-export class AppComponent {}
+export class App {}
 ```
 
 ```typescript
 // ./main.ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {App} from './app';
 
-bootstrapApplication(AppComponent).catch(e => console.error(e));
+bootstrapApplication(App).catch((e) => console.error(e));
 ```
 
 ## Common problems

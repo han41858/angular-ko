@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import {
@@ -14,8 +14,13 @@ import {
   TmplAstTemplate,
   TmplAstTextAttribute,
 } from '@angular/compiler';
-import {ErrorCode, ngErrorCode} from '@angular/compiler-cli/src/ngtsc/diagnostics';
-import {TypeCheckableDirectiveMeta} from '@angular/compiler-cli/src/ngtsc/typecheck/api';
+import {
+  ErrorCode,
+  InputMapping,
+  ngErrorCode,
+  TypeCheckableDirectiveMeta,
+} from '@angular/compiler-cli';
+
 import ts from 'typescript';
 
 import {getTargetAtPosition, TargetNodeKind} from '../template_target';
@@ -74,8 +79,8 @@ export const fixMissingRequiredInput: CodeActionMeta = {
     const codeActions: ts.CodeFixAction[] = [];
 
     for (const dirSymbol of symbol.directives) {
-      const directive = dirSymbol.tsSymbol.valueDeclaration;
-      if (!ts.isClassDeclaration(directive)) {
+      const directive = ttc.getTsSymbolOfSymbol(dirSymbol)?.valueDeclaration;
+      if (!directive || !ts.isClassDeclaration(directive)) {
         continue;
       }
 
@@ -100,7 +105,10 @@ export const fixMissingRequiredInput: CodeActionMeta = {
           continue;
         }
         const typeCheck = compiler.getCurrentProgram().getTypeChecker();
-        const memberSymbol = typeCheck.getPropertyOfType(dirSymbol.tsType, input.classPropertyName);
+        const memberSymbol = typeCheck.getPropertyOfType(
+          ttc.getTypeOfSymbol(dirSymbol)!,
+          input.classPropertyName,
+        );
         if (memberSymbol === undefined) {
           continue;
         }
@@ -165,7 +173,7 @@ function getBoundAttributes(
     if (inputs !== null) {
       boundInputs.push({
         attribute: attr,
-        inputs: inputs.map((input) => ({
+        inputs: inputs.map((input: InputMapping) => ({
           fieldName: input.classPropertyName,
           required: input.required,
         })),

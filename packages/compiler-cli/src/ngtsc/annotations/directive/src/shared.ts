@@ -7,6 +7,8 @@
  */
 
 import {
+  ArrowFunctionExpr,
+  ClassPropertyMapping,
   createMayBeForwardRefExpression,
   emitDistinctChangesOnlyDefaultValue,
   Expression,
@@ -14,6 +16,11 @@ import {
   ExternalReference,
   ForwardRefHandling,
   getSafePropertyAccessString,
+  HostBindingDecorator,
+  HostListenerDecorator,
+  HostObjectLiteralBinding,
+  InputOrOutput,
+  literal,
   LiteralArrayExpr,
   literalMap,
   MaybeForwardRefExpression,
@@ -22,14 +29,13 @@ import {
   parseHostBindings,
   R3DirectiveMetadata,
   R3HostDirectiveMetadata,
+  R3Identifiers,
   R3InputMetadata,
   R3QueryMetadata,
   R3Reference,
+  SourceNode,
   verifyHostBindings,
-  R3Identifiers,
-  ArrowFunctionExpr,
   WrappedNodeExpr,
-  literal,
 } from '@angular/compiler';
 import ts from 'typescript';
 
@@ -42,11 +48,9 @@ import {
   ReferenceEmitter,
 } from '../../../imports';
 import {
-  ClassPropertyMapping,
   DecoratorInputTransform,
   HostDirectiveMeta,
   InputMapping,
-  InputOrOutput,
   isHostDirectiveMetaForGlobalMode,
   Resource,
 } from '../../../metadata';
@@ -56,7 +60,6 @@ import {
   ForeignFunctionResolver,
   PartialEvaluator,
   ResolvedValue,
-  traceDynamicValue,
 } from '../../../partial_evaluator';
 import {
   AmbientImport,
@@ -105,9 +108,10 @@ export const queryDecoratorNames: QueryDecoratorName[] = [
 ];
 
 export interface HostBindingNodes {
-  literal: ts.ObjectLiteralExpression | null;
-  bindingDecorators: Set<ts.Decorator>;
-  listenerDecorators: Set<ts.Decorator>;
+  hostObjectLiteralBindings: HostObjectLiteralBinding[];
+  hostBindingDecorators: HostBindingDecorator[];
+  hostListenerDecorators: HostListenerDecorator[];
+  rawNodes: ts.Node[];
 }
 
 const QUERY_TYPES = new Set<string>(queryDecoratorNames);
@@ -133,6 +137,7 @@ export function extractDirectiveMetadata(
   strictStandalone: boolean,
   implicitStandaloneValue: boolean,
   emitDeclarationOnly: boolean,
+  legacyOptionalChaining: boolean,
 ):
   | {
       jitForced: false;
@@ -290,9 +295,10 @@ export function extractDirectiveMetadata(
   }
 
   const hostBindingNodes: HostBindingNodes = {
-    literal: null,
-    bindingDecorators: new Set<ts.Decorator>(),
-    listenerDecorators: new Set<ts.Decorator>(),
+    hostObjectLiteralBindings: [],
+    hostBindingDecorators: [],
+    hostListenerDecorators: [],
+    rawNodes: [],
   };
 
   const host = extractHostBindings(
@@ -317,6 +323,8 @@ export function extractDirectiveMetadata(
     (member) =>
       !member.isStatic && member.kind === ClassMemberKind.Method && member.name === 'ngOnChanges',
   );
+
+  const controlCreate = extractControlDirectiveDefinition(members);
 
   // Parse exportAs.
   let exportAs: string[] | null = null;
@@ -392,7 +400,7 @@ export function extractDirectiveMetadata(
   // Detect if the component inherits from another class
   const usesInheritance = reflector.hasBaseClass(clazz);
   const sourceFile = clazz.getSourceFile();
-  const type = wrapTypeReference(reflector, clazz);
+  const type = wrapTypeReference(clazz);
 
   const rawHostDirectives = directive.get('hostDirectives') || null;
   const hostDirectives =
@@ -442,6 +450,7 @@ export function extractDirectiveMetadata(
     typeArgumentCount: reflector.getGenericArityOfClass(clazz) || 0,
     typeSourceSpan: createSourceSpan(clazz.name),
     usesInheritance,
+    controlCreate,
     exportAs,
     providers,
     isStandalone,
@@ -449,6 +458,7 @@ export function extractDirectiveMetadata(
     hostDirectives:
       hostDirectives?.map((hostDir) => toHostDirectiveMetadata(hostDir, sourceFile, refEmitter)) ||
       null,
+    legacyOptionalChaining,
   };
   return {
     jitForced: false,
@@ -597,7 +607,17 @@ function extractHostBindings(
     const hostExpression = metadata.get('host')!;
     bindings = evaluateHostExpressionBindings(hostExpression, evaluator);
     if (ts.isObjectLiteralExpression(hostExpression)) {
-      hostBindingNodes.literal = hostExpression;
+      hostBindingNodes.rawNodes.push(hostExpression);
+
+      for (const prop of hostExpression.properties) {
+        if (ts.isPropertyAssignment(prop)) {
+          hostBindingNodes.hostObjectLiteralBindings.push({
+            key: sourceNodeFromTs(prop.name),
+            value: sourceNodeFromTs(prop.initializer),
+            sourceSpan: createSourceSpan(prop),
+          });
+        }
+      }
     }
   } else {
     bindings = parseHostBindings({});
@@ -642,7 +662,23 @@ function extractHostBindings(
         }
 
         if (ts.isDecorator(decorator.node)) {
-          hostBindingNodes.bindingDecorators.add(decorator.node);
+          const member = decorator.node.parent;
+
+          hostBindingNodes.rawNodes.push(decorator.node.expression);
+
+          // TODO(crisbeto): this doesn't cover getters which is likely hiding some errors.
+          if (member && ts.isPropertyDeclaration(member) && member.name) {
+            const memberName = sourceNodeFromTs(member.name);
+
+            if (memberName.kind === 'string' || memberName.kind === 'identifier') {
+              hostBindingNodes.hostBindingDecorators.push({
+                memberName,
+                memberSpan: createSourceSpan(member),
+                arguments: decorator.args === null ? [] : decorator.args.map(sourceNodeFromTs),
+                decoratorSpan: createSourceSpan(decorator.node),
+              });
+            }
+          }
         }
 
         // Since this is a decorator, we know that the value is a class member. Always access it
@@ -707,7 +743,33 @@ function extractHostBindings(
         }
 
         if (ts.isDecorator(decorator.node)) {
-          hostBindingNodes.listenerDecorators.add(decorator.node);
+          const member = decorator.node.parent;
+          hostBindingNodes.rawNodes.push(decorator.node.expression);
+
+          if (member && ts.isMethodDeclaration(member) && member.name) {
+            const memberName = sourceNodeFromTs(member.name);
+
+            if (memberName.kind === 'string' || memberName.kind === 'identifier') {
+              let eventName: SourceNode | null = null;
+              let args: SourceNode[] | undefined;
+
+              if (decorator.args !== null && decorator.args.length > 0) {
+                eventName = sourceNodeFromTs(decorator.args[0]);
+                args =
+                  decorator.args.length > 1 && ts.isArrayLiteralExpression(decorator.args[1])
+                    ? decorator.args[1].elements.map(sourceNodeFromTs)
+                    : [];
+              }
+
+              hostBindingNodes.hostListenerDecorators.push({
+                eventName,
+                memberName,
+                memberSpan: createSourceSpan(member),
+                arguments: args ?? [],
+                decoratorSpan: createSourceSpan(decorator.node),
+              });
+            }
+          }
         }
 
         bindings.listeners[eventName] = `${member.name}(${args.join(',')})`;
@@ -715,6 +777,28 @@ function extractHostBindings(
     },
   );
   return bindings;
+}
+
+function sourceNodeFromTs(node: ts.Node): SourceNode {
+  const sourceSpan = createSourceSpan(node);
+
+  if (ts.isStringLiteralLike(node) || ts.isIdentifier(node)) {
+    // Offset by one on both sides to skip over the quotes.
+    if (ts.isStringLiteralLike(node)) {
+      sourceSpan.fullStart = sourceSpan.fullStart.moveBy(1);
+      sourceSpan.start = sourceSpan.start.moveBy(1);
+      sourceSpan.end = sourceSpan.end.moveBy(-1);
+    }
+
+    return {
+      kind: ts.isIdentifier(node) ? 'identifier' : 'string',
+      sourceSpan,
+      source: node.getText(),
+      text: node.text,
+    };
+  }
+
+  return {kind: 'unspecified', sourceSpan};
 }
 
 function extractQueriesFromDecorator(
@@ -1343,6 +1427,7 @@ function parseInputFields(
   emitDeclarationOnly: boolean,
 ): Record<string, InputMapping> {
   const inputs = {} as Record<string, InputMapping>;
+  const bindings = new Map<string, ClassMember>();
 
   for (const member of members) {
     const classPropertyName = member.name;
@@ -1360,6 +1445,18 @@ function parseInputFields(
     if (inputMapping === null) {
       continue;
     }
+
+    const bindingPropertyName = inputMapping.bindingPropertyName;
+    if (bindings.has(bindingPropertyName)) {
+      const firstMember = bindings.get(bindingPropertyName)!;
+      throw new FatalDiagnosticError(
+        ErrorCode.DUPLICATE_BINDING_NAME,
+        member.node ?? clazz,
+        `Input '${bindingPropertyName}' is bound to both '${firstMember.name}' and '${member.name}'.`,
+        [makeRelatedInformation(firstMember.node ?? clazz, `The first binding is declared here.`)],
+      );
+    }
+    bindings.set(bindingPropertyName, member);
 
     if (member.isStatic) {
       throw new FatalDiagnosticError(
@@ -1577,6 +1674,64 @@ function assertEmittableInputType(
 }
 
 /**
+ * Extracts the `controlCreate` definition for the private control directive contract from the
+ * directive class.
+ *
+ * This looks for a lifecycle method called `ɵngControlCreate`. If present, a control directive
+ * definition will be extracted, and `ɵɵControlFeature` will be applied to the directive.
+ *
+ * A control directive may declare a pass-through input name, by including a generic type on the
+ * type of the `ControlDirectiveHost` parameter of `ɵngControlCreate`:
+ *
+ * ```ts
+ * class MyControlDirective {
+ *   ɵngControlCreate<T>(host: ControlDirectiveHost<'formField'>): void {}
+ * }
+ * ```
+ *
+ * If present, this will be extracted as the `passThroughInput` property of the control directive
+ * definition.
+ */
+function extractControlDirectiveDefinition(
+  members: ClassMember[],
+): R3DirectiveMetadata['controlCreate'] {
+  const controlCreateMember = members.find(
+    (member) =>
+      !member.isStatic &&
+      member.kind === ClassMemberKind.Method &&
+      member.name === 'ɵngControlCreate',
+  );
+
+  if (
+    controlCreateMember === undefined ||
+    controlCreateMember.node === null ||
+    !ts.isMethodDeclaration(controlCreateMember.node)
+  ) {
+    return null;
+  }
+
+  const {node} = controlCreateMember;
+  if (
+    node.parameters.length === 0 ||
+    node.parameters[0].type === undefined ||
+    !ts.isTypeReferenceNode(node.parameters[0].type)
+  ) {
+    return {passThroughInput: null};
+  }
+
+  const type = node.parameters[0].type;
+  if (
+    type.typeArguments?.length !== 1 ||
+    !ts.isLiteralTypeNode(type.typeArguments[0]) ||
+    !ts.isStringLiteral(type.typeArguments[0].literal)
+  ) {
+    return {passThroughInput: null};
+  }
+
+  return {passThroughInput: type.typeArguments[0].literal.text};
+}
+
+/**
  * Iterates through all specified class members and attempts to detect
  * view and content queries defined.
  *
@@ -1681,6 +1836,7 @@ function parseOutputFields(
   outputsFromMeta: Record<string, string>,
 ): Record<string, string> {
   const outputs = {} as Record<string, string>;
+  const bindings = new Map<string, ClassMember>();
 
   for (const member of members) {
     const decoratorOutput = tryParseDecoratorOutput(member, evaluator, isCore);
@@ -1724,6 +1880,17 @@ function parseOutputFields(
     } else {
       continue;
     }
+
+    if (bindings.has(bindingPropertyName)) {
+      const firstMember = bindings.get(bindingPropertyName)!;
+      throw new FatalDiagnosticError(
+        ErrorCode.DUPLICATE_BINDING_NAME,
+        member.node ?? clazz,
+        `Output '${bindingPropertyName}' is bound to both '${firstMember.name}' and '${member.name}'.`,
+        [makeRelatedInformation(firstMember.node ?? clazz, `The first binding is declared here.`)],
+      );
+    }
+    bindings.set(bindingPropertyName, member);
 
     // Validate that initializer-based outputs are not accidentally declared
     // in the `outputs` class metadata.
@@ -2057,16 +2224,8 @@ function toR3InputMetadata(mapping: InputMapping): R3InputMetadata {
 export function extractHostBindingResources(nodes: HostBindingNodes): ReadonlySet<Resource> {
   const result = new Set<Resource>();
 
-  if (nodes.literal !== null) {
-    result.add({path: null, node: nodes.literal});
-  }
-
-  for (const current of nodes.bindingDecorators) {
-    result.add({path: null, node: current.expression});
-  }
-
-  for (const current of nodes.listenerDecorators) {
-    result.add({path: null, node: current.expression});
+  for (const node of nodes.rawNodes) {
+    result.add({path: null, node});
   }
 
   return result;

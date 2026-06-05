@@ -1,18 +1,14 @@
-import {Component, model, input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, input, model} from '@angular/core';
 
 @Component({
   selector: 'custom-checkbox',
   template: `
     <label class="custom-checkbox">
-      <input 
-        type="checkbox" 
-        [checked]="checked()" 
-        (change)="toggle()">
+      <input type="checkbox" [checked]="checked()" (change)="toggle()" />
       <span class="checkmark"></span>
       {{ label() }}
     </label>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomCheckbox {
   // Model signal for two-way binding

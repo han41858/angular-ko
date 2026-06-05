@@ -1,5 +1,5 @@
 // TODO: Import signal from @angular/core
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import {Component} from '@angular/core';
 import {ProductCard} from './product-card';
 
 @Component({
@@ -14,11 +14,7 @@ import {ProductCard} from './product-card';
         <p>Data flows down from parent to child via signal inputs:</p>
 
         <!-- TODO: Change from static values to dynamic signal values -->
-        <product-card
-          name="Static Product"
-          price="99"
-          available="true"
-        />
+        <product-card name="Static Product" price="99" available="true" />
 
         <!-- TODO: Add controls to test reactive updates -->
         <div class="controls">
@@ -28,7 +24,6 @@ import {ProductCard} from './product-card';
     </div>
   `,
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   // TODO: Create parent signals for product data

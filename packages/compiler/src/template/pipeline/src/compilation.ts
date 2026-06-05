@@ -34,8 +34,8 @@ export abstract class CompilationJob {
   constructor(
     readonly componentName: string,
     readonly pool: ConstantPool,
-    readonly compatibility: ir.CompatibilityMode,
     readonly mode: TemplateCompilationMode,
+    readonly legacyOptionalChaining: boolean,
   ) {}
 
   kind: CompilationJobKind = CompilationJobKind.Both;
@@ -78,7 +78,6 @@ export class ComponentCompilationJob extends CompilationJob {
   constructor(
     componentName: string,
     pool: ConstantPool,
-    compatibility: ir.CompatibilityMode,
     mode: TemplateCompilationMode,
     readonly relativeContextFilePath: string,
     readonly i18nUseExternalIds: boolean,
@@ -86,8 +85,9 @@ export class ComponentCompilationJob extends CompilationJob {
     readonly allDeferrableDepsFn: o.ReadVarExpr | null,
     readonly relativeTemplatePath: string | null,
     readonly enableDebugLocations: boolean,
+    legacyOptionalChaining: boolean,
   ) {
-    super(componentName, pool, compatibility, mode);
+    super(componentName, pool, mode, legacyOptionalChaining);
     this.root = new ViewCompilationUnit(this, this.allocateXrefId(), null);
     this.views.set(this.root.xref, this.root);
   }
@@ -172,6 +172,13 @@ export abstract class CompilationUnit {
   readonly update = new ir.OpList<ir.UpdateOp>();
 
   /**
+   * Function definition expressions that can be found in this unit.
+   *
+   * This is a shortcut so we don't need to traverse all the ops to find functions.
+   */
+  readonly functions = new Set<ir.ArrowFunctionExpr>();
+
+  /**
    * The enclosing job, which might contain several individual compilation units.
    */
   abstract readonly job: CompilationJob;
@@ -195,6 +202,11 @@ export abstract class CompilationUnit {
    * Some operations may have child operations, which this iterator will visit.
    */
   *ops(): Generator<ir.CreateOp | ir.UpdateOp> {
+    for (const expr of this.functions) {
+      for (const op of expr.ops) {
+        yield op;
+      }
+    }
     for (const op of this.create) {
       yield op;
       if (
@@ -256,10 +268,10 @@ export class HostBindingCompilationJob extends CompilationJob {
   constructor(
     componentName: string,
     pool: ConstantPool,
-    compatibility: ir.CompatibilityMode,
     mode: TemplateCompilationMode,
+    legacyOptionalChaining: boolean,
   ) {
-    super(componentName, pool, compatibility, mode);
+    super(componentName, pool, mode, legacyOptionalChaining);
     this.root = new HostBindingCompilationUnit(this);
   }
 

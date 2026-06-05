@@ -16,7 +16,7 @@ Angular CLI builders support a `configurations` object, which allows overwriting
     "my-app": {
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
             // By default, disable source map generation.
             "sourceMap": false
@@ -54,7 +54,7 @@ ng build --configuration debug,production,customer-facing
 
 ## Configure environment-specific defaults
 
-`@angular-devkit/build-angular:browser` supports file replacements, an option for substituting source files before executing a build.
+`@angular/build:application` supports file replacements, an option for substituting source files before executing a build.
 Using this in combination with `--configuration` provides a mechanism for configuring environment-specific data in your application.
 
 Start by [generating environments](cli/generate/environments) to create the `src/environments/` directory and configure the project to use file replacements.
@@ -83,11 +83,9 @@ The base file `environment.ts`, contains the default environment settings.
 For example:
 
 ```ts
-
 export const environment = {
-  production: true
+  production: true,
 };
-
 ```
 
 The `build` command uses this as the build target when no environment is specified.
@@ -95,24 +93,22 @@ You can add further variables, either as additional properties on the environmen
 For example, the following adds a default for a variable to the default environment:
 
 ```ts
-
 export const environment = {
   production: true,
-  apiUrl: 'http://my-prod-url'
+  apiUrl: 'http://my-prod-url',
 };
-
 ```
+
+CRITICAL: Files in `src/environments/` are bundled into your client-side application and visible to anyone who loads the page. Never store secrets such as API keys here. Use a server-side proxy or a secrets manager instead.
 
 You can add target-specific configuration files, such as `environment.development.ts`.
 The following content sets default values for the development build target:
 
 ```ts
-
 export const environment = {
   production: false,
-  apiUrl: 'http://my-dev-url'
+  apiUrl: 'http://my-dev-url',
 };
-
 ```
 
 ## Using environment-specific variables in your app
@@ -120,22 +116,18 @@ export const environment = {
 To use the environment configurations you have defined, your components must import the original environments file:
 
 ```ts
-
-import { environment } from './environments/environment';
-
+import {environment} from './environments/environment';
 ```
 
 This ensures that the build and serve commands can find the configurations for specific build targets.
 
-The following code in the component file (`app.component.ts`) uses an environment variable defined in the configuration files.
+The following code in the component file (`app.ts`) uses an environment variable defined in the configuration files.
 
 ```ts
-
-import { environment } from './../environments/environment';
+import {environment} from './../environments/environment';
 
 // Fetches from `http://my-prod-url` in production, `http://my-dev-url` in development.
 fetch(environment.apiUrl);
-
 ```
 
 The main CLI configuration file, `angular.json`, contains a `fileReplacements` section in the configuration for each build target, which lets you replace any file in the TypeScript program with a target-specific version of that file.
@@ -196,7 +188,7 @@ You can also configure `ng serve` to use the targeted build configuration if you
 ```json
 
   "serve": {
-    "builder": "@angular-devkit/build-angular:dev-server",
+    "builder": "@angular/build:dev-server",
     "options": { … },
     "configurations": {
       "development": {

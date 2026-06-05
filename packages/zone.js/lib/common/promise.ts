@@ -34,7 +34,7 @@ export function patchPromise(Zone: ZoneType): void {
     api.onUnhandledError = (e: any) => {
       if (api.showUncaughtError()) {
         const rejection = e && e.rejection;
-        if (rejection) {
+        if (rejection && e.zone && e.task) {
           console.error(
             'Unhandled Promise rejection:',
             rejection instanceof Error ? rejection.message : rejection,
@@ -627,6 +627,11 @@ export function patchPromise(Zone: ZoneType): void {
 
     if (NativePromise) {
       patchThen(NativePromise);
+      // TODO(atscott): Investigate generic to propagate any unknown properties
+      const nativeTry = (NativePromise as any)['try'];
+      if (nativeTry && typeof nativeTry === 'function') {
+        (ZoneAwarePromise as any)['try'] = nativeTry;
+      }
       patchMethod(global, 'fetch', (delegate) => zoneify(delegate));
     }
 

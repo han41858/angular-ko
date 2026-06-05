@@ -1,10 +1,10 @@
 # Introduction to Angular animations
 
-IMPORTANT: The `@angular/animations` package is now deprecated. The Angular team recommends using native CSS with `animate.enter` and `animate.leave` for animations for all new code. Learn more at the new enter and leave [animation guide](guide/animations/enter-and-leave). Also see [Migrating away from Angular's Animations package](guide/animations/migration) to learn how you can start migrating to pure CSS animations in your apps.
+IMPORTANT: The `@angular/animations` package is now deprecated. The Angular team recommends using native CSS with `animate.enter` and `animate.leave` for animations for all new code. Learn more at the new enter and leave [animation guide](guide/animations). Also see [Migrating away from Angular's Animations package](guide/animations/migration) to learn how you can start migrating to pure CSS animations in your apps.
 
-Animation provides the illusion of motion: HTML elements change styling over time.
-Well-designed animations can make your application more fun and straightforward to use, but they aren't just cosmetic.
-Animations can improve your application and user experience in a number of ways:
+Animation provides the illusion of motion: HTML elements change styles over time.
+Well-designed animations can make your application more intuitive and engaging, but they aren't just cosmetic.
+Animations can improve your application and the user experience in a number of ways:
 
 - Without animations, web page transitions can seem abrupt and jarring
 - Motion greatly enhances the user experience, so animations give users a chance to detect the application's response to their actions
@@ -32,13 +32,11 @@ To get started with adding Angular animations to your project, import the animat
 <docs-step title="Enabling the animations module">
 Import `provideAnimationsAsync` from `@angular/platform-browser/animations/async` and add it to the providers list in the `bootstrapApplication` function call.
 
-<docs-code header="Enabling Animations" language="ts" linenums>
+```ts {header: "Enabling Animations", linenums}
 bootstrapApplication(AppComponent, {
-  providers: [
-    provideAnimationsAsync(),
-  ]
+  providers: [provideAnimationsAsync()],
 });
-</docs-code>
+```
 
 <docs-callout important title="If you need immediate animations in your application">
   If you need to have an animation happen immediately when your application is loaded,
@@ -54,7 +52,7 @@ For `NgModule` based applications import `BrowserAnimationsModule`, which introd
 <docs-step title="Importing animation functions into component files">
 If you plan to use specific animation functions in component files, import those functions from `@angular/animations`.
 
-<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" visibleRegion="imports"/>
+<docs-code header="app.ts" path="adev/src/content/examples/animations/src/app/app.ts" region="imports"/>
 
 See all [available animation functions](guide/legacy-animations#animations-api-summary) at the end of this guide.
 
@@ -63,7 +61,7 @@ See all [available animation functions](guide/legacy-animations#animations-api-s
 In the component file, add a metadata property called `animations:` within the `@Component()` decorator.
 You put the trigger that defines an animation within the `animations` metadata property.
 
-<docs-code header="app.component.ts" path="adev/src/content/examples/animations/src/app/app.component.ts" visibleRegion="decorator"/>
+<docs-code header="app.ts" path="adev/src/content/examples/animations/src/app/app.ts" region="decorator"/>
 </docs-step>
 </docs-workflow>
 
@@ -72,7 +70,7 @@ You put the trigger that defines an animation within the `animations` metadata p
 Let's animate a transition that changes a single HTML element from one state to another.
 For example, you can specify that a button displays either **Open** or **Closed** based on the user's last action.
 When the button is in the `open` state, it's visible and yellow.
-When it's the `closed` state, it's translucent and blue.
+When it's in the `closed` state, it's translucent and blue.
 
 In HTML, these attributes are set using ordinary CSS styles such as color and opacity.
 In Angular, use the `style()` function to specify a set of CSS styles for use with animations.
@@ -86,7 +84,7 @@ Run the following command in terminal to generate the component:
 ng g component open-close
 ```
 
-This will create the component at `src/app/open-close.component.ts`.
+This will create the component at `src/app/open-close.ts`.
 
 ### Animation state and styles
 
@@ -101,11 +99,11 @@ Let's see how Angular's [`state()`](api/animations/state) function works with th
 In this code snippet, multiple style attributes are set at the same time for the state.
 In the `open` state, the button has a height of 200 pixels, an opacity of 1, and a yellow background color.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="state1"/>
+<docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="state1"/>
 
 In the following `closed` state, the button has a height of 100 pixels, an opacity of 0.8, and a background color of blue.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="state2"/>
+<docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="state2"/>
 
 ### Transitions and timing
 
@@ -126,19 +124,15 @@ The `animate()` function \(second argument of the transition function\) accepts 
 
 The `timings` parameter takes either a number or a string defined in three parts.
 
-<docs-code language="typescript">
-
-animate (duration)
-
-</docs-code>
+```ts
+animate(duration);
+```
 
 or
 
-<docs-code language="typescript">
-
-animate ('duration delay easing')
-
-</docs-code>
+```ts
+animate('duration delay easing');
+```
 
 The first part, `duration`, is required.
 The duration can be expressed in milliseconds as a number without quotes, or in seconds with quotes and a time specifier.
@@ -177,7 +171,7 @@ HELPFUL: See the Material Design website's topic on [Natural easing curves](http
 
 This example provides a state transition from `open` to `closed` with a 1-second transition between states.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="transition1"/>
+<docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="transition1"/>
 
 In the preceding code snippet, the `=>` operator indicates unidirectional transitions, and `<=>` is bidirectional.
 Within the transition, `animate()` specifies how long the transition takes.
@@ -185,7 +179,7 @@ In this case, the state change from `open` to `closed` takes 1 second, expressed
 
 This example adds a state transition from the `closed` state to the `open` state with a 0.5-second transition animation arc.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="transition2"/>
+<docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="transition2"/>
 
 HELPFUL: Some additional notes on using styles within [`state`](api/animations/state) and `transition` functions.
 
@@ -194,11 +188,9 @@ HELPFUL: Some additional notes on using styles within [`state`](api/animations/s
 - When animations are disabled, `transition()` styles can be skipped, but [`state()`](api/animations/state) styles can't
 - Include multiple state pairs within the same `transition()` argument:
 
-    <docs-code language="typescript">
-
-  transition( 'on => off, off => void' )
-
-    </docs-code>
+  ```ts
+  transition('on => off, off => void');
+  ```
 
 ### Triggering the animation
 
@@ -220,22 +212,20 @@ However, it's possible for multiple triggers to be active at once.
 Animations are defined in the metadata of the component that controls the HTML element to be animated.
 Put the code that defines your animations under the `animations:` property within the `@Component()` decorator.
 
-<docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="component"/>
+<docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="component"/>
 
 When you've defined an animation trigger for a component, attach it to an element in that component's template by wrapping the trigger name in brackets and preceding it with an `@` symbol.
 Then, you can bind the trigger to a template expression using standard Angular property binding syntax as shown below, where `triggerName` is the name of the trigger, and `expression` evaluates to a defined animation state.
 
-<docs-code language="typescript">
-
-<div [@triggerName]="expression">…</div>;
-
-</docs-code>
+```angular-html
+<div [@triggerName]="expression">…</div>
+```
 
 The animation is executed or triggered when the expression value changes to a new state.
 
 The following code snippet binds the trigger to the value of the `isOpen` property.
 
-<docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.1.html" visibleRegion="trigger"/>
+<docs-code header="open-close.html" path="adev/src/content/examples/animations/src/app/open-close.1.html" region="trigger"/>
 
 In this example, when the `isOpen` expression evaluates to a defined state of `open` or `closed`, it notifies the trigger `openClose` of a state change.
 Then it's up to the `openClose` code to handle the state change and kick off a state change animation.
@@ -252,9 +242,9 @@ In the HTML template file, use the trigger name to attach the defined animations
 Here are the code files discussed in the transition example.
 
 <docs-code-multifile>
-    <docs-code header="open-close.component.ts" path="adev/src/content/examples/animations/src/app/open-close.component.ts" visibleRegion="component"/>
-    <docs-code header="open-close.component.html" path="adev/src/content/examples/animations/src/app/open-close.component.1.html" visibleRegion="trigger"/>
-    <docs-code header="open-close.component.css" path="adev/src/content/examples/animations/src/app/open-close.component.css"/>
+    <docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="component"/>
+    <docs-code header="open-close.html" path="adev/src/content/examples/animations/src/app/open-close.1.html" region="trigger"/>
+    <docs-code header="open-close.css" path="adev/src/content/examples/animations/src/app/open-close.css"/>
 </docs-code-multifile>
 
 ### Summary

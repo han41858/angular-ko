@@ -33,7 +33,7 @@ Angular's compiler produces a [dynamic import](https://developer.mozilla.org/en-
 
 ### `@defer`
 
-This is the primary block that defines the section of content that is lazily loaded. It is not rendered initially– deferred content loads and renders once the specified [trigger](/guide/templates/defer#triggers) occurs or the `when` condition is met.
+This is the primary block that defines the section of content that is lazily loaded. It is not rendered initially– deferred content loads and renders once the specified [trigger](#controlling-deferred-content-loading-with-triggers) occurs or the `when` condition is met.
 
 By default, a `@defer` block is triggered when the browser state becomes [idle](/guide/templates/defer#idle).
 
@@ -57,7 +57,7 @@ The `@placeholder` is an optional block that declares what content to show befor
 }
 ```
 
-While optional, certain triggers may require the presence of either a `@placeholder` or a [template reference variable](/guide/templates/variables#template-reference-variables) to function. See the [Triggers](/guide/templates/defer#triggers) section for more details.
+While optional, certain triggers may require the presence of either a `@placeholder` or a [template reference variable](/guide/templates/variables#template-reference-variables) to function. See the [Triggers](#controlling-deferred-content-loading-with-triggers) section for more details.
 
 Angular replaces placeholder content with the main content once loading is complete. You can use any content in the placeholder section including plain HTML, components, directives, and pipes. Keep in mind the _dependencies of the placeholder block are eagerly loaded_.
 
@@ -134,7 +134,7 @@ The available triggers are as follows:
 
 | Trigger                       | Description                                                            |
 | ----------------------------- | ---------------------------------------------------------------------- |
-| [`idle`](#idle)               | Triggers when the browser is idle.                                     |
+| [`idle`](#idle)               | Triggers when the browser is idle. Supports an optional timeout.       |
 | [`viewport`](#viewport)       | Triggers when specified content enters the viewport                    |
 | [`interaction`](#interaction) | Triggers when the user interacts with specified element                |
 | [`hover`](#hover)             | Triggers when the mouse hovers over specified area                     |
@@ -145,6 +145,8 @@ The available triggers are as follows:
 
 The `idle` trigger loads the deferred content once the browser has reached an idle state, based on requestIdleCallback. This is the default behavior with a defer block.
 
+You can optionally specify a timeout in milliseconds that is passed to [`requestIdleCallback`](https://developer.mozilla.org/docs/Web/API/Window/requestIdleCallback). If the browser doesn't schedule the callback soon enough, the work will run no later than the specified timeout.
+
 ```angular-html
 <!-- @defer (on idle) -->
 @defer {
@@ -152,6 +154,32 @@ The `idle` trigger loads the deferred content once the browser has reached an id
 } @placeholder {
   <div>Large component placeholder</div>
 }
+
+<!-- With a 500ms timeout -->
+@defer (on idle(500)) {
+  <large-cmp />
+}
+```
+
+##### Customizing `idle` behavior
+
+You can customize the `idle` trigger by providing your own `IdleService` implementation and registering it with `provideIdleServiceWith` in your application's providers.
+
+```ts
+@Service()
+class CustomIdleService implements IdleService {
+  requestOnIdle(callback: (deadline?: IdleDeadline) => void, options?: IdleRequestOptions) {
+    // Custom idle scheduling logic can be implemented here.
+  }
+
+  cancelOnIdle(id: number) {
+    // Implement custom idle cancellation here.
+  }
+}
+
+bootstrapApplication(App, {
+  providers: [provideIdleServiceWith(CustomIdleService)],
+});
 ```
 
 #### `viewport`
@@ -297,6 +325,11 @@ In the example below, the prefetching starts when a browser becomes idle and the
 } @placeholder {
   <div>Large component placeholder</div>
 }
+
+<!-- Prefetching with a 500ms idle timeout -->
+@defer (on interaction; prefetch on idle(500)) {
+  <large-cmp />
+}
 ```
 
 ## Testing `@defer` blocks
@@ -317,11 +350,11 @@ it('should render a defer block in different states', async () => {
       } @loading {
         Loading...
       }
-    `
+    `,
   })
-  class ComponentA {}
+  class ExampleA {}
   // Create component fixture.
-  const componentFixture = TestBed.createComponent(ComponentA);
+  const componentFixture = TestBed.createComponent(ExampleA);
   // Retrieve the list of all defer block fixtures and get the first block.
   const deferBlockFixture = (await componentFixture.getDeferBlocks())[0];
   // Renders placeholder state by default.
@@ -348,6 +381,37 @@ When Hot Module Replacement (HMR) is active, all `@defer` block chunks are fetch
 By default, when rendering an application on the server (either using SSR or SSG), defer blocks always render their `@placeholder` (or nothing if a placeholder is not specified) and triggers are not invoked. On the client, the content of the `@placeholder` is hydrated and triggers are activated.
 
 To render the main content of `@defer` blocks on the server (both SSR and SSG), you can enable [the Incremental Hydration feature](/guide/incremental-hydration) and configure `hydrate` triggers for the necessary blocks.
+
+## Barrel files and lazy chunks
+
+If you're using `@defer` but not seeing a separate lazy chunk in your build output, check how you're importing the deferred component. Importing through a barrel file (`index.ts`) is a common culprit — bundlers see the barrel as a single module and keep all its exports together, so your component ends up in the main bundle regardless of `@defer`.
+
+```typescript
+// index.ts
+export {HeavyComponent} from './heavy.component';
+export {OtherComponent} from './other.component';
+```
+
+```typescript
+// parent.component.ts
+import {HeavyComponent} from './index'; // pulls in OtherComponent too
+
+@Component({
+  imports: [HeavyComponent],
+  template: `@defer {
+    <heavy-component />
+  }`,
+})
+export class ParentComponent {}
+```
+
+The fix is straightforward — import directly from the component's own file:
+
+```typescript
+import {HeavyComponent} from './heavy.component';
+```
+
+That's enough for the bundler to split it into its own chunk and load it lazily when the trigger fires.
 
 ## Best practices for deferring views
 

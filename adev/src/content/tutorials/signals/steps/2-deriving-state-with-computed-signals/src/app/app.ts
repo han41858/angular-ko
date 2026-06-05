@@ -1,5 +1,5 @@
 // TODO: Import computed from @angular/core
-import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
+import {Component, signal} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -30,23 +30,14 @@ import {Component, signal, ChangeDetectionStrategy} from '@angular/core';
       </div>
 
       <div class="status-controls">
-        <button (click)="goOnline()" [disabled]="userStatus() === 'online'">
-          Go Online
-        </button>
-        <button (click)="goAway()" [disabled]="userStatus() === 'away'">
-          Set Away
-        </button>
-        <button (click)="goOffline()" [disabled]="userStatus() === 'offline'">
-          Go Offline
-        </button>
-        <button (click)="toggleStatus()" class="toggle-btn">
-          Cycle Status
-        </button>
+        <button (click)="goOnline()" [disabled]="userStatus() === 'online'">Go Online</button>
+        <button (click)="goAway()" [disabled]="userStatus() === 'away'">Set Away</button>
+        <button (click)="goOffline()" [disabled]="userStatus() === 'offline'">Go Offline</button>
+        <button (click)="toggleStatus()" class="toggle-btn">Cycle Status</button>
       </div>
     </div>
   `,
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   userStatus = signal<'online' | 'away' | 'offline'>('offline');
