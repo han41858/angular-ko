@@ -6,7 +6,11 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {CommonModule, NgIfContext, ɵgetDOM as getDOM} from '@angular/common';
+import {CommonModule, ɵgetDOM as getDOM, NgIfContext} from '@angular/common';
+import {ChangeDetectionStrategy} from '@angular/compiler';
+import {By} from '@angular/platform-browser';
+import {createMouseEvent, hasClass} from '@angular/private/testing';
+import {expect} from '@angular/private/testing/matchers';
 import {
   Component,
   DebugElement,
@@ -29,9 +33,6 @@ import {
   ViewContainerRef,
 } from '../../src/core';
 import {ComponentFixture, TestBed, waitForAsync} from '../../testing';
-import {By} from '@angular/platform-browser';
-import {createMouseEvent, hasClass} from '@angular/private/testing';
-import {expect} from '@angular/private/testing/matchers';
 
 @Injectable()
 class Logger {
@@ -75,9 +76,9 @@ class WithTitleDir {
 @Component({
   selector: 'child-comp',
   template: `<div class="child" message="child">
-               <span class="childnested" message="nestedchild">Child</span>
-             </div>
-             <span class="child" [innerHtml]="childBinding"></span>`,
+      <span class="childnested" message="nestedchild">Child</span>
+    </div>
+    <span class="child" [innerHtml]="childBinding"></span>`,
   standalone: false,
 })
 class ChildComp {
@@ -92,10 +93,10 @@ class ChildComp {
   selector: 'parent-comp',
   viewProviders: [Logger],
   template: `<div class="parent" message="parent">
-               <span class="parentnested" message="nestedparent">Parent</span>
-             </div>
-             <span class="parent" [innerHtml]="parentBinding"></span>
-             <child-comp class="child-comp-class"></child-comp>`,
+      <span class="parentnested" message="nestedparent">Parent</span>
+    </div>
+    <span class="parent" [innerHtml]="parentBinding"></span>
+    <child-comp class="child-comp-class"></child-comp>`,
   standalone: false,
 })
 class ParentComp {
@@ -121,7 +122,7 @@ class CustomEmitter {
 @Component({
   selector: 'events-comp',
   template: `<button (click)="handleClick()"></button>
-             <custom-emitter (myevent)="handleCustom()"></custom-emitter>`,
+    <custom-emitter (myevent)="handleCustom()"></custom-emitter>`,
   standalone: false,
 })
 class EventsComp {
@@ -147,6 +148,7 @@ class EventsComp {
   viewProviders: [Logger],
   template: `<div class="child" message="child" *ngIf="myBool"><ng-content></ng-content></div>`,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ConditionalContentComp {
   myBool: boolean = false;
@@ -156,10 +158,11 @@ class ConditionalContentComp {
   selector: 'conditional-parent-comp',
   viewProviders: [Logger],
   template: `<span class="parent" [innerHtml]="parentBinding"></span>
-            <cond-content-comp class="cond-content-comp-class">
-              <span class="from-parent"></span>
-            </cond-content-comp>`,
+    <cond-content-comp class="cond-content-comp-class">
+      <span class="from-parent"></span>
+    </cond-content-comp>`,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class ConditionalParentComp {
   parentBinding: string;
@@ -172,9 +175,9 @@ class ConditionalParentComp {
   selector: 'using-for',
   viewProviders: [Logger],
   template: `<span *ngFor="let thing of stuff" [innerHtml]="thing"></span>
-            <ul message="list">
-              <li *ngFor="let item of stuff" [innerHtml]="item"></li>
-            </ul>`,
+    <ul message="list">
+      <li *ngFor="let item of stuff" [innerHtml]="item"></li>
+    </ul>`,
   standalone: false,
 })
 class UsingFor {
@@ -193,19 +196,14 @@ class MyDir {}
 
 @Component({
   selector: 'locals-comp',
-  template: `
-   <div mydir #alice="mydir"></div>
- `,
+  template: ` <div mydir #alice="mydir"></div> `,
   standalone: false,
 })
 class LocalsComp {}
 
 @Component({
   selector: 'bank-account',
-  template: `
-   Bank Name: {{bank}}
-   Account Id: {{id}}
- `,
+  template: ` Bank Name: {{ bank }} Account Id: {{ id }} `,
   host: {
     'class': 'static-class',
     '[class.absent-class]': 'false',
@@ -221,9 +219,7 @@ class BankAccount {
 }
 
 @Component({
-  template: `
-    <div class="content" #content>Some content</div>
- `,
+  template: ` <div class="content" #content>Some content</div> `,
   standalone: false,
 })
 class SimpleContentComp {
@@ -233,13 +229,15 @@ class SimpleContentComp {
 @Component({
   selector: 'test-app',
   template: `
-   <bank-account bank="RBC"
-                 account="4747"
-                 [style.width.px]="width"
-                 [style.color]="color"
-                 [class.closed]="isClosed"
-                 [class.open]="!isClosed"></bank-account>
- `,
+    <bank-account
+      bank="RBC"
+      account="4747"
+      [style.width.px]="width"
+      [style.color]="color"
+      [class.closed]="isClosed"
+      [class.open]="!isClosed"
+    ></bank-account>
+  `,
   standalone: false,
 })
 class TestApp {
@@ -285,11 +283,8 @@ class TestCmptWithViewContainerRef {
 
 @Component({
   template: `
-  <button
-    [disabled]="disabled"
-    [tabIndex]="tabIndex"
-    [title]="title">Click me</button>
-`,
+    <button [disabled]="disabled" [tabIndex]="tabIndex" [title]="title">Click me</button>
+  `,
   standalone: false,
 })
 class TestCmptWithPropBindings {
@@ -300,17 +295,19 @@ class TestCmptWithPropBindings {
 
 @Component({
   template: `
-  <button title="{{0}}"></button>
-  <button title="a{{1}}b"></button>
-  <button title="a{{1}}b{{2}}c"></button>
-  <button title="a{{1}}b{{2}}c{{3}}d"></button>
-  <button title="a{{1}}b{{2}}c{{3}}d{{4}}e"></button>
-  <button title="a{{1}}b{{2}}c{{3}}d{{4}}e{{5}}f"></button>
-  <button title="a{{1}}b{{2}}c{{3}}d{{4}}e{{5}}f{{6}}g"></button>
-  <button title="a{{1}}b{{2}}c{{3}}d{{4}}e{{5}}f{{6}}g{{7}}h"></button>
-  <button title="a{{1}}b{{2}}c{{3}}d{{4}}e{{5}}f{{6}}g{{7}}h{{8}}i"></button>
-  <button title="a{{1}}b{{2}}c{{3}}d{{4}}e{{5}}f{{6}}g{{7}}h{{8}}i{{9}}j"></button>
-`,
+    <button title="{{ 0 }}"></button>
+    <button title="a{{ 1 }}b"></button>
+    <button title="a{{ 1 }}b{{ 2 }}c"></button>
+    <button title="a{{ 1 }}b{{ 2 }}c{{ 3 }}d"></button>
+    <button title="a{{ 1 }}b{{ 2 }}c{{ 3 }}d{{ 4 }}e"></button>
+    <button title="a{{ 1 }}b{{ 2 }}c{{ 3 }}d{{ 4 }}e{{ 5 }}f"></button>
+    <button title="a{{ 1 }}b{{ 2 }}c{{ 3 }}d{{ 4 }}e{{ 5 }}f{{ 6 }}g"></button>
+    <button title="a{{ 1 }}b{{ 2 }}c{{ 3 }}d{{ 4 }}e{{ 5 }}f{{ 6 }}g{{ 7 }}h"></button>
+    <button title="a{{ 1 }}b{{ 2 }}c{{ 3 }}d{{ 4 }}e{{ 5 }}f{{ 6 }}g{{ 7 }}h{{ 8 }}i"></button>
+    <button
+      title="a{{ 1 }}b{{ 2 }}c{{ 3 }}d{{ 4 }}e{{ 5 }}f{{ 6 }}g{{ 7 }}h{{ 8 }}i{{ 9 }}j"
+    ></button>
+  `,
   standalone: false,
 })
 class TestCmptWithPropInterpolation {}
@@ -503,9 +500,7 @@ describe('debug element', () => {
 
     @Component({
       selector: 'wrapper-component',
-      template: `
-          <ng-content select="example-directive-a"></ng-content>
-        `,
+      template: ` <ng-content select="example-directive-a"></ng-content> `,
       standalone: false,
     })
     class WrapperComponent {}
@@ -538,9 +533,7 @@ describe('debug element', () => {
 
     @Component({
       selector: 'proxy-component',
-      template: `
-          <ng-content></ng-content>
-        `,
+      template: ` <ng-content></ng-content> `,
       standalone: false,
     })
     class ProxyComponent {}
@@ -548,11 +541,11 @@ describe('debug element', () => {
     @Component({
       selector: 'wrapper-component',
       template: `
-          <proxy-component>
-            <ng-content select="div"></ng-content>
-            <ng-content select="example-directive-a"></ng-content>
-          </proxy-component>
-        `,
+        <proxy-component>
+          <ng-content select="div"></ng-content>
+          <ng-content select="example-directive-a"></ng-content>
+        </proxy-component>
+      `,
       standalone: false,
     })
     class WrapperComponent {}
@@ -1229,27 +1222,27 @@ describe('debug element', () => {
     @Component({
       selector: 'my-comp',
       template: `
-          <div class="div.1">
-            <p class="p.1">
-              <span class="span.1">span.1</span>
-              <span class="span.2">span.2</span>
-            </p>
-            <p class="p.2">
-              <span class="span.3">span.3</span>
-              <span class="span.4">span.4</span>
-            </p>
-          </div>
-          <div class="div.2">
-            <p class="p.3">
-              <span class="span.5">span.5</span>
-              <span class="span.6">span.6</span>
-            </p>
-            <p class="p.4">
-              <span class="span.7">span.7</span>
-              <span class="span.8">span.8</span>
-            </p>
-          </div>
-        `,
+        <div class="div.1">
+          <p class="p.1">
+            <span class="span.1">span.1</span>
+            <span class="span.2">span.2</span>
+          </p>
+          <p class="p.2">
+            <span class="span.3">span.3</span>
+            <span class="span.4">span.4</span>
+          </p>
+        </div>
+        <div class="div.2">
+          <p class="p.3">
+            <span class="span.5">span.5</span>
+            <span class="span.6">span.6</span>
+          </p>
+          <p class="p.4">
+            <span class="span.7">span.7</span>
+            <span class="span.8">span.8</span>
+          </p>
+        </div>
+      `,
       standalone: false,
     })
     class MyComp {}
@@ -1390,7 +1383,8 @@ describe('debug element', () => {
 
   it('should match node name with declared casing', () => {
     @Component({
-      template: `<div></div><myComponent></myComponent>`,
+      template: `<div></div>
+        <myComponent></myComponent>`,
       standalone: false,
     })
     class Wrapper {}

@@ -5,8 +5,12 @@
 
 <!--
 Angular has two types of variable declarations in templates: local template variables and template reference variables.
+
+HELPFUL: In this guide, “template” does not mean the entire HTML template file. It refers only to a specific template construct or expression within the file.
 -->
 Angular 템플릿에서는 템플릿 지역 변수와 템플릿 참조 변수를 선언해서 활용할 수 있습니다.
+
+참고: 이 문서에서 이야기하는 "템플릿"은 HTML 템플릿 파일 전체가 아니라, 템플릿 구조나 표현식을 가리킵니다.
 
 <!--
 ## Local template variables with `@let`
@@ -26,7 +30,7 @@ Angular가 제공하는 `@let` 문법을 사용하면 템플릿에서 지역 변
 ### `@let` 활용하기
 
 <!--
-Use `@let` to declare a variable whose value is based on the result of a template expression. Angular automatically keeps the variable's value up-to-date with the given expression, similar to [bindings](./templates/bindings).
+Use `@let` to declare a variable whose value is based on the result of a template expression. Angular automatically keeps the variable's value up-to-date with the given expression, similar to [bindings](/guide/templates/binding).
 
 ```angular-html
 @let name = user.name;
@@ -34,15 +38,16 @@ Use `@let` to declare a variable whose value is based on the result of a templat
 @let data = data$ | async;
 @let pi = 3.14159;
 @let coordinates = {x: 50, y: 100};
-@let longExpression = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit ' +
-                      'sed do eiusmod tempor incididunt ut labore et dolore magna ' +
-                      'Ut enim ad minim veniam...';
+@let longExpression =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit ' +
+  'sed do eiusmod tempor incididunt ut labore et dolore magna ' +
+  'Ut enim ad minim veniam...';
 ```
 
 Each `@let` block can declare exactly one variable. You cannot declare multiple variables in the same block with a comma.
 -->
 템플릿 지역 변수를 선언하려면 `@let`을 사용하면 되고, 템플릿 지역 변수의 값은 표현식의 실행 결과로 할당됩니다.
-이 값은 [바인딩](./templates/bindings)과 비슷하게 Angular가 값이 변경되는 것을 추적합니다.
+이 값은 [바인딩](/guide/templates/binding)과 비슷하게 Angular가 값이 변경되는 것을 추적합니다.
 
 ```angular-html
 @let name = user.name;
@@ -50,9 +55,10 @@ Each `@let` block can declare exactly one variable. You cannot declare multiple 
 @let data = data$ | async;
 @let pi = 3.1459;
 @let coordinates = {x: 50, y: 100};
-@let longExpression = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit ' +
-                      'sed do eiusmod tempor incididunt ut labore et dolore magna ' +
-                      'Ut enim ad minim veniam...';
+@let longExpression =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit ' +
+  'sed do eiusmod tempor incididunt ut labore et dolore magna ' +
+  'Ut enim ad minim veniam...';
 ```
 
 `@let` 블록은 각각 변수 하나를 선언합니다.
@@ -71,12 +77,12 @@ Once you've declared a variable with `@let`, you can reuse it in the same templa
 @let user = user$ | async;
 
 @if (user) {
-  <h1>Hello, {{user.name}}</h1>
-  <user-avatar [photo]="user.photo"/>
+  <h1>Hello, {{ user.name }}</h1>
+  <user-avatar [photo]="user.photo" />
 
   <ul>
     @for (snack of user.favoriteSnacks; track snack.id) {
-      <li>{{snack.name}}</li>
+      <li>{{ snack.name }}</li>
     }
   </ul>
 
@@ -90,12 +96,12 @@ Once you've declared a variable with `@let`, you can reuse it in the same templa
 @let user = user$ | async;
 
 @if (user) {
-  <h1>Hello, {{user.name}}</h1>
-  <user-avatar [photo]="user.photo"/>
+  <h1>Hello, {{ user.name }}</h1>
+  <user-avatar [photo]="user.photo" />
 
   <ul>
     @for (snack of user.favoriteSnacks; track snack.id) {
-      <li>{{snack.name}}</li>
+      <li>{{ snack.name }}</li>
     }
   </ul>
 
@@ -147,20 +153,25 @@ Since `@let` declarations are not hoisted, they **cannot** be accessed by parent
   @let insideDiv = value;
 </div>
 
-{{topLevel}} <!- Valid ->
-{{insideDiv}} <!- Valid ->
+<!- Valid ->
+{{ topLevel }}
+<!- Valid ->
+{{ insideDiv }}
 
 @if (condition) {
-  {{topLevel + insideDiv}} <!- Valid ->
+  <!- Valid ->
+  {{ topLevel + insideDiv }}
 
   @let nested = value;
 
   @if (condition) {
-    {{topLevel + insideDiv + nested}} <!- Valid ->
+    <!- Valid ->
+    {{ topLevel + insideDiv + nested }}
   }
 }
 
-{{nested}} <!- Error, not hoisted from @if ->
+<!- Error, not hoisted from @if ->
+{{ nested }}
 ```
 -->
 `@let` 으로 선언한 변수는 해당 뷰과 해당 뷰의 자식 뷰에서 접근할 수 있습니다.
@@ -175,20 +186,25 @@ Since `@let` declarations are not hoisted, they **cannot** be accessed by parent
   @let insideDiv = value;
 </div>
 
-{{topLevel}} <!-- 유효함 -->
-{{insideDiv}} <!-- 유효함 -->
+<!-- 유효함 -->
+{{ topLevel }}
+<!-- 유효함 -->
+{{ insideDiv }}
 
 @if (condition) {
-  {{topLevel + insideDiv}} <!-- 유효함 -->
+  <!-- 유효함 -->
+  {{ topLevel + insideDiv }}
 
   @let nested = value;
 
   @if (condition) {
-    {{topLevel + insideDiv + nested}} <!-- 유효함 -->
+    <!-- 유효함 -->
+    {{ topLevel + insideDiv + nested }}
   }
 }
 
-{{nested}} <!-- 오류, @if 밖으로 호이스팅되지 않습니다. -->
+<!-- 오류, @if 밖으로 호이스팅되지 않습니다 -->
+{{ nested }}
 ```
 
 
@@ -254,14 +270,14 @@ You can declare a variable on an element in a template by adding an attribute th
 
 ```angular-html
 <!- Create a template reference variable named "taskInput", referring to the HTMLInputElement. ->
-<input #taskInput placeholder="Enter task name">
+<input #taskInput placeholder="Enter task name" />
 ```
 -->
 템플릿에 있는 엘리먼트에 변수를 선언하려면 변수 이름 앞에 해시 문자(`#`)를 붙이면 됩니다.
 
 ```angular-html
 <!-- `taskInput` 이라는 템플릿 참조 변수를 선언합니다. 이 변수는 HTMLInputElement를 가리킵니다. -->
-<input #taskInput placeholder="Enter task name">
+<input #taskInput placeholder="Enter task name" />
 ```
 
 
@@ -293,7 +309,7 @@ If you declare the variable on any other displayed element, the variable refers 
 
 ```angular-html
 <!- The "taskInput" variable refers to the HTMLInputElement instance. ->
-<input #taskInput placeholder="Enter task name">
+<input #taskInput placeholder="Enter task name" />
 ```
 -->
 Angular는 변수가 선언된 엘리먼트를 기준으로 템플릿 변수의 값을 할당합니다.
@@ -319,7 +335,7 @@ Angular 컴포넌트에 변수를 선언하면 이 변수는 컴포넌트 인스
 
 ```angular-html
 <!-- 변수 `taskInput`는 HTMLInputElement 인스턴스를 가리킵니다. -->
-<input #taskInput placeholder="Enter task name">
+<input #taskInput placeholder="Enter task name" />
 ```
 
 
@@ -336,14 +352,16 @@ Angular directives may have an `exportAs` property that defines a name by which 
   selector: '[dropZone]',
   exportAs: 'dropZone',
 })
-export class DropZone { /* ... */ }
+export class DropZone {
+  /* ... */
+}
 ```
 
 When you declare a template variable on an element, you can assign that variable a directive instance by specifying this `exportAs` name:
 
 ```angular-html
 <!- The `firstZone` variable refers to the `DropZone` directive instance. ->
-<section dropZone #firstZone="dropZone"> ... </section>
+<section dropZone #firstZone="dropZone">...</section>
 ```
 
 You cannot refer to a directive that does not specify an `exportAs` name.
@@ -355,7 +373,9 @@ Angular 디렉티브는 템플릿에서 참조할 수 있는 이름을 `exportAs
   selector: '[dropZone]',
   exportAs: 'dropZone',
 })
-export class DropZone { /* ... */ }
+export class DropZone {
+  /* ... */
+}
 ```
 
 그러면 엘리먼트에 템플릿 참조 변수를 선언하면서 `exportAs`를 사용하면 디렉티브 인스턴스를 할당할 수 있습니다:
@@ -379,7 +399,7 @@ In addition to using template variables to read values from another part of the 
 When you want to query for a specific element in a template, you can declare a template variable on that element and then query for the element based on the variable name.
 
 ```angular-html
- <input #description value="Original description">
+<input #description value="Original description" />
 ```
 
 ```angular-ts
@@ -400,7 +420,7 @@ See [Referencing children with queries](/guide/components/queries) for more info
 템플릿에 있는 엘리먼트를 탐색하려면 해당 엘리먼트에 템플릿 변수를 선언하고, 컴포넌트 클래스 코드에서 템플릿 변수 이름으로 탐색하면 됩니다.
 
 ```angular-html
- <input #description value="Original description">
+<input #description value="Original description" />
 ```
 
 ```angular-ts
@@ -415,3 +435,75 @@ export class AppComponent {
 ```
 
 탐색에 대해 자세하게 알아보려면 [쿼리 함수로 자식 컴포넌트 참조하기](/guide/components/queries) 문서를 참고하세요.
+
+
+<!--
+### Template variable scope
+-->
+### 템플릿 변수의 범위
+
+<!--
+Just like variables in JavaScript or TypeScript code, template variables are scoped to the template that declares them.
+
+Similarly, [Structural directives](guide/directives/structural-directives) or `<ng-template>` declarations create a new nested template scope, much like JavaScript's control flow statements like `if` and `for` create new lexical scopes. You cannot access template variables within one of these structural directives from outside of its boundaries.
+
+HELPFUL: Define a variable only once in the template so the runtime value remains predictable.
+-->
+JavaScript나 TypeScript 코드 처럼, 템플릿 변수도 선언된 범위 내에서만 유효합니다.
+
+비슷하게, [구조 디렉티브](guide/directives/structural-directives)나 `<ng-template>`처럼 중첩된 템플릿 범위를 생성하거나, `if`, `for`로 범위를 생성하는 경우에도 그렇습니다.
+구조 디렉티브 밖에서는 구조 디렉티브 안에 있는 템플릿 변수에 접근할 수 없습니다.
+
+참고: 실행 시점에 값을 예측 가능하게 하려면 템플릿에서 변수를 한 번만 선언하세요.
+
+
+<!--
+#### Accessing in a nested template
+-->
+#### 중첨된 템플릿에 접근하기
+
+<!--
+An inner template can access template variables that the outer template defines.
+
+In the following example, changing the text in the `<input>` changes the value in the `<span>` because Angular immediately updates changes through the template variable, `ref1`.
+
+```html
+<input #ref1 type="text" [(ngModel)]="firstExample" />
+
+<span *ngIf="true">Value: {{ ref1.value }}</span>
+```
+
+In this case, the `*ngIf` on `<span>` creates a new template scope, which includes the `ref1` variable from its parent scope.
+
+However, accessing a template variable from a child scope in the parent template doesn't work:
+
+```html {avoid}
+<input *ngIf="true" #ref2 type="text" [(ngModel)]="secondExample" />
+
+<span>Value: {{ ref2?.value }}</span>
+```
+
+Here, `ref2` is declared in the child scope created by `*ngIf`, and is not accessible from the parent template.
+-->
+템플릿 안쪽에서는 템플릿 밖에 선언된 템플릿 변수에 접근할 수 있습니다.
+
+아래 예제 코드는 `<input>` 에 있는 텍스트를 변경하면 `<span>`에 표시되는 문자열이 변경됩니다.
+왜냐하면 Angular가 템플릿 변수 `ref1`을 통해서 변경된 값을 반영하기 때문입니다.
+
+```html
+<input #ref1 type="text" [(ngModel)]="firstExample" />
+
+<span *ngIf="true">Value: {{ ref1.value }}</span>
+```
+
+이 경우, `<span>`에 적용된 `*ngIf`는 새로운 템플릿 범위를 생성하는데, 이 템플릿 범위에서 보면 `ref1`는 부모 범위에 존재합니다.
+
+하지만 자식 템플릿 범위에 존재하는 템플릿 변수를 부모 템플릿 범위에서 참조할 수는 없습니다:
+
+```html {avoid}
+<input *ngIf="true" #ref2 type="text" [(ngModel)]="secondExample" />
+
+<span>Value: {{ ref2?.value }}</span>
+```
+
+위 코드에서 `ref2`는 `*ngIf`로 자식 템플릿 범위에 선언되었기 때문에, 부모 템플릿 범위에서는 접근할 수 없습니다.

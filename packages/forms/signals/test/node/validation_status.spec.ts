@@ -6,14 +6,15 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ApplicationRef, Injector, Resource, resource, signal} from '@angular/core';
+import {ApplicationRef, computed, Injector, Resource, resource, signal} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
+import {timeout, useAutoTick} from '@angular/private/testing';
+
 import {
-  customError,
-  FieldTree,
   form,
   NgValidationError,
   patternError,
+  ReadonlyFieldTree,
   requiredError,
   validate,
   validateAsync,
@@ -22,14 +23,14 @@ import {
 } from '../../public_api';
 
 function validateValue(value: string): ValidationError[] {
-  return value === 'INVALID' ? [customError()] : [];
+  return value === 'INVALID' ? [{kind: 'custom'}] : [];
 }
 
 function validateValueForChild(
   value: string,
-  field: FieldTree<unknown> | undefined,
-): ValidationError.WithField[] {
-  return value === 'INVALID' ? [customError({field})] : [];
+  fieldTree: ReadonlyFieldTree<unknown> | undefined,
+): ValidationError.WithOptionalFieldTree[] {
+  return value === 'INVALID' ? [{kind: 'custom', fieldTree: fieldTree}] : [];
 }
 
 describe('validation status', () => {
@@ -91,6 +92,31 @@ describe('validation status', () => {
       f.child().value.set('INVALID');
       expect(f.child().valid()).toBe(true);
       expect(f.child().invalid()).toBe(false);
+    });
+
+    it('should not notify dependents if errors are shallowly equal', () => {
+      let computeCount = 0;
+      const val = signal('VALID');
+      const f = form(
+        val,
+        (p) => {
+          validate(p, ({value}) => (value() === 'INVALID' ? [{kind: 'custom'}] : []));
+        },
+        {injector},
+      );
+
+      const errorWatcher = computed(() => {
+        computeCount++;
+        return f().errors();
+      });
+
+      errorWatcher();
+      expect(computeCount).toBe(1);
+
+      val.set('STILL_VALID');
+
+      errorWatcher();
+      expect(computeCount).toBe(1);
     });
   });
 
@@ -171,6 +197,7 @@ describe('validation status', () => {
   });
 
   describe('async validator', () => {
+    useAutoTick();
     it('should affect validity of host field if no target specified', async () => {
       let res: Resource<unknown>;
 
@@ -236,7 +263,7 @@ describe('validation status', () => {
             onSuccess: (results, {fieldTreeOf}) =>
               results.map((e) => ({
                 ...e,
-                field: fieldTreeOf(p.child),
+                fieldTree: fieldTreeOf(p.child),
               })),
             onError: () => null,
           });
@@ -415,6 +442,45 @@ describe('validation status', () => {
       expect(f().valid()).toBe(false);
       expect(f().invalid()).toBe(true);
     });
+
+    it('should produce pending status during debounce period', async () => {
+      let res: Resource<unknown>;
+
+      const f = form(
+        signal('VALID'),
+        (p) => {
+          validateAsync(p, {
+            params: ({value}) => value(),
+            debounce: 100,
+            factory: (params) =>
+              (res = resource({
+                params,
+                loader: ({params}) =>
+                  new Promise<ValidationError[]>((r) =>
+                    setTimeout(() => r(validateValueForChild(params, undefined))),
+                  ),
+              })),
+            onSuccess: (results) => results,
+            onError: () => null,
+          });
+        },
+        {injector},
+      );
+
+      await appRef.whenStable();
+      expect(f().pending()).toBe(false);
+
+      f().value.set('INVALID');
+      await appRef.whenStable();
+
+      expect(f().pending()).withContext('pending during debounce').toBe(true);
+
+      await timeout(150);
+      await appRef.whenStable();
+
+      expect(f().pending()).toBe(false);
+      expect(f().invalid()).toBe(true);
+    });
   });
 
   describe('multiple validators', () => {
@@ -423,7 +489,7 @@ describe('validation status', () => {
         signal('MIXED'),
         (p) => {
           validate(p, () => []);
-          validate(p, () => [customError()]);
+          validate(p, () => [{kind: 'custom'}]);
         },
         {injector},
       );
@@ -463,7 +529,7 @@ describe('validation status', () => {
       let res!: Resource<unknown>;
       let res2!: Resource<unknown>;
 
-      const promise = Promise.resolve<ValidationError[]>([customError()]);
+      const promise = Promise.resolve<ValidationError[]>([{kind: 'custom'}]);
       const promise2 = new Promise<ValidationError[]>(() => {});
       const f = form(
         signal('MIXED'),
@@ -506,7 +572,7 @@ describe('validation status', () => {
       let res: Resource<unknown>;
       let res2: Resource<unknown>;
 
-      const invalidPromise = Promise.resolve<ValidationError[]>([customError()]);
+      const invalidPromise = Promise.resolve<ValidationError[]>([{kind: 'custom'}]);
       const validPromise = Promise.resolve<ValidationError[]>([]);
       const pendingPromise = new Promise<ValidationError[]>(() => {});
 
@@ -564,7 +630,7 @@ describe('validation status', () => {
     it('instanceof should check if structure matches a standard error type', () => {
       const e1 = requiredError();
       expect(e1 instanceof NgValidationError).toBe(true);
-      const e2 = customError({kind: 'min', min: 'two'});
+      const e2 = {kind: 'min', min: 'two'};
       expect(e2 instanceof NgValidationError).toBe(false);
       const e3 = patternError(/.*@.*\.com/);
       expect(e3 instanceof NgValidationError).toBe(true);

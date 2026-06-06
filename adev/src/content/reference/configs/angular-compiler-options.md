@@ -4,7 +4,7 @@ When you use [ahead-of-time compilation (AOT)](tools/cli/aot-compiler), you can 
 
 The Angular options object, `angularCompilerOptions`, is a sibling to the `compilerOptions` object that supplies standard options to the TypeScript compiler.
 
-<docs-code header="tsconfig.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.json" visibleRegion="angular-compiler-options"/>
+<docs-code header="tsconfig.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.json" region="angular-compiler-options"/>
 
 ## Configuration inheritance with `extends`
 
@@ -16,7 +16,7 @@ The configuration options from the base file are loaded first, then overridden b
 
 For example:
 
-<docs-code header="tsconfig.app.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.app.json" visibleRegion="angular-compiler-options-app"/>
+<docs-code header="tsconfig.app.json" path="adev/src/content/examples/angular-compiler-options/tsconfig.app.json" region="angular-compiler-options-app"/>
 
 For more information, see the [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
 
@@ -60,7 +60,7 @@ The default value is `'full'`.
 
 For most applications, `'full'` is the correct compilation mode.
 
-Use `'partial'` for independently published libraries, such as NPM packages.
+Use `'partial'` for independently published libraries, such as npm packages.
 `'partial'` compilations output a stable, intermediate format which better supports usage by applications built at different Angular versions from the library.
 Libraries built at "HEAD" alongside their applications and using the same version of Angular such as in a mono-repository can use `'full'` since there is no risk of version skew.
 
@@ -130,15 +130,6 @@ For example, if a library uses the `public_api.ts` file as the library index of 
 The `flatModuleOutFile` option could then be set, for example, to `"index.js"`, which produces `index.d.ts` and `index.metadata.json` files.
 The `module` field of the library's `package.json` would be `"index.js"` and the `typings` field would be `"index.d.ts"`.
 
-### `fullTemplateTypeCheck`
-
-When `true`, the recommended value, enables the [binding expression validation](tools/cli/aot-compiler#binding-expression-validation) phase of the template compiler. This phase uses TypeScript to verify binding expressions.
-For more information, see [Template type checking](tools/cli/template-typecheck).
-
-Default is `false`, but when you use the Angular CLI command `ng new --strict`, it is set to `true` in the new project's configuration.
-
-IMPORTANT: The `fullTemplateTypeCheck` option has been deprecated in Angular 13 in favor of the `strictTemplates` family of compiler options.
-
 ### `generateCodeForLibraries`
 
 When `true`, creates factory files \(`.ngfactory.js` and `.ngstyle.js`\) for `.d.ts` files with a corresponding `.metadata.json` file. The default value is `true`.
@@ -151,7 +142,7 @@ Do this when using factory summaries.
 When `false`, the default, removes blank text nodes from compiled templates, which results in smaller emitted template factory modules.
 Set to `true` to preserve blank text nodes.
 
-HELPFUL: When using hydration, it is recommended that you use `preserveWhitespaces: false`, which is the default value. If you choose to enable preserving whitespaces by adding `preserveWhitespaces: true` to your tsconfig, it is possible you may encounter issues with hydration. This is not yet a fully supported configuration. Ensure this is also consistently set between the server and client tsconfig files. See the [hydration guide](guide/hydration#preserve-whitespaces) for more details.
+HELPFUL: When using hydration, it is recommended that you use `preserveWhitespaces: false`, which is the default value. If you choose to enable preserving whitespaces by adding `preserveWhitespaces: true` to your tsconfig, it is possible you may encounter issues with hydration. This is not yet a fully supported configuration. Ensure this is also consistently set between the server and client tsconfig files. See the [hydration guide](guide/hydration#preserve-whitespaces-configuration) for more details.
 
 ### `skipMetadataEmit`
 
@@ -221,6 +212,11 @@ When `true`, reports an error if a component, directive, or pipe is not standalo
 
 When `true`, prints extra information while compiling templates.
 Default is `false`.
+
+### `typeCheckHostBindings`
+
+When `true`, enables type checking of expressions in the `host` object literal and `@HostBinding`/`@HostListener` decorators of components and directives.
+Default is `true`.
 
 ## Command line options
 

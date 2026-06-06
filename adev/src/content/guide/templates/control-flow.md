@@ -10,7 +10,7 @@ Angular 템플릿은 조건에 따라 엘리먼트를 표시하거나, 감추거
 
 
 <!--
-## Conditionally display content with `@if`, `@else-if` and `@else`
+## Conditionally display content with `@if`, `@else if` and `@else`
 -->
 ## 조건에 따라 표시하기: `@if`, `@else-if`, `@else`
 
@@ -19,7 +19,7 @@ The `@if` block conditionally displays its content when its condition expression
 
 ```angular-html
 @if (a > b) {
-  <p>{{a}} is greater than {{b}}</p>
+  <p>{{ a }} is greater than {{ b }}</p>
 }
 ```
 
@@ -27,11 +27,11 @@ If you want to display alternative content, you can do so by providing any numbe
 
 ```angular-html
 @if (a > b) {
-  {{a}} is greater than {{b}}
+  {{ a }} is greater than {{ b }}
 } @else if (b > a) {
-  {{a}} is less than {{b}}
+  {{ a }} is less than {{ b }}
 } @else {
-  {{a}} is equal to {{b}}
+  {{ a }} is equal to {{ b }}
 }
 ```
 -->
@@ -39,7 +39,7 @@ If you want to display alternative content, you can do so by providing any numbe
 
 ```angular-html
 @if (a > b) {
-  <p>{{a}} is greater than {{b}}</p>
+  <p>{{ a }} is greater than {{ b }}</p>
 }
 ```
 
@@ -47,11 +47,11 @@ If you want to display alternative content, you can do so by providing any numbe
 
 ```angular-html
 @if (a > b) {
-  {{a}} is greater than {{b}}
+  {{ a }} is greater than {{ b }}
 } @else if (b > a) {
-  {{a}} is less than {{b}}
+  {{ a }} is less than {{ b }}
 } @else {
-  {{a}} is equal to {{b}}
+  {{ a }} is equal to {{ b }}
 }
 ```
 
@@ -129,7 +129,15 @@ Select a property that uniquely identifies each item in the `track` expression. 
 
 For static collections that never change, you can use `$index` to tell Angular to track each item by its index in the collection.
 
-If no other option is available, you can specify `identity`. This tells Angular to track the item by its reference identity using the triple-equals operator (`===`). Avoid this option whenever possible as it can lead to significantly slower rendering updates, as Angular has no way to map which data item corresponds to which DOM nodes.
+If no other option is available, you can use the item itself as a tracking key. This tells Angular to track the item by its reference identity using the triple-equals operator (`===`). Avoid this option whenever possible as it can lead to significantly slower rendering updates, as Angular has no way to map which data item corresponds to which DOM nodes.
+
+```angular-html
+@for (item of items; track item) {
+  {{ item.name }}
+}
+```
+
+NOTE: Unlike `*ngFor`, the `@for` block prioritizes view reuse. If a tracked property changes but the object reference remains the same, Angular updates the view's bindings (including component inputs) rather than destroying and recreating the entire element.
 -->
 `track` 표현식은 Angular가 데이터와 DOM 노드의 관계를 파악하는 용도로 사용합니다.
 Angular가 이 관계를 파악할 수 있으면 데이터가 변경되었을 때 DOM 연산을 최소화하면서 성능을 최적화할 수 있습니다.
@@ -142,10 +150,9 @@ Angular가 이 관계를 파악할 수 있으면 데이터가 변경되었을 �
 
 값이 변경되지 않는 정적 콜렉션이라면 인덱스 값을 표현하는 `$index`를 사용하는 것도 좋습니다.
 
-값이 변경되는 것을 필드로 식별할 수 없다면 `identity`를 활용할 수도 있습니다.
+옵션을 사용할 수 없다면 항목 자체를 추적할 수도 있습니다.
 이 방식은 삼중 등호 연산자(`===`)를 기준으로 참조값이 같은지 판단합니다.
-이 방식은 가능한 한 사용하지 않는 것이 좋습니다.
-Angular가 데이터와 DOM 노드를 제대로 매칭할 수 없으면 렌더링 성능이 크게 저하될 수 있습니다.
+이 방식은 Angular가 데이터와 DOM 노드를 제대로 매칭할 수 없으면 렌더링 성능이 크게 저하될 수 있기 때문에, 가능한 한 사용하지 않는 것이 좋습니다.
 
 
 <!--
@@ -207,9 +214,9 @@ You can optionally include an `@empty` section immediately after the `@for` bloc
 
 ```angular-html
 @for (item of items; track item.name) {
-  <li> {{ item.name }}</li>
+  <li>{{ item.name }}</li>
 } @empty {
-  <li> There are no items. </li>
+  <li>There are no items.</li>
 }
 ```
 -->
@@ -218,9 +225,9 @@ You can optionally include an `@empty` section immediately after the `@for` bloc
 
 ```angular-html
 @for (item of items; track item.name) {
-  <li> {{ item.name }}</li>
+  <li>{{ item.name }}</li>
 } @empty {
-  <li aria-hidden="true"> There are no items. </li>
+  <li>There are no items.</li>
 }
 ```
 
@@ -238,9 +245,7 @@ While the `@if` block is great for most scenarios, the `@switch` block provides 
   @case ('admin') {
     <app-admin-dashboard />
   }
-  @case ('reviewer') {
-    <app-reviewer-dashboard />
-  }
+  @case ('reviewer')
   @case ('editor') {
     <app-editor-dashboard />
   }
@@ -254,6 +259,8 @@ The value of the conditional expression is compared to the case expression using
 
 **`@switch` does not have a fallthrough**, so you do not need an equivalent to a `break` or `return` statement in the block.
 
+You can specify multiple conditions for a single block by have consecutive `@case` statements.
+
 You can optionally include a `@default` block. The content of the `@default` block displays if none of the preceding case expressions match the switch value.
 
 If no `@case` matches the expression and there is no `@default` block, nothing is shown.
@@ -266,9 +273,7 @@ If no `@case` matches the expression and there is no `@default` block, nothing i
   @case ('admin') {
     <app-admin-dashboard />
   }
-  @case ('reviewer') {
-    <app-reviewer-dashboard />
-  }
+  @case ('reviewer')
   @case ('editor') {
     <app-editor-dashboard />
   }
@@ -282,7 +287,54 @@ If no `@case` matches the expression and there is no `@default` block, nothing i
 
 **`@switch` 블록은 다음 블록으로 연결되지 않습니다. `break`나 `return` 같이 흐름을 제어하는 구문은 존재하지 않습니다.**
 
+조건이 여러 개라면 `@case` 블록을 여러개 사용할 수도 있습니다. 
+
 `@default` 블록을 사용할 수 있습니다.
 이 블록은 매칭되는 `@case` 블록이 없을 때 표시됩니다.
 
 `@default` 블록이 없으면서 `@case` 블록 중 어느것도 매칭되지 않으면, 아무것도 렌더링되지 않습니다.
+
+
+### Exhaustive type checking
+
+`@switch` supports exhaustive type checking, allowing Angular to verify at compile time that all possible values of a union type are handled.
+
+By using `@default never;`, you explicitly declare that no remaining cases should exist. If the union type is later extended and a new case is not covered by an @case, Angular’s template type checker will report an error, helping you catch missing branches early.
+
+```angular-html
+@Component({
+  template: `
+    @switch (state) {
+      @case ('loggedOut') {
+        <button>Login</button>
+      }
+
+      @case ('loggedIn') {
+        <p>Welcome back!</p>
+      }
+
+      @default never; // throws because `@case ('loading')` is missing
+    }
+  `,
+})
+export class AppComponent {
+  state: 'loggedOut' | 'loading' | 'loggedIn' = 'loggedOut';
+}
+```
+
+When the switched expression is nested within a union, you must explicitly specify the expression to check for exhaustiveness.
+
+```angular-ts
+@Component({
+  template: `
+    @switch (state.mode) {
+      @case ('show') { {{ state.menu }}; }
+      @case ('hide') {}
+      @default never(state);
+    }
+  `,
+})
+export class App {
+  state!: {mode: 'hide'} | {mode: 'show'; menu: number};
+}
+```

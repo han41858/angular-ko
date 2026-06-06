@@ -62,7 +62,11 @@ export function compileTest(
 ): CompileResult {
   const rootDir = getRootDirectory(fs);
   const outDir = getBuildOutputDirectory(fs);
-  const options = getOptions(rootDir, outDir, compilerOptions, angularCompilerOptions);
+  const options = getOptions(rootDir, outDir, compilerOptions, {
+    ...angularCompilerOptions,
+    // TODO: Do we want to enable strictTemplates for compliance tests?
+    strictTemplates: false,
+  });
   const rootNames = files.map((f) => fs.resolve(f));
   const host = new NgtscTestCompilerHost(fs, options);
   const {diagnostics, emitResult} = performCompilation({rootNames, host, options});
@@ -103,7 +107,7 @@ export function getBuildOutputDirectory(fs: PathManipulation): AbsoluteFsPath {
  * @param compilerOptions Additional options for the TypeScript compiler.
  * @param angularCompilerOptions Additional options for the Angular compiler.
  */
-function getOptions(
+export function getOptions(
   rootDir: AbsoluteFsPath,
   outDir: AbsoluteFsPath,
   compilerOptions: ConfigOptions | undefined,
@@ -126,10 +130,9 @@ function getOptions(
     strictNullChecks: true,
     outDir,
     rootDir,
-    baseUrl: '.',
     allowJs: true,
     declaration: true,
-    target: ts.ScriptTarget.ES2015,
+    target: ts.ScriptTarget.ES2022,
     newLine: ts.NewLineKind.LineFeed,
     module: ts.ModuleKind.ES2015,
     moduleResolution: ts.ModuleResolutionKind.Bundler,

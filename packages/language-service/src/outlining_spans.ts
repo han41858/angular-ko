@@ -15,11 +15,11 @@ import {
   TmplAstIfBlock,
   TmplAstNode,
   TmplAstRecursiveVisitor,
+  TmplAstSwitchBlockCase,
   tmplAstVisitAll,
 } from '@angular/compiler';
-import {NgCompiler} from '@angular/compiler-cli/src/ngtsc/core';
-import {isExternalResource} from '@angular/compiler-cli/src/ngtsc/metadata';
-import {isNamedClassDeclaration} from '@angular/compiler-cli/src/ngtsc/reflection';
+import {isExternalResource, isNamedClassDeclaration, NgCompiler} from '@angular/compiler-cli';
+
 import ts from 'typescript';
 
 import {getFirstComponentForTemplateFile, isTypeScriptFile, toTextSpan} from './utils';
@@ -89,7 +89,9 @@ class BlockVisitor extends TmplAstRecursiveVisitor {
     if (
       node instanceof TmplAstBlockNode &&
       // Omit `IfBlock` because we include the branches individually
-      !(node instanceof TmplAstIfBlock)
+      !(node instanceof TmplAstIfBlock) &&
+      // Omit `SwitchBlockCase` because we include the groups
+      !(node instanceof TmplAstSwitchBlockCase)
     ) {
       this.blocks.push(node);
     }

@@ -23,8 +23,8 @@ _STYLE_LABELS = [
 npm_sass_library(
     name = "todo_mvc",
     deps = [
-        "//:node_modules/todomvc-app-css",
-        "//:node_modules/todomvc-common",
+        "//devtools:node_modules/todomvc-app-css",
+        "//devtools:node_modules/todomvc-common",
     ],
 )
 
@@ -58,7 +58,9 @@ ng_project(
         "//:node_modules/@angular/elements",
         "//:node_modules/@angular/router",
         "//devtools/projects/ng-devtools-backend",
+        "//devtools/src:communication",
         "//devtools/src:zone-unaware-iframe_message_bus",
+        "//devtools/src/app/demo-app/auxiliary",
         "//devtools/src/app/demo-app/todo",
     ],
 )

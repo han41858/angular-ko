@@ -28,7 +28,7 @@ preferably with a small repro.
 - Whip up prototypes and proofs of concept.
 
 - Share examples with the community in a web coding environment such as Plunker or CodePen.
-  Create Angular issues and StackOverflow answers supported by live code.
+  Create Angular issues and Stack Overflow answers supported by live code.
 
 - Simulate operations against data collections that aren't yet implemented on your dev/test server.
   You can pass requests thru to the dev/test server for collections that are supported.
@@ -84,15 +84,15 @@ and whose values are arrays of collection objects to return or update.
 For example:
 
 ```ts
-import { InMemoryDbService } from 'angular-in-memory-web-api';
+import {InMemoryDbService} from 'angular-in-memory-web-api';
 
 export class InMemHeroService implements InMemoryDbService {
   createDb() {
     let heroes = [
-      { id: 1, name: 'Windstorm' },
-      { id: 2, name: 'Bombasto' },
-      { id: 3, name: 'Magneta' },
-      { id: 4, name: 'Tornado' }
+      {id: 1, name: 'Windstorm'},
+      {id: 2, name: 'Bombasto'},
+      {id: 3, name: 'Magneta'},
+      {id: 4, name: 'Tornado'},
     ];
     return {heroes};
   }

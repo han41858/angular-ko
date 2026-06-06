@@ -37,6 +37,7 @@ import {TestBed} from '../../testing';
 import {firstValueFrom} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {EnvironmentInjector, Injectable} from '../../src/di';
+import {timeout} from '@angular/private/testing';
 
 function createAndAttachComponent<T>(component: Type<T>) {
   const componentRef = createComponent(component, {
@@ -565,7 +566,7 @@ describe('after render hooks', () => {
       describe('throw error inside reactive context', () => {
         it('inside template effect', () => {
           @Component({
-            template: `{{someFn()}}`,
+            template: `{{ someFn() }}`,
             standalone: false,
           })
           class TestCmp {
@@ -643,7 +644,7 @@ describe('after render hooks', () => {
           standalone: false,
           template: `
             @if (shouldShow) {
-              <comp/>
+              <comp />
             }
           `,
         })
@@ -898,7 +899,7 @@ describe('after render hooks', () => {
         @Component({
           selector: 'comp',
           standalone: false,
-          template: `{{outerHookCount()}}:{{innerHookCount}}`,
+          template: `{{ outerHookCount() }}:{{ innerHookCount }}`,
           changeDetection: ChangeDetectionStrategy.OnPush,
         })
         class Comp {
@@ -1264,7 +1265,7 @@ describe('after render hooks', () => {
 
       @Component({
         selector: 'test-component',
-        template: ` {{counter()}} `,
+        template: ` {{ counter() }} `,
       })
       class TestCmp {
         counter = counter;
@@ -1292,7 +1293,7 @@ describe('after render hooks', () => {
     it('allows updating state and calling markForCheck in afterRender', async () => {
       @Component({
         selector: 'test-component',
-        template: ` {{counter}} `,
+        template: ` {{ counter }} `,
       })
       class TestCmp {
         counter = 0;
@@ -1323,14 +1324,14 @@ describe('after render hooks', () => {
       const counter = signal(0);
       @Component({
         selector: 'test-component',
-        template: `{{counter()}}`,
+        template: `{{ counter() }}`,
       })
       class TestCmp {
         injector = inject(EnvironmentInjector);
         counter = counter;
         async ngOnInit() {
           // push the render hook to a time outside of change detection
-          await new Promise<void>((resolve) => setTimeout(resolve));
+          await timeout();
           afterNextRender(
             () => {
               counter.set(1);
@@ -1364,7 +1365,7 @@ describe('after render hooks', () => {
 
       @Component({
         selector: 'test-component',
-        template: ` {{counter()}} `,
+        template: ` {{ counter() }} `,
       })
       class TestCmp {
         counter = counter;

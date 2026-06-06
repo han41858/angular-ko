@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -29,7 +29,6 @@ const PROFILER_VERSION = 1;
   templateUrl: './profiler.component.html',
   styleUrls: ['./profiler.component.scss'],
   imports: [MatTooltip, MatIcon, RecordingTimelineComponent, ButtonComponent, MatProgressBar],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfilerComponent {
   readonly state = signal<State>('idle');
@@ -47,9 +46,15 @@ export class ProfilerComponent {
       if (importedFile.error) {
         console.error('Could not process uploaded file');
         console.error(importedFile.error);
+
+        const errorMessage =
+          importedFile.error instanceof Error
+            ? `${importedFile.error.name}: ${importedFile.error.message}`
+            : JSON.stringify(importedFile.error);
+
         this.dialog.open(ProfilerImportDialogComponent, {
           width: '600px',
-          data: {status: 'ERROR', errorMessage: importedFile.error},
+          data: {status: 'ERROR', errorMessage},
         });
 
         return;

@@ -16,9 +16,9 @@ import {CompatFieldAdapter} from '../compat_field_adapter';
  * Options that may be specified when creating a compat form.
  *
  * @category interop
- * @experimental 21.0.0
+ * @publicApi 22.0
  */
-export type CompatFormOptions = Omit<FormOptions, 'adapter'>;
+export type CompatFormOptions<TModel> = Omit<FormOptions<TModel>, 'adapter'>;
 
 /**
  * Creates a compatibility form wrapped around the given model data.
@@ -27,7 +27,7 @@ export type CompatFormOptions = Omit<FormOptions, 'adapter'>;
  * compatibility with Reactive forms by accepting Reactive controls as a part of the data.
  *
  * @example
- * ```
+ * ```ts
  * const lastName = new FormControl('lastName');
  *
  * const nameModel = signal({
@@ -40,13 +40,14 @@ export type CompatFormOptions = Omit<FormOptions, 'adapter'>;
  * });
  *
  * nameForm.last().value(); // lastName, not FormControl
+ * ```
  *
  * @param model A writable signal that contains the model data for the form. The resulting field
  * structure will match the shape of the model and any changes to the form data will be written to
  * the model.
-
+ *
  * @category interop
- * @experimental 21.0.0
+ * @publicApi 22.0
  */
 export function compatForm<TModel>(model: WritableSignal<TModel>): FieldTree<TModel>;
 
@@ -57,7 +58,7 @@ export function compatForm<TModel>(model: WritableSignal<TModel>): FieldTree<TMo
  * compatibility with Reactive forms by accepting Reactive controls as a part of the data.
  *
  * @example
- * ```
+ * ```ts
  * const lastName = new FormControl('lastName');
  *
  * const nameModel = signal({
@@ -80,11 +81,11 @@ export function compatForm<TModel>(model: WritableSignal<TModel>): FieldTree<TMo
  *   2. The form options (excluding adapter, since it's provided).
  *
  * @category interop
- * @experimental 21.0.0
+ * @publicApi 22.0
  */
 export function compatForm<TModel>(
   model: WritableSignal<TModel>,
-  schemaOrOptions: SchemaOrSchemaFn<TModel> | CompatFormOptions,
+  schemaOrOptions: SchemaOrSchemaFn<TModel> | CompatFormOptions<TModel>,
 ): FieldTree<TModel>;
 
 /**
@@ -94,7 +95,7 @@ export function compatForm<TModel>(
  * compatibility with Reactive forms by accepting Reactive controls as a part of the data.
  *
  * @example
- * ```
+ * ```ts
  * const lastName = new FormControl('lastName');
  *
  * const nameModel = signal({
@@ -116,12 +117,12 @@ export function compatForm<TModel>(
  * @param options The form options (excluding adapter, since it's provided).
  *
  * @category interop
- * @experimental 21.0.0
+ * @publicApi 22.0
  */
 export function compatForm<TModel>(
   model: WritableSignal<TModel>,
   schema: SchemaOrSchemaFn<TModel>,
-  options: CompatFormOptions,
+  options: CompatFormOptions<TModel>,
 ): FieldTree<TModel>;
 
 export function compatForm<TModel>(...args: any[]): FieldTree<TModel> {
@@ -129,5 +130,5 @@ export function compatForm<TModel>(...args: any[]): FieldTree<TModel> {
 
   const options = {...maybeOptions, adapter: new CompatFieldAdapter()};
   const schema = maybeSchema || ((() => {}) as SchemaOrSchemaFn<TModel, PathKind>);
-  return form(model, schema, options) as FieldTree<TModel>;
+  return form(model, schema, options);
 }

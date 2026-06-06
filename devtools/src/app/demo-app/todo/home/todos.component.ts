@@ -14,6 +14,7 @@ import {
   OnInit,
   output,
   input,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {Todo} from './todo';
@@ -32,9 +33,8 @@ const fib = (n: number): number => {
 
 @Component({
   selector: 'base-case',
-  template: `
-    <h2>Base Case</h2>
-  `,
+  template: ` <h2>Base Case</h2> `,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class BaseCaseComponent {
   // This component serves as a base case for the recursive component.
@@ -46,10 +46,10 @@ export class BaseCaseComponent {
   template: `
     <div class="recursive-component">
       @if (level() === 0) {
-        <base-case/>
+        <base-case />
       } @else {
         <h3>Level {{ level() }}</h3>
-        <recursive-component [level]="level() - 1"/>
+        <recursive-component [level]="level() - 1" />
       }
     </div>
   `,

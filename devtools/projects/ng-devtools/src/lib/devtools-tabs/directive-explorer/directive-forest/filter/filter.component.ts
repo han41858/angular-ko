@@ -6,14 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  input,
-  output,
-  viewChild,
-} from '@angular/core';
+import {Component, ElementRef, input, output, viewChild} from '@angular/core';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 
@@ -52,7 +45,6 @@ const genericSearchGenerator: FilterFnGenerator = (filter: string) => {
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
   imports: [MatIcon, MatTooltip],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterComponent {
   protected readonly input = viewChild.required<ElementRef>('input');
@@ -61,8 +53,8 @@ export class FilterComponent {
   readonly nextMatched = output<void>();
   readonly prevMatched = output<void>();
 
-  readonly matchesCount = input<number>(0);
-  readonly currentMatch = input<number>(0);
+  readonly matchesCount = input(0);
+  readonly currentMatch = input(0);
 
   readonly filterFnGenerator = input<FilterFnGenerator>(genericSearchGenerator);
 

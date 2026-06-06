@@ -44,9 +44,9 @@ describe('FileLinker', () => {
       const version = factory.createLiteral('0.0.0-PLACEHOLDER');
       const ngImport = factory.createIdentifier('core');
       const declarationArg = factory.createObjectLiteral([
-        {propertyName: 'minVersion', quoted: false, value: version},
-        {propertyName: 'version', quoted: false, value: version},
-        {propertyName: 'ngImport', quoted: false, value: ngImport},
+        {propertyName: 'minVersion', quoted: false, kind: 'property', value: version},
+        {propertyName: 'version', quoted: false, kind: 'property', value: version},
+        {propertyName: 'ngImport', quoted: false, kind: 'property', value: ngImport},
       ]);
       expect(() =>
         fileLinker.linkPartialDeclaration('foo', [declarationArg], new MockDeclarationScope()),
@@ -58,8 +58,8 @@ describe('FileLinker', () => {
       const version = factory.createLiteral('0.0.0-PLACEHOLDER');
       const ngImport = factory.createIdentifier('core');
       const declarationArg = factory.createObjectLiteral([
-        {propertyName: 'version', quoted: false, value: version},
-        {propertyName: 'ngImport', quoted: false, value: ngImport},
+        {propertyName: 'version', quoted: false, kind: 'property', value: version},
+        {propertyName: 'ngImport', quoted: false, kind: 'property', value: ngImport},
       ]);
       expect(() =>
         fileLinker.linkPartialDeclaration(
@@ -75,8 +75,8 @@ describe('FileLinker', () => {
       const version = factory.createLiteral('0.0.0-PLACEHOLDER');
       const ngImport = factory.createIdentifier('core');
       const declarationArg = factory.createObjectLiteral([
-        {propertyName: 'minVersion', quoted: false, value: version},
-        {propertyName: 'ngImport', quoted: false, value: ngImport},
+        {propertyName: 'minVersion', quoted: false, kind: 'property', value: version},
+        {propertyName: 'ngImport', quoted: false, kind: 'property', value: ngImport},
       ]);
       expect(() =>
         fileLinker.linkPartialDeclaration(
@@ -91,8 +91,8 @@ describe('FileLinker', () => {
       const {fileLinker} = createFileLinker();
       const version = factory.createLiteral('0.0.0-PLACEHOLDER');
       const declarationArg = factory.createObjectLiteral([
-        {propertyName: 'minVersion', quoted: false, value: version},
-        {propertyName: 'version', quoted: false, value: version},
+        {propertyName: 'minVersion', quoted: false, kind: 'property', value: version},
+        {propertyName: 'version', quoted: false, kind: 'property', value: version},
       ]);
       expect(() =>
         fileLinker.linkPartialDeclaration(
@@ -116,9 +116,9 @@ describe('FileLinker', () => {
       const ngImport = factory.createIdentifier('core');
       const version = factory.createLiteral('0.0.0-PLACEHOLDER');
       const declarationArg = factory.createObjectLiteral([
-        {propertyName: 'ngImport', quoted: false, value: ngImport},
-        {propertyName: 'minVersion', quoted: false, value: version},
-        {propertyName: 'version', quoted: false, value: version},
+        {propertyName: 'ngImport', quoted: false, kind: 'property', value: ngImport},
+        {propertyName: 'minVersion', quoted: false, kind: 'property', value: version},
+        {propertyName: 'version', quoted: false, kind: 'property', value: version},
       ]);
 
       const compilationResult = fileLinker.linkPartialDeclaration(
@@ -179,6 +179,113 @@ describe('FileLinker', () => {
     });
   });
 
+  describe('legacyOptionalChaining support', () => {
+    function linkComponentWithTemplate(version: string, template: string): string {
+      // Note that the `minVersion` is set to the placeholder,
+      // because that's what we have in the source code as well.
+      const source = `
+        ɵɵngDeclareComponent({
+          minVersion: "0.0.0-PLACEHOLDER",
+          version: "${version}",
+          ngImport: core,
+          template: \`${template}\`,
+          isInline: true,
+          type: SomeComp
+        });
+      `;
+
+      // We need to create a new source file here, because template parsing requires
+      // the template string to have offsets which synthetic nodes do not.
+      const {fileLinker} = createFileLinker(source);
+      const sourceFile = ts.createSourceFile('', source, ts.ScriptTarget.Latest, true);
+      const call = (sourceFile.statements[0] as ts.ExpressionStatement)
+        .expression as ts.CallExpression;
+      const result = fileLinker.linkPartialDeclaration(
+        'ɵɵngDeclareComponent',
+        [call.arguments[0]],
+        new MockDeclarationScope(),
+      );
+      return ts.createPrinter().printNode(ts.EmitHint.Unspecified, result, sourceFile);
+    }
+
+    it('should use null for optional chaining if compiled with a version older than 22', () => {
+      for (const version of ['21.0.0', '21.2.0', '16.2.0']) {
+        const result = linkComponentWithTemplate(version, '{{ foo?.bar }}');
+        expect(result).toContain(' == null');
+      }
+    });
+
+    it('should use undefined for optional chaining if compiled with version 22 or above', () => {
+      for (const version of ['22.0.0', '22.0.1', '22.1.0', '22.0.0-next.0', '23.0.0']) {
+        const result = linkComponentWithTemplate(version, '{{ foo?.bar }}');
+        expect(result).not.toContain(' == null');
+      }
+    });
+
+    it('should not use null for optional chaining if compiled with a local version (0.0.0-PLACEHOLDER)', () => {
+      const result = linkComponentWithTemplate('0.0.0-PLACEHOLDER', '{{ foo?.bar }}');
+      expect(result).not.toContain(' == null');
+    });
+
+    it('should use null for optional chaining when the $safeNavigationMigration magic function is used, regardless of the version', () => {
+      for (const version of ['16.2.0', '22.0.0', '0.0.0-PLACEHOLDER']) {
+        const result = linkComponentWithTemplate(
+          version,
+          '{{ $safeNavigationMigration(foo?.bar) }}',
+        );
+        expect(result).toContain(' == null');
+      }
+    });
+
+    function linkDirectiveWithHostBinding(version: string, expression: string): string {
+      const source = `
+        ɵɵngDeclareDirective({
+          minVersion: "0.0.0-PLACEHOLDER",
+          version: "${version}",
+          ngImport: core,
+          host: {
+            properties: {
+              "attr.foo": "${expression}"
+            }
+          },
+          type: SomeDir
+        });
+      `;
+
+      const {fileLinker} = createFileLinker(source);
+      const sourceFile = ts.createSourceFile('', source, ts.ScriptTarget.Latest, true);
+      const call = (sourceFile.statements[0] as ts.ExpressionStatement)
+        .expression as ts.CallExpression;
+      const result = fileLinker.linkPartialDeclaration(
+        'ɵɵngDeclareDirective',
+        [call.arguments[0]],
+        new MockDeclarationScope(),
+      );
+      return ts.createPrinter().printNode(ts.EmitHint.Unspecified, result, sourceFile);
+    }
+
+    it('should use null for optional chaining in directive host bindings if compiled with a version older than 22', () => {
+      for (const version of ['21.0.0', '21.2.0', '16.2.0']) {
+        const result = linkDirectiveWithHostBinding(version, 'foo?.bar');
+        expect(result).toContain(' == null');
+      }
+    });
+
+    it('should use undefined for optional chaining in directive host bindings if compiled with version 22 or above', () => {
+      for (const version of [
+        '22.0.0',
+        '22.0.1',
+        '22.1.0',
+        '22.0.0-next.0',
+        '23.0.0',
+        '0.0.0-PLACEHOLDER',
+      ]) {
+        const result = linkDirectiveWithHostBinding(version, 'foo?.bar');
+        expect(result).not.toContain(' == null');
+      }
+    });
+  });
+
   describe('getConstantStatements()', () => {
     it('should capture shared constant values', () => {
       const {fileLinker} = createFileLinker();
@@ -187,13 +294,24 @@ describe('FileLinker', () => {
       // Here we use the `core` identifier for `ngImport` to trigger the use of a shared scope for
       // constant statements.
       const declarationArg = factory.createObjectLiteral([
-        {propertyName: 'ngImport', quoted: false, value: factory.createIdentifier('core')},
+        {
+          propertyName: 'ngImport',
+          quoted: false,
+          kind: 'property',
+          value: factory.createIdentifier('core'),
+        },
         {
           propertyName: 'minVersion',
           quoted: false,
+          kind: 'property',
           value: factory.createLiteral('0.0.0-PLACEHOLDER'),
         },
-        {propertyName: 'version', quoted: false, value: factory.createLiteral('0.0.0-PLACEHOLDER')},
+        {
+          propertyName: 'version',
+          quoted: false,
+          kind: 'property',
+          value: factory.createLiteral('0.0.0-PLACEHOLDER'),
+        },
       ]);
 
       const replacement = fileLinker.linkPartialDeclaration(
@@ -217,15 +335,22 @@ describe('FileLinker', () => {
       // Here we use a string literal `"not-a-module"` for `ngImport` to cause constant
       // statements to be emitted in an IIFE rather than added to the shared constant scope.
       const declarationArg = factory.createObjectLiteral([
-        {propertyName: 'ngImport', quoted: false, value: factory.createLiteral('not-a-module')},
+        {
+          propertyName: 'ngImport',
+          quoted: false,
+          kind: 'property',
+          value: factory.createLiteral('not-a-module'),
+        },
         {
           propertyName: 'minVersion',
           quoted: false,
+          kind: 'property',
           value: factory.createLiteral('0.0.0-PLACEHOLDER'),
         },
         {
           propertyName: 'version',
           quoted: false,
+          kind: 'property',
           value: factory.createLiteral('0.0.0-PLACEHOLDER'),
         },
       ]);
@@ -246,22 +371,23 @@ describe('FileLinker', () => {
 
   function createFileLinker(code = '// test code'): {
     host: AstHost<ts.Expression>;
-    fileLinker: FileLinker<MockConstantScopeRef, ts.Statement, ts.Expression>;
+    fileLinker: FileLinker<MockConstantScopeRef, ts.Statement, ts.Expression, ts.TypeNode>;
   } {
     const fs = new MockFileSystemNative();
     const logger = new MockLogger();
-    const linkerEnvironment = LinkerEnvironment.create<ts.Statement, ts.Expression>(
+    const linkerEnvironment = LinkerEnvironment.create<ts.Statement, ts.Expression, ts.TypeNode>(
       fs,
       logger,
       new TypeScriptAstHost(),
       new TypeScriptAstFactory(/* annotateForClosureCompiler */ false),
       DEFAULT_LINKER_OPTIONS,
     );
-    const fileLinker = new FileLinker<MockConstantScopeRef, ts.Statement, ts.Expression>(
-      linkerEnvironment,
-      fs.resolve('/test.js'),
-      code,
-    );
+    const fileLinker = new FileLinker<
+      MockConstantScopeRef,
+      ts.Statement,
+      ts.Expression,
+      ts.TypeNode
+    >(linkerEnvironment, fs.resolve('/test.js'), code);
     return {host: linkerEnvironment.host, fileLinker};
   }
 });

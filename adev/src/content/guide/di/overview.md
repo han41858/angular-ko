@@ -1,7 +1,7 @@
 <docs-decorative-header title="의존성 주입" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
 
 <!--
-Dependency Injection (DI) is a design pattern used to organize and share code across an application.
+Dependency Injection (DI) is a design pattern you use to organize and share code across your application by supplying dependencies to a class instead of creating them inside it.
 -->
 
 의존성 주입(Dependency Injection, DI)은 애플리케이션 전역에서 코드를 관리하고 공유하는 디자인 패턴입니다.
@@ -10,13 +10,13 @@ Dependency Injection (DI) is a design pattern used to organize and share code ac
 <!--
 TIP: Check out Angular's [Essentials](essentials/dependency-injection) before diving into this comprehensive guide.
 
-As an application grows, developers often need to reuse and share features across different parts of the codebase. [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) is a design pattern used to organize and share code across an application by allowing you to "inject" features into different parts.
+As an application grows, developers often need to reuse and share functionality across different parts of the codebase. [Dependency Injection (DI)](https://en.wikipedia.org/wiki/Dependency_injection) helps you achieve this by allowing you to provide dependencies to a class instead of creating them directly inside it. This makes different parts of the application more reusable and easier to manage.
 
 Dependency injection is a popular pattern because it allows developers to address common challenges such as:
 
-- **Improved code maintainability**: Dependency injection allows cleaner separation of concerns which enables easier refactoring and reducing code duplication.
-- **Scalability**: Modular functionality can be reused across multiple contexts and allows for easier scaling.
-- **Better testing**: DI allows unit tests to easily use [test doubles](https://en.wikipedia.org/wiki/Test_double) for situations when using a real implementation is not practical.
+- **Improved code maintainability**: Dependency injection promotes a clear separation of concerns, making code easier to refactor and reducing duplication.
+- **Scalability**: You can reuse modular functionality across different parts of an application, making it easier to scale.
+- **Better testing**: DI allows unit tests to use [test doubles](https://en.wikipedia.org/wiki/Test_double) in place of real implementations when needed.
 -->
 
 팁: 이 문서에서 다루는 내용을 읽기 전에 Angular [핵심](essentials/dependency-injection)을 먼저 보는 것이 좋습니다.
@@ -30,38 +30,37 @@ Dependency injection is a popular pattern because it allows developers to addres
 - **확장성**: 기능을 모듈화하면 여러 곳에서 재사용할 수 있기 때문에 확장하기 편합니다.
 - **테스트 편의성**: 의존성 주입 패턴을 활용하면 실제 동작하는 구현 로직 대신 [테스트 더미](https://en.wikipedia.org/wiki/Test_double)를 활용할 수 있기 때문에 유닛 테스트하기 편합니다.
 
+
 <!--
 ## How does dependency injection work in Angular?
 -->
-
 ## Angular에서 의존성 주입이 어떻게 동작하나요?
 
 <!--
-A dependency is any object, value, function or service that a class needs to work but does not create itself. In other words, it creates a relationship between different parts of your application since it wouldn't work without the dependency.
+A dependency is any object, value, function, or service that a class requires to work but does not create itself. Instead, you provide it from the outside, creating a clear relationship between different parts of the application.
 
-There are two ways that code interacts with any dependency injection system:
+You interact with a dependency injection system in two main ways:
 
-- Code can _provide_, or make available, values.
-- Code can _inject_, or ask for, those values as dependencies.
+- You can _provide_, or make available, values.
+- You can _inject_, or ask for, those values as dependencies.
 
-"Values," in this context, can be any JavaScript value, including objects and functions. Common types of injected dependencies include:
+In this context, "values" can refer to any JavaScript value, including objects, functions, or class instances. Common types of injected dependencies include:
 
 - **Configuration values**: Environment-specific constants, API URLs, feature flags, etc.
 - **Factories**: Functions that create objects or values based on runtime conditions
 - **Services**: Classes that provide common functionality, business logic, or state
 
-Angular components and directives automatically participate in DI, meaning that they can inject dependencies _and_ they are available to be injected.
+Angular components and directives automatically participate in DI, meaning that you can inject dependencies into them and make them available for injection.
 -->
-
-의존성이라는 것은 어떤 로직으로 동작하지만 스스로를 생성하지 않는 클래스를 의미하며, 어떤 객체이거나 값, 함수, 서비스일 수 있습니다.
-다르게 표현하면, 의존성 객체가 없으면 동작하지 않는 애플리케이션의 부분을 연결하는 역할이라고 할 수 있습니다.
+의존성이라는 것은 클래스가 동작하는 데 필요하지만 스스로 생성하지 않는 객체, 값, 함수, 서비스를 이야기합니다.
+다르게 표현하면, 의존성은 외부에서 제공되어 애플리케이션 안에서 관계를 갖고 동작합니다.
 
 코드가 의존성 주입 시스템과 상호작용하는 방법은 두 가지 입니다:
 
 - 어떤 값을 만들어서 사용할 수 있습니다.
 - 의존성을 요청해서 _주입 받아_ 사용할 수 있습니다.
 
-이 때 "값" 이라는 것은 JavaScript 자료 타입일 수 있으며, 객체이거나 함수일 수도 있습니다.
+이 때 "값" 이라는 것은 JavaScript 자료 타입일 수 있으며, 객체이거나 함수, 클래스일 수도 있습니다.
 보통은 이런 것들이 의존성이 됩니다:
 
 - **설정값**: 환경변수, API URL, 기능 스위치 플래그 등
@@ -70,6 +69,7 @@ Angular components and directives automatically participate in DI, meaning that 
 
 Angular 컴포넌트와 디렉티브는 기본적으로 의존성 주입 시스템의 일부이기 때문에, 의존성 객체를 주입받을 수 있고, 의존성으로 주입될 수도 있습니다.
 
+
 <!--
 ## What are services?
 -->
@@ -77,7 +77,7 @@ Angular 컴포넌트와 디렉티브는 기본적으로 의존성 주입 시스�
 ## 서비스가 무엇인가요?
 
 <!--
-An Angular _service_ is a TypeScript class decorated with `@Injectable`, which makes an instance of the class available to be injected as a dependency. Services are the most common way of sharing data and functionality across an application.
+An Angular _service_ is a TypeScript class decorated with `@Service`, which allows you to inject an instance of the class as a dependency. Services are the most common way of sharing data and functionality across an application.
 
 Common types of services include:
 
@@ -91,24 +91,25 @@ Common types of services include:
 The following example declares a service named `AnalyticsLogger`:
 
 ```ts
-import { Injectable } from '@angular/core';
+import {Service} from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AnalyticsLogger {
   trackEvent(category: string, value: string) {
     console.log('Analytics event logged:', {
       category,
       value,
-      timestamp: new Date().toISOString()
-    })
+      timestamp: new Date().toISOString(),
+    });
   }
 }
 ```
 
-NOTE: The `providedIn: 'root'` option makes this service available throughout your entire application as a singleton. This is the recommended approach for most services.
--->
+NOTE: The `@Service` makes this service available throughout your entire application as a singleton. This is the recommended approach for most services.
 
-Angular에서 이야기하는 _서비스(service)_ 란 `@Injectable` 데코레이터가 붙은 TypeScript 클래스이며, 이 클래스를 인스턴스로 생성하면 의존성으로 주입할 수 있습니다.
+HELPFUL: The [`@Service`](guide/di/creating-and-using-services#using-the-service-decorator) decorator is an ergonomic shorthand for `@Injectable({providedIn: 'root'})`.
+-->
+Angular에서 이야기하는 _서비스(service)_ 란 `@Service` 데코레이터가 붙은 TypeScript 클래스이며, 이 클래스를 인스턴스로 생성하면 의존성으로 주입할 수 있습니다.
 서비스는 애플리케이션 전역에서 데이터와 기능을 공유하는 용도로 가장 많이 사용됩니다.
 
 일반적으로 서비스는 이런 역할을 합니다:
@@ -123,21 +124,23 @@ Angular에서 이야기하는 _서비스(service)_ 란 `@Injectable` 데코레�
 아래 코드는 `AnalyticsLogger`라는 서비스의 예제 코드입니다:
 
 ```ts
-import { Injectable } from '@angular/core';
+import {Service} from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AnalyticsLogger {
   trackEvent(category: string, value: string) {
     console.log('Analytics event logged:', {
       category,
       value,
-      timestamp: new Date().toISOString()
-    })
+      timestamp: new Date().toISOString(),
+    });
   }
 }
 ```
 
-참고: `providedIn: 'root'` 옵션을 지정하면 서비스를 전역 범위에서 사용할 수 있도록 인스턴스를 싱글턴으로 생성합니다. 대부분의 경우 이런 사용 방식을 권장합니다.
+참고: `@Service` 데코레이터를 지정하면 이 서비스를 전역 범위에서 사용할 수 있도록 인스턴스를 싱글턴으로 생성합니다. 대부분의 경우 이 방식을 권장합니다.
+
+참고: [`@Service`](guide/di/creating-and-using-services#using-the-service-decorator) 데코레이터는 `@Injectable({providedIn: 'root'})`의 축약 표현입니다.
 
 <!--
 ## Injecting dependencies with `inject()`
@@ -151,17 +154,15 @@ You can inject dependencies using Angular's `inject()` function.
 Here is an example of a navigation bar that injects `AnalyticsLogger` and Angular `Router` service to allow users to navigate to a different page while tracking the event.
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AnalyticsLogger } from './analytics-logger';
+import {Component, inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {AnalyticsLogger} from './analytics-logger';
 
 @Component({
   selector: 'app-navbar',
-  template: `
-    <a href="#" (click)="navigateToDetail($event)">Detail Page</a>
-  `,
+  template: `<a href="#" (click)="navigateToDetail($event)">Detail Page</a>`,
 })
-export class NavbarComponent {
+export class Navbar {
   private router = inject(Router);
   private analytics = inject(AnalyticsLogger);
 
@@ -179,17 +180,15 @@ export class NavbarComponent {
 아래 코드는 `AnalyticsLogger`와 Angular `Router`를 의존성 객체로 주입받아서 이벤트에 따라 화면을 전환하는 네비게이션 바 컴포넌트의 예제 코드입니다.
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AnalyticsLogger } from './analytics-logger';
+import {Component, inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {AnalyticsLogger} from './analytics-logger';
 
 @Component({
   selector: 'app-navbar',
-  template: `
-    <a href="#" (click)="navigateToDetail($event)">Detail Page</a>
-  `,
+  template: `<a href="#" (click)="navigateToDetail($event)">Detail Page</a>`,
 })
-export class NavbarComponent {
+export class Navbar {
   private router = inject(Router);
   private analytics = inject(AnalyticsLogger);
 
@@ -208,10 +207,12 @@ export class NavbarComponent {
 ### `inject()`는 어디에 사용할 수 있나요?
 
 <!--
-You can inject dependencies during construction of a component, directive, or service. The call to `inject` can appear in either the `constructor` or in a field initializer. Here are some common examples:
+You can inject dependencies during construction of a component, directive, or service. The call to [`inject`](/api/core/inject) can appear in either the `constructor` or in a field initializer. Here are some common examples:
 
 ```ts
-@Component({...})
+@Component({
+  /*...*/
+})
 export class MyComponent {
   // ✅ In class field initializer
   private service = inject(MyService);
@@ -234,10 +235,10 @@ export class MyDirective {
 ```
 
 ```ts
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Service, inject} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class MyService {
   // ✅ In a service
   private http = inject(HttpClient);
@@ -249,19 +250,21 @@ export const authGuard = () => {
   // ✅ In a route guard
   const auth = inject(AuthService);
   return auth.isAuthenticated();
-}
+};
 ```
 
-Angular uses the term "injection context" to describe any place in your code where you can call `inject`. While component, directive, and service construction is the most common, see [injection contexts](/guide/di/dependency-injection-context) for more details.
+Angular uses the term "injection context" to describe any place in your code where you can call [`inject`](/api/core/inject). While component, directive, and service construction is the most common, see [injection contexts](/guide/di/dependency-injection-context) for more details.
 
 For more information, see the [inject API docs](api/core/inject#usage-notes).
 -->
 
 의존성 객체는 컴포넌트, 디렉티브, 서비스를 생성할 때 주입할 수 있습니다.
-`inject` 함수를 직접 사용하거나 `constructor()` 함수에서 프로퍼티로 선언하면 됩니다:
+[`inject`](/api/core/inject) 함수를 직접 사용하거나 `constructor()` 함수에서 프로퍼티로 선언하면 됩니다:
 
 ```ts
-@Component({...})
+@Component({
+  /*...*/
+})
 export class MyComponent {
   // ✅ 클래스 필드 초기화로 주입
   private service = inject(MyService);
@@ -284,10 +287,10 @@ export class MyDirective {
 ```
 
 ```ts
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Service, inject} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class MyService {
   // ✅ 서비스에서 주입
   private http = inject(HttpClient);
@@ -299,7 +302,7 @@ export const authGuard = () => {
   // ✅ 라우팅 규칙 가드에서 주입
   const auth = inject(AuthService);
   return auth.isAuthenticated();
-}
+};
 ```
 
 `inject`를 사용할 수 있는 코드 범위를 "의존성 주입 컨텍스트(injection context)"라고 합니다.

@@ -10,9 +10,14 @@ import {setOutput} from '@actions/core';
 import {GitClient, Log, bold, green, yellow} from '@angular/ng-dev';
 import {select} from '@inquirer/prompts';
 import yargs from 'yargs';
-import {collectBenchmarkResults} from './results.mjs';
-import {ResolvedTarget, findBenchmarkTargets, getTestlogPath, resolveTarget} from './targets.mjs';
-import {exec} from './utils.mjs';
+import {collectBenchmarkResults} from './results.mts';
+import {
+  type ResolvedTarget,
+  findBenchmarkTargets,
+  getTestlogPath,
+  resolveTarget,
+} from './targets.mts';
+import {exec} from './utils.mts';
 
 const benchmarkTestFlags = [
   '--cache_test_results=no',
@@ -166,14 +171,14 @@ async function runCompare(bazelTargetRaw: string | undefined, compareRef: string
     Log.log(green('Checking out comparison revision.'));
     git.run(['checkout', 'FETCH_HEAD']);
 
-    await exec('yarn');
+    await exec('pnpm', ['install', '--frozen-lockfile']);
     await runBenchmarkTarget(bazelTarget);
   } finally {
     restoreWorkingStage(git, currentRef);
   }
 
   // Re-install dependencies for `HEAD`.
-  await exec('yarn');
+  await exec('pnpm', ['install', '--frozen-lockfile']);
 
   const comparisonResults = await collectBenchmarkResults(testlogPath);
 

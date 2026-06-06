@@ -20,7 +20,6 @@ import {
   InjectionToken,
   ModuleWithProviders,
   NgModule,
-  NgZone,
   Provider,
   ɵRuntimeError as RuntimeError,
 } from '@angular/core';
@@ -31,11 +30,10 @@ import {RouterLinkActive} from './directives/router_link_active';
 import {RouterOutlet} from './directives/router_outlet';
 import {RuntimeErrorCode} from './errors';
 import {Routes} from './models';
-import {NAVIGATION_ERROR_HANDLER, NavigationTransitions} from './navigation_transition';
+import {NAVIGATION_ERROR_HANDLER} from './navigation_transition';
 import {
   getBootstrapListener,
   rootRoute,
-  ROUTER_IS_PROVIDED,
   withComponentInputBinding,
   withDebugTracing,
   withDisabledInitialNavigation,
@@ -74,11 +72,6 @@ export const ROUTER_PROVIDERS: Provider[] = [
   ChildrenOutletContexts,
   {provide: ActivatedRoute, useFactory: rootRoute},
   RouterConfigLoader,
-  // Only used to warn when `provideRoutes` is used without `RouterModule` or `provideRouter`. Can
-  // be removed when `provideRoutes` is removed.
-  typeof ngDevMode === 'undefined' || ngDevMode
-    ? {provide: ROUTER_IS_PROVIDED, useValue: true}
-    : [],
 ];
 
 /**
@@ -159,7 +152,11 @@ export class RouterModule {
         provideRouterScroller(),
         config?.preloadingStrategy ? withPreloading(config.preloadingStrategy).ɵproviders : [],
         config?.initialNavigation ? provideInitialNavigation(config) : [],
-        config?.bindToComponentInputs ? withComponentInputBinding().ɵproviders : [],
+        config?.bindToComponentInputs
+          ? withComponentInputBinding(
+              typeof config.bindToComponentInputs === 'object' ? config.bindToComponentInputs : {},
+            ).ɵproviders
+          : [],
         config?.enableViewTransitions ? withViewTransitions().ɵproviders : [],
         provideRouterInitializer(),
       ],
@@ -199,14 +196,11 @@ export function provideRouterScroller(): Provider {
     provide: ROUTER_SCROLLER,
     useFactory: () => {
       const viewportScroller = inject(ViewportScroller);
-      const zone = inject(NgZone);
       const config: ExtraOptions = inject(ROUTER_CONFIGURATION);
-      const transitions = inject(NavigationTransitions);
-      const urlSerializer = inject(UrlSerializer);
       if (config.scrollOffset) {
         viewportScroller.setOffset(config.scrollOffset);
       }
-      return new RouterScroller(urlSerializer, transitions, viewportScroller, zone, config);
+      return new RouterScroller(config);
     },
   };
 }

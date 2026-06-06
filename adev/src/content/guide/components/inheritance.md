@@ -16,7 +16,9 @@ export class ListboxBase {
   value: string;
 }
 
-@Component({ ... })
+@Component({
+  /*...*/
+})
 export class CustomListbox extends ListboxBase {
   // CustomListbox inherits the `value` property.
 }
@@ -33,7 +35,9 @@ export class ListboxBase {
   value: string;
 }
 
-@Component({ ... })
+@Component({
+  /*...*/
+})
 export class CustomListbox extends ListboxBase {
   // CustomListbox는 ListboxBase를 상속하기 때문에 `value` 프로퍼티가 존재합니다.
 }
@@ -53,9 +57,7 @@ host bindings, inputs, outputs, lifecycle methods.
 ```angular-ts
 @Component({
   selector: 'base-listbox',
-  template: `
-    ...
-  `,
+  template: ` ... `,
   host: {
     '(keydown)': 'handleKey($event)',
   },
@@ -69,9 +71,7 @@ export class ListboxBase {
 
 @Component({
   selector: 'custom-listbox',
-  template: `
-    ...
-  `,
+  template: ` ... `,
   host: {
     '(click)': 'focusActiveOption()',
   },
@@ -97,9 +97,7 @@ and their own.
 ```angular-ts
 @Component({
   selector: 'base-listbox',
-  template: `
-    ...
-  `,
+  template: ` ... `,
   host: {
     '(keydown)': 'handleKey($event)',
   },
@@ -113,9 +111,7 @@ export class ListboxBase {
 
 @Component({
   selector: 'custom-listbox',
-  template: `
-    ...
-  `,
+  template: ` ... `,
   host: {
     '(click)': 'focusActiveOption()',
   },
@@ -140,15 +136,37 @@ export class CustomListbox extends ListboxBase {
 ### 의존성 객체 전달하기
 
 <!--
-If a base class injects dependencies as constructor parameters, the child class must explicitly class these dependencies to `super`.
+When a base class uses `inject()` as a property initializer, the child class inherits the property automatically. No `super` forwarding is needed.
 
 ```ts
-@Component({ ... })
+@Component({
+  /*...*/
+})
 export class ListboxBase {
-  constructor(private element: ElementRef) { }
+  protected element = inject(ElementRef);
 }
 
-@Component({ ... })
+@Component({
+  /*...*/
+})
+export class CustomListbox extends ListboxBase {
+  // `element` is inherited from `ListboxBase`.
+}
+```
+
+If a base class injects dependencies as constructor parameters, the child class must explicitly pass these dependencies to `super`.
+
+```ts
+@Component({
+  /*...*/
+})
+export class ListboxBase {
+  constructor(private element: ElementRef) {}
+}
+
+@Component({
+  /*...*/
+})
 export class CustomListbox extends ListboxBase {
   constructor(element: ElementRef) {
     super(element);
@@ -156,15 +174,39 @@ export class CustomListbox extends ListboxBase {
 }
 ```
 -->
-부모 클래스가 생성자로 의존성 객체를 주입받으면, 자식 클래스에서는 `super`를 사용해서 해당 객체를 의존성으로 전달해야 합니다.
+프로퍼티를 초기화 할 때 `inject()`를 사용하면 자식 클래스는 부모 클래스를 자동으로 상속받습니다.
+`supser` 키워드는 사용하지 않아도 됩니다.
 
 ```ts
-@Component({ ... })
+@Component({
+  /*...*/
+})
 export class ListboxBase {
-  constructor(private element: ElementRef) { }
+  protected element = inject(ElementRef);
 }
 
-@Component({ ... })
+@Component({
+  /*...*/
+})
+export class CustomListbox extends ListboxBase {
+  // `element` is inherited from `ListboxBase`.
+}
+```
+
+If a base class injects dependencies as constructor parameters, the child class must explicitly pass these dependencies to `super`.
+부모 클래스에서 생성자로 의존성을 주입했다면, 자식 클래스에서는 `super`를 사용해서 접근해야 합니다.
+
+```ts
+@Component({
+  /*...*/
+})
+export class ListboxBase {
+  constructor(private element: ElementRef) {}
+}
+
+@Component({
+  /*...*/
+})
 export class CustomListbox extends ListboxBase {
   constructor(element: ElementRef) {
     super(element);
@@ -205,7 +247,9 @@ export class CustomListbox extends ListboxBase {
 이 때 부모 클래스의 메서드를 실행하려면, `super` 키워드와 함께 실행하면 됩니다:
 
 ```ts
-@Component({ ... })
+@Component({
+  /*...*/
+})
 export class ListboxBase {
   protected isInitialized = false;
   ngOnInit() {
@@ -213,7 +257,9 @@ export class ListboxBase {
   }
 }
 
-@Component({ ... })
+@Component({
+  /*...*/
+})
 export class CustomListbox extends ListboxBase {
   override ngOnInit() {
     super.ngOnInit();

@@ -14,7 +14,9 @@ example, you may want to create a custom card component:
   selector: 'custom-card',
   template: '<div class="card-shadow"> <!- card content goes here -> </div>',
 })
-export class CustomCard {/* ... */}
+export class CustomCard {
+  /* ... */
+}
 ```
 
 **You can use the `<ng-content>` element as a placeholder to mark where content should go**:
@@ -24,7 +26,9 @@ export class CustomCard {/* ... */}
   selector: 'custom-card',
   template: '<div class="card-shadow"> <ng-content/> </div>',
 })
-export class CustomCard {/* ... */}
+export class CustomCard {
+  /* ... */
+}
 ```
 
 TIP: `<ng-content>` works similarly
@@ -44,7 +48,9 @@ rendered, or **projected**, at the location of that `<ng-content>`:
     </div>
   `,
 })
-export class CustomCard {/* ... */}
+export class CustomCard {
+  /* ... */
+}
 ```
 
 ```angular-html
@@ -87,7 +93,9 @@ see [Template fragments](api/core/ng-template).
   selector: 'custom-card',
   template: '<div class="card-shadow"> <!-- 카드 내용은 여기에 들어갑니다. --> </div>',
 })
-export class CustomCard {/* ... */}
+export class CustomCard {
+  /* ... */
+}
 ```
 
 **이 때 내용물이 들어갈 위치는 `<ng-content` 엘리먼트로 지정합니다**:
@@ -114,7 +122,9 @@ export class CustomCard {/* ... */}
     </div>
   `,
 })
-export class CustomCard {/* ... */}
+export class CustomCard {
+  /* ... */
+}
 ```
 
 ```angular-html
@@ -173,7 +183,7 @@ export class CardBody {}
 
 ```angular-ts
 <!- Component template ->
-Component({
+@Component({
   selector: 'custom-card',
   template: `
   <div class="card-shadow">
@@ -432,7 +442,7 @@ placeholder, Angular compares against the `ngProjectAs` value instead of the ele
 <div class="card-shadow">
   <ng-content select="card-title"></ng-content>
   <div class="card-divider"></div>
-  <ng-content></ng-content>
+  <ng-content />
 </div>
 ```
 
@@ -466,7 +476,7 @@ Angular는 모든 엘리먼트에 CSS 셀렉터를 지정할 수 있도록 `ngPr
 <div class="card-shadow">
   <ng-content select="card-title"></ng-content>
   <div class="card-divider"></div>
-  <ng-content></ng-content>
+  <ng-content />
 </div>
 ```
 
@@ -491,3 +501,29 @@ Angular는 모든 엘리먼트에 CSS 셀렉터를 지정할 수 있도록 `ngPr
 ```
 
 `ngProjectAs` 는 정적인 엘리먼트만 지정할 수 있으며, 동적으로 바인딩할 수는 없습니다.
+
+## Caveats
+
+### Projected content lives in the parent's view
+
+Even though projected content is _rendered_ inside the receiving component, it is still owned by the component that declared it. Angular tracks it as part of the parent's view, which has a couple of side effects worth knowing about.
+
+**Change detection:** Projected content is checked when the _parent_ runs change detection. If the receiving component uses `OnPush`, Angular can skip checking that component's own template — but it won't skip the projected content, because that belongs to the parent.
+
+```angular-html
+<!-- Parent template (default change detection) -->
+<onpush-wrapper>
+  <!-- Still checked on every parent cycle, OnPush doesn't help here -->
+  <expensive-component />
+</onpush-wrapper>
+```
+
+**Dependency injection:** Projected content gets its dependencies from the parent's injector, not from the receiving component's `viewProviders`. See [Providers and viewProviders](guide/di/hierarchical-dependency-injection) for details.
+
+### Some library components don't support projected children
+
+Certain components — menus, tabs, lists — use `ContentChildren` to find their children and wire up behavior like keyboard navigation, focus management, or ARIA attributes. They're written assuming they own their children directly, so projecting external content into them tends to break things in subtle ways.
+
+For example, wrapping `<mat-menu-item>` elements in an extra layer and projecting them into `<mat-menu>` can silently break keyboard navigation and screen reader support. The query still finds the items, but the internal setup that makes them interactive may not work correctly when the items come from a different view context.
+
+If a library component manages its children's behavior, check its docs before reaching for content projection — it may not be supported.

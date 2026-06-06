@@ -14,9 +14,7 @@ The contents of a component's template are rendered inside its host element.
 // Component source
 @Component({
   selector: 'profile-photo',
-  template: `
-    <img src="profile-photo.jpg" alt="Your profile photo" />
-  `,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
 })
 export class ProfilePhoto {}
 ```
@@ -49,9 +47,7 @@ In the above example, `<profile-photo>` is the host element of the `ProfilePhoto
 // 컴포넌트 코드
 @Component({
   selector: 'profile-photo',
-  template: `
-    <img src="profile-photo.jpg" alt="Your profile photo" />
-  `,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
 })
 export class ProfilePhoto {}
 ```
@@ -106,6 +102,8 @@ export class CustomSlider {
   /* ... */
 }
 ```
+
+NOTE: The global target names that can be used to prefix an event name are `document:`, `window:` and `body:`.
 -->
 컴포넌트는 프로퍼티나 어트리뷰트, 스타일, 이벤트를 호스트 엘리먼트와 바인딩할 수 있습니다.
 이 바인딩은 컴포넌트 템플릿의 엘리먼트에서 바인딩해도 되지만, `@Component` 데코레이터의 `host` 프로퍼티를 활용할 수도 있습니다.:
@@ -133,6 +131,7 @@ export class CustomSlider {
 }
 ```
 
+참고: 이벤트 이름 앞에 붙일 수 있는 전역 대상 이름은 `document:`, `window:`, `body:` 입니다.
 
 <!--
 ## The `@HostBinding` and `@HostListener` decorators
@@ -276,14 +275,14 @@ export class ProfilePhoto { /* ... */ }
 ## Styling with CSS custom properties
 
 Developers often rely on [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties) to enable a flexible configuration of their component's styles.
-You can set such custom properties on a host element with a [style binding][style binding](guide/templates/binding#css-style-properties).
+You can set such custom properties on a host element with a [style binding](guide/templates/binding#css-style-properties).
 
 ```angular-ts
 @Component({
   /* ... */
   host: {
     '[style.--my-background]': 'color()',
-  }
+  },
 })
 export class MyComponent {
   color = signal('lightgreen');
@@ -292,14 +291,14 @@ export class MyComponent {
 
 In this example, the `--my-background` CSS custom property is bound to the `color` signal. The value of the custom property will automatically update whenever the `color` signal changes. This will affect the current component and all its children that rely on this custom property.
 
-### Setting custom properties on children compoents
+### Setting custom properties on children components
 
 Alternatively, it is also possible to set css custom properties on the host element of children components with a [style binding](guide/templates/binding#css-style-properties).
 
 ```angular-ts
 @Component({
   selector: 'my-component',
-  template: `<my-child [style.--my-background]="color()">`,
+  template: `<my-child [style.--my-background]="color()" />`,
 })
 export class MyComponent {
   color = signal('lightgreen');

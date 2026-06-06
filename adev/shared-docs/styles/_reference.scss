@@ -1,4 +1,4 @@
-@use './anchor' as anchor;
+@use './links' as links;
 
 /* Common styles for the API & CLI references */
 @mixin reference-common() {
@@ -51,7 +51,7 @@
     }
 
     .docs-reference-category {
-      color: var(--gray-400);
+      color: var(--quaternary-contrast);
       font-size: 0.875rem;
       font-weight: 500;
       line-height: 1.4rem;
@@ -64,15 +64,40 @@
   }
 
   .docs-reference-section-heading {
-    padding-block-start: 3rem;
+    margin-block-start: 3rem;
 
     &--sub {
-      padding-block-start: 1rem;
+      margin-block-start: 1rem;
     }
 
     & > a {
-      @include anchor.docs-anchor();
       color: inherit;
+    }
+  }
+
+  .docs-api,
+  .docs-cli {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      .docs-anchor {
+        color: inherit;
+      }
+
+      // Show copy link button when hovering the heading
+      &:hover docs-copy-link-button {
+        opacity: 1;
+      }
+    }
+
+    a:not(.docs-github-links):not(.docs-pill):not(.docs-example-github-link) {
+      &[href^='http:'],
+      &[href^='https:'] {
+        @include links.external-link-with-icon();
+      }
     }
   }
 
@@ -235,7 +260,7 @@
           background-color: var(--septenary-contrast);
         }
 
-        &:focus {
+        &:focus-visible {
           background-color: var(--senary-contrast);
 
           span {
@@ -315,6 +340,11 @@
           }
         }
 
+        .docs-param-type {
+          display: inline-block;
+          margin-inline-end: 0.5rem;
+        }
+
         .docs-parameter-description {
           p:first-child {
             margin-block-start: 0;
@@ -332,8 +362,18 @@
         padding-block: 1rem;
 
         // & does not follow a function definition
-        &:not(.docs-function-definition + .docs-return-type) {
+        &:not(.docs-function-definition + .docs-return-type):not(:first-child) {
           border-block-start: 1px solid var(--senary-contrast);
+        }
+      }
+
+      .docs-usage-notes {
+        border-block-start: 1px solid var(--senary-contrast);
+
+        .docs-usage-notes-heading {
+          color: var(--primary-contrast);
+          margin: 0.5rem 0;
+          font-size: 1.2rem;
         }
       }
     }
@@ -390,6 +430,14 @@
 
       .docs-ref-content {
         padding: 1rem 0;
+
+        .docs-ref-option-and-description {
+          .docs-reference-option {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+        }
 
         &:not(:first-child) {
           border-block-start: 1px solid var(--senary-contrast);

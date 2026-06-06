@@ -13,7 +13,6 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 @Component({
   selector: '{{tag-name}}-root',
   templateUrl: '{{tag-name}}.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class {{ClassName}} {
   protected readonly isServerRunning = signal(true);
@@ -25,26 +24,26 @@ export class {{ClassName}} {
 
 ```css
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 
-    button {
-        margin-top: 10px;
-    }
+  button {
+    margin-top: 10px;
+  }
 }
 ```
 
 ```html
 <section class="container">
-    @if (isServerRunning()) {
-        <span>Yes, the server is running</span>
-    } @else {
-        <span>No, the server is not running</span>
-    }
-    <button (click)="toggleServerStatus()">Toggle Server Status</button>
+  @if (isServerRunning()) {
+  <span>Yes, the server is running</span>
+  } @else {
+  <span>No, the server is not running</span>
+  }
+  <button (click)="toggleServerStatus()">Toggle Server Status</button>
 </section>
 ```
 
@@ -78,8 +77,14 @@ Here is a link to the most recent Angular style guide https://angular.dev/style-
 - Do NOT set `standalone: true` inside the `@Component`, `@Directive` and `@Pipe` decorators
 - Use signals for state management
 - Implement lazy loading for feature routes
-- Use `NgOptimizedImage` for all static images.
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
+- Use `NgOptimizedImage` for all static images.
+  - `NgOptimizedImage` does not work for inline base64 images.
+
+### Accessibility Requirements
+
+- It MUST pass all AXE checks.
+- It MUST follow all WCAG AA minimums, including focus management, color contrast, and ARIA attributes.
 
 ### Components
 
@@ -87,7 +92,6 @@ Here is a link to the most recent Angular style guide https://angular.dev/style-
 - Use `input()` signal instead of decorators, learn more here https://angular.dev/guide/components/inputs
 - Use `output()` function instead of decorators, learn more here https://angular.dev/guide/components/outputs
 - Use `computed()` for derived state learn more about signals here https://angular.dev/guide/signals.
-- Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
 - Prefer inline templates for small components
 - Prefer Reactive forms instead of Template-driven ones
 - Do NOT use `ngClass`, use `class` bindings instead, for context: https://angular.dev/guide/templates/binding#css-class-and-style-property-bindings
@@ -104,8 +108,10 @@ Here is a link to the most recent Angular style guide https://angular.dev/style-
 
 - Keep templates simple and avoid complex logic
 - Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
+- Do not assume globals like (`new Date()`) are available.
 - Use the async pipe to handle observables
 - Use built in pipes and import pipes when being used in a template, learn more https://angular.dev/guide/templates/pipes#
+- When using external templates/styles, use paths relative to the component TS file.
 
 ### Services
 

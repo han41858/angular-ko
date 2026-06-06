@@ -73,12 +73,12 @@ HELPFUL: Built-in directives use only public APIs. They do not have special acce
 <!--
 Add or remove multiple CSS classes simultaneously with `ngClass`.
 
-HELPFUL: To add or remove a _single_ class, use [class binding](guide/templates/class-binding) rather than `NgClass`.
+HELPFUL: To add or remove a _single_ class, use [class binding](/guide/templates/binding#css-class-and-style-property-bindings) rather than `NgClass`.
 -->
 
 `ngClass`는 CSS 클래스를 지정하거나 제거할 수 있습니다.
 
-참고: 클래스 _하나_ 만 지정하거나 제거하려면 `NgClass` 대신 [클래스 바인딩](guide/templates/class-binding)를 사용하세요.
+참고: 클래스 _하나_ 만 지정하거나 제거하려면 `NgClass` 대신 [클래스 바인딩](/guide/templates/binding#css-class-and-style-property-bindings)를 사용하세요.
 
 <!--
 ### Import `NgClass` in the component
@@ -89,12 +89,28 @@ HELPFUL: To add or remove a _single_ class, use [class binding](guide/templates/
 <!--
 To use `NgClass`, add it to the component's `imports` list.
 
-<docs-code header="app.component.ts (NgClass import)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="import-ng-class"/>
--->
+```angular-ts
+import {NgClass} from '@angular/common';
 
+@Component({
+  /* ... */
+  imports: [NgClass],
+})
+export class AppComponent {}
+```
+-->
 `NgClass`를 사용하려면 먼저 컴포넌트 `imports` 배열에 이 심볼을 로드해야 합니다.
 
-<docs-code header="app.component.ts (NgClass 불러오기)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="import-ng-class"/>
+```angular-ts
+import {NgClass} from '@angular/common';
+
+@Component({
+  /* ... */
+  imports: [NgClass],
+})
+export class AppComponent {}
+```
+
 
 <!--
 ### Using `NgClass` with an expression
@@ -107,13 +123,13 @@ On the element you'd like to style, add `[ngClass]` and set it equal to an expre
 In this case, `isSpecial` is a boolean set to `true` in `app.component.ts`.
 Because `isSpecial` is true, `ngClass` applies the class of `special` to the `<div>`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="special-div"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="special-div"/>
 -->
 
 스타일을 지정하려는 엘리먼트에 `[ngClass]`를 추가하고 등호(`=`)를 붙인 후 표현식을 작성합니다.
 아래 코드처럼 작성하면 `app.component.ts` 파일의 `isSpecial` 값이 `true`로 평가되면 `<div>`에 `special` 클래스가 지정됩니다.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="special-div"/>
+<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="special-div"/>
 
 <!--
 ### Using `NgClass` with a method
@@ -129,11 +145,11 @@ Because `isSpecial` is true, `ngClass` applies the class of `special` to the `<d
    If a key is `true`, `ngClass` adds the class.
    If a key is `false`, `ngClass` removes the class.
 
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="setClasses"/>
+   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setClasses"/>
 
 1. In the template, add the `ngClass` property binding to `currentClasses` to set the element's classes:
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="NgClass-1"/>
+   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgClass-1"/>
 
 For this use case, Angular applies the classes on initialization and in case of changes caused by reassigning the `currentClasses` object.
 The full example calls `setCurrentClasses()` initially with `ngOnInit()` when the user clicks on the `Refresh currentClasses` button.
@@ -147,11 +163,11 @@ These steps are not necessary to implement `ngClass`.
    값이 `true`이면, `ngClass` 가 CSS 클래스를 지정합니다.
    값이 `false`이면, `ngClass` 가 CSS 클래스를 제거합니다.
 
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="setClasses"/>
+   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setClasses"/>
 
 1. 템플릿에서 CSS 클래스를 지정하려는 엘리먼트에 `ngClass` 로 `currentClasses` 프로퍼티와 바인딩 합니다:
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="NgClass-1"/>
+   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgClass-1"/>
 
 이렇게 구현하면 Angular는 `currentClasses` 객체를 처음 생성할 때부터 이 객체 내부의 값이 변할 때마다 새로운 객체를 재할당합니다.
 그리고 전체 예제 코드에서는 사용자가 `Refresh currentClasses` 버튼을 클릭하면 `ngOnInit()`가 실행될 때와 동일하게 `setCurrentClasses()`를 실행합니다.
@@ -177,7 +193,15 @@ HELPFUL: To add or remove a _single_ style, use [style bindings](guide/templates
 <!--
 To use `NgStyle`, add it to the component's `imports` list.
 
-<docs-code header="app.component.ts (NgStyle import)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="import-ng-style"/>
+```angular-ts
+import {NgStyle} from '@angular/common';
+
+@Component({
+  /* ... */
+  imports: [NgStyle],
+})
+export class AppComponent {}
+```
 
 Use `NgStyle` to set multiple inline styles simultaneously, based on the state of the component.
 
@@ -185,11 +209,11 @@ Use `NgStyle` to set multiple inline styles simultaneously, based on the state o
 
    In the following example, `setCurrentStyles()` sets the property `currentStyles` with an object that defines three styles, based on the state of three other component properties.
 
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="setStyles"/>
+   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setStyles"/>
 
 1. To set the element's styles, add an `ngStyle` property binding to `currentStyles`.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="NgStyle-2"/>
+   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgStyle-2"/>
 
 For this use case, Angular applies the styles upon initialization and in case of changes.
 To do this, the full example calls `setCurrentStyles()` initially with `ngOnInit()` and when the dependent properties change through a button click.
@@ -198,7 +222,15 @@ However, these steps are not necessary to implement `ngStyle` on its own.
 
 `NgStyle`을 사용하려면 먼저 컴포넌트 `imports` 배열에 이 심볼을 로드해야 합니다.
 
-<docs-code header="app.component.ts (NgStyle 불러오기)" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="import-ng-style"/>
+```angular-ts
+import {NgStyle} from '@angular/common';
+
+@Component({
+  /* ... */
+  imports: [NgStyle],
+})
+export class AppComponent {}
+```
 
 `NgStyle`을 사용하면 컴포넌트 상태에 따라 인라인 스타일 여러개를 동시에 지정할 수 있습니다.
 
@@ -206,63 +238,15 @@ However, these steps are not necessary to implement `ngStyle` on its own.
 
    아래 예제를 보면 `setCurrentStyles()`는 컴포넌트 프로퍼티 상태에 따라 스타일을 지정하는 객체를 선언해서 `currentStyles` 프로퍼티에 할당합니다.
 
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" visibleRegion="setStyles"/>
+   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setStyles"/>
 
 1. 엘리먼트에 스타일을 지정하려면 `ngStyle`을 사용해서 `currentStyles`와 프로퍼티 바인딩하면 됩니다.
 
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" visibleRegion="NgStyle-2"/>
+   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgStyle-2"/>
 
 이렇게 구현하면 Angular는 프로퍼티 값이 변경될 때마다 엘리먼트에 변경된 스타일을 지정합니다.
 그리고 전체 예제 코드에서는 사용자가 버튼을 클릭하면 `ngOnInit()`가 실행될 때와 동일하게 `setCurrentStyles()`를 실행합니다.
 
-<!--
-## Hosting a directive without a DOM element
--->
-
-## DOM 엘리먼트 없이 디렉티브 적용하기
-
-<!--
-The Angular `<ng-container>` is a grouping element that doesn't interfere with styles or layout because Angular doesn't put it in the DOM.
-
-Use `<ng-container>` when there's no single element to host the directive.
-
-Here's a conditional paragraph using `<ng-container>`.
-
-<docs-code header="app.component.html (ngif-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" visibleRegion="ngif-ngcontainer"/>
-
-<img alt="ngcontainer paragraph with proper style" src="assets/images/guide/structural-directives/good-paragraph.png">
-
-1. Import the `ngModel` directive from `FormsModule`.
-
-1. Add `FormsModule` to the imports section of the relevant Angular module.
-
-1. To conditionally exclude an `<option>`, wrap the `<option>` in an `<ng-container>`.
-
-   <docs-code header="app.component.html (select-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" visibleRegion="select-ngcontainer"/>
-
-   <img alt="ngcontainer options work properly" src="assets/images/guide/structural-directives/select-ngcontainer-anim.gif">
--->
-
-Angular 엘리먼트 `<ng-container>`는 스타일이나 레이앙수 변경 없이 엘리먼트 여러 개를 하나로 묶는 엘리먼트입니다.
-이 엘리먼트는 DOM에 직접 추가되지 않습니다.
-
-그런데 `<ng-container>`는 엘리먼트 없이 디렉티브를 적용하는 용도로도 사용할 수 있습니다.
-
-이렇게 사용하면 됩니다:
-
-<docs-code header="app.component.html (ngif-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" visibleRegion="ngif-ngcontainer"/>
-
-<img alt="ngcontainer paragraph with proper style" src="assets/images/guide/structural-directives/good-paragraph.png">
-
-1. `FormsModule` 로 제공되는 `ngModel` 디렉티브를 불러옵니다.
-
-1. `FormsModule` 을 적절한 Angular 모듈의 imports 배열에 추가합니다.
-
-1. 이제 `<option>` 엘리먼트는 `<option>` 엘리먼트를 둘러싼 `<ng-container>`에 지정된 조건에 따라 DOM에 추가되거나 제거됩니다.
-
-   <docs-code header="app.component.html (select-ngcontainer)" path="adev/src/content/examples/structural-directives/src/app/app.component.html" visibleRegion="select-ngcontainer"/>
-
-   <img alt="ngcontainer options work properly" src="assets/images/guide/structural-directives/select-ngcontainer-anim.gif">
 
 <!--
 ## What's next

@@ -33,10 +33,10 @@ works similarly to applying the `MenuBehavior` to the `<admin-menu>` element in 
 ```typescript
 @Component({
   selector: 'admin-menu',
-  template: 'admin-menu.html',
+  templateUrl: './admin-menu.html',
   hostDirectives: [MenuBehavior],
 })
-export class AdminMenu { }
+export class AdminMenu {}
 ```
 
 When the framework renders a component, Angular also creates an instance of each host directive. The
@@ -93,22 +93,23 @@ in your component's API by expanding the entry in `hostDirectives`:
 ```typescript
 @Component({
   selector: 'admin-menu',
-  template: 'admin-menu.html',
-  hostDirectives: [{
-    directive: MenuBehavior,
-    inputs: ['menuId'],
-    outputs: ['menuClosed'],
-  }],
+  templateUrl: './admin-menu.html',
+  hostDirectives: [
+    {
+      directive: MenuBehavior,
+      inputs: ['menuId'],
+      outputs: ['menuClosed'],
+    },
+  ],
 })
-export class AdminMenu { }
+export class AdminMenu {}
 ```
 
 By explicitly specifying the inputs and outputs, consumers of the component with `hostDirective` can
 bind them in a template:
 
 ```angular-html
-
-<admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()">
+<admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()"></admin-menu>
 ```
 
 Furthermore, you can alias inputs and outputs from `hostDirective` to customize the API of your
@@ -117,19 +118,16 @@ component:
 ```typescript
 @Component({
   selector: 'admin-menu',
-  template: 'admin-menu.html',
-  hostDirectives: [{
-    directive: MenuBehavior,
-    inputs: ['menuId: id'],
-    outputs: ['menuClosed: closed'],
-  }],
+  templateUrl: './admin-menu.html',
+  hostDirectives: [
+    {
+      directive: MenuBehavior,
+      inputs: ['menuId: id'],
+      outputs: ['menuClosed: closed'],
+    },
+  ],
 })
-export class AdminMenu { }
-```
-
-```angular-html
-
-<admin-menu id="top-menu" (closed)="logMenuClosed()">
+export class AdminMenu {}
 ```
 -->
 
@@ -139,21 +137,23 @@ export class AdminMenu { }
 ```typescript
 @Component({
   selector: 'admin-menu',
-  template: 'admin-menu.html',
-  hostDirectives: [{
-    directive: MenuBehavior,
-    inputs: ['menuId'],
-    outputs: ['menuClosed'],
-  }],
+  templateUrl: './admin-menu.html',
+  hostDirectives: [
+    {
+      directive: MenuBehavior,
+      inputs: ['menuId'],
+      outputs: ['menuClosed'],
+    },
+  ],
 })
-export class AdminMenu { }
+export class AdminMenu {}
 ```
+
 
 입출력 프로퍼티를 등록하고 나면 템플릿에서 이렇게 사용할 수 있습니다:
 
 ```angular-html
-
-<admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()">
+<admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()"></admin-menu>
 ```
 
 그리고 `hostDirective`에 입출력 프로퍼티를 등록할 때 별칭을 지정할 수도 있습니다:
@@ -161,19 +161,20 @@ export class AdminMenu { }
 ```typescript
 @Component({
   selector: 'admin-menu',
-  template: 'admin-menu.html',
-  hostDirectives: [{
-    directive: MenuBehavior,
-    inputs: ['menuId: id'],
-    outputs: ['menuClosed: closed'],
-  }],
+  templateUrl: './admin-menu.html',
+  hostDirectives: [
+    {
+      directive: MenuBehavior,
+      inputs: ['menuId: id'],
+      outputs: ['menuClosed: closed'],
+    },
+  ],
 })
-export class AdminMenu { }
+export class AdminMenu {}
 ```
 
 ```angular-html
-
-<admin-menu id="top-menu" (closed)="logMenuClosed()">
+<admin-menu id="top-menu" (closed)="logMenuClosed()"></admin-menu>
 ```
 
 <!--
@@ -194,24 +195,28 @@ When `SpecializedMenuWithTooltip` is used in a template, it creates instances of
 , `Tooltip`, and `MenuWithTooltip`. Each of these directives' host bindings apply to the host
 element of `SpecializedMenuWithTooltip`.
 
-```typescript
-@Directive({...})
-export class Menu { }
+```ts
+@Directive({
+  /* ... */
+})
+export class Menu {}
 
-@Directive({...})
-export class Tooltip { }
+@Directive({
+  /* ... */
+})
+export class Tooltip {}
 
 // MenuWithTooltip can compose behaviors from multiple other directives
 @Directive({
   hostDirectives: [Tooltip, Menu],
 })
-export class MenuWithTooltip { }
+export class MenuWithTooltip {}
 
 // CustomWidget can apply the already-composed behaviors from MenuWithTooltip
 @Directive({
   hostDirectives: [MenuWithTooltip],
 })
-export class SpecializedMenuWithTooltip { }
+export class SpecializedMenuWithTooltip {}
 ```
 -->
 
@@ -225,24 +230,28 @@ export class SpecializedMenuWithTooltip { }
 템플릿에 `SpecializedMenuWithTooltip`에 사용되면 Angular는 `Menu`, `Tooltip`, `MenuWithTooltip` 인스턴스가 각각 생성됩니다.
 그리고나면 이 디렉티브들이 각각 `SpecializedMenuWithTooltip` 호스트 엘리먼트에 적용됩니다.
 
-```typescript
-@Directive({...})
-export class Menu { }
+```ts
+@Directive({
+  /* ... */
+})
+export class Menu {}
 
-@Directive({...})
-export class Tooltip { }
+@Directive({
+  /* ... */
+})
+export class Tooltip {}
 
 // MenuWithTooltip은 디렉티브 여러 개를 결합하는 디렉티브입니다.
 @Directive({
   hostDirectives: [Tooltip, Menu],
 })
-export class MenuWithTooltip { }
+export class MenuWithTooltip {}
 
 // 디렉티브가 결합된 MenuWithToolTip을 최종 목적지에 적용합니다.
 @Directive({
   hostDirectives: [MenuWithTooltip],
 })
-export class SpecializedMenuWithTooltip { }
+export class SpecializedMenuWithTooltip {}
 ```
 
 <!--
@@ -266,10 +275,10 @@ The following example shows minimal use of a host directive:
 ```typescript
 @Component({
   selector: 'admin-menu',
-  template: 'admin-menu.html',
+  templateUrl: './admin-menu.html',
   hostDirectives: [MenuBehavior],
 })
-export class AdminMenu { }
+export class AdminMenu {}
 ```
 
 The order of execution here is:
@@ -323,10 +332,10 @@ In the example above, the order of execution is:
 ```typescript
 @Component({
   selector: 'admin-menu',
-  template: 'admin-menu.html',
+  templateUrl: './admin-menu.html',
   hostDirectives: [MenuBehavior],
 })
-export class AdminMenu { }
+export class AdminMenu {}
 ```
 
 위 코드는 아래 순서대로 실행됩니다:
@@ -392,3 +401,110 @@ defined by the host directives.
 호스트 디렉티브를 컴포넌트에 적용할 때 컴포넌트나 호스트 디렉티브 양쪽에서 프로바이더를 등록할 수 있습니다.
 
 `hostDirectives`를 지정한 컴포넌트나 디렉티브, 그리고 호스트 디렉티브가 같은 의존성 토큰을 등록하는 경우에는, 호스트 디렉티브 프로바이더보다 `hostDirectives`를 지정한 클래스의 프로바이더 우선순위가 더 높습니다.
+
+
+### Host directive de-duplication
+
+When the same directive appears more than once in the resolved host directive tree, it is automatically de-duplicated rather than throwing an error. Two deterministic rules are used to decide which match survives.
+
+#### Template match takes precedence
+
+If a directive matches an element once through a **template selector** and also appears as a
+**host directive**, Angular keeps only the template match and discards all host directive matches.
+
+The mental model is that a host directive match represents `Partial<YourDirective>` , a partial
+application where only the inputs and outputs explicitly listed in `hostDirectives` are exposed,
+while a template match represents the full directive with its complete public API.
+
+```ts
+@Directive({selector: '[hoverable]'})
+export class Hoverable {}
+
+@Component({
+  selector: 'app-button',
+  hostDirectives: [Hoverable],
+})
+export class Button {}
+```
+
+```angular-html
+<!-- Hoverable is matched by selector AND as a host directive of Button. -->
+<!-- Angular keeps only the selector match, which has the full public API. -->
+<app-button hoverable></app-button>
+```
+
+#### Multiple host directive matches are merged
+
+If the same directive appears **more than once as a host directive** , for example, when two
+directives both declare a common dependency in their `hostDirectives` , Angular merges all
+instances into a single directive instance. The input and output mappings from all instances are
+combined.
+
+This resolves the classic [diamond problem](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem) in host directive composition:
+
+```ts
+// A shared behavior that both triggers need
+@Directive({
+  host: {
+    '[attr.data-trigger-id]': 'triggerId',
+  },
+})
+export class TriggerRef {
+  readonly triggerId = `trigger-${crypto.randomUUID()}`;
+}
+
+// Two separate triggers, each declaring TriggerRef as a host directive
+@Directive({
+  selector: '[popoverTrigger]',
+  hostDirectives: [TriggerRef],
+})
+export class PopoverTrigger {
+  readonly triggerRef = inject(TriggerRef);
+}
+
+@Directive({
+  selector: '[dropdownTrigger]',
+  hostDirectives: [TriggerRef],
+})
+export class DropdownTrigger {
+  readonly triggerRef = inject(TriggerRef);
+}
+```
+
+```angular-html
+<!-- Angular keeps one TriggerRef instance, shared by both triggers. -->
+<button popoverTrigger dropdownTrigger>Actions</button>
+```
+
+HELPFUL: Because Angular produces only one instance of the shared directive, both `PopoverTrigger`
+and `DropdownTrigger` receive the same `TriggerRef` instance when they inject it.
+
+#### Conflicting aliases
+
+When Angular merges duplicate host directive matches it also merges their input and output mappings.
+If two instances of the same host directive expose the **same input or output under different
+aliases**, Angular throws an error at compile time ([NG8024](errors/NG8024))
+
+```ts
+@Directive({
+  selector: '[popoverTrigger]',
+  hostDirectives: [{directive: TriggerRef, inputs: ['triggerId: popoverTriggerId']}],
+})
+export class PopoverTrigger {}
+
+@Directive({
+  selector: '[dropdownTrigger]',
+  hostDirectives: [
+    {directive: TriggerRef, inputs: ['triggerId: dropdownTriggerId']}, // different alias!
+  ],
+})
+export class DropdownTrigger {}
+```
+
+```angular-html
+<!-- Error: triggerId is exposed as both "popoverTriggerId" and "dropdownTriggerId". -->
+<button popoverTrigger dropdownTrigger></button>
+```
+
+To resolve this, ensure that both paths expose the shared input or output under the same alias, or
+do not expose it at all.

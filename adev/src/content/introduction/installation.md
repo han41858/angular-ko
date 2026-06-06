@@ -19,19 +19,16 @@ Get started with Angular quickly with online starters or locally with your termi
 <!--
 If you just want to play around with Angular in your browser without setting up a project, you can use our online sandbox:
 
-<docs-card-container>
-  <docs-card title="" href="/playground" link="Open on Playground">
-  The fastest way to play with an Angular app. No setup required.
-  </docs-card>
-</docs-card-container>
+<docs-card title="Playground" href="/playground" link="Open on Playground" iconImgSrc="adev/src/assets/icons/playground.svg" titleInline>
+The fastest way to play with an Angular app. No setup required.
+</docs-card>
 -->
 프로젝트 세팅 없이 브라우저에서 바로 Angular를 사용해 보려면, 온라인 샌드박스에 접속하면 됩니다:
 
+<docs-card title="Playground" href="/playground" link="Open on Playground" iconImgSrc="adev/src/assets/icons/playground.svg" titleInline>
+Angular 앱을 체험하는 방법 중 가장 빠른 방법입니다. 환경설정은 필요 없습니다.
+</docs-card>
 <docs-card-container>
-  <docs-card title="" href="/playground" link="온라인 놀이터">
-  Angular 앱을 체험하는 방법 중 가장 빠른 방법입니다. 환경설정은 필요 없습니다.
-  </docs-card>
-</docs-card-container>
 
 
 <!--
@@ -53,12 +50,12 @@ If you're starting a new project, you'll most likely want to create a local proj
 <!--
 - **Node.js** - [v20.19.0 or newer](/reference/versions)
 - **Text editor** - We recommend [Visual Studio Code](https://code.visualstudio.com/)
-- **Terminal** - Required for running Angular CLI commands
+- **Terminal** - Required for running [Angular CLI](/tools/cli) commands
 - **Development Tool** - To improve your development workflow, we recommend the [Angular Language Service](/tools/language-service)
 -->
 - **Node.js** - [v20.19.0 이거나 이후 버전](/reference/versions)
 - **텍스트 에디터** - [Visual Studio Code](https://code.visualstudio.com/)를 추천합니다.
-- **터미널** - Angular CLI 명령을 실행하기 위해 필요합니다.
+- **터미널** - [Angular CLI](/tools/cli) 명령을 실행하기 위해 필요합니다.
 - **개발 툴** - 개발 워크플로를 향상시키기 위해 [Angular Language Service](/tools/language-service) 사용을 권장합니다.
 
 
@@ -151,7 +148,7 @@ Windows나 Unix에서 명령을 실행하다가 에러가 발생하면 [CLI docs
 #### 프로젝트 생성하기
 
 <!--
-In your terminal, run the CLI command `ng new` with the desired project name. In the following examples, we'll be using the example project name of `my-first-angular-app`.
+In your terminal, run the CLI command [`ng new`](cli/new) with the desired project name. In the following examples, we'll be using the example project name of `my-first-angular-app`.
 
 ```shell
 ng new <project-name>
@@ -170,7 +167,7 @@ After you select the configuration options and the CLI runs through the setup, y
 
 At this point, you're now ready to run your project locally!
 -->
-터미널에서 Angular CLI `ng new` 명령을 실행하면서 프로젝트 이름을 지정하세요.
+터미널에서 Angular CLI [`ng new`](cli/new) 명령을 실행하면서 프로젝트 이름을 지정하세요.
 이 문서에서는 `my-first-angular-app`라는 프로젝트 이름을 사용하겠습니다.
 
 ```shell

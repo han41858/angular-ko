@@ -10,6 +10,7 @@ import {BoundTarget} from '@angular/compiler';
 
 import {
   AbsoluteSourceSpan,
+  AbstractBoundTemplate,
   AttributeIdentifier,
   DirectiveHostIdentifier,
   ElementIdentifier,
@@ -25,6 +26,7 @@ import {ComponentMeta} from '../src/context';
 import {getTemplateIdentifiers as getTemplateIdentifiersAndErrors} from '../src/template';
 
 import * as util from './util';
+import {DeclarationNode} from '../../reflection';
 
 function bind(template: string, enableSelectorless = false) {
   return util.getBoundTemplate(template, {
@@ -34,7 +36,7 @@ function bind(template: string, enableSelectorless = false) {
   });
 }
 
-function getTemplateIdentifiers(boundTemplate: BoundTarget<ComponentMeta>) {
+function getTemplateIdentifiers(boundTemplate: AbstractBoundTemplate<DeclarationNode>) {
   return getTemplateIdentifiersAndErrors(boundTemplate).identifiers;
 }
 
@@ -299,7 +301,7 @@ runInEachFileSystem(() => {
         );
       });
 
-      it('should discover properties in template expressions', () => {
+      it('should discover properties in structural directive', () => {
         const template = '<div *ngFor="let foo of foos"></div>';
         const refs = getTemplateIdentifiers(bind(template));
 
@@ -507,7 +509,7 @@ runInEachFileSystem(() => {
       );
     });
 
-    it('should discover references to references', () => {
+    it('should discover references used in an interpolation', () => {
       const template = `<div #foo>{{foo.className}}</div>`;
       const refs = getTemplateIdentifiers(bind(template));
       const elementIdentifier: ElementIdentifier = {
@@ -592,7 +594,7 @@ runInEachFileSystem(() => {
       expect(fooRef.target!.directive).toEqual(declB);
     });
 
-    it('should discover references to references', () => {
+    it('should discover references used in an event binding', () => {
       const template = `<div #foo (ngSubmit)="do(foo)"></div>`;
       const refs = getTemplateIdentifiers(bind(template));
       const elementIdentifier: ElementIdentifier = {
@@ -709,7 +711,7 @@ runInEachFileSystem(() => {
       );
     });
 
-    it('should discover references to variables', () => {
+    it('should discover references to variables used in an event binding', () => {
       const template = `<div *ngFor="let foo of foos" (click)="do(foo)"></div>`;
       const refs = getTemplateIdentifiers(bind(template));
       const variableIdentifier: VariableIdentifier = {

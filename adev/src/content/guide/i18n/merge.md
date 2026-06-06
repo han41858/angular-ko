@@ -31,16 +31,18 @@ Use the `i18n` project option in the [`angular.json`][GuideWorkspaceConfig] work
 
 The following sub-options identify the source language and tell the compiler where to find supported translations for the project.
 
-| Suboption      | Details                                                                      |
-| :------------- | :--------------------------------------------------------------------------- |
-| `sourceLocale` | The locale you use within the application source code \(`en-US` by default\) |
-| `locales`      | A map of locale identifiers to translation files                             |
+| Suboption      | Details                                                                                                                                                |
+| :------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sourceLocale` | The locale you use within the application source code \(`en-US` by default\). Can also be an object with `code`, `baseHref`, and `subPath` properties. |
+| `locales`      | A map of locale identifiers to translation files. Each entry can also be an object with `translation`, `baseHref`, and `subPath` properties.           |
+
+For the full list of `i18n` properties and their types, see [i18n options][GuideWorkspaceConfigI18n].
 
 ### `angular.json` for `en-US` and `fr` example
 
 For example, the following excerpt of an [`angular.json`][GuideWorkspaceConfig] workspace build configuration file sets the source locale to `en-US` and provides the path to the French \(`fr`\) locale translation file.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="locale-config"/>
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="locale-config"/>
 
 ## Generate application variants for each locale
 
@@ -70,7 +72,7 @@ Also, set the property to override other configurations.
 
 The following example displays the `"localize"` option set to `true` in the [`angular.json`][GuideWorkspaceConfig] workspace build configuration file, so that all locales defined in the build configuration are built.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="build-localize-true"/>
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="build-localize-true"/>
 
 ## Build from the command line
 
@@ -80,7 +82,7 @@ If you set the locales in build configuration, it is similar to when you set the
 
 HELPFUL: For more information about how to set the locales, see [Generate application variants for each locale][GuideI18nCommonMergeGenerateApplicationVariantsForEachLocale].
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="build-localize"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="build-localize"/>
 
 ## Apply specific build options for just one locale
 
@@ -92,18 +94,18 @@ IMPORTANT: Use the [Angular CLI][CliMain] development server \(`ng serve`\) with
 
 The following example displays a custom locale-specific configuration using a single locale.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="build-single-locale"/>
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="build-single-locale"/>
 
 Pass this configuration to the `ng serve` or `ng build` commands.
 The following code example displays how to serve the French language file.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="serve-french"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="serve-french"/>
 
 For production builds, use configuration composition to run both configurations.
 
-<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" visibleRegion="build-production-french"/>
+<docs-code path="adev/src/content/examples/i18n/doc-files/commands.sh" region="build-production-french"/>
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="build-production-french" />
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="build-production-french" />
 
 ## Report missing translations
 
@@ -122,7 +124,7 @@ Specify the warning level in the `options` section for the `build` target of you
 
 The following example displays how to set the warning level to `error`.
 
-<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" visibleRegion="missing-translation-error" />
+<docs-code header="angular.json" path="adev/src/content/examples/i18n/angular.json" region="missing-translation-error" />
 
 HELPFUL: When you compile your Angular project into an Angular application, the instances of the `i18n` attribute are replaced with instances of the [`$localize`][ApiLocalizeInitLocalize] tagged message string.
 This means that your Angular application is translated after compilation.
@@ -149,3 +151,4 @@ TLDR: Compile once, then translate for each locale.
 [GuideI18nCommonMergeGenerateApplicationVariantsForEachLocale]: guide/i18n/merge#generate-application-variants-for-each-locale 'Generate application variants for each locale - Merge translations into the application | Angular'
 [GuideI18nCommonTranslationFilesChangeTheSourceLanguageFileFormat]: guide/i18n/translation-files#change-the-source-language-file-format 'Change the source language file format - Work with translation files | Angular'
 [GuideWorkspaceConfig]: reference/configs/workspace-config 'Angular workspace configuration | Angular'
+[GuideWorkspaceConfigI18n]: reference/configs/workspace-config#i18n-options 'i18n options - Angular workspace configuration | Angular'

@@ -5,7 +5,7 @@
 # 서비스 생성하기, 활용하기
 
 <!--
-Services are reusable pieces of code that can be shared across your Angular application. They typically handle data fetching, business logic, or other functionality that multiple components need to access.
+Services are reusable pieces of code that you can share across your Angular application. You commonly use them to handle data fetching, business logic, or other functionality that multiple components need to access.
 -->
 
 서비스는 애플리케이션 전역에서 코드를 공유하고 재사용할 수 있는 코드 묶음입니다.
@@ -18,32 +18,31 @@ Services are reusable pieces of code that can be shared across your Angular appl
 ## 서비스 생성하기
 
 <!--
-You can create a service with the [Angular CLI](tools/cli) with the following command:
+You can create a service using the [Angular CLI](tools/cli) with the following command:
 
 ```bash
 ng generate service CUSTOM_NAME
 ```
 
-This creates a dedicated `CUSTOM_NAME.ts` file in your `src` directory.
+This command creates a dedicated `CUSTOM_NAME.ts` file in your `src` directory.
 
-You can also manually create a service by adding the `@Injectable()` decorator to a TypeScript class. This tells Angular that the service can be injected as a dependency.
+You can also manually create a service by adding the `@Service()` decorator to a TypeScript class. This tells Angular that you can use the class as an injectable dependency.
 
-Here is an example of a service that allows users to add and request data:
+The following example defines a service that allows users to add and retrieve data:
 
-```ts
-// 📄 src/app/basic-data-store.ts
-import { Injectable } from '@angular/core';
+```ts {header: "src/app/basic-data-store.ts"}
+import {Service} from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class BasicDataStore {
-  private data: string[] = []
+  private data: string[] = [];
 
   addData(item: string): void {
-   this.data.push(item)
+    this.data.push(item);
   }
 
   getData(): string[] {
-    return [...this.data]
+    return [...this.data];
   }
 }
 ```
@@ -57,25 +56,24 @@ ng generate service CUSTOM_NAME
 
 이 명령을 실행하면 `src` 디렉토리에 `CUSTOM_NAME.ts` 라는 파일이 생성됩니다.
 
-서비스는 일반 TypeScript 클래스에 `@Injectable()` 데코레이터를 붙여서 직접 선언할 수도 있습니다.
+서비스는 일반 TypeScript 클래스에 `@Service()` 데코레이터를 붙여서 직접 선언할 수도 있습니다.
 이 데코레이터는 데코레이터가 붙은 클래스는 Angular가 의존성 객체로 취급할 수 있다는 것을 알리는 역할을 합니다.
 
 사용자가 데이터를 추가하고 조회하는 예제 서비스라면 이렇게 구현합니다:
 
-```ts
-// 📄 src/app/basic-data-store.ts
-import { Injectable } from '@angular/core';
+```ts {header: "src/app/basic-data-store.ts"}
+import {Service} from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class BasicDataStore {
-  private data: string[] = []
+  private data: string[] = [];
 
   addData(item: string): void {
-   this.data.push(item)
+    this.data.push(item);
   }
 
   getData(): string[] {
-    return [...this.data]
+    return [...this.data];
   }
 }
 ```
@@ -89,9 +87,9 @@ export class BasicDataStore {
 <!--
 When you use `@Injectable({ providedIn: 'root' })` in your service, Angular:
 
-- **Creates a single instance** (singleton) for your entire application
-- **Makes it available everywhere** without any additional configuration
-- **Enables tree-shaking** so the service is only included in your JavaScript bundle if it's actually used
+- **Creates a single instance** (a singleton) for the entire application
+- **Makes it available throughout your application** without additional configuration
+- **Enables tree-shaking** so Angular only includes the service in your JavaScript bundle if you actually use it
 
 This is the recommended approach for most services.
 -->
@@ -103,6 +101,87 @@ This is the recommended approach for most services.
 - 서비스가 실제로 사용되었을 때만 JavaScript 빌드 결과물에 포함되도록 **트리 셰이킹(tree-shaking)이 가능하도록 구성합니다.**
 
 이 방식이 서비스를 사용하는 모범 사례입니다.
+
+## Using the `@Service` decorator
+
+For the common case of a singleton service available throughout your application, Angular provides the `@Service` decorator as a more ergonomic alternative to `@Injectable({providedIn: 'root'})`.
+
+The earlier `BasicDataStore` example can be rewritten with `@Service`:
+
+```ts {header: "src/app/basic-data-store.ts"}
+import {Service} from '@angular/core';
+
+@Service()
+export class BasicDataStore {
+  private data: string[] = [];
+
+  addData(item: string): void {
+    this.data.push(item);
+  }
+
+  getData(): string[] {
+    return [...this.data];
+  }
+}
+```
+
+This behaves the same as the `@Injectable({providedIn: 'root'})` version above: Angular creates a single instance, makes it available everywhere, and tree-shakes it from the bundle if it is never injected.
+
+### Replacing the implementation with a factory
+
+If you need to control how the singleton is created, for example, to swap in a different implementation depending on the environment, pass a `factory` function.
+
+The factory runs in an [injection context](guide/di/dependency-injection-context), so you can use [`inject()`](api/core/inject) inside it to read other dependencies.
+
+The following `Analytics` service is a no-op locally so events don't pollute the console during development. In production, the factory reads an `ANALYTICS_ENABLED` token and returns a `GoogleAnalytics` subclass that forwards events to the real tracker:
+
+```ts {header: "src/app/analytics.ts"}
+import {inject, InjectionToken, Service} from '@angular/core';
+import {ANALYTICS_ENABLED} from './token';
+
+@Service({
+  factory: () => (inject(ANALYTICS_ENABLED) ? new GoogleAnalytics() : new Analytics()),
+})
+export class Analytics {
+  track(event: string, payload?: Record<string, unknown>) {
+    // No-op by default.
+  }
+}
+
+class GoogleAnalytics extends Analytics {
+  override track(event: string, payload?: Record<string, unknown>) {
+    // Dispatches an analytics event to Google Analytics
+  }
+}
+```
+
+NOTE: The `factory` option replaces the `useClass`, `useValue`, `useExisting`, and `useFactory` options of `@Injectable`. If you need any of those, keep using `@Injectable`.
+
+### Opting out of automatic provisioning
+
+By default, `@Service` provides the class at the root injector. If you want to provide it manually, for example, to scope it to a specific route or component, set `autoProvided: false`:
+
+```ts {header: "src/app/analytics-logger.ts"}
+import {Service} from '@angular/core';
+
+@Service({autoProvided: false})
+export class AnalyticsLogger {
+  trackEvent(name: string) {
+    console.log('event:', name);
+  }
+}
+```
+
+You are then responsible for adding the service to a `providers` array, just like with a plain `@Injectable()`:
+
+### When to use `@Service` vs `@Injectable`
+
+Reach for `@Service` when you are creating a new singleton class that uses `inject()` for its dependencies. Keep using `@Injectable` when you need any of the following:
+
+- **Constructor-based dependency injection.** `@Service` only supports the [`inject()`](api/core/inject) function.
+- **Advanced provider configuration** such as `useClass`, `useValue`, `useExisting`, or `useFactory`. `@Service` exposes a single `factory` option instead.
+- **Non-root scopes** such as `providedIn: 'platform'`.
+
 
 <!--
 ## Injecting a service
@@ -123,21 +202,19 @@ Once you've created a service with `providedIn: 'root'`, you can inject it anywh
 ### 컴포넌트에 주입하기
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { BasicDataStore } from './basic-data-store';
+import {Component, inject} from '@angular/core';
+import {BasicDataStore} from './basic-data-store';
 
 @Component({
   selector: 'app-example',
   template: `
     <div>
       <p>{{ dataStore.getData() }}</p>
-      <button (click)="dataStore.addData('More data')">
-        Add more data
-      </button>
+      <button (click)="dataStore.addData('More data')">Add more data</button>
     </div>
-  `
+  `,
 })
-export class ExampleComponent {
+export class Example {
   dataStore = inject(BasicDataStore);
 }
 ```
@@ -149,12 +226,10 @@ export class ExampleComponent {
 ### 다른 서비스에 주입하기
 
 ```ts
-import { inject, Injectable } from '@angular/core';
-import { AdvancedDataStore } from './advanced-data-store';
+import {inject, Service} from '@angular/core';
+import {AdvancedDataStore} from './advanced-data-store';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class BasicDataStore {
   private advancedDataStore = inject(AdvancedDataStore);
   private data: string[] = [];
@@ -176,7 +251,7 @@ export class BasicDataStore {
 ## 다음 단계
 
 <!--
-While `providedIn: 'root'` covers most use cases, Angular offers additional ways to provide services for specialized scenarios:
+While `providedIn: 'root'` covers most use cases, Angular also provides additional ways you can configure services for more specialized scenarios:
 
 - **Component-specific instances** - When components need their own isolated service instances
 - **Manual configuration** - For services that require runtime configuration

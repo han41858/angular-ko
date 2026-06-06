@@ -11,7 +11,7 @@ A component can define **queries** that find child elements and read values from
 Developers most commonly use queries to retrieve references to child components, directives, DOM elements, and more.
 
 All query functions return signals that reflect the most up-to-date results. You can read the
-result by calling the signal function, including in reactive contexts like `computed` and `effect`.
+result by calling the signal function, including in [reactive contexts](guide/signals#reactive-contexts) like `computed` and `effect`.
 
 There are two categories of query: **view queries** and **content queries.**
 -->
@@ -22,7 +22,7 @@ There are two categories of query: **view queries** and **content queries.**
 보통은 자식 컴포넌트나 자식 디렉티브, DOM 엘리먼트 등을 참조하는 용도로 사용합니다.
 
 쿼리 함수는 가장 마지막에 찾은 결과를 시그널 타입으로 반환합니다.
-그래서 시그널 함수를 실행하면 자식 객체를 참조할 수 있으며, `computed` 나 `effect` 함수와 함께 사용해서 반응형 시그널로 활용할 수도 있습니다.
+그래서 시그널 함수를 실행하면 자식 객체를 참조할 수 있으며, `computed` 나 `effect` 함수와 함께 사용해서 [반응형 시그널](guide/signals#reactive-contexts)로 활용할 수도 있습니다.
 
 쿼리 함수는 **뷰 쿼리(view queries)** 와 **컨텐츠 쿼리(content queries)** , 이렇게 두 종류가 있습니다.
 
@@ -35,7 +35,7 @@ There are two categories of query: **view queries** and **content queries.**
 <!--
 View queries retrieve results from the elements in the component's _view_ — the elements defined in the component's own template. You can query for a single result with the `viewChild` function.
 
-```typescript {highlight: [14, 15]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-card-header',
   /*...*/
@@ -60,7 +60,7 @@ If the query does not find a result, its value is `undefined`. This may occur if
 
 You can also query for multiple results with the `viewChildren` function.
 
-```typescript {highlight: [17]}
+```angular-ts {highlight: [17]}
 @Component({
   selector: 'custom-card-action',
   /*...*/
@@ -71,13 +71,14 @@ export class CustomCardAction {
 
 @Component({
   selector: 'custom-card',
-  template: `<custom-card-action>Save</custom-card-action>
+  template: `
+    <custom-card-action>Save</custom-card-action>
     <custom-card-action>Cancel</custom-card-action>
   `,
 })
 export class CustomCard {
   actions = viewChildren(CustomCardAction);
-  actionsTexts = computed(() => this.actions().map(action => action.text);
+  actionsTexts = computed(() => this.actions().map((action) => action.text));
 }
 ```
 
@@ -88,7 +89,7 @@ export class CustomCard {
 뷰 쿼리는 컴포넌트 _뷰_ , 즉, 컴포넌트 템플릿 자체에 있는 엘리먼트를 찾습니다.
 뷰 쿼리 함수 중 `viewChild` 함수를 사용하면 원하는 엘리먼트를 하나 참조할 수 있습니다.
 
-```typescript {highlight: [14, 15]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-card-header',
   /*...*/
@@ -115,7 +116,7 @@ export class CustomCard {
 
 자식 컴포넌트를 여러개 참조하려면 `viewChildren` 함수를 사용하면 됩니다.
 
-```typescript {highlight: [17]}
+```angular-ts {highlight: [17]}
 @Component({
   selector: 'custom-card-action',
   /*...*/
@@ -133,7 +134,7 @@ export class CustomCardAction {
 })
 export class CustomCard {
   actions = viewChildren(CustomCardAction);
-  actionsTexts = computed(() => this.actions().map(action => action.text);
+  actionsTexts = computed(() => this.actions().map((action) => action.text));
 }
 ```
 
@@ -151,7 +152,7 @@ export class CustomCard {
 <!--
 Content queries retrieve results from the elements in the component's _content_— the elements nested inside the component in the template where it's used. You can query for a single result with the `contentChild` function.
 
-```typescript {highlight: [14, 15]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-toggle',
   /*...*/
@@ -170,16 +171,15 @@ export class CustomExpando {
 }
 
 @Component({
-/* ... */
-// CustomToggle is used inside CustomExpando as content.
-template: `
+  /* ... */
+  // CustomToggle is used inside CustomExpando as content.
+  template: `
     <custom-expando>
       <custom-toggle>Show</custom-toggle>
     </custom-expando>
-  `
+  `,
 })
-
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 If the query does not find a result, its value is `undefined`. This may occur if the target element is absent or hidden by `@if`. Angular keeps the result of `contentChild` up to date as your application state changes.
@@ -188,7 +188,7 @@ By default, content queries find only _direct_ children of the component and do 
 
 You can also query for multiple results with the `contentChildren` function.
 
-```typescript {highlight: [14, 16, 17, 18, 19, 20]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/
@@ -201,10 +201,9 @@ export class CustomMenuItem {
   selector: 'custom-menu',
   /*...*/
 })
-
 export class CustomMenu {
   items = contentChildren(CustomMenuItem);
-  itemTexts = computed(() => this.items().map(item => item.text));
+  itemTexts = computed(() => this.items().map((item) => item.text));
 }
 
 @Component({
@@ -214,9 +213,9 @@ export class CustomMenu {
       <custom-menu-item>Cheese</custom-menu-item>
       <custom-menu-item>Tomato</custom-menu-item>
     </custom-menu>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 `contentChildren` creates a signal with an `Array` of the query results.
@@ -226,7 +225,7 @@ export class UserProfile { }
 컨텐츠 쿼리는 컴포넌트 _컨텐츠_, 즉, 컴포넌트 템플릿 안쪽에 있는 엘리먼트를 찾습니다.
 컨텐츠 쿼리 함수 중 `contentChild` 함수를 사용하면 원하는 엘리먼트를 하나 참조할 수 있습니다.
 
-```typescript {highlight: [14, 15]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-toggle',
   /*...*/
@@ -237,23 +236,23 @@ export class CustomToggle {
 
 @Component({
   selector: 'custom-expando',
-  /*...*/
+  /* ... */
 })
 export class CustomExpando {
   toggle = contentChild(CustomToggle);
   toggleText = computed(() => this.toggle()?.text);
 }
 
-@Component({ 
+@Component({
   /* ... */
-  // CustomToggle은 CustomExpando 안에 컨텐츠로 사용되었습니다.  
+  // CustomToggle은 CustomExpando 안에 컨텐츠로 사용되었습니다.
   template: `
     <custom-expando>
       <custom-toggle>Show</custom-toggle>
     </custom-expando>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 만약 쿼리 결과가 없으면 시그널은 `undefined` 값을 갖습니다.
@@ -264,7 +263,7 @@ export class UserProfile { }
 
 자식 컴포넌트를 여러개 참조하려면 `contentChildren` 함수를 사용하면 됩니다.
 
-```typescript {highlight: [14, 16, 17, 18, 19, 20]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/
@@ -279,7 +278,7 @@ export class CustomMenuItem {
 })
 export class CustomMenu {
   items = contentChildren(CustomMenuItem);
-  itemTexts = computed(() => this.items().map(item => item.text));
+  itemTexts = computed(() => this.items().map((item) => item.text));
 }
 
 @Component({
@@ -289,9 +288,9 @@ export class CustomMenu {
       <custom-menu-item>Cheese</custom-menu-item>
       <custom-menu-item>Tomato</custom-menu-item>
     </custom-menu>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 `contentChildren` 함수는 탐색 결과를 `Array` 타입으로 반환하는 시그널입니다.
@@ -310,8 +309,10 @@ If a child query (`viewChild` or `contentChild`) does not find a result, its val
 
 In some cases, especially with `viewChild`, you know with certainty that a specific child is always available. In other cases, you may want to strictly enforce that a specific child is present. For these cases, you can use a _required query_.
 
-```angular-ts
-@Component({/* ... */})
+```ts
+@Component({
+  /*...*/
+})
 export class CustomCard {
   header = viewChild.required(CustomCardHeader);
   body = contentChild.required(CustomCardBody);
@@ -327,8 +328,10 @@ If a required query does not find a matching result, Angular reports an error. B
 하지만 자식 컴포넌트가 반드시 존재하는 경우를 간주할 수 있습니다.
 이 경우에는 대상 컴포넌트가 반드시 존재한다는 것을 지정해서 _값이 반드시 존재하는_ 쿼리로 처리할 수 있습니다.
 
-```angular-ts
-@Component({/* ... */})
+```ts
+@Component({
+  /*...*/
+})
 export class CustomCard {
   header = viewChild.required(CustomCardHeader);
   body = contentChild.required(CustomCardBody);
@@ -358,7 +361,7 @@ a [template reference variable](guide/templates/variables#template-reference-var
   template: `
     <button #save>Save</button>
     <button #cancel>Cancel</button>
-  `
+  `,
 })
 export class ActionBar {
   saveButton = viewChild<ElementRef<HTMLButtonElement>>('save');
@@ -381,7 +384,7 @@ Angular does not support CSS selectors as query locators.
   template: `
     <button #save>Save</button>
     <button #cancel>Cancel</button>
-  `
+  `,
 })
 export class ActionBar {
   saveButton = viewChild<ElementRef<HTMLButtonElement>>('save');
@@ -410,9 +413,11 @@ const SUB_ITEM = new InjectionToken<string>('sub-item');
   /*...*/
   providers: [{provide: SUB_ITEM, useValue: 'special-item'}],
 })
-export class SpecialItem { }
+export class SpecialItem {}
 
-@Component({/*...*/})
+@Component({
+  /*...*/
+})
 export class CustomList {
   subItemType = contentChild(SUB_ITEM);
 }
@@ -432,9 +437,11 @@ const SUB_ITEM = new InjectionToken<string>('sub-item');
   /*...*/
   providers: [{provide: SUB_ITEM, useValue: 'special-item'}],
 })
-export class SpecialItem { }
+export class SpecialItem {}
 
-@Component({/*...*/})
+@Component({
+  /*...*/
+})
 export class CustomList {
   subItemType = contentChild(SUB_ITEM);
 }
@@ -463,8 +470,9 @@ All query functions accept an options object as a second parameter. These option
 By default, the query locator indicates both the element you're searching for and the value retrieved. You can alternatively specify the `read` option to retrieve a different value from the element matched by the locator.
 
 ```ts
-
-@Component({/*...*/})
+@Component({
+  /*...*/
+})
 export class CustomExpando {
   toggle = contentChild(ExpandoContent, {read: TemplateRef});
 }
@@ -479,7 +487,9 @@ Developers most commonly use `read` to retrieve `ElementRef` and `TemplateRef`.
 `read` 옵션을 사용하면 구분자와 매칭되는 객체를 직접 지정할 수 있습니다.
 
 ```ts
-@Component({/*...*/})
+@Component({
+  /*...*/
+})
 export class CustomExpando {
   toggle = contentChild(ExpandoContent, {read: TemplateRef});
 }
@@ -499,7 +509,7 @@ export class CustomExpando {
 By default, `contentChildren` queries find only _direct_ children of the component and do not traverse into descendants.
 `contentChild` queries do traverse into descendants by default.
 
-```typescript {highlight: [13, 14, 15, 16]}
+```angular-ts {highlight: [13, 14, 15, 16, 17]}
 @Component({
   selector: 'custom-expando',
   /*...*/
@@ -511,14 +521,15 @@ export class CustomExpando {
 
 @Component({
   selector: 'user-profile',
-  template: `     <custom-expando>
+  template: `
+    <custom-expando>
       <some-other-component>
         <custom-toggle>Show</custom-toggle>
       </some-other-component>
     </custom-expando>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 In the example above, `CustomExpando` cannot find `<custom-toggle>` with `contentChildren` because it is not a direct child of `<custom-expando>`. By setting `descendants: true`, you configure the query to traverse all descendants in the same template. Queries, however, _never_ pierce into components to traverse elements in other templates.
@@ -528,14 +539,14 @@ View queries do not have this option because they _always_ traverse into descend
 기본적으로 `contentChildren` 쿼리 함수는 컴포넌트의 _바로 한 단계_ 자식 컴포넌트를 탐색하며 더 하위 자식은 탐색하지 않습니다.
 반면에 `contentChild` 쿼리 함수는 자식 엘리먼트를 탐색합니다. 
 
-```typescript {highlight: [13, 14, 15, 16]}
+```angular-ts {highlight: [13, 14, 15, 16, 17]}
 @Component({
   selector: 'custom-expando',
   /*...*/
 })
 export class CustomExpando {
-  toggle = contentChildren(CustomToggle); // 찾을 수 없음
-  // toggle = contentChild(CustomToggle); // 찾음
+  toggle = contentChildren(CustomToggle); // none found
+  // toggle = contentChild(CustomToggle); // found
 }
 
 @Component({
@@ -546,9 +557,9 @@ export class CustomExpando {
         <custom-toggle>Show</custom-toggle>
       </some-other-component>
     </custom-expando>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 위 예제 코드에서 `<custom-toggle>` 컴포넌트는 `CustomExpando`의 직접적인 자식 컴포넌트가 아니기 때문에 `<custom-toggle>`를 탐색할 수 없습니다.
@@ -576,14 +587,14 @@ You can alternatively declare queries by adding the corresponding decorator to a
 
 
 <!--
-### View queries
+### View queries {#decorator-view-queries}
 -->
-### 뷰 쿼리
+### 뷰 쿼리 {#decorator-view-queries}
 
 <!--
 You can query for a single result with the `@ViewChild` decorator.
 
-```typescript {highlight: [14, 16, 17, 18]}
+```angular-ts {highlight: [14, 16, 17, 18]}
 @Component({
   selector: 'custom-card-header',
   /*...*/
@@ -596,7 +607,7 @@ export class CustomCardHeader {
   selector: 'custom-card',
   template: '<custom-card-header>Visit sunny California!</custom-card-header>',
 })
-export class CustomCard {
+export class CustomCard implements AfterViewInit {
   @ViewChild(CustomCardHeader) header: CustomCardHeader;
 
   ngAfterViewInit() {
@@ -613,7 +624,7 @@ Angular keeps the result of `@ViewChild` up to date as your application state ch
 
 You can also query for multiple results with the `@ViewChildren` decorator.
 
-```typescript {highlight: [17, 19, 20, 21, 22, 23]}
+```angular-ts {highlight: [17, 19, 20, 21, 22, 23]}
 @Component({
   selector: 'custom-card-action',
   /*...*/
@@ -629,11 +640,11 @@ export class CustomCardAction {
     <custom-card-action>Cancel</custom-card-action>
   `,
 })
-export class CustomCard {
+export class CustomCard implements AfterViewInit {
   @ViewChildren(CustomCardAction) actions: QueryList<CustomCardAction>;
 
   ngAfterViewInit() {
-    this.actions.forEach(action => {
+    this.actions.forEach((action) => {
       console.log(action.text);
     });
   }
@@ -644,7 +655,7 @@ export class CustomCard {
 -->
 대상을 하나만 참조하려면 `@ViewChild` 데코레이터를 사용합니다.
 
-```typescript {highlight: [14, 16, 17, 18]}
+```angular-ts {highlight: [14, 16, 17, 18]}
 @Component({
   selector: 'custom-card-header',
   /*...*/
@@ -657,7 +668,7 @@ export class CustomCardHeader {
   selector: 'custom-card',
   template: '<custom-card-header>Visit sunny California!</custom-card-header>',
 })
-export class CustomCard {
+export class CustomCard implements AfterViewInit {
   @ViewChild(CustomCardHeader) header: CustomCardHeader;
 
   ngAfterViewInit() {
@@ -676,7 +687,7 @@ export class CustomCard {
 
 자식 컴포넌트를 여러개 탐색하려면 `@ViewChildren` 데코레이터를 사용하면 됩니다.
 
-```typescript {highlight: [17, 19, 20, 21, 22, 23]}
+```angular-ts {highlight: [17, 19, 20, 21, 22, 23]}
 @Component({
   selector: 'custom-card-action',
   /*...*/
@@ -692,11 +703,11 @@ export class CustomCardAction {
     <custom-card-action>Cancel</custom-card-action>
   `,
 })
-export class CustomCard {
+export class CustomCard implements AfterViewInit {
   @ViewChildren(CustomCardAction) actions: QueryList<CustomCardAction>;
 
   ngAfterViewInit() {
-    this.actions.forEach(action => {
+    this.actions.forEach((action) => {
       console.log(action.text);
     });
   }
@@ -708,14 +719,14 @@ export class CustomCard {
 
 
 <!--
-### Content queries
+### Content queries {#decorator-content-queries}
 -->
-### 컨텐츠 쿼리
+### 컨텐츠 쿼리 {#decorator-content-queries}
 
 <!--
 You can query for a single result with the `@ContentChild` decorator.
 
-```typescript {highlight: [14, 16, 17, 18, 25]}
+```angular-ts {highlight: [14, 16, 17, 18]}
 @Component({
   selector: 'custom-toggle',
   /*...*/
@@ -728,8 +739,7 @@ export class CustomToggle {
   selector: 'custom-expando',
   /*...*/
 })
-
-export class CustomExpando {
+export class CustomExpando implements AfterContentInit {
   @ContentChild(CustomToggle) toggle: CustomToggle;
 
   ngAfterContentInit() {
@@ -743,9 +753,9 @@ export class CustomExpando {
     <custom-expando>
       <custom-toggle>Show</custom-toggle>
     </custom-expando>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 In this example, the `CustomExpando` component queries for a child `CustomToggle` and accesses the result in `ngAfterContentInit`.
@@ -756,7 +766,7 @@ Angular keeps the result of `@ContentChild` up to date as your application state
 
 You can also query for multiple results with the `@ContentChildren` decorator.
 
-```typescript {highlight: [15, 17, 18, 19, 20, 21]}
+```angular-ts {highlight: [14, 16, 17, 18, 19, 20]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/
@@ -769,12 +779,11 @@ export class CustomMenuItem {
   selector: 'custom-menu',
   /*...*/
 })
-
-export class CustomMenu {
+export class CustomMenu implements AfterContentInit {
   @ContentChildren(CustomMenuItem) items: QueryList<CustomMenuItem>;
 
   ngAfterContentInit() {
-    this.items.forEach(item => {
+    this.items.forEach((item) => {
       console.log(item.text);
     });
   }
@@ -787,16 +796,16 @@ export class CustomMenu {
       <custom-menu-item>Cheese</custom-menu-item>
       <custom-menu-item>Tomato</custom-menu-item>
     </custom-menu>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 `@ContentChildren` creates a `QueryList` object that contains the query results. You can subscribe to changes to the query results over time via the `changes` property.
 -->
 대상을 하나만 참조하려면 `@ContentChild` 데코레이터를 사용합니다.
 
-```typescript {highlight: [14, 16, 17, 18, 25]}
+```angular-ts {highlight: [14, 16, 17, 18]}
 @Component({
   selector: 'custom-toggle',
   /*...*/
@@ -809,7 +818,7 @@ export class CustomToggle {
   selector: 'custom-expando',
   /*...*/
 })
-export class CustomExpando {
+export class CustomExpando implements AfterContentInit {
   @ContentChild(CustomToggle) toggle: CustomToggle;
 
   ngAfterContentInit() {
@@ -823,9 +832,9 @@ export class CustomExpando {
     <custom-expando>
       <custom-toggle>Show</custom-toggle>
     </custom-expando>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 위 코드는 `CustomExpando` 컴포넌트가 자식 컴포넌트 `CustomToggle`을 탐색하며, 탐색 결과는 `ngAfterContentInit`에서 접근하는 코드입니다.
@@ -838,7 +847,7 @@ export class UserProfile { }
 
 자식 컴포넌트를 여러개 탐색하려면 `@ContentChildren` 데코레이터를 사용하면 됩니다.
 
-```typescript {highlight: [15, 17, 18, 19, 20, 21]}
+```angular-ts {highlight: [14, 16, 17, 18, 19, 20]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/
@@ -851,11 +860,11 @@ export class CustomMenuItem {
   selector: 'custom-menu',
   /*...*/
 })
-export class CustomMenu {
+export class CustomMenu implements AfterContentInit {
   @ContentChildren(CustomMenuItem) items: QueryList<CustomMenuItem>;
 
   ngAfterContentInit() {
-    this.items.forEach(item => {
+    this.items.forEach((item) => {
       console.log(item.text);
     });
   }
@@ -868,9 +877,9 @@ export class CustomMenu {
       <custom-menu-item>Cheese</custom-menu-item>
       <custom-menu-item>Tomato</custom-menu-item>
     </custom-menu>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 `@ContentChildren` 을 사용하면 `QueryList` 타입을 반환합니다.
@@ -902,7 +911,7 @@ All query decorators accept an options object as a second parameter. These optio
   selector: 'custom-card',
   template: '<custom-card-header>Visit sunny California!</custom-card-header>',
 })
-export class CustomCard {
+export class CustomCard implements OnInit {
   @ViewChild(CustomCardHeader, {static: true}) header: CustomCardHeader;
 
   ngOnInit() {
@@ -924,7 +933,7 @@ The `static` option is not available for `@ViewChildren` and `@ContentChildren` 
   selector: 'custom-card',
   template: '<custom-card-header>Visit sunny California!</custom-card-header>',
 })
-export class CustomCard {
+export class CustomCard implements OnInit {
   @ViewChild(CustomCardHeader, {static: true}) header: CustomCardHeader;
 
   ngOnInit() {

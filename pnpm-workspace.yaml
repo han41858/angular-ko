@@ -3,6 +3,8 @@ packages:
   - adev
   - adev/shared-docs
   - adev/shared-docs/pipeline/api-gen
+  - dev-app/
+  - devtools/
   - modules
   - integration
   - packages/animations/
@@ -28,7 +30,6 @@ packages:
   - tools/bazel/rules_angular_store/
   - vscode-ng-language-service
   - vscode-ng-language-service/server
-  - vscode-ng-language-service/integration/pre_standalone_project
   - vscode-ng-language-service/integration/project
 
 allowedDeprecatedVersions:
@@ -36,7 +37,6 @@ allowedDeprecatedVersions:
   tslint: '*'
   gulp-conventional-changelog: '5'
   protractor: '7'
-  '@babel/plugin-proposal-async-generator-functions': '7'
 
 # The minimum age of a release to be considered for dependency installation.
 # The value is in minutes (1440 minutes = 1 day).
@@ -48,6 +48,7 @@ minimumReleaseAgeExclude:
   - '@ngtools/webpack'
   - '@schematics/*'
   - 'ng-packagr'
+  - 'zone.js'
 
 # Allow any version of @angular/* packages to satisfy peer dependencies, as these are managed within the monorepo.
 peerDependencyRules:

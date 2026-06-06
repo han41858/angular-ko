@@ -12,14 +12,14 @@ TIP: Check out Angular's [Essentials](essentials/templates) before diving into t
 
 Every Angular component has a **template** that defines the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) that the component renders onto the page. By using templates, Angular is able to automatically keep your page up-to-date as data changes.
 
-Templates are usually found within either the `template` property of a `*.component.ts` file or the `*.component.html` file. To learn more, check out the [in-depth components guide](/guide/components).
+Templates are usually found within either the `template` property of a `*.ts` file or the `*.html` file. To learn more, check out the [in-depth components guide](/guide/components).
 -->
 팁: 고급 내용을 읽어보기 전에 [핵심 가이드](essentials/templates) 문서를 먼저 확인해 보세요.
 
 모든 Angular 컴포넌트는 화면에 렌더링할 내용을 [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)으로 정의한 **템플릿** 을 갖습니다.
 템플릿을 활용하면 애플리케이션 데이터가 변경되더라도 화면을 언제나 최신 상태로 유지할 수 있습니다.
 
-템플릿은 `*.component.ts` 파일의 `template` 프로퍼티로 정의하거나 별도 `*.component.html` 파일로 정의합니다.
+템플릿은 `*.ts` 파일의 `template` 프로퍼티로 정의하거나 별도 `*.html` 파일로 정의합니다.
 자세한 내용은 [컴포넌트 심화 가이드](/guide/components) 문서를 참고하세요.
 
 

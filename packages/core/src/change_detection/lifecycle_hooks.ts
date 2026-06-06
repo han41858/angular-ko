@@ -9,7 +9,8 @@ import {SimpleChanges} from './simple_change';
 
 /**
  * @description
- * A lifecycle hook that is called when any data-bound property of a directive changes.
+ * A lifecycle hook that is called when the value of one or more component or directive inputs
+ * change. This includes both signal-based and decorator-based inputs.
  * Define an `ngOnChanges()` method to handle the changes.
  *
  * @see {@link DoCheck}
@@ -18,9 +19,19 @@ import {SimpleChanges} from './simple_change';
  *
  * @usageNotes
  * The following snippet shows how a component can implement this interface to
- * define an on-changes handler for an input property.
+ * define an on-changes handler for an input property. While you should prefer
+ * `computed` and `effect` when working with signal-based inputs, the `ngOnChanges`
+ * method does include value changes for signal-based inputs.
  *
- * {@example core/ts/metadata/lifecycle_hooks_spec.ts region='OnChanges'}
+ * ```ts
+ * @Component({ ... })
+ * export class UserProfile implements OnChanges {
+ *   userId = input<number>(0);
+ *   ngOnChanges(changes: SimpleChanges<UserProfile>) {
+ *     // changes.userId contains the old and new value.
+ *   }
+ * }
+ * ```
  *
  * @publicApi
  */
@@ -65,14 +76,19 @@ export interface OnInit {
 
 /**
  * A lifecycle hook that invokes a custom change-detection function for a directive,
- * in addition to the check performed by the default change-detector.
+ * in addition to the check performed by the default change-detector on the input
+ * bindings for this directive usage in the parent template. Note that this hook is
+ * invoked even when the directive's own change detection is skipped (e.g., with
+ * the `OnPush` change detection strategy). Developers might use this hook to
+ * implement a custom change detection strategy for some of the inputs.
  *
  * The default change-detection algorithm looks for differences by comparing
  * bound-property values by reference across change detection runs. You can use this
  * hook to check for and respond to changes by some other means.
  *
- * When the default change detector detects changes, it invokes `ngOnChanges()` if supplied,
- * regardless of whether you perform additional change detection.
+ * When the default change detector detects changes to the directive's input bindings,
+ * it invokes `ngOnChanges()` if supplied, regardless of whether you perform
+ * additional change detection.
  * Typically, you should not use both `DoCheck` and `OnChanges` to respond to
  * changes on the same input.
  *
@@ -93,7 +109,8 @@ export interface OnInit {
 export interface DoCheck {
   /**
    * A callback method that performs change-detection, invoked
-   * after the default change-detector runs.
+   * after the default change-detector has checked the directive's input
+   * bindings in the parent template.
    * See `KeyValueDiffers` and `IterableDiffers` for implementing
    * custom change checking for collections.
    *

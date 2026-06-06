@@ -20,10 +20,11 @@ import {
   ParamsInheritanceStrategy,
   RouterStateSnapshot,
 } from './router_state';
-import {PRIMARY_OUTLET} from './shared';
+import {Params, PRIMARY_OUTLET} from './shared';
 import {UrlSegment, UrlSegmentGroup, UrlSerializer, UrlTree} from './url_tree';
 import {getOutlet, sortByMatchingOutlets} from './utils/config';
 import {
+  createPreMatchRouteSnapshot,
   emptyPathMatch,
   match,
   matchWithChecks,
@@ -48,7 +49,7 @@ export async function recognize(
   config: Routes,
   urlTree: UrlTree,
   urlSerializer: UrlSerializer,
-  paramsInheritanceStrategy: ParamsInheritanceStrategy = 'emptyOnly',
+  paramsInheritanceStrategy: ParamsInheritanceStrategy,
   abortSignal: AbortSignal,
 ): Promise<{state: RouterStateSnapshot; tree: UrlTree}> {
   return new Recognizer(
@@ -128,6 +129,7 @@ export class Recognizer {
       this.rootComponentType,
       null,
       {},
+      this.injector,
     );
     try {
       const children = await this.processSegmentGroup(
@@ -347,20 +349,7 @@ export class Recognizer {
         this.allowRedirects = false;
       }
     }
-    const currentSnapshot = new ActivatedRouteSnapshot(
-      segments,
-      parameters,
-      Object.freeze({...this.urlTree.queryParams}),
-      this.urlTree.fragment,
-      getData(route),
-      getOutlet(route),
-      route.component ?? route._loadedComponent ?? null,
-      route,
-      getResolve(route),
-    );
-    const inherited = getInherited(currentSnapshot, parentRoute, this.paramsInheritanceStrategy);
-    currentSnapshot.params = Object.freeze(inherited.params);
-    currentSnapshot.data = Object.freeze(inherited.data);
+    const currentSnapshot = this.createSnapshot(injector, route, segments, parameters, parentRoute);
     if (this.abortSignal.aborted) {
       throw new Error(this.abortSignal.reason);
     }
@@ -368,7 +357,7 @@ export class Recognizer {
       consumedSegments,
       route.redirectTo!,
       positionalParamSegments,
-      currentSnapshot,
+      createPreMatchRouteSnapshot(currentSnapshot),
       injector,
     );
 
@@ -384,6 +373,31 @@ export class Recognizer {
     );
   }
 
+  private createSnapshot(
+    injector: EnvironmentInjector,
+    route: Route,
+    segments: UrlSegment[],
+    parameters: Params,
+    parentRoute: ActivatedRouteSnapshot,
+  ): ActivatedRouteSnapshot {
+    const snapshot = new ActivatedRouteSnapshot(
+      segments,
+      parameters,
+      Object.freeze({...this.urlTree.queryParams}),
+      this.urlTree.fragment,
+      getData(route),
+      getOutlet(route),
+      route.component ?? route._loadedComponent ?? null,
+      route,
+      getResolve(route),
+      injector,
+    );
+    const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
+    snapshot.params = Object.freeze(inherited.params);
+    snapshot.data = Object.freeze(inherited.data);
+    return snapshot;
+  }
+
   async matchSegmentAgainstRoute(
     injector: EnvironmentInjector,
     rawSegment: UrlSegmentGroup,
@@ -395,8 +409,19 @@ export class Recognizer {
     if (this.abortSignal.aborted) {
       throw new Error(this.abortSignal.reason);
     }
+
+    const createSnapshot = (result: MatchResult) =>
+      this.createSnapshot(injector, route, result.consumedSegments, result.parameters, parentRoute);
     const result = await firstValueFrom(
-      matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer, this.abortSignal),
+      matchWithChecks(
+        rawSegment,
+        route,
+        segments,
+        injector,
+        this.urlSerializer,
+        createSnapshot,
+        this.abortSignal,
+      ),
     );
     if (route.path === '**') {
       // Prior versions of the route matching algorithm would stop matching at the wildcard route.
@@ -415,26 +440,20 @@ export class Recognizer {
     const childInjector = route._loadedInjector ?? injector;
 
     const {parameters, consumedSegments, remainingSegments} = result;
-    const snapshot = new ActivatedRouteSnapshot(
+    const snapshot = this.createSnapshot(
+      injector,
+      route,
       consumedSegments,
       parameters,
-      Object.freeze({...this.urlTree.queryParams}),
-      this.urlTree.fragment,
-      getData(route),
-      getOutlet(route),
-      route.component ?? route._loadedComponent ?? null,
-      route,
-      getResolve(route),
+      parentRoute,
     );
-    const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
-    snapshot.params = Object.freeze(inherited.params);
-    snapshot.data = Object.freeze(inherited.data);
 
     const {segmentGroup, slicedSegments} = split(
       rawSegment,
       consumedSegments,
       remainingSegments,
       childConfig,
+      outlet,
     );
 
     if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
@@ -484,7 +503,11 @@ export class Recognizer {
     if (route.loadChildren) {
       // lazy children belong to the loaded module
       if (route._loadedRoutes !== undefined) {
-        return {routes: route._loadedRoutes, injector: route._loadedInjector!};
+        const ngModuleFactory = route._loadedNgModuleFactory;
+        if (ngModuleFactory && !route._loadedInjector) {
+          route._loadedInjector = ngModuleFactory.create(injector).injector;
+        }
+        return {routes: route._loadedRoutes, injector: route._loadedInjector};
       }
 
       if (this.abortSignal.aborted) {
@@ -497,6 +520,7 @@ export class Recognizer {
         const cfg = await this.configLoader.loadChildren(injector, route);
         route._loadedRoutes = cfg.routes;
         route._loadedInjector = cfg.injector;
+        route._loadedNgModuleFactory = cfg.factory;
         return cfg;
       }
       throw canLoadFails(route);

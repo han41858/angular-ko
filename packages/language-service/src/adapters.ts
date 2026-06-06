@@ -8,16 +8,17 @@
 
 /** @fileoverview provides adapters for communicating with the ng compiler */
 
-import {ConfigurationHost} from '@angular/compiler-cli';
-import {NgCompilerAdapter} from '@angular/compiler-cli/src/ngtsc/core/api';
 import {
   AbsoluteFsPath,
+  ConfigurationHost,
   FileStats,
+  NgCompilerAdapter,
   PathSegment,
   PathString,
-} from '@angular/compiler-cli/src/ngtsc/file_system';
-import {isShim} from '@angular/compiler-cli/src/ngtsc/shims';
-import {getRootDirs} from '@angular/compiler-cli/src/ngtsc/util/src/typescript';
+  getRootDirs,
+  isShim,
+} from '@angular/compiler-cli';
+
 import * as p from 'path';
 import ts from 'typescript';
 
@@ -41,6 +42,15 @@ export class LanguageServiceAdapter implements NgCompilerAdapter {
 
   constructor(private readonly project: ts.server.Project) {
     this.rootDirs = getRootDirs(this, project.getCompilationSettings());
+  }
+
+  getSourceFile(
+    fileName: string,
+    languageVersion: ts.ScriptTarget,
+    onError?: (message: string) => void,
+    shouldCreateNewSourceFile?: boolean,
+  ): ts.SourceFile | undefined {
+    return this.project.getSourceFile(this.project.projectService.toPath(fileName));
   }
 
   resourceNameToFileName(

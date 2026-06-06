@@ -22,7 +22,7 @@ You can create a binding to show some dynamic text in a template by using double
 ```angular-ts
 @Component({
   selector: 'user-profile',
-  template: `<h1>Profile for {{userName()}}</h1>`,
+  template: `<h1>Profile for {{ userName() }}</h1>`,
 })
 export class UserProfile {
   userName = signal('pro_programmer_123');
@@ -127,7 +127,7 @@ export class UserProfile {
 
 ```angular-html
 <!-- Bind the `role` attribute on the `<ul>` element to value of `listRole`. -->
-<ul [attr.role]="listRole()">
+<ul [attr.role]="listRole()"></ul>
 ```
 
 이제 DOM 프로퍼티와 어트리뷰트 값이 변경되면 Angular가 자동으로 DOM을 갱신합니다.
@@ -150,7 +150,9 @@ Angular lets you add event listeners to an element in your template with parenth
 export class UserProfile {
   /* ... */
 
-  cancelSubscription() { /* Your event handling code goes here. */  }
+  cancelSubscription() {
+    /* Your event handling code goes here. */
+  }
 }
 ```
 
@@ -165,7 +167,9 @@ If you need to pass the [event](https://developer.mozilla.org/docs/Web/API/Event
 export class UserProfile {
   /* ... */
 
-  cancelSubscription(event: Event) { /* Your event handling code goes here. */  }
+  cancelSubscription(event: Event) {
+    /* Your event handling code goes here. */
+  }
 }
 ```
 -->
@@ -180,7 +184,9 @@ export class UserProfile {
 export class UserProfile {
   /* ... */
   
-  cancelSubscription() { /* 이벤트를 처리하는 코드는 여기에 작성합니다. */  }
+  cancelSubscription() {
+    /* 이벤트를 처리하는 코드는 여기에 작성합니다. */
+  }
 }
 ```
 
@@ -195,7 +201,9 @@ export class UserProfile {
 export class UserProfile {
   /* ... */
   
-  cancelSubscription(event: Event) { /* 이벤트를 처리하는 코드는 여기에 작성합니다. */  }
+  cancelSubscription() {
+    /* 이벤트를 처리하는 코드는 여기에 작성합니다. */
+  }
 }
 ```
 
@@ -245,13 +253,13 @@ You can repeat part of a template multiple times with Angular's `@for` block:
 
 <ul class="user-badge-list">
   @for (badge of badges(); track badge.id) {
-    <li class="user-badge">{{badge.name}}</li>
+    <li class="user-badge">{{ badge.name }}</li>
   }
 </ul>
 ```
 
 <!--
-Angular's uses the `track` keyword, shown in the example above, to associate data with the DOM elements created by `@for`. See [_Why is track in @for blocks important?_](guide/templates/control-flow#why-is-track-in-for-blocks-important) for more info.
+Angular uses the `track` keyword, shown in the example above, to associate data with the DOM elements created by `@for`. See [_Why is track in @for blocks important?_](guide/templates/control-flow#why-is-track-in-for-blocks-important) for more info.
 
 TIP: Want to know more about Angular templates? See the [In-depth Templates guide](guide/templates) for the full details.
 -->
@@ -270,7 +278,7 @@ TIP: Want to know more about Angular templates? See the [In-depth Templates guid
 Now that you have dynamic data and templates in the application, it's time to learn how to enhance templates by conditionally hiding or showing certain elements, looping over elements, and more.
 
 <docs-pill-row>
-  <docs-pill title="Modular design with dependency injection" href="essentials/dependency-injection" />
+  <docs-pill title="Forms with Signals" href="essentials/signal-forms" />
   <docs-pill title="In-depth template guide" href="guide/templates" />
 </docs-pill-row>
 -->
@@ -278,6 +286,6 @@ Now that you have dynamic data and templates in the application, it's time to le
 그리고 조건에 따라 템플릿의 특정 부분을 표시하거나, 표시하지 않는 방법을 알아봤고 어떤 템플릿 부분을 반복하는 방법을 알아봤습니다.
 
 <docs-pill-row>
-  <docs-pill title="의존성 주입을 활용한 모듈 디자인" href="essentials/dependency-injection" />
+  <docs-pill title="시그널 폼" href="essentials/signal-forms" />
   <docs-pill title="템플릿 심화 가이드" href="guide/templates" />
 </docs-pill-row>

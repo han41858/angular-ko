@@ -43,13 +43,16 @@ export class PlatformState {
 }
 
 // @public
-export function provideServerRendering(): EnvironmentProviders;
+export function provideServerRendering(options?: {
+    maxResponseBodySize: number;
+}): EnvironmentProviders;
 
 // @public
 export function renderApplication(bootstrap: (context: BootstrapContext) => Promise<ApplicationRef>, options: {
     document?: string | Document;
     url?: string;
     platformProviders?: Provider[];
+    allowedHosts?: Readonly<string>[];
 }): Promise<string>;
 
 // @public
@@ -57,6 +60,7 @@ export function renderModule<T>(moduleType: Type<T>, options: {
     document?: string | Document;
     url?: string;
     extraProviders?: StaticProvider[];
+    allowedHosts?: Readonly<string>[];
 }): Promise<string>;
 
 // @public

@@ -8,25 +8,29 @@ TIP: This guide assumes you've already read the [Essentials Guide](essentials). 
 
 Components can optionally include CSS styles that apply to that component's DOM:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight:[4]}
 @Component({
   selector: 'profile-photo',
-  template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
-  styles: ` img { border-radius: 50%; } `,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
+  styles: `
+    img {
+      border-radius: 50%;
+    }
+  `,
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 You can also choose to write your styles in separate files:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight:[4]}
 @Component({
   selector: 'profile-photo',
   templateUrl: 'profile-photo.html',
   styleUrl: 'profile-photo.css',
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 When Angular compiles your component, these styles are emitted with your component's JavaScript
 output. This means that component styles participate in the JavaScript module system. When you
@@ -34,38 +38,42 @@ render an Angular component, the framework automatically includes its associated
 lazy-loading a component.
 
 Angular works with any tool that outputs CSS,
-including [Sass](https://sass-lang.com), [less](https://lesscss.org),
-and [stylus](https://stylus-lang.com).
+including [Sass](https://sass-lang.com), [Less](https://lesscss.org),
+and [Stylus](https://stylus-lang.com).
 -->
 팁: 이 가이드 문서는 [핵심 가이드](essentials) 이후 내용을 다룹니다. 아직 Angular에 익숙하지 않다면 해당 문서를 먼저 읽어보세요.
 
 컴포넌트는 CSS 스타일을 지정할 수 있습니다:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight:[4]}
 @Component({
   selector: 'profile-photo',
-  template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
-  styles: ` img { border-radius: 50%; } `,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
+  styles: `
+    img {
+      border-radius: 50%;
+    }
+  `,
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
-그리고 스타일 파일이 별도 파일로 존재한다면 이렇게 지정합니다:
+You can also choose to write your styles in separate files:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight:[4]}
 @Component({
   selector: 'profile-photo',
   templateUrl: 'profile-photo.html',
   styleUrl: 'profile-photo.css',
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 Angular가 컴포넌트를 컴파일하면 컴포넌트에 지정된 스타일은 컴포넌트 JavaScript 결과물에 포함됩니다.
 이 말은, 컴포넌트 스타일이 JavaScript 모듈 시스템 안에 포함된다는 것을 의미합니다.
 이후에 Angular가 컴포넌트를 렌더링하면, 지연 로딩되는 컴포넌트라고 해도 컴포넌트가 로딩될 떄 스타일도 함께 로딩됩니다.
 
-CSS 스타일을 지정할 때는 [Sass](https://sass-lang.com)나 [less](https://lesscss.org), [stylus](https://stylus-lang.com) 문법을 사용할 수도 있습니다.
+CSS 스타일을 지정할 때는 [Sass](https://sass-lang.com)나 [Less](https://lesscss.org), [Stylus](https://stylus-lang.com) 문법을 사용할 수도 있습니다.
 
 
 <!--
@@ -78,25 +86,25 @@ Every component has a **view encapsulation** setting that determines how the fra
 component's styles. There are four view encapsulation modes: `Emulated`, `ShadowDom`, `ExperimentalIsolatedShadowDom`, and `None`.
 You can specify the mode in the `@Component` decorator:
 
-<docs-code language="angular-ts" highlight="[3]">
+```angular-ts {highlight:[3]}
 @Component({
   ...,
   encapsulation: ViewEncapsulation.None,
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 -->
 컴포넌트에는 컴포넌트 스타일의 범위를 지정하는 **뷰 캡슐화(view encapsulation)** 설정을 지정할 수 있습니다.
 뷰 캡슐화 모드는 `Emulated`, `ShadowDom`, `None` 을 지정할 수 있습니다.
 `@Component` 데코레이터에 이렇게 지정하면 됩니다:
 
-<docs-code language="angular-ts" highlight="[3]">
+```angular-ts {highlight:[3]}
 @Component({
   ...,
   encapsulation: ViewEncapsulation.None,
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 
 ### ViewEncapsulation.Emulated
@@ -136,16 +144,52 @@ Angular의 에뮬레이션 모드는 `::shadow`나 `::part`와 같은 Shadow DOM
 #### `::ng-deep`
 
 <!--
-Angular's emulated encapsulation mode supports a custom pseudo class, `::ng-deep`. Applying this
-pseudo class to a CSS rule disables encapsulation for that rule, effectively turning it into a
-global style. **The Angular team strongly discourages new use of `::ng-deep`**. These APIs remain
+Angular's emulated encapsulation mode supports a custom pseudo class, `::ng-deep`.
+**The Angular team strongly discourages new use of `::ng-deep`**. These APIs remain
 exclusively for backwards compatibility.
+
+When a selector contains `::ng-deep`, Angular stops applying view-encapsulation boundaries after that point in the selector. Any part of the selector that follows `::ng-deep` can match elements outside the component’s template.
+
+For example:
+
+- a CSS rule selector like `p a`, using the emulated encapsulation, will match `<a>` elements that are descendants of a `<p>` element,
+  both being within the component's own template.
+
+- A selector like `::ng-deep p a` will match `<a>` elements anywhere in the application, descendants of a `<p>` element anywhere in the application.
+
+  That effectively makes it behave like a global style.
+
+- In `p ::ng-deep a`, Angular requires the `<p>` element to come from the component's own template, but the `<a>` element may be anywhere in the application.
+
+  So, in effect, the `<a>` element may be in the component's template, or in any of its projected or child content.
+
+- With `:host ::ng-deep p a`, both the `<a>` and `<p>` elements must be descendants of the component's host element.
+
+  They can come from the component's template or the views of its child components, but not elsewhere in the app.
 -->
 Angular의 에뮬레이션 모드는 커스텀 가상 클래스 `::ng-deep`을 지원합니다.
-이 가상 클래스를 사용하면 뷰 캡슐화를 무시하며 사실상 전역 스타일로 적용됩니다.
 **하지만 Angular 팀은 `::ng-deep` 사용을 강력하게 만류합니다.**
 이 API는 이전 버전 호환성을 위해서 남아있는 용도입니다.
 
+`::ng-deep`와 함께 셀렉터를 사용하면, Angular는 해당 지점부터 뷰캡슐화 경계를 적용하지 않습니다.
+`::ng-deep` 뒤에 오는 셀렉터의 모든 부분은 컴포넌트 템플릿 외부에도 영향을 줄 수 있습니다.
+
+예를 들면:
+
+- a CSS rule selector like `p a`, using the emulated encapsulation, will match `<a>` elements that are descendants of a `<p>` element,
+  both being within the component's own template.
+  
+- A selector like `::ng-deep p a` will match `<a>` elements anywhere in the application, descendants of a `<p>` element anywhere in the application.
+
+  That effectively makes it behave like a global style.
+
+- In `p ::ng-deep a`, Angular requires the `<p>` element to come from the component's own template, but the `<a>` element may be anywhere in the application.
+
+  So, in effect, the `<a>` element may be in the component's template, or in any of its projected or child content.
+
+- With `:host ::ng-deep p a`, both the `<a>` and `<p>` elements must be descendants of the component's host element.
+
+  They can come from the component's template or the views of its child components, but not elsewhere in the app.
 
 ### ViewEncapsulation.ShadowDom
 

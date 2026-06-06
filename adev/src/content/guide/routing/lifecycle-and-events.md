@@ -32,11 +32,13 @@ When you want to run code during specific navigation lifecycle events, you can d
 
 ```ts
 // Example of subscribing to router events
-import { Component, inject, signal, effect } from '@angular/core';
-import { Event, Router, NavigationStart, NavigationEnd } from '@angular/router';
+import {Component, inject, signal, effect} from '@angular/core';
+import {Event, Router, NavigationStart, NavigationEnd} from '@angular/router';
 
-@Component({ ... })
-export class RouterEventsComponent {
+@Component({
+  /*...*/
+})
+export class RouterEvents {
   private readonly router = inject(Router);
 
   constructor() {
@@ -55,7 +57,7 @@ export class RouterEventsComponent {
 }
 ```
 
-Note: The [`Event`](api/router/Event) type from `@angular/router` is named the same as the regular global [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event) type, but it is different from the [`RouterEvent`](api/router/RouterEvent) type.
+NOTE: The [`Event`](api/router/Event) type from `@angular/router` is named the same as the regular global [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event) type, but it is different from the [`RouterEvent`](api/router/RouterEvent) type.
 
 ## How to debug routing events
 
@@ -64,16 +66,12 @@ Debugging router navigation issues can be challenging without visibility into th
 When you need to inspect a Router event sequence, you can enable logging for internal navigation events for debugging. You can configure this by passing a configuration option (`withDebugTracing()`) that enables detailed console logging of all routing events.
 
 ```ts
-import { provideRouter, withDebugTracing } from '@angular/router';
+import {provideRouter, withDebugTracing} from '@angular/router';
 
 const appRoutes: Routes = [];
-bootstrapApplication(AppComponent,
-  {
-    providers: [
-      provideRouter(appRoutes, withDebugTracing())
-    ]
-  }
-);
+bootstrapApplication(App, {
+  providers: [provideRouter(appRoutes, withDebugTracing())],
+});
 ```
 
 For more information, check out the official docs on [`withDebugTracing`](api/router/withDebugTracing).
@@ -87,28 +85,21 @@ Router events enable many practical features in real-world applications. Here ar
 Show loading indicators during navigation:
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
+import {Component, inject} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-loading',
+  selector: 'app-root',
   template: `
-    @if (loading()) {
-      <div class="loading-spinner">Loading...</div>
+    @if (isNavigating()) {
+      <div class="loading-bar">Loading...</div>
     }
-  `
+    <router-outlet />
+  `,
 })
-export class AppComponent {
+export class App {
   private router = inject(Router);
-
-  readonly loading = toSignal(
-    this.router.events.pipe(
-      map(() => !!this.router.getCurrentNavigation())
-    ),
-    { initialValue: false }
-  );
+  isNavigating = computed(() => !!this.router.currentNavigation());
 }
 ```
 
@@ -117,30 +108,29 @@ export class AppComponent {
 Track page views for analytics:
 
 ```ts
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { inject, Injectable, DestroyRef } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {inject, DestroyRef, Service} from '@angular/core';
+import {Router, NavigationEnd} from '@angular/router';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AnalyticsService {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
 
   startTracking() {
-    this.router.events.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(event => {
-        // Track page views when URL changes
-        if (event instanceof NavigationEnd) {
-           // Send page view to analytics
-          this.analytics.trackPageView(event.url);
-        }
-      });
+    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
+      // Track page views when URL changes
+      if (event instanceof NavigationEnd) {
+        // Send page view to analytics
+        this.analytics.trackPageView(event.url);
+      }
+    });
   }
 
   private analytics = {
     trackPageView: (url: string) => {
       console.log('Page view tracked:', url);
-    }
+    },
   };
 }
 ```
@@ -150,9 +140,15 @@ export class AnalyticsService {
 Handle navigation errors gracefully and provide user feedback:
 
 ```angular-ts
-import { Component, inject, signal } from '@angular/core';
-import { Router, NavigationStart, NavigationError, NavigationCancel, NavigationCancellationCode } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {Component, inject, signal} from '@angular/core';
+import {
+  Router,
+  NavigationStart,
+  NavigationError,
+  NavigationCancel,
+  NavigationCancellationCode,
+} from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-error-handler',
@@ -163,14 +159,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         <button (click)="dismissError()">Dismiss</button>
       </div>
     }
-  `
+  `,
 })
-export class ErrorHandlerComponent {
+export class ErrorHandler {
   private router = inject(Router);
   readonly errorMessage = signal('');
 
   constructor() {
-    this.router.events.pipe(takeUntilDestroyed()).subscribe(event => {
+    this.router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
       if (event instanceof NavigationStart) {
         this.errorMessage.set('');
       } else if (event instanceof NavigationError) {

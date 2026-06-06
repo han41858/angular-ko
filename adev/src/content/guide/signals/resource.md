@@ -1,13 +1,10 @@
 <!--
 # Async reactivity with resources
 -->
-
 # `Resource` 를 활용한 비동기 반응성
 
-<!--
-IMPORTANT: `resource` is [experimental](reference/releases#experimental). It's ready for you to try, but it might change before it is stable.
-
-Most signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, applications often need to deal with data that is available asynchronously. A `Resource` gives you a way to incorporate async data into your application's signal-based code.
+-->
+All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, applications often need to deal with data that is available asynchronously. A `Resource` gives you a way to incorporate async data into your application's signal-based code and still allow you to access its data synchronously.
 
 You can use a `Resource` to perform any kind of async operation, but the most common use-case for `Resource` is fetching data from a server. The following example creates a resource to fetch some user data.
 
@@ -33,7 +30,7 @@ const firstName = computed(() => {
   if (userResource.hasValue()) {
     // `hasValue` serves 2 purposes:
     // - It acts as type guard to strip `undefined` from the type
-    // - If protects against reading a throwing `value` when the resource is in error state
+    // - It protects against reading a throwing `value` when the resource is in error state
     return userResource.value().firstName;
   }
 
@@ -51,10 +48,7 @@ The `loader` property defines a `ResourceLoader`— an async function that retri
 `Resource` has a `value` signal that contains the results of the loader.
 -->
 
-주의: `resource` 는 아직 [실험 단계](reference/releases#experimental) 입니다.
-지금 사용해 볼 수는 있지만 이후에 안정 버전이 나오면서 변경될 수 있습니다.
-
-`signal`, `computed`, `input` 등의 시그널 API는 대부분 동기 방식으로 동작합니다.
+`signal`, `computed`, `input` 등의 시그널 API는 모두 동기 방식으로 동작합니다.
 그런데 애플리케이션은 데이터를 비동기로 다뤄야 하는 경우가 종종 있습니다.
 이 때 `Resource`를 활용하면 애플리케이션이 시그널 기반으로 동작하면서 비동기 데이터를 처리할 수 있습니다.
 
@@ -245,11 +239,11 @@ The `status` signal provides a specific `ResourceStatus` that describes the stat
 | `'idle'`      | `undefined`       | The resource has no valid request and the loader has not run.                |
 | `'error'`     | `undefined`       | The loader has encountered an error.                                         |
 | `'loading'`   | `undefined`       | The loader is running as a result of the `params` value changing.            |
-| `'reloading'` | Previous value    | The loader is running as a result calling of the resource's `reload` method. |
+| `'reloading'` | Previous value    | The loader is running as a result of calling the resource's `reload` method. |
 | `'resolved'`  | Resolved value    | The loader has completed.                                                    |
 | `'local'`     | Locally set value | The resource's value has been set locally via `.set()` or `.update()`        |
 
-You can use this status information to conditionally display user interface elements, such loading indicators and error messages.
+You can use this status information to conditionally display user interface elements, such as loading indicators and error messages.
 -->
 
 리소스 객체는 비동기 로더를 실행하면서 여러 상태로 변화합니다.
@@ -287,3 +281,55 @@ You can use this status information to conditionally display user interface elem
 
 [`httpResource`](/guide/http/http-resource)는 요청 결과를 시그널로 보내는 `HttpClient` 래퍼(wrapper)입니다.
 이 래퍼는 인터셉터를 포함하여 Angular HTTP 스택을 그대로 활용합니다.
+
+## Resource composition with snapshots
+
+A `ResourceSnapshot` is a structured representation of a resource's current state. Every resource has a `snapshot` property that provides a signal of its current state.
+
+```ts
+const userId: Signal<string> = getUserId();
+
+const userResource = resource({
+  params: () => ({id: userId()}),
+  loader: ({params}) => fetchUser(params),
+});
+
+const userSnapshot = userResource.snapshot;
+```
+
+Each snapshot contains a `status` and either a `value` or an `error`.
+
+### Composing resources with snapshots
+
+You can create new resources from snapshots using `resourceFromSnapshots`. This enables composition with signal APIs like `computed` and `linkedSignal` to transform resource behavior.
+
+```ts
+import {linkedSignal, resourceFromSnapshots, Resource, ResourceSnapshot} from '@angular/core';
+
+function withPreviousValue<T>(input: Resource<T>): Resource<T> {
+  const derived = linkedSignal<ResourceSnapshot<T>, ResourceSnapshot<T>>({
+    source: input.snapshot,
+    computation: (snap, previous) => {
+      if (snap.status === 'loading' && previous && previous.value.status !== 'error') {
+        // When the input resource enters loading state, we keep the value
+        // from its previous state, if any.
+        return {status: 'loading' as const, value: previous.value.value};
+      }
+
+      // Otherwise we simply forward the state of the input resource.
+      return snap;
+    },
+  });
+
+  return resourceFromSnapshots(derived);
+}
+
+@Component({
+  /*... */
+})
+export class AwesomeProfile {
+  userId = input.required<number>();
+  user = withPreviousValue(httpResource(() => `/user/${this.userId()}`));
+  // When userId changes, user.value() keeps the old user data until the new one loads
+}
+```

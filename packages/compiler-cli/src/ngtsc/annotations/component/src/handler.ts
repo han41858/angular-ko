@@ -7,24 +7,27 @@
  */
 
 import {
-  LegacyAnimationTriggerNames,
   BoundTarget,
   compileClassDebugInfo,
-  compileHmrInitializer,
   compileComponentClassMetadata,
   compileComponentDeclareClassMetadata,
   compileComponentFromMetadata,
   compileDeclareComponentFromMetadata,
   compileDeferResolverFunction,
+  compileHmrInitializer,
   ConstantPool,
+  createHostElement,
   CssSelector,
   DeclarationListEmitMode,
   DeclareComponentTemplateInfo,
   DeferBlockDepsEmitMode,
+  DirectiveMatcher,
   DomElementSchemaRegistry,
   ExternalExpr,
   FactoryTarget,
+  LegacyAnimationTriggerNames,
   makeBindingParser,
+  MatchSource,
   outputAst as o,
   R3ComponentDeferMetadata,
   R3ComponentMetadata,
@@ -37,11 +40,11 @@ import {
   R3TemplateDependencyKind,
   R3TemplateDependencyMetadata,
   SchemaMetadata,
+  SelectorlessMatcher,
   SelectorMatcher,
   TmplAstDeferredBlock,
+  TypeCheckId,
   ViewEncapsulation,
-  DirectiveMatcher,
-  SelectorlessMatcher,
 } from '@angular/compiler';
 import ts from 'typescript';
 
@@ -69,11 +72,12 @@ import {
   SemanticDepGraphUpdater,
 } from '../../../incremental/semantic_graph';
 import {IndexingContext} from '../../../indexer';
+import {AbstractBoundTemplate} from '../../../indexer/src/api';
+
 import {
   DirectiveMeta,
   extractDirectiveTypeCheckMeta,
   HostDirectivesResolver,
-  MatchSource,
   MetadataReader,
   MetadataRegistry,
   MetaKind,
@@ -96,12 +100,9 @@ import {
 import {
   ComponentScopeKind,
   ComponentScopeReader,
-  DtsModuleScopeResolver,
-  LocalModuleScope,
   LocalModuleScopeRegistry,
   makeNotStandaloneDiagnostic,
   makeUnknownComponentImportDiagnostic,
-  StandaloneScope,
   TypeCheckScopeRegistry,
 } from '../../../scope';
 import {
@@ -118,11 +119,10 @@ import {
   ResolveResult,
 } from '../../../transform';
 import {
-  TypeCheckId,
+  HostBindingsContext,
+  TemplateContext,
   TypeCheckableDirectiveMeta,
   TypeCheckContext,
-  TemplateContext,
-  HostBindingsContext,
 } from '../../../typecheck/api';
 import {ExtendedTemplateChecker} from '../../../typecheck/extended/api';
 import {TemplateSemanticsChecker} from '../../../typecheck/template_semantics/api/api';
@@ -135,6 +135,7 @@ import {
   compileNgFactoryDefField,
   compileResults,
   createForwardRefResolver,
+  createSourceSpan,
   extractClassDebugInfo,
   extractClassMetadata,
   extractSchemas,
@@ -166,6 +167,12 @@ import {
 } from '../../directive';
 import {createModuleWithProvidersResolver, NgModuleSymbol} from '../../ng_module';
 
+import {extractHmrMetatadata, getHmrUpdateDeclaration} from '../../../hmr';
+import {ComponentScope} from '../../../scope/src/api';
+import {getTemplateDiagnostics} from '../../../typecheck';
+import {getProjectRelativePath} from '../../../util/src/path';
+import {JitDeclarationRegistry} from '../../common/src/jit_declaration_registry';
+import {analyzeTemplateForAnimations} from './animations';
 import {checkCustomElementSelectorForErrors, makeCyclicImportInfo} from './diagnostics';
 import {
   ComponentAnalysisData,
@@ -186,19 +193,13 @@ import {
   StyleUrlMeta,
   transformDecoratorResources,
 } from './resources';
+import {analyzeTemplateForSelectorless} from './selectorless';
 import {ComponentSymbol} from './symbol';
 import {
-  legacyAnimationTriggerResolver,
   collectLegacyAnimationNames,
+  legacyAnimationTriggerResolver,
   validateAndFlattenComponentImports,
 } from './util';
-import {getTemplateDiagnostics, createHostElement} from '../../../typecheck';
-import {JitDeclarationRegistry} from '../../common/src/jit_declaration_registry';
-import {extractHmrMetatadata, getHmrUpdateDeclaration} from '../../../hmr';
-import {getProjectRelativePath} from '../../../util/src/path';
-import {ComponentScope} from '../../../scope/src/api';
-import {analyzeTemplateForSelectorless} from './selectorless';
-import {analyzeTemplateForAnimations} from './animations';
 
 const EMPTY_ARRAY: any[] = [];
 
@@ -231,10 +232,12 @@ const isUsedPipe = (decl: AnyUsedType): decl is UsedPipe =>
 /**
  * `DecoratorHandler` which handles the `@Component` annotation.
  */
-export class ComponentDecoratorHandler
-  implements
-    DecoratorHandler<Decorator, ComponentAnalysisData, ComponentSymbol, ComponentResolutionData>
-{
+export class ComponentDecoratorHandler implements DecoratorHandler<
+  Decorator,
+  ComponentAnalysisData,
+  ComponentSymbol,
+  ComponentResolutionData
+> {
   constructor(
     private reflector: ReflectionHost,
     private evaluator: PartialEvaluator,
@@ -282,6 +285,7 @@ export class ComponentDecoratorHandler
     private readonly typeCheckHostBindings: boolean,
     private readonly enableSelectorless: boolean,
     private readonly emitDeclarationOnly: boolean,
+    private readonly legacyOptionalChaining: boolean,
   ) {
     this.extractTemplateOptions = {
       enableI18nLegacyMessageIdFormat: this.enableI18nLegacyMessageIdFormat,
@@ -498,6 +502,7 @@ export class ComponentDecoratorHandler
       this.strictStandalone,
       this.implicitStandaloneValue,
       this.emitDeclarationOnly,
+      this.legacyOptionalChaining,
     );
     // `extractDirectiveMetadata` returns `jitForced = true` when the `@Component` has
     // set `jit: true`. In this case, compilation of the decorator is skipped. Returning
@@ -983,6 +988,7 @@ export class ComponentDecoratorHandler
           changeDetection,
           styles,
           externalStyles,
+          legacyOptionalChaining: this.legacyOptionalChaining,
           // These will be replaced during the compilation step, after all `NgModule`s have been
           // analyzed and the full compilation scope for the component can be realized.
           animations,
@@ -1126,10 +1132,31 @@ export class ComponentDecoratorHandler
     const binder = new R3TargetBinder<DirectiveMeta>(matcher);
     const boundTemplate = binder.bind({template: analysis.template.diagNodes});
 
+    const abstractBoundTemplate: AbstractBoundTemplate<DeclarationNode> = {
+      getDirectivesOfNode(node) {
+        return boundTemplate.getDirectivesOfNode(node);
+      },
+      getReferenceTarget(node) {
+        return boundTemplate.getReferenceTarget(node);
+      },
+      getExpressionTarget(ast) {
+        return boundTemplate.getExpressionTarget(ast);
+      },
+      getUsedDirectives() {
+        return boundTemplate.getUsedDirectives().map((dir) => ({
+          ref: {node: dir.ref.node},
+          isComponent: dir.isComponent,
+        }));
+      },
+      getTemplateAst() {
+        return boundTemplate.target.template;
+      },
+    };
+
     context.addComponent({
       declaration: node,
       selector,
-      boundTemplate,
+      boundTemplate: abstractBoundTemplate,
       templateMeta: {
         isInline: analysis.template.declaration.isInline,
         file: analysis.template.file,
@@ -1167,10 +1194,10 @@ export class ComponentDecoratorHandler
       ? createHostElement(
           'component',
           meta.meta.selector,
-          node,
-          meta.hostBindingNodes.literal,
-          meta.hostBindingNodes.bindingDecorators,
-          meta.hostBindingNodes.listenerDecorators,
+          createSourceSpan(node.name),
+          meta.hostBindingNodes.hostObjectLiteralBindings,
+          meta.hostBindingNodes.hostBindingDecorators,
+          meta.hostBindingNodes.hostListenerDecorators,
         )
       : null;
     const hostBindingsContext: HostBindingsContext | null =

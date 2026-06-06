@@ -29,7 +29,7 @@ import {
 } from '@angular/platform-browser';
 ...
 
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [provideClientHydration()]
 });
 ```
@@ -41,9 +41,9 @@ import {provideClientHydration} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 @NgModule({
-  declarations: [AppComponent],
-  exports: [AppComponent],
-  bootstrap: [AppComponent],
+  declarations: [App],
+  exports: [App],
+  bootstrap: [App],
   providers: [provideClientHydration()],
 })
 export class AppModule {}
@@ -69,9 +69,7 @@ When an application is rendered on the server, it is visible in a browser as soo
 import {provideClientHydration, withEventReplay} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
-  providers: [
-    provideClientHydration(withEventReplay())
-  ]
+  providers: [provideClientHydration(withEventReplay())],
 });
 ```
 
@@ -94,7 +92,9 @@ Event replay supports _native browser events_, for example `click`, `mouseover`,
 
 ---
 
-This feature ensures a consistent user experience, preventing user actions performed before Hydration from being ignored. NOTE: if you have [incremental hydration](guide/incremental-hydration) enabled, event replay is automatically enabled under the hood.
+This feature ensures a consistent user experience, preventing user actions performed before Hydration from being ignored.
+
+NOTE: If you have [incremental hydration](guide/incremental-hydration) enabled, event replay is automatically enabled under the hood.
 
 ## Constraints
 
@@ -142,7 +142,7 @@ Providing a custom or a "noop" Zone.js implementation may lead to a different ti
 
 ## Errors
 
-There are several hydration related errors you may encounter ranging from node mismatches to cases when the `ngSkipHydration` was used on an invalid host node. The most common error case that may occur is due to direct DOM manipulation using native APIs that results in hydration being unable to find or match the expected DOM tree structure on the client that was rendered by the server. The other case you may encounter this type of error was mentioned in the [Valid HTML structure](#valid-html-structure) section earlier. So, make sure the HTML in your templates are using valid structure, and you'll avoid that error case.
+There are several hydration related errors you may encounter ranging from node mismatches to cases when the `ngSkipHydration` was used on an invalid host node. The most common error case that may occur is due to direct DOM manipulation using native APIs that results in hydration being unable to find or match the expected DOM tree structure on the client that was rendered by the server. The other case you may encounter this type of error was mentioned in the [Valid HTML structure](#valid-html-structure) section earlier. So, make sure the HTML in your templates is using valid structure, and you'll avoid that error case.
 
 For a full reference on hydration related errors, visit the [Errors Reference Guide](/errors).
 
@@ -176,6 +176,24 @@ Keep in mind that adding the `ngSkipHydration` attribute to your root applicatio
 
 Application stability is an important part of the hydration process. Hydration and any post-hydration processes only occur once the application has reported stability. There are a number of ways that stability can be delayed. Examples include setting timeouts and intervals, unresolved promises, and pending microtasks. In those cases, you may encounter the [Application remains unstable](errors/NG0506) error, which indicates that your app has not yet reached the stable state after 10 seconds. If you're finding that your application is not hydrating right away, take a look at what is impacting application stability and refactor to avoid causing these delays.
 
+### Debugging Application Stability
+
+The `provideStabilityDebugging` utility helps identify why your application fails to stabilize. This utility is provided by default in dev mode when using `provideClientHydration`. You can also add it manually to the application providers for use in production bundles or when using SSR without hydration, for example. The feature logs information to the console if the application takes longer than expected to stabilize.
+
+```typescript
+import {provideStabilityDebugging} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
+import 'zone.js/plugins/task-tracking'; // Use if you have Zone.js with `provideZoneChangeDetection`
+
+bootstrapApplication(App, {
+  providers: [provideStabilityDebugging()],
+});
+```
+
+When enabled, the utility logs pending tasks (`PendingTasks`) to the console. If your application uses Zone.js, you can also import `zone.js/plugins/task-tracking` to see which macrotasks are keeping the Angular Zone from stabilizing. This plugin provides the stack trace of the macrotask creation, effectively helping you identify the source of the delay.
+
+IMPORTANT: Angular does not remove the zone.js task tracking plugin or this utility from production bundles. Use them only for temporary debugging of stability issues during development, including for optimized production builds.
+
 ## I18N
 
 HELPFUL: By default, Angular will skip hydration for components that use i18n blocks, effectively re-rendering those components from scratch.
@@ -190,7 +208,7 @@ import {
 } from '@angular/platform-browser';
 ...
 
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [provideClientHydration(withI18nSupport())]
 });
 ```

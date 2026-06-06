@@ -62,14 +62,46 @@ The following properties are a set of options that customize the Angular CLI.
 
 The following top-level configuration properties are available for each project, under `projects['project-name']`.
 
-| Property      | Details                                                                                                                                                                              | Value type                                                      | Default value   |
-| :------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :-------------- |
-| `root`        | The root directory for this project's files, relative to the workspace directory. Empty for the initial application, which resides at the top level of the workspace.                | `string`                                                        | None (required) |
-| `projectType` | One of "application" or "library" An application can run independently in a browser, while a library cannot.                                                                         | `application` \| `library`                                      | None (required) |
-| `sourceRoot`  | The root directory for this project's source files.                                                                                                                                  | `string`                                                        | `''`            |
-| `prefix`      | A string that Angular prepends to selectors when generating new components, directives, and pipes using `ng generate`. Can be customized to identify an application or feature area. | `string`                                                        | `'app'`         |
-| `schematics`  | A set of schematics that customize the `ng generate` sub-command option defaults for this project. See the [Generation schematics](#schematics) section.                             | See [schematics](#schematics)                                   | `{}`            |
-| `architect`   | Configuration defaults for Architect builder targets for this project.                                                                                                               | See [Configuring builder targets](#configuring-builder-targets) | `{}`            |
+| Property      | Details                                                                                                                                                                                                               | Value type                                                      | Default value   |
+| :------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :-------------- |
+| `root`        | The root directory for this project's files, relative to the workspace directory. Empty for the initial application, which resides at the top level of the workspace.                                                 | `string`                                                        | None (required) |
+| `projectType` | One of "application" or "library" An application can run independently in a browser, while a library cannot.                                                                                                          | `application` \| `library`                                      | None (required) |
+| `sourceRoot`  | The root directory for this project's source files.                                                                                                                                                                   | `string`                                                        | `''`            |
+| `prefix`      | A string that Angular prepends to selectors when generating new components, directives, and pipes using `ng generate`. Can be customized to identify an application or feature area.                                  | `string`                                                        | `'app'`         |
+| `i18n`        | Internationalization options for the project. Defines the source locale and additional locales to build. See [Define locales in the build configuration](guide/i18n/merge#define-locales-in-the-build-configuration). | See [i18n options](#i18n-options)                               | `{}`            |
+| `schematics`  | A set of schematics that customize the `ng generate` sub-command option defaults for this project. See the [Generation schematics](#schematics) section.                                                              | See [schematics](#schematics)                                   | `{}`            |
+| `architect`   | Configuration defaults for Architect builder targets for this project.                                                                                                                                                | See [Configuring builder targets](#configuring-builder-targets) | `{}`            |
+
+## i18n options
+
+Use the `i18n` project option to define the application's source locale and any additional locales to build.
+
+| Property       | Details                                                                                                                              | Value type                                              | Default value |
+| :------------- | :----------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------ | :------------ |
+| `sourceLocale` | The locale used in the application source code. Can be a locale identifier string or a [configuration object](#sourcelocale-object). | `string` \| [sourceLocale object](#sourcelocale-object) | `"en-US"`     |
+| `locales`      | A map of locale identifiers to translation files or [locale configuration objects](#locale-object).                                  | `object`                                                | `{}`          |
+
+### `sourceLocale` object
+
+Pass an object instead of a string to customize the output directory or base HREF for the source locale:
+
+| Property   | Details                                                                                                                                       | Value type | Default value |
+| :--------- | :-------------------------------------------------------------------------------------------------------------------------------------------- | :--------- | :------------ |
+| `code`     | The source locale identifier.                                                                                                                 | `string`   | `"en-US"`     |
+| `baseHref` | Overrides the HTML `<base href>` for this locale. The output directory name stays as the locale code. Cannot be used together with `subPath`. | `string`   | Locale code   |
+| `subPath`  | Sets both the output directory name and the HTML `<base href>` for this locale. Cannot be used together with `baseHref`.                      | `string`   | Locale code   |
+
+### Locale object
+
+Each `locales` entry can be a path string, an array of paths, or an object:
+
+| Property      | Details                                                                                                                                             | Value type             | Default value |
+| :------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------- | :------------ |
+| `translation` | Path or paths to the translation file(s) for this locale.                                                                                           | `string` \| `string[]` |               |
+| `baseHref`    | Overrides the HTML `<base href>` for this locale. The output directory name stays as the locale identifier. Cannot be used together with `subPath`. | `string`               | Locale code   |
+| `subPath`     | Sets both the output directory name and the HTML `<base href>` for this locale. Cannot be used together with `baseHref`.                            | `string`               | Locale code   |
+
+HELPFUL: Use `subPath` rather than `baseHref` when you also need to rename the output directory — for example, to output to `de-DE/` instead of `de/`.
 
 ## Schematics
 
@@ -208,16 +240,16 @@ In this example, if both `staging` and `french` configurations set the output pa
 The configurable options for a default or targeted build generally correspond to the options available for the [`ng build`](cli/build), and [`ng test`](cli/test) commands.
 For details of those options and their possible values, see the [Angular CLI Reference](cli).
 
-| Options properties         | Details                                                                                                                                                                                                                                                                |
-| :------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `assets`                   | An object containing paths to static assets to serve with the application. The default paths point to the project's `public` directory. See more in the [Assets configuration](#assets-configuration) section.                                                         |
-| `styles`                   | An array of CSS files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors. See more in the [Styles and scripts configuration](#styles-and-scripts-configuration) section.                                    |
-| `stylePreprocessorOptions` | An object containing option-value pairs to pass to style preprocessors. See more in the [Styles and scripts configuration](#styles-and-scripts-configuration) section.                                                                                                 |
-| `scripts`                  | An object containing JavaScript files to add to the application. The scripts are loaded exactly as if you had added them in a `<script>` tag inside `index.html`. See more in the [Styles and scripts configuration](#styles-and-scripts-configuration) section.       |
-| `budgets`                  | Default size-budget type and thresholds for all or parts of your application. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See [Configure size budgets](tools/cli/build#configure-size-budgets). |
-| `fileReplacements`         | An object containing files and their compile-time replacements. See more in [Configure target-specific file replacements](tools/cli/build#configure-target-specific-file-replacements).                                                                                |
-| `index`                    | A base HTML document which loads the application. See more in [Index configuration](#index-configuration).                                                                                                                                                             |
-| `security`                 | An object containing the key `autoCsp` that can be set to `true` or `false`                                                                                                                                                                                            |
+| Options properties         | Details                                                                                                                                                                                                                                                                  |
+| :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `assets`                   | An object containing paths to static assets to serve with the application. The default paths point to the project's `public` directory. See more in the [Assets configuration](#assets-configuration) section.                                                           |
+| `styles`                   | An array of CSS files to add to the global context of the project. Angular CLI supports CSS imports and all major CSS preprocessors. See more in the [Styles and scripts configuration](#styles-and-scripts-configuration) section.                                      |
+| `stylePreprocessorOptions` | An object containing option-value pairs to pass to style preprocessors. See more in the [Styles and scripts configuration](#styles-and-scripts-configuration) section.                                                                                                   |
+| `scripts`                  | An object containing JavaScript files to add to the application. The scripts are loaded exactly as if you had added them in a `<script>` tag inside `index.html`. See more in the [Styles and scripts configuration](#styles-and-scripts-configuration) section.         |
+| `budgets`                  | Default size-budget type and thresholds for all or parts of your application. You can configure the builder to report a warning or an error when the output reaches or exceeds a threshold size. See [Configure size budgets](tools/cli/build#configuring-size-budgets). |
+| `fileReplacements`         | An object containing files and their compile-time replacements. See more in [Configure target-specific file replacements](tools/cli/environments#configure-environment-specific-defaults).                                                                               |
+| `index`                    | A base HTML document which loads the application. See more in [Index configuration](#index-configuration).                                                                                                                                                               |
+| `security`                 | An object containing the key `autoCsp` that can be set to `true` or `false`                                                                                                                                                                                              |
 
 ### Extra serve options
 
@@ -362,9 +394,7 @@ To add paths, use the `stylePreprocessorOptions` option:
           "builder": "@angular/build:application",
           "options": {
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/style-paths"
-              ]
+              "includePaths": ["src/style-paths"]
             }
           }
         }
@@ -377,7 +407,7 @@ To add paths, use the `stylePreprocessorOptions` option:
 Files in that directory, such as `src/style-paths/_variables.scss`, can be imported from anywhere in your project without the need for a relative path:
 
 ```scss
-// src/app/app.component.scss
+// src/app/app.scss
 // A relative path works
 @import '../style-paths/variables';
 
@@ -432,9 +462,7 @@ You can supply a value such as the following to apply optimization to one or the
           "builder": "@angular/build:application",
           "options": {
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/style-paths"
-              ]
+              "includePaths": ["src/style-paths"]
             }
           }
         }

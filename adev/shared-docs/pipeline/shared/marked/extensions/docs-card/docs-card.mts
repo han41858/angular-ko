@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Tokens, Token, RendererThis, TokenizerThis} from 'marked';
-import {loadWorkspaceRelativeFile, anchorTarget} from '../../helpers.mjs';
-import {setInsideLink} from '../../transformations/link.mjs';
+import {RendererThis, Token, TokenizerThis, Tokens} from 'marked';
+import {anchorTarget, loadWorkspaceRelativeFile} from '../../helpers.mjs';
+import {AdevDocsRenderer} from '../../renderer.mjs';
 
 interface DocsCardToken extends Tokens.Generic {
   type: 'docs-card';
@@ -18,18 +18,20 @@ interface DocsCardToken extends Tokens.Generic {
   href?: string;
   imgSrc?: string;
   iconImgSrc?: string; // Need image since icons are custom
+  titleInline?: boolean;
   tokens: Token[];
 }
 
 // Capture group 1: all attributes on the opening tag
 // Capture group 2: all content between the open and close tags
-const cardRule = /^[^<]*<docs-card(?:\s([^>]*))?>((?:.(?!\/docs-card))*)<\/docs-card>/s;
+const cardRule = /^\s*<docs-card(?:\s([^>]*))?>((?:.(?!\/docs-card))*)<\/docs-card>/s;
 
 const titleRule = /title="([^"]*)"/;
 const linkRule = /link="([^"]*)"/;
 const hrefRule = /href="([^"]*)"/;
 const imgSrcRule = /imgSrc="([^"]*)"/;
 const iconImgSrcRule = /iconImgSrc="([^"]*)"/;
+const titleInlineRule = /(?:^|\s)titleInline(?=\s|$|=)/;
 
 export const docsCardExtension = {
   name: 'docs-card',
@@ -47,6 +49,7 @@ export const docsCardExtension = {
       const href = hrefRule.exec(attr);
       const imgSrc = imgSrcRule.exec(attr);
       const iconImgSrc = iconImgSrcRule.exec(attr);
+      const titleInline = titleInlineRule.test(attr);
 
       const body = match[2].trim();
 
@@ -59,6 +62,7 @@ export const docsCardExtension = {
         link: link ? link[1] : undefined,
         imgSrc: imgSrc ? imgSrc[1] : undefined,
         iconImgSrc: iconImgSrc ? iconImgSrc[1] : undefined,
+        titleInline,
         tokens: [],
       };
       this.lexer.blockTokens(token.body, token.tokens);
@@ -67,22 +71,26 @@ export const docsCardExtension = {
     return undefined;
   },
   renderer(this: RendererThis, token: DocsCardToken) {
-    return token.imgSrc ? getCardWithSvgIllustration(this, token) : getStandardCard(this, token);
+    return token.imgSrc
+      ? getCardWithSvgIllustration(this, token)
+      : getStandardCard(this.parser.renderer as AdevDocsRenderer, token);
   },
 };
 
-function getStandardCard(renderer: RendererThis, token: DocsCardToken) {
+function getStandardCard(renderer: AdevDocsRenderer, token: DocsCardToken) {
   if (token.iconImgSrc && token.href) {
     // We can assume that all icons are svg files since they are custom.
     // We need to read svg content, instead of renering svg with `img`,
     // cause we would like to use CSS variables to support dark and light mode.
     const icon = loadWorkspaceRelativeFile(token.iconImgSrc);
+    const header = token.titleInline
+      ? `<div class="docs-card-header-inline">${icon}<h3>${token.title}</h3></div>`
+      : `${icon}<h3>${token.title}</h3>`;
 
     return `
     <a href="${token.href}" ${anchorTarget(token.href)} class="docs-card">
       <div>
-        ${icon}
-        <h3>${token.title}</h3>
+        ${header}
         ${renderer.parser.parse(token.tokens)}
       </div>
       <span>${token.link ? token.link : 'Learn more'}</span>
@@ -110,13 +118,11 @@ function getStandardCard(renderer: RendererThis, token: DocsCardToken) {
   `;
 }
 
-function parseWithoutCreatingLinks(renderer: RendererThis, token: DocsCardToken) {
-  setInsideLink(true);
-  try {
-    return renderer.parser.parse(token.tokens);
-  } finally {
-    setInsideLink(false);
-  }
+function parseWithoutCreatingLinks(renderer: AdevDocsRenderer, token: DocsCardToken) {
+  renderer.context.disableAutoLinking = true;
+  const parsed = renderer.parser.parse(token.tokens);
+  renderer.context.disableAutoLinking = false;
+  return parsed;
 }
 
 function getCardWithSvgIllustration(renderer: RendererThis, token: DocsCardToken) {

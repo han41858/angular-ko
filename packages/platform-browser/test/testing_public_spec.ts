@@ -8,9 +8,9 @@
 
 import {ResourceLoader} from '@angular/compiler';
 import {
+  ChangeDetectionStrategy,
   Compiler,
   Component,
-  ComponentFactoryResolver,
   CUSTOM_ELEMENTS_SCHEMA,
   Directive,
   Inject,
@@ -21,8 +21,8 @@ import {
   NgModule,
   Optional,
   Pipe,
-  TransferState,
   SkipSelf,
+  TransferState,
   Type,
 } from '@angular/core';
 import {
@@ -34,14 +34,14 @@ import {
   waitForAsync,
   withModule,
 } from '@angular/core/testing';
-import {expect} from '@angular/private/testing/matchers';
 import {isBrowser} from '@angular/private/testing';
+import {expect} from '@angular/private/testing/matchers';
 
 // Services, and components for the tests.
 
 @Component({
   selector: 'child-comp',
-  template: `<span>Original {{childBinding}}</span>`,
+  template: `<span>Original {{ childBinding }}</span>`,
   standalone: false,
 })
 @Injectable()
@@ -72,6 +72,7 @@ class ParentComp {}
   selector: 'my-if-comp',
   template: `MyIf(<span *ngIf="showMore">More</span>)`,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 @Injectable()
 class MyIfComp {
@@ -103,7 +104,7 @@ class MockFancyService extends FancyService {
 @Component({
   selector: 'my-service-comp',
   providers: [FancyService],
-  template: `injected value: {{fancyService.value}}`,
+  template: `injected value: {{ fancyService.value }}`,
   standalone: false,
 })
 class TestProvidersComp {
@@ -113,7 +114,7 @@ class TestProvidersComp {
 @Component({
   selector: 'my-service-comp',
   viewProviders: [FancyService],
-  template: `injected value: {{fancyService.value}}`,
+  template: `injected value: {{ fancyService.value }}`,
   standalone: false,
 })
 class TestViewProvidersComp {
@@ -141,7 +142,7 @@ class SomePipe {
 
 @Component({
   selector: 'comp',
-  template: `<div  [someDir]="'someValue' | somePipe"></div>`,
+  template: `<div [someDir]="'someValue' | somePipe"></div>`,
   standalone: false,
 })
 class CompUsingModuleDirectiveAndPipe {}
@@ -394,7 +395,7 @@ describe('public testing API', () => {
     xdescribe('components with template url', () => {
       let TestComponent!: Type<unknown>;
 
-      beforeEach(waitForAsync(async () => {
+      beforeEach(() => {
         @Component({
           selector: 'comp',
           templateUrl: '/base/angular/packages/platform-browser/test/static_assets/test.html',
@@ -405,8 +406,7 @@ describe('public testing API', () => {
         TestComponent = CompWithUrlTemplate;
 
         TestBed.configureTestingModule({declarations: [CompWithUrlTemplate]});
-        await TestBed.compileComponents();
-      }));
+      });
 
       isBrowser &&
         it('should allow to createSync components with templateUrl after explicit async compilation', () => {
@@ -522,16 +522,6 @@ describe('public testing API', () => {
     });
 
     describe('overriding providers', () => {
-      describe('in core', () => {
-        it('ComponentFactoryResolver', () => {
-          const componentFactoryMock = jasmine.createSpyObj('componentFactory', [
-            'resolveComponentFactory',
-          ]);
-          TestBed.overrideProvider(ComponentFactoryResolver, {useValue: componentFactoryMock});
-          expect(TestBed.inject(ComponentFactoryResolver)).toEqual(componentFactoryMock);
-        });
-      });
-
       describe('in NgModules', () => {
         it('should support useValue', () => {
           TestBed.configureTestingModule({
@@ -922,7 +912,6 @@ describe('public testing API', () => {
             providers: [{provide: ResourceLoader, useValue: {get: resourceLoaderGet}}],
           });
 
-          TestBed.compileComponents();
           tick();
           const compFixture = TestBed.createComponent(InternalCompWithUrlTemplate);
           expect(compFixture.nativeElement).toHaveText('Hello world!');
@@ -1103,6 +1092,29 @@ Did you run and wait for 'resolveComponentResources()'?`);
       componentFixture.detectChanges();
       expect(componentFixture.nativeElement).toHaveText('injected value: mocked out value');
     }));
+
+    describe('getLastFixture', () => {
+      it('should return the last created fixture', () => {
+        const fixture = TestBed.createComponent(ChildComp);
+        expect(TestBed.getLastFixture()).toBe(fixture);
+      });
+
+      it('should throw if no fixture has been created', () => {
+        expect(() => TestBed.getLastFixture()).toThrowError('No fixture has been created yet.');
+      });
+
+      it('should return the last fixture when multiple fixtures are present', () => {
+        TestBed.createComponent(ChildComp);
+        const parentFixture = TestBed.createComponent(ParentComp);
+        expect(TestBed.getLastFixture()).toBe(parentFixture);
+      });
+
+      it('should clear the fixture after reset', () => {
+        TestBed.createComponent(ChildComp);
+        TestBed.resetTestingModule();
+        expect(() => TestBed.getLastFixture()).toThrowError('No fixture has been created yet.');
+      });
+    });
   });
   describe('using alternate components', () => {
     beforeEach(() => {

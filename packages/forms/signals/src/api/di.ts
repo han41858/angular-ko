@@ -7,23 +7,25 @@
  */
 
 import {type Provider} from '@angular/core';
+import type {FormFieldBinding} from '../api/types';
 import {SIGNAL_FORMS_CONFIG} from '../field/di';
-import type {FieldState} from './types';
 
 /**
  * Configuration options for signal forms.
  *
- * @experimental 21.0.1
+ * @publicApi 22.0
  */
 export interface SignalFormsConfig {
   /** A map of CSS class names to predicate functions that determine when to apply them. */
-  classes?: {[className: string]: (state: FieldState<unknown>) => boolean};
+  classes?: {
+    [className: string]: (formField: FormFieldBinding) => boolean;
+  };
 }
 
 /**
  * Provides configuration options for signal forms.
  *
- * @experimental 21.0.1
+ * @publicApi 22.0
  */
 export function provideSignalFormsConfig(config: SignalFormsConfig): Provider[] {
   return [{provide: SIGNAL_FORMS_CONFIG, useValue: config}];

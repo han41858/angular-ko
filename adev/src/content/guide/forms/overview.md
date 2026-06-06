@@ -6,9 +6,9 @@ Applications use forms to enable users to log in, to update a profile, to enter 
 
 Angular provides two different approaches to handling user input through forms: reactive and template-driven.
 
-Both capture user input events from the view, validate the user input, create a form model and data model to update, and provide a way to track changes.
+Both capture user input events from the view, validate the input, create a form and data model, and provide a way to track changes.
 
-TIP: If you're looking for the new experimental Signal Forms, check out our [essential Signal Forms guide](/essentials/signal-forms)!
+TIP: If you're looking for the new Signal Forms, check out our [essential Signal Forms guide](/essentials/signal-forms)!
 
 This guide provides information to help you decide which type of form works best for your situation.
 It introduces the common building blocks used by both approaches.
@@ -86,7 +86,7 @@ The following component implements the same input field for a single control, us
 
 <docs-code language="angular-ts" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.ts"/>
 
-IMPORTANT: In a template-driven form the source of truth is the template. The `NgModel` directive automatically manages the `FormControl` instance for you.
+IMPORTANT: In a template-driven form, the source of truth is the template. The `NgModel` directive automatically manages the `FormControl` instance for you.
 
 ## Data flow in forms
 
@@ -99,10 +99,10 @@ The following diagrams illustrate both kinds of data flow for each type of form,
 
 ### Data flow in reactive forms
 
-In reactive forms each form element in the view is directly linked to the form model (a `FormControl` instance).
+In reactive forms, each form element in the view is directly linked to the form model (a `FormControl` instance).
 Updates from the view to the model and from the model to the view are synchronous and do not depend on how the UI is rendered.
 
-The view-to-model diagram shows how data flows when an input field's value is changed from the view through the following steps.
+The view-to-model diagram shows how data flows when an input field's value is changed from the view through the following steps:
 
 1. The user types a value into the input element, in this case the favorite color _Blue_.
 1. The form input element emits an "input" event with the latest value.
@@ -269,7 +269,7 @@ The first example performs the following steps to verify the view-to-model data 
 1. Set the new value for the input to _Red_, and dispatch the "input" event on the form input element.
 1. Assert that the component's `favoriteColorControl` value matches the value from the input.
 
-<docs-code header="Favorite color test - view to model" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" visibleRegion="view-to-model"/>
+<docs-code header="Favorite color test - view to model" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" region="view-to-model"/>
 
 The next example performs the following steps to verify the model-to-view data flow.
 
@@ -277,7 +277,7 @@ The next example performs the following steps to verify the model-to-view data f
 1. Query the view for the form input element.
 1. Assert that the new value set on the control matches the value in the input.
 
-<docs-code header="Favorite color test - model to view" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" visibleRegion="model-to-view"/>
+<docs-code header="Favorite color test - model to view" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.spec.ts" region="model-to-view"/>
 
 ### Testing template-driven forms
 
@@ -287,7 +287,7 @@ The following tests use the favorite color components mentioned earlier to verif
 
 The following test verifies the data flow from view to model.
 
-<docs-code header="Favorite color test - view to model" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" visibleRegion="view-to-model"/>
+<docs-code header="Favorite color test - view to model" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" region="view-to-model"/>
 
 Here are the steps performed in the view to model test.
 
@@ -298,13 +298,13 @@ Here are the steps performed in the view to model test.
 
 The following test verifies the data flow from model to view.
 
-<docs-code header="Favorite color test - model to view" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" visibleRegion="model-to-view"/>
+<docs-code header="Favorite color test - model to view" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.spec.ts" region="model-to-view"/>
 
 Here are the steps performed in the model to view test.
 
 1. Use the component instance to set the value of the `favoriteColor` property.
 1. Run change detection through the test fixture.
-1. Use the `tick()` method to simulate the passage of time within the `fakeAsync()` task.
+1. Use `await fixture.whenStable()` to wait for the next rendering.
 1. Query the view for the form input element.
 1. Assert that the input value matches the value of the `favoriteColor` property in the component instance.
 

@@ -7,6 +7,7 @@
  */
 
 import {
+  DefaultExport,
   EnvironmentInjector,
   EnvironmentProviders,
   NgModuleFactory,
@@ -15,6 +16,7 @@ import {
   Type,
 } from '@angular/core';
 import {Observable} from 'rxjs';
+export {DefaultExport} from '@angular/core';
 
 import type {ActivatedRouteSnapshot, RouterStateSnapshot} from './router_state';
 import type {UrlSegment, UrlSegmentGroup, UrlTree} from './url_tree';
@@ -214,22 +216,6 @@ export type ResolveData = {
 };
 
 /**
- * An ES Module object with a default export of the given type.
- *
- * @see {@link Route#loadComponent}
- * @see {@link LoadChildrenCallback}
- *
- * @publicApi
- */
-export interface DefaultExport<T> {
-  /**
-   * Default exports are bound under the name `"default"`, per the ES Module spec:
-   * https://tc39.es/ecma262/#table-export-forms-mapping-to-exportentry-records
-   */
-  default: T;
-}
-
-/**
  *
  * A function that is called to resolve a collection of lazy-loaded routes.
  * Must be an arrow function of the following form:
@@ -300,23 +286,16 @@ export type QueryParamsHandling = 'merge' | 'preserve' | 'replace' | '';
 /**
  * The type for the function that can be used to handle redirects when the path matches a `Route` config.
  *
- * The `RedirectFunction` does _not_ have access to the full
- * `ActivatedRouteSnapshot` interface. Some data are not accurately known
- * at the route matching phase. For example, resolvers are not run until
- * later, so any resolved title would not be populated. The same goes for lazy
- * loaded components. This is also true for all the snapshots up to the
- * root, so properties that include parents (root, parent, pathFromRoot)
- * are also excluded. And naturally, the full route matching hasn't yet
- * happened so firstChild and children are not available either.
+ * The `RedirectFunction` does not have access to the full
+ * `ActivatedRouteSnapshot` interface because Route matching has not
+ * yet completed when the function is called. See {@link PartialMatchRouteSnapshot}
+ * for more information.
  *
  * @see {@link Route#redirectTo}
  * @publicApi
  */
 export type RedirectFunction = (
-  redirectData: Pick<
-    ActivatedRouteSnapshot,
-    'routeConfig' | 'url' | 'params' | 'queryParams' | 'fragment' | 'data' | 'outlet' | 'title'
-  >,
+  redirectData: PartialMatchRouteSnapshot,
 ) => MaybeAsync<string | UrlTree>;
 
 /**
@@ -792,11 +771,17 @@ export interface Route {
    * @internal
    */
   _loadedInjector?: EnvironmentInjector;
+  /**
+   * Filled if loadChildren retruns a module factory
+   * @internal
+   */
+  _loadedNgModuleFactory?: NgModuleFactory<any>;
 }
 
 export interface LoadedRouterConfig {
   routes: Route[];
   injector: EnvironmentInjector | undefined;
+  factory?: NgModuleFactory<unknown>;
 }
 
 /**
@@ -820,7 +805,8 @@ export interface LoadedRouterConfig {
  *
  * @Injectable()
  * class CanActivateTeam implements CanActivate {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canActivate(
  *     route: ActivatedRouteSnapshot,
@@ -938,7 +924,8 @@ export type CanActivateFn = (
  *
  * @Injectable()
  * class CanActivateTeam implements CanActivateChild {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canActivateChild(
  *     route: ActivatedRouteSnapshot,
@@ -1029,7 +1016,8 @@ export type CanActivateChildFn = (
  * ```ts
  * @Injectable()
  * class CanDeactivateTeam implements CanDeactivate<TeamComponent> {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canDeactivate(
  *     component: TeamComponent,
@@ -1112,9 +1100,14 @@ export type CanDeactivateFn<T> = (
  *
  * @Injectable()
  * class CanMatchTeamSection implements CanMatch {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
- *   canMatch(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
+ *   canMatch(
+ *     route: Route,
+ *     segments: UrlSegment[],
+ *     currentSnapshot: PartialMatchRouteSnapshot,
+ *   ): Observable<boolean> | Promise<boolean> | boolean {
  *     return this.permissions.canAccess(this.currentUser, route, segments);
  *   }
  * }
@@ -1152,7 +1145,11 @@ export type CanDeactivateFn<T> = (
  * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
 export interface CanMatch {
-  canMatch(route: Route, segments: UrlSegment[]): MaybeAsync<GuardResult>;
+  canMatch(
+    route: Route,
+    segments: UrlSegment[],
+    currentSnapshot: PartialMatchRouteSnapshot,
+  ): MaybeAsync<GuardResult>;
 }
 
 /**
@@ -1169,12 +1166,43 @@ export interface CanMatch {
  *
  * @param route The route configuration.
  * @param segments The URL segments that have not been consumed by previous parent route evaluations.
+ * @param currentSnapshot The current route snapshot up to this point in the matching process.
  *
  * @publicApi
  * @see {@link Route}
  * @see [CanMatch](guide/routing/route-guards#canmatch)
  */
-export type CanMatchFn = (route: Route, segments: UrlSegment[]) => MaybeAsync<GuardResult>;
+export type CanMatchFn = (
+  route: Route,
+  segments: UrlSegment[],
+  currentSnapshot: PartialMatchRouteSnapshot,
+) => MaybeAsync<GuardResult>;
+
+/**
+ * A subset of the `ActivatedRouteSnapshot` interface that includes only the known data
+ * up to the route matching phase. Some data are not accurately known
+ * at in this phase. For example, resolvers are not run until
+ * later, so any resolved title would not be populated. The same goes for lazy
+ * loaded components. This is also true for all the snapshots up to the
+ * root, so properties that include parents (root, parent, pathFromRoot)
+ * are also excluded. And naturally, the full route matching hasn't yet
+ * happened so firstChild and children are not available either.
+ *
+ * @publicApi
+ */
+export type PartialMatchRouteSnapshot = Pick<
+  ActivatedRouteSnapshot,
+  | 'routeConfig'
+  | 'url'
+  | 'params'
+  | 'queryParams'
+  | 'fragment'
+  | 'data'
+  | 'outlet'
+  | 'title'
+  | 'paramMap'
+  | 'queryParamMap'
+>;
 
 /**
  * @description
@@ -1190,7 +1218,7 @@ export type CanMatchFn = (route: Route, segments: UrlSegment[]) => MaybeAsync<Gu
  * ```ts
  * @Injectable({ providedIn: 'root' })
  * export class HeroResolver implements Resolve<Hero> {
- *   constructor(private service: HeroService) {}
+ *   private readonly service = inject(HeroService);
  *
  *   resolve(
  *     route: ActivatedRouteSnapshot,
@@ -1231,7 +1259,7 @@ export type CanMatchFn = (route: Route, segments: UrlSegment[]) => MaybeAsync<Gu
  * })
  * export class HeroComponent {
  *
- *  constructor(private activatedRoute: ActivatedRoute) {}
+ *   private readonly activatedRoute = inject(ActivatedRoute);
  *
  *  ngOnInit() {
  *    this.activatedRoute.data.subscribe(({ hero }) => {
@@ -1406,7 +1434,8 @@ export type ResolveFn<T> = (
  *
  * @Injectable()
  * class CanLoadTeamSection implements CanLoad {
- *   constructor(private permissions: Permissions, private currentUser: UserToken) {}
+ *   private readonly permissions = inject(Permissions);
+ *   private readonly currentUser = inject(UserToken);
  *
  *   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean>|Promise<boolean>|boolean {
  *     return this.permissions.canLoadChildren(this.currentUser, route, segments);
@@ -1500,8 +1529,8 @@ export interface NavigationBehaviorOptions {
   /**
    * Developer-defined state that can be passed to any navigation.
    * Access this value through the `Navigation.extras` object
-   * returned from the [Router.getCurrentNavigation()
-   * method](api/router/Router#getcurrentnavigation) while a navigation is executing.
+   * returned from the [Router.currentNavigation()
+   * method](api/router/Router#currentNavigation) while a navigation is executing.
    *
    * After a navigation completes, the router writes an object containing this
    * value together with a `navigationId` to `history.state`.
@@ -1555,7 +1584,7 @@ export interface NavigationBehaviorOptions {
    *   const userService = inject(UserService);
    *   const router = inject(Router);
    *   if (!userService.isLoggedIn()) {
-   *     const targetOfCurrentNavigation = router.getCurrentNavigation()?.finalUrl;
+   *     const targetOfCurrentNavigation = router.currentNavigation()?.finalUrl;
    *     const redirect = router.parseUrl('/404');
    *     return new RedirectCommand(redirect, {browserUrl: targetOfCurrentNavigation});
    *   }
@@ -1574,4 +1603,18 @@ export interface NavigationBehaviorOptions {
    * state, such as `skipLocationChange`.
    */
   readonly browserUrl?: UrlTree | string;
+
+  /**
+   * Configures how scrolling is handled for an individual navigation when scroll restoration
+   * is enabled in the router.
+   *
+   * - When 'manual', the router will not perform scrolling when the navigation is complete,
+   * even if scroll restoration is enabled.
+   * - When 'after-transition', scrolling will be performed after the `NavigationEnd` event,
+   * according to the behavior configured in the router scrolling feature.
+   *
+   * @see withInMemoryRouterScroller
+   * @see InMemoryScrollingOptions
+   */
+  readonly scroll?: 'manual' | 'after-transition';
 }

@@ -57,7 +57,7 @@ or use the `.update()` operation to compute a new value from the previous one:
 
 ```ts
 // Increment the count by 1.
-count.update(value => value + 1);
+count.update((value) => value + 1);
 ```
 
 Writable signals have the type `WritableSignal`.
@@ -82,10 +82,80 @@ count.set(3);
 
 ```ts
 // 값을 1 증가시킵니다.
-count.update(value => value + 1);
+count.update((value) => value + 1);
 ```
 
 값을 쓸 수 있는 시그널은 `WritableSignal` 타입입니다.
+
+#### Converting writable signals to readonly
+
+<!--
+`WritableSignal` provide a `asReadonly()` method that returns a readonly version of the signal. This is useful when you want to expose a signal's value to consumers without allowing them to modify it directly:
+
+```ts
+@Service()
+export class CounterState {
+  // Private writable state
+  private readonly _count = signal(0);
+
+  readonly count = this._count.asReadonly(); // public readonly
+
+  increment() {
+    this._count.update((v) => v + 1);
+  }
+}
+
+@Component({
+  /* ... */
+})
+export class AwesomeCounter {
+  state = inject(CounterState);
+
+  count = this.state.count; // can read but not modify
+
+  increment() {
+    this.state.increment();
+  }
+}
+```
+
+The readonly signal reflects any changes made to the original writable signal, but cannot be modified using `set()` or `update()` methods.
+
+IMPORTANT: The readonly signals do **not** have any built-in mechanism that would prevent deep-mutation of their value.
+-->
+`WritableSignal`은 시그널을 읽기 전용으로 반환하는 `asReadonly()` 메서드를 제공합니다.
+이 메서드는 시그널의 값을 보내면서 값을 변경하지 못하게 할 때 유용합니다:
+
+```ts
+@Service()
+export class CounterState {
+  // Private writable state
+  private readonly _count = signal(0);
+
+  readonly count = this._count.asReadonly(); // public readonly
+
+  increment() {
+    this._count.update((v) => v + 1);
+  }
+}
+
+@Component({
+  /* ... */
+})
+export class AwesomeCounter {
+  state = inject(CounterState);
+
+  count = this.state.count; // 읽을 수 있지만 변경할 수 없습니다.
+
+  increment() {
+    this.state.increment();
+  }
+}
+```
+
+읽기 전용 시그널은 원래의 쓰기 가능 시그널의 변경사항을 반영하지만, `set()`이나 `update()` 메서드를 사용해서 값을 변경할 수 없습니다.
+
+중요: 읽기 전용 시그널은 값이 변경되는 것을 감지하고 방어하는 내부 메커니즘을 갖고 있지 **않습니다**.
 
 
 <!--
@@ -94,7 +164,7 @@ count.update(value => value + 1);
 ### 연산 시그널(Computed signals)
 
 <!--
-**Computed signal** are read-only signals that derive their value from other signals. You define computed signals using the `computed` function and specifying a derivation:
+**Computed signals** are read-only signals that derive their value from other signals. You define computed signals using the `computed` function and specifying a derivation:
 
 ```typescript
 const count: WritableSignal<number> = signal(0);
@@ -210,203 +280,114 @@ const conditionalCount = computed(() => {
 이후에 `showCount` 시그널의 값이 `false`가 되면, `conditionalCount` 시그널은 더이상 `count` 값이 변경되는 것을 감지하지 않습니다.
 
 
-<!--
+
+
+
+## Reactive contexts
+
+A **reactive context** is a runtime state where Angular monitors signal reads to establish a dependency. The code reading the signal is the _consumer_, and the signal being read is the _producer_.
+
+Angular automatically enters a reactive context when:
+
+- Executing an `effect`, `afterRenderEffect` callback.
+- Evaluating a `computed` signal.
+- Evaluating a `linkedSignal`.
+- Evaluating a `resource`'s params or loader function.
+- Rendering a component template (including bindings in the [host property](guide/components/host-elements#binding-to-the-host-element)).
+
+During these operations, Angular creates a _live_ connection. If a tracked signal changes, Angular will _eventually_ re-run the consumer.
+
+### Asserts the reactive context
+
+Angular provides the `assertNotInReactiveContext` helper function to assert that code is not executing within a reactive context. Pass a reference to the calling function so the error message points to the correct API entry point if the assertion fails. This produces a clearer, more actionable error message than a generic reactive context error.
+
+```ts
+import {assertNotInReactiveContext} from '@angular/core';
+
+function subscribeToEvents() {
+  assertNotInReactiveContext(subscribeToEvents);
+  // Safe to proceed - subscription logic here
+}
+```
+
+### Reading without tracking dependencies
+
+Rarely, you may want to execute code which may read signals within a reactive function such as `computed` or `effect` _without_ creating a dependency.
+
+For example, suppose that when `currentUser` changes, the value of a `counter` should be logged. You could create an `effect` which reads both signals:
+
+```ts
+effect(() => {
+  console.log(`User set to ${currentUser()} and the counter is ${counter()}`);
+});
+```
+
+This example will log a message when _either_ `currentUser` or `counter` changes. However, if the effect should only run when `currentUser` changes, then the read of `counter` is only incidental and changes to `counter` shouldn't log a new message.
+
+You can prevent a signal read from being tracked by calling its getter with `untracked`:
+
+```ts
+effect(() => {
+  console.log(`User set to ${currentUser()} and the counter is ${untracked(counter)}`);
+});
+```
+
+`untracked` is also useful when an effect needs to invoke some external code which shouldn't be treated as a dependency:
+
+```ts
+effect(() => {
+  const user = currentUser();
+  untracked(() => {
+    // If the `loggingService` reads signals, they won't be counted as
+    // dependencies of this effect.
+    this.loggingService.log(`User set to ${user}`);
+  });
+});
+```
+
+### Reactive context and async operations
+
+The reactive context is only active for synchronous code. Any signal reads that occur after an asynchronous boundary will not be tracked as dependencies.
+
+```ts {avoid}
+effect(async () => {
+  const data = await fetchUserData();
+  // Reactive context is lost here - theme() won't be tracked
+  console.log(`User: ${data.name}, Theme: ${theme()}`);
+});
+```
+
+To ensure all signal reads are tracked, read signals before the `await`. This includes passing them as arguments to the awaited function, since arguments are evaluated synchronously:
+
+```ts {prefer}
+effect(async () => {
+  const currentTheme = theme(); // Read before await
+  const data = await fetchUserData();
+  console.log(`User: ${data.name}, Theme: ${currentTheme}`);
+});
+```
+
+```ts {prefer}
+effect(async () => {
+  // Also works: signal is read before await (as function argument)
+  await renderContent(docContent());
+});
+```
+
+## Advanced derivations
+
+While `computed` handles simple readonly derivations, you might find yourself needing a writable state that is dependent on other signals.
+For more information see the [Dependent state with linkedSignal](/guide/signals/linked-signal) guide.
+
+All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, applications often need to deal with data that is available asynchronously. A `Resource` gives you a way to incorporate async data into your application's signal-based code and still allow you to access its data synchronously. For more information see the [Async reactivity with resources](/guide/signals/resource) guide.
+
+## Executing side effects on non-reactive APIs
+
+Synchronous or asynchronous derivations are recommended when we want to react to state changes. However, this doesn't cover all the possible use cases, and you'll sometimes find yourself in a situation where you need to react to signal changes on non-reactive apis. Use `effect` or `afterRenderEffect` for those specific usecases. For more information see [Side effects for non-reactive APIs](/guide/signals/effect) guide.
+
 ## Reading signals in `OnPush` components
--->
-## 컴포넌트 `OnPush` 함수에서 시그널 읽기
 
-<!--
 When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markforcheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
--->
-컴포넌트 템플릿에서 시그널을 참조하면 Angular는 이 시그널의 의존성을 추적합니다.
-그래서 종속 관계인 시그널의 값이 변경되며 Angular가 컴포넌트를 [마크(marks)](api/core/ChangeDetectorRef#markforcheck) 했다가 다음 변경 감지 싸이클이 실행될 때 화면을 갱신합니다.
-자세한 내용은 [컴포넌트 서브트리 건너뛰기](best-practices/skipping-subtrees) 문서를 참고하세요.
-
-
-<!--
-## Effects
--->
-## 효과 함수
-
-<!--
-Signals are useful because they notify interested consumers when they change. An **effect** is an operation that runs whenever one or more signal values change. You can create an effect with the `effect` function:
-
-```ts
-effect(() => {
-  console.log(`The current count is: ${count()}`);
-});
-```
-
-Effects always run **at least once.** When an effect runs, it tracks any signal value reads. Whenever any of these signal values change, the effect runs again. Similar to computed signals, effects keep track of their dependencies dynamically, and only track signals which were read in the most recent execution.
-
-Effects always execute **asynchronously**, during the change detection process.
--->
-시그널은 해당 시그널을 구독하는 쪽으로 알림을 줄 수 있기 때문에 유용합니다.
-그리고 이 시그널은 값이 변경될 때마다 효과 함수가 실행됩니다.
-효과 함수의 동작을 지정하려면 `effect` 함수를 사용하면 됩니다.
-
-```ts
-effect(() => {
-  console.log(`The current count is: ${count()}`);
-});
-```
-
-효과 함수는 **최소한 한 번은** 실행됩니다.
-그리고 효과 함수가 실행되면서 시그널을 추적하기 시작합니다.
-효과 함수는 연산 시그널과 비슷하게, 의존성 관계도 동적으로 변경되며 가장 최근에 실행했을 때 값을 캐싱하며 시그널의 값이 변경되는지 감지합니다.
-
-효과 함수는 언제나 변화 갑지 싸이클에서 **비동기로** 실행됩니다.
-
-
-<!--
-### Use cases for effects
--->
-### 효과 함수 활용하기
-
-<!--
-Effects are rarely needed in most application code, but may be useful in specific circumstances. Here are some examples of situations where an `effect` might be a good solution:
-
-- Logging data being displayed and when it changes, either for analytics or as a debugging tool.
-- Keeping data in sync with `window.localStorage`.
-- Adding custom DOM behavior that can't be expressed with template syntax.
-- Performing custom rendering to a `<canvas>`, charting library, or other third party UI library.
-
-<docs-callout critical title="When not to use effects">
-Avoid using effects for propagation of state changes. This can result in `ExpressionChangedAfterItHasBeenChecked` errors, infinite circular updates, or unnecessary change detection cycles.
-
-Instead, use `computed` signals to model state that depends on other state.
-</docs-callout>
--->
-효과 함수는 사용하는 경우가 거의 없지만, 이런 경우에는 유용합니다:
-
-- 화면에 표시하는 데이터가 변경될 때마다 로그로 출력할 때
-- `window.localStorage`과 데이터를 동기화해야 할 때
-- 템플릿 문법으로 불가능한 커스텀 DOM 동작을 추가할 때
-- `<canvas>` 로 렌더링을 커스터마이징 할 때, 차트 라이브러리를 사용하거나 서드 파티 UI 라이브러리를 사용할 때
-
-<docs-callout critical
-    title="효과 함수를 사용하지 말아야 하는 경우">
-
-상태값이 변경되는 것을 전파할 때 효과 함수를 사용하지 마세요.
-이렇게 사용하면 순환 종속성으로 변화 감지 싸이클이 무한으로 실행되며 `ExpressionChangedAfterItHasBeenChecked` 에러가 발생합니다.
-
-상태값을 전파해야 하는 경우에는 `computed` 시그널을 사용하세요.
-
-</docs-callout>
-
-<!--
-### Injection context
--->
-### 의존성 주입 컨텍스트
-
-<!--
-By default, you can only create an `effect()` within an [injection context](guide/di/dependency-injection-context) (where you have access to the `inject` function). The easiest way to satisfy this requirement is to call `effect` within a component, directive, or service `constructor`:
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-  constructor() {
-    // Register a new effect.
-    effect(() => {
-      console.log(`The count is: ${this.count()}`);
-    });
-  }
-}
-```
-
-Alternatively, you can assign the effect to a field (which also gives it a descriptive name).
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-
-  private loggingEffect = effect(() => {
-    console.log(`The count is: ${this.count()}`);
-  });
-}
-```
-
-To create an effect outside the constructor, you can pass an `Injector` to `effect` via its options:
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-  private injector = inject(Injector);
-
-  initializeLogging(): void {
-    effect(() => {
-      console.log(`The count is: ${this.count()}`);
-    }, {injector: this.injector});
-  }
-}
-```
--->
-기본적으로 `effect()` 함수는 `inject` 함수에 접근할 수 있는 [의존성 주입 컨텍스트](guide/di/dependency-injection-context) 안에서 실행할 수 있습니다.
-컴포넌트, 디렉티브, 서비스에서 이 조건을 만족하려면 `constructor` 함수 안에서 `effect`를 실행하는 것이 가장 간단합니다:
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-  constructor() {
-    // 효과 함수를 등록합니다.
-    effect(() => {
-      console.log(`The count is: ${this.count()}`);
-    });
-  }
-}
-```
-
-아니면 클래스 프로퍼티로 등록해도 됩니다.
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-
-  private loggingEffect = effect(() => {
-    console.log(`The count is: ${this.count()}`);
-  });
-}
-```
-
-생성자 함수 밖에서 효과 함수를 등록하려면 `Injector`를 인자로 전달해야 합니다:
-
-```ts
-@Component({...})
-export class EffectiveCounterComponent {
-  readonly count = signal(0);
-  private injector = inject(Injector);
-
-  initializeLogging(): void {
-    effect(() => {
-      console.log(`The count is: ${this.count()}`);
-    }, {injector: this.injector});
-  }
-}
-```
-
-
-<!--
-### Destroying effects
--->
-### 효과 함수가 종료되는 과정
-
-<!--
-When you create an effect, it is automatically destroyed when its enclosing context is destroyed. This means that effects created within components are destroyed when the component is destroyed. The same goes for effects within directives, services, etc.
-
-Effects return an `EffectRef` that you can use to destroy them manually, by calling the `.destroy()` method. You can combine this with the `manualCleanup` option to create an effect that lasts until it is manually destroyed. Be careful to actually clean up such effects when they're no longer required.
--->
-효과 함수는 효과 함수가 생성된 컨텍스트가 종료될 때 함께 자동으로 종료됩니다.
-이 말은, 효과 함수가 컴포넌트 컨텍스트에서 생성되었으면 컴포넌트가 종료될 때 함께 종료된다는 것을 의미합니다.
-디렉티브나 서비스에서 생성하는 효과 함수도 마찬가지입니다.
-
-효과 함수를 생성하면 `EffectRef`를 반환하기 때문에 `.destroy()` 메서드를 실행하면 수동으로 종료할 수 있습니다.
-그리고 `manualCleanup` 옵션을 사용하면 수동으로 종료하기 전까지 종료되지 않는 효과 함수를 만들 수도 있습니다.
-사용하지 않는 효과 함수는 반드시 정리해야 하는 것을 잊지 마세요.
 
 
 <!--
@@ -423,9 +404,9 @@ Effects return an `EffectRef` that you can use to destroy them manually, by call
 When creating a signal, you can optionally provide an equality function, which will be used to check whether the new value is actually different than the previous one.
 
 ```ts
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 
-const data = signal(['test'], {equal: _.isEqual});
+const data = signal(['test'], {equal: isEqual});
 
 // Even though this is a different array instance, the deep equality
 // function will consider the values to be equal, and the signal won't
@@ -441,9 +422,9 @@ HELPFUL: By default, signals use referential equality ([`Object.is()`](https://d
 이 함수는 새 값이 이전 값과 다른지 판단하는 역할을 합니다.
 
 ```ts
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 
-const data = signal(['test'], {equal: _.isEqual});
+const data = signal(['test'], {equal: isEqual});
 
 // 인스턴스가 다르더라도 deep equal 함수가 동일성을 판단하기 때문에
 // 시그널은 값을 갱신하지 않습니다.
@@ -500,122 +481,6 @@ const doubled = computed(() => count() * 2);
 isWritableSignal(count); // true
 isWritableSignal(doubled); // false
 ```
-
-
-<!--
-### Reading without tracking dependencies
--->
-### 추적 종속성과 관계없이 값 읽기
-
-<!--
-Rarely, you may want to execute code which may read signals within a reactive function such as `computed` or `effect` _without_ creating a dependency.
-
-For example, suppose that when `currentUser` changes, the value of a `counter` should be logged. You could create an `effect` which reads both signals:
-
-```ts
-effect(() => {
-  console.log(`User set to ${currentUser()} and the counter is ${counter()}`);
-});
-```
-
-This example will log a message when _either_ `currentUser` or `counter` changes. However, if the effect should only run when `currentUser` changes, then the read of `counter` is only incidental and changes to `counter` shouldn't log a new message.
-
-You can prevent a signal read from being tracked by calling its getter with `untracked`:
-
-```ts
-effect(() => {
-  console.log(`User set to ${currentUser()} and the counter is ${untracked(counter)}`);
-});
-```
-
-`untracked` is also useful when an effect needs to invoke some external code which shouldn't be treated as a dependency:
-
-```ts
-effect(() => {
-  const user = currentUser();
-  untracked(() => {
-    // If the `loggingService` reads signals, they won't be counted as
-    // dependencies of this effect.
-    this.loggingService.log(`User set to ${user}`);
-  });
-});
-```
--->
-드문 경우지만, `computed`나 `effect`와 같은 반응형 함수 안에서 종속성을 _추가하지 않고_ 코드를 실행할 수 있습니다.
-
-예를 들면, `currentUser` 시그널의 값이 변경될 때 `counter` 시그널의 값을 로그로 출력한다고 합시다.
-그렇다면 이런 효과 함수를 작성할 수 있습니다:
-
-```ts
-effect(() => {
-  console.log(`User set to ${currentUser()} and the counter is ${counter()}`);
-});
-```
-
-이렇게 구현하면 `currentUser` 시그널이나 `counter` 시그널 _둘 중에 하나가 변경될 때마다_ 로그가 출력됩니다.
-하지만 효과 함수가 `currentUser` 시그널이 변경될 때만 반응해야 하고, `counter` 시그널이 변경되는 것은 감지하지 않아야 하는 경우는 어떻게 해야 할까요?
-
-이런 경우라면 `untracked` 함수 안에 게터 함수를 전달하면 됩니다:
-
-```ts
-effect(() => {
-  console.log(`User set to ${currentUser()} and the counter is ${untracked(counter)}`);
-});
-```
-
-`untracked` 함수는 종속성 관계가 아닌 외부 코드를 실행해야 할 때도 유용합니다:
-
-```ts
-effect(() => {
-  const user = currentUser();
-  untracked(() => {
-    // `logginvService`는 `user` 시그널을 읽지만, 종속성 관계는 아닙니다.
-    this.loggingService.log(`User set to ${user}`);
-  });
-});
-```
-
-
-<!--
-### Effect cleanup functions
--->
-### 효과 함수 종료하기
-
-<!--
-Effects might start long-running operations, which you should cancel if the effect is destroyed or runs again before the first operation finished. When you create an effect, your function can optionally accept an `onCleanup` function as its first parameter. This `onCleanup` function lets you register a callback that is invoked before the next run of the effect begins, or when the effect is destroyed.
-
-```ts
-effect((onCleanup) => {
-  const user = currentUser();
-
-  const timer = setTimeout(() => {
-    console.log(`1 second ago, the user became ${user}`);
-  }, 1000);
-
-  onCleanup(() => {
-    clearTimeout(timer);
-  });
-});
-```
--->
-효과 함수의 실행이 길어지는 경우 다른 동작이 시작되기 전에 효과 함수를 정리해야 하는 경우가 있습니다.
-이런 경우는 효과 함수를 생성할 때 첫번째 인자로 `onCleanup` 함수를 전달하면 됩니다.
-이 방식으로 다음 실행이 시작되기 전이나 효과 함수가 종료될 때 실행할 콜백 함수를 등록할 수 있습니다.
-
-```ts
-effect((onCleanup) => {
-  const user = currentUser();
-
-  const timer = setTimeout(() => {
-    console.log(`1 second ago, the user became ${user}`);
-  }, 1000);
-
-  onCleanup(() => {
-    clearTimeout(timer);
-  });
-});
-```
-
 
 <!--
 ## Using signals with RxJS

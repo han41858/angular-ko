@@ -2,19 +2,12 @@
 <docs-decorative-header title="Forms with signals" imgSrc="adev/src/assets/images/signals.svg"> </docs-decorative-header>
 -->
 
-<docs-decorative-header title="시그널 폼" imgSrc="adev/src/assets/images/signals.svg"> </docs-decorative-header>
-
-<!--
-IMPORTANT: Signal Forms are [experimental](/reference/releases#experimental). The API may change in future releases. Avoid using experimental APIs in production applications without understanding the risks.
-
 Signal Forms manage form state using Angular signals to provide automatic synchronization between your data model and the UI with Angular Signals.
 
 This guide walks you through the core concepts to create forms with Signal Forms. Here's how it works:
 -->
 
-중요: 시그널 폼(Signal Forms)은 아직 [실험 단계](/reference/releases#experimental)입니다.
-이후 버전에서 API 사용 방법은 변경될 수 있습니다.
-운영앱에서 실험적인 API를 사용한다면 이런 리스크를 꼭 인지해야 합니다.
+<docs-decorative-header title="시그널 폼" imgSrc="adev/src/assets/images/signals.svg"> </docs-decorative-header>
 
 시그널 폼은 Angular 시그널을 사용해서 폼 상태를 관리하며, 데이터 모델과 UI를 동기화 할 때도 Angular 시그널을 활용합니다.
 
@@ -64,8 +57,8 @@ Then, you pass your form model into the `form()` function to create a **field tr
 const loginForm = form(loginModel);
 
 // Access fields directly by property name
-loginForm.email
-loginForm.password
+loginForm.email;
+loginForm.password;
 ```
 -->
 
@@ -76,30 +69,30 @@ loginForm.password
 const loginForm = form(loginModel);
 
 // 프로퍼티 이름으로 직접 접근합니다.
-loginForm.email
-loginForm.password
+loginForm.email;
+loginForm.password;
 ```
 
 <!--
-### 3. Bind HTML inputs with `[field]` directive
+### 3. Bind HTML inputs with `[formField]` directive
 -->
 
-### 3. `[field]` 디렉티브로 HTML 입력 필드를 바인딩 합니다.
+### 3. `[formField]` 디렉티브로 HTML 입력 필드를 바인딩 합니다.
 
 <!--
-Next, you bind your HTML inputs to the form using the `[field]` directive, which creates two-way binding between them:
+Next, you bind your HTML inputs to the form using the `[formField]` directive, which creates two-way binding between them:
 
 ```html
-<input type="email" [field]="loginForm.email" />
-<input type="password" [field]="loginForm.password" />
+<input type="email" [formField]="loginForm.email" />
+<input type="password" [formField]="loginForm.password" />
 ```
 
 As a result, user changes (such as typing in the field) automatically updates the form.
 
-NOTE: The `[field]` directive also syncs field state for attributes like `required`, `disabled`, and `readonly` when appropriate.
+NOTE: The `[formField]` directive also syncs field state for attributes like `required`, `disabled`, and `readonly` when appropriate.
 -->
 
-그 다음에는 HTML 입력 엘리먼트에 `[field]` 디렉티브를 양방향 바인딩해서 폼과 연결합니다:
+그 다음에는 HTML 입력 엘리먼트에 `[formField]` 디렉티브를 양방향 바인딩해서 폼과 연결합니다:
 
 ```html
 <input type="email" [field]="loginForm.email" />
@@ -108,7 +101,7 @@ NOTE: The `[field]` directive also syncs field state for attributes like `requir
 
 그러면 사용자가 입력 엘리먼트의 값을 변경하면 폼에 있는 데이터도 자동으로 갱신됩니다.
 
-참고: `[field]` 디렉티브는 `required`, `disabled`, `readonly`와 같은 어트리뷰트 값도 동기화합니다.
+참고: `[formField]` 디렉티브는 `required`, `disabled`, `readonly`와 같은 어트리뷰트 값도 동기화합니다.
 
 <!--
 ### 4. Read field values with `value()`
@@ -120,7 +113,7 @@ NOTE: The `[field]` directive also syncs field state for attributes like `requir
 You can access field state by calling the field as a function. This returns a `FieldState` object containing reactive signals for the field's value, validation status, and interaction state:
 
 ```ts
-loginForm.email() // Returns FieldState with value(), valid(), touched(), etc.
+loginForm.email(); // Returns FieldState with value(), valid(), touched(), etc.
 ```
 
 To read the field's current value, access the `value()` signal:
@@ -140,7 +133,7 @@ const currentEmail = loginForm.email().value();
 이 때 접근하는 `FieldState` 객체에는 필드의 값, 유효성 검사 상태, 상호작용 상태를 표현하는 반응형 시그널이 모두 포함됩니다:
 
 ```ts
-loginForm.email() // value(), valid(), touched() 등 값이 포함된 FieldState를 반환합니다.
+loginForm.email(); // value(), valid(), touched() 등 값이 포함된 FieldState를 반환합니다.
 ```
 
 그래서 입력 필드의 현재 값을 읽으려면 `value()` 시그널을 읽으면 됩니다:
@@ -215,10 +208,10 @@ console.log(loginModel().email); // 'alice@wonderland.com'
 ## 활용 방법
 
 <!--
-The `[field]` directive works with all standard HTML input types. Here are the most common patterns:
+The `[formField]` directive works with all standard HTML input types. Here are the most common patterns:
 -->
 
-`[field]` 디렉티브는 표준 HTML 입력 필드라면 어디에라도 사용할 수 있습니다.
+`[formField]` 디렉티브는 표준 HTML 입력 필드라면 어디에라도 사용할 수 있습니다.
 이렇게 사용하면 됩니다:
 
 <!--
@@ -232,8 +225,8 @@ Text inputs work with various `type` attributes and textareas:
 
 ```html
 <!- Text and email ->
-<input type="text" [field]="form.name" />
-<input type="email" [field]="form.email" />
+<input type="text" [formField]="form.name" />
+<input type="email" [formField]="form.email" />
 ```
 -->
 
@@ -241,8 +234,8 @@ Text inputs work with various `type` attributes and textareas:
 
 ```html
 <!-- 텍스트, 이메일 -->
-<input type="text" [field]="form.name" />
-<input type="email" [field]="form.email" />
+<input type="text" [formField]="form.name" />
+<input type="email" [formField]="form.email" />
 ```
 
 <!--
@@ -256,7 +249,7 @@ Number inputs automatically convert between strings and numbers:
 
 ```html
 <!- Number - automatically converts to number type ->
-<input type="number" [field]="form.age" />
+<input type="number" [formField]="form.age" />
 ```
 -->
 
@@ -264,7 +257,7 @@ Number inputs automatically convert between strings and numbers:
 
 ```html
 <!-- 숫자 - 숫자 타입으로 자동 변환합니다. -->
-<input type="number" [field]="form.age" />
+<input type="number" [formField]="form.age" />
 ```
 
 <!--
@@ -278,8 +271,8 @@ Date inputs store values as `YYYY-MM-DD` strings, and time inputs use `HH:mm` fo
 
 ```html
 <!- Date and time - stores as ISO format strings ->
-<input type="date" [field]="form.eventDate" />
-<input type="time" [field]="form.eventTime" />
+<input type="date" [formField]="form.eventDate" />
+<input type="time" [formField]="form.eventTime" />
 ```
 
 If you need to convert date strings to Date objects, you can do so by passing the field value into `Date()`:
@@ -293,8 +286,8 @@ const dateObject = new Date(form.eventDate().value());
 
 ```html
 <!-- 날짜, 시각 - ISO 문자열 형식으로 값을 저장합니다. -->
-<input type="date" [field]="form.eventDate" />
-<input type="time" [field]="form.eventTime" />
+<input type="date" [formField]="form.eventDate" />
+<input type="time" [formField]="form.eventTime" />
 ```
 
 문자열 타입 날짜를 Date 객체로 변환하려면 `Date()` 생성자를 활용하면 됩니다:
@@ -314,7 +307,7 @@ Textareas work the same way as text inputs:
 
 ```html
 <!- Textarea ->
-<textarea [field]="form.message" rows="4"></textarea>
+<textarea [formField]="form.message" rows="4"></textarea>
 ```
 -->
 
@@ -322,7 +315,7 @@ Textareas work the same way as text inputs:
 
 ```html
 <!-- Textarea -->
-<textarea [field]="form.message" rows="4"></textarea>
+<textarea [formField]="form.message" rows="4"></textarea>
 ```
 
 <!--
@@ -337,7 +330,7 @@ Checkboxes bind to boolean values:
 ```html
 <!- Single checkbox ->
 <label>
-  <input type="checkbox" [field]="form.agreeToTerms" />
+  <input type="checkbox" [formField]="form.agreeToTerms" />
   I agree to the terms
 </label>
 ```
@@ -348,7 +341,7 @@ Checkboxes bind to boolean values:
 ```html
 <!-- 단일 체크박스 -->
 <label>
-  <input type="checkbox" [field]="form.agreeToTerms" />
+  <input type="checkbox" [formField]="form.agreeToTerms" />
   I agree to the terms
 </label>
 ```
@@ -360,15 +353,15 @@ Checkboxes bind to boolean values:
 #### 여러 체크박스
 
 <!--
-For multiple options, create a separate boolean `field` for each:
+For multiple options, create a separate boolean `formField` for each:
 
 ```html
 <label>
-  <input type="checkbox" [field]="form.emailNotifications" />
+  <input type="checkbox" [formField]="form.emailNotifications" />
   Email notifications
 </label>
 <label>
-  <input type="checkbox" [field]="form.smsNotifications" />
+  <input type="checkbox" [formField]="form.smsNotifications" />
   SMS notifications
 </label>
 ```
@@ -378,11 +371,11 @@ For multiple options, create a separate boolean `field` for each:
 
 ```html
 <label>
-  <input type="checkbox" [field]="form.emailNotifications" />
+  <input type="checkbox" [formField]="form.emailNotifications" />
   Email notifications
 </label>
 <label>
-  <input type="checkbox" [field]="form.smsNotifications" />
+  <input type="checkbox" [formField]="form.smsNotifications" />
   SMS notifications
 </label>
 ```
@@ -394,32 +387,32 @@ For multiple options, create a separate boolean `field` for each:
 ### 라디오 버튼
 
 <!--
-Radio buttons work similarly to checkboxes. As long as the radio buttons use the same `[field]` value, Signal Forms will automatically bind the same `name` attribute to all of them:
+Radio buttons work similarly to checkboxes. As long as the radio buttons use the same `[formField]` value, Signal Forms will automatically bind the same `name` attribute to all of them:
 
 ```html
 <label>
-  <input type="radio" value="free" [field]="form.plan" />
+  <input type="radio" value="free" [formField]="form.plan" />
   Free
 </label>
 <label>
-  <input type="radio" value="premium" [field]="form.plan" />
+  <input type="radio" value="premium" [formField]="form.plan" />
   Premium
 </label>
 ```
 
-When a user selects a radio button, the form `field` stores the value from that radio button's `value` attribute. For example, selecting "Premium" sets `form.plan().value()` to `"premium"`.
+When a user selects a radio button, the form `formField` stores the value from that radio button's `value` attribute. For example, selecting "Premium" sets `form.plan().value()` to `"premium"`.
 -->
 
 라디오 버튼은 체크박스와 비슷하게 동작합니다.
-라디오 버튼의 `[field]` 값이 같다면, 시그널 폼은 이 라디오 버튼에 같은 `name` 어트리뷰트 값을 바인딩합니다:
+라디오 버튼의 `[formField]` 값이 같다면, 시그널 폼은 이 라디오 버튼에 같은 `name` 어트리뷰트 값을 바인딩합니다:
 
 ```html
 <label>
-  <input type="radio" value="free" [field]="form.plan" />
+  <input type="radio" value="free" [formField]="form.plan" />
   Free
 </label>
 <label>
-  <input type="radio" value="premium" [field]="form.plan" />
+  <input type="radio" value="premium" [formField]="form.plan" />
   Premium
 </label>
 ```
@@ -436,16 +429,16 @@ When a user selects a radio button, the form `field` stores the value from that 
 <!--
 Select elements work with both static and dynamic options:
 
-```html
+```angular-html
 <!- Static options ->
-<select [field]="form.country">
+<select [formField]="form.country">
   <option value="">Select a country</option>
   <option value="us">United States</option>
   <option value="ca">Canada</option>
 </select>
 
 <!- Dynamic options with @for ->
-<select [field]="form.productId">
+<select [formField]="form.productId">
   <option value="">Select a product</option>
   @for (product of products; track product.id) {
     <option [value]="product.id">{{ product.name }}</option>
@@ -453,7 +446,7 @@ Select elements work with both static and dynamic options:
 </select>
 ```
 
-NOTE: Multiple select (`<select multiple>`) is not supported by the `[field]` directive at this time.
+NOTE: Multiple select (`<select multiple>`) is not supported by the `[formField]` directive at this time.
 -->
 
 셀렉트 엘리먼트는 정적인 옵션과 동적인 옵션을 모두 사용할 수 있습니다:
@@ -467,7 +460,7 @@ NOTE: Multiple select (`<select multiple>`) is not supported by the `[field]` di
 </select>
 
 <!-- @for 를 사용하는 동적 옵션 -->
-<select [field]="form.productId">
+<select [formField]="form.productId">
   <option value="">Select a product</option>
   @for (product of products; track product.id) {
     <option [value]="product.id">{{ product.name }}</option>
@@ -507,8 +500,8 @@ Common validators include:
 You can also customize error messages by passing an options object as the second argument to the validator:
 
 ```ts
-required(schemaPath.email, { message: 'Email is required' });
-email(schemaPath.email, { message: 'Please enter a valid email address' });
+required(schemaPath.email, {message: 'Email is required'});
+email(schemaPath.email, {message: 'Please enter a valid email address'});
 ```
 
 Each form field exposes its validation state through signals. For example, you can check `field().valid()` to see if validation passes, `field().touched()` to see if the user has interacted with it, and `field().errors()` to get the list of validation errors.
@@ -546,8 +539,8 @@ const loginForm = form(loginModel, (schemaPath) => {
 그리고 유효성 검사 함수의 두번째 인자로 옵션 객체를 전달하면서 에러 메시지를 커스터마이징 할 수 있습니다:
 
 ```ts
-required(schemaPath.email, { message: 'Email is required' });
-email(schemaPath.email, { message: 'Please enter a valid email address' });
+required(schemaPath.email, {message: 'Email is required'});
+email(schemaPath.email, {message: 'Please enter a valid email address'});
 ```
 
 개별 폼 필드는 유효성 검사 상태를 시그널로 표현합니다.
@@ -606,6 +599,10 @@ To learn more about Signal Forms and how it works, check out the in-depth guides
 - [Form models](guide/forms/signals/models) - Creating and managing form data with signals
 - [Field state management](guide/forms/signals/field-state-management) - Working with validation state, interaction tracking, and field visibility
 - [Validation](guide/forms/signals/validation) - Built-in validators, custom validation rules, and async validation
+
+<docs-pill-row>
+  <docs-pill title="Modular design with dependency injection" href="essentials/dependency-injection" />
+</docs-pill-row>
 -->
 
 시그널 폼이 동작하는 것을 더 자세하게 알아보려면 이런 내용을 확인해 보세요:
@@ -614,3 +611,7 @@ To learn more about Signal Forms and how it works, check out the in-depth guides
 - [폼 모델](guide/forms/signals/models) - 폼 데이터를 시그널로 생성하고 관리합니다.
 - [필드 상태 관리](guide/forms/signals/field-state-management) - 유효성 검사 결과를 활용하는 방법, 사용자 상호작용 상태 확인, 필드의 가시성을 관리합니다.
 - [유효성 검사](guide/forms/signals/validation) - 기본 유효성 검사 함수, 커스텀 유효성 검사, 비동기 유효성 검사를 다룹니다.
+
+<docs-pill-row>
+  <docs-pill title="의존성 주입을 활용하는 모듈 디자인" href="essentials/dependency-injection" />
+</docs-pill-row>

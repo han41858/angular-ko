@@ -71,7 +71,7 @@ Structural directives can be applied directly on an element by prefixing the dir
 You can use this with `SelectDirective` as follows:
 
 ```angular-html
-<p *select="let data from source">The data is: {{data}}</p>
+<p *select="let data; from: source">The data is: {{ data }}</p>
 ```
 
 This example shows the flexibility of structural directive shorthand syntax, which is sometimes called _microsyntax_.
@@ -80,11 +80,11 @@ When used in this way, only the structural directive and its bindings are applie
 
 ```angular-html
 <!- Shorthand syntax: ->
-<p class="data-view" *select="let data from source">The data is: {{data}}</p>
+<p class="data-view" *select="let data; from: source">The data is: {{ data }}</p>
 
 <!- Long-form syntax: ->
 <ng-template select let-data [selectFrom]="source">
-  <p class="data-view">The data is: {{data}}</p>
+  <p class="data-view">The data is: {{ data }}</p>
 </ng-template>
 ```
 
@@ -103,7 +103,7 @@ Angular는 `<ng-template>` 엘리먼트 사용을 생략할 수 있도록 구조
 그래서 `SelectDirective` 는 이렇게도 사용할 수 있습니다:
 
 ```angular-html
-<p *select="let data from source">The data is: {{data}}</p>
+<p *select="let data; from: source">The data is: {{ data }}</p>
 ```
 
 이 방식은 구조 디렉티브를 유연하게 사용하는 단축 문법이며, _마이크로 문법(microsyntax)_ 라고도 합니다.
@@ -118,7 +118,7 @@ Angular는 `<ng-template>` 엘리먼트 사용을 생략할 수 있도록 구조
 
 <!-- 긴 형식의 문법: -->
 <ng-template select let-data [selectFrom]="source">
-  <p class="data-view">The data is: {{data}}</p>
+  <p class="data-view">The data is: {{ data }}</p>
 </ng-template>
 ```
 
@@ -142,7 +142,7 @@ Angular는 `<ng-template>` 엘리먼트 사용을 생략할 수 있도록 구조
 ## 구조 디렉티브는 엘리먼트에 하나씩
 
 <!--
-You can only apply one structural directive per element when using the shorthand syntax. This is because there is only one `<ng-template>` element onto which that directive gets unwrapped. Multiple directives would require multiple nested `<ng-template>`, and it's unclear which directive should be first. `<ng-container>` can be used when to create wrapper layers when multiple structural directives need to be applied around the same physical DOM element or component, which allows the user to define the nested structure.
+You can only apply one structural directive per element when using the shorthand syntax. This is because there is only one `<ng-template>` element onto which that directive gets unwrapped. Multiple directives would require multiple nested `<ng-template>`, and it's unclear which directive should be first. `<ng-container>` can be used to create wrapper layers when multiple structural directives need to be applied around the same physical DOM element or component, which allows the user to define the nested structure.
 -->
 
 단축 문법을 사용하는 경우에 구조 디렉티브는 엘리먼트에 하나만 사용할 수 있습니다.
@@ -170,10 +170,14 @@ ng generate directive select
 Angular creates the directive class and specifies the CSS selector, `[select]`, that identifies the directive in a template.
 </docs-step>
 <docs-step title="Make the directive structural">
-Import `TemplateRef`, and `ViewContainerRef`. Inject `TemplateRef` and `ViewContainerRef` in the directive as private properties.
+Import `TemplateRef`, `ViewContainerRef`, and `input`. Inject `TemplateRef` and `ViewContainerRef` in the directive as private properties.
 
 ```ts
-import {Directive, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Directive, TemplateRef, ViewContainerRef, inject, input} from '@angular/core';
+
+export interface DataSource<T> {
+  load(): Promise<T>;
+}
 
 @Directive({
   selector: '[select]',
@@ -182,7 +186,6 @@ export class SelectDirective {
   private templateRef = inject(TemplateRef);
   private viewContainerRef = inject(ViewContainerRef);
 }
-
 ```
 
 </docs-step>
@@ -192,8 +195,7 @@ Add a `selectFrom` `input()` property.
 ```ts
 export class SelectDirective {
   // ...
-
-  selectFrom = input.required<DataSource>();
+  selectFrom = input.required<DataSource<unknown>>();
 }
 ```
 
@@ -204,9 +206,8 @@ With `SelectDirective` now scaffolded as a structural directive with its input, 
 ```ts
 export class SelectDirective {
   // ...
-
   async ngOnInit() {
-    const data = await this.selectFrom.load();
+    const data = await this.selectFrom().load();
     this.viewContainerRef.createEmbeddedView(this.templateRef, {
       // Create the embedded view with a context object that contains
       // the data via the key `$implicit`.
@@ -235,11 +236,15 @@ ng generate directive select
 명령을 실행하면 Angular가 디렉티브 클래스를 생성하고, 템플릿에 사용하는 CSS 셀렉터를 `[select]` 라고 지정합니다.
 </docs-step>
 <docs-step title="디렉티브 구조 생성하기">
-`TemplateRef`, `ViewContainerRef` 심볼을 로드합니다.
+`TemplateRef`, `ViewContainerRef`, `inject` 심볼을 로드합니다.
 그리고 이 심볼들을 private 프로퍼티로 의존성 주입합니다.
 
 ```ts
-import {Directive, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Directive, TemplateRef, ViewContainerRef, inject, input} from '@angular/core';
+
+export interface DataSource<T> {
+  load(): Promise<T>;
+}
 
 @Directive({
   selector: '[select]',
@@ -248,7 +253,6 @@ export class SelectDirective {
   private templateRef = inject(TemplateRef);
   private viewContainerRef = inject(ViewContainerRef);
 }
-
 ```
 
 </docs-step>
@@ -258,8 +262,7 @@ export class SelectDirective {
 ```ts
 export class SelectDirective {
   // ...
-
-  selectFrom = input.required<DataSource>();
+  selectFrom = input.required<DataSource<unknown>>();
 }
 ```
 
@@ -270,9 +273,8 @@ export class SelectDirective {
 ```ts
 export class SelectDirective {
   // ...
-
   async ngOnInit() {
-    const data = await this.selectFrom.load();
+    const data = await this.selectFrom().load();
     this.viewContainerRef.createEmbeddedView(this.templateRef, {
       // 받아온 데이터를 `$implicit` 키에 담아 임베디드 뷰를 생성합니다.
       $implicit: data,
@@ -280,6 +282,7 @@ export class SelectDirective {
   }
 }
 ```
+
 
 </docs-step>
 </docs-workflow>
@@ -295,11 +298,9 @@ export class SelectDirective {
 <!--
 When you write your own structural directives, use the following syntax:
 
-<docs-code hideCopy language="typescript">
-
-_:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_"
-
-</docs-code>
+```ts {hideCopy}
+_: prefix = "( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_";
+```
 
 The following patterns describe each portion of the structural directive grammar:
 
@@ -320,11 +321,10 @@ let = "let" :local "=" :export ";"?
 
 구조 디렉티브에는 이런 문법을 사용합니다:
 
-<docs-code hideCopy language="typescript">
+```ts {hideCopy}
+_: prefix = "( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_";
+```
 
-_:prefix="( :let | :expression ) (';' | ',')? ( :let | :as | :keyExp )_"
-
-</docs-code>
 
 구조 디렉티브 문법 각각의 역할은 이렇습니다:
 

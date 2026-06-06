@@ -7,44 +7,35 @@
  */
 
 import {Tokens} from 'marked';
-import {getHeaderId} from '../state.mjs';
 import {AdevDocsRenderer} from '../renderer.mjs';
+import {getIdFromHeading} from '../../heading.mjs';
 
-export function headingRender(this: AdevDocsRenderer, {depth, tokens}: Tokens.Heading): string {
-  const text = this?.parser.parseInline(tokens);
-  return formatHeading({text, depth}, this.context.markdownFilePath);
-}
-
-export function formatHeading(
-  {text, depth}: {text: string; depth: number},
-  markdownFilePath?: string,
+export function headingRender(
+  this: AdevDocsRenderer,
+  {depth, tokens, text: headingText, raw}: Tokens.Heading,
 ): string {
+  this.context.disableAutoLinking = true;
+  const parsedText = this?.parser.parseInline(tokens, this);
+  this.context.disableAutoLinking = false;
   if (depth === 1) {
     return `
     <header class="docs-header">
       <docs-breadcrumb></docs-breadcrumb>
-
-      ${getPageTitle(text, markdownFilePath)}
+      ${getPageTitle(parsedText, this.context.markdownFilePath)}
     </header>
     `;
   }
 
-  // Nested anchor elements are invalid in HTML
-  // They might happen when we have a code block in a heading
-  // regex aren't perfect for that but this one should be "good enough"
-  const regex = /<a\s+(?:[^>]*?\s+)?href.*?>(.*?)<\/a>/gi;
-  const anchorLessText = text.replace(regex, '$1');
+  const link = getIdFromHeading(headingText);
 
-  // extract the extended markdown heading id
-  // ex:  ## MyHeading {# myId}
-  const customIdRegex = /{#\s*([\w-]+)\s*}/g;
-  const customId = customIdRegex.exec(anchorLessText)?.[1];
-  const link = customId ?? getHeaderId(anchorLessText);
-  const label = anchorLessText.replace(/`(.*?)`/g, '<code>$1</code>').replace(customIdRegex, '');
+  // Replace code backticks and remove custom ID syntax from the displayed label
+  let label = parsedText.replace(/`(.*?)`/g, '<code>$1</code>');
+  label = label.replace(/{#\s*[\w-]+\s*}/g, '').trim();
+  const normalizedLabel = label.replace(/<[^>]+>/g, '').replace(/"/g, '&quot;');
 
   return `
   <h${depth} id="${link}">
-    <a href="#${link}" class="docs-anchor" tabindex="-1" aria-label="Link to ${label}">${label}</a>
+    <a href="#${link}" class="docs-anchor" tabindex="-1" aria-label="Link to ${normalizedLabel}">${label}</a>
   </h${depth}>
   `;
 }

@@ -16,13 +16,13 @@ Every component must have:
 
 You provide Angular-specific information for a component by adding a `@Component` [decorator](https://www.typescriptlang.org/docs/handbook/decorators.html) on top of the TypeScript class:
 
-<docs-code language="angular-ts" highlight="[1, 2, 3, 4]">
+```angular-ts {highlight: [1, 2, 3, 4]}
 @Component({
   selector: 'profile-photo',
-  template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 For full details on writing Angular templates, including data binding, event handling, and control flow, see the [Templates guide](guide/templates).
 
@@ -30,29 +30,33 @@ The object passed to the `@Component` decorator is called the component's **meta
 
 Components can optionally include a list of CSS styles that apply to that component's DOM:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight: [4]}
 @Component({
   selector: 'profile-photo',
-  template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
-  styles: `img { border-radius: 50%; }`,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
+  styles: `
+    img {
+      border-radius: 50%;
+    }
+  `,
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 By default, a component's styles only affect elements defined in that component's template. See [Styling Components](guide/components/styling) for details on Angular's approach to styling.
 
 You can alternatively choose to write your template and styles in separate files:
 
-<docs-code language="angular-ts" highlight="[3, 4]">
+```ts {highlight: [3,4]}
 @Component({
   selector: 'profile-photo',
   templateUrl: 'profile-photo.html',
   styleUrl: 'profile-photo.css',
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
-This can help separate the concerns of _presentation_ from _behavior_ in your project. You can choose one approach for your entire project, or you decide which to use for each component.
+This can help separate the concerns of _presentation_ from _behavior_ in your project. You can choose one approach for your entire project, or you can decide which to use for each component.
 
 Both `templateUrl` and `styleUrl` are relative to the directory in which the component resides.
 -->
@@ -66,13 +70,13 @@ Both `templateUrl` and `styleUrl` are relative to the directory in which the com
 
 TypeScript 클레스 위에 `@Component` [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html)를 붙이면 이 클래스가 Angular 컴포넌트라고 지정할 수 있습니다.
 
-<docs-code language="angular-ts" highlight="[1, 2, 3, 4]">
+```angular-ts {highlight: [1, 2, 3, 4]}
 @Component({
   selector: 'profile-photo',
-  template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 데이터 바인딩, 이벤트 처리, 컨트롤 흐름 제어 등 Angular 템플릿이 제공하는 기능을 자세하게 알아보려면 [템플릿 가이드](guide/templates) 문서를 참고하세요.
 
@@ -81,28 +85,32 @@ export class ProfilePhoto { }
 
 컴포넌트는 컴포넌트 DOM에 적용될 CSS 스타일을 옵션으로 지정할 수 있습니다:
 
-<docs-code language="angular-ts" highlight="[4]">
+```angular-ts {highlight: [4]}
 @Component({
   selector: 'profile-photo',
-  template: `<img src="profile-photo.jpg" alt="Your profile photo">`,
-  styles: `img { border-radius: 50%; }`,
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
+  styles: `
+    img {
+      border-radius: 50%;
+    }
+  `,
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 기본적으로 컴포넌트의 스타일은 컴포넌트 템플릿에 존재하는 엘리먼트에만 적용됩니다.
 스타일이 적용되는 구조를 자세하게 알아보려면 [컴포넌트 스타일 지정하기](guide/components/styling) 문서를 참고하세요.
 
 아니면 별도 스타일 파일을 만들어서 템플릿에 적용할 수도 있습니다:
 
-<docs-code language="angular-ts" highlight="[3, 4]">
+```ts {highlight: [3,4]}
 @Component({
   selector: 'profile-photo',
   templateUrl: 'profile-photo.html',
   styleUrl: 'profile-photo.css',
 })
-export class ProfilePhoto { }
-</docs-code>
+export class ProfilePhoto {}
+```
 
 이렇게 구성하면 스타일 파일에서는 컴포넌트의 스타일만 신경쓰면 되고 TypeScript 파일에서는 컴포넌트의 동작만 신경쓸 수 있어서 좋습니다.
 어떤 방식을 선택하든 전체 프로젝트에 적용할 수도 있고, 개별 컴포넌트마다 적용할 수도 있습니다.
@@ -133,12 +141,12 @@ import {ProfilePhoto} from './profile-photo';
   imports: [ProfilePhoto],
   /* ... */
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
-By default, Angular components are _standalone_, meaning that you can directly add them to the `imports` array of other components. Components created with an earlier version of Angular may instead specify `standalone: false` in their `@Component` decorator. For these components, you instead import the `NgModule` in which the component is defined. See the full [`NgModule` guide](guide/ngmodules) for details.
+By default, Angular components are _standalone_, meaning that you can directly add them to the `imports` array of other components. Components created with an earlier version of Angular may instead specify `standalone: false` in their `@Component` decorator. For these components, you instead import the `NgModule` in which the component is defined. See the full [`NgModule` guide](guide/ngmodules/overview) for details.
 
-Important: In Angular versions before 19.0.0, the `standalone` option defaults to `false`.
+IMPORTANT: In Angular versions before 19.0.0, the `standalone` option defaults to `false`.
 -->
 컴포넌트나 [디렉티브](guide/directives), [파이프](guide/templates/pipes)를 사용하려면 `@Component` 데코레이터의 `imports` 배열에 로드해야 합니다.
 
@@ -150,14 +158,14 @@ import {ProfilePhoto} from './profile-photo';
   imports: [ProfilePhoto],
   /* ... */
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 기본적으로 Angular 컴포넌트는 _독립(standalone) 컴포넌트_ 입니다.
 그래서 컴포넌트의 `imports` 배열에 다른 컴포넌트를 자유롭게 추가할 수 있습니다.
 이전 방식으로 만든 컴포넌트는 `Component` 데코레이터에 `standalone: false`를 지정할 수 있습니다.
 이런 종류의 컴포넌트는 컴포넌트를 등록할 때 `NgModule`을 사용해야 합니다.
-자세한 내용은 [`NgModule` 가이드](guide/ngmodules) 문서를 참고하세요.
+자세한 내용은 [`NgModule` 가이드](guide/ngmodules/overview) 문서를 참고하세요.
 
 중요: Angular 19.0.0 이전 버전에서 `standalone` 옵션의 기본값은 `false` 입니다.
 
@@ -170,30 +178,30 @@ export class UserProfile { }
 <!--
 Every component defines a [CSS selector](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors):
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: 'profile-photo',
   ...
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 See [Component Selectors](guide/components/selectors) for details about which types of selectors Angular supports and guidance on choosing a selector.
 
 You show a component by creating a matching HTML element in the template of _other_ components:
 
-<docs-code language="angular-ts" highlight="[8]">
+```angular-ts {highlight: [8]}
 @Component({
   selector: 'profile-photo',
 })
-export class ProfilePhoto { }
+export class ProfilePhoto {}
 
 @Component({
-imports: [ProfilePhoto],
-template: `<profile-photo />`
+  imports: [ProfilePhoto],
+  template: `<profile-photo />`,
 })
-export class UserProfile { }
-</docs-code>
+export class UserProfile {}
+```
 
 Angular creates an instance of the component for every matching HTML element it encounters. The DOM element that matches a component's selector is referred to as that component's **host element**. The contents of a component's template are rendered inside its host element.
 
@@ -204,30 +212,30 @@ In composing components in this way, **you can think of your Angular application
 -->
 컴포넌트에는 [CSS 셀렉터](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors)를 지정해야 합니다:
 
-<docs-code language="angular-ts" highlight="[2]">
+```angular-ts {highlight: [2]}
 @Component({
   selector: 'profile-photo',
   ...
 })
 export class ProfilePhoto { }
-</docs-code>
+```
 
 Angular가 지원하는 셀렉터 종류와 셀렉터 선택에 대해 자세하게 알아보려면 [컴포넌트 셀렉터](guide/components/selectors) 문서를 참고하세요.
 
 HTML 엘리먼트 중 컴포넌트 셀렉터와 매칭되는 곳에 컴포넌트가 표시됩니다:
 
-<docs-code language="angular-ts" highlight="[8]">
+```angular-ts {highlight: [8]}
 @Component({
   selector: 'profile-photo',
 })
-export class ProfilePhoto { }
+export class ProfilePhoto {}
 
 @Component({
-imports: [ProfilePhoto],
-template: `<profile-photo />`
+  imports: [ProfilePhoto],
+  template: `<profile-photo />`,
 })
-export class UserProfile { }
-</docs-code>
+export class UserProfile {}
+```
 
 Angular는 컴포넌트 셀렉터와 매칭되는 모든 HTML 엘리먼트에 컴포넌트 인스턴스를 생성합니다.
 이 때 컴포넌트 셀렉터와 매칭된 DOM 엘리먼트를 컴포넌트의 **호스트 엘리먼트(host element)** 라고 합니다.

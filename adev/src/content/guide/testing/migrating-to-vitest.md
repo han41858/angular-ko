@@ -69,16 +69,16 @@ You can now delete `karma.conf.js` and `src/test.ts` from your project and unins
 
 <docs-code-multifile>
   <docs-code header="npm" language="shell">
-    npm uninstall karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter
+    npm uninstall karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter jasmine-core
   </docs-code>
   <docs-code header="yarn" language="shell">
-    yarn remove karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter
+    yarn remove karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter jasmine-core
   </docs-code>
   <docs-code header="pnpm" language="shell">
-    pnpm remove karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter
+    pnpm remove karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter jasmine-core
   </docs-code>
   <docs-code header="bun" language="shell">
-    bun remove karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter
+    bun remove karma karma-chrome-launcher karma-coverage karma-jasmine karma-jasmine-html-reporter jasmine-core
   </docs-code>
 </docs-code-multifile>
 
@@ -92,7 +92,7 @@ Choose one of the following browser providers based on your needs:
 
 - **Playwright**: `@vitest/browser-playwright` for Chromium, Firefox, and WebKit.
 - **WebdriverIO**: `@vitest/browser-webdriverio` for Chrome, Firefox, Safari, and Edge.
-- **Preview**: `@vitest/browser-preview` for Webcontainer environments (like StackBlitz).
+- **Preview**: `@vitest/browser-preview` for WebContainer environments (like StackBlitz).
 
 <docs-code-multifile>
   <docs-code header="npm" language="shell">
@@ -181,6 +181,7 @@ You can use the following options to customize the schematic's behavior:
 | `--file-suffix <suffix>` | Specify a different file suffix for test files. <br> Example: `--file-suffix=.test.ts`              |
 | `--add-imports`          | Add explicit `vitest` imports if you have disabled globals in your Vitest configuration.            |
 | `--verbose`              | See detailed logging of all transformations applied.                                                |
+| `--browser-mode`         | If you intend to run the tests in browser mode.                                                     |
 
 ### After migrating
 
@@ -211,7 +212,7 @@ Provide a direct path to a Vitest configuration file in your `angular.json`:
       "architect": {
         "test": {
           "builder": "@angular/build:unit-test",
-          "options": { "runnerConfig": "vitest.config.ts" }
+          "options": {"runnerConfig": "vitest.config.ts"}
         }
       }
     }
@@ -221,6 +222,14 @@ Provide a direct path to a Vitest configuration file in your `angular.json`:
 
 **2. Automatic search for base configuration:**
 If you set `runnerConfig` to `true`, the builder will automatically search for a shared `vitest-base.config.*` file in your project and workspace roots.
+
+## `zone.js` Vitest patch
+
+In order to use functions like `fakeAsync`, `flush` or `waitForAsync`, or to enable your existing tests to work with them, you can add `zone.js/plugins/vitest-patch` to your test target polyfills in `angular.json`.
+
+Regardless, we strongly recommend you start planning to convert your existing test suites to native `async` and Vitest fake timers, since this is the established approach.
+
+See [an example here](/guide/testing/components-scenarios#async-test-with-a-vitest-fake-timers) for fake timers usage with Vitest.
 
 ## Bug reports
 

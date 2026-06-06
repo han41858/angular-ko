@@ -26,27 +26,29 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 ### 지원하는 타입
 
 <!--
-| Literal type    | Example values                  |
-| --------------- | ------------------------------- |
-| String          | `'Hello'`, `"World"`            |
-| Boolean         | `true`, `false`                 |
-| Number          | `123`, `3.14`                   |
-| Object          | `{name: 'Alice'}`               |
-| Array           | `['Onion', 'Cheese', 'Garlic']` |
-| null            | `null`                          |
-| Template string | `` `Hello ${name}` ``           |
-| RegExp          | `/\d+/`                         |
+| Literal type           | Example values                  |
+| ---------------------- | ------------------------------- |
+| String                 | `'Hello'`, `"World"`            |
+| Boolean                | `true`, `false`                 |
+| Number                 | `123`, `3.14`                   |
+| Object                 | `{name: 'Alice'}`               |
+| Array                  | `['Onion', 'Cheese', 'Garlic']` |
+| null                   | `null`                          |
+| RegExp                 | `/\d+/`                         |
+| Template string        | `` `Hello ${name}` ``           |
+| Tagged template string | `` tag`Hello ${name}` ``        |
 -->
-| 변수 타입   | 예시                              |
-|---------|---------------------------------|
-| 문자열     | `'Hello'`, `"World"`            |
-| 불리언     | `true`, `false`                 |
-| 숫자      | `123`, `3.14`                   |
-| 객체      | `{name: 'Alice'}`               |
-| 배열      | `['Onion', 'Cheese', 'Garlic']` |
-| null    | `null`                          |
-| 템플릿 문자열 | `` `Hello ${name}` ``           |
-| 정규표현식   | `/\d+/`                         |
+| 변수 타입       | 예시                              |
+|-------------|---------------------------------|
+| 문자열         | `'Hello'`, `"World"`            |
+| 불리언         | `true`, `false`                 |
+| 숫자          | `123`, `3.14`                   |
+| 객체          | `{name: 'Alice'}`               |
+| 배열          | `['Onion', 'Cheese', 'Garlic']` |
+| null        | `null`                          |
+| 정규표현식       | `/\d+/`                         |
+| 템플릿 문자열     | `` `Hello ${name}` ``           |
+| 태그된 템플릿 문자열 | `` tag`Hello ${name}` ``        |
 
 
 <!--
@@ -132,6 +134,10 @@ Angular supports the following operators from standard JavaScript.
 | Unary Negation                | `-x`                                           |
 | Unary Plus                    | `+y`                                           |
 | Property Accessor             | `person['name']`                               |
+| typeof                        | `typeof 42`                                    |
+| void                          | `void 1`                                       |
+| in                            | `'model' in car`                               |
+| instanceof                    | `car instanceof Automobile`                    |
 | Assignment                    | `a = b`                                        |
 | Addition Assignment           | `a += b`                                       |
 | Subtraction Assignment        | `a -= b`                                       |
@@ -142,6 +148,9 @@ Angular supports the following operators from standard JavaScript.
 | Logical AND Assignment        | `a &&= b`                                      |
 | Logical OR Assignment         | `a \|\|= b`                                    |
 | Nullish Coalescing Assignment | `a ??= b`                                      |
+| Spread in object literals     | `{...obj, foo: 'bar'}`                         |
+| Spread in array literals      | `[...arr, 1, 2, 3]`                            |
+| Rest in function calls        | `fn(...args)`                                  |
 
 Angular expressions additionally also support the following non-standard operators:
 
@@ -173,6 +182,10 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | 단항 마이너스                     | `-x`                                           |
 | 단항 플러스                      | `+y`                                           |
 | 프로퍼티 접근                     | `person['name']`                               |
+| typeof                      | `typeof 42`                                    |
+| void                        | `void 1`                                       |
+| in                          | `'model' in car`                               |
+| instanceof                  | `car instanceof Automobile`                    |
 | 할당                          | `a = b`                                        |
 | 더하기 할당                      | `a += b`                                       |
 | 빼기 할당                       | `a -= b`                                       |
@@ -183,6 +196,9 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | AND 논리 연산 할당                | `a &&= b`                                      |
 | OR 논리 연산 할당                 | `a \|\|= b`                                    |
 | Null 병합 할당                  | `a ??= b`                                      |
+| 객체 분해                       | `{...obj, foo: 'bar'}`                         |
+| 배열 분해                       | `[...arr, 1, 2, 3]`                            |
+| 함수 실행시 인자 분해                | `fn(...args)`                                  |
 
 그리고 표준 JavaScript 연산자 외에 다음과 같은 연산자도 지원합니다:
 
@@ -207,7 +223,6 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | Object destructuring  | `const { name } = person`         |
 | Array destructuring   | `const [firstItem] = items`       |
 | Comma operator        | `x = (x++, x)`                    |
-| instanceof            | `car instanceof Automobile`       |
 | new                   | `new Car()`                       |
 -->
 | 연산자        | 예시                            |
@@ -216,7 +231,6 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | 객체 분해 할당   | `const { name } = person`     |
 | 배열 분해 할당   | `const [firstItem] = items`   |
 | 쉼표 연산자     | `x = (x++, x)`                |
-| instanceof | `car instanceof Automobile`   |
 | new        | `new Car()`                   |
 
 

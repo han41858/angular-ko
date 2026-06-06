@@ -27,7 +27,7 @@ export function getCliRenderable(command: CliCommand): CliCommandRenderable {
     }),
     cards: getCliCardsRenderable(command),
     argumentsLabel: getArgumentsLabel(command),
-    hasOptions: getOptions(command).length > 0,
+    optionsLabel: getOptionsLabel(command),
   };
 }
 
@@ -53,11 +53,14 @@ export function getCliCardsRenderable(command: CliCommand): CliCardRenderable[] 
   return cards;
 }
 
+// Rewrite absolute angular.dev hrefs to root-relative so links stay in-site.
+const angularDevHrefRegex = /(href=["'])https?:\/\/angular\.dev\//g;
+
 function getRenderableOptions(items: CliOption[]): CliOptionRenderable[] {
   return items.map((option) => ({
     ...option,
     deprecated: option.deprecated ? {version: undefined} : undefined,
-    description: marked.parse(option.description) as string,
+    description: (marked.parse(option.description) as string).replace(angularDevHrefRegex, '$1/'),
   }));
 }
 
@@ -66,7 +69,12 @@ function getArgumentsLabel(command: CliCommand): string {
   if (args.length === 0) {
     return '';
   }
-  return command.command.replace(`${command.name} `, '');
+  const label = command.command.replace(/^ng\s+/, '').replace(`${command.name} `, '');
+  return ` ${label}`;
+}
+
+function getOptionsLabel(command: CliCommand): string {
+  return getOptions(command).length > 0 ? ' [options]' : '';
 }
 
 function getArgs(command: CliCommand): CliOption[] {

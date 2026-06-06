@@ -13,14 +13,16 @@ import {trustedHTMLFromString} from '../util/security/trusted_types';
 import {getInertBodyHelper, InertBodyHelper} from './inert_body';
 import {_sanitizeUrl} from './url_sanitizer';
 
-function tagSet(tags: string): {[k: string]: boolean} {
-  const res: {[k: string]: boolean} = {};
+type BooleanRecord = Record<string, boolean>;
+
+function tagSet(tags: string): BooleanRecord {
+  const res: BooleanRecord = {};
   for (const t of tags.split(',')) res[t] = true;
   return res;
 }
 
-function merge(...sets: {[k: string]: boolean}[]): {[k: string]: boolean} {
-  const res: {[k: string]: boolean} = {};
+function merge(...sets: BooleanRecord[]): BooleanRecord {
+  const res: BooleanRecord = {};
   for (const s of sets) {
     for (const v in s) {
       if (s.hasOwnProperty(v)) res[v] = true;
@@ -66,7 +68,7 @@ const INLINE_ELEMENTS = merge(
   ),
 );
 
-export const VALID_ELEMENTS: {[k: string]: boolean} = merge(
+export const VALID_ELEMENTS: BooleanRecord = merge(
   VOID_ELEMENTS,
   BLOCK_ELEMENTS,
   INLINE_ELEMENTS,
@@ -74,7 +76,7 @@ export const VALID_ELEMENTS: {[k: string]: boolean} = merge(
 );
 
 // Attributes that have href and hence need to be sanitized
-export const URI_ATTRS: {[k: string]: boolean} = tagSet(
+const URI_ATTRS: BooleanRecord = tagSet(
   'background,cite,href,itemtype,longdesc,poster,src,xlink:href',
 );
 
@@ -105,7 +107,7 @@ const ARIA_ATTRS = tagSet(
 // can be sanitized, but they increase security surface area without a legitimate use case, so they
 // are left out here.
 
-export const VALID_ATTRS: {[k: string]: boolean} = merge(URI_ATTRS, HTML_ATTRS, ARIA_ATTRS);
+export const VALID_ATTRS: BooleanRecord = merge(URI_ATTRS, HTML_ATTRS, ARIA_ATTRS);
 
 // Elements whose content should not be traversed/preserved, if the elements themselves are invalid.
 //

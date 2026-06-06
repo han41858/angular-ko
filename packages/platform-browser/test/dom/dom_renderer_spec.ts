@@ -5,16 +5,17 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
+import {ChangeDetectionStrategy} from '@angular/compiler';
 import {Component, Renderer2, ViewEncapsulation} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {isNode} from '@angular/private/testing';
+import {expect} from '@angular/private/testing/matchers';
 import {By} from '../../src/dom/debug/by';
 import {
   addBaseHrefToCssSourceMap,
   NAMESPACE_URIS,
   REMOVE_STYLES_ON_COMPONENT_DESTROY,
 } from '../../src/dom/dom_renderer';
-import {expect} from '@angular/private/testing/matchers';
-import {isNode} from '@angular/private/testing';
 
 describe('DefaultDomRendererV2', () => {
   if (isNode) {
@@ -315,12 +316,9 @@ describe('DefaultDomRendererV2', () => {
     });
 
     it('should create MathML elements', () => {
-      // MathMLElement is fairly recent and doesn't exist on our Saucelabs test environments
-      if (typeof MathMLElement !== 'undefined') {
-        expect(
-          document.createElementNS(NAMESPACE_URIS['math'], 'math') instanceof MathMLElement,
-        ).toBeTrue();
-      }
+      expect(
+        document.createElementNS(NAMESPACE_URIS['math'], 'math') instanceof MathMLElement,
+      ).toBeTrue();
     });
   });
 
@@ -431,13 +429,14 @@ async function styleCount(
 
 @Component({
   selector: 'cmp-emulated',
-  template: `
-    <div class="emulated"></div>`,
+  template: ` <div class="emulated"></div>`,
   styles: [
-    `.emulated {
-      background-color: blue;
-      color: blue;
-    }`,
+    `
+      .emulated {
+        background-color: blue;
+        color: blue;
+      }
+    `,
   ],
   encapsulation: ViewEncapsulation.Emulated,
   standalone: false,
@@ -446,13 +445,14 @@ class CmpEncapsulationEmulated {}
 
 @Component({
   selector: 'cmp-none',
-  template: `
-    <div class="none"></div>`,
+  template: ` <div class="none"></div>`,
   styles: [
-    `.none {
-      background-color: lime;
-      color: lime;
-    }`,
+    `
+      .none {
+        background-color: lime;
+        color: lime;
+      }
+    `,
   ],
   encapsulation: ViewEncapsulation.None,
   standalone: false,
@@ -461,15 +461,16 @@ class CmpEncapsulationNone {}
 
 @Component({
   selector: 'cmp-none',
-  template: `
-    <div class="none"></div>`,
+  template: ` <div class="none"></div>`,
   styles: [
-    `.none {
-      background-color: lime;
-      color: lime;
-    }
+    `
+      .none {
+        background-color: lime;
+        color: lime;
+      }
 
-    /*# sourceMappingURL=cmp-none.css.map */`,
+      /*# sourceMappingURL=cmp-none.css.map */
+    `,
   ],
   encapsulation: ViewEncapsulation.None,
   standalone: false,
@@ -478,12 +479,13 @@ class CmpEncapsulationNoneWithSourceMap {}
 
 @Component({
   selector: 'cmp-shadow',
-  template: `
-    <div class="shadow"></div>`,
+  template: ` <div class="shadow"></div>`,
   styles: [
-    `.shadow {
-      color: red;
-    }`,
+    `
+      .shadow {
+        color: red;
+      }
+    `,
   ],
   encapsulation: ViewEncapsulation.ShadowDom,
   standalone: false,
@@ -492,15 +494,16 @@ class CmpEncapsulationShadow {}
 
 @Component({
   selector: 'cmp-shadow-children',
-  template: `
-    <div class="shadow">
-      <cmp-emulated></cmp-emulated>
-      <cmp-none></cmp-none>
-    </div>`,
+  template: ` <div class="shadow">
+    <cmp-emulated></cmp-emulated>
+    <cmp-none></cmp-none>
+  </div>`,
   styles: [
-    `.shadow {
-      color: red;
-    }`,
+    `
+      .shadow {
+        color: red;
+      }
+    `,
   ],
   encapsulation: ViewEncapsulation.ExperimentalIsolatedShadowDom,
   standalone: false,
@@ -515,15 +518,15 @@ class CmpEncapsulationIsolatedShadowWithChildren {}
     <cmp-none></cmp-none>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class SomeApp {}
 
 @Component({
   selector: 'shadow-parent-app-with-children',
-  template: `
-    <cmp-shadow-children></cmp-shadow-children>
-  `,
+  template: ` <cmp-shadow-children></cmp-shadow-children> `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class IsolatedShadowComponentParentApp {}
 
@@ -531,6 +534,7 @@ export class IsolatedShadowComponentParentApp {}
   selector: 'test-cmp',
   template: '',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestCmp {
   constructor(public renderer: Renderer2) {}
@@ -546,6 +550,7 @@ class TestCmp {
     <cmp-none *ngIf="!componentTwoInstanceHidden && !showEmulatedComponents"></cmp-none>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class SomeAppForCleanUp {
   componentOneInstanceHidden = false;

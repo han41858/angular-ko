@@ -1,4 +1,4 @@
-load("//devtools/tools:defaults.bzl", "ng_project", "ng_web_test_suite", "sass_binary", "ts_project", "ts_test_library")
+load("//devtools/tools:defaults.bzl", "ng_project", "sass_binary", "ts_project", "ts_test_library", "zoneless_web_test_suite")
 
 package(default_visibility = ["//:__subpackages__"])
 
@@ -24,9 +24,9 @@ ng_project(
         "//:node_modules/@angular/common",
         "//:node_modules/@angular/core",
         "//:node_modules/@angular/material",
-        "//:node_modules/@types/d3",
-        "//:node_modules/d3",
         "//:node_modules/rxjs",
+        "//devtools:node_modules/@types/d3",
+        "//devtools:node_modules/d3",
         "//devtools/projects/ng-devtools/src/lib/devtools-tabs/injector-tree/injector-providers",
         "//devtools/projects/ng-devtools/src/lib/shared/docs-ref-button",
         "//devtools/projects/ng-devtools/src/lib/shared/split",
@@ -36,7 +36,7 @@ ng_project(
     ],
 )
 
-ng_web_test_suite(
+zoneless_web_test_suite(
     name = "test",
     deps = [
         ":injector_tree_fns_test_lib",

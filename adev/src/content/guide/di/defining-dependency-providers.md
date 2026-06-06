@@ -7,7 +7,7 @@
 <!--
 Angular provides two ways to make services available for injection:
 
-1. **Automatic provision** - Using `providedIn` in the `@Injectable` decorator or by providing a factory in the `InjectionToken` configuration
+1. **Automatic provision** - Using `providedIn` in the `@Injectable` decorator, the [`@Service`](guide/di/creating-and-using-services#using-the-service-decorator) decorator, or by providing a factory in the `InjectionToken` configuration
 2. **Manual provision** - Using the `providers` array in components, directives, routes, or application config
 
 In the [previous guide](/guide/di/creating-and-using-services), you learned how to create services using `providedIn: 'root'`, which handles most common use cases. This guide explores additional patterns for both automatic and manual provider configuration.
@@ -15,7 +15,7 @@ In the [previous guide](/guide/di/creating-and-using-services), you learned how 
 
 Angular가 서비스를 의존성 주입 가능하게 만드는 방식은 두 가지입니다:
 
-1. **자동 프로비전(provision)** - `@Injectable` 데코레이터에 `providedIn`을 지정하거나, `InjectionToken` 설정에서 팩토리를 사용하는 경우
+1. **자동 프로비전(provision)** - `@Injectable` 데코레이터에 `providedIn`을 지정하거나, [`@Service`](guide/di/creating-and-using-services#using-the-service-decorator) 데코레이터를 지정하는 경우, `InjectionToken` 설정에서 팩토리를 사용하는 경우
 2. **수동 프로비전** - 컴포넌트, 디렉티브, 라우팅 규칙, 애플리케이션 환경설정에서 `providers` 배열을 사용하는 경우
 
 [이전 가이드 문서](/guide/di/creating-and-using-services)에서는 `providedIn: 'root'`를 사용해서 서비스를 생성했고, 이것이 일반적인 사용방법입니다.
@@ -44,7 +44,7 @@ While the `@Injectable` decorator with `providedIn: 'root'` works great for serv
 An `InjectionToken` is an object that Angular's dependency injection system uses to uniquely identify values for injection. Think of it as a special key that lets you store and retrieve any type of value in Angular's DI system:
 
 ```ts
-import { InjectionToken } from '@angular/core';
+import {InjectionToken} from '@angular/core';
 
 // Create a token for a string value
 export const API_URL = new InjectionToken<string>('api.url');
@@ -67,7 +67,7 @@ NOTE: The string parameter (e.g., `'api.url'`) is a description purely for debug
 의존성 객체에 매겨진 특별한 키 값이며, 의존성 객체를 요청할 때 사용하는 값이라고 이해하면 됩니다:
 
 ```ts
-import { InjectionToken } from '@angular/core';
+import {InjectionToken} from '@angular/core';
 
 // 문자열 값으로 토큰을 생성합니다.
 export const API_URL = new InjectionToken<string>('api.url');
@@ -92,11 +92,11 @@ export const CONFIG_TOKEN = new InjectionToken<Config>('app.config');
 ### `providedIn: 'root'`를 사용하는 인젝션 토큰
 
 <!--
-An `InjectionToken` that has a `factory` results in `providedIn: 'root'` by default (but can be overidden via the `providedIn` prop).
+An `InjectionToken` that has a `factory` results in `providedIn: 'root'` by default (but can be overridden via the `providedIn` prop).
 
 ```ts
 // 📁 /app/config.token.ts
-import { InjectionToken } from '@angular/core';
+import {InjectionToken} from '@angular/core';
 
 export interface AppConfig {
   apiUrl: string;
@@ -112,17 +112,17 @@ export const APP_CONFIG = new InjectionToken<AppConfig>('app.config', {
     version: '1.0.0',
     features: {
       darkMode: true,
-      analytics: false
-    }
-  })
+      analytics: false,
+    },
+  }),
 });
 
 // No need to add to providers array - available everywhere!
 @Component({
   selector: 'app-header',
-  template: `<h1>Version: {{ config.version }}</h1>`
+  template: `<h1>Version: {{ config.version }}</h1>`,
 })
-export class HeaderComponent {
+export class Header {
   config = inject(APP_CONFIG); // Automatically available
 }
 ```
@@ -133,7 +133,7 @@ export class HeaderComponent {
 
 ```ts
 // 📁 /app/config.token.ts
-import { InjectionToken } from '@angular/core';
+import {InjectionToken} from '@angular/core';
 
 export interface AppConfig {
   apiUrl: string;
@@ -141,7 +141,7 @@ export interface AppConfig {
   features: Record<string, boolean>;
 }
 
-// providedIn을 사용했기 때문에 애플리케이션 전역에서 사용할 수 있습니다.
+// Globally available configuration using providedIn
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config', {
   providedIn: 'root',
   factory: () => ({
@@ -149,18 +149,18 @@ export const APP_CONFIG = new InjectionToken<AppConfig>('app.config', {
     version: '1.0.0',
     features: {
       darkMode: true,
-      analytics: false
-    }
-  })
+      analytics: false,
+    },
+  }),
 });
 
-// providers 배열에 등록할 필요가 없습니다 - 이미 사용 가능합니다!
+// No need to add to providers array - available everywhere!
 @Component({
   selector: 'app-header',
-  template: `<h1>Version: {{ config.version }}</h1>`
+  template: `<h1>Version: {{ config.version }}</h1>`,
 })
-export class HeaderComponent {
-  config = inject(APP_CONFIG); // 컴포넌트에 등록하지 않아도 사용할 수 있습니다.
+export class Header {
+  config = inject(APP_CONFIG); // Automatically available
 }
 ```
 
@@ -175,8 +175,8 @@ InjectionToken with factory functions is ideal when you can't use a class but ne
 
 ```ts
 // 📁 /app/logger.token.ts
-import { InjectionToken, inject } from '@angular/core';
-import { APP_CONFIG } from './config.token';
+import {InjectionToken, inject} from '@angular/core';
+import {APP_CONFIG} from './config.token';
 
 // Logger function type
 export type LoggerFn = (level: string, message: string) => void;
@@ -192,19 +192,19 @@ export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
         console[level](`[${new Date().toISOString()}] ${message}`);
       }
     };
-  }
+  },
 });
 
 // 📁 /app/storage.token.ts
 // Providing browser APIs as tokens
 export const LOCAL_STORAGE = new InjectionToken<Storage>('localStorage', {
   // providedIn: 'root' is configured as the default
-  factory: () => window.localStorage
+  factory: () => window.localStorage,
 });
 
 export const SESSION_STORAGE = new InjectionToken<Storage>('sessionStorage', {
   providedIn: 'root',
-  factory: () => window.sessionStorage
+  factory: () => window.sessionStorage,
 });
 
 // 📁 /app/feature-flags.token.ts
@@ -223,7 +223,7 @@ export const FEATURE_FLAGS = new InjectionToken<Map<string, boolean>>('feature.f
     flags.set('newDashboard', false);
 
     return flags;
-  }
+  },
 });
 ```
 
@@ -239,36 +239,36 @@ This approach offers several advantages:
 
 ```ts
 // 📁 /app/logger.token.ts
-import { InjectionToken, inject } from '@angular/core';
-import { APP_CONFIG } from './config.token';
+import {InjectionToken, inject} from '@angular/core';
+import {APP_CONFIG} from './config.token';
 
 // 로그 함수 타입
 export type LoggerFn = (level: string, message: string) => void;
 
 // 전역 로그 함수
 export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
-  providedIn: 'root',
-  factory: () => {
-    const config = inject(APP_CONFIG);
+providedIn: 'root',
+factory: () => {
+const config = inject(APP_CONFIG);
 
     return (level: string, message: string) => {
       if (config.features.logging !== false) {
         console[level](`[${new Date().toISOString()}] ${message}`);
       }
     };
-  }
+},
 });
 
 // 📁 /app/storage.token.ts
 // 브라우저 API를 토컨으로 등록합니다.
 export const LOCAL_STORAGE = new InjectionToken<Storage>('localStorage', {
-  // providedIn: 'root' is configured as the default
-  factory: () => window.localStorage
+// providedIn: 'root' is configured as the default
+factory: () => window.localStorage,
 });
 
 export const SESSION_STORAGE = new InjectionToken<Storage>('sessionStorage', {
-  providedIn: 'root',
-  factory: () => window.sessionStorage
+providedIn: 'root',
+factory: () => window.sessionStorage,
 });
 
 // 📁 /app/feature-flags.token.ts
@@ -287,7 +287,7 @@ export const FEATURE_FLAGS = new InjectionToken<Map<string, boolean>>('feature.f
     flags.set('newDashboard', false);
 
     return flags;
-  }
+  },
 });
 ```
 
@@ -329,7 +329,7 @@ When you need more control than `providedIn: 'root'` offers, you can manually co
 
 <!--
 ```ts
-import { Injectable, Component, inject } from '@angular/core';
+import {Injectable, Component, inject} from '@angular/core';
 
 // Service without providedIn
 @Injectable()
@@ -346,16 +346,16 @@ export class LocalDataStore {
   selector: 'app-example',
   // A provider is required here because the `LocalDataStore` service has no providedIn.
   providers: [LocalDataStore],
-  template: `...`
+  template: `...`,
 })
-export class ExampleComponent {
+export class Example {
   dataStore = inject(LocalDataStore);
 }
 ```
 -->
 
 ```ts
-import { Injectable, Component, inject } from '@angular/core';
+import {Injectable, Component, inject} from '@angular/core';
 
 // providedIn이 설정되지 않은 서비스
 @Injectable()
@@ -372,9 +372,9 @@ export class LocalDataStore {
   selector: 'app-example',
   // `LocalDataStore` 서비스에 providedIn이 지정되지 않았기 때문에 프로바이더 배열에 등록해야 합니다.
   providers: [LocalDataStore],
-  template: `...`
+  template: `...`,
 })
-export class ExampleComponent {
+export class Example {
   dataStore = inject(LocalDataStore);
 }
 ```
@@ -389,9 +389,9 @@ export class ExampleComponent {
 Services with `providedIn: 'root'` can be overridden at the component level. This ties the instance of the service to the life of a component. As a result, when the component gets destroyed, the provided service is also destroyed as well.
 
 ```ts
-import { Injectable, Component, inject } from '@angular/core';
+import {Injectable, Component, inject} from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class DataStore {
   private data: ListItem[] = [];
 }
@@ -401,9 +401,9 @@ export class DataStore {
   selector: 'app-isolated',
   // Creates new instance of `DataStore` rather than using the root-provided instance.
   providers: [DataStore],
-  template: `...`
+  template: `...`,
 })
-export class IsolatedComponent {
+export class Isolated {
   dataStore = inject(DataStore); // Component-specific instance
 }
 ```
@@ -512,14 +512,14 @@ Think of Angular's dependency injection system as a hash map or dictionary. Each
 When manually providing dependencies, you typically see this shorthand syntax:
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { LocalService } from './local-service';
+import {Component} from '@angular/core';
+import {LocalService} from './local-service';
 
 @Component({
   selector: 'app-example',
-  providers: [LocalService]  // Service without providedIn
+  providers: [LocalService], // Service without providedIn
 })
-export class ExampleComponent { }
+export class Example {}
 ```
 
 This is actually a shorthand for a more detailed provider configuration:
@@ -546,14 +546,14 @@ Angular의 의존성 주입 시스템은 맵이나 사전처럼 생각할 수 �
 의존성 프로바이더를 수동으로 등록할 때는 일반적으로 단축 문법을 사용합니다:
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { LocalService } from './local-service';
+import {Component} from '@angular/core';
+import {LocalService} from './local-service';
 
 @Component({
   selector: 'app-example',
-  providers: [LocalService]  // providedIn이 지정되지 않은 서비스
+  providers: [LocalService], // providedIn이 지정되지 않은 서비스
 })
-export class ExampleComponent { }
+export class Example {}
 ```
 
 단축 문법을 풀어서 쓰면 이렇습니다:
@@ -622,19 +622,19 @@ Provider identifiers allow Angular's dependency injection (DI) system to retriev
 #### 클래스 이름
 
 <!--
-Class name use the imported class directly as the identifier:
+Class names use the imported class directly as the identifier:
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { LocalService } from './local-service';
+import {Component} from '@angular/core';
+import {LocalService} from './local-service';
 
 @Component({
   selector: 'app-example',
-  providers: [
-    { provide: LocalService, useClass: LocalService }
-  ]
+  providers: [{provide: LocalService, useClass: LocalService}],
 })
-export class ExampleComponent { /* ... */ }
+export class Example {
+  /* ... */
+}
 ```
 
 The class serves as both the identifier and the implementation, which is why Angular provides the shorthand `providers: [LocalService]`.
@@ -643,16 +643,16 @@ The class serves as both the identifier and the implementation, which is why Ang
 클래스 이름을 구분자로 직접 사용할 수 있ㅅ브니다:
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { LocalService } from './local-service';
+import {Component} from '@angular/core';
+import {LocalService} from './local-service';
 
 @Component({
   selector: 'app-example',
-  providers: [
-    { provide: LocalService, useClass: LocalService }
-  ]
+  providers: [{provide: LocalService, useClass: LocalService}],
 })
-export class ExampleComponent { /* ... */ }
+export class Example {
+  /* ... */
+}
 ```
 
 클래스 이름은 구분자이면서 구현체를 가리키는 용도로 사용됩니다.
@@ -669,8 +669,8 @@ Angular provides a built-in [`InjectionToken`](api/core/InjectionToken) class th
 
 ```ts
 // 📁 /app/tokens.ts
-import { InjectionToken } from '@angular/core';
-import { DataService } from './data-service.interface';
+import {InjectionToken} from '@angular/core';
+import {DataService} from './data-service.interface';
 
 export const DATA_SERVICE_TOKEN = new InjectionToken<DataService>('DataService');
 ```
@@ -680,19 +680,18 @@ NOTE: The string `'DataService'` is a description used purely for debugging purp
 Use the token in your provider configuration:
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { LocalDataService } from './local-data-service';
-import { DATA_SERVICE_TOKEN } from './tokens';
+import {Component, inject} from '@angular/core';
+import {LocalDataService} from './local-data-service';
+import {DATA_SERVICE_TOKEN} from './tokens';
 
 @Component({
   selector: 'app-example',
-  providers: [
-    { provide: DATA_SERVICE_TOKEN, useClass: LocalDataService }
-  ]
+  providers: [{provide: DATA_SERVICE_TOKEN, useClass: LocalDataService}],
 })
-export class ExampleComponent {
+export class Example {
   private dataService = inject(DATA_SERVICE_TOKEN);
 }
+```
 ```
 -->
 
@@ -700,8 +699,8 @@ Angular는 의존성으로 주입할 수 있는 객체를 생성하거나 같은
 
 ```ts
 // 📁 /app/tokens.ts
-import { InjectionToken } from '@angular/core';
-import { DataService } from './data-service.interface';
+import {InjectionToken} from '@angular/core';
+import {DataService} from './data-service.interface';
 
 export const DATA_SERVICE_TOKEN = new InjectionToken<DataService>('DataService');
 ```
@@ -711,17 +710,15 @@ export const DATA_SERVICE_TOKEN = new InjectionToken<DataService>('DataService')
 토큰을 사용한 프로바이더 등록 방법은 이렇습니다:
 
 ```angular-ts
-import { Component, inject } from '@angular/core';
-import { LocalDataService } from './local-data-service';
-import { DATA_SERVICE_TOKEN } from './tokens';
+import {Component, inject} from '@angular/core';
+import {LocalDataService} from './local-data-service';
+import {DATA_SERVICE_TOKEN} from './tokens';
 
 @Component({
   selector: 'app-example',
-  providers: [
-    { provide: DATA_SERVICE_TOKEN, useClass: LocalDataService }
-  ]
+  providers: [{provide: DATA_SERVICE_TOKEN, useClass: LocalDataService}],
 })
-export class ExampleComponent {
+export class Example {
   private dataService = inject(DATA_SERVICE_TOKEN);
 }
 ```
@@ -744,10 +741,10 @@ interface DataService {
 // Interfaces disappear after TypeScript compilation
 @Component({
   providers: [
-    { provide: DataService, useClass: LocalDataService } // Error!
-  ]
+    {provide: DataService, useClass: LocalDataService}, // Error!
+  ],
 })
-export class ExampleComponent {
+export class Example {
   private dataService = inject(DataService); // Error!
 }
 
@@ -755,11 +752,9 @@ export class ExampleComponent {
 export const DATA_SERVICE_TOKEN = new InjectionToken<DataService>('DataService');
 
 @Component({
-  providers: [
-    { provide: DATA_SERVICE_TOKEN, useClass: LocalDataService }
-  ]
+  providers: [{provide: DATA_SERVICE_TOKEN, useClass: LocalDataService}],
 })
-export class ExampleComponent {
+export class Example {
   private dataService = inject(DATA_SERVICE_TOKEN); // Works!
 }
 ```
@@ -778,10 +773,10 @@ interface DataService {
 // 인터페이스는 TypeScript 컴파일 이후에 존재하지 않습니다.
 @Component({
   providers: [
-    { provide: DataService, useClass: LocalDataService } // 에러!
-  ]
+    {provide: DataService, useClass: LocalDataService}, // 에러!
+  ],
 })
-export class ExampleComponent {
+export class Example {
   private dataService = inject(DataService); // 에러!
 }
 
@@ -789,11 +784,9 @@ export class ExampleComponent {
 export const DATA_SERVICE_TOKEN = new InjectionToken<DataService>('DataService');
 
 @Component({
-  providers: [
-    { provide: DATA_SERVICE_TOKEN, useClass: LocalDataService }
-  ]
+  providers: [{provide: DATA_SERVICE_TOKEN, useClass: LocalDataService}],
 })
-export class ExampleComponent {
+export class Example {
   private dataService = inject(DATA_SERVICE_TOKEN); // 동작합니다!
 }
 ```
@@ -813,25 +806,21 @@ InjectionToken은 실행 시점에 Angular 의존성 주입 시스템에서 사�
 
 ```ts
 // Shorthand
-providers: [DataService]
+providers: [DataService];
 
 // Full syntax
-providers: [
-  { provide: DataService, useClass: DataService }
-]
+providers: [{provide: DataService, useClass: DataService}];
 
 // Different implementation
-providers: [
-  { provide: DataService, useClass: MockDataService }
-]
+providers: [{provide: DataService, useClass: MockDataService}];
 
 // Conditional implementation
 providers: [
   {
     provide: StorageService,
-    useClass: environment.production ? CloudStorageService : LocalStorageService
-  }
-]
+    useClass: environment.production ? CloudStorageService : LocalStorageService,
+  },
+];
 ```
 -->
 
@@ -840,25 +829,21 @@ providers: [
 
 ```ts
 // 단축 문법
-providers: [DataService]
+providers: [DataService];
 
 // 전체 문법
-providers: [
-  { provide: DataService, useClass: DataService }
-]
+providers: [{provide: DataService, useClass: DataService}];
 
 // 구현체를 더미로 대체하기
-providers: [
-  { provide: DataService, useClass: MockDataService }
-]
+providers: [{provide: DataService, useClass: MockDataService}];
 
 // 조건에 따라 분기하기
 providers: [
   {
     provide: StorageService,
-    useClass: environment.production ? CloudStorageService : LocalStorageService
-  }
-]
+    useClass: environment.production ? CloudStorageService : LocalStorageService,
+  },
+];
 ```
 
 <!--
@@ -871,7 +856,7 @@ providers: [
 You can substitute implementations to extend functionality:
 
 ```ts
-import { Injectable, Component, inject } from '@angular/core';
+import {Injectable, Component, inject} from '@angular/core';
 
 // Base logger
 @Injectable()
@@ -905,10 +890,10 @@ export class EvenBetterLogger extends Logger {
   selector: 'app-example',
   providers: [
     UserService, // EvenBetterLogger needs this
-    { provide: Logger, useClass: EvenBetterLogger }
-  ]
+    {provide: Logger, useClass: EvenBetterLogger},
+  ],
 })
-export class ExampleComponent {
+export class Example {
   private logger = inject(Logger); // Gets EvenBetterLogger instance
 }
 ```
@@ -917,7 +902,7 @@ export class ExampleComponent {
 의존성 주입 시스템을 활용하면 구현체를 바꿔서 기능을 확장할 수 있습니다:
 
 ```ts
-import { Injectable, Component, inject } from '@angular/core';
+import {Injectable, Component, inject} from '@angular/core';
 
 // 기본 로그 함수
 @Injectable()
@@ -951,10 +936,10 @@ export class EvenBetterLogger extends Logger {
   selector: 'app-example',
   providers: [
     UserService, // EvenBetterLogger가 필요합니다.
-    { provide: Logger, useClass: EvenBetterLogger }
-  ]
+    {provide: Logger, useClass: EvenBetterLogger},
+  ],
 })
-export class ExampleComponent {
+export class Example {
   private logger = inject(Logger); // EvenBetterLogger 인스턴스를 받아옵니다.
 }
 ```
@@ -966,10 +951,10 @@ export class ExampleComponent {
 
 ```ts
 providers: [
-  { provide: API_URL_TOKEN, useValue: 'https://api.example.com' },
-  { provide: MAX_RETRIES_TOKEN, useValue: 3 },
-  { provide: FEATURE_FLAGS_TOKEN, useValue: { darkMode: true, beta: false } }
-]
+  {provide: API_URL_TOKEN, useValue: 'https://api.example.com'},
+  {provide: MAX_RETRIES_TOKEN, useValue: 3},
+  {provide: FEATURE_FLAGS_TOKEN, useValue: {darkMode: true, beta: false}},
+];
 ```
 
 IMPORTANT: TypeScript types and interfaces cannot serve as dependency values. They exist only at compile-time.
@@ -979,10 +964,10 @@ IMPORTANT: TypeScript types and interfaces cannot serve as dependency values. Th
 
 ```ts
 providers: [
-  { provide: API_URL_TOKEN, useValue: 'https://api.example.com' },
-  { provide: MAX_RETRIES_TOKEN, useValue: 3 },
-  { provide: FEATURE_FLAGS_TOKEN, useValue: { darkMode: true, beta: false } }
-]
+  {provide: API_URL_TOKEN, useValue: 'https://api.example.com'},
+  {provide: MAX_RETRIES_TOKEN, useValue: 3},
+  {provide: FEATURE_FLAGS_TOKEN, useValue: {darkMode: true, beta: false}},
+];
 ```
 
 중요: TypeScript 타입이나 인터페이스는 의존성 토큰으로 사용할 수 없습니다. 이 타입들은 컴파일 시점까지만 존재합니다.
@@ -1016,23 +1001,21 @@ const appConfig: AppConfig = {
   appTitle: 'My Application',
   features: {
     darkMode: true,
-    analytics: false
-  }
+    analytics: false,
+  },
 };
 
 // Provide in bootstrap
 bootstrapApplication(AppComponent, {
-  providers: [
-    { provide: APP_CONFIG, useValue: appConfig }
-  ]
+  providers: [{provide: APP_CONFIG, useValue: appConfig}],
 });
 
 // Use in component
 @Component({
   selector: 'app-header',
-  template: `<h1>{{ title }}</h1>`
+  template: `<h1>{{ title }}</h1>`,
 })
-export class HeaderComponent {
+export class Header {
   private config = inject(APP_CONFIG);
   title = this.config.appTitle;
 }
@@ -1061,23 +1044,21 @@ const appConfig: AppConfig = {
   appTitle: 'My Application',
   features: {
     darkMode: true,
-    analytics: false
-  }
+    analytics: false,
+  },
 };
 
 // 앱을 시작할 때 프로바이더로 등록합니다.
 bootstrapApplication(AppComponent, {
-  providers: [
-    { provide: APP_CONFIG, useValue: appConfig }
-  ]
+  providers: [{provide: APP_CONFIG, useValue: appConfig}],
 });
 
 // 컴포넌트에서 사용하기
 @Component({
   selector: 'app-header',
-  template: `<h1>{{ title }}</h1>`
+  template: `<h1>{{ title }}</h1>`,
 })
-export class HeaderComponent {
+export class Header {
   private config = inject(APP_CONFIG);
   title = this.config.appTitle;
 }
@@ -1097,15 +1078,15 @@ providers: [
   {
     provide: LoggerService,
     useFactory: loggerFactory,
-    deps: [APP_CONFIG]  // Dependencies for the factory function
-  }
-]
+    deps: [APP_CONFIG], // Dependencies for the factory function
+  },
+];
 ```
 
 You can mark factory dependencies as optional:
 
 ```ts
-import { Optional } from '@angular/core';
+import {Optional} from '@angular/core';
 
 providers: [
   {
@@ -1130,15 +1111,15 @@ providers: [
   {
     provide: LoggerService,
     useFactory: loggerFactory,
-    deps: [APP_CONFIG]  // 팩토리 함수에 필요한 의존성
-  }
+    deps: [APP_CONFIG],  // 팩토리 함수에 필요한 의존성
+  },
 ]
 ```
 
 팩토리 함수에 필요한 의존성은 다음과 같이 명시적으로 지정할 수도 있습니다:
 
 ```ts
-import { Optional } from '@angular/core';
+import {Optional} from '@angular/core';
 
 providers: [
   {
@@ -1146,9 +1127,9 @@ providers: [
     useFactory: (required: RequiredService, optional?: OptionalService) => {
       return new MyService(required, optional || new DefaultService());
     },
-    deps: [RequiredService, [new Optional(), OptionalService]]
-  }
-]
+    deps: [RequiredService, [new Optional(), OptionalService]],
+  },
+];
 ```
 
 <!--
@@ -1166,7 +1147,7 @@ class ApiClient {
   constructor(
     private http: HttpClient,
     private baseUrl: string,
-    private rateLimitMs: number
+    private rateLimitMs: number,
   ) {}
 
   async fetchData(endpoint: string) {
@@ -1177,13 +1158,13 @@ class ApiClient {
 
   private async applyRateLimit() {
     // Simplified example - real implementation would track request timing
-    return new Promise(resolve => setTimeout(resolve, this.rateLimitMs));
+    return new Promise((resolve) => setTimeout(resolve, this.rateLimitMs));
   }
 }
 
 // Factory function that configures based on user tier
-import { inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {inject} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 const apiClientFactory = () => {
   const http = inject(HttpClient);
   const userService = inject(UserService);
@@ -1198,15 +1179,15 @@ const apiClientFactory = () => {
 // Provider configuration
 export const apiClientProvider = {
   provide: ApiClient,
-  useFactory: apiClientFactory
+  useFactory: apiClientFactory,
 };
 
 // Usage in component
 @Component({
   selector: 'app-dashboard',
-  providers: [apiClientProvider]
+  providers: [apiClientProvider],
 })
-export class DashboardComponent {
+export class Dashboard {
   private apiClient = inject(ApiClient);
 }
 ```
@@ -1220,7 +1201,7 @@ class ApiClient {
   constructor(
     private http: HttpClient,
     private baseUrl: string,
-    private rateLimitMs: number
+    private rateLimitMs: number,
   ) {}
 
   async fetchData(endpoint: string) {
@@ -1231,13 +1212,13 @@ class ApiClient {
 
   private async applyRateLimit() {
     // 간단한 예제 - 실제 구현은 요청 시점을 조절해야 합니다.
-    return new Promise(resolve => setTimeout(resolve, this.rateLimitMs));
+    return new Promise((resolve) => setTimeout(resolve, this.rateLimitMs));
   }
 }
 
 // 사용자 등급에 따라 구성되는 팩토리 함수
-import { inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {inject} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 const apiClientFactory = () => {
   const http = inject(HttpClient);
   const userService = inject(UserService);
@@ -1252,15 +1233,15 @@ const apiClientFactory = () => {
 // 프로바이더 등록
 export const apiClientProvider = {
   provide: ApiClient,
-  useFactory: apiClientFactory
+  useFactory: apiClientFactory,
 };
 
 // 컴포넌트에서 사용하기
 @Component({
   selector: 'app-dashboard',
-  providers: [apiClientProvider]
+  providers: [apiClientProvider],
 })
-export class DashboardComponent {
+export class Dashboard {
   private apiClient = inject(ApiClient);
 }
 ```
@@ -1272,9 +1253,9 @@ export class DashboardComponent {
 
 ```ts
 providers: [
-  NewLogger,  // The actual service
-  { provide: OldLogger, useExisting: NewLogger }  // The alias
-]
+  NewLogger, // The actual service
+  {provide: OldLogger, useExisting: NewLogger}, // The alias
+];
 ```
 
 IMPORTANT: Don't confuse `useExisting` with `useClass`. `useClass` creates separate instances, while `useExisting` ensures you get the same singleton instance.
@@ -1285,9 +1266,9 @@ IMPORTANT: Don't confuse `useExisting` with `useClass`. `useClass` creates separ
 
 ```ts
 providers: [
-  NewLogger,  // 실제 서비스
-  { provide: OldLogger, useExisting: NewLogger }  // 별칭 추가
-]
+  NewLogger, // 실제 서비스
+  {provide: OldLogger, useExisting: NewLogger}, // 별칭 추가
+];
 ```
 
 중요: `useExisting`과 `useClass`를 혼동하지 마세요. `useClass`는 인스턴스를 매번 새로 생성하지만, `useExisting`은 유일한 인스턴스를 보장합니다.
@@ -1305,10 +1286,10 @@ Use the `multi: true` flag when multiple providers contribute values to the same
 export const INTERCEPTOR_TOKEN = new InjectionToken<Interceptor[]>('interceptors');
 
 providers: [
-  { provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true },
-  { provide: INTERCEPTOR_TOKEN, useClass: LoggingInterceptor, multi: true },
-  { provide: INTERCEPTOR_TOKEN, useClass: RetryInterceptor, multi: true }
-]
+  {provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true},
+  {provide: INTERCEPTOR_TOKEN, useClass: LoggingInterceptor, multi: true},
+  {provide: INTERCEPTOR_TOKEN, useClass: RetryInterceptor, multi: true},
+];
 ```
 
 When you inject `INTERCEPTOR_TOKEN`, you'll receive an array containing instances of all three interceptors.
@@ -1320,10 +1301,10 @@ When you inject `INTERCEPTOR_TOKEN`, you'll receive an array containing instance
 export const INTERCEPTOR_TOKEN = new InjectionToken<Interceptor[]>('interceptors');
 
 providers: [
-  { provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true },
-  { provide: INTERCEPTOR_TOKEN, useClass: LoggingInterceptor, multi: true },
-  { provide: INTERCEPTOR_TOKEN, useClass: RetryInterceptor, multi: true }
-]
+  {provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true},
+  {provide: INTERCEPTOR_TOKEN, useClass: LoggingInterceptor, multi: true},
+  {provide: INTERCEPTOR_TOKEN, useClass: RetryInterceptor, multi: true},
+];
 ```
 
 이후에 `INTERCEPTOR_TOKEN`을 의존성으로 주입받으면 인터셉터 3개의 인스턴스가 들어있는 배열을 반환받습니다.
@@ -1364,13 +1345,13 @@ Use application-level providers in `bootstrapApplication` when:
 
 ```ts
 // main.ts
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
-    { provide: API_BASE_URL, useValue: 'https://api.example.com' },
-    { provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true },
-    LoggingService,  // Used throughout the app
-    { provide: ErrorHandler, useClass: GlobalErrorHandler }
-  ]
+    {provide: API_BASE_URL, useValue: 'https://api.example.com'},
+    {provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true},
+    LoggingService, // Used throughout the app
+    {provide: ErrorHandler, useClass: GlobalErrorHandler},
+  ],
 });
 ```
 
@@ -1396,13 +1377,13 @@ bootstrapApplication(AppComponent, {
 
 ```ts
 // main.ts
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
-    { provide: API_BASE_URL, useValue: 'https://api.example.com' },
-    { provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true },
-    LoggingService,  // 앱 전역 범위에 사용합니다.
-    { provide: ErrorHandler, useClass: GlobalErrorHandler }
-  ]
+    {provide: API_BASE_URL, useValue: 'https://api.example.com'},
+    {provide: INTERCEPTOR_TOKEN, useClass: AuthInterceptor, multi: true},
+    LoggingService, // 앱 전역 범위에 사용합니다.
+    {provide: ErrorHandler, useClass: GlobalErrorHandler},
+  ],
 });
 ```
 
@@ -1457,20 +1438,20 @@ Use component or directive providers when:
 @Component({
   selector: 'app-advanced-form',
   providers: [
-    FormValidationService,  // Each form gets its own validator
-    { provide: FORM_CONFIG, useValue: { strictMode: true } }
-  ]
+    FormValidationService, // Each form gets its own validator
+    {provide: FORM_CONFIG, useValue: {strictMode: true}},
+  ],
 })
-export class AdvancedFormComponent { }
+export class AdvancedForm {}
 
 // Modal component with isolated state management
 @Component({
   selector: 'app-modal',
   providers: [
-    ModalStateService  // Each modal manages its own state
-  ]
+    ModalStateService, // Each modal manages its own state
+  ],
 })
-export class ModalComponent { }
+export class Modal {}
 ```
 
 **Benefits:**
@@ -1501,20 +1482,20 @@ NOTE: If multiple directives on the same element provide the same token, one wil
 @Component({
   selector: 'app-advanced-form',
   providers: [
-    FormValidationService,  // 개별 폼은 각각 유효성 검사 함수를 갖습니다.
-    { provide: FORM_CONFIG, useValue: { strictMode: true } }
-  ]
+    FormValidationService, // 개별 폼은 각각 유효성 검사 함수를 갖습니다.
+    {provide: FORM_CONFIG, useValue: {strictMode: true}},
+  ],
 })
-export class AdvancedFormComponent { }
+export class AdvancedForm {}
 
 // 상태를 독립적으로 관리하는 모달 컴포넌트
 @Component({
   selector: 'app-modal',
   providers: [
-    ModalStateService  // 개별 모달의 상태는 각각 관리합니다.
-  ]
+    ModalStateService, // 개별 모달의 상태는 각각 관리합니다.
+  ],
 })
-export class ModalComponent { }
+export class Modal {}
 ```
 
 **장점:**
@@ -1551,21 +1532,26 @@ export const routes: Routes = [
   {
     path: 'admin',
     providers: [
-      AdminService,  // Only loaded with admin routes
-      { provide: FEATURE_FLAGS, useValue: { adminMode: true } }
+      AdminService, // Only loaded with admin routes
+      {provide: FEATURE_FLAGS, useValue: {adminMode: true}},
     ],
-    loadChildren: () => import('./admin/admin.routes')
+    loadChildren: () => import('./admin/admin.routes'),
   },
   {
     path: 'shop',
     providers: [
-      ShoppingCartService,  // Isolated shopping state
-      PaymentService
+      ShoppingCartService, // Isolated shopping state
+      PaymentService,
     ],
-    loadChildren: () => import('./shop/shop.routes')
-  }
+    loadChildren: () => import('./shop/shop.routes'),
+  },
 ];
 ```
+
+Services provided at the route level are available to all components and directives within that route, as well as to its guards and resolvers.
+
+Since these services are instantiated independently of the route’s components, they do not have direct access to route-specific information.
+
 -->
 
 라우팅 규칙 계층에 프로바이더를 등록하는 경우가 있습니다:
@@ -1580,21 +1566,26 @@ export const routes: Routes = [
   {
     path: 'admin',
     providers: [
-      AdminService,  // admin 라우팅 규칙에 접근할 때만 로드됩니다.
-      { provide: FEATURE_FLAGS, useValue: { adminMode: true } }
+      AdminService, // admin 라우팅 규칙에 접근할 때만 로드됩니다.
+      {provide: FEATURE_FLAGS, useValue: {adminMode: true}},
     ],
-    loadChildren: () => import('./admin/admin.routes')
+    loadChildren: () => import('./admin/admin.routes'),
   },
   {
     path: 'shop',
     providers: [
-      ShoppingCartService,  // 독립적인 상태 관리를 생성합니다.
-      PaymentService
+      ShoppingCartService, // 독립적인 상태 관리를 생성합니다.
+      PaymentService,
     ],
-    loadChildren: () => import('./shop/shop.routes')
-  }
+    loadChildren: () => import('./shop/shop.routes'),
+  },
 ];
 ```
+
+Services provided at the route level are available to all components and directives within that route, as well as to its guards and resolvers.
+
+Since these services are instantiated independently of the route’s components, they do not have direct access to route-specific information.
+
 
 <!--
 ## Library author patterns
@@ -1620,7 +1611,7 @@ Instead of requiring users to manually configure complex providers, library auth
 
 ```ts
 // 📁 /libs/analytics/src/providers.ts
-import { InjectionToken, Provider, inject } from '@angular/core';
+import {InjectionToken, Provider, inject} from '@angular/core';
 
 // Configuration interface
 export interface AnalyticsConfig {
@@ -1643,21 +1634,18 @@ export class AnalyticsService {
 
 // Provider function for consumers
 export function provideAnalytics(config: AnalyticsConfig): Provider[] {
-  return [
-    { provide: ANALYTICS_CONFIG, useValue: config },
-    AnalyticsService
-  ];
+  return [{provide: ANALYTICS_CONFIG, useValue: config}, AnalyticsService];
 }
 
 // Usage in consumer app
 // main.ts
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
     provideAnalytics({
       trackingId: 'GA-12345',
-      enableDebugMode: !environment.production
-    })
-  ]
+      enableDebugMode: !environment.production,
+    }),
+  ],
 });
 ```
 -->
@@ -1666,7 +1654,7 @@ bootstrapApplication(AppComponent, {
 
 ```ts
 // 📁 /libs/analytics/src/providers.ts
-import { InjectionToken, Provider, inject } from '@angular/core';
+import {InjectionToken, Provider, inject} from '@angular/core';
 
 // 환경설정 인터페이스
 export interface AnalyticsConfig {
@@ -1683,27 +1671,24 @@ export class AnalyticsService {
   private config = inject(ANALYTICS_CONFIG);
 
   track(event: string, properties?: any) {
-    // 환경설정에 따라 실제로 구현되는 코드
+    // Implementation using config
   }
 }
 
 // 라이브러리 사용자를 위한 프로바이더 함수
 export function provideAnalytics(config: AnalyticsConfig): Provider[] {
-  return [
-    { provide: ANALYTICS_CONFIG, useValue: config },
-    AnalyticsService
-  ];
+  return [{provide: ANALYTICS_CONFIG, useValue: config}, AnalyticsService];
 }
 
 // 라이브러리 사용자가 앱에서 사용할 때
 // main.ts
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
     provideAnalytics({
       trackingId: 'GA-12345',
-      enableDebugMode: !environment.production
-    })
-  ]
+      enableDebugMode: !environment.production,
+    }),
+  ],
 });
 ```
 
@@ -1718,13 +1703,13 @@ For more complex scenarios, you can combine multiple configuration approaches:
 
 ```ts
 // 📁 /libs/http-client/src/provider.ts
-import { Provider, InjectionToken, inject } from '@angular/core';
+import {Provider, InjectionToken, inject} from '@angular/core';
 
 // Feature flags for optional functionality
 export enum HttpFeatures {
   Interceptors = 'interceptors',
   Caching = 'caching',
-  Retry = 'retry'
+  Retry = 'retry',
 }
 
 // Configuration interfaces
@@ -1746,7 +1731,7 @@ const HTTP_FEATURES = new InjectionToken<Set<HttpFeatures>>('http.features');
 
 // Core service
 class HttpClientService {
-  private config = inject(HTTP_CONFIG, { optional: true });
+  private config = inject(HTTP_CONFIG, {optional: true});
   private features = inject(HTTP_FEATURES);
 
   get(url: string) {
@@ -1765,18 +1750,15 @@ class CacheInterceptor {
 }
 
 // Main provider function
-export function provideHttpClient(
-  config?: HttpConfig,
-  ...features: HttpFeature[]
-): Provider[] {
+export function provideHttpClient(config?: HttpConfig, ...features: HttpFeature[]): Provider[] {
   const providers: Provider[] = [
-    { provide: HTTP_CONFIG, useValue: config || {} },
-    { provide: HTTP_FEATURES, useValue: new Set(features.map(f => f.kind)) },
-    HttpClientService
+    {provide: HTTP_CONFIG, useValue: config || {}},
+    {provide: HTTP_FEATURES, useValue: new Set(features.map((f) => f.kind))},
+    HttpClientService,
   ];
 
   // Add feature-specific providers
-  features.forEach(feature => {
+  features.forEach((feature) => {
     providers.push(...feature.providers);
   });
 
@@ -1792,41 +1774,38 @@ export interface HttpFeature {
 export function withInterceptors(...interceptors: any[]): HttpFeature {
   return {
     kind: HttpFeatures.Interceptors,
-    providers: interceptors.map(interceptor => ({
+    providers: interceptors.map((interceptor) => ({
       provide: INTERCEPTOR_TOKEN,
       useClass: interceptor,
-      multi: true
-    }))
+      multi: true,
+    })),
   };
 }
 
 export function withCaching(): HttpFeature {
   return {
     kind: HttpFeatures.Caching,
-    providers: [CacheInterceptor]
+    providers: [CacheInterceptor],
   };
 }
 
 export function withRetry(config: RetryConfig): HttpFeature {
   return {
     kind: HttpFeatures.Retry,
-    providers: [
-      { provide: RETRY_CONFIG, useValue: config },
-      RetryInterceptor
-    ]
+    providers: [{provide: RETRY_CONFIG, useValue: config}, RetryInterceptor],
   };
 }
 
 // Consumer usage with multiple features
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
     provideHttpClient(
-      { baseUrl: 'https://api.example.com' },
+      {baseUrl: 'https://api.example.com'},
       withInterceptors(AuthInterceptor, LoggingInterceptor),
       withCaching(),
-      withRetry({ maxAttempts: 3, delayMs: 1000 })
-    )
-  ]
+      withRetry({maxAttempts: 3, delayMs: 1000}),
+    ),
+  ],
 });
 ```
 -->
@@ -1835,13 +1814,13 @@ bootstrapApplication(AppComponent, {
 
 ```ts
 // 📁 /libs/http-client/src/provider.ts
-import { Provider, InjectionToken, inject } from '@angular/core';
+import {Provider, InjectionToken, inject} from '@angular/core';
 
 // 기능 활성화 플래그
 export enum HttpFeatures {
   Interceptors = 'interceptors',
   Caching = 'caching',
-  Retry = 'retry'
+  Retry = 'retry',
 }
 
 // 환경설정 인터페이스
@@ -1863,7 +1842,7 @@ const HTTP_FEATURES = new InjectionToken<Set<HttpFeatures>>('http.features');
 
 // 핵심 서비스
 class HttpClientService {
-  private config = inject(HTTP_CONFIG, { optional: true });
+  private config = inject(HTTP_CONFIG, {optional: true});
   private features = inject(HTTP_FEATURES);
 
   get(url: string) {
@@ -1882,18 +1861,15 @@ class CacheInterceptor {
 }
 
 // 메인 프로바이더 함수
-export function provideHttpClient(
-  config?: HttpConfig,
-  ...features: HttpFeature[]
-): Provider[] {
+export function provideHttpClient(config?: HttpConfig, ...features: HttpFeature[]): Provider[] {
   const providers: Provider[] = [
-    { provide: HTTP_CONFIG, useValue: config || {} },
-    { provide: HTTP_FEATURES, useValue: new Set(features.map(f => f.kind)) },
-    HttpClientService
+    {provide: HTTP_CONFIG, useValue: config || {}},
+    {provide: HTTP_FEATURES, useValue: new Set(features.map((f) => f.kind))},
+    HttpClientService,
   ];
 
   // 기능별 프로바이더를 추가합니다.
-  features.forEach(feature => {
+  features.forEach((feature) => {
     providers.push(...feature.providers);
   });
 
@@ -1909,41 +1885,38 @@ export interface HttpFeature {
 export function withInterceptors(...interceptors: any[]): HttpFeature {
   return {
     kind: HttpFeatures.Interceptors,
-    providers: interceptors.map(interceptor => ({
+    providers: interceptors.map((interceptor) => ({
       provide: INTERCEPTOR_TOKEN,
       useClass: interceptor,
-      multi: true
-    }))
+      multi: true,
+    })),
   };
 }
 
 export function withCaching(): HttpFeature {
   return {
     kind: HttpFeatures.Caching,
-    providers: [CacheInterceptor]
+    providers: [CacheInterceptor],
   };
 }
 
 export function withRetry(config: RetryConfig): HttpFeature {
   return {
     kind: HttpFeatures.Retry,
-    providers: [
-      { provide: RETRY_CONFIG, useValue: config },
-      RetryInterceptor
-    ]
+    providers: [{provide: RETRY_CONFIG, useValue: config}, RetryInterceptor],
   };
 }
 
 // 라이브러리 사용자가 필요한 기능을 구성해서 활용하는 코드
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
     provideHttpClient(
-      { baseUrl: 'https://api.example.com' },
+      {baseUrl: 'https://api.example.com'},
       withInterceptors(AuthInterceptor, LoggingInterceptor),
       withCaching(),
-      withRetry({ maxAttempts: 3, delayMs: 1000 })
-    )
-  ]
+      withRetry({maxAttempts: 3, delayMs: 1000}),
+    ),
+  ],
 });
 ```
 

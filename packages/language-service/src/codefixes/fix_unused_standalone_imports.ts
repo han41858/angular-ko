@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ErrorCode, ngErrorCode} from '@angular/compiler-cli/src/ngtsc/diagnostics';
+import {ErrorCode, ngErrorCode} from '@angular/compiler-cli';
 import tss from 'typescript';
 
 import {CodeActionMeta, FixIdForCodeFixesAll} from './utils';
 import {findFirstMatchingNode} from '../utils/ts_utils';
 
 /**
- * Fix for [unused standalone imports](https://angular.io/extended-diagnostics/NG8113)
+ * Fix for [unused standalone imports](https://angular.dev/extended-diagnostics/NG8113)
  */
 export const fixUnusedStandaloneImportsMeta: CodeActionMeta = {
   errorCodes: [ngErrorCode(ErrorCode.UNUSED_STANDALONE_IMPORTS)],

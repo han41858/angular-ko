@@ -61,38 +61,38 @@ Signal Forms provides validation rules for common validation scenarios. All buil
 The `required()` validation rule ensures a field has a value:
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, required } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, required} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-registration',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Username
-        <input [field]="registrationForm.username" />
+        <input [formField]="registrationForm.username" />
       </label>
 
       <label>
         Email
-        <input type="email" [field]="registrationForm.email" />
+        <input type="email" [formField]="registrationForm.email" />
       </label>
 
       <button type="submit">Register</button>
     </form>
-  `
+  `,
 })
 export class RegistrationComponent {
   registrationModel = signal({
     username: '',
-    email: ''
-  })
+    email: '',
+  });
 
   registrationForm = form(this.registrationModel, (schemaPath) => {
-    required(schemaPath.username, { message: 'Username is required' })
-    required(schemaPath.email, { message: 'Email is required' })
-  })
+    required(schemaPath.username, {message: 'Username is required'});
+    required(schemaPath.email, {message: 'Email is required'});
+  });
 }
 ```
 
@@ -102,7 +102,6 @@ A field is considered "empty" when:
 | ------------------------ | ------- |
 | Value is `null`          | `null`, |
 | Value is an empty string | `''`    |
-| Value is an empty array  | `[]`    |
 
 For conditional requirements, use the `when` option:
 
@@ -110,39 +109,41 @@ For conditional requirements, use the `when` option:
 registrationForm = form(this.registrationModel, (schemaPath) => {
   required(schemaPath.promoCode, {
     message: 'Promo code is required for discounts',
-    when: ({valueOf}) => valueOf(schemaPath.applyDiscount)
-  })
-})
+    when: ({valueOf}) => valueOf(schemaPath.applyDiscount),
+  });
+});
 ```
 
 The validation rule only runs when the `when` function returns `true`.
+
+NOTE: `required` will return `true` for empty array. Use [`minLength()`](#minlength-and-maxlength) to validate arrays.
 
 ### email()
 
 The `email()` validation rule checks for valid email format:
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, email } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, email} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-contact',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Your Email
-        <input type="email" [field]="contactForm.email" />
+        <input type="email" [formField]="contactForm.email" />
       </label>
     </form>
-  `
+  `,
 })
 export class ContactComponent {
-  contactModel = signal({ email: '' })
+  contactModel = signal({email: ''});
 
   contactForm = form(this.contactModel, (schemaPath) => {
-    email(schemaPath.email, { message: 'Please enter a valid email address' })
-  })
+    email(schemaPath.email, {message: 'Please enter a valid email address'});
+  });
 }
 ```
 
@@ -153,39 +154,39 @@ The `email()` validation rule uses a standard email format regex. It accepts add
 The `min()` and `max()` validation rules work with numeric values:
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, min, max } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, min, max} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-age-form',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Age
-        <input type="number" [field]="ageForm.age" />
+        <input type="number" [formField]="ageForm.age" />
       </label>
 
       <label>
         Rating (1-5)
-        <input type="number" [field]="ageForm.rating" />
+        <input type="number" [formField]="ageForm.rating" />
       </label>
     </form>
-  `
+  `,
 })
 export class AgeFormComponent {
   ageModel = signal({
     age: 0,
-    rating: 0
-  })
+    rating: 0,
+  });
 
   ageForm = form(this.ageModel, (schemaPath) => {
-    min(schemaPath.age, 18, { message: 'You must be at least 18 years old' })
-    max(schemaPath.age, 120, { message: 'Please enter a valid age' })
+    min(schemaPath.age, 18, {message: 'You must be at least 18 years old'});
+    max(schemaPath.age, 120, {message: 'Please enter a valid age'});
 
-    min(schemaPath.rating, 1, { message: 'Rating must be at least 1' })
-    max(schemaPath.rating, 5, { message: 'Rating cannot exceed 5' })
-  })
+    min(schemaPath.rating, 1, {message: 'Rating must be at least 1'});
+    max(schemaPath.rating, 5, {message: 'Rating cannot exceed 5'});
+  });
 }
 ```
 
@@ -194,9 +195,9 @@ You can use computed values for dynamic constraints:
 ```ts
 ageForm = form(this.ageModel, (schemaPath) => {
   min(schemaPath.participants, () => this.minimumRequired(), {
-    message: 'Not enough participants'
-  })
-})
+    message: 'Not enough participants',
+  });
+});
 ```
 
 ### minLength() and maxLength()
@@ -204,38 +205,38 @@ ageForm = form(this.ageModel, (schemaPath) => {
 The `minLength()` and `maxLength()` validation rules work with strings and arrays:
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, minLength, maxLength } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, minLength, maxLength} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-password-form',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Password
-        <input type="password" [field]="passwordForm.password" />
+        <input type="password" [formField]="passwordForm.password" />
       </label>
 
       <label>
         Bio
-        <textarea [field]="passwordForm.bio"></textarea>
+        <textarea [formField]="passwordForm.bio"></textarea>
       </label>
     </form>
-  `
+  `,
 })
 export class PasswordFormComponent {
   passwordModel = signal({
     password: '',
-    bio: ''
-  })
+    bio: '',
+  });
 
   passwordForm = form(this.passwordModel, (schemaPath) => {
-    minLength(schemaPath.password, 8, { message: 'Password must be at least 8 characters' })
-    maxLength(schemaPath.password, 100, { message: 'Password is too long' })
+    minLength(schemaPath.password, 8, {message: 'Password must be at least 8 characters'});
+    maxLength(schemaPath.password, 100, {message: 'Password is too long'});
 
-    maxLength(schemaPath.bio, 500, { message: 'Bio cannot exceed 500 characters' })
-  })
+    maxLength(schemaPath.bio, 500, {message: 'Bio cannot exceed 500 characters'});
+  });
 }
 ```
 
@@ -246,41 +247,41 @@ For strings, "length" means the number of characters. For arrays, "length" means
 The `pattern()` validation rule validates against a regular expression:
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, pattern } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, pattern} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-phone-form',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Phone Number
-        <input [field]="phoneForm.phone" placeholder="555-123-4567" />
+        <input [formField]="phoneForm.phone" placeholder="555-123-4567" />
       </label>
 
       <label>
         Postal Code
-        <input [field]="phoneForm.postalCode" placeholder="12345" />
+        <input [formField]="phoneForm.postalCode" placeholder="12345" />
       </label>
     </form>
-  `
+  `,
 })
 export class PhoneFormComponent {
   phoneModel = signal({
     phone: '',
-    postalCode: ''
-  })
+    postalCode: '',
+  });
 
   phoneForm = form(this.phoneModel, (schemaPath) => {
     pattern(schemaPath.phone, /^\d{3}-\d{3}-\d{4}$/, {
-      message: 'Phone must be in format: 555-123-4567'
-    })
+      message: 'Phone must be in format: 555-123-4567',
+    });
 
     pattern(schemaPath.postalCode, /^\d{5}$/, {
-      message: 'Postal code must be 5 digits'
-    })
-  })
+      message: 'Postal code must be 5 digits',
+    });
+  });
 }
 ```
 
@@ -292,6 +293,44 @@ Common patterns:
 | Postal code (US) | `/^\d{5}$/`             | 12345        |
 | Alphanumeric     | `/^[a-zA-Z0-9]+$/`      | abc123       |
 | URL-safe         | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
+
+## Validation of array items
+
+Forms can include arrays of nested objects (for example, a list of order items). To apply validation rules to each item in an array, use `applyEach()` inside your schema function. `applyEach()` iterates the array path and supplies a path for each item where you can apply validators just like top-level fields.
+
+```ts
+import {Component, signal} from '@angular/core';
+import {applyEach, FormField, form, min, required, SchemaPathTree} from '@angular/forms/signals';
+
+type Item = {name: string; quantity: number};
+
+interface Order {
+  title: string;
+  description: string;
+  items: Item[];
+}
+
+function ItemSchema(item: SchemaPathTree<Item>) {
+  required(item.name, {message: 'Item name is required'});
+  min(item.quantity, 1, {message: 'Quantity must be at least 1'});
+}
+
+@Component(/* ... */)
+export class OrderComponent {
+  orderModel = signal<Order>({
+    title: '',
+    description: '',
+    items: [{name: '', quantity: 0}],
+  });
+
+  orderForm = form(this.orderModel, (schemaPath) => {
+    required(schemaPath.title);
+    required(schemaPath.description);
+
+    applyEach(schemaPath.items, ItemSchema);
+  });
+}
+```
 
 ## Validation errors
 
@@ -317,44 +356,44 @@ Built-in validation rules automatically set the `kind` property. The `message` p
 All built-in validation rules accept a `message` option for custom error text:
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, required, minLength } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, required, minLength} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-signup',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Username
-        <input [field]="signupForm.username" />
+        <input [formField]="signupForm.username" />
       </label>
 
       <label>
         Password
-        <input type="password" [field]="signupForm.password" />
+        <input type="password" [formField]="signupForm.password" />
       </label>
     </form>
-  `
+  `,
 })
 export class SignupComponent {
   signupModel = signal({
     username: '',
-    password: ''
-  })
+    password: '',
+  });
 
   signupForm = form(this.signupModel, (schemaPath) => {
     required(schemaPath.username, {
-      message: 'Please choose a username'
-    })
+      message: 'Please choose a username',
+    });
 
     required(schemaPath.password, {
-      message: 'Password cannot be empty'
-    })
+      message: 'Password cannot be empty',
+    });
     minLength(schemaPath.password, 12, {
-      message: 'Password must be at least 12 characters for security'
-    })
-  })
+      message: 'Password must be at least 12 characters for security',
+    });
+  });
 }
 ```
 
@@ -366,10 +405,10 @@ When a field has multiple validation rules, each validation rule runs independen
 
 ```ts
 signupForm = form(this.signupModel, (schemaPath) => {
-  required(schemaPath.email, { message: 'Email is required' })
-  email(schemaPath.email, { message: 'Enter a valid email address' })
-  minLength(schemaPath.email, 5, { message: 'Email is too short' })
-})
+  required(schemaPath.email, {message: 'Email is required'});
+  email(schemaPath.email, {message: 'Enter a valid email address'});
+  minLength(schemaPath.email, 5, {message: 'Email is too short'});
+});
 ```
 
 If the email field is empty, only the `required()` error appears. If the user types "a@b", both `email()` and `minLength()` errors appear. All validation rules run - validation doesn't stop after the first failure.
@@ -390,36 +429,36 @@ The `validate()` function creates custom validation rules. It receives a validat
 | `null` or `undefined` | Value is valid   |
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, validate } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, validate} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-url-form',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Website URL
-        <input [field]="urlForm.website" />
+        <input [formField]="urlForm.website" />
       </label>
     </form>
-  `
+  `,
 })
 export class UrlFormComponent {
-  urlModel = signal({ website: '' })
+  urlModel = signal({website: ''});
 
   urlForm = form(this.urlModel, (schemaPath) => {
     validate(schemaPath.website, ({value}) => {
       if (!value().startsWith('https://')) {
         return {
           kind: 'https',
-          message: 'URL must start with https://'
-        }
+          message: 'URL must start with https://',
+        };
       }
 
-      return null
-    })
-  })
+      return null;
+    });
+  });
 }
 ```
 
@@ -439,38 +478,78 @@ NOTE: Child fields also have a `key` signal, and array item fields have both `ke
 
 Return an error object with `kind` and `message` when validation fails. Return `null` or `undefined` when validation passes.
 
+### Using validateTree()
+
+The `validateTree()` function creates custom validation rules that can target multiple fields or provide complex validation logic for a whole subtree.
+
+```angular-ts
+import {Component, model} from '@angular/core';
+import {form, FormField, validateTree} from '@angular/forms/signals';
+
+interface User {
+  firstName: string;
+  lastName: string;
+}
+
+@Component({
+  /* ... */
+})
+export class UserFormComponent {
+  readonly userModel = model<User>({
+    firstName: '',
+    lastName: '',
+  });
+
+  userForm = form(this.userModel, (path) => {
+    validateTree(path, (ctx) => {
+      if (ctx.valueOf(path.firstName).length < 5) {
+        return {
+          kind: 'minLength5',
+          message: 'First name must be at least 5 characters',
+          fieldTree: ctx.fieldTree.lastName,
+        };
+      }
+
+      return null;
+    });
+  });
+}
+```
+
+The `validateTree()` validator function receives the same `FieldContext` object as `validate()`.
+
 ### Reusable validation rules
 
 Create reusable validation rule functions by wrapping `validate()`:
 
 ```ts
-function url(field: any, options?: { message?: string }) {
-  validate(field, ({value}) => {
+function url(path: SchemaPath<string>, options?: {message?: string}) {
+  validate(path, ({value}) => {
     try {
-      new URL(value())
-      return null
+      new URL(value());
+      return null;
     } catch {
       return {
         kind: 'url',
-        message: options?.message || 'Enter a valid URL'
-      }
+        message: options?.message || 'Enter a valid URL',
+      };
     }
-  })
+  });
 }
 
-function phoneNumber(field: any, options?: { message?: string }) {
-  validate(field, ({value}) => {
-    const phoneRegex = /^\d{3}-\d{3}-\d{4}$/
+function phoneNumber(path: SchemaPath<string>, options?: {message?: string}) {
+  validate(path, ({value}) => {
+    const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
 
     if (!phoneRegex.test(value())) {
       return {
         kind: 'phoneNumber',
-        message: options?.message || 'Phone must be in format: 555-123-4567'
-      }
+        message: options?.message || 'Phone must be in format: 555-123-4567',
+      };
     }
 
-    return null
-  })
+    return null;
+  });
 }
 ```
 
@@ -478,9 +557,9 @@ You can use custom validation rules just like built-in validation rules:
 
 ```ts
 urlForm = form(this.urlModel, (schemaPath) => {
-  url(schemaPath.website, { message: 'Please enter a valid website URL' })
-  phoneNumber(schemaPath.phone)
-})
+  url(schemaPath.website, {message: 'Please enter a valid website URL'});
+  phoneNumber(schemaPath.phone);
+});
 ```
 
 ## Cross-field validation
@@ -490,58 +569,69 @@ Cross-field validation compares or relates multiple field values.
 A common scenario for cross-field validation is password confirmation:
 
 ```angular-ts
-import { Component, signal } from '@angular/core'
-import { form, Field, required, minLength, validate } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, required, minLength, validate} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-password-change',
-  imports: [Field],
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         New Password
-        <input type="password" [field]="passwordForm.password" />
+        <input type="password" [formField]="passwordForm.password" />
       </label>
 
       <label>
         Confirm Password
-        <input type="password" [field]="passwordForm.confirmPassword" />
+        <input type="password" [formField]="passwordForm.confirmPassword" />
       </label>
 
       <button type="submit">Change Password</button>
     </form>
-  `
+  `,
 })
 export class PasswordChangeComponent {
   passwordModel = signal({
     password: '',
-    confirmPassword: ''
-  })
+    confirmPassword: '',
+  });
 
   passwordForm = form(this.passwordModel, (schemaPath) => {
-    required(schemaPath.password, { message: 'Password is required' })
-    minLength(schemaPath.password, 8, { message: 'Password must be at least 8 characters' })
+    required(schemaPath.password, {message: 'Password is required'});
+    minLength(schemaPath.password, 8, {message: 'Password must be at least 8 characters'});
 
-    required(schemaPath.confirmPassword, { message: 'Please confirm your password' })
+    required(schemaPath.confirmPassword, {message: 'Please confirm your password'});
 
     validate(schemaPath.confirmPassword, ({value, valueOf}) => {
-      const confirmPassword = value()
-      const password = valueOf(schemaPath.password)
+      const confirmPassword = value();
+      const password = valueOf(schemaPath.password);
 
       if (confirmPassword !== password) {
         return {
           kind: 'passwordMismatch',
-          message: 'Passwords do not match'
-        }
+          message: 'Passwords do not match',
+        };
       }
 
-      return null
-    })
-  })
+      return null;
+    });
+  });
 }
 ```
 
 The confirmation validation rule accesses the password field value using `valueOf(schemaPath.password)` and compares it to the confirmation value. This validation rule runs reactively - if either password changes, validation reruns automatically.
+
+## Conditional validation
+
+Sometimes a validation rule should apply only under certain conditions, such as validating a shipping address only when an order ships internationally, or applying a different set of rules to each variant of a union-typed field.
+
+Because validation rules live in the schema function, you apply them conditionally with the same structural functions that compose schemas:
+
+- Use [`applyWhen()`](guide/forms/signals/form-logic#conditional-logic-with-applywhen) to activate a group of rules based on reactive form state, including the values of other fields.
+- Use [`applyWhenValue()`](guide/forms/signals/schemas#type-narrowing-with-applywhenvalue) to apply rules based on a field's own value. When the predicate is a type guard, the rules are typed to the narrowed value, which makes it the recommended way to validate discriminated unions and other variant types.
+
+For complete examples, including reusable schemas and discriminated unions, see the [Schemas and schema composability guide](guide/forms/signals/schemas).
 
 ## Async validation
 
@@ -552,33 +642,30 @@ Async validation handles validation that requires external data sources, like ch
 The `validateHttp()` function performs HTTP-based validation:
 
 ```angular-ts
-import { Component, signal, inject } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { form, Field, required, validateHttp } from '@angular/forms/signals'
+import {Component, signal} from '@angular/core';
+import {form, FormField, required, validateHttp} from '@angular/forms/signals';
 
 @Component({
-  selector: 'app-username-form',
-  imports: [Field],
+  selector: 'app-username-form',|
+  imports: [FormField],
   template: `
-    <form>
+    <form novalidate>
       <label>
         Username
-        <input [field]="usernameForm.username" />
+        <input [formField]="usernameForm.username" />
 
         @if (usernameForm.username().pending()) {
           <span class="checking">Checking availability...</span>
         }
       </label>
     </form>
-  `
+  `,
 })
 export class UsernameFormComponent {
-  http = inject(HttpClient)
-
-  usernameModel = signal({ username: '' })
+  usernameModel = signal({username: ''});
 
   usernameForm = form(this.usernameModel, (schemaPath) => {
-    required(schemaPath.username, { message: 'Username is required' })
+    required(schemaPath.username, {message: 'Username is required'});
 
     validateHttp(schemaPath.username, {
       request: ({value}) => `/api/check-username?username=${value()}`,
@@ -586,17 +673,17 @@ export class UsernameFormComponent {
         if (response.taken) {
           return {
             kind: 'usernameTaken',
-            message: 'Username is already taken'
-          }
+            message: 'Username is already taken',
+          };
         }
-        return null
+        return null;
       },
       onError: (error) => ({
         kind: 'networkError',
-        message: 'Could not verify username availability'
-      })
-    })
-  })
+        message: 'Could not verify username availability',
+      }),
+    });
+  });
 }
 ```
 
@@ -612,7 +699,7 @@ The `validateHttp()` validation rule:
 
 While async validation runs, the field's `pending()` signal returns `true`. Use this to show loading indicators:
 
-```ts
+```angular-html
 @if (form.username().pending()) {
   <span class="spinner">Checking...</span>
 }
@@ -620,10 +707,62 @@ While async validation runs, the field's `pending()` signal returns `true`. Use 
 
 The `valid()` signal returns `false` while validation is pending, even if there are no errors yet. The `invalid()` signal only returns `true` if errors exist.
 
+## Integration with schema validation libraries
+
+Signal Forms have built-in support for libraries that conform to [Standard Schema](https://standardschema.dev/) like [Zod](https://zod.dev/) or [Valibot](https://valibot.dev/). The integration is provided via the `validateStandardSchema` function. This allows you to use existing schemas while maintaining Signal Forms' reactive validation benefits.
+
+```ts
+import {form, validateStandardSchema} from '@angular/forms/signals';
+import * as z from 'zod';
+
+// Define your schema
+const userSchema = z.object({
+  email: z.email(),
+  password: z.string().min(8),
+});
+
+// Use with Signal Forms
+const userForm = form(signal({email: '', password: ''}), (schemaPath) => {
+  validateStandardSchema(schemaPath, userSchema);
+});
+```
+
+### Dynamic schemas
+
+You can pass a signal instead of a static schema so the validation schema updates automatically when its dependencies change.
+
+```angular-ts
+import {Component, computed, signal} from '@angular/core';
+import {form, FormField, validateStandardSchema} from '@angular/forms/signals';
+import z from 'zod';
+
+@Component({
+  /* ... */
+})
+export class DynamicSchema {
+  model = signal({document: '', type: 'dni'});
+
+  // Schema reacts automatically to type changes
+  schema = computed(() =>
+    z.object({
+      document:
+        this.model().type === 'dni'
+          ? z.string().length(8, 'DNI must be 8 digits')
+          : z.string().min(12, 'Passport must be at least 12 characters'),
+    }),
+  );
+
+  f = form(this.model, (p) => validateStandardSchema(p, () => this.schema()));
+}
+```
+
 ## Next steps
 
 This guide covered creating and applying validation rules. Related guides explore other aspects of Signal Forms:
 
-- [Form Models guide](guide/forms/signals/models) - Creating and updating form models
-  <!-- TODO: Uncomment when Field State Management guide is published -->
-  <!-- - [Field State Management guide](guide/forms/signals/field-state-management) - Using validation state in templates and displaying errors -->
+<docs-pill-row>
+  <docs-pill href="guide/forms/signals/field-state-management" title="Field state management" />
+  <docs-pill href="guide/forms/signals/models" title="Form models" />
+  <docs-pill href="guide/forms/signals/form-logic" title="Adding form logic" />
+  <docs-pill href="guide/forms/signals/schemas" title="Schemas and schema composability" />
+</docs-pill-row>

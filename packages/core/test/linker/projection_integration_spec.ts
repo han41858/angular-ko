@@ -7,7 +7,11 @@
  */
 
 import {ɵgetDOM as getDOM} from '@angular/common';
+import {By} from '@angular/platform-browser';
+import {isNode} from '@angular/private/testing';
+import {expect} from '@angular/private/testing/matchers';
 import {
+  ChangeDetectionStrategy,
   Component,
   ComponentRef,
   createComponent,
@@ -24,9 +28,6 @@ import {
   ViewEncapsulation,
 } from '../../src/core';
 import {ComponentFixture, TestBed} from '../../testing';
-import {By} from '@angular/platform-browser';
-import {expect} from '@angular/private/testing/matchers';
-import {isNode} from '@angular/private/testing';
 
 describe('projection', () => {
   beforeEach(() => TestBed.configureTestingModule({declarations: [MainComp, OtherComp, Simple]}));
@@ -272,8 +273,11 @@ describe('projection', () => {
   it('should redistribute non-continuous blocks of nodes when the shadow dom changes', () => {
     @Component({
       selector: 'child',
-      template: `<ng-content></ng-content>(<ng-template [ngIf]="showing"><ng-content select="div"></ng-content></ng-template>)`,
+      template: `<ng-content></ng-content>(<ng-template [ngIf]="showing"
+          ><ng-content select="div"></ng-content></ng-template
+        >)`,
       standalone: false,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Child {
       @Input() showing!: boolean;
@@ -288,6 +292,7 @@ describe('projection', () => {
         <span>B</span>
       </child>`,
       standalone: false,
+      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class App {
       showing = false;
@@ -612,7 +617,9 @@ describe('projection', () => {
   it('should project nodes into nested templates and the main template', () => {
     @Component({
       selector: 'content-in-main-and-template',
-      template: `<ng-content></ng-content>(<ng-template manual><ng-content select="[id=left]"></ng-content></ng-template>)`,
+      template: `<ng-content></ng-content>(<ng-template manual
+          ><ng-content select="[id=left]"></ng-content></ng-template
+        >)`,
       standalone: false,
     })
     class ContentInMainAndTemplateComponent {}
@@ -1039,7 +1046,7 @@ class Tree {
 
 @Component({
   selector: 'cmp-d',
-  template: `<i>{{tagName}}</i>`,
+  template: `<i>{{ tagName }}</i>`,
   standalone: false,
 })
 class CmpD {
@@ -1051,7 +1058,7 @@ class CmpD {
 
 @Component({
   selector: 'cmp-c',
-  template: `<b>{{tagName}}</b>`,
+  template: `<b>{{ tagName }}</b>`,
   standalone: false,
 })
 class CmpC {
@@ -1077,42 +1084,42 @@ class CmpA {}
 
 @Component({
   selector: 'cmp-b11',
-  template: `{{'b11'}}`,
+  template: `{{ 'b11' }}`,
   standalone: false,
 })
 class CmpB11 {}
 
 @Component({
   selector: 'cmp-b12',
-  template: `{{'b12'}}`,
+  template: `{{ 'b12' }}`,
   standalone: false,
 })
 class CmpB12 {}
 
 @Component({
   selector: 'cmp-b21',
-  template: `{{'b21'}}`,
+  template: `{{ 'b21' }}`,
   standalone: false,
 })
 class CmpB21 {}
 
 @Component({
   selector: 'cmp-b22',
-  template: `{{'b22'}}`,
+  template: `{{ 'b22' }}`,
   standalone: false,
 })
 class CmpB22 {}
 
 @Component({
   selector: 'cmp-a1',
-  template: `{{'a1'}}<cmp-b11></cmp-b11><cmp-b12></cmp-b12>`,
+  template: `{{ 'a1' }}<cmp-b11></cmp-b11><cmp-b12></cmp-b12>`,
   standalone: false,
 })
 class CmpA1 {}
 
 @Component({
   selector: 'cmp-a2',
-  template: `{{'a2'}}<cmp-b21></cmp-b21><cmp-b22></cmp-b22>`,
+  template: `{{ 'a2' }}<cmp-b21></cmp-b21><cmp-b22></cmp-b22>`,
   standalone: false,
 })
 class CmpA2 {}

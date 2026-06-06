@@ -54,14 +54,16 @@ const typeToDescriptorPreview: Formatter<string> = {
   [PropType.Array]: (prop: Array<unknown>) => `Array(${prop.length})`,
   [PropType.Set]: (prop: Set<unknown>) => `Set(${prop.size})`,
   [PropType.Map]: (prop: Map<unknown, unknown>) => `Map(${prop.size})`,
-  [PropType.BigInt]: (prop: bigint) => truncate(prop.toString()),
+  [PropType.BigInt]: (prop: bigint) => `${truncate(prop.toString())}n`,
   [PropType.Boolean]: (prop: boolean) => truncate(prop.toString()),
   [PropType.String]: (prop: string) => `"${prop}"`,
-  [PropType.Function]: (prop: Function) => `${prop.name}(...)`,
+  [PropType.Function]: (prop: Function) => `${prop.name ? 'ƒ ' : ''}(...)`,
   [PropType.HTMLNode]: (prop: Node) => prop.constructor.name,
   [PropType.Null]: (_: null) => 'null',
   [PropType.Number]: (prop: any) => prop.toString(),
-  [PropType.Object]: (prop: Object) => (getKeys(prop).length > 0 ? '{...}' : '{}'),
+  [PropType.Object]: (prop: Object) =>
+    (prop.constructor.name !== 'Object' ? `${prop.constructor.name} ` : '') +
+    (getKeys(prop).length > 0 ? '{...}' : '{}'),
   [PropType.Symbol]: (symbol: symbol) => `Symbol(${symbol.description})`,
   [PropType.Undefined]: (_: undefined) => 'undefined',
   [PropType.Date]: (prop: unknown) => {
@@ -180,13 +182,13 @@ const getPreview = (propData: TerminalType | CompositeType, isGetterOrSetter: bo
   if (propData.containerType === 'ReadonlySignal') {
     const {error, value} = safelyReadSignalValue(propData.prop);
     if (error) {
-      return 'ERROR: Could not read signal value. See console for details.';
+      return `Signal(⚠️ Error)${error.message ? `: ${error.message}` : ''}`;
     }
     return `Readonly Signal(${typeToDescriptorPreview[propData.type](value)})`;
   } else if (propData.containerType === 'WritableSignal') {
     const {error, value} = safelyReadSignalValue(propData.prop);
     if (error) {
-      return 'ERROR: Could not read signal value. See console for details.';
+      return `Signal(⚠️ Error)${error.message ? `: ${error.message}` : ''}`;
     }
     return `Signal(${typeToDescriptorPreview[propData.type](value)})`;
   }

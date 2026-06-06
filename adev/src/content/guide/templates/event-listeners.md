@@ -24,7 +24,7 @@ When you want to add event listeners to an HTML element, you wrap the event with
   `,
   ...
 })
-export class AppComponent{
+export class App{
   updateField(): void {
     console.log('Field is updated!');
   }
@@ -44,7 +44,7 @@ HTML 엘리먼트에서 발생하는 이벤트를 감지하려면, 이벤트 이
   `,
   ...
 })
-export class AppComponent{
+export class App{
   updateField(): void {
     console.log('Field is updated!');
   }
@@ -72,7 +72,7 @@ In every template event listener, Angular provides a variable named `$event` tha
   `,
   ...
 })
-export class AppComponent {
+export class App {
   updateField(event: KeyboardEvent): void {
     console.log(`The user pressed: ${event.key}`);
   }
@@ -88,7 +88,7 @@ export class AppComponent {
   `,
   ...
 })
-export class AppComponent {
+export class App {
   updateField(event: KeyboardEvent): void {
     console.log(`The user pressed: ${event.key}`);
   }
@@ -111,7 +111,7 @@ When you want to capture specific keyboard events for a specific key, you might 
   `,
   ...
 })
-export class AppComponent {
+export class App {
   updateField(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       console.log('The user pressed enter in the text field.');
@@ -129,7 +129,7 @@ However, since this is a common scenario, Angular lets you filter the events by 
   `,
   ...
 })
-export class AppComponent{
+export class App{
   updateField(event: KeyboardEvent): void {
     console.log('The user pressed enter in the text field.');
   }
@@ -154,7 +154,7 @@ Angular also allows you to specify [Code values for keyboard events](https://dev
 <input type="text" (keydown.code.alt.shiftleft)="updateField($event)" />
 ```
 
-This can be useful for handling keyboard events consistently across different operating systems. For example, when using the Alt key on MacOS devices, the `key` property reports the key based on the character already modified by the Alt key. This means that a combination like Alt + S reports a `key` value of `'ß'`. The `code` property, however, corresponds to the physical or virtual button pressed rather than the character produced.
+This can be useful for handling keyboard events consistently across different operating systems. For example, when using the Alt key on macOS devices, the `key` property reports the key based on the character already modified by the Alt key. This means that a combination like Alt + S reports a `key` value of `'ß'`. The `code` property, however, corresponds to the physical or virtual button pressed rather than the character produced.
 -->
 키보드 이벤트 중 특정 키를 감지해야 할 때는 다음과 같이 구현하면 됩니다:
 
@@ -165,7 +165,7 @@ This can be useful for handling keyboard events consistently across different op
   `,
   ...
 })
-export class AppComponent {
+export class App {
   updateField(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       console.log('The user pressed enter in the text field.');
@@ -184,7 +184,7 @@ export class AppComponent {
   `,
   ...
 })
-export class AppComponent{
+export class App{
   updateField(event: KeyboardEvent): void {
     console.log('The user pressed enter in the text field.');
   }
@@ -217,6 +217,28 @@ Angular에서는 `code` 접미사를 사용해서 [키보드 이벤트의 코드
 
 
 <!--
+## Listening on global targets
+-->
+## 전역 대상 감지하기
+
+<!--
+Global target names can be used to prefix an event. The 3 supported global targets are `window`, `document` and `body`.
+-->
+전역 대상은 이벤트 앞에 `window`, `document`, `body` 중 하나를 접두사로 사용할 수 있습니다.
+
+```angular-ts
+@Component({
+  /* ... */
+  host: {
+    'window:click': 'onWindowClick()',
+    'document:click': 'onDocumentClick()',
+    'body:click': 'onBodyClick()',
+  },
+})
+export class MyView {}
+```
+
+<!--
 ## Preventing event default behavior
 -->
 ## 이벤트 전파 중단하기
@@ -231,7 +253,7 @@ If your event handler should replace the native browser behavior, you can use th
   `,
   ...
 })
-export class AppComponent{
+export class App{
   showOverlay(event: PointerEvent): void {
     event.preventDefault();
     console.log('Show overlay without updating the URL!');
@@ -250,7 +272,7 @@ If the event handler statement evaluates to `false`, Angular automatically calls
   `,
   ...
 })
-export class AppComponent{
+export class App{
   showOverlay(event: PointerEvent): void {
     event.preventDefault();
     console.log('Show overlay without updating the URL!');
@@ -283,8 +305,8 @@ Angular 이벤트 처리 시스템은 커스텀 이벤트 플러그인을 `EVENT
 To create a custom event plugin, extend the `EventManagerPlugin` class and implement the required methods.
 
 ```ts
-import { Injectable } from '@angular/core';
-import { EventManagerPlugin } from '@angular/platform-browser';
+import {Injectable} from '@angular/core';
+import {EventManagerPlugin} from '@angular/platform-browser';
 
 @Injectable()
 export class DebounceEventPlugin extends EventManagerPlugin {
@@ -298,21 +320,17 @@ export class DebounceEventPlugin extends EventManagerPlugin {
   }
 
   // Handle the event registration
-  override addEventListener(
-    element: HTMLElement,
-    eventName: string,
-    handler: Function
-  ) {
+  override addEventListener(element: HTMLElement, eventName: string, handler: Function) {
     // Parse the event: e.g., "click.debounce.500"
     // event: "click", delay: 500
-    const [event, method , delay = 300 ] = eventName.split('.');
+    const [event, method, delay = 300] = eventName.split('.');
 
     let timeoutId: number;
 
     const listener = (event: Event) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-          handler(event);
+        handler(event);
       }, delay);
     };
 
@@ -330,19 +348,19 @@ export class DebounceEventPlugin extends EventManagerPlugin {
 Register your custom plugin using the `EVENT_MANAGER_PLUGINS` token in your application's providers:
 
 ```ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
-import { DebounceEventPlugin } from './debounce-event-plugin';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {EVENT_MANAGER_PLUGINS} from '@angular/platform-browser';
+import {App} from './app';
+import {DebounceEventPlugin} from './debounce-event-plugin';
 
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
     {
       provide: EVENT_MANAGER_PLUGINS,
       useClass: DebounceEventPlugin,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 });
 ```
 
@@ -383,8 +401,8 @@ export class AwesomeCard {
 커스텀 이벤트 플러그인을 만들려면 `EventManagerPlugin` 클래스를 상속받아 필수 메서드를 구현하면 됩니다.
 
 ```ts
-import { Injectable } from '@angular/core';
-import { EventManagerPlugin } from '@angular/platform-browser';
+import {Injectable} from '@angular/core';
+import {EventManagerPlugin} from '@angular/platform-browser';
 
 @Injectable()
 export class DebounceEventPlugin extends EventManagerPlugin {
@@ -398,21 +416,17 @@ export class DebounceEventPlugin extends EventManagerPlugin {
   }
 
   // 이벤트 리스너를 등록합니다.
-  override addEventListener(
-    element: HTMLElement,
-    eventName: string,
-    handler: Function
-  ) {
+  override addEventListener(element: HTMLElement, eventName: string, handler: Function) {
     // 이벤트를 파싱합니다:
-    // "click.debounce.500" -> event: "click", delay: 500
-    const [event, method , delay = 300 ] = eventName.split('.');
+    // event: "click", delay: 500
+    const [event, method, delay = 300] = eventName.split('.');
 
     let timeoutId: number;
 
     const listener = (event: Event) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-          handler(event);
+        handler(event);
       }, delay);
     };
 
@@ -430,21 +444,20 @@ export class DebounceEventPlugin extends EventManagerPlugin {
 이후에는 애플리케이션의 프로바이더 목록에 `EVENT_MANAGER_PLUGINS` 토큰과 커스텀 플러그인을 등록하면 됩니다.
 
 ```ts
-import { bootstrapApplication } from '@angular/platform-browser';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
-import { DebounceEventPlugin } from './debounce-event-plugin';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {EVENT_MANAGER_PLUGINS} from '@angular/platform-browser';
+import {App} from './app';
+import {DebounceEventPlugin} from './debounce-event-plugin';
 
-bootstrapApplication(AppComponent, {
+bootstrapApplication(App, {
   providers: [
     {
       provide: EVENT_MANAGER_PLUGINS,
       useClass: DebounceEventPlugin,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 });
-```
 
 이렇게 한 번 등록하고 나면, 템플릿에서 커스텀 이벤트 문법을 사용할 수 있으며, `host` 프로퍼티를 활용해도 됩니다:
 

@@ -8,7 +8,7 @@
 
 import {Injector, signal} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
-import {customError, form, hidden, validate} from '@angular/forms/signals';
+import {form, hidden, validate} from '@angular/forms/signals';
 
 describe('hidden', () => {
   it('should initially be false', () => {
@@ -16,8 +16,10 @@ describe('hidden', () => {
     const f = form(
       cat,
       (p) => {
-        hidden(p, ({value}) => {
-          return value.name === 'hidden-cat';
+        hidden(p, {
+          when: ({value}) => {
+            return value.name === 'hidden-cat';
+          },
         });
       },
       {injector: TestBed.inject(Injector)},
@@ -32,8 +34,10 @@ describe('hidden', () => {
     const f = form(
       cat,
       (p) => {
-        hidden(p.name, ({value}) => {
-          return value() === 'hidden-cat';
+        hidden(p.name, {
+          when: ({value}) => {
+            return value() === 'hidden-cat';
+          },
         });
       },
       {injector: TestBed.inject(Injector)},
@@ -48,8 +52,10 @@ describe('hidden', () => {
     const f = form(
       cat,
       (p) => {
-        hidden(p, ({value}) => {
-          return value().name === 'hidden-cat';
+        hidden(p, {
+          when: ({value}) => {
+            return value().name === 'hidden-cat';
+          },
         });
       },
       {injector: TestBed.inject(Injector)},
@@ -65,12 +71,14 @@ describe('hidden', () => {
     const f = form(
       cat,
       (p) => {
-        hidden(p.name, ({value}) => {
-          return value() === 'hidden-cat';
+        hidden(p.name, {
+          when: ({value}) => {
+            return value() === 'hidden-cat';
+          },
         });
 
         validate(p.name, () => {
-          return customError({kind: 'dog'});
+          return {kind: 'dog'};
         });
       },
       {injector: TestBed.inject(Injector)},
@@ -94,8 +102,10 @@ describe('hidden', () => {
     const f = form(
       cat,
       (p) => {
-        hidden(p.name, ({value}) => {
-          return value() === 'hidden-cat';
+        hidden(p.name, {
+          when: ({value}) => {
+            return value() === 'hidden-cat';
+          },
         });
       },
       {injector: TestBed.inject(Injector)},
@@ -114,5 +124,19 @@ describe('hidden', () => {
     expect(f().touched())
       .withContext('form with a hidden touched field is not touched')
       .toBeFalse();
+  });
+
+  it('supports deprecated function syntax', () => {
+    const cat = signal({name: 'Pirojok-the-cat', age: 5});
+    const f = form(
+      cat,
+      (p) => {
+        hidden(p.name, ((ctx: any) => ctx.value() === 'hidden-cat') as any);
+      },
+      {injector: TestBed.inject(Injector)},
+    );
+
+    f.name().value.set('hidden-cat');
+    expect(f.name().hidden()).toBe(true);
   });
 });

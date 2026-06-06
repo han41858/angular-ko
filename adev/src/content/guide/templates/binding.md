@@ -1,4 +1,4 @@
-<!--
+﻿<!--
 # Binding dynamic text, properties and attributes
 -->
 # 문자열, 프로퍼티, 어트리뷰트를 동적으로 바인딩하기
@@ -25,7 +25,7 @@ You can bind dynamic text in templates with double curly braces, which tells Ang
   `,
   ...
 })
-export class AppComponent {
+export class App {
   theme = 'dark';
 }
 ```
@@ -45,11 +45,11 @@ Bindings that change over time should read values from [signals](/guide/signals)
     <!-- Does not necessarily update when `welcomeMessage` changes. -->
     <p>{{ welcomeMessage }}</p>
 
-    <p>Your color preference is {{ theme() }}.</p> <!-- Always updates when the value of the `name` signal changes. -->
+    <p>Your color preference is {{ theme() }}.</p> <!-- Always updates when the value of the `theme` signal changes. -->
   `
   ...
 })
-export class AppComponent {
+export class App {
   welcomeMessage = "Welcome, enjoy this app that we built for you";
   theme = signal('dark');
 }
@@ -77,7 +77,7 @@ All expression values are converted to a string. Objects and arrays are converte
   `,
   ...
 })
-export class AppComponent {
+export class App {
   theme = 'dark';
 }
 ```
@@ -102,7 +102,7 @@ export class AppComponent {
   `
   ...
 })
-export class AppComponent {
+export class App {
   welcomeMessage = "Welcome, enjoy this app that we built for you";
   theme = signal('dark');
 }
@@ -131,11 +131,11 @@ HTML에 문자열을 표시하고 싶은 곳이라면 어느 곳에든 문자열
 <!--
 Angular supports binding dynamic values into object properties and HTML attributes with square brackets.
 
-You can bind to properties on an HTML element's DOM instance, a [component](guide/components) instance, or a [directive](guide/directives) instance.
+You can bind to properties on an HTML element's DOM instance, a [component](/guide/components) instance, or a [directive](/guide/directives) instance.
 -->
 대괄호(`[`, `]`)를 사용하면 객체 프로퍼티와 HTML 어트리뷰트를 바인딩 할 수 있습니다.
 
-이 때 프로퍼티는 HTML 엘리먼트의 DOM 인스턴스이거나, [컴포넌트](guide/components) 인스턴스이거나, [디렉티브](guide/directives) 인스턴스 일 수 있습니다.
+이 때 프로퍼티는 HTML 엘리먼트의 DOM 인스턴스이거나, [컴포넌트](/guide/components) 인스턴스이거나, [디렉티브](/guide/directives) 인스턴스 일 수 있습니다.
 
 
 <!--
@@ -184,7 +184,7 @@ You can bind to directive properties as well.
 
 ```angular-html
 <!- Bind to the `ngSrc` property of the `NgOptimizedImage` directive  ->
-<img [ngSrc]="profilePhotoUrl()" alt="The current user's profile photo">
+<img [ngSrc]="profilePhotoUrl()" alt="The current user's profile photo" />
 ```
 -->
 바인딩하려는 프로퍼티가 Angular 컴포넌트라면, 대괄호를 사용하는 프로퍼티 바인딩은 컴포넌트의 입력 프로퍼티와 바인딩됩니다.
@@ -200,7 +200,7 @@ You can bind to directive properties as well.
 
 ```angular-html
 <!-- `NgOptimizedImage` 디렉티브의 `ngSrc` 프로퍼티와 바인딩 됩니다.  -->
-<img [ngSrc]="profilePhotoUrl()" alt="The current user's profile photo">
+<img [ngSrc]="profilePhotoUrl()" alt="The current user's profile photo" />
 ```
 
 
@@ -212,6 +212,7 @@ You can bind to directive properties as well.
 <!--
 When you need to set HTML attributes that do not have corresponding DOM properties, such as SVG attributes, you can bind attributes to elements in your template with the `attr.` prefix.
 
+<!- prettier-ignore ->
 ```angular-html
 <!- Bind the `role` attribute on the `<ul>` element to the component's `listRole` property. ->
 <ul [attr.role]="listRole()">
@@ -243,14 +244,14 @@ You can also use text interpolation syntax in properties and attributes by using
 
 ```angular-html
 <!- Binds a value to the `alt` property of the image element's DOM object. ->
-<img src="profile-photo.jpg" alt="Profile photo of {{ firstName() }}" >
+<img src="profile-photo.jpg" alt="Profile photo of {{ firstName() }}" />
 ```
 -->
 프로퍼티나 어트리뷰트 이름에 대괄호를 사용하는 대신 이중 중괄호를 사용하면 프로퍼티나 어트리뷰트에 문자열 바인딩을 연결할 수 있습니다.
 
 ```angular-html
 <!-- 이미지 엘리먼트의 DOM 객체와 `alt` 프로퍼티를 바인딩합니다. -->
-<img src="profile-photo.jpg" alt="Profile photo of {{ firstName() }}" >
+<img src="profile-photo.jpg" alt="Profile photo of {{ firstName() }}" />
 ```
 
 어트리뷰트에 문자열 바인딩을 사용하려면 어트리뷰트 이름 앞에 `attr.` 접두사를 사용하면 됩니다.
@@ -278,6 +279,7 @@ Angular는 CSS 클래스 바인딩과 CSS 스타일 프로퍼티 바인딩도 �
 <!--
 You can create a CSS class binding to conditionally add or remove a CSS class on an element based on whether the bound value is [truthy or falsy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy).
 
+<!- prettier-ignore ->
 ```angular-html
 <!- When `isExpanded` is truthy, add the `expanded` CSS class. ->
 <ul [class.expanded]="isExpanded()">
@@ -312,6 +314,7 @@ export class UserProfile {
 
 The above example renders the following DOM:
 
+<!- prettier-ignore ->
 ```angular-html
 <ul class="full-width outlined"> ... </ul>
 <section class="expandable elevated"> ... </section>
@@ -335,6 +338,7 @@ export class Listbox {
 
 In the example above, Angular renders the `ul` element with all three CSS classes.
 
+<!- prettier-ignore ->
 ```angular-html
 <ul class="list box expanded">
 ```
@@ -431,6 +435,7 @@ export class Listbox {
 <!--
 You can also bind to CSS style properties directly on an element.
 
+<!- prettier-ignore ->
 ```angular-html
 <!- Set the CSS `display` property based on the `isExpanded` property. ->
 <section [style.display]="isExpanded() ? 'block' : 'none'">
@@ -438,6 +443,7 @@ You can also bind to CSS style properties directly on an element.
 
 You can further specify units for CSS properties that accept units.
 
+<!- prettier-ignore ->
 ```angular-html
 <!- Set the CSS `height` property to a pixel value based on the `sectionHeightInPixels` property. ->
 <section [style.height.px]="sectionHeightInPixels()">
@@ -469,12 +475,13 @@ export class UserProfile {
 
 The above example renders the following DOM.
 
+<!- prettier-ignore ->
 ```angular-html
 <ul style="display: flex; padding: 8px"> ... </ul>
 <section style="border: 1px solid black; font-weight: bold"> ... </section>
 ```
 
-When binding `style` to an object, Angular compares the previous value to the current value with the triple-equals operator (`===`). You must create a new object instance when you modify these values in order to Angular to apply any updates.
+When binding `style` to an object, Angular compares the previous value to the current value with the triple-equals operator (`===`). You must create a new object instance when you modify these values in order for Angular to apply any updates.
 
 If an element has multiple bindings for the same style property, Angular resolves collisions by following its style precedence order.
 -->
@@ -546,7 +553,7 @@ Angular supports binding string values to ARIA attributes.
 
 Angular writes the string value to the element’s `aria-label` attribute and removes it when the bound value is `null`.
 
-Some ARIA features expose DOM properties or directive inputs that accept structured values (such as element references). Use standard property bindings for those cases. See the [accessibility guide](best-practices/a11y#aria-attributes-and-properties) for examples and additional guidance.
+Some ARIA features expose DOM properties or directive inputs that accept structured values (such as element references). Use standard property bindings for those cases. See the [accessibility guide](/best-practices/a11y#aria-attributes-and-properties) for examples and additional guidance.
 -->
 ARIA 어트리뷰트에 문자열을 바인딩 할 수 있습니다.
 
@@ -560,4 +567,4 @@ Angular는 바인딩 된 값에 따라 해당 문자열을 엘리먼트의 `aria
 
 일부 ARIA 기능은 엘리먼트 참조와 같이 어떤 형식을 요구하는 경우가 있습니다.
 이런 경우는 일반적인 프로퍼티 바인딩을 사용하세요.
-자세한 내용은 [접근성 가이드](best-practices/a11y#aria-attributes-and-properties)에서 예제와 함께 확인할 수 있습니다.
+자세한 내용은 [접근성 가이드](/best-practices/a11y#aria-attributes-and-properties)에서 예제와 함께 확인할 수 있습니다.

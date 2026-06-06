@@ -15,19 +15,21 @@ import {
   TransferState,
   makeStateKey,
 } from '@angular/core';
-import {fakeAsync, flush, TestBed} from '@angular/core/testing';
-import {withBody} from '@angular/private/testing';
-import {BehaviorSubject} from 'rxjs';
+import {TestBed} from '@angular/core/testing';
+import {useAutoTick, timeout, withBody} from '@angular/private/testing';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 
-import {HttpClient, HttpResponse, provideHttpClient} from '../public_api';
+import {HttpClient, HttpHeaders, HttpRequest, HttpResponse, provideHttpClient} from '../public_api';
 import {
   BODY,
+  CACHE_OPTIONS,
   HEADERS,
   HTTP_TRANSFER_CACHE_ORIGIN_MAP,
   RESPONSE_TYPE,
   STATUS,
   STATUS_TEXT,
   REQ_URL,
+  transferCacheInterceptorFn,
   withHttpTransferCache,
 } from '../src/transfer_cache';
 import {HttpTestingController, provideHttpClientTesting} from '../testing';
@@ -38,6 +40,7 @@ interface RequestParams {
   observe?: 'body' | 'response';
   transferCache?: {includeHeaders: string[]} | boolean;
   headers?: {[key: string]: string};
+  withCredentials?: boolean;
   body?: RequestBody;
 }
 
@@ -52,12 +55,109 @@ type RequestBody =
   | null;
 
 describe('TransferCache', () => {
+  useAutoTick();
   @Component({
     selector: 'test-app-http',
     template: 'hello',
     standalone: false,
   })
   class SomeComponent {}
+
+  describe('transferCacheInterceptorFn', () => {
+    afterEach(() => {
+      TestBed.resetTestingModule();
+    });
+
+    function configureInterceptor(options: {includeRequestsWithAuthHeaders?: boolean} = {}): void {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [
+          TransferState,
+          {
+            provide: CACHE_OPTIONS,
+            useValue: {
+              isCacheActive: true,
+              ...options,
+            },
+          },
+        ],
+      });
+    }
+
+    function runOnServer<T>(callback: () => T): T {
+      const previousServerMode = globalThis['ngServerMode'];
+      globalThis['ngServerMode'] = true;
+      try {
+        return callback();
+      } finally {
+        globalThis['ngServerMode'] = previousServerMode;
+      }
+    }
+
+    function runInterceptor(
+      req: HttpRequest<unknown>,
+      next: (req: HttpRequest<unknown>) => Observable<HttpResponse<unknown>>,
+    ): HttpResponse<unknown> {
+      let response!: HttpResponse<unknown>;
+      TestBed.runInInjectionContext(() => {
+        transferCacheInterceptorFn(req, next).subscribe((event) => {
+          if (event instanceof HttpResponse) {
+            response = event;
+          }
+        });
+      });
+      return response;
+    }
+
+    it('should not reuse cached responses for Cookie-bearing requests by default', () => {
+      configureInterceptor();
+
+      const firstRequest = new HttpRequest('GET', '/test-cookie', null, {
+        headers: new HttpHeaders({Cookie: 'session=user-a'}),
+      });
+      const secondRequest = new HttpRequest('GET', '/test-cookie', null, {
+        headers: new HttpHeaders({Cookie: 'session=user-b'}),
+      });
+
+      const firstNext = jasmine
+        .createSpy('firstNext')
+        .and.returnValue(of(new HttpResponse({body: 'user-a-secret'})));
+      const secondNext = jasmine
+        .createSpy('secondNext')
+        .and.returnValue(of(new HttpResponse({body: 'user-b-secret'})));
+
+      runOnServer(() => {
+        expect(runInterceptor(firstRequest, firstNext).body).toBe('user-a-secret');
+        expect(runInterceptor(secondRequest, secondNext).body).toBe('user-b-secret');
+      });
+
+      expect(firstNext).toHaveBeenCalledTimes(1);
+      expect(secondNext).toHaveBeenCalledTimes(1);
+    });
+
+    it("should preserve opt-in caching for Cookie-bearing requests when 'includeRequestsWithAuthHeaders' is true", () => {
+      configureInterceptor({includeRequestsWithAuthHeaders: true});
+
+      const request = new HttpRequest('GET', '/test-cookie', null, {
+        headers: new HttpHeaders({Cookie: 'session=user-a'}),
+      });
+
+      const firstNext = jasmine
+        .createSpy('firstNext')
+        .and.returnValue(of(new HttpResponse({body: 'user-a-secret'})));
+      const secondNext = jasmine
+        .createSpy('secondNext')
+        .and.returnValue(of(new HttpResponse({body: 'network-should-not-run'})));
+
+      runOnServer(() => {
+        expect(runInterceptor(request, firstNext).body).toBe('user-a-secret');
+        expect(runInterceptor(request, secondNext).body).toBe('user-a-secret');
+      });
+
+      expect(firstNext).toHaveBeenCalledTimes(1);
+      expect(secondNext).not.toHaveBeenCalled();
+    });
+  });
 
   describe('withHttpTransferCache', () => {
     let isStable: BehaviorSubject<boolean>;
@@ -138,13 +238,44 @@ describe('TransferCache', () => {
       expect(transferState.get(key, null)).toEqual(jasmine.objectContaining({[BODY]: 'foo'}));
     });
 
-    it('should stop storing HTTP calls in `TransferState` after application becomes stable', fakeAsync(() => {
+    it('should cache arraybuffer responses correctly', () => {
+      const testData = new Uint8Array([1, 2, 3, 4, 5]).buffer;
+      let response!: ArrayBuffer;
+      TestBed.inject(HttpClient)
+        .get('/test-arraybuffer', {responseType: 'arraybuffer'})
+        .subscribe((r) => (response = r));
+      TestBed.inject(HttpTestingController).expectOne('/test-arraybuffer').flush(testData);
+
+      expect(new Uint8Array(response)).toEqual(new Uint8Array([1, 2, 3, 4, 5]));
+
+      let cachedResponse!: ArrayBuffer;
+      TestBed.inject(HttpClient)
+        .get('/test-arraybuffer', {responseType: 'arraybuffer'})
+        .subscribe((r) => (cachedResponse = r));
+      TestBed.inject(HttpTestingController).expectNone('/test-arraybuffer');
+
+      expect(new Uint8Array(cachedResponse)).toEqual(new Uint8Array([1, 2, 3, 4, 5]));
+    });
+
+    it('should cache blob responses correctly', () => {
+      const testData = new Uint8Array([10, 20, 30, 40, 50]).buffer;
+      let response!: Blob;
+      TestBed.inject(HttpClient)
+        .get('/test-blob', {responseType: 'blob'})
+        .subscribe((r) => (response = r));
+      TestBed.inject(HttpTestingController).expectOne('/test-blob').flush(testData);
+
+      expect(response instanceof Blob).toBeTrue();
+      expect(response.size).toBe(5);
+    });
+
+    it('should stop storing HTTP calls in `TransferState` after application becomes stable', async () => {
       makeRequestAndExpectOne('/test-1', 'foo');
       makeRequestAndExpectOne('/test-2', 'buzz');
 
       isStable.next(true);
 
-      flush();
+      await timeout();
 
       makeRequestAndExpectOne('/test-3', 'bar');
 
@@ -167,7 +298,7 @@ describe('TransferCache', () => {
           [RESPONSE_TYPE]: 'json',
         },
       });
-    }));
+    });
 
     it(`should use calls from cache when present and application is not stable`, () => {
       makeRequestAndExpectOne('/test-1', 'foo');
@@ -175,14 +306,14 @@ describe('TransferCache', () => {
       makeRequestAndExpectNone('/test-1');
     });
 
-    it(`should not use calls from cache when present and application is stable`, fakeAsync(() => {
+    it(`should not use calls from cache when present and application is stable`, async () => {
       makeRequestAndExpectOne('/test-1', 'foo');
 
       isStable.next(true);
-      flush();
+      await timeout();
       // Do the same call, this time it should go through as application is stable.
       makeRequestAndExpectOne('/test-1', 'foo');
-    }));
+    });
 
     it(`should differentiate calls with different parameters`, async () => {
       // make calls with different parameters. All of which should be saved in the state.
@@ -297,6 +428,16 @@ describe('TransferCache', () => {
       });
 
       makeRequestAndExpectOne('/test-auth', 'foo');
+    });
+
+    it('should not cache requests with credentials', async () => {
+      makeRequestAndExpectOne('/test-auth', 'foo', {
+        withCredentials: true,
+      });
+
+      makeRequestAndExpectOne('/test-auth', 'foo', {
+        withCredentials: true,
+      });
     });
 
     it('should cache POST with the differing body in string form', () => {
@@ -449,6 +590,16 @@ describe('TransferCache', () => {
         });
 
         makeRequestAndExpectNone('/test-auth');
+      });
+
+      it(`should not cache requests with credentials when 'includeRequestsWithAuthHeaders' is 'true'`, async () => {
+        makeRequestAndExpectOne('/test-auth', 'foo', {
+          withCredentials: true,
+        });
+
+        makeRequestAndExpectOne('/test-auth', 'foo', {
+          withCredentials: true,
+        });
       });
 
       it('should cache a POST request', () => {

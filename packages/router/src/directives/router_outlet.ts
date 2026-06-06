@@ -27,14 +27,15 @@ import {
   SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
-import {combineLatest, of, Subscription} from 'rxjs';
+import {combineLatest, Observable, of, Subscription} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 
 import {RuntimeErrorCode} from '../errors';
 import {Data} from '../models';
 import {ChildrenOutletContexts} from '../router_outlet_context';
 import {ActivatedRoute} from '../router_state';
-import {PRIMARY_OUTLET} from '../shared';
+import {Params, PRIMARY_OUTLET} from '../shared';
+import {ComponentInputBindingOptions} from '../router_config';
 
 /**
  * An `InjectionToken` provided by the `RouterOutlet` and can be set using the `routerOutletData`
@@ -58,7 +59,7 @@ import {PRIMARY_OUTLET} from '../shared';
  * @see [Page routerOutletData](guide/routing/show-routes-with-outlets#passing-contextual-data-to-routed-components)
  */
 export const ROUTER_OUTLET_DATA = new InjectionToken<Signal<unknown | undefined>>(
-  typeof ngDevMode !== undefined && ngDevMode ? 'RouterOutlet data' : '',
+  typeof ngDevMode !== 'undefined' && ngDevMode ? 'RouterOutlet data' : '',
 );
 
 /**
@@ -447,8 +448,9 @@ export const INPUT_BINDER = new InjectionToken<RoutedComponentInputBinder>(
  * activated. When this happens, the service subscribes to the `ActivatedRoute` observables (params,
  * queryParams, data) and sets the inputs of the component using `ComponentRef.setInput`.
  * Importantly, when an input does not have an item in the route data with a matching key, this
- * input is set to `undefined`. If it were not done this way, the previous information would be
+ * input is set to `undefined` by default. If it were not done this way, the previous information would be
  * retained if the data got removed from the route (i.e. if a query parameter is removed).
+ * The `unmatchedInputBehavior` option can be used to configure this behavior.
  *
  * The `RouterOutlet` should unregister itself when destroyed via `unsubscribeFromRouteData` so that
  * the subscriptions are cleaned up.
@@ -456,6 +458,11 @@ export const INPUT_BINDER = new InjectionToken<RoutedComponentInputBinder>(
 @Injectable()
 export class RoutedComponentInputBinder {
   private outletDataSubscriptions = new Map<RouterOutlet, Subscription>();
+  private outletSeenKeys = new Map<RouterOutlet, Set<string>>();
+
+  constructor(private options: ComponentInputBindingOptions) {
+    this.options.queryParams ??= true;
+  }
 
   bindActivatedRouteToOutletComponent(outlet: RouterOutlet): void {
     this.unsubscribeFromRouteData(outlet);
@@ -465,12 +472,13 @@ export class RoutedComponentInputBinder {
   unsubscribeFromRouteData(outlet: RouterOutlet): void {
     this.outletDataSubscriptions.get(outlet)?.unsubscribe();
     this.outletDataSubscriptions.delete(outlet);
+    this.outletSeenKeys.delete(outlet);
   }
 
   private subscribeToRouteData(outlet: RouterOutlet) {
     const {activatedRoute} = outlet;
     const dataSubscription = combineLatest([
-      activatedRoute.queryParams,
+      this.options.queryParams ? activatedRoute.queryParams : of({}),
       activatedRoute.params,
       activatedRoute.data,
     ])
@@ -507,8 +515,23 @@ export class RoutedComponentInputBinder {
           return;
         }
 
+        let seenKeys = this.outletSeenKeys.get(outlet);
+        if (!seenKeys) {
+          seenKeys = new Set<string>();
+          this.outletSeenKeys.set(outlet, seenKeys);
+        }
+
+        for (const key of Object.keys(data)) {
+          seenKeys.add(key);
+        }
+
+        const behavior = this.options.unmatchedInputBehavior ?? 'alwaysUndefined';
+
         for (const {templateName} of mirror.inputs) {
-          outlet.activatedComponentRef.setInput(templateName, data[templateName]);
+          const value = data[templateName];
+          if (value !== undefined || behavior === 'alwaysUndefined' || seenKeys.has(templateName)) {
+            outlet.activatedComponentRef.setInput(templateName, value);
+          }
         }
       });
 

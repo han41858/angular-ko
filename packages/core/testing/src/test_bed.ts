@@ -21,8 +21,10 @@ import {
   EnvironmentInjector,
   ɵflushModuleScopingQueueAsMuchAsPossible as flushModuleScopingQueueAsMuchAsPossible,
   ɵgetAsyncClassMetadataFn as getAsyncClassMetadataFn,
+  ɵgetComponentDef as getComponentDef,
   ɵgetUnknownElementStrictMode as getUnknownElementStrictMode,
   ɵgetUnknownPropertyStrictMode as getUnknownPropertyStrictMode,
+  ɵinferTagNameFromDefinition as inferTagNameFromDefinition,
   InjectOptions,
   Injector,
   NgModule,
@@ -38,8 +40,6 @@ import {
   ɵsetUnknownPropertyStrictMode as setUnknownPropertyStrictMode,
   ɵstringify as stringify,
   Type,
-  ɵinferTagNameFromDefinition as inferTagNameFromDefinition,
-  ɵgetComponentDef as getComponentDef,
 } from '../../src/core';
 
 import {ComponentFixture} from './component_fixture';
@@ -170,6 +170,12 @@ export interface TestBed {
   overrideTemplateUsingTestingModule(component: Type<any>, template: string): TestBed;
 
   createComponent<T>(component: Type<T>, options?: TestComponentOptions): ComponentFixture<T>;
+
+  /**
+   * Returns the most recently created `ComponentFixture`, or throws an error if one has not
+   * yet been created.
+   */
+  getLastFixture<T = unknown>(): ComponentFixture<T>;
 
   /**
    * Execute any pending effects.
@@ -412,6 +418,10 @@ export class TestBedImpl implements TestBed {
     options?: TestComponentOptions,
   ): ComponentFixture<T> {
     return TestBedImpl.INSTANCE.createComponent(component, options);
+  }
+
+  static getLastFixture<T = unknown>(): ComponentFixture<T> {
+    return TestBedImpl.INSTANCE.getLastFixture();
   }
 
   static resetTestingModule(): TestBed {
@@ -669,10 +679,14 @@ export class TestBedImpl implements TestBed {
 
   createComponent<T>(type: Type<T>, options?: TestComponentOptions): ComponentFixture<T> {
     if (getAsyncClassMetadataFn(type)) {
-      throw new Error(
-        `Component '${type.name}' has unresolved metadata. ` +
-          `Please call \`await TestBed.compileComponents()\` before running this test.`,
-      );
+      const isCompiled = !!getComponentDef(type);
+
+      if (!isCompiled) {
+        throw new Error(
+          `Component '${type.name}' has unresolved metadata. ` +
+            `Please call \`await TestBed.compileComponents()\` before running this test.`,
+        );
+      }
     }
 
     // Note: injecting the renderer before accessing the definition appears to be load-bearing.
@@ -707,6 +721,13 @@ export class TestBedImpl implements TestBed {
     const fixture = ngZone ? ngZone.run(initComponent) : initComponent();
     this._activeFixtures.push(fixture);
     return fixture;
+  }
+
+  getLastFixture<T = unknown>(): ComponentFixture<T> {
+    if (this._activeFixtures.length === 0) {
+      throw new Error('No fixture has been created yet.');
+    }
+    return this._activeFixtures[this._activeFixtures.length - 1];
   }
 
   /**
@@ -880,6 +901,8 @@ export class TestBedImpl implements TestBed {
       // The behavior should be that TestBed.tick, ComponentFixture.detectChanges, and ApplicationRef.tick all result in the test fixtures
       // getting synchronized, regardless of whether they are autoDetect: true.
       // Automatic scheduling (zone or zoneless) will call _tick which will _not_ include fixtures with autoDetect: false
+      // If this does get changed, we will need a new flag for the scheduler to use to omit the microtask scheduling
+      // from a tick initiated by tests.
       (appRef as any).includeAllTestViews = true;
       appRef.tick();
     } finally {

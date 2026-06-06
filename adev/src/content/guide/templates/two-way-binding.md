@@ -32,8 +32,8 @@ Developers commonly use two-way binding to keep component data in sync with a fo
 The following example dynamically updates the `firstName` attribute on the page:
 
 ```angular-ts
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   imports: [FormsModule],
@@ -42,9 +42,9 @@ import { FormsModule } from '@angular/forms';
       <h2>Hello {{ firstName }}!</h2>
       <input type="text" [(ngModel)]="firstName" />
     </main>
-  `
+  `,
 })
-export class AppComponent {
+export class App {
   firstName = 'Ada';
 }
 ```
@@ -57,7 +57,7 @@ To use two-way binding with native form controls, you need to:
 
 Once that is set up, Angular will ensure that any updates in the text input will reflect correctly inside of the component state!
 
-Learn more about [`NgModel`](guide/directives#displaying-and-updating-properties-with-ngmodel) in the official docs.
+Learn more about [`NgModel`](/api/forms/NgModel) in the official docs.
 -->
 양방향 바인딩은 컴포넌트 데이터와 폼 컨트롤을 같은 값으로 동기화하는 용도로 자주 사용됩니다.
 사용자가 문자열을 입력하면 컴포넌트의 상태가 갱신되는 과정도 이 경우에 해당됩니다.
@@ -77,7 +77,7 @@ import { FormsModule } from '@angular/forms';
     </main>
   `
 })
-export class AppComponent {
+export class App {
   firstName = 'Ada';
 }
 ```
@@ -90,7 +90,7 @@ export class AppComponent {
 
 이렇게 한 번 연결하고 나면 `<input>` 엘리먼트 값이 변경되면 Angular가 변경된 값으로 컴포넌트 상태를 갱신합니다!
 
-[`NgModel`](guide/directives#displaying-and-updating-properties-with-ngmodel) 도 자세하게 알아보세요.
+[`NgModel`](/api/forms/NgModel) 도 자세하게 알아보세요.
 
 
 <!--
@@ -101,16 +101,15 @@ export class AppComponent {
 <!--
 Leveraging two-way binding between a parent and child component requires more configuration compared to form elements.
 
-Here is an example where the `AppComponent` is responsible for setting the initial count state, but the logic for updating and rendering the UI for the counter primarily resides inside its child `CounterComponent`.
+Here is an example where the `App` is responsible for setting the initial count state, but the logic for updating and rendering the UI for the counter primarily resides inside its child `Counter`.
 
-```angular-ts
-// ./app.component.ts
-import { Component } from '@angular/core';
-import { CounterComponent } from './counter/counter.component';
+```angular-ts {header: 'app.ts'}
+import {Component} from '@angular/core';
+import {Counter} from './counter';
 
 @Component({
   selector: 'app-root',
-  imports: [CounterComponent],
+  imports: [Counter],
   template: `
     <main>
       <h1>Counter: {{ initialCount }}</h1>
@@ -118,14 +117,13 @@ import { CounterComponent } from './counter/counter.component';
     </main>
   `,
 })
-export class AppComponent {
+export class App {
   initialCount = 18;
 }
 ```
 
-```angular-ts
-// './counter/counter.component.ts';
-import { Component, model } from '@angular/core';
+```angular-ts {header: 'counter.ts'}
+import {Component, model} from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -135,27 +133,26 @@ import { Component, model } from '@angular/core';
     <button (click)="updateCount(+1)">+</button>
   `,
 })
-export class CounterComponent {
+export class Counter {
   count = model<number>(0);
 
   updateCount(amount: number): void {
-    this.count.update(currentCount => currentCount + amount);
+    this.count.update((currentCount) => currentCount + amount);
   }
 }
 ```
 -->
 폼 엘리먼트가 아니라 부모-자식 컴포넌트에 양방향 바인딩을 연결하려면 설정해야 하는 것이 조금 더 있습니다.
 
-아래 코드는 `AppComponent`에서 초기값을 설정하지만 화면을 렌더링하거나 갱신하는 로직은 자식 컴포넌트인 `CounterComponent` 안에 있는 예제 코드입니다.
+아래 코드는 `App`에서 초기값을 설정하지만 화면을 렌더링하거나 갱신하는 로직은 자식 컴포넌트인 `Counter` 안에 있는 예제 코드입니다.
 
-```angular-ts
-// ./app.component.ts
-import { Component } from '@angular/core';
-import { CounterComponent } from './counter/counter.component';
+```angular-ts {header: 'app.ts'}
+import {Component} from '@angular/core';
+import {Counter} from './counter';
 
 @Component({
   selector: 'app-root',
-  imports: [CounterComponent],
+  imports: [Counter],
   template: `
     <main>
       <h1>Counter: {{ initialCount }}</h1>
@@ -163,14 +160,13 @@ import { CounterComponent } from './counter/counter.component';
     </main>
   `,
 })
-export class AppComponent {
+export class App {
   initialCount = 18;
 }
 ```
 
-```angular-ts
-// './counter/counter.component.ts';
-import { Component, model } from '@angular/core';
+```angular-ts {header: 'counter.ts'}
+import {Component, model} from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -180,11 +176,11 @@ import { Component, model } from '@angular/core';
     <button (click)="updateCount(+1)">+</button>
   `,
 })
-export class CounterComponent {
+export class Counter {
   count = model<number>(0);
 
   updateCount(amount: number): void {
-    this.count.update(currentCount => currentCount + amount);
+    this.count.update((currentCount) => currentCount + amount);
   }
 }
 ```
@@ -202,16 +198,17 @@ The child component must contain a `model` property.
 
 Here is a simplified example:
 
-```angular-ts
-// './counter/counter.component.ts';
-import { Component, model } from '@angular/core';
+```angular-ts {header: 'counter.ts'}
+import {Component, model} from '@angular/core';
 
-@Component({ /* Omitted for brevity */ })
-export class CounterComponent {
+@Component({
+  /* Omitted for brevity */
+})
+export class Counter {
   count = model<number>(0);
 
   updateCount(amount: number): void {
-    this.count.update(currentCount => currentCount + amount);
+    this.count.update((currentCount) => currentCount + amount);
   }
 }
 ```
@@ -223,10 +220,9 @@ The parent component must:
 
 Here is a simplified example:
 
-```angular-ts
-// ./app.component.ts
-import { Component } from '@angular/core';
-import { CounterComponent } from './counter/counter.component';
+```angular-ts {header: 'app.ts'}
+import {Component} from '@angular/core';
+import {Counter} from './counter';
 
 @Component({
   selector: 'app-root',
@@ -248,16 +244,17 @@ export class AppComponent {
 
 간단하게 보면 이렇습니다:
 
-```angular-ts
-// './counter/counter.component.ts';
-import { Component, model } from '@angular/core';
+```angular-ts {header: 'counter.ts'}
+import {Component, model} from '@angular/core';
 
-@Component({ // 간략화 한 코드 })
-export class CounterComponent {
+@Component({
+  /* 생략 */
+})
+export class Counter {
   count = model<number>(0);
 
   updateCount(amount: number): void {
-    this.count.update(currentCount => currentCount + amount);
+    this.count.update((currentCount) => currentCount + amount);
   }
 }
 ```
@@ -276,14 +273,14 @@ import { CounterComponent } from './counter/counter.component';
 
 @Component({
   selector: 'app-root',
-  imports: [CounterComponent],
+  imports: [Counter],
   template: `
     <main>
       <app-counter [(count)]="initialCount"></app-counter>
     </main>
   `,
 })
-export class AppComponent {
+export class App {
   initialCount = 18;
 }
 ```

@@ -60,9 +60,7 @@ CSS 파일로 배경 이미지를 지정하고 있다면 [여기](#배경-이미
 Import `NgOptimizedImage` directive from `@angular/common`:
 
 ```ts
-
-import { NgOptimizedImage } from '@angular/common'
-
+import {NgOptimizedImage} from '@angular/common';
 ```
 
 and include it into the `imports` array of a standalone component or an NgModule:
@@ -74,7 +72,6 @@ imports: [
 ],
 ```
 
-</docs-code>
 </docs-step>
 <docs-step title="(Optional) Set up a Loader">
 An image loader is not **required** in order to use NgOptimizedImage, but using one with an image CDN enables powerful performance features, including automatic `srcset`s for your images.
@@ -85,9 +82,7 @@ A brief guide for setting up a loader can be found in the [Configuring an Image 
 To activate the `NgOptimizedImage` directive, replace your image's `src` attribute with `ngSrc`.
 
 ```html
-
-<img ngSrc="cat.jpg">
-
+<img ngSrc="cat.jpg" />
 ```
 
 If you're using a [built-in third-party loader](#built-in-loaders), make sure to omit the base URL path from `src`, as that will be prepended automatically by the loader.
@@ -96,9 +91,7 @@ If you're using a [built-in third-party loader](#built-in-loaders), make sure to
 Always mark the [LCP image](https://web.dev/lcp/#what-elements-are-considered) on your page as `priority` to prioritize its loading.
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" priority>
-
+<img ngSrc="cat.jpg" width="400" height="200" priority />
 ```
 
 Marking an image as `priority` applies the following optimizations:
@@ -113,9 +106,7 @@ Angular displays a warning during development if the LCP element is an image tha
 In order to prevent [image-related layout shifts](https://web.dev/css-web-vitals/#images-and-layout-shifts), NgOptimizedImage requires that you specify a height and width for your image, as follows:
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200">
-
+<img ngSrc="cat.jpg" width="400" height="200" />
 ```
 
 For **responsive images** (images which you've styled to grow and shrink relative to the viewport), the `width` and `height` attributes should be the intrinsic size of the image file. For responsive images it's also important to [set a value for `sizes`.](#responsive-images)
@@ -131,9 +122,7 @@ NOTE: If you don't know the size of your images, consider using "fill mode" to i
 `@angular/common` 패키지에서 `NgOptimizedImage` 디렉티브를 불러옵니다:
 
 ```ts
-
-import { NgOptimizedImage } from '@angular/common'
-
+import {NgOptimizedImage} from '@angular/common';
 ```
 
 그리고 독립 컴포넌트나 독립 NgModule의 `imports` 배열에 추가합니다:
@@ -156,9 +145,7 @@ NgOptimizedImage를 활용할 때 이미지 로더를 정하는 것이 **필수*
 `NgOptimizedImage` 디렉티브를 활성화하기 위해, 이미지 엘리먼트의 `src` 어트리뷰트를 `ngSrc`로 변경합니다.
 
 ```html
-
-<img ngSrc="cat.jpg">
-
+<img ngSrc="cat.jpg" />
 ```
 
 [기본 로더](#기본-로더)를 사용하고 있다면, `src`를 지정할 때 베이스 URL은 꼭 제거하세요.
@@ -168,9 +155,7 @@ NgOptimizedImage를 활용할 때 이미지 로더를 정하는 것이 **필수*
 화면에서 [LCP 이미지](https://web.dev/lcp/#what-elements-are-considered)는 `priority`를 설정해서 로딩 우선순위를 높이세요.
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" priority>
-
+<img ngSrc="cat.jpg" width="400" height="200" priority />
 ```
 
 이미지 엘리먼트에 `priority`를 적용하면 이런 최적화가 수행됩니다:
@@ -187,9 +172,7 @@ LCP 엘리먼트에 `priority` 어트리뷰트가 설정되어 있지 않으면 
 [이미지 때문에 레이아웃이 변경되는 것](https://web.dev/css-web-vitals/#images-and-layout-shifts)을 방지하기 위해, NgOptimizedImage는 이미지의 너비와 높이 입력을 강제합니다:
 
 ```html
-
 <img ngSrc="cat.jpg" width="400" height="200">
-
 ```
 
 뷰포트 크기에 따라 크기가 변경되거나 화면에서 없어지는 **반응형 이미지(responsive images)** 를 사용한다면, `width` 값과 `height` 값은 이미지 파일의 원래 크기로 지정하세요.
@@ -214,9 +197,7 @@ In cases where you want to have an image fill a containing element, you can use 
 When you add the `fill` attribute to your image, you do not need and should not include a `width` and `height`, as in this example:
 
 ```html
-
-<img ngSrc="cat.jpg" fill>
-
+<img ngSrc="cat.jpg" fill />
 ```
 
 You can use the [object-fit](https://developer.mozilla.org/docs/Web/CSS/object-fit) CSS property to change how the image will fill its container. If you style your image with `object-fit: "contain"`, the image will maintain its aspect ratio and be "letterboxed" to fit the element. If you set `object-fit: "cover"`, the element will retain its aspect ratio, fully fill the element, and some content may be "cropped" off.
@@ -236,9 +217,7 @@ IMPORTANT: For the "fill" image to render properly, its parent element **must** 
 예제 코드를 봅시다:
 
 ```html
-
-<img ngSrc="cat.jpg" fill>
-
+<img ngSrc="cat.jpg" fill />
 ```
 
 이미지를 컨테이너 가득 채울 때는 [object-fit](https://developer.mozilla.org/docs/Web/CSS/object-fit) CSS 프로퍼티를 사용할 수도 있습니다.
@@ -298,9 +277,7 @@ You can adjust how the background image fills the container as described in the 
 NgOptimizedImage can display an automatic low-resolution placeholder for your image if you're using a CDN or image host that provides automatic image resizing. Take advantage of this feature by adding the `placeholder` attribute to your image:
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" placeholder>
-
+<img ngSrc="cat.jpg" width="400" height="200" placeholder />
 ```
 
 Adding this attribute automatically requests a second, smaller version of the image using your specified image loader. This small image will be applied as a `background-image` style with a CSS blur while your image loads. If no image loader is provided, no placeholder image can be generated and an error will be thrown.
@@ -325,9 +302,7 @@ If you want sharp edges around your blurred placeholder, you can wrap your image
 이미지 엘리먼트에 `placeholder` 어트리뷰트만 추가하면 됩니다:
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" placeholder>
-
+<img ngSrc="cat.jpg" width="400" height="200" placeholder />
 ```
 
 이 어트리뷰트를 추가하면 NgOptimizedImage 디렉티브는 지정된 이미지 로더를 사용해서 저해상도 플레이스홀더를 자동으로 요청합니다.
@@ -361,14 +336,7 @@ providers: [
 You can also specify a placeholder using a base64 [data URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs) without an image loader. The data url format is `data:image/[imagetype];[data]`, where `[imagetype]` is the image format, just as `png`, and `[data]` is a base64 encoding of the image. That encoding can be done using the command line or in JavaScript. For specific commands, see [the MDN documentation](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs#encoding_data_into_base64_format). An example of a data URL placeholder with truncated data is shown below:
 
 ```html
-
-<img
-  ngSrc="cat.jpg"
-  width="400"
-  height="200"
-  placeholder="data:image/png;base64,iVBORw0K..."
-/>
-
+<img ngSrc="cat.jpg" width="400" height="200" placeholder="data:image/png;base64,iVBORw0K..." />
 ```
 
 However, large data URLs increase the size of your Angular bundles and slow down page load. If you cannot use an image loader, the Angular team recommends keeping base64 placeholder images smaller than 4KB and using them exclusively on critical images. In addition to decreasing placeholder dimensions, consider changing image formats or parameters used when saving images. At very low resolutions, these parameters can have a large effect on file size.
@@ -382,14 +350,7 @@ However, large data URLs increase the size of your Angular bundles and slow down
 데이터 URL은 아래와 같이 사용하면 됩니다:
 
 ```html
-
-<img
-  ngSrc="cat.jpg"
-  width="400"
-  height="200"
-  placeholder="data:image/png;base64,iVBORw0K..."
-/>
-
+<img ngSrc="cat.jpg" width="400" height="200" placeholder="data:image/png;base64,iVBORw0K..." />
 ```
 
 그런데, 데이터 URL의 크기가 커지면 Angular 빌드 결과물의 크기가 함께 커지기 때문에 페이지 로딩이 느려질 수 있습니다.
@@ -407,13 +368,7 @@ However, large data URLs increase the size of your Angular bundles and slow down
 By default, NgOptimizedImage applies a CSS blur effect to image placeholders. To render a placeholder without blur, provide a `placeholderConfig` argument with an object that includes the `blur` property, set to false. For example:
 
 ```html
-<img
-ngSrc="cat.jpg"
-width="400"
-height="200"
-placeholder
-[placeholderConfig]="{blur: false}"
-/>
+<img ngSrc="cat.jpg" width="400" height="200" placeholder [placeholderConfig]="{blur: false}" />
 ```
 -->
 
@@ -421,13 +376,7 @@ placeholder
 플레이스홀더에 흐림 효과를 적용하지 않으려면 `placeholderConfig`인자를 사용해서 `blur` 프로퍼티 값을 `false`로 지정하면 됩니다:
 
 ```html
-<img
-ngSrc="cat.jpg"
-width="400"
-height="200"
-placeholder
-[placeholderConfig]="{blur: false}"
-/>
+<img ngSrc="cat.jpg" width="400" height="200" placeholder [placeholderConfig]="{blur: false}" />
 ```
 
 <!--
@@ -477,9 +426,7 @@ A [`preconnect` resource hint](https://web.dev/preconnect-and-dns-prefetch) for 
 Preconnect links are automatically generated for domains provided as an argument to a [loader](#optional-set-up-a-loader). If an image origin cannot be automatically identified, and no preconnect link is detected for the LCP image, `NgOptimizedImage` will warn during development. In that case, you should manually add a resource hint to `index.html`. Within the `<head>` of the document, add a `link` tag with `rel="preconnect"`, as shown below:
 
 ```html
-
 <link rel="preconnect" href="https://my.cdn.origin" />
-
 ```
 
 To disable preconnect warnings, inject the `PRECONNECT_CHECK_BLOCKLIST` token:
@@ -503,9 +450,7 @@ LCP 이미지를 최대한 빠르게 로드하려면 [`preconnect` 리소스 힌
 아래 예제 코드와 같이 도큐먼트의 `<head>`에 `link` 태그를 추가하고 `rel="preconnect"`를 지정하면 됩니다:
 
 ```html
-
 <link rel="preconnect" href="https://my.cdn.origin" />
-
 ```
 
 사전 연결 경고를 무시하려면 `PRECONNECT_CHECK_BLOCKLIST` 토큰을 의존성으로 주입하면 됩니다:
@@ -545,7 +490,7 @@ If your image should be "fixed" in size (i.e. the same size across devices, exce
 Example srcset generated:
 
 ```html
-<img ... srcset="image-400w.jpg 1x, image-800w.jpg 2x">
+<img ... srcset="image-400w.jpg 1x, image-800w.jpg 2x" />
 ```
 -->
 
@@ -553,7 +498,7 @@ Example srcset generated:
 이 경우에는 이미지의 너비와 높이에 따라 `srcset`이 자동으로 생성됩니다:
 
 ```html
-<img ... srcset="image-400w.jpg 1x, image-800w.jpg 2x">
+<img ... srcset="image-400w.jpg 1x, image-800w.jpg 2x" />
 ```
 
 <!--
@@ -591,17 +536,13 @@ providers: [
 If you would like to manually define a `srcset` attribute, you can provide your own using the `ngSrcset` attribute:
 
 ```html
-
-<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w">
-
+<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" />
 ```
 
 If the `ngSrcset` attribute is present, `NgOptimizedImage` generates and sets the `srcset` based on the sizes included. Do not include image file names in `ngSrcset` - the directive infers this information from `ngSrc`. The directive supports both width descriptors (e.g. `100w`) and density descriptors (e.g. `1x`).
 
 ```html
-
-<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" sizes="50vw">
-
+<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" sizes="50vw" />
 ```
 -->
 
@@ -636,9 +577,7 @@ providers: [
 만약 `srcset` 어트리뷰트를 수동으로 지정하려면 `ngSrcset` 어트리뷰트를 지정하면 됩니다:
 
 ```html
-
-<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w">
-
+<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" />
 ```
 
 `ngSrcset` 어트리뷰트가 존재하면 `NgOptimizedImage`는 이 어트리뷰트에 지정된 크기를 기준으로 `srcset` 어트리뷰트를 설정합니다.
@@ -647,9 +586,7 @@ providers: [
 `NgOptimizedImage` 디렉티브는 `100w`과 같은 너비 설명자와, `1x`와 같은 밀도 설명자를 모두 지원합니다.
 
 ```html
-
-<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" sizes="50vw">
-
+<img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" sizes="50vw" />
 ```
 
 <!--
@@ -663,7 +600,7 @@ To disable srcset generation for a single image, you can add the `disableOptimiz
 
 ```html
 
-<img ngSrc="about.jpg" disableOptimizedSrcset>
+<img ngSrc="about.jpg" disableOptimizedSrcset />
 
 ```
 -->
@@ -671,9 +608,7 @@ To disable srcset generation for a single image, you can add the `disableOptimiz
 `srcset` 자동 생성을 비활성화 하려면 이미지 엘리먼트에 `disableOptimizedSrcset` 어트리뷰트를 추가하면 됩니다:
 
 ```html
-
-<img ngSrc="about.jpg" disableOptimizedSrcset>
-
+<img ngSrc="about.jpg" disableOptimizedSrcset />
 ```
 
 <!--
@@ -686,9 +621,7 @@ To disable srcset generation for a single image, you can add the `disableOptimiz
 By default, `NgOptimizedImage` sets `loading=lazy` for all images that are not marked `priority`. You can disable this behavior for non-priority images by setting the `loading` attribute. This attribute accepts values: `eager`, `auto`, and `lazy`. [See the documentation for the standard image `loading` attribute for details](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/loading#value).
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" loading="eager">
-
+<img ngSrc="cat.jpg" width="400" height="200" loading="eager" />
 ```
 -->
 
@@ -698,9 +631,7 @@ By default, `NgOptimizedImage` sets `loading=lazy` for all images that are not m
 자세한 내용은 [표준 이미지 `loading` 어트리뷰트에 대한 문서](https://developer.mozilla.org/docs/Web/API/HTMLImageElement/loading#value)를 참고하세요.
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" loading="eager">
-
+<img ngSrc="cat.jpg" width="400" height="200" loading="eager" />
 ```
 
 <!--
@@ -717,16 +648,16 @@ You can still override this behavior by explicitly setting the `decoding` attrib
 
 ```html
 <!- Default: decoding is 'auto' ->
-<img ngSrc="gallery/landscape.jpg" width="1200" height="800">
+<img ngSrc="gallery/landscape.jpg" width="1200" height="800" />
 
 <!- Decode the image asynchronously to avoid blocking the main thread.->
-<img ngSrc="gallery/preview.jpg" width="600" height="400" decoding="async">
+<img ngSrc="gallery/preview.jpg" width="600" height="400" decoding="async" />
 
 <!- Priority images automatically use decoding="sync" ->
-<img ngSrc="awesome.jpg" width="500" height="625" priority >
+<img ngSrc="awesome.jpg" width="500" height="625" priority />
 
 <!- Decode immediately (can block) when you need the pixels right away ->
-<img ngSrc="hero.jpg" width="1600" height="900" decoding="sync">
+<img ngSrc="hero.jpg" width="1600" height="900" decoding="sync" />
 ```
 
 **Allowed values**
@@ -745,16 +676,16 @@ You can still override this behavior by explicitly setting the `decoding` attrib
 
 ```html
 <!-- 기본값: 디코딩 방식은 'auto' 입니다. -->
-<img ngSrc="gallery/landscape.jpg" width="1200" height="800">
+<img ngSrc="gallery/landscape.jpg" width="1200" height="800" />
 
 <!-- 메인 스레드 블로킹을 방지하기 위해 이미지 디코딩을 비동기로 수행합니다. -->
-<img ngSrc="gallery/preview.jpg" width="600" height="400" decoding="async">
+<img ngSrc="gallery/preview.jpg" width="600" height="400" decoding="async" />
 
 <!-- 우선순위가 높은 이미지는 decoding="sync"가 지정됩니다. -->
-<img ngSrc="awesome.jpg" width="500" height="625" priority >
+<img ngSrc="awesome.jpg" width="500" height="625" priority />
 
 <!-- decoding="sync"를 지정하면 메인 스레드를 잠시 막더라도 즉시 디코딩합니다. -->
-<img ngSrc="hero.jpg" width="1600" height="900" decoding="sync">
+<img ngSrc="hero.jpg" width="1600" height="900" decoding="sync" />
 ```
 
 **사용할 수 있는 값**
@@ -773,9 +704,7 @@ You can still override this behavior by explicitly setting the `decoding` attrib
 You may want to have images displayed at varying widths on differently-sized screens. A common example of this pattern is a grid- or column-based layout that renders a single column on mobile devices, and two columns on larger devices. You can capture this behavior in the `sizes` attribute, using a "media query" syntax, such as the following:
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" sizes="(max-width: 768px) 100vw, 50vw">
-
+<img ngSrc="cat.jpg" width="400" height="200" sizes="(max-width: 768px) 100vw, 50vw" />
 ```
 
 The `sizes` attribute in the above example says "I expect this image to be 100 percent of the screen width on devices under 768px wide. Otherwise, I expect it to be 50 percent of the screen width.
@@ -788,9 +717,7 @@ For additional information about the `sizes` attribute, see [web.dev](https://we
 이런 경우는 다음과 같이 "미디어 쿼리" 문법을 사용해서 `sizes` 어트리뷰트를 지정하면 됩니다:
 
 ```html
-
-<img ngSrc="cat.jpg" width="400" height="200" sizes="(max-width: 768px) 100vw, 50vw">
-
+<img ngSrc="cat.jpg" width="400" height="200" sizes="(max-width: 768px) 100vw, 50vw" />
 ```
 
 이렇게 작성하면, "화면 크기가 768px보다 작으면 이미지는 100% 너비로 표시하고, 화면 크기가 768px보다 크다면 화면 전체 너비의 50%로 표시한다"는 것을 의미합니다.
@@ -900,33 +827,33 @@ providers: [
 ### 커스텀 로더
 
 <!--
-To use a **custom loader**, provide your loader function as a value for the `IMAGE_LOADER` DI token. In the example below, the custom loader function returns a URL starting with `https://example.com` that includes `src` and `width` as URL parameters.
+To use a **custom loader**, provide your loader function as a value for the `IMAGE_LOADER` DI token. In the example below, the custom loader function returns a URL starting with `https://example.com` that includes `src`, `width`, and `height` as URL parameters.
 
 ```ts
 providers: [
   {
     provide: IMAGE_LOADER,
     useValue: (config: ImageLoaderConfig) => {
-      return `https://example.com/images?src=${config.src}&width=${config.width}`;
+      return `https://example.com/images?src=${config.src}&width=${config.width}&height=${config.height}`;
     },
   },
 ],
 ```
 
-A loader function for the `NgOptimizedImage` directive takes an object with the `ImageLoaderConfig` type (from `@angular/common`) as its argument and returns the absolute URL of the image asset. The `ImageLoaderConfig` object contains the `src` property, and optional `width` and `loaderParams` properties.
+A loader function for the `NgOptimizedImage` directive takes an object with the `ImageLoaderConfig` type (from `@angular/common`) as its argument and returns the absolute URL of the image asset. The `ImageLoaderConfig` object contains the `src` property, and optional `width`, `height`, and `loaderParams` properties.
 
 NOTE: even though the `width` property may not always be present, a custom loader must use it to support requesting images at various widths in order for `ngSrcset` to work properly.
 -->
 
 **커스텀 로더** 를 사용하려면 `IMAGE_LOADER` DI 토큰에 로더 함수를 등록하면 됩니다.
-아래 예제 코드는 URL 인자로 전달되는 `src`, `width`에 `https://example.com`를 붙이는 커스텀 로더 함수입니다.
+아래 예제 코드는 URL 인자로 전달되는 `src`, `width`, `height`를 `https://example.com`에 붙이는 커스텀 로더 함수입니다.
 
 ```ts
 providers: [
   {
     provide: IMAGE_LOADER,
     useValue: (config: ImageLoaderConfig) => {
-      return `https://example.com/images?src=${config.src}&width=${config.width}`;
+      return `https://example.com/images?src=${config.src}&width=${config.width}&height=${config.height}`;
     },
   },
 ],
@@ -953,7 +880,41 @@ A common use for `loaderParams` is controlling advanced image CDN features.
 `loaderParams` 어트리뷰트는 객체를 인자로 받는데, 객체의 형식은 제한되지 않습니다.
 `loaderParams` 안에 있는 데이터는 `ImageLoaderConfig` 객체에 추가되어 커스텀 로더로 전달되어, 커스텀 로더 로직으로 활용됩니다.
 
-보통은 CDN 기능을 활용할 때 사용합니다.
+
+### Using the `transform` property with built-in loaders
+
+The built-in loaders for Cloudinary, Cloudflare, ImageKit, and Imgix support a special `transform` property within `loaderParams`. This property allows you to apply custom image transformations provided by your CDN.
+
+The `transform` property accepts two formats:
+
+#### String format
+
+Provide transformations as a comma-separated string using your CDN's transformation syntax:
+
+```html
+<img
+  ngSrc="my-image.jpg"
+  width="400"
+  height="300"
+  [loaderParams]="{transform: 'e_grayscale,r_10'}"
+/>
+```
+
+#### Object format
+
+Provide transformations as an object with key-value pairs.
+
+```html
+<img
+  ngSrc="my-image.jpg"
+  width="400"
+  height="300"
+  [loaderParams]="{transform: {e: 'grayscale', r: 10}}"
+/>
+```
+
+NOTE: The `transform` property is not supported by the Netlify loader, as Netlify's image CDN does not provide custom transformation parameters.
+
 
 <!--
 ### Example custom loader
@@ -962,7 +923,7 @@ A common use for `loaderParams` is controlling advanced image CDN features.
 ### 커스텀 로더 예제
 
 <!--
-The following shows an example of a custom loader function. This example function concatenates `src` and `width`, and uses `loaderParams` to control a custom CDN feature for rounded corners:
+The following shows an example of a custom loader function. This example function concatenates `src`, `width`, and `height`, and uses `loaderParams` to control a custom CDN feature for rounded corners:
 
 ```ts
 const myCustomLoader = (config: ImageLoaderConfig) => {
@@ -970,6 +931,9 @@ const myCustomLoader = (config: ImageLoaderConfig) => {
   let queryParams = [];
   if (config.width) {
     queryParams.push(`w=${config.width}`);
+  }
+  if (config.height) {
+    queryParams.push(`h=${config.height}`);
   }
   if (config.loaderParams?.roundedCorners) {
     queryParams.push('mask=corners&corner-radius=5');
@@ -981,14 +945,12 @@ const myCustomLoader = (config: ImageLoaderConfig) => {
 Note that in the above example, we've invented the 'roundedCorners' property name to control a feature of our custom loader. We could then use this feature when creating an image, as follows:
 
 ```html
-
-<img ngSrc="profile.jpg" width="300" height="300" [loaderParams]="{roundedCorners: true}">
-
+<img ngSrc="profile.jpg" width="300" height="300" [loaderParams]="{roundedCorners: true}" />
 ```
 -->
 
 아래 코드는 커스텀 로더 함수입니다.
-이 함수는 `src`와 `width`를 조합하면서 가장자리 곡선 처리를 위해 `loaderParams` 인자를 활용합니다:
+이 함수는 `src`와 `width`, `height`를 조합하면서 가장자리 곡선 처리를 위해 `loaderParams` 인자를 활용합니다:
 
 ```ts
 const myCustomLoader = (config: ImageLoaderConfig) => {
@@ -996,6 +958,9 @@ const myCustomLoader = (config: ImageLoaderConfig) => {
   let queryParams = [];
   if (config.width) {
     queryParams.push(`w=${config.width}`);
+  }
+  if (config.height) {
+    queryParams.push(`h=${config.height}`);
   }
   if (config.loaderParams?.roundedCorners) {
     queryParams.push('mask=corners&corner-radius=5');
@@ -1008,9 +973,7 @@ const myCustomLoader = (config: ImageLoaderConfig) => {
 다음과 같이 사용하면 됩니다:
 
 ```html
-
-<img ngSrc="profile.jpg" width="300" height="300" [loaderParams]="{roundedCorners: true}">
-
+<img ngSrc="profile.jpg" width="300" height="300" [loaderParams]="{roundedCorners: true}" />
 ```
 
 <!--
@@ -1117,7 +1080,7 @@ For maintenance reasons, we don't currently plan to support additional built-in 
 <!--
 No, but this is on our roadmap, so stay tuned.
 
-If you're waiting on this feature, please upvote the Github issue [here](https://github.com/angular/angular/issues/56594).
+If you're waiting on this feature, please upvote the GitHub issue [here](https://github.com/angular/angular/issues/56594).
 -->
 
 아니오, 하지만 로드맵에 포함되어 있으니 조금만 기다려 주세요.

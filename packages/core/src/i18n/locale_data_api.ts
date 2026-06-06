@@ -11,9 +11,11 @@ import {global} from '../util/global';
 import localeEn from './locale_en';
 
 /**
- * This const is used to store the locale data registered with `registerLocaleData`
+ * This const is used to store the locale data registered with `registerLocaleData`.
+ * Use `Object.create(null)` to prevent prototype pollution.
  */
-let LOCALE_DATA: {[localeId: string]: any} = {};
+// tslint:disable-next-line:no-toplevel-property-access
+let LOCALE_DATA: {[localeId: string]: any} = /* @__PURE__ */ Object.create(null);
 
 /**
  * Register locale data to be used internally by Angular. See the
@@ -42,7 +44,7 @@ export function registerLocaleData(data: any, localeId?: string | any, extraData
  *
  * @param locale The locale code.
  * @returns The locale data.
- * @see [Internationalization (i18n) Guide](https://angular.io/guide/i18n)
+ * @see [Internationalization (i18n) Guide](guide/i18n)
  */
 export function findLocaleData(locale: string): any {
   const normalizedLocale = normalizeLocale(locale);
@@ -115,7 +117,7 @@ export function getLocaleData(normalizedLocale: string): any {
  * Helper function to remove all the locale data from `LOCALE_DATA`.
  */
 export function unregisterAllLocaleData() {
-  LOCALE_DATA = {};
+  LOCALE_DATA = Object.create(null);
 }
 
 /**

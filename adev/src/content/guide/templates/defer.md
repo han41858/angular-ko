@@ -81,7 +81,7 @@ Angular 컴파일러는 `@defer` 블록에 사용된 개별 컴포넌트, 디렉
 ### `@defer`
 
 <!--
-This is the primary block that defines the section of content that is lazily loaded. It is not rendered initially– deferred content loads and renders once the specified [trigger](/guide/templates/defer#triggers) occurs or the `when` condition is met.
+This is the primary block that defines the section of content that is lazily loaded. It is not rendered initially– deferred content loads and renders once the specified [trigger](#controlling-deferred-content-loading-with-triggers) occurs or the `when` condition is met.
 
 By default, a `@defer` block is triggered when the browser state becomes [idle](/guide/templates/defer#idle).
 
@@ -92,7 +92,7 @@ By default, a `@defer` block is triggered when the browser state becomes [idle](
 ```
 -->
 지연 로딩 뷰를 정의하는 기본 블록입니다.
-지연 로딩되는 뷰는 화면의 첫 렌더링에 포함되지 않고, [트리거(trigger)](/guide/templates/defer#triggers)가 동작하거나 `when` 조건이 맞을 때만 로딩되어 렌더링됩니다.
+지연 로딩되는 뷰는 화면의 첫 렌더링에 포함되지 않고, [트리거(trigger)](#controlling-deferred-content-loading-with-triggers)가 동작하거나 `when` 조건이 맞을 때만 로딩되어 렌더링됩니다.
 
 기본적으로 `@defer` 블록은 브라우저가 [대기(idle)] (/guide/templates/defer#idle) 상태가 되었을 때 트리거됩니다.
 
@@ -121,7 +121,7 @@ The `@placeholder` is an optional block that declares what content to show befor
 }
 ```
 
-While optional, certain triggers may require the presence of either a `@placeholder` or a [template reference variable](/guide/templates/variables#template-reference-variables) to function. See the [Triggers](/guide/templates/defer#triggers) section for more details.
+While optional, certain triggers may require the presence of either a `@placeholder` or a [template reference variable](/guide/templates/variables#template-reference-variables) to function. See the [Triggers](#controlling-deferred-content-loading-with-triggers) section for more details.
 
 Angular replaces placeholder content with the main content once loading is complete. You can use any content in the placeholder section including plain HTML, components, directives, and pipes. Keep in mind the _dependencies of the placeholder block are eagerly loaded_.
 
@@ -150,7 +150,7 @@ This `minimum` parameter is specified in time increments of milliseconds (ms) or
 ```
 
 `@placeholder` 블록이 필수인 것은 아니지만, 어떤 트리거는 `@placeholder`나 [템플릿 참조 변수](/guide/templates/variables#template-reference-variables)가 필요합니다.
-자세한 내용은 [트리거](/guide/templates/defer#triggers) 섹션을 참고하세요.
+자세한 내용은 [트리거](#controlling-deferred-content-loading-with-triggers) 섹션을 참고하세요.
 
 `@defer` 블록은 로딩된 후에 `@placeholder` 블록을 대체하며 렌더링됩니다.
 그리고 `@placeholder` 블록에는 일반 HTML, 컴포넌트, 디렉티브, 파이프를 자유롭게 사용할 수 있습니다.
@@ -298,7 +298,7 @@ The available triggers are as follows:
 
 | Trigger                       | Description                                                            |
 | ----------------------------- | ---------------------------------------------------------------------- |
-| [`idle`](#idle)               | Triggers when the browser is idle.                                     |
+| [`idle`](#idle)               | Triggers when the browser is idle. Supports an optional timeout.       |
 | [`viewport`](#viewport)       | Triggers when specified content enters the viewport                    |
 | [`interaction`](#interaction) | Triggers when the user interacts with specified element                |
 | [`hover`](#hover)             | Triggers when the mouse hovers over specified area                     |
@@ -309,23 +309,42 @@ The available triggers are as follows:
 
 이런 트리거를 사용할 수 있습니다:
 
-| 트리거                       | 설명                                                            |
-| ----------------------------- | ---------------------------------------------------------------------- |
-| [`idle`](#idle)               | 브라우저가 대기 상태일 때 동작합니다. |
-| [`viewport`](#viewport)       | 특정 항목이 뷰포트에 진입할 때 동작합니다. |
-| [`interaction`](#interaction) | 사용자가 특정 엘리먼트와 상호작용 할 때 동작합니다. |
-| [`hover`](#hover)             | 마우스가 특정 영역 위에 올라갈 때 동작합니다. |
-| [`immediate`](#immediate)     | 지연 로딩이 아닌 뷰 렌더링이 끝난 직후 동작합니다. |
-| [`timer`](#timer)             | 특정 시간 뒤에 동작합니다. |
+| 트리거                       | 설명                                           |
+| ----------------------------- |----------------------------------------------|
+| [`idle`](#idle)               | 브라우저가 대기 상태일 때 동작합니다. 타임아웃을 옵션으로 사용할 수 있습니다. |
+| [`viewport`](#viewport)       | 특정 항목이 뷰포트에 진입할 때 동작합니다.                     |
+| [`interaction`](#interaction) | 사용자가 특정 엘리먼트와 상호작용 할 때 동작합니다.                |
+| [`hover`](#hover)             | 마우스가 특정 영역 위에 올라갈 때 동작합니다.                   |
+| [`immediate`](#immediate)     | 지연 로딩이 아닌 뷰 렌더링이 끝난 직후 동작합니다.                |
+| [`timer`](#timer)             | 특정 시간 뒤에 동작합니다.                              |
 
 
 #### `idle`
 
 <!--
 The `idle` trigger loads the deferred content once the browser has reached an idle state, based on requestIdleCallback. This is the default behavior with a defer block.
+
+You can optionally specify a timeout in milliseconds that is passed to [`requestIdleCallback`](https://developer.mozilla.org/docs/Web/API/Window/requestIdleCallback). If the browser doesn't schedule the callback soon enough, the work will run no later than the specified timeout.
+
+```angular-html
+<!- @defer (on idle) ->
+@defer {
+  <large-cmp />
+} @placeholder {
+  <div>Large component placeholder</div>
+}
+
+<!- With a 500ms timeout ->
+@defer (on idle(500)) {
+  <large-cmp />
+}
+```
 -->
 `idle` 트리거는 브라우저가 대기 상태로 진입할 때 동작해서 지연 로딩 뷰를 로드합니다.
-이 트리거가 기본값입니다.
+디퍼 블록은 이 트리거가 기본 동작입니다.
+
+그리고 [`requestIdleCallback`](https://developer.mozilla.org/docs/Web/API/Window/requestIdleCallback)에 밀리초 단위로 타임아웃 옵션을 지정할 수 있습니다.
+브라우저가 콜백을 충분히 빠르게 예약하지 않으면, 작업은 지정된 시간이 초과되기 전에 실행됩니다.
 
 ```angular-html
 <!-- @defer (on idle) -->
@@ -334,6 +353,33 @@ The `idle` trigger loads the deferred content once the browser has reached an id
 } @placeholder {
   <div>Large component placeholder</div>
 }
+
+<!-- 500ms 타임아웃 -->
+@defer (on idle(500)) {
+  <large-cmp />
+}
+```
+
+
+##### Customizing `idle` behavior
+
+You can customize the `idle` trigger by providing your own `IdleService` implementation and registering it with `provideIdleServiceWith` in your application's providers.
+
+```ts
+@Service()
+class CustomIdleService implements IdleService {
+  requestOnIdle(callback: (deadline?: IdleDeadline) => void, options?: IdleRequestOptions) {
+    // Custom idle scheduling logic can be implemented here.
+  }
+
+  cancelOnIdle(id: number) {
+    // Implement custom idle cancellation here.
+  }
+}
+
+bootstrapApplication(App, {
+  providers: [provideIdleServiceWith(CustomIdleService)],
+});
 ```
 
 #### `viewport`
@@ -618,6 +664,11 @@ In the example below, the prefetching starts when a browser becomes idle and the
 } @placeholder {
   <div>Large component placeholder</div>
 }
+
+<!- Prefetching with a 500ms idle timeout ->
+@defer (on interaction; prefetch on idle(500)) {
+  <large-cmp />
+}
 ```
 -->
 내용을 로딩하는 조건문을 지정하면서 **사전 로딩 트리거(prefetch trigger)** 를 옵션으로 지정할 수 있습니다.
@@ -635,6 +686,11 @@ In the example below, the prefetching starts when a browser becomes idle and the
   <large-cmp />
 } @placeholder {
   <div>Large component placeholder</div>
+}
+
+<!-- 500ms 대기한 후 로드합니다. -->
+@defer (on interaction; prefetch on idle(500)) {
+  <large-cmp />
 }
 ```
 
@@ -661,11 +717,11 @@ it('should render a defer block in different states', async () => {
       } @loading {
         Loading...
       }
-    `
+    `,
   })
-  class ComponentA {}
+  class ExampleA {}
   // Create component fixture.
-  const componentFixture = TestBed.createComponent(ComponentA);
+  const componentFixture = TestBed.createComponent(ExampleA);
   // Retrieve the list of all defer block fixtures and get the first block.
   const deferBlockFixture = (await componentFixture.getDeferBlocks())[0];
   // Renders placeholder state by default.
@@ -697,11 +753,11 @@ it('should render a defer block in different states', async () => {
       } @loading {
         Loading...
       }
-    `
+    `,
   })
-  class ComponentA {}
+  class ExampleA {}
   // 컴포넌트 픽스처를 생성합니다.
-  const componentFixture = TestBed.createComponent(ComponentA);
+  const componentFixture = TestBed.createComponent(ExampleA);
   // defer 블록을 모두 참조하고 그 중 첫번째 블록을 가져옵니다.
   const deferBlockFixture = (await componentFixture.getDeferBlocks())[0];
   // placeholder 블록이 렌더링 된 것을 확인합니다.
@@ -755,6 +811,71 @@ SSR이나 SSG와 같이 애플리케이션이 서버에서 렌더링되는 경�
 그리고 클라이언트에서 애플리케이션이 실행될 때 `@placeholder`가 하이드레이션 되면서 트리거가 동작합니다.
 
 서버엣 ㅓ`@defer` 블록을 렌더링하려면 [증분 하이드레이션](/guide/incremental-hydration)이나 `hydrate` 트리거를 사용해야 합니다.
+
+
+## 배럴 파일과 지연 청크
+
+<!--
+If you're using `@defer` but not seeing a separate lazy chunk in your build output, check how you're importing the deferred component. Importing through a barrel file (`index.ts`) is a common culprit — bundlers see the barrel as a single module and keep all its exports together, so your component ends up in the main bundle regardless of `@defer`.
+
+```typescript
+// index.ts
+export {HeavyComponent} from './heavy.component';
+export {OtherComponent} from './other.component';
+```
+
+```typescript
+// parent.component.ts
+import {HeavyComponent} from './index'; // pulls in OtherComponent too
+
+@Component({
+  imports: [HeavyComponent],
+  template: `@defer {
+    <heavy-component />
+  }`,
+})
+export class ParentComponent {}
+```
+
+The fix is straightforward — import directly from the component's own file:
+
+```typescript
+import {HeavyComponent} from './heavy.component';
+```
+
+That's enough for the bundler to split it into its own chunk and load it lazily when the trigger fires.
+-->
+`@defer`를 사용하지만 빌드 결과 출력 로그에 지연 청크가 표시되지 않는 경우에는, 지연 컴포넌트 로드 방식을 확인해 보세요.
+배럴 파일(barrel, `index.ts`)을 통해 가져오는 것이 일반적입니다.
+배럴 파일은 번들러가 개별 모듈로 인식하고 exports도 유지하기 때문에, `@defer` 사용 여부와 관계없이 컴포넌트가 메인 번들에 포함됩니다.
+
+```typescript
+// index.ts
+export {HeavyComponent} from './heavy.component';
+export {OtherComponent} from './other.component';
+```
+
+```typescript
+// parent.component.ts
+import {HeavyComponent} from './index'; // pulls in OtherComponent too
+
+@Component({
+  imports: [HeavyComponent],
+  template: `@defer {
+    <heavy-component />
+  }`,
+})
+export class ParentComponent {}
+```
+
+해결 방법은 간단합니다.
+컴포넌트 클래스 파일에서 직접 로드하면 됩니다.
+
+```typescript
+import {HeavyComponent} from './heavy.component';
+```
+
+이렇게 수정하면 번들러가 이 컴포넌트를 별도로 처리하고, 이후에 트리거가 동작해야 지연 로드합니다.
 
 
 <!--

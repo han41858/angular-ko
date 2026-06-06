@@ -1,5 +1,5 @@
 // TODO: Import inject from @angular/core
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import {Component} from '@angular/core';
 // TODO: Import CartStore from './cart-store'
 // TODO: Import CartDisplay from './cart-display'
 
@@ -10,9 +10,7 @@ import {Component, ChangeDetectionStrategy} from '@angular/core';
     <div class="shopping-app">
       <header>
         <h1>Signals with Services Demo</h1>
-        <div class="cart-badge">
-          Cart: Loading... items ($Loading...)
-        </div>
+        <div class="cart-badge">Cart: Loading... items ($Loading...)</div>
       </header>
 
       <main>
@@ -21,7 +19,6 @@ import {Component, ChangeDetectionStrategy} from '@angular/core';
     </div>
   `,
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   // TODO: Inject CartStore using inject(CartStore)

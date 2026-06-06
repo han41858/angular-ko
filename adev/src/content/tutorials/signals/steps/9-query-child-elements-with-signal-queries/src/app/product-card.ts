@@ -1,4 +1,4 @@
-import {Component, input, signal, ChangeDetectionStrategy} from '@angular/core';
+import {Component, input, signal} from '@angular/core';
 
 @Component({
   selector: 'product-card',
@@ -13,7 +13,8 @@ import {Component, input, signal, ChangeDetectionStrategy} from '@angular/core';
             Hide
           } @else {
             Show
-          } Details
+          }
+          Details
         </button>
       </div>
       @if (showDetails()) {
@@ -25,7 +26,6 @@ import {Component, input, signal, ChangeDetectionStrategy} from '@angular/core';
     </div>
   `,
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCard {
   name = input.required();

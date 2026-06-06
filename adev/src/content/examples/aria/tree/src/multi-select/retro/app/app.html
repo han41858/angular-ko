@@ -23,7 +23,7 @@
   </div>
 
   <div class="tree-view">
-    <ul ngTree #tree="ngTree" class="retro-tree" [(values)]="selected" [multi]="true">
+    <ul ngTree #tree="ngTree" class="retro-tree" [(value)]="selected" [multi]="true">
       <ng-template
         [ngTemplateOutlet]="treeNodes"
         [ngTemplateOutletContext]="{nodes: nodes, parent: tree}"
@@ -32,7 +32,7 @@
   </div>
 
   <div class="status-bar">
-    <div class="status-panel status-panel-grow">{{selectedCount()}} object(s) selected</div>
+    <div class="status-panel status-panel-grow">{{ selectedCount() }} object(s) selected</div>
     <div class="status-panel status-panel-right">4.5MB</div>
   </div>
 </div>
@@ -50,13 +50,19 @@
     >
       <span aria-hidden="true">
         @if (node.children) {
-          {{treeItem.expanded() ? '📂' : '📁'}}
+          {{ treeItem.expanded() ? '📂' : '📁' }}
         } @else {
           📄
         }
       </span>
       {{ node.name }}
-      <span aria-hidden="true" class="material-symbols-outlined selected-icon" translate="no">check</span>
+      <span
+        aria-hidden="true"
+        class="material-symbols-outlined selected-icon"
+        translate="no"
+        aria-hidden="true"
+        >check</span
+      >
     </li>
 
     @if (node.children) {

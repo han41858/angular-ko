@@ -11,13 +11,10 @@ import {
   DomElementSchemaRegistry,
   SCHEMA,
 } from '../../src/schema/dom_element_schema_registry';
-import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, SecurityContext} from '@angular/core';
-import {isNode} from '@angular/private/testing';
+import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, SecurityContext} from '../../src/core';
 
 import {Element} from '../../src/ml_parser/ast';
 import {HtmlParser} from '../../src/ml_parser/html_parser';
-
-import {extractSchema} from './schema_extractor';
 
 describe('DOMElementSchema', () => {
   let registry: DomElementSchemaRegistry;
@@ -156,8 +153,27 @@ If 'onAnything' is a directive input, make sure the directive is imported by the
     expect(registry.securityContext('p', 'innerHTML', false)).toBe(SecurityContext.HTML);
     expect(registry.securityContext('a', 'href', false)).toBe(SecurityContext.URL);
     expect(registry.securityContext('a', 'style', false)).toBe(SecurityContext.STYLE);
-    expect(registry.securityContext('ins', 'cite', false)).toBe(SecurityContext.URL);
     expect(registry.securityContext('base', 'href', false)).toBe(SecurityContext.RESOURCE_URL);
+
+    // SVG animate and set attributes
+    expect(registry.securityContext(':svg:animate', 'to', false)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext(':svg:animate', 'from', false)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext(':svg:animate', 'values', false)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext(':svg:set', 'to', false)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+
+    // SVG link attributes
+    expect(registry.securityContext(':svg:a', 'href', false)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':svg:a', 'xlink:href', false)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':svg:a', 'href', true)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':svg:a', 'xlink:href', true)).toBe(SecurityContext.URL);
   });
 
   it('should detect properties on namespaced elements', () => {
@@ -188,17 +204,33 @@ If 'onAnything' is a directive input, make sure the directive is imported by the
     });
   });
 
-  if (!isNode) {
-    it('generate a new schema', () => {
-      let schema = '\n';
-      extractSchema()!.forEach((props, name) => {
-        schema += `'${name}|${props.join(',')}',\n`;
-      });
-      // Uncomment this line to see:
-      // the generated schema which can then be pasted to the DomElementSchemaRegistry
-      // console.log(schema);
+  describe('Custom XML / XHTML namespaces', () => {
+    it('should support elements with custom namespaces', () => {
+      expect(registry.hasElement(':xhtml:a', [])).toBeTruthy();
+      expect(registry.hasElement(':foo:div', [])).toBeTruthy();
     });
-  }
+
+    it('should support properties on custom namespaced elements', () => {
+      expect(registry.hasProperty(':xhtml:a', 'href', [])).toBeTruthy();
+      expect(registry.hasProperty(':foo:div', 'id', [])).toBeTruthy();
+    });
+
+    it('should return correct security contexts for custom namespaced elements', () => {
+      expect(registry.securityContext(':xhtml:a', 'href', false)).toBe(SecurityContext.URL);
+      expect(registry.securityContext(':foo:div', 'innerHTML', false)).toBe(SecurityContext.HTML);
+    });
+  });
+
+  // Uncomment to see the generated schema which can then be pasted to the DomElementSchemaRegistry
+  // if (!isNode) {
+  //   it('generate a new schema', () => {
+  //     let schema = '\n';
+  //     extractSchema()!.forEach((props, name) => {
+  //       schema += `'${name}|${props.join(',')}',\n`;
+  //     });
+  //     console.log(schema);
+  //   });
+  // }
 
   describe('normalizeAnimationStyleProperty', () => {
     it('should normalize the given CSS property to camelCase', () => {

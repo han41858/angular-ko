@@ -63,7 +63,6 @@ The three modes of type-checking treat embedded views differently.
 Consider the following example.
 
 ```ts {header:"User interface"}
-
 interface User {
   name: string;
   address: {
@@ -71,16 +70,13 @@ interface User {
     state: string;
   };
 }
-
 ```
 
 ```html
-
 <div *ngFor="let user of users">
   <h2>{{config.title}}</h2>
   <span>City: {{user.address.city}}</span>
 </div>
-
 ```
 
 The `<h2>` and the `<span>` are in the `*ngFor` embedded view.
@@ -138,7 +134,6 @@ The template type checker checks whether a binding expression's type is compatib
 As an example, consider the following component:
 
 ```angular-ts
-
 export interface User {
   name: string;
 }
@@ -150,13 +145,11 @@ export interface User {
 export class UserDetailComponent {
   user = input.required<User>();
 }
-
 ```
 
 The `AppComponent` template uses this component as follows:
 
 ```angular-ts
-
 @Component({
   selector: 'app-root',
   template: '<user-detail [user]="selectedUser"></user-detail>',
@@ -164,7 +157,6 @@ The `AppComponent` template uses this component as follows:
 export class AppComponent {
   selectedUser: User | null = null;
 }
-
 ```
 
 Here, during type checking of the template for `AppComponent`, the `[user]="selectedUser"` binding corresponds with the `UserDetailComponent.user` input.
@@ -173,7 +165,7 @@ TypeScript checks the assignment according to its type system, obeying flags suc
 
 Avoid run-time type errors by providing more specific in-template type requirements to the template type checker.
 Make the input type requirements for your own directives as specific as possible by providing template-guard functions in the directive definition.
-See [Improving template type checking for custom directives](guide/directives/structural-directives#directive-type-checks) in this guide.
+See [Improving template type checking for custom directives](/guide/directives/structural-directives#improving-template-type-checking-for-custom-directives) in this guide.
 
 ### Strict null checks
 
@@ -197,18 +189,14 @@ There are two potential workarounds to the preceding issues:
 - In the template, include the non-null assertion operator `!` at the end of a nullable expression, such as
 
 ```html
-
 <user-detail [user]="user!"></user-detail>
-
 ```
 
 In this example, the compiler disregards type incompatibilities in nullability, just as in TypeScript code.
 In the case of the `async` pipe, notice that the expression needs to be wrapped in parentheses, as in
 
 ```html
-
 <user-detail [user]="(user$ | async)!"></user-detail>
-
 ```
 
 - Disable strict null checks in Angular templates completely.
@@ -222,7 +210,7 @@ In the case of the `async` pipe, notice that the expression needs to be wrapped 
 As a library author, you can take several measures to provide an optimal experience for your users.
 First, enabling `strictNullChecks` and including `null` in an input's type, as appropriate, communicates to your consumers whether they can provide a nullable value or not.
 Additionally, it is possible to provide type hints that are specific to the template type checker.
-See [Improving template type checking for custom directives](guide/directives/structural-directives#directive-type-checks), and [Input setter coercion](#input-setter-coercion).
+See [Improving template type checking for custom directives](/guide/directives/structural-directives#improving-template-type-checking-for-custom-directives), and [Input setter coercion](#input-setter-coercion).
 
 ## Input setter coercion
 
@@ -232,7 +220,6 @@ As an example, consider this custom button component:
 Consider the following directive:
 
 ```angular-ts
-
 @Component({
   selector: 'submit-button',
   template: `
@@ -242,9 +229,8 @@ Consider the following directive:
   `,
 })
 class SubmitButton {
-  disabled = input.required({transform: booleanAttribute });
+  disabled = input.required({transform: booleanAttribute});
 }
-
 ```
 
 Here, the `disabled` input of the component is being passed on to the `<button>` in the template.
@@ -252,17 +238,13 @@ All of this works as expected, as long as a `boolean` value is bound to the inpu
 But, suppose a consumer uses this input in the template as an attribute:
 
 ```html
-
 <submit-button disabled></submit-button>
-
 ```
 
 This has the same effect as the binding:
 
 ```html
-
 <submit-button [disabled]="''"></submit-button>
-
 ```
 
 At runtime, the input will be set to the empty string, which is not a `boolean` value.
@@ -285,7 +267,6 @@ As a workaround for this problem, Angular supports checking a wider, more permis
 Enable this by adding a static property with the `ngAcceptInputType_` prefix to the component class:
 
 ```ts
-
 class SubmitButton {
   private _disabled: boolean;
 
@@ -295,12 +276,11 @@ class SubmitButton {
   }
 
   set disabled(value: boolean) {
-    this._disabled = (value === '') || value;
+    this._disabled = value === '' || value;
   }
 
-  static ngAcceptInputType_disabled: boolean|'';
+  static ngAcceptInputType_disabled: boolean | '';
 }
-
 ```
 
 Since TypeScript 4.3, the setter could have been declared to accept `boolean|''` as type, making the input setter coercion field obsolete.
@@ -320,13 +300,11 @@ The compiler treats it as a cast to the `any` type just like in TypeScript when 
 In the following example, casting `person` to the `any` type suppresses the error `Property address does not exist`.
 
 ```angular-ts
-
 @Component({
   selector: 'my-component',
-  template: '{{$any(person).address.street}}'
+  template: '{{$any(person).address.street}}',
 })
 class MyComponent {
   person?: Person;
 }
-
 ```

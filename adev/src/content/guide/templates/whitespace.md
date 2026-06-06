@@ -18,19 +18,20 @@ By default, Angular templates do not preserve whitespace that the framework cons
 <!--
 Most developers prefer to format their templates with newlines and indentation to make the template readable:
 
-```angular-html
+```html
 <section>
   <h3>User profile</h3>
   <label>
     User name
-    <input>
+    <input />
   </label>
 </section>
 ```
 
 This template contains whitespace between all of the elements. The following snippet shows the same HTML with each whitespace character replaced with the hash (`#`) character to highlight how much whitespace is present:
 
-```angular-html
+<!- prettier-ignore>
+```html
 <!- Total Whitespace: 20 ->
 <section>###<h3>User profile</h3>###<label>#####User name#####<input>###</label>#</section>
 ```
@@ -39,12 +40,12 @@ Preserving the whitespace as written in the template would result in many unnece
 -->
 개발자들은 템플릿의 가독성을 높이기 위해 줄바꿈과 들여쓰기를 자주 사용합니다:
 
-```angular-html
+```html
 <section>
   <h3>User profile</h3>
   <label>
     User name
-    <input>
+    <input />
   </label>
 </section>
 ```
@@ -52,7 +53,8 @@ Preserving the whitespace as written in the template would result in many unnece
 이 템플릿에는 엘리먼트 사이마다 공백문자들이 존재합니다.
 공백문자를 모두 해시(`#`) 기호로 바꿔보면 이렇습니다:
 
-```angular-html
+<!-- prettier-ignore>
+```html
 <!-- 전체 공백문자: 20 -->
 <section>###<h3>User profile</h3>###<label>#####User name#####<input>###</label>#</section>
 ```
@@ -69,7 +71,8 @@ Preserving the whitespace as written in the template would result in many unnece
 <!--
 When your web browser renders HTML on a page, it collapses multiple consecutive whitespace characters to a single character:
 
-```angular-html
+<!- prettier-ignore ->
+```html
 <!- What it looks like in the template ->
 <p>Hello         world</p>
 ```
@@ -87,8 +90,9 @@ Angular avoids sending these unnecessary whitespace characters to the browser in
 -->
 웹 브라우저가 HTML을 렌더링 하면 연속된 공백문자는 공백문자 하나로 변환됩니다:
 
-```angular-html
-<!-- 템플릿 파일 -->
+<!-- prettier-ignore -->
+```html
+<!-- 템플릿에서 어떻게 표시될까요 -->
 <p>Hello         world</p>
 ```
 

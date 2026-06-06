@@ -6,7 +6,7 @@ import {
   Injectable,
 } from '@angular/core';
 import {NgElement, WithProperties} from '@angular/elements';
-import {PopupComponent} from './popup.component';
+import {Popup} from './popup';
 
 @Injectable()
 export class PopupService {
@@ -19,7 +19,7 @@ export class PopupService {
     const popup = document.createElement('popup-component');
 
     // 컴포넌트를 생성하고 엘리먼트와 연결합니다.
-    const popupComponentRef = createComponent(PopupComponent, {
+    const popupComponentRef = createComponent(Popup, {
       environmentInjector: this.injector,
       hostElement: popup,
     });
@@ -34,7 +34,7 @@ export class PopupService {
     });
 
     // 메시지 문구를 설정합니다.
-    popupComponentRef.instance.message = message;
+    popupComponentRef.setInput('message', message);
 
     // DOM에 추가합니다.
     document.body.appendChild(popup);
@@ -43,7 +43,7 @@ export class PopupService {
   // 커스텀 엘리먼트를 DOM에 추가하는 새로운 방법입니다.
   showAsElement(message: string) {
     // 엘리먼트를 생성합니다.
-    const popupEl: NgElement & WithProperties<PopupComponent> = document.createElement(
+    const popupEl: NgElement & WithProperties<Popup> = document.createElement(
       'popup-element',
     ) as any;
 
@@ -51,8 +51,7 @@ export class PopupService {
     popupEl.addEventListener('closed', () => document.body.removeChild(popupEl));
 
     // 메시지 문구를 설정합니다.
-    popupEl.message = message;
-
+    popupEl.setAttribute('message', message);
     // DOM에 추가합니다.
     document.body.appendChild(popupEl);
   }
