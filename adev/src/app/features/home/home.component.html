@@ -4,8 +4,12 @@
     <div class="content">
       <div class="adev-banner-container">
         <a href="events/v22" class="adev-banner" target="_blank">
+          <!--
           <h1 tabindex="-1">Angular v22 is here!</h1>
           <p class="adev-banner-cta">⚡ Explore what's new</p>
+          -->
+          <h1 tabindex="-1">Angular v22 릴리즈!</h1>
+          <p class="adev-banner-cta">⚡ 새로운 기능을 확인해보세요</p>
         </a>
 
         <div class="search-field">
@@ -15,8 +19,12 @@
 
       @if (!isUwu) {
         <div class="title">
+          <!--
           <h2>Productivity<br />Meets scalability</h2>
           <h3>The framework for building scalable web apps with confidence</h3>
+          -->
+          <h2>생산성과 확장성의 조화</h2>
+          <h3>확장 가능한 웹앱을 만드는 프레임워크로 자신있게 추천합니다.</h3>
         </div>
       } @else {
         <!-- UwU logo -->
@@ -27,8 +35,13 @@
 
       <div class="learn-angular">
         <a href="#learn-more" class="adev-cta">
+          <!--
           <button class="docs-primary-btn" [attr.text]="'Get Started'" aria-label="Get Started">
             Get Started
+          </button>
+          -->
+          <button class="docs-primary-btn" [attr.text]="'시작하기'" aria-label="Get Started">
+            시작하기
           </button>
         </a>
         <div class="adev-arrow"></div>
@@ -37,15 +50,24 @@
   </section>
 
   <section class="features-section" #featuresSection>
+    <!--
     <h2 id="features">Features that actually <br />help you solve problems</h2>
+    -->
+    <h2 id="features">개발하면서 만나는 문제를<br />확실하게 해결합니다.</h2>
 
     <div ngTabs class="material-tabs">
       <div ngTabList selectionMode="follow" [(selectedTab)]="selectedFeatureTab">
         <div class="tab-background"></div>
+        <!--
         <div ngTab [value]="FEATURE_TAB.signals">Signals</div>
         <div ngTab [value]="FEATURE_TAB.controlFlow">Control Flow</div>
         <div ngTab [value]="FEATURE_TAB.deferrableViews">Deferrable Views</div>
         <div ngTab [value]="FEATURE_TAB.hydration">Hydration</div>
+        -->
+        <div ngTab [value]="FEATURE_TAB.signals">시그널</div>
+        <div ngTab [value]="FEATURE_TAB.controlFlow">흐름 제어</div>
+        <div ngTab [value]="FEATURE_TAB.deferrableViews">뷰 지연로딩</div>
+        <div ngTab [value]="FEATURE_TAB.hydration">하이드레이션</div>
       </div>
 
       <div class="sliding-window">
@@ -85,7 +107,10 @@
   </section>
 
   <section class="selling-points">
+    <!--
     <h2>Enabling you to build<br />smarter and faster</h2>
+    -->
+    <h2>개발 과정이<br />더 똑똑해지고 빨라집니다.</h2>
     <div class="cards">
       <a class="card" routerLink="/ai/develop-with-ai">
         <div class="icon-wrapper">
@@ -93,8 +118,12 @@
         </div>
         <div class="card-content">
           <h3>
+            <!--
             <strong>AI-forward</strong> resources and integrations to supercharge your development
             with AI
+            -->
+            <strong>AI 지원</strong> 리소스와 통합 기능을 제공합니다. 개발환경에서 AI와 함께 개발해
+            보세요.
           </h3>
         </div>
       </a>
@@ -105,8 +134,12 @@
         </div>
         <div class="card-content">
           <h3>
+            <!--
             <strong>Opinionated & versatile,</strong> organized yet modular thanks to Angular
             components and dependency injection
+            -->
+            <strong>자유롭고 자유자재로 조합</strong>할 수 있는 모듈을 구현하기 위해 컴포넌트와
+            의존성 주입을 활용합니다.
           </h3>
         </div>
       </a>
@@ -117,8 +150,12 @@
         </div>
         <div class="card-content">
           <h3>
+            <!--
             <strong>Reactive</strong> and fast state updates with fine-grained reactivity based on
             Angular Signals
+            -->
+            <strong>Angular Signal</strong>을 활용하면 상태값을 반응형으로 빠르게 추적하고 반영할 수
+            있습니다.
           </h3>
         </div>
       </a>
@@ -129,8 +166,12 @@
         </div>
         <div class="card-content">
           <h3>
+            <!--
             <strong>Fully featured</strong> platform where everything works together with Angular's
             first-party modules for forms, routing, and more
+            -->
+            <strong>방대한 기능</strong>을 제공합니다. 폼, 라우팅과 같은 모듈은 Angular가 직접
+            유지관리하며 서로 완벽하게 동작합니다.
           </h3>
         </div>
       </a>
@@ -141,18 +182,30 @@
     <div class="wrapper">
       <div class="pattern"></div>
       <div class="content">
+        <!--
         <h2>Where performance matters</h2>
         <h3>
           Trusted by millions to build fast, reliable applications that scale with the size of your
           team
         </h3>
+        -->
+        <h2>성능이 중요하다면</h2>
+        <h3>
+          수백만 사용자가 경험했습니다. 팀 규모가 커지더라도 애플리케이션은 여전히 빠르고
+          안정적입니다.
+        </h3>
+        <!--
         <button
           class="docs-primary-btn"
           [attr.text]="'Get started'"
           routerLink="/guide/performance"
         >
-          <!-- TODO: LINK -->
+          <!- TODO: LINK ->
           Get started
+        </button>
+        -->
+        <button class="docs-primary-btn" [attr.text]="'시작하기'" routerLink="/guide/performance">
+          시작하기
         </button>
       </div>
     </div>
@@ -160,7 +213,10 @@
 
   <section class="explore-section" id="learn-more">
     <div class="title">
+      <!--
       <h2>Want to learn more about Angular?</h2>
+      -->
+      <h2>더 알아볼까요?</h2>
       <div class="pattern"></div>
     </div>
 
@@ -169,9 +225,13 @@
       <a routerLink="/tutorials/learn-angular" class="explore-card">
         <div class="card-content">
           <p>
+            <!--
             <span class="emphasis">New to Angular?</span>
             Try our completely in browser tutorial lessons designed to give you hands on experience
             with Angular.
+            -->
+            <span class="emphasis">Angular가 처음인가요?</span>
+            브라우저에서 완벽하게 실행되는 튜토리얼 코스를 진행해 보세요.
           </p>
           <span class="fake-button">Start coding <docs-icon>arrow_forward</docs-icon></span>
           <div class="editor-background"></div>
@@ -182,9 +242,13 @@
       <a routerLink="/ai" class="explore-card">
         <div class="card-content">
           <p>
+            <!--
             <span class="emphasis">Are you an LLM or curious about AI in Angular?</span>
             Head over to our AI section to find prompts, strategies, best practices, examples, and
             more.
+            -->
+            <span class="emphasis">LLM이나 AI를 어떻게 지원하는지 궁금한가요?</span>
+            AI 섹션에서 프롬프트, 활용전략, 모범사례, 예제 코드 등을 확인해 보세요.
           </p>
           <span class="fake-button">Angular + AI <docs-icon>arrow_forward</docs-icon></span>
           <div class="angular-mcp-container">
@@ -204,8 +268,12 @@
       <a routerLink="/overview" class="explore-card">
         <div class="card-content">
           <p>
+            <!--
             <span class="emphasis">Why Angular?</span>
             Learn about Angular, its benefits, and if it's right for you.
+            -->
+            <span class="emphasis">왜 Angular일까요?</span>
+            Angular의 특징과 장점, 당신에게 맞는 프레임워크인지 확인해 보세요.
           </p>
           <div class="logo-background"></div>
         </div>
@@ -215,9 +283,13 @@
       <a routerLink="/essentials" class="explore-card">
         <div class="card-content">
           <p>
+            <!--
             <span class="emphasis">More of a reader?</span>
             Our essentials guides are designed to help you understand Angular fundamentals in the
             time it would take to finish a cup of coffee (or a tea).
+            -->
+            <span class="emphasis">문서를 더 볼까요?</span>
+            핵심 가이드 문서를 확인해 보세요. 내용을 이해하는 데에 커피 한 잔 마실 시간이면 됩니다.
           </p>
           <span class="fake-button">Angular concepts <docs-icon>arrow_forward</docs-icon></span>
         </div>
@@ -228,14 +300,20 @@
   <section class="learn-more-bottom-section" id="bottom">
     <div class="pattern"></div>
     <div class="content">
+      <!--
       <h2>Want to learn more about Angular ?</h2>
+      -->
+      <h2>조금 더 알아볼까요?</h2>
       <button
         class="docs-primary-btn"
         [attr.text]="'Learn more'"
         aria-label="Learn more"
         routerLink="/overview"
       >
+        <!--
         Learn more
+        -->
+        더 알아보기
       </button>
     </div>
   </section>
