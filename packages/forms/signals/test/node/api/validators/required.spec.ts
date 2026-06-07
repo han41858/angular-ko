@@ -110,4 +110,25 @@ describe('required validator', () => {
     f.name().value.set('');
     expect(f.name().errors()).toEqual([{kind: 'pirojok-the-error', fieldTree: f.name}]);
   });
+
+  it('supports returning custom plain error, and wraps it as custom', () => {
+    const cat = signal({name: 'meow', age: 5});
+    const f = form(
+      cat,
+      (p) => {
+        required(p.name, {
+          error: () => {
+            return {kind: 'pirojok-the-error'};
+          },
+        });
+      },
+      {
+        injector: TestBed.inject(Injector),
+      },
+    );
+
+    expect(f.name().errors()).toEqual([]);
+    f.name().value.set('');
+    expect(f.name().errors()).toEqual([customError({kind: 'pirojok-the-error', field: f.name})]);
+  });
 });

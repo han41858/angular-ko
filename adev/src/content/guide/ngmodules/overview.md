@@ -85,12 +85,12 @@ An NgModule can _export_ its declared components, directives, and pipes such tha
 
 ```typescript
 @NgModule({
-  imports: [PopupTrigger, SelectionIndicator],
-  declarations: [CustomMenu, CustomMenuItem],
+ imports: [PopupTrigger, SelectionIndicator],
+ declarations: [CustomMenu, CustomMenuItem],
 
-  // Make CustomMenu and CustomMenuItem available to
-  // components and NgModules that import CustomMenuModule.
-  exports: [CustomMenu, CustomMenuItem],
+ // Make CustomMenu and CustomMenuItem available to
+ // components and NgModules that import CustomMenuModule.
+ exports: [CustomMenu, CustomMenuItem],
 })
 export class CustomMenuModule {}
 ```
@@ -99,11 +99,11 @@ The `exports` property is not limited to declarations, however. An NgModule can 
 
 ```typescript
 @NgModule({
-  imports: [PopupTrigger, SelectionIndicator],
-  declarations: [CustomMenu, CustomMenuItem],
+ imports: [PopupTrigger, SelectionIndicator],
+ declarations: [CustomMenu, CustomMenuItem],
 
-  // Also make PopupTrigger available to any component or NgModule that imports CustomMenuModule.
-  exports: [CustomMenu, CustomMenuItem, PopupTrigger],
+ // Also make PopupTrigger available to any component or NgModule that imports CustomMenuModule.
+ exports: [CustomMenu, CustomMenuItem, PopupTrigger],
 })
 export class CustomMenuModule {}
 ```

@@ -448,7 +448,6 @@
       "getDeclarationTNode",
       "getDeferBlockDataIndex",
       "getDirectiveDef",
-      "getDocument",
       "getElementDepthCount",
       "getFactoryDef",
       "getFirstLContainer",

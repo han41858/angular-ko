@@ -25,10 +25,10 @@ Now the component can generate events that can be listened to by the parent comp
 class Child {
   ...
 
-  onClick() {
-    this.count++;
-    this.incrementCountEvent.emit(this.count);
-  }
+onClick() {
+this.count++;
+this.incrementCountEvent.emit(this.count);
+}
 }
 ```
 

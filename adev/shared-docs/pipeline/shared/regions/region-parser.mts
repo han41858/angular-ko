@@ -16,7 +16,10 @@ import * as html from './region-matchers/html.mjs';
 import * as inlineC from './region-matchers/inline-c.mjs';
 import * as inlineCOnly from './region-matchers/inline-c-only.mjs';
 import * as inlineHash from './region-matchers/inline-hash.mjs';
+<<<<<<<< HEAD:adev/shared-docs/pipeline/guides/extensions/docs-code/regions/region-parser.mts
+========
 import {FileType, removeEslintComments} from './remove-eslint-comments.mjs';
+>>>>>>>> org/21.0.x:adev/shared-docs/pipeline/shared/regions/region-parser.mts
 
 const WHOLE_FILE_REGION_NAME = '';
 const DEFAULT_PLASTER = '. . .';

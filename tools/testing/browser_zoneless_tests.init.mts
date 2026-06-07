@@ -6,8 +6,13 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+<<<<<<<< HEAD:tools/testing/browser_tests.init.mts
+import 'zone.js/lib/browser/rollup-main';
+import './zone_base_setup.mjs';
+========
 import 'reflect-metadata';
 
+>>>>>>>> org/21.0.x:tools/testing/browser_zoneless_tests.init.mts
 import '@angular/compiler'; // For JIT mode. Must be in front of any other @angular/* imports.
 
 import {TestBed} from '@angular/core/testing';

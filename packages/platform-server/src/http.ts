@@ -15,6 +15,7 @@ import {
 } from '@angular/common/http';
 import {inject, Injectable, Provider, ɵRuntimeError as RuntimeError} from '@angular/core';
 import {Observable} from 'rxjs';
+import {resolveUrl} from './url';
 
 import {RuntimeErrorCode} from './errors';
 import {resolveUrl} from './url';

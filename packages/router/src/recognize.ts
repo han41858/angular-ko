@@ -27,7 +27,6 @@ import {
   createPreMatchRouteSnapshot,
   emptyPathMatch,
   match,
-  MatchResult,
   matchWithChecks,
   noLeftoversInUrl,
   split,

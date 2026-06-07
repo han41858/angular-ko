@@ -335,12 +335,10 @@ $transition: 200ms linear;
           }
 
           @mixin meteor-gradient($startColor, $endColor) {
-            background: linear-gradient(
-              calc(var(--math-pi) + var(--meteor-tilt-angle)),
-              $startColor 0,
-              $endColor 66%,
-              transparent 100%
-            );
+            background: linear-gradient(calc(var(--math-pi) + var(--meteor-tilt-angle)),
+                $startColor 0,
+                $endColor 66%,
+                transparent 100%);
           }
 
           &.type-1::after {
@@ -395,7 +393,7 @@ $transition: 200ms linear;
         transform: scale(1);
       }
 
-      .build-for-everyone-layer > .title {
+      .build-for-everyone-layer>.title {
         background-position-x: 0;
       }
     }

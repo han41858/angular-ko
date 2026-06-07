@@ -7,10 +7,7 @@ ts_project(
     srcs = [
         "index.ts",
     ],
-    visibility = [
-        "//adev/shared-docs:__pkg__",
-    ],
-    deps = [
+    interop_deps = [
         "//adev/shared-docs/components/algolia-icon",
         "//adev/shared-docs/components/breadcrumb",
         "//adev/shared-docs/components/cookie-popup",
@@ -25,5 +22,8 @@ ts_project(
         "//adev/shared-docs/components/text-field",
         "//adev/shared-docs/components/top-level-banner",
         "//adev/shared-docs/components/viewers",
+    ],
+    visibility = [
+        "//adev/shared-docs:__pkg__",
     ],
 )

@@ -5,7 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
+<<<<<<<< HEAD:tools/testing/node_tests.init.mts
+
+import 'zone.js/lib/node/rollup-main';
+import './zone_base_setup.mjs';
+========
 import 'reflect-metadata';
+>>>>>>>> org/21.0.x:tools/testing/node_zoneless_tests.init.mts
 
 (global as any).isNode = true;
 (global as any).isBrowser = false;
@@ -13,7 +19,10 @@ import 'reflect-metadata';
 import '@angular/compiler'; // For JIT mode. Must be in front of any other @angular/* imports.
 // Init TestBed
 import {TestBed} from '@angular/core/testing';
+<<<<<<<< HEAD:tools/testing/node_tests.init.mts
+========
 import {NgModule, provideZonelessChangeDetection} from '@angular/core';
+>>>>>>>> org/21.0.x:tools/testing/node_zoneless_tests.init.mts
 import {ServerTestingModule, platformServerTesting} from '@angular/platform-server/testing';
 import {ɵDominoAdapter as DominoAdapter} from '@angular/platform-server';
 import domino from '../../packages/platform-server/third_party/domino/bundled-domino';
