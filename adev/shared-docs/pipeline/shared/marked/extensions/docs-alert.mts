@@ -9,6 +9,7 @@
 import {RendererThis, Token, TokenizerAndRendererExtension, TokenizerThis, Tokens} from 'marked';
 
 /** Enum of all available alert severities. */
+/*
 export enum AlertSeverityLevel {
   NOTE = 'NOTE',
   TIP = 'TIP',
@@ -19,6 +20,16 @@ export enum AlertSeverityLevel {
   CRITICAL = 'CRITICAL',
   IMPORTANT = 'IMPORTANT',
   HELPFUL = 'HELPFUL',
+}
+*/
+export enum AlertSeverityLevel {
+  참고 = '참고',
+  팁 = '팁',
+  TODO = 'TODO',
+  질문 = '질문',
+  요약 = '요약',
+  중요 = '중요',
+  주의 = '주의',
 }
 
 /** Token for docs-alerts */

@@ -45,7 +45,7 @@
     margin-block: 1.6rem;
   }
 
-  .docs-callout-helpful {
+  .docs-callout-참고 {
     --callout-theme: var(--purple-to-blue-horizontal-gradient);
 
     &::before {
@@ -54,7 +54,7 @@
     }
   }
 
-  .docs-callout-critical {
+  .docs-callout-주의 {
     --callout-theme: var(--red-to-orange-horizontal-gradient);
 
     &::before {
@@ -63,7 +63,7 @@
     }
   }
 
-  .docs-callout-important {
+  .docs-callout-중요 {
     --callout-theme: var(--pink-to-purple-horizontal-gradient);
 
     &::before {

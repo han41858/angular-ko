@@ -26,7 +26,8 @@
       font-size: 1.3rem;
     }
 
-    p, header {
+    p,
+    header {
       margin-inline-start: 1.65rem;
     }
 
@@ -49,7 +50,7 @@
     }
   }
 
-  .docs-alert-note {
+  .docs-alert-참고 {
     --alert-gradient: var(--blue-to-teal-vertical-gradient);
     --alert-accent: var(--bright-blue);
     &::before {
@@ -57,7 +58,7 @@
     }
   }
 
-  .docs-alert-tip {
+  .docs-alert-팁 {
     --alert-gradient: var(--green-to-cyan-vertical-gradient);
     --alert-accent: var(--symbolic-cyan);
     &::before {
@@ -73,7 +74,7 @@
     }
   }
 
-  .docs-alert-question {
+  .docs-alert-질문 {
     --alert-gradient: var(--blue-to-cyan-vertical-gradient);
     --alert-accent: var(--symbolic-cyan);
     &::before {
@@ -81,7 +82,7 @@
     }
   }
 
-  .docs-alert-summary {
+  .docs-alert-요약 {
     --alert-gradient: var(--purple-to-light-purple-vertical-gradient);
     --alert-accent: var(--electric-violet);
     &::before {
@@ -97,7 +98,7 @@
     }
   }
 
-  .docs-alert-critical {
+  .docs-alert-주의 {
     --alert-gradient: var(--red-to-orange-vertical-gradient);
     --alert-accent: var(--orange-red);
     &::before {
@@ -105,7 +106,7 @@
     }
   }
 
-  .docs-alert-important {
+  .docs-alert-중요 {
     --alert-gradient: var(--red-to-pink-vertical-gradient);
     --alert-accent: var(--hot-red);
     &::before {
