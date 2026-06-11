@@ -15,7 +15,7 @@ jobs:
       - name: prepare pnpm
         run: corepack enable pnpm
       - name: check env
-        run: node -v && pnpm -v
+        run: node -v && pnpm -v && export NODE_OPTIONS="--max_old_space_size=4096"
       - name: install dependencies
         run: pnpm i
       - name: build
