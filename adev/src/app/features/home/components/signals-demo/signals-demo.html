@@ -1,17 +1,33 @@
 <div class="two-column-step">
   <div class="step-description">
+    <!--
     <div class="header">Signals: Fine-Grained Reactivity</div>
+    -->
+    <div class="header">시그널: 정교하게 움직이는 반응성</div>
     <div class="description">
+      <!--
       Type in the search box to filter the list. A
       <code>computed</code> signal automatically recalculates the
       <code>filteredItems</code> whenever the <code>searchTerm</code> signal changes.
+      -->
+      검색 필드에 문자를 입력해 보세요.
+      <code>computed</code> 시그널은 <code>searchTerm</code> 시그널이 변경될 때마다
+      <code>filteredItems</code> 시그널을 다시 계산합니다.
     </div>
 
     <div class="demo-display">
+      <!--
       <input
         [value]="searchTerm()"
         (input)="onSearch($event.target.value)"
         placeholder="Search for fruit..."
+        class="demo-input"
+      />
+      -->
+      <input
+        [value]="searchTerm()"
+        (input)="onSearch($event.target.value)"
+        placeholder="검색어 입력..."
         class="demo-input"
       />
       <div class="demo-list">
@@ -21,12 +37,17 @@
       </div>
     </div>
 
+    <!--
     <button
       class="docs-primary-btn"
       [attr.text]="'Learn more about signals'"
       routerLink="/guide/signals"
     >
       Learn more about signals
+    </button>
+    -->
+    <button class="docs-primary-btn" [attr.text]="'시그널 더 알아보기'" routerLink="/guide/signals">
+      시그널 더 알아보기
     </button>
   </div>
 

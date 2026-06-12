@@ -233,7 +233,10 @@
             <span class="emphasis">Angular가 처음인가요?</span>
             브라우저에서 완벽하게 실행되는 튜토리얼 코스를 진행해 보세요.
           </p>
+          <!--
           <span class="fake-button">Start coding <docs-icon>arrow_forward</docs-icon></span>
+          -->
+          <span class="fake-button">코딩 시작하기 <docs-icon>arrow_forward</docs-icon></span>
           <div class="editor-background"></div>
         </div>
       </a>
@@ -291,7 +294,10 @@
             <span class="emphasis">문서를 더 볼까요?</span>
             핵심 가이드 문서를 확인해 보세요. 내용을 이해하는 데에 커피 한 잔 마실 시간이면 됩니다.
           </p>
+          <!--
           <span class="fake-button">Angular concepts <docs-icon>arrow_forward</docs-icon></span>
+          -->
+          <span class="fake-button">Angular 기본개념 <docs-icon>arrow_forward</docs-icon></span>
         </div>
       </a>
     </div>
@@ -304,15 +310,22 @@
       <h2>Want to learn more about Angular ?</h2>
       -->
       <h2>조금 더 알아볼까요?</h2>
+      <!--
       <button
         class="docs-primary-btn"
         [attr.text]="'Learn more'"
         aria-label="Learn more"
         routerLink="/overview"
       >
-        <!--
         Learn more
-        -->
+      </button>
+      -->
+      <button
+        class="docs-primary-btn"
+        [attr.text]="'더 알아보기'"
+        aria-label="더 알아보기"
+        routerLink="/overview"
+      >
         더 알아보기
       </button>
     </div>

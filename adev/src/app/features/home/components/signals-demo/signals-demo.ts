@@ -45,11 +45,11 @@ export class SignalsDemo {
 }
 
 const tsExample = `
-// Source signals for state.
+// 상태를 저장하는 소스 시그널
 items = signal(['Apple', 'Banana', /*...*/ ]);
 searchTerm = signal('');
-// A computed signal that derives the filtered list.
-// It automatically re-runs when a dependency changes.
+// 목록을 필터링하는 computed 시그널입니다.
+// 이 시그널은 다른 시그널이 변경되면 자동으로 다시 계산합니다.
 filteredItems = computed(() => {
   const lowerCaseSearchTerm = this.searchTerm().toLowerCase();
   return this.items().filter(item =>

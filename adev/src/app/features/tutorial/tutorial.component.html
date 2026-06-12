@@ -58,11 +58,11 @@
           (click)="answerRevealed() ? handleResetAnswer() : handleRevealAnswer()"
           [disabled]="!canRevealAnswer()"
           class="docs-reveal-answer-button adev-reveal-desktop-button docs-primary-btn"
-          [attr.text]="answerRevealed() ? 'ÃÊ±âÈ­' : 'Á¤´ä È®ÀÎÇÏ±â'"
-          [attr.aria-label]="answerRevealed() ? 'ÃÊ±âÈ­' : 'Á¤´ä È®ÀÎÇÏ±â'"
+          [attr.text]="answerRevealed() ? 'ì´ˆê¸°í™”' : 'ì •ë‹µ í™•ì¸í•˜ê¸°'"
+          [attr.aria-label]="answerRevealed() ? 'ì´ˆê¸°í™”' : 'ì •ë‹µ í™•ì¸í•˜ê¸°'"
           [class.adev-reset-answer-button]="answerRevealed()"
         >
-          {{ answerRevealed() ? 'ÃÊ±âÈ­' : 'Á¤´ä È®ÀÎÇÏ±â' }}
+          {{ answerRevealed() ? 'ì´ˆê¸°í™”' : 'ì •ë‹µ í™•ì¸í•˜ê¸°' }}
         </button>
       }
 
@@ -112,11 +112,11 @@
             (click)="answerRevealed() ? handleResetAnswer() : handleRevealAnswer()"
             [disabled]="!canRevealAnswer()"
             class="docs-reveal-answer-button adev-reveal-mobile-button docs-primary-btn"
-            [attr.text]="answerRevealed() ? 'ÃÊ±âÈ­' : 'Á¤´ä È®ÀÎÇÏ±â'"
-            [attr.aria-label]="answerRevealed() ? 'ÃÊ±âÈ­' : 'Á¤´ä È®ÀÎÇÏ±â'"
+            [attr.text]="answerRevealed() ? 'ì´ˆê¸°í™”' : 'ì •ë‹µ í™•ì¸í•˜ê¸°'"
+            [attr.aria-label]="answerRevealed() ? 'ì´ˆê¸°í™”' : 'ì •ë‹µ í™•ì¸í•˜ê¸°'"
             [class.adev-reset-answer-button]="answerRevealed()"
           >
-            {{ answerRevealed() ? 'ÃÊ±âÈ­' : 'Á¤´ä È®ÀÎÇÏ±â' }}
+            {{ answerRevealed() ? 'ì´ˆê¸°í™”' : 'ì •ë‹µ í™•ì¸í•˜ê¸°' }}
           </button>
         }
       </div>
