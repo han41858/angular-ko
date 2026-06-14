@@ -23,9 +23,17 @@ export enum AlertSeverityLevel {
 }
 */
 export enum AlertSeverityLevel {
+  NOTE = 'NOTE',
+  TIP = 'TIP',
+  TODO = 'TODO',
+  QUESTION = 'QUESTION',
+  SUMMARY = 'SUMMARY',
+  TLDR = 'TL;DR',
+  CRITICAL = 'CRITICAL',
+  IMPORTANT = 'IMPORTANT',
+  HELPFUL = 'HELPFUL',
   참고 = '참고',
   팁 = '팁',
-  TODO = 'TODO',
   질문 = '질문',
   요약 = '요약',
   중요 = '중요',
