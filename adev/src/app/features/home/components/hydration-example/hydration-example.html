@@ -1,10 +1,21 @@
 <div class="header">Hydration</div>
+<!--
 <div class="description">
   Hydration is the process that restores the server-side rendered application on the client
 
   <p>
     This demo showcases Angular's hydration strategies, allowing you to simulate network latency and
     observe how different components hydrate based on their configured triggers.
+  </p>
+</div>
+-->
+<div class="description">
+  하이드레이션(Hydration)은 서버 사이드에서 렌더링 한 애플리케이션을 클라이언트에서 복원하는
+  과정입니다.
+
+  <p>
+    네트워크 속도와 트리거 설정에 따라 컴포넌트 하이드레이션이 어떻게 진행되는지, 데모를 확인해
+    보세요.
   </p>
 </div>
 
@@ -16,13 +27,19 @@
         <div class="card config-card">
           <h3 class="sidebar-title font-mono">
             <docs-icon>schedule</docs-icon>
+            <!--
             Simulation Config
+            -->
+            시뮬레이션 설정
           </h3>
 
           <div class="config-controls">
             <div class="control-group">
               <div class="label-row">
+                <!--
                 <label>Network Latency</label>
+                -->
+                <label>네트워크 지연</label>
                 <span class="latency-value font-mono">{{ latency() }}ms</span>
               </div>
               <input
@@ -42,14 +59,20 @@
               class="btn-reset"
             >
               <docs-icon>refresh</docs-icon>
+              <!--
               Reset Lifecycle
+              -->
+              다시 불러오기
             </button>
           </div>
         </div>
 
         <!-- Terminal Log -->
         <div class="terminal">
+          <!--
           <h3 class="terminal-title font-mono">Hydration Engine Log</h3>
+          -->
+          <h3 class="terminal-title font-mono">하이드레이션 엔진 로그</h3>
           <div class="terminal-body font-mono custom-scrollbar">
             @for (evt of eventQueue(); track $index) {
               <div class="log-entry animate-in">
@@ -59,7 +82,10 @@
               </div>
             }
             @if (eventQueue().length === 0) {
+              <!--
               <div class="log-placeholder">Awaiting app bootstrap...</div>
+              -->
+              <div class="log-placeholder">앱 부트스트랩 대기...</div>
             }
           </div>
         </div>
@@ -89,18 +115,28 @@
                   <div class="spinner-outer"></div>
                   <div class="spinner-inner"></div>
                 </div>
+                <!--
                 <p class="ssr-title">Generating SSR Markup...</p>
+                -->
+                <p class="ssr-title">SSR 마크업 생성...</p>
               </div>
             }
 
             <div class="viewport-flex">
               <div class="viewport-header">
                 <div class="header-text">
+                  <!--
                   <h4 class="viewport-title">Component Strategies</h4>
                   <p class="viewport-subtitle">Mixing eager and deferred hydration triggers.</p>
+                  -->
+                  <h4 class="viewport-title">컴포넌트 정책</h4>
+                  <p class="viewport-subtitle">즉시 로딩 & 지연 로딩 하이드레이션 트리거</p>
                 </div>
                 <div class="viewport-stats">
+                  <!--
                   <div class="stats-label">Main App</div>
+                  -->
+                  <div class="stats-label">메인 앱</div>
                   <div class="stats-value font-tabular">{{ progress() }}%</div>
                 </div>
               </div>
@@ -144,7 +180,10 @@
                       @if (card.isHydrating) {
                         <div class="tag tag-deferred animate-slide-in">
                           <span class="tag-dot spin"></span>
+                          <!--
                           Hydrating...
+                          -->
+                          하이드레이션 진행중...
                         </div>
                       } @else if (!card.isHydrated) {
                         <div class="tag tag-deferred">
@@ -184,33 +223,63 @@
     <!-- Explanatory Feature Cards -->
     <div class="explainer-grid">
       <div class="explainer-item">
+        <!--
         <h5 class="explainer-title"><span class="dot-red"></span> Eager Hydration</h5>
         <p class="explainer-text">
           Essential components (like navigation or top-fold content) hydrate as soon as the main
           application bundle is ready.
         </p>
+        -->
+        <h5 class="explainer-title"><span class="dot-red"></span>즉시 하이드레이션</h5>
+        <p class="explainer-text">
+          네비게이션이나 최상단 항목 등 핵심 컴포넌트는 메인 애플리베이션이 준비되는 대로 즉시
+          로드합니다.
+        </p>
       </div>
       <div class="explainer-item">
+        <!--
         <h5 class="explainer-title"><span class="dot-violet"></span> Incremental Hydration</h5>
         <p class="explainer-text">
           Use hydration triggers like <code>on interaction</code> or <code>on timer</code> to delay
           JS execution for non-critical elements.
         </p>
+        -->
+        <h5 class="explainer-title"><span class="dot-violet"></span>증분 하이드레이션</h5>
+        <p class="explainer-text">
+          중요도가 낮은 엘리먼트를 로드할 때는 <code>on interaction</code>이나
+          <code>on timer</code> 하이드레이션 트리거를 사용하세요.
+        </p>
       </div>
       <div class="explainer-item">
+        <!--
         <h5 class="explainer-title"><span class="dot-green"></span> Event Replay</h5>
         <p class="explainer-text">
           User clicks are never lost. Angular records events during the "Static" phase and
           re-dispatches them once hydrated.
         </p>
+        -->
+        <h5 class="explainer-title"><span class="dot-green"></span>이벤트 리플레이</h5>
+        <p class="explainer-text">
+          로드되는 중에도 사용자 상호작용은 사라지지 않습니다. Angular는 "Static" 단계에서 이벤트를
+          저장했다가 하이드레이션이 완료되면 이벤트를 다시 발생시킵니다.
+        </p>
       </div>
     </div>
   </div>
+  <!--
   <button
     class="docs-primary-btn"
     [attr.text]="'Learn more about hydration'"
     routerLink="/guide/hydration"
   >
     Learn more about hydration
+  </button>
+  -->
+  <button
+    class="docs-primary-btn"
+    [attr.text]="'하이드레이션 더 알아보기'"
+    routerLink="/guide/hydration"
+  >
+    하이드레이션 더 알아보기
   </button>
 </div>

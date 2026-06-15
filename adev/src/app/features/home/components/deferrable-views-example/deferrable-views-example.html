@@ -1,18 +1,37 @@
 <div class="two-column-step">
   <div class="step-description">
+    <!--
     <div class="header">Deferrable Views</div>
+    -->
+    <div class="header">뷰 지연로딩</div>
+    <!--
     <div class="description">
       Deferrable views (also known as <code>&#64;defer</code> blocks) reduce the initial bundle size
       of your application by deferring the loading of code that is not strictly necessary for the
       initial rendering of a page.
     </div>
+    -->
+    <div class="description">
+      뷰 지연로딩(<code>&#64;defer</code> 블록)을 활용하면 최초 화면 렌더링에 필요한 파일만 빌드
+      결과물에 포함하기 때문에 이 빌드 결과물의 크기가 작아집니다./ 이후에 필요한 파일은
+      지연로딩합니다.
+    </div>
 
+    <!--
     <button
       class="docs-primary-btn"
       [attr.text]="'Learn more about deferred loading'"
       routerLink="/guide/templates/defer"
     >
       Learn more about deferred loading
+    </button>
+    -->
+    <button
+      class="docs-primary-btn"
+      [attr.text]="'뷰 지연로딩 더 알아보기'"
+      routerLink="/guide/templates/defer"
+    >
+      뷰 지연로딩 더 알아보기
     </button>
   </div>
 
