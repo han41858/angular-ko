@@ -142,7 +142,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Side effects for non-reactives APIs',
-            label: '반응형 API가 아닌 경우 부수 효과',
+            label: '비반응형 API에 반응하기',
             path: 'guide/signals/effect',
             contentPath: 'guide/signals/effect',
             status: 'new',
