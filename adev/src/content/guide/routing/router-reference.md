@@ -1,9 +1,26 @@
+<!--
 # Router reference
+-->
 
+<a id="router-reference"></a>
+
+# 라우터 레퍼런스
+
+<!--
 The following sections highlight some core router concepts and terminology.
+-->
 
+다음 섹션에서는 라우터의 핵심 개념과 용어를 알아봅니다.
+
+<!--
 ## Router events
+-->
 
+<a id="router-events"></a>
+
+## 라우터 이벤트
+
+<!--
 During each navigation, the `Router` emits navigation events through the `Router.events` property.
 These events are shown in the following table.
 
@@ -27,9 +44,41 @@ These events are shown in the following table.
 | [`Scroll`](api/router/Scroll)                             | Represents a scrolling event.                                                                                                                                          |
 
 When you enable the `withDebugTracing` feature, Angular logs these events to the console.
+-->
 
+`Router`는 내비게이션이 발생할 때마다 `Router.events` 프로퍼티로 내비게이션 이벤트를 방출합니다.
+이벤트 종류는 다음 표와 같습니다.
+
+| 라우터 이벤트                                             | 설명                                                                                                                                                                          |
+| :-------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`NavigationStart`](api/router/NavigationStart)           | 내비게이션이 시작될 때 발생합니다.                                                                                                                                            |
+| [`RouteConfigLoadStart`](api/router/RouteConfigLoadStart) | `Router`가 라우팅 규칙 설정을 지연 로드하기 전에 발생합니다.                                                                                                                  |
+| [`RouteConfigLoadEnd`](api/router/RouteConfigLoadEnd)     | 라우팅 규칙의 지연 로딩이 완료된 뒤 발생합니다.                                                                                                                               |
+| [`RoutesRecognized`](api/router/RoutesRecognized)         | 라우터가 URL을 파싱하고 라우팅 규칙을 인식할 때 발생합니다.                                                                                                                   |
+| [`GuardsCheckStart`](api/router/GuardsCheckStart)         | 라우터가 라우팅의 가드 단계를 시작할 때 발생합니다.                                                                                                                           |
+| [`ChildActivationStart`](api/router/ChildActivationStart) | 라우터가 라우팅 규칙의 자식 활성화를 시작할 때 발생합니다.                                                                                                                    |
+| [`ActivationStart`](api/router/ActivationStart)           | 라우터가 라우팅 규칙 활성화를 시작할 때 발생합니다.                                                                                                                           |
+| [`GuardsCheckEnd`](api/router/GuardsCheckEnd)             | 라우터가 라우팅의 가드 단계를 성공적으로 마칠 때 발생합니다.                                                                                                                  |
+| [`ResolveStart`](api/router/ResolveStart)                 | 라우터가 라우팅의 리졸브 단계를 시작할 때 발생합니다.                                                                                                                         |
+| [`ResolveEnd`](api/router/ResolveEnd)                     | 라우터가 라우팅의 리졸브 단계를 성공적으로 마칠 때 발생합니다.                                                                                                                |
+| [`ChildActivationEnd`](api/router/ChildActivationEnd)     | 라우터가 라우팅 규칙의 자식 활성화를 마칠 때 발생합니다.                                                                                                                      |
+| [`ActivationEnd`](api/router/ActivationEnd)               | 라우터가 라우팅 규칙 활성화를 마칠 때 발생합니다.                                                                                                                             |
+| [`NavigationEnd`](api/router/NavigationEnd)               | 내비게이션이 성공적으로 끝날 때 발생합니다.                                                                                                                                   |
+| [`NavigationCancel`](api/router/NavigationCancel)         | 내비게이션이 취소될 때 발생합니다. 내비게이션 중 라우팅 규칙 가드가 false를 반환하거나, `UrlTree` 또는 `RedirectCommand`를 반환해서 리다이렉트하는 경우에 발생할 수 있습니다. |
+| [`NavigationError`](api/router/NavigationError)           | 예기치 않은 에러로 내비게이션이 실패할 때 발생합니다.                                                                                                                         |
+| [`Scroll`](api/router/Scroll)                             | 스크롤 이벤트를 나타냅니다.                                                                                                                                                   |
+
+`withDebugTracing` 기능을 활성화하면 Angular가 이 이벤트를 콘솔에 기록합니다.
+
+<!--
 ## Router terminology
+-->
 
+<a id="router-terminology"></a>
+
+## 라우터 용어
+
+<!--
 Here are the key `Router` terms and their meanings:
 
 | Router part           | Details                                                                                                                                                                                                                                   |
@@ -46,9 +95,34 @@ Here are the key `Router` terms and their meanings:
 | `RouterState`         | The current state of the router including a tree of the currently activated routes together with convenience methods for traversing the route tree.                                                                                       |
 | Link parameters array | An array that the router interprets as a routing instruction. You can bind that array to a `RouterLink` or pass the array as an argument to the `Router.navigate` method.                                                                 |
 | Routing component     | An Angular component with a `RouterOutlet` that displays views based on router navigations.                                                                                                                                               |
+-->
+
+주요 `Router` 용어와 의미는 다음과 같습니다.
+
+| 라우터 구성 요소   | 설명                                                                                                                                                                                                      |
+| :----------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Router`           | 활성 URL에 해당하는 애플리케이션 컴포넌트를 표시합니다. 컴포넌트 사이의 내비게이션을 관리합니다.                                                                                                          |
+| `provideRouter`    | 애플리케이션 뷰 사이를 이동하는 데 필요한 서비스 프로바이더를 제공합니다.                                                                                                                                 |
+| `RouterModule`     | 애플리케이션 뷰 사이를 이동하는 데 필요한 서비스 프로바이더와 디렉티브를 제공하는 별도의 NgModule입니다.                                                                                                  |
+| `Routes`           | URL 경로와 컴포넌트를 연결하는 라우팅 규칙 배열을 정의합니다.                                                                                                                                             |
+| `Route`            | URL 패턴에 따라 라우터가 컴포넌트로 이동하는 방식을 정의합니다. 대부분의 라우팅 규칙은 경로와 컴포넌트 타입으로 구성됩니다.                                                                               |
+| `RouterOutlet`     | 라우터가 뷰를 표시할 위치를 지정하는 디렉티브\(`<router-outlet>`\)입니다.                                                                                                                                 |
+| `RouterLink`       | 클릭 가능한 HTML 엘리먼트를 라우팅 규칙과 연결하는 디렉티브입니다. *문자열*이나 *링크 파라미터 배열*에 바인딩된 `routerLink` 디렉티브가 있는 엘리먼트를 클릭하면 내비게이션이 실행됩니다.                 |
+| `RouterLinkActive` | 해당 엘리먼트 또는 그 내부의 `routerLink`가 활성화되거나 비활성화될 때 HTML 엘리먼트의 클래스를 추가하거나 제거하는 디렉티브입니다. 접근성을 높이기 위해 활성 링크의 `aria-current`도 설정할 수 있습니다. |
+| `ActivatedRoute`   | 각 라우팅 규칙 컴포넌트에 제공되는 서비스입니다. 라우팅 규칙 파라미터, 정적 데이터, 리졸브 데이터, 전역 쿼리 파라미터, 전역 프래그먼트 등 해당 라우팅 규칙의 정보가 있습니다.                             |
+| `RouterState`      | 라우터의 현재 상태입니다. 현재 활성화된 라우팅 규칙 트리와 라우팅 규칙 트리를 탐색하는 편의 메서드를 포함합니다.                                                                                          |
+| 링크 파라미터 배열 | 라우터가 라우팅 명령으로 해석하는 배열입니다. 이 배열을 `RouterLink`에 바인딩하거나 `Router.navigate` 메서드의 인자로 전달할 수 있습니다.                                                                 |
+| 라우팅 컴포넌트    | 라우터 내비게이션에 따라 뷰를 표시하는 `RouterOutlet`이 있는 Angular 컴포넌트입니다.                                                                                                                      |
+
+<!--
+## `<base href>`
+-->
+
+<a id="base-href"></a>
 
 ## `<base href>`
 
+<!--
 The router uses the browser's [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries 'HTML5 browser history push-state') for navigation.
 `pushState` lets you customize in-application URL paths; for example, `localhost:4200/crisis-center`.
 The in-application URLs can be indistinguishable from server URLs.
@@ -67,9 +141,36 @@ If the `app` folder is the application root, as it is for this application, set 
 ```html
 <base href="/" />
 ```
+-->
 
+라우터는 브라우저의 [history.pushState](https://developer.mozilla.org/docs/Web/API/History_API/Working_with_the_History_API#adding_and_modifying_history_entries 'HTML5 브라우저 히스토리 push-state')로 내비게이션을 처리합니다.
+`pushState`를 사용하면 `localhost:4200/crisis-center`처럼 애플리케이션 내부 URL 경로를 원하는 형태로 구성할 수 있습니다.
+애플리케이션 내부 URL을 서버 URL과 구별되지 않는 형태로 만들 수 있습니다.
+
+`pushState`는 최신 HTML5 브라우저에서 처음 지원되었기 때문에 이런 URL을 "HTML5 형식" URL이라고 부르기도 합니다.
+
+참고: HTML5 형식의 내비게이션은 라우터의 기본 방식입니다.
+[LocationStrategy와 브라우저 URL 형식](guide/routing/common-router-tasks#locationstrategy-and-browser-url-styles) 섹션에서 HTML5 형식을 권장하는 이유, 동작을 조정하는 방법, 필요한 경우 이전 해시\(`#`\) 형식으로 변경하는 방법을 알아보세요.
+
+`pushState` 라우팅이 동작하려면 애플리케이션의 `index.html`에 [`<base href>` 엘리먼트](https://developer.mozilla.org/docs/Web/HTML/Element/base 'base href')를 추가해야 합니다.
+브라우저는 CSS 파일, 스크립트, 이미지를 참조할 때 `<base href>` 값을 상대 URL 앞에 붙입니다.
+
+`<head>` 태그 바로 뒤에 `<base>` 엘리먼트를 추가하세요.
+이 애플리케이션처럼 `app` 폴더가 애플리케이션 루트라면 `index.html`의 `href` 값을 다음과 같이 지정하세요.
+
+```html
+<base href="/" />
+```
+
+<!--
 ### HTML5 URLs and the `<base href>`
+-->
 
+<a id="html5-urls-and-the-base-href"></a>
+
+### HTML5 URL과 `<base href>`
+
+<!--
 The guidelines that follow will refer to different parts of a URL.
 This diagram outlines what those parts refer to:
 
@@ -106,9 +207,55 @@ Those developers can still use HTML5 URLs by taking the following two steps:
    - A fragment in the `<base href>` is _never_ persisted
 
 For more complete information on how `<base href>` is used to construct target URIs, see the [RFC](https://tools.ietf.org/html/rfc3986#section-5.2.2) section on transforming references.
+-->
+
+다음 지침에서는 URL의 여러 부분을 구분해서 설명합니다.
+각 부분이 의미하는 것은 다음 다이어그램과 같습니다.
+
+```text {hideCopy}
+foo://example.com:8042/over/there?name=ferret#nose
+\_/   \______________/\_________/ \_________/ \__/
+ |           |            |            |        |
+scheme    authority      path        query   fragment
+```
+
+라우터는 기본적으로 [HTML5 pushState](https://developer.mozilla.org/docs/Web/API/History_API#Adding_and_modifying_history_entries '브라우저 히스토리 push-state') 형식을 사용하지만, 이 전략을 사용하려면 `<base href>`를 설정해야 합니다.
+
+권장하는 설정 방식은 `index.html`의 `<head>` 안에 [`<base href>` 엘리먼트](https://developer.mozilla.org/docs/Web/HTML/Element/base 'base href')를 추가하는 것입니다.
+
+```angular-html
+<base href="/" />
+```
+
+이 태그가 없으면 애플리케이션의 하위 경로로 직접 연결하는 "딥 링크"를 사용할 때 브라우저가 리소스\(이미지, CSS, 스크립트\)를 로드하지 못할 수 있습니다.
+
+`<head>`나 `index.html`에 접근할 수 없는 등의 이유로 `<base>` 엘리먼트를 추가하지 못할 수도 있습니다.
+
+이 경우에도 다음 두 단계를 진행하면 HTML5 URL을 사용할 수 있습니다.
+
+1. 라우터에 적절한 `APP_BASE_HREF` 값을 제공합니다.
+1. CSS, 이미지, 스크립트, 템플릿 HTML 파일 등 모든 웹 리소스에 루트 URL\(`authority`가 있는 URL\)을 사용합니다.
+   - `<base href>`의 `path`는 "/"로 끝나야 합니다.
+     브라우저는 `path`의 마지막 "`/`" 뒤에 있는 문자를 무시하기 때문입니다.
+   - `<base href>`에 `query` 부분이 있으면 페이지 링크의 `path`가 비어 있고 `query`도 없을 때만 해당 `query`를 사용합니다.
+     따라서 `<base href>`의 `query`는 `HashLocationStrategy`를 사용할 때만 포함됩니다.
+
+   - 페이지 링크가 루트 URL\(`authority`가 있는 URL\)이면 `<base href>`를 사용하지 않습니다.
+     따라서 authority가 있는 `APP_BASE_HREF`를 사용하면 Angular가 생성하는 모든 링크가 `<base href>` 값을 무시합니다.
+
+   - `<base href>`의 프래그먼트는 _절대_ 유지되지 않습니다.
+
+`<base href>`로 대상 URI를 구성하는 방법은 참조 변환을 설명하는 [RFC](https://tools.ietf.org/html/rfc3986#section-5.2.2) 섹션을 참고하세요.
+
+<!--
+### `HashLocationStrategy`
+-->
+
+<a id="hashlocationstrategy"></a>
 
 ### `HashLocationStrategy`
 
+<!--
 Use `HashLocationStrategy` by providing the `useHash: true` in an object as the second argument of the `RouterModule.forRoot()` in the `AppModule`.
 
 ```ts
@@ -116,3 +263,12 @@ providers: [provideRouter(appRoutes, withHashLocation())];
 ```
 
 When using `RouterModule.forRoot`, this is configured with the `useHash: true` in the second argument: `RouterModule.forRoot(routes, {useHash: true})`.
+-->
+
+`HashLocationStrategy`를 사용하려면 `AppModule`에서 `RouterModule.forRoot()`의 두 번째 인자로 `useHash: true`를 지정한 객체를 전달하세요.
+
+```ts
+providers: [provideRouter(appRoutes, withHashLocation())];
+```
+
+`RouterModule.forRoot`를 사용할 때는 `RouterModule.forRoot(routes, {useHash: true})`처럼 두 번째 인자에 `useHash: true`를 설정합니다.

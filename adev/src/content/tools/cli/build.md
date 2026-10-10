@@ -1,5 +1,12 @@
+<!--
 # Building Angular apps
+-->
 
+<a id="building-angular-apps"></a>
+
+# Angular 앱 빌드하기
+
+<!--
 You can build your Angular CLI application or library with the `ng build` command.
 This will compile your TypeScript code to JavaScript, as well as optimize, bundle, and minify the output as appropriate.
 
@@ -38,13 +45,70 @@ You can determine which builder is being used for a particular project by lookin
 ```
 
 This page discusses usage and options of `@angular/build:application`.
+-->
 
+`ng build` 명령어로 Angular CLI 애플리케이션이나 라이브러리를 빌드할 수 있습니다.
+이 명령어는 TypeScript 코드를 JavaScript로 컴파일하고, 필요에 따라 결과물을 최적화하고 번들로 묶고 축소합니다.
+
+`ng build`는 `angular.json`에 지정된 기본 프로젝트에서 `build` 대상으로 설정한 빌더만 실행합니다.
+Angular CLI에는 일반적으로 `build` 대상으로 사용하는 네 가지 빌더가 있습니다:
+
+| 빌더                                            | 용도                                                                                                                                                                                                                                        |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@angular/build:application`                    | [esbuild](https://esbuild.github.io/)로 클라이언트 번들, Node 서버, 빌드 시점에 사전 렌더링한 라우팅 규칙의 페이지를 포함하는 애플리케이션을 빌드합니다.                                                                                    |
+| `@angular-devkit/build-angular:browser-esbuild` | [esbuild](https://esbuild.github.io/)로 브라우저에서 사용할 클라이언트 애플리케이션을 번들로 만듭니다. 자세한 내용은 [`browser-esbuild` 문서](tools/cli/build-system-migration#manual-migration-to-the-compatibility-builder)를 참고하세요. |
+| `@angular-devkit/build-angular:browser`         | [webpack](https://webpack.js.org/)으로 브라우저에서 사용할 클라이언트 애플리케이션을 번들로 만듭니다.                                                                                                                                       |
+| `@angular/build:ng-packagr`                     | [Angular 패키지 형식](tools/libraries/angular-package-format)을 따르는 Angular 라이브러리를 빌드합니다.                                                                                                                                     |
+
+`ng new`로 생성한 애플리케이션은 기본적으로 `@angular/build:application`을 사용합니다.
+`ng generate library`로 생성한 라이브러리는 기본적으로 `@angular/build:ng-packagr`를 사용합니다.
+
+특정 프로젝트에서 사용하는 빌더는 해당 프로젝트의 `build` 대상을 확인하면 알 수 있습니다.
+
+```json
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        // `ng build`는 `build`라는 Architect 대상을 실행합니다.
+        "build": {
+          "builder": "@angular/build:application",
+          …
+        },
+        "serve": { … }
+        "test": { … }
+        …
+      }
+    }
+  }
+}
+```
+
+이 문서에서는 `@angular/build:application`의 사용법과 옵션을 알아봅니다.
+
+<!--
 ## Output directory
+-->
 
+<a id="output-directory"></a>
+
+## 출력 디렉터리
+
+<!--
 The result of this build process is output to a directory (`dist/${PROJECT_NAME}` by default).
+-->
 
+빌드 결과물은 디렉터리에 출력되며, 기본 경로는 `dist/${PROJECT_NAME}`입니다.
+
+<!--
 ## Configuring size budgets
+-->
 
+<a id="configuring-size-budgets"></a>
+
+## 크기 예산 설정하기
+
+<!--
 As applications grow in functionality, they also grow in size.
 The CLI lets you set size thresholds in your configuration to ensure that parts of your application stay within size boundaries that you define.
 
@@ -126,9 +190,99 @@ The following example shows a budget that uses a baseline:
 ```
 
 In this example, the builder warns when the bundle grows beyond `220kb` and errors when it grows beyond `240kb`.
+-->
 
+애플리케이션의 기능이 늘어나면 크기도 함께 커집니다.
+CLI에서는 크기 한도를 설정해서 애플리케이션의 각 부분이 지정한 크기 범위를 유지하도록 할 수 있습니다.
+
+CLI 설정 파일 `angular.json`에서 [설정된 환경](tools/cli/environments)별로 `budgets` 항목에 크기 한도를 정의하세요.
+
+```json
+{
+  …
+  "configurations": {
+    "production": {
+      …
+      "budgets": [
+        {
+          "type": "initial",
+          "maximumWarning": "250kb",
+          "maximumError": "500kb"
+        },
+      ]
+    }
+  }
+}
+```
+
+앱 전체 또는 특정 부분에 크기 예산을 지정할 수 있습니다.
+각 예산 항목은 특정 유형의 예산을 설정합니다.
+예를 들어 `initial` 예산은 애플리케이션을 부트스트랩하는 데 사용하는 JavaScript와 CSS의 크기를 측정하며, 빌드 출력 요약의 `Initial Total` 값에 해당합니다.
+크기 값은 다음 형식으로 지정합니다:
+
+| 크기 값           | 설명                                                               |
+| :---------------- | :----------------------------------------------------------------- |
+| `123` 또는 `123b` | 바이트 단위 크기입니다.                                            |
+| `123kb`           | 킬로바이트 단위 크기입니다.                                        |
+| `123mb`           | 메가바이트 단위 크기입니다.                                        |
+| `12%`             | 기준 크기에 대한 백분율입니다. 기준값 자체에는 사용할 수 없습니다. |
+
+예산을 설정하면 애플리케이션의 특정 부분이 지정한 한도에 도달하거나 초과할 때 빌더가 경고나 오류를 보고합니다.
+
+각 예산 항목은 다음 프로퍼티를 가진 JSON 객체입니다:
+
+| 프로퍼티       | 값                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| type           | 예산 유형입니다. 다음 중 하나를 사용합니다: <table> <thead> <tr> <th> 값 </th> <th> 설명 </th> </tr> </thead> <tbody> <tr> <td> <code>bundle</code> </td> <td> 특정 번들의 크기입니다. <code>name</code>과 함께 사용하면 지연 로딩 번들을 포함한 특정 번들에 예산을 설정할 수 있습니다. </td> </tr> <tr> <td> <code>initial</code> </td> <td> 애플리케이션 부트스트랩에 필요한 JavaScript와 CSS의 크기입니다. 빌드 출력 요약의 <code>Initial Total</code> 값에 해당합니다. 기본적으로 500kb에서 경고가 발생하고 1mb에서 오류가 발생합니다. </td> </tr> <tr> <td> <code>allScript</code> </td> <td> 모든 스크립트의 크기입니다. </td> </tr> <tr> <td> <code>all</code> </td> <td> 애플리케이션 전체의 크기입니다. </td> </tr> <tr> <td> <code>anyComponentStyle</code> </td> <td> 개별 컴포넌트 스타일시트의 크기입니다. 기본적으로 2kb에서 경고가 발생하고 4kb에서 오류가 발생합니다. </td> </tr> <tr> <td> <code>anyScript</code> </td> <td> 개별 스크립트의 크기입니다. </td> </tr> <tr> <td> <code>any</code> </td> <td> 개별 파일의 크기입니다. </td> </tr> </tbody> </table> |
+| name           | `type=bundle`일 때의 번들 이름입니다. 생성된 출력 파일명이 아니라 빌더가 보고하는 번들 이름을 사용합니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| baseline       | 비교의 기준 크기입니다. 지정하지 않으면 기본값은 `0`이며, 한도 값은 이 기준을 바탕으로 계산합니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| maximumWarning | 기준 크기에 대한 경고 상한값입니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| maximumError   | 기준 크기에 대한 오류 상한값입니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| minimumWarning | 기준 크기에 대한 경고 하한값입니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| minimumError   | 기준 크기에 대한 오류 하한값입니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| warning        | 기준 크기에 대한 경고 한도입니다(최솟값과 최댓값).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| error          | 기준 크기에 대한 오류 한도입니다(최솟값과 최댓값).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+
+지연 로딩 번들의 예산을 설정하려면 `type: "bundle"`을 사용하고 `name`에 해당 번들의 이름을 지정하세요.
+
+```json
+{
+  "budgets": [
+    {
+      "type": "bundle",
+      "name": "admin",
+      "maximumWarning": "250kb",
+      "maximumError": "300kb"
+    }
+  ]
+}
+```
+
+`name` 필드는 출력 파일명이 아니라 번들 이름과 매칭되므로 `admin.*.js`와 같은 와일드카드나 정규 표현식 패턴을 사용하지 않습니다.
+
+다음 예제는 기준 크기를 사용하는 예산입니다:
+
+```json
+{
+  "type": "bundle",
+  "name": "main",
+  "baseline": "200kb",
+  "maximumWarning": "10%",
+  "maximumError": "20%"
+}
+```
+
+이 예제에서는 번들 크기가 `220kb`를 초과하면 경고가 발생하고 `240kb`를 초과하면 오류가 발생합니다.
+
+<!--
 ## Configuring CommonJS dependencies
+-->
 
+<a id="configuring-commonjs-dependencies"></a>
+
+## CommonJS 의존성 설정하기
+
+<!--
 Always prefer native [ECMAScript modules](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import) (ESM) throughout your application and its dependencies.
 ESM is a fully specified web standard and JavaScript language feature with strong static analysis support. This makes bundle optimizations more powerful than other module formats.
 
@@ -152,9 +306,42 @@ If the best option is to use a CommonJS dependency, you can disable these warnin
    …
 },
 ```
+-->
 
+애플리케이션과 의존성 전반에서 네이티브 [ECMAScript 모듈](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/import)(ESM)을 우선 사용하세요.
+ESM은 명세가 완전히 정의된 웹 표준이자 JavaScript 언어 기능이며 정적 분석을 강력하게 지원합니다.
+따라서 다른 모듈 형식보다 효과적으로 번들을 최적화할 수 있습니다.
+
+Angular CLI는 프로젝트에서 [CommonJS](https://nodejs.org/api/modules.html) 의존성을 가져오는 것도 지원하며 이러한 의존성을 자동으로 번들에 포함합니다.
+하지만 CommonJS 모듈은 번들러와 축소 도구의 효과적인 최적화를 방해해서 번들 크기를 키울 수 있습니다.
+자세한 내용은 [CommonJS가 번들을 크게 만드는 이유](https://web.dev/commonjs-larger-bundles)를 참고하세요.
+
+Angular CLI는 브라우저 애플리케이션이 CommonJS 모듈에 의존하는 것을 감지하면 경고를 출력합니다.
+CommonJS 의존성이 있다면 관리자에게 ECMAScript 모듈 지원을 요청하거나, 직접 지원 기능을 기여하거나, 요구사항을 충족하는 다른 의존성을 사용하는 것을 고려하세요.
+CommonJS 의존성을 사용하는 것이 최선이라면 `angular.json`의 `build` 옵션에서 `allowedCommonJsDependencies`에 해당 CommonJS 모듈 이름을 추가해서 경고를 비활성화할 수 있습니다.
+
+```json
+"build": {
+  "builder": "@angular/build:application",
+  "options": {
+     "allowedCommonJsDependencies": [
+        "lodash"
+     ]
+     …
+   }
+   …
+},
+```
+
+<!--
 ## Configuring browser compatibility
+-->
 
+<a id="configuring-browser-compatibility"></a>
+
+## 브라우저 호환성 설정하기
+
+<!--
 The Angular CLI uses [Browserslist](https://github.com/browserslist/browserslist) to ensure compatibility with different browser versions.
 Depending on supported browsers, Angular will automatically transform certain JavaScript and CSS features to ensure the built application does not use a feature which has not been implemented by a supported browser. However, the Angular CLI will not automatically add polyfills to supplement missing Web APIs. Use the `polyfills` option in `angular.json` to add polyfills.
 
@@ -167,16 +354,63 @@ Avoid expanding this list to more browsers. Even if your application code more b
 You should only ever _reduce_ the set of browsers or versions in this list.
 
 HELPFUL: Use [browsersl.ist](https://browsersl.ist) to display compatible browsers for a `browserslist` query.
+-->
 
+Angular CLI는 [Browserslist](https://github.com/browserslist/browserslist)를 사용해서 다양한 브라우저 버전과의 호환성을 보장합니다.
+지원하는 브라우저에 따라 일부 JavaScript와 CSS 기능을 자동으로 변환해서 빌드한 애플리케이션이 지원 대상 브라우저에 없는 기능을 사용하지 않도록 합니다.
+하지만 Angular CLI는 누락된 웹 API를 보완하는 폴리필을 자동으로 추가하지 않습니다.
+폴리필은 `angular.json`의 `polyfills` 옵션으로 추가하세요.
+
+기본적으로 Angular CLI는 현재 메이저 버전에서 [Angular가 지원하는 브라우저](reference/versions#browser-support)에 맞는 `browserslist` 설정을 사용합니다.
+
+내부 설정을 덮어쓰려면 [`ng generate config browserslist`](cli/generate/config)를 실행하세요.
+프로젝트 디렉터리에 Angular의 지원 브라우저에 맞는 `.browserslistrc` 설정 파일이 생성됩니다.
+
+특정 브라우저와 버전을 대상으로 설정하는 더 많은 예제는 [browserslist 저장소](https://github.com/browserslist/browserslist)를 참고하세요.
+이 목록을 확장해서 브라우저를 더 추가하지 마세요.
+애플리케이션 코드가 더 넓은 범위의 브라우저와 호환되더라도 Angular 자체는 그렇지 않을 수 있습니다.
+이 목록에서는 브라우저나 버전의 범위를 _줄이는 것만_ 허용됩니다.
+
+도움말: [browsersl.ist](https://browsersl.ist)에서 `browserslist` 쿼리에 해당하는 호환 브라우저를 확인할 수 있습니다.
+
+<!--
 ## Configuring Tailwind
+-->
 
+<a id="configuring-tailwind"></a>
+
+## Tailwind 설정하기
+
+<!--
 Angular supports [Tailwind CSS](https://tailwindcss.com/), a utility-first CSS framework.
 
 To integrate Tailwind CSS with Angular CLI, see [Using Tailwind CSS with Angular](guide/tailwind)
+-->
 
+Angular는 유틸리티 우선 CSS 프레임워크인 [Tailwind CSS](https://tailwindcss.com/)를 지원합니다.
+
+Tailwind CSS를 Angular CLI와 통합하는 방법은 [Angular에서 Tailwind CSS 사용하기](guide/tailwind)를 참고하세요.
+
+<!--
 ## Critical CSS inlining
+-->
 
+<a id="critical-css-inlining"></a>
+
+## 핵심 CSS 인라인 삽입
+
+<!--
 Angular can inline the critical CSS definitions of your application to improve [First Contentful Paint (FCP)](https://web.dev/first-contentful-paint).
 This option is enabled default. You can disable this inlining in the [`styles` customization options](reference/configs/workspace-config#styles-optimization-options).
 
 This optimization extracts the CSS needed to render the initial viewport and inlines it directly into the generated HTML, allowing the browser to display content faster without waiting for the full stylesheets to load. The remaining CSS then loads asynchronously in the background. Angular CLI uses [Beasties](https://github.com/danielroe/beasties) to analyze your application’s HTML and styles.
+-->
+
+Angular는 애플리케이션의 핵심 CSS 정의를 인라인으로 삽입해서 [첫 콘텐츠 표시 시간(FCP)](https://web.dev/first-contentful-paint)을 개선할 수 있습니다.
+이 옵션은 기본적으로 활성화되어 있습니다.
+[`styles` 설정 옵션](reference/configs/workspace-config#styles-optimization-options)에서 인라인 삽입을 비활성화할 수 있습니다.
+
+이 최적화는 초기 화면을 렌더링하는 데 필요한 CSS를 추출해서 생성된 HTML에 직접 삽입합니다.
+그러면 브라우저가 전체 스타일시트를 불러올 때까지 기다리지 않고 콘텐츠를 더 빨리 표시할 수 있습니다.
+나머지 CSS는 백그라운드에서 비동기로 불러옵니다.
+Angular CLI는 [Beasties](https://github.com/danielroe/beasties)로 애플리케이션의 HTML과 스타일을 분석합니다.
