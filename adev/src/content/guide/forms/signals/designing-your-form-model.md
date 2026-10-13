@@ -46,7 +46,6 @@ Forms should use a form model tailored to the input experience, rather than simp
 폼 모델은 화면에서 사용자가 입력한 내용 자체를 다룹니다.
 예를 들어, 폼 모델에서 사용자가 날짜와 시각을 고르는 입력 필드가 있다고 해도, 도메인 모델에서는 이를 JavaScript `Date` 객체로 간단하게 표현할 수 있습니다.
 
-
 ```ts
 interface AppointmentFormModel {
   name: string; // 예약자의 이름

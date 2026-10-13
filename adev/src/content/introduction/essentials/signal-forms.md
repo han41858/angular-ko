@@ -590,7 +590,7 @@ Every `field()` provides these state signals:
 | `dirty()`    | 사용자가 값을 바꾸면 `true`를 반환합니다.                                                             |
 | `disabled()` | 필드가 비활성화되면 `true`를 반환합니다.                                                              |
 | `readonly()` | 필드가 읽기 전용이면 `true`를 반환합니다.                                                             |
-| `pending()`  | 비동기 유효성 검사가 진행 중이면 `true`를 반환합니다.                                                  |
+| `pending()`  | 비동기 유효성 검사가 진행 중이면 `true`를 반환합니다.                                                 |
 | `errors()`   | 유효성 검사에서 발생한 에러 배열을 반환합니다. 에러 객체에는 `kind`, `message` 프로퍼티가 존재합니다. |
 
 <!--

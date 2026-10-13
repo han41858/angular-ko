@@ -359,7 +359,7 @@ Angular translates structural directive shorthand into the normal binding syntax
 
 Angular는 구조 디렉티브 단축 문법을 다음과 같이 일반 바인딩 문법으로 변환해서 처리합니다:
 
-| 단축 문법                   | 변환 결과                                                       |
+| 단축 문법                   | 변환 결과                                                     |
 | :-------------------------- | :------------------------------------------------------------ |
 | `prefix`, 일반 `expression` | `[prefix]="expression"`                                       |
 | `keyExp`                    | `[prefixKey]="expression"` (`prefix` 는 `key` 앞에 붙습니다.) |
