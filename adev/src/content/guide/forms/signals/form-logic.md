@@ -12,9 +12,9 @@ This guide shows you how to use rules like `disabled()`, `hidden()`, `readonly()
 
 스키마를 활용하면 원하는 폼 로직을 시그널 폼에 추가할 수 있습니다.
 [유효성 검사 문서](guide/forms/signals/validation)에서 다룬 유효성 검사 외에, 이 문서는 스키마에서 활용할 수 있는 유효성 검사를 알아봅시다.
-폼 필드는 조건에 따라 비활성화 할 수 있으며, 다른 값에 연동되며 화면에서 감출 수도 있고, 읽기 전용으로 만들거나 커스텀 컨트롤에 메타데이터를 추가할 수도 있습니다.
+폼 필드는 조건에 따라 비활성화할 수 있으며, 다른 값에 연동되며 화면에서 감출 수도 있고, 읽기 전용으로 만들거나 커스텀 컨트롤에 메타데이터를 추가할 수도 있습니다.
 
-이 문서는 `disabled()`, `hidden()`, `readonly()`, `debounce()`, `metadat()`를 활용한 필드 동작 제어 방법을 알아봅시다.
+이 문서는 `disabled()`, `hidden()`, `readonly()`, `debounce()`, `metadata()`를 활용한 필드 동작 제어 방법을 알아봅시다.
 
 <!--
 ## When to add form logic
@@ -33,8 +33,8 @@ Use rules when field behavior depends on other field values or needs to update r
 다른 필드 값에 따라 유효성 검사 규칙이 달라지거나 반응형으로 갱신되어야 할 때 사용하세요.
 예를 들자면:
 
-- 총 금액이 너무 낮을 때 쿠폰 코드를 비활성화 할 때
-- 배송이 필수할 때만 주소 입력 필드를 활성화 할 때
+- 총 금액이 너무 낮을 때 쿠폰 코드를 비활성화할 때
+- 배송이 필수일 때만 주소 입력 필드를 활성화할 때
 - API 요청을 줄이기 위해 검색 필드 요청 횟수를 줄일 때
 
 <!--
@@ -100,15 +100,15 @@ NOTE: Disabled fields skip validation - they don't participate in form validatio
 `disabled()`는 `[formField]` 디렉티브와 함께 동작하며 필드 상태에 따라 `disabled` 어트리뷰트를 자동으로 바인딩합니다.
 템플릿에서 `[disabled]="yourForm.fieldName().disabled()"`와 같은 코드를 작성할 필요는 없습니다.
 
-참고: 비활성화 된 필드는 유효성 검사에 영향을 주지 않습니다.
+참고: 비활성화된 필드는 유효성 검사에 영향을 주지 않습니다.
 필드의 값은 유지되지만 유효성 검사에 관여되지 않습니다.
-유효성 검사에 대해 자세하게 알아보려면 [유효성 검사](guide/forms/signals/validation)문서를 참고하세요.
+유효성 검사에 대해 자세하게 알아보려면 [유효성 검사](guide/forms/signals/validation) 문서를 참고하세요.
 
 <!--
 ### Always disabled
 -->
 
-### 항상 비활성화 되는 경우
+### 항상 비활성화되는 경우
 
 <!--
 To disable a field permanently, call `disabled()` with just the field path:
@@ -140,7 +140,7 @@ export class Settings {
 ```
 -->
 
-필드를 완전히 비활성화 하려면 `disabled()`로 필드 경로를 지정하면 됩니다:
+필드를 완전히 비활성화하려면 `disabled()`로 필드 경로를 지정하면 됩니다:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -211,7 +211,7 @@ export class Order {
 In this example, when the order total is less than $50, the coupon code field is disabled.
 -->
 
-필드를 조건에 따라 비활성화 하려면 `true` 값이나 `false` 값을 반환하는 `when` 함수를 정의하면 됩니다.
+필드를 조건에 따라 비활성화하려면 `true` 값이나 `false` 값을 반환하는 `when` 함수를 정의하면 됩니다.
 `true`를 반환하면 필드가 비활성화되고, `false`를 반환하면 필드가 활성화됩니다:
 
 ```angular-ts
@@ -245,7 +245,7 @@ export class Order {
 }
 ```
 
-이 예제 코드에서는 주문 금액이 $50 미만일 때 쿠폰 코드 필드가 비활성화 됩니다.
+이 예제 코드에서는 주문 금액이 $50 미만일 때 쿠폰 코드 필드가 비활성화됩니다.
 
 <!--
 ### Disabled reasons
@@ -306,7 +306,7 @@ The `when` function returns:
 Access the reasons through the `disabledReasons()` signal on the field state. Each reason has a `message` property containing the string you returned.
 -->
 
-폼 필드를 비활성화 할 때 `true` 값 대신 문자열을 반환하면 사용자에게 표시할 메시지를 지정할 수 있습니다:
+폼 필드를 비활성화할 때 `true` 값 대신 문자열을 반환하면 사용자에게 표시할 메시지를 지정할 수 있습니다:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -352,7 +352,7 @@ export class Order {
 
 `when` 함수가 반환하는 타입은 이렇습니다:
 
-- 문자열 - 비활성화 사유를 전달하며 필드를 비활성화 할 때
+- 문자열 - 비활성화 사유를 전달하며 필드를 비활성화할 때
 - `false` - 필드 활성화, 거짓으로 평가되는 값이 아니라 `false`를 사용하세요.
 
 비활성화 사유를 확인하려면 폼 필드의 `disabledReasons()` 시그널을 확인하면 됩니다.
@@ -362,7 +362,7 @@ export class Order {
 #### Multiple disabled reasons
 -->
 
-#### 비활성화 사유가 여러개일 때
+#### 비활성화 사유가 여러 개일 때
 
 <!--
 You can also call `disabled()` multiple times on the same field, and all of the returned reasons accumulate:
@@ -382,7 +382,7 @@ orderForm = form(this.orderModel, (schemaPath) => {
 If both conditions are true, the field shows both disabled reasons. This pattern is useful for complex availability rules that you want to keep separate.
 -->
 
-`disabled()`는 한 필드에서 여러번 실행될 수도 있습니다.
+`disabled()`는 한 필드에서 여러 번 실행될 수도 있습니다.
 반환하는 값은 모두 누적됩니다:
 
 ```angular-ts
@@ -416,9 +416,9 @@ NOTE: Like disabled fields, hidden fields also skip validation. See the [Validat
 
 필드를 화면에서 감추려면 `hidden()`을 활용하면 됩니다.
 이 규칙은 로직으로만 설정할 수 있습니다.
-**필드가 표시될 지 결정하는 것은 화면에서 입니다.**
+**필드가 표시될지 결정하는 것은 화면에서입니다.**
 
-중요: `disabled`, `readonly`와는 다르게, `hidden`는 상태는 표준 DOM 프로퍼티로 존재하지 않습니다.
+중요: `disabled`, `readonly`와는 다르게, `hidden` 상태는 표준 DOM 프로퍼티로 존재하지 않습니다.
 `[formField]` 디렉티브는 엘리먼트에 `hidden` 어트리뷰트를 적용하지 않습니다.
 `hidden()` 상태에 따라 폼 필드를 조건부로 화면에 표시하려면 `@if`나 CSS를 사용해야 합니다.
 
@@ -714,7 +714,7 @@ All three skip validation and prevent user editing while active. The key differe
 | Included in HTML form submission | No         | No           | Yes          |
 -->
 
-폼 필드의 활성화 상태를 조작하는 방법은 3가지 입니다:
+폼 필드의 활성화 상태를 조작하는 방법은 3가지입니다:
 
 `hidden()`는 이런 경우에 사용하세요:
 
@@ -727,16 +727,16 @@ All three skip validation and prevent user editing while active. The key differe
 - 화면에 표시하지만 수정하지 않아야 할 때
 - 비활성화 사유와 같이 동작하지 않는 이유를 표시할 때
 - HTML 폼 제출과 무관한 필드
-- 예시: 폼이 활성화 되기 전까지는 폼 제출 버튼을 비활성화 할 때, 관리자에게만 승인 필드를 활성화 할 때
+- 예시: 폼이 활성화되기 전까지는 폼 제출 버튼을 비활성화할 때, 관리자에게만 승인 필드를 활성화할 때
 
 `readonly()`는 이런 경우에 사용하세요:
 
 - 화면에 표시하지만 수정하지 않아야 할 때
 - 사용자가 보거나, 선택하거나, 복사해야 하는 데이터를 표시할 때
-- HTML 폼 제출에 필요한 필드할 때
+- HTML 폼 제출에 필요한 필드일 때
 - 예시: 주문 확인 번호, 시스템이 생성한 참조 코드
 
-활성화 되었을 때 유효성 검사 영향 여부나 사용자가 수정 가능한지는 이렇게 다릅니다:
+활성화되었을 때 유효성 검사 영향 여부나 사용자가 수정 가능한지는 이렇게 다릅니다:
 
 | 기능                                        | `hidden()` | `disabled()` | `readonly()` |
 | ------------------------------------------- | ---------- | ------------ | ------------ |
@@ -780,7 +780,7 @@ Debouncing delays these updates and reduces unnecessary work.
 - 문자가 매번 입력될 때마다 유효성 검사가 실행됩니다.
 - 모델 값과 연결된 API 호출이나 기타 효과들이 발생합니다.
 
-`debounce()`를 활용하면 값이 불필요한 작업을 줄일 수 있습니다.
+`debounce()`를 활용하면 불필요한 작업을 줄일 수 있습니다.
 
 <!--
 ### Basic debouncing
@@ -879,7 +879,7 @@ This means users can type quickly, tab away, or submit the form without waiting 
 
 `debounce()` 함수를 사용하면 이런 과정을 거칩니다:
 
-- **사용자가 접근하면:** 지정된 시간동안 값 동기화가 중단됩니다.
+- **사용자가 접근하면:** 지정된 시간 동안 값 동기화가 중단됩니다.
 - **폼 제출 시:** 유효성 검사를 실행하기 전에 모든 필드를 `touched` 상태로 변경합니다. 필드의 모든 값은 동기화됩니다.
 
 사용자가 빠르게 입력하고, 다른 곳으로 포커스를 이동하면, 디바운스 딜레이가 만료되기 전에 폼을 제출할 수 있습니다.
@@ -970,12 +970,12 @@ export class Search {
 
 디바운서 함수가 반환하는 값에 따라 동작이 다릅니다:
 
-- `undefined` - 값을 즉시 동기화 할 때
-- `Promise<void>` - Promise가 완료될 때까지 동기화를 멈춤니다.
+- `undefined` - 값을 즉시 동기화할 때
+- `Promise<void>` - Promise가 완료될 때까지 동기화를 멈춥니다.
 
 커스텀 디바운스 로직은 이런 경우에 사용합니다:
 
-- 단순하게 지연하지 않고 타이밍 로직을 커스터마이징 할 때
+- 단순하게 지연하지 않고 타이밍 로직을 커스터마이징할 때
 - 외부 이벤트와 동기화를 맞춰야 할 때
 - 애플리케이션 상태에 따라 디바운스 로직을 적용할 때
 
@@ -1079,8 +1079,8 @@ export class Age {
 | `MAX_LENGTH` | `maxLength()`  | `field().maxLength()` |
 | `PATTERN`    | `pattern()`    | `field().pattern()`   |
 
-`[formField]` 디렉티므는 위 5개 키를 폼 넌트롤의 HTML 어트리뷰트에 자동으로 바인딩합니다.
-`PATTERN`은 예외인데, 시그널 폼은 패턴을 여러개 설정할 수 있지만 HTML `pattern` 어트리뷰트는 정규 표현식을 하나만 받을 수 있기 때문입니다.
+`[formField]` 디렉티브는 위 5개 키를 폼 컨트롤의 HTML 어트리뷰트에 자동으로 바인딩합니다.
+`PATTERN`은 예외인데, 시그널 폼은 패턴을 여러 개 설정할 수 있지만 HTML `pattern` 어트리뷰트는 정규 표현식을 하나만 받을 수 있기 때문입니다.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -1215,13 +1215,13 @@ export class Inventory {
 You can apply multiple rules to the same field, and you can use conditional logic to apply entire groups of rules based on form state.
 -->
 
-폼 필드에는 유효성 검사 규칙을 여러개 지정할 수 있으며, 폼 상태에 따라 조건부로 적용할 수도 있습니다.
+폼 필드에는 유효성 검사 규칙을 여러 개 지정할 수 있으며, 폼 상태에 따라 조건부로 적용할 수도 있습니다.
 
 <!--
 ### Multiple rules on one field
 -->
 
-### 필드 상태 여러개 적용하기
+### 필드 상태 여러 개 적용하기
 
 <!--
 Apply multiple rules to configure all aspects of a field's behavior:
@@ -1271,7 +1271,7 @@ These rules work together:
 - Metadata is independent and always available
 -->
 
-필드에는 상태를 여러개 적용할 수 있습니다::
+필드에는 상태를 여러 개 적용할 수 있습니다::
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -1313,7 +1313,7 @@ export class Promo {
 그러면 이렇게 동작합니다:
 
 - `hidden` 상태가 최우선 순위입니다 - 필드가 감춰지면 disabled 상태는 영향을 미치지 않습니다.
-- `disabled` 상태가 적용되면 `readonly` 상태와 관련없이 수정이 금지됩니다.
+- `disabled` 상태가 적용되면 `readonly` 상태와 관련 없이 수정이 금지됩니다.
 - 디바운싱은 모델 값 갱신에 영향을 줍니다. 다른 상태에는 영향을 받지 않습니다.
 - 메타데이터는 언제나 독립적으로 적용됩니다.
 

@@ -8,8 +8,8 @@
 Angular expressions are based on JavaScript, but differ in some key ways. This guide walks through the similarities and differences between Angular expressions and standard JavaScript.
 -->
 
-Angular 표현식 문법은 JavaScript를 기반으로 하지만 몇가지는 다릅니다.
-이 문서에서는 Angular 표현식 문법이 표준 JavaScript과 어떻게 비슷하고 다른지 알아봅시다.
+Angular 표현식 문법은 JavaScript를 기반으로 하지만 몇 가지는 다릅니다.
+이 문서에서는 Angular 표현식 문법이 표준 JavaScript와 어떻게 비슷하고 다른지 알아봅시다.
 
 <!--
 ## Value literals
@@ -21,7 +21,7 @@ Angular 표현식 문법은 JavaScript를 기반으로 하지만 몇가지는 �
 Angular supports a subset of [literal values](https://developer.mozilla.org/en-US/docs/Glossary/Literal) from JavaScript.
 -->
 
-Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/docs/Glossary/Literal) 중 몇가지를 제외하고 지원합니다.
+Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/docs/Glossary/Literal) 중 몇 가지를 제외하고 지원합니다.
 
 <!--
 ### Supported value literals

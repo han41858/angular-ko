@@ -56,12 +56,12 @@ Angular components and directives automatically participate in DI, meaning that 
 의존성이라는 것은 어떤 로직으로 동작하지만 스스로를 생성하지 않는 클래스를 의미하며, 어떤 객체이거나 값, 함수, 서비스일 수 있습니다.
 다르게 표현하면, 의존성 객체가 없으면 동작하지 않는 애플리케이션의 부분을 연결하는 역할이라고 할 수 있습니다.
 
-코드가 의존성 주입 시스템과 상호작용하는 방법은 두 가지 입니다:
+코드가 의존성 주입 시스템과 상호작용하는 방법은 두 가지입니다:
 
 - 어떤 값을 만들어서 사용할 수 있습니다.
 - 의존성을 요청해서 _주입 받아_ 사용할 수 있습니다.
 
-이 때 "값" 이라는 것은 JavaScript 자료 타입일 수 있으며, 객체이거나 함수일 수도 있습니다.
+이때 "값" 이라는 것은 JavaScript 자료 타입일 수 있으며, 객체이거나 함수일 수도 있습니다.
 보통은 이런 것들이 의존성이 됩니다:
 
 - **설정값**: 환경변수, API URL, 기능 스위치 플래그 등
@@ -330,7 +330,7 @@ This covers the most common use case for services in Angular applications.
 
 다음 가이드 문서에서는 [서비스를 생성](guide/di/creating-and-using-services)하고 이런 내용을 다룹니다:
 
-- Angular CLI나 수동으로 서비스를 생성하는 방
+- Angular CLI나 수동으로 서비스를 생성하는 방법
 - `providedIn: 'root'` 패턴이 동작하는 방식
 - 서비스를 컴포넌트나 다른 서비스로 의존성 주입하는 방법
 

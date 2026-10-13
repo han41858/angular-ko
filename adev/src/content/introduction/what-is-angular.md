@@ -129,13 +129,13 @@
   </docs-card>
 </docs-card-container>
 -->
-<docs-card-container headerTitle="자신있게 추천합니다" headerImgSrc="adev/src/assets/images/rocket.svg">
+<docs-card-container headerTitle="자신 있게 추천합니다" headerImgSrc="adev/src/assets/images/rocket.svg">
   <docs-card title="커밋마다 검증하는 거대한 모노레포를 Google이 관리합니다" href="https://cacm.acm.org/research/why-google-stores-billions-of-lines-of-code-in-a-single-repository/" link="Learn about Google's monorepo" titleIconName="sensors">
     <p>Angular에 커밋되는 모든 코드는 셀 수 없이 많은 실제 시나리오를 반영하기 위해 Google 내부 코드 저장소에 있는 수십만 개의 테스트로 검증합니다.</p>
-    <p>Angular는 Google Cloud와 같은 Google의 주요 제품에 사용되기 때문에 안정성을 크게 신경쓰고 있습니다. 그래서 커밋으로 수정되는 코드가 충분한 테스트를 거치고, 하위 호환성도 만족하면서, 필요하다면 마이그레이션할 수 있도록 지원합니다.</p>
+    <p>Angular는 Google Cloud와 같은 Google의 주요 제품에 사용되기 때문에 안정성을 크게 신경 쓰고 있습니다. 그래서 커밋으로 수정되는 코드가 충분한 테스트를 거치고, 하위 호환성도 만족하면서, 필요하다면 마이그레이션할 수 있도록 지원합니다.</p>
   </docs-card>
   <docs-card title="명확한 지원 정책, 예측 가능한 릴리즈 일정" href="reference/releases" link="Versioning & releasing" titleIconName="sensors">
-    Angular는 정기적으로 새 버전을 내기 때문에 프레임워크의 안정성과 하위 호환성을 에측할 수 있습니다.
+    Angular는 정기적으로 새 버전을 내기 때문에 프레임워크의 안정성과 하위 호환성을 예측할 수 있습니다.
     장기 지원(LTS) 기간에는 중요한 보안 패치가 계속 제공됩니다.
     Angular 팀이 제공하는 자동 업데이트 툴과 가이드 문서를 참고해서 앱을 최신 상태로 유지할 수 있습니다.
   </docs-card>
@@ -164,16 +164,16 @@
 </docs-card-container>
 -->
 <docs-card-container headerTitle="어떤 규모에도 적합합니다" headerImgSrc="adev/src/assets/images/servers.svg">
-  <docs-card title="전세계 사용자에게 다가가세요" href="guide/i18n" link="Internationalization" titleIconName="sensors">
+  <docs-card title="전 세계 사용자에게 다가가세요" href="guide/i18n" link="Internationalization" titleIconName="sensors">
     Angular가 제공하는 국제화 기능은 유니코드 표준 ICU 구문 지원을 포함하여 메시지 번역, 서식 지정 기능을 제공합니다.
   </docs-card>
   <docs-card title="사용자를 보호하는 보안은 기본입니다" href="best-practices/security" link="Security" titleIconName="sensors">
     Angular는 Google의 세계적인 보안 엔지니어들과 협력하여 보안은 기본으로 보장합니다.
-    HTML 검증과 강력한 타임 겁증을 포함하여 크로스 사이트 스크립팅(CSRF, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
+    HTML 검증과 강력한 타입 검증을 포함하여 크로스 사이트 스크립팅(XSS, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
   </docs-card>
   <docs-card title="Vite와 esbuild로 대규모 팀 생산성을 유지하세요" href="tools/cli/build-system-migration" link="Vite and esbuild" titleIconName="sensors">
     Angular CLI는 Vite와 ESBuild를 활용하는 최신 빌드 파이프라인을 구현했습니다.
-    개발자들의 보고에 따르면, 수십만줄의 코드로 이루어진 프로젝트를 빌드하는 데에 1분도 걸리지 않는다고 합니다.
+    개발자들의 보고에 따르면, 수십만 줄의 코드로 이루어진 프로젝트를 빌드하는 데에 1분도 걸리지 않는다고 합니다.
   </docs-card>
   <docs-card title="Google의 가장 큰 웹 앱에 적용되어 있습니다" titleIconName="sensors">
     [Google Fonts](https://fonts.google.com/)부터 [Google Cloud](https://console.cloud.google.com)까지 다양한 Google 제품이 Angular 아키텍처를 기반으로 구축되어 Angular의 확장성과 새로운 기능 개발에 활용됩니다.
@@ -199,7 +199,7 @@
   </docs-card>
   <docs-card title="로드맵도 투명하게 공개합니다" href="roadmap" link="Read our public roadmap" titleIconName="sensors">
     Angular 팀은 현재는 물론 앞으로 작업할 로드맵을 공개하고 있으며, 이에 대한 피드백도 소중하게 여깁니다.
-    Angular의 향후 방향성을 정하는 과정에서 커뮤니티 의견을 수렴하기 위해 의견 요청(RPF, Request for Comments)을 게시하고 있습니다.
+    Angular의 향후 방향성을 정하는 과정에서 커뮤니티 의견을 수렴하기 위해 의견 요청(RFC, Request for Comments)을 게시하고 있습니다.
   </docs-card>
 </docs-card-container>
 
@@ -228,17 +228,17 @@
   </docs-card>
   <docs-card title="오픈 소스" href="https://github.com/angular/angular/blob/main/CONTRIBUTING.md" link="Contribute to Angular" titleIconName="sensors">
     Angular를 더 나은 프레임워크로 만드는 데 기여하는 오픈 소스 컨트리뷰터 모두에게 감사드립니다.
-    문서의 오타 수정부터 주요한 기능 추가까지, 관심있는 분들은 GitHub에서 함께 해보세요.
+    문서의 오타 수정부터 주요한 기능 추가까지, 관심 있는 분들은 GitHub에서 함께 해보세요.
   </docs-card>
   <docs-card title="커뮤니티 파트너십" href="https://developers.google.com/community/experts/directory?specialization=angular" link="Meet the Angular GDEs" titleIconName="sensors">
     Angular 팀은 개인은 물론, 교육자들과 기업과 협력하며 지원을 계속하고 있습니다.
-    Angular Google Developer Experts(GDEs)는 Angular를 사용해서 개발하고, 교육하거나 조직하는 전세계 커뮤니티 리더를 대표합니다.
+    Angular Google Developer Experts(GDEs)는 Angular를 사용해서 개발하고, 교육하거나 조직하는 전 세계 커뮤니티 리더를 대표합니다.
     또, 기술 업계 리더들을 위해 기업 파트너십을 확대하고 있습니다.
   </docs-card>
   <docs-card title="Google 기술과 파트너십" titleIconName="sensors">
     <p>Angular는 웹 생태계 개선을 위해 Google 기술, 팀과 긴밀히 협력하고 있습니다.</p>
-    <p>Chrome의 Aurora와 지속적인 파트너십을 가지며 웹 전반의 사용자 경험 개선을 적극적으로 모색하고 있으며, NgOptimizaedImage와 같은 기본 성능 최적화를 진행하면서 Angular의 Core Web Vitals 개선을 진행하고 있습니다.</p>
-    <p>그리고 <a href="https://firebase.google.com/">Firebase</a>, <a href="https://www.tensorflow.org/">Tensorflow</a>, <a href="https://flutter.dev/">Flutter</a>, <a href="https://m3.material.io/">Material Design</a>, <a href="https://cloud.google.com/">Google Cloud</a>와 협력하며 개발자의 워크플로 전반에 의미있는 통합을 제공하고 있습니다.</p>
+    <p>Chrome의 Aurora와 지속적인 파트너십을 가지며 웹 전반의 사용자 경험 개선을 적극적으로 모색하고 있으며, NgOptimizedImage와 같은 기본 성능 최적화를 진행하면서 Angular의 Core Web Vitals 개선을 진행하고 있습니다.</p>
+    <p>그리고 <a href="https://firebase.google.com/">Firebase</a>, <a href="https://www.tensorflow.org/">Tensorflow</a>, <a href="https://flutter.dev/">Flutter</a>, <a href="https://m3.material.io/">Material Design</a>, <a href="https://cloud.google.com/">Google Cloud</a>와 협력하며 개발자의 워크플로 전반에 의미 있는 통합을 제공하고 있습니다.</p>
   </docs-card>
 </docs-card-container>
 

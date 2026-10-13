@@ -34,7 +34,7 @@ process.
 그리고 Angular 애플리케이션 전체와 관련된 라이프싸이클 후킹 함수는 콜백 함수로 구현합니다.
 
 컴포넌트 라이프싸이클은 시간 흐름에 따라 Angular가 컴포넌트의 변경 사항을 확인하는 동작과 밀접하게 관련되어 있습니다.
-라이프싸이클 각 단계의 목적을 제대로 이해하려면 Angular가 애플리케이션 트리를 맨 윗단계부터 아래 방향으로 탐색하며 템플릿에 바인딩 된 내용을 확인한다는 것을 명심하면 됩니다.
+라이프싸이클 각 단계의 목적을 제대로 이해하려면 Angular가 애플리케이션 트리를 맨 윗단계부터 아래 방향으로 탐색하며 템플릿에 바인딩된 내용을 확인한다는 것을 명심하면 됩니다.
 이렇게 변경 사항을 확인하는 동안 Angular는 전체 컴포넌트 트리를 순회하고, 필요한 단계마다 라이프싸이클 함수가 실행됩니다.
 이 작업이 진행되는 동안 Angular는 컴포넌트를 한 번만 확인하기 때문에, 변경사항이 반영되는 중에 상태를 다시 바꾸는 작업은 피해야 합니다.
 
@@ -128,7 +128,7 @@ process.
       <td rowspan="7">변화<p>감지</td>
       <td><code>ngOnInit</code>
       </td>
-      <td>Angular가 컴포넌트의 입력 프로퍼티를 초기화 한 이후 한 번 실행됩니다.</td>
+      <td>Angular가 컴포넌트의 입력 프로퍼티를 초기화한 이후 한 번 실행됩니다.</td>
     </tr>
     <tr>
       <td><code>ngOnChanges</code></td>
@@ -140,7 +140,7 @@ process.
     </tr>
     <tr>
       <td><code>ngAfterContentInit</code></td>
-      <td>컴포넌트의 <em>내용물(content)</em>이 초기화 된 후 한 번 실행됩니다.</td>
+      <td>컴포넌트의 <em>내용물(content)</em>이 초기화된 후 한 번 실행됩니다.</td>
     </tr>
     <tr>
       <td><code>ngAfterContentChecked</code></td>
@@ -148,7 +148,7 @@ process.
     </tr>
     <tr>
       <td><code>ngAfterViewInit</code></td>
-      <td>컴포넌트의 <em>뷰(view)</em>가 초기화 된 후 한 번 실행됩니다.</td>
+      <td>컴포넌트의 <em>뷰(view)</em>가 초기화된 후 한 번 실행됩니다.</td>
     </tr>
     <tr>
       <td><code>ngAfterViewChecked</code></td>
@@ -157,11 +157,11 @@ process.
     <tr>
       <td rowspan="2">렌더링</td>
       <td><code>afterNextRender</code></td>
-      <td>컴포넌트가 DOM에 완전히 렌더링 된 후에 한 번 실행됩니다.</td>
+      <td>컴포넌트가 DOM에 완전히 렌더링된 후에 한 번 실행됩니다.</td>
     </tr>
     <tr>
       <td><code>afterEveryRender</code></td>
-      <td>컴포넌트가 DOM에 렌더링 될 때마다 실행됩니다.</td>
+      <td>컴포넌트가 DOM에 렌더링될 때마다 실행됩니다.</td>
     </tr>
     <tr>
       <td>종료</td>
@@ -181,10 +181,10 @@ This step happens _before_ the component's own template is initialized. This mea
 update the component's state based on its initial input values.
 -->
 
-`ngOnInit` 메서드는 Angular가 컴포넌트의 입력 프로퍼티를 초기값과 함께 초기화 한 후에 실행됩니다.
+`ngOnInit` 메서드는 Angular가 컴포넌트의 입력 프로퍼티를 초기값과 함께 초기화한 후에 실행됩니다.
 이 함수는 한 번만 실행됩니다
 
-이 메서드는 컴포넌트의 템플릿이 초기화되기 _전에_ 실행되빈다.
+이 메서드는 컴포넌트의 템플릿이 초기화되기 _전에_ 실행됩니다.
 그래서 컴포넌트의 입력 프로퍼티 초기값이 템플릿에 반영되기 전에 값을 수정할 수 있습니다.
 
 ### ngOnChanges
@@ -201,7 +201,7 @@ During initialization, the first `ngOnChanges` runs before `ngOnInit`.
 `ngOnChanges` 메서드는 컴포넌트의 입력 프로퍼티 값이 변경된 이후에 실행됩니다.
 
 이 메서드는 컴포넌트 템플릿을 검사하기 _전에_ 실행됩니다.
-그래서 컴포넌트의 입력 프로퍼티 값이 템플릿에 반영됙 ㅣ전에 값을 수정할 수 있습니다.
+그래서 컴포넌트의 입력 프로퍼티 값이 템플릿에 반영되기 전에 값을 수정할 수 있습니다.
 
 컴포넌트 초기화 시점에는 `ngOnInit`이 실행되기 전에 첫번째 `ngOnChanges` 메서드가 실행됩니다.
 
@@ -364,7 +364,7 @@ During initialization, the first `ngDoCheck` runs after `ngOnInit`.
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
 
-컴포넌트가 초기화 될 때는 `ngOnInit`이 실행된 후에 첫번째 `ngDoCheck` 메서드가 실행됩니다.
+컴포넌트가 초기화될 때는 `ngOnInit`이 실행된 후에 첫번째 `ngDoCheck` 메서드가 실행됩니다.
 
 ### ngAfterContentInit
 
@@ -442,7 +442,7 @@ an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
 
-이 메서드를 실행하는 시점에는 [뷰 쿼리](guide/components/queries#view-queries) 결과에 접근하고 상태값을 ㅂ녀경할 수 있지만, 값을 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
+이 메서드를 실행하는 시점에는 [뷰 쿼리](guide/components/queries#view-queries) 결과에 접근하고 상태값을 변경할 수 있지만, 값을 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
 
 ### afterEveryRender and afterNextRender
 
@@ -464,11 +464,11 @@ See [Using DOM APIs](guide/components/dom-apis) for guidance on working with the
 Render callbacks do not run during server-side rendering or during build-time pre-rendering.
 -->
 
-`afterEveryRender` 함수와 `afterNextRender` 함수는 Angular가 화면에 표시되는 _모든 컴포넌트_ 를 DOM에 렌더링 한 후에 **렌더링 콜백** 으로 실행됩니다.
+`afterEveryRender` 함수와 `afterNextRender` 함수는 Angular가 화면에 표시되는 _모든 컴포넌트_ 를 DOM에 렌더링한 후에 **렌더링 콜백** 으로 실행됩니다.
 
 이 메서드는 다른 라이프싸이클 후킹 함수와는 조금 다릅니다.
 이 문서에서 다루는 라이프싸이클 후킹 함수는 모두 클래스 메서드로 사용하지만, `afterEveryRender` 함수와 `afterNextRender` 함수는 단독 함수로 등록합니다.
-그래서 이 때 등록되는 콜백 함수는 특정 컴포넌트 인스턴스와 연관되지 않으며, 애플리케이션 전역 후킹 함수가 됩니다.
+그래서 이때 등록되는 콜백 함수는 특정 컴포넌트 인스턴스와 연관되지 않으며, 애플리케이션 전역 후킹 함수가 됩니다.
 
 `afterEveryRender` 함수와 `afterNextRender` 함수는 반드시 [의존성 주입 컨텍스트](guide/di/dependency-injection-context) 안에서 실행해야 하기 때문에, 일반적으로 컴포넌트의 생성자에서 실행합니다.
 
@@ -538,7 +538,7 @@ There are four phases, run in the following order:
 -->
 
 `afterEveryRender` 함수와 `afterNextRender` 함수를 사용할 때 실행되는 과정은 단계별로 나눠볼 수 있습니다.
-각 단계에 해당하는 DOM 작업을 실행할 수 있으며, _쓰기_ 작업을 _읽기_ 작업 전에 실행해서 [레이아웃 스래싱(layout thrashing)](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing)을 최소화 할 수 있습니다.
+각 단계에 해당하는 DOM 작업을 실행할 수 있으며, _쓰기_ 작업을 _읽기_ 작업 전에 실행해서 [레이아웃 스래싱(layout thrashing)](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing)을 최소화할 수 있습니다.
 각 단계마다 실행되는 함수는 해당 단계에서 실행된 결과값을 반환하며, 다음 단계에 실행되는 함수는 이전 단계에서 실행된 결과값을 받아 참조할 수 있습니다.
 
 ```ts
@@ -613,7 +613,7 @@ export class UserProfile implements OnInit {
 -->
 
 Angular는 각 라이프싸이클 후킹 함수에 해당하는 TypeScript 인터페이스를 제공합니다.
-필요한 라이프싸이클 후킹 함수가 있다면 인터페이스를 로드해서 `implement`로 클래스를 확장하면 되는데, 이 때 인자 타입과 오타에 주의하세요.
+필요한 라이프싸이클 후킹 함수가 있다면 인터페이스를 로드해서 `implement`로 클래스를 확장하면 되는데, 이때 인자 타입과 오타에 주의하세요.
 
 인터페이스 이름에 `ng` 접두사를 붙여서 메서드를 구현하면 됩니다.
 `OnInit` 인터페이스에 해당하는 메서드는 `ngOnInit` 메서드가 되는 식입니다.
@@ -692,5 +692,5 @@ hook between the component and the directives on a single element. Never depend 
 ordering, as this may change in later versions of Angular.
 -->
 
-컴포넌트의 호스트 엘리먼트에 디렉티브와 있거나, `hostDirectives` 프로퍼티를 활용하는 경우는 컴포넌트와 디렉티브의 라이프싸이클 후킹 함수의 실행 순서를 보장하지 않습니다.
+컴포넌트의 호스트 엘리먼트에 디렉티브가 있거나, `hostDirectives` 프로퍼티를 활용하는 경우는 컴포넌트와 디렉티브의 라이프싸이클 후킹 함수의 실행 순서를 보장하지 않습니다.
 또한, 이 순서는 이후 Angular 버전에서 변경될 수 있기 때문에, 실행 순서에 영향을 받는 로직을 작성하지 마세요.

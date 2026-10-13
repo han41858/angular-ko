@@ -59,7 +59,7 @@ template: `<p>Car Listing: {{ display }}</p>`,
 You've just injected your first service into a component - fantastic effort.
 -->
 
-Angular의 의존성 주입(Dependency Injection, DI) 시스템을 활용하려면 의존성으로 주입가능한 서비스를 만드는 것이 첫 시작입니다.
+Angular의 의존성 주입(Dependency Injection, DI) 시스템을 활용하려면 의존성으로 주입 가능한 서비스를 만드는 것이 첫 시작입니다.
 그런데 서비스는 컴포넌트로 어떻게 주입할까요?
 Angular는 이 경우에 사용할 수 있는 `inject()` 함수를 제공합니다.
 

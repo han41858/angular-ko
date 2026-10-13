@@ -42,7 +42,7 @@ NOTE: If you're coming from template or reactive forms, you may be interested in
 
 이런 문제를 시그널 폼은 이렇게 해결합니다:
 
-- **상태를 자동으로 동기화합니다** - 폼 데이터 모델과 폼 필드를 자동으로 동기화 합니다.
+- **상태를 자동으로 동기화합니다** - 폼 데이터 모델과 폼 필드를 자동으로 동기화합니다.
 - **타입 검사를 보장합니다** - 화면과 데이터 모델의 타입을 명확하게 정의합니다.
 - **유효성 검사를 한 곳에서 처리합니다** - 유효성 검사 규칙은 모두 유효성 검사 스키마 하나로 정의합니다.
 
@@ -63,7 +63,7 @@ Signal Forms require:
 - Angular v21 or higher
 -->
 
-시그널 폼을 사용하려면 Angular 버전이 v21 를 포함하여 이후 버전이어야 합니다.
+시그널 폼을 사용하려면 Angular 버전이 v21을 포함하여 이후 버전이어야 합니다.
 
 <!--
 ## Setup
@@ -95,7 +95,7 @@ The `FormField` directive must be imported into any component that binds form fi
 import {form, FormField, required, email} from '@angular/forms/signals';
 ```
 
-그 중에서 폼 필드 인스턴스와 HTML 입력 필드를 연결하는 `FormField` 디렉티브는 꼭 불러와야 합니다:
+그중에서 폼 필드 인스턴스와 HTML 입력 필드를 연결하는 `FormField` 디렉티브는 꼭 불러와야 합니다:
 
 ```ts
 @Component({

@@ -78,7 +78,7 @@ Nice work. Let's keep the momentum going!
 폼(Form)은 사용자의 입력을 받는 기능을 구현하기 때문에 앱을 개발할 때 아주 중요한 부분을 차지합니다.
 Angular에서 폼을 어떻게 사용하는지 알아봅시다.
 
-Angular에는 템플릿 기반(template-driven) 폼과 반응형(reactive) 폼() 이렇게 두 종류의 폼이 있습니다.
+Angular에는 템플릿 기반(template-driven) 폼과 반응형(reactive) 폼 이렇게 두 종류의 폼이 있습니다.
 이번 튜토리얼에서는 두 가지를 모두 조금씩 알아봅니다.
 
 참고: 자세한 내용은 [폼 심화 가이드](/guide/forms) 문서를 참고하세요.
@@ -145,6 +145,6 @@ export class User {}
 
 </docs-workflow>
 
-Angular로 폼을 구현하는 첫 걸음을 내딛었습니다.
+Angular로 폼을 구현하는 첫걸음을 내딛었습니다.
 
 잘 하셨습니다. 계속 진행해보시죠!

@@ -68,7 +68,7 @@ Here are some in-depth guides you might be interested in reading:
 To see the rest of our in-depth guides, check out the main navigation.
 -->
 
-흥미있어 할 만 한 심화 가이드를 몇 개 소개합니다:
+흥미있어 할 만한 심화 가이드를 몇 개 소개합니다:
 
 <docs-pill-row>
   <docs-pill title="컴포넌트 심화 가이드" href="guide/components" />

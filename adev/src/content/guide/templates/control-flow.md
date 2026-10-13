@@ -46,7 +46,7 @@ If you want to display alternative content, you can do so by providing any numbe
 }
 ```
 
-판단할 조건이 여러개라면 `@else if` 블록이나 `@else` 블록을 자유롭게 활용하면 됩니다.
+판단할 조건이 여러 개라면 `@else if` 블록이나 `@else` 블록을 자유롭게 활용하면 됩니다.
 
 ```angular-html
 @if (a > b) {
@@ -107,7 +107,7 @@ Angular's `@for` block does not support flow-modifying statements like JavaScrip
 -->
 
 `@for` 블록은 콜렉션을 순회하면서 블록 안에 있는 내용물을 반복해서 렌더링합니다.
-이 때 콜렉션은 JavaScript [이터러블(iterable)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols)이라면 어떤 것이라도 가능하며, Angular는 특히 `Array`를 다루는 성능에 최적화되어 있습니다.
+이때 콜렉션은 JavaScript [이터러블(iterable)](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Iteration_protocols)이라면 어떤 것이라도 가능하며, Angular는 특히 `Array`를 다루는 성능에 최적화되어 있습니다.
 
 `@for` 루프 블럭은 이렇게 사용합니다:
 
@@ -182,7 +182,7 @@ These variables are always available with these names, but can be aliased via a 
 The aliasing is useful when nesting `@for` blocks, letting you read variables from the outer `@for` block from an inner `@for` block.
 -->
 
-`@for` 블록에서 사용할 수 있는 내부 변수가 몇가지 있습니다:
+`@for` 블록에서 사용할 수 있는 내부 변수가 몇 가지 있습니다:
 
 | 변수     | 의미                                      |
 | -------- | ----------------------------------------- |
@@ -267,7 +267,7 @@ You can optionally include a `@default` block. The content of the `@default` blo
 If no `@case` matches the expression and there is no `@default` block, nothing is shown.
 -->
 
-`@if` 블록은 대부분의 경우에 사용할 수 있지만, 조건이 여러개라면 `@switch` 블록을 사용하는 것도 고려할 만 합니다.
+`@if` 블록은 대부분의 경우에 사용할 수 있지만, 조건이 여러 개라면 `@switch` 블록을 사용하는 것도 고려할 만합니다.
 `@switch` 블록은 JavaScript `switch` 구문과 아주 비슷합니다.
 
 ```angular-html
@@ -285,7 +285,7 @@ If no `@case` matches the expression and there is no `@default` block, nothing i
 }
 ```
 
-이 때 조건문은 삼중 등호 연산자(`===`)로 비교합니다.
+이때 조건문은 삼중 등호 연산자(`===`)로 비교합니다.
 
 **`@switch` 블록은 다음 블록으로 연결되지 않습니다. `break`나 `return` 같이 흐름을 제어하는 구문은 존재하지 않습니다.**
 
@@ -294,7 +294,7 @@ If no `@case` matches the expression and there is no `@default` block, nothing i
 `@default` 블록을 사용할 수 있습니다.
 이 블록은 매칭되는 `@case` 블록이 없을 때 표시됩니다.
 
-`@default` 블록이 없으면서 `@case` 블록 중 어느것도 매칭되지 않으면, 아무것도 렌더링되지 않습니다.
+`@default` 블록이 없으면서 `@case` 블록 중 어느 것도 매칭되지 않으면, 아무것도 렌더링되지 않습니다.
 
 <!--
 ### Exhaustive type checking
@@ -349,7 +349,7 @@ export class App {
 `@siwtch`는 포괄적인 타입 검사 기능을 제공하기 때문에, Angular는 컴파일 시점에 가능한 값들은 모두 유니언 타입으로 검증합니다.
 
 `@default never;`를 사용하면 명시적으로 나머지 조건이 없다는 것을 지정할 수 있습니다.
-이후에 유니언 타입에 새 타입이 추가되어 확장되는 경우에는 `@case`로 처리되지 않아 Angular 템플릿 타입 검사에서 에러가 발생하기 때문에, 조기에 문제를 발견할 수 있습니다ㅣ.
+이후에 유니언 타입에 새 타입이 추가되어 확장되는 경우에는 `@case`로 처리되지 않아 Angular 템플릿 타입 검사에서 에러가 발생하기 때문에, 조기에 문제를 발견할 수 있습니다.
 
 ```angular-html
 @Component({

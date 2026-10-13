@@ -36,7 +36,7 @@ _경량 주입 토큰(lightweight injection tokens)_ 을 사용하여 라이브�
 이 패턴을 활용하면 애플리케이션이 라이브러리 기능 중 일부만 사용하는 경우, 사용하지 않는 코드는 클라이언트 애플리케이션의 빌드 결과물에서 제거할 수 있습니다.
 
 애플리케이션이 라이브러리를 활용할 때, 라이브러리가 제공하는 서비스 중에서 클라이언트 애플리케이션이 사용하지 않는 서비스가 있을 수 있습니다.
-이 경우, 애플리케이션 개발자는 해당 서비스가 트리 셰이킹되어 최종 컴파일 된 애플리케이션에 영향을 미치지 않을 것을 기대합니다.
+이 경우, 애플리케이션 개발자는 해당 서비스가 트리 셰이킹되어 최종 컴파일된 애플리케이션에 영향을 미치지 않을 것을 기대합니다.
 애플리케이션 개발자는 라이브러리의 트리 셰이킹 문제를 알거나 직접 해결할 수 없기 때문에, 이를 처리하는 것은 라이브러리 개발자의 몫입니다.
 사용하지 않는 구성요소가 빌드 결과물에 포함되지 않도록 하려면, 라이브러리에서 경량 의존성 주입 토큰 디자인 패턴을 활용하면 됩니다.
 
@@ -177,7 +177,7 @@ HELPFUL: Libraries should use [tree-shakable providers](guide/di/defining-depend
 -->
 
 컴포넌트가 의존성 토큰을 사용하면 트리 셰이킹에 문제가 발생합니다.
-문제가 발생하는 경우는 두 가지 입니다:
+문제가 발생하는 경우는 두 가지입니다:
 
 - 토큰이 [컨텐츠 쿼리](guide/components/queries#content-queries) 자리에 값 역할로 사용된 경우
 - 토큰이 `inject` 함수와 사용된 경우
@@ -269,7 +269,7 @@ class LibCard {
 }
 ```
 
-이 예제에서 `LibCardComponent`의 구현체는 더이상 `LibHeaderComponent`를 타입으로도, 값으로도 사용하지 않습니다.
+이 예제에서 `LibCardComponent`의 구현체는 더 이상 `LibHeaderComponent`를 타입으로도, 값으로도 사용하지 않습니다.
 따라서 `LibHeaderComponent`는 완전하게 트리 셰이킹이 가능합니다.
 그 대신 `LibHeaderToken`이 클래스 선언부에 사용되어 코드에 남지만, 구현체가 없이 단순한 클래스 선언일 뿐입니다.
 이 토큰의 크기는 아주 작기 때문에 컴파일 후에도 애플리케이션 크기에 거의 영향을 주지 않습니다.
@@ -288,7 +288,7 @@ class LibCard {
 ### Use the lightweight injection token for API definition
 -->
 
-### 경랑 의존성 토큰은 API를 정의할 때 사용하세요.
+### 경량 의존성 토큰은 API를 정의할 때 사용하세요.
 
 <!--
 A component that injects a lightweight injection token might need to invoke a method in the injected class.
@@ -339,7 +339,7 @@ If the child component has been tree-shaken, there is no runtime reference to it
 메서드의 실제 구현 코드와 그 외에 코드는 모두 트리 셰이킹 대상이 되는 컴포넌트에 존재합니다.
 이를 통해 부모 컴포넌트는 자식 컴포넌트가 존재하는 경우 타입으로 보호되는 방식으로 호출할 수 있습니다.
 
-이제 `LibCard`에서 `LibHeader` 대신 `LibHeaderToken`를 쿼리해 봅시다.
+이제 `LibCard`에서 `LibHeader` 대신 `LibHeaderToken`을 쿼리해 봅시다.
 아래 예제는 `LibCard`가 실제 `LibHeader`를 직접 호출하지 않아도 `LibHeader`를 활용할 수 있습니다:
 
 ```ts {highlight: [[2],[7],[11],[19]]}
@@ -393,5 +393,5 @@ The recommended style is to use the component base name with the suffix `Token` 
 [Angular 스타일 가이드](style-guide)에 따르면, 컴포넌트는 "Component"라는 접미사를 사용하지 않는 것을 권장합니다.
 "LibHeader"와 같은 식입니다.
 
-컴포넌트는 토큰과 관련되어 있지만 둘을 명확하게 구분해야 ㅎ바니다.
+컴포넌트는 토큰과 관련되어 있지만 둘을 명확하게 구분해야 합니다.
 따라서, `LibHeaderToken`과 같이 `Token` 접미사를 붙이는 것을 권장합니다.

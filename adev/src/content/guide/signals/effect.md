@@ -21,7 +21,7 @@ Effects always execute **asynchronously**, during the change detection process.
 -->
 
 시그널은 시그널 값이 변경되었다는 것을 컨슈머(consumer)가 알 수 있다는 점에서 유용합니다.
-시그널 값 하나 또는 여러개가 변경될 때마다 로직을 실행하려면 `effect()` 함수를 실행하면 됩니다:
+시그널 값 하나 또는 여러 개가 변경될 때마다 로직을 실행하려면 `effect()` 함수를 실행하면 됩니다:
 
 ```ts
 import {effect} from '@angular/core';
@@ -68,9 +68,9 @@ Instead, use `computed` signals to model state that depends on other state.
 참고: `effect()`가 더 나은 상황은 없습니다. 사용하기 적절한 경우만 있습니다.
 
 - 분석하거나 디버깅 툴에서 시그널 값을 로그에 출력하는 경우
-- `window.localStorage`나 세션 스토리지, 쿠키 등 다른 스토리지의 데이터를 동기화 할 때
+- `window.localStorage`나 세션 스토리지, 쿠키 등 다른 스토리지의 데이터를 동기화할 때
 - 템플릿 문법으로 표현할 수 없는 커스텀 DOM 동작을 추가할 때
-- `<canvas>` 엘리먼트나 차트 라이브러리, 서드 파티 UI 라이브러리를 사용해서 렌더링을 커스터마이징 할 때
+- `<canvas>` 엘리먼트나 차트 라이브러리, 서드 파티 UI 라이브러리를 사용해서 렌더링을 커스터마이징할 때
 
 <docs-callout critical title="`effect()`를 사용하지 말아야 하는 경우">
 
@@ -147,7 +147,7 @@ export class EffectiveCounter {
 }
 ```
 
-클래서 생성자 밖에서 `effect()` 함수를 사용하려면 `effect()` 함수에 `Injector`를 다음과 같이 전달하면 됩니다:
+클래스 생성자 밖에서 `effect()` 함수를 사용하려면 `effect()` 함수에 `Injector`를 다음과 같이 전달하면 됩니다:
 
 ```ts
 @Component({
@@ -199,7 +199,7 @@ In both cases, if at least one of the effect dependencies changed during the eff
 - "뷰 이펙트"는 컴포넌트 변화를 검사하기 _전에_ 실행됩니다.
 - "최상위 이펙트"는 변화 감지 싸이클에서 모든 컴포넌트를 검사하기 전에 실행됩니다.
 
-두 경우 모두 변화 감지를 감지하는 중간에 다른 변동사항이 감지되면, 진행중인 변화 감지 싸이클이 종료되고 `effect()` 함수를 다시 실행합니다.
+두 경우 모두 변화 감지를 감지하는 중간에 다른 변동사항이 감지되면, 진행 중인 변화 감지 싸이클이 종료되고 `effect()` 함수를 다시 실행합니다.
 
 <!--
 ### Destroying effects
@@ -223,7 +223,7 @@ Effects return an `EffectRef`. You can use the ref's `destroy` method to manuall
 이펙트 시그널은 두 가지 컨텍스트에서 생성될 수 있기 때문에 종료되는 시점이 다릅니다:
 
 - "뷰 이펙트" 시그널은 컴포넌트가 종료되면 종료됩니다.
-- "최상위 이펙트" 시그널은 애플리케이션이 종료되면 졷료됩니다.
+- "최상위 이펙트" 시그널은 애플리케이션이 종료되면 종료됩니다.
 
 `effect()` 함수는 `EffectRef`를 반환합니다.
 이펙트 시그널의 자동 종료를 생략하고 수동으로 종료하려면 시그널을 생성할 때 `manualCleanup` 옵션을 지정한 후에 `destroy()` 메서드를 실행하면 됩니다.
@@ -255,9 +255,9 @@ effect((onCleanup) => {
 -->
 
 컴포넌트나 디렉티브가 종료되면 Angular는 연관된 모든 이펙트 시그널을 자동으로 정리합니다.
-이펙트 시그널은 오랜 시간동안 실행될 수 있는데, 이 시그널이 다시 실행되려면 이전 동작이 완료되거나 종료되어야 합니다.
-그렇다면, 이펙트 시그널을 생성할 때 옵션으로 `onCleanUp` 함수를 지정할 수 있습니다.
-`onCleanup` 함수는 시그널이 종료될 떄 실행되는 콜백 함수로 등록됩니다.
+이펙트 시그널은 오랜 시간 동안 실행될 수 있는데, 이 시그널이 다시 실행되려면 이전 동작이 완료되거나 종료되어야 합니다.
+그렇다면, 이펙트 시그널을 생성할 때 옵션으로 `onCleanup` 함수를 지정할 수 있습니다.
+`onCleanup` 함수는 시그널이 종료될 때 실행되는 콜백 함수로 등록됩니다.
 
 ```ts
 effect((onCleanup) => {
@@ -314,7 +314,7 @@ In this example `afterRenderEffect` is used to update a chart created by a 3rd p
 TIP: You often don't need `afterRenderEffect` to check for DOM changes. APIs like `ResizeObserver`, `MutationObserver` and `IntersectionObserver` are preferred to `effect` or `afterRenderEffect` when possible.
 -->
 
-`effect()` 함수는 시그널이 변경되는 것을 반응하는 용도의 범용 도구입니다.
+`effect()` 함수는 시그널이 변경되는 것에 반응하는 용도의 범용 도구입니다.
 하지만 이 함수는 Angular가 DOM을 갱신하기 _전에_ 실행됩니다.
 그래서 DOM을 수동으로 검사하거나 조작해야 하는 경우, 서드 파티 라이브러리를 사용하는 경우라면 DOM에 직접 접근해야 합니다.
 
@@ -492,5 +492,5 @@ NOTE: Components are not guaranteed to be [hydrated](/guide/hydration) before th
 
 `afterRenderEffect()`는 `afterNextRender()`, `afterEveryRender()`와 비슷하게 클라이언트에서만 실행됩니다.
 
-참고: 컴포넌트는 콜백 함수가 실행되기 전에 [하이드레이션 된 상태(hydrated)](/guide/hydration)를 보장하지 않습니다.
+참고: 컴포넌트는 콜백 함수가 실행되기 전에 [하이드레이션된 상태(hydrated)](/guide/hydration)를 보장하지 않습니다.
 DOM이나 레이아웃을 직접 읽고 변경하는 경우에 주의해야 합니다.

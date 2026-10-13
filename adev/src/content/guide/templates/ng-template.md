@@ -9,7 +9,7 @@ Inspired by the [native `<template>` element](https://developer.mozilla.org/en-U
 -->
 
 `<ng-template>` 엘리먼트는 [표준 `<template>` 엘리먼트](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template)와 비슷하게 **템플릿 조각(template fragment)** 를 선언하는 엘리먼트입니다.
-이렇게 정의한 템플릿 조각은 동적으로 렌더링하거나 코드로 렌더링 할 수 있습니다.
+이렇게 정의한 템플릿 조각은 동적으로 렌더링하거나 코드로 렌더링할 수 있습니다.
 
 <!--
 ## Creating a template fragment
@@ -78,7 +78,7 @@ export class ItemCounter {
 }
 ```
 
-템플릿 조각에 존재하는 표현식(expressions)이나 실행문(statements)은 템플릿 조각이 렌더링 되는 곳이 아니라, 템플릿 조각이 선언된 컴포넌트의 컨텍스트와 연결됩니다.
+템플릿 조각에 존재하는 표현식(expressions)이나 실행문(statements)은 템플릿 조각이 렌더링되는 곳이 아니라, 템플릿 조각이 선언된 컴포넌트의 컨텍스트와 연결됩니다.
 
 <!--
 ## Getting a reference to a template fragment
@@ -96,7 +96,7 @@ You can get a reference to a template fragment in one of three ways:
 In all three cases, the fragment is represented by a [TemplateRef](/api/core/TemplateRef) object.
 -->
 
-템플릿 조각을 참조하는 방법은 세 가지 입니다:
+템플릿 조각을 참조하는 방법은 세 가지입니다:
 
 - `<ng-template>` 엘리먼트에 [템플릿 참조 변수](/guide/templates/variables#template-reference-variables)를 선언하는 방법
 - [컴포넌트/디렉티브 쿼리](/guide/components/queries)로 쿼리하는 방법
@@ -295,7 +295,7 @@ export class MyDirective {
 Once you have a reference to a template fragment's `TemplateRef` object, you can render a fragment in one of two ways: in your template with the `NgTemplateOutlet` directive or in your TypeScript code with `ViewContainerRef`.
 -->
 
-템플릿 조각을 `TemplateRef` 객체 타입으로 참조하고 나면, 이 템플릿 조각은 템플릿에서 `NgTemplateOutlet` 디렉티브로 렌더링하거나, TypeScript 코드에서 `ViewContainerRef`로 렌더링 할 수 있습니다.
+템플릿 조각을 `TemplateRef` 객체 타입으로 참조하고 나면, 이 템플릿 조각은 템플릿에서 `NgTemplateOutlet` 디렉티브로 렌더링하거나, TypeScript 코드에서 `ViewContainerRef`로 렌더링할 수 있습니다.
 
 <!--
 ### Using `NgTemplateOutlet`
@@ -341,7 +341,7 @@ This example produces the following rendered DOM:
 import {NgTemplateOutlet} from '@angular/common';
 ```
 
-그리고 아래 예제 코드처럼 템플릿 조각을 선언한 후 `<ng-container>`에 `NgTemplateOutlet`를 지정해서 렌더링하면 됩니다:
+그리고 아래 예제 코드처럼 템플릿 조각을 선언한 후 `<ng-container>`에 `NgTemplateOutlet`을 지정해서 렌더링하면 됩니다:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -353,7 +353,7 @@ import {NgTemplateOutlet} from '@angular/common';
 <ng-container *ngTemplateOutlet="myFragment"></ng-container>
 ```
 
-최종 결과는 이렇게 렌더링 됩니다:
+최종 결과는 이렇게 렌더링됩니다:
 
 ```angular-html
 <p>This is a normal element</p>
@@ -518,7 +518,7 @@ You can bind a context object to the `ngTemplateOutletContext` input:
 ```
 -->
 
-컨텍스트 객체는 `ngTemplateOutletContext`로 바인딩 할 수 있습니다:
+컨텍스트 객체는 `ngTemplateOutletContext`로 바인딩할 수 있습니다:
 
 ```angular-html
 <ng-template #myFragment let-pizzaTopping="topping">
@@ -551,7 +551,7 @@ When you render a template fragment, its injector context comes from the **templ
 -->
 
 템플릿 조각을 렌더링하면, 이 템플릿 조각이 렌더링된 위치가 아니라, **템플릿을 선언한 위치** 에 있는 인젝터 컨텍스트가 사용됩니다.
-커스텀 인젝터를 등록하면 이 인젝터를 오버라이딩 할 수 있습니다.
+커스텀 인젝터를 등록하면 이 인젝터를 오버라이딩할 수 있습니다.
 
 <!--
 ### Using `NgTemplateOutlet` {#using-ngtemplateoutlet-with-injectors}
@@ -756,7 +756,7 @@ Angular는 구조 디렉티브를 간편하게 사용할 수 있는 특별한 �
 </ng-template>
 ```
 
-구조 디렉티브는 일반적으로 템플릿 조각을 조건에 따라 렌더링하거나, 여러번 렌더링하는 방식으로 활용됩니다.
+구조 디렉티브는 일반적으로 템플릿 조각을 조건에 따라 렌더링하거나, 여러 번 렌더링하는 방식으로 활용됩니다.
 
 더 자세한 내용은 [구조 디렉티브](/guide/directives/structural-directives) 문서를 참고하세요.
 
@@ -776,4 +776,4 @@ For examples of how `ng-template` is used in other libraries, check out:
 다른 라이브러리에서 `ng-template`이 어떻게 사용되는지 알아보려면, 이런 내용을 확인해 보세요:
 
 - [Angular Material의 탭](https://material.angular.dev/components/tabs/overview) - 탭이 활성화되어야 DOM이 렌더링됩니다.
-- [Angular Material의 표](https://material.angular.dev/components/table/overview) - 데이터를 다양한 방식으로 렌더링 할 수 있습니다.
+- [Angular Material의 표](https://material.angular.dev/components/table/overview) - 데이터를 다양한 방식으로 렌더링할 수 있습니다.

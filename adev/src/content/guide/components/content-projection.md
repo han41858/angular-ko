@@ -100,7 +100,7 @@ export class CustomCard {
 }
 ```
 
-**이 때 내용물이 들어갈 위치는 `<ng-content` 엘리먼트로 지정합니다**:
+**이때 내용물이 들어갈 위치는 `<ng-content` 엘리먼트로 지정합니다**:
 
 ```angular-ts
 @Component({
@@ -164,7 +164,7 @@ Angular는 언제나 `<ng-content>` 플레이스홀더가 위치한 곳에 내�
 ## Multiple content placeholders
 -->
 
-## 플레이스홀더 여러개 사용하기
+## 플레이스홀더 여러 개 사용하기
 
 <!--
 Angular supports projecting multiple different elements into different `<ng-content>` placeholders
@@ -268,7 +268,7 @@ If a component does not include an `<ng-content>` placeholder without a `select`
 elements that don't match one of the component's placeholders do not render into the DOM.
 -->
 
-`<ng-content>` 플레이스홀더에 CSS 셀렉터를 지정하면 내용물을 여러개 전달할 수 있습니다.
+`<ng-content>` 플레이스홀더에 CSS 셀렉터를 지정하면 내용물을 여러 개 전달할 수 있습니다.
 위에서 다룬 카드 예제를 다시 보자면, `select` 어트리뷰트로 플레이스홀더를 구분하면 됩니다:
 
 ```angular-ts
@@ -328,7 +328,7 @@ export class App {}
 
 `<ng-content>` 플레이스홀더에 사용하는 CSS 셀렉터는 [컴포넌트 셀렉터](guide/components/selectors)로 지정하는 방식과 같습니다.
 
-`<ng-content>` 를 하나 이상 사용할 때 `select` 어트리뷰트를 지정한 `<ng-content>` 외에 `select` 어트리뷰트를 사용하지 않는 `<ng-content>`를 사용할 수 있는데, 이 경우는 `select` 어트리뷰트가 메칭되지 않는 모든 엘리먼트와 매칭됩니다:
+`<ng-content>` 를 하나 이상 사용할 때 `select` 어트리뷰트를 지정한 `<ng-content>` 외에 `select` 어트리뷰트를 사용하지 않는 `<ng-content>`를 사용할 수 있는데, 이 경우는 `select` 어트리뷰트가 매칭되지 않는 모든 엘리먼트와 매칭됩니다:
 
 ```angular-html
 <!-- 컴포넌트 템플릿 -->
@@ -519,7 +519,7 @@ Angular는 모든 엘리먼트에 CSS 셀렉터를 지정할 수 있도록 `ngPr
 ### Projected content lives in the parent's view
 -->
 
-### 프로젝션 된 컨텐츠는 부모 뷰에 존재합니다.
+### 프로젝션된 컨텐츠는 부모 뷰에 존재합니다.
 
 <!--
 Even though projected content is _rendered_ inside the receiving component, it is still owned by the component that declared it. Angular tracks it as part of the parent's view, which has a couple of side effects worth knowing about.
@@ -537,11 +537,11 @@ Even though projected content is _rendered_ inside the receiving component, it i
 **Dependency injection:** Projected content gets its dependencies from the parent's injector, not from the receiving component's `viewProviders`. See [Providers and viewProviders](guide/di/hierarchical-dependency-injection) for details.
 -->
 
-어떤 컴포넌트가 컨텐츠를 받아서 프로젝션 안에 _렌더링 하더라도_, 프로젝션 된 컨텐츠는 여전히 이 컨텐츠를 정의한 컴포넌트가 주인입니다.
-Angular는 부모 뷰를 계속 추적하는데, 이 때 알아야 할 부수 효과가 몇가지 있습니다.
+어떤 컴포넌트가 컨텐츠를 받아서 프로젝션 안에 _렌더링하더라도_, 프로젝션된 컨텐츠는 여전히 이 컨텐츠를 정의한 컴포넌트가 주인입니다.
+Angular는 부모 뷰를 계속 추적하는데, 이때 알아야 할 부수 효과가 몇 가지 있습니다.
 
-**변경 감지:** 프로젝션 된 컨텐츠는 _부모_ 컴포넌트의 변화 감지가 동작할 때 함께 검사됩니다.
-그래서 컨텐츠를 받는 컴포넌트가 `OnPush`를 사용하면 Angular는 이 컴포넌트의 템플릿은 변화 감지를 건너뛰지만, 프로젝션 된 컨텐츠는 부모 컴포넌트에 속하기 때문에 검사가 진행됩니다.
+**변경 감지:** 프로젝션된 컨텐츠는 _부모_ 컴포넌트의 변화 감지가 동작할 때 함께 검사됩니다.
+그래서 컨텐츠를 받는 컴포넌트가 `OnPush`를 사용하면 Angular는 이 컴포넌트의 템플릿은 변화 감지를 건너뛰지만, 프로젝션된 컨텐츠는 부모 컴포넌트에 속하기 때문에 검사가 진행됩니다.
 
 ```angular-html
 <!-- 부모 템플릿 (기본 변화 감지) -->
@@ -573,6 +573,6 @@ If a library component manages its children's behavior, check its docs before re
 그런데 이런 컴포넌트는 자식 요소를 직접 소유한다고 가정하고 구현되기 때문에, 외부에서 컨텐츠를 프로젝션하면 문제가 생길 수 있습니다.
 
 예를 들면, `<mat-menu-item>` 엘리먼트를 추가 레이어로 감싸고 `<mat-menu>`에 프로젝션하면, 키보드 네비게이션이나 스크린 리더 지원이 동작하지 않습니다.
-쿼리는 여전히 자식 항목을 찾겠지만, 프로젝션ㄷ 되는 항목이 다른 뷰 컨텍스트에서 오면 상호작용이 제대로 동작하지 않을 수 있씁니다.
+쿼리는 여전히 자식 항목을 찾겠지만, 프로젝션되는 항목이 다른 뷰 컨텍스트에서 오면 상호작용이 제대로 동작하지 않을 수 있습니다.
 
 라이브러리 컴포넌트가 자식 컴포넌트의 동작을 관리한다면, 컨텐츠 프로젝션을 지원하는지 문서를 먼저 확인해 보세요.

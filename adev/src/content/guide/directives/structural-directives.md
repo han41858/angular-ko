@@ -39,8 +39,8 @@ For more information, see the [ng-template API](api/core/ng-template) documentat
 이 문서에서는 데이터 소스에서 데이터를 받아와서 해당 데이터가 준비되었을 때 템플릿에 렌더링하는 구조 디렉티브를 만들어 봅시다.
 이 디렉티브는 SQL 키워드 `SELECT`를 따와서 `SelectDirective`라고 하며, 어트리뷰트 셀렉터는 `[select]`로 지정합니다.
 
-`SelectDirective`는 데이터 소스 이름을 `selectFrom` 입력으로 받아 받습니다.
-이 때 사용한 `select` 접두사는 [단축 문법](#구조-디렉티브-단축-문법)입니다.
+`SelectDirective`는 데이터 소스 이름을 `selectFrom` 입력으로 받습니다.
+이때 사용한 `select` 접두사는 [단축 문법](#구조-디렉티브-단축-문법)입니다.
 디렉티브는 데이터가 준비되면 이 데이터를 제공하는 템플릿 컨텍스트를 구성하며 `<ng-template>` 인스턴스를 생성합니다.
 
 디렉티브를 `<ng-template>`에 직접 사용하면 이렇게 작성할 수 있습니다:
@@ -51,7 +51,7 @@ For more information, see the [ng-template API](api/core/ng-template) documentat
 </ng-template>
 ```
 
-그러면 구조 디렉티브는 데이터가 사용할 수 있을 때까지 기다린 후에, `<ng-template>`을 화면에 렌더링합니다.
+그러면 구조 디렉티브는 데이터를 사용할 수 있을 때까지 기다린 후에, `<ng-template>`을 화면에 렌더링합니다.
 
 참고: Angular가 제공하는 `<ng-template>` 엘리먼트는 템플릿을 정의하며, 그 자체로는 화면에 아무것도 렌더링하지 않습니다. `<ng-template>` 엘리먼트는 구조 디렉티브와 함께 사용합니다.
 
@@ -132,7 +132,7 @@ Angular는 `<ng-template>` 엘리먼트 사용을 생략할 수 있도록 구조
 두번째 부분 `from source`는 키-표현식 쌍입니다.
 `from`은 바인딩 키이며, `source`는 일반적인 템플릿 표현식입니다.
 바인딩 키는 파스칼 케이스(PascalCase)로 변환되어 구조 디렉티브 셀렉터 뒤에 오는 구문의 프로퍼티와 맵핑됩니다.
-그래서 `from` 키는 `selecteFrom`과 매핑되어 `source` 표현식과 바인딩됩니다.
+그래서 `from` 키는 `selectFrom`과 매핑되어 `source` 표현식과 바인딩됩니다.
 구조 디렉티브는 보통 구조 디렉티브의 셀렉터와 같은 접두사를 사용하는 것이 일반적입니다.
 
 <!--
@@ -147,7 +147,7 @@ You can only apply one structural directive per element when using the shorthand
 
 단축 문법을 사용하는 경우에 구조 디렉티브는 엘리먼트에 하나만 사용할 수 있습니다.
 왜냐하면 구조 디렉티브마다 `<ng-template>` 엘리먼트가 연결되어야 하기 때문입니다.
-디렉티브를 여러개 사용한다면 `<ng-template>`을 여러개 중첩해야 하는데, 이 경우에는 어떤 디렉티브를 먼저 적용해야 하는지 결정할 수 없습니다.
+디렉티브를 여러 개 사용한다면 `<ng-template>`을 여러 개 중첩해야 하는데, 이 경우에는 어떤 디렉티브를 먼저 적용해야 하는지 결정할 수 없습니다.
 구조 디렉티브 여러 개를 DOM 엘리먼트나 컴포넌트 하나에 적용해야 한다면, `<ng-container>`를 사용해서 가상으로 중첩된 DOM 구조를 만들면 됩니다.
 
 <!--
@@ -257,7 +257,7 @@ export class SelectDirective {
 
 </docs-step>
 <docs-step title="'selectFrom' 입력 프로퍼티 추가하기">
-`selecttFrom` `input()` 프로퍼티를 추가합니다.
+`selectFrom` `input()` 프로퍼티를 추가합니다.
 
 ```ts
 export class SelectDirective {
@@ -359,7 +359,7 @@ Angular translates structural directive shorthand into the normal binding syntax
 
 Angular는 구조 디렉티브 단축 문법을 다음과 같이 일반 바인딩 문법으로 변환해서 처리합니다:
 
-| 단축 문법                   | 변환 결                                                       |
+| 단축 문법                   | 변환 결과                                                     |
 | :-------------------------- | :------------------------------------------------------------ |
 | `prefix`, 일반 `expression` | `[prefix]="expression"`                                       |
 | `keyExp`                    | `[prefixKey]="expression"` (`prefix` 는 `key` 앞에 붙습니다.) |
@@ -383,7 +383,7 @@ The following table provides shorthand examples:
 | `*myDir="exp as value"`                                               | `<ng-template [myDir]="exp" let-value="myDir">`                                                               |
 -->
 
-단축 문법이 어떻게 사용되는지 몇가지 예제를 살펴봅시다:
+단축 문법이 어떻게 사용되는지 몇 가지 예제를 살펴봅시다:
 
 | 단축 문법                                                             | Angular가 해석하고 나면                                                                                       |
 | :-------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
@@ -413,7 +413,7 @@ For more information, see [Template type checking](tools/cli/template-typecheck 
 
 디렉티브를 정의할 때 템플릿 가드를 추가하면 템플릿 타입 검사를 강화할 수 있습니다.
 이 가드를 추가하면 컴파일 시점에 Angular 템플릿 타입 검사기가 동작하면서 실수를 찾아낼 수 있기 때문에, 실행 시점에 에러가 발생하는 것을 방지합니다.
-가드는 두가지 종류가 있습니다:
+가드는 두 가지 종류가 있습니다:
 
 - `ngTemplateGuard_(input)` - 입력값의 타입에 따라 입력 표현식 타입을 좁힐 수 있습니다. -`ngTemplateContextGuard` - 디렉티브 자체 타입에 따라 템플릿 컨텍스트 객체의 타입을 결정합니다.
 
@@ -468,12 +468,12 @@ class CustomIf {
 The template type-checker will behave as if the expression bound to `condition` was asserted to be truthy within the template.
 -->
 
-템플릿에 사용되는 구조 디렉티브는 템플릿을 렌더링 할 지 결정합니다.
+템플릿에 사용되는 구조 디렉티브는 템플릿을 렌더링할지 결정합니다.
 그래서 때로는 입력 표현식의 타입을 기반으로 타입을 좁혀야 하는 경우가 있습니다.
 
-입력 가드로 타입을 좁히는 방법은 두 가지 입니다:
+입력 가드로 타입을 좁히는 방법은 두 가지입니다:
 
-- TypeScript 타입 경고(assertion) 함수를 사용하는 방법해서 입력 표현식 타입을 좁히는 방법 -입력 표현식의 참/거짓 여부로 입력 표현식 타입을 좁히는 방법
+- TypeScript 타입 경고(assertion) 함수를 사용해서 입력 표현식 타입을 좁히는 방법 -입력 표현식의 참/거짓 여부로 입력 표현식 타입을 좁히는 방법
 
 타입 경고 함수를 사용하는 방식은 이렇습니다:
 
@@ -485,13 +485,13 @@ class ActorIsUser {
   actor = input<User | Robot>();
 
   static ngTemplateGuard_actor(dir: ActorIsUser, expr: User | Robot): expr is User {
-    // 반환 구문은 필요없지만, TypeScript 에러를 방지하기 위해 선언합니다.
+    // 반환 구문은 필요 없지만, TypeScript 에러를 방지하기 위해 선언합니다.
     return true;
   }
 }
 ```
 
-템플릿 안에서는 타입 검사가 마치 바인딩 된 표현식에 `ngTemplateGuard_actor`가 경고 함수로 사용되는 것처럼 동작합니다.
+템플릿 안에서는 타입 검사가 마치 바인딩된 표현식에 `ngTemplateGuard_actor`가 경고 함수로 사용되는 것처럼 동작합니다.
 
 디렉티브 중에는 입력값이 참인 경우에 템플릿을 렌더링하는 경우가 있습니다.
 이 경우에는 타입 검사 함수가 "참" 의 의미를 완벽하게 이해할 수는 없기 때문에, 바인딩 표현식에 가드를 사용해야 하는 것을 알리기 위해 `'binding'` 값을 사용합니다.
@@ -553,7 +553,7 @@ export interface SelectTemplateContext<T> {
 
 @Directive(...)
 export class SelectDirective<T> {
-  // 입력으로 받은 `DataSource`을 제네릭 `T` 타입으로 선언합니다.
+  // 입력으로 받은 `DataSource`를 제네릭 `T` 타입으로 선언합니다.
   selectFrom = input.required<DataSource<T>>();
 
   // 디렉티브의 제네릭 타입을 활용해서 컨텍스트의 타입을 좁힙니다.

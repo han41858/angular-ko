@@ -100,7 +100,7 @@ export class AppComponent {
 ## Two-way binding between components
 -->
 
-## 컴포넌트간 양방향 바인딩
+## 컴포넌트 간 양방향 바인딩
 
 <!--
 Leveraging two-way binding between a parent and child component requires more configuration compared to form elements.

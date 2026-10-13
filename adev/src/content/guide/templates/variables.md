@@ -68,7 +68,7 @@ Each `@let` block can declare exactly one variable. You cannot declare multiple 
 ```
 
 `@let` 블록은 각각 변수 하나를 선언합니다.
-쉼표(`,`)를 사용하는 것처럼 블록 하나에서 변수 여러개를 한 번에 선언할 수는 없습니다.
+쉼표(`,`)를 사용하는 것처럼 블록 하나에서 변수 여러 개를 한 번에 선언할 수는 없습니다.
 
 <!--
 ### Referencing the value of `@let`
@@ -183,7 +183,7 @@ Since `@let` declarations are not hoisted, they **cannot** be accessed by parent
 ```
 -->
 
-`@let` 으로 선언한 변수는 해당 뷰과 해당 뷰의 자식 뷰에서 접근할 수 있습니다.
+`@let` 으로 선언한 변수는 해당 뷰와 해당 뷰의 자식 뷰에서 접근할 수 있습니다.
 그리고 `@defer` 블록이나 구조 디렉티브와 같은 흐름 제어 블록으로 컨텐츠가 동적으로 갱신되는 경우도 변수의 접근 범위에 포함됩니다.
 
 하지만 `@let`으로 선언한 변수는 호이스팅(hoisting)되지 않기 때문에 부모 뷰나 이웃 뷰에서는 참조할 수 없습니다:
@@ -476,7 +476,7 @@ HELPFUL: Define a variable only once in the template so the runtime value remain
 #### Accessing in a nested template
 -->
 
-#### 중첨 템플릿 안에 접근하기
+#### 중첩 템플릿 안에 접근하기
 
 <!--
 An inner template can access template variables that the outer template defines.
@@ -514,7 +514,7 @@ Here, `ref2` is declared in the child scope created by `*ngIf`, and is not acces
 
 이 경우 `<span>`에 적용된 `*ngIf`는 새로운 템플릿 범위를 만들기 때문에, 이 범위에서 보면 `ref1` 변수는 부모 범위에 존재합니다.
 
-하지만 부모 템플릿 범위에서 저식 템플릿 범위에 있는 변수에는 접근할 수 없습니다:
+하지만 부모 템플릿 범위에서 자식 템플릿 범위에 있는 변수에는 접근할 수 없습니다:
 
 ```html {avoid}
 <input *ngIf="true" #ref2 type="text" [(ngModel)]="secondExample" />

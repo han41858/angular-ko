@@ -210,7 +210,7 @@ CRITICAL: The body of a request or response is **not** protected from deep mutat
 
 `HttpRequest`와 `HttpResponse` 인스턴스의 대부분은 _불변_ 이므로 인터셉터에서 직접 수정할 수 없습니다.
 대신 `.clone()`으로 객체를 복제하면서 새 인스턴스에서 변경할 프로퍼티를 지정합니다.
-이 때 `HttpHeaders`나 `HttpParams`처럼 값 자체도 불변 방식으로 갱신해야 할 수 있습니다.
+이때 `HttpHeaders`나 `HttpParams`처럼 값 자체도 불변 방식으로 갱신해야 할 수 있습니다.
 
 예를 들어 요청에 헤더를 추가하려면 다음과 같이 작성합니다:
 

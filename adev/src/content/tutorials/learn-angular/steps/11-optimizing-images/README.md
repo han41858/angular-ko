@@ -164,7 +164,7 @@ imports: [NgOptimizedImage],
 
 <docs-step title="width, height 어트리뷰트를 추가하세요">
 
-위 예제에서 이미지 엘리먼트마다 `width` 어트리뷰트와 `height` 어트리뷰트를 지정한 것을 주의깊게 보세요.
+위 예제에서 이미지 엘리먼트마다 `width` 어트리뷰트와 `height` 어트리뷰트를 지정한 것을 주의 깊게 보세요.
 `NgOptimizedImage` 디렉티브를 사용할 때는 [레이아웃이 틀어지는 것](https://web.dev/articles/cls)을 방지하기 위해 이미지마다 정확한 크기를 지정하는 것을 권장합니다.
 
 정확한 `height` 값과 `width` 값을 지정할 수 없거나 지정하지 않으려는 상황이라면, [`fill` 어트리뷰트](https://web.dev/articles/cls)를 사용해서 이 이미지가 엘리먼트를 채우는 "배경 이미지" 라고 지정하면 됩니다:
@@ -183,7 +183,7 @@ imports: [NgOptimizedImage],
 <docs-step title="중요한 이미지는 우선순위를 높이세요">
 
 로딩 성능에 가장 중요한 것은 화면이 로드될 때 화면에서 가장 큰 그래픽 요소인 ["LCP 엘리먼트"](https://web.dev/articles/optimize-lcp) 이미지의 우선순위를 정하는 것입니다.
-로딩 시간을 최적화 하려면 "가장 중요한 이미지"나 LCP 엘리먼트라고 생각하는 이미지에 `priority` 어트리뷰트를 추가하면 됩니다.
+로딩 시간을 최적화하려면 "가장 중요한 이미지"나 LCP 엘리먼트라고 생각하는 이미지에 `priority` 어트리뷰트를 추가하면 됩니다.
 
 ```ts
 <img ngSrc="www.example.com/image.png" height="600" width="800" priority />
@@ -208,13 +208,13 @@ providers: [provideImgixLoader('https://my.base.url/')],
 
 이미지 로더는 간편함만을 위한 것은 아닙니다.
 이미지 로더를 사용하면 `NgOptimizedImage`의 모든 기능을 활용할 수 있습니다.
-또다른 최적화 기법과 CDN용 내장 로더 사용방법을 확인하려면 [이 링크](guide/image-optimization#configuring-an-image-loader-for-ngoptimizedimage)를 참고하세요.
+또 다른 최적화 기법과 CDN용 내장 로더 사용방법을 확인하려면 [이 링크](guide/image-optimization#configuring-an-image-loader-for-ngoptimizedimage)를 참고하세요.
 
 </docs-step>
 
 </docs-workflow>
 
-이미지 최적화 디렉티브를 추가하는 것 만으로 이제 앱에 사용되는 이미지 파일은 모두 최적의 상태로 로딩됩니다 🎉
+이미지 최적화 디렉티브를 추가하는 것만으로 이제 앱에 사용되는 이미지 파일은 모두 최적의 상태로 로딩됩니다 🎉
 
 더 자세한 내용을 확인하려면 [`NgOptimizedImage` 문서](guide/image-optimization)를 참고하세요.
 잘 진행하고 있습니다. 좀 더 진행해 보세요.

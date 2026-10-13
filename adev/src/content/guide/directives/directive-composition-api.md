@@ -52,10 +52,10 @@ directives at runtime.
 **Angular ignores the `selector` of directives applied in the `hostDirectives` property.**
 -->
 
-컴포넌트 데코레이터에 `hostDirective` 프로퍼티를 추가하면 적용할 수 있습니다.
+컴포넌트 데코레이터에 `hostDirectives` 프로퍼티를 추가하면 적용할 수 있습니다.
 이렇게 사용하는 디렉티브를 _호스트 디렉티브(host directive)_ 라고 합니다.
 
-위 예제에서는 `MenuBehavior` 디렉티브를 `AminMenu`의 호스트 엘리먼트에 적용했습니다.
+위 예제에서는 `MenuBehavior` 디렉티브를 `AdminMenu`의 호스트 엘리먼트에 적용했습니다.
 이 방식은 템플릿에서 `<admin-menu>` 엘리먼트에 `MenuBehavior` 디렉티브를 적용한 것과 같은 효과입니다.
 
 ```typescript
@@ -67,7 +67,7 @@ directives at runtime.
 export class AdminMenu {}
 ```
 
-프레임워크가 컴포넌트를 렌더링 할 때 Angular는 호스트 디렉티브마다 각각 인스턴스를 생성합니다.
+프레임워크가 컴포넌트를 렌더링할 때 Angular는 호스트 디렉티브마다 각각 인스턴스를 생성합니다.
 그리고 이 디렉티브는 컴포넌트의 호스트 엘리먼트에 호스트 바인딩됩니다.
 기본적으로 호스트 디렉티브의 입출력 프로퍼티는 컴포넌트 public API처럼 컴포넌트 밖으로 노출되지 않습니다.
 자세한 내용은 아래 [입출력 프로퍼티 지정하기](#입출력-프로퍼티-지정하기) 섹션을 참고하세요.
@@ -75,7 +75,7 @@ export class AdminMenu {}
 **호스트 디렉티브는 컴파일 시점에 정적으로 적용됩니다.**
 실행 시점에는 디렉티브를 동적으로 적용할 수 없습니다.
 
-**`hostDirectives`에 사용된 디렉티브는 `standalone: false` 여야 합니다.**
+**`hostDirectives`에 사용된 디렉티브는 `standalone: false`를 지정해서는 안 됩니다.**
 
 **`hostDirectives` 프로퍼티에 적용된 디렉티브의 `selector`는 무시합니다.**
 
@@ -159,7 +159,7 @@ export class AdminMenu {}
 <admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()"></admin-menu>
 ```
 
-그리고 `hostDirective`에 입출력 프로퍼티를 등록할 때 별칭을 지정할 수도 있습니다:
+그리고 `hostDirectives`에 입출력 프로퍼티를 등록할 때 별칭을 지정할 수도 있습니다:
 
 ```typescript
 @Component({
@@ -225,14 +225,14 @@ export class SpecializedMenuWithTooltip {}
 -->
 
 컴포넌트뿐 아니라 다른 디렉티브에서 `hostDirectives`를 활용할 수도 있습니다.
-이 방식을 활용하면 디렉티브 여러개를 한 번에 적용할 수 있습니다.
+이 방식을 활용하면 디렉티브 여러 개를 한 번에 적용할 수 있습니다.
 
 아래 예제에는 `Menu` 디렉티브와 `Tooltip` 디렉티브가 있습니다.
 두 디렉티브를 `MenuWithTooltip` 디렉티브로 합쳐봅시다.
 그리고 최종적으로는 `MenuWithTooltip`을 `SpecializedMenuWithTooltip`에 적용해 봅시다.
 
-템플릿에 `SpecializedMenuWithTooltip`에 사용되면 Angular는 `Menu`, `Tooltip`, `MenuWithTooltip` 인스턴스가 각각 생성됩니다.
-그리고나면 이 디렉티브들이 각각 `SpecializedMenuWithTooltip` 호스트 엘리먼트에 적용됩니다.
+템플릿에 `SpecializedMenuWithTooltip`이 사용되면 Angular는 `Menu`, `Tooltip`, `MenuWithTooltip` 인스턴스를 각각 생성합니다.
+그러고 나면 이 디렉티브들이 각각 `SpecializedMenuWithTooltip` 호스트 엘리먼트에 적용됩니다.
 
 ```ts
 @Directive({
@@ -351,7 +351,7 @@ export class AdminMenu {}
 5. `MenuBehavior` 호스트 바인딩이 적용됩니다.
 6. `AdminMenu` 호스트 바인딩이 적용됩니다.
 
-실행 순서가 이렇기 때문에, 컴포넌트에 지정한 `hostDirectives`는 바인딩되는 호스트 디렉티브에 의해 오버라이드 될 수 있습니다.
+실행 순서가 이렇기 때문에, `hostDirectives`를 사용하는 컴포넌트는 호스트 디렉티브에 지정된 호스트 바인딩을 오버라이드할 수 있습니다.
 
 디렉티브 적용이 중첩된 경우도 방식은 같습니다.
 
@@ -375,9 +375,9 @@ export class EvenMoreCustomTooltip { }
 1. `Tooltip` 인스턴스가 생성됩니다.
 2. `CustomTooltip` 인스턴스가 생성됩니다.
 3. `EvenMoreCustomTooltip` 인스턴스가 생성됩니다.
-4. `Tooltip` 가 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
-5. `CustomTooltip` 가 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
-6. `EvenMoreCustomTooltip` 가 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
+4. `Tooltip`이 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
+5. `CustomTooltip`이 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
+6. `EvenMoreCustomTooltip`이 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
 7. `Tooltip` 호스트 바인딩이 적용됩니다.
 8. `CustomTooltip` 호스트 바인딩이 적용됩니다.
 9. `EvenMoreCustomTooltip` 호스트 바인딩이 적용됩니다.
@@ -417,7 +417,7 @@ When the same directive appears more than once in the resolved host directive tr
 -->
 
 호스트 디렉티브 트리에 같은 디렉티브가 두 번 이상 사용되면, 오류를 발생시키는 대신 자동으로 중복이 제거됩니다.
-어떤 항목이 유지될 지는 다음 규칙을 따릅니다.
+어떤 항목이 유지될지는 다음 규칙을 따릅니다.
 
 <!--
 #### Template match takes precedence
@@ -478,7 +478,7 @@ export class Button {}
 #### Multiple host directive matches are merged
 -->
 
-#### 호스트 디렉티브가 여러개 매칭되면 합쳐집니다.
+#### 호스트 디렉티브가 여러 개 매칭되면 합쳐집니다.
 
 <!--
 If the same directive appears **more than once as a host directive** , for example, when two

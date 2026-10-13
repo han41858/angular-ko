@@ -30,7 +30,7 @@ You can apply directives to `<ng-container>` to add behaviors or configuration t
 Angular ignores all attribute bindings and event listeners applied to `<ng-container>`, including those applied via directive.
 -->
 
-`<ng-container>` 는 여러 엘리먼트를 하나로 묶거나, 템플릿에 추가로 렌더링 될 엘리먼트의 위치를 지정하는 특별한 엘리먼트입니다.
+`<ng-container>` 는 여러 엘리먼트를 하나로 묶거나, 템플릿에 추가로 렌더링될 엘리먼트의 위치를 지정하는 특별한 엘리먼트입니다.
 
 ```angular-html
 <!-- 컴포넌트 템플릿 -->
@@ -64,7 +64,7 @@ Angular ignores all attribute bindings and event listeners applied to `<ng-conta
 `<ng-container>` can act as a placeholder for rendering dynamic content.
 -->
 
-`<ng-container>`는 동적 컨텐츠가 렌더링 될 위치를 지정하는 용도로 사용됩니다.
+`<ng-container>`는 동적 컨텐츠가 렌더링될 위치를 지정하는 용도로 사용됩니다.
 
 <!--
 ### Rendering components

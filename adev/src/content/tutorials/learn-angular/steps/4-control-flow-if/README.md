@@ -70,7 +70,7 @@ Add your code to fill in the missing markup.
 This type of functionality is called conditional control flow. Next you'll learn how to repeat items in a template.
 -->
 
-앱을 개발하다보면 사용자에게 어떤 화면을 표시해야 할 지 판단할 일이 많습니다.
+앱을 개발하다 보면 사용자에게 어떤 화면을 표시해야 할지 판단할 일이 많습니다.
 그리고 이런 경우는 대부분 앱 상태에 따라 조건으로 결정됩니다.
 
 템플릿에서 조건에 따라 엘리먼트를 표시하거나 표시하지 않으려면 템플릿 문법 `@if` 를 사용하면 됩니다.

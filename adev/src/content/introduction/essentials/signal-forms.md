@@ -16,7 +16,7 @@ This guide walks you through the core concepts to create forms with Signal Forms
 이후 버전에서 API 사용 방법은 변경될 수 있습니다.
 운영앱에서 실험적인 API를 사용한다면 이런 리스크를 꼭 인지해야 합니다.
 
-시그널 폼은 Angular 시그널을 사용해서 폼 상태를 관리하며, 데이터 모델과 UI를 동기화 할 때도 Angular 시그널을 활용합니다.
+시그널 폼은 Angular 시그널을 사용해서 폼 상태를 관리하며, 데이터 모델과 UI를 동기화할 때도 Angular 시그널을 활용합니다.
 
 이 문서에서는 시그널 폼을 어떻게 만드는지 핵심을 알아봅시다.
 이렇게 구현합니다:
@@ -84,7 +84,7 @@ loginForm.password;
 ### 3. Bind HTML inputs with `[formField]` directive
 -->
 
-### 3. `[formField]` 디렉티브로 HTML 입력 필드를 바인딩 합니다.
+### 3. `[formField]` 디렉티브로 HTML 입력 필드를 바인딩합니다.
 
 <!--
 Next, you bind your HTML inputs to the form using the `[formField]` directive, which creates two-way binding between them:
@@ -99,7 +99,7 @@ As a result, user changes (such as typing in the field) automatically updates th
 NOTE: The `[formField]` directive also syncs field state for attributes like `required`, `disabled`, and `readonly` when appropriate.
 -->
 
-그 다음에는 HTML 입력 엘리먼트에 `[formField]` 디렉티브를 양방향 바인딩해서 폼과 연결합니다:
+그다음에는 HTML 입력 엘리먼트에 `[formField]` 디렉티브를 양방향 바인딩해서 폼과 연결합니다:
 
 ```html
 <input type="email" [formField]="loginForm.email" />
@@ -137,7 +137,7 @@ const currentEmail = loginForm.email().value();
 -->
 
 필드 상태는 필드를 함수처럼 실행하면 접근할 수 있습니다.
-이 때 접근하는 `FieldState` 객체에는 필드의 값, 유효성 검사 상태, 상호작용 상태를 표현하는 반응형 시그널이 모두 포함됩니다:
+이때 접근하는 `FieldState` 객체에는 필드의 값, 유효성 검사 상태, 상호작용 상태를 표현하는 반응형 시그널이 모두 포함됩니다:
 
 ```ts
 loginForm.email(); // value(), valid(), touched() 등 값이 포함된 FieldState를 반환합니다.
@@ -237,7 +237,7 @@ Text inputs work with various `type` attributes and textareas:
 ```
 -->
 
-텍스트 입력은 다양한 `type`과 함께 사용할 수 있ㅅ브니다:
+텍스트 입력은 다양한 `type`과 함께 사용할 수 있습니다:
 
 ```html
 <!-- 텍스트, 이메일 -->
@@ -307,7 +307,7 @@ const dateObject = new Date(form.eventDate().value());
 #### Multiline text
 -->
 
-#### 여러줄 텍스트
+#### 여러 줄 텍스트
 
 <!--
 Textareas work the same way as text inputs:
@@ -374,7 +374,7 @@ For multiple options, create a separate boolean `formField` for each:
 ```
 -->
 
-체크박스가 여러개라면 개별 필드마다 불리언 값을 연결합니다:
+체크박스가 여러 개라면 개별 필드마다 불리언 값을 연결합니다:
 
 ```html
 <label>
@@ -543,7 +543,7 @@ const loginForm = form(loginModel, (schemaPath) => {
 - **`minLength()`** / **`maxLength()`** - 문자열이나 배열의 길이를 검사합니다.
 - **`pattern()`** - 정규표현식 형식에 맞는지 검사합니다.
 
-그리고 유효성 검사 함수의 두번째 인자로 옵션 객체를 전달하면서 에러 메시지를 커스터마이징 할 수 있습니다:
+그리고 유효성 검사 함수의 두번째 인자로 옵션 객체를 전달하면서 에러 메시지를 커스터마이징할 수 있습니다:
 
 ```ts
 required(schemaPath.email, {message: 'Email is required'});
@@ -590,7 +590,7 @@ Every `field()` provides these state signals:
 | `dirty()`    | 사용자가 값을 바꾸면 `true`를 반환합니다.                                                             |
 | `disabled()` | 필드가 비활성화되면 `true`를 반환합니다.                                                              |
 | `readonly()` | 필드가 읽기 전용이면 `true`를 반환합니다.                                                             |
-| `pending()`  | 비동기 유효성 검사가 진행중이면 `true`를 반환합니다.                                                  |
+| `pending()`  | 비동기 유효성 검사가 진행 중이면 `true`를 반환합니다.                                                 |
 | `errors()`   | 유효성 검사에서 발생한 에러 배열을 반환합니다. 에러 객체에는 `kind`, `message` 프로퍼티가 존재합니다. |
 
 <!--

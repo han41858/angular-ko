@@ -93,7 +93,7 @@ Angular does not support any other schemas at this time.
 -->
 
 기본적으로 Angular는 식별할 수 없는 HTML 엘리먼트를 발견하면 에러를 발생시킵니다.
-이 동작은 컴포넌트 메타데이터에서 `schemas` 옵션을 `CUSTOM_ELEMENTS_SCHEMA`를 추가하면 비활성화 할 수 있습니다.
+이 동작은 컴포넌트 메타데이터에서 `schemas` 옵션에 `CUSTOM_ELEMENTS_SCHEMA`를 추가하면 비활성화할 수 있습니다.
 
 ```angular-ts
 import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
@@ -106,4 +106,4 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 export class ComponentWithCustomElements { }
 ```
 
-이렇게 구현하면 Angular는 모든 스키마 지원을 비활성화 합니다.
+이렇게 구현하면 Angular는 모든 스키마 지원을 비활성화합니다.

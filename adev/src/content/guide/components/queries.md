@@ -116,7 +116,7 @@ export class CustomCard {
 이 경우는 찾으려는 엘리먼트가 `@if` 로 화면에 표시되지 않은 경우에 발생할 수 있습니다.
 그리고 애플리케이션의 상태가 변경되면 `viewChild` 결과는 계속 최신 상태로 갱신됩니다.
 
-자식 컴포넌트를 여러개 참조하려면 `viewChildren` 함수를 사용하면 됩니다.
+자식 컴포넌트를 여러 개 참조하려면 `viewChildren` 함수를 사용하면 됩니다.
 
 ```typescript {highlight: [17]}
 @Component({
@@ -265,7 +265,7 @@ export class UserProfile {}
 
 기본적으로 컨텐츠 쿼리는 컴포넌트의 _한 단계 아래_ 자식들을 찾으며, 그보다 자식 컴포넌트는 탐색하지 않습니다.
 
-자식 컴포넌트를 여러개 참조하려면 `contentChildren` 함수를 사용하면 됩니다.
+자식 컴포넌트를 여러 개 참조하려면 `contentChildren` 함수를 사용하면 됩니다.
 
 ```typescript {highlight: [14, 16, 17, 18, 19, 20]}
 @Component({
@@ -397,7 +397,7 @@ export class ActionBar {
 }
 ```
 
-템플릿에 구분자가 여러개 매칭되는 경우에는 첫번째 매칭되는 엘리먼트를 참조합니다.
+템플릿에 구분자가 여러 개 매칭되는 경우에는 첫번째 매칭되는 엘리먼트를 참조합니다.
 
 CSS 셀렉터는 쿼리 구분자로 사용할 수 없습니다.
 
@@ -569,7 +569,7 @@ export class UserProfile {}
 이 경우 `descendants: true` 옵션을 지정하면 쿼리 함수가 자식 컴포넌트를 모두 탐색합니다.
 하지만 이런 경우에도 컴포넌트를 벗어나는 영역은 _절대_ 탐색할 수 없습니다.
 
-뷰 쿼리는 _항상_ 자식 컴포넌트를 참조하기 땜누에 이 옵션을 사용하지 않습니다.
+뷰 쿼리는 _항상_ 자식 컴포넌트를 참조하기 때문에 이 옵션을 사용하지 않습니다.
 
 <!--
 ## Decorator-based queries
@@ -688,7 +688,7 @@ export class CustomCard implements AfterViewInit {
 이 메서드가 실행되기 전 시점에는 `undefined` 값을 갖습니다.
 컴포넌트 라이프싸이클에 대해 알아보려면 [라이프싸이클 후킹 함수](guide/components/lifecycle) 문서를 참고하세요.
 
-자식 컴포넌트를 여러개 탐색하려면 `@ViewChildren` 데코레이터를 사용하면 됩니다.
+자식 컴포넌트를 여러 개 탐색하려면 `@ViewChildren` 데코레이터를 사용하면 됩니다.
 
 ```angular-ts {highlight: [17, 19, 20, 21, 22, 23]}
 @Component({
@@ -849,7 +849,7 @@ export class UserProfile {}
 이 메서드가 실행되기 전 시점에는 `undefined` 값을 갖습니다.
 컴포넌트 라이프싸이클에 대해 알아보려면 [라이프싸이클 후킹 함수](guide/components/lifecycle) 문서를 참고하세요.
 
-자식 컴포넌트를 여러개 탐색하려면 `@ContentChildren` 데코레이터를 사용하면 됩니다.
+자식 컴포넌트를 여러 개 탐색하려면 `@ContentChildren` 데코레이터를 사용하면 됩니다.
 
 ```angular-ts {highlight: [14, 16, 17, 18, 19, 20]}
 @Component({
@@ -949,7 +949,7 @@ export class CustomCard implements OnInit {
 ```
 
 `static: true` 옵션을 지정하면 찾으려는 대상 컴포넌트가 _언제나_ 존재하며 렌더링 조건에 영향을 받지 않는다는 것을 의미합니다.
-그래서 탐색 결과를 빠른 시점부터 참조할 수 있으며, `ngOnInit` 라이프싸이클 메서드에서 활용할 수도 있씁니다.
+그래서 탐색 결과를 빠른 시점부터 참조할 수 있으며, `ngOnInit` 라이프싸이클 메서드에서 활용할 수도 있습니다.
 
 정적 쿼리 결과는 처음 초기화된 후에 변경되지 않습니다.
 

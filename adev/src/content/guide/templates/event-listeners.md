@@ -205,7 +205,7 @@ export class AppComponent{
 
 Angular는 `alt`, `control`, `meta`, `shift` 키조합도 지원합니다.
 
-키보드 이벤트는 키 이름나 코드를 사용해서 바인딩할 수 있습니다.
+키보드 이벤트는 키 이름이나 코드를 사용해서 바인딩할 수 있습니다.
 키 값이나 코드 값은 브라우저 키보드 이벤트 객체를 기반으로 하며, [키보드 이벤트의 키 값](https://developer.mozilla.org/docs/Web/API/UI_Events/Keyboard_event_key_values)을 따른다고 가정합니다.
 
 Angular에서는 `code` 접미사를 사용해서 [키보드 이벤트의 코드 값](https://developer.mozilla.org/docs/Web/API/UI_Events/Keyboard_event_code_values)을 활용할 수도 있습니다.

@@ -67,10 +67,10 @@ Both `templateUrl` and `styleUrl` are relative to the directory in which the com
 컴포넌트는 다음 구성요소를 반드시 갖습니다:
 
 - TypeScript 클래스 &mdash; 사용자 입력을 다루거나 서버에서 데이터를 받아오는 등 _동작_ 을 정의합니다.
-- HTML 템플릿 &mdash; DOM에 렌더링 될 HTML 구조를 구성합니다.
+- HTML 템플릿 &mdash; DOM에 렌더링될 HTML 구조를 구성합니다.
 - [CSS 셀렉터](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) &mdash; 컴포넌트가 HTML 문서에 적용될 이름을 지정합니다.
 
-TypeScript 클레스 위에 `@Component` [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html)를 붙이면 이 클래스가 Angular 컴포넌트라고 지정할 수 있습니다.
+TypeScript 클래스 위에 `@Component` [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html)를 붙이면 이 클래스가 Angular 컴포넌트라고 지정할 수 있습니다.
 
 ```angular-ts {highlight: [1, 2, 3, 4]}
 @Component({
@@ -83,7 +83,7 @@ export class ProfilePhoto {}
 데이터 바인딩, 이벤트 처리, 컨트롤 흐름 제어 등 Angular 템플릿이 제공하는 기능을 자세하게 알아보려면 [템플릿 가이드](guide/templates) 문서를 참고하세요.
 
 `@Component` 데코레이터에는 객체를 전달할 수 있는데, 이 객체는 컴포넌트 **메타데이터** 라고 합니다.
-이 객체에는 `selector`나 `template`, 그밖의 컴포넌트 설정을 지정합니다.
+이 객체에는 `selector`나 `template`, 그 밖의 컴포넌트 설정을 지정합니다.
 
 컴포넌트는 컴포넌트 DOM에 적용될 CSS 스타일을 옵션으로 지정할 수 있습니다:
 
@@ -114,7 +114,7 @@ export class ProfilePhoto {}
 export class ProfilePhoto {}
 ```
 
-이렇게 구성하면 스타일 파일에서는 컴포넌트의 스타일만 신경쓰면 되고 TypeScript 파일에서는 컴포넌트의 동작만 신경쓸 수 있어서 좋습니다.
+이렇게 구성하면 스타일 파일에서는 컴포넌트의 스타일만 신경 쓰면 되고 TypeScript 파일에서는 컴포넌트의 동작만 신경 쓸 수 있어서 좋습니다.
 어떤 방식을 선택하든 전체 프로젝트에 적용할 수도 있고, 개별 컴포넌트마다 적용할 수도 있습니다.
 
 `templateUrl`과 `styleUrl`은 모두 컴포넌트 클래스 파일이 존재하는 경로의 상대 주소로 지정합니다.
@@ -243,7 +243,7 @@ export class UserProfile {}
 ```
 
 Angular는 컴포넌트 셀렉터와 매칭되는 모든 HTML 엘리먼트에 컴포넌트 인스턴스를 생성합니다.
-이 때 컴포넌트 셀렉터와 매칭된 DOM 엘리먼트를 컴포넌트의 **호스트 엘리먼트(host element)** 라고 합니다.
+이때 컴포넌트 셀렉터와 매칭된 DOM 엘리먼트를 컴포넌트의 **호스트 엘리먼트(host element)** 라고 합니다.
 컴포넌트 템플릿 안에 있는 내용은 호스트 엘리먼트 안에 렌더링됩니다.
 
 컴포넌트가 렌더링하는 DOM은 컴포넌트 템플릿으로 결정되며, 이것을 컴포넌트의 **뷰(view)** 라고 합니다.

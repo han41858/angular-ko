@@ -31,7 +31,7 @@ If you're using a background image in CSS, [start here](#how-to-migrate-your-bac
 
 이 디렉티브는 아래 작업을 통해 [가장 큰 컨텐츠 페인트(Largest Contentful Paint, LCP)](http://web.dev/lcp) 성능을 끌어올립니다:
 
-- `<img>` 태그에 `fetchprioirity` 어트리뷰트를 자동으로 설정합니다.
+- `<img>` 태그에 `fetchpriority` 어트리뷰트를 자동으로 설정합니다.
 - 기본적으로 이미지는 지연 로딩합니다.
 - document 헤더에 사전 연결 링크 태그를 자동으로 생성합니다.
 - `srcset` 어트리뷰트를 자동으로 생성합니다.
@@ -165,8 +165,8 @@ NgOptimizedImage를 활용할 때 이미지 로더를 정하는 것이 **필수*
 - [서버에서 렌더링하는 경우](guide/ssr)라면 [사전로드 링크 엘리먼트](https://developer.mozilla.org/docs/Web/HTML/Link_types/preload)를 자동으로 생성합니다.
 
 LCP 엘리먼트에 `priority` 어트리뷰트가 설정되어 있지 않으면 Angular는 경고를 표시합니다.
-화면에 표시되는 LCP 엘리먼트는 사용자 화면 해상도 등 여러가지 요인에 따라 다르게 표시될 수 있기 때문에, `priority`를 이미지 여러개에 지정해야 할 수도 있습니다.
-자세한 내용은 [웹 바이탈을 위한 CSS](https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp)을 참고하세요.
+화면에 표시되는 LCP 엘리먼트는 사용자 화면 해상도 등 여러 가지 요인에 따라 다르게 표시될 수 있기 때문에, `priority`를 이미지 여러 개에 지정해야 할 수도 있습니다.
+자세한 내용은 [웹 바이탈을 위한 CSS](https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp)를 참고하세요.
 </docs-step>
 <docs-step title="너비, 높이 지정하기">
 [이미지 때문에 레이아웃이 변경되는 것](https://web.dev/css-web-vitals/#images-and-layout-shifts)을 방지하기 위해, NgOptimizedImage는 이미지의 너비와 높이 입력을 강제합니다:
@@ -210,7 +210,7 @@ IMPORTANT: For the "fill" image to render properly, its parent element **must** 
 -->
 
 이미지를 엘리먼트에 가득 채우고 싶다면 `fill` 어트리뷰트를 사용하면 됩니다.
-이 방식은 이미지를 배경 이미지 처럼 지정하려고 할 때 유용합니다.
+이 방식은 이미지를 배경 이미지처럼 지정하려고 할 때 유용합니다.
 그리고 이미지 자체의 너비와 높이는 모르지만, 부모 컨테이너의 크기를 알고 있을 때에도 활용할 수 있습니다.
 
 이미지에 `fill` 어트리뷰트를 지정하면 `width`나 `height`를 지정할 수 없습니다.
@@ -341,10 +341,10 @@ You can also specify a placeholder using a base64 [data URL](https://developer.m
 However, large data URLs increase the size of your Angular bundles and slow down page load. If you cannot use an image loader, the Angular team recommends keeping base64 placeholder images smaller than 4KB and using them exclusively on critical images. In addition to decreasing placeholder dimensions, consider changing image formats or parameters used when saving images. At very low resolutions, these parameters can have a large effect on file size.
 -->
 
-플레이스홀더에는 이미지 로더 대신 base64 [데이터 URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)를 사용할 수도 있습니다.
+플레이스홀더에는 이미지 로더 대신 base64 [데이터 URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)을 사용할 수도 있습니다.
 이 데이터 url은 `data:image/[imagetype];[data]` 형식이며, `[imagetype]` 자리에는 이미지의 형식이 들어가는데, `png`와 같이 들어갑니다.
 그리고 `[data]` 자리에는 base64로 인코딩된 이미지가 들어갑니다.
-이미지 인코딩은 커맨드라인이나 JavaScript로도 실행할 ㅅ ㅜ있습니다.
+이미지 인코딩은 커맨드라인이나 JavaScript로도 실행할 수 있습니다.
 자세한 내용은 [MDN 문서](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs#encoding_data_into_base64_format)를 참고하세요.
 데이터 URL은 아래와 같이 사용하면 됩니다:
 
@@ -354,7 +354,7 @@ However, large data URLs increase the size of your Angular bundles and slow down
 
 그런데, 데이터 URL의 크기가 커지면 Angular 빌드 결과물의 크기가 함께 커지기 때문에 페이지 로딩이 느려질 수 있습니다.
 이미지 로더를 사용하지 못하는 경우에는 base64 플레이스홀더 이미지를 권장하지만, 이 크기는 최대 4KB를 넘지 않을 것을 권장합니다.
-플레이스홀더의 크기를 줄일 수 없다면 이미지의 형식이나 변수를 조정해서 이미지의 크기를 줄이는 것도 고려할 만 합니다.
+플레이스홀더의 크기를 줄일 수 없다면 이미지의 형식이나 변수를 조정해서 이미지의 크기를 줄이는 것도 고려할 만합니다.
 해상도가 낮은 이미지라면 이런 변수 조정이 파일 크기에 큰 영향을 미칠 수 있습니다.
 
 <!--
@@ -372,7 +372,7 @@ By default, NgOptimizedImage applies a CSS blur effect to image placeholders. To
 -->
 
 기본적으로 NgOptimizedImage는 이미지 플레이스 홀더에 CSS 블러 효과를 적용합니다.
-플레이스홀더에 흐림 효과를 적용하지 않으려면 `placeholderConfig`인자를 사용해서 `blur` 프로퍼티 값을 `false`로 지정하면 됩니다:
+플레이스홀더에 흐림 효과를 적용하지 않으려면 `placeholderConfig` 인자를 사용해서 `blur` 프로퍼티 값을 `false`로 지정하면 됩니다:
 
 ```html
 <img ngSrc="cat.jpg" width="400" height="200" placeholder [placeholderConfig]="{blur: false}" />
@@ -392,7 +392,7 @@ You can typically fix this by adding `height: auto` or `width: auto` to your ima
 If the `width` and `height` attribute on the image are preventing you from sizing the image the way you want with CSS, consider using `fill` mode instead, and styling the image's parent element.
 -->
 
-이미 엘리먼트에 `width`, `height` 어트리뷰트를 추가하면 이미지가 다르게 렌더링 될 수 있습니다.
+이미지 엘리먼트에 `width`, `height` 어트리뷰트를 추가하면 이미지가 다르게 렌더링될 수 있습니다.
 이런 경우 이미지 비율이 왜곡되면 `NgOptimizedImage`가 경고를 표시합니다.
 
 일반적으로는 `height: auto`, `width: auto`를 사용하면 이 문제를 방지할 수 있습니다.
@@ -580,9 +580,9 @@ providers: [
 ```
 
 `ngSrcset` 어트리뷰트가 존재하면 `NgOptimizedImage`는 이 어트리뷰트에 지정된 크기를 기준으로 `srcset` 어트리뷰트를 설정합니다.
-이 때 `ngSrcset`에 이미지 파일 이름을 포함하지 마세요.
+이때 `ngSrcset`에 이미지 파일 이름을 포함하지 마세요.
 이 정보는 디렉티브가 `ngSrc`를 활용해서 추론합니다.
-`NgOptimizedImage` 디렉티브는 `100w`과 같은 너비 설명자와, `1x`와 같은 밀도 설명자를 모두 지원합니다.
+`NgOptimizedImage` 디렉티브는 `100w`와 같은 너비 설명자와, `1x`와 같은 밀도 설명자를 모두 지원합니다.
 
 ```html
 <img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" sizes="50vw" />
@@ -602,7 +602,7 @@ To disable srcset generation for a single image, you can add the `disableOptimiz
 ```
 -->
 
-`srcset` 자동 생성을 비활성화 하려면 이미지 엘리먼트에 `disableOptimizedSrcset` 어트리뷰트를 추가하면 됩니다:
+`srcset` 자동 생성을 비활성화하려면 이미지 엘리먼트에 `disableOptimizedSrcset` 어트리뷰트를 추가하면 됩니다:
 
 ```html
 <img ngSrc="about.jpg" disableOptimizedSrcset />
@@ -668,7 +668,7 @@ You can still override this behavior by explicitly setting the `decoding` attrib
 이 동작은 브라우저가 이미지 파일을 로드한 후에 디코딩하는 방식을 지정하기 위한 것입니다.
 만약 이미지 파일에 `priority`가 지정되어 있다면, Angular는 해당 이미지 엘리먼트에 `decoding="sync"`를 지정해서 최대 컨텐츠 페인트(Largest Contentful Paint, LCP)가 최대한 빨리 표시될 수 있도록 합니다.
 
-이 동작은 `decoding` 어트리뷰트를 직접 지정해서 오버라이드 할 수 있습니다.
+이 동작은 `decoding` 어트리뷰트를 직접 지정해서 오버라이드할 수 있습니다.
 자세한 내용은 [표준 이미지 `decoding` 어트리뷰트](https://developer.mozilla.org/docs/Web/HTML/Element/img#decoding) 문서를 참고하세요.
 
 ```html
@@ -808,7 +808,7 @@ providers: [
 ],
 ```
 
-이 때 이미지 파일들이 존재하는 기본 URL이 프로바이더 팩토리에 인자로 전달되어야 합니다.
+이때 이미지 파일들이 존재하는 기본 URL이 프로바이더 팩토리에 인자로 전달되어야 합니다.
 보통은 다음과 같은 패턴입니다:
 
 - <https://yoursite.yourcdn.com>
@@ -843,7 +843,7 @@ NOTE: even though the `width` property may not always be present, a custom loade
 -->
 
 **커스텀 로더** 를 사용하려면 `IMAGE_LOADER` DI 토큰에 로더 함수를 등록하면 됩니다.
-아래 예제 코드는 URL 인자로 전달되는 `src`, `width`, `height`, 에 `https://example.com`를 붙이는 커스텀 로더 함수입니다.
+아래 예제 코드는 URL 인자로 전달되는 `src`, `width`, `height`에 `https://example.com`을 붙이는 커스텀 로더 함수입니다.
 
 ```ts
 providers: [
@@ -1097,8 +1097,8 @@ The [image loaders](#configuring-an-image-loader-for-ngoptimizedimage) provider 
 To do this, we recommend writing a [custom image loader](#custom-loaders) which uses the [`loaderParams` property](#the-loaderparams-property) to pass a flag that specifies which image CDN should be used, and then invokes the appropriate loader based on that flag.
 -->
 
-[이미지 로더](#ngoptimizedimage용-이미지-로더-설정하기) 프로바이더 패턴은 컴포넌트에서 단일 이미지 CDN을 활용을 최적화하기 위해 도입되었습니다.
-하지만 프로바이더가 하나라도 이미지 CDN을 여러개 활용하는 것도 가능합니다.
+[이미지 로더](#ngoptimizedimage용-이미지-로더-설정하기) 프로바이더 패턴은 컴포넌트에서 단일 이미지 CDN 활용을 최적화하기 위해 도입되었습니다.
+하지만 프로바이더가 하나라도 이미지 CDN을 여러 개 활용하는 것도 가능합니다.
 
 이런 경우라면, [커스텀 이미지 로더](#커스텀-로더)를 정의하고 [`loaderParams` 프로퍼티](#loaderparams-프로퍼티)를 전달받아 원하는 이미지 CDN을 선택하는 방식으로 구현하면 됩니다.
 
@@ -1127,7 +1127,7 @@ No, but this is on our roadmap, so stay tuned.
 If you're waiting on this feature, please upvote the GitHub issue [here](https://github.com/angular/angular/issues/56594).
 -->
 
-아니오, 하지만 로드맵에 포함되어 있으니 조금만 기다려 주세요.
+아니요, 하지만 로드맵에 포함되어 있으니 조금만 기다려 주세요.
 
 이 기능을 기다리고 있다면 [Github 이슈](https://github.com/angular/angular/issues/56594)에 투표해 주세요.
 

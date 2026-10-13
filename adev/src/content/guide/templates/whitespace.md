@@ -95,7 +95,7 @@ See [How whitespace is handled by HTML, CSS, and in the DOM](https://developer.m
 Angular avoids sending these unnecessary whitespace characters to the browser in the first place by collapsing them to a single character when it compiles the template.
 -->
 
-웹 브라우저가 HTML을 렌더링 하면 연속된 공백문자는 공백문자 하나로 변환됩니다:
+웹 브라우저가 HTML을 렌더링하면 연속된 공백문자는 공백문자 하나로 변환됩니다:
 
 ```html
 <!-- 템플릿 파일 -->

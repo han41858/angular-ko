@@ -24,7 +24,7 @@ If you prefer to immediately start writing some code, you can [skip straight to 
 
 환영합니다!
 이 _핵심 가이드_ 문서는 Angular의 주요 개념을 설명하면서 프레임워크를 이해할 수 있도록 돕습니다.
-이 문서에서는 간단하게 설명하기 위해 몇가지 구성요소에만 초점을 둡니다.
+이 문서에서는 간단하게 설명하기 위해 몇 가지 구성요소에만 초점을 둡니다.
 자세한 내용을 찾아보려면 [가이드 문서](overview)로 이동해서 원하는 주제를 확인해 보세요.
 
 지금 코드를 직접 작성해보고 싶다면 [튜토리얼](tutorials/learn-angular)로 바로 이동해도 됩니다.
@@ -45,7 +45,7 @@ In particular, you should be familiar with the following concepts:
 - [TypeScript Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html)
 -->
 
-이 가이드 문서는 HTML과 CSS ,TypeScript에 익숙한 분을 대상으로 합니다.
+이 가이드 문서는 HTML과 CSS, TypeScript에 익숙한 분을 대상으로 합니다.
 웹 개발이 처음이라면 이 내용을 먼저 학습하고 다시 Angular 문서를 보는 것을 권장합니다.
 
 특히 이런 내용들을 잘 알고 있어야 합니다:

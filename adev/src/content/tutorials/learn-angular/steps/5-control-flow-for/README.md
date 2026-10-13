@@ -71,7 +71,7 @@ NOTE: the use of `track` is required, you may use the `id` or some other unique 
 This type of functionality is called control flow. Next, you'll learn to customize and communicate with components - by the way, you're doing a great job so far.
 -->
 
-웹 애플리케이션을 개발하다보면, 이름들이 모여있는 배열과 같이 코드를 반복해야 하는 경우가 있습니다.
+웹 애플리케이션을 개발하다 보면, 이름들이 모여있는 배열과 같이 코드를 반복해야 하는 경우가 있습니다.
 개별 이름마다 `<p>` 태그를 반복하려는 경우가 그렇습니다.
 
 참고: [흐름 제어 핵심 가이드](/essentials/templates#control-flow-with-if-and-for) 문서를 참고하세요.
@@ -98,10 +98,10 @@ export class App {
 }
 ```
 
-이 코드에서 중요한 점이 두가지 있습니다:
+이 코드에서 중요한 점이 두 가지 있습니다:
 
 - [Angular 템플릿 문법](guide/templates)을 사용하기 위해 `for` 앞에는 `@` 접두사가 붙습니다.
-- Angulav 16 버전이나 이전 버전에서는 [Angular NgFor 문서](guide/directives/structural-directives)를 참고하세요.
+- Angular 16 버전이나 이전 버전에서는 [Angular NgFor 문서](guide/directives/structural-directives)를 참고하세요.
 
 <docs-workflow>
 

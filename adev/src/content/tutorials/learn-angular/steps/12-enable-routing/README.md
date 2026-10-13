@@ -114,7 +114,7 @@ export const routes: Routes = [];
 `app.config.ts` 파일을 열고 다음 단계로 Angular Router를 설정합니다:
 
 1. `@angular/router` 패키지로 제공되는 `provideRouter` 함수를 불러옵니다.
-1. `./app.routes.ts` 파일에 선언한 `routes` 를 불러옵니다..
+1. `./app.routes.ts` 파일에 선언한 `routes` 를 불러옵니다.
 1. `providers` 배열에서 `provideRouter` 함수를 실행하면서 `routes` 를 인자로 전달합니다.
 
 ```ts {highlight:[2,3,6]}
@@ -131,7 +131,7 @@ export const appConfig: ApplicationConfig = {
 
 <docs-step title="컴포넌트에서 `RouterOutlet` 를 로드합니다">
 
-마지막으로 Angular Router를 사용하려면 원하는 화면을 앱의 어느 위치에 표시할 지 지정해야 합니다.
+마지막으로 Angular Router를 사용하려면 원하는 화면을 앱의 어느 위치에 표시할지 지정해야 합니다.
 이 위치는 `@angular/router`로 제공되는 `RouterOutlet` 디렉티브로 지정합니다.
 
 `App` 컴포넌트의 템플릿을 수정해서 `<router-outlet />` 를 추가해 봅시다.

@@ -29,7 +29,7 @@ Form models solve this by centralizing form data in a single writable signal. Wh
 -->
 
 폼 데이터는 계속해서 변경됩니다.
-그래서 구조를 제대로 잡지 않으면 데이터가 컴포넌트 프로퍼티로 흩어지면서 추적하기 어렵고, 유효성 검사를 하기도 어려우며, 서버로 보낼 데이터를 모으기도 힘들어 집니다.
+그래서 구조를 제대로 잡지 않으면 데이터가 컴포넌트 프로퍼티로 흩어지면서 추적하기 어렵고, 유효성 검사를 하기도 어려우며, 서버로 보낼 데이터를 모으기도 힘들어집니다.
 
 폼 모델은 폼 데이터를 하나의 시그널로 집중하는 개념입니다.
 그리고 폼 모델의 값이 변경되면 자동으로 변경사항을 전파합니다.
@@ -173,7 +173,7 @@ const userModel = signal<UserFormModel>({
 시그널 폼은 실행 시점에 이런 타입을 구분할 수 없기 때문에, 이런 타입이 사용되면 에러가 발생합니다:
 
 - **클래스 인스턴스** 는 프로토 타입을 놓치고 값이 변경될 때 얕은 복사를 합니다. 클래스 메서드나 게터는 사라지며, `instanceof` 검사는 실패합니다.
-- **배열 안에 변경할 수 없는 객체** 가 사용되면 시그널 폼을 재정렬 할 때 항목을 제대로 추적할 수 없습니다.
+- **배열 안에 변경할 수 없는 객체** 가 사용되면 시그널 폼을 재정렬할 때 항목을 제대로 추적할 수 없습니다.
 - **`Map`, `Set`** 를 사용하면 빈 필드 트리가 생성됩니다. 시그널 폼은 자식 객체를 `Object.keys`로 순회합니다.
 
 애플리케이션에서 특정 도메인 클래스를 사용하는 경우라면, 폼으로 전달하기 전에 일반 객체로 변환하세요.
@@ -344,7 +344,7 @@ You can access form values in two ways: directly from the model signal, or throu
 -->
 
 폼 값은 두 가지 방법으로 접근할 수 있습니다.
-모델 시그널로 접근하거나, 개별 필드를 통해 접근하면 ㅗ딥니다.
+모델 시그널로 접근하거나, 개별 필드를 통해 접근하면 됩니다.
 두 방식의 목적은 다릅니다.
 
 <!--
@@ -652,7 +652,7 @@ This synchronization happens automatically. You don't write subscriptions or eve
 1. `set()`, `update()`와 같은 코드로 폼 모델 값을 변경합니다.
 2. 모델 시그널이 구독자들에게 값을 전파합니다.
 3. 폼 필드 상태가 갱신됩니다.
-4. `[formField]` 디렉티브가 입력 엘리번트의 값을 변경합니다.
+4. `[formField]` 디렉티브가 입력 엘리먼트의 값을 변경합니다.
 
 이 동기화 동작은 자동으로 이루어집니다.
 폼 모델과 화면을 같은 상태로 유지하기 위해 별도 구독 코드나 이벤트 핸들러를 구현할 필요는 없습니다.
@@ -720,7 +720,7 @@ Form models can be flat objects or contain nested objects and arrays. The struct
 -->
 
 폼 모델 구조는 일반적인 객체나 배열이 모두 가능합니다.
-필드에 어떻게 접근할 지, 유효성 검사를 어떻게 구조화 할 지에 따라 폼 모델 구조를 정하면 됩니다.
+필드에 어떻게 접근할지, 유효성 검사를 어떻게 구조화할지에 따라 폼 모델 구조를 정하면 됩니다.
 
 <!--
 ### Flat vs nested models
@@ -804,7 +804,7 @@ const userModel = signal({
 
 **평평한 구조를 사용하는 경우:**
 
-- 필드간 연관이 없을 때
+- 필드 간 연관이 없을 때
 - 필드 접근을 단순하게 할 때 (`userForm.city` vs `userForm.address.city`)
 - 유효성 검사가 여러 그룹으로 묶일 때
 
@@ -875,7 +875,7 @@ const userModel = signal({
 
 const userForm = form(userModel);
 
-// 중첨된 폼 모델에 접근하기
+// 중첩된 폼 모델에 접근하기
 userForm.profile.firstName; // FieldTree<string>
 userForm.settings.theme; // FieldTree<string>
 ```

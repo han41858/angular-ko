@@ -204,7 +204,7 @@ This section walks you through setting the highlight color while applying the `H
 
    <docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.3.ts" region="input"/>
 
-   `input()` 함수는 `appHighlight`와 같은 디렉티브 프로퍼티를 바인딩 할 수 있도록 클래스 메타데이터에 등록하는 함수입니다.
+   `input()` 함수는 `appHighlight`와 같은 디렉티브 프로퍼티를 바인딩할 수 있도록 클래스 메타데이터에 등록하는 함수입니다.
 
 1. `app.component.ts` 파일에 선언된 `AppComponent` 클래스에 `color` 프로퍼티를 추가합니다.
 
@@ -214,9 +214,9 @@ This section walks you through setting the highlight color while applying the `H
 
    <docs-code header="app.component.html (color)" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="color"/>
 
-   그러면 `[appHighlight]` 어트리뷰트는 두가지 동작을 수행합니다:
+   그러면 `[appHighlight]` 어트리뷰트는 두 가지 동작을 수행합니다:
    - `<p>` 엘리먼트에 하이라이트 디렉티브를 적용합니다.
-   - 디렉티브의 배경색을 프로퍼티 바인딩 된 값으로 설정합니다.
+   - 디렉티브의 배경색을 프로퍼티 바인딩된 값으로 설정합니다.
 
 <!--
 ### Setting the value with user input
@@ -302,11 +302,11 @@ When the user chooses a color the selected color becomes the active highlight co
    <docs-code header="highlight.directive.ts (mouse-enter)" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.ts" region="mouse-enter"/>
 
 3. `AppComponent.color` 프로퍼티의 값은 "violet" 으로 바인딩합니다.
-   이번 경우는 정적인 값을 사용하기 때문에 HTML 문서에서 `defaultColor` 값을 바인딩 할 때 대괄호(`[]`)를 사용하지 않습니다.
+   이번 경우는 정적인 값을 사용하기 때문에 HTML 문서에서 `defaultColor` 값을 바인딩할 때 대괄호(`[]`)를 사용하지 않습니다.
 
    <docs-code header="app.component.html (defaultColor)" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="defaultColor"/>
 
-   이렇게 디렉티브 프로퍼티는 여러 개를 동시에 바인딩 할 수 있습니다.
+   이렇게 디렉티브 프로퍼티는 여러 개를 동시에 바인딩할 수 있습니다.
 
 기본값이 바인딩되지 않은 경우 사용되는 기본 색상은 `red` 입니다.
 그리고 사용자가 색상을 선택하면 해당 색상이 배경색으로 사용됩니다.
@@ -349,4 +349,4 @@ If you apply `ngNonBindable` to a parent element, Angular disables interpolation
 
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="ngNonBindable-with-directive"/>
 
-그래서 어떤 엘리먼트를 포함하여 자식 엘리먼트들에 존재하는 문자열 바인딩, 프로퍼티 바인딩, 이벤트 바인딩이 모두 비활성화하려면, 해당 엘리먼트의 부모 엘리먼트에 `ngNonBindable`을 적용하면 됩니다.
+그래서 어떤 엘리먼트를 포함하여 자식 엘리먼트들에 존재하는 문자열 바인딩, 프로퍼티 바인딩, 이벤트 바인딩을 모두 비활성화하려면, 해당 엘리먼트의 부모 엘리먼트에 `ngNonBindable`을 적용하면 됩니다.

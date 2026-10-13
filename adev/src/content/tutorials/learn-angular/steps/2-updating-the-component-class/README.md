@@ -76,7 +76,7 @@ export class App {
 ```
 
 `city` 프로퍼티는 `string` 타입이겠지만 [TypeScript는 타입을 추론](https://www.typescriptlang.org/docs/handbook/type-inference.html) 하기 때문에 타입 지정은 생략할 수 있습니다.
-`app` 클래스에 선언된 `city` 프로피터는 컴포넌트 템플릿에 사용하게 될 것입니다.
+`app` 클래스에 선언된 `city` 프로퍼티는 컴포넌트 템플릿에 사용하게 될 것입니다.
 
 <br>
 

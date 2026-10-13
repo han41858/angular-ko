@@ -99,7 +99,7 @@ template: `{{ date | date: 'medium' }}`;
 
 <docs-step title="`DecimalPipe`로 숫자 형식 지정하기">
 
-`app.ts` 파일의 템플릿에 `decimal` 파이프를 적용하는데, 이 떄 인자를 함께 전달해 봅시다.
+`app.ts` 파일의 템플릿에 `decimal` 파이프를 적용하는데, 이때 인자를 함께 전달해 봅시다.
 
 ```angular-html {highlight:[3]}
 template: ` ...
@@ -107,11 +107,11 @@ template: ` ...
 `
 ```
 
-참고: 이게 무슨 형식일까요? `DecimalPipe`는 `digitsInfo` 인자를 받는데, 이 인자는 `{정수의 최소 자리수}.{소수의 최소 자리수}.{소수의 최대 자리수}` 형식입니다.
+참고: 이게 무슨 형식일까요? `DecimalPipe`는 `digitsInfo` 인자를 받는데, 이 인자는 `{정수의 최소 자릿수}.{소수의 최소 자릿수}.{소수의 최대 자릿수}` 형식입니다.
 
 </docs-step>
 
-<docs-step title="`DatePipe`으로 날짜 형식 지정하기">
+<docs-step title="`DatePipe`로 날짜 형식 지정하기">
 
 이제, `date` 파이프를 사용해 봅시다.
 
@@ -126,7 +126,7 @@ template: ` ...
 
 </docs-step>
 
-<docs-step title="`CurrencyPipe`으로 통화 형식 지정하기">
+<docs-step title="`CurrencyPipe`로 통화 형식 지정하기">
 
 마지막으로 템플릿에 `currency` 파이프를 사용해 봅시다.
 

@@ -111,7 +111,7 @@ import {LowerCasePipe} from '@angular/common';
 
 <docs-step title="imports 배열에 파이프를 추가합니다">
 
-다음으로, `@Componen()` 데코레이터의 `imports` 배열에 `LowerCasePipe`를 추가합니다.
+다음으로, `@Component()` 데코레이터의 `imports` 배열에 `LowerCasePipe`를 추가합니다.
 
 ```ts {highlight:[3]}
 @Component({

@@ -106,7 +106,7 @@ export class Registration {
 그리고 `registrationForm.username().required()`를 실행하면 누적된 값이 반환됩니다.
 메타데이터 키는 이 둘을 연결하는 다리 역할을 합니다.
 
-내장 유효성 검사 몇가지가 이 방식을 따릅니다:
+내장 유효성 검사 몇 가지가 이 방식을 따릅니다:
 Several built-in constraint validators follow this pattern:
 
 | 유효성 검사 함수 | 메타데이터 키 | 타입                  | `FieldState` 게터 |
@@ -171,7 +171,7 @@ NOTE: A key created without a reducer uses "override" semantics by default: the 
 -->
 
 커스텀 키를 생성하려면 `createMetadataKey<TWrite>()`를 실행하면 됩니다.
-이 때 타입은 스키마 규칙이 다룰 값의 타입을 의미합니다.
+이때 타입은 스키마 규칙이 다룰 값의 타입을 의미합니다.
 
 ```ts
 import {createMetadataKey} from '@angular/forms/signals';
@@ -182,7 +182,7 @@ export const USERNAME_HELP = createMetadataKey<string>();
 `createMetadataKey()`를 실행하면 고유한 키가 생성됩니다.
 타입이 같더라도 이 함수가 두 번 실행되면 서로 다른 키로 간주되기 때문에, 각 키는 모듈 범위에서 한 번만 정의하고 필요한 곳으로 가져와야 합니다.
 
-참고: 리듀서 없이 생성한 키는 기본적으로 "오버라이드" 의미로 사용됩니다: 한 키로 규칙이 여러번 사용되면, 마지막에 추가한 규칙이 우선합니다.
+참고: 리듀서 없이 생성한 키는 기본적으로 "오버라이드" 의미로 사용됩니다: 한 키로 규칙이 여러 번 사용되면, 마지막에 추가한 규칙이 우선합니다.
 
 <!--
 ## Setting values from a schema
@@ -282,7 +282,7 @@ export class Registration {
 
 논리 함수는 필드 컨텍스트를 인자로 받으며, 이 컨텍스트는 필드의 현재 값을 표현하는 `value` 시그널, 상태를 나타내는 `fieldState` 시그널, `valueOf(path)`나 `stateOf(path)`와 같이 폼 내의 다른 필드를 읽는 메서드를 제공합니다.
 함수가 읽는 모든 시그널은 반응형이 됩니다.
-`value()`가 변경되면 ㅇ메타데이터가 다시 계산되고, 해당 키를 읽는 템플릿이 모두 갱신됩니다.
+`value()`가 변경되면 메타데이터가 다시 계산되고, 해당 키를 읽는 템플릿이 모두 갱신됩니다.
 
 <!--
 ## Reading metadata from a field
@@ -326,8 +326,8 @@ The component example above uses optional chaining inside a `computed()` so the 
 This is the whole API for a single contributor. The next section covers what happens when more than one schema rule contributes to the same key, and how to combine those contributions with reducers.
 -->
 
-`hashMetadata(key)`를 사용하면 필드에 해당 키가 등록되어 있을 때 `true`를 반환합니다.
-그리고 검사 규칙에 등록된 키가 없으면 `state.metadata(key)`가 `undefined`를 반환하며, 그렇지 않으면 현재 리듀스 된 값을 시그널로 반환합니다.
+`hasMetadata(key)`를 사용하면 필드에 해당 키가 등록되어 있을 때 `true`를 반환합니다.
+그리고 검사 규칙에 등록된 키가 없으면 `state.metadata(key)`가 `undefined`를 반환하며, 그렇지 않으면 현재 리듀스된 값을 시그널로 반환합니다.
 
 ```ts
 registrationForm.username().hasMetadata(USERNAME_HELP); // USERNAME_HELP 키가 등록되어 있으면 metadata()가 true를 반환합니다.
@@ -359,7 +359,7 @@ const message = registrationForm.username().metadata(USERNAME_HELP)!();
 ```
 
 위 컴포넌트 예제는 `computed()` 안에서 선택적 체이닝을 사용하면서 템플릿에 일반 `string`을 바인딩합니다.
-초기값이 비어있으면 공백이 바인딩 됩니다.
+초기값이 비어있으면 공백이 바인딩됩니다.
 
 영향을 주는 항목이 하나인 경우는 이것으로 충분합니다.
 다음 섹션에서는 둘 이상의 스키마 규칙이 동일한 키에 영향을 미치는 경우 발생하는 상황과 리듀서를 이용하여 영향을 결합하는 방법을 다룹니다.
@@ -420,7 +420,7 @@ form(model, (path) => {
 두 검사 규칙이 실행되면 `state.metadata(HELP)!()`는 두 번째 메시지를 반환합니다.
 이런 상황은 대부분 원하는 상황이 아닙니다.
 영향은 종종 여러 곳에서 옵니다.
-`pply()`를 사용해서 각 도움말 텍스트를 붙이는 두 개의 스키마가 결합되거나, 힌트를 적용하는 유효성 검사 규칙이 여러개 사용되는 경우가 그렇습니다.
+`apply()`를 사용해서 각 도움말 텍스트를 붙이는 두 개의 스키마가 결합되거나, 힌트를 적용하는 유효성 검사 규칙이 여러 개 사용되는 경우가 그렇습니다.
 
 영향을 결합하려면 리듀서를 `createMetadataKey()`에 전달하면 됩니다.
 리듀서는 개별 값을 어떻게 조합해서 결과를 생성하는지 정하는 함수입니다:
@@ -441,7 +441,7 @@ form(model, (path) => {
 // ]
 ```
 
-`createMetadataKey<TWrite, TAcc>`라는 타입을 주의깊게 보세요.
+`createMetadataKey<TWrite, TAcc>`라는 타입을 주의 깊게 보세요.
 첫번째 타입은 각 검사 규칙이 제공하는 타입이고, 두번째 타입은 리듀서가 반환하는 타입입니다.
 `list()`를 사용하면 `string`을 만드는 검사 규칙을 `string[]` 타입으로 조합할 수 있습니다.
 
@@ -517,8 +517,8 @@ This pairing of "strictest wins" is why calling `min(path.age, 18)` and `min(pat
 | 키           | 리듀서           | 이유                                                                                                                                                   |
 | ------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `REQUIRED`   | `or()`           | `required()` 규칙 중 하나라도 `true`를 반환하면 필드는 필수 항목이 됩니다.                                                                             |
-| `MIN`        | `max()`          | 최소값 제약 조건은 값이 가장 클 때 가장 엄격합니다. 한 규칙이 `>= 5` 이고 다른 규칙이 `>= 10`이면, 유효 최소값은 `10`이 됩니다.                        |
-| `MAX`        | `min()`          | 최대값 제약 조건은 값이 가장 작을 때 가장 엄격합니다. 한 규칙이 `100`을 상한으로 하고 다른 규칙이 `50`을 상한으로 한다면, 유효 최대값은 `50`이 됩니다. |
+| `MIN`        | `max()`          | 최솟값 제약 조건은 값이 가장 클 때 가장 엄격합니다. 한 규칙이 `>= 5` 이고 다른 규칙이 `>= 10`이면, 유효 최솟값은 `10`이 됩니다.                        |
+| `MAX`        | `min()`          | 최댓값 제약 조건은 값이 가장 작을 때 가장 엄격합니다. 한 규칙이 `100`을 상한으로 하고 다른 규칙이 `50`을 상한으로 한다면, 유효 최댓값은 `50`이 됩니다. |
 | `MIN_LENGTH` | `max()`          | `MIN`과 비슷합니다. 가장 긴 항목이 우선입니다.                                                                                                         |
 | `MAX_LENGTH` | `min()`          | `MAX`와 비슷합니다. 가장 짧은 항목이 우선입니다.                                                                                                       |
 | `PATTERN`    | `list<RegExp>()` | 개별 `pattern()` 호출은 각각 정규표현식을 반환하며, 모든 정규표현식을 통과해야 합니다.                                                                 |
@@ -526,7 +526,7 @@ This pairing of "strictest wins" is why calling `min(path.age, 18)` and `min(pat
 이렇게 "가장 엄격한 조건이 우선"하기 때문에 `min(path.age, 18)`과 `min(path.age, 21)`이 동시에 사용되어도 문제없이 동작합니다.
 검사 규칙이 등록될 때마다 유효성 검사 함수는 경계값을 조정합니다.
 따라서 경계값에 해당되지 않는 유효성 검사는 실패합니다.
-별도로, 개별 호출은 `MIN` 키에 영향을 미치며, `state.metadata(MIN)!()`가 반환하는 값은 `21`이기 때문에 화면이나 커스텀 컨트롤에서는 유효 최소값을 활용할 수 있습니다.
+별도로, 개별 호출은 `MIN` 키에 영향을 미치며, `state.metadata(MIN)!()`가 반환하는 값은 `21`이기 때문에 화면이나 커스텀 컨트롤에서는 유효 최솟값을 활용할 수 있습니다.
 
 <!--
 ### Writing a custom reducer
@@ -611,7 +611,7 @@ const maxSeverity: MetadataReducer<Severity | undefined, Severity> = {
 export const SEVERITY = createMetadataKey<Severity, Severity | undefined>(maxSeverity);
 ```
 
-이제 심각도를 반환하는 규칙 검사는 여러 개라도 문제없이 사용할 수 있으며, 리듀서는 그 중에 가장 높은 심각도를 유지합니다:
+이제 심각도를 반환하는 규칙 검사는 여러 개라도 문제없이 사용할 수 있으며, 리듀서는 그중에 가장 높은 심각도를 유지합니다:
 
 ```ts
 form(model, (path) => {
@@ -623,7 +623,7 @@ form(model, (path) => {
 });
 ```
 
-리듀서는 영향을 주는 검사 규칙들이 변경될 때마다 실행되기 때문에, `state.metadata(SEVERITY)!()`는 모든 규칙의 결과와 동기화 된 상태를 유지합니다.
+리듀서는 영향을 주는 검사 규칙들이 변경될 때마다 실행되기 때문에, `state.metadata(SEVERITY)!()`는 모든 규칙의 결과와 동기화된 상태를 유지합니다.
 
 팁: 리듀서를 순수 함수(pure function)로 작성하세요. `reduce()`는 전달받는 두 인자에만 의존해야 하며, `getInitial()`은 매번 똑같은 값을 반환해야 합니다.
 리듀서는 검사 규칙의 신호가 변경될 때마다 다시 실행되기 때문에, 순수 함수가 아닌 리듀서는 일관성 없는 메타데이터 값을 반환합니다.
@@ -706,10 +706,10 @@ export const URL_PREVIEW = createManagedMetadataKey((_state, url: Signal<string 
 그래서 `create` 함수 안에서 `inject()`나 `resource()`, `effect()`를 실행할 수 있으며, 필드의 수명 주기에 따라 정리 작업을 실행할 수도 있습니다.
 그리고 필드가 종료되면 Angular가 의존성 주입 컨텍스트도 종료하기 때문에 `resource()`, `effect()`, `DestroyRef` 콜백 함수가 자동으로 실행됩니다.
 
-`create` 자체는 반응형이 아니기 떄문에 시그널 변경에 반응해야 하는 모든 동작은 `effect()`, `resource()`, `httpResource()` 내부에 있어야 합니다.
+`create` 자체는 반응형이 아니기 때문에 시그널 변경에 반응해야 하는 모든 동작은 `effect()`, `resource()`, `httpResource()` 내부에 있어야 합니다.
 `URL_PREVIEW`도 이런 방식입니다.
 `httpResource()`는 URL 시그널을 읽기 때문에, 시그널이 변경될 때마다 HTTP 요청이 다시 실행됩니다.
-스키마 규칙 `metadata(path.url, URL_PREVIEW, ({value}) => value())`는 어떤 데이터를 입력할 지 결정하고, 관리 키는 입력된 데이터를 어떻게 처리할 지 결정합니다.
+스키마 규칙 `metadata(path.url, URL_PREVIEW, ({value}) => value())`는 어떤 데이터를 입력할지 결정하고, 관리 키는 입력된 데이터를 어떻게 처리할지 결정합니다.
 
 <!--
 ### Using a managed key in a form

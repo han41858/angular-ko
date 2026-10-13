@@ -68,7 +68,7 @@ export class UserProfile { }
 그래서 실행 시점에 Angular 바인딩 문법이나 DOM API로 DOM이 변경되는 것은 컴포넌트 렌더링에 영향을 미치지 않습니다.
 
 **엘리먼트는 하나의 컴포넌트 셀렉터에만 매칭됩니다.**
-한 엘리먼트에 컴포넌트 셀렉터가 여러개 매칭되면 에러가 발생합니다.
+한 엘리먼트에 컴포넌트 셀렉터가 여러 개 매칭되면 에러가 발생합니다.
 
 **컴포넌트 셀렉터는 대소문자를 구분합니다.**
 
@@ -184,7 +184,7 @@ export class DropZone { }
 Angular creates a component for each element that matches _any_ of the selectors in the list.
 -->
 
-셀렉터는 여러개를 조합해서 지정할 수도 있습니다.
+셀렉터는 여러 개를 조합해서 지정할 수도 있습니다.
 `type="reset"` 어트리뷰트가 지정된 `<button>` 엘리먼트를 매칭하려면 이렇게 지정하면 됩니다:
 
 ```angular-ts {highlight: [2]}
@@ -195,7 +195,7 @@ Angular creates a component for each element that matches _any_ of the selectors
 export class ResetButton { }
 ```
 
-쉼표(`,`)로 구분하면 셀렉터를 여러개 지정할 수도 있습니다:
+쉼표(`,`)로 구분하면 셀렉터를 여러 개 지정할 수도 있습니다:
 
 ```angular-ts {highlight: [2]}
 @Component({
@@ -205,7 +205,7 @@ export class ResetButton { }
 export class DropZone { }
 ```
 
-셀렉터를 여러개 지정하면 셀렉터 중 _어느 하나에_ 매칭되는 엘리먼트마다 컴포넌트를 생성합니다.
+셀렉터를 여러 개 지정하면 셀렉터 중 _어느 하나에_ 매칭되는 엘리먼트마다 컴포넌트를 생성합니다.
 
 <!--
 ## Choosing a selector
@@ -227,7 +227,7 @@ Angular templates.
 
 컴포넌트는 대부분 커스텀 엘리먼트 이름으로 셀렉터를 지정합니다.
 따라서 [HTML 스펙](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name)에서 정하는 커스텀 엘리먼트 규칙에 따라 하이픈(`-`)을 최소한 하나 포함해야 합니다.
-Angular는 어떠한 컴포넌트와도 매칭되지 않 커스텀 태그를 확인하면 버그와 오타를 방지하기 위해 에러를 발생시킵니다.
+Angular는 어떠한 컴포넌트와도 매칭되지 않는 커스텀 태그를 확인하면 버그와 오타를 방지하기 위해 에러를 발생시킵니다.
 
 Angular 템플릿에서 [네이티브 커스텀 엘리먼트](https://developer.mozilla.org/docs/Web/Web_Components) 활용방법을 자세하게 알아보려면 [심화 컴포넌트 설정](guide/components/advanced-configuration) 문서를 참고하세요.
 
@@ -253,7 +253,7 @@ Angular 팀은 프로젝트에 정의된 모든 커스텀 컴포넌트에 짧고
 Angular CLI로 생성한 프로젝트의 기본 접두사는 `app-` 입니다.
 
 중요: Angular 프레임워크 자체 API의 셀렉터 접두사는 `ng` 입니다.
-그래서 커스텀 컴포넌트에 `ng` 접두사를 사용하면 안됩니다.
+그래서 커스텀 컴포넌트에 `ng` 접두사를 사용하면 안 됩니다.
 
 <!--
 ### When to use an attribute selector

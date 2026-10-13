@@ -40,12 +40,11 @@ Forms should use a form model tailored to the input experience, rather than simp
 -->
 
 폼은 사용자 입력을 수집하는 용도로 사용됩니다.
-애플리케이션에는 비즈니스 로직이나 저장에 최적화 된 방식으로 설계된 도메인 모델이 있을 수 있습니다.
+애플리케이션에는 비즈니스 로직이나 저장에 최적화된 방식으로 설계된 도메인 모델이 있을 수 있습니다.
 하지만 때로는 도메인 모델이 폼의 구조와 다른 경우가 종종 있습니다.
 
 폼 모델은 화면에서 사용자가 입력한 내용 자체를 다룹니다.
-예를 들어, 폼 모델에서 사용자가 날짜와 시각을 고르는 입력 필드가 있다고 해도, 도메인 모델에서는 이를 JavaScript `Date` 객체로 간단하게 표현될 수 있습니다.
-도메인 모델에서 JavaScript `Date` 객체를
+예를 들어, 폼 모델에서 사용자가 날짜와 시각을 고르는 입력 필드가 있다고 해도, 도메인 모델에서는 이를 JavaScript `Date` 객체로 간단하게 표현할 수 있습니다.
 
 ```ts
 interface AppointmentFormModel {
@@ -55,7 +54,7 @@ interface AppointmentFormModel {
 }
 
 interface AppointmentDomainModel {
-  name: string; // 예얏자의 이름
+  name: string; // 예약자의 이름
   time: Date; // 예약시각 (날짜와 시각 정보를 모두 사용합니다)
 }
 ```
@@ -123,7 +122,7 @@ const taskModel = signal({
 ```ts {avoid, header: '부분 초기화'}
 const taskModel = signal({
   title: '',
-  // description, priority, completed 이 없습니다.
+  // description, priority, completed가 없습니다.
 });
 ```
 
@@ -184,7 +183,7 @@ const appModel = signal({
 ```
 
 폼 모델은 용도에 따라 분리해야 이해하기 쉽고 재사용하기도 쉽습니다.
-다뤄야 하는 데이터 그룹이 많다면 폼을 여러개 만드세요.
+다뤄야 하는 데이터 그룹이 많다면 폼을 여러 개 만드세요.
 
 <!--
 ### Consider validation requirements
@@ -252,8 +251,8 @@ interface BeverageOrderFormModel {
 
 ```ts {prefer, header: 'UI 컨트롤과 어울리는 데이터 타입을 사용하세요'}
 interface BeverageOrderFormModel {
-  size: string; // <select> (option values: "6", "12", "24")와 바인딩 됩니다
-  quantity: number; // <input type="number">와 바인딩 됩니다
+  size: string; // <select> (option values: "6", "12", "24")와 바인딩됩니다
+  quantity: number; // <input type="number">와 바인딩됩니다
 }
 ```
 
@@ -279,7 +278,7 @@ form(signal({name: '', birthday: null}));
 ```
 -->
 
-폼 모델에는 `undefined` 값이나 속성을 포함하면 안됩니다.
+폼 모델에는 `undefined` 값이나 속성을 포함하면 안 됩니다.
 시그널 폼은 폼 모델을 기반으로 동작하기 때문에, `undefined`를 사용하면 빈 값을 의미하는 것이 아니라 _필드가 없음_ 을 의미합니다.
 `{property?: string}` 과 같은 생략 가능 항목이라도 `undefined`를 암묵적으로 사용하는 것은 피해야 합니다.
 
@@ -289,8 +288,8 @@ form(signal({name: '', birthday: null}));
 
 ```ts {prefer, header: '적절한 빈 값을 사용하세요'}
 interface UserFormModel {
-  name: string; // <input type="text">과 바인딩 됩니다
-  birthday: Date | null; // <input type="date">과 바인딩 됩니다
+  name: string; // <input type="text">과 바인딩됩니다
+  birthday: Date | null; // <input type="date">과 바인딩됩니다
 }
 
 // 빈 값으로 폼을 초기화합니다
@@ -309,7 +308,7 @@ A form model has a dynamic structure if it changes shape (if the properties on t
 
 폼 모델은 객체의 모양이 변하는 경우에 동적 구조가 될 수 있습니다.
 이런 경우는 프로퍼티 구성이 다른 유니언 객체 타입을 폼 모델로 다룰 때 해당됩니다.
-아래 섹션부터는 동적인 폼 모델 구조가 쓸만해 보이지만, 결국 문제가 될 수 있는 경우를 몇가지 살펴봅시다.
+아래 섹션부터는 동적인 폼 모델 구조가 쓸만해 보이지만, 결국 문제가 될 수 있는 경우를 몇 가지 살펴봅시다.
 
 <!--
 #### Empty value for a complex object
@@ -372,7 +371,7 @@ interface CreateAccountFormModel {
 }
 ```
 
-이런 폼 모델을 구성할 때 고민이 되는 점이 있씁니다.
+이런 폼 모델을 구성할 때 고민이 되는 점이 있습니다.
 초기값을 무엇으로 정해야 할까요?
 사용자가 아직 아무것도 입력하지 않은 상태를 고려하면 `form<CreateAccountFormModel | null>()`를 사용할 수도 있습니다.
 
@@ -398,7 +397,7 @@ createAccountForm = form<CreateAccountFormModel>(
 );
 ```
 
-이렇게 구현하면, `CreateAccountFormModel`의 모든 필드가 존재하기 때문에 템플릿에서 `[formField]` 디렉티브를 사용해서 입력 필드와 바인딩 할 수 있습니다.
+이렇게 구현하면, `CreateAccountFormModel`의 모든 필드가 존재하기 때문에 템플릿에서 `[formField]` 디렉티브를 사용해서 입력 필드와 바인딩할 수 있습니다.
 
 ```html
 First: <input [formField]="createAccountForm.name.first" /> Last:
@@ -515,7 +514,7 @@ Name: <input type="text" />
 ```
 
 가장 좋은 방법은 가능한 결제 수단을 _모두_ 나열해서 폼을 정적으로 구성하는 것입니다.
-스키마를 활용하면 특정 필드를 감추거나 비활성화 할 수 있습니다.
+스키마를 활용하면 특정 필드를 감추거나 비활성화할 수 있습니다.
 
 ```ts {prefer, header: '정적 구조 모델'}
 interface BillPayFormModel {
@@ -547,8 +546,8 @@ const billPaySchema = schema<BillPayFormModel>((billPay) => {
 사용자가 신용카드 필드에 입력한 데이터는 `card` 객체에 그대로 남아있지만, 다시 신용카드를 선택하지 않는 한 화면에 표시되지 않습니다.
 
 이런 경우는 동적 폼이 오히려 더 유용해 보일 수 있습니다.
-사용자가 신용카드를 선택하면 계좌 관련 정보는 필요없기 때문입니다.
-유니언 폼 모델을 하는 것이 나아보일 수 있습니다:
+사용자가 신용카드를 선택하면 계좌 관련 정보는 필요 없기 때문입니다.
+유니언 폼 모델을 하는 것이 나아 보일 수 있습니다:
 
 ```ts {avoid, header: '동적 구조 모델'}
 interface BillPayFormModel {
@@ -577,7 +576,7 @@ interface BillPayFormModel {
 5. 다시 신용카드 옵션을 선택하지만, 직전에 입력한 정보는 모두 사라졌습니다!
 
 동적 폼 모델은 데이터를 잃어버릴 수 있다는 문제점이 있습니다.
-이런 모델은 필드가 감춰지면 해당 정보는 다시 필요하지 않다는 것을 간주하기 때문에, 신용카드 정보가 한 번 사라지면 복원할 방법이 없습니다.
+이런 모델은 필드가 감춰지면 해당 정보는 다시 필요하지 않은 것으로 간주하기 때문에, 신용카드 정보가 한 번 사라지면 복원할 방법이 없습니다.
 
 <!--
 #### Exceptions
@@ -620,8 +619,8 @@ interface SendEmailFormModel {
 }
 ```
 
-이 경우 `recipienEmails` 배열은 사용자 입력에 따라 개수가 늘어나거나 줄어들 수 있습니다.
-배열의 길이는 동적이지만, 개별 항목의 구조는 같은 타입으로 일관적되어야 합니다.
+이 경우 `recipientEmails` 배열은 사용자 입력에 따라 개수가 늘어나거나 줄어들 수 있습니다.
+배열의 길이는 동적이지만, 개별 항목의 구조는 같은 타입으로 일관되어야 합니다.
 
 <!--
 ##### Fields that are treated atomically by the UI control
@@ -674,7 +673,7 @@ interface Location {
 
 interface UserProfileFormModel {
   username: string;
-  // 프로퍼티 여러개를 한 번에 다루기 때문에 유효합니다.
+  // 프로퍼티 여러 개를 한 번에 다루기 때문에 유효합니다.
   location: Location | null;
 }
 ```
@@ -793,12 +792,12 @@ The examples above show a pure derivation of the form model, directly from the d
 시스템에 저장된 도메인 모델을 수정하도록 폼 모델을 만들 때, 도메인 모델은 보통 폼 컴포넌트의 `input()`으로 전달되거나 백엔드에서 전달됩니다.
 어느 경우든, `linkedSignal`로 변환 작업을 수행하는 것이 아주 좋습니다.
 
-도메인 모델을 `input()`으로 받는 경우, `linkedSignal`을 사용해서 폼 모델로 변환하는 로직은 다음과 같이 구현할 수 있씁니다.
+도메인 모델을 `input()`으로 받는 경우, `linkedSignal`을 사용해서 폼 모델로 변환하는 로직은 다음과 같이 구현할 수 있습니다.
 
 ```ts {prefer, header: '도메인 모델을 폼 모델로 변환하기 위해 linkedSignal 사용하기'}
 @Component(...)
 class MyForm {
-  // 도메인 모델로 폼을 초기화 합니다. 입력값이 없으면 빈 폼으로 시작합니다.
+  // 도메인 모델로 폼을 초기화합니다. 입력값이 없으면 빈 폼으로 시작합니다.
   readonly domainModel = input<MyDomainModel>();
 
   private readonly formModel = linkedSignal({
@@ -826,7 +825,7 @@ class MyForm {
   private readonly formModel = linkedSignal({
     // 도메인 모델로 linkedSignal을 구성합니다
     source: this.domainModelResource.value,
-    // 빈 폼 모델로 시낙했다가 도메인 모델이 준비되면 변환합니다.
+    // 빈 폼 모델로 시작했다가 도메인 모델이 준비되면 변환합니다.
     computation: (domainModel) => domainModel
       ? domainModelToFormModel(domainModel)
       : EMPTY_MY_FORM_MODEL
@@ -948,7 +947,7 @@ class MyForm {
 ```
 
 위 예제에서는 폼 모델을 도메인 모델로 그대로 사용했습니다.
-그리고 폼 모델의 값 뿐만 아니라 전체 폼의 상태를 고려하면 전혀 문제가 없습니다.
+그리고 폼 모델의 값뿐만 아니라 전체 폼의 상태를 고려하면 전혀 문제가 없습니다.
 전송 용량을 절약하기 위해 사용자가 변경한 필드만 부분적으로 갱신하는 것도 가능합니다.
 이 경우 변환 함수는 폼의 전체 상태를 받아서 도메인 기반으로 값과 변경사항을 검사할 수 있습니다.
 

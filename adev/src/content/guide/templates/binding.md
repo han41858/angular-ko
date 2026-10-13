@@ -137,9 +137,9 @@ Angular supports binding dynamic values into object properties and HTML attribut
 You can bind to properties on an HTML element's DOM instance, a [component](/guide/components) instance, or a [directive](/guide/directives) instance.
 -->
 
-대괄호(`[`, `]`)를 사용하면 객체 프로퍼티와 HTML 어트리뷰트를 바인딩 할 수 있습니다.
+대괄호(`[`, `]`)를 사용하면 객체 프로퍼티와 HTML 어트리뷰트를 바인딩할 수 있습니다.
 
-이 때 프로퍼티는 HTML 엘리먼트의 DOM 인스턴스이거나, [컴포넌트](guide/components) 인스턴스이거나, [디렉티브](guide/directives) 인스턴스 일 수 있습니다.
+이때 프로퍼티는 HTML 엘리먼트의 DOM 인스턴스이거나, [컴포넌트](guide/components) 인스턴스이거나, [디렉티브](guide/directives) 인스턴스일 수 있습니다.
 
 <!--
 ### Native element properties
@@ -202,7 +202,7 @@ You can bind to directive properties as well.
 
 이렇게 구현하면 `mySelection` 값이 변경될 때마다 Angular가 자동으로 `MyListbox` 인스턴스의 `value` 프로퍼티 값을 변경합니다.
 
-디렉티브도 같은 방식으로 바인딩 됩니다.
+디렉티브도 같은 방식으로 바인딩됩니다.
 
 ```angular-html
 <!-- `NgOptimizedImage` 디렉티브의 `ngSrc` 프로퍼티와 바인딩 됩니다.  -->
@@ -229,7 +229,7 @@ In this example, every time `listRole` changes, Angular automatically sets the `
 If the value of an attribute binding is `null`, Angular removes the attribute by calling `removeAttribute`.
 -->
 
-SVG 어트리뷰트와 같이 연관된 DOM 프로퍼티가 존재하지 않는 경우에는 템플릿 엘리먼트에 `attr.` 접두사를 붙여서 어트리뷰트와 바인딩 할 수 있습니다.
+SVG 어트리뷰트와 같이 연관된 DOM 프로퍼티가 존재하지 않는 경우에는 템플릿 엘리먼트에 `attr.` 접두사를 붙여서 어트리뷰트와 바인딩할 수 있습니다.
 
 ```angular-html
 <!-- Bind the `role` attribute on the `<ul>` element to the component's `listRole` property. -->
@@ -238,13 +238,13 @@ SVG 어트리뷰트와 같이 연관된 DOM 프로퍼티가 존재하지 않는 
 
 이렇게 구현하면 `listRole` 값이 변경될 때마다 Angular가 자동으로 `<ul>` 엘리먼트의 `setAttribute`를 실행해서 `role` 어트리뷰트 값을 변경합니다.
 
-이 때 어트리뷰트에 바인딩되는 값이 `null`이면, Angular가 `removeAttribute`를 실행해서 어트리뷰트를 제거합니다.
+이때 어트리뷰트에 바인딩되는 값이 `null`이면, Angular가 `removeAttribute`를 실행해서 어트리뷰트를 제거합니다.
 
 <!--
 ### Text interpolation in properties and attributes
 -->
 
-### 프로퍼티와 어트리뷰트를 바인딩 할 때 문자열 바인딩
+### 프로퍼티와 어트리뷰트를 바인딩할 때 문자열 바인딩
 
 <!--
 You can also use text interpolation syntax in properties and attributes by using the double curly brace syntax instead of square braces around the property or attribute name. When using this syntax, Angular treats the assignment as a property binding.
@@ -427,9 +427,9 @@ export class Listbox {
 `class`를 바인딩하면서 배열이나 객체를 사용한 경우에는, Angular가 이전 값과 현재 값을 동등 연산자(`===`)로 비교합니다.
 그래서 객체나 배열 내부의 값이 변경되었다면 새 객체와 새 배열을 사용해야 변경사항이 제대로 반영됩니다.
 
-엘리먼트에 같은 CSS가 여러번 바인딩되면, 우선순위에 따라 충돌을 해결합니다.
+엘리먼트에 같은 CSS가 여러 번 바인딩되면, 우선순위에 따라 충돌을 해결합니다.
 
-참고: 클래스 바인딩은 키 하나에 공백으로 구분되는 여러개 클래스 이름을 지정할 수 없습니다.
+참고: 클래스 바인딩은 키 하나에 공백으로 구분되는 여러 개 클래스 이름을 지정할 수 없습니다.
 그리고 바인딩 객체의 참조가 동일하게 유지되기 때문에 객체 변경도 지원하지 않습니다.
 둘 중 하나가 필요한 경우에는 [ngClass](/api/common/NgClass) 디렉티브를 사용하세요.
 
@@ -493,14 +493,14 @@ When binding `style` to an object, Angular compares the previous value to the cu
 If an element has multiple bindings for the same style property, Angular resolves collisions by following its style precedence order.
 -->
 
-엘리먼트에 CSS 스타일 프로퍼티를 직접 바인딩 할 수도 있습니다.
+엘리먼트에 CSS 스타일 프로퍼티를 직접 바인딩할 수도 있습니다.
 
 ```angular-html
 <!-- `isExpanded` 프로퍼티 값에 따라 CSS `display` 프로퍼티 값을 설정합니다. -->
 <section [style.display]="isExpanded() ? 'block' : 'none'"></section>
 ```
 
-이 때 단위를 함께 지정할 수 있습니다.
+이때 단위를 함께 지정할 수 있습니다.
 
 ```angular-html
 <!-- `sectionHeightInPixels` 프로퍼티 값에 따라 CSS `height` 프로퍼티를 픽셀 단위로 설정합니다. -->
@@ -544,7 +544,7 @@ export class UserProfile {
 `style`에 객체를 바인딩하면 Angular는 이전값과 현재값을 동등 연산자(`===`)로 비교합니다.
 그래서 객체 내부의 값이 변경되었다면 새 객체를 사용해야 변경사항이 제대로 반영됩니다.
 
-엘리먼트에 같은 스타일 프로퍼티가 여러번 바인딩되면, 우선순위에 따라 충돌을 해결합니다.
+엘리먼트에 같은 스타일 프로퍼티가 여러 번 바인딩되면, 우선순위에 따라 충돌을 해결합니다.
 
 <!--
 ## ARIA attributes
@@ -566,7 +566,7 @@ Angular writes the string value to the element’s `aria-label` attribute and re
 Some ARIA features expose DOM properties or directive inputs that accept structured values (such as element references). Use standard property bindings for those cases. See the [accessibility guide](/best-practices/a11y#aria-attributes-and-properties) for examples and additional guidance.
 -->
 
-ARIA 어트리뷰트에 문자열을 바인딩 할 수 있습니다.
+ARIA 어트리뷰트에 문자열을 바인딩할 수 있습니다.
 
 ```angular-html
 <button type="button" [aria-label]="actionLabel()">
@@ -574,7 +574,7 @@ ARIA 어트리뷰트에 문자열을 바인딩 할 수 있습니다.
 </button>
 ```
 
-Angular는 바인딩 된 값에 따라 해당 문자열을 엘리먼트의 `aria-label` 어트리뷰트에 지정하고, 바인딩 된 값이 `null`이면 어트리뷰트를 제거합니다.
+Angular는 바인딩된 값에 따라 해당 문자열을 엘리먼트의 `aria-label` 어트리뷰트에 지정하고, 바인딩된 값이 `null`이면 어트리뷰트를 제거합니다.
 
 일부 ARIA 기능은 엘리먼트 참조와 같이 어떤 형식을 요구하는 경우가 있습니다.
 이런 경우는 일반적인 프로퍼티 바인딩을 사용하세요.
