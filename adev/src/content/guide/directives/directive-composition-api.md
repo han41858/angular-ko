@@ -75,7 +75,7 @@ export class AdminMenu {}
 **호스트 디렉티브는 컴파일 시점에 정적으로 적용됩니다.**
 실행 시점에는 디렉티브를 동적으로 적용할 수 없습니다.
 
-**`hostDirectives`에 사용된 디렉티브는 `standalone: false` 여야 합니다.**
+**`hostDirectives`에 사용된 디렉티브는 `standalone: false`를 지정해서는 안 됩니다.**
 
 **`hostDirectives` 프로퍼티에 적용된 디렉티브의 `selector`는 무시합니다.**
 
@@ -351,7 +351,7 @@ export class AdminMenu {}
 5. `MenuBehavior` 호스트 바인딩이 적용됩니다.
 6. `AdminMenu` 호스트 바인딩이 적용됩니다.
 
-실행 순서가 이렇기 때문에, 컴포넌트에 지정한 `hostDirectives`는 바인딩되는 호스트 디렉티브에 의해 오버라이드 될 수 있습니다.
+실행 순서가 이렇기 때문에, `hostDirectives`를 사용하는 컴포넌트는 호스트 디렉티브에 지정된 호스트 바인딩을 오버라이드할 수 있습니다.
 
 디렉티브 적용이 중첩된 경우도 방식은 같습니다.
 
