@@ -139,7 +139,7 @@ Tabs work well for organizing related content into distinct sections where users
 - **Selection modes** - Tabs activate automatically on focus or require manual activation
 - **Keyboard navigation** - Arrow keys, Home, and End for efficient tab navigation
 - **Orientation** - Horizontal or vertical tab list layouts
-- **Lazy content** - Tab panels render only when first activated
+- **Lazy content** - Tab panels render only when activated
 - **Disabled tabs** - Disable individual tabs with focus management
 - **Focus modes** - Roving tabindex or activedescendant focus strategies
 - **RTL support** - Right-to-left language navigation
@@ -148,7 +148,7 @@ Tabs work well for organizing related content into distinct sections where users
 - **선택 모드**: 포커스를 받으면 탭을 자동으로 활성화하거나 수동으로 활성화하도록 합니다.
 - **키보드 탐색**: 방향키, Home, End로 탭을 효율적으로 탐색합니다.
 - **방향**: 탭 목록을 수평이나 수직으로 배치합니다.
-- **지연 콘텐츠**: 탭 패널을 처음 활성화할 때만 렌더링합니다.
+- **지연 콘텐츠**: 탭 패널을 활성화할 때만 렌더링합니다.
 - **비활성화된 탭**: 개별 탭을 비활성화하고 포커스를 관리합니다.
 - **포커스 모드**: roving tabindex 또는 activedescendant 포커스 전략을 사용합니다.
 - **RTL 지원**: 오른쪽에서 왼쪽으로 쓰는 언어의 탐색을 지원합니다.
@@ -383,7 +383,7 @@ Set `[orientation]="'vertical'"` on the tab list. Navigation changes to Up/Down 
 ### 콘텐츠 지연 렌더링
 
 <!--
-Use the `ngTabContent` directive on an `ng-template` to defer rendering tab panels until they're first shown.
+Use the `ngTabContent` directive on an `ng-template` to defer rendering tab panels until they're shown.
 
 ```angular-html
 <div ngTabs>
@@ -394,24 +394,24 @@ Use the `ngTabContent` directive on an `ng-template` to defer rendering tab pane
 
   <div ngTabPanel value="tab1">
     <ng-template ngTabContent>
-      <!- This content only renders when Tab 1 is first shown ->
+      <!- This content only renders when Tab 1 is shown ->
       <app-heavy-component />
     </ng-template>
   </div>
 
   <div ngTabPanel value="tab2">
     <ng-template ngTabContent>
-      <!- This content only renders when Tab 2 is first shown ->
+      <!- This content only renders when Tab 2 is shown ->
       <app-another-component />
     </ng-template>
   </div>
 </div>
 ```
 
-By default, content remains in the DOM after the panel is hidden. Set `[preserveContent]="false"` to remove content when the panel is deactivated.
+By default, content is removed from the DOM when the panel is hidden. Set `[preserveContent]="true"` to keep it, for example when the panel contains a video that shouldn't reset when switching tabs.
 -->
 
-`ng-template`에 `ngTabContent` 디렉티브를 적용하면 탭 패널을 처음 표시할 때까지 렌더링을 미룰 수 있습니다.
+`ng-template`에 `ngTabContent` 디렉티브를 적용하면 탭 패널을 표시할 때까지 렌더링을 미룰 수 있습니다.
 
 ```angular-html
 <div ngTabs>
@@ -422,22 +422,22 @@ By default, content remains in the DOM after the panel is hidden. Set `[preserve
 
   <div ngTabPanel value="tab1">
     <ng-template ngTabContent>
-      <!-- 이 콘텐츠는 Tab 1을 처음 표시할 때만 렌더링됩니다. -->
+      <!-- 이 콘텐츠는 Tab 1을 표시할 때만 렌더링됩니다. -->
       <app-heavy-component />
     </ng-template>
   </div>
 
   <div ngTabPanel value="tab2">
     <ng-template ngTabContent>
-      <!-- 이 콘텐츠는 Tab 2를 처음 표시할 때만 렌더링됩니다. -->
+      <!-- 이 콘텐츠는 Tab 2를 표시할 때만 렌더링됩니다. -->
       <app-another-component />
     </ng-template>
   </div>
 </div>
 ```
 
-기본적으로 패널을 숨긴 뒤에도 콘텐츠는 DOM에 남습니다.
-패널이 비활성화될 때 콘텐츠를 제거하려면 `[preserveContent]="false"`로 설정하세요.
+기본적으로 패널을 숨기면 콘텐츠가 DOM에서 제거됩니다.
+예를 들어 탭을 전환해도 초기화되지 않아야 하는 동영상이 있다면, `[preserveContent]="true"`로 설정해서 콘텐츠를 유지하세요.
 
 <!--
 ### Disabled tabs

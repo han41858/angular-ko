@@ -17,7 +17,7 @@ The `@angular/rxjs-interop` package offers two APIs related to component and dir
 `@angular/rxjs-interop` 패키지는 컴포넌트와 디렉티브 출력에 관련된 API를 두 가지 제공합니다.
 
 <!--
-## Creating an output based on an RxJs Observable
+## Creating an output based on an RxJS Observable
 -->
 
 <a id="creating-an-output-based-on-an-rxjs-observable"></a>

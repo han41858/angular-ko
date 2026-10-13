@@ -97,7 +97,7 @@ Accordions work well for organizing content into logical groups where users typi
 <!--
 - **Expansion modes** - Control whether one or multiple panels can be open at the same time
 - **Keyboard navigation** - Navigate between triggers using arrow keys, Home, and End
-- **Lazy rendering** - Content is only created when a panel first expands, improving initial load performance
+- **Lazy rendering** - Content is only created when a panel expands, improving initial load performance
 - **Disabled states** - Disable the entire group or individual triggers
 - **Focus management** - Control whether disabled items can receive keyboard focus
 - **Programmatic control** - Expand, collapse, or toggle panels from your component code
@@ -106,7 +106,7 @@ Accordions work well for organizing content into logical groups where users typi
 
 - **펼침 모드**: 한 번에 하나의 패널만 열거나 여러 패널을 열도록 제어합니다.
 - **키보드 탐색**: 방향키, Home, End로 트리거 사이를 이동합니다.
-- **지연 렌더링**: 패널을 처음 펼칠 때만 콘텐츠를 생성해서 초기 로딩 성능을 개선합니다.
+- **지연 렌더링**: 패널을 펼칠 때만 콘텐츠를 생성해서 초기 로딩 성능을 개선합니다.
 - **비활성화 상태**: 전체 그룹이나 개별 트리거를 비활성화합니다.
 - **포커스 관리**: 비활성화된 항목이 키보드 포커스를 받을 수 있는지 제어합니다.
 - **코드로 제어**: 컴포넌트 코드에서 패널을 펼치거나 접고, 펼침 상태를 전환합니다.
@@ -336,7 +336,7 @@ When `[softDisabled]="true"` (the default), disabled items can receive focus but
 ### 콘텐츠 지연 렌더링
 
 <!--
-Use the `ngAccordionContent` directive on an `ng-template` to defer rendering content until the panel first expands. This improves performance for accordions with heavy content like images, charts, or complex components.
+Use the `ngAccordionContent` directive on an `ng-template` to defer rendering content until the panel expands. This improves performance for accordions with heavy content like images, charts, or complex components.
 
 ```angular-html
 <div ngAccordionGroup>
@@ -344,7 +344,7 @@ Use the `ngAccordionContent` directive on an `ng-template` to defer rendering co
     <button ngAccordionTrigger [panel]="panel1">Trigger Text</button>
     <div ngAccordionPanel #panel1="ngAccordionPanel">
       <ng-template ngAccordionContent>
-        <!- This content only renders when the panel first opens ->
+        <!- This content only renders when the panel opens ->
         <img src="large-image.jpg" alt="Description" />
         <app-expensive-component />
       </ng-template>
@@ -353,10 +353,10 @@ Use the `ngAccordionContent` directive on an `ng-template` to defer rendering co
 </div>
 ```
 
-By default, content remains in the DOM after the panel collapses. Set `[preserveContent]="false"` to remove the content from the DOM when the panel closes.
+By default, content is removed from the DOM when the panel collapses. Set `[preserveContent]="true"` to keep it, for example when the panel contains a video that shouldn't reset on collapse.
 -->
 
-`ng-template`에 `ngAccordionContent` 디렉티브를 적용하면 패널을 처음 펼칠 때까지 콘텐츠 렌더링을 미룰 수 있습니다.
+`ng-template`에 `ngAccordionContent` 디렉티브를 적용하면 패널을 펼칠 때까지 콘텐츠 렌더링을 미룰 수 있습니다.
 이미지, 차트, 복잡한 컴포넌트처럼 처리 비용이 큰 콘텐츠를 포함한 아코디언의 성능을 개선할 수 있습니다.
 
 ```angular-html
@@ -365,7 +365,7 @@ By default, content remains in the DOM after the panel collapses. Set `[preserve
     <button ngAccordionTrigger [panel]="panel1">Trigger Text</button>
     <div ngAccordionPanel #panel1="ngAccordionPanel">
       <ng-template ngAccordionContent>
-        <!-- 이 콘텐츠는 패널을 처음 열 때만 렌더링됩니다. -->
+        <!-- 이 콘텐츠는 패널을 열 때만 렌더링됩니다. -->
         <img src="large-image.jpg" alt="Description" />
         <app-expensive-component />
       </ng-template>
@@ -374,8 +374,8 @@ By default, content remains in the DOM after the panel collapses. Set `[preserve
 </div>
 ```
 
-기본적으로 패널을 접은 뒤에도 콘텐츠는 DOM에 남습니다.
-패널을 닫을 때 DOM에서 콘텐츠를 제거하려면 `[preserveContent]="false"`로 설정하세요.
+기본적으로 패널을 접으면 콘텐츠가 DOM에서 제거됩니다.
+예를 들어 패널을 접어도 초기화되지 않아야 하는 동영상이 있다면, `[preserveContent]="true"`로 설정해서 콘텐츠를 유지하세요.
 
 <!--
 ## Testing

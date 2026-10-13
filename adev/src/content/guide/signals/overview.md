@@ -669,3 +669,19 @@ See [RxJS interop with Angular signals](ecosystem/rxjs-interop) for details on i
 -->
 
 시그널과 RxJS를 함께 사용하는 방법을 알아보려면 [RxJS와 Angular 시그널 함께 사용하기](ecosystem/rxjs-interop) 문서를 참고하세요.
+
+<!--
+## Debugging signals
+-->
+
+<a id="debugging-signals"></a>
+
+## 시그널 디버깅하기
+
+<!--
+Angular DevTools can visualize the signal graph of a component or directive, showing how its signals, computeds, effects, and other reactive nodes depend on each other.
+See [Debug the signal graph](tools/devtools/signals) to learn how to open, read, and inspect the graph.
+-->
+
+Angular DevTools는 컴포넌트나 디렉티브의 시그널 그래프를 시각화하여 시그널, computed 시그널, 이펙트, 기타 반응형 노드가 서로 어떻게 의존하는지 보여줍니다.
+그래프를 열고 읽고 검사하는 방법은 [시그널 그래프 디버깅하기](tools/devtools/signals) 문서를 참고하세요.
