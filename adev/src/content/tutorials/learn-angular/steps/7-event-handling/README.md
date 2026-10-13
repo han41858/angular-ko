@@ -68,7 +68,7 @@ And with a few steps in the code you've created your first event handler in Angu
 
 <hr />
 
-이벤트를 소괄호(`(`, `)`)로 감싸면 이벤트를 바인딩 할 수 있습니다.
+이벤트를 소괄호(`(`, `)`)로 감싸면 이벤트를 바인딩할 수 있습니다.
 그리고 소괄호 오른쪽에 이벤트를 처리할 핸들러를 지정하면 됩니다.
 `button` 예제를 봅시다:
 
@@ -106,7 +106,7 @@ onMouseOver() {
 
 <docs-step title="템플릿에서 이벤트를 바인딩합니다">
 
-`app.ts` 파일에 있는 템플릿에서 `section` 엘리먼트에 `mouseover` 이벤트를 바인딩 해보세요.
+`app.ts` 파일에 있는 템플릿에서 `section` 엘리먼트에 `mouseover` 이벤트를 바인딩해 보세요.
 
 ```angular-html
 <section (mouseover)="onMouseOver()"></section>

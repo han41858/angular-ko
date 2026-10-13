@@ -22,7 +22,7 @@ Deferrable views support a variety of triggers, prefetching options, and sub-blo
 
 `@defer` 블록은 지연 로딩 뷰를 선언하는 블록입니다.
 애플리케이션 초기 렌더링에 꼭 필요하지 않은 코드를 나중에 불러오는 방식으로 애플리케이션 첫 실행에 필요한 파일의 크기를 줄일 수 있습니다.
-뷰를 지연 로딩 하면 Core Web Vitals(CWV)나 Largest Contentful Paint(LCP), Time to First Byte(TTFB)가 향상되는 경우가 많습니다.
+뷰를 지연 로딩하면 Core Web Vitals(CWV)나 Largest Contentful Paint(LCP), Time to First Byte(TTFB)가 향상되는 경우가 많습니다.
 
 뷰를 지연 로딩하려면 템플릿을 `@defer` 블록으로 감싸면 됩니다:
 
@@ -32,7 +32,7 @@ Deferrable views support a variety of triggers, prefetching options, and sub-blo
 }
 ```
 
-`@defer` 블록 안에 있는 컴포넌트나 디렉티브, 파이프는 별도 JavaScript 파일로 분리되며, 나머지 템플릿이 렌더링 된 후 이 구성요소가 필요한 경우에 로드됩니다.
+`@defer` 블록 안에 있는 컴포넌트나 디렉티브, 파이프는 별도 JavaScript 파일로 분리되며, 나머지 템플릿이 렌더링된 후 이 구성요소가 필요한 경우에 로드됩니다.
 
 지연 로딩 뷰를 지정하면서 다양한 트리거, 사전 로딩 옵션, 플레이스 홀더, 로딩, 에러 상태 관리 등의 기능을 활용할 수 있습니다.
 
@@ -40,7 +40,7 @@ Deferrable views support a variety of triggers, prefetching options, and sub-blo
 ## Which dependencies are deferred?
 -->
 
-## 어떤 항목을 지연 로딩 할 수 있나요?
+## 어떤 항목을 지연 로딩할 수 있나요?
 
 <!--
 Components, directives, pipes, and any component CSS styles can be deferred when loading an application.
@@ -55,15 +55,15 @@ The _transitive_ dependencies of the components, directives and pipes used in th
 Angular's compiler produces a [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) statement for each component, directive, and pipe used in the `@defer` block. The main content of the block renders after all the imports resolve. Angular does not guarantee any particular order for these imports.
 -->
 
-컴포넌트, 디렉티브, 파이프, 컴포넌트 CSS 스타일은 애플리케이션 최초 실행에서 제외하여 지연 로딩 할 수 있습니다.
+컴포넌트, 디렉티브, 파이프, 컴포넌트 CSS 스타일은 애플리케이션 최초 실행에서 제외하여 지연 로딩할 수 있습니다.
 
 `@defer` 블록 안에 있는 구성요소를 정말 지연 로딩하려면, 다음 조건을 만족해야 합니다:
 
-1. **독립(standalone) 구성요소여야 합니다.** 그렇지 않으면 `@defer` 블록 안에 있더라도 로딩이 지연되지 않고 즉시 로드 됩니다.
+1. **독립(standalone) 구성요소여야 합니다.** 그렇지 않으면 `@defer` 블록 안에 있더라도 로딩이 지연되지 않고 즉시 로드됩니다.
 1. **같은 파일의 `@defer` 블록 밖에서 사용되지 않아야 합니다.** `@defer` 블록 밖에서도 사용되거나 ViewChild 쿼리 등으로 참조되면 해당 항목은 즉시 로드됩니다.
 
 `@defer` 블록 안에 사용된 컴포넌트, 디렉티브, 파이프의 내부 의존성 구성요소는 독립 구성요소가 아니어도 됩니다;
-이 항목들은 `NgModule`에 등록해서 모듈 단위로 지연 로딩 할 수 있습니다.
+이 항목들은 `NgModule`에 등록해서 모듈 단위로 지연 로딩할 수 있습니다.
 
 Angular 컴파일러는 `@defer` 블록에 사용된 개별 컴포넌트, 디렉티브, 파이프마다 [동적 불러오기(dynamic import)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import)를 적용합니다.
 그래서 이 블록의 내용은 모든 로딩이 끝난 후에 렌더링됩니다.
@@ -144,7 +144,7 @@ This `minimum` parameter is specified in time increments of milliseconds (ms) or
 
 기본적으로 `@defer` 블록은 트리거가 동작하기 전까지 아무것도 렌더링되지 않습니다.
 
-이 때 `@defer` 블록이 표시되기 전에 화면에 표시할 내용이 있다면, `@placeholder` 블록을 지정하면 됩니다.
+이때 `@defer` 블록이 표시되기 전에 화면에 표시할 내용이 있다면, `@placeholder` 블록을 지정하면 됩니다.
 
 ```angular-html
 @defer {
@@ -159,10 +159,10 @@ This `minimum` parameter is specified in time increments of milliseconds (ms) or
 
 `@defer` 블록은 로딩된 후에 `@placeholder` 블록을 대체하며 렌더링됩니다.
 그리고 `@placeholder` 블록에는 일반 HTML, 컴포넌트, 디렉티브, 파이프를 자유롭게 사용할 수 있습니다.
-`@placeholder` 블록에 사용되는 컴포넌트, 디렉티브, 파이프는 지연 로딩되지 않고 _즉시 로딩 된다는 것을_ 기억하세요.
+`@placeholder` 블록에 사용되는 컴포넌트, 디렉티브, 파이프는 지연 로딩되지 않고 _즉시 로딩된다는 것을_ 기억하세요.
 
 `@placeholder` 블록을 사용할 때 `minimum` 옵션을 사용할 수 있습니다.
-이 옵션은 `@placeholder` 블록이 처음 렌더링 된 후, 표시되는 최소 시간을 지정하는 옵션입니다.
+이 옵션은 `@placeholder` 블록이 처음 렌더링된 후, 표시되는 최소 시간을 지정하는 옵션입니다.
 
 ```angular-html
 @defer {
@@ -212,7 +212,7 @@ The `@loading` block accepts two optional parameters to help prevent fast flicke
 Both parameters are specified in time increments of milliseconds (ms) or seconds (s). In addition, the timers for both parameters begin immediately after the loading has been triggered.
 -->
 
-지연 로딩되는 뷰가 로딩중일때 표시할 내용이 있다면 `@loading` 블록을 사용합니다.
+지연 로딩되는 뷰가 로딩 중일 때 표시할 내용이 있다면 `@loading` 블록을 사용합니다.
 `@loading` 블록은 트리거가 동작하고 나면 `@placeholder` 블록 대신 화면에 표시됩니다.
 
 ```angular-html
@@ -292,7 +292,7 @@ There are two types of triggers: `on` and `when`.
 
 `@defer` 블록은 트리거가 동작하고 난 후 지연 로딩되면서 `@placeholder` 블록을 대체하면서 렌더링됩니다.
 
-이 때 세미 콜론(`;`)을 사용해서 이벤트 트리거를 여러개 지정할 수 있으며, 이렇게 지정된 트리거는 OR 조건으로 동작합니다.
+이때 세미 콜론(`;`)을 사용해서 이벤트 트리거를 여러 개 지정할 수 있으며, 이렇게 지정된 트리거는 OR 조건으로 동작합니다.
 
 트리거는 크게 `on`과 `when` 으로 구분할 수 있습니다.
 
@@ -321,7 +321,7 @@ The available triggers are as follows:
 | ----------------------------- | ----------------------------------------------------------------- |
 | [`idle`](#idle)               | 브라우저가 대기 상태일 때 동작합니다. 타임아웃 옵션을 지원합니다. |
 | [`viewport`](#viewport)       | 특정 항목이 뷰포트에 진입할 때 동작합니다.                        |
-| [`interaction`](#interaction) | 사용자가 특정 엘리먼트와 상호작용 할 때 동작합니다.               |
+| [`interaction`](#interaction) | 사용자가 특정 엘리먼트와 상호작용할 때 동작합니다.               |
 | [`hover`](#hover)             | 마우스가 특정 영역 위에 올라갈 때 동작합니다.                     |
 | [`immediate`](#immediate)     | 지연 로딩이 아닌 뷰 렌더링이 끝난 직후 동작합니다.                |
 | [`timer`](#timer)             | 특정 시간 뒤에 동작합니다.                                        |
@@ -396,7 +396,7 @@ bootstrapApplication(App, {
 ```
 -->
 
-`IdleService`를 구현하고 이 객체를 `provideIdleServiceWith` 함수로 프로바이더에 등록하면 `idle` 트리거를 커스터마이징 할 수 있습니다.
+`IdleService`를 구현하고 이 객체를 `provideIdleServiceWith` 함수로 프로바이더에 등록하면 `idle` 트리거를 커스터마이징할 수 있습니다.
 
 ```ts
 @Service()
@@ -459,7 +459,7 @@ If you want to customize the options of the `IntersectionObserver`, the `viewpor
 -->
 
 `viewport` 트리거는 [Intersection Observer API](https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API)를 활용해서 특정 항목이 뷰포트에 진입할 때 동작합니다.
-이 때 특정 항목은 `@placeholder` 항목이거나 명시적으로 지정한 엘리먼트가 됩니다.
+이때 특정 항목은 `@placeholder` 항목이거나 명시적으로 지정한 엘리먼트가 됩니다.
 
 기본적으로 `@defer` 블록은 `@placeholder` 가 뷰포트에 진입하는 것을 감지합니다.
 이 경우 `@placeholder` 는 반드시 엘리먼트 하나여야 합니다.
@@ -610,7 +610,7 @@ The `immediate` trigger loads the deferred content immediately. This means that 
 -->
 
 `immediate` 트리거는 지연 로딩 뷰를 즉시 로드합니다.
-다르게 표현하면, 지연 로딩이 아닌 부분의 렌더링이 끝난 직후, 지연 로딩 하도록 지정된 나머지 뷰를 로드합니다.
+다르게 표현하면, 지연 로딩이 아닌 부분의 렌더링이 끝난 직후, 지연 로딩하도록 지정된 나머지 뷰를 로드합니다.
 
 ```angular-html
 @defer (on immediate) {
@@ -646,7 +646,7 @@ The duration parameter must be specified in milliseconds (`ms`) or seconds (`s`)
 }
 ```
 
-이 때 지연시간은 밀리초(`ms`) 단위나 초(`s`) 단위를 사용합니다.
+이때 지연시간은 밀리초(`ms`) 단위나 초(`s`) 단위를 사용합니다.
 
 ### `when`
 
@@ -715,7 +715,7 @@ In the example below, the prefetching starts when a browser becomes idle and the
 사전 로딩 트리거는 블록 트리거와 비슷하지만, `prefetch` 키워드가 접두사로 붙습니다.
 블록 트리거와 사전 로딩 트리거를 함께 사용하는 경우에는 세미 콜론(`;`)으로 구분합니다.
 
-아래 예제처럼 구현하면, 브라우저가 대기 상태로 진입하는 시점에 사전 로딩이 시작되며, `@defer` 블록의 내용은 사용자가 `@placeholder` 블록과 상호작용 할 때 렌더링됩니다.
+아래 예제처럼 구현하면, 브라우저가 대기 상태로 진입하는 시점에 사전 로딩이 시작되며, `@defer` 블록의 내용은 사용자가 `@placeholder` 블록과 상호작용할 때 렌더링됩니다.
 
 ```angular-html
 @defer (on interaction; prefetch on idle) {
@@ -818,7 +818,7 @@ it('should render a defer block in different states', async () => {
 -->
 
 `@defer` 블록은 독립 구성요소는 물론이고 NgModule 기반 컴포넌트, 디렉티브, 파이프와도 함께 사용할 수 있습니다.
-하지만 **실제로 지연 로딩되는 것은 독립 컴포넌트, 독립 디렉티브, 독립 파이프 뿐입니다**.
+하지만 **실제로 지연 로딩되는 것은 독립 컴포넌트, 독립 디렉티브, 독립 파이프뿐입니다**.
 NgModule 기반으로 등록된 컴포넌트, 디렉티브, 파이프는 지연 로딩되지 않으며 즉시 로드됩니다.
 
 <!--
@@ -847,7 +847,7 @@ To render the main content of `@defer` blocks on the server (both SSR and SSG), 
 -->
 
 SSR이나 SSG와 같이 애플리케이션이 서버에서 렌더링되는 경우는 기본적으로 `@placeholder` 블록이 있는 경우는 `@placeholder` 블록을 렌더링하고, `@placeholder` 블록이 없으면 아무것도 렌더링하지 않습니다.
-그리고 클라이언트에서 애플리케이션이 실행될 때 `@placeholder`가 하이드레이션 되면서 트리거가 동작합니다.
+그리고 클라이언트에서 애플리케이션이 실행될 때 `@placeholder`가 하이드레이션되면서 트리거가 동작합니다.
 
 서버에서 `@defer` 블록을 렌더링하려면 [증분 하이드레이션](/guide/incremental-hydration)이나 `hydrate` 트리거를 사용해야 합니다.
 
@@ -951,7 +951,7 @@ Avoid deferring components that are visible in the user’s viewport on initial 
 In the event this is necessary, avoid `immediate`, `timer`, `viewport`, and custom `when` triggers that cause the content to load during the initial page render.
 -->
 
-첫 로딩에서 사용자의 뷰포트에 있는 컴포넌트를 지연 로딩 하지 마세요.
+첫 로딩에서 사용자의 뷰포트에 있는 컴포넌트를 지연 로딩하지 마세요.
 이 경우는 누적 레이아웃 이동(cumulative layout shift, CLS)이 발생하면서 Core Web Vital에 부정적인 영향을 줍니다.
 
 꼭 필요한 경우라면, 첫 화면 로딩을 방해할 수 있는 `immediate`, `timer`, `viewport`, 커스텀 `when` 트리거 사용을 피하세요.
@@ -986,7 +986,7 @@ This ensures that changes are announced to the user when transitions (placeholde
 -->
 
 `@defer` 블록을 사용하면 스크린 리더와 같은 보조 기술을 사용하는 사용자에게 큰 영향을 줄 수 있습니다.
-스크린 리더는 지연 로딩되는 섹션의 플레이스홀더나 로딩중이라는 것은 읽을 수 있지만, 이후에 내용물이 갱신되고 나면 변경사항을 알리지 않을 수도 있습니다.
+스크린 리더는 지연 로딩되는 섹션의 플레이스홀더나 로딩 중이라는 것은 읽을 수 있지만, 이후에 내용물이 갱신되고 나면 변경사항을 알리지 않을 수도 있습니다.
 
 화면이 변경된 것을 스크린 리더에게 명확하게 알리려면, `@defer` 블록을 `aria-live` 어트리뷰트로 랩핑하면 됩니다:
 

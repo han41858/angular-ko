@@ -56,7 +56,7 @@ To add the `@angular/elements` package to your workspace, run the following comm
 </docs-code-multifile>
 -->
 
-커스텀 엘리먼트는 그 자체로 부트스트랩 됩니다.
+커스텀 엘리먼트는 그 자체로 부트스트랩됩니다.
 커스텀 엘리먼트는 DOM에 추가되면서 시작되고, DOM에서 제거되면서 종료됩니다.
 그래서 커스텀 엘리먼트가 어떤 화면에 추가되면, Angular에서 사용하는 용어와 사용방법을 알지 못하더라도 HTML 엘리먼트처럼 보이고 동작합니다.
 
@@ -165,7 +165,7 @@ For more information, see Web Component documentation for [Creating custom event
 그래서 컴포넌트 프로퍼티는 HTML 어트리뷰트로, 컴포넌트 클래스 로직은 브라우저 이벤트 시스템과 연결됩니다.
 
 - 커스텀 엘리먼트 생성 API가 컴포넌트 입력 프로퍼티를 발견하면 커스텀 엘리먼트 어트리뷰트를 선언합니다.
-  이 때 프로퍼티 이름은 커스텀 엘리먼트에 적합하도록 대소문자를 구분하지 않고 대시(`-`)와 소문자로 구성됩니다.
+  이때 프로퍼티 이름은 커스텀 엘리먼트에 적합하도록 대소문자를 구분하지 않고 대시(`-`)와 소문자로 구성됩니다.
   예를 들어 컴포넌트에 `inputProp = input({alias: 'myInputProp'})`와 같은 코드가 있다면 이 프로퍼티는 커스텀 엘리먼트의 `my-input-prop` 어트리뷰트로 변환됩니다.
 
 - 컴포넌트의 출력 프로퍼티는 출력 프로퍼티 이름과 동일한 HTML [커스텀 이벤트](https://developer.mozilla.org/docs/Web/API/CustomEvent)로 변환됩니다.
@@ -218,7 +218,7 @@ The result is the same, but the preparation is different.
 | `popup.ts`         | `Popup`을 동적 컴포넌트로 사용하거나 커스텀 엘리먼트로 사용하는 코드를 정의합니다. 동적 로딩하는 경우 코드를 얼마나 많이 사용해야 하는지 확인해 보세요. |
 | `app.component.ts` | 애플리케이션 최상위 컴포넌트를 정의합니다. 이 컴포넌트가 시작되면 `PopupService` 코드에 따라 `Popup`을 커스텀 엘리먼트로 전환합니다.                    |
 
-코드를 비교해보기 위해 예제 코드는 두가지 방식을 모두 구현했습니다.
+코드를 비교해보기 위해 예제 코드는 두 가지 방식을 모두 구현했습니다.
 버튼 하나는 컴포넌트를 동적으로 로드하는 방식으로 팝업을 표시하며, 다른 버튼은 커스텀 엘리먼트를 활용하는 방식으로 동작합니다.
 결과물은 같지만 준비과정은 다릅니다.
 
@@ -304,7 +304,7 @@ TypeScript 코드에서는 커스텀 엘리먼트의 타입을 추론할 수 없
 Angular로 생성한 커스텀 엘리먼트는 `HTMLElement` 타입을 확장한 `NgElement`를 기반으로 하며, 컴포넌트의 입력 프로퍼티에 해당하는 프로퍼티를 갖습니다.
 위 예제 코드를 보면, `popup-element`에는 `string` 타입의 `message` 프로퍼티가 존재합니다.
 
-커스텀 엘리먼트에 올바른 타입을 적용하는 방법이 몇가지 있습니다.
+커스텀 엘리먼트에 올바른 타입을 적용하는 방법이 몇 가지 있습니다.
 다음 코드처럼 `my-dialog` 커스텀 엘리먼트를 생성한다고 합시다:
 
 ```ts
@@ -368,5 +368,5 @@ Care should be taken when destroying and then re-attaching custom elements creat
 `@angular/elements` 로 생성한 커스텀 엘리먼트를 제거했다가 다시 연결할 때는 [disconnect()](https://github.com/angular/angular/issues/38778) 콜백 이슈에 주의해야 합니다.
 이 문제는 다음 경우에 발생할 수 있습니다:
 
-- `AngularJS`에서 `ng-if`나 `ng-repeat`을 사용해서 컴포넌트를 렌더링 할 때
+- `AngularJS`에서 `ng-if`나 `ng-repeat`을 사용해서 컴포넌트를 렌더링할 때
 - DOM에서 엘리먼트를 수동으로 제거하고 다시 연결할 때

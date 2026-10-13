@@ -29,7 +29,7 @@ Don't use async validation for checks you can perform synchronously on the clien
 비동기 유효성 검사는 유효성 검사에 외부 데이터가 필요할 때 사용합니다.
 보통은 이런 경우입니다:
 
-- **중복 검사** - 사용자 이름이나 이메일이 사용중인지 확인할 때
+- **중복 검사** - 사용자 이름이나 이메일이 사용 중인지 확인할 때
 - **DB 탐색** - 서버 데이터를 확인해야 할 때
 - **외부 API 유효성 검사** - 주소, 주민번호 등 서드 파티 서비스를 활용해서 데이터를 확인해야 할 때
 - **서버의 비즈니스 규칙을 확인할 때** - 서버에서만 실행할 수 있는 유효성 검사가 필요할 때
@@ -112,8 +112,8 @@ The validation flow works like this:
 6. Errors update based on the response
 -->
 비동기 유효성 검사는 동기 유효성 검사를 모두 통과한 후에 실행됩니다.
-그리고 비동기 검사가 실행중일 때는 `pending()` 시그널이 `true`를 반환합니다.
-유효성 검사 결과를 활용하면 특정 필드에 에러가 발생했다는 것을 표시할 수 있으며, 필드 값이 변경되면 진행중인 비동기 유효성 검사를 취소할 수도 있습니다.
+그리고 비동기 검사가 실행 중일 때는 `pending()` 시그널이 `true`를 반환합니다.
+유효성 검사 결과를 활용하면 특정 필드에 에러가 발생했다는 것을 표시할 수 있으며, 필드 값이 변경되면 진행 중인 비동기 유효성 검사를 취소할 수도 있습니다.
 
 사용자 이름을 사용할 수 있는지 검사하는 예제 코드를 살펴봅시다:
 
@@ -396,7 +396,7 @@ onSuccess: (response: { valid: boolean; message?: string }) => {
 } // prettier-ignore
 ```
 
-에러는 여러개를 한 번에 반환할 수도 있습니다:
+에러는 여러 개를 한 번에 반환할 수도 있습니다:
 
 ```ts
 onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
@@ -482,7 +482,7 @@ validateHttp(schemaPath.field, {
 
 TIP: See the [httpResource API documentation](api/common/http/httpResource) for all available options.
 -->
-HTTP 요청은 `options` 인자로 커스터마이징 할 수 있습니다:
+HTTP 요청은 `options` 인자로 커스터마이징할 수 있습니다:
 
 ```ts
 import {HttpHeaders} from '@angular/common/http';
@@ -619,7 +619,7 @@ export class Registration {
 The `params` function runs on every value change. Return `undefined` to skip validation. The `factory` function runs once during setup and receives params as a signal. The resource updates automatically when params change.
 -->
 `validateAsync()` 함수는 `params`, `factory`, `onSuccess`, `onError`로 프로퍼티가 4개 필요합니다.
-이 때 `params` 함수는 리소스를 인자로 반환하며, `factory`는 리소스를 생성합니다:
+이때 `params` 함수는 리소스를 인자로 반환하며, `factory`는 리소스를 생성합니다:
 
 ```ts
 import {Component, inject, signal, resource, Signal} from '@angular/core';
@@ -846,7 +846,7 @@ With a 300 ms debounce, the model updates and validates only after the user paus
 
 스키마 안에서 `debounce`를 사용하면 폼 필드의 UI 변화를 어떻게 지연시킬지 지정해야 합니다.
 가장 간단하게는 `debounce(path, ms)`라고 작성하면 사용자의 입력이 해당 밀리초만큼 지난 후에 모델에 값을 반영합니다.
-중간에 값이 변경되는 동안은 타이머가 계속 초기화 됩니다.
+중간에 값이 변경되는 동안은 타이머가 계속 초기화됩니다.
 
 아래 예제는 `username` 필드에 사용자가 값을 충분히 입력할 수 있도록 `debounce`와 `validateHttp`를 사용한 예제 코드입니다:
 
@@ -1013,7 +1013,7 @@ const registrationForm = form(registrationModel, (schemaPath) => {
 ```
 
 `abortSignal`은 필드가 조작되거나 디바운스가 완료되기 전에 값이 변경되면 발생합니다.
-중단 신호가 발생하면 Promise를 완료(resolve) 상태로 만들어서 디바운서가 대기중인 타이머를 정리할 수 있도록 하세요.
+중단 신호가 발생하면 Promise를 완료(resolve) 상태로 만들어서 디바운서가 대기 중인 타이머를 정리할 수 있도록 하세요.
 Angular는 필드 조작 시 대기 중인 값을 모델에 반영하고 새로운 값이 들어오면 기존 값을 폐기합니다.
 전체 `Debouncer` 구성을 알아보려면 [`debounce` API 참조](api/forms/signals/debounce) 문서를 참고하세요.
 
@@ -1324,7 +1324,7 @@ Disable form submission while validation is pending:
 TIP: See the [Field State Management guide](guide/forms/signals/field-state-management) for more patterns using `pending()`, `valid()`, and `invalid()` signals.
 -->
 비동기 유효성 검사가 실행되면, 필드의 `pending()` 시그널은 `true`를 반환합니다.
-이 때:
+이때:
 
 - `valid()`는 `false`를 반환합니다.
 - `invalid()`는 `false`를 반환합니다.
@@ -1347,7 +1347,7 @@ TIP: See the [Field State Management guide](guide/forms/signals/field-state-mana
 }
 ```
 
-유효성 검사가 진행중인 경우는 폼 제출을 막으세요:
+유효성 검사가 진행 중인 경우는 폼 제출을 막으세요:
 
 ```angular-html
 <button type="submit" [disabled]="loginForm().pending()">
@@ -1660,7 +1660,7 @@ Use the `pending()` signal to show when validation is happening. This helps user
 }
 ```
 -->
-유효성 검사가 진행중인 것을 사용자에게 표시하려면 `pending()` 시그널을 활용하면 됩니다.
+유효성 검사가 진행 중인 것을 사용자에게 표시하려면 `pending()` 시그널을 활용하면 됩니다.
 그러면 사용자는 왜 앱이 느려졌는지 확인할 수 있으며, 체감 성능도 향상됩니다:
 
 ```angular-html

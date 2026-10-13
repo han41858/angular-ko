@@ -51,7 +51,7 @@ The `loader` property defines a `ResourceLoader`— an async function that retri
 
 `signal`, `computed`, `input` 등의 시그널 API는 대부분 동기 방식으로 동작합니다.
 그런데 애플리케이션은 데이터를 비동기로 다뤄야 하는 경우가 종종 있습니다.
-이 때 `Resource`를 활용하면 애플리케이션이 시그널 기반으로 동작하면서 비동기 데이터를 처리할 수 있습니다.
+이때 `Resource`를 활용하면 애플리케이션이 시그널 기반으로 동작하면서 비동기 데이터를 처리할 수 있습니다.
 
 `Resource`를 활용하면 모든 종류의 비동기 작업을 다룰 수 있지만, 가장 많이 사용하는 경우는 역시 서버에서 데이터를 받아오는 것입니다.
 아래 코드는 사용자 데이터를 받아오는 예제 코드입니다.
@@ -254,7 +254,7 @@ You can use this status information to conditionally display user interface elem
 | `value`     | 리소스 객체의 최종 값, 값을 받지 못했으면 `undefined`                                |
 | `hasValue`  | 리소스가 값을 갖고 있는지 여부                                                       |
 | `error`     | 리소스 로더를 실행하다가 발생한 가장 최근 에러, 에러가 발생하지 않았다면 `undefined` |
-| `isLoading` | 리소스 로더가 실행중인지 여부                                                        |
+| `isLoading` | 리소스 로더가 실행 중인지 여부                                                        |
 | `status`    | 리소스의 세부 `ResourceStatus`, 아래에서 설명                                        |
 
 `status` 시그널에는 시그널의 상태를 문자열로 더 자세하게 표현하는 `ResourceStatus` 값이 존재합니다.
@@ -263,8 +263,8 @@ You can use this status information to conditionally display user interface elem
 | ------------- | :------------- | -------------------------------------------------------- |
 | `'idle'`      | `undefined`    | 리소스에 유효한 요청이 없으며, 로더가 실행되지 않았음    |
 | `'error'`     | `undefined`    | 로더 실행 중 에러가 발생했음                             |
-| `'loading'`   | `undefined`    | `params` 값이 변경되어 로더가 실행중                     |
-| `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행중        |
+| `'loading'`   | `undefined`    | `params` 값이 변경되어 로더가 실행 중                     |
+| `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행 중        |
 | `'resolved'`  | 계산된 값      | 로더 실행 종료                                           |
 | `'local'`     | 직접 설정된 값 | 리소스의 `.set()`, `.update()` 메서드로 값이 설정된 상태 |
 

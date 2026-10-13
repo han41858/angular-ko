@@ -64,7 +64,7 @@ Great job learning about routing with Angular. This is just the surface of the `
 
 참고: 자세한 내용은 [앱에 라우팅 규칙 추가하기 심화 가이드](/guide/routing/define-routes#adding-the-router-to-your-application) 문서를 참고하세요.
 
-이번 예제에서는 `RouterLink` 디렉티브를 사용해서 Angular Router의 활용성을 극대화 해봅시다.
+이번 예제에서는 `RouterLink` 디렉티브를 사용해서 Angular Router의 활용성을 극대화해 봅시다.
 
 <hr>
 

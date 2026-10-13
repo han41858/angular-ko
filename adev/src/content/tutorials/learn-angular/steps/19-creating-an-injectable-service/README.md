@@ -52,7 +52,7 @@ Well, done 👍 that service is now `injectable` and can participate in the fun.
 
 의존성 주입(Dependency injection, DI)은 Angular가 제공하는 기능 중 가장 중요한 기능이라고 해도 지나치지 않습니다.
 의존성 주입이란 실행 시점에 필요한 리소스를 Angular가 제공하는 기능이라고 생각하면 됩니다.
-이 때 의존성 객체는 서비스 등 어떠한 리소스라도 가능합니다.
+이때 의존성 객체는 서비스 등 어떠한 리소스라도 가능합니다.
 
 참고: 자세한 내용은 [의존성 주입 핵심 가이드](/essentials/dependency-injection) 문서를 참고하세요.
 

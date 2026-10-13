@@ -42,7 +42,7 @@ In the above example, `<profile-photo>` is the host element of the `ProfilePhoto
 팁: 이 가이드 문서는 [핵심 가이드](essentials) 이후 내용을 다룹니다. 아직 Angular에 익숙하지 않다면 해당 문서를 먼저 읽어보세요.
 
 컴포넌트 셀렉터와 매칭되는 HTML 엘리먼트마다 컴포넌트 인스턴스가 생성됩니다.
-이 때 컴포넌트 셀렉터와 매칭된 DOM 엘리먼트를 **호스트 엘리먼트(host element)** 라고 합니다.
+이때 컴포넌트 셀렉터와 매칭된 DOM 엘리먼트를 **호스트 엘리먼트(host element)** 라고 합니다.
 컴포넌트 템플릿은 호스트 엘리먼트 안에 렌더링된다고 이해하면 됩니다.
 
 ```angular-ts
@@ -186,7 +186,7 @@ decorators exist exclusively for backwards compatibility.
 
 `@HostBinding` 이나 `@HostListener` 데코레이터를 사용해서 호스트 엘리먼트와 클래스 멤버를 바인딩하는 방법도 있습니다.
 
-`@HostBinding` 을 사용하면 호스트 엘리먼트의 프로퍼티를 클래스 프로퍼티와 바인딩하거나, 호스트 엘리먼트의 어트리뷰트를 메서드와 바인딩 할 수 있습니다:
+`@HostBinding` 을 사용하면 호스트 엘리먼트의 프로퍼티를 클래스 프로퍼티와 바인딩하거나, 호스트 엘리먼트의 어트리뷰트를 메서드와 바인딩할 수 있습니다:
 
 ```ts
 @Component({

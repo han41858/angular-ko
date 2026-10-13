@@ -30,7 +30,7 @@ You can also learn more in our [guides](overview) and [reference](api), or `ng n
   Angular는 웹 앱을 개발하는 최신 프레임워크입니다!
   </docs-card>
   <docs-card title="Angular의 로드맵" href="roadmap">
-  Angular의 오픈 소스 로드맵을 확인해 보세요. 이미 완료된 프로젝트부터 현재 진행중인 프로젝트, 미래에 진행될 프로젝트도 확인해 보세요.
+  Angular의 오픈 소스 로드맵을 확인해 보세요. 이미 완료된 프로젝트부터 현재 진행 중인 프로젝트, 미래에 진행될 프로젝트도 확인해 보세요.
   </docs-card>
   <docs-card title="Angular 놀이터" href="playground" link="Start playing">
   브라우저에서 Angular를 자유롭게 사용해 보세요!

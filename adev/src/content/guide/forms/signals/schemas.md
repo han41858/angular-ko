@@ -46,7 +46,7 @@ This distinction is important when you compose schemas because functions like `a
 스키마 함수 안으로 들어가면, `disabled()`나 `validate()`와 같은 규칙 함수를 실행할 수 있습니다.
 이런 규칙 함수들은 참조 필드의 값이 변경되었을 때마다 다시 실행되는 반응형 로직을 인자로 받습니다.
 `disabled()`나 `required()`와 같은 조건부 규칙은 옵션을 지정할 수 있기 때문에, 해당 조건을 지정하기 위해 `when` 함수를 추가할 수도 있습니다.
-이렇게 규칙을 지정하는 것은 폼이 실행시점에 어떻게 동작할 지 **동작 계층(behavioral layer)** 을 지정하는 것입니다.
+이렇게 규칙을 지정하는 것은 폼이 실행시점에 어떻게 동작할지 **동작 계층(behavioral layer)** 을 지정하는 것입니다.
 
 ```ts
 contactForm = form(this.contactModel, (schemaPath) => {
@@ -100,7 +100,7 @@ The `schema()` function wraps a function and converts it into a reusable `Schema
 TIP: If rules only appear in one place, an inline schema function works just as well. Use `schema()` when you want to reuse the same schema across multiple forms or apply the same schema to multiple paths. Reusable `Schema` objects are cached per form compilation.
 -->
 
-폼이 여러개인데 다루는 데이터 모양이 같고 유효성 검사 규칙도 같다면, 스키마를 재사용하기 위해 `schema()` 함수를 사용할 수 있습니다.
+폼이 여러 개인데 다루는 데이터 모양이 같고 유효성 검사 규칙도 같다면, 스키마를 재사용하기 위해 `schema()` 함수를 사용할 수 있습니다.
 
 ```ts
 import {schema, required, minLength} from '@angular/forms/signals';
@@ -118,7 +118,7 @@ const nameSchema = schema<{first: string; last: string}>((name) => {
 
 팁: 규칙이 한 곳에만 존재하는 경우, 인라인 스키마 함수를 사용해도 동일한 효과를 얻을 수 있습니다.
 한 스키마를 여러 폼에 사용하거나, 여러 경로에 동일한 스키마를 적용하려면 `schema()` 함수를 사용하세요.
-`Schema` 객체는 폼이 컴파일 될 때마다 캐싱됩니다.
+`Schema` 객체는 폼이 컴파일될 때마다 캐싱됩니다.
 
 <!--
 ### Using the schema with `apply()`
@@ -302,10 +302,10 @@ shippingForm = form(this.shippingModel, (schemaPath) => {
 ```
 
 참고: 경로 인자가 `schemaPath.address`지만, 로직 함수는 `valueOf(schemaPath.country)`에 접근합니다.
-왜냐하면 `valueOf` 헬퍼 함수는 지정된 필드 뿐만 아니라 폼 내부의 모든 필드에 접근할 수 있기 때문입니다.
+왜냐하면 `valueOf` 헬퍼 함수는 지정된 필드뿐만 아니라 폼 내부의 모든 필드에 접근할 수 있기 때문입니다.
 
 이 패턴은 유효성 검사 로직을 모듈화하는 것입니다.
-각 국가의 주소 규칙은 별도 스키마에 존재하며, 사용자가 어떤 국가를 선택하면 해당 스키마가 어떤 규칙을 활성화 할 지 결정합니다.
+각 국가의 주소 규칙은 별도 스키마에 존재하며, 사용자가 어떤 국가를 선택하면 해당 스키마가 어떤 규칙을 활성화할지 결정합니다.
 
 <!--
 ## Type-narrowing with `applyWhenValue()`

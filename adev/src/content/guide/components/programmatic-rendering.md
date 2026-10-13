@@ -22,10 +22,10 @@ chunks automatically and loaded only when necessary, based on the configured tri
 
 팁: 이 가이드 문서는 [핵심 가이드](essentials) 이후 내용을 다룹니다. 아직 Angular에 익숙하지 않다면 해당 문서를 먼저 읽어보세요.
 
-템플릿에 컴포넌트를 직접 사용하는 방법 외에, 컴포넌트는 프로그래밍 방식으로 동적 렌더링 할 수도 있습니다.
+템플릿에 컴포넌트를 직접 사용하는 방법 외에, 컴포넌트는 프로그래밍 방식으로 동적 렌더링할 수도 있습니다.
 이 방식은 컴포넌트를 처음에 알 수 없는 경우나, 조건에 따라 달라지는 경우에 유용합니다.
 
-컴포넌트를 프로그래밍 방식으로 렌더링하는 방법은 두 가지 입니다: 템플릿에서 `NgComponentOutlet`을 사용하거나 TypeScript 코드에서 `ViewContainerRef`를 사용하면 됩니다.
+컴포넌트를 프로그래밍 방식으로 렌더링하는 방법은 두 가지입니다: 템플릿에서 `NgComponentOutlet`을 사용하거나 TypeScript 코드에서 `ViewContainerRef`를 사용하면 됩니다.
 
 참고: 무거운 컴포넌트의 로딩을 늦추는 지연 로딩을 활용하려면 [`@defer` 기능](/guide/templates/defer)을 활용하세요.
 `@defer` 기능을 활용하면 `@defer` 블록 안에 있는 모든 컴포넌트, 디렉티브, 파이프 코드를 별도 JavaScript 빌드 파일로 추출해서 필요한 경우에만 로드합니다.
@@ -96,7 +96,7 @@ export class CustomDialog {
 ### Passing inputs to dynamically rendered components
 -->
 
-### 렌더링 되는 컴포넌트에 입력값 동적으로 전달하기
+### 렌더링되는 컴포넌트에 입력값 동적으로 전달하기
 
 <!--
 You can pass inputs to the dynamically rendered component using the `ngComponentOutletInputs` property. This property accepts an object where keys are input names and values are the input values.
@@ -456,7 +456,7 @@ In the example above, clicking the "Load content" button results in the followin
 **뷰 컨테이너** 는 컴포넌트 트리에서 내용물을 담는 노드를 의미합니다.
 그리고 컴포넌트나 디렉티브는 `ViewContainerRef`를 의존성 객체로 주입받아서 DOM에 존재하는 뷰 컨테이너를 참조할 수 있습니다.
 
-`ViewContainerRef` 객체의 `createComponent` 메서드를 사용하면 컴포넌트를 동적으로 생성하고 렌더링 할 수 있습니다.
+`ViewContainerRef` 객체의 `createComponent` 메서드를 사용하면 컴포넌트를 동적으로 생성하고 렌더링할 수 있습니다.
 `ViewContainerRef`를 사용해서 컴포넌트를 생성하면 Angular는 `ViewContainerRef`로 참조한 컴포넌트나 디렉티브 바로 옆에 DOM을 추가합니다.
 
 ```angular-ts
@@ -489,7 +489,7 @@ export class InnerItem {
 }
 ```
 
-위 예제코드에서 사용자가 "Load content" 버튼을 클릭하면 아래 DOM 구조가 화면에 렌더링 됩니다.
+위 예제코드에서 사용자가 "Load content" 버튼을 클릭하면 아래 DOM 구조가 화면에 렌더링됩니다.
 
 ```angular-html
 <outer-container>
@@ -678,7 +678,7 @@ export class Host {
 In the example above, the dynamic **AppWarning** is created with its `canClose` input bound to a reactive signal, a two-way binding on its `isExpanded` state, and an output listener for `close`. The `FocusTrap` and `ThemeDirective` are attached to the host element via `directives`.
 -->
 
-`ViewContainerRef.createComponent`는 컴포넌트를 생성하면서 호스트 뷰와 호스트 엘리먼트를 컨테이너의 뷰 계층내 지정된 위치에 자동으로 삽입합니다.
+`ViewContainerRef.createComponent`는 컴포넌트를 생성하면서 호스트 뷰와 호스트 엘리먼트를 컨테이너의 뷰 계층 내 지정된 위치에 자동으로 삽입합니다.
 이 메서드는 동적 컴포넌트가 목록 항목이나 인라인 UI와 같이 컨테이너의 논리적, 시각적 구조의 일부가 되어야 할 때 활용합니다.
 
 반면, 함수로 제공되는 `createComponent` API는 새 컴포넌트를 생성하면서 이 컴포넌트를 뷰나 DOM에 삽입하지 않고, `ComponentRef`를 반환하기 때문에, 이 참조를 활용해서 컴포넌트의 호스트 엘리먼트의 원하는 위치에 넣을 수 있습니다.
@@ -803,7 +803,7 @@ export class PopupService {
 
 오버레이와 같이 현재 뷰 계층 외부에 렌더링할 때 사용하는 방식입니다.
 `hostElement`로 지정한 엘리먼트는 컴포넌트의 호스트 엘리먼트가 되며, Angular는 새 엘리먼트를 생성하지 않습니다.
-원하는대로 **바인딩**을 직접 구성할 수 있습니다.
+원하는 대로 **바인딩**을 직접 구성할 수 있습니다.
 
 ```ts
 import {

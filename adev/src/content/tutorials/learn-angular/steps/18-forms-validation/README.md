@@ -63,7 +63,7 @@ Great job learning these core concepts of working with forms in Angular. If you 
 
 폼을 다루다 보면 폼에 입력된 값을 제출하기 전에 유효성 검사를 해야 하는 경우가 일반적입니다.
 
-참고: 자세한 내용은[폼 유효성 검사 심화 가이드](/guide/forms/reactive-forms#validating-form-input) 문서를 참고하세요.
+참고: 자세한 내용은 [폼 유효성 검사 심화 가이드](/guide/forms/reactive-forms#validating-form-input) 문서를 참고하세요.
 
 이번 튜토리얼에서는 반응형 폼의 유효성을 검사해 봅시다.
 

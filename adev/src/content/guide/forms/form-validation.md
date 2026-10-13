@@ -661,7 +661,7 @@ interface ActorsService {
 검증 함수에서는 서비스의 실제 구현이 중요하지 않으므로, 이 예제는 `ActorsService` 인터페이스를 기준으로 작성할 수 있습니다.
 
 유효성 검사를 시작하면 `UniqueRoleValidator`는 현재 컨트롤 값을 `ActorsService`의 `isRoleTaken()` 메서드에 전달해서 작업을 위임합니다.
-이 때 컨트롤은 `pending` 상태가 되며, `validate()` 메서드가 반환한 옵저버블 체인이 완료될 때까지 이 상태를 유지합니다.
+이때 컨트롤은 `pending` 상태가 되며, `validate()` 메서드가 반환한 옵저버블 체인이 완료될 때까지 이 상태를 유지합니다.
 
 `isRoleTaken()` 메서드는 배역을 선택할 수 있는지 확인하는 HTTP 요청을 보내고 결과로 `Observable<boolean>`을 반환합니다.
 `validate()` 메서드는 응답을 `map` 연산자로 전달해서 유효성 검사 결과로 변환합니다.

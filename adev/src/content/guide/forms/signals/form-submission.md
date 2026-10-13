@@ -130,7 +130,7 @@ After validation passes, the action itself may still fail due to scenarios such 
 참고: `FormRoot` 디렉티브는 `form` 엘리먼트에 `novalidate` 어트리뷰트를 자동으로 지정합니다.
 수동으로 지정할 필요는 없습니다.
 
-`FormRoot`가 폼 제출 이벤트를 받더라도 개발자는 폼 데이터로 _무엇을_ 할 지 지정해야 합니다.
+`FormRoot`가 폼 제출 이벤트를 받더라도 개발자는 폼 데이터로 _무엇을_ 할지 지정해야 합니다.
 일반적으로 3가지가 필요합니다:
 
 1. 폼과 `FormRoot` 디렉티브를 바인딩합니다.
@@ -219,7 +219,7 @@ Once the `action` function succeeds or returns an error, the `submitting()` sign
 
 폼 제출이 진행되는 상태를 추적하려면 시그널 폼의 `submitting()` 시그널을 확인하면 됩니다.
 `action` 함수가 실행되는 중에는 이 시그널이 `true`를 반환합니다.
-이 시그널은 로딩중임을 표시하거나 중복 제출을 막기 위해 폼 제출 버튼을 비활성화 할 때 사용하면 좋습니다.
+이 시그널은 로딩 중임을 표시하거나 중복 제출을 막기 위해 폼 제출 버튼을 비활성화할 때 사용하면 좋습니다.
 
 ```angular-html
 <button type="submit" [disabled]="contactForm().submitting()">
@@ -473,14 +473,14 @@ contactForm = form(
 Use `'none'` when your form has async validators (such as checking username availability) and you need all validation to complete before submitting. Use `'all'` for draft-saving scenarios where you want to persist data regardless of validation state.
 -->
 
-기본적으로 `sugmit()`은 진행중인 유효성 검사는 무시합니다.
-그리고 실패한 유효성 검사가 없다면, 비동기 유효성 검사가 진행중이더라도 `action`이 실행됩니다.
+기본적으로 `sugmit()`은 진행 중인 유효성 검사는 무시합니다.
+그리고 실패한 유효성 검사가 없다면, 비동기 유효성 검사가 진행 중이더라도 `action`이 실행됩니다.
 이 동작을 변경하려면 `ignoreValidators` 옵션을 지정하면 됩니다.
 
 | 값          | 동작                                                                                                    |
 | ----------- | ------------------------------------------------------------------------------------------------------- |
 | `'pending'` | 보류 중인 유효성 검사가 있어도, 유효성 검사가 실패하지 않으면 폼을 제출합니다(기본값)                   |
-| `'none'`    | 모든 유효성 검사가 통과된 후에 폼을 제출합니다. 비동기 유효성 검사가 진행중이면 폼은 제출되지 않습니다. |
+| `'none'`    | 모든 유효성 검사가 통과된 후에 폼을 제출합니다. 비동기 유효성 검사가 진행 중이면 폼은 제출되지 않습니다. |
 | `'all'`     | 유효성 검사 결과와 관계없이 폼을 제출합니다.                                                            |
 
 ```ts
@@ -716,8 +716,8 @@ submission: {
 When a submission is in progress, subsequent calls to `submit()` for the same form or any of its parents return `false` immediately without running the action. This prevents duplicate submissions and side effects if a user triggers the submit action multiple times quickly.
 -->
 
-폼 제출이 진행중일 때 같은 폼이나 부모 폼에서 다시 한 번 `submit()`을 실행하면 폼 제출 함수가 실행되지 않고 `false` 값을 즉시 반환합니다.
-이 동작은 사용자가 폼 제출 버튼을 빠르게 여러번 누르는 경우 발생할 수 있는 폼 중복 제출을 방지하기 위한 것입니다.
+폼 제출이 진행 중일 때 같은 폼이나 부모 폼에서 다시 한 번 `submit()`을 실행하면 폼 제출 함수가 실행되지 않고 `false` 값을 즉시 반환합니다.
+이 동작은 사용자가 폼 제출 버튼을 빠르게 여러 번 누르는 경우 발생할 수 있는 폼 중복 제출을 방지하기 위한 것입니다.
 
 <!--
 ## Next steps

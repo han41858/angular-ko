@@ -152,10 +152,10 @@ There's even more you can do with them, like different triggers, prefetching, an
 If you would like to learn more, check out the [documentation for Deferrable views](/guide/templates/defer).
 -->
 
-앱을 개발하다보면 컴포넌트 중 일부는 여러가지 이유로 바로 로딩하지 않아도 되는 컴포넌트가 있습니다.
+앱을 개발하다 보면 컴포넌트 중 일부는 여러 가지 이유로 바로 로딩하지 않아도 되는 컴포넌트가 있습니다.
 
 화면에 보이지 않는 영역에 있거나, 무거워서 나중에야 사용하는 컴포넌트가 그런 경우입니다.
-이런 컴포넌트들은 나중에 불러오도록 지연 로딩 할 수 있습니다.
+이런 컴포넌트들은 나중에 불러오도록 지연 로딩할 수 있습니다.
 
 참고: 자세한 내용은 [지연 로딩하기: @defer 심화 가이드](/guide/templates/defer) 문서를 참고하세요.
 
@@ -236,7 +236,7 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 
 <docs-step title="뷰포트 트리거를 추가해 보세요">
 
-뷰를 지연 로딩할 때 사용할 수 있는 트리거 옵션이 몇가지 있습니다.
+뷰를 지연 로딩할 때 사용할 수 있는 트리거 옵션이 몇 가지 있습니다.
 화면이 뷰포트 영역을 만났을 때 내용물을 로딩하는 트리거를 추가해 봅시다.
 
 ```angular-html {highlight:[1]}

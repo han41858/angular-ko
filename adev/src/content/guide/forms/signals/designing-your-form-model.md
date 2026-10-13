@@ -40,7 +40,7 @@ Forms should use a form model tailored to the input experience, rather than simp
 -->
 
 폼은 사용자 입력을 수집하는 용도로 사용됩니다.
-애플리케이션에는 비즈니스 로직이나 저장에 최적화 된 방식으로 설계된 도메인 모델이 있을 수 있습니다.
+애플리케이션에는 비즈니스 로직이나 저장에 최적화된 방식으로 설계된 도메인 모델이 있을 수 있습니다.
 하지만 때로는 도메인 모델이 폼의 구조와 다른 경우가 종종 있습니다.
 
 폼 모델은 화면에서 사용자가 입력한 내용 자체를 다룹니다.
@@ -184,7 +184,7 @@ const appModel = signal({
 ```
 
 폼 모델은 용도에 따라 분리해야 이해하기 쉽고 재사용하기도 쉽습니다.
-다뤄야 하는 데이터 그룹이 많다면 폼을 여러개 만드세요.
+다뤄야 하는 데이터 그룹이 많다면 폼을 여러 개 만드세요.
 
 <!--
 ### Consider validation requirements
@@ -279,7 +279,7 @@ form(signal({name: '', birthday: null}));
 ```
 -->
 
-폼 모델에는 `undefined` 값이나 속성을 포함하면 안됩니다.
+폼 모델에는 `undefined` 값이나 속성을 포함하면 안 됩니다.
 시그널 폼은 폼 모델을 기반으로 동작하기 때문에, `undefined`를 사용하면 빈 값을 의미하는 것이 아니라 _필드가 없음_ 을 의미합니다.
 `{property?: string}` 과 같은 생략 가능 항목이라도 `undefined`를 암묵적으로 사용하는 것은 피해야 합니다.
 
@@ -309,7 +309,7 @@ A form model has a dynamic structure if it changes shape (if the properties on t
 
 폼 모델은 객체의 모양이 변하는 경우에 동적 구조가 될 수 있습니다.
 이런 경우는 프로퍼티 구성이 다른 유니언 객체 타입을 폼 모델로 다룰 때 해당됩니다.
-아래 섹션부터는 동적인 폼 모델 구조가 쓸만해 보이지만, 결국 문제가 될 수 있는 경우를 몇가지 살펴봅시다.
+아래 섹션부터는 동적인 폼 모델 구조가 쓸만해 보이지만, 결국 문제가 될 수 있는 경우를 몇 가지 살펴봅시다.
 
 <!--
 #### Empty value for a complex object
@@ -398,7 +398,7 @@ createAccountForm = form<CreateAccountFormModel>(
 );
 ```
 
-이렇게 구현하면, `CreateAccountFormModel`의 모든 필드가 존재하기 때문에 템플릿에서 `[formField]` 디렉티브를 사용해서 입력 필드와 바인딩 할 수 있습니다.
+이렇게 구현하면, `CreateAccountFormModel`의 모든 필드가 존재하기 때문에 템플릿에서 `[formField]` 디렉티브를 사용해서 입력 필드와 바인딩할 수 있습니다.
 
 ```html
 First: <input [formField]="createAccountForm.name.first" /> Last:
@@ -515,7 +515,7 @@ Name: <input type="text" />
 ```
 
 가장 좋은 방법은 가능한 결제 수단을 _모두_ 나열해서 폼을 정적으로 구성하는 것입니다.
-스키마를 활용하면 특정 필드를 감추거나 비활성화 할 수 있습니다.
+스키마를 활용하면 특정 필드를 감추거나 비활성화할 수 있습니다.
 
 ```ts {prefer, header: '정적 구조 모델'}
 interface BillPayFormModel {
@@ -547,8 +547,8 @@ const billPaySchema = schema<BillPayFormModel>((billPay) => {
 사용자가 신용카드 필드에 입력한 데이터는 `card` 객체에 그대로 남아있지만, 다시 신용카드를 선택하지 않는 한 화면에 표시되지 않습니다.
 
 이런 경우는 동적 폼이 오히려 더 유용해 보일 수 있습니다.
-사용자가 신용카드를 선택하면 계좌 관련 정보는 필요없기 때문입니다.
-유니언 폼 모델을 하는 것이 나아보일 수 있습니다:
+사용자가 신용카드를 선택하면 계좌 관련 정보는 필요 없기 때문입니다.
+유니언 폼 모델을 하는 것이 나아 보일 수 있습니다:
 
 ```ts {avoid, header: '동적 구조 모델'}
 interface BillPayFormModel {
@@ -948,7 +948,7 @@ class MyForm {
 ```
 
 위 예제에서는 폼 모델을 도메인 모델로 그대로 사용했습니다.
-그리고 폼 모델의 값 뿐만 아니라 전체 폼의 상태를 고려하면 전혀 문제가 없습니다.
+그리고 폼 모델의 값뿐만 아니라 전체 폼의 상태를 고려하면 전혀 문제가 없습니다.
 전송 용량을 절약하기 위해 사용자가 변경한 필드만 부분적으로 갱신하는 것도 가능합니다.
 이 경우 변환 함수는 폼의 전체 상태를 받아서 도메인 기반으로 값과 변경사항을 검사할 수 있습니다.
 

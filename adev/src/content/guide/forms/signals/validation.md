@@ -67,7 +67,7 @@ NOTE: The schema callback parameter (`schemaPath` in these examples) is a `Schem
   highlight="[23,24,26]"
 />
 
-스키마 함수는 폼이 초기화 될 때 한 번 실행됩니다.
+스키마 함수는 폼이 초기화될 때 한 번 실행됩니다.
 유효성 검사 규칙은 `schemaPath.email`이나 `schemaPath.password`와 같이 스키마 경로 매개변수를 사용해서 필드에 바인딩되며, 필드값이 변경될 때마다 유효성 검사가 자동으로 실행됩니다.
 
 참고: 스키마 콜백 함수의 인자(`schemaPath`)는 폼에 있는 모든 필드에 접근할 수 있는 `SchemaPathTree` 객체입니다.
@@ -91,7 +91,7 @@ Validation runs on every value change for interactive fields. Hidden and disable
 -->
 시그널 폼의 유효성 검사는 이런 방식으로 동작합니다:
 
-1. **유효성 검사 규칙을 스키마에 정의합니다** - 스키마 함수 안에서 유효성검사 규칙이 필드와 바인딩 됩니다.
+1. **유효성 검사 규칙을 스키마에 정의합니다** - 스키마 함수 안에서 유효성검사 규칙이 필드와 바인딩됩니다.
 2. **자동 실행** - 값이 변경될 때마다 유효성 검사가 실행됩니다.
 3. **에러 전파** - 유효성 검사로 에러가 발생하면 상태 시그널로 전달됩니다.
 4. **반응형 업데이트** - 유효성 검사 결과에 따라 UI가 자동으로 갱신됩니다.
@@ -125,7 +125,7 @@ All validation rules run on every change - validation doesn't short-circuit afte
 `required()`나 `email()`과 같은 동기 유효성 검사는 실행이 즉시 종료됩니다.
 `validateHttp()`와 같은 비동기 유효성 검사는 시간이 조금 걸리기 때문에, 비동기 검사가 실행되는 중에는 `pending()` 시그널의 값이 `true`가 됩니다.
 
-유효성 검사는 값이 변경될 때마다 실행되며, 에러가 먼저 발생하는 유효성 검사가 있어도 진행중인 검사가 중단되지는 않습니다.
+유효성 검사는 값이 변경될 때마다 실행되며, 에러가 먼저 발생하는 유효성 검사가 있어도 진행 중인 검사가 중단되지는 않습니다.
 어떤 필드에 `required()` 규칙과 `email()` 규칙이 함께 있으면, 동시에 실행되며, 동시에 에러가 발생할 수 있습니다.
 
 
@@ -260,7 +260,7 @@ registrationForm = form(this.registrationModel, (schemaPath) => {
 });
 ```
 
-유효성 검사 규칙은 `when` 함수 결과가 `true`일때만 실행됩니다.
+유효성 검사 규칙은 `when` 함수 결과가 `true`일 때만 실행됩니다.
 
 참고: `required()`는 빈 배열에서도 `true` 값을 반환합니다.
 배열을 검사하려면 [`minLength()`](#minlength-and-maxlength) 섹션을 참고하세요.
@@ -855,7 +855,7 @@ export class SignupComponent {
 <!--
 ### Multiple errors per field
 -->
-### 필드 하나에 에러가 여러개 발생한 경우
+### 필드 하나에 에러가 여러 개 발생한 경우
 
 <!--
 When a field has multiple validation rules, each validation rule runs independently and can produce an error:
@@ -872,7 +872,7 @@ If the email field is empty, only the `required()` error appears. If the user ty
 
 TIP: Use the `touched() && invalid()` pattern in your templates to prevent errors from appearing before users have interacted with a field. For comprehensive guidance on displaying validation errors, see the [Field State Management guide](guide/forms/signals/field-state-management#conditional-error-display).
 -->
-한 필드에 유효성 검사 규칙이 여러개 적용된 경우에는 개별 유효성 검사 규칙이 독립적으로 실행되며 에러가 발생할 수 있습니다:
+한 필드에 유효성 검사 규칙이 여러 개 적용된 경우에는 개별 유효성 검사 규칙이 독립적으로 실행되며 에러가 발생할 수 있습니다:
 
 ```ts
 signupForm = form(this.signupModel, (schemaPath) => {
@@ -1068,7 +1068,7 @@ export class UserFormComponent {
 
 The `validateTree()` validator function receives the same `FieldContext` object as `validate()`.
 -->
-필드 여러개를 한꺼번에 검사하거나, 필드 트리를 기준으로 복잡한 검사 로직을 구현할 때는 `validateTree()` 함수를 사용합니다.
+필드 여러 개를 한꺼번에 검사하거나, 필드 트리를 기준으로 복잡한 검사 로직을 구현할 때는 `validateTree()` 함수를 사용합니다.
 
 ```angular-ts
 import {Component, model} from '@angular/core';
@@ -1503,7 +1503,7 @@ The `valid()` signal returns `false` while validation is pending, even if there 
 }
 ```
 
-비동기 유효성 검사가 진행중이면 `valid()` 시그널은 `false`를 반환합니다.
+비동기 유효성 검사가 진행 중이면 `valid()` 시그널은 `false`를 반환합니다.
 에러가 발생하지 않은 경우에도 그렇습니다.
 `invalid()` 시그널은 에러가 발생했을 때만 `true`를 반환합니다.
 

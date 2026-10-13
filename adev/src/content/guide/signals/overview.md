@@ -27,7 +27,7 @@ You read a signal's value by calling its getter function, which allows Angular t
 Signals may be either _writable_ or _read-only_.
 -->
 
-**시그널(signal)** 은 값을 감싸는 래퍼(wrapper)인데, 시그널은 그 값이 변경될 때 관심있는 사용자에게 알림을 보냅니다.
+**시그널(signal)** 은 값을 감싸는 래퍼(wrapper)인데, 시그널은 그 값이 변경될 때 관심 있는 사용자에게 알림을 보냅니다.
 시그널은 기본 자료형부터 복잡한 데이터 구조까지 다양한 값을 담을 수 있습니다.
 
 시그널의 값을 읽으려면 시그널 생성 함수를 실행하면 되고, Angular도 이 방식을 사용해서 시그널의 값이 변경되는 것을 추적합니다.
@@ -183,7 +183,7 @@ const doubleCount: Signal<number> = computed(() => count() * 2);
 The `doubleCount` signal depends on the `count` signal. Whenever `count` updates, Angular knows that `doubleCount` needs to update as well.
 -->
 
-**연산 시그널(Computed signal)** 은 어떤 시그널의 영향을 받아값이 변경되는 시그널을 의미합니다.
+**연산 시그널(Computed signal)** 은 어떤 시그널의 영향을 받아 값이 변경되는 시그널을 의미합니다.
 연산 시그널은 `computed` 함수로 생성할 수 있습니다:
 
 ```typescript
@@ -211,9 +211,9 @@ As a result, you can safely perform computationally expensive derivations in com
 `doubleCount`는 처음 실행하기 전까지 실제 연산을 수행하지 않습니다.
 그리고 계산된 값은 캐싱되며, 다음 `doubleCount`를 실행하면 다시 연산하지 않고 캐싱된 값을 바로 반환합니다.
 
-이후에 `count` 시그널이 변경되면 Angular는 이를 감지하고 `doubleCount`에 캐싱된 값이 더이상 유효하지 않다는 것을 판단하기 때문에, 이후에 `doubleCount`를 실행하면 실제 연산이 실행됩니다.
+이후에 `count` 시그널이 변경되면 Angular는 이를 감지하고 `doubleCount`에 캐싱된 값이 더 이상 유효하지 않다는 것을 판단하기 때문에, 이후에 `doubleCount`를 실행하면 실제 연산이 실행됩니다.
 
-따라서 배열 필터링과 같이 계산이 많은 경우라면 연산 시그널을 사용하는 것이 성능면에서 유리합니다.
+따라서 배열 필터링과 같이 계산이 많은 경우라면 연산 시그널을 사용하는 것이 성능 면에서 유리합니다.
 
 <!--
 #### Computed signals are not writable signals
@@ -284,13 +284,13 @@ const conditionalCount = computed(() => {
 ```
 
 이제 `showCount` 시그널의 값이 `false`일 때 `conditionalCount` 시그널의 값을 읽으면 `count` 시그널은 _실행되지도 않고_ "Nothing to see here" 메시지가 반환됩니다.
-이 말은, 나중에 `count` 시그널이 변경되더라도 `conditionalCount`는 연산을 다시 하지 않는 다는 것을 의미합니다.
+이 말은, 나중에 `count` 시그널이 변경되더라도 `conditionalCount`는 연산을 다시 하지 않는다는 것을 의미합니다.
 
 그리고 `showCount` 시그널의 값이 `true` 일 때 `conditionCount` 시그널의 값을 읽으면, 시그널의 증분 함수가 실행되면서 `showCount`가 `true`인 분기를 타게 되고, `count` 시그널의 값을 문자열에 담아 반환합니다.
 그리고 `count` 시그널이 변경되면 `conditionalCount` 시그널에 캐싱된 값도 유효하지 않은 것으로 판단합니다.
 
 시그널의 종속성은 동적으로 변경됩니다.
-이후에 `showCount` 시그널의 값이 `false`가 되면, `conditionalCount` 시그널은 더이상 `count` 값이 변경되는 것을 감지하지 않습니다.
+이후에 `showCount` 시그널의 값이 `false`가 되면, `conditionalCount` 시그널은 더 이상 `count` 값이 변경되는 것을 감지하지 않습니다.
 
 <!--
 ## Reading signals in `OnPush` components
@@ -335,9 +335,9 @@ Angular가 반응 컨텍스트로 관리하는 경우는 이렇습니다:
 - `computed` 시그널 값을 계산할 때
 - `linkedSignal` 시그널 값을 계산할 때
 - `resource` 인자나 로더 함수 값을 계산할 때
-- 컴포넌트 템플릿을 렌더링 할 때 ([호스트 프로퍼티](guide/components/host-elements#binding-to-the-host-element)도 포함합니다)
+- 컴포넌트 템플릿을 렌더링할 때 ([호스트 프로퍼티](guide/components/host-elements#binding-to-the-host-element)도 포함합니다)
 
-이 작업중에 Angular는 별도 연결을 생성하는데, 추적하는 시그널이 변경되면 컨슈머를 다시 실행합니다.
+이 작업 중에 Angular는 별도 연결을 생성하는데, 추적하는 시그널이 변경되면 컨슈머를 다시 실행합니다.
 
 <!--
 ### Asserts the reactive context
@@ -528,7 +528,7 @@ All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, 
 
 `signal`, `computed`, `input` 등 모든 시그널 API는 동기 방식으로 동작합니다.
 하지만 애플리케이션은 종종 비동기 작업을 수행합니다.
-이 때 `resource` 함수를 사용하면 비동기 데이터를 애플리케이션의 시그널 기반 코드에 통합하면서도 데이터에 동기 방식으로 접근할 수 있습니다.
+이때 `resource` 함수를 사용하면 비동기 데이터를 애플리케이션의 시그널 기반 코드에 통합하면서도 데이터에 동기 방식으로 접근할 수 있습니다.
 자세한 내용은 [resource를 활용한 비동기 반응성](/guide/signals/resource)
 
 <!--

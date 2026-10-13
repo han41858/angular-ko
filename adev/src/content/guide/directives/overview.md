@@ -165,7 +165,7 @@ These steps are not necessary to implement `ngClass`.
 
    <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setClasses"/>
 
-1. 템플릿에서 CSS 클래스를 지정하려는 엘리먼트에 `ngClass` 로 `currentClasses` 프로퍼티와 바인딩 합니다:
+1. 템플릿에서 CSS 클래스를 지정하려는 엘리먼트에 `ngClass` 로 `currentClasses` 프로퍼티와 바인딩합니다:
 
    <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgClass-1"/>
 
@@ -232,7 +232,7 @@ import {NgStyle} from '@angular/common';
 export class AppComponent {}
 ```
 
-`NgStyle`을 사용하면 컴포넌트 상태에 따라 인라인 스타일 여러개를 동시에 지정할 수 있습니다.
+`NgStyle`을 사용하면 컴포넌트 상태에 따라 인라인 스타일 여러 개를 동시에 지정할 수 있습니다.
 
 1. `NgStyle`을 사용하려면, 컴포넌트 클래스에 메서드를 추가합니다.
 

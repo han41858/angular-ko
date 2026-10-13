@@ -61,7 +61,7 @@ See the [in-depth guide on i18n](/guide/i18n) to learn more about how Angular lo
 참고: Angular의 파이프 구문은 표준 JavaScript [비트 OR 연산자](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_OR)와는 다릅니다.
 Angular 템플릿 표현식은 비트 연산자를 지원하지 않습니다.
 
-Angular가 제공하는 기본 파이프를 몇가지 사용해 봅시다:
+Angular가 제공하는 기본 파이프를 몇 가지 사용해 봅시다:
 
 ```angular-ts
 import {Component} from '@angular/core';
@@ -174,7 +174,7 @@ In this example, the value of `amount` is passed into the `CurrencyPipe` where t
 ### Combining multiple pipes in the same expression
 -->
 
-### 한 표현식에서 파이프 여러개 사용하기
+### 한 표현식에서 파이프 여러 개 사용하기
 
 <!--
 You can apply multiple transformations to a value by using multiple pipe operators. Angular runs the pipes from left to right.
@@ -227,7 +227,7 @@ For example, we can also pass a second optional parameter to control the timezon
 <p>The event will occur at {{ scheduledOn | date: 'hh:mm' }}.</p>
 ```
 
-인자를 여러개 받는 파이프도 있습니다.
+인자를 여러 개 받는 파이프도 있습니다.
 이 경우는 콜론(`:`)을 더 사용하면 됩니다:
 
 ```angular-html

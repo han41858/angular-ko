@@ -68,7 +68,7 @@ Each `@let` block can declare exactly one variable. You cannot declare multiple 
 ```
 
 `@let` 블록은 각각 변수 하나를 선언합니다.
-쉼표(`,`)를 사용하는 것처럼 블록 하나에서 변수 여러개를 한 번에 선언할 수는 없습니다.
+쉼표(`,`)를 사용하는 것처럼 블록 하나에서 변수 여러 개를 한 번에 선언할 수는 없습니다.
 
 <!--
 ### Referencing the value of `@let`

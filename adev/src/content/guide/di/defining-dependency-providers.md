@@ -409,7 +409,7 @@ export class Isolated {
 ```
 -->
 
-서비스에 `providedIn: 'root'`가 지정되어 있어도 컴포넌트 계층에서 이 값을 오버라이드 할 수 있습니다.
+서비스에 `providedIn: 'root'`가 지정되어 있어도 컴포넌트 계층에서 이 값을 오버라이드할 수 있습니다.
 이 경우에는 서비스의 인스턴스가 컴포넌트의 생명주기와 동일하게 동작합니다.
 그래서 컴포넌트가 종료되면 의존성으로 주입된 서비스의 인스턴스도 함께 종료됩니다.
 
@@ -694,7 +694,7 @@ export class Example {
 ```
 -->
 
-Angular는 의존성으로 주입할 수 있는 객체를 생성하거나 같은 인터페이스 구현체를 여러개 사용할 때 활용할 수 있는 [`InjectionToken`](api/core/InjectionToken) 클래스를 제공합니다.
+Angular는 의존성으로 주입할 수 있는 객체를 생성하거나 같은 인터페이스 구현체를 여러 개 사용할 때 활용할 수 있는 [`InjectionToken`](api/core/InjectionToken) 클래스를 제공합니다.
 
 ```ts
 // 📁 /app/tokens.ts
@@ -1276,7 +1276,7 @@ providers: [
 ### Multiple providers
 -->
 
-### 프로바이더 여러개 등록하기
+### 프로바이더 여러 개 등록하기
 
 <!--
 Use the `multi: true` flag when multiple providers contribute values to the same token:
@@ -1294,7 +1294,7 @@ providers: [
 When you inject `INTERCEPTOR_TOKEN`, you'll receive an array containing instances of all three interceptors.
 -->
 
-`multi: true` 플래그를 사용하면 한 토큰에 프로바이더 여러개를 인젝션 토큰 하나에 등록할 수 있습니다:
+`multi: true` 플래그를 사용하면 한 토큰에 프로바이더 여러 개를 인젝션 토큰 하나에 등록할 수 있습니다:
 
 ```ts
 export const INTERCEPTOR_TOKEN = new InjectionToken<Interceptor[]>('interceptors');
@@ -1324,7 +1324,7 @@ Angular offers several levels where you can register providers, each with differ
 
 프로바이더를 등록하는 계층은 접근 범위, 라이프싸이클, 성능에 따라 선택할 수 있습니다:
 
-- [**애플리케이션을 부트스트랩 할 때**](#애플리케이션을-부트스트랩-할-때) - 전역 범위에 싱글턴 인스턴스로 등록됩니다.
+- [**애플리케이션을 부트스트랩할 때**](#애플리케이션을-부트스트랩할-때) - 전역 범위에 싱글턴 인스턴스로 등록됩니다.
 - [**컴포넌트나 디렉티브 계층**](#컴포넌트나-디렉티브-프로바이더-배열) - 컴포넌트 트리별로 인스턴스를 구분할 때
 - [**라우팅 규칙(Route)**](#라우팅-규칙-프로바이더) - 지연 로딩되는 모듈인 경우
 
@@ -1332,7 +1332,7 @@ Angular offers several levels where you can register providers, each with differ
 ### Application bootstrap
 -->
 
-### 애플리케이션을 부트스트랩 할 때
+### 애플리케이션을 부트스트랩할 때
 
 <!--
 Use application-level providers in `bootstrapApplication` when:
@@ -1389,7 +1389,7 @@ bootstrapApplication(App, {
 **장점:**
 
 - 싱글턴 인스턴스를 활용하면 메모리 사용량을 줄일 수 있습니다.
-- 별도 설정없이도 앱 전역에서 사용할 수 있습니다.
+- 별도 설정 없이도 앱 전역에서 사용할 수 있습니다.
 - 전역 상태를 관리하기 편합니다.
 
 **단점:**
@@ -1510,7 +1510,7 @@ export class Modal {}
 - 사용하는 곳마다 프로바이더를 등록해야 합니다.
 - 의존성 객체를 실제로 사용하지 않더라도, 컴포넌트/디렉티브 빌드 결과물에 항상 포함됩니다.
 
-참고: 한 엘리먼트에 같은 토큰으로 디렉티브 여러개가 존재하면, 하나만 유효하지만, 어떤 것이 유효할 지는 알 수 없습니다.
+참고: 한 엘리먼트에 같은 토큰으로 디렉티브 여러 개가 존재하면, 하나만 유효하지만, 어떤 것이 유효할지는 알 수 없습니다.
 
 <!--
 ### Route providers
@@ -1808,7 +1808,7 @@ bootstrapApplication(App, {
 ```
 -->
 
-더 복잡한 경우라면 여러가지 구현 방식을 섞어서 사용할 수 있습니다:
+더 복잡한 경우라면 여러 가지 구현 방식을 섞어서 사용할 수 있습니다:
 
 ```ts
 // 📁 /libs/http-client/src/provider.ts

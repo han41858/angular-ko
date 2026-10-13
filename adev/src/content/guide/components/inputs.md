@@ -84,7 +84,7 @@ export class CustomSlider {
 }
 ```
 
-그러면 템플릿에서 이렇게 프로퍼티 바인딩 할 수 있습니다:
+그러면 템플릿에서 이렇게 프로퍼티 바인딩할 수 있습니다:
 
 ```angular-html
 <custom-slider [value]="50" />
@@ -375,7 +375,7 @@ export class CustomSlider {
 }
 ```
 
-`booleanAttribute`는 표준 HTML [불리언 어트리뷰트](https://developer.mozilla.org/docs/Glossary/Boolean/HTML)를 따라해서 어트리뷰트 값이 _존재하면_ "true" 값으로 변환합니다.
+`booleanAttribute`는 표준 HTML [불리언 어트리뷰트](https://developer.mozilla.org/docs/Glossary/Boolean/HTML)를 따라 해서 어트리뷰트 값이 _존재하면_ "true" 값으로 변환합니다.
 그리고 `booleanAttribute`가 `"false"` 문자열을 받으면 불리언 `false` 값으로 변환합니다.
 
 `numberAttribute`는 값이 주어지면 숫자로 변환합니다.
@@ -483,7 +483,7 @@ See [Two-way binding](guide/templates/two-way-binding) for more details on two-w
 
 모델 입력 프로퍼티와 일반 입력 프로퍼티는 컴포넌트 안쪽으로 값을 전달할 수 있습니다.
 그런데 **모델 입력 프로퍼티는 컴포넌트 밖으로도 값을 전달할 수 있습니다.**
-그래서 이 프로퍼티는 양방향으로 바인딩 할 수 있습니다.
+그래서 이 프로퍼티는 양방향으로 바인딩할 수 있습니다.
 
 ```ts
 @Component({
@@ -544,7 +544,7 @@ export class MediaControls {
 In the example above, the `CustomSlider` can write values into its `value` model input, which then propagates those values back to the `volume` property in `MediaControls`. This binding keeps the values of `value` and `volume` in sync.
 -->
 
-일반적인 JavaScript 프로퍼티를 모델 입력 프로퍼티와 바인딩 할 수 있습니다.
+일반적인 JavaScript 프로퍼티를 모델 입력 프로퍼티와 바인딩할 수 있습니다.
 
 ```angular-ts
 @Component({
@@ -905,7 +905,7 @@ export class CustomSlider {
 ```
 
 가능하다면 **게터, 세터 대신 입력 프로퍼티 변환 함수를 사용하세요**.
-Angular는 입력 프로퍼티의 세터를 여러번 실행할 수 있으며, 이 세터가 DOM을 조작하는 것처럼 성능에 영향을 많이 주는 경우에는 전체 애플리케이션 성능에 부정적인 영향을 미칠 수 있습니다.
+Angular는 입력 프로퍼티의 세터를 여러 번 실행할 수 있으며, 이 세터가 DOM을 조작하는 것처럼 성능에 영향을 많이 주는 경우에는 전체 애플리케이션 성능에 부정적인 영향을 미칠 수 있습니다.
 
 <!--
 ## Specify inputs in the `@Component` decorator

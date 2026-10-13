@@ -145,6 +145,6 @@ export class User {}
 
 </docs-workflow>
 
-Angular로 폼을 구현하는 첫 걸음을 내딛었습니다.
+Angular로 폼을 구현하는 첫걸음을 내딛었습니다.
 
 잘 하셨습니다. 계속 진행해보시죠!

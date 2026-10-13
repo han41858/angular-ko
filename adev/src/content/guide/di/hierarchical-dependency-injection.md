@@ -208,11 +208,11 @@ bootstrapApplication(App, appConfig);
 이것이 최상위 인젝터인 `EnvironmentInjector`입니다.
 
 `platformBrowserDynamic()` 메서드는 각 플랫폼 의존성 객체를 기반으로 `PlatformModule` 인젝터를 생성합니다.
-이 방식에 따라 플랫폼 환경설정을 공유하는 애플리케이션은 여러개가 될 수도 있습니다.
+이 방식에 따라 플랫폼 환경설정을 공유하는 애플리케이션은 여러 개가 될 수도 있습니다.
 예를 들면, 브라우저에서 실행되는 애플리케이션 숫자에 관계없이 브라우저에는 주소표시줄이 하나만 존재합니다.
 그리고 `platformBrowser()` 함수를 실행할 때 `extraProviders` 옵션을 사용해서 플랫폼 계층에 플랫폼별 프로바이더를 추가로 구성할 수 있습니다.
 
-그 다음으로 트리 최상단에 존재하는 부모 인젝터는 `NullInjector()` 입니다.
+그다음으로 트리 최상단에 존재하는 부모 인젝터는 `NullInjector()` 입니다.
 `@Optional()`을 사용하지 않은 채로 의존성 객체를 찾다가 `NullInjector()`를 만나면 에러가 발생합니다.
 왜냐하면 `NullInjector()`는 의존성 객체를 찾는 마지막 지점이기 때문에 `@Optional()`을 사용한 경우 `null`을 반환하거나, 아니면 에러를 반환하기 때문입니다.
 `@Optional()`에 대해 자세하게 알아보려면 이 문서의 [`@Optional()` 섹션](#optional)을 참고하세요.
@@ -471,7 +471,7 @@ export class Self {
 `self`를 사용하면 Angular는 해당 컴포넌트/디렉티브의 `ElementInjector`에서만 의존성 객체를 찾습니다.
 
 `self`는 현재 호스트 엘리먼트에서 사용할 수 있는 서비스 인스턴스를 참조할 때 사용하면 좋습니다.
-이 때 오류가 발생하는 것을 방지하려면 `self`와 `optional`을 함께 사용하세요.
+이때 오류가 발생하는 것을 방지하려면 `self`와 `optional`을 함께 사용하세요.
 
 예를 들어 아래 코드에서 `SelfNoDataComponent`는 `LeafService`를 의존성 객체로 요청합니다.
 
@@ -590,7 +590,7 @@ class Person {
 `skipSelf` 옵션을 사용할 때 `optional`을 함께 사용하면 의존성 객체를 찾지 못해 `null`을 반환하더라도 오류가 발생하지 않습니다.
 
 아래 코드는 프로퍼티 초기화 시점에 `Person` 서비스를 의존성으로 주입받는 예제 코드입니다.
-이 때 `skipSelf`를 사용했기 때문에 현재 계층의 인젝터는 건너뛰지만, `optional`을 함께 사용했기 때문에 `Person` 서비스를 찾지 못해 `null`을 반환하더라도 오류가 발생하지는 않습니다.
+이때 `skipSelf`를 사용했기 때문에 현재 계층의 인젝터는 건너뛰지만, `optional`을 함께 사용했기 때문에 `Person` 서비스를 찾지 못해 `null`을 반환하더라도 오류가 발생하지는 않습니다.
 
 ```ts
 class Person {
@@ -726,7 +726,7 @@ Angular 템플릿의 논리 구조를 이해하면 서비스를 어떻게 구성
 
 참고: 일반적으로 컴포넌트 클래스 코드와 템플릿은 별도 파일로 작성합니다.
 의존성 주입 시스템이 어떻게 동작하는지 이해하려면 이 둘을 논리적 트리로 합쳐서 바라보는 것이 좋습니다.
-이 때 _논리적(logical)_ 이라는 것은 애플리케이션 DOM 트리인 렌더링 트리와 구분하기 위한 용어입니다.
+이때 _논리적(logical)_ 이라는 것은 애플리케이션 DOM 트리인 렌더링 트리와 구분하기 위한 용어입니다.
 그리고 컴포넌트 템플릿이 위치한 곳을 표시하기 위해 예제 코드에서는 `<#VIEW>` 라는 임시 엘리먼트를 사용하겠습니다.
 이 엘리먼트는 렌더링 트리에 실제로 존재하는 것은 아니며, 이해를 돕기 위한 목적입니다.
 
@@ -780,7 +780,7 @@ These aren't real attributes but are here to demonstrate what is going on under 
 `@Component()`나 `@Directive()` 데코레이터에 서비스 프로바이더를 등록하면 이 서비스의 접근 범위가 결정됩니다.
 다음 섹션에서는 `providers`나 `viewProviders`, `skipSelf`와 `host`를 사용해서 서비스의 접근 범위를 변경하는 방법을 알아봅시다.
 
-서비스 프로바이더를 컴포넌트 클래스에 등록하는 방법은 두 가지 입니다:
+서비스 프로바이더를 컴포넌트 클래스에 등록하는 방법은 두 가지입니다:
 
 | 배열            | 설명                                           |
 | :-------------- | :--------------------------------------------- |
@@ -1073,7 +1073,7 @@ export class Child {
 이제 `FlowerService`가 `@Component()` 데코레이터에 등록되었기 때문에, `<app-child>`에서 의존성 객체를 요청하면 인젝터는 `<app-child>`에 있는 `ElementInjector` 에서만 의존성 객체를 찾습니다.
 인젝터 트리를 따라 위로 향하지 않습니다.
 
-그 다음 단계는 `Child` 템플릿에 바인딩을 추가해 봅시다:
+그다음 단계는 `Child` 템플릿에 바인딩을 추가해 봅시다:
 
 ```html
 <p>Emoji from FlowerService: {{flower.emoji}}</p>
@@ -1445,7 +1445,7 @@ export class Inspector {
 }
 ```
 
-이 때 `providers` 배열이나 `viewProviders` 배열은 필요하지 않습니다.
+이때 `providers` 배열이나 `viewProviders` 배열은 필요하지 않습니다.
 그리고 `inspector.html` 파일에서 이전에 추가했던 것과 같은 마크업을 추가합니다:
 
 ```html
@@ -1499,16 +1499,16 @@ Emoji from FlowerService: 🌻
 Emoji from AnimalService: 🐶
 ```
 
-이렇게 네 가지로 바인딩 한 결과를 보면 `providers`와 `viewProviders`의 차이점을 확인할 수 있습니다.
+이렇게 네 가지로 바인딩한 결과를 보면 `providers`와 `viewProviders`의 차이점을 확인할 수 있습니다.
 강아지 이모지 <code>🐶</code>는 `ChildComponent`의 `<#VIEW>` 안에 선언되어 있기 때문에 프로젝션된 컨텐츠 안에서는 접근할 수 없습니다.
-프로젝션 된 컨텐츠 안에서는 고래 <code>🐳</code>를 의존성 객체로 참조할 수 있습니다.
+프로젝션된 컨텐츠 안에서는 고래 <code>🐳</code>를 의존성 객체로 참조할 수 있습니다.
 
 프로젝션된 `<app-inspector>` 에서 왜 <code>🐳</code>가 표시되는지 의문이 들 수 있습니다.
 Angular의 의존성 주입 시스템은 **컴포넌트가 렌더링되는 곳** 이 아니라 **컴포넌트가 선언된 곳** 을 추적하기 때문입니다.
 `<app-inspector>`는 `App`의 템플릿 안, 다르게 표현하면 `App`의 `<#VIEW> 안에 존재하기 때문에 `App`의 `viewProviders`의 영향을 받습니다.
 컨텐츠가 `Child`안으로 프로젝션된다고 해도`Child`의 `viewProviders`에 등록된 <code>🐶</code>를 참조하는 것이 아니라 `App`에 등록된 <code>🐳</code>를 참조합니다.
 
-그런데 다음 섹션을 보면, `Inspector`는 `Child`의 자식 컴포넌트이며, `Inspector`는 `<#VIEW>` 안에 존재하기 때문에, 이 때 참조하는 `AnimalService`는 강아지 <code>🐶</code> 값이 됩니다.
+그런데 다음 섹션을 보면, `Inspector`는 `Child`의 자식 컴포넌트이며, `Inspector`는 `<#VIEW>` 안에 존재하기 때문에, 이때 참조하는 `AnimalService`는 강아지 <code>🐶</code> 값이 됩니다.
 
 로직 트리로 표현해보면 이렇습니다:
 
@@ -1901,7 +1901,7 @@ export class Child {
   and how `host` works.
  -->
 
-`providers` 배열에 `FlowerService`를 등록했지만 `host`와 `skipSelf`를 사용하면 `null`이 반환되는 이유는, `skipSelf`를 사용했기 때문에 `<app-child>` 인젝터를 건너 뛰지만, `host`를 사용했기 때문에 해당 계층의 `<#VIEW>`에서 탐색을 멈추기 때문입니다.
+`providers` 배열에 `FlowerService`를 등록했지만 `host`와 `skipSelf`를 사용하면 `null`이 반환되는 이유는, `skipSelf`를 사용했기 때문에 `<app-child>` 인젝터를 건너뛰지만, `host`를 사용했기 때문에 해당 계층의 `<#VIEW>`에서 탐색을 멈추기 때문입니다.
 논리 트리로 보면 `<app-child>`에서는 `FlowerService`에 접근할 수 있지만 `<app-child>`의 `<#VIEW>`는 그렇지 않습니다.
 
 하지만, `AnimalService`는 `AppComponent`의 `viewProviders` 배열에 등록되었기 때문에 접근할 수 있습니다.
@@ -1975,7 +1975,7 @@ As long as `VillainsList` does not get destroyed it will be the same instance of
 빌런의 목록을 표시하는 `VillainsList`를 예로 들어 봅시다.
 빌런 목록은 `VillainsService`에서 가져옵니다.
 
-이 때 `VillainsService`를 `AppModule`에 등록하면, `VillainsService`는 애플리케이션 전체 범위에서 자유롭게 접근할 수 있습니다.
+이때 `VillainsService`를 `AppModule`에 등록하면, `VillainsService`는 애플리케이션 전체 범위에서 자유롭게 접근할 수 있습니다.
 그래서 이후에 `VillainsService`를 수정하면 다른 컴포넌트에서 문제가 발생할 수 있습니다.
 
 대신, `VillainService`를 `VillainsList`의 `providers`에 등록하는 방법을 사용할 수도 있습니다:
@@ -1992,13 +1992,13 @@ export class VillainsList {}
 `VillainsService`를 `VillainsList`에 등록하면 이제 이 컴포넌트와 자식 컴포넌트가 아닌 곳에서는 `VillainsService`에 접근할 수 없습니다.
 
 `VillainService`는 이 서비스가 등록된 `VillainsList`의 기준에서 싱글턴으로 동작합니다.
-그래서 `VillainsList`가 종료되지 않는 한 `VillainService`는 동일한 인스턴스가 유지되지만, `VillainsList`의 인스턴스가 여러개가 되면 개별 컴포넌트 인스턴스마다 `VilalinService`의 인스턴스가 생성됩니다.
+그래서 `VillainsList`가 종료되지 않는 한 `VillainService`는 동일한 인스턴스가 유지되지만, `VillainsList`의 인스턴스가 여러 개가 되면 개별 컴포넌트 인스턴스마다 `VilalinService`의 인스턴스가 생성됩니다.
 
 <!--
 ### Scenario: multiple edit sessions
 -->
 
-### 시나리오: 세션 여러개 유지하기
+### 시나리오: 세션 여러 개 유지하기
 
 <!--
 Many applications allow users to work on several open tasks at the same time.
@@ -2130,14 +2130,14 @@ HELPFUL: The rest of the scenario code relies on other Angular features and tech
 -->
 
 대부분의 애플리케이션은 보통 동시에 여러 작업을 처리합니다.
-세금 신고 애플리케이션이라면, 신고 담당자는 하루종일 여러 작업을 전환하면서 세금 신고서를 동시에 작업할 수도 있습니다.
+세금 신고 애플리케이션이라면, 신고 담당자는 하루 종일 여러 작업을 전환하면서 세금 신고서를 동시에 작업할 수도 있습니다.
 
 이와 비슷하게, 슈퍼 히어로 목록을 표시하는 `HeroList`를 생각해 봅시다.
 
 목록에서 히어로의 이름을 클릭하면 히어로의 세금 신고서가 표시되고 편집할 수 있는 컴포넌트가 열립니다.
 그러면 각 히어로의 세금 신고서는 동시에 각각의 컴포넌트로 열립니다.
 
-이 때 개별 컴포넌트는 이런 특징이 있습니다:
+이때 개별 컴포넌트는 이런 특징이 있습니다:
 
 - 독립적인 편집 세션을 유지합니다.
 - 다른 컴포넌트에 영향을 주지 않고 세금 신고서를 수정할 수 있습니다.

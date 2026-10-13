@@ -1,5 +1,5 @@
 <docs-decorative-header title="의존성 주입" imgSrc="adev/src/assets/images/dependency_injection.svg"> <!-- markdownlint-disable-line -->
-애플리케이션 전반과 테스트에 코드를 재사용 해보세요.
+애플리케이션 전반과 테스트에 코드를 재사용해 보세요.
 </docs-decorative-header>
 
 <!--
@@ -75,7 +75,7 @@ Here’s what it might look like in the `Receipt` component:
 컴포넌트에서 서비스를 사용하려면:
 
 1. 서비스를 불러옵니다.
-2. 불러온 서비스를 클래스 필드로 선언합니다. 이 때 [`inject`](/api/core/inject) 함수를 실행하면 원하는 서비스를 의존성 객체로 참조할 수 있습니다.
+2. 불러온 서비스를 클래스 필드로 선언합니다. 이때 [`inject`](/api/core/inject) 함수를 실행하면 원하는 서비스를 의존성 객체로 참조할 수 있습니다.
 
 `Receipt` 컴포넌트를 살펴봅시다:
 

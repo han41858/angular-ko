@@ -72,7 +72,7 @@ Property binding is one of Angular's many powerful features. If you'd like to le
 <img alt="photo" [src]="imageURL" />
 ```
 
-이 예제에서는 엘리먼트의 `src` 어트리뷰트 값이 클래스 프로퍼티 `imageURL`과 바인딩 되어 있습니다.
+이 예제에서는 엘리먼트의 `src` 어트리뷰트 값이 클래스 프로퍼티 `imageURL`과 바인딩되어 있습니다.
 그래서 `imageURL` 값이 변경되면 `img` 태그의 `src` 어트리뷰트도 같은 값으로 변경됩니다.
 
 <docs-workflow>
@@ -89,9 +89,9 @@ export class App {
 
 </docs-step>
 
-<docs-step title="`contentEditable`에 바인딩 해보세요" header="app.ts" language="ts">
+<docs-step title="`contentEditable`에 바인딩해 보세요" header="app.ts" language="ts">
 
-그 다음은 `div` 엘리먼트의 `contentEditable` 어트리뷰트와 `isEditable` 프로퍼티를 <code aria-label="square brackets">[]</code> 문법으로 바인딩 하면 됩니다.
+그다음은 `div` 엘리먼트의 `contentEditable` 어트리뷰트와 `isEditable` 프로퍼티를 <code aria-label="square brackets">[]</code> 문법으로 바인딩하면 됩니다.
 
 ```angular-ts {highlight:[3]}
 @Component({

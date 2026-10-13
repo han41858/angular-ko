@@ -43,7 +43,7 @@ export class Search {
 지금도 사용해 볼 수는 있지만, 이후에 안정 버전에서 사용방법이 변경될 수 있습니다.
 
 시그널 값이 계속 변경되다가 멈췄을 때 반응하려면 `debounced`를 사용하면 됩니다.
-이 함수를 실행하면 소스 시그널 값이 안정될 때 실행되는`Resource` 시그널을 반환합니다.
+이 함수를 실행하면 소스 시그널 값이 안정될 때 실행되는 `Resource` 시그널을 반환합니다.
 
 ```angular-ts
 import {debounced, resource, signal} from '@angular/core';

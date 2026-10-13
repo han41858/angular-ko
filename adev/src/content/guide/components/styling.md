@@ -133,7 +133,7 @@ emulated encapsulation mode does not support any other pseudo classes related to
 as `::shadow` or `::part`.
 -->
 
-기본적으로 Angular는 에뮬레이션 된 뷰 캡슐화 정책을 사용하기 때문에 컴포넌트의 스타일은 컴포넌트 템플릿에 있는 엘리먼트에만 적용됩니다.
+기본적으로 Angular는 에뮬레이션된 뷰 캡슐화 정책을 사용하기 때문에 컴포넌트의 스타일은 컴포넌트 템플릿에 있는 엘리먼트에만 적용됩니다.
 Angular는 이 모드에서 컴포넌트 인스턴스마다 고유한 HTML 어트리뷰트를 생성해서 컴포넌트 템플릿의 엘리먼트에 추가하고, 컴포넌트 스타일에도 해당 어트리뷰트를 추가합니다.
 
 이 모드를 사용하면 한 컴포넌트의 스타일이 다른 컴포넌트에 영향을 주지 않습니다.

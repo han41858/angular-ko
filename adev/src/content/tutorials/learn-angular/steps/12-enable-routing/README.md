@@ -131,7 +131,7 @@ export const appConfig: ApplicationConfig = {
 
 <docs-step title="컴포넌트에서 `RouterOutlet` 를 로드합니다">
 
-마지막으로 Angular Router를 사용하려면 원하는 화면을 앱의 어느 위치에 표시할 지 지정해야 합니다.
+마지막으로 Angular Router를 사용하려면 원하는 화면을 앱의 어느 위치에 표시할지 지정해야 합니다.
 이 위치는 `@angular/router`로 제공되는 `RouterOutlet` 디렉티브로 지정합니다.
 
 `App` 컴포넌트의 템플릿을 수정해서 `<router-outlet />` 를 추가해 봅시다.

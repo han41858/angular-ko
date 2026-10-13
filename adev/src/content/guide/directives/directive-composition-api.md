@@ -67,7 +67,7 @@ directives at runtime.
 export class AdminMenu {}
 ```
 
-프레임워크가 컴포넌트를 렌더링 할 때 Angular는 호스트 디렉티브마다 각각 인스턴스를 생성합니다.
+프레임워크가 컴포넌트를 렌더링할 때 Angular는 호스트 디렉티브마다 각각 인스턴스를 생성합니다.
 그리고 이 디렉티브는 컴포넌트의 호스트 엘리먼트에 호스트 바인딩됩니다.
 기본적으로 호스트 디렉티브의 입출력 프로퍼티는 컴포넌트 public API처럼 컴포넌트 밖으로 노출되지 않습니다.
 자세한 내용은 아래 [입출력 프로퍼티 지정하기](#입출력-프로퍼티-지정하기) 섹션을 참고하세요.
@@ -225,7 +225,7 @@ export class SpecializedMenuWithTooltip {}
 -->
 
 컴포넌트뿐 아니라 다른 디렉티브에서 `hostDirectives`를 활용할 수도 있습니다.
-이 방식을 활용하면 디렉티브 여러개를 한 번에 적용할 수 있습니다.
+이 방식을 활용하면 디렉티브 여러 개를 한 번에 적용할 수 있습니다.
 
 아래 예제에는 `Menu` 디렉티브와 `Tooltip` 디렉티브가 있습니다.
 두 디렉티브를 `MenuWithTooltip` 디렉티브로 합쳐봅시다.
@@ -417,7 +417,7 @@ When the same directive appears more than once in the resolved host directive tr
 -->
 
 호스트 디렉티브 트리에 같은 디렉티브가 두 번 이상 사용되면, 오류를 발생시키는 대신 자동으로 중복이 제거됩니다.
-어떤 항목이 유지될 지는 다음 규칙을 따릅니다.
+어떤 항목이 유지될지는 다음 규칙을 따릅니다.
 
 <!--
 #### Template match takes precedence
@@ -478,7 +478,7 @@ export class Button {}
 #### Multiple host directive matches are merged
 -->
 
-#### 호스트 디렉티브가 여러개 매칭되면 합쳐집니다.
+#### 호스트 디렉티브가 여러 개 매칭되면 합쳐집니다.
 
 <!--
 If the same directive appears **more than once as a host directive** , for example, when two

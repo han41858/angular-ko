@@ -181,7 +181,7 @@ If the service should be lazy-loaded but still available to eager components, in
 -->
 
 지연 로딩되는 라우팅 규칙의 `providers` 배열에 서비스 프로바이더를 등록하면, Angular는 그 라우팅 규칙에 인젝터를 생성합니다.
-이 때 생성되는 인젝터와 서비스 인스턴스는 해당 라우팅 규칙이 로딩된 이후에 사용가능합니다.
+이때 생성되는 인젝터와 서비스 인스턴스는 해당 라우팅 규칙이 로딩된 이후에 사용가능합니다.
 그리고 이 인젝터는 애플리케이션이 실행되면서 즉시 로드된 부분과는 다르게 구성되기 때문에, 즉시 로드된 컴포넌트에서 지연 로딩된 인젝터에 접근할 수는 없습니다.
 
 ```ts {header: 'feature.routes.ts'}
@@ -233,7 +233,7 @@ export class FeatureClient {
 ### Multiple instances instead of singletons
 -->
 
-### 인스턴스 여러개 사용하기
+### 인스턴스 여러 개 사용하기
 
 <!--
 You expect one shared instance (singleton) but get separate instances in different components.
@@ -289,7 +289,7 @@ export class UserClient {
 
 컴포넌트 `providers` 배열에 서비스 프로바이더를 등록하면, Angular는 컴포넌트 인스턴스마다 서비스 인스턴스를 새로 생성합니다.
 그러면 개별 컴포넌트마다 각각 서비스 인스턴스가 생성되기 때문에, 어떤 컴포넌트에서 서비스를 활용하는 것이 다른 컴포넌트의 서비스 인스턴스에 영향을 주지 않습니다.
-애플리케이션의 어떤 상태를 다른 곳에 전달하려고 한다면 이렇게 구성하면 안됩니다.
+애플리케이션의 어떤 상태를 다른 곳에 전달하려고 한다면 이렇게 구성하면 안 됩니다.
 
 ```angular-ts {avoid, header: '컴포넌트 계층에 프로바이더를 등록하면 인스턴스가 여러개 생성됩니다'}
 import {Component, inject} from '@angular/core';
@@ -332,7 +332,7 @@ export class UserClient {
 #### When multiple instances are intentional
 -->
 
-#### 인스턴스를 여러개 활용하려는 경우
+#### 인스턴스를 여러 개 활용하려는 경우
 
 <!--
 Sometimes you want separate instances per component for component-specific state.
@@ -808,13 +808,13 @@ Use `viewProviders` when:
 
 `providers`는 이런 경우에 사용하세요:
 
-- 프로젝션 된 컨텐츠에서 서비스 인스턴스를 활용해야 할 때
+- 프로젝션된 컨텐츠에서 서비스 인스턴스를 활용해야 할 때
 - 일반적으로 서비스 프로바이더를 등록할 때
 
 `viewProviders` 는 이런 경우에 사용하세요:
 
 - 서비스 인스턴스를 컴포넌트 템플릿에서만 사용하려고 할 때
-- 프로젝션 된 컨텐츠의 구체적인 구현 내용을 감추려고 할 때
+- 프로젝션된 컨텐츠의 구체적인 구현 내용을 감추려고 할 때
 - 서비스를 내부 용도로만 사용하고 외부로 노출하지 않을 때
 
 **권장사항:** `viewProviders`를 사용해서 사용범위를 제한해야 하는 경우가 아니라면 언제나 `providers`를 사용하세요.
@@ -960,7 +960,7 @@ export class FeatureView {
 ```
 
 참고: 토큰은 파일 한 곳에 선언하고 필요한 곳에 로드해서 사용하세요.
-같은 구분자로 `INjectionToken`을 여러개 선언하면 안됩니다.
+같은 구분자로 `INjectionToken`을 여러 개 선언하면 안 됩니다.
 
 <!--
 #### Trying to inject interfaces
@@ -1094,7 +1094,7 @@ Circular dependencies occur when services inject each other, creating a cycle th
 NOTE: Do not use `forwardRef()` for service circular dependencies—it only solves circular imports in standalone component configurations.
 -->
 
-서비스 여러개가 서로를 참조하면 순환 참조가 발생하기 때문에 에러가 발생합니다.
+서비스 여러 개가 서로를 참조하면 순환 참조가 발생하기 때문에 에러가 발생합니다.
 자세한 설명과 예제 코드는 [NG0200: Circular dependency](errors/NG0200) 문서를 참고하세요.
 
 **해결 방법** (권장하는 순서대로):
@@ -1148,7 +1148,7 @@ Angular는 이런 순서로 탐색합니다:
 4. **NullInjector** - 의존성 객체를 찾지 못하면 `NullInjectorError` 를 발생시킵니다.
 
 `NullInjectorError`가 발생하면 어느 계층에도 서비스 클래스 프로바이더가 등록되지 않았다는 것을 의미합니다.
-이 곳을 확인해 보세요:
+이곳을 확인해 보세요:
 
 - 서비스에 `@Service()`가 지정되었는지
 - 서비스에 `@Injectable({providedIn: 'root'})`가 지정되었는지
@@ -1182,7 +1182,7 @@ Angular가 제공하는 개발자도구를 활용하면 전체 인젝터 계층 
 
 - **서비스 프로바이더가 등록되어 있는지?** 의존성 주입이 실패한 컴포넌트를 선택하면 Injector 섹션에 서비스가 등록되어 있는지 확인하세요.
 - **어느 계층에 등록되어 있는지?** 컴포넌트 트리를 따라 올라가며 서비스가 실제로 컴포넌트, 라우팅 규칙, 애플리케이션 계층 중 어디에 등록되었는지 찾을 수 있습니다.
-- **인스턴스가 여러개인지?** 컴포넌트마다 싱글턴 서비스가 여러개 확인된다면, 이 서비스는 컴포넌트의 `providers` 배열에 등록되었을 수 있습니다. 전역 범위에 등록하려면 `@Service` 데코레이터나 `providedIn: 'root'` 옵션을 사용합니다.
+- **인스턴스가 여러 개인지?** 컴포넌트마다 싱글턴 서비스가 여러 개 확인된다면, 이 서비스는 컴포넌트의 `providers` 배열에 등록되었을 수 있습니다. 전역 범위에 등록하려면 `@Service` 데코레이터나 `providedIn: 'root'` 옵션을 사용합니다.
 
 서비스 프로바이더가 어떠한 인젝터에도 등록되지 않았다면, 서비스 클래스에 `@Service` 데코레이터를 빠뜨리지 않았는지, `providers` 배열에 추가했는지 확인해 보세요.
 
@@ -1450,7 +1450,7 @@ When DI fails, follow this systematic approach:
 
 - `inject()` 가 유효한 컨텍스트에서 실행되었나요?
 - 비동기 이슈인지 확인해 보세요. (await, setTimeout, promises)
-- 실행 시점을 확인해 보세요. (컴포넌트 종료 후에 실행하면 안됩니다)
+- 실행 시점을 확인해 보세요. (컴포넌트 종료 후에 실행하면 안 됩니다)
 
 **4단계: 디버깅 툴을 사용하세요**
 
@@ -1889,7 +1889,7 @@ Other injection contexts that `inject()` also works in include:
 
 `inject()` 함수는 이런 곳에서 사용할 수 있습니다:
 
-1. **클래스 필드를 초기화 할 때**
+1. **클래스 필드를 초기화할 때**
 
    ```angular-ts
    import {Component, inject} from '@angular/core';
@@ -2036,7 +2036,7 @@ setTimeout(() => {
 ```
 -->
 
-**해결 방법 1:** 의존성 객체는 클래스 필드를 초기화 할 때 주입하세요.
+**해결 방법 1:** 의존성 객체는 클래스 필드를 초기화할 때 주입하세요.
 
 ```ts
 private userService = inject(UserClient) // 클래스 계층에서 주입
@@ -2145,7 +2145,7 @@ Do NOT use `forwardRef()` for service circular dependencies. It only solves circ
 
 1. **코드를 다시 구성하세요** - 공통 로직을 별도 서비스로 분리하세요. (권장)
 2. **이벤트를 활용하세요** - 의존성 객체로 직접 참조하지 말고 이벤트 기반으로 통신하세요.
-3. **지연 의존성 주입을 활용하세요** - 의존성 객체 한 쪽에서 `Injector.get()` 를 사용해서 지연로딩 하세요. (최종 수단)
+3. **지연 의존성 주입을 활용하세요** - 의존성 객체 한쪽에서 `Injector.get()` 를 사용해서 지연로딩하세요. (최종 수단)
 
 의존성 순환 참조를 해결하기 위해 `forwardRef()`를 **사용하지 마세요**.
 이 연산자는 컴포넌트를 구성할 때 발생한 순환 참조만 해결할 수 있습니다.

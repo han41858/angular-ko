@@ -148,7 +148,7 @@ console.log(emailValue); // 현재 email 문자열
 
 | 분류                                      | 시그널       | 의미                                                                                            |
 | ----------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- |
-| **[유효성 검사](#validation-state)**      | `valid()`    | 진행중인 검사 없이 모든 필드가 유효성 검사를 통과했습니다.                                      |
+| **[유효성 검사](#validation-state)**      | `valid()`    | 진행 중인 검사 없이 모든 필드가 유효성 검사를 통과했습니다.                                      |
 |                                           | `invalid()`  | 유효성 검사 결과 에러가 발생했습니다.                                                           |
 |                                           | `errors()`   | 유효성 검사를 통과하지 못한 에러 목록                                                           |
 |                                           | `pending()`  | 비동기 유효성 검사가 완료되었는지                                                               |
@@ -239,10 +239,10 @@ export class Login {
 
 | 시그널      | `true`를 반환하는 경우                                   |
 | ----------- | -------------------------------------------------------- |
-| `valid()`   | 진행중인 검사 없이 필드가 유효성 검사 규칙을 통과한 경우 |
+| `valid()`   | 진행 중인 검사 없이 필드가 유효성 검사 규칙을 통과한 경우 |
 | `invalid()` | 유효성 검사 에러가 발생한 경우                           |
 
-컴포넌트 코드에서 유효성 검사를 확인할 때 "에러 있음" 과 "유효성 검사 진행중"을 구분하려면 `!valid()` 대신 `invalid()`를 활용하세요.
+컴포넌트 코드에서 유효성 검사를 확인할 때 "에러 있음" 과 "유효성 검사 진행 중"을 구분하려면 `!valid()` 대신 `invalid()`를 활용하세요.
 비동기 유효성 검사가 아직 완료되지 않아 필드가 아직 유효하지 않은 상태라면 `valid()`와 `invalid()`가 모두 `false` 이기 때문입니다.
 이 상태는 오류가 아직 확인되지 않은 상태일 수 있습니다.
 
@@ -344,7 +344,7 @@ The `pending()` signal indicates async validation is in progress:
 This signal enables you to show loading states while async validation executes.
 -->
 
-`pending()` 시그널을 확인하면 비동기 유효성 검사가 진행중인지 확인할 수 있습니다:
+`pending()` 시그널을 확인하면 비동기 유효성 검사가 진행 중인지 확인할 수 있습니다:
 
 ```angular-ts
 @Component({
@@ -362,7 +362,7 @@ This signal enables you to show loading states while async validation executes.
 })
 ```
 
-이 시그널은 비동기 유효성 검사가 실행중일 때 로딩 상태를 표시하는 용도로 활용할 수 있습니다.
+이 시그널은 비동기 유효성 검사가 실행 중일 때 로딩 상태를 표시하는 용도로 활용할 수 있습니다.
 
 <a id="interaction-state"></a>
 
@@ -449,7 +449,7 @@ export class Profile {
 }
 ```
 
-저장하지 않은 변경사항을 사용자에게 알리거나 데이터가 실제로 변경되었을 때만 저장 버튼을 활성화 하려면 `dirty()` 시그널을 활용하세요.
+저장하지 않은 변경사항을 사용자에게 알리거나 데이터가 실제로 변경되었을 때만 저장 버튼을 활성화하려면 `dirty()` 시그널을 활용하세요.
 
 <!--
 ### Touched vs dirty
@@ -482,7 +482,7 @@ NOTE: Hidden, disabled, and readonly fields are non-interactive - they don't bec
 | `touched()` | 사용자가 필드에 접근했다가 다른 곳으로 이동했을 때. 아무것도 변경하지 않아도 상관없습니다.               |
 | `dirty()`   | 사용자가 필드 값을 변경했을 때. 포커스를 다른 곳으로 옮기지 않아도, 초기값으로 다시 바꿔도 남아있습니다. |
 
-시그널은 여러가지로 조합할 수 있습니다:
+시그널은 여러 가지로 조합할 수 있습니다:
 
 | 상태                               | 시나리오                                                                 |
 | ---------------------------------- | ------------------------------------------------------------------------ |
@@ -503,15 +503,15 @@ NOTE: Hidden, disabled, and readonly fields are non-interactive - they don't bec
 Availability state signals control whether fields are interactive, editable, or visible. Disabled, hidden, and readonly fields are non-interactive. They don't affect whether their parent form is valid, touched, or dirty.
 -->
 
-가용성 상태 시그널은 사용자가 필드와 상호작용 할 수 있는지, 값을 수정할 수 있는지, 화면에 표시되는지 표현합니다.
-비활성화 되었거나, 숨겨져 있거나, 읽기 전용인 필드는 사용자와 상호작용 할 수 없습니다.
+가용성 상태 시그널은 사용자가 필드와 상호작용할 수 있는지, 값을 수정할 수 있는지, 화면에 표시되는지 표현합니다.
+비활성화되었거나, 숨겨져 있거나, 읽기 전용인 필드는 사용자와 상호작용할 수 없습니다.
 그래서 부모 폼의 유효성 상태, `touched`, `dirty` 상태에 영향을 주지 않습니다.
 
 <!--
 ### Disabled fields
 -->
 
-### 비활성화 된 필드
+### 비활성화된 필드
 
 <!--
 The `disabled()` signal indicates whether a field accepts user input. Disabled fields appear in the UI but users cannot interact with them.
@@ -558,7 +558,7 @@ Disabled fields don't contribute to the parent form's validation state. Even if 
 -->
 
 `disabled()` 시그널은 필드가 사용자의 입력을 받을 수 있는 상태인지 표현합니다.
-비활성화 된 필드는 화면에 표시되지만 조작할 수 없습니다.
+비활성화된 필드는 화면에 표시되지만 조작할 수 없습니다.
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -589,7 +589,7 @@ export class Order {
 }
 ```
 
-위 예제 코드는 `valueOf(schemaPath.totla)`을 사용해서 `total` 필드 값에 따라 `couponCode`가 비활성화될 지 결정합니다.
+위 예제 코드는 `valueOf(schemaPath.totla)`을 사용해서 `total` 필드 값에 따라 `couponCode`가 비활성화될지 결정합니다.
 
 참고: `schemaPath`와 같이 스키마 콜백 함수의 인자는 폼 전체 필드에 접근할 수 있는 `SchemaPathTree` 객체입니다.
 변수 이름은 원하는 대로 지정할 수 있습니다.
@@ -600,8 +600,8 @@ export class Order {
 - `valueOf(schemaPath.otherField)` - 폼 안에 있는 다른 필드의 값을 읽습니다.
 - `value()` - 필드의 값을 시그널로 전달합니다.
 
-비활성화 된 필드는 부모 폼의 유효성 검사 상태에 영향을 주지 않습니다.
-비활성화 된 필드에서 유효성 검사가 실패하더라도, 부모 폼은 유효할 수 있습니다.
+비활성화된 필드는 부모 폼의 유효성 검사 상태에 영향을 주지 않습니다.
+비활성화된 필드에서 유효성 검사가 실패하더라도, 부모 폼은 유효할 수 있습니다.
 `disabled()` 상태는 사용자의 상호작용 이력, 유효성 검사 결과에는 영향을 주지만, 필드 값에는 영향을 주지 않습니다.
 
 <!--
@@ -771,7 +771,7 @@ export class Account {
 참고: `[formField]` 디렉티브는 `readonly()` 상태에 따라 필드의 `readonly` 어트리뷰트를 자동으로 바인딩합니다.
 `[readonly]="field().readonly()"`와 같은 로직을 작성할 필요가 없습니다.
 
-비활성화 된 필드나 감춰진 필드와 마찬가지로, 읽기 전용 필드는 사용자와 상호작용 할 수 없으며, 부모 폼 상태에도 영향을 주지 않습니다.
+비활성화된 필드나 감춰진 필드와 마찬가지로, 읽기 전용 필드는 사용자와 상호작용할 수 없으며, 부모 폼 상태에도 영향을 주지 않습니다.
 `readonly()` 상태는 유효성 검사에 영향을 주지만 필드의 값에는 영향을 주지 않습니다.
 
 <!--
@@ -780,7 +780,7 @@ export class Account {
 
 ### 언제 사용해야 할까요
 
-| 시그널       | 의미                                                          | 사용자가 볼 수 있는지   | 사용자가 상호작용 할 수 있는지 | 유효성 검사에 영향을 주는지 |
+| 시그널       | 의미                                                          | 사용자가 볼 수 있는지   | 사용자가 상호작용할 수 있는지 | 유효성 검사에 영향을 주는지 |
 | ------------ | ------------------------------------------------------------- | ----------------------- | ------------------------------ | --------------------------- |
 | `disabled()` | 필드를 사용할 수 없습니다 (다른 필드 값도 활용할 수 있습니다) | O                       | X                              | X                           |
 | `hidden()`   | 필드가 현재 컨텍스트에 영향을 주지 않습니다                   | X (`@if`를 사용한 경우) | X                              | X                           |
@@ -868,9 +868,9 @@ Because the root form is a field, it has the same signals (such as `valid()`, `i
 
 | 시그널      | 폼 계층에서는                                                             |
 | ----------- | ------------------------------------------------------------------------- |
-| `valid()`   | 상호작용할 수 있는 필드가 모두 유효하고, 진행중인 유효성 검사도 없습니다. |
+| `valid()`   | 상호작용할 수 있는 필드가 모두 유효하고, 진행 중인 유효성 검사도 없습니다. |
 | `invalid()` | 1개 이상 필드에 유효성 검사 오류가 발생했습니다.                          |
-| `pending()` | 1개 이상 필드에 유효성 검사가 진행중입니다.                               |
+| `pending()` | 1개 이상 필드에 유효성 검사가 진행 중입니다.                               |
 | `touched()` | 사용자가 어떠한 필드라도 접근했습니다.                                    |
 | `dirty()`   | 사용자가 어떠한 필드라도 값을 변경했습니다.                               |
 
@@ -898,7 +898,7 @@ Because the root form is a field, it has the same signals (such as `valid()`, `i
 
 **폼 계층 상태는 이런 경우 사용합니다:**
 
-- 폼 제출 버튼을 활성화/비활성화 할 때
+- 폼 제출 버튼을 활성화/비활성화할 때
 - "저장" 버튼의 상태를 조작할 때
 - 전체 폼의 유효성을 검사할 때
 - 저장하지 않은 변동사항이 있다고 알릴 때
@@ -1002,7 +1002,7 @@ In this example, when `shippingAddress` is hidden, it doesn't affect form validi
 This behavior prevents hidden, disabled, or readonly fields from blocking form submission or affecting validation, touched, and dirty state.
 -->
 
-숨겨진 필드, 비활성화 된 필드, 읽기전용 필드는 사용자와 상호작용할 수 없기 때문에 부모 폼 상태에 영향을 주지 않습니다:
+숨겨진 필드, 비활성화된 필드, 읽기전용 필드는 사용자와 상호작용할 수 없기 때문에 부모 폼 상태에 영향을 주지 않습니다:
 
 ```ts
 const orderModel = signal({
@@ -1019,7 +1019,7 @@ const orderForm = form(orderModel, (schemaPath) => {
 이 예제에서 `shippingAddress`가 화면에서 숨겨지면 폼 유효성 상태에 영향을 주지 않습니다.
 따라서 `shippingAddress`가 필수 입력 항목이지만 빈 값이어도 폼은 유효한 상태가 됩니다.
 
-숨겨진 필드, 비활성화 된 필드, 읽기 전용 필드는 유효성 검사, 사용자가 접근했거나 값을 수정했는지 여부에 따라 폼 제출을 막는 경우에 영향을 주지 않습니다.
+숨겨진 필드, 비활성화된 필드, 읽기 전용 필드는 유효성 검사, 사용자가 접근했거나 값을 수정했는지 여부에 따라 폼 제출을 막는 경우에 영향을 주지 않습니다.
 
 <!--
 ## Using state in templates
@@ -1525,7 +1525,7 @@ This ensures the form is ready for new input without showing stale error message
 -->
 
 폼을 제출하고 나면 사용자가 상호작용했던 기록과 필드 값을 모두 초기화하는 것이 일반적입니다.
-이 때 `reset()` 메서드를 실행하면 `touched` 플래그와 `dirty` 플래그를 초기화합니다.
+이때 `reset()` 메서드를 실행하면 `touched` 플래그와 `dirty` 플래그를 초기화합니다.
 `reset()` 메서드를 실행하면서 새로운 값으로 폼을 설정하려면 인자로 전달하면 됩니다:
 
 ```ts

@@ -62,7 +62,7 @@ While this is great, it is only one direction of the component communication. Wh
 P.S. you are doing great - keep going 🎉
 -->
 
-앱을 개발하다보면 컴포넌트로 데이터를 전달해야 하는 경우가 있습니다.
+앱을 개발하다 보면 컴포넌트로 데이터를 전달해야 하는 경우가 있습니다.
 이렇게 전달하는 데이터는 컴포넌트를 커스터마이징할 때 사용되거나, 부모 컴포넌트에서 자식 컴포넌트로 정보를 전달하는 용도로 사용됩니다.
 
 Angular는 입력 프로퍼티라는 개념을 사용합니다.
