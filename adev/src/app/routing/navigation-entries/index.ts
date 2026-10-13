@@ -1303,12 +1303,12 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             path: 'tools/devtools/injectors',
             contentPath: 'tools/devtools/injectors',
           },
-          // TODO: create those guides
-          // The signal debugging docs should also be added to the signal section
-          //   label: 'Signals',
-          //   path: 'tools/devtools/signals',
-          //   contentPath: 'tools/devtools/signals',
-          // },
+          {
+            // label: 'Signals',
+            label: '시그널',
+            path: 'tools/devtools/signals',
+            contentPath: 'tools/devtools/signals',
+          },
           {
             // label: 'Router Tree',
             label: '라우터 트리',

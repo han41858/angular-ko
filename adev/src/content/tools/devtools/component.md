@@ -211,3 +211,17 @@ SSR/SSG 애플리케이션에서 [하이드레이션](/guide/hydration)을 활�
 <img src="assets/images/guide/devtools/hydration-overlay-ecom.png" />
 
 위 이미지는 Angular 전자상거래 예제 앱에 하이드레이션 오버레이를 표시한 모습입니다.
+
+<!--
+### Debug the signal graph
+-->
+
+<a id="debug-the-signal-graph"></a>
+
+### 시그널 그래프 디버깅하기
+
+<!--
+To visualize how the signals, computeds, and effects of a component depend on each other, see [Debug the signal graph](tools/devtools/signals).
+-->
+
+컴포넌트의 시그널, computed 시그널, 이펙트가 서로 어떻게 의존하는지 시각화하려면 [시그널 그래프 디버깅하기](tools/devtools/signals) 문서를 참고하세요.

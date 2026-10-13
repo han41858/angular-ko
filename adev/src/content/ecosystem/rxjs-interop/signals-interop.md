@@ -13,7 +13,7 @@ The `@angular/core/rxjs-interop` package offers APIs that help you integrate RxJ
 `@angular/core/rxjs-interop` 패키지는 RxJS와 Angular 시그널을 연동하는 API를 제공합니다.
 
 <!--
-## Create a signal from an RxJs Observable with `toSignal`
+## Create a signal from an RxJS Observable with `toSignal`
 -->
 
 <a id="create-a-signal-from-an-rxjs-observable-with-tosignal"></a>

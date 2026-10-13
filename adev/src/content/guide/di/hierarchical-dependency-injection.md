@@ -622,7 +622,7 @@ export class Host {
 }
 ```
 
-Since `Host` has the `host` option , no matter what the parent of `Host` might have as a `flower.emoji` value, the `Host` will use tulip <code>🌷</code>.
+Since `Host` has the `host` option, no matter what the parent of `Host` might have as a `flower.emoji` value, the `Host` will use tulip <code>🌷</code>.
 -->
 
 `host`를 사용하면 의존성 객체 탐색 지점의 마지막 위치를 지정할 수 있습니다.

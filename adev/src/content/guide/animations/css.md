@@ -305,7 +305,7 @@ Applying this class to an element prevents any animation from firing on that ele
 
 2. Use the [`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) media query to ensure no animations play for users that prefer less animation.
 
-3. Prevent adding animation classes programatically
+3. Prevent adding animation classes programmatically
 -->
 
 지정한 애니메이션을 비활성화하려면 몇 가지 방법을 사용할 수 있습니다.

@@ -1478,7 +1478,7 @@ export class BlogPostEditor {
 ### 전파 제어 이해하기
 
 <!--
-By default `onlySelf: false` , updates cascade to parent controls, recalculating their values and validation status. Setting `onlySelf: true` isolates the update to the current control, preventing parent notification. This is useful for batch operations where you want to manually trigger the parent update once.
+By default `onlySelf: false`, updates cascade to parent controls, recalculating their values and validation status. Setting `onlySelf: true` isolates the update to the current control, preventing parent notification. This is useful for batch operations where you want to manually trigger the parent update once.
 
 ```ts
 updatePostalCodeValidator(country: string) {
