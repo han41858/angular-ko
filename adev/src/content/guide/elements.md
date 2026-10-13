@@ -169,7 +169,7 @@ For more information, see Web Component documentation for [Creating custom event
   예를 들어 컴포넌트에 `inputProp = input({alias: 'myInputProp'})`와 같은 코드가 있다면 이 프로퍼티는 커스텀 엘리먼트의 `my-input-prop` 어트리뷰트로 변환됩니다.
 
 - 컴포넌트의 출력 프로퍼티는 출력 프로퍼티 이름과 동일한 HTML [커스텀 이벤트](https://developer.mozilla.org/docs/Web/API/CustomEvent)로 변환됩니다.
-  예를 들어 컴포넌트에 `valueChanged = output()`와 같은 코드가 있다면, 커스텀 엘리먼트에서 "valueChanged" 라는 이름으로 이벤트를 발생하며, 커스텀 엘리먼트에서 보내는 데이터는 이벤트 객체의 `detail` 프로퍼티로 전달됩니다.
+  예를 들어 컴포넌트에 `valueChanged = output()`와 같은 코드가 있다면, 커스텀 엘리먼트에서 "valueChanged" 라는 이름으로 이벤트를 발생시키며, 커스텀 엘리먼트에서 보내는 데이터는 이벤트 객체의 `detail` 프로퍼티로 전달됩니다.
   출력 프로퍼티에 별칭이 있는 경우, 예를 들어 `clicks = output<string>({alias: 'myClick'});`와 같은 코드가 있다면, 커스텀 엘리먼트가 생성하는 이벤트 이름은 "myClick"이 됩니다.
 
 더 자세한 내용은 웹 컴포넌트 문서의 [커스텀 이벤트 생성하기](https://developer.mozilla.org/docs/Web/Guide/Events/Creating_and_triggering_events#Creating_custom_events) 문서를 참고하세요.
@@ -296,9 +296,9 @@ document.querySelector('my-other-element'); //-> NgElement & WithProperties<{foo
 
 `document.createElement()`나 `document.querySelector()`와 같은 제네릭 DOM API는 인자에 맞는 엘리먼트 타입을 반환합니다.
 그래서 `document.createElement('a')`라고 작성하면 `HTMLAnchorElement`를 반환하며, TypeScript 코드에서 `href` 프로퍼티가 존재한다는 것을 인식할 수 있습니다.
-다른 예시로, `document.createElement('div')`라고 작성하면 `HTMLDivElement`를 반확하기 때문에 TypeScript 코드에서 `href` 프로퍼티가 존재하지 않는다는 것을 인식할 수 있습니다.
+다른 예시로, `document.createElement('div')`라고 작성하면 `HTMLDivElement`를 반환하기 때문에 TypeScript 코드에서 `href` 프로퍼티가 존재하지 않는다는 것을 인식할 수 있습니다.
 
-그런데 예제 코드처럼 `popup-element`와 같은 커스텀 엘리먼트를 인자로 전달했다면, `document.createElement()` 헤서드는 `HTMLElement` 제네릭 타입을 반환합니다.
+그런데 예제 코드처럼 `popup-element`와 같은 커스텀 엘리먼트를 인자로 전달했다면, `document.createElement()` 메서드는 `HTMLElement` 제네릭 타입을 반환합니다.
 TypeScript 코드에서는 커스텀 엘리먼트의 타입을 추론할 수 없기 때문입니다.
 
 Angular로 생성한 커스텀 엘리먼트는 `HTMLElement` 타입을 확장한 `NgElement`를 기반으로 하며, 컴포넌트의 입력 프로퍼티에 해당하는 프로퍼티를 갖습니다.

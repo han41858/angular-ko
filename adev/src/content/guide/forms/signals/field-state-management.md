@@ -156,7 +156,7 @@ console.log(emailValue); // 현재 email 문자열
 |                                           | `dirty()`    | 사용자가 필드 값을 수정했습니다.                                                                |
 | **[비활성화 상태](#availability-state)**  | `disabled()` | 필드가 비활성화되어, 전체 폼에 영향을 주지 않습니다.                                            |
 |                                           | `hidden()`   | 필드가 숨겨져 있어야 합니다. 템플릿에서 `@if`를 사용해서 폼 컨트롤을 표시하지 않을 수 있습니다. |
-|                                           | `readonly()` | 필드가 읽기전용이며, 전체 폼에 영향을 줒 ㅣ않습니다.                                            |
+|                                           | `readonly()` | 필드가 읽기전용이며, 전체 폼에 영향을 주지 않습니다.                                            |
 
 이 시그널들을 활용하면 사용자의 상호작용에 반응하는 방식으로 반응형 폼을 구성할 수 있습니다.
 개별 항목을 자세하게 알아봅시다.
@@ -898,7 +898,7 @@ Because the root form is a field, it has the same signals (such as `valid()`, `i
 
 **폼 계층 상태는 이런 경우 사용합니다:**
 
-- 홈 제출 버튼을 활성화/비활성화 할 때
+- 폼 제출 버튼을 활성화/비활성화 할 때
 - "저장" 버튼의 상태를 조작할 때
 - 전체 폼의 유효성을 검사할 때
 - 저장하지 않은 변동사항이 있다고 알릴 때
@@ -1031,7 +1031,7 @@ const orderForm = form(orderModel, (schemaPath) => {
 Field state signals integrate seamlessly with Angular templates, enabling reactive form user experiences without manual event handling.
 -->
 
-필드 상태 시그널은 Angular 템플릿과 경계없이 통합되어, 별도 이벤트 처리 없이도 반응평 폼 경험을 제공합니다.
+필드 상태 시그널은 Angular 템플릿과 경계없이 통합되어, 별도 이벤트 처리 없이도 반응형 폼 경험을 제공합니다.
 
 <!--
 ### Conditional error display
@@ -1238,7 +1238,7 @@ export class App {
 
 폼 시스템은 배열 안에서 필드를 참조하며 자동으로 모델 값을 추적합니다.
 필드를 참조하는 방식은 Angular 프레임워크가 기존 UI 엘리먼트를 재사용하는 방식보다 유리합니다.
-이를 통해 폼 상태가 작못 저장되는 것을 방지하고 바인딩도 순서대로 제대로 연결합니다.
+이를 통해 폼 상태가 잘못 저장되는 것을 방지하고 바인딩도 순서대로 제대로 연결합니다.
 
 <!--
 ## Using field state in component logic
@@ -1653,7 +1653,7 @@ This guide covered validation and availability status handling, interaction trac
 
 <docs-pill-row>
   <docs-pill href="guide/forms/signals/models" title="폼 모델" />
-  <docs-pill href="guide/forms/signals/validation" title="유료성 검사" />
+  <docs-pill href="guide/forms/signals/validation" title="유효성 검사" />
   <docs-pill href="guide/forms/signals/custom-controls" title="커스텀 컨트롤" />
   <!-- <docs-pill href="guide/forms/signals/arrays" title="Working with Arrays" /> -->
 </docs-pill-row>

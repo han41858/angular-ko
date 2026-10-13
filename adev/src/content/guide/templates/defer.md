@@ -319,7 +319,7 @@ The available triggers are as follows:
 
 | 트리거                        | 설명                                                              |
 | ----------------------------- | ----------------------------------------------------------------- |
-| [`idle`](#idle)               | 브라우저가 대기 상태일 때 동작합니다. 타입아웃 옵션을 지원합니다. |
+| [`idle`](#idle)               | 브라우저가 대기 상태일 때 동작합니다. 타임아웃 옵션을 지원합니다. |
 | [`viewport`](#viewport)       | 특정 항목이 뷰포트에 진입할 때 동작합니다.                        |
 | [`interaction`](#interaction) | 사용자가 특정 엘리먼트와 상호작용 할 때 동작합니다.               |
 | [`hover`](#hover)             | 마우스가 특정 영역 위에 올라갈 때 동작합니다.                     |
@@ -483,7 +483,7 @@ If you want to customize the options of the `IntersectionObserver`, the `viewpor
 
 `IntersectionObserver` 옵션을 커스터마이징하려면 `viewport` 트리거로 객체 리터럴을 전달하면 됩니다.
 이 리터럴은 `root`를 제외하고 `IntersectionObserver`의 두 번째 인자의 모든 프로퍼티를 지원합니다.
-객체 리터럴 표기법을 사용할 때는 `trigger` 프로퍼티로 트리거를 전달함녀 됩니다.
+객체 리터럴 표기법을 사용할 때는 `trigger` 프로퍼티로 트리거를 전달하면 됩니다.
 
 ```angular-html
 <div #greeting>Hello!</div>
@@ -713,7 +713,7 @@ In the example below, the prefetching starts when a browser becomes idle and the
 사전 로딩을 활용하면 사용자가 지연 로딩 뷰를 실제로 보기 전이나 특정 블록과 상호작용하기 전에 리소스를 빠르게 로딩해 둘 수 있습니다.
 
 사전 로딩 트리거는 블록 트리거와 비슷하지만, `prefetch` 키워드가 접두사로 붙습니다.
-블록 트리거와 사전 로딩 트리거를 함꼐 사용하는 경우에는 세미 콜론(`;`)으로 구분합니다.
+블록 트리거와 사전 로딩 트리거를 함께 사용하는 경우에는 세미 콜론(`;`)으로 구분합니다.
 
 아래 예제처럼 구현하면, 브라우저가 대기 상태로 진입하는 시점에 사전 로딩이 시작되며, `@defer` 블록의 내용은 사용자가 `@placeholder` 블록과 상호작용 할 때 렌더링됩니다.
 
@@ -890,7 +890,7 @@ That's enough for the bundler to split it into its own chunk and load it lazily 
 
 `@defer`를 사용하는데 별도로 지연 로딩 청크가 생성되지 않는다면, 지연 로딩 컴포넌트를 어떻게 불러오는지 확인해 보세요.
 배럴 파일(`index.ts`)로 로딩하는 것이 흔한 원인입니다.
-이런 경우는 번들러가 배럴 파일을 단일 보율로 인식하고 모든 항목을 함께 유지하기 때문에, `@defer` 사용 여부와 관계없이 컴포넌트가 메인 번들 파일에 포함됩니다.
+이런 경우는 번들러가 배럴 파일을 단일 모듈로 인식하고 모든 항목을 함께 유지하기 때문에, `@defer` 사용 여부와 관계없이 컴포넌트가 메인 번들 파일에 포함됩니다.
 
 ```typescript
 // index.ts

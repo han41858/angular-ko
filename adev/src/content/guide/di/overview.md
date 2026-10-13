@@ -330,7 +330,7 @@ This covers the most common use case for services in Angular applications.
 
 다음 가이드 문서에서는 [서비스를 생성](guide/di/creating-and-using-services)하고 이런 내용을 다룹니다:
 
-- Angular CLI나 수동으로 서비스를 생성하는 방
+- Angular CLI나 수동으로 서비스를 생성하는 방법
 - `providedIn: 'root'` 패턴이 동작하는 방식
 - 서비스를 컴포넌트나 다른 서비스로 의존성 주입하는 방법
 

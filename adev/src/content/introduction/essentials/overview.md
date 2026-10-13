@@ -45,7 +45,7 @@ In particular, you should be familiar with the following concepts:
 - [TypeScript Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html)
 -->
 
-이 가이드 문서는 HTML과 CSS ,TypeScript에 익숙한 분을 대상으로 합니다.
+이 가이드 문서는 HTML과 CSS, TypeScript에 익숙한 분을 대상으로 합니다.
 웹 개발이 처음이라면 이 내용을 먼저 학습하고 다시 Angular 문서를 보는 것을 권장합니다.
 
 특히 이런 내용들을 잘 알고 있어야 합니다:

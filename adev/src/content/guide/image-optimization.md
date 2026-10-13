@@ -166,7 +166,7 @@ NgOptimizedImage를 활용할 때 이미지 로더를 정하는 것이 **필수*
 
 LCP 엘리먼트에 `priority` 어트리뷰트가 설정되어 있지 않으면 Angular는 경고를 표시합니다.
 화면에 표시되는 LCP 엘리먼트는 사용자 화면 해상도 등 여러가지 요인에 따라 다르게 표시될 수 있기 때문에, `priority`를 이미지 여러개에 지정해야 할 수도 있습니다.
-자세한 내용은 [웹 바이탈을 위한 CSS](https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp)을 참고하세요.
+자세한 내용은 [웹 바이탈을 위한 CSS](https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp)를 참고하세요.
 </docs-step>
 <docs-step title="너비, 높이 지정하기">
 [이미지 때문에 레이아웃이 변경되는 것](https://web.dev/css-web-vitals/#images-and-layout-shifts)을 방지하기 위해, NgOptimizedImage는 이미지의 너비와 높이 입력을 강제합니다:
@@ -341,10 +341,10 @@ You can also specify a placeholder using a base64 [data URL](https://developer.m
 However, large data URLs increase the size of your Angular bundles and slow down page load. If you cannot use an image loader, the Angular team recommends keeping base64 placeholder images smaller than 4KB and using them exclusively on critical images. In addition to decreasing placeholder dimensions, consider changing image formats or parameters used when saving images. At very low resolutions, these parameters can have a large effect on file size.
 -->
 
-플레이스홀더에는 이미지 로더 대신 base64 [데이터 URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)를 사용할 수도 있습니다.
+플레이스홀더에는 이미지 로더 대신 base64 [데이터 URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)을 사용할 수도 있습니다.
 이 데이터 url은 `data:image/[imagetype];[data]` 형식이며, `[imagetype]` 자리에는 이미지의 형식이 들어가는데, `png`와 같이 들어갑니다.
 그리고 `[data]` 자리에는 base64로 인코딩된 이미지가 들어갑니다.
-이미지 인코딩은 커맨드라인이나 JavaScript로도 실행할 ㅅ ㅜ있습니다.
+이미지 인코딩은 커맨드라인이나 JavaScript로도 실행할 수 있습니다.
 자세한 내용은 [MDN 문서](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URLs#encoding_data_into_base64_format)를 참고하세요.
 데이터 URL은 아래와 같이 사용하면 됩니다:
 
@@ -392,7 +392,7 @@ You can typically fix this by adding `height: auto` or `width: auto` to your ima
 If the `width` and `height` attribute on the image are preventing you from sizing the image the way you want with CSS, consider using `fill` mode instead, and styling the image's parent element.
 -->
 
-이미 엘리먼트에 `width`, `height` 어트리뷰트를 추가하면 이미지가 다르게 렌더링 될 수 있습니다.
+이미지 엘리먼트에 `width`, `height` 어트리뷰트를 추가하면 이미지가 다르게 렌더링 될 수 있습니다.
 이런 경우 이미지 비율이 왜곡되면 `NgOptimizedImage`가 경고를 표시합니다.
 
 일반적으로는 `height: auto`, `width: auto`를 사용하면 이 문제를 방지할 수 있습니다.
@@ -582,7 +582,7 @@ providers: [
 `ngSrcset` 어트리뷰트가 존재하면 `NgOptimizedImage`는 이 어트리뷰트에 지정된 크기를 기준으로 `srcset` 어트리뷰트를 설정합니다.
 이 때 `ngSrcset`에 이미지 파일 이름을 포함하지 마세요.
 이 정보는 디렉티브가 `ngSrc`를 활용해서 추론합니다.
-`NgOptimizedImage` 디렉티브는 `100w`과 같은 너비 설명자와, `1x`와 같은 밀도 설명자를 모두 지원합니다.
+`NgOptimizedImage` 디렉티브는 `100w`와 같은 너비 설명자와, `1x`와 같은 밀도 설명자를 모두 지원합니다.
 
 ```html
 <img ngSrc="hero.jpg" ngSrcset="100w, 200w, 300w" sizes="50vw" />
@@ -843,7 +843,7 @@ NOTE: even though the `width` property may not always be present, a custom loade
 -->
 
 **커스텀 로더** 를 사용하려면 `IMAGE_LOADER` DI 토큰에 로더 함수를 등록하면 됩니다.
-아래 예제 코드는 URL 인자로 전달되는 `src`, `width`, `height`, 에 `https://example.com`를 붙이는 커스텀 로더 함수입니다.
+아래 예제 코드는 URL 인자로 전달되는 `src`, `width`, `height`에 `https://example.com`을 붙이는 커스텀 로더 함수입니다.
 
 ```ts
 providers: [
@@ -1097,7 +1097,7 @@ The [image loaders](#configuring-an-image-loader-for-ngoptimizedimage) provider 
 To do this, we recommend writing a [custom image loader](#custom-loaders) which uses the [`loaderParams` property](#the-loaderparams-property) to pass a flag that specifies which image CDN should be used, and then invokes the appropriate loader based on that flag.
 -->
 
-[이미지 로더](#ngoptimizedimage용-이미지-로더-설정하기) 프로바이더 패턴은 컴포넌트에서 단일 이미지 CDN을 활용을 최적화하기 위해 도입되었습니다.
+[이미지 로더](#ngoptimizedimage용-이미지-로더-설정하기) 프로바이더 패턴은 컴포넌트에서 단일 이미지 CDN 활용을 최적화하기 위해 도입되었습니다.
 하지만 프로바이더가 하나라도 이미지 CDN을 여러개 활용하는 것도 가능합니다.
 
 이런 경우라면, [커스텀 이미지 로더](#커스텀-로더)를 정의하고 [`loaderParams` 프로퍼티](#loaderparams-프로퍼티)를 전달받아 원하는 이미지 CDN을 선택하는 방식으로 구현하면 됩니다.
@@ -1127,7 +1127,7 @@ No, but this is on our roadmap, so stay tuned.
 If you're waiting on this feature, please upvote the GitHub issue [here](https://github.com/angular/angular/issues/56594).
 -->
 
-아니오, 하지만 로드맵에 포함되어 있으니 조금만 기다려 주세요.
+아니요, 하지만 로드맵에 포함되어 있으니 조금만 기다려 주세요.
 
 이 기능을 기다리고 있다면 [Github 이슈](https://github.com/angular/angular/issues/56594)에 투표해 주세요.
 

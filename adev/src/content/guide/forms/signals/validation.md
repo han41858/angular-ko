@@ -68,9 +68,9 @@ NOTE: The schema callback parameter (`schemaPath` in these examples) is a `Schem
 />
 
 스키마 함수는 폼이 초기화 될 때 한 번 실행됩니다.
-유효성 검사 규칙은 `schemaPath.email`이나 `schemaPath.password`와 같이 스키마 경로 배개변수를 사용해서 필드에 바인딩되며, 필드값이 변경될 때마다 유효성 검사가 자동으로 실행됩니다.
+유효성 검사 규칙은 `schemaPath.email`이나 `schemaPath.password`와 같이 스키마 경로 매개변수를 사용해서 필드에 바인딩되며, 필드값이 변경될 때마다 유효성 검사가 자동으로 실행됩니다.
 
-참고: 스키마 콜백 함수의 인자(`schemaPath`)는 폼에 있는 모든 필드를 접근할 수 있는 `SchemaPathTree` 객체입니다.
+참고: 스키마 콜백 함수의 인자(`schemaPath`)는 폼에 있는 모든 필드에 접근할 수 있는 `SchemaPathTree` 객체입니다.
 인자의 이름은 원하는 대로 변경해도 됩니다.
 
 
@@ -89,7 +89,7 @@ Validation in Signal Forms follows this pattern:
 
 Validation runs on every value change for interactive fields. Hidden and disabled fields don't run validation - their validation rules are skipped until the field becomes interactive again.
 -->
-시그널 폼의 츄효성 검사는 이런 방식으로 동작합니다:
+시그널 폼의 유효성 검사는 이런 방식으로 동작합니다:
 
 1. **유효성 검사 규칙을 스키마에 정의합니다** - 스키마 함수 안에서 유효성검사 규칙이 필드와 바인딩 됩니다.
 2. **자동 실행** - 값이 변경될 때마다 유효성 검사가 실행됩니다.

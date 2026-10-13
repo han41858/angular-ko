@@ -39,7 +39,7 @@ Angular compiles templates into JavaScript in order to build up an internal unde
 
 템플릿은 [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) 문법을 바탕으로 하며, 여기에 템플릿 함수, 데이터 바인딩, 이벤트 리스닝, 변수 선언 등 Angular가 제공하는 기능을 더한 것입니다.
 
-Angular는 애플리케이션을 빌드할 때 템플릿을 JavaScript 코드로 변환하며, 애플리케이션에 맞체 렌더링도 최적화 합니다.
+Angular는 애플리케이션을 빌드할 때 템플릿을 JavaScript 코드로 변환하며, 애플리케이션에 맞게 렌더링도 최적화 합니다.
 
 <!--
 ### Differences from standard HTML

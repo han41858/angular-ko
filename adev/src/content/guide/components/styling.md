@@ -73,7 +73,7 @@ export class ProfilePhoto {}
 
 Angular가 컴포넌트를 컴파일하면 컴포넌트에 지정된 스타일은 컴포넌트 JavaScript 결과물에 포함됩니다.
 이 말은, 컴포넌트 스타일이 JavaScript 모듈 시스템 안에 포함된다는 것을 의미합니다.
-이후에 Angular가 컴포넌트를 렌더링하면, 지연 로딩되는 컴포넌트라고 해도 컴포넌트가 로딩될 떄 스타일도 함께 로딩됩니다.
+이후에 Angular가 컴포넌트를 렌더링하면, 지연 로딩되는 컴포넌트라고 해도 컴포넌트가 로딩될 때 스타일도 함께 로딩됩니다.
 
 CSS 스타일을 지정할 때는 [Sass](https://sass-lang.com)나 [less](https://lesscss.org), [stylus](https://stylus-lang.com) 문법을 사용할 수도 있습니다.
 
@@ -174,7 +174,7 @@ Angular는 캡슐화를 에뮬레이션하는 가상 클래스, `::ng-deep`을 �
 **하지만 Angular 팀은 `::ng-deep` 사용을 강하게 비권장합니다.**
 이 API는 하위 호환성을 위해 남아있는 것입니다.
 
-`::ng-deep` 셀렉터를 사용하면 이 셀렉터 뒷부분은 Angular는 뷰 캡슐화가 적용되지 않습니다.
+`::ng-deep` 셀렉터를 사용하면 이 셀렉터 뒷부분은 Angular의 뷰 캡슐화가 적용되지 않습니다.
 그래서 `::ng-deep` 이후에 오는 선택자의 모든 부분은 컴포넌트 템플릿 밖의 범위에도 매칭될 수 있습니다.
 
 예를 들면:
@@ -226,7 +226,7 @@ component's template. Global styles cannot affect elements in a shadow tree and 
 shadow tree cannot affect elements outside of that shadow tree.
 -->
 
-위와 동일하게 동작하지만, 이 모드는 해당 해당 컴포넌트 템플릿에만 적용되도록 엄격하게 보장됩니다.
+위와 동일하게 동작하지만, 이 모드는 해당 컴포넌트 템플릿에만 적용되도록 엄격하게 보장됩니다.
 전역 스타일은 섀도우 DOM 트리에 영향을 미치지 않으며, 섀도우 DOM 안에 적용된 스타일은 섀도우 DOM 밖에 영향을 미치지 않습니다.
 
 ### ViewEncapsulation.None

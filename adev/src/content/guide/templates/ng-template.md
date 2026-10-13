@@ -341,7 +341,7 @@ This example produces the following rendered DOM:
 import {NgTemplateOutlet} from '@angular/common';
 ```
 
-그리고 아래 예제 코드처럼 템플릿 조각을 선언한 후 `<ng-container>`에 `NgTemplateOutlet`를 지정해서 렌더링하면 됩니다:
+그리고 아래 예제 코드처럼 템플릿 조각을 선언한 후 `<ng-container>`에 `NgTemplateOutlet`을 지정해서 렌더링하면 됩니다:
 
 ```angular-html
 <p>This is a normal element</p>

@@ -349,4 +349,4 @@ If you apply `ngNonBindable` to a parent element, Angular disables interpolation
 
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="ngNonBindable-with-directive"/>
 
-그래서 어떤 엘리먼트를 포함하여 자식 엘리먼트들에 존재하는 문자열 바인딩, 프로퍼티 바인딩, 이벤트 바인딩이 모두 비활성화하려면, 해당 엘리먼트의 부모 엘리먼트에 `ngNonBindable`을 적용하면 됩니다.
+그래서 어떤 엘리먼트를 포함하여 자식 엘리먼트들에 존재하는 문자열 바인딩, 프로퍼티 바인딩, 이벤트 바인딩을 모두 비활성화하려면, 해당 엘리먼트의 부모 엘리먼트에 `ngNonBindable`을 적용하면 됩니다.

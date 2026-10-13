@@ -344,7 +344,7 @@ You can access form values in two ways: directly from the model signal, or throu
 -->
 
 폼 값은 두 가지 방법으로 접근할 수 있습니다.
-모델 시그널로 접근하거나, 개별 필드를 통해 접근하면 ㅗ딥니다.
+모델 시그널로 접근하거나, 개별 필드를 통해 접근하면 됩니다.
 두 방식의 목적은 다릅니다.
 
 <!--
@@ -652,7 +652,7 @@ This synchronization happens automatically. You don't write subscriptions or eve
 1. `set()`, `update()`와 같은 코드로 폼 모델 값을 변경합니다.
 2. 모델 시그널이 구독자들에게 값을 전파합니다.
 3. 폼 필드 상태가 갱신됩니다.
-4. `[formField]` 디렉티브가 입력 엘리번트의 값을 변경합니다.
+4. `[formField]` 디렉티브가 입력 엘리먼트의 값을 변경합니다.
 
 이 동기화 동작은 자동으로 이루어집니다.
 폼 모델과 화면을 같은 상태로 유지하기 위해 별도 구독 코드나 이벤트 핸들러를 구현할 필요는 없습니다.

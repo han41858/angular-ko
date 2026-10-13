@@ -44,8 +44,8 @@ Forms should use a form model tailored to the input experience, rather than simp
 하지만 때로는 도메인 모델이 폼의 구조와 다른 경우가 종종 있습니다.
 
 폼 모델은 화면에서 사용자가 입력한 내용 자체를 다룹니다.
-예를 들어, 폼 모델에서 사용자가 날짜와 시각을 고르는 입력 필드가 있다고 해도, 도메인 모델에서는 이를 JavaScript `Date` 객체로 간단하게 표현될 수 있습니다.
-도메인 모델에서 JavaScript `Date` 객체를
+예를 들어, 폼 모델에서 사용자가 날짜와 시각을 고르는 입력 필드가 있다고 해도, 도메인 모델에서는 이를 JavaScript `Date` 객체로 간단하게 표현할 수 있습니다.
+
 
 ```ts
 interface AppointmentFormModel {
@@ -372,7 +372,7 @@ interface CreateAccountFormModel {
 }
 ```
 
-이런 폼 모델을 구성할 때 고민이 되는 점이 있씁니다.
+이런 폼 모델을 구성할 때 고민이 되는 점이 있습니다.
 초기값을 무엇으로 정해야 할까요?
 사용자가 아직 아무것도 입력하지 않은 상태를 고려하면 `form<CreateAccountFormModel | null>()`를 사용할 수도 있습니다.
 
@@ -577,7 +577,7 @@ interface BillPayFormModel {
 5. 다시 신용카드 옵션을 선택하지만, 직전에 입력한 정보는 모두 사라졌습니다!
 
 동적 폼 모델은 데이터를 잃어버릴 수 있다는 문제점이 있습니다.
-이런 모델은 필드가 감춰지면 해당 정보는 다시 필요하지 않다는 것을 간주하기 때문에, 신용카드 정보가 한 번 사라지면 복원할 방법이 없습니다.
+이런 모델은 필드가 감춰지면 해당 정보는 다시 필요하지 않은 것으로 간주하기 때문에, 신용카드 정보가 한 번 사라지면 복원할 방법이 없습니다.
 
 <!--
 #### Exceptions
@@ -621,7 +621,7 @@ interface SendEmailFormModel {
 ```
 
 이 경우 `recipienEmails` 배열은 사용자 입력에 따라 개수가 늘어나거나 줄어들 수 있습니다.
-배열의 길이는 동적이지만, 개별 항목의 구조는 같은 타입으로 일관적되어야 합니다.
+배열의 길이는 동적이지만, 개별 항목의 구조는 같은 타입으로 일관되어야 합니다.
 
 <!--
 ##### Fields that are treated atomically by the UI control
@@ -793,7 +793,7 @@ The examples above show a pure derivation of the form model, directly from the d
 시스템에 저장된 도메인 모델을 수정하도록 폼 모델을 만들 때, 도메인 모델은 보통 폼 컴포넌트의 `input()`으로 전달되거나 백엔드에서 전달됩니다.
 어느 경우든, `linkedSignal`로 변환 작업을 수행하는 것이 아주 좋습니다.
 
-도메인 모델을 `input()`으로 받는 경우, `linkedSignal`을 사용해서 폼 모델로 변환하는 로직은 다음과 같이 구현할 수 있씁니다.
+도메인 모델을 `input()`으로 받는 경우, `linkedSignal`을 사용해서 폼 모델로 변환하는 로직은 다음과 같이 구현할 수 있습니다.
 
 ```ts {prefer, header: '도메인 모델을 폼 모델로 변환하기 위해 linkedSignal 사용하기'}
 @Component(...)

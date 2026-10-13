@@ -9,7 +9,7 @@ Angular expressions are based on JavaScript, but differ in some key ways. This g
 -->
 
 Angular 표현식 문법은 JavaScript를 기반으로 하지만 몇가지는 다릅니다.
-이 문서에서는 Angular 표현식 문법이 표준 JavaScript과 어떻게 비슷하고 다른지 알아봅시다.
+이 문서에서는 Angular 표현식 문법이 표준 JavaScript와 어떻게 비슷하고 다른지 알아봅시다.
 
 <!--
 ## Value literals

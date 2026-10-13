@@ -133,7 +133,7 @@ injectAsync(loader, {prefetch: () => onIdle({timeout: 1_000})});
 NOTE: Prefetching is opportunistic. If the user invokes the feature before the prefetch fires, Angular still loads the dependency immediately and resolves your `await` as soon as it's ready.
 -->
 
-기본적으로 지연로딩 되는 청크는 해당 청크의 함수를 실행할 떄만 로딩됩니다.
+기본적으로 지연로딩 되는 청크는 해당 청크의 함수를 실행할 때만 로딩됩니다.
 그런데 옵션에 `prefetch` 트리거를 전달하면 이 파일을 사전에 다운로드 해둘 수 있습니다.
 트리거는 `Promise`를 반환하는 함수이기만 하면 되고, 이 함수가 종료되면 Angular가 로더를 시작합니다.
 

@@ -98,5 +98,5 @@ styles: `
 
 </docs-workflow>
 
-브라우저가 지원한는 CSS, HTML 기능은 Angular 앱에도 모두 사용할 수 있습니다.
+브라우저가 지원하는 CSS, HTML 기능은 Angular 앱에도 모두 사용할 수 있습니다.
 그리고 템플릿과 스타일은 별도 파일로 저장할 수 있습니다.

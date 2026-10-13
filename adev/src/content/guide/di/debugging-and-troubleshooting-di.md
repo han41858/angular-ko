@@ -287,7 +287,7 @@ export class UserClient {
 ```
 -->
 
-컴포넌트 `providers` 베열에 서비스 프로바이더를 등록하면, Angular는 컴포넌트 인스턴스마다 서비스 인스턴스를 새로 생성합니다.
+컴포넌트 `providers` 배열에 서비스 프로바이더를 등록하면, Angular는 컴포넌트 인스턴스마다 서비스 인스턴스를 새로 생성합니다.
 그러면 개별 컴포넌트마다 각각 서비스 인스턴스가 생성되기 때문에, 어떤 컴포넌트에서 서비스를 활용하는 것이 다른 컴포넌트의 서비스 인스턴스에 영향을 주지 않습니다.
 애플리케이션의 어떤 상태를 다른 곳에 전달하려고 한다면 이렇게 구성하면 안됩니다.
 
@@ -1154,7 +1154,7 @@ Angular는 이런 순서로 탐색합니다:
 - 서비스에 `@Injectable({providedIn: 'root'})`가 지정되었는지
 - 컴포넌트가 접근할 수 있는 범위에 `providers` 배열로 서비스가 등록되었는지
 
-이 탐색 과정은 `self`, `skipSelf`, `host`, `optional`과 같은 옵션를 사용하면 변경될 수 있습니다.
+이 탐색 과정은 `self`, `skipSelf`, `host`, `optional`과 같은 옵션을 사용하면 변경될 수 있습니다.
 의존성 객체 판별 규칙과 옵션에 대해 자세하게 알아보려면 [의존성 계층 인젝터 가이드](guide/di/hierarchical-dependency-injection) 문서를 참고하세요.
 
 <!--
@@ -1316,7 +1316,7 @@ export class DebugView {
 }
 ```
 
-이 방식울 활용하면 서비스가 제대로 주입되지 않아서 애플리케이션이 강제 종료되는 것을 방지할 수 있습니다.
+이 방식을 활용하면 서비스가 제대로 주입되지 않아서 애플리케이션이 강제 종료되는 것을 방지할 수 있습니다.
 
 <!--
 #### Logging resolution modifiers
@@ -1992,7 +1992,7 @@ See the "Incorrect inject() usage" section for detailed examples and solutions.
 - 라이프싸이클 후킹 함수에서 `inject()` 를 실행한 경우 (`ngOnInit`, `ngAfterViewInit` 등)
 - 비동기 함수에서 `await` 다음에 `inject()` 를 실행한 경우
 - 콜백 함수에서 `inject()` 를 실행한 경우 (`setTimeout`, `Promise.then()` 등)
-- 클래서 생성자 밖에서 `inject()` 를 실행한 경우
+- 클래스 생성자 밖에서 `inject()` 를 실행한 경우
 
 <!--
 #### Solutions and workarounds

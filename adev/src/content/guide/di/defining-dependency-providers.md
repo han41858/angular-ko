@@ -475,7 +475,7 @@ Angular의 의존성 주입 시스템은 계층으로 구성됩니다.
 이 계층 구조는 다음과 같은 점에서 유용합니다:
 
 - **인스턴스의 사용 범위를 지정할 수 있습니다.**: 앱의 일부분마다 같은 서비스라도 다른 인스턴스를 사용할 수 있습니다.
-- **프로바이더 오버라이드**: 자식 컴포넌트가 부모 컴포넌트 프로바이더를 오버라이드할 ㅅ ㅜ있씁니다.
+- **프로바이더 오버라이드**: 자식 컴포넌트가 부모 컴포넌트 프로바이더를 오버라이드할 수 있습니다.
 - **효율적인 메모리 사용**: 서비스의 인스턴스는 필요한 경우에만 생성됩니다.
 
 Angular에서 컴포넌트나 디렉티브가 적용된 엘리먼트는 모든 하위 요소에 의존성 객체를 제공할 수 있습니다.
@@ -495,7 +495,7 @@ graph TD
 위 예제를 보면:
 
 1. `SocialApp`은 `UserProfile`과 `FriendList` 인스턴스를 활용할 수 있습니다.
-2. `FriendList`에 존재하는 의존성 객체의 인스턴스는 `FriendEntry`에서 사용할 수 있지만, `UserProfile`는 다른 트리에 있기 때문에 사용할 수 없습니다.
+2. `FriendList`에 존재하는 의존성 객체의 인스턴스는 `FriendEntry`에서 사용할 수 있지만, `UserProfile`은 다른 트리에 있기 때문에 사용할 수 없습니다.
 
 <!--
 ## Declaring a provider
@@ -640,7 +640,7 @@ export class Example {
 The class serves as both the identifier and the implementation, which is why Angular provides the shorthand `providers: [LocalService]`.
 -->
 
-클래스 이름을 구분자로 직접 사용할 수 있ㅅ브니다:
+클래스 이름을 구분자로 직접 사용할 수 있습니다:
 
 ```angular-ts
 import {Component} from '@angular/core';
@@ -1260,7 +1260,7 @@ providers: [
 IMPORTANT: Don't confuse `useExisting` with `useClass`. `useClass` creates separate instances, while `useExisting` ensures you get the same singleton instance.
 -->
 
-`useExisting`를 활용하면 이미 존재하는 프로바이더에 별칭을 추가할 수 있습니다.
+`useExisting`을 활용하면 이미 존재하는 프로바이더에 별칭을 추가할 수 있습니다.
 기존 토큰과 별칭으로 만드는 토큰은 같은 인스턴스를 반환합니다:
 
 ```ts

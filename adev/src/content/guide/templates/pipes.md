@@ -636,7 +636,7 @@ Angular developers often adopt the convention of including `Impure` in the pipe 
 
 파이프가 배열이나 객체 내부의 변화를 감지하려면 `@Pipe` 데코레이터에 `pure` 플래그를 `false`로 지정해서 순수하지 않은 함수라고 표시하면 됩니다.
 
-순수하지 않은 함수는 파이프는 꼭 필요한 경우가 아닌 한 사용하지 마세요.
+순수하지 않은 함수인 파이프는 꼭 필요한 경우가 아닌 한 사용하지 마세요.
 주의해서 사용하지 않으면 성능이 심각하게 나빠질 수 있습니다.
 
 ```angular-ts

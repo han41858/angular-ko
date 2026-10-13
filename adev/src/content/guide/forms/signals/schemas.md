@@ -302,7 +302,7 @@ shippingForm = form(this.shippingModel, (schemaPath) => {
 ```
 
 참고: 경로 인자가 `schemaPath.address`지만, 로직 함수는 `valueOf(schemaPath.country)`에 접근합니다.
-왜냐하면 `valueOf` 헬퍼 함수는 지정된 필드 뿐만 아니라 폼 내부의 모든 필드에 접근할 수 있기 때문딥니다.
+왜냐하면 `valueOf` 헬퍼 함수는 지정된 필드 뿐만 아니라 폼 내부의 모든 필드에 접근할 수 있기 때문입니다.
 
 이 패턴은 유효성 검사 로직을 모듈화하는 것입니다.
 각 국가의 주소 규칙은 별도 스키마에 존재하며, 사용자가 어떤 국가를 선택하면 해당 스키마가 어떤 규칙을 활성화 할 지 결정합니다.

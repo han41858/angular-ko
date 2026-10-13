@@ -288,7 +288,7 @@ class LibCard {
 ### Use the lightweight injection token for API definition
 -->
 
-### 경랑 의존성 토큰은 API를 정의할 때 사용하세요.
+### 경량 의존성 토큰은 API를 정의할 때 사용하세요.
 
 <!--
 A component that injects a lightweight injection token might need to invoke a method in the injected class.
@@ -339,7 +339,7 @@ If the child component has been tree-shaken, there is no runtime reference to it
 메서드의 실제 구현 코드와 그 외에 코드는 모두 트리 셰이킹 대상이 되는 컴포넌트에 존재합니다.
 이를 통해 부모 컴포넌트는 자식 컴포넌트가 존재하는 경우 타입으로 보호되는 방식으로 호출할 수 있습니다.
 
-이제 `LibCard`에서 `LibHeader` 대신 `LibHeaderToken`를 쿼리해 봅시다.
+이제 `LibCard`에서 `LibHeader` 대신 `LibHeaderToken`을 쿼리해 봅시다.
 아래 예제는 `LibCard`가 실제 `LibHeader`를 직접 호출하지 않아도 `LibHeader`를 활용할 수 있습니다:
 
 ```ts {highlight: [[2],[7],[11],[19]]}
@@ -393,5 +393,5 @@ The recommended style is to use the component base name with the suffix `Token` 
 [Angular 스타일 가이드](style-guide)에 따르면, 컴포넌트는 "Component"라는 접미사를 사용하지 않는 것을 권장합니다.
 "LibHeader"와 같은 식입니다.
 
-컴포넌트는 토큰과 관련되어 있지만 둘을 명확하게 구분해야 ㅎ바니다.
+컴포넌트는 토큰과 관련되어 있지만 둘을 명확하게 구분해야 합니다.
 따라서, `LibHeaderToken`과 같이 `Token` 접미사를 붙이는 것을 권장합니다.

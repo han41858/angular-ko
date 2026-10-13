@@ -184,7 +184,7 @@ update the component's state based on its initial input values.
 `ngOnInit` 메서드는 Angular가 컴포넌트의 입력 프로퍼티를 초기값과 함께 초기화 한 후에 실행됩니다.
 이 함수는 한 번만 실행됩니다
 
-이 메서드는 컴포넌트의 템플릿이 초기화되기 _전에_ 실행되빈다.
+이 메서드는 컴포넌트의 템플릿이 초기화되기 _전에_ 실행됩니다.
 그래서 컴포넌트의 입력 프로퍼티 초기값이 템플릿에 반영되기 전에 값을 수정할 수 있습니다.
 
 ### ngOnChanges
@@ -201,7 +201,7 @@ During initialization, the first `ngOnChanges` runs before `ngOnInit`.
 `ngOnChanges` 메서드는 컴포넌트의 입력 프로퍼티 값이 변경된 이후에 실행됩니다.
 
 이 메서드는 컴포넌트 템플릿을 검사하기 _전에_ 실행됩니다.
-그래서 컴포넌트의 입력 프로퍼티 값이 템플릿에 반영됙 ㅣ전에 값을 수정할 수 있습니다.
+그래서 컴포넌트의 입력 프로퍼티 값이 템플릿에 반영되기 전에 값을 수정할 수 있습니다.
 
 컴포넌트 초기화 시점에는 `ngOnInit`이 실행되기 전에 첫번째 `ngOnChanges` 메서드가 실행됩니다.
 
@@ -442,7 +442,7 @@ an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
 
-이 메서드를 실행하는 시점에는 [뷰 쿼리](guide/components/queries#view-queries) 결과에 접근하고 상태값을 ㅂ녀경할 수 있지만, 값을 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
+이 메서드를 실행하는 시점에는 [뷰 쿼리](guide/components/queries#view-queries) 결과에 접근하고 상태값을 변경할 수 있지만, 값을 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
 
 ### afterEveryRender and afterNextRender
 
@@ -692,5 +692,5 @@ hook between the component and the directives on a single element. Never depend 
 ordering, as this may change in later versions of Angular.
 -->
 
-컴포넌트의 호스트 엘리먼트에 디렉티브와 있거나, `hostDirectives` 프로퍼티를 활용하는 경우는 컴포넌트와 디렉티브의 라이프싸이클 후킹 함수의 실행 순서를 보장하지 않습니다.
+컴포넌트의 호스트 엘리먼트에 디렉티브가 있거나, `hostDirectives` 프로퍼티를 활용하는 경우는 컴포넌트와 디렉티브의 라이프싸이클 후킹 함수의 실행 순서를 보장하지 않습니다.
 또한, 이 순서는 이후 Angular 버전에서 변경될 수 있기 때문에, 실행 순서에 영향을 받는 로직을 작성하지 마세요.

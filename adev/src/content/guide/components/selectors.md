@@ -227,7 +227,7 @@ Angular templates.
 
 컴포넌트는 대부분 커스텀 엘리먼트 이름으로 셀렉터를 지정합니다.
 따라서 [HTML 스펙](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name)에서 정하는 커스텀 엘리먼트 규칙에 따라 하이픈(`-`)을 최소한 하나 포함해야 합니다.
-Angular는 어떠한 컴포넌트와도 매칭되지 않 커스텀 태그를 확인하면 버그와 오타를 방지하기 위해 에러를 발생시킵니다.
+Angular는 어떠한 컴포넌트와도 매칭되지 않는 커스텀 태그를 확인하면 버그와 오타를 방지하기 위해 에러를 발생시킵니다.
 
 Angular 템플릿에서 [네이티브 커스텀 엘리먼트](https://developer.mozilla.org/docs/Web/Web_Components) 활용방법을 자세하게 알아보려면 [심화 컴포넌트 설정](guide/components/advanced-configuration) 문서를 참고하세요.
 

@@ -81,7 +81,7 @@ export class ShippingMethodPicker {
 ```
 
 이 예제에서 `selectedOption`은 기본값이 설정되어 있으며, 사용자의 선택에 따라 값이 변경됩니다.
-그런데 `shippingOptions`는 시그널이기 떄문에 값이 변경될 수 있습니다!
+그런데 `shippingOptions`는 시그널이기 때문에 값이 변경될 수 있습니다!
 `shippingOptions` 값이 변경되면 `selectedOption` 값은 더이상 유효하지 않습니다.
 
 **이 때 `linkedSignal` 함수를 사용하면, 다른 상태와 직접 _연결되는_ 시그널을 생성할 수 있습니다.**
@@ -188,7 +188,7 @@ The `computation` is a function that receives the new value of `source` and a `p
 HELPFUL: When using the `previous` parameter, it is necessary to provide the generic type arguments of `linkedSignal` explicitly. The first generic type corresponds with the type of `source` and the second generic type determines the output type of `computation`.
 -->
 
-경우에 따라 `linkedSignal`가 이전 값을 참조해야 하는 경우가 있습니다.
+경우에 따라 `linkedSignal`이 이전 값을 참조해야 하는 경우가 있습니다.
 
 위 예제에서 `shippingOptions` 목록이 변경되면 `selectedOption`의 값은 언제나 첫번째 항목으로 변경됩니다.
 하지만 사용자가 선택한 옵션이 어딘가에 사용중이라 이전 상태를 유지해야 한다고 합시다.
@@ -322,7 +322,7 @@ NOTE: Using `rawSet` allows you to update the `linkedSignal`'s value directly. T
 커스텀 `set` 함수는 인자를 2개 받습니다:
 
 1. 변경할 새 값
-2. `rawSet` 함수 - `linkedSignal` 내부 상태를 직접 갱신하는 함
+2. `rawSet` 함수 - `linkedSignal` 내부 상태를 직접 갱신하는 함수
 
 참고: `rawSet` 함수를 사용하면 `linkedSignal` 내부값을 직접 갱신할 수 있습니다.
 이 방식은 계산이 복잡하거나 이미 결과를 알고 있는 경우를 건너뛰는 방식으로 유용합니다.
@@ -331,7 +331,7 @@ NOTE: Using `rawSet` allows you to update the `linkedSignal`'s value directly. T
 ### Writing back to a source signal
 -->
 
-### 원본 시그널에 값을 변경하기
+### 원본 시그널의 값을 변경하기
 
 <!--
 Consider a component that displays and allows editing temperature in Fahrenheit, but uses a Celsius signal as its source of truth:

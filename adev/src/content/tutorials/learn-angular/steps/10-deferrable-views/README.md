@@ -159,7 +159,7 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 
 참고: 자세한 내용은 [지연 로딩하기: @defer 심화 가이드](/guide/templates/defer) 문서를 참고하세요.
 
-이번 에제에서는 컴포넌트 템플릿의 특정 영역을 지연 로딩하는 방법을 알아봅시다.
+이번 예제에서는 컴포넌트 템플릿의 특정 영역을 지연 로딩하는 방법을 알아봅시다.
 
 <hr>
 

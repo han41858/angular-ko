@@ -39,7 +39,7 @@ For more information, see the [ng-template API](api/core/ng-template) documentat
 이 문서에서는 데이터 소스에서 데이터를 받아와서 해당 데이터가 준비되었을 때 템플릿에 렌더링하는 구조 디렉티브를 만들어 봅시다.
 이 디렉티브는 SQL 키워드 `SELECT`를 따와서 `SelectDirective`라고 하며, 어트리뷰트 셀렉터는 `[select]`로 지정합니다.
 
-`SelectDirective`는 데이터 소스 이름을 `selectFrom` 입력으로 받아 받습니다.
+`SelectDirective`는 데이터 소스 이름을 `selectFrom` 입력으로 받습니다.
 이 때 사용한 `select` 접두사는 [단축 문법](#구조-디렉티브-단축-문법)입니다.
 디렉티브는 데이터가 준비되면 이 데이터를 제공하는 템플릿 컨텍스트를 구성하며 `<ng-template>` 인스턴스를 생성합니다.
 
@@ -51,7 +51,7 @@ For more information, see the [ng-template API](api/core/ng-template) documentat
 </ng-template>
 ```
 
-그러면 구조 디렉티브는 데이터가 사용할 수 있을 때까지 기다린 후에, `<ng-template>`을 화면에 렌더링합니다.
+그러면 구조 디렉티브는 데이터를 사용할 수 있을 때까지 기다린 후에, `<ng-template>`을 화면에 렌더링합니다.
 
 참고: Angular가 제공하는 `<ng-template>` 엘리먼트는 템플릿을 정의하며, 그 자체로는 화면에 아무것도 렌더링하지 않습니다. `<ng-template>` 엘리먼트는 구조 디렉티브와 함께 사용합니다.
 
@@ -359,7 +359,7 @@ Angular translates structural directive shorthand into the normal binding syntax
 
 Angular는 구조 디렉티브 단축 문법을 다음과 같이 일반 바인딩 문법으로 변환해서 처리합니다:
 
-| 단축 문법                   | 변환 결                                                       |
+| 단축 문법                   | 변환 결과                                                       |
 | :-------------------------- | :------------------------------------------------------------ |
 | `prefix`, 일반 `expression` | `[prefix]="expression"`                                       |
 | `keyExp`                    | `[prefixKey]="expression"` (`prefix` 는 `key` 앞에 붙습니다.) |
@@ -473,7 +473,7 @@ The template type-checker will behave as if the expression bound to `condition` 
 
 입력 가드로 타입을 좁히는 방법은 두 가지 입니다:
 
-- TypeScript 타입 경고(assertion) 함수를 사용하는 방법해서 입력 표현식 타입을 좁히는 방법 -입력 표현식의 참/거짓 여부로 입력 표현식 타입을 좁히는 방법
+- TypeScript 타입 경고(assertion) 함수를 사용해서 입력 표현식 타입을 좁히는 방법 -입력 표현식의 참/거짓 여부로 입력 표현식 타입을 좁히는 방법
 
 타입 경고 함수를 사용하는 방식은 이렇습니다:
 

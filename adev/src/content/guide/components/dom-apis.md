@@ -134,7 +134,7 @@ pre-rendering contexts.
 컴포넌트에서 `Renderer2`를 사용하면서 생성되는 모든 DOM 엘리먼트는 컴포넌트의 [스타일 캡슐화](guide/components/styling#style-scoping)를 적용받습니다.
 
 `Render2` API 중에는 Angular 애니메이션 시스템과 연관된 API도 있습니다.
-합성 애니베이션 프로퍼티를 수정하려면 `setProperty` 메서드를 실행하면 되고, 합성 애니메이션에 이벤트 리스너를 추가하려면 `listen` 메서드를 실행하면 됩니다.
+합성 애니메이션 프로퍼티를 수정하려면 `setProperty` 메서드를 실행하면 되고, 합성 애니메이션에 이벤트 리스너를 추가하려면 `listen` 메서드를 실행하면 됩니다.
 자세한 내용은 [애니메이션](guide/animations) 문서를 참고하세요.
 
 이 두가지 사용방법을 제외하면, `Renderer2` 를 사용하는 방식과 네이티브 DOM API를 활용하는 방식은 차이가 없습니다.
@@ -176,7 +176,7 @@ Angular는 렌더링 대부분을 자동으로 처리하지만, DOM API 활용�
   [`IntersectionObserver`](https://developer.mozilla.org/docs/Web/API/Intersection_Observer_API)와 같은 네이티브 옵저버를 설정할 때
 
 DOM 엘리먼트를 추가하거나 제거하고 갱신하는 것은 피하세요.
-특시, **엘리먼트의 `innerHTML` 프로퍼티를 직접 설정하지 마세요.**
+특히, **엘리먼트의 `innerHTML` 프로퍼티를 직접 설정하지 마세요.**
 엘리먼트의 `innerHTML` 프로퍼티를 직접 설정하면 애플리케이션이 [크로스 사이트 스크립팅(cross-site scripting, XSS) 공격](https://developer.mozilla.org/docs/Glossary/Cross-site_scripting)에 노출될 수 있습니다.
 Angular `innerHTML` 바인딩을 안전하게 처리하기 위해 XSS 공격을 방지하는 기능을 제공합니다.
 자세한 내용은 [보안 가이드 문서](best-practices/security)를 참고하세요.

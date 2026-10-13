@@ -70,7 +70,7 @@ Both `templateUrl` and `styleUrl` are relative to the directory in which the com
 - HTML 템플릿 &mdash; DOM에 렌더링 될 HTML 구조를 구성합니다.
 - [CSS 셀렉터](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) &mdash; 컴포넌트가 HTML 문서에 적용될 이름을 지정합니다.
 
-TypeScript 클레스 위에 `@Component` [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html)를 붙이면 이 클래스가 Angular 컴포넌트라고 지정할 수 있습니다.
+TypeScript 클래스 위에 `@Component` [데코레이터](https://www.typescriptlang.org/docs/handbook/decorators.html)를 붙이면 이 클래스가 Angular 컴포넌트라고 지정할 수 있습니다.
 
 ```angular-ts {highlight: [1, 2, 3, 4]}
 @Component({

@@ -303,7 +303,7 @@ export class MyComponent {
 In this example, the `--my-background` CSS custom property is bound to the `color` signal. The value of the custom property will automatically update whenever the `color` signal changes. This will affect the current component and all its children that rely on this custom property.
 -->
 
-[CSS 커스텀 프로퍼티](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties)를 사용한다면 컴포넌트 스타일을 좀 더 유연하게 지정할 수 있씁니다.
+[CSS 커스텀 프로퍼티](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables/Using_CSS_custom_properties)를 사용한다면 컴포넌트 스타일을 좀 더 유연하게 지정할 수 있습니다.
 커스텀 프로퍼티로 호스트 엘리먼트에 [스타일을 바인딩](guide/templates/binding#css-style-properties) 해봅시다.
 
 ```angular-ts
@@ -382,7 +382,7 @@ export class Button {
 HELPFUL: `HostAttributeToken` throws an error if the attribute is missing, unless the injection is marked as optional.
 -->
 
-컴포넌트나 디렉티브는 `HostAttributeToken`과 [`inject`](api/core/inject) 함수를 사용해서 호스트 엘리먼트의 적적 어트리뷰트를 참조할 수 있습니다.
+컴포넌트나 디렉티브는 `HostAttributeToken`과 [`inject`](api/core/inject) 함수를 사용해서 호스트 엘리먼트의 정적 어트리뷰트를 참조할 수 있습니다.
 
 ```ts
 import { Component, HostAttributeToken, inject } from '@angular/core';
@@ -400,4 +400,4 @@ export class Button {
 <app-button variation="primary">Click me</app-button>
 ```
 
-참고: `HostAttributeToken`를 사용할 때 의존성 객체가 옵션으로 지정되지 않은 채로 어트리뷰트가 존재하지 않으면 에러가 발생합니다.
+참고: `HostAttributeToken`을 사용할 때 의존성 객체가 옵션으로 지정되지 않은 채로 어트리뷰트가 존재하지 않으면 에러가 발생합니다.

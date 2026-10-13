@@ -34,7 +34,7 @@ Use rules when field behavior depends on other field values or needs to update r
 예를 들자면:
 
 - 총 금액이 너무 낮을 때 쿠폰 코드를 비활성화 할 때
-- 배송이 필수할 때만 주소 입력 필드를 활성화 할 때
+- 배송이 필수일 때만 주소 입력 필드를 활성화 할 때
 - API 요청을 줄이기 위해 검색 필드 요청 횟수를 줄일 때
 
 <!--
@@ -418,7 +418,7 @@ NOTE: Like disabled fields, hidden fields also skip validation. See the [Validat
 이 규칙은 로직으로만 설정할 수 있습니다.
 **필드가 표시될 지 결정하는 것은 화면에서 입니다.**
 
-중요: `disabled`, `readonly`와는 다르게, `hidden`는 상태는 표준 DOM 프로퍼티로 존재하지 않습니다.
+중요: `disabled`, `readonly`와는 다르게, `hidden` 상태는 표준 DOM 프로퍼티로 존재하지 않습니다.
 `[formField]` 디렉티브는 엘리먼트에 `hidden` 어트리뷰트를 적용하지 않습니다.
 `hidden()` 상태에 따라 폼 필드를 조건부로 화면에 표시하려면 `@if`나 CSS를 사용해야 합니다.
 
@@ -733,7 +733,7 @@ All three skip validation and prevent user editing while active. The key differe
 
 - 화면에 표시하지만 수정하지 않아야 할 때
 - 사용자가 보거나, 선택하거나, 복사해야 하는 데이터를 표시할 때
-- HTML 폼 제출에 필요한 필드할 때
+- HTML 폼 제출에 필요한 필드일 때
 - 예시: 주문 확인 번호, 시스템이 생성한 참조 코드
 
 활성화 되었을 때 유효성 검사 영향 여부나 사용자가 수정 가능한지는 이렇게 다릅니다:
@@ -780,7 +780,7 @@ Debouncing delays these updates and reduces unnecessary work.
 - 문자가 매번 입력될 때마다 유효성 검사가 실행됩니다.
 - 모델 값과 연결된 API 호출이나 기타 효과들이 발생합니다.
 
-`debounce()`를 활용하면 값이 불필요한 작업을 줄일 수 있습니다.
+`debounce()`를 활용하면 불필요한 작업을 줄일 수 있습니다.
 
 <!--
 ### Basic debouncing
@@ -971,7 +971,7 @@ export class Search {
 디바운서 함수가 반환하는 값에 따라 동작이 다릅니다:
 
 - `undefined` - 값을 즉시 동기화 할 때
-- `Promise<void>` - Promise가 완료될 때까지 동기화를 멈춤니다.
+- `Promise<void>` - Promise가 완료될 때까지 동기화를 멈춥니다.
 
 커스텀 디바운스 로직은 이런 경우에 사용합니다:
 
@@ -1079,7 +1079,7 @@ export class Age {
 | `MAX_LENGTH` | `maxLength()`  | `field().maxLength()` |
 | `PATTERN`    | `pattern()`    | `field().pattern()`   |
 
-`[formField]` 디렉티므는 위 5개 키를 폼 넌트롤의 HTML 어트리뷰트에 자동으로 바인딩합니다.
+`[formField]` 디렉티브는 위 5개 키를 폼 컨트롤의 HTML 어트리뷰트에 자동으로 바인딩합니다.
 `PATTERN`은 예외인데, 시그널 폼은 패턴을 여러개 설정할 수 있지만 HTML `pattern` 어트리뷰트는 정규 표현식을 하나만 받을 수 있기 때문입니다.
 
 ```angular-ts

@@ -231,8 +231,8 @@ export class SpecializedMenuWithTooltip {}
 두 디렉티브를 `MenuWithTooltip` 디렉티브로 합쳐봅시다.
 그리고 최종적으로는 `MenuWithTooltip`을 `SpecializedMenuWithTooltip`에 적용해 봅시다.
 
-템플릿에 `SpecializedMenuWithTooltip`에 사용되면 Angular는 `Menu`, `Tooltip`, `MenuWithTooltip` 인스턴스가 각각 생성됩니다.
-그리고나면 이 디렉티브들이 각각 `SpecializedMenuWithTooltip` 호스트 엘리먼트에 적용됩니다.
+템플릿에 `SpecializedMenuWithTooltip`이 사용되면 Angular는 `Menu`, `Tooltip`, `MenuWithTooltip` 인스턴스를 각각 생성합니다.
+그러고 나면 이 디렉티브들이 각각 `SpecializedMenuWithTooltip` 호스트 엘리먼트에 적용됩니다.
 
 ```ts
 @Directive({
@@ -375,9 +375,9 @@ export class EvenMoreCustomTooltip { }
 1. `Tooltip` 인스턴스가 생성됩니다.
 2. `CustomTooltip` 인스턴스가 생성됩니다.
 3. `EvenMoreCustomTooltip` 인스턴스가 생성됩니다.
-4. `Tooltip` 가 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
-5. `CustomTooltip` 가 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
-6. `EvenMoreCustomTooltip` 가 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
+4. `Tooltip`이 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
+5. `CustomTooltip`이 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
+6. `EvenMoreCustomTooltip`이 입력 프로퍼티로 입력을 받습니다. (`ngOnInit`)
 7. `Tooltip` 호스트 바인딩이 적용됩니다.
 8. `CustomTooltip` 호스트 바인딩이 적용됩니다.
 9. `EvenMoreCustomTooltip` 호스트 바인딩이 적용됩니다.

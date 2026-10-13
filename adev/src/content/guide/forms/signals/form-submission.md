@@ -191,7 +191,7 @@ export class Contact {
 자세한 내용은 [유효성 검사 타이밍 제어](#controlling-validation-gating-with-ignorevalidators) 섹션을 참고하세요.
 `action` 함수는 필드 트리와 함께 `root`와 `submitted` 필드 트리를 표현하는 `detail` 객체를 인자로 받습니다.
 
-유효성 검사가 통과된 후에도, 네트워크 에러나 중복 오류과 같은 상황으로 `action` 함수는 실패할 수 있습니다.
+유효성 검사가 통과된 후에도, 네트워크 에러나 중복 오류와 같은 상황으로 `action` 함수는 실패할 수 있습니다.
 이런 경우에는 에러를 반환해서 화면에 에러를 표시할 수 있습니다.
 반대로, 에러가 아님을 표현하려면 `action` 함수가 `null` 이나 `undefined`을 반환하거나, 빈 값으로 `return` 을 실행하면 됩니다.
 

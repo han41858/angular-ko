@@ -30,7 +30,7 @@ Angular가 제공하는 기본 디렉티브는 폼, 목록, 스타일 등에 다
 | [어트리뷰트 디렉티브](#기본-어트리뷰트-디렉티브)         | 엘리먼트, 컴포넌트, 디렉티브의 모습이나 동작을 바꿉니다.     |
 | [구조 디렉티브](/guide/directives/structural-directives) | 조건에 따라 DOM 엘리먼트를 DOM에 추가하거나 제거합니다.      |
 
-이 문서는 Angular가 제공하는 기분 [어트리뷰트 디렉티브](#기본-어트리뷰트-디렉티브)를 다룹니다.
+이 문서는 Angular가 제공하는 기본 [어트리뷰트 디렉티브](#기본-어트리뷰트-디렉티브)를 다룹니다.
 
 <!--
 ## Built-in attribute directives
@@ -78,7 +78,7 @@ HELPFUL: To add or remove a _single_ class, use [class binding](/guide/templates
 
 `ngClass`는 CSS 클래스를 지정하거나 제거할 수 있습니다.
 
-참고: 클래스 _하나_ 만 지정하거나 제거하려면 `NgClass` 대신 [클래스 바인딩](/guide/templates/binding#css-class-and-style-property-bindings)를 사용하세요.
+참고: 클래스 _하나_ 만 지정하거나 제거하려면 `NgClass` 대신 [클래스 바인딩](/guide/templates/binding#css-class-and-style-property-bindings)을 사용하세요.
 
 <!--
 ### Import `NgClass` in the component

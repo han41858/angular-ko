@@ -124,7 +124,7 @@ If the `params` computation returns `undefined`, the loader function does not ru
 
 `ResourceLoaderParams` 객체에는 `params`, `previous`, `abortSignal` 프로퍼티가 있습니다.
 
-| 프로퍼니      | 설명                                                                                                                                                        |
+| 프로퍼티      | 설명                                                                                                                                                        |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `params`      | 리소스의 `params` 연산 함수                                                                                                                                 |
 | `previous`    | `status` 프로퍼티와 이전 `ResourceStatus` 값이 담겨 전달되는 객체입니다.                                                                                    |
@@ -266,7 +266,7 @@ You can use this status information to conditionally display user interface elem
 | `'loading'`   | `undefined`    | `params` 값이 변경되어 로더가 실행중                     |
 | `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행중        |
 | `'resolved'`  | 계산된 값      | 로더 실행 종료                                           |
-| `'local'`     | 직접 설정된 값 | 리소스의 `.set()`, `.update()` 메서드로 값이 설정되 상태 |
+| `'local'`     | 직접 설정된 값 | 리소스의 `.set()`, `.update()` 메서드로 값이 설정된 상태 |
 
 이 상태값들은 사용자에게 표시하는 용도로 활용하거나, 로딩 인디케이터, 에러 메시지를 활용하는 용도로 활용할 수 있습니다.
 

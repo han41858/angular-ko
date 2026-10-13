@@ -147,7 +147,7 @@ export class EffectiveCounter {
 }
 ```
 
-클래서 생성자 밖에서 `effect()` 함수를 사용하려면 `effect()` 함수에 `Injector`를 다음과 같이 전달하면 됩니다:
+클래스 생성자 밖에서 `effect()` 함수를 사용하려면 `effect()` 함수에 `Injector`를 다음과 같이 전달하면 됩니다:
 
 ```ts
 @Component({
@@ -223,7 +223,7 @@ Effects return an `EffectRef`. You can use the ref's `destroy` method to manuall
 이펙트 시그널은 두 가지 컨텍스트에서 생성될 수 있기 때문에 종료되는 시점이 다릅니다:
 
 - "뷰 이펙트" 시그널은 컴포넌트가 종료되면 종료됩니다.
-- "최상위 이펙트" 시그널은 애플리케이션이 종료되면 졷료됩니다.
+- "최상위 이펙트" 시그널은 애플리케이션이 종료되면 종료됩니다.
 
 `effect()` 함수는 `EffectRef`를 반환합니다.
 이펙트 시그널의 자동 종료를 생략하고 수동으로 종료하려면 시그널을 생성할 때 `manualCleanup` 옵션을 지정한 후에 `destroy()` 메서드를 실행하면 됩니다.
@@ -257,7 +257,7 @@ effect((onCleanup) => {
 컴포넌트나 디렉티브가 종료되면 Angular는 연관된 모든 이펙트 시그널을 자동으로 정리합니다.
 이펙트 시그널은 오랜 시간동안 실행될 수 있는데, 이 시그널이 다시 실행되려면 이전 동작이 완료되거나 종료되어야 합니다.
 그렇다면, 이펙트 시그널을 생성할 때 옵션으로 `onCleanUp` 함수를 지정할 수 있습니다.
-`onCleanup` 함수는 시그널이 종료될 떄 실행되는 콜백 함수로 등록됩니다.
+`onCleanup` 함수는 시그널이 종료될 때 실행되는 콜백 함수로 등록됩니다.
 
 ```ts
 effect((onCleanup) => {
@@ -314,7 +314,7 @@ In this example `afterRenderEffect` is used to update a chart created by a 3rd p
 TIP: You often don't need `afterRenderEffect` to check for DOM changes. APIs like `ResizeObserver`, `MutationObserver` and `IntersectionObserver` are preferred to `effect` or `afterRenderEffect` when possible.
 -->
 
-`effect()` 함수는 시그널이 변경되는 것을 반응하는 용도의 범용 도구입니다.
+`effect()` 함수는 시그널이 변경되는 것에 반응하는 용도의 범용 도구입니다.
 하지만 이 함수는 Angular가 DOM을 갱신하기 _전에_ 실행됩니다.
 그래서 DOM을 수동으로 검사하거나 조작해야 하는 경우, 서드 파티 라이브러리를 사용하는 경우라면 DOM에 직접 접근해야 합니다.
 

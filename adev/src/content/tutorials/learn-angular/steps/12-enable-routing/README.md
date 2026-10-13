@@ -114,7 +114,7 @@ export const routes: Routes = [];
 `app.config.ts` 파일을 열고 다음 단계로 Angular Router를 설정합니다:
 
 1. `@angular/router` 패키지로 제공되는 `provideRouter` 함수를 불러옵니다.
-1. `./app.routes.ts` 파일에 선언한 `routes` 를 불러옵니다..
+1. `./app.routes.ts` 파일에 선언한 `routes` 를 불러옵니다.
 1. `providers` 배열에서 `provideRouter` 함수를 실행하면서 `routes` 를 인자로 전달합니다.
 
 ```ts {highlight:[2,3,6]}

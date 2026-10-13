@@ -174,7 +174,7 @@ export class Registration {
 유효성 검사가 진행되는 과정은 이렇습니다:
 
 1. 사용자가 값을 입력합니다.
-2. 동기 유효성가 먼저 실행됩니다.
+2. 동기 유효성 검사가 먼저 실행됩니다.
 3. 동기 유효성 검사가 실패하면 비동기 유효성 검사는 실행되지 않습니다.
 4. 동기 유효성 검사가 성공하면, 비동기 유효성 검사가 실행되며 `pending()` 시그널이 `true`를 반환합니다.
 5. 비동기 유효성 검사 요청이 성공하면 `pending()` 시그널이 `false`를 반환합니다.
@@ -779,7 +779,7 @@ export class Registration {
 }
 ```
 
-`rxResources` 함수는 Observable를 직접 처리합니다.
+`rxResources` 함수는 Observable을 직접 처리합니다.
 필드 값이 변경되었을 때 기존에 구독한 옵저버블을 정리하는 기능도 자동으로 합니다.
 
 
@@ -893,7 +893,7 @@ export class Registration {
 }
 ```
 
-300ms 라고 디바운싱을 지정하면, 폼 모델은 사용자가 해당 시간만큼 입력이 멈추기를 기다힌 후에 유효성 검사를 실행합니다.
+300ms 라고 디바운싱을 지정하면, 폼 모델은 사용자가 해당 시간만큼 입력이 멈추기를 기다린 후에 유효성 검사를 실행합니다.
 예를 들면, "signal forms"라고 빠르게 입력하면 유효성 검사 요청은 12번이 아니라 1번만 실행합니다.
 
 
@@ -985,7 +985,7 @@ const registrationForm = form(registrationModel, (schemaPath) => {
 The `abortSignal` fires when the field is touched, or when its value changes before the debounce resolves. Resolve the promise on abort so your debouncer releases any pending timers. The framework writes the pending value to the model on touch, and discards it when a newer value arrives. See the [`debounce` API reference](api/forms/signals/debounce) for the full `Debouncer` signature.
 -->
 딜레이가 필요하거나 `'blur'`로는 해결되지 않으면, `Debouncer` 함수를 사용하면 됩니다.
-이 함수는 필드 컨텍스트와 [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)를 인자로 받으며, 모델이 업데이트해야 할 시점에 완료되는 `Promise<void>`를 반환합니다:
+이 함수는 필드 컨텍스트와 [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)을 인자로 받으며, 모델이 업데이트해야 할 시점에 완료되는 `Promise<void>`를 반환합니다:
 
 ```ts
 import {debounce, type Debouncer} from '@angular/forms/signals';
@@ -1091,7 +1091,7 @@ HTTP 요청만 디바운싱됩니다.
 | 옵션                                                        | 언제 사용하나요                                                                                                                         |
 | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `debounce()` 규칙                                             | 동기 유효성 검사, 상태 연계 반응, 필드 값이 모두 확정되어야 폼 제출이 가능할 때, 입력 중에는 반응하지 않습니다. |
-| `validateHttp({ debounce })` 또는 `validateAsync({ debounce })` | 부하가 적은 간단한 유효성 검사는 즉시 실행합니다. 하지만 연산이 필요한 검사는 사용자가 입력을 멈출 떄까지 기다립니다.   |
+| `validateHttp({ debounce })` 또는 `validateAsync({ debounce })` | 부하가 적은 간단한 유효성 검사는 즉시 실행합니다. 하지만 연산이 필요한 검사는 사용자가 입력을 멈출 때까지 기다립니다.   |
 
 두 옵션 모두 인자를 밀리초 단위로 받습니다.
 커스텀 타이밍 콜백은 조금 다른데, 폼 계층의 규칙은 `Debouncer`를 사용하며, 유효성 계층의 옵션은 `@angular/core` 패키지로 제공되는 `DebounceTimer`를 받습니다.
@@ -1177,7 +1177,7 @@ export class Registration {
 }
 ```
 
-`params` 콜백 함수는 사용자명이 짧은 경우 `undefined`를 반환하기 떄문에 유효성 검사를 건너뜁니다.
+`params` 콜백 함수는 사용자명이 짧은 경우 `undefined`를 반환하기 때문에 유효성 검사를 건너뜁니다.
 그리고 `debounce: 300`을 사용하면 사용자가 입력을 300ms 멈추기 전까지는 값이 변경된 것을 처리하지 않고 기다립니다.
 이후에 로더가 사용자명이 유효하다고 검사하고 나면 디바운스되는 값이 `undefined`로 변경되며 대기 상태가 됩니다.
 
@@ -1545,7 +1545,7 @@ validateHttp(schemaPath.username, {
 ```
 -->
 `request` 함수가 `undefined`를 반환하면 유효성 검사를 생략합니다.
-이것을 활용하면 필드 입력값이 비어있거나 최소 길이보다 모자른 경우 유효성 검사를 생략할 수 있습니다:
+이것을 활용하면 필드 입력값이 비어있거나 최소 길이보다 모자란 경우 유효성 검사를 생략할 수 있습니다:
 
 ```ts
 import {validateHttp} from '@angular/forms/signals';
@@ -1661,7 +1661,7 @@ Use the `pending()` signal to show when validation is happening. This helps user
 ```
 -->
 유효성 검사가 진행중인 것을 사용자에게 표시하려면 `pending()` 시그널을 활용하면 됩니다.
-그러면 사용자는 왜 앱이 느려진지 확인할 수 있으며, 체감 성능도 향상됩니다:
+그러면 사용자는 왜 앱이 느려졌는지 확인할 수 있으며, 체감 성능도 향상됩니다:
 
 ```angular-html
 @if (field().pending()) {

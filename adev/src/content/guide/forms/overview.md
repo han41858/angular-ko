@@ -81,7 +81,7 @@ The following table summarizes the key differences between reactive and template
 | [폼 모델 구성](#setting-up-the-form-model)   | 컴포넌트 클래스에서 명시적으로 선언    | 디렉티브로 묵시적 선언                       |
 | [데이터 모델](#mutability-of-the-data-model) | 구조가 명확하며 바뀌지 않음(immutable) | 구조가 명확하지 않으며 바뀔 수 있음(mutable) |
 | [데이터 흐름](#data-flow-in-forms)           | 동기                                   | 비동기                                       |
-| [유효성 검사](#form-validation)              | 함수                                   | 디렉티므                                     |
+| [유효성 검사](#form-validation)              | 함수                                   | 디렉티브                                     |
 
 <!--
 ### Scalability

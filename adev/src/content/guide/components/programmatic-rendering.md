@@ -66,7 +66,7 @@ See the [NgComponentOutlet API reference](api/common/NgComponentOutlet) for more
 directive's capabilities.
 -->
 
-`NgComponentOutlet` 는 템플릿에서 컴포넌트를 동적으로 렌더링하는 구조 디렉티브입니다.
+`NgComponentOutlet` 은 템플릿에서 컴포넌트를 동적으로 렌더링하는 구조 디렉티브입니다.
 
 ```angular-ts
 @Component({/*...*/})
@@ -601,7 +601,7 @@ To simplify this, both `createComponent` and `ViewContainerRef.createComponent` 
 바인딩은 컴포넌트 인스턴스가 생성된 후에 별도로 하는 것이 좋습니다.
 
 간단하게 이야기하면, `createComponent`나 `ViewContainerRef.createComponent` 함수는 `inputBinding()`, `outputBinding()`, `twoWayBinding()`과 같이 입출력값을 바인딩하는 기능을 제공합니다.
-로스트 디렉티브에는 `directives` 배열을 지정할 수도 있습니다.
+호스트 디렉티브에는 `directives` 배열을 지정할 수도 있습니다.
 이 방식을 활용하면 컴포넌트를 코드로 생성하면서 템플릿 바인딩을 한 번에 처리할 수 있습니다.
 
 <!--
@@ -681,7 +681,7 @@ In the example above, the dynamic **AppWarning** is created with its `canClose` 
 `ViewContainerRef.createComponent`는 컴포넌트를 생성하면서 호스트 뷰와 호스트 엘리먼트를 컨테이너의 뷰 계층내 지정된 위치에 자동으로 삽입합니다.
 이 메서드는 동적 컴포넌트가 목록 항목이나 인라인 UI와 같이 컨테이너의 논리적, 시각적 구조의 일부가 되어야 할 때 활용합니다.
 
-반면, 함수로 제공되는 `createComponent` API는 새 컴포넌트를 생성하면서 이 컴포넌트를 뷰나 DOM에 삽입하지 않고, `ComponentRef`를 반환하기 때문에, 이 참조를 활용햇 ㅓ컴포넌트의 호스트 엘리먼트의 원하는 위치에 넣을 수 있습니다.
+반면, 함수로 제공되는 `createComponent` API는 새 컴포넌트를 생성하면서 이 컴포넌트를 뷰나 DOM에 삽입하지 않고, `ComponentRef`를 반환하기 때문에, 이 참조를 활용해서 컴포넌트의 호스트 엘리먼트의 원하는 위치에 넣을 수 있습니다.
 
 ```angular-ts
 import {Component, input, model, output} from '@angular/core';

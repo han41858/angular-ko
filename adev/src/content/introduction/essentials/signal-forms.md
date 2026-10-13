@@ -237,7 +237,7 @@ Text inputs work with various `type` attributes and textareas:
 ```
 -->
 
-텍스트 입력은 다양한 `type`과 함께 사용할 수 있ㅅ브니다:
+텍스트 입력은 다양한 `type`과 함께 사용할 수 있습니다:
 
 ```html
 <!-- 텍스트, 이메일 -->

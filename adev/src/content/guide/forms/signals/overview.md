@@ -63,7 +63,7 @@ Signal Forms require:
 - Angular v21 or higher
 -->
 
-시그널 폼을 사용하려면 Angular 버전이 v21 를 포함하여 이후 버전이어야 합니다.
+시그널 폼을 사용하려면 Angular 버전이 v21을 포함하여 이후 버전이어야 합니다.
 
 <!--
 ## Setup
