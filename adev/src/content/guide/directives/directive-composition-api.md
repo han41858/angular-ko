@@ -52,10 +52,10 @@ directives at runtime.
 **Angular ignores the `selector` of directives applied in the `hostDirectives` property.**
 -->
 
-컴포넌트 데코레이터에 `hostDirective` 프로퍼티를 추가하면 적용할 수 있습니다.
+컴포넌트 데코레이터에 `hostDirectives` 프로퍼티를 추가하면 적용할 수 있습니다.
 이렇게 사용하는 디렉티브를 _호스트 디렉티브(host directive)_ 라고 합니다.
 
-위 예제에서는 `MenuBehavior` 디렉티브를 `AminMenu`의 호스트 엘리먼트에 적용했습니다.
+위 예제에서는 `MenuBehavior` 디렉티브를 `AdminMenu`의 호스트 엘리먼트에 적용했습니다.
 이 방식은 템플릿에서 `<admin-menu>` 엘리먼트에 `MenuBehavior` 디렉티브를 적용한 것과 같은 효과입니다.
 
 ```typescript
@@ -159,7 +159,7 @@ export class AdminMenu {}
 <admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()"></admin-menu>
 ```
 
-그리고 `hostDirective`에 입출력 프로퍼티를 등록할 때 별칭을 지정할 수도 있습니다:
+그리고 `hostDirectives`에 입출력 프로퍼티를 등록할 때 별칭을 지정할 수도 있습니다:
 
 ```typescript
 @Component({

@@ -132,7 +132,7 @@ Angular는 `<ng-template>` 엘리먼트 사용을 생략할 수 있도록 구조
 두번째 부분 `from source`는 키-표현식 쌍입니다.
 `from`은 바인딩 키이며, `source`는 일반적인 템플릿 표현식입니다.
 바인딩 키는 파스칼 케이스(PascalCase)로 변환되어 구조 디렉티브 셀렉터 뒤에 오는 구문의 프로퍼티와 맵핑됩니다.
-그래서 `from` 키는 `selecteFrom`과 매핑되어 `source` 표현식과 바인딩됩니다.
+그래서 `from` 키는 `selectFrom`과 매핑되어 `source` 표현식과 바인딩됩니다.
 구조 디렉티브는 보통 구조 디렉티브의 셀렉터와 같은 접두사를 사용하는 것이 일반적입니다.
 
 <!--
@@ -257,7 +257,7 @@ export class SelectDirective {
 
 </docs-step>
 <docs-step title="'selectFrom' 입력 프로퍼티 추가하기">
-`selecttFrom` `input()` 프로퍼티를 추가합니다.
+`selectFrom` `input()` 프로퍼티를 추가합니다.
 
 ```ts
 export class SelectDirective {
@@ -485,7 +485,7 @@ class ActorIsUser {
   actor = input<User | Robot>();
 
   static ngTemplateGuard_actor(dir: ActorIsUser, expr: User | Robot): expr is User {
-    // 반환 구문은 필요없지만, TypeScript 에러를 방지하기 위해 선언합니다.
+    // 반환 구문은 필요 없지만, TypeScript 에러를 방지하기 위해 선언합니다.
     return true;
   }
 }
@@ -553,7 +553,7 @@ export interface SelectTemplateContext<T> {
 
 @Directive(...)
 export class SelectDirective<T> {
-  // 입력으로 받은 `DataSource`을 제네릭 `T` 타입으로 선언합니다.
+  // 입력으로 받은 `DataSource`를 제네릭 `T` 타입으로 선언합니다.
   selectFrom = input.required<DataSource<T>>();
 
   // 디렉티브의 제네릭 타입을 활용해서 컨텍스트의 타입을 좁힙니다.

@@ -794,11 +794,11 @@ it('should render a defer block in different states', async () => {
   class ExampleA {}
   // 컴포넌트 픽스처를 생성합니다.
   const componentFixture = TestBed.createComponent(ExampleA);
-  // defer 블록을 모두 참조하고 그 중 첫번째 블록을 가져옵니다.
+  // defer 블록을 모두 참조하고 그중 첫번째 블록을 가져옵니다.
   const deferBlockFixture = (await componentFixture.getDeferBlocks())[0];
-  // placeholder 블록이 렌더링 된 것을 확인합니다.
+  // placeholder 블록이 렌더링된 것을 확인합니다.
   expect(componentFixture.nativeElement.innerHTML).toContain('Placeholder');
-  // 로딩 상태로 바꾸고 loading 블록이 렌더링 된 것을 확인합니다.
+  // 로딩 상태로 바꾸고 loading 블록이 렌더링된 것을 확인합니다.
   await deferBlockFixture.render(DeferBlockState.Loading);
   expect(componentFixture.nativeElement.innerHTML).toContain('Loading');
   // 최종 상태로 바꾸고 최종 렌더링을 확인합니다.

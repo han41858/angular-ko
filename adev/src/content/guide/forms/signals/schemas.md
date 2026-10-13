@@ -67,7 +67,7 @@ graph TD
     C --> G["반응형 로직: 시그널이 변경될 때마다 실행됩니다"]
     D --> G
     E --> G
-    F --> B2["중첨된 스키마 함수도 한 번만 실행됩니다"]
+    F --> B2["중첩된 스키마 함수도 한 번만 실행됩니다"]
     B2 --> G
 ```
 
@@ -371,7 +371,7 @@ paymentForm = form(this.paymentModel, (schemaPath) => {
 Without the type guard, TypeScript would not know which fields are available inside each schema function. The type narrowing ensures that accessing `payment.cardNumber` is type-safe in the credit card branch and `payment.accountNumber` is type-safe in the bank transfer branch.
 -->
 
-`applyWhenValue(0` 함수는 특정 필드의 값만 검사하는 방식으로 조건을 단순화합니다.
+`applyWhenValue()` 함수는 특정 필드의 값만 검사하는 방식으로 조건을 단순화합니다.
 그래서 `FieldContext`를 인자로 받는 대신, 필드의 값을 직접 받아서 평가하는 함수를 인자로 받습니다.
 
 ```ts {header: "applyWhen — 로직 함수는 FieldContext를 인자로 받습니다"}
@@ -421,7 +421,7 @@ paymentForm = form(this.paymentModel, (schemaPath) => {
   });
 
   applyWhenValue(schemaPath, isBankTransfer, (payment) => {
-    // TypeScript는 payment가 BankTransfer 타입라고 인식합니다.
+    // TypeScript는 payment가 BankTransfer 타입이라고 인식합니다.
     required(payment.accountNumber);
     required(payment.routingNumber);
   });

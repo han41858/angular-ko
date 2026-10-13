@@ -55,7 +55,7 @@ interface AppointmentFormModel {
 }
 
 interface AppointmentDomainModel {
-  name: string; // 예얏자의 이름
+  name: string; // 예약자의 이름
   time: Date; // 예약시각 (날짜와 시각 정보를 모두 사용합니다)
 }
 ```
@@ -123,7 +123,7 @@ const taskModel = signal({
 ```ts {avoid, header: '부분 초기화'}
 const taskModel = signal({
   title: '',
-  // description, priority, completed 이 없습니다.
+  // description, priority, completed가 없습니다.
 });
 ```
 
@@ -252,8 +252,8 @@ interface BeverageOrderFormModel {
 
 ```ts {prefer, header: 'UI 컨트롤과 어울리는 데이터 타입을 사용하세요'}
 interface BeverageOrderFormModel {
-  size: string; // <select> (option values: "6", "12", "24")와 바인딩 됩니다
-  quantity: number; // <input type="number">와 바인딩 됩니다
+  size: string; // <select> (option values: "6", "12", "24")와 바인딩됩니다
+  quantity: number; // <input type="number">와 바인딩됩니다
 }
 ```
 
@@ -289,8 +289,8 @@ form(signal({name: '', birthday: null}));
 
 ```ts {prefer, header: '적절한 빈 값을 사용하세요'}
 interface UserFormModel {
-  name: string; // <input type="text">과 바인딩 됩니다
-  birthday: Date | null; // <input type="date">과 바인딩 됩니다
+  name: string; // <input type="text">과 바인딩됩니다
+  birthday: Date | null; // <input type="date">과 바인딩됩니다
 }
 
 // 빈 값으로 폼을 초기화합니다
@@ -620,7 +620,7 @@ interface SendEmailFormModel {
 }
 ```
 
-이 경우 `recipienEmails` 배열은 사용자 입력에 따라 개수가 늘어나거나 줄어들 수 있습니다.
+이 경우 `recipientEmails` 배열은 사용자 입력에 따라 개수가 늘어나거나 줄어들 수 있습니다.
 배열의 길이는 동적이지만, 개별 항목의 구조는 같은 타입으로 일관되어야 합니다.
 
 <!--
@@ -674,7 +674,7 @@ interface Location {
 
 interface UserProfileFormModel {
   username: string;
-  // 프로퍼티 여러개를 한 번에 다루기 때문에 유효합니다.
+  // 프로퍼티 여러 개를 한 번에 다루기 때문에 유효합니다.
   location: Location | null;
 }
 ```
@@ -798,7 +798,7 @@ The examples above show a pure derivation of the form model, directly from the d
 ```ts {prefer, header: '도메인 모델을 폼 모델로 변환하기 위해 linkedSignal 사용하기'}
 @Component(...)
 class MyForm {
-  // 도메인 모델로 폼을 초기화 합니다. 입력값이 없으면 빈 폼으로 시작합니다.
+  // 도메인 모델로 폼을 초기화합니다. 입력값이 없으면 빈 폼으로 시작합니다.
   readonly domainModel = input<MyDomainModel>();
 
   private readonly formModel = linkedSignal({
@@ -826,7 +826,7 @@ class MyForm {
   private readonly formModel = linkedSignal({
     // 도메인 모델로 linkedSignal을 구성합니다
     source: this.domainModelResource.value,
-    // 빈 폼 모델로 시낙했다가 도메인 모델이 준비되면 변환합니다.
+    // 빈 폼 모델로 시작했다가 도메인 모델이 준비되면 변환합니다.
     computation: (domainModel) => domainModel
       ? domainModelToFormModel(domainModel)
       : EMPTY_MY_FORM_MODEL

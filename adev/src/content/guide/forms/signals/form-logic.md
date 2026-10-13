@@ -14,7 +14,7 @@ This guide shows you how to use rules like `disabled()`, `hidden()`, `readonly()
 [유효성 검사 문서](guide/forms/signals/validation)에서 다룬 유효성 검사 외에, 이 문서는 스키마에서 활용할 수 있는 유효성 검사를 알아봅시다.
 폼 필드는 조건에 따라 비활성화할 수 있으며, 다른 값에 연동되며 화면에서 감출 수도 있고, 읽기 전용으로 만들거나 커스텀 컨트롤에 메타데이터를 추가할 수도 있습니다.
 
-이 문서는 `disabled()`, `hidden()`, `readonly()`, `debounce()`, `metadat()`를 활용한 필드 동작 제어 방법을 알아봅시다.
+이 문서는 `disabled()`, `hidden()`, `readonly()`, `debounce()`, `metadata()`를 활용한 필드 동작 제어 방법을 알아봅시다.
 
 <!--
 ## When to add form logic

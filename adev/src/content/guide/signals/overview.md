@@ -286,7 +286,7 @@ const conditionalCount = computed(() => {
 이제 `showCount` 시그널의 값이 `false`일 때 `conditionalCount` 시그널의 값을 읽으면 `count` 시그널은 _실행되지도 않고_ "Nothing to see here" 메시지가 반환됩니다.
 이 말은, 나중에 `count` 시그널이 변경되더라도 `conditionalCount`는 연산을 다시 하지 않는다는 것을 의미합니다.
 
-그리고 `showCount` 시그널의 값이 `true` 일 때 `conditionCount` 시그널의 값을 읽으면, 시그널의 증분 함수가 실행되면서 `showCount`가 `true`인 분기를 타게 되고, `count` 시그널의 값을 문자열에 담아 반환합니다.
+그리고 `showCount` 시그널의 값이 `true` 일 때 `conditionalCount` 시그널의 값을 읽으면, 시그널의 증분 함수가 실행되면서 `showCount`가 `true`인 분기를 타게 되고, `count` 시그널의 값을 문자열에 담아 반환합니다.
 그리고 `count` 시그널이 변경되면 `conditionalCount` 시그널에 캐싱된 값도 유효하지 않은 것으로 판단합니다.
 
 시그널의 종속성은 동적으로 변경됩니다.
@@ -358,7 +358,7 @@ function subscribeToEvents() {
 ```
 -->
 
-Angular 코드가 반응 컨텍스트에서 실행되지 않으면 assert를 보내는 헬퍼 함수 `assertNotInReactriveContext` 를 제공합니다.
+Angular 코드가 반응 컨텍스트에서 실행되지 않으면 assert를 보내는 헬퍼 함수 `assertNotInReactiveContext` 를 제공합니다.
 이 함수에 실행 코드의 참조를 전달하고 assert가 동작하면, 오류 메시지를 확인해서 올바른 API 진입점을 확인할 수 있습니다.
 일반적인 내용만 있는 에러 메시지가 아니라, 어떻게 해결할 수 있는지 명확하게 안내하는 에러 메시지를 제공합니다.
 

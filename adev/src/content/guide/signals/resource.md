@@ -64,7 +64,7 @@ import {resource, Signal} from '@angular/core';
 const userId: Signal<string> = getUserId();
 
 const userResource = resource({
-  // 반응셩 연산 함수를 정의합니다.
+  // 반응형 연산 함수를 정의합니다.
   // params 값은 시그널을 읽을 때마다 다시 계산됩니다.
   params: () => ({id: userId()}),
 
@@ -76,7 +76,7 @@ const userResource = resource({
 // 리소스의 로더 함수의 실행 결과로 연산 시그널을 생성합니다.
 const firstName = computed(() => {
   if (userResource.hasValue()) {
-    // `hasValue`는 두가지 용도로 사용합니다:
+    // `hasValue`는 두 가지 용도로 사용합니다:
     // - `undefined` 타입을 걸러내는 타입 가드 역할을 합니다.
     // - 자원이 에러 상태일 때 값을 읽는 것을 방지합니다.
     return userResource.value().firstName;

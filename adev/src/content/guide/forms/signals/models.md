@@ -875,7 +875,7 @@ const userModel = signal({
 
 const userForm = form(userModel);
 
-// 중첨된 폼 모델에 접근하기
+// 중첩된 폼 모델에 접근하기
 userForm.profile.firstName; // FieldTree<string>
 userForm.settings.theme; // FieldTree<string>
 ```

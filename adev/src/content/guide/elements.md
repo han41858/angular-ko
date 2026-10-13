@@ -329,7 +329,7 @@ aDialog.body = 'News'; // <-- 에러: `aDialog`에는 `body` 프로퍼티가 존
 하지만 커스텀 엘리먼트를 사용하는 모든 코드에 타입을 적용해야 한다면 번거로울 수 있습니다.
 
 그렇다면 이 방식 대신 `HTMLElementTagNameMap`에 커스텀 엘리먼트와 타입을 등록해두는 방법이 있습니다.
-이렇게 타입을 등록해두면 `document.createElemnt()`나 `document.querySelector()`와 같은 DMO 메서드가 태그 이름을 기반으로 TypeScript 타입을 추론합니다:
+이렇게 타입을 등록해두면 `document.createElement()`나 `document.querySelector()`와 같은 DOM 메서드가 태그 이름을 기반으로 TypeScript 타입을 추론합니다:
 
 ```ts
 

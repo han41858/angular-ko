@@ -779,7 +779,7 @@ export class Registration {
 }
 ```
 
-`rxResources` 함수는 Observable을 직접 처리합니다.
+`rxResource` 함수는 Observable을 직접 처리합니다.
 필드 값이 변경되었을 때 기존에 구독한 옵저버블을 정리하는 기능도 자동으로 합니다.
 
 
@@ -991,7 +991,7 @@ The `abortSignal` fires when the field is touched, or when its value changes bef
 import {debounce, type Debouncer} from '@angular/forms/signals';
 
 const shorterWhenLonger: Debouncer<string> = ({value}, abortSignal) => {
-  // 사용자가 입력중일 가능성이 있기 때문에 쿼리가 짧으면 딜레이를 길게 합니다.
+  // 사용자가 입력 중일 가능성이 있기 때문에 쿼리가 짧으면 딜레이를 길게 합니다.
   const ms = value().length < 3 ? 500 : 200;
   return new Promise((resolve) => {
     const timeoutId = setTimeout(resolve, ms);
@@ -1253,7 +1253,7 @@ export class Registration {
         // 팩토리 클로저에 캐싱하며 해당 필드의 라이프싸이클 동안 유지됩니다.
         const cache = new Map<string, {available: boolean}>();
         return resource({
-          // 원본 시그널이 아니라 디바운스 된 시그널을 읽습니다.
+          // 원본 시그널이 아니라 디바운스된 시그널을 읽습니다.
           params: () => debouncedUsername.value(),
           loader: async ({params: name}) => {
             const cached = cache.get(name);

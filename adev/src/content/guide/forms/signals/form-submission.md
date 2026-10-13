@@ -473,7 +473,7 @@ contactForm = form(
 Use `'none'` when your form has async validators (such as checking username availability) and you need all validation to complete before submitting. Use `'all'` for draft-saving scenarios where you want to persist data regardless of validation state.
 -->
 
-기본적으로 `sugmit()`은 진행 중인 유효성 검사는 무시합니다.
+기본적으로 `submit()`은 진행 중인 유효성 검사는 무시합니다.
 그리고 실패한 유효성 검사가 없다면, 비동기 유효성 검사가 진행 중이더라도 `action`이 실행됩니다.
 이 동작을 변경하려면 `ignoreValidators` 옵션을 지정하면 됩니다.
 

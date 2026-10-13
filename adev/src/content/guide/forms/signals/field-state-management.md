@@ -137,7 +137,7 @@ Beyond `value()`, field state includes signals for validation, interaction track
 These signals enable you to build responsive form user experiences that react to user behavior. The sections below explore each category in detail.
 -->
 
-가장 많이 사용하는 시그널은 필드의 현재값을 반환하는 `WwritableSignal` 타입의 `value()` 입니다:
+가장 많이 사용하는 시그널은 필드의 현재값을 반환하는 `WritableSignal` 타입의 `value()` 입니다:
 
 ```ts
 const emailValue = registrationForm.email().value();
@@ -216,7 +216,7 @@ export class Login {
 When checking validity in code, use `invalid()` instead of `!valid()` if you want to distinguish between "has errors" and "validation pending." The reason for this is that both `valid()` and `invalid()` can be `false` simultaneously when async validation is pending because the field isn't valid yet since validation not complete and is also isn't invalid since no errors have been found yet.
 -->
 
-`valid()`와 `vinvalid()`를 확인하면 유효성 검사 결과를 확인할 수 있습니다:
+`valid()`와 `invalid()`를 확인하면 유효성 검사 결과를 확인할 수 있습니다:
 
 ```angular-ts
 @Component({
@@ -589,7 +589,7 @@ export class Order {
 }
 ```
 
-위 예제 코드는 `valueOf(schemaPath.totla)`을 사용해서 `total` 필드 값에 따라 `couponCode`가 비활성화될지 결정합니다.
+위 예제 코드는 `valueOf(schemaPath.total)`을 사용해서 `total` 필드 값에 따라 `couponCode`가 비활성화될지 결정합니다.
 
 참고: `schemaPath`와 같이 스키마 콜백 함수의 인자는 폼 전체 필드에 접근할 수 있는 `SchemaPathTree` 객체입니다.
 변수 이름은 원하는 대로 지정할 수 있습니다.
@@ -1494,7 +1494,7 @@ export class Registration {
 이 함수는 모든 필드의 유효성 검사 결과를 완료된 것으로 표시하고, 폼이 유효한 경우 `action` 콜백 함수를 실행합니다.
 
 디렉티브를 사용하지 않고 `submit(this.registrationForm)`을 실행해서 수동으로 폼을 제출할 수도 있습니다.
-`submit()` 함수를 명시적으로 호출할 때는 `FormSubmitOptioins`를 전달해서 폼의 기본 제출 로직을 재정의할 수 있습니다: `submit(this.registrationForm, {action: () => /* ... */ })`
+`submit()` 함수를 명시적으로 호출할 때는 `FormSubmitOptions`를 전달해서 폼의 기본 제출 로직을 재정의할 수 있습니다: `submit(this.registrationForm, {action: () => /* ... */ })`
 
 <!--
 #### Resetting forms after submission

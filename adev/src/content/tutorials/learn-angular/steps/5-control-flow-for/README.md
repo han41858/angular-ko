@@ -101,7 +101,7 @@ export class App {
 이 코드에서 중요한 점이 두 가지 있습니다:
 
 - [Angular 템플릿 문법](guide/templates)을 사용하기 위해 `for` 앞에는 `@` 접두사가 붙습니다.
-- Angulav 16 버전이나 이전 버전에서는 [Angular NgFor 문서](guide/directives/structural-directives)를 참고하세요.
+- Angular 16 버전이나 이전 버전에서는 [Angular NgFor 문서](guide/directives/structural-directives)를 참고하세요.
 
 <docs-workflow>
 

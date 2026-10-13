@@ -169,7 +169,7 @@
   </docs-card>
   <docs-card title="사용자를 보호하는 보안은 기본입니다" href="best-practices/security" link="Security" titleIconName="sensors">
     Angular는 Google의 세계적인 보안 엔지니어들과 협력하여 보안은 기본으로 보장합니다.
-    HTML 검증과 강력한 타입 검증을 포함하여 크로스 사이트 스크립팅(CSRF, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
+    HTML 검증과 강력한 타입 검증을 포함하여 크로스 사이트 스크립팅(XSS, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
   </docs-card>
   <docs-card title="Vite와 esbuild로 대규모 팀 생산성을 유지하세요" href="tools/cli/build-system-migration" link="Vite and esbuild" titleIconName="sensors">
     Angular CLI는 Vite와 ESBuild를 활용하는 최신 빌드 파이프라인을 구현했습니다.
@@ -199,7 +199,7 @@
   </docs-card>
   <docs-card title="로드맵도 투명하게 공개합니다" href="roadmap" link="Read our public roadmap" titleIconName="sensors">
     Angular 팀은 현재는 물론 앞으로 작업할 로드맵을 공개하고 있으며, 이에 대한 피드백도 소중하게 여깁니다.
-    Angular의 향후 방향성을 정하는 과정에서 커뮤니티 의견을 수렴하기 위해 의견 요청(RPF, Request for Comments)을 게시하고 있습니다.
+    Angular의 향후 방향성을 정하는 과정에서 커뮤니티 의견을 수렴하기 위해 의견 요청(RFC, Request for Comments)을 게시하고 있습니다.
   </docs-card>
 </docs-card-container>
 
@@ -237,7 +237,7 @@
   </docs-card>
   <docs-card title="Google 기술과 파트너십" titleIconName="sensors">
     <p>Angular는 웹 생태계 개선을 위해 Google 기술, 팀과 긴밀히 협력하고 있습니다.</p>
-    <p>Chrome의 Aurora와 지속적인 파트너십을 가지며 웹 전반의 사용자 경험 개선을 적극적으로 모색하고 있으며, NgOptimizaedImage와 같은 기본 성능 최적화를 진행하면서 Angular의 Core Web Vitals 개선을 진행하고 있습니다.</p>
+    <p>Chrome의 Aurora와 지속적인 파트너십을 가지며 웹 전반의 사용자 경험 개선을 적극적으로 모색하고 있으며, NgOptimizedImage와 같은 기본 성능 최적화를 진행하면서 Angular의 Core Web Vitals 개선을 진행하고 있습니다.</p>
     <p>그리고 <a href="https://firebase.google.com/">Firebase</a>, <a href="https://www.tensorflow.org/">Tensorflow</a>, <a href="https://flutter.dev/">Flutter</a>, <a href="https://m3.material.io/">Material Design</a>, <a href="https://cloud.google.com/">Google Cloud</a>와 협력하며 개발자의 워크플로 전반에 의미 있는 통합을 제공하고 있습니다.</p>
   </docs-card>
 </docs-card-container>

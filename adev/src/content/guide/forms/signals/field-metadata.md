@@ -326,7 +326,7 @@ The component example above uses optional chaining inside a `computed()` so the 
 This is the whole API for a single contributor. The next section covers what happens when more than one schema rule contributes to the same key, and how to combine those contributions with reducers.
 -->
 
-`hashMetadata(key)`를 사용하면 필드에 해당 키가 등록되어 있을 때 `true`를 반환합니다.
+`hasMetadata(key)`를 사용하면 필드에 해당 키가 등록되어 있을 때 `true`를 반환합니다.
 그리고 검사 규칙에 등록된 키가 없으면 `state.metadata(key)`가 `undefined`를 반환하며, 그렇지 않으면 현재 리듀스된 값을 시그널로 반환합니다.
 
 ```ts
@@ -420,7 +420,7 @@ form(model, (path) => {
 두 검사 규칙이 실행되면 `state.metadata(HELP)!()`는 두 번째 메시지를 반환합니다.
 이런 상황은 대부분 원하는 상황이 아닙니다.
 영향은 종종 여러 곳에서 옵니다.
-`pply()`를 사용해서 각 도움말 텍스트를 붙이는 두 개의 스키마가 결합되거나, 힌트를 적용하는 유효성 검사 규칙이 여러 개 사용되는 경우가 그렇습니다.
+`apply()`를 사용해서 각 도움말 텍스트를 붙이는 두 개의 스키마가 결합되거나, 힌트를 적용하는 유효성 검사 규칙이 여러 개 사용되는 경우가 그렇습니다.
 
 영향을 결합하려면 리듀서를 `createMetadataKey()`에 전달하면 됩니다.
 리듀서는 개별 값을 어떻게 조합해서 결과를 생성하는지 정하는 함수입니다:

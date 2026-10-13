@@ -31,7 +31,7 @@ If you're using a background image in CSS, [start here](#how-to-migrate-your-bac
 
 이 디렉티브는 아래 작업을 통해 [가장 큰 컨텐츠 페인트(Largest Contentful Paint, LCP)](http://web.dev/lcp) 성능을 끌어올립니다:
 
-- `<img>` 태그에 `fetchprioirity` 어트리뷰트를 자동으로 설정합니다.
+- `<img>` 태그에 `fetchpriority` 어트리뷰트를 자동으로 설정합니다.
 - 기본적으로 이미지는 지연 로딩합니다.
 - document 헤더에 사전 연결 링크 태그를 자동으로 생성합니다.
 - `srcset` 어트리뷰트를 자동으로 생성합니다.

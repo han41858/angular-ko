@@ -223,7 +223,7 @@ import {Service} from '@angular/core';
 
 @Service()
 export class FeatureClient {
-  // 지연 로딩되기 전을 포함헤서 애플리케이션 전체 범위에서 접근할 수 있습니다.
+  // 지연 로딩되기 전을 포함해서 애플리케이션 전체 범위에서 접근할 수 있습니다.
 }
 ```
 
@@ -727,7 +727,7 @@ import {ThemeStore} from './theme-store';
       <ng-content />
     </div>
   `,
-  providers: [ThemeStore], // 프로젝션 된 컨텐츠에서 사용할 수 있습니다.
+  providers: [ThemeStore], // 프로젝션된 컨텐츠에서 사용할 수 있습니다.
 })
 export class ParentView {
   protected themeService = inject(ThemeStore);
@@ -741,7 +741,7 @@ export class ParentView {
       <ng-content />
     </div>
   `,
-  viewProviders: [ThemeStore], // 프로젝션 된 컨텐츠에서 사용할 수 없습니다.
+  viewProviders: [ThemeStore], // 프로젝션된 컨텐츠에서 사용할 수 없습니다.
 })
 export class ParentViewOnly {
   protected themeService = inject(ThemeStore);
@@ -2062,7 +2062,7 @@ setTimeout(() => {
   const service = inject(MyClient) // 에러
 }, 1000)
 
-// 의존성을 주입을 먼저 하고 사용은 나중에 합니다
+// 의존성 주입을 먼저 하고 사용은 나중에 합니다
 private service = inject(MyClient)
 
 setTimeout(() => {

@@ -494,7 +494,7 @@ export class CustomSlider {
   value = model(0);
 
   increment() {
-    // 모델 입력 프로퍼티 값을 변환한 후 바인딩 된 곳으로 전달합니다.
+    // 모델 입력 프로퍼티 값을 변환한 후 바인딩된 곳으로 전달합니다.
     this.value.update((oldValue) => oldValue + 10);
   }
 }

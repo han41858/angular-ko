@@ -462,7 +462,7 @@ flowchart TB
 ```mermaid
 flowchart TB
     C(Component)
-    P(NgModel로 바인딩 된 프로퍼티)
+    P(NgModel로 바인딩된 프로퍼티)
     C-->|프로퍼티 값을 변경합니다|P
     P-->|변화 감지 싸이클을 시작합니다|CD1
 
