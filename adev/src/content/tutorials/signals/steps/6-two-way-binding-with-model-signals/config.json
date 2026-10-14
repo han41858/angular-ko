@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/custom-checkbox.ts", "src/app/app.css"],
   "type": "editor",
-  "title": "Two-way binding with model signals"
+  "title": "모델 시그널을 사용하는 양방향 바인딩"
 }

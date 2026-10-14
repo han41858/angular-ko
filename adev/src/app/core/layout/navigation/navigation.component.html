@@ -11,7 +11,7 @@
     <button
       type="button"
       class="adev-mobile-nav-button"
-      aria-label="Toggle mobile navigation"
+      aria-label="모바일 탐색 메뉴 열기/닫기"
       (click)="openMobileNav($event)"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 223 236" width="32">
@@ -70,7 +70,7 @@
       type="button"
       class="adev-close-nav"
       (click)="closeMobileNav()"
-      aria-label="Close navigation"
+      aria-label="탐색 메뉴 닫기"
     >
       <docs-icon role="presentation">close</docs-icon>
     </button>
@@ -81,7 +81,7 @@
         class="adev-nav-item adev-nav-item--logo"
         [class.adev-nav-item--active]="activeRouteItem() === PAGE_PREFIX.HOME"
       >
-        <a aria-label="Angular homepage" routerLink="/">
+        <a aria-label="Angular 홈페이지" routerLink="/">
           <!-- Logo Symbol -->
           @if (!isUwu) {
             <svg
@@ -138,7 +138,7 @@
               src="assets/images/uwu.png"
               style="width: auto; margin: 0"
               class="uwu-logo"
-              alt="Angular logo"
+              alt="Angular 로고"
               height="34"
             />
           }
@@ -148,7 +148,7 @@
         <div class="adev-nav-item">
           <button
             type="button"
-            aria-label="Select Angular version"
+            aria-label="Angular 버전 선택"
             role="menu"
             class="adev-version-button"
             [class.adev-mini-menu-open]="openedMenu() === 'version-picker'"
@@ -189,8 +189,8 @@
           class="adev-nav-button"
           type="button"
           (click)="toggleSearchDialog($event)"
-          title="Search docs"
-          [aria-label]="'Open search dialog with ' + searchTitle"
+          title="문서 검색"
+          [aria-label]="searchTitle + ' 키로 검색창 열기'"
         >
           <svg
             aria-hidden="true"
@@ -297,7 +297,7 @@
           type="button"
           [cdkMenuTriggerFor]="socialMiniMenu"
           [cdkMenuPosition]="bottomMiniMenuPositions"
-          aria-label="Open social media links"
+          aria-label="소셜 미디어 링크 열기"
           (cdkMenuClosed)="closeMenu()"
           (cdkMenuOpened)="openMenu('social')"
           aria-controls="social-mini-menu"
@@ -311,7 +311,7 @@
               <a
                 [href]="ngLinks.YOUTUBE"
                 cdkMenuItem
-                title="Angular YouTube channel"
+                title="Angular YouTube 채널"
                 target="_blank"
                 rel="noopener"
               >
@@ -333,7 +333,7 @@
               <a
                 [href]="ngLinks.X"
                 cdkMenuItem
-                title="Angular X (formerly Twitter) profile"
+                title="Angular X(구 Twitter) 프로필"
                 target="_blank"
                 rel="noopener"
               >
@@ -355,7 +355,7 @@
               <a
                 [href]="ngLinks.BLUESKY"
                 cdkMenuItem
-                title="Angular Bluesky profile"
+                title="Angular Bluesky 프로필"
                 target="_blank"
                 rel="noopener"
               >
@@ -377,7 +377,7 @@
               <a
                 [href]="ngLinks.MEDIUM"
                 cdkMenuItem
-                title="Angular Medium blog"
+                title="Angular Medium 블로그"
                 target="_blank"
                 rel="noopener"
               >
@@ -496,7 +496,7 @@
             cdkMenu
             id="theme-mini-menu"
             role="menu"
-            aria-label="Theme options"
+            aria-label="테마 옵션"
           >
             <li role="none">
               <button
@@ -505,7 +505,7 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'auto'"
                 (click)="setTheme('auto')"
-                aria-label="Set default system theme"
+                aria-label="시스템 기본 테마 적용"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">routine</docs-icon>
                 <span>시스템 설정</span>
@@ -518,7 +518,7 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'dark'"
                 (click)="setTheme('dark')"
-                aria-label="Set dark theme"
+                aria-label="어두운 테마 적용"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">dark_mode</docs-icon>
                 <span>다크 테마</span>
@@ -531,7 +531,7 @@
                 role="menuitemradio"
                 [aria-checked]="theme() === 'light'"
                 (click)="setTheme('light')"
-                aria-label="Set light theme"
+                aria-label="밝은 테마 적용"
               >
                 <docs-icon class="docs-icon_high-contrast" aria-hidden="true">light_mode</docs-icon>
                 <span>밝은 테마</span>
@@ -549,7 +549,7 @@
       <button type="button" (click)="openMobileNav($event)">
         <docs-icon class="docs-icon_high-contrast">menu</docs-icon>
         @if (activeRouteItem() === PAGE_PREFIX.DOCS) {
-          <span>Docs</span>
+          <span>문서</span>
         }
         @if (activeRouteItem() === PAGE_PREFIX.REFERENCE) {
           <span>API</span>

@@ -1559,7 +1559,13 @@ NullInjectorError: No provider for UserClient!
 
 로그를 보면 `App`에서 `AuthClient`를 의존성 객체로 주입하려고 하는데, `UserClient`를 찾지 못해서 에러가 발생했습니다.
 
+<!--
 #### Missing the `@Service ` or `@Injectable` decorator
+-->
+
+<a id="missing-the-service--or-injectable-decorator"></a>
+
+#### `@Service` 또는 `@Injectable` 데코레이터 누락
 
 <!--
 The most common cause is forgetting the `@Service` or `@Injectable()` decorator on a service class.
@@ -1613,7 +1619,13 @@ export class UserClient {
 
 참고: 생성자에 인자가 없는 클래스는 `@Service()` 없이도 동작할 수 있지만, 권장하지 않습니다. 의존성은 나중에도 추가될 수 있기 때문에 언제나 데코레이터를 붙이세요.
 
+<!--
 #### Missing providedIn configuration
+-->
+
+<a id="missing-providedin-configuration"></a>
+
+#### providedIn 설정 누락
 
 <!--
 A service may have `@Injectable()` but not specify where it should be provided.
@@ -1673,7 +1685,13 @@ export class UserClient {
 
 `@Service` 데코레이터를 지정하면 애플리케이션 전역에서 서비스를 의존성으로 주입할 수 있으면서, 트리 셰이킹도 가능합니다.
 
+<!--
 #### Standalone component missing imports
+-->
+
+<a id="standalone-component-missing-imports"></a>
+
+#### 독립 컴포넌트의 imports 누락
 
 <!--
 In Angular v20+ with standalone components, you must explicitly import or provide dependencies in each component.

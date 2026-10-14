@@ -41,9 +41,7 @@ components, traversing upwards through the application tree.
 `@Component` 데코레이터의 `changeDetection` 옵션을 지정하면 **변화 감지 모드** 를 설정할 수 있습니다.
 변화 감지 모드는 두 가지가 있습니다.
 
-**`ChangeDetectionStrategy.Eager`/`Default`** 는 선택해서 사용할 수 있는 모드입니다.
-이 모드를 지정하면 Angular가 전역 범위의 컴포넌트 DOM을 모두 검사하고 갱신합니다.
-변화 감지는 사용자의 상호작용, 네트워크 응답, 타이머 만료 등으로 동작합니다.
+**`ChangeDetectionStrategy.Eager`/`Default`**는 선택해서 사용할 수 있는 모드입니다. 이 모드에서는 애플리케이션 어디에서든 사용자 상호작용, 네트워크 응답, 타이머 등의 활동이 발생했을 가능성이 있을 때, 해당 컴포넌트의 DOM을 갱신해야 하는지 검사합니다.
 
 Angular v22 부터는 **`ChangeDetectionStrategy.OnPush`** 가 기본값입니다.
 이 모드를 사용하면 성능 최적화를 위해 변화 감지 검사를 줄이며, 이런 경우만 검사합니다:

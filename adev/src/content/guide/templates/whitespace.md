@@ -102,9 +102,10 @@ Angular avoids sending these unnecessary whitespace characters to the browser in
 
 웹 브라우저가 HTML을 렌더링하면 연속된 공백문자는 공백문자 하나로 변환됩니다:
 
+<!-- prettier-ignore -->
 ```html
 <!-- 템플릿 파일 -->
-<p>Hello world</p>
+<p>Hello         world</p>
 ```
 
 이렇게 작성해도 브라우저는 "Hello"와 "world" 사이에 공백을 하나만 표시합니다.

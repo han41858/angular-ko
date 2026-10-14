@@ -1006,7 +1006,7 @@ Emoji from FlowerService: 🌺
      같은 계층에 존재하는 디렉티브는 해당되지 않습니다.
    - 의존성 객체를 검색하는 마지막 지점이 같은 컴포넌트인 이유는, 이 컴포넌트가 애플리케이션의 최상위 컴포넌트이기 때문입니다.
 
-1. `ElementInjector` 계층을 따라가면서 인젝터가 의존성 객체를 찾지 못하면 기본값으로 사용할 값을 `EnvironmentInjector`에 `ApplicationConfig`로 등록합니다.
+1. `ElementInjector` 계층에서 의존성 토큰을 찾지 못하면, `ApplicationConfig`로 구성된 `EnvironmentInjector`가 대체 인젝터로서 요청을 처리합니다.
 
 <!--
 ### Using the `providers` array

@@ -275,19 +275,19 @@ class LibCard {
 }
 ```
 
-이 예제에서 `LibCardComponent`의 구현체는 더 이상 `LibHeaderComponent`를 타입으로도, 값으로도 사용하지 않습니다.
-따라서 `LibHeaderComponent`는 완전하게 트리 셰이킹이 가능합니다.
+이 예제에서 `LibCard`의 구현체는 더 이상 `LibHeader`를 타입으로도, 값으로도 사용하지 않습니다.
+따라서 `LibHeader`는 완전하게 트리 셰이킹이 가능합니다.
 그 대신 `LibHeaderToken`이 클래스 선언부에 사용되어 코드에 남지만, 구현체가 없이 단순한 클래스 선언일 뿐입니다.
 이 토큰의 크기는 아주 작기 때문에 컴파일 후에도 애플리케이션 크기에 거의 영향을 주지 않습니다.
 
-대신, `LibHeaderToken` 추상 클래스의 구현체는 `LibHeaderComponent` 가 됩니다.
+대신, `LibHeaderToken` 추상 클래스의 구현체는 `LibHeader` 가 됩니다.
 컴포넌트를 정의할 때 프로바이더에 `LibHeaderToken`을 등록하면 Angular가 구현체를 올바르게 의존성으로 주입합니다.
 
 요약하자면, 경량 의존성 토큰 패턴은 다음과 같이 구성됩니다:
 
 1. 경량 의존성 토큰 - 추상 클래스로 표현합니다
-2. 컴포넌트 정의 - 추상 클래스를 프로바이더로 등록합니다.
-3. 경량 토큰 주입 - `@ContentChild()`나 `@ContentChildren()`에서 의존성으로 주입합니다.
+2. 컴포넌트 정의 - 추상 클래스를 구현합니다.
+3. 경량 토큰 주입 - `contentChild`나 `contentChildren`을 사용해 의존성으로 주입합니다.
 4. 프로바이더 - 경량 의존성 토큰과 구현체를 연결합니다.
 
 <!--

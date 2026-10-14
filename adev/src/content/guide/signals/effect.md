@@ -456,9 +456,7 @@ Effects run in the following phase order:
 If one of the phases modifies a signal value tracked by `afterRenderEffect`, the affected phases execute again.
 -->
 
-`earlyRead` 단계의 콜백은 정리 함수만 인자로 받습니다.
-그리고 이후 단계들은 이전 단계에서 반환하는 값을 인자로 받습니다.
-단계 사이에 데이터를 전달해야 하는 경우에 활용하면 됩니다.
+`earlyRead` 단계의 콜백은 정리 함수만 인자로 받습니다. 이후 각 단계는 이전 단계 콜백의 반환값을 `Signal`로 전달받습니다. 이 시그널을 사용해 단계 사이의 작업을 조율할 수 있습니다.
 
 이펙트 시그널은 다음 단계로 실행됩니다:
 

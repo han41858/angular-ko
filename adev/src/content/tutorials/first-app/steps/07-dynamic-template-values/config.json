@@ -1,5 +1,5 @@
 {
-  "title": "Add dynamic values to templates",
+  "title": "문자열 바인딩 추가하기",
   "type": "editor",
   "answerSrc": "../08-ngFor/src",
   "answerRootDir": "../08-ngFor/",

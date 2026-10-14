@@ -65,9 +65,7 @@ Angular 코드에서 어떤 상태를 저장하려면 `signal` 함수를 사용�
 사용자가 배송 방식을 선택하는 컴포넌트를 예로 들어 봅시다:
 
 ```typescript
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class ShippingMethodPicker {
   shippingOptions: Signal<ShippingMethod[]> = getShippingOptions();
 
@@ -88,9 +86,7 @@ export class ShippingMethodPicker {
 위 예제 코드에서 `signal`을 `linkedSignal`로 바꿔 보세요:
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class ShippingMethodPicker {
   shippingOptions: Signal<ShippingMethod[]> = getShippingOptions();
 
@@ -202,9 +198,7 @@ interface ShippingMethod {
   name: string;
 }
 
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class ShippingMethodPicker {
   constructor() {
     this.changeShipping(2);
@@ -244,9 +238,7 @@ export class ShippingMethodPicker {
 
 `linkedSignal`을 생성할 때 연산 함수를 전달하는 대신, 객체를 전달하면서 이 객체의 프로퍼티로 `source`와 `computation` 옵션을 전달할 수 있습니다.
 
-`source`는 시그널을 지정합니다.
-`computed` 시그널이거나 컴포넌트의 `input` 시그널도 가능합니다.
-`source` 시그널의 값이 변경되면 `linkedSignal`은 `computation` 실행 결과로 시그널의 값을 할당합니다.
+`source`에는 `computed`나 컴포넌트 `input` 등 어떤 시그널이든 사용할 수 있습니다. `source`가 변경되거나 `computation`에서 참조한 시그널이 변경되면, `linkedSignal`은 제공된 `computation`의 실행 결과로 값을 갱신합니다.
 
 그리고 `computation`은 `source`에서 새 값을 받으면서 `previous` 객체를 받는 함수입니다.
 이때 `previous` 객체에는 `source` 프로퍼티와 `value` 프로퍼티가 있습니다.

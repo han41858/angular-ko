@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/app.html"],
   "type": "editor",
-  "title": "Add validation to your form"
+  "title": "폼에 유효성 검사 추가하기"
 }

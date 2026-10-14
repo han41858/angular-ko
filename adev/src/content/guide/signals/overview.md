@@ -303,20 +303,6 @@ const conditionalCount = computed(() => {
 이후에 `showCount` 시그널의 값이 `false`가 되면, `conditionalCount` 시그널은 더 이상 `count` 값이 변경되는 것을 감지하지 않습니다.
 
 <!--
-## Reading signals in `OnPush` components
--->
-
-## 컴포넌트 `OnPush` 함수에서 시그널 읽기
-
-<!--
-When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markForCheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
--->
-
-컴포넌트 템플릿에서 시그널을 참조하면 Angular는 이 시그널의 의존성을 추적합니다.
-그래서 종속 관계인 시그널의 값이 변경되며 Angular가 컴포넌트를 [마크(marks)](api/core/ChangeDetectorRef#markForCheck) 했다가 다음 변경 감지 싸이클이 실행될 때 화면을 갱신합니다.
-자세한 내용은 [컴포넌트 서브트리 건너뛰기](best-practices/skipping-subtrees) 문서를 참고하세요.
-
-<!--
 ## Reactive contexts
 -->
 
@@ -563,15 +549,13 @@ All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, 
 Synchronous or asynchronous derivations are recommended when we want to react to state changes. However, this doesn't cover all the possible use cases, and you'll sometimes find yourself in a situation where you need to react to signal changes on non-reactive APIs. Use `effect` or `afterRenderEffect` for those specific use cases. For more information see [Side effects for non-reactive APIs](/guide/signals/effect) guide.
 -->
 
-앱 상태 변화에 반응할 때는 동기 방식이든 비동기 방식이든 시그널을 추적하면 됩니다.
-하지만 예외 경우가 있을 수 있으며, 반응형 API가 아닌 코드가 실행될 때 시그널이 반응해야 하는 경우도 있습니다.
-이런 경우는 `effect`나 `afterRenderEffect`를 사용하면 됩니다.
-자세한 내용은 [비반응형 API에 반응하기](/guide/signals/effect) 문서를 참고하세요.
+상태 변화에 반응할 때는 동기 또는 비동기 파생 값을 사용하는 것이 좋습니다. 다만 시그널 변경에 맞춰 비반응형 API를 실행해야 하는 경우에는 `effect`나 `afterRenderEffect`를 사용하세요. 자세한 내용은 [비반응형 API의 부수 효과](/guide/signals/effect) 문서를 참고하세요.
 
 <!--
 ## Reading signals in `OnPush` components
 -->
 
+<a id="컴포넌트-onpush-함수에서-시그널-읽기"></a>
 <a id="reading-signals-in-onpush-components"></a>
 
 ## `OnPush` 컴포넌트에서 시그널 읽기
@@ -580,7 +564,7 @@ Synchronous or asynchronous derivations are recommended when we want to react to
 When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markForCheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
 -->
 
-`OnPush` 컴포넌트 템플릿에서 시그널 값을 읽으면 Angular는 이 컴포넌트와 관련된 시그널도 함께 추적합니다.
+`OnPush` 컴포넌트 템플릿에서 시그널 값을 읽으면 Angular는 해당 시그널을 이 컴포넌트의 의존성으로 추적합니다.
 그리고 시그널의 값이 변경되면, Angular는 다음 변화감지 사이클에서 컴포넌트를 갱신할 수 있게 컴포넌트를 [마킹](api/core/ChangeDetectorRef#markForCheck)합니다.
 `OnPush` 컴포넌트에 대해 자세하게 알아보려면 [컴포넌트 서브트리 건너뛰기](best-practices/skipping-subtrees) 문서를 참고하세요.
 
@@ -627,8 +611,8 @@ import isEqual from 'lodash/isEqual';
 
 const data = signal(['test'], {equal: isEqual});
 
-// 배열의 참조가 다르기 때문에 깊은 참조 비교에서 새 값은 이전 값과 동일하다고 판단합니다.
-// 시그널 갱신 트리거는 동작하지 않습니다.
+// 서로 다른 배열 인스턴스이지만, 깊은 동등성 함수는
+// 두 값이 같다고 판단하므로 시그널 갱신을 트리거하지 않습니다.
 data.set(['test']);
 ```
 

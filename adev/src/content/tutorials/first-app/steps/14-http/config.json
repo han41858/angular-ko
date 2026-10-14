@@ -1,5 +1,5 @@
 {
-  "title": "Add HTTP communication",
+  "title": "HTTP 통신 추가하기",
   "type": "local",
   "answerSrc": "./src-final",
   "answerRootDir": "./src-final",

@@ -1,5 +1,5 @@
 {
-  "title": "Add property binding to components",
+  "title": "프로퍼티 바인딩 추가하기",
   "type": "editor",
   "answerSrc": "../07-dynamic-template-values/src",
   "answerRootDir": "../07-dynamic-template-values",

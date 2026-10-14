@@ -31,8 +31,8 @@
               <button
                 type="button"
                 class="docs-rename-file"
-                aria-label="Rename file"
-                matTooltip="Rename file"
+                aria-label="파일 이름 변경"
+                matTooltip="파일 이름 변경"
                 matTooltipPosition="above"
                 (click)="onRenameButtonClick()"
               >
@@ -43,8 +43,8 @@
               <button
                 type="button"
                 class="docs-delete-file"
-                aria-label="Delete file"
-                matTooltip="Delete file"
+                aria-label="파일 삭제"
+                matTooltip="파일 삭제"
                 matTooltipPosition="above"
                 (click)="deleteFile(file.filename)"
               >
@@ -76,8 +76,8 @@
         type="button"
         class="adev-add-file"
         (click)="onAddButtonClick()"
-        aria-label="Add a new file"
-        matTooltip="Add a new file"
+        aria-label="새 파일 추가"
+        matTooltip="새 파일 추가"
         matTooltipPosition="above"
       >
         <docs-icon>add</docs-icon>
@@ -88,7 +88,7 @@
   <button
     class="adev-editor-download-button"
     type="button"
-    aria-label="Open current code in editor in an online editor"
+    aria-label="현재 코드를 온라인 에디터에서 열기"
     [cdkMenuTriggerFor]="launcherMenu"
   >
     <docs-icon>launch</docs-icon>
@@ -96,15 +96,15 @@
   <!-- launcher dropdown window -->
   <ng-template #launcherMenu>
     <div class="adev-editor-dropdown" cdkMenu>
-      <button cdkMenuItem (click)="openCurrentCodeInStackBlitz()">Open in StackBlitz</button>
+      <button cdkMenuItem (click)="openCurrentCodeInStackBlitz()">StackBlitz에서 열기</button>
     </div>
   </ng-template>
   <button
     class="adev-editor-download-button"
     type="button"
     (click)="downloadCurrentCodeEditorState()"
-    aria-label="Download current source code"
-    matTooltip="Download current source code"
+    aria-label="현재 소스 코드 다운로드"
+    matTooltip="현재 소스 코드 다운로드"
     matTooltipPosition="above"
   >
     <docs-icon>download</docs-icon>
@@ -126,7 +126,7 @@
             href="#"
             (click)="$event.preventDefault(); openFileAtLocation(error)"
           >
-            (line: {{ error.lineNumber }}:{{ error.characterPosition }})
+            ({{ error.lineNumber }}행:{{ error.characterPosition }}열)
           </a>
           {{ error.message }}
         </li>

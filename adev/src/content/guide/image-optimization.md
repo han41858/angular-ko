@@ -1184,8 +1184,7 @@ To do this, we recommend writing a [custom image loader](#custom-loaders) which 
 For maintenance reasons, we don't currently plan to support additional built-in loaders in the Angular repository. Instead, we encourage developers to publish any additional image loaders as third-party packages.
 -->
 
-유지관리 이슈 때문에, 현재 지원하는 로더 외에는 추가 도입을 고려하고 있지 않습니다.
-서드파티 이미지 로더를 활용해 보세요.
+유지보수상의 이유로 Angular 저장소에 내장 로더를 추가할 계획은 현재 없습니다. 대신 추가 이미지 로더를 서드파티 패키지로 배포하는 것을 권장합니다.
 
 <!--
 ### Can I use this with the `<picture>` tag

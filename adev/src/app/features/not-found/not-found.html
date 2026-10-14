@@ -2,22 +2,22 @@
   <div class="docs-not-found">
     <img src="assets/images/angie/sad.svg" class="docs-not-found__angie" aria-hidden="true" />
     <div class="docs-not-found__bubble">
-      <h1 tabindex="-1">Page Not Found</h1>
+      <h1 tabindex="-1">페이지를 찾을 수 없습니다</h1>
       <p>
-        We couldn't find what you were looking for.
+        요청하신 페이지를 찾을 수 없습니다.
         @if (searchResults().length > 0) {
-          We have initiated a search for the term extracted from the URL.
+          URL에서 추출한 검색어로 검색했습니다.
         }
       </p>
       <p>
-        If you think this is a mistake, please
+        잘못된 안내라고 생각하시면
         <a
           href="https://github.com/angular/angular/issues/new?template=3-docs-bug.yaml"
           target="_blank"
         >
-          open an issue</a
+          이슈를 등록해 주세요</a
         >
-        so we can fix it.
+        확인 후 수정하겠습니다.
       </p>
     </div>
   </div>
@@ -26,8 +26,8 @@
   @if (searchResults().length > 0) {
     <!-- The search results are faded in if/once we have results -->
     <div animate.enter="enter-animation">
-      <h2>Feeling lucky?</h2>
-      <p>Maybe what you're looking for is in the list below:</p>
+      <h2>이 문서를 찾으셨나요?</h2>
+      <p>아래 목록에 찾으시는 내용이 있을 수 있습니다:</p>
 
       <ul class="docs-search-results docs-mini-scroll-track">
         @for (result of searchResults(); track $index) {
