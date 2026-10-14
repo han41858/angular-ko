@@ -19,7 +19,67 @@ jobs:
       - name: install dependencies
         run: pnpm i
       - name: build
-        run: pnpm adev:build
+        run: |
+          resource_snapshot() {
+            printf '\n--- Build resources: %s ---\n' "$(date -u +%FT%TZ)"
+            free -m || true
+            df -h . "${RUNNER_TEMP:-/tmp}" || true
+            df -i . "${RUNNER_TEMP:-/tmp}" || true
+            # Show executable names and usage only, never arguments or environment variables.
+            ps -eo pid,ppid,comm,%cpu,%mem,rss --sort=-rss | head -n 11 || true
+            if [[ -r /sys/fs/cgroup/memory.events ]]; then
+              printf '%s\n' 'cgroup memory events:'
+              cat /sys/fs/cgroup/memory.events || true
+            fi
+          }
+
+          monitor_resources() {
+            sleep_pid=''
+            trap 'if [[ -n "$sleep_pid" ]]; then kill "$sleep_pid" 2>/dev/null || true; wait "$sleep_pid" 2>/dev/null || true; fi; exit 0' INT TERM
+            while true; do
+              sleep 30 &
+              sleep_pid=$!
+              wait "$sleep_pid" || break
+              sleep_pid=''
+              resource_snapshot || true
+            done
+          }
+
+          finish_build() {
+            build_exit_code=$?
+            trap - EXIT
+            trap '' INT TERM
+            if [[ -n "$build_pid" ]]; then
+              kill "$build_pid" 2>/dev/null || true
+            fi
+            if [[ -n "$monitor_pid" ]]; then
+              kill "$monitor_pid" 2>/dev/null || true
+              wait "$monitor_pid" 2>/dev/null || true
+            fi
+            resource_snapshot || true
+            printf '\nBuild step exit code: %s\n' "$build_exit_code" || true
+            exit "$build_exit_code"
+          }
+
+          build_pid=''
+          monitor_pid=''
+          trap finish_build EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+
+          # Stream snapshots during the build: runner loss can prevent a final snapshot.
+          resource_snapshot || true
+          monitor_resources &
+          monitor_pid=$!
+
+          # Waiting on a background build lets cancellation run the cleanup trap promptly.
+          pnpm adev:build &
+          build_pid=$!
+          # Capture failures explicitly because GitHub Actions runs Bash with errexit.
+          build_exit_code=0
+          wait "$build_pid" || build_exit_code=$?
+          build_pid=''
+          exit "$build_exit_code"
         env:
           NODE_OPTIONS: '--max_old_space_size=4096'
 
