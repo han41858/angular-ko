@@ -112,7 +112,7 @@ describe('Navigation', () => {
       await fixture.whenStable();
 
       const themePicker = fixture.debugElement.query(
-        By.css('button[aria-controls="theme-mini-menu"]'),
+        By.css('button[aria-label^="테마 변경. 현재 테마:"]'),
       ).nativeElement;
 
       expect(themePicker.getAttribute('aria-label')).toBe(`테마 변경. 현재 테마: ${label}`);
