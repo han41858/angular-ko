@@ -269,7 +269,7 @@ export class MyView {}
 
 <a id="preventing-event-default-behavior"></a>
 
-## 이벤트 전파 중단하기
+## 이벤트의 기본 동작 막기
 
 <!--
 If your event handler should replace the native browser behavior, you can use the event object's [`preventDefault` method](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault):

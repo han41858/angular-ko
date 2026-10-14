@@ -225,8 +225,8 @@ The result is the same, but the preparation is different.
 | 파일               | 설명                                                                                                                                                    |
 | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `popup.ts`         | 메시지를 화면에 표시하는 팝업 엘리먼트를 구현합니다. 애니메이션과 스타일도 지정되어 있습니다.                                                           |
-| `popup.ts`         | `Popup`을 동적 컴포넌트로 사용하거나 커스텀 엘리먼트로 사용하는 코드를 정의합니다. 동적 로딩하는 경우 코드를 얼마나 많이 사용해야 하는지 확인해 보세요. |
-| `app.component.ts` | 애플리케이션 최상위 컴포넌트를 정의합니다. 이 컴포넌트가 시작되면 `PopupService` 코드에 따라 `Popup`을 커스텀 엘리먼트로 전환합니다.                    |
+| `popup.service.ts` | `Popup`을 동적 컴포넌트로 사용하거나 커스텀 엘리먼트로 사용하는 코드를 정의합니다. 동적 로딩하는 경우 코드를 얼마나 많이 사용해야 하는지 확인해 보세요. |
+| `app.ts`           | 애플리케이션 최상위 컴포넌트를 정의합니다. 이 컴포넌트가 시작되면 `PopupService` 코드에 따라 `Popup`을 커스텀 엘리먼트로 전환합니다.                    |
 
 코드를 비교해보기 위해 예제 코드는 두 가지 방식을 모두 구현했습니다.
 버튼 하나는 컴포넌트를 동적으로 로드하는 방식으로 팝업을 표시하며, 다른 버튼은 커스텀 엘리먼트를 활용하는 방식으로 동작합니다.
@@ -327,7 +327,7 @@ class MyDialog {
 ```
 
 가장 간단한 방법은 DOM 메서드가 반환하는 객체를 명시적으로 타입 변환하는 것입니다.
-`@angular/elements` 패키지로 제공되는 `NgElement` 타입과 `WithProperties` 타입을 활용하면 됩니다.:
+`@angular/elements` 패키지로 제공되는 `NgElement` 타입과 `WithProperties` 타입을 활용하면 됩니다:
 
 ```ts
 const aDialog = document.createElement('my-dialog') as NgElement &
@@ -355,7 +355,7 @@ declare global {
 
 ```
 
-Now, TypeScript can infer the correct type the same way it does for built-in elements:
+이제 TypeScript는 기본 엘리먼트와 마찬가지로 올바른 타입을 추론할 수 있습니다:
 
 ```ts
 document.createElement('div'); //--> HTMLDivElement (기본 엘리먼트)

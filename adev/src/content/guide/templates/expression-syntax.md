@@ -17,13 +17,13 @@ Angular 표현식 문법은 JavaScript를 기반으로 하지만 몇 가지는 �
 
 <a id="value-literals"></a>
 
-## 변수 타입
+## 리터럴 값
 
 <!--
 Angular supports a subset of [literal values](https://developer.mozilla.org/en-US/docs/Glossary/Literal) from JavaScript.
 -->
 
-Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/docs/Glossary/Literal) 중 몇 가지를 제외하고 지원합니다.
+Angular는 JavaScript의 [리터럴 값](https://developer.mozilla.org/en-US/docs/Glossary/Literal) 중 일부를 지원합니다.
 
 <!--
 ### Supported value literals
@@ -31,7 +31,7 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 
 <a id="supported-value-literals"></a>
 
-### 지원하는 타입
+### 지원하는 리터럴 값
 
 <!--
 | Literal type           | Example values                  |
@@ -47,7 +47,7 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 | Tagged template string | `` tag`Hello ${name}` ``        |
 -->
 
-| 변수 타입                   | 예시                            |
+| 리터럴 타입                 | 예시                            |
 | --------------------------- | ------------------------------- |
 | 문자열                      | `'Hello'`, `"World"`            |
 | 불리언                      | `true`, `false`                 |
@@ -65,7 +65,7 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 
 <a id="unsupported-value-literals"></a>
 
-### 지원하지 않는 타입
+### 지원하지 않는 리터럴 값
 
 <!--
 | Literal type | Example values |
@@ -73,9 +73,9 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 | BigInt       | `1n`           |
 -->
 
-| 변수 타입 | 예시 |
-| --------- | ---- |
-| BigInt    | `1n` |
+| 리터럴 타입 | 예시 |
+| ----------- | ---- |
+| BigInt      | `1n` |
 
 <!--
 ## Globals
@@ -341,7 +341,7 @@ Generally speaking, declarations are not supported in Angular expressions. This 
 | Classes                           | `class Rectangle { }`                       |
 -->
 
-일반적으로 Angular 표현식에서는 변수를 선언한다고 보기 어렵습니다.
+일반적으로 Angular 표현식에서는 선언문을 지원하지 않습니다.
 이런 경우가 모두 해당됩니다:
 
 | 선언                         | 예시                                        |

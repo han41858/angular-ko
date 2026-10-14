@@ -100,7 +100,7 @@ export class ProfilePhoto { }
 -->
 
 컴포넌트에는 컴포넌트 스타일의 범위를 지정하는 **뷰 캡슐화(view encapsulation)** 설정을 지정할 수 있습니다.
-뷰 캡슐화 모드는 `Emulated`, `ShadowDom`, `None` 을 지정할 수 있습니다.
+뷰 캡슐화 모드는 `Emulated`, `ShadowDom`, `ExperimentalIsolatedShadowDom`, `None` 네 가지입니다.
 `@Component` 데코레이터에 이렇게 지정하면 됩니다:
 
 ```angular-ts {highlight:[3]}
@@ -213,8 +213,7 @@ Shadow DOM in your application before enabling this option.
 이 모드를 사용하면 [웹 표준 Shadow DOM API](https://developer.mozilla.org/docs/Web/Web_Components/Using_shadow_DOM)를 사용해서 컴포넌트 스타일을 컴포넌트에만 적용합니다.
 이 모드에서는 Angular가 컴포넌트의 호스트 엘리먼트에 Shadow DOM을 붙이고 컴포넌트 템플릿을 해당 Shadow DOM에 렌더링하면서 스타일을 적용합니다.
 
-이 모드를 사용하면 컴포넌트의 스타일이 컴포넌트 템플릿 안에 있는 엘리먼트에만 적용되는 것이 엄격하게 보장됩니다.
-전역 스타일도 Shadow DOM 트리 안에 있는 엘리먼트에 영향을 주지 않으며, Shadow DOM 트리 안에서도 외부에 영향을 미칠 수 없습니다.
+Shadow DOM 트리 안의 스타일은 트리 밖에 있는 엘리먼트에 영향을 주지 않습니다.
 
 하지만 `ShadowDom` 뷰 캡슐화를 사용하면 스타일 적용 범위 외에 다른 영향을 줍니다.
 Shadow DOM 트리에 렌더링된 컴포넌트는 이벤트 전파 방식에 영향을 미치며, [`<slot>` API](https://developer.mozilla.org/docs/Web/Web_Components/Using_templates_and_slots)를 사용해야 하고, 브라우저 개발자 도구가 엘리먼트를 표시하는 방식도 변경됩니다.

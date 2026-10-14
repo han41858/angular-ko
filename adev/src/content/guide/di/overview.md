@@ -55,7 +55,7 @@ In this context, "values" can refer to any JavaScript value, including objects, 
 Angular components and directives automatically participate in DI, meaning that you can inject dependencies into them and make them available for injection.
 -->
 
-의존성이라는 것은 어떤 로직으로 동작하지만 스스로를 생성하지 않는 클래스를 의미하며, 어떤 객체이거나 값, 함수, 서비스일 수 있습니다.
+의존성이란 클래스가 동작하는 데 필요하지만 클래스 안에서 직접 생성하지 않는 객체, 값, 함수, 서비스를 의미합니다.
 다르게 표현하면, 의존성 객체가 없으면 동작하지 않는 애플리케이션의 부분을 연결하는 역할이라고 할 수 있습니다.
 
 코드가 의존성 주입 시스템과 상호작용하는 방법은 두 가지입니다:
@@ -112,7 +112,7 @@ export class AnalyticsLogger {
 NOTE: The `@Service` makes this service available throughout your entire application as a singleton. This is the recommended approach for most services.
 -->
 
-Angular에서 이야기하는 _서비스(service)_ 란 `@Injectable` 데코레이터가 붙은 TypeScript 클래스이며, 이 클래스를 인스턴스로 생성하면 의존성으로 주입할 수 있습니다.
+Angular에서 이야기하는 _서비스(service)_ 란 `@Service` 데코레이터가 붙은 TypeScript 클래스이며, 이 클래스를 인스턴스로 생성하면 의존성으로 주입할 수 있습니다.
 서비스는 애플리케이션 전역에서 데이터와 기능을 공유하는 용도로 가장 많이 사용됩니다.
 
 일반적으로 서비스는 이런 역할을 합니다:

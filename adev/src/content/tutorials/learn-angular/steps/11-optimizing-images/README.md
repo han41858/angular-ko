@@ -173,7 +173,7 @@ imports: [NgOptimizedImage],
 <docs-step title="width, height 어트리뷰트를 추가하세요">
 
 위 예제에서 이미지 엘리먼트마다 `width` 어트리뷰트와 `height` 어트리뷰트를 지정한 것을 주의 깊게 보세요.
-`NgOptimizedImage` 디렉티브를 사용할 때는 [레이아웃이 틀어지는 것](https://web.dev/articles/cls)을 방지하기 위해 이미지마다 정확한 크기를 지정하는 것을 권장합니다.
+`NgOptimizedImage` 디렉티브는 [레이아웃이 틀어지는 것](https://web.dev/articles/cls)을 방지하기 위해, `fill` 모드를 사용하지 않는 이미지마다 `width`와 `height` 어트리뷰트를 모두 지정하도록 요구합니다.
 
 정확한 `height` 값과 `width` 값을 지정할 수 없거나 지정하지 않으려는 상황이라면, [`fill` 어트리뷰트](/guide/image-optimization#using-fill-mode)를 사용해서 이 이미지가 엘리먼트를 채우는 "배경 이미지" 라고 지정하면 됩니다:
 

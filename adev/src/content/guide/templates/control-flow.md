@@ -143,6 +143,14 @@ Select a property that uniquely identifies each item in the `track` expression. 
 For static collections that never change, you can use `$index` to tell Angular to track each item by its index in the collection.
 
 If no other option is available, you can use the item itself as a tracking key. This tells Angular to track the item by its reference identity using the triple-equals operator (`===`). Avoid this option whenever possible as it can lead to significantly slower rendering updates, as Angular has no way to map which data item corresponds to which DOM nodes.
+
+```angular-html
+@for (item of items; track item) {
+  {{ item.name }}
+}
+```
+
+NOTE: Unlike `*ngFor`, the `@for` block prioritizes view reuse. If a tracked property changes but the object reference remains the same, Angular updates the view's bindings (including component inputs) rather than destroying and recreating the entire element.
 -->
 
 `track` 표현식은 Angular가 데이터와 DOM 노드의 관계를 파악하는 용도로 사용합니다.
@@ -160,6 +168,14 @@ Angular가 이 관계를 파악할 수 있으면 데이터가 변경되었을 �
 이 방식은 삼중 등호 연산자(`===`)를 기준으로 참조값이 같은지 판단합니다.
 이 방식은 가능한 한 사용하지 않는 것이 좋습니다.
 Angular가 데이터와 DOM 노드를 제대로 매칭할 수 없으면 렌더링 성능이 크게 저하될 수 있습니다.
+
+```angular-html
+@for (item of items; track item) {
+  {{ item.name }}
+}
+```
+
+참고: `*ngFor`와 달리 `@for` 블록은 뷰 재사용을 우선합니다. 추적하는 프로퍼티가 바뀌어도 객체 참조가 같으면 엘리먼트 전체를 제거하고 다시 생성하는 대신 컴포넌트 입력값을 포함한 뷰 바인딩을 갱신합니다.
 
 <!--
 ### Contextual variables in `@for` blocks

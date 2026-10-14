@@ -32,7 +32,7 @@ Signals may be either _writable_ or _read-only_.
 **시그널(signal)** 은 값을 감싸는 래퍼(wrapper)인데, 시그널은 그 값이 변경될 때 관심 있는 사용자에게 알림을 보냅니다.
 시그널은 기본 자료형부터 복잡한 데이터 구조까지 다양한 값을 담을 수 있습니다.
 
-시그널의 값을 읽으려면 시그널 생성 함수를 실행하면 되고, Angular도 이 방식을 사용해서 시그널의 값이 변경되는 것을 추적합니다.
+시그널의 값을 읽으려면 시그널의 게터 함수를 호출하면 되고, Angular는 이 호출을 통해 시그널이 어디에서 사용되는지 추적합니다.
 
 시그널은 _값을 쓸 수 있거나(writable)_ _읽기 전용(read-only)_ 입니다.
 
@@ -278,8 +278,8 @@ If you set `showCount` to `true` and then read `conditionalCount` again, the der
 Note that dependencies can be removed during a derivation as well as added. If you later set `showCount` back to `false`, then `count` will no longer be considered a dependency of `conditionalCount`.
 -->
 
-Angular는 구독자가 있는 시그널만 추적합니다.
-`showCount` 시그널이 `true` 값일 때만 값을 참조하는 `count` 연산 시그널이 있다고 합니다:
+계산 과정에서 실제로 읽은 시그널만 추적합니다.
+예를 들어 다음 `computed`에서는 `showCount` 시그널이 `true`일 때만 `count` 시그널의 값을 읽습니다:
 
 ```ts
 const showCount = signal(false);
@@ -372,9 +372,9 @@ function subscribeToEvents() {
 ```
 -->
 
-Angular 코드가 반응 컨텍스트에서 실행되지 않으면 assert를 보내는 헬퍼 함수 `assertNotInReactiveContext` 를 제공합니다.
-이 함수에 실행 코드의 참조를 전달하고 assert가 동작하면, 오류 메시지를 확인해서 올바른 API 진입점을 확인할 수 있습니다.
-일반적인 내용만 있는 에러 메시지가 아니라, 어떻게 해결할 수 있는지 명확하게 안내하는 에러 메시지를 제공합니다.
+Angular는 코드가 반응 컨텍스트 밖에서 실행되는지 확인하는 헬퍼 함수 `assertNotInReactiveContext`를 제공합니다.
+반응 컨텍스트 안에서 호출하면 에러가 발생하며, 호출하는 함수의 참조를 인자로 전달하면 에러 메시지가 올바른 API 진입점을 가리킵니다.
+일반적인 반응 컨텍스트 에러 메시지보다 문제를 해결하는 방법을 명확하게 안내할 수 있습니다.
 
 ```ts
 import {assertNotInReactiveContext} from '@angular/core';

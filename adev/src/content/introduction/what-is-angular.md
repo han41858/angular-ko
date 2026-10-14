@@ -103,7 +103,7 @@
 -->
 <docs-card-container headerTitle="어느 때보다 빠르게 애플리케이션을 개발해 보세요" headerImgSrc="adev/src/assets/images/browser-bolt.svg">
   <docs-card title="CLI" href="tools/cli" link="Angular CLI" iconImgSrc="adev/src/assets/icons/cli.svg">
-    Angular CLI를 사용하면 애플리케이션 개발에 필요한 어떠한 명령도 1분 안에 실행할 수 있습니다.
+    Angular CLI를 사용하면 1분 이내에 프로젝트를 실행할 수 있으며, 이후 운영 환경에 배포할 애플리케이션으로 발전시키는 데 필요한 명령도 제공합니다.
   </docs-card>
   <docs-card title="DevTools" href="tools/devtools" link="Angular DevTools" iconImgSrc="adev/src/assets/icons/dev-tools.svg">
     Angular DevTools는 브라우저 개발자 도구와 함께 사용할 수 있습니다.
@@ -169,7 +169,7 @@
   </docs-card>
   <docs-card title="사용자를 보호하는 보안은 기본입니다" href="best-practices/security" link="Security" titleIconName="sensors">
     Angular는 Google의 세계적인 보안 엔지니어들과 협력하여 보안은 기본으로 보장합니다.
-    HTML 검증과 강력한 타입 검증을 포함하여 크로스 사이트 스크립팅(XSS, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
+    HTML 무력화와 Trusted Types 지원을 포함하여 크로스 사이트 스크립팅(XSS, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
   </docs-card>
   <docs-card title="Vite와 esbuild로 대규모 팀 생산성을 유지하세요" href="tools/cli/build-system-migration" link="Vite and esbuild" titleIconName="sensors">
     Angular CLI는 Vite와 ESBuild를 활용하는 최신 빌드 파이프라인을 구현했습니다.

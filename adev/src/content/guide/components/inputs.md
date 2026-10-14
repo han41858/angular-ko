@@ -59,7 +59,7 @@ When extending a component class, **inputs are inherited by the child class.**
 
 팁: 이 가이드 문서는 [핵심 가이드](essentials) 이후 내용을 다룹니다. 아직 Angular에 익숙하지 않다면 해당 문서를 먼저 읽어보세요.
 
-팁: 만약 웹 프레임워크에 익숙하다면, 입력 프로퍼티는 _프롭스(pros)_ 와 비슷하다고 이해해도 됩니다.
+팁: 만약 웹 프레임워크에 익숙하다면, 입력 프로퍼티는 _프롭스(props)_ 와 비슷하다고 이해해도 됩니다.
 
 컴포넌트를 사용하다 보면 컴포넌트에 데이터를 전달하는 경우가 자주 있습니다.
 이 경우 컴포넌트의 **입력 프로퍼티** 를 활용하면 됩니다:
@@ -92,7 +92,7 @@ export class CustomSlider {
 
 입력 프로퍼티에 제네릭 함수를 사용하는 경우에는 타입을 명확하게 지정할 수도 있습니다.
 
-입력 프로퍼티에 기본값을 할당하지 않으면 `undefined`로 추론됩니다.
+기본값이 없는 입력 프로퍼티에 값을 설정하지 않으면 그 값은 `undefined`입니다.
 
 ```ts
 @Component(/* ... */)
@@ -355,7 +355,7 @@ export class CustomSlider {
 }
 ```
 
-`booleanAttribute`는 표준 HTML [불리언 어트리뷰트](https://developer.mozilla.org/docs/Glossary/Boolean/HTML)를 따라 해서 어트리뷰트 값이 _존재하면_ "true" 값으로 변환합니다.
+`booleanAttribute`는 표준 HTML [불리언 어트리뷰트](https://developer.mozilla.org/docs/Glossary/Boolean/HTML)처럼 어트리뷰트 자체가 _존재하면_ `true`로 취급합니다.
 그리고 `booleanAttribute`가 `"false"` 문자열을 받으면 불리언 `false` 값으로 변환합니다.
 
 `numberAttribute`는 값이 주어지면 숫자로 변환합니다.
@@ -910,7 +910,7 @@ export class CustomSlider extends BaseSlider { }
 ```
 -->
 
-`@Input` 데코레이터에는 `inputs` 프로퍼티를 활용해서 입력 프로퍼티를 직접 지정할 수도 있습니다.
+`@Input` 데코레이터 외에도 `@Component` 데코레이터의 `inputs` 프로퍼티로 컴포넌트의 입력 프로퍼티를 지정할 수 있습니다.
 이 방식은 컴포넌트를 기본 클래스에서 상속받을 때 유용합니다:
 
 ```ts {highlight:[4]}

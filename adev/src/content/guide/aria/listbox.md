@@ -463,12 +463,14 @@ For complete dropdown patterns with trigger, popup, and overlay positioning, see
 - [`Listbox`](/api/aria/listbox/Listbox)
 - [`Option`](/api/aria/listbox/Option)
 
-### Related patterns
+<a id="related-patterns"></a>
 
-Listbox is used by these documented dropdown patterns:
+### 관련 패턴
 
-- [Select](guide/aria/select) - Single-selection dropdown pattern using readonly combobox + listbox
-- [Multiselect](guide/aria/multiselect) - Multiple-selection dropdown pattern using readonly combobox + listbox with `multi`
-- [Autocomplete](guide/aria/autocomplete) - Filterable dropdown pattern using combobox + listbox
+리스트박스는 다음 문서에서 설명하는 드롭다운 패턴에 사용됩니다:
 
-For complete dropdown patterns with trigger, popup, and overlay positioning, see those pattern guides instead of using listbox alone.
+- [단일 선택](guide/aria/select) - 읽기 전용 콤보박스와 리스트박스를 사용하는 단일 선택 드롭다운 패턴
+- [다중 선택](guide/aria/multiselect) - 읽기 전용 콤보박스와 `multi`가 활성화된 리스트박스를 사용하는 다중 선택 드롭다운 패턴
+- [자동 완성](guide/aria/autocomplete) - 콤보박스와 리스트박스를 사용하는 필터링 가능한 드롭다운 패턴
+
+트리거, 팝업, 오버레이 위치 지정이 포함된 완전한 드롭다운 패턴을 구현하려면 리스트박스만 사용하기보다 해당 패턴 가이드를 참고하세요.

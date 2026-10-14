@@ -870,9 +870,9 @@ class MyForm {
 }
 ```
 
-위에서 살펴본 경우는 도메인 모델을 폼 모델로 그대로 사용했습니다.
-하지만, 도메인 모델과 폼 모델이 다르게 구성되는 경우에는 변환 작업이 필요할 수 있습니다.
-이 로직은 `linkedSignal`에서 [이전 상태](/guide/signals/linked-signal#accounting-for-previous-state)를 참고해서 구현하면 됩니다.
+위 예제는 도메인 모델에서 폼 모델을 직접 파생합니다.
+하지만 더 복잡한 경우에는 새 도메인 모델의 값과 이전 도메인 모델 및 폼 모델의 값을 비교해 차이를 반영하고 싶을 수 있습니다.
+이 로직은 `linkedSignal`의 [이전 상태](/guide/signals/linked-signal#accounting-for-previous-state)를 활용해서 구현하면 됩니다.
 
 <!--
 ### Form model to domain model

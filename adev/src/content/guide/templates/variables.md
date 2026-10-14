@@ -63,7 +63,7 @@ Each `@let` block can declare exactly one variable. You cannot declare multiple 
 @let name = user.name;
 @let greeting = 'Hello, ' + name;
 @let data = data$ | async;
-@let pi = 3.1459;
+@let pi = 3.14159;
 @let coordinates = {x: 50, y: 100};
 @let longExpression =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit ' +

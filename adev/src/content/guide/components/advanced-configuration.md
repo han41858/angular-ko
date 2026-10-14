@@ -50,7 +50,7 @@ Angular v22 부터는 **`ChangeDetectionStrategy.OnPush`** 가 기본값입니�
 
 - 템플릿에 바인딩된 입력 프로퍼티가 변경될 때
 - 컴포넌트의 이벤트 리스너가 실행될 때
-- 컴포넌트가 `ChangeDetectorRef.markForCheck` 로 명확하게 지정되어 있거나 `AsyncPipe` 등으로 랩핑되어 있을 때
+- `ChangeDetectorRef.markForCheck` 또는 이를 내부적으로 사용하는 `AsyncPipe` 등을 통해 컴포넌트가 검사 대상으로 명시적으로 표시될 때
 
 추가로, OnPush 컴포넌트에서 변화가 발생하면 Angular는 애플리케이션 트리를 따라 모든 부모 컴포넌트를 _함께_ 검사합니다.
 

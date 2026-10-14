@@ -138,7 +138,7 @@ process.
     </tr>
     <tr>
       <td><code>ngDoCheck</code></td>
-      <td>컴포넌트가 변화를 감지할 때마다 실행됩니다.</td>
+      <td>컴포넌트의 변경 여부를 검사할 때마다 실행됩니다.</td>
     </tr>
     <tr>
       <td><code>ngAfterContentInit</code></td>
@@ -146,7 +146,7 @@ process.
     </tr>
     <tr>
       <td><code>ngAfterContentChecked</code></td>
-      <td>컴포넌트의 내용물에서 변화가 감지될 때마다 실행됩니다.</td>
+      <td>컴포넌트 컨텐츠의 변경 여부를 검사한 후 매번 실행됩니다.</td>
     </tr>
     <tr>
       <td><code>ngAfterViewInit</code></td>
@@ -154,16 +154,16 @@ process.
     </tr>
     <tr>
       <td><code>ngAfterViewChecked</code></td>
-      <td>컴포넌트의 뷰에서 변화가 감지될 때마다 실행됩니다.</td>
+      <td>컴포넌트 뷰의 변경 여부를 검사한 후 매번 실행됩니다.</td>
     </tr>
     <tr>
       <td rowspan="2">렌더링</td>
       <td><code>afterNextRender</code></td>
-      <td>컴포넌트가 DOM에 완전히 렌더링된 후에 한 번 실행됩니다.</td>
+      <td>다음번에 모든 컴포넌트가 DOM에 렌더링된 후 한 번 실행됩니다.</td>
     </tr>
     <tr>
       <td><code>afterEveryRender</code></td>
-      <td>컴포넌트가 DOM에 렌더링될 때마다 실행됩니다.</td>
+      <td>모든 컴포넌트가 DOM에 렌더링될 때마다 실행됩니다.</td>
     </tr>
     <tr>
       <td>종료</td>
@@ -355,7 +355,7 @@ defining this hook whenever possible, only using it when you have no alternative
 During initialization, the first `ngDoCheck` runs after `ngOnInit`.
 -->
 
-`ngDoCheck` 메서드는 Angular가 컴포넌트 템플릿의 변화를 감지할 때마다 실행됩니다.
+`ngDoCheck` 메서드는 Angular가 컴포넌트 템플릿의 변경 여부를 검사하기 전에 매번 실행됩니다.
 
 이 메서드는 Angular의 일반적인 변화 감지 외에 컴포넌트 밖에서 상태가 변하는 것을 수동으로 감지하거나, 컴포넌트 상태를 수동으로 갱신해야 할 때 사용할 수 있습니다.
 
@@ -396,7 +396,7 @@ change any state in this method results in
 an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 -->
 
-`ngAfterContentChecked` 메서드는 컴포넌트 안에 있는 모든 자식 컴포넌트(컨텐츠)에서 변화가 감지될 때마다 실행됩니다.
+`ngAfterContentChecked` 메서드는 컴포넌트 안에 중첩된 모든 자식 엘리먼트(컨텐츠)의 변경 여부를 검사한 후 매번 실행됩니다.
 
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
@@ -435,7 +435,7 @@ change any state in this method results in
 an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 -->
 
-`ngAfterViewChecked` 메서드는 컴포넌트 템플릿 안에 있는 모든 자식 컴포넌트(뷰)에서 변화가 감지될 때마다 실행됩니다.
+`ngAfterViewChecked` 메서드는 컴포넌트 템플릿 안에 있는 모든 자식 엘리먼트(뷰)의 변경 여부를 검사한 후 매번 실행됩니다.
 
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
@@ -579,7 +579,7 @@ export class UserProfile {
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `earlyRead`      | 다음 단계에서 필요한 DOM 속성과 스타일 값을 읽을 때 사용합니다. 가능하다면, 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다.                                                   |
 | `write`          | 레이아웃 DOM 프로퍼티나 스타일 값을 설정할 때 사용합니다.                                                                                                                                             |
-| `mixedReadWrite` | 기본 단계입니다. 레이아웃 프로퍼티나 스타일 값을 참조하여 `read` 단계와 `write` 단계를 준비하는 로직을 작성합니다. 가능하다면 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다. |
+| `mixedReadWrite` | 기본 단계입니다. 레이아웃에 영향을 주는 프로퍼티와 스타일을 읽고 쓰는 작업을 모두 수행해야 할 때 사용합니다. 가능하다면 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다. |
 | `read`           | 레이아웃 DOM 프로퍼티를 읽을 때 사용합니다.                                                                                                                                                           |
 
 <!--

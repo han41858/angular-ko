@@ -40,6 +40,13 @@ Angular 튜토리얼에 오신 것을 환영합니다!
     Angular 놀이터 활용
   </docs-card>
   <docs-card
+    title="Angular AI 튜터"
+    link="설치 및 사용 방법"
+    href="ai/ai-tutor"
+    imgSrc="adev/src/assets/images/learn-angular-local.svg">
+    MCP 서버 활용
+  </docs-card>
+  <docs-card
     title="로컬 환경에서 Angular 앱을 만들어 봅시다."
     link="시작하기"
     href="tutorials/first-app"
@@ -47,10 +54,24 @@ Angular 튜토리얼에 오신 것을 환영합니다!
     npm 활용
   </docs-card>
   <docs-card
+    title="시그널 배우기"
+    link="시작하기"
+    href="tutorials/signals"
+    imgSrc="adev/src/assets/images/learn-angular-local.svg">
+    Angular 놀이터 활용
+  </docs-card>
+  <docs-card
     title="지연 로딩 뷰"
     link="시작하기"
     href="tutorials/deferrable-views"
     imgSrc="adev/src/assets/images/ang_illustrations-04.svg">
+    Angular 놀이터 활용
+  </docs-card>
+  <docs-card
+    title="시그널 폼 배우기"
+    link="시작하기"
+    href="tutorials/signal-forms"
+    imgSrc="adev/src/assets/images/learn-angular-local.svg">
     Angular 놀이터 활용
   </docs-card>
 </docs-card-container>

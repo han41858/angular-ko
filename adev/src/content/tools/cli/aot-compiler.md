@@ -761,7 +761,7 @@ my.component.ts.MyComponent.html(1,1): : Property 'addresss' does not exist on t
 줄과 열 번호는 해당 클래스(이 예제에서는 `MyComponent`)의 `@Component` 어노테이션에 있는 템플릿 문자열을 기준으로 합니다.
 컴포넌트가 `template` 대신 `templateUrl`을 사용하면 가상 파일이 아니라 `templateUrl`이 참조하는 HTML 파일을 기준으로 오류를 보고합니다.
 
-오류 위치는 문제가 있는 보간 표현식을 포함한 텍스트 노드의 시작 지점입니다.
+오류 위치는 문제가 있는 문자열 바인딩 표현식을 포함한 텍스트 노드의 시작 지점입니다.
 `[value]="person.address.street"`와 같은 어트리뷰트 바인딩에 오류가 있으면 해당 어트리뷰트의 위치를 보고합니다.
 
 검증에는 TypeScript 타입 검사기를 사용하며 TypeScript 컴파일러에 전달한 옵션으로 타입 검증의 엄격함을 제어합니다.
@@ -802,7 +802,7 @@ For more information about input type narrowing, see [Improving template type ch
 -->
 
 Angular 템플릿 컴파일러는 TypeScript의 `if` 표현식과 같은 방식으로 `ngIf` 디렉티브의 표현식을 사용해서 유니온 타입을 좁힙니다.
-예를 들어 앞의 템플릿에서 `Object is possibly 'undefined'` 오류를 피하려면 다음과 같이 `person` 값이 초기화되었을 때만 보간 표현식을 출력하도록 수정하세요:
+예를 들어 앞의 템플릿에서 `Object is possibly 'undefined'` 오류를 피하려면 다음과 같이 `person` 값이 초기화되었을 때만 문자열 바인딩 표현식을 출력하도록 수정하세요:
 
 ```angular-ts
 @Component({
@@ -869,7 +869,7 @@ class MyComponent {
 ```
 -->
 
-`*ngIf`를 사용하기 불편하거나 컴포넌트의 어떤 제약 때문에 바인딩 표현식을 보간할 때 항상 null이 아님이 보장된다면, null이 아님을 단언하는 타입 연산자로 `Object is possibly 'undefined'` 오류를 억제할 수 있습니다.
+`*ngIf`를 사용하기 불편하거나 컴포넌트의 어떤 제약 때문에 문자열 바인딩 표현식을 평가할 때 항상 null이 아님이 보장된다면, null이 아님을 단언하는 타입 연산자로 `Object is possibly 'undefined'` 오류를 억제할 수 있습니다.
 
 다음 예제에서 `person`과 `address` 프로퍼티는 항상 함께 설정되므로 `person`이 null이 아니면 `address`도 항상 null이 아닙니다.
 이 제약을 TypeScript와 템플릿 컴파일러에 쉽게 설명할 방법은 없지만 `address!.street`를 사용해서 오류를 억제합니다.

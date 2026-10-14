@@ -859,7 +859,7 @@ Use `viewProviders` when:
 When using `InjectionToken` for non-class dependencies, developers often encounter problems related to token identity, type safety, and provider configuration. These issues usually stem from how JavaScript handles object identity and how TypeScript infers types.
 -->
 
-의존성 객체가 아닌 클래스에 `InjectionToken`을 사용하면, 토큰 식별, 타입 검사, 프로바이더 설정에 문제가 발생할 수 있습니다.
+클래스가 아닌 의존성에 `InjectionToken`을 사용할 때 토큰 식별, 타입 안전성, 프로바이더 설정과 관련된 문제가 발생할 수 있습니다.
 이런 문제는 일반적으로 JavaScript가 객체를 구분하는 방식과 TypeScript가 타입을 추론하는 방식 때문에 발생합니다.
 
 <!--
@@ -992,7 +992,7 @@ export class FeatureView {
 ```
 
 참고: 토큰은 파일 한 곳에 선언하고 필요한 곳에 로드해서 사용하세요.
-같은 구분자로 `INjectionToken`을 여러 개 선언하면 안 됩니다.
+동일한 의존성을 가리키려면 설명이 같은 `InjectionToken`을 새로 만들지 말고 같은 토큰 인스턴스를 재사용하세요.
 
 <!--
 #### Trying to inject interfaces
@@ -1075,7 +1075,7 @@ export class UserProfile {
 }
 ```
 
-**해결방법:** Use `InjectionToken` for interface types.
+**해결방법:** 인터페이스 타입에는 `InjectionToken`을 사용하세요.
 
 ```angular-ts {prefer, header: 'InjectionToken을 사용하세요'}
 import {InjectionToken, inject} from '@angular/core';
@@ -2242,11 +2242,11 @@ For detailed explanations and solutions for these errors, see the [Angular error
 
 아래 에러들에 대해 자세하게 알아보려면 [Angular 에러 참조](errors) 문서를 참고하세요:
 
-| 에러 코드               | 설명                                                                                                          |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------- |
-| [NG0204](errors/NG0204) | 인자를 확인할 수 없습니다 - `@Injectable()` 데코레이터가 누락되었을 수 있습니다.                              |
-| [NG0205](errors/NG0205) | 인젝터가 이미 종료되었습니다 - 컴포넌트가 종료된 후에 서비스에 접근했습니다.                                  |
-| [NG0207](errors/NG0207) | EnvironmentProviders 컨텍스트가 잘못되었습니다 - 컴포넌트 프로바이더에서 `provideHttpClient()` 를 사용하세요. |
+| 에러 코드               | 설명                                                                                                                 |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [NG0204](errors/NG0204) | 인자를 확인할 수 없습니다 - `@Injectable()` 데코레이터가 누락되었을 수 있습니다.                                     |
+| [NG0205](errors/NG0205) | 인젝터가 이미 종료되었습니다 - 컴포넌트가 종료된 후에 서비스에 접근했습니다.                                         |
+| [NG0207](errors/NG0207) | EnvironmentProviders가 잘못된 컨텍스트에 있습니다 - 컴포넌트 프로바이더에 `provideHttpClient()`를 사용한 경우입니다. |
 
 <!--
 ## Next steps

@@ -108,10 +108,10 @@ If `LibHeaderComponent` 's code, template, and styles combine to become too larg
 </lib-card>
 ```
 
-일반적으로는 `<lib-card>` 컴포넌트는 `contentCHild()`나 `contentChildren()`을 사용해서 `<lib-header>`나 `<lib-body>`를 참조합니다:
+일반적으로는 `<lib-card>` 컴포넌트는 `contentChild()`나 `contentChildren()`을 사용해서 `<lib-header>`나 `<lib-body>`를 참조합니다:
 
 ```ts {highlight: [14]}
-import {Component, ContentChild} from '@angular/core';
+import {Component, contentChild} from '@angular/core';
 
 @Component({
   selector: 'lib-header',
@@ -180,7 +180,7 @@ The token is now in a value position, which causes the tree-shaker to keep the r
 HELPFUL: Libraries should use [tree-shakable providers](guide/di/defining-dependency-providers) for all services, providing dependencies at the root level rather than in components or modules.
 -->
 
-컴포넌트가 의존성 토큰을 사용하면 트리 셰이킹에 문제가 발생합니다.
+컴포넌트 자체가 의존성 주입 토큰으로 사용되면 트리 셰이킹 문제가 발생할 수 있습니다.
 문제가 발생하는 경우는 두 가지입니다:
 
 - 토큰이 [컨텐츠 쿼리](guide/components/queries#content-queries) 자리에 값 역할로 사용된 경우

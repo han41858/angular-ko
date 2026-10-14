@@ -507,7 +507,7 @@ NOTE: Multiple select (`<select multiple>`) is not supported by the `[formField]
 </select>
 ```
 
-참고: 셀렉트 엘리먼트에 `multiple` 옵션을 지정하면 `[field]` 디렉티브를 사용할 수 없습니다.
+참고: 셀렉트 엘리먼트에 `multiple` 옵션을 지정하면 `[formField]` 디렉티브를 사용할 수 없습니다.
 
 <!--
 ## Validation and state
@@ -572,7 +572,7 @@ Every node in the tree, including the root form object, provides the same signal
 -->
 
 시그널 폼은 폼 필드에 사용할 수 있는 유효성 검사 함수를 기본으로 제공합니다.
-폼 필드에 유효성 검사 함수를 적용하려면 `form()` 함수를 실행할 때 두번째 인자로 스키마 함수(scheme function)를 전달하면 됩니다:
+폼 필드에 유효성 검사 함수를 적용하려면 `form()` 함수를 실행할 때 두번째 인자로 스키마 함수(schema function)를 전달하면 됩니다:
 
 ```ts
 const loginForm = form(loginModel, (schemaPath) => {

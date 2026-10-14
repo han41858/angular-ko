@@ -99,7 +99,7 @@ This type of functionality is called conditional control flow. Next you'll learn
     }
   `,
 })
-class App {
+export class App {
   isLoggedIn = true;
 }
 ```

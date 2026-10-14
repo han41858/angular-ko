@@ -111,7 +111,6 @@ export class Registration {
 메타데이터 키는 이 둘을 연결하는 다리 역할을 합니다.
 
 내장 유효성 검사 몇 가지가 이 방식을 따릅니다:
-Several built-in constraint validators follow this pattern:
 
 | 유효성 검사 함수 | 메타데이터 키             | 타입                  | `FieldState` 게터 |
 | ---------------- | ------------------------- | --------------------- | ----------------- |
@@ -292,7 +291,7 @@ export class Registration {
 }
 ```
 
-논리 함수는 필드 컨텍스트를 인자로 받으며, 이 컨텍스트는 필드의 현재 값을 표현하는 `value` 시그널, 상태를 나타내는 `fieldState` 시그널, `valueOf(path)`나 `stateOf(path)`와 같이 폼 내의 다른 필드를 읽는 메서드를 제공합니다.
+논리 함수는 필드 컨텍스트를 인자로 받으며, 이 컨텍스트는 필드의 현재 값을 표현하는 `value` 시그널, 필드의 `FieldState` 객체인 `state`, `valueOf(path)`나 `stateOf(path)`와 같이 폼 내의 다른 필드를 읽는 메서드를 제공합니다.
 함수가 읽는 모든 시그널은 반응형이 됩니다.
 `value()`가 변경되면 메타데이터가 다시 계산되고, 해당 키를 읽는 템플릿이 모두 갱신됩니다.
 
@@ -492,7 +491,7 @@ Angular는 6가지 리듀서를 [`MetadataReducer`](api/forms/signals/MetadataRe
 | -------------- | --------------------- | --------------------------------------------------------------- | ----------- |
 | `list<T>()`    | `T[]`                 | `T \| undefined` 를 받아서 `undefined` 값이 아닌 값을 합칩니다. | `[]`        |
 | `or()`         | `boolean`             | 어떠한 영향의 결과가 `true`면 `true`를 반환합니다.              | `false`     |
-| `and()`        | `boolean`             | 모든 영향의 결과가 `true`면 `true를 반환합니다.                 | `true`      |
+| `and()`        | `boolean`             | 모든 영향의 결과가 `true`면 `true`를 반환합니다.                | `true`      |
 | `min()`        | `number \| undefined` | 가장 작은 값을 유지합니다.                                      | `undefined` |
 | `max()`        | `number \| undefined` | 가장 큰 값을 유지합니다.                                        | `undefined` |
 | `override()`   | `T \| undefined`      | 마지막 값이 남습니다. (기본 동작)                               | `undefined` |
@@ -738,7 +737,7 @@ export const URL_PREVIEW = createManagedMetadataKey((_state, url: Signal<string 
 
 `create`는 필드의 의존성 주입 컨텍스트 안에서 필드가 생성될 때 한 번만 실행됩니다.
 그래서 `create` 함수 안에서 `inject()`나 `resource()`, `effect()`를 실행할 수 있으며, 필드의 수명 주기에 따라 정리 작업을 실행할 수도 있습니다.
-그리고 필드가 종료되면 Angular가 의존성 주입 컨텍스트도 종료하기 때문에 `resource()`, `effect()`, `DestroyRef` 콜백 함수가 자동으로 실행됩니다.
+그리고 필드가 종료되면 Angular가 의존성 주입 컨텍스트도 종료하므로, 그 안에서 생성한 `resource()`와 `effect()`가 정리되고 등록한 `DestroyRef` 정리 콜백이 호출됩니다.
 
 `create` 자체는 반응형이 아니기 때문에 시그널 변경에 반응해야 하는 모든 동작은 `effect()`, `resource()`, `httpResource()` 내부에 있어야 합니다.
 `URL_PREVIEW`도 이런 방식입니다.

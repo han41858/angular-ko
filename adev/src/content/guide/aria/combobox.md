@@ -570,15 +570,17 @@ Combobox typically combines with:
 - [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
 - [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
 
-### Related patterns and directives
+<a id="related-patterns-and-directives"></a>
 
-Combobox is the primitive directive for these documented patterns:
+### 관련 패턴과 디렉티브
 
-- [Autocomplete](guide/aria/autocomplete) - Filtering and suggestions pattern (coordinates input typing with options list)
-- [Select](guide/aria/select) - Single selection dropdown pattern (applied directly on non-editable button triggers)
-- [Multiselect](guide/aria/multiselect) - Multiple selection pattern (applied on non-editable triggers with multi-enabled Listbox)
+콤보박스는 다음 문서에서 설명하는 패턴의 기반 디렉티브입니다:
 
-Combobox typically combines with:
+- [자동 완성](guide/aria/autocomplete) - 필터링 및 추천 패턴 (입력 내용과 옵션 목록을 연결합니다)
+- [단일 선택](guide/aria/select) - 단일 선택 드롭다운 패턴 (편집할 수 없는 버튼 트리거에 직접 적용합니다)
+- [다중 선택](guide/aria/multiselect) - 다중 선택 패턴 (편집할 수 없는 트리거에 적용하며, `multi`가 활성화된 리스트박스와 함께 사용합니다)
 
-- [Listbox](guide/aria/listbox) - Most common popup content
-- [Tree](guide/aria/tree) - Hierarchical popup content (see Tree guide for examples)
+콤보박스는 일반적으로 다음 요소와 함께 사용합니다:
+
+- [리스트박스](guide/aria/listbox) - 가장 일반적인 팝업 콘텐츠
+- [트리](guide/aria/tree) - 계층형 팝업 콘텐츠 (예제는 트리 가이드를 참고하세요)

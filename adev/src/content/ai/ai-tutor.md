@@ -407,7 +407,7 @@ You will build your application over a five-phase journey. You can follow this p
 -->
 
 - **모듈 1:** 시작하기
-- **모듈 2:** 문자열 치환으로 동적 텍스트 표시하기
+- **모듈 2:** 문자열 바인딩으로 동적 텍스트 표시하기
 - **모듈 3:** 이벤트 리스너(`(click)`)
 
 <!--

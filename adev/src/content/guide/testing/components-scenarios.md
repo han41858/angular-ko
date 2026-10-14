@@ -210,7 +210,7 @@ it('should display original title', async () => {
 ```
 
 변화 감지를 지연하는 것은 의도된 동작이며 유용합니다.
-_Angular가 데이터 바인딩을 시작하고 [라이프싸이클 후킹 함수](guide/components/lifecycle)를 실행하기 전에_ 테스트에서 컴포넌트 상태를 확인하고 변경할 기회를 제공하기 때문입니다.
+_Angular가 데이터 바인딩을 시작하고 [라이프사이클 훅](guide/components/lifecycle)을 실행하기 전에_ 테스트에서 컴포넌트 상태를 확인하고 변경할 기회를 제공하기 때문입니다.
 
 다음 테스트는 `fixture.whenStable()`을 실행하기 _전에_ 컴포넌트의 `title` 프로퍼티를 변경합니다.
 
