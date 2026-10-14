@@ -237,7 +237,7 @@ Both parameters are specified in time increments of milliseconds (ms) or seconds
 
 `@loading` 블록은 지연 로딩하는 뷰가 너무 빨리 로딩되어 화면이 깜빡이는 것을 방지하기 위해 옵션을 2개 받을 수 있습니다:
 
-- `minimum` - `@placeholder` 블록이 표시될 최소 시간
+- `minimum` - `@loading` 블록이 표시될 최소 시간
 - `after` - `@loading` 블록이 로딩되고 표시되기 전까지 대기할 시간
 
 ```angular-html
@@ -362,8 +362,8 @@ You can optionally specify a timeout in milliseconds that is passed to [`request
 `idle` 트리거는 브라우저가 대기 상태로 진입할 때 동작해서 지연 로딩 뷰를 로드합니다.
 이 트리거가 기본값입니다.
 
-[`requestIdleCall`](https://developer.mozilla.org/docs/Web/API/Window/requestIdleCallback)에 밀리초 단위의 타이머를 지정할 수 있습니다.
-별도 콜백이 없다면 지정된 시간에 타이머가 동작합니다.
+[`requestIdleCallback`](https://developer.mozilla.org/docs/Web/API/Window/requestIdleCallback)에 전달할 타임아웃을 밀리초 단위로 지정할 수 있습니다.
+브라우저가 콜백을 충분히 빨리 예약하지 못하더라도 지정한 제한 시간 안에는 작업이 실행됩니다.
 
 ```angular-html
 <!-- @defer (on idle) -->
@@ -688,7 +688,7 @@ This is a one-time operation– the `@defer` block does not revert back to the p
 }
 ```
 
-조건식은 한 번만 평가됩니다.
+이 로딩 동작은 한 번만 실행됩니다.
 조건이 참이었다가 거짓으로 평가되더라도 `@placeholder` 블록이 다시 표시되거나 하지는 않습니다.
 
 <!--
@@ -873,7 +873,7 @@ To render the main content of `@defer` blocks on the server (both SSR and SSG), 
 SSR이나 SSG와 같이 애플리케이션이 서버에서 렌더링되는 경우는 기본적으로 `@placeholder` 블록이 있는 경우는 `@placeholder` 블록을 렌더링하고, `@placeholder` 블록이 없으면 아무것도 렌더링하지 않습니다.
 그리고 클라이언트에서 애플리케이션이 실행될 때 `@placeholder`가 하이드레이션되면서 트리거가 동작합니다.
 
-서버에서 `@defer` 블록을 렌더링하려면 [증분 하이드레이션](/guide/incremental-hydration)이나 `hydrate` 트리거를 사용해야 합니다.
+서버에서 `@defer` 블록의 본문을 렌더링하려면 [증분 하이드레이션](/guide/incremental-hydration)을 활성화하고 필요한 블록에 `hydrate` 트리거를 설정해야 합니다.
 
 <!--
 ## Barrel files and lazy chunks
@@ -962,8 +962,8 @@ import {HeavyComponent} from './heavy.component';
 When you have nested `@defer` blocks, they should have different triggers in order to avoid loading simultaneously, which causes cascading requests and may negatively impact page load performance.
 -->
 
-`@defer` 블록이 중첩되면 트리거가 각각 동작하기 때문에 컨텐츠를 동시에 로딩할 수 없습니다.
-결국 화면이 로딩되는 전체 성능에 나쁜 영향을 줍니다.
+`@defer` 블록을 중첩할 때는 동시에 로딩되어 연속적인 요청이 발생하지 않도록 서로 다른 트리거를 사용하세요.
+연속적인 요청은 페이지 로딩 성능에 나쁜 영향을 줄 수 있습니다.
 
 <!--
 ### Avoid layout shifts

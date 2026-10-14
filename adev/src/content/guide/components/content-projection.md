@@ -100,7 +100,7 @@ export class CustomCard {
 }
 ```
 
-**이때 내용물이 들어갈 위치는 `<ng-content` 엘리먼트로 지정합니다**:
+**이때 내용물이 들어갈 위치는 `<ng-content>` 엘리먼트로 지정합니다**:
 
 ```angular-ts
 @Component({
@@ -482,7 +482,7 @@ placeholder, Angular compares against the `ngProjectAs` value instead of the ele
 -->
 
 Angular는 모든 엘리먼트에 CSS 셀렉터를 지정할 수 있도록 `ngProjectAs` 라는 특별한 어트리뷰트를 지원합니다.
-`ngProjectAs`가 지정된 엘리먼트가 `<ng-content>` 플레이스홀더와 매칭되면, Angular는 `<ng-content>` 엘리먼트의 내용물을 `ngProjectAs` 가 지정된 엘리먼트 내용물로 대체합니다:
+`ngProjectAs`가 지정된 엘리먼트를 `<ng-content>` 플레이스홀더와 매칭할 때, Angular는 엘리먼트 자체의 셀렉터 대신 `ngProjectAs` 값을 비교합니다:
 
 ```angular-html
 <!-- 컴포넌트 템플릿 -->
@@ -571,7 +571,7 @@ Angular는 부모 뷰를 계속 추적하는데, 이때 알아야 할 부수 효
 
 <a id="some-library-components-dont-support-projected-children"></a>
 
-### 라이브러리 컴포넌트는 프로젝션을 지원하지 않습니다.
+### 일부 라이브러리 컴포넌트는 프로젝션된 자식 엘리먼트를 지원하지 않습니다.
 
 <!--
 Certain components — menus, tabs, lists — use `ContentChildren` to find their children and wire up behavior like keyboard navigation, focus management, or ARIA attributes. They're written assuming they own their children directly, so projecting external content into them tends to break things in subtle ways.

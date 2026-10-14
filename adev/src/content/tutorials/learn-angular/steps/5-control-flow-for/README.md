@@ -96,7 +96,7 @@ This type of functionality is called control flow. Next, you'll learn to customi
   `,
 })
 export class App {
-  operatingSystems = [{id: 'win', name: 'Windows'}, {id: 'osx', name: 'MacOS'}, {id: 'linux', name: 'Linux'}];
+  operatingSystems = [{id: 'win', name: 'Windows'}, {id: 'osx', name: 'macOS'}, {id: 'linux', name: 'Linux'}];
 }
 ```
 

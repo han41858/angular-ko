@@ -357,7 +357,7 @@ Always use parentheses in your expressions when operator precedence may be ambig
 {{ (isAdmin ? 'Access granted' : 'Access denied') | uppercase }}
 ```
 
-그래서 괄호를 사용하지 않아도 됩니다:
+같은 표현식에서 괄호를 생략하면 다음과 같습니다:
 
 ```angular-html
 {{ isAdmin ? 'Access granted' : ('Access denied' | uppercase) }}

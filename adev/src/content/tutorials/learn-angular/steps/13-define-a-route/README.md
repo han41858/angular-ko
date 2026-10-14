@@ -80,14 +80,16 @@ The journey to fully enabling routing in your app is almost complete, keep going
 
 <docs-workflow>
 
-<docs-step title="Define a route in `app.routes.ts`">
+<a id="define-a-route-in-approutests"></a>
+
+<docs-step title="app.routes.ts에 라우팅 규칙을 정의하세요">
 
 예제 앱에는 표시할 화면이 (1) 홈 화면과 (2) 사용자 화면 이렇게 2개 있습니다.
 
 라우팅 규칙을 정의하려면 `app.routes.ts` 파일의 `routes` 배열에 라우팅 규칙 객체를 추가하면 됩니다.
 이 객체에 필요한 프로퍼티는 이렇습니다:
 
-- `path` - 최상위 경로(ex. `/`)로 시작하는 경로
+- `path` - 라우팅 규칙의 경로. 이 예제에서는 루트 경로(`/`)를 기준으로 하며, `path` 값 앞에 `/`를 붙이지 않습니다.
 - `component` - 라우팅 규칙이 매칭되었을 때 표시할 컴포넌트
 
 ```ts

@@ -107,10 +107,12 @@ this.message = 'Way to go 🚀';
 
 <docs-step title="템플릿에서 이벤트를 바인딩합니다">
 
-`app.ts` 파일에 있는 템플릿에서 `section` 엘리먼트에 `mouseover` 이벤트를 바인딩해 보세요.
+`app.ts` 파일에 있는 템플릿에서 `section` 엘리먼트의 시작 태그에 `mouseover` 이벤트를 바인딩해 보세요.
+내부 안내 문구와 `{{ message }}` 문자열 바인딩은 그대로 유지하세요.
 
+<!-- prettier-ignore -->
 ```angular-html
-<section (mouseover)="showSecretMessage()"></section>
+<section (mouseover)="showSecretMessage()">
 ```
 
 </docs-step>

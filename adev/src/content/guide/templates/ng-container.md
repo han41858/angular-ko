@@ -52,7 +52,7 @@ Angular ignores all attribute bindings and event listeners applied to `<ng-conta
 
 `<ng-container>`에 동작을 추가하거나 템플릿에서 사용되는 설정을 더하려면 이 엘리먼트에 디렉티브를 적용할 수도 있습니다.
 
-다만, Angular는 `<ng-container>`에 바인딩된 어트리뷰트나 이벤트 리스너, 디렉티브는 모두 무시합니다.
+다만, Angular는 `<ng-container>`에 적용된 어트리뷰트 바인딩과 이벤트 리스너를 무시합니다. 디렉티브를 통해 적용된 바인딩과 리스너도 마찬가지입니다.
 
 <!--
 ## Using `<ng-container>` to display dynamic contents
@@ -120,6 +120,7 @@ export class UserProfile {
 
 ### 템플릿 조각 렌더링하기
 
+<!--
 You can use Angular's built-in `NgTemplateOutlet` directive to dynamically render a template fragment to the location of the `<ng-container>`.
 
 ```angular-ts
@@ -144,6 +145,7 @@ In the example above, the `ngTemplateOutlet` directive dynamically renders one o
 
 For more information regarding `NgTemplateOutlet`, see the [NgTemplateOutlet API documentation page](/api/common/NgTemplateOutlet).
 -->
+
 `<ng-container>`로 템플릿 조각을 동적으로 렌더링하려면 Angular가 제공하는 `NgTemplateOutlet` 디렉티브를 사용하면 됩니다.
 
 ```angular-ts

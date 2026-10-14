@@ -521,6 +521,8 @@ Each parameter is written as an attribute prefixed with `let-` with a value matc
 ### Using `NgTemplateOutlet`
 -->
 
+<a id="using-ngtemplateoutlet-with-parameters"></a>
+
 ### `NgTemplateOutlet` 활용하기
 
 <!--
@@ -548,18 +550,24 @@ You can bind a context object to the `ngTemplateOutletContext` input:
 <ng-container [ngTemplateOutlet]="myFragment" [ngTemplateOutletContext]="{topping: 'onion'}" />
 ```
 
+<!--
+### Using `ViewContainerRef`
+
+You can pass a context object as the second argument to `createEmbeddedView`:
+
+```ts
+this.viewContainer.createEmbeddedView(this.myFragment, {topping: 'onion'});
+```
+-->
+
 <a id="using-viewcontainerref-with-parameters"></a>
 
-### Using `NgTemplateOutlet` {#using-ngtemplateoutlet-with-parameters}
+### `ViewContainerRef` 활용하기
 
-You can bind a context object to the `ngTemplateOutletContext` input:
+`createEmbeddedView`의 두 번째 인자로 컨텍스트 객체를 전달할 수 있습니다:
 
-```angular-html
-<ng-template #myFragment let-pizzaTopping="topping">
-  <p>You selected: {{ pizzaTopping }}</p>
-</ng-template>
-
-<ng-container [ngTemplateOutlet]="myFragment" [ngTemplateOutletContext]="{topping: 'onion'}" />
+```ts
+this.viewContainer.createEmbeddedView(this.myFragment, {topping: 'onion'});
 ```
 
 <!--
@@ -715,7 +723,7 @@ this.viewContainer.createEmbeddedView(this.myFragment, context, {
 ```
 -->
 
-그리고 `createEmbeddedView` 메서드의 두 번째 인자로 컨텍스트 객체를 전달할 수도 있습니다:
+`createEmbeddedView` 메서드의 옵션 객체에 커스텀 인젝터를 전달할 수 있습니다:
 
 ```ts
 this.viewContainer.createEmbeddedView(this.myFragment, context, {

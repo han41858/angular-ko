@@ -193,7 +193,7 @@ HELPFUL: When using the `previous` parameter, it is necessary to provide the gen
 경우에 따라 `linkedSignal`이 이전 값을 참조해야 하는 경우가 있습니다.
 
 위 예제에서 `shippingOptions` 목록이 변경되면 `selectedOption`의 값은 언제나 첫번째 항목으로 변경됩니다.
-하지만 사용자가 선택한 옵션이 어딘가에 사용 중이라 이전 상태를 유지해야 한다고 합시다.
+하지만 사용자가 선택한 옵션이 새 목록에 남아 있다면 선택을 유지하고 싶을 수 있습니다.
 그러면 `linkedSignal`을 생성할 때 _소스(source)_ 와 _연산(computation)_ 을 구분하는 방식을 사용하면 됩니다:
 
 ```ts
@@ -250,7 +250,7 @@ export class ShippingMethodPicker {
 
 그리고 `computation`은 `source`에서 새 값을 받으면서 `previous` 객체를 받는 함수입니다.
 이때 `previous` 객체에는 `source` 프로퍼티와 `value` 프로퍼티가 있습니다.
-`previous.source` 프로퍼티에는 이전 `source` 값이 전달되며, `previous.value`에는 이전 `computation` 연산 결과가 전달됩니다.
+`previous.source` 프로퍼티에는 이전 `source` 값이 전달되며, `previous.value`에는 `linkedSignal`의 이전 값이 전달됩니다.
 연산 함수는 이 값들을 활용해서 새 값을 만들어 내면 됩니다.
 
 도움말: `previous` 인자를 사용할 때는 `linkedSignal`의 제네릭 타입을 명시적으로 지정해야 합니다.
@@ -323,7 +323,7 @@ NOTE: Using `rawSet` allows you to update the `linkedSignal`'s value directly. T
 -->
 
 `linkedSignal`의 `set` 메서드나 `update` 메서드의 동작이 `linkedSignal` 자체의 값을 변경하지 않고 원본의 값을 변경하는 경우가 있다고 합시다.
-이런 경우에는 `set` 함수에 옵션을 전달해서 동작을 커스터마이징할 수 있습니다.
+이런 경우에는 `linkedSignal`을 생성할 때 옵션 객체의 `set` 프로퍼티로 커스텀 함수를 전달해서 동작을 커스터마이징할 수 있습니다.
 
 커스텀 `set` 함수는 인자를 2개 받습니다:
 

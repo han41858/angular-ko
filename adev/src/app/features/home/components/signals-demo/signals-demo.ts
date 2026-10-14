@@ -49,7 +49,7 @@ const tsExample = `
 items = signal(['Apple', 'Banana', /*...*/ ]);
 searchTerm = signal('');
 // 목록을 필터링하는 computed 시그널입니다.
-// 이 시그널은 다른 시그널이 변경되면 자동으로 다시 계산합니다.
+// 이 시그널은 의존하는 시그널이 변경되면 자동으로 다시 계산합니다.
 filteredItems = computed(() => {
   const lowerCaseSearchTerm = this.searchTerm().toLowerCase();
   return this.items().filter(item =>

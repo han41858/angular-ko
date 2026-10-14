@@ -138,7 +138,7 @@ export class UserProfile {
 <ul [attr.role]="listRole()"></ul>
 ```
 
-이제 DOM 프로퍼티와 어트리뷰트 값이 변경되면 Angular가 자동으로 DOM을 갱신합니다.
+바인딩된 값이 변경되면 Angular가 DOM 프로퍼티와 어트리뷰트를 자동으로 갱신합니다.
 
 <!--
 ## Handling user interaction

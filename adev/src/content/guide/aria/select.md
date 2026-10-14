@@ -508,6 +508,8 @@ The select pattern integrates with [CDK Overlay](https://material.angular.dev/cd
 - [`Listbox`](/api/aria/listbox/Listbox)
 - [`Option`](/api/aria/listbox/Option)
 
-### Positioning
+<a id="positioning"></a>
 
-The select pattern integrates with [CDK Overlay](https://material.angular.dev/cdk/overlay/overview) for smart positioning. Use `cdkConnectedOverlay` to handle viewport edges and scrolling automatically.
+### 위치 지정
+
+선택 패턴은 [CDK Overlay](https://material.angular.dev/cdk/overlay/overview)와 통합하여 팝업 위치를 지정합니다. `cdkConnectedOverlay`를 사용하면 뷰포트 경계와 스크롤을 자동으로 처리할 수 있습니다.

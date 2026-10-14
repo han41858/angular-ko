@@ -96,21 +96,18 @@ The `@Service()` or `@Injectable()` decorators identify a service class.
 
 `EnvironmentInjector`는 `ApplicationConfig.providers`에서 구성할 수 있습니다.
 
-그리고 `@Injectable()`의 `providedIn`을 활용해서 등록할 수 있습니다:
+`@Service()`를 사용해서 다음과 같이 서비스를 등록할 수 있습니다:
 
 ```ts {highlight:[4]}
-import {Injectable} from '@angular/core';
+import {Service} from '@angular/core';
 
-@Injectable({
-  providedIn: 'root', // <-- 이 서비스를 최상위 EnvironmentInjector에 등록합니다.
-})
+@Service() // <-- 이 서비스를 최상위 EnvironmentInjector에 등록합니다.
 export class ItemService {
   name = 'telephone';
 }
 ```
 
-`@Injectable()` 데코레이터가 붙은 클래스는 Angular 서비스 클래스입니다.
-이 데코레이터의 `providedIn` 프로퍼티는 `EnvironmentInjector`를 구성하는데, `root`를 지정하면 최상위 `EnvironmentInjector`에 이 서비스의 프로바이더를 등록합니다.
+`@Service()`나 `@Injectable()` 데코레이터가 붙은 클래스는 Angular 서비스 클래스입니다.
 
 ### ModuleInjector
 
@@ -1301,7 +1298,6 @@ export class Child {
 
 ```html
 <p>Emoji from AnimalService: {{animal.emoji}}</p>
-s
 ```
 
 이제 브라우저에서 두 값이 어떻게 표시되는지 확인해 보세요:
@@ -1751,9 +1747,9 @@ Emoji from FlowerService: 🌺
 </app-root>
 ```
 
-`<app-child>`에 해바라기 <code>🌻</code>가 등록되어 있기는 하지만, `skipSelf`가 사용되어서 현재 계층(`app-child`)의 인젝터 탐색을 건너뛰기 때문에 빨간 히비스커스 <code>🌺</code>를 찾지 않고 부모 계층에서 의존성 객체를 찾게 됩니다.
+`<app-child>`에 해바라기 <code>🌻</code>가 등록되어 있지만, `skipSelf`가 현재 인젝터(`app-child`)를 건너뛰고 부모 계층에서 의존성을 찾게 하므로 애플리케이션에는 빨간 히비스커스 <code>🌺</code>가 표시됩니다.
 
-`skipSelf`와 `host`를 함께 사용하면 언제나 `null`을 반환합니다.
+이 예제에서 `skipSelf`와 `host`를 함께 사용하면 `null`을 반환합니다.
 왜냐하면 `host`는 `app-child`의 `<#VIEW>` 상위 계층의 탐색을 제한하기 때문입니다.
 논리 트리로 표현하면 이렇습니다:
 

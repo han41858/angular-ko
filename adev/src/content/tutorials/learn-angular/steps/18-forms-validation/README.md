@@ -107,10 +107,10 @@ profileForm = new FormGroup({
 
 <a id="check-form-validation-in-template"></a>
 
-<docs-step title="템플릿에 유효성 검사 함수를 적용하세요">
+<docs-step title="템플릿에서 폼의 유효성 상태를 확인하세요">
 
 폼에 입력된 값들이 적절한지 확인하려면 `FormGroup` 클래스에 있는 `valid` 프로퍼티를 참조하면 됩니다.
-이 프로퍼티는 어트리뷰트로 바인딩되어 동적으로 값이 변경되는 프로퍼티입니다.
+이 프로퍼티를 사용해 버튼의 `disabled` 프로퍼티를 동적으로 바인딩할 수 있습니다.
 폼 유효성 상태에 따라 폼 제출 버튼을 비활성화하는 기능을 추가해 보세요.
 
 ```angular-html

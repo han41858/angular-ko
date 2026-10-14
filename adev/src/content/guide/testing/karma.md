@@ -285,7 +285,7 @@ Karma 설정을 직접 변경하려면 다음 명령으로 `karma.conf.js`를 �
 ng generate config karma
 ```
 
-참고: 자세한 내용은 [Karma 설정 가이드](http://karma-runner.github.io/6.4/config/configuration-file.html)를 참고하세요.
+참고: 자세한 내용은 [Karma 설정 가이드](https://karma-runner.github.io/6.4/config/configuration-file.html)를 참고하세요.
 
 <!--
 ### Setting the Test Runner in `angular.json`

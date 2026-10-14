@@ -399,8 +399,7 @@ onError: (error) => {
 ```
 -->
 
-`onSuccess` 함수는 유효성 검사 에러를 받거나 유효성 검사에 성공한 경우 `undefined`를 반환합니다.
-이 함수는 HTTP 응답을 인자로 받습니다.
+`onSuccess` 함수는 HTTP 응답을 인자로 받아, 값이 유효하지 않으면 유효성 검사 에러를 반환하고 유효하면 `undefined`를 반환합니다.
 
 ```ts
 onSuccess: (response: { valid: boolean; message?: string }) => {
@@ -645,7 +644,7 @@ The `params` function runs on every value change. Return `undefined` to skip val
 -->
 
 `validateAsync()` 함수는 `params`, `factory`, `onSuccess`, `onError`로 프로퍼티가 4개 필요합니다.
-이때 `params` 함수는 리소스를 인자로 반환하며, `factory`는 리소스를 생성합니다:
+이때 `params` 함수는 리소스에 전달할 인자를 반환하며, `factory`는 리소스를 생성합니다:
 
 ```ts
 import {Component, inject, signal, resource, Signal} from '@angular/core';
@@ -974,7 +973,7 @@ With `'blur'`, the model keeps its previous value while the user is typing. Sync
 어떤 필드는 사용자 입력 도중에 반응하지 않고, 입력을 모두 끝낸 후에야 값을 반영해야 하는 경우가 있습니다.
 예를 들어 검색 필터라면 사용자가 값을 입력하는 동안 모든 값 입력에 반응하거나 상태 변경을 유발하는 동작은 사용자가 값을 완전히 입력하기 전까지는 제한하는 것이 좋습니다.
 
-이런 경우는 모든 필드가 터치되기 전까지 일정 시간 기다리기보다는, `'pass'` 옵션을 지정하는 것이 좋습니다:
+이런 경우에는 시간 대신 `'blur'`를 전달하여 필드가 touched 상태가 될 때까지 모든 갱신을 미루면 됩니다:
 
 ```ts
 form(this.registrationModel, (schemaPath) => {
@@ -1226,7 +1225,7 @@ export class Registration {
 
 `params` 콜백 함수는 사용자명이 짧은 경우 `undefined`를 반환하기 때문에 유효성 검사를 건너뜁니다.
 그리고 `debounce: 300`을 사용하면 사용자가 입력을 300ms 멈추기 전까지는 값이 변경된 것을 처리하지 않고 기다립니다.
-이후에 로더가 사용자명이 유효하다고 검사하고 나면 디바운스되는 값이 `undefined`로 변경되며 대기 상태가 됩니다.
+이후 유효한 사용자명에는 로더를 실행하고, 디바운스된 값이 `undefined`로 확정되면 대기 상태를 유지합니다.
 
 <!--
 ### Combining debounce with additional logic

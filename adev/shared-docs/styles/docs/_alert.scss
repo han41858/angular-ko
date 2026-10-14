@@ -50,6 +50,7 @@
     }
   }
 
+  .docs-alert-note,
   .docs-alert-참고 {
     --alert-gradient: var(--blue-to-teal-vertical-gradient);
     --alert-accent: var(--bright-blue);
@@ -58,6 +59,7 @@
     }
   }
 
+  .docs-alert-tip,
   .docs-alert-팁 {
     --alert-gradient: var(--green-to-cyan-vertical-gradient);
     --alert-accent: var(--symbolic-cyan);
@@ -74,6 +76,7 @@
     }
   }
 
+  .docs-alert-question,
   .docs-alert-질문 {
     --alert-gradient: var(--blue-to-cyan-vertical-gradient);
     --alert-accent: var(--symbolic-cyan);
@@ -82,6 +85,7 @@
     }
   }
 
+  .docs-alert-summary,
   .docs-alert-요약 {
     --alert-gradient: var(--purple-to-light-purple-vertical-gradient);
     --alert-accent: var(--electric-violet);
@@ -98,6 +102,7 @@
     }
   }
 
+  .docs-alert-critical,
   .docs-alert-주의 {
     --alert-gradient: var(--red-to-orange-vertical-gradient);
     --alert-accent: var(--orange-red);
@@ -106,6 +111,7 @@
     }
   }
 
+  .docs-alert-important,
   .docs-alert-중요 {
     --alert-gradient: var(--red-to-pink-vertical-gradient);
     --alert-accent: var(--hot-red);

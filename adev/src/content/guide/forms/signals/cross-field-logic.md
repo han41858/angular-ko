@@ -93,7 +93,7 @@ NOTE: The `fieldContext` parameter is typically destructured to pull out only wh
 | 프로퍼티        | 타입                           | 설명                                                                                                   |
 | --------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | `valueOf()`     | `(path) => PValue`             | 가장 많이 사용합니다. 다른 필드의 값을 참조할 때 사용합니다.                                           |
-| `stateOf()`     | `(path) => FieldState<PValue>` | `valid`, `touched, `dirty` 등 다른 필드 상태를 참조할 때 사용합니다.                                   |
+| `stateOf()`     | `(path) => FieldState<PValue>` | `valid`, `touched`, `dirty` 등 다른 필드 상태를 참조할 때 사용합니다.                                   |
 | `fieldTreeOf()` | `(path) => FieldTree<PModel>`  | `validateTree`로 어떤 필드의 자식으로 오류를 전달하는 등 다른 필드 트리에 코드로 접근할 때 사용합니다. |
 
 현재 필드(종료 날짜)가 시작 일자 이후인지 `value`와 `valueOf()`로 확인하는 예제 코드를 확인해 보세요:
@@ -287,7 +287,7 @@ export class RegistrationForm {
 }
 ```
 
-`when` 옵션은 `valueOf` 함수와 마찬가지로 필드 컨텍스트를 인자로 받습니다.
+`when` 옵션은 다른 규칙 함수와 동일한 필드 컨텍스트를 인자로 받으므로, 그 안에서 `valueOf`를 같은 방식으로 사용할 수 있습니다.
 그리고 사용자가 `'personal'` 옵션을 다시 선택하면, 조건이 다시 실행되면서 필수 입력 여부와 에러가 자동으로 초기화됩니다.
 
 수동으로 `validate()`를 사용하는 대신 `when`과 `required()`를 사용하면 필드에 `required` 메타데이터를 자동으로 추가하기 때문에, 스크린 리더에서도 필수 항목으로 표시하는 접근성 기능으로 활용할 수 있습니다.

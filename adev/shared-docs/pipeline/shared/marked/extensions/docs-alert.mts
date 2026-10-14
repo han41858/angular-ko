@@ -38,7 +38,23 @@ export enum AlertSeverityLevel {
   요약 = '요약',
   중요 = '중요',
   주의 = '주의',
+  도움말 = '도움말',
+  '할 일' = '할 일',
+  '짧은 요약' = '짧은 요약',
 }
+
+// Keep localized labels while sharing the English severity classes and styles.
+const koreanSeverityLevels: Record<string, string> = {
+  참고: 'NOTE',
+  팁: 'TIP',
+  '할 일': 'TODO',
+  질문: 'QUESTION',
+  요약: 'SUMMARY',
+  '짧은 요약': 'TLDR',
+  주의: 'CRITICAL',
+  중요: 'IMPORTANT',
+  도움말: 'HELPFUL',
+};
 
 /** Token for docs-alerts */
 interface DocsAlertToken extends Tokens.Generic {
@@ -73,7 +89,7 @@ export const docsAlertExtension: TokenizerAndRendererExtension = {
     return {
       type: 'docs-alert',
       raw: execMatch[0],
-      severityLevel: severityLevelKey,
+      severityLevel: koreanSeverityLevels[severityLevelKey] ?? severityLevelKey,
       tokens: this.lexer.inlineTokens(`**${severityLevelValue}:** ${execMatch[2].trim()}`, []),
     };
   },

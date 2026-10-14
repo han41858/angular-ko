@@ -92,7 +92,7 @@ Child classes end up with the _union_ of all of their ancestors' inputs, outputs
 and their own.
 -->
 
-컴포넌트가 다른 컴포넌트나 디렉티브를 상속하면, 부모 클래스에 있는 메타데이터와 프로퍼티를 모두 상속받습니다.
+컴포넌트가 다른 컴포넌트나 디렉티브를 상속하면, 부모 클래스 데코레이터에 정의된 일부 메타데이터와 데코레이터가 적용된 멤버를 상속받습니다.
 여기에는 호스트 바인딩, 입출력 프로퍼티, 라이프싸이클 메서드가 모두 포함됩니다.
 
 ```angular-ts

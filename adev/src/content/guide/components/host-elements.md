@@ -199,7 +199,7 @@ decorators exist exclusively for backwards compatibility.
 
 `@HostBinding` 이나 `@HostListener` 데코레이터를 사용해서 호스트 엘리먼트와 클래스 멤버를 바인딩하는 방법도 있습니다.
 
-`@HostBinding` 을 사용하면 호스트 엘리먼트의 프로퍼티를 클래스 프로퍼티와 바인딩하거나, 호스트 엘리먼트의 어트리뷰트를 메서드와 바인딩할 수 있습니다:
+`@HostBinding`을 사용하면 호스트 엘리먼트의 프로퍼티와 어트리뷰트를 클래스 프로퍼티와 게터에 바인딩할 수 있습니다:
 
 ```ts
 @Component({/* ... */})

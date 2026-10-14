@@ -506,8 +506,8 @@ export class DropdownTrigger {
 HELPFUL: Because Angular produces only one instance of the shared directive, both `PopoverTrigger` and `DropdownTrigger` receive the same `TriggerRef` instance when they inject it.
 -->
 
-디렉티브 2개가 같은 `hostDirectives`에 적용되는 경우에는 디렉티브 인스턴스 하나만 유지됩니다.
-입출력 프로퍼티는 인스턴스 하나로 합쳐집니다.
+동일한 디렉티브가 **호스트 디렉티브로 여러 번 나타나면** Angular는 인스턴스 하나로 합칩니다. 예를 들어 서로 다른 두 디렉티브의 `hostDirectives`가 같은 디렉티브를 참조하는 경우입니다.
+모든 인스턴스의 입출력 프로퍼티 매핑도 함께 합쳐집니다.
 
 이 정책은 흔히 발생하는 [다이아몬드 문제](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem)를 해결하기 위한 것입니다:
 
@@ -609,7 +609,7 @@ export class DropdownTrigger {}
 <button popoverTrigger dropdownTrigger></button>
 ```
 
-이 문제를 해결하려면, 입출력 프로퍼티에 별칭을 지정할 때 같은 별칭을 사용하거나, 별칭을 지정하지 않으면 됩니다.
+이 문제를 해결하려면 양쪽 경로에서 공유 입출력 프로퍼티를 동일한 별칭으로 공개하거나, 해당 프로퍼티를 아예 공개하지 마세요.
 
 <!--
 ## What's next

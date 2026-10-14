@@ -272,7 +272,7 @@ export class DynamicCard {
 }
 ```
 
-참고: 하이드레이션은 네이티브 DOM API를 활용하기 때문에 DOM 노드 프로젝션을 지원하지 않습니다.
+참고: 하이드레이션은 네이티브 DOM API로 생성한 DOM 노드를 프로젝션하는 방식을 지원하지 않습니다.
 이렇게 사용하려고 하면 [NG0503 에러](/errors/NG0503)가 발생합니다.
 컨텐츠를 프로젝션하려면 Angular API를 사용하거나 컴포넌트에 `ngSkipHydration`을 사용하세요.
 
@@ -594,9 +594,6 @@ The example above loads and displays the `AdvancedSettings` upon receiving a but
           Load advanced settings
         </button>
       }
-      <button (click)="loadAdvanced()" *ngIf="!advancedSettings">
-        Load advanced settings
-      </button>
       <ng-container *ngComponentOutlet="advancedSettings" />
     </section>
   `
@@ -628,7 +625,7 @@ To simplify this, both `createComponent` and `ViewContainerRef.createComponent` 
 -->
 
 컴포넌트를 동적으로 생성할 때 입력값을 수동으로 설정하고 출력값을 구독하면 에러가 발생할 가능성이 높습니다.
-바인딩은 컴포넌트 인스턴스가 생성된 후에 별도로 하는 것이 좋습니다.
+컴포넌트 인스턴스를 생성한 뒤 바인딩을 연결하려면 추가 코드를 작성해야 하는 경우가 많습니다.
 
 간단하게 이야기하면, `createComponent`나 `ViewContainerRef.createComponent` 함수는 `inputBinding()`, `outputBinding()`, `twoWayBinding()`과 같이 입출력값을 바인딩하는 기능을 제공합니다.
 호스트 디렉티브에는 `directives` 배열을 지정할 수도 있습니다.

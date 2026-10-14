@@ -58,7 +58,7 @@ ng generate service CUSTOM_NAME
 
 이 명령을 실행하면 `src` 디렉토리에 `CUSTOM_NAME.ts` 라는 파일이 생성됩니다.
 
-서비스는 일반 TypeScript 클래스에 `@Injectable()` 데코레이터를 붙여서 직접 선언할 수도 있습니다.
+서비스는 일반 TypeScript 클래스에 `@Service()` 데코레이터를 붙여서 직접 선언할 수도 있습니다.
 이 데코레이터는 데코레이터가 붙은 클래스는 Angular가 의존성 객체로 취급할 수 있다는 것을 알리는 역할을 합니다.
 
 사용자가 데이터를 추가하고 조회하는 예제 서비스라면 이렇게 구현합니다:

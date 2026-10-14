@@ -512,7 +512,7 @@ graph TD
 
 위 예제를 보면:
 
-1. `SocialApp`은 `UserProfile`과 `FriendList` 인스턴스를 활용할 수 있습니다.
+1. `SocialApp`은 `UserProfile`과 `FriendList`에 의존성 값을 제공할 수 있습니다.
 2. `FriendList`에 존재하는 의존성 객체의 인스턴스는 `FriendEntry`에서 사용할 수 있지만, `UserProfile`은 다른 트리에 있기 때문에 사용할 수 없습니다.
 
 <!--
@@ -1059,14 +1059,14 @@ export class Header {
 
 ```ts
 // 환경설정 인터페이스를 정의합니다.
-const appConfig: AppConfig = {
-  apiUrl: 'https://api.example.com',
-  appTitle: 'My Application',
+export interface AppConfig {
+  apiUrl: string;
+  appTitle: string;
   features: {
-    darkMode: true,
-    analytics: false,
-  },
-};
+    darkMode: boolean;
+    analytics: boolean;
+  };
+}
 
 // 인젝션 토큰을 생성합니다.
 export const APP_CONFIG = new InjectionToken<AppConfig>('app.config');
@@ -1149,7 +1149,7 @@ providers: [
 ];
 ```
 
-팩토리 함수에 필요한 의존성은 다음과 같이 명시적으로 지정할 수도 있습니다:
+팩토리 함수의 의존성을 생략 가능한 항목으로 지정할 수 있습니다:
 
 ```ts
 import {Optional} from '@angular/core';
@@ -1306,7 +1306,7 @@ providers: [
 ];
 ```
 
-중요: `useExisting`과 `useClass`를 혼동하지 마세요. `useClass`는 인스턴스를 매번 새로 생성하지만, `useExisting`은 유일한 인스턴스를 보장합니다.
+중요: `useExisting`과 `useClass`를 혼동하지 마세요. `useClass`는 별도 인스턴스를 만들고, `useExisting`은 기존 프로바이더와 동일한 인스턴스를 반환합니다.
 
 <!--
 ### Multiple providers
@@ -1642,7 +1642,7 @@ When creating Angular libraries, you often need to provide flexible configuratio
 -->
 
 Angular 라이브러리를 개발한다면, 깔끔한 API를 유지하면서도 사용자에게 맞는 환경설정을 제공해야 하는 경우가 있습니다.
-ANgular 자체 라이브러리가 활용하는 강력한 패턴을 활용해 보세요.
+Angular 자체 라이브러리가 활용하는 강력한 패턴을 활용해 보세요.
 
 <!--
 ### The `provide` pattern

@@ -230,7 +230,7 @@ export class UserProfile { }
 **Queries never pierce through component boundaries.** Content queries can only retrieve results from the same template as the component itself.
 -->
 
-컨텐츠 쿼리는 컴포넌트 _컨텐츠_, 즉, 컴포넌트 템플릿 안쪽에 있는 엘리먼트를 찾습니다.
+컨텐츠 쿼리는 컴포넌트의 _컨텐츠_, 즉, 컴포넌트를 사용하는 템플릿에서 해당 컴포넌트 태그 안에 중첩된 엘리먼트를 찾습니다.
 컨텐츠 쿼리 함수 중 `contentChild` 함수를 사용하면 원하는 엘리먼트를 하나 참조할 수 있습니다.
 
 ```angular-ts {highlight: [14, 15]}
@@ -303,8 +303,8 @@ export class UserProfile {}
 
 `contentChildren` 함수는 탐색 결과를 `Array` 타입으로 반환하는 시그널입니다.
 
-**쿼리 함수는 컴포넌트 밖을 참조할 수 없습니다.**
-컨텐츠 쿼리는 컴포넌트 템플릿 안에 있는 객체만 참조할 수 있습니다.
+**쿼리 함수는 컴포넌트 경계를 넘어 탐색하지 않습니다.**
+컨텐츠 쿼리는 해당 컴포넌트를 사용하는 템플릿에서만 결과를 찾을 수 있습니다.
 
 <!--
 ## Required queries
@@ -331,7 +331,7 @@ If a required query does not find a matching result, Angular reports an error. B
 -->
 
 `viewChild` 함수나 `contentChild` 함수를 사용해서 자식 컴포넌트를 탐색했지만 아무것도 찾지 못한 경우, 쿼리 함수가 반환하는 시그널은 `undefined` 값을 갖습니다.
-이 경우는 찾으려는 엘리먼트가 `@fi`나 `@for`로 인해 화면에 표시되지 않는 경우에 발생할 수 있습니다.
+이 경우는 찾으려는 엘리먼트가 `@if`나 `@for`로 인해 화면에 표시되지 않는 경우에 발생할 수 있습니다.
 결국 자식 엘리먼트를 쿼리하는 함수는 찾으려는 객체 타입이거나 `undefined` 타입일 수 있습니다.
 
 하지만 자식 컴포넌트가 반드시 존재하는 경우를 간주할 수 있습니다.
@@ -443,6 +443,12 @@ The above example uses an `InjectionToken` as a locator, but you can use any `Pr
 
 ```angular-ts
 const SUB_ITEM = new InjectionToken<string>('sub-item');
+
+@Component({
+  /*...*/
+  providers: [{provide: SUB_ITEM, useValue: 'special-item'}],
+})
+export class SpecialItem {}
 
 @Component(/* ... */)
 export class CustomList {
@@ -631,11 +637,13 @@ export class UserProfile {}
 
 ## 데코레이터 기반 쿼리 함수
 
+<!--
 TIP: While the Angular team recommends using the signal-based query function for new projects, the
 original decorator-based query APIs remain fully supported.
 
 You can alternatively declare queries by adding the corresponding decorator to a property. Decorator-based queries behave the same way as signal-based queries except as described below.
 -->
+
 팁: 기존에 사용하던 데코레이터 기반 쿼리 API도 온전히 잘 작동하지만, 시그널 기반 쿼리 함수 사용을 권장합니다.
 
 쿼리 함수는 데코레이터 프로퍼티로 사용할 수도 있습니다.

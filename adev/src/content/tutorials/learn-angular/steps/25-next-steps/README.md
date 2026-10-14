@@ -44,10 +44,10 @@ You can also learn more in our [guides](overview) and [reference](api), or `ng n
   <docs-card title="Angular의 로드맵" href="roadmap">
   Angular의 오픈 소스 로드맵을 확인해 보세요. 이미 완료된 프로젝트부터 현재 진행 중인 프로젝트, 미래에 진행될 프로젝트도 확인해 보세요.
   </docs-card>
-  <docs-card title="Angular 놀이터" href="playground" link="Start playing">
+  <docs-card title="Angular 놀이터" href="playground" link="시작하기">
   브라우저에서 Angular를 자유롭게 사용해 보세요!
   </docs-card>
-  <docs-card title="Angular YouTube 코스" href="https://youtube.com/playlist?list=PL1w1q3fL4pmj9k1FrJ3Pe91EPub2_h4jF" link="Start learning">
+  <docs-card title="Angular YouTube 코스" href="https://youtube.com/playlist?list=PL1w1q3fL4pmj9k1FrJ3Pe91EPub2_h4jF" link="학습 시작하기">
   공식 Angular YouTube 채널을 확인해 보세요!
   </docs-card>
 </docs-card-container>

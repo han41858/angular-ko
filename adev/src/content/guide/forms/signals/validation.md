@@ -698,7 +698,7 @@ export class PhoneFormComponent {
 | 전화번호       | `/^\d{3}-\d{3}-\d{4}$/` | 555-123-4567 |
 | 우편번호(미국) | `/^\d{5}$/`             | 12345        |
 | 영문자, 숫자   | `/^[a-zA-Z0-9]+$/`      | abc123       |
-| URL            | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
+| URL에 안전하게 사용할 문자열 | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
 
 <!--
 ## Validation of array items
@@ -1579,7 +1579,7 @@ export class UsernameFormComponent {
 `validateHttp()` 는 이렇게 동작합니다:
 
 1. `request()` 함수로 외부 요청을 보냅니다.
-2. 응답 성공은 `onSuccess`에 `null`을 보내고, 아니면 유효성 검사 에러를 반환합니다.
+2. `onSuccess`로 성공 응답을 유효성 검사 에러 또는 `null`로 변환합니다.
 3. 네트워크 오류나 HTTP 오류 등 요청 자체가 실패한 경우는 `onError`에서 다룹니다.
 4. 요청을 보내고 응답을 받기 전까지는 `pending()` 시그널의 값이 `true`가 됩니다.
 5. 비동기 유효성 검사는 동기 유효성 검사를 모두 통과했을 때만 실행됩니다.

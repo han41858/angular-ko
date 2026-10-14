@@ -65,7 +65,7 @@ const userId: Signal<string> = getUserId();
 
 const userResource = resource({
   // 반응형 연산 함수를 정의합니다.
-  // params 값은 시그널을 읽을 때마다 다시 계산됩니다.
+  // 이 계산에서 읽은 시그널의 값이 변경될 때마다 params 값을 다시 계산합니다.
   params: () => ({id: userId()}),
 
   // 데이터를 받아오는 비동기 로더 함수를 정의합니다.
@@ -128,7 +128,7 @@ If the `params` computation returns `undefined`, the loader function does not ru
 
 | 프로퍼티      | 설명                                                                                                                                                        |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `params`      | 리소스의 `params` 연산 함수                                                                                                                                 |
+| `params`      | 리소스의 `params` 연산 함수가 반환한 값                                                                                                                                 |
 | `previous`    | `status` 프로퍼티와 이전 `ResourceStatus` 값이 담겨 전달되는 객체입니다.                                                                                    |
 | `abortSignal` | [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)에 대해 자세하게 알아보려면 [요청 취소하기](#요청-취소하기) 섹션을 참고하세요. |
 
