@@ -464,11 +464,15 @@
       </div>
       <!-- Theme Picker -->
       <div class="adev-nav-item" [class.adev-nav-item--active]="openedMenu() === 'theme-picker'">
+        <!-- Change theme. Current theme: -->
         <button
           type="button"
           [cdkMenuTriggerFor]="themeMiniMenu"
           [cdkMenuPosition]="bottomMiniMenuPositions"
-          [aria-label]="'Change theme. Current theme: ' + theme()"
+          [aria-label]="
+            '테마 변경. 현재 테마: ' +
+            (theme() === 'dark' ? '어두운 테마' : theme() === 'light' ? '밝은 테마' : '시스템 설정')
+          "
           aria-controls="theme-mini-menu"
           [aria-expanded]="openedMenu() === 'theme-picker'"
           aria-haspopup="menu"

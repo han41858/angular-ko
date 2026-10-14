@@ -38,6 +38,7 @@ describe('Navigation', () => {
   const fakeSearch = {};
 
   beforeEach(async () => {
+    fakeThemeManager.theme.set('dark');
     TestBed.configureTestingModule({
       imports: [Navigation],
       providers: [
@@ -85,7 +86,7 @@ describe('Navigation', () => {
 
   it('should call themeManager.setTheme(dark) when user tries to set dark theme', async () => {
     const openThemePickerButton = fixture.debugElement.query(
-      By.css('button[aria-label^="Change theme. Current theme:"]'),
+      By.css('button[aria-label^="테마 변경. 현재 테마:"]'),
     ).nativeElement;
     const setThemeSpy = spyOn(fakeThemeManager, 'setTheme');
 
@@ -93,11 +94,28 @@ describe('Navigation', () => {
     await fixture.whenStable();
 
     const setDarkModeButton = fixture.debugElement.query(
-      By.css('button[aria-label="Set dark theme"]'),
+      By.css('button[aria-label="어두운 테마 적용"]'),
     ).nativeElement;
 
     setDarkModeButton.click();
 
     expect(setThemeSpy).toHaveBeenCalledOnceWith('dark');
   });
+
+  for (const [theme, label] of [
+    ['dark', '어두운 테마'],
+    ['light', '밝은 테마'],
+    ['auto', '시스템 설정'],
+  ] as const) {
+    it(`should announce the ${theme} theme in Korean`, async () => {
+      fakeThemeManager.theme.set(theme);
+      await fixture.whenStable();
+
+      const themePicker = fixture.debugElement.query(
+        By.css('button[aria-controls="theme-mini-menu"]'),
+      ).nativeElement;
+
+      expect(themePicker.getAttribute('aria-label')).toBe(`테마 변경. 현재 테마: ${label}`);
+    });
+  }
 });
