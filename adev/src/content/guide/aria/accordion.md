@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Accordion">
-</docs-decorative-header>
+# Accordion
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/" title="Accordion ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="아코디언">
-</docs-decorative-header>
+# 아코디언
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/" title="아코디언 ARIA 패턴"/>
@@ -482,254 +480,25 @@ describe('MyAccordionComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`AccordionGroup`](/api/aria/accordion/AccordionGroup)
+- [`AccordionTrigger`](/api/aria/accordion/AccordionTrigger)
+- [`AccordionPanel`](/api/aria/accordion/AccordionPanel)
+- [`AccordionContent`](/api/aria/accordion/AccordionContent)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### AccordionGroup
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="accordiongroup"></a>
-
-### AccordionGroup
-
-<!--
-The container directive that manages keyboard navigation and expansion behavior for a group of accordion items.
--->
-
-아코디언 항목 그룹의 키보드 탐색과 펼침 동작을 관리하는 컨테이너 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property          | Type      | Default | Description                                                               |
-| ----------------- | --------- | ------- | ------------------------------------------------------------------------- |
-| `disabled`        | `boolean` | `false` | Disables all triggers in the group                                        |
-| `multiExpandable` | `boolean` | `true`  | Whether multiple panels can be expanded simultaneously                    |
-| `softDisabled`    | `boolean` | `true`  | When `true`, disabled items are focusable. When `false`, they are skipped |
-| `wrap`            | `boolean` | `false` | Whether keyboard navigation wraps from last to first item and vice versa  |
--->
-
-| 프로퍼티          | 타입      | 기본값  | 설명                                                                                        |
-| ----------------- | --------- | ------- | ------------------------------------------------------------------------------------------- |
-| `disabled`        | `boolean` | `false` | 그룹의 모든 트리거를 비활성화합니다.                                                        |
-| `multiExpandable` | `boolean` | `true`  | 여러 패널을 동시에 펼칠 수 있는지 지정합니다.                                               |
-| `softDisabled`    | `boolean` | `true`  | `true`이면 비활성화된 항목도 포커스를 받을 수 있습니다. `false`이면 해당 항목을 건너뜁니다. |
-| `wrap`            | `boolean` | `false` | 키보드 탐색에서 마지막 항목과 첫 번째 항목 사이를 양방향으로 순환할지 지정합니다.           |
-
-<!--
-#### Methods
--->
-
-<a id="methods"></a>
-
-#### 메서드
-
-<!--
-| Method        | Parameters | Description                                                      |
-| ------------- | ---------- | ---------------------------------------------------------------- |
-| `expandAll`   | none       | Expands all panels (only works when `multiExpandable` is `true`) |
-| `collapseAll` | none       | Collapses all panels                                             |
--->
-
-| 메서드        | 인자 | 설명                                                                |
-| ------------- | ---- | ------------------------------------------------------------------- |
-| `expandAll`   | 없음 | 모든 패널을 펼칩니다(`multiExpandable`이 `true`일 때만 동작합니다). |
-| `collapseAll` | 없음 | 모든 패널을 접습니다.                                               |
-
-<!--
-### AccordionTrigger
--->
-
-<a id="accordiontrigger"></a>
-
-### AccordionTrigger
-
-<!--
-The directive applied to the button element that toggles panel visibility.
--->
-
-패널을 표시하거나 숨기는 버튼 엘리먼트에 적용하는 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type             | Default | Description                                                    |
-| ---------- | ---------------- | ------- | -------------------------------------------------------------- |
-| `panel`    | `AccordionPanel` | —       | **Required.** The reference of the controlled accordion panel. |
-| `id`       | `string`         | auto    | Unique identifier for the trigger                              |
-| `disabled` | `boolean`        | `false` | Disables this trigger                                          |
-| `expanded` | `boolean`        | `false` | Whether the panel is expanded (supports two-way binding)       |
--->
-
-| 프로퍼티   | 타입             | 기본값    | 설명                                                         |
-| ---------- | ---------------- | --------- | ------------------------------------------------------------ |
-| `panel`    | `AccordionPanel` | —         | **필수.** 제어할 아코디언 패널의 참조입니다.                 |
-| `id`       | `string`         | 자동 생성 | 트리거의 고유 식별자입니다.                                  |
-| `disabled` | `boolean`        | `false`   | 이 트리거를 비활성화합니다.                                  |
-| `expanded` | `boolean`        | `false`   | 패널이 펼쳐져 있는지 나타냅니다(양방향 바인딩을 지원합니다). |
-
-<!--
-#### Signals
--->
-
-<a id="signals"></a>
-
-#### 시그널
-
-<!--
-| Property | Type              | Description                             |
-| -------- | ----------------- | --------------------------------------- |
-| `active` | `Signal<boolean>` | Whether the trigger currently has focus |
--->
-
-| 프로퍼티 | 타입              | 설명                                      |
-| -------- | ----------------- | ----------------------------------------- |
-| `active` | `Signal<boolean>` | 현재 트리거에 포커스가 있는지 나타냅니다. |
-
-<!--
-#### Methods
--->
-
-<a id="methods-1"></a>
-
-#### 메서드
-
-<!--
-| Method     | Parameters | Description                       |
-| ---------- | ---------- | --------------------------------- |
-| `expand`   | none       | Expands the associated panel      |
-| `collapse` | none       | Collapses the associated panel    |
-| `toggle`   | none       | Toggles the panel expansion state |
--->
-
-| 메서드     | 인자 | 설명                           |
-| ---------- | ---- | ------------------------------ |
-| `expand`   | 없음 | 연결된 패널을 펼칩니다.        |
-| `collapse` | 없음 | 연결된 패널을 접습니다.        |
-| `toggle`   | 없음 | 패널의 펼침 상태를 전환합니다. |
-
-<!--
-### AccordionPanel
--->
-
-<a id="accordionpanel"></a>
-
-### AccordionPanel
-
-<!--
-The directive applied to the element containing the collapsible content.
--->
-
-접을 수 있는 콘텐츠를 포함한 엘리먼트에 적용하는 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-2"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property          | Type      | Default | Description                                          |
-| ----------------- | --------- | ------- | ---------------------------------------------------- |
-| `id`              | `string`  | auto    | Unique identifier for the panel                      |
-| `preserveContent` | `boolean` | `true`  | Whether to keep content in DOM after panel collapses |
--->
-
-| 프로퍼티          | 타입      | 기본값    | 설명                                                   |
-| ----------------- | --------- | --------- | ------------------------------------------------------ |
-| `id`              | `string`  | 자동 생성 | 패널의 고유 식별자입니다.                              |
-| `preserveContent` | `boolean` | `true`    | 패널을 접은 뒤에도 콘텐츠를 DOM에 유지할지 지정합니다. |
-
-<!--
-#### Signals
--->
-
-<a id="signals-1"></a>
-
-#### 시그널
-
-<!--
-| Property  | Type              | Description                             |
-| --------- | ----------------- | --------------------------------------- |
-| `visible` | `Signal<boolean>` | Whether the panel is currently expanded |
--->
-
-| 프로퍼티  | 타입              | 설명                                  |
-| --------- | ----------------- | ------------------------------------- |
-| `visible` | `Signal<boolean>` | 현재 패널이 펼쳐져 있는지 나타냅니다. |
-
-<!--
-#### Methods
--->
-
-<a id="methods-2"></a>
-
-#### 메서드
-
-<!--
-| Method     | Parameters | Description                 |
-| ---------- | ---------- | --------------------------- |
-| `expand`   | none       | Expands this panel          |
-| `collapse` | none       | Collapses this panel        |
-| `toggle`   | none       | Toggles the expansion state |
--->
-
-| 메서드     | 인자 | 설명                    |
-| ---------- | ---- | ----------------------- |
-| `expand`   | 없음 | 이 패널을 펼칩니다.     |
-| `collapse` | 없음 | 이 패널을 접습니다.     |
-| `toggle`   | 없음 | 펼침 상태를 전환합니다. |
-
-<!--
-### AccordionContent
--->
-
-<a id="accordioncontent"></a>
-
-### AccordionContent
-
-<!--
-The structural directive applied to an `ng-template` inside an accordion panel to enable lazy rendering.
-
-This directive has no inputs, outputs, or methods. Apply it to an `ng-template` element:
-
-```angular-html
-<div ngAccordionPanel #panel1="ngAccordionPanel">
-  <ng-template ngAccordionContent>
-    <!- Content here is lazily rendered ->
-  </ng-template>
-</div>
-```
--->
-
-아코디언 패널 안의 `ng-template`에 적용해서 지연 렌더링을 활성화하는 구조 디렉티브입니다.
-
-이 디렉티브에는 입력 프로퍼티, 출력 프로퍼티, 메서드가 없습니다.
-`ng-template` 엘리먼트에 다음과 같이 적용합니다.
-
-```angular-html
-<div ngAccordionPanel #panel1="ngAccordionPanel">
-  <ng-template ngAccordionContent>
-    <!-- 이 콘텐츠는 지연 렌더링됩니다. -->
-  </ng-template>
-</div>
-```
+- [`AccordionGroup`](/api/aria/accordion/AccordionGroup)
+- [`AccordionTrigger`](/api/aria/accordion/AccordionTrigger)
+- [`AccordionPanel`](/api/aria/accordion/AccordionPanel)
+- [`AccordionContent`](/api/aria/accordion/AccordionContent)

@@ -26,13 +26,6 @@ import SIGNAL_FORMS_TUTORIAL_NAV_DATA from '../../../content/tutorials/signal-fo
 // @ts-ignore
 import API_MANIFEST_JSON from '../../../assets/manifest.json' with {type: 'json'};
 
-interface SubNavigationData {
-  docs: NavigationItem[];
-  reference: NavigationItem[];
-  tutorials: NavigationItem[];
-  footer: NavigationItem[];
-}
-
 export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
   {
     // label: 'Introduction',
@@ -310,6 +303,13 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/templates/defer',
           },
           {
+            // label: 'Error boundaries with @boundary',
+            label: '@boundary로 오류 경계 설정하기',
+            path: 'guide/templates/error-boundaries',
+            contentPath: 'guide/templates/error-boundaries',
+            status: 'new',
+          },
+          {
             // label: 'Expression syntax',
             label: '표현식 문법',
             path: 'guide/templates/expression-syntax',
@@ -369,14 +369,12 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             label: '개요',
             path: 'guide/di',
             contentPath: 'guide/di/overview',
-            status: 'updated',
           },
           {
             // label: 'Creating and using services',
             label: '서비스 생성하기, 활용하기',
             path: 'guide/di/creating-and-using-services',
             contentPath: 'guide/di/creating-and-using-services',
-            status: 'updated',
           },
           {
             // label: 'Lazy loading services',
@@ -390,7 +388,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             label: '프로바이더 정의하기',
             path: 'guide/di/defining-dependency-providers',
             contentPath: 'guide/di/defining-dependency-providers',
-            status: 'updated',
           },
           {
             // label: 'Injection context',
@@ -428,7 +425,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
       {
         // label: 'Routing',
         label: '라우팅',
-        status: 'updated',
         children: [
           {
             // label: 'Overview',
@@ -485,6 +481,13 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/routing/data-resolvers',
           },
           {
+            // label: 'Data fetching with resources',
+            label: '리소스로 데이터 가져오기',
+            path: 'guide/routing/data-fetching-with-resources',
+            contentPath: 'guide/routing/data-fetching-with-resources',
+            status: 'new',
+          },
+          {
             // label: 'Lifecycle and events',
             label: '라우팅 과정, 라우팅 이벤트',
             path: 'guide/routing/lifecycle-and-events',
@@ -495,7 +498,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             label: '라우팅, 네비게이션 테스트',
             path: 'guide/routing/testing',
             contentPath: 'guide/routing/testing',
-            status: 'new',
           },
           {
             // label: 'Other routing tasks',
@@ -514,14 +516,12 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             label: '렌더링 정책',
             path: 'guide/routing/rendering-strategies',
             contentPath: 'guide/routing/rendering-strategies',
-            status: 'new',
           },
           {
             // label: 'Customizing route behavior',
             label: '라우팅 동작 커스터마이징하기',
             path: 'guide/routing/customizing-route-behavior',
             contentPath: 'guide/routing/customizing-route-behavior',
-            status: 'new',
           },
           {
             // label: 'Router reference',
@@ -542,6 +542,11 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: '폼',
         status: 'updated',
         preserveOtherCategoryOrder: true,
+        categoriesStatus: [
+          {
+            'Signal Forms': 'new',
+          },
+        ],
         children: [
           {
             // label: 'Overview',
@@ -557,7 +562,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/overview',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Form models',
@@ -566,7 +570,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/models',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Form model design',
@@ -575,7 +578,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/designing-your-form-model',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Field state management',
@@ -584,7 +586,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/field-state-management',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Validation',
@@ -593,7 +594,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/validation',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Form logic',
@@ -602,7 +602,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/form-logic',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Cross-field logic',
@@ -611,7 +610,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/cross-field-logic',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Form submission',
@@ -620,7 +618,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/form-submission',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Schemas',
@@ -629,7 +626,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/schemas',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Field metadata',
@@ -638,7 +634,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/field-metadata',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Async operations',
@@ -647,7 +642,14 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/async-operations',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
+          },
+          {
+            // label: 'Dynamic forms with JSON',
+            label: 'JSON으로 동적 폼 구성하기',
+            path: 'guide/forms/signals/dynamic-forms-with-json',
+            contentPath: 'guide/forms/signals/dynamic-forms-with-json',
+            // category: 'Signal Forms',
+            category: '시그널 폼',
           },
           {
             // label: 'Custom controls',
@@ -656,7 +658,14 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/custom-controls',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
+          },
+          {
+            // label: 'Testing',
+            label: '테스트',
+            path: 'guide/forms/signals/testing',
+            contentPath: 'guide/forms/signals/testing',
+            // category: 'Signal Forms',
+            category: '시그널 폼',
           },
           {
             // label: 'Comparison with other form systems',
@@ -665,7 +674,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/comparison',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Migrating from Reactive Forms',
@@ -674,7 +682,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             contentPath: 'guide/forms/signals/migration',
             // category: 'Signal Forms',
             category: '시그널 폼',
-            status: 'new',
           },
           {
             // label: 'Reactive forms',
@@ -721,7 +728,8 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             label: '동적 폼 구성하기',
             path: 'guide/forms/dynamic-forms',
             contentPath: 'guide/forms/dynamic-forms',
-            category: 'Reactive Forms',
+            // category: 'Reactive Forms',
+            category: '반응형 폼',
           },
         ],
       },
@@ -1067,14 +1075,12 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
       {
         // label: 'Animations',
         label: '애니메이션',
-        status: 'updated',
         children: [
           {
             // label: 'Enter and Leave animations',
             label: '진입/복귀 애니메이션',
             path: 'guide/animations',
             contentPath: 'guide/animations/enter-and-leave',
-            status: 'new',
           },
           {
             // label: 'Complex Animations with CSS',
@@ -1334,7 +1340,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: '스타일 가이드',
         path: 'style-guide',
         contentPath: 'best-practices/style-guide',
-        status: 'updated',
       },
       {
         // label: 'Security',
@@ -1625,7 +1630,6 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: 'Tailwind',
         path: 'guide/tailwind',
         contentPath: 'guide/tailwind',
-        status: 'new',
       },
       {
         label: 'Angular Fire',
@@ -1697,7 +1701,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     preserveOtherCategoryOrder: true,
     children: [
       {
-        label: 'Overview',
+        // label: 'Overview',
+        label: '개요',
         path: 'api',
       },
       ...getApiNavigationItems(),
@@ -1707,7 +1712,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     label: 'CLI Reference',
     children: [
       {
-        label: 'Overview',
+        // label: 'Overview',
+        label: '개요',
         path: 'cli',
         contentPath: 'reference/cli',
       },
@@ -1719,7 +1725,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: 'ng analytics',
         children: [
           {
-            label: 'Overview',
+            // label: 'Overview',
+            label: '개요',
             path: 'cli/analytics',
           },
           {
@@ -1748,7 +1755,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: 'ng cache',
         children: [
           {
-            label: 'Overview',
+            // label: 'Overview',
+            label: '개요',
             path: 'cli/cache',
           },
           {
@@ -1773,7 +1781,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: 'ng completion',
         children: [
           {
-            label: 'Overview',
+            // label: 'Overview',
+            label: '개요',
             path: 'cli/completion',
           },
           {
@@ -1802,7 +1811,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: 'ng generate',
         children: [
           {
-            label: 'Overview',
+            // label: 'Overview',
+            label: '개요',
             path: 'cli/generate',
           },
           {
@@ -1917,7 +1927,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     label: 'Error Encyclopedia',
     children: [
       {
-        label: 'Overview',
+        // label: 'Overview',
+        label: '개요',
         path: 'errors',
         contentPath: 'reference/errors/overview',
       },
@@ -1928,7 +1939,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     label: 'Extended Diagnostics',
     children: [
       {
-        label: 'Overview',
+        // label: 'Overview',
+        label: '개요',
         path: 'extended-diagnostics',
         contentPath: 'reference/extended-diagnostics/overview',
       },
@@ -1978,7 +1990,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     label: 'Migrations',
     children: [
       {
-        label: 'Overview',
+        // label: 'Overview',
+        label: '개요',
         path: 'reference/migrations',
         contentPath: 'reference/migrations/overview',
       },
@@ -1998,7 +2011,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         contentPath: 'reference/migrations/inject-function',
       },
       {
-        label: 'Lazy-loaded routes',
+        // label: 'Lazy-loaded routes',
+        label: '라우팅 규칙 지연 로딩',
         path: 'reference/migrations/route-lazy-loading',
         contentPath: 'reference/migrations/route-lazy-loading',
       },
@@ -2031,25 +2045,26 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         label: 'NgClass to Class',
         path: 'reference/migrations/ngclass-to-class',
         contentPath: 'reference/migrations/ngclass-to-class',
-        status: 'new',
       },
       {
         label: 'NgStyle to Style',
         path: 'reference/migrations/ngstyle-to-style',
         contentPath: 'reference/migrations/ngstyle-to-style',
-        status: 'new',
       },
       {
         label: 'Router Testing Module Migration',
         path: 'reference/migrations/router-testing-module-migration',
         contentPath: 'reference/migrations/router-testing-module-migration',
-        status: 'new',
       },
       {
         label: 'CommonModule to Standalone',
         path: 'reference/migrations/common-to-standalone',
         contentPath: 'reference/migrations/common-to-standalone',
-        status: 'new',
+      },
+      {
+        label: 'Injectable to Service',
+        path: 'reference/migrations/injectable-to-service',
+        contentPath: 'reference/migrations/injectable-to-service',
       },
     ],
   },
@@ -2075,15 +2090,21 @@ export const ALL_ITEMS = [
   ...TUTORIALS_SUB_NAVIGATION_DATA,
 ];
 
+interface ApiManifestPackage {
+  normalizedModuleName: string;
+  moduleLabel: string;
+  entries: {name: string; category: string | undefined}[];
+}
+
 function getApiNavigationItems(): NavigationItem[] {
-  const manifest = API_MANIFEST_JSON as any; // TODO(mri): Use proper type when the refactoring of #66252 gets in.
+  const manifest = API_MANIFEST_JSON as ApiManifestPackage[];
 
   const apiNavigationItems: NavigationItem[] = [];
 
   for (const packageEntry of manifest) {
     const packageNavigationItem: NavigationItem = {
       label: packageEntry.moduleLabel,
-      children: packageEntry.entries.map((api: any) => ({
+      children: packageEntry.entries.map((api) => ({
         path: getApiUrl(packageEntry, api.name),
         label: api.name,
         category: api.category,
@@ -2096,7 +2117,7 @@ function getApiNavigationItems(): NavigationItem[] {
   return apiNavigationItems;
 }
 
-function getApiUrl(packageEntry: any, apiName: string): string {
+function getApiUrl(packageEntry: ApiManifestPackage, apiName: string): string {
   const packageName = packageEntry.normalizedModuleName
     // packages like `angular_core` should be `core`
     // packages like `angular_animation_browser` should be `animation/browser`

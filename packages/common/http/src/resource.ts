@@ -299,8 +299,7 @@ function normalizeRequest(
       ? unwrappedRequest.headers
       : new HttpHeaders(
           unwrappedRequest.headers as
-            | Record<string, string | number | Array<string | number>>
-            | undefined,
+            Record<string, string | number | Array<string | number>> | undefined,
         );
 
   const params =
@@ -315,7 +314,7 @@ function normalizeRequest(
     {
       headers,
       params,
-      reportProgress: unwrappedRequest.reportProgress,
+      reportDownloadProgress: unwrappedRequest.reportProgress,
       withCredentials: unwrappedRequest.withCredentials,
       keepalive: unwrappedRequest.keepalive,
       cache: unwrappedRequest.cache as RequestCache,
@@ -376,13 +375,13 @@ class HttpResourceImpl<T>
         // is subscribe even if it isn't initialized yet.
         let aborted = false;
 
-        // Track the abort listener so it can be removed if the Observable completes (as a memory
-        // optimization).
+        // `once: true`: calling unsubscribe() here (on abort) doesn't trigger the error/complete
+        // callbacks below, so without it this listener wouldn't get removed on the abort path.
         const onAbort = () => {
           aborted = true;
           sub?.unsubscribe();
         };
-        abortSignal.addEventListener('abort', onAbort);
+        abortSignal.addEventListener('abort', onAbort, {once: true});
 
         // Start off stream as undefined.
         const stream = signal<ResourceStreamItem<T>>({value: undefined as T});

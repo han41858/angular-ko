@@ -356,12 +356,12 @@ When serving your Angular application, the server should include a randomly-gene
 You must provide this nonce to Angular so that the framework can render `<style>` elements.
 You can set the nonce for Angular in one of the following ways:
 
-1. Set the `autoCsp` option to `true` the [workspace configuration](reference/configs/workspace-config#extra-build-and-test-options).
 1. Set the `ngCspNonce` attribute on the root application element as `<app ngCspNonce="randomNonceGoesHere"></app>`. Use this approach if you have access to server-side templating that can add the nonce both to the header and the `index.html` when constructing the response.
 1. Provide the nonce using the `CSP_NONCE` injection token. Use this approach if you have access to the nonce at runtime and you want to be able to cache the `index.html`.
 
 ```ts
-import {bootstrapApplication, CSP_NONCE} from '@angular/core';
+import {CSP_NONCE} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
 import {AppComponent} from './app/app.component';
 
 bootstrapApplication(AppComponent, {
@@ -385,15 +385,15 @@ To maintain the "one-time-use" integrity of a nonce, it should ideally be genera
 
 </docs-callout>
 
-NOTE: If you want to [inline the critical CSS](/tools/cli/build#critical-css-inlining) of your application, you can not use the `CSP_NONCE` token, and should prefer the `autoCsp` option or set the `ngCspNonce` attribute on the root application element.
+NOTE: If you want to [inline the critical CSS](/tools/cli/build#critical-css-inlining) of your application, you can not use the `CSP_NONCE` token, and should prefer the `security.autoCsp` option in the [workspace configuration](reference/configs/workspace-config#extra-build-and-test-options) or set the `ngCspNonce` attribute on the root application element.
 
 If you cannot generate nonces in your project, you can allow inline styles by adding `'unsafe-inline'` to the `style-src` section of the CSP header.
 
-| Sections                                         | Details                                                                                                                                                                                                         |
-| :----------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default-src 'self';`                            | Allows the page to load all its required resources from the same origin.                                                                                                                                        |
-| `style-src 'self' 'nonce-randomNonceGoesHere';`  | Allows the page to load global styles from the same origin \(`'self'`\) and styles inserted by Angular with the `nonce-randomNonceGoesHere`.                                                                    |
-| `script-src 'self' 'nonce-randomNonceGoesHere';` | Allows the page to load JavaScript from the same origin \(`'self'`\) and scripts inserted by the Angular CLI with the `nonce-randomNonceGoesHere`. This is only required if you're using critical CSS inlining. |
+| Sections                                         | Details                                                                                                                                                                                                                                                                                                                                                  |
+| :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default-src 'self';`                            | Allows the page to load all its required resources from the same origin.                                                                                                                                                                                                                                                                                 |
+| `style-src 'self' 'nonce-randomNonceGoesHere';`  | Allows the page to load global styles from the same origin \(`'self'`\) and styles inserted by Angular with the `nonce-randomNonceGoesHere`.                                                                                                                                                                                                             |
+| `script-src 'self' 'nonce-randomNonceGoesHere';` | Allows the page to load JavaScript from the same origin \(`'self'`\) and scripts inserted by the Angular CLI with the `nonce-randomNonceGoesHere`. Required only when you enable critical CSS inlining or subresource integrity (which injects an import map to validate dynamically imported chunks), both of which add inline scripts to `index.html`. |
 
 Angular itself requires only these settings to function correctly.
 As your project grows, you may need to expand your CSP settings to accommodate extra features specific to your application.
@@ -413,14 +413,14 @@ Angular 애플리케이션을 제공할 때 서버는 요청마다 무작위로 
 프레임워크가 `<style>` 엘리먼트를 렌더링할 수 있도록 이 nonce를 Angular에 제공해야 합니다.
 다음 방법 중 하나로 Angular에 nonce를 설정할 수 있습니다.
 
-1. [작업 공간 설정](reference/configs/workspace-config#extra-build-and-test-options)에서 `autoCsp` 옵션을 `true`로 설정합니다.
 1. 최상위 애플리케이션 엘리먼트에 `<app ngCspNonce="randomNonceGoesHere"></app>`와 같이 `ngCspNonce` 어트리뷰트를 지정합니다.
    응답을 구성할 때 헤더와 `index.html` 모두에 nonce를 추가할 수 있는 서버 측 템플릿 기능을 사용할 수 있다면 이 방식을 사용하세요.
 1. `CSP_NONCE` 주입 토큰으로 nonce를 제공합니다.
    런타임에 nonce에 접근할 수 있고 `index.html`을 캐시하려는 경우 이 방식을 사용하세요.
 
 ```ts
-import {bootstrapApplication, CSP_NONCE} from '@angular/core';
+import {CSP_NONCE} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
 import {AppComponent} from './app/app.component';
 
 bootstrapApplication(AppComponent, {
@@ -447,18 +447,122 @@ nonce의 "일회용" 속성을 유지하려면 콘텐츠가 사용자에게 전�
 </docs-callout>
 
 참고: 애플리케이션의 [핵심 CSS를 인라인으로 포함](/tools/cli/build#critical-css-inlining)하려면 `CSP_NONCE` 토큰을 사용할 수 없습니다.
-`autoCsp` 옵션을 사용하거나 최상위 애플리케이션 엘리먼트에 `ngCspNonce` 어트리뷰트를 설정하세요.
+이 경우 [워크스페이스 설정](reference/configs/workspace-config#extra-build-and-test-options)의 `security.autoCsp` 옵션을 사용하거나 최상위 애플리케이션 엘리먼트에 `ngCspNonce` 어트리뷰트를 설정하세요.
 
 프로젝트에서 nonce를 생성할 수 없다면 CSP 헤더의 `style-src` 항목에 `'unsafe-inline'`을 추가해 인라인 스타일을 허용할 수 있습니다.
 
-| 항목                                             | 설명                                                                                                                                                                                               |
-| :----------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default-src 'self';`                            | 페이지가 필요한 모든 리소스를 동일 출처에서 불러올 수 있도록 허용합니다.                                                                                                                           |
-| `style-src 'self' 'nonce-randomNonceGoesHere';`  | 페이지가 동일 출처(`'self'`)의 전역 스타일과 Angular가 `nonce-randomNonceGoesHere`를 사용해 삽입한 스타일을 불러올 수 있도록 허용합니다.                                                           |
-| `script-src 'self' 'nonce-randomNonceGoesHere';` | 페이지가 동일 출처(`'self'`)의 JavaScript와 Angular CLI가 `nonce-randomNonceGoesHere`를 사용해 삽입한 스크립트를 불러올 수 있도록 허용합니다. 핵심 CSS 인라인 기능을 사용하는 경우에만 필요합니다. |
+| 항목                                             | 설명                                                                                                                                                                                                                                                                                                                                                              |
+| :----------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default-src 'self';`                            | 페이지가 필요한 모든 리소스를 동일 출처에서 불러올 수 있도록 허용합니다.                                                                                                                                                                                                                                                                                          |
+| `style-src 'self' 'nonce-randomNonceGoesHere';`  | 페이지가 동일 출처(`'self'`)의 전역 스타일과 Angular가 `nonce-randomNonceGoesHere`를 사용해 삽입한 스타일을 불러올 수 있도록 허용합니다.                                                                                                                                                                                                                          |
+| `script-src 'self' 'nonce-randomNonceGoesHere';` | 페이지가 동일 출처(`'self'`)의 JavaScript와 Angular CLI가 `nonce-randomNonceGoesHere`를 사용해 삽입한 스크립트를 불러올 수 있도록 허용합니다. 중요 CSS 인라인 처리 또는 하위 리소스 무결성을 활성화한 경우에만 필요합니다. 하위 리소스 무결성은 동적으로 불러오는 청크를 검증하는 임포트 맵을 삽입하며, 두 기능 모두 `index.html`에 인라인 스크립트를 추가합니다. |
 
 Angular 자체는 이 설정만 있으면 정상적으로 동작합니다.
 프로젝트가 커지면 애플리케이션에 특화된 추가 기능을 지원하도록 CSP 설정을 확장해야 할 수 있습니다.
+
+<!--
+#### Static hosting without per-response nonces
+
+If your hosting environment or CDN can replace a placeholder token in cached HTML at the edge (for example, using SSI, ESI, or an edge function), you can build `index.html` with a placeholder in `ngCspNonce` (such as `<app ngCspNonce="__CSP_NONCE__"></app>`) and replace it with a unique nonce on each response.
+
+If you deploy your application to a static host that serves `index.html` unchanged without edge transformation, do not hard-code a static nonce. Instead, use one of the following approaches:
+
+##### Hash inline scripts with `autoCsp`
+
+Set the `security.autoCsp` option to `true` in the [workspace configuration](reference/configs/workspace-config#extra-build-and-test-options).
+At build time, the Angular CLI computes a hash of every inline script in `index.html`, including the scripts added by critical CSS inlining and subresource integrity.
+The CLI replaces the `<script src>` elements with a hashed loader script and adds a `<meta>` tag at the start of `<head>`:
+
+```txt
+script-src 'strict-dynamic' 'sha256-...' https: 'unsafe-inline'; object-src 'none'; base-uri 'self';
+```
+
+Because hashes depend only on the content of the scripts, `index.html` remains valid for every visitor and can be cached.
+Browsers that support hashes and `'strict-dynamic'` ignore the `https:` and `'unsafe-inline'` fallback sources.
+
+The policy generated by `autoCsp` has the following limitations:
+
+- It only covers scripts. You must configure `style-src` separately.
+- Browsers ignore some directives, such as `frame-ancestors`, `report-uri`, and `sandbox`, when they appear in a `<meta>` tag. Send these directives in a `Content-Security-Policy` HTTP header.
+- When a page has multiple policies, the browser enforces all of them. If you also send a CSP header, omit both `script-src` and `default-src` from the header so they do not block the hashed inline scripts.
+- You cannot use `autoCsp` with server-side rendering.
+
+##### Avoid inline scripts
+
+The Angular CLI only adds inline scripts to `index.html` for critical CSS inlining and subresource integrity (which emits an import map to carry integrity metadata for dynamic module imports).
+If you set `optimization.styles.inlineCritical` to `false` and leave `subresourceIntegrity` disabled, `index.html` does not contain inline scripts. You can then configure a `Content-Security-Policy` header with `script-src 'self'`.
+
+NOTE: Disabling critical CSS inlining can slow down the initial render of your application, and disabling subresource integrity removes script integrity checks.
+
+##### Configure styles for static hosting
+
+Angular inserts `<style>` elements for component styles at runtime, and critical CSS inlining adds a `<style>` element to `index.html`.
+Neither `autoCsp` nor disabling inline scripts covers these styles. Without a per-response nonce, allow them by adding `'unsafe-inline'` to `style-src`.
+For example, if your build avoids inline scripts, configure your host to send the following header:
+
+```txt
+default-src 'self'; style-src 'self' 'unsafe-inline';
+```
+
+If you use `autoCsp`, send `style-src 'self' 'unsafe-inline'` in the HTTP header without `default-src` or `script-src`.
+
+Your application code and third-party libraries might require additional directives in both cases.
+-->
+
+<a id="static-hosting-without-per-response-nonces"></a>
+
+#### 응답마다 nonce를 만들 수 없는 정적 호스팅
+
+호스팅 환경이나 CDN이 SSI, ESI, 엣지 함수 등으로 캐시된 HTML의 플레이스홀더를 교체할 수 있다면, `ngCspNonce`에 플레이스홀더를 넣어 `index.html`을 빌드할 수 있습니다. 예를 들어 `<app ngCspNonce="__CSP_NONCE__"></app>`을 사용하고, 응답마다 고유한 nonce로 교체합니다.
+
+엣지에서 변환하지 않고 `index.html`을 그대로 제공하는 정적 호스트에 배포한다면 고정된 nonce를 하드코딩하지 마세요. 대신 다음 방법 중 하나를 사용하세요.
+
+<a id="hash-inline-scripts-with-autocsp"></a>
+
+##### `autoCsp`로 인라인 스크립트 해시 생성하기
+
+[워크스페이스 설정](reference/configs/workspace-config#extra-build-and-test-options)에서 `security.autoCsp` 옵션을 `true`로 설정하세요.
+Angular CLI는 빌드 시 `index.html`의 모든 인라인 스크립트에 대해 해시를 계산합니다. 중요 CSS 인라인 처리와 하위 리소스 무결성 기능이 추가한 스크립트도 포함합니다.
+CLI는 `<script src>` 엘리먼트를 해시가 있는 로더 스크립트로 교체하고, `<head>` 시작 부분에 다음 정책을 담은 `<meta>` 태그를 추가합니다.
+
+```txt
+script-src 'strict-dynamic' 'sha256-...' https: 'unsafe-inline'; object-src 'none'; base-uri 'self';
+```
+
+해시는 스크립트 내용에만 의존하므로 `index.html`은 모든 방문자에게 유효하며 캐시할 수 있습니다.
+해시와 `'strict-dynamic'`을 지원하는 브라우저는 대체 소스인 `https:`와 `'unsafe-inline'`을 무시합니다.
+
+`autoCsp`가 생성하는 정책에는 다음과 같은 제약이 있습니다.
+
+- 스크립트에만 적용됩니다. `style-src`는 별도로 설정해야 합니다.
+- 브라우저는 `<meta>` 태그에 포함된 `frame-ancestors`, `report-uri`, `sandbox` 등의 일부 지시자를 무시합니다. 이러한 지시자는 `Content-Security-Policy` HTTP 헤더로 전달하세요.
+- 페이지에 여러 정책이 있으면 브라우저는 모든 정책을 적용합니다. CSP 헤더도 함께 전송한다면 해시가 있는 인라인 스크립트를 차단하지 않도록 헤더에서 `script-src`와 `default-src`를 모두 생략하세요.
+- `autoCsp`는 서버 사이드 렌더링과 함께 사용할 수 없습니다.
+
+<a id="avoid-inline-scripts"></a>
+
+##### 인라인 스크립트 사용하지 않기
+
+Angular CLI는 중요 CSS 인라인 처리와 하위 리소스 무결성을 위해서만 `index.html`에 인라인 스크립트를 추가합니다. 하위 리소스 무결성 기능은 동적 모듈 임포트의 무결성 메타데이터를 전달하는 임포트 맵을 생성합니다.
+`optimization.styles.inlineCritical`을 `false`로 설정하고 `subresourceIntegrity`를 비활성화한 상태로 유지하면 `index.html`에 인라인 스크립트가 포함되지 않습니다. 이때 `script-src 'self'`를 사용하는 `Content-Security-Policy` 헤더를 설정할 수 있습니다.
+
+참고: 중요 CSS 인라인 처리를 비활성화하면 애플리케이션의 초기 렌더링이 느려질 수 있으며, 하위 리소스 무결성을 비활성화하면 스크립트 무결성 검사가 제거됩니다.
+
+<a id="configure-styles-for-static-hosting"></a>
+
+##### 정적 호스팅에 맞게 스타일 설정하기
+
+Angular는 실행 중에 컴포넌트 스타일용 `<style>` 엘리먼트를 삽입하며, 중요 CSS 인라인 처리는 `index.html`에 `<style>` 엘리먼트를 추가합니다.
+`autoCsp`를 사용하거나 인라인 스크립트를 비활성화해도 이 스타일에는 적용되지 않습니다. 응답별 nonce가 없다면 `style-src`에 `'unsafe-inline'`을 추가해 허용하세요.
+예를 들어 인라인 스크립트를 사용하지 않는 빌드라면 호스트가 다음 헤더를 보내도록 설정하세요.
+
+```txt
+default-src 'self'; style-src 'self' 'unsafe-inline';
+```
+
+`autoCsp`를 사용한다면 HTTP 헤더에 `default-src`나 `script-src` 없이 `style-src 'self' 'unsafe-inline'`을 보내세요.
+
+두 경우 모두 애플리케이션 코드와 서드 파티 라이브러리에 따라 추가 지시자가 필요할 수 있습니다.
 
 <!--
 ### Enforcing Trusted Types
@@ -723,6 +827,8 @@ The malicious code on `evil.com` can't.
 
 <a id="httpclient-xsrfcsrf-security"></a>
 
+<a id="httpclient-xsrf-csrf-security"></a>
+
 ### `HttpClient`의 XSRF/CSRF 보안
 
 <!--
@@ -772,6 +878,8 @@ CSRF 공격은 본질적으로 도메인 경계를 넘으며, 웹의 [동일 출
 -->
 
 <a id="configure-custom-cookieheader-names"></a>
+
+<a id="configure-custom-cookie-header-names"></a>
 
 ### 커스텀 쿠키와 헤더 이름 설정하기
 
@@ -887,30 +995,30 @@ Angular의 `HttpClient` 라이브러리는 이 관례를 인식하고, 모든 �
 ## 서버 측 요청 위조(SSRF) 방지하기
 
 <!--
-Angular includes strict validation for `Host`, `X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-Prefix` and `X-Forwarded-Port` headers in the request handling pipeline to prevent header-based [Server-Side Request Forgery (SSRF)](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/SSRF).
+Angular includes strict validation for `Host`, `Forwarded`, `X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-Prefix`, and `X-Forwarded-Port` headers in the request handling pipeline to prevent header-based [Server-Side Request Forgery (SSRF)](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/SSRF).
 
 The validation rules are:
 
-- `Host` and `X-Forwarded-Host` headers are validated against a strict allowlist and cannot contain path separators.
+- `Host`, `X-Forwarded-Host`, and the `host` parameter of the `Forwarded` header are validated against a strict allowlist and cannot contain path separators.
 - `X-Forwarded-Port` header must be numeric.
-- `X-Forwarded-Proto` header must be `http` or `https`.
+- `X-Forwarded-Proto` header and the `proto` parameter of the `Forwarded` header must be `http` or `https`.
 - `X-Forwarded-Prefix` header must start with `/` and contain only alphanumeric characters, hyphens, and underscores, separated by single slashes.
-- By default, all `X-Forwarded-*` headers are treated as untrusted and are removed from the request. To retain them, they must be explicitly allowed by configuring `trustProxyHeaders`.
+- By default, the `Forwarded` header and all `X-Forwarded-*` headers are treated as untrusted and are removed from the request. To retain them, they must be explicitly allowed by configuring `trustProxyHeaders`.
 
-Invalid headers trigger an error log, and unallowed proxy headers are removed from the request. Requests with unrecognized hostnames will result in a `400 Bad Request` is issued.
+Invalid headers trigger an error log, and unallowed proxy headers are removed from the request. Requests with unrecognized hostnames will result in a `400 Bad Request`.
 
 NOTE: Most cloud providers and CDN providers perform automatic validation of these headers before a request ever reaches the application origin. This inherent filtering significantly reduces the practical attack surface.
 -->
 
-Angular는 헤더 기반 [서버 측 요청 위조(SSRF)](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/SSRF)를 방지하기 위해 요청 처리 과정에서 `Host`, `X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-Prefix`, `X-Forwarded-Port` 헤더를 엄격하게 검증합니다.
+Angular는 헤더 기반 [서버 측 요청 위조(SSRF)](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/SSRF)를 방지하기 위해 요청 처리 과정에서 `Host`, `Forwarded`, `X-Forwarded-Host`, `X-Forwarded-Proto`, `X-Forwarded-Prefix`, `X-Forwarded-Port` 헤더를 엄격하게 검증합니다.
 
 검증 규칙은 다음과 같습니다.
 
-- `Host`와 `X-Forwarded-Host` 헤더는 엄격한 허용 목록으로 검증하며, 경로 구분자를 포함할 수 없습니다.
+- `Host`, `X-Forwarded-Host` 헤더와 `Forwarded` 헤더의 `host` 파라미터는 엄격한 허용 목록으로 검증하며, 경로 구분자를 포함할 수 없습니다.
 - `X-Forwarded-Port` 헤더는 숫자여야 합니다.
-- `X-Forwarded-Proto` 헤더는 `http` 또는 `https`여야 합니다.
+- `X-Forwarded-Proto` 헤더와 `Forwarded` 헤더의 `proto` 파라미터는 `http` 또는 `https`여야 합니다.
 - `X-Forwarded-Prefix` 헤더는 `/`로 시작해야 하며, 단일 슬래시로 구분된 영문자·숫자·하이픈·밑줄만 포함할 수 있습니다.
-- 기본적으로 모든 `X-Forwarded-*` 헤더는 신뢰할 수 없다고 취급되어 요청에서 제거됩니다.
+- 기본적으로 `Forwarded` 헤더와 모든 `X-Forwarded-*` 헤더는 신뢰할 수 없다고 취급되어 요청에서 제거됩니다.
   유지하려면 `trustProxyHeaders` 설정으로 명시적으로 허용해야 합니다.
 
 유효하지 않은 헤더는 에러 로그를 발생시키며, 허용되지 않은 프록시 헤더는 요청에서 제거됩니다.
@@ -1042,21 +1150,27 @@ export NG_ALLOWED_HOSTS="example.com,*.trusted-example.com"
 ### 신뢰할 프록시 헤더 설정하기
 
 <!--
-By default, Angular ignores all `X-Forwarded-*` headers. If your application is behind a trusted reverse proxy (like a load balancer) that sets these headers, you can configure Angular to trust them.
+By default, Angular ignores the standard `Forwarded` header and all `X-Forwarded-*` headers. If your application is behind a trusted reverse proxy (like a load balancer) that sets these headers, you can configure Angular to trust them.
+
+If the `Forwarded` header is trusted, its `host` and `proto` parameters are extracted and take precedence over the corresponding `x-forwarded-host` and `x-forwarded-proto` headers.
 
 You can configure `trustProxyHeaders` when initializing the application engine:
 
 ```typescript
 const appEngine = new AngularAppEngine({
-  trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto'], // Trust specific headers
+  trustProxyHeaders: ['forwarded'], // Trust the standard Forwarded header
+});
+
+const appEngine = new AngularAppEngine({
+  trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto'], // Trust non-standard headers
 });
 
 const nodeAppEngine = new AngularNodeAppEngine({
-  trustProxyHeaders: true, // Trust all X-Forwarded-* headers
+  trustProxyHeaders: true, // Trust standard Forwarded and all X-Forwarded-* headers
 });
 ```
 
-For the Node.js variant `AngularNodeAppEngine`, you can also provide the `NG_TRUST_PROXY_HEADERS` environment variable (with comma-separated list of headers as a value) to allow the usage of these headers.
+For the Node.js variant `AngularNodeAppEngine`, you can also provide the `NG_TRUST_PROXY_HEADERS` environment variable (with a comma-separated list of headers as a value) to allow the usage of these headers.
 
 ```bash {hideDollar}
 export NG_TRUST_PROXY_HEADERS="X-FORWARDED-HOST,X-FORWARDED-PREFIX"
@@ -1065,18 +1179,24 @@ export NG_TRUST_PROXY_HEADERS="X-FORWARDED-HOST,X-FORWARDED-PREFIX"
 IMPORTANT: Only enable `trustProxyHeaders` if your application is behind a trusted proxy that strictly validates or overrides these headers. Otherwise, attackers can spoof these headers to cause [Server-Side Request Forgery (SSRF)](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/SSRF) attacks.
 -->
 
-Angular는 기본적으로 모든 `X-Forwarded-*` 헤더를 무시합니다.
+Angular는 기본적으로 표준 `Forwarded` 헤더와 모든 `X-Forwarded-*` 헤더를 무시합니다.
 애플리케이션 앞에 이 헤더들을 설정하는 신뢰할 수 있는 리버스 프록시(예: 로드 밸런서)가 있다면, Angular가 해당 헤더를 신뢰하도록 설정할 수 있습니다.
+
+`Forwarded` 헤더를 신뢰하면 이 헤더에서 추출한 `host`와 `proto` 파라미터가 각각 `x-forwarded-host`, `x-forwarded-proto` 헤더보다 우선합니다.
 
 애플리케이션 엔진을 초기화할 때 `trustProxyHeaders`를 설정할 수 있습니다.
 
 ```typescript
 const appEngine = new AngularAppEngine({
-  trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto'], // 지정한 헤더를 신뢰합니다.
+  trustProxyHeaders: ['forwarded'], // 표준 Forwarded 헤더를 신뢰합니다.
+});
+
+const appEngine = new AngularAppEngine({
+  trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto'], // 비표준 헤더를 신뢰합니다.
 });
 
 const nodeAppEngine = new AngularNodeAppEngine({
-  trustProxyHeaders: true, // 모든 X-Forwarded-* 헤더를 신뢰합니다.
+  trustProxyHeaders: true, // 표준 Forwarded와 모든 X-Forwarded-* 헤더를 신뢰합니다.
 });
 ```
 

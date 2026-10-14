@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Listbox">
-</docs-decorative-header>
+# Listbox
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/" title="Listbox pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="리스트박스">
-</docs-decorative-header>
+# 리스트박스
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/" title="리스트박스 패턴"/>
@@ -436,209 +434,41 @@ describe('MyListboxComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Listbox`](/api/aria/listbox/Listbox)
+- [`Option`](/api/aria/listbox/Option)
+
+### Related patterns
+
+Listbox is used by these documented dropdown patterns:
+
+- [Select](guide/aria/select) - Single-selection dropdown pattern using readonly combobox + listbox
+- [Multiselect](guide/aria/multiselect) - Multiple-selection dropdown pattern using readonly combobox + listbox with `multi`
+- [Autocomplete](guide/aria/autocomplete) - Filterable dropdown pattern using combobox + listbox
+
+For complete dropdown patterns with trigger, popup, and overlay positioning, see those pattern guides instead of using listbox alone.
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### Listbox Directive
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="listbox-directive"></a>
+- [`Listbox`](/api/aria/listbox/Listbox)
+- [`Option`](/api/aria/listbox/Option)
 
-### Listbox 디렉티브
-
-<!--
-The `ngListbox` directive creates an accessible list of selectable options.
--->
-
-`ngListbox` 디렉티브는 접근성을 지원하는 선택 가능한 옵션 목록을 만듭니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property         | Type                               | Default      | Description                                  |
-| ---------------- | ---------------------------------- | ------------ | -------------------------------------------- |
-| `id`             | `string`                           | auto         | Unique identifier for the listbox            |
-| `multi`          | `boolean`                          | `false`      | Enables multiple selection                   |
-| `orientation`    | `'vertical'` \| `'horizontal'`     | `'vertical'` | Layout direction of the list                 |
-| `wrap`           | `boolean`                          | `true`       | Whether focus wraps at list edges            |
-| `selectionMode`  | `'follow'` \| `'explicit'`         | `'follow'`   | How selection is triggered                   |
-| `focusMode`      | `'roving'` \| `'activedescendant'` | `'roving'`   | Focus management strategy                    |
-| `softDisabled`   | `boolean`                          | `true`       | Whether disabled items are focusable         |
-| `disabled`       | `boolean`                          | `false`      | Disables the entire listbox                  |
-| `readonly`       | `boolean`                          | `false`      | Makes listbox readonly                       |
-| `typeaheadDelay` | `number`                           | `500`        | Milliseconds before type-ahead search resets |
--->
-
-| 프로퍼티         | 타입                               | 기본값       | 설명                                                  |
-| ---------------- | ---------------------------------- | ------------ | ----------------------------------------------------- |
-| `id`             | `string`                           | 자동 생성    | 리스트박스의 고유 식별자입니다.                       |
-| `multi`          | `boolean`                          | `false`      | 다중 선택을 활성화합니다.                             |
-| `orientation`    | `'vertical'` \| `'horizontal'`     | `'vertical'` | 목록의 배치 방향입니다.                               |
-| `wrap`           | `boolean`                          | `true`       | 목록의 끝에서 포커스를 순환할지 지정합니다.           |
-| `selectionMode`  | `'follow'` \| `'explicit'`         | `'follow'`   | 선택이 실행되는 방식입니다.                           |
-| `focusMode`      | `'roving'` \| `'activedescendant'` | `'roving'`   | 포커스 관리 전략입니다.                               |
-| `softDisabled`   | `boolean`                          | `true`       | 비활성화된 항목이 포커스를 받을 수 있는지 지정합니다. |
-| `disabled`       | `boolean`                          | `false`      | 전체 리스트박스를 비활성화합니다.                     |
-| `readonly`       | `boolean`                          | `false`      | 리스트박스를 읽기 전용으로 설정합니다.                |
-| `typeaheadDelay` | `number`                           | `500`        | 문자 입력 검색이 초기화되기까지의 시간입니다(밀리초). |
-
-<!--
-#### Model
--->
-
-<a id="model"></a>
-
-#### 모델
-
-<!--
-| Property | Type  | Description                               |
-| -------- | ----- | ----------------------------------------- |
-| `value`  | `V[]` | Two-way bindable array of selected values |
--->
-
-| 프로퍼티 | 타입  | 설명                                           |
-| -------- | ----- | ---------------------------------------------- |
-| `value`  | `V[]` | 양방향 바인딩이 가능한 선택된 값의 배열입니다. |
-
-<!--
-#### Signals
--->
-
-<a id="signals"></a>
-
-#### 시그널
-
-<!--
-| Property | Type          | Description                           |
-| -------- | ------------- | ------------------------------------- |
-| `value`  | `Signal<V[]>` | Currently selected values as a signal |
--->
-
-| 프로퍼티 | 타입          | 설명                                    |
-| -------- | ------------- | --------------------------------------- |
-| `value`  | `Signal<V[]>` | 현재 선택된 값을 나타내는 시그널입니다. |
-
-<!--
-#### Methods
--->
-
-<a id="methods"></a>
-
-#### 메서드
-
-<!--
-| Method                     | Parameters                        | Description                                |
-| -------------------------- | --------------------------------- | ------------------------------------------ |
-| `scrollActiveItemIntoView` | `options?: ScrollIntoViewOptions` | Scrolls the active item into view          |
-| `gotoFirst`                | none                              | Navigates to the first item in the listbox |
--->
-
-| 메서드                     | 인자                              | 설명                                      |
-| -------------------------- | --------------------------------- | ----------------------------------------- |
-| `scrollActiveItemIntoView` | `options?: ScrollIntoViewOptions` | 활성 항목이 보이도록 스크롤합니다.        |
-| `gotoFirst`                | 없음                              | 리스트박스의 첫 번째 항목으로 이동합니다. |
-
-<!--
-### Option Directive
--->
-
-<a id="option-directive"></a>
-
-### Option 디렉티브
-
-<!--
-The `ngOption` directive marks an item within a listbox.
--->
-
-`ngOption` 디렉티브는 리스트박스 안의 항목을 나타냅니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type      | Default | Description                                      |
-| ---------- | --------- | ------- | ------------------------------------------------ |
-| `id`       | `string`  | auto    | Unique identifier for the option                 |
-| `value`    | `V`       | -       | The value associated with this option (required) |
-| `label`    | `string`  | -       | Optional label for screen readers                |
-| `disabled` | `boolean` | `false` | Whether this option is disabled                  |
--->
-
-| 프로퍼티   | 타입      | 기본값    | 설명                                   |
-| ---------- | --------- | --------- | -------------------------------------- |
-| `id`       | `string`  | 자동 생성 | 옵션의 고유 식별자입니다.              |
-| `value`    | `V`       | -         | 이 옵션에 연결된 값입니다(필수).       |
-| `label`    | `string`  | -         | 스크린 리더용 레이블입니다(선택 사항). |
-| `disabled` | `boolean` | `false`   | 이 옵션이 비활성화되었는지 지정합니다. |
-
-<!--
-#### Signals
--->
-
-<a id="signals-1"></a>
-
-#### 시그널
-
-<!--
-| Property   | Type              | Description                     |
-| ---------- | ----------------- | ------------------------------- |
-| `selected` | `Signal<boolean>` | Whether this option is selected |
-| `active`   | `Signal<boolean>` | Whether this option has focus   |
--->
-
-| 프로퍼티   | 타입              | 설명                                  |
-| ---------- | ----------------- | ------------------------------------- |
-| `selected` | `Signal<boolean>` | 이 옵션이 선택되어 있는지 나타냅니다. |
-| `active`   | `Signal<boolean>` | 이 옵션에 포커스가 있는지 나타냅니다. |
-
-<!--
 ### Related patterns
--->
 
-<a id="related-patterns"></a>
-
-### 관련 패턴
-
-<!--
 Listbox is used by these documented dropdown patterns:
 
-- **[Select](guide/aria/select)** - Single-selection dropdown pattern using readonly combobox + listbox
-- **[Multiselect](guide/aria/multiselect)** - Multiple-selection dropdown pattern using readonly combobox + listbox with `multi`
-- **[Autocomplete](guide/aria/autocomplete)** - Filterable dropdown pattern using combobox + listbox
+- [Select](guide/aria/select) - Single-selection dropdown pattern using readonly combobox + listbox
+- [Multiselect](guide/aria/multiselect) - Multiple-selection dropdown pattern using readonly combobox + listbox with `multi`
+- [Autocomplete](guide/aria/autocomplete) - Filterable dropdown pattern using combobox + listbox
 
 For complete dropdown patterns with trigger, popup, and overlay positioning, see those pattern guides instead of using listbox alone.
-
-<docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/" title="Listbox ARIA pattern"/>
-  <docs-pill href="/api/aria/listbox/Listbox" title="Listbox API Reference"/>
-</docs-pill-row>
--->
-
-리스트박스는 다음 드롭다운 패턴에서 사용됩니다.
-
-- **[선택](guide/aria/select)**: 읽기 전용 콤보박스와 리스트박스를 사용하는 단일 선택 드롭다운 패턴
-- **[다중 선택](guide/aria/multiselect)**: 읽기 전용 콤보박스와 `multi`가 적용된 리스트박스를 사용하는 다중 선택 드롭다운 패턴
-- **[자동 완성](guide/aria/autocomplete)**: 콤보박스와 리스트박스를 사용하는 필터링 가능한 드롭다운 패턴
-
-트리거, 팝업, 오버레이 위치 지정을 갖춘 완전한 드롭다운 패턴이 필요하다면 리스트박스를 단독으로 사용하기보다 해당 패턴의 가이드를 참고하세요.
-
-<docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/" title="리스트박스 ARIA 패턴"/>
-  <docs-pill href="/api/aria/listbox/Listbox" title="리스트박스 API 레퍼런스"/>
-</docs-pill-row>

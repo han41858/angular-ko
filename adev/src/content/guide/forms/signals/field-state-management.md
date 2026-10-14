@@ -14,23 +14,27 @@ Signal Forms' field state allows you to react to user interactions by providing 
 ## Understanding field state
 -->
 
+<a id="understanding-field-state"></a>
+
 ## 필드 상태 이해하기
 
 <!--
-When you create a form with the [`form()`](api/forms/signals/form) function, it returns a **field tree** - an object structure that mirrors your form model. Each field in the tree is accessible via dot notation (like [`form.email`](api/forms/signals/form#email)).
+When you create a form with the [`form()`](api/forms/signals/form) function, it returns a **field tree** - an object structure that mirrors your form model. Each field in the tree is accessible via dot notation (like [`form.email`](api/forms/signals/FieldTree)).
 -->
 
 [`form()`](api/forms/signals/form) 함수로 폼을 생성하면 폼 모델을 객체 형태로 반영하는 **필드 트리(field tree)** 를 반환합니다.
-그러면 이 트리의 개별 필드를 [`form.email`](api/forms/signals/form#email)와 같이 객체 참조 방식으로 접근할 수 있습니다.
+그러면 이 트리의 개별 필드를 [`form.email`](api/forms/signals/FieldTree)와 같이 객체 참조 방식으로 접근할 수 있습니다.
 
 <!--
 ### Accessing field state
 -->
 
+<a id="accessing-field-state"></a>
+
 ### 필드 상태에 접근하기
 
 <!--
-When you call any field in the field tree as a function (like [`form.email()`](api/forms/signals/form#email)), it returns a `FieldState` object containing reactive signals that track the field's validation, interaction, and availability state. For example, the `invalid()` signal tells you whether the field has validation errors:
+When you call any field in the field tree as a function (like [`form.email()`](api/forms/signals/FieldState)), it returns a `FieldState` object containing reactive signals that track the field's validation, interaction, and availability state. For example, the `invalid()` signal tells you whether the field has validation errors:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -68,7 +72,7 @@ export class Registration {
 In this example, the template checks `registrationForm.email().invalid()` to determine whether to display an error message.
 -->
 
-필드 트리에 있는 개별 필드는 모두 [`form.email()`](api/forms/signals/form#email) 같은 방식으로 실행할 수 있는데, 이렇게 실행하면 필드의 유효성, 사용자의 접근 기록, 사용할 수 있는 상태 등을 반응형 시그널로 확인할 수 있는 `FieldState` 객체를 반환합니다.
+필드 트리에 있는 개별 필드는 모두 [`form.email()`](api/forms/signals/FieldState) 같은 방식으로 실행할 수 있는데, 이렇게 실행하면 필드의 유효성, 사용자의 접근 기록, 사용할 수 있는 상태 등을 반응형 시그널로 확인할 수 있는 `FieldState` 객체를 반환합니다.
 예를 들면, `invalid()` 시그널은 필드 유효성 검사 상태를 표현합니다:
 
 ```angular-ts
@@ -109,6 +113,8 @@ export class Registration {
 <!--
 ### Field state signals
 -->
+
+<a id="field-state-signals"></a>
 
 ### 필드 상태 시그널
 
@@ -184,6 +190,8 @@ NOTE: This guide focuses on **using** validation state in your templates and log
 ### Checking validity
 -->
 
+<a id="checking-validity"></a>
+
 ### 검사 결과 확인하기
 
 <!--
@@ -250,10 +258,12 @@ export class Login {
 ### Reading validation errors
 -->
 
+<a id="reading-validation-errors"></a>
+
 ### 유효성 검사 에러 확인하기
 
 <!--
-Access the array of validation errors with `errors()`. Each error object contains:
+Access the array of validation errors with `errors()`, or an individual error with `getError()`. Each error object contains:
 
 | Property    | Description                                                     |
 | ----------- | --------------------------------------------------------------- |
@@ -263,7 +273,7 @@ Access the array of validation errors with `errors()`. Each error object contain
 
 NOTE: The `message` property is optional. Validators can provide custom error messages, but if not specified, you may need to map error `kind` values to your own messages.
 
-Here's an example of how to display errors in your template:
+Here's an example of how to display errors in your template by an array of validation errors:
 
 ```angular-ts
 @Component({
@@ -284,7 +294,7 @@ Here's an example of how to display errors in your template:
 This approach loops through all errors for a field, displaying each error message to the user.
 -->
 
-`errors()`를 확인하면 유효성 검사에서 발생한 에러 목록을 확인할 수 있습니다.
+`errors()`로 유효성 검사에서 발생한 에러 목록을 확인하거나, `getError()`로 개별 에러를 확인할 수 있습니다.
 개별 에러 객체에는 이런 필드가 존재합니다:
 
 | 프로퍼티    | 설명                                              |
@@ -317,8 +327,48 @@ This approach loops through all errors for a field, displaying each error messag
 이 코드는 필드에 발생한 모든 에러 메시지를 표시합니다.
 
 <!--
+Here's an example of how to display an error in your template with `getError()`:
+
+```angular-ts
+@Component({
+  template: `
+    <input type="email" [formField]="loginForm.email" />
+
+    @if (loginForm.email().getError('required'); as error) {
+      <div class="errors">
+        <p>{{ error.message }}</p>
+      </div>
+    }
+  `
+})
+```
+
+`getError()` accepts any string for an error's `kind`, and recognizes build-in validation error kinds (e.g., "required", "email", "minLength").
+-->
+
+`getError()`로 템플릿에 에러를 표시할 수도 있습니다:
+
+```angular-ts
+@Component({
+  template: `
+    <input type="email" [formField]="loginForm.email" />
+
+    @if (loginForm.email().getError('required'); as error) {
+      <div class="errors">
+        <p>{{ error.message }}</p>
+      </div>
+    }
+  `
+})
+```
+
+`getError()`는 에러의 `kind`로 어떤 문자열이든 받을 수 있으며, "required", "email", "minLength" 같은 내장 유효성 검사 에러 종류를 인식합니다.
+
+<!--
 ### Pending validation
 -->
+
+<a id="pending-validation"></a>
 
 ### 유효성 검사 진행 상태
 
@@ -380,21 +430,153 @@ Interaction state tracks whether users have interacted with fields, enabling pat
 
 <!--
 ### Touched state
+
+The `touched()` signal tracks whether a user has focused and then blurred a field, or whether the field has been marked as touched programmatically. Only interactive fields can become touched; hidden, disabled, and readonly fields don't become touched from user interactions or `markAsTouched()`.
+
+When you need a section-level action to reveal validation errors within that section, call `markAsTouched()` on the section field. The default value of `skipDescendants` is `false`, so the call marks the section field and each descendant field as touched.
+
+For example, a checkout flow can validate the shipping section before allowing the user to continue to the next step:
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {form, FormField, required} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-checkout-shipping',
+  imports: [FormField],
+  template: `
+    <label>
+      Name
+      <input [formField]="checkoutForm.shipping.name" />
+    </label>
+    @if (checkoutForm.shipping.name().touched() && checkoutForm.shipping.name().invalid()) {
+      <p>{{ checkoutForm.shipping.name().errors()[0].message }}</p>
+    }
+
+    <label>
+      Address
+      <input [formField]="checkoutForm.shipping.address" />
+    </label>
+    @if (checkoutForm.shipping.address().touched() && checkoutForm.shipping.address().invalid()) {
+      <p>{{ checkoutForm.shipping.address().errors()[0].message }}</p>
+    }
+
+    <button type="button" (click)="continueToPayment()">Continue</button>
+
+    @if (showPayment() && checkoutForm.shipping().valid()) {
+      <p>Ready for payment.</p>
+    }
+  `,
+})
+export class CheckoutShipping {
+  checkoutModel = signal({
+    shipping: {
+      name: '',
+      address: '',
+    },
+  });
+
+  showPayment = signal(false);
+
+  checkoutForm = form(this.checkoutModel, (schemaPath) => {
+    required(schemaPath.shipping.name, {message: 'Enter a name'});
+    required(schemaPath.shipping.address, {message: 'Enter an address'});
+  });
+
+  continueToPayment() {
+    this.checkoutForm.shipping().markAsTouched();
+
+    if (this.checkoutForm.shipping().invalid()) {
+      return;
+    }
+
+    this.showPayment.set(true);
+  }
+}
+```
+
+When `continueToPayment()` calls `markAsTouched()` on `checkoutForm.shipping()`, it uses the default `skipDescendants: false` behavior. Angular marks `shipping`, `shipping.name`, and `shipping.address` as touched, so the child `touched() && invalid()` error messages become visible before the whole form is submitted.
+
+NOTE: Pass `{skipDescendants: true}` only when the field receiving the call should become touched without changing the touched state of its descendants.
 -->
+
+<a id="touched-state"></a>
 
 ### `touched` 상태
 
-<!--
-The `touched()` signal tracks whether a user has focused and then blurred a field. It becomes `true` when a user focuses and then blurs a field through user interaction (not programmatically). Hidden, disabled, and readonly fields are non-interactive and don't become touched from user interactions.
--->
+`touched()` 시그널은 사용자가 필드에 접근했다가 다른 곳으로 이동했는지, 또는 코드에서 필드를 touched 상태로 표시했는지 추적합니다. 상호작용할 수 있는 필드만 touched 상태가 될 수 있습니다. 숨겨진 필드, 비활성화된 필드, 읽기 전용 필드는 사용자 상호작용이나 `markAsTouched()` 호출로 touched 상태가 되지 않습니다.
 
-`touched()` 시그널은 사용자가 필드에 접근했었는지, 접근했다가 다른 곳으로 옮겼는지 표현합니다.
-사용자가 필드에 접근했다가 다른 곳으로 옮겨가면 `true` 상태가 됩니다.
-필드가 숨겨져 있거나, 비활성화되었거나, 읽기 전용인 필드는 사용자가 상호작용할 수 없기 때문에 `touched` 상태가 되지 않습니다.
+폼의 특정 영역에서 동작을 실행할 때 그 영역의 유효성 검사 에러를 표시하려면 해당 영역의 필드에 `markAsTouched()`를 호출하세요. `skipDescendants`의 기본값은 `false`이므로 해당 필드와 모든 하위 필드를 touched 상태로 표시합니다.
+
+예를 들어 결제 과정에서 다음 단계로 진행하기 전에 배송 정보 영역을 검사할 수 있습니다:
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {form, FormField, required} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-checkout-shipping',
+  imports: [FormField],
+  template: `
+    <label>
+      Name
+      <input [formField]="checkoutForm.shipping.name" />
+    </label>
+    @if (checkoutForm.shipping.name().touched() && checkoutForm.shipping.name().invalid()) {
+      <p>{{ checkoutForm.shipping.name().errors()[0].message }}</p>
+    }
+
+    <label>
+      Address
+      <input [formField]="checkoutForm.shipping.address" />
+    </label>
+    @if (checkoutForm.shipping.address().touched() && checkoutForm.shipping.address().invalid()) {
+      <p>{{ checkoutForm.shipping.address().errors()[0].message }}</p>
+    }
+
+    <button type="button" (click)="continueToPayment()">Continue</button>
+
+    @if (showPayment() && checkoutForm.shipping().valid()) {
+      <p>Ready for payment.</p>
+    }
+  `,
+})
+export class CheckoutShipping {
+  checkoutModel = signal({
+    shipping: {
+      name: '',
+      address: '',
+    },
+  });
+
+  showPayment = signal(false);
+
+  checkoutForm = form(this.checkoutModel, (schemaPath) => {
+    required(schemaPath.shipping.name, {message: 'Enter a name'});
+    required(schemaPath.shipping.address, {message: 'Enter an address'});
+  });
+
+  continueToPayment() {
+    this.checkoutForm.shipping().markAsTouched();
+
+    if (this.checkoutForm.shipping().invalid()) {
+      return;
+    }
+
+    this.showPayment.set(true);
+  }
+}
+```
+
+`continueToPayment()`가 `checkoutForm.shipping()`에 `markAsTouched()`를 호출하면 기본값인 `skipDescendants: false`가 적용됩니다. Angular가 `shipping`, `shipping.name`, `shipping.address`를 touched 상태로 표시하므로 전체 폼을 제출하기 전에도 하위 필드의 `touched() && invalid()` 조건에 따라 에러 메시지가 표시됩니다.
+
+참고: 하위 필드의 touched 상태는 유지하고 호출 대상 필드만 touched 상태로 표시하려는 경우에만 `{skipDescendants: true}`를 전달하세요.
 
 <!--
 ### Dirty state
 -->
+
+<a id="dirty-state"></a>
 
 ### `dirty` 상태
 
@@ -458,11 +640,11 @@ export class Profile {
 ### `touched` vs `dirty`
 
 <!--
-These signals track different user interactions:
+These signals track different kinds of interaction state:
 
 | Signal      | When it becomes true                                                                                                            |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `touched()` | User has focused and blurred an interactive field (even if they didn't change anything)                                         |
+| `touched()` | User has focused and blurred an interactive field, or the field was marked as touched programmatically                          |
 | `dirty()`   | User has modified an interactive field (even if they never blurred it, and even if the current value matches the initial value) |
 
 A field can be in different combinations:
@@ -475,11 +657,11 @@ A field can be in different combinations:
 NOTE: Hidden, disabled, and readonly fields are non-interactive - they don't become touched or dirty from user interactions.
 -->
 
-사용자의 상호작용을 추적하는 시그널이 있습니다:
+이 시그널들은 서로 다른 종류의 상호작용 상태를 추적합니다:
 
 | 시그널      | true가 되는 경우                                                                                         |
 | ----------- | -------------------------------------------------------------------------------------------------------- |
-| `touched()` | 사용자가 필드에 접근했다가 다른 곳으로 이동했을 때. 아무것도 변경하지 않아도 상관없습니다.               |
+| `touched()` | 사용자가 상호작용 가능한 필드에 접근했다가 이동했거나, 코드에서 touched 상태로 표시했을 때.              |
 | `dirty()`   | 사용자가 필드 값을 변경했을 때. 포커스를 다른 곳으로 옮기지 않아도, 초기값으로 다시 바꿔도 남아있습니다. |
 
 시그널은 여러 가지로 조합할 수 있습니다:
@@ -510,6 +692,8 @@ Availability state signals control whether fields are interactive, editable, or 
 <!--
 ### Disabled fields
 -->
+
+<a id="disabled-fields"></a>
 
 ### 비활성화된 필드
 
@@ -608,6 +792,8 @@ export class Order {
 ### Hidden fields
 -->
 
+<a id="hidden-fields"></a>
+
 ### 숨겨진 필드
 
 <!--
@@ -692,6 +878,8 @@ export class Profile {
 <!--
 ### Readonly fields
 -->
+
+<a id="readonly-fields"></a>
 
 ### 읽기 전용 필드
 
@@ -778,6 +966,8 @@ export class Account {
 ### When to use each
 -->
 
+<a id="when-to-use-each"></a>
+
 ### 언제 사용해야 할까요
 
 | 시그널       | 의미                                                          | 사용자가 볼 수 있는지   | 사용자가 상호작용할 수 있는지 | 유효성 검사에 영향을 주는지 |
@@ -789,6 +979,8 @@ export class Account {
 <!--
 ## Form-level state
 -->
+
+<a id="form-level-state"></a>
 
 ## 폼 계층 상태
 
@@ -802,6 +994,8 @@ The root form is also a field in the field tree. When you call it as a function,
 <!--
 ### Accessing form state
 -->
+
+<a id="accessing-form-state"></a>
 
 ### 폼 상태에 접근하기
 
@@ -850,6 +1044,8 @@ export class Login {
 ### Form-level signals
 -->
 
+<a id="form-level-signals"></a>
+
 ### 폼 계층 시그널
 
 <!--
@@ -860,7 +1056,7 @@ Because the root form is a field, it has the same signals (such as `valid()`, `i
 | `valid()`   | All interactive fields are valid and no validators are pending |
 | `invalid()` | At least one interactive field has validation errors           |
 | `pending()` | At least one interactive field has pending async validation    |
-| `touched()` | User has touched at least one interactive field                |
+| `touched()` | The form, or at least one interactive descendant, is touched   |
 | `dirty()`   | User has modified at least one interactive field               |
 -->
 
@@ -871,12 +1067,14 @@ Because the root form is a field, it has the same signals (such as `valid()`, `i
 | `valid()`   | 상호작용할 수 있는 필드가 모두 유효하고, 진행 중인 유효성 검사도 없습니다. |
 | `invalid()` | 1개 이상 필드에 유효성 검사 오류가 발생했습니다.                           |
 | `pending()` | 1개 이상 필드에 유효성 검사가 진행 중입니다.                               |
-| `touched()` | 사용자가 어떠한 필드라도 접근했습니다.                                     |
+| `touched()` | 폼 자체나 상호작용할 수 있는 하위 필드 중 하나 이상이 touched 상태입니다.  |
 | `dirty()`   | 사용자가 어떠한 필드라도 값을 변경했습니다.                                |
 
 <!--
 ### When to use form-level vs field-level
 -->
+
+<a id="when-to-use-form-level-vs-field-level"></a>
 
 ### 폼 계층 vs 필드 계층
 
@@ -914,6 +1112,8 @@ Because the root form is a field, it has the same signals (such as `valid()`, `i
 ## State propagation
 -->
 
+<a id="state-propagation"></a>
+
 ## 상태 전파
 
 <!--
@@ -925,6 +1125,8 @@ Field state propagates from child fields up through parent field groups to the r
 <!--
 ### How child state affects parent forms
 -->
+
+<a id="how-child-state-affects-parent-forms"></a>
 
 ### 자식 필드의 상태가 부모 필드에 어떻게 영향을 미칠까요
 
@@ -980,6 +1182,8 @@ userForm.profile.firstName().invalid() === true;
 ### Hidden, disabled, and readonly fields
 -->
 
+<a id="hidden-disabled-and-readonly-fields"></a>
+
 ### `hidden`, `disabled`, `readonly`
 
 <!--
@@ -1025,6 +1229,8 @@ const orderForm = form(orderModel, (schemaPath) => {
 ## Using state in templates
 -->
 
+<a id="using-state-in-templates"></a>
+
 ## 템플릿에서 상태 활용하기
 
 <!--
@@ -1036,6 +1242,8 @@ Field state signals integrate seamlessly with Angular templates, enabling reacti
 <!--
 ### Conditional error display
 -->
+
+<a id="conditional-error-display"></a>
 
 ### 조건부 에러 표시
 
@@ -1107,6 +1315,8 @@ export class Signup {
 <!--
 ### Conditional field availability
 -->
+
+<a id="conditional-field-availability"></a>
 
 ### 조건부 필드 활성화
 
@@ -1194,6 +1404,8 @@ export class Order {
 ### Tracking values for array fields
 -->
 
+<a id="tracking-values-for-array-fields"></a>
+
 ### 배열 필드의 값 추적하기
 
 <!--
@@ -1244,6 +1456,8 @@ export class App {
 ## Using field state in component logic
 -->
 
+<a id="using-field-state-in-component-logic"></a>
+
 ## 컴포넌트 로직에서 필드 상태 활용하기
 
 <!--
@@ -1255,6 +1469,8 @@ Field state signals work with Angular's reactive primitives like `computed()` an
 <!--
 ### Validation checks before submission
 -->
+
+<a id="validation-checks-before-submission"></a>
 
 ### 폼 제출 전 유효성 검사
 
@@ -1330,6 +1546,8 @@ export class Registration {
 ### Derived state with computed
 -->
 
+<a id="derived-state-with-computed"></a>
+
 ### `computed()` 파생 상태
 
 <!--
@@ -1388,6 +1606,8 @@ export class Password {
 ### Programmatic state changes
 -->
 
+<a id="programmatic-state-changes"></a>
+
 ### 로직으로 상태 변경
 
 <!--
@@ -1400,6 +1620,8 @@ While field state typically updates through user interactions (typing, focusing,
 <!--
 #### Form submission
 -->
+
+<a id="form-submission"></a>
 
 #### 폼 제출
 
@@ -1500,6 +1722,8 @@ export class Registration {
 #### Resetting forms after submission
 -->
 
+<a id="resetting-forms-after-submission"></a>
+
 #### 폼 제출 후 폼 초기화
 
 <!--
@@ -1549,6 +1773,8 @@ export class Contact {
 <!--
 ## Styling based on validation state
 -->
+
+<a id="styling-based-on-validation-state"></a>
 
 ## 유효성 검사 상태에 따라 스타일 지정하기
 
@@ -1630,16 +1856,187 @@ export class StyleExample {
 
 `touched()`와 유효성 검사 상태를 확인하면 사용자가 상호작용한 후에 에러 스타일을 지정할 수 있습니다.
 
-<!---
+<!--
+## Focus a form control bound to a form field
+
+Angular Signal Forms provide a `focusBoundControl()` method on field state that lets you programmatically move [focus](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) to the form control associated with a given form field.
+
+A common use case is improving accessibility on form submission: when a form is invalid, display error messages and automatically move focus to the first invalid field, guiding the user to correct it.
+
+### Basic usage
+
+Given a registration form:
+
+```ts
+@Component({/* ... */})
+export class Registration {
+  registrationModel = signal({username: '', email: '', password: ''});
+  registrationForm = form(this.registrationModel, (schemaPath) => {
+    required(schemaPath.username);
+    email(schemaPath.email);
+    required(schemaPath.password);
+  });
+}
+```
+
+To move focus to the control bound to the `email` field:
+
+```ts
+registrationForm.email().focusBoundControl();
+```
+
+### Preventing scroll
+
+If the target control is outside the viewport and you want to focus it without triggering a scroll, you can set the [preventScroll](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll) option to `true` when calling the `focusBoundControl()` method.
+
+```ts
+registrationForm.email().focusBoundControl({preventScroll: true});
+```
+
+### Focusing the first invalid field on submission
+
+Use `errorSummary()` to locate the first invalid field and focus it when the user submits the form with errors:
+
+```ts
+onSubmit() {
+  const firstError = this.registrationForm().errorSummary()[0];
+  if (firstError?.fieldTree) {
+    firstError.fieldTree().focusBoundControl();
+  } else {
+    // proceed with submission
+  }
+}
+```
+
+### Custom controls
+
+By default, calling `focusBoundControl()` on a custom control has no effect because a custom control can contain multiple native inputs. For example, a date picker can contain separate day, month, and year fields. As a result, Angular cannot determine which element should receive focus or what action to perform.
+
+To support programmatic focus in a custom control, implement a `focus()` method. When `focusBoundControl()` is called on the field state associated with a custom control, Angular calls the control's `focus()` method if one is present.
+
+Consider a custom password input:
+
+```html
+<div class="password-block">
+  <input type="password" #passwordCtrl [value]="value()" (input)="value.set($event.target.value)" />
+</div>
+```
+
+```ts
+@Component({/* ... */})
+export class PasswordInput implements FormValueControl<string> {
+  readonly value = model<string>('');
+  readonly passwordCtrl = viewChild.required<ElementRef<HTMLInputElement>>('passwordCtrl');
+
+  // Called automatically when focusBoundControl() is invoked
+  // on the field state associated with this custom control
+  focus(): void {
+    this.passwordCtrl().nativeElement.focus();
+  }
+}
+```
+-->
+
+<a id="focus-a-form-control-bound-to-a-form-field"></a>
+
+## 필드에 바인딩된 폼 컨트롤에 포커스 이동하기
+
+Angular Signal Forms의 필드 상태는 `focusBoundControl()` 메서드를 제공합니다. 이 메서드로 필드에 연결된 폼 컨트롤에 [포커스](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)를 이동할 수 있습니다.
+
+대표적인 활용 방법은 폼 제출 시 접근성을 개선하는 것입니다. 폼이 유효하지 않을 때 에러 메시지를 표시하고 첫 번째 오류 필드로 포커스를 자동 이동하여 사용자가 수정할 수 있도록 안내합니다.
+
+<a id="basic-usage"></a>
+
+### 기본 사용법
+
+다음과 같은 회원가입 폼이 있다고 가정해 봅시다:
+
+```ts
+@Component({/* ... */})
+export class Registration {
+  registrationModel = signal({username: '', email: '', password: ''});
+  registrationForm = form(this.registrationModel, (schemaPath) => {
+    required(schemaPath.username);
+    email(schemaPath.email);
+    required(schemaPath.password);
+  });
+}
+```
+
+`email` 필드에 연결된 컨트롤로 포커스를 이동하려면 다음과 같이 호출합니다:
+
+```ts
+registrationForm.email().focusBoundControl();
+```
+
+<a id="preventing-scroll"></a>
+
+### 스크롤 방지하기
+
+컨트롤이 화면 밖에 있을 때 스크롤하지 않고 포커스만 이동하려면 `focusBoundControl()`을 호출할 때 [preventScroll](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll) 옵션을 `true`로 설정하세요.
+
+```ts
+registrationForm.email().focusBoundControl({preventScroll: true});
+```
+
+<a id="focusing-the-first-invalid-field-on-submission"></a>
+
+### 제출 시 첫 번째 오류 필드에 포커스 이동하기
+
+사용자가 오류가 있는 폼을 제출하면 `errorSummary()`로 첫 번째 오류 필드를 찾아 포커스를 이동하세요:
+
+```ts
+onSubmit() {
+  const firstError = this.registrationForm().errorSummary()[0];
+  if (firstError?.fieldTree) {
+    firstError.fieldTree().focusBoundControl();
+  } else {
+    // 폼 제출을 진행합니다.
+  }
+}
+```
+
+<a id="custom-controls"></a>
+
+### 커스텀 컨트롤
+
+커스텀 컨트롤에서 `focusBoundControl()`을 호출해도 기본적으로는 아무 동작도 하지 않습니다. 커스텀 컨트롤에는 기본 입력 엘리먼트가 여러 개 있을 수 있기 때문입니다. 예를 들어 날짜 선택기는 일, 월, 연도 필드를 각각 포함할 수 있습니다. Angular는 어느 엘리먼트에 포커스를 주거나 어떤 동작을 실행해야 하는지 결정할 수 없습니다.
+
+커스텀 컨트롤에서 코드로 포커스를 이동할 수 있도록 하려면 `focus()` 메서드를 구현하세요. 연결된 필드 상태에 `focusBoundControl()`을 호출하면 Angular가 컨트롤에 구현된 `focus()` 메서드를 호출합니다.
+
+다음은 커스텀 비밀번호 입력의 예입니다:
+
+```html
+<div class="password-block">
+  <input type="password" #passwordCtrl [value]="value()" (input)="value.set($event.target.value)" />
+</div>
+```
+
+```ts
+@Component({/* ... */})
+export class PasswordInput implements FormValueControl<string> {
+  readonly value = model<string>('');
+  readonly passwordCtrl = viewChild.required<ElementRef<HTMLInputElement>>('passwordCtrl');
+
+  // 이 커스텀 컨트롤에 연결된 필드 상태에서
+  // focusBoundControl()을 호출하면 자동으로 실행됩니다.
+  focus(): void {
+    this.passwordCtrl().nativeElement.focus();
+  }
+}
+```
+
+<!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 
 <!--
 This guide covered validation and availability status handling, interaction tracking and field state propagation. Related guides explore other aspects of Signal Forms:
 
-<!- TODO: UNCOMMENT WHEN THE GUIDES ARE AVAILABLE ->
 <docs-pill-row>
   <docs-pill href="guide/forms/signals/models" title="Form models" />
   <docs-pill href="guide/forms/signals/validation" title="Validation" />

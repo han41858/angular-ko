@@ -87,7 +87,7 @@ The `hostSelector` property identifies elements in the DOM that match this harne
   template: `
     <button (click)="toggle()">{{ triggerText() }}</button>
     @if (isOpen()) {
-      <div class="my-popup-content"><ng-content></ng-content></div>
+      <div class="my-popup-content"><ng-content /></div>
     }
   `,
 })
@@ -126,7 +126,7 @@ While `ComponentHarness` subclasses require only the `hostSelector` property, mo
   template: `
     <button (click)="toggle()">{{ triggerText() }}</button>
     @if (isOpen()) {
-      <div class="my-popup-content"><ng-content></ng-content></div>
+      <div class="my-popup-content"><ng-content /></div>
     }
   `,
 })

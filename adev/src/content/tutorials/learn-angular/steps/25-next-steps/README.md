@@ -1,8 +1,20 @@
 <!--
 # Ready to explore more of Angular?
+
+<div class="docs-tutorial-mascot">
+  <img class="docs-tutorial-mascot__angie" src="assets/images/angie/superhero.svg" aria-hidden="true">
+  <p class="docs-tutorial-mascot__bubble">You've done it! You completed the Learn Angular tutorial and learned the essentials of building apps.</p>
+</div>
 -->
 
+<a id="ready-to-explore-more-of-angular"></a>
+
 # Angular를 더 알아볼 준비가 되었나요?
+
+<div class="docs-tutorial-mascot">
+  <img class="docs-tutorial-mascot__angie" src="assets/images/angie/superhero.svg" aria-hidden="true">
+  <p class="docs-tutorial-mascot__bubble">해내셨습니다! Angular 배우기 튜토리얼을 완료하고 앱 개발의 핵심을 익혔습니다.</p>
+</div>
 
 <!--
 You can also learn more in our [guides](overview) and [reference](api), or `ng new`.

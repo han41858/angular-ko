@@ -21,6 +21,8 @@ Angular가 제공하는 유효성 검사 함수 `required()`나 `min()`는 이 �
 ## You have already been using metadata
 -->
 
+<a id="you-have-already-been-using-metadata"></a>
+
 ## 메타데이터는 이미 사용하고 있었습니다
 
 <!--
@@ -58,14 +60,16 @@ Calling `required(path.username)` contributes a value to the `REQUIRED` metadata
 
 Several built-in constraint validators follow this pattern:
 
-| Validator     | Metadata key | Type                  | `FieldState` getter |
-| ------------- | ------------ | --------------------- | ------------------- |
-| `required()`  | `REQUIRED`   | `boolean`             | `required`          |
-| `min()`       | `MIN`        | `number \| undefined` | `min`               |
-| `max()`       | `MAX`        | `number \| undefined` | `max`               |
-| `minLength()` | `MIN_LENGTH` | `number \| undefined` | `minLength`         |
-| `maxLength()` | `MAX_LENGTH` | `number \| undefined` | `maxLength`         |
-| `pattern()`   | `PATTERN`    | `RegExp[]`            | `pattern`           |
+| Validator     | Metadata key               | Type                  | `FieldState` getter |
+| ------------- | -------------------------- | --------------------- | ------------------- |
+| `required()`  | `REQUIRED`                 | `boolean`             | `required`          |
+| `min()`       | `MIN` selects `MIN_NUMBER` | `number \| undefined` | `min`               |
+| `max()`       | `MAX` selects `MAX_NUMBER` | `number \| undefined` | `max`               |
+| `minDate()`   | `MIN` selects `MIN_DATE`   | `Date \| undefined`   | `min`               |
+| `maxDate()`   | `MAX` selects `MAX_DATE`   | `Date \| undefined`   | `max`               |
+| `minLength()` | `MIN_LENGTH`               | `number \| undefined` | `minLength`         |
+| `maxLength()` | `MAX_LENGTH`               | `number \| undefined` | `maxLength`         |
+| `pattern()`   | `PATTERN`                  | `RegExp[]`            | `pattern`           |
 
 Non-constraint validators like `email()` and `validate()` do not contribute to metadata. They run their check and surface a validation error, but they do not publish a reactive value for templates to read.
 -->
@@ -109,14 +113,16 @@ export class Registration {
 내장 유효성 검사 몇 가지가 이 방식을 따릅니다:
 Several built-in constraint validators follow this pattern:
 
-| 유효성 검사 함수 | 메타데이터 키 | 타입                  | `FieldState` 게터 |
-| ---------------- | ------------- | --------------------- | ----------------- |
-| `required()`     | `REQUIRED`    | `boolean`             | `required`        |
-| `min()`          | `MIN`         | `number \| undefined` | `min`             |
-| `max()`          | `MAX`         | `number \| undefined` | `max`             |
-| `minLength()`    | `MIN_LENGTH`  | `number \| undefined` | `minLength`       |
-| `maxLength()`    | `MAX_LENGTH`  | `number \| undefined` | `maxLength`       |
-| `pattern()`      | `PATTERN`     | `RegExp[]`            | `pattern`         |
+| 유효성 검사 함수 | 메타데이터 키             | 타입                  | `FieldState` 게터 |
+| ---------------- | ------------------------- | --------------------- | ----------------- |
+| `required()`     | `REQUIRED`                | `boolean`             | `required`        |
+| `min()`          | `MIN`이 `MIN_NUMBER` 선택 | `number \| undefined` | `min`             |
+| `max()`          | `MAX`가 `MAX_NUMBER` 선택 | `number \| undefined` | `max`             |
+| `minDate()`      | `MIN`이 `MIN_DATE` 선택   | `Date \| undefined`   | `min`             |
+| `maxDate()`      | `MAX`가 `MAX_DATE` 선택   | `Date \| undefined`   | `max`             |
+| `minLength()`    | `MIN_LENGTH`              | `number \| undefined` | `minLength`       |
+| `maxLength()`    | `MAX_LENGTH`              | `number \| undefined` | `maxLength`       |
+| `pattern()`      | `PATTERN`                 | `RegExp[]`            | `pattern`         |
 
 `email()`이나 `validate()`와 같이 비제약 조건 유효성 검사 함수는 메타데이터에 영향을 미치지 않습니다.
 이 함수들은 유효성 검사를 실행하고 유효성 검사 에러를 반환하지만, 템플릿에서 읽을 수 있는 반응형 값을 제공하지는 않습니다.
@@ -124,6 +130,8 @@ Several built-in constraint validators follow this pattern:
 <!--
 ## When to use custom metadata
 -->
+
+<a id="when-to-use-custom-metadata"></a>
 
 ## 커스텀 메타데이터는 언제 사용할까요
 
@@ -153,6 +161,8 @@ If you find yourself keeping a parallel `Map<fieldKey, value>` alongside your fo
 <!--
 ## Creating a metadata key
 -->
+
+<a id="creating-a-metadata-key"></a>
 
 ## 메타데이터 키 만들기
 
@@ -187,6 +197,8 @@ export const USERNAME_HELP = createMetadataKey<string>();
 <!--
 ## Setting values from a schema
 -->
+
+<a id="setting-values-from-a-schema"></a>
 
 ## 스키마에서 값 설정하기
 
@@ -288,6 +300,8 @@ export class Registration {
 ## Reading metadata from a field
 -->
 
+<a id="reading-metadata-from-a-field"></a>
+
 ## 필드의 메타데이터 읽기
 
 <!--
@@ -367,6 +381,8 @@ const message = registrationForm.username().metadata(USERNAME_HELP)!();
 <!--
 ## Combining contributions with reducers
 -->
+
+<a id="combining-contributions-with-reducers"></a>
 
 ## 영향도 결합하기: 리듀서(reducer)
 
@@ -449,6 +465,8 @@ form(model, (path) => {
 ### Built-in reducers
 -->
 
+<a id="built-in-reducers"></a>
+
 ### 기본 리듀서
 
 <!--
@@ -489,6 +507,8 @@ Angular는 6가지 리듀서를 [`MetadataReducer`](api/forms/signals/MetadataRe
 ### How built-in validator keys use reducers
 -->
 
+<a id="how-built-in-validator-keys-use-reducers"></a>
+
 ### 내장 유효성 검사 키가 리듀서를 활용하는 방법
 
 <!--
@@ -496,16 +516,20 @@ While `MetadataReducer.min()` and `MetadataReducer.max()` are reducers, you may 
 
 The built-in constraint keys pick their reducers based on what "strictest" means for the constraint, which is often the opposite of what the key's name suggests:
 
-| Key          | Reducer          | Reasoning                                                                                                                             |
-| ------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `REQUIRED`   | `or()`           | If any `required()` rule evaluates to `true`, the field is required.                                                                  |
-| `MIN`        | `max()`          | A minimum-value constraint is strictest when largest. If one rule requires `>= 5` and another `>= 10`, the effective minimum is `10`. |
-| `MAX`        | `min()`          | A maximum-value constraint is strictest when smallest. If one rule caps at `100` and another at `50`, the effective maximum is `50`.  |
-| `MIN_LENGTH` | `max()`          | Same logic as `MIN`: the longest required length wins.                                                                                |
-| `MAX_LENGTH` | `min()`          | Same logic as `MAX`: the shortest allowed length wins.                                                                                |
-| `PATTERN`    | `list<RegExp>()` | Each `pattern()` call contributes a regex; the value must match all of them.                                                          |
+| Key          | Reducer          | Reasoning                                                                                                                              |
+| ------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `REQUIRED`   | `or()`           | If any `required()` rule evaluates to `true`, the field is required.                                                                   |
+| `MIN_NUMBER` | `max()`          | A minimum-number constraint is strictest when largest. If one rule requires `>= 5` and another `>= 10`, the effective minimum is `10`. |
+| `MIN_DATE`   | `max()`          | Same logic as `MIN_NUMBER`: the latest required date wins.                                                                             |
+| `MAX_NUMBER` | `min()`          | A maximum-number constraint is strictest when smallest. If one rule caps at `100` and another at `50`, the effective maximum is `50`.  |
+| `MAX_DATE`   | `min()`          | Same logic as `MAX_NUMBER`: the earliest allowed date wins.                                                                            |
+| `MIN_LENGTH` | `max()`          | Same logic as `MIN_NUMBER`: the longest required length wins.                                                                          |
+| `MAX_LENGTH` | `min()`          | Same logic as `MAX_NUMBER`: the shortest allowed length wins.                                                                          |
+| `PATTERN`    | `list<RegExp>()` | Each `pattern()` call contributes a regex; the value must match all of them.                                                           |
 
-This pairing of "strictest wins" is why calling `min(path.age, 18)` and `min(path.age, 21)` in two composed schemas works correctly. Each call registers its own validator that enforces its specific bound (so a value below either bound fails validation). Separately, each call contributes to the public `MIN` key, and `state.metadata(MIN)!()` reports the aggregate (`21`) so UI and custom controls can read the effective minimum.
+`MIN` and `MAX` are selection keys. They point to the concrete key that matches the field's value type, such as `MIN_NUMBER` for `min()` and `MIN_DATE` for `minDate()`. This is why `field().min()` and `field().max()` work for both numeric and date fields.
+
+This pairing of "strictest wins" is why calling `min(path.age, 18)` and `min(path.age, 21)` in two composed schemas works correctly. Each call registers its own validator that enforces its specific bound (so a value below either bound fails validation). Separately, each call contributes to the `MIN_NUMBER` key, and `state.min!()` reports the aggregate (`21`) so UI and custom controls can read the effective minimum.
 -->
 
 `MetadataReducer.min()`와 `MetadataReducer.max()`는 리듀서이지만, 유효성 검사 함수는 아닙니다.
@@ -517,20 +541,26 @@ This pairing of "strictest wins" is why calling `min(path.age, 18)` and `min(pat
 | 키           | 리듀서           | 이유                                                                                                                                                   |
 | ------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `REQUIRED`   | `or()`           | `required()` 규칙 중 하나라도 `true`를 반환하면 필드는 필수 항목이 됩니다.                                                                             |
-| `MIN`        | `max()`          | 최솟값 제약 조건은 값이 가장 클 때 가장 엄격합니다. 한 규칙이 `>= 5` 이고 다른 규칙이 `>= 10`이면, 유효 최솟값은 `10`이 됩니다.                        |
-| `MAX`        | `min()`          | 최댓값 제약 조건은 값이 가장 작을 때 가장 엄격합니다. 한 규칙이 `100`을 상한으로 하고 다른 규칙이 `50`을 상한으로 한다면, 유효 최댓값은 `50`이 됩니다. |
-| `MIN_LENGTH` | `max()`          | `MIN`과 비슷합니다. 가장 긴 항목이 우선입니다.                                                                                                         |
-| `MAX_LENGTH` | `min()`          | `MAX`와 비슷합니다. 가장 짧은 항목이 우선입니다.                                                                                                       |
+| `MIN_NUMBER` | `max()`          | 최솟값 제약 조건은 값이 가장 클 때 가장 엄격합니다. 한 규칙이 `>= 5` 이고 다른 규칙이 `>= 10`이면, 유효 최솟값은 `10`이 됩니다.                        |
+| `MAX_NUMBER` | `min()`          | 최댓값 제약 조건은 값이 가장 작을 때 가장 엄격합니다. 한 규칙이 `100`을 상한으로 하고 다른 규칙이 `50`을 상한으로 한다면, 유효 최댓값은 `50`이 됩니다. |
+| `MIN_DATE`   | `max()`          | `MIN_NUMBER`와 비슷합니다. 가장 늦은 날짜가 우선입니다.                                                                                                |
+| `MAX_DATE`   | `min()`          | `MAX_NUMBER`와 비슷합니다. 가장 이른 날짜가 우선입니다.                                                                                                |
+| `MIN_LENGTH` | `max()`          | `MIN_NUMBER`와 비슷합니다. 가장 긴 항목이 우선입니다.                                                                                                  |
+| `MAX_LENGTH` | `min()`          | `MAX_NUMBER`와 비슷합니다. 가장 짧은 항목이 우선입니다.                                                                                                |
 | `PATTERN`    | `list<RegExp>()` | 개별 `pattern()` 호출은 각각 정규표현식을 반환하며, 모든 정규표현식을 통과해야 합니다.                                                                 |
+
+`MIN`과 `MAX`는 선택 키입니다. `min()`의 `MIN_NUMBER`, `minDate()`의 `MIN_DATE`처럼 필드의 값 타입에 맞는 구체적인 키를 가리킵니다. 따라서 `field().min()`과 `field().max()`는 숫자 필드와 날짜 필드 모두에서 동작합니다.
 
 이렇게 "가장 엄격한 조건이 우선"하기 때문에 `min(path.age, 18)`과 `min(path.age, 21)`이 동시에 사용되어도 문제없이 동작합니다.
 검사 규칙이 등록될 때마다 유효성 검사 함수는 경계값을 조정합니다.
 따라서 경계값에 해당되지 않는 유효성 검사는 실패합니다.
-별도로, 개별 호출은 `MIN` 키에 영향을 미치며, `state.metadata(MIN)!()`가 반환하는 값은 `21`이기 때문에 화면이나 커스텀 컨트롤에서는 유효 최솟값을 활용할 수 있습니다.
+별도로, 개별 호출은 `MIN_NUMBER` 키에 영향을 미치며, `state.min!()`가 반환하는 값은 `21`이기 때문에 화면이나 커스텀 컨트롤에서는 유효 최솟값을 활용할 수 있습니다.
 
 <!--
 ### Writing a custom reducer
 -->
+
+<a id="writing-a-custom-reducer"></a>
 
 ### 커스텀 리듀서 정의하기
 
@@ -632,6 +662,8 @@ form(model, (path) => {
 ## Attaching lifecycle-aware objects with managed metadata
 -->
 
+<a id="attaching-lifecycle-aware-objects-with-managed-metadata"></a>
+
 ## 메타데이터에 라이프싸이클 객체
 
 <!--
@@ -644,6 +676,8 @@ Managed metadata stores a lifecycle-aware object on a field instead of a reactiv
 <!--
 ### Creating a managed key
 -->
+
+<a id="creating-a-managed-key"></a>
 
 ### 관리형 키 생성하기
 
@@ -715,6 +749,8 @@ export const URL_PREVIEW = createManagedMetadataKey((_state, url: Signal<string 
 ### Using a managed key in a form
 -->
 
+<a id="using-a-managed-key-in-a-form"></a>
+
 ### 폼에서 관리 키 사용하기
 
 <!--
@@ -757,6 +793,8 @@ import {URL_PREVIEW} from './url-preview';
   `,
 })
 export class LinkEditor {
+  URL_PREVIEW = URL_PREVIEW;
+
   linksModel = signal({links: [{url: ''}]});
 
   linksForm = form(this.linksModel, (path) => {
@@ -816,6 +854,8 @@ import {URL_PREVIEW} from './url-preview';
   `,
 })
 export class LinkEditor {
+  URL_PREVIEW = URL_PREVIEW;
+
   linksModel = signal({links: [{url: ''}]});
 
   linksForm = form(this.linksModel, (path) => {
@@ -840,6 +880,8 @@ export class LinkEditor {
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

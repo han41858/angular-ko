@@ -84,7 +84,7 @@ runInEachFileSystem(() => {
       expect(getSourceCodeForDiagnostic(diags[0])).toBe('does_not_exist');
     });
 
-    it('should not fail with a runtime error when generating TCB', () => {
+    it('should type check templates using a non-exported dependency from the same file', () => {
       env.tsconfig({strictTemplates: true});
       env.write(
         'test.ts',
@@ -107,12 +107,35 @@ runInEachFileSystem(() => {
       `,
       );
 
+      expect(env.driveDiagnostics()).toEqual([]);
+    });
+
+    it('should report binding errors on a non-exported dependency from the same file', () => {
+      env.tsconfig({strictTemplates: true});
+      env.write(
+        'test.ts',
+        `
+        import {Component, input} from '@angular/core';
+
+        @Component({
+          selector: 'sub-cmp',
+          template: '',
+        })
+        class Sub { // intentionally not exported
+          someInput = input.required<string>();
+        }
+
+        @Component({
+          template: \`<sub-cmp [someInput]="1" />\`,
+          imports: [Sub],
+        })
+        export class MyComponent {}
+      `,
+      );
+
       const diagnostics = env.driveDiagnostics();
-      expect(diagnostics).toEqual([
-        jasmine.objectContaining({
-          messageText: jasmine.objectContaining({messageText: 'Unable to import symbol Sub.'}),
-        }),
-      ]);
+      expect(diagnostics.length).toBe(1);
+      expect(diagnostics[0].messageText).toBe(`Type 'number' is not assignable to type 'string'.`);
     });
 
     it('should check regular attributes that are directive inputs', () => {
@@ -1044,6 +1067,49 @@ runInEachFileSystem(() => {
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(0);
       });
+
+      it('should properly short-circuit safe navigation chains', () => {
+        env.tsconfig({
+          fullTemplateTypeCheck: true,
+          strictTemplates: true,
+          strictSafeNavigationTypes: true,
+        });
+
+        env.write(
+          'test.ts',
+          `
+          import {Component, NgModule} from '@angular/core';
+
+          type MyType = {
+            data: {
+              foo: {
+                bar: () => boolean;
+              };
+              0: {
+                bar: boolean;
+              };
+            };
+          };
+
+          @Component({
+            selector: 'test',
+            template: '{{ value?.data.foo.bar() }} {{ value?.data["foo"] }} {{ value?.data[0].bar }}',
+            standalone: false,
+          })
+          class TestCmp {
+            value: MyType | null = null;
+          }
+
+          @NgModule({
+            declarations: [TestCmp],
+          })
+          class Module {}
+        `,
+        );
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(0);
+      });
     });
 
     describe('strictOutputEventTypes', () => {
@@ -1345,6 +1411,231 @@ runInEachFileSystem(() => {
         expect(diags[0].messageText).toEqual(
           `Property 'invalid' does not exist on type 'TestCmp'.`,
         );
+      });
+    });
+
+    describe('strictUnclaimedEventNames', () => {
+      function writeTestComponent(
+        template: string,
+        imports: string = '[TargetCmp]',
+        extraMetadata: string = '',
+      ): void {
+        env.write(
+          'test.ts',
+          `
+          import {Component, CUSTOM_ELEMENTS_SCHEMA, Directive, EventEmitter, NO_ERRORS_SCHEMA, Output} from '@angular/core';
+
+          @Component({
+            selector: 'target-cmp',
+            template: '',
+          })
+          export class TargetCmp {
+            @Output() someOutput = new EventEmitter<string>();
+            @Output('publicName') internalProp = new EventEmitter<string>();
+          }
+
+          @Directive({
+            selector: '[some-dir]',
+          })
+          export class SomeDir {}
+
+          @Component({
+            selector: 'test',
+            template: '${template}',
+            imports: ${imports},
+            ${extraMetadata}
+          })
+          export class TestCmp {
+            handle(value: unknown) {}
+          }
+        `,
+        );
+      }
+
+      function expectNoDiagnostics(): void {
+        expect(env.driveDiagnostics().map((diag) => diag.messageText)).toEqual([]);
+      }
+
+      it('should report events matching neither an output nor a native DOM event', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (someOutptu)="handle($event)"></target-cmp>');
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(1);
+        expect(diags[0].messageText).toContain(
+          `Event 'someOutptu' is not emitted by any directive applied to 'target-cmp' and it isn't a known native DOM event.`,
+        );
+      });
+
+      it('should report unclaimed camelCase events on elements with matched directives', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<div some-dir (myEvent)="handle($event)"></div>', '[SomeDir]');
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(1);
+        expect(diags[0].messageText).toContain(
+          `Event 'myEvent' is not emitted by any directive applied to 'div' and it isn't a known native DOM event.`,
+        );
+      });
+
+      it('should not report outputs of matched directives', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (someOutput)="handle($event)"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report native DOM events', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (click)="handle($event)"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report dash-separated custom events', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (my-custom-event)="handle($any($event))"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report key pseudo-events', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (keyup.ArrowDown)="handle($event)"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report events with a target prefix', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (window:resize)="handle($event)"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report events on elements without matched directives', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<div (myEvent)="handle($any($event))"></div>', '[]');
+
+        expectNoDiagnostics();
+      });
+
+      it('should report output typos on components even when using CUSTOM_ELEMENTS_SCHEMA', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent(
+          '<target-cmp (someOutptu)="handle($any($event))"></target-cmp>',
+          '[TargetCmp]',
+          'schemas: [CUSTOM_ELEMENTS_SCHEMA],',
+        );
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(1);
+        expect(diags[0].messageText).toContain(
+          `Event 'someOutptu' is not emitted by any directive applied to 'target-cmp' and it isn't a known native DOM event.`,
+        );
+      });
+
+      it('should not report events on elements without a matched component when using CUSTOM_ELEMENTS_SCHEMA', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent(
+          '<div some-dir (itemSelected)="handle($any($event))"><my-web-component></my-web-component></div>',
+          '[SomeDir]',
+          'schemas: [CUSTOM_ELEMENTS_SCHEMA],',
+        );
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report events on customized built-in elements when using CUSTOM_ELEMENTS_SCHEMA', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent(
+          '<button is="fancy-button" some-dir (buttonCustomEvent)="handle($any($event))"></button>',
+          '[SomeDir]',
+          'schemas: [CUSTOM_ELEMENTS_SCHEMA],',
+        );
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report vendor-prefixed native events with camelCase names', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent(
+          '<div some-dir (webkitAnimationEnd)="handle($event)"></div>',
+          '[SomeDir]',
+        );
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report any events when using NO_ERRORS_SCHEMA', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent(
+          '<target-cmp (someOutptu)="handle($any($event))"></target-cmp>',
+          '[TargetCmp]',
+          'schemas: [NO_ERRORS_SCHEMA],',
+        );
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report unclaimed events when explicitly disabled', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: false});
+        writeTestComponent('<target-cmp (someOutptu)="handle($any($event))"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report unclaimed events when not enabled', () => {
+        env.tsconfig({strictTemplates: true});
+        writeTestComponent('<target-cmp (someOutptu)="handle($any($event))"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should not report the public name of an aliased output', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (publicName)="handle($event)"></target-cmp>');
+
+        expectNoDiagnostics();
+      });
+
+      it('should report the internal property name of an aliased output', () => {
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (internalProp)="handle($event)"></target-cmp>');
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(1);
+        expect(diags[0].messageText).toContain(
+          `Event 'internalProp' is not emitted by any directive applied to 'target-cmp' and it isn't a known native DOM event.`,
+        );
+      });
+
+      it('should report camelCase bubbling custom events listened to via event delegation', () => {
+        // Event delegation of camelCase custom events dispatched by descendants is valid DOM
+        // behavior, but it's statically indistinguishable from a misspelled output name. Not
+        // reporting it would require dropping the check entirely, so reporting it is the
+        // documented trade-off of this opt-in option: such projects should use dash-separated
+        // event names or leave the option disabled.
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent(
+          '<div some-dir (cardSwipe)="handle($event)"><button>Action</button></div>',
+          '[SomeDir]',
+        );
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(1);
+        expect(diags[0].messageText).toContain(
+          `Event 'cardSwipe' is not emitted by any directive applied to 'div' and it isn't a known native DOM event.`,
+        );
+      });
+
+      it('should not report all-lowercase unclaimed events', () => {
+        // All-lowercase names could be custom events dispatched by a descendant element, so
+        // they're intentionally not reported, even when they're likely misspelled outputs.
+        env.tsconfig({strictTemplates: true, strictUnclaimedEventNames: true});
+        writeTestComponent('<target-cmp (someoutput)="handle($any($event))"></target-cmp>');
+
+        expectNoDiagnostics();
       });
     });
 
@@ -1805,7 +2096,9 @@ runInEachFileSystem(() => {
       );
       const diags = env.driveDiagnostics();
       expect(diags.length).toBe(1);
-      expect(diags[0].messageText).toBe(`No directive found with exportAs 'unknownTarget'.`);
+      expect(diags[0].messageText).toMatch(
+        /No directive found with exportAs 'unknownTarget'\. Find more at .*/,
+      );
       expect(getSourceCodeForDiagnostic(diags[0])).toBe('unknownTarget');
     });
 
@@ -1832,7 +2125,9 @@ runInEachFileSystem(() => {
       );
       const diags = env.driveDiagnostics();
       expect(diags.length).toBe(1);
-      expect(diags[0].messageText).toBe(`No directive found with exportAs 'unknownTarget'.`);
+      expect(diags[0].messageText).toMatch(
+        /No directive found with exportAs 'unknownTarget'\. Find more at .*/,
+      );
       expect(getSourceCodeForDiagnostic(diags[0])).toBe('unknownTarget');
     });
 
@@ -2015,7 +2310,7 @@ runInEachFileSystem(() => {
       });
 
       it("should be treated as 'any' without strictTemplates", () => {
-        env.tsconfig();
+        env.tsconfig({strictTemplates: false});
 
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(0);
@@ -2319,6 +2614,404 @@ runInEachFileSystem(() => {
         `,
         );
         env.driveMain();
+      });
+
+      it('should allow @content block when used as a direct child of a foreign component', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton> @content (icon) {} </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(0);
+      });
+
+      it('should detect @content block used outside of a foreign component', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<div> @content (icon) {} </div>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.INVALID_CONTENT_PLACEMENT));
+        expect(diags[0].messageText).toEqual(
+          '@content blocks are only valid as direct children of foreign components.',
+        );
+      });
+
+      it('should detect @content block nested inside a foreign component but not as a direct child', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton> <div> @content (icon) {} </div> </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.INVALID_CONTENT_PLACEMENT));
+        expect(diags[0].messageText).toEqual(
+          '@content blocks are only valid as direct children of foreign components.',
+        );
+      });
+
+      it('should detect @content block nested inside a block (like @if) within a foreign component', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton> @if (true) { @content (icon) {} } </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.INVALID_CONTENT_PLACEMENT));
+        expect(diags[0].messageText).toEqual(
+          '@content blocks are only valid as direct children of foreign components.',
+        );
+      });
+
+      it('should detect unnecessary @content (children) block on a foreign component', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton> @content (children) {} </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(
+          ngErrorCode(ErrorCode.FOREIGN_COMPONENT_CONTENT_UNNECESSARY_FOR_CHILDREN),
+        );
+        expect(diags[0].messageText).toEqual(
+          'Defining a @content (children) block with no parameters is unnecessary. ' +
+            'Pass children as direct nested content of the foreign component instead.',
+        );
+      });
+
+      it('should allow @content (children, let ...) with parameters', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton> @content (children; let arg) {} </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(0);
+      });
+
+      it('should detect duplicate @content blocks under the same foreign component', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton> @content (icon) {} @content (icon) {} </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_DECLARATION));
+        expect(diags[0].messageText).toEqual(
+          "A @content block with the name 'icon' has already been defined for this component.",
+        );
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('@content (icon) {}');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(1);
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          "The @content block 'icon' was first defined here.",
+        );
+      });
+
+      it('should allow the same @content block name under different foreign components', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: \`
+              <FancyButton> @content (icon) {} </FancyButton>
+              <FancyButton> @content (icon) {} </FancyButton>
+            \`,
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(0);
+      });
+
+      it('should detect a conflict between a @content block name and an input property binding', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton [icon]="myIcon"> @content (icon) {square} </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {
+            myIcon = document.createTextNode('circle');
+          }
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_AND_PROPERTY));
+        expect(diags[0].messageText).toEqual(
+          "A @content block with the name 'icon' conflicts with a property on the parent component.",
+        );
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('@content (icon) {square}');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(1);
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          "The property 'icon' is defined here.",
+        );
+      });
+
+      it('should detect a conflict between a @content block name and a static attribute', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton icon="circle"> @content (icon) {square} </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_AND_PROPERTY));
+        expect(diags[0].messageText).toEqual(
+          "A @content block with the name 'icon' conflicts with a property on the parent component.",
+        );
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('@content (icon) {square}');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(1);
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          "The property 'icon' is defined here.",
+        );
+      });
+
+      it('should detect a conflict between implicit children and a [children] property binding', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton [children]="myChildren"> <div>child</div> </FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {
+            myChildren = [];
+          }
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_AND_PROPERTY));
+        expect(diags[0].messageText).toEqual(
+          "A foreign component cannot have both a 'children' property and child nodes.",
+        );
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('[children]="myChildren"');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(1);
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          'Child nodes are defined here.',
+        );
+      });
+
+      it('should detect a conflict between implicit children and a children static attribute', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            template: '<FancyButton children="Hello, property!">Hello, content!</FancyButton>',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_AND_PROPERTY));
+        expect(diags[0].messageText).toEqual(
+          "A foreign component cannot have both a 'children' property and child nodes.",
+        );
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('children="Hello, property!"');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(1);
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          'Child nodes are defined here.',
+        );
+      });
+
+      it('should detect duplicate @content blocks in an external template', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            templateUrl: './test.html',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {}
+        `,
+        );
+        env.write(
+          'test.html',
+          '<FancyButton> @content (icon) {} @content (icon) {} </FancyButton>',
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_DECLARATION));
+        expect(diags[0].file?.fileName).toMatch(/test\.html$/);
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('@content (icon) {}');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(2);
+        expect(diags[0].relatedInformation![0].file?.fileName).toMatch(/test\.html$/);
+        expect(getSourceCodeForDiagnostic(diags[0].relatedInformation![0])).toEqual(
+          '@content (icon) {}',
+        );
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          "The @content block 'icon' was first defined here.",
+        );
+      });
+
+      it('should detect a conflict between a @content block and property binding in an external template', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            templateUrl: './test.html',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {
+            myIcon = document.createTextNode('circle');
+          }
+        `,
+        );
+        env.write(
+          'test.html',
+          '<FancyButton [icon]="myIcon"> @content (icon) {square} </FancyButton>',
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_AND_PROPERTY));
+        expect(diags[0].file?.fileName).toMatch(/test\.html$/);
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('@content (icon) {square}');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(2);
+        expect(diags[0].relatedInformation![0].file?.fileName).toMatch(/test\.html$/);
+        expect(getSourceCodeForDiagnostic(diags[0].relatedInformation![0])).toEqual(
+          '[icon]="myIcon"',
+        );
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          "The property 'icon' is defined here.",
+        );
+      });
+
+      it('should detect a conflict between implicit children and [children] binding in an external template', () => {
+        env.write(
+          'test.ts',
+          `
+          ${foreignSetupCode}
+
+          @Component({
+            selector: 'test',
+            templateUrl: './test.html',
+            foreignImports: [frameworkImport(FancyButton)],
+          })
+          export class TestCmp {
+            myChildren = [];
+          }
+        `,
+        );
+        env.write(
+          'test.html',
+          '<FancyButton [children]="myChildren"> <div>child</div> </FancyButton>',
+        );
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toEqual(1);
+        expect(diags[0].code).toEqual(ngErrorCode(ErrorCode.CONFLICTING_CONTENT_AND_PROPERTY));
+        expect(diags[0].file?.fileName).toMatch(/test\.html$/);
+        expect(getSourceCodeForDiagnostic(diags[0])).toEqual('[children]="myChildren"');
+        expect(diags[0].relatedInformation).toBeDefined();
+        expect(diags[0].relatedInformation!.length).toEqual(2);
+        expect(diags[0].relatedInformation![0].file?.fileName).toMatch(/test\.html$/);
+        expect(getSourceCodeForDiagnostic(diags[0].relatedInformation![0])).toEqual(
+          '<div>child</div>',
+        );
+        expect(diags[0].relatedInformation![0].messageText).toEqual(
+          'Child nodes are defined here.',
+        );
       });
     });
 
@@ -3769,9 +4462,9 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(`'foo' is not a known element:
-1. If 'foo' is an Angular component, then verify that it is part of this module.
-2. To allow any element add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.`);
+        expect(diags[0].messageText).toMatch(
+          /^'foo' is not a known element:\n1\. If 'foo' is an Angular component, then verify that it is part of this module\.\n2\. To allow any element add 'NO_ERRORS_SCHEMA' to the '@NgModule\.schemas' of this component\. Find more at .*$/,
+        );
       });
 
       it('should check for unknown elements in standalone components', () => {
@@ -3792,9 +4485,9 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(`'foo' is not a known element:
-1. If 'foo' is an Angular component, then verify that it is included in the '@Component.imports' of this component.
-2. To allow any element add 'NO_ERRORS_SCHEMA' to the '@Component.schemas' of this component.`);
+        expect(diags[0].messageText).toMatch(
+          /^'foo' is not a known element:\n1\. If 'foo' is an Angular component, then verify that it is included in the '@Component\.imports' of this component\.\n2\. To allow any element add 'NO_ERRORS_SCHEMA' to the '@Component\.schemas' of this component\. Find more at .*$/,
+        );
       });
 
       it('should check for unknown properties in standalone components', () => {
@@ -3844,9 +4537,9 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(`'my-foo' is not a known element:
-1. If 'my-foo' is an Angular component, then verify that it is part of this module.
-2. If 'my-foo' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.`);
+        expect(diags[0].messageText).toMatch(
+          /^'my-foo' is not a known element:\n1\. If 'my-foo' is an Angular component, then verify that it is part of this module\.\n2\. If 'my-foo' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule\.schemas' of this component to suppress this message\. Find more at .*$/,
+        );
       });
 
       it('should have a descriptive error for unknown elements that contain a dash in standalone components', () => {
@@ -3867,9 +4560,9 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(`'my-foo' is not a known element:
-1. If 'my-foo' is an Angular component, then verify that it is included in the '@Component.imports' of this component.
-2. If 'my-foo' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@Component.schemas' of this component to suppress this message.`);
+        expect(diags[0].messageText).toMatch(
+          /^'my-foo' is not a known element:\n1\. If 'my-foo' is an Angular component, then verify that it is included in the '@Component\.imports' of this component\.\n2\. If 'my-foo' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@Component\.schemas' of this component to suppress this message\. Find more at .*$/,
+        );
       });
 
       it('should check for unknown properties', () => {
@@ -3891,8 +4584,8 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(
-          `Can't bind to 'foo' since it isn't a known property of 'div'.`,
+        expect(diags[0].messageText).toMatch(
+          /Can't bind to 'foo' since it isn't a known property of 'div'\. Find more at .*/,
         );
       });
 
@@ -3915,8 +4608,8 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(
-          `Can't bind to 'foo' since it isn't a known property of 'div'.`,
+        expect(diags[0].messageText).toMatch(
+          /Can't bind to 'foo' since it isn't a known property of 'div'\. Find more at .*/,
         );
       });
 
@@ -3964,14 +4657,12 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(2);
-        expect(diags[0].messageText).toBe(`'custom-element' is not a known element:
-1. If 'custom-element' is an Angular component, then verify that it is part of this module.
-2. If 'custom-element' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.`);
-        expect(diags[1].messageText)
-          .toBe(`Can't bind to 'foo' since it isn't a known property of 'custom-element'.
-1. If 'custom-element' is an Angular component and it has 'foo' input, then verify that it is part of this module.
-2. If 'custom-element' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule.schemas' of this component to suppress this message.
-3. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.`);
+        expect(diags[0].messageText).toMatch(
+          /^'custom-element' is not a known element:\n1\. If 'custom-element' is an Angular component, then verify that it is part of this module\.\n2\. If 'custom-element' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule\.schemas' of this component to suppress this message\. Find more at .*$/,
+        );
+        expect(diags[1].messageText).toMatch(
+          /^Can't bind to 'foo' since it isn't a known property of 'custom-element'\.\n1\. If 'custom-element' is an Angular component and it has 'foo' input, then verify that it is part of this module\.\n2\. If 'custom-element' is a Web Component then add 'CUSTOM_ELEMENTS_SCHEMA' to the '@NgModule\.schemas' of this component to suppress this message\.\n3\. To allow any property add 'NO_ERRORS_SCHEMA' to the '@NgModule\.schemas' of this component\. Find more at .*$/,
+        );
       });
 
       it('should not produce diagnostics for custom-elements-style elements when using the CUSTOM_ELEMENTS_SCHEMA', () => {
@@ -4100,9 +4791,9 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(`'foo' is not a known element:
-1. If 'foo' is an Angular component, then verify that it is part of this module.
-2. To allow any element add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.`);
+        expect(diags[0].messageText).toMatch(
+          /^'foo' is not a known element:\n1\. If 'foo' is an Angular component, then verify that it is part of this module\.\n2\. To allow any element add 'NO_ERRORS_SCHEMA' to the '@NgModule\.schemas' of this component\. Find more at .*$/,
+        );
       });
 
       it('should check for unknown elements without explicit namespace inside an SVG foreignObject', () => {
@@ -4130,9 +4821,9 @@ runInEachFileSystem(() => {
         );
         const diags = env.driveDiagnostics();
         expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toBe(`'foo' is not a known element:
-1. If 'foo' is an Angular component, then verify that it is part of this module.
-2. To allow any element add 'NO_ERRORS_SCHEMA' to the '@NgModule.schemas' of this component.`);
+        expect(diags[0].messageText).toMatch(
+          /^'foo' is not a known element:\n1\. If 'foo' is an Angular component, then verify that it is part of this module\.\n2\. To allow any element add 'NO_ERRORS_SCHEMA' to the '@NgModule\.schemas' of this component\. Find more at .*$/,
+        );
       });
 
       it('should allow math elements', () => {
@@ -4584,7 +5275,9 @@ suppress
         // typings since the inputs/outputs haven't been exposed.
         expect(messages).toEqual([
           `Argument of type 'Event' is not assignable to parameter of type 'string'.`,
-          `Can't bind to 'input' since it isn't a known property of 'div'.`,
+          jasmine.stringMatching(
+            /Can't bind to 'input' since it isn't a known property of 'div'\. Find more at .*/,
+          ),
         ]);
       });
 
@@ -7150,6 +7843,75 @@ suppress
         expect(diags.length).toBe(0);
       });
 
+      it('should not report when there are @let declarations at the root of the control flow node', () => {
+        env.write(
+          'test.ts',
+          `
+          import {Component} from '@angular/core';
+
+          @Component({
+            selector: 'comp',
+            template: '<ng-content/> <ng-content select="[foo]"/>',
+          })
+          class Comp {}
+
+          @Component({
+            imports: [Comp],
+            template: \`
+              <comp>
+                @if (true) {
+                  @let value = 1;
+                  <div foo>{{value}}</div>
+                }
+              </comp>
+            \`,
+          })
+          class TestCmp {}
+        `,
+        );
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(0);
+      });
+
+      it('should report when there are @let declarations and multiple nodes at the root of the control flow node', () => {
+        env.write(
+          'test.ts',
+          `
+          import {Component} from '@angular/core';
+
+          @Component({
+            selector: 'comp',
+            template: '<ng-content/> <ng-content select="[foo]"/>',
+          })
+          class Comp {}
+
+          @Component({
+            imports: [Comp],
+            template: \`
+              <comp>
+                @if (true) {
+                  @let value = 1;
+                  <div foo>{{value}}</div>
+                  breaks projection
+                }
+              </comp>
+            \`,
+          })
+          class TestCmp {}
+        `,
+        );
+
+        const diags = env
+          .driveDiagnostics()
+          .map((d) => ts.flattenDiagnosticMessageText(d.messageText, ''));
+        expect(diags.length).toBe(1);
+        expect(diags[0]).toContain(
+          `Node matches the "[foo]" slot of the "Comp" component, but will ` +
+            `not be projected into the specific slot because the surrounding @if has more than one node at its root.`,
+        );
+      });
+
       it('should not report when the component only has a catch-all slot', () => {
         env.write(
           'test.ts',
@@ -8737,6 +9499,31 @@ suppress
               </section>
             \`,
             imports: [UsedDir, COMMON]
+          })
+          export class MyComp {}
+        `,
+        );
+
+        const diags = env.driveDiagnostics();
+        expect(diags.length).toBe(0);
+      });
+
+      it('should not report unused directives on ng-template nested in an svg element', () => {
+        env.write(
+          'test.ts',
+          `
+          import {Component} from '@angular/core';
+          import {CommonModule} from '@angular/common';
+
+
+          @Component({
+            template: \`
+              <ng-template #foo>foo</ng-template>
+              <svg>
+                <ng-template [ngTemplateOutlet]="foo"></ng-template>
+              </svg>
+            \`,
+            imports: [CommonModule]
           })
           export class MyComp {}
         `,

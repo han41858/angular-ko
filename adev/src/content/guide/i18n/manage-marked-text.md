@@ -16,7 +16,7 @@ As described in [How meanings control text extraction and merges][GuideI18nCommo
 
 The following example displays translation units with unique IDs.
 
-<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="generated-id"/>
+<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" region="generated-id"/>
 
 When you change the translatable text, the extractor generates a new ID for that translation unit.
 In most cases, changes in the source text also require a change to the translation.
@@ -41,7 +41,7 @@ variableText1 = $localize`:@@introductionHeader:Hello i18n!`;
 
 When you specify a custom ID, the extractor generates a translation unit with the custom ID.
 
-<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="custom-id"/>
+<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" region="custom-id"/>
 
 If you change the text, the extractor does not change the ID.
 As a result, you don't have to take the extra step to update the translation.
@@ -57,7 +57,7 @@ Angular 추출 도구는 다음 항목마다 번역 단위 항목을 만들어 �
 
 다음 예제는 고유한 ID가 있는 번역 단위를 보여줍니다.
 
-<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="generated-id"/>
+<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" region="generated-id"/>
 
 번역할 텍스트를 변경하면 추출 도구가 해당 번역 단위의 ID를 새로 생성합니다.
 원문이 변경되면 대부분 번역도 변경해야 합니다.
@@ -82,7 +82,7 @@ variableText1 = $localize`:@@introductionHeader:Hello i18n!`;
 
 커스텀 ID를 지정하면 추출 도구가 해당 커스텀 ID를 가진 번역 단위를 생성합니다.
 
-<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="custom-id"/>
+<docs-code header="messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" region="custom-id"/>
 
 텍스트를 변경해도 추출 도구는 ID를 변경하지 않습니다.
 따라서 번역을 갱신하기 위한 추가 단계를 거칠 필요가 없습니다.
@@ -160,7 +160,7 @@ For example, in the following code snippet the same `myId` custom ID is defined 
 
 The following displays the translation in French.
 
-<docs-code header="src/locale/messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="i18n-duplicate-custom-id"/>
+<docs-code header="src/locale/messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" region="i18n-duplicate-custom-id"/>
 
 Both elements now use the same translation \(`Bonjour`\), because both were defined with the same custom ID.
 
@@ -179,7 +179,7 @@ Both elements now use the same translation \(`Bonjour`\), because both were defi
 
 다음은 프랑스어 번역입니다.
 
-<docs-code header="src/locale/messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" visibleRegion="i18n-duplicate-custom-id"/>
+<docs-code header="src/locale/messages.fr.xlf" path="adev/src/content/examples/i18n/doc-files/messages.fr.xlf" region="i18n-duplicate-custom-id"/>
 
 두 엘리먼트에 같은 커스텀 ID를 정의했기 때문에 이제 두 엘리먼트 모두 같은 번역(`Bonjour`)을 사용합니다.
 

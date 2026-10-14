@@ -20,6 +20,8 @@ Signal Forms provides a `submit()` function that helps you manage the form submi
 ## What does `submit()` do?
 -->
 
+<a id="what-does-submit-do"></a>
+
 ## `submit()` 함수는 뭘 하나요?
 
 <!--
@@ -45,6 +47,8 @@ The `submit()` function returns a `Promise<boolean>` that resolves to `true` whe
 <!--
 ## Setting up form submission with `FormRoot`
 -->
+
+<a id="setting-up-form-submission-with-formroot"></a>
 
 ## `FormRoot`에 폼 제출 방법 등록하기
 
@@ -199,6 +203,8 @@ export class Contact {
 ## Showing submission state with `submitting()`
 -->
 
+<a id="showing-submission-state-with-submitting"></a>
+
 ## 폼 제출 상태 표시하기: `submitting()`
 
 <!--
@@ -237,11 +243,15 @@ Once the `action` function succeeds or returns an error, the `submitting()` sign
 ## Managing submission errors
 -->
 
+<a id="managing-submission-errors"></a>
+
 ## 폼 제출 에러 관리하기
 
 <!--
 ### Server errors
 -->
+
+<a id="server-errors"></a>
 
 ### 서버 에러
 
@@ -255,6 +265,8 @@ When your `action` function communicates with a server, the server may return er
 <!--
 #### Errors on the submitted field
 -->
+
+<a id="errors-on-the-submitted-field"></a>
 
 #### 필드 에러
 
@@ -287,6 +299,8 @@ action: async (field) => {
 #### Errors on specific fields
 -->
 
+<a id="errors-on-specific-fields"></a>
+
 #### 특정 필드에서 발생한 에러
 
 <!--
@@ -316,6 +330,8 @@ action: async (field) => {
 <!--
 #### Multiple errors
 -->
+
+<a id="multiple-errors"></a>
 
 #### 동시에 발생한 에러
 
@@ -355,6 +371,8 @@ action: async (field) => {
 ### Auto-clearing submission errors
 -->
 
+<a id="auto-clearing-submission-errors"></a>
+
 ### 폼 제출 에러 초기화하기
 
 <!--
@@ -378,6 +396,8 @@ TIP: Submission errors appear alongside validation errors in the field's `errors
 <!--
 ## Handling invalid submissions with `onInvalid`
 -->
+
+<a id="handling-invalid-submissions-with-oninvalid"></a>
 
 ## 유효성 검사 오류 처리하기: `onInvalid`
 
@@ -509,6 +529,8 @@ contactForm = form(
 ## Manual submission with `submit()`
 -->
 
+<a id="manual-submission-with-submit"></a>
+
 ## 수동 폼 제출: `submit()`
 
 <!--
@@ -619,6 +641,8 @@ export class Contact {
 ## Handling side effects
 -->
 
+<a id="handling-side-effects"></a>
+
 ## 추가 동작 실행하기
 
 <!--
@@ -710,18 +734,22 @@ submission: {
 ## Concurrent submissions
 -->
 
+<a id="concurrent-submissions"></a>
+
 ## 동시 제출
 
 <!--
-When a submission is in progress, subsequent calls to `submit()` for the same form or any of its parents return `false` immediately without running the action. This prevents duplicate submissions and side effects if a user triggers the submit action multiple times quickly.
+When a submission is in progress, subsequent calls to `submit()` for the same form or any of its descendants return `false` immediately without running the action. This prevents duplicate submissions and side effects if a user triggers the submit action multiple times quickly.
 -->
 
-폼 제출이 진행 중일 때 같은 폼이나 부모 폼에서 다시 한 번 `submit()`을 실행하면 폼 제출 함수가 실행되지 않고 `false` 값을 즉시 반환합니다.
+폼 제출이 진행 중일 때 같은 폼이나 하위 폼에서 다시 한 번 `submit()`을 실행하면 폼 제출 함수가 실행되지 않고 `false` 값을 즉시 반환합니다.
 이 동작은 사용자가 폼 제출 버튼을 빠르게 여러 번 누르는 경우 발생할 수 있는 폼 중복 제출을 방지하기 위한 것입니다.
 
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

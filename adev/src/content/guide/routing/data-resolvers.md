@@ -14,6 +14,12 @@ Data resolvers allow you to fetch data before navigating to a route, ensuring th
 필수 데이터를 미리 로드하기 때문에 로딩 상태를 표시할 필요를 줄이고 사용자 경험을 개선할 수 있습니다.
 
 <!--
+TIP: If your application uses Angular Signals, consider using [route resources](/guide/routing/data-fetching-with-resources) for reactive data fetching with `Resource` APIs and built-in support for non-blocking data loading.
+-->
+
+TIP: 애플리케이션에서 Angular 시그널을 사용한다면 [라우팅 규칙 리소스](/guide/routing/data-fetching-with-resources)를 활용해 보세요. `Resource` API로 반응형 데이터 요청을 구현할 수 있고, 논블로킹 데이터 로딩도 기본으로 지원합니다.
+
+<!--
 ## What are data resolvers?
 -->
 
@@ -213,7 +219,7 @@ import type {User, Settings} from './types';
 })
 export class UserDetail {
   private route = inject(ActivatedRoute);
-  private data = toSignal(this.route.data);
+  private data = toSignal(this.route.data, {requireSync: true});
   user = computed(() => this.data().user as User);
   settings = computed(() => this.data().settings as Settings);
 }
@@ -237,7 +243,7 @@ import type {User, Settings} from './types';
 })
 export class UserDetail {
   private route = inject(ActivatedRoute);
-  private data = toSignal(this.route.data);
+  private data = toSignal(this.route.data, {requireSync: true});
   user = computed(() => this.data().user as User);
   settings = computed(() => this.data().settings as Settings);
 }
@@ -361,9 +367,8 @@ The [`withNavigationErrorHandler`](api/router/withNavigationErrorHandler) featur
 
 ```ts
 import {bootstrapApplication} from '@angular/platform-browser';
-import {provideRouter, withNavigationErrorHandler} from '@angular/router';
+import {provideRouter, Router, withNavigationErrorHandler} from '@angular/router';
 import {inject} from '@angular/core';
-import {Router} from '@angular/router';
 import {routes} from './app.routes';
 
 bootstrapApplication(App, {
@@ -373,8 +378,8 @@ bootstrapApplication(App, {
       withNavigationErrorHandler((error) => {
         const router = inject(Router);
 
-        if (error?.message) {
-          console.error('Navigation error occurred:', error.message);
+        if (error.error?.message) {
+          console.error('Navigation error occurred:', error.error.message);
         }
 
         router.navigate(['/error']);
@@ -401,9 +406,8 @@ export const userResolver: ResolveFn<User> = (route) => {
 
 ```ts
 import {bootstrapApplication} from '@angular/platform-browser';
-import {provideRouter, withNavigationErrorHandler} from '@angular/router';
+import {provideRouter, Router, withNavigationErrorHandler} from '@angular/router';
 import {inject} from '@angular/core';
-import {Router} from '@angular/router';
 import {routes} from './app.routes';
 
 bootstrapApplication(App, {
@@ -413,8 +417,8 @@ bootstrapApplication(App, {
       withNavigationErrorHandler((error) => {
         const router = inject(Router);
 
-        if (error?.message) {
-          console.error('Navigation error occurred:', error.message);
+        if (error.error?.message) {
+          console.error('Navigation error occurred:', error.error.message);
         }
 
         router.navigate(['/error']);
@@ -635,6 +639,12 @@ While data resolvers prevent loading states within components, they introduce a 
 특히 네트워크 요청이 느리면 사용자가 링크를 클릭한 뒤 새 라우팅 규칙이 표시되기까지 지연을 느낄 수 있습니다.
 
 <!--
+TIP: To avoid blocking navigation and render components immediately with skeleton or loading indicators, use [non-blocking route resources](/guide/routing/data-fetching-with-resources#blocking-and-non-blocking-resources).
+-->
+
+TIP: 내비게이션을 막지 않고 스켈레톤 화면이나 로딩 표시와 함께 컴포넌트를 즉시 렌더링하려면 [논블로킹 라우팅 규칙 리소스](/guide/routing/data-fetching-with-resources#blocking-and-non-blocking-resources)를 사용하세요.
+
+<!--
 ### Providing navigation feedback
 -->
 
@@ -646,7 +656,7 @@ While data resolvers prevent loading states within components, they introduce a 
 To improve user experience during resolver execution, you can listen to router events and show loading indicators:
 
 ```angular-ts
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {Router} from '@angular/router';
 
 @Component({
@@ -670,7 +680,7 @@ This approach ensures users receive visual feedback that navigation is in progre
 리졸버가 실행되는 동안 사용자 경험을 개선하려면 라우터 이벤트를 감지해서 로딩 표시기를 표시할 수 있습니다.
 
 ```angular-ts
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {Router} from '@angular/router';
 
 @Component({
@@ -723,20 +733,22 @@ export class App {
 ## 자식 리졸버에서 부모의 리졸버 데이터 읽기
 
 <!--
-Resolvers execute from parent to child. When a parent route defines a resolver, its resolved data is available to child resolvers that run afterward.
+Resolvers execute sequentially from parent to child. When a parent route defines a resolver, its resolved data is available to child resolvers that run afterward.
+
+NOTE: Because resolvers execute sequentially from parent to child, each nested level adds to the total navigation wait time (a network waterfall). If your child routes do not depend on parent data, consider [route resources](/guide/routing/data-fetching-with-resources), which execute concurrently across all routes.
 
 ```ts
-import { inject } from '@angular/core';
-import { provideRouter , ActivatedRouteSnapshot } from '@angular/router';
-import { userResolver } from './resolvers';
-import { UserPosts } from './pages';
-import { PostService } from './services',
-import type { User } from './types';
+import {inject} from '@angular/core';
+import {provideRouter, ActivatedRouteSnapshot} from '@angular/router';
+import {userResolver} from './resolvers';
+import {UserPosts} from './pages';
+import {PostService} from './services';
+import type {User} from './types';
 
 provideRouter([
   {
     path: 'users/:id',
-    resolve: { user: userResolver }, // user resolver in the parent route
+    resolve: {user: userResolver}, // user resolver in the parent route
     children: [
       {
         path: 'posts',
@@ -757,21 +769,23 @@ provideRouter([
 ```
 -->
 
-리졸버는 부모에서 자식 순서로 실행됩니다.
+리졸버는 부모에서 자식 순서로 순차 실행됩니다.
 부모 라우팅 규칙에 리졸버가 정의되어 있다면, 이후에 실행되는 자식 리졸버는 부모 리졸버가 가져온 데이터를 사용할 수 있습니다.
 
+NOTE: 리졸버는 부모에서 자식 순서로 순차 실행되므로 중첩 단계마다 전체 내비게이션 대기 시간이 길어집니다(네트워크 워터폴). 자식 라우팅 규칙이 부모 데이터에 의존하지 않는다면 모든 라우팅 규칙에서 동시에 실행되는 [라우팅 규칙 리소스](/guide/routing/data-fetching-with-resources)를 고려하세요.
+
 ```ts
-import { inject } from '@angular/core';
-import { provideRouter , ActivatedRouteSnapshot } from '@angular/router';
-import { userResolver } from './resolvers';
-import { UserPosts } from './pages';
-import { PostService } from './services',
-import type { User } from './types';
+import {inject} from '@angular/core';
+import {provideRouter, ActivatedRouteSnapshot} from '@angular/router';
+import {userResolver} from './resolvers';
+import {UserPosts} from './pages';
+import {PostService} from './services';
+import type {User} from './types';
 
 provideRouter([
   {
     path: 'users/:id',
-    resolve: { user: userResolver }, // 부모 라우팅 규칙의 사용자 리졸버
+    resolve: {user: userResolver}, // 부모 라우팅 규칙의 사용자 리졸버
     children: [
       {
         path: 'posts',
@@ -790,3 +804,21 @@ provideRouter([
   },
 ]);
 ```
+
+<!--
+## Next steps
+
+<docs-pill-row>
+  <docs-pill href="/guide/routing/data-fetching-with-resources" title="Data fetching with resources"/>
+  <docs-pill href="/guide/routing/route-guards" title="Control route access with guards"/>
+</docs-pill-row>
+-->
+
+<a id="next-steps"></a>
+
+## 다음 단계
+
+<docs-pill-row>
+  <docs-pill href="/guide/routing/data-fetching-with-resources" title="리소스로 데이터 가져오기"/>
+  <docs-pill href="/guide/routing/route-guards" title="가드로 라우팅 규칙 접근 제어하기"/>
+</docs-pill-row>

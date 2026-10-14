@@ -190,7 +190,6 @@ While `RouterLink` handles declarative navigation in templates, Angular provides
 ### `router.navigate()`
 -->
 
-<a id="routernavigate"></a>
 
 ### `router.navigate()`
 
@@ -391,7 +390,6 @@ this.router.navigate(['/edit'], {relativeTo: this.route});
 ### `router.navigateByUrl()`
 -->
 
-<a id="routernavigatebyurl"></a>
 
 ### `router.navigateByUrl()`
 

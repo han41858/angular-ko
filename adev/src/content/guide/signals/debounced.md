@@ -10,7 +10,7 @@ IMPORTANT: `debounced` is [experimental](reference/releases#experimental). It's 
 Use `debounced` to delay reacting to a signal's value until it stops changing. It returns a `Resource` whose value reflects the debounced value of the source signal.
 
 ```angular-ts
-import {debounced, resource, signal} from '@angular/core';
+import {Component, debounced, resource, signal} from '@angular/core';
 
 @Component({
   template: `
@@ -46,7 +46,7 @@ export class Search {
 이 함수를 실행하면 소스 시그널 값이 안정될 때 실행되는 `Resource` 시그널을 반환합니다.
 
 ```angular-ts
-import {debounced, resource, signal} from '@angular/core';
+import {Component, debounced, resource, signal} from '@angular/core';
 
 @Component({
   template: `
@@ -79,10 +79,12 @@ export class Search {
 ## Status during debounce
 -->
 
+<a id="status-during-debounce"></a>
+
 ## 지연되는 동안의 상태
 
 <!--
-While the debounce timer is counting down, `status()` is `'loading'` and `value()` returns the previously resolved value. When the timer expires, the resource settles to `'resolved'`. If the source signal throws, the resource enters `'error'` immediately no timer runs.
+While the debounce timer is counting down, `status()` is `'loading'` and `value()` returns the previously resolved value. When the timer expires, the resource settles to `'resolved'`. If the source signal throws, the resource enters `'error'` immediately; no timer runs.
 
 See [Resource status](/guide/signals/resource#resource-status) for the full list of statuses and their `value()` behavior.
 -->
@@ -96,6 +98,8 @@ See [Resource status](/guide/signals/resource#resource-status) for the full list
 <!--
 ## Custom wait function
 -->
+
+<a id="custom-wait-function"></a>
 
 ## 커스텀 지연 함수
 
@@ -135,6 +139,8 @@ debouncedQuery = debounced(query, (value, lastSnapshot) => {
 ## Equality
 -->
 
+<a id="equality"></a>
+
 ## 동일값 확인
 
 <!--
@@ -162,6 +168,8 @@ debouncedFilter = debounced(filter, 200, {
 <!--
 ## Injection context
 -->
+
+<a id="injection-context"></a>
 
 ### 의존성 주입 컨텍스트
 

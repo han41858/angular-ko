@@ -276,7 +276,7 @@ If you want to customize Karma, you can create a `karma.conf.js` by running the 
 ng generate config karma
 ```
 
-HELPFUL: Read more about Karma configuration in the [Karma configuration guide](http://karma-runner.github.io/6.4/config/configuration-file.html).
+HELPFUL: Read more about Karma configuration in the [Karma configuration guide](https://karma-runner.github.io/6.4/config/configuration-file.html).
 -->
 
 Karma 설정을 직접 변경하려면 다음 명령으로 `karma.conf.js`를 생성하세요.

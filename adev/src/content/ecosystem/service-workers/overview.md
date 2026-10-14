@@ -169,7 +169,7 @@ More specifically:
 
 - The browser does not download the service worker script and the `ngsw.json` manifest file
 - Active attempts to interact with the service worker, such as calling `SwUpdate.checkForUpdate()`, return rejected promises
-- The observable events of related services, such as `SwUpdate.available`, are not triggered
+- The observable events of related services, such as `SwUpdate.versionUpdates`, are not triggered
 
 It is highly recommended that you ensure that your application works even without service worker support in the browser.
 Although an unsupported browser ignores service worker caching, it still reports errors if the application attempts to interact with the service worker.
@@ -188,7 +188,7 @@ IE, Opera Mini 등의 브라우저는 서비스 워커를 지원하지 않습니
 
 - 브라우저가 서비스 워커 스크립트와 `ngsw.json` 매니페스트 파일을 다운로드하지 않습니다.
 - `SwUpdate.checkForUpdate()` 호출처럼 서비스 워커와 직접 상호작용하려는 시도는 거부된 Promise를 반환합니다.
-- `SwUpdate.available` 같은 관련 서비스의 Observable 이벤트가 발생하지 않습니다.
+- `SwUpdate.versionUpdates` 같은 관련 서비스의 Observable 이벤트가 발생하지 않습니다.
 
 브라우저가 서비스 워커를 지원하지 않아도 애플리케이션이 동작하도록 하는 것을 적극 권장합니다.
 지원하지 않는 브라우저는 서비스 워커 캐싱을 무시하지만, 애플리케이션이 서비스 워커와 상호작용하려고 하면 에러를 보고합니다.

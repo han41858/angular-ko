@@ -1,5 +1,5 @@
 <!--
-<docs-decorative-header title="Installation" imgSrc="adev/src/assets/images/what_is_angular.svg"> <!-- markdownlint-disable-line ->
+<docs-decorative-header title="Installation" imgSrc="adev/src/assets/images/what_is_angular.svg"> <!- markdownlint-disable-line ->
 </docs-decorative-header>
 -->
 
@@ -15,6 +15,8 @@ Get started with Angular quickly with online starters or locally with your termi
 <!--
 ## Play Online
 -->
+
+<a id="play-online"></a>
 
 ## 온라인으로 작업하기
 
@@ -39,6 +41,8 @@ The fastest way to play with an Angular app. No setup required.
 ## Set up a new project locally
 -->
 
+<a id="set-up-a-new-project-locally"></a>
+
 ## 로컬 환경에 프로젝트 환경 설정하기
 
 <!--
@@ -51,16 +55,18 @@ If you're starting a new project, you'll most likely want to create a local proj
 ### Prerequisites
 -->
 
+<a id="prerequisites"></a>
+
 ### 환경설정 조건
 
 <!--
-- **Node.js** - [v20.19.0 or newer](/reference/versions)
+- **Node.js** - [v22.22.3 or newer](/reference/versions)
 - **Text editor** - We recommend [Visual Studio Code](https://code.visualstudio.com/)
 - **Terminal** - Required for running [Angular CLI](/tools/cli) commands
 - **Development Tool** - To improve your development workflow, we recommend the [Angular Language Service](/tools/language-service)
 -->
 
-- **Node.js** - [v20.19.0 이거나 이후 버전](/reference/versions)
+- **Node.js** - [v22.22.3 이거나 이후 버전](/reference/versions)
 - **텍스트 에디터** - [Visual Studio Code](https://code.visualstudio.com/)를 추천합니다.
 - **터미널** - [Angular CLI](/tools/cli) 명령을 실행하기 위해 필요합니다.
 - **개발 툴** - 개발 워크플로를 향상시키기 위해 [Angular Language Service](/tools/language-service) 사용을 권장합니다.
@@ -68,6 +74,8 @@ If you're starting a new project, you'll most likely want to create a local proj
 <!--
 ### Instructions
 -->
+
+<a id="instructions"></a>
 
 ### 설정방법
 
@@ -80,6 +88,8 @@ The following guide will walk you through setting up a local Angular project.
 <!--
 #### Install Angular CLI
 -->
+
+<a id="install-angular-cli"></a>
 
 #### Angular CLI 설치하기
 
@@ -154,8 +164,11 @@ Windows나 Unix에서 명령을 실행하다가 에러가 발생하면 [CLI docs
 #### Create a new project
 -->
 
+<a id="create-a-new-project"></a>
+
 #### 프로젝트 생성하기
 
+<!--
 In your terminal, run the CLI command [`ng new`](cli/new) with the desired project name. In the following examples, we'll be using the example project name of `my-first-angular-app`.
 
 ```shell
@@ -175,6 +188,7 @@ After you select the configuration options and the CLI runs through the setup, y
 
 At this point, you're now ready to run your project locally!
 -->
+
 터미널에서 Angular CLI [`ng new`](cli/new) 명령을 실행하면서 프로젝트 이름을 지정하세요.
 이 문서에서는 `my-first-angular-app`라는 프로젝트 이름을 사용하겠습니다.
 
@@ -201,6 +215,8 @@ ng new <프로젝트-이름>
 <!--
 #### Running your new project locally
 -->
+
+<a id="running-your-new-project-locally"></a>
 
 #### 로컬 프로젝트 실행하기
 
@@ -257,6 +273,8 @@ NOTE: Raw file sizes do not reflect development server per-request transformatio
 ### Using AI for Development
 -->
 
+<a id="using-ai-for-development"></a>
+
 ### AI 활용하기
 
 <!--
@@ -268,6 +286,8 @@ AI 기능이 지원되는 IDE를 활용하려면 [Angular 프롬프트 규칙, �
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

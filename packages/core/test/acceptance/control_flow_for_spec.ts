@@ -1289,6 +1289,40 @@ describe('control flow - for', () => {
 
       expect(fixture.nativeElement.textContent).toBe('Main: Before  After Slot: 3');
     });
+
+    it('should project @for and @empty blocks with namespaced root nodes into tag selector slots', () => {
+      @Component({
+        selector: 'test',
+        template: 'svg: (<ng-content select="svg"/>), math: (<ng-content select="math"/>)',
+      })
+      class TestComponent {}
+
+      @Component({
+        imports: [TestComponent],
+        template: `
+          <test>
+            @for (item of items(); track $index) {
+              <svg>
+                <text>{{ item }}</text>
+              </svg>
+            } @empty {
+              <math><mi>Empty</mi></math>
+            }
+          </test>
+        `,
+      })
+      class App {
+        items = signal([1, 2]);
+      }
+
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toBe('svg: (12), math: ()');
+
+      fixture.componentInstance.items.set([]);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.textContent).toBe('svg: (), math: (Empty)');
+    });
   });
 
   describe('reactivity', () => {
@@ -1297,7 +1331,6 @@ describe('control flow - for', () => {
       // prettier-ignore
       @Component({
         template: `@for (item of items; track item) {{{item}}|}`,
-        changeDetection: ChangeDetectionStrategy.OnPush,
       })
       class TestComponent {
         items = new Proxy([1, 2, 3, 4, 5], {
@@ -1324,7 +1357,6 @@ describe('control flow - for', () => {
     // prettier-ignore
     @Component({
       template: `@for (item of items; track $index) {{{item}}|}`,
-      changeDetection: ChangeDetectionStrategy.OnPush,
     })
     class TestComponent {
       items = new Proxy(

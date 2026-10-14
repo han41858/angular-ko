@@ -2,6 +2,8 @@
 # Optimizing images
 -->
 
+<a id="optimizing-images"></a>
+
 # 이미지 최적화
 
 <!--
@@ -61,7 +63,7 @@ imports: [NgOptimizedImage],
 
 Note that in the above code example, each image has both `width` and `height` attributes. In order to prevent [layout shift](https://web.dev/articles/cls), the `NgOptimizedImage` directive requires both size attributes on each image.
 
-In situations where you can't or don't want to specify a static `height` and `width` for images, you can use [the `fill` attribute](https://web.dev/articles/cls) to tell the image to act like a "background image", filling its containing element:
+In situations where you can't or don't want to specify a static `height` and `width` for images, you can use [the `fill` attribute](/guide/image-optimization#using-fill-mode) to tell the image to act like a "background image", filling its containing element:
 
 ```angular-html
 // Container div has 'position: "relative"'
@@ -121,6 +123,8 @@ If you would like to learn more, check out the [documentation for `NgOptimizedIm
 
 <docs-workflow>
 
+<a id="import-the-ngoptimizedimage-directive"></a>
+
 <docs-step title="NgOptimizedImage 디렉티브를 불러오세요">
 
 `NgOptimizedImage` 디렉티브를 사용하려면, 먼저 컴포넌트의 `imports` 배열에 `@angular/common` 라이브러리로 제공되는 `NgOptimizedImage` 를 로드해야 합니다.
@@ -135,6 +139,8 @@ import { NgOptimizedImage } from '@angular/common';
 ```
 
 </docs-step>
+
+<a id="update-the-src-attribute-to-be-ngsrc"></a>
 
 <docs-step title="src 어트리뷰트를 ngSrc로 수정하세요">
 
@@ -162,12 +168,14 @@ imports: [NgOptimizedImage],
 
 </docs-step>
 
+<a id="add-width-and-height-attributes"></a>
+
 <docs-step title="width, height 어트리뷰트를 추가하세요">
 
 위 예제에서 이미지 엘리먼트마다 `width` 어트리뷰트와 `height` 어트리뷰트를 지정한 것을 주의 깊게 보세요.
 `NgOptimizedImage` 디렉티브를 사용할 때는 [레이아웃이 틀어지는 것](https://web.dev/articles/cls)을 방지하기 위해 이미지마다 정확한 크기를 지정하는 것을 권장합니다.
 
-정확한 `height` 값과 `width` 값을 지정할 수 없거나 지정하지 않으려는 상황이라면, [`fill` 어트리뷰트](https://web.dev/articles/cls)를 사용해서 이 이미지가 엘리먼트를 채우는 "배경 이미지" 라고 지정하면 됩니다:
+정확한 `height` 값과 `width` 값을 지정할 수 없거나 지정하지 않으려는 상황이라면, [`fill` 어트리뷰트](/guide/image-optimization#using-fill-mode)를 사용해서 이 이미지가 엘리먼트를 채우는 "배경 이미지" 라고 지정하면 됩니다:
 
 ```angular-html
 // Container div has 'position: "relative"'
@@ -180,6 +188,8 @@ imports: [NgOptimizedImage],
 
 </docs-step>
 
+<a id="prioritize-important-images"></a>
+
 <docs-step title="중요한 이미지는 우선순위를 높이세요">
 
 로딩 성능에 가장 중요한 것은 화면이 로드될 때 화면에서 가장 큰 그래픽 요소인 ["LCP 엘리먼트"](https://web.dev/articles/optimize-lcp) 이미지의 우선순위를 정하는 것입니다.
@@ -190,6 +200,8 @@ imports: [NgOptimizedImage],
 ```
 
 </docs-step>
+
+<a id="optional-use-an-image-loader"></a>
 
 <docs-step title="선택사항: 이미지 로더를 사용해 보세요">
 

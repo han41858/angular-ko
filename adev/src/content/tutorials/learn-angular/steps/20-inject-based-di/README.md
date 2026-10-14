@@ -81,6 +81,8 @@ class PetCareDashboard {
 
 <docs-workflow>
 
+<a id="inject-the-carservice"></a>
+
 <docs-step title="`CarService`를 의존성으로 주입합니다">
 
 `app.ts` 파일에서 `inject()` 함수를 사용해서 `carService` 프로퍼티에 `CarService`를 의존성으로 주입합니다.
@@ -88,6 +90,8 @@ class PetCareDashboard {
 참고: 프로퍼티 `carService`와 클래스 `CarService`는 다릅니다.
 
 </docs-step>
+
+<a id="use-the-carservice-instance"></a>
 
 <docs-step title="`carService` 인스턴스를 사용해 보세요">
 
@@ -100,6 +104,8 @@ display = this.carService.getCars().join(' ⭐️ ');
 ```
 
 </docs-step>
+
+<a id="update-the-app-template"></a>
 
 <docs-step title="`App` 컴포넌트의 템플릿을 수정하세요">
 

@@ -25,7 +25,7 @@ Angular 14부터 반응형 폼에는 기본적으로 엄격한 타입이 적용�
 ## 타입이 지정된 폼 개요
 
 <!--
-<docs-video src="https://www.youtube.com/embed/L-odCf4MfJc" alt="Typed Forms in Angular" />
+<docs-video src="https://www.youtube.com/embed/L-odCf4MfJc" title="Typed Forms in Angular" />
 
 With Angular reactive forms, you explicitly specify a _form model_. As a simple example, consider this basic user login form:
 
@@ -51,7 +51,7 @@ In addition to the added safety, the types enable a variety of other improvement
 These improvements currently apply only to _reactive_ forms (not [_template-driven_ forms](guide/forms/template-driven-forms)).
 -->
 
-<docs-video src="https://www.youtube.com/embed/L-odCf4MfJc" alt="Angular에서 타입이 지정된 폼 사용하기" />
+<docs-video src="https://www.youtube.com/embed/L-odCf4MfJc" title="Angular에서 타입이 지정된 폼 사용하기" />
 
 Angular 반응형 폼을 사용하면 _폼 모델_ 을 명시적으로 지정합니다.
 간단한 예로 다음과 같은 기본 로그인 폼을 살펴봅시다:
@@ -406,7 +406,6 @@ TypeScript는 선택적 컨트롤만 추가하거나 제거할 수 있도록 제
 ### `FormRecord`
 -->
 
-<a id="formrecord"></a>
 
 ### `FormRecord`
 

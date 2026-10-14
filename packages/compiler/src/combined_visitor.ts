@@ -46,6 +46,10 @@ export class CombinedRecursiveAstVisitor extends RecursiveAstVisitor implements 
     this.visitAllTemplateNodes(content.children);
   }
 
+  visitContentBlock(block: t.ContentBlock): void {
+    this.visitAllTemplateNodes(block.children);
+  }
+
   visitBoundAttribute(attribute: t.BoundAttribute): void {
     this.visit(attribute.value);
   }
@@ -123,6 +127,17 @@ export class CombinedRecursiveAstVisitor extends RecursiveAstVisitor implements 
   visitIfBlockBranch(block: t.IfBlockBranch): void {
     block.expression && this.visit(block.expression);
     block.expressionAlias?.visit(this);
+    this.visitAllTemplateNodes(block.children);
+  }
+
+  visitBoundaryBlock(block: t.BoundaryBlock): void {
+    this.visitAllTemplateNodes(block.children);
+    this.visitAllTemplateNodes(block.errorBlocks);
+  }
+
+  visitBoundaryErrorBlock(block: t.BoundaryErrorBlock): void {
+    this.visitAllTemplateNodes(block.contextVariables);
+    block.expression && this.visit(block.expression);
     this.visitAllTemplateNodes(block.children);
   }
 

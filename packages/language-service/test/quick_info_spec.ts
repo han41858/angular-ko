@@ -450,6 +450,14 @@ describe('quick info', () => {
         });
       });
 
+      it('should work in class bindings with dots in the class name', () => {
+        expectQuickInfo({
+          templateOverride: `<div [class.px-3.5]="tit¦le"></div>`,
+          expectedSpanText: 'title',
+          expectedDisplayString: '(property) AppCmp.title: string',
+        });
+      });
+
       it('should work for accessed function calls', () => {
         expectQuickInfo({
           templateOverride: `<div (click)="someObject.some¦Method()"></div>`,
@@ -541,7 +549,7 @@ describe('quick info', () => {
         const appFile = project.openFile('app.ts');
         appFile.moveCursorToText('something?.va¦lue()');
         const info = appFile.getQuickInfoAtPosition()!;
-        expect(toText(info.displayParts)).toEqual('(property) value: Signal<number>');
+        expect(toText(info.displayParts)).toEqual('(property) value: () => number');
         expect(toText(info.documentation)).toEqual('Documentation for value.');
       });
 
@@ -848,6 +856,22 @@ describe('quick info', () => {
         });
       });
 
+      it('boundary error block context variables', () => {
+        expectQuickInfo({
+          templateOverride: `@boundary { } @error (let er¦r) { }`,
+          expectedSpanText: 'err',
+          expectedDisplayString: '(variable) err: Error',
+        });
+      });
+
+      it('boundary error block retry context variable', () => {
+        expectQuickInfo({
+          templateOverride: `@boundary { } @error (let err, rt¦ry = $reset) { }`,
+          expectedSpanText: 'rtry',
+          expectedDisplayString: '(variable) rtry: () => void',
+        });
+      });
+
       it('if block alias variable narrowed', () => {
         expectQuickInfo({
           templateOverride: `@if (signalValue; as al¦iasName) {}`,
@@ -979,6 +1003,28 @@ describe('quick info', () => {
           moveTo: `'[title]': 'myT¦itle'`,
           expectedSpanText: 'myTitle',
           expectedDisplayString: '(property) AppCmp.myTitle: string',
+        });
+      });
+
+      it('should handle host class binding with dots in the class name', () => {
+        const source = `
+          import {Component} from '@angular/core';
+
+          @Component({
+            template: '',
+            selector: 'app-cmp',
+            host: {'[class.py-2.5]': 'isActive'}
+          })
+          export class AppCmp {
+            isActive = true;
+          }
+        `;
+
+        expectHostBindingsQuickInfo({
+          source,
+          moveTo: `'[class.py-2.5]': 'isAc¦tive'`,
+          expectedSpanText: 'isActive',
+          expectedDisplayString: '(property) AppCmp.isActive: boolean',
         });
       });
 
@@ -1319,6 +1365,46 @@ describe('quick info', () => {
         templateOverride: `<div>{{tit¦le}}</div>`,
         expectedSpanText: 'title',
         expectedDisplayString: '(property) SomeCmp.title: string',
+      });
+    });
+
+    it('should get quick info in a component using a non-exported directive from the same file', () => {
+      project = env.addProject(
+        'test',
+        {
+          'app.ts': `
+            import {Component, Directive, input, signal} from '@angular/core';
+
+            @Directive({selector: 'img[appHelper]'})
+            class HelperDirective {
+              readonly appHelper = input.required<string>();
+            }
+
+            @Component({
+              selector: 'app-some',
+              imports: [HelperDirective],
+              templateUrl: './app.html',
+            })
+            export class SomeComponent {
+              protected readonly open = signal(true);
+              protected readonly items = signal([{id: 1, src: '/photo.jpg'}]);
+            }
+          `,
+          'app.html': ``,
+        },
+        {strictTemplates: true},
+      );
+
+      expectQuickInfo({
+        templateOverride: `
+          @if (open()) {
+            @for (item of items(); track item.id) {
+              <img [appHelper]="item.s¦rc" alt="" />
+            }
+          }
+        `,
+        expectedSpanText: 'src',
+        expectedDisplayString: '(property) src: string',
       });
     });
 

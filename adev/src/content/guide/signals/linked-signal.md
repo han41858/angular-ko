@@ -126,6 +126,8 @@ console.log(selectedOption()); // 'Email'
 ## Accounting for previous state
 -->
 
+<a id="accounting-for-previous-state"></a>
+
 ## 이전 상태 참조하기
 
 <!--
@@ -258,6 +260,8 @@ export class ShippingMethodPicker {
 ## Custom equality comparison
 -->
 
+<a id="custom-equality-comparison"></a>
+
 ## 동일성 평가 함수 커스터마이징
 
 <!--
@@ -303,6 +307,8 @@ const activeUserEditCopy = linkedSignal({
 ## Customizing the set operation
 -->
 
+<a id="customizing-the-set-operation"></a>
+
 ## `set()` 커스터마이징하기
 
 <!--
@@ -330,6 +336,8 @@ NOTE: Using `rawSet` allows you to update the `linkedSignal`'s value directly. T
 <!--
 ### Writing back to a source signal
 -->
+
+<a id="writing-back-to-a-source-signal"></a>
 
 ### 원본 시그널의 값을 변경하기
 
@@ -370,6 +378,8 @@ console.log(tempF()); // 212
 <!--
 ### Updating a property inside a parent object
 -->
+
+<a id="updating-a-property-inside-a-parent-object"></a>
 
 ### 부모 객체의 프로퍼티 값 변경하기
 

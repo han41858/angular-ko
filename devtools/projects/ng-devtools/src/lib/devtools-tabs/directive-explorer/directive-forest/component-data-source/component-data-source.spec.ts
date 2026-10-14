@@ -12,7 +12,7 @@ import {DevToolsNode} from '../../../../../../../protocol';
 import {ComponentDataSource, FlatNode} from '.';
 
 const tree1: DevToolsNode = {
-  element: 'app',
+  tagName: 'app',
   directives: [
     {
       id: 1,
@@ -21,6 +21,7 @@ const tree1: DevToolsNode = {
   ],
   component: null,
   controlFlowBlock: null,
+  static: false,
 
   children: [
     {
@@ -31,16 +32,17 @@ const tree1: DevToolsNode = {
         name: 'bar',
       },
       directives: [],
-      element: 'bar',
+      tagName: 'bar',
       nativeElement: document.createElement('bar'),
       controlFlowBlock: null,
+      static: false,
     },
   ],
   nativeElement: document.createElement('foo'),
 };
 
 const tree2: DevToolsNode = {
-  element: 'app',
+  tagName: 'app',
   directives: [
     {
       id: 1,
@@ -49,6 +51,7 @@ const tree2: DevToolsNode = {
   ],
   component: null,
   controlFlowBlock: null,
+  static: false,
 
   children: [
     {
@@ -59,9 +62,10 @@ const tree2: DevToolsNode = {
         name: 'bar',
       },
       directives: [],
-      element: 'bar',
+      tagName: 'bar',
       nativeElement: document.createElement('bar'),
       controlFlowBlock: null,
+      static: false,
     },
     {
       children: [],
@@ -71,15 +75,16 @@ const tree2: DevToolsNode = {
         name: 'qux',
       },
       directives: [],
-      element: 'qux',
+      tagName: 'qux',
       controlFlowBlock: null,
+      static: false,
     },
   ],
   nativeElement: document.createElement('foo'),
 };
 
 const tree3: DevToolsNode = {
-  element: 'app',
+  tagName: 'app',
   directives: [
     {
       id: 1,
@@ -88,6 +93,8 @@ const tree3: DevToolsNode = {
   ],
   component: null,
   controlFlowBlock: null,
+  static: false,
+
   children: [
     {
       children: [],
@@ -97,8 +104,9 @@ const tree3: DevToolsNode = {
         name: 'bar',
       },
       directives: [],
-      element: '#comment',
+      tagName: '#comment',
       controlFlowBlock: null,
+      static: false,
       nativeElement: document.createComment('bar'),
     },
     {
@@ -109,8 +117,9 @@ const tree3: DevToolsNode = {
         name: 'qux',
       },
       directives: [],
-      element: '#comment',
+      tagName: '#comment',
       controlFlowBlock: null,
+      static: false,
       nativeElement: document.createComment('bar'),
     },
   ],
@@ -118,8 +127,9 @@ const tree3: DevToolsNode = {
 };
 
 const tree4: DevToolsNode = {
-  element: 'app',
+  tagName: 'app',
   controlFlowBlock: null,
+  static: false,
   directives: [
     {
       id: 1,
@@ -144,8 +154,9 @@ const tree4: DevToolsNode = {
                         name: 'qux',
                       },
                       directives: [],
-                      element: 'bar',
+                      tagName: 'bar',
                       controlFlowBlock: null,
+                      static: false,
                       nativeElement: document.createComment('bar'),
                     },
                   ],
@@ -155,8 +166,9 @@ const tree4: DevToolsNode = {
                     name: 'qux',
                   },
                   directives: [],
-                  element: '#comment',
+                  tagName: '#comment',
                   controlFlowBlock: null,
+                  static: false,
                   nativeElement: document.createComment('bar'),
                 },
               ],
@@ -166,8 +178,9 @@ const tree4: DevToolsNode = {
                 name: 'qux',
               },
               directives: [],
-              element: '#comment',
+              tagName: '#comment',
               controlFlowBlock: null,
+              static: false,
               nativeElement: document.createComment('bar'),
             },
           ],
@@ -177,8 +190,9 @@ const tree4: DevToolsNode = {
             name: 'qux',
           },
           directives: [],
-          element: '#comment',
+          tagName: '#comment',
           controlFlowBlock: null,
+          static: false,
           nativeElement: document.createComment('bar'),
         },
       ],
@@ -188,9 +202,10 @@ const tree4: DevToolsNode = {
         name: 'bar',
       },
       directives: [],
-      element: '#comment',
+      tagName: '#comment',
       nativeElement: document.createComment('bar'),
       controlFlowBlock: null,
+      static: false,
     },
   ],
   nativeElement: document.createElement('foo'),

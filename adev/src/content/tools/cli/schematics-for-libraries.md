@@ -86,10 +86,17 @@ A schematic for the `ng add` command can enhance the initial installation proces
 The following steps define this type of schematic.
 
 1. Go to the `<lib-root>/schematics/ng-add` folder.
-1. Create the main file, `index.ts`.
-1. Open `index.ts` and add the source code for your schematic factory function.
+1. Create a `schema.json` file to define the options that the schematic accepts.
 
-<docs-code header="projects/my-lib/schematics/ng-add/index.ts (ng-add Rule Factory)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"/>
+   <docs-code header="projects/my-lib/schematics/ng-add/schema.json (ng-add Schema)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/schema.json"/>
+
+1. Create a `schema.ts` file to define an interface for the options defined in the `schema.json` file.
+
+   <docs-code header="projects/my-lib/schematics/ng-add/schema.ts (ng-add Schema Interface)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/schema.ts"/>
+
+1. Create the main file, `index.ts`, and add the source code for your schematic factory function.
+
+   <docs-code header="projects/my-lib/schematics/ng-add/index.ts (ng-add Rule Factory)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"/>
 
 The Angular CLI will install the latest version of the library automatically, and this example is taking it a step further by adding the `MyLibModule` to the root of the application. The `addRootImport` function accepts a callback that needs to return a code block. You can write any code inside of the string tagged with the `code` function and any external symbol have to be wrapped with the `external` function to ensure that the appropriate import statements are generated.
 -->
@@ -98,10 +105,17 @@ The Angular CLI will install the latest version of the library automatically, an
 다음 단계에 따라 이 스키매틱을 정의합니다.
 
 1. `<lib-root>/schematics/ng-add` 폴더로 이동합니다.
-1. 주요 파일인 `index.ts`를 만듭니다.
-1. `index.ts`를 열고 스키매틱 팩토리 함수의 소스 코드를 추가합니다.
+1. 스키매틱이 받는 옵션을 정의하는 `schema.json` 파일을 만듭니다.
 
-<docs-code header="projects/my-lib/schematics/ng-add/index.ts (ng-add 규칙 팩토리)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"/>
+   <docs-code header="projects/my-lib/schematics/ng-add/schema.json (ng-add 스키마)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/schema.json"/>
+
+1. `schema.json` 파일의 옵션에 대한 인터페이스를 정의하는 `schema.ts` 파일을 만듭니다.
+
+   <docs-code header="projects/my-lib/schematics/ng-add/schema.ts (ng-add 스키마 인터페이스)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/schema.ts"/>
+
+1. 주요 파일인 `index.ts`를 만들고 스키매틱 팩토리 함수의 소스 코드를 추가합니다.
+
+   <docs-code header="projects/my-lib/schematics/ng-add/index.ts (ng-add 규칙 팩토리)" path="adev/src/content/examples/schematics-for-libraries/projects/my-lib/schematics/ng-add/index.ts"/>
 
 Angular CLI는 라이브러리의 최신 버전을 자동으로 설치합니다.
 이 예제에서는 여기서 더 나아가 애플리케이션의 최상위에 `MyLibModule`을 추가합니다.
@@ -328,7 +342,7 @@ Schematic templates support special syntax to execute code and variable substitu
 1. Create a file named `__name@dasherize__.service.ts.template` that defines a template to use for generating files.
    This template will generate a service that already has Angular's `HttpClient` injected into an `http` property.
 
-   ```ts {header:projects/my-lib/schematics/my-service/files/__name@dasherize__.service.ts.template (Schematic Template)}
+   ```ts {header: "projects/my-lib/schematics/my-service/files/__name@dasherize__.service.ts.template (Schematic Template)"}
 
    import { Service } from '@angular/core';
    import { HttpClient } from '@angular/common/http';
@@ -352,7 +366,7 @@ Schematic templates support special syntax to execute code and variable substitu
 1. `__name@dasherize__.service.ts.template` 파일을 만들고 파일 생성에 사용할 템플릿을 정의합니다.
    이 템플릿은 Angular의 `HttpClient`가 `http` 프로퍼티에 이미 주입된 서비스를 생성합니다.
 
-   ```ts {header:projects/my-lib/schematics/my-service/files/__name@dasherize__.service.ts.template (Schematic Template)}
+   ```ts {header: "projects/my-lib/schematics/my-service/files/__name@dasherize__.service.ts.template (Schematic Template)"}
 
    import { Service } from '@angular/core';
    import { HttpClient } from '@angular/common/http';

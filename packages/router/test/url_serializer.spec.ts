@@ -13,11 +13,13 @@ import {
   encodeUriQuery,
   encodeUriSegment,
   serializePath,
+  UrlSegment,
   UrlSegmentGroup,
 } from '../src/url_tree';
 
 describe('url serializer', () => {
   const url = new DefaultUrlSerializer();
+  const protocolRelativeUrlWarning = `NG04019: Cannot serialize a UrlTree that would produce a protocol-relative URL. Falling back to '/' instead.`;
 
   it('should parse the root url', () => {
     const tree = url.parse('/');
@@ -130,6 +132,17 @@ describe('url serializer', () => {
     expectSegment(tree.root.children['left'], 'two/three');
 
     expect(url.serialize(tree)).toEqual('/one(left:two/three)');
+  });
+
+  it('should parse a secondary segment named "__proto__"', () => {
+    const tree = url.parse('/one(__proto__:two)');
+
+    expectSegment(tree.root.children[PRIMARY_OUTLET], 'one');
+    expectSegment(tree.root.children['__proto__'], 'two');
+    expect(tree.root.numberOfChildren).toEqual(2);
+    expect(Object.getPrototypeOf(tree.root.children)).toBeNull();
+
+    expect(url.serialize(tree)).toEqual('/one(__proto__:two)');
   });
 
   it('should parse an empty secondary segment group', () => {
@@ -436,6 +449,71 @@ describe('url serializer', () => {
     });
   });
 
+  describe('leading empty path segments', () => {
+    it('should fall back for a parsed primary outlet that would serialize as protocol-relative', () => {
+      const warn = spyOn(console, 'warn');
+      const tree = url.parse('/(primary://attacker.example/collect)?token=RESET_TOKEN');
+
+      expect(url.serialize(tree)).toBe('/?token=RESET_TOKEN');
+      expect(warn).toHaveBeenCalledOnceWith(protocolRelativeUrlWarning);
+    });
+
+    it('should fall back for multiple leading empty primary segments', () => {
+      const warn = spyOn(console, 'warn');
+      const tree = url.parse('/attacker.example/collect');
+      tree.root.children[PRIMARY_OUTLET].segments.unshift(
+        new UrlSegment('', {}),
+        new UrlSegment('', {}),
+      );
+
+      expect(url.serialize(tree)).toBe('/');
+      expect(warn).toHaveBeenCalledOnceWith(protocolRelativeUrlWarning);
+    });
+
+    it('should fall back for unsafe trees with secondary outlets, query params, and fragments', () => {
+      const warn = spyOn(console, 'warn');
+      const tree = url.parse(
+        '/attacker.example/collect(popup:compose)?token=RESET_TOKEN#OAUTH_TOKEN',
+      );
+      tree.root.children[PRIMARY_OUTLET].segments.unshift(new UrlSegment('', {}));
+
+      expect(url.serialize(tree)).toBe('/?token=RESET_TOKEN#OAUTH_TOKEN');
+      expect(warn).toHaveBeenCalledOnceWith(protocolRelativeUrlWarning);
+    });
+
+    it('should fall back for a parsed path with dot and leading empty segment that would normalize to protocol-relative', () => {
+      const warn = spyOn(console, 'warn');
+      const tree = url.parse('/.;/(//evil.test)');
+
+      expect(url.serialize(tree)).toBe('/');
+      expect(warn).toHaveBeenCalledOnceWith(protocolRelativeUrlWarning);
+    });
+
+    it('should fall back for dot segments collapsing to protocol-relative path', () => {
+      const warn = spyOn(console, 'warn');
+      const tree = url.parse('/attacker.example/collect');
+      tree.root.children[PRIMARY_OUTLET].segments.unshift(
+        new UrlSegment('.', {}),
+        new UrlSegment('', {}),
+      );
+
+      expect(url.serialize(tree)).toBe('/');
+      expect(warn).toHaveBeenCalledOnceWith(protocolRelativeUrlWarning);
+    });
+
+    it('should fall back for double dot segments collapsing to protocol-relative path', () => {
+      const warn = spyOn(console, 'warn');
+      const tree = url.parse('/attacker.example/collect');
+      tree.root.children[PRIMARY_OUTLET].segments.unshift(
+        new UrlSegment('..', {}),
+        new UrlSegment('', {}),
+      );
+
+      expect(url.serialize(tree)).toBe('/');
+      expect(warn).toHaveBeenCalledOnceWith(protocolRelativeUrlWarning);
+    });
+  });
+
   describe('error handling', () => {
     it('should throw when invalid characters inside children', () => {
       expect(() => url.parse('/one/(left#one)')).toThrowError();
@@ -459,6 +537,36 @@ describe('url serializer', () => {
         urlStr = `p/(${urlStr})`;
       }
       expect(() => url.parse(`/${urlStr}`)).not.toThrow();
+    });
+  });
+
+  describe('numeric parameter and outlet names', () => {
+    it('should round-trip numeric names without adding the internal sentinel', () => {
+      const tree = url.parse('/one;7=a;32=b;032=c;1e3=d(32:two)');
+
+      expect(tree.root.children[PRIMARY_OUTLET].segments[0].parameters).toEqual({
+        '7': 'a',
+        '32': 'b',
+        '032': 'c',
+        '1e3': 'd',
+      });
+      expectSegment(tree.root.children['32'], 'two');
+      expect(url.serialize(tree)).toEqual('/one;7=a;32=b;032=c;1e3=d(32:two)');
+    });
+
+    it('should preserve names that match the internal sentinel', () => {
+      // 1073741824 is the helper's sentinel.
+      const tree = url.parse('/one;1073741824=keep;32=other(1073741824:two//32:three)');
+
+      expect(tree.root.children[PRIMARY_OUTLET].segments[0].parameters).toEqual({
+        '1073741824': 'keep',
+        '32': 'other',
+      });
+      expectSegment(tree.root.children['1073741824'], 'two');
+      expectSegment(tree.root.children['32'], 'three');
+      expect(url.serialize(tree)).toEqual(
+        '/one;32=other;1073741824=keep(32:three//1073741824:two)',
+      );
     });
   });
 });

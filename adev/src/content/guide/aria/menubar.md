@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Menubar">
-</docs-decorative-header>
+# Menubar
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/" title="Menubar ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="메뉴바">
-</docs-decorative-header>
+# 메뉴바
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/" title="메뉴바 ARIA 패턴"/>
@@ -487,106 +485,25 @@ describe('MyMenubarComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`MenuBar`](/api/aria/menu/MenuBar)
+- [`MenuItem`](/api/aria/menu/MenuItem)
+- [`MenuTrigger`](/api/aria/menu/MenuTrigger)
+- [`Menu`](/api/aria/menu/Menu)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-The menubar pattern uses directives from Angular's Aria library. See the [Menu guide](guide/aria/menu) for complete API documentation.
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-메뉴바 패턴은 Angular Aria 라이브러리의 디렉티브를 사용합니다.
-전체 API 문서는 [메뉴 가이드](guide/aria/menu)를 참고하세요.
-
-<!--
-### MenuBar
--->
-
-<a id="menubar"></a>
-
-### MenuBar
-
-<!--
-The horizontal container for top-level menu items.
--->
-
-최상위 메뉴 항목을 담는 수평 컨테이너입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property         | Type      | Default | Description                                                   |
-| ---------------- | --------- | ------- | ------------------------------------------------------------- |
-| `disabled`       | `boolean` | `false` | Disables the entire menubar                                   |
-| `wrap`           | `boolean` | `true`  | Whether keyboard navigation wraps from last to first item     |
-| `softDisabled`   | `boolean` | `true`  | When `true`, disabled items are focusable but not interactive |
-| `value`          | `V[]`     | `[]`    | Selected menu item values (supports two-way binding)          |
-| `typeaheadDelay` | `number`  | `500`   | Milliseconds before the typeahead buffer is reset             |
-
-See the [Menu API documentation](guide/aria/menu#apis) for complete details on all available inputs and signals.
--->
-
-| 프로퍼티         | 타입      | 기본값  | 설명                                                                       |
-| ---------------- | --------- | ------- | -------------------------------------------------------------------------- |
-| `disabled`       | `boolean` | `false` | 전체 메뉴바를 비활성화합니다.                                              |
-| `wrap`           | `boolean` | `true`  | 키보드 탐색에서 마지막 항목에서 첫 번째 항목으로 순환할지 지정합니다.      |
-| `softDisabled`   | `boolean` | `true`  | `true`이면 비활성화된 항목도 포커스를 받을 수 있지만 조작할 수는 없습니다. |
-| `value`          | `V[]`     | `[]`    | 선택된 메뉴 항목의 값입니다(양방향 바인딩을 지원합니다).                   |
-| `typeaheadDelay` | `number`  | `500`   | 문자 입력 검색 버퍼가 초기화되기까지의 시간입니다(밀리초).                 |
-
-사용 가능한 모든 입력 프로퍼티와 시그널의 자세한 내용은 [메뉴 API 문서](guide/aria/menu#apis)를 참고하세요.
-
-<!--
-### MenuItem
--->
-
-<a id="menuitem"></a>
-
-### MenuItem
-
-<!--
-Individual items within the menubar. Same API as Menu - see [MenuItem](guide/aria/menu#menuitem).
-
-**Menubar-specific behavior:**
-
-- Left/Right arrows navigate between menubar items (vs Up/Down in vertical menus)
-- First keyboard interaction or click enables hover-to-open for submenus
-- Enter or Down arrow opens the submenu and focuses the first item
-- `aria-haspopup="menu"` indicates items with submenus
--->
-
-메뉴바 안의 개별 항목입니다.
-Menu와 동일한 API를 사용합니다.
-[MenuItem](guide/aria/menu#menuitem)을 참고하세요.
-
-**메뉴바에만 적용되는 동작:**
-
-- 왼쪽/오른쪽 방향키로 메뉴바 항목 사이를 이동합니다(수직 메뉴에서는 위/아래 방향키를 사용합니다).
-- 처음 키보드로 조작하거나 클릭하면 마우스를 올려 하위 메뉴를 여는 기능이 활성화됩니다.
-- Enter나 아래 방향키를 누르면 하위 메뉴를 열고 첫 번째 항목에 포커스를 둡니다.
-- `aria-haspopup="menu"`는 하위 메뉴가 있는 항목을 나타냅니다.
-
-<!--
-### MenuTrigger
--->
-
-<a id="menutrigger"></a>
-
-### MenuTrigger
-
-<!--
-Not typically used in menubars - MenuItem handles trigger behavior directly when it has an associated submenu. See [MenuTrigger](guide/aria/menu#menutrigger) for standalone menu trigger patterns.
--->
-
-메뉴바에서는 일반적으로 사용하지 않습니다.
-MenuItem에 하위 메뉴가 연결되어 있으면 MenuItem이 트리거 동작을 직접 처리합니다.
-독립형 메뉴 트리거 패턴은 [MenuTrigger](guide/aria/menu#menutrigger)를 참고하세요.
+- [`MenuBar`](/api/aria/menu/MenuBar)
+- [`MenuItem`](/api/aria/menu/MenuItem)
+- [`MenuTrigger`](/api/aria/menu/MenuTrigger)
+- [`Menu`](/api/aria/menu/Menu)

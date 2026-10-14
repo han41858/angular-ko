@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {CssSelector, SelectorlessMatcher, SelectorMatcher} from '../../../src/directive_matching';
 import * as e from '../../../src/expression_parser/ast';
-import * as a from '../../../src/render3/r3_ast';
-import {DirectiveMeta, MatchSource, ForeignComponentMeta} from '../../../src/render3/view/t2_api';
 import {ClassPropertyMapping} from '../../../src/property_mapping';
+import * as a from '../../../src/render3/r3_ast';
+import {DirectiveMeta, ForeignComponentMeta, MatchSource} from '../../../src/render3/view/t2_api';
 import {findMatchingDirectivesAndPipes, R3TargetBinder} from '../../../src/render3/view/t2_binder';
 import {parseTemplate, ParseTemplateOptions} from '../../../src/render3/view/template';
-import {CssSelector, SelectorlessMatcher, SelectorMatcher} from '../../../src/directive_matching';
 
 import {findExpression} from './util';
 
@@ -252,6 +252,22 @@ describe('t2 binding', () => {
     expect(directives).not.toBeNull();
     expect(directives.length).toBe(1);
     expect(directives[0].name).toBe('Dir');
+  });
+
+  it('should match directives on ng-template nested in namespaced elements', () => {
+    const template = parseTemplate(
+      '<svg><ng-template [hasInput]="true"></ng-template></svg>',
+      '',
+      {},
+    );
+    const binder = new R3TargetBinder(makeSelectorMatcher());
+    const res = binder.bind({template: template.nodes});
+    const svgNode = template.nodes[0] as a.Element;
+    const tmplNode = svgNode.children[0] as a.Template;
+    const directives = res.getDirectivesOfNode(tmplNode)!;
+    expect(directives).not.toBeNull();
+    expect(directives.length).toBe(1);
+    expect(directives[0].name).toBe('HasInput');
   });
 
   it('should not match directives intended for an element on a microsyntax template', () => {
@@ -667,6 +683,80 @@ describe('t2 binding', () => {
 
       expect(allDirs).toEqual(['DirA', 'DirB', 'DirC']);
       expect(eagerDirs).toEqual([]);
+    });
+
+    it('should track enclosing defer blocks for pipes', () => {
+      const template = parseTemplate(
+        `
+          {{ 'outside' | pipeA }}
+          @defer (name blockA) {
+            {{ 'in A' | pipeB }}
+            @defer (name blockB) {
+              {{ 'in B' | pipeC }}
+            }
+          }
+        `,
+        '',
+      );
+      const binder = new R3TargetBinder(makeSelectorMatcher());
+      const bound = binder.bind({template: template.nodes});
+      const deferBlocks = bound.getDeferBlocks();
+      expect(deferBlocks.length).toBe(2);
+
+      const pipes: e.BindingPipe[] = [];
+      class AstVisitor extends e.RecursiveAstVisitor {
+        override visitPipe(ast: e.BindingPipe, context: any) {
+          pipes.push(ast);
+          super.visitPipe(ast, context);
+        }
+      }
+      const astVisitor = new AstVisitor();
+      class TemplateVisitor extends a.RecursiveVisitor {
+        override visitBoundText(text: a.BoundText) {
+          text.value.visit(astVisitor);
+        }
+      }
+      a.visitAll(new TemplateVisitor(), template.nodes);
+
+      const pipeA = pipes.find((p) => p.name === 'pipeA')!;
+      const pipeB = pipes.find((p) => p.name === 'pipeB')!;
+      const pipeC = pipes.find((p) => p.name === 'pipeC')!;
+
+      expect(bound.getDeferBlocksOfPipe(pipeA)).toEqual([]);
+      expect(bound.getDeferBlocksOfPipe(pipeB)).toEqual([deferBlocks[0]]);
+      expect(bound.getDeferBlocksOfPipe(pipeC)).toEqual([deferBlocks[0], deferBlocks[1]]);
+    });
+
+    it('should track enclosing defer blocks for element and template nodes', () => {
+      const template = parseTemplate(
+        `
+          <div id="outside"></div>
+          @defer (name blockA) {
+            <div id="insideA"></div>
+            <div *a id="templateInsideA"></div>
+            @defer (name blockB) {
+              <div id="insideB"></div>
+            }
+          }
+        `,
+        '',
+      );
+      const binder = new R3TargetBinder(makeSelectorMatcher());
+      const bound = binder.bind({template: template.nodes});
+      const deferBlocks = bound.getDeferBlocks();
+      expect(deferBlocks.length).toBe(2);
+
+      const divOutside = template.nodes[0] as a.Element;
+      const blockA = template.nodes[1] as a.DeferredBlock;
+      const divInsideA = blockA.children[0] as a.Element;
+      const templateInsideA = blockA.children[1] as a.Template;
+      const blockB = blockA.children[2] as a.DeferredBlock;
+      const divInsideB = blockB.children[0] as a.Element;
+
+      expect(bound.getDeferBlocksOfNode(divOutside)).toEqual([]);
+      expect(bound.getDeferBlocksOfNode(divInsideA)).toEqual([deferBlocks[0]]);
+      expect(bound.getDeferBlocksOfNode(templateInsideA)).toEqual([deferBlocks[0]]);
+      expect(bound.getDeferBlocksOfNode(divInsideB)).toEqual([deferBlocks[0], deferBlocks[1]]);
     });
 
     it('should identify a trigger element that is a parent of the deferred block', () => {
@@ -1599,7 +1689,7 @@ describe('t2 binding', () => {
     it('should match foreign components by tag name', () => {
       const template = parseTemplate('<FancyButton></FancyButton>', '', {});
       const registry = new Map<string, ForeignComponentMeta[]>();
-      registry.set('FancyButton', [{name: 'FancyButton', ref: {key: 'FancyButtonKey'}}]);
+      registry.set('FancyButton', [{name: 'FancyButton'}]);
       const foreignMatcher = new SelectorlessMatcher(registry);
 
       const binder = new R3TargetBinder(new SelectorMatcher<DirectiveMeta[]>(), foreignMatcher);
@@ -1614,7 +1704,7 @@ describe('t2 binding', () => {
     it('should throw an error when tag matches both directive and foreign component', () => {
       const template = parseTemplate('<comp></comp>', '', {});
       const registry = new Map<string, ForeignComponentMeta[]>();
-      registry.set('comp', [{name: 'comp', ref: {key: 'compKey'}}]);
+      registry.set('comp', [{name: 'comp'}]);
       const foreignMatcher = new SelectorlessMatcher(registry);
 
       const binder = new R3TargetBinder(makeSelectorMatcher(), foreignMatcher);

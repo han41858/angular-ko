@@ -27,7 +27,7 @@ Angular의 `resource` 패턴을 자세히 알아보려면 [`resource`를 활용�
 ## `httpResource` 사용하기
 
 <!--
-TIP: Make sure to include `provideHttpClient` in your application providers. See [Setting up HttpClient](/guide/http/setup) for details.
+TIP: `httpResource` uses the globally available `HttpClient`. Use `provideHttpClient(...)` only when you need to configure HTTP features, such as interceptors or XSRF options. See [Setting up HttpClient](/guide/http/setup) for details.
 
 You can define an HTTP resource by returning a url:
 
@@ -37,7 +37,7 @@ userId = input.required<string>();
 user = httpResource(() => `/api/user/${userId()}`); // A reactive function as argument
 ```
 
-`httpResource` is reactive, meaning that whenever one of the signal it depends on changes (like `userId`), the resource will emit a new http request.
+`httpResource` is reactive, meaning that whenever one of the signals it depends on changes (like `userId`), the resource will emit a new http request.
 If a request is already pending, the resource cancels the outstanding request before issuing a new one.
 
 HELPFUL: `httpResource` differs from the `HttpClient` as it initiates the request _eagerly_. In contrast, the `HttpClient` only initiates requests upon subscription to the returned `Observable`.
@@ -74,8 +74,8 @@ TIP: Avoid using `httpResource` for _mutations_ like `POST` or `PUT`. Instead, p
 The signals of the `httpResource` can be used in the template to control which elements should be displayed.
 
 ```angular-html
-@if(user.hasValue()) {
-  <user-details [user]="user.value()">
+@if (user.hasValue()) {
+  <user-details [user]="user.value()" />
 } @else if (user.error()) {
   <div>Could not load user information</div>
 } @else if (user.isLoading()) {
@@ -86,7 +86,8 @@ The signals of the `httpResource` can be used in the template to control which e
 HELPFUL: Reading the `value` signal on a `resource` that is in error state throws at runtime. It is recommended to guard `value` reads with `hasValue()`.
 -->
 
-팁: 애플리케이션 프로바이더에 `provideHttpClient`를 반드시 포함하세요.
+팁: `httpResource`는 전역으로 제공되는 `HttpClient`를 사용합니다.
+인터셉터나 XSRF 옵션 같은 HTTP 기능을 설정할 때만 `provideHttpClient(...)`를 사용하세요.
 자세한 내용은 [HttpClient 설정하기](/guide/http/setup)를 참고하세요.
 
 URL을 반환하는 함수로 HTTP 리소스를 정의할 수 있습니다:
@@ -136,8 +137,8 @@ user = httpResource(() => ({
 템플릿에서 `httpResource`의 시그널을 사용하면 어떤 엘리먼트를 표시할지 제어할 수 있습니다.
 
 ```angular-html
-@if(user.hasValue()) {
-  <user-details [user]="user.value()">
+@if (user.hasValue()) {
+  <user-details [user]="user.value()" />
 } @else if (user.error()) {
   <div>Could not load user information</div>
 } @else if (user.isLoading()) {
@@ -157,7 +158,7 @@ user = httpResource(() => ({
 ### 응답 타입
 
 <!--
-By default, `httpResource` returns and parses the response as JSON. However, you can specify alternate return with additional functions on `httpResource`:
+By default, `httpResource` returns and parses the response as JSON. However, you can specify an alternate return type with additional functions on `httpResource`:
 
 ```ts
 httpResource.text(() => ({ … })); // returns a string in value()
@@ -178,6 +179,40 @@ httpResource.blob(() => ({ … })); // value()가 Blob 객체를 반환합니다
 
 httpResource.arrayBuffer(() => ({ … })); // value()가 ArrayBuffer를 반환합니다.
 ```
+
+<!--
+### Tracking download progress
+
+Set `reportProgress: true` in the request object to track the download progress of the response. The latest `HttpProgressEvent` is available through the `progress` signal of the resource:
+
+```ts
+file = httpResource.blob(() => ({
+  url: `/api/files/${fileId()}`,
+  reportProgress: true,
+}));
+
+downloaded = computed(() => this.file.progress()?.loaded ?? 0);
+```
+
+NOTE: Unlike `HttpClient`, where `reportProgress` is deprecated in favor of `reportUploadProgress` and `reportDownloadProgress`, `httpResource` keeps the single `reportProgress` option. It only enables download progress events.
+-->
+
+<a id="tracking-download-progress"></a>
+
+### 다운로드 진행 상황 추적하기
+
+요청 객체에 `reportProgress: true`를 설정하면 응답의 다운로드 진행 상황을 추적할 수 있습니다. 최신 `HttpProgressEvent`는 리소스의 `progress` 시그널로 확인합니다:
+
+```ts
+file = httpResource.blob(() => ({
+  url: `/api/files/${fileId()}`,
+  reportProgress: true,
+}));
+
+downloaded = computed(() => this.file.progress()?.loaded ?? 0);
+```
+
+참고: `HttpClient`는 `reportProgress` 대신 `reportUploadProgress`와 `reportDownloadProgress`를 사용하도록 변경되었지만, `httpResource`는 `reportProgress` 옵션을 그대로 사용합니다. 이 옵션은 다운로드 진행 상황 이벤트만 활성화합니다.
 
 <!--
 ## Response parsing and validation
@@ -250,7 +285,7 @@ The following example shows a unit test for code using `httpResource`.
 
 ```ts
 TestBed.configureTestingModule({
-  providers: [provideHttpClient(), provideHttpClientTesting()],
+  providers: [provideHttpClientTesting()],
 });
 
 const id = signal(0);
@@ -274,7 +309,7 @@ expect(response.value()).toEqual(0);
 
 ```ts
 TestBed.configureTestingModule({
-  providers: [provideHttpClient(), provideHttpClientTesting()],
+  providers: [provideHttpClientTesting()],
 });
 
 const id = signal(0);

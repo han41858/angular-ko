@@ -123,7 +123,6 @@ for (const browserAPI of ['navigation', 'history'] as const) {
       @Component({
         selector: 'root-cmp',
         template: `<router-outlet></router-outlet>`,
-        changeDetection: ChangeDetectionStrategy.OnPush,
         standalone: false,
       })
       class OnPushOutlet {}
@@ -795,7 +794,7 @@ for (const browserAPI of ['navigation', 'history'] as const) {
       expect(router.lastSuccessfulNavigation()).toBe(null);
 
       router.navigateByUrl('/user/init');
-      const navigation = router.getCurrentNavigation();
+      const navigation = router.currentNavigation();
       expect(router.lastSuccessfulNavigation()).toBe(null);
       await advance(fixture);
 

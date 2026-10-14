@@ -8,6 +8,7 @@
 
 import {consumerDestroy, setActiveConsumer} from '../../primitives/signals';
 
+import {RuntimeError, RuntimeErrorCode} from '../errors';
 import {NotificationSource} from '../change_detection/scheduling/zoneless_scheduling';
 import {hasInSkipHydrationBlockFlag} from '../hydration/skip_hydration';
 import {ViewEncapsulation} from '../metadata/view';
@@ -35,7 +36,13 @@ import {
   nativeRemoveNode,
 } from './dom_node_manipulation';
 import {icuContainerIterate} from './i18n/i18n_tree_shaking';
-import {CONTAINER_HEADER_OFFSET, LContainer, MOVED_VIEWS, NATIVE} from './interfaces/container';
+import {
+  CONTAINER_HEADER_OFFSET,
+  LContainer,
+  LContainerFlags,
+  MOVED_VIEWS,
+  NATIVE,
+} from './interfaces/container';
 import {ComponentDef} from './interfaces/definition';
 import {NodeInjectorFactory} from './interfaces/injector';
 import {unregisterLView} from './interfaces/lview_tracking';
@@ -143,12 +150,14 @@ function applyToElementOrContainer(
         nativeInsertBefore(renderer, parent, rNode, beforeNode || null, true);
       }
     } else if (action === WalkTNodeTreeAction.Insert && parent !== null) {
-      maybeQueueEnterAnimation(parentLView, parent, tNode, injector);
       nativeInsertBefore(renderer, parent, rNode, beforeNode || null, true);
-      cancelLeavingNodes(tNode, rNode as HTMLElement);
+      cancelLeavingNodes(tNode, rNode as HTMLElement, parentLView);
+      if (!reusedNodes.has(rNode as HTMLElement)) {
+        maybeQueueEnterAnimation(parentLView, parent, tNode, injector);
+      }
     } else if (action === WalkTNodeTreeAction.Detach) {
       if (parentLView?.[ANIMATIONS]?.leave?.has(tNode.index)) {
-        trackLeavingNodes(tNode, rNode as HTMLElement);
+        trackLeavingNodes(tNode, rNode as HTMLElement, parentLView);
       }
       reusedNodes.delete(rNode as HTMLElement);
       runLeaveAnimationsWithCallback(
@@ -480,7 +489,30 @@ function executeOnDestroys(tView: TView, lView: LView): void {
  * @param tNode: `TNode` for which we wish to retrieve render parent.
  * @param lView: Current `LView`.
  */
-export function getParentRElement(tView: TView, tNode: TNode, lView: LView): RElement | null {
+export function getParentRElement(
+  tView: TView,
+  tNode: TNode | null,
+  lView: LView,
+): RElement | null {
+  // `tNode` can genuinely be null here, not just as a defensive type-widening measure. An
+  // `@if`/`@switch` branch's content is its own embedded view with its own `TView`, built the
+  // first time that branch is rendered. If an error interrupts that first creation pass (for
+  // example, a hydration mismatch on one of the branch's later nodes, after an earlier node's
+  // `TNode` was already created), `TView.firstCreatePass` still gets flipped to `false` before
+  // the error propagates (see `renderView()`'s `catch` block in `instructions/render.ts`),
+  // permanently marking the view's `TNode` data as "already created" even though it isn't.
+  // Unlike a component's `TView`, nothing rebuilds an embedded view's `TView` afterward, so the
+  // next time that same branch is selected, its instructions read directly from the still-null
+  // slot in `tView.data` instead of creating a fresh `TNode` — which is what surfaces here.
+  // Guard against it so production throws a coded RuntimeError instead of a raw TypeError when
+  // dereferencing `tNode.parent` below.
+  if (tNode === null) {
+    throw new RuntimeError(
+      RuntimeErrorCode.PARENT_NODE_NOT_FOUND,
+      ngDevMode &&
+        'getParentRElement() was called with a null TNode, so no parent element could be resolved. This usually means a TNode was never created for this node, or was already destroyed.',
+    );
+  }
   return getClosestRElement(tView, tNode.parent, lView);
 }
 
@@ -1081,6 +1113,9 @@ function applyContainer(
       tNode,
       beforeNode,
     );
+  }
+  if ((lContainer[FLAGS] & LContainerFlags.LogicalOnly) !== 0) {
+    return;
   }
   for (let i = CONTAINER_HEADER_OFFSET; i < lContainer.length; i++) {
     const lView = lContainer[i] as LView;

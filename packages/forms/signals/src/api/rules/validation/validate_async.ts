@@ -6,15 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {
-  computed,
-  DebounceTimer,
-  ResourceRef,
-  ResourceSnapshot,
-  Signal,
-  debounced,
-  ɵchain,
-} from '@angular/core';
+import {DebounceTimer, Resource, Signal, computed, debounced, ɵchain} from '@angular/core';
 import {FieldNode} from '../../../field/node';
 import {addDefaultField} from '../../../field/validation';
 import {FieldPathNode} from '../../../schema/path_node';
@@ -58,7 +50,10 @@ export type MapToErrorsFn<TValue, TResult, TPathKind extends PathKind = PathKind
  * @template TParams The type of parameters to the resource.
  * @template TResult The type of result returned by the resource
  * @template TPathKind The kind of path being validated (a root path, child path, or item of an array)
+ *
  * @see [Signal Form Async Validation](guide/forms/signals/validation#async-validation)
+ * @see [Custom async validation](guide/forms/signals/async-operations#custom-async-validation-with-validateasync)
+ *
  * @category validation
  * @publicApi 22.0
  */
@@ -90,7 +85,7 @@ export interface AsyncValidatorOptions<
    * @param params The params to use for constructing the resource
    * @returns A reference to the constructed resource.
    */
-  readonly factory: (params: Signal<TParams | undefined>) => ResourceRef<TResult | undefined>;
+  readonly factory: (params: Signal<TParams | undefined>) => Resource<TResult | undefined>;
   /**
    * A function to handle errors thrown by httpResource (HTTP errors, network errors, etc.).
    * Receives the error and the field context, returns a list of validation errors.
@@ -126,6 +121,7 @@ export interface AsyncValidatorOptions<
  * @template TPathKind The kind of path being validated (a root path, child path, or item of an array)
  *
  * @see [Signal Form Async Validation](guide/forms/signals/validation#async-validation)
+ * @see [Custom async validation](guide/forms/signals/async-operations#custom-async-validation-with-validateasync)
  * @category validation
  * @publicApi 22.0
  */

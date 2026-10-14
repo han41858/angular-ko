@@ -409,7 +409,7 @@ export class Stats {
 
 When Angular activates the `Stats` in that outlet, it receives `{ layout: 'sidebar' }` as injected data.
 
-NOTE: When the `routerOutletData` input is unset, the injected value is null by default.
+NOTE: When the `routerOutletData` input is unset, the injected signal's value is `undefined` by default.
 
 ---
 -->
@@ -451,7 +451,7 @@ export class Stats {
 
 Angular가 해당 아웃렛에서 `Stats`를 활성화하면 `{ layout: 'sidebar' }`가 데이터로 주입됩니다.
 
-참고: `routerOutletData` 입력 프로퍼티를 지정하지 않으면 기본적으로 null이 주입됩니다.
+참고: `routerOutletData` 입력 프로퍼티를 지정하지 않으면 주입된 시그널의 기본값은 `undefined`입니다.
 
 ---
 

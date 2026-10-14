@@ -15,6 +15,8 @@ By default, Angular templates do not preserve whitespace that the framework cons
 ## Whitespace between elements
 -->
 
+<a id="whitespace-between-elements"></a>
+
 ## 엘리먼트 사이에 있는 공백문자
 
 <!--
@@ -32,7 +34,7 @@ Most developers prefer to format their templates with newlines and indentation t
 
 This template contains whitespace between all of the elements. The following snippet shows the same HTML with each whitespace character replaced with the hash (`#`) character to highlight how much whitespace is present:
 
-<!- prettier-ignore>
+<!- prettier-ignore ->
 ```html
 <!- Total Whitespace: 20 ->
 <section>###<h3>User profile</h3>###<label>#####User name#####<input>###</label>#</section>
@@ -56,6 +58,7 @@ Preserving the whitespace as written in the template would result in many unnece
 이 템플릿에는 엘리먼트 사이마다 공백문자들이 존재합니다.
 공백문자를 모두 해시(`#`) 기호로 바꿔보면 이렇습니다:
 
+<!-- prettier-ignore -->
 ```angular-html
 <!-- 전체 공백문자: 20 -->
 <section>
@@ -71,6 +74,8 @@ Preserving the whitespace as written in the template would result in many unnece
 <!--
 ## Collapsible whitespace inside text
 -->
+
+<a id="collapsible-whitespace-inside-text"></a>
 
 ## 문자열 안에 중복된 공백문자
 
@@ -116,6 +121,8 @@ Angular는 템플릿을 컴파일하는 시점에 불필요한 공백 문자를 
 <!--
 ## Preserving whitespace
 -->
+
+<a id="preserving-whitespace"></a>
 
 ## 공백문자 유지하기
 

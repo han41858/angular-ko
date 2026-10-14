@@ -8,18 +8,18 @@
 
 import {AST, TmplAstNode} from '@angular/compiler';
 import {
-  AbsoluteFsPath,
   absoluteFrom,
+  AbsoluteFsPath,
   CompilerOptions,
   ConfigurationHost,
   ErrorCode,
   FileUpdate,
+  InliningMode,
   isExternalResource,
   isFatalDiagnosticError,
   isNamedClassDeclaration,
-  ngErrorCode,
   NgCompiler,
-  InliningMode,
+  ngErrorCode,
   OptimizeFor,
   PerfPhase,
   ProgramDriver,
@@ -282,6 +282,7 @@ export class LanguageService {
                     compiler,
                     typeCheckInfo,
                     span,
+                    fileName,
                     config,
                   );
                   hints.push(...templateHints);
@@ -298,7 +299,13 @@ export class LanguageService {
           // For external template files (HTML), find the associated component
           const typeCheckInfo = getTypeCheckInfoAtPosition(fileName, span.start, compiler);
           if (typeCheckInfo) {
-            const templateHints = getInlayHintsForTemplate(compiler, typeCheckInfo, span, config);
+            const templateHints = getInlayHintsForTemplate(
+              compiler,
+              typeCheckInfo,
+              span,
+              fileName,
+              config,
+            );
             hints.push(...templateHints);
           }
         }
@@ -892,7 +899,7 @@ export class LanguageService {
         project.readFile(path),
       );
 
-      if (!this.options.strictTemplates) {
+      if (this.options.strictTemplates === false) {
         diagnostics.push({
           messageText:
             'Some language features are not available. ' +
@@ -984,6 +991,17 @@ function parseNgCompilerOptions(
     const detectedVersion = detectAngularCoreVersion(project, host);
     if (detectedVersion !== null) {
       options['_angularCoreVersion'] = detectedVersion;
+    }
+  }
+
+  // Prior to v22, strictTemplates was set to false by default
+  if (options.strictTemplates === undefined && typeof options['_angularCoreVersion'] === 'string') {
+    const version = options['_angularCoreVersion'];
+    if (version !== `0.0.0-${'PLACEHOLDER'}`) {
+      const major = parseInt(version.split('.')[0], 10);
+      if (!Number.isNaN(major) && major < 22) {
+        options.strictTemplates = false;
+      }
     }
   }
 

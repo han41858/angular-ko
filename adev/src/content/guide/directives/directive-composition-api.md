@@ -5,15 +5,13 @@
 # 디렉티브 조합 API
 
 <!--
-Angular directives offer a great way to encapsulate reusable behaviors— directives can apply
-attributes, CSS classes, and event listeners to an element.
+Angular directives offer a great way to encapsulate reusable behaviors. Directives can apply attributes, CSS classes, and event listeners to an element.
 
-The _directive composition API_ lets you apply directives to a component's host element from
-_within_ the component TypeScript class.
+The _directive composition API_ lets you apply directives to a component's host element from _within_ the component TypeScript class.
 -->
 
 Angular 디렉티브는 재사용을 염두에 두고 캡슐화되어 설계되었습니다.
-디렉티브는 어트리뷰트, CSS 클래스, 이벤트 리스너에 적용할 수 있습니다.
+디렉티브는 엘리먼트에 어트리뷰트, CSS 클래스, 이벤트 리스너를 적용할 수 있습니다.
 
 _디렉티브 조합 API_ 를 활용하면 컴포넌트 TypeScript 클래스 _안에서_ 컴포넌트 호스트 엘리먼트에 디렉티브를 적용할 수 있습니다.
 
@@ -21,16 +19,16 @@ _디렉티브 조합 API_ 를 활용하면 컴포넌트 TypeScript 클래스 _�
 ## Adding directives to a component
 -->
 
+<a id="adding-directives-to-a-component"></a>
+
 ## 컴포넌트에 디렉티브 추가하기
 
 <!--
-You apply directives to a component by adding a `hostDirectives` property to a component's
-decorator. We call such directives _host directives_.
+You apply directives to a component by adding a `hostDirectives` property to a component's decorator. Such directives are called _host directives_.
 
-In this example, we apply the directive `MenuBehavior` to the host element of `AdminMenu`. This
-works similarly to applying the `MenuBehavior` to the `<admin-menu>` element in a template.
+In this example, the `MenuBehavior` directive is applied to the host element of `AdminMenu`. This works similarly to applying the `MenuBehavior` to the `<admin-menu>` element in a template.
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -39,17 +37,14 @@ works similarly to applying the `MenuBehavior` to the `<admin-menu>` element in 
 export class AdminMenu {}
 ```
 
-When the framework renders a component, Angular also creates an instance of each host directive. The
-directives' host bindings apply to the component's host element. By default, host directive inputs
-and outputs are not exposed as part of the component's public API. See
-[Including inputs and outputs](#including-inputs-and-outputs) below for more information.
+When the framework renders a component, Angular also creates an instance of each host directive. The directives' host bindings apply to the component's host element. By default, host directive inputs and outputs are not exposed as part of the component's public API. See [Including inputs and outputs](#including-inputs-and-outputs) below for more information.
 
-**Angular applies host directives statically at compile time.** You cannot dynamically add
-directives at runtime.
+Host directives come with the following constraints:
 
-**Directives used in `hostDirectives` may not specify `standalone: false`.**
-
-**Angular ignores the `selector` of directives applied in the `hostDirectives` property.**
+- **Angular applies host directives statically at compile time.** You cannot dynamically add
+  directives at runtime.
+- **Directives used in `hostDirectives` may not specify `standalone: false`.**
+- **Angular ignores the `selector` of directives applied in the `hostDirectives` property.**
 -->
 
 컴포넌트 데코레이터에 `hostDirectives` 프로퍼티를 추가하면 적용할 수 있습니다.
@@ -58,7 +53,7 @@ directives at runtime.
 위 예제에서는 `MenuBehavior` 디렉티브를 `AdminMenu`의 호스트 엘리먼트에 적용했습니다.
 이 방식은 템플릿에서 `<admin-menu>` 엘리먼트에 `MenuBehavior` 디렉티브를 적용한 것과 같은 효과입니다.
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -83,14 +78,14 @@ export class AdminMenu {}
 ## Including inputs and outputs
 -->
 
+<a id="including-inputs-and-outputs"></a>
+
 ## 입출력 프로퍼티 지정하기
 
 <!--
-When you apply `hostDirectives` to your component, the inputs and outputs from the host directives
-are not included in your component's API by default. You can explicitly include inputs and outputs
-in your component's API by expanding the entry in `hostDirectives`:
+When you apply `hostDirectives` to your component, the inputs and outputs from the host directives are not included in your component's API by default. You can explicitly include inputs and outputs in your component's API by expanding the entry in `hostDirectives`:
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -105,17 +100,15 @@ in your component's API by expanding the entry in `hostDirectives`:
 export class AdminMenu {}
 ```
 
-By explicitly specifying the inputs and outputs, consumers of the component with `hostDirective` can
-bind them in a template:
+By explicitly specifying the inputs and outputs, consumers of the component with `hostDirectives` can bind them in a template:
 
 ```angular-html
 <admin-menu menuId="top-menu" (menuClosed)="logMenuClosed()"></admin-menu>
 ```
 
-Furthermore, you can alias inputs and outputs from `hostDirective` to customize the API of your
-component:
+Furthermore, you can alias inputs and outputs from a host directive to customize the API of your component:
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -138,7 +131,7 @@ export class AdminMenu {}
 컴포넌트에 `hostDirectives`를 적용하더라도 호스트 디렉티브의 입출력 프로퍼티는 컴포넌트 API에 기본으로 포함되지 않습니다.
 그렇다면 `hostDirectives` 설정을 변경해서 디렉티브의 입출력 프로퍼티를 컴포넌트 API에 등록해야 합니다:
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -161,7 +154,7 @@ export class AdminMenu {}
 
 그리고 `hostDirectives`에 입출력 프로퍼티를 등록할 때 별칭을 지정할 수도 있습니다:
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -184,29 +177,22 @@ export class AdminMenu {}
 ## Adding directives to another directive
 -->
 
+<a id="adding-directives-to-another-directive"></a>
+
 ## 디렉티브를 다른 디렉티브에 적용하기
 
 <!--
-You can also add `hostDirectives` to other directives, in addition to components. This enables the
-transitive aggregation of multiple behaviors.
+You can also add `hostDirectives` to other directives, in addition to components. This enables the transitive aggregation of multiple behaviors.
 
-In the following example, we define two directives, `Menu` and `Tooltip`. We then compose the behavior
-of these two directives in `MenuWithTooltip`. Finally, we apply `MenuWithTooltip`
-to `SpecializedMenuWithTooltip`.
+The following example defines two directives, `Menu` and `Tooltip`, then composes their behavior in `MenuWithTooltip`. Finally, it applies `MenuWithTooltip` to `SpecializedMenuWithTooltip`.
 
-When `SpecializedMenuWithTooltip` is used in a template, it creates instances of all of `Menu`
-, `Tooltip`, and `MenuWithTooltip`. Each of these directives' host bindings apply to the host
-element of `SpecializedMenuWithTooltip`.
+When `SpecializedMenuWithTooltip` is used in a template, it creates instances of all of `Menu`, `Tooltip`, and `MenuWithTooltip`. Each of these directives' host bindings apply to the host element of `SpecializedMenuWithTooltip`.
 
 ```ts
-@Directive({
-  /* ... */
-})
+@Directive({/* ... */})
 export class Menu {}
 
-@Directive({
-  /* ... */
-})
+@Directive({/* ... */})
 export class Tooltip {}
 
 // MenuWithTooltip can compose behaviors from multiple other directives
@@ -235,14 +221,10 @@ export class SpecializedMenuWithTooltip {}
 그러고 나면 이 디렉티브들이 각각 `SpecializedMenuWithTooltip` 호스트 엘리먼트에 적용됩니다.
 
 ```ts
-@Directive({
-  /* ... */
-})
+@Directive({/* ... */})
 export class Menu {}
 
-@Directive({
-  /* ... */
-})
+@Directive({/* ... */})
 export class Tooltip {}
 
 // MenuWithTooltip은 디렉티브 여러 개를 결합하는 디렉티브입니다.
@@ -262,21 +244,24 @@ export class SpecializedMenuWithTooltip {}
 ## Host directive semantics
 -->
 
+<a id="host-directive-semantics"></a>
+
 ## 호스트 디렉티브 활용
 
 <!--
 ### Directive execution order
 -->
 
+<a id="directive-execution-order"></a>
+
 ### 디렉티브 실행 순서
 
 <!--
-Host directives go through the same lifecycle as components and directives used directly in a
-template. However, host directives always execute their constructor, lifecycle hooks, and bindings _before_ the component or directive on which they are applied.
+Host directives go through the same lifecycle as components and directives used directly in a template. However, host directives always execute their constructor, lifecycle hooks, and bindings _before_ the component or directive on which they are applied.
 
 The following example shows minimal use of a host directive:
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -294,13 +279,11 @@ The order of execution here is:
 5. `MenuBehavior` applies host bindings
 6. `AdminMenu` applies host bindings
 
-This order of operations means that components with `hostDirectives` can override any host bindings
-specified by a host directive.
+This order of operations means that components with `hostDirectives` can override any host bindings specified by a host directive.
 
-This order of operations extends to nested chains of host directives, as shown in the following
-example.
+This order of operations extends to nested chains of host directives, as shown in the following example.
 
-```typescript
+```ts
 @Directive({...})
 export class Tooltip { }
 
@@ -333,7 +316,7 @@ In the example above, the order of execution is:
 
 예제를 보며 확인해 봅시다:
 
-```typescript
+```ts
 @Component({
   selector: 'admin-menu',
   templateUrl: './admin-menu.html',
@@ -355,7 +338,7 @@ export class AdminMenu {}
 
 디렉티브 적용이 중첩된 경우도 방식은 같습니다.
 
-```typescript
+```ts
 @Directive({...})
 export class Tooltip { }
 
@@ -386,18 +369,16 @@ export class EvenMoreCustomTooltip { }
 ### Dependency injection
 -->
 
+<a id="dependency-injection"></a>
+
 ### 의존성 주입
 
 <!--
-A component or directive that specifies `hostDirectives` can inject the instances of those host
-directives and vice versa.
+A component or directive that specifies `hostDirectives` can inject the instances of those host directives and vice versa.
 
-When applying host directives to a component, both the component and host directives can define
-providers.
+When applying host directives to a component, both the component and host directives can define providers.
 
-If a component or directive with `hostDirectives` and those host directives both provide the same
-injection token, the providers defined by class with `hostDirectives` take precedence over providers
-defined by the host directives.
+If a component or directive with `hostDirectives` and those host directives both provide the same injection token, the providers defined by class with `hostDirectives` take precedence over providers defined by the host directives.
 -->
 
 `hostDirectives`를 지정하는 컴포넌트나 디렉티브는 호스트 디렉티브를 의존성으로 주입받아 참조할 수 있으며, 반대 경우도 마찬가지입니다.
@@ -409,6 +390,8 @@ defined by the host directives.
 <!--
 ### Host directive de-duplication
 -->
+
+<a id="host-directive-de-duplication"></a>
 
 ### 호스트 디렉티브 중복 제거
 
@@ -423,20 +406,19 @@ When the same directive appears more than once in the resolved host directive tr
 #### Template match takes precedence
 -->
 
+<a id="template-match-takes-precedence"></a>
+
 #### 템플릿 매칭을 우선합니다.
 
 <!--
-If a directive matches an element once through a **template selector** and also appears as a
-**host directive**, Angular keeps only the template match and discards all host directive matches.
+If a directive matches an element once through a **template selector** and also appears as a **host directive**, Angular keeps only the template match and discards all host directive matches.
 
-The mental model is that a host directive match represents `Partial<YourDirective>` , a partial
-application where only the inputs and outputs explicitly listed in `hostDirectives` are exposed,
-while a template match represents the full directive with its complete public API.
+The mental model is that a host directive match represents `Partial<YourDirective>`, a partial application where only the inputs and outputs explicitly listed in `hostDirectives` are exposed, while a template match represents the full directive with its complete public API.
 
-```ts
 @Directive({selector: '[hoverable]'})
 export class Hoverable {}
 
+```ts
 @Component({
   selector: 'app-button',
   hostDirectives: [Hoverable],
@@ -478,13 +460,12 @@ export class Button {}
 #### Multiple host directive matches are merged
 -->
 
+<a id="multiple-host-directive-matches-are-merged"></a>
+
 #### 호스트 디렉티브가 여러 개 매칭되면 합쳐집니다.
 
 <!--
-If the same directive appears **more than once as a host directive** , for example, when two
-directives both declare a common dependency in their `hostDirectives` , Angular merges all
-instances into a single directive instance. The input and output mappings from all instances are
-combined.
+If the same directive appears **more than once as a host directive**, for example, when two directives both declare a common dependency in their `hostDirectives`, Angular merges all instances into a single directive instance. The input and output mappings from all instances are combined.
 
 This resolves the classic [diamond problem](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem) in host directive composition:
 
@@ -492,11 +473,11 @@ This resolves the classic [diamond problem](https://en.wikipedia.org/wiki/Multip
 // A shared behavior that both triggers need
 @Directive({
   host: {
-    '[attr.data-trigger-id]': 'triggerId',
+    '[attr.data-trigger-id]': 'triggerId()',
   },
 })
 export class TriggerRef {
-  readonly triggerId = `trigger-${crypto.randomUUID()}`;
+  readonly triggerId = input(`trigger-${crypto.randomUUID()}`);
 }
 
 // Two separate triggers, each declaring TriggerRef as a host directive
@@ -522,8 +503,7 @@ export class DropdownTrigger {
 <button popoverTrigger dropdownTrigger>Actions</button>
 ```
 
-HELPFUL: Because Angular produces only one instance of the shared directive, both `PopoverTrigger`
-and `DropdownTrigger` receive the same `TriggerRef` instance when they inject it.
+HELPFUL: Because Angular produces only one instance of the shared directive, both `PopoverTrigger` and `DropdownTrigger` receive the same `TriggerRef` instance when they inject it.
 -->
 
 디렉티브 2개가 같은 `hostDirectives`에 적용되는 경우에는 디렉티브 인스턴스 하나만 유지됩니다.
@@ -535,11 +515,11 @@ and `DropdownTrigger` receive the same `TriggerRef` instance when they inject it
 // 트리거 2개의 참조
 @Directive({
   host: {
-    '[attr.data-trigger-id]': 'triggerId',
+    '[attr.data-trigger-id]': 'triggerId()',
   },
 })
 export class TriggerRef {
-  readonly triggerId = `trigger-${crypto.randomUUID()}`;
+  readonly triggerId = input(`trigger-${crypto.randomUUID()}`);
 }
 
 // 트리거는 2개지만, TriggerRef를 사용해서 호스트 디렉티브에 적용됩니다.
@@ -571,12 +551,14 @@ export class DropdownTrigger {
 #### Conflicting aliases
 -->
 
+<a id="conflicting-aliases"></a>
+
 #### 별칭이 겹치는 경우
 
 <!--
 When Angular merges duplicate host directive matches it also merges their input and output mappings.
-If two instances of the same host directive expose the **same input or output under different
-aliases**, Angular throws an error at compile time ([NG8024](errors/NG8024))
+
+If two instances of the same host directive expose the **same input or output under different aliases**, Angular throws an error at compile time ([NG8024](errors/NG8024)).
 
 ```ts
 @Directive({
@@ -599,8 +581,8 @@ export class DropdownTrigger {}
 <button popoverTrigger dropdownTrigger></button>
 ```
 
-To resolve this, ensure that both paths expose the shared input or output under the same alias, or
-do not expose it at all.
+To resolve this, ensure that both paths expose the shared input or output under the same alias, or do not expose it at all.
+
 -->
 
 호스트 디렉티브에 적용되는 입출력 프로퍼티는 모두 하나로 합쳐집니다.
@@ -628,3 +610,19 @@ export class DropdownTrigger {}
 ```
 
 이 문제를 해결하려면, 입출력 프로퍼티에 별칭을 지정할 때 같은 별칭을 사용하거나, 별칭을 지정하지 않으면 됩니다.
+
+<!--
+## What's next
+
+<docs-pill-row>
+  <docs-pill href="guide/directives/structural-directives" title="Structural directives"/>
+  <docs-pill href="guide/components/host-elements" title="Component host elements"/>
+</docs-pill-row>
+-->
+
+## 다음 단계 {#whats-next}
+
+<docs-pill-row>
+  <docs-pill href="guide/directives/structural-directives" title="구조 디렉티브"/>
+  <docs-pill href="guide/components/host-elements" title="컴포넌트 호스트 엘리먼트"/>
+</docs-pill-row>

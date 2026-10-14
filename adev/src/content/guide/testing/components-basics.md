@@ -204,7 +204,6 @@ describe('Banner (minimal)', () => {
 ### `createComponent()`
 -->
 
-<a id="createcomponent"></a>
 
 ### `createComponent()`
 
@@ -221,7 +220,7 @@ IMPORTANT: Do not re-configure `TestBed` after calling `createComponent`.
 
 The `createComponent` method freezes the current `TestBed` definition, closing it to further configuration.
 
-You cannot call any more `TestBed` configuration methods, not `configureTestingModule()`, nor `get()`, nor any of the `override...` methods.
+You cannot call any more `TestBed` configuration methods, not `configureTestingModule()`, nor any of the `override...` methods.
 If you try, `TestBed` throws an error.
 -->
 
@@ -237,14 +236,13 @@ const fixture = TestBed.createComponent(Banner);
 
 `createComponent` 메서드를 실행하면 현재 `TestBed` 정의가 고정되어 더 이상 설정할 수 없습니다.
 
-`configureTestingModule()`, `get()`, `override...` 등 `TestBed` 설정 메서드를 추가로 실행할 수 없습니다.
+`configureTestingModule()`, `override...` 등 `TestBed` 설정 메서드를 추가로 실행할 수 없습니다.
 실행하면 `TestBed`가 에러를 발생시킵니다.
 
 <!--
 ### `ComponentFixture`
 -->
 
-<a id="componentfixture"></a>
 
 ### `ComponentFixture`
 
@@ -272,7 +270,6 @@ expect(component).toBeDefined();
 ### `beforeEach()`
 -->
 
-<a id="beforeeach"></a>
 
 ### `beforeEach()`
 
@@ -357,7 +354,7 @@ A setup function has the advantage of being customizable via parameters.
 Here is an example of what a setup function could look like:
 
 ```ts
-function setup(providers?: StaticProviders[]): ComponentFixture<Banner> {
+function setup(providers?: Provider[]): ComponentFixture<Banner> {
   TestBed.configureTestingModule({providers});
   return TestBed.createComponent(Banner);
 }
@@ -370,7 +367,7 @@ function setup(providers?: StaticProviders[]): ComponentFixture<Banner> {
 설정 함수는 다음과 같이 작성할 수 있습니다.
 
 ```ts
-function setup(providers?: StaticProviders[]): ComponentFixture<Banner> {
+function setup(providers?: Provider[]): ComponentFixture<Banner> {
   TestBed.configureTestingModule({providers});
   return TestBed.createComponent(Banner);
 }
@@ -380,7 +377,6 @@ function setup(providers?: StaticProviders[]): ComponentFixture<Banner> {
 ### `nativeElement`
 -->
 
-<a id="nativeelement"></a>
 
 ### `nativeElement`
 
@@ -431,7 +427,6 @@ it('should have <p> with "banner works!"', () => {
 ### `DebugElement`
 -->
 
-<a id="debugelement"></a>
 
 ### `DebugElement`
 
@@ -529,7 +524,6 @@ import {DebugElement} from '@angular/core';
 ### `By.css()`
 -->
 
-<a id="bycss"></a>
 
 ### `By.css()`
 

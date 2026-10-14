@@ -586,6 +586,7 @@ export const appConfig: ApplicationConfig = {
 Available registration strategies:
 
 - **`'registerWhenStable:timeout'`** (default: `'registerWhenStable:30000'`) - Register as soon as the application stabilizes (no pending micro-/macro-tasks) but no later than the specified timeout in milliseconds
+  The timeout is required. Without it, `'registerWhenStable'` registers the service worker immediately.
 - **`'registerImmediately'`** - Register the service worker immediately
 - **`'registerWithDelay:timeout'`** - Register with a delay of the specified timeout in milliseconds
 
@@ -643,6 +644,7 @@ export const appConfig: ApplicationConfig = {
 다음 등록 전략을 사용할 수 있습니다:
 
 - **`'registerWhenStable:timeout'`**(기본값: `'registerWhenStable:30000'`) - 애플리케이션이 안정화되는 즉시(대기 중인 마이크로태스크와 매크로태스크가 없을 때) 등록하되, 밀리초로 지정한 제한 시간을 넘기지 않습니다.
+  제한 시간은 필수입니다. 제한 시간이 없으면 `'registerWhenStable'`은 서비스 워커를 즉시 등록합니다.
 - **`'registerImmediately'`** - 서비스 워커를 즉시 등록합니다.
 - **`'registerWithDelay:timeout'`** - 밀리초로 지정한 시간이 지난 뒤 등록합니다.
 

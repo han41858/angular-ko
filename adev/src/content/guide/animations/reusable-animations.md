@@ -40,7 +40,7 @@ HELPFUL: The `height`, `opacity`, `backgroundColor`, and `time` inputs are repla
 You can also export a part of an animation.
 For example, the following snippet exports the animation `trigger`.
 
-<docs-code header="animations.1.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="trigger-const"/>
+<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="trigger-const"/>
 
 From this point, you can import reusable animation variables into your component class.
 For example, the following code snippet imports the `transitionAnimation` variable and uses it via the `useAnimation()` function.
@@ -60,7 +60,7 @@ For example, the following code snippet imports the `transitionAnimation` variab
 애니메이션의 일부만 내보낼 수도 있습니다.
 예를 들어 다음 코드에서는 애니메이션 `trigger`를 내보냅니다.
 
-<docs-code header="animations.1.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="trigger-const"/>
+<docs-code header="animations.ts" path="adev/src/content/examples/animations/src/app/animations.1.ts" region="trigger-const"/>
 
 이제 컴포넌트 클래스에서 재사용 가능한 애니메이션 변수를 가져올 수 있습니다.
 예를 들어 다음 코드에서는 `transitionAnimation` 변수를 가져와 `useAnimation()` 함수로 사용합니다.

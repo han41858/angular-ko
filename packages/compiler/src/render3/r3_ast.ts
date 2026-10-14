@@ -339,6 +339,63 @@ export class DeferredBlockError extends BlockNode implements Node {
   }
 }
 
+export class ContentBlock extends BlockNode implements Node {
+  constructor(
+    public name: string,
+    public variables: Variable[],
+    public children: Node[],
+    nameSpan: ParseSourceSpan,
+    sourceSpan: ParseSourceSpan,
+    startSourceSpan: ParseSourceSpan,
+    endSourceSpan: ParseSourceSpan | null,
+    public i18n?: I18nMeta,
+  ) {
+    super(nameSpan, sourceSpan, startSourceSpan, endSourceSpan);
+  }
+
+  visit<Result>(visitor: Visitor<Result>): Result {
+    return visitor.visitContentBlock(this);
+  }
+}
+
+export class BoundaryBlock extends BlockNode implements Node {
+  constructor(
+    public children: Node[],
+    public errorBlocks: BoundaryErrorBlock[],
+    nameSpan: ParseSourceSpan,
+    sourceSpan: ParseSourceSpan,
+    public mainBlockSpan: ParseSourceSpan,
+    startSourceSpan: ParseSourceSpan,
+    endSourceSpan: ParseSourceSpan | null,
+    public i18n?: I18nMeta,
+  ) {
+    super(nameSpan, sourceSpan, startSourceSpan, endSourceSpan);
+  }
+
+  visit<Result>(visitor: Visitor<Result>): Result {
+    return visitor.visitBoundaryBlock(this);
+  }
+}
+
+export class BoundaryErrorBlock extends BlockNode implements Node {
+  constructor(
+    public children: Node[],
+    public contextVariables: Variable[],
+    public expression: AST | null,
+    nameSpan: ParseSourceSpan,
+    sourceSpan: ParseSourceSpan,
+    startSourceSpan: ParseSourceSpan,
+    endSourceSpan: ParseSourceSpan | null,
+    public i18n?: I18nMeta,
+  ) {
+    super(nameSpan, sourceSpan, startSourceSpan, endSourceSpan);
+  }
+
+  visit<Result>(visitor: Visitor<Result>): Result {
+    return visitor.visitBoundaryErrorBlock(this);
+  }
+}
+
 export interface DeferredBlockTriggers {
   when?: BoundDeferredTrigger;
   idle?: IdleDeferredTrigger;
@@ -371,6 +428,7 @@ export class DeferredBlock extends BlockNode implements Node {
     public mainBlockSpan: ParseSourceSpan,
     startSourceSpan: ParseSourceSpan,
     endSourceSpan: ParseSourceSpan | null,
+    public definedName: string | null,
     public i18n?: I18nMeta,
   ) {
     super(nameSpan, sourceSpan, startSourceSpan, endSourceSpan);
@@ -758,10 +816,13 @@ export interface Visitor<Result = any> {
   visitForLoopBlockEmpty(block: ForLoopBlockEmpty): Result;
   visitIfBlock(block: IfBlock): Result;
   visitIfBlockBranch(block: IfBlockBranch): Result;
+  visitBoundaryBlock(block: BoundaryBlock): Result;
+  visitBoundaryErrorBlock(block: BoundaryErrorBlock): Result;
   visitUnknownBlock(block: UnknownBlock): Result;
   visitLetDeclaration(decl: LetDeclaration): Result;
   visitComponent(component: Component): Result;
   visitDirective(directive: Directive): Result;
+  visitContentBlock(block: ContentBlock): Result;
 }
 
 export class RecursiveVisitor implements Visitor<void> {
@@ -818,6 +879,14 @@ export class RecursiveVisitor implements Visitor<void> {
     visitAll(this, block.children);
     block.expressionAlias?.visit(this);
   }
+  visitBoundaryBlock(block: BoundaryBlock): void {
+    visitAll(this, block.children);
+    visitAll(this, block.errorBlocks);
+  }
+  visitBoundaryErrorBlock(block: BoundaryErrorBlock): void {
+    const blockItems = [...block.contextVariables, ...block.children];
+    visitAll(this, blockItems);
+  }
   visitContent(content: Content): void {
     visitAll(this, content.children);
   }
@@ -846,6 +915,9 @@ export class RecursiveVisitor implements Visitor<void> {
   visitDeferredTrigger(trigger: DeferredTrigger): void {}
   visitUnknownBlock(block: UnknownBlock): void {}
   visitLetDeclaration(decl: LetDeclaration): void {}
+  visitContentBlock(block: ContentBlock): void {
+    visitAll(this, block.children);
+  }
 }
 
 export function visitAll<Result>(visitor: Visitor<Result>, nodes: Node[]): Result[] {

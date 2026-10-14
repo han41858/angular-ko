@@ -18,6 +18,8 @@ NOTE: For comprehensive coverage of InjectionToken and custom providers, see the
 ## Inject the component's DOM element
 -->
 
+<a id="inject-the-components-dom-element"></a>
+
 ## 컴포넌트의 DOM 엘리먼트 주입하기
 
 <!--
@@ -65,6 +67,8 @@ export class HighlightDirective {
 <!--
 ## Inject the host element's tag name
 -->
+
+<a id="inject-the-host-elements-tag-name"></a>
 
 ## 호스트 엘리먼트의 태그 이름 주입하기
 
@@ -131,6 +135,8 @@ export class RoleButtonDirective {
 <!--
 ## Resolve circular dependencies with a forward reference
 -->
+
+<a id="resolve-circular-dependencies-with-a-forward-reference"></a>
 
 ## 의존성 순환 참조 해결하기
 

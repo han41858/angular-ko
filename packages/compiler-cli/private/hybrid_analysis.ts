@@ -28,3 +28,5 @@ export {
   SymbolBoundTarget,
   SymbolDirectiveMeta,
 } from '../src/ngtsc/typecheck/src/template_symbol_builder';
+
+export * from '../src/ngtsc/indexer';

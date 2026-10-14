@@ -6,14 +6,13 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {ConstantPool} from '@angular/compiler';
+import {ConstantPool, IndexingContext} from '@angular/compiler';
 import ts from 'typescript';
 
 import {SourceFileTypeIdentifier} from '../../core/api';
-import {ErrorCode, FatalDiagnosticError} from '../../diagnostics';
+import {ErrorCode, FatalDiagnosticError, ngErrorCode} from '../../diagnostics';
 import {IncrementalBuild} from '../../incremental/api';
 import {SemanticDepGraphUpdater, SemanticSymbol} from '../../incremental/semantic_graph';
-import {IndexingContext} from '../../indexer';
 import {PerfEvent, PerfRecorder} from '../../perf';
 import {
   ClassDeclaration,
@@ -346,7 +345,7 @@ export class TraitCompiler implements ProgramTypeCheckAdapter {
           record.metaDiagnostics = [
             {
               category: ts.DiagnosticCategory.Error,
-              code: Number('-99' + ErrorCode.DECORATOR_COLLISION),
+              code: ngErrorCode(ErrorCode.DECORATOR_COLLISION),
               file: getSourceFile(clazz),
               start: clazz.getStart(undefined, false),
               length: clazz.getWidth(),
@@ -377,7 +376,7 @@ export class TraitCompiler implements ProgramTypeCheckAdapter {
         : 'local compilation';
       record.metaDiagnostics = [...nonNgDecoratorsInLocalMode].map((decorator) => ({
         category: ts.DiagnosticCategory.Error,
-        code: Number('-99' + ErrorCode.DECORATOR_UNEXPECTED),
+        code: ngErrorCode(ErrorCode.DECORATOR_UNEXPECTED),
         file: getSourceFile(clazz),
         start: decorator.node.getStart(),
         length: decorator.node.getWidth(),
@@ -600,7 +599,7 @@ export class TraitCompiler implements ProgramTypeCheckAdapter {
     return diagnostics;
   }
 
-  index(ctx: IndexingContext): void {
+  index(ctx: IndexingContext<DeclarationNode>): void {
     for (const clazz of this.classes.keys()) {
       const record = this.classes.get(clazz)!;
       for (const trait of record.traits) {

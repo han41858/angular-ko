@@ -14,6 +14,8 @@ Angular 템플릿은 조건에 따라 엘리먼트를 표시하거나, 감추거
 ## Conditionally display content with `@if`, `@else-if` and `@else`
 -->
 
+<a id="conditionally-display-content-with-if-else-if-and-else"></a>
+
 ## 조건에 따라 표시하기: `@if`, `@else-if`, `@else`
 
 <!--
@@ -62,6 +64,8 @@ If you want to display alternative content, you can do so by providing any numbe
 ### Referencing the conditional expression's result
 -->
 
+<a id="referencing-the-conditional-expressions-result"></a>
+
 ### 표현식 계산 결과를 변수로 저장하기
 
 <!--
@@ -89,6 +93,8 @@ This can be useful for referencing longer expressions that would be easier to re
 <!--
 ## Repeat content with the `@for` block
 -->
+
+<a id="repeat-content-with-the-for-block"></a>
 
 ## 내용 반복하기: `@for`
 
@@ -123,6 +129,8 @@ Angular `@for` 블록은 JavaScript의 `continue`나 `break` 같이 흐름을 �
 ### Why is `track` in `@for` blocks important?
 -->
 
+<a id="why-is-track-in-for-blocks-important"></a>
+
 ### `@for` 블록을 사용할 때 왜 `track`을 지정해야 하나요?
 
 <!--
@@ -156,6 +164,8 @@ Angular가 데이터와 DOM 노드를 제대로 매칭할 수 없으면 렌더�
 <!--
 ### Contextual variables in `@for` blocks
 -->
+
+<a id="contextual-variables-in-for-blocks"></a>
 
 ### `@for` 블록 내부에서 사용할 수 있는 변수
 
@@ -207,6 +217,8 @@ The aliasing is useful when nesting `@for` blocks, letting you read variables fr
 ### Providing a fallback for `@for` blocks with the `@empty` block
 -->
 
+<a id="providing-a-fallback-for-for-blocks-with-the-empty-block"></a>
+
 ### 콜렉션이 비어있을 때 - `@empty` 블록 사용하기
 
 <!--
@@ -236,6 +248,8 @@ You can optionally include an `@empty` section immediately after the `@for` bloc
 ## Conditionally display content with the `@switch` block
 -->
 
+<a id="conditionally-display-content-with-the-switch-block"></a>
+
 ## 여러 조건 중 하나 표시하기: `@switch` 블록
 
 <!--
@@ -260,7 +274,7 @@ The value of the conditional expression is compared to the case expression using
 
 **`@switch` does not have a fallthrough**, so you do not need an equivalent to a `break` or `return` statement in the block.
 
-You can specify multiple conditions for a single block by have consecutive `@case` statements.
+You can specify multiple conditions for a single block by having consecutive `@case` statements.
 
 You can optionally include a `@default` block. The content of the `@default` block displays if none of the preceding case expressions match the switch value.
 
@@ -298,16 +312,14 @@ If no `@case` matches the expression and there is no `@default` block, nothing i
 
 <!--
 ### Exhaustive type checking
--->
 
-### 명시적인 타입 지정
-
-<!--
 `@switch` supports exhaustive type checking, allowing Angular to verify at compile time that all possible values of a union type are handled.
 
 By using `@default never;`, you explicitly declare that no remaining cases should exist. If the union type is later extended and a new case is not covered by an @case, Angular’s template type checker will report an error, helping you catch missing branches early.
 
-```angular-html
+NOTE: Exhaustiveness checking relies on TypeScript's type narrowing, which only works on variables. It will not work if the switch condition is a function call or a signal (for example, `@switch (state())`). To work around this, assign the signal to a `@let` variable, e.g.: `@let mySignal = this.mySignal()`.
+
+```angular-ts
 @Component({
   template: `
     @switch (state) {
@@ -319,7 +331,8 @@ By using `@default never;`, you explicitly declare that no remaining cases shoul
         <p>Welcome back!</p>
       }
 
-      @default never; // throws because `@case ('loading')` is missing
+      @default never;
+      <!- throws because @case ('loading') is missing ->
     }
   `,
 })
@@ -330,11 +343,14 @@ export class AppComponent {
 
 When the switched expression is nested within a union, you must explicitly specify the expression to check for exhaustiveness.
 
+<!- prettier-ignore ->
 ```angular-ts
 @Component({
   template: `
     @switch (state.mode) {
-      @case ('show') { {{ state.menu }}; }
+      @case ('show') {
+        {{ state.menu }};
+      }
       @case ('hide') {}
       @default never(state);
     }
@@ -346,12 +362,20 @@ export class App {
 ```
 -->
 
-`@siwtch`는 포괄적인 타입 검사 기능을 제공하기 때문에, Angular는 컴파일 시점에 가능한 값들은 모두 유니언 타입으로 검증합니다.
+<a id="명시적인-타입-지정"></a>
 
-`@default never;`를 사용하면 명시적으로 나머지 조건이 없다는 것을 지정할 수 있습니다.
-이후에 유니언 타입에 새 타입이 추가되어 확장되는 경우에는 `@case`로 처리되지 않아 Angular 템플릿 타입 검사에서 에러가 발생하기 때문에, 조기에 문제를 발견할 수 있습니다.
+### 모든 경우의 타입 검사하기 {#exhaustive-type-checking}
 
-```angular-html
+`@switch`는 모든 경우에 대한 타입 검사를 지원하므로, Angular는 컴파일 시점에 유니언 타입의 가능한 값을 모두 처리하는지 확인할 수 있습니다.
+
+`@default never;`를 사용하면 처리하지 않은 경우가 남아 있지 않아야 한다고 명시적으로 선언합니다.
+이후 유니언 타입이 확장되어 새로운 경우가 추가되었는데 `@case`로 처리하지 않으면 Angular 템플릿 타입 검사기가 에러를 보고하므로 누락한 분기를 조기에 발견할 수 있습니다.
+
+참고: 모든 경우에 대한 검사는 TypeScript의 타입 좁히기를 사용하며, 이 기능은 변수에만 동작합니다.
+switch 조건이 함수 호출이나 시그널(예: `@switch (state())`)이면 동작하지 않습니다.
+이때는 `@let mySignal = this.mySignal()`처럼 시그널 값을 `@let` 변수에 할당해서 사용하세요.
+
+```angular-ts
 @Component({
   template: `
     @switch (state) {
@@ -363,17 +387,19 @@ export class App {
         <p>Welcome back!</p>
       }
 
-      @default never; // throws because `@case ('loading')` is missing
+      @default never;
+      <!-- @case ('loading')이 없으므로 에러가 발생합니다. -->
     }
   `,
 })
-export class App {
+export class AppComponent {
   state: 'loggedOut' | 'loading' | 'loggedIn' = 'loggedOut';
 }
 ```
 
-switch 표현식이 유니언 타입 안에 중첩되면, 명시적으로 표현식을 지정해야 합니다.
+switch 표현식이 유니언 타입 안에 중첩되면, 모든 경우를 확인할 표현식을 명시적으로 지정해야 합니다.
 
+<!-- prettier-ignore -->
 ```angular-ts
 @Component({
   template: `
@@ -382,7 +408,7 @@ switch 표현식이 유니언 타입 안에 중첩되면, 명시적으로 표현
         {{ state.menu }};
       }
       @case ('hide') {}
-      @default never;
+      @default never(state);
     }
   `,
 })

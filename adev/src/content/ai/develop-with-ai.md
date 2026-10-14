@@ -58,26 +58,26 @@ Here is a set of instructions to help LLMs generate correct code that follows An
 ## 규칙 파일
 
 <!--
-Several editors, such as <a href="https://studio.firebase.google.com?utm_source=adev&utm_medium=website&utm_campaign=BUILD_WITH_AI_ANGULAR&utm_term=angular_devrel&utm_content=build_with_ai_angular_firebase_studio" target="_blank">Firebase Studio</a> have rules files useful for providing critical context to LLMs.
+Several tools, such as <a href="https://antigravity.google?utm_source=adev&utm_medium=website&utm_campaign=BUILD_WITH_AI_ANGULAR&utm_term=angular_devrel&utm_content=build_with_ai_angular_antigravity" target="_blank">Antigravity</a> have rules files useful for providing critical context to LLMs.
 
 | Environment/IDE      | Rules File                                                                                                             | Installation Instructions                                                                                                                                       |
 | :------------------- | :--------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Firebase Studio      | <a download href="/assets/context/airules.md" target="_blank">airules.md</a>                                           | <a href="https://firebase.google.com/docs/studio/set-up-gemini#custom-instructions" target="_blank">Configure `airules.md`</a>                                  |
+| Antigravity          | <a download href="/assets/context/GEMINI.md" target="_blank">GEMINI.md</a>                                             | <a href="https://antigravity.google/docs/rules-workflows" target="_blank">Configure `GEMINI.md`</a>                                                             |
 | Copilot powered IDEs | <a download="copilot-instructions.md" href="/assets/context/guidelines.md" target="_blank">copilot-instructions.md</a> | <a href="https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions" target="_blank">Configure `.github/copilot-instructions.md`</a> |
 | Cursor               | <a download href="/assets/context/angular-20.mdc" target="_blank">cursor.md</a>                                        | <a href="https://docs.cursor.com/context/rules" target="_blank">Configure `cursorrules.md`</a>                                                                  |
-| JetBrains IDEs       | <a download href="/assets/context/guidelines.md" target="_blank">guidelines.md</a>                                     | <a href="https://www.jetbrains.com/help/junie/customize-guidelines.html" target="_blank">Configure `guidelines.md`</a>                                          |
+| JetBrains IDEs       | <a download href="/assets/context/AGENTS.md" target="_blank">AGENTS.md</a>                                             | <a href="https://junie.jetbrains.com/docs/guidelines-and-memory.html#how-junie-cli-discovers-guidelines" target="_blank">Configure `AGENTS.md`</a>              |
 | VS Code              | <a download=".instructions.md" href="/assets/context/guidelines.md" target="_blank">.instructions.md</a>               | <a href="https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions" target="_blank">Configure `.instructions.md`</a>                |
 | Windsurf             | <a download href="/assets/context/guidelines.md" target="_blank">guidelines.md</a>                                     | <a href="https://docs.windsurf.com/windsurf/cascade/memories#rules" target="_blank">Configure `guidelines.md`</a>                                               |
 -->
 
-<a href="https://studio.firebase.google.com?utm_source=adev&utm_medium=website&utm_campaign=BUILD_WITH_AI_ANGULAR&utm_term=angular_devrel&utm_content=build_with_ai_angular_firebase_studio" target="_blank">Firebase Studio</a>를 비롯한 여러 에디터는 LLM에 중요한 맥락 정보를 제공하는 규칙 파일을 지원합니다.
+<a href="https://antigravity.google?utm_source=adev&utm_medium=website&utm_campaign=BUILD_WITH_AI_ANGULAR&utm_term=angular_devrel&utm_content=build_with_ai_angular_antigravity" target="_blank">Antigravity</a>를 비롯한 여러 도구는 LLM에 중요한 맥락 정보를 제공하는 규칙 파일을 지원합니다.
 
 | 환경/IDE               | 규칙 파일                                                                                                              | 설치 방법                                                                                                                                                      |
 | :--------------------- | :--------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Firebase Studio        | <a download href="/assets/context/airules.md" target="_blank">airules.md</a>                                           | <a href="https://firebase.google.com/docs/studio/set-up-gemini#custom-instructions" target="_blank">`airules.md` 설정하기</a>                                  |
+| Antigravity            | <a download href="/assets/context/GEMINI.md" target="_blank">GEMINI.md</a>                                             | <a href="https://antigravity.google/docs/rules-workflows" target="_blank">`GEMINI.md` 설정하기</a>                                                             |
 | Copilot을 사용하는 IDE | <a download="copilot-instructions.md" href="/assets/context/guidelines.md" target="_blank">copilot-instructions.md</a> | <a href="https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions" target="_blank">`.github/copilot-instructions.md` 설정하기</a> |
 | Cursor                 | <a download href="/assets/context/angular-20.mdc" target="_blank">cursor.md</a>                                        | <a href="https://docs.cursor.com/context/rules" target="_blank">`cursorrules.md` 설정하기</a>                                                                  |
-| JetBrains IDE          | <a download href="/assets/context/guidelines.md" target="_blank">guidelines.md</a>                                     | <a href="https://www.jetbrains.com/help/junie/customize-guidelines.html" target="_blank">`guidelines.md` 설정하기</a>                                          |
+| JetBrains IDE          | <a download href="/assets/context/AGENTS.md" target="_blank">AGENTS.md</a>                                             | <a href="https://junie.jetbrains.com/docs/guidelines-and-memory.html#how-junie-cli-discovers-guidelines" target="_blank">`AGENTS.md` 설정하기</a>              |
 | VS Code                | <a download=".instructions.md" href="/assets/context/guidelines.md" target="_blank">.instructions.md</a>               | <a href="https://code.visualstudio.com/docs/copilot/copilot-customization#_custom-instructions" target="_blank">`.instructions.md` 설정하기</a>                |
 | Windsurf               | <a download href="/assets/context/guidelines.md" target="_blank">guidelines.md</a>                                     | <a href="https://docs.windsurf.com/windsurf/cascade/memories#rules" target="_blank">`guidelines.md` 설정하기</a>                                               |
 
@@ -112,8 +112,6 @@ Angular CLI에는 개발 환경의 AI 어시스턴트가 Angular CLI와 상호�
 
 - <a href="/llms.txt" target="_blank">llms.txt</a> - an index file providing links to key files and resources.
 - <a href="/assets/context/llms-full.txt" target="_blank">llms-full.txt</a> - a more robust compiled set of resources describing how Angular works and how to build Angular applications.
-
-Be sure [to check out the overview page](/ai) for more information on how to integrate AI into your Angular applications.
 -->
 
 `llms.txt`는 LLM이 웹사이트의 콘텐츠를 더 잘 이해하고 처리하도록 돕기 위해 제안된 표준입니다.
@@ -122,21 +120,8 @@ Angular 팀은 LLM과 LLM 기반 코드 생성 도구가 더 나은 최신 Angul
 - <a href="/llms.txt" target="_blank">llms.txt</a> - 주요 파일과 리소스의 링크를 제공하는 색인 파일입니다.
 - <a href="/assets/context/llms-full.txt" target="_blank">llms-full.txt</a> - Angular의 동작 방식과 Angular 애플리케이션을 만드는 방법을 설명하는 리소스를 더 폭넓게 모은 파일입니다.
 
-Angular 애플리케이션에 AI를 통합하는 방법이 궁금하다면 [개요 페이지도 확인해 보세요](/ai).
-
 <!--
-## Web Codegen Scorer
+Be sure to check out the [overview page](/ai) for more information on how to integrate AI into your Angular applications.
 -->
 
-<a id="web-codegen-scorer"></a>
-
-## Web Codegen Scorer
-
-<!--
-The Angular team developed and open-sourced the [Web Codegen Scorer](https://github.com/angular/web-codegen-scorer), a tool to evaluate and score the quality of AI generated web code. You can use this tool to make evidence-based decisions relating to AI-generated code, such as fine-tuning prompts to improve the accuracy of LLM-generated code for Angular. These prompts can be included as system instructions for your AI tooling or as context with your prompt. You can also use this tool to compare the quality of code produced by different models and monitor quality over time as models and agents evolve.
--->
-
-Angular 팀은 AI가 생성한 웹 코드의 품질을 평가하고 점수를 매기는 도구인 [Web Codegen Scorer](https://github.com/angular/web-codegen-scorer)를 개발해 오픈 소스로 공개했습니다.
-이 도구를 사용하면 LLM이 생성하는 Angular 코드의 정확성을 높이기 위해 프롬프트를 다듬는 등, AI 생성 코드와 관련된 결정을 근거에 따라 내릴 수 있습니다.
-이 프롬프트는 AI 도구의 시스템 지침이나 프롬프트의 맥락 정보로 제공할 수 있습니다.
-모델별로 생성한 코드의 품질을 비교하거나, 모델과 에이전트가 발전함에 따라 코드 품질이 어떻게 변하는지 추적하는 데도 사용할 수 있습니다.
+Angular 애플리케이션에 AI를 통합하는 방법에 대한 자세한 내용은 [개요 페이지](/ai)를 확인하세요.

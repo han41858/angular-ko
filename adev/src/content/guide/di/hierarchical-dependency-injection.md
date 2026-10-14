@@ -18,6 +18,8 @@ NOTE: For basic concepts about injector hierarchy and provider scoping, see the 
 ## Types of injector hierarchies
 -->
 
+<a id="types-of-injector-hierarchies"></a>
+
 ## 인젝터 계층의 종류
 
 <!--
@@ -139,6 +141,8 @@ Child `ModuleInjector` hierarchies are created when lazy loading other `@NgModul
 ### Platform injector
 -->
 
+<a id="platform-injector"></a>
+
 ### 플랫폼 인젝터
 
 <!--
@@ -153,7 +157,7 @@ bootstrapApplication(App, appConfig);
 The `bootstrapApplication()` method creates a child injector of the platform injector which is configured by the `ApplicationConfig` instance.
 This is the `root` `EnvironmentInjector`.
 
-The `platformBrowserDynamic()` method creates an injector configured by a `PlatformModule`, which contains platform-specific dependencies.
+The `bootstrapApplication()` method also creates (or reuses) the platform injector, which contains platform-specific dependencies.
 This allows multiple applications to share a platform configuration.
 For example, a browser has only one URL bar, no matter how many applications you have running.
 You can configure additional platform-specific providers at the platform level by supplying `extraProviders` using the `platformBrowser()` function.
@@ -207,7 +211,7 @@ bootstrapApplication(App, appConfig);
 `bootstrapApplication` 메서드는 `ApplicationConfig` 인스턴스 값에 따라 플랫폼 인젝터의 자식 인젝터를 생성합니다.
 이것이 최상위 인젝터인 `EnvironmentInjector`입니다.
 
-`platformBrowserDynamic()` 메서드는 각 플랫폼 의존성 객체를 기반으로 `PlatformModule` 인젝터를 생성합니다.
+`bootstrapApplication()` 메서드는 플랫폼별 의존성이 있는 플랫폼 인젝터를 생성하거나 기존 인젝터를 재사용합니다.
 이 방식에 따라 플랫폼 환경설정을 공유하는 애플리케이션은 여러 개가 될 수도 있습니다.
 예를 들면, 브라우저에서 실행되는 애플리케이션 숫자에 관계없이 브라우저에는 주소표시줄이 하나만 존재합니다.
 그리고 `platformBrowser()` 함수를 실행할 때 `extraProviders` 옵션을 사용해서 플랫폼 계층에 플랫폼별 프로바이더를 추가로 구성할 수 있습니다.
@@ -298,6 +302,8 @@ export class TestComponent
 #### `@Directive()` and `@Component()`
 -->
 
+<a id="directive-and-component"></a>
+
 #### `@Directive()`, `@Component()`
 
 <!--
@@ -315,6 +321,8 @@ Components and directives on the same element share an injector.
 <!--
 ## Resolution rules
 -->
+
+<a id="resolution-rules"></a>
 
 ## 의존성 객체 결정 규칙
 
@@ -361,6 +369,8 @@ Angular가 `ElementInjector` 계층을 따라 탐색했지만 의존성 객체�
 ## Resolution modifiers
 -->
 
+<a id="resolution-modifiers"></a>
+
 ## 의존성 객체 결정에 영향을 주는 심볼
 
 <!--
@@ -374,6 +384,8 @@ Import each of them from `@angular/core` and use each in the [`inject`](/api/cor
 <!--
 ### Types of modifiers
 -->
+
+<a id="types-of-modifiers"></a>
 
 ### 종류
 
@@ -572,6 +584,8 @@ export class Skipself {
 #### `skipSelf` option with `optional`
 -->
 
+<a id="skipself-option-with-optional"></a>
+
 #### `skipSelf`와 `optional`을 함께 사용하는 경우
 
 <!--
@@ -651,6 +665,8 @@ export class Host {
 ### Modifiers with constructor injection
 -->
 
+<a id="modifiers-with-constructor-injection"></a>
+
 ### 생성자 주입 시점에 사용하기
 
 <!--
@@ -678,6 +694,8 @@ export class SelfNoData {
 <!--
 ## Logical structure of the template
 -->
+
+<a id="logical-structure-of-the-template"></a>
 
 ## 템플릿의 논리 구조
 
@@ -750,6 +768,8 @@ Angular 템플릿의 논리 구조를 이해하면 서비스를 어떻게 구성
 ## Example: Providing services in `@Component()`
 -->
 
+<a id="example-providing-services-in-component"></a>
+
 ## 예제: 서비스를 `@Component()`에 등록하기
 
 <!--
@@ -803,6 +823,8 @@ These aren't real attributes but are here to demonstrate what is going on under 
 <!--
 ### Example app structure
 -->
+
+<a id="example-app-structure"></a>
 
 ### 예제 앱의 구조
 
@@ -993,6 +1015,8 @@ Emoji from FlowerService: 🌺
 ### Using the `providers` array
 -->
 
+<a id="using-the-providers-array"></a>
+
 ### `providers` 배열을 활용하는 방법
 
 <!--
@@ -1115,6 +1139,8 @@ Emoji from FlowerService: 🌻
 <!--
 ### Using the `viewProviders` array
 -->
+
+<a id="using-the-viewproviders-array"></a>
 
 ### `viewProviders` 배열을 활용하는 방법
 
@@ -1547,8 +1573,85 @@ Angular의 의존성 주입 시스템은 **컴포넌트가 렌더링되는 곳**
 `<app-inspector>`는 강아지 <code>🐶</code> 값이 `<#VIEW>` 안에 있을 때만 참조할 수 있습니다.
 
 <!--
+### Giving projected content access to a view injector
+
+Content projected with `<ng-content>` can't see a component's `viewProviders`, because Angular resolves injection against the injector where the content is declared, not where it renders.
+
+When you specifically want projected content to reach a view-level service — or the projecting component instance itself — accept the content as a template instead of `<ng-content>` and render it with an explicit injector.
+
+Update `Child` to provide `AnimalService` in `viewProviders`, query the projected template, and render it through [`NgTemplateOutlet`](/api/common/NgTemplateOutlet) with `ngTemplateOutletInjector` set to an injector that can see that service:
+
+```ts
+@Component({
+  selector: 'app-child',
+  viewProviders: [AnimalService],
+  imports: [NgTemplateOutlet],
+  template: `
+    <ng-container [ngTemplateOutlet]="content()" [ngTemplateOutletInjector]="injector" />
+  `,
+})
+export class Child {
+  readonly content = contentChild.required(TemplateRef);
+  readonly injector = inject(Injector);
+}
+```
+
+The consumer wraps the projected markup in an `<ng-template>`:
+
+```html
+<app-child>
+  <ng-template>
+    <app-inspector />
+  </ng-template>
+</app-child>
+```
+
+`Child` now creates `<app-inspector>` at the outlet using its own injector, so `AnimalService` resolves to the dog <code>🐶</code> even though the markup is written in `App`'s template. The cost is a little extra markup on both sides compared with `<ng-content>`.
+-->
+
+### 프로젝션된 콘텐츠에서 뷰 인젝터에 접근하기 {#giving-projected-content-access-to-a-view-injector}
+
+`<ng-content>`로 프로젝션한 콘텐츠에서는 컴포넌트의 `viewProviders`에 접근할 수 없습니다.
+Angular는 콘텐츠가 렌더링되는 위치가 아니라 선언된 위치의 인젝터를 기준으로 의존성을 찾기 때문입니다.
+
+프로젝션한 콘텐츠에서 뷰 계층의 서비스나 콘텐츠를 프로젝션하는 컴포넌트 인스턴스 자체에 접근해야 한다면, `<ng-content>` 대신 템플릿으로 콘텐츠를 받아서 인젝터를 명시적으로 지정해 렌더링하세요.
+
+`Child`의 `viewProviders`에 `AnimalService`를 제공하고, 프로젝션한 템플릿을 쿼리로 조회하세요.
+그런 다음 [`NgTemplateOutlet`](/api/common/NgTemplateOutlet)으로 렌더링하면서 `ngTemplateOutletInjector`에 해당 서비스에 접근할 수 있는 인젝터를 지정하세요.
+
+```ts
+@Component({
+  selector: 'app-child',
+  viewProviders: [AnimalService],
+  imports: [NgTemplateOutlet],
+  template: `
+    <ng-container [ngTemplateOutlet]="content()" [ngTemplateOutletInjector]="injector" />
+  `,
+})
+export class Child {
+  readonly content = contentChild.required(TemplateRef);
+  readonly injector = inject(Injector);
+}
+```
+
+사용하는 쪽에서는 프로젝션할 마크업을 `<ng-template>`으로 감쌉니다.
+
+```html
+<app-child>
+  <ng-template>
+    <app-inspector />
+  </ng-template>
+</app-child>
+```
+
+이제 `Child`가 자체 인젝터를 사용해서 아웃렛에 `<app-inspector>`를 생성합니다. 따라서 마크업을 `App`의 템플릿에 작성했더라도 `AnimalService`는 강아지 <code>🐶</code>로 결정됩니다.
+다만 `<ng-content>`를 사용할 때보다 양쪽에 마크업을 조금 더 작성해야 합니다.
+
+<!--
 ### Visibility of provided tokens
 -->
+
+<a id="visibility-of-provided-tokens"></a>
 
 ### 의존성 토큰의 접근 범위
 
@@ -1672,6 +1775,8 @@ Emoji from FlowerService: 🌺
 ### `skipSelf` and `viewProviders`
 -->
 
+<a id="skipself-and-viewproviders"></a>
+
 ### `skipSelf`, `viewProviders`
 
 <!--
@@ -1752,6 +1857,8 @@ With `skipSelf` in the `<app-child>`, the injector begins its search for the `An
 <!--
 ### `host` and `viewProviders`
 -->
+
+<a id="host-and-viewproviders"></a>
 
 ### `host`, `viewProviders`
 
@@ -1932,6 +2039,8 @@ export class Child {
 ## Example: `ElementInjector` use cases
 -->
 
+<a id="example-elementinjector-use-cases"></a>
+
 ## 예제: `ElementInject` 사용 사례
 
 <!--
@@ -1943,6 +2052,8 @@ The ability to configure one or more providers at different levels opens up usef
 <!--
 ### Scenario: service isolation
 -->
+
+<a id="scenario-service-isolation"></a>
 
 ### 시나리오: 서비스 분리
 
@@ -1998,6 +2109,8 @@ export class VillainsList {}
 ### Scenario: multiple edit sessions
 -->
 
+<a id="scenario-multiple-edit-sessions"></a>
+
 ### 시나리오: 세션 여러 개 유지하기
 
 <!--
@@ -2015,7 +2128,7 @@ Each tax return component has the following characteristics:
 - Can change a tax return without affecting a return in another component
 - Has the ability to save the changes to its tax return or cancel them
 
-Suppose that the `HeroTaxReturn` had logic to manage and restore changes.
+Suppose that the `HeroTaxReturnEditor` had logic to manage and restore changes.
 That would be a straightforward task for a hero tax return.
 In the real world, with a rich tax return data model, the change management would be tricky.
 You could delegate that management to a helper service, as this example does.
@@ -2055,10 +2168,10 @@ export class HeroTaxReturnService {
 }
 ```
 
-Here is the `HeroTaxReturn` that makes use of `HeroTaxReturnService`.
+Here is the `HeroTaxReturnEditor` that makes use of `HeroTaxReturnService`.
 
 ```typescript
-import {Component, input, output} from '@angular/core';
+import {Component, effect, inject, input, output} from '@angular/core';
 import {HeroTaxReturn} from './hero';
 import {HeroTaxReturnService} from './hero-tax-return.service';
 
@@ -2068,24 +2181,20 @@ import {HeroTaxReturnService} from './hero-tax-return.service';
   styleUrls: ['./hero-tax-return.css'],
   providers: [HeroTaxReturnService],
 })
-export class HeroTaxReturn {
+export class HeroTaxReturnEditor {
   message = '';
 
   close = output<void>();
 
-  get taxReturn(): HeroTaxReturn {
-    return this.heroTaxReturnService.taxReturn;
-  }
-
   taxReturn = input.required<HeroTaxReturn>();
+
+  private heroTaxReturnService = inject(HeroTaxReturnService);
 
   constructor() {
     effect(() => {
       this.heroTaxReturnService.taxReturn = this.taxReturn();
     });
   }
-
-  private heroTaxReturnService = inject(HeroTaxReturnService);
 
   onCanceled() {
     this.flashMessage('Canceled');
@@ -2108,21 +2217,21 @@ export class HeroTaxReturn {
 }
 ```
 
-The _tax-return-to-edit_ arrives by way of the `input` property, which is implemented with getters and setters.
-The setter initializes the component's own instance of the `HeroTaxReturnService` with the incoming return.
-The getter always returns what that service says is the current state of the hero.
+The _tax-return-to-edit_ arrives by way of the `taxReturn` signal input.
+An `effect` initializes the component's own instance of the `HeroTaxReturnService` with the incoming return whenever the input changes.
+The service's getter always returns what the service says is the current state of the hero.
 The component also asks the service to save and restore this tax return.
 
 This won't work if the service is an application-wide singleton.
 Every component would share the same service instance, and each component would overwrite the tax return that belonged to another hero.
 
-To prevent this, configure the component-level injector of `HeroTaxReturn` to provide the service, using the `providers` property in the component metadata.
+To prevent this, configure the component-level injector of `HeroTaxReturnEditor` to provide the service, using the `providers` property in the component metadata.
 
 ```typescript
 providers: [HeroTaxReturnService];
 ```
 
-The `HeroTaxReturn` has its own provider of the `HeroTaxReturnService`.
+The `HeroTaxReturnEditor` has its own provider of the `HeroTaxReturnService`.
 Recall that every component _instance_ has its own injector.
 Providing the service at the component level ensures that _every_ instance of the component gets a private instance of the service. This makes sure that no tax return gets overwritten.
 
@@ -2143,7 +2252,7 @@ HELPFUL: The rest of the scenario code relies on other Angular features and tech
 - 다른 컴포넌트에 영향을 주지 않고 세금 신고서를 수정할 수 있습니다.
 - 변경사항을 저장하거나 취소합니다.
 
-`HeroTaxReturn`에 변경사항을 관리하고 복원하는 로직이 있다고 합시다.
+`HeroTaxReturnEditor`에 변경사항을 관리하고 복원하는 로직이 있다고 합시다.
 히어로의 세금 신고서를 편집하는 화면이라면 간단한 작업입니다.
 하지만 실제 운영되는 애플리케이션이라면 복잡한 데이터 모델을 사용하기 때문에 변경사항을 관리하는 것이 까다로워질 수 있습니다.
 이런 경우 관리 로직은 헬퍼 서비스로 분리하는 것이 좋습니다.
@@ -2183,10 +2292,10 @@ export class HeroTaxReturnService {
 }
 ```
 
-`HeroTaxReturnService`를 활용하는 `HeroTaxReturn` 코드는 이렇습니다.
+`HeroTaxReturnService`를 활용하는 `HeroTaxReturnEditor` 코드는 이렇습니다.
 
 ```typescript
-import {Component, input, output} from '@angular/core';
+import {Component, effect, inject, input, output} from '@angular/core';
 import {HeroTaxReturn} from './hero';
 import {HeroTaxReturnService} from './hero-tax-return.service';
 
@@ -2196,24 +2305,20 @@ import {HeroTaxReturnService} from './hero-tax-return.service';
   styleUrls: ['./hero-tax-return.css'],
   providers: [HeroTaxReturnService],
 })
-export class HeroTaxReturn {
+export class HeroTaxReturnEditor {
   message = '';
 
   close = output<void>();
 
-  get taxReturn(): HeroTaxReturn {
-    return this.heroTaxReturnService.taxReturn;
-  }
-
   taxReturn = input.required<HeroTaxReturn>();
+
+  private heroTaxReturnService = inject(HeroTaxReturnService);
 
   constructor() {
     effect(() => {
       this.heroTaxReturnService.taxReturn = this.taxReturn();
     });
   }
-
-  private heroTaxReturnService = inject(HeroTaxReturnService);
 
   onCanceled() {
     this.flashMessage('Canceled');
@@ -2236,21 +2341,21 @@ export class HeroTaxReturn {
 }
 ```
 
-수정하려는 세금 신고서는 `input` 프로퍼티로 전달되며, 게터(getter)와 세터(setter)가 존재합니다.
-세터는 입력으로 전달되는 세금 신고서를 사용해서 컴포넌트의 인스턴스와 연동되는 `HeroTaxReturnService`를 초기화합니다.
-그리고 게터는 서비스가 관리하는 현재 상태를 반환합니다.
+수정하려는 세금 신고서는 `taxReturn` 시그널 입력 프로퍼티로 전달됩니다.
+입력값이 변경될 때마다 `effect`가 전달받은 신고서로 컴포넌트 자체의 `HeroTaxReturnService` 인스턴스를 초기화합니다.
+서비스의 게터는 서비스가 관리하는 현재 상태를 반환합니다.
 이 컴포넌트는 세금 신고서를 저장하거나 복원할 때도 서비스를 활용합니다.
 
 서비스가 애플리케이션 전역 범위에 싱글턴으로 존재하면 이런 방식은 동작하지 않습니다.
 모든 컴포넌트가 서비스 인스턴스 하나를 공유하게 되면, 개별 컴포넌트에서 수정하는 세금 신고서가 다른 히어로의 세금 신고서를 덮어쓰게 될 것입니다.
 
-그래서 이런 경우는 `HeroTaxReturn` 계층에서 `providers` 배열로 서비스 프로바이더를 등록해야 합니다.
+그래서 이런 경우는 `HeroTaxReturnEditor` 계층에서 `providers` 배열로 서비스 프로바이더를 등록해야 합니다.
 
 ```typescript
 providers: [HeroTaxReturnService];
 ```
 
-`HeroTaxReturn`은 `HeroTaxReturnService`를 자체 프로바이더로 등록했습니다.
+`HeroTaxReturnEditor`는 `HeroTaxReturnService`를 자체 프로바이더로 등록했습니다.
 컴포넌트 인스턴스마다 인젝터가 존재한다는 것을 떠올려 보세요.
 컴포넌트 계층에 서비스 프로바이더를 등록하면 _개별_ 컴포넌트 인스턴스마다 독자적인 서비스 인스턴스를 갖게 됩니다.
 결국 다른 컴포넌트의 작업을 덮어쓰지 않습니다.
@@ -2260,6 +2365,8 @@ providers: [HeroTaxReturnService];
 <!--
 ### Scenario: specialized providers
 -->
+
+<a id="scenario-specialized-providers"></a>
 
 ### 시나리오: 프로바이더 오버라이드
 
@@ -2416,6 +2523,8 @@ style RootInjector fill:#BDD7EE,color:#000
 <!--
 ## More on dependency injection
 -->
+
+<a id="more-on-dependency-injection"></a>
 
 ## 더 알아보기
 

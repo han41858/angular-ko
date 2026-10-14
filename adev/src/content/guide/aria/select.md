@@ -1,10 +1,8 @@
 <!--
-<docs-decorative-header title="Select">
-</docs-decorative-header>
+# Select
 -->
 
-<docs-decorative-header title="선택">
-</docs-decorative-header>
+# 선택
 
 <!--
 ## Overview
@@ -481,167 +479,35 @@ describe('MySelectComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Combobox`](/api/aria/combobox/Combobox)
+- [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
+- [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
+- [`Listbox`](/api/aria/listbox/Listbox)
+- [`Option`](/api/aria/listbox/Option)
+
+### Positioning
+
+The select pattern integrates with [CDK Overlay](https://material.angular.dev/cdk/overlay/overview) for smart positioning. Use `cdkConnectedOverlay` to handle viewport edges and scrolling automatically.
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-The select pattern uses the following directives from Angular's Aria library. See the full API documentation in the linked guides.
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-선택 패턴은 Angular Aria 라이브러리의 다음 디렉티브를 사용합니다.
-전체 API 문서는 연결된 가이드를 참고하세요.
+- [`Combobox`](/api/aria/combobox/Combobox)
+- [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
+- [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
+- [`Listbox`](/api/aria/listbox/Listbox)
+- [`Option`](/api/aria/listbox/Option)
 
-<!--
-### Combobox Directives
--->
-
-<a id="combobox-directives"></a>
-
-### Combobox 디렉티브
-
-<!--
-The select pattern applies `ngCombobox` directly onto a non-interactive host element (such as a `div` or a `button`) to prevent text input while preserving keyboard navigation.
--->
-
-선택 패턴은 `div`나 `button`과 같은 비대화형 호스트 엘리먼트에 `ngCombobox`를 직접 적용해서 키보드 탐색을 유지하면서 텍스트 입력을 방지합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type                   | Default | Description                |
-| ---------- | ---------------------- | ------- | -------------------------- |
-| `disabled` | `boolean`              | `false` | Disables the entire select |
-| `expanded` | `ModelSignal<boolean>` | `false` | Expanded state of select   |
-
-See the [Combobox API documentation](guide/aria/combobox#apis) for complete details on all available inputs and signals.
--->
-
-| 프로퍼티   | 타입                   | 기본값  | 설명                               |
-| ---------- | ---------------------- | ------- | ---------------------------------- |
-| `disabled` | `boolean`              | `false` | 선택 컨트롤 전체를 비활성화합니다. |
-| `expanded` | `ModelSignal<boolean>` | `false` | 선택 컨트롤의 펼침 상태입니다.     |
-
-사용 가능한 모든 입력 프로퍼티와 시그널의 자세한 내용은 [콤보박스 API 문서](guide/aria/combobox#apis)를 참고하세요.
-
-<!--
-#### Popup Directives
--->
-
-<a id="popup-directives"></a>
-
-#### 팝업 디렉티브
-
-<!--
-The structural `ngComboboxPopup` directive marks the overlay template and requires a reference to the parent combobox:
-
-| Property   | Type       | Description                                 |
-| ---------- | ---------- | ------------------------------------------- |
-| `combobox` | `Combobox` | Required reference to the parent `Combobox` |
--->
-
-`ngComboboxPopup` 구조 디렉티브는 오버레이 템플릿을 지정하며 부모 콤보박스의 참조가 필요합니다.
-
-| 프로퍼티   | 타입       | 설명                                |
-| ---------- | ---------- | ----------------------------------- |
-| `combobox` | `Combobox` | 부모 `Combobox`의 참조입니다(필수). |
-
-<!--
-#### ComboboxWidget Directive
--->
-
-<a id="comboboxwidget-directive"></a>
-
-#### ComboboxWidget 디렉티브
-
-<!--
-The `ngComboboxWidget` directive bridges the listbox with the combobox trigger to support active-descendant focus tracking.
-
-| Property           | Type                  | Description                                                                                                                                  |
-| ------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `activeDescendant` | `string \| undefined` | The ID of the currently active option (bound to `listbox.activeDescendant()`) to update the `aria-activedescendant` attribute on the trigger |
--->
-
-`ngComboboxWidget` 디렉티브는 리스트박스와 콤보박스 트리거를 연결해서 활성 자손의 포커스 추적을 지원합니다.
-
-| 프로퍼티           | 타입                  | 설명                                                                                                                         |
-| ------------------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `activeDescendant` | `string \| undefined` | 트리거의 `aria-activedescendant` 어트리뷰트를 갱신할 현재 활성 옵션의 ID입니다(`listbox.activeDescendant()`에 바인딩합니다). |
-
-<!--
-### Listbox Directives
--->
-
-<a id="listbox-directives"></a>
-
-### Listbox 디렉티브
-
-<!--
-The select pattern uses `ngListbox` for the dropdown list and `ngOption` for each selectable item.
--->
-
-선택 패턴은 드롭다운 목록에 `ngListbox`를 사용하고 선택 가능한 각 항목에 `ngOption`을 사용합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property        | Type                               | Default      | Description                                                                                                                     |
-| --------------- | ---------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| `selectionMode` | `'follow'` \| `'explicit'`         | `'explicit'` | Set to `'explicit'` so options are toggled explicitly via click/Enter instead of following active focus                         |
-| `focusMode`     | `'roving'` \| `'activedescendant'` | `'roving'`   | The focus strategy used by the listbox. Set to `'activedescendant'` so browser focus remains on the combobox trigger.           |
-| `tabIndex`      | `number`                           | `0`          | The tabindex of the listbox. Set to `-1` to prevent keyboard focus from entering the popup container in active-descendant mode. |
--->
-
-| 프로퍼티        | 타입                               | 기본값       | 설명                                                                                                                         |
-| --------------- | ---------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| `selectionMode` | `'follow'` \| `'explicit'`         | `'explicit'` | 활성 포커스에 따라 선택하는 대신 클릭/Enter로 옵션의 선택 상태를 명시적으로 전환하도록 `'explicit'`으로 설정합니다.          |
-| `focusMode`     | `'roving'` \| `'activedescendant'` | `'roving'`   | 리스트박스에서 사용하는 포커스 전략입니다. 브라우저 포커스를 콤보박스 트리거에 유지하려면 `'activedescendant'`로 설정합니다. |
-| `tabIndex`      | `number`                           | `0`          | 리스트박스의 tabindex입니다. 활성 자손 모드에서 키보드 포커스가 팝업 컨테이너에 들어가지 않도록 `-1`로 설정합니다.           |
-
-<!--
-#### Model
--->
-
-<a id="model"></a>
-
-#### 모델
-
-<!--
-| Property | Type                 | Description                                                                  |
-| -------- | -------------------- | ---------------------------------------------------------------------------- |
-| `value`  | `ModelSignal<any[]>` | Two-way bindable array of selected values (contains single value for select) |
--->
-
-| 프로퍼티 | 타입                 | 설명                                                                                 |
-| -------- | -------------------- | ------------------------------------------------------------------------------------ |
-| `value`  | `ModelSignal<any[]>` | 양방향 바인딩이 가능한 선택된 값의 배열입니다(단일 선택에서는 값 하나를 포함합니다). |
-
-<!--
 ### Positioning
--->
 
-<a id="positioning"></a>
-
-### 위치 지정
-
-<!--
-The select pattern integrates with [CDK Overlay](https://material.angular.io/cdk/overlay/overview) for smart positioning. Use `cdkConnectedOverlay` to handle viewport edges and scrolling automatically.
--->
-
-선택 패턴은 [CDK Overlay](https://material.angular.io/cdk/overlay/overview)와 통합해서 위치를 적절하게 지정합니다.
-뷰포트 경계와 스크롤을 자동으로 처리하려면 `cdkConnectedOverlay`를 사용하세요.
+The select pattern integrates with [CDK Overlay](https://material.angular.dev/cdk/overlay/overview) for smart positioning. Use `cdkConnectedOverlay` to handle viewport edges and scrolling automatically.

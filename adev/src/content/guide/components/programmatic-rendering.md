@@ -34,6 +34,8 @@ chunks automatically and loaded only when necessary, based on the configured tri
 ## Using NgComponentOutlet
 -->
 
+<a id="using-ngcomponentoutlet"></a>
+
 ## `NgComponentOutlet` 사용하기
 
 <!--
@@ -41,24 +43,31 @@ chunks automatically and loaded only when necessary, based on the configured tri
 template.
 
 ```angular-ts
-@Component({/*...*/})
-export class AdminBio { /* ... */ }
+import {NgComponentOutlet} from '@angular/common';
 
 @Component({/*...*/})
-export class StandardBio { /* ... */ }
+export class AdminBio {
+  /* ... */
+}
+
+@Component({/*...*/})
+export class StandardBio {
+  /* ... */
+}
 
 @Component({
-  ...,
+  imports: [NgComponentOutlet],
   template: `
-    <p>Profile for {{user.name}}</p>
-    <ng-container *ngComponentOutlet="getBioComponent()" /> `
+    <p>Profile for {{ user().name }}</p>
+    <ng-container *ngComponentOutlet="bioComponent()" />
+  `,
 })
 export class CustomDialog {
   user = input.required<User>();
 
-  getBioComponent() {
+  bioComponent = computed(() => {
     return this.user().isAdmin ? AdminBio : StandardBio;
-  }
+  });
 }
 ```
 
@@ -69,24 +78,31 @@ directive's capabilities.
 `NgComponentOutlet` 은 템플릿에서 컴포넌트를 동적으로 렌더링하는 구조 디렉티브입니다.
 
 ```angular-ts
-@Component({/*...*/})
-export class AdminBio { /* ... */ }
+import {NgComponentOutlet} from '@angular/common';
 
 @Component({/*...*/})
-export class StandardBio { /* ... */ }
+export class AdminBio {
+  /* ... */
+}
+
+@Component({/*...*/})
+export class StandardBio {
+  /* ... */
+}
 
 @Component({
-  ...,
+  imports: [NgComponentOutlet],
   template: `
-    <p>Profile for {{user.name}}</p>
-    <ng-container *ngComponentOutlet="getBioComponent()" /> `
+    <p>Profile for {{ user().name }}</p>
+    <ng-container *ngComponentOutlet="bioComponent()" />
+  `,
 })
 export class CustomDialog {
   user = input.required<User>();
 
-  getBioComponent() {
+  bioComponent = computed(() => {
     return this.user().isAdmin ? AdminBio : StandardBio;
-  }
+  });
 }
 ```
 
@@ -95,6 +111,8 @@ export class CustomDialog {
 <!--
 ### Passing inputs to dynamically rendered components
 -->
+
+<a id="passing-inputs-to-dynamically-rendered-components"></a>
 
 ### 렌더링되는 컴포넌트에 입력값 동적으로 전달하기
 
@@ -164,6 +182,8 @@ export class ProfileView {
 <!--
 ### Providing content projection
 -->
+
+<a id="providing-content-projection"></a>
 
 ### 컨텐츠 프로젝션 제공하기
 
@@ -260,6 +280,8 @@ export class DynamicCard {
 ### Providing injectors
 -->
 
+<a id="providing-injectors"></a>
+
 ### 인젝터 등록하기
 
 <!--
@@ -326,6 +348,8 @@ export class DynamicPanel {
 <!--
 ### Accessing the component instance
 -->
+
+<a id="accessing-the-component-instance"></a>
 
 ### 컴포넌트 인스턴스에 접근하기
 
@@ -397,6 +421,8 @@ export class CounterHost {
 <!--
 ## Using ViewContainerRef
 -->
+
+<a id="using-viewcontainerref"></a>
 
 ## `ViewContainerRef` 사용하기
 
@@ -506,6 +532,8 @@ export class InnerItem {
 ## Lazy-loading components
 -->
 
+<a id="lazy-loading-components"></a>
+
 ## 컴포넌트 지연 로딩
 
 <!--
@@ -589,6 +617,8 @@ export class AdminSettings {
 ## Binding inputs, outputs and setting host directives at creation
 -->
 
+<a id="binding-inputs-outputs-and-setting-host-directives-at-creation"></a>
+
 ## 컴포넌트 생성 시점에 입출력값 바인딩, 호스트 디렉티브 설정하면
 
 <!--
@@ -607,6 +637,8 @@ To simplify this, both `createComponent` and `ViewContainerRef.createComponent` 
 <!--
 ### Host view using `ViewContainerRef.createComponent`
 -->
+
+<a id="host-view-using-viewcontainerrefcreatecomponent"></a>
 
 ### `ViewContainerRef.createComponent`를 활용하는 호스트 뷰
 
@@ -750,6 +782,8 @@ export class Host {
 ### Popup attached to `document.body` with `createComponent` + `hostElement`
 -->
 
+<a id="popup-attached-to-documentbody-with-createcomponent--hostelement"></a>
+
 ### `createComponent` + `hostElement`로 `document.body`에 팝업 붙이기
 
 <!--
@@ -849,3 +883,35 @@ export class PopupService {
   }
 }
 ```
+
+<!--
+## Handling rendering errors
+
+When dynamically creating components using `ViewContainerRef.createComponent` or the standalone `createComponent` function, you can provide an `onError` callback in the options object to handle errors that occur during the rendering or change detection phases. This is the programmatic equivalent of using an `@error` block in templates.
+
+```ts
+viewContainerRef.createComponent(DynamicComponent, {
+  onError: (err: Error, details: ErrorDetails) => {
+    console.error('Component rendering failed:', err);
+    // Render an alternative UI or log metrics
+  },
+});
+```
+
+NOTE: The `onError` callback only catches errors that occur during the rendering or change detection phases. It does not catch errors that occur during component instantiation (for example, in the constructor). Angular throws construction errors synchronously when you call the API.
+-->
+
+## 렌더링 에러 처리하기 {#handling-rendering-errors}
+
+`ViewContainerRef.createComponent`나 독립형 `createComponent` 함수로 컴포넌트를 동적으로 생성할 때, 옵션 객체에 `onError` 콜백을 지정하면 렌더링이나 변화 감지 단계에서 발생하는 에러를 처리할 수 있습니다. 템플릿의 `@error` 블록과 같은 기능을 프로그래밍 방식으로 사용하는 것입니다.
+
+```ts
+viewContainerRef.createComponent(DynamicComponent, {
+  onError: (err: Error, details: ErrorDetails) => {
+    console.error('Component rendering failed:', err);
+    // 대체 UI를 렌더링하거나 측정값을 기록합니다.
+  },
+});
+```
+
+참고: `onError` 콜백은 렌더링이나 변화 감지 단계에서 발생하는 에러만 처리합니다. 생성자처럼 컴포넌트 인스턴스를 생성하는 동안 발생한 에러는 처리하지 않습니다. 생성 과정의 에러는 API를 호출할 때 Angular가 동기적으로 발생시킵니다.

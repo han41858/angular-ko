@@ -49,7 +49,14 @@
             <ng-template ngComboboxPopup [combobox]="innerCombobox">
               <div class="example-popup example-popup-no-margin">
                 @if (filteredOptions().length === 0) {
-                  <div class="docs-select-no-results">No results found</div>
+                  <div class="docs-select-no-results">
+                    <img
+                      src="assets/images/angie/question.svg"
+                      class="docs-select-no-results-angie"
+                      aria-hidden="true"
+                    />
+                    <span>No results found</span>
+                  </div>
                 }
                 <div
                   #listbox="ngListbox"
@@ -57,7 +64,7 @@
                   [(value)]="selectedValues"
                   [multi]="false"
                   ngComboboxWidget
-                  class="example-listbox"
+                  class="docs-select-listbox"
                   focusMode="activedescendant"
                   tabindex="-1"
                   selectionMode="explicit"
@@ -74,12 +81,6 @@
                       class="docs-select-option"
                     >
                       <span class="docs-select-option-label">{{ option.label }}</span>
-                      <span
-                        class="material-symbols-outlined docs-select-check-icon"
-                        translate="no"
-                        aria-hidden="true"
-                        >check</span
-                      >
                     </div>
                   }
                 </div>

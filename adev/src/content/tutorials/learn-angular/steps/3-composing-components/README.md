@@ -62,6 +62,8 @@ That's a great segue, how would you conditionally show a component based on data
 
 <docs-workflow>
 
+<a id="add-a-reference-to-user"></a>
+
 <docs-step title="`User` 컴포넌트를 추가해 보세요">
 
 `User` 컴포넌트를 `App` 컴포넌트 템플릿에 적용하기 위해 셀렉터로 지정한 `app-user` 를 추가합니다.
@@ -76,6 +78,8 @@ template: `<app-user />`, imports: [User]
 템플릿을 좀 더 수정해 봅시다.
 
 </docs-step>
+
+<a id="add-more-markup"></a>
 
 <docs-step title="마크업을 추가해 보세요">
 

@@ -13,6 +13,8 @@ Component templates aren't just static HTML— they can use data from your compo
 ## Showing dynamic text
 -->
 
+<a id="showing-dynamic-text"></a>
+
 ## 동적 텍스트 표시하기
 
 <!--
@@ -88,6 +90,8 @@ this.userName.set('cool_coder_789');
 ## Setting dynamic properties and attributes
 -->
 
+<a id="setting-dynamic-properties-and-attributes"></a>
+
 ## 동적 프로퍼티, 동적 어트리뷰트 연결하기
 
 <!--
@@ -139,6 +143,8 @@ export class UserProfile {
 <!--
 ## Handling user interaction
 -->
+
+<a id="handling-user-interaction"></a>
 
 ## 사용자 입력 처리하기
 
@@ -216,6 +222,8 @@ export class UserProfile {
 ## Control flow with `@if` and `@for`
 -->
 
+<a id="control-flow-with-if-and-for"></a>
+
 ## `@if`와 `@for`로 흐름 제어하기
 
 <!--
@@ -281,6 +289,8 @@ TIP: Want to know more about Angular templates? See the [In-depth Templates guid
 <!--
 ## Next Step
 -->
+
+<a id="next-step"></a>
 
 ## 다음 단계
 

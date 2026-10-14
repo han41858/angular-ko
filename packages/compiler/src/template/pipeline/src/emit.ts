@@ -29,6 +29,7 @@ import {specializeBindings} from './phases/binding_specialization';
 import {chain} from './phases/chaining';
 import {collapseSingletonInterpolations} from './phases/collapse_singleton_interpolations';
 import {generateConditionalExpressions} from './phases/conditionals';
+import {generateBoundaryConditions} from './phases/boundary_conditions';
 import {collectElementConsts} from './phases/const_collection';
 import {specializeControlProperties} from './phases/control_directives';
 import {convertAnimations} from './phases/convert_animations';
@@ -70,9 +71,11 @@ import {removeEmptyBindings} from './phases/remove_empty_bindings';
 import {removeI18nContexts} from './phases/remove_i18n_contexts';
 import {removeIllegalLetReferences} from './phases/remove_illegal_let_references';
 import {removeUnusedI18nAttributesOps} from './phases/remove_unused_i18n_attrs';
+import {resolveBoundaries} from './phases/resolve_boundaries';
 import {resolveContexts} from './phases/resolve_contexts';
 import {resolveDeferDepsFns} from './phases/resolve_defer_deps_fns';
 import {resolveDollarEvent} from './phases/resolve_dollar_event';
+import {resolveForeignContent} from './phases/resolve_foreign_content';
 import {resolveI18nElementPlaceholders} from './phases/resolve_i18n_element_placeholders';
 import {resolveI18nExpressionPlaceholders} from './phases/resolve_i18n_expression_placeholders';
 import {resolveI18nAttrSanitizers} from './phases/resolve_i18n_attr_sanitizers';
@@ -107,6 +110,7 @@ type Phase =
     };
 
 const phases: Phase[] = [
+  {kind: Kind.Tmpl, fn: resolveForeignContent},
   {kind: Kind.Tmpl, fn: removeContentSelectors},
   {kind: Kind.Both, fn: optimizeRegularExpressions},
   {kind: Kind.Host, fn: parseHostStyleProperties},
@@ -125,6 +129,7 @@ const phases: Phase[] = [
   {kind: Kind.Both, fn: collapseSingletonInterpolations},
   {kind: Kind.Both, fn: orderOps},
   {kind: Kind.Tmpl, fn: generateConditionalExpressions},
+  {kind: Kind.Tmpl, fn: generateBoundaryConditions},
   {kind: Kind.Tmpl, fn: createPipes},
   {kind: Kind.Tmpl, fn: configureDeferInstructions},
   {kind: Kind.Tmpl, fn: insertIncrementalHydrationRuntime},
@@ -134,6 +139,7 @@ const phases: Phase[] = [
   {kind: Kind.Tmpl, fn: generateProjectionDefs},
   {kind: Kind.Tmpl, fn: generateLocalLetReferences},
   {kind: Kind.Tmpl, fn: generateVariables},
+  {kind: Kind.Tmpl, fn: resolveBoundaries},
   {kind: Kind.Tmpl, fn: saveAndRestoreView},
   {kind: Kind.Both, fn: deleteAnyCasts},
   {kind: Kind.Both, fn: removeSafeNavigationMigration},
@@ -255,7 +261,7 @@ function emitView(view: ViewCompilationUnit): o.FunctionExpr {
   return o.fn(
     [new o.FnParam(RENDER_FLAGS, o.NUMBER_TYPE), new o.FnParam(CONTEXT_NAME, o.DYNAMIC_TYPE)],
     [...createCond, ...updateCond],
-    /* type */ undefined,
+    /* type */ o.DYNAMIC_TYPE,
     /* sourceSpan */ undefined,
     view.fnName,
   );
@@ -315,7 +321,7 @@ export function emitHostBindingFunction(job: HostBindingCompilationJob): o.Funct
   return o.fn(
     [new o.FnParam(RENDER_FLAGS, o.NUMBER_TYPE), new o.FnParam(CONTEXT_NAME, o.DYNAMIC_TYPE)],
     [...createCond, ...updateCond],
-    /* type */ undefined,
+    /* type */ o.DYNAMIC_TYPE,
     /* sourceSpan */ undefined,
     job.root.fnName,
   );

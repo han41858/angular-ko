@@ -1,265 +1,141 @@
 <!--
-<docs-decorative-header title="Built-in directives" imgSrc="adev/src/assets/images/directives.svg"> <!- markdownlint-disable-line ->
-Directives are classes that add additional behavior to elements in your Angular applications.
+<docs-decorative-header title="Directives" imgSrc="adev/src/assets/images/directives.svg"> <!- markdownlint-disable-line ->
+Directives add behavior to elements and components in your Angular applications.
 </docs-decorative-header>
 
-Use Angular's built-in directives to manage forms, lists, styles, and what users see.
+A directive can change how an element looks, how it behaves, or how it fits into the DOM. Angular ships with several built-in directives, and you can write your own.
 
-The different types of Angular directives are as follows:
+## When to use a directive
 
-| Directive Types                                                  | Details                                                                           |
-| :--------------------------------------------------------------- | :-------------------------------------------------------------------------------- |
-| [Components](guide/components)                                   | Used with a template. This type of directive is the most common directive type.   |
-| [Attribute directives](#built-in-attribute-directives)           | Change the appearance or behavior of an element, component, or another directive. |
-| [Structural directives](/guide/directives/structural-directives) | Change the DOM layout by adding and removing DOM elements.                        |
+Directives are most effective when they encapsulate **reusable** behavior that you want to apply to an existing element or component.
 
-This guide covers built-in [attribute directives](#built-in-attribute-directives).
--->
+Common examples include:
 
-<docs-decorative-header title="기본 디렉티브" imgSrc="adev/src/assets/images/directives.svg"> <!-- markdownlint-disable-line -->
-디렉티브(directive)는 Angular 애플리케이션 안에서 엘리먼트에 어떤 동작을 추가하는 클래스입니다.
-</docs-decorative-header>
+- Applying the same appearance or behavior across many elements, such as autofocus or a tooltip.
+- Reading from or writing to the host element's DOM, attributes, or classes.
+- Adding behavior to a component you don't own without changing its source.
 
-Angular가 제공하는 기본 디렉티브는 폼, 목록, 스타일 등에 다양하게 활용됩니다.
+If you need to render your own markup or manage a piece of UI with its own template, reach for a [component](guide/components), a specialized directive with its own template.
 
-디렉티브는 두 종류로 구분됩니다:
+## A quick example
 
-| 종류                                                     | 설명                                                         |
-| :------------------------------------------------------- | :----------------------------------------------------------- |
-| [컴포넌트](guide/components)                             | 템플릿에 사용합니다. 가장 많이 사용되는 디렉티브 종류입니다. |
-| [어트리뷰트 디렉티브](#기본-어트리뷰트-디렉티브)         | 엘리먼트, 컴포넌트, 디렉티브의 모습이나 동작을 바꿉니다.     |
-| [구조 디렉티브](/guide/directives/structural-directives) | 조건에 따라 DOM 엘리먼트를 DOM에 추가하거나 제거합니다.      |
+Suppose you want elements to highlight when the user hovers over them with a mouse, changing their background color to yellow. Rather than repeat the same event-handling logic on every element, you can package that behavior in a directive and apply it wherever you need it.
 
-이 문서는 Angular가 제공하는 기본 [어트리뷰트 디렉티브](#기본-어트리뷰트-디렉티브)를 다룹니다.
+The following `appHighlight` directive sets the host element's background color when the mouse enters and clears it when the mouse leaves:
 
-<!--
-## Built-in attribute directives
--->
+```ts
+import {Directive, signal} from '@angular/core';
 
-## 기본 어트리뷰트 디렉티브
-
-<!--
-Attribute directives listen to and modify the behavior of other HTML elements, attributes, properties, and components.
-
-The most common attribute directives are as follows:
-
-| Common directives                                      | Details                                            |
-| :----------------------------------------------------- | :------------------------------------------------- |
-| [`NgClass`](#adding-and-removing-classes-with-ngclass) | Adds and removes a set of CSS classes.             |
-| [`NgStyle`](#setting-inline-styles-with-ngstyle)       | Adds and removes a set of HTML styles.             |
-| [`NgModel`](guide/forms/template-driven-forms)         | Adds two-way data binding to an HTML form element. |
-
-HELPFUL: Built-in directives use only public APIs. They do not have special access to any private APIs that other directives can't access.
--->
-
-어트리뷰트는 HTML 엘리먼트, 어트리뷰트, 프로퍼티, 컴포넌트의 동작을 바꿉니다.
-
-어트리뷰트 중에는 이런 것들을 자주 사용합니다:
-
-| 디렉티브                                               | 설명                                                  |
-| :----------------------------------------------------- | :---------------------------------------------------- |
-| [`NgClass`](#css-클래스를-지정하거나-제거하기-ngclass) | CSS 클래스를 추가하거나 제거합니다.                   |
-| [`NgStyle`](#인라인-스타일-지정하기-ngstyle)           | HTML 스타일을 지정하거나 제거합니다.                  |
-| [`NgModel`](guide/forms/template-driven-forms)         | HTML 폼 엘리먼트에 양방향 데이터 바인딩을 연결합니다. |
-
-참고: 기본 디렉티브는 public API만 사용합니다. 디렉티브가 제공하지 않는 private API는 사용할 수 없습니다.
-
-<!--
-## Adding and removing classes with `NgClass`
--->
-
-## CSS 클래스를 지정하거나 제거하기: `NgClass`
-
-<!--
-Add or remove multiple CSS classes simultaneously with `ngClass`.
-
-HELPFUL: To add or remove a _single_ class, use [class binding](/guide/templates/binding#css-class-and-style-property-bindings) rather than `NgClass`.
--->
-
-`ngClass`는 CSS 클래스를 지정하거나 제거할 수 있습니다.
-
-참고: 클래스 _하나_ 만 지정하거나 제거하려면 `NgClass` 대신 [클래스 바인딩](/guide/templates/binding#css-class-and-style-property-bindings)을 사용하세요.
-
-<!--
-### Import `NgClass` in the component
--->
-
-### 컴포넌트에 `NgClass` 불러오기
-
-<!--
-To use `NgClass`, add it to the component's `imports` list.
-
-```angular-ts
-import {NgClass} from '@angular/common';
-
-@Component({
-  /* ... */
-  imports: [NgClass],
+@Directive({
+  selector: '[appHighlight]',
+  host: {
+    '(mouseenter)': 'isHovered.set(true)',
+    '(mouseleave)': 'isHovered.set(false)',
+    '[style.background-color]': 'isHovered() ? "yellow" : null',
+  },
 })
-export class AppComponent {}
-```
--->
-
-`NgClass`를 사용하려면 먼저 컴포넌트 `imports` 배열에 이 심볼을 로드해야 합니다.
-
-```angular-ts
-import {NgClass} from '@angular/common';
-
-@Component({
-  /* ... */
-  imports: [NgClass],
-})
-export class AppComponent {}
+export class HighlightDirective {
+  protected isHovered = signal(false);
+}
 ```
 
-<!--
-### Using `NgClass` with an expression
--->
+The `host` metadata listens for mouse events to update the `isHovered` signal, and binds the host element's `background-color` style to the signal's value.
 
-### `NgClass`에 표현식 연결하기
+Apply the directive by adding its selector as an attribute on an element:
 
-<!--
-On the element you'd like to style, add `[ngClass]` and set it equal to an expression.
-In this case, `isSpecial` is a boolean set to `true` in `app.component.ts`.
-Because `isSpecial` is true, `ngClass` applies the class of `special` to the `<div>`.
-
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="special-div"/>
--->
-
-스타일을 지정하려는 엘리먼트에 `[ngClass]`를 추가하고 등호(`=`)를 붙인 후 표현식을 작성합니다.
-아래 코드처럼 작성하면 `app.component.ts` 파일의 `isSpecial` 값이 `true`로 평가되면 `<div>`에 `special` 클래스가 지정됩니다.
-
-<docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="special-div"/>
-
-<!--
-### Using `NgClass` with a method
--->
-
-### `NgClass`와 메서드 사용하기
-
-<!--
-1. To use `NgClass` with a method, add the method to the component class.
-   In the following example, `setCurrentClasses()` sets the property `currentClasses` with an object that adds or removes three classes based on the `true` or `false` state of three other component properties.
-
-   Each key of the object is a CSS class name.
-   If a key is `true`, `ngClass` adds the class.
-   If a key is `false`, `ngClass` removes the class.
-
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setClasses"/>
-
-1. In the template, add the `ngClass` property binding to `currentClasses` to set the element's classes:
-
-   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgClass-1"/>
-
-For this use case, Angular applies the classes on initialization and in case of changes caused by reassigning the `currentClasses` object.
-The full example calls `setCurrentClasses()` initially with `ngOnInit()` when the user clicks on the `Refresh currentClasses` button.
-These steps are not necessary to implement `ngClass`.
--->
-
-1. `NgClass`를 메서드와 함께 사용하려면 컴포넌트 클래스에 메서드를 정의해야 합니다.
-   아래 코드를 보면, `setCurrentClasses()` 는 `currentClasses` 프로퍼티에 객체를 할당하며, 이 객체는 다른 컴포넌트 프로퍼티 값에 따라 CSS 클래스를 지정하거나 제거합니다.
-
-   객체의 키는 CSS 클래스 이름을 의미합니다.
-   값이 `true`이면, `ngClass` 가 CSS 클래스를 지정합니다.
-   값이 `false`이면, `ngClass` 가 CSS 클래스를 제거합니다.
-
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setClasses"/>
-
-1. 템플릿에서 CSS 클래스를 지정하려는 엘리먼트에 `ngClass` 로 `currentClasses` 프로퍼티와 바인딩합니다:
-
-   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgClass-1"/>
-
-이렇게 구현하면 Angular는 `currentClasses` 객체를 처음 생성할 때부터 이 객체 내부의 값이 변할 때마다 새로운 객체를 재할당합니다.
-그리고 전체 예제 코드에서는 사용자가 `Refresh currentClasses` 버튼을 클릭하면 `ngOnInit()`가 실행될 때와 동일하게 `setCurrentClasses()`를 실행합니다.
-
-<!--
-## Setting inline styles with `NgStyle`
--->
-
-## 인라인 스타일 지정하기: `NgStyle`
-
-<!--
-HELPFUL: To add or remove a _single_ style, use [style bindings](guide/templates/binding#css-class-and-style-property-bindings) rather than `NgStyle`.
--->
-
-참고: 스타일 _하나_ 를 지정하거나 제거하려면 `NgStyle`을 사용하지 말고 [스타일 바인딩](guide/templates/binding#css-class-and-style-property-bindings)을 사용하세요.
-
-<!--
-### Import `NgStyle` in the component
--->
-
-### 컴포넌트에 `NgStyle` 불러오기
-
-<!--
-To use `NgStyle`, add it to the component's `imports` list.
-
-```angular-ts
-import {NgStyle} from '@angular/common';
-
-@Component({
-  /* ... */
-  imports: [NgStyle],
-})
-export class AppComponent {}
+```angular-html
+<p appHighlight>Highlight me!</p>
 ```
 
-Use `NgStyle` to set multiple inline styles simultaneously, based on the state of the component.
+Every element that carries the `appHighlight` attribute gains the same hover behavior, with the logic defined in one place.
 
-1. To use `NgStyle`, add a method to the component class.
+## Types of directives
 
-   In the following example, `setCurrentStyles()` sets the property `currentStyles` with an object that defines three styles, based on the state of three other component properties.
+Angular has three primary types of directives:
 
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setStyles"/>
+| Directive type                                                  | Details                                                                           |
+| :-------------------------------------------------------------- | :-------------------------------------------------------------------------------- |
+| [Components](guide/components)                                  | Define reusable UI with their own template.                                       |
+| [Attribute directives](guide/directives/attribute-directives)   | Change the appearance or behavior of an element, component, or another directive. |
+| [Structural directives](guide/directives/structural-directives) | Change the DOM layout by adding and removing DOM elements.                        |
 
-1. To set the element's styles, add an `ngStyle` property binding to `currentStyles`.
-
-   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgStyle-2"/>
-
-For this use case, Angular applies the styles upon initialization and in case of changes.
-To do this, the full example calls `setCurrentStyles()` initially with `ngOnInit()` and when the dependent properties change through a button click.
-However, these steps are not necessary to implement `ngStyle` on its own.
--->
-
-`NgStyle`을 사용하려면 먼저 컴포넌트 `imports` 배열에 이 심볼을 로드해야 합니다.
-
-```angular-ts
-import {NgStyle} from '@angular/common';
-
-@Component({
-  /* ... */
-  imports: [NgStyle],
-})
-export class AppComponent {}
-```
-
-`NgStyle`을 사용하면 컴포넌트 상태에 따라 인라인 스타일 여러 개를 동시에 지정할 수 있습니다.
-
-1. `NgStyle`을 사용하려면, 컴포넌트 클래스에 메서드를 추가합니다.
-
-   아래 예제를 보면 `setCurrentStyles()`는 컴포넌트 프로퍼티 상태에 따라 스타일을 지정하는 객체를 선언해서 `currentStyles` 프로퍼티에 할당합니다.
-
-   <docs-code header="app.component.ts" path="adev/src/content/examples/built-in-directives/src/app/app.component.ts" region="setStyles"/>
-
-1. 엘리먼트에 스타일을 지정하려면 `ngStyle`을 사용해서 `currentStyles`와 프로퍼티 바인딩하면 됩니다.
-
-   <docs-code header="app.component.html" path="adev/src/content/examples/built-in-directives/src/app/app.component.html" region="NgStyle-2"/>
-
-이렇게 구현하면 Angular는 프로퍼티 값이 변경될 때마다 엘리먼트에 변경된 스타일을 지정합니다.
-그리고 전체 예제 코드에서는 사용자가 버튼을 클릭하면 `ngOnInit()`가 실행될 때와 동일하게 `setCurrentStyles()`를 실행합니다.
-
-<!--
 ## What's next
--->
 
-## 다음 단계
+Learn more about each type of directive in the following guides.
 
-<!--
 <docs-pill-row>
-  <docs-pill href="guide/directives/attribute-directives" title="Attribute Directives"/>
-  <docs-pill href="guide/directives/structural-directives" title="Structural Directives"/>
+  <docs-pill href="guide/directives/attribute-directives" title="Attribute directives"/>
+  <docs-pill href="guide/directives/structural-directives" title="Structural directives"/>
   <docs-pill href="guide/directives/directive-composition-api" title="Directive composition API"/>
 </docs-pill-row>
 -->
+
+<docs-decorative-header title="디렉티브" imgSrc="adev/src/assets/images/directives.svg"> <!-- markdownlint-disable-line -->
+디렉티브는 Angular 애플리케이션의 엘리먼트와 컴포넌트에 동작을 추가합니다.
+</docs-decorative-header>
+
+디렉티브는 엘리먼트의 모습이나 동작, DOM 안에서의 배치를 변경할 수 있습니다.
+Angular가 제공하는 내장 디렉티브를 사용하거나 직접 디렉티브를 작성할 수 있습니다.
+
+## 디렉티브를 사용하는 경우 {#when-to-use-a-directive}
+
+기존 엘리먼트나 컴포넌트에 적용할 **재사용 가능한** 동작을 캡슐화할 때 디렉티브가 가장 효과적입니다.
+
+다음과 같은 경우에 주로 사용합니다.
+
+- 자동 포커스나 툴팁처럼 여러 엘리먼트에 같은 모습이나 동작 적용하기
+- 호스트 엘리먼트의 DOM, 어트리뷰트, 클래스 읽거나 변경하기
+- 직접 관리하지 않는 컴포넌트의 소스 코드를 변경하지 않고 동작 추가하기
+
+직접 마크업을 렌더링하거나 자체 템플릿이 있는 UI를 관리해야 한다면, 자체 템플릿을 가진 특별한 디렉티브인 [컴포넌트](guide/components)를 사용하세요.
+
+## 간단한 예제 {#a-quick-example}
+
+사용자가 엘리먼트 위로 마우스를 가져가면 배경색을 노란색으로 바꿔서 강조하고 싶다고 가정해 보세요.
+모든 엘리먼트에 같은 이벤트 처리 로직을 반복해서 작성하는 대신 디렉티브로 구성해서 필요한 곳에 적용할 수 있습니다.
+
+다음 `appHighlight` 디렉티브는 마우스가 호스트 엘리먼트 안으로 들어오면 배경색을 설정하고, 밖으로 나가면 배경색을 지웁니다.
+
+```ts
+import {Directive, signal} from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]',
+  host: {
+    '(mouseenter)': 'isHovered.set(true)',
+    '(mouseleave)': 'isHovered.set(false)',
+    '[style.background-color]': 'isHovered() ? "yellow" : null',
+  },
+})
+export class HighlightDirective {
+  protected isHovered = signal(false);
+}
+```
+
+`host` 메타데이터는 마우스 이벤트를 감지해서 `isHovered` 시그널을 갱신하고, 호스트 엘리먼트의 `background-color` 스타일을 시그널 값에 바인딩합니다.
+
+엘리먼트에 디렉티브 셀렉터를 어트리뷰트로 추가하면 디렉티브를 적용할 수 있습니다.
+
+```angular-html
+<p appHighlight>강조해 주세요!</p>
+```
+
+`appHighlight` 어트리뷰트가 있는 모든 엘리먼트에는 한 곳에 정의한 같은 호버 동작이 적용됩니다.
+
+## 디렉티브 종류 {#types-of-directives}
+
+Angular에는 세 가지 주요 디렉티브 종류가 있습니다.
+
+| 디렉티브 종류                                                | 설명                                                            |
+| :----------------------------------------------------------- | :-------------------------------------------------------------- |
+| [컴포넌트](guide/components)                                 | 자체 템플릿으로 재사용 가능한 UI를 정의합니다.                  |
+| [어트리뷰트 디렉티브](guide/directives/attribute-directives) | 엘리먼트, 컴포넌트, 다른 디렉티브의 모습이나 동작을 변경합니다. |
+| [구조 디렉티브](guide/directives/structural-directives)      | DOM 엘리먼트를 추가하거나 제거해서 DOM 배치를 변경합니다.       |
+
+## 다음 단계 {#whats-next}
+
+다음 가이드에서 각 디렉티브 종류를 자세히 알아보세요.
+
 <docs-pill-row>
   <docs-pill href="guide/directives/attribute-directives" title="어트리뷰트 디렉티브"/>
   <docs-pill href="guide/directives/structural-directives" title="구조 디렉티브"/>

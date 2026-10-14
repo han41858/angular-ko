@@ -17,9 +17,7 @@ export class ListboxBase {
   value: string;
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   // CustomListbox inherits the `value` property.
 }
@@ -37,9 +35,7 @@ export class ListboxBase {
   value: string;
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   // CustomListbox는 ListboxBase를 상속하기 때문에 `value` 프로퍼티가 존재합니다.
 }
@@ -48,6 +44,8 @@ export class CustomListbox extends ListboxBase {
 <!--
 ## Extending other components and directives
 -->
+
+<a id="extending-other-components-and-directives"></a>
 
 ## 컴포넌트, 디렉티브 확장하기
 
@@ -136,22 +134,20 @@ export class CustomListbox extends ListboxBase {
 ### Forwarding injected dependencies
 -->
 
+<a id="forwarding-injected-dependencies"></a>
+
 ### 의존성 객체 전달하기
 
 <!--
 When a base class uses `inject()` as a property initializer, the child class inherits the property automatically. No `super` forwarding is needed.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ListboxBase {
   protected element = inject(ElementRef);
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   // `element` is inherited from `ListboxBase`.
 }
@@ -160,16 +156,12 @@ export class CustomListbox extends ListboxBase {
 If a base class injects dependencies as constructor parameters, the child class must explicitly pass these dependencies to `super`.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ListboxBase {
   constructor(private element: ElementRef) {}
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   constructor(element: ElementRef) {
     super(element);
@@ -182,16 +174,12 @@ export class CustomListbox extends ListboxBase {
 `super`는 사용하지 않아도 됩니다.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ListboxBase {
   protected element = inject(ElementRef);
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   // `ListboxBase`를 상속해서 `element` 프로퍼티를 선언합니다.
 }
@@ -200,16 +188,12 @@ export class CustomListbox extends ListboxBase {
 부모 클래스에서 생성자로 의존성 객체를 주입하면, 자식 클래스에서는 `super`를 사용해서 의존성 객체를 명시적으로 전달해야 합니다.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ListboxBase {
   constructor(private element: ElementRef) {}
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   constructor(element: ElementRef) {
     super(element);
@@ -221,6 +205,8 @@ export class CustomListbox extends ListboxBase {
 ### Overriding lifecycle methods
 -->
 
+<a id="overriding-lifecycle-methods"></a>
+
 ### 라이프싸이클 메서드 오버라이딩
 
 <!--
@@ -229,9 +215,7 @@ implements `ngOnInit` _overrides_ the base class's implementation. If you want t
 class's lifecycle method, explicitly call the method with `super`:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ListboxBase {
   protected isInitialized = false;
   ngOnInit() {
@@ -239,9 +223,7 @@ export class ListboxBase {
   }
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   override ngOnInit() {
     super.ngOnInit();
@@ -255,9 +237,7 @@ export class CustomListbox extends ListboxBase {
 이때 부모 클래스의 메서드를 실행하려면, `super` 키워드와 함께 실행하면 됩니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ListboxBase {
   protected isInitialized = false;
   ngOnInit() {
@@ -265,9 +245,7 @@ export class ListboxBase {
   }
 }
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomListbox extends ListboxBase {
   override ngOnInit() {
     super.ngOnInit();

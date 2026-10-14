@@ -2,6 +2,8 @@
 # Event handling
 -->
 
+<a id="event-handling"></a>
+
 # 이벤트 처리
 
 <!--
@@ -34,12 +36,10 @@ Alright, your turn to give this a try:
 <docs-workflow>
 
 <docs-step title="Add an event handler">
-Add the `showSecretMessage()` event handler function in the `App` class. Use the following code as the implementation:
+In the `App` class, fill in the body of the existing `showSecretMessage()` method with the following code:
 
 ```ts
-showSecretMessage() {
-  this.message = 'Way to go 🚀';
-}
+this.message = 'Way to go 🚀';
 ```
 
 </docs-step>
@@ -77,7 +77,7 @@ And with a few steps in the code you've created your first event handler in Angu
     ...
     template: `<button (click)="greet()">`
 })
-class App {
+export class App {
     greet() {
         console.log('Hello, there 👋');
     }
@@ -91,25 +91,26 @@ class App {
 
 <docs-workflow>
 
+<a id="add-an-event-handler"></a>
+
 <docs-step title="이벤트 핸들러를 추가해 보세요">
 
-`App` 컴포넌트 클래스에 `onMouseOver` 이벤트 핸들러 함수를 추가합니다.
-이렇게 구현해 봅시다:
+`App` 클래스에 이미 있는 `showSecretMessage()` 메서드의 본문을 다음 코드로 채우세요.
 
 ```ts
-onMouseOver() {
-    this.message = 'Way to go 🚀';
-}
+this.message = 'Way to go 🚀';
 ```
 
 </docs-step>
+
+<a id="bind-to-the-template-event"></a>
 
 <docs-step title="템플릿에서 이벤트를 바인딩합니다">
 
 `app.ts` 파일에 있는 템플릿에서 `section` 엘리먼트에 `mouseover` 이벤트를 바인딩해 보세요.
 
 ```angular-html
-<section (mouseover)="onMouseOver()"></section>
+<section (mouseover)="showSecretMessage()"></section>
 ```
 
 </docs-step>

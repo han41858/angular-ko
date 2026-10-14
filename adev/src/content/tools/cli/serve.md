@@ -25,12 +25,8 @@ You can determine which builder is being used for a particular project by lookin
           "builder": "@angular/build:dev-server"
           // ...
         },
-        "build": {
-          /* ... */
-        },
-        "test": {
-          /* ... */
-        }
+        "build": {/* ... */},
+        "test": {/* ... */}
       }
     }
   }
@@ -57,12 +53,8 @@ Angular CLI 애플리케이션은 `ng serve` 명령어로 실행할 수 있습�
           "builder": "@angular/build:dev-server"
           // ...
         },
-        "build": {
-          /* ... */
-        },
-        "test": {
-          /* ... */
-        }
+        "build": {/* ... */},
+        "test": {/* ... */}
       }
     }
   }
@@ -156,31 +148,19 @@ NOTE: To apply changes made to your proxy configuration file, you must restart t
 참고: 프록시 설정 파일의 변경 사항을 적용하려면 `ng serve` 프로세스를 다시 시작해야 합니다.
 
 <!--
-### Path matching behavior depends on the builder
+### Path matching behavior
 -->
 
-<a id="path-matching-behavior-depends-on-the-builder"></a>
+<a id="path-matching-behavior"></a>
 
-### 빌더에 따른 경로 매칭 방식
+### 경로 매칭 방식
 
 <!--
-**`@angular/build:dev-server`** (based on [Vite](https://vite.dev/config/server-options#server-proxy))
-
-- `/api` matches only `/api`.
-- `/api/*` matches `/api/users` but not `/api/users/123`.
-- `/api/**` matches `/api/users` and `/api/users/123`.
-
-**`@angular-devkit/build-angular:dev-server`** (based on [Webpack DevServer](https://webpack.js.org/configuration/dev-server/#devserverproxy))
-
-- `/api` matches `/api` and any sub-paths (equivalent to `/api/**`).
+- `/api` matches `/api` and any path that starts with it, such as `/api/users/123` or `/api-docs`.
+- `/api/*` matches `/api/users`, but not `/api` or `/api/users/123`.
+- `/api/**` matches `/api`, `/api/users`, and `/api/users/123`, but not `/api-docs`.
 -->
 
-**`@angular/build:dev-server`** ([Vite](https://vite.dev/config/server-options#server-proxy) 기반)
-
-- `/api`는 `/api`에만 매칭됩니다.
-- `/api/*`는 `/api/users`에 매칭되지만 `/api/users/123`에는 매칭되지 않습니다.
-- `/api/**`는 `/api/users`와 `/api/users/123`에 매칭됩니다.
-
-**`@angular-devkit/build-angular:dev-server`** ([Webpack DevServer](https://webpack.js.org/configuration/dev-server/#devserverproxy) 기반)
-
-- `/api`는 `/api`와 모든 하위 경로에 매칭됩니다(`/api/**`와 동일합니다).
+- `/api`는 `/api`와 `/api/users/123`, `/api-docs`처럼 해당 문자열로 시작하는 모든 경로에 매칭됩니다.
+- `/api/*`는 `/api/users`에 매칭되지만 `/api`나 `/api/users/123`에는 매칭되지 않습니다.
+- `/api/**`는 `/api`, `/api/users`, `/api/users/123`에 매칭되지만 `/api-docs`에는 매칭되지 않습니다.

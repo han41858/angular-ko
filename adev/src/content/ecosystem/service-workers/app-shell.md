@@ -45,6 +45,7 @@ src
 └── main.server.ts # main server application bootstrapping
 ```
 
+</docs-step>
 <docs-step title="Verify the application is built with the shell content">
 
 ```shell
@@ -69,6 +70,8 @@ Look for default text `app-shell works!` to show that the application shell rout
 JavaScript를 초기화하지 않고도 브라우저가 HTML과 CSS를 렌더링할 수 있으므로, 사용자에게 의미 있는 애플리케이션 화면을 빠르게 처음 표시할 수 있습니다.
 
 <docs-workflow>
+<a id="prepare-the-application"></a>
+
 <docs-step title="애플리케이션 준비하기">
 다음 Angular CLI 명령으로 준비하세요:
 
@@ -78,6 +81,8 @@ ng new my-app
 
 기존 애플리케이션에서는 `Router`를 직접 추가하고 애플리케이션 안에 `<router-outlet>`을 정의해야 합니다.
 </docs-step>
+<a id="create-the-application-shell"></a>
+
 <docs-step title="애플리케이션 셸 생성하기">
 Angular CLI를 사용해서 애플리케이션 셸을 자동으로 생성하세요.
 
@@ -100,6 +105,9 @@ src
 │   └── app-shell.component.ts
 └── main.server.ts # main server application bootstrapping
 ```
+
+</docs-step>
+<a id="verify-the-application-is-built-with-the-shell-content"></a>
 
 <docs-step title="셸 내용을 포함해서 애플리케이션이 빌드되었는지 확인하기">
 

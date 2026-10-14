@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 import * as chars from './chars';
+import {namespaceCssVariable} from './util';
 
 /**
  * The following set contains all keywords that can be used in the animation css shorthand
@@ -361,7 +362,7 @@ export class ShadowCss {
     unscopedKeyframesSet: ReadonlySet<string>,
   ): CssRule {
     let content = rule.content.replace(
-      /((?:^|\s+|;)(?:-webkit-)?animation\s*:\s*)([^;]+)/g,
+      /((?:^|[\s;{])(?:-webkit-)?animation\s*:\s*)([^;}]+)/g,
       (_, start, animationDeclarations) =>
         start +
         animationDeclarations.replace(
@@ -392,7 +393,7 @@ export class ShadowCss {
         ),
     );
     content = content.replace(
-      /((?:^|\s+|;)(?:-webkit-)?animation-name(?:\s*):(?:\s*))([^;]+)/g,
+      /((?:^|[\s;{])(?:-webkit-)?animation-name(?:\s*):(?:\s*))([^;}]+)/g,
       (_match, start, commaSeparatedKeyframes) =>
         `${start}${commaSeparatedKeyframes
           .split(',')
@@ -595,18 +596,30 @@ export class ShadowCss {
       let selector = rule.selector;
       let content = rule.content;
       if (rule.selector[0] !== '@') {
-        selector = this._scopeSelector({
-          selector,
-          scopeSelector,
-          hostSelector,
-          isParentSelector: true,
-        });
+        if (rule.isBlock) {
+          const selectorParts = selector.split(_selectorSplitRe);
+          const containsDeep = selectorParts.some((part) => _shadowDeepSelectorRe.test(part));
+
+          selector = this._scopeSelector({
+            selector,
+            scopeSelector,
+            hostSelector,
+            isParentSelector: true,
+          });
+
+          content =
+            // Only recurse into content if there might be any child blocks.
+            // TODO: support something like `.parent { ::ng-deep { .child {} } }`
+            !containsDeep && rule.content.includes('{')
+              ? this._scopeSelectors(rule.content, scopeSelector, hostSelector)
+              : this._stripScopingSelectors(rule.content);
+        }
       } else if (scopedAtRuleIdentifiers.some((atRule) => rule.selector.startsWith(atRule))) {
         content = this._scopeSelectors(rule.content, scopeSelector, hostSelector);
       } else if (rule.selector.startsWith('@font-face') || rule.selector.startsWith('@page')) {
         content = this._stripScopingSelectors(rule.content);
       }
-      return new CssRule(selector, content);
+      return new CssRule(selector, content, rule.isBlock);
     });
   }
 
@@ -636,7 +649,7 @@ export class ShadowCss {
       const selector = rule.selector
         .replace(_shadowDeepSelectors, ' ')
         .replace(_polyfillHostNoCombinatorRe, ' ');
-      return new CssRule(selector, rule.content);
+      return new CssRule(selector, rule.content, rule.isBlock);
     });
   }
 
@@ -658,15 +671,8 @@ export class ShadowCss {
     hostSelector: string;
     isParentSelector?: boolean;
   }): string {
-    // Split the selector into independent parts by `,` (comma) unless
-    // comma is within parenthesis, for example `:is(.one, two)`.
-    // Negative lookup after comma allows not splitting inside nested parenthesis,
-    // up to three levels (((,))).
-    const selectorSplitRe =
-      / ?,(?!(?:[^)(]*(?:\([^)(]*(?:\([^)(]*(?:\([^)(]*\)[^)(]*)*\)[^)(]*)*\)[^)(]*)*\))) ?/;
-
     return selector
-      .split(selectorSplitRe)
+      .split(_selectorSplitRe)
       .map((part) => part.split(_shadowDeepSelectors))
       .map((deepParts) => {
         const [shallowPart, ...otherParts] = deepParts;
@@ -747,7 +753,9 @@ export class ShadowCss {
     const _scopeSelectorPart = (p: string) => {
       let scopedP = p.trim();
 
-      if (!scopedP) {
+      // Comments are replaced with placeholders before scoping. A part that only consists of
+      // comments is not a selector and must be left untouched.
+      if (!scopedP || scopedP === '&' || _onlyCommentPlaceholdersRe.test(scopedP)) {
         return p;
       }
 
@@ -1007,6 +1015,14 @@ const _polyfillHostNoCombinatorRe = /-shadowcsshost-no-combinator([^\s,]*)/;
 // Support for `>>>`, `deep`, `::ng-deep` is then also deprecated and will be removed in the future.
 // see https://github.com/angular/angular/pull/17677
 const _shadowDeepSelectors = /(?:>>>)|(?:\/deep\/)|(?:::ng-deep)/g;
+// Non-global copy for `.test()`, which would otherwise carry `lastIndex` over to the next rule.
+const _shadowDeepSelectorRe = new RegExp(_shadowDeepSelectors.source);
+
+// Splits the selector into independent parts by `,` (comma) unless comma is within parenthesis,
+// for example `:is(.one, two)`. Negative lookup after comma allows not splitting inside nested
+// parenthesis, up to three levels (((,))).
+const _selectorSplitRe =
+  / ?,(?!(?:[^)(]*(?:\([^)(]*(?:\([^)(]*(?:\([^)(]*\)[^)(]*)*\)[^)(]*)*\)[^)(]*)*\))) ?/;
 const _selectorReSuffix = '([>\\s~+[.,{:][\\s\\S]*)?$';
 const _polyfillHostRe = /-shadowcsshost/gim;
 const _colonHostRe = /:host(?!\-context)/gim;
@@ -1017,10 +1033,11 @@ const _commentRe = /\/\*[\s\S]*?\*\//g;
 const _commentWithHashRe = /\/\*\s*#\s*source(Mapping)?URL=/g;
 const COMMENT_PLACEHOLDER = '%COMMENT%';
 const _commentWithHashPlaceHolderRe = new RegExp(COMMENT_PLACEHOLDER, 'g');
+const _onlyCommentPlaceholdersRe = new RegExp(`^(?:${COMMENT_PLACEHOLDER})+$`);
 
 const BLOCK_PLACEHOLDER = '%BLOCK%';
 const _ruleRe = new RegExp(
-  `(\\s*(?:${COMMENT_PLACEHOLDER}\\s*)*)([^;\\{\\}]+?)(\\s*)((?:{%BLOCK%}?\\s*;?)|(?:\\s*;))`,
+  `(\\s*(?:${COMMENT_PLACEHOLDER}\\s*)*)([^;\\{\\}]+?)(\\s*)((?:{%BLOCK%}?\\s*;?)|(?:\\s*;)|$)`,
   'g',
 );
 const CONTENT_PAIRS = new Map([['{', '}']]);
@@ -1028,15 +1045,52 @@ const CONTENT_PAIRS = new Map([['{', '}']]);
 const COMMA_IN_PLACEHOLDER = '%COMMA_IN_PLACEHOLDER%';
 const SEMI_IN_PLACEHOLDER = '%SEMI_IN_PLACEHOLDER%';
 const COLON_IN_PLACEHOLDER = '%COLON_IN_PLACEHOLDER%';
+const LBRACE_IN_PLACEHOLDER = '%LBRACE_IN_PLACEHOLDER%';
+const RBRACE_IN_PLACEHOLDER = '%RBRACE_IN_PLACEHOLDER%';
 
 const _cssCommaInPlaceholderReGlobal = new RegExp(COMMA_IN_PLACEHOLDER, 'g');
 const _cssSemiInPlaceholderReGlobal = new RegExp(SEMI_IN_PLACEHOLDER, 'g');
 const _cssColonInPlaceholderReGlobal = new RegExp(COLON_IN_PLACEHOLDER, 'g');
+const _cssLbraceInPlaceholderReGlobal = new RegExp(LBRACE_IN_PLACEHOLDER, 'g');
+const _cssRbraceInPlaceholderReGlobal = new RegExp(RBRACE_IN_PLACEHOLDER, 'g');
+
+// Matches any CSS variable name, defined by a double-hyphen followed by any valid ident.
+// https://www.w3.org/TR/css-syntax-3/#ident-token-diagram
+const _cssVariableRe = /(var\(\s*|@property\s+)?(--(?:[a-zA-Z0-9_-]|[^\x00-\x7F])+)(\s*:)?/g;
+
+/**
+ * Transforms CSS variables within a stylesheet to include a namespace placeholder.
+ *
+ * E.g. `--foo: bar;` becomes `--%NS%foo: bar;`
+ * E.g. `color: var(--foo);` becomes `color: var(--%NS%foo);`
+ * E.g. `@property --foo` becomes `@property --%NS%foo`
+ *
+ * If a variable is prefixed with `--global--`, it is NOT namespaced and the prefix is removed.
+ * E.g. `--global--mycolor: red;` becomes `--mycolor: red;`
+ */
+export function namespaceCssVariables(cssText: string): string {
+  return cssText.replace(_cssVariableRe, (match, prefix, varName, trailingColon) => {
+    // Check for a leading `var(`, `@property`, or trailing `:` to approximate whether we're
+    // operating on a real CSS variable, not another piece of syntax that resembles it.
+    // For example, this guards against:
+    // - `.foo--bar {}`
+    // - `/* --foo */`
+    // - `p { content: "--foo" }`
+    // - `[data---bar] {}`
+    // - `[data-status=foo--bar] {}`
+    // etc.
+    if (!prefix && !trailingColon) {
+      return match;
+    }
+    return (prefix ?? '') + namespaceCssVariable(varName) + (trailingColon ?? '');
+  });
+}
 
 export class CssRule {
   constructor(
-    public selector: string,
-    public content: string,
+    readonly selector: string,
+    readonly content: string,
+    readonly isBlock: boolean,
   ) {}
 }
 
@@ -1049,12 +1103,14 @@ export function processRules(input: string, ruleCallback: (rule: CssRule) => Css
     let content = '';
     let suffix = m[4];
     let contentPrefix = '';
+    let hasBlock = false;
     if (suffix && suffix.startsWith('{' + BLOCK_PLACEHOLDER)) {
       content = inputWithEscapedBlocks.blocks[nextBlockIndex++];
       suffix = suffix.substring(BLOCK_PLACEHOLDER.length + 1);
       contentPrefix = '{';
+      hasBlock = true;
     }
-    const rule = ruleCallback(new CssRule(selector, content));
+    const rule = ruleCallback(new CssRule(selector, content, hasBlock));
     return `${m[1]}${rule.selector}${m[3]}${contentPrefix}${rule.content}${suffix}`;
   });
   return unescapeInStrings(escapedResult);
@@ -1123,6 +1179,8 @@ const ESCAPE_IN_STRING_MAP: {[key: string]: string} = {
   ';': SEMI_IN_PLACEHOLDER,
   ',': COMMA_IN_PLACEHOLDER,
   ':': COLON_IN_PLACEHOLDER,
+  '{': LBRACE_IN_PLACEHOLDER,
+  '}': RBRACE_IN_PLACEHOLDER,
 };
 
 /**
@@ -1193,6 +1251,8 @@ function unescapeInStrings(input: string): string {
   let result = input.replace(_cssCommaInPlaceholderReGlobal, ',');
   result = result.replace(_cssSemiInPlaceholderReGlobal, ';');
   result = result.replace(_cssColonInPlaceholderReGlobal, ':');
+  result = result.replace(_cssLbraceInPlaceholderReGlobal, '{');
+  result = result.replace(_cssRbraceInPlaceholderReGlobal, '}');
   return result;
 }
 

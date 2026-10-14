@@ -17,9 +17,15 @@ import {inject, Injectable, Provider, ɵRuntimeError as RuntimeError} from '@ang
 import {Observable} from 'rxjs';
 
 import {RuntimeErrorCode} from './errors';
-import {resolveUrl} from './url';
+import {HTTP_OR_HTTPS_NO_AUTHORITY_REGEXP, resolveUrl} from './url';
 
 @Injectable()
+/**
+ * @deprecated Use the HttpClient fetch backend instead. Intent to remove in Angular 23.
+ * XHR support in `@angular/platform-server` is deprecated because the underlying `xhr2`
+ * library does not safely handle redirects (e.g. it can forward `Authorization` headers
+ * on cross-origin redirects and is susceptible to denial-of-service (DoS) via redirect loops).
+ */
 export class ServerXhr implements XhrFactory {
   private xhrImpl: typeof import('xhr2') | undefined;
 
@@ -29,6 +35,16 @@ export class ServerXhr implements XhrFactory {
   // server platform (via shims, etc).
   private async ɵloadImpl(): Promise<void> {
     if (!this.xhrImpl) {
+      if (typeof ngDevMode === 'undefined' || ngDevMode) {
+        console.warn(
+          'XHR support in `@angular/platform-server` is deprecated and will be removed ' +
+            'in Angular 23. It has known security and performance issues in server ' +
+            'environments, such as forwarding `Authorization` headers on cross-origin ' +
+            'redirects and susceptibility to denial-of-service (DoS) via redirect loops. ' +
+            'Please use the HttpClient fetch backend instead, which is the default since Angular 22.',
+        );
+      }
+
       const {default: xhr} = await import('xhr2');
       this.xhrImpl = xhr;
     }
@@ -57,9 +73,8 @@ function relativeUrlsTransformerInterceptorFn(
   request: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
-  const trimmedUrl = request.url.trim();
-  if (URL_SCHEMA_REGEXP.test(trimmedUrl)) {
-    // URLs with a schema should be left unchanged.
+  if (URL_SCHEMA_REGEXP.test(request.url) && !HTTP_OR_HTTPS_NO_AUTHORITY_REGEXP.test(request.url)) {
+    // URLs with a schema (and an authority for http(s)) should be left unchanged.
     return next(request);
   }
 

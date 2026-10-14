@@ -79,7 +79,6 @@ class FixupExpression extends o.Expression {
 export class ConstantPool {
   statements: o.Statement[] = [];
   private literals = new Map<string, FixupExpression>();
-  private literalFactories = new Map<string, o.Expression>();
   private sharedConstants = new Map<string, o.Expression>();
 
   /**
@@ -89,8 +88,6 @@ export class ConstantPool {
    * them with unique numbers.
    */
   private _claimedNames = new Map<string, number>();
-
-  private nextNameIndex = 0;
 
   constructor(private readonly isClosureCompilerEnabled: boolean = false) {}
 
@@ -131,13 +128,7 @@ export class ConstantPool {
         // const myStr = function() { return "very very very long string"; };
         // const usage1 = myStr();
         // const usage2 = myStr();
-        value = new o.FunctionExpr(
-          [], // Params.
-          [
-            // Statements.
-            new o.ReturnStatement(literal),
-          ],
-        );
+        value = new o.FunctionExpr([], [new o.ReturnStatement(literal)], o.DYNAMIC_TYPE);
         usage = o.variable(name).callFn([]);
       } else {
         // Just declare and use the variable directly, without a function call
@@ -171,7 +162,7 @@ export class ConstantPool {
     fn: o.Expression,
     prefix: string,
     useUniqueName: boolean = true,
-  ): o.Expression {
+  ): o.ReadVarExpr {
     const isArrow = fn instanceof o.ArrowFunctionExpr;
 
     for (const current of this.statements) {

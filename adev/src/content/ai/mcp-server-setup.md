@@ -1,400 +1,273 @@
 <!--
-# Angular CLI MCP Server setup
--->
+# Angular CLI MCP Server
 
-<a id="angular-cli-mcp-server-setup"></a>
+The Angular CLI includes a Model Context Protocol (MCP) server that enables AI assistants (like Cursor, Antigravity, JetBrains AI, etc.) to interact directly with the Angular CLI. It provides tools for code generation, workspace analysis, and running builds/tests.
 
-# Angular CLI MCP 서버 설정
+<docs-callout title="Integration with Angular AI Agent Skills">
+  If your host environment supports custom Agent Skills (such as Antigravity), you can combine the Angular CLI MCP server with the official [Angular AI Skills](https://angular.dev/ai/agent-skills). While the skills provide the agent with deep instruction-level guidance and coding standards, the MCP server provides the action tools (like compiling, running tests, and analyzing workspaces) to execute those guidelines, resulting in a complete and powerful development agent.
+</docs-callout>
 
-<!--
-The Angular CLI includes an experimental [Model Context Protocol (MCP) server](https://modelcontextprotocol.io/) enabling AI assistants in your development environment to interact with the Angular CLI. We've included support for CLI powered code generation, adding packages, and more.
--->
-
-Angular CLI에는 개발 환경의 AI 어시스턴트가 Angular CLI와 상호작용할 수 있는 실험적인 [모델 컨텍스트 프로토콜(MCP) 서버](https://modelcontextprotocol.io/)가 포함되어 있습니다.
-CLI를 활용한 코드 생성, 패키지 추가 등의 기능을 지원합니다.
-
-<!--
-## Available Tools
--->
-
-<a id="available-tools"></a>
-
-## 사용할 수 있는 도구
-
-<!--
-The Angular CLI MCP server provides several tools to assist you in your development workflow. By default, the following tools are enabled:
-
-| Name                        | Description                                                                                                                                                                                        | `local-only` | `read-only` |
-| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: | :---------: |
-| `ai_tutor`                  | Launches an interactive AI-powered Angular tutor. Recommended to run from a new Angular project using v20 or later. [Learn more](ai/ai-tutor).                                                     |      ✅      |     ✅      |
-| `find_examples`             | Finds authoritative code examples from a curated database of official, best-practice examples, focusing on **modern, new, and recently updated** Angular features.                                 |      ✅      |     ✅      |
-| `get_best_practices`        | Retrieves the Angular Best Practices Guide. This guide is essential for ensuring that all code adheres to modern standards, including standalone components, typed forms, and modern control flow. |      ✅      |     ✅      |
-| `list_projects`             | Lists the names of all applications and libraries defined within an Angular workspace. It reads the `angular.json` configuration file to identify the projects.                                    |      ✅      |     ✅      |
-| `onpush_zoneless_migration` | Analyzes Angular code and provides a step-by-step, iterative plan to migrate it to `OnPush` change detection, a prerequisite for a zoneless application.                                           |      ✅      |     ✅      |
-| `search_documentation`      | Searches the official Angular documentation at <https://angular.dev>. This tool should be used to answer any questions about Angular, such as for APIs, tutorials, and best practices.             |      ❌      |     ✅      |
--->
-
-Angular CLI MCP 서버는 개발 작업을 돕는 여러 도구를 제공합니다.
-다음 도구는 기본적으로 활성화되어 있습니다:
-
-| 이름                        | 설명                                                                                                                                                         | `local-only` | `read-only` |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: | :---------: |
-| `ai_tutor`                  | AI 기반 대화형 Angular 튜터를 시작합니다. v20 이상의 새 Angular 프로젝트에서 실행하는 것을 권장합니다. [자세히 알아보기](ai/ai-tutor).                       |      ✅      |     ✅      |
-| `find_examples`             | 엄선된 공식 모범 사례 예제 데이터베이스에서 신뢰할 수 있는 코드 예제를 찾습니다. **최신 기능, 새로운 기능, 최근 업데이트한 기능**을 중심으로 다룹니다.       |      ✅      |     ✅      |
-| `get_best_practices`        | Angular 모범 사례 가이드를 가져옵니다. 이 가이드는 독립형 컴포넌트, 타입이 지정된 폼, 최신 제어 흐름 등 모든 코드가 최신 표준을 따르도록 하는 데 중요합니다. |      ✅      |     ✅      |
-| `list_projects`             | Angular 작업 공간에 정의된 모든 애플리케이션과 라이브러리의 이름을 나열합니다. `angular.json` 설정 파일을 읽어 프로젝트를 확인합니다.                        |      ✅      |     ✅      |
-| `onpush_zoneless_migration` | Angular 코드를 분석하고, 존리스 애플리케이션의 선행 조건인 `OnPush` 변경 감지 방식으로 전환하는 단계별 반복 계획을 제공합니다.                               |      ✅      |     ✅      |
-| `search_documentation`      | <https://angular.dev>의 Angular 공식 문서를 검색합니다. API, 튜토리얼, 모범 사례 등 Angular에 관한 질문에 답할 때 이 도구를 사용해야 합니다.                 |      ❌      |     ✅      |
-
-<!--
-### Experimental Tools
--->
-
-<a id="experimental-tools"></a>
-
-### 실험적인 도구
-
-<!--
-Some tools are provided in experimental / preview status since they are new or not fully tested. Enable them individually with the [`--experimental-tool`](#command-options) option and use them with caution.
-
-| Name                       | Description                                                                                                                                                                                                                                                         | `local-only` | `read-only` |
-| :------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :----------: | :---------: |
-| `build`                    | Perform a one-off, non-watched build using `ng build`.                                                                                                                                                                                                              |      ✅      |     ❌      |
-| `devserver.start`          | Asynchronously starts a development server that watches the workspace for changes, similar to running `ng serve`. Since this is asynchronous it returns immediately. To manage the resulting server, use the `devserver.stop` and `devserver.wait_for_build` tools. |      ✅      |     ✅      |
-| `devserver.stop`           | Stops a development server started by `devserver.start`.                                                                                                                                                                                                            |      ✅      |     ✅      |
-| `devserver.wait_for_build` | Returns the output logs of the most recent build in a running development server started by `devserver.start`. If a build is currently ongoing, it will first wait for that build to complete and then return the logs.                                             |      ✅      |     ✅      |
-| `e2e`                      | Executes the end-to-end tests configured in the project.                                                                                                                                                                                                            |      ✅      |     ✅      |
-| `modernize`                | Performs code migrations and provides further instructions on how to modernize Angular code to align with the latest best practices and syntax. [Learn more](https://angular.dev/reference/migrations)                                                              |      ✅      |     ❌      |
-| `test`                     | Runs the project's unit tests.                                                                                                                                                                                                                                      |      ✅      |     ✅      |
--->
-
-일부 도구는 새로 추가되었거나 충분히 테스트되지 않아 실험 또는 프리뷰 상태로 제공됩니다.
-[`--experimental-tool`](#command-options) 옵션으로 개별적으로 활성화하고 주의해서 사용하세요.
-
-| 이름                       | 설명                                                                                                                                                                                                                   | `local-only` | `read-only` |
-| :------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------: | :---------: |
-| `build`                    | `ng build`로 변경 감시 없이 빌드를 한 번 실행합니다.                                                                                                                                                                   |      ✅      |     ❌      |
-| `devserver.start`          | `ng serve`를 실행하는 것처럼 작업 공간의 변경을 감시하는 개발 서버를 비동기로 시작합니다. 비동기 작업이므로 즉시 반환합니다. 시작한 서버를 관리하려면 `devserver.stop`과 `devserver.wait_for_build` 도구를 사용하세요. |      ✅      |     ✅      |
-| `devserver.stop`           | `devserver.start`로 시작한 개발 서버를 중지합니다.                                                                                                                                                                     |      ✅      |     ✅      |
-| `devserver.wait_for_build` | `devserver.start`로 시작해 실행 중인 개발 서버의 가장 최근 빌드 출력 로그를 반환합니다. 현재 빌드가 진행 중이면 완료될 때까지 기다린 뒤 로그를 반환합니다.                                                             |      ✅      |     ✅      |
-| `e2e`                      | 프로젝트에 설정된 엔드 투 엔드 테스트를 실행합니다.                                                                                                                                                                    |      ✅      |     ✅      |
-| `modernize`                | 코드를 마이그레이션하고, 최신 모범 사례와 문법에 맞게 Angular 코드를 개선하는 추가 지침을 제공합니다. [자세히 알아보기](https://angular.dev/reference/migrations)                                                      |      ✅      |     ❌      |
-| `test`                     | 프로젝트의 단위 테스트를 실행합니다.                                                                                                                                                                                   |      ✅      |     ✅      |
-
-<!--
 ## Get Started
+
+To use the MCP server, you configure your host environment (IDE or CLI) to run `npx @angular/cli mcp`.
+
+<docs-tab-group>
+  <docs-tab label="Antigravity IDE">
+    Create a file named `.antigravity/mcp.json` in your project's root:
+
+    ```json
+    {
+      "mcpServers": {
+        "angular-cli": {
+          "command": "npx",
+          "args": ["-y", "@angular/cli", "mcp"]
+        }
+      }
+    }
+    ```
+
+  </docs-tab>
+
+  <docs-tab label="Cursor">
+    Create `.cursor/mcp.json` in the project root (or globally at `~/.cursor/mcp.json`):
+
+    ```json
+    {
+      "mcpServers": {
+        "angular-cli": {
+          "command": "npx",
+          "args": ["-y", "@angular/cli", "mcp"]
+        }
+      }
+    }
+    ```
+
+  </docs-tab>
+
+  <docs-tab label="VS Code">
+    Create `.vscode/mcp.json`:
+
+    ```json
+    {
+      "servers": {
+        "angular-cli": {
+          "command": "npx",
+          "args": ["-y", "@angular/cli", "mcp"]
+        }
+      }
+    }
+    ```
+
+  </docs-tab>
+</docs-tab-group>
+
+## Available Tools (Default)
+
+When the MCP server is enabled, AI agents have access to the following tools:
+
+| Name                        | Description                                                                                               |
+| :-------------------------- | :-------------------------------------------------------------------------------------------------------- |
+| `ai_tutor`                  | Launches an interactive AI-powered Angular tutor.                                                         |
+| `devserver_start`           | Asynchronously starts a dev server (`ng serve`). Returns immediately.                                     |
+| `devserver_stop`            | Stops the dev server.                                                                                     |
+| `devserver_wait_for_build`  | Returns the logs of the most recent build in a running dev server.                                        |
+| `get_best_practices`        | Retrieves the Angular Best Practices Guide (crucial for standalone components, typed forms, etc.).        |
+| `list_projects`             | Lists all applications and libraries in the workspace by reading `angular.json`.                          |
+| `onpush_zoneless_migration` | Analyzes code and provides a plan to migrate it to `OnPush` change detection (prerequisite for zoneless). |
+| `run_target`                | Executes a configured target (e.g., build, test, lint, e2e, deploy).                                      |
+| `search_documentation`      | Searches the official documentation at `https://angular.dev`.                                             |
+
+## Common Workflows
+
+These workflows demonstrate how AI assistants coordinate different MCP tools to automatically achieve complex developer stories.
+
+### 1. Performance Tuning: Zoneless & OnPush Migration
+
+The AI agent optimizes change detection performance and migrates components to a zoneless-ready state.
+
+1. **Discover Workspace**: The AI agent calls `list_projects` to locate components, projects, and style/test configurations in the workspace.
+2. **Schematic Modernization (Prerequisite)**: The AI agent runs any prerequisite signal migrations using standard `ng generate` commands (e.g., Signal Inputs, Signal Queries).
+3. **Plan Migration**: The AI agent calls `onpush_zoneless_migration` with the absolute path of the directory or component file.
+4. **Apply Changes**: The AI agent automatically applies the single actionable change returned by the tool to the codebase.
+5. **Verify Changes**: The AI agent runs unit tests by calling `run_target` with the target parameter set to `"test"`.
+6. **Repeat**: The AI agent calls `onpush_zoneless_migration` again to retrieve the next step, repeating until the tool indicates the migration is complete.
+
+### 2. Feature Development & TDD Loop
+
+The AI agent automates research, implementation, and verification when developing new features.
+
+1. **API & Syntax Research**: The AI agent uses `search_documentation` to look up Angular APIs or syntax rules (e.g., `@defer` block options).
+2. **Load Coding Standards**: The AI agent calls `get_best_practices` with the workspace path to load Angular version-aligned coding rules.
+3. **Start Local Dev Server**: The AI agent starts a background server by calling `devserver_start`.
+4. **Monitor Build**: The AI agent uses `devserver_wait_for_build` to watch build logs and ensure compilation succeeds as it edits the code.
+5. **Write and Execute Tests**: The AI agent identifies the project's test framework (e.g., Jasmine, Jest, Vitest) via `list_projects`, writes the corresponding test file, and runs the tests using `run_target` with `"test"`.
+6. **Stop Dev Server**: When finished, the AI agent stops the active dev server by calling `devserver_stop`.
+
+### 3. Developer Onboarding and Learning
+
+The AI agent guides the developer through Angular concepts in an interactive sandbox.
+
+1. **Discover Projects**: The AI agent calls `list_projects` to scan the workspace and identify the codebase structure.
+2. **Launch Tutor**: The AI agent runs `ai_tutor` to load the curriculum instructions, persona, and tutoring guidelines.
+3. **Follow the Curriculum**: The AI agent guides the user through the curriculum, explaining concepts and instructing them on what components to build or modify.
+4. **Implement & Verify**: The AI agent helps implement the sandbox code and verifies changes using `run_target` with `"test"` or `"build"`.
+
+## Command Options
+
+You can pass arguments to the MCP server in the `args` array of your configuration:
+
+- `--read-only`: Only registers tools that do not modify the project.
+- `--local-only`: Only registers tools that do not require an internet connection.
+
+Example for read-only mode:
+
+```json
+"args": ["-y", "@angular/cli", "mcp", "--read-only"]
+```
 -->
+
+<a id="angular-cli-mcp-server"></a>
+
+# Angular CLI MCP 서버
+
+Angular CLI에는 Cursor, Antigravity, JetBrains AI 등의 AI 어시스턴트가 Angular CLI와 직접 상호작용할 수 있게 하는 모델 컨텍스트 프로토콜(MCP) 서버가 포함되어 있습니다. 코드 생성, 워크스페이스 분석, 빌드 및 테스트 실행 도구를 제공합니다.
+
+<docs-callout title="Angular AI 에이전트 스킬과 통합하기">
+  Antigravity처럼 호스트 환경이 커스텀 에이전트 스킬을 지원한다면 Angular CLI MCP 서버와 공식 [Angular AI 스킬](https://angular.dev/ai/agent-skills)을 함께 사용할 수 있습니다. 스킬은 에이전트에 구체적인 작업 지침과 코딩 표준을 제공하고, MCP 서버는 컴파일, 테스트 실행, 워크스페이스 분석 등 지침을 실행할 도구를 제공합니다. 두 기능을 결합하면 완성도 높고 강력한 개발 에이전트를 구성할 수 있습니다.
+</docs-callout>
 
 <a id="get-started"></a>
 
 ## 시작하기
 
-<!--
-To get started, run the following command in your terminal:
+MCP 서버를 사용하려면 호스트 환경(IDE 또는 CLI)이 `npx @angular/cli mcp`를 실행하도록 설정하세요.
 
-```bash
-ng mcp
-```
+<docs-tab-group>
+  <docs-tab label="Antigravity IDE">
+    프로젝트 루트에 `.antigravity/mcp.json` 파일을 만드세요.
 
-When run from an interactive terminal, this command displays instructions on how to configure a host environment to use the MCP server. The following sections provide example configurations for several popular editors and tools.
--->
-
-터미널에서 다음 명령을 실행하면 됩니다:
-
-```bash
-ng mcp
-```
-
-대화형 터미널에서 이 명령을 실행하면 MCP 서버를 사용할 호스트 환경의 설정 방법을 안내합니다.
-다음 섹션에서는 널리 사용하는 에디터와 도구의 설정 예제를 소개합니다.
-
-<!--
-### Cursor
--->
-
-<a id="cursor"></a>
-
-### Cursor
-
-<!--
-Create a file named `.cursor/mcp.json` in your project's root and add the following configuration. You can also configure it globally in `~/.cursor/mcp.json`.
-
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
+    ```json
+    {
+      "mcpServers": {
+        "angular-cli": {
+          "command": "npx",
+          "args": ["-y", "@angular/cli", "mcp"]
+        }
+      }
     }
-  }
-}
-```
--->
+    ```
 
-프로젝트 루트에 `.cursor/mcp.json` 파일을 만들고 다음 설정을 추가하세요.
-`~/.cursor/mcp.json`에서 전역으로 설정할 수도 있습니다.
+  </docs-tab>
 
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
+  <docs-tab label="Cursor">
+    프로젝트 루트에 `.cursor/mcp.json`을 만들거나 전역 설정으로 `~/.cursor/mcp.json`을 만드세요.
+
+    ```json
+    {
+      "mcpServers": {
+        "angular-cli": {
+          "command": "npx",
+          "args": ["-y", "@angular/cli", "mcp"]
+        }
+      }
     }
-  }
-}
-```
+    ```
 
-<!--
-### Firebase Studio
--->
+  </docs-tab>
 
-<a id="firebase-studio"></a>
+  <docs-tab label="VS Code">
+    `.vscode/mcp.json`을 만드세요.
 
-### Firebase Studio
-
-<!--
-Create a file named `.idx/mcp.json` in your project's root and add the following configuration:
-
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
+    ```json
+    {
+      "servers": {
+        "angular-cli": {
+          "command": "npx",
+          "args": ["-y", "@angular/cli", "mcp"]
+        }
+      }
     }
-  }
-}
-```
--->
+    ```
 
-프로젝트 루트에 `.idx/mcp.json` 파일을 만들고 다음 설정을 추가하세요:
+  </docs-tab>
+</docs-tab-group>
 
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
+<a id="available-tools-default"></a>
 
-<!--
-### Gemini CLI
--->
+## 사용 가능한 기본 도구
 
-<a id="gemini-cli"></a>
+MCP 서버를 활성화하면 AI 에이전트가 다음 도구에 접근할 수 있습니다.
 
-### Gemini CLI
+| 이름                        | 설명                                                                                             |
+| :-------------------------- | :----------------------------------------------------------------------------------------------- |
+| `ai_tutor`                  | 대화형 AI 기반 Angular 튜터를 시작합니다.                                                        |
+| `devserver_start`           | 개발 서버(`ng serve`)를 비동기로 시작하고 즉시 반환합니다.                                       |
+| `devserver_stop`            | 개발 서버를 중지합니다.                                                                          |
+| `devserver_wait_for_build`  | 실행 중인 개발 서버의 가장 최근 빌드 로그를 반환합니다.                                          |
+| `get_best_practices`        | 독립형 컴포넌트, 타입이 있는 폼 등에 중요한 Angular 모범 사례 가이드를 가져옵니다.               |
+| `list_projects`             | `angular.json`을 읽어 워크스페이스의 모든 애플리케이션과 라이브러리를 나열합니다.                |
+| `onpush_zoneless_migration` | 코드를 분석하고 존리스 전환의 전제 조건인 `OnPush` 변경 감지로 마이그레이션할 계획을 제공합니다. |
+| `run_target`                | 설정된 대상(예: build, test, lint, e2e, deploy)을 실행합니다.                                    |
+| `search_documentation`      | `https://angular.dev`의 공식 문서를 검색합니다.                                                  |
 
-<!--
-Create a file named `.gemini/settings.json` in your project's root and add the following configuration:
+<a id="common-workflows"></a>
 
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
--->
+## 일반적인 작업 흐름
 
-프로젝트 루트에 `.gemini/settings.json` 파일을 만들고 다음 설정을 추가하세요:
+다음 작업 흐름은 AI 어시스턴트가 여러 MCP 도구를 조합하여 복잡한 개발 작업을 자동으로 수행하는 방법을 보여 줍니다.
 
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
+<a id="1-performance-tuning-zoneless-onpush-migration"></a>
 
-<!--
-### JetBrains IDEs
--->
+<a id="1-performance-tuning-zoneless--onpush-migration"></a>
 
-<a id="jetbrains-ides"></a>
+### 1. 성능 최적화: 존리스와 OnPush 마이그레이션
 
-### JetBrains IDE
+AI 에이전트가 변경 감지 성능을 최적화하고 컴포넌트를 존리스 환경에 준비된 상태로 전환합니다.
 
-<!--
-In JetBrains IDEs (like IntelliJ IDEA or WebStorm), after installing the JetBrains AI Assistant plugin, go to `Settings | Tools | AI Assistant | Model Context Protocol (MCP)`. Add a new server (`+`) and select `As JSON`. Then paste the following configuration:
+1. **워크스페이스 파악:** `list_projects`를 호출하여 워크스페이스의 컴포넌트, 프로젝트, 스타일 및 테스트 설정을 찾습니다.
+2. **스키매틱으로 최신화(선행 조건):** 표준 `ng generate` 명령어로 필요한 시그널 마이그레이션(예: 시그널 입력, 시그널 쿼리)을 먼저 실행합니다.
+3. **마이그레이션 계획:** 디렉터리 또는 컴포넌트 파일의 절대 경로로 `onpush_zoneless_migration`을 호출합니다.
+4. **변경 적용:** 도구가 반환한 실행 가능한 변경 한 가지를 코드베이스에 자동으로 적용합니다.
+5. **변경 검증:** 대상 매개변수를 `"test"`로 설정하여 `run_target`을 호출하고 단위 테스트를 실행합니다.
+6. **반복:** `onpush_zoneless_migration`을 다시 호출해 다음 단계를 가져오고, 도구가 마이그레이션 완료를 알릴 때까지 반복합니다.
 
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
+<a id="2-feature-development-tdd-loop"></a>
 
-For the most up-to-date instructions on configuring MCP servers, please refer to the JetBrains documentation: [Connect to an MCP server](https://www.jetbrains.com/help/ai-assistant/mcp.html#connect-to-an-mcp-server).
--->
+<a id="2-feature-development--tdd-loop"></a>
 
-IntelliJ IDEA나 WebStorm과 같은 JetBrains IDE에서는 JetBrains AI Assistant 플러그인을 설치한 뒤 `Settings | Tools | AI Assistant | Model Context Protocol (MCP)`로 이동하세요.
-새 서버를 추가(`+`)하고 `As JSON`을 선택한 다음 다음 설정을 붙여넣으세요:
+### 2. 기능 개발과 TDD 반복
 
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
+AI 에이전트가 새 기능 개발에 필요한 조사, 구현, 검증을 자동화합니다.
 
-MCP 서버 설정에 관한 최신 안내는 JetBrains의 [MCP 서버에 연결하기](https://www.jetbrains.com/help/ai-assistant/mcp.html#connect-to-an-mcp-server) 문서를 참고하세요.
+1. **API와 문법 조사:** `search_documentation`으로 Angular API나 문법 규칙(예: `@defer` 블록 옵션)을 찾아봅니다.
+2. **코딩 표준 불러오기:** 워크스페이스 경로로 `get_best_practices`를 호출하여 Angular 버전에 맞는 코딩 규칙을 가져옵니다.
+3. **로컬 개발 서버 시작:** `devserver_start`를 호출하여 백그라운드 서버를 시작합니다.
+4. **빌드 확인:** 코드를 편집하는 동안 `devserver_wait_for_build`로 빌드 로그를 확인하고 컴파일이 성공하는지 검증합니다.
+5. **테스트 작성과 실행:** `list_projects`로 프로젝트의 테스트 프레임워크(예: Jasmine, Jest, Vitest)를 파악하고 알맞은 테스트 파일을 작성한 뒤 `"test"`로 `run_target`을 호출하여 테스트를 실행합니다.
+6. **개발 서버 중지:** 작업을 마치면 `devserver_stop`을 호출하여 실행 중인 개발 서버를 중지합니다.
 
-<!--
-### VS Code
--->
+<a id="3-developer-onboarding-and-learning"></a>
 
-<a id="vs-code"></a>
+### 3. 개발자 온보딩과 학습
 
-### VS Code
+AI 에이전트가 대화형 샌드박스에서 개발자에게 Angular 개념을 안내합니다.
 
-<!--
-In your project's root, create a file named `.vscode/mcp.json` and add the following configuration. Note the use of the `servers` property.
-
-```json
-{
-  "servers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
--->
-
-프로젝트 루트에 `.vscode/mcp.json` 파일을 만들고 다음 설정을 추가하세요.
-`servers` 프로퍼티를 사용한다는 점에 주의하세요.
-
-```json
-{
-  "servers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
-
-<!--
-### Other IDEs
--->
-
-<a id="other-ides"></a>
-
-### 다른 IDE
-
-<!--
-For other IDEs, check your IDE's documentation for the proper location of the MCP configuration file (often `mcp.json`). The configuration should contain the following snippet.
-
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
--->
-
-다른 IDE에서는 해당 IDE의 문서에서 MCP 설정 파일(보통 `mcp.json`)의 올바른 위치를 확인하세요.
-설정에는 다음 코드가 포함되어야 합니다.
-
-```json
-{
-  "mcpServers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp"]
-    }
-  }
-}
-```
-
-<!--
-## Command Options
--->
+1. **프로젝트 파악:** `list_projects`를 호출하여 워크스페이스를 살펴보고 코드베이스 구조를 파악합니다.
+2. **튜터 시작:** `ai_tutor`를 실행하여 교육과정 지침, 페르소나, 학습 안내 지침을 불러옵니다.
+3. **교육과정 진행:** 개념을 설명하고 만들거나 수정할 컴포넌트를 안내하면서 사용자가 교육과정을 진행하도록 돕습니다.
+4. **구현과 검증:** 샌드박스 코드 구현을 돕고 `"test"`나 `"build"`로 `run_target`을 호출하여 변경 사항을 검증합니다.
 
 <a id="command-options"></a>
 
-## 명령 옵션
+## 명령어 옵션
 
-<!--
-The `mcp` command can be configured with the following options passed as arguments in your IDE's MCP configuration:
+설정의 `args` 배열에서 MCP 서버에 인자를 전달할 수 있습니다.
 
-| Option                        | Type      | Description                                                                                                                                                               | Default |
-| :---------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------ |
-| `--read-only`                 | `boolean` | Only register tools that do not make changes to the project. Your editor or coding agent may still perform edits.                                                         | `false` |
-| `--local-only`                | `boolean` | Only register tools that do not require an internet connection. Your editor or coding agent may still send data over the network.                                         | `false` |
-| `--experimental-tool`<br>`-E` | `string`  | Enable an [experimental tool](#experimental-tools). Separate multiple options by spaces, e.g. `-E tool_a tool_b`. Enable all `devserver.x` tools by using `-E devserver`. |         |
+- `--read-only`: 프로젝트를 수정하지 않는 도구만 등록합니다.
+- `--local-only`: 인터넷 연결이 필요하지 않은 도구만 등록합니다.
 
-For example, to run the server in read-only mode in VS Code, you would update your `mcp.json` like this:
+읽기 전용 모드 예제:
 
 ```json
-{
-  "servers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp", "--read-only"]
-    }
-  }
-}
+"args": ["-y", "@angular/cli", "mcp", "--read-only"]
 ```
--->
-
-IDE의 MCP 설정에서 다음 옵션을 인자로 전달해 `mcp` 명령을 설정할 수 있습니다:
-
-| 옵션                          | 타입      | 설명                                                                                                                                                                           | 기본값  |
-| :---------------------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
-| `--read-only`                 | `boolean` | 프로젝트를 변경하지 않는 도구만 등록합니다. 에디터나 코딩 에이전트는 여전히 파일을 수정할 수 있습니다.                                                                         | `false` |
-| `--local-only`                | `boolean` | 인터넷 연결이 필요 없는 도구만 등록합니다. 에디터나 코딩 에이전트는 여전히 네트워크로 데이터를 전송할 수 있습니다.                                                             | `false` |
-| `--experimental-tool`<br>`-E` | `string`  | [실험적인 도구](#experimental-tools)를 활성화합니다. 여러 옵션은 `-E tool_a tool_b`처럼 공백으로 구분하세요. `-E devserver`를 사용하면 모든 `devserver.x` 도구를 활성화합니다. |         |
-
-예를 들어 VS Code에서 서버를 읽기 전용 모드로 실행하려면 `mcp.json`을 다음과 같이 수정하면 됩니다:
-
-```json
-{
-  "servers": {
-    "angular-cli": {
-      "command": "npx",
-      "args": ["-y", "@angular/cli", "mcp", "--read-only"]
-    }
-  }
-}
-```
-
-<!--
-## Feedback and New Ideas
--->
-
-<a id="feedback-and-new-ideas"></a>
-
-## 피드백과 새로운 아이디어
-
-<!--
-The Angular team welcomes your feedback on the existing MCP capabilities and any ideas you have for new tools or features. Please share your thoughts by opening an issue on the [angular/angular GitHub repository](https://github.com/angular/angular/issues).
--->
-
-Angular 팀은 기존 MCP 기능에 관한 피드백과 새로운 도구나 기능에 관한 아이디어를 환영합니다.
-[angular/angular GitHub 저장소](https://github.com/angular/angular/issues)에 이슈를 등록해 의견을 알려주세요.

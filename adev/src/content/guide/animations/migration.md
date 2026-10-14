@@ -124,12 +124,13 @@ The animations package allowed you to define various states using the [`state()`
 다음 예제를 참고하세요:
 
 <!--
-#### With Animations Package
+#### With Animations Package {#animating-state-and-styles-with-animations-package}
 -->
 
 <a id="with-animations-package-1"></a>
+<a id="animating-state-and-styles-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용
+#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-2}
 
 <!--
 <docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="state1"/>
@@ -142,12 +143,13 @@ This same behavior can be accomplished natively by using CSS classes, either wit
 CSS 클래스에 키프레임 애니메이션이나 전환 스타일을 지정하면 네이티브 CSS로도 같은 동작을 구현할 수 있습니다.
 
 <!--
-#### With Native CSS
+#### With Native CSS {#animating-state-and-styles-with-native-css}
 -->
 
 <a id="with-native-css-1"></a>
+<a id="animating-state-and-styles-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-2}
 
 <!--
 <docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-states"/>
@@ -216,12 +218,13 @@ CSS 스타일이나 클래스를 전환해서 애니메이션을 실행할 수 �
 다음 예제를 참고하세요:
 
 <!--
-#### With Animations Package
+#### With Animations Package {#triggering-an-animation-with-animations-package}
 -->
 
 <a id="with-animations-package-2"></a>
+<a id="triggering-an-animation-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용
+#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-3}
 
 <!--
 <docs-code-multifile>
@@ -238,12 +241,13 @@ CSS 스타일이나 클래스를 전환해서 애니메이션을 실행할 수 �
 </docs-code-multifile>
 
 <!--
-#### With Native CSS
+#### With Native CSS {#triggering-an-animation-with-native-css}
 -->
 
 <a id="with-native-css-2"></a>
+<a id="triggering-an-animation-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-3}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/open-close.ts">
@@ -306,12 +310,13 @@ The animations package offers the ability to animate things that have been histo
 이제 순수 CSS로도 구현할 수 있습니다.
 
 <!--
-#### With Animations Package
+#### With Animations Package {#automatic-property-calculation-with-animations-package}
 -->
 
 <a id="with-animations-package-3"></a>
+<a id="automatic-property-calculation-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용
+#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-4}
 
 <!--
 <docs-code-multifile>
@@ -332,12 +337,13 @@ You can use CSS Grid to animate to auto height.
 CSS Grid를 사용하면 높이가 자동으로 결정되는 상태까지 애니메이션을 적용할 수 있습니다.
 
 <!--
-#### With Native CSS
+#### With Native CSS {#automatic-property-calculation-with-native-css}
 -->
 
 <a id="with-native-css-3"></a>
+<a id="automatic-property-calculation-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-4}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/auto-height.ts">
@@ -373,12 +379,13 @@ The animations package offered the previously mentioned pattern matching for ent
 애니메이션 패키지는 앞서 설명한 진입 및 퇴장 패턴 매칭뿐 아니라 `:enter`, `:leave`라는 축약 별칭도 제공했습니다.
 
 <!--
-#### With Animations Package
+#### With Animations Package {#enter-and-leave-with-animations-package}
 -->
 
 <a id="with-animations-package-4"></a>
+<a id="enter-and-leave-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용
+#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-5}
 
 <!--
 <docs-code-multifile>
@@ -395,12 +402,13 @@ The animations package offered the previously mentioned pattern matching for ent
 </docs-code-multifile>
 
 <!--
-#### With Native CSS
+#### With Native CSS {#enter-with-native-css}
 -->
 
 <a id="with-native-css-4"></a>
+<a id="enter-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-5}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/insert.ts">
@@ -417,12 +425,13 @@ The animations package offered the previously mentioned pattern matching for ent
 </docs-code-multifile>
 
 <!--
-#### With Native CSS
+#### With Native CSS {#leave-with-native-css}
 -->
 
 <a id="with-native-css-5"></a>
+<a id="leave-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-6}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/remove.ts">
@@ -461,12 +470,13 @@ Along with the aforementioned `:enter` and `:leave`, there's also `:increment` a
 다음 예제를 참고하세요:
 
 <!--
-#### With Animations Package
+#### With Animations Package {#increment-and-decrement-with-animations-package}
 -->
 
 <a id="with-animations-package-5"></a>
+<a id="increment-and-decrement-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용
+#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-6}
 
 <!--
 <docs-code-multifile>
@@ -483,12 +493,13 @@ Along with the aforementioned `:enter` and `:leave`, there's also `:increment` a
 </docs-code-multifile>
 
 <!--
-#### With Native CSS
+#### With Native CSS {#increment-and-decrement-with-native-css}
 -->
 
 <a id="with-native-css-6"></a>
+<a id="increment-and-decrement-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-7}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.ts">
@@ -510,6 +521,8 @@ Along with the aforementioned `:enter` and `:leave`, there's also `:increment` a
 
 <a id="parent-child-animations"></a>
 
+<a id="parent---child-animations"></a>
+
 ### 부모와 자식 애니메이션
 
 <!--
@@ -518,6 +531,12 @@ Unlike the animations package, when multiple animations are specified within a g
 
 애니메이션 패키지와 달리, 한 컴포넌트 안에 여러 애니메이션을 지정해도 어느 애니메이션이 다른 애니메이션보다 우선하지 않으며 애니메이션 실행을 차단하지도 않습니다.
 애니메이션을 순서대로 실행하려면 CSS 애니메이션 정의에서 애니메이션이나 전환의 지연 시간을 지정하거나, `animationend` 또는 `transitionend` 이벤트에서 다음 애니메이션을 위한 CSS를 추가하도록 처리해야 합니다.
+
+<!--
+Child animations fire only within the same component template. In the `@angular/animations` package, parent animations could query and trigger animations in nested child components using `query()` and `animateChild()`. With `animate.leave` and native CSS animations, animations defined inside nested child component templates will not fire when a parent component removes an element or view. Only nested animations within the same Angular component template will execute. See the [Enter and Leave Animations guide](guide/animations#element-removal-order) for more information on this.
+-->
+
+자식 애니메이션은 같은 컴포넌트 템플릿 안에서만 실행됩니다. `@angular/animations` 패키지에서는 부모 애니메이션이 `query()`와 `animateChild()`로 중첩된 자식 컴포넌트의 애니메이션을 찾아 실행할 수 있었습니다. `animate.leave`와 네이티브 CSS 애니메이션에서는 부모 컴포넌트가 엘리먼트나 뷰를 제거해도 중첩된 자식 컴포넌트 템플릿 안의 애니메이션은 실행되지 않습니다. 같은 Angular 컴포넌트 템플릿 안에 중첩된 애니메이션만 실행됩니다. 자세한 내용은 [진입/퇴장 애니메이션 가이드](guide/animations#element-removal-order)를 참고하세요.
 
 <!--
 ### Disabling an animation or all animations
@@ -580,7 +599,7 @@ The animations package exposed callbacks for you to use in the case that you wan
 
 [`OnAnimationStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationstart_event)
 [`OnAnimationEnd`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationend_event)
-[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationitration_event)
+[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationiteration_event)
 [`OnAnimationCancel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationcancel_event)
 
 [`OnTransitionStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/transitionstart_event)
@@ -598,7 +617,7 @@ NOTE: Be aware of bubbling issues with these callbacks. If you are animating chi
 
 [`OnAnimationStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationstart_event)  
 [`OnAnimationEnd`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationend_event)  
-[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationitration_event)  
+[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationiteration_event)  
 [`OnAnimationCancel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationcancel_event)
 
 [`OnTransitionStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/transitionstart_event)  
@@ -653,7 +672,6 @@ To toggle classes for child nodes within a template, you can use class and style
 ### Stagger()
 -->
 
-<a id="stagger"></a>
 
 ### `stagger()`
 
@@ -666,12 +684,13 @@ The `stagger()` function allowed you to delay the animation of each item in a li
 다음 예제에서 CSS를 어떻게 작성하는지 확인할 수 있습니다.
 
 <!--
-#### With Animations Package
+#### With Animations Package {#stagger-with-animations-package}
 -->
 
 <a id="with-animations-package-6"></a>
+<a id="stagger-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용
+#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-7}
 
 <!--
 <docs-code-multifile>
@@ -688,12 +707,13 @@ The `stagger()` function allowed you to delay the animation of each item in a li
 </docs-code-multifile>
 
 <!--
-#### With Native CSS
+#### With Native CSS {#stagger-with-native-css}
 -->
 
 <a id="with-native-css-7"></a>
+<a id="stagger-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-8}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/stagger.ts">
@@ -763,12 +783,13 @@ Items reordering in a list works out of the box using the previously described t
 위 예제처럼 엘리먼트가 제거될 때 애니메이션을 적용하려면 `animate.leave`를 사용하세요.
 
 <!--
-#### With Animations Package
+#### With Animations Package {#reordering-list-with-animations-package}
 -->
 
 <a id="with-animations-package-7"></a>
+<a id="reordering-list-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용
+#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-8}
 
 <!--
 <docs-code-multifile>
@@ -785,12 +806,13 @@ Items reordering in a list works out of the box using the previously described t
 </docs-code-multifile>
 
 <!--
-#### With Native CSS
+#### With Native CSS {#reordering-list-with-native-css}
 -->
 
 <a id="with-native-css-8"></a>
+<a id="reordering-list-with-native-css"></a>
 
-#### 네이티브 CSS 사용
+#### 네이티브 CSS 사용 {#네이티브-css-사용-9}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/reorder.ts">

@@ -115,12 +115,16 @@ The `FormControl` assigned to the `name` property is displayed when the `<app-na
 
 <docs-workflow>
 
+<a id="generate-a-new-component-and-import-the-reactiveformsmodule"></a>
+
 <docs-step title="새 컴포넌트를 생성하고 ReactiveFormsModule 불러오기">
 CLI 명령 `ng generate component`로 프로젝트에 컴포넌트를 생성하세요.
 그리고 `@angular/forms` 패키지에서 `ReactiveFormsModule`을 불러와 컴포넌트의 `imports` 배열에 추가하세요.
 
 <docs-code header="name-editor.component.ts (일부)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="imports" />
 </docs-step>
+
+<a id="declare-a-formcontrol-instance"></a>
 
 <docs-step title="FormControl 인스턴스 선언하기">
 `FormControl` 생성자로 초기값을 지정하세요.
@@ -129,6 +133,8 @@ CLI 명령 `ng generate component`로 프로젝트에 컴포넌트를 생성하�
 
 <docs-code header="name-editor.component.ts" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.ts" region="create-control"/>
 </docs-step>
+
+<a id="register-the-control-in-the-template"></a>
 
 <docs-step title="템플릿에 컨트롤 등록하기">
 컴포넌트 클래스에 컨트롤을 생성했으면 템플릿의 폼 컨트롤 엘리먼트와 연결해야 합니다.
@@ -140,6 +146,8 @@ CLI 명령 `ng generate component`로 프로젝트에 컴포넌트를 생성하�
 템플릿 바인딩 문법을 사용하면 템플릿의 `name` 입력 엘리먼트에 폼 컨트롤이 등록됩니다.
 폼 컨트롤과 DOM 엘리먼트는 서로 정보를 주고받기 때문에 모델의 변화는 뷰에 반영되고, 뷰의 변화는 모델에 반영됩니다.
 </docs-step>
+
+<a id="display-the-component"></a>
 
 <docs-step title="컴포넌트 표시하기">
 템플릿에 `<app-name-editor>` 컴포넌트를 추가하면 `name` 프로퍼티에 할당한 `FormControl`이 표시됩니다.
@@ -310,12 +318,14 @@ Use a `button` element to add a button to the bottom of the form to trigger the 
 The button in the preceding snippet also has a `disabled` binding attached to it to disable the button when `profileForm` is invalid. You aren't performing any validation yet, so the button is always enabled. Basic form validation is covered in the [Validating form input](#validating-form-input) section.
 </docs-step>
 
-<docs-step title="Display the component">
+<docs-step title="Display the component {#display-the-component-form-group}">
 To display the `ProfileEditor` component that contains the form, add it to a component template.
 
 <docs-code header="app.component.html (profile editor)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" region="app-profile-editor"/>
 
 `ProfileEditor` lets you manage the form control instances for the `firstName` and `lastName` controls within the form group instance.
+</docs-step>
+</docs-workflow>
 -->
 
 폼에는 일반적으로 서로 관련된 여러 컨트롤이 있습니다.
@@ -346,6 +356,8 @@ ng generate component ProfileEditor
 
 <docs-workflow>
 
+<a id="create-a-formgroup-instance"></a>
+
 <docs-step title="FormGroup 인스턴스 생성하기">
 컴포넌트 클래스에 `profileForm` 프로퍼티를 생성하고 새 폼 그룹 인스턴스를 할당하세요.
 폼 그룹을 초기화하려면 각 컨트롤의 이름을 키로, 해당 컨트롤을 값으로 지정한 객체를 생성자에 전달합니다.
@@ -358,6 +370,8 @@ ng generate component ProfileEditor
 `FormGroup` 인스턴스는 그룹에 속한 각 컨트롤의 값을 하나의 객체로 모아서 모델 값으로 제공합니다.
 폼 그룹 인스턴스는 폼 컨트롤 인스턴스와 마찬가지로 `value`, `untouched` 같은 프로퍼티와 `setValue()` 같은 메서드를 제공합니다.
 </docs-step>
+
+<a id="associate-the-formgroup-model-and-view"></a>
 
 <docs-step title="FormGroup 모델과 뷰 연결하기">
 폼 그룹은 각 컨트롤의 상태와 변화를 추적합니다.
@@ -373,6 +387,8 @@ ng generate component ProfileEditor
 폼 컨트롤은 각자의 엘리먼트와 정보를 주고받습니다.
 그리고 모델 값의 기준이 되는 폼 그룹 인스턴스에도 변화를 전달합니다.
 </docs-step>
+
+<a id="save-form-data"></a>
 
 <docs-step title="폼 데이터 저장하기">
 `ProfileEditor` 컴포넌트는 사용자 입력을 받지만, 실제 애플리케이션에서는 폼 값을 가져와 컴포넌트 밖에서 추가로 처리할 수 있어야 합니다.
@@ -400,12 +416,14 @@ ng generate component ProfileEditor
 기본적인 폼 유효성 검사는 [폼 입력 유효성 검사하기](#validating-form-input) 섹션에서 설명합니다.
 </docs-step>
 
-<docs-step title="컴포넌트 표시하기">
+<docs-step title="컴포넌트 표시하기 {#display-the-component-form-group}">
 폼이 있는 `ProfileEditor` 컴포넌트를 표시하려면 컴포넌트 템플릿에 추가하세요.
 
 <docs-code header="app.component.html (프로필 편집기)" path="adev/src/content/examples/reactive-forms/src/app/app.component.1.html" region="app-profile-editor"/>
 
 `ProfileEditor`에서는 폼 그룹 인스턴스 안에서 `firstName`과 `lastName` 컨트롤의 폼 컨트롤 인스턴스를 관리할 수 있습니다.
+</docs-step>
+</docs-workflow>
 
 <!--
 ### Creating nested form groups
@@ -466,6 +484,8 @@ Display the value for the form group instance in the component template using th
 이름과 주소는 중첩 그룹으로 묶기 좋은 대표적인 예이며, 다음 예제에서도 사용합니다.
 
 <docs-workflow>
+<a id="create-a-nested-group"></a>
+
 <docs-step title="중첩 그룹 생성하기">
 `profileForm`에 중첩 그룹을 생성하려면 폼 그룹 인스턴스에 `address` 엘리먼트를 중첩해서 추가하세요.
 
@@ -475,6 +495,8 @@ Display the value for the form group instance in the component template using th
 폼 그룹의 `address` 엘리먼트는 전체 `profileForm` 엘리먼트의 자식이지만, 값과 상태가 바뀔 때 적용되는 규칙은 같습니다.
 중첩 폼 그룹에서 상태와 값이 바뀌면 부모 폼 그룹으로 전파되기 때문에 전체 모델의 일관성이 유지됩니다.
 </docs-step>
+
+<a id="group-the-nested-form-in-the-template"></a>
 
 <docs-step title="템플릿에서 중첩 폼을 그룹으로 묶기">
 컴포넌트 클래스의 모델을 갱신했으면 폼 그룹 인스턴스와 입력 엘리먼트가 연결되도록 템플릿을 수정하세요.
@@ -612,12 +634,16 @@ TIP: You can define the control with just the initial value, but if your control
 다음 예제에서는 폼 빌더 서비스로 폼 컨트롤과 폼 그룹 인스턴스를 생성하도록 `ProfileEditor` 컴포넌트를 리팩터링합니다.
 
 <docs-workflow>
+<a id="import-the-formbuilder-class"></a>
+
 <docs-step title="FormBuilder 클래스 불러오기">
 `@angular/forms` 패키지에서 `FormBuilder` 클래스를 불러오세요.
 
 <docs-code header="profile-editor.component.ts (불러오기)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder-imports"/>
 
 </docs-step>
+
+<a id="inject-the-formbuilder-service"></a>
 
 <docs-step title="FormBuilder 서비스 주입하기">
 `FormBuilder` 서비스는 반응형 폼 모듈에서 제공하는 주입 가능한 프로바이더입니다.
@@ -626,6 +652,8 @@ TIP: You can define the control with just the initial value, but if your control
 <docs-code header="profile-editor.component.ts (프로퍼티 초기화)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="inject-form-builder"/>
 
 </docs-step>
+<a id="generate-form-controls"></a>
+
 <docs-step title="폼 컨트롤 생성하기">
 `FormBuilder` 서비스에는 `control()`, `group()`, `array()` 메서드가 있습니다.
 이 메서드는 컴포넌트 클래스에서 폼 컨트롤, 폼 그룹, 폼 배열 인스턴스를 생성하는 팩토리 메서드입니다.
@@ -713,6 +741,8 @@ For more on form validation, visit the [Form Validation](guide/forms/form-valida
 다음 예제에서는 `firstName` 컨트롤에 필수 입력 검사를 추가하고 유효성 검사 결과를 표시합니다.
 
 <docs-workflow>
+<a id="import-a-validator-function"></a>
+
 <docs-step title="유효성 검사 함수 불러오기">
 반응형 폼에는 자주 사용하는 유효성 검사 함수가 포함되어 있습니다.
 이 함수는 검사할 컨트롤을 인자로 받아 유효성 검사 결과에 따라 에러 객체나 null 값을 반환합니다.
@@ -722,11 +752,15 @@ For more on form validation, visit the [Form Validation](guide/forms/form-valida
 <docs-code header="profile-editor.component.ts (불러오기)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="validator-imports"/>
 </docs-step>
 
+<a id="make-a-field-required"></a>
+
 <docs-step title="필수 필드 지정하기">
 `ProfileEditor` 컴포넌트에서 `firstName` 컨트롤 배열의 두 번째 항목에 `Validators.required` 정적 메서드를 추가하세요.
 
 <docs-code header="profile-editor.component.ts (필수 입력 검사기)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.ts" region="required-validator"/>
 </docs-step>
+
+<a id="display-form-status"></a>
 
 <docs-step title="폼 상태 표시하기">
 폼 컨트롤에 필수 필드를 추가하면 초기 상태는 유효하지 않은 상태입니다.
@@ -800,7 +834,7 @@ In the template, each control is displayed as a separate input field.
 
 <docs-step title="Display the form array in the template">
 
-To attach the aliases from your form model, you must add it to the template. Similar to the `formGroupName` input provided by `FormGroupNameDirective`, `formArrayName` binds communication from the form array instance to the template with `FormArrayNameDirective`.
+To attach the aliases from your form model, you must add it to the template. Similar to the `formGroupName` input provided by `FormGroupName`, `formArrayName` binds communication from the form array instance to the template with `FormArrayName`.
 
 Add the following template HTML after the `<div>` closing the `formGroupName` element.
 
@@ -816,9 +850,7 @@ NOTE: In zoneless applications, mutating a reactive forms model (for example cal
 import {ChangeDetectorRef, Component, inject} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class ProfileEditor {
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -848,12 +880,16 @@ export class ProfileEditor {
 다음 예제는 `ProfileEditor`에서 _별칭(aliases)_ 배열을 관리하는 방법입니다.
 
 <docs-workflow>
+<a id="import-the-formarray-class"></a>
+
 <docs-step title="`FormArray` 클래스 불러오기">
 타입 정보로 사용할 `FormArray` 클래스를 `@angular/forms`에서 불러오세요.
 `FormBuilder` 서비스는 `FormArray` 인스턴스를 생성할 준비가 되어 있습니다.
 
 <docs-code header="profile-editor.component.ts (불러오기)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-array-imports"/>
 </docs-step>
+
+<a id="define-a-formarray-control"></a>
 
 <docs-step title="`FormArray` 컨트롤 정의하기">
 배열에 컨트롤을 정의하면 컨트롤이 없는 폼 배열부터 여러 컨트롤이 있는 폼 배열까지 원하는 개수로 초기화할 수 있습니다.
@@ -866,6 +902,8 @@ export class ProfileEditor {
 이제 폼 그룹 인스턴스의 aliases 컨트롤에는 컨트롤이 하나 들어 있습니다.
 이후에 컨트롤을 동적으로 더 추가할 수 있습니다.
 </docs-step>
+
+<a id="access-the-formarray-control"></a>
 
 <docs-step title="`FormArray` 컨트롤에 접근하기">
 각 인스턴스를 가져올 때마다 `profileForm.get()` 메서드를 호출하는 대신 getter로 폼 배열 인스턴스의 별칭에 접근할 수 있습니다.
@@ -887,10 +925,12 @@ FormArray.push()에 컨트롤 배열을 전달하면 여러 컨트롤을 한 번
 
 </docs-step>
 
+<a id="display-the-form-array-in-the-template"></a>
+
 <docs-step title="템플릿에 폼 배열 표시하기">
 
 폼 모델의 별칭을 연결하려면 템플릿에 추가해야 합니다.
-`FormGroupNameDirective`가 제공하는 `formGroupName` 입력 프로퍼티와 비슷하게, `formArrayName`은 `FormArrayNameDirective`를 통해 폼 배열 인스턴스와 템플릿을 연결합니다.
+`FormGroupName`이 제공하는 `formGroupName` 입력 프로퍼티와 비슷하게, `formArrayName`은 `FormArrayName`을 통해 폼 배열 인스턴스와 템플릿을 연결합니다.
 
 `formGroupName` 엘리먼트를 닫는 `<div>` 뒤에 다음 템플릿 HTML을 추가하세요.
 
@@ -910,9 +950,7 @@ FormArray.push()에 컨트롤 배열을 전달하면 여러 컨트롤을 한 번
 import {ChangeDetectorRef, Component, inject} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class ProfileEditor {
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -991,6 +1029,8 @@ export class FormArrayExampleComponent {
 }
 ```
 
+<a id="add-an-alias"></a>
+
 <docs-step title="별칭 추가하기">
 
 처음에는 폼에 `Alias` 필드가 하나 있습니다.
@@ -1053,9 +1093,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UnifiedEventsBasicComponent {
   form = new FormGroup({
     username: new FormControl(''),
@@ -1118,9 +1156,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UnifiedEventsBasicComponent {
   form = new FormGroup({
     username: new FormControl(''),
@@ -1200,7 +1236,7 @@ control.events
 **Before**
 
 ```ts
-import {combineLatest} from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
 
 combineLatest([control.valueChanges, control.statusChanges]).subscribe(([value, status]) => {
   /* ... */
@@ -1221,7 +1257,7 @@ NOTE: On value change, the emit happens right after a value of this control is u
 **변경 전**
 
 ```ts
-import {combineLatest} from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
 
 combineLatest([control.valueChanges, control.statusChanges]).subscribe(([value, status]) => {
   /* ... */
@@ -1417,9 +1453,7 @@ When updating form controls programmatically, you have precise control over how 
 By default `emitEvent: true`, any change to a control emits events through the `valueChanges` and `statusChanges` observables. Setting `emitEvent: false` suppresses these emissions, which is useful when setting values programmatically without triggering reactive behavior like auto-save, avoiding circular updates between controls, or performing bulk updates where events should emit only once at the end.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class BlogPostEditor {
   postForm = new FormGroup({
     title: new FormControl(''),
@@ -1446,9 +1480,7 @@ export class BlogPostEditor {
 자동 저장 같은 반응형 동작을 실행하지 않고 코드로 값을 설정하거나, 컨트롤 사이의 순환 갱신을 방지하거나, 일괄 갱신이 끝날 때 이벤트를 한 번만 방출하려는 경우에 유용합니다.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class BlogPostEditor {
   postForm = new FormGroup({
     title: new FormControl(''),
@@ -1588,11 +1620,11 @@ export function positiveValues(control: AbstractControl) {
 
 <!--
 The following table lists the base classes and services used to create and manage reactive form controls.
-For complete syntax details, see the API reference documentation for the [Forms package](api#forms 'API reference').
+For complete syntax details, see the API reference documentation for the [Forms package](api#angular_forms 'API reference').
 -->
 
 다음 표는 반응형 폼 컨트롤을 생성하고 관리하는 데 사용하는 기반 클래스와 서비스를 정리한 것입니다.
-자세한 문법은 [Forms 패키지](api#forms 'API 레퍼런스')의 API 레퍼런스를 참고하세요.
+자세한 문법은 [Forms 패키지](api#angular_forms 'API 레퍼런스')의 API 레퍼런스를 참고하세요.
 
 <!--
 ### Classes

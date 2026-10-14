@@ -44,6 +44,7 @@ import {
   RunGuardsAndResolvers,
   Data,
   RouterModule,
+  RouterOutlet,
   NavigationCancellationCode,
   RouteConfigLoadStart,
   RouteConfigLoadEnd,
@@ -113,7 +114,7 @@ export function guardsIntegrationSuite() {
           fixture.destroy();
 
           // Wait until the event task is dispatched.
-          await new Promise((resolve) => setTimeout(resolve, 10));
+          await timeout(10);
           window.removeEventListener('unhandledrejection', onUnhandledrejection);
 
           expect(onUnhandledrejection).not.toHaveBeenCalled();
@@ -934,8 +935,7 @@ export function guardsIntegrationSuite() {
         });
 
         function delayPromise(delay: number): Promise<boolean> {
-          let resolve: (val: boolean) => void;
-          const promise = new Promise<boolean>((res) => (resolve = res));
+          const {promise, resolve} = Promise.withResolvers<boolean>();
           setTimeout(() => resolve(true), delay);
           return promise;
         }
@@ -1187,6 +1187,65 @@ export function guardsIntegrationSuite() {
         expect(log[0].component).toBeInstanceOf(AdminComponent);
       });
 
+      it('should pass correct component to canDeactivate when using named outlets in componentless parent routes', async () => {
+        @Component({
+          selector: 'outer',
+          template: '<router-outlet name="inner"></router-outlet>',
+          standalone: true,
+          imports: [RouterOutlet],
+        })
+        class OuterCmp {}
+
+        @Component({selector: 'inner1', template: '', standalone: true})
+        class Inner1Cmp {}
+
+        @Component({selector: 'inner2', template: '', standalone: true})
+        class Inner2Cmp {}
+
+        const router: Router = TestBed.inject(Router);
+        const fixture = await createRoot(router, RootCmp);
+
+        router.resetConfig([
+          {
+            path: '',
+            component: OuterCmp,
+            children: [
+              {
+                path: 'one',
+                children: [
+                  {
+                    path: '',
+                    outlet: 'inner',
+                    component: Inner1Cmp,
+                    canDeactivate: [recordingDeactivate],
+                  },
+                ],
+              },
+              {
+                path: 'two',
+                children: [
+                  {
+                    path: '',
+                    outlet: 'inner',
+                    component: Inner2Cmp,
+                    canDeactivate: [recordingDeactivate],
+                  },
+                ],
+              },
+            ],
+          },
+        ]);
+
+        router.navigateByUrl('/one');
+        await advance(fixture);
+
+        router.navigateByUrl('/two');
+        await advance(fixture);
+
+        expect(log.length).toBe(1);
+        expect(log[0].component).toBeInstanceOf(Inner1Cmp);
+      });
+
       it('should not create a route state if navigation is canceled', async () => {
         const router: Router = TestBed.inject(Router);
         const location: Location = TestBed.inject(Location);
@@ -1230,8 +1289,7 @@ export function guardsIntegrationSuite() {
                 canDeactivate: [
                   () => {
                     log.push('called');
-                    let resolve: (result: boolean) => void;
-                    const promise = new Promise((res) => (resolve = res));
+                    const {promise, resolve} = Promise.withResolvers<boolean>();
                     setTimeout(() => resolve(false), 0);
                     return promise;
                   },
@@ -2284,6 +2342,41 @@ export function guardsIntegrationSuite() {
         await advance(fixture);
         expect(router.url).toEqual('/a/2');
       });
+
+      it('does not keep earlier guards running when a later guard starts a new navigation', async () => {
+        const router = TestBed.inject(Router);
+        const fixture = await createRoot(router, RootCmp);
+        const recorder: string[] = [];
+
+        router.resetConfig([
+          {
+            path: 'a',
+            canMatch: [
+              () => {
+                recorder.push('first guard called');
+                return new Observable<boolean>(() => {
+                  recorder.push('first guard subscribed');
+                  return () => recorder.push('first guard unsubscribed');
+                });
+              },
+              () => {
+                recorder.push('second guard called');
+                inject(Router).navigateByUrl('/b');
+                return false;
+              },
+            ],
+            component: SimpleCmp,
+          },
+          {path: 'b', component: BlankCmp},
+        ]);
+
+        router.navigateByUrl('/a');
+        await advance(fixture);
+
+        expect(router.url).toEqual('/b');
+        // Recorder before the fix: ['first guard called', 'second guard called', 'first guard subscribed'].
+        expect(recorder).toEqual(['first guard called', 'second guard called']);
+      });
     });
 
     it('should allow guards as functions', async () => {
@@ -2487,6 +2580,62 @@ export function guardsIntegrationSuite() {
       service.canRun = true;
       await router.navigateByUrl('/a?q=2');
       expect(resolveCount).toBe(2);
+    });
+
+    describe('throwing redirect', () => {
+      it('should redirect when a guard throws a RedirectCommand', async () => {
+        const router = TestBed.inject(Router);
+        const location = TestBed.inject(Location);
+        const fixture = await createRoot(router, RootCmp);
+
+        router.resetConfig([
+          {
+            path: 'a',
+            canActivate: [
+              () => {
+                throw new RedirectCommand(router.parseUrl('/b'));
+              },
+            ],
+            component: BlankCmp,
+          },
+          {
+            path: 'b',
+            component: BlankCmp,
+          },
+        ]);
+
+        router.navigateByUrl('/a');
+        await advance(fixture);
+
+        expect(location.path()).toEqual('/b');
+      });
+
+      it('should redirect when a resolver throws a RedirectCommand', async () => {
+        const router = TestBed.inject(Router);
+        const location = TestBed.inject(Location);
+        const fixture = await createRoot(router, RootCmp);
+
+        router.resetConfig([
+          {
+            path: 'a',
+            resolve: {
+              data: () => {
+                throw new RedirectCommand(router.parseUrl('/b'));
+              },
+            },
+            component: BlankCmp,
+          },
+          {
+            path: 'b',
+            component: BlankCmp,
+          },
+        ]);
+
+        router.navigateByUrl('/a');
+        await advance(fixture);
+
+        expect(location.path()).toEqual('/b');
+      });
     });
   });
 }

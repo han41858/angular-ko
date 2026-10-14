@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Grid">
-</docs-decorative-header>
+# Grid
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/" title="Grid ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="그리드">
-</docs-decorative-header>
+# 그리드
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/grid/" title="그리드 ARIA 패턴"/>
@@ -483,239 +481,25 @@ describe('MyGridComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Grid`](/api/aria/grid/Grid)
+- [`GridRow`](/api/aria/grid/GridRow)
+- [`GridCell`](/api/aria/grid/GridCell)
+- [`GridCellWidget`](/api/aria/grid/GridCellWidget)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### Grid
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="grid"></a>
-
-### Grid
-
-<!--
-The container directive that provides keyboard navigation and focus management for rows and cells.
--->
-
-행과 셀에 키보드 탐색과 포커스 관리를 제공하는 컨테이너 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property               | Type                                 | Default    | Description                                                   |
-| ---------------------- | ------------------------------------ | ---------- | ------------------------------------------------------------- |
-| `enableSelection`      | `boolean`                            | `false`    | Whether selection is enabled for the grid                     |
-| `disabled`             | `boolean`                            | `false`    | Disables the entire grid                                      |
-| `softDisabled`         | `boolean`                            | `true`     | When `true`, disabled cells are focusable but not interactive |
-| `focusMode`            | `'roving' \| 'activedescendant'`     | `'roving'` | Focus strategy used by the grid                               |
-| `rowWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`   | Navigation wrapping behavior along rows                       |
-| `colWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`   | Navigation wrapping behavior along columns                    |
-| `multi`                | `boolean`                            | `false`    | Whether multiple cells can be selected                        |
-| `selectionMode`        | `'follow' \| 'explicit'`             | `'follow'` | Whether selection follows focus or requires explicit action   |
-| `enableRangeSelection` | `boolean`                            | `false`    | Enable range selections with modifier keys or dragging        |
--->
-
-| 프로퍼티               | 타입                                 | 기본값     | 설명                                                                     |
-| ---------------------- | ------------------------------------ | ---------- | ------------------------------------------------------------------------ |
-| `enableSelection`      | `boolean`                            | `false`    | 그리드의 선택 기능을 활성화할지 지정합니다.                              |
-| `disabled`             | `boolean`                            | `false`    | 전체 그리드를 비활성화합니다.                                            |
-| `softDisabled`         | `boolean`                            | `true`     | `true`이면 비활성화된 셀도 포커스를 받을 수 있지만 조작할 수는 없습니다. |
-| `focusMode`            | `'roving' \| 'activedescendant'`     | `'roving'` | 그리드에서 사용하는 포커스 전략입니다.                                   |
-| `rowWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`   | 행을 따라 탐색할 때의 순환 동작입니다.                                   |
-| `colWrap`              | `'continuous' \| 'loop' \| 'nowrap'` | `'loop'`   | 열을 따라 탐색할 때의 순환 동작입니다.                                   |
-| `multi`                | `boolean`                            | `false`    | 여러 셀을 선택할 수 있는지 지정합니다.                                   |
-| `selectionMode`        | `'follow' \| 'explicit'`             | `'follow'` | 포커스에 따라 선택할지, 명시적인 동작이 필요한지 지정합니다.             |
-| `enableRangeSelection` | `boolean`                            | `false`    | 보조 키나 드래그를 이용한 범위 선택을 활성화합니다.                      |
-
-<!--
-### GridRow
--->
-
-<a id="gridrow"></a>
-
-### GridRow
-
-<!--
-Represents a row within a grid and serves as a container for grid cells.
--->
-
-그리드 안의 행을 나타내며 그리드 셀의 컨테이너 역할을 합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type     | Default | Description                           |
-| ---------- | -------- | ------- | ------------------------------------- |
-| `rowIndex` | `number` | auto    | The index of this row within the grid |
--->
-
-| 프로퍼티   | 타입     | 기본값    | 설명                             |
-| ---------- | -------- | --------- | -------------------------------- |
-| `rowIndex` | `number` | 자동 지정 | 그리드에서 이 행의 인덱스입니다. |
-
-<!--
-### GridCell
--->
-
-<a id="gridcell"></a>
-
-### GridCell
-
-<!--
-Represents an individual cell within a grid row.
--->
-
-그리드 행 안의 개별 셀을 나타냅니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-2"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property      | Type                         | Default        | Description                                             |
-| ------------- | ---------------------------- | -------------- | ------------------------------------------------------- |
-| `id`          | `string`                     | auto           | Unique identifier for the cell                          |
-| `role`        | `string`                     | `'gridcell'`   | Cell role: `gridcell`, `columnheader`, or `rowheader`   |
-| `disabled`    | `boolean`                    | `false`        | Disables this cell                                      |
-| `selected`    | `boolean`                    | `false`        | Whether the cell is selected (supports two-way binding) |
-| `selectable`  | `boolean`                    | `true`         | Whether the cell can be selected                        |
-| `rowSpan`     | `number`                     | —              | Number of rows the cell spans                           |
-| `colSpan`     | `number`                     | —              | Number of columns the cell spans                        |
-| `rowIndex`    | `number`                     | —              | Row index of the cell                                   |
-| `colIndex`    | `number`                     | —              | Column index of the cell                                |
-| `orientation` | `'vertical' \| 'horizontal'` | `'horizontal'` | Orientation for widgets within the cell                 |
-| `wrap`        | `boolean`                    | `true`         | Whether widget navigation wraps within the cell         |
--->
-
-| 프로퍼티      | 타입                         | 기본값         | 설명                                                                   |
-| ------------- | ---------------------------- | -------------- | ---------------------------------------------------------------------- |
-| `id`          | `string`                     | 자동 생성      | 셀의 고유 식별자입니다.                                                |
-| `role`        | `string`                     | `'gridcell'`   | 셀의 역할입니다. `gridcell`, `columnheader`, `rowheader`를 사용합니다. |
-| `disabled`    | `boolean`                    | `false`        | 이 셀을 비활성화합니다.                                                |
-| `selected`    | `boolean`                    | `false`        | 셀이 선택되어 있는지 나타냅니다(양방향 바인딩을 지원합니다).           |
-| `selectable`  | `boolean`                    | `true`         | 셀을 선택할 수 있는지 지정합니다.                                      |
-| `rowSpan`     | `number`                     | —              | 셀이 차지하는 행의 수입니다.                                           |
-| `colSpan`     | `number`                     | —              | 셀이 차지하는 열의 수입니다.                                           |
-| `rowIndex`    | `number`                     | —              | 셀의 행 인덱스입니다.                                                  |
-| `colIndex`    | `number`                     | —              | 셀의 열 인덱스입니다.                                                  |
-| `orientation` | `'vertical' \| 'horizontal'` | `'horizontal'` | 셀 안의 위젯 방향입니다.                                               |
-| `wrap`        | `boolean`                    | `true`         | 셀 안에서 위젯 탐색을 순환할지 지정합니다.                             |
-
-<!--
-#### Signals
--->
-
-<a id="signals"></a>
-
-#### 시그널
-
-<!--
-| Property | Type              | Description                          |
-| -------- | ----------------- | ------------------------------------ |
-| `active` | `Signal<boolean>` | Whether the cell currently has focus |
--->
-
-| 프로퍼티 | 타입              | 설명                                  |
-| -------- | ----------------- | ------------------------------------- |
-| `active` | `Signal<boolean>` | 현재 셀에 포커스가 있는지 나타냅니다. |
-
-<!--
-### GridCellWidget
--->
-
-<a id="gridcellwidget"></a>
-
-### GridCellWidget
-
-<!--
-Applied to an interactive element inside a grid cell to allow for pausing grid navigation.
--->
-
-그리드 탐색을 일시 중지할 수 있도록 그리드 셀 안의 상호작용 엘리먼트에 적용합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-3"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property      | Type                                  | Default    | Description                                               |
-| ------------- | ------------------------------------- | ---------- | --------------------------------------------------------- |
-| `id`          | `string`                              | auto       | Unique identifier for the widget                          |
-| `widgetType`  | `'simple' \| 'complex' \| 'editable'` | `'simple'` | The widget type, controlling how activation behaves       |
-| `disabled`    | `boolean`                             | `false`    | Disables this cell widget                                 |
-| `focusTarget` | `ElementResolver<HTMLElement>`        | —          | Optional element reference to receive focus on activation |
-| `tabindex`    | `number`                              | —          | Tabindex override for the widget                          |
--->
-
-| 프로퍼티      | 타입                                  | 기본값     | 설명                                                        |
-| ------------- | ------------------------------------- | ---------- | ----------------------------------------------------------- |
-| `id`          | `string`                              | 자동 생성  | 위젯의 고유 식별자입니다.                                   |
-| `widgetType`  | `'simple' \| 'complex' \| 'editable'` | `'simple'` | 활성화 동작을 제어하는 위젯 타입입니다.                     |
-| `disabled`    | `boolean`                             | `false`    | 이 셀 위젯을 비활성화합니다.                                |
-| `focusTarget` | `ElementResolver<HTMLElement>`        | —          | 활성화할 때 포커스를 받을 엘리먼트의 참조입니다(선택 사항). |
-| `tabindex`    | `number`                              | —          | 위젯의 tabindex를 재정의합니다.                             |
-
-<!--
-#### Outputs
--->
-
-<a id="outputs"></a>
-
-#### 출력 프로퍼티
-
-<!--
-| Property      | Type                                                     | Description                                    |
-| ------------- | -------------------------------------------------------- | ---------------------------------------------- |
-| `activated`   | `EventEmitter<KeyboardEvent \| FocusEvent \| undefined>` | Emits when the cell widget becomes activated   |
-| `deactivated` | `EventEmitter<KeyboardEvent \| FocusEvent \| undefined>` | Emits when the cell widget becomes deactivated |
--->
-
-| 프로퍼티      | 타입                                                     | 설명                                           |
-| ------------- | -------------------------------------------------------- | ---------------------------------------------- |
-| `activated`   | `EventEmitter<KeyboardEvent \| FocusEvent \| undefined>` | 셀 위젯이 활성화될 때 이벤트를 발생시킵니다.   |
-| `deactivated` | `EventEmitter<KeyboardEvent \| FocusEvent \| undefined>` | 셀 위젯이 비활성화될 때 이벤트를 발생시킵니다. |
-
-<!--
-#### Methods
--->
-
-<a id="methods"></a>
-
-#### 메서드
-
-<!--
-| Method       | Parameters | Description                       |
-| ------------ | ---------- | --------------------------------- |
-| `activate`   | none       | Forcefully activates the widget   |
-| `deactivate` | none       | Forcefully deactivates the widget |
--->
-
-| 메서드       | 인자 | 설명                          |
-| ------------ | ---- | ----------------------------- |
-| `activate`   | 없음 | 위젯을 강제로 활성화합니다.   |
-| `deactivate` | 없음 | 위젯을 강제로 비활성화합니다. |
+- [`Grid`](/api/aria/grid/Grid)
+- [`GridRow`](/api/aria/grid/GridRow)
+- [`GridCell`](/api/aria/grid/GridCell)
+- [`GridCellWidget`](/api/aria/grid/GridCellWidget)

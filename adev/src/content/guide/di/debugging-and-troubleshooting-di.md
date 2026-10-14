@@ -15,11 +15,15 @@ Dependency injection (DI) issues typically stem from configuration mistakes, sco
 ## Common pitfalls and solutions
 -->
 
+<a id="common-pitfalls-and-solutions"></a>
+
 ## 흔히 발생하는 문제와 해결방법
 
 <!--
 ### Services not available where expected
 -->
+
+<a id="services-not-available-where-expected"></a>
 
 ### 서비스에 접근할 수 없음
 
@@ -33,6 +37,8 @@ One of the most common DI issues occurs when you try to inject a service but Ang
 <!--
 #### Provider scope mismatch
 -->
+
+<a id="provider-scope-mismatch"></a>
 
 #### 프로바이더가 잘못 등록된 경우
 
@@ -131,6 +137,8 @@ export class DataStore {
 #### Services and lazy-loaded routes
 -->
 
+<a id="services-and-lazy-loaded-routes"></a>
+
 #### 지연 로딩되는 라우팅 규칙의 서비스
 
 <!--
@@ -164,7 +172,7 @@ export class EagerView {
 
 Lazy-loaded routes create child injectors that are only available after the route loads.
 
-NOTE: By default, route injectors and their services persist even after navigating away from the route. They are not destroyed until the application is closed. For automatic cleanup of unused route injectors, see [customizing route behavior](guide/routing/customizing-route-behavior#experimental-automatic-cleanup-of-unused-route-injectors).
+NOTE: By default, route injectors and their services persist even after navigating away from the route. They are not destroyed until the application is closed. For automatic cleanup of unused route injectors, see [customizing route behavior](guide/routing/customizing-route-behavior#automatic-cleanup-of-unused-route-injectors).
 
 **Solution:** Use `@Service` for services that need to be shared across lazy boundaries.
 
@@ -214,7 +222,7 @@ export class EagerView {
 
 참고: 기본적으로 라우팅 규칙의 인젝터와 이 인젝터에 등록되는 서비스 프로바이더는 해당 라우팅 규칙을 벗어나도 유지됩니다.
 애플리케이션이 종료되기 전까지는 인스턴스가 종료되지 않기 때문입니다.
-사용하지 않는 라우팅 규칙의 인젝터를 자동으로 정리하려면 [라우팅 규칙 커스터마이징](guide/routing/customizing-route-behavior#experimental-automatic-cleanup-of-unused-route-injectors) 문서를 참고하세요.
+사용하지 않는 라우팅 규칙의 인젝터를 자동으로 정리하려면 [라우팅 규칙 커스터마이징](guide/routing/customizing-route-behavior#automatic-cleanup-of-unused-route-injectors) 문서를 참고하세요.
 
 **해결방법:** 지연 로딩되는 영역에서 서비스 인스턴스를 사용하려면 `@Service` 데코레이터를 사용하세요.
 
@@ -233,6 +241,8 @@ export class FeatureClient {
 ### Multiple instances instead of singletons
 -->
 
+<a id="multiple-instances-instead-of-singletons"></a>
+
 ### 인스턴스 여러 개 사용하기
 
 <!--
@@ -244,6 +254,8 @@ You expect one shared instance (singleton) but get separate instances in differe
 <!--
 #### Providing in component instead of root
 -->
+
+<a id="providing-in-component-instead-of-root"></a>
 
 #### 최상위 대신 컴포넌트에 서비스 프로바이더 등록하기
 
@@ -278,7 +290,7 @@ Each component gets its own `UserClient` instance. Changes in one component don'
 **Solution:** Use `@Service` for singletons.
 
 ```ts {prefer, header: 'Root-level singleton'}
-import {Injectable} from '@angular/core';
+import {Service} from '@angular/core';
 
 @Service()
 export class UserClient {
@@ -320,7 +332,7 @@ export class UserSettings {
 **해결방법:** 서비스 인스턴스를 하나만 생성하려면 `@Service` 데코레이터를 사용하세요.
 
 ```ts {prefer, header: '최상위 계층에 싱글턴 인스턴스로 생성됩니다'}
-import {Injectable} from '@angular/core';
+import {Service} from '@angular/core';
 
 @Service()
 export class UserClient {
@@ -331,6 +343,8 @@ export class UserClient {
 <!--
 #### When multiple instances are intentional
 -->
+
+<a id="when-multiple-instances-are-intentional"></a>
 
 #### 인스턴스를 여러 개 활용하려는 경우
 
@@ -408,6 +422,8 @@ export class UserForm {
 ### Incorrect inject() usage
 -->
 
+<a id="incorrect-inject-usage"></a>
+
 ### `inject()`를 잘못 사용하는 경우
 
 <!--
@@ -419,6 +435,8 @@ The `inject()` function only works in specific contexts during class constructio
 <!--
 #### Using inject() in lifecycle hooks
 -->
+
+<a id="using-inject-in-lifecycle-hooks"></a>
 
 #### 라이프싸이클 후킹 함수에서 `inject()` 를 사용하면
 
@@ -501,6 +519,8 @@ export class UserProfile {
 #### Using the Injector for deferred injection
 -->
 
+<a id="using-the-injector-for-deferred-injection"></a>
+
 #### 의존성 주입 컨텍스트 이후에 인젝터 사용하기
 
 <!--
@@ -553,13 +573,15 @@ export class UserProfile {
 #### Using runInInjectionContext for callbacks
 -->
 
+<a id="using-runininjectioncontext-for-callbacks"></a>
+
 #### 콜백 함수에 `runInInjectionContext()` 사용하기
 
 <!--
 Use `runInInjectionContext()` when you need to enable **other code** to call `inject()`. This is useful when accepting callbacks that might use dependency injection:
 
 ```angular-ts
-import {Component, inject, Injector, input} from '@angular/core';
+import {Component, inject, Injector, input, runInInjectionContext} from '@angular/core';
 
 @Component({
   selector: 'app-data-loader',
@@ -573,13 +595,13 @@ export class DataLoader {
     const callback = this.onLoad();
     if (callback) {
       // Enable the callback to use inject()
-      this.injector.runInInjectionContext(callback);
+      runInInjectionContext(this.injector, callback);
     }
   }
 }
 ```
 
-The `runInInjectionContext()` method creates a temporary injection context, allowing code inside the callback to call `inject()`.
+The `runInInjectionContext()` function creates a temporary injection context, allowing code inside the callback to call `inject()`.
 
 IMPORTANT: Always capture dependencies at the class level when possible. Use `injector.get()` for simple deferred retrieval, and `runInInjectionContext()` only when external code needs to call `inject()`.
 
@@ -590,7 +612,7 @@ TIP: Use `assertInInjectionContext()` to verify your code is running in a valid 
 콜백 함수를 활용하는 경우에 유용합니다:
 
 ```angular-ts
-import {Component, inject, Injector, input} from '@angular/core';
+import {Component, inject, Injector, input, runInInjectionContext} from '@angular/core';
 
 @Component({
   selector: 'app-data-loader',
@@ -604,13 +626,13 @@ export class DataLoader {
     const callback = this.onLoad();
     if (callback) {
       // inject()를 사용할 수 있도록 콜백 함수를 등록합니다.
-      this.injector.runInInjectionContext(callback);
+      runInInjectionContext(this.injector, callback);
     }
   }
 }
 ```
 
-`runInInjectionContext()` 메서드는 임시 의존성 주입 컨텍스트를 생성하기 때문에, 콜백 함수 안에서는 `inject()`를 사용할 수 있습니다.
+`runInInjectionContext()` 함수는 임시 의존성 주입 컨텍스트를 생성하기 때문에, 콜백 함수 안에서는 `inject()`를 사용할 수 있습니다.
 
 중요: 가능하다면 클래스 프로퍼티를 선언할 때 의존성 객체도 주입하세요. 그 이후에 실행되는 코드에서는 `injector.get()`를 사용하면 간단하며, 다른 코드 컨텍스트에서 `inject()`를 사용하려면 `runInInjectionContext()`를 사용하면 됩니다.
 
@@ -621,6 +643,8 @@ export class DataLoader {
 <!--
 ### providers vs viewProviders confusion
 -->
+
+<a id="providers-vs-viewproviders-confusion"></a>
 
 ### `providers`와 `viewProviders`를 혼동하는 경우
 
@@ -633,6 +657,8 @@ The difference between `providers` and `viewProviders` affects content projectio
 <!--
 #### Understanding the difference
 -->
+
+<a id="understanding-the-difference"></a>
 
 #### 차이점
 
@@ -788,6 +814,8 @@ export class App {}
 #### Choosing between providers and viewProviders
 -->
 
+<a id="choosing-between-providers-and-viewproviders"></a>
+
 #### `providers`, `viewProviders` 선택하기
 
 <!--
@@ -823,6 +851,8 @@ Use `viewProviders` when:
 ### InjectionToken issues
 -->
 
+<a id="injectiontoken-issues"></a>
+
 ### `InjectionToken` 문제
 
 <!--
@@ -835,6 +865,8 @@ When using `InjectionToken` for non-class dependencies, developers often encount
 <!--
 #### Token identity confusion
 -->
+
+<a id="token-identity-confusion"></a>
 
 #### 토큰 식별 혼동
 
@@ -966,12 +998,14 @@ export class FeatureView {
 #### Trying to inject interfaces
 -->
 
+<a id="trying-to-inject-interfaces"></a>
+
 #### 인터페이스로 의존성 주입하기
 
 <!--
 When you define a TypeScript interface, it only exists during compilation for type checking. TypeScript erases all interface definitions when it compiles to JavaScript, so at runtime there's no object for Angular to use as an injection token. If you try to inject an interface type, Angular has nothing to match against the provider configuration.
 
-```angular-ts {avoid, header: 'Can't inject interface'}
+```angular-ts {avoid, header: "Can't inject interface"}
 interface UserConfig {
   name: string;
   email: string;
@@ -1080,6 +1114,8 @@ export class UserProfile {
 ### Circular dependencies
 -->
 
+<a id="circular-dependencies"></a>
+
 ### 의존성 순환 참조
 
 <!--
@@ -1110,11 +1146,15 @@ NOTE: Do not use `forwardRef()` for service circular dependencies—it only solv
 ## Debugging dependency resolution
 -->
 
+<a id="debugging-dependency-resolution"></a>
+
 ## 의존성 객체 판별 디버깅하기
 
 <!--
 ### Understanding the resolution process
 -->
+
+<a id="understanding-the-resolution-process"></a>
 
 ### 의존성 객체 판별 과정 이해하기
 
@@ -1161,6 +1201,8 @@ Angular는 이런 순서로 탐색합니다:
 ### Using Angular DevTools
 -->
 
+<a id="using-angular-devtools"></a>
+
 ### 개발자도구 활용하기
 
 <!--
@@ -1190,6 +1232,8 @@ Angular가 제공하는 개발자도구를 활용하면 전체 인젝터 계층 
 ### Logging and tracing injection
 -->
 
+<a id="logging-and-tracing-injection"></a>
+
 ### 로그, 콜스택 확인하기
 
 <!--
@@ -1201,6 +1245,8 @@ When DevTools isn't enough, use logging to trace injection behavior.
 <!--
 #### Logging service creation
 -->
+
+<a id="logging-service-creation"></a>
 
 #### 서비스 생성 로그
 
@@ -1262,6 +1308,8 @@ export class UserClient {
 #### Checking service availability
 -->
 
+<a id="checking-service-availability"></a>
+
 #### 서비스가 사용 가능한지 확인하기
 
 <!--
@@ -1321,6 +1369,8 @@ export class DebugView {
 <!--
 #### Logging resolution modifiers
 -->
+
+<a id="logging-resolution-modifiers"></a>
 
 #### 의존성 객체 옵션 로그로 출력하기
 
@@ -1391,6 +1441,8 @@ export class DebugView {
 <!--
 ### Debugging workflow
 -->
+
+<a id="debugging-workflow"></a>
 
 ### 디버깅 작업 순서
 
@@ -1470,6 +1522,8 @@ When DI fails, follow this systematic approach:
 ## DI error reference
 -->
 
+<a id="di-error-reference"></a>
+
 ## 의존성 주입 에러 참고
 
 <!--
@@ -1481,7 +1535,7 @@ This section provides detailed information about specific Angular DI error codes
 ### NullInjectorError: No provider for [Service]
 
 <!--
-**Error code:** None (displayed as `NullInjectorError`)
+**Error code:** [NG0201](errors/NG0201)
 
 This error occurs when Angular cannot find a provider for a token in the injector hierarchy. The error message includes a dependency path showing where the injection was attempted.
 
@@ -1493,7 +1547,7 @@ NullInjectorError: No provider for UserClient!
 The dependency path shows that `App` injected `AuthClient`, which tried to inject `UserClient`, but no provider was found.
 -->
 
-**에러 코드:** 없음 (`NullInjectorError` 라고 표시됩니다.)
+**에러 코드:** [NG0201](errors/NG0201)
 
 Angular가 인젝터에서 의존성 주입 토큰의 프로바이더를 찾지 못했을 때 발생합니다.
 에러 메시지를 보면 어떤 객체를 찾지 못했는지 확인할 수 있습니다.
@@ -1691,6 +1745,8 @@ export class UserProfile {
 #### Debugging with the dependency path
 -->
 
+<a id="debugging-with-the-dependency-path"></a>
+
 #### 의존성 주입 순서로 디버깅하기
 
 <!--
@@ -1730,6 +1786,8 @@ NullInjectorError: No provider for LoggerStore!
 <!--
 #### Checking provider availability with optional injection
 -->
+
+<a id="checking-provider-availability-with-optional-injection"></a>
 
 #### 생략할 수 있도록 옵션 수정하기
 
@@ -1800,6 +1858,8 @@ used with `runInInjectionContext`.
 #### Valid injection contexts
 -->
 
+<a id="valid-injection-contexts"></a>
+
 #### 의존성 주입 컨텍스트가 유효한 경우
 
 <!--
@@ -1833,12 +1893,12 @@ Angular allows `inject()` in these locations:
    })
    export class UserProfile {
      private userService: UserClient;
+     user: ReturnType<UserClient['getUser']>;
 
      constructor() {
        this.userService = inject(UserClient); // Valid
+       this.user = this.userService.getUser();
      }
-
-     user = this.userService.getUser();
    }
    ```
 
@@ -1860,7 +1920,7 @@ Angular allows `inject()` in these locations:
 4. **Inside runInInjectionContext()**
 
    ```angular-ts
-   import {Component, inject, Injector} from '@angular/core';
+   import {Component, inject, Injector, runInInjectionContext} from '@angular/core';
    import {UserClient} from './user-client';
 
    @Component({
@@ -1871,7 +1931,7 @@ Angular allows `inject()` in these locations:
      private injector = inject(Injector);
 
      loadUser() {
-       this.injector.runInInjectionContext(() => {
+       runInInjectionContext(this.injector, () => {
          const userService = inject(UserClient); // Valid
          console.log(userService.getUser());
        });
@@ -1885,6 +1945,7 @@ Other injection contexts that `inject()` also works in include:
 - [provideEnvironmentInitializer](api/core/provideEnvironmentInitializer)
 - Functional [route guards](guide/routing/route-guards)
 - Functional [data resolvers](guide/routing/data-resolvers)
+- Route [resources](guide/routing/data-fetching-with-resources)
 -->
 
 `inject()` 함수는 이런 곳에서 사용할 수 있습니다:
@@ -1917,12 +1978,12 @@ Other injection contexts that `inject()` also works in include:
    })
    export class UserProfile {
      private userService: UserClient;
+     user: ReturnType<UserClient['getUser']>;
 
      constructor() {
        this.userService = inject(UserClient); // 유효함
+       this.user = this.userService.getUser();
      }
-
-     user = this.userService.getUser();
    }
    ```
 
@@ -1944,7 +2005,7 @@ Other injection contexts that `inject()` also works in include:
 4. **runInInjectionContext() 안쪽**
 
    ```angular-ts
-   import {Component, inject, Injector} from '@angular/core';
+   import {Component, inject, Injector, runInInjectionContext} from '@angular/core';
    import {UserClient} from './user-client';
 
    @Component({
@@ -1955,7 +2016,7 @@ Other injection contexts that `inject()` also works in include:
      private injector = inject(Injector);
 
      loadUser() {
-       this.injector.runInInjectionContext(() => {
+       runInInjectionContext(this.injector, () => {
          const userService = inject(UserClient); // 유효함
          console.log(userService.getUser());
        });
@@ -1969,10 +2030,13 @@ Other injection contexts that `inject()` also works in include:
 - [provideEnvironmentInitializer](api/core/provideEnvironmentInitializer)
 - 함수로 정의된 [route guards](guide/routing/route-guards)
 - 함수로 정의된 [data resolvers](guide/routing/data-resolvers)
+- 라우팅 규칙의 [리소스](guide/routing/data-fetching-with-resources)
 
 <!--
 #### When this error occurs
 -->
+
+<a id="when-this-error-occurs"></a>
 
 #### 에러가 발생하는 경우
 
@@ -1998,6 +2062,8 @@ See the "Incorrect inject() usage" section for detailed examples and solutions.
 #### Solutions and workarounds
 -->
 
+<a id="solutions-and-workarounds"></a>
+
 #### 해결 방법
 
 <!--
@@ -2013,7 +2079,7 @@ private userService = inject(UserClient) // Capture at class level
 private injector = inject(Injector)
 
 someCallback() {
-  this.injector.runInInjectionContext(() => {
+  runInInjectionContext(this.injector, () => {
     const service = inject(MyClient)
   })
 }
@@ -2048,7 +2114,7 @@ private userService = inject(UserClient) // 클래스 계층에서 주입
 private injector = inject(Injector)
 
 someCallback() {
-  this.injector.runInInjectionContext(() => {
+  runInInjectionContext(this.injector, () => {
     const service = inject(MyClient)
   })
 }
@@ -2100,6 +2166,8 @@ NG0200: Circular dependency in DI detected for AuthClient
 #### Understanding the error
 -->
 
+<a id="understanding-the-error"></a>
+
 #### 에러가 발생한 이유
 
 <!--
@@ -2112,6 +2180,8 @@ Angular는 서비스 클래스의 생성자를 실행하면서 서비스 인스�
 <!--
 #### Common causes
 -->
+
+<a id="common-causes"></a>
 
 #### 원인
 
@@ -2129,7 +2199,9 @@ Angular는 서비스 클래스의 생성자를 실행하면서 서비스 인스�
 #### Resolution strategies
 -->
 
-#### 해결 방법
+<a id="resolution-strategies"></a>
+
+#### 해결 방법 {#해결-방법-2}
 
 <!--
 See the "Circular dependencies" section for detailed examples and solutions:
@@ -2154,6 +2226,8 @@ Do NOT use `forwardRef()` for service circular dependencies. It only solves circ
 ### Other DI error codes
 -->
 
+<a id="other-di-error-codes"></a>
+
 ### 기타 의존성 주입 에러 코드
 
 <!--
@@ -2177,6 +2251,8 @@ For detailed explanations and solutions for these errors, see the [Angular error
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

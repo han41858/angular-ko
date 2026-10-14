@@ -74,7 +74,7 @@ document.startViewTransition(async () => {
 <!--
 Angular Router integrates view transitions into the navigation lifecycle to create seamless route changes. During navigation, the Router:
 
-1. **Completes navigation preparation** - Route matching, [lazy loading](guide/routing/loading-strategies#lazily-loaded-components-and-routes), [guards](/guide/routing/route-guards), and [resolvers](/guide/routing/data-resolvers) execute
+1. **Completes navigation preparation** - Route matching, [lazy loading](guide/routing/loading-strategies#lazily-loaded-components-and-routes), [guards](/guide/routing/route-guards), [resources](/guide/routing/data-fetching-with-resources), and [resolvers](/guide/routing/data-resolvers) execute
 2. **Initiates the view transition** - Router calls `startViewTransition` when routes are ready for activation
 3. **Updates the DOM** - Router activates new routes and deactivates old ones within the transition callback
 4. **Finalizes the transition** - The transition Promise resolves when Angular completes rendering
@@ -85,7 +85,7 @@ The Router's view transition integration acts as a [progressive enhancement](htt
 Angular 라우터는 내비게이션 생명주기에 뷰 전환을 통합해서 라우팅 규칙을 매끄럽게 전환합니다.
 내비게이션 중 라우터는 다음과 같이 동작합니다.
 
-1. **내비게이션 준비 완료** — 라우팅 규칙 매칭, [지연 로딩](guide/routing/loading-strategies#lazily-loaded-components-and-routes), [가드](/guide/routing/route-guards), [리졸버](/guide/routing/data-resolvers)를 실행합니다.
+1. **내비게이션 준비 완료** — 라우팅 규칙 매칭, [지연 로딩](guide/routing/loading-strategies#lazily-loaded-components-and-routes), [가드](/guide/routing/route-guards), [리소스](/guide/routing/data-fetching-with-resources), [리졸버](/guide/routing/data-resolvers)를 실행합니다.
 2. **뷰 전환 시작** — 라우팅 규칙 활성화 준비가 끝나면 라우터가 `startViewTransition`을 호출합니다.
 3. **DOM 갱신** — 전환 콜백 안에서 새 라우팅 규칙을 활성화하고 이전 라우팅 규칙을 비활성화합니다.
 4. **전환 마무리** — Angular가 렌더링을 완료하면 전환 Promise가 이행됩니다.
@@ -289,7 +289,7 @@ Use this callback to customize transition behavior based on navigation context. 
 
 ```ts
 import {inject} from '@angular/core';
-import {Router, withViewTransitions, isActive} from '@angular/router';
+import {Router, withViewTransitions, isActive, IsActiveMatchOptions} from '@angular/router';
 
 withViewTransitions({
   onViewTransitionCreated: ({transition}) => {
@@ -297,7 +297,7 @@ withViewTransitions({
     const targetUrl = router.currentNavigation()!.finalUrl!;
 
     // Skip transition if only fragment or query params change
-    const config = {
+    const config: Partial<IsActiveMatchOptions> = {
       paths: 'exact',
       matrixParams: 'exact',
       fragment: 'ignored',
@@ -330,7 +330,7 @@ This example skips the view transition when navigation only changes the [URL fra
 
 ```ts
 import {inject} from '@angular/core';
-import {Router, withViewTransitions, isActive} from '@angular/router';
+import {Router, withViewTransitions, isActive, IsActiveMatchOptions} from '@angular/router';
 
 withViewTransitions({
   onViewTransitionCreated: ({transition}) => {
@@ -338,7 +338,7 @@ withViewTransitions({
     const targetUrl = router.currentNavigation()!.finalUrl!;
 
     // 프래그먼트나 쿼리 파라미터만 바뀌면 전환을 건너뜁니다.
-    const config = {
+    const config: Partial<IsActiveMatchOptions> = {
       paths: 'exact',
       matrixParams: 'exact',
       fragment: 'ignored',

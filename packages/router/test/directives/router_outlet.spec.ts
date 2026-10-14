@@ -7,20 +7,41 @@
  */
 
 import {CommonModule, NgForOf} from '@angular/common';
-import {Component, inject, Input, Type, NgModule, signal} from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  Input,
+  model,
+  NgModule,
+  resource,
+  signal,
+  Type,
+} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {
-  provideRouter,
+  provideRouter as internalProvideRouter,
   Router,
   RouterModule,
   RouterOutlet,
   withComponentInputBinding,
   ROUTER_OUTLET_DATA,
+  withRouterResources,
+  nonBlocking,
+  Route,
+  RouterFeatures,
 } from '../../index';
 import {RouterTestingHarness} from '../../testing';
-import {InjectionToken} from '../../../core/src/di';
+import {EnvironmentProviders, InjectionToken} from '../../../core/src/di';
 import {useAutoTick, timeout} from '@angular/private/testing';
 
+export function provideRouter(
+  routes: Route[],
+  ...features: RouterFeatures[]
+): EnvironmentProviders {
+  return internalProvideRouter(routes, ...features);
+}
 describe('router outlet name', () => {
   useAutoTick();
   it('should support name binding', async () => {
@@ -471,6 +492,226 @@ describe('component input binding', () => {
     expect(harness.routeNativeElement!.innerText).toBe('1');
     await harness.navigateByUrl('/root/child?myInput=2');
     expect(harness.routeNativeElement!.innerText).toBe('2');
+  });
+
+  it('when keys conflict, sets inputs based on priority: resources > resolvers > data', async () => {
+    @Component({
+      template: '',
+      standalone: false,
+    })
+    class MyComponent {
+      @Input() result?: any;
+    }
+
+    @Component({
+      template: '',
+      standalone: false,
+    })
+    class MyComponentWithoutResource {
+      @Input() result?: any;
+    }
+
+    @Component({
+      template: '',
+      standalone: false,
+    })
+    class MyComponentWithoutResolver {
+      @Input() result?: any;
+    }
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter(
+          [
+            {
+              path: 'all',
+              component: MyComponent,
+              data: {'result': 'from data'},
+              resolve: {'result': () => 'from resolver'},
+              resources: () => ({
+                result: resource({loader: async () => 'from resource'}),
+              }),
+            },
+            {
+              path: 'no-resource',
+              component: MyComponentWithoutResource,
+              data: {'result': 'from data'},
+              resolve: {'result': () => 'from resolver'},
+            },
+            {
+              path: 'no-resolver',
+              component: MyComponentWithoutResolver,
+              data: {'result': 'from data'},
+            },
+          ],
+          withComponentInputBinding(),
+          withRouterResources(),
+        ),
+      ],
+    });
+    const harness = await RouterTestingHarness.create();
+
+    let instance = await harness.navigateByUrl('/all', MyComponent);
+    // Precedence: resources > resolvers > data
+    // resources wins, and it binds ONLY THE VALUE for blocking resources!
+    expect(typeof instance.result).toBe('string');
+    expect(instance.result).toEqual('from resource');
+
+    const instance2 = await harness.navigateByUrl('/no-resource', MyComponentWithoutResource);
+    // No resources, so resolver wins!
+    expect(typeof instance2.result).toBe('string');
+    expect(instance2.result).toEqual('from resolver');
+
+    const instance3 = await harness.navigateByUrl('/no-resolver', MyComponentWithoutResolver);
+    // No resource, no resolver, so data wins!
+    expect(typeof instance3.result).toBe('string');
+    expect(instance3.result).toEqual('from data');
+  });
+
+  it('binds the actual resource object for non-blocking resources', async () => {
+    @Component({
+      template: '',
+      standalone: false,
+    })
+    class MyComponent {
+      @Input() result?: any;
+    }
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter(
+          [
+            {
+              path: '**',
+              component: MyComponent,
+              resources: () => ({
+                result: nonBlocking(resource({loader: async () => 'from non-blocking resource'})),
+              }),
+            },
+          ],
+          withComponentInputBinding(),
+          withRouterResources(),
+        ),
+      ],
+    });
+    const harness = await RouterTestingHarness.create();
+
+    const instance = await harness.navigateByUrl('/', MyComponent);
+    await harness.fixture.whenStable();
+    expect(typeof instance.result).toBe('object');
+    expect(instance.result?.value()).toEqual('from non-blocking resource');
+  });
+
+  it('updates component inputs reactively and cleans up binding effects on outlet deactivation', async () => {
+    const trigger = signal('initial');
+
+    @Component({
+      template: '',
+      standalone: false,
+    })
+    class MyComponent {
+      @Input() result?: string;
+    }
+
+    @Component({
+      template: '',
+      standalone: false,
+    })
+    class OtherComponent {}
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter(
+          [
+            {
+              path: 'resource',
+              component: MyComponent,
+              resources: () => ({
+                result: resource({
+                  params: () => trigger(),
+                  loader: async ({params}) => `data: ${params}`,
+                }),
+              }),
+            },
+            {
+              path: 'other',
+              component: OtherComponent,
+            },
+          ],
+          withComponentInputBinding(),
+          withRouterResources(),
+        ),
+      ],
+    });
+    const harness = await RouterTestingHarness.create();
+
+    const instance = await harness.navigateByUrl('/resource', MyComponent);
+    await harness.fixture.whenStable();
+    expect(instance.result).toEqual('data: initial');
+
+    // Trigger reactive update while active
+    trigger.set('updated');
+    await harness.fixture.whenStable();
+    expect(instance.result).toEqual('data: updated');
+
+    // Navigate away to deactivate outlet component
+    await harness.navigateByUrl('/other', OtherComponent);
+    await harness.fixture.whenStable();
+
+    // Trigger update after deactivation - effect should have been destroyed
+    trigger.set('after-destroy');
+    await harness.fixture.whenStable();
+    expect(instance.result).toEqual('data: updated');
+  });
+
+  it('sets blocking resource input synchronously so input.required() is available in ngOnInit and constructor effects on first render', async () => {
+    const log: string[] = [];
+
+    @Component({
+      template: '{{ passenger() }}',
+    })
+    class PassengerEdit {
+      @Input({isSignal: true, required: true} as any)
+      readonly passenger = model.required<string>();
+      @Input({isSignal: true, required: true} as any)
+      readonly details = input.required<string>();
+
+      constructor() {
+        effect(() => {
+          log.push(`effect:${this.passenger()}:${this.details()}`);
+        });
+      }
+
+      ngOnInit() {
+        log.push(`init:${this.passenger()}:${this.details()}`);
+      }
+    }
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter(
+          [
+            {
+              path: 'edit',
+              component: PassengerEdit,
+              resources: () => ({
+                passenger: resource({loader: async () => 'Alice'}),
+                details: resource({loader: async () => 'VIP'}),
+              }),
+            },
+          ],
+          withComponentInputBinding(),
+          withRouterResources(),
+        ),
+      ],
+    });
+
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/edit', PassengerEdit);
+    await harness.fixture.whenStable();
+
+    expect(log).toEqual(['init:Alice:VIP', 'effect:Alice:VIP']);
+    expect(harness.routeNativeElement?.textContent).toBe('Alice');
   });
 });
 

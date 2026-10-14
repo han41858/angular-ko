@@ -480,25 +480,25 @@ http.get<Config>('/api/config', {observe: 'response'}).subscribe((res) => {
 <!--
 In addition to the response body or response object, `HttpClient` can also return a stream of raw _events_ corresponding to specific moments in the request lifecycle. These events include when the request is sent, when the response header is returned, and when the body is complete. These events can also include _progress events_ that report upload and download status for large request or response bodies.
 
-Progress events are disabled by default (as they have a performance cost) but can be enabled with the `reportProgress` option.
+Progress events are disabled by default (as they have a performance cost) but can be enabled with the `reportUploadProgress` and `reportDownloadProgress` options.
 
-NOTE: The default fetch backend of `HttpClient` does not report _upload_ progress events. If your app needs upload progress events, configure `HttpClient` with `withXhr()` in `provideHttpClient(...)`.
+NOTE: The default fetch backend of `HttpClient` does not support _upload_ progress events and throws an error if you set `reportUploadProgress`. If your app needs upload progress events, configure `HttpClient` with `withXhr()` in `provideHttpClient(...)`.
 
 To observe the event stream, set the `observe` option to `'events'`:
 
 ```ts
 http
-  .post('/api/upload', myData, {
-    reportProgress: true,
+  .get('/api/download', {
+    reportDownloadProgress: true,
     observe: 'events',
   })
   .subscribe((event) => {
     switch (event.type) {
-      case HttpEventType.UploadProgress:
-        console.log('Uploaded ' + event.loaded + ' out of ' + event.total + ' bytes');
+      case HttpEventType.DownloadProgress:
+        console.log('Downloaded ' + event.loaded + ' out of ' + event.total + ' bytes');
         break;
       case HttpEventType.Response:
-        console.log('Finished uploading!');
+        console.log('Finished downloading!');
         break;
     }
   });
@@ -526,26 +526,26 @@ Each `HttpEvent` reported in the event stream has a `type` which distinguishes w
 요청을 보낸 시점, 응답 헤더를 받은 시점, 본문을 모두 받은 시점 등이 여기에 포함됩니다.
 큰 요청 본문이나 응답 본문의 업로드 및 다운로드 상태를 알려주는 _진행 상황 이벤트_ 도 포함할 수 있습니다.
 
-진행 상황 이벤트는 성능 비용이 있어 기본적으로 비활성화되어 있지만, `reportProgress` 옵션으로 활성화할 수 있습니다.
+진행 상황 이벤트는 성능 비용이 있어 기본적으로 비활성화되어 있지만, `reportUploadProgress`와 `reportDownloadProgress` 옵션으로 활성화할 수 있습니다.
 
-참고: `HttpClient`의 기본 fetch 백엔드는 _업로드_ 진행 상황 이벤트를 제공하지 않습니다.
+참고: `HttpClient`의 기본 fetch 백엔드는 _업로드_ 진행 상황 이벤트를 지원하지 않으며, `reportUploadProgress`를 설정하면 에러가 발생합니다.
 업로드 진행 상황 이벤트가 필요하다면 `provideHttpClient(...)`에 `withXhr()`를 지정해서 `HttpClient`를 설정하세요.
 
 이벤트 스트림을 관찰하려면 `observe` 옵션을 `'events'`로 설정합니다:
 
 ```ts
 http
-  .post('/api/upload', myData, {
-    reportProgress: true,
+  .get('/api/download', {
+    reportDownloadProgress: true,
     observe: 'events',
   })
   .subscribe((event) => {
     switch (event.type) {
-      case HttpEventType.UploadProgress:
-        console.log('Uploaded ' + event.loaded + ' out of ' + event.total + ' bytes');
+      case HttpEventType.DownloadProgress:
+        console.log('Downloaded ' + event.loaded + ' out of ' + event.total + ' bytes');
         break;
       case HttpEventType.Response:
-        console.log('Finished uploading!');
+        console.log('Finished downloading!');
         break;
     }
   });
@@ -584,7 +584,7 @@ There are three ways an HTTP request can fail:
 - A request didn't respond in time when the timeout option was set.
 - The backend can receive the request but fail to process it, and return an error response.
 
-`HttpClient` captures all of the above kinds of errors in an `HttpErrorResponse` which it returns through the `Observable`'s error channel. Network and timeout errors have a `status` code of `0` and an `error` which is an instance of [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent). Backend errors have the failing `status` code returned by the backend, and the error response as the `error`. Inspect the response to identify the error's cause and the appropriate action to handle the error.
+`HttpClient` captures all of the above kinds of errors in an `HttpErrorResponse` which it returns through the `Observable`'s error channel. Network and timeout errors have a `status` code of `0`. For timeouts, the `error` is a `DOMException` named `TimeoutError`; for network errors, it is the error thrown by `fetch` (or a [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent) when using `withXhr()`). Backend errors have the failing `status` code returned by the backend, and the error response as the `error`. Inspect the response to identify the error's cause and the appropriate action to handle the error.
 
 The [RxJS library](https://rxjs.dev/) offers several operators which can be useful for error handling.
 
@@ -600,7 +600,7 @@ HTTP 요청은 다음 세 가지 방식으로 실패할 수 있습니다:
 - 백엔드가 요청을 받았지만 처리에 실패해서 에러 응답을 반환합니다.
 
 `HttpClient`는 이런 모든 에러를 `HttpErrorResponse`에 담아 `Observable`의 에러 채널로 전달합니다.
-네트워크 및 타임아웃 에러는 `status` 코드가 `0`이며, `error`에는 [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent) 인스턴스가 들어 있습니다.
+네트워크 및 타임아웃 에러의 `status` 코드는 `0`입니다. 타임아웃이면 `error`는 이름이 `TimeoutError`인 `DOMException`입니다. 네트워크 에러이면 `fetch`가 발생시킨 에러이며, `withXhr()`를 사용하는 경우에는 [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent)입니다.
 백엔드 에러는 백엔드가 반환한 실패 상태 코드를 `status`로, 에러 응답을 `error`로 제공합니다.
 응답을 확인해서 에러 원인과 적절한 처리 방법을 판단하세요.
 
@@ -622,7 +622,7 @@ RxJS는 특정 조건에서 실패한 `Observable`을 자동으로 다시 구독
 ### 타임아웃
 
 <!--
-To set a timeout for a request, you can set the `timeout` option to a number of milliseconds along other request options. If the backend request does not complete within the specified time, the request will be aborted and an error will be emitted.
+To set a timeout for a request, you can set the `timeout` option to a number of milliseconds along with other request options. If the backend request does not complete within the specified time, the request will be aborted and an error will be emitted.
 
 NOTE: The timeout will only apply to the backend HTTP request itself. It is not a timeout for the entire request handling chain. Therefore, this option is not affected by any delay introduced by interceptors.
 
@@ -933,7 +933,9 @@ Available `mode` values:
 - `'cors'`: Allow cross-origin requests with CORS (default)
 - `'no-cors'`: Allow simple cross-origin requests without CORS, response is opaque
 
-TIP: Use `mode: 'same-origin'` for sensitive requests that should never go cross-origin.
+TIP: In the browser, use `mode: 'same-origin'` for sensitive requests that should never go cross-origin.
+
+IMPORTANT: During SSR on Node.js, `HttpClient` uses Node.js's [Undici-based Fetch implementation](https://nodejs.org/api/globals.html#fetch). [Undici does not enforce browser CORS checks](https://undici.nodejs.org/#cors), so `mode: 'same-origin'` does not restrict server-side requests. Validate user-influenced URLs against an allowlist.
 -->
 
 `mode` 옵션은 교차 출처 요청을 처리하는 방식을 제어하고 응답 타입을 결정합니다.
@@ -974,7 +976,9 @@ http
   기본값입니다.
 - `'no-cors'`: CORS 없이 단순 교차 출처 요청을 허용하며, 응답은 불투명한(opaque) 응답이 됩니다.
 
-팁: 다른 출처로 보내면 안 되는 민감한 요청에는 `mode: 'same-origin'`을 사용하세요.
+팁: 브라우저에서 다른 출처로 보내면 안 되는 민감한 요청에는 `mode: 'same-origin'`을 사용하세요.
+
+중요: Node.js의 SSR에서 `HttpClient`는 Node.js의 [Undici 기반 Fetch 구현](https://nodejs.org/api/globals.html#fetch)을 사용합니다. [Undici는 브라우저의 CORS 검사를 강제하지 않으므로](https://undici.nodejs.org/#cors) `mode: 'same-origin'`이 서버 측 요청을 제한하지 않습니다. 사용자 입력의 영향을 받는 URL은 허용 목록과 대조하여 검사하세요.
 
 <!--
 #### Redirect handling
@@ -1210,6 +1214,12 @@ http
 혼동을 피하려면 `credentials`와 `withCredentials` 옵션을 함께 사용하지 않는 것이 좋습니다.
 
 <!--
+IMPORTANT: During SSR on Node.js, `credentials: 'include'` does not automatically forward cookies from the incoming browser request. The `credentials` option does not remove `Cookie` or `Authorization` headers that you add explicitly. [Undici permits some headers that browsers forbid](https://undici.nodejs.org/#forbidden-and-safelisted-header-names), so only forward credential headers to trusted origins.
+-->
+
+중요: Node.js의 SSR에서 `credentials: 'include'`는 들어온 브라우저 요청의 쿠키를 자동으로 전달하지 않습니다. `credentials` 옵션은 직접 추가한 `Cookie`나 `Authorization` 헤더도 제거하지 않습니다. [Undici는 브라우저가 금지하는 일부 헤더를 허용하므로](https://undici.nodejs.org/#forbidden-and-safelisted-header-names), 인증 정보가 담긴 헤더는 신뢰할 수 있는 출처에만 전달하세요.
+
+<!--
 #### Referrer
 -->
 
@@ -1289,7 +1299,7 @@ http
 #### 리퍼러 정책
 
 <!--
-The `referrerPolicy` option controls how much referrer information , the URL of the page making the request is sent along with an HTTP request. This setting affects both privacy and analytics, allowing you to balance data visibility with security considerations.
+The `referrerPolicy` option controls how much referrer information—the URL of the page making the request—is sent along with an HTTP request. This setting affects both privacy and analytics, allowing you to balance data visibility with security considerations.
 
 ```ts
 // Send no referrer information regardless of the current page
@@ -1316,7 +1326,7 @@ The `referrerPolicy` option accepts:
 - `'same-origin'` Sends the full URL for same-origin requests and no referrer for cross-origin requests.
 - `'strict-origin'` Sends only the origin, and only if the protocol security level is not downgraded (e.g., HTTPS→HTTPS). Omits the referrer on downgrade.
 - `'strict-origin-when-cross-origin'` Default browser behavior. Sends the full URL for same-origin requests, the origin for cross-origin requests when not downgraded, and omits the referrer on downgrade.
-- `'unsafe-url'`Always sends the full URL (including path and query). This can expose sensitive data and should be used with caution.
+- `'unsafe-url'` Always sends the full URL (including path and query). This can expose sensitive data and should be used with caution.
 
 TIP: Prefer conservative values such as `'no-referrer'`, `'origin'`, or `'strict-origin-when-cross-origin'` for privacy-sensitive requests.
 -->
@@ -1381,6 +1391,8 @@ http
 
 IMPORTANT: The `integrity` option requires an exact match between the response content and the provided hash. If the content doesn't match, the request will fail with a network error.
 
+CRITICAL: During SSR, the Fetch implementation reads the entire response body to verify `integrity` before returning a response, as required by the [Fetch Standard](https://fetch.spec.whatwg.org/#concept-main-fetch). Angular enforces [`maxResponseBodySize`](/guide/ssr#configuring-the-response-body-size-limit) only after Fetch returns a response, so this limit does not constrain the data buffered during integrity verification.
+
 TIP: Use subresource integrity when loading critical resources from external sources to ensure they haven't been modified. Generate hashes using tools like `openssl`.
 -->
 
@@ -1401,6 +1413,8 @@ http
 
 중요: `integrity` 옵션을 사용하면 응답 콘텐츠와 지정한 해시가 정확히 일치해야 합니다.
 일치하지 않으면 요청이 네트워크 에러로 실패합니다.
+
+매우 중요: SSR에서 Fetch 구현은 [Fetch 표준](https://fetch.spec.whatwg.org/#concept-main-fetch)에 따라 응답을 반환하기 전에 전체 응답 본문을 읽어 `integrity`를 검증합니다. Angular의 [`maxResponseBodySize`](/guide/ssr#configuring-the-response-body-size-limit)는 Fetch가 응답을 반환한 뒤에만 적용되므로, 무결성 검증 중에 버퍼링하는 데이터 양을 제한하지 못합니다.
 
 팁: 외부에서 중요한 리소스를 불러올 때는 하위 리소스 무결성 검사(subresource integrity)로 변조 여부를 확인하세요.
 해시는 `openssl` 같은 도구로 생성할 수 있습니다.
@@ -1494,7 +1508,7 @@ export class UserProfile {
 
   private userService = inject(UserService);
 
-  constructor(): void {
+  constructor() {
     effect(() => {
       this.user$ = this.userService.getUser(this.userId());
     });
@@ -1537,7 +1551,7 @@ export class UserProfile {
 
   private userService = inject(UserService);
 
-  constructor(): void {
+  constructor() {
     effect(() => {
       this.user$ = this.userService.getUser(this.userId());
     });

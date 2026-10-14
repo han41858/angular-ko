@@ -6,13 +6,20 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {initializeWebMCPPolyfill, cleanupWebMCPPolyfill} from '@mcp-b/webmcp-polyfill';
-import {signal} from '@angular/core';
-import {form, required, provideExperimentalWebMcpForms} from '@angular/forms/signals';
+import {ApplicationRef, Component, input, linkedSignal, signal} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
+import {form, provideExperimentalWebMcpForms, required} from '@angular/forms/signals';
+import {cleanupWebMCPPolyfill, initializeWebMCPPolyfill} from '@mcp-b/webmcp-polyfill';
+import type {ChromeModelContextExtensions, ModelContext} from '@mcp-b/webmcp-types';
+import {REGISTER_WEBMCP_FORM, RegisterWebMcpForm} from '../../src/webmcp/tokens';
 
 describe('Signal Forms WebMCP Integration', () => {
   beforeEach(() => {
+    // Firefox throws a security error with this.
+    Object.defineProperty(globalThis, 'originAgentCluster', {
+      value: true,
+      configurable: true,
+    });
     initializeWebMCPPolyfill({installTestingShim: true});
   });
 
@@ -27,7 +34,7 @@ describe('Signal Forms WebMCP Integration', () => {
       });
     });
 
-    it('should infer schema and register form as a tool', () => {
+    it('should infer schema and register form as a tool', async () => {
       const model = signal({
         name: 'John',
         age: 30,
@@ -39,6 +46,9 @@ describe('Signal Forms WebMCP Integration', () => {
         },
       });
 
+      const modelContext = (globalThis.document as any).modelContext;
+      const registerSpy = spyOn(modelContext, 'registerTool').and.callThrough();
+
       TestBed.runInInjectionContext(() => {
         form(model, {
           experimentalWebMcpTool: {
@@ -47,11 +57,22 @@ describe('Signal Forms WebMCP Integration', () => {
           },
         });
       });
+      await TestBed.inject(ApplicationRef).whenStable();
 
-      const registeredTools = globalThis.navigator.modelContextTesting!.listTools();
+      expect(registerSpy).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          annotations: {
+            readOnlyHint: false,
+            untrustedContentHint: false,
+          },
+        }),
+        jasmine.anything(),
+      );
+
+      const registeredTools = await getModelContext().getTools();
       expect(registeredTools[0].name).toBe('testFormTool');
       expect(registeredTools[0].description).toBe('A test form tool');
-      expect(JSON.parse(registeredTools[0].inputSchema!)).toEqual({
+      expect(registeredTools[0].inputSchema).toEqual({
         type: 'object',
         properties: {
           name: {type: 'string'},
@@ -76,7 +97,7 @@ describe('Signal Forms WebMCP Integration', () => {
       });
     });
 
-    it('should infer required validators in schema', () => {
+    it('should infer required validators in schema', async () => {
       const model = signal({
         name: 'John',
         age: 30,
@@ -101,10 +122,11 @@ describe('Signal Forms WebMCP Integration', () => {
           },
         );
       });
+      await TestBed.inject(ApplicationRef).whenStable();
 
-      const registeredTools = globalThis.navigator.modelContextTesting!.listTools();
+      const registeredTools = await getModelContext().getTools();
       const tool = registeredTools.find((t) => t.name === 'requiredTestTool')!;
-      expect(JSON.parse(tool.inputSchema!)).toEqual({
+      expect(tool.inputSchema).toEqual({
         type: 'object',
         properties: {
           name: {type: 'string'},
@@ -143,8 +165,9 @@ describe('Signal Forms WebMCP Integration', () => {
           },
         });
       });
+      await TestBed.inject(ApplicationRef).whenStable();
 
-      const result = await globalThis.navigator.modelContextTesting!.executeTool(
+      const result = await executeTool(
         'testFormSubmitTool',
         JSON.stringify({
           name: 'Alice',
@@ -184,11 +207,9 @@ describe('Signal Forms WebMCP Integration', () => {
           },
         );
       });
+      await TestBed.inject(ApplicationRef).whenStable();
 
-      const result = await globalThis.navigator.modelContextTesting!.executeTool(
-        'testFormInvalidTool',
-        JSON.stringify({name: {first: ''}}),
-      );
+      const result = await executeTool('testFormInvalidTool', JSON.stringify({name: {first: ''}}));
 
       expect(JSON.parse(result!)).toEqual({
         content: [
@@ -219,11 +240,9 @@ describe('Signal Forms WebMCP Integration', () => {
           },
         });
       });
+      await TestBed.inject(ApplicationRef).whenStable();
 
-      const result = await globalThis.navigator.modelContextTesting!.executeTool(
-        'testFormSubmitFailTool',
-        JSON.stringify({name: ''}),
-      );
+      const result = await executeTool('testFormSubmitFailTool', JSON.stringify({name: ''}));
 
       expect(JSON.parse(result!)).toEqual({
         content: [
@@ -251,62 +270,73 @@ describe('Signal Forms WebMCP Integration', () => {
           },
         });
       });
+      await TestBed.inject(ApplicationRef).whenStable();
 
       await expectAsync(
-        globalThis.navigator.modelContextTesting!.executeTool(
-          'testFormSubmitErrorTool',
-          JSON.stringify({name: ''}),
-        ),
+        executeTool('testFormSubmitErrorTool', JSON.stringify({name: ''})),
       ).toBeRejectedWithError(/Database connection lost/);
     });
 
-    it('should throw an error if schema cannot be inferred accurately', () => {
+    it('should throw an error if schema cannot be inferred accurately', async () => {
+      const registerWebMcpForm = TestBed.inject<RegisterWebMcpForm>(REGISTER_WEBMCP_FORM);
       // 1. Null value
-      TestBed.runInInjectionContext(() => {
-        expect(() => {
-          form(signal({value: null}), {
-            experimentalWebMcpTool: {
-              name: 'nullTool',
-              description: 'A null tool',
-            },
+      await expectAsync(
+        TestBed.runInInjectionContext(() => {
+          const promise = registerWebMcpForm(form(signal({value: null})), {
+            name: 'nullTool',
+            description: 'A null tool',
           });
-        }).toThrowError(/Could not accurately infer WebMCP schema/);
-      });
-      expect(
-        globalThis.navigator.modelContextTesting!.listTools().some((t) => t.name === 'nullTool'),
-      ).toBeFalse();
+          TestBed.inject(ApplicationRef).tick();
+          return promise;
+        }),
+      ).toBeRejectedWithError(/Could not accurately infer WebMCP schema/);
+      expect((await getModelContext()!.getTools()).some((t) => t.name === 'nullTool')).toBeFalse();
 
       // 2. Empty array value
-      TestBed.runInInjectionContext(() => {
-        expect(() => {
-          form(signal({value: [] as string[]}), {
-            experimentalWebMcpTool: {
-              name: 'emptyArrayTool',
-              description: 'An empty array tool',
-            },
+      await expectAsync(
+        TestBed.runInInjectionContext(() => {
+          const promise = registerWebMcpForm(form(signal({value: [] as string[]})), {
+            name: 'emptyArrayTool',
+            description: 'An empty array tool',
           });
-        }).toThrowError(/Could not accurately infer WebMCP schema/);
-      });
+          TestBed.inject(ApplicationRef).tick();
+          return promise;
+        }),
+      ).toBeRejectedWithError(/Could not accurately infer WebMCP schema/);
       expect(
-        globalThis.navigator
-          .modelContextTesting!.listTools()
-          .some((t) => t.name === 'emptyArrayTool'),
+        (await getModelContext().getTools()).some((t) => t.name === 'emptyArrayTool'),
       ).toBeFalse();
 
       // 3. Unsupported type (symbol)
-      TestBed.runInInjectionContext(() => {
-        expect(() => {
-          form(signal({value: Symbol('test')}), {
-            experimentalWebMcpTool: {
-              name: 'symbolTool',
-              description: 'A symbol tool',
-            },
+      await expectAsync(
+        TestBed.runInInjectionContext(() => {
+          const promise = registerWebMcpForm(form(signal({value: Symbol('test')})), {
+            name: 'symbolTool',
+            description: 'A symbol tool',
           });
-        }).toThrowError(/Could not accurately infer WebMCP schema/);
-      });
-      expect(
-        globalThis.navigator.modelContextTesting!.listTools().some((t) => t.name === 'symbolTool'),
-      ).toBeFalse();
+          TestBed.inject(ApplicationRef).tick();
+          return promise;
+        }),
+      ).toBeRejectedWithError(/Could not accurately infer WebMCP schema/);
+      expect((await getModelContext().getTools()).some((t) => t.name === 'symbolTool')).toBeFalse();
+    });
+
+    it('should not throw an error when reading the model', async () => {
+      @Component({
+        selector: 'app-root',
+        template: ``,
+      })
+      class App {
+        id = input.required<string>();
+        model = linkedSignal(() => ({id: this.id()}));
+
+        form = form(this.model, () => {}, {
+          experimentalWebMcpTool: {description: 'foo', name: 'foo'},
+        });
+      }
+
+      await TestBed.inject(ApplicationRef).whenStable();
+      expect(() => TestBed.createComponent(App)).not.toThrow();
     });
   });
 
@@ -325,3 +355,14 @@ describe('Signal Forms WebMCP Integration', () => {
     });
   });
 });
+
+function getModelContext(): ModelContext & ChromeModelContextExtensions {
+  // Because we use the 3p types, we need to cast the document.
+  return globalThis.document.modelContext!;
+}
+
+async function executeTool(toolName: string, args: string) {
+  const toolsForSubmit = await getModelContext().getTools();
+  const testFormSubmitTool = toolsForSubmit.find((t) => t.name === toolName)!;
+  return getModelContext().executeTool!(testFormSubmitTool, args);
+}

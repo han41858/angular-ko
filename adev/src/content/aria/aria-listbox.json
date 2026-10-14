@@ -5,6 +5,19 @@
   "normalizedModuleName": "angular_aria_listbox",
   "entries": [
     {
+      "name": "LISTBOX",
+      "type": "InjectionToken<Listbox<any>>",
+      "entryType": "constant",
+      "rawComment": "",
+      "description": "",
+      "jsdocTags": [],
+      "source": {
+        "filePath": "/src/aria/listbox/tokens.ts",
+        "startLine": 12,
+        "endLine": 12
+      }
+    },
+    {
       "name": "Option",
       "isAbstract": false,
       "entryType": "directive",
@@ -509,6 +522,55 @@
           "rawComment": "/** Navigates to the first item in the listbox. */",
           "memberType": "method",
           "memberTags": []
+        },
+        {
+          "name": "gotoIndex",
+          "signatures": [
+            {
+              "name": "gotoIndex",
+              "entryType": "function",
+              "description": "Navigates to an item at a specific index in the listbox.",
+              "generics": [],
+              "isNewType": false,
+              "jsdocTags": [],
+              "params": [
+                {
+                  "name": "index",
+                  "description": "",
+                  "type": "number",
+                  "isOptional": false,
+                  "isRestParam": false
+                }
+              ],
+              "rawComment": "/** Navigates to an item at a specific index in the listbox. */",
+              "returnType": "void"
+            }
+          ],
+          "implementation": {
+            "params": [
+              {
+                "name": "index",
+                "description": "",
+                "type": "number",
+                "isOptional": false,
+                "isRestParam": false
+              }
+            ],
+            "isNewType": false,
+            "returnType": "void",
+            "generics": [],
+            "name": "gotoIndex",
+            "description": "Navigates to an item at a specific index in the listbox.",
+            "entryType": "function",
+            "jsdocTags": [],
+            "rawComment": "/** Navigates to an item at a specific index in the listbox. */"
+          },
+          "entryType": "function",
+          "description": "Navigates to an item at a specific index in the listbox.",
+          "jsdocTags": [],
+          "rawComment": "/** Navigates to an item at a specific index in the listbox. */",
+          "memberType": "method",
+          "memberTags": []
         }
       ],
       "generics": [
@@ -550,11 +612,15 @@
       "source": {
         "filePath": "/src/aria/listbox/listbox.ts",
         "startLine": 52,
-        "endLine": 213
+        "endLine": 222
       }
     }
   ],
   "symbols": [
+    [
+      "InjectionToken",
+      "@angular/core"
+    ],
     [
       "booleanAttribute",
       "@angular/core"
@@ -620,11 +686,19 @@
       "@angular/cdk/bidi"
     ],
     [
+      "LISTBOX",
+      "@angular/aria/listbox"
+    ],
+    [
       "Option",
       "@angular/aria/listbox"
     ],
     [
       "Listbox",
+      "@angular/aria/listbox"
+    ],
+    [
+      "LISTBOX",
       "@angular/aria/listbox"
     ],
     [
@@ -741,6 +815,10 @@
     ],
     [
       "Listbox.gotoFirst",
+      "@angular/aria/listbox"
+    ],
+    [
+      "Listbox.gotoIndex",
       "@angular/aria/listbox"
     ]
   ]

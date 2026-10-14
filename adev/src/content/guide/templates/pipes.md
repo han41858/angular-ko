@@ -8,6 +8,8 @@
 ## Overview
 -->
 
+<a id="overview"></a>
+
 ## 개요
 
 <!--
@@ -104,6 +106,8 @@ Angular 현지화에 대한 내용은 [i18n 심화 가이드](/guide/i18n) 문�
 ### Built-in Pipes
 -->
 
+<a id="built-in-pipes"></a>
+
 ### 기본 파이프
 
 <!--
@@ -148,6 +152,8 @@ Angular includes a set of built-in pipes in the `@angular/common` package:
 ## Using pipes
 -->
 
+<a id="using-pipes"></a>
+
 ## 파이프 활용하기
 
 <!--
@@ -174,6 +180,8 @@ In this example, the value of `amount` is passed into the `CurrencyPipe` where t
 ### Combining multiple pipes in the same expression
 -->
 
+<a id="combining-multiple-pipes-in-the-same-expression"></a>
+
 ### 한 표현식에서 파이프 여러 개 사용하기
 
 <!--
@@ -197,6 +205,8 @@ The following example demonstrates a combination of pipes to display a localized
 <!--
 ### Passing parameters to pipes
 -->
+
+<a id="passing-parameters-to-pipes"></a>
 
 ### 파이프에 인자 전달하기
 
@@ -237,6 +247,8 @@ For example, we can also pass a second optional parameter to control the timezon
 <!--
 ## How pipes work
 -->
+
+<a id="how-pipes-work"></a>
 
 ## 파이프는 어떻게 동작할까요
 
@@ -297,6 +309,8 @@ export class AppComponent {
 <!--
 ### Pipe operator precedence
 -->
+
+<a id="pipe-operator-precedence"></a>
 
 ### 파이프 연산자 우선순위
 
@@ -361,6 +375,8 @@ Always use parentheses in your expressions when operator precedence may be ambig
 ### Change detection with pipes
 -->
 
+<a id="change-detection-with-pipes"></a>
+
 ### 파이프가 변화를 감지하는 방식
 
 <!--
@@ -380,6 +396,8 @@ As a result, this means that mutations to object properties or array items are n
 ## Creating custom pipes
 -->
 
+<a id="creating-custom-pipes"></a>
+
 ## 커스텀 파이프 정의하기
 
 <!--
@@ -392,8 +410,7 @@ The TypeScript class should additionally implement the `PipeTransform` interface
 
 Here is an example of a custom pipe that transforms strings to kebab case:
 
-```angular-ts
-// kebab-case.pipe.ts
+```angular-ts {header: "kebab-case.pipe.ts"}
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
@@ -417,8 +434,7 @@ TypeScript 클래스에 `@Pipe` 데코레이터를 붙이면 커스텀 파이프
 
 문자열을 케밥 케이스로 변환하는 커스텀 파이프는 이렇게 구현하면 됩니다:
 
-```angular-ts
-// kebab-case.pipe.ts
+```angular-ts {header: "kebab-case.pipe.ts"}
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
@@ -434,6 +450,8 @@ export class KebabCasePipe implements PipeTransform {
 <!--
 ### Using the `@Pipe` decorator
 -->
+
+<a id="using-the-pipe-decorator"></a>
 
 ### `@Pipe` 데코레이터 활용하기
 
@@ -469,6 +487,8 @@ export class MyCustomTransformationPipe {}
 ### Naming convention for custom pipes
 -->
 
+<a id="naming-convention-for-custom-pipes"></a>
+
 ### 커스텀 파이프의 명명규칙
 
 <!--
@@ -486,6 +506,8 @@ The naming convention for custom pipes consists of two conventions:
 <!--
 ### Implement the `PipeTransform` interface
 -->
+
+<a id="implement-the-pipetransform-interface"></a>
 
 ## `PipeTransform` 인터페이스 확장하기
 
@@ -520,6 +542,8 @@ export class MyCustomTransformationPipe implements PipeTransform {}
 <!--
 ### Transforming the value of a pipe
 -->
+
+<a id="transforming-the-value-of-a-pipe"></a>
 
 ### 입력받은 값 변환하기
 
@@ -559,6 +583,8 @@ export class MyCustomTransformationPipe implements PipeTransform {
 <!--
 ### Adding parameters to a custom pipe
 -->
+
+<a id="adding-parameters-to-a-custom-pipe"></a>
 
 ### 커스텀 파이프의 옵션 인자 추가하기
 
@@ -610,6 +636,8 @@ export class MyCustomTransformationPipe implements PipeTransform {
 ### Detecting change within arrays or objects
 -->
 
+<a id="detecting-change-within-arrays-or-objects"></a>
+
 ### 배열과 객체의 변화 감지하기
 
 <!--
@@ -654,3 +682,193 @@ export class JoinNamesImpurePipe implements PipeTransform {
 ```
 
 중요: 서드 파티 파이프 중에 성능 저하가 우려되는 파이프는 TypeScript 클래스와 `name`에 `Impure` 접미사를 붙여서 경고하는 경우도 있습니다.
+
+<!--
+## Using pipe logic outside templates
+
+Pipes are template operators designed to transform data declaratively in templates. When you need the same transformation logic in a service, a utility class, or any other non-template context, **avoid injecting the pipe class**. Pipes are not designed as injectable services.
+
+### Extract the logic from custom pipes
+
+When you create a custom pipe, extract the transformation into a standalone function. Have the pipe's `transform()` method delegate to that function, and import the function directly wherever else you need it.
+
+```ts {header: "kebab-case.ts"}
+export function toKebabCase(value: string): string {
+  return value.toLowerCase().replace(/ /g, '-');
+}
+```
+
+```ts {header: "kebab-case.pipe.ts" , prefer}
+import {Pipe, PipeTransform} from '@angular/core';
+import {toKebabCase} from './kebab-case';
+
+@Pipe({name: 'kebabCase'})
+export class KebabCasePipe implements PipeTransform {
+  transform(value: string): string {
+    return toKebabCase(value);
+  }
+}
+```
+
+```ts {header: "formatter.service.ts" , prefer}
+import {Service} from '@angular/core';
+import {toKebabCase} from './kebab-case';
+
+@Service()
+export class FormatterService {
+  formatSlug(title: string): string {
+    return toKebabCase(title);
+  }
+}
+```
+
+```ts {header: "formatter.service.ts" , avoid}
+import {inject, Service} from '@angular/core';
+import {KebabCasePipe} from './kebab-case.pipe';
+
+@Service()
+export class FormatterService {
+  // Avoid injecting the pipe class into services or other classes.
+  private kebabCasePipe = inject(KebabCasePipe);
+
+  formatSlug(title: string): string {
+    return this.kebabCasePipe.transform(title);
+  }
+}
+```
+
+### Use formatting functions for built-in pipes
+
+Angular's built-in locale-aware pipes each have a corresponding standalone formatting function exported from `@angular/common`. Use these functions instead of injecting the pipe class.
+
+| Pipe           | Standalone function |
+| -------------- | ------------------- |
+| `DatePipe`     | `formatDate`        |
+| `CurrencyPipe` | `formatCurrency`    |
+| `DecimalPipe`  | `formatNumber`      |
+| `PercentPipe`  | `formatPercent`     |
+
+```ts {prefer}
+import {Service, LOCALE_ID, inject} from '@angular/core';
+import {formatNumber} from '@angular/common';
+
+@Service()
+export class PriceService {
+  private locale = inject(LOCALE_ID);
+
+  format(value: number) {
+    return formatNumber(value, this.locale, '1.2-2');
+  }
+}
+```
+
+```ts {avoid}
+import {inject, Service} from '@angular/core';
+import {DecimalPipe} from '@angular/common';
+
+@Service()
+export class PriceService {
+  private decimalPipe = inject(DecimalPipe);
+
+  format(value: number) {
+    return this.decimalPipe.transform(value, '1.2-2');
+  }
+}
+```
+-->
+
+## 템플릿 밖에서 파이프 로직 사용하기 {#using-pipe-logic-outside-templates}
+
+파이프는 템플릿에서 데이터를 선언적으로 변환하는 템플릿 연산자입니다.
+서비스, 유틸리티 클래스 등 템플릿이 아닌 곳에서 같은 변환 로직이 필요하더라도 **파이프 클래스를 주입하지 마세요**.
+파이프는 의존성 주입용 서비스로 설계되지 않았습니다.
+
+### 커스텀 파이프의 로직 분리하기 {#extract-the-logic-from-custom-pipes}
+
+커스텀 파이프를 만들 때 변환 로직을 독립적인 함수로 분리하세요.
+파이프의 `transform()` 메서드는 해당 함수를 호출하게 하고, 다른 곳에서도 필요하면 함수를 직접 불러와서 사용하세요.
+
+```ts {header: "kebab-case.ts"}
+export function toKebabCase(value: string): string {
+  return value.toLowerCase().replace(/ /g, '-');
+}
+```
+
+```ts {header: "kebab-case.pipe.ts" , prefer}
+import {Pipe, PipeTransform} from '@angular/core';
+import {toKebabCase} from './kebab-case';
+
+@Pipe({name: 'kebabCase'})
+export class KebabCasePipe implements PipeTransform {
+  transform(value: string): string {
+    return toKebabCase(value);
+  }
+}
+```
+
+```ts {header: "formatter.service.ts" , prefer}
+import {Service} from '@angular/core';
+import {toKebabCase} from './kebab-case';
+
+@Service()
+export class FormatterService {
+  formatSlug(title: string): string {
+    return toKebabCase(title);
+  }
+}
+```
+
+```ts {header: "formatter.service.ts" , avoid}
+import {inject, Service} from '@angular/core';
+import {KebabCasePipe} from './kebab-case.pipe';
+
+@Service()
+export class FormatterService {
+  // 서비스나 다른 클래스에 파이프 클래스를 주입하지 마세요.
+  private kebabCasePipe = inject(KebabCasePipe);
+
+  formatSlug(title: string): string {
+    return this.kebabCasePipe.transform(title);
+  }
+}
+```
+
+### 내장 파이프의 포맷팅 함수 사용하기 {#use-formatting-functions-for-built-in-pipes}
+
+지역 정보를 사용하는 Angular 내장 파이프에는 각각 대응하는 독립적인 포맷팅 함수가 있으며, `@angular/common`에서 불러올 수 있습니다.
+파이프 클래스를 주입하는 대신 이 함수를 사용하세요.
+
+| 파이프         | 독립적인 함수    |
+| -------------- | ---------------- |
+| `DatePipe`     | `formatDate`     |
+| `CurrencyPipe` | `formatCurrency` |
+| `DecimalPipe`  | `formatNumber`   |
+| `PercentPipe`  | `formatPercent`  |
+
+```ts {prefer}
+import {Service, LOCALE_ID, inject} from '@angular/core';
+import {formatNumber} from '@angular/common';
+
+@Service()
+export class PriceService {
+  private locale = inject(LOCALE_ID);
+
+  format(value: number) {
+    return formatNumber(value, this.locale, '1.2-2');
+  }
+}
+```
+
+```ts {avoid}
+import {inject, Service} from '@angular/core';
+import {DecimalPipe} from '@angular/common';
+
+@Service()
+export class PriceService {
+  private decimalPipe = inject(DecimalPipe);
+
+  format(value: number) {
+    return this.decimalPipe.transform(value, '1.2-2');
+  }
+}
+```

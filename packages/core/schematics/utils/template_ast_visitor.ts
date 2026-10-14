@@ -37,6 +37,9 @@ import type {
   TmplAstTextAttribute,
   TmplAstUnknownBlock,
   TmplAstVariable,
+  TmplAstContentBlock,
+  TmplAstBoundaryBlock,
+  TmplAstBoundaryErrorBlock,
 } from '@angular/compiler';
 
 /**
@@ -89,6 +92,9 @@ export class TemplateAstVisitor implements TmplAstRecursiveVisitor {
   visitComponent(component: TmplAstComponent): void {}
   visitDirective(directive: TmplAstDirective): void {}
   visitSwitchExhaustiveCheck(block: TmplAstSwitchExhaustiveCheck): void {}
+  visitContentBlock(block: TmplAstContentBlock): void {}
+  visitBoundaryBlock(block: TmplAstBoundaryBlock): void {}
+  visitBoundaryErrorBlock(block: TmplAstBoundaryErrorBlock): void {}
 
   /**
    * Visits all the provided nodes in order using this Visitor's visit methods.

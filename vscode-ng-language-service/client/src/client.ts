@@ -26,12 +26,8 @@ import {
 } from '../../common/requests';
 import {NodeModule, resolve, Version} from '../../common/resolver';
 
-import {
-  isInsideStringLiteral,
-  isNotTypescriptOrSupportedDecoratorField,
-  isNotTypescriptOrSupportedDecoratorRange,
-} from './embedded_support';
 import {OpenJsDocLinkCommandId} from '../../common/initialize';
+import {isInsideStringLiteral, isNotTypescriptOrSupportedDecoratorField} from './embedded_support';
 
 interface GetTcbResponse {
   uri: vscode.Uri;
@@ -290,13 +286,16 @@ export class AngularLanguageClient implements vscode.Disposable {
             return null;
           }
 
-          // For TypeScript files, only request Angular inlay hints when the
-          // visible range intersects supported decorator fields (e.g. inline
-          // template/style metadata). This matches the guarding strategy used
-          // by other Angular LSP features and avoids work on unsupported TS regions.
-          if (!isNotTypescriptOrSupportedDecoratorRange(document, range)) {
+          if (
+            document.languageId === 'typescript' &&
+            !document.getText().includes('@angular/core')
+          ) {
             return null;
           }
+
+          // For TypeScript files, we always request Angular inlay hints.
+          // The server is responsible for filtering hints that do not intersect
+          // with the requested span and unsupported TS regions.
 
           return next(document, range, token);
         },
@@ -649,12 +648,24 @@ export class AngularLanguageClient implements vscode.Disposable {
         const isApproved = this.context.workspaceState.get<boolean>(stateKey);
 
         if (isApproved) {
+          if (!path.isAbsolute(workspaceTsdk)) {
+            const workspaceFolders = vscode.workspace.workspaceFolders || [];
+            for (const folder of workspaceFolders) {
+              const absolutePath = path.join(folder.uri.fsPath, workspaceTsdk);
+              if (fs.existsSync(path.join(absolutePath, 'tsserverlibrary.js'))) {
+                return absolutePath;
+              }
+            }
+            if (workspaceFolders.length > 0) {
+              return path.join(workspaceFolders[0].uri.fsPath, workspaceTsdk);
+            }
+          }
           return workspaceTsdk;
         }
 
         if (isApproved === undefined) {
           // Prompt the user asynchronously, without blocking current server initialization
-          this.promptForTsdkApproval(workspaceTsdk, stateKey);
+          this.promptForTsdkApproval(stateKey);
         }
 
         // Fall back to globalValue (or bundled) while waiting for approval or if rejected
@@ -664,12 +675,12 @@ export class AngularLanguageClient implements vscode.Disposable {
     return jsTsTsdkInspect?.globalValue?.trim() ?? tsTsdkInspect?.globalValue?.trim() ?? '';
   }
 
-  private async promptForTsdkApproval(workspaceTsdk: string, stateKey: string): Promise<void> {
+  private async promptForTsdkApproval(stateKey: string): Promise<void> {
     const allowOption = 'Allow';
     const disallowOption = 'Disallow';
 
     const choice = await vscode.window.showWarningMessage(
-      `This workspace configures a custom TypeScript compiler path (${workspaceTsdk}) via 'js/ts.tsdk.path' or 'typescript.tsdk'. ` +
+      `This workspace configures a custom TypeScript compiler path via 'js/ts.tsdk.path' or 'typescript.tsdk'. ` +
         `Do you want to allow the Angular Language Service to load the TypeScript compiler from this path?`,
       allowOption,
       disallowOption,

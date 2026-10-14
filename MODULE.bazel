@@ -4,42 +4,42 @@ module(
     name = "angular",
 )
 
-bazel_dep(name = "rules_pkg", version = "1.2.0")
-bazel_dep(name = "rules_nodejs", version = "6.7.4")
-bazel_dep(name = "aspect_rules_ts", version = "3.8.10")
-bazel_dep(name = "aspect_rules_js", version = "3.2.1")
-bazel_dep(name = "aspect_rules_esbuild", version = "0.26.0")
+bazel_dep(name = "rules_pkg", version = "1.3.0")
+bazel_dep(name = "rules_nodejs", version = "6.7.6")
+bazel_dep(name = "aspect_rules_ts", version = "3.10.1")
+bazel_dep(name = "aspect_rules_js", version = "3.5.1")
+bazel_dep(name = "aspect_rules_esbuild", version = "0.27.1")
 bazel_dep(name = "aspect_rules_jasmine", version = "2.0.4")
 bazel_dep(name = "aspect_rules_rollup", version = "2.0.1")
-bazel_dep(name = "bazel_skylib", version = "1.9.0")
-bazel_dep(name = "bazel_lib", version = "3.3.1")
-bazel_dep(name = "tar.bzl", version = "0.10.5")
-bazel_dep(name = "yq.bzl", version = "0.3.6")
+bazel_dep(name = "bazel_skylib", version = "1.9.2")
+bazel_dep(name = "bazel_lib", version = "3.7.2")
+bazel_dep(name = "tar.bzl", version = "0.10.9")
+bazel_dep(name = "yq.bzl", version = "0.4.0")
 bazel_dep(name = "rules_angular")
 git_override(
     module_name = "rules_angular",
-    commit = "1e2b7e6d6938874beb6259930998629119f391d0",
+    commit = "b5869cff3db5d2217b8896d483e75af8a1d26712",
     remote = "https://github.com/angular/rules_angular.git",
 )
 
 bazel_dep(name = "devinfra")
 git_override(
     module_name = "devinfra",
-    commit = "00ec31b42db276577188de9c0ca34d830c3f83dd",
+    commit = "5fb5ac8b22fb074ec50302e64f24c8397ea3b632",
     remote = "https://github.com/angular/dev-infra.git",
 )
 
 bazel_dep(name = "rules_sass")
 git_override(
     module_name = "rules_sass",
-    commit = "77d16f93b87e23ea38b0363d92d7fef5d1466269",
+    commit = "d6fac1939d9742f3e4429de7c8e3e8b2ebede350",
     remote = "https://github.com/angular/rules_sass.git",
 )
 
 bazel_dep(name = "rules_browsers")
 git_override(
     module_name = "rules_browsers",
-    commit = "ee292750196e44296e3567a391762ebf58c3650c",
+    commit = "a4c271a014f5ced5e700129199934614053bb3b1",
     remote = "https://github.com/angular/rules_browsers.git",
 )
 
@@ -49,15 +49,15 @@ use_repo(yq, "yq_toolchains")
 node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 node.toolchain(
     node_repositories = {
-        "22.22.3-darwin_arm64": ("node-v22.22.3-darwin-arm64.tar.gz", "node-v22.22.3-darwin-arm64", "0da7ff74ef8611328c8212f17943368713a2ad953fb7d89a8c8a0eae87c23207"),
-        "22.22.3-darwin_amd64": ("node-v22.22.3-darwin-x64.tar.gz", "node-v22.22.3-darwin-x64", "45830ba752fa0d892c6dcd640946669801293cac820a33591ded40ac075198ec"),
-        "22.22.3-linux_arm64": ("node-v22.22.3-linux-arm64.tar.xz", "node-v22.22.3-linux-arm64", "1c4a9933a5e45bc88f54f70b5f91232c127ec49f1a5989d23fb85824c7adf9b7"),
-        "22.22.3-linux_ppc64le": ("node-v22.22.3-linux-ppc64le.tar.xz", "node-v22.22.3-linux-ppc64le", "edb5478071bd1375e80195ca52f72823998bb5141b1a09e68bc54b3e2eb67754"),
-        "22.22.3-linux_s390x": ("node-v22.22.3-linux-s390x.tar.xz", "node-v22.22.3-linux-s390x", "ce398c057830d57a24c458177279a17bc51742d5c22dd4cbe97b10dbd43f2617"),
-        "22.22.3-linux_amd64": ("node-v22.22.3-linux-x64.tar.xz", "node-v22.22.3-linux-x64", "2e5d13569282d016861fae7c8f935e741693c269101a5bebcf761a5376d1f99f"),
-        "22.22.3-windows_amd64": ("node-v22.22.3-win-x64.zip", "node-v22.22.3-win-x64", "6c8d54f635feff4df76c2ca80f45332eb2ff57d25226edce36592e51a177ee33"),
+        "24.21.0-darwin_arm64": ("node-v24.21.0-darwin-arm64.tar.gz", "node-v24.21.0-darwin-arm64", "bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057"),
+        "24.21.0-darwin_amd64": ("node-v24.21.0-darwin-x64.tar.gz", "node-v24.21.0-darwin-x64", "1462cb3b3046b815cf8ea436d3da450ec1a9f11dac7e5a46b0ada5305d7e8097"),
+        "24.21.0-linux_arm64": ("node-v24.21.0-linux-arm64.tar.xz", "node-v24.21.0-linux-arm64", "6ad1325edbdb5649c379b75a237147a666c95d4f9ae8d340fef2d1575d289ad2"),
+        "24.21.0-linux_ppc64le": ("node-v24.21.0-linux-ppc64le.tar.xz", "node-v24.21.0-linux-ppc64le", "1936fd64623a2f98d1fb31b456686d10c30e92639899cfefdefa8835d22adccd"),
+        "24.21.0-linux_s390x": ("node-v24.21.0-linux-s390x.tar.xz", "node-v24.21.0-linux-s390x", "2ef7e2ecbf7a6c2f3d08d106f6b2f279419c6dac89fe91b8cad193af7890082c"),
+        "24.21.0-linux_amd64": ("node-v24.21.0-linux-x64.tar.xz", "node-v24.21.0-linux-x64", "fd8e59d5a511510f6a298afb548f18c7d2b1be404d8b4a27d94fbe49f56cb2d6"),
+        "24.21.0-windows_amd64": ("node-v24.21.0-win-x64.zip", "node-v24.21.0-win-x64", "158f7685b44de51f6c0df1d153526cbcd3e1bc739a8dfc607721cef75de9e541"),
     },
-    node_version = "22.22.3",
+    node_version = "24.21.0",
 )
 use_repo(node, "nodejs_toolchains")
 use_repo(node, "nodejs_darwin_amd64")
@@ -71,8 +71,8 @@ use_repo(node, "nodejs_windows_amd64")
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
 pnpm.pnpm(
     name = "pnpm",
-    pnpm_version = "11.5.0",
-    pnpm_version_integrity = "sha512-2/zE+Bz0hZev1Lw5H/3xLBHxqfuDo5W/prCi2cwv2P/rr9scy9UpYyFT95OQTCYVt/Cf4aNFRz/Rw1hFFyqOsQ==",
+    pnpm_version = "11.28.5",
+    pnpm_version_integrity = "sha512-SEVj0wtMKtJ8tIqpT/KzAtvOvI/2vyiBbCWJiG4UbOf3bzVPO8GkOOb16XaMMCqgpvet2CMpA81M+BQmy8FNng==",
 )
 use_repo(pnpm, "pnpm")
 

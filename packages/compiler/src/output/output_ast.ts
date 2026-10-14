@@ -1401,6 +1401,7 @@ export class LiteralMapPropertyAssignment {
     public key: string,
     public value: Expression,
     public quoted: boolean,
+    public leadingComments?: LeadingComment[],
   ) {}
 
   isEquivalent(e: LiteralMapPropertyAssignment): boolean {
@@ -1408,7 +1409,12 @@ export class LiteralMapPropertyAssignment {
   }
 
   clone(): LiteralMapPropertyAssignment {
-    return new LiteralMapPropertyAssignment(this.key, this.value.clone(), this.quoted);
+    return new LiteralMapPropertyAssignment(
+      this.key,
+      this.value.clone(),
+      this.quoted,
+      this.leadingComments ? [...this.leadingComments] : undefined,
+    );
   }
 
   isConstant() {
@@ -1614,7 +1620,7 @@ export class DeclareVarStmt extends Statement {
     leadingComments?: LeadingComment[],
   ) {
     super(modifiers, sourceSpan, leadingComments);
-    this.type = type || (value && value.type) || null;
+    this.type = type || null;
   }
   override isEquivalent(stmt: Statement): boolean {
     return (

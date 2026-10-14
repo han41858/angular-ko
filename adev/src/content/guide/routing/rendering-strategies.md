@@ -120,6 +120,8 @@ JavaScript가 로드된 뒤 모든 내용을 브라우저에서 렌더링합니�
 
 <a id="static-site-generation-ssgprerendering"></a>
 
+<a id="static-site-generation-ssg-prerendering"></a>
+
 ## 정적 사이트 생성(SSG/프리렌더링)
 
 <!--
@@ -321,6 +323,8 @@ Once the client renders the page, Angular [hydrates](/guide/hydration#what-is-hy
 -->
 
 <a id="making-ssrssg-interactive-with-hydration"></a>
+
+<a id="making-ssr-ssg-interactive-with-hydration"></a>
 
 ## 하이드레이션으로 SSR/SSG에 상호작용 추가하기
 

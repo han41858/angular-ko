@@ -99,6 +99,8 @@ export class App {
 
 <docs-workflow>
 
+<a id="import-the-lowercase-pipe"></a>
+
 <docs-step title="`LowerCase` 파이프 불러오기">
 
 먼저, `app.ts` 파일을 열고 `@angular/common` 패키지로 제공되는 `LowerCasePipe`를 로드하세요.
@@ -108,6 +110,8 @@ import {LowerCasePipe} from '@angular/common';
 ```
 
 </docs-step>
+
+<a id="add-the-pipe-to-the-template-imports"></a>
 
 <docs-step title="imports 배열에 파이프를 추가합니다">
 
@@ -121,6 +125,8 @@ import {LowerCasePipe} from '@angular/common';
 ```
 
 </docs-step>
+
+<a id="add-the-pipe-to-the-template"></a>
 
 <docs-step title="템플릿에 파이프를 적용하세요">
 

@@ -14,6 +14,8 @@ TIP: This guide assumes you've already read the [Essentials Guide](essentials). 
 ## ChangeDetectionStrategy
 -->
 
+<a id="changedetectionstrategy"></a>
+
 ## 변화 감지 정책
 
 <!--
@@ -39,7 +41,7 @@ components, traversing upwards through the application tree.
 `@Component` 데코레이터의 `changeDetection` 옵션을 지정하면 **변화 감지 모드** 를 설정할 수 있습니다.
 변화 감지 모드는 두 가지가 있습니다.
 
-기본 모드는 **`ChangeDetectionStrategy.Eager`/`Default`** 입니다.
+**`ChangeDetectionStrategy.Eager`/`Default`** 는 선택해서 사용할 수 있는 모드입니다.
 이 모드를 지정하면 Angular가 전역 범위의 컴포넌트 DOM을 모두 검사하고 갱신합니다.
 변화 감지는 사용자의 상호작용, 네트워크 응답, 타이머 만료 등으로 동작합니다.
 
@@ -56,6 +58,8 @@ Angular v22 부터는 **`ChangeDetectionStrategy.OnPush`** 가 기본값입니�
 ## PreserveWhitespaces
 -->
 
+<a id="preservewhitespaces"></a>
+
 ## 공백문자 유지
 
 <!--
@@ -70,6 +74,8 @@ newlines and indentation. You can change this setting by explicitly setting `pre
 <!--
 ## Custom element schemas
 -->
+
+<a id="custom-element-schemas"></a>
 
 ## 커스텀 엘리먼트 스키마
 
@@ -89,7 +95,7 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 export class ComponentWithCustomElements { }
 ```
 
-Angular does not support any other schemas at this time.
+Angular also provides `NO_ERRORS_SCHEMA`, which allows any element and any property.
 -->
 
 기본적으로 Angular는 식별할 수 없는 HTML 엘리먼트를 발견하면 에러를 발생시킵니다.
@@ -106,4 +112,4 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 export class ComponentWithCustomElements { }
 ```
 
-이렇게 구현하면 Angular는 모든 스키마 지원을 비활성화합니다.
+Angular는 모든 엘리먼트와 프로퍼티를 허용하는 `NO_ERRORS_SCHEMA`도 제공합니다.

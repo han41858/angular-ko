@@ -47,14 +47,6 @@ To specify and generate a particular schematic, or a collection of schematics, u
 ng generate my-schematic-collection:my-schematic-name
 
 ```
-
-or
-
-```shell
-
-ng generate my-schematic-name --collection collection-name
-
-```
 -->
 
 스키매틱은 Angular 생태계의 일부입니다.
@@ -69,14 +61,6 @@ Angular CLI는 스키매틱으로 웹 앱 프로젝트에 변환 작업을 적�
 ```shell
 
 ng generate my-schematic-collection:my-schematic-name
-
-```
-
-또는
-
-```shell
-
-ng generate my-schematic-name --collection collection-name
 
 ```
 
@@ -237,7 +221,7 @@ We analyzed your package.json, there are some packages to update:
 
 If you pass the command a set of libraries to update, it updates those libraries, their peer dependencies, and the peer dependencies that depend on them.
 
-HELPFUL: If there are inconsistencies \(for example, if peer dependencies cannot be matched by a simple [semver](https://semver.io) range\), the command generates an error and does not change anything in the workspace.
+HELPFUL: If there are inconsistencies \(for example, if peer dependencies cannot be matched by a simple [semver](https://semver.org) range\), the command generates an error and does not change anything in the workspace.
 
 We recommend that you do not force an update of all dependencies by default.
 Try updating specific dependencies first.
@@ -276,7 +260,7 @@ We analyzed your package.json, there are some packages to update:
 
 업데이트할 라이브러리 목록을 명령어에 전달하면 해당 라이브러리, 그 피어 의존성, 해당 라이브러리를 피어 의존성으로 사용하는 의존성을 업데이트합니다.
 
-도움말: 의존성이 일관되지 않으면(예를 들어 간단한 [semver](https://semver.io) 범위로 피어 의존성을 맞출 수 없다면) 명령어는 오류를 발생시키고 워크스페이스를 변경하지 않습니다.
+도움말: 의존성이 일관되지 않으면(예를 들어 간단한 [semver](https://semver.org) 범위로 피어 의존성을 맞출 수 없다면) 명령어는 오류를 발생시키고 워크스페이스를 변경하지 않습니다.
 
 처음부터 모든 의존성을 강제로 업데이트하는 방식은 권장하지 않습니다.
 먼저 특정 의존성부터 업데이트해 보세요.

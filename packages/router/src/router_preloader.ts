@@ -125,7 +125,7 @@ export class RouterPreloader implements OnDestroy {
   }
 
   private processRoutes(injector: EnvironmentInjector, routes: Routes): Observable<void> {
-    const res: Observable<any>[] = [];
+    const res: Observable<void>[] = [];
     for (const route of routes) {
       if (route.providers && !route._injector) {
         route._injector = createEnvironmentInjector(
@@ -151,7 +151,8 @@ export class RouterPreloader implements OnDestroy {
       // at all. Code splitting and lazy loading is separate from client-side authorization checks
       // and should not be used as a security measure to prevent loading of code.
       if (
-        (route.loadChildren && !route._loadedRoutes && route.canLoad === undefined) ||
+        // TODO: Remove `canLoad` check once removed from 3p.
+        (route.loadChildren && !route._loadedRoutes && (route as any).canLoad === undefined) ||
         (route.loadComponent && !route._loadedComponent)
       ) {
         res.push(this.preloadConfig(injectorForCurrentRoute, route));
@@ -169,7 +170,8 @@ export class RouterPreloader implements OnDestroy {
         return of(null);
       }
       let loadedChildren$: Observable<LoadedRouterConfig | null>;
-      if (route.loadChildren && route.canLoad === undefined) {
+      // TODO: Remove `canLoad` check once removed from 3p.
+      if (route.loadChildren && (route as any).canLoad === undefined) {
         loadedChildren$ = from(this.loader.loadChildren(injector, route));
       } else {
         loadedChildren$ = of(null);

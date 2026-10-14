@@ -26,6 +26,8 @@ export class Identifiers {
   static elementEnd: o.ExternalReference = {name: 'ɵɵelementEnd', moduleName: CORE};
 
   static foreignComponent: o.ExternalReference = {name: 'ɵɵforeignComponent', moduleName: CORE};
+  static foreignContent: o.ExternalReference = {name: 'ɵɵforeignContent', moduleName: CORE};
+  static foreignContentFn: o.ExternalReference = {name: 'ɵɵforeignContentFn', moduleName: CORE};
 
   static domElement: o.ExternalReference = {name: 'ɵɵdomElement', moduleName: CORE};
   static domElementStart: o.ExternalReference = {name: 'ɵɵdomElementStart', moduleName: CORE};
@@ -200,6 +202,9 @@ export class Identifiers {
     moduleName: CORE,
   };
   static conditional: o.ExternalReference = {name: 'ɵɵconditional', moduleName: CORE};
+  static boundaryCreate: o.ExternalReference = {name: 'ɵɵboundaryCreate', moduleName: CORE};
+  static boundaryUpdate: o.ExternalReference = {name: 'ɵɵboundaryUpdate', moduleName: CORE};
+  static getBoundary: o.ExternalReference = {name: 'ɵɵgetBoundary', moduleName: CORE};
   static repeater: o.ExternalReference = {name: 'ɵɵrepeater', moduleName: CORE};
   static repeaterCreate: o.ExternalReference = {name: 'ɵɵrepeaterCreate', moduleName: CORE};
   static repeaterTrackByIndex: o.ExternalReference = {

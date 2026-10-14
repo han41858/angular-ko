@@ -2,6 +2,8 @@
 # Control Flow in Components - `@if`
 -->
 
+<a id="control-flow-in-components-if"></a>
+
 # 흐름 제어 - `@if`
 
 <!--
@@ -36,7 +38,7 @@ export class App {
 Two things to take note of:
 
 - There is an `@` prefix for the `if` because it is a special type of syntax called [Angular template syntax](guide/templates)
-- For applications using v16 and older please refer to the [Angular documentation for NgIf](guide/directives/structural-directives) for more information.
+- For applications that still use `*ngIf`, please refer to the [Angular documentation for NgIf](guide/directives/structural-directives) for more information.
 
 <docs-workflow>
 
@@ -56,8 +58,11 @@ Here's an example:
 
 ```angular-html
 template: `
-  @if (isServerRunning) { ... }
-  @else { ... }
+@if (isServerRunning) {
+  ...
+} @else {
+  ...
+}
 `;
 ```
 
@@ -102,9 +107,11 @@ class App {
 두 가지가 중요합니다:
 
 - `if` 앞에는 `@`가 붙습니다. 이 문자는 [Angular 템플릿 문법](guide/templates)이라는 것을 의미합니다.
-- v16 버전이나 이전 버전에서는 [Angular NgIf 문서](guide/directives/structural-directives) 를 참고하세요.
+- 아직 `*ngIf`를 사용하는 애플리케이션에서는 [Angular NgIf 문서](guide/directives/structural-directives) 를 참고하세요.
 
 <docs-workflow>
+
+<a id="create-a-property-called-isserverrunning"></a>
 
 <docs-step title="`isServerRunning` 프로퍼티를 추가해 봅시다">
 
@@ -112,11 +119,15 @@ class App {
 
 </docs-step>
 
+<a id="use-if-in-the-template"></a>
+
 <docs-step title="템플릿에 `@if` 사용하기">
 
 `isServerRunning`의 값이 `true`라면 `Yes, the server is running`을 표시하도록 템플릿을 수정합니다.
 
 </docs-step>
+
+<a id="use-else-in-the-template"></a>
 
 <docs-step title="템플릿에 `@else` 사용하기">
 

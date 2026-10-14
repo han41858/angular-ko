@@ -35,7 +35,6 @@ Angular 컴파일러가 직접 지원하는 특별한 API이며, 엘리먼트에
 ## `animate.enter`
 -->
 
-<a id="animateenter"></a>
 
 ## `animate.enter`
 
@@ -96,7 +95,6 @@ CSS 전환을 사용할 때는 한 가지 유의할 점이 있습니다.
 ## `animate.leave`
 -->
 
-<a id="animateleave"></a>
 
 ## `animate.leave`
 
@@ -153,25 +151,31 @@ NOTE: When using multiple keyframe animations or transition properties on an ele
 ### 엘리먼트 제거 순서
 
 <!--
-There is some nuance to how `animate.leave` animations are run and when an animation will occur. `animate.leave` works if it is placed on the element that is being removed, and if `animate.leave` is placed on an element that is a _descendent_ of the element being removed, those child animations will happen _before_ the parent node is removed from the DOM. This ensures that you can confidently animate away child elements without the parent node disappearing prematurely.
+There is some nuance to how `animate.leave` animations are run and when an animation will occur. `animate.leave` works if it is placed on the element that is being removed, and if `animate.leave` is placed on an element that is a _descendant_ of the element being removed _within the same component template_, those child `animate.leave` animations will happen _before_ the parent node is removed from the DOM. This ensures that you can confidently animate away child elements without the parent node disappearing prematurely.
 
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts">
-    <docs-code header="leave.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts" />
-    <docs-code header="leave.html" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.html" />
-    <docs-code header="leave.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.css"/>
+    <docs-code header="leave-parent.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts" />
+    <docs-code header="leave-parent.html" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.html" />
+    <docs-code header="leave-parent.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.css"/>
 </docs-code-multifile>
 -->
 
 `animate.leave` 애니메이션의 실행 방식과 시점에는 알아둘 세부 사항이 있습니다.
 제거되는 엘리먼트에 `animate.leave`가 지정되어 있으면 애니메이션이 실행됩니다.
-제거되는 엘리먼트의 _하위_ 엘리먼트에 `animate.leave`가 지정되어 있으면, 자식 애니메이션은 부모 노드가 DOM에서 제거되기 _전에_ 실행됩니다.
+_같은 컴포넌트 템플릿 안에서_ 제거되는 엘리먼트의 _하위_ 엘리먼트에 `animate.leave`가 지정되어 있으면, 자식 `animate.leave` 애니메이션은 부모 노드가 DOM에서 제거되기 _전에_ 실행됩니다.
 따라서 부모 노드가 너무 일찍 사라지는 일을 걱정하지 않고 자식 엘리먼트의 퇴장 애니메이션을 적용할 수 있습니다.
 
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts">
-    <docs-code header="leave.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts" />
-    <docs-code header="leave.html" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.html" />
-    <docs-code header="leave.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.css"/>
+    <docs-code header="leave-parent.ts" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.ts" />
+    <docs-code header="leave-parent.html" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.html" />
+    <docs-code header="leave-parent.css" path="adev/src/content/examples/animations/src/app/enter-and-leave/leave-parent.css"/>
 </docs-code-multifile>
+
+<!--
+IMPORTANT: Child animations fire only for elements within the same component template. If an element being removed contains child components, any `animate.leave` animations defined inside those child component templates will **not** run before the parent is removed. To animate a child component on removal, apply `animate.leave` to the child component's host element directly within the parent template instead, or programmatically handle triggering the animation in the child component and delaying the removal of the parent until that animation completes.
+-->
+
+중요: 자식 애니메이션은 같은 컴포넌트 템플릿 안의 엘리먼트에 대해서만 실행됩니다. 제거할 엘리먼트에 자식 컴포넌트가 있으면, 자식 컴포넌트 템플릿 안에 정의된 `animate.leave` 애니메이션은 부모가 제거되기 전에 실행되지 **않습니다**. 자식 컴포넌트를 제거할 때 애니메이션을 실행하려면 부모 템플릿에서 자식 컴포넌트의 호스트 엘리먼트에 `animate.leave`를 직접 적용하세요. 또는 코드로 자식 컴포넌트의 애니메이션을 실행하고, 애니메이션이 끝날 때까지 부모 제거를 지연할 수 있습니다.
 
 <!--
 ## Event Bindings, Functions, and Third-party Libraries

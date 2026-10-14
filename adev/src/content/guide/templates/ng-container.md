@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 # Grouping elements with ng-container
 -->
 
@@ -58,6 +58,8 @@ Angular ignores all attribute bindings and event listeners applied to `<ng-conta
 ## Using `<ng-container>` to display dynamic contents
 -->
 
+<a id="using-ng-container-to-display-dynamic-contents"></a>
+
 ## 동적으로 렌더링하기
 
 <!--
@@ -69,6 +71,8 @@ Angular ignores all attribute bindings and event listeners applied to `<ng-conta
 <!--
 ### Rendering components
 -->
+
+<a id="rendering-components"></a>
 
 ### 컴포넌트 렌더링하기
 
@@ -111,6 +115,8 @@ export class UserProfile {
 <!--
 ### Rendering template fragments
 -->
+
+<a id="rendering-template-fragments"></a>
 
 ### 템플릿 조각 렌더링하기
 
@@ -166,6 +172,8 @@ NgTemplateOutlet에 대해 자세하게 알아보려면 [NgTemplateOutlets API �
 ## Using `<ng-container>` with structural directives
 -->
 
+<a id="using-ng-container-with-structural-directives"></a>
+
 ## `<ng-container>`와 구조 디렉티브 함께 사용하기
 
 <!--
@@ -202,6 +210,8 @@ You can also apply structural directives to `<ng-container>` elements. Common ex
 <!--
 ## Using `<ng-container>` for injection
 -->
+
+<a id="using-ng-container-for-injection"></a>
 
 ## 의존성 주입에 `<ng-container>` 사용하기
 

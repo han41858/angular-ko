@@ -71,6 +71,8 @@ Great job learning these core concepts of working with forms in Angular. If you 
 
 <docs-workflow>
 
+<a id="import-validators"></a>
+
 <docs-step title="유효성 검사 함수를 로드합니다">
 
 Angular는 자체 유효성 검사 툴을 제공합니다.
@@ -84,6 +86,8 @@ export class App {}
 ```
 
 </docs-step>
+
+<a id="add-validation-to-form"></a>
 
 <docs-step title="폼에 유효성 검사 함수를 적용하세요">
 
@@ -100,6 +104,8 @@ profileForm = new FormGroup({
 ```
 
 </docs-step>
+
+<a id="check-form-validation-in-template"></a>
 
 <docs-step title="템플릿에 유효성 검사 함수를 적용하세요">
 

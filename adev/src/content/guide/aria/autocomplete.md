@@ -1,10 +1,8 @@
 <!--
-<docs-decorative-header title="Autocomplete">
-</docs-decorative-header>
+# Autocomplete
 -->
 
-<docs-decorative-header title="자동 완성">
-</docs-decorative-header>
+# 자동 완성
 
 <!--
 ## Overview
@@ -496,214 +494,27 @@ describe('MyAutocompleteComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Combobox`](/api/aria/combobox/Combobox)
+- [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
+- [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
+- [`Listbox`](/api/aria/listbox/Listbox)
+- [`Option`](/api/aria/listbox/Option)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### Combobox Directive
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="combobox-directive"></a>
-
-### Combobox 디렉티브
-
-<!--
-The `ngCombobox` directive is applied directly onto the editable text `<input>` or `<textarea>` to manage keyboard triggers and popover states.
--->
-
-`ngCombobox` 디렉티브는 편집 가능한 텍스트 `<input>`이나 `<textarea>`에 직접 적용해서 키보드 트리거와 팝오버 상태를 관리합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property           | Type                  | Default     | Description                                                     |
-| ------------------ | --------------------- | ----------- | --------------------------------------------------------------- |
-| `disabled`         | `boolean`             | `false`     | Disables the combobox                                           |
-| `softDisabled`     | `boolean`             | `true`      | Focusable when disabled                                         |
-| `inlineSuggestion` | `string \| undefined` | `undefined` | Displays an inline completion suggestion for autocomplete modes |
--->
-
-| 프로퍼티           | 타입                  | 기본값      | 설명                                              |
-| ------------------ | --------------------- | ----------- | ------------------------------------------------- |
-| `disabled`         | `boolean`             | `false`     | 콤보박스를 비활성화합니다.                        |
-| `softDisabled`     | `boolean`             | `true`      | 비활성화되어도 포커스를 받을 수 있도록 합니다.    |
-| `inlineSuggestion` | `string \| undefined` | `undefined` | 자동 완성 모드에서 인라인 완성 추천을 표시합니다. |
-
-<!--
-#### Models
--->
-
-<a id="models"></a>
-
-#### 모델
-
-<!--
-| Property   | Type                   | Default | Description                                                       |
-| ---------- | ---------------------- | ------- | ----------------------------------------------------------------- |
-| `value`    | `ModelSignal<string>`  | `''`    | Two-way bindable value of the input using `[(value)]`             |
-| `expanded` | `ModelSignal<boolean>` | `false` | Two-way bindable expanded state of the popup using `[(expanded)]` |
-
----
--->
-
-| 프로퍼티   | 타입                   | 기본값  | 설명                                                             |
-| ---------- | ---------------------- | ------- | ---------------------------------------------------------------- |
-| `value`    | `ModelSignal<string>`  | `''`    | `[(value)]`로 양방향 바인딩할 수 있는 입력값입니다.              |
-| `expanded` | `ModelSignal<boolean>` | `false` | `[(expanded)]`로 양방향 바인딩할 수 있는 팝업의 펼침 상태입니다. |
-
----
-
-<!--
-### ComboboxPopup Directive
--->
-
-<a id="comboboxpopup-directive"></a>
-
-### ComboboxPopup 디렉티브
-
-<!--
-A structural directive applied to `<ng-template>` to mark the container used as the popup.
--->
-
-팝업으로 사용할 컨테이너를 지정하기 위해 `<ng-template>`에 적용하는 구조 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type       | Description                                 |
-| ---------- | ---------- | ------------------------------------------- |
-| `combobox` | `Combobox` | Required reference to the parent `Combobox` |
-
----
--->
-
-| 프로퍼티   | 타입       | 설명                                |
-| ---------- | ---------- | ----------------------------------- |
-| `combobox` | `Combobox` | 부모 `Combobox`의 참조입니다(필수). |
-
----
-
-<!--
-### ComboboxWidget Directive
--->
-
-<a id="comboboxwidget-directive"></a>
-
-### ComboboxWidget 디렉티브
-
-<!--
-Applied to the popup content container to bridge active-descendant focus changes to the input trigger.
--->
-
-활성 자손의 포커스 변경을 입력 트리거에 전달하기 위해 팝업 콘텐츠 컨테이너에 적용합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-2"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property           | Type                  | Description                                                                       |
-| ------------------ | --------------------- | --------------------------------------------------------------------------------- |
-| `activeDescendant` | `string \| undefined` | The ID of the currently active descendant (bound to `listbox.activeDescendant()`) |
-
----
--->
-
-| 프로퍼티           | 타입                  | 설명                                                                    |
-| ------------------ | --------------------- | ----------------------------------------------------------------------- |
-| `activeDescendant` | `string \| undefined` | 현재 활성 자손의 ID입니다(`listbox.activeDescendant()`에 바인딩합니다). |
-
----
-
-<!--
-### Listbox Directives
--->
-
-<a id="listbox-directives"></a>
-
-### Listbox 디렉티브
-
-<!--
-Autocomplete suggestion lists use the standard standalone listbox directives.
--->
-
-자동 완성 추천 목록은 표준 독립형 리스트박스 디렉티브를 사용합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-3"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property        | Type                               | Default    | Description                                                                                          |
-| --------------- | ---------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------- |
-| `selectionMode` | `'follow'` \| `'explicit'`         | `'follow'` | In manual/explicit mode, updates are committed explicitly on click/Enter rather than following focus |
-| `focusMode`     | `'roving'` \| `'activedescendant'` | `'roving'` | Set to `'activedescendant'` so browser focus stays on the trigger input                              |
-| `tabIndex`      | `number`                           | `0`        | Set to `-1` to prevent keyboard tab focus from entering the popup listbox container                  |
--->
-
-| 프로퍼티        | 타입                               | 기본값     | 설명                                                                                               |
-| --------------- | ---------------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
-| `selectionMode` | `'follow'` \| `'explicit'`         | `'follow'` | 수동/명시적 모드에서는 포커스에 따라 값을 변경하지 않고 클릭/Enter로 변경을 명시적으로 확정합니다. |
-| `focusMode`     | `'roving'` \| `'activedescendant'` | `'roving'` | 브라우저 포커스를 트리거 입력란에 유지하려면 `'activedescendant'`로 설정합니다.                    |
-| `tabIndex`      | `number`                           | `0`        | Tab 키 포커스가 팝업 리스트박스 컨테이너로 들어가지 않도록 `-1`로 설정합니다.                      |
-
-<!--
-#### Models
--->
-
-<a id="models-1"></a>
-
-#### 모델
-
-<!--
-| Property | Type                 | Description                                                 |
-| -------- | -------------------- | ----------------------------------------------------------- |
-| `value`  | `ModelSignal<any[]>` | Two-way bindable array of selected values using `[(value)]` |
-
----
--->
-
-| 프로퍼티 | 타입                 | 설명                                                          |
-| -------- | -------------------- | ------------------------------------------------------------- |
-| `value`  | `ModelSignal<any[]>` | `[(value)]`로 양방향 바인딩할 수 있는 선택된 값의 배열입니다. |
-
----
-
-<!--
-### Related components
--->
-
-<a id="related-components"></a>
-
-### 관련 컴포넌트
-
-<!--
-Autocomplete uses standard standalone [Listbox](/api/aria/listbox/Listbox) and [Option](/api/aria/listbox/Option) directives. See the [Listbox documentation](/guide/aria/listbox) for advanced options.
--->
-
-자동 완성은 표준 독립형 [Listbox](/api/aria/listbox/Listbox)와 [Option](/api/aria/listbox/Option) 디렉티브를 사용합니다.
-고급 옵션은 [리스트박스 문서](/guide/aria/listbox)를 참고하세요.
+- [`Combobox`](/api/aria/combobox/Combobox)
+- [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
+- [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
+- [`Listbox`](/api/aria/listbox/Listbox)
+- [`Option`](/api/aria/listbox/Option)

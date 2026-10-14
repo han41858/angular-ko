@@ -15,6 +15,8 @@ Services are reusable pieces of code that you can share across your Angular appl
 ## Creating a service
 -->
 
+<a id="creating-a-service"></a>
+
 ## 서비스 생성하기
 
 <!--
@@ -80,86 +82,59 @@ export class BasicDataStore {
 
 <!--
 ## How services become available
+
+Services are provisioned at the root level by default. When a service is provided globally, Angular guarantees three main benefits:
+
+- **Singleton Instance:** Creates a single, shared instance for the entire application.
+- **Global Availability:** Automatically accessible anywhere without manual provider registration.
+- **Tree-shakability:** Ensures the service is excluded from the final production bundle if your code never explicitly uses it.
+
+### Using the `@Service` vs `@Injectable` decorator
+
+The `@Service` decorator serves as a modern, ergonomic shorthand for the traditional `@Injectable({ providedIn: 'root' })` syntax.
+
+Use this quick reference to decide which decorator fits your scenario:
+
+| Feature / Requirement                         | `@Service` | `@Injectable`                           |
+| --------------------------------------------- | ---------- | --------------------------------------- |
+| **`inject()` function support**               | Yes        | Yes                                     |
+| **Constructor-based DI**                      | ❌ No      | Yes                                     |
+| **Implicit root singleton provider**          | Yes        | ❌ No (requires `{providedIn: 'root'}`) |
+| **Advanced provider keys (`useClass`, etc.)** | ❌ No      | Yes                                     |
+| **Custom initialization factories**           | Yes        | Yes                                     |
+| **Non-root scopes (`platform`, etc.)**        | ❌ No      | Yes                                     |
 -->
 
-## 서비스는 어떻게 사용할 수 있나요
+## 서비스는 어떻게 사용할 수 있나요 {#how-services-become-available}
 
-<!--
-When you use `@Injectable({ providedIn: 'root' })` in your service, Angular:
+서비스는 기본적으로 최상위 계층에 제공됩니다. 서비스를 전역으로 제공하면 Angular가 다음 세 가지 이점을 보장합니다.
 
-- **Creates a single instance** (a singleton) for the entire application
-- **Makes it available throughout your application** without additional configuration
-- **Enables tree-shaking** so Angular only includes the service in your JavaScript bundle if you actually use it
+- **싱글턴 인스턴스:** 애플리케이션 전체에서 공유하는 인스턴스를 하나만 생성합니다.
+- **전역 사용:** 프로바이더를 수동으로 등록하지 않아도 어디서든 사용할 수 있습니다.
+- **트리 셰이킹:** 코드에서 서비스를 명시적으로 사용하지 않으면 최종 프로덕션 빌드 결과물에서 제외합니다.
 
-This is the recommended approach for most services.
--->
+<a id="using-the-service-decorator"></a>
 
-서비스 데코레이터에 `@Injectable({ providedIn: 'root' })` 라고 사용하면 Angular는:
+### `@Service`와 `@Injectable` 데코레이터 선택하기 {#using-the-service-vs-injectable-decorator}
 
-- 애플리케이션 전역 범위에 **인스턴스를 하나만 생성합니다.**
-- **애플리케이션 전역 범위에 사용할 수 있도록 등록합니다.**
-- 서비스가 실제로 사용되었을 때만 JavaScript 빌드 결과물에 포함되도록 **트리 셰이킹(tree-shaking)이 가능하도록 구성합니다.**
+`@Service` 데코레이터는 기존의 `@Injectable({ providedIn: 'root' })` 문법을 더 간편하게 작성하는 현대적인 단축 문법입니다.
 
-이 방식이 서비스를 사용하는 모범 사례입니다.
+다음 표를 참고해서 상황에 맞는 데코레이터를 선택하세요.
 
-<!--
-## Using the `@Service` decorator
--->
-
-## `@Service` 데코레이터
-
-<!--
-For the common case of a singleton service available throughout your application, Angular provides the `@Service` decorator as a more ergonomic alternative to `@Injectable({providedIn: 'root'})`.
-
-The earlier `BasicDataStore` example can be rewritten with `@Service`:
-
-```ts {header: "src/app/basic-data-store.ts"}
-import {Service} from '@angular/core';
-
-@Service()
-export class BasicDataStore {
-  private data: string[] = [];
-
-  addData(item: string): void {
-    this.data.push(item);
-  }
-
-  getData(): string[] {
-    return [...this.data];
-  }
-}
-```
-
-This behaves the same as the `@Injectable({providedIn: 'root'})` version above: Angular creates a single instance, makes it available everywhere, and tree-shakes it from the bundle if it is never injected.
--->
-
-앱 전역에서 싱글턴으로 사용할 서비스는 `@Service` 데코레이터를 붙여서 정의합니다.
-
-위에서 살펴본 `BasicDataStore`에도 `@Service` 데코레이터가 사용된 것을 확인할 수 있습니다.
-
-```ts {header: "src/app/basic-data-store.ts"}
-import {Service} from '@angular/core';
-
-@Service()
-export class BasicDataStore {
-  private data: string[] = [];
-
-  addData(item: string): void {
-    this.data.push(item);
-  }
-
-  getData(): string[] {
-    return [...this.data];
-  }
-}
-```
-
-이전 버전까지 `@Injectable({providedIn: 'root'})`를 사용했던 방식과 같습니다.
-Angular는 이 서비스의 인스턴스를 하나만 생성하며, 앱 어디에든 의존성으로 주입할 수 있고, 실제로 사용되지 않으면 트리 셰이킹되면서 빌드 결과물에 포함되지 않습니다.
+| 기능 / 요구사항                       | `@Service`       | `@Injectable`                                  |
+| ------------------------------------- | ---------------- | ---------------------------------------------- |
+| **`inject()` 함수 지원**              | 지원             | 지원                                           |
+| **생성자 기반 DI**                    | ❌ 지원하지 않음 | 지원                                           |
+| **암묵적인 최상위 싱글턴 프로바이더** | 지원             | ❌ 지원하지 않음 (`{providedIn: 'root'}` 필요) |
+| **고급 프로바이더 키(`useClass` 등)** | ❌ 지원하지 않음 | 지원                                           |
+| **커스텀 초기화 팩토리**              | 지원             | 지원                                           |
+| **최상위 이외의 범위(`platform` 등)** | ❌ 지원하지 않음 | 지원                                           |
 
 <!--
 ### Replacing the implementation with a factory
 -->
+
+<a id="replacing-the-implementation-with-a-factory"></a>
 
 ## 구현부를 팩토리로 사용하기
 
@@ -226,6 +201,8 @@ class GoogleAnalytics extends Analytics {
 ### Opting out of automatic provisioning
 -->
 
+<a id="opting-out-of-automatic-provisioning"></a>
+
 ### 자동 프로비저닝 비활성화하기
 
 <!--
@@ -265,6 +242,8 @@ export class AnalyticsLogger {
 ### When to use `@Service` vs `@Injectable`
 -->
 
+<a id="when-to-use-service-vs-injectable"></a>
+
 ### `@Service` vs. `@Injectable`
 
 <!--
@@ -287,6 +266,8 @@ Reach for `@Service` when you are creating a new singleton class that uses `inje
 ## Injecting a service
 -->
 
+<a id="injecting-a-service"></a>
+
 ## 서비스를 의존성으로 주입하기
 
 <!--
@@ -298,6 +279,8 @@ Once you've created a service with `providedIn: 'root'`, you can inject it anywh
 <!--
 ### Injecting into a component
 -->
+
+<a id="injecting-into-a-component"></a>
 
 ### 컴포넌트에 주입하기
 
@@ -323,6 +306,8 @@ export class Example {
 ### Injecting into another service
 -->
 
+<a id="injecting-into-another-service"></a>
+
 ### 다른 서비스에 주입하기
 
 ```ts
@@ -347,6 +332,8 @@ export class BasicDataStore {
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

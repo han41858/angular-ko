@@ -76,7 +76,7 @@ export class EmitterVisitorContext {
     return this._lines[this._lines.length - 1];
   }
 
-  println(from?: {sourceSpan: ParseSourceSpan | null} | null, lastPart: string = ''): void {
+  println(from?: {sourceSpan?: ParseSourceSpan | null} | null, lastPart: string = ''): void {
     this.print(from || null, lastPart, true);
   }
 
@@ -88,7 +88,11 @@ export class EmitterVisitorContext {
     return this._currentLine.indent * INDENT_WITH.length + this._currentLine.partsLength;
   }
 
-  print(from: {sourceSpan: ParseSourceSpan | null} | null, part: string, newLine: boolean = false) {
+  print(
+    from: {sourceSpan?: ParseSourceSpan | null} | null,
+    part: string,
+    newLine: boolean = false,
+  ) {
     if (part.length > 0) {
       this._currentLine.parts.push(part);
       this._currentLine.partsLength += part.length;
@@ -198,6 +202,24 @@ export class EmitterVisitorContext {
       }
     }
     return null;
+  }
+
+  addUniqueSingleLineComment(commentText: string): void {
+    const previousIndex = this._lines.length - 2;
+    const comment = `//${commentText}`;
+
+    if (
+      previousIndex >= 0 &&
+      this._lines[previousIndex].parts.length === 1 &&
+      this._lines[previousIndex].parts[0] === comment
+    ) {
+      return;
+    }
+    const line = new EmittedLine(this._currentLine.indent);
+    line.parts.push(comment);
+    line.partsLength = comment.length;
+    line.srcSpans.push(null);
+    this._lines.splice(this._lines.length - 1, 0, line);
   }
 
   /**
@@ -530,20 +552,29 @@ export abstract class AbstractEmitterVisitor
   visitLiteralMapExpr(ast: o.LiteralMapExpr, ctx: EmitterVisitorContext): void {
     this.printLeadingComments(ast, ctx);
     ctx.print(ast, `{`);
-    this.visitAllObjects(
-      (entry) => {
-        if (entry instanceof o.LiteralMapSpreadAssignment) {
-          ctx.print(ast, '...');
-          entry.expression.visitExpression(this, ctx);
-        } else {
-          ctx.print(ast, `${escapeIdentifier(entry.key, entry.quoted)}: `);
-          entry.value.visitExpression(this, ctx);
+    for (let i = 0; i < ast.entries.length; i++) {
+      const entry = ast.entries[i];
+      if (entry instanceof o.LiteralMapSpreadAssignment) {
+        if (i > 0) {
+          ctx.print(ast, ', ', false);
         }
-      },
-      ast.entries,
-      ctx,
-      ', ',
-    );
+        ctx.print(ast, '...');
+        entry.expression.visitExpression(this, ctx);
+      } else {
+        const hasLeadingComments =
+          this.printComments &&
+          entry.leadingComments !== undefined &&
+          entry.leadingComments.length > 0;
+        if (i > 0) {
+          ctx.print(ast, hasLeadingComments ? ',' : ', ', hasLeadingComments);
+        } else if (hasLeadingComments) {
+          ctx.println(ast);
+        }
+        this.printLeadingComments(entry, ctx);
+        ctx.print(ast, `${escapeIdentifier(entry.key, entry.quoted)}: `);
+        entry.value.visitExpression(this, ctx);
+      }
+    }
     ctx.print(ast, `}`);
   }
 
@@ -556,10 +587,28 @@ export abstract class AbstractEmitterVisitor
 
   visitParenthesizedExpr(ast: o.ParenthesizedExpr, ctx: EmitterVisitorContext): void {
     this.printLeadingComments(ast, ctx);
-    // We parenthesize everything regardless of an explicit ParenthesizedExpr, so we can just visit
-    // the inner expression.
-    // TODO: Do we *need* to parenthesize everything?
-    ast.expr.visitExpression(this, ctx);
+
+    // The condition of an `if` statement is already wrapped in parentheses. Forward the
+    // "last if condition" status to the inner expression so it doesn't add its own either.
+    if (ast === this.lastIfCondition) {
+      this.lastIfCondition = ast.expr;
+      ast.expr.visitExpression(this, ctx);
+    } else {
+      // Some expressions always wrap themselves in parentheses so we can skip adding more.
+      // Other expressions (e.g. `NotExpr`, `TypeofExpr`, literals, arrow functions or calls)
+      // don't and require explicit parentheses to preserve precedence, e.g. `(!a).b`,
+      // `(typeof a) ** 2`, `(1).toString()`.
+      const preserveParens =
+        !(ast.expr instanceof o.BinaryOperatorExpr) &&
+        !(ast.expr instanceof o.UnaryOperatorExpr) &&
+        !(ast.expr instanceof o.ConditionalExpr) &&
+        !(ast.expr instanceof o.CommaExpr) &&
+        !(ast.expr instanceof o.ParenthesizedExpr);
+
+      preserveParens && ctx.print(ast, '(');
+      ast.expr.visitExpression(this, ctx);
+      preserveParens && ctx.print(ast, ')');
+    }
   }
 
   visitSpreadElementExpr(ast: o.SpreadElementExpr, ctx: EmitterVisitorContext): void {
@@ -661,27 +710,11 @@ export abstract class AbstractEmitterVisitor
     ctx: EmitterVisitorContext,
     separator: string,
   ): void {
-    let incrementedIndent = false;
     for (let i = 0; i < expressions.length; i++) {
       if (i > 0) {
-        if (ctx.lineLength() > 80) {
-          ctx.print(null, separator, true);
-          if (!incrementedIndent) {
-            // continuation are marked with double indent.
-            ctx.incIndent();
-            ctx.incIndent();
-            incrementedIndent = true;
-          }
-        } else {
-          ctx.print(null, separator, false);
-        }
+        ctx.print(null, separator, false);
       }
       handler(expressions[i]);
-    }
-    if (incrementedIndent) {
-      // continuation are marked with double indent.
-      ctx.decIndent();
-      ctx.decIndent();
     }
   }
 
@@ -718,7 +751,7 @@ export abstract class AbstractEmitterVisitor
   }
 
   protected printLeadingComments(
-    node: o.Expression | o.Statement,
+    node: {leadingComments?: o.LeadingComment[]; sourceSpan?: ParseSourceSpan | null},
     ctx: EmitterVisitorContext,
   ): void {
     if (!this.printComments || node.leadingComments === undefined) {

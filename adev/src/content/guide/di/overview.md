@@ -34,6 +34,8 @@ Dependency injection is a popular pattern because it allows developers to addres
 ## How does dependency injection work in Angular?
 -->
 
+<a id="how-does-dependency-injection-work-in-angular"></a>
+
 ## Angular에서 의존성 주입이 어떻게 동작하나요?
 
 <!--
@@ -73,6 +75,8 @@ Angular 컴포넌트와 디렉티브는 기본적으로 의존성 주입 시스�
 <!--
 ## What are services?
 -->
+
+<a id="what-are-services"></a>
 
 ## 서비스가 무엇인가요?
 
@@ -140,8 +144,16 @@ export class AnalyticsLogger {
 참고: `@Service` 데코레이터를 지정하면 서비스를 전역 범위에서 사용할 수 있도록 인스턴스를 싱글턴으로 생성합니다. 대부분의 경우 이런 사용 방식을 권장합니다.
 
 <!--
+HELPFUL: The [`@Service`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) decorator is an ergonomic shorthand for `@Injectable({providedIn: 'root'})`.
+-->
+
+참고: [`@Service`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) 데코레이터는 `@Injectable({providedIn: 'root'})`를 간편하게 작성하는 단축 문법입니다.
+
+<!--
 ## Injecting dependencies with `inject()`
 -->
+
+<a id="injecting-dependencies-with-inject"></a>
 
 ## `inject()`로 의존성 주입하기
 
@@ -201,15 +213,15 @@ export class Navbar {
 ### Where can `inject()` be used?
 -->
 
+<a id="where-can-inject-be-used"></a>
+
 ### `inject()`는 어디에 사용할 수 있나요?
 
 <!--
 You can inject dependencies during construction of a component, directive, or service. The call to [`inject`](/api/core/inject) can appear in either the `constructor` or in a field initializer. Here are some common examples:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class MyComponent {
   // ✅ In class field initializer
   private service = inject(MyService);
@@ -259,9 +271,7 @@ For more information, see the [inject API docs](api/core/inject#usage-notes).
 `inject` 함수를 직접 사용하거나 `constructor()` 함수에서 프로퍼티로 선언하면 됩니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class MyComponent {
   // ✅ 클래스 필드 초기화로 주입
   private service = inject(MyService);
@@ -310,6 +320,8 @@ export const authGuard = () => {
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

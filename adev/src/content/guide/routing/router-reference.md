@@ -87,11 +87,11 @@ Here are the key `Router` terms and their meanings:
 | `provideRouter`       | provides the necessary service providers for navigating through application views.                                                                                                                                                        |
 | `RouterModule`        | A separate NgModule that provides the necessary service providers and directives for navigating through application views.                                                                                                                |
 | `Routes`              | Defines an array of Routes, each mapping a URL path to a component.                                                                                                                                                                       |
-| `Route`               | Defines how the router should navigate to a component based on a URL pattern. Most routes consist of a path and a component type.                                                                                                         |
+| `Route`               | Defines how the router should navigate to a component based on a URL pattern. Routes can include paths, components, child routes, guards, resolvers, and resources.                                                                       |
 | `RouterOutlet`        | The directive \(`<router-outlet>`\) that marks where the router displays a view.                                                                                                                                                          |
 | `RouterLink`          | The directive for binding a clickable HTML element to a route. Clicking an element with a `routerLink` directive that's bound to a _string_ or a _link parameters array_ triggers a navigation.                                           |
 | `RouterLinkActive`    | The directive for adding/removing classes from an HTML element when an associated `routerLink` contained on or inside the element becomes active/inactive. It can also set the `aria-current` of an active link for better accessibility. |
-| `ActivatedRoute`      | A service that's provided to each route component that contains route specific information such as route parameters, static data, resolve data, global query parameters, and the global fragment.                                         |
+| `ActivatedRoute`      | A service that's provided to each route component that contains route specific information such as route parameters, static data, resolve data, route resources, global query parameters, and the global fragment.                        |
 | `RouterState`         | The current state of the router including a tree of the currently activated routes together with convenience methods for traversing the route tree.                                                                                       |
 | Link parameters array | An array that the router interprets as a routing instruction. You can bind that array to a `RouterLink` or pass the array as an argument to the `Router.navigate` method.                                                                 |
 | Routing component     | An Angular component with a `RouterOutlet` that displays views based on router navigations.                                                                                                                                               |
@@ -105,11 +105,11 @@ Here are the key `Router` terms and their meanings:
 | `provideRouter`    | 애플리케이션 뷰 사이를 이동하는 데 필요한 서비스 프로바이더를 제공합니다.                                                                                                                                 |
 | `RouterModule`     | 애플리케이션 뷰 사이를 이동하는 데 필요한 서비스 프로바이더와 디렉티브를 제공하는 별도의 NgModule입니다.                                                                                                  |
 | `Routes`           | URL 경로와 컴포넌트를 연결하는 라우팅 규칙 배열을 정의합니다.                                                                                                                                             |
-| `Route`            | URL 패턴에 따라 라우터가 컴포넌트로 이동하는 방식을 정의합니다. 대부분의 라우팅 규칙은 경로와 컴포넌트 타입으로 구성됩니다.                                                                               |
+| `Route`            | URL 패턴에 따라 라우터가 컴포넌트로 이동하는 방식을 정의합니다. 라우팅 규칙에는 경로, 컴포넌트, 자식 라우팅 규칙, 가드, 리졸버, 리소스가 포함될 수 있습니다.                                              |
 | `RouterOutlet`     | 라우터가 뷰를 표시할 위치를 지정하는 디렉티브\(`<router-outlet>`\)입니다.                                                                                                                                 |
 | `RouterLink`       | 클릭 가능한 HTML 엘리먼트를 라우팅 규칙과 연결하는 디렉티브입니다. *문자열*이나 *링크 파라미터 배열*에 바인딩된 `routerLink` 디렉티브가 있는 엘리먼트를 클릭하면 내비게이션이 실행됩니다.                 |
 | `RouterLinkActive` | 해당 엘리먼트 또는 그 내부의 `routerLink`가 활성화되거나 비활성화될 때 HTML 엘리먼트의 클래스를 추가하거나 제거하는 디렉티브입니다. 접근성을 높이기 위해 활성 링크의 `aria-current`도 설정할 수 있습니다. |
-| `ActivatedRoute`   | 각 라우팅 규칙 컴포넌트에 제공되는 서비스입니다. 라우팅 규칙 파라미터, 정적 데이터, 리졸브 데이터, 전역 쿼리 파라미터, 전역 프래그먼트 등 해당 라우팅 규칙의 정보가 있습니다.                             |
+| `ActivatedRoute`   | 각 라우팅 규칙 컴포넌트에 제공되는 서비스입니다. 라우팅 규칙 파라미터, 정적 데이터, 리졸브 데이터, 라우팅 규칙 리소스, 전역 쿼리 파라미터, 전역 프래그먼트 등 해당 라우팅 규칙의 정보가 있습니다.         |
 | `RouterState`      | 라우터의 현재 상태입니다. 현재 활성화된 라우팅 규칙 트리와 라우팅 규칙 트리를 탐색하는 편의 메서드를 포함합니다.                                                                                          |
 | 링크 파라미터 배열 | 라우터가 라우팅 명령으로 해석하는 배열입니다. 이 배열을 `RouterLink`에 바인딩하거나 `Router.navigate` 메서드의 인자로 전달할 수 있습니다.                                                                 |
 | 라우팅 컴포넌트    | 라우터 내비게이션에 따라 뷰를 표시하는 `RouterOutlet`이 있는 Angular 컴포넌트입니다.                                                                                                                      |
@@ -118,7 +118,6 @@ Here are the key `Router` terms and their meanings:
 ## `<base href>`
 -->
 
-<a id="base-href"></a>
 
 ## `<base href>`
 
@@ -251,7 +250,6 @@ scheme    authority      path        query   fragment
 ### `HashLocationStrategy`
 -->
 
-<a id="hashlocationstrategy"></a>
 
 ### `HashLocationStrategy`
 

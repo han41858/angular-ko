@@ -32,6 +32,8 @@ _Angular 엘리먼트_ 는 Angular 컴포넌트를 _커스텀 엘리먼트_ 로 
 ## Using custom elements
 -->
 
+<a id="using-custom-elements"></a>
+
 ## 커스텀 엘리먼트 활용하기
 
 <!--
@@ -81,6 +83,8 @@ To add the `@angular/elements` package to your workspace, run the following comm
 ### How it works
 -->
 
+<a id="how-it-works"></a>
+
 ### 어떻게 동작할까요
 
 <!--
@@ -89,7 +93,7 @@ After you register your configured class with the browser's custom-element regis
 
 ```html
 
-<my-popup message="Use Angular!"></my-popup>
+<my-popup message="Use Angular!" />
 
 ```
 
@@ -102,7 +106,7 @@ Input properties in the component correspond to input attributes for the element
 컴포넌트를 브라우저 커스텀 엘리먼트 저장소에 등록하고 나면, 기본 HTML 엘리먼트를 사용하는 방법처럼 DOM에 사용할 수 있습니다:
 
 ```html
-<my-popup message="Use Angular!"></my-popup>
+<my-popup message="Use Angular!" />
 ```
 
 이제 커스텀 엘리먼트를 화면에 추가하면 브라우저가 커스텀 엘리먼트 클래스의 인스턴스를 생성하고 DOM에 추가합니다.
@@ -112,6 +116,8 @@ Input properties in the component correspond to input attributes for the element
 <!--
 ## Transforming components to custom elements
 -->
+
+<a id="transforming-components-to-custom-elements"></a>
 
 ## 컴포넌트를 커스텀 엘리먼트로 변환하기
 
@@ -143,6 +149,8 @@ Angular는 DOM 엘리먼트 하나에 Angular 컴포넌트 인스턴스와 커�
 ### Mapping
 -->
 
+<a id="mapping"></a>
+
 ### 맵핑
 
 <!--
@@ -152,13 +160,13 @@ Component properties and logic map directly into HTML attributes and the browser
 - The creation API parses the component looking for input properties, and defines corresponding attributes for the custom element.
   It transforms the property names to make them compatible with custom elements, which do not recognize case distinctions.
   The resulting attribute names use dash-separated lowercase.
-  For example, for a component with `inputProp = input({alias: 'myInputProp'})`, the corresponding custom element defines an attribute `my-input-prop`.
+  For example, for a component with `inputProp = input('', {alias: 'myInputProp'})`, the corresponding custom element defines an attribute `my-input-prop`.
 
 - Component outputs are dispatched as HTML [Custom Events](https://developer.mozilla.org/docs/Web/API/CustomEvent), with the name of the custom event matching the output name.
   For example, for a component with `valueChanged = output()`, the corresponding custom element dispatches events with the name "valueChanged", and the emitted data is stored on the event's `detail` property.
   If you provide an alias, that value is used; for example, `clicks = output<string>({alias: 'myClick'});` results in dispatch events with the name "myClick".
 
-For more information, see Web Component documentation for [Creating custom events](https://developer.mozilla.org/docs/Web/Guide/Events/Creating_and_triggering_events#Creating_custom_events).
+For more information, see Web Component documentation for [Creating custom events](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Events#creating_custom_events).
 -->
 
 커스텀 엘리먼트는 Angular 컴포넌트와 동일한 동작을 하기 때문에 컴포넌트에 정의된 로직과 표준 DOM API를 연결합니다.
@@ -166,25 +174,27 @@ For more information, see Web Component documentation for [Creating custom event
 
 - 커스텀 엘리먼트 생성 API가 컴포넌트 입력 프로퍼티를 발견하면 커스텀 엘리먼트 어트리뷰트를 선언합니다.
   이때 프로퍼티 이름은 커스텀 엘리먼트에 적합하도록 대소문자를 구분하지 않고 대시(`-`)와 소문자로 구성됩니다.
-  예를 들어 컴포넌트에 `inputProp = input({alias: 'myInputProp'})`와 같은 코드가 있다면 이 프로퍼티는 커스텀 엘리먼트의 `my-input-prop` 어트리뷰트로 변환됩니다.
+  예를 들어 컴포넌트에 `inputProp = input('', {alias: 'myInputProp'})`와 같은 코드가 있다면 이 프로퍼티는 커스텀 엘리먼트의 `my-input-prop` 어트리뷰트로 변환됩니다.
 
 - 컴포넌트의 출력 프로퍼티는 출력 프로퍼티 이름과 동일한 HTML [커스텀 이벤트](https://developer.mozilla.org/docs/Web/API/CustomEvent)로 변환됩니다.
   예를 들어 컴포넌트에 `valueChanged = output()`와 같은 코드가 있다면, 커스텀 엘리먼트에서 "valueChanged" 라는 이름으로 이벤트를 발생시키며, 커스텀 엘리먼트에서 보내는 데이터는 이벤트 객체의 `detail` 프로퍼티로 전달됩니다.
   출력 프로퍼티에 별칭이 있는 경우, 예를 들어 `clicks = output<string>({alias: 'myClick'});`와 같은 코드가 있다면, 커스텀 엘리먼트가 생성하는 이벤트 이름은 "myClick"이 됩니다.
 
-더 자세한 내용은 웹 컴포넌트 문서의 [커스텀 이벤트 생성하기](https://developer.mozilla.org/docs/Web/Guide/Events/Creating_and_triggering_events#Creating_custom_events) 문서를 참고하세요.
+더 자세한 내용은 웹 컴포넌트 문서의 [커스텀 이벤트 생성하기](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Events#creating_custom_events) 문서를 참고하세요.
 
 <!--
 ## Example: A Popup Service
 -->
 
+<a id="example-a-popup-service"></a>
+
 ## 예제: 팝업 서비스
 
 <!--
-Previously, when you wanted to add a component to an application at runtime, you had to define a _dynamic component_, and then you would have to load it, attach it to an element in the DOM, and wire up all of the dependencies, change detection, and event handling.
+To add a component to an application at runtime, you can [render it programmatically](guide/components/programmatic-rendering) with the `createComponent` API.
+With this approach, you are responsible for the surrounding infrastructure: attaching the component's host view to the `ApplicationRef` so that change detection runs, setting its inputs, subscribing to its outputs, and detaching and cleaning up the view when the component is removed.
 
-Using an Angular custom element makes the process simpler and more transparent, by providing all the infrastructure and framework automatically —all you have to do is define the kind of event handling you want.
-\(You do still have to exclude the component from compilation, if you are not going to use it in your application.\)
+Using an Angular custom element makes the process simpler and more transparent, by providing all of this infrastructure automatically — all you have to do is define the kind of event handling you want.
 
 The following Popup Service example application defines a component that you can either load dynamically or convert to a custom element.
 
@@ -199,16 +209,16 @@ One button adds the popup using the dynamic-loading method, and the other uses t
 The result is the same, but the preparation is different.
 
 <docs-code-multifile>
-    <docs-code header="popup.component.ts" path="adev/src/content/examples/elements/src/app/popup.component.ts"/>
+    <docs-code language="angular-ts" header="popup.ts" path="adev/src/content/examples/elements/src/app/popup.ts"/>
     <docs-code header="popup.service.ts" path="adev/src/content/examples/elements/src/app/popup.service.ts"/>
-    <docs-code header="app.component.ts" path="adev/src/content/examples/elements/src/app/app.component.ts"/>
+    <docs-code header="app.ts" path="adev/src/content/examples/elements/src/app/app.ts"/>
 </docs-code-multifile>
 -->
 
-이전에는 애플리케이션 실행 시점에 컴포넌트를 추가하려면 _동적 컴포넌트_ 를 정의한 후 불러와서 DOM, 의존성 객체, 변화 감지, 이벤트 처리 함수를 연결해야 했습니다.
+애플리케이션 실행 시점에 컴포넌트를 추가하려면 `createComponent` API로 [코드에서 렌더링](guide/components/programmatic-rendering)할 수 있습니다.
+이때 변경 감지가 실행되도록 컴포넌트의 호스트 뷰를 `ApplicationRef`에 연결하고, 입력값을 설정하고, 출력 이벤트를 구독하는 작업은 직접 처리해야 합니다. 컴포넌트를 제거할 때 뷰의 연결을 해제하고 정리하는 작업도 필요합니다.
 
 하지만 Angular가 제공하는 커스텀 엘리먼트 변환 기능을 활용하면 똑같은 과정을 아주 간단하게 자동으로 적용할 수 있습니다.
-(애플리케이션에서 사용하지 않는 컴포넌트는 컴파일에서 제외해야 하긴 합니다.)
 
 아래 Popup 서비스 예제 애플리케이션은 컴포넌트를 동적으로 불러와서 커스텀 엘리먼트로 변환하는 예제 코드입니다.
 
@@ -223,7 +233,7 @@ The result is the same, but the preparation is different.
 결과물은 같지만 준비과정은 다릅니다.
 
 <docs-code-multifile>
-    <docs-code header="popup.ts" path="adev/src/content/examples/elements/src/app/popup.ts"/>
+    <docs-code language="angular-ts" header="popup.ts" path="adev/src/content/examples/elements/src/app/popup.ts"/>
     <docs-code header="popup.service.ts" path="adev/src/content/examples/elements/src/app/popup.service.ts"/>
     <docs-code header="app.ts" path="adev/src/content/examples/elements/src/app/app.ts"/>
 </docs-code-multifile>
@@ -231,6 +241,8 @@ The result is the same, but the preparation is different.
 <!--
 ## Typings for custom elements
 -->
+
+<a id="typings-for-custom-elements"></a>
 
 ## 커스텀 엘리먼트에 타입 지정하기
 
@@ -355,6 +367,8 @@ document.querySelector('my-other-element'); //--> NgElement & WithProperties<{fo
 <!--
 ## Limitations
 -->
+
+<a id="limitations"></a>
 
 ## 제한사항
 

@@ -109,7 +109,6 @@ By default, all redirects use the `prefix` strategy.
 ### `pathMatch: 'prefix'`
 -->
 
-<a id="pathmatch-prefix"></a>
 
 ### `pathMatch: 'prefix'`
 
@@ -119,10 +118,10 @@ By default, all redirects use the `prefix` strategy.
 ```ts
 export const routes: Routes = [
   // This redirect route is equivalent to…
-  { path: 'news', redirectTo: 'blog },
+  {path: 'news', redirectTo: 'blog'},
 
   // This explicitly defined route redirect pathMatch
-  { path: 'news', redirectTo: 'blog', pathMatch: 'prefix' },
+  {path: 'news', redirectTo: 'blog', pathMatch: 'prefix'},
 ];
 ```
 
@@ -138,10 +137,10 @@ In this example, all routes that are prefixed with `news` are redirected to thei
 ```ts
 export const routes: Routes = [
   // 이 리다이렉트 라우팅 규칙은 아래 설정과 같습니다.
-  { path: 'news', redirectTo: 'blog },
+  {path: 'news', redirectTo: 'blog'},
 
   // 리다이렉트의 pathMatch를 명시적으로 지정한 라우팅 규칙입니다.
-  { path: 'news', redirectTo: 'blog', pathMatch: 'prefix' },
+  {path: 'news', redirectTo: 'blog', pathMatch: 'prefix'},
 ];
 ```
 
@@ -156,7 +155,6 @@ export const routes: Routes = [
 ### `pathMatch: 'full'`
 -->
 
-<a id="pathmatch-full"></a>
 
 ### `pathMatch: 'full'`
 
@@ -239,7 +237,7 @@ export const routes: Routes = [
 
       // Check if user requested a specific meal via query parameter
       if (activatedRouteSnapshot.queryParams['meal']) {
-        return `/restaurant/${location}/menu/${queryParams['meal']}`;
+        return `/restaurant/${location}/menu/${activatedRouteSnapshot.queryParams['meal']}`;
       }
 
       // Auto-redirect based on time of day
@@ -288,7 +286,7 @@ export const routes: Routes = [
 
       // 사용자가 쿼리 파라미터로 특정 식사 메뉴를 요청했는지 확인합니다.
       if (activatedRouteSnapshot.queryParams['meal']) {
-        return `/restaurant/${location}/menu/${queryParams['meal']}`;
+        return `/restaurant/${location}/menu/${activatedRouteSnapshot.queryParams['meal']}`;
       }
 
       // 시간대에 따라 자동으로 리다이렉트합니다.

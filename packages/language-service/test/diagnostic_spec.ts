@@ -194,6 +194,30 @@ describe('getSemanticDiagnostics', () => {
     );
   });
 
+  it('should report a parse error for an empty template literal interpolation', () => {
+    const files = {
+      'app.ts': `
+      import {Component} from '@angular/core';
+
+      @Component({
+        template: '<p>{{ \`Hello, $\{\}!\` }}</p>',
+      })
+      export class AppComponent {}
+    `,
+    };
+
+    const project = createModuleAndProjectWithDeclarations(env, 'test', files);
+    const diags = project.getDiagnosticsForFile('app.ts');
+
+    expect(
+      diags.some((diag) =>
+        ts
+          .flattenDiagnosticMessageText(diag.messageText, '')
+          .includes('Parser Error: Template literal interpolation cannot be empty'),
+      ),
+    ).toBe(true);
+  });
+
   it('reports html parse errors along with typecheck errors as diagnostics', () => {
     const files = {
       'app.ts': `
@@ -560,6 +584,67 @@ describe('getSemanticDiagnostics', () => {
     expect(diags.length).toBe(1);
     expect(ts.flattenDiagnosticMessageText(diags[0].messageText, '')).toContain(
       'HostBindDirective',
+    );
+  });
+
+  it('should type check templates using a non-exported directive from the same file', () => {
+    const files = {
+      'app.ts': `
+        import {Component, Directive, input, signal} from '@angular/core';
+
+        @Directive({selector: 'img[appHelper]'})
+        class HelperDirective {
+          readonly appHelper = input.required<string>();
+        }
+
+        @Component({
+          selector: 'app-some',
+          imports: [HelperDirective],
+          templateUrl: './app.html',
+        })
+        export class SomeComponent {
+          protected readonly open = signal(true);
+          protected readonly items = signal([{id: 1, src: '/photo.jpg'}]);
+        }
+      `,
+      'app.html': `
+        @if (open()) {
+          @for (item of items(); track item.id) {
+            <img [appHelper]="item.src" alt="" />
+          }
+        }
+      `,
+    };
+
+    const project = env.addProject('test', files, {strictTemplates: true});
+    expect(project.getDiagnosticsForFile('app.html')).toEqual([]);
+    expect(project.getDiagnosticsForFile('app.ts')).toEqual([]);
+  });
+
+  it('should report template errors involving a non-exported directive from the same file', () => {
+    const files = {
+      'app.ts': `
+        import {Component, Directive, input} from '@angular/core';
+
+        @Directive({selector: '[appHelper]'})
+        class HelperDirective {
+          readonly appHelper = input.required<string>();
+        }
+
+        @Component({
+          imports: [HelperDirective],
+          templateUrl: './app.html',
+        })
+        export class SomeComponent {}
+      `,
+      'app.html': `<div [appHelper]="1"></div>`,
+    };
+
+    const project = env.addProject('test', files, {strictTemplates: true});
+    const diags = project.getDiagnosticsForFile('app.html');
+    expect(diags.length).toBe(1);
+    expect(ts.flattenDiagnosticMessageText(diags[0].messageText, '')).toContain(
+      `Type 'number' is not assignable to type 'string'`,
     );
   });
 });

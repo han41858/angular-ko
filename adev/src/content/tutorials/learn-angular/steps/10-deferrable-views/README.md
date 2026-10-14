@@ -2,6 +2,8 @@
 # Deferrable Views
 -->
 
+<a id="deferrable-views"></a>
+
 # 뷰 지연 로딩(Deferrable Views)
 
 <!--
@@ -86,6 +88,10 @@ Deferrable views have a number of trigger options. Add a viewport trigger so the
 ```angular-html {highlight:[1]}
 @defer (on viewport) {
   <comments />
+} @placeholder {
+  <p>Future comments</p>
+} @loading (minimum 2s) {
+  <p>Loading comments...</p>
 }
 ```
 
@@ -165,6 +171,8 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 
 <docs-workflow>
 
+<a id="add-a-defer-block-around-the-comments-component"></a>
+
 <docs-step title="`comments` 컴포넌트를 `@defer` 블록으로 감싸서 지연 로딩 영역으로 지정해 보세요">
 
 예제 앱에서 댓글 컴포넌트는 블로그 글이 표시되는 영역 아래에 표시됩니다.
@@ -182,6 +190,8 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 
 </docs-step>
 
+<a id="add-a-placeholder"></a>
+
 <docs-step title="`@placeholder` 블록을 추가해 보세요">
 
 `@defer` 블록 뒤에 `@placeholder` 블록을 추가해 보세요.
@@ -197,6 +207,8 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 ```
 
 </docs-step>
+
+<a id="add-a-loading-block"></a>
 
 <docs-step title="`@loading` 블록을 추가해 보세요">
 
@@ -216,6 +228,8 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 
 </docs-step>
 
+<a id="add-a-minimum-duration"></a>
+
 <docs-step title="최소 지연시간을 추가해 보세요">
 
 `@placeholder`와 `@loading` 섹션은 로딩이 너무 빨리 시도될 때 발생하는 플리커링을 방지하기 위해 옵션을 받을 수 있습니다.
@@ -234,6 +248,8 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 
 </docs-step>
 
+<a id="add-a-viewport-trigger"></a>
+
 <docs-step title="뷰포트 트리거를 추가해 보세요">
 
 뷰를 지연 로딩할 때 사용할 수 있는 트리거 옵션이 몇 가지 있습니다.
@@ -242,10 +258,16 @@ If you would like to learn more, check out the [documentation for Deferrable vie
 ```angular-html {highlight:[1]}
 @defer (on viewport) {
   <comments />
+} @placeholder {
+  <p>Future comments</p>
+} @loading (minimum 2s) {
+  <p>Loading comments...</p>
 }
 ```
 
 </docs-step>
+
+<a id="add-content"></a>
 
 <docs-step title="본문 내용을 추가해 보세요">
 

@@ -17,6 +17,7 @@ import {
   OnInit,
   Provider,
   Renderer2,
+  SimpleChanges,
   ɵRuntimeError as RuntimeError,
   Service,
 } from '@angular/core';
@@ -53,7 +54,7 @@ function throwNameError() {
  */
 @Service()
 export class RadioControlRegistry {
-  private _accessors: any[] = [];
+  private _accessors: [NgControl, RadioControlValueAccessor][] = [];
 
   /**
    * @description
@@ -177,6 +178,15 @@ export class RadioControlValueAccessor
     private _injector: Injector,
   ) {
     super(renderer, elementRef);
+  }
+
+  /** @internal */
+  ngOnChanges(changes: SimpleChanges): void {
+    const control = this._control?.control;
+
+    if (changes['value'] && control) {
+      this.writeValue(control.value);
+    }
   }
 
   /** @docs-private */

@@ -76,6 +76,8 @@ export class UserProfile { }
 ## Types of selectors
 -->
 
+<a id="types-of-selectors"></a>
+
 ## 셀렉터의 종류
 
 <!--
@@ -119,6 +121,8 @@ Angular 컴포넌트 셀렉터는 [네임스페이스](https://developer.mozilla
 ### The `:not` pseudo-class
 -->
 
+<a id="the-not-pseudo-class"></a>
+
 ### `:not` 가상 클래스
 
 <!--
@@ -156,6 +160,8 @@ export class DropZone { }
 <!--
 ### Combining selectors
 -->
+
+<a id="combining-selectors"></a>
 
 ### 셀렉터 조합하기
 
@@ -211,6 +217,8 @@ export class DropZone { }
 ## Choosing a selector
 -->
 
+<a id="choosing-a-selector"></a>
+
 ## 셀렉터 정하기
 
 <!--
@@ -235,6 +243,8 @@ Angular 템플릿에서 [네이티브 커스텀 엘리먼트](https://developer.
 ### Selector prefixes
 -->
 
+<a id="selector-prefixes"></a>
+
 ### 셀렉터 접두사
 
 <!--
@@ -258,6 +268,8 @@ Angular CLI로 생성한 프로젝트의 기본 접두사는 `app-` 입니다.
 <!--
 ### When to use an attribute selector
 -->
+
+<a id="when-to-use-an-attribute-selector"></a>
 
 ### 어트리뷰트 셀렉터는 언제 사용해야 할까요?
 

@@ -12,8 +12,8 @@ import {
   IdentifierKind,
   IndexedComponent,
   TopLevelIdentifier,
-} from '../../src/ngtsc/indexer';
-import {ParseSourceFile} from '@angular/compiler';
+} from '@angular/compiler';
+import {DeclarationNode} from '../../src/ngtsc/reflection';
 
 import {NgtscTestEnvironment} from './env';
 
@@ -51,10 +51,10 @@ runInEachFileSystem(() => {
 
         expect(decl.getText()).toContain('export class TestCmp {}');
         expect(indexedComp).toEqual(
-          jasmine.objectContaining<IndexedComponent>({
+          jasmine.objectContaining<IndexedComponent<DeclarationNode>>({
             name: 'TestCmp',
             selector: 'test-cmp',
-            file: new ParseSourceFile(componentContent, testSourceFile),
+            fileUrl: testSourceFile,
           }),
         );
       });
@@ -75,7 +75,7 @@ runInEachFileSystem(() => {
         const template = indexedComp.template;
 
         expect(template).toEqual({
-          identifiers: new Set<TopLevelIdentifier>([
+          identifiers: new Set<TopLevelIdentifier<DeclarationNode>>([
             {
               name: 'foo',
               kind: IdentifierKind.Property,
@@ -83,7 +83,7 @@ runInEachFileSystem(() => {
               target: null,
             },
           ]),
-          file: new ParseSourceFile(componentContent, testSourceFile),
+          fileUrl: testSourceFile,
         });
       });
 
@@ -106,7 +106,7 @@ runInEachFileSystem(() => {
         const template = indexedComp.template;
 
         expect(template).toEqual({
-          identifiers: new Set<TopLevelIdentifier>([
+          identifiers: new Set<TopLevelIdentifier<DeclarationNode>>([
             {
               name: 'foo',
               kind: IdentifierKind.Property,
@@ -114,7 +114,7 @@ runInEachFileSystem(() => {
               target: null,
             },
           ]),
-          file: new ParseSourceFile('{{foo}}', testTemplateFile),
+          fileUrl: testTemplateFile,
         });
       });
 
@@ -141,7 +141,7 @@ runInEachFileSystem(() => {
         const template = indexedComp.template;
 
         expect(template).toEqual({
-          identifiers: new Set<TopLevelIdentifier>([
+          identifiers: new Set<TopLevelIdentifier<DeclarationNode>>([
             {
               name: 'foo',
               kind: IdentifierKind.Property,
@@ -149,7 +149,7 @@ runInEachFileSystem(() => {
               target: null,
             },
           ]),
-          file: new ParseSourceFile('  \n  {{foo}}', testTemplateFile),
+          fileUrl: testTemplateFile,
         });
       });
 

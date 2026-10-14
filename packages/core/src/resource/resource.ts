@@ -29,6 +29,7 @@ import {
 import {assertInInjectionContext} from '../di/contextual';
 import {Injector} from '../di/injector';
 import {inject} from '../di/injector_compatibility';
+import {isErrorLike} from '../error_handler';
 import {RuntimeError, RuntimeErrorCode} from '../errors';
 import {CACHE_ACTIVE} from '../hydration/cache';
 import {DestroyRef} from '../linker/destroy_ref';
@@ -606,15 +607,6 @@ export function encapsulateResourceError(error: unknown): Error {
   return new ResourceWrappedError(error);
 }
 
-export function isErrorLike(error: unknown): error is Error {
-  return (
-    error instanceof Error ||
-    (typeof error === 'object' &&
-      typeof (error as Error).name === 'string' &&
-      typeof (error as Error).message === 'string')
-  );
-}
-
 export class ResourceValueError extends Error {
   constructor(error: Error) {
     super(
@@ -638,9 +630,9 @@ class ResourceWrappedError extends Error {
 }
 
 /**
- * Chains the value of another resource into the params of the current resource, returning the value
- * of the other resource if it is available, or propagating the status to the current resource if it
- * is not.
+ * Chains the current params off of the value of another resource, returning the value
+ * of the other resource only when its status is `resolved` or `local`, or propagating status to
+ * the current resource by throwing the appropriate status code when the value is not available.
  */
 export function chain<T>(resource: Resource<T>): T {
   switch (resource.status()) {

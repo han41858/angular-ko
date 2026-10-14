@@ -37,7 +37,7 @@ v13 이전 버전의 명세는 이 [Google 문서](https://docs.google.com/docum
 ## 패키지 형식을 지정하는 이유
 
 <!--
-In today's JavaScript landscape, developers consume packages in many different ways, using many different toolchains \(webpack, Rollup, esbuild, etc.\).
+In today's JavaScript landscape, developers consume packages in many different ways, using many different toolchains \(webpack, Rollup, Rolldown, esbuild, etc.\).
 These tools may understand and require different inputs - some tools may be able to process the latest ES language version, while others may benefit from directly consuming an older ES version.
 
 The Angular distribution format supports all of the commonly used development tools and workflows, and adds emphasis on optimizations that result either in smaller application payload size or faster development iteration cycle \(build time\).
@@ -46,7 +46,7 @@ Developers can rely on Angular CLI and [ng-packagr](https://github.com/ng-packag
 See the [Creating Libraries](tools/libraries/creating-libraries) guide for more details.
 -->
 
-오늘날 JavaScript 개발자는 여러 도구 모음\(webpack, Rollup, esbuild 등\)으로 다양한 방식으로 패키지를 사용합니다.
+오늘날 JavaScript 개발자는 여러 도구 모음\(webpack, Rollup, Rolldown, esbuild 등\)으로 다양한 방식으로 패키지를 사용합니다.
 도구마다 이해하거나 요구하는 입력이 다를 수 있습니다.
 어떤 도구는 최신 ES 언어 버전을 처리할 수 있지만, 다른 도구는 이전 ES 버전의 코드를 직접 사용하는 편이 유리할 수 있습니다.
 
@@ -117,12 +117,11 @@ node_modules/@angular/core
 | `types/` <br /> &nbsp;&nbsp;─ `core.d.ts` <br /> &nbsp;&nbsp;─ `testing.d.ts`                                                                             | 모든 공개 진입점의 TypeScript 타입 정의를 번들로 묶은 파일입니다.                                                                                             |
 
 <!--
-## `package.json`
+### `package.json`
 -->
 
-<a id="packagejson"></a>
 
-## `package.json`
+### `package.json`
 
 <!--
 The primary `package.json` contains important package metadata, including the following:
@@ -178,7 +177,6 @@ This informs resolvers that code within the package is using EcmaScript Modules 
 ### `"exports"`
 -->
 
-<a id="exports"></a>
 
 ### `"exports"`
 
@@ -320,12 +318,12 @@ Most Angular packages should not depend on top-level side effects, and thus shou
 대부분의 Angular 패키지는 최상위 수준의 부수 효과에 의존하지 않아야 하므로 이 선언을 포함해야 합니다.
 
 <!--
-## Entrypoints and code splitting
+### Entrypoints and code splitting
 -->
 
 <a id="entrypoints-and-code-splitting"></a>
 
-## 진입점과 코드 분할
+### 진입점과 코드 분할
 
 <!--
 Packages in the Angular Package Format contain one primary entrypoint and zero or more secondary entrypoints \(for example, `@angular/common/http`\).
@@ -377,12 +375,12 @@ APF 패키지에서는 논리적으로 연결된 코드를 가능한 한 작은 
 예를 들어 Angular 런타임은 보통 하나의 단위로 사용하므로 `@angular/core`는 런타임에 단일 진입점을 사용합니다.
 
 <!--
-### Resolution of secondary entry points
+#### Resolution of secondary entry points
 -->
 
 <a id="resolution-of-secondary-entry-points"></a>
 
-### 보조 진입점 찾기
+#### 보조 진입점 찾기
 
 <!--
 Secondary entrypoints can be resolved via the `"exports"` field of the `package.json` for the package.
@@ -391,12 +389,15 @@ Secondary entrypoints can be resolved via the `"exports"` field of the `package.
 보조 진입점은 패키지 `package.json`의 `"exports"` 필드로 찾을 수 있습니다.
 
 <!--
-## README.md
+To learn how to configure secondary entry points in a library, see [Entry points](tools/libraries/creating-libraries#entry-points).
+
+### README.md
 -->
 
-<a id="readmemd"></a>
+라이브러리에서 보조 진입점을 설정하는 방법은 [진입점](tools/libraries/creating-libraries#entry-points)을 참고하세요.
 
-## README.md
+
+### README.md
 
 <!--
 The README file in the Markdown format that is used to display description of a package on npm and GitHub.
@@ -421,12 +422,22 @@ against that repo. License: MIT
 ```
 
 <!--
-## Partial compilation
+## Library Compilation and Package Optimizations
+
+This section describes the compilation process for libraries and optimizations that apply to the npm package before publishing the artifact to a registry.
+
+### Partial compilation
 -->
+
+<a id="library-compilation-and-package-optimizations"></a>
+
+## 라이브러리 컴파일과 패키지 최적화
+
+이 섹션에서는 라이브러리 컴파일 과정과 결과물을 레지스트리에 배포하기 전에 npm 패키지에 적용하는 최적화를 설명합니다.
 
 <a id="partial-compilation"></a>
 
-## 부분 컴파일
+### 부분 컴파일
 
 <!--
 Libraries in the Angular Package Format must be published in "partial compilation" mode.
@@ -468,14 +479,6 @@ Angular 코드를 부분 컴파일하려면 `tsconfig.json`의 `angularCompilerO
 빌드 파이프라인에서 Angular CLI를 사용하지 않는다면 [Angular CLI 외부에서 부분 Ivy 코드 사용하기](tools/libraries/creating-libraries#consuming-partial-ivy-code-outside-the-angular-cli) 가이드를 참고하세요.
 
 <!--
-## Optimizations
--->
-
-<a id="optimizations"></a>
-
-## 최적화
-
-<!--
 ### Flattening of ES modules
 -->
 
@@ -488,7 +491,7 @@ The Angular Package Format specifies that code be published in "flattened" ES mo
 This significantly reduces the build time of Angular applications as well as download and parse time of the final application bundle.
 Please check out the excellent post ["The cost of small modules"](https://nolanlawson.com/2016/08/15/the-cost-of-small-modules) by Nolan Lawson.
 
-The Angular compiler can generate index ES module files. Tools like Rollup can use these files to generate flattened modules in a _Flattened ES Module_ (FESM) file format.
+The Angular compiler can generate index ES module files. Tools like Rollup / Rolldown can use these files to generate flattened modules in a _Flattened ES Module_ (FESM) file format.
 
 FESM is a file format created by flattening all ES Modules accessible from an entrypoint into a single ES Module.
 It's formed by following all imports from a package and copying that code into a single file while preserving all public ES exports and removing all private imports.
@@ -516,7 +519,7 @@ To generate a flattened ES Module index file, use the following configuration op
 }
 ```
 
-Once the index file \(for example, `my-ui-lib.js`\) is generated by ngc, bundlers and optimizers like Rollup can be used to produce the flattened ESM file.
+Once the index file \(for example, `my-ui-lib.js`\) is generated by ngc, bundlers and optimizers like Rollup and Rolldown can be used to produce the flattened ESM file.
 -->
 
 Angular 패키지 형식은 코드를 "평탄화된" ES 모듈 형식으로 배포하도록 규정합니다.
@@ -524,7 +527,7 @@ Angular 패키지 형식은 코드를 "평탄화된" ES 모듈 형식으로 배�
 Nolan Lawson의 ["작은 모듈의 비용"](https://nolanlawson.com/2016/08/15/the-cost-of-small-modules) 글을 참고하세요.
 
 Angular 컴파일러는 인덱스 ES 모듈 파일을 생성할 수 있습니다.
-Rollup 같은 도구는 이 파일을 사용해서 _평탄화된 ES 모듈_ (FESM) 파일 형식의 모듈을 생성합니다.
+Rollup / Rolldown 같은 도구는 이 파일을 사용해서 _평탄화된 ES 모듈_ (FESM) 파일 형식의 모듈을 생성합니다.
 
 FESM은 진입점에서 접근할 수 있는 모든 ES 모듈을 하나의 ES 모듈로 평탄화한 파일 형식입니다.
 패키지의 모든 import를 따라가면서 코드를 단일 파일에 복사하고, 공개 ES export는 유지하며 비공개 import는 제거해서 만듭니다.
@@ -552,7 +555,7 @@ FESM은 _페솜_ 으로 읽으며, FESM2020처럼 뒤에 숫자를 붙일 수 �
 }
 ```
 
-ngc가 인덱스 파일\(예: `my-ui-lib.js`\)을 생성하면 Rollup 같은 번들러와 최적화 도구로 평탄화된 ESM 파일을 만들 수 있습니다.
+ngc가 인덱스 파일\(예: `my-ui-lib.js`\)을 생성하면 Rollup / Rolldown 같은 번들러와 최적화 도구로 평탄화된 ESM 파일을 만들 수 있습니다.
 
 <!--
 ### "sideEffects" flag
@@ -572,7 +575,7 @@ The end result of these optimizations should be smaller bundle size and better c
 This optimization can break your code if it contains non-local side-effects - this is however not common in Angular applications and it's usually a sign of bad design.
 The recommendation is for all packages to claim the side-effect free status by setting the `sideEffects` property to `false`, and that developers follow the [Angular Style Guide](/style-guide) which naturally results in code without non-local side-effects.
 
-More info: [webpack docs on side effects](https://github.com/webpack/webpack/tree/master/examples/side-effects)
+More info: [webpack docs on side effects](https://github.com/webpack/webpack/tree/main/examples/side-effects)
 -->
 
 EcmaScript 모듈에는 기본적으로 부수 효과가 있다고 간주합니다.
@@ -587,7 +590,7 @@ webpack 같은 빌드 도구는 패키지가 모듈 최상위 수준의 부수 �
 하지만 Angular 애플리케이션에서 이런 경우는 흔하지 않으며 대개 설계가 좋지 않다는 신호입니다.
 모든 패키지에서 `sideEffects` 프로퍼티를 `false`로 설정해서 부수 효과가 없다고 선언하고, 개발자는 범위 밖에 부수 효과를 만들지 않는 코드를 자연스럽게 작성할 수 있도록 [Angular 스타일 가이드](/style-guide)를 따르는 것이 좋습니다.
 
-자세한 내용: [webpack 부수 효과 문서](https://github.com/webpack/webpack/tree/master/examples/side-effects)
+자세한 내용: [webpack 부수 효과 문서](https://github.com/webpack/webpack/tree/main/examples/side-effects)
 
 <!--
 ### ES2022 language level
@@ -606,20 +609,20 @@ ES2022는 현재 Angular CLI와 다른 도구가 사용하는 기본 언어 수�
 Angular CLI는 애플리케이션을 빌드할 때 모든 대상 브라우저가 지원하는 언어 수준으로 번들을 변환합니다.
 
 <!--
-### d.ts bundling / type definition flattening
+### Flattening of Type Definitions (`.d.ts` bundling)
 -->
 
-<a id="dts-bundling-type-definition-flattening"></a>
+<a id="flattening-of-type-definitions-dts-bundling"></a>
 
-### d.ts 번들링과 타입 정의 평탄화
+### 타입 정의 평탄화(`.d.ts` 번들링)
 
 <!--
 As of APF v8, it is recommended to bundle TypeScript definitions.
 Bundling of type definitions can significantly speed up compilations for users, especially if there are many individual `.ts` source files in your library.
 
-Angular uses [`rollup-plugin-dts`](https://github.com/Swatinem/rollup-plugin-dts) to flatten `.d.ts` files (using `rollup`, similar to how FESM files are created).
+Angular uses [`rolldown-plugin-dts`](https://github.com/sxzz/rolldown-plugin-dts) to flatten `.d.ts` files (using `rolldown`, similar to how FESM files are created).
 
-Using rollup for `.d.ts` bundling is beneficial as it supports code splitting between entry-points.
+Using rolldown for `.d.ts` bundling is beneficial as it supports code splitting between entry-points.
 For example, consider you have multiple entrypoints relying on the same shared type, a shared `.d.ts` file would be created along with the larger flattened `.d.ts` files.
 This is desirable and avoids duplication of types.
 -->
@@ -627,9 +630,9 @@ This is desirable and avoids duplication of types.
 APF v8부터는 TypeScript 타입 정의를 번들로 묶는 것이 좋습니다.
 특히 라이브러리에 개별 `.ts` 소스 파일이 많다면 타입 정의 번들링으로 사용자의 컴파일 속도를 크게 높일 수 있습니다.
 
-Angular는 [`rollup-plugin-dts`](https://github.com/Swatinem/rollup-plugin-dts)를 사용해서 `.d.ts` 파일을 평탄화합니다(FESM 파일을 만드는 방식과 비슷하게 `rollup`을 사용합니다).
+Angular는 [`rolldown-plugin-dts`](https://github.com/sxzz/rolldown-plugin-dts)를 사용해서 `.d.ts` 파일을 평탄화합니다(FESM 파일을 만드는 방식과 비슷하게 `rolldown`을 사용합니다).
 
-rollup은 진입점 사이의 코드 분할을 지원하므로 `.d.ts` 번들링에 유용합니다.
+rolldown은 진입점 사이의 코드 분할을 지원하므로 `.d.ts` 번들링에 유용합니다.
 예를 들어 여러 진입점이 같은 공통 타입에 의존한다면, 평탄화된 큰 `.d.ts` 파일들과 함께 공통 `.d.ts` 파일이 생성됩니다.
 이렇게 하면 타입 중복을 피할 수 있습니다.
 
@@ -637,7 +640,6 @@ rollup은 진입점 사이의 코드 분할을 지원하므로 `.d.ts` 번들링
 ### Tslib
 -->
 
-<a id="tslib"></a>
 
 ### Tslib
 
@@ -658,15 +660,21 @@ tslib 버전이 라이브러리를 컴파일할 때 사용하는 TypeScript 버�
 ## 예제
 
 <!--
+The npm packages of the Angular framework are a good reference point for APF-compliant library packages.
+Browse the file layout and npm package on UNPKG:
+
 <docs-pill-row>
-  <docs-pill href="https://app.unpkg.com/@angular/core@21.0.6" title="@angular/core package"/>
-  <docs-pill href="https://app.unpkg.com/@angular/material@21.0.3" title="@angular/material package"/>
+  <docs-pill href="https://app.unpkg.com/@angular/core@latest" title="@angular/core package"/>
+  <docs-pill href="https://app.unpkg.com/@angular/material@latest" title="@angular/material package"/>
 </docs-pill-row>
 -->
 
+Angular 프레임워크의 npm 패키지는 APF 규격에 맞는 라이브러리 패키지를 만드는 좋은 참고 자료입니다.
+UNPKG에서 파일 구조와 npm 패키지를 살펴보세요.
+
 <docs-pill-row>
-  <docs-pill href="https://app.unpkg.com/@angular/core@21.0.6" title="@angular/core 패키지"/>
-  <docs-pill href="https://app.unpkg.com/@angular/material@21.0.3" title="@angular/material 패키지"/>
+  <docs-pill href="https://app.unpkg.com/@angular/core@latest" title="@angular/core 패키지"/>
+  <docs-pill href="https://app.unpkg.com/@angular/material@latest" title="@angular/material 패키지"/>
 </docs-pill-row>
 
 <!--
@@ -739,7 +747,6 @@ ECMAScript 명세의 모듈 정의와 같습니다.
 ### ESM
 -->
 
-<a id="esm"></a>
 
 ### ESM
 
@@ -753,7 +760,6 @@ ECMAScript 모듈의 약어입니다\(위 설명 참고\).
 ### FESM
 -->
 
-<a id="fesm"></a>
 
 ### FESM
 
@@ -931,11 +937,11 @@ The available top-level imports are what define the public API and are exposed i
 
 <!--
 The process of identifying and removing code not used by an application - also known as dead code elimination.
-This is a global optimization performed at the application level using tools like [Rollup](https://rollupjs.org), [Closure Compiler](https://developers.google.com/closure/compiler), or [Terser](https://github.com/terser/terser).
+This is a global optimization performed at the application level using tools like [Rollup](https://rollupjs.org), [Rolldown](https://rolldown.rs/), [Closure Compiler](https://developers.google.com/closure/compiler), or [Terser](https://github.com/terser/terser).
 -->
 
 애플리케이션에서 사용하지 않는 코드를 찾아 제거하는 과정이며, 죽은 코드 제거라고도 합니다.
-[Rollup](https://rollupjs.org), [Closure Compiler](https://developers.google.com/closure/compiler), [Terser](https://github.com/terser/terser) 같은 도구를 사용해서 애플리케이션 수준에서 수행하는 전체 최적화입니다.
+[Rollup](https://rollupjs.org), [Rolldown](https://rolldown.rs/), [Closure Compiler](https://developers.google.com/closure/compiler), [Terser](https://github.com/terser/terser) 같은 도구를 사용해서 애플리케이션 수준에서 수행하는 전체 최적화입니다.
 
 <!--
 ### AOT compiler

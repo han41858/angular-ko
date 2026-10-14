@@ -7,7 +7,7 @@
 # WebMCP
 
 <!--
-Web Model Context Protocol (WebMCP) is an [emerging web standard](https://github.com/webmachinelearning/webmcp/) that allows web applications to expose structured tools directly to AI agents running natively in the browser. Tools defined by an application allow AI assistants to interact with it directly, providing additional capabilities to the agent and reducing the need for DOM interactions.
+WebMCP is a [proposed web standard](https://github.com/webmachinelearning/webmcp/) that allows web applications to expose structured tools directly to AI agents running natively in the browser. Tools defined by an application allow AI assistants to interact with it directly, providing additional capabilities to the agent and reducing the need for DOM interactions.
 
 For example, an application to register a new user might provide a WebMCP tool for a browser's AI agent to create the user directly rather than requiring the agent to go through a complex wizard UI via DOM interactions.
 
@@ -16,7 +16,7 @@ Angular provides experimental support for WebMCP, allowing you to easily registe
 IMPORTANT: The WebMCP spec is very early in its lifecycle and is undergoing frequent changes. As such, WebMCP support in Angular is currently [**experimental**](reference/releases#experimental). APIs are subject to change even outside of major versions.
 -->
 
-웹 모델 컨텍스트 프로토콜(WebMCP)은 웹 애플리케이션이 브라우저에서 기본적으로 실행되는 AI 에이전트에 구조화된 도구를 직접 제공할 수 있게 하는 [새로운 웹 표준](https://github.com/webmachinelearning/webmcp/)입니다.
+WebMCP는 웹 애플리케이션이 브라우저에서 기본적으로 실행되는 AI 에이전트에 구조화된 도구를 직접 제공할 수 있게 하는 [제안된 웹 표준](https://github.com/webmachinelearning/webmcp/)입니다.
 애플리케이션이 정의한 도구를 사용하면 AI 어시스턴트가 애플리케이션과 직접 상호작용할 수 있으므로, 에이전트의 기능을 확장하고 DOM 상호작용의 필요성을 줄일 수 있습니다.
 
 예를 들어 신규 사용자 등록 애플리케이션은 브라우저의 AI 에이전트가 DOM 상호작용으로 복잡한 마법사 UI를 거치는 대신, 사용자를 직접 생성하도록 WebMCP 도구를 제공할 수 있습니다.
@@ -254,15 +254,15 @@ export const routes: Routes = [
 ];
 ```
 
-NOTE: When registering tools to a particular route, consider configuring the router to use [`withExperimentalAutoCleanupInjectors`](api/router/withExperimentalAutoCleanupInjectors) to ensure tools are automatically _unregistered_ when the user navigates away from the route. Without this option, WebMCP tools declared on routes will remain accessible to AI agents even after the user has navigated to a different route.
+NOTE: When registering tools to a particular route, consider configuring the router to use [`withAutoCleanupInjectors`](api/router/withAutoCleanupInjectors) to ensure tools are automatically _unregistered_ when the user navigates away from the route. Without this option, WebMCP tools declared on routes will remain accessible to AI agents even after the user has navigated to a different route.
 
 ```ts {header:"app.config.ts"}
 import {ApplicationConfig} from '@angular/core';
-import {provideRouter, withExperimentalAutoCleanupInjectors} from '@angular/router';
+import {provideRouter, withAutoCleanupInjectors} from '@angular/router';
 import {routes} from './routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes, withExperimentalAutoCleanupInjectors())],
+  providers: [provideRouter(routes, withAutoCleanupInjectors())],
 };
 ```
 -->
@@ -294,16 +294,16 @@ export const routes: Routes = [
 ];
 ```
 
-참고: 특정 라우팅 규칙에 도구를 등록할 때는 사용자가 해당 라우팅 규칙을 벗어나면 도구의 _등록이 자동으로 해제_ 되도록 라우터에 [`withExperimentalAutoCleanupInjectors`](api/router/withExperimentalAutoCleanupInjectors)를 설정하는 것을 고려하세요.
+참고: 특정 라우팅 규칙에 도구를 등록할 때는 사용자가 해당 라우팅 규칙을 벗어나면 도구의 _등록이 자동으로 해제_ 되도록 라우터에 [`withAutoCleanupInjectors`](api/router/withAutoCleanupInjectors)를 설정하는 것을 고려하세요.
 이 옵션을 사용하지 않으면 사용자가 다른 라우팅 규칙으로 이동한 뒤에도 AI 에이전트가 이전 라우팅 규칙에 선언된 WebMCP 도구에 접근할 수 있습니다.
 
 ```ts {header:"app.config.ts"}
 import {ApplicationConfig} from '@angular/core';
-import {provideRouter, withExperimentalAutoCleanupInjectors} from '@angular/router';
+import {provideRouter, withAutoCleanupInjectors} from '@angular/router';
 import {routes} from './routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes, withExperimentalAutoCleanupInjectors())],
+  providers: [provideRouter(routes, withAutoCleanupInjectors())],
 };
 ```
 
@@ -456,7 +456,7 @@ export class UserRegistration {
       },
       submission: {
         action: async (formValue) => {
-          console.log('Submitting user:', formValue);
+          console.log('Submitting user:', formValue().value());
           // ...
         },
       },
@@ -509,7 +509,7 @@ export class UserRegistration {
       },
       submission: {
         action: async (formValue) => {
-          console.log('Submitting user:', formValue);
+          console.log('Submitting user:', formValue().value());
           // ...
         },
       },

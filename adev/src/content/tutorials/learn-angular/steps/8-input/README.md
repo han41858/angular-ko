@@ -105,6 +105,8 @@ export class App {}
 
 <docs-workflow>
 
+<a id="define-an-input-property"></a>
+
 <docs-step title="`input()` 프로퍼티를 선언해 보세요">
 
 `user.ts` 파일을 열어서 `User` 컴포넌트에 입력 프로퍼티로 `name`을 `string` 타입으로 선언해 보세요.
@@ -112,6 +114,8 @@ export class App {}
 `name` 프로퍼티가 템플릿에 그대로 바인딩되지 않도록 실행해야 한다는 것을 주의하세요.
 
 </docs-step>
+
+<a id="pass-a-value-to-the-input-property"></a>
 
 <docs-step title="입력 프로퍼티로 데이터를 전달해 보세요">
 
