@@ -66,6 +66,8 @@ This is just the beginning of what's possible with Angular templates, keep on le
 
 <docs-workflow>
 
+<a id="add-a-property-called-city"></a>
+
 <docs-step title="`city` 프로퍼티를 추가하세요">
 컴포넌트 클래스를 수정해 봅시다. `App` 클래스에 `city` 라는 프로퍼티를 추가해 보세요.
 
@@ -83,6 +85,8 @@ export class App {
 템플릿에 클래스 프로퍼티를 사용하려면 `{{ }}` 문법을 사용하면 됩니다.
 </docs-step>
 
+<a id="update-the-component-template"></a>
+
 <docs-step title="컴포넌트 템플릿을 수정해 보세요">
 
 `template` 프로퍼티를 다음과 같이 수정합니다:
@@ -95,6 +99,8 @@ template: `Hello {{ city }}`,
 문자열 바인딩을 활용하면 동적 텍스트를 템플릿에 자유롭게 추가할 수 있습니다.
 그리고 이 문법에 표현식을 사용하면 함수를 실행할 수도 있습니다.
 </docs-step>
+
+<a id="more-practice-with-interpolation"></a>
 
 <docs-step title="문자열 바인딩을 더 활용해 보세요">
 

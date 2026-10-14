@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Menu">
-</docs-decorative-header>
+# Menu
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/" title="Menu ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="메뉴">
-</docs-decorative-header>
+# 메뉴
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/menubar/" title="메뉴 ARIA 패턴"/>
@@ -549,244 +547,27 @@ describe('MyMenuComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Menu`](/api/aria/menu/Menu)
+- [`MenuBar`](/api/aria/menu/MenuBar)
+- [`MenuItem`](/api/aria/menu/MenuItem)
+- [`MenuTrigger`](/api/aria/menu/MenuTrigger)
+- [`MenuContent`](/api/aria/menu/MenuContent)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### Menu
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="menu"></a>
-
-### Menu
-
-<!--
-The container directive for menu items.
--->
-
-메뉴 항목의 컨테이너 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property       | Type      | Default | Description                                                   |
-| -------------- | --------- | ------- | ------------------------------------------------------------- |
-| `disabled`     | `boolean` | `false` | Disables all items in the menu                                |
-| `wrap`         | `boolean` | `true`  | Whether keyboard navigation wraps at edges                    |
-| `softDisabled` | `boolean` | `true`  | When `true`, disabled items are focusable but not interactive |
--->
-
-| 프로퍼티       | 타입      | 기본값  | 설명                                                                       |
-| -------------- | --------- | ------- | -------------------------------------------------------------------------- |
-| `disabled`     | `boolean` | `false` | 메뉴의 모든 항목을 비활성화합니다.                                         |
-| `wrap`         | `boolean` | `true`  | 키보드 탐색에서 끝에 도달하면 순환할지 지정합니다.                         |
-| `softDisabled` | `boolean` | `true`  | `true`이면 비활성화된 항목도 포커스를 받을 수 있지만 조작할 수는 없습니다. |
-
-<!--
-#### Methods
--->
-
-<a id="methods"></a>
-
-#### 메서드
-
-<!--
-| Method  | Parameters | Description     |
-| ------- | ---------- | --------------- |
-| `close` | none       | Closes the menu |
--->
-
-| 메서드  | 인자 | 설명             |
-| ------- | ---- | ---------------- |
-| `close` | 없음 | 메뉴를 닫습니다. |
-
-<!--
-### MenuBar
--->
-
-<a id="menubar"></a>
-
-### MenuBar
-
-<!--
-A horizontal container for multiple menus.
--->
-
-여러 메뉴를 담는 수평 컨테이너입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property       | Type      | Default | Description                                                   |
-| -------------- | --------- | ------- | ------------------------------------------------------------- |
-| `disabled`     | `boolean` | `false` | Disables the entire menubar                                   |
-| `wrap`         | `boolean` | `true`  | Whether keyboard navigation wraps at edges                    |
-| `softDisabled` | `boolean` | `true`  | When `true`, disabled items are focusable but not interactive |
--->
-
-| 프로퍼티       | 타입      | 기본값  | 설명                                                                       |
-| -------------- | --------- | ------- | -------------------------------------------------------------------------- |
-| `disabled`     | `boolean` | `false` | 전체 메뉴바를 비활성화합니다.                                              |
-| `wrap`         | `boolean` | `true`  | 키보드 탐색에서 끝에 도달하면 순환할지 지정합니다.                         |
-| `softDisabled` | `boolean` | `true`  | `true`이면 비활성화된 항목도 포커스를 받을 수 있지만 조작할 수는 없습니다. |
-
-<!--
-### MenuItem
--->
-
-<a id="menuitem"></a>
-
-### MenuItem
-
-<!--
-An individual item within a menu.
--->
-
-메뉴 안의 개별 항목입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-2"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property     | Type                                                  | Default      | Description                                          |
-| ------------ | ----------------------------------------------------- | ------------ | ---------------------------------------------------- |
-| `value`      | `any`                                                 | —            | **Required.** Value for this item                    |
-| `role`       | `'menuitem' \| 'menuitemcheckbox' \| 'menuitemradio'` | `'menuitem'` | The ARIA role for the menu item                      |
-| `disabled`   | `boolean`                                             | `false`      | Disables this menu item                              |
-| `submenu`    | `Menu`                                                | —            | Reference to a submenu                               |
-| `searchTerm` | `string`                                              | `''`         | Search term for typeahead (supports two-way binding) |
--->
-
-| 프로퍼티     | 타입                                                  | 기본값       | 설명                                                              |
-| ------------ | ----------------------------------------------------- | ------------ | ----------------------------------------------------------------- |
-| `value`      | `any`                                                 | —            | **필수.** 이 항목의 값입니다.                                     |
-| `role`       | `'menuitem' \| 'menuitemcheckbox' \| 'menuitemradio'` | `'menuitem'` | 메뉴 항목의 ARIA 역할입니다.                                      |
-| `disabled`   | `boolean`                                             | `false`      | 이 메뉴 항목을 비활성화합니다.                                    |
-| `submenu`    | `Menu`                                                | —            | 하위 메뉴의 참조입니다.                                           |
-| `searchTerm` | `string`                                              | `''`         | 문자 입력 검색에 사용할 검색어입니다(양방향 바인딩을 지원합니다). |
-
-<!--
-#### Signals
--->
-
-<a id="signals"></a>
-
-#### 시그널
-
-<!--
-| Property   | Type              | Description                                |
-| ---------- | ----------------- | ------------------------------------------ |
-| `active`   | `Signal<boolean>` | Whether the item currently has focus       |
-| `expanded` | `Signal<boolean>` | Whether the submenu is expanded            |
-| `hasPopup` | `Signal<boolean>` | Whether the item has an associated submenu |
-
-NOTE: MenuItem does not expose public methods. Use the `submenu` input to associate submenus with menu items.
--->
-
-| 프로퍼티   | 타입              | 설명                                         |
-| ---------- | ----------------- | -------------------------------------------- |
-| `active`   | `Signal<boolean>` | 현재 항목에 포커스가 있는지 나타냅니다.      |
-| `expanded` | `Signal<boolean>` | 하위 메뉴가 펼쳐져 있는지 나타냅니다.        |
-| `hasPopup` | `Signal<boolean>` | 항목에 연결된 하위 메뉴가 있는지 나타냅니다. |
-
-NOTE: MenuItem은 공개 메서드를 제공하지 않습니다.
-메뉴 항목에 하위 메뉴를 연결하려면 `submenu` 입력 프로퍼티를 사용하세요.
-
-<!--
-### MenuTrigger
--->
-
-<a id="menutrigger"></a>
-
-### MenuTrigger
-
-<!--
-A button or element that opens a menu.
--->
-
-메뉴를 여는 버튼이나 엘리먼트입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-3"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property       | Type      | Default | Description                                |
-| -------------- | --------- | ------- | ------------------------------------------ |
-| `menu`         | `Menu`    | —       | **Required.** The menu to trigger          |
-| `disabled`     | `boolean` | `false` | Disables the trigger                       |
-| `softDisabled` | `boolean` | `true`  | When `true`, disabled trigger is focusable |
--->
-
-| 프로퍼티       | 타입      | 기본값  | 설명                                                      |
-| -------------- | --------- | ------- | --------------------------------------------------------- |
-| `menu`         | `Menu`    | —       | **필수.** 열고 닫을 메뉴입니다.                           |
-| `disabled`     | `boolean` | `false` | 트리거를 비활성화합니다.                                  |
-| `softDisabled` | `boolean` | `true`  | `true`이면 비활성화된 트리거도 포커스를 받을 수 있습니다. |
-
-<!--
-#### Signals
--->
-
-<a id="signals-1"></a>
-
-#### 시그널
-
-<!--
-| Property   | Type              | Description                                |
-| ---------- | ----------------- | ------------------------------------------ |
-| `expanded` | `Signal<boolean>` | Whether the menu is currently open         |
-| `hasPopup` | `Signal<boolean>` | Whether the trigger has an associated menu |
--->
-
-| 프로퍼티   | 타입              | 설명                                      |
-| ---------- | ----------------- | ----------------------------------------- |
-| `expanded` | `Signal<boolean>` | 현재 메뉴가 열려 있는지 나타냅니다.       |
-| `hasPopup` | `Signal<boolean>` | 트리거에 연결된 메뉴가 있는지 나타냅니다. |
-
-<!--
-#### Methods
--->
-
-<a id="methods-1"></a>
-
-#### 메서드
-
-<!--
-| Method   | Parameters | Description                  |
-| -------- | ---------- | ---------------------------- |
-| `open`   | none       | Opens the menu               |
-| `close`  | none       | Closes the menu              |
-| `toggle` | none       | Toggles the menu open/closed |
--->
-
-| 메서드   | 인자 | 설명                                |
-| -------- | ---- | ----------------------------------- |
-| `open`   | 없음 | 메뉴를 엽니다.                      |
-| `close`  | 없음 | 메뉴를 닫습니다.                    |
-| `toggle` | 없음 | 메뉴의 열림/닫힘 상태를 전환합니다. |
+- [`Menu`](/api/aria/menu/Menu)
+- [`MenuBar`](/api/aria/menu/MenuBar)
+- [`MenuItem`](/api/aria/menu/MenuItem)
+- [`MenuTrigger`](/api/aria/menu/MenuTrigger)
+- [`MenuContent`](/api/aria/menu/MenuContent)

@@ -16,11 +16,11 @@
 
 <!--
 Just as TypeScript catches type errors in your code, Angular checks the expressions and bindings within the templates of your application and can report any type errors it finds.
-Angular currently has three modes of doing this, depending on the value of the `fullTemplateTypeCheck` and `strictTemplates` flags in [Angular's compiler options](reference/configs/angular-compiler-options).
+Angular has two modes of doing this, depending on the value of the `strictTemplates` flag in [Angular's compiler options](reference/configs/angular-compiler-options).
 -->
 
 TypeScript가 코드의 타입 오류를 찾아내듯이 Angular도 애플리케이션 템플릿의 표현식과 바인딩을 검사하고 발견한 타입 오류를 보고할 수 있습니다.
-Angular에는 현재 세 가지 검사 모드가 있으며, [Angular 컴파일러 옵션](reference/configs/angular-compiler-options)의 `fullTemplateTypeCheck`와 `strictTemplates` 플래그 값으로 결정됩니다.
+Angular에는 [Angular 컴파일러 옵션](reference/configs/angular-compiler-options)의 `strictTemplates` 플래그 값에 따라 두 가지 검사 모드가 있습니다.
 
 <!--
 ### Basic mode
@@ -31,7 +31,7 @@ Angular에는 현재 세 가지 검사 모드가 있으며, [Angular 컴파일�
 ### 기본 모드
 
 <!--
-In the most basic type-checking mode, with the `fullTemplateTypeCheck` flag set to `false`, Angular validates only top-level expressions in a template.
+In the basic type-checking mode, with the `strictTemplates` flag set to `false`, Angular validates only top-level expressions in a template.
 
 If you write `<map [city]="user.address.city">`, the compiler verifies the following:
 
@@ -49,7 +49,7 @@ The compiler also has some major limitations in this mode:
 In many cases, these things end up as type `any`, which can cause subsequent parts of the expression to go unchecked.
 -->
 
-가장 기본적인 타입 검사 모드에서는 `fullTemplateTypeCheck` 플래그가 `false`이며, Angular는 템플릿의 최상위 표현식만 검증합니다.
+기본 타입 검사 모드에서는 `strictTemplates` 플래그가 `false`이며, Angular는 템플릿의 최상위 표현식만 검증합니다.
 
 `<map [city]="user.address.city">`라고 작성하면 컴파일러는 다음을 확인합니다:
 
@@ -67,49 +67,6 @@ In many cases, these things end up as type `any`, which can cause subsequent par
 이러한 항목은 대부분 `any` 타입이 되어 표현식의 뒷부분이 검사되지 않을 수 있습니다.
 
 <!--
-### Full mode
--->
-
-<a id="full-mode"></a>
-
-### 전체 모드
-
-<!--
-If the `fullTemplateTypeCheck` flag is set to `true`, Angular is more aggressive in its type-checking within templates.
-In particular:
-
-- Embedded views \(such as those within an `*ngIf` or `*ngFor`\) are checked
-- Pipes have the correct return type
-- Local references to directives and pipes have the correct type \(except for any generic parameters, which will be `any`\)
-
-The following still have type `any`.
-
-- Local references to DOM elements
-- The `$event` object
-- Safe navigation expressions
-
-IMPORTANT: The `fullTemplateTypeCheck` flag has been deprecated in Angular 13.
-The `strictTemplates` family of compiler options should be used instead.
--->
-
-`fullTemplateTypeCheck` 플래그가 `true`이면 Angular가 템플릿의 타입을 더 적극적으로 검사합니다.
-특히 다음과 같은 차이가 있습니다:
-
-- `*ngIf`, `*ngFor` 내부와 같은 내장 뷰도 검사합니다.
-- 파이프의 반환 타입을 올바르게 확인합니다.
-- 디렉티브와 파이프의 지역 참조에 올바른 타입을 부여합니다.
-  단, 제네릭 매개변수는 `any`가 됩니다.
-
-다음 항목은 여전히 `any` 타입입니다.
-
-- DOM 엘리먼트의 지역 참조
-- `$event` 객체
-- 안전한 탐색 표현식
-
-중요: `fullTemplateTypeCheck` 플래그는 Angular 13에서 사용 중단되었습니다.
-대신 `strictTemplates` 계열의 컴파일러 옵션을 사용해야 합니다.
-
-<!--
 ### Strict mode
 -->
 
@@ -118,28 +75,30 @@ The `strictTemplates` family of compiler options should be used instead.
 ### 엄격 모드
 
 <!--
-Angular maintains the behavior of the `fullTemplateTypeCheck` flag, and introduces a third "strict mode".
-Strict mode is a superset of full mode, and is accessed by setting the `strictTemplates` flag to true.
-This flag supersedes the `fullTemplateTypeCheck` flag.
+Strict mode is the default, and is enabled when the `strictTemplates` flag is `true` or not set.
 
-In addition to the full mode behavior, Angular does the following:
+In strict mode, Angular does the following:
 
+- Checks embedded views \(such as those within an `*ngIf` or `*ngFor`\)
+- Infers the correct return type of pipes
+- Infers the correct type of local references to directives and pipes
 - Verifies that component/directive bindings are assignable to their `input()`s
-- Obeys TypeScript's `strictNullChecks` flag when validating the preceding mode
+- Obeys TypeScript's `strictNullChecks` flag when validating input bindings
 - Infers the correct type of components/directives, including generics
 - Infers template context types where configured \(for example, allowing correct type-checking of `NgFor`\)
 - Infers the correct type of `$event` in component/directive, DOM, and animation event bindings
 - Infers the correct type of local references to DOM elements, based on the tag name \(for example, the type that `document.createElement` would return for that tag\)
 -->
 
-Angular는 `fullTemplateTypeCheck` 플래그의 동작을 유지하면서 세 번째 모드인 "엄격 모드"를 제공합니다.
-엄격 모드는 전체 모드의 기능을 모두 포함하며 `strictTemplates` 플래그를 true로 설정하면 사용할 수 있습니다.
-이 플래그는 `fullTemplateTypeCheck` 플래그를 대체합니다.
+엄격 모드는 기본 모드이며 `strictTemplates` 플래그가 `true`이거나 설정되지 않았을 때 활성화됩니다.
 
-전체 모드의 동작에 더해 Angular는 다음을 수행합니다:
+엄격 모드에서 Angular는 다음을 수행합니다:
 
+- `*ngIf`나 `*ngFor` 내부와 같은 내장 뷰를 검사합니다.
+- 파이프의 올바른 반환 타입을 추론합니다.
+- 디렉티브와 파이프의 지역 참조에 대해 올바른 타입을 추론합니다.
 - 컴포넌트/디렉티브 바인딩을 해당 `input()`에 할당할 수 있는지 확인합니다.
-- 앞의 검증 과정에서 TypeScript의 `strictNullChecks` 플래그를 따릅니다.
+- 입력 바인딩을 검증할 때 TypeScript의 `strictNullChecks` 플래그를 따릅니다.
 - 제네릭을 포함한 컴포넌트/디렉티브의 올바른 타입을 추론합니다.
 - 설정된 경우 템플릿 컨텍스트 타입을 추론합니다.
   예를 들어 `NgFor`의 타입을 올바르게 검사할 수 있습니다.
@@ -156,7 +115,7 @@ Angular는 `fullTemplateTypeCheck` 플래그의 동작을 유지하면서 세 �
 ## `*ngFor` 검사하기
 
 <!--
-The three modes of type-checking treat embedded views differently.
+The two modes of type-checking treat embedded views differently.
 Consider the following example.
 
 ```ts {header:"User interface"}
@@ -178,11 +137,10 @@ interface User {
 
 The `<h2>` and the `<span>` are in the `*ngFor` embedded view.
 In basic mode, Angular doesn't check either of them.
-However, in full mode, Angular checks that `config` and `user` exist and assumes a type of `any`.
 In strict mode, Angular knows that the `user` in the `<span>` has a type of `User`, and that `address` is an object with a `city` property of type `string`.
 -->
 
-세 가지 타입 검사 모드는 내장 뷰를 서로 다르게 처리합니다.
+두 가지 타입 검사 모드는 내장 뷰를 서로 다르게 처리합니다.
 다음 예제를 살펴봅시다.
 
 ```ts {header:"User interface"}
@@ -204,7 +162,6 @@ interface User {
 
 `<h2>`와 `<span>`은 `*ngFor` 내장 뷰 안에 있습니다.
 기본 모드에서는 Angular가 둘 다 검사하지 않습니다.
-전체 모드에서는 `config`와 `user`가 존재하는지 확인하고 타입을 `any`로 간주합니다.
 엄격 모드에서는 `<span>`의 `user`가 `User` 타입이고, `address`는 `string` 타입의 `city` 프로퍼티를 가진 객체라는 것을 알고 있습니다.
 
 <!--
@@ -216,7 +173,7 @@ interface User {
 ## 템플릿 오류 해결하기
 
 <!--
-With strict mode, you might encounter template errors that didn't arise in either of the previous modes.
+With strict mode, you might encounter template errors that didn't arise in basic mode.
 These errors often represent genuine type mismatches in the templates that were not caught by the previous tooling.
 If this is the case, the error message should make it clear where in the template the problem occurs.
 
@@ -235,31 +192,32 @@ In case of a false positive like these, there are a few options:
 - Disable certain type-checking operations individually, while maintaining strictness in other aspects, by setting a _strictness flag_ to `false`
 - If you want to use `strictTemplates` and `strictNullChecks` together, opt out of strict null type checking specifically for input bindings using `strictNullInputTypes`
 
-Unless otherwise commented, each following option is set to the value for `strictTemplates` \(`true` when `strictTemplates` is `true` and conversely, the other way around\).
+Each following option is set to the value for `strictTemplates` \(`true` when `strictTemplates` is `true` and conversely, the other way around\):
 
-| Strictness flag              | Effect                                                                                                                                                                                                                                                                                                                                                                        |
-| :--------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `strictInputTypes`           | Whether the assignability of a binding expression to the `@Input()` field is checked. Also affects the inference of directive generic types.                                                                                                                                                                                                                                  |
-| `strictInputAccessModifiers` | Whether access modifiers such as `private`/`protected`/`readonly` are honored when assigning a binding expression to an `@Input()` or `input()`. If disabled, the access modifiers of the input are ignored; only the type is checked. This option is `false` by default, even with `strictTemplates` set to `true`. Note: This checking only applies to inputs, not outputs. |
-| `strictNullInputTypes`       | Whether `strictNullChecks` is honored when checking `@Input()` bindings \(per `strictInputTypes`\). Turning this off can be useful when using a library that was not built with `strictNullChecks` in mind.                                                                                                                                                                   |
-| `strictAttributeTypes`       | Whether to check `@Input()` bindings that are made using text attributes. For example, `<input matInput disabled="true">` \(setting the `disabled` property to the string `'true'`\) vs `<input matInput [disabled]="true">` \(setting the `disabled` property to the boolean `true`\).                                                                                       |
-| `strictSafeNavigationTypes`  | Whether the return type of safe navigation operations \(for example, `user?.name` will be correctly inferred based on the type of `user`\). If disabled, `user?.name` will be of type `any`.                                                                                                                                                                                  |
-| `strictDomLocalRefTypes`     | Whether local references to DOM elements will have the correct type. If disabled `ref` will be of type `any` for `<input #ref>`.                                                                                                                                                                                                                                              |
-| `strictOutputEventTypes`     | Whether `$event` will have the correct type for event bindings to component/directive an `@Output()`, or to animation events. If disabled, it will be `any`.                                                                                                                                                                                                                  |
-| `strictDomEventTypes`        | Whether `$event` will have the correct type for event bindings to DOM events. If disabled, it will be `any`.                                                                                                                                                                                                                                                                  |
-| `strictContextGenerics`      | Whether the type parameters of generic components will be inferred correctly \(including any generic bounds\). If disabled, any type parameters will be `any`.                                                                                                                                                                                                                |
-| `strictLiteralTypes`         | Whether object and array literals declared in the template will have their type inferred. If disabled, the type of such literals will be `any`. This flag is `true` when _either_ `fullTemplateTypeCheck` or `strictTemplates` is set to `true`.                                                                                                                              |
+| Strictness flag              | Effect                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `strictInputTypes`           | Whether the assignability of a binding expression to the `@Input()` field is checked. Also affects the inference of directive generic types.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `strictNullInputTypes`       | Whether `strictNullChecks` is honored when checking `@Input()` bindings \(per `strictInputTypes`\). Turning this off can be useful when using a library that was not built with `strictNullChecks` in mind.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `strictAttributeTypes`       | Whether to check `@Input()` bindings that are made using text attributes. For example, `<input matInput disabled="true">` \(setting the `disabled` property to the string `'true'`\) vs `<input matInput [disabled]="true">` \(setting the `disabled` property to the boolean `true`\).                                                                                                                                                                                                                                                                                                                                                        |
+| `strictSafeNavigationTypes`  | Whether the return type of safe navigation operations \(for example, `user?.name` will be correctly inferred based on the type of `user`\). If disabled, `user?.name` will be of type `any`.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `strictDomLocalRefTypes`     | Whether local references to DOM elements will have the correct type. If disabled `ref` will be of type `any` for `<input #ref>`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `strictOutputEventTypes`     | Whether `$event` will have the correct type for event bindings to component/directive an `@Output()`, or to animation events. If disabled, it will be `any`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `strictDomEventTypes`        | Whether `$event` will have the correct type for event bindings to DOM events. If disabled, it will be `any`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `strictContextGenerics`      | Whether the type parameters of generic components will be inferred correctly \(including any generic bounds\). If disabled, any type parameters will be `any`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `strictLiteralTypes`         | Whether object and array literals declared in the template will have their type inferred. If disabled, the type of such literals will be `any`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| Strictness flag              | Effect                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `strictInputAccessModifiers` | Whether access modifiers such as `private`/`protected`/`readonly` are honored when assigning a binding expression to an `@Input()` or `input()`. If disabled, the access modifiers of the input are ignored; only the type is checked. Note: This checking only applies to inputs, not outputs.                                                                                                                                                                                                                                                                                                                                                |
+| `strictUnclaimedEventNames`  | Whether to report event bindings whose name matches neither an output of a directive applied to the element nor a known native DOM event — the ones described by TypeScript's `GlobalEventHandlersEventMap`, compared ignoring case — which usually indicates a misspelled output name. Only single-identifier camelCase names are checked; dash-separated names \(for example, `my-event`\), which custom events dispatched by descendants conventionally use, are exempt, as are elements without a matched component when `CUSTOM_ELEMENTS_SCHEMA` is in use. This option is `false` by default, even with `strictTemplates` set to `true`. |
 
-If you still have issues after troubleshooting with these flags, fall back to full mode by disabling `strictTemplates`.
-
-If that doesn't work, an option of last resort is to turn off full mode entirely with `fullTemplateTypeCheck: false`.
+If you still have issues after troubleshooting with these flags, an option of last resort is to fall back to basic mode by disabling `strictTemplates`.
 
 A type-checking error that you cannot resolve with any of the recommended methods can be the result of a bug in the template type-checker itself.
 If you get errors that require falling back to basic mode, it is likely to be such a bug.
 If this happens, [file an issue](https://github.com/angular/angular/issues) so the team can address it.
 -->
 
-엄격 모드에서는 앞의 두 모드에서 나타나지 않던 템플릿 오류가 발생할 수 있습니다.
+엄격 모드에서는 기본 모드에서 나타나지 않던 템플릿 오류가 발생할 수 있습니다.
 이러한 오류는 이전 도구가 발견하지 못한 실제 템플릿 타입 불일치를 나타내는 경우가 많습니다.
 이 경우 오류 메시지에서 템플릿의 어느 부분에 문제가 있는지 명확하게 확인할 수 있습니다.
 
@@ -280,24 +238,25 @@ If this happens, [file an issue](https://github.com/angular/angular/issues) so t
 - _엄격성 플래그_ 를 `false`로 설정해서 특정 타입 검사만 비활성화하고 다른 검사는 엄격하게 유지합니다.
 - `strictTemplates`와 `strictNullChecks`를 함께 사용하려면 `strictNullInputTypes`로 입력 바인딩에 대해서만 엄격한 null 타입 검사를 제외할 수 있습니다.
 
-별도 설명이 없다면 다음 옵션의 값은 `strictTemplates`와 같습니다(`strictTemplates`가 `true`이면 `true`이고 그 반대도 같습니다).
+다음 옵션의 값은 `strictTemplates`와 같습니다(`strictTemplates`가 `true`이면 `true`이고 그 반대도 같습니다).
 
-| 엄격성 플래그                | 효과                                                                                                                                                                                                                                                                                                             |
-| :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `strictInputTypes`           | 바인딩 표현식을 `@Input()` 필드에 할당할 수 있는지 검사합니다. 디렉티브의 제네릭 타입 추론에도 영향을 줍니다.                                                                                                                                                                                                    |
-| `strictInputAccessModifiers` | 바인딩 표현식을 `@Input()`이나 `input()`에 할당할 때 `private`/`protected`/`readonly` 등의 접근 제어자를 준수할지 결정합니다. 비활성화하면 입력의 접근 제어자를 무시하고 타입만 검사합니다. `strictTemplates`가 `true`여도 기본값은 `false`입니다. 참고: 이 검사는 입력에만 적용하며 출력에는 적용하지 않습니다. |
-| `strictNullInputTypes`       | `strictInputTypes`에 따라 `@Input()` 바인딩을 검사할 때 `strictNullChecks`를 준수할지 결정합니다. `strictNullChecks`를 고려하지 않고 만든 라이브러리를 사용할 때 비활성화하면 도움이 될 수 있습니다.                                                                                                             |
-| `strictAttributeTypes`       | 텍스트 어트리뷰트로 지정한 `@Input()` 바인딩을 검사할지 결정합니다. 예를 들어 `<input matInput disabled="true">`는 `disabled` 프로퍼티를 문자열 `'true'`로 설정하고, `<input matInput [disabled]="true">`는 불리언 `true`로 설정합니다.                                                                          |
-| `strictSafeNavigationTypes`  | 안전한 탐색 연산의 반환 타입을 올바르게 추론할지 결정합니다. 예를 들어 `user?.name`의 타입을 `user`의 타입을 바탕으로 추론합니다. 비활성화하면 `user?.name`은 `any` 타입이 됩니다.                                                                                                                               |
-| `strictDomLocalRefTypes`     | DOM 엘리먼트의 지역 참조가 올바른 타입을 가질지 결정합니다. 비활성화하면 `<input #ref>`의 `ref`는 `any` 타입이 됩니다.                                                                                                                                                                                           |
-| `strictOutputEventTypes`     | 컴포넌트/디렉티브의 `@Output()`이나 애니메이션 이벤트 바인딩에서 `$event`가 올바른 타입을 가질지 결정합니다. 비활성화하면 `any`가 됩니다.                                                                                                                                                                        |
-| `strictDomEventTypes`        | DOM 이벤트 바인딩에서 `$event`가 올바른 타입을 가질지 결정합니다. 비활성화하면 `any`가 됩니다.                                                                                                                                                                                                                   |
-| `strictContextGenerics`      | 제네릭 제약을 포함한 제네릭 컴포넌트의 타입 매개변수를 올바르게 추론할지 결정합니다. 비활성화하면 모든 타입 매개변수가 `any`가 됩니다.                                                                                                                                                                           |
-| `strictLiteralTypes`         | 템플릿에 선언된 객체 및 배열 리터럴의 타입을 추론할지 결정합니다. 비활성화하면 이러한 리터럴의 타입은 `any`가 됩니다. `fullTemplateTypeCheck`나 `strictTemplates` 중 _어느 하나라도_ `true`이면 이 플래그는 `true`입니다.                                                                                        |
+| 엄격성 플래그                | 효과                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `strictInputTypes`           | 바인딩 표현식을 `@Input()` 필드에 할당할 수 있는지 검사합니다. 디렉티브의 제네릭 타입 추론에도 영향을 줍니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `strictNullInputTypes`       | `strictInputTypes`에 따라 `@Input()` 바인딩을 검사할 때 `strictNullChecks`를 준수할지 결정합니다. `strictNullChecks`를 고려하지 않고 만든 라이브러리를 사용할 때 비활성화하면 도움이 될 수 있습니다.                                                                                                                                                                                                                                                                                                                                                                               |
+| `strictAttributeTypes`       | 텍스트 어트리뷰트로 지정한 `@Input()` 바인딩을 검사할지 결정합니다. 예를 들어 `<input matInput disabled="true">`는 `disabled` 프로퍼티를 문자열 `'true'`로 설정하고, `<input matInput [disabled]="true">`는 불리언 `true`로 설정합니다.                                                                                                                                                                                                                                                                                                                                            |
+| `strictSafeNavigationTypes`  | 안전한 탐색 연산의 반환 타입을 올바르게 추론할지 결정합니다. 예를 들어 `user?.name`의 타입을 `user`의 타입을 바탕으로 추론합니다. 비활성화하면 `user?.name`은 `any` 타입이 됩니다.                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `strictDomLocalRefTypes`     | DOM 엘리먼트의 지역 참조가 올바른 타입을 가질지 결정합니다. 비활성화하면 `<input #ref>`의 `ref`는 `any` 타입이 됩니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `strictOutputEventTypes`     | 컴포넌트/디렉티브의 `@Output()`이나 애니메이션 이벤트 바인딩에서 `$event`가 올바른 타입을 가질지 결정합니다. 비활성화하면 `any`가 됩니다.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `strictDomEventTypes`        | DOM 이벤트 바인딩에서 `$event`가 올바른 타입을 가질지 결정합니다. 비활성화하면 `any`가 됩니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `strictContextGenerics`      | 제네릭 제약을 포함한 제네릭 컴포넌트의 타입 매개변수를 올바르게 추론할지 결정합니다. 비활성화하면 모든 타입 매개변수가 `any`가 됩니다.                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `strictLiteralTypes`         | 템플릿에 선언된 객체 및 배열 리터럴의 타입을 추론할지 결정합니다. 비활성화하면 이러한 리터럴의 타입은 `any`가 됩니다.                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| 엄격성 플래그                | 효과                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| :---                         | :---                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `strictInputAccessModifiers` | 바인딩 표현식을 `@Input()`이나 `input()`에 할당할 때 `private`/`protected`/`readonly` 등의 접근 제어자를 준수할지 결정합니다. 비활성화하면 입력의 접근 제어자를 무시하고 타입만 검사합니다. 참고: 이 검사는 입력에만 적용하며 출력에는 적용하지 않습니다.                                                                                                                                                                                                                                                                                                                          |
+| `strictUnclaimedEventNames`  | 요소에 적용된 디렉티브의 출력 이름이나 알려진 네이티브 DOM 이벤트 이름과 일치하지 않는 이벤트 바인딩을 보고할지 결정합니다. DOM 이벤트는 TypeScript의 `GlobalEventHandlersEventMap`을 기준으로 대소문자를 구분하지 않고 비교하며, 일치하지 않으면 보통 출력 이름의 오타입니다. 단일 식별자로 된 camelCase 이름만 검사합니다. 하위 요소가 발생시키는 커스텀 이벤트에 관례적으로 사용하는 `my-event` 같은 하이픈 포함 이름은 제외하며, `CUSTOM_ELEMENTS_SCHEMA` 사용 시 일치하는 컴포넌트가 없는 요소도 제외합니다. `strictTemplates`가 `true`여도 이 옵션의 기본값은 `false`입니다. |
 
-이 플래그로 문제를 해결하지 못하면 `strictTemplates`를 비활성화해서 전체 모드로 돌아가세요.
-
-그래도 해결되지 않으면 마지막 수단으로 `fullTemplateTypeCheck: false`를 설정해서 전체 모드도 완전히 끌 수 있습니다.
+이 플래그로 문제를 해결할 수 없다면 마지막 수단으로 `strictTemplates`를 비활성화하여 기본 모드로 돌아갈 수 있습니다.
 
 권장한 어떤 방법으로도 해결되지 않는 타입 검사 오류는 템플릿 타입 검사기 자체의 버그일 수 있습니다.
 기본 모드로 돌아가야만 해결되는 오류라면 이러한 버그일 가능성이 높습니다.
@@ -322,7 +281,7 @@ export interface User {
 
 @Component({
   selector: 'user-detail',
-  template: '{{ user.name }}',
+  template: '{{ user().name }}',
 })
 export class UserDetailComponent {
   user = input.required<User>();
@@ -360,7 +319,7 @@ export interface User {
 
 @Component({
   selector: 'user-detail',
-  template: '{{ user.name }}',
+  template: '{{ user().name }}',
 })
 export class UserDetailComponent {
   user = input.required<User>();
@@ -510,7 +469,7 @@ Consider the following directive:
   selector: 'submit-button',
   template: `
     <div class="wrapper">
-      <button [disabled]="disabled">Submit</button>
+      <button [disabled]="disabled()">Submit</button>
     </div>
   `,
 })
@@ -590,7 +549,7 @@ Care should be taken that if an `ngAcceptInputType_` override is present for a g
   selector: 'submit-button',
   template: `
     <div class="wrapper">
-      <button [disabled]="disabled">Submit</button>
+      <button [disabled]="disabled()">Submit</button>
     </div>
   `,
 })

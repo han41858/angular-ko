@@ -50,7 +50,6 @@ NgModule은 크게 두 가지 역할을 합니다:
 ## Declarations
 -->
 
-<a id="declarations"></a>
 
 ## declarations
 
@@ -147,7 +146,6 @@ export class CustomMenu {
 ### imports
 -->
 
-<a id="imports"></a>
 
 ### imports
 
@@ -186,7 +184,6 @@ export class CustomMenuModule {}
 ### exports
 -->
 
-<a id="exports"></a>
 
 ### exports
 

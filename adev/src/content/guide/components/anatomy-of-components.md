@@ -123,11 +123,15 @@ export class ProfilePhoto {}
 ## Using components
 -->
 
+<a id="using-components"></a>
+
 ## 컴포넌트 사용하기
 
 <!--
 ### Imports in the `@Component` decorator
 -->
+
+<a id="imports-in-the-component-decorator"></a>
 
 ### `@Component` 데코레이터 불러오기
 
@@ -176,6 +180,8 @@ export class UserProfile {}
 <!--
 ### Showing components in a template
 -->
+
+<a id="showing-components-in-a-template"></a>
 
 ## 템플릿에 컴포넌트 사용하기
 

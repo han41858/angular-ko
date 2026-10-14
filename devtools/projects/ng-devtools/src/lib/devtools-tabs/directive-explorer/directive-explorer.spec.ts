@@ -252,13 +252,33 @@ describe('DirectiveExplorerComponent', () => {
     });
   });
 
-  describe('hydration', () => {
-    it('should highlight hydration nodes', () => {
-      comp.createHydrationOverlays();
-      expect(messageBusMock.emit).toHaveBeenCalledWith('createHydrationOverlay');
+  describe('highlight', () => {
+    it('should create a highlight overlay for directive-only nodes', () => {
+      comp.highlight({
+        original: {
+          component: null,
+          directives: [{id: 9, name: 'RouterLink'}],
+          hasNativeElement: true,
+        },
+        position: [0],
+        hasNativeElement: true,
+      } as any);
 
-      comp.removeHydrationOverlays();
-      expect(messageBusMock.emit).toHaveBeenCalledWith('removeHydrationOverlay');
+      expect(messageBusMock.emit).toHaveBeenCalledWith('createHighlightOverlay', [[0]]);
+    });
+
+    it('should not create a highlight overlay for nodes without native elements', () => {
+      comp.highlight({
+        original: {
+          component: null,
+          directives: [{id: 9, name: 'RouterLink'}],
+          hasNativeElement: false,
+        },
+        position: [0],
+        hasNativeElement: false,
+      } as any);
+
+      expect(messageBusMock.emit).not.toHaveBeenCalledWith('createHighlightOverlay', [[0]]);
     });
   });
 

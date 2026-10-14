@@ -91,7 +91,7 @@ The following `<div>` tag will display translated text as part of `div` and `ari
 
 <docs-code-multifile>
     <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html"  region="i18n-conditional"/>
-    <docs-code header="app.component.ts" path="adev/src/content/examples/i18n/src/app/app.component.ts" visibleLines="[[14,21],[33,37]]"/>
+    <docs-code header="app.component.ts" path="adev/src/content/examples/i18n/src/app/app.component.ts" visibleLines="[[13,18],[32,34]]"/>
 </docs-code-multifile>
 -->
 
@@ -99,7 +99,7 @@ The following `<div>` tag will display translated text as part of `div` and `ari
 
 <docs-code-multifile>
     <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html"  region="i18n-conditional"/>
-    <docs-code header="app.component.ts" path="adev/src/content/examples/i18n/src/app/app.component.ts" visibleLines="[[14,21],[33,37]]"/>
+    <docs-code header="app.component.ts" path="adev/src/content/examples/i18n/src/app/app.component.ts" visibleLines="[[13,18],[32,34]]"/>
 </docs-code-multifile>
 
 <!--
@@ -313,12 +313,13 @@ $localize`string_to_translate ${variable_name}`;
 ```
 
 <!--
-### Name the interpolation placeholder
+### Name the interpolation placeholder {#name-the-interpolation-placeholder-in-code}
 -->
 
 <a id="name-the-interpolation-placeholder-1"></a>
+<a id="name-the-interpolation-placeholder-in-code"></a>
 
-### 문자열 보간 플레이스홀더에 이름 지정하기
+### 문자열 보간 플레이스홀더에 이름 지정하기 {#문자열-보간-플레이스홀더에-이름-지정하기-2}
 
 <!--
 ```ts
@@ -457,7 +458,7 @@ $localize`:site header|An introduction header for this sample:Hello i18n!`;
 <docs-callout title="How meanings control text extraction and merges">
 
 The Angular extraction tool generates a translation unit entry for each `i18n` attribute in a template.
-The Angular extraction tool assigns each translation unit a unique ID based on the _meaning_ and _description_.
+The Angular extraction tool assigns each translation unit a unique ID based on its source text and _meaning_. The _description_ does not affect the ID.
 
 HELPFUL: For more information about the Angular extraction tool, see [Work with translation files](guide/i18n/translation-files).
 
@@ -494,7 +495,7 @@ $localize`:site header|An introduction header for this sample:Hello i18n!`;
 <docs-callout title="의미가 텍스트 추출과 병합을 제어하는 방식">
 
 Angular 추출 도구는 템플릿의 각 `i18n` 어트리뷰트에 대한 번역 단위 항목을 생성합니다.
-Angular 추출 도구는 _의미_ 와 _설명_ 을 기준으로 각 번역 단위에 고유한 ID를 부여합니다.
+Angular 추출 도구는 원문 텍스트와 _의미_ 를 기준으로 각 번역 단위에 고유한 ID를 부여합니다. _설명_ 은 ID에 영향을 주지 않습니다.
 
 도움말: Angular 추출 도구에 대한 자세한 내용은 [번역 파일 다루기](guide/i18n/translation-files)를 참고하세요.
 
@@ -603,7 +604,7 @@ other { default_quantity }
 
 HELPFUL: For more information about pluralization categories, see [Choosing plural category names][UnicodeCldrIndexCldrSpecPluralRulesTocChoosingPluralCategoryNames] in the [CLDR - Unicode Common Locale Data Repository][UnicodeCldrMain].
 
-<docs-callout header='Background: Locales may not support some pluralization categories'>
+<docs-callout title="Background: Locales may not support some pluralization categories">
 
 Many locales don't support some of the pluralization categories.
 The default locale \(`en-US`\) uses a very simple `plural()` function that doesn't support the `few` pluralization category.
@@ -651,7 +652,7 @@ other { default_quantity }
 
 도움말: 복수형 범주에 대한 자세한 내용은 [CLDR - 유니코드 공통 지역 데이터 저장소][UnicodeCldrMain]의 [복수형 범주 이름 선택하기][UnicodeCldrIndexCldrSpecPluralRulesTocChoosingPluralCategoryNames]를 참고하세요.
 
-<docs-callout header='배경: 지역에 따라 일부 복수형 범주를 지원하지 않을 수 있습니다'>
+<docs-callout title='배경: 지역에 따라 일부 복수형 범주를 지원하지 않을 수 있습니다'>
 
 많은 지역은 일부 복수형 범주를 지원하지 않습니다.
 기본 지역(`en-US`)은 `few` 복수형 범주를 지원하지 않는 매우 단순한 `plural()` 함수를 사용합니다.
@@ -931,8 +932,8 @@ The following code example shows nested clauses based on the `gender` and `minut
 [GithubAngularAngularBlobEcffc3557fe1bff9718c01277498e877ca44588dPackagesCoreSrcI18nLocaleEnTsL14L18]: https://github.com/angular/angular/blob/ecffc3557fe1bff9718c01277498e877ca44588d/packages/core/src/i18n/locale_en.ts#L14-L18 'Line 14 to 18 - angular/packages/core/src/i18n/locale_en.ts | angular/angular | GitHub'
 [GithubUnicodeOrgIcuUserguideFormatParseMessages]: https://unicode-org.github.io/icu/userguide/format_parse/messages 'ICU Message Format - ICU Documentation | Unicode | GitHub'
 [UnicodeCldrMain]: https://cldr.unicode.org 'Unicode CLDR Project'
-[UnicodeCldrIndexCldrSpecPluralRules]: http://cldr.unicode.org/index/cldr-spec/plural-rules 'Plural Rules | CLDR - Unicode Common Locale Data Repository | Unicode'
-[UnicodeCldrIndexCldrSpecPluralRulesTocChoosingPluralCategoryNames]: http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Choosing-Plural-Category-Names 'Choosing Plural Category Names - Plural Rules | CLDR - Unicode Common Locale Data Repository | Unicode'
+[UnicodeCldrIndexCldrSpecPluralRules]: https://cldr.unicode.org/index/cldr-spec/plural-rules 'Plural Rules | CLDR - Unicode Common Locale Data Repository | Unicode'
+[UnicodeCldrIndexCldrSpecPluralRulesTocChoosingPluralCategoryNames]: https://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Choosing-Plural-Category-Names 'Choosing Plural Category Names - Plural Rules | CLDR - Unicode Common Locale Data Repository | Unicode'
 -->
 
 <docs-pill-row>
@@ -946,5 +947,5 @@ The following code example shows nested clauses based on the `gender` and `minut
 [GithubAngularAngularBlobEcffc3557fe1bff9718c01277498e877ca44588dPackagesCoreSrcI18nLocaleEnTsL14L18]: https://github.com/angular/angular/blob/ecffc3557fe1bff9718c01277498e877ca44588d/packages/core/src/i18n/locale_en.ts#L14-L18 '14~18번째 줄 - angular/packages/core/src/i18n/locale_en.ts | angular/angular | GitHub'
 [GithubUnicodeOrgIcuUserguideFormatParseMessages]: https://unicode-org.github.io/icu/userguide/format_parse/messages 'ICU 메시지 형식 - ICU 문서 | Unicode | GitHub'
 [UnicodeCldrMain]: https://cldr.unicode.org 'Unicode CLDR Project'
-[UnicodeCldrIndexCldrSpecPluralRules]: http://cldr.unicode.org/index/cldr-spec/plural-rules '복수형 규칙 | CLDR - 유니코드 공통 지역 데이터 저장소 | Unicode'
-[UnicodeCldrIndexCldrSpecPluralRulesTocChoosingPluralCategoryNames]: http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Choosing-Plural-Category-Names '복수형 범주 이름 선택하기 - 복수형 규칙 | CLDR - 유니코드 공통 지역 데이터 저장소 | Unicode'
+[UnicodeCldrIndexCldrSpecPluralRules]: https://cldr.unicode.org/index/cldr-spec/plural-rules '복수형 규칙 | CLDR - 유니코드 공통 지역 데이터 저장소 | Unicode'
+[UnicodeCldrIndexCldrSpecPluralRulesTocChoosingPluralCategoryNames]: https://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Choosing-Plural-Category-Names '복수형 범주 이름 선택하기 - 복수형 규칙 | CLDR - 유니코드 공통 지역 데이터 저장소 | Unicode'

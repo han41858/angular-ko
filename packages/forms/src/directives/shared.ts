@@ -43,7 +43,7 @@ export const ɵFORM_CONTROL_INTEGRATION = new InjectionToken<ɵFormControlIntegr
  * Token to provide to allow SetDisabledState to always be called when a CVA is added, regardless of
  * whether the control is disabled or enabled.
  *
- * @see {@link FormsModule#withconfig}
+ * @see {@link FormsModule#withConfig}
  */
 export const CALL_SET_DISABLED_STATE = new InjectionToken(
   typeof ngDevMode === 'undefined' || ngDevMode ? 'CallSetDisabledState' : '',
@@ -58,7 +58,7 @@ export const CALL_SET_DISABLED_STATE = new InjectionToken(
  * called when disabled, which is the legacy behavior for compatibility.
  *
  * @publicApi
- * @see {@link FormsModule#withconfig}
+ * @see {@link FormsModule#withConfig}
  */
 export type SetDisabledStateOption = 'whenDisabledForLegacyCode' | 'always';
 
@@ -370,7 +370,7 @@ function _throwInvalidValueAccessorError(dir: AbstractControlDirective) {
 }
 
 export function isPropertyUpdated(changes: {[key: string]: any}, viewModel: any): boolean {
-  if (!changes.hasOwnProperty('model')) return false;
+  if (!Object.hasOwn(changes, 'model')) return false;
   const change = changes['model'];
 
   if (change.isFirstChange()) return true;

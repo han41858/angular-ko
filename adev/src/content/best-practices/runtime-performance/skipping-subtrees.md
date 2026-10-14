@@ -30,7 +30,7 @@ Angular는 데이터 구조의 최신 상태가 DOM에 반영되도록 전체 �
 <!--
 OnPush is the default change detection strategy in Angular (since v22). It instructs Angular to run change detection for a component subtree **only** when:
 
-- The root component of the subtree receives new inputs as the result of a template binding. Angular compares the current and past value of the input with `==`.
+- The root component of the subtree receives new inputs as the result of a template binding. Angular compares the current and past value of the input with `Object.is`.
 - Angular handles an event _(for example using event binding, output binding, or `@HostListener` )_ in the subtree's root component or any of its children whether they are using OnPush change detection or not.
 -->
 
@@ -38,7 +38,7 @@ Angular의 기본 변경 감지 전략은 OnPush입니다(v22부터).
 이 전략에서는 다음 경우에**만** 컴포넌트 하위 트리의 변경 감지를 실행하도록 Angular에 지시합니다:
 
 - 템플릿 바인딩의 결과로 하위 트리의 루트 컴포넌트가 새 입력값을 받는 경우입니다.
-  Angular는 입력의 현재 값과 이전 값을 `==`로 비교합니다.
+  Angular는 입력의 현재 값과 이전 값을 `Object.is`로 비교합니다.
 - Angular가 하위 트리의 루트 컴포넌트나 자식 컴포넌트에서 _(이벤트 바인딩, 출력 바인딩, `@HostListener` 등을 통해)_ 이벤트를 처리하는 경우입니다.
   이때 자식 컴포넌트의 OnPush 변경 감지 사용 여부는 관계없습니다.
 

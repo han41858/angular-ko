@@ -2,6 +2,8 @@
 # Reactive Forms
 -->
 
+<a id="reactive-forms"></a>
+
 # 반응형 폼(Reactive Forms)
 
 <!--
@@ -115,7 +117,7 @@ handleSubmit() {
 You have access to the form values, now it is time to handle the submission event and use the `handleSubmit` method.
 Angular has an event handler for this specific purpose called `ngSubmit`. Update the form element to call the `handleSubmit` method when the form is submitted.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[1]}
 <form [formGroup]="profileForm" (ngSubmit)="handleSubmit()"></form>
 ```
 
@@ -137,6 +139,8 @@ Fantastic job with this activity. Keep going to learn about form validation.
 <hr>
 
 <docs-workflow>
+
+<a id="import-reactiveforms-module"></a>
 
 <docs-step title="`ReactiveForms` 모듈을 로드합니다">
 
@@ -164,6 +168,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 </docs-step>
 
+<a id="create-the-formgroup-object-with-formcontrols"></a>
+
 <docs-step title="FormControls로 `FormGroup` 객체를 생성하세요">
 
 반응형 폼은 폼 컨트롤을 표현하는 용도로 `FormControl` 클래스를 사용합니다.
@@ -183,6 +189,8 @@ export class App {
 ```
 
 </docs-step>
+
+<a id="link-the-formgroup-and-formcontrols-to-the-form"></a>
 
 <docs-step title="FormGroup과 FormControl을 폼과 연결하세요">
 
@@ -207,6 +215,8 @@ export class App {
 
 </docs-step>
 
+<a id="handle-update-to-the-form"></a>
+
 <docs-step title="폼을 수정합니다">
 
 폼 그룹 안에 있는 데이터에 접근하려면 `FormGroup` 객체의 값을 참조하면 됩니다.
@@ -220,6 +230,8 @@ export class App {
 ```
 
 </docs-step>
+
+<a id="access-formgroup-values"></a>
 
 <docs-step title="FormGroup 값에 접근해 보세요">
 
@@ -238,13 +250,15 @@ handleSubmit() {
 
 </docs-step>
 
+<a id="add-ngsubmit-to-the-form"></a>
+
 <docs-step title="폼에 `ngSubmit`을 추가합니다">
 
 이제 폼 값에 접근할 수 있으니, 폼 제출 이벤트를 `handleSubmit` 메서드로 전달해 봅시다.
 Angular는 이런 경우를 위해 `ngSubmit` 이라는 이벤트 핸들러를 제공합니다.
 폼 제출 이벤트가 발생했을 때 이 이벤트를 `handleSubmit` 메서드로 받을 수 있도록 폼 엘리먼트를 수정해 봅시다.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[1]}
 <form [formGroup]="profileForm" (ngSubmit)="handleSubmit()"></form>
 ```
 

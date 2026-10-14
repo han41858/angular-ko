@@ -1,10 +1,12 @@
 <!--
-# Angular Internationalization (i18n)
+<docs-decorative-header title="Angular Internationalization (i18n)" imgSrc="adev/src/assets/images/i18n.svg"> <!- markdownlint-disable-line ->
+</docs-decorative-header>
 -->
 
 <a id="angular-internationalization-i18n"></a>
 
-# Angular 국제화(i18n)
+<docs-decorative-header title="Angular 국제화(i18n)" imgSrc="adev/src/assets/images/i18n.svg">
+</docs-decorative-header>
 
 <!--
 _Internationalization_, sometimes referenced as i18n, is the process of designing and preparing your project for use in different locales around the world.

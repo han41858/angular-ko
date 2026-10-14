@@ -76,6 +76,8 @@ export class ProfilePhoto {}
 ## Binding to the host element
 -->
 
+<a id="binding-to-the-host-element"></a>
+
 ## 호스트 엘리먼트 바인딩하기
 
 <!--
@@ -138,8 +140,21 @@ export class CustomSlider {
 참고: 전역 대상의 이름은 `document:`, `window:`, `body:`를 사용할 수 있습니다.
 
 <!--
+NOTE: Key names like `'(keydown.enter)'` are matched against `KeyboardEvent.key`, which depends on
+the user's keyboard layout and input language. To match a physical key regardless of layout, use
+the `code` modifier instead, e.g. `'(keydown.code.Enter)'`. See
+[Using key modifiers](guide/templates/event-listeners#using-key-modifiers) for details.
+-->
+
+참고: `'(keydown.enter)'`와 같은 키 이름은 `KeyboardEvent.key`와 비교하며, 이 값은 사용자의 키보드 배열과 입력 언어에 따라 달라집니다.
+키보드 배열과 관계없이 물리적인 키를 식별하려면 `'(keydown.code.Enter)'`처럼 `code` 변경자를 사용하세요.
+자세한 내용은 [키 변경자 사용하기](guide/templates/event-listeners#using-key-modifiers)를 참고하세요.
+
+<!--
 ## The `@HostBinding` and `@HostListener` decorators
 -->
+
+<a id="the-hostbinding-and-hostlistener-decorators"></a>
 
 ## `@HostBinding`, `@HostListener` 데코레이터
 
@@ -150,9 +165,7 @@ decorator to class members.
 `@HostBinding` lets you bind host properties and attributes to properties and getters:
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class CustomSlider {
   @HostBinding('attr.aria-valuenow')
   value: number = 0;
@@ -189,9 +202,7 @@ decorators exist exclusively for backwards compatibility.
 `@HostBinding` 을 사용하면 호스트 엘리먼트의 프로퍼티를 클래스 프로퍼티와 바인딩하거나, 호스트 엘리먼트의 어트리뷰트를 메서드와 바인딩할 수 있습니다:
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class CustomSlider {
   @HostBinding('attr.aria-valuenow')
   value: number = 0;
@@ -225,6 +236,8 @@ export class CustomSlider {
 <!--
 ## Binding collisions
 -->
+
+<a id="binding-collisions"></a>
 
 ## 바인딩 우선순위
 
@@ -282,6 +295,8 @@ export class ProfilePhoto { /* ... */ }
 ## Styling with CSS custom properties
 -->
 
+<a id="styling-with-css-custom-properties"></a>
+
 ## CSS 커스텀 프로퍼티 스타일 지정하기
 
 <!--
@@ -326,6 +341,8 @@ export class MyComponent {
 ### Setting custom properties on children components
 -->
 
+<a id="setting-custom-properties-on-children-components"></a>
+
 ### 자식 컴포넌트에 커스텀 프로퍼티 설정하기
 
 <!--
@@ -357,6 +374,8 @@ export class MyComponent {
 <!--
 ## Injecting host element attributes
 -->
+
+<a id="injecting-host-element-attributes"></a>
 
 ## 호스트 엘리먼트 어트리뷰트 주입하기
 

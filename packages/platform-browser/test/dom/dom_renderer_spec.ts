@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
+import {NgIf} from '@angular/common';
 import {ChangeDetectionStrategy} from '@angular/compiler';
 import {Component, Renderer2, ViewEncapsulation} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
@@ -14,6 +15,7 @@ import {By} from '../../src/dom/debug/by';
 import {
   addBaseHrefToCssSourceMap,
   NAMESPACE_URIS,
+  provideCssVarNamespacing,
   REMOVE_STYLES_ON_COMPONENT_DESTROY,
 } from '../../src/dom/dom_renderer';
 
@@ -27,18 +29,6 @@ describe('DefaultDomRendererV2', () => {
   let renderer: Renderer2;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        TestCmp,
-        SomeApp,
-        IsolatedShadowComponentParentApp,
-        SomeAppForCleanUp,
-        CmpEncapsulationEmulated,
-        CmpEncapsulationNone,
-        CmpEncapsulationShadow,
-        CmpEncapsulationIsolatedShadowWithChildren,
-      ],
-    });
     renderer = TestBed.createComponent(TestCmp).componentInstance.renderer;
   });
 
@@ -112,9 +102,9 @@ describe('DefaultDomRendererV2', () => {
     });
   });
 
-  it('should style non-descendant components correctly with different types of encapsulation', () => {
+  it('should style non-descendant components correctly with different types of encapsulation', async () => {
     const fixture = TestBed.createComponent(SomeApp);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const cmp = fixture.debugElement.query(By.css('cmp-shadow')).nativeElement;
     const shadowRoot = cmp.shadowRoot;
@@ -128,9 +118,9 @@ describe('DefaultDomRendererV2', () => {
     expect(window.getComputedStyle(none).color).toEqual('rgb(0, 255, 0)');
   });
 
-  it('should encapsulate shadow DOM components, with child components inheriting from shadow styles not global styles', () => {
+  it('should encapsulate shadow DOM components, with child components inheriting from shadow styles not global styles', async () => {
     const fixture = TestBed.createComponent(IsolatedShadowComponentParentApp);
-    fixture.detectChanges();
+    await fixture.whenStable();
     const shadowcmp = fixture.debugElement.query(By.css('cmp-shadow-children')).nativeElement;
     const shadowRoot = shadowcmp.shadowRoot;
 
@@ -144,9 +134,9 @@ describe('DefaultDomRendererV2', () => {
     expect(window.getComputedStyle(none).color).toEqual('rgb(255, 0, 0)');
   });
 
-  it('child components of shadow components should inherit browser defaults rather than their component styles', () => {
+  it('child components of shadow components should inherit browser defaults rather than their component styles', async () => {
     const fixture = TestBed.createComponent(IsolatedShadowComponentParentApp);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const shadowcmp = fixture.debugElement.query(By.css('cmp-shadow-children')).nativeElement;
     const shadowRoot = shadowcmp.shadowRoot;
@@ -160,9 +150,9 @@ describe('DefaultDomRendererV2', () => {
     expect(window.getComputedStyle(none).backgroundColor).toEqual('rgba(0, 0, 0, 0)');
   });
 
-  it('shadow components should not be polluted by child components styles when using ExperimentalIsolatedShadowDom', () => {
+  it('shadow components should not be polluted by child components styles when using ExperimentalIsolatedShadowDom', async () => {
     const fixture = TestBed.createComponent(IsolatedShadowComponentParentApp);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     const cmp = fixture.debugElement.query(By.css('cmp-shadow-children')).nativeElement;
     const shadowRoot = cmp.shadowRoot;
@@ -191,12 +181,48 @@ describe('DefaultDomRendererV2', () => {
     expect(otherChild.parentNode).toBe(template.content);
   });
 
+  it('should be able to insert a child when `refChild` is `null`', () => {
+    const parent = document.createElement('div');
+    const child = document.createElement('div');
+
+    renderer.insertBefore(parent, child, null);
+
+    expect(child.parentNode).toBe(parent);
+  });
+
+  describe('when the reference node was detached outside of Angular', () => {
+    it('should throw a descriptive error instead of a native NotFoundError', () => {
+      const parent = document.createElement('div');
+      const refChild = document.createElement('span');
+      const newChild = document.createElement('div');
+      parent.appendChild(refChild);
+
+      // pretend something outside Angular removed it
+      refChild.remove();
+
+      expect(() => renderer.insertBefore(parent, newChild, refChild)).toThrowError(/NG05106/);
+      expect(newChild.parentNode).toBeNull();
+    });
+
+    it('should throw a descriptive error when the reference node was moved to another parent', () => {
+      const parent = document.createElement('div');
+      const otherParent = document.createElement('div');
+      const refChild = document.createElement('span');
+      const newChild = document.createElement('div');
+      parent.appendChild(refChild);
+
+      otherParent.appendChild(refChild);
+
+      expect(() => renderer.insertBefore(parent, newChild, refChild)).toThrowError(/NG05106/);
+    });
+  });
+
   describe('should not cleanup styles of destroyed components when `REMOVE_STYLES_ON_COMPONENT_DESTROY` is `false`', () => {
     beforeEach(() => {
       TestBed.resetTestingModule();
 
       TestBed.configureTestingModule({
-        declarations: [SomeAppForCleanUp, CmpEncapsulationEmulated, CmpEncapsulationNone],
+        imports: [SomeAppForCleanUp],
         providers: [
           {
             provide: REMOVE_STYLES_ON_COMPONENT_DESTROY,
@@ -211,21 +237,22 @@ describe('DefaultDomRendererV2', () => {
       const compInstance = fixture.componentInstance;
       compInstance.showEmulatedComponents = true;
 
-      fixture.detectChanges();
+      fixture.changeDetectorRef.markForCheck();
+      await fixture.whenStable();
       // verify style is in DOM
       expect(await styleCount(fixture, '.emulated')).toBe(1);
 
       // Remove a single instance of the component.
       compInstance.componentOneInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
       // Verify style is still in DOM
       expect(await styleCount(fixture, '.emulated')).toBe(1);
 
       // Hide all instances of the component
       compInstance.componentTwoInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // Verify style is still in DOM
       expect(await styleCount(fixture, '.emulated')).toBe(1);
@@ -236,21 +263,22 @@ describe('DefaultDomRendererV2', () => {
       const compInstance = fixture.componentInstance;
       compInstance.showEmulatedComponents = false;
 
-      fixture.detectChanges();
+      fixture.changeDetectorRef.markForCheck();
+      await fixture.whenStable();
       // verify style is in DOM
       expect(await styleCount(fixture, '.none')).toBe(1);
 
       // Remove a single instance of the component.
       compInstance.componentOneInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
       // Verify style is still in DOM
       expect(await styleCount(fixture, '.none')).toBe(1);
 
       // Hide all instances of the component
       compInstance.componentTwoInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // Verify style is still in DOM
       expect(await styleCount(fixture, '.none')).toBe(1);
@@ -262,21 +290,22 @@ describe('DefaultDomRendererV2', () => {
       const fixture = TestBed.createComponent(SomeAppForCleanUp);
       const compInstance = fixture.componentInstance;
       compInstance.showEmulatedComponents = true;
-      fixture.detectChanges();
+      fixture.changeDetectorRef.markForCheck();
+      await fixture.whenStable();
       // verify style is in DOM
       expect(await styleCount(fixture, '.emulated')).toBe(1);
 
       // Remove a single instance of the component.
       compInstance.componentOneInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
       // Verify style is still in DOM
       expect(await styleCount(fixture, '.emulated')).toBe(1);
 
       // Hide all instances of the component
       compInstance.componentTwoInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // Verify style is not in DOM
       expect(await styleCount(fixture, '.emulated')).toBe(0);
@@ -287,21 +316,22 @@ describe('DefaultDomRendererV2', () => {
       const compInstance = fixture.componentInstance;
       compInstance.showEmulatedComponents = false;
 
-      fixture.detectChanges();
+      fixture.changeDetectorRef.markForCheck();
+      await fixture.whenStable();
       // verify style is in DOM
       expect(await styleCount(fixture, '.none')).toBe(1);
 
       // Remove a single instance of the component.
       compInstance.componentOneInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
       // Verify style is still in DOM
       expect(await styleCount(fixture, '.none')).toBe(1);
 
       // Hide all instances of the component
       compInstance.componentTwoInstanceHidden = true;
       fixture.changeDetectorRef.markForCheck();
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // Verify style is not in DOM
       expect(await styleCount(fixture, '.emulated')).toBe(0);
@@ -322,21 +352,246 @@ describe('DefaultDomRendererV2', () => {
     });
   });
 
-  it('should update an external sourceMappingURL by prepending the baseHref as a prefix', () => {
+  it('should update an external sourceMappingURL by prepending the baseHref as a prefix', async () => {
     document.head.innerHTML = `<base href="/base/" />`;
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({
-      declarations: [CmpEncapsulationNoneWithSourceMap],
-    });
 
     const fixture = TestBed.createComponent(CmpEncapsulationNoneWithSourceMap);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(document.head.querySelector('style')?.textContent).toContain(
       '/*# sourceMappingURL=/base/cmp-none.css.map */',
     );
 
     document.head.innerHTML = '';
+  });
+
+  describe('CSS namespacing', () => {
+    beforeEach(() => {
+      TestBed.resetTestingModule();
+    });
+
+    describe('with provided namespace', () => {
+      it('should replace `%NS%` in styles for `Emulated` encapsulation', async () => {
+        @Component({
+          selector: 'cmp-namespace-emulated',
+          template: '',
+          styles: `
+            :host {
+              color: var(--%NS%foo);
+            }
+          `,
+          encapsulation: ViewEncapsulation.Emulated,
+        })
+        class CmpNamespaceEmulated {}
+
+        TestBed.configureTestingModule({
+          imports: [CmpNamespaceEmulated],
+          providers: [provideCssVarNamespacing('my-namespace')],
+        });
+        const fixture = TestBed.createComponent(CmpNamespaceEmulated);
+        await fixture.whenStable();
+
+        expect(await styleCount(fixture, 'var(--my-namespace_foo)')).toBe(1);
+      });
+
+      it('should replace `%NS%` in styles for `None` encapsulation', async () => {
+        @Component({
+          selector: 'cmp-namespace-none',
+          template: '',
+          styles: `
+            :host {
+              color: var(--%NS%foo);
+            }
+          `,
+          encapsulation: ViewEncapsulation.None,
+        })
+        class CmpNamespaceNone {}
+
+        TestBed.configureTestingModule({
+          imports: [CmpNamespaceNone],
+          providers: [provideCssVarNamespacing('my-namespace')],
+        });
+        const fixture = TestBed.createComponent(CmpNamespaceNone);
+        await fixture.whenStable();
+
+        expect(await styleCount(fixture, 'var(--my-namespace_foo)')).toBe(1);
+      });
+
+      it('should replace `%NS%` in styles for `ShadowDom` encapsulation', async () => {
+        @Component({
+          selector: 'cmp-namespace-shadow',
+          template: '',
+          styles: `
+            :host {
+              color: var(--%NS%foo);
+            }
+          `,
+          encapsulation: ViewEncapsulation.ShadowDom,
+        })
+        class CmpNamespaceShadow {}
+
+        TestBed.configureTestingModule({
+          imports: [CmpNamespaceShadow],
+          providers: [provideCssVarNamespacing('my-namespace')],
+        });
+        const fixture = TestBed.createComponent(CmpNamespaceShadow);
+        await fixture.whenStable();
+
+        const styles = fixture.nativeElement.shadowRoot.querySelectorAll(
+          'style',
+        ) as NodeListOf<HTMLStyleElement>;
+        const css = Array.from(styles)
+          .map((s) => s.textContent)
+          .join('\n\n');
+        expect(css).toContain('var(--my-namespace_foo)');
+      });
+    });
+
+    describe('with default (empty) namespace', () => {
+      it('should replace `%NS%` in styles for `Emulated` encapsulation', async () => {
+        @Component({
+          selector: 'cmp-namespace-emulated',
+          template: '',
+          styles: `
+            :host {
+              color: var(--%NS%foo);
+            }
+          `,
+          encapsulation: ViewEncapsulation.Emulated,
+        })
+        class CmpNamespaceEmulated {}
+
+        TestBed.configureTestingModule({
+          imports: [CmpNamespaceEmulated],
+          providers: [], // No `provideCssVarNamespacing`.
+        });
+        const fixture = TestBed.createComponent(CmpNamespaceEmulated);
+        await fixture.whenStable();
+
+        expect(await styleCount(fixture, 'var(--foo)')).toBe(1);
+      });
+
+      it('should replace `%NS%` in styles for `None` encapsulation', async () => {
+        @Component({
+          selector: 'cmp-namespace-none',
+          template: '',
+          styles: `
+            :host {
+              color: var(--%NS%foo);
+            }
+          `,
+          encapsulation: ViewEncapsulation.None,
+        })
+        class CmpNamespaceNone {}
+
+        TestBed.configureTestingModule({
+          imports: [CmpNamespaceNone],
+          providers: [], // No `provideCssVarNamespacing`.
+        });
+        const fixture = TestBed.createComponent(CmpNamespaceNone);
+        await fixture.whenStable();
+
+        expect(await styleCount(fixture, 'var(--foo)')).toBe(1);
+      });
+
+      it('should replace `%NS%` in styles for `ShadowDom` encapsulation', async () => {
+        @Component({
+          selector: 'cmp-namespace-shadow',
+          template: '',
+          styles: `
+            :host {
+              color: var(--%NS%foo);
+            }
+          `,
+          encapsulation: ViewEncapsulation.ShadowDom,
+        })
+        class CmpNamespaceShadow {}
+
+        TestBed.configureTestingModule({
+          imports: [CmpNamespaceShadow],
+          providers: [], // No `provideCssVarNamespacing`.
+        });
+        const fixture = TestBed.createComponent(CmpNamespaceShadow);
+        await fixture.whenStable();
+
+        const styles = fixture.nativeElement.shadowRoot.querySelectorAll(
+          'style',
+        ) as NodeListOf<HTMLStyleElement>;
+        const css = Array.from(styles)
+          .map((s) => s.textContent)
+          .join('\n\n');
+        expect(css).toContain('var(--foo)');
+      });
+    });
+
+    describe('style property bindings namespacing', () => {
+      it('should namespace style property bindings starting with `--`', async () => {
+        @Component({
+          selector: 'cmp-style-prop-namespace',
+          template: `<div [style.--foo]="'blue'"></div>`,
+          standalone: true,
+        })
+        class CmpStylePropNamespace {}
+
+        TestBed.configureTestingModule({
+          imports: [CmpStylePropNamespace],
+          providers: [provideCssVarNamespacing('my-namespace')],
+        });
+        const fixture = TestBed.createComponent(CmpStylePropNamespace);
+        await fixture.whenStable();
+
+        const div = fixture.nativeElement.querySelector('div');
+        expect(div.style.getPropertyValue('--my-namespace_foo')).toBe('blue');
+        expect(div.style.getPropertyValue('--foo')).toBe('');
+      });
+
+      // TODO: Enforce this in v23.
+      xit('should throw an error if style property binding starts with `--global-` with a single hyphen', () => {
+        @Component({
+          selector: 'cmp-style-prop-error',
+          template: `<div [style.--global-foo]="'blue'"></div>`,
+          standalone: true,
+        })
+        class CmpStylePropError {}
+
+        expect(() => {
+          TestBed.configureTestingModule({
+            imports: [CmpStylePropError],
+            providers: [provideCssVarNamespacing('my-namespace')],
+          });
+        }).toThrowError(/CSS variable "--global-foo" has a single hyphen after "--global"/);
+      });
+
+      it('should namespace styles set via Renderer2.setStyle/removeStyle', () => {
+        @Component({
+          selector: 'cmp-renderer-set-style',
+          template: '',
+          standalone: true,
+        })
+        class CmpRendererSetStyle {
+          constructor(public renderer: Renderer2) {}
+        }
+
+        TestBed.configureTestingModule({
+          imports: [CmpRendererSetStyle],
+          providers: [provideCssVarNamespacing('my-namespace')],
+        });
+        const fixture = TestBed.createComponent(CmpRendererSetStyle);
+        const comp = fixture.componentInstance;
+        const div = document.createElement('div');
+
+        comp.renderer.setStyle(div, '--%NS%foo', 'blue');
+        expect(div.style.getPropertyValue('--my-namespace_foo')).toBe('blue');
+
+        comp.renderer.setStyle(div, '--bar', 'red');
+        expect(div.style.getPropertyValue('--bar')).toBe('red');
+        expect(div.style.getPropertyValue('--my-namespace_bar')).toBe('');
+
+        comp.renderer.removeStyle(div, '--%NS%foo');
+        expect(div.style.getPropertyValue('--my-namespace_foo')).toBe('');
+      });
+    });
   });
 });
 
@@ -439,7 +694,6 @@ async function styleCount(
     `,
   ],
   encapsulation: ViewEncapsulation.Emulated,
-  standalone: false,
 })
 class CmpEncapsulationEmulated {}
 
@@ -455,7 +709,6 @@ class CmpEncapsulationEmulated {}
     `,
   ],
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
 })
 class CmpEncapsulationNone {}
 
@@ -473,7 +726,6 @@ class CmpEncapsulationNone {}
     `,
   ],
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
 })
 class CmpEncapsulationNoneWithSourceMap {}
 
@@ -488,7 +740,6 @@ class CmpEncapsulationNoneWithSourceMap {}
     `,
   ],
   encapsulation: ViewEncapsulation.ShadowDom,
-  standalone: false,
 })
 class CmpEncapsulationShadow {}
 
@@ -506,7 +757,7 @@ class CmpEncapsulationShadow {}
     `,
   ],
   encapsulation: ViewEncapsulation.ExperimentalIsolatedShadowDom,
-  standalone: false,
+  imports: [CmpEncapsulationEmulated, CmpEncapsulationNone],
 })
 class CmpEncapsulationIsolatedShadowWithChildren {}
 
@@ -517,7 +768,7 @@ class CmpEncapsulationIsolatedShadowWithChildren {}
     <cmp-emulated></cmp-emulated>
     <cmp-none></cmp-none>
   `,
-  standalone: false,
+  imports: [CmpEncapsulationShadow, CmpEncapsulationEmulated, CmpEncapsulationNone],
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class SomeApp {}
@@ -525,7 +776,7 @@ export class SomeApp {}
 @Component({
   selector: 'shadow-parent-app-with-children',
   template: ` <cmp-shadow-children></cmp-shadow-children> `,
-  standalone: false,
+  imports: [CmpEncapsulationIsolatedShadowWithChildren],
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class IsolatedShadowComponentParentApp {}
@@ -533,7 +784,6 @@ export class IsolatedShadowComponentParentApp {}
 @Component({
   selector: 'test-cmp',
   template: '',
-  standalone: false,
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 class TestCmp {
@@ -549,7 +799,7 @@ class TestCmp {
     <cmp-none *ngIf="!componentOneInstanceHidden && !showEmulatedComponents"></cmp-none>
     <cmp-none *ngIf="!componentTwoInstanceHidden && !showEmulatedComponents"></cmp-none>
   `,
-  standalone: false,
+  imports: [NgIf, CmpEncapsulationEmulated, CmpEncapsulationNone],
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class SomeAppForCleanUp {

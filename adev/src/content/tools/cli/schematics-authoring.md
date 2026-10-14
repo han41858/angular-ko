@@ -89,12 +89,12 @@ When you create a new blank schematic with the [Schematics CLI](#schematics-cli)
 A `RuleFactory` object defines a higher-order function that creates a `Rule`.
 
 ```ts {header: "index.ts"}
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import {Rule, SchematicContext, Tree} from '@angular-devkit/schematics';
 
 // You don't have to export the function as default.
 // You can also have more than one rule factory per file.
-export function helloWorld(\_options: any): Rule {
-   return (tree: Tree,\_context: SchematicContext) => {
+export function helloWorld(_options: any): Rule {
+  return (tree: Tree, _context: SchematicContext) => {
     return tree;
   };
 }
@@ -123,12 +123,12 @@ import {
 `RuleFactory` 객체는 `Rule`을 생성하는 고차 함수를 정의합니다.
 
 ```ts {header: "index.ts"}
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import {Rule, SchematicContext, Tree} from '@angular-devkit/schematics';
 
 // 함수를 기본 내보내기(default export)로 내보낼 필요는 없습니다.
 // 하나의 파일에 여러 규칙 팩토리를 작성할 수도 있습니다.
-export function helloWorld(\_options: any): Rule {
-   return (tree: Tree,\_context: SchematicContext) => {
+export function helloWorld(_options: any): Rule {
+  return (tree: Tree, _context: SchematicContext) => {
     return tree;
   };
 }
@@ -564,13 +564,12 @@ The following JSON schema is a complete description of the long-form syntax for 
 ## Schematics CLI
 -->
 
-<a id="schematics-cli"></a>
 
 ## Schematics CLI
 
 <!--
 Schematics come with their own command-line tool.
-Using Node 6.9 or later, install the Schematics command line tool globally:
+Install the Schematics command line tool globally:
 
 ```shell
 
@@ -588,7 +587,7 @@ See [Schematics for Libraries](tools/cli/schematics-for-libraries).
 -->
 
 스키매틱에는 전용 명령줄 도구가 있습니다.
-Node 6.9 이상에서 다음 명령어로 Schematics 명령줄 도구를 전역 설치하세요:
+다음 명령어로 Schematics 명령줄 도구를 전역 설치하세요:
 
 ```shell
 

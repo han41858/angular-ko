@@ -62,6 +62,8 @@ export const enum RuntimeErrorCode {
     // (undocumented)
     HYDRATION_MISSING_NODE = -502,
     // (undocumented)
+    HYDRATION_MISSING_NODE_ON_PATH = 509,
+    // (undocumented)
     HYDRATION_MISSING_SIBLINGS = -501,
     // (undocumented)
     HYDRATION_NODE_MISMATCH = -500,
@@ -99,6 +101,8 @@ export const enum RuntimeErrorCode {
     INVALID_SET_INPUT_CALL = 317,
     // (undocumented)
     INVALID_SKIP_HYDRATION_HOST = -504,
+    // (undocumented)
+    INVALID_STYLE_PROP_VALUE = -318,
     // (undocumented)
     LOOP_TRACK_DUPLICATE_KEYS = -955,
     // (undocumented)
@@ -144,6 +148,8 @@ export const enum RuntimeErrorCode {
     // (undocumented)
     OUTPUT_REF_DESTROYED = 953,
     // (undocumented)
+    PARENT_NODE_NOT_FOUND = 510,
+    // (undocumented)
     PIPE_NOT_FOUND = -302,
     // (undocumented)
     PLATFORM_ALREADY_DESTROYED = 404,
@@ -168,13 +174,13 @@ export const enum RuntimeErrorCode {
     // (undocumented)
     REQUIRED_QUERY_NO_VALUE = -951,
     // (undocumented)
-    RESOURCE_COMPLETED_BEFORE_PRODUCING_VALUE = 991,
+    RESOURCE_COMPLETED_BEFORE_PRODUCING_VALUE = -991,
     // (undocumented)
     RUNTIME_DEPS_INVALID_IMPORTED_TYPE = 980,
     // (undocumented)
     RUNTIME_DEPS_ORPHAN_COMPONENT = 981,
     // (undocumented)
-    SIGNAL_WRITE_FROM_ILLEGAL_CONTEXT = 600,
+    SIGNAL_WRITE_FROM_ILLEGAL_CONTEXT = -600,
     // (undocumented)
     TEMPLATE_STRUCTURE_ERROR = 305,
     // (undocumented)
@@ -192,7 +198,7 @@ export const enum RuntimeErrorCode {
     // (undocumented)
     UNSAFE_ATTRIBUTE_BINDING = -910,
     // (undocumented)
-    UNSAFE_VALUE_IN_RESOURCE_URL = 904,
+    UNSAFE_VALUE_IN_RESOURCE_URL = -904,
     // (undocumented)
     UNSAFE_VALUE_IN_SCRIPT = 905,
     // (undocumented)

@@ -41,7 +41,7 @@ You can use interceptors to implement a variety of common patterns, such as:
 - Customizing the parsing of responses.
 - Measuring server response times and logging them.
 - Driving UI elements such as a loading spinner while network operations are in progress.
-- Collecting and batch requests made within a certain timeframe.
+- Collecting and batching requests made within a certain timeframe.
 - Automatically failing requests after a configurable deadline or timeout.
 - Regularly polling the server and refreshing results.
 -->
@@ -541,9 +541,9 @@ export function authRedirectInterceptor(
 ## 응답 타입 활용하기
 
 <!--
-When `HttpClient` uses the fetch backend, responses include a `type` property that indicates how the browser handled the response based on CORS policies and request mode. This property aligns with the native Fetch API specification and provides valuable insights for debugging CORS issues and understanding response accessibility.
+When `HttpClient` uses the fetch backend, responses include a `responseType` property that indicates how the browser handled the response based on CORS policies and request mode. This property aligns with the native Fetch API specification and provides valuable insights for debugging CORS issues and understanding response accessibility.
 
-The response `type` property can have the following values:
+The response `responseType` property can have the following values:
 
 - `'basic'` - Same-origin response with all headers accessible
 - `'cors'` - Cross-origin response with CORS headers properly configured
@@ -559,7 +559,7 @@ export function responseTypeInterceptor(
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   return next(req).pipe(
-    map((event) => {
+    tap((event) => {
       if (event.type === HttpEventType.Response) {
         // Handle different response types appropriately
         switch (event.responseType) {
@@ -583,11 +583,11 @@ export function responseTypeInterceptor(
 ```
 -->
 
-`HttpClient`가 fetch 백엔드를 사용하면 응답에 `type` 프로퍼티가 포함됩니다.
+`HttpClient`가 fetch 백엔드를 사용하면 응답에 `responseType` 프로퍼티가 포함됩니다.
 이 프로퍼티는 브라우저가 CORS 정책과 요청 모드에 따라 응답을 어떻게 처리했는지 나타냅니다.
 네이티브 Fetch API 명세와 같으며, CORS 문제를 디버깅하고 응답에 접근할 수 있는 범위를 이해하는 데 유용합니다.
 
-응답의 `type` 프로퍼티에는 다음 값이 올 수 있습니다:
+응답의 `responseType` 프로퍼티에는 다음 값이 올 수 있습니다:
 
 - `'basic'` - 모든 헤더에 접근할 수 있는 동일 출처 응답
 - `'cors'` - CORS 헤더가 올바르게 설정된 교차 출처 응답
@@ -603,7 +603,7 @@ export function responseTypeInterceptor(
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   return next(req).pipe(
-    map((event) => {
+    tap((event) => {
       if (event.type === HttpEventType.Response) {
         // 응답 타입에 맞게 처리합니다.
         switch (event.responseType) {

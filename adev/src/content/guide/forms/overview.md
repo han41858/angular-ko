@@ -37,6 +37,8 @@ Angular는 반응형 폼과 템플릿 기반 폼을 기본으로 지원합니다
 ## Choosing an approach
 -->
 
+<a id="choosing-an-approach"></a>
+
 ## 폼 종류 선택하기
 
 <!--
@@ -60,6 +62,8 @@ Each approach offers different advantages.
 <!--
 ### Key differences
 -->
+
+<a id="key-differences"></a>
 
 ### 차이점
 
@@ -86,6 +90,8 @@ The following table summarizes the key differences between reactive and template
 <!--
 ### Scalability
 -->
+
+<a id="scalability"></a>
 
 ### 확장성
 
@@ -115,10 +121,11 @@ Tests are deeply reliant on manual change detection execution to run properly, a
 템플릿 기반 폼의 추상적인 특성은 테스트에도 영향을 줍니다.
 폼을 정상적으로 테스트하려면 변화 감지를 수동으로 실행해야 하고, 반응형 폼보다 설정해야 할 것도 많습니다.
 
-<a id="setting-up-the-form-model"/>
 <!--
 ## Setting up the form model
 -->
+
+<a id="setting-up-the-form-model"></a>
 
 ## 폼 모델 구성하기
 
@@ -133,6 +140,8 @@ The two approaches share underlying building blocks, but differ in how you creat
 <!--
 ### Common form foundation classes
 -->
+
+<a id="common-form-foundation-classes"></a>
 
 ### 폼을 구성하는 클래스
 
@@ -159,6 +168,8 @@ Both reactive and template-driven forms are built on the following base classes.
 <!--
 ### Setup in reactive forms
 -->
+
+<a id="setup-in-reactive-forms"></a>
 
 ### 반응형 폼 구성하기
 
@@ -187,6 +198,8 @@ IMPORTANT: In reactive forms, the form model is the source of truth; it provides
 <!--
 ### Setup in template-driven forms
 -->
+
+<a id="setup-in-template-driven-forms"></a>
 
 ### 템플릿 기반 폼 구성하기
 
@@ -558,6 +571,8 @@ For more information, see [Form Validation](guide/forms/form-validation#validati
 ## Testing
 -->
 
+<a id="testing"></a>
+
 ## 테스트
 
 <!--
@@ -575,6 +590,8 @@ The following examples demonstrate the process of testing forms with reactive an
 <!--
 ### Testing reactive forms
 -->
+
+<a id="testing-reactive-forms"></a>
 
 ### 반응형 폼 테스트
 
@@ -595,6 +612,8 @@ The following tests use the favorite-color components from previous examples to 
 <!--
 #### Verifying view-to-model data flow
 -->
+
+<a id="verifying-view-to-model-data-flow"></a>
 
 #### 화면 - 모델 데이터 흐름 검증하기
 
@@ -635,6 +654,8 @@ The first example performs the following steps to verify the view-to-model data 
 <!--
 ### Testing template-driven forms
 -->
+
+<a id="testing-template-driven-forms"></a>
 
 ### 템플릿 기반 폼 테스트하기
 
@@ -697,6 +718,8 @@ Here are the steps performed in the model to view test.
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

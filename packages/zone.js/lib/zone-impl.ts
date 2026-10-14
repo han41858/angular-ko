@@ -628,12 +628,7 @@ export type TaskType = 'microTask' | 'macroTask' | 'eventTask';
  * Task type: `notScheduled`, `scheduling`, `scheduled`, `running`, `canceling`, 'unknown'.
  */
 export type TaskState =
-  | 'notScheduled'
-  | 'scheduling'
-  | 'scheduled'
-  | 'running'
-  | 'canceling'
-  | 'unknown';
+  'notScheduled' | 'scheduling' | 'scheduled' | 'running' | 'canceling' | 'unknown';
 
 /**
  */
@@ -814,7 +809,7 @@ export function initZone(): ZoneType {
     }
 
     static __load_patch(name: string, fn: PatchFn, ignoreDuplicate = false): void {
-      if (patches.hasOwnProperty(name)) {
+      if (Object.hasOwn(patches, name)) {
         // `checkDuplicate` option is defined from global variable
         // so it works for all modules.
         // `ignoreDuplicate` can work for the specified module
@@ -862,7 +857,7 @@ export function initZone(): ZoneType {
     public getZoneWith(key: string): AmbientZone | null {
       let current: ZoneImpl | null = this;
       while (current) {
-        if (current._properties.hasOwnProperty(key)) {
+        if (Object.hasOwn(current._properties, key)) {
           return current;
         }
         current = current._parent;
@@ -1601,7 +1596,7 @@ export function initZone(): ZoneType {
     macroTask: 'macroTask' = 'macroTask',
     eventTask: 'eventTask' = 'eventTask';
 
-  const patches: {[key: string]: any} = {};
+  const patches: {[key: string]: any} = Object.create(null);
   const _api: ZonePrivate = {
     symbol: __symbol__,
     currentZoneFrame: () => _currentZoneFrame,

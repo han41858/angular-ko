@@ -1,19 +1,23 @@
 <!--
 # Async operations
 -->
+
 # 비동기 동작
 
 <!--
 Some validation requires data from external sources like backend APIs or third-party services. Signal Forms provides two functions for asynchronous validation: `validateHttp()` for HTTP-based validation and `validateAsync()` for custom resource-based validation.
 -->
+
 유효성 검사 중에는 백엔드 API나 서드 파티 서비스로 데이터가 적합한지 검사해야 하는 경우가 있습니다.
 시그널 폼은 이런 경우를 위해 비동기 유효성 검사를 2가지 방법으로 지원합니다.
 HTTP 기반으로 유효성 검사를 해야 하는 경우는 `validateHttp()`를 사용하고, 커스텀 리소스로 유효성 검사를 해야 하는 경우는 `validateAsync()`를 사용하면 됩니다.
 
-
 <!--
 ## When to use async validation
 -->
+
+<a id="when-to-use-async-validation"></a>
+
 ## 비동기 유효성 검사는 언제 사용하나요
 
 <!--
@@ -26,6 +30,7 @@ Use async validation when your validation logic requires external data. Some com
 
 Don't use async validation for checks you can perform synchronously on the client. Use synchronous validation rules like `pattern()`, `email()`, or `validate()` for format validation and static rules.
 -->
+
 비동기 유효성 검사는 유효성 검사에 외부 데이터가 필요할 때 사용합니다.
 보통은 이런 경우입니다:
 
@@ -37,10 +42,12 @@ Don't use async validation for checks you can perform synchronously on the clien
 클라이언트에서 동기 방식으로 실행할 수 있는 유효성 검사에 비동기 유효성 검사를 적용하지 마세요.
 `pattern()`, `email()`, `validate()`와 같이 형식을 검사하거나 정적인 규칙을 확인하는 경우는 동기 유효성 검사를 사용하는 것이 맞습니다.
 
-
 <!--
 ## How async validation works
 -->
+
+<a id="how-async-validation-works"></a>
+
 ## 비동기 유효성 검사는 어떻게 동작하나요
 
 <!--
@@ -111,6 +118,7 @@ The validation flow works like this:
 5. The request completes and `pending()` becomes `false`
 6. Errors update based on the response
 -->
+
 비동기 유효성 검사는 동기 유효성 검사를 모두 통과한 후에 실행됩니다.
 그리고 비동기 검사가 실행 중일 때는 `pending()` 시그널이 `true`를 반환합니다.
 유효성 검사 결과를 활용하면 특정 필드에 에러가 발생했다는 것을 표시할 수 있으며, 필드 값이 변경되면 진행 중인 비동기 유효성 검사를 취소할 수도 있습니다.
@@ -180,22 +188,27 @@ export class Registration {
 5. 비동기 유효성 검사 요청이 성공하면 `pending()` 시그널이 `false`를 반환합니다.
 6. 유효성 검사 응답을 확인해서 에러를 표시합니다.
 
-
 <!--
 ## HTTP validation with validateHttp()
 -->
+
+<a id="http-validation-with-validatehttp"></a>
+
 ## HTTP 유효성 검사: `validateHttp()`
 
 <!--
 The `validateHttp()` function provides the most common form of async validation. Use it when you need to validate against a REST API or any HTTP endpoint.
 -->
+
 `validateHttp()` 함수는 일반적인 비동기 유효성 검사로 가장 많이 사용됩니다.
 REST API나 HTTP 엔드포인트로 유효성 검사를 진행할 때 사용하세요.
-
 
 <!--
 ### Request function
 -->
+
+<a id="request-function"></a>
+
 ### 요청 함수
 
 <!--
@@ -255,6 +268,7 @@ request: ({value}) => ({
 }) // prettier-ignore
 ```
 -->
+
 `request()` 함수는 URL 문자열이나 `HttpResourceRequest` 객체를 반환합니다.
 `undefined`를 반환하면 유효성 검사를 건너뜁니다:
 
@@ -312,10 +326,12 @@ request: ({value}) => ({
 }) // prettier-ignore
 ```
 
-
 <!--
 ### Success and error handlers
 -->
+
+<a id="success-and-error-handlers"></a>
+
 ## 비동기 유효성 검사 성공/실패 처리하기
 
 <!--
@@ -382,6 +398,7 @@ onError: (error) => {
 } // prettier-ignore
 ```
 -->
+
 `onSuccess` 함수는 유효성 검사 에러를 받거나 유효성 검사에 성공한 경우 `undefined`를 반환합니다.
 이 함수는 HTTP 응답을 인자로 받습니다.
 
@@ -446,26 +463,28 @@ onError: (error) => {
 } // prettier-ignore
 ```
 
-
 <!--
 ### HTTP options
 -->
+
+<a id="http-options"></a>
+
 ### HTTP 옵션
 
 <!--
-Customize the HTTP request with the `options` parameter:
+Customize the HTTP request by returning an `HttpResourceRequest` object from the `request` function:
 
 ```ts
 import {HttpHeaders} from '@angular/common/http';
 
 validateHttp(schemaPath.field, {
-  request: ({value}) => `/api/validate?value=${value()}`,
-  options: {
+  request: ({value}) => ({
+    url: `/api/validate?value=${value()}`,
     headers: new HttpHeaders({
       Authorization: 'Bearer token',
     }),
     timeout: 5000,
-  },
+  }),
   onSuccess: (response: {valid: boolean}) =>
     response.valid
       ? null
@@ -482,19 +501,20 @@ validateHttp(schemaPath.field, {
 
 TIP: See the [httpResource API documentation](api/common/http/httpResource) for all available options.
 -->
-HTTP 요청은 `options` 인자로 커스터마이징할 수 있습니다:
+
+`request` 함수에서 `HttpResourceRequest` 객체를 반환하면 HTTP 요청을 커스터마이징할 수 있습니다:
 
 ```ts
 import {HttpHeaders} from '@angular/common/http';
 
 validateHttp(schemaPath.field, {
-  request: ({value}) => `/api/validate?value=${value()}`,
-  options: {
+  request: ({value}) => ({
+    url: `/api/validate?value=${value()}`,
     headers: new HttpHeaders({
       Authorization: 'Bearer token',
     }),
     timeout: 5000,
-  },
+  }),
   onSuccess: (response: {valid: boolean}) =>
     response.valid
       ? null
@@ -511,10 +531,12 @@ validateHttp(schemaPath.field, {
 
 팁: 사용할 수 있는 옵션을 확인하려면 [httpResource API 문서](api/common/http/httpResource)를 참고하세요.
 
-
 <!--
 ## Custom async validation with validateAsync()
 -->
+
+<a id="custom-async-validation-with-validateasync"></a>
+
 ## 커스텀 비동기 유효성 검사: `validateAsync()`
 
 <!--
@@ -529,6 +551,7 @@ Consider `validateAsync()` only when `validateHttp()` can't meet your needs. Som
 - **Complex retry logic** - Custom backoff strategies or conditional retries
 - **Direct resource access** - When you need the full resource lifecycle
 -->
+
 비동기 유효성 검사는 대부분 `validateHttp()`를 사용하면 됩니다.
 이 함수는 최소 옵션으로 HTTP 요청을 처리하며, 대부분의 경우에 활용할 수 있습니다.
 
@@ -538,15 +561,17 @@ Consider `validateAsync()` only when `validateHttp()` can't meet your needs. Som
 `validateHttp()`로 해결할 수 없다면 `validateAsync()` 활용을 검토하세요.
 이런 경우에 활용하면 됩니다:
 
-- **HTTP가 아닌 유효성 검사** - WebSocket 연결이나, IndexedDB 탐색,  Web Worker 연산인 경우
+- **HTTP가 아닌 유효성 검사** - WebSocket 연결이나, IndexedDB 탐색, Web Worker 연산인 경우
 - **커스텀 캐싱 정책** - 단순한 메모이제이션이 아니라 애플리케이션에 특화된 캐싱을 해야 하는 경우
 - **재시도 로직이 복잡한 경우** - 커스텀 재시도 정책이나 조건부 재시도를 활용하는 경우
 - **resource에 직접 접근하는 경우** - resource 라이프싸이클에 적극적으로 개입해야 하는 경우
 
-
 <!--
 ### Creating a custom validation rule
 -->
+
+<a id="creating-a-custom-validation-rule"></a>
+
 ### 커스텀 유효성 검사 규칙 만들기
 
 <!--
@@ -618,6 +643,7 @@ export class Registration {
 
 The `params` function runs on every value change. Return `undefined` to skip validation. The `factory` function runs once during setup and receives params as a signal. The resource updates automatically when params change.
 -->
+
 `validateAsync()` 함수는 `params`, `factory`, `onSuccess`, `onError`로 프로퍼티가 4개 필요합니다.
 이때 `params` 함수는 리소스를 인자로 반환하며, `factory`는 리소스를 생성합니다:
 
@@ -690,10 +716,12 @@ export class Registration {
 `factory` 함수는 초기 설정 단계에 한 번 실행되며 시그널을 인자로 받습니다.
 리소스는 `params` 함수가 반환하는 값이 변경될 때마다 자동으로 갱신됩니다.
 
-
 <!--
 ### Using Observable-based services
 -->
+
+<a id="using-observable-based-services"></a>
+
 ## Observable 기반 서비스 활용하기
 
 <!--
@@ -739,6 +767,7 @@ export class Registration {
 
 The `rxResource` function works directly with Observables and handles subscription cleanup automatically when the field value changes.
 -->
+
 애플리케이션에서 Observable 기반 서비스를 활용하고 있다면 `@angular/core/rxjs-interop` 패키지로 제공되는 `rxResource`를 활용하세요:
 
 ```ts
@@ -782,10 +811,12 @@ export class Registration {
 `rxResource` 함수는 Observable을 직접 처리합니다.
 필드 값이 변경되었을 때 기존에 구독한 옵저버블을 정리하는 기능도 자동으로 합니다.
 
-
 <!--
 ## Debouncing
 -->
+
+<a id="debouncing"></a>
+
 ## 디바운싱(debouncing)
 
 <!--
@@ -840,6 +871,7 @@ export class Registration {
 
 With a 300 ms debounce, the model updates and validates only after the user pauses typing longer than the configured duration. For example, typing "signal forms" in a quick burst fires one validation request instead of twelve.
 -->
+
 `debounce`는 사용자가 폼 모델에 입력하는 값을 디바운싱(debouncing)합니다.
 디바운싱은 사용자의 값 입력을 일정 시간 동안 기다린 후에 폼 모델에 반영하는 것을 의미합니다.
 이 방식은 모든 키 눌림에 반응하지 않기 때문에 연산 자원을 아낄 수 있으며, 값을 입력하는 중에는 에러 메시지를 표시하지 않을 수 있고, 개별 글자마다 반응하지 않을 수 있습니다.
@@ -896,10 +928,12 @@ export class Registration {
 300ms 라고 디바운싱을 지정하면, 폼 모델은 사용자가 해당 시간만큼 입력이 멈추기를 기다린 후에 유효성 검사를 실행합니다.
 예를 들면, "signal forms"라고 빠르게 입력하면 유효성 검사 요청은 12번이 아니라 1번만 실행합니다.
 
-
 <!--
 ### Touch flushes the model
 -->
+
+<a id="touch-flushes-the-model"></a>
+
 ### `touched` 상태면 바로 반영하기
 
 <!--
@@ -907,6 +941,7 @@ Regardless of the debounce duration, the framework writes the field's `controlVa
 
 In the typical case, this matters for form submission. When the user clicks a submit button, the focused input blurs, which touches that field and flushes its pending debounce before the submission handler runs.
 -->
+
 디바운싱 딜레이와 관계없이, 필드가 `touched` 상태가 되면 프레임워크는 필드의 `controlValue()` 값을 모델에 즉시 전달합니다.
 네이티브 입력 필드는 포커스가 이동하면 터치된 것으로 간주되므로, 사용자가 값을 입력하고 탭을 누르면 디바운싱 타이머가 만료되는 것을 기다릴 필요가 없습니다.
 커스텀 컨트롤이라면 원하는 이벤트에 응답해서 터치된 것으로 간주할 수 있습니다.
@@ -914,10 +949,12 @@ In the typical case, this matters for form submission. When the user clicks a su
 일반적으로는 폼 제출 시에 중요합니다.
 사용자가 제출 버튼을 클릭하면, 입력 필드에서 포커스가 이동하고, 터치 상태가 된 필드는 폼 제출 핸들러가 실행되기 전에 디바운싱 타이머가 초기화됩니다.
 
-
 <!--
 ### Commit only on blur
 -->
+
+<a id="commit-only-on-blur"></a>
+
 ### `blur`일 때 반응하기
 
 <!--
@@ -933,6 +970,7 @@ form(this.registrationModel, (schemaPath) => {
 
 With `'blur'`, the model keeps its previous value while the user is typing. Sync and async validation, derived signals, and any reactive rules reading the field all see the previous value until the field becomes touched. This commonly occurs when the user blurs a native input, or when a custom control signals touch on its own.
 -->
+
 어떤 필드는 사용자 입력 도중에 반응하지 않고, 입력을 모두 끝낸 후에야 값을 반영해야 하는 경우가 있습니다.
 예를 들어 검색 필터라면 사용자가 값을 입력하는 동안 모든 값 입력에 반응하거나 상태 변경을 유발하는 동작은 사용자가 값을 완전히 입력하기 전까지는 제한하는 것이 좋습니다.
 
@@ -948,10 +986,12 @@ form(this.registrationModel, (schemaPath) => {
 그리고 동기, 비동기 유효성 검사와 연관 시그널, 모든 반응형 규칙이 이전 값을 기준으로 동작합니다.
 이런 경우는 사용자가 입력 필드에서 포커스를 옮기거나, 커스텀 컨트롤이 자체 터치 시그널을 보낼 때 발생합니다.
 
-
 <!--
 ### Custom timing logic
 -->
+
+<a id="custom-timing-logic"></a>
+
 ### 커스텀 타이밍 로직
 
 <!--
@@ -984,6 +1024,7 @@ const registrationForm = form(registrationModel, (schemaPath) => {
 
 The `abortSignal` fires when the field is touched, or when its value changes before the debounce resolves. Resolve the promise on abort so your debouncer releases any pending timers. The framework writes the pending value to the model on touch, and discards it when a newer value arrives. See the [`debounce` API reference](api/forms/signals/debounce) for the full `Debouncer` signature.
 -->
+
 딜레이가 필요하거나 `'blur'`로는 해결되지 않으면, `Debouncer` 함수를 사용하면 됩니다.
 이 함수는 필드 컨텍스트와 [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)을 인자로 받으며, 모델이 업데이트해야 할 시점에 완료되는 `Promise<void>`를 반환합니다:
 
@@ -1017,10 +1058,12 @@ const registrationForm = form(registrationModel, (schemaPath) => {
 Angular는 필드 조작 시 대기 중인 값을 모델에 반영하고 새로운 값이 들어오면 기존 값을 폐기합니다.
 전체 `Debouncer` 구성을 알아보려면 [`debounce` API 참조](api/forms/signals/debounce) 문서를 참고하세요.
 
-
 <!--
 ### Debouncing a single async validator
 -->
+
+<a id="debouncing-a-single-async-validator"></a>
+
 ### 단일 비동기 유효성 검사의 디바운싱
 
 <!--
@@ -1057,6 +1100,7 @@ Choose between the two layers based on scope:
 
 Both options accept a duration in milliseconds. Their custom-timing callbacks differ: the form-level rule takes a `Debouncer`, and the validator-level option takes a `DebounceTimer` from `@angular/core`. The two signatures are not interchangeable.
 -->
+
 `debounce` 규칙은 동기 유효성 검사, 비동기 유효성 검사, 시그널 반응 등 모든 연쇄 반응을 지연시킵니다.
 하지만 그 반대의 경우가 필요한 경우도 있습니다.
 `required`나 `email`과 같이 간단한 동기 유효성 검사는 그대로 실행하고, 비용이 들어가는 비동기 함수는 사용자 입력이 끝나고 동작하는 것입니다.
@@ -1088,19 +1132,21 @@ HTTP 요청만 디바운싱됩니다.
 
 두 계층이 동작하는 것을 비교해 보세요.
 
-| 옵션                                                        | 언제 사용하나요                                                                                                                         |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `debounce()` 규칙                                             | 동기 유효성 검사, 상태 연계 반응, 필드 값이 모두 확정되어야 폼 제출이 가능할 때, 입력 중에는 반응하지 않습니다. |
-| `validateHttp({ debounce })` 또는 `validateAsync({ debounce })` | 부하가 적은 간단한 유효성 검사는 즉시 실행합니다. 하지만 연산이 필요한 검사는 사용자가 입력을 멈출 때까지 기다립니다.   |
+| 옵션                                                            | 언제 사용하나요                                                                                                       |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `debounce()` 규칙                                               | 동기 유효성 검사, 상태 연계 반응, 필드 값이 모두 확정되어야 폼 제출이 가능할 때, 입력 중에는 반응하지 않습니다.       |
+| `validateHttp({ debounce })` 또는 `validateAsync({ debounce })` | 부하가 적은 간단한 유효성 검사는 즉시 실행합니다. 하지만 연산이 필요한 검사는 사용자가 입력을 멈출 때까지 기다립니다. |
 
 두 옵션 모두 인자를 밀리초 단위로 받습니다.
 커스텀 타이밍 콜백은 조금 다른데, 폼 계층의 규칙은 `Debouncer`를 사용하며, 유효성 계층의 옵션은 `@angular/core` 패키지로 제공되는 `DebounceTimer`를 받습니다.
 두 방식은 서로 호환되지 않습니다.
 
-
 <!--
 ## Composing resources in async validation with a factory
 -->
+
+<a id="composing-resources-in-async-validation-with-a-factory"></a>
+
 ## 팩토리로 비동기 유효성 검사와 `resource` 조합하기
 
 <!--
@@ -1140,6 +1186,7 @@ export class Registration {
 
 The `params` callback returns `undefined` for short usernames, signaling that validation should skip. With `debounce: 300` applied, the resource waits until the user pauses typing for 300 ms before acting on each change. It then runs the loader for valid usernames and stays idle once the debounced value settles to `undefined`.
 -->
+
 Angular가 제공하는 [`debounce` 옵션](api/forms/signals/validateAsync)은 스로틀링으로 사용할 수도 있지만, `validateAsync()`는 더 유용하게 조합할 수 있는 `factory` 함수를 제공합니다.
 팩토리 함수는 시그널을 인자로 받고 리소스를 반환합니다.
 두 지점 사이에는 필요한 로직을 자유롭게 구현할 수 있습니다.
@@ -1181,10 +1228,12 @@ export class Registration {
 그리고 `debounce: 300`을 사용하면 사용자가 입력을 300ms 멈추기 전까지는 값이 변경된 것을 처리하지 않고 기다립니다.
 이후에 로더가 사용자명이 유효하다고 검사하고 나면 디바운스되는 값이 `undefined`로 변경되며 대기 상태가 됩니다.
 
-
 <!--
 ### Combining debounce with additional logic
 -->
+
+<a id="combining-debounce-with-additional-logic"></a>
+
 ### 디바운스에 로직 더하기
 
 <!--
@@ -1232,6 +1281,7 @@ export class Registration {
 
 The `cache` lives in the factory's closure, so it persists for the field's lifetime. Once the user has typed a username the server has already checked, the loader reads from the cache instead of making a new network request.
 -->
+
 시간 기반 디바운스보다 복잡한 로직이 필요하다면, 커스텀 팩토리를 조합하면 됩니다.
 서버 응답을 캐싱하는 경우에 이 방식을 활용합니다.
 예를 들어, 서버가 특정 사용자 이름을 확인했다면, 동일한 값을 다시 입력해도 요청을 보낼 필요가 없습니다.
@@ -1279,10 +1329,12 @@ export class Registration {
 `cache`는 팩토리 클로저 안에 위치하기 때문에, 이 캐시는 필드의 라이프싸이클 동안 유지됩니다.
 사용자가 사용자명을 입력해서 서버로 한 번 검사하고 나면, 이후에는 새로운 요청을 보내지 않고 로더가 캐시를 확인합니다.
 
-
 <!--
 ## Understanding pending state
 -->
+
+<a id="understanding-pending-state"></a>
+
 ## `pending` 상태 이해하기
 
 <!--
@@ -1291,7 +1343,7 @@ When async validation runs, the field's `pending()` signal returns `true`. Durin
 - `valid()` returns `false`
 - `invalid()` returns `false`
 - `errors()` returns an empty array
-- `submit()` waits for validation to complete
+- `submit()` does not wait for it; by default the `action` runs anyway (see [`ignoreValidators`](guide/forms/signals/form-submission#controlling-validation-gating-with-ignorevalidators))
 
 Show the pending state in your template to provide feedback:
 
@@ -1323,13 +1375,14 @@ Disable form submission while validation is pending:
 
 TIP: See the [Field State Management guide](guide/forms/signals/field-state-management) for more patterns using `pending()`, `valid()`, and `invalid()` signals.
 -->
+
 비동기 유효성 검사가 실행되면, 필드의 `pending()` 시그널은 `true`를 반환합니다.
 이때:
 
 - `valid()`는 `false`를 반환합니다.
 - `invalid()`는 `false`를 반환합니다.
 - `errors()`는 빈 배열을 반환합니다.
-- `submit()`는 유효성 검사가 끝날 때까지 기다립니다.
+- `submit()`는 유효성 검사가 끝날 때까지 기다리지 않습니다. 기본적으로 `action`은 그대로 실행됩니다([`ignoreValidators`](guide/forms/signals/form-submission#controlling-validation-gating-with-ignorevalidators) 참고).
 
 `pending` 상태라면 템플릿에 관련 메시지를 표시하는 방식으로 활용할 수 있습니다:
 
@@ -1361,10 +1414,12 @@ TIP: See the [Field State Management guide](guide/forms/signals/field-state-mana
 
 팁: `pending()`, `valid()`, `invalid()` 시그널 활용에 대해 더 알아보려면 [필드 상태 관리](guide/forms/signals/field-state-management)를 참고하세요.
 
-
 <!--
 ### Validation execution order
 -->
+
+<a id="validation-execution-order"></a>
+
 ### 유효성 검사 실행 순서
 
 <!--
@@ -1398,6 +1453,7 @@ form(model, (schemaPath) => {
 
 This execution order improves performance by reducing server load and catching format errors instantly.
 -->
+
 비동기 유효성 검사는 동기 유효성 검사를 모두 통과한 이후에만 실행됩니다.
 그래서 입력값이 잘못된 경우에는 불필요하게 서버로 요청을 보내지 않을 수 있습니다:
 
@@ -1429,28 +1485,36 @@ form(model, (schemaPath) => {
 
 실행 순서가 이렇다는 것을 활용하면 형식에 맞지 않는 입력값을 즉시 확인하거나 서버의 검사 부하를 줄일 수 있습니다.
 
-
 <!--
 ### Request cancellation
 -->
+
+<a id="request-cancellation"></a>
+
 ### 요청 취소
 
 <!--
 When a field value changes, Signal Forms automatically cancels any pending async validation request for that field. This prevents race conditions and ensures validation always reflects the current value. You don't need to implement cancellation logic yourself.
 -->
+
 필드 값이 변경되면 시그널 폼은 아직 완료되지 않은 비동기 유효성 검사를 모두 취소합니다.
 그렇기 때문에 응답 순서가 뒤바뀌는 일 없이 현재 필드 값으로만 유효성 검사가 동작합니다.
 수동으로 로직을 취소할 필요는 없습니다.
 
-
 <!--
 ## Best practices
 -->
+
+<a id="best-practices"></a>
+
 ## 모범사례
 
 <!--
 ### Combine with synchronous validation
 -->
+
+<a id="combine-with-synchronous-validation"></a>
+
 ### 동기 유효성 검사와 조합하기
 
 <!--
@@ -1482,6 +1546,7 @@ form(model, (schemaPath) => {
 });
 ```
 -->
+
 입력값 형식 검사는 언제나 비동기 유효성 검사보다 먼저 실행하세요.
 이렇게 하면 오류를 즉시 잡을 수 있고 불필요한 서버 요청을 방지할 수 있습니다:
 
@@ -1514,6 +1579,9 @@ form(model, (schemaPath) => {
 <!--
 ### Skip validation when appropriate
 -->
+
+<a id="skip-validation-when-appropriate"></a>
+
 ### 근사값으로 유효성 검사 생략하기
 
 <!--
@@ -1544,6 +1612,7 @@ validateHttp(schemaPath.username, {
 });
 ```
 -->
+
 `request` 함수가 `undefined`를 반환하면 유효성 검사를 생략합니다.
 이것을 활용하면 필드 입력값이 비어있거나 최소 길이보다 모자란 경우 유효성 검사를 생략할 수 있습니다:
 
@@ -1572,10 +1641,12 @@ validateHttp(schemaPath.username, {
 });
 ```
 
-
 <!--
 ### Handle errors gracefully
 -->
+
+<a id="handle-errors-gracefully"></a>
+
 ### 에러 처리하기
 
 <!--
@@ -1607,6 +1678,7 @@ validateHttp(schemaPath.field, {
 });
 ```
 -->
+
 에러 메시지는 명확하게, 사용자가 이해하기 쉽게 제공하세요.
 디버깅을 위한 세부사항은 사용자에게 표시할 필요 없이 로그로 남겨주세요:
 
@@ -1636,10 +1708,12 @@ validateHttp(schemaPath.field, {
 });
 ```
 
-
 <!--
 ### Show clear feedback
 -->
+
+<a id="show-clear-feedback"></a>
+
 ### 피드백을 명확하게 제공하세요
 
 <!--
@@ -1660,6 +1734,7 @@ Use the `pending()` signal to show when validation is happening. This helps user
 }
 ```
 -->
+
 유효성 검사가 진행 중인 것을 사용자에게 표시하려면 `pending()` 시그널을 활용하면 됩니다.
 그러면 사용자는 왜 앱이 느려졌는지 확인할 수 있으며, 체감 성능도 향상됩니다:
 
@@ -1678,10 +1753,12 @@ Use the `pending()` signal to show when validation is happening. This helps user
 }
 ```
 
-
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
+
 ## 다음 단계
 
 <!--
@@ -1699,6 +1776,7 @@ For detailed API documentation, see:
 - [`httpResource()`](api/common/http/httpResource) - Angular's HTTP resource API
 - [`resource()`](api/core/resource) - Angular's resource primitive
 -->
+
 이 문서에서는 `validateHttp()`와 `validateAsync()`를 활용하는 비동기 유효성 검사를 다뤘습니다.
 시그널 폼에 대해 더 알아보세요:
 

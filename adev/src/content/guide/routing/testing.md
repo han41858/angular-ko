@@ -58,9 +58,8 @@ The following example shows how to test a `UserProfile` component that displays 
 
 ```ts { header: 'user-profile.spec.ts'}
 import {TestBed} from '@angular/core/testing';
-import {Router} from '@angular/router';
+import {provideRouter, Router} from '@angular/router';
 import {RouterTestingHarness} from '@angular/router/testing';
-import {provideRouter} from '@angular/router';
 import {UserProfile} from './user-profile';
 
 describe('UserProfile', () => {
@@ -98,9 +97,8 @@ export class UserProfile {
 
 ```ts { header: 'user-profile.spec.ts'}
 import {TestBed} from '@angular/core/testing';
-import {Router} from '@angular/router';
+import {provideRouter, Router} from '@angular/router';
 import {RouterTestingHarness} from '@angular/router/testing';
-import {provideRouter} from '@angular/router';
 import {UserProfile} from './user-profile';
 
 describe('UserProfile', () => {
@@ -145,7 +143,7 @@ Route guards control access to routes based on conditions like authentication or
 The following example tests an `authGuard` that allows navigation for authenticated users and redirects unauthenticated users to a login page.
 
 ```ts {header: 'auth.guard.spec.ts'}
-import {vi, type Mocked} from 'vitest';
+import {describe, expect, it, vi, type Mocked} from 'vitest';
 import {RouterTestingHarness} from '@angular/router/testing';
 import {provideRouter, Router} from '@angular/router';
 import {authGuard} from './auth.guard';
@@ -214,7 +212,7 @@ export const authGuard: CanActivateFn = () => {
 다음 예제는 인증된 사용자의 내비게이션은 허용하고 인증되지 않은 사용자는 로그인 페이지로 리다이렉트하는 `authGuard`를 테스트합니다.
 
 ```ts {header: 'auth.guard.spec.ts'}
-import {vi, type Mocked} from 'vitest';
+import {describe, expect, it, vi, type Mocked} from 'vitest';
 import {RouterTestingHarness} from '@angular/router/testing';
 import {provideRouter, Router} from '@angular/router';
 import {authGuard} from './auth.guard';

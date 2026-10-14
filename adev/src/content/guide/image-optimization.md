@@ -7,7 +7,7 @@
 <!--
 The `NgOptimizedImage` directive makes it easy to adopt performance best practices for loading images.
 
-The directive ensures that the loading of the [Largest Contentful Paint (LCP)](http://web.dev/lcp) image is prioritized by:
+The directive ensures that the loading of the [Largest Contentful Paint (LCP)](https://web.dev/lcp) image is prioritized by:
 
 - Automatically setting the `fetchpriority` attribute on the `<img>` tag
 - Lazy loading other images by default
@@ -24,12 +24,12 @@ In addition to optimizing the loading of the LCP image, `NgOptimizedImage` enfor
 
 If you're using a background image in CSS, [start here](#how-to-migrate-your-background-image).
 
-**NOTE: Although the `NgOptimizedImage` directive was made a stable feature in Angular version 15, it has been backported and is available as a stable feature in versions 13.4.0 and 14.3.0 as well.**
+NOTE: Although the `NgOptimizedImage` directive was made a stable feature in Angular version 15, it has been backported and is available as a stable feature in versions 13.4.0 and 14.3.0 as well.
 -->
 
 `NgOptimizedImage` 디렉티브를 활용하면 이미지를 다루는 모범 사례를 간단하게 도입할 수 있습니다.
 
-이 디렉티브는 아래 작업을 통해 [가장 큰 컨텐츠 페인트(Largest Contentful Paint, LCP)](http://web.dev/lcp) 성능을 끌어올립니다:
+이 디렉티브는 아래 작업을 통해 [가장 큰 컨텐츠 페인트(Largest Contentful Paint, LCP)](https://web.dev/lcp) 성능을 끌어올립니다:
 
 - `<img>` 태그에 `fetchpriority` 어트리뷰트를 자동으로 설정합니다.
 - 기본적으로 이미지는 지연 로딩합니다.
@@ -51,6 +51,8 @@ CSS 파일로 배경 이미지를 지정하고 있다면 [여기](#배경-이미
 <!--
 ## Getting Started
 -->
+
+<a id="getting-started"></a>
 
 ## 시작하기
 
@@ -118,6 +120,8 @@ NOTE: If you don't know the size of your images, consider using "fill mode" to i
 </docs-workflow>
 -->
 <docs-workflow>
+<a id="import-ngoptimizedimage-directive"></a>
+
 <docs-step title="`NgOptimizedImage` 디렉티브 불러오기">
 `@angular/common` 패키지에서 `NgOptimizedImage` 디렉티브를 불러옵니다:
 
@@ -136,11 +140,15 @@ imports: [
 
 </docs-code>
 </docs-step>
+<a id="optional-set-up-a-loader"></a>
+
 <docs-step title="(선택) 로더 설정하기">
 NgOptimizedImage를 활용할 때 이미지 로더를 정하는 것이 **필수** 는 아니지만, 성능 향상을 위해서라면 이미지 엘리먼트에 `srcset`을 설정하고 이미지 CDN을 활용하는 것이 좋습니다.
 
 이미지 로더를 어떻게 설정하는지 간단하게 알아보려면 [이미지 로더 설정하기](#ngoptimizedimage용-이미지-로더-설정하기) 섹션을 참고하세요.
 </docs-step>
+<a id="enable-the-directive"></a>
+
 <docs-step title="디렉티브 활성화하기">
 `NgOptimizedImage` 디렉티브를 활성화하기 위해, 이미지 엘리먼트의 `src` 어트리뷰트를 `ngSrc`로 변경합니다.
 
@@ -151,6 +159,8 @@ NgOptimizedImage를 활용할 때 이미지 로더를 정하는 것이 **필수*
 [기본 로더](#기본-로더)를 사용하고 있다면, `src`를 지정할 때 베이스 URL은 꼭 제거하세요.
 베이스 주소는 이미지 로더가 직접 적용합니다.
 </docs-step>
+<a id="mark-images-as-priority"></a>
+
 <docs-step title="이미지에 `priority` 설정하기">
 화면에서 [LCP 이미지](https://web.dev/lcp/#what-elements-are-considered)는 `priority`를 설정해서 로딩 우선순위를 높이세요.
 
@@ -168,6 +178,8 @@ LCP 엘리먼트에 `priority` 어트리뷰트가 설정되어 있지 않으면 
 화면에 표시되는 LCP 엘리먼트는 사용자 화면 해상도 등 여러 가지 요인에 따라 다르게 표시될 수 있기 때문에, `priority`를 이미지 여러 개에 지정해야 할 수도 있습니다.
 자세한 내용은 [웹 바이탈을 위한 CSS](https://web.dev/css-web-vitals/#images-and-largest-contentful-paint-lcp)를 참고하세요.
 </docs-step>
+<a id="include-width-and-height"></a>
+
 <docs-step title="너비, 높이 지정하기">
 [이미지 때문에 레이아웃이 변경되는 것](https://web.dev/css-web-vitals/#images-and-layout-shifts)을 방지하기 위해, NgOptimizedImage는 이미지의 너비와 높이 입력을 강제합니다:
 
@@ -188,6 +200,8 @@ LCP 엘리먼트에 `priority` 어트리뷰트가 설정되어 있지 않으면 
 <!--
 ## Using `fill` mode
 -->
+
+<a id="using-fill-mode"></a>
 
 ## `fill` 모드 사용하기
 
@@ -235,6 +249,8 @@ IMPORTANT: For the "fill" image to render properly, its parent element **must** 
 ## How to migrate your background image
 -->
 
+<a id="how-to-migrate-your-background-image"></a>
+
 ## 배경 이미지 마이그레이션하기
 
 <!--
@@ -264,11 +280,15 @@ You can adjust how the background image fills the container as described in the 
 ## Using placeholders
 -->
 
+<a id="using-placeholders"></a>
+
 ## 플레이스홀더(placeholder) 사용하기
 
 <!--
 ### Automatic placeholders
 -->
+
+<a id="automatic-placeholders"></a>
 
 ### 자동 플레이스홀더
 
@@ -329,6 +349,8 @@ providers: [
 ### Data URL placeholders
 -->
 
+<a id="data-url-placeholders"></a>
+
 ### 데이터 URL 플레이스홀더
 
 <!--
@@ -361,6 +383,8 @@ However, large data URLs increase the size of your Angular bundles and slow down
 ### Non-blurred placeholders
 -->
 
+<a id="non-blurred-placeholders"></a>
+
 ### 흐리게 처리되지 않는 플레이스홀더
 
 <!--
@@ -381,6 +405,8 @@ By default, NgOptimizedImage applies a CSS blur effect to image placeholders. To
 <!--
 ## Adjusting image styling
 -->
+
+<a id="adjusting-image-styling"></a>
 
 ## 이미지 스타일 조정하기
 
@@ -404,6 +430,8 @@ If the `width` and `height` attribute on the image are preventing you from sizin
 ## Performance Features
 -->
 
+<a id="performance-features"></a>
+
 ## 성능 향상
 
 <!--
@@ -416,6 +444,8 @@ NgOptimizedImage는 앱 성능 향상을 위한 기능도 다양하게 제공합
 <!--
 ### Add resource hints
 -->
+
+<a id="add-resource-hints"></a>
 
 ### 리소스 힌트 추가
 
@@ -468,6 +498,8 @@ providers: [
 ### Request images at the correct size with automatic `srcset`
 -->
 
+<a id="request-images-at-the-correct-size-with-automatic-srcset"></a>
+
 ### 이미지를 원하는 사이즈로 요청하기: `srcset`
 
 <!--
@@ -480,6 +512,8 @@ Defining a [`srcset` attribute](https://developer.mozilla.org/docs/Web/API/HTMLI
 <!--
 #### Fixed-size images
 -->
+
+<a id="fixed-size-images"></a>
 
 #### 크기가 고정된 이미지
 
@@ -503,6 +537,8 @@ Example srcset generated:
 <!--
 #### Responsive images
 -->
+
+<a id="responsive-images"></a>
 
 #### 반응형 이미지
 
@@ -592,6 +628,8 @@ providers: [
 ### Disabling automatic srcset generation
 -->
 
+<a id="disabling-automatic-srcset-generation"></a>
+
 ### `srcset` 자동 생성 비활성화
 
 <!--
@@ -611,6 +649,8 @@ To disable srcset generation for a single image, you can add the `disableOptimiz
 <!--
 ### Disabling image lazy loading
 -->
+
+<a id="disabling-image-lazy-loading"></a>
 
 ### 이미지 지연로딩 비활성화
 
@@ -634,6 +674,8 @@ By default, `NgOptimizedImage` sets `loading=lazy` for all images that are not m
 <!--
 ### Controlling image decoding
 -->
+
+<a id="controlling-image-decoding"></a>
 
 ### 이미지 디코딩 지정
 
@@ -695,6 +737,8 @@ You can still override this behavior by explicitly setting the `decoding` attrib
 ### Advanced 'sizes' values
 -->
 
+<a id="advanced-sizes-values"></a>
+
 ### `sizes` 고급 활용
 
 <!--
@@ -724,6 +768,8 @@ For additional information about the `sizes` attribute, see [web.dev](https://we
 <!--
 ## Configuring an image loader for `NgOptimizedImage`
 -->
+
+<a id="configuring-an-image-loader-for-ngoptimizedimage"></a>
 
 ## `NgOptimizedImage`용 이미지 로더 설정하기
 
@@ -779,6 +825,8 @@ Angular 애플리케이션과 함께 사용되는 이미지 서비스들은 `NgO
 ### Built-in Loaders
 -->
 
+<a id="built-in-loaders"></a>
+
 ### 기본 로더
 
 <!--
@@ -820,6 +868,8 @@ providers: [
 <!--
 ### Custom Loaders
 -->
+
+<a id="custom-loaders"></a>
 
 ### 커스텀 로더
 
@@ -865,6 +915,8 @@ providers: [
 ### The `loaderParams` Property
 -->
 
+<a id="the-loaderparams-property"></a>
+
 ### `loaderParams` 프로퍼티
 
 <!--
@@ -883,6 +935,8 @@ A common use for `loaderParams` is controlling advanced image CDN features.
 ### Using the `transform` property with built-in loaders
 -->
 
+<a id="using-the-transform-property-with-built-in-loaders"></a>
+
 ### 내장 로더로 `transform` 프로퍼티 활용하기
 
 <!--
@@ -899,6 +953,8 @@ The `transform` property accepts two formats:
 <!--
 #### String format
 -->
+
+<a id="string-format"></a>
 
 #### 문자열 형식
 
@@ -929,6 +985,8 @@ Provide transformations as a comma-separated string using your CDN's transformat
 <!--
 #### Object format
 -->
+
+<a id="object-format"></a>
 
 #### 객체 형식
 
@@ -963,6 +1021,8 @@ NOTE: The `transform` property is not supported by the Netlify loader, as Netlif
 <!--
 ### Example custom loader
 -->
+
+<a id="example-custom-loader"></a>
 
 ### 커스텀 로더 예제
 
@@ -1024,11 +1084,15 @@ const myCustomLoader = (config: ImageLoaderConfig) => {
 ## Frequently Asked Questions
 -->
 
+<a id="frequently-asked-questions"></a>
+
 ## 자주 묻는 질문
 
 <!--
 ### Does NgOptimizedImage support the `background-image` css property?
 -->
+
+<a id="does-ngoptimizedimage-support-the-background-image-css-property"></a>
 
 ### `NgOptimizedImage`는 `background-image` CSS 프로퍼티를 지원하나요?
 
@@ -1046,6 +1110,8 @@ NgOptimizedImage는 `background-image` CSS 프로퍼티를 직접 지원하지 �
 ### Why can't I use `src` with `NgOptimizedImage`?
 -->
 
+<a id="why-cant-i-use-src-with-ngoptimizedimage"></a>
+
 ### 왜 `NgOptimizedImage`에 `src`를 사용할 수 없나요?
 
 <!--
@@ -1058,6 +1124,8 @@ NgOptimizedImage는 `loading` 어트리뷰트를 프로그램으로 변경하는
 <!--
 ### Why is a preconnect element not being generated for my image domain?
 -->
+
+<a id="why-is-a-preconnect-element-not-being-generated-for-my-image-domain"></a>
 
 ### 이미지 도메인에 사전 연결 엘리먼트가 연결되지 않는 이유는 무엇일까요?
 
@@ -1089,6 +1157,8 @@ providers: [
 ### Can I use two different image domains in the same page?
 -->
 
+<a id="can-i-use-two-different-image-domains-in-the-same-page"></a>
+
 ### 한 화면에서 이미지 도메인을 2개 사용할 수 있나요?
 
 <!--
@@ -1106,6 +1176,8 @@ To do this, we recommend writing a [custom image loader](#custom-loaders) which 
 ### Can you add a new built-in loader for my preferred CDN?
 -->
 
+<a id="can-you-add-a-new-built-in-loader-for-my-preferred-cdn"></a>
+
 ### 제가 자주 사용하는 CDN용 로더를 추가해 줄 수 있나요?
 
 <!--
@@ -1118,6 +1190,8 @@ For maintenance reasons, we don't currently plan to support additional built-in 
 <!--
 ### Can I use this with the `<picture>` tag
 -->
+
+<a id="can-i-use-this-with-the-picture-tag"></a>
 
 ### `<picture>` 태그를 사용할 수 있나요?
 
@@ -1134,6 +1208,8 @@ If you're waiting on this feature, please upvote the GitHub issue [here](https:/
 <!--
 ### How do I find my LCP image with Chrome DevTools?
 -->
+
+<a id="how-do-i-find-my-lcp-image-with-chrome-devtools"></a>
 
 ### Chrome 개발자도구에서 LCP 이미지를 어떻게 찾을 수 있나요?
 

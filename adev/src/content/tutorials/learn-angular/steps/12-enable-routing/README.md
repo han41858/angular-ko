@@ -2,6 +2,8 @@
 # Routing Overview
 -->
 
+<a id="routing-overview"></a>
+
 # 라우팅(Routing) 개요
 
 <!--
@@ -56,9 +58,7 @@ Finally, to make sure your app is ready to use the Angular Router, you need to t
 
 Update the template for `App` by adding `<router-outlet />`
 
-```angular-ts {highlight:[11]}
-import {RouterOutlet} from '@angular/router';
-
+```angular-ts {highlight:[9]}
 @Component({
 ...
 template: `
@@ -94,6 +94,8 @@ Keep the momentum going to learn the next step of defining the routes for our ap
 
 <docs-workflow>
 
+<a id="create-an-approutests-file"></a>
+
 <docs-step title="app.routes.ts 파일을 생성합니다">
 
 `app.routes.ts` 파일에서 이런 내용을 수정해 봅시다:
@@ -108,6 +110,8 @@ export const routes: Routes = [];
 ```
 
 </docs-step>
+
+<a id="add-routing-to-provider"></a>
 
 <docs-step title="프로바이더에 라우팅 규칙을 추가합니다">
 
@@ -129,6 +133,8 @@ export const appConfig: ApplicationConfig = {
 
 </docs-step>
 
+<a id="import-routeroutlet-in-the-component"></a>
+
 <docs-step title="컴포넌트에서 `RouterOutlet` 를 로드합니다">
 
 마지막으로 Angular Router를 사용하려면 원하는 화면을 앱의 어느 위치에 표시할지 지정해야 합니다.
@@ -136,9 +142,7 @@ export const appConfig: ApplicationConfig = {
 
 `App` 컴포넌트의 템플릿을 수정해서 `<router-outlet />` 를 추가해 봅시다.
 
-```angular-ts {highlight:[11]}
-import {RouterOutlet} from '@angular/router';
-
+```angular-ts {highlight:[9]}
 @Component({
 ...
 template: `

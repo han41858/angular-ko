@@ -2,6 +2,8 @@
 # Forms Overview
 -->
 
+<a id="forms-overview"></a>
+
 # 폼 개요
 
 <!--
@@ -36,7 +38,7 @@ For this form to use Angular features that enable data binding to forms, you'll 
 
 Import the `FormsModule` from `@angular/forms` and add it to the `imports` array of the `User`.
 
-```ts {highlight:[2,6]}
+```ts {highlight:[[2],[6]]}
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 
@@ -89,6 +91,8 @@ Angular에는 템플릿 기반(template-driven) 폼과 반응형(reactive) 폼 �
 
 <docs-workflow>
 
+<a id="create-an-input-field"></a>
+
 <docs-step title="입력 필드 추가하기">
 
 `user.ts` 파일을 열고 템플릿을 수정해서 `framework`라는 `id`를 갖는 `text` 입력 필드를 추가합니다.
@@ -102,13 +106,15 @@ Angular에는 템플릿 기반(template-driven) 폼과 반응형(reactive) 폼 �
 
 </docs-step>
 
+<a id="import-formsmodule"></a>
+
 <docs-step title="`FormsModule`를 로드합니다">
 
 Angular가 제공하는 폼과 데이터 바인딩 기능을 활용하려면 `FormsModule`을 로드해야 합니다.
 
 `@angular/forms` 패키지로 제공되는 `FormsModule`을 로드해서 `User` 컴포넌트의 `imports` 배열에 추가하세요.
 
-```ts {highlight:[2,6]}
+```ts {highlight:[[2],[6]]}
 import {Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 
@@ -120,6 +126,8 @@ export class User {}
 ```
 
 </docs-step>
+
+<a id="add-binding-to-the-value-of-the-input"></a>
 
 <docs-step title="입력 필드와 값을 바인딩하세요">
 

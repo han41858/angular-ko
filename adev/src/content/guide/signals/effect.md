@@ -1,8 +1,8 @@
 <!--
-## Effects
+# Effects
 -->
 
-## `effect()`
+# `effect()`
 
 <!--
 Signals are useful because they notify interested consumers when they change. An **effect** is an operation that runs whenever one or more signal values change. You can create an effect with the `effect` function:
@@ -38,10 +38,12 @@ effect(() => {
 이펙트 시그널은 변화 감지 동작에서 언제나 **비동기** 로 실행됩니다.
 
 <!--
-### Use cases for effects
+## Use cases for effects
 -->
 
-### 활용사례
+<a id="use-cases-for-effects"></a>
+
+## 활용사례
 
 <!--
 Effects should be the last API you reach for. Always prefer `computed()` for derived values and `linkedSignal()` for values that can be both derived and manually set. If you find yourself copying data from one signal to another with an effect, it's a sign you should move your source-of-truth higher up and use `computed()` or `linkedSignal()` instead. Effects are best for syncing signal state to imperative, non-signal APIs.
@@ -49,7 +51,7 @@ Effects should be the last API you reach for. Always prefer `computed()` for der
 TIP: There are no situations where effect is good, only situations where it is appropriate.
 
 - Logging signal values, either for analytics or as a debugging tool.
-- Keeping data in sync with different kind of storages: `window.localStorage`, session storage, cookies etc.
+- Keeping data in sync with different kinds of storage: `window.localStorage`, session storage, cookies, etc.
 - Adding custom DOM behavior that can't be expressed with template syntax.
 - Performing custom rendering to a `<canvas>` element, charting library, or other third party UI library.
 
@@ -82,18 +84,18 @@ Instead, use `computed` signals to model state that depends on other state.
 </docs-callout>
 
 <!--
-### Injection context
+## Injection context
 -->
 
-### 의존성 주입 컨텍스트
+<a id="injection-context"></a>
+
+## 의존성 주입 컨텍스트
 
 <!--
 By default, you can only create an `effect()` within an [injection context](guide/di/dependency-injection-context) (where you have access to the `inject` function). The easiest way to satisfy this requirement is to call `effect` within a component, directive, or service `constructor`:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class EffectiveCounter {
   readonly count = signal(0);
 
@@ -109,9 +111,7 @@ export class EffectiveCounter {
 To create an effect outside the constructor, you can pass an `Injector` to `effect` via its options:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class EffectiveCounter {
   readonly count = signal(0);
   private injector = inject(Injector);
@@ -132,9 +132,7 @@ export class EffectiveCounter {
 이 조건을 만족하는 방법 중 가장 쉬운 방법은, 컴포넌트, 디렉티브, 서비스 클래스의 `constructor` 안에서 `effect()`를 실행하는 것입니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class EffectiveCounter {
   readonly count = signal(0);
 
@@ -150,9 +148,7 @@ export class EffectiveCounter {
 클래스 생성자 밖에서 `effect()` 함수를 사용하려면 `effect()` 함수에 `Injector`를 다음과 같이 전달하면 됩니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class EffectiveCounter {
   readonly count = signal(0);
   private injector = inject(Injector);
@@ -169,10 +165,12 @@ export class EffectiveCounter {
 ```
 
 <!--
-### Execution of effects
+## Execution of effects
 -->
 
-### `effect()` 실행과정
+<a id="execution-of-effects"></a>
+
+## `effect()` 실행과정
 
 <!--
 Angular implicitly defines two implicit behaviors for its effects depending on the context they were created in.
@@ -202,10 +200,12 @@ In both cases, if at least one of the effect dependencies changed during the eff
 두 경우 모두 변화 감지를 감지하는 중간에 다른 변동사항이 감지되면, 진행 중인 변화 감지 싸이클이 종료되고 `effect()` 함수를 다시 실행합니다.
 
 <!--
-### Destroying effects
+## Destroying effects
 -->
 
-### 종료과정
+<a id="destroying-effects"></a>
+
+## 종료과정
 
 <!--
 When a component or directive is destroyed, Angular automatically cleans up any associated effects.
@@ -230,10 +230,12 @@ Effects return an `EffectRef`. You can use the ref's `destroy` method to manuall
 이런 경우는 시그널이 필요하지 않을 때 반드시 종료해야 하는 것을 잊지 마세요.
 
 <!--
-### Effect cleanup functions
+## Effect cleanup functions
 -->
 
-### 이펙트 시그널 종료 함수
+<a id="effect-cleanup-functions"></a>
+
+## 이펙트 시그널 종료 함수
 
 <!--
 When a component or directive is destroyed, Angular automatically cleans up any associated effects.
@@ -277,6 +279,8 @@ effect((onCleanup) => {
 ## Side effects on DOM elements
 -->
 
+<a id="side-effects-on-dom-elements"></a>
+
 ## DOM 엘리먼트 부수효과
 
 <!--
@@ -285,9 +289,7 @@ The `effect` function is a general-purpose tool for running code in reaction to 
 For these situations, you can use `afterRenderEffect`. It functions like `effect`, but runs after Angular has finished rendering and committed its changes to the DOM.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class MyFancyChart {
   chartData = input.required<ChartData>();
   canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
@@ -297,7 +299,7 @@ export class MyFancyChart {
     // Run a single time to create the chart instance
     afterNextRender({
       write: () => {
-        this.chart = initializeChart(this.canvas().nativeElement(), this.chartData());
+        this.chart = initializeChart(this.canvas().nativeElement, this.chartData());
       },
     });
 
@@ -322,9 +324,7 @@ TIP: You often don't need `afterRenderEffect` to check for DOM changes. APIs lik
 이 함수는 `effect()` 함수와 비슷하지만, Angular가 렌더링을 끝내고 변동사항을 DOM에 반영한 후에 실행됩니다.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class MyFancyChart {
   chartData = input.required<ChartData>();
   canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
@@ -334,7 +334,7 @@ export class MyFancyChart {
     // 차트 인스턴스를 생성할 때 한 번 실행합니다.
     afterNextRender({
       write: () => {
-        this.chart = initializeChart(this.canvas().nativeElement(), this.chartData());
+        this.chart = initializeChart(this.canvas().nativeElement, this.chartData());
       },
     });
 
@@ -355,6 +355,8 @@ export class MyFancyChart {
 ### Render phases
 -->
 
+<a id="render-phases"></a>
+
 ### 렌더링 단계
 
 <!--
@@ -373,7 +375,7 @@ The phases are:
 
 Using these phases helps prevent layout thrashing and ensures that your DOM operations are performed in a safe and efficient manner.
 
-You can specify the phase by passing an object with a `phase` property to `afterRender` or `afterNextRender`:
+You can specify the phases by passing an object with a callback for each phase to `afterRenderEffect`:
 
 ```ts
 afterRenderEffect({
@@ -411,7 +413,7 @@ DOM에 접근하고 변경하는 것은 애플리케이션 성능에 영향을 �
 
 네 단계를 잘 활용하면 불필요한 레이아웃 스레싱(thrashing)을 막고, DOM 작업을 안전하고 효율적으로 수행할 수 있습니다.
 
-`afterRender()`나 `afterNextRender()` 함수에 옵션 인자를 전달하면서 다음과 같이 단계를 지정하면 됩니다:
+`afterRenderEffect`에 단계별 콜백을 담은 객체를 전달하면 다음과 같이 실행 단계를 지정할 수 있습니다:
 
 ```ts
 afterRenderEffect({
@@ -437,10 +439,12 @@ DOM 리플로우가 발생하는 경우라면 애플리케이션 성능에 영�
 #### Phase executions
 -->
 
+<a id="phase-executions"></a>
+
 #### 단계 실행
 
 <!--
-The `earlyRead` phase callback receives no parameters. Each subsequent phase receives the return value of the previous phase's callback as a Signal. You can use this to coordinate work across phases.
+The `earlyRead` phase callback receives only the cleanup function. Each subsequent phase receives the return value of the previous phase's callback as a Signal. You can use this to coordinate work across phases.
 
 Effects run in the following phase order:
 
@@ -452,7 +456,7 @@ Effects run in the following phase order:
 If one of the phases modifies a signal value tracked by `afterRenderEffect`, the affected phases execute again.
 -->
 
-`earlyRead` 단계의 콜백은 인자를 받지 않습니다.
+`earlyRead` 단계의 콜백은 정리 함수만 인자로 받습니다.
 그리고 이후 단계들은 이전 단계에서 반환하는 값을 인자로 받습니다.
 단계 사이에 데이터를 전달해야 하는 경우에 활용하면 됩니다.
 
@@ -469,6 +473,8 @@ If one of the phases modifies a signal value tracked by `afterRenderEffect`, the
 #### Cleanup
 -->
 
+<a id="cleanup"></a>
+
 #### 정리
 
 <!--
@@ -481,6 +487,8 @@ Each phase provides a cleanup callback function as argument. The cleanup callbac
 <!--
 ### Server-side rendering caveats
 -->
+
+<a id="server-side-rendering-caveats"></a>
 
 ### 서버 사이드 렌더링에서 주의사항
 

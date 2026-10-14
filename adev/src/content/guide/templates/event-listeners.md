@@ -14,6 +14,8 @@ Angular를 활용하면 템플릿에 있는 엘리먼트에서 발생하는 이�
 ## Listening to native events
 -->
 
+<a id="listening-to-native-events"></a>
+
 ## 기본 이벤트 감지하기
 
 <!--
@@ -63,6 +65,8 @@ export class App{
 ## Accessing the event argument
 -->
 
+<a id="accessing-the-event-argument"></a>
+
 ## 이벤트 객체 접근하기
 
 <!--
@@ -103,7 +107,7 @@ export class App {
 ## Using key modifiers
 -->
 
-## 특정 키에만 반응하기
+## 특정 키에만 반응하기 {#using-key-modifiers}
 
 <!--
 When you want to capture specific keyboard events for a specific key, you might write some code like the following:
@@ -224,6 +228,8 @@ Angular에서는 `code` 접미사를 사용해서 [키보드 이벤트의 코드
 ## Listening on global targets
 -->
 
+<a id="listening-on-global-targets"></a>
+
 ## 전역 이벤트 감지하기
 
 <!--
@@ -233,9 +239,9 @@ Global target names can be used to prefix an event. The 3 supported global targe
 @Component({
   /* ... */
   host: {
-    'window:click': 'onWindowClick()',
-    'document:click': 'onDocumentClick()',
-    'body:click': 'onBodyClick()',
+    '(window:click)': 'onWindowClick()',
+    '(document:click)': 'onDocumentClick()',
+    '(body:click)': 'onBodyClick()',
   },
 })
 export class MyView {}
@@ -249,9 +255,9 @@ export class MyView {}
 @Component({
   /* ... */
   host: {
-    'window:click': 'onWindowClick()',
-    'document:click': 'onDocumentClick()',
-    'body:click': 'onBodyClick()',
+    '(window:click)': 'onWindowClick()',
+    '(document:click)': 'onDocumentClick()',
+    '(body:click)': 'onBodyClick()',
   },
 })
 export class MyView {}
@@ -260,6 +266,8 @@ export class MyView {}
 <!--
 ## Preventing event default behavior
 -->
+
+<a id="preventing-event-default-behavior"></a>
 
 ## 이벤트 전파 중단하기
 
@@ -309,6 +317,8 @@ _`preventDefault()` 실행이 필요한 경우라면 반드시 명시적으로 �
 ## Extend event handling
 -->
 
+<a id="extend-event-handling"></a>
+
 ## 이벤트 핸들링 확장하기
 
 <!--
@@ -320,6 +330,8 @@ Angular 이벤트 처리 시스템은 커스텀 이벤트 플러그인을 `EVENT
 <!--
 ### Implementing Event Plugin
 -->
+
+<a id="implementing-event-plugin"></a>
 
 ### 이벤트 플러그인 구현하기
 
@@ -345,15 +357,15 @@ export class DebounceEventPlugin extends EventManagerPlugin {
   override addEventListener(element: HTMLElement, eventName: string, handler: Function) {
     // Parse the event: e.g., "click.debounce.500"
     // event: "click", delay: 500
-    const [event, method, delay = 300] = eventName.split('.');
+    const [event, , delay = '300'] = eventName.split('.');
 
-    let timeoutId: number;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
-    const listener = (event: Event) => {
+    const listener = (e: Event) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        handler(event);
-      }, delay);
+        handler(e);
+      }, Number(delay));
     };
 
     element.addEventListener(event, listener);
@@ -370,8 +382,7 @@ export class DebounceEventPlugin extends EventManagerPlugin {
 Register your custom plugin using the `EVENT_MANAGER_PLUGINS` token in your application's providers:
 
 ```ts
-import {bootstrapApplication} from '@angular/platform-browser';
-import {EVENT_MANAGER_PLUGINS} from '@angular/platform-browser';
+import {bootstrapApplication, EVENT_MANAGER_PLUGINS} from '@angular/platform-browser';
 import {App} from './app';
 import {DebounceEventPlugin} from './debounce-event-plugin';
 
@@ -442,15 +453,15 @@ export class DebounceEventPlugin extends EventManagerPlugin {
   override addEventListener(element: HTMLElement, eventName: string, handler: Function) {
     // 이벤트를 파싱합니다:
     // "click.debounce.500" -> event: "click", delay: 500
-    const [event, method, delay = 300] = eventName.split('.');
+    const [event, , delay = '300'] = eventName.split('.');
 
-    let timeoutId: number;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
-    const listener = (event: Event) => {
+    const listener = (e: Event) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        handler(event);
-      }, delay);
+        handler(e);
+      }, Number(delay));
     };
 
     element.addEventListener(event, listener);
@@ -467,8 +478,7 @@ export class DebounceEventPlugin extends EventManagerPlugin {
 이후에는 애플리케이션의 프로바이더 목록에 `EVENT_MANAGER_PLUGINS` 토큰과 커스텀 플러그인을 등록하면 됩니다.
 
 ```ts
-import {bootstrapApplication} from '@angular/platform-browser';
-import {EVENT_MANAGER_PLUGINS} from '@angular/platform-browser';
+import {bootstrapApplication, EVENT_MANAGER_PLUGINS} from '@angular/platform-browser';
 import {App} from './app';
 import {DebounceEventPlugin} from './debounce-event-plugin';
 

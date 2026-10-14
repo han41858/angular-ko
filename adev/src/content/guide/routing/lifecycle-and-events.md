@@ -30,17 +30,17 @@ The Angular Router emits navigation events that you can subscribe to in order to
 | [`RoutesRecognized`](api/router/RoutesRecognized)   | Occurs after the router determines which route matches the URL and contains the route state information. |
 | [`GuardsCheckStart`](api/router/GuardsCheckStart)   | Begins the route guard phase. The router evaluates route guards like `canActivate` and `canDeactivate`.  |
 | [`GuardsCheckEnd`](api/router/GuardsCheckEnd)       | Signals completion of guard evaluation. Contains the result (allowed/denied).                            |
-| [`ResolveStart`](api/router/ResolveStart)           | Begins the data resolution phase. Route resolvers start fetching data.                                   |
-| [`ResolveEnd`](api/router/ResolveEnd)               | Data resolution completes. All required data becomes available.                                          |
+| [`ResolveStart`](api/router/ResolveStart)           | Begins the data resolution phase. Route resolvers and resources start fetching data.                     |
+| [`ResolveEnd`](api/router/ResolveEnd)               | Data resolution completes. All required data and blocking resources become available.                    |
 | [`NavigationEnd`](api/router/NavigationEnd)         | Final event when navigation completes successfully. The router updates the URL.                          |
 | [`NavigationSkipped`](api/router/NavigationSkipped) | Occurs when the router skips navigation (e.g., same URL navigation).                                     |
 
 The following are common error events:
 
-| Event                                             | Description                                                                      |
-| ------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [`NavigationCancel`](api/router/NavigationCancel) | Occurs when the router cancels navigation. Often due to a guard returning false. |
-| [`NavigationError`](api/router/NavigationError)   | Occurs when navigation fails. Could be due to invalid routes or resolver errors. |
+| Event                                             | Description                                                                                                    |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [`NavigationCancel`](api/router/NavigationCancel) | Occurs when the router cancels navigation. Often due to a guard returning false.                               |
+| [`NavigationError`](api/router/NavigationError)   | Occurs when navigation fails. Could be due to invalid routes, resolver errors, or rejected blocking resources. |
 
 For a list of all lifecycle events, check out the [complete table of this guide](#all-router-events).
 -->
@@ -55,17 +55,17 @@ Angular 라우터가 발생시키는 내비게이션 이벤트를 구독하면 �
 | [`RoutesRecognized`](api/router/RoutesRecognized)   | 라우터가 URL에 매칭되는 라우팅 규칙을 결정한 뒤 발생하며 라우팅 규칙 상태 정보를 포함합니다.                    |
 | [`GuardsCheckStart`](api/router/GuardsCheckStart)   | 라우팅 규칙 가드 단계를 시작합니다. 라우터가 `canActivate`, `canDeactivate` 같은 라우팅 규칙 가드를 평가합니다. |
 | [`GuardsCheckEnd`](api/router/GuardsCheckEnd)       | 가드 평가가 완료되었음을 알립니다. 허용 또는 거부 결과를 포함합니다.                                            |
-| [`ResolveStart`](api/router/ResolveStart)           | 데이터 리졸브 단계를 시작합니다. 라우팅 규칙 리졸버가 데이터를 가져오기 시작합니다.                             |
-| [`ResolveEnd`](api/router/ResolveEnd)               | 데이터 리졸브가 완료됩니다. 필요한 모든 데이터를 사용할 수 있게 됩니다.                                         |
+| [`ResolveStart`](api/router/ResolveStart)           | 데이터 리졸브 단계를 시작합니다. 라우팅 규칙 리졸버와 리소스가 데이터를 가져오기 시작합니다.                    |
+| [`ResolveEnd`](api/router/ResolveEnd)               | 데이터 리졸브가 완료됩니다. 필요한 모든 데이터와 블로킹 리소스를 사용할 수 있게 됩니다.                         |
 | [`NavigationEnd`](api/router/NavigationEnd)         | 내비게이션이 성공적으로 완료되었을 때 발생하는 마지막 이벤트입니다. 라우터가 URL을 갱신합니다.                  |
 | [`NavigationSkipped`](api/router/NavigationSkipped) | 같은 URL로 이동하는 경우처럼 라우터가 내비게이션을 건너뛸 때 발생합니다.                                        |
 
 주요 에러 이벤트는 다음과 같습니다.
 
-| 이벤트                                            | 설명                                                                                                  |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| [`NavigationCancel`](api/router/NavigationCancel) | 라우터가 내비게이션을 취소할 때 발생합니다. 가드가 false를 반환하는 경우가 흔합니다.                  |
-| [`NavigationError`](api/router/NavigationError)   | 내비게이션이 실패할 때 발생합니다. 유효하지 않은 라우팅 규칙이나 리졸버 에러 등이 원인일 수 있습니다. |
+| 이벤트                                            | 설명                                                                                                                     |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [`NavigationCancel`](api/router/NavigationCancel) | 라우터가 내비게이션을 취소할 때 발생합니다. 가드가 false를 반환하는 경우가 흔합니다.                                     |
+| [`NavigationError`](api/router/NavigationError)   | 내비게이션이 실패할 때 발생합니다. 유효하지 않은 라우팅 규칙, 리졸버 에러, 블로킹 리소스의 실패 등이 원인일 수 있습니다. |
 
 전체 생명주기 이벤트 목록은 [이 문서의 전체 이벤트 표](#all-router-events)를 참고하세요.
 
@@ -84,10 +84,9 @@ When you want to run code during specific navigation lifecycle events, you can d
 // Example of subscribing to router events
 import {Component, inject, signal, effect} from '@angular/core';
 import {Event, Router, NavigationStart, NavigationEnd} from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class RouterEvents {
   private readonly router = inject(Router);
 
@@ -116,10 +115,9 @@ NOTE: The [`Event`](api/router/Event) type from `@angular/router` is named the s
 // 라우터 이벤트 구독 예제
 import {Component, inject, signal, effect} from '@angular/core';
 import {Event, Router, NavigationStart, NavigationEnd} from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class RouterEvents {
   private readonly router = inject(Router);
 
@@ -156,7 +154,7 @@ Debugging router navigation issues can be challenging without visibility into th
 When you need to inspect a Router event sequence, you can enable logging for internal navigation events for debugging. You can configure this by passing a configuration option (`withDebugTracing()`) that enables detailed console logging of all routing events.
 
 ```ts
-import {provideRouter, withDebugTracing} from '@angular/router';
+import {provideRouter, Routes, withDebugTracing} from '@angular/router';
 
 const appRoutes: Routes = [];
 bootstrapApplication(App, {
@@ -175,7 +173,7 @@ Angular는 모든 라우터 이벤트를 콘솔에 기록하는 내장 디버깅
 모든 라우팅 이벤트를 콘솔에 자세하게 기록하는 설정 옵션 `withDebugTracing()`을 전달하면 됩니다.
 
 ```ts
-import {provideRouter, withDebugTracing} from '@angular/router';
+import {provideRouter, Routes, withDebugTracing} from '@angular/router';
 
 const appRoutes: Routes = [];
 bootstrapApplication(App, {
@@ -212,7 +210,7 @@ Router events enable many practical features in real-world applications. Here ar
 Show loading indicators during navigation:
 
 ```angular-ts
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {Router} from '@angular/router';
 
 @Component({
@@ -234,7 +232,7 @@ export class App {
 내비게이션 중에 로딩 표시기를 표시합니다.
 
 ```angular-ts
-import {Component, inject} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {Router} from '@angular/router';
 
 @Component({
@@ -573,7 +571,7 @@ There is one additional event that occurs outside the main navigation lifecycle,
 ## 다음 단계
 
 <!--
-Learn more about [route guards](/guide/routing/route-guards) and [common router tasks](/guide/routing/common-router-tasks).
+Learn more about [route guards](/guide/routing/route-guards), [data fetching with resources](/guide/routing/data-fetching-with-resources), and [common router tasks](/guide/routing/common-router-tasks).
 -->
 
-[라우팅 규칙 가드](/guide/routing/route-guards)와 [일반적인 라우터 작업](/guide/routing/common-router-tasks)을 더 알아보세요.
+[라우팅 규칙 가드](/guide/routing/route-guards), [리소스로 데이터 가져오기](/guide/routing/data-fetching-with-resources), [일반적인 라우터 작업](/guide/routing/common-router-tasks)을 더 알아보세요.

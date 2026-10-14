@@ -36,6 +36,7 @@ import {
 import {of, Subject} from 'rxjs';
 
 import {INPUT_BINDER, RoutedComponentInputBinder} from './directives/router_outlet';
+import {createResourceOutletBindingEffects} from './router_resource';
 import {Event, NavigationError, stringifyEvent} from './events';
 import {RedirectCommand, Routes} from './models';
 import {NAVIGATION_ERROR_HANDLER, NavigationTransitions} from './navigation_transition';
@@ -48,6 +49,7 @@ import {
   RouterConfigOptions,
 } from './router_config';
 import {ROUTES} from './router_config_loader';
+import {setupAndRunResources} from './operators/setup_and_run_resources';
 import {PreloadingStrategy, RouterPreloader} from './router_preloader';
 
 import {ROUTER_SCROLLER, RouterScroller} from './router_scroller';
@@ -63,6 +65,7 @@ import {
   VIEW_TRANSITION_OPTIONS,
   ViewTransitionsFeatureOptions,
 } from './utils/view_transition';
+import {ROUTER_RESOURCES_FEATURE} from './router_resource_feature';
 
 /**
  * Sets up providers necessary to enable `Router` functionality for the application.
@@ -361,8 +364,7 @@ export type EnabledBlockingInitialNavigationFeature =
  * @publicApi
  */
 export type InitialNavigationFeature =
-  | EnabledBlockingInitialNavigationFeature
-  | DisabledInitialNavigationFeature;
+  EnabledBlockingInitialNavigationFeature | DisabledInitialNavigationFeature;
 
 /**
  * Configures initial navigation to start before the root component is created.
@@ -730,15 +732,15 @@ export function withNavigationErrorHandler(
 }
 
 /**
- * A type alias for providers returned by `withExperimentalAutoCleanupInjectors` for use with `provideRouter`.
+ * A type alias for providers returned by `withAutoCleanupInjectors` for use with `provideRouter`.
  *
- * @see {@link withExperimentalAutoCleanupInjectors}
+ * @see {@link withAutoCleanupInjectors}
  * @see {@link provideRouter}
  *
- * @experimental 21.1
+ * @publicApi 22.2
  */
-export type ExperimentalAutoCleanupInjectorsFeature =
-  RouterFeature<RouterFeatureKind.ExperimentalAutoCleanupInjectorsFeature>;
+export type AutoCleanupInjectorsFeature =
+  RouterFeature<RouterFeatureKind.AutoCleanupInjectorsFeature>;
 
 /**
  * Enables automatic destruction of unused route injectors.
@@ -753,12 +755,23 @@ export type ExperimentalAutoCleanupInjectorsFeature =
  * should also implement `retrieveStoredRouteHandles` to ensure injectors for handles that will be
  * reattached are not destroyed.
  *
- * @experimental 21.1
+ * @publicApi 22.2
  */
-export function withExperimentalAutoCleanupInjectors(): ExperimentalAutoCleanupInjectorsFeature {
-  return routerFeature(RouterFeatureKind.ExperimentalAutoCleanupInjectorsFeature, [
+export function withAutoCleanupInjectors(): AutoCleanupInjectorsFeature {
+  return routerFeature(RouterFeatureKind.AutoCleanupInjectorsFeature, [
     {provide: ROUTE_INJECTOR_CLEANUP, useValue: routeInjectorCleanup},
   ]);
+}
+
+/**
+ * Enables automatic destruction of unused route injectors.
+ *
+ * @deprecated Use `withAutoCleanupInjectors` instead.
+ * @see {@link withAutoCleanupInjectors}
+ * @publicApi
+ */
+export function withExperimentalAutoCleanupInjectors(): AutoCleanupInjectorsFeature {
+  return withAutoCleanupInjectors();
 }
 
 /**
@@ -838,7 +851,11 @@ export function withComponentInputBinding(
   options: ComponentInputBindingOptions = {},
 ): ComponentInputBindingFeature {
   const providers = [
-    {provide: INPUT_BINDER, useFactory: () => new RoutedComponentInputBinder(options)},
+    {
+      provide: INPUT_BINDER,
+      useFactory: () =>
+        new RoutedComponentInputBinder(options, inject(ROUTER_RESOURCES_FEATURE, {optional: true})),
+    },
   ];
 
   return routerFeature(RouterFeatureKind.ComponentInputBindingFeature, providers);
@@ -887,6 +904,49 @@ export function withViewTransitions(
 }
 
 /**
+ * A type alias for providers returned by `withRouterResources` for use with `provideRouter`.
+ *
+ * @see {@link withRouterResources}
+ * @see {@link provideRouter}
+ *
+ * @developerPreview 22.2
+ */
+export type RouterResourcesFeature = RouterFeature<RouterFeatureKind.RouterResourcesFeature>;
+
+/**
+ * Enables `resources` capabilities for Route definitions.
+ *
+ * @usageNotes
+ *
+ * Basic example of how you can enable the feature:
+ * ```ts
+ * const appRoutes: Routes = [];
+ * bootstrapApplication(AppComponent,
+ *   {
+ *     providers: [
+ *       provideRouter(appRoutes, withRouterResources())
+ *     ]
+ *   }
+ * );
+ * ```
+ *
+ * @developerPreview 22.2
+ * @returns A set of providers for use with `provideRouter`.
+ */
+export function withRouterResources(): RouterResourcesFeature {
+  const providers = [
+    {
+      provide: ROUTER_RESOURCES_FEATURE,
+      useValue: {
+        setupAndRunResources,
+        createResourceOutletBindingEffects,
+      },
+    },
+  ];
+  return routerFeature(RouterFeatureKind.RouterResourcesFeature, providers);
+}
+
+/**
  * A type alias that represents all Router features available for use with `provideRouter`.
  * Features can be enabled by adding special functions to the `provideRouter` call.
  * See documentation for each symbol to find corresponding function name. See also `provideRouter`
@@ -905,9 +965,10 @@ export type RouterFeatures =
   | NavigationErrorHandlerFeature
   | ComponentInputBindingFeature
   | ViewTransitionsFeature
-  | ExperimentalAutoCleanupInjectorsFeature
+  | AutoCleanupInjectorsFeature
   | RouterHashLocationFeature
-  | ExperimentalPlatformNavigationFeature;
+  | ExperimentalPlatformNavigationFeature
+  | RouterResourcesFeature;
 
 /**
  * The list of features as an enum to uniquely type each feature.
@@ -923,6 +984,7 @@ export const enum RouterFeatureKind {
   NavigationErrorHandlerFeature,
   ComponentInputBindingFeature,
   ViewTransitionsFeature,
-  ExperimentalAutoCleanupInjectorsFeature,
+  AutoCleanupInjectorsFeature,
   ExperimentalPlatformNavigationFeature,
+  RouterResourcesFeature,
 }

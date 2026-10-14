@@ -17,8 +17,6 @@ import {Signal, isSignal} from '../reactivity/api';
 import {applyChanges} from './change_detection_utils';
 import {getControlFlowBlocks} from './control_flow';
 import {
-  AngularComponentDebugMetadata,
-  AngularDirectiveDebugMetadata,
   DirectiveDebugMetadata,
   Listener,
   getComponent,
@@ -37,9 +35,12 @@ import {
   getInjectorProviders,
   getInjectorResolutionPath,
 } from './injector_discovery_utils';
-import {DebugSignalGraph, getSignalGraph} from './signal_debug';
+import {getSignalGraph, toggleWatchSignal} from './signal_debug';
 
-import {enableProfiling} from '../debug/chrome_dev_tools_performance';
+import {
+  enableProfiling,
+  getComponentInstanceDeepLinkId,
+} from '../debug/chrome_dev_tools_performance';
 import {getTransferState} from './transfer_state_utils';
 import {InjectionToken} from '../../di/injection_token';
 import {Injector} from '../../di/injector';
@@ -47,7 +48,7 @@ import {InjectedService, ProviderRecord} from '../debug/injector_profiler';
 
 import {Type} from '../../interface/type';
 import {RElement} from '../interfaces/renderer_dom';
-import {type Profiler} from '../../../primitives/devtools';
+import type {DebugSignalGraph, Profiler} from '../../../primitives/devtools';
 import {ControlFlowBlock} from './control_flow_types';
 
 /**
@@ -91,7 +92,9 @@ interface NonCoreGlobalUtils {
  * Angular. This allows fast iteration on new global utils and only applies Angular's long-lived
  * versioning constraint when we are ready to accept it.
  */
-interface InternalCoreGlobalUtils {}
+interface InternalCoreGlobalUtils {
+  toggleWatchSignal(id: string): void;
+}
 
 /**
  * The set of external (meaning outside google3) global utils implemented by `@angular/core`.
@@ -117,7 +120,7 @@ export interface ExternalCoreGlobalUtils {
   ɵgetSignalGraph(injector: Injector): DebugSignalGraph;
   ɵgetControlFlowBlocks(node: Node): ControlFlowBlock[];
   ɵgetTransferState(injector: Injector): Record<string, unknown>;
-
+  ɵgetComponentInstanceDeepLinkId(instance: unknown): number | undefined;
   getDirectiveMetadata(directiveOrComponentInstance: any): DirectiveDebugMetadata | null;
   getComponent<T>(element: Element): T | null;
   getContext<T extends {}>(element: Element): T | null;
@@ -131,6 +134,10 @@ export interface ExternalCoreGlobalUtils {
   isSignal(value: unknown): value is Signal<unknown>;
   enableProfiling(): void;
 }
+
+const internalCoreGlobalUtils: InternalCoreGlobalUtils = {
+  toggleWatchSignal,
+};
 
 const externalCoreGlobalUtils: ExternalCoreGlobalUtils = {
   /**
@@ -146,6 +153,7 @@ const externalCoreGlobalUtils: ExternalCoreGlobalUtils = {
   'ɵgetSignalGraph': getSignalGraph,
   'ɵgetControlFlowBlocks': getControlFlowBlocks,
   'ɵgetTransferState': getTransferState,
+  'ɵgetComponentInstanceDeepLinkId': getComponentInstanceDeepLinkId,
 
   getDirectiveMetadata,
   getComponent,
@@ -181,6 +189,10 @@ export function publishDefaultGlobalUtils() {
     for (const [methodName, method] of Object.entries(externalCoreGlobalUtils)) {
       publishGlobalUtil(methodName as keyof ExternalCoreGlobalUtils, method);
     }
+
+    for (const [methodName, method] of Object.entries(internalCoreGlobalUtils)) {
+      publishGlobalUtil(methodName as keyof InternalCoreGlobalUtils, method);
+    }
   }
 }
 
@@ -188,10 +200,9 @@ export function publishDefaultGlobalUtils() {
  * Publishes the given function to `window.ng` so that it can be
  * used from the browser console when an application is not in production.
  */
-export function publishGlobalUtil<K extends keyof ExternalCoreGlobalUtils>(
-  name: K,
-  fn: ExternalCoreGlobalUtils[K],
-): void {
+export function publishGlobalUtil<
+  K extends keyof InternalCoreGlobalUtils | keyof ExternalCoreGlobalUtils,
+>(name: K, fn: (InternalCoreGlobalUtils & ExternalCoreGlobalUtils)[K]): void {
   publishUtil(name, fn);
 }
 

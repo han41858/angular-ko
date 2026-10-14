@@ -23,20 +23,21 @@ Components are the main building blocks of Angular applications. Each component 
 ## Defining a component
 -->
 
+<a id="defining-a-component"></a>
+
 ## 컴포넌트 정의하기
 
 <!--
 Every component has a few main parts:
 
-1. A `@Component`[decorator](https://www.typescriptlang.org/docs/handbook/decorators.html) that contains some configuration used by Angular.
+1. A `@Component` [decorator](https://www.typescriptlang.org/docs/handbook/decorators.html) that contains some configuration used by Angular.
 2. An HTML template that controls what renders into the DOM.
 3. A [CSS selector](https://developer.mozilla.org/docs/Learn/CSS/Building_blocks/Selectors) that defines how the component is used in HTML.
 4. A TypeScript class with behaviors, such as handling user input or making requests to a server.
 
 Here is a simplified example of a `UserProfile` component.
 
-```angular-ts
-// user-profile.ts
+```angular-ts {header: "user-profile.ts"}
 @Component({
   selector: 'user-profile',
   template: `
@@ -51,8 +52,7 @@ export class UserProfile {
 
 The `@Component` decorator also optionally accepts a `styles` property for any CSS you want to apply to your template:
 
-```angular-ts
-// user-profile.ts
+```angular-ts {header: "user-profile.ts"}
 @Component({
   selector: 'user-profile',
   template: `
@@ -81,8 +81,7 @@ export class UserProfile {
 
 간단하게 만든 `UserProfile` 컴포넌트를 확인해 봅시다.
 
-```angular-ts
-// user-profile.ts
+```angular-ts {header: "user-profile.ts"}
 @Component({
   selector: 'user-profile',
   template: `
@@ -97,8 +96,7 @@ export class UserProfile {
 
 `@Component` 데코레이터에는 템플릿에 CSS 스타일을 지정하기 위해 `styles` 프로퍼티를 추가할 수 있습니다:
 
-```angular-ts
-// user-profile.ts
+```angular-ts {header: "user-profile.ts"}
 @Component({
   selector: 'user-profile',
   template: `
@@ -120,13 +118,14 @@ export class UserProfile {
 ### Separating HTML and CSS into separate files
 -->
 
+<a id="separating-html-and-css-into-separate-files"></a>
+
 ### HTML과 CSS는 개별 파일로 구성합니다.
 
 <!--
 You can define a component's HTML and CSS in separate files using `templateUrl` and `styleUrl`:
 
-```angular-ts
-// user-profile.ts
+```angular-ts {header: "user-profile.ts"}
 @Component({
   selector: 'user-profile',
   templateUrl: 'user-profile.html',
@@ -137,14 +136,12 @@ export class UserProfile {
 }
 ```
 
-```angular-html
-<!- user-profile.html ->
-<h1>Use profile</h1>
+```angular-html {header: "user-profile.html"}
+<h1>User profile</h1>
 <p>This is the user profile page</p>
 ```
 
-```css
-/* user-profile.css */
+```css {header: "user-profile.css"}
 h1 {
   font-size: 3em;
 }
@@ -153,8 +150,7 @@ h1 {
 
 컴포넌트의 HTML과 CSS는 개별 파일로 구성해서 `templateUrl`과 `styleUrl`로 연결합니다:
 
-```angular-ts
-// user-profile.ts
+```angular-ts {header: "user-profile.ts"}
 @Component({
   selector: 'user-profile',
   templateUrl: 'user-profile.html',
@@ -165,14 +161,12 @@ export class UserProfile {
 }
 ```
 
-```angular-html
-<!-- user-profile.html -->
+```angular-html {header: "user-profile.html"}
 <h1>User profile</h1>
 <p>This is the user profile page</p>
 ```
 
-```css
-/* user-profile.css */
+```css {header: "user-profile.css"}
 h1 {
   font-size: 3em;
 }
@@ -181,6 +175,8 @@ h1 {
 <!--
 ## Using components
 -->
+
+<a id="using-components"></a>
 
 ## 컴포넌트 사용하기
 
@@ -211,9 +207,8 @@ To import and use a component, you need to:
 
 Here's an example of a `UserProfile` component importing a `ProfilePhoto` component:
 
-```angular-ts
-// user-profile.ts
-import {ProfilePhoto} from 'profile-photo.ts';
+```angular-ts {header: "user-profile.ts"}
+import {ProfilePhoto} from './profile-photo';
 
 @Component({
   selector: 'user-profile',
@@ -242,9 +237,8 @@ TIP: Want to know more about Angular components? See the [In-depth Components gu
 
 그래서 `UserProfile` 컴포넌트 안에 `ProfilePhoto` 컴포넌트를 사용하려면 이렇게 구현하면 됩니다:
 
-```angular-ts
-// user-profile.ts
-import {ProfilePhoto} from 'profile-photo.ts';
+```angular-ts {header: "user-profile.ts"}
+import {ProfilePhoto} from './profile-photo';
 
 @Component({
   selector: 'user-profile',
@@ -265,6 +259,8 @@ export class UserProfile {
 <!--
 ## Next Step
 -->
+
+<a id="next-step"></a>
 
 ## 다음 단계
 

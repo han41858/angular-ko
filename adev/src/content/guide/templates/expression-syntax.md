@@ -15,6 +15,8 @@ Angular 표현식 문법은 JavaScript를 기반으로 하지만 몇 가지는 �
 ## Value literals
 -->
 
+<a id="value-literals"></a>
+
 ## 변수 타입
 
 <!--
@@ -26,6 +28,8 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 <!--
 ### Supported value literals
 -->
+
+<a id="supported-value-literals"></a>
 
 ### 지원하는 타입
 
@@ -59,6 +63,8 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 ### Unsupported value literals
 -->
 
+<a id="unsupported-value-literals"></a>
+
 ### 지원하지 않는 타입
 
 <!--
@@ -74,6 +80,8 @@ Angular는 JavaScript의 [변수 타입](https://developer.mozilla.org/en-US/doc
 <!--
 ## Globals
 -->
+
+<a id="globals"></a>
 
 ## 전역 변수
 
@@ -97,6 +105,8 @@ Angular 표현식에서는 다음과 같은 [전역](https://developer.mozilla.o
 ## Local variables
 -->
 
+<a id="local-variables"></a>
+
 ## 지역 변수
 
 <!--
@@ -114,11 +124,15 @@ For example, `@for` blocks make several local variables corresponding to informa
 ## What operators are supported?
 -->
 
+<a id="what-operators-are-supported"></a>
+
 ## 어떤 연산자를 사용할 수 있나요?
 
 <!--
 ### Supported operators
 -->
+
+<a id="supported-operators"></a>
 
 ### 지원하는 연산자
 
@@ -161,6 +175,12 @@ Angular supports the following operators from standard JavaScript.
 | Spread in array literals      | `[...arr, 1, 2, 3]`                            |
 | Rest in function calls        | `fn(...args)`                                  |
 
+| Arrow function                | `items.filter((i) => i.active)`                |
+
+NOTE: Assignment and increment/decrement operators are only valid in [event listener statements](#event-listener-statements). Using them in a binding or interpolation is a compile error, unless they are inside an arrow function.
+
+Arrow functions must have an expression body. Pipes cannot be used inside an arrow function, but you can pass an arrow function as an argument to a pipe.
+
 Angular expressions additionally also support the following non-standard operators:
 
 | Operator                        | Example(s)                     |
@@ -169,7 +189,20 @@ Angular expressions additionally also support the following non-standard operato
 | Optional chaining\*             | `someObj.someProp?.nestedProp` |
 | Non-null assertion (TypeScript) | `someObj!.someProp`            |
 
-NOTE: Optional chaining behaves differently from the standard JavaScript version in that if the left side of Angular’s optional chaining operator is `null` or `undefined`, it returns `null` instead of `undefined`.
+### Safe navigation migration
+
+Prior to Angular 22, the optional chaining operator (`?.`) returned `null` when the left-hand side is `null` or `undefined`, whereas standard JavaScript's `?.` returns `undefined`.
+Since Angular 22, the optional chaining operator behavior in angular expressions is alligned with the standard Javascript's behavior.
+
+During the migration to v22, the `ng update` schematics added a `$safeNavigationMigration` magic function to existing expressions to preserve the previous `null`-returning behavior.
+
+```html
+{{ $safeNavigationMigration(foo?.bar) }}
+```
+
+`$safeNavigationMigration` is a **temporary migration aid only**. It instructs the compiler to compile the wrapped safe-navigation expression using the legacy null-returning semantics rather than the standard JavaScript `?.` semantics. It is not a real function and cannot be called from TypeScript.
+
+NOTE: Prefer migrating expressions to no longer rely on `null` vs `undefined` distinctions so that `$safeNavigationMigration` can be removed. This function may be removed in a future version of Angular.
 -->
 
 Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산자를 사용할 수 있습니다.
@@ -210,6 +243,12 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | 배열 분해 연산자              | `[...arr, 1, 2, 3]`                            |
 | 함수의 나머지 인자 연산자     | `fn(...args)`                                  |
 
+| 화살표 함수 | `items.filter((i) => i.active)` |
+
+참고: 할당 연산자와 증가/감소 연산자는 [이벤트 리스너 구문](#event-listener-statements)에서만 사용할 수 있습니다. 화살표 함수 내부가 아니라면 바인딩이나 문자열 바인딩에서 사용했을 때 컴파일 에러가 발생합니다.
+
+화살표 함수의 본문은 표현식이어야 합니다. 화살표 함수 안에서 파이프를 사용할 수는 없지만, 화살표 함수를 파이프의 인자로 전달할 수는 있습니다.
+
 그리고 표준 JavaScript 연산자 외에 다음과 같은 연산자도 지원합니다:
 
 | 연산자                         | 예시                           |
@@ -218,11 +257,29 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | 옵셔널 체이닝\*                | `someObj.someProp?.nestedProp` |
 | null 보정 연산자 (TypeScript)  | `someObj!.someProp`            |
 
-참고: 옵셔널 체이닝(Optional chaining)의 동작은 표준 JavaScript와 조금 다릅니다. Angular에서는 옵셔널 체이닝이 끊길 때 `undefined` 대신 `null`을 반환합니다.
+### 안전 탐색 마이그레이션 {#safe-navigation-migration}
+
+Angular 22 이전에는 옵셔널 체이닝 연산자(`?.`)의 왼쪽 값이 `null`이나 `undefined`이면 `null`을 반환했지만, 표준 JavaScript의 `?.`는 `undefined`를 반환합니다.
+Angular 22부터 Angular 표현식의 옵셔널 체이닝 연산자도 표준 JavaScript와 동일하게 동작합니다.
+
+v22로 마이그레이션할 때 `ng update` 스키매틱은 기존의 `null` 반환 동작을 유지하기 위해 기존 표현식에 `$safeNavigationMigration` 특수 함수를 추가했습니다.
+
+```html
+{{ $safeNavigationMigration(foo?.bar) }}
+```
+
+`$safeNavigationMigration`은 **임시 마이그레이션 도구**입니다.
+감싼 안전 탐색 표현식을 표준 JavaScript `?.` 의미 대신 기존의 `null` 반환 의미로 컴파일하도록 컴파일러에 지시합니다.
+실제 함수가 아니므로 TypeScript에서 호출할 수 없습니다.
+
+참고: `$safeNavigationMigration`을 제거할 수 있도록 `null`과 `undefined`의 차이에 의존하지 않는 표현식으로 마이그레이션하는 것이 좋습니다.
+이 함수는 향후 Angular 버전에서 제거될 수 있습니다.
 
 <!--
 ### Unsupported operators
 -->
+
+<a id="unsupported-operators"></a>
 
 ### 지원하지 않는 연산자
 
@@ -248,6 +305,8 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 ## Lexical context for expressions
 -->
 
+<a id="lexical-context-for-expressions"></a>
+
 ## 표현식의 컨텍스트
 
 <!--
@@ -267,39 +326,41 @@ Angular 표현식에서는 컴포넌트 클래스의 컨텍스트 외에도 [템
 ## Declarations
 -->
 
+<a id="declarations"></a>
+
 ## 변수 선언
 
 <!--
 Generally speaking, declarations are not supported in Angular expressions. This includes, but is not limited to:
 
-| Declarations    | Example(s)                                  |
-| --------------- | ------------------------------------------- |
-| Variables       | `let label = 'abc'`, `const item = 'apple'` |
-| Functions       | `function myCustomFunction() { }`           |
-| Arrow Functions | `() => { }`                                 |
-| Classes         | `class Rectangle { }`                       |
+| Declarations                      | Example(s)                                  |
+| --------------------------------- | ------------------------------------------- |
+| Variables                         | `let label = 'abc'`, `const item = 'apple'` |
+| Functions                         | `function myCustomFunction() { }`           |
+| Arrow functions with block bodies | `() => { }`                                 |
+| Classes                           | `class Rectangle { }`                       |
 -->
 
 일반적으로 Angular 표현식에서는 변수를 선언한다고 보기 어렵습니다.
 이런 경우가 모두 해당됩니다:
 
-| 선언        | 예시                                        |
-| ----------- | ------------------------------------------- |
-| 변수        | `let label = 'abc'`, `const item = 'apple'` |
-| 함수        | `function myCustomFunction() { }`           |
-| 화살표 함수 | `() => { }`                                 |
-| 클래스      | `class Rectangle { }`                       |
+| 선언                         | 예시                                        |
+| ---------------------------- | ------------------------------------------- |
+| 변수                         | `let label = 'abc'`, `const item = 'apple'` |
+| 함수                         | `function myCustomFunction() { }`           |
+| 블록 본문을 가진 화살표 함수 | `() => { }`                                 |
+| 클래스                       | `class Rectangle { }`                       |
 
 <!--
-# Event listener statements
+## Event listener statements
 -->
 
-# 이벤트 리스너 실행문
+## 이벤트 리스너 실행문 {#event-listener-statements}
 
 <!--
 Event handlers are **statements** rather than expressions. While they support all of the same syntax as Angular expressions, there are two key differences:
 
-1. Statements **do support** assignment operators (but not destructing assignments)
+1. Statements **do support** assignment operators (but not destructuring assignments)
 1. Statements **do not support** pipes
 -->
 

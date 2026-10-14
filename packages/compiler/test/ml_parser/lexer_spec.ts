@@ -158,6 +158,52 @@ describe('HtmlLexer', () => {
     });
   });
 
+  describe('processing instructions', () => {
+    it('should parse a processing instruction', () => {
+      expect(tokenizeAndHumanizeParts('<?xml version="1.0" encoding="UTF-8"?>')).toEqual([
+        [TokenType.PROCESSING_INSTRUCTION, 'xml version="1.0" encoding="UTF-8"'],
+        [TokenType.EOF],
+      ]);
+    });
+
+    it('should parse a processing instruction ending with > instead of ?>', () => {
+      expect(tokenizeAndHumanizeParts('<?xml version="1.0" encoding="UTF-8">')).toEqual([
+        [TokenType.PROCESSING_INSTRUCTION, 'xml version="1.0" encoding="UTF-8"'],
+        [TokenType.EOF],
+      ]);
+    });
+
+    it('should parse a processing instruction surrounded by other content', () => {
+      expect(
+        tokenizeAndHumanizeParts('<!DOCTYPE html>\n<?xml version="1.0" encoding="UTF-8"?> hello'),
+      ).toEqual([
+        [TokenType.DOC_TYPE, 'DOCTYPE html'],
+        [TokenType.TEXT, '\n'],
+        [TokenType.PROCESSING_INSTRUCTION, 'xml version="1.0" encoding="UTF-8"'],
+        [TokenType.TEXT, ' hello'],
+        [TokenType.EOF],
+      ]);
+    });
+
+    it('should parse a processing instruction that contains question marks inside quoted content', () => {
+      expect(tokenizeAndHumanizeParts('<?xml version="?" encoding="UTF?>-8"?>')).toEqual([
+        [TokenType.PROCESSING_INSTRUCTION, 'xml version="?" encoding="UTF?>-8"'],
+        [TokenType.EOF],
+      ]);
+    });
+
+    it('should store the location of a processing instruction', () => {
+      expect(tokenizeAndHumanizeSourceSpans('<?xml version="1.0" encoding="UTF-8"?>')).toEqual([
+        [TokenType.PROCESSING_INSTRUCTION, '<?xml version="1.0" encoding="UTF-8"?>'],
+        [TokenType.EOF, ''],
+      ]);
+    });
+
+    it('should report missing end of a processing instruction', () => {
+      expect(tokenizeAndHumanizeErrors('<?')).toEqual([['Unexpected character "EOF"', '0:2']]);
+    });
+  });
+
   describe('CDATA', () => {
     it('should parse CDATA', () => {
       expect(tokenizeAndHumanizeParts('<![CDATA[t\ne\rs\r\nt]]>')).toEqual([
@@ -3394,6 +3440,13 @@ describe('HtmlLexer', () => {
         [TokenType.BLOCK_CLOSE],
         [TokenType.EOF],
       ]);
+
+      expect(tokenizeAndHumanizeParts('@default                  never;')).toEqual([
+        [TokenType.BLOCK_OPEN_START, 'default never'],
+        [TokenType.BLOCK_OPEN_END],
+        [TokenType.BLOCK_CLOSE],
+        [TokenType.EOF],
+      ]);
     });
 
     it('should parse @default never(expr);', () => {
@@ -3450,6 +3503,16 @@ describe('HtmlLexer', () => {
       expect(tokenizeAndHumanizeParts('@else if (foo !== 2) {hello}')).toEqual([
         [TokenType.BLOCK_OPEN_START, 'else if'],
         [TokenType.BLOCK_PARAMETER, 'foo !== 2'],
+        [TokenType.BLOCK_OPEN_END],
+        [TokenType.TEXT, 'hello'],
+        [TokenType.BLOCK_CLOSE],
+        [TokenType.EOF],
+      ]);
+    });
+
+    it('should normalize @else if block name with spaces', () => {
+      expect(tokenizeAndHumanizeParts('@else            if {hello}')).toEqual([
+        [TokenType.BLOCK_OPEN_START, 'else if'],
         [TokenType.BLOCK_OPEN_END],
         [TokenType.TEXT, 'hello'],
         [TokenType.BLOCK_CLOSE],

@@ -150,7 +150,6 @@ There are three types of hydrate triggers: `hydrate on`, `hydrate when`, and `hy
 ### `hydrate on`
 -->
 
-<a id="hydrate-on"></a>
 
 ### `hydrate on`
 
@@ -186,7 +185,6 @@ The available triggers are as follows:
 #### `hydrate on idle`
 -->
 
-<a id="hydrate-on-idle"></a>
 
 #### `hydrate on idle`
 
@@ -231,7 +229,6 @@ You can optionally specify a timeout in milliseconds that is passed to [`request
 #### `hydrate on viewport`
 -->
 
-<a id="hydrate-on-viewport"></a>
 
 #### `hydrate on viewport`
 
@@ -262,7 +259,6 @@ The `hydrate on viewport` trigger loads the deferrable view's dependencies and h
 #### `hydrate on interaction`
 -->
 
-<a id="hydrate-on-interaction"></a>
 
 #### `hydrate on interaction`
 
@@ -293,7 +289,6 @@ The `hydrate on interaction` trigger loads the deferrable view's dependencies an
 #### `hydrate on hover`
 -->
 
-<a id="hydrate-on-hover"></a>
 
 #### `hydrate on hover`
 
@@ -324,7 +319,6 @@ The `hydrate on hover` trigger loads the deferrable view's dependencies and hydr
 #### `hydrate on immediate`
 -->
 
-<a id="hydrate-on-immediate"></a>
 
 #### `hydrate on immediate`
 
@@ -356,7 +350,6 @@ as all other non-deferred content has finished rendering.
 #### `hydrate on timer`
 -->
 
-<a id="hydrate-on-timer"></a>
 
 #### `hydrate on timer`
 
@@ -390,7 +383,6 @@ The duration parameter must be specified in milliseconds (`ms`) or seconds (`s`)
 ### `hydrate when`
 -->
 
-<a id="hydrate-when"></a>
 
 ### `hydrate when`
 
@@ -429,7 +421,6 @@ be resolvable by Angular.
 ### `hydrate never`
 -->
 
-<a id="hydrate-never"></a>
 
 ### `hydrate never`
 

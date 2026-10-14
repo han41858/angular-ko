@@ -41,7 +41,7 @@ When you select a specific route in the tree, Angular DevTools displays its prop
 - **Auxiliary**: Indicates if the route is an auxiliary route (e.g., in a named outlet).
 - **Lazy**: Indicates if the route is lazily loaded.
 
-Note: Properties like Path Match, Data, Resolvers, Guards, Providers, Title, and RunGuardsAndResolvers only appear in the sidebar when they are configured on the selected route.
+NOTE: Properties like Path Match, Data, Resolvers, Guards, Providers, Title, and RunGuardsAndResolvers only appear in the sidebar when they are configured on the selected route.
 -->
 
 트리에서 특정 라우팅 규칙을 선택하면 Angular DevTools가 오른쪽 사이드바에 프로퍼티를 표시합니다.
@@ -62,7 +62,7 @@ Note: Properties like Path Match, Data, Resolvers, Guards, Providers, Title, and
 - **Auxiliary**: 보조 라우팅 규칙인지 표시합니다(예: 이름이 지정된 아웃렛의 라우팅 규칙).
 - **Lazy**: 지연 로딩하는 라우팅 규칙인지 표시합니다.
 
-참고: Path Match, Data, Resolvers, Guards, Providers, Title, RunGuardsAndResolvers 등의 프로퍼티는 선택한 라우팅 규칙에 설정되어 있을 때만 사이드바에 나타납니다.
+NOTE: Path Match, Data, Resolvers, Guards, Providers, Title, RunGuardsAndResolvers 등의 프로퍼티는 선택한 라우팅 규칙에 설정되어 있을 때만 사이드바에 나타납니다.
 
 <!--
 ### Navigate to a specific route

@@ -43,10 +43,11 @@ The `ActivatedRoute` can provide different information about the route. Some com
 
 | Property      | Details                                                                                                                           |
 | :------------ | :-------------------------------------------------------------------------------------------------------------------------------- |
-| `url`         | An `Observable` of the route paths, represented as an array of strings for each part of the route path.                           |
+| `url`         | An `Observable` of the route paths, represented as an array of `UrlSegment` objects for each part of the route path.              |
 | `data`        | An `Observable` that contains the `data` object provided for the route. Also contains any resolved values from the resolve guard. |
 | `params`      | An `Observable` that contains the required and optional parameters specific to the route.                                         |
 | `queryParams` | An `Observable` that contains the query parameters available to all routes.                                                       |
+| `resources` | An optional record of `Resource` instances defined on the route (when `withRouterResources` is enabled). |
 
 Check out the [`ActivatedRoute` API docs](/api/router/ActivatedRoute) for a complete list of what you can access with in the route.
 -->
@@ -74,10 +75,11 @@ export class Product {
 
 | 프로퍼티      | 설명                                                                                                     |
 | :------------ | :------------------------------------------------------------------------------------------------------- |
-| `url`         | 라우팅 규칙 경로의 `Observable`입니다. 라우팅 규칙 경로의 각 부분을 문자열 배열로 나타냅니다.            |
+| `url`         | 라우팅 규칙 경로의 `Observable`입니다. 라우팅 규칙 경로의 각 부분을 `UrlSegment` 객체 배열로 나타냅니다. |
 | `data`        | 라우팅 규칙에 제공한 `data` 객체를 포함하는 `Observable`입니다. resolve 가드에서 가져온 값도 포함합니다. |
 | `params`      | 해당 라우팅 규칙의 필수 파라미터와 선택 파라미터를 포함하는 `Observable`입니다.                          |
 | `queryParams` | 모든 라우팅 규칙에서 사용할 수 있는 쿼리 파라미터를 포함하는 `Observable`입니다.                         |
+| `resources`   | 라우팅 규칙에 정의된 `Resource` 인스턴스의 선택적 레코드입니다(`withRouterResources`를 활성화한 경우).   |
 
 라우팅 규칙에서 접근할 수 있는 전체 정보는 [`ActivatedRoute` API 문서](/api/router/ActivatedRoute)를 참고하세요.
 
@@ -99,9 +101,7 @@ Here’s an example of how you’d access a route snapshot:
 ```angular-ts
 import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   readonly userId: string;
   private route = inject(ActivatedRoute);
@@ -115,7 +115,7 @@ export class UserProfile {
     // Access multiple route elements
     const snapshot = this.route.snapshot;
     console.log({
-      url: snapshot.url, // https://www.angular.dev
+      url: snapshot.url, // Array of UrlSegments matched by this route
       // Route parameters object: {id: '123'}
       params: snapshot.params,
       // Query parameters object: {role: 'admin', status: 'active'}
@@ -139,9 +139,7 @@ Check out the [`ActivatedRoute` API docs](/api/router/ActivatedRoute) and [`Acti
 ```angular-ts
 import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   readonly userId: string;
   private route = inject(ActivatedRoute);
@@ -155,7 +153,7 @@ export class UserProfile {
     // 여러 라우팅 규칙 정보에 접근합니다.
     const snapshot = this.route.snapshot;
     console.log({
-      url: snapshot.url, // https://www.angular.dev
+      url: snapshot.url, // Array of UrlSegments matched by this route
       // 라우팅 규칙 파라미터 객체: {id: '123'}
       params: snapshot.params,
       // 쿼리 파라미터 객체: {role: 'admin', status: 'active'}
@@ -534,9 +532,7 @@ If you need to add multiple classes onto the element, you can use either a space
 <a routerLink="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
 ```
 
-When you specify a value for routerLinkActive, you are also defining the same value for `ariaCurrentWhenActive`. This makes sure that visually impaired users (which may not perceive the different styling being applied) can also identify the active button.
-
-If you want to define a different value for aria, you’ll need to explicitly set the value using the `ariaCurrentWhenActive` directive.
+Setting `routerLinkActive` alone does not set `aria-current`. Set the `ariaCurrentWhenActive` input, as in the example above, so that visually impaired users (which may not perceive the different styling being applied) can also identify the active link.
 -->
 
 `RouterLinkActive` 디렉티브를 사용하면 현재 활성 라우팅 규칙에 따라 내비게이션 엘리먼트의 스타일을 동적으로 적용할 수 있습니다.
@@ -576,10 +572,8 @@ If you want to define a different value for aria, you’ll need to explicitly se
 <a routerLink="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
 ```
 
-routerLinkActive에 값을 지정하면 `ariaCurrentWhenActive`에도 같은 값을 정의하게 됩니다.
-이렇게 하면 적용된 스타일 차이를 인지하기 어려운 시각 장애인 사용자도 활성 버튼을 구별할 수 있습니다.
-
-aria에 다른 값을 정의하려면 `ariaCurrentWhenActive` 디렉티브에 값을 명시적으로 설정해야 합니다.
+`routerLinkActive`만 설정해도 `aria-current`가 설정되는 것은 아닙니다.
+적용된 스타일 차이를 인지하기 어려운 시각 장애인 사용자도 활성 링크를 구별할 수 있도록, 앞의 예제처럼 `ariaCurrentWhenActive` 입력 프로퍼티를 설정하세요.
 
 <!--
 ### Route matching strategy

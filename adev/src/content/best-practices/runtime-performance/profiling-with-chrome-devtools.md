@@ -111,7 +111,7 @@ bootstrapApplication(MyApp);
 
 <a id="record-a-profile"></a>
 
-### 프로파일 기록하기
+### 프로파일 기록하기 {#프로파일-기록하기-2}
 
 <!--
 Use the **Record** button in the Chrome DevTools performance panel:
@@ -126,6 +126,34 @@ Chrome DevTools 성능 패널의 **Record** 버튼을 사용하세요:
 <img alt="프로파일 기록하기" src="assets/images/best-practices/runtime-performance/recording-profile-in-chrome.png">
 
 프로파일 기록에 관한 자세한 내용은 [Chrome DevTools 문서](https://developer.chrome.com/docs/devtools/performance#record)를 참고하세요.
+
+<!--
+## Open a component in Angular DevTools
+
+After recording a profile, select a component event in the **Angular** track.
+The **Summary** tab can include a **Component** link that uses the `angular-devtools://component/...` URL scheme.
+
+<img alt="Chrome DevTools Performance panel showing an Angular custom track with a selected _MainComponent event. The Summary tab displays a Component link that uses the angular-devtools://component URL scheme." src="assets/images/best-practices/runtime-performance/chrome-performance-deep-link.png">
+
+Click the link to open Angular DevTools and select the matching component in the **Components** tab.
+This helps you move from a browser-level profile to the component state and metadata for a selected event.
+
+NOTE: Opening component links requires Angular DevTools for Chrome and Chrome's experimental `chrome://flags/#enable-devtools-deep-link-via-extensibility-api` flag.
+-->
+
+<a id="open-a-component-in-angular-devtools"></a>
+
+## Angular DevTools에서 컴포넌트 열기
+
+프로파일을 기록한 후 **Angular** 트랙에서 컴포넌트 이벤트를 선택하세요.
+**Summary** 탭에는 `angular-devtools://component/...` URL 스킴을 사용하는 **Component** 링크가 표시될 수 있습니다.
+
+<img alt="Chrome DevTools 성능 패널의 Angular 커스텀 트랙에서 _MainComponent 이벤트를 선택한 모습. Summary 탭에는 angular-devtools://component URL 스킴을 사용하는 Component 링크가 표시됩니다." src="assets/images/best-practices/runtime-performance/chrome-performance-deep-link.png">
+
+이 링크를 클릭하면 Angular DevTools가 열리고 **Components** 탭에서 해당 컴포넌트가 선택됩니다.
+브라우저 수준의 프로파일에서 선택한 이벤트에 해당하는 컴포넌트 상태와 메타데이터로 바로 이동할 수 있습니다.
+
+참고: 컴포넌트 링크를 열려면 Chrome용 Angular DevTools와 Chrome의 실험적 기능인 `chrome://flags/#enable-devtools-deep-link-via-extensibility-api` 플래그가 필요합니다.
 
 <!--
 ## Interpreting a recorded profile

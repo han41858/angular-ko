@@ -31,7 +31,7 @@ import {Router} from '@angular/router';
 import {fromEvent} from 'rxjs';
 import {Snippet} from '../../../interfaces';
 import {NavigationState, TOC_SKIP_CONTENT_MARKER} from '../../../services';
-import {handleHrefClickEventWithRouter} from '../../../utils';
+import {handleHrefClickEventWithRouter, isFirefox} from '../../../utils';
 import {IconComponent} from '../../icon/icon.component';
 import {TableOfContents} from '../../table-of-contents/table-of-contents.component';
 
@@ -43,12 +43,11 @@ import {TabGroup} from '../../tab-group/tab-group.component';
 import {ExampleViewer} from '../example-viewer/example-viewer.component';
 
 const TOC_HOST_ELEMENT_NAME = 'docs-table-of-contents';
-export const ASSETS_EXAMPLES_PATH = 'assets/content/examples';
 export const DOCS_VIEWER_SELECTOR = 'docs-viewer, main[docsViewer]';
-export const DOCS_CODE_SELECTOR = '.docs-code';
-export const DOCS_CODE_MUTLIFILE_SELECTOR = '.docs-code-multifile';
-export const DOCS_CODE_TAB_GROUP_SELECTOR = '.docs-tab-group';
-export const DOCS_CODE_TAB_SELECTOR = '.docs-tab';
+const DOCS_CODE_SELECTOR = '.docs-code';
+const DOCS_CODE_MUTLIFILE_SELECTOR = '.docs-code-multifile';
+const DOCS_CODE_TAB_GROUP_SELECTOR = '.docs-tab-group';
+const DOCS_CODE_TAB_SELECTOR = '.docs-tab';
 const GITHUB_CONTENT_URL = 'https://github.com/angular/angular/blob/{{BUILD_SCM_ABBREV_HASH}}';
 
 @Component({
@@ -124,6 +123,7 @@ export class DocViewer {
       // In case when content contains tabs, create tabs component and move
       // content in a tab into tab panel.
       this.constructTabs(contentContainer);
+      this.setupVideoFacades(contentContainer);
     }
 
     // Display Breadcrumb component if the `<docs-breadcrumb>` element exists
@@ -410,6 +410,38 @@ export class DocViewer {
       const tabGroupRef = this.viewContainer.createComponent(TabGroup);
       tabGroupRef.setInput('tabs', tabs);
       tabGroup.parentElement!.replaceChild(tabGroupRef.location.nativeElement, tabGroup);
+    }
+  }
+
+  private setupVideoFacades(element: HTMLElement): void {
+    const facades = element.querySelectorAll<HTMLAnchorElement>('a.docs-video-facade');
+
+    for (const facade of Array.from(facades)) {
+      const src = facade.getAttribute('data-video-src');
+      if (!src) {
+        continue;
+      }
+
+      if (isFirefox) {
+        const thumbnail = facade.querySelector<HTMLImageElement>('img.docs-video-thumbnail');
+        thumbnail?.addEventListener(
+          'error',
+          () => {
+            thumbnail.src = thumbnail.src.replace('maxresdefault', 'hqdefault');
+          },
+          {once: true},
+        );
+        continue;
+      }
+
+      const iframe = this.document.createElement('iframe');
+      iframe.className = 'docs-video';
+      iframe.src = src;
+      iframe.title = facade.getAttribute('data-video-title') ?? 'Video player';
+      iframe.setAttribute('allow', 'accelerometer; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('credentialless', '');
+      facade.replaceWith(iframe);
     }
   }
 }

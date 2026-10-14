@@ -324,3 +324,71 @@ it('bare <h2> should not have a backgroundColor', () => {
   기본 색상 테스트에서는 두 번째 `<h2>`의 인젝터로 `Highlight` 인스턴스와 `defaultColor`를 가져옵니다.
 
 - `DebugElement.properties`로 디렉티브가 설정한 테스트용 커스텀 프로퍼티에 접근할 수 있습니다.
+
+<!--
+## Testing a directive in isolation
+
+A directive can be created on its own with `TestBed.createDirective()`, which returns a `DirectiveFixture`. Alternatively, you can render it through a component's template.
+The `Highlight` directive can be tested this way, using a local test component's input to control the directive.
+
+```ts
+@Component({
+  imports: [Highlight],
+  template: `<p [highlight]="color()">{{ color() }}</p>`,
+})
+class Test {
+  readonly color = input('');
+}
+
+describe('Highlight', () => {
+  let fixture: ComponentFixture<Test>;
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(Test);
+    await fixture.whenStable();
+  });
+
+  it('should use the specified color once an input is provided', async () => {
+    fixture.componentRef.setInput('color', 'blue');
+    await fixture.whenStable();
+
+    const p = fixture.nativeElement.querySelector('p');
+    expect(p.style.backgroundColor).toBe('blue');
+  });
+});
+```
+-->
+
+<a id="testing-a-directive-in-isolation"></a>
+
+## 디렉티브를 독립적으로 테스트하기
+
+`TestBed.createDirective()`로 디렉티브를 독립적으로 생성하면 `DirectiveFixture`를 반환합니다. 컴포넌트 템플릿을 통해 디렉티브를 렌더링할 수도 있습니다.
+다음은 로컬 테스트 컴포넌트의 입력값으로 `Highlight` 디렉티브를 제어하는 테스트입니다.
+
+```ts
+@Component({
+  imports: [Highlight],
+  template: `<p [highlight]="color()">{{ color() }}</p>`,
+})
+class Test {
+  readonly color = input('');
+}
+
+describe('Highlight', () => {
+  let fixture: ComponentFixture<Test>;
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(Test);
+    await fixture.whenStable();
+  });
+
+  it('should use the specified color once an input is provided', async () => {
+    fixture.componentRef.setInput('color', 'blue');
+    await fixture.whenStable();
+
+    const p = fixture.nativeElement.querySelector('p');
+    expect(p.style.backgroundColor).toBe('blue');
+  });
+});
+```

@@ -389,7 +389,7 @@ npm install @angular/material --save
 
 You can style standard Markdown triple backticks with attributes for enhanced presentation:
 
-```ts {header:"Awesome Title", linenums, highlight="[2]", hideCopy}
+```ts {header:"Awesome Title", linenums, highlight: [2], hideCopy}
 console.log('Hello, World!');
 console.log('Awesome Angular Docs!');
 ```
@@ -416,7 +416,7 @@ npm install @angular/material --save
 
 기본 마크다운의 백틱 세 개에 어트리뷰트를 지정하면 더 풍부한 스타일로 표시할 수 있습니다:
 
-```ts {header:"멋진 제목", linenums, highlight="[2]", hideCopy}
+```ts {header:"멋진 제목", linenums, highlight: [2], hideCopy}
 console.log('Hello, World!');
 console.log('Awesome Angular Docs!');
 ```
@@ -714,6 +714,8 @@ If your installation and setup was successful, you should see a page similar to 
 
 <docs-workflow>
 
+<a id="install-the-angular-cli"></a>
+
 <docs-step title="Angular CLI 설치하기">
   Angular CLI로 프로젝트를 만들고, 애플리케이션과 라이브러리 코드를 생성하고, 테스트, 번들링, 배포 등 개발 과정의 다양한 작업을 수행합니다.
 
@@ -724,6 +726,8 @@ npm install -g @angular/cli
 ```
 
 </docs-step>
+
+<a id="create-a-workspace-and-initial-application"></a>
 
 <docs-step title="작업 공간과 초기 애플리케이션 만들기">
   앱은 Angular 작업 공간 안에서 개발합니다.
@@ -745,6 +749,8 @@ npm install -g @angular/cli
   CLI는 새 작업 공간과 바로 실행할 수 있는 간단한 환영 앱을 만듭니다.
   </docs-step>
 
+<a id="run-the-application"></a>
+
 <docs-step title="애플리케이션 실행하기">
   Angular CLI에는 로컬에서 앱을 빌드하고 제공하는 서버가 포함되어 있습니다.
 
@@ -761,6 +767,8 @@ npm install -g @angular/cli
 `--open`(또는 `-o`) 옵션을 사용하면 브라우저에서 <http://localhost:4200/>을 자동으로 엽니다.
 설치와 설정이 성공했다면 다음과 비슷한 페이지가 표시됩니다.
 </docs-step>
+
+<a id="final-step"></a>
 
 <docs-step title="마지막 단계">
   문서 컴포넌트를 모두 살펴봤습니다!
@@ -822,17 +830,17 @@ You can add images using the semantic Markdown image:
 ![Lazy loaded image](assets/images/kitchen-sink/rhubarb.jpg {loading: 'lazy'})
 ![Combined attributes](assets/images/kitchen-sink/rhubarb.jpg#small {loading: 'lazy', decoding: 'async', fetchpriority: 'low'})
 
-Embedded videos are created with `docs-video` and just need a `src` and `alt`:
+Embedded videos are created with `docs-video` and just need a `src` and `title`:
 
-<docs-video src="https://www.youtube.com/embed/O47uUnJjbJc" alt=""/>
+<docs-video src="https://www.youtube.com/embed/O47uUnJjbJc" title="Expression changed after checked"/>
 -->
 
 ![지연 로딩 이미지](assets/images/kitchen-sink/rhubarb.jpg {loading: 'lazy'})
 ![여러 어트리뷰트를 적용한 이미지](assets/images/kitchen-sink/rhubarb.jpg#small {loading: 'lazy', decoding: 'async', fetchpriority: 'low'})
 
-동영상을 삽입할 때는 `docs-video`에 `src`와 `alt`만 지정하면 됩니다:
+동영상을 삽입할 때는 `docs-video`에 `src`와 `title`만 지정하면 됩니다:
 
-<docs-video src="https://www.youtube.com/embed/O47uUnJjbJc" alt=""/>
+<docs-video src="https://www.youtube.com/embed/O47uUnJjbJc" title="Expression changed after checked"/>
 
 <!--
 ## Charts & Graphs
@@ -840,10 +848,12 @@ Embedded videos are created with `docs-video` and just need a `src` and `alt`:
 
 <a id="charts-graphs"></a>
 
+<a id="charts--graphs"></a>
+
 ## 차트와 그래프
 
 <!--
-Write diagrams and charts using [Mermaid](http://mermaid.js.org/) by setting the code language to `mermaid`, all theming is built-in.
+Write diagrams and charts using [Mermaid](https://mermaid.js.org/) by setting the code language to `mermaid`, all theming is built-in.
 
 ```mermaid
     graph TD;
@@ -869,7 +879,7 @@ Write diagrams and charts using [Mermaid](http://mermaid.js.org/) by setting the
 ```
 -->
 
-코드 언어를 `mermaid`로 설정하면 [Mermaid](http://mermaid.js.org/)로 다이어그램과 차트를 작성할 수 있습니다.
+코드 언어를 `mermaid`로 설정하면 [Mermaid](https://mermaid.js.org/)로 다이어그램과 차트를 작성할 수 있습니다.
 테마는 모두 기본 제공됩니다.
 
 ```mermaid
@@ -923,6 +933,8 @@ The end!
 -->
 
 <a id="prefer-avoid"></a>
+
+<a id="prefer---avoid"></a>
 
 ## 권장하는 방식 / 피해야 할 방식
 

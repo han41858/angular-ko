@@ -42,6 +42,8 @@ process.
 ## Summary
 -->
 
+<a id="summary"></a>
+
 ## 요약
 
 <!--
@@ -62,7 +64,7 @@ process.
       </td>
     </tr>
     <tr>
-      <td rowspan="7">Change<p>Detection</td>
+      <td rowspan="7">Change<br>Detection</td>
       <td><code>ngOnInit</code>
       </td>
       <td>Runs once after Angular has initialized all the component's inputs.</td>
@@ -125,7 +127,7 @@ process.
       </td>
     </tr>
     <tr>
-      <td rowspan="7">변화<p>감지</td>
+      <td rowspan="7">변화<br>감지</td>
       <td><code>ngOnInit</code>
       </td>
       <td>Angular가 컴포넌트의 입력 프로퍼티를 초기화한 이후 한 번 실행됩니다.</td>
@@ -209,6 +211,8 @@ During initialization, the first `ngOnChanges` runs before `ngOnInit`.
 #### Inspecting changes
 -->
 
+<a id="inspecting-changes"></a>
+
 #### 변경사항 확인하기
 
 <!--
@@ -221,9 +225,7 @@ has changed.
 You can optionally pass the current class or this as the first generic argument for stronger type checking.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class UserProfile {
   name = input('');
 
@@ -248,9 +250,7 @@ TypeScript property name as a key, rather than the alias.
 타입 검사를 강화하려면 첫번째 제네릭 인자로 클래스를 전달할 수도 있습니다.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class UserProfile {
   name = input('');
 
@@ -285,9 +285,7 @@ register a callback to be invoked upon the component's destruction by calling th
 of `DestroyRef`.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class UserProfile {
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -309,9 +307,7 @@ all cleanup code in the `ngOnDestroy` method.
 컴포넌트가 종료될 때 실행해야 하는 코드가 있다면 `DestroyRef`의 `onDestroy` 메서드로 등록하면 됩니다.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class UserProfile {
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -329,6 +325,8 @@ export class UserProfile {
 <!--
 ##### Detecting instance destruction
 -->
+
+<a id="detecting-instance-destruction"></a>
 
 ##### 인스턴스 분해 감지하기
 
@@ -481,6 +479,8 @@ Angular에서 DOM을 조작하는 방법은 [DOM API 활용하기](guide/compone
 #### after\*Render phases
 -->
 
+<a id="afterrender-phases"></a>
+
 #### after\*Render 단계
 
 <!--
@@ -494,9 +494,7 @@ next phase.
 ```ts
 import {Component, ElementRef, afterNextRender} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   private prevPadding = 0;
   private elementHeight = 0;
@@ -544,9 +542,7 @@ There are four phases, run in the following order:
 ```ts
 import {Component, ElementRef, afterNextRender} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   private prevPadding = 0;
   private elementHeight = 0;
@@ -590,6 +586,8 @@ export class UserProfile {
 ## Lifecycle interfaces
 -->
 
+<a id="lifecycle-interfaces"></a>
+
 ## 라이프싸이클 인터페이스
 
 <!--
@@ -601,9 +599,7 @@ Each interface has the same name as the corresponding method without the `ng` pr
 the interface for `ngOnInit` is `OnInit`.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class UserProfile implements OnInit {
   ngOnInit() {
     /* ... */
@@ -619,9 +615,7 @@ Angular는 각 라이프싸이클 후킹 함수에 해당하는 TypeScript 인�
 `OnInit` 인터페이스에 해당하는 메서드는 `ngOnInit` 메서드가 되는 식입니다.
 
 ```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class UserProfile implements OnInit {
   ngOnInit() {
     /* ... */
@@ -632,6 +626,8 @@ export class UserProfile implements OnInit {
 <!--
 ## Execution order
 -->
+
+<a id="execution-order"></a>
 
 ## 실행 순서
 
@@ -644,6 +640,8 @@ Angular 라이프싸이클 후킹 함수는 다음 순서대로 실행됩니다.
 <!--
 ### During initialization
 -->
+
+<a id="during-initialization"></a>
 
 ### 컴포넌트 생성 시점
 
@@ -666,6 +664,8 @@ CHANGE--렌더링-->afterNextRender-->afterEveryRender
 ### Subsequent updates
 -->
 
+<a id="subsequent-updates"></a>
+
 ### 값이 변경될 때
 
 ```mermaid
@@ -682,6 +682,8 @@ CHANGE--렌더링-->afterEveryRender
 <!--
 ### Ordering with directives
 -->
+
+<a id="ordering-with-directives"></a>
 
 ### 디렉티브가 함께 사용된 경우
 

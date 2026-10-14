@@ -7,7 +7,7 @@
 <!--
 Angular provides two ways to make services available for injection:
 
-1. **Automatic provision** - Using `providedIn` in the `@Injectable` decorator, the [`@Service`](guide/di/creating-and-using-services#using-the-service-decorator) decorator, or by providing a factory in the `InjectionToken` configuration
+1. **Automatic provision** - Using `providedIn` in the `@Injectable` decorator, the [`@Service`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) decorator, or by providing a factory in the `InjectionToken` configuration
 2. **Manual provision** - Using the `providers` array in components, directives, routes, or application config
 
 In the [previous guide](/guide/di/creating-and-using-services), you learned how to create services using `providedIn: 'root'`, which handles most common use cases. This guide explores additional patterns for both automatic and manual provider configuration.
@@ -15,7 +15,7 @@ In the [previous guide](/guide/di/creating-and-using-services), you learned how 
 
 Angular가 서비스를 의존성 주입 가능하게 만드는 방식은 두 가지입니다:
 
-1. **자동 프로비전(provision)** - `@Injectable` 데코레이터에 `providedIn`을 지정하거나, [`@Service`](guide/di/creating-and-using-services#using-the-service-decorator) 데코레이터를 사용하는 경우, `InjectionToken` 설정에서 팩토리를 사용하는 경우
+1. **자동 프로비전(provision)** - `@Injectable` 데코레이터에 `providedIn`을 지정하거나, [`@Service`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) 데코레이터를 사용하는 경우, `InjectionToken` 설정에서 팩토리를 사용하는 경우
 2. **수동 프로비전** - 컴포넌트, 디렉티브, 라우팅 규칙, 애플리케이션 환경설정에서 `providers` 배열을 사용하는 경우
 
 [이전 가이드 문서](/guide/di/creating-and-using-services)에서는 `providedIn: 'root'`를 사용해서 서비스를 생성했고, 이것이 일반적인 사용방법입니다.
@@ -24,6 +24,8 @@ Angular가 서비스를 의존성 주입 가능하게 만드는 방식은 두 �
 <!--
 ## Automatic provision for non-class dependencies
 -->
+
+<a id="automatic-provision-for-non-class-dependencies"></a>
 
 ## 자동 프로비전: 클래스가 아닌 경우
 
@@ -37,6 +39,8 @@ While the `@Injectable` decorator with `providedIn: 'root'` works great for serv
 <!--
 ### What is an InjectionToken?
 -->
+
+<a id="what-is-an-injectiontoken"></a>
 
 ### 인젝션 토큰이 무엇인가요?
 
@@ -89,13 +93,14 @@ export const CONFIG_TOKEN = new InjectionToken<Config>('app.config');
 ### InjectionToken with `providedIn: 'root'`
 -->
 
+<a id="injectiontoken-with-providedin-root"></a>
+
 ### `providedIn: 'root'`를 사용하는 인젝션 토큰
 
 <!--
 An `InjectionToken` that has a `factory` results in `providedIn: 'root'` by default (but can be overridden via the `providedIn` prop).
 
-```ts
-// 📁 /app/config.token.ts
+```ts {header: "/app/config.token.ts"}
 import {InjectionToken} from '@angular/core';
 
 export interface AppConfig {
@@ -131,8 +136,7 @@ export class Header {
 `factory` 프로퍼티를 사용하는 `InjectionToken`은 기본적으로 `providedIn: 'root'` 값을 갖습니다.
 하지만 `providedIn` 프로퍼티가 다시 지정되면 오버라이드할 수 있습니다.
 
-```ts
-// 📁 /app/config.token.ts
+```ts {header: "/app/config.token.ts"}
 import {InjectionToken} from '@angular/core';
 
 export interface AppConfig {
@@ -168,13 +172,14 @@ export class Header {
 ### When to use InjectionToken with factory functions
 -->
 
+<a id="when-to-use-injectiontoken-with-factory-functions"></a>
+
 ### 팩토리 함수를 사용하는 인젝션 토큰
 
 <!--
 InjectionToken with factory functions is ideal when you can't use a class but need to provide dependencies globally:
 
-```ts
-// 📁 /app/logger.token.ts
+```ts {header: "/app/logger.token.ts"}
 import {InjectionToken, inject} from '@angular/core';
 import {APP_CONFIG} from './config.token';
 
@@ -195,7 +200,9 @@ export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
   },
 });
 
-// 📁 /app/storage.token.ts
+```
+
+```ts {header: "/app/storage.token.ts"}
 // Providing browser APIs as tokens
 export const LOCAL_STORAGE = new InjectionToken<Storage>('localStorage', {
   // providedIn: 'root' is configured as the default
@@ -207,7 +214,9 @@ export const SESSION_STORAGE = new InjectionToken<Storage>('sessionStorage', {
   factory: () => window.sessionStorage,
 });
 
-// 📁 /app/feature-flags.token.ts
+```
+
+```ts {header: "/app/feature-flags.token.ts"}
 // Complex configuration with runtime logic
 export const FEATURE_FLAGS = new InjectionToken<Map<string, boolean>>('feature.flags', {
   providedIn: 'root',
@@ -237,8 +246,7 @@ This approach offers several advantages:
 
 팩토리 함수를 사용하는 InjectionToken은 전역 범위에서 클래스를 의존성 객체로 사용하지만 클래스를 직접 사용할 수 없는 경우에 유용합니다:
 
-```ts
-// 📁 /app/logger.token.ts
+```ts {header: "/app/logger.token.ts"}
 import {InjectionToken, inject} from '@angular/core';
 import {APP_CONFIG} from './config.token';
 
@@ -258,8 +266,9 @@ export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
     };
   },
 });
+```
 
-// 📁 /app/storage.token.ts
+```ts {header: "/app/storage.token.ts"}
 // 브라우저 API를 토컨으로 등록합니다.
 export const LOCAL_STORAGE = new InjectionToken<Storage>('localStorage', {
   // providedIn: 'root' is configured as the default
@@ -270,8 +279,9 @@ export const SESSION_STORAGE = new InjectionToken<Storage>('sessionStorage', {
   providedIn: 'root',
   factory: () => window.sessionStorage,
 });
+```
 
-// 📁 /app/feature-flags.token.ts
+```ts {header: "/app/feature-flags.token.ts"}
 // 실행환경에 따라 복잡한 환경설정을 등록합니다.
 export const FEATURE_FLAGS = new InjectionToken<Map<string, boolean>>('feature.flags', {
   providedIn: 'root',
@@ -302,6 +312,8 @@ export const FEATURE_FLAGS = new InjectionToken<Map<string, boolean>>('feature.f
 ## Understanding manual provider configuration
 -->
 
+<a id="understanding-manual-provider-configuration"></a>
+
 ## 수동 프로바이더 등록 이해하기
 
 <!--
@@ -324,6 +336,8 @@ When you need more control than `providedIn: 'root'` offers, you can manually co
 <!--
 ### Example: Service without `providedIn`
 -->
+
+<a id="example-service-without-providedin"></a>
 
 ### 예제: `providedIn`이 설정되지 않은 서비스
 
@@ -383,6 +397,8 @@ export class ExampleComponent {
 ### Example: Creating component-specific instances
 -->
 
+<a id="example-creating-component-specific-instances"></a>
+
 ### 예제: 컴포넌트별 인스턴스를 생성할 때
 
 <!--
@@ -436,6 +452,8 @@ export class Isolated {
 <!--
 ## Injector hierarchy in Angular
 -->
+
+<a id="injector-hierarchy-in-angular"></a>
 
 ## Angular의 의존성 계층
 
@@ -500,6 +518,8 @@ graph TD
 <!--
 ## Declaring a provider
 -->
+
+<a id="declaring-a-provider"></a>
 
 ## 프로바이더 정의하기
 
@@ -574,6 +594,8 @@ export class Example {}
 ### Provider configuration object
 -->
 
+<a id="provider-configuration-object"></a>
+
 ### 프로바이더 설정 객체
 
 <!--
@@ -600,6 +622,8 @@ Every provider configuration object has two primary parts:
 ### Provider identifiers
 -->
 
+<a id="provider-identifiers"></a>
+
 ### 프로바이더 구분자
 
 <!--
@@ -618,6 +642,8 @@ Provider identifiers allow Angular's dependency injection (DI) system to retriev
 <!--
 #### Class names
 -->
+
+<a id="class-names"></a>
 
 #### 클래스 이름
 
@@ -662,13 +688,14 @@ export class Example {
 #### Injection tokens
 -->
 
+<a id="injection-tokens"></a>
+
 #### 인젝션 토큰
 
 <!--
 Angular provides a built-in [`InjectionToken`](api/core/InjectionToken) class that creates a unique object reference for injectable values or when you want to provide multiple implementations of the same interface.
 
-```ts
-// 📁 /app/tokens.ts
+```ts {header: "/app/tokens.ts"}
 import {InjectionToken} from '@angular/core';
 import {DataService} from './data-service.interface';
 
@@ -696,8 +723,7 @@ export class Example {
 
 Angular는 의존성으로 주입할 수 있는 객체를 생성하거나 같은 인터페이스 구현체를 여러 개 사용할 때 활용할 수 있는 [`InjectionToken`](api/core/InjectionToken) 클래스를 제공합니다.
 
-```ts
-// 📁 /app/tokens.ts
+```ts {header: "/app/tokens.ts"}
 import {InjectionToken} from '@angular/core';
 import {DataService} from './data-service.interface';
 
@@ -725,6 +751,8 @@ export class Example {
 <!--
 #### Can TypeScript interfaces be identifiers for injection?
 -->
+
+<a id="can-typescript-interfaces-be-identifiers-for-injection"></a>
 
 #### TypeScript 인터페이스를 구분자로 사용할 수 있나요?
 
@@ -796,6 +824,8 @@ InjectionToken은 실행 시점에 Angular 의존성 주입 시스템에서 사�
 ### Provider value types
 -->
 
+<a id="provider-value-types"></a>
+
 ### 프로바이더 값 타입
 
 #### useClass
@@ -848,6 +878,8 @@ providers: [
 <!--
 #### Practical example: Logger substitution
 -->
+
+<a id="practical-example-logger-substitution"></a>
 
 #### 실전 예제: 로그
 
@@ -974,6 +1006,8 @@ providers: [
 <!--
 #### Practical example: Application configuration
 -->
+
+<a id="practical-example-application-configuration"></a>
 
 #### 실전 예제: 애플리케이션 환경설정
 
@@ -1135,6 +1169,8 @@ providers: [
 #### Practical example: Configuration-based API client
 -->
 
+<a id="practical-example-configuration-based-api-client"></a>
+
 #### 실전 예제: 환경설정에 따른 API 클라이언트
 
 <!--
@@ -1276,6 +1312,8 @@ providers: [
 ### Multiple providers
 -->
 
+<a id="multiple-providers"></a>
+
 ### 프로바이더 여러 개 등록하기
 
 <!--
@@ -1312,6 +1350,8 @@ providers: [
 ## Where can you specify providers?
 -->
 
+<a id="where-can-you-specify-providers"></a>
+
 ## 프로바이더는 어디에 등록하나요?
 
 <!--
@@ -1332,6 +1372,8 @@ Angular offers several levels where you can register providers, each with differ
 ### Application bootstrap
 -->
 
+<a id="application-bootstrap"></a>
+
 ### 애플리케이션을 부트스트랩할 때
 
 <!--
@@ -1342,8 +1384,7 @@ Use application-level providers in `bootstrapApplication` when:
 - **The service has no component-specific configuration** - General-purpose utilities that work the same everywhere
 - **You're providing global configuration** - API endpoints, feature flags, or environment settings
 
-```ts
-// main.ts
+```ts {header: "main.ts"}
 bootstrapApplication(App, {
   providers: [
     {provide: API_BASE_URL, useValue: 'https://api.example.com'},
@@ -1374,8 +1415,7 @@ bootstrapApplication(App, {
 - **서비스가 컴포넌트와 관계없이 동작할 때** - 유틸리티 역할을 하는 서비스
 - **전역 환경설정 값을 등록하는 경우** - API 엔드포인트, 기능 on/off 플래그, 환경설정 값을 등록할 때
 
-```ts
-// main.ts
+```ts {header: "main.ts"}
 bootstrapApplication(App, {
   providers: [
     {provide: API_BASE_URL, useValue: 'https://api.example.com'},
@@ -1402,6 +1442,8 @@ bootstrapApplication(App, {
 #### Why provide during bootstrap instead of using `providedIn: 'root'`?
 -->
 
+<a id="why-provide-during-bootstrap-instead-of-using-providedin-root"></a>
+
 #### `providedIn: 'root'`를 사용하지 않고 부트스트랩 단계에 등록하는 이유는 무엇인가요?
 
 <!--
@@ -1421,6 +1463,8 @@ You might want a provider during bootstrap when:
 <!--
 ### Component or directive providers
 -->
+
+<a id="component-or-directive-providers"></a>
 
 ### 컴포넌트나 디렉티브 프로바이더 배열
 
@@ -1516,6 +1560,8 @@ export class Modal {}
 ### Route providers
 -->
 
+<a id="route-providers"></a>
+
 ### 라우팅 규칙 프로바이더
 
 <!--
@@ -1525,8 +1571,7 @@ Use route-level providers for:
 - **Lazy-loaded module dependencies** - Services that should only load with specific features
 - **Route-specific configuration** - Settings that vary by application area
 
-```ts
-// routes.ts
+```ts {header: "routes.ts"}
 export const routes: Routes = [
   {
     path: 'admin',
@@ -1558,8 +1603,7 @@ Since these services are instantiated independently of the route’s components,
 - **지연 로딩되는 모듈 의존성** - 특정 기능에만 필요한 서비스인 경우
 - **라우팅 규칙별 환경설정** - 애플리케이션 부분마다 환경설정이 달라지는 경우
 
-```ts
-// routes.ts
+```ts {header: "routes.ts"}
 export const routes: Routes = [
   {
     path: 'admin',
@@ -1589,6 +1633,8 @@ export const routes: Routes = [
 ## Library author patterns
 -->
 
+<a id="library-author-patterns"></a>
+
 ## 라이브러리 개발자 패턴
 
 <!--
@@ -1602,13 +1648,14 @@ ANgular 자체 라이브러리가 활용하는 강력한 패턴을 활용해 보
 ### The `provide` pattern
 -->
 
+<a id="the-provide-pattern"></a>
+
 ### `provide` 패턴
 
 <!--
 Instead of requiring users to manually configure complex providers, library authors can export functions that return provider configurations:
 
-```ts
-// 📁 /libs/analytics/src/providers.ts
+```ts {header: "/libs/analytics/src/providers.ts"}
 import {InjectionToken, Provider, inject} from '@angular/core';
 
 // Configuration interface
@@ -1635,8 +1682,10 @@ export function provideAnalytics(config: AnalyticsConfig): Provider[] {
   return [{provide: ANALYTICS_CONFIG, useValue: config}, AnalyticsService];
 }
 
+```
+
+```ts {header: "main.ts"}
 // Usage in consumer app
-// main.ts
 bootstrapApplication(App, {
   providers: [
     provideAnalytics({
@@ -1650,8 +1699,7 @@ bootstrapApplication(App, {
 
 라이브러리 사용자가 복잡하게 프로바이더 설정을 하게 하는 것보다, 프로바이더 환경설정을 반환하는 함수를 사용하는 것이 더 좋습니다:
 
-```ts
-// 📁 /libs/analytics/src/providers.ts
+```ts {header: "/libs/analytics/src/providers.ts"}
 import {InjectionToken, Provider, inject} from '@angular/core';
 
 // 환경설정 인터페이스
@@ -1677,9 +1725,10 @@ export class AnalyticsService {
 export function provideAnalytics(config: AnalyticsConfig): Provider[] {
   return [{provide: ANALYTICS_CONFIG, useValue: config}, AnalyticsService];
 }
+```
 
+```ts {header: "main.ts"}
 // 라이브러리 사용자가 앱에서 사용할 때
-// main.ts
 bootstrapApplication(App, {
   providers: [
     provideAnalytics({
@@ -1694,13 +1743,14 @@ bootstrapApplication(App, {
 ### Advanced provider patterns with options
 -->
 
+<a id="advanced-provider-patterns-with-options"></a>
+
 ### 옵션을 사용하는 고급 프로바이더 패턴
 
 <!--
 For more complex scenarios, you can combine multiple configuration approaches:
 
-```ts
-// 📁 /libs/http-client/src/provider.ts
+```ts {header: "/libs/http-client/src/provider.ts"}
 import {Provider, InjectionToken, inject} from '@angular/core';
 
 // Feature flags for optional functionality
@@ -1810,8 +1860,7 @@ bootstrapApplication(App, {
 
 더 복잡한 경우라면 여러 가지 구현 방식을 섞어서 사용할 수 있습니다:
 
-```ts
-// 📁 /libs/http-client/src/provider.ts
+```ts {header: "/libs/http-client/src/provider.ts"}
 import {Provider, InjectionToken, inject} from '@angular/core';
 
 // 기능 활성화 플래그
@@ -1921,6 +1970,8 @@ bootstrapApplication(App, {
 <!--
 ### Why use provider functions instead of direct configuration?
 -->
+
+<a id="why-use-provider-functions-instead-of-direct-configuration"></a>
 
 ### 왜 프로바이더를 직접 설정하지 않고 프로바이더 생성 함수를 사용하나요?
 

@@ -32,6 +32,8 @@ There are two categories of query: **view queries** and **content queries.**
 ## View queries
 -->
 
+<a id="view-queries"></a>
+
 ## 뷰 쿼리(View queries)
 
 <!--
@@ -149,6 +151,8 @@ export class CustomCard {
 ## Content queries
 -->
 
+<a id="content-queries"></a>
+
 ## 컨텐츠 쿼리(Content queries)
 
 <!--
@@ -186,7 +190,7 @@ export class UserProfile {}
 
 If the query does not find a result, its value is `undefined`. This may occur if the target element is absent or hidden by `@if`. Angular keeps the result of `contentChild` up to date as your application state changes.
 
-By default, content queries find only _direct_ children of the component and do not traverse into descendants.
+By default, `contentChild` queries traverse into descendants, while `contentChildren` queries find only _direct_ children. See [Content descendants](#content-descendants).
 
 You can also query for multiple results with the `contentChildren` function.
 
@@ -263,7 +267,7 @@ export class UserProfile {}
 이 경우는 찾으려는 엘리먼트가 `@if`로 화면에 표시되지 않은 경우에 발생할 수 있습니다.
 그리고 애플리케이션의 상태가 변경되면 `contentChild` 결과는 계속 최신 상태로 갱신됩니다.
 
-기본적으로 컨텐츠 쿼리는 컴포넌트의 _한 단계 아래_ 자식들을 찾으며, 그보다 자식 컴포넌트는 탐색하지 않습니다.
+기본적으로 `contentChild` 쿼리는 하위 자식까지 탐색하지만, `contentChildren` 쿼리는 _바로 한 단계_ 자식만 찾습니다. [하위 자식 탐색](#content-descendants)을 참고하세요.
 
 자식 컴포넌트를 여러 개 참조하려면 `contentChildren` 함수를 사용하면 됩니다.
 
@@ -306,6 +310,8 @@ export class UserProfile {}
 ## Required queries
 -->
 
+<a id="required-queries"></a>
+
 ## 필수 쿼리(Required queries)
 
 <!--
@@ -314,9 +320,7 @@ If a child query (`viewChild` or `contentChild`) does not find a result, its val
 In some cases, especially with `viewChild`, you know with certainty that a specific child is always available. In other cases, you may want to strictly enforce that a specific child is present. For these cases, you can use a _required query_.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomCard {
   header = viewChild.required(CustomCardHeader);
   body = contentChild.required(CustomCardBody);
@@ -334,9 +338,7 @@ If a required query does not find a matching result, Angular reports an error. B
 이 경우에는 대상 컴포넌트가 반드시 존재한다는 것을 지정해서 _값이 반드시 존재하는_ 쿼리로 처리할 수 있습니다.
 
 ```angular-ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomCard {
   header = viewChild.required(CustomCardHeader);
   body = contentChild.required(CustomCardBody);
@@ -349,6 +351,8 @@ export class CustomCard {
 <!--
 ## Query locators
 -->
+
+<a id="query-locators"></a>
 
 ## 쿼리 구분자(Query locators)
 
@@ -405,6 +409,8 @@ CSS 셀렉터는 쿼리 구분자로 사용할 수 없습니다.
 ### Queries and the injector tree
 -->
 
+<a id="queries-and-the-injector-tree"></a>
+
 ### 쿼리 함수와 인젝터 계층
 
 <!--
@@ -421,7 +427,7 @@ const SUB_ITEM = new InjectionToken<string>('sub-item');
 })
 export class SpecialItem {}
 
-@Component({/*...*/})
+@Component(/* ... */)
 export class CustomList {
   subItemType = contentChild(SUB_ITEM);
 }
@@ -438,9 +444,7 @@ The above example uses an `InjectionToken` as a locator, but you can use any `Pr
 ```angular-ts
 const SUB_ITEM = new InjectionToken<string>('sub-item');
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomList {
   subItemType = contentChild(SUB_ITEM);
 }
@@ -451,6 +455,8 @@ export class CustomList {
 <!--
 ## Query options
 -->
+
+<a id="query-options"></a>
 
 ## 쿼리 옵션
 
@@ -465,15 +471,15 @@ All query functions accept an options object as a second parameter. These option
 ### Reading specific values from an element's injector
 -->
 
+<a id="reading-specific-values-from-an-elements-injector"></a>
+
 ### 엘리먼트 인젝터로 원하는 값 읽기
 
 <!--
 By default, the query locator indicates both the element you're searching for and the value retrieved. You can alternatively specify the `read` option to retrieve a different value from the element matched by the locator.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomExpando {
   toggle = contentChild(ExpandoContent, {read: TemplateRef});
 }
@@ -489,9 +495,7 @@ Developers most commonly use `read` to retrieve `ElementRef` and `TemplateRef`.
 `read` 옵션을 사용하면 구분자와 매칭되는 객체를 직접 지정할 수 있습니다.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomExpando {
   toggle = contentChild(ExpandoContent, {read: TemplateRef});
 }
@@ -502,10 +506,58 @@ export class CustomExpando {
 `read`에는 일반적으로 `ElementRef`나 `TemplateRef`를 사용합니다.
 
 <!--
+You can also pass `Injector` to `read`.
+
+```angular-ts
+@Component({
+  selector: 'custom-table',
+  template: `
+    <third-party-table #inner>
+      <ng-template>
+        <ng-container [ngTemplateOutlet]="columns()" [ngTemplateOutletInjector]="innerInjector()" />
+      </ng-template>
+    </third-party-table>
+  `,
+})
+export class CustomTable {
+  columns = contentChild(TemplateRef);
+  innerInjector = viewChild('inner', {read: Injector});
+}
+```
+
+The above example retrieves the node injector of the `third-party-table` element, meaning the
+injector as seen from that element's position in the tree. Passing it to `NgTemplateOutlet` through
+`ngTemplateOutletInjector` lets directives in the projected template inject values that the
+third-party component provides.
+-->
+
+`read`에 `Injector`를 전달할 수도 있습니다.
+
+```angular-ts
+@Component({
+  selector: 'custom-table',
+  template: `
+    <third-party-table #inner>
+      <ng-template>
+        <ng-container [ngTemplateOutlet]="columns()" [ngTemplateOutletInjector]="innerInjector()" />
+      </ng-template>
+    </third-party-table>
+  `,
+})
+export class CustomTable {
+  columns = contentChild(TemplateRef);
+  innerInjector = viewChild('inner', {read: Injector});
+}
+```
+
+위 예제는 `third-party-table` 엘리먼트의 노드 인젝터, 즉 트리에서 해당 엘리먼트 위치에 해당하는 인젝터를 가져옵니다.
+이 인젝터를 `ngTemplateOutletInjector`로 `NgTemplateOutlet`에 전달하면 프로젝션된 템플릿의 디렉티브에서 서드파티 컴포넌트가 제공하는 값을 주입받을 수 있습니다.
+
+<!--
 ### Content descendants
 -->
 
-### 컨텐츠의 자식 객체
+### 컨텐츠의 자식 객체 {#content-descendants}
 
 <!--
 By default, `contentChildren` queries find only _direct_ children of the component and do not traverse into descendants.
@@ -574,6 +626,8 @@ export class UserProfile {}
 <!--
 ## Decorator-based queries
 -->
+
+<a id="decorator-based-queries"></a>
 
 ## 데코레이터 기반 쿼리 함수
 
@@ -723,6 +777,8 @@ export class CustomCard implements AfterViewInit {
 <!--
 ### Content queries
 -->
+
+<a id="decorator-content-queries"></a>
 
 ### 컨텐츠 쿼리
 
@@ -893,6 +949,8 @@ export class UserProfile {}
 ### Decorator-based query options
 -->
 
+<a id="decorator-based-query-options"></a>
+
 ### 데코레이터 기반 쿼리 옵션
 
 <!--
@@ -905,6 +963,8 @@ All query decorators accept an options object as a second parameter. These optio
 <!--
 ### Static queries
 -->
+
+<a id="static-queries"></a>
 
 ### 정적 쿼리
 
@@ -959,6 +1019,8 @@ export class CustomCard implements OnInit {
 ### Using QueryList
 -->
 
+<a id="using-querylist"></a>
+
 ### QueryList 활용하기
 
 <!--
@@ -978,6 +1040,8 @@ You can subscribe to the `changes` property to do something any time the results
 <!--
 ## Common query pitfalls
 -->
+
+<a id="common-query-pitfalls"></a>
 
 ## 쿼리를 잘못 사용하는 경우
 

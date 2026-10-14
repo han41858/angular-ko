@@ -118,7 +118,6 @@ Angular는 용도에 따라 네 가지 라우팅 규칙 가드를 제공합니�
 ### CanActivate
 -->
 
-<a id="canactivate"></a>
 
 ### CanActivate
 
@@ -142,7 +141,7 @@ export const authGuard: CanActivateFn = (
 };
 ```
 
-Tip: If you need to redirect the user, return a [`URLTree`](api/router/UrlTree) or [`RedirectCommand`](api/router/RedirectCommand). Do **not** return `false` and then programmatically `navigate` the user.
+TIP: If you need to redirect the user, return a [`URLTree`](api/router/UrlTree) or [`RedirectCommand`](api/router/RedirectCommand). Do **not** return `false` and then programmatically `navigate` the user.
 
 For more information, check out the [API docs for CanActivateFn](api/router/CanActivateFn).
 -->
@@ -176,7 +175,6 @@ export const authGuard: CanActivateFn = (
 ### CanActivateChild
 -->
 
-<a id="canactivatechild"></a>
 
 ### CanActivateChild
 
@@ -231,7 +229,6 @@ export const adminChildGuard: CanActivateChildFn = (
 ### CanDeactivate
 -->
 
-<a id="candeactivate"></a>
 
 ### CanDeactivate
 
@@ -294,7 +291,6 @@ export const unsavedChangesGuard: CanDeactivateFn<Form> = (
 ### CanMatch
 -->
 
-<a id="canmatch"></a>
 
 ### CanMatch
 
@@ -322,8 +318,7 @@ export const featureToggleGuard: CanMatchFn = (
 
 It can also allow you to use different components for the same path.
 
-```ts
-// 📄 routes.ts
+```ts {header: "routes.ts"}
 const routes: Routes = [
   {
     path: 'dashboard',
@@ -369,8 +364,7 @@ export const featureToggleGuard: CanMatchFn = (
 
 같은 경로에서 서로 다른 컴포넌트를 사용할 수도 있습니다.
 
-```ts
-// 📄 routes.ts
+```ts {header: "routes.ts"}
 const routes: Routes = [
   {
     path: 'dashboard',
@@ -400,7 +394,11 @@ const routes: Routes = [
 <!--
 Once you've created your route guards, you need to configure them in your route definitions.
 
-Guards are specified as arrays in the route configuration in order to allow you to apply multiple guards to a single route. They are executed in the order they appear in the array.
+Guards are specified as arrays in the route configuration in order to allow you to apply multiple guards to a single route. The router starts the guards in the order they appear in the array, but it does not wait for one guard to finish before starting the next. Guards that return a `Promise` or an `Observable` therefore run concurrently.
+
+The array order determines which result takes priority. Navigation continues only if every guard returns `true`. Otherwise the router uses the result of the first guard in the array that did not return `true`, even if a later guard finished earlier.
+
+NOTE: Because asynchronous guards run concurrently, a guard must not rely on work done by an earlier guard in the same array, such as loading the current user. Put that work in a service that both guards use, or combine the checks into a single guard.
 
 ```ts
 import {Routes} from '@angular/router';
@@ -463,7 +461,11 @@ const routes: Routes = [
 라우팅 규칙 가드를 생성했으면 라우팅 규칙 정의에 설정해야 합니다.
 
 하나의 라우팅 규칙에 여러 가드를 적용할 수 있도록 라우팅 규칙 설정에서는 가드를 배열로 지정합니다.
-가드는 배열에 나열된 순서대로 실행됩니다.
+라우터는 배열에 나열된 순서대로 가드를 시작하지만, 앞의 가드가 끝날 때까지 기다렸다가 다음 가드를 시작하지는 않습니다. 따라서 `Promise`나 `Observable`을 반환하는 가드는 동시에 실행됩니다.
+
+배열 순서는 어떤 결과를 우선할지 결정합니다. 모든 가드가 `true`를 반환해야 내비게이션이 계속됩니다. 그렇지 않으면 뒤의 가드가 먼저 끝났더라도 배열에서 `true`를 반환하지 않은 첫 번째 가드의 결과를 사용합니다.
+
+NOTE: 비동기 가드는 동시에 실행되므로 현재 사용자 정보를 불러오는 작업처럼 같은 배열의 앞선 가드가 수행하는 작업에 의존하면 안 됩니다. 두 가드가 함께 사용하는 서비스에서 해당 작업을 수행하거나, 검사들을 하나의 가드로 합치세요.
 
 ```ts
 import {Routes} from '@angular/router';

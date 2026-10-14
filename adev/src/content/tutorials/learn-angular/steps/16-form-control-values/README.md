@@ -81,6 +81,8 @@ Time to progress onto the next way of managing forms with Angular: reactive form
 
 <docs-workflow>
 
+<a id="show-the-value-of-the-input-field-in-the-template"></a>
+
 <docs-step title="템플릿에 있는 입력 필드의 값을 표시해 봅시다">
 
 템플릿에 있는 입력 필드의 값을 표시하려면 컴포넌트 클래스 프로퍼티를 바인딩했던 것처럼 문자열 바인딩(`{{}}`) 문법을 사용하면 됩니다.
@@ -103,6 +105,8 @@ export class User {
 ```
 
 </docs-step>
+
+<a id="retrieve-the-value-of-an-input-field"></a>
 
 <docs-step title="입력 필드에 있는 값을 받아옵시다">
 

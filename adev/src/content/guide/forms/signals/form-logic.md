@@ -20,6 +20,8 @@ This guide shows you how to use rules like `disabled()`, `hidden()`, `readonly()
 ## When to add form logic
 -->
 
+<a id="when-to-add-form-logic"></a>
+
 ## 폼 로직은 언제 추가하나요
 
 <!--
@@ -40,6 +42,8 @@ Use rules when field behavior depends on other field values or needs to update r
 <!--
 ## How rules work
 -->
+
+<a id="how-rules-work"></a>
 
 ## 규칙은 어떻게 동작하나요
 
@@ -85,6 +89,8 @@ const orderForm = form(this.orderModel, (schemaPath) => {
 ## Prevent field updates with `disabled()`
 -->
 
+<a id="prevent-field-updates-with-disabled"></a>
+
 ## 필드 비활성화: `disabled()`
 
 <!--
@@ -107,6 +113,8 @@ NOTE: Disabled fields skip validation - they don't participate in form validatio
 <!--
 ### Always disabled
 -->
+
+<a id="always-disabled"></a>
 
 ### 항상 비활성화되는 경우
 
@@ -171,6 +179,8 @@ export class Settings {
 <!--
 ### Conditional disabling
 -->
+
+<a id="conditional-disabling"></a>
 
 ### 조건부 비활성화
 
@@ -250,6 +260,8 @@ export class Order {
 <!--
 ### Disabled reasons
 -->
+
+<a id="disabled-reasons"></a>
 
 ### 비활성화 사유
 
@@ -362,6 +374,8 @@ export class Order {
 #### Multiple disabled reasons
 -->
 
+<a id="multiple-disabled-reasons"></a>
+
 #### 비활성화 사유가 여러 개일 때
 
 <!--
@@ -404,6 +418,8 @@ orderForm = form(this.orderModel, (schemaPath) => {
 ## Configuring `hidden()` state on fields
 -->
 
+<a id="configuring-hidden-state-on-fields"></a>
+
 ## 화면에서 감추기: `hidden()`
 
 <!--
@@ -428,6 +444,8 @@ NOTE: Like disabled fields, hidden fields also skip validation. See the [Validat
 <!--
 ### Basic field hiding
 -->
+
+<a id="basic-field-hiding"></a>
 
 ### 기본 활용
 
@@ -504,8 +522,92 @@ export class Profile {
 ```
 
 <!--
+### Always hidden
+
+To make a field permanently hidden, call `hidden()` with just the field path:
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {form, FormField, hidden} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-profile',
+  imports: [FormField],
+  template: `
+    <label>
+      <input type="checkbox" [formField]="profileForm.isPublic" />
+      Make profile public
+    </label>
+
+    <!- The publicUrl is permanently hidden, so this block never renders ->
+    @if (!profileForm.publicUrl().hidden()) {
+      <label>
+        Public URL
+        <input [formField]="profileForm.publicUrl" />
+      </label>
+    }
+  `,
+})
+export class Profile {
+  profileModel = signal({
+    isPublic: false,
+    publicUrl: '',
+  });
+
+  profileForm = form(this.profileModel, (schemaPath) => {
+    // This field is now permanently hidden and excluded from active validation
+    hidden(schemaPath.publicUrl);
+  });
+}
+```
+-->
+
+<a id="always-hidden"></a>
+
+### 항상 숨기기
+
+필드를 항상 숨기려면 필드 경로만 전달하여 `hidden()`을 호출하세요:
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {form, FormField, hidden} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-profile',
+  imports: [FormField],
+  template: `
+    <label>
+      <input type="checkbox" [formField]="profileForm.isPublic" />
+      Make profile public
+    </label>
+
+    <!-- publicUrl은 항상 숨겨져 있으므로 이 블록은 렌더링되지 않습니다. -->
+    @if (!profileForm.publicUrl().hidden()) {
+      <label>
+        Public URL
+        <input [formField]="profileForm.publicUrl" />
+      </label>
+    }
+  `,
+})
+export class Profile {
+  profileModel = signal({
+    isPublic: false,
+    publicUrl: '',
+  });
+
+  profileForm = form(this.profileModel, (schemaPath) => {
+    // 이 필드는 항상 숨겨지며 활성 유효성 검사에서 제외됩니다.
+    hidden(schemaPath.publicUrl);
+  });
+}
+```
+
+<!--
 ## Display uneditable fields with `readonly()`
 -->
+
+<a id="display-uneditable-fields-with-readonly"></a>
 
 ## 화면에 표시되지만 수정할 수 없는 필드: `readonly()`
 
@@ -523,6 +625,8 @@ NOTE: Readonly fields skip [validation](guide/forms/signals/validation).
 <!--
 ### Always readonly
 -->
+
+<a id="always-readonly"></a>
 
 ### 항상 읽기 전용인 경우
 
@@ -602,6 +706,8 @@ export class Account {
 ### Conditional readonly
 -->
 
+<a id="conditional-readonly"></a>
+
 ### 조건부 읽기 전용
 
 <!--
@@ -680,6 +786,8 @@ export class Document {
 ## Choose between hidden, disabled, and readonly
 -->
 
+<a id="choose-between-hidden-disabled-and-readonly"></a>
+
 ## 숨김, 비활성화, 읽기 전용 선택 기준
 
 <!--
@@ -748,6 +856,8 @@ All three skip validation and prevent user editing while active. The key differe
 ## Delay input operations with `debounce()`
 -->
 
+<a id="delay-input-operations-with-debounce"></a>
+
 ## 입력값 전달 속도 늦추기: `debounce()`
 
 <!--
@@ -760,6 +870,8 @@ The `debounce()` rule delays updating the form model. This is useful for perform
 <!--
 ### What debouncing does
 -->
+
+<a id="what-debouncing-does"></a>
 
 ### `debounce()`가 하는 작업
 
@@ -785,6 +897,8 @@ Debouncing delays these updates and reduces unnecessary work.
 <!--
 ### Basic debouncing
 -->
+
+<a id="basic-debouncing"></a>
 
 ### 기본 디바운싱
 
@@ -866,6 +980,8 @@ export class Search {
 ### Timing guarantees
 -->
 
+<a id="timing-guarantees"></a>
+
 ### 타이밍 보장
 
 <!--
@@ -887,6 +1003,8 @@ This means users can type quickly, tab away, or submit the form without waiting 
 <!--
 ### Custom debounce logic
 -->
+
+<a id="custom-debounce-logic"></a>
 
 ### 커스텀 디바운스 로직
 
@@ -983,6 +1101,8 @@ export class Search {
 ### When to use debouncing
 -->
 
+<a id="when-to-use-debouncing"></a>
+
 ### 언제 사용하나요?
 
 <!--
@@ -1017,21 +1137,23 @@ Don't use debouncing if:
 ## Associate data with a field using `metadata()`
 -->
 
+<a id="associate-data-with-a-field-using-metadata"></a>
+
 ## 데이터와 필드 연관짓기: `metadata()`
 
 <!--
 Metadata attaches reactive data to a field. Validation rules use this system internally, and you can publish your own keys for application-specific information like help text, configuration, or computed display values.
 
-Signal Forms provides six pre-defined metadata keys that built-in validators populate automatically:
+Signal Forms provides pre-defined metadata keys that built-in validators populate automatically:
 
-| Key          | Populated by  | Read via              |
-| ------------ | ------------- | --------------------- |
-| `REQUIRED`   | `required()`  | `field().required()`  |
-| `MIN`        | `min()`       | `field().min()`       |
-| `MAX`        | `max()`       | `field().max()`       |
-| `MIN_LENGTH` | `minLength()` | `field().minLength()` |
-| `MAX_LENGTH` | `maxLength()` | `field().maxLength()` |
-| `PATTERN`    | `pattern()`   | `field().pattern()`   |
+| Key          | Populated by         | Read via              |
+| ------------ | -------------------- | --------------------- |
+| `REQUIRED`   | `required()`         | `field().required()`  |
+| `MIN`        | `min()`, `minDate()` | `field().min()`       |
+| `MAX`        | `max()`, `maxDate()` | `field().max()`       |
+| `MIN_LENGTH` | `minLength()`        | `field().minLength()` |
+| `MAX_LENGTH` | `maxLength()`        | `field().maxLength()` |
+| `PATTERN`    | `pattern()`          | `field().pattern()`   |
 
 The `[formField]` directive automatically binds five of these (`REQUIRED`, `MIN`, `MAX`, `MIN_LENGTH`, and `MAX_LENGTH`) to the corresponding HTML attribute on a native form control. `PATTERN` is the exception, because Signal Forms supports multiple patterns per field but the HTML `pattern` attribute accepts only a single regular expression.
 
@@ -1068,16 +1190,16 @@ export class Age {
 메타데이터는 필드에 반응형 데이터를 연결합니다.
 도움말과 같은 애플리케이션별 정보, 환경설정, 계산값 등을 지정할 수 있으며, 이런 메타데이터는 유효성 검사 규칙에서 활용할 수 있습니다.
 
-시그널 폼은 기본적으로 6개 메타데이터 키를 제공합니다:
+시그널 폼은 기본 메타데이터 키를 제공하며, 내장 유효성 검사 함수가 자동으로 값을 채웁니다:
 
-| 키           | 관련 검사 함수 | 사용방식              |
-| ------------ | -------------- | --------------------- |
-| `REQUIRED`   | `required()`   | `field().required()`  |
-| `MIN`        | `min()`        | `field().min()`       |
-| `MAX`        | `max()`        | `field().max()`       |
-| `MIN_LENGTH` | `minLength()`  | `field().minLength()` |
-| `MAX_LENGTH` | `maxLength()`  | `field().maxLength()` |
-| `PATTERN`    | `pattern()`    | `field().pattern()`   |
+| 키           | 관련 검사 함수       | 사용방식              |
+| ------------ | -------------------- | --------------------- |
+| `REQUIRED`   | `required()`         | `field().required()`  |
+| `MIN`        | `min()`, `minDate()` | `field().min()`       |
+| `MAX`        | `max()`, `maxDate()` | `field().max()`       |
+| `MIN_LENGTH` | `minLength()`        | `field().minLength()` |
+| `MAX_LENGTH` | `maxLength()`        | `field().maxLength()` |
+| `PATTERN`    | `pattern()`          | `field().pattern()`   |
 
 `[formField]` 디렉티브는 위 5개 키를 폼 컨트롤의 HTML 어트리뷰트에 자동으로 바인딩합니다.
 `PATTERN`은 예외인데, 시그널 폼은 패턴을 여러 개 설정할 수 있지만 HTML `pattern` 어트리뷰트는 정규 표현식을 하나만 받을 수 있기 때문입니다.
@@ -1114,6 +1236,8 @@ export class Age {
 <!--
 ### Reactive metadata
 -->
+
+<a id="reactive-metadata"></a>
 
 ### 반응형 메타데이터
 
@@ -1209,6 +1333,8 @@ export class Inventory {
 ## Combining rules
 -->
 
+<a id="combining-rules"></a>
+
 ## 유효성 검사 조합하기
 
 <!--
@@ -1220,6 +1346,8 @@ You can apply multiple rules to the same field, and you can use conditional logi
 <!--
 ### Multiple rules on one field
 -->
+
+<a id="multiple-rules-on-one-field"></a>
 
 ### 필드 상태 여러 개 적용하기
 
@@ -1320,6 +1448,8 @@ export class Promo {
 <!--
 ### Conditional logic with applyWhen
 -->
+
+<a id="conditional-logic-with-applywhen"></a>
 
 ### 조건부로 적용하기: `applyWhen`
 
@@ -1434,6 +1564,8 @@ export class Address {
 ### Reusable schema functions
 -->
 
+<a id="reusable-schema-functions"></a>
+
 ### 재사용 가능한 스키마 함수
 
 <!--
@@ -1491,6 +1623,8 @@ const registrationForm = form(registrationModel, (schemaPath) => {
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

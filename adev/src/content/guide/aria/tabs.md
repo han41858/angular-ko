@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Tabs">
-</docs-decorative-header>
+# Tabs
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/" title="Tabs ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="탭">
-</docs-decorative-header>
+# 탭
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/" title="탭 ARIA 패턴"/>
@@ -638,211 +636,27 @@ describe('MyTabsComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Tabs`](/api/aria/tabs/Tabs)
+- [`TabList`](/api/aria/tabs/TabList)
+- [`Tab`](/api/aria/tabs/Tab)
+- [`TabPanel`](/api/aria/tabs/TabPanel)
+- [`TabContent`](/api/aria/tabs/TabContent)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### Tabs
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="tabs"></a>
-
-### Tabs
-
-<!--
-The container directive that coordinates tab lists and panels.
-
-This directive has no inputs or outputs. It serves as the root container for `ngTabList`, `ngTab`, and `ngTabPanel` directives.
--->
-
-탭 목록과 패널을 연결하는 컨테이너 디렉티브입니다.
-
-이 디렉티브에는 입력 프로퍼티나 출력 프로퍼티가 없습니다.
-`ngTabList`, `ngTab`, `ngTabPanel` 디렉티브의 루트 컨테이너 역할을 합니다.
-
-<!--
-### TabList
--->
-
-<a id="tablist"></a>
-
-### TabList
-
-<!--
-The container for tab buttons that manages selection and keyboard navigation.
--->
-
-선택과 키보드 탐색을 관리하는 탭 버튼의 컨테이너입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property        | Type                             | Default        | Description                                                        |
-| --------------- | -------------------------------- | -------------- | ------------------------------------------------------------------ |
-| `orientation`   | `'horizontal' \| 'vertical'`     | `'horizontal'` | Tab list layout direction                                          |
-| `wrap`          | `boolean`                        | `true`         | Whether keyboard navigation wraps from last to first tab           |
-| `softDisabled`  | `boolean`                        | `true`         | When `true`, disabled tabs are focusable but not activatable       |
-| `selectionMode` | `'follow' \| 'explicit'`         | `'follow'`     | Whether tabs activate on focus or require explicit activation      |
-| `focusMode`     | `'roving' \| 'activedescendant'` | `'roving'`     | Focus management strategy                                          |
-| `selectedTab`   | `any`                            | —              | The value of the currently selected tab (supports two-way binding) |
--->
-
-| 프로퍼티        | 타입                             | 기본값         | 설명                                                                       |
-| --------------- | -------------------------------- | -------------- | -------------------------------------------------------------------------- |
-| `orientation`   | `'horizontal' \| 'vertical'`     | `'horizontal'` | 탭 목록의 배치 방향입니다.                                                 |
-| `wrap`          | `boolean`                        | `true`         | 키보드 탐색에서 마지막 탭에서 첫 번째 탭으로 순환할지 지정합니다.          |
-| `softDisabled`  | `boolean`                        | `true`         | `true`이면 비활성화된 탭도 포커스를 받을 수 있지만 활성화할 수는 없습니다. |
-| `selectionMode` | `'follow' \| 'explicit'`         | `'follow'`     | 포커스를 받으면 탭을 활성화할지, 명시적인 활성화가 필요한지 지정합니다.    |
-| `focusMode`     | `'roving' \| 'activedescendant'` | `'roving'`     | 포커스 관리 전략입니다.                                                    |
-| `selectedTab`   | `any`                            | —              | 현재 선택된 탭의 값입니다(양방향 바인딩을 지원합니다).                     |
-
-<!--
-### Tab
--->
-
-<a id="tab"></a>
-
-### Tab
-
-<!--
-An individual tab button.
--->
-
-개별 탭 버튼입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type      | Default | Description                             |
-| ---------- | --------- | ------- | --------------------------------------- |
-| `value`    | `any`     | —       | **Required.** Unique value for this tab |
-| `disabled` | `boolean` | `false` | Disables this tab                       |
--->
-
-| 프로퍼티   | 타입      | 기본값  | 설명                             |
-| ---------- | --------- | ------- | -------------------------------- |
-| `value`    | `any`     | —       | **필수.** 이 탭의 고유 값입니다. |
-| `disabled` | `boolean` | `false` | 이 탭을 비활성화합니다.          |
-
-<!--
-#### Signals
--->
-
-<a id="signals"></a>
-
-#### 시그널
-
-<!--
-| Property   | Type              | Description                           |
-| ---------- | ----------------- | ------------------------------------- |
-| `selected` | `Signal<boolean>` | Whether the tab is currently selected |
-| `active`   | `Signal<boolean>` | Whether the tab currently has focus   |
--->
-
-| 프로퍼티   | 타입              | 설명                                  |
-| ---------- | ----------------- | ------------------------------------- |
-| `selected` | `Signal<boolean>` | 현재 탭이 선택되어 있는지 나타냅니다. |
-| `active`   | `Signal<boolean>` | 현재 탭에 포커스가 있는지 나타냅니다. |
-
-<!--
-### TabPanel
--->
-
-<a id="tabpanel"></a>
-
-### TabPanel
-
-<!--
-The content panel associated with a tab.
--->
-
-탭에 연결된 콘텐츠 패널입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-2"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property          | Type      | Default | Description                                                |
-| ----------------- | --------- | ------- | ---------------------------------------------------------- |
-| `value`           | `any`     | —       | **Required.** Must match the `value` of the associated tab |
-| `preserveContent` | `boolean` | `true`  | Whether to keep panel content in DOM after deactivation    |
--->
-
-| 프로퍼티          | 타입      | 기본값 | 설명                                                       |
-| ----------------- | --------- | ------ | ---------------------------------------------------------- |
-| `value`           | `any`     | —      | **필수.** 연결된 탭의 `value`와 일치해야 합니다.           |
-| `preserveContent` | `boolean` | `true` | 비활성화된 뒤에도 패널 콘텐츠를 DOM에 유지할지 지정합니다. |
-
-<!--
-#### Signals
--->
-
-<a id="signals-1"></a>
-
-#### 시그널
-
-<!--
-| Property  | Type              | Description                            |
-| --------- | ----------------- | -------------------------------------- |
-| `visible` | `Signal<boolean>` | Whether the panel is currently visible |
--->
-
-| 프로퍼티  | 타입              | 설명                                    |
-| --------- | ----------------- | --------------------------------------- |
-| `visible` | `Signal<boolean>` | 현재 패널이 표시되어 있는지 나타냅니다. |
-
-<!--
-### TabContent
--->
-
-<a id="tabcontent"></a>
-
-### TabContent
-
-<!--
-A structural directive for lazy rendering tab panel content.
-
-This directive has no inputs, outputs, or methods. Apply it to an `ng-template` element inside a tab panel:
-
-```angular-html
-<div ngTabPanel value="tab1">
-  <ng-template ngTabContent>
-    <!- Content here is lazily rendered ->
-  </ng-template>
-</div>
-```
--->
-
-탭 패널 콘텐츠를 지연 렌더링하는 구조 디렉티브입니다.
-
-이 디렉티브에는 입력 프로퍼티, 출력 프로퍼티, 메서드가 없습니다.
-탭 패널 안의 `ng-template` 엘리먼트에 다음과 같이 적용합니다.
-
-```angular-html
-<div ngTabPanel value="tab1">
-  <ng-template ngTabContent>
-    <!-- 이 콘텐츠는 지연 렌더링됩니다. -->
-  </ng-template>
-</div>
-```
+- [`Tabs`](/api/aria/tabs/Tabs)
+- [`TabList`](/api/aria/tabs/TabList)
+- [`Tab`](/api/aria/tabs/Tab)
+- [`TabPanel`](/api/aria/tabs/TabPanel)
+- [`TabContent`](/api/aria/tabs/TabContent)

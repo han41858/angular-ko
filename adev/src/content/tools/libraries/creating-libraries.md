@@ -167,8 +167,186 @@ ng lint my-lib
 라이브러리에는 설치와 유지보수를 위한 문서\(일반적으로 README 파일\)를 제공해야 합니다.
 
 <!--
+## Entry points
+
+An _entry point_ is a module specifier that consumers import from, together with the public API that specifier exposes.
+Every library has one _primary entry point_, and can add any number of _secondary entry points_.
+
+The primary entry point is the package itself.
+The `ng-package.json` file at the root of the library configures it, and `lib.entryFile` names the file that defines its public API.
+
+```json {header: 'projects/my-lib/ng-package.json'}
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/my-lib",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}
+```
+
+Consumers import the primary entry point by the package name:
+
+```ts
+import {ThemeService} from 'my-lib';
+```
+
+A secondary entry point is a directory inside the library with its own `ng-package.json` file.
+The path of that directory relative to the library root defines the import subpath.
+For example, a `button` directory makes `my-lib/button` available to consumers:
+
+```ts
+import {ButtonComponent} from 'my-lib/button';
+```
+
+Angular packages use this same structure.
+For example, `@angular/core` is the primary entry point and `@angular/core/testing` is a secondary entry point of the same package.
+
+HELPFUL: For an architectural overview of how entry points enable code splitting and define chunk boundaries in the Angular Package Format, see [Entrypoints and code splitting](tools/libraries/angular-package-format#entrypoints-and-code-splitting).
+
+### Adding a secondary entry point
+
+Create a directory inside the library with its own `ng-package.json` and public API file:
+
+```text
+projects/my-lib/
+├── ng-package.json      (primary entry point: my-lib)
+├── package.json
+├── src/
+│   ├── public-api.ts
+│   └── lib/ …
+└── button/
+    ├── ng-package.json  (secondary entry point: my-lib/button)
+    └── src/
+        ├── public-api.ts
+        └── button.ts
+```
+
+The secondary `ng-package.json` configures only the entry point itself:
+
+```json {header: 'projects/my-lib/button/ng-package.json'}
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-entrypoint.schema.json",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}
+```
+
+IMPORTANT: A secondary `ng-package.json` accepts only the `lib` options. Package-wide options such as `dest` and `assets` belong in the `ng-package.json` at the library root and apply to every entry point.
+
+You do not need to register the secondary entry point anywhere else.
+During the build, `ng-packagr` automatically discovers every `ng-package.json` under the library root and derives the import subpath from its directory path (for example, `button/` becomes `my-lib/button` and `testing/harness/` becomes `my-lib/testing/harness`).
+
+To import a secondary entry point from an application in the same workspace, add a wildcard path mapping in the workspace `tsconfig.json`.
+By default, `ng generate library` maps only the package root, which does not cover subpaths:
+
+```json {header: 'tsconfig.json'}
+{
+  "compilerOptions": {
+    "paths": {
+      "my-lib": ["./dist/my-lib"],
+      "my-lib/*": ["./dist/my-lib/*"]
+    }
+  }
+}
+```
+
+IMPORTANT: When importing code from another entry point in the same library, always use its package import path (for example, `import {ThemeService} from 'my-lib'`) instead of a relative path. `ng-packagr` builds each entry point separately in dependency order, so relative imports across entry points and circular dependencies between entry points will fail the build.
+
 ## Refactoring parts of an application into a library
 -->
+
+<a id="entry-points"></a>
+
+## 진입점
+
+_진입점_ 은 라이브러리 사용자가 임포트할 때 지정하는 모듈 지정자와 해당 지정자가 노출하는 공개 API를 의미합니다.
+모든 라이브러리는 하나의 _기본 진입점_ 을 가지며, 원하는 만큼 _보조 진입점_ 을 추가할 수 있습니다.
+
+기본 진입점은 패키지 자체입니다.
+라이브러리 루트의 `ng-package.json` 파일에서 설정하며 `lib.entryFile`로 공개 API를 정의하는 파일을 지정합니다.
+
+```json {header: 'projects/my-lib/ng-package.json'}
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/my-lib",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}
+```
+
+사용자는 패키지 이름으로 기본 진입점을 임포트합니다.
+
+```ts
+import {ThemeService} from 'my-lib';
+```
+
+보조 진입점은 자체 `ng-package.json` 파일이 있는 라이브러리 내부 디렉터리입니다.
+라이브러리 루트를 기준으로 한 디렉터리의 상대 경로가 임포트 하위 경로가 됩니다.
+예를 들어 `button` 디렉터리가 있으면 사용자가 `my-lib/button`을 사용할 수 있습니다.
+
+```ts
+import {ButtonComponent} from 'my-lib/button';
+```
+
+Angular 패키지도 같은 구조를 사용합니다.
+예를 들어 `@angular/core`는 기본 진입점이고 `@angular/core/testing`은 같은 패키지의 보조 진입점입니다.
+
+HELPFUL: Angular 패키지 형식에서 진입점으로 코드 분할을 지원하고 청크 경계를 정의하는 구조는 [진입점과 코드 분할](tools/libraries/angular-package-format#entrypoints-and-code-splitting)을 참고하세요.
+
+<a id="adding-a-secondary-entry-point"></a>
+
+### 보조 진입점 추가하기
+
+라이브러리 내부에 자체 `ng-package.json`과 공개 API 파일이 있는 디렉터리를 만드세요.
+
+```text
+projects/my-lib/
+├── ng-package.json      (기본 진입점: my-lib)
+├── package.json
+├── src/
+│   ├── public-api.ts
+│   └── lib/ …
+└── button/
+    ├── ng-package.json  (보조 진입점: my-lib/button)
+    └── src/
+        ├── public-api.ts
+        └── button.ts
+```
+
+보조 진입점의 `ng-package.json`은 해당 진입점만 설정합니다.
+
+```json {header: 'projects/my-lib/button/ng-package.json'}
+{
+  "$schema": "../../../node_modules/ng-packagr/ng-entrypoint.schema.json",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}
+```
+
+IMPORTANT: 보조 진입점의 `ng-package.json`에는 `lib` 옵션만 지정할 수 있습니다. `dest`, `assets` 같은 패키지 전체 옵션은 라이브러리 루트의 `ng-package.json`에 지정하며 모든 진입점에 적용됩니다.
+
+보조 진입점을 다른 곳에 등록할 필요는 없습니다.
+빌드 중 `ng-packagr`가 라이브러리 루트 아래의 모든 `ng-package.json`을 자동으로 발견하고 디렉터리 경로에서 임포트 하위 경로를 도출합니다. 예를 들어 `button/`은 `my-lib/button`, `testing/harness/`는 `my-lib/testing/harness`가 됩니다.
+
+같은 워크스페이스의 애플리케이션에서 보조 진입점을 임포트하려면 워크스페이스의 `tsconfig.json`에 와일드카드 경로 매핑을 추가하세요.
+기본적으로 `ng generate library`는 패키지 루트만 매핑하므로 하위 경로는 포함되지 않습니다.
+
+```json {header: 'tsconfig.json'}
+{
+  "compilerOptions": {
+    "paths": {
+      "my-lib": ["./dist/my-lib"],
+      "my-lib/*": ["./dist/my-lib/*"]
+    }
+  }
+}
+```
+
+IMPORTANT: 같은 라이브러리의 다른 진입점에서 코드를 임포트할 때는 상대 경로 대신 항상 패키지 임포트 경로(예: `import {ThemeService} from 'my-lib'`)를 사용하세요. `ng-packagr`는 의존성 순서대로 각 진입점을 별도로 빌드하므로 진입점 사이의 상대 임포트나 순환 의존성이 있으면 빌드가 실패합니다.
 
 <a id="refactoring-parts-of-an-application-into-a-library"></a>
 
@@ -292,7 +470,7 @@ For more information, see [Schematics Overview](tools/cli/schematics) and [Schem
 <!--
 Use the Angular CLI and the npm package manager to build and publish your library as an npm package.
 
-Angular CLI uses a tool called [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md) to create packages from your compiled code that can be published to npm.
+Angular CLI uses a tool called [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/main/README.md) to create packages from your compiled code that can be published to npm.
 See [Building libraries with Ivy](tools/libraries/creating-libraries#publishing-libraries) for information on the distribution formats supported by `ng-packagr` and guidance on how
 to choose the right format for your library.
 
@@ -310,7 +488,7 @@ npm publish
 
 Angular CLI와 npm 패키지 관리자를 사용해서 라이브러리를 빌드하고 npm 패키지로 배포하세요.
 
-Angular CLI는 [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/master/README.md)라는 도구로 컴파일된 코드를 npm에 배포할 수 있는 패키지로 만듭니다.
+Angular CLI는 [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/main/README.md)라는 도구로 컴파일된 코드를 npm에 배포할 수 있는 패키지로 만듭니다.
 `ng-packagr`가 지원하는 배포 형식과 라이브러리에 맞는 형식을 선택하는 방법은 [Ivy로 라이브러리 빌드하기](tools/libraries/creating-libraries#publishing-libraries)를 참고하세요.
 
 배포할 라이브러리는 항상 `production` 설정으로 빌드해야 합니다.
@@ -334,7 +512,7 @@ npm publish
 
 <!--
 In your Angular library, the distributable can include additional assets like theming files, Sass mixins, or documentation \(like a changelog\).
-For more information [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md) and [embed assets in component styles](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md).
+For more information [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/main/docs/copy-assets.md) and [embed assets in component styles](https://github.com/ng-packagr/ng-packagr/blob/main/docs/embed-assets-css.md).
 
 IMPORTANT: When including additional assets like Sass mixins or pre-compiled CSS.
 You need to add these manually to the conditional ["exports"](tools/libraries/angular-package-format#exports) in the `package.json` of the primary entrypoint.
@@ -361,7 +539,7 @@ The above is an extract from the [@angular/material](https://unpkg.com/browse/@a
 -->
 
 Angular 라이브러리의 배포 결과물에는 테마 파일, Sass 믹스인, 변경 이력 같은 문서 등의 추가 자원을 포함할 수 있습니다.
-자세한 내용은 [빌드 중 라이브러리에 자원 복사하기](https://github.com/ng-packagr/ng-packagr/blob/master/docs/copy-assets.md)와 [컴포넌트 스타일에 자원 포함하기](https://github.com/ng-packagr/ng-packagr/blob/master/docs/embed-assets-css.md)를 참고하세요.
+자세한 내용은 [빌드 중 라이브러리에 자원 복사하기](https://github.com/ng-packagr/ng-packagr/blob/main/docs/copy-assets.md)와 [컴포넌트 스타일에 자원 포함하기](https://github.com/ng-packagr/ng-packagr/blob/main/docs/embed-assets-css.md)를 참고하세요.
 
 중요: Sass 믹스인이나 미리 컴파일한 CSS 같은 추가 자원을 포함할 때는 기본 진입점의 `package.json`에서 조건부 ["exports"](tools/libraries/angular-package-format#exports)에 직접 추가해야 합니다.
 

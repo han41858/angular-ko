@@ -56,7 +56,7 @@ describe('Calculator', () => {
 
   beforeEach(() => {
     // Injects the Calculator service which is available to Angular
-    // because the service uses `providedIn: 'root'`
+    // because the service uses `@Service`
     service = TestBed.inject(Calculator);
   });
 
@@ -103,7 +103,7 @@ describe('Calculator', () => {
 
   beforeEach(() => {
     // Calculator 서비스를 주입합니다.
-    // 서비스가 `providedIn: 'root'`를 사용하므로 Angular에서 사용할 수 있습니다
+    // 서비스가 `@Service`를 사용하므로 Angular에서 사용할 수 있습니다
     service = TestBed.inject(Calculator);
   });
 
@@ -300,7 +300,7 @@ A stub controls what a dependency returns, but sometimes you also need to verify
 
 ```ts { header: 'order-total.spec.ts' }
 import {TestBed} from '@angular/core/testing';
-import {beforeEach, describe, expect, it, vi, type Mocked} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi, type Mocked} from 'vitest';
 import {OrderTotal} from './order-total';
 import {TaxCalculator} from './tax-calculator';
 
@@ -320,6 +320,10 @@ describe('OrderTotal', () => {
     service = TestBed.inject(OrderTotal);
   });
 
+  afterEach(() => {
+    taxCalculatorStub.calculate.mockClear();
+  });
+
   it('adds tax to the subtotal', () => {
     expect(service.total(100)).toBe(105);
   });
@@ -327,7 +331,7 @@ describe('OrderTotal', () => {
   // Verify the interaction with a spy
   it('calls the tax calculator', () => {
     service.total(100);
-    expect(taxCalculatorStub.calculate).toHaveBeenCalledExactlyOnce();
+    expect(taxCalculatorStub.calculate).toHaveBeenCalledExactlyOnceWith(100);
   });
 });
 ```
@@ -341,7 +345,7 @@ Vitest에서는 `vi.fn()`이 이 기능을 제공하므로 서비스 사이의 �
 
 ```ts { header: 'order-total.spec.ts' }
 import {TestBed} from '@angular/core/testing';
-import {beforeEach, describe, expect, it, vi, type Mocked} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi, type Mocked} from 'vitest';
 import {OrderTotal} from './order-total';
 import {TaxCalculator} from './tax-calculator';
 
@@ -361,6 +365,10 @@ describe('OrderTotal', () => {
     service = TestBed.inject(OrderTotal);
   });
 
+  afterEach(() => {
+    taxCalculatorStub.calculate.mockClear();
+  });
+
   it('adds tax to the subtotal', () => {
     expect(service.total(100)).toBe(105);
   });
@@ -368,7 +376,7 @@ describe('OrderTotal', () => {
   // 스파이로 상호작용을 검증합니다
   it('calls the tax calculator', () => {
     service.total(100);
-    expect(taxCalculatorStub.calculate).toHaveBeenCalledExactlyOnce();
+    expect(taxCalculatorStub.calculate).toHaveBeenCalledExactlyOnceWith(100);
   });
 });
 ```

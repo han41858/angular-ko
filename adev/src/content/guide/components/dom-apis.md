@@ -12,9 +12,7 @@ directly interact with a component's DOM. Components can inject ElementRef to ge
 component's host element:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ProfilePhoto {
   constructor() {
     const elementRef = inject(ElementRef);
@@ -30,9 +28,7 @@ You can use Angular's `afterEveryRender` and `afterNextRender` functions to regi
 callback** that runs when Angular has finished rendering the page.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ProfilePhoto {
   constructor() {
     const elementRef = inject(ElementRef);
@@ -66,9 +62,7 @@ Angular는 DOM 생성, 갱신, 제거를 자동으로 처리합니다.
 그렇다면 `ElementRef` 를 의존성으로 주입해서 컴포넌트 호스트 엘리먼트를 참조할 수 있습니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ProfilePhoto {
   constructor() {
     const elementRef = inject(ElementRef);
@@ -82,9 +76,7 @@ export class ProfilePhoto {
 Angular가 컴포넌트를 렌더링한 뒤에 **콜백 함수** 를 실행하려면 `afterEveryRender`나 `afterNextRender`를 활용하면 됩니다.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ProfilePhoto {
   constructor() {
     const elementRef = inject(ElementRef);
@@ -110,6 +102,8 @@ Angular는 컴포넌트의 DOM이 완전히 준비된 후에 렌더링 콜백 �
 <!--
 ## Using a component's renderer
 -->
+
+<a id="using-a-components-renderer"></a>
 
 ## 컴포넌트 렌더러 활용하기
 
@@ -143,6 +137,8 @@ pre-rendering contexts.
 <!--
 ## When to use DOM APIs
 -->
+
+<a id="when-to-use-dom-apis"></a>
 
 ## DOM API는 언제 사용하면 될까요
 

@@ -19,6 +19,8 @@ Angular 템플릿에서는 템플릿 지역 변수와 템플릿 참조 변수를
 ## Local template variables with `@let`
 -->
 
+<a id="local-template-variables-with-let"></a>
+
 ## 템플릿 지역 변수(Local template variables): `@let`
 
 <!--
@@ -31,6 +33,8 @@ Angular가 제공하는 `@let` 문법을 사용하면 템플릿에서 지역 변
 <!--
 ### Using `@let`
 -->
+
+<a id="using-let"></a>
 
 ### `@let` 활용하기
 
@@ -73,6 +77,8 @@ Each `@let` block can declare exactly one variable. You cannot declare multiple 
 <!--
 ### Referencing the value of `@let`
 -->
+
+<a id="referencing-the-value-of-let"></a>
 
 ### `@let`으로 값 참조하기
 
@@ -120,6 +126,8 @@ Once you've declared a variable with `@let`, you can reuse it in the same templa
 ### Assignability
 -->
 
+<a id="assignability"></a>
+
 ### 재할당 불가
 
 <!--
@@ -146,6 +154,8 @@ Angular에서는 값을 재할당하지 않아도 표현식의 결과에 따라 
 <!--
 ### Variable scope
 -->
+
+<a id="variable-scope"></a>
 
 ### 접근 범위
 
@@ -220,6 +230,8 @@ Since `@let` declarations are not hoisted, they **cannot** be accessed by parent
 ### Full syntax
 -->
 
+<a id="full-syntax"></a>
+
 ### 전체 문법
 
 <!--
@@ -245,6 +257,8 @@ The `@let` syntax is formally defined as:
 <!--
 ## Template reference variables
 -->
+
+<a id="template-reference-variables"></a>
 
 ## 템플릿 참조 변수(Template reference variables)
 
@@ -274,6 +288,8 @@ You can use template reference variables to read information from one part of th
 ### Declaring a template reference variable
 -->
 
+<a id="declaring-a-template-reference-variable"></a>
+
 ### 템플릿 참조 변수 선언하기
 
 <!--
@@ -295,6 +311,8 @@ You can declare a variable on an element in a template by adding an attribute th
 <!--
 ### Assigning values to template reference variables
 -->
+
+<a id="assigning-values-to-template-reference-variables"></a>
 
 ### 템플릿 참조 변수에 값 할당하기
 
@@ -355,6 +373,8 @@ Angular 컴포넌트에 변수를 선언하면 이 변수는 컴포넌트 인스
 #### Assigning a reference to an Angular directive
 -->
 
+<a id="assigning-a-reference-to-an-angular-directive"></a>
+
 #### Angular 디렉티브 참조하기
 
 <!--
@@ -404,6 +424,8 @@ export class DropZone {
 <!--
 ### Using template reference variables with queries
 -->
+
+<a id="using-template-reference-variables-with-queries"></a>
 
 ### 템플릿 참조 변수로 탐색하기
 
@@ -455,26 +477,30 @@ export class AppComponent {
 ### Template variable scope
 -->
 
+<a id="template-variable-scope"></a>
+
 ### 템플릿 변수의 범위
 
 <!--
 Just like variables in JavaScript or TypeScript code, template variables are scoped to the template that declares them.
 
-Similarly, [Structural directives](guide/directives/structural-directives) or `<ng-template>` declarations create a new nested template scope, much like JavaScript's control flow statements like `if` and `for` create new lexical scopes. You cannot access template variables within one of these structural directives from outside of its boundaries.
+Similarly, [control flow blocks](guide/templates/control-flow) like `@if` and `@for`, [structural directives](guide/directives/structural-directives), and `<ng-template>` declarations create a new nested template scope, much like JavaScript's control flow statements like `if` and `for` create new lexical scopes. You cannot access template variables within one of these nested templates from outside of its boundaries.
 
 HELPFUL: Define a variable only once in the template so the runtime value remains predictable.
 -->
 
 템플릿 변수의 범위는 JavaScript나 TypeScript 코드와 마찬가지로 선언된 범위 안에서만 유효합니다.
 
-이와 비슷하게, [구조 디렉티브](guide/directives/structural-directives)나 `<ng-template>`도 새로운 템플릿 범위를 만들며, `if`나 `for`도 새로운 범위를 생성합니다.
-구조 디렉티브 안에 선언된 템플릿 변수는 외부에서 참조할 수 없습니다.
+이와 비슷하게, `@if`와 `@for` 같은 [제어 흐름 블록](guide/templates/control-flow), [구조 디렉티브](guide/directives/structural-directives), `<ng-template>` 선언은 새로운 중첩 템플릿 범위를 만듭니다. JavaScript의 `if`와 `for`가 새로운 렉시컬 범위를 만드는 것과 같습니다.
+이렇게 중첩된 템플릿 안에 선언된 변수는 해당 범위 밖에서 참조할 수 없습니다.
 
 참고: 실행 오류를 방지하기 위해 템플릿 변수는 한 번만 선언하세요.
 
 <!--
 #### Accessing in a nested template
 -->
+
+<a id="accessing-in-a-nested-template"></a>
 
 #### 중첩 템플릿 안에 접근하기
 
@@ -483,43 +509,51 @@ An inner template can access template variables that the outer template defines.
 
 In the following example, changing the text in the `<input>` changes the value in the `<span>` because Angular immediately updates changes through the template variable, `ref1`.
 
-```html
+```angular-html
 <input #ref1 type="text" [(ngModel)]="firstExample" />
 
-<span *ngIf="true">Value: {{ ref1.value }}</span>
+@if (true) {
+  <span>Value: {{ ref1.value }}</span>
+}
 ```
 
-In this case, the `*ngIf` on `<span>` creates a new template scope, which includes the `ref1` variable from its parent scope.
+In this case, the `@if` block creates a new template scope, which includes the `ref1` variable from its parent scope.
 
 However, accessing a template variable from a child scope in the parent template doesn't work:
 
-```html {avoid}
-<input *ngIf="true" #ref2 type="text" [(ngModel)]="secondExample" />
+```angular-html {avoid}
+@if (true) {
+  <input #ref2 type="text" [(ngModel)]="secondExample" />
+}
 
 <span>Value: {{ ref2?.value }}</span>
 ```
 
-Here, `ref2` is declared in the child scope created by `*ngIf`, and is not accessible from the parent template.
+Here, `ref2` is declared in the child scope created by `@if`, and is not accessible from the parent template.
 -->
 
 내부 템플릿은 이 템플릿의 외부 템플릿 변수에 접근할 수 있습니다.
 
 아래 코드에서 `<input>` 입력값을 변경하면 Angular가 템플릿 변수 `ref1`을 즉시 갱신하기 때문에 `<span>`에 표시되는 값이 변경됩니다.
 
-```html
+```angular-html
 <input #ref1 type="text" [(ngModel)]="firstExample" />
 
-<span *ngIf="true">Value: {{ ref1.value }}</span>
+@if (true) {
+  <span>Value: {{ ref1.value }}</span>
+}
 ```
 
-이 경우 `<span>`에 적용된 `*ngIf`는 새로운 템플릿 범위를 만들기 때문에, 이 범위에서 보면 `ref1` 변수는 부모 범위에 존재합니다.
+이 경우 `@if` 블록은 새로운 템플릿 범위를 만들기 때문에, 이 범위에서 보면 `ref1` 변수는 부모 범위에 존재합니다.
 
 하지만 부모 템플릿 범위에서 자식 템플릿 범위에 있는 변수에는 접근할 수 없습니다:
 
-```html {avoid}
-<input *ngIf="true" #ref2 type="text" [(ngModel)]="secondExample" />
+```angular-html {avoid}
+@if (true) {
+  <input #ref2 type="text" [(ngModel)]="secondExample" />
+}
 
 <span>Value: {{ ref2?.value }}</span>
 ```
 
-위 코드에서 `ref2`는 `*ngIf`에 의해 자식 템플릿 범위에 선언되었기 때문에, 부모 템플릿에서는 접근할 수 없습니다.
+위 코드에서 `ref2`는 `@if`에 의해 자식 템플릿 범위에 선언되었기 때문에, 부모 템플릿에서는 접근할 수 없습니다.

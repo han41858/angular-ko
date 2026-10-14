@@ -116,7 +116,7 @@ In the course of this tutorial, you bind a sample form to data and handle user i
    - Add custom CSS to provide visual feedback on the status
    - Show and hide validation-error messages
 1. Respond to a native HTML button-click event by adding to the model data.
-1. Handle form submission using the [`ngSubmit`](api/forms/NgForm#properties) output property of the form.
+1. Handle form submission using the [`ngSubmit`](api/forms/NgForm#ngSubmit) output property of the form.
    - Disable the **Submit** button until the form is valid
    - After submit, swap out the finished form for different content on the page
 -->
@@ -133,7 +133,7 @@ In the course of this tutorial, you bind a sample form to data and handle user i
    - 커스텀 CSS를 추가해서 상태에 따른 시각적 피드백을 제공합니다.
    - 유효성 검사 에러 메시지를 표시하거나 숨깁니다.
 1. 표준 HTML 버튼의 클릭 이벤트에 반응해서 모델 데이터를 추가합니다.
-1. 폼의 [`ngSubmit`](api/forms/NgForm#properties) 출력 프로퍼티로 폼 제출을 처리합니다.
+1. 폼의 [`ngSubmit`](api/forms/NgForm#ngSubmit) 출력 프로퍼티로 폼 제출을 처리합니다.
    - 폼이 유효해질 때까지 **Submit** 버튼을 비활성화합니다.
    - 폼을 제출하면 입력이 끝난 폼 대신 다른 내용을 페이지에 표시합니다.
 
@@ -466,7 +466,7 @@ To see how the classes are added and removed by the framework, open the browser'
 1. When you first bring it up, the classes indicate that it has a valid value, that the value has not been changed since initialization or reset, and that the control has not been visited since initialization or reset.
 
    ```html
-   <input class="form-control ng-untouched ng-pristine ng-valid" />;
+   <input class="form-control ng-untouched ng-pristine ng-valid" />
    ```
 
 1. Take the following actions on the **Name** `<input>` box, and observe which classes appear.
@@ -491,7 +491,7 @@ Angular가 클래스를 추가하고 삭제하는 모습을 확인하려면 브�
 1. 처음 표시될 때는 값이 유효하고, 초기화하거나 리셋한 후 값이 변경되지 않았으며, 컨트롤에도 접근한 적이 없다는 것을 클래스가 나타냅니다.
 
    ```html
-   <input class="form-control ng-untouched ng-pristine ng-valid" />;
+   <input class="form-control ng-untouched ng-pristine ng-valid" />
    ```
 
 1. **Name** `<input>` 필드에서 다음 동작을 하면서 어떤 클래스가 적용되는지 확인해 보세요.
@@ -618,6 +618,8 @@ You'll see the significance of this choice when you add a new actor to the form 
 적절한 시점에 에러 메시지가 표시되도록 다음 순서로 구성합니다.
 
 <docs-workflow>
+<a id="add-a-local-reference-to-the-input"></a>
+
 <docs-step title="입력 필드에 지역 참조 추가하기">
 `input` 태그에 템플릿 참조 변수를 추가하면 템플릿 안에서 입력 필드의 Angular 컨트롤에 접근할 수 있습니다.
 예제에서는 `#name="ngModel"` 변수를 사용합니다.
@@ -626,15 +628,21 @@ You'll see the significance of this choice when you add a new actor to the form 
 이 프로퍼티는 참조 변수를 디렉티브에 연결하는 방법을 Angular에 알려줍니다.
 </docs-step>
 
+<a id="add-the-error-message"></a>
+
 <docs-step title="에러 메시지 추가하기">
 적절한 에러 메시지가 담긴 `<div>`를 추가합니다.
 </docs-step>
+
+<a id="make-the-error-message-conditional"></a>
 
 <docs-step title="조건에 따라 에러 메시지 표시하기">
 `name` 컨트롤의 프로퍼티를 메시지가 담긴 `<div>` 엘리먼트의 `hidden` 프로퍼티에 바인딩해서 에러 메시지를 표시하거나 숨깁니다.
 </docs-step>
 
 <docs-code header="actor-form.component.html (에러 메시지 숨기기)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="hidden-error-msg"/>
+
+<a id="add-a-conditional-error-message-to-name"></a>
 
 <docs-step title="name에 조건부 에러 메시지 추가하기">
 아래 예제와 같이 `name` 입력 필드에 조건부 에러 메시지를 추가합니다.
@@ -742,7 +750,7 @@ To respond to this event, take the following steps.
 <docs-workflow>
 
 <docs-step title="Listen to ngOnSubmit">
-Bind the form's [`ngSubmit`](api/forms/NgForm#properties) event property to the actor-form component's `onSubmit()` method.
+Bind the form's [`ngSubmit`](api/forms/NgForm#ngSubmit) event property to the actor-form component's `onSubmit()` method.
 
 <docs-code header="actor-form.component.html (ngSubmit)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngSubmit"/>
 </docs-step>
@@ -775,11 +783,15 @@ The `FormsModule` did this automatically when you defined a template reference v
 
 <docs-workflow>
 
+<a id="listen-to-ngonsubmit"></a>
+
 <docs-step title="ngOnSubmit 감지하기">
-폼의 [`ngSubmit`](api/forms/NgForm#properties) 이벤트 프로퍼티를 배우 폼 컴포넌트의 `onSubmit()` 메서드에 바인딩합니다.
+폼의 [`ngSubmit`](api/forms/NgForm#ngSubmit) 이벤트 프로퍼티를 배우 폼 컴포넌트의 `onSubmit()` 메서드에 바인딩합니다.
 
 <docs-code header="actor-form.component.html (ngSubmit)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngSubmit"/>
 </docs-step>
+
+<a id="bind-the-disabled-property"></a>
 
 <docs-step title="disabled 프로퍼티 바인딩하기">
 템플릿 참조 변수 `#actorForm`으로 **Submit** 버튼이 포함된 폼에 접근하고 이벤트 바인딩을 구성합니다.
@@ -789,9 +801,13 @@ The `FormsModule` did this automatically when you defined a template reference v
 <docs-code header="actor-form.component.html (제출 버튼)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submit-button"/>
 </docs-step>
 
+<a id="run-the-application"></a>
+
 <docs-step title="애플리케이션 실행하기">
 아직 별다른 기능은 없지만 버튼이 활성화된 것을 확인할 수 있습니다.
 </docs-step>
+
+<a id="delete-the-name-value"></a>
 
 <docs-step title="Name 값 지우기">
 "required" 규칙을 위반했기 때문에 에러 메시지가 표시됩니다.
@@ -845,6 +861,8 @@ Click the *Edit* button to switch the display back to the editable form.
 폼을 제출했다는 것을 보여주려면 데이터 입력 영역을 숨기고 그 자리에 다른 내용을 표시하면 됩니다.
 
 <docs-workflow>
+<a id="wrap-the-form"></a>
+
 <docs-step title="폼 감싸기">
 폼 전체를 `<div>`로 감싸고 `hidden` 프로퍼티를 `ActorFormComponent.submitted` 프로퍼티에 바인딩합니다.
 
@@ -857,6 +875,8 @@ Click the *Edit* button to switch the display back to the editable form.
 **Submit** 버튼을 클릭하면 `submitted` 플래그가 true로 바뀌고 폼이 사라집니다.
 </docs-step>
 
+<a id="add-the-submitted-state"></a>
+
 <docs-step title="제출 상태 추가하기">
 폼을 제출한 상태에서 다른 내용을 표시하려면 폼을 감싼 새 `<div>` 아래에 다음 HTML을 추가합니다.
 
@@ -867,6 +887,8 @@ Click the *Edit* button to switch the display back to the editable form.
 새로 표시되는 영역에는 _Edit_ 버튼도 있습니다.
 이 버튼의 클릭 이벤트는 `submitted` 플래그를 해제하는 표현식에 바인딩됩니다.
 </docs-step>
+
+<a id="test-the-edit-button"></a>
 
 <docs-step title="Edit 버튼 테스트하기">
 *Edit* 버튼을 클릭하면 화면이 다시 수정할 수 있는 폼으로 바뀝니다.

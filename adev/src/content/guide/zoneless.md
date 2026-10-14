@@ -18,9 +18,9 @@
 The main advantages to removing ZoneJS as a dependency are:
 
 - **Improved performance**: ZoneJS uses DOM events and async tasks as indicators of when application state _might_ have updated and subsequently triggers application synchronization to run change detection on the application's views. ZoneJS does not have any insight into whether application state actually changed and so this synchronization is triggered more frequently than necessary.
-- **Improved Core Web Vitals**: ZoneJS brings a fair amount of overhead, both in payload size and in startup time cost.
+- **Improved Core Web Vitals**: ZoneJS brings a fair amount of overhead, both in payload size and startup time.
 - **Improved debugging experience**: ZoneJS makes debugging code more difficult. Stack traces are harder to understand with ZoneJS. It's also difficult to understand when code breaks as a result of being outside the Angular Zone.
-- **Better ecosystem compatibility**: ZoneJS works by patching browser APIs but does not automatically have patches for every new browser API. Some APIs cannot be patched effectively, such as `async`/`await`, and have to be downleveled to work with ZoneJS. Sometimes libraries in the ecosystem are also incompatible with the way ZoneJS patches the native APIs. Removing ZoneJS as a dependency ensures better long-term compatibility by removing a source of complexity, monkey patching, and ongoing maintenance.
+- **Better ecosystem compatibility**: ZoneJS works by patching browser APIs but does not automatically have patches for every new browser API. Some APIs, such as `async`/`await`, cannot be patched effectively and must be downleveled to work with ZoneJS. Sometimes libraries in the ecosystem are also incompatible with the way ZoneJS patches the native APIs. Removing ZoneJS as a dependency ensures better long-term compatibility by removing a source of complexity, monkey patching, and ongoing maintenance.
 -->
 
 ZoneJS 의존성을 제거하면 다음과 같은 주요 이점이 있습니다.
@@ -179,7 +179,7 @@ Being a host for a user component means using an API such as `ViewContainerRef.c
 ### `NgZone.onMicrotaskEmpty`, `NgZone.onUnstable`, `NgZone.isStable`, `NgZone.onStable` 제거하기
 
 <!--
-Applications and libraries need to remove uses of `NgZone.onMicrotaskEmpty`, `NgZone.onUnstable` and `NgZone.onStable`.
+Applications and libraries need to remove uses of `NgZone.onMicrotaskEmpty`, `NgZone.onUnstable`, and `NgZone.onStable`.
 These observables will never emit when an Application enables zoneless change detection.
 Similarly, `NgZone.isStable` will always be `true` and should not be used as a condition for code execution.
 
@@ -251,15 +251,14 @@ try {
 }
 ```
 
-In addition, the [pendingUntilEvent](/api/core/rxjs-interop/pendingUntilEvent#) helper in `rxjs-interop` ensures
+In addition, the [pendingUntilEvent](/api/core/rxjs-interop/pendingUntilEvent) helper in `rxjs-interop` ensures
 the application remains unstable until the observable emits, completes, errors, or is unsubscribed.
 
 ```typescript
 readonly myObservableState = someObservable.pipe(pendingUntilEvent());
 ```
 
-The framework uses this service internally as well to prevent serialization until asynchronous tasks are complete. These include, but are not limited to,
-an ongoing Router navigation and an incomplete `HttpClient` request.
+The framework uses this service internally as well to prevent serialization until asynchronous tasks are complete. These include, but are not limited to, an ongoing Router navigation and an incomplete `HttpClient` request.
 -->
 
 Angular에서 SSR을 사용한다면, 애플리케이션이 "안정된 상태"가 되어 직렬화할 수 있는지 판단하는 데 ZoneJS를 활용한다는 점을 알고 계실 수 있습니다.
@@ -290,7 +289,7 @@ try {
 }
 ```
 
-또한 `rxjs-interop`의 [pendingUntilEvent](/api/core/rxjs-interop/pendingUntilEvent#) 헬퍼를 사용하면 옵저버블이 값을 방출하거나, 완료되거나, 에러가 발생하거나, 구독이 해제될 때까지 애플리케이션이 불안정한 상태를 유지하도록 할 수 있습니다.
+또한 `rxjs-interop`의 [pendingUntilEvent](/api/core/rxjs-interop/pendingUntilEvent) 헬퍼를 사용하면 옵저버블이 값을 방출하거나, 완료되거나, 에러가 발생하거나, 구독이 해제될 때까지 애플리케이션이 불안정한 상태를 유지하도록 할 수 있습니다.
 
 ```typescript
 readonly myObservableState = someObservable.pipe(pendingUntilEvent());
@@ -308,7 +307,7 @@ readonly myObservableState = someObservable.pipe(pendingUntilEvent());
 ### Zoneless 애플리케이션의 리액티브 폼
 
 <!--
-Reactive forms model updates (`setValue`, `patchValue`, `FormArray.push`, and similar APIs) update form state and emit forms observables, but they do not automatically schedule component change detection.
+Reactive forms model updates (`setValue`, `patchValue`, `FormArray.push`, and similar APIs) update form state and emit form observables, but they do not automatically schedule component change detection.
 
 If a template depends on reactive forms state, connect forms observables to a change-detection notification (for example `ChangeDetectorRef.markForCheck()`), or reflect the data through signals consumed by the template.
 -->
@@ -334,9 +333,9 @@ If a template depends on reactive forms state, connect forms observables to a ch
 ### `TestBed`에서 Zoneless 사용하기
 
 <!--
-`TestBed` uses Zone-based change detection by default when `zone.js` is loaded via the `polyfills`.
+`TestBed` uses zoneless change detection by default, even when `zone.js` is loaded via the `polyfills`.
 
-If `zone.js` is not present, `TestBed` runs zoneless by default. To force zoneless mode when `zone.js` is loaded, add `provideZonelessChangeDetection()`:
+To use Zone-based change detection in a test, add `provideZoneChangeDetection()` to the `TestBed` providers. Adding `provideZonelessChangeDetection()` is optional:
 
 ```typescript
 TestBed.configureTestingModule({
@@ -368,10 +367,9 @@ If the component is only used as a test wrapper and never used in an application
 it is acceptable to use `fixture.changeDetectorRef.markForCheck()`.
 -->
 
-`polyfills`로 `zone.js`를 불러온 경우, `TestBed`는 기본적으로 Zone 기반 변경 감지를 사용합니다.
+`TestBed`는 `polyfills`로 `zone.js`를 불러온 경우에도 기본적으로 Zoneless 변경 감지를 사용합니다.
 
-`zone.js`가 없으면 `TestBed`는 기본적으로 Zoneless로 실행됩니다.
-`zone.js`를 불러온 상태에서 Zoneless 모드를 강제하려면 `provideZonelessChangeDetection()`을 추가하세요.
+테스트에서 Zone 기반 변경 감지를 사용하려면 `TestBed` 프로바이더에 `provideZoneChangeDetection()`을 추가하세요. `provideZonelessChangeDetection()` 추가는 선택 사항입니다.
 
 ```typescript
 TestBed.configureTestingModule({

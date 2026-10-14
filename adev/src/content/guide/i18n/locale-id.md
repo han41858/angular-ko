@@ -12,7 +12,7 @@ Angular uses the Unicode _locale identifier_ \(Unicode locale ID\) to find the c
 <docs-callout title="Unicode locale ID">
 
 - A locale ID conforms to the [Unicode Common Locale Data Repository (CLDR) core specification][UnicodeCldrDevelopmentCoreSpecification].
-  For more information about locale IDs, see [Unicode Language and Locale Identifiers][UnicodeCldrDevelopmentCoreSpecificationLocaleIDs].
+  For more information about locale IDs, see [Unicode Language and Locale Identifiers][UnicodeCldrDevelopmentCoreSpecificationLocaleID].
 
 - CLDR and Angular use [BCP 47 tags][RfcEditorInfoBcp47] as the base for the locale ID
 
@@ -51,7 +51,7 @@ Angular는 유니코드 _지역 식별자_(유니코드 지역 ID)를 사용해 
 <docs-callout title="유니코드 지역 ID">
 
 - 지역 ID는 [유니코드 공통 지역 데이터 저장소(CLDR) 핵심 명세][UnicodeCldrDevelopmentCoreSpecification]를 따릅니다.
-  지역 ID에 대한 자세한 내용은 [유니코드 언어 및 지역 식별자][UnicodeCldrDevelopmentCoreSpecificationLocaleIDs]를 참고하세요.
+  지역 ID에 대한 자세한 내용은 [유니코드 언어 및 지역 식별자][UnicodeCldrDevelopmentCoreSpecificationLocaleID]를 참고하세요.
 
 - CLDR과 Angular는 [BCP 47 태그][RfcEditorInfoBcp47]를 지역 ID의 기준으로 사용합니다.
 

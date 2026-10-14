@@ -40,6 +40,8 @@ Deferrable views support a variety of triggers, prefetching options, and sub-blo
 ## Which dependencies are deferred?
 -->
 
+<a id="which-dependencies-are-deferred"></a>
+
 ## 어떤 항목을 지연 로딩할 수 있나요?
 
 <!--
@@ -72,6 +74,8 @@ Angular 컴파일러는 `@defer` 블록에 사용된 개별 컴포넌트, 디렉
 <!--
 ## How to manage different stages of deferred loading
 -->
+
+<a id="how-to-manage-different-stages-of-deferred-loading"></a>
 
 ## 지연 로딩 단계 관리하기
 
@@ -109,6 +113,8 @@ By default, a `@defer` block is triggered when the browser state becomes [idle](
 <!--
 ### Show placeholder content with `@placeholder`
 -->
+
+<a id="show-placeholder-content-with-placeholder"></a>
 
 ### 렌더링 위치 지정하기: `@placeholder`
 
@@ -179,6 +185,8 @@ This `minimum` parameter is specified in time increments of milliseconds (ms) or
 ### Show loading content with `@loading`
 -->
 
+<a id="show-loading-content-with-loading"></a>
+
 ### 로딩 표시하기: `@loading`
 
 <!--
@@ -246,6 +254,8 @@ Both parameters are specified in time increments of milliseconds (ms) or seconds
 <!--
 ### Show error state when deferred loading fails with `@error`
 -->
+
+<a id="show-error-state-when-deferred-loading-fails-with-error"></a>
 
 ### 지연 로딩 에러 표시하기: `@error`
 
@@ -373,6 +383,8 @@ You can optionally specify a timeout in milliseconds that is passed to [`request
 ##### Customizing `idle` behavior
 -->
 
+<a id="customizing-idle-behavior"></a>
+
 ##### `idle` 동작 커스터마이징하기
 
 <!--
@@ -381,8 +393,9 @@ You can customize the `idle` trigger by providing your own `IdleService` impleme
 ```ts
 @Service()
 class CustomIdleService implements IdleService {
-  requestOnIdle(callback: (deadline?: IdleDeadline) => void, options?: IdleRequestOptions) {
+  requestOnIdle(callback: (deadline?: IdleDeadline) => void, options?: IdleRequestOptions): number {
     // Custom idle scheduling logic can be implemented here.
+    return requestIdleCallback(callback, options);
   }
 
   cancelOnIdle(id: number) {
@@ -401,8 +414,9 @@ bootstrapApplication(App, {
 ```ts
 @Service()
 class CustomIdleService implements IdleService {
-  requestOnIdle(callback: (deadline?: IdleDeadline) => void, options?: IdleRequestOptions) {
-    // idle 스케쥴 로직을 여기에 작성합니다.
+  requestOnIdle(callback: (deadline?: IdleDeadline) => void, options?: IdleRequestOptions): number {
+    // idle 스케줄 로직을 여기에 작성합니다.
+    return requestIdleCallback(callback, options);
   }
 
   cancelOnIdle(id: number) {
@@ -516,7 +530,7 @@ By default, the placeholder acts as the interaction element. Placeholders used t
 }
 ```
 
-Alternatively, you can specify a [template reference variable](/guide/templates/variables) in the same template as the `@defer` block as the element that is watched for interactions. This variable is passed in as a parameter on the viewport trigger.
+Alternatively, you can specify a [template reference variable](/guide/templates/variables) in the same template as the `@defer` block as the element that is watched for interactions. This variable is passed in as a parameter on the interaction trigger.
 
 ```angular-html
 <div #greeting>Hello!</div>
@@ -563,7 +577,7 @@ By default, the placeholder acts as the interaction element. Placeholders used t
 }
 ```
 
-Alternatively, you can specify a [template reference variable](/guide/templates/variables) in the same template as the `@defer` block as the element that is watched to enter the viewport. This variable is passed in as a parameter on the viewport trigger.
+Alternatively, you can specify a [template reference variable](/guide/templates/variables) in the same template as the `@defer` block as the element that is hovered over. This variable is passed in as a parameter on the hover trigger.
 
 ```angular-html
 <div #greeting>Hello!</div>
@@ -586,7 +600,7 @@ Alternatively, you can specify a [template reference variable](/guide/templates/
 }
 ```
 
-아니면 대상 엘리먼트에 [템플릿 참조 변수](/guide/templates/variables)를 지정한 후에 트리거로 전달하면 됩니다.
+아니면 같은 템플릿 안에서 마우스가 올라오는 것을 감지할 엘리먼트에 [템플릿 참조 변수](/guide/templates/variables)를 지정한 후 `hover` 트리거의 인자로 전달하면 됩니다.
 
 ```angular-html
 <div #greeting>Hello!</div>
@@ -681,6 +695,8 @@ This is a one-time operation– the `@defer` block does not revert back to the p
 ## Prefetching data with `prefetch`
 -->
 
+<a id="prefetching-data-with-prefetch"></a>
+
 ## 사전 로딩하기: `prefetch`
 
 <!--
@@ -732,6 +748,8 @@ In the example below, the prefetching starts when a browser becomes idle and the
 <!--
 ## Testing `@defer` blocks
 -->
+
+<a id="testing-defer-blocks"></a>
 
 ## `@defer` 블록 테스트하기
 
@@ -811,6 +829,8 @@ it('should render a defer block in different states', async () => {
 ## Does `@defer` work with `NgModule`?
 -->
 
+<a id="does-defer-work-with-ngmodule"></a>
+
 ## `@defer`를 `NgModule`과 함께 사용할 수 있나요?
 
 <!--
@@ -825,6 +845,8 @@ NgModule 기반으로 등록된 컴포넌트, 디렉티브, 파이프는 지연 
 ## Compatibility between `@defer` blocks and Hot Module Reload (HMR)
 -->
 
+<a id="compatibility-between-defer-blocks-and-hot-module-reload-hmr"></a>
+
 ## `@defer` 블록과 핫 모듈 갱신(HMR) 호환성
 
 <!--
@@ -837,6 +859,8 @@ When Hot Module Replacement (HMR) is active, all `@defer` block chunks are fetch
 <!--
 ## How does `@defer` work with server-side rendering (SSR) and static-site generation (SSG)?
 -->
+
+<a id="how-does-defer-work-with-server-side-rendering-ssr-and-static-site-generation-ssg"></a>
 
 ## 서버 사이드 렌더링(SSR), 정적 사이트 생성(SSG)인 경우는 `@defer`가 어떻게 동작하나요?
 
@@ -855,19 +879,19 @@ SSR이나 SSG와 같이 애플리케이션이 서버에서 렌더링되는 경�
 ## Barrel files and lazy chunks
 -->
 
+<a id="barrel-files-and-lazy-chunks"></a>
+
 ## 배럴 파일과 지연 로딩 청크
 
 <!--
 If you're using `@defer` but not seeing a separate lazy chunk in your build output, check how you're importing the deferred component. Importing through a barrel file (`index.ts`) is a common culprit — bundlers see the barrel as a single module and keep all its exports together, so your component ends up in the main bundle regardless of `@defer`.
 
-```typescript
-// index.ts
+```typescript {header: "index.ts"}
 export {HeavyComponent} from './heavy.component';
 export {OtherComponent} from './other.component';
 ```
 
-```typescript
-// parent.component.ts
+```typescript {header: "parent.component.ts"}
 import {HeavyComponent} from './index'; // pulls in OtherComponent too
 
 @Component({
@@ -892,14 +916,12 @@ That's enough for the bundler to split it into its own chunk and load it lazily 
 배럴 파일(`index.ts`)로 로딩하는 것이 흔한 원인입니다.
 이런 경우는 번들러가 배럴 파일을 단일 모듈로 인식하고 모든 항목을 함께 유지하기 때문에, `@defer` 사용 여부와 관계없이 컴포넌트가 메인 번들 파일에 포함됩니다.
 
-```typescript
-// index.ts
+```typescript {header: "index.ts"}
 export {HeavyComponent} from './heavy.component';
 export {OtherComponent} from './other.component';
 ```
 
-```typescript
-// parent.component.ts
+```typescript {header: "parent.component.ts"}
 import {HeavyComponent} from './index'; // 다른 컴포넌트도 함께 로드합니다.
 
 @Component({
@@ -924,11 +946,15 @@ import {HeavyComponent} from './heavy.component';
 ## Best practices for deferring views
 -->
 
+<a id="best-practices-for-deferring-views"></a>
+
 ## 모범사례
 
 <!--
 ### Avoid cascading loads with nested `@defer` blocks
 -->
+
+<a id="avoid-cascading-loads-with-nested-defer-blocks"></a>
 
 ### `@defer` 블록 중첩 사용을 피하세요
 
@@ -942,6 +968,8 @@ When you have nested `@defer` blocks, they should have different triggers in ord
 <!--
 ### Avoid layout shifts
 -->
+
+<a id="avoid-layout-shifts"></a>
 
 ### 레이아웃 변경을 피하세요
 
@@ -959,6 +987,8 @@ In the event this is necessary, avoid `immediate`, `timer`, `viewport`, and cust
 <!--
 ### Keep accessibility in mind
 -->
+
+<a id="keep-accessibility-in-mind"></a>
 
 ### 접근성을 항상 고려하세요
 

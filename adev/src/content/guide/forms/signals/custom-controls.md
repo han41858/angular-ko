@@ -24,6 +24,12 @@ Signal Forms는 특정 인터페이스를 구현한 컴포넌트와 함께 동�
 컴포넌트가 이 인터페이스 중 하나를 구현하면, `[formField]` 디렉티브가 컨트롤을 폼 상태, 유효성 검사, 데이터 바인딩에 자동으로 연결합니다.
 
 <!--
+HELPFUL: Custom Signal Form Controls [can be used](guide/forms/signals/migration#custom-controls) with Signal, Reactive and Template-Driven Forms without any extra compatibility code.
+-->
+
+도움말: 커스텀 Signal Form 컨트롤은 별도의 호환성 코드 없이 시그널 폼, 반응형 폼, 템플릿 기반 폼에서 [사용할 수 있습니다](guide/forms/signals/migration#custom-controls).
+
+<!--
 ## Creating a basic custom control
 -->
 
@@ -292,7 +298,6 @@ Signal Forms는 이 인터페이스를 통해 각 컴포넌트와 상호작용�
 #### FormValueControl
 -->
 
-<a id="formvaluecontrol"></a>
 
 #### FormValueControl
 
@@ -317,7 +322,6 @@ IMPORTANT: Controls implementing `FormValueControl` must NOT have a `checked` pr
 #### FormCheckboxControl
 -->
 
-<a id="formcheckboxcontrol"></a>
 
 #### FormCheckboxControl
 
@@ -396,7 +400,6 @@ Display validation feedback to users:
 | Property  | Purpose                                 |
 | --------- | --------------------------------------- |
 | `errors`  | Array of current validation errors      |
-| `valid`   | Whether the field is valid              |
 | `invalid` | Whether the field has validation errors |
 | `pending` | Whether async validation is in progress |
 -->
@@ -406,7 +409,6 @@ Display validation feedback to users:
 | 프로퍼티  | 용도                                  |
 | --------- | ------------------------------------- |
 | `errors`  | 현재 유효성 검사 에러의 배열          |
-| `valid`   | 필드 값이 유효한지 여부               |
 | `invalid` | 필드에 유효성 검사 에러가 있는지 여부 |
 | `pending` | 비동기 유효성 검사가 진행 중인지 여부 |
 
@@ -428,7 +430,7 @@ Control whether users can interact with your field:
 | `readonly`        | Whether the field is readonly (visible but not editable) |
 | `hidden`          | Whether the field is hidden from view                    |
 
-NOTE: `disabledReasons` is an array of `DisabledReason` objects. Each object has a `field` property (reference to the field tree) and an optional `message` property. Access the message via `reason.message`.
+NOTE: `disabledReasons` is an array of `DisabledReason` objects. Each object has a `fieldTree` property (reference to the field tree) and an optional `message` property. Access the message via `reason.message`.
 -->
 
 사용자가 필드와 상호작용할 수 있는지 제어합니다:
@@ -441,7 +443,7 @@ NOTE: `disabledReasons` is an array of `DisabledReason` objects. Each object has
 | `hidden`          | 필드가 화면에서 숨겨졌는지 여부                             |
 
 참고: `disabledReasons`는 `DisabledReason` 객체의 배열입니다.
-각 객체에는 필드 트리를 참조하는 `field` 프로퍼티와 선택적으로 사용하는 `message` 프로퍼티가 있습니다.
+각 객체에는 필드 트리를 참조하는 `fieldTree` 프로퍼티와 선택적으로 사용하는 `message` 프로퍼티가 있습니다.
 메시지는 `reason.message`로 참조할 수 있습니다.
 
 <!--
@@ -600,7 +602,7 @@ The minimal controls shown above work, but they don't respond to form state. You
 Here's a comprehensive example that implements common state properties:
 
 ```angular-ts
-import {Component, model, input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, model, input, output, ChangeDetectionStrategy} from '@angular/core';
 import {
   FormValueControl,
   WithOptionalFieldTree,
@@ -621,7 +623,7 @@ import {
           [readonly]="readonly()"
           [class.invalid]="invalid()"
           [attr.aria-invalid]="invalid()"
-          (blur)="touched.set(true)"
+          (blur)="touch.emit()"
         />
 
         @if (invalid()) {
@@ -648,11 +650,12 @@ export class StatefulInput implements FormValueControl<string> {
   value = model<string>('');
 
   // Writable interaction state - control updates these
-  touched = model<boolean>(false);
+  touched = input<boolean>(false);
+  touch = output<void>();
 
   // Read-only state - form system manages these
   disabled = input<boolean>(false);
-  disabledReasons = input<readonly DisabledReason[]>([]);
+  disabledReasons = input<readonly WithOptionalFieldTree<DisabledReason>[]>([]);
   readonly = input<boolean>(false);
   hidden = input<boolean>(false);
   invalid = input<boolean>(false);
@@ -697,7 +700,7 @@ When the user types an invalid email, the FormField directive automatically upda
 자주 사용하는 상태 프로퍼티를 구현한 예제를 살펴봅시다:
 
 ```angular-ts
-import {Component, model, input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, model, input, output, ChangeDetectionStrategy} from '@angular/core';
 import {
   FormValueControl,
   WithOptionalFieldTree,
@@ -718,7 +721,7 @@ import {
           [readonly]="readonly()"
           [class.invalid]="invalid()"
           [attr.aria-invalid]="invalid()"
-          (blur)="touched.set(true)"
+          (blur)="touch.emit()"
         />
 
         @if (invalid()) {
@@ -745,11 +748,12 @@ export class StatefulInput implements FormValueControl<string> {
   value = model<string>('');
 
   // 값을 쓸 수 있는 상호작용 상태 - 컨트롤에서 갱신합니다.
-  touched = model<boolean>(false);
+  touched = input<boolean>(false);
+  touch = output<void>();
 
   // 읽기 전용 상태 - 폼 시스템에서 관리합니다.
   disabled = input<boolean>(false);
-  disabledReasons = input<readonly DisabledReason[]>([]);
+  disabledReasons = input<readonly WithOptionalFieldTree<DisabledReason>[]>([]);
   readonly = input<boolean>(false);
   hidden = input<boolean>(false);
   invalid = input<boolean>(false);
@@ -789,110 +793,288 @@ export class Login {
 컨트롤은 이 값을 사용해서 유효성 검사 결과를 표시할 수 있습니다.
 
 <!--
-### Signal types for state properties
+### Working with `debounce('blur')`
+
+The [`debounce('blur')`](api/forms/signals/debounce) rule delays updates from the UI to the form model until the field is blurred, instead of applying them on every keystroke. Built-in controls report a blur to the form automatically. A custom control only participates if it emits its `touch` output in response to the native [`blur` event](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event):
+
+```angular-ts
+import {Component, model, output} from '@angular/core';
+import {FormValueControl} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-custom-input',
+  template: `
+    <input
+      type="text"
+      [value]="value()"
+      (input)="value.set($event.target.value)"
+      (blur)="touch.emit()"
+    />
+  `,
+})
+export class CustomInput implements FormValueControl<string> {
+  value = model('');
+  touch = output<void>();
+}
+```
+
+With the `touch` output in place, `debounce('blur')` behaves the same for your control as it does for built-in inputs:
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {debounce, form, FormField} from '@angular/forms/signals';
+import {CustomInput} from './custom-input';
+
+@Component({
+  selector: 'app-root',
+  imports: [CustomInput, FormField],
+  template: `<app-custom-input [formField]="userForm.name" />`,
+})
+export class App {
+  userModel = signal({name: ''});
+
+  userForm = form(this.userModel, (schemaPath) => {
+    debounce(schemaPath.name, 'blur');
+  });
+}
+```
+
+IMPORTANT: Emit `touch` on `blur` (when focus leaves the control), not on `focus`. Without the `touch` output the field never registers as blurred, so `debounce('blur')` has no effect on your control.
 -->
 
-<a id="signal-types-for-state-properties"></a>
+<a id="working-with-debounceblur"></a>
 
-### 상태 프로퍼티에 사용하는 시그널 타입
+### `debounce('blur')` 사용하기
 
-<!--
-Most state properties use `input()` (read-only from the form). Use `model()` for `touched` when your control updates it on user interaction. The `touched` property uniquely supports `model()`, `input()`, or `OutputRef` depending on your needs.
--->
+[`debounce('blur')`](api/forms/signals/debounce) 규칙은 키를 누를 때마다 모델을 갱신하는 대신 필드에서 포커스가 벗어날 때까지 UI에서 폼 모델로의 갱신을 지연합니다. 기본 컨트롤은 포커스가 벗어났음을 폼에 자동으로 알립니다. 커스텀 컨트롤에서는 기본 [`blur` 이벤트](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event)에 응답하여 `touch` 출력을 내보내야 이 기능이 동작합니다:
 
-대부분의 상태 프로퍼티에는 `input()`을 사용합니다.
-폼에서 전달받은 상태를 컨트롤에서 읽기 전용으로 사용하기 때문입니다.
-사용자와의 상호작용에 따라 컨트롤에서 `touched` 값을 변경하려면 `model()`을 사용하면 됩니다.
-`touched` 프로퍼티는 특별히 필요에 따라 `model()`, `input()`, `OutputRef` 중 하나를 사용할 수 있습니다.
+```angular-ts
+import {Component, model, output} from '@angular/core';
+import {FormValueControl} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-custom-input',
+  template: `
+    <input
+      type="text"
+      [value]="value()"
+      (input)="value.set($event.target.value)"
+      (blur)="touch.emit()"
+    />
+  `,
+})
+export class CustomInput implements FormValueControl<string> {
+  value = model('');
+  touch = output<void>();
+}
+```
+
+`touch` 출력을 구현하면 커스텀 컨트롤에서도 기본 입력과 동일하게 `debounce('blur')`가 동작합니다:
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {debounce, form, FormField} from '@angular/forms/signals';
+import {CustomInput} from './custom-input';
+
+@Component({
+  selector: 'app-root',
+  imports: [CustomInput, FormField],
+  template: `<app-custom-input [formField]="userForm.name" />`,
+})
+export class App {
+  userModel = signal({name: ''});
+
+  userForm = form(this.userModel, (schemaPath) => {
+    debounce(schemaPath.name, 'blur');
+  });
+}
+```
+
+중요: `touch`는 `focus`가 아니라 `blur`(컨트롤에서 포커스가 벗어날 때)에 내보내세요. `touch` 출력이 없으면 필드가 포커스를 잃었다는 사실이 기록되지 않아 `debounce('blur')`가 동작하지 않습니다.
 
 <!--
 ## Value transformation
+
+Controls sometimes display values differently than the form model stores them - a date picker might display "January 15, 2024" while storing "2024-01-15", or a currency input might show "$1,234.56" while storing 1234.56.
+
+Use `transformedValue()` (from `@angular/forms/signals`) to keep the raw value shown in the UI in sync with the model value. It takes the control's `value` model signal plus a `parse` and a `format` function, and returns a writable signal holding the raw value:
+
+- `format` converts the model value into the raw value the template renders.
+- `parse` converts what the user typed back into a model value, and can report parse errors instead.
+
+```angular-ts
+import {Component, model} from '@angular/core';
+import {FormValueControl, transformedValue} from '@angular/forms/signals';
+
+@Component({
+  selector: 'number-input',
+  template: `
+    <input type="text" [value]="rawValue()" (input)="rawValue.set($event.target.value)" />
+  `,
+})
+export class NumberInput implements FormValueControl<number | null> {
+  readonly value = model.required<number | null>();
+
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (val: string): {value: number | null} => ({value: val ? Number(val) : null}),
+    format: (val: number | null): string => val?.toString() ?? '',
+  });
+}
+```
+
+Writing to the returned signal (`rawValue.set(...)`) runs `parse` and writes the result into `value`. Whenever the model changes from elsewhere - a `reset()`, a schema rule, or another part of the app - `format` runs again and the raw value updates to match.
+
+### Reporting parse errors
+
+Sometimes the raw value has no valid model representation - a half-typed date, or letters in a numeric field. The `NumberInput` above has this problem: `Number('abc')` is `NaN`, which `parse` happily writes into the model.
+
+Return `{error}` instead:
+
+```ts
+export class NumberInput implements FormValueControl<number | null> {
+  readonly value = model.required<number | null>();
+
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (val) => {
+      const parsed = val ? Number(val) : null;
+
+      return Number.isNaN(parsed)
+        ? {error: {kind: 'parse', message: `${val} is not a number`}}
+        : {value: parsed};
+    },
+    format: (val) => val?.toString() ?? '',
+  });
+}
+```
+
+Return both `value` and `error` when you want to update the model _and_ flag a problem.
+
+When the control is bound with `[formField]`, parse errors are automatically reported to the field, so they show up in the field's `errors()` signal alongside validation errors:
+
+```angular-ts
+@Component({
+  imports: [NumberInput, FormField],
+  template: `
+    <number-input [formField]="orderForm.amount" />
+
+    @for (error of orderForm.amount().errors(); track $index) {
+      <!- {kind: 'parse', message: '...'} is reported here too ->
+      <p class="error">{{ error.message }}</p>
+    }
+  `,
+})
+export class Order {
+  orderModel = signal<{amount: number | null}>({amount: null});
+  orderForm = form(this.orderModel);
+}
+```
+
+A field with parse errors is invalid, which blocks submission the same way a failed validation rule does.
+
+HELPFUL: Signal Forms uses the same mechanism for native inputs. When the browser cannot parse a value (for example, a partially typed date in `<input type="date">`), it surfaces as a `parse` error on the field. See [Native HTML validation](guide/forms/signals/validation#native-html-validation) for details.
+
+### Resetting
+
+Calling `reset()` on the field clears any pending parse errors and re-formats the raw value from the model, so a control left in an unparseable state returns to a clean display value:
+
+```ts
+orderForm.amount().reset();
+```
 -->
 
 <a id="value-transformation"></a>
 
 ## 값 변환하기
 
-<!--
-Controls sometimes display values differently than the form model stores them - a date picker might display "January 15, 2024" while storing "2024-01-15", or a currency input might show "$1,234.56" while storing 1234.56.
-
-Use `linkedSignal()` (from `@angular/core`) to transform the model value for display, and handle input events to parse user input back to the storage format:
-
-```angular-ts
-import {formatCurrency} from '@angular/common';
-import {ChangeDetectionStrategy, Component, linkedSignal, model} from '@angular/core';
-import {FormValueControl} from '@angular/forms/signals';
-
-@Component({
-  selector: 'app-currency-input',
-  template: `
-    <input
-      type="text"
-      [value]="displayValue()"
-      (input)="displayValue.set($event.target.value)"
-      (blur)="updateModel()"
-    />
-  `,
-})
-export class CurrencyInput implements FormValueControl<number> {
-  // Stores numeric value (1234.56)
-  readonly value = model.required<number>();
-
-  // Stores display value ("1,234.56")
-  readonly displayValue = linkedSignal(() => formatCurrency(this.value(), 'en', 'USD'));
-
-  // Update the model from the display value.
-  updateModel() {
-    this.value.set(parseCurrency(this.displayValue()));
-  }
-}
-
-// Converts a currency string to a number (e.g. "USD1,234.56" -> 1234.56).
-function parseCurrency(value: string): number {
-  return parseFloat(value.replace(/^[^\d-]+/, '').replace(/,/g, ''));
-}
-```
--->
-
 컨트롤에 표시하는 값의 형식과 폼 모델에 저장하는 값의 형식이 다를 때가 있습니다.
 예를 들어 날짜 선택기에는 "January 15, 2024"를 표시하면서 모델에는 "2024-01-15"를 저장하거나, 통화 입력 컨트롤에는 "$1,234.56"을 표시하면서 모델에는 1234.56을 저장할 수 있습니다.
 
-이런 경우에는 `@angular/core`의 `linkedSignal()`을 사용해서 모델 값을 표시할 형식으로 변환하면 됩니다.
-그리고 입력 이벤트를 처리하면서 사용자 입력을 다시 저장할 형식으로 변환합니다:
+`@angular/forms/signals`의 `transformedValue()`로 UI에 표시하는 원시 값과 모델 값을 동기화하세요. 컨트롤의 `value` 모델 시그널, `parse` 함수, `format` 함수를 전달하면 원시 값을 담는 쓰기 가능한 시그널을 반환합니다:
+
+- `format`은 모델 값을 템플릿에 표시할 원시 값으로 변환합니다.
+- `parse`는 사용자가 입력한 값을 모델 값으로 변환하거나 파싱 에러를 반환합니다.
 
 ```angular-ts
-import {formatCurrency} from '@angular/common';
-import {ChangeDetectionStrategy, Component, linkedSignal, model} from '@angular/core';
-import {FormValueControl} from '@angular/forms/signals';
+import {Component, model} from '@angular/core';
+import {FormValueControl, transformedValue} from '@angular/forms/signals';
 
 @Component({
-  selector: 'app-currency-input',
+  selector: 'number-input',
   template: `
-    <input
-      type="text"
-      [value]="displayValue()"
-      (input)="displayValue.set($event.target.value)"
-      (blur)="updateModel()"
-    />
+    <input type="text" [value]="rawValue()" (input)="rawValue.set($event.target.value)" />
   `,
 })
-export class CurrencyInput implements FormValueControl<number> {
-  // 숫자 값을 저장합니다(1234.56).
-  readonly value = model.required<number>();
+export class NumberInput implements FormValueControl<number | null> {
+  readonly value = model.required<number | null>();
 
-  // 화면에 표시할 값을 저장합니다("1,234.56").
-  readonly displayValue = linkedSignal(() => formatCurrency(this.value(), 'en', 'USD'));
-
-  // 화면에 표시한 값으로 모델을 갱신합니다.
-  updateModel() {
-    this.value.set(parseCurrency(this.displayValue()));
-  }
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (val: string): {value: number | null} => ({value: val ? Number(val) : null}),
+    format: (val: number | null): string => val?.toString() ?? '',
+  });
 }
+```
 
-// 통화 문자열을 숫자로 변환합니다(예: "USD1,234.56" -> 1234.56).
-function parseCurrency(value: string): number {
-  return parseFloat(value.replace(/^[^\d-]+/, '').replace(/,/g, ''));
+반환된 시그널에 `rawValue.set(...)`으로 값을 쓰면 `parse`를 실행하고 결과를 `value`에 기록합니다. `reset()`, 스키마 규칙, 애플리케이션의 다른 부분에서 모델을 변경하면 `format`을 다시 실행하여 원시 값을 모델과 일치시킵니다.
+
+<a id="reporting-parse-errors"></a>
+
+### 파싱 에러 알리기
+
+일부만 입력한 날짜나 숫자 필드에 입력한 문자처럼 원시 값을 유효한 모델 값으로 바꿀 수 없는 경우가 있습니다. 위의 `NumberInput`도 이 문제가 있습니다. `Number('abc')`는 `NaN`이지만 `parse`는 그대로 모델에 기록합니다.
+
+이 경우에는 `{error}`를 반환하세요:
+
+```ts
+export class NumberInput implements FormValueControl<number | null> {
+  readonly value = model.required<number | null>();
+
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (val) => {
+      const parsed = val ? Number(val) : null;
+
+      return Number.isNaN(parsed)
+        ? {error: {kind: 'parse', message: `${val} is not a number`}}
+        : {value: parsed};
+    },
+    format: (val) => val?.toString() ?? '',
+  });
 }
+```
+
+모델을 갱신하면서 문제도 알리려면 `value`와 `error`를 함께 반환하세요.
+
+컨트롤을 `[formField]`로 바인딩하면 파싱 에러가 필드에 자동으로 전달되어 유효성 검사 에러와 함께 `errors()` 시그널에 표시됩니다:
+
+```angular-ts
+@Component({
+  imports: [NumberInput, FormField],
+  template: `
+    <number-input [formField]="orderForm.amount" />
+
+    @for (error of orderForm.amount().errors(); track $index) {
+      <!-- {kind: 'parse', message: '...'}도 여기에 표시됩니다. -->
+      <p class="error">{{ error.message }}</p>
+    }
+  `,
+})
+export class Order {
+  orderModel = signal<{amount: number | null}>({amount: null});
+  orderForm = form(this.orderModel);
+}
+```
+
+파싱 에러가 있는 필드는 유효하지 않으므로 유효성 검사 규칙에 실패한 경우와 마찬가지로 제출을 차단합니다.
+
+도움말: Signal Forms는 기본 입력에도 같은 방식을 사용합니다. 브라우저가 값을 파싱할 수 없으면(예: `<input type="date">`에 날짜를 일부만 입력한 경우) 필드에 `parse` 에러가 나타납니다. 자세한 내용은 [기본 HTML 유효성 검사](guide/forms/signals/validation#native-html-validation)를 참고하세요.
+
+<a id="resetting"></a>
+
+### 초기화하기
+
+필드에 `reset()`을 호출하면 남아 있는 파싱 에러를 지우고 모델 값으로 원시 값의 형식을 다시 지정합니다. 파싱할 수 없는 상태의 컨트롤도 정상적인 표시 값으로 돌아옵니다:
+
+```ts
+orderForm.amount().reset();
 ```
 
 <!--
@@ -981,6 +1163,76 @@ accountForm = form(this.accountModel, (schemaPath) => {
   minLength(schemaPath.password, 8, {message: 'Password must be at least 8 characters'});
 });
 ```
+
+<!--
+## Making controls reusable
+
+A custom control often carries implicit expectations about validation. An email input needs `required` and `email` rules in every form that uses it. Instead of relying on each consumer to redeclare those rules, package a companion schema alongside the control and export both from the same module:
+
+```ts {header: 'email-input.ts'}
+import {schema, required, email} from '@angular/forms/signals';
+
+export const emailFieldSchema = schema<string>((path) => {
+  required(path, {message: 'Email is required'});
+  email(path, {message: 'Enter a valid email address'});
+});
+```
+
+A consumer imports the companion schema and composes it into their form with `apply()`:
+
+```ts {header: 'registration.ts'}
+import {form, apply} from '@angular/forms/signals';
+import {emailFieldSchema} from './email-input';
+
+registrationForm = form(this.registrationModel, (path) => {
+  apply(path.email, emailFieldSchema);
+});
+```
+
+`apply()` merges the companion schema's rules into the parent form at the specified path. The consumer can still add more rules to the same field because `apply()` composes with other rules rather than replacing them. See the [Schemas guide](guide/forms/signals/schemas) for complete coverage of `schema()`, `apply()`, and conditional composition with `applyWhen()`.
+
+### Design considerations
+
+The consumer's model must initialize every field with a defined value. In Signal Forms, `undefined` signifies the absence of a field and not an empty value. For a reusable email control, that means the consumer should use `''` as the initial value, and not leave the property undefined. See the [Form Models guide](guide/forms/signals/models) for details on choosing initial values.
+
+In addition, controls should not register their own effects for state management. The form system manages field state through internal effects. This means that your control receives state updates through input signals. If a control needs to transform values, use `transformedValue()` as shown in the "[Value transformation](#value-transformation)" section rather than an `effect()`.
+-->
+
+<a id="making-controls-reusable"></a>
+
+## 컨트롤 재사용하기
+
+커스텀 컨트롤에는 유효성 검사에 대한 암묵적인 전제가 있는 경우가 많습니다. 이메일 입력이라면 사용하는 모든 폼에 `required`와 `email` 규칙이 필요합니다. 사용하는 쪽에서 매번 규칙을 다시 선언하도록 하는 대신, 컨트롤과 함께 사용할 스키마를 만들어 같은 모듈에서 내보내세요:
+
+```ts {header: 'email-input.ts'}
+import {schema, required, email} from '@angular/forms/signals';
+
+export const emailFieldSchema = schema<string>((path) => {
+  required(path, {message: 'Email is required'});
+  email(path, {message: 'Enter a valid email address'});
+});
+```
+
+컨트롤을 사용하는 쪽에서는 이 스키마를 불러와 `apply()`로 폼에 결합합니다:
+
+```ts {header: 'registration.ts'}
+import {form, apply} from '@angular/forms/signals';
+import {emailFieldSchema} from './email-input';
+
+registrationForm = form(this.registrationModel, (path) => {
+  apply(path.email, emailFieldSchema);
+});
+```
+
+`apply()`는 함께 제공된 스키마의 규칙을 부모 폼의 지정한 경로에 병합합니다. 기존 규칙을 덮어쓰지 않고 조합하므로 같은 필드에 규칙을 추가할 수도 있습니다. `schema()`, `apply()`, `applyWhen()`을 사용하는 조건부 조합에 대한 자세한 내용은 [스키마 가이드](guide/forms/signals/schemas)를 참고하세요.
+
+<a id="design-considerations"></a>
+
+### 설계 시 고려 사항
+
+컨트롤을 사용하는 모델은 모든 필드를 정의된 값으로 초기화해야 합니다. Signal Forms에서 `undefined`는 빈 값이 아니라 필드가 없다는 의미입니다. 재사용 가능한 이메일 컨트롤이라면 프로퍼티를 정의하지 않은 채 두지 말고 초기값으로 `''`를 사용하세요. 초기값 선택에 대한 자세한 내용은 [폼 모델 가이드](guide/forms/signals/models)를 참고하세요.
+
+또한 컨트롤은 상태 관리를 위해 별도의 이펙트를 등록하지 않아야 합니다. 폼 시스템이 내부 이펙트로 필드 상태를 관리하며 컨트롤은 입력 시그널로 상태 변경을 전달받습니다. 값을 변환해야 한다면 `effect()` 대신 [값 변환](#value-transformation)에서 설명한 `transformedValue()`를 사용하세요.
 
 <!--
 ## Next steps

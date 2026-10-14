@@ -673,6 +673,8 @@ const value = userControl.sourceValue();
 
 <a id="disablingenabling-control"></a>
 
+<a id="disabling-enabling-control"></a>
+
 ### 컨트롤 비활성화와 활성화
 
 <!--
@@ -975,3 +977,129 @@ bootstrapApplication(App, {
   ],
 });
 ```
+
+<!--
+## Custom Controls
+
+Any [custom Signal Form Control](guide/forms/signals/custom-controls) can be
+used with Reactive (and Template-Driven) Forms as-is. This allows you to
+migrate existing `ControlValueAccessor` implementations to
+`FormValueControl`/`FormCheckboxControl` without breaking existing usages.
+
+IMPORTANT: Do **not** implement both `ControlValueAccessor` and
+`FormValueControl`/`FormCheckboxControl` on the same component. Implement one or
+the other.
+
+Given the following custom control:
+
+```angular-ts
+import {Component, model} from '@angular/core';
+import {FormValueControl} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-basic-input',
+  template: `
+    <div class="basic-input">
+      <input
+        type="text"
+        [value]="value()"
+        (input)="value.set($event.target.value)"
+        placeholder="Enter text..."
+      />
+    </div>
+  `,
+})
+export class BasicInput implements FormValueControl<string> {
+  /** The current input value */
+  value = model('');
+}
+```
+
+You can use this custom control with reactive forms as you would a native input
+or a custom control based on `ControlValueAccessor`. For example, consider this
+simple component with a Reactive Form.
+
+```angular-ts
+import {Component} from '@angular/core';
+import {FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
+import {BasicInput} from './basic-input';
+
+@Component({
+  selector: 'app-example',
+  template: `
+    <form [formGroup]="reactiveFormGroup">
+      <app-basic-input formControlName="reactiveControlName" />
+    </form>
+    <p>Text: {{ reactiveFormGroup.value.reactiveControlName }}</p>
+  `,
+  imports: [ReactiveFormsModule, BasicInput],
+})
+export class ExampleComponent {
+  readonly reactiveFormGroup = new FormGroup({
+    reactiveControlName: new FormControl(''),
+  });
+}
+```
+
+Any change to the custom `app-basic-input` control will be reflected in the
+reactive `FormControl`.
+-->
+
+<a id="custom-controls"></a>
+
+## 커스텀 컨트롤
+
+[커스텀 Signal Form 컨트롤](guide/forms/signals/custom-controls)은 반응형 폼과 템플릿 기반 폼에서도 그대로 사용할 수 있습니다. 따라서 기존 사용 코드를 깨뜨리지 않고 `ControlValueAccessor` 구현을 `FormValueControl` 또는 `FormCheckboxControl`로 전환할 수 있습니다.
+
+중요: 같은 컴포넌트에 `ControlValueAccessor`와 `FormValueControl`/`FormCheckboxControl`을 함께 구현하지 **마세요**. 둘 중 하나만 구현하세요.
+
+다음과 같은 커스텀 컨트롤이 있다고 가정해 봅시다:
+
+```angular-ts
+import {Component, model} from '@angular/core';
+import {FormValueControl} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-basic-input',
+  template: `
+    <div class="basic-input">
+      <input
+        type="text"
+        [value]="value()"
+        (input)="value.set($event.target.value)"
+        placeholder="Enter text..."
+      />
+    </div>
+  `,
+})
+export class BasicInput implements FormValueControl<string> {
+  /** 현재 입력 값 */
+  value = model('');
+}
+```
+
+이 커스텀 컨트롤은 기본 입력 엘리먼트나 `ControlValueAccessor` 기반 커스텀 컨트롤처럼 반응형 폼에서 사용할 수 있습니다. 다음은 반응형 폼을 사용하는 간단한 컴포넌트입니다:
+
+```angular-ts
+import {Component} from '@angular/core';
+import {FormGroup, FormControl, ReactiveFormsModule} from '@angular/forms';
+import {BasicInput} from './basic-input';
+
+@Component({
+  selector: 'app-example',
+  template: `
+    <form [formGroup]="reactiveFormGroup">
+      <app-basic-input formControlName="reactiveControlName" />
+    </form>
+    <p>Text: {{ reactiveFormGroup.value.reactiveControlName }}</p>
+  `,
+  imports: [ReactiveFormsModule, BasicInput],
+})
+export class ExampleComponent {
+  readonly reactiveFormGroup = new FormGroup({
+    reactiveControlName: new FormControl(''),
+  });
+}
+```
+
+커스텀 `app-basic-input` 컨트롤의 변경 사항은 반응형 `FormControl`에 반영됩니다.

@@ -154,7 +154,6 @@ When `requireSync` is `true`, `toSignal` enforces that the Observable emits sync
 ### `manualCleanup`
 -->
 
-<a id="manualcleanup"></a>
 
 ### `manualCleanup`
 
@@ -291,12 +290,13 @@ export class SearchResults {
 `query` 시그널이 변경되면 `query$` Observable은 최신 쿼리를 방출하고 새로운 HTTP 요청을 실행합니다.
 
 <!--
-### Injection context
+### Injection context {#injection-context-to-observable}
 -->
 
 <a id="injection-context-1"></a>
+<a id="injection-context-to-observable"></a>
 
-### 의존성 주입 컨텍스트
+### 의존성 주입 컨텍스트 {#의존성-주입-컨텍스트-2}
 
 <!--
 `toObservable` by default needs to run in an [injection context](guide/di/dependency-injection-context), such as during construction of a component or service. If an injection context is not available, you can manually specify the `Injector` to use instead.
@@ -356,7 +356,7 @@ mySignal.set(3);
 ## 비동기 데이터에 `rxResource` 사용하기
 
 <!--
-Angular's [`resource` function](/guide/signals/resource) gives you a way to incorporate async data into your application's signal-based code. Building on top of this pattern, `rxResource` lets you define a resource where the source of your data is defined in terms of an RxJS `Observable`. Instead of accepting a `loader` function, `rxResource` accepts a `stream` function that accepts an RxJS `Observable`.
+Angular's [`resource` function](/guide/signals/resource) gives you a way to incorporate async data into your application's signal-based code. Building on top of this pattern, `rxResource` lets you define a resource where the source of your data is defined in terms of an RxJS `Observable`. Instead of accepting a `loader` function, `rxResource` accepts a `stream` function that returns an RxJS `Observable`.
 
 ```typescript
 import {Component, inject} from '@angular/core';
@@ -386,7 +386,7 @@ In all other ways, `rxResource` behaves like and provides the same APIs as `reso
 
 Angular의 [`resource` 함수](/guide/signals/resource)를 사용하면 애플리케이션의 시그널 기반 코드에 비동기 데이터를 통합할 수 있습니다.
 이 패턴을 바탕으로 하는 `rxResource`는 데이터 소스를 RxJS `Observable`로 정의하는 리소스를 만들 수 있습니다.
-`rxResource`는 `loader` 함수 대신 RxJS `Observable`을 받는 `stream` 함수를 사용합니다.
+`rxResource`는 `loader` 함수 대신 RxJS `Observable`을 반환하는 `stream` 함수를 사용합니다.
 
 ```typescript
 import {Component, inject} from '@angular/core';
@@ -416,3 +416,9 @@ export class UserProfile {
 
 그 밖의 동작과 API는 `resource`와 같습니다.
 `rxResource`는 인자 지정, 값 읽기, 로딩 상태 확인, 에러 확인을 같은 방식으로 지원합니다.
+
+<!--
+The `Observable` returned from `stream` must always emit a value or an error before it completes; see [`NG0991`](/errors/NG0991) for what happens otherwise and how to avoid it.
+-->
+
+`stream`이 반환하는 `Observable`은 완료되기 전에 반드시 값이나 오류를 전달해야 합니다. 그렇지 않으면 발생하는 문제와 해결 방법은 [`NG0991`](/errors/NG0991)을 참고하세요.

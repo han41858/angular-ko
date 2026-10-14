@@ -9,7 +9,7 @@ TIP: This guide assumes you've already read the [Essentials Guide](essentials). 
 
 Angular components can define custom events by assigning a property to the `output` function:
 
-```ts {highlight:[3]}
+```ts {highlight:[5]}
 @Component({
   /*...*/
 })
@@ -44,9 +44,7 @@ The `output` function has special meaning to the Angular compiler. **You can exc
 컴포넌트는 `output` 함수로 출력 프로퍼티를 선언해서 커스텀 이벤트를 정의할 수 있습니다:
 
 ```ts {highlight:[5]}
-@Component({
-  /*...*/
-})
+@Component({/*...*/})
 export class ExpandablePanel {
   panelClosed = output<void>();
 }
@@ -78,6 +76,8 @@ Angular에서 `output` 함수로 초기화한 프로퍼티를 **출력 프로퍼
 <!--
 ## Emitting event data
 -->
+
+<a id="emitting-event-data"></a>
 
 ## 이벤트 데이터 보내기
 
@@ -138,9 +138,7 @@ this.thumbDropped.emit({
 부모 컴포넌트에서는 이렇게 이벤트 데이터를 받습니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class App {
   logValue(value: number) {
     ...
@@ -153,13 +151,15 @@ export class App {
 ## Customizing output names
 -->
 
+<a id="customizing-output-names"></a>
+
 ## 별칭으로 사용하기
 
 <!--
 The `output` function accepts a parameter that lets you specify a different name for the event in a template:
 
 ```ts
-@Component({/*...*/})
+@Component(/* ... */)
 export class CustomSlider {
   changed = output({alias: 'valueChanged'});
 }
@@ -177,7 +177,7 @@ While you should generally avoid aliasing outputs for components, this feature c
 템플릿에서 이벤트 이름을 프로퍼티 이름과 다르게 사용하려면 `output` 함수를 실행하면서 설정하면 됩니다:
 
 <docs-code language="ts" highlight="">
-@Component({/*...*/})
+@Component(/* ... */)
 export class CustomSlider {
   changed = output({alias: 'valueChanged'});
 }
@@ -194,6 +194,8 @@ export class CustomSlider {
 <!--
 ## Subscribing to outputs programmatically
 -->
+
+<a id="subscribing-to-outputs-programmatically"></a>
 
 ## 코드로 출력 프로퍼티 구독하기
 
@@ -251,6 +253,8 @@ eventSubscription.unsubscribe();
 ## Choosing event names
 -->
 
+<a id="choosing-event-names"></a>
+
 ## 이벤트 이름 결정하기
 
 <!--
@@ -274,6 +278,8 @@ Always use [camelCase](https://en.wikipedia.org/wiki/Camel_case) output names. A
 ## Using outputs with RxJS
 -->
 
+<a id="using-outputs-with-rxjs"></a>
+
 ## RxJS와 함께 사용하기
 
 <!--
@@ -286,6 +292,8 @@ See [RxJS interop with component and directive outputs](ecosystem/rxjs-interop/o
 ## Declaring outputs with the `@Output` decorator
 -->
 
+<a id="declaring-outputs-with-the-output-decorator"></a>
+
 ## `@Output` 데코레이터로 출력 프로퍼티 선언하기
 
 <!--
@@ -295,9 +303,7 @@ original decorator-based `@Output` API remains fully supported.
 You can alternatively define custom events by assigning a property to a new `EventEmitter` and adding the `@Output` decorator:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ExpandablePanel {
   @Output() panelClosed = new EventEmitter<void>();
 }
@@ -311,9 +317,7 @@ You can emit an event by calling the `emit` method on the `EventEmitter`.
 커스텀 이벤트는 프로퍼티에 `@Output` 데코레이터를 붙이고 `EventEmitter` 인스턴스를 생성하는 방식으로 선언할 수도 있습니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class ExpandablePanel {
   @Output() panelClosed = new EventEmitter<void>();
 }
@@ -325,15 +329,15 @@ export class ExpandablePanel {
 ### Aliases with the `@Output` decorator
 -->
 
+<a id="aliases-with-the-output-decorator"></a>
+
 ### `@Output` 데코레이터로 별칭 지정하기
 
 <!--
 The `@Output` decorator accepts a parameter that lets you specify a different name for the event in a template:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   @Output('valueChanged') changed = new EventEmitter<number>();
 }
@@ -349,9 +353,7 @@ This alias does not affect usage of the property in TypeScript code.
 템플릿에서 이벤트 이름을 출력 프로퍼티와 다르게 사용하려면 `@Output` 데코레이터에 별칭을 지정하면 됩니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class CustomSlider {
   @Output('valueChanged') changed = new EventEmitter<number>();
 }
@@ -366,6 +368,8 @@ export class CustomSlider {
 <!--
 ## Specify outputs in the `@Component` decorator
 -->
+
+<a id="specify-outputs-in-the-component-decorator"></a>
 
 ## `@Component` 데코레이터로 출력 프로퍼티 선언하기
 

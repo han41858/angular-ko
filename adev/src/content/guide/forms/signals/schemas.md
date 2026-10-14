@@ -24,7 +24,7 @@ contactForm = form(this.contactModel, (schemaPath) => {
 graph TD
     A["form(model, schemaFn)"] -> B["Schema function runs ONCE"]
     B -> C["required(path)"]
-    B -> D["disabled(path, logicFn)"]
+    B -> D["disabled(path, {when: logicFn})"]
     B -> E["validate(path, logicFn)"]
     B -> F["apply(path, schema)"]
     C -> G["Reactive: recomputes on signal change"]
@@ -61,7 +61,7 @@ contactForm = form(this.contactModel, (schemaPath) => {
 graph TD
     A["form(model, schemaFn)"] --> B["스키마 함수는 한 번만 실행됩니다"]
     B --> C["required(path)"]
-    B --> D["disabled(path, logicFn)"]
+    B --> D["disabled(path, {when: logicFn})"]
     B --> E["validate(path, logicFn)"]
     B --> F["apply(path, schema)"]
     C --> G["반응형 로직: 시그널이 변경될 때마다 실행됩니다"]
@@ -78,6 +78,8 @@ graph TD
 <!--
 ## Create reusable schemas with `schema()`
 -->
+
+<a id="create-reusable-schemas-with-schema"></a>
 
 ## 스키마 재사용하기: `schema()`
 
@@ -124,6 +126,8 @@ const nameSchema = schema<{first: string; last: string}>((name) => {
 ### Using the schema with `apply()`
 -->
 
+<a id="using-the-schema-with-apply"></a>
+
 ### 스키마 적용하기: `apply()`
 
 <!--
@@ -160,6 +164,8 @@ registrationForm = form(this.registrationModel, (schemaPath) => {
 <!--
 ## Conditional schemas with `applyWhen()`
 -->
+
+<a id="conditional-schemas-with-applywhen"></a>
 
 ## 조건부 스키마 적용: `applyWhen()`
 
@@ -239,6 +245,8 @@ addressForm = form(this.addressModel, (schemaPath) => {
 ### Combining `applyWhen()` with reusable schemas
 -->
 
+<a id="combining-applywhen-with-reusable-schemas"></a>
+
 ### 스키마 재사용 조합하기: `applyWhen()`
 
 <!--
@@ -310,6 +318,8 @@ shippingForm = form(this.shippingModel, (schemaPath) => {
 <!--
 ## Type-narrowing with `applyWhenValue()`
 -->
+
+<a id="type-narrowing-with-applywhenvalue"></a>
 
 ## 타입 좁히기: `applyWhenValue()`
 
@@ -435,6 +445,8 @@ paymentForm = form(this.paymentModel, (schemaPath) => {
 ## Array items with `applyEach()`
 -->
 
+<a id="array-items-with-applyeach"></a>
+
 ## 배열 다루기: `applyEach()`
 
 <!--
@@ -482,6 +494,8 @@ orderForm = form(this.orderModel, (schemaPath) => {
 <!--
 ### Combining `applyEach()` with reusable schemas
 -->
+
+<a id="combining-applyeach-with-reusable-schemas"></a>
 
 ### 배열에 스키마 활용하기: `applyEach()`
 
@@ -532,6 +546,8 @@ invoiceForm = form(this.invoiceModel, (schemaPath) => {
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

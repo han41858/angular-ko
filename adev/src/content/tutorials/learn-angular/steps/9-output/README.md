@@ -118,12 +118,16 @@ class Child {
 
 <docs-workflow>
 
+<a id="add-an-output-property"></a>
+
 <docs-step title="`output()` 함수를 실행해서 출력 프로퍼티를 추가해 보세요">
 
 `child.ts` 파일을 열어서 `addItemEvent` 라는 이름으로 출력 프로퍼티를 선언해 보세요.
 출력 프로퍼티의 타입은 `string` 으로 지정하세요.
 
 </docs-step>
+
+<a id="complete-additem-method"></a>
 
 <docs-step title="`addItem` 메서드를 완성해 보세요">
 
@@ -137,6 +141,8 @@ addItem() {
 ```
 
 </docs-step>
+
+<a id="update-the-app-template"></a>
 
 <docs-step title="`App` 컴포넌트의 템플릿을 수정해 보세요">
 

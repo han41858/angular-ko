@@ -272,7 +272,7 @@ import * as $ from 'jquery';
 If you import it using import statements, you have two different copies of the library: one imported as a global library, and one imported as a module.
 This is especially bad for libraries with plugins, like jQuery, because each copy includes different plugins.
 
-Instead, run the `npm install @types/jquery` Angular CLI command to download typings for your library and then follow the library installation steps.
+Instead, run `npm install @types/jquery` to download typings for your library, add `"jquery"` to the `types` array in `tsconfig.app.json`, and then follow the library installation steps.
 This gives you access to the global variables exposed by that library.
 -->
 
@@ -286,7 +286,7 @@ import * as $ from 'jquery';
 import 구문으로도 불러오면 전역 라이브러리로 불러온 사본과 모듈로 불러온 사본이 따로 존재하게 됩니다.
 jQuery처럼 플러그인을 사용하는 라이브러리는 사본마다 서로 다른 플러그인이 포함되므로 특히 문제가 됩니다.
 
-대신 Angular CLI의 `npm install @types/jquery` 명령으로 라이브러리의 타입 선언을 다운로드한 뒤 라이브러리 설치 단계를 따르세요.
+대신 `npm install @types/jquery`로 라이브러리의 타입 선언을 다운로드하고, `tsconfig.app.json`의 `types` 배열에 `"jquery"`를 추가한 뒤 라이브러리 설치 단계를 따르세요.
 그러면 라이브러리가 노출하는 전역 변수에 접근할 수 있습니다.
 
 <!--

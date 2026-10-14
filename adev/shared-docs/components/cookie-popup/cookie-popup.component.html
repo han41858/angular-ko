@@ -1,11 +1,17 @@
 @if (!hasAccepted()) {
   <div class="docs-cookies-popup docs-invert-mode">
-    <!--
-    <p>This site uses cookies from Google to deliver its services and to analyze traffic.</p>
-    -->
-    <p>이 사이트는 서비스를 개선하고 트래픽을 분석하기 위해 Google의 쿠키를 사용합니다.</p>
+    <div class="docs-cookies-popup-header">
+      <img
+        class="docs-cookies-popup-angie"
+        src="assets/images/angie/greeting.svg"
+        alt=""
+        aria-hidden="true"
+      />
+      <!-- <p>This site uses cookies from Google to deliver its services and to analyze traffic.</p> -->
+      <p>이 사이트는 서비스를 개선하고 트래픽을 분석하기 위해 Google의 쿠키를 사용합니다.</p>
+    </div>
 
-    <div>
+    <div class="docs-cookies-popup-actions">
       <a
         href="https://policies.google.com/technologies/cookies"
         target="_blank"

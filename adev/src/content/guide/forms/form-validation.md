@@ -446,7 +446,7 @@ If they do match, the actor's role is ambiguous and the validator must mark the 
 
 To provide better user experience, the template shows an appropriate error message when the form is invalid.
 
-<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" region="cross-validation-error-message"/>
+<docs-code header="actor-form-reactive.component.html" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" region="cross-validation-error-message"/>
 
 This `@if` displays the error if the `FormGroup` has the cross validation error returned by the `unambiguousRoleValidator` validator, but only if the user finished [interacting with the form](#control-status-css-classes).
 -->
@@ -492,7 +492,7 @@ Angular 컨트롤 객체를 인자로 받고, 폼이 유효하면 null을, 그�
 
 사용자 경험을 개선하기 위해 폼이 유효하지 않을 때 템플릿에 적절한 에러 메시지를 표시합니다.
 
-<docs-code header="actor-form-template.component.html" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" region="cross-validation-error-message"/>
+<docs-code header="actor-form-reactive.component.html" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.html" region="cross-validation-error-message"/>
 
 이 `@if`는 `FormGroup`에 `unambiguousRoleValidator`가 반환한 교차 검증 에러가 있을 때 메시지를 표시합니다.
 단, 사용자가 [폼과 상호작용한 뒤에만](#control-status-css-classes) 표시합니다.
@@ -686,7 +686,7 @@ interface ActorsService {
 <!--
 To use an async validator in reactive forms, begin by injecting the validator into a property of the component class.
 
-<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-inject"/>
+<docs-code header="actor-form-reactive.component.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-inject"/>
 
 Then, pass the validator function directly to the `FormControl` to apply it.
 
@@ -694,12 +694,12 @@ In the following example, the `validate` function of `UniqueRoleValidator` is ap
 The value of `asyncValidators` can be either a single async validator function, or an array of functions.
 To learn more about `FormControl` options, see the [AbstractControlOptions](api/forms/AbstractControlOptions) API reference.
 
-<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-usage"/>
+<docs-code header="actor-form-reactive.component.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-usage"/>
 -->
 
 반응형 폼에서 비동기 검증 함수를 사용하려면 먼저 컴포넌트 클래스의 프로퍼티에 검증 객체를 주입합니다.
 
-<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-inject"/>
+<docs-code header="actor-form-reactive.component.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-inject"/>
 
 그런 다음 검증 함수를 `FormControl`에 직접 전달해서 적용합니다.
 
@@ -707,7 +707,7 @@ To learn more about `FormControl` options, see the [AbstractControlOptions](api/
 `asyncValidators`에는 비동기 검증 함수 하나 또는 함수 배열을 지정할 수 있습니다.
 `FormControl` 옵션에 대해 자세히 알아보려면 [AbstractControlOptions](api/forms/AbstractControlOptions) API 레퍼런스를 참고하세요.
 
-<docs-code header="actor-form-reactive.component.2.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-usage"/>
+<docs-code header="actor-form-reactive.component.ts" path="adev/src/content/examples/form-validation/src/app/reactive/actor-form-reactive.component.2.ts" region="async-validator-usage"/>
 
 <!--
 ### Adding async validators to template-driven forms
@@ -865,7 +865,7 @@ Use [`setValidators`](api/forms/AbstractControl#setValidators) to replace all ex
 toggleStrictNameValidation(isStrict: boolean) {
   const nameControl = this.profileForm.get('name');
 
-  if (enable) {
+  if (isStrict) {
     // Set strict validation rules
     nameControl.setValidators([
       Validators.required,
@@ -890,7 +890,7 @@ The same pattern applies to async validators using [`addAsyncValidators`](api/fo
 toggleStrictNameValidation(isStrict: boolean) {
   const nameControl = this.profileForm.get('name');
 
-  if (enable) {
+  if (isStrict) {
     // 엄격한 유효성 검사 규칙을 설정합니다.
     nameControl.setValidators([
       Validators.required,

@@ -7,14 +7,14 @@
  */
 
 import {
-  EventEmitter,
-  signal,
-  ɵRuntimeError as RuntimeError,
-  ɵWritable as Writable,
-  untracked,
   computed,
+  EventEmitter,
+  ɵRuntimeError as RuntimeError,
+  signal,
+  untracked,
+  ɵWritable as Writable,
 } from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 
 import {
   asyncValidatorsDroppedWithOptsWarning,
@@ -265,7 +265,7 @@ export function isOptionsObj(
 }
 
 export function assertControlPresent(parent: any, isGroup: boolean, key: string | number): void {
-  const controls = parent.controls as {[key: string | number]: unknown};
+  const controls = parent.controls as {[key: string | number]: AbstractControl<any>};
   const collection = isGroup ? Object.keys(controls) : controls;
   if (!collection.length) {
     throw new RuntimeError(
@@ -273,7 +273,7 @@ export function assertControlPresent(parent: any, isGroup: boolean, key: string 
       typeof ngDevMode === 'undefined' || ngDevMode ? noControlsError(isGroup) : '',
     );
   }
-  if (!controls[key]) {
+  if (!hasOwnControl(controls, key)) {
     throw new RuntimeError(
       RuntimeErrorCode.MISSING_CONTROL,
       typeof ngDevMode === 'undefined' || ngDevMode ? missingControlError(isGroup, key) : '',
@@ -402,7 +402,7 @@ export type ɵTokenize<S extends string, D extends string> = string extends S
   ? string[] /* S must be a literal */
   : S extends `${infer T}${D}${infer U}`
     ? [T, ...ɵTokenize<U, D>]
-    : [S] /* Base case */;
+    : [S]; /* Base case */
 
 /**
  * CoerceStrArrToNumArr accepts an array of strings, and converts any numeric string to a number.
@@ -433,7 +433,7 @@ export type ɵNavigate<
         : any /* tail(K) was not an array, give up */
       : never /* head(K) does not index T, give up */
     : any /* K cannot be split, give up */
-  : any /* T is not indexable, give up */;
+  : any; /* T is not indexable, give up */
 
 /**
  * ɵWriteable removes readonly from all keys.
@@ -507,7 +507,7 @@ export abstract class AbstractControl<
   _hasRequired = signal(false);
 
   private _parent: FormGroup | FormArray | null = null;
-  private _asyncValidationSubscription: any;
+  private _asyncValidationSubscription: Subscription | undefined;
 
   /**
    * Contains the result of merging synchronous validators into a single validator function
@@ -1462,7 +1462,7 @@ export abstract class AbstractControl<
     if (this._asyncValidationSubscription) {
       this._asyncValidationSubscription.unsubscribe();
 
-      // we're cancelling the validator subscribtion, we keep if it should have emitted
+      // we're cancelling the validator subscription, we keep if it should have emitted
       // because we want to emit eventually if it was required at least once.
       const shouldHaveEmitted =
         (this._hasOwnPendingAsyncValidator?.emitEvent ||
@@ -1806,4 +1806,11 @@ export abstract class AbstractControl<
   private _updateHasRequiredValidator(): void {
     untracked(() => this._hasRequired.set(this.hasValidator(Validators.required)));
   }
+}
+
+export function hasOwnControl(
+  controls: {[key: string]: AbstractControl<any>},
+  name: string | number | symbol,
+): boolean {
+  return Object.hasOwn(controls, name);
 }

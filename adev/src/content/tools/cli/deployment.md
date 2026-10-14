@@ -47,10 +47,10 @@ You can read more by following the links associated with the package names below
 
 | Deployment to                                                     | Setup Command                                                                               |
 | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
-| [Firebase hosting](https://firebase.google.com/docs/hosting)      | [`ng add @angular/fire`](https://npmjs.org/package/@angular/fire)                           |
+| [Firebase hosting](https://firebase.google.com/docs/hosting)      | [`ng add @angular/fire`](https://www.npmjs.com/package/@angular/fire)                       |
 | [Vercel](https://vercel.com/solutions/angular)                    | [`vercel init angular`](https://github.com/vercel/vercel/tree/main/examples/angular)        |
-| [Netlify](https://www.netlify.com)                                | [`ng add @netlify-builder/deploy`](https://npmjs.org/package/@netlify-builder/deploy)       |
-| [GitHub Pages](https://pages.github.com)                          | [`ng add angular-cli-ghpages`](https://npmjs.org/package/angular-cli-ghpages)               |
+| [Netlify](https://www.netlify.com)                                | [`ng add @netlify-builder/deploy`](https://www.npmjs.com/package/@netlify-builder/deploy)   |
+| [GitHub Pages](https://pages.github.com)                          | [`ng add angular-cli-ghpages`](https://www.npmjs.com/package/angular-cli-ghpages)           |
 | [Amazon Cloud S3](https://aws.amazon.com/s3/?nc2=h_ql_prod_st_s3) | [`ng add @jefiozie/ngx-aws-deploy`](https://www.npmjs.com/package/@jefiozie/ngx-aws-deploy) |
 
 If you're deploying to a self-managed server or there's no builder for your favorite cloud platform, you can either [create a builder](tools/cli/cli-builder) that allows you to use the `ng deploy` command, or read through this guide to learn how to manually deploy your application.
@@ -82,10 +82,10 @@ ng deploy
 
 | 배포 대상                                                         | 설정 명령어                                                                                 |
 | :---------------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
-| [Firebase 호스팅](https://firebase.google.com/docs/hosting)       | [`ng add @angular/fire`](https://npmjs.org/package/@angular/fire)                           |
+| [Firebase 호스팅](https://firebase.google.com/docs/hosting)       | [`ng add @angular/fire`](https://www.npmjs.com/package/@angular/fire)                       |
 | [Vercel](https://vercel.com/solutions/angular)                    | [`vercel init angular`](https://github.com/vercel/vercel/tree/main/examples/angular)        |
-| [Netlify](https://www.netlify.com)                                | [`ng add @netlify-builder/deploy`](https://npmjs.org/package/@netlify-builder/deploy)       |
-| [GitHub Pages](https://pages.github.com)                          | [`ng add angular-cli-ghpages`](https://npmjs.org/package/angular-cli-ghpages)               |
+| [Netlify](https://www.netlify.com)                                | [`ng add @netlify-builder/deploy`](https://www.npmjs.com/package/@netlify-builder/deploy)   |
+| [GitHub Pages](https://pages.github.com)                          | [`ng add angular-cli-ghpages`](https://www.npmjs.com/package/angular-cli-ghpages)           |
 | [Amazon Cloud S3](https://aws.amazon.com/s3/?nc2=h_ql_prod_st_s3) | [`ng add @jefiozie/ngx-aws-deploy`](https://www.npmjs.com/package/@jefiozie/ngx-aws-deploy) |
 
 직접 관리하는 서버에 배포하거나 원하는 클라우드 플랫폼용 빌더가 없다면 `ng deploy` 명령어를 사용할 수 있도록 [빌더를 만들거나](tools/cli/cli-builder), 이 가이드를 계속 읽고 애플리케이션을 수동으로 배포하는 방법을 알아보세요.
@@ -266,7 +266,7 @@ at runtime which enables:
 
 - Extra safety checks such as [`expression-changed-after-checked`](errors/NG0100) detection.
 - More detailed error messages.
-- Additional debugging utilities such as the global `ng` variable with [debugging functions](api#core-global) and [Angular DevTools](tools/devtools) support.
+- Additional debugging utilities such as the global `ng` variable with [debugging functions](api#angular_core_globals) and [Angular DevTools](tools/devtools) support.
 
 These features are helpful during development, but they require extra code in the app, which is
 undesirable in production. To ensure these features do not negatively impact bundle size for end users, Angular CLI
@@ -279,7 +279,7 @@ Building your application with `ng build` by default uses the `production` confi
 
 - [`expression-changed-after-checked`](errors/NG0100) 감지 등의 추가 안전 검사.
 - 더 자세한 오류 메시지.
-- [디버깅 함수](api#core-global)를 제공하는 전역 `ng` 변수와 [Angular DevTools](tools/devtools) 지원 등의 추가 디버깅 도구.
+- [디버깅 함수](api#angular_core_globals)를 제공하는 전역 `ng` 변수와 [Angular DevTools](tools/devtools) 지원 등의 추가 디버깅 도구.
 
 이러한 기능은 개발할 때 유용하지만 앱에 추가 코드가 필요하기 때문에 프로덕션에는 적합하지 않습니다.
 최종 사용자에게 전달하는 번들 크기에 영향을 주지 않도록 Angular CLI는 프로덕션 빌드에서 개발 전용 코드를 제거합니다.
@@ -290,7 +290,8 @@ Building your application with `ng build` by default uses the `production` confi
 ## `--deploy-url`
 -->
 
-<a id="--deploy-url"></a>
+
+<a id="-deploy-url"></a>
 
 ## `--deploy-url`
 

@@ -230,6 +230,8 @@ Animating an element when it leaves the view is similar to animating when enteri
     <docs-code header="remove.css" path="adev/src/content/examples/animations/src/app/native-css/remove.css"  />
 </docs-code-multifile>
 
+NOTE: Child `animate.leave` animations fire only within the same component template. Nested component `animate.leave` animations will not fire when a parent element is removed.
+
 For more information on `animate.enter` and `animate.leave`, see the [Enter and Leave animations guide](guide/animations).
 -->
 
@@ -251,6 +253,8 @@ For more information on `animate.enter` and `animate.leave`, see the [Enter and 
     <docs-code header="remove.html" path="adev/src/content/examples/animations/src/app/native-css/remove.html" />
     <docs-code header="remove.css" path="adev/src/content/examples/animations/src/app/native-css/remove.css"  />
 </docs-code-multifile>
+
+참고: 자식 `animate.leave` 애니메이션은 같은 컴포넌트 템플릿 안에서만 실행됩니다. 부모 엘리먼트를 제거할 때 중첩된 컴포넌트 안의 `animate.leave` 애니메이션은 실행되지 않습니다.
 
 `animate.enter`와 `animate.leave`에 대한 자세한 내용은 [진입 및 퇴장 애니메이션 가이드](guide/animations)를 참고하세요.
 
@@ -342,7 +346,7 @@ If you have actions you would like to execute at certain points during animation
 
 [`OnAnimationStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationstart_event)
 [`OnAnimationEnd`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationend_event)
-[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationitration_event)
+[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationiteration_event)
 [`OnAnimationCancel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationcancel_event)
 
 [`OnTransitionStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/transitionstart_event)
@@ -360,7 +364,7 @@ NOTE: Be aware of bubbling issues with these callbacks. If you are animating chi
 
 [`OnAnimationStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationstart_event)  
 [`OnAnimationEnd`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationend_event)  
-[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationitration_event)  
+[`OnAnimationIteration`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationiteration_event)  
 [`OnAnimationCancel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/animationcancel_event)
 
 [`OnTransitionStart`](https://developer.mozilla.org/en-US/docs/Web/API/Element/transitionstart_event)  

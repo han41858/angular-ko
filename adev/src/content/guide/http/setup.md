@@ -7,10 +7,10 @@
 # `HttpClient` 설정하기
 
 <!--
-Before you can use `HttpClient` in your app, you must configure it using [dependency injection](guide/di).
+`HttpClient` is available for injection by default in Angular v21 and later.
 -->
 
-애플리케이션에서 `HttpClient`를 사용하려면 먼저 [의존성 주입](guide/di)을 통해 설정해야 합니다.
+Angular v21 이상에서는 별도 설정 없이 `HttpClient`를 주입할 수 있습니다.
 
 <!--
 ## Providing `HttpClient` through dependency injection
@@ -21,19 +21,19 @@ Before you can use `HttpClient` in your app, you must configure it using [depend
 ## 의존성 주입으로 `HttpClient` 제공하기
 
 <!--
-`HttpClient` is provided using the `provideHttpClient` helper function, which most apps include in the application `providers` in `app.config.ts`.
+You can use the `provideHttpClient` helper function to configure the default HTTP feature set or add features in the application `providers` in `app.config.ts`.
 
 ```ts
 export const appConfig: ApplicationConfig = {
-  providers: [provideHttpClient()],
+  providers: [provideHttpClient(/* add features here, such as withInterceptors(...) */)],
 };
 ```
 
-If your app is using NgModule-based bootstrap instead, you can include `provideHttpClient` in the providers of your app's NgModule:
+If your app is using NgModule-based bootstrap instead, you can include `provideHttpClient` in the providers of your app's NgModule to configure the default HTTP feature set or add features:
 
 ```ts
 @NgModule({
-  providers: [provideHttpClient()],
+  providers: [provideHttpClient(/* add features here, such as withInterceptors(...) */)],
   // ... other application configuration
 })
 export class AppModule {}
@@ -50,20 +50,19 @@ export class ConfigService {
 ```
 -->
 
-`HttpClient`는 `provideHttpClient` 헬퍼 함수로 제공합니다.
-대부분의 애플리케이션에서는 `app.config.ts`의 애플리케이션 `providers`에 이 함수를 포함합니다.
+`app.config.ts`의 애플리케이션 `providers`에서 `provideHttpClient` 헬퍼 함수를 사용하면 기본 HTTP 기능을 설정하거나 추가 기능을 활성화할 수 있습니다.
 
 ```ts
 export const appConfig: ApplicationConfig = {
-  providers: [provideHttpClient()],
+  providers: [provideHttpClient(/* withInterceptors(...) 등의 기능을 여기에 추가합니다. */)],
 };
 ```
 
-NgModule 기반으로 부트스트랩하는 애플리케이션이라면 애플리케이션 NgModule의 프로바이더에 `provideHttpClient`를 포함할 수 있습니다:
+NgModule 기반으로 부트스트랩하는 애플리케이션이라면 애플리케이션 NgModule의 프로바이더에 `provideHttpClient`를 포함하여 기본 HTTP 기능을 설정하거나 추가 기능을 활성화할 수 있습니다:
 
 ```ts
 @NgModule({
-  providers: [provideHttpClient()],
+  providers: [provideHttpClient(/* withInterceptors(...) 등의 기능을 여기에 추가합니다. */)],
   // ... 애플리케이션의 다른 설정
 })
 export class AppModule {}
@@ -98,7 +97,6 @@ export class ConfigService {
 ### `withXhr`
 -->
 
-<a id="withxhr"></a>
 
 ### `withXhr`
 
@@ -127,10 +125,23 @@ export const appConfig: ApplicationConfig = {
 다만 업로드 진행 상황 이벤트를 제공하지 않는 등의 제약이 있습니다.
 
 <!--
+<docs-callout critical title="Do not use `withXhr` in server-side rendering (SSR) environments">
+
+XHR support on the server is **deprecated** and is intended to be removed in Angular 23. The underlying `xhr2` library does not safely handle redirects: it can forward `Authorization` headers on cross-origin redirects and is susceptible to denial-of-service (DoS) via redirect loops. For SSR applications, use the default `fetch` backend instead.
+
+</docs-callout>
+-->
+
+<docs-callout critical title="서버 사이드 렌더링(SSR) 환경에서는 withXhr를 사용하지 마세요">
+
+서버에서의 XHR 지원은 **지원 중단 예정**이며 Angular 23에서 제거할 예정입니다. 기반 라이브러리인 `xhr2`는 리다이렉트를 안전하게 처리하지 못합니다. 교차 출처 리다이렉트에 `Authorization` 헤더를 전달할 수 있으며, 리다이렉트 루프로 서비스 거부(DoS) 공격을 받을 수 있습니다. SSR 애플리케이션에서는 기본 `fetch` 백엔드를 사용하세요.
+
+</docs-callout>
+
+<!--
 ### `withInterceptors(...)`
 -->
 
-<a id="withinterceptors"></a>
 
 ### `withInterceptors(...)`
 
@@ -145,7 +156,6 @@ export const appConfig: ApplicationConfig = {
 ### `withInterceptorsFromDi()`
 -->
 
-<a id="withinterceptorsfromdi"></a>
 
 ### `withInterceptorsFromDi()`
 
@@ -164,7 +174,6 @@ HELPFUL: Functional interceptors (through `withInterceptors`) have more predicta
 ### `withRequestsMadeViaParent()`
 -->
 
-<a id="withrequestsmadeviaparent"></a>
 
 ### `withRequestsMadeViaParent()`
 
@@ -188,9 +197,22 @@ CRITICAL: You must configure an instance of `HttpClient` above the current injec
 ### `withJsonpSupport()`
 -->
 
-<a id="withjsonpsupport"></a>
 
 ### `withJsonpSupport()`
+
+<!--
+<docs-callout critical title="JSONP is deprecated">
+
+`withJsonpSupport`, `HttpClientJsonpModule`, and the `.jsonp()` method on `HttpClient` are deprecated because JSONP can cause cross-site scripting (XSS) vulnerabilities. Use standard HTTP requests with [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS) instead.
+
+</docs-callout>
+-->
+
+<docs-callout critical title="JSONP는 지원 중단 예정입니다">
+
+JSONP는 크로스 사이트 스크립팅(XSS) 취약점을 유발할 수 있으므로 `withJsonpSupport`, `HttpClientJsonpModule`, `HttpClient`의 `.jsonp()` 메서드는 지원 중단 예정입니다. 대신 [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS)를 사용하는 표준 HTTP 요청을 사용하세요.
+
+</docs-callout>
 
 <!--
 Including `withJsonpSupport` enables the `.jsonp()` method on `HttpClient`, which makes a GET request via the [JSONP convention](https://en.wikipedia.org/wiki/JSONP) for cross-domain loading of data.
@@ -207,7 +229,6 @@ HELPFUL: Prefer using [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS) t
 ### `withXsrfConfiguration(...)`
 -->
 
-<a id="withxsrfconfiguration"></a>
 
 ### `withXsrfConfiguration(...)`
 
@@ -222,7 +243,6 @@ Including this option allows customization of `HttpClient`'s built-in XSRF secur
 ### `withNoXsrfProtection()`
 -->
 
-<a id="withnoxsrfprotection"></a>
 
 ### `withNoXsrfProtection()`
 
@@ -249,9 +269,11 @@ This table lists the NgModules available from `@angular/common/http` and how the
 | **NgModule**                            | `provideHttpClient()` equivalent                         |
 | --------------------------------------- | -------------------------------------------------------- |
 | `HttpClientModule`                      | `provideHttpClient(withInterceptorsFromDi(), withXhr())` |
-| `HttpClientJsonpModule`                 | `withJsonpSupport()`                                     |
+| `HttpClientJsonpModule` (deprecated)    | `withJsonpSupport()` (deprecated)                        |
 | `HttpClientXsrfModule.withOptions(...)` | `withXsrfConfiguration(...)`                             |
 | `HttpClientXsrfModule.disable()`        | `withNoXsrfProtection()`                                 |
+
+NOTE: `HttpClientModule` and `HttpClientXsrfModule` are also deprecated. Use `provideHttpClient` with the corresponding features instead.
 
 <docs-callout important title="Use caution when using HttpClientModule in multiple injectors">
 When `HttpClientModule` is present in multiple injectors, the behavior of interceptors is poorly defined and depends on the exact options and provider/import ordering.
@@ -264,12 +286,14 @@ Prefer `provideHttpClient` for multi-injector configurations, as it has more sta
 
 다음 표는 `@angular/common/http`에서 제공하는 NgModule과 앞에서 살펴본 프로바이더 설정 함수의 대응 관계입니다.
 
-| **NgModule**                            | 대응하는 `provideHttpClient()` 설정                      |
-| --------------------------------------- | -------------------------------------------------------- |
-| `HttpClientModule`                      | `provideHttpClient(withInterceptorsFromDi(), withXhr())` |
-| `HttpClientJsonpModule`                 | `withJsonpSupport()`                                     |
-| `HttpClientXsrfModule.withOptions(...)` | `withXsrfConfiguration(...)`                             |
-| `HttpClientXsrfModule.disable()`        | `withNoXsrfProtection()`                                 |
+| **NgModule**                             | 대응하는 `provideHttpClient()` 설정                      |
+| ---------------------------------------- | -------------------------------------------------------- |
+| `HttpClientModule`                       | `provideHttpClient(withInterceptorsFromDi(), withXhr())` |
+| `HttpClientJsonpModule` (지원 중단 예정) | `withJsonpSupport()` (지원 중단 예정)                    |
+| `HttpClientXsrfModule.withOptions(...)`  | `withXsrfConfiguration(...)`                             |
+| `HttpClientXsrfModule.disable()`         | `withNoXsrfProtection()`                                 |
+
+참고: `HttpClientModule`과 `HttpClientXsrfModule`도 지원 중단 예정입니다. 대신 `provideHttpClient`에 대응하는 기능을 함께 설정하세요.
 
 <docs-callout important title="여러 인젝터에서 HttpClientModule을 사용할 때 주의하세요">
 여러 인젝터에 `HttpClientModule`이 있으면 인터셉터의 동작이 명확하게 정해지지 않으며, 구체적인 옵션과 프로바이더 및 모듈 로드 순서에 따라 달라집니다.

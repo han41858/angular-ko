@@ -56,6 +56,8 @@ Angular는 시그널이 어디에 사용되고 언제 갱신되는지 계속 추
 ## Computed expressions
 -->
 
+<a id="computed-expressions"></a>
+
 ## 연산 표현식
 
 <!--
@@ -114,6 +116,8 @@ console.log(firstNameCapitalized()); // JAIME
 ## Using signals in components
 -->
 
+<a id="using-signals-in-components"></a>
+
 ## 컴포넌트에서 시그널 활용하기
 
 <!--
@@ -159,6 +163,8 @@ export class UserProfile {
 <!--
 ## Next Step
 -->
+
+<a id="next-step"></a>
 
 ## 다음 단계
 

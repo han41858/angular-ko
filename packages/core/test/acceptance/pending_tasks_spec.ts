@@ -88,14 +88,10 @@ describe('public PendingTasks', () => {
     const appRef = TestBed.inject(ApplicationRef);
     const pendingTasks = TestBed.inject(PendingTasks);
 
-    let resolveFn: () => void;
-    pendingTasks.run(() => {
-      return new Promise<void>((r) => {
-        resolveFn = r;
-      });
-    });
+    const {promise, resolve} = Promise.withResolvers<void>();
+    pendingTasks.run(() => promise);
     await expectAsync(applicationRefIsStable(appRef)).toBeResolvedTo(false);
-    resolveFn!();
+    resolve();
     await expectAsync(TestBed.inject(ApplicationRef).whenStable()).toBeResolved();
   });
 
@@ -105,16 +101,30 @@ describe('public PendingTasks', () => {
     const errorHandler = TestBed.inject(ErrorHandler);
     const spy = spyOn(errorHandler, 'handleError');
 
-    let rejectFn: () => void;
-    pendingTasks.run(() => {
-      return new Promise<void>((_, reject) => {
-        rejectFn = reject;
-      });
-    });
+    const {promise, reject} = Promise.withResolvers<void>();
+    pendingTasks.run(() => promise);
     await expectAsync(applicationRefIsStable(appRef)).toBeResolvedTo(false);
-    rejectFn!();
+    reject();
     await expectAsync(appRef.whenStable()).toBeResolved();
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('should stop blocking stability if run function throws synchronously', async () => {
+    TestBed.configureTestingModule({
+      rethrowApplicationErrors: false,
+    });
+
+    const appRef = TestBed.inject(ApplicationRef);
+    const pendingTasks = TestBed.inject(PendingTasks);
+    const errorHandler = TestBed.inject(ErrorHandler);
+    const spy = spyOn(errorHandler, 'handleError');
+
+    pendingTasks.run(() => {
+      throw new Error('Sync error');
+    });
+    await expectAsync(appRef.whenStable()).toBeResolved();
+    expect(spy).toHaveBeenCalled();
+    expect(spy.calls.mostRecent().args[0].message).toContain('Sync error');
   });
 });
 

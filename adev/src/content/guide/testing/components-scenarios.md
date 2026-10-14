@@ -25,7 +25,7 @@ In the example application, the `Banner` component presents static title text in
 
 After a few changes, the `Banner` component presents a dynamic title by binding to the component's `title` property like this.
 
-```angular-ts {header="banner.ts"}
+```angular-ts {header: "banner.ts"}
 import {Component, signal} from '@angular/core';
 
 @Component({
@@ -45,7 +45,7 @@ As minimal as this is, you decide to add a test to confirm that component actual
 
 코드를 조금 변경해서 컴포넌트의 `title` 프로퍼티를 바인딩하면 동적인 제목을 표시할 수 있습니다.
 
-```angular-ts {header="banner.ts"}
+```angular-ts {header: "banner.ts"}
 import {Component, signal} from '@angular/core';
 
 @Component({
@@ -171,7 +171,6 @@ it('no title in the DOM after createComponent()', () => {
 ### `whenStable()`
 -->
 
-<a id="whenstable"></a>
 
 ### `whenStable()`
 
@@ -450,7 +449,6 @@ userAuth = fixture.debugElement.injector.get(UserAuthentication);
 ### `TestBed.inject()`
 -->
 
-<a id="testbedinject"></a>
 
 ### `TestBed.inject()`
 
@@ -1001,7 +999,7 @@ The `fakeAsync` helper function is another mock clock that relies on patching as
 
 TIP: Prefer using native async testing strategies or other fake timers (also called mock clocks) like those from Vitest or Jasmine.
 
-IMPORTANT: `fakeAsync` cannot be used with the Vitest test runner as no `zone.js` patch is applied for this runner.
+IMPORTANT: `fakeAsync` requires `zone.js`. To use it with the Vitest test runner, add the `zone.js/plugins/vitest-patch` polyfill as described in [the Vitest migration guide](guide/testing/migrating-to-vitest#zonejs-vitest-patch).
 -->
 
 `fakeAsync` 헬퍼 함수도 가상 시계를 제공합니다.
@@ -1010,7 +1008,7 @@ IMPORTANT: `fakeAsync` cannot be used with the Vitest test runner as no `zone.js
 
 팁: 네이티브 비동기 테스트 방식이나 Vitest, Jasmine이 제공하는 가상 타이머(목 시계라고도 합니다)를 우선 사용하세요.
 
-중요: Vitest 테스트 러너에는 `zone.js` 패치가 적용되지 않으므로 `fakeAsync`를 사용할 수 없습니다.
+중요: `fakeAsync`에는 `zone.js`가 필요합니다. Vitest 테스트 러너에서 사용하려면 [Vitest 마이그레이션 가이드](guide/testing/migrating-to-vitest#zonejs-vitest-patch)에 설명된 대로 `zone.js/plugins/vitest-patch` 폴리필을 추가하세요.
 
 <!--
 ## Component with inputs and outputs
@@ -1239,7 +1237,7 @@ it('should raise selected event when clicked (triggerEventHandler)', () => {
 });
 ```
 
-The component's `selected` property returns an `EventEmitter`, which looks like an RxJS synchronous `Observable` to consumers.
+The component's `selected` property is an `OutputEmitterRef`, whose `subscribe` method notifies subscribers synchronously.
 The test subscribes to it _explicitly_ just as the host component does _implicitly_.
 
 If the component behaves as expected, clicking the hero's element should tell the component's `selected` property to emit the `hero` object.
@@ -1259,8 +1257,7 @@ it('should raise selected event when clicked (triggerEventHandler)', () => {
 });
 ```
 
-컴포넌트의 `selected` 프로퍼티는 `EventEmitter`를 반환합니다.
-이를 사용하는 쪽에서는 RxJS의 동기 `Observable`처럼 보입니다.
+컴포넌트의 `selected` 프로퍼티는 `OutputEmitterRef`입니다. 이 객체의 `subscribe` 메서드는 구독자에게 동기적으로 알립니다.
 호스트 컴포넌트가 _묵시적으로_ 구독하는 것을 테스트에서는 _명시적으로_ 구독합니다.
 
 컴포넌트가 예상대로 동작한다면 히어로 엘리먼트를 클릭했을 때 `selected` 프로퍼티가 `hero` 객체를 발행해야 합니다.
@@ -1271,12 +1268,11 @@ it('should raise selected event when clicked (triggerEventHandler)', () => {
 ### `triggerEventHandler`
 -->
 
-<a id="triggereventhandler"></a>
 
 ### `triggerEventHandler`
 
 <!--
-The `heroDe` in the previous test is a `DebugElement` that represents the hero `<div>`.
+The `heroDe` in the previous test is a `DebugElement` that represents the hero `<button>`.
 
 It has Angular properties and methods that abstract interaction with the native element.
 This test calls the `DebugElement.triggerEventHandler` with the "click" event name.
@@ -1298,7 +1294,7 @@ For example, the `RouterLink` directive expects an object with a `button` proper
 The `RouterLink` directive throws an error if the event object is missing.
 -->
 
-앞의 테스트에서 `heroDe`는 히어로 `<div>`를 나타내는 `DebugElement`입니다.
+앞의 테스트에서 `heroDe`는 히어로 `<button>`를 나타내는 `DebugElement`입니다.
 
 네이티브 엘리먼트와의 상호작용을 추상화하는 Angular 프로퍼티와 메서드를 제공합니다.
 이 테스트는 이벤트 이름 "click"을 전달해서 `DebugElement.triggerEventHandler`를 실행합니다.
@@ -1713,9 +1709,7 @@ The component has to _subscribe_ to the `ActivatedRoute.paramMap` observable and
 ```ts
 constructor() {
   // get hero when `id` param changes
-  this.route.paramMap
-    .pipe(takeUntilDestroyed())
-    .subscribe((pmap) => this.getHero(pmap.get('id')));
+  this.route.paramMap.subscribe((pmap) => this.getHero(pmap.get('id')));
 }
 ```
 
@@ -1749,9 +1743,7 @@ private router = inject(Router);
 ```ts
 constructor() {
   // `id` 파라미터가 바뀌면 히어로를 가져옵니다
-  this.route.paramMap
-    .pipe(takeUntilDestroyed())
-    .subscribe((pmap) => this.getHero(pmap.get('id')));
+  this.route.paramMap.subscribe((pmap) => this.getHero(pmap.get('id')));
 }
 ```
 
@@ -1925,7 +1917,6 @@ beforeEach(() => {
 ### `NO_ERRORS_SCHEMA`
 -->
 
-<a id="noerrorsschema"></a>
 
 ### `NO_ERRORS_SCHEMA`
 

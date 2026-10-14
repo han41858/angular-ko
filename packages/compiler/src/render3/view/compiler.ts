@@ -10,7 +10,7 @@ import {ConstantPool} from '../../constant_pool';
 import * as core from '../../core';
 import * as o from '../../output/output_ast';
 import {ParseError, ParseSourceSpan} from '../../parse_util';
-import {ShadowCss} from '../../shadow_css';
+import {namespaceCssVariables, ShadowCss} from '../../shadow_css';
 import {CompilationJobKind, TemplateCompilationMode} from '../../template/pipeline/src/compilation';
 import {emitHostBindingFunction, emitTemplateFn, transform} from '../../template/pipeline/src/emit';
 import {ingestComponent, ingestHostBinding} from '../../template/pipeline/src/ingest';
@@ -27,7 +27,7 @@ import {
   R3HostMetadata,
   R3TemplateDependency,
 } from './api';
-import {getTemplateSourceLocationsEnabled} from './config';
+import {ENABLE_TEMPLATE_SOURCE_LOCATIONS} from './config';
 import {createContentQueriesFunction, createViewQueriesFunction} from './query_generation';
 import {makeBindingParser} from './template';
 import {asLiteral, conditionallyCreateDirectiveBindingLiteral, DefinitionMap} from './util';
@@ -214,7 +214,7 @@ export function compileComponentFromMetadata(
     meta.defer,
     allDeferrableDepsFn,
     meta.relativeTemplatePath,
-    getTemplateSourceLocationsEnabled(),
+    meta.enableTemplateSourceLocations || ENABLE_TEMPLATE_SOURCE_LOCATIONS,
     meta.legacyOptionalChaining,
     meta.foreignImports,
   );
@@ -235,7 +235,11 @@ export function compileComponentFromMetadata(
     if (tpl.constsInitializers.length > 0) {
       definitionMap.set(
         'consts',
-        o.arrowFn([], [...tpl.constsInitializers, new o.ReturnStatement(o.literalArr(tpl.consts))]),
+        o.arrowFn(
+          [],
+          [...tpl.constsInitializers, new o.ReturnStatement(o.literalArr(tpl.consts))],
+          o.DYNAMIC_TYPE,
+        ),
       );
     } else {
       definitionMap.set('consts', o.literalArr(tpl.consts));
@@ -269,10 +273,11 @@ export function compileComponentFromMetadata(
   let hasStyles = !!meta.externalStyles?.length;
   // e.g. `styles: [str1, str2]`
   if (meta.styles && meta.styles.length) {
+    const namespacedStyles = meta.styles.map((s) => namespaceCssVariables(s));
     const styleValues =
       meta.encapsulation == core.ViewEncapsulation.Emulated
-        ? compileStyles(meta.styles, CONTENT_ATTR, HOST_ATTR)
-        : meta.styles;
+        ? compileStyles(namespacedStyles, CONTENT_ATTR, HOST_ATTR)
+        : namespacedStyles;
     const styleNodes = styleValues.reduce((result, style) => {
       if (style.trim().length > 0) {
         result.push(constantPool.getConstLiteral(o.literal(style)));
@@ -359,11 +364,11 @@ function compileDeclarationList(
       return list;
     case DeclarationListEmitMode.Closure:
       // directives: function () { return [MyDir]; }
-      return o.arrowFn([], list);
+      return o.arrowFn([], list, o.DYNAMIC_TYPE);
     case DeclarationListEmitMode.ClosureResolved:
       // directives: function () { return [MyDir].map(ng.resolveForwardRef); }
       const resolvedList = list.prop('map').callFn([o.importExpr(R3.resolveForwardRef)]);
-      return o.arrowFn([], resolvedList);
+      return o.arrowFn([], resolvedList, o.DYNAMIC_TYPE);
     case DeclarationListEmitMode.RuntimeResolved:
       throw new Error(`Unsupported with an array of pre-resolved dependencies`);
   }
@@ -715,7 +720,7 @@ function createHostDirectivesFeatureArg(
   // If there's a forward reference, we generate a `function() { return [HostDir] }`,
   // otherwise we can save some bytes by using a plain array, e.g. `[HostDir]`.
   return hasForwardRef
-    ? new o.FunctionExpr([], [new o.ReturnStatement(o.literalArr(expressions))])
+    ? new o.FunctionExpr([], [new o.ReturnStatement(o.literalArr(expressions))], o.DYNAMIC_TYPE)
     : o.literalArr(expressions);
 }
 
@@ -734,7 +739,7 @@ export function createHostDirectivesMappingArray(
   const elements: o.LiteralExpr[] = [];
 
   for (const publicName in mapping) {
-    if (mapping.hasOwnProperty(publicName)) {
+    if (Object.hasOwn(mapping, publicName)) {
       elements.push(o.literal(publicName), o.literal(mapping[publicName]));
     }
   }
@@ -758,6 +763,7 @@ export function compileDeferResolverFunction(
           // Default imports are always accessed through the `default` property.
           [new o.FnParam('m', o.DYNAMIC_TYPE)],
           o.variable('m').prop(dep.isDefaultImport ? 'default' : dep.symbolName),
+          o.DYNAMIC_TYPE,
         );
 
         // Dynamic import, e.g. `import('./a').then(...)`.
@@ -782,6 +788,7 @@ export function compileDeferResolverFunction(
       const innerFn = o.arrowFn(
         [new o.FnParam('m', o.DYNAMIC_TYPE)],
         o.variable('m').prop(isDefaultImport ? 'default' : symbolName),
+        o.DYNAMIC_TYPE,
       );
 
       // Dynamic import, e.g. `import('./a').then(...)`.
@@ -796,5 +803,5 @@ export function compileDeferResolverFunction(
     }
   }
 
-  return o.arrowFn([], o.literalArr(depExpressions));
+  return o.arrowFn([], o.literalArr(depExpressions), o.DYNAMIC_TYPE);
 }

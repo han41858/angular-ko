@@ -64,7 +64,7 @@ Add the `locale` parameter to the pipe to override the current value of `LOCALE_
 To force the currency to use American English \(`en-US`\), use the following format for the `CurrencyPipe`
 
 ```angular-html
-{{ amount | currency: 'en-US' }}
+{{ amount | currency: 'USD' : 'symbol' : '1.2-2' : 'en-US' }}
 ```
 
 HELPFUL: The locale specified for the `CurrencyPipe` overrides the global `LOCALE_ID` token of your application.
@@ -75,7 +75,7 @@ HELPFUL: The locale specified for the `CurrencyPipe` overrides the global `LOCAL
 통화에 미국 영어(`en-US`)를 사용하도록 지정하려면 `CurrencyPipe`를 다음과 같이 사용하세요.
 
 ```angular-html
-{{ amount | currency: 'en-US' }}
+{{ amount | currency: 'USD' : 'symbol' : '1.2-2' : 'en-US' }}
 ```
 
 도움말: `CurrencyPipe`에 지정한 지역은 애플리케이션의 전역 `LOCALE_ID` 토큰보다 우선합니다.

@@ -2,6 +2,8 @@
 # Formatting data with pipes
 -->
 
+<a id="formatting-data-with-pipes"></a>
+
 # 파이프 출력 형식 지정하기
 
 <!--
@@ -29,7 +31,7 @@ Time to customize some pipe output:
 
 In `app.ts`, update the template to include parameter for the `decimal` pipe.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[2]}
 template: ` ...
 <li>Number with "decimal" {{ num | number: '3.2-2' }}</li>
 `
@@ -43,7 +45,7 @@ NOTE: What's that format? The parameter for the `DecimalPipe` is called `digitsI
 
 Now, update the template to use the `date` pipe.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[2]}
 template: ` ...
 <li>Date with "date" {{ birthday | date: 'medium' }}</li>
 `
@@ -57,7 +59,7 @@ For extra fun, try some different parameters for `date`. More information can be
 
 For your last task, update the template to use the `currency` pipe.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[2]}
 template: ` ...
 <li>Currency with "currency" {{ cost | currency }}</li>
 `
@@ -97,11 +99,13 @@ template: `{{ date | date: 'medium' }}`;
 
 <docs-workflow>
 
+<a id="format-a-number-with-decimalpipe"></a>
+
 <docs-step title="`DecimalPipe`로 숫자 형식 지정하기">
 
 `app.ts` 파일의 템플릿에 `decimal` 파이프를 적용하는데, 이때 인자를 함께 전달해 봅시다.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[2]}
 template: ` ...
 <li>Number with "decimal" {{ num | number: '3.2-2' }}</li>
 `
@@ -111,11 +115,13 @@ template: ` ...
 
 </docs-step>
 
+<a id="format-a-date-with-datepipe"></a>
+
 <docs-step title="`DatePipe`로 날짜 형식 지정하기">
 
 이제, `date` 파이프를 사용해 봅시다.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[2]}
 template: ` ...
 <li>Date with "date" {{ birthday | date: 'medium' }}</li>
 `
@@ -126,11 +132,13 @@ template: ` ...
 
 </docs-step>
 
+<a id="format-a-currency-with-currencypipe"></a>
+
 <docs-step title="`CurrencyPipe`로 통화 형식 지정하기">
 
 마지막으로 템플릿에 `currency` 파이프를 사용해 봅시다.
 
-```angular-html {highlight:[3]}
+```angular-html {highlight:[2]}
 template: ` ...
 <li>Currency with "currency" {{ cost | currency }}</li>
 `

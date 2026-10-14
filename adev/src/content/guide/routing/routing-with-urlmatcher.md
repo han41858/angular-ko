@@ -12,7 +12,7 @@ This matching strategy supports static routes, variable routes with parameters, 
 Also, build your own custom pattern matching for situations in which the URLs are more complicated.
 
 In this tutorial, you'll build a custom route matcher using Angular's `UrlMatcher`.
-This matcher looks for a Twitter handle in the URL.
+This matcher looks for an X (formerly Twitter) handle in the URL.
 -->
 
 Angular 라우터는 사용자가 애플리케이션을 탐색할 수 있도록 강력한 매칭 전략을 지원합니다.
@@ -20,7 +20,7 @@ Angular 라우터는 사용자가 애플리케이션을 탐색할 수 있도록 
 URL이 더 복잡한 경우에는 커스텀 패턴 매칭을 직접 만들 수도 있습니다.
 
 이 튜토리얼에서는 Angular의 `UrlMatcher`로 커스텀 라우팅 규칙 매처를 만듭니다.
-이 매처는 URL에서 Twitter 사용자 이름을 찾습니다.
+이 매처는 URL에서 X(이전 이름 Twitter) 사용자 이름을 찾습니다.
 
 <!--
 ## Objectives
@@ -116,7 +116,7 @@ Angular CLI로 *angular-custom-route-match*라는 새 애플리케이션을 생�
 
 <!--
 With your application framework in place, you next need to add routing capabilities to the `app.config.ts` file.
-As a part of this process, you will create a custom URL matcher that looks for a Twitter handle in the URL.
+As a part of this process, you will create a custom URL matcher that looks for an X handle in the URL.
 This handle is identified by a preceding `@` symbol.
 
 1. In your code editor, open your `app.config.ts` file.
@@ -145,7 +145,7 @@ HELPFUL: A custom URL matcher behaves like any other route definition. Define ch
 -->
 
 애플리케이션의 기본 구조를 준비했으면 `app.config.ts` 파일에 라우팅 기능을 추가하세요.
-이 과정에서 URL의 Twitter 사용자 이름을 찾는 커스텀 URL 매처를 만듭니다.
+이 과정에서 URL의 X 사용자 이름을 찾는 커스텀 URL 매처를 만듭니다.
 사용자 이름은 앞에 붙은 `@` 기호로 구별합니다.
 
 1. 코드 편집기에서 `app.config.ts` 파일을 여세요.
@@ -262,7 +262,7 @@ To learn more about the Angular Router, see the following topics:
   <docs-pill href="api/router/Router" title="Router API"/>
 </docs-pill-row>
 
-HELPFUL: This content is based on [Custom Route Matching with the Angular Router](https://medium.com/@brandontroberts/custom-route-matching-with-the-angular-router-fbdd48665483), by [Brandon Roberts](https://twitter.com/brandontroberts).
+HELPFUL: This content is based on [Custom Route Matching with the Angular Router](https://medium.com/@brandontroberts/custom-route-matching-with-the-angular-router-fbdd48665483), by [Brandon Roberts](https://x.com/brandontroberts).
 -->
 
 Angular 라우터의 패턴 매칭을 사용하면 애플리케이션의 동적 URL을 유연하게 처리할 수 있습니다.
@@ -273,4 +273,4 @@ Angular 라우터가 더 궁금하면 다음 내용을 참고하세요.
   <docs-pill href="api/router/Router" title="라우터 API"/>
 </docs-pill-row>
 
-참고: 이 문서는 [Brandon Roberts](https://twitter.com/brandontroberts)의 [Custom Route Matching with the Angular Router](https://medium.com/@brandontroberts/custom-route-matching-with-the-angular-router-fbdd48665483)를 기반으로 작성했습니다.
+참고: 이 문서는 [Brandon Roberts](https://x.com/brandontroberts)의 [Custom Route Matching with the Angular Router](https://medium.com/@brandontroberts/custom-route-matching-with-the-angular-router-fbdd48665483)를 기반으로 작성했습니다.

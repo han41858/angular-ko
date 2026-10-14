@@ -69,6 +69,8 @@ In Angular, you can use all the browser supported CSS and HTML that's available.
 
 <docs-workflow>
 
+<a id="update-the-component-template"></a>
+
 <docs-step title="컴포넌트 템플릿을 수정하세요">
 `template` 프로퍼티를 수정해서 `Hello Universe` 로 바꿔보세요.
 
@@ -81,6 +83,8 @@ template: `
 수정한 HTML 템플릿이 미리보기 화면에 제대로 표시되는지 확인해 보세요.
 이제 텍스트 색상을 변경해 봅시다.
 </docs-step>
+
+<a id="update-the-component-styles"></a>
 
 <docs-step title="컴포넌트 스타일을 수정하세요">
 `color` 프로퍼티 값을 `blue`에서 `#a144eb` 로 변경해 보세요.

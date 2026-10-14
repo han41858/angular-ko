@@ -62,6 +62,16 @@ export function foreignComponent(
   return call(Identifiers.foreignComponent, args, sourceSpan);
 }
 
+export function foreignContent(
+  slot: number,
+  foreignComponentIndex: number,
+  parameterized: boolean,
+): o.Expression {
+  return o
+    .importExpr(parameterized ? Identifiers.foreignContentFn : Identifiers.foreignContent)
+    .callFn([o.literal(slot), o.literal(foreignComponentIndex)]);
+}
+
 function elementOrContainerBase(
   instruction: o.ExternalReference,
   slot: number,
@@ -501,6 +511,23 @@ export function conditionalBranchCreate(
   return call(Identifiers.conditionalBranchCreate, args, sourceSpan);
 }
 
+export function boundaryCreate(slot: number, sourceSpan: ParseSourceSpan): ir.CreateOp {
+  return call(Identifiers.boundaryCreate, [o.literal(slot)], sourceSpan);
+}
+
+export function getBoundary(slot: o.Expression): o.Expression {
+  return o.importExpr(Identifiers.getBoundary).callFn([slot]);
+}
+
+export function boundary(
+  slot: o.Expression,
+  processedExpr: o.Expression,
+  primarySlot: o.Expression,
+  sourceSpan: ParseSourceSpan | null,
+): ir.UpdateOp {
+  const args = [slot, processedExpr, primarySlot];
+  return call(Identifiers.boundaryUpdate, args, sourceSpan);
+}
 export function repeaterCreate(
   slot: number,
   viewFnName: string,

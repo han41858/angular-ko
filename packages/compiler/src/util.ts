@@ -34,10 +34,6 @@ export function noUndefined<T>(val: T | undefined): T {
   return val === undefined ? null! : val;
 }
 
-export function error(msg: string): never {
-  throw new Error(`Internal Error: ${msg}`);
-}
-
 // Escape characters that have a special meaning in Regular Expressions
 export function escapeRegExp(s: string): string {
   return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
@@ -152,4 +148,30 @@ export function getJitStandaloneDefaultForVersion(version: string): boolean {
 
   // All other Angular versions (v19+) default to true.
   return true;
+}
+
+/**
+ * Namespaces a CSS variable name and validates its syntax.
+ *
+ * @param varName The CSS variable name starting with `--`.
+ * @throws An Error if the CSS variable is invalid (e.g. has a single hyphen after "--global").
+ * @returns The namespaced CSS variable name.
+ */
+export function namespaceCssVariable(varName: string): string {
+  // TODO: Enforce this in v23. This is a breaking change.
+  //       Enable tests under platform-browser and compiler matching "has a single hyphen".
+  // g3-only-start
+  // if (varName.startsWith('--global-') && !varName.startsWith('--global--')) {
+  //   throw new Error(
+  //     `CSS variable "${varName}" has a single hyphen after "--global". ` +
+  //       `Use two hyphens ("--global--${varName.substring('--global-'.length)}") to opt-out of namespacing.`,
+  //   );
+  // }
+  // g3-only-end
+
+  if (varName.startsWith('--global--')) {
+    return '--' + varName.substring('--global--'.length);
+  } else {
+    return '--%NS%' + varName.substring('--'.length);
+  }
 }

@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
+import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, SecurityContext} from '../../src/core';
 import {
   _ATTR_TO_PROP,
   DomElementSchemaRegistry,
   SCHEMA,
 } from '../../src/schema/dom_element_schema_registry';
-import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, SecurityContext} from '../../src/core';
 
 import {Element} from '../../src/ml_parser/ast';
 import {HtmlParser} from '../../src/ml_parser/html_parser';
@@ -44,6 +44,11 @@ describe('DOMElementSchema', () => {
     expect(registry.hasProperty('div', 'id', [])).toBeTruthy();
     expect(registry.hasProperty('div', 'title', [])).toBeTruthy();
     expect(registry.hasProperty('div', 'inert', [])).toBeTruthy();
+    expect(registry.hasProperty('div', 'popover', [])).toBeTruthy();
+    expect(registry.hasProperty('button', 'popoverTargetAction', [])).toBeTruthy();
+    expect(registry.hasProperty('button', 'popoverTargetElement', [])).toBeTruthy();
+    expect(registry.hasProperty('input', 'popoverTargetAction', [])).toBeTruthy();
+    expect(registry.hasProperty('input', 'popoverTargetElement', [])).toBeTruthy();
     expect(registry.hasProperty('h1', 'align', [])).toBeTruthy();
     expect(registry.hasProperty('h2', 'align', [])).toBeTruthy();
     expect(registry.hasProperty('h3', 'align', [])).toBeTruthy();
@@ -154,6 +159,9 @@ If 'onAnything' is a directive input, make sure the directive is imported by the
     expect(registry.securityContext('a', 'href', false)).toBe(SecurityContext.URL);
     expect(registry.securityContext('a', 'style', false)).toBe(SecurityContext.STYLE);
     expect(registry.securityContext('base', 'href', false)).toBe(SecurityContext.RESOURCE_URL);
+    expect(registry.securityContext('iframe', 'credentialless', false)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
 
     // SVG animate and set attributes
     expect(registry.securityContext(':svg:animate', 'to', false)).toBe(
@@ -169,11 +177,54 @@ If 'onAnything' is a directive input, make sure the directive is imported by the
       SecurityContext.ATTRIBUTE_NO_BINDING,
     );
 
+    // SVG animation elements are sensitive when their namespace is omitted at compile time.
+    expect(registry.securityContext('set', 'to', true)).toBe(SecurityContext.ATTRIBUTE_NO_BINDING);
+    expect(registry.securityContext('set', 'attributeName', true)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext('animate', 'to', true)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext('animate', 'from', true)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext('animate', 'values', true)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext('animate', 'attributeName', true)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext('animateMotion', 'attributeName', true)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+    expect(registry.securityContext('animateTransform', 'attributeName', true)).toBe(
+      SecurityContext.ATTRIBUTE_NO_BINDING,
+    );
+
+    // The defensive SVG lookup must not apply to elements in an explicit foreign namespace.
+    expect(registry.securityContext(':math:set', 'to', true)).toBe(SecurityContext.NONE);
+
     // SVG link attributes
     expect(registry.securityContext(':svg:a', 'href', false)).toBe(SecurityContext.URL);
     expect(registry.securityContext(':svg:a', 'xlink:href', false)).toBe(SecurityContext.URL);
     expect(registry.securityContext(':svg:a', 'href', true)).toBe(SecurityContext.URL);
     expect(registry.securityContext(':svg:a', 'xlink:href', true)).toBe(SecurityContext.URL);
+
+    // MathML link attributes
+    expect(registry.securityContext(':math:math', 'href', false)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':math:math', 'xlink:href', false)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':math:math', 'href', true)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':math:math', 'xlink:href', true)).toBe(SecurityContext.URL);
+    // Making sure we're have a wild card match for MathML elements with the correct security context
+    expect(registry.securityContext(':math:foobar', 'href', true)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':math:foobar', 'xlink:href', true)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':math:foobar', 'href', false)).toBe(SecurityContext.URL);
+    expect(registry.securityContext(':math:foobar', 'xlink:href', false)).toBe(SecurityContext.URL);
+    // Ensure MathML wildcard does not apply outside of the MathML namespace.
+    expect(registry.securityContext(':svg:foobar', 'href', false)).toBe(SecurityContext.NONE);
+    expect(registry.securityContext(':svg:foobar', 'xlink:href', false)).toBe(SecurityContext.NONE);
+
+    expect(registry.securityContext('p', 'href', false)).toBe(SecurityContext.NONE);
   });
 
   it('should detect properties on namespaced elements', () => {

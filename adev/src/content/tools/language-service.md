@@ -156,15 +156,18 @@ You can then click "Go to definition" or press F12 to go directly to the definit
 
 <!--
 Angular Language Service is currently available as an extension for [Visual Studio Code](https://code.visualstudio.com), [WebStorm](https://www.jetbrains.com/webstorm), [Sublime Text](https://www.sublimetext.com), [Zed](https://zed.dev), [Neovim](https://neovim.io), and [Eclipse IDE](https://www.eclipse.org/eclipseide).
+
+NOTE: The Angular team maintains and distributes the Visual Studio Code extension, which is supported in Visual Studio Code and VS Code-based editors such as Cursor and Antigravity. Integrations for other editors are maintained by their respective editor vendors or by the community. Report issues specific to those integrations to their maintainers.
 -->
 
 Angular 언어 지원 서비스는 현재 [Visual Studio Code](https://code.visualstudio.com), [WebStorm](https://www.jetbrains.com/webstorm), [Sublime Text](https://www.sublimetext.com), [Zed](https://zed.dev), [Neovim](https://neovim.io), [Eclipse IDE](https://www.eclipse.org/eclipseide)의 확장 기능으로 제공됩니다.
+
+NOTE: Angular 팀은 Visual Studio Code 확장 기능을 유지보수하고 배포하며, Visual Studio Code와 Cursor, Antigravity 같은 VS Code 기반 편집기를 지원합니다. 다른 편집기의 통합 기능은 해당 편집기 공급업체나 커뮤니티가 유지보수합니다. 해당 통합 기능에만 발생하는 문제는 각 유지보수 담당자에게 보고하세요.
 
 <!--
 ### Visual Studio Code
 -->
 
-<a id="visual-studio-code"></a>
 
 ### Visual Studio Code
 
@@ -186,7 +189,6 @@ Visual Studio Code와 Angular 언어 지원 서비스의 통합 기능은 Angula
 ### Visual Studio
 -->
 
-<a id="visual-studio"></a>
 
 ### Visual Studio
 
@@ -210,7 +212,6 @@ Visual Studio와 Angular 언어 지원 서비스의 통합 기능은 Angular 팀
 ### WebStorm
 -->
 
-<a id="webstorm"></a>
 
 ### WebStorm
 
@@ -228,7 +229,6 @@ WebStorm 2019.1부터는 `@angular/language-service`가 더 이상 필요하지 
 ### Sublime Text
 -->
 
-<a id="sublime-text"></a>
 
 ### Sublime Text
 
@@ -314,7 +314,6 @@ TypeScript 2.3부터는 언어 서비스에서 사용할 수 있는 플러그인
 ### Eclipse IDE
 -->
 
-<a id="eclipse-ide"></a>
 
 ### Eclipse IDE
 
@@ -329,7 +328,6 @@ Angular Language Server가 포함된 "Eclipse IDE for Web and JavaScript develop
 ### Neovim
 -->
 
-<a id="neovim"></a>
 
 ### Neovim
 
@@ -433,15 +431,14 @@ Angular Language Service can be used with Neovim by using the [nvim-lspconfig](h
 ### Zed
 -->
 
-<a id="zed"></a>
 
 ### Zed
 
 <!--
-In [Zed](https://zed.dev), install the extension from [Extensions: Marketplace](https://zed.dev/extensions/angular).
+In [Zed](https://zed.dev), install the community-maintained extension from [Extensions: Marketplace](https://zed.dev/extensions/angular).
 -->
 
-[Zed](https://zed.dev)에서는 [확장 기능 마켓플레이스](https://zed.dev/extensions/angular)에서 확장 기능을 설치하세요.
+[Zed](https://zed.dev)에서는 [확장 기능 마켓플레이스](https://zed.dev/extensions/angular)에서 커뮤니티가 유지보수하는 확장 기능을 설치하세요.
 
 <!--
 ## How the Language Service works

@@ -35,6 +35,8 @@ export interface ParseResult<TValue> {
 /**
  * Options for `transformedValue`.
  *
+ * @see [Value transformation](guide/forms/signals/custom-controls#value-transformation)
+ *
  * @publicApi 22.0
  */
 export interface TransformedValueOptions<TValue, TRaw> {
@@ -56,6 +58,8 @@ export interface TransformedValueOptions<TValue, TRaw> {
 /**
  * A writable signal representing a "raw" UI value that is synchronized with a model signal
  * via parse/format transformations.
+ *
+ * @see [Value transformation](guide/forms/signals/custom-controls#value-transformation)
  *
  * @category control
  * @publicApi 22.0
@@ -99,17 +103,20 @@ export interface TransformedValueSignal<TRaw> extends WritableSignal<TRaw> {
  *
  *   protected readonly rawValue = transformedValue(this.value, {
  *     parse: (val) => {
- *       if (val === '') return {value: null};
- *       const num = Number(val);
- *       if (Number.isNaN(num)) {
- *         return {error: {kind: 'parse', message: `${val} is not numeric`}};
- *       }
- *       return {value: num};
+ *       const parsed = val ? Number(val) : null;
+ *
+ *       return Number.isNaN(parsed)
+ *         ? {error: {kind: 'parse', message: `${val} is not a number`}}
+ *         : {value: parsed};
  *     },
  *     format: (val) => val?.toString() ?? '',
  *   });
  * }
  * ```
+ *
+ * @see [Value transformation](guide/forms/signals/custom-controls#value-transformation)
+ *
+
  */
 export function transformedValue<TValue, TRaw>(
   value: ModelSignal<TValue>,

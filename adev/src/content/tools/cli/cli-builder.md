@@ -257,7 +257,7 @@ You can provide the following schema for type validation of these values.
 
 ```json {header: "schema.json"}
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
   "type": "object",
   "properties": {
     "source": {
@@ -271,7 +271,7 @@ You can provide the following schema for type validation of these values.
 ```
 
 HELPFUL: This is a minimal example, but the use of a schema for validation can be very powerful.
-For more information, see the [JSON schemas website](http://json-schema.org).
+For more information, see the [JSON schemas website](https://json-schema.org).
 
 To link our builder implementation with its schema and name, you need to create a _builder definition_ file, which you can point to in `package.json`.
 
@@ -320,7 +320,7 @@ These values are accessed on `options.source` and `options.destination`.
 
 ```json {header: "schema.json"}
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "https://json-schema.org/schema",
   "type": "object",
   "properties": {
     "source": {
@@ -334,7 +334,7 @@ These values are accessed on `options.source` and `options.destination`.
 ```
 
 도움말: 간단한 예제이지만 스키마를 활용하면 강력한 유효성 검사를 수행할 수 있습니다.
-자세한 내용은 [JSON 스키마 웹사이트](http://json-schema.org)를 참고하세요.
+자세한 내용은 [JSON 스키마 웹사이트](https://json-schema.org)를 참고하세요.
 
 빌더 구현을 스키마 및 이름과 연결하려면 _빌더 정의_ 파일을 생성하고 `package.json`에서 해당 파일을 가리키도록 해야 합니다.
 
@@ -596,9 +596,8 @@ If you create a new project with `ng new builder-test`, the generated `angular.j
           "options": {
             "outputPath": "dist/builder-test",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json"
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json"
           },
           "configurations": {
             "production": {
@@ -636,9 +635,8 @@ npm install @example/copy-file
           "options": {
             "outputPath": "dist/builder-test",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json"
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json"
           },
           "configurations": {
             "production": {

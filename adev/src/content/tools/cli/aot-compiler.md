@@ -100,7 +100,7 @@ In the following example, the `@Component()` metadata object and the class const
 ```angular-ts
 @Component({
   selector: 'app-typical',
-  template: '<div>A typical component for {{data.name}}</div>',
+  template: '<div>A typical component for {{data().name}}</div>',
 })
 export class Typical {
   data = input.required<TypicalData>();
@@ -121,7 +121,7 @@ Angular AOT 컴파일러는 Angular가 관리해야 하는 애플리케이션의
 ```angular-ts
 @Component({
   selector: 'app-typical',
-  template: '<div>A typical component for {{data.name}}</div>',
+  template: '<div>A typical component for {{data().name}}</div>',
 })
 export class Typical {
   data = input.required<TypicalData>();
@@ -144,20 +144,20 @@ Angular 컴파일러는 메타데이터를 _한 번_ 추출하고 `Typical`의 _
 <!--
 There are three phases of AOT compilation.
 
-|     | Phase                  | Details                                                                                                                                                                                                                                                                                                        |
-| :-- | :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | code analysis          | In this phase, the TypeScript compiler and _AOT collector_ create a representation of the source. The collector does not attempt to interpret the metadata it collects. It represents the metadata as best it can and records errors when it detects a metadata syntax violation.                              |
-| 2   | code generation        | In this phase, the compiler's `StaticReflector` interprets the metadata collected in phase 1, performs additional validation of the metadata, and throws an error if it detects a metadata restriction violation.                                                                                              |
-| 3   | template type checking | In this optional phase, the Angular _template compiler_ uses the TypeScript compiler to validate the binding expressions in templates. You can enable this phase explicitly by setting the `strictTemplates` configuration option; see [Angular compiler options](reference/configs/angular-compiler-options). |
+|     | Phase                  | Details                                                                                                                                                                                                                                                                                                                     |
+| :-- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | code analysis          | In this phase, the TypeScript compiler and _AOT collector_ create a representation of the source. The collector does not attempt to interpret the metadata it collects. It represents the metadata as best it can and records errors when it detects a metadata syntax violation.                                           |
+| 2   | code generation        | In this phase, the compiler's `StaticReflector` interprets the metadata collected in phase 1, performs additional validation of the metadata, and throws an error if it detects a metadata restriction violation.                                                                                                           |
+| 3   | template type checking | In this phase, the Angular _template compiler_ uses the TypeScript compiler to validate the binding expressions in templates. Strict checking in this phase is enabled by default and controlled by the `strictTemplates` configuration option; see [Angular compiler options](reference/configs/angular-compiler-options). |
 -->
 
 AOT 컴파일은 세 단계로 진행됩니다.
 
-| 순서 | 단계             | 설명                                                                                                                                                                                                                                                                 |
-| :--- | :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | 코드 분석        | TypeScript 컴파일러와 _AOT 수집기_ 가 소스를 표현하는 데이터를 생성합니다. 수집기는 수집한 메타데이터를 해석하지 않습니다. 가능한 범위에서 메타데이터를 표현하고 메타데이터 문법 위반을 발견하면 오류를 기록합니다.                                                  |
-| 2    | 코드 생성        | 컴파일러의 `StaticReflector`가 1단계에서 수집한 메타데이터를 해석하고 추가로 검증하며, 메타데이터 제약 위반을 발견하면 오류를 발생시킵니다.                                                                                                                          |
-| 3    | 템플릿 타입 검사 | 선택적인 단계로, Angular _템플릿 컴파일러_ 가 TypeScript 컴파일러를 사용해서 템플릿의 바인딩 표현식을 검증합니다. `strictTemplates` 설정 옵션으로 명시적으로 활성화할 수 있습니다. [Angular 컴파일러 옵션](reference/configs/angular-compiler-options)을 참고하세요. |
+| 순서 | 단계             | 설명                                                                                                                                                                                                                                                                           |
+| :--- | :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | 코드 분석        | TypeScript 컴파일러와 _AOT 수집기_ 가 소스를 표현하는 데이터를 생성합니다. 수집기는 수집한 메타데이터를 해석하지 않습니다. 가능한 범위에서 메타데이터를 표현하고 메타데이터 문법 위반을 발견하면 오류를 기록합니다.                                                            |
+| 2    | 코드 생성        | 컴파일러의 `StaticReflector`가 1단계에서 수집한 메타데이터를 해석하고 추가로 검증하며, 메타데이터 제약 위반을 발견하면 오류를 발생시킵니다.                                                                                                                                    |
+| 3    | 템플릿 타입 검사 | 이 단계에서 Angular _템플릿 컴파일러_ 가 TypeScript 컴파일러를 사용해서 템플릿의 바인딩 표현식을 검증합니다. 엄격한 검사는 기본적으로 활성화되며 `strictTemplates` 설정 옵션으로 제어합니다. [Angular 컴파일러 옵션](reference/configs/angular-compiler-options)을 참고하세요. |
 
 <!--
 ### Metadata restrictions
@@ -221,7 +221,7 @@ At the same time, the AOT **collector** analyzes the metadata recorded in the An
 
 You can think of `.metadata.json` as a diagram of the overall structure of a decorator's metadata, represented as an [abstract syntax tree (AST)](https://en.wikipedia.org/wiki/Abstract_syntax_tree).
 
-HELPFUL: Angular's [schema.ts](https://github.com/angular/angular/blob/main/packages/compiler-cli/src/metadata/schema.ts) describes the JSON format as a collection of TypeScript interfaces.
+HELPFUL: Angular's [schema.ts](https://github.com/angular/angular/blob/12.2.x/packages/compiler-cli/src/metadata/schema.ts) describes the JSON format as a collection of TypeScript interfaces.
 -->
 
 첫 번째 단계의 분석 작업 일부는 TypeScript 컴파일러가 수행합니다.
@@ -230,7 +230,7 @@ AOT 컴파일러가 애플리케이션 코드를 생성하는 데 필요한 타�
 
 `.metadata.json`은 데코레이터 메타데이터의 전체 구조를 [추상 구문 트리(AST)](https://en.wikipedia.org/wiki/Abstract_syntax_tree)로 표현한 도식이라고 생각하면 됩니다.
 
-도움말: Angular의 [schema.ts](https://github.com/angular/angular/blob/main/packages/compiler-cli/src/metadata/schema.ts)는 TypeScript 인터페이스 집합으로 JSON 형식을 설명합니다.
+도움말: Angular의 [schema.ts](https://github.com/angular/angular/blob/12.2.x/packages/compiler-cli/src/metadata/schema.ts)는 TypeScript 인터페이스 집합으로 JSON 형식을 설명합니다.
 
 <!--
 ### Expression syntax limitations
@@ -320,85 +320,6 @@ AOT 수집기는 JavaScript 문법의 일부만 이해합니다.
 
 Angular 라이브러리는 모든 Angular `.metadata.json` 파일에 오류가 없도록 이 옵션을 사용합니다.
 직접 라이브러리를 빌드할 때도 같은 설정을 사용하는 것이 좋습니다.
-
-<!--
-### No arrow functions
--->
-
-<a id="no-arrow-functions"></a>
-
-### 화살표 함수 사용 불가
-
-<!--
-The AOT compiler does not support [function expressions](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/function)
-and [arrow functions](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Arrow_functions), also called _lambda_ functions.
-
-Consider the following component decorator:
-
-```ts
-
-@Component({
-  …
-  providers: [{provide: server, useFactory: () => new Server()}]
-})
-
-```
-
-The AOT collector does not support the arrow function, `() => new Server()`, in a metadata expression.
-It generates an error node in place of the function.
-When the compiler later interprets this node, it reports an error that invites you to turn the arrow function into an _exported function_.
-
-You can fix the error by converting to this:
-
-```ts
-
-export function serverFactory() {
-  return new Server();
-}
-
-@Component({
-  …
-  providers: [{provide: server, useFactory: serverFactory}]
-})
-
-```
-
-In version 5 and later, the compiler automatically performs this rewriting while emitting the `.js` file.
--->
-
-AOT 컴파일러는 [함수 표현식](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/function)과 _람다_ 함수라고도 부르는 [화살표 함수](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Arrow_functions)를 지원하지 않습니다.
-
-다음 컴포넌트 데코레이터를 살펴봅시다:
-
-```ts
-
-@Component({
-  …
-  providers: [{provide: server, useFactory: () => new Server()}]
-})
-
-```
-
-AOT 수집기는 메타데이터 표현식 안의 화살표 함수 `() => new Server()`를 지원하지 않습니다.
-해당 함수 대신 오류 노드를 생성합니다.
-이후 컴파일러가 이 노드를 해석하면 화살표 함수를 _내보낸 함수_ 로 변경하라는 오류를 보고합니다.
-
-다음과 같이 변경하면 오류를 해결할 수 있습니다:
-
-```ts
-
-export function serverFactory() {
-  return new Server();
-}
-
-@Component({
-  …
-  providers: [{provide: server, useFactory: serverFactory}]
-})
-
-```
-
-버전 5 이상에서는 컴파일러가 `.js` 파일을 출력할 때 이 변환을 자동으로 수행합니다.
 
 <!--
 ### Code folding
@@ -562,7 +483,7 @@ The following table describes which expressions the collector can and cannot fol
 | Conditional operator             | yes, if condition is foldable            |
 | Parentheses                      | yes, if the expression is foldable       |
 
-If an expression is not foldable, the collector writes it to `.metadata.json` as an [AST](https://en.wikipedia.org/wiki/Abstract*syntax*tree) for the compiler to resolve.
+If an expression is not foldable, the collector writes it to `.metadata.json` as an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) for the compiler to resolve.
 -->
 
 수집기가 접을 수 있는 표현식과 접을 수 없는 표현식은 다음과 같습니다:
@@ -588,7 +509,7 @@ If an expression is not foldable, the collector writes it to `.metadata.json` as
 | 조건 연산자             | 조건을 접을 수 있으면 가능                      |
 | 괄호                    | 표현식을 접을 수 있으면 가능                    |
 
-표현식을 접을 수 없으면 수집기는 컴파일러가 해석할 수 있도록 `.metadata.json`에 [AST](https://en.wikipedia.org/wiki/Abstract*syntax*tree)로 기록합니다.
+표현식을 접을 수 없으면 수집기는 컴파일러가 해석할 수 있도록 `.metadata.json`에 [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree)로 기록합니다.
 
 <!--
 ## Phase 2: code generation
@@ -651,11 +572,10 @@ The compiler, however, can later refuse to generate a call to a _particular_ fun
 
 The compiler can only create instances of certain classes, supports only core decorators, and only supports calls to macros \(functions or static methods\) that return expressions.
 
-| Compiler action      | Details                                                                                                                                                |
-| :------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| New instances        | The compiler only allows metadata that create instances of the class `InjectionToken` from `@angular/core`.                                            |
-| Supported decorators | The compiler only supports metadata for the [Angular decorators in the `@angular/core` module](/api?type=decorator).                                   |
-| Function calls       | Factory functions must be exported, named functions. The AOT compiler does not support lambda expressions \("arrow functions"\) for factory functions. |
+| Compiler action      | Details                                                                                                              |
+| :------------------- | :------------------------------------------------------------------------------------------------------------------- |
+| New instances        | The compiler only allows metadata that create instances of the class `InjectionToken` from `@angular/core`.          |
+| Supported decorators | The compiler only supports metadata for the [Angular decorators in the `@angular/core` module](/api?type=decorator). |
 -->
 
 수집기는 문법이 올바르다면 함수 호출이나 `new`를 사용한 객체 생성을 표현할 수 있습니다.
@@ -663,11 +583,10 @@ The compiler can only create instances of certain classes, supports only core de
 
 컴파일러는 특정 클래스의 인스턴스만 생성할 수 있고, 핵심 데코레이터만 지원하며, 표현식을 반환하는 매크로(함수 또는 정적 메서드)의 호출만 지원합니다.
 
-| 컴파일러 동작       | 설명                                                                                                                           |
-| :------------------ | :----------------------------------------------------------------------------------------------------------------------------- |
-| 새 인스턴스         | 컴파일러는 `@angular/core`의 `InjectionToken` 클래스 인스턴스를 생성하는 메타데이터만 허용합니다.                              |
-| 지원하는 데코레이터 | 컴파일러는 [`@angular/core` 모듈의 Angular 데코레이터](/api?type=decorator)에 대한 메타데이터만 지원합니다.                    |
-| 함수 호출           | 팩토리 함수는 이름이 있고 내보낸 함수여야 합니다. AOT 컴파일러는 팩토리 함수의 람다 표현식("화살표 함수")을 지원하지 않습니다. |
+| 컴파일러 동작       | 설명                                                                                                        |
+| :------------------ | :---------------------------------------------------------------------------------------------------------- |
+| 새 인스턴스         | 컴파일러는 `@angular/core`의 `InjectionToken` 클래스 인스턴스를 생성하는 메타데이터만 허용합니다.           |
+| 지원하는 데코레이터 | 컴파일러는 [`@angular/core` 모듈의 Angular 데코레이터](/api?type=decorator)에 대한 메타데이터만 지원합니다. |
 
 <!--
 ### Functions and static method calls
@@ -749,87 +668,6 @@ Angular의 [`RouterModule`](api/router/RouterModule)은 최상위 및 하위 라
 이 메서드의 [소스 코드](https://github.com/angular/angular/blob/main/packages/router/src/router_module.ts#L139 'RouterModule.forRoot 소스 코드')를 살펴보고 매크로가 복잡한 [NgModule](guide/ngmodules/overview) 설정을 어떻게 단순하게 만드는지 확인해 보세요.
 
 <!--
-### Metadata rewriting
--->
-
-<a id="metadata-rewriting"></a>
-
-### 메타데이터 다시 작성하기
-
-<!--
-The compiler treats object literals containing the fields `useClass`, `useValue`, `useFactory`, and `data` specially, converting the expression initializing one of these fields into an exported variable that replaces the expression.
-This process of rewriting these expressions removes all the restrictions on what can be in them because
-the compiler doesn't need to know the expression's value — it just needs to be able to generate a reference to the value.
-
-You might write something like:
-
-```ts
-class TypicalServer {}
-
-@NgModule({
-  providers: [{provide: SERVER, useFactory: () => TypicalServer}],
-})
-export class TypicalModule {}
-```
-
-Without rewriting, this would be invalid because lambdas are not supported and `TypicalServer` is not exported.
-To allow this, the compiler automatically rewrites this to something like:
-
-```ts
-class TypicalServer {}
-
-export const θ0 = () => new TypicalServer();
-
-@NgModule({
-  providers: [{provide: SERVER, useFactory: θ0}],
-})
-export class TypicalModule {}
-```
-
-This allows the compiler to generate a reference to `θ0` in the factory without having to know what the value of `θ0` contains.
-
-The compiler does the rewriting during the emit of the `.js` file.
-It does not, however, rewrite the `.d.ts` file, so TypeScript doesn't recognize it as being an export.
-And it does not interfere with the ES module's exported API.
--->
-
-컴파일러는 `useClass`, `useValue`, `useFactory`, `data` 필드가 포함된 객체 리터럴을 특별하게 처리합니다.
-이 필드 중 하나를 초기화하는 표현식을 내보낸 변수로 변환하고 원래 표현식을 해당 변수로 대체합니다.
-이렇게 표현식을 다시 작성하면 표현식에 들어갈 수 있는 내용에 대한 제약이 모두 사라집니다.
-컴파일러가 표현식의 값을 알 필요 없이 그 값을 참조하는 코드만 생성하면 되기 때문입니다.
-
-다음과 같이 작성할 수 있습니다:
-
-```ts
-class TypicalServer {}
-
-@NgModule({
-  providers: [{provide: SERVER, useFactory: () => TypicalServer}],
-})
-export class TypicalModule {}
-```
-
-다시 작성하지 않는다면 람다 함수를 지원하지 않고 `TypicalServer`를 내보내지 않았기 때문에 유효하지 않습니다.
-이를 허용하기 위해 컴파일러는 자동으로 다음과 비슷하게 다시 작성합니다:
-
-```ts
-class TypicalServer {}
-
-export const θ0 = () => new TypicalServer();
-
-@NgModule({
-  providers: [{provide: SERVER, useFactory: θ0}],
-})
-export class TypicalModule {}
-```
-
-그러면 컴파일러는 `θ0`에 어떤 값이 있는지 알지 못해도 팩토리에서 `θ0`를 참조하는 코드를 생성할 수 있습니다.
-
-컴파일러는 `.js` 파일을 출력할 때 다시 작성합니다.
-하지만 `.d.ts` 파일은 다시 작성하지 않으므로 TypeScript는 이를 내보낸 항목으로 인식하지 않습니다.
-또한 ES 모듈에서 내보내는 API에도 영향을 주지 않습니다.
-
-<!--
 ## Phase 3: Template type checking
 -->
 
@@ -841,7 +679,7 @@ export class TypicalModule {}
 One of the Angular compiler's most helpful features is the ability to type-check expressions within templates, and catch any errors before they cause crashes at runtime.
 In the template type-checking phase, the Angular template compiler uses the TypeScript compiler to validate the binding expressions in templates.
 
-Enable this phase explicitly by adding the compiler option `"strictTemplates"` in the `"angularCompilerOptions"` of the project's TypeScript configuration file
+Strict checking in this phase is enabled by default and controlled by the compiler option `"strictTemplates"` in the `"angularCompilerOptions"` of the project's TypeScript configuration file
 (see [Angular Compiler Options](reference/configs/angular-compiler-options)).
 
 Template validation produces error messages when a type error is detected in a template binding
@@ -879,7 +717,7 @@ If the error is in an attribute binding such as `[value]="person.address.street"
 location is the location of the attribute that contains the error.
 
 The validation uses the TypeScript type checker and the options supplied to the TypeScript compiler to control how detailed the type validation is.
-For example, if the `strictTypeChecks` is specified, the error
+For example, if the `strictNullChecks` TypeScript option is enabled, the error
 
 ```shell {hideCopy}
 
@@ -893,7 +731,7 @@ is reported as well as the above error message.
 Angular 컴파일러의 가장 유용한 기능 중 하나는 템플릿 안의 표현식에 대해 타입을 검사하고 실행 중 오류가 발생하기 전에 문제를 발견하는 기능입니다.
 템플릿 타입 검사 단계에서 Angular 템플릿 컴파일러는 TypeScript 컴파일러로 템플릿의 바인딩 표현식을 검증합니다.
 
-프로젝트의 TypeScript 설정 파일에서 `"angularCompilerOptions"`에 `"strictTemplates"` 컴파일러 옵션을 추가하면 이 단계를 명시적으로 활성화할 수 있습니다([Angular 컴파일러 옵션](reference/configs/angular-compiler-options) 참고).
+이 단계의 엄격한 검사는 기본적으로 활성화되며 프로젝트의 TypeScript 설정 파일에서 `"angularCompilerOptions"`의 `"strictTemplates"` 컴파일러 옵션으로 제어합니다([Angular 컴파일러 옵션](reference/configs/angular-compiler-options) 참고).
 
 템플릿 검증은 바인딩 표현식에서 타입 오류를 발견하면 오류 메시지를 생성합니다.
 TypeScript 컴파일러가 `.ts` 파일의 코드에서 타입 오류를 보고하는 것과 비슷합니다.
@@ -927,7 +765,7 @@ my.component.ts.MyComponent.html(1,1): : Property 'addresss' does not exist on t
 `[value]="person.address.street"`와 같은 어트리뷰트 바인딩에 오류가 있으면 해당 어트리뷰트의 위치를 보고합니다.
 
 검증에는 TypeScript 타입 검사기를 사용하며 TypeScript 컴파일러에 전달한 옵션으로 타입 검증의 엄격함을 제어합니다.
-예를 들어 `strictTypeChecks`를 지정하면 앞의 오류 메시지와 함께 다음 오류도 보고합니다.
+예를 들어 TypeScript의 `strictNullChecks` 옵션을 활성화하면 앞의 오류 메시지와 함께 다음 오류도 보고합니다.
 
 ```shell {hideCopy}
 

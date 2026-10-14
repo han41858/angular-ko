@@ -30,7 +30,7 @@ Hydration is the process that restores the server-side rendered application on t
 ## 하이드레이션은 왜 중요한가요?
 
 <!--
-Hydration improves application performance by avoiding extra work to re-create DOM nodes. Instead, Angular tries to match existing DOM elements to the applications structure at runtime and reuses DOM nodes when possible. This results in a performance improvement that can be measured using [Core Web Vitals (CWV)](https://web.dev/learn-core-web-vitals/) statistics, such as reducing the First Input Delay ([FID](https://web.dev/fid/)) and Largest Contentful Paint ([LCP](https://web.dev/lcp/)), as well as Cumulative Layout Shift ([CLS](https://web.dev/cls/)). Improving these numbers also affects things like SEO performance.
+Hydration improves application performance by avoiding extra work to re-create DOM nodes. Instead, Angular tries to match existing DOM elements to the application's structure at runtime and reuses DOM nodes when possible. This results in a performance improvement that can be measured using [Core Web Vitals (CWV)](https://web.dev/learn-core-web-vitals/) statistics, such as reducing the First Input Delay ([FID](https://web.dev/fid/)) and Largest Contentful Paint ([LCP](https://web.dev/lcp/)), as well as Cumulative Layout Shift ([CLS](https://web.dev/cls/)). Improving these numbers also affects things like SEO performance.
 
 Without hydration enabled, server-side rendered Angular applications will destroy and re-render the application's DOM, which may result in a visible UI flicker. This re-rendering can negatively impact [Core Web Vitals](https://web.dev/learn-core-web-vitals/) like [LCP](https://web.dev/lcp/) and cause a layout shift. Enabling hydration allows the existing DOM to be re-used and prevents a flicker.
 -->
@@ -188,27 +188,40 @@ Angular DevTools에서는 페이지의 어느 부분이 하이드레이션되었
 ## 이벤트 캡처와 재실행
 
 <!--
-When an application is rendered on the server, it is visible in a browser as soon as produced HTML loads. Users may assume that they can interact with the page, but event listeners are not attached until hydration completes. Starting from v18, you can enable the Event Replay feature that allows to capture all events that happen before hydration and replay those events once hydration has completed. You can enable it using the `withEventReplay()` function, for example:
+When an application is rendered on the server, it is visible in a browser as soon as produced HTML loads. Users may assume that they can interact with the page, but event listeners are not attached until hydration completes. The Event Replay feature captures all events that happen before hydration and replays those events once hydration has completed.
+
+Event replay is enabled alongside [incremental hydration](guide/incremental-hydration). If you opt out of incremental hydration with `withNoIncrementalHydration()`, you can still enable event replay using the `withEventReplay()` function:
 
 ```typescript
-import {provideClientHydration, withEventReplay} from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withNoIncrementalHydration,
+} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
-  providers: [provideClientHydration(withEventReplay())],
+  providers: [provideClientHydration(withNoIncrementalHydration(), withEventReplay())],
 });
 ```
 -->
 
 서버에서 렌더링한 애플리케이션은 생성된 HTML이 로드되면 바로 브라우저에 표시됩니다.
 사용자는 페이지와 상호작용할 수 있다고 생각할 수 있지만, 이벤트 리스너는 하이드레이션이 완료될 때까지 연결되지 않습니다.
-v18부터는 하이드레이션 전에 발생한 모든 이벤트를 캡처하고 완료 후 재실행하는 이벤트 재실행(Event Replay) 기능을 활성화할 수 있습니다.
-다음처럼 `withEventReplay()` 함수로 활성화하세요:
+이벤트 재실행(Event Replay) 기능은 하이드레이션 전에 발생한 모든 이벤트를 캡처하고 하이드레이션이 완료되면 다시 실행합니다.
+
+이벤트 재실행은 [점진적 하이드레이션](guide/incremental-hydration)과 함께 활성화됩니다.
+`withNoIncrementalHydration()`으로 점진적 하이드레이션을 비활성화해도 `withEventReplay()`으로 이벤트 재실행을 활성화할 수 있습니다.
+다음 예제를 참고하세요:
 
 ```typescript
-import {provideClientHydration, withEventReplay} from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withNoIncrementalHydration,
+} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
-  providers: [provideClientHydration(withEventReplay())],
+  providers: [provideClientHydration(withNoIncrementalHydration(), withEventReplay())],
 });
 ```
 
@@ -236,11 +249,8 @@ The Event Replay is divided into three main phases:
 
 Event replay supports _native browser events_, for example `click`, `mouseover`, and `focusin`. If you'd like to learn more about JSAction, the library that powers event replay, you can read more [on the readme](https://github.com/angular/angular/tree/main/packages/core/primitives/event-dispatch#readme).
 
----
+This feature ensures a consistent user experience, preventing user actions performed before hydration from being ignored.
 
-This feature ensures a consistent user experience, preventing user actions performed before Hydration from being ignored.
-
-NOTE: If you have [incremental hydration](guide/incremental-hydration) enabled, event replay is automatically enabled under the hood.
 -->
 
 이벤트 재실행은 하이드레이션 과정이 끝나기 전에 발생한 사용자 이벤트를 캡처해서 사용자 경험을 개선하는 기능입니다.
@@ -260,11 +270,7 @@ NOTE: If you have [incremental hydration](guide/incremental-hydration) enabled, 
 이벤트 재실행은 `click`, `mouseover`, `focusin` 같은 _브라우저 네이티브 이벤트_ 를 지원합니다.
 이벤트 재실행을 구현하는 라이브러리인 JSAction에 대해 더 알고 싶다면 [README](https://github.com/angular/angular/tree/main/packages/core/primitives/event-dispatch#readme)를 참고하세요.
 
----
-
 이 기능은 하이드레이션 전에 수행한 사용자 행동이 무시되지 않도록 해서 일관된 사용자 경험을 제공합니다.
-
-참고: [점진적 하이드레이션](guide/incremental-hydration)을 활성화하면 이벤트 재실행도 내부적으로 자동 활성화됩니다.
 
 <!--
 ## Constraints
@@ -412,7 +418,7 @@ Providing a custom or a "noop" Zone.js implementation may lead to a different ti
 ## 오류
 
 <!--
-There are several hydration related errors you may encounter ranging from node mismatches to cases when the `ngSkipHydration` was used on an invalid host node. The most common error case that may occur is due to direct DOM manipulation using native APIs that results in hydration being unable to find or match the expected DOM tree structure on the client that was rendered by the server. The other case you may encounter this type of error was mentioned in the [Valid HTML structure](#valid-html-structure) section earlier. So, make sure the HTML in your templates is using valid structure, and you'll avoid that error case.
+There are several hydration related errors you may encounter ranging from node mismatches to cases when the `ngSkipHydration` was used on an invalid host node. The most common error case that may occur is due to direct DOM manipulation using native APIs that results in hydration being unable to find or match the expected DOM tree structure on the client that was rendered by the server. The other case where you may encounter this type of error was mentioned in the [Valid HTML structure](#valid-html-structure) section earlier. So, make sure the HTML in your templates is using valid structure, and you'll avoid that error case.
 
 For a full reference on hydration related errors, visit the [Errors Reference Guide](/errors).
 -->

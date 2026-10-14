@@ -120,6 +120,8 @@ You put the trigger that defines an animation within the `animations` metadata p
 프로젝트에 Angular 애니메이션을 추가하려면 일반 Angular 기능과 함께 애니메이션 전용 모듈을 가져오세요.
 
 <docs-workflow>
+<a id="enabling-the-animations-module"></a>
+
 <docs-step title="애니메이션 모듈 활성화하기">
 `@angular/platform-browser/animations/async`에서 `provideAnimationsAsync`를 가져와 `bootstrapApplication` 함수 호출의 프로바이더 목록에 추가합니다.
 
@@ -141,6 +143,8 @@ bootstrapApplication(AppComponent, {
 
 <docs-code header="app.module.ts" path="adev/src/content/examples/animations/src/app/app.module.1.ts"/>
 </docs-step>
+<a id="importing-animation-functions-into-component-files"></a>
+
 <docs-step title="컴포넌트 파일에서 애니메이션 함수 가져오기">
 컴포넌트 파일에서 특정 애니메이션 함수를 사용하려면 `@angular/animations`에서 해당 함수를 가져오세요.
 
@@ -149,6 +153,8 @@ bootstrapApplication(AppComponent, {
 이 가이드의 끝에서 [사용할 수 있는 애니메이션 함수](guide/legacy-animations#animations-api-summary) 전체를 확인할 수 있습니다.
 
 </docs-step>
+<a id="adding-the-animation-metadata-property"></a>
+
 <docs-step title="애니메이션 메타데이터 프로퍼티 추가하기">
 컴포넌트 파일의 `@Component()` 데코레이터 안에 `animations:`라는 메타데이터 프로퍼티를 추가하세요.
 애니메이션을 정의하는 트리거는 이 `animations` 메타데이터 프로퍼티 안에 넣습니다.
@@ -589,7 +595,7 @@ Learn about more advanced features in Angular animations under the Animation sec
 
 <!--
 The functional API provided by the `@angular/animations` module provides a domain-specific language \(DSL\) for creating and controlling animations in Angular applications.
-See the [API reference](api#animations) for a complete listing and syntax details of the core functions and related data structures.
+See the [API reference](api?package=angular_animations&status=8) for a complete listing and syntax details of the core functions and related data structures.
 
 | Function name                     | What it does                                                                                                                                                                                                |
 | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -611,7 +617,7 @@ See the [API reference](api#animations) for a complete listing and syntax detail
 -->
 
 `@angular/animations` 모듈의 함수형 API는 Angular 애플리케이션에서 애니메이션을 만들고 제어하는 도메인 특화 언어(DSL)를 제공합니다.
-핵심 함수와 관련 데이터 구조의 전체 목록 및 자세한 문법은 [API 레퍼런스](api#animations)를 참고하세요.
+핵심 함수와 관련 데이터 구조의 전체 목록 및 자세한 문법은 [API 레퍼런스](api?package=angular_animations&status=8)를 참고하세요.
 
 | 함수 이름                         | 동작                                                                                                                                                                                                     |
 | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -243,6 +243,16 @@ class ExpressionSourceHumanizer extends e.RecursiveAstVisitor implements t.Visit
     t.visitAll(this, block.children);
   }
 
+  visitBoundaryBlock(block: t.BoundaryBlock) {
+    t.visitAll(this, block.children);
+    t.visitAll(this, block.errorBlocks);
+  }
+
+  visitBoundaryErrorBlock(block: t.BoundaryErrorBlock) {
+    block.expression?.visit(this);
+    t.visitAll(this, block.children);
+  }
+
   visitLetDeclaration(decl: t.LetDeclaration) {
     decl.value.visit(this);
   }
@@ -257,6 +267,10 @@ class ExpressionSourceHumanizer extends e.RecursiveAstVisitor implements t.Visit
   visitDirective(ast: t.Directive) {
     t.visitAll(this, ast.inputs);
     t.visitAll(this, ast.outputs);
+  }
+
+  visitContentBlock(block: t.ContentBlock) {
+    t.visitAll(this, block.children);
   }
 }
 

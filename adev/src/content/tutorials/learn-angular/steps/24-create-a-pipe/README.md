@@ -2,6 +2,8 @@
 # Create a custom pipe
 -->
 
+<a id="create-a-custom-pipe"></a>
+
 # 커스텀 파이프 만들기
 
 <!--
@@ -69,16 +71,18 @@ export class ReversePipe implements PipeTransform {
 
 </docs-step>
 
-<docs-step title="Use the `ReversePipe` in the template"></docs-step>
+<docs-step title="Use the `ReversePipe` in the template">
 With the pipe logic implemented, the final step is to use it in the template. In `app.ts` include the pipe in the template and add it to the component imports:
 
 ```angular-ts {highlight:[3,4]}
 @Component({
   ...
-  template: `Reverse Machine: {{ word | reverse }}`
+  template: `Reverse Machine: {{ word | reverse }}`,
   imports: [ReversePipe]
 })
 ```
+
+</docs-step>
 
 </docs-workflow>
 
@@ -120,6 +124,8 @@ export class StarPipe implements PipeTransform {
 
 <docs-workflow>
 
+<a id="create-the-reversepipe"></a>
+
 <docs-step title="`ReversePipe`를 생성합니다">
 
 `reverse.pipe.ts` 파일에 있는 `ReversePipe` 클래스에 `@Pipe` 데코레이터를 다음과 같이 지정해 보세요:
@@ -131,6 +137,8 @@ export class StarPipe implements PipeTransform {
 ```
 
 </docs-step>
+
+<a id="implement-the-transform-function"></a>
 
 <docs-step title="`transform` 함수를 구현해 보세요">
 
@@ -153,7 +161,9 @@ export class ReversePipe implements PipeTransform {
 
 </docs-step>
 
-<docs-step title="템플릿에 `ReversePipe`를 사용해 보세요"></docs-step>
+<a id="use-the-reversepipe-in-the-template"></a>
+
+<docs-step title="템플릿에 `ReversePipe`를 사용해 보세요">
 
 이제 파이프 로직이 완성되었기 때문에 템플릿에 적용하기만 하면 됩니다.
 `app.ts` 파일에 파이프를 등록하고 템플릿에도 적용해 보세요:
@@ -161,10 +171,12 @@ export class ReversePipe implements PipeTransform {
 ```angular-ts {highlight:[3,4]}
 @Component({
   ...
-  template: `Reverse Machine: {{ word | reverse }}`
+  template: `Reverse Machine: {{ word | reverse }}`,
   imports: [ReversePipe]
 })
 ```
+
+</docs-step>
 
 </docs-workflow>
 

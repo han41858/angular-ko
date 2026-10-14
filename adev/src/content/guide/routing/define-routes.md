@@ -69,7 +69,7 @@ A collection of routes looks like this:
 ```ts
 import {Routes} from '@angular/router';
 import {HomePage} from './home-page';
-import {AdminPage} from './about-page';
+import {AdminPage} from './admin-page';
 
 export const routes: Routes = [
   {
@@ -83,7 +83,7 @@ export const routes: Routes = [
 ];
 ```
 
-Tip: If you generated a project with Angular CLI, your routes are defined in `src/app/app.routes.ts`.
+TIP: If you generated a project with Angular CLI, your routes are defined in `src/app/app.routes.ts`.
 -->
 
 대부분의 프로젝트에서는 파일 이름에 `routes`가 포함된 별도 파일에 라우팅 규칙을 정의합니다.
@@ -93,7 +93,7 @@ Tip: If you generated a project with Angular CLI, your routes are defined in `sr
 ```ts
 import {Routes} from '@angular/router';
 import {HomePage} from './home-page';
-import {AdminPage} from './about-page';
+import {AdminPage} from './admin-page';
 
 export const routes: Routes = [
   {
@@ -233,7 +233,7 @@ import {SocialMediaFeed} from './social-media-feed';
 
 const routes: Routes = [
   {path: 'user/:id/:social-media', component: SocialMediaFeed},
-  {path: 'user/:id/', component: UserProfile},
+  {path: 'user/:id', component: UserProfile},
 ];
 ```
 
@@ -278,7 +278,7 @@ import {SocialMediaFeed} from './social-media-feed';
 
 const routes: Routes = [
   {path: 'user/:id/:social-media', component: SocialMediaFeed},
-  {path: 'user/:id/', component: UserProfile},
+  {path: 'user/:id', component: UserProfile},
 ];
 ```
 
@@ -313,7 +313,7 @@ const routes: Routes = [
 
 In this routes array, the app displays the `NotFound` component when the user visits any path outside of `home` and `user/:id`.
 
-Tip: Wildcard routes are typically placed at the end of a routes array.
+TIP: Wildcard routes are typically placed at the end of a routes array.
 -->
 
 특정 경로의 모든 라우팅 규칙을 처리해야 한다면 별표 두 개(`**`)로 정의하는 와일드카드 라우팅 규칙을 사용하세요.
@@ -479,7 +479,8 @@ The page `title` property can be set dynamically to a resolver function using [`
 ```ts
 const titleResolver: ResolveFn<string> = (route) => route.queryParams['id'];
 const routes: Routes = [
-  ...{
+  // ...
+  {
     path: 'products',
     component: Products,
     title: titleResolver,
@@ -519,7 +520,8 @@ const routes: Routes = [
 ```ts
 const titleResolver: ResolveFn<string> = (route) => route.queryParams['id'];
 const routes: Routes = [
-  ...{
+  // ...
+  {
     path: 'products',
     component: Products,
     title: titleResolver,
@@ -749,18 +751,25 @@ const routes: Routes = [
 자세한 내용은 [라우팅 규칙 상태 읽기](/guide/routing/read-route-state)를 참고하세요.
 
 <!--
-### Dynamic data with data resolvers
+### Dynamic data with resources and resolvers
 -->
 
 <a id="dynamic-data-with-data-resolvers"></a>
+<a id="dynamic-data-with-resources-and-resolvers"></a>
 
-### 데이터 리졸버로 동적 데이터 제공하기
+### 리소스와 리졸버로 동적 데이터 제공하기
 
 <!--
-When you need to provide dynamic data to a route, check out the [guide on route data resolvers](/guide/routing/data-resolvers).
+When you need to fetch data for a route, Angular Router supports reactive route resources as well as data resolvers:
+
+- [Data fetching with resources](/guide/routing/data-fetching-with-resources): Fetch data reactively using Angular Signals `Resource` APIs.
+- [Route data resolvers](/guide/routing/data-resolvers): Fetch data before route activation using resolver functions.
 -->
 
-라우팅 규칙에 동적 데이터를 제공해야 한다면 [라우팅 규칙 데이터 리졸버 가이드](/guide/routing/data-resolvers)를 참고하세요.
+라우팅 규칙에서 데이터를 가져와야 한다면 Angular 라우터가 제공하는 반응형 리소스나 데이터 리졸버를 사용할 수 있습니다.
+
+- [리소스로 데이터 가져오기](/guide/routing/data-fetching-with-resources): Angular 시그널의 `Resource` API로 데이터를 반응형으로 가져옵니다.
+- [라우팅 규칙 데이터 리졸버](/guide/routing/data-resolvers): 리졸버 함수로 라우팅 규칙을 활성화하기 전에 데이터를 가져옵니다.
 
 <!--
 ## Nested Routes

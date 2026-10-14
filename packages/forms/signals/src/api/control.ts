@@ -14,6 +14,8 @@ import type {DisabledReason} from './types';
 /**
  * The base set of properties shared by all form control contracts.
  *
+ * @see [Custom form controls](guide/forms/signals/custom-controls)
+ *
  * @category control
  * @publicApi 22.0
  */
@@ -113,7 +115,10 @@ export interface FormUiControl<TValue> {
     | InputSignal<readonly RegExp[]>
     | InputSignalWithTransform<readonly RegExp[], unknown>;
   /**
-   * An output to emit when the control is touched.
+   * An output to emit when the user finishes interacting with the control, marking the field as
+   * touched. Emit this in response to the native `blur` event (when focus leaves the control), not
+   * `focus`. The `Field` directive listens to this output to update the field's touched status,
+   * which blur-based rules such as `debounce('blur')` rely on.
    */
   readonly touch?: OutputRef<void>;
   /**
@@ -147,6 +152,8 @@ type FormUiControlImplementsFormFieldBindingOptions = Check<
  *
  * @template TValue The type of `FieldTree` that the implementing component can edit.
  *
+ * @see [Custom form controls](guide/forms/signals/custom-controls)
+ *
  * @category control
  * @publicApi 22.0
  */
@@ -175,6 +182,8 @@ export interface FormValueControl<TValue> extends FormUiControl<TValue> {
  * Many of the properties declared on this contract are optional. They do not need to be
  * implemented, but if they are will be kept in sync with the field state of the field bound to the
  * `Field` directive.
+ *
+ * @see [Custom form controls](guide/forms/signals/custom-controls)
  *
  * @category control
  * @publicApi 22.0

@@ -19,8 +19,8 @@ This new build system is stable and fully supported for use with Angular applica
 You can migrate to the new build system with applications that use the `browser` builder.
 If using a custom builder, please refer to the documentation for that builder on possible migration options.
 
-IMPORTANT: The existing webpack-based build system is still considered stable and fully supported.
-Applications can continue to use the `browser` builder and projects can opt-out of migrating during an update.
+IMPORTANT: The existing webpack-based build system and `browser` builder are deprecated.
+Applications can temporarily continue to use the `browser` builder and projects can opt-out of migrating during an update, but the Angular team recommends migrating to the new build system.
 -->
 
 v17부터 제공되는 새로운 빌드 시스템을 사용하면 Angular 애플리케이션을 더 효율적으로 빌드할 수 있습니다.
@@ -36,8 +36,8 @@ v17부터 제공되는 새로운 빌드 시스템을 사용하면 Angular 애플
 `browser` 빌더를 사용하는 애플리케이션은 새 빌드 시스템으로 전환할 수 있습니다.
 커스텀 빌더를 사용한다면 해당 빌더의 문서에서 가능한 전환 방법을 확인하세요.
 
-중요: 기존 webpack 기반 빌드 시스템도 여전히 안정적이며 완전히 지원됩니다.
-애플리케이션에서 `browser` 빌더를 계속 사용할 수 있으며, 프로젝트를 업데이트할 때 전환하지 않도록 선택할 수도 있습니다.
+중요: 기존 webpack 기반 빌드 시스템과 `browser` 빌더는 사용 중단되었습니다.
+일시적으로 `browser` 빌더를 계속 사용하거나 업데이트 중 전환하지 않도록 선택할 수 있지만 Angular 팀은 새 빌드 시스템으로 전환할 것을 권장합니다.
 
 <!--
 ## For new applications
@@ -279,7 +279,6 @@ The following list discusses all the `browser` builder options that will need to
 - `resourcesOutputPath` should be removed, this is now always `media`.
 - `vendorChunk` should be removed, as this was a performance optimization which is no longer needed.
 - `commonChunk` should be removed, as this was a performance optimization which is no longer needed.
-- `deployUrl` should be removed and is not supported. Prefer [`<base href>`](guide/routing/router-reference#base-href) instead. See [deployment documentation](tools/cli/deployment#--deploy-url) for more information.
 - `ngswConfigPath` should be renamed to `serviceWorker`.
 
 If the application is not using SSR currently, this should be the final step to allow `ng build` to function.
@@ -339,7 +338,6 @@ Angular CLI로 생성한 애플리케이션에 포함된 `@angular-devkit/build-
   더 이상 필요하지 않은 성능 최적화 옵션입니다.
 - `commonChunk`는 제거합니다.
   더 이상 필요하지 않은 성능 최적화 옵션입니다.
-- `deployUrl`은 지원되지 않으므로 제거합니다.
   대신 [`<base href>`](guide/routing/router-reference#base-href)를 사용하는 것이 좋습니다.
   자세한 내용은 [배포 문서](tools/cli/deployment#--deploy-url)를 참고하세요.
 - `ngswConfigPath`의 이름을 `serviceWorker`로 변경합니다.
@@ -1021,6 +1019,8 @@ console.log(icon); // "data:image/svg+xml;..."
 -->
 
 <a id="importexport-conditions"></a>
+
+<a id="import-export-conditions"></a>
 
 ### import/export 조건
 

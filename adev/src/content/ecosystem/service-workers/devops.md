@@ -281,6 +281,46 @@ Angular 서비스 워커는 애플리케이션을 처음 열 때와 한동안 �
 이때 서비스 워커는 별도의 개입 없이 네트워크에서 애플리케이션을 새로 가져옵니다.
 
 <!--
+#### Updating the service worker when only its response headers change
+
+Browsers only install a new service worker when the service worker script is byte-different from the installed one.
+Because `ngsw-worker.js` is usually identical across builds, changing only the response headers that the server sends with it, such as a `Content-Security-Policy`, does not update the installed service worker.
+The service worker keeps running with the headers it was installed with.
+
+To make browsers install the service worker again, register it with a versioned script URL, and change the version whenever those headers change:
+
+```ts
+provideServiceWorker('ngsw-worker.js?v=2', {
+  enabled: !isDevMode(),
+  registrationStrategy: 'registerWhenStable:30000',
+});
+```
+
+Registering a different script URL makes the browser fetch and install the service worker again, even if its content is unchanged.
+The Angular service worker resolves its caches and `ngsw.json` relative to its registration scope, not its script URL, so the query parameter doesn't affect cached content.
+-->
+
+<a id="updating-the-service-worker-when-only-its-response-headers-change"></a>
+
+#### 응답 헤더만 변경했을 때 서비스 워커 업데이트하기
+
+브라우저는 서비스 워커 스크립트의 바이트가 설치된 스크립트와 다를 때만 새 서비스 워커를 설치합니다.
+`ngsw-worker.js`는 일반적으로 빌드가 달라져도 같으므로, 서버가 함께 보내는 `Content-Security-Policy` 등의 응답 헤더만 바꾸면 설치된 서비스 워커는 업데이트되지 않습니다.
+서비스 워커는 설치 당시의 헤더를 계속 사용합니다.
+
+브라우저가 서비스 워커를 다시 설치하게 하려면 버전이 포함된 스크립트 URL로 등록하고, 헤더를 변경할 때마다 버전도 변경하세요.
+
+```ts
+provideServiceWorker('ngsw-worker.js?v=2', {
+  enabled: !isDevMode(),
+  registrationStrategy: 'registerWhenStable:30000',
+});
+```
+
+다른 스크립트 URL을 등록하면 내용이 같더라도 브라우저가 서비스 워커를 다시 가져와 설치합니다.
+Angular 서비스 워커는 스크립트 URL이 아닌 등록 범위를 기준으로 캐시와 `ngsw.json`을 찾으므로, 쿼리 파라미터는 캐시된 콘텐츠에 영향을 주지 않습니다.
+
+<!--
 ### Bypassing the service worker
 -->
 

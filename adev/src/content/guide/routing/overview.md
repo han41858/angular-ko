@@ -55,6 +55,7 @@ In addition, the Angular Routing library offers additional functionality such as
 - Programmatic navigation
 - Route params, queries and wildcards
 - Activated route information with `ActivatedRoute`
+- Data fetching with route resources and resolvers
 - View transition effects
 - Navigation guards
 -->
@@ -71,6 +72,7 @@ Angular 라우팅 라이브러리는 다음 기능도 제공합니다.
 - 코드로 실행하는 내비게이션
 - 라우팅 규칙 파라미터, 쿼리, 와일드카드
 - `ActivatedRoute`로 확인하는 활성 라우팅 규칙 정보
+- 라우팅 규칙 리소스와 리졸버로 데이터 가져오기
 - 뷰 전환 효과
 - 내비게이션 가드
 

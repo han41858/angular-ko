@@ -5,7 +5,7 @@
 # 서비스 지연 로딩
 
 <!--
-IMPORTANT: For lazy loading to work, the service you load must be auto-provided. Decorate it with either `@Injectable({providedIn: 'root'})` or [`@Service()`](guide/di/creating-and-using-services#using-the-service-decorator). Without auto-provisioning, Angular has no way to construct the service after it loads.
+IMPORTANT: For lazy loading to work, the service you load must be auto-provided. Decorate it with either `@Injectable({providedIn: 'root'})` or [`@Service()`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator). Without auto-provisioning, Angular has no way to construct the service after it loads.
 
 Angular's `injectAsync` function lets you load a service on demand, only when it's actually needed. This is useful when a service depends on a large library or rarely used feature, and you don't want to pay for it on the initial page load.
 
@@ -13,7 +13,7 @@ When you use `injectAsync`, the service's code is split out by your bundler into
 -->
 
 중요: 서비스가 지연 로딩되려면 이 서비스의 프로바이더가 앱 최상위 계층에 등록되어야 합니다.
-그래서 `@Injectable({providedIn: 'root'})`나 [`@Service()`](guide/di/creating-and-using-services#using-the-service-decorator) 데코레이터를 사용해야 합니다.
+그래서 `@Injectable({providedIn: 'root'})`나 [`@Service()`](guide/di/creating-and-using-services#using-the-service-vs-injectable-decorator) 데코레이터를 사용해야 합니다.
 
 `injectAsync` 함수를 사용하면 서비스가 실제로 사용되어 꼭 필요한 시점에 서비스를 로드할 수 있습니다.
 이 방식은 용량이 큰 라이브러리를 활용하거나, 거의 사용하지 않는 기능을 사용할 때, 최초 화면 로딩 속도를 향상시키려고 할 때 유용합니다.
@@ -24,6 +24,8 @@ When you use `injectAsync`, the service's code is split out by your bundler into
 <!--
 ## Lazily injecting a service
 -->
+
+<a id="lazily-injecting-a-service"></a>
 
 ## 지연 의존성 주입
 
@@ -51,14 +53,14 @@ The first call to `this.exporter()` triggers the dynamic import and resolves the
 
 If the lazy-loaded service is the [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export), pass the dynamic import directly, Angular unwraps the `default` for you:
 
-```ts {header: report-exporter.ts}
+```ts {header: "report-exporter.ts"}
 @Service()
 export default class ReportExporter {
   /* … */
 }
 ```
 
-```ts {header: report.ts}
+```ts {header: "report.ts"}
 private exporter = injectAsync(() => import('./report-exporter'));
 ```
 -->
@@ -89,20 +91,22 @@ export class Report {
 
 지연 로딩되는 서비스가 [default export](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/export#using_the_default_export)로 지정되어 있다면, 동적 로딩에 직접 연결했을 때 Angular가 `default`를 자동으로 제거합니다:
 
-```ts {header: report-exporter.ts}
+```ts {header: "report-exporter.ts"}
 @Service()
 export default class ReportExporter {
   /* … */
 }
 ```
 
-```ts {header: report.ts}
+```ts {header: "report.ts"}
 private exporter = injectAsync(() => import('./report-exporter'));
 ```
 
 <!--
 ## Prefetching the dependency
 -->
+
+<a id="prefetching-the-dependency"></a>
 
 ## 의존성을 사전에 로딩하기
 
@@ -114,9 +118,7 @@ Angular ships with `onIdle`, a built-in trigger that waits until the browser bec
 ```ts
 import {Component, injectAsync, onIdle} from '@angular/core';
 
-@Component({
-  /* … */
-})
+@Component({/* … */})
 export class Report {
   private exporter = injectAsync(() => import('./report-exporter').then((m) => m.ReportExporter), {
     prefetch: onIdle,
@@ -142,9 +144,7 @@ NOTE: Prefetching is opportunistic. If the user invokes the feature before the p
 ```ts
 import {Component, injectAsync, onIdle} from '@angular/core';
 
-@Component({
-  /* … */
-})
+@Component({/* … */})
 export class Report {
   private exporter = injectAsync(() => import('./report-exporter').then((m) => m.ReportExporter), {
     prefetch: onIdle,
@@ -164,6 +164,8 @@ injectAsync(loader, {prefetch: () => onIdle({timeout: 1_000})});
 <!--
 ## Provide a custom prefetch trigger
 -->
+
+<a id="provide-a-custom-prefetch-trigger"></a>
 
 ## 커스텀 사전 로딩 트리거 등록하기
 

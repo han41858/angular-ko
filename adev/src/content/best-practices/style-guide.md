@@ -510,9 +510,7 @@ properties initialized by `input`, `model`, `output`, and queries. The readonly 
 ensures that the value set by Angular is not overwritten.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   readonly userId = input();
   readonly userSaved = output();
@@ -524,9 +522,7 @@ For components and directives that use the decorator-based `@Input`, `@Output`, 
 advice applies to output properties and queries, but not input properties.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   @Output() readonly userSaved = new EventEmitter<void>();
   @ViewChildren(PaymentMethod) readonly paymentMethods?: QueryList<PaymentMethod>;
@@ -539,9 +535,7 @@ Angular가 초기화하는 컴포넌트와 디렉티브 프로퍼티는 `readonl
 readonly 접근 제한자는 Angular가 설정한 값을 덮어쓰지 못하도록 합니다.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   readonly userId = input();
   readonly userSaved = output();
@@ -552,9 +546,7 @@ export class UserProfile {
 데코레이터 기반의 `@Input`, `@Output`, 쿼리 API를 사용하는 컴포넌트와 디렉티브에서는 이 지침이 출력 프로퍼티와 쿼리에 적용되지만 입력 프로퍼티에는 적용되지 않습니다.
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile {
   @Output() readonly userSaved = new EventEmitter<void>();
   @ViewChildren(PaymentMethod) readonly paymentMethods?: QueryList<PaymentMethod>;
@@ -658,9 +650,7 @@ single well-named handler. In these cases, it's fine to fall back to a name like
 then delegate to more specific behaviors based on the event details:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 class RichText {
   handleKeydown(event: KeyboardEvent) {
     if (event.ctrlKey) {
@@ -698,9 +688,7 @@ class RichText {
 이 경우에는 'handleKeydown' 같은 이름을 사용하고 이벤트 세부 정보에 따라 더 구체적인 동작으로 위임해도 괜찮습니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 class RichText {
   handleKeydown(event: KeyboardEvent) {
     if (event.ctrlKey) {
@@ -779,9 +767,7 @@ your class, import and `implement` these interfaces to ensure that the methods a
 ```ts
 import {Component, OnInit} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile implements OnInit {
   // The `OnInit` interface ensures this method is named correctly.
   ngOnInit() {
@@ -797,9 +783,7 @@ Angular는 각 생명주기 메서드에 해당하는 TypeScript 인터페이스
 ```ts
 import {Component, OnInit} from '@angular/core';
 
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class UserProfile implements OnInit {
   // `OnInit` 인터페이스는 이 메서드의 이름이 올바른지 확인합니다.
   ngOnInit() {

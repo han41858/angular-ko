@@ -29,6 +29,8 @@ Templates are usually found within either the `template` property of a `*.ts` fi
 ## How do templates work?
 -->
 
+<a id="how-do-templates-work"></a>
+
 ## 템플릿은 어떻게 동작할까요?
 
 <!--
@@ -44,6 +46,8 @@ Angular는 애플리케이션을 빌드할 때 템플릿을 JavaScript 코드로
 <!--
 ### Differences from standard HTML
 -->
+
+<a id="differences-from-standard-html"></a>
 
 ### 표준 HTML과 다른 점
 
@@ -75,6 +79,8 @@ Angular 템플릿은 표준 HTML 문법과 다른 점이 있습니다:
 <!--
 ## What's next?
 -->
+
+<a id="whats-next"></a>
 
 ## 다음 단계
 

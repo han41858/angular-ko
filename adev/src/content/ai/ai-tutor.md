@@ -113,6 +113,8 @@ Once you've succeeded, the tutor will move directly to the next topic. You can a
 
 <a id="features-commands"></a>
 
+<a id="features--commands"></a>
+
 ## **기능과 명령**
 
 <!--
@@ -282,6 +284,36 @@ If you want to learn about a specific topic out of order (e.g., jump from the ba
 ## **문제 해결**
 
 <!--
+### Setup Issues
+
+**"launch the Angular AI tutor" doesn't do anything?**
+
+Make sure you have a project open first. The tutor needs an actual Angular project to work with:
+
+```bash
+ng new my-app
+cd my-app
+code .
+```
+
+Then ensure your MCP server is running. In VS Code, open the `.vscode/mcp.json` file and click the **"Start"** button at the top of the file.
+
+When you type "launch the Angular AI tutor", you should see a checkmark saying
+"Reviewed .vscode/mcp.json and ran start task" and a prompt asking to
+"Allow task run?" — go ahead and click Allow.
+
+**Still not working?**
+
+Try typing `#angular-cli` first to load the Angular context, then paste the tutorial URL: `https://angular.dev/ai/ai-tutor`
+
+**How to verify the server is running**
+
+Open the Command Palette (`Ctrl+Shift+P`), type "MCP: List Running Servers", and look for "angular-cli" in the list.
+
+---
+
+### General Issues
+
 If the tutor doesn't respond correctly or you suspect an issue with your application, here are a few things to try:
 
 1. **Type "proceed":** This can often nudge the tutor to continue to the next step in the event it gets stuck.
@@ -291,6 +323,38 @@ If the tutor doesn't respond correctly or you suspect an issue with your applica
 5. **Hard Restart the Browser:** Errors are sometimes only surfaced in the browser's developer console. A hard restart can help clear underlying issues related to the application.
 6. **Start a New Chat:** You can always start a new chat to remove the existing history and begin fresh. The tutor will read your files to find the latest step you were on.
 -->
+
+<a id="setup-issues"></a>
+
+### 설정 문제
+
+**"launch the Angular AI tutor"를 입력해도 반응이 없나요?**
+
+먼저 프로젝트를 열었는지 확인하세요. 튜터가 작업하려면 실제 Angular 프로젝트가 필요합니다.
+
+```bash
+ng new my-app
+cd my-app
+code .
+```
+
+그다음 MCP 서버가 실행 중인지 확인하세요. VS Code에서 `.vscode/mcp.json` 파일을 열고 파일 상단의 **"Start"** 버튼을 클릭하세요.
+
+"launch the Angular AI tutor"를 입력하면 "Reviewed .vscode/mcp.json and ran start task"라는 체크 표시와 "Allow task run?"이라는 확인 메시지가 표시됩니다. Allow를 클릭하세요.
+
+**여전히 작동하지 않나요?**
+
+먼저 `#angular-cli`를 입력하여 Angular 컨텍스트를 불러온 다음 튜토리얼 URL `https://angular.dev/ai/ai-tutor`을 붙여 넣어 보세요.
+
+**서버가 실행 중인지 확인하는 방법**
+
+명령 팔레트(`Ctrl+Shift+P`)를 열고 "MCP: List Running Servers"를 입력한 뒤 목록에서 "angular-cli"를 찾으세요.
+
+---
+
+<a id="general-issues"></a>
+
+### 일반적인 문제
 
 튜터가 올바르게 응답하지 않거나 애플리케이션에 문제가 있는 것 같다면 다음 방법을 시도해 보세요:
 
@@ -394,6 +458,8 @@ You will build your application over a five-phase journey. You can follow this p
 
 <a id="phase-4-advanced-features-architecture"></a>
 
+<a id="phase-4-advanced-features--architecture"></a>
+
 ### **4단계: 고급 기능과 아키텍처**
 
 <!--
@@ -439,6 +505,8 @@ You will build your application over a five-phase journey. You can follow this p
 -->
 
 <a id="a-note-on-ai-feedback"></a>
+
+<a id="a-note-on-ai--feedback"></a>
 
 ## **AI와 피드백에 관한 안내**
 

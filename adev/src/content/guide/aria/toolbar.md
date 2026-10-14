@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Toolbar">
-</docs-decorative-header>
+# Toolbar
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" title="Toolbar ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="툴바">
-</docs-decorative-header>
+# 툴바
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" title="툴바 ARIA 패턴"/>
@@ -131,7 +129,7 @@ Avoid toolbar when:
 <!--
 Angular's toolbar provides a fully accessible toolbar implementation with:
 
-- **Keyboard Navigation** - Navigate widgets with arrow keys, activate with Enter or Space
+- **Keyboard Navigation** - Navigate widgets with arrow keys, Home, and End using roving tabindex, while controls retain native activation
 - **Screen Reader Support** - Built-in ARIA attributes for assistive technologies
 - **Widget Groups** - Organize related widgets like radio button groups or toggle button groups
 - **Flexible Orientation** - Horizontal or vertical layouts with automatic keyboard navigation
@@ -142,7 +140,7 @@ Angular's toolbar provides a fully accessible toolbar implementation with:
 
 Angular의 툴바는 다음과 같이 접근성을 갖춘 툴바 구현을 제공합니다.
 
-- **키보드 탐색**: 방향키로 위젯을 탐색하고 Enter나 Space로 활성화합니다.
+- **키보드 탐색**: 이동식 tabindex를 사용해서 방향키, Home, End로 위젯을 탐색하며, 컨트롤은 기본 활성화 동작을 유지합니다.
 - **스크린 리더 지원**: 보조 기술을 위한 ARIA 어트리뷰트를 기본 제공합니다.
 - **위젯 그룹**: 라디오 버튼 그룹이나 토글 버튼 그룹처럼 관련 위젯을 구성합니다.
 - **유연한 방향 설정**: 수평/수직 배치에 맞춰 키보드 탐색을 자동으로 처리합니다.
@@ -301,49 +299,110 @@ Vertical toolbars stack controls top to bottom, useful for side panels or vertic
 ### 위젯 그룹
 
 <!--
-Widget groups contain related controls that work together, like text alignment options or list formatting choices. Groups maintain their own internal state while participating in toolbar navigation.
+Widget groups organize related controls that work together, such as text alignment options or formatting toggles. Groups maintain roving tabindex navigation while presenting the appropriate semantic structure to assistive technologies.
 
-In the examples above, the alignment buttons are wrapped in `ngToolbarWidgetGroup` with `role="radiogroup"` to create a mutually exclusive selection group.
+In the examples above, the alignment buttons are wrapped in `ngToolbarWidgetGroup` with `role="radiogroup"`. Selection is decoupled from the toolbar container, allowing you to manage state using Angular signals or custom directives:
 
-The `multi` input controls whether multiple widgets within a group can be selected simultaneously:
-
-```html {highlight: [15]}
-<!- Single selection (radio group) ->
+```angular-html
+<!- Mutually exclusive radio group ->
 <div ngToolbarWidgetGroup role="radiogroup" aria-label="Alignment">
-  <button ngToolbarWidget value="left">Left</button>
-  <button ngToolbarWidget value="center">Center</button>
-  <button ngToolbarWidget value="right">Right</button>
+  <button
+    ngToolbarWidget
+    role="radio"
+    type="button"
+    [attr.aria-checked]="alignment() === 'left'"
+    (click)="alignment.set('left')"
+  >
+    Left
+  </button>
+  <button
+    ngToolbarWidget
+    role="radio"
+    type="button"
+    [attr.aria-checked]="alignment() === 'center'"
+    (click)="alignment.set('center')"
+  >
+    Center
+  </button>
+  <button
+    ngToolbarWidget
+    role="radio"
+    type="button"
+    [attr.aria-checked]="alignment() === 'right'"
+    (click)="alignment.set('right')"
+  >
+    Right
+  </button>
 </div>
 
-<!- Multiple selection (toggle group) ->
-<div ngToolbarWidgetGroup [multi]="true" aria-label="Formatting">
-  <button ngToolbarWidget value="bold">Bold</button>
-  <button ngToolbarWidget value="italic">Italic</button>
-  <button ngToolbarWidget value="underline">Underline</button>
+<!- Toggle button group ->
+<div class="group" role="group" aria-label="Text styling">
+  <button ngToolbarWidget type="button" [attr.aria-pressed]="bold()" (click)="bold.set(!bold())">
+    Bold
+  </button>
+  <button
+    ngToolbarWidget
+    type="button"
+    [attr.aria-pressed]="italic()"
+    (click)="italic.set(!italic())"
+  >
+    Italic
+  </button>
 </div>
 ```
 -->
 
-위젯 그룹은 텍스트 정렬 옵션이나 목록 서식 선택처럼 함께 동작하는 관련 컨트롤을 담습니다.
-그룹은 자체 내부 상태를 유지하면서 툴바 탐색에 참여합니다.
+위젯 그룹은 텍스트 정렬 옵션이나 서식 토글처럼 함께 동작하는 관련 컨트롤을 구성합니다.
+그룹은 이동식 tabindex 탐색을 유지하면서 보조 기술에 적절한 의미 구조를 제공합니다.
 
-위 예제에서는 정렬 버튼을 `role="radiogroup"`이 지정된 `ngToolbarWidgetGroup`으로 감싸서 한 번에 하나만 선택할 수 있는 그룹을 만듭니다.
+위 예제에서는 정렬 버튼을 `role="radiogroup"`이 지정된 `ngToolbarWidgetGroup`으로 감쌉니다.
+선택 상태는 툴바 컨테이너와 분리되어 있으므로 Angular 시그널이나 커스텀 디렉티브로 상태를 관리할 수 있습니다.
 
-`multi` 입력 프로퍼티는 그룹 안에서 여러 위젯을 동시에 선택할 수 있는지 제어합니다.
-
-```html {highlight: [15]}
-<!-- 단일 선택(라디오 그룹) -->
+```angular-html
+<!-- 한 번에 하나만 선택할 수 있는 라디오 그룹 -->
 <div ngToolbarWidgetGroup role="radiogroup" aria-label="Alignment">
-  <button ngToolbarWidget value="left">Left</button>
-  <button ngToolbarWidget value="center">Center</button>
-  <button ngToolbarWidget value="right">Right</button>
+  <button
+    ngToolbarWidget
+    role="radio"
+    type="button"
+    [attr.aria-checked]="alignment() === 'left'"
+    (click)="alignment.set('left')"
+  >
+    Left
+  </button>
+  <button
+    ngToolbarWidget
+    role="radio"
+    type="button"
+    [attr.aria-checked]="alignment() === 'center'"
+    (click)="alignment.set('center')"
+  >
+    Center
+  </button>
+  <button
+    ngToolbarWidget
+    role="radio"
+    type="button"
+    [attr.aria-checked]="alignment() === 'right'"
+    (click)="alignment.set('right')"
+  >
+    Right
+  </button>
 </div>
 
-<!-- 다중 선택(토글 그룹) -->
-<div ngToolbarWidgetGroup [multi]="true" aria-label="Formatting">
-  <button ngToolbarWidget value="bold">Bold</button>
-  <button ngToolbarWidget value="italic">Italic</button>
-  <button ngToolbarWidget value="underline">Underline</button>
+<!-- 토글 버튼 그룹 -->
+<div class="group" role="group" aria-label="Text styling">
+  <button ngToolbarWidget type="button" [attr.aria-pressed]="bold()" (click)="bold.set(!bold())">
+    Bold
+  </button>
+  <button
+    ngToolbarWidget
+    type="button"
+    [attr.aria-pressed]="italic()"
+    (click)="italic.set(!italic())"
+  >
+    Italic
+  </button>
 </div>
 ```
 
@@ -525,7 +584,7 @@ describe('MyToolbarComponent', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should have widgets and allow selection', async () => {
+  it('should have widgets and update toggle state on click', async () => {
     // Load the toolbar harness
     const toolbar = await loader.getHarness(ToolbarHarness);
 
@@ -536,7 +595,7 @@ describe('MyToolbarComponent', () => {
     // Click the first widget
     await widgets[0].click();
 
-    // Verify selection state
+    // Verify pressed state updated via click handler
     expect(await widgets[0].isSelected()).toBe(true);
   });
 });
@@ -567,7 +626,7 @@ describe('MyToolbarComponent', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should have widgets and allow selection', async () => {
+  it('should have widgets and update toggle state on click', async () => {
     // 툴바 하네스를 불러옵니다.
     const toolbar = await loader.getHarness(ToolbarHarness);
 
@@ -578,171 +637,30 @@ describe('MyToolbarComponent', () => {
     // 첫 번째 위젯을 클릭합니다.
     await widgets[0].click();
 
-    // 선택 상태를 확인합니다.
+    // 클릭 핸들러가 눌림 상태를 갱신했는지 확인합니다.
     expect(await widgets[0].isSelected()).toBe(true);
   });
 });
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Toolbar`](/api/aria/toolbar/Toolbar)
+- [`ToolbarWidget`](/api/aria/toolbar/ToolbarWidget)
+- [`ToolbarWidgetGroup`](/api/aria/toolbar/ToolbarWidgetGroup)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### Toolbar Directive
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="toolbar-directive"></a>
-
-### Toolbar 디렉티브
-
-<!--
-The `ngToolbar` directive provides the container for toolbar functionality.
--->
-
-`ngToolbar` 디렉티브는 툴바 기능을 위한 컨테이너를 제공합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property       | Type                           | Default        | Description                                            |
-| -------------- | ------------------------------ | -------------- | ------------------------------------------------------ |
-| `orientation`  | `'vertical'` \| `'horizontal'` | `'horizontal'` | Whether toolbar is vertically or horizontally oriented |
-| `disabled`     | `boolean`                      | `false`        | Disables the entire toolbar                            |
-| `softDisabled` | `boolean`                      | `true`         | Whether disabled items can receive focus               |
-| `wrap`         | `boolean`                      | `true`         | Whether focus should wrap at the edges                 |
-| `value`        | `V[]`                          | `[]`           | Selected widget values (supports two-way binding)      |
--->
-
-| 프로퍼티       | 타입                           | 기본값         | 설명                                                       |
-| -------------- | ------------------------------ | -------------- | ---------------------------------------------------------- |
-| `orientation`  | `'vertical'` \| `'horizontal'` | `'horizontal'` | 툴바를 수직이나 수평 중 어느 방향으로 배치할지 지정합니다. |
-| `disabled`     | `boolean`                      | `false`        | 전체 툴바를 비활성화합니다.                                |
-| `softDisabled` | `boolean`                      | `true`         | 비활성화된 항목이 포커스를 받을 수 있는지 지정합니다.      |
-| `wrap`         | `boolean`                      | `true`         | 끝에 도달하면 포커스를 순환할지 지정합니다.                |
-| `value`        | `V[]`                          | `[]`           | 선택된 위젯의 값입니다(양방향 바인딩을 지원합니다).        |
-
-<!--
-### ToolbarWidget Directive
--->
-
-<a id="toolbarwidget-directive"></a>
-
-### ToolbarWidget 디렉티브
-
-<!--
-The `ngToolbarWidget` directive marks an element as a navigable widget within the toolbar.
--->
-
-`ngToolbarWidget` 디렉티브는 엘리먼트를 툴바 안에서 탐색 가능한 위젯으로 지정합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type      | Default | Description                                     |
-| ---------- | --------- | ------- | ----------------------------------------------- |
-| `id`       | `string`  | auto    | Unique identifier for the widget                |
-| `disabled` | `boolean` | `false` | Disables the widget                             |
-| `value`    | `V`       | -       | The value associated with the widget (required) |
--->
-
-| 프로퍼티   | 타입      | 기본값    | 설명                          |
-| ---------- | --------- | --------- | ----------------------------- |
-| `id`       | `string`  | 자동 생성 | 위젯의 고유 식별자입니다.     |
-| `disabled` | `boolean` | `false`   | 위젯을 비활성화합니다.        |
-| `value`    | `V`       | -         | 위젯에 연결된 값입니다(필수). |
-
-<!--
-#### Signals
--->
-
-<a id="signals"></a>
-
-#### 시그널
-
-<!--
-| Property   | Type              | Description                                 |
-| ---------- | ----------------- | ------------------------------------------- |
-| `active`   | `Signal<boolean>` | Whether the widget is currently focused     |
-| `selected` | `Signal<boolean>` | Whether the widget is selected (in a group) |
--->
-
-| 프로퍼티   | 타입              | 설명                                        |
-| ---------- | ----------------- | ------------------------------------------- |
-| `active`   | `Signal<boolean>` | 현재 위젯에 포커스가 있는지 나타냅니다.     |
-| `selected` | `Signal<boolean>` | 그룹에서 위젯이 선택되어 있는지 나타냅니다. |
-
-<!--
-### ToolbarWidgetGroup Directive
--->
-
-<a id="toolbarwidgetgroup-directive"></a>
-
-### ToolbarWidgetGroup 디렉티브
-
-<!--
-The `ngToolbarWidgetGroup` directive groups related widgets together.
--->
-
-`ngToolbarWidgetGroup` 디렉티브는 관련 위젯을 그룹으로 묶습니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-2"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type      | Default | Description                              |
-| ---------- | --------- | ------- | ---------------------------------------- |
-| `disabled` | `boolean` | `false` | Disables all widgets in the group        |
-| `multi`    | `boolean` | `false` | Whether multiple widgets can be selected |
--->
-
-| 프로퍼티   | 타입      | 기본값  | 설명                                     |
-| ---------- | --------- | ------- | ---------------------------------------- |
-| `disabled` | `boolean` | `false` | 그룹의 모든 위젯을 비활성화합니다.       |
-| `multi`    | `boolean` | `false` | 여러 위젯을 선택할 수 있는지 지정합니다. |
-
-<!--
-### Related components
--->
-
-<a id="related-components"></a>
-
-### 관련 컴포넌트
-
-<!--
-Toolbar can contain various widget types including buttons, trees, and comboboxes. See individual component documentation for specific widget implementations.
-
-<docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" title="Toolbar ARIA pattern"/>
-  <docs-pill href="/api/aria/toolbar/Toolbar" title="Toolbar API Reference"/>
-</docs-pill-row>
--->
-
-툴바에는 버튼, 트리, 콤보박스 등 다양한 위젯 타입을 포함할 수 있습니다.
-구체적인 위젯 구현은 각 컴포넌트의 문서를 참고하세요.
-
-<docs-pill-row>
-  <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/toolbar/" title="툴바 ARIA 패턴"/>
-  <docs-pill href="/api/aria/toolbar/Toolbar" title="툴바 API 레퍼런스"/>
-</docs-pill-row>
+- [`Toolbar`](/api/aria/toolbar/Toolbar)
+- [`ToolbarWidget`](/api/aria/toolbar/ToolbarWidget)
+- [`ToolbarWidgetGroup`](/api/aria/toolbar/ToolbarWidgetGroup)

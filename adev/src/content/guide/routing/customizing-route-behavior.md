@@ -88,7 +88,7 @@ provideRouter(routes, withRouterConfig({canceledNavigationResolution: 'computed'
 ### 같은 URL로의 내비게이션 처리하기
 
 <!--
-`onSameUrlNavigation` configures what should happen when the user asks to navigate to the current URL. The default `'ignore'` skips work, while `'reload'` re-runs guards and resolvers and refreshes component instances.
+`onSameUrlNavigation` configures what should happen when the user asks to navigate to the current URL. The default `'ignore'` skips work, while `'reload'` instructs the Router to process the URL in its navigation pipeline rather than skipping it. Guard and resolver reruns are governed by [`runGuardsAndResolvers`](api/router/RunGuardsAndResolvers), and component reuse is determined by the [route reuse strategy](#route-reuse-strategy).
 
 This is useful when you want repeated clicks on a list filter, left-nav item, or refresh button to trigger new data retrieval even though the URL does not change.
 
@@ -96,7 +96,7 @@ This is useful when you want repeated clicks on a list filter, left-nav item, or
 provideRouter(routes, withRouterConfig({onSameUrlNavigation: 'reload'}));
 ```
 
-You can also control this behavior on individual navigations rather than globally. This allows you to keep the keep the default of `'ignore'` while selectively enabling reload behavior for specific use cases:
+You can also control this behavior on individual navigations rather than globally. This allows you to keep the default of `'ignore'` while selectively enabling reload behavior for specific use cases:
 
 ```ts
 router.navigate(['/some-path'], {onSameUrlNavigation: 'reload'});
@@ -104,7 +104,8 @@ router.navigate(['/some-path'], {onSameUrlNavigation: 'reload'});
 -->
 
 `onSameUrlNavigation`은 사용자가 현재 URL로 이동하려고 할 때의 동작을 설정합니다.
-기본값인 `'ignore'`는 처리를 생략하고, `'reload'`는 가드와 리졸버를 다시 실행하며 컴포넌트 인스턴스를 새로 만듭니다.
+기본값인 `'ignore'`는 처리를 생략하고, `'reload'`는 URL을 건너뛰지 않고 라우터의 내비게이션 처리 과정에서 처리하도록 합니다.
+가드와 리졸버를 다시 실행할지는 [`runGuardsAndResolvers`](api/router/RunGuardsAndResolvers)가 결정하고, 컴포넌트를 재사용할지는 [라우팅 규칙 재사용 전략](#route-reuse-strategy)이 결정합니다.
 
 URL이 바뀌지 않더라도 목록 필터, 왼쪽 내비게이션 항목, 새로고침 버튼을 반복해서 클릭할 때 데이터를 다시 가져오고 싶은 경우에 유용합니다.
 
@@ -120,6 +121,12 @@ router.navigate(['/some-path'], {onSameUrlNavigation: 'reload'});
 ```
 
 <!--
+TIP: If you use [route resources](/guide/routing/data-fetching-with-resources#reloading-resources-without-renavigation), you can refresh data on-demand by calling `.reload()` on the resource or by updating signals read in `params`, without needing to configure `onSameUrlNavigation` or trigger a router navigation.
+-->
+
+TIP: [라우팅 규칙 리소스](/guide/routing/data-fetching-with-resources#reloading-resources-without-renavigation)를 사용하면 `onSameUrlNavigation`을 설정하거나 라우터 내비게이션을 시작하지 않아도 데이터를 갱신할 수 있습니다. 리소스의 `.reload()`를 실행하거나 `params`에서 읽는 시그널을 갱신하세요.
+
+<!--
 ### Control parameter inheritance
 -->
 
@@ -130,10 +137,10 @@ router.navigate(['/some-path'], {onSameUrlNavigation: 'reload'});
 <!--
 `paramsInheritanceStrategy` defines how route parameters and data flow from parent routes.
 
-By default (`'always'`), child routes automatically inherit parameters, route data, and resolved values from parent routes.
+By default (`'always'`), child routes automatically inherit parameters, route data, and resolved values from parent routes. This ensures matrix parameters, route data, and resolved values are available further down the route tree—handy when you share contextual identifiers across feature areas such as:
 
-```ts
-provideRouter(routes, withRouterConfig({paramsInheritanceStrategy: 'emptyOnly'}));
+```text {hideCopy}
+/org/:orgId/projects/:projectId/customers/:customerId
 ```
 
 ```ts
@@ -158,28 +165,7 @@ export const routes: Routes = [
 ```
 
 ```ts
-@Component({
-  /* ... */
-})
-export class Customer {
-  private route = inject(ActivatedRoute);
-
-  orgId = this.route.parent?.parent?.snapshot.params['orgId'];
-  projectId = this.route.parent?.snapshot.params['projectId'];
-  customerId = this.route.snapshot.params['customerId'];
-}
-```
-
-This ensures matrix parameters, route data, and resolved values are available further down the route tree—handy when you share contextual identifiers across feature areas such as:
-
-```text {hideCopy}
-/org/:orgId/projects/:projectId/customers/:customerId
-```
-
-```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class Customer {
   private route = inject(ActivatedRoute);
 
@@ -189,14 +175,35 @@ export class Customer {
   customerId = this.route.snapshot.params['customerId'];
 }
 ```
+
+To restore the legacy behavior, set `paramsInheritanceStrategy` to `'emptyOnly'`. With `'emptyOnly'`, child routes inherit params only when their path is empty or the parent does not declare a component:
+
+```ts
+provideRouter(routes, withRouterConfig({paramsInheritanceStrategy: 'emptyOnly'}));
+```
+
+In that case, the `Customer` component has to read the parent parameters from its ancestor routes:
+
+```ts
+@Component({/* ... */})
+export class Customer {
+  private route = inject(ActivatedRoute);
+
+  orgId = this.route.parent?.parent?.snapshot.params['orgId'];
+  projectId = this.route.parent?.snapshot.params['projectId'];
+  customerId = this.route.snapshot.params['customerId'];
+}
+```
 -->
 
 `paramsInheritanceStrategy`는 상위 라우팅 규칙의 파라미터와 데이터를 전달하는 방식을 정의합니다.
 
 기본값인 `'always'`에서는 하위 라우팅 규칙이 상위 라우팅 규칙의 파라미터, 라우팅 규칙 데이터, 리졸버로 가져온 값을 자동으로 상속합니다.
+따라서 라우팅 규칙 트리의 더 아래쪽에서도 매트릭스 파라미터, 라우팅 규칙 데이터, 리졸버로 가져온 값을 사용할 수 있습니다.
+다음처럼 여러 기능 영역에서 컨텍스트 식별자를 공유할 때 유용합니다:
 
-```ts
-provideRouter(routes, withRouterConfig({paramsInheritanceStrategy: 'emptyOnly'}));
+```text {hideCopy}
+/org/:orgId/projects/:projectId/customers/:customerId
 ```
 
 ```ts
@@ -221,35 +228,33 @@ export const routes: Routes = [
 ```
 
 ```ts
-@Component({
-  /* ... */
-})
-export class Customer {
-  private route = inject(ActivatedRoute);
-
-  orgId = this.route.parent?.parent?.snapshot.params['orgId'];
-  projectId = this.route.parent?.snapshot.params['projectId'];
-  customerId = this.route.snapshot.params['customerId'];
-}
-```
-
-따라서 라우팅 규칙 트리의 더 아래쪽에서도 매트릭스 파라미터, 라우팅 규칙 데이터, 리졸버로 가져온 값을 사용할 수 있습니다.
-다음처럼 여러 기능 영역에서 컨텍스트 식별자를 공유할 때 유용합니다:
-
-```text {hideCopy}
-/org/:orgId/projects/:projectId/customers/:customerId
-```
-
-```ts
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class Customer {
   private route = inject(ActivatedRoute);
 
   // 모든 상위 라우팅 규칙 파라미터에 직접 접근할 수 있습니다.
   orgId = this.route.snapshot.params['orgId'];
   projectId = this.route.snapshot.params['projectId'];
+  customerId = this.route.snapshot.params['customerId'];
+}
+```
+
+이전 동작으로 되돌리려면 `paramsInheritanceStrategy`를 `'emptyOnly'`로 설정하세요.
+`'emptyOnly'`에서는 하위 라우팅 규칙의 경로가 비어 있거나 상위 라우팅 규칙에 컴포넌트가 선언되지 않은 경우에만 파라미터를 상속합니다:
+
+```ts
+provideRouter(routes, withRouterConfig({paramsInheritanceStrategy: 'emptyOnly'}));
+```
+
+이 경우 `Customer` 컴포넌트는 상위 라우팅 규칙에서 부모 파라미터를 읽어야 합니다:
+
+```ts
+@Component({/* ... */})
+export class Customer {
+  private route = inject(ActivatedRoute);
+
+  orgId = this.route.parent?.parent?.snapshot.params['orgId'];
+  projectId = this.route.parent?.snapshot.params['projectId'];
   customerId = this.route.snapshot.params['customerId'];
 }
 ```
@@ -443,14 +448,14 @@ Angular's `RouteReuseStrategy` class allows you to customize navigation behavior
 
 The `RouteReuseStrategy` class provides the following methods that control the lifecycle of route components:
 
-| Method                                                                         | Description                                                                                                         |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| [`shouldDetach`](api/router/RouteReuseStrategy#shouldDetach)                   | Determines if a route should be stored for later reuse when navigating away                                         |
-| [`store`](api/router/RouteReuseStrategy#store)                                 | Stores the detached route handle when `shouldDetach` returns true                                                   |
-| [`shouldAttach`](api/router/RouteReuseStrategy#shouldAttach)                   | Determines if a stored route should be reattached when navigating to it                                             |
-| [`retrieve`](api/router/RouteReuseStrategy#retrieve)                           | Returns the previously stored route handle for reattachment                                                         |
-| [`shouldReuseRoute`](api/router/RouteReuseStrategy#shouldReuseRoute)           | Determines if the router should reuse the current route instance instead of destroying it during navigation         |
-| [`shouldDestroyInjector`](api/router/RouteReuseStrategy#shouldDestroyInjector) | (Experimental) Determines if the router should destroy the injector of a detached route when it is no longer stored |
+| Method                                                                         | Description                                                                                                 |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| [`shouldDetach`](api/router/RouteReuseStrategy#shouldDetach)                   | Determines if a route should be stored for later reuse when navigating away                                 |
+| [`store`](api/router/RouteReuseStrategy#store)                                 | Stores the detached route handle when `shouldDetach` returns true                                           |
+| [`shouldAttach`](api/router/RouteReuseStrategy#shouldAttach)                   | Determines if a stored route should be reattached when navigating to it                                     |
+| [`retrieve`](api/router/RouteReuseStrategy#retrieve)                           | Returns the previously stored route handle for reattachment                                                 |
+| [`shouldReuseRoute`](api/router/RouteReuseStrategy#shouldReuseRoute)           | Determines if the router should reuse the current route instance instead of destroying it during navigation |
+| [`shouldDestroyInjector`](api/router/RouteReuseStrategy#shouldDestroyInjector) | Determines if the router should destroy the injector of a detached route when it is no longer stored        |
 
 The following example demonstrates a custom route reuse strategy that selectively preserves component state based on route metadata:
 
@@ -512,14 +517,14 @@ Angular의 `RouteReuseStrategy` 클래스를 사용하면 "분리된 라우팅 �
 
 `RouteReuseStrategy` 클래스는 라우팅 규칙 컴포넌트의 라이프사이클을 제어하는 다음 메서드를 제공합니다:
 
-| 메서드                                                                         | 설명                                                                                           |
-| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| [`shouldDetach`](api/router/RouteReuseStrategy#shouldDetach)                   | 라우팅 규칙을 떠날 때 이후 재사용을 위해 저장할지 결정합니다.                                  |
-| [`store`](api/router/RouteReuseStrategy#store)                                 | `shouldDetach`가 true를 반환하면 분리된 라우팅 규칙 핸들을 저장합니다.                         |
-| [`shouldAttach`](api/router/RouteReuseStrategy#shouldAttach)                   | 라우팅 규칙으로 이동할 때 저장된 라우팅 규칙을 다시 연결할지 결정합니다.                       |
-| [`retrieve`](api/router/RouteReuseStrategy#retrieve)                           | 다시 연결할 수 있도록 이전에 저장한 라우팅 규칙 핸들을 반환합니다.                             |
-| [`shouldReuseRoute`](api/router/RouteReuseStrategy#shouldReuseRoute)           | 내비게이션 중 현재 라우팅 규칙 인스턴스를 종료하지 않고 재사용할지 결정합니다.                 |
-| [`shouldDestroyInjector`](api/router/RouteReuseStrategy#shouldDestroyInjector) | (실험적 기능) 분리된 라우팅 규칙이 더 이상 저장되지 않을 때 해당 인젝터를 종료할지 결정합니다. |
+| 메서드                                                                         | 설명                                                                             |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| [`shouldDetach`](api/router/RouteReuseStrategy#shouldDetach)                   | 라우팅 규칙을 떠날 때 이후 재사용을 위해 저장할지 결정합니다.                    |
+| [`store`](api/router/RouteReuseStrategy#store)                                 | `shouldDetach`가 true를 반환하면 분리된 라우팅 규칙 핸들을 저장합니다.           |
+| [`shouldAttach`](api/router/RouteReuseStrategy#shouldAttach)                   | 라우팅 규칙으로 이동할 때 저장된 라우팅 규칙을 다시 연결할지 결정합니다.         |
+| [`retrieve`](api/router/RouteReuseStrategy#retrieve)                           | 다시 연결할 수 있도록 이전에 저장한 라우팅 규칙 핸들을 반환합니다.               |
+| [`shouldReuseRoute`](api/router/RouteReuseStrategy#shouldReuseRoute)           | 내비게이션 중 현재 라우팅 규칙 인스턴스를 종료하지 않고 재사용할지 결정합니다.   |
+| [`shouldDestroyInjector`](api/router/RouteReuseStrategy#shouldDestroyInjector) | 분리된 라우팅 규칙이 더 이상 저장되지 않을 때 해당 인젝터를 종료할지 결정합니다. |
 
 다음 예제는 라우팅 규칙 메타데이터에 따라 컴포넌트 상태를 선택적으로 유지하는 커스텀 라우팅 규칙 재사용 전략입니다:
 
@@ -623,23 +628,24 @@ if (this.handles.size > MAX_CACHE_SIZE) {
 참고: `canMatch` 가드를 사용하는 경우에는 중복 항목이 생길 수 있으므로 라우팅 규칙 경로를 키로 사용하지 않는 것이 좋습니다.
 
 <!--
-### (Experimental) Automatic cleanup of unused route injectors
+### Automatic cleanup of unused route injectors
 -->
 
 <a id="experimental-automatic-cleanup-of-unused-route-injectors"></a>
+<a id="automatic-cleanup-of-unused-route-injectors"></a>
 
-### (실험적 기능) 사용하지 않는 라우팅 규칙 인젝터 자동 정리하기
+### 사용하지 않는 라우팅 규칙 인젝터 자동 정리하기
 
 <!--
 By default, Angular does not destroy the injectors of detached routes, even if they are no longer stored by the `RouteReuseStrategy`. This is primarily because this level of memory management is not commonly needed for most applications.
 
-To enable automatic cleanup of unused route injectors, you can use the `withExperimentalAutoCleanupInjectors` feature in your router configuration. This feature checks which routes are currently stored by the strategy after navigations and destroys the injectors of any detached routes that are not currently stored by the reuse strategy.
+To enable automatic cleanup of unused route injectors, you can use the `withAutoCleanupInjectors` feature in your router configuration. This feature checks which routes are currently stored by the strategy after navigations and destroys the injectors of any detached routes that are not currently stored by the reuse strategy.
 
 ```ts
-import {provideRouter, withExperimentalAutoCleanupInjectors} from '@angular/router';
+import {provideRouter, withAutoCleanupInjectors} from '@angular/router';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes, withExperimentalAutoCleanupInjectors())],
+  providers: [provideRouter(routes, withAutoCleanupInjectors())],
 };
 ```
 
@@ -649,14 +655,14 @@ If you do not provide a custom `RouteReuseStrategy` or your custom strategy exte
 기본적으로 Angular는 `RouteReuseStrategy`가 더 이상 저장하지 않는 분리된 라우팅 규칙이라도 해당 인젝터를 종료하지 않습니다.
 대부분의 애플리케이션에서는 이 수준의 메모리 관리가 필요하지 않기 때문입니다.
 
-사용하지 않는 라우팅 규칙 인젝터를 자동으로 정리하려면 라우터 설정에서 `withExperimentalAutoCleanupInjectors` 기능을 사용하면 됩니다.
+사용하지 않는 라우팅 규칙 인젝터를 자동으로 정리하려면 라우터 설정에서 `withAutoCleanupInjectors` 기능을 사용하면 됩니다.
 이 기능은 내비게이션 후에 전략이 현재 저장 중인 라우팅 규칙을 확인하고, 재사용 전략에 저장되지 않은 분리된 라우팅 규칙의 인젝터를 종료합니다.
 
 ```ts
-import {provideRouter, withExperimentalAutoCleanupInjectors} from '@angular/router';
+import {provideRouter, withAutoCleanupInjectors} from '@angular/router';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes, withExperimentalAutoCleanupInjectors())],
+  providers: [provideRouter(routes, withAutoCleanupInjectors())],
 };
 ```
 
@@ -695,7 +701,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
     this.handles.set(route.routeConfig!, handle);
   }
 
-  retrieveStoredRouteHandles(): DetachedRouteHandle {
+  retrieveStoredRouteHandles(): DetachedRouteHandle[] {
     return Array.from(this.handles.values());
   }
 
@@ -728,7 +734,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
     this.handles.set(route.routeConfig!, handle);
   }
 
-  retrieveStoredRouteHandles(): DetachedRouteHandle {
+  retrieveStoredRouteHandles(): DetachedRouteHandle[] {
     return Array.from(this.handles.values());
   }
 
@@ -1113,8 +1119,7 @@ You can register a custom strategy through Angular's dependency injection system
 
 ```ts
 import {ApplicationConfig} from '@angular/core';
-import {provideRouter} from '@angular/router';
-import {UrlHandlingStrategy} from '@angular/router';
+import {provideRouter, UrlHandlingStrategy} from '@angular/router';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -1129,8 +1134,7 @@ Angular의 의존성 주입 시스템으로 커스텀 전략을 등록할 수 �
 
 ```ts
 import {ApplicationConfig} from '@angular/core';
-import {provideRouter} from '@angular/router';
-import {UrlHandlingStrategy} from '@angular/router';
+import {provideRouter, UrlHandlingStrategy} from '@angular/router';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -1267,8 +1271,7 @@ export const routes: Routes = [
 The component receives the extracted parameters through route inputs:
 
 ```angular-ts
-import {Component, input, inject} from '@angular/core';
-import {resource} from '@angular/core';
+import {Component, input, inject, resource} from '@angular/core';
 
 @Component({
   selector: 'app-documentation',
@@ -1343,8 +1346,7 @@ export const routes: Routes = [
 컴포넌트는 라우팅 규칙 입력을 통해 추출한 파라미터를 전달받습니다:
 
 ```angular-ts
-import {Component, input, inject} from '@angular/core';
-import {resource} from '@angular/core';
+import {Component, input, inject, resource} from '@angular/core';
 
 @Component({
   selector: 'app-documentation',

@@ -225,7 +225,7 @@ export default testProviders;
 ### Vitest 고급 설정
 
 <!--
-For advanced use cases, you can provide a custom Vitest configuration file using the `configFile` option in `angular.json`.
+For advanced use cases, you can provide a custom Vitest configuration file using the `runnerConfig` option in `angular.json`.
 
 IMPORTANT: While using a custom configuration enables advanced options, the Angular team does not provide support for the contents of the configuration file or for any third-party plugins. The CLI will also override certain properties (`test.projects`, `test.include`) to ensure proper integration.
 
@@ -259,7 +259,7 @@ This creates a `vitest-base.config.ts` file that you can customize.
 HELPFUL: Read more about Vitest configuration in the [official Vitest documentation](https://vitest.dev/config/).
 -->
 
-고급 설정이 필요하면 `angular.json`의 `configFile` 옵션으로 커스텀 Vitest 설정 파일을 제공할 수 있습니다.
+고급 설정이 필요하면 `angular.json`의 `runnerConfig` 옵션으로 커스텀 Vitest 설정 파일을 제공할 수 있습니다.
 
 중요: 커스텀 설정으로 고급 옵션을 사용할 수 있지만, Angular 팀은 설정 파일의 내용이나 서드 파티 플러그인을 지원하지 않습니다.
 또한 CLI는 올바르게 통합하기 위해 일부 프로퍼티(`test.projects`, `test.include`)를 덮어씁니다.
@@ -376,7 +376,6 @@ ng test --browsers=chromeHeadless
 ### Playwright
 -->
 
-<a id="playwright"></a>
 
 ### Playwright
 
@@ -420,7 +419,6 @@ ng test --browsers=chromeHeadless
 ### WebdriverIO
 -->
 
-<a id="webdriverio"></a>
 
 ### WebdriverIO
 
@@ -464,7 +462,6 @@ ng test --browsers=chromeHeadless
 ### Preview
 -->
 
-<a id="preview"></a>
 
 ### Preview
 

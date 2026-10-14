@@ -63,7 +63,6 @@ Currently, there are two well supported community tools that enable you to creat
 ### Rspack
 -->
 
-<a id="rspack"></a>
 
 ### Rspack
 
@@ -85,7 +84,6 @@ Angular Rspack에 대한 자세한 내용은 프로젝트의 [문서 웹사이�
 ### Vite
 -->
 
-<a id="vite"></a>
 
 ### Vite
 

@@ -81,6 +81,8 @@ CSS 스타일을 지정할 때는 [Sass](https://sass-lang.com)나 [less](https:
 ## Style scoping
 -->
 
+<a id="style-scoping"></a>
+
 ## 스타일 지정 범위
 
 <!--
@@ -249,7 +251,7 @@ CSS 지정의 구체도가 같다면 컴포넌트 스타일 지정이 충돌할 
 ## Defining styles in templates
 -->
 
-## 템플릿에서 스타일 지정하기
+## 템플릿에서 스타일 지정하기 {#defining-styles-in-templates}
 
 <!--
 You can use the `<style>` element in a component's template to define additional styles. The
@@ -267,7 +269,7 @@ Angular는 스타일 엘리먼트 내부에는 바인딩 문법을 지원하지 
 ## Referencing external style files
 -->
 
-## 외부 스타일 파일 참조하기
+## 외부 스타일 파일 참조하기 {#referencing-external-style-files}
 
 <!--
 Component templates can
@@ -282,3 +284,223 @@ emulated view encapsulation.
 그리고 CSS 스타일 안에서 [`@import`](https://developer.mozilla.org/docs/Web/CSS/@import)를 사용해서 외부 CSS 파일을 참조할 수도 있습니다.
 Angular는 이런 참조 방식을 컴포넌트 _외부_ 스타일로 간주합니다.
 컴포넌트 외부 스타일은 에뮬레이션 뷰 캡슐화의 영향을 받지 않습니다.
+
+<!--
+## Namespacing CSS custom properties
+
+Angular can add a prefix to the CSS custom properties (also called CSS variables) that your
+component styles declare and read. Custom properties inherit down the DOM tree, so when something
+outside your application defines a custom property such as `--primary-color` on an ancestor
+element, your components read that value. This matters when your application shares a page with another
+application or with markup you do not control. Angular does not namespace custom properties until
+you ask it to, and an application that owns its page does not need namespacing.
+
+To scope the custom properties in your component styles to your application, add
+[`provideCssVarNamespacing`](api/platform-browser/provideCssVarNamespacing) to your application's
+providers. It uses the application's [`APP_ID`](api/core/APP_ID) as the namespace:
+
+```ts {header: "app.config.ts"}
+import {APP_ID, ApplicationConfig} from '@angular/core';
+import {provideCssVarNamespacing} from '@angular/platform-browser';
+
+export const appConfig: ApplicationConfig = {
+  providers: [{provide: APP_ID, useValue: 'my-app'}, provideCssVarNamespacing()],
+};
+```
+
+Angular prefixes the custom properties in your component styles with that namespace followed by an
+underscore, so `--primary-color` becomes `--my-app_primary-color`. The prefix applies to
+declarations, `var()` references, `@property` rules, and style bindings such as
+`[style.--primary-color]`, including the style bindings a component declares in its `host` object.
+
+`APP_ID` is `ng` unless you set it, so give each application on the page its own `APP_ID`.
+Otherwise, the applications share a prefix and collide again. To use a namespace that differs from
+the application id, pass it to `provideCssVarNamespacing`. Angular appends the underscore itself:
+`provideCssVarNamespacing('my-app_')` produces `--my-app__primary-color`.
+
+Angular namespaces the styles it compiles into a component: the `styles` and `styleUrl` of the
+component, the styles you [write in a `<style>` element](#defining-styles-in-templates) in its
+template, stylesheets its template references with a relative `<link rel="stylesheet">`, and
+the styles of a component that uses `ViewEncapsulation.None`. Angular does not namespace a stylesheet the browser
+loads at runtime, such as a global stylesheet your build configuration lists or an
+[external style](#referencing-external-style-files) that your build does not inline.
+
+Namespacing applies to every component Angular compiles, including the components of the libraries
+you install. When a library's styles read a custom property that a global stylesheet defines, such
+as the properties of a theme, the reference no longer matches, the browser uses the `var()`
+fallback if there is one or otherwise
+[the property's inherited or initial value](https://www.w3.org/TR/css-variables-1/#invalid-variables),
+and nothing reports an error. Before you enable namespacing in an
+existing application, review the custom properties that cross between your global stylesheets and
+your components.
+
+IMPORTANT: Angular rewrites custom property names only in the styles and bindings it compiles.
+Everywhere else keeps the name you write, and nothing reports the mismatch.
+
+Angular does not rewrite the name in:
+
+- Static style attributes, such as `style="--primary-color: red"`, including the `style` entry of a
+  component's `host` object.
+- Object and string style bindings, such as `[style]="{'--primary-color': color}"`,
+  `[style]="'--primary-color: red'"` and `ngStyle`, including the `[style]` entry of a component's
+  `host` object.
+- Custom property names inside a binding's value, such as
+  `[style.border-color]="'var(--primary-color)'"`.
+- Calls to `Renderer2.setStyle`.
+
+Each of these produces a property that your namespaced styles no longer read. Namespace those
+names yourself, as described in
+[Using namespaced properties in TypeScript](#using-namespaced-properties-in-typescript).
+
+### Opting out of namespacing
+
+To declare or read a custom property that Angular does not namespace, such as one defined in a
+global stylesheet, prefix its name with `--global--`. Angular removes `--global` and leaves the
+remaining `--` and the rest of the name unchanged:
+
+```css
+:host {
+  /* Declares --accent-color and reads --brand-color, not --my-app_brand-color. */
+  --global--accent-color: navy;
+  color: var(--global--brand-color);
+}
+```
+
+Write two hyphens after `global`. A single hyphen, as in `--global-brand-color`, does not opt out,
+and Angular namespaces that name like any other. Avoid names that start with `--global-` followed
+by anything but a second hyphen; a future major version is planned to reject them at build time.
+Angular removes `--global` in every application, including applications that never configure a
+namespace.
+
+### Using namespaced properties in TypeScript
+
+Prefer a style binding such as `[style.--primary-color]`, which Angular namespaces for you. When
+you go through a DOM API instead, pass the name you wrote in your styles to
+[`CssVarNamespacer`](api/platform-browser/CssVarNamespacer), including the leading `--`:
+
+```angular-ts {header: "profile-photo.ts"}
+import {Component, ElementRef, inject} from '@angular/core';
+import {CssVarNamespacer} from '@angular/platform-browser';
+
+@Component({
+  selector: 'profile-photo',
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
+  styles: `
+    img {
+      border: 2px solid var(--primary-color);
+    }
+  `,
+})
+export class ProfilePhoto {
+  private readonly host: HTMLElement = inject(ElementRef).nativeElement;
+  private readonly cssVarNamespacer = inject(CssVarNamespacer);
+
+  setPrimaryColor(color: string): void {
+    this.host.style.setProperty(this.cssVarNamespacer.namespace('--primary-color'), color);
+  }
+}
+```
+
+Use the plain name for a property you declared with `--global--`, since Angular never namespaces
+those. For everything else, `namespace` returns the name unchanged when an application configures
+no namespace, so a library can call it for the custom properties its own styles declare.
+-->
+
+## CSS 커스텀 프로퍼티에 네임스페이스 적용하기 {#namespacing-css-custom-properties}
+
+Angular는 컴포넌트 스타일에서 선언하고 읽는 CSS 커스텀 프로퍼티(CSS 변수)에 접두사를 추가할 수 있습니다.
+커스텀 프로퍼티는 DOM 트리를 따라 아래로 상속됩니다. 따라서 애플리케이션 외부에서 상위 엘리먼트에 `--primary-color` 같은 커스텀 프로퍼티를 정의하면 컴포넌트가 그 값을 읽게 됩니다.
+다른 애플리케이션이나 직접 제어하지 않는 마크업과 페이지를 공유할 때는 이 점이 중요합니다.
+Angular는 명시적으로 설정하기 전까지 커스텀 프로퍼티에 네임스페이스를 적용하지 않으며, 페이지 전체를 사용하는 애플리케이션에는 네임스페이스가 필요하지 않습니다.
+
+컴포넌트 스타일의 커스텀 프로퍼티 범위를 애플리케이션으로 한정하려면 애플리케이션의 프로바이더에 [`provideCssVarNamespacing`](api/platform-browser/provideCssVarNamespacing)을 추가하세요.
+애플리케이션의 [`APP_ID`](api/core/APP_ID)를 네임스페이스로 사용합니다.
+
+```ts {header: "app.config.ts"}
+import {APP_ID, ApplicationConfig} from '@angular/core';
+import {provideCssVarNamespacing} from '@angular/platform-browser';
+
+export const appConfig: ApplicationConfig = {
+  providers: [{provide: APP_ID, useValue: 'my-app'}, provideCssVarNamespacing()],
+};
+```
+
+Angular는 컴포넌트 스타일의 커스텀 프로퍼티 앞에 네임스페이스와 밑줄을 붙입니다. 따라서 `--primary-color`는 `--my-app_primary-color`가 됩니다.
+이 접두사는 선언, `var()` 참조, `@property` 규칙, `[style.--primary-color]` 같은 스타일 바인딩에 적용되며, 컴포넌트의 `host` 객체에 선언한 스타일 바인딩도 포함합니다.
+
+`APP_ID`를 설정하지 않으면 기본값은 `ng`입니다. 페이지의 각 애플리케이션에 서로 다른 `APP_ID`를 지정하세요.
+그렇지 않으면 애플리케이션들이 같은 접두사를 사용해서 다시 충돌합니다.
+애플리케이션 ID와 다른 네임스페이스를 사용하려면 `provideCssVarNamespacing`에 원하는 값을 전달하세요.
+Angular가 밑줄을 직접 추가하므로 `provideCssVarNamespacing('my-app_')`는 `--my-app__primary-color`를 만듭니다.
+
+Angular는 컴포넌트로 컴파일하는 스타일에 네임스페이스를 적용합니다.
+컴포넌트의 `styles`와 `styleUrl`, 템플릿의 [`<style>` 엘리먼트에 작성한 스타일](#defining-styles-in-templates), 템플릿에서 상대 경로의 `<link rel="stylesheet">`로 참조하는 스타일시트, `ViewEncapsulation.None`을 사용하는 컴포넌트의 스타일이 여기에 해당합니다.
+빌드 설정에 나열한 전역 스타일시트나 빌드할 때 인라인으로 포함하지 않는 [외부 스타일](#referencing-external-style-files)처럼 브라우저가 런타임에 로드하는 스타일시트에는 네임스페이스를 적용하지 않습니다.
+
+네임스페이스는 설치한 라이브러리의 컴포넌트를 포함해서 Angular가 컴파일하는 모든 컴포넌트에 적용됩니다.
+라이브러리 스타일이 테마 프로퍼티처럼 전역 스타일시트에 정의한 커스텀 프로퍼티를 읽는다면 참조하는 이름이 더 이상 일치하지 않게 됩니다.
+이때 브라우저는 `var()`에 대체값이 있으면 그 값을 사용하고, 없으면 [프로퍼티의 상속값이나 초기값](https://www.w3.org/TR/css-variables-1/#invalid-variables)을 사용하며 에러를 보고하지 않습니다.
+기존 애플리케이션에서 네임스페이스를 활성화하기 전에 전역 스타일시트와 컴포넌트 사이에서 공유하는 커스텀 프로퍼티를 확인하세요.
+
+중요: Angular는 직접 컴파일하는 스타일과 바인딩에서만 커스텀 프로퍼티의 이름을 변경합니다.
+그 밖의 위치에서는 작성한 이름을 그대로 유지하며, 이름이 일치하지 않아도 에러를 보고하지 않습니다.
+
+다음 위치에서는 이름을 변경하지 않습니다.
+
+- `style="--primary-color: red"` 같은 정적 스타일 어트리뷰트. 컴포넌트의 `host` 객체에 있는 `style` 항목도 포함합니다.
+- `[style]="{'--primary-color': color}"`, `[style]="'--primary-color: red'"`, `ngStyle` 같은 객체 및 문자열 스타일 바인딩. 컴포넌트의 `host` 객체에 있는 `[style]` 항목도 포함합니다.
+- `[style.border-color]="'var(--primary-color)'"`처럼 바인딩 값 안에 있는 커스텀 프로퍼티 이름
+- `Renderer2.setStyle` 호출
+
+이렇게 생성한 프로퍼티는 네임스페이스가 적용된 스타일에서 더 이상 읽을 수 없습니다.
+[TypeScript에서 네임스페이스가 적용된 프로퍼티 사용하기](#using-namespaced-properties-in-typescript)에서 설명하는 방식으로 직접 네임스페이스를 적용하세요.
+
+### 네임스페이스 적용 제외하기 {#opting-out-of-namespacing}
+
+전역 스타일시트에 정의한 프로퍼티처럼 Angular가 네임스페이스를 적용하지 않아야 하는 커스텀 프로퍼티를 선언하거나 읽으려면 이름 앞에 `--global--`을 붙이세요.
+Angular는 `--global`을 제거하고 나머지 `--`와 이름은 그대로 유지합니다.
+
+```css
+:host {
+  /* --accent-color를 선언하고 --my-app_brand-color 대신 --brand-color를 읽습니다. */
+  --global--accent-color: navy;
+  color: var(--global--brand-color);
+}
+```
+
+`global` 뒤에는 하이픈을 두 개 작성하세요.
+`--global-brand-color`처럼 하이픈을 하나만 사용하면 적용 제외 대상이 되지 않으며, 다른 이름과 마찬가지로 네임스페이스가 적용됩니다.
+`--global-` 다음에 두 번째 하이픈 이외의 문자가 오는 이름은 사용하지 마세요. 향후 메이저 버전에서는 빌드 시점에 이러한 이름을 허용하지 않을 예정입니다.
+네임스페이스를 설정하지 않은 애플리케이션을 포함해서 모든 애플리케이션에서 Angular는 `--global`을 제거합니다.
+
+### TypeScript에서 네임스페이스가 적용된 프로퍼티 사용하기 {#using-namespaced-properties-in-typescript}
+
+Angular가 자동으로 네임스페이스를 적용하는 `[style.--primary-color]` 같은 스타일 바인딩을 우선 사용하세요.
+대신 DOM API를 사용한다면 스타일에 작성한 이름을 앞쪽의 `--`까지 포함해서 [`CssVarNamespacer`](api/platform-browser/CssVarNamespacer)에 전달하세요.
+
+```angular-ts {header: "profile-photo.ts"}
+import {Component, ElementRef, inject} from '@angular/core';
+import {CssVarNamespacer} from '@angular/platform-browser';
+
+@Component({
+  selector: 'profile-photo',
+  template: `<img src="profile-photo.jpg" alt="프로필 사진" />`,
+  styles: `
+    img {
+      border: 2px solid var(--primary-color);
+    }
+  `,
+})
+export class ProfilePhoto {
+  private readonly host: HTMLElement = inject(ElementRef).nativeElement;
+  private readonly cssVarNamespacer = inject(CssVarNamespacer);
+
+  setPrimaryColor(color: string): void {
+    this.host.style.setProperty(this.cssVarNamespacer.namespace('--primary-color'), color);
+  }
+}
+```
+
+`--global--`로 선언한 프로퍼티에는 Angular가 네임스페이스를 적용하지 않으므로 원래 이름을 사용하세요.
+다른 프로퍼티의 경우 애플리케이션에 네임스페이스가 설정되어 있지 않으면 `namespace`가 이름을 그대로 반환합니다.
+따라서 라이브러리에서도 자체 스타일에 선언한 커스텀 프로퍼티에 이 메서드를 사용할 수 있습니다.

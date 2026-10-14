@@ -50,7 +50,7 @@ Update the component to have an `input()` property matching the name of the para
 
 ```ts
 id = input.required<string>();
-hero = computed(() => this.service.getHero(id()));
+hero = computed(() => this.service.getHero(this.id()));
 ```
 
 </docs-step>
@@ -73,7 +73,18 @@ internalId = linkedSignal(() => this.id() ?? getDefaultId());
 </docs-step>
 </docs-workflow>
 
-NOTE: You can bind all route data with key, value pairs to component inputs: static or resolved route data, path parameters, matrix parameters, and query parameters.
+NOTE: You can bind all route data with key-value pairs to component inputs: route resources, static or resolved route data, path parameters, matrix parameters, and query parameters.
+
+### Input binding priority
+
+When multiple route sources define identical keys, the router resolves collisions in the following priority order (from highest to lowest):
+
+1. **Route resources**: Values defined in the route's `resources` map. Blocking resources bind their unwrapped value (`resource.value()`), while non-blocking resources bind the `Resource` instance.
+2. **Route data and resolvers**: Static data defined in `data` or values resolved via `resolve`.
+3. **Path parameters and matrix parameters**: Parameters from the URL path (such as `:id`) and matrix parameters.
+4. **Query parameters**: Parameters from the query string (such as `?id=123`).
+
+For example, if a route has both a path parameter `:id` and a query parameter `?id=...`, the path parameter value is bound to the component's `id` input. If the route also defines a resource named `id`, the resource value takes precedence over both.
 -->
 
 사용자가 애플리케이션을 탐색하는 동안 한 컴포넌트에서 다른 컴포넌트로 정보를 전달해야 하는 경우가 많습니다.
@@ -89,6 +100,8 @@ NOTE: You can bind all route data with key, value pairs to component inputs: sta
 
 <docs-workflow>
 
+<a id="add-withcomponentinputbinding"></a>
+
 <docs-step title="`withComponentInputBinding` 추가하기">
 
 `provideRouter` 메서드에 `withComponentInputBinding` 기능을 추가하세요.
@@ -99,16 +112,20 @@ providers: [provideRouter(appRoutes, withComponentInputBinding())];
 
 </docs-step>
 
+<a id="add-an-input-to-the-component"></a>
+
 <docs-step title="컴포넌트에 `input` 추가하기">
 
 파라미터 이름과 일치하는 `input()` 프로퍼티를 컴포넌트에 추가하세요.
 
 ```ts
 id = input.required<string>();
-hero = computed(() => this.service.getHero(id()));
+hero = computed(() => this.service.getHero(this.id()));
 ```
 
 </docs-step>
+<a id="optional-use-a-default-value"></a>
+
 <docs-step title="선택 사항: 기본값 사용하기">
 `withComponentInputBinding`을 활성화하면 라우터가 현재 라우팅 규칙을 기준으로 모든 입력 프로퍼티에 값을 할당합니다.
 선택적 쿼리 파라미터가 없는 경우처럼 입력 프로퍼티의 키와 매칭되는 라우팅 규칙 데이터가 없으면 `undefined`를 할당합니다.
@@ -129,7 +146,20 @@ internalId = linkedSignal(() => this.id() ?? getDefaultId());
 </docs-workflow>
 
 참고: 키와 값 쌍으로 된 모든 라우팅 규칙 데이터를 컴포넌트 입력 프로퍼티에 바인딩할 수 있습니다.
-정적 라우팅 규칙 데이터, 리졸버가 가져온 데이터, 경로 파라미터, 매트릭스 파라미터, 쿼리 파라미터가 모두 포함됩니다.
+라우팅 규칙 리소스, 정적 라우팅 규칙 데이터, 리졸버가 가져온 데이터, 경로 파라미터, 매트릭스 파라미터, 쿼리 파라미터가 모두 포함됩니다.
+
+<a id="input-binding-priority"></a>
+
+### 입력 프로퍼티 바인딩 우선순위
+
+여러 라우팅 데이터 소스에서 같은 키를 정의하면 라우터는 다음 우선순위에 따라 충돌을 해결합니다. 위쪽 항목의 우선순위가 더 높습니다.
+
+1. **라우팅 규칙 리소스**: 라우팅 규칙의 `resources` 맵에 정의된 값입니다. 블로킹 리소스는 내부 값(`resource.value()`)을 바인딩하고, 논블로킹 리소스는 `Resource` 인스턴스를 바인딩합니다.
+2. **라우팅 규칙 데이터와 리졸버**: `data`에 정의한 정적 데이터 또는 `resolve`로 가져온 값입니다.
+3. **경로 파라미터와 매트릭스 파라미터**: URL 경로의 파라미터(`:id` 등)와 매트릭스 파라미터입니다.
+4. **쿼리 파라미터**: 쿼리 문자열의 파라미터(`?id=123` 등)입니다.
+
+예를 들어 경로 파라미터 `:id`와 쿼리 파라미터 `?id=...`가 모두 있으면 경로 파라미터 값이 컴포넌트의 `id` 입력 프로퍼티에 바인딩됩니다. 라우팅 규칙에 `id`라는 리소스도 정의되어 있다면 리소스 값이 두 파라미터보다 우선합니다.
 
 <!--
 ### Disable query parameter binding

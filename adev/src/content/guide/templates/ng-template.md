@@ -15,6 +15,8 @@ Inspired by the [native `<template>` element](https://developer.mozilla.org/en-U
 ## Creating a template fragment
 -->
 
+<a id="creating-a-template-fragment"></a>
+
 ## 템플릿 조각 만들기
 
 <!--
@@ -47,6 +49,8 @@ When the above is rendered, the content of the `<ng-template>` element is not re
 <!--
 ### Binding context for fragments
 -->
+
+<a id="binding-context-for-fragments"></a>
 
 ### 템플릿 조각의 컨텍스트
 
@@ -84,6 +88,8 @@ export class ItemCounter {
 ## Getting a reference to a template fragment
 -->
 
+<a id="getting-a-reference-to-a-template-fragment"></a>
+
 ## 템플릿 조각 참조하기
 
 <!--
@@ -107,6 +113,8 @@ In all three cases, the fragment is represented by a [TemplateRef](/api/core/Tem
 <!--
 ### Referencing a template fragment with a template reference variable
 -->
+
+<a id="referencing-a-template-fragment-with-a-template-reference-variable"></a>
 
 ### 템플릿 참조 변수로 참조하기
 
@@ -139,6 +147,8 @@ You can then reference this fragment anywhere else in the template via the `myFr
 <!--
 ### Referencing a template fragment with queries
 -->
+
+<a id="referencing-a-template-fragment-with-queries"></a>
 
 ### 쿼리로 참조하기
 
@@ -243,6 +253,8 @@ export class ComponentWithFragment {
 ### Injecting a template fragment
 -->
 
+<a id="injecting-a-template-fragment"></a>
+
 ### 의존성 관계로 참조하기
 
 <!--
@@ -289,6 +301,8 @@ export class MyDirective {
 ## Rendering a template fragment
 -->
 
+<a id="rendering-a-template-fragment"></a>
+
 ## 템플릿 조각 렌더링하기
 
 <!--
@@ -300,6 +314,8 @@ Once you have a reference to a template fragment's `TemplateRef` object, you can
 <!--
 ### Using `NgTemplateOutlet`
 -->
+
+<a id="using-ngtemplateoutlet"></a>
 
 ### `NgTemplateOutlet` 로 렌더링하기
 
@@ -364,6 +380,8 @@ import {NgTemplateOutlet} from '@angular/common';
 ### Using `ViewContainerRef`
 -->
 
+<a id="using-viewcontainerref"></a>
+
 ### `ViewContainerRef` 로 렌더링하기
 
 <!--
@@ -408,7 +426,7 @@ In the example above, clicking the "Show" button results in the following output
 
 ```angular-html
 <component-with-fragment>
-  <h2>Component with a fragment>
+  <h2>Component with a fragment</h2>
   <my-outlet>
     <button>Show</button>
   </my-outlet>
@@ -459,7 +477,7 @@ export class MyOutlet {
 
 ```angular-html
 <component-with-fragment>
-  <h2>Component with a fragment>
+  <h2>Component with a fragment</h2>
   <my-outlet>
     <button>Show</button>
   </my-outlet>
@@ -470,6 +488,8 @@ export class MyOutlet {
 <!--
 ## Passing parameters when rendering a template fragment
 -->
+
+<a id="passing-parameters-when-rendering-a-template-fragment"></a>
 
 ## 템플릿 조각을 렌더링하면서 인자 전달하기
 
@@ -528,6 +548,8 @@ You can bind a context object to the `ngTemplateOutletContext` input:
 <ng-container [ngTemplateOutlet]="myFragment" [ngTemplateOutletContext]="{topping: 'onion'}" />
 ```
 
+<a id="using-viewcontainerref-with-parameters"></a>
+
 ### Using `NgTemplateOutlet` {#using-ngtemplateoutlet-with-parameters}
 
 You can bind a context object to the `ngTemplateOutletContext` input:
@@ -543,6 +565,8 @@ You can bind a context object to the `ngTemplateOutletContext` input:
 <!--
 ## Providing injectors to template fragments
 -->
+
+<a id="providing-injectors-to-template-fragments"></a>
 
 ## 템플릿 조각에서 인젝터 활용하기
 
@@ -629,6 +653,8 @@ export class Root {
 #### Inheriting the outlet's injector
 -->
 
+<a id="inheriting-the-outlets-injector"></a>
+
 ### 인젝터 상속하기
 
 <!--
@@ -701,6 +727,8 @@ this.viewContainer.createEmbeddedView(this.myFragment, context, {
 ## Structural directives
 -->
 
+<a id="structural-directives"></a>
+
 ## 구조 디렉티브
 
 <!--
@@ -763,6 +791,8 @@ Angular는 구조 디렉티브를 간편하게 사용할 수 있는 특별한 �
 <!--
 ## Additional resources
 -->
+
+<a id="additional-resources"></a>
 
 ## 추가 자료
 

@@ -14,6 +14,8 @@
 ## Syntax
 -->
 
+<a id="syntax"></a>
+
 ## 문법
 
 <!--
@@ -26,6 +28,8 @@ Angular 커뮤니티에서는 비공식적으로 "상자 안에 든 바나나" �
 <!--
 ## Two-way binding with form controls
 -->
+
+<a id="two-way-binding-with-form-controls"></a>
 
 ## 폼 컨트롤 양방향 바인딩
 
@@ -99,6 +103,8 @@ export class AppComponent {
 <!--
 ## Two-way binding between components
 -->
+
+<a id="two-way-binding-between-components"></a>
 
 ## 컴포넌트 간 양방향 바인딩
 
@@ -193,6 +199,8 @@ export class Counter {
 <!--
 ### Enabling two-way binding between components
 -->
+
+<a id="enabling-two-way-binding-between-components"></a>
 
 ### 양방향 바인딩 연결하기
 

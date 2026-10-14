@@ -9,12 +9,12 @@
 <!--
 TIP: This guide assumes you're familiar with [component and directive outputs](guide/components/outputs).
 
-The `@angular/rxjs-interop` package offers two APIs related to component and directive outputs.
+The `@angular/core/rxjs-interop` package offers two APIs related to component and directive outputs.
 -->
 
 팁: 이 문서는 [컴포넌트와 디렉티브 출력](guide/components/outputs)을 알고 있다고 가정합니다.
 
-`@angular/rxjs-interop` 패키지는 컴포넌트와 디렉티브 출력에 관련된 API를 두 가지 제공합니다.
+`@angular/core/rxjs-interop` 패키지는 컴포넌트와 디렉티브 출력에 관련된 API를 두 가지 제공합니다.
 
 <!--
 ## Creating an output based on an RxJS Observable
@@ -27,13 +27,11 @@ The `@angular/rxjs-interop` package offers two APIs related to component and dir
 <!--
 The `outputFromObservable` lets you create a component or directive output that emits based on an RxJS observable:
 
-```ts {highlight:[11]}
+```ts {highlight:[9]}
 import {Directive} from '@angular/core';
 import {outputFromObservable} from '@angular/core/rxjs-interop';
 
-@Directive({
-  /*...*/
-})
+@Directive(/* ... */)
 class Draggable {
   pointerMoves$: Observable<PointerMovements> = listenToPointerMoves();
 
@@ -51,13 +49,11 @@ HELPFUL: Consider using `output()` directly if you can emit values imperatively.
 
 `outputFromObservable`을 사용하면 RxJS Observable을 기반으로 값을 방출하는 컴포넌트 또는 디렉티브 출력을 생성할 수 있습니다:
 
-```ts {highlight:[11]}
+```ts {highlight:[9]}
 import {Directive} from '@angular/core';
 import {outputFromObservable} from '@angular/core/rxjs-interop';
 
-@Directive({
-  /*...*/
-})
+@Directive(/* ... */)
 class Draggable {
   pointerMoves$: Observable<PointerMovements> = listenToPointerMoves();
 

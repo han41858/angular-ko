@@ -7,29 +7,31 @@
  */
 
 import {
+  AST,
   ASTWithSource,
   Binary,
   BindingPipe,
   Conditional,
   Interpolation,
+  KeyedRead,
+  LiteralArray,
+  LiteralMap,
+  MatchSource,
+  ParseTemplateOptions,
   PropertyRead,
+  SafeKeyedRead,
+  SafePropertyRead,
   TmplAstBoundAttribute,
   TmplAstBoundText,
+  TmplAstComponent,
   TmplAstElement,
   TmplAstForLoopBlock,
+  TmplAstIfBlock,
+  TmplAstLetDeclaration,
   TmplAstNode,
   TmplAstReference,
   TmplAstTemplate,
-  AST,
-  LiteralArray,
-  LiteralMap,
-  TmplAstIfBlock,
-  TmplAstLetDeclaration,
   TypeCheckingConfig,
-  ParseTemplateOptions,
-  TmplAstComponent,
-  MatchSource,
-  SafePropertyRead,
 } from '@angular/compiler';
 import ts from 'typescript';
 
@@ -55,17 +57,16 @@ import {
   TemplateTypeChecker,
   VariableSymbol,
 } from '../api';
+import {findNodeInFile} from '../src/tcb_util';
 import {
+  setup as baseTestSetup,
+  createNgCompilerForFile,
   getClass,
   ngForDeclaration,
   ngForTypeCheckTarget,
-  setup as baseTestSetup,
-  TypeCheckingTarget,
-  createNgCompilerForFile,
   TestDirective,
+  TypeCheckingTarget,
 } from '../testing';
-import {TsCreateProgramDriver} from '../../program_driver';
-import {findNodeInFile} from '../src/tcb_util';
 
 runInEachFileSystem(() => {
   describe('TemplateTypeChecker.getSymbolOfNode', () => {
@@ -814,8 +815,6 @@ runInEachFileSystem(() => {
           const safeMethodCall = nodes[2].inputs[0].value as ASTWithSource;
           const methodCallSymbol = templateTypeChecker.getSymbolOfNode(safeMethodCall, cmp)!;
           assertExpressionSymbol(methodCallSymbol);
-          // Note that the symbol returned is for the return value of the safe method call.
-          expect(templateTypeChecker.getTsSymbolOfSymbol(methodCallSymbol)).toBeNull();
           expect(
             program
               .getTypeChecker()
@@ -839,11 +838,14 @@ runInEachFileSystem(() => {
                 .declarations![0] as ts.PropertyDeclaration
             ).parent.name!.getText(),
           ).toEqual('Car');
+
+          // Even if engine is string, TS will returned the type returned by the expression,
+          // which is string | undefined because of the safe navigation operator.
           expect(
             program
               .getTypeChecker()
               .typeToString(templateTypeChecker.getTypeOfSymbol(keyedReadSymbol)!),
-          ).toEqual('string');
+          ).toEqual('string | undefined');
         });
 
         it('safe property reads with as any (failure case)', () => {
@@ -869,6 +871,73 @@ runInEachFileSystem(() => {
           const nodes = getAstElements(templateTypeChecker, cmp);
           const ast = (nodes[0].inputs[0].value as ASTWithSource).ast as PropertyRead;
           const dataRead = ast.receiver as SafePropertyRead;
+          const dataSymbol = templateTypeChecker.getSymbolOfNode(dataRead, cmp)!;
+          assertExpressionSymbol(dataSymbol);
+          expect(
+            program
+              .getTypeChecker()
+              .symbolToString(templateTypeChecker.getTsSymbolOfSymbol(dataSymbol)!),
+          ).toEqual('data');
+        });
+
+        it('safe property reads with optional chaining', () => {
+          const fileName = absoluteFrom('/main.ts');
+          const templateString = `<div [inputA]="route?.data?.['icon']"></div>`;
+          const {templateTypeChecker, program} = setup(
+            [
+              {
+                fileName,
+                templates: {'Cmp': templateString},
+                source: `
+                interface Route {
+                  data?: { icon: string; };
+                }
+                export class Cmp { route?: Route; }
+              `,
+              },
+            ],
+            {strictSafeNavigationTypes: true},
+          );
+          const sf = getSourceFileOrError(program, fileName);
+          const cmp = getClass(sf, 'Cmp');
+          const nodes = getAstElements(templateTypeChecker, cmp);
+          const ast = (nodes[0].inputs[0].value as ASTWithSource).ast as SafeKeyedRead;
+          const dataRead = ast.receiver as SafePropertyRead;
+          const dataSymbol = templateTypeChecker.getSymbolOfNode(dataRead, cmp)!;
+          assertExpressionSymbol(dataSymbol);
+          expect(
+            program
+              .getTypeChecker()
+              .symbolToString(templateTypeChecker.getTsSymbolOfSymbol(dataSymbol)!),
+          ).toEqual('data');
+        });
+
+        it('safe property reads used in element access argument', () => {
+          const fileName = absoluteFrom('/main.ts');
+          const templateString = `<div [inputA]="arr[route?.data]"></div>`;
+          const {templateTypeChecker, program} = setup(
+            [
+              {
+                fileName,
+                templates: {'Cmp': templateString},
+                source: `
+                interface Route {
+                  data: string;
+                }
+                export class Cmp {
+                  route?: Route;
+                  arr: Record<string, string> = {};
+                }
+              `,
+              },
+            ],
+            {strictSafeNavigationTypes: true},
+          );
+          const sf = getSourceFileOrError(program, fileName);
+          const cmp = getClass(sf, 'Cmp');
+          const nodes = getAstElements(templateTypeChecker, cmp);
+          const ast = (nodes[0].inputs[0].value as ASTWithSource).ast as KeyedRead;
+          const dataRead = ast.key as SafePropertyRead;
           const dataSymbol = templateTypeChecker.getSymbolOfNode(dataRead, cmp)!;
           assertExpressionSymbol(dataSymbol);
           expect(

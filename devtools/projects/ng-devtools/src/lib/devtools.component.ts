@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Component, computed, effect, inject, OnDestroy, signal} from '@angular/core';
+import {Component, computed, effect, inject, Injector, OnDestroy, signal} from '@angular/core';
 import {Events, MessageBus} from '../../../protocol';
 import {interval} from 'rxjs';
 
@@ -17,10 +17,11 @@ import {DevToolsTabsComponent} from './devtools-tabs/devtools-tabs.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {Frame} from './application-environment';
 import {BrowserStylesService} from './application-services/browser_styles_service';
-import {MatIcon, MatIconRegistry} from '@angular/material/icon';
+import {MatIconRegistry} from '@angular/material/icon';
 import {SUPPORTED_APIS} from './application-providers/supported_apis';
 import {APP_DATA} from './application-providers/app_data';
 import {Settings} from './application-services/settings';
+import {AngieComponent} from './shared/angie/angie.component';
 
 const DETECT_ANGULAR_ATTEMPTS = 20;
 
@@ -48,7 +49,13 @@ export const LAST_SUPPORTED_VERSION = 12;
   selector: 'ng-devtools',
   templateUrl: './devtools.component.html',
   styleUrls: ['./devtools.component.scss'],
-  imports: [DevToolsTabsComponent, MatIcon, MatTooltip, MatProgressSpinnerModule, MatTooltipModule],
+  imports: [
+    DevToolsTabsComponent,
+    MatTooltip,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    AngieComponent,
+  ],
 })
 export class DevToolsComponent implements OnDestroy {
   protected readonly supportedApis = inject(SUPPORTED_APIS);
@@ -56,6 +63,7 @@ export class DevToolsComponent implements OnDestroy {
   private readonly messageBus = inject<MessageBus<Events>>(MessageBus);
   private readonly frameManager = inject(FrameManager);
   private readonly settings = inject(Settings);
+  private readonly injector = inject(Injector);
 
   readonly angularStatus = signal(AngularStatus.UNKNOWN);
 
@@ -94,9 +102,9 @@ export class DevToolsComponent implements OnDestroy {
       if (supportedApis) {
         this.supportedApis.init(supportedApis);
       }
-    });
 
-    this.syncBackendWithSettings();
+      this.syncBackendWithSettings();
+    });
   }
 
   inspectFrame(frame: Frame) {
@@ -108,22 +116,18 @@ export class DevToolsComponent implements OnDestroy {
   }
 
   private syncBackendWithSettings() {
-    // Keep BE in sync with timing API.
-    effect(() => {
-      if (this.settings.timingAPIEnabled()) {
-        this.messageBus.emit('enableTimingAPI');
-      } else {
-        this.messageBus.emit('disableTimingAPI');
-      }
-    });
-
-    // Keep BE in sync with hydration visualization.
-    effect(() => {
-      if (this.settings.showHydrationOverlays()) {
-        this.messageBus.emit('createHydrationOverlay');
-      } else {
-        this.messageBus.emit('removeHydrationOverlay');
-      }
-    });
+    effect(
+      () => {
+        this.messageBus.emit('setConfig', [
+          {
+            performanceTrack: this.settings.performanceTrack(),
+            hydrationOverlays: this.settings.showHydrationOverlays(),
+            cdHighlighting: this.settings.highlightChangeDetection(),
+            cdDataStream: this.settings.showCdInExplorer(),
+          },
+        ]);
+      },
+      {injector: this.injector},
+    );
   }
 }

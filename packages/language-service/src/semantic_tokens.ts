@@ -13,6 +13,7 @@ import {
   TmplAstBoundText,
   TmplAstComponent,
   TmplAstContent,
+  TmplAstContentBlock,
   TmplAstDeferredBlock,
   TmplAstDeferredBlockError,
   TmplAstDeferredBlockLoading,
@@ -38,6 +39,8 @@ import {
   TmplAstUnknownBlock,
   TmplAstVariable,
   TmplAstVisitor,
+  TmplAstBoundaryBlock,
+  TmplAstBoundaryErrorBlock,
 } from '@angular/compiler';
 import {NgCompiler, PotentialDirective} from '@angular/compiler-cli';
 
@@ -141,6 +144,10 @@ class ClassificationVisitor implements TmplAstVisitor {
     this.visitAll(content.children);
   }
 
+  visitContentBlock(block: TmplAstContentBlock) {
+    this.visitAll(block.children);
+  }
+
   visitVariable(variable: TmplAstVariable) {}
   visitReference(reference: TmplAstReference) {}
   visitTextAttribute(attribute: TmplAstTextAttribute) {}
@@ -197,6 +204,15 @@ class ClassificationVisitor implements TmplAstVisitor {
   }
 
   visitIfBlockBranch(block: TmplAstIfBlockBranch) {
+    this.visitAll(block.children);
+  }
+
+  visitBoundaryBlock(block: TmplAstBoundaryBlock) {
+    this.visitAll(block.children);
+    this.visitAll(block.errorBlocks);
+  }
+
+  visitBoundaryErrorBlock(block: TmplAstBoundaryErrorBlock) {
     this.visitAll(block.children);
   }
 

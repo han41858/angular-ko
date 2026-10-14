@@ -2,6 +2,8 @@
 # Control Flow in Components - `@for`
 -->
 
+<a id="control-flow-in-components-for"></a>
+
 # 흐름 제어 - `@for`
 
 <!--
@@ -34,7 +36,7 @@ export class App {
 Two things to take note of:
 
 - There is an `@` prefix for the `for` because it is a special syntax called [Angular template syntax](guide/templates)
-- For applications using v16 and older please refer to the [Angular documentation for NgFor](guide/directives/structural-directives)
+- For applications that still use `*ngFor`, please refer to the [Angular documentation for NgFor](guide/directives/structural-directives)
 
 <docs-workflow>
 
@@ -101,9 +103,11 @@ export class App {
 이 코드에서 중요한 점이 두 가지 있습니다:
 
 - [Angular 템플릿 문법](guide/templates)을 사용하기 위해 `for` 앞에는 `@` 접두사가 붙습니다.
-- Angular 16 버전이나 이전 버전에서는 [Angular NgFor 문서](guide/directives/structural-directives)를 참고하세요.
+- 아직 `*ngFor`를 사용하는 애플리케이션에서는 [Angular NgFor 문서](guide/directives/structural-directives)를 참고하세요.
 
 <docs-workflow>
+
+<a id="add-the-users-property"></a>
 
 <docs-step title="`users` 프로퍼티를 추가해 보세요">
 
@@ -120,6 +124,8 @@ export class App {
 ```
 
 </docs-step>
+
+<a id="update-the-template"></a>
 
 <docs-step title="템플릿을 수정하세요">
 

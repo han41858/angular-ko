@@ -164,6 +164,8 @@ Angular는 언제나 `<ng-content>` 플레이스홀더가 위치한 곳에 내�
 ## Multiple content placeholders
 -->
 
+<a id="multiple-content-placeholders"></a>
+
 ## 플레이스홀더 여러 개 사용하기
 
 <!--
@@ -191,9 +193,9 @@ export class CardBody {}
   selector: 'custom-card',
   template: `
   <div class="card-shadow">
-    <ng-content select="card-title"></ng-content>
+    <ng-content select="card-title" />
     <div class="card-divider"></div>
-    <ng-content select="card-body"></ng-content>
+    <ng-content select="card-body" />
   </div>
   `,
 })
@@ -236,10 +238,10 @@ did not match a `select` attribute:
 ```angular-html
 <!- Component template ->
 <div class="card-shadow">
-  <ng-content select="card-title"></ng-content>
+  <ng-content select="card-title" />
   <div class="card-divider"></div>
   <!- capture anything except "card-title" ->
-  <ng-content></ng-content>
+  <ng-content />
 </div>
 ```
 
@@ -291,9 +293,9 @@ export class CardBody {}
   selector: 'custom-card',
   template: `
   <div class="card-shadow">
-    <ng-content select="card-title"></ng-content>
+    <ng-content select="card-title" />
     <div class="card-divider"></div>
-    <ng-content select="card-body"></ng-content>
+    <ng-content select="card-body" />
   </div>
   `,
 })
@@ -333,10 +335,10 @@ export class App {}
 ```angular-html
 <!-- 컴포넌트 템플릿 -->
 <div class="card-shadow">
-  <ng-content select="card-title"></ng-content>
+  <ng-content select="card-title" />
   <div class="card-divider"></div>
   <!-- "card-title"이 아닌 모든 엘리먼트가 표시됩니다. -->
-  <ng-content></ng-content>
+  <ng-content />
 </div>
 ```
 
@@ -366,6 +368,8 @@ export class App {}
 <!--
 ## Fallback content
 -->
+
+<a id="fallback-content"></a>
 
 ## 폴백 컨텐츠
 
@@ -436,6 +440,8 @@ Angular can show _fallback content_ for a component's `<ng-content>` placeholder
 ## Aliasing content for projection
 -->
 
+<a id="aliasing-content-for-projection"></a>
+
 ## 별칭으로 프로젝션하기
 
 <!--
@@ -446,7 +452,7 @@ placeholder, Angular compares against the `ngProjectAs` value instead of the ele
 ```angular-html
 <!- Component template ->
 <div class="card-shadow">
-  <ng-content select="card-title"></ng-content>
+  <ng-content select="card-title" />
   <div class="card-divider"></div>
   <ng-content />
 </div>
@@ -481,7 +487,7 @@ Angular는 모든 엘리먼트에 CSS 셀렉터를 지정할 수 있도록 `ngPr
 ```angular-html
 <!-- 컴포넌트 템플릿 -->
 <div class="card-shadow">
-  <ng-content select="card-title"></ng-content>
+  <ng-content select="card-title" />
   <div class="card-divider"></div>
   <ng-content />
 </div>
@@ -513,11 +519,15 @@ Angular는 모든 엘리먼트에 CSS 셀렉터를 지정할 수 있도록 `ngPr
 ## Caveats
 -->
 
+<a id="caveats"></a>
+
 ## 주의사항
 
 <!--
 ### Projected content lives in the parent's view
 -->
+
+<a id="projected-content-lives-in-the-parents-view"></a>
 
 ### 프로젝션된 컨텐츠는 부모 뷰에 존재합니다.
 
@@ -558,6 +568,8 @@ Angular는 부모 뷰를 계속 추적하는데, 이때 알아야 할 부수 효
 <!--
 ### Some library components don't support projected children
 -->
+
+<a id="some-library-components-dont-support-projected-children"></a>
 
 ### 라이브러리 컴포넌트는 프로젝션을 지원하지 않습니다.
 

@@ -17,6 +17,8 @@ Angular 시그널은 애플리케이션의 특정 상태가 어떻게 변경되�
 ## What are signals?
 -->
 
+<a id="what-are-signals"></a>
+
 ## 시그널이 무엇인가요?
 
 <!--
@@ -37,6 +39,8 @@ Signals may be either _writable_ or _read-only_.
 <!--
 ### Writable signals
 -->
+
+<a id="writable-signals"></a>
 
 ### 값을 쓸 수 있는 시그널(Writable signals)
 
@@ -95,10 +99,12 @@ count.update((value) => value + 1);
 #### Converting writable signals to readonly
 -->
 
+<a id="converting-writable-signals-to-readonly"></a>
+
 #### 값을 쓸 수 있는 시그널을 읽기 전용으로 전환하기
 
 <!--
-`WritableSignal` provide a `asReadonly()` method that returns a readonly version of the signal. This is useful when you want to expose a signal's value to consumers without allowing them to modify it directly:
+`WritableSignal` provides an `asReadonly()` method that returns a readonly version of the signal. This is useful when you want to expose a signal's value to consumers without allowing them to modify it directly:
 
 ```ts
 @Service()
@@ -113,9 +119,7 @@ export class CounterState {
   }
 }
 
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class AwesomeCounter {
   state = inject(CounterState);
 
@@ -148,9 +152,7 @@ export class CounterState {
   }
 }
 
-@Component({
-  /* ... */
-})
+@Component({/* ... */})
 export class AwesomeCounter {
   state = inject(CounterState);
 
@@ -169,6 +171,8 @@ export class AwesomeCounter {
 <!--
 ### Computed signals
 -->
+
+<a id="computed-signals"></a>
 
 ### 연산 시그널(Computed signals)
 
@@ -198,6 +202,8 @@ const doubleCount: Signal<number> = computed(() => count() * 2);
 #### Computed signals are both lazily evaluated and memoized
 -->
 
+<a id="computed-signals-are-both-lazily-evaluated-and-memoized"></a>
+
 #### 연산 시그널은 지연 연산되며 연산된 결과는 캐싱됩니다
 
 <!--
@@ -218,6 +224,8 @@ As a result, you can safely perform computationally expensive derivations in com
 <!--
 #### Computed signals are not writable signals
 -->
+
+<a id="computed-signals-are-not-writable-signals"></a>
 
 #### 연산 시그널은 값을 지정할 수 없습니다
 
@@ -243,6 +251,8 @@ doubleCount.set(3);
 <!--
 #### Computed signal dependencies are dynamic
 -->
+
+<a id="computed-signal-dependencies-are-dynamic"></a>
 
 #### 연산 시그널의 종속성은 동적으로 변경됩니다
 
@@ -299,16 +309,18 @@ const conditionalCount = computed(() => {
 ## 컴포넌트 `OnPush` 함수에서 시그널 읽기
 
 <!--
-When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markforcheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
+When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markForCheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
 -->
 
 컴포넌트 템플릿에서 시그널을 참조하면 Angular는 이 시그널의 의존성을 추적합니다.
-그래서 종속 관계인 시그널의 값이 변경되며 Angular가 컴포넌트를 [마크(marks)](api/core/ChangeDetectorRef#markforcheck) 했다가 다음 변경 감지 싸이클이 실행될 때 화면을 갱신합니다.
+그래서 종속 관계인 시그널의 값이 변경되며 Angular가 컴포넌트를 [마크(marks)](api/core/ChangeDetectorRef#markForCheck) 했다가 다음 변경 감지 싸이클이 실행될 때 화면을 갱신합니다.
 자세한 내용은 [컴포넌트 서브트리 건너뛰기](best-practices/skipping-subtrees) 문서를 참고하세요.
 
 <!--
 ## Reactive contexts
 -->
+
+<a id="reactive-contexts"></a>
 
 ## 반응 컨텍스트
 
@@ -343,6 +355,8 @@ Angular가 반응 컨텍스트로 관리하는 경우는 이렇습니다:
 ### Asserts the reactive context
 -->
 
+<a id="asserts-the-reactive-context"></a>
+
 ### 반응 컨텍스트에서 assert 사용하기
 
 <!--
@@ -374,6 +388,8 @@ function subscribeToEvents() {
 <!--
 ### Reading without tracking dependencies
 -->
+
+<a id="reading-without-tracking-dependencies"></a>
 
 ### 추적 종속성과 관계없이 값 읽기
 
@@ -450,6 +466,8 @@ effect(() => {
 ### Reactive context and async operations
 -->
 
+<a id="reactive-context-and-async-operations"></a>
+
 ### 비동기 연산의 반응 컨텍스트
 
 <!--
@@ -514,6 +532,8 @@ effect(async () => {
 ## Advanced derivations
 -->
 
+<a id="advanced-derivations"></a>
+
 ## 고급 파생
 
 <!--
@@ -535,10 +555,12 @@ All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, 
 ## Executing side effects on non-reactive APIs
 -->
 
+<a id="executing-side-effects-on-non-reactive-apis"></a>
+
 ## 반응형 API가 아닌 코드를 실행하는 경우
 
 <!--
-Synchronous or asynchronous derivations are recommended when we want to react to state changes. However, this doesn't cover all the possible use cases, and you'll sometimes find yourself in a situation where you need to react to signal changes on non-reactive apis. Use `effect` or `afterRenderEffect` for those specific usecases. For more information see [Side effects for non-reactive APIs](/guide/signals/effect) guide.
+Synchronous or asynchronous derivations are recommended when we want to react to state changes. However, this doesn't cover all the possible use cases, and you'll sometimes find yourself in a situation where you need to react to signal changes on non-reactive APIs. Use `effect` or `afterRenderEffect` for those specific use cases. For more information see [Side effects for non-reactive APIs](/guide/signals/effect) guide.
 -->
 
 앱 상태 변화에 반응할 때는 동기 방식이든 비동기 방식이든 시그널을 추적하면 됩니다.
@@ -550,25 +572,31 @@ Synchronous or asynchronous derivations are recommended when we want to react to
 ## Reading signals in `OnPush` components
 -->
 
+<a id="reading-signals-in-onpush-components"></a>
+
 ## `OnPush` 컴포넌트에서 시그널 읽기
 
 <!--
-When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markforcheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
+When you read a signal within an `OnPush` component's template, Angular tracks the signal as a dependency of that component. When the value of that signal changes, Angular automatically [marks](api/core/ChangeDetectorRef#markForCheck) the component to ensure it gets updated the next time change detection runs. Refer to the [Skipping component subtrees](best-practices/skipping-subtrees) guide for more information about `OnPush` components.
 -->
 
 `OnPush` 컴포넌트 템플릿에서 시그널 값을 읽으면 Angular는 이 컴포넌트와 관련된 시그널도 함께 추적합니다.
-그리고 시그널의 값이 변경되면, Angular는 다음 변화감지 사이클에서 컴포넌트를 갱신할 수 있게 컴포넌트를 [마킹](api/core/ChangeDetectorRef#markforcheck)합니다.
+그리고 시그널의 값이 변경되면, Angular는 다음 변화감지 사이클에서 컴포넌트를 갱신할 수 있게 컴포넌트를 [마킹](api/core/ChangeDetectorRef#markForCheck)합니다.
 `OnPush` 컴포넌트에 대해 자세하게 알아보려면 [컴포넌트 서브트리 건너뛰기](best-practices/skipping-subtrees) 문서를 참고하세요.
 
 <!--
 ## Advanced topics
 -->
 
+<a id="advanced-topics"></a>
+
 ## 고급 주제
 
 <!--
 ### Signal equality functions
 -->
+
+<a id="signal-equality-functions"></a>
 
 ### 시그널 동일값 평가 함수
 
@@ -611,6 +639,8 @@ data.set(['test']);
 <!--
 ### Type checking signals
 -->
+
+<a id="type-checking-signals"></a>
 
 ### 시그널 타입 검사
 
@@ -661,6 +691,8 @@ isWritableSignal(doubled); // false
 <!--
 ## Using signals with RxJS
 -->
+
+<a id="using-signals-with-rxjs"></a>
 
 ## RxJS와 시그널 함께 사용하기
 

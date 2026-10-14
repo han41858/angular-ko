@@ -7,7 +7,7 @@
 </docs-decorative-header>
 
 <!--
-Signal Forms is an library that allows you to manage form state in Angular applications by building on the reactive foundation of signals. With automatic two-way binding, type-safe field access, and schema-based validation, Signal Forms help you create robust forms.
+Signal Forms is a library that allows you to manage form state in Angular applications by building on the reactive foundation of signals. With automatic two-way binding, type-safe field access, and schema-based validation, Signal Forms help you create robust forms.
 
 TIP: For a quick introduction to Signal Forms, see the [Signal Forms essentials guide](essentials/signal-forms).
 -->
@@ -21,6 +21,8 @@ TIP: For a quick introduction to Signal Forms, see the [Signal Forms essentials 
 ## Why Signal Forms?
 -->
 
+<a id="why-signal-forms"></a>
+
 ## 왜 시그널 폼을 사용해야 할까요?
 
 <!--
@@ -32,7 +34,7 @@ Signal Forms address these challenges by:
 - **Providing type safety** - Supports fully type safe schemas & bindings between your UI controls and data model
 - **Centralizing validation logic** - Define all validation rules in one place using a validation schema
 
-Signal Forms work best in new applications built with signals. If you're working with an existing application that uses reactive forms, or if you need production stability guarantees, reactive forms remain a solid choice.
+Signal Forms work best in new applications built with signals. If you're working with an existing application that uses reactive forms, reactive forms remain a solid choice.
 
 NOTE: If you're coming from template or reactive forms, you may be interested in the [comparison guide](guide/forms/signals/comparison).
 -->
@@ -47,13 +49,15 @@ NOTE: If you're coming from template or reactive forms, you may be interested in
 - **유효성 검사를 한 곳에서 처리합니다** - 유효성 검사 규칙은 모두 유효성 검사 스키마 하나로 정의합니다.
 
 시그널 폼은 시그널 기반으로 동작하는 애플리케이션과 가장 잘 맞습니다.
-기존 애플리케이션에서 반응형 폼을 사용하고 있거나, 이미 운영하고 있어서 안정성이 중요하다면 반응형 폼 방식을 그대로 둬도 됩니다.
+기존 애플리케이션에서 반응형 폼을 사용하고 있다면 반응형 폼도 여전히 좋은 선택입니다.
 
 참고: 반응형 폼이나 템플릿 기반 폼을 찾아 왔다면 [비교하는 문서](guide/forms/signals/comparison)를 참고하세요.
 
 <!--
 ## Prerequisites
 -->
+
+<a id="prerequisites"></a>
 
 ## 조건
 
@@ -68,6 +72,8 @@ Signal Forms require:
 <!--
 ## Setup
 -->
+
+<a id="setup"></a>
 
 ## 환경설정
 
@@ -107,6 +113,8 @@ import {form, FormField, required, email} from '@angular/forms/signals';
 <!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

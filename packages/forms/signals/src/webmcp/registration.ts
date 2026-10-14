@@ -8,32 +8,65 @@
 
 import {
   declareExperimentalWebMcpTool,
+  effect,
   EnvironmentProviders,
+  inject,
+  Injector,
   makeEnvironmentProviders,
   untracked,
 } from '@angular/core';
 import type {JsonSchemaForInference} from '@mcp-b/webmcp-types';
 import {submit} from '../api/structure';
+import {FieldTree} from '../api/types';
 import {FieldNode} from '../field/node';
 import {REGISTER_WEBMCP_FORM, RegisterWebMcpForm} from './tokens';
 
 const registerWebMcpForm: RegisterWebMcpForm = (formTree, options) => {
-  untracked(() => {
-    const node = formTree() as FieldNode;
-    const inputSchema = inferSchemaFromFieldNode(node);
+  const injector = inject(Injector);
 
-    if (!inputSchema) {
-      throw new Error(
-        `Could not accurately infer WebMCP schema for form "${options.name}". ` +
-          `Ensure that the form model does not contain null, undefined, empty arrays, or unsupported types.`,
-      );
-    }
+  // we want to defer the registration until the context is fully initialized,
+  // This is especially useful if the form model is a derivation of a required input
+  return new Promise<void>((resolve, reject) => {
+    effect(() => {
+      untracked(() => {
+        initWebMcpForm(formTree, options, injector).then(resolve, reject);
+      });
+    });
+  });
+};
 
-    declareExperimentalWebMcpTool({
+async function initWebMcpForm(
+  formTree: FieldTree<unknown>,
+  options: {name: string; description: string; annotations?: {consequentialHint?: boolean}},
+  injector: Injector,
+) {
+  const node = formTree() as FieldNode;
+  const inputSchema = inferSchemaFromFieldNode(node);
+
+  if (!inputSchema) {
+    throw new Error(
+      `Could not accurately infer WebMCP schema for form "${options.name}". ` +
+        `Ensure that the form model does not contain null, undefined, empty arrays, or unsupported types.`,
+    );
+  }
+
+  await declareExperimentalWebMcpTool(
+    {
       name: options.name,
       description: options.description,
       inputSchema,
-      execute: async (args: Record<string, unknown>) => {
+      annotations: {
+        ...options.annotations,
+
+        // Forms are assumed to implicitly mutate the DOM (otherwise how would a user interact with them?)
+        // and therefore are _never_ read-only.
+        readOnlyHint: false,
+
+        // Response text is currently hard-coded by the framework and trusted or derived from application
+        // errors which are considered trusted.
+        untrustedContentHint: false,
+      },
+      execute: async (args: Record<string, unknown> | unknown[]) => {
         // Populate the form with changes from the agent.
         node.value.set(args);
 
@@ -54,9 +87,10 @@ const registerWebMcpForm: RegisterWebMcpForm = (formTree, options) => {
           return {content: [{type: 'text', text: `Form submission failed:\n${errorMessages}`}]};
         }
       },
-    });
-  });
-};
+    },
+    injector,
+  );
+}
 
 /** Infers the JSON schema from a specific form field. */
 function inferSchemaFromFieldNode(node: FieldNode): JsonSchemaForInference | undefined {
@@ -115,6 +149,8 @@ function inferSchemaFromFieldNode(node: FieldNode): JsonSchemaForInference | und
 /**
  * Creates a provider that configures all signal forms with `experimentalWebMcpTool`
  * to be registered as WebMCP tools.
+ *
+ * @see [Implicit tools in Signal Forms](ai/webmcp#implicit-tools-in-signal-forms)
  *
  * @experimental
  */

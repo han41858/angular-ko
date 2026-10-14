@@ -67,7 +67,7 @@ export {
 export {IdleService, provideIdleServiceWith} from './defer/idle_service';
 export * from './di';
 export {DOCUMENT} from './document';
-export {ErrorHandler, provideBrowserGlobalErrorListeners} from './error_handler';
+export {ErrorDetails, ErrorHandler, provideBrowserGlobalErrorListeners} from './error_handler';
 export {EventEmitter} from './event_emitter';
 export {
   DEFAULT_CURRENCY_CODE,
@@ -112,6 +112,7 @@ export {
   outputBinding,
   twoWayBinding,
 } from './render3/dynamic_bindings';
+// g3-only export {provideForeignRootContext} from './render3/foreign_context';
 // g3-only export {foreignImport} from './render3/foreign_import';
 export {createEnvironmentInjector, createNgModule} from './render3/ng_module_ref';
 export {publishNonCoreGlobalUtil as ɵpublishNonCoreGlobalUtil} from './render3/util/global_utils';

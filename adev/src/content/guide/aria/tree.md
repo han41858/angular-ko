@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Tree">
-</docs-decorative-header>
+# Tree
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/" title="Tree ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="트리">
-</docs-decorative-header>
+# 트리
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/treeview/" title="트리 ARIA 패턴"/>
@@ -502,231 +500,23 @@ describe('MyTreeComponent', () => {
 ```
 
 <!--
-## APIs
+## API reference
+
+For detailed API documentation, inspect the following API references:
+
+- [`Tree`](/api/aria/tree/Tree)
+- [`TreeItem`](/api/aria/tree/TreeItem)
+- [`TreeItemGroup`](/api/aria/tree/TreeItemGroup)
 -->
 
 <a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-## API
+## API 레퍼런스
 
-<!--
-### Tree
--->
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-<a id="tree"></a>
-
-### Tree
-
-<!--
-The container directive that manages hierarchical navigation and selection.
--->
-
-계층형 탐색과 선택을 관리하는 컨테이너 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property        | Type                             | Default      | Description                                                   |
-| --------------- | -------------------------------- | ------------ | ------------------------------------------------------------- |
-| `disabled`      | `boolean`                        | `false`      | Disables the entire tree                                      |
-| `softDisabled`  | `boolean`                        | `true`       | When `true`, disabled items are focusable but not interactive |
-| `multi`         | `boolean`                        | `false`      | Whether multiple items can be selected                        |
-| `selectionMode` | `'explicit' \| 'follow'`         | `'explicit'` | Whether selection requires explicit action or follows focus   |
-| `nav`           | `boolean`                        | `false`      | Whether the tree is in navigation mode (uses `aria-current`)  |
-| `wrap`          | `boolean`                        | `true`       | Whether keyboard navigation wraps from last to first item     |
-| `focusMode`     | `'roving' \| 'activedescendant'` | `'roving'`   | Focus strategy used by the tree                               |
-| `values`        | `any[]`                          | `[]`         | Selected item values (supports two-way binding)               |
--->
-
-| 프로퍼티        | 타입                             | 기본값       | 설명                                                                       |
-| --------------- | -------------------------------- | ------------ | -------------------------------------------------------------------------- |
-| `disabled`      | `boolean`                        | `false`      | 전체 트리를 비활성화합니다.                                                |
-| `softDisabled`  | `boolean`                        | `true`       | `true`이면 비활성화된 항목도 포커스를 받을 수 있지만 조작할 수는 없습니다. |
-| `multi`         | `boolean`                        | `false`      | 여러 항목을 선택할 수 있는지 지정합니다.                                   |
-| `selectionMode` | `'explicit' \| 'follow'`         | `'explicit'` | 명시적인 동작으로 선택할지, 포커스에 따라 선택할지 지정합니다.             |
-| `nav`           | `boolean`                        | `false`      | 트리가 탐색 모드인지 지정합니다(`aria-current`를 사용합니다).              |
-| `wrap`          | `boolean`                        | `true`       | 키보드 탐색에서 마지막 항목에서 첫 번째 항목으로 순환할지 지정합니다.      |
-| `focusMode`     | `'roving' \| 'activedescendant'` | `'roving'`   | 트리에서 사용하는 포커스 전략입니다.                                       |
-| `values`        | `any[]`                          | `[]`         | 선택된 항목의 값입니다(양방향 바인딩을 지원합니다).                        |
-
-<!--
-#### Methods
--->
-
-<a id="methods"></a>
-
-#### 메서드
-
-<!--
-| Method           | Parameters | Description                                   |
-| ---------------- | ---------- | --------------------------------------------- |
-| `expandAll`      | none       | Expands all tree nodes                        |
-| `collapseAll`    | none       | Collapses all tree nodes                      |
-| `selectAll`      | none       | Selects all items (only in multi-select mode) |
-| `clearSelection` | none       | Clears all selection                          |
--->
-
-| 메서드           | 인자 | 설명                                                     |
-| ---------------- | ---- | -------------------------------------------------------- |
-| `expandAll`      | 없음 | 모든 트리 노드를 펼칩니다.                               |
-| `collapseAll`    | 없음 | 모든 트리 노드를 접습니다.                               |
-| `selectAll`      | 없음 | 모든 항목을 선택합니다(다중 선택 모드에서만 사용합니다). |
-| `clearSelection` | 없음 | 모든 선택을 해제합니다.                                  |
-
-<!--
-### TreeItem
--->
-
-<a id="treeitem"></a>
-
-### TreeItem
-
-<!--
-An individual node in the tree that can contain child nodes.
--->
-
-자식 노드를 포함할 수 있는 트리의 개별 노드입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property   | Type                    | Default | Description                                             |
-| ---------- | ----------------------- | ------- | ------------------------------------------------------- |
-| `parent`   | `Tree \| TreeItemGroup` | —       | **Required.** The parent Tree root or TreeItemGroup.    |
-| `value`    | `any`                   | —       | **Required.** Unique value for this tree item           |
-| `disabled` | `boolean`               | `false` | Disables this item                                      |
-| `expanded` | `boolean`               | `false` | Whether the node is expanded (supports two-way binding) |
--->
-
-| 프로퍼티   | 타입                    | 기본값  | 설명                                                         |
-| ---------- | ----------------------- | ------- | ------------------------------------------------------------ |
-| `parent`   | `Tree \| TreeItemGroup` | —       | **필수.** 부모인 Tree 루트 또는 TreeItemGroup입니다.         |
-| `value`    | `any`                   | —       | **필수.** 이 트리 항목의 고유 값입니다.                      |
-| `disabled` | `boolean`               | `false` | 이 항목을 비활성화합니다.                                    |
-| `expanded` | `boolean`               | `false` | 노드가 펼쳐져 있는지 나타냅니다(양방향 바인딩을 지원합니다). |
-
-<!--
-#### Signals
--->
-
-<a id="signals"></a>
-
-#### 시그널
-
-<!--
-| Property      | Type              | Description                          |
-| ------------- | ----------------- | ------------------------------------ |
-| `selected`    | `Signal<boolean>` | Whether the item is selected         |
-| `active`      | `Signal<boolean>` | Whether the item currently has focus |
-| `hasChildren` | `Signal<boolean>` | Whether the item has child nodes     |
--->
-
-| 프로퍼티      | 타입              | 설명                                    |
-| ------------- | ----------------- | --------------------------------------- |
-| `selected`    | `Signal<boolean>` | 항목이 선택되어 있는지 나타냅니다.      |
-| `active`      | `Signal<boolean>` | 현재 항목에 포커스가 있는지 나타냅니다. |
-| `hasChildren` | `Signal<boolean>` | 항목에 자식 노드가 있는지 나타냅니다.   |
-
-<!--
-#### Methods
--->
-
-<a id="methods-1"></a>
-
-#### 메서드
-
-<!--
-| Method     | Parameters | Description                 |
-| ---------- | ---------- | --------------------------- |
-| `expand`   | none       | Expands this node           |
-| `collapse` | none       | Collapses this node         |
-| `toggle`   | none       | Toggles the expansion state |
--->
-
-| 메서드     | 인자 | 설명                    |
-| ---------- | ---- | ----------------------- |
-| `expand`   | 없음 | 이 노드를 펼칩니다.     |
-| `collapse` | 없음 | 이 노드를 접습니다.     |
-| `toggle`   | 없음 | 펼침 상태를 전환합니다. |
-
-<!--
-### TreeItemGroup
--->
-
-<a id="treeitemgroup"></a>
-
-### TreeItemGroup
-
-<!--
-The structural directive applied to an `ng-template` that holds the children nodes of an expandable tree item.
--->
-
-펼칠 수 있는 트리 항목의 자식 노드를 담은 `ng-template`에 적용하는 구조 디렉티브입니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-2"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property  | Type       | Default | Description                                             |
-| --------- | ---------- | ------- | ------------------------------------------------------- |
-| `ownedBy` | `TreeItem` | —       | **Required.** The reference of the parent `ngTreeItem`. |
--->
-
-| 프로퍼티  | 타입       | 기본값 | 설명                                      |
-| --------- | ---------- | ------ | ----------------------------------------- |
-| `ownedBy` | `TreeItem` | —      | **필수.** 부모 `ngTreeItem`의 참조입니다. |
-
-<!--
-#### Usage
--->
-
-<a id="usage-1"></a>
-
-#### 사용법
-
-<!--
-```angular-html
-<ul ngTree #tree="ngTree">
-  <li ngTreeItem [parent]="tree" value="parent" #parentItem="ngTreeItem">
-    Parent Item
-    <ul role="group">
-      <ng-template ngTreeItemGroup [ownedBy]="parentItem" #group="ngTreeItemGroup">
-        <li ngTreeItem [parent]="group" value="child1">Child 1</li>
-        <li ngTreeItem [parent]="group" value="child2">Child 2</li>
-      </ng-template>
-    </ul>
-  </li>
-</ul>
-```
--->
-
-```angular-html
-<ul ngTree #tree="ngTree">
-  <li ngTreeItem [parent]="tree" value="parent" #parentItem="ngTreeItem">
-    Parent Item
-    <ul role="group">
-      <ng-template ngTreeItemGroup [ownedBy]="parentItem" #group="ngTreeItemGroup">
-        <li ngTreeItem [parent]="group" value="child1">Child 1</li>
-        <li ngTreeItem [parent]="group" value="child2">Child 2</li>
-      </ng-template>
-    </ul>
-  </li>
-</ul>
-```
+- [`Tree`](/api/aria/tree/Tree)
+- [`TreeItem`](/api/aria/tree/TreeItem)
+- [`TreeItemGroup`](/api/aria/tree/TreeItemGroup)

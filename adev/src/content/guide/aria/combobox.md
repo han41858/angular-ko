@@ -1,6 +1,5 @@
 <!--
-<docs-decorative-header title="Combobox">
-</docs-decorative-header>
+# Combobox
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/" title="Combobox ARIA pattern"/>
@@ -8,8 +7,7 @@
 </docs-pill-row>
 -->
 
-<docs-decorative-header title="콤보박스">
-</docs-decorative-header>
+# 콤보박스
 
 <docs-pill-row>
   <docs-pill href="https://www.w3.org/WAI/ARIA/apg/patterns/combobox/" title="콤보박스 ARIA 패턴"/>
@@ -538,167 +536,49 @@ describe('MyComboboxComponent', () => {
 ```
 
 <!--
-## APIs
--->
+## API reference
 
-<a id="apis"></a>
+For detailed API documentation, inspect the following API references:
 
-## API
+- [`Combobox`](/api/aria/combobox/Combobox)
+- [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
+- [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
 
-<!--
-### Combobox Directive
--->
-
-<a id="combobox-directive"></a>
-
-### Combobox 디렉티브
-
-<!--
-Coordinates an interactive trigger element (such as a text input, button, or div) with a popup container.
--->
-
-텍스트 입력란, 버튼, div 같은 상호작용 트리거 엘리먼트와 팝업 컨테이너를 연결합니다.
-
-<!--
-#### Inputs / Model
--->
-
-<a id="inputs-model"></a>
-
-#### 입력 프로퍼티 / 모델
-
-<!--
-| Property           | Type                   | Default | Description                                                         |
-| ------------------ | ---------------------- | ------- | ------------------------------------------------------------------- |
-| `value`            | `ModelSignal<string>`  | `''`    | Two-way bindable text value of the combobox                         |
-| `expanded`         | `ModelSignal<boolean>` | `false` | Two-way bindable open/closed expanded state of the popup            |
-| `disabled`         | `boolean`              | `false` | Disables the combobox trigger element                               |
-| `softDisabled`     | `boolean`              | `true`  | Disables interaction while keeping the element keyboard focusable   |
-| `alwaysExpanded`   | `boolean`              | `false` | Forces the popup to always remain open                              |
-| `inlineSuggestion` | `string \| undefined`  | -       | Sets an inline suggestion to be highlighted at the end of the input |
-| `tabIndex`         | `number \| undefined`  | -       | Tabindex of the combobox element (aliased to `tabindex`)            |
-
-All keyboard events, focus coordination, and ARIA state properties (including `role="combobox"`, `aria-autocomplete`, and `aria-expanded`) are handled automatically on the host element.
-
----
--->
-
-| 프로퍼티           | 타입                   | 기본값  | 설명                                                                  |
-| ------------------ | ---------------------- | ------- | --------------------------------------------------------------------- |
-| `value`            | `ModelSignal<string>`  | `''`    | 양방향 바인딩이 가능한 콤보박스의 텍스트 값입니다.                    |
-| `expanded`         | `ModelSignal<boolean>` | `false` | 양방향 바인딩이 가능한 팝업의 열림/닫힘 상태입니다.                   |
-| `disabled`         | `boolean`              | `false` | 콤보박스 트리거 엘리먼트를 비활성화합니다.                            |
-| `softDisabled`     | `boolean`              | `true`  | 키보드 포커스는 받을 수 있게 유지하면서 조작을 비활성화합니다.        |
-| `alwaysExpanded`   | `boolean`              | `false` | 팝업을 항상 열린 상태로 유지합니다.                                   |
-| `inlineSuggestion` | `string \| undefined`  | -       | 입력값 끝에 강조해서 표시할 인라인 추천을 설정합니다.                 |
-| `tabIndex`         | `number \| undefined`  | -       | 콤보박스 엘리먼트의 tabindex입니다(`tabindex`라는 별칭을 사용합니다). |
-
-모든 키보드 이벤트, 포커스 연결, ARIA 상태 프로퍼티(`role="combobox"`, `aria-autocomplete`, `aria-expanded` 포함)는 호스트 엘리먼트에서 자동으로 처리됩니다.
-
----
-
-<!--
-### ComboboxPopup Directive
--->
-
-<a id="comboboxpopup-directive"></a>
-
-### ComboboxPopup 디렉티브
-
-<!--
-Marks an `<ng-template>` as the popup container for the combobox.
--->
-
-`<ng-template>`을 콤보박스의 팝업 컨테이너로 지정합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property    | Type                                        | Default     | Description                                    |
-| ----------- | ------------------------------------------- | ----------- | ---------------------------------------------- |
-| `combobox`  | `Combobox`                                  | (Required)  | Reference to the parent `Combobox` directive   |
-| `popupType` | `'listbox' \| 'tree' \| 'grid' \| 'dialog'` | `'listbox'` | Specifies the layout/role profile of the popup |
-
----
--->
-
-| 프로퍼티    | 타입                                        | 기본값      | 설명                                      |
-| ----------- | ------------------------------------------- | ----------- | ----------------------------------------- |
-| `combobox`  | `Combobox`                                  | (필수)      | 부모 `Combobox` 디렉티브의 참조입니다.    |
-| `popupType` | `'listbox' \| 'tree' \| 'grid' \| 'dialog'` | `'listbox'` | 팝업의 레이아웃과 역할 유형을 지정합니다. |
-
----
-
-<!--
-### ComboboxWidget Directive
--->
-
-<a id="comboboxwidget-directive"></a>
-
-### ComboboxWidget 디렉티브
-
-<!--
-Connects the popup contents (such as a listbox or grid) with the parent combobox trigger.
--->
-
-리스트박스나 그리드 같은 팝업 콘텐츠를 부모 콤보박스 트리거와 연결합니다.
-
-<!--
-#### Inputs
--->
-
-<a id="inputs-1"></a>
-
-#### 입력 프로퍼티
-
-<!--
-| Property           | Type                  | Description                                                                         |
-| ------------------ | --------------------- | ----------------------------------------------------------------------------------- |
-| `activeDescendant` | `string \| undefined` | The ID of the currently active option (bound to the active option ID in the widget) |
-
----
--->
-
-| 프로퍼티           | 타입                  | 설명                                                           |
-| ------------------ | --------------------- | -------------------------------------------------------------- |
-| `activeDescendant` | `string \| undefined` | 현재 활성 옵션의 ID입니다(위젯의 활성 옵션 ID에 바인딩합니다). |
-
----
-
-<!--
 ### Related patterns and directives
--->
 
-<a id="related-patterns-and-directives"></a>
-
-### 관련 패턴과 디렉티브
-
-<!--
 Combobox is the primitive directive for these documented patterns:
 
-- **[Autocomplete](guide/aria/autocomplete)** - Filtering and suggestions pattern (coordinates input typing with options list)
-- **[Select](guide/aria/select)** - Single selection dropdown pattern (applied directly on non-editable button triggers)
-- **[Multiselect](guide/aria/multiselect)** - Multiple selection pattern (applied on non-editable triggers with multi-enabled Listbox)
+- [Autocomplete](guide/aria/autocomplete) - Filtering and suggestions pattern (coordinates input typing with options list)
+- [Select](guide/aria/select) - Single selection dropdown pattern (applied directly on non-editable button triggers)
+- [Multiselect](guide/aria/multiselect) - Multiple selection pattern (applied on non-editable triggers with multi-enabled Listbox)
 
 Combobox typically combines with:
 
-- **[Listbox](guide/aria/listbox)** - Most common popup content
-- **[Tree](guide/aria/tree)** - Hierarchical popup content (see Tree guide for examples)
+- [Listbox](guide/aria/listbox) - Most common popup content
+- [Tree](guide/aria/tree) - Hierarchical popup content (see Tree guide for examples)
 -->
 
-콤보박스는 다음 패턴의 기본 디렉티브입니다.
+<a id="apis"></a>
+<a id="api"></a>
+<a id="api-reference"></a>
 
-- **[자동 완성](guide/aria/autocomplete)**: 필터링과 추천 패턴입니다(텍스트 입력과 옵션 목록을 연결합니다).
-- **[선택](guide/aria/select)**: 단일 선택 드롭다운 패턴입니다(편집할 수 없는 버튼 트리거에 직접 적용합니다).
-- **[다중 선택](guide/aria/multiselect)**: 다중 선택 패턴입니다(편집할 수 없는 트리거에 적용하고 다중 선택을 활성화한 Listbox와 연결합니다).
+## API 레퍼런스
 
-콤보박스는 일반적으로 다음과 결합합니다.
+자세한 API 문서는 다음 API 레퍼런스를 참고하세요.
 
-- **[리스트박스](guide/aria/listbox)**: 가장 일반적인 팝업 콘텐츠입니다.
-- **[트리](guide/aria/tree)**: 계층형 팝업 콘텐츠입니다(예제는 트리 가이드를 참고하세요).
+- [`Combobox`](/api/aria/combobox/Combobox)
+- [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
+- [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
+
+### Related patterns and directives
+
+Combobox is the primitive directive for these documented patterns:
+
+- [Autocomplete](guide/aria/autocomplete) - Filtering and suggestions pattern (coordinates input typing with options list)
+- [Select](guide/aria/select) - Single selection dropdown pattern (applied directly on non-editable button triggers)
+- [Multiselect](guide/aria/multiselect) - Multiple selection pattern (applied on non-editable triggers with multi-enabled Listbox)
+
+Combobox typically combines with:
+
+- [Listbox](guide/aria/listbox) - Most common popup content
+- [Tree](guide/aria/tree) - Hierarchical popup content (see Tree guide for examples)

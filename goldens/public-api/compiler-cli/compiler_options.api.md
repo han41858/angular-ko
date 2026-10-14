@@ -7,6 +7,7 @@
 // @public
 export interface BazelAndG3Options {
     annotateForClosureCompiler?: boolean;
+    enableTemplateSourceLocations?: boolean;
     _experimentalAllowEmitDeclarationOnly?: boolean;
     generateDeepReexports?: boolean;
     generateExtraImportsInLocalMode?: boolean;
@@ -80,6 +81,7 @@ export interface TypeCheckingOptions {
     strictOutputEventTypes?: boolean;
     strictSafeNavigationTypes?: boolean;
     strictTemplates?: boolean;
+    strictUnclaimedEventNames?: boolean;
     typeCheckHostBindings?: boolean;
 }
 

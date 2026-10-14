@@ -44,6 +44,8 @@ _경량 주입 토큰(lightweight injection tokens)_ 을 사용하여 라이브�
 ## When tokens are retained
 -->
 
+<a id="when-tokens-are-retained"></a>
+
 ## 토큰이 유지되는 경우
 
 <!--
@@ -150,6 +152,8 @@ readonly header = contentChild(LibHeader);
 ## When to use the lightweight injection token pattern
 -->
 
+<a id="when-to-use-the-lightweight-injection-token-pattern"></a>
+
 ## 경량 의존성 주입 토큰은 언제 사용해야 할까요?
 
 <!--
@@ -201,6 +205,8 @@ class App {
 <!--
 ## Using lightweight injection tokens
 -->
+
+<a id="using-lightweight-injection-tokens"></a>
 
 ## 경량 의존성 토큰 사용하기
 
@@ -287,6 +293,8 @@ class LibCard {
 <!--
 ### Use the lightweight injection token for API definition
 -->
+
+<a id="use-the-lightweight-injection-token-for-api-definition"></a>
 
 ### 경량 의존성 토큰은 API를 정의할 때 사용하세요.
 
@@ -377,6 +385,8 @@ class LibCard implements AfterContentInit {
 <!--
 ### Naming your lightweight injection token
 -->
+
+<a id="naming-your-lightweight-injection-token"></a>
 
 ### 경량 의존성 토큰의 이름 지정하기
 

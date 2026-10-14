@@ -1,10 +1,10 @@
 <!--
-## Inspect your injectors
+# Inspect your injectors
 -->
 
 <a id="inspect-your-injectors"></a>
 
-## 인젝터 검사하기
+# 인젝터 검사하기
 
 <!--
 NOTE: The Injector Tree is available for Angular Applications built with version 17 or higher.
@@ -13,12 +13,12 @@ NOTE: The Injector Tree is available for Angular Applications built with version
 참고: Injector Tree는 Angular 버전 17 이상으로 빌드한 애플리케이션에서 사용할 수 있습니다.
 
 <!--
-### View the injector hierarchy of your application
+## View the injector hierarchy of your application
 -->
 
 <a id="view-the-injector-hierarchy-of-your-application"></a>
 
-### 애플리케이션의 인젝터 계층 확인하기
+## 애플리케이션의 인젝터 계층 확인하기
 
 <!--
 The **Injector Tree** tab lets you explore the structure of the Injectors configured in your application. Here you will see two trees representing the [injector hierarchy](guide/di/hierarchical-dependency-injection) of your application. One tree is your environment hierarchy, the other is your element hierarchy.
@@ -33,12 +33,12 @@ The **Injector Tree** tab lets you explore the structure of the Injectors config
 <img src="assets/images/guide/devtools/di-injector-tree.png" alt="예제 애플리케이션의 인젝터 그래프를 시각화한 Angular DevTools 인젝터 트리 탭이 표시된 'Profiler' 탭 화면입니다.">
 
 <!--
-### Visualize resolution paths
+## Visualize resolution paths
 -->
 
 <a id="visualize-resolution-paths"></a>
 
-### 의존성을 찾는 경로 시각화하기
+## 의존성을 찾는 경로 시각화하기
 
 <!--
 When a specific injector is selected, the path that Angular's dependency injection algorithm traverses from that injector to the root is highlighted. For element injectors, this includes highlighting the environment injectors that the dependency injection algorithm jumps to when a dependency cannot be resolved in the element hierarchy.
@@ -56,12 +56,12 @@ Angular가 의존성을 찾는 경로를 결정하는 방식은 [의존성 탐�
 <img src="assets/images/guide/devtools/di-injector-tree-selected.png" alt="인젝터를 선택했을 때 인젝터 트리에서 의존성 탐색 경로가 강조되는 모습을 보여주는 'Profiler' 탭 화면입니다.">
 
 <!--
-### View injector providers
+## View injector providers
 -->
 
 <a id="view-injector-providers"></a>
 
-### 인젝터의 프로바이더 확인하기
+## 인젝터의 프로바이더 확인하기
 
 <!--
 Clicking an injector that has configured providers will display those providers in a list on the right of the injector tree view. Here you can view the provided token and it's type. The button on the right of each provider allows you to log the provider in the console.

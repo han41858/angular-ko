@@ -70,6 +70,8 @@ Great job learning about routing with Angular. This is just the surface of the `
 
 <docs-workflow>
 
+<a id="import-routerlink-directive"></a>
+
 <docs-step title="`RouterLink` 디렉티브를 불러옵니다">
 
 `@angular/router` 패키지로 제공되는 `RouterLink` 디렉티브를 `app.ts` 파일에 불러와서 컴포넌트 데코레이터의 `imports` 배열에 추가합니다.
@@ -85,6 +87,8 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 ```
 
 </docs-step>
+
+<a id="add-a-routerlink-to-template"></a>
 
 <docs-step title="템플릿에 `routerLink` 를 추가하세요">
 

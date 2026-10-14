@@ -12,6 +12,8 @@ Now that you have been introduced to the main concepts of Angular - you're ready
 ## Playground
 -->
 
+<a id="playground"></a>
+
 ## 놀이터
 
 <!--
@@ -31,6 +33,8 @@ Try out Angular in an interactive code editor to further explore the concepts yo
 <!--
 ## Tutorials
 -->
+
+<a id="tutorials"></a>
 
 ## 튜토리얼
 
@@ -53,6 +57,8 @@ Put these main concepts into practice with our in-browser tutorial or build your
 <!--
 ## In-depth Guides
 -->
+
+<a id="in-depth-guides"></a>
 
 ## 심화 가이드
 

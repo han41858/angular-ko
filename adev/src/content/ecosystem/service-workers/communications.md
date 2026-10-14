@@ -47,28 +47,26 @@ The `SwUpdate` service supports three separate operations:
 ### 버전 업데이트
 
 <!--
-The `versionUpdates` is an `Observable` property of `SwUpdate` and emits five event types:
+The `versionUpdates` is an `Observable` property of `SwUpdate` and emits four event types:
 
-| Event types                      | Details                                                                                                                                                                               |
-| :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `VersionDetectedEvent`           | Emitted when the service worker has detected a new version of the app on the server and is about to start downloading it.                                                             |
-| `NoNewVersionDetectedEvent`      | Emitted when the service worker has checked the version of the app on the server and did not find a new version.                                                                      |
-| `VersionReadyEvent`              | Emitted when a new version of the app is available to be activated by clients. It may be used to notify the user of an available update or prompt them to refresh the page.           |
-| `VersionInstallationFailedEvent` | Emitted when the installation of a new version failed. It may be used for logging/monitoring purposes.                                                                                |
-| `VersionFailedEvent`             | Emitted when a version encounters a critical failure (such as broken hash errors) that affects all clients using that version. Provides error details for debugging and transparency. |
+| Event types                      | Details                                                                                                                                                                     |
+| :------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VersionDetectedEvent`           | Emitted when the service worker has detected a new version of the app on the server and is about to start downloading it.                                                   |
+| `NoNewVersionDetectedEvent`      | Emitted when the service worker has checked the version of the app on the server and did not find a new version.                                                            |
+| `VersionReadyEvent`              | Emitted when a new version of the app is available to be activated by clients. It may be used to notify the user of an available update or prompt them to refresh the page. |
+| `VersionInstallationFailedEvent` | Emitted when the installation of a new version failed. It may be used for logging/monitoring purposes.                                                                      |
 
 <docs-code header="log-update.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/log-update.service.ts" region="sw-update"/>
 -->
 
-`versionUpdates`는 `SwUpdate`의 `Observable` 프로퍼티이며, 다섯 가지 이벤트를 방출합니다:
+`versionUpdates`는 `SwUpdate`의 `Observable` 프로퍼티이며, 네 가지 이벤트를 방출합니다:
 
-| 이벤트 타입                      | 설명                                                                                                                                                           |
-| :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `VersionDetectedEvent`           | 서비스 워커가 서버에서 앱의 새 버전을 감지하고 다운로드를 시작하려고 할 때 발생합니다.                                                                         |
-| `NoNewVersionDetectedEvent`      | 서비스 워커가 서버에서 앱 버전을 확인했지만 새 버전을 찾지 못했을 때 발생합니다.                                                                               |
-| `VersionReadyEvent`              | 클라이언트가 앱의 새 버전을 활성화할 수 있을 때 발생합니다. 사용자에게 업데이트를 알리거나 페이지 새로고침을 요청할 때 사용할 수 있습니다.                     |
-| `VersionInstallationFailedEvent` | 새 버전 설치에 실패했을 때 발생합니다. 로깅이나 모니터링 용도로 사용할 수 있습니다.                                                                            |
-| `VersionFailedEvent`             | 해시 불일치 같은 심각한 오류가 발생해서 해당 버전을 사용하는 모든 클라이언트에 영향을 줄 때 발생합니다. 디버깅과 원인 파악을 위한 에러 세부 정보를 제공합니다. |
+| 이벤트 타입                      | 설명                                                                                                                                       |
+| :------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| `VersionDetectedEvent`           | 서비스 워커가 서버에서 앱의 새 버전을 감지하고 다운로드를 시작하려고 할 때 발생합니다.                                                     |
+| `NoNewVersionDetectedEvent`      | 서비스 워커가 서버에서 앱 버전을 확인했지만 새 버전을 찾지 못했을 때 발생합니다.                                                           |
+| `VersionReadyEvent`              | 클라이언트가 앱의 새 버전을 활성화할 수 있을 때 발생합니다. 사용자에게 업데이트를 알리거나 페이지 새로고침을 요청할 때 사용할 수 있습니다. |
+| `VersionInstallationFailedEvent` | 새 버전 설치에 실패했을 때 발생합니다. 로깅이나 모니터링 용도로 사용할 수 있습니다.                                                        |
 
 <docs-code header="log-update.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/log-update.service.ts" region="sw-update"/>
 

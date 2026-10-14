@@ -55,6 +55,15 @@ export class By {
 export function createApplication(options?: ApplicationConfig, context?: BootstrapContext): Promise<ApplicationRef>;
 
 // @public
+export class CssVarNamespacer {
+    namespace(name: string): string;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<CssVarNamespacer, never>;
+    // (undocumented)
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
+}
+
+// @public
 export function disableDebugTools(): void;
 
 // @public
@@ -68,7 +77,7 @@ export abstract class DomSanitizer implements Sanitizer {
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<DomSanitizer, never>;
     // (undocumented)
-    static ɵprov: i0.ɵɵInjectableDeclaration<DomSanitizer>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 // @public
@@ -85,7 +94,7 @@ export class EventManager {
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<EventManager, never>;
     // (undocumented)
-    static ɵprov: i0.ɵɵInjectableDeclaration<EventManager>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 // @public
@@ -123,7 +132,6 @@ export enum HydrationFeatureKind {
 
 // @public
 export class Meta {
-    constructor(_doc: any);
     addTag(tag: MetaDefinition, forceCreation?: boolean): HTMLMetaElement | null;
     addTags(tags: MetaDefinition[], forceCreation?: boolean): HTMLMetaElement[];
     getTag(attrSelector: string): HTMLMetaElement | null;
@@ -134,7 +142,7 @@ export class Meta {
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<Meta, never>;
     // (undocumented)
-    static ɵprov: i0.ɵɵInjectableDeclaration<Meta>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 // @public
@@ -157,6 +165,9 @@ export const platformBrowser: (extraProviders?: StaticProvider[]) => PlatformRef
 
 // @public
 export function provideClientHydration(...features: HydrationFeature<HydrationFeatureKind>[]): EnvironmentProviders;
+
+// @public
+export function provideCssVarNamespacing(namespace?: string): EnvironmentProviders;
 
 // @public
 export function provideProtractorTestingSupport(options?: {
@@ -198,7 +209,7 @@ export class Title {
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<Title, never>;
     // (undocumented)
-    static ɵprov: i0.ɵɵInjectableDeclaration<Title>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<any>;
 }
 
 // @public (undocumented)

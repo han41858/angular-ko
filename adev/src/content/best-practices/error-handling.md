@@ -134,6 +134,39 @@ Angular의 `TestBed`는 프레임워크가 잡은 오류를 실수로 놓치거�
 이 경우 `TestBed.configureTestingModule({rethrowApplicationErrors: false})`로 [`TestBed`가 애플리케이션 오류를 다시 던지지 _않도록_ 설정할 수 있습니다](api/core/testing/TestModuleMetadata#rethrowApplicationErrors).
 
 <!--
+### Errors thrown while your app is still starting up
+
+There's a brief moment when Angular can't send errors to your `ErrorHandler` yet: while it is still creating your app's root module or root component. Angular needs that root instance to exist before it can look up the `ErrorHandler` you provided, so an error thrown before then has nowhere to go. It behaves like a normal uncaught error instead of being reported through `ErrorHandler`.
+
+You're most likely to run into this with [Angular elements](guide/elements). If you define a custom element while its tag is already present on the page, the browser upgrades it right away, running the component's constructor and `ngOnInit` as part of that early startup work. Any error thrown there can get lost.
+
+If this happens to you, move the code that throws so it runs after your app has finished starting up, for example:
+
+- Wrap it in `setTimeout(() => /* your code */)` so it runs on its own turn instead of during startup.
+- Provide it as an `APP_BOOTSTRAP_LISTENER` instead of running it from a constructor.
+- Define your custom elements in `ngDoBootstrap` instead of your root module's constructor.
+
+Turning on `provideBrowserGlobalErrorListeners()` (see below) can also help catch these errors, since they still reach the browser as uncaught errors.
+-->
+
+<a id="errors-thrown-while-your-app-is-still-starting-up"></a>
+
+### 앱이 시작되는 동안 발생하는 오류
+
+Angular가 아직 `ErrorHandler`에 오류를 전달할 수 없는 짧은 시점이 있습니다. 앱의 최상위 모듈이나 컴포넌트를 생성하는 동안입니다.
+등록한 `ErrorHandler`를 찾으려면 최상위 인스턴스가 먼저 존재해야 하므로, 그 전에 발생한 오류는 `ErrorHandler`로 전달되지 않고 일반적인 처리되지 않은 오류처럼 동작합니다.
+
+이 문제는 [Angular 엘리먼트](guide/elements)를 사용할 때 발생하기 쉽습니다. 페이지에 태그가 이미 존재하는 상태에서 커스텀 엘리먼트를 정의하면 브라우저는 즉시 이 엘리먼트를 업그레이드합니다. 이때 초기화 과정에서 컴포넌트 생성자와 `ngOnInit`이 실행되므로 여기서 발생한 오류를 놓칠 수 있습니다.
+
+이런 문제가 발생하면 오류를 발생시키는 코드가 앱 초기화 이후에 실행되도록 옮기세요. 다음과 같은 방법을 사용할 수 있습니다.
+
+- `setTimeout(() => /* 실행할 코드 */)`으로 감싸 초기화 중이 아닌 별도의 실행 차례에 실행합니다.
+- 생성자에서 실행하는 대신 `APP_BOOTSTRAP_LISTENER`로 등록합니다.
+- 최상위 모듈의 생성자 대신 `ngDoBootstrap`에서 커스텀 엘리먼트를 정의합니다.
+
+이 오류는 브라우저에 처리되지 않은 오류로 전달되므로, 아래에서 설명하는 `provideBrowserGlobalErrorListeners()`를 활성화하는 것도 도움이 됩니다.
+
+<!--
 ## Global error listeners
 -->
 

@@ -42,6 +42,8 @@ NOTE: For basic examples of using `inject()` in class constructors and field ini
 ## Stack frame in context
 -->
 
+<a id="stack-frame-in-context"></a>
+
 ## 컨텍스트 안의 스택 프레임
 
 <!--
@@ -76,16 +78,16 @@ const canActivateTeam: CanActivateFn = (
 ## Run within an injection context
 -->
 
+<a id="run-within-an-injection-context"></a>
+
 ## 인젝션 컨텍스트 안에서 실행하기
 
 <!--
 If you need to run a function within an injection context without already being in one, you can use `runInInjectionContext`.
 This requires access to an injector, such as the `EnvironmentInjector`:
 
-```ts {highlight: [9], header:"hero.service.ts"}
-@Injectable({
-  providedIn: 'root',
-})
+```ts {highlight: [7], header:"hero.service.ts"}
+@Service()
 export class HeroService {
   private environmentInjector = inject(EnvironmentInjector);
 
@@ -103,10 +105,8 @@ Note that [`inject`](/api/core/inject) returns an instance only if the injector 
 의존성 주입 컨텍스트가 아닌 함수 안에서 의존성과 관련된 함수를 실행하려면 `runInInjectionContext`를 사용하면 됩니다.
 이 방식을 사용하려면 `EnvironmentInjector`와 같은 특수 인젝터를 사용해야 합니다:
 
-```ts {highlight: [9], header"hero.service.ts"}
-@Injectable({
-  providedIn: 'root',
-})
+```ts {highlight: [7], header:"hero.service.ts"}
+@Service()
 export class HeroService {
   private environmentInjector = inject(EnvironmentInjector);
 
@@ -123,6 +123,8 @@ export class HeroService {
 <!--
 ## Asserts the context
 -->
+
+<a id="asserts-the-context"></a>
 
 ## 컨텍스트 보장하기
 
@@ -144,9 +146,7 @@ You can then call this helper **from an injection context** (constructor, field 
 import {Component, inject} from '@angular/core';
 import {injectNativeElement} from './dom-helpers';
 
-@Component({
-  /* … */
-})
+@Component({/* … */})
 export class PreviewCard {
   readonly hostEl = injectNativeElement<HTMLElement>(); // Field initializer runs in an injection context.
 
@@ -176,9 +176,7 @@ export function injectNativeElement<T extends Element>(): T {
 import {Component, inject} from '@angular/core';
 import {injectNativeElement} from './dom-helpers';
 
-@Component({
-  /* … */
-})
+@Component({/* … */})
 export class PreviewCard {
   readonly hostEl = injectNativeElement<HTMLElement>(); // 필드를 초기화할 때 의존성 주입 컨텍스트를 실행합니다.
 
@@ -191,6 +189,8 @@ export class PreviewCard {
 <!--
 ## Using DI outside of a context
 -->
+
+<a id="using-di-outside-of-a-context"></a>
 
 ## 의존성 주입 컨텍스트 밖에서 의존성 주입 사용하기
 

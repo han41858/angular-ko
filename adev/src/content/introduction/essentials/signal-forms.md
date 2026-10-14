@@ -5,16 +5,10 @@
 <docs-decorative-header title="시그널 폼" imgSrc="adev/src/assets/images/signals.svg"> </docs-decorative-header>
 
 <!--
-IMPORTANT: Signal Forms are [experimental](/reference/releases#experimental). The API may change in future releases. Avoid using experimental APIs in production applications without understanding the risks.
-
 Signal Forms manage form state using Angular signals to provide automatic synchronization between your data model and the UI with Angular Signals.
 
 This guide walks you through the core concepts to create forms with Signal Forms. Here's how it works:
 -->
-
-중요: 시그널 폼(Signal Forms)은 아직 [실험 단계](/reference/releases#experimental)입니다.
-이후 버전에서 API 사용 방법은 변경될 수 있습니다.
-운영앱에서 실험적인 API를 사용한다면 이런 리스크를 꼭 인지해야 합니다.
 
 시그널 폼은 Angular 시그널을 사용해서 폼 상태를 관리하며, 데이터 모델과 UI를 동기화할 때도 Angular 시그널을 활용합니다.
 
@@ -25,11 +19,15 @@ This guide walks you through the core concepts to create forms with Signal Forms
 ## Creating your first form
 -->
 
+<a id="creating-your-first-form"></a>
+
 ## 첫번째 폼 만들기
 
 <!--
 ### 1. Create a form model with `signal()`
 -->
+
+<a id="1-create-a-form-model-with-signal"></a>
 
 ### 1. 폼 모델 생성하기: `signal()`
 
@@ -55,34 +53,40 @@ const loginModel = signal<LoginData>({
 ### 2. Pass the form model to `form()` to create a `FieldTree`
 -->
 
+<a id="2-pass-the-form-model-to-form-to-create-a-fieldtree"></a>
+
 ### 2. `form()`을 실행해서 폼 모델을 `FieldTree`로 변환하기
 
 <!--
-Then, you pass your form model into the `form()` function to create a **field tree** - an object structure that mirrors your model's shape, allowing you to access fields with dot notation:
+Then, you pass your form model into the `form()` function to create a **field tree** - an object structure that mirrors your model's shape, allowing you to access fields with dot notation.
+
+Both the root form object and its nested properties are `FieldTree` nodes:
 
 ```ts
 const loginForm = form(loginModel);
 
-// Access fields directly by property name
-loginForm.email;
-loginForm.password;
+loginForm; // is a FieldTree
+loginForm.email; // is also a FieldTree
 ```
 -->
 
 그리고 폼 모델을 `form()` 함수로 전달해서 이 폼 모델을 **필드 트리** 로 변환합니다.
-필드 트리는 데이터 모델을 표현하는 객체이며, 객체이기 때문에 객체 프로퍼티처럼 접근할 수 있습니다:
+필드 트리는 데이터 모델을 표현하는 객체이며, 객체이기 때문에 객체 프로퍼티처럼 접근할 수 있습니다.
+
+최상위 폼 객체와 그 안에 중첩된 프로퍼티는 모두 `FieldTree` 노드입니다:
 
 ```ts
 const loginForm = form(loginModel);
 
-// 프로퍼티 이름으로 직접 접근합니다.
-loginForm.email;
-loginForm.password;
+loginForm; // FieldTree입니다.
+loginForm.email; // 이 값도 FieldTree입니다.
 ```
 
 <!--
 ### 3. Bind HTML inputs with `[formField]` directive
 -->
+
+<a id="3-bind-html-inputs-with-formfield-directive"></a>
 
 ### 3. `[formField]` 디렉티브로 HTML 입력 필드를 바인딩합니다.
 
@@ -108,25 +112,29 @@ NOTE: The `[formField]` directive also syncs field state for attributes like `re
 
 그러면 사용자가 입력 엘리먼트의 값을 변경하면 폼에 있는 데이터도 자동으로 갱신됩니다.
 
-참고: `[field]` 디렉티브는 `required`, `disabled`, `readonly`와 같은 어트리뷰트 값도 동기화합니다.
+참고: `[formField]` 디렉티브는 `required`, `disabled`, `readonly`와 같은 어트리뷰트 값도 동기화합니다.
 
 <!--
-### 4. Read field values with `value()`
+### 4. Read state with `FieldTree` signals
 -->
 
-### 4. 필드 값 읽기: `value()`
+<a id="4-read-state-with-fieldtree-signals"></a>
+
+### 4. `FieldTree` 시그널로 상태 읽기
 
 <!--
-You can access field state by calling the field as a function. This returns a `FieldState` object containing reactive signals for the field's value, validation status, and interaction state:
+You can access state for any part of the tree by calling the `FieldTree` node as a function. This returns a state object containing reactive signals for the value, validation status, and interaction state:
 
 ```ts
-loginForm.email(); // Returns FieldState with value(), valid(), touched(), etc.
+loginForm(); // Returns state for the whole form
+loginForm.email(); // Returns state for the email field
 ```
 
-To read the field's current value, access the `value()` signal:
+To read the current value, access the `value()` signal:
 
 ```html
-<!- Render form value that updates automatically as user types ->
+<!- Render values that update automatically as user types ->
+<p>Form value: {{ loginForm().value() | json }}</p>
 <p>Email: {{ loginForm.email().value() }}</p>
 ```
 
@@ -136,17 +144,19 @@ const currentEmail = loginForm.email().value();
 ```
 -->
 
-필드 상태는 필드를 함수처럼 실행하면 접근할 수 있습니다.
-이때 접근하는 `FieldState` 객체에는 필드의 값, 유효성 검사 상태, 상호작용 상태를 표현하는 반응형 시그널이 모두 포함됩니다:
+`FieldTree` 노드를 함수처럼 실행하면 트리의 어느 부분에서든 상태에 접근할 수 있습니다.
+반환된 상태 객체에는 값, 유효성 검사 상태, 상호작용 상태를 표현하는 반응형 시그널이 포함됩니다:
 
 ```ts
-loginForm.email(); // value(), valid(), touched() 등 값이 포함된 FieldState를 반환합니다.
+loginForm(); // 폼 전체의 상태를 반환합니다.
+loginForm.email(); // 이메일 필드의 상태를 반환합니다.
 ```
 
-그래서 입력 필드의 현재 값을 읽으려면 `value()` 시그널을 읽으면 됩니다:
+현재 값을 읽으려면 `value()` 시그널을 읽으면 됩니다:
 
 ```html
 <!-- 사용자가 입력한 값을 화면에 렌더링합니다. -->
+<p>Form value: {{ loginForm().value() | json }}</p>
 <p>Email: {{ loginForm.email().value() }}</p>
 ```
 
@@ -156,13 +166,15 @@ const currentEmail = loginForm.email().value();
 ```
 
 <!--
-### 5. Update field values with `set()`
+### 5. Update values with `set()`
 -->
 
-### 5. 필드값 변경하기: `set()`
+<a id="5-update-values-with-set"></a>
+
+### 5. 값 변경하기: `set()`
 
 <!--
-You can programmatically update a field's value using the `value.set()` method. This updates both the field and the underlying model signal:
+You can programmatically update values using the `value.set()` method on any node. This updates both the `FieldTree` and the underlying model signal:
 
 ```ts
 // Update the value programmatically
@@ -176,7 +188,7 @@ As a result, both the field value and the model signal are updated automatically
 console.log(loginModel().email); // 'alice@wonderland.com'
 ```
 
-Here's a complete example:
+### Complete example
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-simple/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-simple/app/app.ts"/>
@@ -185,8 +197,8 @@ Here's a complete example:
 </docs-code-multifile>
 -->
 
-필드값은 `value.set()` 메서드를 사용해서 코드로 변경할 수 있습니다.
-이 메서드를 실행하면 필드의 값과 모델 시그널 값을 모두 변경합니다:
+어떤 노드에서든 `value.set()` 메서드를 사용해서 코드로 값을 변경할 수 있습니다.
+이 메서드를 실행하면 `FieldTree`와 모델 시그널 값을 모두 변경합니다:
 
 ```ts
 // 코드로 필드 값을 변경합니다.
@@ -200,7 +212,9 @@ loginForm.email().value.set('alice@wonderland.com');
 console.log(loginModel().email); // 'alice@wonderland.com'
 ```
 
-전체 예제 코드를 확인해 보세요:
+<a id="complete-example"></a>
+
+### 전체 예제
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-simple/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-simple/app/app.ts"/>
@@ -211,6 +225,8 @@ console.log(loginModel().email); // 'alice@wonderland.com'
 <!--
 ## Basic usage
 -->
+
+<a id="basic-usage"></a>
 
 ## 활용 방법
 
@@ -224,6 +240,8 @@ The `[formField]` directive works with all standard HTML input types. Here are t
 <!--
 ### Text inputs
 -->
+
+<a id="text-inputs"></a>
 
 ### 텍스트 입력
 
@@ -249,6 +267,8 @@ Text inputs work with various `type` attributes and textareas:
 #### Numbers
 -->
 
+<a id="numbers"></a>
+
 #### 숫자
 
 <!--
@@ -270,6 +290,8 @@ Number inputs automatically convert between strings and numbers:
 <!--
 #### Date and time
 -->
+
+<a id="date-and-time"></a>
 
 #### 날짜, 시각
 
@@ -307,6 +329,8 @@ const dateObject = new Date(form.eventDate().value());
 #### Multiline text
 -->
 
+<a id="multiline-text"></a>
+
 #### 여러 줄 텍스트
 
 <!--
@@ -328,6 +352,8 @@ Textareas work the same way as text inputs:
 <!--
 ### Checkboxes
 -->
+
+<a id="checkboxes"></a>
 
 ### 체크박스
 
@@ -356,6 +382,8 @@ Checkboxes bind to boolean values:
 <!--
 #### Multiple checkboxes
 -->
+
+<a id="multiple-checkboxes"></a>
 
 #### 여러 체크박스
 
@@ -390,6 +418,8 @@ For multiple options, create a separate boolean `formField` for each:
 <!--
 ### Radio buttons
 -->
+
+<a id="radio-buttons"></a>
 
 ### 라디오 버튼
 
@@ -430,6 +460,8 @@ When a user selects a radio button, the form `formField` stores the value from t
 <!--
 ### Select dropdowns
 -->
+
+<a id="select-dropdowns"></a>
 
 ### 드롭다운 셀렉트
 
@@ -481,6 +513,8 @@ NOTE: Multiple select (`<select multiple>`) is not supported by the `[formField]
 ## Validation and state
 -->
 
+<a id="validation-and-state"></a>
+
 ## 유효성 검사, 유효성 검사 상태
 
 <!--
@@ -511,9 +545,24 @@ required(schemaPath.email, {message: 'Email is required'});
 email(schemaPath.email, {message: 'Please enter a valid email address'});
 ```
 
-Each form field exposes its validation state through signals. For example, you can check `field().valid()` to see if validation passes, `field().touched()` to see if the user has interacted with it, and `field().errors()` to get the list of validation errors.
+Each node in the `FieldTree` exposes its validation and interaction state through reactive signals.
 
-Here's a complete example:
+### FieldTree State Signals
+
+Every node in the tree, including the root form object, provides the same signals to track its state. Since every node is a `FieldTree`, the API for monitoring validity and interaction is identical at every level.
+
+| State        | Description                                                                     |
+| ------------ | ------------------------------------------------------------------------------- |
+| `valid()`    | Returns `true` if the node passes all validation rules                          |
+| `invalid()`  | Returns `true` if there are validation errors                                   |
+| `pending()`  | Returns `true` if async validation is in progress                               |
+| `touched()`  | Returns `true` if the user has focused and blurred the field or any child field |
+| `dirty()`    | Returns `true` if the value has been changed by the user                        |
+| `disabled()` | Returns `true` if the node is disabled                                          |
+| `readonly()` | Returns `true` if the node is readonly                                          |
+| `errors()`   | Returns an array of validation errors with `kind` and `message` properties      |
+
+### Complete example {#complete-example-validation}
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts"/>
@@ -550,10 +599,29 @@ required(schemaPath.email, {message: 'Email is required'});
 email(schemaPath.email, {message: 'Please enter a valid email address'});
 ```
 
-개별 폼 필드는 유효성 검사 상태를 시그널로 표현합니다.
-그래서 유효성 검사를 통과했다면 `field().valid()`를 확인하면 되고, 사용자가 입력 엘리먼트에 접근했는지 확인하려면 `field().touched()`를 확인하면 되고, 유효성 검사에서 발생한 에러를 확인하려면 `field().errors()`를 확인하면 됩니다.
+`FieldTree`의 각 노드는 유효성 검사 상태와 상호작용 상태를 반응형 시그널로 표현합니다.
 
-전체 예제 코드를 확인해 보세요:
+<a id="fieldtree-state-signals"></a>
+
+### FieldTree 상태 시그널
+
+최상위 폼 객체를 포함한 트리의 모든 노드는 상태를 확인하는 동일한 시그널을 제공합니다.
+모든 노드가 `FieldTree`이므로 어느 단계에서든 같은 API로 유효성 검사 상태와 상호작용 상태를 확인할 수 있습니다.
+
+| 상태         | 설명                                                                        |
+| ------------ | --------------------------------------------------------------------------- |
+| `valid()`    | 노드가 모든 유효성 검사 규칙을 통과하면 `true`를 반환합니다.                |
+| `invalid()`  | 유효성 검사 에러가 있으면 `true`를 반환합니다.                              |
+| `pending()`  | 비동기 유효성 검사가 진행 중이면 `true`를 반환합니다.                       |
+| `touched()`  | 사용자가 해당 필드나 자식 필드에 접근했다가 빠져나가면 `true`를 반환합니다. |
+| `dirty()`    | 사용자가 값을 변경했으면 `true`를 반환합니다.                               |
+| `disabled()` | 노드가 비활성화되면 `true`를 반환합니다.                                    |
+| `readonly()` | 노드가 읽기 전용이면 `true`를 반환합니다.                                   |
+| `errors()`   | `kind`, `message` 프로퍼티가 있는 유효성 검사 에러 배열을 반환합니다.       |
+
+<a id="complete-example-validation"></a>
+
+### 전체 예제 {#전체-예제-2}
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts"/>
@@ -562,40 +630,10 @@ email(schemaPath.email, {message: 'Please enter a valid email address'});
 </docs-code-multifile>
 
 <!--
-### Field State Signals
--->
-
-### 필드 상태 시그널
-
-<!--
-Every `field()` provides these state signals:
-
-| State        | Description                                                                |
-| ------------ | -------------------------------------------------------------------------- |
-| `valid()`    | Returns `true` if the field passes all validation rules                    |
-| `touched()`  | Returns `true` if the user has focused and blurred the field               |
-| `dirty()`    | Returns `true` if the user has changed the value                           |
-| `disabled()` | Returns `true` if the field is disabled                                    |
-| `readonly()` | Returns `true` if the field is readonly                                    |
-| `pending()`  | Returns `true` if async validation is in progress                          |
-| `errors()`   | Returns an array of validation errors with `kind` and `message` properties |
--->
-
-`field()`로 확인할 수 있는 상태값 시그널은 이렇습니다:
-
-| 상태         | 설명                                                                                                  |
-| ------------ | ----------------------------------------------------------------------------------------------------- |
-| `valid()`    | 유효성 검사를 모두 통과하면 `true`를 반환합니다.                                                      |
-| `touched()`  | 사용자가 입력 엘리먼트에 접근했다가 빠져나가면 `true`를 반환합니다.                                   |
-| `dirty()`    | 사용자가 값을 바꾸면 `true`를 반환합니다.                                                             |
-| `disabled()` | 필드가 비활성화되면 `true`를 반환합니다.                                                              |
-| `readonly()` | 필드가 읽기 전용이면 `true`를 반환합니다.                                                             |
-| `pending()`  | 비동기 유효성 검사가 진행 중이면 `true`를 반환합니다.                                                 |
-| `errors()`   | 유효성 검사에서 발생한 에러 배열을 반환합니다. 에러 객체에는 `kind`, `message` 프로퍼티가 존재합니다. |
-
-<!--
 ## Next steps
 -->
+
+<a id="next-steps"></a>
 
 ## 다음 단계
 

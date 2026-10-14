@@ -7,10 +7,11 @@
  */
 
 import {
-  BoundTarget,
   ClassPropertyMapping,
   CssSelector,
+  AbstractBoundTemplate,
   DirectiveMatcher,
+  DirectiveMeta,
   MatchSource,
   parseTemplate,
   ParseTemplateOptions,
@@ -24,8 +25,11 @@ import {absoluteFrom, AbsoluteFsPath} from '../../file_system';
 import {Reference} from '../../imports';
 import {ClassDeclaration, DeclarationNode} from '../../reflection';
 import {getDeclaration, makeProgram} from '../../testing';
-import {ComponentMeta} from '../src/context';
-import {AbstractBoundTemplate} from '../src/api';
+
+export interface ComponentMeta extends DirectiveMeta {
+  ref: {key: string; node: DeclarationNode};
+  selector: string | null;
+}
 
 /** Dummy file URL */
 function getTestFilePath(): AbsoluteFsPath {
@@ -57,15 +61,24 @@ export function getComponentDeclaration(componentStr: string, className: string)
 export function getBoundTemplate(
   template: string,
   options: ParseTemplateOptions = {},
-  components: Array<{selector: string | null; declaration: ClassDeclaration}> = [],
+  components: Array<{
+    selector: string | null;
+    declaration: ClassDeclaration;
+    inputs?: Record<string, string>;
+    outputs?: Record<string, string>;
+  }> = [],
+  pipes: Array<{
+    name: string;
+    declaration: ClassDeclaration;
+  }> = [],
 ): AbstractBoundTemplate<DeclarationNode> {
-  const componentsMeta = components.map(({selector, declaration}) => ({
+  const componentsMeta = components.map(({selector, declaration, inputs = {}, outputs = {}}) => ({
     ref: new Reference(declaration),
     selector,
     name: declaration.name.getText(),
     isComponent: true,
-    inputs: ClassPropertyMapping.fromMappedObject({}),
-    outputs: ClassPropertyMapping.fromMappedObject({}),
+    inputs: ClassPropertyMapping.fromMappedObject(inputs),
+    outputs: ClassPropertyMapping.fromMappedObject(outputs),
     exportAs: null,
     isStructural: false,
     animationTriggerNames: null,
@@ -106,6 +119,13 @@ export function getBoundTemplate(
     getReferenceTarget(node) {
       return boundTemplate.getReferenceTarget(node);
     },
+    getConsumerOfBinding(binding) {
+      const consumer = boundTemplate.getConsumerOfBinding(binding);
+      if (consumer && 'ref' in consumer && consumer.ref) {
+        return {ref: {node: consumer.ref.node}};
+      }
+      return null;
+    },
     getExpressionTarget(ast) {
       return boundTemplate.getExpressionTarget(ast);
     },
@@ -117,6 +137,10 @@ export function getBoundTemplate(
     },
     getTemplateAst() {
       return boundTemplate.target.template;
+    },
+    getPipe(name) {
+      const pipe = pipes.find((p) => p.name === name);
+      return pipe ? {ref: {node: pipe.declaration}} : null;
     },
   };
   return abstractBoundTemplate;

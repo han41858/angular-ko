@@ -113,7 +113,6 @@ The following sections describe each property of the configuration file.
 ### `appData`
 -->
 
-<a id="appdata"></a>
 
 ### `appData`
 
@@ -131,7 +130,6 @@ Many applications use this section to provide additional information for the dis
 ### `index`
 -->
 
-<a id="index"></a>
 
 ### `index`
 
@@ -147,7 +145,6 @@ Usually this is `/index.html`.
 ### `assetGroups`
 -->
 
-<a id="assetgroups"></a>
 
 ### `assetGroups`
 
@@ -256,7 +253,6 @@ interface AssetGroup {
 #### `name`
 -->
 
-<a id="name"></a>
 
 #### `name`
 
@@ -272,7 +268,6 @@ It identifies this particular group of assets between versions of the configurat
 #### `installMode`
 -->
 
-<a id="installmode"></a>
 
 #### `installMode`
 
@@ -302,7 +297,6 @@ Defaults to `prefetch`.
 #### `updateMode`
 -->
 
-<a id="updatemode"></a>
 
 #### `updateMode`
 
@@ -332,7 +326,6 @@ Defaults to the value `installMode` is set to.
 #### `resources`
 -->
 
-<a id="resources"></a>
 
 #### `resources`
 
@@ -356,7 +349,6 @@ This section describes the resources to cache, broken up into the following grou
 #### `cacheQueryOptions`
 -->
 
-<a id="cachequeryoptions"></a>
 
 #### `cacheQueryOptions`
 
@@ -384,7 +376,6 @@ Currently, only the following options are supported:
 ### `dataGroups`
 -->
 
-<a id="datagroups"></a>
 
 ### `dataGroups`
 
@@ -484,12 +475,12 @@ export interface DataGroup {
 각 `DataGroup`은 다음 프로퍼티로 정의합니다.
 
 <!--
-#### `name`
+#### `name` {#datagroups-name}
 -->
 
 <a id="name-1"></a>
 
-#### `name`
+#### `name` {#datagroups-name}
 
 <!--
 Similar to `assetGroups`, every data group has a `name` which uniquely identifies it.
@@ -501,7 +492,6 @@ Similar to `assetGroups`, every data group has a `name` which uniquely identifie
 #### `urls`
 -->
 
-<a id="urls"></a>
 
 #### `urls`
 
@@ -526,7 +516,6 @@ URL 패턴 목록입니다.
 #### `version`
 -->
 
-<a id="version"></a>
 
 #### `version`
 
@@ -550,7 +539,6 @@ API 형식이 이전 버전과 호환되지 않는 방식으로 변경되는 경
 #### `cacheConfig`
 -->
 
-<a id="cacheconfig"></a>
 
 #### `cacheConfig`
 
@@ -564,7 +552,6 @@ The following properties define the policy by which matching requests are cached
 ##### `maxSize`
 -->
 
-<a id="maxsize"></a>
 
 ##### `maxSize`
 
@@ -582,7 +569,6 @@ CRITICAL: Open-ended caches can grow in unbounded ways and eventually exceed sto
 ##### `maxAge`
 -->
 
-<a id="maxage"></a>
 
 ##### `maxAge`
 
@@ -617,7 +603,6 @@ For example, the string `3d12h` caches content for up to three and a half days.
 ##### `timeout`
 -->
 
-<a id="timeout"></a>
 
 ##### `timeout`
 
@@ -655,7 +640,6 @@ For example, the string `5s30u` translates to five seconds and 30 milliseconds o
 ##### `refreshAhead`
 -->
 
-<a id="refreshahead"></a>
 
 ##### `refreshAhead`
 
@@ -691,7 +675,6 @@ For example, the string `1h30m` translates to one hour and 30 minutes ahead of t
 ##### `strategy`
 -->
 
-<a id="strategy"></a>
 
 ##### `strategy`
 
@@ -736,7 +719,6 @@ Angular 서비스 워커는 데이터 리소스에 다음 두 캐싱 전략 중 
 ##### `cacheOpaqueResponses`
 -->
 
-<a id="cacheopaqueresponses"></a>
 
 ##### `cacheOpaqueResponses`
 
@@ -782,12 +764,12 @@ Angular 서비스 워커가 불투명 응답(opaque response)을 캐시에 저�
 </docs-callout>
 
 <!--
-#### `cacheQueryOptions`
+#### `cacheQueryOptions` {#datagroups-cachequeryoptions}
 -->
 
 <a id="cachequeryoptions-1"></a>
 
-#### `cacheQueryOptions`
+#### `cacheQueryOptions` {#datagroups-cachequeryoptions}
 
 <!--
 See [assetGroups](#assetgroups) for details.
@@ -799,7 +781,6 @@ See [assetGroups](#assetgroups) for details.
 ### `navigationUrls`
 -->
 
-<a id="navigationurls"></a>
 
 ### `navigationUrls`
 
@@ -822,7 +803,7 @@ The ServiceWorker redirects navigation requests that don't match any `asset` or 
 A request is considered to be a navigation request if:
 
 - Its [method](https://developer.mozilla.org/docs/Web/API/Request/method) is `GET`
-- Its [mode](https://developer.mozilla.org/docs/Web/API/Request/mode) is `navigation`
+- Its [mode](https://developer.mozilla.org/docs/Web/API/Request/mode) is `navigate`
 - It accepts a `text/html` response as determined by the value of the `Accept` header
 - Its URL matches the following criteria:
   - The URL must not contain a file extension (that is, a `.`) in the last path segment
@@ -835,7 +816,7 @@ ServiceWorker는 어떤 `asset` 또는 `data` 그룹에도 해당하지 않는 �
 다음 조건을 충족하면 탐색 요청으로 간주합니다:
 
 - [메서드](https://developer.mozilla.org/docs/Web/API/Request/method)가 `GET`입니다.
-- [모드](https://developer.mozilla.org/docs/Web/API/Request/mode)가 `navigation`입니다.
+- [모드](https://developer.mozilla.org/docs/Web/API/Request/mode)가 `navigate`입니다.
 - `Accept` 헤더 값에 따라 `text/html` 응답을 허용합니다.
 - URL이 다음 기준을 충족합니다:
   - URL의 마지막 경로 세그먼트에 파일 확장자(즉, `.`)가 없어야 합니다.
@@ -897,7 +878,6 @@ URL이 일반 URL/패턴 중 _하나 이상_ 과 일치하면서, 제외 패턴�
 ### `navigationRequestStrategy`
 -->
 
-<a id="navigationrequeststrategy"></a>
 
 ### `navigationRequestStrategy`
 
@@ -938,7 +918,6 @@ IMPORTANT: The `freshness` strategy usually results in more requests sent to the
 ### `applicationMaxAge`
 -->
 
-<a id="applicationmaxage"></a>
 
 ### `applicationMaxAge`
 

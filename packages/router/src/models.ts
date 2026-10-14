@@ -13,13 +13,59 @@ import {
   NgModuleFactory,
   Provider,
   ProviderToken,
+  Signal,
   Type,
+  Resource,
+  WritableResource,
 } from '@angular/core';
 import {Observable} from 'rxjs';
 export {DefaultExport} from '@angular/core';
 
 import type {ActivatedRouteSnapshot, RouterStateSnapshot} from './router_state';
+import {Params} from './shared';
 import type {UrlSegment, UrlSegmentGroup, UrlTree} from './url_tree';
+
+/**
+ * The expected return type of a `resources` function.
+ * @developerPreview 22.2
+ */
+export type ResourceResult = Record<
+  string,
+  Resource<unknown> & Pick<WritableResource<unknown>, 'reload'>
+>;
+
+// Developer notes: properties are exposed as a plain Record (`Params`) rather than a `ParamMap`
+// to allow future type-check layers to infer exact keys (e.g., `{ id: string }`).
+// Same applies to data and queryparams.
+/**
+ * The contextual information provided to a `resources` function.
+ * @developerPreview 22.2
+ */
+export interface ResourceContext {
+  /**
+   * The path and matrix parameters available to the route.
+   *
+   * @developerPreview 22.2
+   */
+  params: Signal<Params>;
+  /**
+   * The query parameters of the route.
+   *
+   * @developerPreview 22.2
+   */
+  queryParams: Signal<Params>;
+  /**
+   * The URL fragment.
+   * @developerPreview 22.2
+   */
+  fragment: Signal<string | null>;
+  /**
+   * Data provided in the route configuration.
+   *
+   * @developerPreview 22.2
+   */
+  data: Signal<Record<string, any>>;
+}
 
 /**
  * How to handle a navigation request to the current URL. One of:
@@ -81,7 +127,7 @@ export type DeprecatedResolve = DeprecatedGuard | any;
 /**
  * The supported types that can be returned from a `Router` guard.
  *
- * @see [Routing guide](guide/routing/common-router-tasks#preventing-unauthorized-access)
+ * @see [Routing guide](guide/routing/route-guards)
  * @publicApi
  */
 export type GuardResult = boolean | UrlTree | RedirectCommand;
@@ -113,15 +159,18 @@ export type GuardResult = boolean | UrlTree | RedirectCommand;
  *   ],
  * };
  * ```
- * @see [Routing guide](guide/routing/common-router-tasks#preventing-unauthorized-access)
+ * @see [Routing guide](guide/routing/route-guards)
  *
  * @publicApi
  */
-export class RedirectCommand {
+export class RedirectCommand extends Error {
   constructor(
     readonly redirectTo: UrlTree,
     readonly navigationBehaviorOptions?: NavigationBehaviorOptions,
-  ) {}
+  ) {
+    super();
+    Object.setPrototypeOf(this, RedirectCommand.prototype);
+  }
 }
 
 /**
@@ -138,7 +187,7 @@ export type MaybeAsync<T> = T | Observable<T> | Promise<T>;
  *
  * @see {@link Route}
  * @see {@link Router}
- * @see [Router configuration guide](guide/routing/router-reference#configuration)
+ * @see [Router configuration guide](guide/routing/router-reference)
  * @publicApi
  */
 export type Routes = Route[];
@@ -314,7 +363,7 @@ export type RedirectFunction = (
  * change or query params have changed. This does not include matrix parameters.
  *
  * @see {@link Route#runGuardsAndResolvers}
- * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior#control-when-guards-and-resolvers-execute)
+ * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior)
  * @publicApi
  */
 export type RunGuardsAndResolvers =
@@ -606,7 +655,7 @@ export interface Route {
   /**
    * An object specifying a lazy-loaded component.
    *
-   * @see [Injection context lazy loading](guide/routing/define-routes#injection-context-lazy-loading)
+   * @see [Injection context lazy loading](guide/routing/loading-strategies)
    *
    */
   loadComponent?: () =>
@@ -689,6 +738,7 @@ export interface Route {
    *
    */
   canDeactivate?: Array<CanDeactivateFn<any> | DeprecatedGuard>;
+  // 3p-only-start
   /**
    * An array of `CanLoadFn` or DI tokens used to look up `CanLoad()`
    * handlers, in order to determine if the current user is allowed to
@@ -699,6 +749,7 @@ export interface Route {
    * @deprecated Use `canMatch` instead
    */
   canLoad?: Array<CanLoadFn | DeprecatedGuard>;
+  // 3p-only-end
   /**
    * Additional developer-defined data provided to the component via
    * `ActivatedRoute`. By default, no additional data is passed.
@@ -711,6 +762,13 @@ export interface Route {
    */
   resolve?: ResolveData;
   /**
+   * A function that returns a record of resources.
+   * This function is executed during the Main Loading Phase of a navigation.
+   * @developerPreview 22.2
+   */
+  resources?: (ctx: ResourceContext) => ResourceResult | Promise<ResourceResult>;
+
+  /**
    * An array of child `Route` objects that specifies a nested route
    * configuration.
    */
@@ -718,7 +776,7 @@ export interface Route {
   /**
    * An object specifying lazy-loaded child routes.
    *
-   * @see [Injection context lazy loading](guide/routing/define-routes#injection-context-lazy-loading)
+   * @see [Injection context lazy loading](guide/routing/loading-strategies)
    *
    */
   loadChildren?: LoadChildren;
@@ -739,7 +797,7 @@ export interface Route {
    * change or query params have changed. This does not include matrix parameters.
    *
    * @see {@link RunGuardsAndResolvers}
-   * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior#control-when-guards-and-resolvers-execute)
+   * @see [Control when guards and resolvers execute](guide/routing/customizing-route-behavior)
    */
   runGuardsAndResolvers?: RunGuardsAndResolvers;
 

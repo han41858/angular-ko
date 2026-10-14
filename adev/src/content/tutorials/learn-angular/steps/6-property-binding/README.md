@@ -77,6 +77,8 @@ Property binding is one of Angular's many powerful features. If you'd like to le
 
 <docs-workflow>
 
+<a id="add-a-property-called-iseditable"></a>
+
 <docs-step title="`isEditable` 프로퍼티를 추가해 보세요" header="app.ts" language="ts">
 
 `app.ts` 파일에 있는 `App` 컴포넌트 클래스에 `isEditable` 프로퍼티를 추가하고 초기값으로 `true`를 설정해 보세요.
@@ -88,6 +90,8 @@ export class App {
 ```
 
 </docs-step>
+
+<a id="bind-to-contenteditable"></a>
 
 <docs-step title="`contentEditable`에 바인딩해 보세요" header="app.ts" language="ts">
 

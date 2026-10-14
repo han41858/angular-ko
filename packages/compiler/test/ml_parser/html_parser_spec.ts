@@ -387,6 +387,13 @@ describe('HtmlParser', () => {
         ]);
       });
 
+      it('should avoid walking the prototype when looking up entity names', () => {
+        expect(humanizeDom(parser.parse('<p>{{ &constructor; }}</p>', 'TestComp'))).toEqual([
+          [html.Element, 'p', 0],
+          [html.Text, '{{ &constructor; }}', 1, [''], ['{{', ' &constructor; ', '}}'], ['']],
+        ]);
+      });
+
       it('should normalize line endings within attribute values', () => {
         const result = parser.parse('<div key="  \r\n line 1 \r\n   line 2  "></div>', 'TestComp');
         expect(humanizeDom(result)).toEqual([
@@ -1626,6 +1633,20 @@ describe('HtmlParser', () => {
             '<MyThirdComp:button/>',
           ],
         ]);
+      });
+    });
+
+    describe('ignored syntax', () => {
+      it('should ignore doctype declaration', () => {
+        expect(humanizeDom(parser.parse(`<!DOCTYPE html>hello`, 'TestComp'))).toEqual([
+          [html.Text, 'hello', 0, ['hello']],
+        ]);
+      });
+
+      it('should ignore processing instruction', () => {
+        expect(
+          humanizeDom(parser.parse(`<?xml version="1.0" encoding="UTF-8"?>hello`, 'TestComp')),
+        ).toEqual([[html.Text, 'hello', 0, ['hello']]]);
       });
     });
 

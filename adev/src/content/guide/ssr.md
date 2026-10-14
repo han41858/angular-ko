@@ -89,8 +89,7 @@ SSR을 활성화하려면 서버 라우트가 `RenderMode.Server`를 사용하�
 <!--
 You can create a server route config by declaring an array of [`ServerRoute`](api/ssr/ServerRoute 'API reference') objects. This configuration typically lives in a file named `app.routes.server.ts`.
 
-```typescript
-// app.routes.server.ts
+```typescript {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -115,11 +114,10 @@ export const serverRoutes: ServerRoute[] = [
 
 You can add this config to your application with [`provideServerRendering`](api/ssr/provideServerRendering 'API reference') using the [`withRoutes`](api/ssr/withRoutes 'API reference') function:
 
-```typescript
+```typescript {header: "app.config.server.ts"}
 import {provideServerRendering, withRoutes} from '@angular/ssr';
 import {serverRoutes} from './app.routes.server';
 
-// app.config.server.ts
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(withRoutes(serverRoutes)),
@@ -146,8 +144,7 @@ const serverConfig: ApplicationConfig = {
 [`ServerRoute`](api/ssr/ServerRoute 'API 레퍼런스') 객체의 배열을 선언해서 서버 라우트를 설정할 수 있습니다.
 이 설정은 일반적으로 `app.routes.server.ts` 파일에 작성합니다.
 
-```typescript
-// app.routes.server.ts
+```typescript {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -172,11 +169,10 @@ export const serverRoutes: ServerRoute[] = [
 
 [`withRoutes`](api/ssr/withRoutes 'API 레퍼런스') 함수를 [`provideServerRendering`](api/ssr/provideServerRendering 'API 레퍼런스')과 함께 사용해서 애플리케이션에 이 설정을 추가할 수 있습니다:
 
-```typescript
+```typescript {header: "app.config.server.ts"}
 import {provideServerRendering, withRoutes} from '@angular/ssr';
 import {serverRoutes} from './app.routes.server';
 
-// app.config.server.ts
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(withRoutes(serverRoutes)),
@@ -360,8 +356,7 @@ _빌드 시점_ 에 HTML 문서를 생성하므로 서버는 추가 작업 없�
 <!--
 You can set custom headers and status codes for individual server routes using the `headers` and `status` properties in the `ServerRoute` configuration.
 
-```typescript
-// app.routes.server.ts
+```typescript {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -380,8 +375,7 @@ export const serverRoutes: ServerRoute[] = [
 
 `ServerRoute` 설정의 `headers`, `status` 프로퍼티를 사용하면 개별 서버 라우트에 커스텀 헤더와 상태 코드를 지정할 수 있습니다.
 
-```typescript
-// app.routes.server.ts
+```typescript {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -454,8 +448,7 @@ The body of [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPre
 
 You can also use this function with catch-all routes (e.g., `/**`), where the parameter name will be `"**"` and the return value will be the segments of the path, such as `foo/bar`. These can be combined with other parameters (e.g., `/post/:id/**`) to handle more complex route configuration.
 
-```ts
-// app.routes.server.ts
+```ts {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -501,8 +494,7 @@ IMPORTANT: When using [`inject`](api/core/inject 'API reference') inside `getPre
 이때 파라미터 이름은 `"**"`이며 반환 값은 `foo/bar` 같은 경로 세그먼트입니다.
 `/post/:id/**`처럼 다른 파라미터와 조합해서 더 복잡한 라우트 설정을 처리할 수도 있습니다.
 
-```ts
-// app.routes.server.ts
+```ts {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -553,8 +545,7 @@ The available fallback strategies are:
 - **Client:** Falls back to client-side rendering.
 - **None:** No fallback. Angular will not handle requests for paths that are not prerendered.
 
-```ts
-// app.routes.server.ts
+```ts {header: "app.routes.server.ts"}
 import {RenderMode, PrerenderFallback, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -583,8 +574,7 @@ export const serverRoutes: ServerRoute[] = [
 - **None:** 대체 처리를 하지 않습니다.
   Angular는 사전 렌더링되지 않은 경로의 요청을 처리하지 않습니다.
 
-```ts
-// app.routes.server.ts
+```ts {header: "app.routes.server.ts"}
 import {RenderMode, PrerenderFallback, ServerRoute} from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
@@ -616,7 +606,7 @@ Some common browser APIs and capabilities might not be available on the server. 
 In general, code which relies on browser-specific symbols should only be executed in the browser, not on the server. This can be enforced through the `afterEveryRender` and `afterNextRender` lifecycle hooks. These are only executed on the browser and skipped on the server.
 
 ```angular-ts
-import {Component, viewChild, afterNextRender} from '@angular/core';
+import {Component, ElementRef, viewChild, afterNextRender} from '@angular/core';
 
 @Component({
   selector: 'my-cmp',
@@ -647,7 +637,7 @@ IMPORTANT: Avoid using `isPlatformBrowser` in templates with `@if` or other cond
 이 훅은 브라우저에서만 실행되고 서버에서는 건너뜁니다.
 
 ```angular-ts
-import {Component, viewChild, afterNextRender} from '@angular/core';
+import {Component, ElementRef, viewChild, afterNextRender} from '@angular/core';
 
 @Component({
   selector: 'my-cmp',
@@ -733,8 +723,7 @@ export class ServerAnalyticsService implements AnalyticsService {
 
 Register the browser implementation in your main application configuration:
 
-```ts
-// app.config.ts
+```ts {header: "app.config.ts"}
 export const appConfig: ApplicationConfig = {
   providers: [{provide: AnalyticsService, useClass: BrowserAnalyticsService}],
 };
@@ -742,8 +731,7 @@ export const appConfig: ApplicationConfig = {
 
 Override with the server implementation in your server configuration:
 
-```ts
-// app.config.server.ts
+```ts {header: "app.config.server.ts"}
 const serverConfig: ApplicationConfig = {
   providers: [{provide: AnalyticsService, useClass: ServerAnalyticsService}],
 };
@@ -752,9 +740,7 @@ const serverConfig: ApplicationConfig = {
 Inject and use the service in your components:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class Checkout {
   private analytics = inject(AnalyticsService);
 
@@ -798,8 +784,7 @@ export class ServerAnalyticsService implements AnalyticsService {
 
 메인 애플리케이션 설정에 브라우저용 구현을 등록합니다:
 
-```ts
-// app.config.ts
+```ts {header: "app.config.ts"}
 export const appConfig: ApplicationConfig = {
   providers: [{provide: AnalyticsService, useClass: BrowserAnalyticsService}],
 };
@@ -807,8 +792,7 @@ export const appConfig: ApplicationConfig = {
 
 서버 설정에서 서버용 구현으로 재정의합니다:
 
-```ts
-// app.config.server.ts
+```ts {header: "app.config.server.ts"}
 const serverConfig: ApplicationConfig = {
   providers: [{provide: AnalyticsService, useClass: ServerAnalyticsService}],
 };
@@ -817,9 +801,7 @@ const serverConfig: ApplicationConfig = {
 컴포넌트에 서비스를 주입해서 사용합니다:
 
 ```ts
-@Component({
-  /*...*/
-})
+@Component(/* ... */)
 export class Checkout {
   private analytics = inject(AnalyticsService);
 
@@ -1041,6 +1023,68 @@ To configure this, update your `angular.json` file as follows:
 브라우저에서 애플리케이션이 [안정 상태](api/core/ApplicationRef#isStable)에 도달하면 `HttpClient`는 캐시 사용을 중단합니다.
 
 <!--
+### Configuring the response body size limit
+
+When `HttpClient` uses the default fetch backend during server-side rendering, Angular limits each response body to 1 MB. This limit prevents the server from buffering unexpectedly large responses during rendering. If a response exceeds the configured limit, the request fails with the [NG02825](errors/NG02825) error.
+
+If your application needs to fetch larger responses during server rendering, set `maxResponseBodySize` in the `provideServerRendering` options:
+
+```ts
+import {provideServerRendering, withRoutes} from '@angular/ssr';
+import {serverRoutes} from './app.routes.server';
+
+const serverConfig: ApplicationConfig = {
+  providers: [
+    provideServerRendering(
+      {
+        maxResponseBodySize: 5 * 1024 * 1024, // 5MB
+      },
+      withRoutes(serverRoutes),
+    ),
+  ],
+};
+```
+
+`maxResponseBodySize` is configured in bytes and applies globally to server-side `HttpClient` requests that use the fetch backend.
+
+IMPORTANT: Keep this limit as small as your application allows. Increasing it lets server-side requests buffer larger response bodies, which can increase memory use and denial-of-service risk. Prefer moving large downloads outside server rendering.
+
+CRITICAL: During SSR, the Fetch implementation reads the entire response body to verify `integrity` before returning a response, as required by the [Fetch Standard](https://fetch.spec.whatwg.org/#concept-main-fetch). Angular enforces [`maxResponseBodySize`](/guide/ssr#configuring-the-response-body-size-limit) only after Fetch returns a response, so this limit does not constrain the data buffered during integrity verification.
+-->
+
+<a id="configuring-the-response-body-size-limit"></a>
+
+### 응답 본문 크기 제한 설정하기
+
+서버 사이드 렌더링 중 `HttpClient`가 기본 fetch 백엔드를 사용하면 Angular는 각 응답 본문을 1MB로 제한합니다.
+렌더링 중 서버가 예상보다 큰 응답을 버퍼에 저장하는 것을 막기 위한 제한입니다.
+응답이 설정한 제한을 초과하면 요청은 [NG02825](errors/NG02825) 오류로 실패합니다.
+
+서버 렌더링 중 더 큰 응답을 가져와야 한다면 `provideServerRendering` 옵션에서 `maxResponseBodySize`를 설정하세요:
+
+```ts
+import {provideServerRendering, withRoutes} from '@angular/ssr';
+import {serverRoutes} from './app.routes.server';
+
+const serverConfig: ApplicationConfig = {
+  providers: [
+    provideServerRendering(
+      {
+        maxResponseBodySize: 5 * 1024 * 1024, // 5MB
+      },
+      withRoutes(serverRoutes),
+    ),
+  ],
+};
+```
+
+`maxResponseBodySize`는 바이트 단위이며, fetch 백엔드를 사용하는 서버 측 `HttpClient` 요청에 전역으로 적용됩니다.
+
+IMPORTANT: 애플리케이션에서 허용하는 범위 안에서 제한을 최대한 작게 유지하세요. 제한을 높이면 서버 측 요청이 더 큰 응답 본문을 버퍼에 저장할 수 있어 메모리 사용량과 서비스 거부 공격 위험이 커질 수 있습니다. 큰 파일 다운로드는 서버 렌더링 밖에서 처리하는 편이 좋습니다.
+
+CRITICAL: SSR 중 Fetch 구현은 [Fetch 표준](https://fetch.spec.whatwg.org/#concept-main-fetch)에 따라 응답을 반환하기 전에 응답 본문 전체를 읽어 `integrity`를 검증합니다. Angular는 Fetch가 응답을 반환한 뒤에만 [`maxResponseBodySize`](/guide/ssr#configuring-the-response-body-size-limit)를 적용하므로, 이 제한으로 무결성 검증 중 버퍼에 저장되는 데이터까지 제한할 수는 없습니다.
+
+<!--
 ### Configuring the caching options
 -->
 
@@ -1052,11 +1096,14 @@ To configure this, update your `angular.json` file as follows:
 You can customize how Angular caches HTTP responses during server‑side rendering (SSR) and reuses them during hydration by configuring `HttpTransferCacheOptions`.
 This configuration is provided globally using `withHttpTransferCacheOptions` inside `provideClientHydration()`.
 
-By default, `HttpClient` caches all `HEAD` and `GET` requests which don't contain `Authorization`, `Proxy-Authorization`, or `Cookie` headers and are not sent with `withCredentials` or Fetch API `credentials` modes that can send credentials. Angular also skips transfer cache when a request or response includes `Cache-Control` directives that forbid caching (`no-store`, `no-cache`, or `private`), or when the Fetch API `cache` option is set to `no-store` or `no-cache`. You can override the request filtering settings by using `withHttpTransferCacheOptions` in the hydration configuration.
+By default, `HttpClient` caches all `HEAD` and `GET` requests which don't contain `Authorization`, `Proxy-Authorization`, or `Cookie` headers and are not sent with `withCredentials` or Fetch API `credentials` modes that can send credentials. Angular also skips transfer cache when a request or response includes `Cache-Control` directives that forbid caching (`no-store`, `no-cache`, or `private`), or when the Fetch API `cache` option is set to `no-store` or `no-cache`. Responses that carry a `Set-Cookie` header are also skipped. You can override the request filtering settings by using `withHttpTransferCacheOptions` in the hydration configuration.
 
 ```ts
-import {bootstrapApplication} from '@angular/platform-browser';
-import {provideClientHydration, withHttpTransferCacheOptions} from '@angular/platform-browser';
+import {
+  bootstrapApplication,
+  provideClientHydration,
+  withHttpTransferCacheOptions,
+} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [
@@ -1080,11 +1127,15 @@ bootstrapApplication(App, {
 
 기본적으로 `HttpClient`는 `Authorization`, `Proxy-Authorization`, `Cookie` 헤더가 없고, `withCredentials`나 자격 증명을 전송할 수 있는 Fetch API의 `credentials` 모드로 보내지 않은 모든 `HEAD`, `GET` 요청을 캐시합니다.
 요청이나 응답의 `Cache-Control`에 캐시를 금지하는 지시자(`no-store`, `no-cache`, `private`)가 있거나 Fetch API의 `cache` 옵션이 `no-store` 또는 `no-cache`이면 Angular는 전송 캐시를 건너뜁니다.
+`Set-Cookie` 헤더가 포함된 응답도 건너뜁니다.
 하이드레이션 설정의 `withHttpTransferCacheOptions`로 요청 필터링 설정을 재정의할 수 있습니다.
 
 ```ts
-import {bootstrapApplication} from '@angular/platform-browser';
-import {provideClientHydration, withHttpTransferCacheOptions} from '@angular/platform-browser';
+import {
+  bootstrapApplication,
+  provideClientHydration,
+  withHttpTransferCacheOptions,
+} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [
@@ -1106,7 +1157,6 @@ bootstrapApplication(App, {
 ### `includeHeaders`
 -->
 
-<a id="includeheaders"></a>
 
 ### `includeHeaders`
 
@@ -1148,7 +1198,6 @@ Angular는 요청이나 응답을 전송 캐시에 저장할 수 있는지 판�
 ### `includePostRequests`
 -->
 
-<a id="includepostrequests"></a>
 
 ### `includePostRequests`
 
@@ -1184,13 +1233,12 @@ withHttpTransferCacheOptions({
 ### `includeRequestsWithAuthHeaders`
 -->
 
-<a id="includerequestswithauthheaders"></a>
 
 ### `includeRequestsWithAuthHeaders`
 
 <!--
 Determines whether requests containing `Authorization`, `Proxy‑Authorization`, or `Cookie` headers are eligible for caching.
-By default, these are excluded to prevent caching user‑specific responses. Requests sent with `withCredentials` or Fetch API `credentials` set to `include` or `same-origin` are also excluded by default.
+By default, these are excluded to prevent caching user‑specific responses.
 
 ```ts
 withHttpTransferCacheOptions({
@@ -1203,7 +1251,6 @@ Enable only when authentication headers do **not** affect the response content (
 
 `Authorization`, `Proxy‑Authorization`, `Cookie` 헤더가 포함된 요청을 캐시할 수 있는지 결정합니다.  
 사용자별 응답이 캐시되지 않도록 기본적으로 제외합니다.
-`withCredentials`를 사용하거나 Fetch API의 `credentials`를 `include` 또는 `same-origin`으로 지정해서 보낸 요청도 기본적으로 제외합니다.
 
 ```ts
 withHttpTransferCacheOptions({
@@ -1213,6 +1260,60 @@ withHttpTransferCacheOptions({
 
 인증 헤더가 응답 내용에 영향을 **주지 않는** 경우에만 활성화하세요.
 예를 들어 분석 API의 공개 토큰이 여기에 해당합니다.
+
+<!--
+### `includeRequestsWithCredentials`
+
+Determines whether requests sent using `withCredentials` or Fetch API `credentials` modes (`include` or `same-origin`) are eligible for caching.
+By default, these are excluded to prevent caching user‑specific responses.
+
+```ts
+withHttpTransferCacheOptions({
+  includeRequestsWithCredentials: true,
+});
+```
+
+Enable only when credentialed requests return responses that are safe to cache.
+
+### `includeNonCacheableRequests`
+
+Determines whether requests and responses containing `Cache-Control` directives that forbid caching (`no-store`, `no-cache`, or `private`), responses with a `Set-Cookie` header, or requests using Fetch API `cache` options (`no-store` or `no-cache`), are eligible for caching.
+By default, these are excluded to respect HTTP caching controls.
+
+```ts
+withHttpTransferCacheOptions({
+  includeNonCacheableRequests: true,
+});
+```
+
+Enable only when you need to bypass cache-control restrictions for transfer caching.
+-->
+
+### `includeRequestsWithCredentials`
+
+`withCredentials` 또는 Fetch API의 `credentials` 모드(`include`, `same-origin`)로 보내는 요청을 캐시할 수 있는지 결정합니다.
+사용자별 응답이 캐시되지 않도록 기본적으로 제외합니다.
+
+```ts
+withHttpTransferCacheOptions({
+  includeRequestsWithCredentials: true,
+});
+```
+
+자격 증명을 포함하는 요청이 캐시해도 안전한 응답을 반환할 때만 활성화하세요.
+
+### `includeNonCacheableRequests`
+
+캐시를 금지하는 `Cache-Control` 지시자(`no-store`, `no-cache`, `private`)가 포함된 요청과 응답, `Set-Cookie` 헤더가 포함된 응답, Fetch API의 `cache` 옵션(`no-store`, `no-cache`)을 사용하는 요청을 캐시할 수 있는지 결정합니다.
+HTTP 캐시 제어를 따르도록 기본적으로 제외합니다.
+
+```ts
+withHttpTransferCacheOptions({
+  includeNonCacheableRequests: true,
+});
+```
+
+전송 캐시에 대해 캐시 제어 제한을 우회해야 할 때만 활성화하세요.
 
 <!--
 ### Per‑request overrides
@@ -1360,7 +1461,7 @@ To disable caching for an individual request, you can specify the [`transferCach
 httpClient.get('/api/sensitive-data', {transferCache: false});
 ```
 
-`HttpTransferCache` does not cache requests or responses that explicitly opt out of caching. Angular skips transfer cache entries when a request includes a `Cache-Control` header with `no-store`, `no-cache`, or `private`, or when the request uses the Fetch API `cache` option set to `no-store` or `no-cache`. Responses with `Cache-Control: no-store`, `Cache-Control: no-cache`, or `Cache-Control: private` are also not stored in the transfer cache.
+`HttpTransferCache` does not cache requests or responses that explicitly opt out of caching. Angular skips transfer cache entries when a request includes a `Cache-Control` header with `no-store`, `no-cache`, or `private`, or when the request uses the Fetch API `cache` option set to `no-store` or `no-cache`. Responses with `Cache-Control: no-store`, `Cache-Control: no-cache`, or `Cache-Control: private` are also not stored in the transfer cache. Responses that include a `Set-Cookie` header are likewise not stored, as they typically carry user-specific state.
 
 NOTE: If your application uses different HTTP origins to make API calls on the server and on the client, the `HTTP_TRANSFER_CACHE_ORIGIN_MAP` token allows you to establish a mapping between those origins, so that `HttpTransferCache` feature can recognize those requests as the same ones and reuse the data cached on the server during hydration on the client.
 -->
@@ -1374,6 +1475,7 @@ httpClient.get('/api/sensitive-data', {transferCache: false});
 `HttpTransferCache`는 명시적으로 캐시를 거부하는 요청이나 응답을 캐시하지 않습니다.
 요청의 `Cache-Control` 헤더에 `no-store`, `no-cache`, `private`가 있거나 Fetch API의 `cache` 옵션이 `no-store` 또는 `no-cache`이면 Angular는 전송 캐시를 건너뜁니다.
 `Cache-Control: no-store`, `Cache-Control: no-cache`, `Cache-Control: private` 응답도 전송 캐시에 저장하지 않습니다.
+`Set-Cookie` 헤더가 포함된 응답도 일반적으로 사용자별 상태를 담고 있으므로 저장하지 않습니다.
 
 참고: 서버와 클라이언트에서 서로 다른 HTTP 출처(origin)로 API를 호출한다면, `HTTP_TRANSFER_CACHE_ORIGIN_MAP` 토큰으로 출처 사이의 매핑을 지정할 수 있습니다.
 그러면 `HttpTransferCache`는 이 요청을 같은 요청으로 인식하고, 클라이언트 하이드레이션 중 서버에서 캐시한 데이터를 재사용할 수 있습니다.
@@ -1390,15 +1492,13 @@ httpClient.get('/api/sensitive-data', {transferCache: false});
 ### Node.js
 -->
 
-<a id="nodejs"></a>
 
 ### Node.js
 
 <!--
 The `@angular/ssr/node` extends `@angular/ssr` specifically for Node.js environments. It provides APIs that make it easier to implement server-side rendering within your Node.js application. For a complete list of functions and usage examples, refer to the [`@angular/ssr/node` API reference](api/ssr/node/AngularNodeAppEngine) API reference.
 
-```ts
-// server.ts
+```ts {header: "server.ts"}
 import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
@@ -1433,8 +1533,7 @@ export const reqHandler = createNodeRequestHandler(app);
 Node.js 애플리케이션에서 서버 사이드 렌더링을 쉽게 구현할 수 있는 API를 제공합니다.
 전체 함수 목록과 사용 예제는 [`@angular/ssr/node` API 레퍼런스](api/ssr/node/AngularNodeAppEngine)를 참고하세요.
 
-```ts
-// server.ts
+```ts {header: "server.ts"}
 import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
@@ -1475,8 +1574,7 @@ export const reqHandler = createNodeRequestHandler(app);
 <!--
 The `@angular/ssr` provides essential APIs for server-side rendering your Angular application on platforms other than Node.js. It leverages the standard [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) and [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) objects from the Web API, enabling you to integrate Angular SSR into various server environments. For detailed information and examples, refer to the [`@angular/ssr` API reference](api/ssr/AngularAppEngine).
 
-```ts
-// server.ts
+```ts {header: "server.ts"}
 import {AngularAppEngine, createRequestHandler} from '@angular/ssr';
 
 const angularApp = new AngularAppEngine();
@@ -1485,7 +1583,7 @@ const angularApp = new AngularAppEngine();
  * This is a request handler used by the Angular CLI (dev-server and during build).
  */
 export const reqHandler = createRequestHandler(async (req: Request) => {
-  const res: Response | null = await angularApp.render(req);
+  const res: Response | null = await angularApp.handle(req);
 
   // ...
 });
@@ -1496,8 +1594,7 @@ export const reqHandler = createRequestHandler(async (req: Request) => {
 Web API의 표준 [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request)와 [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response) 객체를 사용하므로 다양한 서버 환경에 Angular SSR을 통합할 수 있습니다.
 자세한 내용과 예제는 [`@angular/ssr` API 레퍼런스](api/ssr/AngularAppEngine)를 참고하세요.
 
-```ts
-// server.ts
+```ts {header: "server.ts"}
 import {AngularAppEngine, createRequestHandler} from '@angular/ssr';
 
 const angularApp = new AngularAppEngine();
@@ -1506,7 +1603,7 @@ const angularApp = new AngularAppEngine();
  * Angular CLI가 개발 서버와 빌드 중에 사용하는 요청 핸들러입니다.
  */
 export const reqHandler = createRequestHandler(async (req: Request) => {
-  const res: Response | null = await angularApp.render(req);
+  const res: Response | null = await angularApp.handle(req);
 
   // ...
 });

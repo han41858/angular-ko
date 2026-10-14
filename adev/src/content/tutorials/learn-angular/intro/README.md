@@ -1,8 +1,20 @@
 <!--
 # Welcome to the Angular tutorial
+
+<div class="docs-tutorial-mascot">
+  <img class="docs-tutorial-mascot__angie" src="assets/images/angie/greeting.svg" aria-hidden="true">
+  <p class="docs-tutorial-mascot__bubble">Welcome! Let's learn the building blocks of Angular.</p>
+</div>
 -->
 
+<a id="welcome-to-the-angular-tutorial"></a>
+
 # Angular 튜토리얼에 오신 것을 환영합니다.
+
+<div class="docs-tutorial-mascot">
+  <img class="docs-tutorial-mascot__angie" src="assets/images/angie/greeting.svg" aria-hidden="true">
+  <p class="docs-tutorial-mascot__bubble">환영합니다! Angular의 기본 구성 요소를 알아봅시다.</p>
+</div>
 
 <!--
 This interactive tutorial will teach you the basic building blocks to start building great apps with Angular.
@@ -13,6 +25,8 @@ This interactive tutorial will teach you the basic building blocks to start buil
 <!--
 ## How to use this tutorial
 -->
+
+<a id="how-to-use-this-tutorial"></a>
 
 ## 이 튜토리얼은 어떻게 사용하나요?
 
@@ -38,6 +52,8 @@ Angular를 이해하려면 HTML, CSS, JavaScript 기본 지식이 필요합니�
 <!--
 ## Using AI for Development
 -->
+
+<a id="using-ai-for-development"></a>
 
 ## AI 활용하기
 
