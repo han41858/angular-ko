@@ -4,7 +4,7 @@
 Dependency Injection (DI) is a design pattern you use to organize and share code across your application by supplying dependencies to a class instead of creating them inside it.
 -->
 
-의존성 주입(Dependency Injection, DI)은 클래스 안에서 인스턴스를 직접 생성하지 않고, 외부에서 주입 받는 방식으로 애플리케이션 전역에서 코드를 관리하고 공유하는 디자인 패턴입니다.
+의존성 주입(Dependency Injection, DI)은 클래스 안에서 인스턴스를 직접 생성하지 않고, 외부에서 주입받는 방식으로 애플리케이션 전역에서 코드를 관리하고 공유하는 디자인 패턴입니다.
 </docs-decorative-header>
 
 <!--
@@ -22,13 +22,14 @@ Dependency injection is a popular pattern because it allows developers to addres
 팁: 이 문서에서 다루는 내용을 읽기 전에 Angular [핵심](essentials/dependency-injection)을 먼저 보는 것이 좋습니다.
 
 애플리케이션이 커지면서 개발자가 코드를 재사용하거나 서로 다른 부분에서 공유해야 하는 경우가 있습니다.
-[의존성 주입](https://en.wikipedia.org/wiki/Dependency_injection)이라는 것은 애플리케이션 전역에서 필요한 무언가를 "주입" 하는 방식으로 코드를 관리하고 공유하는 디자인 패턴입니다.
+[의존성 주입(DI)](https://en.wikipedia.org/wiki/Dependency_injection)을 활용하면 클래스 안에서 의존성을 직접 생성하지 않고 외부에서 제공받을 수 있기 때문에 이런 요구사항을 해결할 수 있습니다.
+그래서 애플리케이션의 각 부분을 재사용하기 쉬워지고 관리하기도 편해집니다.
 
-의존성 주입은 이런 점에서 인기있습니다:
+의존성 주입은 다음과 같은 일반적인 문제를 해결할 수 있기 때문에 널리 사용됩니다:
 
 - **코드의 유지보수성 향상**: 의존성 주입 패턴을 활용하면 관심사의 분리 원칙에 따라 코드를 분리하기 때문에 코드 중복을 방지하고 리팩토링하기 편합니다.
 - **확장성**: 기능을 모듈화하면 여러 곳에서 재사용할 수 있기 때문에 확장하기 편합니다.
-- **테스트 편의성**: 의존성 주입 패턴을 활용하면 실제 동작하는 구현 로직 대신 [테스트 더미](https://en.wikipedia.org/wiki/Test_double)를 활용할 수 있기 때문에 유닛 테스트하기 편합니다.
+- **테스트 편의성**: 의존성 주입 패턴을 활용하면 실제 동작하는 구현 로직 대신 [테스트 더블](https://en.wikipedia.org/wiki/Test_double)을 활용할 수 있기 때문에 유닛 테스트하기 편합니다.
 
 <!--
 ## How does dependency injection work in Angular?
@@ -39,7 +40,7 @@ Dependency injection is a popular pattern because it allows developers to addres
 ## Angular에서 의존성 주입이 어떻게 동작하나요?
 
 <!--
-A dependency is any object, value, function or service that a class needs to work but does not create itself. In other words, it creates a relationship between different parts of your application since it wouldn't work without the dependency.
+A dependency is any object, value, function, or service that a class requires to work but does not create itself. Instead, you provide it from the outside, creating a clear relationship between different parts of the application.
 
 You interact with a dependency injection system in two main ways:
 
@@ -56,14 +57,14 @@ Angular components and directives automatically participate in DI, meaning that 
 -->
 
 의존성이란 클래스가 동작하는 데 필요하지만 클래스 안에서 직접 생성하지 않는 객체, 값, 함수, 서비스를 의미합니다.
-다르게 표현하면, 의존성 객체가 없으면 동작하지 않는 애플리케이션의 부분을 연결하는 역할이라고 할 수 있습니다.
+의존성은 클래스 외부에서 제공하며, 이를 통해 애플리케이션의 각 부분 사이에 명확한 관계가 만들어집니다.
 
 코드가 의존성 주입 시스템과 상호작용하는 방법은 두 가지입니다:
 
-- 어떤 값을 만들어서 사용할 수 있습니다.
-- 의존성을 요청해서 _주입 받아_ 사용할 수 있습니다.
+- 값을 _제공(provide)_ 해서 사용할 수 있게 만들 수 있습니다.
+- 그렇게 제공된 값을 의존성으로 요청해서 _주입(inject)_ 받을 수 있습니다.
 
-이때 "값" 이라는 것은 JavaScript 자료 타입일 수 있으며, 객체이거나 함수일 수도 있습니다.
+이때 "값"은 객체, 함수, 클래스 인스턴스를 포함한 모든 JavaScript 값을 의미합니다.
 보통은 이런 것들이 의존성이 됩니다:
 
 - **설정값**: 환경변수, API URL, 기능 스위치 플래그 등

@@ -85,7 +85,7 @@ import {FormsModule} from '@angular/forms';
     </main>
   `,
 })
-export class AppComponent {
+export class App {
   firstName = 'Ada';
 }
 ```

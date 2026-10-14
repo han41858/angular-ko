@@ -203,7 +203,7 @@ Again, you can then reference these fragments in your component code or the comp
 
 [컴포넌트/디렉티브 쿼리 API](/guide/components/queries)를 사용하면 템플릿 조각을 참조할 수 있습니다.
 
-그래서 템플릿에 템플릿 조각이 하나만 있다면, `@ViewChild` 쿼리를 사용해서 `TemplateRef` 객체를 직접 쿼리하면 됩니다:
+`viewChild` 쿼리를 사용하면 `TemplateRef` 객체를 직접 쿼리할 수 있습니다:
 
 ```angular-ts
 @Component({
@@ -217,13 +217,13 @@ Again, you can then reference these fragments in your component code or the comp
   `,
 })
 export class ComponentWithFragment {
-  @ViewChild(TemplateRef) myFragment: TemplateRef<unknown> | undefined;
+  templateRef = viewChild<TemplateRef<unknown>>(TemplateRef);
 }
 ```
 
 그러면 이제 다른 클래스 멤버처럼 템플릿 조각을 참조할 수 있습니다.
 
-템플릿 조각이 여러 개라면, 각 `<ng-template>` 엘리먼트에 템플릿 참조 변수를 추가한 후에 쿼리하면서 이름을 지정하면 됩니다:
+템플릿 조각이 여러 개라면, 각 `<ng-template>` 엘리먼트에 템플릿 참조 변수를 추가해서 이름을 지정하고 그 이름으로 쿼리하면 됩니다:
 
 ```angular-ts
 @Component({
@@ -241,9 +241,8 @@ export class ComponentWithFragment {
   `,
 })
 export class ComponentWithFragment {
-  // 이름으로 쿼리하면서 `read` 옵션을 지정해서 이 엘리먼트의 TemplateRef를 참조한다는 것을 지정합니다.
-  @ViewChild('fragmentOne', {read: TemplateRef}) fragmentOne: TemplateRef<unknown> | undefined;
-  @ViewChild('fragmentTwo', {read: TemplateRef}) fragmentTwo: TemplateRef<unknown> | undefined;
+  fragmentOne = viewChild<TemplateRef<unknown>>('fragmentOne');
+  fragmentTwo = viewChild<TemplateRef<unknown>>('fragmentTwo');
 }
 ```
 
@@ -530,13 +529,10 @@ You can bind a context object to the `ngTemplateOutletContext` input:
 
 ```angular-html
 <ng-template #myFragment let-pizzaTopping="topping">
-  <p>You selected: {{pizzaTopping}}</p>
+  <p>You selected: {{ pizzaTopping }}</p>
 </ng-template>
 
-<ng-container
-  [ngTemplateOutlet]="myFragment"
-  [ngTemplateOutletContext]="{topping: 'onion'}"
-/>
+<ng-container [ngTemplateOutlet]="myFragment" [ngTemplateOutletContext]="{topping: 'onion'}" />
 ```
 -->
 

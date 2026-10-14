@@ -362,7 +362,7 @@ export class LocalDataStore {
   providers: [LocalDataStore],
   template: `...`,
 })
-export class ExampleComponent {
+export class Example {
   dataStore = inject(LocalDataStore);
 }
 ```
@@ -388,7 +388,7 @@ export class LocalDataStore {
   providers: [LocalDataStore],
   template: `...`,
 })
-export class ExampleComponent {
+export class Example {
   dataStore = inject(LocalDataStore);
 }
 ```
@@ -813,7 +813,7 @@ export const DATA_SERVICE_TOKEN = new InjectionToken<DataService>('DataService')
 @Component({
   providers: [{provide: DATA_SERVICE_TOKEN, useClass: LocalDataService}],
 })
-export class ExampleComponent {
+export class Example {
   private dataService = inject(DATA_SERVICE_TOKEN); // 동작합니다!
 }
 ```
@@ -1276,7 +1276,7 @@ export const apiClientProvider = {
   selector: 'app-dashboard',
   providers: [apiClientProvider],
 })
-export class DashboardComponent {
+export class Dashboard {
   private apiClient = inject(ApiClient);
 }
 ```
@@ -1529,7 +1529,7 @@ NOTE: If multiple directives on the same element provide the same token, one wil
     {provide: FORM_CONFIG, useValue: {strictMode: true}},
   ],
 })
-export class AdvancedFormComponent {}
+export class AdvancedForm {}
 
 // 상태를 독립적으로 관리하는 모달 컴포넌트
 @Component({

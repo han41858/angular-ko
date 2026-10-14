@@ -445,7 +445,7 @@ export class MediaControls {
 
 In the above example, the `CustomSlider` can write values into its `value` model input, which then propagates those values back to the `volume` signal in `MediaControls`. This binding keeps the values of `value` and `volume` in sync. Notice that the binding passes the `volume` signal instance, not the _value_ of the signal.
 
-In other respects, model inputs work similarly to standard inputs. You can read the value by calling the signal function, including in reactive contexts like `computed` and `effect`.
+In other respects, model inputs work similarly to standard inputs. You can read the value by calling the signal function, including in [reactive contexts](guide/signals#reactive-contexts) like `computed` and `effect`.
 
 See [Two-way binding](guide/templates/two-way-binding) for more details on two-way binding in templates.
 -->
@@ -465,7 +465,7 @@ export class CustomSlider {
   value = model(0);
 
   increment() {
-    // 모델 입력 프로퍼티 값을 변환한 후 바인딩된 곳으로 전달합니다.
+    // 모델 입력 프로퍼티 값을 변경하고, 바인딩된 곳으로 새 값을 전달합니다.
     this.value.update((oldValue) => oldValue + 10);
   }
 }

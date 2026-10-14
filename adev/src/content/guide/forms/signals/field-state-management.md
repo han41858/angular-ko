@@ -960,7 +960,7 @@ export class Account {
 `[readonly]="field().readonly()"`와 같은 로직을 작성할 필요가 없습니다.
 
 비활성화된 필드나 감춰진 필드와 마찬가지로, 읽기 전용 필드는 사용자와 상호작용할 수 없으며, 부모 폼 상태에도 영향을 주지 않습니다.
-`readonly()` 상태는 유효성 검사에 영향을 주지만 필드의 값에는 영향을 주지 않습니다.
+`readonly()` 상태는 수정 가능 여부와 유효성 검사에 영향을 주지만, 필드의 값은 변경하지 않습니다.
 
 <!--
 ### When to use each
@@ -970,11 +970,19 @@ export class Account {
 
 ### 언제 사용해야 할까요
 
-| 시그널       | 의미                                                          | 사용자가 볼 수 있는지   | 사용자가 상호작용할 수 있는지 | 유효성 검사에 영향을 주는지 |
+<!--
+| State        | Use when                                                            | User can see it | User can interact | Contributes to validation |
+| ------------ | ------------------------------------------------------------------- | --------------- | ----------------- | ------------------------- |
+| `disabled()` | Field temporarily unavailable (such as based on other field values) | Yes             | No                | No                        |
+| `hidden()`   | Field not relevant in current context                               | No (with @if)   | No                | No                        |
+| `readonly()` | Value should be visible but not editable                            | Yes             | No                | No                        |
+-->
+
+| 시그널       | 사용하는 경우                                                 | 사용자가 볼 수 있는지   | 사용자가 상호작용할 수 있는지 | 유효성 검사에 영향을 주는지 |
 | ------------ | ------------------------------------------------------------- | ----------------------- | ----------------------------- | --------------------------- |
-| `disabled()` | 필드를 사용할 수 없습니다 (다른 필드 값도 활용할 수 있습니다) | O                       | X                             | X                           |
-| `hidden()`   | 필드가 현재 컨텍스트에 영향을 주지 않습니다                   | X (`@if`를 사용한 경우) | X                             | X                           |
-| `readonly()` | 필드가 화면에는 표시되지만 수정할 수 없습니다                 | O                       | X                             | X                           |
+| `disabled()` | 필드를 일시적으로 사용할 수 없을 때 (예: 다른 필드 값에 따라) | O                       | X                             | X                           |
+| `hidden()`   | 현재 맥락에서 필드가 필요하지 않을 때                         | X (`@if`를 사용한 경우) | X                             | X                           |
+| `readonly()` | 값을 화면에 표시하지만 수정하지 못하게 할 때                  | O                       | X                             | X                           |
 
 <!--
 ## Form-level state

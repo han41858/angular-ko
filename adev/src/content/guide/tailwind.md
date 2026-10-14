@@ -42,7 +42,7 @@ After running `ng add tailwindcss`, you can immediately start using Tailwind's u
 Angular CLI는 `ng add` 명령으로 프로젝트에 Tailwind CSS를 간편하게 통합하는 방법을 제공합니다.
 이 명령은 필요한 패키지를 자동으로 설치하고 Tailwind CSS를 구성하며 프로젝트의 빌드 설정을 갱신합니다.
 
-먼저 터미널에서 Angular 프로젝트의 최상위 디렉터리로 이동한 다음 다음 명령을 실행하세요.
+먼저 터미널에서 Angular 프로젝트의 최상위 디렉터리로 이동한 뒤 다음 명령을 실행하세요.
 
 ```shell
 ng add tailwindcss

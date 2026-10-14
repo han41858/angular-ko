@@ -294,7 +294,7 @@ import {ButtonComponent} from 'my-lib/button';
 Angular 패키지도 같은 구조를 사용합니다.
 예를 들어 `@angular/core`는 기본 진입점이고 `@angular/core/testing`은 같은 패키지의 보조 진입점입니다.
 
-HELPFUL: Angular 패키지 형식에서 진입점으로 코드 분할을 지원하고 청크 경계를 정의하는 구조는 [진입점과 코드 분할](tools/libraries/angular-package-format#entrypoints-and-code-splitting)을 참고하세요.
+도움말: Angular 패키지 형식에서 진입점으로 코드 분할을 지원하고 청크 경계를 정의하는 구조는 [진입점과 코드 분할](tools/libraries/angular-package-format#entrypoints-and-code-splitting)을 참고하세요.
 
 <a id="adding-a-secondary-entry-point"></a>
 

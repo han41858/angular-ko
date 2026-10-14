@@ -302,7 +302,7 @@ There are two types of triggers: `on` and `when`.
 
 `@defer` 블록은 트리거가 동작하고 난 후 지연 로딩되면서 `@placeholder` 블록을 대체하면서 렌더링됩니다.
 
-이때 세미 콜론(`;`)을 사용해서 이벤트 트리거를 여러 개 지정할 수 있으며, 이렇게 지정된 트리거는 OR 조건으로 동작합니다.
+이때 세미콜론(`;`)을 사용해서 이벤트 트리거를 여러 개 지정할 수 있으며, 이렇게 지정된 트리거는 OR 조건으로 동작합니다.
 
 트리거는 크게 `on`과 `when` 으로 구분할 수 있습니다.
 
@@ -720,7 +720,6 @@ In the example below, the prefetching starts when a browser becomes idle and the
   <large-cmp />
 }
 ```
-```
 -->
 
 내용을 로딩하는 조건문을 지정하면서 **사전 로딩 트리거(prefetch trigger)** 를 옵션으로 지정할 수 있습니다.
@@ -729,7 +728,7 @@ In the example below, the prefetching starts when a browser becomes idle and the
 사전 로딩을 활용하면 사용자가 지연 로딩 뷰를 실제로 보기 전이나 특정 블록과 상호작용하기 전에 리소스를 빠르게 로딩해 둘 수 있습니다.
 
 사전 로딩 트리거는 블록 트리거와 비슷하지만, `prefetch` 키워드가 접두사로 붙습니다.
-블록 트리거와 사전 로딩 트리거를 함께 사용하는 경우에는 세미 콜론(`;`)으로 구분합니다.
+블록 트리거와 사전 로딩 트리거를 함께 사용하는 경우에는 세미콜론(`;`)으로 구분합니다.
 
 아래 예제처럼 구현하면, 브라우저가 대기 상태로 진입하는 시점에 사전 로딩이 시작되며, `@defer` 블록의 내용은 사용자가 `@placeholder` 블록과 상호작용할 때 렌더링됩니다.
 
@@ -739,7 +738,7 @@ In the example below, the prefetching starts when a browser becomes idle and the
 } @placeholder {
   <div>Large component placeholder</div>
 }
-<!-- 500ms idle 타이머로 사전로딩하기 -->
+<!-- 500ms idle 타임아웃으로 사전 로딩하기 -->
 @defer (on interaction; prefetch on idle(500)) {
   <large-cmp />
 }

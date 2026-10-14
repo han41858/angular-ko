@@ -338,7 +338,7 @@ export class BasicDataStore {
 ## 다음 단계
 
 <!--
-While `providedIn: 'root'` covers most use cases, Angular offers additional ways to provide services for specialized scenarios:
+While `providedIn: 'root'` covers most use cases, Angular also provides additional ways you can configure services for more specialized scenarios:
 
 - **Component-specific instances** - When components need their own isolated service instances
 - **Manual configuration** - For services that require runtime configuration

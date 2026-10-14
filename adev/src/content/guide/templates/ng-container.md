@@ -179,7 +179,7 @@ NgTemplateOutlet에 대해 자세하게 알아보려면 [NgTemplateOutlets API �
 ## `<ng-container>`와 구조 디렉티브 함께 사용하기
 
 <!--
-You can also apply structural directives to `<ng-container>` elements. Common examples of this include `ngIf`and `ngFor`.
+You can also apply structural directives to `<ng-container>` elements. Common examples of this include `ngIf` and `ngFor`.
 
 ```angular-html
 <ng-container *ngIf="permissions == 'admin'">
