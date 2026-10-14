@@ -18,6 +18,82 @@ jobs:
         run: node -v && pnpm -v
       - name: install dependencies
         run: pnpm i
+      - name: validate Firebase Hosting access
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_KO }}
+        run: |
+          # Keep credentials, CLI config, and any debug logs out of the checkout.
+          set +x
+          umask 077
+          preflight_dir=''
+          firebase_pid=''
+          cleanup_preflight() {
+            preflight_exit_code=$?
+            trap - EXIT
+            trap '' INT TERM
+            if [[ -n "$firebase_pid" ]]; then
+              kill "$firebase_pid" 2>/dev/null || true
+              wait "$firebase_pid" 2>/dev/null || true
+            fi
+            if [[ -n "$preflight_dir" ]]; then
+              rm -rf -- "$preflight_dir"
+            fi
+            exit "$preflight_exit_code"
+          }
+          trap cleanup_preflight EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+
+          preflight_dir=$(mktemp -d "${RUNNER_TEMP:-/tmp}/firebase-preflight.XXXXXX")
+          export GOOGLE_APPLICATION_CREDENTIALS="$preflight_dir/service-account.json"
+          # Never print the JSON, parse errors, private key, or authentication responses.
+          if ! node <<'NODE' >/dev/null 2>&1
+          const fs = require('node:fs');
+          const {createPrivateKey} = require('node:crypto');
+          try {
+            const account = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '');
+            const fields = ['project_id', 'client_email', 'private_key', 'token_uri'];
+            if (!account || typeof account !== 'object' || Array.isArray(account) ||
+                account.type !== 'service_account' ||
+                fields.some(field => typeof account[field] !== 'string' || !account[field].trim()) ||
+                account.project_id !== 'angular-ko' ||
+                !/^[^@\s]+@[^@\s]+\.gserviceaccount\.com$/.test(account.client_email) ||
+                account.token_uri !== 'https://oauth2.googleapis.com/token' ||
+                (account.universe_domain && account.universe_domain !== 'googleapis.com') ||
+                createPrivateKey(account.private_key).asymmetricKeyType !== 'rsa') {
+              process.exit(1);
+            }
+            fs.writeFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, JSON.stringify(account), {
+              mode: 0o600,
+              flag: 'wx',
+            });
+          } catch {
+            process.exit(1);
+          }
+          NODE
+          then
+            echo '::error::Firebase service-account JSON is invalid or does not match angular-ko.'
+            exit 1
+          fi
+          unset FIREBASE_SERVICE_ACCOUNT FIREBASE_TOKEN
+
+          # Reuse the repository's locked CLI; do not install another copy.
+          firebase_cli=$(node -p "require.resolve('firebase-tools/lib/bin/firebase.js')")
+          export HOME="$preflight_dir/home"
+          export XDG_CONFIG_HOME="$HOME/.config"
+          mkdir -p "$XDG_CONFIG_HOME"
+          cd "$preflight_dir"
+          # This proves authentication and Hosting read access, not all deploy permissions.
+          node "$firebase_cli" hosting:sites:list --project angular-ko --non-interactive >/dev/null 2>&1 &
+          firebase_pid=$!
+          preflight_exit_code=0
+          wait "$firebase_pid" || preflight_exit_code=$?
+          firebase_pid=''
+          if [[ "$preflight_exit_code" -ne 0 ]]; then
+            echo '::error::Firebase authentication or Hosting read access failed for angular-ko. Check the repository secret and project access.'
+            exit "$preflight_exit_code"
+          fi
+          echo 'Firebase authentication and Hosting read access verified for angular-ko.'
       - name: build
         run: |
           resource_snapshot() {
@@ -73,7 +149,8 @@ jobs:
           monitor_pid=$!
 
           # Waiting on a background build lets cancellation run the cleanup trap promptly.
-          pnpm adev:build &
+          # Trial lower concurrency; worker instances are limited per worker key.
+          pnpm adev:build --jobs=2 --worker_max_instances=2 &
           build_pid=$!
           # Capture failures explicitly because GitHub Actions runs Bash with errexit.
           build_exit_code=0
