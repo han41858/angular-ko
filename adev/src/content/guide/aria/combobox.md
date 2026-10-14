@@ -543,19 +543,6 @@ For detailed API documentation, inspect the following API references:
 - [`Combobox`](/api/aria/combobox/Combobox)
 - [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
 - [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
-
-### Related patterns and directives
-
-Combobox is the primitive directive for these documented patterns:
-
-- [Autocomplete](guide/aria/autocomplete) - Filtering and suggestions pattern (coordinates input typing with options list)
-- [Select](guide/aria/select) - Single selection dropdown pattern (applied directly on non-editable button triggers)
-- [Multiselect](guide/aria/multiselect) - Multiple selection pattern (applied on non-editable triggers with multi-enabled Listbox)
-
-Combobox typically combines with:
-
-- [Listbox](guide/aria/listbox) - Most common popup content
-- [Tree](guide/aria/tree) - Hierarchical popup content (see Tree guide for examples)
 -->
 
 <a id="apis"></a>
@@ -569,6 +556,21 @@ Combobox typically combines with:
 - [`Combobox`](/api/aria/combobox/Combobox)
 - [`ComboboxPopup`](/api/aria/combobox/ComboboxPopup)
 - [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
+
+<!--
+### Related patterns and directives
+
+Combobox is the primitive directive for these documented patterns:
+
+- [Autocomplete](guide/aria/autocomplete) - Filtering and suggestions pattern (coordinates input typing with options list)
+- [Select](guide/aria/select) - Single selection dropdown pattern (applied directly on non-editable button triggers)
+- [Multiselect](guide/aria/multiselect) - Multiple selection pattern (applied on non-editable triggers with multi-enabled Listbox)
+
+Combobox typically combines with:
+
+- [Listbox](guide/aria/listbox) - Most common popup content
+- [Tree](guide/aria/tree) - Hierarchical popup content (see Tree guide for examples)
+-->
 
 <a id="related-patterns-and-directives"></a>
 

@@ -518,7 +518,7 @@ Each parameter is written as an attribute prefixed with `let-` with a value matc
 ```
 
 <!--
-### Using `NgTemplateOutlet` {#using-ngtemplateoutlet-with-parameters}
+### Using `NgTemplateOutlet`
 -->
 
 <a id="using-ngtemplateoutlet-with-parameters"></a>
@@ -551,7 +551,7 @@ You can bind a context object to the `ngTemplateOutletContext` input:
 ```
 
 <!--
-### Using `ViewContainerRef` {#using-viewcontainerref-with-parameters}
+### Using `ViewContainerRef`
 
 You can pass a context object as the second argument to `createEmbeddedView`:
 
