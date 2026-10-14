@@ -11,7 +11,7 @@ Angular templates support control flow blocks that let you conditionally show, h
 Angular 템플릿은 조건에 따라 엘리먼트를 표시하거나, 감추거나, 반복하는 흐름 제어 블록 기능을 제공합니다.
 
 <!--
-## Conditionally display content with `@if`, `@else-if` and `@else`
+## Conditionally display content with `@if`, `@else if` and `@else`
 -->
 
 <a id="conditionally-display-content-with-if-else-if-and-else"></a>

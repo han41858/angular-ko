@@ -75,7 +75,8 @@ export class CustomCardAction {
 
 @Component({
   selector: 'custom-card',
-  template: `<custom-card-action>Save</custom-card-action>
+  template: `
+    <custom-card-action>Save</custom-card-action>
     <custom-card-action>Cancel</custom-card-action>
   `,
 })
@@ -194,7 +195,7 @@ By default, `contentChild` queries traverse into descendants, while `contentChil
 
 You can also query for multiple results with the `contentChildren` function.
 
-```typescript {highlight: [14, 16, 17, 18, 19, 20]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/
@@ -207,10 +208,9 @@ export class CustomMenuItem {
   selector: 'custom-menu',
   /*...*/
 })
-
 export class CustomMenu {
   items = contentChildren(CustomMenuItem);
-  itemTexts = computed(() => this.items().map(item => item.text));
+  itemTexts = computed(() => this.items().map((item) => item.text));
 }
 
 @Component({
@@ -220,9 +220,9 @@ export class CustomMenu {
       <custom-menu-item>Cheese</custom-menu-item>
       <custom-menu-item>Tomato</custom-menu-item>
     </custom-menu>
-  `
+  `,
 })
-export class UserProfile { }
+export class UserProfile {}
 ```
 
 `contentChildren` creates a signal with an `Array` of the query results.
@@ -271,7 +271,7 @@ export class UserProfile {}
 
 자식 컴포넌트를 여러 개 참조하려면 `contentChildren` 함수를 사용하면 됩니다.
 
-```typescript {highlight: [14, 16, 17, 18, 19, 20]}
+```angular-ts {highlight: [14, 15]}
 @Component({
   selector: 'custom-menu-item',
   /*...*/

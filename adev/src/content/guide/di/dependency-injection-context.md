@@ -52,10 +52,12 @@ Some APIs are designed to run within an injection context. This is the case, for
 Here is an example for `CanActivateFn`
 
 ```ts {highlight: [3]}
-const canActivateTeam: CanActivateFn =
-  (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-    return inject(PermissionsService).canActivate(inject(UserToken), route.params.id);
-  };
+const canActivateTeam: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
+  return inject(PermissionsService).canActivate(inject(UserToken), route.params.id);
+};
 ```
 -->
 

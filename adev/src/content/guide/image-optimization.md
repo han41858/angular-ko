@@ -35,7 +35,7 @@ NOTE: Although the `NgOptimizedImage` directive was made a stable feature in Ang
 - 기본적으로 이미지는 지연 로딩합니다.
 - document 헤더에 사전 연결 링크 태그를 자동으로 생성합니다.
 - `srcset` 어트리뷰트를 자동으로 생성합니다.
-- SSR이 적용된 앱이라면 [사전로딩 힌트](https://developer.mozilla.org/docs/Web/HTML/Link_types/preload)를 생성합니다.
+- SSR이 적용된 앱이라면 [사전 로딩 힌트](https://developer.mozilla.org/docs/Web/HTML/Link_types/preload)를 생성합니다.
 
 `NgOptimizedImage`는 LCP 이미지 로딩을 최적화하는 것 외에도, 이미지를 다루는 모범 사례를 제공합니다:
 
@@ -1027,7 +1027,7 @@ NOTE: The `transform` property is not supported by the Netlify loader, as Netlif
 ### 커스텀 로더 예제
 
 <!--
-The following shows an example of a custom loader function. This example function concatenates `src` and `width`, and uses `loaderParams` to control a custom CDN feature for rounded corners:
+The following shows an example of a custom loader function. This example function concatenates `src`, `width`, and `height`, and uses `loaderParams` to control a custom CDN feature for rounded corners:
 
 ```ts
 const myCustomLoader = (config: ImageLoaderConfig) => {

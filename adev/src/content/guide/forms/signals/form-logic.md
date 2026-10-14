@@ -1490,7 +1490,7 @@ export class Address {
       schemaPath,
       ({valueOf}) => valueOf(schemaPath.country) === 'US',
       (schemaPath) => {
-        // 국가가 US인 경우에만 적용됩니다.
+        // Only applied when country is US
         required(schemaPath.zipCode);
         pattern(schemaPath.zipCode, /^\d{5}(-\d{4})?$/);
       },

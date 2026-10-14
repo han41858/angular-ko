@@ -50,7 +50,7 @@ firstName.update((name) => name.toUpperCase());
 
 Angular는 시그널이 어디에 사용되고 언제 갱신되는지 계속 추적합니다.
 그래서 상태가 변경되면 DOM을 갱신하는 등 필요한 작업을 수행합니다.
-이렇게 시그널을 생성해서 애플리케이션이 시그널에 반응하는 방식을 _반응성(reactivity)_ 이라고 합니다.
+이렇게 시그널 값이 변하는 것에 맞춰 반응하는 능력을 _반응성(reactivity)_ 이라고 합니다.
 
 <!--
 ## Computed expressions

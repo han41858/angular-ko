@@ -927,7 +927,7 @@ export class FlowerService {
 }
 ```
 
-예시 애플리케이션에는 `AppComponent`와 `ChildComponent`만 있다고 합시다.
+예시 애플리케이션에는 `App`과 `Child`만 있다고 합시다.
 일반적으로 구성하는 방법을 따르면 다음과 같이 구성할 수 있을 것입니다:
 
 ```html
@@ -1261,7 +1261,7 @@ export class AnimalService {
 그리고 `FlowerService` 때와 마찬가지로, `App` 클래스에 `AnimalService` 를 의존성으로 주입합니다:
 
 ```ts
-export class AppComponent {
+export class App {
   public flower = inject(FlowerService);
   public animal = inject(AnimalService);
 }
@@ -1287,14 +1287,14 @@ export class Child {
 }
 ```
 
-그리고 `AppComponent` 템플릿에 `ChildComponent`를 바인딩합니다.
-`ChildComponent` 템플릿에는 이런 바인딩 문구가 있습니다:
+그리고 `App` 템플릿에 `Child`를 바인딩합니다.
+`Child` 템플릿에는 이런 바인딩 문구가 있습니다:
 
 ```html
 <p>Emoji from AnimalService: {{animal.emoji}}</p>
 ```
 
-그리고 `AppComponent` 템플릿에도 같은 내용을 추가합니다:
+그리고 `App` 템플릿에도 같은 내용을 추가합니다:
 
 ```html
 <p>Emoji from AnimalService: {{animal.emoji}}</p>
@@ -1303,7 +1303,7 @@ export class Child {
 이제 브라우저에서 두 값이 어떻게 표시되는지 확인해 보세요:
 
 ```shell
-AppComponent
+App
 Emoji from AnimalService: 🐳
 
 Child Component
@@ -1522,7 +1522,7 @@ Emoji from AnimalService: 🐶
 ```
 
 이렇게 네 가지로 바인딩한 결과를 보면 `providers`와 `viewProviders`의 차이점을 확인할 수 있습니다.
-강아지 이모지 <code>🐶</code>는 `ChildComponent`의 `<#VIEW>` 안에 선언되어 있기 때문에 프로젝션된 컨텐츠 안에서는 접근할 수 없습니다.
+강아지 이모지 <code>🐶</code>는 `Child`의 `<#VIEW>` 안에 선언되어 있기 때문에 프로젝션된 컨텐츠 안에서는 접근할 수 없습니다.
 프로젝션된 컨텐츠 안에서는 고래 <code>🐳</code>를 의존성 객체로 참조할 수 있습니다.
 
 프로젝션된 `<app-inspector>` 에서 왜 <code>🐳</code>가 표시되는지 의문이 들 수 있습니다.
@@ -1715,7 +1715,7 @@ Here, the services and their values are the same, but `host` stops the injector 
 이렇게 접근 범위를 조절하려면, 선언 시점이 아니라 `inject()`를 실행해서 의존성 객체를 주입하는 시점에 데코레이터를 사용해야 합니다.
 
 인젝터가 `FlowerService`를 찾는 시작 지점을 변경하려면 `<app-child>`에서 `inject()`를 실행해서 `FlowerService`를 주입하는 코드에 `skipSelf`를 추가하면 됩니다.
-아래 예제 코드에서 보면 `child.component.ts` 파일의 `<app-child>` 컴포넌트에서 프로퍼티를 선언하는 시점에 해당됩니다:
+아래 예제 코드에서 보면 `child.ts` 파일의 `<app-child>` 컴포넌트에서 프로퍼티를 선언하는 시점에 해당됩니다:
 
 ```typescript
 flower = inject(FlowerService, {skipSelf: true});
@@ -1896,7 +1896,7 @@ Add a `viewProviders` array with a third animal, hedgehog <code>🦔</code>, to 
 
 ```typescript
 @Component({
-  selector: 'app-root',4
+  selector: 'app-root',
   templateUrl: './app.html',
   styleUrls: [ './app.css' ],
   viewProviders: [
@@ -2007,7 +2007,7 @@ export class Child {
 `providers` 배열에 `FlowerService`를 등록했지만 `host`와 `skipSelf`를 사용하면 `null`이 반환되는 이유는, `skipSelf`를 사용했기 때문에 `<app-child>` 인젝터를 건너뛰지만, `host`를 사용했기 때문에 해당 계층의 `<#VIEW>`에서 탐색을 멈추기 때문입니다.
 논리 트리로 보면 `<app-child>`에서는 `FlowerService`에 접근할 수 있지만 `<app-child>`의 `<#VIEW>`는 그렇지 않습니다.
 
-하지만, `AnimalService`는 `AppComponent`의 `viewProviders` 배열에 등록되었기 때문에 접근할 수 있습니다.
+하지만, `AnimalService`는 `App`의 `viewProviders` 배열에 등록되었기 때문에 접근할 수 있습니다.
 
 논리 트리로 표현하면 이렇습니다:
 

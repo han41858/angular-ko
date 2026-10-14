@@ -298,10 +298,10 @@ The `status` signal provides a specific `ResourceStatus` that describes the stat
 | `'resolved'`  | Resolved value    | The loader has completed.                                                    |
 | `'local'`     | Locally set value | The resource's value has been set locally via `.set()` or `.update()`        |
 
-You can use this status information to conditionally display user interface elements, such loading indicators and error messages.
+You can use this status information to conditionally display user interface elements, such as loading indicators and error messages.
 -->
 
-리소스 객체는 비동기 로더를 실행하면서 여러 상태로 변화합니다.
+리소스 객체에는 비동기 로더의 상태를 읽을 수 있는 시그널 프로퍼티가 여러 개 있습니다.
 
 | 프로퍼티    | 설명                                                                                 |
 | ----------- | ------------------------------------------------------------------------------------ |
@@ -311,7 +311,7 @@ You can use this status information to conditionally display user interface elem
 | `isLoading` | 리소스 로더가 실행 중인지 여부                                                       |
 | `status`    | 리소스의 세부 `ResourceStatus`, 아래에서 설명                                        |
 
-`status` 시그널에는 시그널의 상태를 문자열로 더 자세하게 표현하는 `ResourceStatus` 값이 존재합니다.
+`status` 시그널은 리소스의 상태를 문자열 상수로 표현하는 `ResourceStatus` 값을 제공합니다.
 
 | 상태          | `value()`      | 설명                                                     |
 | ------------- | :------------- | -------------------------------------------------------- |
@@ -319,10 +319,10 @@ You can use this status information to conditionally display user interface elem
 | `'error'`     | 에러 발생      | 로더 실행 중 에러가 발생했음                             |
 | `'loading'`   | `undefined`    | `params` 값이 변경되어 로더가 실행 중                    |
 | `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행 중       |
-| `'resolved'`  | 계산된 값      | 로더 실행 종료                                           |
+| `'resolved'`  | 로더가 반환한 값 | 로더 실행 종료                                           |
 | `'local'`     | 직접 설정된 값 | 리소스의 `.set()`, `.update()` 메서드로 값이 설정된 상태 |
 
-이 상태값들은 사용자에게 표시하는 용도로 활용하거나, 로딩 인디케이터, 에러 메시지를 활용하는 용도로 활용할 수 있습니다.
+이 상태 정보를 활용하면 로딩 인디케이터나 에러 메시지 같은 UI 엘리먼트를 조건에 따라 표시할 수 있습니다.
 
 <!--
 ## Caching `resource` data with SSR

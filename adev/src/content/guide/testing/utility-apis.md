@@ -186,7 +186,7 @@ Here are the most important properties for testers, in order of likely utility.
 | `componentInstance` | The instance of the component class created by `TestBed.createComponent`.                                                                                                                                                                                                                 |
 | `debugElement`      | The `DebugElement` associated with the root element of the component. <br /> The `debugElement` provides insight into the component and its DOM element during test and debugging. It's a critical property for testers. The most interesting members are covered [below](#debugelement). |
 | `nativeElement`     | The native DOM element at the root of the component.                                                                                                                                                                                                                                      |
-| `changeDetectorRef` | The `ChangeDetectorRef` for the component. <br /> The `ChangeDetectorRef` is most valuable when testing a component that has the `ChangeDetectionStrategy.OnPush` method or the component's change detection is under your programmatic control.                                          |
+| `changeDetectorRef` | The `ChangeDetectorRef` of the component's host view, not of the component itself. See [Using Zoneless in `TestBed`](guide/zoneless#using-zoneless-in-testbed).                                                                                                                           |
 -->
 
 테스트에 중요한 프로퍼티를 활용도가 높은 순서로 정리하면 다음과 같습니다.
@@ -196,7 +196,7 @@ Here are the most important properties for testers, in order of likely utility.
 | `componentInstance` | `TestBed.createComponent`가 생성한 컴포넌트 클래스의 인스턴스입니다.                                                                                                                                                                                |
 | `debugElement`      | 컴포넌트의 최상위 엘리먼트에 대응하는 `DebugElement`입니다. <br /> `debugElement`로 테스트와 디버깅 중에 컴포넌트와 DOM 엘리먼트를 자세히 확인할 수 있습니다. 테스트에서 핵심적인 프로퍼티입니다. 주요 멤버는 [아래](#debugelement)에서 알아봅니다. |
 | `nativeElement`     | 컴포넌트의 최상위 네이티브 DOM 엘리먼트입니다.                                                                                                                                                                                                      |
-| `changeDetectorRef` | 컴포넌트의 `ChangeDetectorRef`입니다. <br /> `ChangeDetectionStrategy.OnPush`를 사용하거나 코드에서 변화 감지를 직접 제어하는 컴포넌트를 테스트할 때 특히 유용합니다.                                                                               |
+| `changeDetectorRef` | 컴포넌트 자체가 아니라 컴포넌트 호스트 뷰의 `ChangeDetectorRef`입니다. [`TestBed`에서 Zoneless 사용하기](guide/zoneless#using-zoneless-in-testbed) 문서를 참고하세요. |
 
 <!--
 ### `ComponentFixture` methods

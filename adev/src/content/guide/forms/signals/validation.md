@@ -502,6 +502,103 @@ ageForm = form(this.ageModel, (schemaPath) => {
 });
 ```
 
+<a id="mindate-and-maxdate"></a>
+<!--
+### minDate() and maxDate()
+-->
+
+### `minDate()`, `maxDate()`
+
+<!--
+The `minDate()` and `maxDate()` validation rules work with `Date` values, such as a field bound to `<input type="date">`. They also set the `min` and `max` attributes of that input.
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {form, FormField, minDate, maxDate} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-booking-form',
+  imports: [FormField],
+  template: `
+    <form novalidate>
+      <label>
+        Check-in
+        <input type="date" [formField]="bookingForm.checkIn" />
+      </label>
+    </form>
+  `,
+})
+export class BookingFormComponent {
+  bookingModel = signal<{checkIn: Date | null}>({checkIn: null});
+
+  bookingForm = form(this.bookingModel, (schemaPath) => {
+    minDate(schemaPath.checkIn, new Date('2026-06-01'), {message: 'Bookings open on June 1'});
+    maxDate(schemaPath.checkIn, new Date('2026-08-31'), {message: 'Bookings close on August 31'});
+  });
+}
+```
+
+IMPORTANT: An `<input type="date">` reads and writes `Date` values at midnight UTC, whatever the user's time zone, because that is how the browser's `valueAsDate` works. Build the limits the same way, for example with `new Date('2026-06-01')` or `new Date(Date.UTC(2026, 5, 1))`. A `Date` created from local time, such as `new Date(2026, 5, 1)` or `new Date()`, is shifted by the user's UTC offset. Depending on the time zone, the `min` or `max` attribute can then be off by a day, and the limit date itself can be rejected.
+
+To require a date that is not before today, use today's calendar date in the user's time zone, expressed at midnight UTC:
+
+```ts
+const now = new Date();
+const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+
+minDate(schemaPath.checkIn, today, {message: 'Check-in cannot be in the past'});
+```
+
+Passing `new Date()` directly can reject today's date, because the value picked in the input is midnight UTC, which is earlier than the current time. This happens in UTC and in the time zones behind it.
+-->
+
+`minDate()`, `maxDate()` 유효성 검사 규칙은 `<input type="date">`에 바인딩된 필드처럼 `Date` 값을 다루는 필드에 사용합니다.
+이 규칙은 해당 입력 필드의 `min`, `max` 어트리뷰트도 함께 설정합니다.
+
+```angular-ts
+import {Component, signal} from '@angular/core';
+import {form, FormField, minDate, maxDate} from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-booking-form',
+  imports: [FormField],
+  template: `
+    <form novalidate>
+      <label>
+        Check-in
+        <input type="date" [formField]="bookingForm.checkIn" />
+      </label>
+    </form>
+  `,
+})
+export class BookingFormComponent {
+  bookingModel = signal<{checkIn: Date | null}>({checkIn: null});
+
+  bookingForm = form(this.bookingModel, (schemaPath) => {
+    minDate(schemaPath.checkIn, new Date('2026-06-01'), {message: 'Bookings open on June 1'});
+    maxDate(schemaPath.checkIn, new Date('2026-08-31'), {message: 'Bookings close on August 31'});
+  });
+}
+```
+
+중요: `<input type="date">`는 사용자의 시간대와 관계없이 `Date` 값을 UTC 자정 기준으로 읽고 씁니다. 브라우저의 `valueAsDate`가 이렇게 동작하기 때문입니다.
+제한값도 같은 방식으로 만드세요. 예를 들면 `new Date('2026-06-01')`이나 `new Date(Date.UTC(2026, 5, 1))`처럼 생성하면 됩니다.
+`new Date(2026, 5, 1)`이나 `new Date()`처럼 로컬 시간으로 생성한 `Date`는 사용자의 UTC 오프셋만큼 어긋납니다.
+그러면 시간대에 따라 `min`이나 `max` 어트리뷰트가 하루 어긋나고, 제한 날짜 자체가 유효하지 않은 값으로 처리될 수 있습니다.
+
+오늘 이전 날짜를 막으려면, 사용자 시간대 기준 오늘 날짜를 UTC 자정으로 표현한 값을 사용하세요:
+
+```ts
+const now = new Date();
+const today = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+
+minDate(schemaPath.checkIn, today, {message: 'Check-in cannot be in the past'});
+```
+
+`new Date()`를 그대로 전달하면 오늘 날짜를 골라도 유효성 검사에 실패할 수 있습니다.
+입력 필드에서 선택한 값은 UTC 자정이라서 현재 시각보다 이르기 때문입니다.
+이 문제는 UTC 시간대와 UTC보다 늦은(UTC−) 시간대에서 발생합니다.
+
 <a id="minlength-and-maxlength"></a>
 <!--
 ### minLength() and maxLength()

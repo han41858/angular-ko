@@ -364,7 +364,12 @@ change notification (i.e. `fixture.componentInstance.someValue = 'newValue';`).
 If the component is used in production, this issue should be addressed by updating
 the component to use signals for state or call `ChangeDetectorRef.markForCheck()`.
 If the component is only used as a test wrapper and never used in an application,
-it is acceptable to use `fixture.changeDetectorRef.markForCheck()`.
+it is acceptable to use `ChangeDetectionStrategy.Eager` for it and call `fixture.changeDetectorRef.markForCheck()`.
+
+IMPORTANT: `fixture.changeDetectorRef` belongs to the fixture's host view, so its `markForCheck()`
+doesn't refresh the template of an `OnPush` component. Your application components shouldn't need it
+in tests. If a test needs it, the component usually isn't fully reactive or
+[zoneless compatible](#requirements-for-zoneless-compatibility).
 -->
 
 `TestBed`는 `polyfills`로 `zone.js`를 불러온 경우에도 기본적으로 Zoneless 변경 감지를 사용합니다.
@@ -389,7 +394,11 @@ await fixture.whenStable();
 기존 테스트 모음에서는 `fixture.detectChanges()` 사용이 흔한 패턴이며, 이를 `await fixture.whenStable()`로 바꾸는 데 드는 노력만큼의 이점은 크지 않을 수 있습니다.
 `TestBed`는 여전히 fixture의 컴포넌트가 `OnPush`와 호환되는지 확인하며, 변경 알림 없이 템플릿 값이 갱신된 경우(예: `fixture.componentInstance.someValue = 'newValue';`) `ExpressionChangedAfterItHasBeenCheckedError`를 발생시킵니다.
 프로덕션에서 사용하는 컴포넌트라면 상태에 시그널을 사용하거나 `ChangeDetectorRef.markForCheck()`를 호출하도록 컴포넌트를 수정해 이 문제를 해결해야 합니다.
-컴포넌트가 테스트용 래퍼로만 사용되고 애플리케이션에서는 사용되지 않는다면 `fixture.changeDetectorRef.markForCheck()`를 사용해도 괜찮습니다.
+컴포넌트가 테스트용 래퍼로만 사용되고 애플리케이션에서는 사용되지 않는다면 해당 컴포넌트에 `ChangeDetectionStrategy.Eager`를 지정하고 `fixture.changeDetectorRef.markForCheck()`를 호출해도 괜찮습니다.
+
+중요: `fixture.changeDetectorRef`는 fixture의 호스트 뷰에 속하기 때문에, 이 객체의 `markForCheck()`를 호출해도 `OnPush` 컴포넌트의 템플릿은 갱신되지 않습니다.
+애플리케이션 컴포넌트를 테스트할 때는 이 메서드가 필요하지 않아야 합니다.
+테스트에 이 메서드가 필요하다면, 대개 해당 컴포넌트가 완전히 반응형으로 동작하지 않거나 [Zoneless와 호환되지 않는](#requirements-for-zoneless-compatibility) 상태입니다.
 
 <!--
 ### Debug-mode check to ensure updates are detected

@@ -96,10 +96,10 @@ The compiler handles token references in these positions differently:
 
 In the example, the compiler retains the `LibHeader` token that occurs in the value position.
 This prevents the referenced component from being tree-shaken, even if the application does not actually use `<lib-header>` anywhere.
-If `LibHeaderComponent` 's code, template, and styles combine to become too large, including it unnecessarily can significantly increase the size of the client application.
+If `LibHeader` 's code, template, and styles combine to become too large, including it unnecessarily can significantly increase the size of the client application.
 -->
 
-토큰이 유지되는 경우를 설명하기 위해 도서관 카드 컴포넌트를 제공하는 라이브러리를 생각해 봅시다.
+토큰이 유지되는 경우를 설명하기 위해, 카드 컴포넌트(library-card)를 제공하는 라이브러리를 생각해 봅시다.
 이 컴포넌트는 바디를 가지며 헤더는 선택적으로 가질 수 있습니다:
 
 ```html
@@ -108,7 +108,7 @@ If `LibHeaderComponent` 's code, template, and styles combine to become too larg
 </lib-card>
 ```
 
-일반적으로는 `<lib-card>` 컴포넌트는 `contentChild()`나 `contentChildren()`을 사용해서 `<lib-header>`나 `<lib-body>`를 참조합니다:
+일반적으로 `<lib-card>` 컴포넌트는 `contentChild()`나 `contentChildren()`을 사용해서 `<lib-header>`나 `<lib-body>`를 참조합니다:
 
 ```ts {highlight: [14]}
 import {Component, contentChild} from '@angular/core';
@@ -117,27 +117,27 @@ import {Component, contentChild} from '@angular/core';
   selector: 'lib-header',
   …,
 })
-class LibHeader{}
+class LibHeader {}
 
 @Component({
   selector: 'lib-card',
   …,
 })
-class LibCardComponent {
+class LibCard {
   readonly header = contentChild(LibHeader);
 }
 ```
 
-그런데 `<lib-header>`는 선택 사항이기 때문에, 가장 단순하게 구성하면 `<lib-card></lib-card>` 라는 템플릿으로 사용할 수 있습니다.
+그런데 `<lib-header>`는 선택 사항이기 때문에, 가장 단순하게 구성하면 `<lib-card />`라는 템플릿으로 사용할 수 있습니다.
 이 경우, `<lib-header>`는 사용되지 않으며, 트리 셰이킹이 될 것으로 예상하겠지만, 실제로는 그렇지 않습니다.
-왜냐하면 `LibCard`는 다음과 같이 `LibHeader`를 참조하기 때문입니다:
+`LibCard`가 실제로는 `LibHeader`를 두 번 참조하기 때문입니다:
 
 ```ts
 readonly header = contentChild(LibHeader);
 ```
 
-- `readonly header: Signal<LibHeader|undefined>` 에서는 `LibHeader` 타입 역할로 사용되었습니다.
-- `@ContentChild(LibHeader)`에서는 `LibHeader`가 값 역할로 사용되었습니다.
+- 하나는 _타입 역할(type position)_ 로 참조합니다. `readonly header: Signal<LibHeader|undefined>`처럼 `LibHeader`를 타입으로 지정하는 경우입니다.
+- 다른 하나는 _값 역할(value position)_ 로 참조합니다. `contentChild(LibHeader)`처럼 `LibHeader`를 `contentChild` 함수에 값으로 전달하는 경우입니다.
 
 컴파일러는 이런 토큰을 역할에 따라 다르게 처리합니다.
 

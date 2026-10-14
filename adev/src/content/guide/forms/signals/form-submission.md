@@ -32,7 +32,7 @@ The `submit()` function runs through a specific sequence:
 1. **Run the action** — The `action` function executes with the form's current value. While it runs, `submitting()` returns `true`.
 1. **Handle the result** — If the action returns errors, they are routed to their target fields. If it returns nothing, the submission is treated as successful.
 
-The `submit()` function returns a `Promise<boolean>` that resolves to `true` when the action completes without errors, and `false` when validation fails or the action returns errors.
+The `submit()` function returns a `Promise<boolean>` that resolves to `true` when the action completes without errors, and `false` when validation fails, the action returns errors, or a submission is already in progress. If the action throws, the promise rejects with that error.
 -->
 
 `submit()` 함수는 이런 과정을 수행합니다:
@@ -42,7 +42,7 @@ The `submit()` function returns a `Promise<boolean>` that resolves to `true` whe
 1. **`action` 함수를 실행합니다** — `action` 함수는 폼의 현재 값을 실행합니다. 이 함수가 실행되는 동안 `submitting()` 함수는 `true` 값을 반환합니다.
 1. **결과를 처리합니다** — `action` 함수가 에러를 반환하면 오류가 해당 필드로 전달됩니다. 에러가 발생하지 않으면 폼 제출이 처리됩니다.
 
-`submit()` 함수는 `Promise<boolean>` 타입을 반환하는데, `action` 함수가 에러 없이 완료되면 `true`를 반환하며, `action` 함수가 에러를 반환하면 `false`를 반환합니다.
+`submit()` 함수는 `Promise<boolean>` 타입을 반환합니다. `action` 함수가 에러 없이 완료되면 `true`로 이행되고, 유효성 검사에 실패하거나 `action` 함수가 에러를 반환하거나 이미 제출이 진행 중이면 `false`로 이행됩니다. `action` 함수가 예외를 던지면 Promise는 그 에러로 거부(reject)됩니다.
 
 <!--
 ## Setting up form submission with `FormRoot`
@@ -59,7 +59,7 @@ The `FormRoot` directive handles three things automatically when bound to a `<fo
 
 1. **Sets [`novalidate`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form#novalidate)** — Disables the browser's built-in validation so Signal Forms manages validation instead
 1. **Prevents default** — Stops the browser from navigating on form submission
-1. **Calls `submit()`** — Triggers the submission flow when the user submits the form
+1. **Calls `submit()`** — Triggers the submission flow when the user submits the form, if the form was created with a `submission` option
 
 NOTE: The `FormRoot` directive sets the `novalidate` attribute on the `form` element automatically. You do not need to add it manually when using `FormRoot`.
 
@@ -129,7 +129,7 @@ After validation passes, the action itself may still fail due to scenarios such 
 
 1. **[`novalidate`](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form#novalidate)를 설정합니다** — 브라우저의 기본 유효성 검사를 비활성화하여 시그널 폼이 유효성 검사를 처리하도록 합니다.
 1. **기본값 방지** — 브라우저의 내장 폼 제출 기능을 방지합니다
-1. **`submit()` 함수를 실행합니다** — Angular의 기능으로 폼을 제출합니다.
+1. **`submit()` 함수를 실행합니다** — 폼을 `submission` 옵션으로 생성한 경우, 사용자가 폼을 제출하면 제출 과정을 시작합니다.
 
 참고: `FormRoot` 디렉티브는 `form` 엘리먼트에 `novalidate` 어트리뷰트를 자동으로 지정합니다.
 수동으로 지정할 필요는 없습니다.
@@ -645,7 +645,7 @@ export class Contact {
 ## 추가 동작 실행하기
 
 <!--
-The `submit()` function returns a `Promise<boolean>` — `true` when the action completes without errors, `false` when validation fails or the action returns errors. Use this to trigger side effects like navigation or notifications.
+The `submit()` function returns a `Promise<boolean>` — `true` when the action completes without errors, `false` when validation fails, the action returns errors, or a submission is already in progress. If the action throws, the promise rejects. Use this to trigger side effects like navigation or notifications.
 
 ```ts
 async onSave() {
@@ -687,7 +687,7 @@ submission: {
 ```
 -->
 
-`submit()` 함수는 `Promise<boolean>`을 반환하는데, `action`이 에러 없이 종료되면 `true`를 반환하고, 에러가 발생하면 `false` 를 반환합니다.
+`submit()` 함수는 `Promise<boolean>`을 반환합니다. `action`이 에러 없이 종료되면 `true`를 반환하고, 유효성 검사에 실패하거나 `action`이 에러를 반환하거나 이미 제출이 진행 중이면 `false`를 반환합니다. `action`이 예외를 던지면 Promise는 거부(reject)됩니다.
 네비게이션이나 사용자 알림을 수행하려면 이 방식을 활용하면 됩니다.
 
 ```ts

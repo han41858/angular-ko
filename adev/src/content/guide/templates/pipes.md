@@ -347,7 +347,7 @@ Always use parentheses in your expressions when operator precedence may be ambig
 파이프 연산자는 `+`, `-`, `*`, `/`, `%`, `&&`, `||`, `??` 와 같은 이진 연산자보다 우선순위가 낮습니다.
 
 ```angular-html
-<!-- firstName 과 lastName 을 조합하고 대문자 파이프로 전달합니다. -->
+<!-- firstName과 lastName을 먼저 연결한 결과를 uppercase 파이프로 전달합니다. -->
 {{ firstName + lastName | uppercase }}
 ```
 
@@ -357,13 +357,14 @@ Always use parentheses in your expressions when operator precedence may be ambig
 {{ (isAdmin ? 'Access granted' : 'Access denied') | uppercase }}
 ```
 
-같은 표현식에서 괄호를 생략하면 다음과 같습니다:
+같은 표현식을 괄호 없이 작성하면:
 
+<!-- prettier-ignore -->
 ```angular-html
-{{ isAdmin ? 'Access granted' : ('Access denied' | uppercase) }}
+{{ isAdmin ? 'Access granted' : 'Access denied' | uppercase }}
 ```
 
-하지만 이렇게 작성하면 결과가 달라집니다:
+다음과 같이 해석됩니다:
 
 ```angular-html
 {{ isAdmin ? 'Access granted' : ('Access denied' | uppercase) }}
@@ -380,14 +381,14 @@ Always use parentheses in your expressions when operator precedence may be ambig
 ### 파이프가 변화를 감지하는 방식
 
 <!--
-By default, all pipes are considered `pure`, which means that it only executes when a primitive input value (such as a `String`, `Number`, `Boolean`, or `Symbol`) or a object reference (such as `Array`, `Object`, `Function`, or `Date`) is changed. Pure pipes offer a performance advantage because Angular can avoid calling the transformation function if the passed value has not changed.
+By default, all pipes are considered `pure`, which means that they only execute when a primitive input value (such as a `String`, `Number`, `Boolean`, or `Symbol`) or an object reference (such as `Array`, `Object`, `Function`, or `Date`) is changed. Pure pipes offer a performance advantage because Angular can avoid calling the transformation function if the passed value has not changed.
 
 As a result, this means that mutations to object properties or array items are not detected unless the entire object or array reference is replaced with a different instance. If you want this level of change detection, refer to [detecting changes within arrays or objects](#detecting-change-within-arrays-or-objects).
 -->
 
-기본적으로 파이프는 순수 함수(pure function)입니다.
-`String`, `Number`, `Boolean`, `Symbol`과 같은 기본 타입이나 `Array`, `Object`, `Function`, `Date`와 같은 객체를 입력값으로 받습니다.
-순수 파이프는 입력값이 변경되지 않으면 변환 함수를 실행하지 않기 때문에 성능면에서 유리합니다.
+기본적으로 모든 파이프는 순수(`pure`) 파이프로 취급됩니다.
+순수 파이프는 `String`, `Number`, `Boolean`, `Symbol`과 같은 기본 타입 입력값이 변경되거나, `Array`, `Object`, `Function`, `Date`와 같은 객체의 참조가 변경될 때만 실행됩니다.
+순수 파이프는 입력값이 변경되지 않으면 변환 함수를 실행하지 않기 때문에 성능 면에서 유리합니다.
 
 그래서 객체나 배열은 참조 자체가 변경되지 않으면 데이터가 변경된 것으로 인식하지 않습니다.
 참조는 동일하지만 내부 데이터가 변경된 경우라면 [배열이나 객체 내부 변화 감지하기](#배열과-객체의-변화-감지하기) 섹션을 참고하세요.
