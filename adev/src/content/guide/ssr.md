@@ -442,7 +442,7 @@ When using [`RenderMode.Prerender`](api/ssr/RenderMode#Prerender 'API reference'
 <!--
 For each route with [`RenderMode.Prerender`](api/ssr/RenderMode#Prerender 'API reference'), you can specify a [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API reference') function. This function lets you control which specific parameters produce separate prerendered documents.
 
-The [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API reference') function returns a `Promise` that resolves to an array of objects. Each object is a key-value map of route parameter name to value. For example, if you define a route like `post/:id`, `getPrerenderParams ` could return the array `[{id: 123}, {id: 456}]`, and thus render separate documents for `post/123` and `post/456`.
+The [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API reference') function returns a `Promise` that resolves to an array of objects. Each object is a key-value map of route parameter name to value. For example, if you define a route like `post/:id`, `getPrerenderParams ` could return the array `[{id: '123'}, {id: '456'}]`, and thus render separate documents for `post/123` and `post/456`.
 
 The body of [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API reference') can use Angular's [`inject`](api/core/inject 'API reference') function to inject dependencies and perform any work to determine which routes to prerender. This typically includes making requests to fetch data to construct the array of parameter values.
 
@@ -485,7 +485,7 @@ IMPORTANT: When using [`inject`](api/core/inject 'API reference') inside `getPre
 
 [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API 레퍼런스') 함수는 객체 배열로 이행되는 `Promise`를 반환합니다.
 각 객체는 라우트 파라미터 이름과 값을 연결하는 키·값 맵입니다.
-예를 들어 `post/:id` 라우트를 정의하고 `getPrerenderParams`가 `[{id: 123}, {id: 456}]`를 반환하면 `post/123`과 `post/456`의 문서를 각각 렌더링합니다.
+예를 들어 `post/:id` 라우팅 규칙을 정의하고 `getPrerenderParams`가 `[{id: '123'}, {id: '456'}]`를 반환하면 `post/123`과 `post/456`의 문서를 각각 렌더링합니다.
 
 [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API 레퍼런스') 안에서는 Angular의 [`inject`](api/core/inject 'API 레퍼런스') 함수로 의존성을 주입하고, 어떤 라우트를 사전 렌더링할지 결정하는 작업을 수행할 수 있습니다.
 일반적으로 데이터를 요청해서 파라미터 값 배열을 만드는 작업이 여기에 포함됩니다.
@@ -557,7 +557,7 @@ export const serverRoutes: ServerRoute[] = [
       // This function returns an array of objects representing prerendered posts at the paths:
       // `/post/1`, `/post/2`, and `/post/3`.
       // The path `/post/4` will utilize the fallback behavior if it's requested.
-      return [{id: 1}, {id: 2}, {id: 3}];
+      return [{id: '1'}, {id: '2'}, {id: '3'}];
     },
   },
 ];
@@ -586,7 +586,7 @@ export const serverRoutes: ServerRoute[] = [
       // 이 함수는 다음 경로에서 사전 렌더링할 게시물을 나타내는 객체 배열을 반환합니다:
       // `/post/1`, `/post/2`, `/post/3`.
       // `/post/4` 경로가 요청되면 대체 처리 동작을 사용합니다.
-      return [{id: 1}, {id: 2}, {id: 3}];
+      return [{id: '1'}, {id: '2'}, {id: '3'}];
     },
   },
 ];
@@ -1157,7 +1157,6 @@ bootstrapApplication(App, {
 ### `includeHeaders`
 -->
 
-
 ### `includeHeaders`
 
 <!--
@@ -1198,7 +1197,6 @@ Angular는 요청이나 응답을 전송 캐시에 저장할 수 있는지 판�
 ### `includePostRequests`
 -->
 
-
 ### `includePostRequests`
 
 <!--
@@ -1232,7 +1230,6 @@ withHttpTransferCacheOptions({
 <!--
 ### `includeRequestsWithAuthHeaders`
 -->
-
 
 ### `includeRequestsWithAuthHeaders`
 
@@ -1492,7 +1489,6 @@ httpClient.get('/api/sensitive-data', {transferCache: false});
 ### Node.js
 -->
 
-
 ### Node.js
 
 <!--
@@ -1509,7 +1505,7 @@ import express from 'express';
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-app.use('*', (req, res, next) => {
+app.use((req, res, next) => {
   angularApp
     .handle(req)
     .then((response) => {
@@ -1544,7 +1540,7 @@ import express from 'express';
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-app.use('*', (req, res, next) => {
+app.use((req, res, next) => {
   angularApp
     .handle(req)
     .then((response) => {
