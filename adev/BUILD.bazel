@@ -14,6 +14,7 @@ exports_files([
 ])
 
 APPLICATION_FILES = [
+    "//:docs_release_package_json",
     "//adev/src/assets/images",
     "//adev/src/assets/images/v21-event:v21-event-images",
     "//adev/src/assets/images/v22-event:v22-event-images",

@@ -21,6 +21,13 @@ filegroup(
     srcs = ["package.json"],
 )
 
+# Make the repository release available to the documentation footer under Bazel.
+copy_to_bin(
+    name = "docs_release_package_json",
+    srcs = ["package.json"],
+    visibility = ["//adev:__pkg__"],
+)
+
 validate_ts_version_matching(
     module_bazel = "MODULE.bazel",
     package_json = "package.json",
