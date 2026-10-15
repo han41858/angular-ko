@@ -37,6 +37,10 @@ describe('Footer', () => {
     await fixture.whenStable();
   });
 
+  it('should display the repository release version in the footer', () => {
+    expect(fixture.nativeElement.textContent).toContain('Built by Angular at v22.2.3.');
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
