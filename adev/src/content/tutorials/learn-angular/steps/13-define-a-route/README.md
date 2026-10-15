@@ -118,7 +118,7 @@ export const routes: Routes = [
 
 Angular Router를 사용하면 라우팅 규칙을 정확한 규격으로 정의할 수 있으며, `title` 프로퍼티를 사용해서 라우팅 규칙마다 화면 제목을 지정할 수 있습니다.
 
-`app.routes.ts` 파일에서 기본 라우팅 규칙(`path: ''`)에 `title` 프로퍼티를 추가해보고, `user`로 연결되는 라우팅 규칙도 추가해 봅시다.
+`app.routes.ts` 파일에서 기본 라우팅 규칙(`path: ''`)과 `user` 라우팅 규칙 모두에 `title` 프로퍼티를 추가해 봅시다.
 이렇게 작성하면 됩니다:
 
 ```ts {highlight:[7]}

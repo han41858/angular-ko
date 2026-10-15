@@ -28,7 +28,7 @@
                 <!-- Preview Section: for larger screens -->
                 <div class="adev-preview-section">
                   <div class="adev-preview-header">
-                    <span>Preview</span>
+                    <span>미리보기</span>
                   </div>
                   @if (!displayPreviewInMatTabGroup()) {
                     <docs-tutorial-preview />
@@ -47,13 +47,13 @@
                 (selectedIndexChange)="selectedTabIndex.set($event)"
               >
                 @if (displayPreviewInMatTabGroup()) {
-                  <mat-tab label="Preview">
+                  <mat-tab label="미리보기">
                     <docs-tutorial-preview />
                   </mat-tab>
                 }
-                <mat-tab label="Console">
+                <mat-tab label="콘솔">
                   <ng-template mat-tab-label>
-                    Console
+                    콘솔
                     @if (errorsCount()) {
                       <docs-icon class="docs-icon_high-contrast docs-error-icon">error</docs-icon>
                       <span>
@@ -66,7 +66,7 @@
                     class="docs-tutorial-terminal"
                   />
                 </mat-tab>
-                <mat-tab label="Terminal">
+                <mat-tab label="터미널">
                   <docs-tutorial-terminal
                     [type]="TerminalType.INTERACTIVE"
                     class="docs-tutorial-terminal"
@@ -77,7 +77,7 @@
               <button
                 type="button"
                 (click)="reset()"
-                title="Refresh the preview"
+                title="미리보기 새로고침"
                 [disabled]="!shouldEnableReset()"
                 class="adev-refresh-btn"
               >

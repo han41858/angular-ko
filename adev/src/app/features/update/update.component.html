@@ -1,14 +1,14 @@
 <main class="page docs-viewer">
-  <h1 class="page-header" tabindex="-1">Update Guide</h1>
+  <h1 class="page-header" tabindex="-1">업데이트 가이드</h1>
   <div class="wizard">
     <div>
-      <h2>Select the options that match your update</h2>
+      <h2>업데이트할 환경에 맞는 옵션을 선택하세요</h2>
 
-      <h3>Angular versions</h3>
+      <h3>Angular 버전</h3>
 
       <div class="adev-version-selector">
         <span class="adev-template-select">
-          From v.
+          현재 버전 v.
 
           <button type="button" [cdkMenuTriggerFor]="templatesMenuFrom">
             <span>{{ from().name }}</span>
@@ -30,7 +30,7 @@
 
         <span>
           <span class="adev-template-select">
-            To v.
+            업데이트할 버전 v.
             <button type="button" [cdkMenuTriggerFor]="templatesMenuTo">
               <span>{{ to().name }}</span>
               <docs-icon>expand_more</docs-icon>
@@ -54,9 +54,9 @@
       @if (from().number >= futureVersion || to().number >= futureVersion) {
         <div class="docs-alert docs-alert-critical">
           <p>
-            <strong>Warning:</strong>
-            Plans for releases after the current major release are not finalized and may change.
-            These recommendations are based on scheduled deprecations.
+            <strong>주의:</strong>
+            현재 메이저 릴리즈 이후의 계획은 확정되지 않았으며 변경될 수 있습니다. 이 권장 사항은
+            지원 중단 예정 사항을 기준으로 작성되었습니다.
           </p>
         </div>
       }
@@ -64,8 +64,8 @@
       @if (from().number > to().number) {
         <div class="docs-alert docs-alert-critical">
           <p>
-            <strong>Warning:</strong>
-            We do not support downgrading versions of Angular.
+            <strong>주의:</strong>
+            Angular 버전을 낮추는 것은 지원하지 않습니다.
           </p>
         </div>
       }
@@ -73,46 +73,45 @@
       @if (to().number - from().number > 150 && from().number > 240) {
         <div class="docs-alert docs-alert-critical">
           <p>
-            <strong>Warning:</strong>
-            Be sure to follow the guide below to migrate your application to the new version. You
-            can't run
-            <code>ng update</code>
-            to update Angular applications more than one major version at a time.
+            <strong>주의:</strong>
+            아래 가이드에 따라 애플리케이션을 새 버전으로 마이그레이션하세요.
+            <code>ng update</code>로 Angular 애플리케이션을 업데이트할 때는 한 번에 메이저 버전을
+            하나씩 올려야 합니다.
           </p>
         </div>
       }
 
-      <h3>Application complexity</h3>
+      <h3>애플리케이션 복잡도</h3>
       <mat-button-toggle-group
         (change)="level.set($event.value); showUpdatePath()"
         [value]="level()"
         style="margin-bottom: 16px"
       >
-        <mat-button-toggle [value]="1">Basic</mat-button-toggle>
-        <mat-button-toggle [value]="2">Medium</mat-button-toggle>
-        <mat-button-toggle [value]="3">Advanced</mat-button-toggle>
+        <mat-button-toggle [value]="1">기본</mat-button-toggle>
+        <mat-button-toggle [value]="2">중급</mat-button-toggle>
+        <mat-button-toggle [value]="3">고급</mat-button-toggle>
       </mat-button-toggle-group>
       @if (level() === 1) {
-        <p>Shows information for all Angular developers.</p>
+        <p>모든 Angular 개발자에게 필요한 정보를 표시합니다.</p>
       } @else if (level() === 2) {
-        <p>Shows information that's of interest to more advanced Angular developers.</p>
+        <p>숙련된 Angular 개발자에게 필요한 정보도 표시합니다.</p>
       } @else if (level() === 3) {
-        <p>Shows all the information we have about this update.</p>
+        <p>이 업데이트에 관한 모든 정보를 표시합니다.</p>
       }
 
-      <h3>Other dependencies</h3>
+      <h3>기타 의존성</h3>
       @for (option of optionList; track $index) {
         <div>
           <mat-checkbox
             (change)="options[option.id] = $event.checked; showUpdatePath()"
             [checked]="options[option.id]"
-            >I use {{ option.name }} {{ option.description }}</mat-checkbox
+            >{{ option.name }} 사용 {{ option.description }}</mat-checkbox
           >
         </div>
       }
 
       @if (from().number < 600) {
-        <h4>Package Manager</h4>
+        <h4>패키지 매니저</h4>
         <mat-button-toggle-group
           (change)="packageManager = $event.value; showUpdatePath()"
           [value]="packageManager"
@@ -126,9 +125,9 @@
         type="button"
         (click)="showUpdatePath()"
         class="docs-primary-btn show-button"
-        [attr.text]="'Show me how to update!'"
+        [attr.text]="'업데이트 방법 보기'"
       >
-        Show me how to update!
+        업데이트 방법 보기
       </button>
     </div>
   </div>
@@ -144,7 +143,7 @@
     <div class="recommendations">
       <h2>{{ title() }}</h2>
 
-      <h3>Before you update</h3>
+      <h3>업데이트 전</h3>
       @for (r of beforeRecommendations; track $index) {
         <div class="adev-recommendation-item">
           <mat-checkbox #checkbox [aria-labelledby]="'adev-before-recommendation-' + $index" />
@@ -161,14 +160,14 @@
         </div>
       } @empty {
         <div>
-          <em>You don't need to do anything before moving between these versions.</em>
+          <em>이 버전 사이에서 업데이트하기 전에 필요한 작업은 없습니다.</em>
         </div>
       }
 
-      <h3>Update to the new version</h3>
+      <h3>새 버전으로 업데이트</h3>
       @if (duringRecommendations.length > 0) {
         <div>
-          <em>Review these changes and perform the actions to update your application.</em>
+          <em>변경 사항을 확인하고 안내에 따라 애플리케이션을 업데이트하세요.</em>
         </div>
       }
 
@@ -188,11 +187,11 @@
         </div>
       } @empty {
         <div>
-          <em>There aren't any recommendations for moving between these versions.</em>
+          <em>이 버전 사이의 업데이트에 관한 권장 사항은 없습니다.</em>
         </div>
       }
 
-      <h3>After you update</h3>
+      <h3>업데이트 후</h3>
       @for (r of afterRecommendations; track $index) {
         <div class="adev-recommendation-item">
           <mat-checkbox #checkbox [aria-labelledby]="'adev-after-recommendation-' + $index" />
@@ -209,7 +208,7 @@
         </div>
       } @empty {
         <div>
-          <em>You don't need to do anything after moving between these versions.</em>
+          <em>이 버전 사이에서 업데이트한 후에 필요한 작업은 없습니다.</em>
         </div>
       }
     </div>

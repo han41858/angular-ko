@@ -903,7 +903,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Testing with Karma and Jasmine',
-            label: 'Karma, Jamine으로 테스트하기',
+            label: 'Karma, Jasmine으로 테스트하기',
             path: 'guide/testing/karma',
             contentPath: 'guide/testing/karma',
           },
@@ -1054,7 +1054,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Import global variants of the locale data',
-            label: '언어에 맞는 전역 변수 참조하기',
+            label: '지역 데이터의 전역 변형 가져오기',
             path: 'guide/i18n/import-global-variants',
             contentPath: 'guide/i18n/import-global-variants',
           },
@@ -1078,7 +1078,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
         children: [
           {
             // label: 'Enter and Leave animations',
-            label: '진입/복귀 애니메이션',
+            label: '진입/퇴장 애니메이션',
             path: 'guide/animations',
             contentPath: 'guide/animations/enter-and-leave',
           },
@@ -1186,7 +1186,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Deployment',
-            label: '개발',
+            label: '배포',
             path: 'tools/cli/deployment',
             contentPath: 'tools/cli/deployment',
           },
@@ -1584,6 +1584,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Configuration file',
+            // label: 'Configurations',
             label: '환경설정',
             path: 'ecosystem/service-workers/config',
             contentPath: 'ecosystem/service-workers/config',
@@ -1682,22 +1683,26 @@ export const TUTORIALS_SUB_NAVIGATION_DATA: NavigationItem[] = [
   {
     path: 'tutorials',
     contentPath: 'tutorials/home',
-    label: 'Tutorials',
+    // label: 'Tutorials',
+    label: '튜토리얼',
   },
 ];
 
 export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
   {
-    label: 'Roadmap',
+    // label: 'Roadmap',
+    label: '로드맵',
     path: 'roadmap',
     contentPath: 'reference/roadmap',
   },
   {
-    label: 'Get involved',
+    // label: 'Get involved',
+    label: '참여하기',
     path: 'https://github.com/angular/angular/blob/main/CONTRIBUTING.md',
   },
   {
-    label: 'API Reference',
+    // label: 'API Reference',
+    label: 'API 참조',
     preserveOtherCategoryOrder: true,
     children: [
       {
@@ -1709,7 +1714,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     ],
   },
   {
-    label: 'CLI Reference',
+    // label: 'CLI Reference',
+    label: 'CLI 참조',
     children: [
       {
         // label: 'Overview',
@@ -1924,7 +1930,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     ],
   },
   {
-    label: 'Error Encyclopedia',
+    // label: 'Error Encyclopedia',
+    label: '에러 백과',
     children: [
       {
         // label: 'Overview',
@@ -1936,7 +1943,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     ],
   },
   {
-    label: 'Extended Diagnostics',
+    // label: 'Extended Diagnostics',
+    label: '확장 진단',
     children: [
       {
         // label: 'Overview',
@@ -1948,34 +1956,40 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     ],
   },
   {
-    label: 'Versioning and releases',
+    // label: 'Versioning and releases',
+    label: '버전 관리와 릴리즈',
     path: 'reference/releases',
     contentPath: 'reference/releases',
   },
   {
-    label: 'Version compatibility',
+    // label: 'Version compatibility',
+    label: '버전 호환성',
     path: 'reference/versions',
     contentPath: 'reference/versions',
   },
   {
-    label: 'Update guide',
+    // label: 'Update guide',
+    label: '업데이트 가이드',
     path: 'update-guide',
   },
   {
-    label: 'Configurations',
+    label: '환경설정',
     children: [
       {
-        label: 'File structure',
+        // label: 'File structure',
+        label: '파일 구조',
         path: 'reference/configs/file-structure',
         contentPath: 'reference/configs/file-structure',
       },
       {
-        label: 'Workspace configuration',
+        // label: 'Workspace configuration',
+        label: '워크스페이스 환경설정',
         path: 'reference/configs/workspace-config',
         contentPath: 'reference/configs/workspace-config',
       },
       {
-        label: 'Angular compiler options',
+        // label: 'Angular compiler options',
+        label: 'Angular 컴파일러 옵션',
         path: 'reference/configs/angular-compiler-options',
         contentPath: 'reference/configs/angular-compiler-options',
       },
@@ -1987,7 +2001,8 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
     ],
   },
   {
-    label: 'Migrations',
+    // label: 'Migrations',
+    label: '마이그레이션',
     children: [
       {
         // label: 'Overview',
@@ -1996,12 +2011,14 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         contentPath: 'reference/migrations/overview',
       },
       {
-        label: 'Standalone',
+        // label: 'Standalone',
+        label: '독립형 컴포넌트',
         path: 'reference/migrations/standalone',
         contentPath: 'reference/migrations/standalone',
       },
       {
-        label: 'Control Flow Syntax',
+        // label: 'Control Flow Syntax',
+        label: '흐름 제어 문법',
         path: 'reference/migrations/control-flow',
         contentPath: 'reference/migrations/control-flow',
       },
@@ -2017,52 +2034,62 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         contentPath: 'reference/migrations/route-lazy-loading',
       },
       {
-        label: 'Signal inputs',
+        // label: 'Signal inputs',
+        label: '시그널 입력',
         path: 'reference/migrations/signal-inputs',
         contentPath: 'reference/migrations/signal-inputs',
       },
       {
-        label: 'Outputs',
+        // label: 'Outputs',
+        label: '출력',
         path: 'reference/migrations/outputs',
         contentPath: 'reference/migrations/outputs',
       },
       {
-        label: 'Signal queries',
+        // label: 'Signal queries',
+        label: '시그널 쿼리',
         path: 'reference/migrations/signal-queries',
         contentPath: 'reference/migrations/signal-queries',
       },
       {
-        label: 'Clean up unused imports',
+        // label: 'Clean up unused imports',
+        label: '사용하지 않는 import 정리',
         path: 'reference/migrations/cleanup-unused-imports',
         contentPath: 'reference/migrations/cleanup-unused-imports',
       },
       {
-        label: 'Self-closing tags',
+        // label: 'Self-closing tags',
+        label: '자체 닫힘 태그',
         path: 'reference/migrations/self-closing-tags',
         contentPath: 'reference/migrations/self-closing-tags',
       },
       {
-        label: 'NgClass to Class',
+        // label: 'NgClass to Class',
+        label: 'NgClass를 class로 전환',
         path: 'reference/migrations/ngclass-to-class',
         contentPath: 'reference/migrations/ngclass-to-class',
       },
       {
-        label: 'NgStyle to Style',
+        // label: 'NgStyle to Style',
+        label: 'NgStyle을 style로 전환',
         path: 'reference/migrations/ngstyle-to-style',
         contentPath: 'reference/migrations/ngstyle-to-style',
       },
       {
-        label: 'Router Testing Module Migration',
+        // label: 'Router Testing Module Migration',
+        label: '라우터 테스트 모듈 마이그레이션',
         path: 'reference/migrations/router-testing-module-migration',
         contentPath: 'reference/migrations/router-testing-module-migration',
       },
       {
-        label: 'CommonModule to Standalone',
+        // label: 'CommonModule to Standalone',
+        label: 'CommonModule을 독립형 구성으로 전환',
         path: 'reference/migrations/common-to-standalone',
         contentPath: 'reference/migrations/common-to-standalone',
       },
       {
-        label: 'Injectable to Service',
+        // label: 'Injectable to Service',
+        label: 'Injectable을 Service로 전환',
         path: 'reference/migrations/injectable-to-service',
         contentPath: 'reference/migrations/injectable-to-service',
       },
@@ -2072,12 +2099,14 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
 
 export const FOOTER_NAVIGATION_DATA: NavigationItem[] = [
   {
-    label: 'Press Kit',
+    // label: 'Press Kit',
+    label: '프레스 키트',
     path: 'press-kit',
     contentPath: 'reference/press-kit',
   },
   {
-    label: 'License',
+    // label: 'License',
+    label: '라이선스',
     path: 'license',
     contentPath: 'reference/license',
   },

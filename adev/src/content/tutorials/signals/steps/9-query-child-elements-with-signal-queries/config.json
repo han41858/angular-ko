@@ -6,5 +6,5 @@
     "src/app/app.css"
   ],
   "type": "editor",
-  "title": "Query child elements with signal queries"
+  "title": "시그널 쿼리로 자식 엘리먼트 조회하기"
 }

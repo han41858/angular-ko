@@ -80,7 +80,7 @@ export default class ApiReferenceList {
   );
 
   protected packageOptions = computed<SelectOption[]>(() => [
-    {label: 'All Packages', value: ALL_PACKAGES},
+    {label: '모든 패키지', value: ALL_PACKAGES},
     ...this.apiReferenceManager.apiGroups().map((group) => ({
       label: group.title,
       value: group.id,
@@ -92,10 +92,10 @@ export default class ApiReferenceList {
   protected readonly statuses = STATUSES;
 
   protected readonly statusLabels = {
-    [STATUSES.stable]: 'Stable',
-    [STATUSES.developerPreview]: 'Developer Preview',
-    [STATUSES.experimental]: 'Experimental',
-    [STATUSES.deprecated]: 'Deprecated',
+    [STATUSES.stable]: '안정 버전',
+    [STATUSES.developerPreview]: '개발자 미리보기',
+    [STATUSES.experimental]: '실험 단계',
+    [STATUSES.deprecated]: '지원 중단 예정',
   };
 
   readonly filteredGroups = computed((): ApiItemsGroup[] => {

@@ -148,10 +148,7 @@ IMPORTANT: Class instances, `Map`, and `Set` are **not supported in the structur
 If your application uses classes for domain modeling, translate to plain objects at the form boundary. See [Translating between form model and domain model](guide/forms/signals/model-design#translating-between-form-model-and-domain-model).
 -->
 
-시그널 폼은 폼 모델을 기반으로 필드 트리를 구성합니다.
-그래서 필드 트리를 구성하는 객체와 배열은 모두 JavaScript 객체나 배열이어야 합니다.
-그리고 중첩된 필드가 아니라면 보통 `string`, `number`, `boolean`, `null` 등 기본 자료형으로 구성합니다.
-`Date` 타입도 지원하며, 커스텀 컨트롤이라면 어떠한 타입도 가능합니다.
+시그널 폼은 모델을 순회해서 필드 트리를 구성합니다. 이때 순회하는 객체와 배열, 즉 **구조 계층**은 일반 JavaScript 객체와 배열이어야 합니다. 중첩 필드가 없는 말단 값은 보통 기본 자료형이나 `null`입니다. 기본 `date`, `month`, `time`, `week` 입력은 `Date`도 지원하며, 커스텀 컨트롤의 말단 값은 해당 컨트롤이 처리할 수 있는 타입이면 됩니다.
 
 ```ts {prefer, header: '기본 구조'}
 interface UserFormModel {
@@ -175,12 +172,11 @@ const userModel = signal<UserFormModel>({
 });
 ```
 
-중요: 클래스 인스턴스나 `Map`, `Set`은 TypeScript 차원에서 지원하지만 폼 모델에는 사용할 수 없습니다.
-시그널 폼은 실행 시점에 이런 타입을 구분할 수 없기 때문에, 이런 타입이 사용되면 에러가 발생합니다:
+중요: TypeScript에서 허용하더라도 클래스 인스턴스, `Map`, `Set`은 **구조 계층에서 지원하지 않습니다**. 시그널 폼은 실행 시점에 모델 구조를 검증하지 않으므로 이런 값을 예외 없이 받아들인 뒤, 구조에 따라 잘못 동작할 수 있습니다:
 
-- **클래스 인스턴스** 는 프로토 타입을 놓치고 값이 변경될 때 얕은 복사를 합니다. 클래스 메서드나 게터는 사라지며, `instanceof` 검사는 실패합니다.
-- **배열 안에 변경할 수 없는 객체** 가 사용되면 시그널 폼을 재정렬할 때 항목을 제대로 추적할 수 없습니다.
-- **`Map`, `Set`** 를 사용하면 빈 필드 트리가 생성됩니다. 시그널 폼은 자식 객체를 `Object.keys`로 순회합니다.
+- **클래스 인스턴스**는 첫 쓰기 시 부모 객체를 얕게 복사하면서 프로토타입을 잃습니다. 이후 메서드, 게터, `instanceof` 검사가 유지되지 않습니다.
+- **배열 안의 확장 불가능하거나 동결된 객체**에는 재정렬 시 항목 식별을 유지하기 위한 추적 심볼을 할당할 수 없어 예외가 발생합니다.
+- **`Map`, `Set`**은 자식을 `Object.keys`로 순회하므로 빈 필드 트리를 만듭니다.
 
 애플리케이션에서 특정 도메인 클래스를 사용하는 경우라면, 폼으로 전달하기 전에 일반 객체로 변환하세요.
 [폼 모델과 도메인 모델 변환](guide/forms/signals/model-design#translating-between-form-model-and-domain-model) 문서를 참고하세요.

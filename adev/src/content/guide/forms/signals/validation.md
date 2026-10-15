@@ -503,6 +503,7 @@ ageForm = form(this.ageModel, (schemaPath) => {
 ```
 
 <a id="mindate-and-maxdate"></a>
+
 <!--
 ### minDate() and maxDate()
 -->
@@ -600,6 +601,7 @@ minDate(schemaPath.checkIn, today, {message: 'Check-in cannot be in the past'});
 이 문제는 UTC 시간대와 UTC보다 늦은(UTC−) 시간대에서 발생합니다.
 
 <a id="minlength-and-maxlength"></a>
+
 <!--
 ### minLength() and maxLength()
 -->
@@ -790,11 +792,11 @@ export class PhoneFormComponent {
 
 사용 방법:
 
-| 패턴           | 정규표현식              | 예시         |
-| -------------- | ----------------------- | ------------ |
-| 전화번호       | `/^\d{3}-\d{3}-\d{4}$/` | 555-123-4567 |
-| 우편번호(미국) | `/^\d{5}$/`             | 12345        |
-| 영문자, 숫자   | `/^[a-zA-Z0-9]+$/`      | abc123       |
+| 패턴                         | 정규표현식              | 예시         |
+| ---------------------------- | ----------------------- | ------------ |
+| 전화번호                     | `/^\d{3}-\d{3}-\d{4}$/` | 555-123-4567 |
+| 우편번호(미국)               | `/^\d{5}$/`             | 12345        |
+| 영문자, 숫자                 | `/^[a-zA-Z0-9]+$/`      | abc123       |
 | URL에 안전하게 사용할 문자열 | `/^[a-zA-Z0-9_-]+$/`    | my-url_123   |
 
 <!--
@@ -1154,8 +1156,7 @@ NOTE: Child fields also have a `key` signal, and array item fields have both `ke
 Return an error object with `kind` and `message` when validation fails. Return `null` or `undefined` when validation passes.
 -->
 
-커스텀 유효성 검사 규칙을 만들 때는 `validate()` 함수를 활용합니다.
-이 함수는 필드 컨텍스트를 인자로 받고 결과를 반환하는 함수입니다:
+커스텀 유효성 검사 규칙을 만들 때는 `validate()` 함수를 사용합니다. 이 함수에는 필드 컨텍스트에 접근해서 다음 값을 반환하는 유효성 검사 함수를 전달합니다:
 
 | 반환값                  | 의미               |
 | ----------------------- | ------------------ |

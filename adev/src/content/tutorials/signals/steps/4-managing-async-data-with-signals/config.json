@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/user-api.ts", "src/app/app.css"],
   "type": "editor",
-  "title": "Managing async data with signals using the Resources API"
+  "title": "Resource API로 시그널의 비동기 데이터 관리하기"
 }

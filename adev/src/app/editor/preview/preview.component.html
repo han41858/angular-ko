@@ -3,7 +3,7 @@
     <iframe
       class="adev-embedded-editor-preview"
       allow="cross-origin-isolated"
-      title="Editor preview"
+      title="에디터 미리보기"
       [src]="previewUrlForIFrame()"
     ></iframe>
   } @else {
@@ -20,25 +20,25 @@
       />
       @switch (loadingProgressValue()) {
         @case (loadingEnum.NOT_STARTED) {
-          <span class="adev-embedded-editor-preview-loading-starting">Starting</span>
+          <span class="adev-embedded-editor-preview-loading-starting">시작 중</span>
         }
         @case (loadingEnum.BOOT) {
-          <span class="adev-embedded-editor-preview-loading-boot">Booting</span>
+          <span class="adev-embedded-editor-preview-loading-boot">실행 환경 준비 중</span>
         }
         @case (loadingEnum.LOAD_FILES) {
-          <span class="adev-embedded-editor-preview-loading-load-files">Creating project</span>
+          <span class="adev-embedded-editor-preview-loading-load-files">프로젝트 생성 중</span>
         }
         @case (loadingEnum.INSTALL) {
-          <span class="adev-embedded-editor-preview-loading-install">Installing packages</span>
+          <span class="adev-embedded-editor-preview-loading-install">패키지 설치 중</span>
         }
         @case (loadingEnum.START_DEV_SERVER) {
           <span class="adev-embedded-editor-preview-loading-start-dev-server">
-            Initializing dev server
+            개발 서버 초기화 중
           </span>
         }
       }
       <progress
-        title="Preview progress"
+        title="미리보기 준비 진행률"
         [value]="loadingProgressValue()"
         [max]="loadingEnum.READY"
       ></progress>

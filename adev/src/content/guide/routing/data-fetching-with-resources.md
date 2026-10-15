@@ -92,11 +92,13 @@ The `resources` function can also be `async` and return a `Promise` if you need 
 
 ```ts
 resources: async (ctx) => {
+  const injector = inject(Injector);
   const {fetchUserData} = await import('./user-api');
   return {
     user: resource({
       params: () => ctx.params()['id'],
       loader: ({params: id}) => fetchUserData(id),
+      injector,
     }),
   };
 },
@@ -356,11 +358,13 @@ NOTE: `rxResource`는 `loader` 대신 `stream` 프로퍼티로 Observable을 반
 
 ```ts
 resources: async (ctx) => {
+  const injector = inject(Injector);
   const {fetchUserData} = await import('./user-api');
   return {
     user: resource({
       params: () => ctx.params()['id'],
       loader: ({params: id}) => fetchUserData(id),
+      injector,
     }),
   };
 },
