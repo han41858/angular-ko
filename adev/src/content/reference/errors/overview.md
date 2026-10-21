@@ -54,6 +54,7 @@
 | `NG0956`  | [Tracking expression caused re-creation of the DOM structure](errors/NG0956)         |
 | `NG0991`  | [Resource completed before producing a value](errors/NG0991)                         |
 | `NG01002` | [Missing Control Value](errors/NG01002)                                              |
+| `NG01055` | [Missing control for `formControlName`](errors/NG01055)                              |
 | `NG01101` | [Wrong Async Validator Return Type](errors/NG01101)                                  |
 | `NG01203` | [Missing value accessor](errors/NG01203)                                             |
 | `NG01902` | [Orphan field in signal forms](errors/NG01902)                                       |
@@ -107,6 +108,7 @@
 | `NG0956`  | [DOM 구조를 다시 생성하게 만드는 추적 표현식](errors/NG0956)                 |
 | `NG0991`  | [값을 생성하기 전에 리소스가 완료됨](errors/NG0991)                          |
 | `NG01002` | [누락된 폼 컨트롤 값](errors/NG01002)                                        |
+| `NG01055` | [`formControlName`에 해당하는 컨트롤 누락](errors/NG01055)                      |
 | `NG01101` | [잘못된 비동기 유효성 검사기 반환 타입](errors/NG01101)                      |
 | `NG01203` | [누락된 값 접근자](errors/NG01203)                                           |
 | `NG01902` | [시그널 폼에서 연결이 끊어진 필드](errors/NG01902)                           |

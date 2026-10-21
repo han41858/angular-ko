@@ -68,10 +68,10 @@ VSCode 확장 프로그램을 최신 버전으로 설치하고 `@ViewChild` 같�
 **이전**
 
 ```angular-ts
-import {Component, ContentChild} from '@angular/core';
+import {Component, ContentChild, ElementRef} from '@angular/core';
 
 @Component({
-  template: `Has ref: {{ someRef ? 'Yes' : 'No' }}`,
+  template: `Has ref: {{ ref ? 'Yes' : 'No' }}`,
 })
 export class MyComponent {
   @ContentChild('someRef') ref: ElementRef | undefined = undefined;
@@ -91,10 +91,10 @@ export class MyComponent {
 **이후**
 
 ```angular-ts
-import {Component, contentChild} from '@angular/core';
+import {Component, contentChild, ElementRef} from '@angular/core';
 
 @Component({
-  template: `Has ref: {{ someRef() ? 'Yes' : 'No' }}`,
+  template: `Has ref: {{ ref() ? 'Yes' : 'No' }}`,
 })
 export class MyComponent {
   readonly ref = contentChild<ElementRef>('someRef');
