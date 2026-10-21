@@ -41,7 +41,7 @@ import {Component, Inject, Optional} from '@angular/core';
 import {MyService} from './service';
 import {DI_TOKEN} from './token';
 
-@Component()
+@Component({template: ''})
 export class MyComp {
   constructor(
     private service: MyService,
@@ -63,7 +63,7 @@ import {Component, inject} from '@angular/core';
 import {MyService} from './service';
 import {DI_TOKEN} from './token';
 
-@Component()
+@Component({template: ''})
 export class MyComp {
   private service = inject(MyService);
   readonly token = inject(DI_TOKEN, {optional: true});
@@ -147,7 +147,7 @@ additional constructor signature to keep it backwards compatible, at the expense
 import {Component} from '@angular/core';
 import {MyService} from './service';
 
-@Component()
+@Component({template: ''})
 export class MyComp {
   constructor(private service: MyService) {}
 }
@@ -165,7 +165,7 @@ export class MyComp {
 import {Component, inject} from '@angular/core';
 import {MyService} from './service';
 
-@Component()
+@Component({template: ''})
 export class MyComp {
   private service = inject(MyService);
 
@@ -214,7 +214,7 @@ NOTE: 이미 null을 허용하는 타입의 매개변수에는 null 아님 단�
 import {Component, Inject, Optional} from '@angular/core';
 import {TOKEN_ONE, TOKEN_TWO} from './token';
 
-@Component()
+@Component({template: ''})
 export class MyComp {
   constructor(
     @Inject(TOKEN_ONE) @Optional() private tokenOne: number,
@@ -235,7 +235,7 @@ export class MyComp {
 import {Component, inject} from '@angular/core';
 import {TOKEN_ONE, TOKEN_TWO} from './token';
 
-@Component()
+@Component({template: ''})
 export class MyComp {
   // Note the `!` at the end.
   private tokenOne = inject(TOKEN_ONE, {optional: true})!;
