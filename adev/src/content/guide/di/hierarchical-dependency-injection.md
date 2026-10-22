@@ -1407,10 +1407,10 @@ These four bindings demonstrate the difference between `providers` and `viewProv
 Remember that the dog emoji <code>🐶</code> is declared inside the `<#VIEW>` of `Child` and isn't visible to the projected content.
 Instead, the projected content sees the whale <code>🐳</code>.
 
-You might wonder why the projected `<app-inspector>` can still see <code>🐳</code> from `App`'s `viewProviders`.
+You might wonder why the projected `<app-inspector>` can still see <code>🐳</code>, which is the root-provided `AnimalService`.
 The reason is that Angular DI tracks **where a component was declared**, not where it ends up being rendered.
-`<app-inspector>` lives in `App`'s template — inside `App`'s `<#VIEW>` — so `App`'s `viewProviders` are fair game.
-Projecting it into `Child` cuts off access to `Child`'s `viewProviders` (<code>🐶</code>), but `App`'s providers (<code>🐳</code>) are still reachable up the tree.
+`<app-inspector>` lives in `App`'s template, inside `App`'s `<#VIEW>`, so its lookup never goes through `Child`'s `<#VIEW>`.
+Projecting it into `Child` cuts off access to `Child`'s `viewProviders` (<code>🐶</code>), but the root `AnimalService` (<code>🐳</code>) is still reachable up the tree.
 
 However, in the next output section though, the `Inspector` is an actual child component of `Child`, `Inspector` is inside the `<#VIEW>`, so when it asks for the `AnimalService`, it sees the dog <code>🐶</code>.
 
@@ -1449,7 +1449,7 @@ The `AnimalService` in the logical tree would look like this:
 ```
 
 The projected `<app-inspector>` gets <code>🐳</code> because <code>🐶</code> belongs to `Child`'s view and projected content can't reach it.
-<code>🐳</code> is accessible because `<app-inspector>` was declared in `App`'s template, so it can still walk up to `App`'s `viewProviders`.
+<code>🐳</code> is accessible because `<app-inspector>` was declared in `App`'s template, so it can still walk up to the root `AnimalService`.
 
 The `<app-inspector>` that lives directly inside `Child`'s template (not projected) gets <code>🐶</code> — it's inside the `<#VIEW>`, so no boundary to cross.
 -->
@@ -1525,10 +1525,10 @@ Emoji from AnimalService: 🐶
 강아지 이모지 <code>🐶</code>는 `Child`의 `<#VIEW>` 안에 선언되어 있기 때문에 프로젝션된 컨텐츠 안에서는 접근할 수 없습니다.
 프로젝션된 컨텐츠 안에서는 고래 <code>🐳</code>를 의존성 객체로 참조할 수 있습니다.
 
-프로젝션된 `<app-inspector>` 에서 왜 <code>🐳</code>가 표시되는지 의문이 들 수 있습니다.
+프로젝션된 `<app-inspector>`에서 왜 루트에 등록된 `AnimalService`인 <code>🐳</code>를 참조할 수 있는지 의문이 들 수 있습니다.
 Angular의 의존성 주입 시스템은 **컴포넌트가 렌더링되는 곳** 이 아니라 **컴포넌트가 선언된 곳** 을 추적하기 때문입니다.
-`<app-inspector>`는 `App`의 템플릿 안, 다르게 표현하면 `App`의 `<#VIEW> 안에 존재하기 때문에 `App`의 `viewProviders`의 영향을 받습니다.
-컨텐츠가 `Child`안으로 프로젝션된다고 해도`Child`의 `viewProviders`에 등록된 <code>🐶</code>를 참조하는 것이 아니라 `App`에 등록된 <code>🐳</code>를 참조합니다.
+`<app-inspector>`는 `App`의 템플릿 안, 즉 `App`의 `<#VIEW>` 안에 선언되어 있으므로 의존성을 탐색할 때 `Child`의 `<#VIEW>`를 거치지 않습니다.
+`Child` 안으로 프로젝션된 컨텐츠는 `Child`의 `viewProviders`에 등록된 <code>🐶</code>에는 접근할 수 없지만, 트리 상위의 루트 `AnimalService`인 <code>🐳</code>에는 접근할 수 있습니다.
 
 그런데 다음 섹션을 보면, `Inspector`는 `Child`의 자식 컴포넌트이며, `Inspector`는 `<#VIEW>` 안에 존재하기 때문에, 이때 참조하는 `AnimalService`는 강아지 <code>🐶</code> 값이 됩니다.
 
@@ -1564,9 +1564,12 @@ Angular의 의존성 주입 시스템은 **컴포넌트가 렌더링되는 곳**
 </app-root>
 ```
 
-`<app-inspector>`에 프로젝션된 컨텐츠는 강아지 <code>🐶</code>가 아니라 고래 <code>🐳</code>입니다.
-왜냐하면, 강아지 <code>🐶</code> 값은 `<app-child>` `<#VIEW>` 안에 존재하기 때문입니다.
-`<app-inspector>`는 강아지 <code>🐶</code> 값이 `<#VIEW>` 안에 있을 때만 참조할 수 있습니다.
+프로젝션된 `<app-inspector>`는 <code>🐳</code>를 참조합니다.
+<code>🐶</code>는 `Child`의 뷰에 속하므로 프로젝션된 컨텐츠에서는 접근할 수 없습니다.
+`<app-inspector>`가 `App`의 템플릿에 선언되어 있기 때문에 트리 상위의 루트 `AnimalService`인 <code>🐳</code>에는 접근할 수 있습니다.
+
+프로젝션되지 않고 `Child`의 템플릿 안에 직접 선언된 `<app-inspector>`는 <code>🐶</code>를 참조합니다.
+이 컴포넌트는 `<#VIEW>` 안에 있으므로 뷰 경계를 넘을 필요가 없습니다.
 
 <!--
 ### Giving projected content access to a view injector

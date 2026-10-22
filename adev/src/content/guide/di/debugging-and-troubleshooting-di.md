@@ -1540,11 +1540,10 @@ This section provides detailed information about specific Angular DI error codes
 This error occurs when Angular cannot find a provider for a token in the injector hierarchy. The error message includes a dependency path showing where the injection was attempted.
 
 ```
-NullInjectorError: No provider for UserClient!
-  Dependency path: App -> AuthClient -> UserClient
+NG0201: No provider found for `UserClient`. Path: AuthClient -> UserClient.
 ```
 
-The dependency path shows that `App` injected `AuthClient`, which tried to inject `UserClient`, but no provider was found.
+The dependency path shows that `AuthClient` tried to inject `UserClient`, but no provider was found.
 -->
 
 **에러 코드:** [NG0201](errors/NG0201)
@@ -1553,11 +1552,10 @@ Angular가 인젝터에서 의존성 주입 토큰의 프로바이더를 찾지 
 에러 메시지를 보면 어떤 객체를 찾지 못했는지 확인할 수 있습니다.
 
 ```
-NullInjectorError: No provider for UserClient!
-  Dependency path: App -> AuthClient -> UserClient
+NG0201: No provider found for `UserClient`. Path: AuthClient -> UserClient.
 ```
 
-로그를 보면 `App`에서 `AuthClient`를 의존성 객체로 주입하려고 하는데, `UserClient`를 찾지 못해서 에러가 발생했습니다.
+의존성 주입 경로를 보면 `AuthClient`에서 `UserClient`를 주입하려고 했지만 프로바이더를 찾지 못했습니다.
 
 <!--
 #### Missing the `@Service ` or `@Injectable` decorator
@@ -1702,7 +1700,7 @@ import {UserClient} from './user-client';
 
 @Component({
   selector: 'app-profile',
-  template: '<p>User: {{user().name}}</p>',
+  template: '<p>User: {{user.name}}</p>',
 })
 export class UserProfile {
   private userService = inject(UserClient); // ERROR: No provider
@@ -1718,7 +1716,7 @@ import {UserClient} from './user-client';
 
 @Component({
   selector: 'app-profile',
-  template: '<p>User: {{user().name}}</p>',
+  template: '<p>User: {{user.name}}</p>',
 })
 export class UserProfile {
   private userService = inject(UserClient); // Works: providedIn: 'root'
@@ -1735,7 +1733,7 @@ import {UserClient} from './user-client';
 
 @Component({
   selector: 'app-profile',
-  template: '<p>User: {{user().name}}</p>',
+  template: '<p>User: {{user.name}}</p>',
 })
 export class UserProfile {
   private userService = inject(UserClient); // ERROR: 프로바이더가 존재하지 않습니다.
@@ -1751,7 +1749,7 @@ import {UserClient} from './user-client';
 
 @Component({
   selector: 'app-profile',
-  template: '<p>User: {{user().name}}</p>',
+  template: '<p>User: {{user.name}}</p>',
 })
 export class UserProfile {
   private userService = inject(UserClient); // Works: providedIn: 'root'
@@ -1771,16 +1769,14 @@ export class UserProfile {
 The dependency path in the error message shows the chain of injections that led to the failure.
 
 ```
-NullInjectorError: No provider for LoggerStore!
-  Dependency path: App -> DataStore -> ApiClient -> LoggerStore
+NG0201: No provider found for `LoggerStore`. Path: DataStore -> ApiClient -> LoggerStore.
 ```
 
 This path tells you:
 
-1. `App` injected `DataStore`
-2. `DataStore` injected `ApiClient`
-3. `ApiClient` tried to inject `LoggerStore`
-4. No provider for `LoggerStore` was found
+1. `DataStore` injected `ApiClient`
+2. `ApiClient` tried to inject `LoggerStore`
+3. No provider for `LoggerStore` was found
 
 Start your investigation at the end of the chain (`LoggerStore`) and verify it has proper configuration.
 -->
@@ -1788,16 +1784,14 @@ Start your investigation at the end of the chain (`LoggerStore`) and verify it h
 에러 메시지를 확인하면 의존성 주입 체인이 어디에서 실패했는지 확인할 수 있습니다.
 
 ```
-NullInjectorError: No provider for LoggerStore!
-  Dependency path: App -> DataStore -> ApiClient -> LoggerStore
+NG0201: No provider found for `LoggerStore`. Path: DataStore -> ApiClient -> LoggerStore.
 ```
 
 이런 내용을 알 수 있습니다:
 
-1. `App`에서 `DataStore`를 의존성으로 주입합니다.
-2. `DataStore`에 `ApiClient`를 의존성으로 주입합니다.
-3. `ApiClient`가 `LoggerStore`를 의존성으로 주입하려고 시도합니다.
-4. `LoggerStore` 프로바이더를 찾지 못했습니다.
+1. `DataStore`가 `ApiClient`를 의존성으로 주입합니다.
+2. `ApiClient`가 `LoggerStore`를 의존성으로 주입하려고 시도합니다.
+3. `LoggerStore` 프로바이더를 찾지 못했습니다.
 
 그렇다면 의존성 주입 체인 마지막인 `LoggerStore`부터 설정이 제대로 되었는지 확인하면 됩니다.
 
@@ -1855,9 +1849,10 @@ export class DebugView {
 This error occurs when you call `inject()` outside of a valid injection context. Angular requires `inject()` to be called synchronously during class construction or factory execution.
 
 ```
-NG0203: inject() must be called from an injection context such as a
-constructor, a factory function, a field initializer, or a function
-used with `runInInjectionContext`.
+NG0203: The `UserClient` token injection failed. `inject()` function must
+be called from an injection context such as a constructor, a factory
+function, a field initializer, or a function used with
+`runInInjectionContext`.
 ```
 -->
 
@@ -1867,9 +1862,10 @@ used with `runInInjectionContext`.
 `inject()` 함수는 클래스 생성자나 팩토리 실행 시점에만 동기 방식으로 사용할 수 있습니다.
 
 ```
-NG0203: inject() must be called from an injection context such as a
-constructor, a factory function, a field initializer, or a function
-used with `runInInjectionContext`.
+NG0203: The `UserClient` token injection failed. `inject()` function must
+be called from an injection context such as a constructor, a factory
+function, a field initializer, or a function used with
+`runInInjectionContext`.
 ```
 
 <!--
@@ -1891,7 +1887,7 @@ Angular allows `inject()` in these locations:
 
    @Component({
      selector: 'app-profile',
-     template: '<p>User: {{user().name}}</p>',
+     template: '<p>User: {{user.name}}</p>',
    })
    export class UserProfile {
      private userService = inject(UserClient); // Valid
@@ -1907,7 +1903,7 @@ Angular allows `inject()` in these locations:
 
    @Component({
      selector: 'app-profile',
-     template: '<p>User: {{user().name}}</p>',
+     template: '<p>User: {{user.name}}</p>',
    })
    export class UserProfile {
      private userService: UserClient;
@@ -1976,7 +1972,7 @@ Other injection contexts that `inject()` also works in include:
 
    @Component({
      selector: 'app-profile',
-     template: '<p>User: {{user().name}}</p>',
+     template: '<p>User: {{user.name}}</p>',
    })
    export class UserProfile {
      private userService = inject(UserClient); // 유효함
@@ -1992,7 +1988,7 @@ Other injection contexts that `inject()` also works in include:
 
    @Component({
      selector: 'app-profile',
-     template: '<p>User: {{user().name}}</p>',
+     template: '<p>User: {{user.name}}</p>',
    })
    export class UserProfile {
      private userService: UserClient;
@@ -2162,8 +2158,7 @@ setTimeout(() => {
 This error occurs when two or more services depend on each other, creating a circular dependency that Angular cannot resolve.
 
 ```
-NG0200: Circular dependency in DI detected for AuthClient
-  Dependency path: AuthClient -> UserClient -> AuthClient
+NG0200: Circular dependency detected for `AuthClient`. Path: AuthClient -> UserClient -> AuthClient.
 ```
 
 The dependency path shows the cycle: `AuthClient` depends on `UserClient`, which depends back on `AuthClient`.
@@ -2174,8 +2169,7 @@ The dependency path shows the cycle: `AuthClient` depends on `UserClient`, which
 2개 이상의 서비스가 서로를 의존성으로 순환 참조할 때 발생합니다.
 
 ```
-NG0200: Circular dependency in DI detected for AuthClient
-  Dependency path: AuthClient -> UserClient -> AuthClient
+NG0200: Circular dependency detected for `AuthClient`. Path: AuthClient -> UserClient -> AuthClient.
 ```
 
 로그를 보면 `AuthClient`는 `UserClient`를 의존성으로 요청하는데, `UserCLient`는 `AuthClient`를 의존성으로 요청하고 있습니다.

@@ -476,7 +476,7 @@ In the template, render an array case like this:
 }
 ```
 
-The `addItem()` method extends the model; the form re-derives the array's fields automatically. New items start with fresh validation state. `removeItem()` filters the model; the dropped item's field state goes with it.
+The `addItem()` method extends the model; the form re-derives the array's fields automatically. New items start with fresh validation state. The `removeItem()` method filters the model. Because arrays of primitives are [tracked by position](#tracking-item-identity), field state is tied to the index rather than the value: when an item is removed, subsequent values shift into earlier positions and inherit their existing field state, while the trailing field is dropped.
 
 ### Tracking item identity
 
@@ -647,7 +647,11 @@ removeItem(name: string, index: number) {
 }
 ```
 
-`addItem()`이 모델을 확장하면 폼이 배열의 필드를 자동으로 다시 구성합니다. 새 항목은 새로운 유효성 검사 상태로 시작합니다. `removeItem()`은 모델을 필터링하며, 삭제된 항목의 필드 상태도 함께 제거됩니다.
+`addItem()`이 모델을 확장하면 폼이 배열의 필드를 자동으로 다시 구성합니다.
+새 항목은 새로운 유효성 검사 상태로 시작합니다.
+`removeItem()`은 모델을 필터링합니다.
+원시 값 배열은 [위치로 추적](#tracking-item-identity)하므로 필드 상태는 값이 아니라 인덱스에 연결됩니다.
+항목을 삭제하면 뒤에 있던 값이 앞쪽 위치로 이동하면서 해당 위치의 기존 필드 상태를 이어받고, 마지막 필드는 제거됩니다.
 
 <a id="tracking-item-identity"></a>
 

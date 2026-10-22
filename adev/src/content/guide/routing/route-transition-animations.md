@@ -358,6 +358,32 @@ withViewTransitions({
 `skipTransition()` 메서드는 애니메이션을 생략하면서 내비게이션은 완료할 수 있도록 합니다.
 
 <!--
+## Respecting the user's motion preferences
+-->
+
+<a id="respecting-the-users-motion-preferences"></a>
+
+## 사용자의 모션 환경설정 존중하기
+
+<!--
+The Router runs view transitions regardless of the user's [`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) setting. A preference for reduced motion doesn't necessarily mean the user wants no motion at all, so the framework leaves the choice to the application: you can [provide more subtle animations](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#react_to_the_reduced_motion_preference) for these users, or skip the transition entirely with the `onViewTransitionCreated` callback:
+-->
+
+라우터는 사용자의 [`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion) 설정과 관계없이 뷰 전환을 실행합니다.
+모션을 줄이는 설정이 모든 움직임을 없애려는 뜻은 아니므로, 프레임워크는 이 선택을 애플리케이션에 맡깁니다.
+이런 사용자를 위해 [움직임이 더 적은 애니메이션을 제공](https://developer.chrome.com/docs/web-platform/view-transitions/same-document#react_to_the_reduced_motion_preference)하거나, `onViewTransitionCreated` 콜백으로 전환을 완전히 건너뛸 수 있습니다:
+
+```ts
+withViewTransitions({
+  onViewTransitionCreated: ({transition}) => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      transition.skipTransition();
+    }
+  },
+});
+```
+
+<!--
 ## Examples from the Chrome explainer adapted to Angular
 -->
 
