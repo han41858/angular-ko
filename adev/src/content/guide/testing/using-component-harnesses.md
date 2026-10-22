@@ -320,10 +320,10 @@ To interact with elements below the root element of this harness loader, use the
 const myComponentHarness = await loader.getHarness(MyComponent);
 
 // Get loader for first instance of child element with '.child' selector
-const childLoader = await myComponentHarness.getLoader('.child');
+const childLoader = await loader.getChildLoader('.child');
 
 // Get loaders for all instances of child elements with '.child' selector
-const allChildLoaders = await myComponentHarness.getAllChildLoaders('.child');
+const allChildLoaders = await loader.getAllChildLoaders('.child');
 ```
 -->
 
@@ -334,10 +334,10 @@ const allChildLoaders = await myComponentHarness.getAllChildLoaders('.child');
 const myComponentHarness = await loader.getHarness(MyComponent);
 
 // '.child' 셀렉터와 일치하는 첫 번째 자식 엘리먼트의 로더를 가져옵니다
-const childLoader = await myComponentHarness.getLoader('.child');
+const childLoader = await loader.getChildLoader('.child');
 
 // '.child' 셀렉터와 일치하는 모든 자식 엘리먼트의 로더를 가져옵니다
-const allChildLoaders = await myComponentHarness.getAllChildLoaders('.child');
+const allChildLoaders = await loader.getAllChildLoaders('.child');
 ```
 
 <!--
@@ -460,7 +460,7 @@ There may be times that you need finer-grained control over change detection in 
 
 ```ts
 it('checks state while async action is in progress', async () => {
-  const buttonHarness = loader.getHarness(MyButtonHarness);
+  const buttonHarness = await loader.getHarness(MyButtonHarness);
   await manualChangeDetection(async () => {
     await buttonHarness.click();
     fixture.detectChanges();
@@ -485,7 +485,7 @@ Occasionally, you may want to perform multiple actions simultaneously and wait u
 
 ```ts
 it('reads properties in parallel', async () => {
-  const checkboxHarness = loader.getHarness(MyCheckboxHarness);
+  const checkboxHarness = await loader.getHarness(MyCheckboxHarness);
   // Read the checked and intermediate properties simultaneously.
   const [checked, indeterminate] = await parallel(() => [
     checkboxHarness.isChecked(),
@@ -504,7 +504,7 @@ it('reads properties in parallel', async () => {
 
 ```ts
 it('checks state while async action is in progress', async () => {
-  const buttonHarness = loader.getHarness(MyButtonHarness);
+  const buttonHarness = await loader.getHarness(MyButtonHarness);
   await manualChangeDetection(async () => {
     await buttonHarness.click();
     fixture.detectChanges();
@@ -533,7 +533,7 @@ Angular 팀은 테스트의 가독성을 높이기 위해 [await](https://develo
 
 ```ts
 it('reads properties in parallel', async () => {
-  const checkboxHarness = loader.getHarness(MyCheckboxHarness);
+  const checkboxHarness = await loader.getHarness(MyCheckboxHarness);
   // checked와 intermediate 프로퍼티를 동시에 읽습니다.
   const [checked, indeterminate] = await parallel(() => [
     checkboxHarness.isChecked(),

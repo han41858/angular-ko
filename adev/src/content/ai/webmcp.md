@@ -473,7 +473,7 @@ In this example, Angular generates a WebMCP tool with a JSON schema which:
 
 Beyond inferring the input schema, Angular also connects the WebMCP tool to the form's validation logic and submission handler. This means the agent will observe any validation errors triggered by its inputs or any failures which happen during submission, allowing it to self-correct and potentially retry.
 
-NOTE: Async validators are _not_ triggered and should be handled by the submission action.
+NOTE: By default, async validators don't block submission: the submission action runs before they finish, so their errors aren't reported to the agent. Handle these checks in the submission action instead.
 -->
 
 다음으로 [`form`](api/forms/signals/form)으로 시그널 폼을 정의할 때 `experimentalWebMcpTool` 설정 옵션을 전달해 암시적 WebMCP 도구를 활성화하세요.
@@ -527,7 +527,9 @@ export class UserRegistration {
 Angular는 입력 스키마를 추론하는 것 외에도 WebMCP 도구를 폼의 유효성 검사 로직과 제출 핸들러에 연결합니다.
 따라서 에이전트는 입력으로 발생한 유효성 검사 오류나 제출 중 발생한 실패를 확인하고, 스스로 수정한 뒤 재시도할 수 있습니다.
 
-참고: 비동기 유효성 검사기는 _실행되지 않으므로_ 제출 작업에서 처리해야 합니다.
+참고: 기본적으로 비동기 유효성 검사기는 제출을 막지 않습니다.
+검사가 끝나기 전에 제출 작업이 실행되므로 검사 오류가 에이전트에 전달되지 않습니다.
+이러한 검사는 제출 작업에서 처리하세요.
 
 <!--
 #### Constraints

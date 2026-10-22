@@ -171,7 +171,6 @@ it('no title in the DOM after createComponent()', () => {
 ### `whenStable()`
 -->
 
-
 ### `whenStable()`
 
 <!--
@@ -448,7 +447,6 @@ userAuth = fixture.debugElement.injector.get(UserAuthentication);
 <!--
 ### `TestBed.inject()`
 -->
-
 
 ### `TestBed.inject()`
 
@@ -894,41 +892,39 @@ With the stubbed service returning async observables, most of your tests will ha
 Here's a test that demonstrates the data flow you'd expect in the real world.
 
 ```ts
-it('should show quote after getQuote', async () => {
-  class MockTwainQuotes implements TwainQuotes {
-    private subject = new Subject<string>();
+class MockTwainQuotes implements TwainQuotes {
+  private subject = new Subject<string>();
 
-    getQuote() {
-      return this.subject.asObservable();
-    }
-
-    emit(val: string) {
-      this.subject.next(val);
-    }
+  getQuote() {
+    return this.subject.asObservable();
   }
 
-  it('should show quote after getQuote (success)', async () => {
-    vi.useFakeTimers();
+  emit(val: string) {
+    this.subject.next(val);
+  }
+}
 
-    TestBed.configureTestingModule({
-      providers: [{provide: TwainQuotes, useClass: MockTwainQuotes}],
-    });
+it('should show quote after getQuote (success)', async () => {
+  vi.useFakeTimers();
 
-    const fixture = TestBed.createComponent(TwainComponent);
-    const twainQuotes = TestBed.inject(TwainQuotes) as MockTwainQuotes;
-    await vi.runAllTimersAsync(); // render before the quote is received
-
-    const quoteEl = fixture.nativeElement.querySelector('.twain');
-    expect(quoteEl.textContent).toBe('...');
-
-    twainQuotes.emit('Twain Quote'); // emits the quote
-    await vi.runAllTimersAsync(); // render with the quote received
-
-    expect(quoteEl.textContent).toBe('Twain Quote');
-    expect(fixture.nativeElement.querySelector('.error')).toBeNull();
-
-    vi.useRealTimers();
+  TestBed.configureTestingModule({
+    providers: [{provide: TwainQuotes, useClass: MockTwainQuotes}],
   });
+
+  const fixture = TestBed.createComponent(TwainComponent);
+  const twainQuotes = TestBed.inject(TwainQuotes) as MockTwainQuotes;
+  await vi.runAllTimersAsync(); // render before the quote is received
+
+  const quoteEl = fixture.nativeElement.querySelector('.twain');
+  expect(quoteEl.textContent).toBe('...');
+
+  twainQuotes.emit('Twain Quote'); // emits the quote
+  await vi.runAllTimersAsync(); // render with the quote received
+
+  expect(quoteEl.textContent).toBe('Twain Quote');
+  expect(fixture.nativeElement.querySelector('.error')).toBeNull();
+
+  vi.useRealTimers();
 });
 ```
 
@@ -943,41 +939,39 @@ Then you can assert that the quote element displays the expected text.
 다음 테스트는 실제 환경에서 예상하는 데이터 흐름을 보여줍니다.
 
 ```ts
-it('should show quote after getQuote', async () => {
-  class MockTwainQuotes implements TwainQuotes {
-    private subject = new Subject<string>();
+class MockTwainQuotes implements TwainQuotes {
+  private subject = new Subject<string>();
 
-    getQuote() {
-      return this.subject.asObservable();
-    }
-
-    emit(val: string) {
-      this.subject.next(val);
-    }
+  getQuote() {
+    return this.subject.asObservable();
   }
 
-  it('should show quote after getQuote (success)', async () => {
-    vi.useFakeTimers();
+  emit(val: string) {
+    this.subject.next(val);
+  }
+}
 
-    TestBed.configureTestingModule({
-      providers: [{provide: TwainQuotes, useClass: MockTwainQuotes}],
-    });
+it('should show quote after getQuote (success)', async () => {
+  vi.useFakeTimers();
 
-    const fixture = TestBed.createComponent(TwainComponent);
-    const twainQuotes = TestBed.inject(TwainQuotes) as MockTwainQuotes;
-    await vi.runAllTimersAsync(); // 명언을 받기 전에 렌더링합니다
-
-    const quoteEl = fixture.nativeElement.querySelector('.twain');
-    expect(quoteEl.textContent).toBe('...');
-
-    twainQuotes.emit('Twain Quote'); // 명언을 발행합니다
-    await vi.runAllTimersAsync(); // 명언을 받은 상태로 렌더링합니다
-
-    expect(quoteEl.textContent).toBe('Twain Quote');
-    expect(fixture.nativeElement.querySelector('.error')).toBeNull();
-
-    vi.useRealTimers();
+  TestBed.configureTestingModule({
+    providers: [{provide: TwainQuotes, useClass: MockTwainQuotes}],
   });
+
+  const fixture = TestBed.createComponent(TwainComponent);
+  const twainQuotes = TestBed.inject(TwainQuotes) as MockTwainQuotes;
+  await vi.runAllTimersAsync(); // 명언을 받기 전에 렌더링합니다
+
+  const quoteEl = fixture.nativeElement.querySelector('.twain');
+  expect(quoteEl.textContent).toBe('...');
+
+  twainQuotes.emit('Twain Quote'); // 명언을 발행합니다
+  await vi.runAllTimersAsync(); // 명언을 받은 상태로 렌더링합니다
+
+  expect(quoteEl.textContent).toBe('Twain Quote');
+  expect(fixture.nativeElement.querySelector('.error')).toBeNull();
+
+  vi.useRealTimers();
 });
 ```
 
@@ -1267,7 +1261,6 @@ it('should raise selected event when clicked (triggerEventHandler)', () => {
 <!--
 ### `triggerEventHandler`
 -->
-
 
 ### `triggerEventHandler`
 
@@ -1916,7 +1909,6 @@ beforeEach(() => {
 <!--
 ### `NO_ERRORS_SCHEMA`
 -->
-
 
 ### `NO_ERRORS_SCHEMA`
 

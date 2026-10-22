@@ -12,7 +12,8 @@ For example, your French version is located in the `myapp/fr` directory and the 
 
 The HTML `base` tag with the `href` attribute specifies the base URI, or URL, for relative links.
 If you set the `"localize"` option in [`angular.json`][GuideWorkspaceConfig] workspace build configuration file to `true` or to an array of locale IDs, the CLI adjusts the base `href` for each version of the application.
-To adjust the base `href` for each version of the application, the CLI adds the locale to the configured `"subPath"`.
+To adjust the base `href` for each version of the application, the CLI uses the configured `"subPath"` as the URL segment for the locale.
+If you don't set `"subPath"`, it defaults to the locale ID.
 Specify the `"subPath"` for each locale in your [`angular.json`][GuideWorkspaceConfig] workspace build configuration file.
 The following example displays `"subPath"` set to an empty string.
 
@@ -24,7 +25,8 @@ The following example displays `"subPath"` set to an empty string.
 
 HTML `base` 태그의 `href` 어트리뷰트는 상대 링크의 기준 URI 또는 URL을 지정합니다.
 [`angular.json`][GuideWorkspaceConfig] 작업 공간 빌드 설정 파일의 `"localize"` 옵션을 `true`나 지역 ID 배열로 설정하면, CLI가 애플리케이션 버전별로 기준 `href`를 조정합니다.
-각 애플리케이션 버전의 기준 `href`를 조정하기 위해 CLI는 설정된 `"subPath"`에 지역을 추가합니다.
+각 애플리케이션 버전의 기준 `href`를 조정하기 위해 CLI는 설정된 `"subPath"`를 해당 지역의 URL 경로 구간으로 사용합니다.
+`"subPath"`를 설정하지 않으면 지역 ID가 기본값으로 사용됩니다.
 각 지역의 `"subPath"`는 [`angular.json`][GuideWorkspaceConfig] 작업 공간 빌드 설정 파일에서 지정하세요.
 다음 예제에서는 `"subPath"`를 빈 문자열로 설정합니다.
 
