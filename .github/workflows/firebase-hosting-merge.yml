@@ -10,14 +10,14 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
       - name: prepare pnpm
         run: corepack enable pnpm
       - name: check env
         run: node -v && pnpm -v
       - name: install dependencies
-        run: pnpm i
+        run: pnpm install --frozen-lockfile
       - name: validate Firebase Hosting access
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_KO }}
@@ -149,8 +149,14 @@ jobs:
           monitor_pid=$!
 
           # Waiting on a background build lets cancellation run the cleanup trap promptly.
-          # Trial lower concurrency; worker instances are limited per worker key.
-          pnpm adev:build --jobs=2 --worker_max_instances=2 &
+          # Use the same development target directly: adev:build is a local-only wrapper.
+          # Do not retain one TypeScript worker per worker key through app bundling.
+          # The memory resource budget guides scheduling; it is not an RSS hard limit.
+          pnpm bazel build //adev:build \
+            --jobs=2 \
+            --local_resources=memory=6144 \
+            --spawn_strategy=processwrapper-sandbox \
+            --action_env=NG_BUILD_MAX_WORKERS=2 &
           build_pid=$!
           # Capture failures explicitly because GitHub Actions runs Bash with errexit.
           build_exit_code=0
