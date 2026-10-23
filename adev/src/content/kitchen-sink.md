@@ -438,7 +438,6 @@ console.log('Awesome Angular Docs!');
 | `language`     | `string`             | code language                                                   |
 | `linenums`     | `boolean`            | (False) displays line numbers                                   |
 | `highlight`    | `string of number[]` | lines highlighted                                               |
-| `diff`         | `string`             | path to changed code                                            |
 | `visibleLines` | `string of number[]` | range of lines for collapse mode                                |
 | `region`       | `string`             | only show the provided region.                                  |
 | `preview`      | `boolean`            | (False) display preview                                         |
@@ -454,7 +453,6 @@ console.log('Awesome Angular Docs!');
 | `language`     | `string`             | 코드 언어                                                      |
 | `linenums`     | `boolean`            | (기본값 False) 줄 번호를 표시합니다.                           |
 | `highlight`    | `string of number[]` | 강조할 줄                                                      |
-| `diff`         | `string`             | 변경한 코드의 경로                                             |
 | `visibleLines` | `string of number[]` | 접기 모드에서 표시할 줄 범위                                   |
 | `region`       | `string`             | 지정한 영역만 표시합니다.                                      |
 | `preview`      | `boolean`            | (기본값 False) 미리보기를 표시합니다.                          |
@@ -512,7 +510,6 @@ You can create multifile examples by wrapping the examples inside a `<docs-code-
 | `path`        | `string`  | Path to code example for preview and external link              |
 | `preview`     | `boolean` | (False) display preview                                         |
 | `hideCode`    | `boolean` | (False) Whether to collapse code example by default.            |
-| `hideDollar`  | `boolean` | (False) Whether to hide the dollar sign in shell code examples. |
 -->
 
 | 어트리뷰트   | 타입      | 설명                                                           |
@@ -521,7 +518,6 @@ You can create multifile examples by wrapping the examples inside a `<docs-code-
 | `path`       | `string`  | 미리보기와 외부 링크에 사용할 코드 예제 경로                   |
 | `preview`    | `boolean` | (기본값 False) 미리보기를 표시합니다.                          |
 | `hideCode`   | `boolean` | (기본값 False) 코드 예제를 기본적으로 접을지 여부입니다.       |
-| `hideDollar` | `boolean` | (기본값 False) 셸 코드 예제에서 달러 기호를 숨길지 여부입니다. |
 
 <!--
 ### Adding `preview` to your code example

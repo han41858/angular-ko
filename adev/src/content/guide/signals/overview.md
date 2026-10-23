@@ -318,7 +318,7 @@ Angular automatically enters a reactive context when:
 - Executing an `effect`, `afterRenderEffect` callback.
 - Evaluating a `computed` signal.
 - Evaluating a `linkedSignal`.
-- Evaluating a `resource`'s params or loader function.
+- Evaluating a `resource`'s params function.
 - Rendering a component template (including bindings in the [host property](guide/components/host-elements#binding-to-the-host-element)).
 
 During these operations, Angular creates a _live_ connection. If a tracked signal changes, Angular will _eventually_ re-run the consumer.
@@ -332,7 +332,7 @@ Angular가 반응 컨텍스트로 관리하는 경우는 이렇습니다:
 - `effect`, `afterRenderEffect` 콜백을 실행할 때
 - `computed` 시그널 값을 계산할 때
 - `linkedSignal` 시그널 값을 계산할 때
-- `resource` 인자나 로더 함수 값을 계산할 때
+- `resource`의 `params` 함수를 평가할 때
 - 컴포넌트 템플릿을 렌더링할 때 ([호스트 프로퍼티](guide/components/host-elements#binding-to-the-host-element)도 포함합니다)
 
 이 작업 중에 Angular는 별도 연결을 생성하는데, 추적하는 시그널이 변경되면 컨슈머를 다시 실행합니다.
