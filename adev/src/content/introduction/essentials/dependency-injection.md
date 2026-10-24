@@ -7,7 +7,7 @@ When you need to share logic between components, Angular leverages the design pa
 -->
 
 여러 컴포넌트에 로직이 중복되는 경우에는 Angular가 제공하는 [의존성 주입](guide/di) 디자인 패턴을 사용하는 것이 좋습니다.
-의존성 주입을 활용하면 재사용할 수 있는 로직을 서비스로 만들어서 컴포넌트에 주입할 수 있습니다.
+의존성 주입을 활용하면 재사용할 수 있는 로직을 서비스로 만들어서 컴포넌트에 주입하고, 원본 데이터를 한 곳에서 관리할 수 있습니다.
 
 <!--
 ## What are services?

@@ -350,7 +350,9 @@ IMPORTANT: 같은 라이브러리의 다른 진입점에서 코드를 임포트�
 
 <a id="refactoring-parts-of-an-application-into-a-library"></a>
 
-## 애플리케이션 일부를 라이브러리로 리팩터링하기
+<a id="애플리케이션-일부를-라이브러리로-리팩터링하기"></a>
+
+## 애플리케이션 일부를 라이브러리로 리팩토링하기
 
 <!--
 To make your solution reusable, you need to adjust it so that it does not depend on application-specific code.
@@ -508,7 +510,9 @@ npm publish
 
 <a id="managing-assets-in-a-library"></a>
 
-## 라이브러리의 정적 자원 관리하기
+<a id="라이브러리의-정적-자원-관리하기"></a>
+
+## 라이브러리의 정적 리소스 관리하기
 
 <!--
 In your Angular library, the distributable can include additional assets like theming files, Sass mixins, or documentation \(like a changelog\).

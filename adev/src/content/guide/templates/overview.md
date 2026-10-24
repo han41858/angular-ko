@@ -109,7 +109,7 @@ You might also be interested in the following:
 | :-------------------------------------------------------------------- | :------------------------------------------------------------------------- |
 | [동적 문자열, 프로퍼티, 어트리뷰트 바인딩](guide/templates/binding)   | 동적인 데이터를 문자열, 프로퍼티, 어트리뷰트와 바인딩할 수 있습니다.       |
 | [이벤트 리스너 추가하기](guide/templates/event-listeners)             | 템플릿에서 발생하는 이벤트에 반응할 수 있습니다.                           |
-| [양방향 바인딩](guide/templates/two-way-binding)                      | 데이터를 바인딩하면서 변화 감지도 함께 연결합니다.                         |
+| [양방향 바인딩](guide/templates/two-way-binding)                      | 데이터를 바인딩하면서 변경 감지도 함께 연결합니다.                         |
 | [흐름 제어](guide/templates/control-flow)                             | 엘리먼트를 조건부로 표시하거나 반복할 수 있습니다.                         |
 | [파이프](guide/templates/pipes)                                       | 데이터 표현 형식을 변경합니다.                                             |
 | [`ng-content`로 자식 컨텐츠 표시하기](guide/templates/ng-content)     | 컴포넌트가 컨텐츠를 받아 표시할 수 있습니다.                               |

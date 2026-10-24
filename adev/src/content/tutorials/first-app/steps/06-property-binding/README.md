@@ -106,8 +106,8 @@ For more information about the topics covered in this lesson, visit:
 
 <a id="confirm-the-code-still-works"></a>
 
-1. 변경 사항을 저장하고 앱에 에러가 없는지 확인하세요.
-1. 에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 변경 사항을 저장하고 앱에 오류가 없는지 확인하세요.
+1. 오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 </docs-workflow>

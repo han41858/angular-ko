@@ -766,8 +766,8 @@ For more details, see [Structural Directives](/guide/directives/structural-direc
 
 **구조 디렉티브(structural directive)** 는:
 
-- `TemplateRef` 를 의존성으로 주입받거나,
-- `ViewContainerRef` 를 의존성으로 주입받아 `TemplateRef`를 코드로 렌더링하는 디렉티브입니다.
+- `TemplateRef` 를 의존성으로 주입받고,
+- `ViewContainerRef` 를 의존성으로 주입받아, 앞서 주입받은 `TemplateRef`를 코드로 렌더링하는 디렉티브입니다.
 
 Angular는 구조 디렉티브를 간편하게 사용할 수 있는 특별한 방법을 제공합니다.
 디렉티브를 엘리먼트에 사용할 때 이 디렉티브 셀렉터 앞에 아스테리스크(`*`) 문자를 추가하면, Angular는 이 엘리먼트 전체를 템플릿 조각으로 다룹니다:

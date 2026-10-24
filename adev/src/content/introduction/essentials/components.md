@@ -120,7 +120,9 @@ export class UserProfile {
 
 <a id="separating-html-and-css-into-separate-files"></a>
 
-### HTML과 CSS는 개별 파일로 구성합니다.
+<a id="html과-css는-개별-파일로-구성합니다"></a>
+
+### HTML과 CSS를 개별 파일로 분리하기
 
 <!--
 You can define a component's HTML and CSS in separate files using `templateUrl` and `styleUrl`:
@@ -148,7 +150,7 @@ h1 {
 ```
 -->
 
-컴포넌트의 HTML과 CSS는 개별 파일로 구성해서 `templateUrl`과 `styleUrl`로 연결합니다:
+컴포넌트의 HTML과 CSS를 개별 파일로 정의하고 `templateUrl`과 `styleUrl`로 연결할 수도 있습니다:
 
 ```angular-ts {header: "user-profile.ts"}
 @Component({

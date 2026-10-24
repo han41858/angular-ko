@@ -2,7 +2,7 @@
 # Component Lifecycle
 -->
 
-# 컴포넌트 라이프싸이클
+# 컴포넌트 라이프사이클
 
 <!--
 TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
@@ -26,16 +26,16 @@ process.
 
 팁: 이 가이드 문서는 [핵심 가이드](essentials) 이후 내용을 다룹니다. 아직 Angular에 익숙하지 않다면 해당 문서를 먼저 읽어보세요.
 
-컴포넌트의 **라이프싸이클** 은 컴포넌트가 생성되면서 종료될 때까지 진행되는 각 단계를 의미합니다.
+컴포넌트의 **라이프사이클** 은 컴포넌트가 생성되면서 종료될 때까지 진행되는 각 단계를 의미합니다.
 각 단계마다 Angular는 컴포넌트를 렌더링하거나 갱신 내용을 화면에 반영하는 등 필요한 동작을 수행합니다.
 
-이런 단계마다 어떤 코드를 실행하려면 **라이프싸이클 후킹 함수(lifecycle hooks)** 를 구현하면 됩니다.
-컴포넌트 인스턴스와 관련된 라이프싸이클 후킹 함수는 컴포넌트 클래스 메서드로 구현합니다.
-그리고 Angular 애플리케이션 전체와 관련된 라이프싸이클 후킹 함수는 콜백 함수로 구현합니다.
+이런 단계마다 어떤 코드를 실행하려면 **라이프사이클 훅(lifecycle hooks)** 를 구현하면 됩니다.
+컴포넌트 인스턴스와 관련된 라이프사이클 훅은 컴포넌트 클래스 메서드로 구현합니다.
+그리고 Angular 애플리케이션 전체와 관련된 라이프사이클 훅은 콜백 함수로 구현합니다.
 
-컴포넌트 라이프싸이클은 시간 흐름에 따라 Angular가 컴포넌트의 변경 사항을 확인하는 동작과 밀접하게 관련되어 있습니다.
-라이프싸이클 각 단계의 목적을 제대로 이해하려면 Angular가 애플리케이션 트리를 맨 윗단계부터 아래 방향으로 탐색하며 템플릿에 바인딩된 내용을 확인한다는 것을 명심하면 됩니다.
-이렇게 변경 사항을 확인하는 동안 Angular는 전체 컴포넌트 트리를 순회하고, 필요한 단계마다 라이프싸이클 함수가 실행됩니다.
+컴포넌트 라이프사이클은 시간 흐름에 따라 Angular가 컴포넌트의 변경 사항을 확인하는 동작과 밀접하게 관련되어 있습니다.
+라이프사이클 각 단계의 목적을 제대로 이해하려면 Angular가 애플리케이션 트리를 맨 윗단계부터 아래 방향으로 탐색하며 템플릿에 바인딩된 내용을 확인한다는 것을 명심하면 됩니다.
+이렇게 변경 사항을 확인하는 동안 Angular는 전체 컴포넌트 트리를 순회하고, 필요한 단계마다 라이프사이클 함수가 실행됩니다.
 이 작업이 진행되는 동안 Angular는 컴포넌트를 한 번만 확인하기 때문에, 변경사항이 반영되는 중에 상태를 다시 바꾸는 작업은 피해야 합니다.
 
 <!--
@@ -339,7 +339,7 @@ By checking `destroyRef.destroyed`, you can prevent executing code after the ins
 `DestroyRef` 객체의 `destroyed` 프로퍼티를 활용하면 인스턴스가 종료되었는지 확인할 수 있습니다.
 이 프로퍼티는 특히 비동기 로직이 동작할 때 컴포넌트가 종료되었는지 확인해야 할 때 유용합니다.
 
-`destroyRef.destroyed` 프로퍼티를 확인하면 인스턴스가 종료되었는지 확인할 수 있기 때문에, `NG0911: View has already been destroyed.` 에러를 사전에 방지할 수 있습니다.
+`destroyRef.destroyed` 프로퍼티를 확인하면 인스턴스가 종료되었는지 확인할 수 있기 때문에, `NG0911: View has already been destroyed.` 오류를 사전에 방지할 수 있습니다.
 
 ### ngDoCheck
 
@@ -357,7 +357,7 @@ During initialization, the first `ngDoCheck` runs after `ngOnInit`.
 
 `ngDoCheck` 메서드는 Angular가 컴포넌트 템플릿의 변경 여부를 검사하기 전에 매번 실행됩니다.
 
-이 메서드는 Angular의 일반적인 변화 감지 외에 컴포넌트 밖에서 상태가 변하는 것을 수동으로 감지하거나, 컴포넌트 상태를 수동으로 갱신해야 할 때 사용할 수 있습니다.
+이 메서드는 Angular의 일반적인 변경 감지 외에 컴포넌트 밖에서 상태가 변하는 것을 수동으로 감지하거나, 컴포넌트 상태를 수동으로 갱신해야 할 때 사용할 수 있습니다.
 
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
@@ -464,8 +464,8 @@ Render callbacks do not run during server-side rendering or during build-time pr
 
 `afterEveryRender` 함수와 `afterNextRender` 함수는 Angular가 화면에 표시되는 _모든 컴포넌트_ 를 DOM에 렌더링한 후에 **렌더링 콜백** 으로 실행됩니다.
 
-이 메서드는 다른 라이프싸이클 후킹 함수와는 조금 다릅니다.
-이 문서에서 다루는 라이프싸이클 후킹 함수는 모두 클래스 메서드로 사용하지만, `afterEveryRender` 함수와 `afterNextRender` 함수는 단독 함수로 등록합니다.
+이 메서드는 다른 라이프사이클 훅과는 조금 다릅니다.
+이 문서에서 다루는 라이프사이클 훅은 모두 클래스 메서드로 사용하지만, `afterEveryRender` 함수와 `afterNextRender` 함수는 단독 함수로 등록합니다.
 그래서 이때 등록되는 콜백 함수는 특정 컴포넌트 인스턴스와 연관되지 않으며, 애플리케이션 전역 후킹 함수가 됩니다.
 
 `afterEveryRender` 함수와 `afterNextRender` 함수는 반드시 [의존성 주입 컨텍스트](guide/di/dependency-injection-context) 안에서 실행해야 하기 때문에, 일반적으로 컴포넌트의 생성자에서 실행합니다.
@@ -588,7 +588,9 @@ export class UserProfile {
 
 <a id="lifecycle-interfaces"></a>
 
-## 라이프싸이클 인터페이스
+<a id="라이프싸이클-인터페이스"></a>
+
+## 라이프사이클 인터페이스
 
 <!--
 Angular provides a TypeScript interface for each lifecycle method. You can optionally import
@@ -608,8 +610,9 @@ export class UserProfile implements OnInit {
 ```
 -->
 
-Angular는 각 라이프싸이클 후킹 함수에 해당하는 TypeScript 인터페이스를 제공합니다.
-필요한 라이프싸이클 후킹 함수가 있다면 인터페이스를 로드해서 `implement`로 클래스를 확장하면 되는데, 이때 인자 타입과 오타에 주의하세요.
+Angular는 각 라이프사이클 훅에 해당하는 TypeScript 인터페이스를 제공합니다.
+필요하면 이 인터페이스를 가져와 클래스에서 구현할 수 있습니다.
+인터페이스를 구현하면 메서드 이름의 오타를 타입 검사로 확인할 수 있습니다.
 
 인터페이스 이름에 `ng` 접두사를 붙여서 메서드를 구현하면 됩니다.
 `OnInit` 인터페이스에 해당하는 메서드는 `ngOnInit` 메서드가 되는 식입니다.
@@ -635,7 +638,7 @@ export class UserProfile implements OnInit {
 The following diagrams show the execution order of Angular's lifecycle hooks.
 -->
 
-Angular 라이프싸이클 후킹 함수는 다음 순서대로 실행됩니다.
+Angular 라이프사이클 훅은 다음 순서대로 실행됩니다.
 
 <!--
 ### During initialization
@@ -694,5 +697,5 @@ hook between the component and the directives on a single element. Never depend 
 ordering, as this may change in later versions of Angular.
 -->
 
-컴포넌트의 호스트 엘리먼트에 디렉티브가 있거나, `hostDirectives` 프로퍼티를 활용하는 경우는 컴포넌트와 디렉티브의 라이프싸이클 후킹 함수의 실행 순서를 보장하지 않습니다.
+컴포넌트의 호스트 엘리먼트에 디렉티브가 있거나, `hostDirectives` 프로퍼티를 활용하는 경우는 컴포넌트와 디렉티브의 라이프사이클 훅의 실행 순서를 보장하지 않습니다.
 또한, 이 순서는 이후 Angular 버전에서 변경될 수 있기 때문에, 실행 순서에 영향을 받는 로직을 작성하지 마세요.

@@ -224,4 +224,4 @@ SSR/SSG 애플리케이션에서 [하이드레이션](/guide/hydration)을 활�
 To visualize how the signals, computeds, and effects of a component depend on each other, see [Debug the signal graph](tools/devtools/signals).
 -->
 
-컴포넌트의 시그널, computed 시그널, 이펙트가 서로 어떻게 의존하는지 시각화하려면 [시그널 그래프 디버깅하기](tools/devtools/signals) 문서를 참고하세요.
+컴포넌트의 시그널, computed 시그널, 이펙트 함수가 서로 어떻게 의존하는지 시각화하려면 [시그널 그래프 디버깅하기](tools/devtools/signals) 문서를 참고하세요.

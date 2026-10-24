@@ -243,13 +243,15 @@ export class FeatureClient {
 
 <a id="multiple-instances-instead-of-singletons"></a>
 
-### 인스턴스 여러 개 사용하기
+<a id="인스턴스-여러-개-사용하기"></a>
+
+### 싱글턴을 예상했지만 여러 인스턴스가 생성되는 경우
 
 <!--
 You expect one shared instance (singleton) but get separate instances in different components.
 -->
 
-서비스 인스턴스를 싱글턴으로 유지하지 않고, 컴포넌트마다 별도 인스턴스를 구성할 수 있습니다.
+하나의 공유 인스턴스(싱글턴)를 예상했지만, 컴포넌트마다 별도 인스턴스가 생성되는 문제입니다.
 
 <!--
 #### Providing in component instead of root
@@ -438,7 +440,9 @@ The `inject()` function only works in specific contexts during class constructio
 
 <a id="using-inject-in-lifecycle-hooks"></a>
 
-#### 라이프싸이클 후킹 함수에서 `inject()` 를 사용하면
+<a id="라이프싸이클-후킹-함수에서-inject-를-사용하면"></a>
+
+#### 라이프사이클 훅에서 `inject()` 를 사용하면
 
 <!--
 When you call the `inject()` function inside lifecycle hooks like `ngOnInit()`, `ngAfterViewInit()`, or `ngOnDestroy()`, Angular throws an error because these methods run outside the injection context. The injection context is only available during the synchronous execution of class construction, which happens before lifecycle hooks are called.
@@ -478,8 +482,8 @@ export class UserProfile {
 ```
 -->
 
-`ngOnInit()`, `ngAfterViewInit()`, `ngOnDestroy()`와 같은 라이프싸이클 후킹 함수에서 `inject()` 함수를 사용하면, 이 함수들은 의존성 주입 컨텍스트가 아니기 때문에 에러가 발생합니다.
-의존성 주입 컨텍스트는 라이프싸이클 후킹 함수 실행 전인 클래스 생성자의 동기 실행 코드에서만 유효합니다.
+`ngOnInit()`, `ngAfterViewInit()`, `ngOnDestroy()`와 같은 라이프사이클 훅에서 `inject()` 함수를 사용하면, 이 함수들은 의존성 주입 컨텍스트가 아니기 때문에 오류가 발생합니다.
+의존성 주입 컨텍스트는 라이프사이클 훅 실행 전인 클래스 생성자의 동기 실행 코드에서만 유효합니다.
 
 ```angular-ts {avoid, header: 'ngOnInit()에서 inject()를 사용하면'}
 import {Component, inject} from '@angular/core';
@@ -842,7 +846,7 @@ Use `viewProviders` when:
 `viewProviders` 는 이런 경우에 사용하세요:
 
 - 서비스 인스턴스를 컴포넌트 템플릿에서만 사용하려고 할 때
-- 프로젝션된 컨텐츠의 구체적인 구현 내용을 감추려고 할 때
+- 컴포넌트의 내부 구현을 프로젝션된 컨텐츠에 노출하지 않으려고 할 때
 - 서비스를 내부 용도로만 사용하고 외부로 노출하지 않을 때
 
 **권장사항:** `viewProviders`를 사용해서 사용범위를 제한해야 하는 경우가 아니라면 언제나 `providers`를 사용하세요.
@@ -1130,7 +1134,7 @@ Circular dependencies occur when services inject each other, creating a cycle th
 NOTE: Do not use `forwardRef()` for service circular dependencies—it only solves circular imports in standalone component configurations.
 -->
 
-서비스 여러 개가 서로를 참조하면 순환 참조가 발생하기 때문에 에러가 발생합니다.
+서비스 여러 개가 서로를 참조하면 순환 참조가 발생하기 때문에 오류가 발생합니다.
 자세한 설명과 예제 코드는 [NG0200: Circular dependency](errors/NG0200) 문서를 참고하세요.
 
 **해결 방법** (권장하는 순서대로):
@@ -1178,7 +1182,7 @@ You can modify this search behavior with resolution modifiers like `self`, `skip
 -->
 
 Angular는 인젝터 계층을 따라 올라가며 의존성 객체를 판별합니다.
-그리고 `NullInjectorError` 에러가 발생하면 아래 순서로 프로바이더 등록이 빠졌는지 찾아보세요.
+그리고 `NullInjectorError` 오류가 발생하면 아래 순서로 프로바이더 등록이 빠졌는지 찾아보세요.
 
 Angular는 이런 순서로 탐색합니다:
 
@@ -1485,9 +1489,9 @@ When DI fails, follow this systematic approach:
 
 의존성 주입이 실패하면 이런 순서로 진행해 보세요:
 
-**1단계: 에러 메시지를 확인하세요**
+**1단계: 오류 메시지를 확인하세요**
 
-- 에러 코드를 확인하세요(NG0200, NG0203 등)
+- 오류 코드를 확인하세요(NG0200, NG0203 등)
 - 의존성 경로를 확인하세요
 - 어떤 토큰이 주입 실패했는지 확인하세요
 
@@ -1524,13 +1528,15 @@ When DI fails, follow this systematic approach:
 
 <a id="di-error-reference"></a>
 
-## 의존성 주입 에러 참고
+<a id="의존성-주입-에러-참고"></a>
+
+## 의존성 주입 오류 참고
 
 <!--
 This section provides detailed information about specific Angular DI error codes you may encounter. Use this as a reference when you see these errors in your console.
 -->
 
-이번 섹션에서는 실제로 발생하는 Angular DI 에러 코드가 왜 발생하는지 알아봅시다.
+이번 섹션에서는 실제로 발생하는 Angular DI 오류 코드가 왜 발생하는지 알아봅시다.
 
 ### NullInjectorError: No provider for [Service]
 
@@ -1546,10 +1552,10 @@ NG0201: No provider found for `UserClient`. Path: AuthClient -> UserClient.
 The dependency path shows that `AuthClient` tried to inject `UserClient`, but no provider was found.
 -->
 
-**에러 코드:** [NG0201](errors/NG0201)
+**오류 코드:** [NG0201](errors/NG0201)
 
 Angular가 인젝터에서 의존성 주입 토큰의 프로바이더를 찾지 못했을 때 발생합니다.
-에러 메시지를 보면 어떤 객체를 찾지 못했는지 확인할 수 있습니다.
+오류 메시지를 보면 어떤 객체를 찾지 못했는지 확인할 수 있습니다.
 
 ```
 NG0201: No provider found for `UserClient`. Path: AuthClient -> UserClient.
@@ -1781,7 +1787,7 @@ This path tells you:
 Start your investigation at the end of the chain (`LoggerStore`) and verify it has proper configuration.
 -->
 
-에러 메시지를 확인하면 의존성 주입 체인이 어디에서 실패했는지 확인할 수 있습니다.
+오류 메시지를 확인하면 의존성 주입 체인이 어디에서 실패했는지 확인할 수 있습니다.
 
 ```
 NG0201: No provider found for `LoggerStore`. Path: DataStore -> ApiClient -> LoggerStore.
@@ -1823,7 +1829,7 @@ export class DebugView {
 Optional injection returns `null` if no provider is found, allowing you to handle the absence gracefully.
 -->
 
-프로바이더가 등록되어 있지 않아서 에러가 발생하는 것을 방지하려면 생략 가능 옵션을 추가하세요.
+프로바이더가 등록되어 있지 않아서 오류가 발생하는 것을 방지하려면 생략 가능 옵션을 추가하세요.
 
 ```angular-ts
 import {Component, inject} from '@angular/core';
@@ -1856,9 +1862,9 @@ function, a field initializer, or a function used with
 ```
 -->
 
-**에러 코드:** NG0203
+**오류 코드:** NG0203
 
-이 에러는 의존성 주입 컨텍스트 밖에서 `inject()`를 실행했을 때 발생합니다.
+이 오류는 의존성 주입 컨텍스트 밖에서 `inject()`를 실행했을 때 발생합니다.
 `inject()` 함수는 클래스 생성자나 팩토리 실행 시점에만 동기 방식으로 사용할 수 있습니다.
 
 ```
@@ -2052,7 +2058,9 @@ Other injection contexts that `inject()` also works in include:
 
 <a id="when-this-error-occurs"></a>
 
-#### 에러가 발생하는 경우
+<a id="에러가-발생하는-경우"></a>
+
+#### 오류가 발생하는 경우
 
 <!--
 This error occurs when:
@@ -2065,9 +2073,9 @@ This error occurs when:
 See the "Incorrect inject() usage" section for detailed examples and solutions.
 -->
 
-이런 경우는 에러가 발생합니다:
+이런 경우는 오류가 발생합니다:
 
-- 라이프싸이클 후킹 함수에서 `inject()` 를 실행한 경우 (`ngOnInit`, `ngAfterViewInit` 등)
+- 라이프사이클 훅에서 `inject()` 를 실행한 경우 (`ngOnInit`, `ngAfterViewInit` 등)
 - 비동기 함수에서 `await` 다음에 `inject()` 를 실행한 경우
 - 콜백 함수에서 `inject()` 를 실행한 경우 (`setTimeout`, `Promise.then()` 등)
 - 클래스 생성자 밖에서 `inject()` 를 실행한 경우
@@ -2164,7 +2172,7 @@ NG0200: Circular dependency detected for `AuthClient`. Path: AuthClient -> UserC
 The dependency path shows the cycle: `AuthClient` depends on `UserClient`, which depends back on `AuthClient`.
 -->
 
-**에러 코드:** NG0200
+**오류 코드:** NG0200
 
 2개 이상의 서비스가 서로를 의존성으로 순환 참조할 때 발생합니다.
 
@@ -2180,7 +2188,9 @@ NG0200: Circular dependency detected for `AuthClient`. Path: AuthClient -> UserC
 
 <a id="understanding-the-error"></a>
 
-#### 에러가 발생한 이유
+<a id="에러가-발생한-이유"></a>
+
+#### 오류가 발생한 이유
 
 <!--
 Angular creates service instances by calling their constructors and injecting dependencies. When services depend on each other circularly, Angular cannot determine which to create first.
@@ -2213,7 +2223,9 @@ Angular는 서비스 클래스의 생성자를 실행하면서 서비스 인스�
 
 <a id="resolution-strategies"></a>
 
-#### 해결 방법 {#해결-방법-2}
+<a id="해결-방법-해결-방법-2"></a>
+
+#### 해결 방법 {#ko-resolution-strategies}
 
 <!--
 See the "Circular dependencies" section for detailed examples and solutions:
@@ -2240,7 +2252,9 @@ Do NOT use `forwardRef()` for service circular dependencies. It only solves circ
 
 <a id="other-di-error-codes"></a>
 
-### 기타 의존성 주입 에러 코드
+<a id="기타-의존성-주입-에러-코드"></a>
+
+### 기타 의존성 주입 오류 코드
 
 <!--
 For detailed explanations and solutions for these errors, see the [Angular error reference](errors):
@@ -2252,9 +2266,9 @@ For detailed explanations and solutions for these errors, see the [Angular error
 | [NG0207](errors/NG0207) | EnvironmentProviders in wrong context - using `provideHttpClient()` in component providers |
 -->
 
-아래 에러들에 대해 자세하게 알아보려면 [Angular 에러 참조](errors) 문서를 참고하세요:
+아래 오류들에 대해 자세하게 알아보려면 [Angular 오류 참조](errors) 문서를 참고하세요:
 
-| 에러 코드               | 설명                                                                                                                 |
+| 오류 코드               | 설명                                                                                                                 |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | [NG0204](errors/NG0204) | 인자를 확인할 수 없습니다 - `@Injectable()` 데코레이터가 누락되었을 수 있습니다.                                     |
 | [NG0205](errors/NG0205) | 인젝터가 이미 종료되었습니다 - 컴포넌트가 종료된 후에 서비스에 접근했습니다.                                         |
@@ -2284,9 +2298,9 @@ For a deeper understanding of specific topics on dependency injection, check out
 - [Testing with dependency injection](guide/testing) - Using TestBed and mocking dependencies
 -->
 
-의존성 주입 에러를 만나면 이것을 기억하세요:
+의존성 주입 오류를 만나면 이것을 기억하세요:
 
-1. 어디에서 에러가 발생했는지 에러 메시지를 읽고 확인하세요.
+1. 어디에서 오류가 발생했는지 오류 메시지를 읽고 확인하세요.
 2. 데코레이터, `providedIn`, `imports` 등 설정 구성을 확인하세요.
 3. 의존성 주입 컨텍스트와 실행 시점을 확인하세요.
 4. 개발자 도구를 활용하거나 로그를 활용하세요.

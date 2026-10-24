@@ -8,7 +8,7 @@
 Now that you've learned [two-way binding with model signals](/tutorials/signals/6-two-way-binding-with-model-signals), let's explore how to use signals with Angular services. Services are perfect for sharing reactive state across multiple components, and signals make this even more powerful by providing automatic change detection and clean reactive patterns.
 -->
 
-[모델 시그널을 사용하는 양방향 바인딩](/tutorials/signals/6-two-way-binding-with-model-signals)을 배웠으니, 이제 Angular 서비스에서 시그널을 사용하는 방법을 살펴봅시다. 서비스는 여러 컴포넌트에서 반응형 상태를 공유할 때 적합합니다. 시그널의 자동 변화 감지와 명확한 반응형 패턴을 활용하면 더 편리하게 구현할 수 있습니다.
+[모델 시그널을 사용하는 양방향 바인딩](/tutorials/signals/6-two-way-binding-with-model-signals)을 배웠으니, 이제 Angular 서비스에서 시그널을 사용하는 방법을 살펴봅시다. 서비스는 여러 컴포넌트에서 반응형 상태를 공유할 때 적합합니다. 시그널의 자동 변경 감지와 명확한 반응형 패턴을 활용하면 더 편리하게 구현할 수 있습니다.
 
 <!--
 In this activity, you'll learn how to create a cart store with signals that allow the cart display component to react to state changes automatically.

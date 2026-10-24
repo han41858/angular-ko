@@ -55,7 +55,7 @@ Each step represents a concept in Signal Forms. You'll build a complete login fo
 1. TypeScript와 시그널로 폼 모델 구성하기
 2. 폼을 템플릿에 연결하기
 3. 유효성 검사 규칙 추가하기
-4. 사용자에게 유효성 검사 에러 표시하기
+4. 사용자에게 유효성 검사 오류 표시하기
 5. 폼 제출 처리하기
 6. 심화 주제와 다음 단계 살펴보기
 
@@ -63,7 +63,7 @@ Each step represents a concept in Signal Forms. You'll build a complete login fo
 If you get stuck, click "Reveal answer" at the top.
 -->
 
-진행이 어렵다면 상단의 "정답 보기"를 클릭하세요.
+진행이 어렵다면 상단의 "정답 확인하기"를 클릭하세요.
 
 <!--
 Alright, let's [get started](/tutorials/signal-forms/1-set-up-form-model)!

@@ -298,7 +298,9 @@ httpTesting.expectNone((req) => req.method !== 'GET');
 
 <a id="testing-error-handling"></a>
 
-## 에러 처리 테스트하기
+<a id="에러-처리-테스트하기"></a>
+
+## 오류 처리 테스트하기
 
 <!--
 You should test your app's responses when HTTP requests fail.
@@ -312,7 +314,9 @@ HTTP 요청이 실패했을 때 애플리케이션이 어떻게 대응하는지 
 
 <a id="backend-errors"></a>
 
-### 백엔드 에러
+<a id="백엔드-에러"></a>
+
+### 백엔드 오류
 
 <!--
 To test handling of backend errors (when the server returns a non-successful status code), flush requests with an error response that emulates what your backend would return when a request fails.
@@ -325,7 +329,7 @@ req.flush('Failed!', {status: 500, statusText: 'Internal Server Error'});
 ```
 -->
 
-서버가 성공이 아닌 상태 코드를 반환하는 백엔드 에러를 테스트하려면, 요청 실패 시 백엔드가 반환할 에러 응답을 만들어 요청에 전달합니다.
+서버가 성공이 아닌 상태 코드를 반환하는 백엔드 오류를 테스트하려면, 요청 실패 시 백엔드가 반환할 오류 응답을 만들어 요청에 전달합니다.
 
 ```ts
 const req = httpTesting.expectOne('/api/config');
@@ -340,7 +344,9 @@ req.flush('Failed!', {status: 500, statusText: 'Internal Server Error'});
 
 <a id="network-errors"></a>
 
-### 네트워크 에러
+<a id="네트워크-에러"></a>
+
+### 네트워크 오류
 
 <!--
 Requests can also fail due to network errors, which surface as `ProgressEvent` errors. These can be delivered with the `error()` method:
@@ -353,7 +359,7 @@ req.error(new ProgressEvent('network error!'));
 ```
 -->
 
-요청은 네트워크 에러로 실패할 수도 있으며, 이런 에러는 `ProgressEvent`로 전달됩니다.
+요청은 네트워크 오류로 실패할 수도 있으며, 이런 오류는 `ProgressEvent`로 전달됩니다.
 `error()` 메서드로 전달할 수 있습니다:
 
 ```ts

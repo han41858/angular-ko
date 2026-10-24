@@ -48,7 +48,7 @@ In this lesson, you'll create an interface to define properties that represent d
 
 Angular는 TypeScript를 사용해 엄격한 타입 검사가 가능한 프로그래밍 환경의 장점을 활용합니다.
 엄격한 타입 검사는 앱의 한 요소가 다른 요소에 잘못된 형식의 데이터를 전달할 가능성을 줄여줍니다.
-이러한 타입 불일치 에러는 TypeScript 컴파일러에서 발견하며, 상당수는 IDE에서도 확인할 수 있습니다.
+이러한 타입 불일치 오류는 TypeScript 컴파일러에서 발견하며, 상당수는 IDE에서도 확인할 수 있습니다.
 
 이번 실습에서는 주택 한 곳의 데이터를 나타내는 프로퍼티를 인터페이스로 정의합니다.
 
@@ -95,8 +95,8 @@ IDE의 **터미널** 창에서 다음 작업을 수행하세요:
 
 1. `ng serve`를 실행해 앱을 빌드하고 `http://localhost:4200`에서 실행하세요.
 1. 브라우저에서 `http://localhost:4200`을 열어 앱을 확인하세요.
-1. 앱이 에러 없이 빌드되는지 확인하세요.
-   에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
+   오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 <!--
@@ -127,7 +127,7 @@ At this point, you've defined an interface that represents data about a housing 
 
   <docs-code header="src/app/housinglocation.ts를 다음 코드로 수정하기" path="adev/src/content/tutorials/first-app/steps/05-inputs/src/app/housinglocation.ts" visibleLines="[1,10]" />
 
-1. 변경 사항을 저장하고 앱에 에러가 없는지 확인하세요. 에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 변경 사항을 저장하고 앱에 오류가 없는지 확인하세요. 오류가 있다면 수정한 후 다음 단계로 진행하세요.
 
 이제 `id`, `name`, 위치 정보 등 주택 데이터를 표현하는 인터페이스가 정의되었습니다.
 </docs-step>
@@ -201,13 +201,13 @@ For more information about the topics covered in this lesson, visit:
 
      <docs-code language="angular-ts" header="src/app/home/home.ts" path="adev/src/content/tutorials/first-app/steps/05-inputs/src/app/home/home.ts" visibleLines="[1,34]" />
 
-   `Home` 클래스에 `HousingLocationInfo` 타입의 `housingLocation` 프로퍼티를 추가하면 데이터가 인터페이스 정의에 맞는지 확인할 수 있습니다. 데이터가 인터페이스 정의와 다르면 IDE가 타입 정보를 바탕으로 유용한 에러 메시지를 표시합니다.
+   `Home` 클래스에 `HousingLocationInfo` 타입의 `housingLocation` 프로퍼티를 추가하면 데이터가 인터페이스 정의에 맞는지 확인할 수 있습니다. 데이터가 인터페이스 정의와 다르면 IDE가 타입 정보를 바탕으로 유용한 오류 메시지를 표시합니다.
 
-1. 변경 사항을 저장하고 앱에 에러가 없는지 확인하세요. 브라우저를 열어 "housing-location works!" 메시지가 여전히 표시되는지 확인하세요.
+1. 변경 사항을 저장하고 앱에 오류가 없는지 확인하세요. 브라우저를 열어 "housing-location works!" 메시지가 여전히 표시되는지 확인하세요.
 
   <img alt="로고, 필터 검색 입력창, 검색 버튼과 'housing-location works!' 메시지가 표시된 Homes 앱의 브라우저 화면" src="assets/images/tutorials/first-app/homes-app-lesson-03-step-2.png">
 
-1. 에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 </docs-workflow>

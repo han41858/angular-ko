@@ -34,7 +34,7 @@ Deferrable views support a variety of triggers, prefetching options, and sub-blo
 
 `@defer` 블록 안에 있는 컴포넌트나 디렉티브, 파이프는 별도 JavaScript 파일로 분리되며, 나머지 템플릿이 렌더링된 후 이 구성요소가 필요한 경우에 로드됩니다.
 
-지연 로딩 뷰를 지정하면서 다양한 트리거, 사전 로딩 옵션, 플레이스 홀더, 로딩, 에러 상태 관리 등의 기능을 활용할 수 있습니다.
+지연 로딩 뷰를 지정하면서 다양한 트리거, 사전 로딩 옵션, 플레이스 홀더, 로딩, 오류 상태 관리 등의 기능을 활용할 수 있습니다.
 
 <!--
 ## Which dependencies are deferred?
@@ -257,7 +257,9 @@ Both parameters are specified in time increments of milliseconds (ms) or seconds
 
 <a id="show-error-state-when-deferred-loading-fails-with-error"></a>
 
-### 지연 로딩 에러 표시하기: `@error`
+<a id="지연-로딩-에러-표시하기-error"></a>
+
+### 지연 로딩 오류 표시하기: `@error`
 
 <!--
 The `@error` block is an optional block that displays if deferred loading fails. Similar to `@placeholder` and `@loading`, the dependencies of the @error block are eagerly loaded.
@@ -872,7 +874,7 @@ To render the main content of `@defer` blocks on the server (both SSR and SSG), 
 SSR이나 SSG와 같이 애플리케이션이 서버에서 렌더링되는 경우는 기본적으로 `@placeholder` 블록이 있는 경우는 `@placeholder` 블록을 렌더링하고, `@placeholder` 블록이 없으면 아무것도 렌더링하지 않습니다.
 그리고 클라이언트에서 애플리케이션이 실행될 때 `@placeholder`가 하이드레이션되면서 트리거가 동작합니다.
 
-서버에서 `@defer` 블록의 본문을 렌더링하려면 [증분 하이드레이션](/guide/incremental-hydration)을 활성화하고 필요한 블록에 `hydrate` 트리거를 설정해야 합니다.
+서버에서 `@defer` 블록의 본문을 렌더링하려면 [점진적 하이드레이션](/guide/incremental-hydration)을 활성화하고 필요한 블록에 `hydrate` 트리거를 설정해야 합니다.
 
 <!--
 ## Barrel files and lazy chunks

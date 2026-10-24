@@ -10,7 +10,7 @@ Form models are the foundation of Signal Forms, serving as the single source of 
 NOTE: Form models are distinct from Angular's `model()` signal used for component two-way binding. A form model is a writable signal that stores form data, while `model()` creates inputs/outputs for parent/child component communication.
 -->
 
-폼 모델은 시그널 폼의 기본 요소이며, 폼 데이터 원장을 제공합니다.
+폼 모델은 시그널 폼의 기본 요소이며, 폼의 원본 데이터를 한 곳에서 관리합니다.
 이 문서는 폼 모델을 어떻게 만드는지, 값을 어떻게 변경하는지, 유지보수를 편하게 하려면 어떻게 설계해야 하는지 안내합니다.
 
 참고: 폼 모델은 컴포넌트 양방향 바인딩용으로 제공되는 `model()` 시그널과는 다릅니다.
@@ -238,7 +238,7 @@ export class LoginComponent {
 ```
 
 객체 타입을 명확하게 지정하면 필드 트리도 타입이 정확하게 지정됩니다.
-`loginForm.email`은 `FieldTree<string>` 타입이 되며, 존재하지 않는 프로퍼티에 접근하면 컴파일 에러가 발생합니다.
+`loginForm.email`은 `FieldTree<string>` 타입이 되며, 존재하지 않는 프로퍼티에 접근하면 컴파일 오류가 발생합니다.
 
 ```ts
 // TypeScript는 FieldTree<string> 타입이라는 것을 알고 있습니다.

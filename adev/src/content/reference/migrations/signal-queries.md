@@ -38,7 +38,7 @@ Install the latest version of the VSCode extension and click onto e.g. a `@ViewC
 See more details in the section [below](#vscode-extension).
 -->
 
-또는 VSCode에서 [코드 리팩터링 작업](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring)으로 마이그레이션할 수 있습니다.
+또는 VSCode에서 [코드 리팩토링 작업](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring)으로 마이그레이션할 수 있습니다.
 VSCode 확장 프로그램을 최신 버전으로 설치하고 `@ViewChild` 같은 필드를 클릭하세요.
 자세한 내용은 [아래 섹션](#vscode-extension)을 참고하세요.
 
@@ -152,7 +152,7 @@ The migration tries to refactor code as safely as possible.
 -->
 
 기본적으로 마이그레이션은 안전하게 변환할 수 없는 쿼리를 건너뜁니다.
-마이그레이션은 가능한 한 안전하게 코드를 리팩터링하려고 시도합니다.
+마이그레이션은 가능한 한 안전하게 코드를 리팩토링하려고 시도합니다.
 
 <!--
 When the `--best-effort-mode` flag is enabled, the migration eagerly
@@ -225,7 +225,7 @@ references outside this directory are silently skipped, potentially breaking you
 The migration is available as a [code refactor action](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring) in VSCode.
 -->
 
-이 마이그레이션은 VSCode의 [코드 리팩터링 작업](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring)으로도 사용할 수 있습니다.
+이 마이그레이션은 VSCode의 [코드 리팩토링 작업](https://code.visualstudio.com/docs/typescript/typescript-refactoring#_refactoring)으로도 사용할 수 있습니다.
 
 <!--
 To make use of the migration via VSCode, install the latest version of the VSCode extension and either click:
@@ -246,5 +246,5 @@ Then, wait for the yellow lightbulb VSCode refactoring button to appear.
 Via this button you can then select the signal queries migration.
 -->
 
-그다음 노란 전구 모양의 VSCode 리팩터링 버튼이 나타날 때까지 기다리세요.
+그다음 노란 전구 모양의 VSCode 리팩토링 버튼이 나타날 때까지 기다리세요.
 이 버튼에서 시그널 쿼리 마이그레이션을 선택할 수 있습니다.

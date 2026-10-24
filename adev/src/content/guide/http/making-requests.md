@@ -528,7 +528,7 @@ Each `HttpEvent` reported in the event stream has a `type` which distinguishes w
 
 진행 상황 이벤트는 성능 비용이 있어 기본적으로 비활성화되어 있지만, `reportUploadProgress`와 `reportDownloadProgress` 옵션으로 활성화할 수 있습니다.
 
-참고: `HttpClient`의 기본 fetch 백엔드는 _업로드_ 진행 상황 이벤트를 지원하지 않으며, `reportUploadProgress`를 설정하면 에러가 발생합니다.
+참고: `HttpClient`의 기본 fetch 백엔드는 _업로드_ 진행 상황 이벤트를 지원하지 않으며, `reportUploadProgress`를 설정하면 오류가 발생합니다.
 업로드 진행 상황 이벤트가 필요하다면 `provideHttpClient(...)`에 `withXhr()`를 지정해서 `HttpClient`를 설정하세요.
 
 이벤트 스트림을 관찰하려면 `observe` 옵션을 `'events'`로 설정합니다:
@@ -595,21 +595,21 @@ Sometimes transient errors such as network interruptions can cause a request to 
 
 HTTP 요청은 다음 세 가지 방식으로 실패할 수 있습니다:
 
-- 네트워크 또는 연결 에러로 요청이 백엔드 서버에 도달하지 못합니다.
+- 네트워크 또는 연결 오류로 요청이 백엔드 서버에 도달하지 못합니다.
 - 타임아웃 옵션을 설정했는데 제한 시간 안에 응답하지 않습니다.
-- 백엔드가 요청을 받았지만 처리에 실패해서 에러 응답을 반환합니다.
+- 백엔드가 요청을 받았지만 처리에 실패해서 오류 응답을 반환합니다.
 
-`HttpClient`는 이런 모든 에러를 `HttpErrorResponse`에 담아 `Observable`의 에러 채널로 전달합니다.
-네트워크 및 타임아웃 에러의 `status` 코드는 `0`입니다. 타임아웃이면 `error`는 이름이 `TimeoutError`인 `DOMException`입니다. 네트워크 에러이면 `fetch`가 발생시킨 에러이며, `withXhr()`를 사용하는 경우에는 [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent)입니다.
-백엔드 에러는 백엔드가 반환한 실패 상태 코드를 `status`로, 에러 응답을 `error`로 제공합니다.
-응답을 확인해서 에러 원인과 적절한 처리 방법을 판단하세요.
+`HttpClient`는 이런 모든 오류를 `HttpErrorResponse`에 담아 `Observable`의 오류 채널로 전달합니다.
+네트워크 및 타임아웃 오류의 `status` 코드는 `0`입니다. 타임아웃이면 `error`는 이름이 `TimeoutError`인 `DOMException`입니다. 네트워크 오류이면 `fetch`가 발생시킨 오류이며, `withXhr()`를 사용하는 경우에는 [`ProgressEvent`](https://developer.mozilla.org/docs/Web/API/ProgressEvent)입니다.
+백엔드 오류는 백엔드가 반환한 실패 상태 코드를 `status`로, 오류 응답을 `error`로 제공합니다.
+응답을 확인해서 오류 원인과 적절한 처리 방법을 판단하세요.
 
-[RxJS 라이브러리](https://rxjs.dev/)에는 에러 처리에 유용한 연산자가 여러 개 있습니다.
+[RxJS 라이브러리](https://rxjs.dev/)에는 오류 처리에 유용한 연산자가 여러 개 있습니다.
 
-`catchError` 연산자를 사용하면 에러 응답을 UI에서 사용할 값으로 변환할 수 있습니다.
-이 값으로 UI에 에러 페이지나 값을 표시하도록 알리고, 필요하면 에러 원인도 기록할 수 있습니다.
+`catchError` 연산자를 사용하면 오류 응답을 UI에서 사용할 값으로 변환할 수 있습니다.
+이 값으로 UI에 오류 페이지나 값을 표시하도록 알리고, 필요하면 오류 원인도 기록할 수 있습니다.
 
-때로는 네트워크 중단 같은 일시적 에러로 요청이 예상치 못하게 실패하며, 요청을 다시 보내기만 해도 성공할 수 있습니다.
+때로는 네트워크 중단 같은 일시적 오류로 요청이 예상치 못하게 실패하며, 요청을 다시 보내기만 해도 성공할 수 있습니다.
 RxJS는 특정 조건에서 실패한 `Observable`을 자동으로 다시 구독하는 여러 _재시도_ 연산자를 제공합니다.
 예를 들어 `retry()` 연산자는 지정한 횟수만큼 자동으로 재구독을 시도합니다.
 
@@ -643,7 +643,7 @@ http
 -->
 
 요청에 타임아웃을 설정하려면 다른 요청 옵션과 함께 `timeout` 옵션에 밀리초 단위의 숫자를 지정합니다.
-백엔드 요청이 지정한 시간 안에 완료되지 않으면 요청을 취소하고 에러를 전달합니다.
+백엔드 요청이 지정한 시간 안에 완료되지 않으면 요청을 취소하고 오류를 전달합니다.
 
 참고: 타임아웃은 백엔드 HTTP 요청 자체에만 적용되며, 전체 요청 처리 체인에 적용되는 것은 아닙니다.
 따라서 인터셉터에서 발생한 지연은 이 옵션에 영향을 미치지 않습니다.
@@ -1074,7 +1074,7 @@ http
 
 - `'follow'`: 리다이렉트를 자동으로 따릅니다.
   기본값입니다.
-- `'error'`: 리다이렉트를 에러로 처리합니다.
+- `'error'`: 리다이렉트를 오류로 처리합니다.
 - `'manual'`: 리다이렉트를 자동으로 따르지 않고 리다이렉트 응답을 반환합니다.
 
 팁: 리다이렉트를 직접 작성한 로직으로 처리해야 한다면 `redirect: 'manual'`을 사용하세요.
@@ -1412,7 +1412,7 @@ http
 ```
 
 중요: `integrity` 옵션을 사용하면 응답 콘텐츠와 지정한 해시가 정확히 일치해야 합니다.
-일치하지 않으면 요청이 네트워크 에러로 실패합니다.
+일치하지 않으면 요청이 네트워크 오류로 실패합니다.
 
 매우 중요: SSR에서 Fetch 구현은 [Fetch 표준](https://fetch.spec.whatwg.org/#concept-main-fetch)에 따라 응답을 반환하기 전에 전체 응답 본문을 읽어 `integrity`를 검증합니다. Angular의 [`maxResponseBodySize`](/guide/ssr#configuring-the-response-body-size-limit)는 Fetch가 응답을 반환한 뒤에만 적용되므로, 무결성 검증 중에 버퍼링하는 데이터 양을 제한하지 못합니다.
 
@@ -1462,7 +1462,7 @@ TIP: Using the `async` pipe or the `toSignal` operation to subscribe to `Observa
 
 자동으로 완료되므로 `HttpClient` 구독을 정리하지 않아도 보통 메모리 누수가 발생하지 않습니다.
 하지만 다른 비동기 작업과 마찬가지로, 구독을 사용하는 컴포넌트가 종료되면 구독도 정리하는 것을 강하게 권장합니다.
-그렇지 않으면 구독 콜백이 실행되면서 이미 종료된 컴포넌트와 상호작용하려다가 에러가 발생할 수 있습니다.
+그렇지 않으면 구독 콜백이 실행되면서 이미 종료된 컴포넌트와 상호작용하려다가 오류가 발생할 수 있습니다.
 
 팁: `async` 파이프나 `toSignal`로 `Observable`을 구독하면 구독을 적절하게 정리할 수 있습니다.
 

@@ -28,8 +28,8 @@ NOTE: For basic examples of using `inject()` in class constructors and field ini
 
 의존성 주입 컨텍스트는 이런 상황에 사용할 수 있습니다:
 
-- `@Injectable`이나 `@Component` 데코레이터가 지정된 클래스가 생성되는 `constructor()` 생성자 안에서
-- 클래스 필드를 선언할 때
+- `@Injectable`이나 `@Component` 등 DI 시스템이 인스턴스를 생성하는 클래스의 `constructor` 안에서
+- 그러한 클래스의 필드를 초기화하는 코드 안에서
 - `Provider`나 `@Injectable`을 `useFactory`로 등록하는 경우 팩토리 함수 안에서
 - `InjectionToken`에 연결하는 `factory` 함수 안에서
 - 의존성 주입 컨텍스트가 실행되는 스택 프레임 안에서
@@ -105,7 +105,7 @@ Note that [`inject`](/api/core/inject) returns an instance only if the injector 
 -->
 
 의존성 주입 컨텍스트가 아닌 함수 안에서 의존성과 관련된 함수를 실행하려면 `runInInjectionContext`를 사용하면 됩니다.
-이 방식을 사용하려면 `EnvironmentInjector`와 같은 특수 인젝터를 사용해야 합니다:
+이 방식을 사용하려면 `EnvironmentInjector`와 같은 인젝터에 접근할 수 있어야 합니다:
 
 ```ts {highlight: [7], header:"hero.service.ts"}
 @Service()
@@ -159,7 +159,7 @@ export class PreviewCard {
 ```
 -->
 
-Angular는 `assertInInjectionContext` 라는 헬퍼 함수를 제공하는데, 이 함수는 현재 컨텍스트가 의존성 주입 컨텍스트라면 아무 문제가 없지만, 의존성 주입 컨텍스트가 아니라면 에러를 발생시킵니다.
+Angular는 `assertInInjectionContext` 라는 헬퍼 함수를 제공하는데, 이 함수는 현재 컨텍스트가 의존성 주입 컨텍스트라면 아무 문제가 없지만, 의존성 주입 컨텍스트가 아니라면 오류를 발생시킵니다.
 그리고 이 함수를 실행하면서 올바른 API 진입점을 인자로 전달할 수 있습니다.
 이 방식을 사용하면 일반적인 인젝션 오류가 아니라 좀 더 명확하고 개선할 수 있는 메시지가 표시됩니다.
 
@@ -200,4 +200,4 @@ export class PreviewCard {
 If you call [`inject`](api/core/inject) or `assertInInjectionContext` outside of an injection context, Angular throws [error NG0203](/errors/NG0203).
 -->
 
-의존성 주입 컨텍스트가 아닌 곳에서 [`inject`](api/core/inject) 함수를 실행하거나 `assertInInjectionContext`를 실행하면 [NG0203 에러](/errors/NG0203)가 발생합니다.
+의존성 주입 컨텍스트가 아닌 곳에서 [`inject`](api/core/inject) 함수를 실행하거나 `assertInInjectionContext`를 실행하면 [NG0203 오류](/errors/NG0203)가 발생합니다.

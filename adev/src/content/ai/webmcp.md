@@ -16,13 +16,13 @@ Angular provides experimental support for WebMCP, allowing you to easily registe
 IMPORTANT: The WebMCP spec is very early in its lifecycle and is undergoing frequent changes. As such, WebMCP support in Angular is currently [**experimental**](reference/releases#experimental). APIs are subject to change even outside of major versions.
 -->
 
-WebMCP는 웹 애플리케이션이 브라우저에서 기본적으로 실행되는 AI 에이전트에 구조화된 도구를 직접 제공할 수 있게 하는 [제안된 웹 표준](https://github.com/webmachinelearning/webmcp/)입니다.
+WebMCP는 웹 애플리케이션이 브라우저 내부에서 직접 실행되는 AI 에이전트에 구조화된 도구를 직접 제공할 수 있게 하는 [제안된 웹 표준](https://github.com/webmachinelearning/webmcp/)입니다.
 애플리케이션이 정의한 도구를 사용하면 AI 어시스턴트가 애플리케이션과 직접 상호작용할 수 있으므로, 에이전트의 기능을 확장하고 DOM 상호작용의 필요성을 줄일 수 있습니다.
 
 예를 들어 신규 사용자 등록 애플리케이션은 브라우저의 AI 에이전트가 DOM 상호작용으로 복잡한 마법사 UI를 거치는 대신, 사용자를 직접 생성하도록 WebMCP 도구를 제공할 수 있습니다.
 
 Angular는 WebMCP를 실험적으로 지원합니다.
-애플리케이션의 의존성 주입 생명주기와 연결된 도구를 쉽게 등록하고, 시그널 폼을 AI가 사용할 수 있는 도구로 자동 변환할 수 있습니다.
+애플리케이션의 의존성 주입 라이프사이클와 연결된 도구를 쉽게 등록하고, 시그널 폼을 AI가 사용할 수 있는 도구로 자동 변환할 수 있습니다.
 
 중요: WebMCP 명세는 매우 초기 단계이며 자주 변경됩니다.
 따라서 Angular의 WebMCP 지원은 현재 [**실험 단계**](reference/releases#experimental)입니다.
@@ -72,7 +72,7 @@ bootstrapApplication(AppRoot, {
 ```
 -->
 
-애플리케이션 설정에 [`provideExperimentalWebMcpTools`](api/core/provideExperimentalWebMcpTools)를 사용하면 애플리케이션의 전체 생명주기 동안 사용할 도구를 등록할 수 있습니다.
+애플리케이션 설정에 [`provideExperimentalWebMcpTools`](api/core/provideExperimentalWebMcpTools)를 사용하면 애플리케이션의 전체 라이프사이클 동안 사용할 도구를 등록할 수 있습니다.
 이 방식으로 제공한 도구는 애플리케이션을 초기화할 때 자동으로 등록되고, 애플리케이션을 종료할 때 등록이 해제됩니다.
 
 `execute` 콜백은 연결된 `Injector`의 주입 컨텍스트에서 실행되므로 서비스를 직접 [`inject`](api/core/inject)할 수 있습니다.

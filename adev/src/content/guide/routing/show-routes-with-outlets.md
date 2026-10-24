@@ -318,7 +318,9 @@ Angular는 아웃렛 이름을 각 라우팅 규칙에 정의한 `outlet` 프로
 
 <a id="outlet-lifecycle-events"></a>
 
-## 아웃렛 생명주기 이벤트
+<a id="아웃렛-생명주기-이벤트"></a>
+
+## 아웃렛 라이프사이클 이벤트
 
 <!--
 There are four lifecycle events that a router outlet can emit:
@@ -344,7 +346,7 @@ You can add event listeners with the standard event binding syntax:
 Check out the [API docs for RouterOutlet](/api/router/RouterOutlet?tab=api) if you’d like to learn more.
 -->
 
-라우터 아웃렛은 네 가지 생명주기 이벤트를 발생시킬 수 있습니다.
+라우터 아웃렛은 네 가지 라이프사이클 이벤트를 발생시킬 수 있습니다.
 
 | 이벤트       | 설명                                                                         |
 | ------------ | ---------------------------------------------------------------------------- |

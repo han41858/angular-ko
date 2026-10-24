@@ -146,7 +146,7 @@ user = httpResource(() => ({
 }
 ```
 
-참고: 에러 상태인 `resource`의 `value` 시그널을 읽으면 런타임 에러가 발생합니다.
+참고: 오류 상태인 `resource`의 `value` 시그널을 읽으면 런타임 오류가 발생합니다.
 `hasValue()`로 확인한 뒤 `value`를 읽는 것이 좋습니다.
 
 <!--

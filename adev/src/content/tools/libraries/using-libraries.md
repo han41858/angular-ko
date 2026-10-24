@@ -220,7 +220,7 @@ For example, to use the [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroducti
 -->
 
 레거시 JavaScript 라이브러리를 애플리케이션으로 직접 불러오지 않는 경우에는 런타임 전역 스코프에 추가해서 script 태그로 추가한 것처럼 로드할 수 있습니다.
-워크스페이스 빌드 설정 파일인 [`angular.json`][GuideWorkspaceConfig]에서 빌드 타겟의 `scripts`와 `styles` 옵션을 사용하면 Angular CLI가 빌드할 때 이렇게 처리하도록 설정할 수 있습니다.
+워크스페이스 빌드 설정 파일인 [`angular.json`][GuideWorkspaceConfig]에서 빌드 대상의 `scripts`와 `styles` 옵션을 사용하면 Angular CLI가 빌드할 때 이렇게 처리하도록 설정할 수 있습니다.
 
 예를 들어 [Bootstrap 4][GetbootstrapDocs40GettingStartedIntroduction] 라이브러리를 사용하려면 다음과 같이 진행하세요.
 

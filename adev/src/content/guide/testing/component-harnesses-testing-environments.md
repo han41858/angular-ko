@@ -170,7 +170,9 @@ Angular CDK의 [`TestbedHarnessEnvironment`](/api/cdk/testing/testbed/TestbedHar
 
 <a id="handling-auto-change-detection"></a>
 
-## 자동 변화 감지 처리하기
+<a id="자동-변화-감지-처리하기"></a>
+
+## 자동 변경 감지 처리하기
 
 <!--
 In order to support the `manualChangeDetection` and parallel APIs, your environment should install a handler for the auto change detection status.
@@ -179,9 +181,9 @@ When your environment wants to start handling the auto change detection status i
 If your environment wants to stop handling auto change detection status it can call `stopHandlingAutoChangeDetectionStatus()`.
 -->
 
-`manualChangeDetection`과 parallel API를 지원하려면 환경에 자동 변화 감지 상태를 처리하는 핸들러를 등록해야 합니다.
+`manualChangeDetection`과 parallel API를 지원하려면 환경에 자동 변경 감지 상태를 처리하는 핸들러를 등록해야 합니다.
 
-자동 변화 감지 상태 처리를 시작하려면 `handleAutoChangeDetectionStatus(handler)`를 실행합니다.
+자동 변경 감지 상태 처리를 시작하려면 `handleAutoChangeDetectionStatus(handler)`를 실행합니다.
 핸들러 함수는 `isDisabled`, `onDetectChangesNow()`라는 두 프로퍼티가 있는 `AutoChangeDetectionStatus`를 전달받습니다.
 자세한 내용은 [AutoChangeDetectionStatus API 문서](/api/cdk/testing/AutoChangeDetectionStatus)를 참고하세요.
-자동 변화 감지 상태 처리를 중단하려면 `stopHandlingAutoChangeDetectionStatus()`를 실행합니다.
+자동 변경 감지 상태 처리를 중단하려면 `stopHandlingAutoChangeDetectionStatus()`를 실행합니다.

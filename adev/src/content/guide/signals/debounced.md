@@ -91,7 +91,7 @@ See [Resource status](/guide/signals/resource#resource-status) for the full list
 
 시그널을 지연시키는 동안 `status()`가 반환하는 값은 `'loading'`이며, `value()`는 이전 값을 반환합니다.
 그리고 타이머가 종료되면 리소스 시그널 상태가 `'resolved'`로 변경됩니다.
-소스 시그널에서 에러가 발생하면 리소스 시그널은 타이머 만료에 관계없이 `'error'` 상태가 됩니다.
+소스 시그널에서 오류가 발생하면 리소스 시그널은 타이머 만료에 관계없이 `'error'` 상태가 됩니다.
 
 가능한 상태의 전체 목록과 `value()` 동작에 대해 더 알아보려면 [Resource status](/guide/signals/resource#resource-status) 문서를 참고하세요.
 

@@ -20,7 +20,7 @@ Signal Forms provides a schema-based validation approach. Validation rules bind 
 유효성 검사가 없으면 서버에서 데이터 유효성을 검사해야 하고, 명확하지 않은 오류 메시지로 사용자 경험을 악화시킬 수 있으며, 모든 제약 조건을 수동으로 확인해야 합니다.
 
 시그널 폼은 스키마 기반으로 유효성을 검사합니다.
-유효성 검사 규칙은 스키마 함수를 사용해서 필드와 바인딩하며, 값이 변경되었을 때 자동으로 실행되고 필드 상태 시그널에 따라 에러 메시지를 표시합니다.
+유효성 검사 규칙은 스키마 함수를 사용해서 필드와 바인딩하며, 값이 변경되었을 때 자동으로 실행되고 필드 상태 시그널에 따라 오류 메시지를 표시합니다.
 시그널 폼을 활용하면 사용자가 폼과 상호작용하면서 실시간으로 업데이트되는 반응형 유효성 검사가 가능합니다.
 
 <docs-code-multifile preview hideCode path="adev/src/content/examples/signal-forms/src/login-validation-complete/app/app.ts">
@@ -104,7 +104,7 @@ Validation runs on every value change for interactive fields. Hidden and disable
 
 1. **유효성 검사 규칙을 스키마에 정의합니다** - 스키마 함수 안에서 유효성검사 규칙이 필드와 바인딩됩니다.
 2. **자동 실행** - 값이 변경될 때마다 유효성 검사가 실행됩니다.
-3. **에러 전파** - 유효성 검사로 에러가 발생하면 상태 시그널로 전달됩니다.
+3. **오류 전파** - 유효성 검사로 오류가 발생하면 상태 시그널로 전달됩니다.
 4. **반응형 업데이트** - 유효성 검사 결과에 따라 UI가 자동으로 갱신됩니다.
 
 유효성 검사는 사용자가 필드와 상호작용하면서 값이 변경될 때마다 실행됩니다.
@@ -139,8 +139,8 @@ All validation rules run on every change - validation doesn't short-circuit afte
 `required()`나 `email()`과 같은 동기 유효성 검사는 실행이 즉시 종료됩니다.
 `validateHttp()`와 같은 비동기 유효성 검사는 시간이 조금 걸리기 때문에, 비동기 검사가 실행되는 중에는 `pending()` 시그널의 값이 `true`가 됩니다.
 
-유효성 검사는 값이 변경될 때마다 실행되며, 에러가 먼저 발생하는 유효성 검사가 있어도 진행 중인 검사가 중단되지는 않습니다.
-어떤 필드에 `required()` 규칙과 `email()` 규칙이 함께 있으면, 동시에 실행되며, 동시에 에러가 발생할 수 있습니다.
+유효성 검사는 값이 변경될 때마다 실행되며, 오류가 먼저 발생하는 유효성 검사가 있어도 진행 중인 검사가 중단되지는 않습니다.
+어떤 필드에 `required()` 규칙과 `email()` 규칙이 함께 있으면, 동시에 실행되며, 동시에 오류가 발생할 수 있습니다.
 
 <!--
 ### Native HTML validation
@@ -168,7 +168,7 @@ Signal Forms는 유효성 검사 규칙을 실행할 때 브라우저의 기본 
 
 필드를 기본 폼 엘리먼트에 바인딩하면 일부 내장 검사 규칙의 제약 조건은 대응하는 HTML 속성에도 반영됩니다. 엘리먼트가 지원하는 경우 `required()`, `min()`, `max()`, `minLength()`, `maxLength()`가 각각 `required`, `min`, `max`, `minlength`, `maxlength` 속성을 설정합니다. 예외적으로 `pattern()`은 기본 `pattern` 속성을 설정하지 않습니다. 이 속성들은 입력 동작을 제어하고 접근성을 높이기 위한 것이며, **브라우저의 기본 유효성 검사를 실행하기 위한 것이 아닙니다**.
 
-참고: Signal Forms가 기본 유효성 상태를 읽는 경우가 한 가지 있습니다. 브라우저가 기본 입력의 값을 파싱할 수 없으면(예: 날짜를 일부만 입력한 경우) 파싱 에러로 처리합니다. 이 경우에도 다른 검사 에러처럼 필드의 `errors()` 시그널로 에러를 확인합니다. 자세한 내용은 [값 변환](guide/forms/signals/custom-controls#value-transformation)을 참고하세요.
+참고: Signal Forms가 기본 유효성 상태를 읽는 경우가 한 가지 있습니다. 브라우저가 기본 입력의 값을 파싱할 수 없으면(예: 날짜를 일부만 입력한 경우) 파싱 오류로 처리합니다. 이 경우에도 다른 검사 오류처럼 필드의 `errors()` 시그널로 오류를 확인합니다. 자세한 내용은 [값 변환](guide/forms/signals/custom-controls#value-transformation)을 참고하세요.
 
 중요: `:valid`, `:invalid` CSS 가상 클래스, 엘리먼트의 `validity` 프로퍼티, `validationMessage` 같은 기본 유효성 검사 기능에 의존하지 마세요. 반영된 속성 때문에 브라우저가 일부 입력을 유효하지 않은 것으로 판단할 수 있지만(예: `min`보다 작은 숫자 입력), 이 동작은 검사 규칙과 입력 타입에 따라 달라지므로 유효성 검사 상태를 확인하는 공식적인 방법이 아닙니다.
 
@@ -187,7 +187,7 @@ Signal Forms provides validation rules for common validation scenarios. All buil
 -->
 
 시그널 폼이 기본적으로 제공하는 유효성 검사가 있습니다.
-기본 유효성 검사 규칙은 옵션 객체를 받는데, 이 객체를 사용해서 에러 메시지와 조건 로직을 추가로 지정할 수 있습니다.
+기본 유효성 검사 규칙은 옵션 객체를 받는데, 이 객체를 사용해서 오류 메시지와 조건 로직을 추가로 지정할 수 있습니다.
 
 ### `required()`
 
@@ -314,7 +314,7 @@ export class RegistrationComponent {
 마지막 두 항목에는 다음과 같은 이유가 있습니다:
 
 - `false`는 `<input type="checkbox">`의 `required`와 같은 의미로 처리합니다. 선택하지 않은 체크박스는 유효성 검사를 통과하지 못합니다.
-- `NaN`은 보통 파싱 에러의 결과이며 유효한 숫자가 아니므로 빈 값으로 처리합니다.
+- `NaN`은 보통 파싱 오류의 결과이며 유효한 숫자가 아니므로 빈 값으로 처리합니다.
 
 조건부로 필수 항목이라면 `when` 옵션을 사용하면 됩니다:
 
@@ -889,7 +889,9 @@ export class OrderComponent {
 
 <a id="validation-errors"></a>
 
-## 유효성 검사 에러
+<a id="유효성-검사-에러"></a>
+
+## 유효성 검사 오류
 
 <!--
 When validation rules fail, they produce error objects that describe what went wrong. Understanding error structure helps you provide clear feedback to users.
@@ -897,10 +899,10 @@ When validation rules fail, they produce error objects that describe what went w
 NOTE: This section covers the errors that validation rules produce. For displaying and using validation errors in your UI, see the [Field State Management guide](guide/forms/signals/field-state-management).
 -->
 
-유효성 검사가 실패하면 유효성 검사 함수는 무엇이 잘못되었는지 설명하는 에러 객체를 반환합니다.
-사용자에게 명확한 피드백을 제공하기 위해 에러 객체의 구조를 이해해 봅시다.
+유효성 검사가 실패하면 유효성 검사 함수는 무엇이 잘못되었는지 설명하는 오류 객체를 반환합니다.
+사용자에게 명확한 피드백을 제공하기 위해 오류 객체의 구조를 이해해 봅시다.
 
-참고: 이 섹션은 검사 규칙이 생성하는 에러를 설명합니다. UI에서 검사 에러를 표시하고 활용하는 방법은 [필드 상태 관리 가이드](guide/forms/signals/field-state-management)를 참고하세요.
+참고: 이 섹션은 검사 규칙이 생성하는 오류를 설명합니다. UI에서 검사 오류를 표시하고 활용하는 방법은 [필드 상태 관리 가이드](guide/forms/signals/field-state-management)를 참고하세요.
 
 <!--
 ### Error structure
@@ -908,7 +910,9 @@ NOTE: This section covers the errors that validation rules produce. For displayi
 
 <a id="error-structure"></a>
 
-### 에러 객체의 구조
+<a id="에러-객체의-구조"></a>
+
+### 오류 객체의 구조
 
 <!--
 Each validation error object contains these properties:
@@ -921,12 +925,12 @@ Each validation error object contains these properties:
 Built-in validation rules automatically set the `kind` property. The `message` property is optional - you can provide custom messages through validation rule options.
 -->
 
-에러 객체는 이런 프로퍼티를 갖습니다:
+오류 객체는 이런 프로퍼티를 갖습니다:
 
 | 프로퍼티  | 설명                                                               |
 | --------- | ------------------------------------------------------------------ |
 | `kind`    | 유효성 검사가 실패한 규칙 (예시. "required", "email", "minLength") |
-| `message` | 사람이 읽을 수 있는 에러 메시지(생략 가능)                         |
+| `message` | 사람이 읽을 수 있는 오류 메시지(생략 가능)                         |
 
 Angular가 기본으로 제공하는 유효성 검사 규칙은 `kind` 프로퍼티 값이 자동으로 설정됩니다.
 `message` 프로퍼티는 유효성 검사 규칙을 정의할 때 옵션으로 전달할 수 있으며, 생략할 수 있습니다.
@@ -937,7 +941,9 @@ Angular가 기본으로 제공하는 유효성 검사 규칙은 `kind` 프로퍼
 
 <a id="custom-error-messages"></a>
 
-### 커스텀 에러 메시지
+<a id="커스텀-에러-메시지"></a>
+
+### 커스텀 오류 메시지
 
 <!--
 All built-in validation rules accept a `message` option for custom error text:
@@ -987,7 +993,7 @@ export class SignupComponent {
 Custom messages should be clear, specific, and tell users how to fix the problem. Instead of "Invalid input", use "Password must be at least 12 characters for security".
 -->
 
-Angular가 제공하는 기본 유효성 검사 함수는 `message` 옵션으로 커스텀 에러 문구를 받을 수 있습니다:
+Angular가 제공하는 기본 유효성 검사 함수는 `message` 옵션으로 커스텀 오류 문구를 받을 수 있습니다:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -1040,7 +1046,9 @@ export class SignupComponent {
 
 <a id="multiple-errors-per-field"></a>
 
-### 필드 하나에 에러가 여러 개 발생한 경우
+<a id="필드-하나에-에러가-여러-개-발생한-경우"></a>
+
+### 필드 하나에 오류가 여러 개 발생한 경우
 
 <!--
 When a field has multiple validation rules, each validation rule runs independently and can produce an error:
@@ -1058,7 +1066,7 @@ If the email field is empty, only the `required()` error appears. If the user ty
 TIP: Use the `touched() && invalid()` pattern in your templates to prevent errors from appearing before users have interacted with a field. For comprehensive guidance on displaying validation errors, see the [Field State Management guide](guide/forms/signals/field-state-management#conditional-error-display).
 -->
 
-한 필드에 유효성 검사 규칙이 여러 개 적용된 경우에는 개별 유효성 검사 규칙이 독립적으로 실행되며 에러가 발생할 수 있습니다:
+한 필드에 유효성 검사 규칙이 여러 개 적용된 경우에는 개별 유효성 검사 규칙이 독립적으로 실행되며 오류가 발생할 수 있습니다:
 
 ```ts
 signupForm = form(this.signupModel, (schemaPath) => {
@@ -1068,12 +1076,12 @@ signupForm = form(this.signupModel, (schemaPath) => {
 });
 ```
 
-이메일 필드가 빈 값이라면 `required()` 에러만 발생합니다.
-사용자가 "a@b" 라고 입력하면 `email()` 에러와 `minLength()` 에러가 발생합니다.
-유효성 검사 규칙 중에서 에러가 발생하는 것이 있더라도, 유효성 검사 규칙은 모두 실행됩니다.
+이메일 필드가 빈 값이라면 `required()` 오류만 발생합니다.
+사용자가 "a@b" 라고 입력하면 `email()` 오류와 `minLength()` 오류가 발생합니다.
+유효성 검사 규칙 중에서 오류가 발생하는 것이 있더라도, 유효성 검사 규칙은 모두 실행됩니다.
 
-참고: 사용자가 필드에 접근한 이후에만 템플릿에 에러를 표시하려면 `touched() && invalid()` 패턴을 사용하세요.
-유효성 검사 에러에 대해 자세하게 알아보려면 [필드 상태 관리 문서](guide/forms/signals/field-state-management#conditional-error-display)를 참고하세요.
+참고: 사용자가 필드에 접근한 이후에만 템플릿에 오류를 표시하려면 `touched() && invalid()` 패턴을 사용하세요.
+유효성 검사 오류에 대해 자세하게 알아보려면 [필드 상태 관리 문서](guide/forms/signals/field-state-management#conditional-error-display)를 참고하세요.
 
 <!--
 ## Custom validation rules
@@ -1160,7 +1168,7 @@ Return an error object with `kind` and `message` when validation fails. Return `
 
 | 반환값                  | 의미               |
 | ----------------------- | ------------------ |
-| 에러 객체               | 값이 유효하지 않음 |
+| 오류 객체               | 값이 유효하지 않음 |
 | `null` 또는 `undefined` | 값이 유효함        |
 
 ```angular-ts
@@ -1211,7 +1219,7 @@ export class UrlFormComponent {
 
 참고: 자식 필드에도 `key` 시그널이 존재하며, 배열 항목 필드에는 `key`와 `index` 시그널이 함께 존재합니다.
 
-유효성 검사에 실패하면 `kind` 프로퍼티와 `message` 프로퍼티를 설정해서 에러 객체를 반환하면 됩니다.
+유효성 검사에 실패하면 `kind` 프로퍼티와 `message` 프로퍼티를 설정해서 오류 객체를 반환하면 됩니다.
 유효성 검사에 성공하면 `null`이나 `undefined`를 반환하면 됩니다.
 
 <!--
@@ -1542,7 +1550,7 @@ For complete examples, including reusable schemas and discriminated unions, see 
 유효성 검사 규칙은 스키마 함수 안에 정의하기 때문에, 조건부 유효성 검사도 스키마로 정의합니다:
 
 - [`applyWhen()`](guide/forms/signals/form-logic#conditional-logic-with-applywhen) - 폼 상태에 반응하며 특정 조건이 되었을 때만 유효성 검사를 진행할 때 사용합니다.
-- [`applyWhenValue()`](guide/forms/signals/schemas#type-narrowing-with-applywhenvalue) - 해당 필드 값에 따라 유효성 검사를 진행할 때 사용합니다. 타입 가드를 사용하는 경우, 유효성 검사 규칙의 타입이 축소되는데, 이 방식은 유니언 타입이나 확장 타입을 검증할 때 권장합니다.
+- [`applyWhenValue()`](guide/forms/signals/schemas#type-narrowing-with-applywhenvalue) - 해당 필드 값에 따라 유효성 검사를 진행할 때 사용합니다. 타입 가드를 사용하는 경우, 유효성 검사 규칙의 타입이 축소되는데, 이 방식은 판별 유니언과 그 밖에 여러 변형을 갖는 타입을 검증할 때 권장합니다.
 
 스키마를 재사용하고 유니언을 구분하는 예제 코드는 [스키마와 스키마 조합](guide/forms/signals/schemas) 문서를 참고하세요.
 
@@ -1677,7 +1685,7 @@ export class UsernameFormComponent {
 `validateHttp()` 는 이렇게 동작합니다:
 
 1. `request()` 함수로 외부 요청을 보냅니다.
-2. `onSuccess`로 성공 응답을 유효성 검사 에러 또는 `null`로 변환합니다.
+2. `onSuccess`로 성공 응답을 유효성 검사 오류 또는 `null`로 변환합니다.
 3. 네트워크 오류나 HTTP 오류 등 요청 자체가 실패한 경우는 `onError`에서 다룹니다.
 4. 요청을 보내고 응답을 받기 전까지는 `pending()` 시그널의 값이 `true`가 됩니다.
 5. 비동기 유효성 검사는 동기 유효성 검사를 모두 통과했을 때만 실행됩니다.
@@ -1712,8 +1720,8 @@ The `valid()` signal returns `false` while validation is pending, even if there 
 ```
 
 비동기 유효성 검사가 진행 중이면 `valid()` 시그널은 `false`를 반환합니다.
-에러가 발생하지 않은 경우에도 그렇습니다.
-`invalid()` 시그널은 에러가 발생했을 때만 `true`를 반환합니다.
+오류가 발생하지 않은 경우에도 그렇습니다.
+`invalid()` 시그널은 오류가 발생했을 때만 `true`를 반환합니다.
 
 <!--
 ## Integration with schema validation libraries

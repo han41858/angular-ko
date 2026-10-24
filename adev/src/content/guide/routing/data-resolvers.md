@@ -60,7 +60,7 @@ Data resolvers solve common routing challenges:
 
 - **빈 상태 방지**: 컴포넌트가 로드되면 바로 데이터를 받습니다.
 - **사용자 경험 개선**: 핵심 데이터를 위한 로딩 스피너가 필요하지 않습니다.
-- **에러 처리**: 내비게이션 전에 데이터 요청 에러를 처리합니다.
+- **오류 처리**: 내비게이션 전에 데이터 요청 오류를 처리합니다.
 - **데이터 일관성**: 렌더링 전에 필요한 데이터를 확보합니다.
   이는 SSR에서 중요합니다.
 
@@ -333,7 +333,9 @@ export class UserDetail {
 
 <a id="error-handling-in-resolvers"></a>
 
-## 리졸버 에러 처리하기
+<a id="리졸버-에러-처리하기"></a>
+
+## 리졸버 오류 처리하기
 
 <!--
 In the event of navigation failures, it is important to handle errors gracefully in your data resolvers. Otherwise, a `NavigationError` will occur and the navigation to the current route will fail which will lead to a poor experience for your users.
@@ -345,14 +347,14 @@ There are three primary ways to handle errors with data resolvers:
 3. Handle errors directly in the resolver
 -->
 
-내비게이션이 실패할 때는 데이터 리졸버에서 에러를 적절하게 처리하는 것이 중요합니다.
-에러를 처리하지 않으면 `NavigationError`가 발생하고 해당 라우팅 규칙으로 이동하지 못해서 사용자 경험이 나빠집니다.
+내비게이션이 실패할 때는 데이터 리졸버에서 오류를 적절하게 처리하는 것이 중요합니다.
+오류를 처리하지 않으면 `NavigationError`가 발생하고 해당 라우팅 규칙으로 이동하지 못해서 사용자 경험이 나빠집니다.
 
-데이터 리졸버의 에러를 처리하는 주요 방법은 세 가지입니다.
+데이터 리졸버의 오류를 처리하는 주요 방법은 세 가지입니다.
 
-1. `withNavigationErrorHandler`에서 에러 처리를 통합합니다.
-2. 라우터 이벤트를 구독해서 에러를 관리합니다.
-3. 리졸버에서 직접 에러를 처리합니다.
+1. `withNavigationErrorHandler`에서 오류 처리를 통합합니다.
+2. 라우터 이벤트를 구독해서 오류를 관리합니다.
+3. 리졸버에서 직접 오류를 처리합니다.
 
 <!--
 ### Centralize error handling in `withNavigationErrorHandler`
@@ -360,7 +362,9 @@ There are three primary ways to handle errors with data resolvers:
 
 <a id="centralize-error-handling-in-withnavigationerrorhandler"></a>
 
-### `withNavigationErrorHandler`에서 에러 처리 통합하기
+<a id="withnavigationerrorhandler에서-에러-처리-통합하기"></a>
+
+### `withNavigationErrorHandler`에서 오류 처리 통합하기
 
 <!--
 The [`withNavigationErrorHandler`](api/router/withNavigationErrorHandler) feature provides a centralized way to handle all navigation errors, including those from failed data resolvers. This approach keeps error handling logic in one place and prevents duplicate error handling code across resolvers.
@@ -401,8 +405,8 @@ export const userResolver: ResolveFn<User> = (route) => {
 ```
 -->
 
-[`withNavigationErrorHandler`](api/router/withNavigationErrorHandler)는 데이터 리졸버의 실패를 포함한 모든 내비게이션 에러를 한곳에서 처리하는 기능입니다.
-에러 처리 로직을 한곳에 모으기 때문에 리졸버마다 에러 처리 코드가 중복되는 일을 방지할 수 있습니다.
+[`withNavigationErrorHandler`](api/router/withNavigationErrorHandler)는 데이터 리졸버의 실패를 포함한 모든 내비게이션 오류를 한곳에서 처리하는 기능입니다.
+오류 처리 로직을 한곳에 모으기 때문에 리졸버마다 오류 처리 코드가 중복되는 일을 방지할 수 있습니다.
 
 ```ts
 import {bootstrapApplication} from '@angular/platform-browser';
@@ -428,7 +432,7 @@ bootstrapApplication(App, {
 });
 ```
 
-이렇게 설정하면 에러 상황은 공통 핸들러가 관리하고, 리졸버는 데이터 요청에 집중할 수 있습니다.
+이렇게 설정하면 오류 상황은 공통 핸들러가 관리하고, 리졸버는 데이터 요청에 집중할 수 있습니다.
 
 ```ts
 export const userResolver: ResolveFn<User> = (route) => {
@@ -445,7 +449,9 @@ export const userResolver: ResolveFn<User> = (route) => {
 
 <a id="managing-errors-through-a-subscription-to-router-events"></a>
 
-### 라우터 이벤트를 구독해서 에러 관리하기
+<a id="라우터-이벤트를-구독해서-에러-관리하기"></a>
+
+### 라우터 이벤트를 구독해서 오류 관리하기
 
 <!--
 You can also handle resolver errors by subscribing to router events and listening for `NavigationError` events. This approach gives you more granular control over error handling and allows you to implement custom error recovery logic.
@@ -507,8 +513,8 @@ This approach is particularly useful when you need to:
 - Track navigation failures for analytics purposes
 -->
 
-라우터 이벤트를 구독하고 `NavigationError` 이벤트를 감지해서 리졸버 에러를 처리할 수도 있습니다.
-이 방식은 에러 처리를 더 세밀하게 제어할 수 있으며 커스텀 에러 복구 로직도 구현할 수 있습니다.
+라우터 이벤트를 구독하고 `NavigationError` 이벤트를 감지해서 리졸버 오류를 처리할 수도 있습니다.
+이 방식은 오류 처리를 더 세밀하게 제어할 수 있으며 커스텀 오류 복구 로직도 구현할 수 있습니다.
 
 ```angular-ts
 import {Component, inject, signal} from '@angular/core';
@@ -563,7 +569,7 @@ export class App {
 이 방식은 다음과 같은 경우에 특히 유용합니다.
 
 - 실패한 내비게이션에 커스텀 재시도 로직을 구현할 때
-- 실패 유형에 따라 다른 에러 메시지를 표시할 때
+- 실패 유형에 따라 다른 오류 메시지를 표시할 때
 - 분석 목적으로 내비게이션 실패를 추적할 때
 
 <!--
@@ -572,7 +578,9 @@ export class App {
 
 <a id="handling-errors-directly-in-the-resolver"></a>
 
-### 리졸버에서 직접 에러 처리하기
+<a id="리졸버에서-직접-에러-처리하기"></a>
+
+### 리졸버에서 직접 오류 처리하기
 
 <!--
 Here's an updated example of the `userResolver` that logs the error and navigates back to the generic `/users` page using the `Router` service:
@@ -599,7 +607,7 @@ export const userResolver: ResolveFn<User | RedirectCommand> = (route) => {
 ```
 -->
 
-다음은 에러를 기록하고 `Router` 서비스로 일반 `/users` 페이지에 돌아가도록 수정한 `userResolver` 예제입니다.
+다음은 오류를 기록하고 `Router` 서비스로 일반 `/users` 페이지에 돌아가도록 수정한 `userResolver` 예제입니다.
 
 ```ts
 import {inject} from '@angular/core';
@@ -718,7 +726,7 @@ export class App {
 -->
 
 - **리졸버를 가볍게 유지하세요**: 페이지에서 필요할 수 있는 모든 데이터 대신 필수 데이터만 가져오세요.
-- **에러를 처리하세요**: 사용자에게 가능한 한 좋은 경험을 제공할 수 있도록 항상 에러를 적절하게 처리하세요.
+- **오류를 처리하세요**: 사용자에게 가능한 한 좋은 경험을 제공할 수 있도록 항상 오류를 적절하게 처리하세요.
 - **캐시를 활용하세요**: 성능을 높이기 위해 리졸버가 가져온 데이터의 캐시를 고려하세요.
 - **내비게이션 사용자 경험을 고려하세요**: 데이터를 가져오는 동안 내비게이션이 대기하므로 리졸버 실행을 위한 로딩 표시기를 구현하세요.
 - **적절한 제한 시간을 설정하세요**: 리졸버가 무기한 대기하면서 내비게이션을 막지 않도록 하세요.

@@ -134,7 +134,9 @@ The following example shows the `<ng-container>` element transformed into a non-
 
 <a id="name-the-interpolation-placeholder"></a>
 
-### 문자열 보간 플레이스홀더에 이름 지정하기
+<a id="문자열-보간-플레이스홀더에-이름-지정하기"></a>
+
+### 문자열 바인딩 플레이스홀더에 이름 지정하기
 
 <!--
 By default, Angular generates a placeholder name for each interpolation in a translated message. To give it a meaningful name that helps translators understand the context, add an `//i18n(ph="name")` comment inside the interpolation.
@@ -156,8 +158,8 @@ $localize`Hello, ${username}:name:!`;
 ```
 -->
 
-기본적으로 Angular는 번역된 메시지의 각 문자열 보간에 플레이스홀더 이름을 생성합니다.
-번역자가 문맥을 이해하는 데 도움이 되는 이름을 지정하려면 문자열 보간 안에 `//i18n(ph="name")` 주석을 추가하세요.
+기본적으로 Angular는 번역된 메시지의 각 문자열 바인딩에 플레이스홀더 이름을 생성합니다.
+번역자가 문맥을 이해하는 데 도움이 되는 이름을 지정하려면 문자열 바인딩 안에 `//i18n(ph="name")` 주석을 추가하세요.
 
 ```html
 <element i18n>{{ expression //i18n(ph="placeholder_name") }}</element>
@@ -306,7 +308,7 @@ $localize`string_to_translate ${variable_name}`;
 ```
 -->
 
-[`$localize`][ApiLocalizeInitLocalize] 태그가 붙은 메시지 문자열에 [문자열 보간](guide/templates/binding#render-dynamic-text-with-text-interpolation)을 포함하세요.
+[`$localize`][ApiLocalizeInitLocalize] 태그가 붙은 메시지 문자열에 [문자열 바인딩](guide/templates/binding#render-dynamic-text-with-text-interpolation)을 포함하세요.
 
 ```ts
 $localize`string_to_translate ${variable_name}`;
@@ -319,7 +321,9 @@ $localize`string_to_translate ${variable_name}`;
 <a id="name-the-interpolation-placeholder-1"></a>
 <a id="name-the-interpolation-placeholder-in-code"></a>
 
-### 문자열 보간 플레이스홀더에 이름 지정하기 {#문자열-보간-플레이스홀더에-이름-지정하기-2}
+<a id="문자열-보간-플레이스홀더에-이름-지정하기-문자열-보간-플레이스홀더에-이름-지정하기-2"></a>
+
+### 문자열 바인딩 플레이스홀더에 이름 지정하기 {#ko-name-the-interpolation-placeholder-in-code}
 
 <!--
 ```ts
@@ -737,7 +741,7 @@ updated just now
 updated one minute ago
 ```
 
-HTML 마크업과 [문자열 보간](guide/templates/binding#render-dynamic-text-with-text-interpolation)을 사용하세요.
+HTML 마크업과 [문자열 바인딩](guide/templates/binding#render-dynamic-text-with-text-interpolation)을 사용하세요.
 다음 코드 예제는 `plural` 절로 앞의 세 상황을 `<span>` 엘리먼트에 표현하는 방법을 보여줍니다.
 
 <docs-code header="app.component.html" path="adev/src/content/examples/i18n/src/app/app.component.html" region="i18n-plural"/>
@@ -752,7 +756,7 @@ HTML 마크업과 [문자열 보간](guide/templates/binding#render-dynamic-text
 | `=1 {one minute}`                 | 1분이면 복수형 범주는 `=1`입니다. 값은 `one minute`입니다.                                                          |
 | `other {{{minutes}} minutes ago}` | 어느 범주와도 일치하지 않는 수량에는 기본 복수형 범주인 `other`를 사용합니다. 값은 `{{minutes}} minutes ago`입니다. |
 
-`{{minutes}}`는 [문자열 보간](guide/templates/binding#render-dynamic-text-with-text-interpolation)입니다.
+`{{minutes}}`는 [문자열 바인딩](guide/templates/binding#render-dynamic-text-with-text-interpolation)입니다.
 
 <!--
 ### Mark alternates and nested expressions

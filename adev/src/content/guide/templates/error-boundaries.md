@@ -113,18 +113,18 @@ To catch those errors, wrap the wrapper component and its projected content in a
 Error handling isn't limited to template syntax. If you are creating components or embedded views dynamically, you can use the `onError` option to handle errors. See the [Handling rendering errors](guide/components/programmatic-rendering#handling-rendering-errors) section in the programmatic rendering guide for more information.
 -->
 
-# `@boundary`로 에러 경계 설정하기
+# `@boundary`로 오류 경계 설정하기
 
 중요: `@boundary`는 [개발자 프리뷰](reference/releases#developer-preview) 기능입니다.
 
-Angular 템플릿은 렌더링과 변화 감지 중 발생하는 런타임 에러를 적절하게 처리할 수 있는 에러 경계를 지원합니다.
+Angular 템플릿은 렌더링과 변경 감지 중 발생하는 런타임 오류를 적절하게 처리할 수 있는 오류 경계를 지원합니다.
 
-에러 경계는 한 컴포넌트의 실패로 애플리케이션 전체가 중단되는 것을 방지하고, 사용자에게 대체 UI를 표시할 수 있게 합니다.
+오류 경계는 한 컴포넌트의 실패로 애플리케이션 전체가 중단되는 것을 방지하고, 사용자에게 대체 UI를 표시할 수 있게 합니다.
 
-## `@boundary`와 `@error`로 에러 처리하기 {#catching-errors-with-boundary-and-error}
+## `@boundary`와 `@error`로 오류 처리하기 {#catching-errors-with-boundary-and-error}
 
 `@boundary` 블록은 템플릿의 일부를 감쌉니다.
-경계 안에 있는 컴포넌트나 디렉티브에서 초기화 또는 변화 감지 중 에러가 발생하면, 프레임워크가 에러를 처리하고 대신 `@error` 블록을 렌더링합니다.
+경계 안에 있는 컴포넌트나 디렉티브에서 초기화 또는 변경 감지 중 오류가 발생하면, 프레임워크가 오류를 처리하고 대신 `@error` 블록을 렌더링합니다.
 
 ```angular-html
 @boundary {
@@ -134,9 +134,9 @@ Angular 템플릿은 렌더링과 변화 감지 중 발생하는 런타임 에�
 }
 ```
 
-## 에러 객체에 접근하기 {#accessing-the-error-object}
+## 오류 객체에 접근하기 {#accessing-the-error-object}
 
-암묵적으로 제공되는 `$error` 변수를 사용하면 발생한 에러에 접근할 수 있습니다.
+암묵적으로 제공되는 `$error` 변수를 사용하면 발생한 오류에 접근할 수 있습니다.
 
 ```angular-html
 @boundary {
@@ -160,10 +160,10 @@ Angular 템플릿은 렌더링과 변화 감지 중 발생하는 런타임 에�
 }
 ```
 
-## `when`으로 조건에 따라 에러 처리하기 {#conditional-error-handling-with-when}
+## `when`으로 조건에 따라 오류 처리하기 {#conditional-error-handling-with-when}
 
-`when` 절을 사용하면 특정 종류의 에러를 조건에 따라 처리해서 서로 다른 대체 UI를 제공할 수 있습니다.
-Angular는 에러를 처리할 때 이 조건을 평가합니다.
+`when` 절을 사용하면 특정 종류의 오류를 조건에 따라 처리해서 서로 다른 대체 UI를 제공할 수 있습니다.
+Angular는 오류를 처리할 때 이 조건을 평가합니다.
 
 ```angular-html
 @boundary {
@@ -178,12 +178,12 @@ Angular는 에러를 처리할 때 이 조건을 평가합니다.
 
 `@error` 블록은 가장 구체적인 조건부터 일반적인 조건 순서로 배치하세요.
 Angular는 `when` 절을 순서대로 평가하고 처음으로 참이 되는 블록을 사용합니다.
-마지막에 `when` 절이 없는 `@error` 블록을 두면 나머지 모든 에러를 처리할 수 있습니다.
+마지막에 `when` 절이 없는 `@error` 블록을 두면 나머지 모든 오류를 처리할 수 있습니다.
 
-## 전역 에러 핸들러와 통합하기 {#global-error-handler-integration}
+## 전역 오류 핸들러와 통합하기 {#global-error-handler-integration}
 
-경계가 에러를 처리하더라도 Angular는 전역 `ErrorHandler`에 에러를 알릴 수 있습니다.
-커스텀 `ErrorHandler`에 선택적인 `onViewError` 훅을 구현하면 경계에서 처리한 에러를 에러 추적 서비스에 기록할 수 있습니다.
+경계가 오류를 처리하더라도 Angular는 전역 `ErrorHandler`에 오류를 알릴 수 있습니다.
+커스텀 `ErrorHandler`에 선택적인 `onViewError` 훅을 구현하면 경계에서 처리한 오류를 오류 추적 서비스에 기록할 수 있습니다.
 
 ```ts
 @Injectable()
@@ -200,14 +200,14 @@ export class MyErrorHandler implements ErrorHandler {
 }
 ```
 
-중요: `@error` 블록 자체에서 에러가 발생하면 바로 바깥쪽 `@boundary`로 전파되며, 바깥 경계가 없으면 Angular가 처리되지 않은 애플리케이션 에러로 취급합니다.
+중요: `@error` 블록 자체에서 오류가 발생하면 바로 바깥쪽 `@boundary`로 전파되며, 바깥 경계가 없으면 Angular가 처리되지 않은 애플리케이션 오류로 취급합니다.
 
 ## 콘텐츠 프로젝션 {#content-projection}
 
-컴포넌트에서 [콘텐츠 프로젝션](guide/components/content-projection)을 사용한다면, `<ng-content>`를 `@boundary`로 감싸도 프로젝션된 콘텐츠의 에러는 처리하지 못합니다.
+컴포넌트에서 [콘텐츠 프로젝션](guide/components/content-projection)을 사용한다면, `<ng-content>`를 `@boundary`로 감싸도 프로젝션된 콘텐츠의 오류는 처리하지 못합니다.
 해당 콘텐츠는 받는 컴포넌트의 뷰가 아니라, 콘텐츠를 선언한 뷰에 속하기 때문입니다.
 
-예를 들어 다음 템플릿을 사용하는 래퍼 컴포넌트는 안으로 프로젝션된 컴포넌트에서 발생하는 에러를 처리하지 못합니다.
+예를 들어 다음 템플릿을 사용하는 래퍼 컴포넌트는 안으로 프로젝션된 컴포넌트에서 발생하는 오류를 처리하지 못합니다.
 
 ```angular-html {avoid}
 @boundary {
@@ -217,7 +217,7 @@ export class MyErrorHandler implements ErrorHandler {
 }
 ```
 
-이러한 에러를 처리하려면 부모 템플릿에서 래퍼 컴포넌트와 프로젝션할 콘텐츠를 함께 `@boundary`로 감싸세요.
+이러한 오류를 처리하려면 부모 템플릿에서 래퍼 컴포넌트와 프로젝션할 콘텐츠를 함께 `@boundary`로 감싸세요.
 
 ```angular-html {prefer}
 @boundary {
@@ -229,8 +229,8 @@ export class MyErrorHandler implements ErrorHandler {
 }
 ```
 
-## 동적 뷰와 프로그래밍 방식의 에러 처리 {#dynamic-views-and-programmatic-error-handling}
+## 동적 뷰와 프로그래밍 방식의 오류 처리 {#dynamic-views-and-programmatic-error-handling}
 
-에러 처리는 템플릿 문법에만 한정되지 않습니다.
-컴포넌트나 내장 뷰를 동적으로 생성한다면 `onError` 옵션으로 에러를 처리할 수 있습니다.
-자세한 내용은 프로그래밍 방식 렌더링 가이드의 [렌더링 에러 처리하기](guide/components/programmatic-rendering#handling-rendering-errors)를 참고하세요.
+오류 처리는 템플릿 문법에만 한정되지 않습니다.
+컴포넌트나 내장 뷰를 동적으로 생성한다면 `onError` 옵션으로 오류를 처리할 수 있습니다.
+자세한 내용은 프로그래밍 방식 렌더링 가이드의 [렌더링 오류 처리하기](guide/components/programmatic-rendering#handling-rendering-errors)를 참고하세요.

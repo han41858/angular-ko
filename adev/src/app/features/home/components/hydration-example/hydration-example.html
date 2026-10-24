@@ -1,4 +1,4 @@
-<div class="header">Hydration</div>
+<div class="header">하이드레이션</div>
 <!--
 <div class="description">
   Hydration is the process that restores the server-side rendered application on the client
@@ -165,7 +165,7 @@
                       </div>
                       @if (card.clickCount > 0) {
                         <div class="click-badge font-tabular animate-zoom">
-                          <span class="badge-label">CLICKS:</span> {{ card.clickCount }}
+                          <span class="badge-label">클릭 수:</span> {{ card.clickCount }}
                         </div>
                       }
                     </div>
@@ -187,12 +187,12 @@
                       } @else if (!card.isHydrated) {
                         <div class="tag tag-deferred">
                           <span class="tag-dot pulse"></span>
-                          Static
+                          정적 상태
                         </div>
                       } @else {
                         <div class="tag tag-hydrated animate-slide-in">
                           <span class="tag-dot"></span>
-                          Hydrated
+                          하이드레이션 완료
                         </div>
                       }
                     </div>
@@ -231,7 +231,7 @@
         -->
         <h5 class="explainer-title"><span class="dot-red"></span>즉시 하이드레이션</h5>
         <p class="explainer-text">
-          네비게이션이나 최상단 항목 등 핵심 컴포넌트는 메인 애플리베이션이 준비되는 대로 즉시
+          네비게이션이나 최상단 항목 등 핵심 컴포넌트는 메인 애플리케이션이 준비되는 대로 즉시
           로드합니다.
         </p>
       </div>
@@ -243,7 +243,7 @@
           JS execution for non-critical elements.
         </p>
         -->
-        <h5 class="explainer-title"><span class="dot-violet"></span>증분 하이드레이션</h5>
+        <h5 class="explainer-title"><span class="dot-violet"></span>점진적 하이드레이션</h5>
         <p class="explainer-text">
           중요도가 낮은 엘리먼트를 로드할 때는 <code>on interaction</code>이나
           <code>on timer</code> 하이드레이션 트리거를 사용하세요.
@@ -259,8 +259,8 @@
         -->
         <h5 class="explainer-title"><span class="dot-green"></span>이벤트 리플레이</h5>
         <p class="explainer-text">
-          로드되는 중에도 사용자 상호작용은 사라지지 않습니다. Angular는 "Static" 단계에서 이벤트를
-          저장했다가 하이드레이션이 완료되면 이벤트를 다시 발생시킵니다.
+          로드되는 중에도 사용자 상호작용은 사라지지 않습니다. Angular는 "정적 상태" 단계에서
+          이벤트를 저장했다가 하이드레이션이 완료되면 이벤트를 다시 발생시킵니다.
         </p>
       </div>
     </div>

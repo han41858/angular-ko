@@ -593,9 +593,9 @@ export function responseTypeInterceptor(
 - `'cors'` - CORS 헤더가 올바르게 설정된 교차 출처 응답
 - `'opaque'` - CORS를 사용하지 않는 교차 출처 응답으로, 헤더와 본문 접근이 제한될 수 있음
 - `'opaqueredirect'` - no-cors 모드에서 리다이렉트된 요청의 응답
-- `'error'` - 네트워크 에러가 발생함
+- `'error'` - 네트워크 오류가 발생함
 
-인터셉터에서 응답 타입 정보를 사용해서 CORS를 디버깅하고 에러를 처리할 수 있습니다:
+인터셉터에서 응답 타입 정보를 사용해서 CORS를 디버깅하고 오류를 처리할 수 있습니다:
 
 ```ts
 export function responseTypeInterceptor(

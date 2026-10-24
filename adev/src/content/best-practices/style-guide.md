@@ -203,7 +203,7 @@ Unit tests should live in the same directory as the code-under-test. Avoid colle
 tests into a single `tests` directory.
 -->
 
-Angular 컴포넌트는 TypeScript 파일과 선택적인 템플릿 파일, 하나 이상의 스타일 파일로 구성됩니다.
+Angular 컴포넌트는 TypeScript 파일로 구성되며, 템플릿 파일과 하나 이상의 스타일 파일을 선택적으로 포함할 수 있습니다.
 이 파일들은 같은 디렉터리에 모아야 합니다.
 
 단위 테스트는 테스트 대상 코드와 같은 디렉터리에 두세요.
@@ -318,7 +318,7 @@ Prefer using the [`inject`](/api/core/inject) function over injecting constructo
 - [`inject`](/api/core/inject)는 타입 추론이 더 좋습니다.
 - ES2022 이상을 대상으로 [`useDefineForClassFields`](https://www.typescriptlang.org/tsconfig/#useDefineForClassFields)를 사용할 때, 필드가 주입된 의존성을 참조하더라도 필드 선언과 초기화를 분리하지 않아도 됩니다.
 
-[자동화 도구로 기존 코드를 `inject` 방식으로 리팩터링할 수 있습니다](reference/migrations/inject-function).
+[자동화 도구로 기존 코드를 `inject` 방식으로 리팩토링할 수 있습니다](reference/migrations/inject-function).
 
 <!--
 ## Components and directives
@@ -709,7 +709,9 @@ class RichText {
 
 <a id="keep-lifecycle-methods-simple"></a>
 
-### 생명주기 메서드는 간단하게 유지하세요
+<a id="생명주기-메서드는-간단하게-유지하세요"></a>
+
+### 라이프사이클 메서드는 간단하게 유지하세요
 
 <!--
 Avoid putting long or complex logic inside lifecycle hooks like `ngOnInit`. Instead, prefer creating
@@ -733,9 +735,9 @@ ngOnInit() {
 ```
 -->
 
-`ngOnInit` 같은 생명주기 후킹 메서드에 길고 복잡한 로직을 넣지 마세요.
-대신 로직을 설명하는 이름의 메서드를 만들고 생명주기 후킹 메서드에서 _그 메서드를 호출_ 하는 것이 좋습니다.
-생명주기 후킹 메서드의 이름은 _언제_ 실행되는지를 나타내므로, 내부 코드가 어떤 일을 하는지 설명하는 의미 있는 이름이 되지는 못합니다.
+`ngOnInit` 같은 라이프사이클 후킹 메서드에 길고 복잡한 로직을 넣지 마세요.
+대신 로직을 설명하는 이름의 메서드를 만들고 라이프사이클 후킹 메서드에서 _그 메서드를 호출_ 하는 것이 좋습니다.
+라이프사이클 후킹 메서드의 이름은 _언제_ 실행되는지를 나타내므로, 내부 코드가 어떤 일을 하는지 설명하는 의미 있는 이름이 되지는 못합니다.
 
 ```ts {prefer}
 ngOnInit() {
@@ -758,7 +760,9 @@ ngOnInit() {
 
 <a id="use-lifecycle-hook-interfaces"></a>
 
-### 생명주기 후킹 인터페이스를 사용하세요
+<a id="생명주기-후킹-인터페이스를-사용하세요"></a>
+
+### 라이프사이클 후킹 인터페이스를 사용하세요
 
 <!--
 Angular provides a TypeScript interface for each lifecycle method. When adding a lifecycle hook to
@@ -777,8 +781,8 @@ export class UserProfile implements OnInit {
 ```
 -->
 
-Angular는 각 생명주기 메서드에 해당하는 TypeScript 인터페이스를 제공합니다.
-클래스에 생명주기 후킹 메서드를 추가할 때는 해당 인터페이스를 가져와 `implement`하여 메서드 이름이 올바른지 확인하세요.
+Angular는 각 라이프사이클 메서드에 해당하는 TypeScript 인터페이스를 제공합니다.
+클래스에 라이프사이클 후킹 메서드를 추가할 때는 해당 인터페이스를 가져와 `implement`하여 메서드 이름이 올바른지 확인하세요.
 
 ```ts
 import {Component, OnInit} from '@angular/core';

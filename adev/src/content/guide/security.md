@@ -119,7 +119,7 @@ For this reason, it is strongly encouraged to take advantage of these features. 
 -->
 
 Angular는 XSS 버그를 체계적으로 차단하기 위해 기본적으로 모든 값을 신뢰할 수 없는 값으로 취급합니다.
-템플릿 바인딩이나 문자열 보간을 통해 DOM에 값을 삽입할 때 Angular는 신뢰할 수 없는 값을 무력화하고 이스케이프합니다.
+템플릿 바인딩이나 문자열 바인딩을 통해 DOM에 값을 삽입할 때 Angular는 신뢰할 수 없는 값을 무력화하고 이스케이프합니다.
 Angular 외부에서 이미 무력화되어 안전하다고 판단한 값이라면, [신뢰할 수 있는 값으로 표시](#trusting-safe-values)해 Angular에 알려주세요.
 
 렌더링에 사용하는 값과 달리 Angular 템플릿은 기본적으로 신뢰할 수 있다고 간주되며, 실행 가능한 코드로 취급해야 합니다.
@@ -205,11 +205,11 @@ Angular recognizes the value as unsafe and automatically sanitizes it, which rem
 -->
 
 다음 템플릿은 `htmlSnippet`의 값을 두 가지 방식으로 바인딩합니다.
-하나는 문자열 보간을 사용해 엘리먼트의 내용에 넣고, 다른 하나는 엘리먼트의 `innerHTML` 프로퍼티에 바인딩합니다.
+하나는 문자열 바인딩을 사용해 엘리먼트의 내용에 넣고, 다른 하나는 엘리먼트의 `innerHTML` 프로퍼티에 바인딩합니다.
 
 <docs-code header="inner-html-binding.component.html" path="adev/src/content/examples/security/src/app/inner-html-binding.component.html"/>
 
-문자열 보간으로 넣은 내용은 항상 이스케이프됩니다.
+문자열 바인딩으로 넣은 내용은 항상 이스케이프됩니다.
 HTML로 해석되지 않으므로 브라우저는 꺾쇠괄호를 엘리먼트의 텍스트 내용으로 표시합니다.
 
 HTML로 해석하게 하려면 `innerHTML`과 같은 HTML 프로퍼티에 바인딩하세요.
@@ -221,7 +221,7 @@ HTML로 해석하게 하려면 `innerHTML`과 같은 HTML 프로퍼티에 바인
 Angular는 이 값을 안전하지 않다고 인식해 자동으로 무력화합니다.
 `script` 엘리먼트는 제거하지만 `<b>` 엘리먼트와 같은 안전한 내용은 유지합니다.
 
-<img alt="문자열 보간과 바인딩으로 표시한 HTML 값의 화면" src="assets/images/guide/security/binding-inner-html.png#small">
+<img alt="문자열 바인딩과 바인딩으로 표시한 HTML 값의 화면" src="assets/images/guide/security/binding-inner-html.png#small">
 
 <!--
 ### Direct use of the DOM APIs and explicit sanitization calls
@@ -244,7 +244,7 @@ That function also accepts values that were marked as trusted using the `bypassS
 
 Trusted Types를 강제 적용하지 않는 한, 브라우저의 내장 DOM API는 보안 취약점을 자동으로 방어하지 않습니다.
 예를 들어 `document`, `ElementRef`를 통해 접근하는 노드, 여러 서드 파티 API에는 안전하지 않은 메서드가 포함되어 있습니다.
-마찬가지로 DOM을 조작하는 다른 라이브러리와 상호작용할 때는 Angular 문자열 보간과 같은 자동 무력화 기능을 제공받지 못할 가능성이 높습니다.
+마찬가지로 DOM을 조작하는 다른 라이브러리와 상호작용할 때는 Angular 문자열 바인딩과 같은 자동 무력화 기능을 제공받지 못할 가능성이 높습니다.
 DOM을 직접 조작하는 것은 피하고, 가능하면 Angular 템플릿을 사용하세요.
 
 직접 조작이 불가피하다면 Angular에 내장된 무력화 함수를 사용하세요.
@@ -1021,7 +1021,7 @@ Angular는 헤더 기반 [서버 측 요청 위조(SSRF)](https://developer.mozi
 - 기본적으로 `Forwarded` 헤더와 모든 `X-Forwarded-*` 헤더는 신뢰할 수 없다고 취급되어 요청에서 제거됩니다.
   유지하려면 `trustProxyHeaders` 설정으로 명시적으로 허용해야 합니다.
 
-유효하지 않은 헤더는 에러 로그를 발생시키며, 허용되지 않은 프록시 헤더는 요청에서 제거됩니다.
+유효하지 않은 헤더는 오류 로그를 발생시키며, 허용되지 않은 프록시 헤더는 요청에서 제거됩니다.
 인식할 수 없는 호스트 이름이 있는 요청에는 `400 Bad Request`가 반환됩니다.
 
 참고: 대부분의 클라우드 제공업체와 CDN 제공업체는 요청이 애플리케이션 원본 서버에 도착하기 전에 이 헤더들을 자동으로 검증합니다.

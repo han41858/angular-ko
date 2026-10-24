@@ -323,9 +323,9 @@ Angular가 이런 DOM 변경을 알지 못하며 하이드레이션 과정에서
 Angular는 특정 구조를 예상하지만 하이드레이션하려고 할 때 다른 구조를 만나게 됩니다.
 이 불일치로 인해 하이드레이션이 실패하고 DOM 불일치 오류가 발생합니다([아래 참고](#errors)).
 
-이런 DOM 조작을 피하도록 컴포넌트를 리팩터링하는 것이 가장 좋습니다.
+이런 DOM 조작을 피하도록 컴포넌트를 리팩토링하는 것이 가장 좋습니다.
 가능하다면 Angular API로 작업을 처리하세요.
-당장 리팩터링할 수 없다면 하이드레이션과 호환되는 방식으로 고칠 때까지 `ngSkipHydration` 어트리뷰트를 사용하세요([아래 설명](#how-to-skip-hydration-for-particular-components)).
+당장 리팩토링할 수 없다면 하이드레이션과 호환되는 방식으로 고칠 때까지 `ngSkipHydration` 어트리뷰트를 사용하세요([아래 설명](#how-to-skip-hydration-for-particular-components)).
 
 <!--
 ### Valid HTML structure
@@ -510,7 +510,7 @@ Application stability is an important part of the hydration process. Hydration a
 하이드레이션과 그 이후의 처리는 애플리케이션이 안정 상태를 알린 뒤에만 실행됩니다.
 타임아웃과 인터벌, 완료되지 않은 Promise, 대기 중인 마이크로태스크 등 여러 요인으로 안정 상태에 도달하는 시점이 늦어질 수 있습니다.
 이런 경우 10초가 지나도 애플리케이션이 안정 상태에 도달하지 않았음을 나타내는 [Application remains unstable](errors/NG0506) 오류가 발생할 수 있습니다.
-애플리케이션이 바로 하이드레이션되지 않는다면 안정 상태에 영향을 주는 요인을 확인하고, 이런 지연을 피하도록 리팩터링하세요.
+애플리케이션이 바로 하이드레이션되지 않는다면 안정 상태에 영향을 주는 요인을 확인하고, 이런 지연을 피하도록 리팩토링하세요.
 
 <!--
 ### Debugging Application Stability

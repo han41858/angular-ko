@@ -147,7 +147,7 @@ registrationForm = form(this.registrationModel, (schemaPath) => {
 -->
 
 `apply()` 함수를 사용하면 폼의 특정 경로에 스키마를 적용할 수 있습니다.
-`apply()`를 사용할 때 스키마가 적용될 내부 필드의 경로와 스키마를 전달하면 됩니다:
+`apply()`를 호출하면 스키마는 지정한 하위 경로 내부의 필드만 볼 수 있도록 범위가 제한된 경로를 전달받습니다:
 
 ```ts
 import {apply} from '@angular/forms/signals';
@@ -540,7 +540,7 @@ invoiceForm = form(this.invoiceModel, (schemaPath) => {
 });
 ```
 
-팁: 커스텀 에러 메시지를 활용하는 등 배열 항목에 유효성 검사를 더 적용하려면 [유효성 검사 가이드](guide/forms/signals/validation) 문서를 참고하세요.
+팁: 커스텀 오류 메시지를 활용하는 등 배열 항목에 유효성 검사를 더 적용하려면 [유효성 검사 가이드](guide/forms/signals/validation) 문서를 참고하세요.
 
 <!--
 ## Next steps
@@ -561,5 +561,5 @@ To learn more about Signal Forms, check out these related guides:
 시그널 폼에 대해 더 알아보세요:
 
 - [폼 로직 추가하기](guide/forms/signals/form-logic) - 폼에 조건부 로직, 동적 동작, 메타데이터를 추가해 보세요.
-- [유효성 검사](guide/forms/signals/validation) - 유효성 검사 규칙과 에러 처리 방법을 안내합니다.
+- [유효성 검사](guide/forms/signals/validation) - 유효성 검사 규칙과 오류 처리 방법을 안내합니다.
 - [비동기 동작](guide/forms/signals/async-operations) - 폼 제출과 비동기 유효성 검사를 안내합니다.

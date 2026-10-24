@@ -408,8 +408,8 @@ Display validation feedback to users:
 
 | 프로퍼티  | 용도                                  |
 | --------- | ------------------------------------- |
-| `errors`  | 현재 유효성 검사 에러의 배열          |
-| `invalid` | 필드에 유효성 검사 에러가 있는지 여부 |
+| `errors`  | 현재 유효성 검사 오류의 배열          |
+| `invalid` | 필드에 유효성 검사 오류가 있는지 여부 |
 | `pending` | 비동기 유효성 검사가 진행 중인지 여부 |
 
 <!--
@@ -695,7 +695,7 @@ When the user types an invalid email, the FormField directive automatically upda
 -->
 
 앞에서 만든 기본 컨트롤은 입력 기능은 동작하지만 폼 상태에는 반응하지 않습니다.
-입력 시그널을 선택적으로 추가하면 비활성화 상태에 반응하고, 유효성 검사 에러를 표시하며, 사용자와의 상호작용을 추적할 수 있습니다.
+입력 시그널을 선택적으로 추가하면 비활성화 상태에 반응하고, 유효성 검사 오류를 표시하며, 사용자와의 상호작용을 추적할 수 있습니다.
 
 자주 사용하는 상태 프로퍼티를 구현한 예제를 살펴봅시다:
 
@@ -992,7 +992,7 @@ orderForm.amount().reset();
 `@angular/forms/signals`의 `transformedValue()`로 UI에 표시하는 원시 값과 모델 값을 동기화하세요. 컨트롤의 `value` 모델 시그널, `parse` 함수, `format` 함수를 전달하면 원시 값을 담는 쓰기 가능한 시그널을 반환합니다:
 
 - `format`은 모델 값을 템플릿에 표시할 원시 값으로 변환합니다.
-- `parse`는 사용자가 입력한 값을 모델 값으로 변환하거나 파싱 에러를 반환합니다.
+- `parse`는 사용자가 입력한 값을 모델 값으로 변환하거나 파싱 오류를 반환합니다.
 
 ```angular-ts
 import {Component, model} from '@angular/core';
@@ -1018,7 +1018,9 @@ export class NumberInput implements FormValueControl<number | null> {
 
 <a id="reporting-parse-errors"></a>
 
-### 파싱 에러 알리기
+<a id="파싱-에러-알리기"></a>
+
+### 파싱 오류 알리기
 
 일부만 입력한 날짜나 숫자 필드에 입력한 문자처럼 원시 값을 유효한 모델 값으로 바꿀 수 없는 경우가 있습니다. 위의 `NumberInput`도 이 문제가 있습니다. `Number('abc')`는 `NaN`이지만 `parse`는 그대로 모델에 기록합니다.
 
@@ -1043,7 +1045,7 @@ export class NumberInput implements FormValueControl<number | null> {
 
 모델을 갱신하면서 문제도 알리려면 `value`와 `error`를 함께 반환하세요.
 
-컨트롤을 `[formField]`로 바인딩하면 파싱 에러가 필드에 자동으로 전달되어 유효성 검사 에러와 함께 `errors()` 시그널에 표시됩니다:
+컨트롤을 `[formField]`로 바인딩하면 파싱 오류가 필드에 자동으로 전달되어 유효성 검사 오류와 함께 `errors()` 시그널에 표시됩니다:
 
 ```angular-ts
 @Component({
@@ -1063,15 +1065,15 @@ export class Order {
 }
 ```
 
-파싱 에러가 있는 필드는 유효하지 않으므로 유효성 검사 규칙에 실패한 경우와 마찬가지로 제출을 차단합니다.
+파싱 오류가 있는 필드는 유효하지 않으므로 유효성 검사 규칙에 실패한 경우와 마찬가지로 제출을 차단합니다.
 
-도움말: Signal Forms는 기본 입력에도 같은 방식을 사용합니다. 브라우저가 값을 파싱할 수 없으면(예: `<input type="date">`에 날짜를 일부만 입력한 경우) 필드에 `parse` 에러가 나타납니다. 자세한 내용은 [기본 HTML 유효성 검사](guide/forms/signals/validation#native-html-validation)를 참고하세요.
+도움말: Signal Forms는 기본 입력에도 같은 방식을 사용합니다. 브라우저가 값을 파싱할 수 없으면(예: `<input type="date">`에 날짜를 일부만 입력한 경우) 필드에 `parse` 오류가 나타납니다. 자세한 내용은 [기본 HTML 유효성 검사](guide/forms/signals/validation#native-html-validation)를 참고하세요.
 
 <a id="resetting"></a>
 
 ### 초기화하기
 
-필드에 `reset()`을 호출하면 남아 있는 파싱 에러를 지우고 모델 값으로 원시 값의 형식을 다시 지정합니다. 파싱할 수 없는 상태의 컨트롤도 정상적인 표시 값으로 돌아옵니다:
+필드에 `reset()`을 호출하면 남아 있는 파싱 오류를 지우고 모델 값으로 원시 값의 형식을 다시 지정합니다. 파싱할 수 없는 상태의 컨트롤도 정상적인 표시 값으로 돌아옵니다:
 
 ```ts
 orderForm.amount().reset();
@@ -1232,7 +1234,7 @@ registrationForm = form(this.registrationModel, (path) => {
 
 컨트롤을 사용하는 모델은 모든 필드를 정의된 값으로 초기화해야 합니다. Signal Forms에서 `undefined`는 빈 값이 아니라 필드가 없다는 의미입니다. 재사용 가능한 이메일 컨트롤이라면 프로퍼티를 정의하지 않은 채 두지 말고 초기값으로 `''`를 사용하세요. 초기값 선택에 대한 자세한 내용은 [폼 모델 가이드](guide/forms/signals/models)를 참고하세요.
 
-또한 컨트롤은 상태 관리를 위해 별도의 이펙트를 등록하지 않아야 합니다. 폼 시스템이 내부 이펙트로 필드 상태를 관리하며 컨트롤은 입력 시그널로 상태 변경을 전달받습니다. 값을 변환해야 한다면 `effect()` 대신 [값 변환](#value-transformation)에서 설명한 `transformedValue()`를 사용하세요.
+또한 컨트롤은 상태 관리를 위해 별도의 이펙트 함수를 등록하지 않아야 합니다. 폼 시스템이 내부 이펙트 함수로 필드 상태를 관리하며 컨트롤은 입력 시그널로 상태 변경을 전달받습니다. 값을 변환해야 한다면 `effect()` 대신 [값 변환](#value-transformation)에서 설명한 `transformedValue()`를 사용하세요.
 
 <!--
 ## Next steps

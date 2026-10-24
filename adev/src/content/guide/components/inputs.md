@@ -657,7 +657,7 @@ Binding to an input is the same in both signal-based and decorator-based inputs:
 ```
 -->
 
-팁: Angular 팀은 `input` 함수를 사용해서 시그널 기반으로 선언하는 것을 권장합니다. 데코레이터 `@Input`을 사용하는 것과 기능은 같습니다.
+팁: Angular 팀은 새 프로젝트에서 시그널 기반 `input` 함수를 사용하는 것을 권장하지만, 기존 데코레이터 기반 `@Input` API도 계속 완전히 지원합니다.
 
 입력 프로퍼티는 `@Input` 데코레이터를 사용해서 선언할 수도 있습니다:
 
@@ -716,7 +716,7 @@ export class CustomSlider {
 }
 ```
 
-이제 템플릿에서 필수값을 지정하지 않고 컴포넌트를 사용하면 빌드 시점에 에러가 발생합니다.
+이제 템플릿에서 필수값을 지정하지 않고 컴포넌트를 사용하면 빌드 시점에 오류가 발생합니다.
 
 <!--
 #### Input transforms {#input-transforms-decorator}

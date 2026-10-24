@@ -214,7 +214,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Programmatically rendering components',
-            label: '조건에 따라 컴포넌트 렌더링하기',
+            label: '코드로 컴포넌트 렌더링하기',
             path: 'guide/components/programmatic-rendering',
             contentPath: 'guide/components/programmatic-rendering',
           },
@@ -244,7 +244,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Binding dynamic text, properties and attributes',
-            label: '텍스트, 프로퍼티, 어브리뷰트를 동적으로 바인딩하기',
+            label: '텍스트, 프로퍼티, 어트리뷰트를 동적으로 바인딩하기',
             path: 'guide/templates/binding',
             contentPath: 'guide/templates/binding',
           },
@@ -476,7 +476,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Route data resolvers',
-            label: '라우팅 데이터 전달하기',
+            label: '라우팅 전에 필요한 데이터 준비하기',
             path: 'guide/routing/data-resolvers',
             contentPath: 'guide/routing/data-resolvers',
           },
@@ -1018,13 +1018,13 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Refer to locales by ID',
-            label: 'ID로 참조하기',
+            label: 'ID로 지역 참조하기',
             path: 'guide/i18n/locale-id',
             contentPath: 'guide/i18n/locale-id',
           },
           {
             // label: 'Format data based on locale',
-            label: '언어에 따라 데이터 형식 변경하기',
+            label: '지역에 따라 데이터 형식 지정하기',
             path: 'guide/i18n/format-data-locale',
             contentPath: 'guide/i18n/format-data-locale',
           },
@@ -1048,7 +1048,7 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
           },
           {
             // label: 'Deploy multiple locales',
-            label: '다국어 배포하기',
+            label: '여러 지역별 버전 배포하기',
             path: 'guide/i18n/deploy',
             contentPath: 'guide/i18n/deploy',
           },

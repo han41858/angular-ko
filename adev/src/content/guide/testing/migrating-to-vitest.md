@@ -109,7 +109,7 @@ The `unit-test` builder defaults to `"tsConfig": "tsconfig.spec.json"` and `"bui
 The `@angular/build:karma` builder previously allowed build options (like `polyfills`, `assets`, or `styles`) to be configured directly within the `test` target. The new `@angular/build:unit-test` builder does not support this. If your test-specific build options differ from your existing `development` build configuration, you must move them to a dedicated build target configuration. If your test build options already match your `development` build configuration, no action is needed.
 -->
 
-`angular.json` 파일에서 프로젝트의 `test` 타깃을 찾아 `builder`를 `@angular/build:unit-test`로 변경합니다.
+`angular.json` 파일에서 프로젝트의 `test` 대상을 찾아 `builder`를 `@angular/build:unit-test`로 변경합니다.
 
 ```json
 {
@@ -129,9 +129,9 @@ The `@angular/build:karma` builder previously allowed build options (like `polyf
 프로젝트에서 다른 값이 필요하면 명시적으로 설정할 수 있습니다.
 예를 들어 `development` 빌드 설정이 없거나 테스트에 다른 옵션이 필요하면 `testing`과 같은 이름의 빌드 설정을 만들고 `buildTarget`에 지정하세요.
 
-기존 `@angular/build:karma` 빌더는 `polyfills`, `assets`, `styles` 같은 빌드 옵션을 `test` 타깃에 직접 설정할 수 있었습니다.
+기존 `@angular/build:karma` 빌더는 `polyfills`, `assets`, `styles` 같은 빌드 옵션을 `test` 대상에 직접 설정할 수 있었습니다.
 새로운 `@angular/build:unit-test` 빌더는 이를 지원하지 않습니다.
-테스트용 빌드 옵션이 기존 `development` 빌드 설정과 다르면 전용 빌드 타깃 설정으로 옮겨야 합니다.
+테스트용 빌드 옵션이 기존 `development` 빌드 설정과 다르면 전용 빌드 대상 설정으로 옮겨야 합니다.
 이미 `development` 빌드 설정과 같다면 별도로 수정할 필요가 없습니다.
 
 <!--
@@ -304,7 +304,7 @@ Headless mode is enabled automatically if the `CI` environment variable is set o
 
 **브라우저 모드에 맞게 `angular.json`을 수정합니다.**
 
-`test` 타깃의 옵션에 `browsers`를 추가합니다.
+`test` 대상의 옵션에 `browsers`를 추가합니다.
 브라우저 이름은 설치한 프로바이더에 따라 다릅니다.
 예를 들어 Playwright는 `chromium`, WebdriverIO는 `chrome`을 사용합니다.
 
@@ -393,7 +393,7 @@ The schematic **does not** perform the following actions:
 스키매틱은 다음 작업은 **수행하지 않습니다**.
 
 - `vitest`나 관련 의존성을 설치하지 않습니다.
-- `angular.json`이 Vitest 빌더를 사용하도록 변경하거나, `test` 타깃의 빌드 옵션(예: `polyfills`, `styles`)을 이전하지 않습니다.
+- `angular.json`이 Vitest 빌더를 사용하도록 변경하거나, `test` 대상의 빌드 옵션(예: `polyfills`, `styles`)을 이전하지 않습니다.
 - `karma.conf.js`나 `test.ts` 파일을 제거하지 않습니다.
 - 복잡하거나 중첩된 스파이 사용 사례를 처리하지 않습니다.
   이런 경우에는 직접 리팩토링해야 할 수 있습니다.
@@ -479,8 +479,8 @@ The `ng test` command builds the application in _watch mode_ and launches the co
 2. **변경사항 검토**: 스키매틱이 수정한 내용을 살펴보세요.
    특히 복잡한 스파이나 목이 있는 테스트는 추가로 직접 수정해야 할 수 있으므로 주의해서 확인하세요.
 
-`ng test` 명령은 애플리케이션을 _변경 감시 모드_ 로 빌드하고 설정한 러너를 실행합니다.
-CI 환경이 아닌 대화형 터미널에서는 변경 감시 모드가 기본으로 활성화됩니다.
+`ng test` 명령은 애플리케이션을 _파일 감시 모드_ 로 빌드하고 설정한 러너를 실행합니다.
+CI 환경이 아닌 대화형 터미널에서는 파일 감시 모드가 기본으로 활성화됩니다.
 
 <!--
 ## Configuration
@@ -574,7 +574,7 @@ Regardless, we strongly recommend you start planning to convert your existing te
 See [an example here](/guide/testing/components-scenarios#async-test-with-a-vitest-fake-timers) for fake timers usage with Vitest.
 -->
 
-`fakeAsync`, `flush`, `waitForAsync` 같은 함수를 사용하거나 기존 테스트에서 계속 사용하려면 `angular.json`의 테스트 타깃 폴리필에 `zone.js/plugins/vitest-patch`를 추가할 수 있습니다.
+`fakeAsync`, `flush`, `waitForAsync` 같은 함수를 사용하거나 기존 테스트에서 계속 사용하려면 `angular.json`의 테스트 대상 폴리필에 `zone.js/plugins/vitest-patch`를 추가할 수 있습니다.
 
 이와 관계없이 기존 테스트 모음을 네이티브 `async`와 Vitest 가상 타이머를 사용하도록 전환할 계획을 세우는 것을 적극 권장합니다.
 이것이 일반적으로 사용하는 방식입니다.

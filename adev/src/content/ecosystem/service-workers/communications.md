@@ -158,7 +158,7 @@ You should only use `activateUpdate()`, if you are certain it is safe for your s
 <docs-callout important title="새로고침 없이 업데이트할 때의 안전성">
 `activateUpdate()`를 호출하면 페이지를 새로고침하지 않고 탭을 최신 버전으로 업데이트하지만, 이로 인해 애플리케이션이 제대로 동작하지 않을 수 있습니다.
 
-새로고침 없이 업데이트하면 애플리케이션 셸과 다른 페이지 리소스 사이에 버전 불일치가 발생할 수 있습니다.
+새로고침 없이 업데이트하면 앱 기본 구조와 다른 페이지 리소스 사이에 버전 불일치가 발생할 수 있습니다.
 예를 들어 지연 로딩되는 청크의 파일 이름은 버전마다 달라질 수 있습니다.
 
 구체적인 사용 상황에서 안전하다고 확신할 때만 `activateUpdate()`를 사용하세요.
@@ -233,7 +233,7 @@ Subscribe to `SwUpdate#unrecoverable` to be notified and handle these errors.
 이 상황에서는 서비스 워커가 정상적으로 캐시에 있어야 할 리소스를 제공할 수 없습니다.
 해당 애플리케이션 버전이 손상된 상태이며, 페이지를 새로고침하지 않고는 클라이언트 상태를 복구할 방법이 없습니다.
 이 경우 서비스 워커는 `UnrecoverableStateEvent` 이벤트를 보내 클라이언트에 알립니다.
-이 알림을 받아 에러를 처리하려면 `SwUpdate#unrecoverable`을 구독하세요.
+이 알림을 받아 오류를 처리하려면 `SwUpdate#unrecoverable`을 구독하세요.
 
 <docs-code header="handle-unrecoverable-state.service.ts" path="adev/src/content/examples/service-worker-getting-started/src/app/handle-unrecoverable-state.service.ts" region="sw-unrecoverable-state"/>
 

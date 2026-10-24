@@ -73,7 +73,7 @@ CLI로 생성한 프로젝트는 바로 테스트할 수 있습니다.
 ng test
 ```
 
-`ng test` 명령은 애플리케이션을 _변경 감시 모드_ 로 빌드하고 [Vitest 테스트 러너](https://vitest.dev)를 실행합니다.
+`ng test` 명령은 애플리케이션을 _파일 감시 모드_ 로 빌드하고 [Vitest 테스트 러너](https://vitest.dev)를 실행합니다.
 
 콘솔에는 다음과 같이 출력됩니다.
 
@@ -104,7 +104,7 @@ The Angular CLI handles most of the Vitest configuration for you. You can custom
 -->
 
 Angular CLI가 Vitest 설정 대부분을 처리합니다.
-`angular.json` 파일의 `test` 타깃 옵션을 수정하면 테스트 동작을 변경할 수 있습니다.
+`angular.json` 파일의 `test` 대상 옵션을 수정하면 테스트 동작을 변경할 수 있습니다.
 
 <!--
 ### Angular.json options

@@ -26,7 +26,7 @@ This includes positions, sizes, transforms, colors, borders, and more.
 The W3C maintains a list of animatable properties on its [CSS Transitions](https://www.w3.org/TR/css-transitions-1) page.
 -->
 
-중요: `@angular/animations` 패키지는 이제 지원 중단 예정(deprecated)입니다.
+중요: `@angular/animations` 패키지는 이제 사용 중단 권고(deprecated) 상태입니다.
 Angular 팀은 새로 작성하는 모든 코드에서 `animate.enter`와 `animate.leave`를 사용하는 네이티브 CSS 애니메이션을 권장합니다.
 새로운 진입 및 퇴장 [애니메이션 가이드](guide/animations)에서 자세히 알아보세요.
 [Angular 애니메이션 패키지에서 마이그레이션하기](guide/animations/migration)를 참고하면 애플리케이션을 순수 CSS 애니메이션으로 전환하는 방법도 확인할 수 있습니다.

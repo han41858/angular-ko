@@ -43,7 +43,7 @@ Each step represents a concept in Angular signals. You can do one, or all of the
 If you get stuck, click "Reveal answer" at the top.
 -->
 
-진행이 어렵다면 상단의 "정답 보기"를 클릭하세요.
+진행이 어렵다면 상단의 "정답 확인하기"를 클릭하세요.
 
 <!--
 Alright, let's [get started](/tutorials/signals/1-creating-your-first-signal)!

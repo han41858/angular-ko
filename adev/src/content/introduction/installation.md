@@ -158,7 +158,7 @@ If you are having issues running this command in Windows or Unix, check out the 
 
 </docs-code-multifile>
 
-Windows나 Unix에서 명령을 실행하다가 에러가 발생하면 [CLI docs](/tools/cli/setup-local#install-the-angular-cli)를 참고하세요.
+Windows나 Unix에서 명령을 실행하다가 오류가 발생하면 [CLI docs](/tools/cli/setup-local#install-the-angular-cli)를 참고하세요.
 
 <!--
 #### Create a new project

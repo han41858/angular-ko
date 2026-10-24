@@ -108,7 +108,7 @@ describe('ExampleViewer', () => {
   it('should expand button not appear when there is no hidden line', async () => {
     componentRef.setInput('metadata', getMetadata());
     await component.renderExample();
-    const button = fixture.debugElement.query(By.css('button[aria-label="Expand code example"]'));
+    const button = fixture.debugElement.query(By.css('button[aria-label="예제 코드 펼치기"]'));
     expect(button).toBeNull();
   });
 
@@ -157,7 +157,7 @@ describe('ExampleViewer', () => {
     await fixture.whenStable();
 
     const expandButton = fixture.debugElement.query(
-      By.css('button[aria-label="Expand code example"]'),
+      By.css('button[aria-label="예제 코드 펼치기"]'),
     );
     expandButton.nativeElement.click();
     await fixture.whenStable();
@@ -333,9 +333,7 @@ describe('ExampleViewer', () => {
     await component.renderExample();
     await fixture.whenStable();
 
-    const githubButton = fixture.debugElement.query(
-      By.css('a[aria-label="Open example on GitHub"]'),
-    );
+    const githubButton = fixture.debugElement.query(By.css('a[aria-label="GitHub에서 예제 열기"]'));
     expect(githubButton).toBeTruthy();
     expect(githubButton.nativeElement.href).toBe(component.githubUrl());
   });
@@ -355,7 +353,7 @@ describe('ExampleViewer', () => {
     await fixture.whenStable();
 
     const stackblitzButton = fixture.debugElement.query(
-      By.css('a[aria-label="Edit example in StackBlitz"]'),
+      By.css('a[aria-label="StackBlitz에서 예제 편집하기"]'),
     );
     expect(stackblitzButton).toBeTruthy();
     expect(stackblitzButton.nativeElement.href).toBe(component.stackblitzUrl());

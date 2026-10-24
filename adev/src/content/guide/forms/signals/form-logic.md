@@ -835,7 +835,7 @@ All three skip validation and prevent user editing while active. The key differe
 - 화면에 표시하지만 수정하지 않아야 할 때
 - 비활성화 사유와 같이 동작하지 않는 이유를 표시할 때
 - HTML 폼 제출과 무관한 필드
-- 예시: 폼이 활성화되기 전까지는 폼 제출 버튼을 비활성화할 때, 관리자에게만 승인 필드를 활성화할 때
+- 예시: 폼이 유효한 상태가 될 때까지 폼 제출 버튼을 비활성화할 때, 관리자에게만 승인 필드를 활성화할 때
 
 `readonly()`는 이런 경우에 사용하세요:
 
@@ -844,7 +844,8 @@ All three skip validation and prevent user editing while active. The key differe
 - HTML 폼 제출에 필요한 필드일 때
 - 예시: 주문 확인 번호, 시스템이 생성한 참조 코드
 
-활성화되었을 때 유효성 검사 영향 여부나 사용자가 수정 가능한지는 이렇게 다릅니다:
+세 상태 모두 적용 중에는 유효성 검사를 건너뛰고 사용자의 수정을 막습니다.
+주요 차이점은 다음과 같습니다:
 
 | 기능                                        | `hidden()` | `disabled()` | `readonly()` |
 | ------------------------------------------- | ---------- | ------------ | ------------ |
@@ -1328,7 +1329,7 @@ export class Inventory {
 `max()` 유효성 검사 함수는 선택된 항목에 따라 `MAX` 메타데이터를 반응형으로 설정합니다.
 따라서 `field().max()`를 읽는 템플릿이나 컨트롤도 항목이 바뀔 때마다 갱신됩니다.
 
-커스텀 키를 정의하는 방법, 리듀서(reducer)를 활용하는 방법, 라이프 싸이클 관련 객체에서 메타데이터를 활용하는 방법 등 더 자세한 내용을 알아보려면 [필드 메타데이터](guide/forms/signals/field-metadata)를 참고하세요.
+커스텀 키를 정의하는 방법, 리듀서(reducer)로 메타데이터 제공값을 결합하는 방법, 라이프사이클 관련 객체에 관리형 메타데이터를 사용하는 방법 등 더 자세한 내용을 알아보려면 [필드 메타데이터](guide/forms/signals/field-metadata)를 참고하세요.
 
 <!--
 ## Combining rules
@@ -1640,5 +1641,5 @@ To learn more about Signal Forms, check out these related guides:
 이런 내용도 확인해 보세요:
 
 - [필드 상태 관리](guide/forms/signals/field-state-management) - 템플릿과 컴포넌트 로직에서 상태 시그널을 어떻게 활용하는지 안내합니다.
-- [유효성 검사](guide/forms/signals/validation) - 폼의 유효성을 검사하고 에러가 발생했을 때 처리하는 방법을 안내합니다.
+- [유효성 검사](guide/forms/signals/validation) - 폼의 유효성을 검사하고 오류가 발생했을 때 처리하는 방법을 안내합니다.
 - [커스텀 컨트롤](guide/forms/signals/custom-controls) - 커스텀 폼 컨트롤이 폼 필드의 메타데이터와 상태를 어떻게 활용할 수 있는지 안내합니다.

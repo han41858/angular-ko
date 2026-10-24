@@ -95,7 +95,7 @@ export default class ApiReferenceList {
     [STATUSES.stable]: '안정 버전',
     [STATUSES.developerPreview]: '개발자 미리보기',
     [STATUSES.experimental]: '실험 단계',
-    [STATUSES.deprecated]: '지원 중단 예정',
+    [STATUSES.deprecated]: '사용 중단 권고',
   };
 
   readonly filteredGroups = computed((): ApiItemsGroup[] => {

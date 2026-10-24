@@ -188,12 +188,12 @@ IE, Opera Mini 등의 브라우저는 서비스 워커를 지원하지 않습니
 
 - 브라우저가 서비스 워커 스크립트와 `ngsw.json` 매니페스트 파일을 다운로드하지 않습니다.
 - `SwUpdate.checkForUpdate()` 호출처럼 서비스 워커와 직접 상호작용하려는 시도는 거부된 Promise를 반환합니다.
-- `SwUpdate.versionUpdates` 같은 관련 서비스의 Observable 이벤트가 발생하지 않습니다.
+- `SwUpdate.versionUpdates` 같은 관련 서비스의 옵저버블 이벤트가 발생하지 않습니다.
 
 브라우저가 서비스 워커를 지원하지 않아도 애플리케이션이 동작하도록 하는 것을 적극 권장합니다.
-지원하지 않는 브라우저는 서비스 워커 캐싱을 무시하지만, 애플리케이션이 서비스 워커와 상호작용하려고 하면 에러를 보고합니다.
+지원하지 않는 브라우저는 서비스 워커 캐싱을 무시하지만, 애플리케이션이 서비스 워커와 상호작용하려고 하면 오류를 보고합니다.
 예를 들어 `SwUpdate.checkForUpdate()`를 호출하면 거부된 Promise를 반환합니다.
-이런 에러를 방지하려면 `SwUpdate.isEnabled`로 Angular 서비스 워커가 활성화되어 있는지 확인하세요.
+이런 오류를 방지하려면 `SwUpdate.isEnabled`로 Angular 서비스 워커가 활성화되어 있는지 확인하세요.
 
 서비스 워커를 지원하는 다른 브라우저에 대한 자세한 내용은 [Can I Use](https://caniuse.com/#feat=serviceworkers) 페이지와 [MDN 문서](https://developer.mozilla.org/docs/Web/API/Service_Worker_API)를 참고하세요.
 
@@ -235,7 +235,7 @@ For additional recommendations and examples, see:
   <docs-pill href="ecosystem/service-workers/communications" title="서비스 워커와 통신하기"/>
   <docs-pill href="ecosystem/service-workers/push-notifications" title="푸시 알림"/>
   <docs-pill href="ecosystem/service-workers/devops" title="서비스 워커 운영"/>
-  <docs-pill href="ecosystem/service-workers/app-shell" title="앱 셸 패턴"/>
+  <docs-pill href="ecosystem/service-workers/app-shell" title="앱 기본 구조 패턴"/>
 </docs-pill-row>
 
 서비스 워커에 대한 일반적인 내용은 [서비스 워커 소개](https://developers.google.com/web/fundamentals/primers/service-workers)를 참고하세요.

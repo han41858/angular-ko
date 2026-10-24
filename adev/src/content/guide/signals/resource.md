@@ -307,7 +307,7 @@ You can use this status information to conditionally display user interface elem
 | ----------- | ------------------------------------------------------------------------------------ |
 | `value`     | 리소스의 가장 최근 값이며, 값을 받지 못했으면 기본값(`defaultValue`를 설정하지 않았다면 `undefined`)입니다. 상태가 `'error'`일 때 `value()`를 읽으면 예외가 발생합니다.                                |
 | `hasValue`  | 리소스가 값을 갖고 있는지 여부                                                       |
-| `error`     | 리소스 로더를 실행하다가 발생한 가장 최근 에러, 에러가 발생하지 않았다면 `undefined` |
+| `error`     | 리소스 로더를 실행하다가 발생한 가장 최근 오류, 오류가 발생하지 않았다면 `undefined` |
 | `isLoading` | 리소스 로더가 실행 중인지 여부                                                       |
 | `status`    | 리소스의 세부 `ResourceStatus`, 아래에서 설명                                        |
 
@@ -316,13 +316,13 @@ You can use this status information to conditionally display user interface elem
 | 상태          | `value()`      | 설명                                                     |
 | ------------- | :------------- | -------------------------------------------------------- |
 | `'idle'`      | `undefined`    | 리소스에 유효한 요청이 없으며, 로더가 실행되지 않았음    |
-| `'error'`     | 에러 발생      | 로더 실행 중 에러가 발생했음                             |
+| `'error'`     | 오류 발생      | 로더 실행 중 오류가 발생했음                             |
 | `'loading'`   | `undefined`    | `params` 값이 변경되어 로더가 실행 중                    |
 | `'reloading'` | 이전 값        | 리소스의 `reload` 메서드가 실행되어 로더가 실행 중       |
 | `'resolved'`  | 로더가 반환한 값 | 로더 실행 종료                                           |
 | `'local'`     | 직접 설정된 값 | 리소스의 `.set()`, `.update()` 메서드로 값이 설정된 상태 |
 
-이 상태 정보를 활용하면 로딩 인디케이터나 에러 메시지 같은 UI 엘리먼트를 조건에 따라 표시할 수 있습니다.
+이 상태 정보를 활용하면 로딩 인디케이터나 오류 메시지 같은 UI 엘리먼트를 조건에 따라 표시할 수 있습니다.
 
 <!--
 ## Caching `resource` data with SSR

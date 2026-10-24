@@ -71,8 +71,8 @@ IDE의 **편집** 창에서 다음 작업을 수행하세요:
 
    <docs-code header="src/app/housing.service.ts의 제출 메서드" path="adev/src/content/tutorials/first-app/steps/13-search/src/app/housing.service.ts" visibleLines="[118,122]"/>
 
-1. 앱이 에러 없이 빌드되는지 확인하세요.
-   에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
+   오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 <!--
@@ -134,8 +134,8 @@ IDE의 **편집** 창에서 `src/app/details/details.ts`를 수정하세요:
 
    이 버튼은 아직 없으며 다음 단계에서 추가합니다. 위 코드의 `FormControl`은 `null`을 반환할 수 있습니다. 널 병합 연산자로 값이 `null`일 때 빈 문자열을 사용하도록 합니다.
 
-1. 앱이 에러 없이 빌드되는지 확인하세요.
-   에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
+   오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 <!--
@@ -172,8 +172,8 @@ IDE의 **편집** 창에서 `src/app/details/details.ts`를 수정하세요:
 
    이제 템플릿에 `(submit)="submitApplication()"` 이벤트 핸들러가 포함됩니다. Angular 템플릿에서는 이벤트 이름을 괄호로 감싸 이벤트를 바인딩합니다. 등호 오른쪽 코드는 해당 이벤트가 발생했을 때 실행됩니다. 브라우저 이벤트와 커스텀 이벤트 모두 바인딩할 수 있습니다.
 
-1. 앱이 에러 없이 빌드되는지 확인하세요.
-   에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
+   오류가 있다면 수정한 후 다음 단계로 진행하세요.
 
    <img alt="입주 신청 폼이 표시된 상세 페이지" src="assets/images/tutorials/first-app/homes-app-lesson-12-step-3.png">
 

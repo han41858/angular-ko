@@ -451,7 +451,9 @@ it('should get value of slider thumb', async () => {
 
 <a id="interop-with-angular-change-detection"></a>
 
-## Angular 변화 감지와 연동하기
+<a id="angular-변화-감지와-연동하기"></a>
+
+## Angular 변경 감지와 연동하기
 
 <!--
 By default, test harnesses runs Angular's [change detection](/best-practices/runtime-performance) before reading the state of a DOM element and after interacting with a DOM element.
@@ -497,10 +499,10 @@ it('reads properties in parallel', async () => {
 ```
 -->
 
-테스트 하네스는 기본으로 DOM 엘리먼트의 상태를 읽기 전과 DOM 엘리먼트와 상호작용한 후에 Angular [변화 감지](/best-practices/runtime-performance)를 실행합니다.
+테스트 하네스는 기본으로 DOM 엘리먼트의 상태를 읽기 전과 DOM 엘리먼트와 상호작용한 후에 Angular [변경 감지](/best-practices/runtime-performance)를 실행합니다.
 
-비동기 작업이 진행 중일 때 컴포넌트 상태를 확인하는 등, 테스트에서 변화 감지를 더 세밀하게 제어해야 할 수 있습니다.
-이때는 `manualChangeDetection` 함수로 특정 코드 블록의 자동 변화 감지 처리를 비활성화하세요.
+비동기 작업이 진행 중일 때 컴포넌트 상태를 확인하는 등, 테스트에서 변경 감지를 더 세밀하게 제어해야 할 수 있습니다.
+이때는 `manualChangeDetection` 함수로 특정 코드 블록의 자동 변경 감지 처리를 비활성화하세요.
 
 ```ts
 it('checks state while async action is in progress', async () => {
@@ -529,7 +531,7 @@ Angular 팀은 테스트의 가독성을 높이기 위해 [await](https://develo
 각 동작을 순서대로 실행하지 않고 여러 동작을 동시에 실행한 뒤 모두 끝날 때까지 기다려야 할 때도 있습니다.
 컴포넌트 하나의 여러 프로퍼티를 읽는 경우가 예입니다.
 이때는 `parallel` 함수로 작업을 병렬 실행하세요.
-이 함수는 `Promise.all`과 비슷하게 동작하면서 변화 감지 검사도 최적화합니다.
+이 함수는 `Promise.all`과 비슷하게 동작하면서 변경 감지 검사도 최적화합니다.
 
 ```ts
 it('reads properties in parallel', async () => {

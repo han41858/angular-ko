@@ -42,7 +42,7 @@ See the [Forms Overview](guide/forms) for detailed comparisons between the two p
 반응형 폼은 옵저버블 스트림을 기반으로 구성되며, 폼 입력과 값은 동기적으로 접근할 수 있는 스트림으로 제공됩니다.
 
 반응형 폼은 데이터를 요청할 때 일관되고 예측 가능한 데이터를 보장하기 때문에 테스트하기도 간편합니다.
-이 스트림을 사용하는 곳에서는 데이터를 안전하게 다룰 수 있습니다.
+이 스트림의 소비자는 데이터를 안전하게 다룰 수 있습니다.
 
 반응형 폼은 [템플릿 기반 폼](guide/forms/template-driven-forms)과 몇 가지 차이가 있습니다.
 반응형 폼에서는 데이터 모델에 동기적으로 접근하며, 옵저버블 연산자로 불변성을 유지하고, 옵저버블 스트림으로 변화를 추적합니다.
@@ -239,7 +239,7 @@ When using the `setValue()` method with a [form group](#grouping-form-controls) 
 
 <docs-code header="name-editor.component.html (값 갱신)" path="adev/src/content/examples/reactive-forms/src/app/name-editor/name-editor.component.html" region="update-value"/>
 
-폼 모델은 컨트롤 값의 기준이 됩니다.
+폼 모델은 컨트롤 값의 원본 데이터를 관리합니다.
 따라서 버튼을 클릭하면 컴포넌트 클래스에서 입력값을 변경하면서 현재 값을 덮어씁니다.
 
 참고: 이 예제에서는 컨트롤 하나를 사용합니다.
@@ -385,7 +385,7 @@ ng generate component ProfileEditor
 이렇게 하면 모델과 입력 엘리먼트가 있는 폼 사이에서 정보를 주고받는 연결 계층이 만들어집니다.
 `FormControlName` 디렉티브가 제공하는 `formControlName` 입력 프로퍼티는 각 입력 엘리먼트를 `FormGroup`에 정의된 폼 컨트롤과 연결합니다.
 폼 컨트롤은 각자의 엘리먼트와 정보를 주고받습니다.
-그리고 모델 값의 기준이 되는 폼 그룹 인스턴스에도 변화를 전달합니다.
+그리고 모델 값의 원본 데이터를 관리하는 폼 그룹 인스턴스에도 변화를 전달합니다.
 </docs-step>
 
 <a id="save-form-data"></a>
@@ -631,7 +631,7 @@ TIP: You can define the control with just the initial value, but if your control
 1. `FormBuilder` 서비스를 의존성으로 주입합니다.
 1. 폼 내용을 생성합니다.
 
-다음 예제에서는 폼 빌더 서비스로 폼 컨트롤과 폼 그룹 인스턴스를 생성하도록 `ProfileEditor` 컴포넌트를 리팩터링합니다.
+다음 예제에서는 폼 빌더 서비스로 폼 컨트롤과 폼 그룹 인스턴스를 생성하도록 `ProfileEditor` 컴포넌트를 리팩토링합니다.
 
 <docs-workflow>
 <a id="import-the-formbuilder-class"></a>
@@ -745,7 +745,7 @@ For more on form validation, visit the [Form Validation](guide/forms/form-valida
 
 <docs-step title="유효성 검사 함수 불러오기">
 반응형 폼에는 자주 사용하는 유효성 검사 함수가 포함되어 있습니다.
-이 함수는 검사할 컨트롤을 인자로 받아 유효성 검사 결과에 따라 에러 객체나 null 값을 반환합니다.
+이 함수는 검사할 컨트롤을 인자로 받아 유효성 검사 결과에 따라 오류 객체나 null 값을 반환합니다.
 
 `@angular/forms` 패키지에서 `Validators` 클래스를 불러오세요.
 
@@ -942,8 +942,8 @@ FormArray.push()에 컨트롤 배열을 전달하면 여러 컨트롤을 한 번
 새 별칭 인스턴스가 추가될 때마다 새 폼 배열 인스턴스에는 인덱스를 기준으로 컨트롤이 연결됩니다.
 따라서 최상위 컨트롤의 상태와 값을 계산할 때 각 컨트롤을 추적할 수 있습니다.
 
-참고: 존리스 애플리케이션에서 반응형 폼 모델을 변경해도(예: `FormArray.push()` 호출) 컴포넌트 변화 감지가 자동으로 예약되지는 않습니다.
-템플릿이 `aliases.controls`처럼 모델 구조의 변화에 의존한다면, 컴포넌트가 Angular에 변화 감지 실행을 알리도록 해야 합니다.
+참고: 존리스 애플리케이션에서 반응형 폼 모델을 변경해도(예: `FormArray.push()` 호출) 컴포넌트 변경 감지가 자동으로 예약되지는 않습니다.
+템플릿이 `aliases.controls`처럼 모델 구조의 변화에 의존한다면, 컴포넌트가 Angular에 변경 감지 실행을 알리도록 해야 합니다.
 예를 들어 폼 옵저버블을 `ChangeDetectorRef.markForCheck()`와 연결할 수 있습니다.
 
 ```ts
@@ -1414,7 +1414,7 @@ loadData(data: FormData) {
 ```
 
 **[`markAllAsTouched`](api/forms/FormControl#markAllAsTouched)** — 컨트롤이나 폼과 그 아래에 있는 모든 하위 컨트롤을 touched로 표시합니다.
-전체 폼의 유효성 검사 에러를 표시할 때 유용합니다.
+전체 폼의 유효성 검사 오류를 표시할 때 유용합니다.
 
 ```ts
 // 제출하기 전에 모든 유효성 검사 에러를 표시합니다.

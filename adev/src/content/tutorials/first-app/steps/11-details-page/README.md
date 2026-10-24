@@ -214,7 +214,7 @@ To access the data you will add a call to the `HousingService`.
 
    <docs-code language="angular-ts" header="src/app/details/details.ts의 Details 템플릿 수정하기" path="adev/src/content/tutorials/first-app/steps/12-forms/src/app/details/details.ts" visibleLines="[8,29]"/>
 
-   `housingLocation`의 프로퍼티에 옵셔널 체이닝 연산자 `?.`로 접근한다는 점을 확인하세요. 이렇게 하면 `housingLocation`이 `null`이나 `undefined`여도 애플리케이션에 에러가 발생하지 않습니다.
+   `housingLocation`의 프로퍼티에 옵셔널 체이닝 연산자 `?.`로 접근한다는 점을 확인하세요. 이렇게 하면 `housingLocation`이 `null`이나 `undefined`여도 애플리케이션에 오류가 발생하지 않습니다.
 
 1. `Details` 클래스의 본문을 다음 코드와 같이 수정하세요:
 

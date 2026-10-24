@@ -133,7 +133,9 @@ export class ProfilePhoto {}
 
 <a id="imports-in-the-component-decorator"></a>
 
-### `@Component` 데코레이터 불러오기
+<a id="component-데코레이터-불러오기"></a>
+
+### `@Component` 데코레이터의 imports
 
 <!--
 To use a component, [directive](guide/directives), or [pipe](guide/templates/pipes), you must add

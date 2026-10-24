@@ -109,8 +109,8 @@ IDE의 **터미널** 창에서 다음 작업을 수행하세요:
    ```
 
 1. `ng serve`를 실행해 앱을 빌드하고 `http://localhost:4200`에서 실행하세요.
-1. 앱이 에러 없이 빌드되는지 확인하세요.
-   에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
+   오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 <!--
@@ -164,8 +164,8 @@ IDE의 **편집** 창에서 다음 작업을 수행하세요:
 
       <docs-code header="src/app/housing.service.ts에서 HousingLocationInfo 타입 불러오기" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[2]"/>
 
-1. 앱이 에러 없이 빌드되는지 확인하세요.
-   에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
+   오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 <!--
@@ -233,8 +233,8 @@ IDE의 **편집** 창에서 `src/app/home/home.ts`를 수정하세요:
 
   <docs-code language="angular-ts" header="src/app/home/home.ts에서 서비스 데이터로 초기화하기" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/home/home.ts" visibleLines="[23,30]"/>
 
-1. `src/app/home/home.ts`의 변경 사항을 저장하고 앱이 에러 없이 빌드되는지 확인하세요.
-   에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. `src/app/home/home.ts`의 변경 사항을 저장하고 앱이 오류 없이 빌드되는지 확인하세요.
+   오류가 있다면 수정한 후 다음 단계로 진행하세요.
    </docs-step>
 
 </docs-workflow>

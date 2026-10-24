@@ -214,8 +214,8 @@ bootstrapApplication(App, appConfig);
 그리고 `platformBrowser()` 함수를 실행할 때 `extraProviders` 옵션을 사용해서 플랫폼 계층에 플랫폼별 프로바이더를 추가로 구성할 수 있습니다.
 
 그다음으로 트리 최상단에 존재하는 부모 인젝터는 `NullInjector()` 입니다.
-`@Optional()`을 사용하지 않은 채로 의존성 객체를 찾다가 `NullInjector()`를 만나면 에러가 발생합니다.
-왜냐하면 `NullInjector()`는 의존성 객체를 찾는 마지막 지점이기 때문에 `@Optional()`을 사용한 경우 `null`을 반환하거나, 아니면 에러를 반환하기 때문입니다.
+`@Optional()`을 사용하지 않은 채로 의존성 객체를 찾다가 `NullInjector()`를 만나면 오류가 발생합니다.
+왜냐하면 `NullInjector()`는 의존성 객체를 찾는 마지막 지점이기 때문에 `@Optional()`을 사용한 경우 `null`을 반환하거나, 아니면 오류를 반환하기 때문입니다.
 `@Optional()`에 대해 자세하게 알아보려면 이 문서의 [`@Optional()` 섹션](#optional)을 참고하세요.
 
 아래 다이어그램은 최상위 `ModuleInjector`와 그 부모 인젝터들의 관계를 표현합니다.
@@ -355,7 +355,7 @@ HELPFUL: For `NgModule` based applications, Angular will search the `ModuleInjec
 이런 요청은 부모 `ElementInjector` 계층을 따라 거슬러 올라가며 원하는 의존성 객체를 찾을 때까지 계속됩니다.
 
 Angular가 `ElementInjector` 계층을 따라 탐색했지만 의존성 객체를 찾지 못하면, 다시 시작 엘리먼트로 돌아가서 `EnvironmentInjector` 계층을 따라 다시 한 번 탐색합니다.
-그리고 마지막까지 의존성 객체를 찾지 못하면 에러가 발생합니다.
+그리고 마지막까지 의존성 객체를 찾지 못하면 오류가 발생합니다.
 
 같은 의존성 객체 토큰을 다른 계층에 등록하면, 먼저 만나는 의존성 객체를 사용합니다.
 그래서 어떤 서비스가 컴포넌트 계층에 등록되어 있다면, Angular는 해당 컴포넌트에 등록된 프로바이더를 사용하며 다른 곳을 탐색하지 않습니다.
