@@ -24,7 +24,7 @@ Angular 라우터를 사용하면 라우팅 규칙에 연결된 정보를 읽고
 `ActivatedRoute` is a service from `@angular/router` that provides all the information associated with the current route.
 
 ```angular-ts
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -55,7 +55,7 @@ Check out the [`ActivatedRoute` API docs](/api/router/ActivatedRoute) for a comp
 `ActivatedRoute`는 현재 라우팅 규칙에 연결된 모든 정보를 제공하는 `@angular/router`의 서비스입니다.
 
 ```angular-ts
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
@@ -99,11 +99,12 @@ Route snapshots contain essential information about the route, including its par
 Here’s an example of how you’d access a route snapshot:
 
 ```angular-ts
-import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
 @Component(/* ... */)
 export class UserProfile {
-  readonly userId: string;
+  readonly userId: string | null;
   private route = inject(ActivatedRoute);
 
   constructor() {
@@ -137,11 +138,12 @@ Check out the [`ActivatedRoute` API docs](/api/router/ActivatedRoute) and [`Acti
 라우팅 규칙 스냅샷에는 다음과 같이 접근할 수 있습니다.
 
 ```angular-ts
-import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 
 @Component(/* ... */)
 export class UserProfile {
-  readonly userId: string;
+  readonly userId: string | null;
   private route = inject(ActivatedRoute);
 
   constructor() {
@@ -292,6 +294,7 @@ You can access query parameters with `route.queryParams`.
 Here is an example of a `ProductList` that updates the query parameters that affect how it displays a list of products:
 
 ```angular-ts
+import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -361,6 +364,7 @@ router.navigate(['/products'], {
 다음 `ProductList` 예제는 상품 목록을 표시하는 방식에 영향을 주는 쿼리 파라미터를 갱신합니다.
 
 ```angular-ts
+import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({

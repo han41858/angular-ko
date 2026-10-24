@@ -395,7 +395,7 @@ export class Dashboard {}
 The routed component can inject the provided outlet data using `ROUTER_OUTLET_DATA`:
 
 ```angular-ts
-import {Component, inject} from '@angular/core';
+import {Component, inject, Signal} from '@angular/core';
 import {ROUTER_OUTLET_DATA} from '@angular/router';
 
 @Component({
@@ -437,7 +437,7 @@ export class Dashboard {}
 라우팅된 컴포넌트에서는 `ROUTER_OUTLET_DATA`로 아웃렛이 제공한 데이터를 주입받을 수 있습니다.
 
 ```angular-ts
-import {Component, inject} from '@angular/core';
+import {Component, inject, Signal} from '@angular/core';
 import {ROUTER_OUTLET_DATA} from '@angular/router';
 
 @Component({

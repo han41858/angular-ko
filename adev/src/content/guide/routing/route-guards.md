@@ -179,7 +179,7 @@ export const authGuard: CanActivateFn = (
 ### CanActivateChild
 
 <!--
-The `CanActivateChild` guard determines whether a user can access child routes of a particular parent route. This is useful when you want to protect an entire section of nested routes. In other words, `canActivateChild` runs for _all_ children. If there is a child component with another child component underneath of it, `canActivateChild` will run once for both components.
+The `CanActivateChild` guard determines whether a user can access child routes of a particular parent route. This is useful when you want to protect an entire section of nested routes. In other words, `canActivateChild` runs for _all_ children. If there is a child component with another child component underneath of it, `canActivateChild` will run once for each of them.
 
 It has access to the following default arguments:
 
@@ -204,7 +204,7 @@ For more information, check out the [API docs for CanActivateChildFn](api/router
 `CanActivateChild` 가드는 사용자가 특정 부모 라우팅 규칙의 자식 라우팅 규칙에 접근할 수 있는지 결정합니다.
 중첩 라우팅 규칙의 전체 영역을 보호하려는 경우에 유용합니다.
 즉, `canActivateChild`는 _모든_ 자식에 적용됩니다.
-자식 컴포넌트 아래에 또 다른 자식 컴포넌트가 있으면 `canActivateChild`는 두 컴포넌트에 대해 한 번 실행됩니다.
+자식 컴포넌트 아래에 또 다른 자식 컴포넌트가 있으면 `canActivateChild`는 각 컴포넌트에 대해 한 번씩 실행됩니다.
 
 다음 기본 인자를 사용할 수 있습니다.
 

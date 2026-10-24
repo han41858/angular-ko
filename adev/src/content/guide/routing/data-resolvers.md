@@ -202,7 +202,7 @@ export const routes: Routes = [
 ### ActivatedRoute 사용하기
 
 <!--
-You can access the resolved data in a component by accessing the snapshot data from the `ActivatedRoute` using the `signal` function:
+You can access the resolved data in a component by converting the `data` observable from the `ActivatedRoute` into a signal using the `toSignal` function:
 
 ```angular-ts
 import {Component, inject, computed} from '@angular/core';
@@ -226,7 +226,7 @@ export class UserDetail {
 ```
 -->
 
-컴포넌트에서는 `signal` 함수로 `ActivatedRoute`의 스냅샷 데이터에 접근해서 리졸버가 가져온 데이터를 사용할 수 있습니다.
+컴포넌트에서는 `toSignal` 함수로 `ActivatedRoute`의 `data` 옵저버블을 시그널로 변환해서 리졸버가 가져온 데이터에 접근할 수 있습니다.
 
 ```angular-ts
 import {Component, inject, computed} from '@angular/core';
