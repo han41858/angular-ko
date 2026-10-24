@@ -418,7 +418,7 @@ In the case of the `async` pipe, notice that the expression needs to be wrapped 
 
 위 문제에는 두 가지 우회 방법이 있습니다:
 
-- 템플릿에서 null일 수 있는 표현식 끝에 null 아님 단언 연산자 `!`를 추가합니다.
+- 템플릿에서 null일 수 있는 표현식 끝에 null이 아님을 명시하는 연산자 `!`를 추가합니다.
   예를 들면 다음과 같습니다.
 
 ```html

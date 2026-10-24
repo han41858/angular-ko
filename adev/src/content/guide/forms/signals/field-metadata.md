@@ -364,7 +364,7 @@ const message = registrationForm.username().metadata(USERNAME_HELP)?.();
 // message: string | undefined
 ```
 
-또는 규칙이 키를 등록했다는 것이 보장된다면, 선택적 체이닝을 생략하고 null 아님 단언 연산자(`!`)를 사용할 수 있습니다:
+또는 규칙이 키를 등록했다는 것이 보장된다면, 선택적 체이닝을 생략하고 null이 아님을 명시하는 연산자(`!`)를 사용할 수 있습니다:
 
 ```ts
 const message = registrationForm.username().metadata(USERNAME_HELP)!();
