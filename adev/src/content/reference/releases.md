@@ -41,12 +41,12 @@ Angular 프레임워크에 안정성이 필요하다는 점을 잘 알고 있습
 앞으로의 변경 사항도 항상 예측 가능한 방식으로 도입하고자 합니다.
 Angular를 사용하는 모든 사람이 새로운 기능이 언제, 어떻게 추가되는지 알고, 오래된 기능이 제거될 때 충분히 준비할 수 있기를 바랍니다.
 
-혁신을 이어 가고 모범 사례의 발전, 의존성 변경, 웹 플랫폼 변화에 대응하려면 때로는 API나 기능 제거와 같은 _호환성을 깨뜨리는 변경_ 이 필요합니다. 이러한 변경은 [지원 중단 정책](#deprecation-policy)에 설명된 절차를 거칩니다.
+혁신을 이어 가고 모범 사례의 발전, 의존성 변경, 웹 플랫폼 변화에 대응하려면 때로는 API나 기능 제거와 같은 _호환성을 깨뜨리는 변경_ 이 필요합니다. 이러한 변경은 [사용 중단 권고 정책](#deprecation-policy)에 설명된 절차를 거칩니다.
 
 이러한 전환을 최대한 쉽게 할 수 있도록 Angular 팀은 다음을 약속합니다.
 
 - 호환성을 깨뜨리는 변경을 최소화하고 가능한 경우 마이그레이션 도구를 제공하기 위해 노력합니다.
-- 이 문서의 지원 중단 정책을 준수하여 애플리케이션을 최신 API와 모범 사례에 맞게 업데이트할 시간을 제공합니다.
+- 이 문서의 사용 중단 권고 정책을 준수하여 애플리케이션을 최신 API와 모범 사례에 맞게 업데이트할 시간을 제공합니다.
 
 HELPFUL: 이 문서의 원칙은 Angular 2.0 이후 버전에 적용됩니다.
 현재 AngularJS를 사용한다면 [AngularJS에서 업그레이드하기](https://angular.io/guide/upgrade 'AngularJS에서 업그레이드하기')를 참고하세요.
@@ -89,7 +89,7 @@ Angular 버전 번호는 `major.minor.patch`의 세 부분으로 구성됩니다
 
 | 변경 수준     | 설명                                                                                                                                                                                                                                                                                                                                                                                                   |
 | :------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 메이저 릴리즈 | 중요한 새 기능을 포함하며, 업데이트 과정에서 개발자의 작업이 일부 필요할 수 있지만 최소한으로 유지합니다. 새 메이저 릴리즈로 업데이트할 때는 업데이트 스크립트 실행, 코드 리팩터링, 추가 테스트 실행, 새로운 API 학습 등이 필요할 수 있습니다.                                                                                                                                                         |
+| 메이저 릴리즈 | 중요한 새 기능을 포함하며, 업데이트 과정에서 개발자의 작업이 일부 필요할 수 있지만 최소한으로 유지합니다. 새 메이저 릴리즈로 업데이트할 때는 업데이트 스크립트 실행, 코드 리팩토링, 추가 테스트 실행, 새로운 API 학습 등이 필요할 수 있습니다.                                                                                                                                                         |
 | 마이너 릴리즈 | 규모가 작은 새 기능을 포함합니다. 마이너 릴리즈는 완전한 하위 호환성을 제공하므로 업데이트할 때 개발자의 별도 작업이 필요하지 않습니다. 다만 릴리즈에 추가된 API와 기능을 사용하기 위해 애플리케이션과 라이브러리를 선택적으로 수정할 수 있습니다. 마이너 버전에서는 지원하는 버전 범위를 확장하는 방식으로 피어 의존성을 업데이트하며, 프로젝트에서 이러한 의존성을 업데이트하도록 요구하지 않습니다. |
 | 패치 릴리즈   | 위험이 낮은 버그 수정 릴리즈입니다. 업데이트할 때 개발자의 별도 작업이 필요하지 않습니다.                                                                                                                                                                                                                                                                                                              |
 
@@ -284,7 +284,9 @@ As a general rule, a fix is considered for an LTS version if it resolves one of:
 
 <a id="deprecation-policy"></a>
 
-## 지원 중단 정책
+<a id="지원-중단-정책"></a>
+
+## 사용 중단 권고 정책
 
 <!--
 When the Angular team intends to remove an API or feature, it will be marked as _deprecated_. This occurs when an API is obsolete, superseded by another API, or otherwise discontinued. Deprecated API remain available through their deprecated phase, which lasts a minimum one major version (approximately one year).
@@ -298,14 +300,14 @@ To help ensure that you have sufficient time and a clear path to update, this is
 | npm dependencies   | We only make npm dependency updates that require changes to your applications in a major release. In minor releases, we update peer dependencies by expanding the supported versions, but we do not require projects to update these dependencies until a future major version. This means that during minor Angular releases, npm dependency updates within Angular applications and libraries are optional.                                                                                              |
 -->
 
-Angular 팀이 API나 기능을 제거하려고 할 때는 _지원 중단 예정(deprecated)_ 으로 표시합니다. API가 오래되었거나 다른 API로 대체되었거나 더 이상 제공하지 않기로 한 경우에 해당합니다. 지원 중단 예정인 API는 최소 한 번의 메이저 버전(약 1년)에 걸친 지원 중단 유예 기간 동안 계속 사용할 수 있습니다.
+Angular 팀이 API나 기능을 제거하려고 할 때는 _사용 중단 권고(deprecated)_ 으로 표시합니다. API가 오래되었거나 다른 API로 대체되었거나 더 이상 제공하지 않기로 한 경우에 해당합니다. 사용 중단이 권고된 API는 최소 한 번의 메이저 버전(약 1년)에 걸친 사용 중단 권고 기간 동안 계속 사용할 수 있습니다.
 
-업데이트할 충분한 시간과 명확한 방법을 제공하기 위해 다음 지원 중단 정책을 따릅니다.
+업데이트할 충분한 시간과 명확한 방법을 제공하기 위해 다음 사용 중단 권고 정책을 따릅니다.
 
-| 지원 중단 단계      | 설명                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| 사용 중단 권고 단계      | 설명                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 공지                | 지원 중단 예정인 API와 기능을 [변경 이력](https://github.com/angular/angular/blob/main/CHANGELOG.md 'Angular 변경 이력')에 공지합니다. 지원 중단 예정인 API는 [문서](api?status=8)에 ~~취소선~~으로 표시합니다. 지원 중단을 공지할 때 권장하는 업데이트 방법도 함께 안내합니다. 또한 해당 문서의 모든 지원 중단 예정 API에 `@deprecated`를 표시하므로, 프로젝트가 이러한 API에 의존하면 텍스트 편집기와 IDE에서 안내를 제공할 수 있습니다. |
-| 지원 중단 유예 기간 | API나 기능이 지원 중단 예정으로 표시되더라도 적어도 다음 메이저 릴리즈까지는 유지됩니다(최소 12개월). 그 이후에는 지원 중단 예정인 API와 기능이 제거 대상이 됩니다. 지원 중단 공지는 어떤 릴리즈에서든 할 수 있지만, 실제 제거는 메이저 릴리즈에서만 이루어집니다. 제거되기 전까지는 LTS 지원 정책에 따라 유지 관리하며, 중요한 문제와 보안 문제만 수정합니다.                                                                             |
+| 공지                | 사용 중단이 권고된 API와 기능을 [변경 이력](https://github.com/angular/angular/blob/main/CHANGELOG.md 'Angular 변경 이력')에 공지합니다. 사용 중단이 권고된 API는 [문서](api?status=8)에 ~~취소선~~으로 표시합니다. 사용 중단 권고를 공지할 때 권장하는 업데이트 방법도 함께 안내합니다. 또한 해당 문서의 모든 사용 중단이 권고된 API에 `@deprecated`를 표시하므로, 프로젝트가 이러한 API에 의존하면 텍스트 편집기와 IDE에서 안내를 제공할 수 있습니다. |
+| 사용 중단 권고 기간 | API나 기능이 사용 중단 권고로 표시되더라도 적어도 다음 메이저 릴리즈까지는 유지됩니다(최소 12개월). 그 이후에는 사용 중단이 권고된 API와 기능이 제거 대상이 됩니다. 사용 중단 권고 공지는 어떤 릴리즈에서든 할 수 있지만, 실제 제거는 메이저 릴리즈에서만 이루어집니다. 제거되기 전까지는 LTS 지원 정책에 따라 유지 관리하며, 중요한 문제와 보안 문제만 수정합니다.                                                                             |
 | npm 의존성          | 애플리케이션의 변경이 필요한 npm 의존성 업데이트는 메이저 릴리즈에서만 수행합니다. 마이너 릴리즈에서는 지원하는 버전 범위를 확장하여 피어 의존성을 업데이트하지만, 다음 메이저 버전 전까지 프로젝트에서 이러한 의존성을 업데이트하도록 요구하지 않습니다. 따라서 Angular 마이너 릴리즈 동안에는 Angular 애플리케이션과 라이브러리의 npm 의존성 업데이트가 선택 사항입니다.                                                                 |
 
 <!--
@@ -340,7 +342,7 @@ Angular의 하위 호환성을 보장하기 위해 모든 변경 사항을 병�
 - 변경 전후의 공개 API 타입 정의 비교
 - Angular에 의존하는 Google의 모든 애플리케이션 테스트 실행
 
-공개 API의 모든 변경은 앞에서 설명한 버전 관리, 지원, 지원 중단 정책에 따라 이루어집니다. 중요한 보안 패치와 같은 예외적인 경우에는 수정 사항이 하위 호환성을 깨뜨릴 수 있습니다. 이러한 예외적인 경우에는 프레임워크의 공식 소통 채널을 통해 명시적으로 공지합니다.
+공개 API의 모든 변경은 앞에서 설명한 버전 관리, 지원, 사용 중단 권고 정책에 따라 이루어집니다. 중요한 보안 패치와 같은 예외적인 경우에는 수정 사항이 하위 호환성을 깨뜨릴 수 있습니다. 이러한 예외적인 경우에는 프레임워크의 공식 소통 채널을 통해 명시적으로 공지합니다.
 
 <!--
 ## Breaking change policy and update paths
@@ -377,7 +379,7 @@ For example, to update from version 10 to version 12:
 
 Angular에서 호환성을 깨뜨리는 변경이 발생할 때 여러분을 지원하기 위해 다음을 제공합니다.
 
-- 공개 API를 제거하기 전에 [지원 중단 정책](#deprecation-policy)을 따릅니다.
+- 공개 API를 제거하기 전에 [사용 중단 권고 정책](#deprecation-policy)을 따릅니다.
 - `ng update` 명령어로 업데이트 자동화를 지원합니다. 이 명령어는 코드 변환을 제공하며, 이러한 변환은 Google의 수십만 개 프로젝트에서 사전에 테스트한 경우가 많습니다.
 - ["Angular 업데이트 가이드"](update-guide)에서 메이저 버전 간 업데이트 방법을 단계별로 안내합니다.
 
@@ -409,7 +411,7 @@ This may be because we want to gather feedback from real applications before sta
 The policies and practices that are described in this document do not apply to APIs marked as Developer Preview. Such APIs can change at any time, even in new patch versions of the framework. Teams should decide for themselves whether the benefits of using Developer Preview APIs are worth the risk of breaking changes outside of our normal use of semantic versioning.
 -->
 
-때로는 "개발자 미리보기(Developer Preview)"라는 이름으로 새 API를 도입합니다. 이러한 API는 모든 기능이 구현되어 있고 완성도가 높지만, 아직 일반적인 지원 중단 정책 아래에서 안정화할 준비가 되지 않은 상태입니다.
+때로는 "개발자 미리보기(Developer Preview)"라는 이름으로 새 API를 도입합니다. 이러한 API는 모든 기능이 구현되어 있고 완성도가 높지만, 아직 일반적인 사용 중단 권고 정책 아래에서 안정화할 준비가 되지 않은 상태입니다.
 
 안정화 전에 실제 애플리케이션의 피드백을 수집하려는 경우나 관련 문서 또는 마이그레이션 도구가 아직 완성되지 않은 경우가 이에 해당할 수 있습니다. 개발자는 [GitHub 이슈](https://github.com/angular/angular/issues)를 통해 사용 경험을 공유하고, 버그를 보고하고, 개선 사항을 제안하여 기능을 다듬는 데 도움을 줄 수 있습니다.
 

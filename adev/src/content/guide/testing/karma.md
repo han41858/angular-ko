@@ -138,7 +138,7 @@ To add Karma and Jasmine to an existing project, follow these steps:
 
 2. **`angular.json`에 테스트 러너를 설정합니다.**
 
-   `angular.json` 파일에서 `test` 타깃을 찾아 `runner` 옵션을 `karma`로 지정합니다.
+   `angular.json` 파일에서 `test` 대상을 찾아 `runner` 옵션을 `karma`로 지정합니다.
 
    ```json
    {
@@ -220,7 +220,7 @@ Meanwhile, the `ng test` command is watching for changes. To see this in action,
 ng test
 ```
 
-`ng test` 명령은 애플리케이션을 _변경 감시 모드_ 로 빌드하고 [Karma 테스트 러너](https://karma-runner.github.io)를 실행합니다.
+`ng test` 명령은 애플리케이션을 _파일 감시 모드_ 로 빌드하고 [Karma 테스트 러너](https://karma-runner.github.io)를 실행합니다.
 
 콘솔에는 다음과 같이 출력됩니다.
 
@@ -319,7 +319,7 @@ To explicitly set Karma as the test runner for your project, locate the `test` t
 ```
 -->
 
-프로젝트의 테스트 러너를 Karma로 명시하려면 `angular.json` 파일의 `test` 타깃에서 `runner` 옵션을 `karma`로 지정하세요.
+프로젝트의 테스트 러너를 Karma로 명시하려면 `angular.json` 파일의 `test` 대상에서 `runner` 옵션을 `karma`로 지정하세요.
 
 ```json
 {

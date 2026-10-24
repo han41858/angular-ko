@@ -68,7 +68,7 @@ The information popover contains among others what version of Angular is running
 | 탭                                        | 설명                                                                                            |
 | :---------------------------------------- | :---------------------------------------------------------------------------------------------- |
 | [Components](tools/devtools/component)    | 애플리케이션의 컴포넌트와 디렉티브를 살펴보고 상태를 미리 보거나 수정할 수 있습니다.            |
-| [Profiler](tools/devtools/profiler)       | 애플리케이션을 프로파일링하고 변화 감지 실행 중 성능 병목이 발생하는 지점을 파악할 수 있습니다. |
+| [Profiler](tools/devtools/profiler)       | 애플리케이션을 프로파일링하고 변경 감지 실행 중 성능 병목이 발생하는 지점을 파악할 수 있습니다. |
 | [Injector Tree](tools/devtools/injectors) | 환경 인젝터와 엘리먼트 인젝터의 계층을 시각적으로 확인할 수 있습니다.                           |
 | [Router Tree](tools/devtools/router)      | 애플리케이션의 라우팅 트리를 시각적으로 확인할 수 있습니다.                                     |
 

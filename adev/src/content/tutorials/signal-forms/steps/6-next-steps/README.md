@@ -36,7 +36,7 @@ Throughout this tutorial, you learned the fundamentals of Angular Signal Forms:
 1. **폼 모델** - 시그널과 `form()` 함수로 타입 안전성이 보장되는 폼 데이터 만들기
 2. **필드 바인딩** - `[formField]` 디렉티브로 양방향 데이터 바인딩을 연결하고 `value()`로 필드 값 표시하기
 3. **유효성 검사** - `required()`, `email()` 등의 내장 유효성 검사 함수에 커스텀 메시지 적용하기
-4. **에러 표시** - 필드 상태에 따라 조건부로 유효성 검사 에러 표시하기
+4. **오류 표시** - 필드 상태에 따라 조건부로 유효성 검사 오류 표시하기
 5. **폼 제출** - `submit()` 함수로 폼 제출 처리하기
 
 <!--

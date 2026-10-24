@@ -23,10 +23,10 @@ _Angular 엘리먼트_ 는 Angular 컴포넌트를 _커스텀 엘리먼트_ 로 
 이 커스텀 엘리먼트는 JavaScript 코드를 사용해서 내용물을 생성하고 조작하는 형태로 HTML을 확장한 것입니다.
 커스텀 엘리먼트는 JavaScript 클래스로 구현되어 HTML 태그로 변환되는데, 브라우저가 관리하는 `CustomElementRegistry`에 등록됩니다.
 
-`@angular/elements` 패키지로 제공되는 `createCustomElement()` API를 활용하면 Angular 컴포넌트 인터페이스와 변화 감지 기능을 브라우저 내장 DOM API와 연동할 수 있습니다.
+`@angular/elements` 패키지로 제공되는 `createCustomElement()` API를 활용하면 Angular 컴포넌트 인터페이스와 변경 감지 기능을 브라우저 내장 DOM API와 연동할 수 있습니다.
 
 컴포넌트를 커스텀 엘리먼트로 변환하면 Angular 기반에서만 동작하던 코드를 모든 브라우저에서 실행하는 것과 같습니다.
-커스텀 엘리먼트를 정의하는 것은 간단하고 직관적이며, Angular가 제공하던 변화 감지, 데이터 바인딩 등 다양한 기능을 자유롭게 활용할 수 있습니다.
+커스텀 엘리먼트를 정의하는 것은 간단하고 직관적이며, Angular가 제공하던 변경 감지, 데이터 바인딩 등 다양한 기능을 자유롭게 활용할 수 있습니다.
 
 <!--
 ## Using custom elements

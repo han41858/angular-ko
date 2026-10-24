@@ -27,7 +27,7 @@ When working in the browser playground, you do not need to `ng serve` to run the
 
 ## 학습 목표
 
-애플리케이션이 브라우저에서 정상적으로 실행되고 에러 없이 내용이 표시된다면 Angular 앱 개발을 시작할 수 있도록 개발 환경과 IDE가 올바르게 설정된 것입니다.
+애플리케이션이 브라우저에서 정상적으로 실행되고 오류 없이 내용이 표시된다면 Angular 앱 개발을 시작할 수 있도록 개발 환경과 IDE가 올바르게 설정된 것입니다.
 
 NOTE: 내장 에디터를 사용한다면 [네 번째 단계](#create-hello-world)로 이동하세요.
 브라우저 플레이그라운드에서는 앱을 실행하기 위해 `ng serve`를 실행할 필요가 없습니다. `ng generate`와 같은 다른 명령어는 오른쪽 콘솔 창에서 실행할 수 있습니다.
@@ -101,7 +101,7 @@ IDE의 **터미널** 창에서 다음 작업을 수행하세요:
    ng serve
    ```
 
-   앱이 에러 없이 빌드되어야 합니다.
+   앱이 오류 없이 빌드되어야 합니다.
 
 1. 개발용 컴퓨터의 웹 브라우저에서 `http://localhost:4200`을 여세요.
 1. 브라우저에 기본 웹사이트가 표시되는지 확인하세요.
@@ -254,7 +254,7 @@ IDE에서 다음 작업을 수행하세요:
    그런 다음 `app.ts`의 변경 사항을 저장하세요.
 
 1. 앞에서 실행한 `ng serve` 명령어를 중지했다면 IDE의 **터미널** 창에서 `ng serve`를 다시 실행하세요.
-1. 브라우저에서 `localhost:4200`을 열고 앱이 에러 없이 빌드되며 제목에는 _Homes_ 가, 본문에는 _Hello world_ 가 표시되는지 확인하세요:
+1. 브라우저에서 `localhost:4200`을 열고 앱이 오류 없이 빌드되며 제목에는 _Homes_ 가, 본문에는 _Hello world_ 가 표시되는지 확인하세요:
    <img alt="'Hello World' 문구가 표시된 브라우저 화면" src="assets/images/tutorials/first-app/homes-app-lesson-01-browser.png">
    </docs-step>
 

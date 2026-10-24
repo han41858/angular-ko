@@ -67,7 +67,7 @@ ng add @angular/ssr
 
 참고: 기본적으로 Angular는 애플리케이션 전체를 사전 렌더링하고 서버 파일을 생성합니다.
 이 동작을 끄고 완전한 정적 애플리케이션을 만들려면 `outputMode`를 `static`으로 설정하세요.
-SSR을 활성화하려면 서버 라우트가 `RenderMode.Server`를 사용하도록 수정하세요.
+SSR을 활성화하려면 서버 라우팅 규칙이 `RenderMode.Server`를 사용하도록 수정하세요.
 자세한 내용은 [`서버 라우팅`](#server-routing)과 [`완전한 정적 애플리케이션 생성하기`](#generate-a-fully-static-application)를 참고하세요.
 
 <!--
@@ -84,7 +84,9 @@ SSR을 활성화하려면 서버 라우트가 `RenderMode.Server`를 사용하�
 
 <a id="configuring-server-routes"></a>
 
-### 서버 라우트 설정하기
+<a id="서버-라우트-설정하기"></a>
+
+### 서버 라우팅 규칙 설정하기
 
 <!--
 You can create a server route config by declaring an array of [`ServerRoute`](api/ssr/ServerRoute 'API reference') objects. This configuration typically lives in a file named `app.routes.server.ts`.
@@ -141,7 +143,7 @@ const serverConfig: ApplicationConfig = {
 ```
 -->
 
-[`ServerRoute`](api/ssr/ServerRoute 'API 레퍼런스') 객체의 배열을 선언해서 서버 라우트를 설정할 수 있습니다.
+[`ServerRoute`](api/ssr/ServerRoute 'API 레퍼런스') 객체의 배열을 선언해서 서버 라우팅 규칙을 설정할 수 있습니다.
 이 설정은 일반적으로 `app.routes.server.ts` 파일에 작성합니다.
 
 ```typescript {header: "app.routes.server.ts"}
@@ -181,7 +183,7 @@ const serverConfig: ApplicationConfig = {
 };
 ```
 
-[앱 셸 패턴](ecosystem/service-workers/app-shell)을 사용한다면 클라이언트에서 렌더링하는 라우트의 앱 셸로 사용할 컴포넌트를 지정해야 합니다.
+[앱 셸 패턴](ecosystem/service-workers/app-shell)을 사용한다면 클라이언트에서 렌더링하는 라우팅 규칙의 앱 셸로 사용할 컴포넌트를 지정해야 합니다.
 [`withAppShell`](api/ssr/withAppShell 'API 레퍼런스') 기능으로 지정하세요:
 
 ```typescript
@@ -214,13 +216,13 @@ The server routing configuration lets you specify how each route in your applica
 | **Prerender (SSG)** | Prerenders the application at build time, generating static HTML files for each route.                      |
 -->
 
-서버 라우팅 설정에서 [`RenderMode`](api/ssr/RenderMode 'API 레퍼런스')를 지정하면 애플리케이션의 각 라우트를 어떻게 렌더링할지 정할 수 있습니다:
+서버 라우팅 설정에서 [`RenderMode`](api/ssr/RenderMode 'API 레퍼런스')를 지정하면 애플리케이션의 각 라우팅 규칙을 어떻게 렌더링할지 정할 수 있습니다:
 
 | 렌더링 모드         | 설명                                                                                            |
 | ------------------- | ----------------------------------------------------------------------------------------------- |
 | **Server (SSR)**    | 요청마다 서버에서 애플리케이션을 렌더링하고, 콘텐츠가 완성된 HTML 페이지를 브라우저로 보냅니다. |
 | **Client (CSR)**    | 브라우저에서 애플리케이션을 렌더링합니다. Angular의 기본 동작입니다.                            |
-| **Prerender (SSG)** | 빌드 시점에 애플리케이션을 사전 렌더링해서 각 라우트의 정적 HTML 파일을 생성합니다.             |
+| **Prerender (SSG)** | 빌드 시점에 애플리케이션을 사전 렌더링해서 각 라우팅 규칙의 정적 HTML 파일을 생성합니다.             |
 
 <!--
 #### Choosing a rendering mode
@@ -373,7 +375,7 @@ export const serverRoutes: ServerRoute[] = [
 ```
 -->
 
-`ServerRoute` 설정의 `headers`, `status` 프로퍼티를 사용하면 개별 서버 라우트에 커스텀 헤더와 상태 코드를 지정할 수 있습니다.
+`ServerRoute` 설정의 `headers`, `status` 프로퍼티를 사용하면 개별 서버 라우팅 규칙에 커스텀 헤더와 상태 코드를 지정할 수 있습니다.
 
 ```typescript {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
@@ -409,7 +411,7 @@ Redirects are performed using standard HTTP redirects (e.g., 301, 302) within th
 Redirects are implemented as "soft redirects" using [`<meta http-equiv="refresh">`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta#refresh) tags in the prerendered HTML.
 -->
 
-Angular는 라우트 설정의 [`redirectTo`](api/router/Route#redirectTo 'API 레퍼런스') 프로퍼티로 지정한 리다이렉트를 서버에서 다르게 처리합니다.
+Angular는 라우팅 규칙 설정의 [`redirectTo`](api/router/Route#redirectTo 'API 레퍼런스') 프로퍼티로 지정한 리다이렉트를 서버에서 다르게 처리합니다.
 
 **서버 사이드 렌더링(SSR)**
 서버 사이드 렌더링 과정에서 표준 HTTP 리다이렉트(예: 301, 302)를 사용합니다.
@@ -437,7 +439,9 @@ When using [`RenderMode.Prerender`](api/ssr/RenderMode#Prerender 'API reference'
 
 <a id="parameterized-routes"></a>
 
-#### 파라미터가 있는 라우트
+<a id="파라미터가-있는-라우트"></a>
+
+#### 파라미터가 있는 라우팅 규칙
 
 <!--
 For each route with [`RenderMode.Prerender`](api/ssr/RenderMode#Prerender 'API reference'), you can specify a [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API reference') function. This function lets you control which specific parameters produce separate prerendered documents.
@@ -480,19 +484,19 @@ Because [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerend
 IMPORTANT: When using [`inject`](api/core/inject 'API reference') inside `getPrerenderParams`, please remember that `inject` must be used synchronously. It cannot be invoked within asynchronous callbacks or following any `await` statements. For more information, refer to `runInInjectionContext`.
 -->
 
-[`RenderMode.Prerender`](api/ssr/RenderMode#Prerender 'API 레퍼런스')를 사용하는 각 라우트에 [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API 레퍼런스') 함수를 지정할 수 있습니다.
+[`RenderMode.Prerender`](api/ssr/RenderMode#Prerender 'API 레퍼런스')를 사용하는 각 라우팅 규칙에 [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API 레퍼런스') 함수를 지정할 수 있습니다.
 이 함수로 어떤 파라미터 값에 대해 별도의 사전 렌더링 문서를 생성할지 제어합니다.
 
 [`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API 레퍼런스') 함수는 객체 배열로 이행되는 `Promise`를 반환합니다.
-각 객체는 라우트 파라미터 이름과 값을 연결하는 키·값 맵입니다.
+각 객체는 라우팅 규칙 파라미터 이름과 값을 연결하는 키·값 맵입니다.
 예를 들어 `post/:id` 라우팅 규칙을 정의하고 `getPrerenderParams`가 `[{id: '123'}, {id: '456'}]`를 반환하면 `post/123`과 `post/456`의 문서를 각각 렌더링합니다.
 
-[`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API 레퍼런스') 안에서는 Angular의 [`inject`](api/core/inject 'API 레퍼런스') 함수로 의존성을 주입하고, 어떤 라우트를 사전 렌더링할지 결정하는 작업을 수행할 수 있습니다.
+[`getPrerenderParams`](api/ssr/ServerRoutePrerenderWithParams#getPrerenderParams 'API 레퍼런스') 안에서는 Angular의 [`inject`](api/core/inject 'API 레퍼런스') 함수로 의존성을 주입하고, 어떤 라우팅 규칙을 사전 렌더링할지 결정하는 작업을 수행할 수 있습니다.
 일반적으로 데이터를 요청해서 파라미터 값 배열을 만드는 작업이 여기에 포함됩니다.
 
-이 함수를 모든 경로를 처리하는 catch-all 라우트(예: `/**`)에도 사용할 수 있습니다.
+이 함수를 모든 경로를 처리하는 catch-all 라우팅 규칙(예: `/**`)에도 사용할 수 있습니다.
 이때 파라미터 이름은 `"**"`이며 반환 값은 `foo/bar` 같은 경로 세그먼트입니다.
-`/post/:id/**`처럼 다른 파라미터와 조합해서 더 복잡한 라우트 설정을 처리할 수도 있습니다.
+`/post/:id/**`처럼 다른 파라미터와 조합해서 더 복잡한 라우팅 규칙 설정을 처리할 수도 있습니다.
 
 ```ts {header: "app.routes.server.ts"}
 import {RenderMode, ServerRoute} from '@angular/ssr';
@@ -943,7 +947,7 @@ export class MyComponent {
   <li>빌드 과정 중.</li>
   <li>애플리케이션이 브라우저에서 렌더링되는 경우(CSR).</li>
   <li>정적 사이트 생성(SSG)을 수행하는 경우.</li>
-  <li>개발 중 라우트를 추출하는 경우(요청 시점).</li>
+  <li>개발 중 라우팅 규칙을 추출하는 경우(요청 시점).</li>
 </ul>
 
 <!-- prettier-ignore-end -->
@@ -984,7 +988,7 @@ To configure this, update your `angular.json` file as follows:
 이 방식으로 사전 렌더링한 콘텐츠를 사용자에게 제공할 수 있습니다.
 하지만 서버 없는 완전한 정적 사이트를 원한다면 `angular.json` 설정 파일에서 `outputMode`를 `static`으로 설정해서 이 동작을 변경할 수 있습니다.
 
-`outputMode`가 `static`이면 Angular는 빌드 시점에 각 라우트의 사전 렌더링 HTML 파일을 생성하지만 서버 파일은 생성하지 않으며, 애플리케이션을 제공할 Node.js 서버도 필요하지 않습니다.
+`outputMode`가 `static`이면 Angular는 빌드 시점에 각 라우팅 규칙의 사전 렌더링 HTML 파일을 생성하지만 서버 파일은 생성하지 않으며, 애플리케이션을 제공할 Node.js 서버도 필요하지 않습니다.
 백엔드 서버가 필요 없는 정적 호스팅 서비스에 배포할 때 유용합니다.
 
 다음과 같이 `angular.json` 파일을 수정하세요:

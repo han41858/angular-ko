@@ -16,7 +16,9 @@ TIP: This guide assumes you've already read the [Essentials Guide](essentials). 
 
 <a id="changedetectionstrategy"></a>
 
-## 변화 감지 정책
+<a id="변화-감지-정책"></a>
+
+## 변경 감지 정책
 
 <!--
 The `@Component` decorator accepts a `changeDetection` option that controls the component's **change
@@ -38,13 +40,13 @@ Additionally, when an OnPush component is checked, Angular _also_ checks all of 
 components, traversing upwards through the application tree.
 -->
 
-`@Component` 데코레이터의 `changeDetection` 옵션을 지정하면 **변화 감지 모드** 를 설정할 수 있습니다.
-변화 감지 모드는 두 가지가 있습니다.
+`@Component` 데코레이터의 `changeDetection` 옵션을 지정하면 **변경 감지 모드** 를 설정할 수 있습니다.
+변경 감지 모드는 두 가지가 있습니다.
 
 **`ChangeDetectionStrategy.Eager`/`Default`**는 선택해서 사용할 수 있는 모드입니다. 이 모드에서는 애플리케이션 어디에서든 사용자 상호작용, 네트워크 응답, 타이머 등의 활동이 발생했을 가능성이 있을 때, 해당 컴포넌트의 DOM을 갱신해야 하는지 검사합니다.
 
 Angular v22 부터는 **`ChangeDetectionStrategy.OnPush`** 가 기본값입니다.
-이 모드를 사용하면 성능 최적화를 위해 변화 감지 검사를 줄이며, 이런 경우만 검사합니다:
+이 모드를 사용하면 성능 최적화를 위해 변경 감지 검사를 줄이며, 이런 경우만 검사합니다:
 
 - 템플릿에 바인딩된 입력 프로퍼티가 변경될 때
 - 컴포넌트의 이벤트 리스너가 실행될 때
@@ -96,7 +98,7 @@ export class ComponentWithCustomElements { }
 Angular also provides `NO_ERRORS_SCHEMA`, which allows any element and any property.
 -->
 
-기본적으로 Angular는 식별할 수 없는 HTML 엘리먼트를 발견하면 에러를 발생시킵니다.
+기본적으로 Angular는 식별할 수 없는 HTML 엘리먼트를 발견하면 오류를 발생시킵니다.
 이 동작은 컴포넌트 메타데이터에서 `schemas` 옵션에 `CUSTOM_ELEMENTS_SCHEMA`를 추가하면 비활성화할 수 있습니다.
 
 ```angular-ts

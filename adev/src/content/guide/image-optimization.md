@@ -129,7 +129,7 @@ NOTE: If you don't know the size of your images, consider using "fill mode" to i
 import {NgOptimizedImage} from '@angular/common';
 ```
 
-그리고 독립 컴포넌트나 독립 NgModule의 `imports` 배열에 추가합니다:
+그리고 독립 컴포넌트나 NgModule의 `imports` 배열에 추가합니다:
 
 ```ts
 imports: [
@@ -156,7 +156,7 @@ NgOptimizedImage를 활용할 때 이미지 로더를 정하는 것이 **필수*
 <img ngSrc="cat.jpg" />
 ```
 
-[기본 로더](#기본-로더)를 사용하고 있다면, `src`를 지정할 때 베이스 URL은 꼭 제거하세요.
+[내장 서드 파티 로더](#built-in-loaders)를 사용하고 있다면, `src`를 지정할 때 베이스 URL 경로는 제외하세요.
 베이스 주소는 이미지 로더가 직접 적용합니다.
 </docs-step>
 <a id="mark-images-as-priority"></a>
@@ -827,7 +827,9 @@ Angular 애플리케이션과 함께 사용되는 이미지 서비스들은 `NgO
 
 <a id="built-in-loaders"></a>
 
-### 기본 로더
+<a id="기본-로더"></a>
+
+### 내장 로더
 
 <!--
 To use an existing loader for a **third-party image service**, add the provider factory for your chosen service to the `providers` array. In the example below, the Imgix loader is used:

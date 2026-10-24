@@ -91,7 +91,7 @@ Start developing with the latest Angular features from our roadmap. This list re
 - [존리스 변경 감지](/guide/zoneless)
 - [연결된 시그널 API](/guide/signals/linked-signal)
 - [점진적 하이드레이션](/guide/incremental-hydration)
-- [이펙트 API](/api/core/effect)
+- [이펙트 함수 API](/api/core/effect)
 - [SSR에서 이벤트 재실행](/api/platform-browser/withEventReplay)
 - [라우팅 규칙 수준 렌더링 모드](/guide/ssr)
 
@@ -395,7 +395,7 @@ To make it easier for developers to use modern Angular APIs, we enabled integrat
 -->
 
 <docs-card title="Angular 언어 지원 서비스와 스키매틱 통합" link="2024년 4분기 완료">
-개발자가 최신 Angular API를 쉽게 사용할 수 있도록 Angular 언어 지원 서비스와 스키매틱을 통합하여, 클릭 한 번으로 앱을 리팩터링할 수 있게 했습니다.
+개발자가 최신 Angular API를 쉽게 사용할 수 있도록 Angular 언어 지원 서비스와 스키매틱을 통합하여, 클릭 한 번으로 앱을 리팩토링할 수 있게 했습니다.
 </docs-card>
 
 <!--
@@ -479,7 +479,7 @@ In v17 we shipped a developer preview version of a new control flow. It brings s
 -->
 
 <docs-card title="내장 흐름 제어 도입" link="2024년 2분기 완료" href="guide/templates/control-flow">
-v17에서 새로운 흐름 제어을 개발자 미리보기로 제공했습니다. 이는 성능을 크게 개선하고 템플릿을 더 편리하게 작성할 수 있도록 합니다. 기존 `*ngIf`, `*ngFor`, `*ngSwitch`를 새 구현으로 전환할 수 있는 마이그레이션도 제공했습니다. v18부터 내장 흐름 제어이 안정화되었습니다.
+v17에서 새로운 흐름 제어를 개발자 미리보기로 제공했습니다. 이는 성능을 크게 개선하고 템플릿을 더 편리하게 작성할 수 있도록 합니다. 기존 `*ngIf`, `*ngFor`, `*ngSwitch`를 새 구현으로 전환할 수 있는 마이그레이션도 제공했습니다. v18부터 내장 흐름 제어가 안정화되었습니다.
 </docs-card>
 
 <!--
@@ -562,8 +562,8 @@ Ensure all existing documentation fits into a consistent set of content types. U
 </docs-card>
 -->
 
-<docs-card title="문서 리팩터링" link="2023년 1분기 완료" href="https://angular.io">
-기존 문서 전체가 일관된 콘텐츠 유형 체계에 맞도록 정리합니다. 튜토리얼 형식에 지나치게 의존하는 문서는 독립적인 주제로 바꿉니다. 주요 튜토리얼 외의 콘텐츠가 일련의 가이드에 강하게 결합되지 않고 독립적으로 이해될 수 있도록 하는 것이 목표입니다. 2022년 2분기에는 템플릿과 의존성 주입 콘텐츠를 리팩터링했습니다. 2023년 1분기에는 HTTP 가이드를 개선했으며, 이를 끝으로 문서 리팩터링 프로젝트를 잠정 중단합니다.
+<docs-card title="문서 리팩토링" link="2023년 1분기 완료" href="https://angular.io">
+기존 문서 전체가 일관된 콘텐츠 유형 체계에 맞도록 정리합니다. 튜토리얼 형식에 지나치게 의존하는 문서는 독립적인 주제로 바꿉니다. 주요 튜토리얼 외의 콘텐츠가 일련의 가이드에 강하게 결합되지 않고 독립적으로 이해될 수 있도록 하는 것이 목표입니다. 2022년 2분기에는 템플릿과 의존성 주입 콘텐츠를 리팩토링했습니다. 2023년 1분기에는 HTTP 가이드를 개선했으며, 이를 끝으로 문서 리팩토링 프로젝트를 잠정 중단합니다.
 </docs-card>
 
 <!--
@@ -723,7 +723,7 @@ Earlier in 2020, we shared an RFC for Ivy library distribution. After invaluable
 -->
 
 <docs-card title="Angular 라이브러리의 Ivy 사용" link="2021년 3분기 완료" href="tools/libraries">
-2020년 초에 Ivy 라이브러리 배포에 관한 RFC를 공개했습니다. 커뮤니티의 소중한 피드백을 바탕으로 프로젝트를 설계했습니다. 현재는 Ivy 라이브러리 배포 개발에 투자하고 있습니다. 여기에는 Ivy 컴파일을 사용하도록 라이브러리 패키지 형식을 업데이트하고, View Engine 라이브러리 형식과 ngcc의 지원 중단을 가능하게 하는 작업이 포함됩니다.
+2020년 초에 Ivy 라이브러리 배포에 관한 RFC를 공개했습니다. 커뮤니티의 소중한 피드백을 바탕으로 프로젝트를 설계했습니다. 현재는 Ivy 라이브러리 배포 개발에 투자하고 있습니다. 여기에는 Ivy 컴파일을 사용하도록 라이브러리 패키지 형식을 업데이트하고, View Engine 라이브러리 형식과 ngcc의 사용 중단 권고를 가능하게 하는 작업이 포함됩니다.
 </docs-card>
 
 <!--
@@ -873,7 +873,7 @@ With the deprecation of TSLint we will be moving to ESLint. As part of the proce
 -->
 
 <docs-card title="ESLint로 마이그레이션" link="2020년 4분기 완료" href="tools/cli">
-TSLint 지원 중단에 따라 ESLint로 전환할 예정입니다. 이 과정에서 현재 권장하는 TSLint 설정과의 하위 호환성을 확보하고, 기존 Angular 앱의 마이그레이션 전략을 구현하며, Angular CLI 도구 체인에 새로운 도구를 도입할 예정입니다.
+TSLint 사용 중단 권고에 따라 ESLint로 전환할 예정입니다. 이 과정에서 현재 권장하는 TSLint 설정과의 하위 호환성을 확보하고, 기존 Angular 앱의 마이그레이션 전략을 구현하며, Angular CLI 도구 체인에 새로운 도구를 도입할 예정입니다.
 </docs-card>
 
 <!--

@@ -24,7 +24,7 @@ Let's add validation!
 
 - 내장 유효성 검사 함수 불러오기
 - 폼의 스키마 함수 정의하기
-- 특정 필드에 커스텀 에러 메시지와 유효성 검사 함수 적용하기
+- 특정 필드에 커스텀 오류 메시지와 유효성 검사 함수 적용하기
 
 유효성 검사를 추가해 봅시다!
 
@@ -99,7 +99,7 @@ loginForm = form(this.loginModel, (fieldPath) => {
 The `message` option provides custom error messages for users.
 -->
 
-`message` 옵션은 사용자에게 보여줄 커스텀 에러 메시지를 지정합니다.
+`message` 옵션은 사용자에게 보여줄 커스텀 오류 메시지를 지정합니다.
 </docs-step>
 
 <!--
@@ -132,10 +132,10 @@ loginForm = form(this.loginModel, (fieldPath) => {
 Perfect! You've added validation to your form. The validators run automatically as users interact with the form. When validation fails, the field's state will reflect the errors.
 -->
 
-폼에 유효성 검사를 추가했습니다! 사용자가 폼과 상호작용하면 유효성 검사 함수가 자동으로 실행됩니다. 유효성 검사에 실패하면 필드 상태에 에러가 반영됩니다.
+폼에 유효성 검사를 추가했습니다! 사용자가 폼과 상호작용하면 유효성 검사 함수가 자동으로 실행됩니다. 유효성 검사에 실패하면 필드 상태에 오류가 반영됩니다.
 
 <!--
 Next, you'll learn [how to display validation errors in the template](/tutorials/signal-forms/4-display-errors)!
 -->
 
-다음 단계에서는 [템플릿에 유효성 검사 에러를 표시하는 방법](/tutorials/signal-forms/4-display-errors)을 배웁니다!
+다음 단계에서는 [템플릿에 유효성 검사 오류를 표시하는 방법](/tutorials/signal-forms/4-display-errors)을 배웁니다!

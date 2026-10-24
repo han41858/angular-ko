@@ -127,7 +127,7 @@ const WIDGETS = [MENU_COMPONENTS, CustomSlider];
 export class CustomMenuModule {}
 ```
 
-컴포넌트, 디렉티브, 파이프가 여러 NgModule에 중복으로 선언되어 있으면 Angular는 에러를 발생시킵니다.
+컴포넌트, 디렉티브, 파이프가 여러 NgModule에 중복으로 선언되어 있으면 Angular는 오류를 발생시킵니다.
 
 NgModule에 선언할 컴포넌트, 디렉티브, 파이프에는 반드시 `standalone: false`를 명시해야 합니다.
 

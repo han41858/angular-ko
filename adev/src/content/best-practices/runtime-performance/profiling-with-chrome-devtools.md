@@ -38,7 +38,7 @@ Angular는 [Chrome DevTools 확장 API](https://developer.chrome.com/docs/devtoo
 
 <img alt="Chrome DevTools 프로파일러의 Angular 커스텀 트랙" src="assets/images/best-practices/runtime-performance/angular-perf-in-chrome.png">
 
-Angular 고유의 데이터는 컴포넌트, 변경 감지, 생명주기 후킹 메서드 같은 프레임워크 개념으로 표시되며, 브라우저가 수집한 더 낮은 수준의 함수 및 메서드 호출과 나란히 나타납니다.
+Angular 고유의 데이터는 컴포넌트, 변경 감지, 라이프사이클 후킹 메서드 같은 프레임워크 개념으로 표시되며, 브라우저가 수집한 더 낮은 수준의 함수 및 메서드 호출과 나란히 나타납니다.
 두 데이터 집합은 서로 연결되어 있으므로 관점과 상세 수준을 바꿔가며 확인할 수 있습니다.
 
 Angular 트랙을 사용하면 다음과 같이 코드가 브라우저에서 실행되는 방식을 더 잘 이해할 수 있습니다:
@@ -111,7 +111,9 @@ bootstrapApplication(MyApp);
 
 <a id="record-a-profile"></a>
 
-### 프로파일 기록하기 {#프로파일-기록하기-2}
+<a id="프로파일-기록하기-프로파일-기록하기-2"></a>
+
+### 프로파일 기록하기 {#ko-record-a-profile}
 
 <!--
 Use the **Record** button in the Chrome DevTools performance panel:
@@ -213,7 +215,7 @@ The following examples illustrate the described color-coding in various, real-li
 
 Angular는 플레임 차트의 색상으로 작업 유형을 구분합니다:
 
-- 🟦 파란색은 애플리케이션 개발자가 작성한 TypeScript 코드(서비스, 컴포넌트 생성자, 생명주기 후킹 메서드 등)를 나타냅니다.
+- 🟦 파란색은 애플리케이션 개발자가 작성한 TypeScript 코드(서비스, 컴포넌트 생성자, 라이프사이클 후킹 메서드 등)를 나타냅니다.
 - 🟪 보라색은 애플리케이션 개발자가 작성하고 Angular 컴파일러가 변환한 템플릿 코드를 나타냅니다.
 - 🟩 초록색은 애플리케이션 코드의 진입점을 나타내며, 코드를 실행하는 _이유_ 를 식별합니다.
 
@@ -258,7 +260,7 @@ One component processing is typically represented as an entry point (blue) follo
 -->
 
 컴포넌트 하나를 처리하는 과정은 보통 진입점(파란색)에 이어 템플릿 실행(보라색)이 나타납니다.
-템플릿은 다시 디렉티브 인스턴스 생성과 생명주기 후킹 메서드 실행(초록색)을 유발할 수 있습니다:
+템플릿은 다시 디렉티브 인스턴스 생성과 라이프사이클 후킹 메서드 실행(초록색)을 유발할 수 있습니다:
 
 <img alt="프로파일 데이터: 컴포넌트 처리" src="assets/images/best-practices/runtime-performance/profile-component-processing.png">
 

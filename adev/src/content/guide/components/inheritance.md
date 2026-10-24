@@ -93,7 +93,7 @@ and their own.
 -->
 
 컴포넌트가 다른 컴포넌트나 디렉티브를 상속하면, 부모 클래스 데코레이터에 정의된 일부 메타데이터와 데코레이터가 적용된 멤버를 상속받습니다.
-여기에는 호스트 바인딩, 입출력 프로퍼티, 라이프싸이클 메서드가 모두 포함됩니다.
+여기에는 호스트 바인딩, 입출력 프로퍼티, 라이프사이클 메서드가 모두 포함됩니다.
 
 ```angular-ts
 @Component({
@@ -207,7 +207,9 @@ export class CustomListbox extends ListboxBase {
 
 <a id="overriding-lifecycle-methods"></a>
 
-### 라이프싸이클 메서드 오버라이딩
+<a id="라이프싸이클-메서드-오버라이딩"></a>
+
+### 라이프사이클 메서드 오버라이딩
 
 <!--
 If a base class defines a lifecycle method, such as `ngOnInit`, a child class that also
@@ -233,7 +235,7 @@ export class CustomListbox extends ListboxBase {
 ```
 -->
 
-부모 클래스에서 `ngOnInit`과 같은 라이프싸이클 메서드를 구현했다면, 자식 클래스에서 다시 `ngOnInit` 함수를 구현하면서 부모 클래스의 메서드를 오버라이딩할 수 있습니다.
+부모 클래스에서 `ngOnInit`과 같은 라이프사이클 메서드를 구현했다면, 자식 클래스에서 다시 `ngOnInit` 함수를 구현하면서 부모 클래스의 메서드를 오버라이딩할 수 있습니다.
 이때 부모 클래스의 메서드를 실행하려면, `super` 키워드와 함께 실행하면 됩니다:
 
 ```ts

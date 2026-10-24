@@ -811,7 +811,9 @@ You can avoid this by renaming `my-builder.spec.ts` to `my-builder.spec.js`.
 
 <a id="watch-mode"></a>
 
-### 변경 감지 모드
+<a id="변경-감지-모드"></a>
+
+### 파일 감시 모드
 
 <!--
 Most builders to run once and return. However, this behavior is not entirely compatible with a builder that watches for changes (like a devserver, for example).
@@ -839,17 +841,17 @@ In general, if your builder is watching an external event, you should separate y
 
 대부분의 빌더는 한 번 실행한 뒤 반환합니다.
 하지만 개발 서버처럼 변경 사항을 감지하는 빌더에는 이러한 동작 방식이 완전히 맞지는 않습니다.
-Architect는 변경 감지 모드를 지원하지만 몇 가지 주의할 점이 있습니다.
+Architect는 파일 감시 모드를 지원하지만 몇 가지 주의할 점이 있습니다.
 
-- 변경 감지 모드에서 사용하려면 빌더 핸들러 함수가 `Observable`을 반환해야 합니다.
+- 파일 감시 모드에서 사용하려면 빌더 핸들러 함수가 `Observable`을 반환해야 합니다.
   Architect는 `Observable`이 완료될 때까지 구독하며, 같은 인자로 빌더가 다시 예약되면 이를 재사용할 수 있습니다.
 
 - 빌더는 실행할 때마다 항상 `BuilderOutput` 객체를 방출해야 합니다.
-  실행 후에는 외부 이벤트로 다시 실행할 수 있도록 변경 감지 모드로 들어갈 수 있습니다.
+  실행 후에는 외부 이벤트로 다시 실행할 수 있도록 파일 감시 모드로 들어갈 수 있습니다.
   이벤트 때문에 다시 시작할 때는 `context.reportRunning()` 함수를 호출해서 Architect에 다시 실행 중임을 알려야 합니다.
   그러면 다른 실행이 예약되어도 Architect가 빌더를 중지하지 않습니다.
 
-변경 감지 모드를 종료하려고 `BuilderRun.stop()`을 호출하면 Architect는 빌더의 `Observable` 구독을 해제하고 빌더의 정리 로직을 호출합니다.
+파일 감시 모드를 종료하려고 `BuilderRun.stop()`을 호출하면 Architect는 빌더의 `Observable` 구독을 해제하고 빌더의 정리 로직을 호출합니다.
 이 동작을 통해 오래 실행되는 빌드도 중지하고 정리할 수 있습니다.
 
 일반적으로 외부 이벤트를 감지하는 빌더의 실행은 세 단계로 나누는 것이 좋습니다.

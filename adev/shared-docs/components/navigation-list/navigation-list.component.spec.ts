@@ -95,7 +95,7 @@ describe('NavigationList', () => {
 
     expect(categoryGroup.nativeElement.innerText).toContain('Signal Forms');
     expect(categoryStatus).toBeTruthy();
-    expect(categoryStatus.nativeElement.innerText).toBe('New');
+    expect(categoryStatus.nativeElement.innerText).toBe('새 항목');
   });
 
   it('should append `docs-navigation-list-dropdown` when isDropdownView is true', async () => {

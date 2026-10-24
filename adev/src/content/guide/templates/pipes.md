@@ -391,7 +391,7 @@ As a result, this means that mutations to object properties or array items are n
 순수 파이프는 입력값이 변경되지 않으면 변환 함수를 실행하지 않기 때문에 성능 면에서 유리합니다.
 
 그래서 객체나 배열은 참조 자체가 변경되지 않으면 데이터가 변경된 것으로 인식하지 않습니다.
-참조는 동일하지만 내부 데이터가 변경된 경우라면 [배열이나 객체 내부 변화 감지하기](#배열과-객체의-변화-감지하기) 섹션을 참고하세요.
+참조는 동일하지만 내부 데이터가 변경된 경우라면 [배열이나 객체 내부 변경 감지하기](#배열과-객체의-변화-감지하기) 섹션을 참고하세요.
 
 <!--
 ## Creating custom pipes
@@ -639,7 +639,9 @@ export class MyCustomTransformationPipe implements PipeTransform {
 
 <a id="detecting-change-within-arrays-or-objects"></a>
 
-### 배열과 객체의 변화 감지하기
+<a id="배열과-객체의-변화-감지하기"></a>
+
+### 배열과 객체의 변경 감지하기
 
 <!--
 When you want a pipe to detect changes within arrays or objects, it must be marked as an impure function by passing the `pure` flag with a value of `false`.

@@ -670,7 +670,7 @@ export const delayedConfig: ApplicationConfig = {
 };
 ```
 
-Observable 팩토리 함수를 제공해서 등록 시점을 직접 정할 수도 있습니다:
+옵저버블 팩토리 함수를 제공해서 등록 시점을 직접 정할 수도 있습니다:
 
 ```ts
 import {timer} from 'rxjs';
@@ -712,5 +712,5 @@ You might also be interested in the following:
   <docs-pill href="ecosystem/service-workers/communications" title="서비스 워커와 통신하기"/>
   <docs-pill href="ecosystem/service-workers/push-notifications" title="푸시 알림"/>
   <docs-pill href="ecosystem/service-workers/devops" title="서비스 워커 운영"/>
-  <docs-pill href="ecosystem/service-workers/app-shell" title="앱 셸 패턴"/>
+  <docs-pill href="ecosystem/service-workers/app-shell" title="앱 기본 구조 패턴"/>
 </docs-pill-row>

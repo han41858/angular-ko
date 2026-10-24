@@ -314,7 +314,7 @@ The custom `set` function receives two arguments:
 NOTE: Using `rawSet` allows you to update the `linkedSignal`'s value directly. This can be useful to prevent the computation from running, for example if it is an expensive derivation and you already know the result.
 -->
 
-`linkedSignal`의 `set` 메서드나 `update` 메서드의 동작이 `linkedSignal` 자체의 값을 변경하지 않고 원본의 값을 변경하는 경우가 있다고 합시다.
+`linkedSignal`의 `set` 메서드나 `update` 메서드의 동작이 `linkedSignal` 자체의 값을 변경하지 않고 원본 데이터를 변경하는 경우가 있다고 합시다.
 이런 경우에는 `linkedSignal`을 생성할 때 옵션 객체의 `set` 프로퍼티로 커스텀 함수를 전달해서 동작을 커스터마이징할 수 있습니다.
 
 커스텀 `set` 함수는 인자를 2개 받습니다:

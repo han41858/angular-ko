@@ -2,7 +2,9 @@
 # Programmatically rendering components
 -->
 
-# 조건에 따라 컴포넌트 렌더링하기
+<a id="조건에-따라-컴포넌트-렌더링하기"></a>
+
+# 코드로 컴포넌트 렌더링하기
 
 <!--
 TIP: This guide assumes you've already read the [Essentials Guide](essentials). Read that first if you're new to Angular.
@@ -273,7 +275,7 @@ export class DynamicCard {
 ```
 
 참고: 하이드레이션은 네이티브 DOM API로 생성한 DOM 노드를 프로젝션하는 방식을 지원하지 않습니다.
-이렇게 사용하려고 하면 [NG0503 에러](/errors/NG0503)가 발생합니다.
+이렇게 사용하려고 하면 [NG0503 오류](/errors/NG0503)가 발생합니다.
 컨텐츠를 프로젝션하려면 Angular API를 사용하거나 컴포넌트에 `ngSkipHydration`을 사용하세요.
 
 <!--
@@ -624,7 +626,7 @@ When dynamically creating components, manually setting inputs and subscribing to
 To simplify this, both `createComponent` and `ViewContainerRef.createComponent` support passing a `bindings` array with helpers like `inputBinding()`, `outputBinding()`, and `twoWayBinding()` to configure inputs and outputs up front. You can also specify a `directives` array to apply any host directives. This enables creating components programmatically with template-like bindings in a single, declarative call.
 -->
 
-컴포넌트를 동적으로 생성할 때 입력값을 수동으로 설정하고 출력값을 구독하면 에러가 발생할 가능성이 높습니다.
+컴포넌트를 동적으로 생성할 때 입력값을 수동으로 설정하고 출력값을 구독하면 오류가 발생할 가능성이 높습니다.
 컴포넌트 인스턴스를 생성한 뒤 바인딩을 연결하려면 추가 코드를 작성해야 하는 경우가 많습니다.
 
 간단하게 이야기하면, `createComponent`나 `ViewContainerRef.createComponent` 함수는 `inputBinding()`, `outputBinding()`, `twoWayBinding()`과 같이 입출력값을 바인딩하는 기능을 제공합니다.
@@ -898,9 +900,9 @@ viewContainerRef.createComponent(DynamicComponent, {
 NOTE: The `onError` callback only catches errors that occur during the rendering or change detection phases. It does not catch errors that occur during component instantiation (for example, in the constructor). Angular throws construction errors synchronously when you call the API.
 -->
 
-## 렌더링 에러 처리하기 {#handling-rendering-errors}
+## 렌더링 오류 처리하기 {#handling-rendering-errors}
 
-`ViewContainerRef.createComponent`나 독립형 `createComponent` 함수로 컴포넌트를 동적으로 생성할 때, 옵션 객체에 `onError` 콜백을 지정하면 렌더링이나 변화 감지 단계에서 발생하는 에러를 처리할 수 있습니다. 템플릿의 `@error` 블록과 같은 기능을 프로그래밍 방식으로 사용하는 것입니다.
+`ViewContainerRef.createComponent`나 독립형 `createComponent` 함수로 컴포넌트를 동적으로 생성할 때, 옵션 객체에 `onError` 콜백을 지정하면 렌더링이나 변경 감지 단계에서 발생하는 오류를 처리할 수 있습니다. 템플릿의 `@error` 블록과 같은 기능을 프로그래밍 방식으로 사용하는 것입니다.
 
 ```ts
 viewContainerRef.createComponent(DynamicComponent, {
@@ -911,4 +913,4 @@ viewContainerRef.createComponent(DynamicComponent, {
 });
 ```
 
-참고: `onError` 콜백은 렌더링이나 변화 감지 단계에서 발생하는 에러만 처리합니다. 생성자처럼 컴포넌트 인스턴스를 생성하는 동안 발생한 에러는 처리하지 않습니다. 생성 과정의 에러는 API를 호출할 때 Angular가 동기적으로 발생시킵니다.
+참고: `onError` 콜백은 렌더링이나 변경 감지 단계에서 발생하는 오류만 처리합니다. 생성자처럼 컴포넌트 인스턴스를 생성하는 동안 발생한 오류는 처리하지 않습니다. 생성 과정의 오류는 API를 호출할 때 Angular가 동기적으로 발생시킵니다.

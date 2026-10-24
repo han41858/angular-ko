@@ -4,7 +4,7 @@
 
 <a id="app-shell-pattern"></a>
 
-# 앱 기본구조 패턴
+# 앱 기본 구조 패턴
 
 <!--
 The [App shell pattern](https://developer.chrome.com/blog/app-shell) is a way to render a portion of your application using a route at build time.
@@ -64,7 +64,7 @@ Look for default text `app-shell works!` to show that the application shell rout
 </docs-workflow>
 -->
 
-[앱 셸 패턴](https://developer.chrome.com/blog/app-shell)은 빌드 시점에 라우팅 규칙을 사용해서 애플리케이션의 일부를 렌더링하는 방법입니다.
+[앱 기본 구조 패턴](https://developer.chrome.com/blog/app-shell)은 빌드 시점에 라우팅 규칙을 사용해서 애플리케이션의 일부를 렌더링하는 방법입니다.
 브라우저가 전체 클라이언트 버전을 내려받는 동안 정적으로 렌더링한 페이지(모든 페이지에서 공통으로 사용하는 뼈대)를 빠르게 표시하고, 코드 로딩이 끝나면 자동으로 전환해서 사용자 경험을 개선할 수 있습니다.
 
 JavaScript를 초기화하지 않고도 브라우저가 HTML과 CSS를 렌더링할 수 있으므로, 사용자에게 의미 있는 애플리케이션 화면을 빠르게 처음 표시할 수 있습니다.
@@ -83,14 +83,16 @@ ng new my-app
 </docs-step>
 <a id="create-the-application-shell"></a>
 
-<docs-step title="애플리케이션 셸 생성하기">
-Angular CLI를 사용해서 애플리케이션 셸을 자동으로 생성하세요.
+<a id="애플리케이션-셸-생성하기"></a>
+
+<docs-step title="앱 기본 구조 생성하기">
+Angular CLI를 사용해서 앱 기본 구조를 자동으로 생성하세요.
 
 ```shell
 ng generate app-shell
 ```
 
-이 명령에 대한 자세한 내용은 [앱 셸 명령](cli/generate/app-shell)을 참고하세요.
+이 명령에 대한 자세한 내용은 [앱 기본 구조 명령](cli/generate/app-shell)을 참고하세요.
 
 이 명령은 애플리케이션 코드를 갱신하고 프로젝트 구조에 파일을 추가합니다.
 
@@ -109,7 +111,9 @@ src
 </docs-step>
 <a id="verify-the-application-is-built-with-the-shell-content"></a>
 
-<docs-step title="셸 내용을 포함해서 애플리케이션이 빌드되었는지 확인하기">
+<a id="셸-내용을-포함해서-애플리케이션이-빌드되었는지-확인하기"></a>
+
+<docs-step title="앱 기본 구조의 내용을 포함해서 애플리케이션이 빌드되었는지 확인하기">
 
 ```shell
 ng build --configuration=development
@@ -122,6 +126,6 @@ ng build
 ```
 
 빌드 결과를 확인하려면 <code class="no-auto-link">dist/my-app/browser/index.html</code>을 여세요.
-애플리케이션 셸 라우팅 규칙이 결과물의 일부로 렌더링되었는지 확인하려면 기본 문구인 `app-shell works!`를 찾아보세요.
+앱 기본 구조 라우팅 규칙이 결과물의 일부로 렌더링되었는지 확인하려면 기본 문구인 `app-shell works!`를 찾아보세요.
 </docs-step>
 </docs-workflow>

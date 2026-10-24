@@ -29,7 +29,7 @@ You read a signal's value by calling its getter function, which allows Angular t
 Signals may be either _writable_ or _read-only_.
 -->
 
-**시그널(signal)** 은 값을 감싸는 래퍼(wrapper)인데, 시그널은 그 값이 변경될 때 관심 있는 사용자에게 알림을 보냅니다.
+**시그널(signal)** 은 값을 감싸는 래퍼(wrapper)인데, 시그널은 그 값이 변경될 때 해당 값을 읽는 소비자에게 알림을 보냅니다.
 시그널은 기본 자료형부터 복잡한 데이터 구조까지 다양한 값을 담을 수 있습니다.
 
 시그널의 값을 읽으려면 시그널의 게터 함수를 호출하면 되고, Angular는 이 호출을 통해 시그널이 어디에서 사용되는지 추적합니다.
@@ -71,7 +71,7 @@ Writable signals have the type `WritableSignal`.
 -->
 
 값을 쓸 수 있는 시그널의 값을 변경하려면 시그널의 내부 메서드를 직접 실행하면 됩니다.
-이런 시그널은 `signal` 함수로 생성할 수 있으며, 시그널을 생성하면서 초기값을 지정할 수도 있습니다:
+초기값을 인자로 전달해 `signal` 함수를 호출하면 값을 쓸 수 있는 시그널을 생성할 수 있습니다:
 
 ```ts
 const count = signal(0);
@@ -245,7 +245,7 @@ produces a compilation error, because `doubleCount` is not a `WritableSignal`.
 doubleCount.set(3);
 ```
 
-이렇게 코드를 작성하면 컴파일 에러가 발생합니다.
+이렇게 코드를 작성하면 컴파일 오류가 발생합니다.
 `doubleCount`는 `WritableSignal` 타입이 아니기 때문입니다.
 
 <!--
@@ -254,7 +254,9 @@ doubleCount.set(3);
 
 <a id="computed-signal-dependencies-are-dynamic"></a>
 
-#### 연산 시그널의 종속성은 동적으로 변경됩니다
+<a id="연산-시그널의-종속성은-동적으로-변경됩니다"></a>
+
+#### 연산 시그널의 의존성은 동적으로 변경됩니다
 
 <!--
 Only the signals actually read during the derivation are tracked. For example, in this `computed` the `count` signal is only read if the `showCount` signal is true:
@@ -296,10 +298,10 @@ const conditionalCount = computed(() => {
 이제 `showCount` 시그널의 값이 `false`일 때 `conditionalCount` 시그널의 값을 읽으면 `count` 시그널은 _실행되지도 않고_ "Nothing to see here" 메시지가 반환됩니다.
 이 말은, 나중에 `count` 시그널이 변경되더라도 `conditionalCount`는 연산을 다시 하지 않는다는 것을 의미합니다.
 
-그리고 `showCount` 시그널의 값이 `true` 일 때 `conditionalCount` 시그널의 값을 읽으면, 시그널의 증분 함수가 실행되면서 `showCount`가 `true`인 분기를 타게 되고, `count` 시그널의 값을 문자열에 담아 반환합니다.
+그리고 `showCount` 시그널의 값이 `true` 일 때 `conditionalCount` 시그널의 값을 읽으면, 파생 값을 계산하는 함수가 다시 실행되면서 `showCount`가 `true`인 분기를 타게 되고, `count` 시그널의 값을 문자열에 담아 반환합니다.
 그리고 `count` 시그널이 변경되면 `conditionalCount` 시그널에 캐싱된 값도 유효하지 않은 것으로 판단합니다.
 
-시그널의 종속성은 동적으로 변경됩니다.
+시그널의 의존성은 동적으로 변경됩니다.
 이후에 `showCount` 시그널의 값이 `false`가 되면, `conditionalCount` 시그널은 더 이상 `count` 값이 변경되는 것을 감지하지 않습니다.
 
 <!--
@@ -325,7 +327,7 @@ During these operations, Angular creates a _live_ connection. If a tracked signa
 -->
 
 **반응 컨텍스트(reactive context)** 는 Angular가 시그널을 모니터링하고 의존성을 관리하는 실행 상태를 의미합니다.
-값을 보내는 시그널을 _프로듀서(producer)_ 라고 하며, 시그널에서 값을 읽는 코드를 _컨슈머(consumer)_ 라고 합니다.
+값을 보내는 시그널을 _프로듀서(producer)_ 라고 하며, 시그널에서 값을 읽는 코드를 _소비자(consumer)_ 라고 합니다.
 
 Angular가 반응 컨텍스트로 관리하는 경우는 이렇습니다:
 
@@ -335,7 +337,7 @@ Angular가 반응 컨텍스트로 관리하는 경우는 이렇습니다:
 - `resource`의 `params` 함수를 평가할 때
 - 컴포넌트 템플릿을 렌더링할 때 ([호스트 프로퍼티](guide/components/host-elements#binding-to-the-host-element)도 포함합니다)
 
-이 작업 중에 Angular는 별도 연결을 생성하는데, 추적하는 시그널이 변경되면 컨슈머를 다시 실행합니다.
+이 작업 중에 Angular는 별도 연결을 생성하는데, 추적하는 시그널이 변경되면 소비자를 다시 실행합니다.
 
 <!--
 ### Asserts the reactive context
@@ -359,8 +361,8 @@ function subscribeToEvents() {
 -->
 
 Angular는 코드가 반응 컨텍스트 밖에서 실행되는지 확인하는 헬퍼 함수 `assertNotInReactiveContext`를 제공합니다.
-반응 컨텍스트 안에서 호출하면 에러가 발생하며, 호출하는 함수의 참조를 인자로 전달하면 에러 메시지가 올바른 API 진입점을 가리킵니다.
-일반적인 반응 컨텍스트 에러 메시지보다 문제를 해결하는 방법을 명확하게 안내할 수 있습니다.
+반응 컨텍스트 안에서 호출하면 오류가 발생하며, 호출하는 함수의 참조를 인자로 전달하면 오류 메시지가 올바른 API 진입점을 가리킵니다.
+일반적인 반응 컨텍스트 오류 메시지보다 문제를 해결하는 방법을 명확하게 안내할 수 있습니다.
 
 ```ts
 import {assertNotInReactiveContext} from '@angular/core';
@@ -377,7 +379,9 @@ function subscribeToEvents() {
 
 <a id="reading-without-tracking-dependencies"></a>
 
-### 추적 종속성과 관계없이 값 읽기
+<a id="추적-종속성과-관계없이-값-읽기"></a>
+
+### 추적 의존성과 관계없이 값 읽기
 
 <!--
 Rarely, you may want to execute code which may read signals within a reactive function such as `computed` or `effect` _without_ creating a dependency.
@@ -414,10 +418,10 @@ effect(() => {
 ```
 -->
 
-드문 경우지만, `computed`나 `effect`와 같은 반응형 함수 안에서 종속성을 _추가하지 않고_ 코드를 실행할 수 있습니다.
+드문 경우지만, `computed`나 `effect`와 같은 반응형 함수 안에서 의존성을 _추가하지 않고_ 코드를 실행할 수 있습니다.
 
 예를 들면, `currentUser` 시그널의 값이 변경될 때 `counter` 시그널의 값을 로그로 출력한다고 합시다.
-그렇다면 이런 효과 함수를 작성할 수 있습니다:
+그렇다면 이런 이펙트 함수를 작성할 수 있습니다:
 
 ```ts
 effect(() => {
@@ -426,7 +430,7 @@ effect(() => {
 ```
 
 이렇게 구현하면 `currentUser` 시그널이나 `counter` 시그널 _둘 중에 하나가 변경될 때마다_ 로그가 출력됩니다.
-하지만 효과 함수가 `currentUser` 시그널이 변경될 때만 반응해야 하고, `counter` 시그널이 변경되는 것은 감지하지 않아야 하는 경우는 어떻게 해야 할까요?
+하지만 이펙트 함수가 `currentUser` 시그널이 변경될 때만 반응해야 하고, `counter` 시그널이 변경되는 것은 감지하지 않아야 하는 경우는 어떻게 해야 할까요?
 
 이런 경우라면 `untracked` 함수 안에 게터 함수를 전달하면 됩니다:
 
@@ -436,7 +440,7 @@ effect(() => {
 });
 ```
 
-`untracked` 함수는 종속성 관계가 아닌 외부 코드를 실행해야 할 때도 유용합니다:
+`untracked` 함수는 의존성 관계가 아닌 외부 코드를 실행해야 할 때도 유용합니다:
 
 ```ts
 effect(() => {
@@ -699,5 +703,5 @@ Angular DevTools can visualize the signal graph of a component or directive, sho
 See [Debug the signal graph](tools/devtools/signals) to learn how to open, read, and inspect the graph.
 -->
 
-Angular DevTools는 컴포넌트나 디렉티브의 시그널 그래프를 시각화하여 시그널, computed 시그널, 이펙트, 기타 반응형 노드가 서로 어떻게 의존하는지 보여줍니다.
+Angular DevTools는 컴포넌트나 디렉티브의 시그널 그래프를 시각화하여 시그널, computed 시그널, 이펙트 함수, 기타 반응형 노드가 서로 어떻게 의존하는지 보여줍니다.
 그래프를 열고 읽고 검사하는 방법은 [시그널 그래프 디버깅하기](tools/devtools/signals) 문서를 참고하세요.

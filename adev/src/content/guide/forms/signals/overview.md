@@ -39,7 +39,7 @@ Signal Forms work best in new applications built with signals. If you're working
 NOTE: If you're coming from template or reactive forms, you may be interested in the [comparison guide](guide/forms/signals/comparison).
 -->
 
-웹 애플리케이션에서 폼을 구성한다는 것은 필드 값을 추적하고 사용자가 입력한 값의 유효성을 검사하고, 에러 상태를 처리하며, 데이터 모델과 화면을 동기화해야 하는 것을 의미합니다.
+웹 애플리케이션에서 폼을 구성한다는 것은 필드 값을 추적하고 사용자가 입력한 값의 유효성을 검사하고, 오류 상태를 처리하며, 데이터 모델과 화면을 동기화해야 하는 것을 의미합니다.
 이런 문제를 개별적으로 해결하려면 기본 코드가 늘어나고 복잡성이 증가합니다.
 
 이런 문제를 시그널 폼은 이렇게 해결합니다:

@@ -36,7 +36,7 @@ v17부터 제공되는 새로운 빌드 시스템을 사용하면 Angular 애플
 `browser` 빌더를 사용하는 애플리케이션은 새 빌드 시스템으로 전환할 수 있습니다.
 커스텀 빌더를 사용한다면 해당 빌더의 문서에서 가능한 전환 방법을 확인하세요.
 
-중요: 기존 webpack 기반 빌드 시스템과 `browser` 빌더는 사용 중단되었습니다.
+중요: 기존 webpack 기반 빌드 시스템과 `browser` 빌더는 사용 중단이 권고됩니다.
 일시적으로 `browser` 빌더를 계속 사용하거나 업데이트 중 전환하지 않도록 선택할 수 있지만 Angular 팀은 새 빌드 시스템으로 전환할 것을 권장합니다.
 
 <!--
@@ -113,8 +113,8 @@ The migration does the following:
 자동 전환은 `angular.json`의 애플리케이션 설정과 코드, 스타일시트를 조정해서 기존 webpack 전용 기능의 사용을 제거합니다.
 많은 변경사항을 자동으로 처리할 수 있고 대부분의 애플리케이션은 추가 수정이 필요하지 않지만, 애플리케이션마다 상황이 다르므로 일부는 직접 수정해야 할 수도 있습니다.
 전환한 뒤에는 애플리케이션을 빌드해 보세요.
-코드를 조정해야 하는 새로운 에러가 발생할 수도 있습니다.
-에러 메시지는 가능한 경우 해결 방법을 제시하며, 이 가이드의 뒷부분에서도 자주 발생하는 상황을 설명합니다.
+코드를 조정해야 하는 새로운 오류가 발생할 수도 있습니다.
+오류 메시지는 가능한 경우 해결 방법을 제시하며, 이 가이드의 뒷부분에서도 자주 발생하는 상황을 설명합니다.
 `ng update`로 Angular v18로 업데이트하면 이 전환을 실행할지 묻습니다.
 v18에서 전환은 전적으로 선택사항이며, 업데이트한 뒤 언제든 다음 명령으로 직접 실행할 수도 있습니다:
 
@@ -126,7 +126,7 @@ ng update @angular/cli --name use-application-builder
 
 자동 전환은 다음 작업을 수행합니다:
 
-- 기존 `browser` 또는 `browser-esbuild` 타깃을 `application`으로 전환합니다.
+- 기존 `browser` 또는 `browser-esbuild` 대상을 `application`으로 전환합니다.
 - 기존 SSR 빌더를 제거합니다.
   이제 `application`이 이 작업을 처리합니다.
 - 변경사항에 맞춰 설정을 갱신합니다.
@@ -216,7 +216,7 @@ Angular CLI로 생성한 애플리케이션에 포함된 `@angular-devkit/build-
 
 호환 옵션은 애플리케이션을 처음 전환할 때 필요한 변경사항을 최소화하도록 구현되었습니다.
 이 옵션은 대체 빌더인 `browser-esbuild`를 통해 제공됩니다.
-애플리케이션의 `build` 타깃을 갱신해서 새 빌드 시스템으로 전환할 수 있습니다.
+애플리케이션의 `build` 대상을 갱신해서 새 빌드 시스템으로 전환할 수 있습니다.
 
 애플리케이션의 `angular.json`에는 일반적으로 다음과 같은 설정이 있습니다:
 
@@ -325,7 +325,7 @@ Angular CLI로 생성한 애플리케이션에 포함된 `@angular-devkit/build-
 ...
 ```
 
-빌더 이름을 변경한 다음에는 `build` 타깃의 옵션을 갱신해야 합니다.
+빌더 이름을 변경한 다음에는 `build` 대상의 옵션을 갱신해야 합니다.
 조정해야 하는 `browser` 빌더 옵션은 다음과 같습니다:
 
 - `main`의 이름을 `browser`로 변경합니다.
@@ -338,12 +338,10 @@ Angular CLI로 생성한 애플리케이션에 포함된 `@angular-devkit/build-
   더 이상 필요하지 않은 성능 최적화 옵션입니다.
 - `commonChunk`는 제거합니다.
   더 이상 필요하지 않은 성능 최적화 옵션입니다.
-  대신 [`<base href>`](guide/routing/router-reference#base-href)를 사용하는 것이 좋습니다.
-  자세한 내용은 [배포 문서](tools/cli/deployment#--deploy-url)를 참고하세요.
 - `ngswConfigPath`의 이름을 `serviceWorker`로 변경합니다.
 
 현재 SSR을 사용하지 않는 애플리케이션이라면 여기까지 수정한 뒤 `ng build`를 실행할 수 있습니다.
-처음 `ng build`를 실행하면 동작 방식의 차이나 애플리케이션에서 사용하는 webpack 전용 기능 때문에 새로운 경고나 에러가 발생할 수 있습니다.
+처음 `ng build`를 실행하면 동작 방식의 차이나 애플리케이션에서 사용하는 webpack 전용 기능 때문에 새로운 경고나 오류가 발생할 수 있습니다.
 많은 경고 메시지에서 문제를 해결하는 방법을 안내합니다.
 경고가 잘못된 것으로 보이거나 해결 방법이 명확하지 않다면 [GitHub](https://github.com/angular/angular-cli/issues)에 이슈를 등록해 주세요.
 이 가이드의 뒷부분에서도 몇 가지 구체적인 상황과 현재 알려진 문제를 설명합니다.
@@ -560,7 +558,7 @@ Vite는 Angular CLI에서 기본적으로 활성화되는 [사전 번들링 기�
 
 - [`loader` 옵션](#file-extension-loader-customization)처럼 의존성 내부의 import에 대한 로더 동작을 변경하는 경우
 - [`npm link`](https://docs.npmjs.com/cli/v10/commands/npm-link)처럼 개발을 위해 의존성을 로컬 코드에 심볼릭 링크로 연결하는 경우
-- 의존성의 사전 번들링 과정에서 발생한 에러를 우회하는 경우
+- 의존성의 사전 번들링 과정에서 발생한 오류를 우회하는 경우
 
 프로젝트에서 필요하다면 사전 번들링을 완전히 비활성화하거나 특정 의존성을 제외할 수 있습니다.
 이 설정에는 `dev-server` 빌더의 `prebundle` 옵션을 사용합니다.
@@ -732,7 +730,7 @@ export API_RETRY=3
 ng build --define API_HOST=\'$MY_APP_API_HOST\' --define API_RETRY=$API_RETRY
 ```
 
-어느 방법을 사용하든 빌드 중 타입 검사 에러가 발생하지 않도록 TypeScript가 식별자의 타입을 알아야 합니다.
+어느 방법을 사용하든 빌드 중 타입 검사 오류가 발생하지 않도록 TypeScript가 식별자의 타입을 알아야 합니다.
 애플리케이션 소스 코드에 다음과 비슷한 내용의 타입 정의 파일(예: `src/types.d.ts`)을 추가하면 됩니다:
 
 ```ts
@@ -855,7 +853,7 @@ import contents from './some-file.svg';
 console.log(contents); // <svg>...</svg>
 ```
 
-또한 빌드 중 타입 검사 에러가 발생하지 않도록 TypeScript가 import의 모듈 타입을 알아야 합니다.
+또한 빌드 중 타입 검사 오류가 발생하지 않도록 TypeScript가 import의 모듈 타입을 알아야 합니다.
 애플리케이션 소스 코드에 다음과 같거나 비슷한 내용의 타입 정의 파일(예: `src/types.d.ts`)을 추가하면 됩니다:
 
 ```ts
@@ -1001,7 +999,7 @@ import logo from './logo.png' with {loader: 'base64'};
 console.log(logo); // "iVBORw0KGgoAAAANSUhEUgAA..."
 ```
 
-`dataurl` 로더는 에셋을 완전한 데이터 URL로 인라인으로 포함합니다.
+`dataurl` 로더는 정적 리소스를 완전한 데이터 URL로 인라인으로 포함합니다.
 
 ```ts
 // @ts-expect-error TypeScript는 아직 어트리뷰트를 기반으로 타입을 제공할 수 없습니다.
@@ -1227,7 +1225,7 @@ TypeScript는 기본적으로 기본 내보내기(default export)를 네임스�
 [`esModuleInterop`](https://www.typescriptlang.org/tsconfig#esModuleInterop) 옵션을 활성화하면 ECMAScript 명세에 더 부합하게 동작하며, TypeScript 팀도 이 옵션을 권장합니다.
 옵션을 활성화한 뒤에는 해당 패키지의 import를 ECMAScript에 맞는 형식으로 변경할 수 있습니다.
 
-[`moment`](https://npmjs.com/package/moment) 패키지를 예로 들면 다음 애플리케이션 코드는 실행 중 에러를 발생시킵니다:
+[`moment`](https://npmjs.com/package/moment) 패키지를 예로 들면 다음 애플리케이션 코드는 실행 중 오류를 발생시킵니다:
 
 ```ts
 import * as moment from 'moment';
@@ -1253,7 +1251,7 @@ Consider changing "moment" to a default import instead:
 
 ```
 
-애플리케이션의 TypeScript 옵션 `esModuleInterop`을 활성화하고 import를 다음과 같이 변경하면 실행 중 에러와 경고를 피할 수 있습니다:
+애플리케이션의 TypeScript 옵션 `esModuleInterop`을 활성화하고 import를 다음과 같이 변경하면 실행 중 오류와 경고를 피할 수 있습니다:
 
 ```ts
 import moment from 'moment';

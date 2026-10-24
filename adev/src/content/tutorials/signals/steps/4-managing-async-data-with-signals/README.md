@@ -8,7 +8,7 @@
 Now that you've learned [how to derive state with linked signals](/tutorials/signals/3-deriving-state-with-linked-signals), let's explore how to handle asynchronous data with the Resource API. The Resource API provides a powerful way to manage async operations using signals, with built-in loading states, error handling, and request management.
 -->
 
-[linked 시그널로 상태를 파생하는 방법](/tutorials/signals/3-deriving-state-with-linked-signals)을 배웠으니, 이제 Resource API로 비동기 데이터를 처리하는 방법을 살펴봅시다. Resource API는 시그널로 비동기 작업을 관리하는 강력한 방법입니다. 로딩 상태, 에러 처리, 요청 관리를 기본으로 제공합니다.
+[linked 시그널로 상태를 파생하는 방법](/tutorials/signals/3-deriving-state-with-linked-signals)을 배웠으니, 이제 Resource API로 비동기 데이터를 처리하는 방법을 살펴봅시다. Resource API는 시그널로 비동기 작업을 관리하는 강력한 방법입니다. 로딩 상태, 오류 처리, 요청 관리를 기본으로 제공합니다.
 
 <!--
 In this activity, you'll learn how to use the `resource()` function to load data asynchronously and how to handle different states of async operations by building a user profile loader that demonstrates the Resource API in action.
@@ -187,10 +187,10 @@ The resource provides different methods to check its state:
 -->
 
 - `isLoading()` - 데이터를 가져오는 동안 true입니다.
-- `hasError()` - 에러가 발생하면 true입니다.
+- `hasError()` - 오류가 발생하면 true입니다.
 - `userResource.hasValue()` - 데이터가 있으면 true입니다.
 - `userResource.value()` - 로딩한 데이터에 접근합니다.
-- `userResource.error()` - 에러 정보에 접근합니다.
+- `userResource.error()` - 오류 정보에 접근합니다.
 
 </docs-step>
 

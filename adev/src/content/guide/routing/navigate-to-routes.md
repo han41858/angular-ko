@@ -476,7 +476,7 @@ NOTE: `browserUrl` only affects what appears in the browser's address bar.
 
 navigateByUrl에 browserUrl 옵션을 전달하면 라우팅 규칙 매칭에 사용하는 URL과 다른 URL을 브라우저 주소 표시줄에 표시할 수 있습니다.
 
-사용자가 처음 방문하려던 URL을 유지하면서 다른 라우팅 규칙(예: 에러 페이지)으로 리다이렉트하고 싶을 때 유용합니다.
+사용자가 처음 방문하려던 URL을 유지하면서 다른 라우팅 규칙(예: 오류 페이지)으로 리다이렉트하고 싶을 때 유용합니다.
 
 ```ts
 router.navigateByUrl('/not-found', {browserUrl: '/products/missing-item'});

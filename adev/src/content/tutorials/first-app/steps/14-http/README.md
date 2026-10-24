@@ -356,7 +356,7 @@ The data source has been configured, the next step is to update your web app to 
 
    <docs-code header="housing.service.ts에 url 프로퍼티 추가하기" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[6]"/>
 
-   나머지 코드는 `housingLocationList` 프로퍼티에 의존하므로 이 시점에는 에러가 발생합니다. 다음으로 서비스 메서드를 수정하겠습니다.
+   나머지 코드는 `housingLocationList` 프로퍼티에 의존하므로 이 시점에는 오류가 발생합니다. 다음으로 서비스 메서드를 수정하겠습니다.
 
 1. `getAllHousingLocations` 함수가 설정한 웹 서버를 호출하도록 수정하세요.
 
@@ -410,7 +410,7 @@ If you would like to learn more, please consider completing some of Angular's ot
 
 <a id="update-the-components-to-use-asynchronous-calls-to-the-housing-service"></a>
 
-이제 서비스는 HTTP 요청으로 데이터를 읽지만, 이를 사용하는 컴포넌트는 동기 방식의 서비스를 기준으로 작성되어 에러가 발생합니다.
+이제 서비스는 HTTP 요청으로 데이터를 읽지만, 이를 사용하는 컴포넌트는 동기 방식의 서비스를 기준으로 작성되어 오류가 발생합니다.
 
 1. `src/app/home/home.ts`의 `constructor`에서 비동기로 바뀐 `getAllHousingLocations` 메서드를 사용하도록 수정하세요. 상태에 시그널을 사용하지 않았으므로 화면과 동기화할 변경이 발생했음을 Angular에 알려야 합니다. 이를 위해 `this.changeDetectorRef.markForCheck()`를 호출하세요.
 
@@ -422,7 +422,7 @@ If you would like to learn more, please consider completing some of Angular's ot
 
 1. 코드를 저장하세요.
 
-1. 브라우저에서 애플리케이션을 열고 에러 없이 실행되는지 확인하세요.
+1. 브라우저에서 애플리케이션을 열고 오류 없이 실행되는지 확인하세요.
    </docs-step>
 
 </docs-workflow>

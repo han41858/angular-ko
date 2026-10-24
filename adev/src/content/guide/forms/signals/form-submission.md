@@ -37,12 +37,12 @@ The `submit()` function returns a `Promise<boolean>` that resolves to `true` whe
 
 `submit()` 함수는 이런 과정을 수행합니다:
 
-1. **상호작용 가능한 필드를 `touched` 상태로 바꿉니다** — touched 상태가 된 뒤에만 에러를 표시하는 필드에도 이제 유효성 검사 에러가 표시됩니다. 숨겨진 필드, 비활성화된 필드, 읽기 전용 필드는 이 처리에서 제외합니다.
+1. **상호작용 가능한 필드를 `touched` 상태로 바꿉니다** — touched 상태가 된 뒤에만 오류를 표시하는 필드에도 이제 유효성 검사 오류가 표시됩니다. 숨겨진 필드, 비활성화된 필드, 읽기 전용 필드는 이 처리에서 제외합니다.
 1. **유효성 검사를 실행합니다** — 유효성 검사가 실패하면 폼 제출을 멈추고 `action` 함수가 실행되지 않습니다.
-1. **`action` 함수를 실행합니다** — `action` 함수는 폼의 현재 값을 실행합니다. 이 함수가 실행되는 동안 `submitting()` 함수는 `true` 값을 반환합니다.
-1. **결과를 처리합니다** — `action` 함수가 에러를 반환하면 오류가 해당 필드로 전달됩니다. 에러가 발생하지 않으면 폼 제출이 처리됩니다.
+1. **`action` 함수를 실행합니다** — `action` 함수는 폼의 현재 값을 사용하여 실행됩니다. 이 함수가 실행되는 동안 `submitting()` 함수는 `true` 값을 반환합니다.
+1. **결과를 처리합니다** — `action` 함수가 오류를 반환하면 오류가 해당 필드로 전달됩니다. 오류가 발생하지 않으면 폼 제출이 처리됩니다.
 
-`submit()` 함수는 `Promise<boolean>` 타입을 반환합니다. `action` 함수가 에러 없이 완료되면 `true`로 이행되고, 유효성 검사에 실패하거나 `action` 함수가 에러를 반환하거나 이미 제출이 진행 중이면 `false`로 이행됩니다. `action` 함수가 예외를 던지면 Promise는 그 에러로 거부(reject)됩니다.
+`submit()` 함수는 `Promise<boolean>` 타입을 반환합니다. `action` 함수가 오류 없이 완료되면 `true`로 이행되고, 유효성 검사에 실패하거나 `action` 함수가 오류를 반환하거나 이미 제출이 진행 중이면 `false`로 이행됩니다. `action` 함수가 예외를 던지면 Promise는 그 오류로 거부(reject)됩니다.
 
 <!--
 ## Setting up form submission with `FormRoot`
@@ -195,9 +195,9 @@ export class Contact {
 자세한 내용은 [유효성 검사 타이밍 제어](#controlling-validation-gating-with-ignorevalidators) 섹션을 참고하세요.
 `action` 함수는 필드 트리와 함께 `root`와 `submitted` 필드 트리를 표현하는 `detail` 객체를 인자로 받습니다.
 
-유효성 검사가 통과된 후에도, 네트워크 에러나 중복 오류와 같은 상황으로 `action` 함수는 실패할 수 있습니다.
-이런 경우에는 에러를 반환해서 화면에 에러를 표시할 수 있습니다.
-반대로, 에러가 아님을 표현하려면 `action` 함수가 `null` 이나 `undefined`을 반환하거나, 빈 값으로 `return` 을 실행하면 됩니다.
+유효성 검사가 통과된 후에도, 네트워크 오류나 중복 오류와 같은 상황으로 `action` 함수는 실패할 수 있습니다.
+이런 경우에는 오류를 반환해서 화면에 오류를 표시할 수 있습니다.
+반대로, 오류가 아님을 표현하려면 `action` 함수가 `null` 이나 `undefined`을 반환하거나, 빈 값으로 `return` 을 실행하면 됩니다.
 
 <!--
 ## Showing submission state with `submitting()`
@@ -237,7 +237,7 @@ Once the `action` function succeeds or returns an error, the `submitting()` sign
 </button>
 ```
 
-`action` 함수 실행이 완료되거나 에러를 반환하면 `submitting()` 시그널은 `false`를 반환합니다.
+`action` 함수 실행이 완료되거나 오류를 반환하면 `submitting()` 시그널은 `false`를 반환합니다.
 
 <!--
 ## Managing submission errors
@@ -245,7 +245,9 @@ Once the `action` function succeeds or returns an error, the `submitting()` sign
 
 <a id="managing-submission-errors"></a>
 
-## 폼 제출 에러 관리하기
+<a id="폼-제출-에러-관리하기"></a>
+
+## 폼 제출 오류 관리하기
 
 <!--
 ### Server errors
@@ -253,14 +255,16 @@ Once the `action` function succeeds or returns an error, the `submitting()` sign
 
 <a id="server-errors"></a>
 
-### 서버 에러
+<a id="서버-에러"></a>
+
+### 서버 오류
 
 <!--
 When your `action` function communicates with a server, the server may return errors that need to appear on specific fields. Return these errors from the `action` to route them to their target fields.
 -->
 
-`action` 함수가 서버와 통신하고 나서 서버가 특정 필드에서 에러가 발생했다고 결과를 반환할 수 있습니다.
-이 경우에는 서버에서 받은 에러를 `action`으로 반환해서 화면에 있는 필드에서 에러가 발생했다고 표시하면 됩니다.
+`action` 함수가 서버와 통신하고 나서 서버가 특정 필드에서 오류가 발생했다고 결과를 반환할 수 있습니다.
+이 경우에는 서버에서 받은 오류를 `action`으로 반환해서 화면에 있는 필드에서 오류가 발생했다고 표시하면 됩니다.
 
 <!--
 #### Errors on the submitted field
@@ -268,7 +272,9 @@ When your `action` function communicates with a server, the server may return er
 
 <a id="errors-on-the-submitted-field"></a>
 
-#### 필드 에러
+<a id="필드-에러"></a>
+
+#### 필드 오류
 
 <!--
 By default, errors returned from the `action` are assigned to the submitted field (the field tree you passed to `submit()`):
@@ -283,7 +289,7 @@ action: async (field) => {
 ```
 -->
 
-기본적으로 `action` 함수에서 반환하는 에러는 제출 대상 필드, 즉 `submit()`에 전달한 필드 트리에 할당됩니다:
+기본적으로 `action` 함수에서 반환하는 오류는 제출 대상 필드, 즉 `submit()`에 전달한 필드 트리에 할당됩니다:
 
 ```ts
 action: async (field) => {
@@ -300,7 +306,9 @@ action: async (field) => {
 
 <a id="errors-on-specific-fields"></a>
 
-#### 특정 필드에서 발생한 에러
+<a id="특정-필드에서-발생한-에러"></a>
+
+#### 특정 필드에서 발생한 오류
 
 <!--
 When you want to route an error to a specific field, include a `fieldTree` property pointing to that field:
@@ -315,7 +323,7 @@ action: async (field) => {
 ```
 -->
 
-에러가 발생한 것을 특정 필드에 표시하려면 `fieldTree` 프로퍼티로 해당 필드를 가리키면 됩니다:
+오류가 발생한 것을 특정 필드에 표시하려면 `fieldTree` 프로퍼티로 해당 필드를 가리키면 됩니다:
 
 ```ts
 action: async (field) => {
@@ -332,7 +340,9 @@ action: async (field) => {
 
 <a id="multiple-errors"></a>
 
-#### 동시에 발생한 에러
+<a id="동시에-발생한-에러"></a>
+
+#### 동시에 발생한 오류
 
 <!--
 When you want to report errors on multiple fields, return an array:
@@ -351,7 +361,7 @@ action: async (field) => {
 ```
 -->
 
-여러 필드에서 에러가 동시에 발생한 것을 표시하려면 에러를 배열 형태로 반환하면 됩니다:
+여러 필드에서 오류가 동시에 발생한 것을 표시하려면 오류를 배열 형태로 반환하면 됩니다:
 
 ```ts
 action: async (field) => {
@@ -372,7 +382,9 @@ action: async (field) => {
 
 <a id="auto-clearing-submission-errors"></a>
 
-### 폼 제출 에러 초기화하기
+<a id="폼-제출-에러-초기화하기"></a>
+
+### 폼 제출 오류 초기화하기
 
 <!--
 Submission errors clear automatically when the user edits the field. If the `action` returns an error on the email field, that error disappears as soon as the user changes the email value.
@@ -382,15 +394,15 @@ This differs from validation errors, which recompute reactively. Validation rule
 TIP: Submission errors appear alongside validation errors in the field's `errors()` signal. For guidance on displaying errors in your template, see the [Field State Management guide](guide/forms/signals/field-state-management).
 -->
 
-사용자가 필드값을 수정하면 폼 제출 에러가 자동으로 초기화됩니다.
-만약 `email` 필드에서 발생한 에러가 `action`으로 반환되었다면, 사용자가 `email` 필드의 값을 변경하면서 에러가 사라집니다.
+사용자가 필드값을 수정하면 폼 제출 오류가 자동으로 초기화됩니다.
+만약 `email` 필드에서 발생한 오류가 `action`으로 반환되었다면, 사용자가 `email` 필드의 값을 변경하면서 오류가 사라집니다.
 
 사용자가 필드값을 변경했을 때 실행되는 유효성 검사와는 다릅니다.
-유효성 검사 규칙은 필드값이 변경될 때마다 실행되며 같은 에러가 계속 발생할 수 있습니다.
-폼 제출 에러는 서버에서 한 번 전달된 결과입니다. 사용자가 필드 값을 수정해 에러가 지워지면, 폼을 다시 제출하기 전까지는 다시 나타나지 않습니다.
+유효성 검사 규칙은 필드값이 변경될 때마다 실행되며 같은 오류가 계속 발생할 수 있습니다.
+폼 제출 오류는 서버에서 한 번 전달된 결과입니다. 사용자가 필드 값을 수정해 오류가 지워지면, 폼을 다시 제출하기 전까지는 다시 나타나지 않습니다.
 
-팁: 폼 제출 에러는 필드의 `errors()` 시그널로 유효성 검사 에러와 함께 전달됩니다.
-템플릿에 에러를 표시하는 방법은 [필드 상태 관리](guide/forms/signals/field-state-management) 문서를 참고하세요.
+팁: 폼 제출 오류는 필드의 `errors()` 시그널로 유효성 검사 오류와 함께 전달됩니다.
+템플릿에 오류를 표시하는 방법은 [필드 상태 관리](guide/forms/signals/field-state-management) 문서를 참고하세요.
 
 <!--
 ## Handling invalid submissions with `onInvalid`
@@ -428,7 +440,7 @@ The `onInvalid` callback receives the same `(field, detail)` parameters as `acti
 -->
 
 유효성 검사가 실패하면 `action` 함수는 실행되지 않습니다.
-에러가 발생한 첫번째 위치로 이동하거나, 토스트를 표시하고, 오류가 발생한 필드에 포커스를 옮기는 등 폼 제출 단계에서 발생한 에러에 반응할 때는 `onInvalid` 콜백을 사용합니다.
+오류가 발생한 첫번째 위치로 이동하거나, 토스트를 표시하고, 오류가 발생한 필드에 포커스를 옮기는 등 폼 제출 단계에서 발생한 오류에 반응할 때는 `onInvalid` 콜백을 사용합니다.
 
 ```ts
 contactForm = form(
@@ -452,7 +464,7 @@ contactForm = form(
 ```
 
 `onInvalid` 콜백 함수는 `action`과 마찬가지로 `(field, detail)` 인자를 받습니다.
-`onInvalid` 함수는 모든 필드가 `touched`로 처리된 후 실행되기 때문에, 이 함수가 실행되는 시점에는 화면에 이미 에러가 표시되어 있을 것입니다.
+`onInvalid` 함수는 모든 필드가 `touched`로 처리된 후 실행되기 때문에, 이 함수가 실행되는 시점에는 화면에 이미 오류가 표시되어 있을 것입니다.
 
 <a id="controlling-validation-gating-with-ignorevalidators"></a>
 
@@ -687,7 +699,7 @@ submission: {
 ```
 -->
 
-`submit()` 함수는 `Promise<boolean>`을 반환합니다. `action`이 에러 없이 종료되면 `true`를 반환하고, 유효성 검사에 실패하거나 `action`이 에러를 반환하거나 이미 제출이 진행 중이면 `false`를 반환합니다. `action`이 예외를 던지면 Promise는 거부(reject)됩니다.
+`submit()` 함수는 `Promise<boolean>`을 반환합니다. `action`이 오류 없이 종료되면 `true`를 반환하고, 유효성 검사에 실패하거나 `action`이 오류를 반환하거나 이미 제출이 진행 중이면 `false`를 반환합니다. `action`이 예외를 던지면 Promise는 거부(reject)됩니다.
 네비게이션이나 사용자 알림을 수행하려면 이 방식을 활용하면 됩니다.
 
 ```ts
@@ -762,7 +774,7 @@ This guide covered submitting forms and handling form submission errors. Related
 </docs-pill-row>
 -->
 
-이 문서에서는 폼을 제출하고 그 과정에서 발생하는 에러를 처리하는 방법을 알아봤습니다.
+이 문서에서는 폼을 제출하고 그 과정에서 발생하는 오류를 처리하는 방법을 알아봤습니다.
 이런 내용도 확인해 보세요:
 
 <docs-pill-row>

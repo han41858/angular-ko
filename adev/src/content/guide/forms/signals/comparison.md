@@ -210,7 +210,7 @@ loginForm = form(this.loginModel, (fieldPath) => {
 
 모든 유효성 검사 규칙을 한곳에 모아 정의합니다.
 스키마 함수는 폼을 생성할 때 한 번 실행되고, 필드 값이 변경되면 검증 함수가 자동으로 실행됩니다.
-에러 메시지도 유효성 검사 정의에 포함합니다.
+오류 메시지도 유효성 검사 정의에 포함합니다.
 
 반응형 폼은 컨트롤을 생성할 때 검증 함수를 연결합니다:
 
@@ -222,7 +222,7 @@ loginForm = new FormGroup({
 
 검증 함수는 폼 구조의 개별 컨트롤에 연결됩니다.
 따라서 유효성 검사 로직이 폼 정의 곳곳에 나뉘어 배치됩니다.
-에러 메시지는 일반적으로 템플릿에 작성합니다.
+오류 메시지는 일반적으로 템플릿에 작성합니다.
 
 템플릿 기반 폼은 템플릿에서 디렉티브 어트리뷰트를 사용합니다:
 
@@ -277,7 +277,7 @@ password = '';
 TypeScript understands your component properties but has no knowledge of form structure or validation. You lose compile-time checking for form operations.
 -->
 
-각 방식은 TypeScript와 연동하는 방법이 크게 다르므로, 컴파일러가 에러를 방지하는 데 도움을 주는 정도도 다릅니다.
+각 방식은 TypeScript와 연동하는 방법이 크게 다르므로, 컴파일러가 오류를 방지하는 데 도움을 주는 정도도 다릅니다.
 
 Signal Forms는 모델 구조에서 타입을 추론합니다:
 
@@ -288,7 +288,7 @@ const loginForm = form(loginModel);
 ```
 
 시그널에서 데이터 구조를 한 번 정의하면 TypeScript가 필드의 존재 여부와 타입을 자동으로 알 수 있습니다.
-존재하지 않는 `loginForm.username`에 접근하면 타입 에러가 발생합니다.
+존재하지 않는 `loginForm.username`에 접근하면 타입 오류가 발생합니다.
 
 반응형 폼은 타입이 지정된 폼을 사용해서 타입을 명시적으로 지정해야 합니다:
 

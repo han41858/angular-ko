@@ -154,11 +154,11 @@ it('should display original title', () => {
 expected '' to contain 'Test Tour of Heroes'.
 ```
 
-바인딩은 Angular가 **변화 감지**를 실행할 때 이루어집니다.
+바인딩은 Angular가 **변경 감지**를 실행할 때 이루어집니다.
 
-실제 애플리케이션에서는 Angular가 컴포넌트를 생성하거나 사용자가 키를 입력할 때 변화 감지가 자동으로 실행됩니다.
+실제 애플리케이션에서는 Angular가 컴포넌트를 생성하거나 사용자가 키를 입력할 때 변경 감지가 자동으로 실행됩니다.
 
-`TestBed.createComponent`는 변화 감지를 동기적으로 실행하지 않습니다.
+`TestBed.createComponent`는 변경 감지를 동기적으로 실행하지 않습니다.
 수정한 테스트에서 이를 확인할 수 있습니다.
 
 ```ts
@@ -198,7 +198,7 @@ it('should display a different test title', async () => {
 ```
 -->
 
-`await fixture.whenStable()`로 `TestBed`가 변화 감지 실행을 기다리게 할 수 있습니다.
+`await fixture.whenStable()`로 `TestBed`가 변경 감지 실행을 기다리게 할 수 있습니다.
 그런 다음에야 `<h1>`에 예상한 제목이 표시됩니다.
 
 ```ts
@@ -208,7 +208,7 @@ it('should display original title', async () => {
 });
 ```
 
-변화 감지를 지연하는 것은 의도된 동작이며 유용합니다.
+변경 감지를 지연하는 것은 의도된 동작이며 유용합니다.
 _Angular가 데이터 바인딩을 시작하고 [라이프사이클 훅](guide/components/lifecycle)을 실행하기 전에_ 테스트에서 컴포넌트 상태를 확인하고 변경할 기회를 제공하기 때문입니다.
 
 다음 테스트는 `fixture.whenStable()`을 실행하기 _전에_ 컴포넌트의 `title` 프로퍼티를 변경합니다.
@@ -682,7 +682,7 @@ getQuote() {
 `Twain` 컴포넌트는 주입된 `TwainQuotes`에서 명언을 가져옵니다.
 서비스가 첫 번째 명언을 반환하기 전에 표시할 수 있도록 반환된 `Observable`을 임시 값\(`'...'`\)으로 시작합니다.
 
-`catchError`는 서비스 에러를 가로채고 에러 메시지를 준비한 뒤, 정상 값 전달 경로로 임시 값을 반환합니다.
+`catchError`는 서비스 오류를 가로채고 오류 메시지를 준비한 뒤, 정상 값 전달 경로로 임시 값을 반환합니다.
 
 이 기능들은 모두 테스트해 보는 것이 좋습니다.
 
@@ -1306,7 +1306,7 @@ heroDe.triggerEventHandler('click');
 
 참고: 다른 핸들러에서는 그렇지 않을 수 있습니다.
 예를 들어 `RouterLink` 디렉티브는 클릭할 때 어떤 마우스 버튼을 눌렀는지 나타내는 `button` 프로퍼티가 있는 객체를 기대합니다.
-이벤트 객체를 전달하지 않으면 `RouterLink` 디렉티브에서 에러가 발생합니다.
+이벤트 객체를 전달하지 않으면 `RouterLink` 디렉티브에서 오류가 발생합니다.
 
 <!--
 ### Click the element
@@ -1811,7 +1811,7 @@ Use them, alone or in combination, to stay focused on testing the primary compon
 하지만 DOM에 `App` 컴포넌트를 생성하는 테스트는 이 세 컴포넌트의 인스턴스도 생성합니다.
 그대로 생성하려면 `TestBed`에서도 이를 생성할 수 있도록 설정해야 합니다.
 
-선언하지 않으면 Angular 컴파일러는 `App` 템플릿의 `<app-banner>`, `<app-welcome>`, `<router-outlet>` 태그를 인식하지 못하고 에러를 발생시킵니다.
+선언하지 않으면 Angular 컴파일러는 `App` 템플릿의 `<app-banner>`, `<app-welcome>`, `<router-outlet>` 태그를 인식하지 못하고 오류를 발생시킵니다.
 
 실제 컴포넌트를 선언하면 _그 안의_ 중첩 컴포넌트도 선언해야 하고, 트리에 있는 _모든_ 컴포넌트에 주입되는 _모든_ 서비스도 제공해야 합니다.
 
@@ -1957,7 +1957,7 @@ beforeEach(() => {
 
 `TestBed` 설정에 대응하는 `App` 컴포넌트와 `RouterLink`를 선언했으므로 컴파일러는 `<app-root>` 엘리먼트와 `routerLink` 어트리뷰트를 인식합니다.
 
-하지만 `<app-banner>`, `<app-welcome>`, `<router-outlet>`을 만나도 에러를 발생시키지 않습니다.
+하지만 `<app-banner>`, `<app-welcome>`, `<router-outlet>`을 만나도 오류를 발생시키지 않습니다.
 빈 태그로 렌더링하고, 브라우저는 이를 무시합니다.
 
 이제 스텁 컴포넌트가 필요하지 않습니다.

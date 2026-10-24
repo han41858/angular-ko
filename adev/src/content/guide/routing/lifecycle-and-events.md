@@ -4,13 +4,13 @@
 
 <a id="router-lifecycle-and-events"></a>
 
-# 라우터 생명주기와 이벤트
+# 라우터 라이프사이클와 이벤트
 
 <!--
 Angular Router provides a comprehensive set of lifecycle hooks and events that allow you to respond to navigation changes and execute custom logic during the routing process.
 -->
 
-Angular 라우터는 다양한 생명주기 훅과 이벤트를 제공합니다.
+Angular 라우터는 다양한 라이프사이클 훅과 이벤트를 제공합니다.
 이 기능으로 내비게이션 변화에 반응하고 라우팅 과정에서 커스텀 로직을 실행할 수 있습니다.
 
 <!--
@@ -45,9 +45,9 @@ The following are common error events:
 For a list of all lifecycle events, check out the [complete table of this guide](#all-router-events).
 -->
 
-Angular 라우터가 발생시키는 내비게이션 이벤트를 구독하면 내비게이션 생명주기를 추적할 수 있습니다.
+Angular 라우터가 발생시키는 내비게이션 이벤트를 구독하면 내비게이션 라이프사이클을 추적할 수 있습니다.
 이 이벤트는 `Router.events` 옵저버블로 제공됩니다.
-이 섹션에서는 내비게이션과 에러를 추적하는 주요 라우팅 생명주기 이벤트를 발생 순서대로 설명합니다.
+이 섹션에서는 내비게이션과 오류를 추적하는 주요 라우팅 라이프사이클 이벤트를 발생 순서대로 설명합니다.
 
 | 이벤트                                              | 설명                                                                                                            |
 | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -60,14 +60,14 @@ Angular 라우터가 발생시키는 내비게이션 이벤트를 구독하면 �
 | [`NavigationEnd`](api/router/NavigationEnd)         | 내비게이션이 성공적으로 완료되었을 때 발생하는 마지막 이벤트입니다. 라우터가 URL을 갱신합니다.                  |
 | [`NavigationSkipped`](api/router/NavigationSkipped) | 같은 URL로 이동하는 경우처럼 라우터가 내비게이션을 건너뛸 때 발생합니다.                                        |
 
-주요 에러 이벤트는 다음과 같습니다.
+주요 오류 이벤트는 다음과 같습니다.
 
 | 이벤트                                            | 설명                                                                                                                     |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | [`NavigationCancel`](api/router/NavigationCancel) | 라우터가 내비게이션을 취소할 때 발생합니다. 가드가 false를 반환하는 경우가 흔합니다.                                     |
-| [`NavigationError`](api/router/NavigationError)   | 내비게이션이 실패할 때 발생합니다. 유효하지 않은 라우팅 규칙, 리졸버 에러, 블로킹 리소스의 실패 등이 원인일 수 있습니다. |
+| [`NavigationError`](api/router/NavigationError)   | 내비게이션이 실패할 때 발생합니다. 유효하지 않은 라우팅 규칙, 리졸버 오류, 블로킹 리소스의 실패 등이 원인일 수 있습니다. |
 
-전체 생명주기 이벤트 목록은 [이 문서의 전체 이벤트 표](#all-router-events)를 참고하세요.
+전체 라이프사이클 이벤트 목록은 [이 문서의 전체 이벤트 표](#all-router-events)를 참고하세요.
 
 <!--
 ## How to subscribe to router events
@@ -109,7 +109,7 @@ export class RouterEvents {
 NOTE: The [`Event`](api/router/Event) type from `@angular/router` is named the same as the regular global [`Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event) type, but it is different from the [`RouterEvent`](api/router/RouterEvent) type.
 -->
 
-특정 내비게이션 생명주기 이벤트에서 코드를 실행하려면 `router.events`를 구독하고 이벤트의 인스턴스 타입을 확인하세요.
+특정 내비게이션 라이프사이클 이벤트에서 코드를 실행하려면 `router.events`를 구독하고 이벤트의 인스턴스 타입을 확인하세요.
 
 ```ts
 // 라우터 이벤트 구독 예제
@@ -326,7 +326,9 @@ export class AnalyticsService {
 
 <a id="error-handling"></a>
 
-### 에러 처리
+<a id="에러-처리"></a>
+
+### 오류 처리
 
 <!--
 Handle navigation errors gracefully and provide user feedback:
@@ -380,7 +382,7 @@ export class ErrorHandler {
 ```
 -->
 
-내비게이션 에러를 적절하게 처리하고 사용자에게 결과를 알립니다.
+내비게이션 오류를 적절하게 처리하고 사용자에게 결과를 알립니다.
 
 ```angular-ts
 import {Component, inject, signal} from '@angular/core';
@@ -469,7 +471,7 @@ These events track the core navigation process from start through route recognit
 -->
 
 이 이벤트는 내비게이션 시작부터 라우팅 규칙 인식, 가드 검사, 데이터 리졸브까지 핵심 내비게이션 과정을 추적합니다.
-내비게이션 생명주기의 각 단계를 확인할 수 있습니다.
+내비게이션 라이프사이클의 각 단계를 확인할 수 있습니다.
 
 | 이벤트                                                    | 설명                                                        |
 | --------------------------------------------------------- | ----------------------------------------------------------- |
@@ -537,7 +539,7 @@ These events represent the final outcome of a navigation attempt. Every navigati
 | --------------------------------------------------- | ------------------------------------------------------------------------ |
 | [`NavigationEnd`](api/router/NavigationEnd)         | 내비게이션이 성공적으로 끝날 때 발생합니다.                              |
 | [`NavigationCancel`](api/router/NavigationCancel)   | 라우터가 내비게이션을 취소할 때 발생합니다.                              |
-| [`NavigationError`](api/router/NavigationError)     | 예기치 않은 에러로 내비게이션이 실패할 때 발생합니다.                    |
+| [`NavigationError`](api/router/NavigationError)     | 예기치 않은 오류로 내비게이션이 실패할 때 발생합니다.                    |
 | [`NavigationSkipped`](api/router/NavigationSkipped) | 같은 URL로 이동하는 경우처럼 라우터가 내비게이션을 건너뛸 때 발생합니다. |
 
 <!--
@@ -556,7 +558,7 @@ There is one additional event that occurs outside the main navigation lifecycle,
 | [`Scroll`](api/router/Scroll) | Occurs during scrolling |
 -->
 
-주요 내비게이션 생명주기 밖에서 발생하지만 라우터 이벤트 시스템에 포함되는 이벤트가 하나 더 있습니다.
+주요 내비게이션 라이프사이클 밖에서 발생하지만 라우터 이벤트 시스템에 포함되는 이벤트가 하나 더 있습니다.
 
 | 이벤트                        | 설명                        |
 | ----------------------------- | --------------------------- |

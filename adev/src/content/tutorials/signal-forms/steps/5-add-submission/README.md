@@ -8,7 +8,7 @@
 Finally, let's learn how to handle form submission. You'll learn how to use the `submit()` function to run async operations when the form is valid, and disable the submit button when the form has errors.
 -->
 
-마지막으로 폼 제출을 처리하는 방법을 배워봅시다. `submit()` 함수를 사용해서 폼이 유효할 때 비동기 작업을 실행하고, 폼에 에러가 있을 때 제출 버튼을 비활성화하는 방법을 배웁니다.
+마지막으로 폼 제출을 처리하는 방법을 배워봅시다. `submit()` 함수를 사용해서 폼이 유효할 때 비동기 작업을 실행하고, 폼에 오류가 있을 때 제출 버튼을 비활성화하는 방법을 배웁니다.
 
 <!--
 In this activity, you'll learn how to:
@@ -128,7 +128,7 @@ Update the submit button to be disabled when the form is invalid:
 This prevents submission when the form has validation errors.
 -->
 
-폼에 유효성 검사 에러가 있으면 제출할 수 없게 합니다.
+폼에 유효성 검사 오류가 있으면 제출할 수 없게 합니다.
 </docs-step>
 
 </docs-workflow>

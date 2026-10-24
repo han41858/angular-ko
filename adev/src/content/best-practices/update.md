@@ -25,7 +25,7 @@ Angular 애플리케이션을 최신 상태로 유지하면 최신 기능과 최
 
 이 문서는 Angular 애플리케이션과 라이브러리를 최신 상태로 유지하는 데 도움이 되는 정보와 리소스를 제공합니다.
 
-지원 및 지원 중단 방식, 릴리즈 일정 등 버전 정책과 운영 방식은 [Angular 버전 관리와 릴리즈](reference/releases 'Angular 버전 관리와 릴리즈')를 참고하세요.
+지원 및 사용 중단 권고 정책, 릴리즈 일정 등 버전 정책과 운영 방식은 [Angular 버전 관리와 릴리즈](reference/releases 'Angular 버전 관리와 릴리즈')를 참고하세요.
 
 도움말: 현재 AngularJS를 사용하고 있다면 [AngularJS에서 업그레이드하기](https://angular.io/guide/upgrade 'AngularJS에서 업그레이드하기')를 참고하세요.
 _AngularJS_ 는 Angular의 모든 v1.x 버전을 가리키는 이름입니다.
@@ -169,5 +169,5 @@ Angular 업데이트 가이드는 지정한 현재 버전과 목표 버전에 �
 - 업데이트 명령 레퍼런스:
   [Angular CLI `ng update` 명령 레퍼런스](cli/update)
 
-- 버전 관리, 릴리즈, 지원, 지원 중단 방식:
+- 버전 관리, 릴리즈, 지원, 사용 중단 권고 정책:
   [Angular 버전 관리와 릴리즈](reference/releases 'Angular 버전 관리와 릴리즈')

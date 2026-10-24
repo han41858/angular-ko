@@ -10,11 +10,11 @@
 The `@angular/animations` package is deprecated as of v20.2, which also introduced the new `animate.enter` and `animate.leave` feature to add animations to your application. Using these new features, you can replace all animations based on `@angular/animations` with plain CSS or JS animation libraries. Removing `@angular/animations` from your application can significantly reduce the size of your JavaScript bundle. Native CSS animations generally offer superior performance, as they can benefit from hardware acceleration. This guide walks through the process of refactoring your code from `@angular/animations` to native CSS animations.
 -->
 
-`@angular/animations` 패키지는 v20.2부터 지원 중단 예정(deprecated)이며, 같은 버전에 애플리케이션에 애니메이션을 추가하는 새로운 기능인 `animate.enter`와 `animate.leave`가 도입되었습니다.
+`@angular/animations` 패키지는 v20.2부터 사용 중단 권고(deprecated) 상태이며, 같은 버전에 애플리케이션에 애니메이션을 추가하는 새로운 기능인 `animate.enter`와 `animate.leave`가 도입되었습니다.
 이 기능을 사용하면 `@angular/animations` 기반 애니메이션을 모두 일반 CSS나 JavaScript 애니메이션 라이브러리로 대체할 수 있습니다.
 애플리케이션에서 `@angular/animations`를 제거하면 JavaScript 번들 크기를 크게 줄일 수 있습니다.
 네이티브 CSS 애니메이션은 하드웨어 가속을 활용할 수 있어 일반적으로 더 뛰어난 성능을 제공합니다.
-이 가이드에서는 `@angular/animations`를 사용하는 코드를 네이티브 CSS 애니메이션으로 리팩터링하는 과정을 살펴봅니다.
+이 가이드에서는 `@angular/animations`를 사용하는 코드를 네이티브 CSS 애니메이션으로 리팩토링하는 과정을 살펴봅니다.
 
 <!--
 ## How to write animations in native CSS
@@ -130,7 +130,9 @@ The animations package allowed you to define various states using the [`state()`
 <a id="with-animations-package-1"></a>
 <a id="animating-state-and-styles-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-2}
+<a id="애니메이션-패키지-사용-애니메이션-패키지-사용-2"></a>
+
+#### 애니메이션 패키지 사용 {#ko-animating-state-and-styles-with-animations-package}
 
 <!--
 <docs-code header="open-close.ts" path="adev/src/content/examples/animations/src/app/open-close.ts" region="state1"/>
@@ -149,7 +151,9 @@ CSS 클래스에 키프레임 애니메이션이나 전환 스타일을 지정�
 <a id="with-native-css-1"></a>
 <a id="animating-state-and-styles-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-2}
+<a id="네이티브-css-사용-네이티브-css-사용-2"></a>
+
+#### 네이티브 CSS 사용 {#ko-animating-state-and-styles-with-native-css}
 
 <!--
 <docs-code header="animations.css" path="adev/src/content/examples/animations/src/app/animations.css" region="animation-states"/>
@@ -224,7 +228,9 @@ CSS 스타일이나 클래스를 전환해서 애니메이션을 실행할 수 �
 <a id="with-animations-package-2"></a>
 <a id="triggering-an-animation-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-3}
+<a id="애니메이션-패키지-사용-애니메이션-패키지-사용-3"></a>
+
+#### 애니메이션 패키지 사용 {#ko-triggering-an-animation-with-animations-package}
 
 <!--
 <docs-code-multifile>
@@ -247,7 +253,9 @@ CSS 스타일이나 클래스를 전환해서 애니메이션을 실행할 수 �
 <a id="with-native-css-2"></a>
 <a id="triggering-an-animation-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-3}
+<a id="네이티브-css-사용-네이티브-css-사용-3"></a>
+
+#### 네이티브 CSS 사용 {#ko-triggering-an-animation-with-native-css}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/open-close.ts">
@@ -316,7 +324,9 @@ The animations package offers the ability to animate things that have been histo
 <a id="with-animations-package-3"></a>
 <a id="automatic-property-calculation-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-4}
+<a id="애니메이션-패키지-사용-애니메이션-패키지-사용-4"></a>
+
+#### 애니메이션 패키지 사용 {#ko-automatic-property-calculation-with-animations-package}
 
 <!--
 <docs-code-multifile>
@@ -343,7 +353,9 @@ CSS Grid를 사용하면 높이가 자동으로 결정되는 상태까지 애니
 <a id="with-native-css-3"></a>
 <a id="automatic-property-calculation-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-4}
+<a id="네이티브-css-사용-네이티브-css-사용-4"></a>
+
+#### 네이티브 CSS 사용 {#ko-automatic-property-calculation-with-native-css}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/auto-height.ts">
@@ -385,7 +397,9 @@ The animations package offered the previously mentioned pattern matching for ent
 <a id="with-animations-package-4"></a>
 <a id="enter-and-leave-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-5}
+<a id="애니메이션-패키지-사용-애니메이션-패키지-사용-5"></a>
+
+#### 애니메이션 패키지 사용 {#ko-enter-and-leave-with-animations-package}
 
 <!--
 <docs-code-multifile>
@@ -408,7 +422,9 @@ The animations package offered the previously mentioned pattern matching for ent
 <a id="with-native-css-4"></a>
 <a id="enter-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-5}
+<a id="네이티브-css-사용-네이티브-css-사용-5"></a>
+
+#### 네이티브 CSS 사용 {#ko-enter-with-native-css}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/insert.ts">
@@ -431,7 +447,9 @@ The animations package offered the previously mentioned pattern matching for ent
 <a id="with-native-css-5"></a>
 <a id="leave-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-6}
+<a id="네이티브-css-사용-네이티브-css-사용-6"></a>
+
+#### 네이티브 CSS 사용 {#ko-leave-with-native-css}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/remove.ts">
@@ -476,7 +494,9 @@ Along with the aforementioned `:enter` and `:leave`, there's also `:increment` a
 <a id="with-animations-package-5"></a>
 <a id="increment-and-decrement-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-6}
+<a id="애니메이션-패키지-사용-애니메이션-패키지-사용-6"></a>
+
+#### 애니메이션 패키지 사용 {#ko-increment-and-decrement-with-animations-package}
 
 <!--
 <docs-code-multifile>
@@ -499,7 +519,9 @@ Along with the aforementioned `:enter` and `:leave`, there's also `:increment` a
 <a id="with-native-css-6"></a>
 <a id="increment-and-decrement-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-7}
+<a id="네이티브-css-사용-네이티브-css-사용-7"></a>
+
+#### 네이티브 CSS 사용 {#ko-increment-and-decrement-with-native-css}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/increment-decrement.ts">
@@ -690,7 +712,9 @@ The `stagger()` function allowed you to delay the animation of each item in a li
 <a id="with-animations-package-6"></a>
 <a id="stagger-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-7}
+<a id="애니메이션-패키지-사용-애니메이션-패키지-사용-7"></a>
+
+#### 애니메이션 패키지 사용 {#ko-stagger-with-animations-package}
 
 <!--
 <docs-code-multifile>
@@ -713,7 +737,9 @@ The `stagger()` function allowed you to delay the animation of each item in a li
 <a id="with-native-css-7"></a>
 <a id="stagger-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-8}
+<a id="네이티브-css-사용-네이티브-css-사용-8"></a>
+
+#### 네이티브 CSS 사용 {#ko-stagger-with-native-css}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/stagger.ts">
@@ -789,7 +815,9 @@ Items reordering in a list works out of the box using the previously described t
 <a id="with-animations-package-7"></a>
 <a id="reordering-list-with-animations-package"></a>
 
-#### 애니메이션 패키지 사용 {#애니메이션-패키지-사용-8}
+<a id="애니메이션-패키지-사용-애니메이션-패키지-사용-8"></a>
+
+#### 애니메이션 패키지 사용 {#ko-reordering-list-with-animations-package}
 
 <!--
 <docs-code-multifile>
@@ -812,7 +840,9 @@ Items reordering in a list works out of the box using the previously described t
 <a id="with-native-css-8"></a>
 <a id="reordering-list-with-native-css"></a>
 
-#### 네이티브 CSS 사용 {#네이티브-css-사용-9}
+<a id="네이티브-css-사용-네이티브-css-사용-9"></a>
+
+#### 네이티브 CSS 사용 {#ko-reordering-list-with-native-css}
 
 <!--
 <docs-code-multifile preview path="adev/src/content/examples/animations/src/app/native-css/reorder.ts">

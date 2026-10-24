@@ -82,7 +82,7 @@ Angular Router integrates view transitions into the navigation lifecycle to crea
 The Router's view transition integration acts as a [progressive enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement). When browsers don't support the View Transitions API, the Router performs normal DOM updates without animation, ensuring your application works across all browsers.
 -->
 
-Angular 라우터는 내비게이션 생명주기에 뷰 전환을 통합해서 라우팅 규칙을 매끄럽게 전환합니다.
+Angular 라우터는 내비게이션 라이프사이클에 뷰 전환을 통합해서 라우팅 규칙을 매끄럽게 전환합니다.
 내비게이션 중 라우터는 다음과 같이 동작합니다.
 
 1. **내비게이션 준비 완료** — 라우팅 규칙 매칭, [지연 로딩](guide/routing/loading-strategies#lazily-loaded-components-and-routes), [가드](/guide/routing/route-guards), [리소스](/guide/routing/data-fetching-with-resources), [리졸버](/guide/routing/data-resolvers)를 실행합니다.
@@ -488,7 +488,9 @@ Use view transition types to apply different animation styles based on navigatio
 
 <a id="handle-multiple-view-transition-styles-with-a-class-name-on-the-view-transition-root-deprecated"></a>
 
-### 뷰 전환 루트의 클래스 이름으로 여러 전환 스타일 처리하기(지원 중단 예정)
+<a id="뷰-전환-루트의-클래스-이름으로-여러-전환-스타일-처리하기지원-중단-예정"></a>
+
+### 뷰 전환 루트의 클래스 이름으로 여러 전환 스타일 처리하기(사용 중단 권고)
 
 <!--
 This approach uses CSS classes on the transition root element to control animation styles.

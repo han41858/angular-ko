@@ -592,7 +592,7 @@ const loginForm = form(loginModel, (schemaPath) => {
 - **`minLength()`** / **`maxLength()`** - 문자열이나 배열의 길이를 검사합니다.
 - **`pattern()`** - 정규표현식 형식에 맞는지 검사합니다.
 
-그리고 유효성 검사 함수의 두번째 인자로 옵션 객체를 전달하면서 에러 메시지를 커스터마이징할 수 있습니다:
+그리고 유효성 검사 함수의 두번째 인자로 옵션 객체를 전달하면서 오류 메시지를 커스터마이징할 수 있습니다:
 
 ```ts
 required(schemaPath.email, {message: 'Email is required'});
@@ -611,17 +611,19 @@ email(schemaPath.email, {message: 'Please enter a valid email address'});
 | 상태         | 설명                                                                        |
 | ------------ | --------------------------------------------------------------------------- |
 | `valid()`    | 노드가 모든 유효성 검사 규칙을 통과하면 `true`를 반환합니다.                |
-| `invalid()`  | 유효성 검사 에러가 있으면 `true`를 반환합니다.                              |
+| `invalid()`  | 유효성 검사 오류가 있으면 `true`를 반환합니다.                              |
 | `pending()`  | 비동기 유효성 검사가 진행 중이면 `true`를 반환합니다.                       |
 | `touched()`  | 사용자가 해당 필드나 자식 필드에 접근했다가 빠져나가면 `true`를 반환합니다. |
 | `dirty()`    | 사용자가 값을 변경했으면 `true`를 반환합니다.                               |
 | `disabled()` | 노드가 비활성화되면 `true`를 반환합니다.                                    |
 | `readonly()` | 노드가 읽기 전용이면 `true`를 반환합니다.                                   |
-| `errors()`   | `kind`, `message` 프로퍼티가 있는 유효성 검사 에러 배열을 반환합니다.       |
+| `errors()`   | `kind`, `message` 프로퍼티가 있는 유효성 검사 오류 배열을 반환합니다.       |
 
 <a id="complete-example-validation"></a>
 
-### 전체 예제 {#전체-예제-2}
+<a id="전체-예제-전체-예제-2"></a>
+
+### 전체 예제 {#ko-complete-example-validation}
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts">
   <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts"/>

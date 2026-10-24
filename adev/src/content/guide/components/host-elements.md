@@ -112,7 +112,7 @@ NOTE: The global target names that can be used to prefix an event name are `docu
 -->
 
 컴포넌트는 프로퍼티나 어트리뷰트, 스타일, 이벤트를 호스트 엘리먼트와 바인딩할 수 있습니다.
-이 바인딩은 컴포넌트 템플릿의 엘리먼트에서 바인딩해도 되지만, `@Component` 데코레이터의 `host` 프로퍼티를 활용할 수도 있습니다.:
+호스트 바인딩은 컴포넌트 템플릿 내부 엘리먼트의 바인딩과 동작 방식은 같지만, `@Component` 데코레이터의 `host` 프로퍼티에서 정의합니다:
 
 ```angular-ts
 @Component({
@@ -419,4 +419,4 @@ export class Button {
 <app-button variation="primary">Click me</app-button>
 ```
 
-참고: `HostAttributeToken`을 사용할 때 의존성 객체가 옵션으로 지정되지 않은 채로 어트리뷰트가 존재하지 않으면 에러가 발생합니다.
+참고: `HostAttributeToken`을 사용할 때 의존성 객체가 옵션으로 지정되지 않은 채로 어트리뷰트가 존재하지 않으면 오류가 발생합니다.

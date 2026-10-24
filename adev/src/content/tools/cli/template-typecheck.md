@@ -92,7 +92,7 @@ In strict mode, Angular does the following:
 - Infers the correct type of local references to DOM elements, based on the tag name \(for example, the type that `document.createElement` would return for that tag\)
 -->
 
-엄격 모드는 기본 모드이며 `strictTemplates` 플래그가 `true`이거나 설정되지 않았을 때 활성화됩니다.
+엄격 모드는 기본으로 활성화되며 `strictTemplates` 플래그가 `true`이거나 설정되지 않았을 때 사용됩니다.
 
 엄격 모드에서 Angular는 다음을 수행합니다:
 
@@ -409,12 +409,12 @@ In the case of the `async` pipe, notice that the expression needs to be wrapped 
   라이브러리가 `null`을 올바르게 처리하더라도, 컴파일러는 `null` 타입이 빠진 선언 파일을 기준으로 null일 수 있는 값을 검사하므로 문제가 됩니다.
   컴파일러는 `strictNullChecks`를 준수하기 때문에 타입 검사 오류를 발생시킵니다.
 
-- 값을 동기적으로 방출한다는 것을 알고 있는 Observable에 `async` 파이프를 사용하는 경우입니다.
+- 값을 동기적으로 방출한다는 것을 알고 있는 옵저버블에 `async` 파이프를 사용하는 경우입니다.
 
-  현재 `async` 파이프는 구독하는 Observable이 비동기일 수 있다고 가정하므로 아직 사용할 수 있는 값이 없을 가능성을 고려합니다.
+  현재 `async` 파이프는 구독하는 옵저버블이 비동기일 수 있다고 가정하므로 아직 사용할 수 있는 값이 없을 가능성을 고려합니다.
   이 경우에도 무언가를 반환해야 하며 그 값이 `null`입니다.
   즉, `async` 파이프의 반환 타입에는 `null`이 포함됩니다.
-  따라서 Observable이 null이 아닌 값을 동기적으로 방출한다고 알고 있더라도 오류가 발생할 수 있습니다.
+  따라서 옵저버블이 null이 아닌 값을 동기적으로 방출한다고 알고 있더라도 오류가 발생할 수 있습니다.
 
 위 문제에는 두 가지 우회 방법이 있습니다:
 
@@ -618,7 +618,7 @@ class SubmitButton {
 ```
 
 TypeScript 4.3부터는 세터가 `boolean|''` 타입을 받도록 선언할 수 있으므로 입력 세터 타입 변환 필드가 필요하지 않습니다.
-따라서 입력 세터 타입 변환 필드는 사용 중단되었습니다.
+따라서 입력 세터 타입 변환 필드는 사용 중단이 권고됩니다.
 
 이 필드에 값을 지정할 필요는 없습니다.
 필드가 존재하면 Angular 타입 검사기는 `disabled` 입력이 `boolean|''` 타입에 맞는 바인딩을 받을 수 있다고 판단합니다.

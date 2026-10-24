@@ -121,7 +121,7 @@ The validation flow works like this:
 
 비동기 유효성 검사는 동기 유효성 검사를 모두 통과한 후에 실행됩니다.
 그리고 비동기 검사가 실행 중일 때는 `pending()` 시그널이 `true`를 반환합니다.
-유효성 검사 결과를 활용하면 특정 필드에 에러가 발생했다는 것을 표시할 수 있으며, 필드 값이 변경되면 진행 중인 비동기 유효성 검사를 취소할 수도 있습니다.
+유효성 검사 결과를 활용하면 특정 필드에 오류가 발생했다는 것을 표시할 수 있으며, 필드 값이 변경되면 진행 중인 비동기 유효성 검사를 취소할 수도 있습니다.
 
 사용자 이름을 사용할 수 있는지 검사하는 예제 코드를 살펴봅시다:
 
@@ -186,7 +186,7 @@ export class Registration {
 3. 동기 유효성 검사가 실패하면 비동기 유효성 검사는 실행되지 않습니다.
 4. 동기 유효성 검사가 성공하면, 비동기 유효성 검사가 실행되며 `pending()` 시그널이 `true`를 반환합니다.
 5. 비동기 유효성 검사 요청이 성공하면 `pending()` 시그널이 `false`를 반환합니다.
-6. 유효성 검사 응답을 확인해서 에러를 표시합니다.
+6. 유효성 검사 응답을 확인해서 오류를 표시합니다.
 
 <!--
 ## HTTP validation with validateHttp()
@@ -399,7 +399,7 @@ onError: (error) => {
 ```
 -->
 
-`onSuccess` 함수는 HTTP 응답을 인자로 받아, 값이 유효하지 않으면 유효성 검사 에러를 반환하고 유효하면 `undefined`를 반환합니다.
+`onSuccess` 함수는 HTTP 응답을 인자로 받아, 값이 유효하지 않으면 유효성 검사 오류를 반환하고 유효하면 `undefined`를 반환합니다.
 
 ```ts
 onSuccess: (response: { valid: boolean; message?: string }) => {
@@ -412,7 +412,7 @@ onSuccess: (response: { valid: boolean; message?: string }) => {
 } // prettier-ignore
 ```
 
-에러는 여러 개를 한 번에 반환할 수도 있습니다:
+오류는 여러 개를 한 번에 반환할 수도 있습니다:
 
 ```ts
 onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
@@ -450,7 +450,7 @@ onSuccess: (response) => {
 } // prettier-ignore
 ```
 
-`onError` 함수는 네트워크 에러나 HTTP 에러를 반환받았을 때 실행됩니다:
+`onError` 함수는 네트워크 오류나 HTTP 오류를 반환받았을 때 실행됩니다:
 
 ```ts
 onError: (error) => {
@@ -563,7 +563,7 @@ Consider `validateAsync()` only when `validateHttp()` can't meet your needs. Som
 - **HTTP가 아닌 유효성 검사** - WebSocket 연결이나, IndexedDB 탐색, Web Worker 연산인 경우
 - **커스텀 캐싱 정책** - 단순한 메모이제이션이 아니라 애플리케이션에 특화된 캐싱을 해야 하는 경우
 - **재시도 로직이 복잡한 경우** - 커스텀 재시도 정책이나 조건부 재시도를 활용하는 경우
-- **resource에 직접 접근하는 경우** - resource 라이프싸이클에 적극적으로 개입해야 하는 경우
+- **resource에 직접 접근하는 경우** - resource 라이프사이클에 적극적으로 개입해야 하는 경우
 
 <!--
 ### Creating a custom validation rule
@@ -721,7 +721,9 @@ export class Registration {
 
 <a id="using-observable-based-services"></a>
 
-## Observable 기반 서비스 활용하기
+<a id="observable-기반-서비스-활용하기"></a>
+
+## 옵저버블 기반 서비스 활용하기
 
 <!--
 If your application has existing services that return Observables, use `rxResource` from `@angular/core/rxjs-interop`:
@@ -767,7 +769,7 @@ export class Registration {
 The `rxResource` function works directly with Observables and handles subscription cleanup automatically when the field value changes.
 -->
 
-애플리케이션에서 Observable 기반 서비스를 활용하고 있다면 `@angular/core/rxjs-interop` 패키지로 제공되는 `rxResource`를 활용하세요:
+애플리케이션에서 옵저버블 기반 서비스를 활용하고 있다면 `@angular/core/rxjs-interop` 패키지로 제공되는 `rxResource`를 활용하세요:
 
 ```ts
 import {Component, inject, signal, Signal} from '@angular/core';
@@ -807,7 +809,7 @@ export class Registration {
 }
 ```
 
-`rxResource` 함수는 Observable을 직접 처리합니다.
+`rxResource` 함수는 옵저버블을 직접 처리합니다.
 필드 값이 변경되었을 때 기존에 구독한 옵저버블을 정리하는 기능도 자동으로 합니다.
 
 <!--
@@ -873,7 +875,7 @@ With a 300 ms debounce, the model updates and validates only after the user paus
 
 `debounce`는 사용자가 폼 모델에 입력하는 값을 디바운싱(debouncing)합니다.
 디바운싱은 사용자의 값 입력을 일정 시간 동안 기다린 후에 폼 모델에 반영하는 것을 의미합니다.
-이 방식은 모든 키 눌림에 반응하지 않기 때문에 연산 자원을 아낄 수 있으며, 값을 입력하는 중에는 에러 메시지를 표시하지 않을 수 있고, 개별 글자마다 반응하지 않을 수 있습니다.
+이 방식은 모든 키 눌림에 반응하지 않기 때문에 연산 자원을 아낄 수 있으며, 값을 입력하는 중에는 오류 메시지를 표시하지 않을 수 있고, 개별 글자마다 반응하지 않을 수 있습니다.
 
 스키마 안에서 `debounce`를 사용하면 폼 필드의 UI 변화를 어떻게 지연시킬지 지정해야 합니다.
 가장 간단하게는 `debounce(path, ms)`라고 작성하면 사용자의 입력이 해당 밀리초만큼 지난 후에 모델에 값을 반영합니다.
@@ -1325,7 +1327,7 @@ export class Registration {
 }
 ```
 
-`cache`는 팩토리 클로저 안에 위치하기 때문에, 이 캐시는 필드의 라이프싸이클 동안 유지됩니다.
+`cache`는 팩토리 클로저 안에 위치하기 때문에, 이 캐시는 필드의 라이프사이클 동안 유지됩니다.
 사용자가 사용자명을 입력해서 서버로 한 번 검사하고 나면, 이후에는 새로운 요청을 보내지 않고 로더가 캐시를 확인합니다.
 
 <!--
@@ -1646,7 +1648,9 @@ validateHttp(schemaPath.username, {
 
 <a id="handle-errors-gracefully"></a>
 
-### 에러 처리하기
+<a id="에러-처리하기"></a>
+
+### 오류 처리하기
 
 <!--
 Provide clear, user-friendly error messages. Log technical details for debugging but show simple messages to users:
@@ -1678,7 +1682,7 @@ validateHttp(schemaPath.field, {
 ```
 -->
 
-에러 메시지는 명확하게, 사용자가 이해하기 쉽게 제공하세요.
+오류 메시지는 명확하게, 사용자가 이해하기 쉽게 제공하세요.
 디버깅을 위한 세부사항은 사용자에게 표시할 필요 없이 로그로 남겨주세요:
 
 ```ts

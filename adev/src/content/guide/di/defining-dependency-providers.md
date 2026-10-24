@@ -244,7 +244,7 @@ This approach offers several advantages:
 - **Can inject other dependencies** - Factory functions can use `inject()` to access other services
 -->
 
-팩토리 함수를 사용하는 InjectionToken은 전역 범위에서 클래스를 의존성 객체로 사용하지만 클래스를 직접 사용할 수 없는 경우에 유용합니다:
+팩토리 함수를 사용하는 `InjectionToken`은 클래스를 사용할 수 없지만 의존성을 전역으로 제공해야 할 때 유용합니다:
 
 ```ts {header: "/app/logger.token.ts"}
 import {InjectionToken, inject} from '@angular/core';
@@ -426,7 +426,7 @@ export class Isolated {
 -->
 
 서비스에 `providedIn: 'root'`가 지정되어 있어도 컴포넌트 계층에서 이 값을 오버라이드할 수 있습니다.
-이 경우에는 서비스의 인스턴스가 컴포넌트의 생명주기와 동일하게 동작합니다.
+이 경우에는 서비스의 인스턴스가 컴포넌트의 라이프사이클와 동일하게 동작합니다.
 그래서 컴포넌트가 종료되면 의존성으로 주입된 서비스의 인스턴스도 함께 종료됩니다.
 
 ```ts
@@ -1362,7 +1362,7 @@ Angular offers several levels where you can register providers, each with differ
 - [**Route**](#route-providers) - Feature-specific services for lazy-loaded modules
 -->
 
-프로바이더를 등록하는 계층은 접근 범위, 라이프싸이클, 성능에 따라 선택할 수 있습니다:
+프로바이더를 등록하는 계층은 접근 범위, 라이프사이클, 성능에 따라 선택할 수 있습니다:
 
 - [**애플리케이션을 부트스트랩할 때**](#애플리케이션을-부트스트랩할-때) - 전역 범위에 싱글턴 인스턴스로 등록됩니다.
 - [**컴포넌트나 디렉티브 계층**](#컴포넌트나-디렉티브-프로바이더-배열) - 컴포넌트 트리별로 인스턴스를 구분할 때

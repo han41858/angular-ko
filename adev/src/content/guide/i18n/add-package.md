@@ -33,8 +33,8 @@ Angular의 현지화 기능을 사용하려면 [Angular CLI][CliMain]로 프로�
 도움말: `package.json`과 `tsconfig.json` 파일에 대한 자세한 내용은 [작업 공간의 npm 의존성][GuideNpmPackages]과 [TypeScript 설정][GuideTsConfig]을 참고하세요.
 삼중 슬래시 지시문에 대해 알아보려면 [TypeScript 핸드북](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html#-reference-types-)을 참고하세요.
 
-`@angular/localize`를 설치하지 않은 상태에서 현지화된 프로젝트 버전을 빌드하려고 하면(예를 들어 템플릿에서 `i18n` 어트리뷰트를 사용하는 경우), [Angular CLI][CliMain]가 에러를 표시합니다.
-이 에러에는 프로젝트에서 i18n을 활성화하는 방법이 안내됩니다.
+`@angular/localize`를 설치하지 않은 상태에서 현지화된 프로젝트 버전을 빌드하려고 하면(예를 들어 템플릿에서 `i18n` 어트리뷰트를 사용하는 경우), [Angular CLI][CliMain]가 오류를 표시합니다.
+이 오류에는 프로젝트에서 i18n을 활성화하는 방법이 안내됩니다.
 
 <!--
 ## Options

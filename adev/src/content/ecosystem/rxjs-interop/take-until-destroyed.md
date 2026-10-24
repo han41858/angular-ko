@@ -55,7 +55,7 @@ export class UserProfile {
 
 팁: 이 문서는 [컴포넌트와 디렉티브의 라이프사이클](guide/components/lifecycle)을 알고 있다고 가정합니다.
 
-`@angular/core/rxjs-interop`의 `takeUntilDestroyed` 연산자를 사용하면 컴포넌트나 디렉티브가 종료될 때 Observable 구독을 간결하고 안정적으로 자동 해제할 수 있습니다.
+`@angular/core/rxjs-interop`의 `takeUntilDestroyed` 연산자를 사용하면 컴포넌트나 디렉티브가 종료될 때 옵저버블 구독을 간결하고 안정적으로 자동 해제할 수 있습니다.
 이를 통해 RxJS 구독에서 자주 발생하는 메모리 누수를 방지할 수 있습니다.
 RxJS의 [`takeUntil`](https://rxjs.dev/api/operators/takeUntil) 연산자와 비슷하게 동작하지만 별도의 Subject가 필요하지 않습니다.
 

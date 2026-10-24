@@ -280,7 +280,7 @@ provideRouter(routes, withRouterConfig({urlUpdateStrategy: 'eager'}));
 `urlUpdateStrategy`는 Angular가 브라우저 주소 표시줄을 갱신하는 시점을 결정합니다.
 기본값인 `'deferred'`는 내비게이션이 성공한 후에 URL을 변경합니다.
 내비게이션이 시작될 때 즉시 갱신하려면 `'eager'`를 사용합니다.
-즉시 갱신하면 가드나 에러로 내비게이션이 실패했을 때 시도한 URL을 쉽게 표시할 수 있지만, 오래 실행되는 가드가 있다면 진행 중인 URL이 잠시 표시될 수 있습니다.
+즉시 갱신하면 가드나 오류로 내비게이션이 실패했을 때 시도한 URL을 쉽게 표시할 수 있지만, 오래 실행되는 가드가 있다면 진행 중인 URL이 잠시 표시될 수 있습니다.
 
 가드가 이동을 차단하더라도 분석 파이프라인에서 이동을 시도한 라우팅 규칙을 확인해야 한다면 이 설정을 고려해 보세요.
 
@@ -949,7 +949,7 @@ export const routes: Routes = [
 
 커스텀 미리 로드 전략은 `preload` 메서드 하나가 필요한 `PreloadingStrategy` 인터페이스를 구현합니다.
 이 메서드는 라우팅 규칙 설정과 실제 모듈 로드를 실행하는 함수를 인자로 받습니다.
-미리 로드가 완료될 때 값을 전달하는 Observable을 반환하거나, 미리 로드를 생략하려면 빈 Observable을 반환합니다:
+미리 로드가 완료될 때 값을 전달하는 옵저버블을 반환하거나, 미리 로드를 생략하려면 빈 옵저버블을 반환합니다:
 
 ```ts
 import {Injectable} from '@angular/core';
@@ -1394,7 +1394,9 @@ export class Documentation {
 
 <a id="locale-aware-routing"></a>
 
-### 로케일에 따른 라우팅
+<a id="로케일에-따른-라우팅"></a>
+
+### 지역에 따른 라우팅
 
 <!--
 International applications often encode locale information in URLs. A custom matcher can extract locale codes and route to appropriate components while making the locale available as a parameter:
@@ -1431,8 +1433,8 @@ export function localeMatcher(segments: UrlSegment[]): UrlMatchResult | null {
 ```
 -->
 
-여러 국가를 지원하는 애플리케이션은 URL에 로케일 정보를 포함하는 경우가 많습니다.
-커스텀 매처로 로케일 코드를 추출해서 알맞은 컴포넌트로 연결하고, 로케일을 파라미터로 제공할 수 있습니다:
+여러 국가를 지원하는 애플리케이션은 URL에 지역 정보를 포함하는 경우가 많습니다.
+커스텀 매처로 지역 코드를 추출해서 알맞은 컴포넌트로 연결하고, 지역을 파라미터로 제공할 수 있습니다:
 
 ```ts
 // 지원하는 로케일

@@ -193,14 +193,14 @@ the migration will produce a non-null assertion after the `inject()` call to mat
 at the expense of potentially hiding type errors.
 -->
 
-`@Optional` 데코레이터가 있는 매개변수의 주입에 실패하면 Angular는 `null`을 반환합니다. 따라서 `@Optional` 매개변수의 실제 타입에는 `| null`이 포함됩니다. 하지만 데코레이터는 타입에 영향을 줄 수 없으므로 기존 코드에는 잘못된 타입이 많이 있습니다. `inject()`는 이 타입을 바로잡으므로 새로운 컴파일 오류가 발생할 수 있습니다. 이 옵션을 활성화하면 마이그레이션이 `inject()` 호출 뒤에 null 아님 단언을 추가하여 이전 타입과 일치시킵니다. 다만 이로 인해 타입 오류가 가려질 수 있습니다.
+`@Optional` 데코레이터가 있는 매개변수의 주입에 실패하면 Angular는 `null`을 반환합니다. 따라서 `@Optional` 매개변수의 실제 타입에는 `| null`이 포함됩니다. 하지만 데코레이터는 타입에 영향을 줄 수 없으므로 기존 코드에는 잘못된 타입이 많이 있습니다. `inject()`는 이 타입을 바로잡으므로 새로운 컴파일 오류가 발생할 수 있습니다. 이 옵션을 활성화하면 마이그레이션이 `inject()` 호출 뒤에 null 아님 단언 연산자를 추가하여 이전 타입과 일치시킵니다. 다만 이로 인해 타입 오류가 가려질 수 있습니다.
 
 <!--
 NOTE: non-null assertions won't be added to parameters that are already typed to be nullable,
 because the code that depends on them likely already accounts for their nullability.
 -->
 
-NOTE: 이미 null을 허용하는 타입의 매개변수에는 null 아님 단언을 추가하지 않습니다. 해당 매개변수를 사용하는 코드에서 이미 null 가능성을 고려했을 가능성이 높기 때문입니다.
+NOTE: 이미 null을 허용하는 타입의 매개변수에는 null 아님 단언 연산자를 추가하지 않습니다. 해당 매개변수를 사용하는 코드에서 이미 null 가능성을 고려했을 가능성이 높기 때문입니다.
 
 <!--
 #### Before

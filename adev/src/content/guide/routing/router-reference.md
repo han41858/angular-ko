@@ -65,7 +65,7 @@ When you enable the `withDebugTracing` feature, Angular logs these events to the
 | [`ActivationEnd`](api/router/ActivationEnd)               | 라우터가 라우팅 규칙 활성화를 마칠 때 발생합니다.                                                                                                                             |
 | [`NavigationEnd`](api/router/NavigationEnd)               | 내비게이션이 성공적으로 끝날 때 발생합니다.                                                                                                                                   |
 | [`NavigationCancel`](api/router/NavigationCancel)         | 내비게이션이 취소될 때 발생합니다. 내비게이션 중 라우팅 규칙 가드가 false를 반환하거나, `UrlTree` 또는 `RedirectCommand`를 반환해서 리다이렉트하는 경우에 발생할 수 있습니다. |
-| [`NavigationError`](api/router/NavigationError)           | 예기치 않은 에러로 내비게이션이 실패할 때 발생합니다.                                                                                                                         |
+| [`NavigationError`](api/router/NavigationError)           | 예기치 않은 오류로 내비게이션이 실패할 때 발생합니다.                                                                                                                         |
 | [`Scroll`](api/router/Scroll)                             | 스크롤 이벤트를 나타냅니다.                                                                                                                                                   |
 
 `withDebugTracing` 기능을 활성화하면 Angular가 이 이벤트를 콘솔에 기록합니다.

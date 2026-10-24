@@ -345,7 +345,7 @@ export class CustomCard {
 }
 ```
 
-필수 쿼리로 지정했지만 대상을 찾지 못하는 경우에는 에러가 발생합니다.
+필수 쿼리로 지정했지만 대상을 찾지 못하는 경우에는 오류가 발생합니다.
 왜냐하면 필수 쿼리는 대상이 있는 것을 보장하기 때문에 시그널이 `undefined` 값을 가질 수 없기 때문입니다.
 
 <!--
@@ -497,8 +497,8 @@ the `TemplateRef` associated with that element.
 Developers most commonly use `read` to retrieve `ElementRef` and `TemplateRef`.
 -->
 
-기본적으로 쿼리 구분자는 엘리먼트 자체와 엘리먼트의 값을 모두 의미합니다.
-`read` 옵션을 사용하면 구분자와 매칭되는 객체를 직접 지정할 수 있습니다.
+기본적으로 쿼리 구분자는 찾을 엘리먼트와 그 엘리먼트에서 읽어 올 값을 모두 지정합니다.
+`read` 옵션을 지정하면 구분자로 찾은 엘리먼트에서 다른 값을 읽어 올 수 있습니다.
 
 ```ts
 @Component(/* ... */)
@@ -746,9 +746,9 @@ export class CustomCard implements AfterViewInit {
 
 그리고 애플리케이션 상태가 변경되면 `@ViewChild` 탐색 결과는 최신 상태로 갱신됩니다.
 
-**뷰 쿼리는 `ngAfterViewInit` 라이프싸이클 메서드 시점부터 결과값을 참조할 수 있습니다.**
+**뷰 쿼리는 `ngAfterViewInit` 라이프사이클 메서드 시점부터 결과값을 참조할 수 있습니다.**
 이 메서드가 실행되기 전 시점에는 `undefined` 값을 갖습니다.
-컴포넌트 라이프싸이클에 대해 알아보려면 [라이프싸이클 후킹 함수](guide/components/lifecycle) 문서를 참고하세요.
+컴포넌트 라이프사이클에 대해 알아보려면 [라이프사이클 훅](guide/components/lifecycle) 문서를 참고하세요.
 
 자식 컴포넌트를 여러 개 탐색하려면 `@ViewChildren` 데코레이터를 사용하면 됩니다.
 
@@ -909,9 +909,9 @@ export class UserProfile {}
 
 그리고 애플리케이션 상태가 변경되면 `@ContentChild` 탐색 결과는 최신 상태로 갱신됩니다.
 
-**컨텐츠 쿼리는 `ngAfterContentInit` 라이프싸이클 메서드 시점부터 결과값을 참조할 수 있습니다.**
+**컨텐츠 쿼리는 `ngAfterContentInit` 라이프사이클 메서드 시점부터 결과값을 참조할 수 있습니다.**
 이 메서드가 실행되기 전 시점에는 `undefined` 값을 갖습니다.
-컴포넌트 라이프싸이클에 대해 알아보려면 [라이프싸이클 후킹 함수](guide/components/lifecycle) 문서를 참고하세요.
+컴포넌트 라이프사이클에 대해 알아보려면 [라이프사이클 훅](guide/components/lifecycle) 문서를 참고하세요.
 
 자식 컴포넌트를 여러 개 탐색하려면 `@ContentChildren` 데코레이터를 사용하면 됩니다.
 
@@ -1017,7 +1017,7 @@ export class CustomCard implements OnInit {
 ```
 
 `static: true` 옵션을 지정하면 찾으려는 대상 컴포넌트가 _언제나_ 존재하며 렌더링 조건에 영향을 받지 않는다는 것을 의미합니다.
-그래서 탐색 결과를 빠른 시점부터 참조할 수 있으며, `ngOnInit` 라이프싸이클 메서드에서 활용할 수도 있습니다.
+그래서 탐색 결과를 빠른 시점부터 참조할 수 있으며, `ngOnInit` 라이프사이클 메서드에서 활용할 수도 있습니다.
 
 정적 쿼리 결과는 처음 초기화된 후에 변경되지 않습니다.
 
@@ -1065,11 +1065,11 @@ Never directly write state to parent or ancestor components. This pattern can le
 
 쿼리를 사용할 때 혼동하는 경우에는 코드를 복잡하고 유지보수하기 어렵게 만들 수 있습니다.
 
-여러 컴포넌트에 사용되는 소스가 있다면 항상 단일한 소스로 유지하세요.
+여러 컴포넌트가 공유하는 상태의 원본 데이터는 항상 한 곳에서 관리하세요.
 컴포넌트끼리 동기화되지 않아 발생하는 문제를 예방하는 방법입니다.
 
 자식 컴포넌트의 상태값을 직접 설정하지 마세요.
-이런 방식은 이해하기 어렵고 [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) 에러를 유발할 수 있습니다.
+이런 방식은 이해하기 어렵고 [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) 오류를 유발할 수 있습니다.
 
 부모 컴포넌트나 더 위쪽 컴포넌트의 상태값을 직접 설정하지 마세요.
-이런 방식은 이해하기 어렵고 [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) 에러를 유발할 수 있습니다.
+이런 방식은 이해하기 어렵고 [ExpressionChangedAfterItHasBeenChecked](errors/NG0100) 오류를 유발할 수 있습니다.

@@ -190,8 +190,8 @@ const passwordErrors = f.password().errors(); // 기존 검증 함수를 통과�
 </form>
 ```
 
-기존 검증 함수에서 발생한 에러는 `CompatValidationError`입니다.
-이 에러에는 `message`가 설정되지 않으며, 검증 함수가 반환한 에러 객체는 대신 `context`에서 확인할 수 있습니다:
+기존 검증 함수에서 발생한 오류는 `CompatValidationError`입니다.
+이 오류에는 `message`가 설정되지 않으며, 검증 함수가 반환한 오류 객체는 대신 `context`에서 확인할 수 있습니다:
 
 ```typescript
 import {ValidationError} from '@angular/forms/signals';
@@ -760,7 +760,7 @@ export class UserProfile {
 `SignalFormControl`은 `enable()`, `disable()`처럼 활성화/비활성화 상태를 명령형으로 변경하는 API를 의도적으로 지원하지 않습니다.
 컨트롤 상태는 시그널 상태와 규칙에서 도출되어야 하기 때문입니다.
 
-활성화나 비활성화 메서드를 실행하면 에러가 발생합니다.
+활성화나 비활성화 메서드를 실행하면 오류가 발생합니다.
 
 ```typescript {avoid}
 import {signal, effect} from '@angular/core';
@@ -863,7 +863,7 @@ export class UserProfile {
 
 `SignalFormControl`은 `addValidators()`, `removeValidators()`, `setValidators()`처럼 검증 함수를 명령형으로 추가하거나 제거하는 API를 의도적으로 지원하지 않습니다.
 
-이 메서드들을 실행하면 에러가 발생합니다.
+이 메서드들을 실행하면 오류가 발생합니다.
 
 ```typescript {avoid}
 export class UserProfile {
@@ -911,7 +911,9 @@ export class UserProfile {
 
 <a id="manual-error-selection"></a>
 
-### 에러를 수동으로 지정하기
+<a id="에러를-수동으로-지정하기"></a>
+
+### 오류를 수동으로 지정하기
 
 <!--
 The `setErrors()` and `markAsPending()` methods are not supported. In Signal Forms, errors are derived from validation
@@ -920,8 +922,8 @@ in the schema.
 -->
 
 `setErrors()`와 `markAsPending()` 메서드는 지원하지 않습니다.
-Signal Forms에서는 유효성 검사 규칙과 비동기 유효성 검사 상태에 따라 에러가 결정됩니다.
-에러를 표시해야 한다면 스키마의 유효성 검사 규칙을 통해 선언적으로 지정해야 합니다.
+Signal Forms에서는 유효성 검사 규칙과 비동기 유효성 검사 상태에 따라 오류가 결정됩니다.
+오류를 표시해야 한다면 스키마의 유효성 검사 규칙을 통해 선언적으로 지정해야 합니다.
 
 <!--
 ## Automatic status classes

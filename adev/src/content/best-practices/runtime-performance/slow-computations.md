@@ -17,8 +17,8 @@ On every change detection cycle, Angular synchronously:
 Angular는 변경 감지 사이클마다 다음 작업을 동기적으로 수행합니다:
 
 - 별도로 지정하지 않았다면 각 컴포넌트의 변경 감지 전략에 따라 모든 컴포넌트의 템플릿 표현식을 평가합니다.
-- `ngDoCheck`, `ngAfterContentChecked`, `ngAfterViewChecked`, `ngOnChanges` 생명주기 후킹 메서드를 실행합니다.
-  Angular는 연산을 순차적으로 실행하므로 템플릿이나 생명주기 후킹 메서드의 느린 연산 하나가 전체 변경 감지 과정을 느리게 할 수 있습니다.
+- `ngDoCheck`, `ngAfterContentChecked`, `ngAfterViewChecked`, `ngOnChanges` 라이프사이클 후킹 메서드를 실행합니다.
+  Angular는 연산을 순차적으로 실행하므로 템플릿이나 라이프사이클 후킹 메서드의 느린 연산 하나가 전체 변경 감지 과정을 느리게 할 수 있습니다.
 
 <!--
 ## Identifying slow computations
@@ -39,7 +39,7 @@ For example, in the preceding screenshot, the second recorded change detection c
 Angular DevTools의 프로파일러로 비용이 큰 연산을 찾을 수 있습니다.
 성능 타임라인에서 막대를 클릭하면 특정 변경 감지 사이클을 살펴볼 수 있습니다.
 그러면 프레임워크가 각 컴포넌트의 변경 감지에 사용한 시간을 막대 차트로 표시합니다.
-컴포넌트를 클릭하면 Angular가 해당 템플릿과 생명주기 후킹 메서드를 평가하는 데 사용한 시간을 확인할 수 있습니다.
+컴포넌트를 클릭하면 Angular가 해당 템플릿과 라이프사이클 후킹 메서드를 평가하는 데 사용한 시간을 확인할 수 있습니다.
 
 <img alt="느린 연산을 보여주는 Angular DevTools 프로파일러 화면" src="assets/images/best-practices/runtime-performance/slow-computations.png">
 
@@ -76,7 +76,7 @@ Pure pipes and memoization have different trade-offs. Pure pipes are an Angular 
   Angular는 이전 호출과 비교해 입력값이 변경된 경우에만 순수 파이프를 다시 평가합니다.
 - **메모이제이션 사용하기**.
   [메모이제이션](https://en.wikipedia.org/wiki/Memoization)은 순수 파이프와 비슷한 기법이지만, 순수 파이프는 마지막 연산 결과만 보관하고 메모이제이션은 여러 결과를 저장할 수 있다는 차이가 있습니다.
-- **생명주기 후킹 메서드에서 리페인트/리플로 피하기**.
+- **라이프사이클 후킹 메서드에서 리페인트/리플로 피하기**.
   특정 [작업](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing/)은 브라우저가 페이지 레이아웃을 동기적으로 다시 계산하거나 다시 렌더링하도록 합니다.
   리플로와 리페인트는 대체로 느리므로 변경 감지 사이클마다 실행하는 것은 피하는 것이 좋습니다.
 

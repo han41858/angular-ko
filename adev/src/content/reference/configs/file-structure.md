@@ -97,7 +97,7 @@ The top level of the workspace contains workspace-wide configuration files, conf
 | `package.json`         | 워크스페이스의 모든 프로젝트에서 사용할 수 있는 [npm 패키지 의존성](reference/configs/npm-packages)을 설정합니다. 이 파일의 구체적인 형식과 내용은 [npm 문서](https://docs.npmjs.com/files/package.json)를 참고하세요.                                                    |
 | `package-lock.json`    | npm 클라이언트가 `node_modules`에 설치한 모든 패키지의 버전 정보를 제공합니다. 자세한 내용은 [npm 문서](https://docs.npmjs.com/files/package-lock.json)를 참고하세요.                                                                                                     |
 | `src/`                 | 루트 수준 애플리케이션 프로젝트의 소스 파일입니다.                                                                                                                                                                                                                        |
-| `public/`              | 개발 서버가 정적 파일로 제공하고 애플리케이션을 빌드할 때 그대로 복사하는 이미지 및 기타 에셋 파일을 담습니다.                                                                                                                                                            |
+| `public/`              | 개발 서버가 정적 파일로 제공하고 애플리케이션을 빌드할 때 그대로 복사하는 이미지 및 기타 정적 리소스 파일을 담습니다.                                                                                                                                                            |
 | `node_modules/`        | 워크스페이스 전체에 설치한 [npm 패키지](reference/configs/npm-packages)입니다. 워크스페이스 전체의 `node_modules` 의존성은 모든 프로젝트에서 접근할 수 있습니다.                                                                                                          |
 | `tsconfig.json`        | 워크스페이스 프로젝트의 기본 [TypeScript](https://www.typescriptlang.org) 설정입니다. 다른 모든 설정 파일은 이 기본 파일을 상속합니다. 자세한 내용은 [관련 TypeScript 문서](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html#tsconfig-bases)를 참고하세요. |
 
@@ -126,7 +126,7 @@ For a multi-project workspace, additional projects in the `projects` folder cont
 워크스페이스 파일 구조가 준비되면 명령줄에서 `ng generate` 명령어를 사용해 애플리케이션에 기능과 데이터를 추가할 수 있습니다.
 이 초기 루트 수준 애플리케이션은 CLI 명령어의 _기본 앱_ 입니다([추가 앱](#multiple-projects)을 생성한 뒤 기본값을 변경하지 않은 경우).
 
-애플리케이션이 하나인 워크스페이스에서는 워크스페이스의 `src` 하위 폴더에 루트 애플리케이션의 소스 파일(애플리케이션 로직, 데이터, 에셋)이 들어 있습니다.
+애플리케이션이 하나인 워크스페이스에서는 워크스페이스의 `src` 하위 폴더에 루트 애플리케이션의 소스 파일(애플리케이션 로직, 데이터, 정적 리소스)이 들어 있습니다.
 다중 프로젝트 워크스페이스에서는 `projects` 폴더의 추가 프로젝트마다 같은 구조의 `project-name/src/` 하위 폴더가 있습니다.
 
 <!--

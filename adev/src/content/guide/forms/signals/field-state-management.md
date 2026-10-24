@@ -108,7 +108,7 @@ export class Registration {
 }
 ```
 
-이 예제를 보면, 템플릿에서 에러 메시지를 표시하기 위해 `registrationForm.email().invalid()`를 확인하는 것을 확인할 수 있습니다.
+이 예제를 보면, 템플릿에서 오류 메시지를 표시하기 위해 `registrationForm.email().invalid()`를 확인하는 것을 확인할 수 있습니다.
 
 <!--
 ### Field state signals
@@ -155,8 +155,8 @@ console.log(emailValue); // 현재 email 문자열
 | 분류                                      | 시그널       | 의미                                                                                            |
 | ----------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------- |
 | **[유효성 검사](#validation-state)**      | `valid()`    | 진행 중인 검사 없이 모든 필드가 유효성 검사를 통과했습니다.                                     |
-|                                           | `invalid()`  | 유효성 검사 결과 에러가 발생했습니다.                                                           |
-|                                           | `errors()`   | 유효성 검사를 통과하지 못한 에러 목록                                                           |
+|                                           | `invalid()`  | 유효성 검사 결과 오류가 발생했습니다.                                                           |
+|                                           | `errors()`   | 유효성 검사를 통과하지 못한 오류 목록                                                           |
 |                                           | `pending()`  | 비동기 유효성 검사가 진행 중인지                                                               |
 | **[사용자 상호작용](#interaction-state)** | `touched()`  | 사용자가 필드에 접근했다가 다른 곳으로 이동했습니다.                                            |
 |                                           | `dirty()`    | 사용자가 필드 값을 수정했습니다.                                                                |
@@ -181,7 +181,7 @@ Validation state signals tell you whether a field is valid and what errors it co
 NOTE: This guide focuses on **using** validation state in your templates and logic (such as reading `valid()`, `invalid()`, `errors()` to display feedback). For information on **defining** validation rules and creating custom validators, see the [Validation guide](guide/forms/signals/validation).
 -->
 
-유효성 검사 상태를 표현하는 시그널은 개별 필드가 유효한지, 에러가 발생했는지 의미합니다.
+유효성 검사 상태를 표현하는 시그널은 개별 필드가 유효한지, 오류가 발생했는지 의미합니다.
 
 참고: 이 문서는 템플릿과 컴포넌트 로직에서 `valid()`, `invalid()`, `errors()`와 같은 유효성 검사 상태로 활용하는 방법을 안내합니다.
 유효성 검사 규칙을 **정의하고** 커스텀 유효성 검사기를 활용하는 방법은 [유효성 검사](guide/forms/signals/validation) 문서를 참고하세요.
@@ -248,9 +248,9 @@ export class Login {
 | 시그널      | `true`를 반환하는 경우                                    |
 | ----------- | --------------------------------------------------------- |
 | `valid()`   | 진행 중인 검사 없이 필드가 유효성 검사 규칙을 통과한 경우 |
-| `invalid()` | 유효성 검사 에러가 발생한 경우                            |
+| `invalid()` | 유효성 검사 오류가 발생한 경우                            |
 
-컴포넌트 코드에서 유효성 검사를 확인할 때 "에러 있음" 과 "유효성 검사 진행 중"을 구분하려면 `!valid()` 대신 `invalid()`를 활용하세요.
+컴포넌트 코드에서 유효성 검사를 확인할 때 "오류 있음" 과 "유효성 검사 진행 중"을 구분하려면 `!valid()` 대신 `invalid()`를 활용하세요.
 비동기 유효성 검사가 아직 완료되지 않아 필드가 아직 유효하지 않은 상태라면 `valid()`와 `invalid()`가 모두 `false` 이기 때문입니다.
 이 상태는 오류가 아직 확인되지 않은 상태일 수 있습니다.
 
@@ -260,7 +260,9 @@ export class Login {
 
 <a id="reading-validation-errors"></a>
 
-### 유효성 검사 에러 확인하기
+<a id="유효성-검사-에러-확인하기"></a>
+
+### 유효성 검사 오류 확인하기
 
 <!--
 Access the array of validation errors with `errors()`, or an individual error with `getError()`. Each error object contains:
@@ -294,17 +296,17 @@ Here's an example of how to display errors in your template by an array of valid
 This approach loops through all errors for a field, displaying each error message to the user.
 -->
 
-`errors()`로 유효성 검사에서 발생한 에러 목록을 확인하거나, `getError()`로 개별 에러를 확인할 수 있습니다.
-개별 에러 객체에는 이런 필드가 존재합니다:
+`errors()`로 유효성 검사에서 발생한 오류 목록을 확인하거나, `getError()`로 개별 오류를 확인할 수 있습니다.
+개별 오류 객체에는 이런 필드가 존재합니다:
 
 | 프로퍼티    | 설명                                              |
 | ----------- | ------------------------------------------------- |
 | `kind`      | "required"나 "email" 같이 실패한 유효성 검사 이름 |
-| `message`   | (생략 가능) 사람이 읽을 에러 메시지               |
-| `fieldTree` | 에러가 발생한 `FieldTree` 참조                    |
+| `message`   | (생략 가능) 사람이 읽을 오류 메시지               |
+| `fieldTree` | 오류가 발생한 `FieldTree` 참조                    |
 
 참고: `message` 프로퍼티는 생략할 수 있습니다.
-유효성 검사 함수도 커스텀 에러 메시지를 표시할 수 있지만, 이 프로퍼티를 지정하지 않은 경우라면 `kind` 값으로 에러 메시지를 매칭시켜야 합니다.
+유효성 검사 함수도 커스텀 오류 메시지를 표시할 수 있지만, 이 프로퍼티를 지정하지 않은 경우라면 `kind` 값으로 오류 메시지를 매칭시켜야 합니다.
 
 템플릿에서 오류를 표시하는 예제 코드를 확인해 봅시다:
 
@@ -324,7 +326,7 @@ This approach loops through all errors for a field, displaying each error messag
 })
 ```
 
-이 코드는 필드에 발생한 모든 에러 메시지를 표시합니다.
+이 코드는 필드에 발생한 모든 오류 메시지를 표시합니다.
 
 <!--
 Here's an example of how to display an error in your template with `getError()`:
@@ -346,7 +348,7 @@ Here's an example of how to display an error in your template with `getError()`:
 `getError()` accepts any string for an error's `kind`, and recognizes build-in validation error kinds (e.g., "required", "email", "minLength").
 -->
 
-`getError()`로 템플릿에 에러를 표시할 수도 있습니다:
+`getError()`로 템플릿에 오류를 표시할 수도 있습니다:
 
 ```angular-ts
 @Component({
@@ -362,7 +364,7 @@ Here's an example of how to display an error in your template with `getError()`:
 })
 ```
 
-`getError()`는 에러의 `kind`로 어떤 문자열이든 받을 수 있으며, "required", "email", "minLength" 같은 내장 유효성 검사 에러 종류를 인식합니다.
+`getError()`는 오류의 `kind`로 어떤 문자열이든 받을 수 있으며, "required", "email", "minLength" 같은 내장 유효성 검사 오류 종류를 인식합니다.
 
 <!--
 ### Pending validation
@@ -426,7 +428,7 @@ This signal enables you to show loading states while async validation executes.
 Interaction state tracks whether users have interacted with fields, enabling patterns like "show errors only after the user has touched a field."
 -->
 
-사용자가 필드에 접근한 이후에만 에러를 표시하려면, 사용자가 필드에 접근했었는지 확인해야 합니다.
+사용자가 필드에 접근한 이후에만 오류를 표시하려면, 사용자가 필드에 접근했었는지 확인해야 합니다.
 
 <!--
 ### Touched state
@@ -506,7 +508,7 @@ NOTE: Pass `{skipDescendants: true}` only when the field receiving the call shou
 
 `touched()` 시그널은 사용자가 필드에 접근했다가 다른 곳으로 이동했는지, 또는 코드에서 필드를 touched 상태로 표시했는지 추적합니다. 상호작용할 수 있는 필드만 touched 상태가 될 수 있습니다. 숨겨진 필드, 비활성화된 필드, 읽기 전용 필드는 사용자 상호작용이나 `markAsTouched()` 호출로 touched 상태가 되지 않습니다.
 
-폼의 특정 영역에서 동작을 실행할 때 그 영역의 유효성 검사 에러를 표시하려면 해당 영역의 필드에 `markAsTouched()`를 호출하세요. `skipDescendants`의 기본값은 `false`이므로 해당 필드와 모든 하위 필드를 touched 상태로 표시합니다.
+폼의 특정 영역에서 동작을 실행할 때 그 영역의 유효성 검사 오류를 표시하려면 해당 영역의 필드에 `markAsTouched()`를 호출하세요. `skipDescendants`의 기본값은 `false`이므로 해당 필드와 모든 하위 필드를 touched 상태로 표시합니다.
 
 예를 들어 결제 과정에서 다음 단계로 진행하기 전에 배송 정보 영역을 검사할 수 있습니다:
 
@@ -568,7 +570,7 @@ export class CheckoutShipping {
 }
 ```
 
-`continueToPayment()`가 `checkoutForm.shipping()`에 `markAsTouched()`를 호출하면 기본값인 `skipDescendants: false`가 적용됩니다. Angular가 `shipping`, `shipping.name`, `shipping.address`를 touched 상태로 표시하므로 전체 폼을 제출하기 전에도 하위 필드의 `touched() && invalid()` 조건에 따라 에러 메시지가 표시됩니다.
+`continueToPayment()`가 `checkoutForm.shipping()`에 `markAsTouched()`를 호출하면 기본값인 `skipDescendants: false`가 적용됩니다. Angular가 `shipping`, `shipping.name`, `shipping.address`를 touched 상태로 표시하므로 전체 폼을 제출하기 전에도 하위 필드의 `touched() && invalid()` 조건에 따라 오류 메시지가 표시됩니다.
 
 참고: 하위 필드의 touched 상태는 유지하고 호출 대상 필드만 touched 상태로 표시하려는 경우에만 `{skipDescendants: true}`를 전달하세요.
 
@@ -1111,7 +1113,7 @@ Because the root form is a field, it has the same signals (such as `valid()`, `i
 
 **필드 계층 상태는 이런 경우 사용합니다:**
 
-- 개별 필드의 에러 메시지를 표시할 때
+- 개별 필드의 오류 메시지를 표시할 때
 - 개별 필드의 스타일을 지정할 때
 - 개별 필드의 유효성 결과를 활용할 때
 - 필드의 구조를 조건에 따라 변경할 때
@@ -1253,7 +1255,9 @@ Field state signals integrate seamlessly with Angular templates, enabling reacti
 
 <a id="conditional-error-display"></a>
 
-### 조건부 에러 표시
+<a id="조건부-에러-표시"></a>
+
+### 조건부 오류 표시
 
 <!--
 Show errors only after a user has interacted with a field:
@@ -1288,7 +1292,7 @@ export class Signup {
 This pattern prevents showing errors before users have had a chance to interact with the field. Errors appear only after the user has focused and then left the field.
 -->
 
-에러는 사용자가 상호작용한 후에만 표시하는 것이 좋습니다:
+오류는 사용자가 상호작용한 후에만 표시하는 것이 좋습니다:
 
 ```angular-ts
 import {Component, signal} from '@angular/core';
@@ -1317,8 +1321,8 @@ export class Signup {
 }
 ```
 
-이 방식을 활용하면 사용자가 아직 필드를 조작하기 전에 에러가 표시되는 것을 방지할 수 있습니다.
-에러 메시지는 사용자가 필드에 접근한 이후에만 표시됩니다.
+이 방식을 활용하면 사용자가 아직 필드를 조작하기 전에 오류가 표시되는 것을 방지할 수 있습니다.
+오류 메시지는 사용자가 필드에 포커스를 두었다가 다른 곳으로 이동한 뒤에만 표시됩니다.
 
 <!--
 ### Conditional field availability
@@ -1439,7 +1443,7 @@ The forms system is already tracking the model values within the array and maint
 When an item changes, it may represent a new logical entity even if some of its properties look the same. Tracking by identity ensures the framework treats it as a distinct item rather than reusing existing UI elements. This prevents stateful elements, like form inputs, from being incorrectly shared and keeps bindings aligned with the correct part of the model.
 -->
 
-시그널 폼에서 `@for` 블럭은 필드 참조를 기준으로 항목을 추적합니다.
+시그널 폼에서 필드 목록을 반복하는 `@for` 블록은 필드의 동일성을 기준으로 항목을 추적해야 합니다.
 
 ```angular-ts
 @Component({
@@ -1456,9 +1460,10 @@ export class App {
 }
 ```
 
-폼 시스템은 배열 안에서 필드를 참조하며 자동으로 모델 값을 추적합니다.
-필드를 참조하는 방식은 Angular 프레임워크가 기존 UI 엘리먼트를 재사용하는 방식보다 유리합니다.
-이를 통해 폼 상태가 잘못 저장되는 것을 방지하고 바인딩도 순서대로 제대로 연결합니다.
+폼 시스템은 배열 안의 모델 값을 추적하면서 자동으로 생성한 필드의 동일성을 안정적으로 유지합니다.
+항목이 변경되면 일부 프로퍼티가 같더라도 새로운 논리적 항목일 수 있습니다.
+동일성을 기준으로 추적하면 프레임워크는 기존 UI 엘리먼트를 재사용하는 대신 이런 항목을 별개로 처리합니다.
+이렇게 하면 폼 입력처럼 상태를 가진 엘리먼트가 잘못 공유되는 것을 방지하고, 바인딩을 모델의 올바른 부분에 연결해 유지할 수 있습니다.
 
 <!--
 ## Using field state in component logic
@@ -1721,7 +1726,7 @@ export class Registration {
 ```
 
 `formRoot`를 사용하면 폼을 제출할 때 `submit()` 함수가 자동으로 실행됩니다.
-이 함수는 모든 필드를 touched 상태로 표시하여 유효성 검사 에러가 드러나게 하고, 폼이 유효한 경우 `action` 콜백 함수를 실행합니다.
+이 함수는 모든 필드를 touched 상태로 표시하여 유효성 검사 오류가 드러나게 하고, 폼이 유효한 경우 `action` 콜백 함수를 실행합니다.
 
 디렉티브를 사용하지 않고 `submit(this.registrationForm)`을 실행해서 수동으로 폼을 제출할 수도 있습니다.
 `submit()` 함수를 명시적으로 호출할 때는 `FormSubmitOptions`를 전달해서 폼의 기본 제출 로직을 재정의할 수 있습니다: `submit(this.registrationForm, {action: () => /* ... */ })`
@@ -1776,7 +1781,7 @@ export class Contact {
 }
 ```
 
-이렇게 하면 폼의 에러 메시지와 `dirty` 상태가 초기화되며 새로운 값을 입력받을 준비가 됩니다.
+이렇게 하면 폼의 오류 메시지와 `dirty` 상태가 초기화되며 새로운 값을 입력받을 준비가 됩니다.
 
 <!--
 ## Styling based on validation state
@@ -1862,7 +1867,7 @@ export class StyleExample {
 }
 ```
 
-`touched()`와 유효성 검사 상태를 확인하면 사용자가 상호작용한 후에 에러 스타일을 지정할 수 있습니다.
+`touched()`와 유효성 검사 상태를 확인하면 사용자가 상호작용한 후에 오류 스타일을 지정할 수 있습니다.
 
 <!--
 ## Focus a form control bound to a form field
@@ -1951,7 +1956,7 @@ export class PasswordInput implements FormValueControl<string> {
 
 Angular Signal Forms의 필드 상태는 `focusBoundControl()` 메서드를 제공합니다. 이 메서드로 필드에 연결된 폼 컨트롤에 [포커스](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)를 이동할 수 있습니다.
 
-대표적인 활용 방법은 폼 제출 시 접근성을 개선하는 것입니다. 폼이 유효하지 않을 때 에러 메시지를 표시하고 첫 번째 오류 필드로 포커스를 자동 이동하여 사용자가 수정할 수 있도록 안내합니다.
+대표적인 활용 방법은 폼 제출 시 접근성을 개선하는 것입니다. 폼이 유효하지 않을 때 오류 메시지를 표시하고 첫 번째 오류 필드로 포커스를 자동 이동하여 사용자가 수정할 수 있도록 안내합니다.
 
 <a id="basic-usage"></a>
 

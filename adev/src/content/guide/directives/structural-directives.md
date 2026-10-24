@@ -392,7 +392,7 @@ For more information, see [Template type checking](tools/cli/template-typecheck 
 -->
 
 디렉티브를 정의할 때 템플릿 가드를 추가하면 템플릿 타입 검사를 강화할 수 있습니다.
-이 가드를 추가하면 컴파일 시점에 Angular 템플릿 타입 검사기가 동작하면서 실수를 찾아낼 수 있기 때문에, 실행 시점에 에러가 발생하는 것을 방지합니다.
+이 가드를 추가하면 컴파일 시점에 Angular 템플릿 타입 검사기가 동작하면서 실수를 찾아낼 수 있기 때문에, 실행 시점에 오류가 발생하는 것을 방지합니다.
 가드는 두 가지 종류가 있습니다:
 
 - `ngTemplateGuard_(input)` - 입력값의 타입에 따라 입력 표현식 타입을 좁힐 수 있습니다. -`ngTemplateContextGuard` - 디렉티브 자체 타입에 따라 템플릿 컨텍스트 객체의 타입을 결정합니다.

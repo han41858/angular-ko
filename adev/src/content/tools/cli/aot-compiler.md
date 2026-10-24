@@ -824,7 +824,9 @@ class MyComponent {
 
 <a id="non-null-type-assertion-operator"></a>
 
-### null이 아님을 단언하는 타입 연산자
+<a id="null이-아님을-단언하는-타입-연산자"></a>
+
+### null 아님 단언 연산자
 
 <!--
 Use the non-null type assertion operator to suppress the `Object is possibly 'undefined'` error when it is inconvenient to use `*ngIf` or when some constraint in the component ensures that the expression is always non-null when the binding expression is interpolated.
@@ -869,7 +871,7 @@ class MyComponent {
 ```
 -->
 
-`*ngIf`를 사용하기 불편하거나 컴포넌트의 어떤 제약 때문에 문자열 바인딩 표현식을 평가할 때 항상 null이 아님이 보장된다면, null이 아님을 단언하는 타입 연산자로 `Object is possibly 'undefined'` 오류를 억제할 수 있습니다.
+`*ngIf`를 사용하기 불편하거나 컴포넌트의 어떤 제약 때문에 문자열 바인딩 표현식을 평가할 때 항상 null이 아님이 보장된다면, null 아님 단언 연산자로 `Object is possibly 'undefined'` 오류를 억제할 수 있습니다.
 
 다음 예제에서 `person`과 `address` 프로퍼티는 항상 함께 설정되므로 `person`이 null이 아니면 `address`도 항상 null이 아닙니다.
 이 제약을 TypeScript와 템플릿 컴파일러에 쉽게 설명할 방법은 없지만 `address!.street`를 사용해서 오류를 억제합니다.
@@ -890,7 +892,7 @@ class MyComponent {
 }
 ```
 
-컴포넌트를 리팩터링하면 이 제약이 깨질 수 있으므로 null 아님 단언 연산자는 꼭 필요한 경우에만 사용해야 합니다.
+컴포넌트를 리팩토링하면 이 제약이 깨질 수 있으므로 null 아님 단언 연산자는 꼭 필요한 경우에만 사용해야 합니다.
 
 이 예제에서는 다음과 같이 `*ngIf`에 `address` 검사도 포함하는 것을 권장합니다:
 

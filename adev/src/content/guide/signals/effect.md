@@ -20,8 +20,9 @@ Effects always run **at least once.** When an effect runs, it tracks any signal 
 Effects always execute **asynchronously**, during the change detection process.
 -->
 
-시그널은 시그널 값이 변경되었다는 것을 컨슈머(consumer)가 알 수 있다는 점에서 유용합니다.
-시그널 값 하나 또는 여러 개가 변경될 때마다 로직을 실행하려면 `effect()` 함수를 실행하면 됩니다:
+시그널은 값이 변경되면 해당 값을 읽는 소비자(consumer)에게 알릴 수 있다는 점에서 유용합니다.
+**이펙트 함수** 는 하나 이상의 시그널 값이 변경될 때마다 실행되는 작업입니다.
+`effect()` 함수를 호출해 이펙트 함수를 등록할 수 있습니다:
 
 ```ts
 import {effect} from '@angular/core';
@@ -31,11 +32,11 @@ effect(() => {
 });
 ```
 
-`effect()` 함수는 **반드시 한 번은 실행됩니다.**
-그리고 한 번 실행되고 나면 참조하는 시그널들의 값이 변경되는 것을 추적하다가, 시그널 값이 변경되면 `effect()` 함수를 다시 실행합니다.
-`computed()` 시그널과 비슷하게, `effect()` 시그널은 참조하는 시그널이 동적으로 변경될 수 있으며, 가장 최근에 실행된 시그널을 추적합니다.
+이펙트 함수는 **반드시 한 번은 실행됩니다.**
+이펙트 함수가 실행되면 실행 중 값을 읽은 시그널을 추적하며, 이 시그널 중 하나의 값이 변경되면 다시 실행됩니다.
+`computed()` 시그널과 비슷하게 의존성을 동적으로 추적하며, 가장 최근 실행에서 값을 읽은 시그널만 추적합니다.
 
-이펙트 시그널은 변화 감지 동작에서 언제나 **비동기** 로 실행됩니다.
+이펙트 함수는 변경 감지 동작에서 언제나 **비동기** 로 실행됩니다.
 
 <!--
 ## Use cases for effects
@@ -62,9 +63,9 @@ Instead, use `computed` signals to model state that depends on other state.
 </docs-callout>
 -->
 
-이펙트 시그널은 마지막에 사용해야 하는 API입니다.
+이펙트 함수는 마지막에 사용해야 하는 API입니다.
 보통은 `computed()`를 사용할 수 있으며, 시그널이 여러 개로 파생되거나 수동으로 조작하려면 `linkedSignal()`을 사용하는 것이 좋습니다.
-만약 이펙트 시그널로 어떤 시그널 값을 다른 시그널로 옮기고 있다면, 원본 데이터(source of truth)를 더 상단으로 올리고 `computed()`나 `linkedSignal()`을 사용하는 것이 좋습니다.
+만약 이펙트 함수로 어떤 시그널 값을 다른 시그널로 옮기고 있다면, 원본 데이터(source of truth)를 더 상단으로 올리고 `computed()`나 `linkedSignal()`을 사용하는 것이 좋습니다.
 `effect()` 함수는 시그널이 아닌 API와 시그널을 동기화할 때 가장 효과적입니다.
 
 참고: `effect()`가 더 나은 상황은 없습니다. 사용하기 적절한 경우만 있습니다.
@@ -77,7 +78,7 @@ Instead, use `computed` signals to model state that depends on other state.
 <docs-callout critical title="`effect()`를 사용하지 말아야 하는 경우">
 
 상태값을 단순하게 전파하는 용도로 `effect()`를 사용하지 마세요.
-이런 용도로 사용하면 `ExpressionChangedAfterItHasBeenChecked` 에러가 발생하거나, 무한 루프에 빠지거나, 불필요한 변화 감지 싸이클이 실행될 수 있습니다.
+이런 용도로 사용하면 `ExpressionChangedAfterItHasBeenChecked` 오류가 발생하거나, 무한 루프에 빠지거나, 불필요한 변경 감지 싸이클이 실행될 수 있습니다.
 
 다른 상태에 의존하는 시그널 모델을 다룰 때는 `computed()`를 사용하세요.
 
@@ -186,18 +187,18 @@ The execution of both kinds of `effect` are tied to the change detection process
 In both cases, if at least one of the effect dependencies changed during the effect execution, the effect will re-run before moving ahead on the change detection process.
 -->
 
-이펙트 시그널은 생성된 컨텍스트에 따라 암묵적으로 두 가지 동작 중 하나가 적용됩니다.
+이펙트 함수는 생성된 컨텍스트에 따라 암묵적으로 두 가지 동작 중 하나가 적용됩니다.
 
-"뷰 이펙트(View Effect)" 시그널은 컴포넌트 초기화 단계에서 생성된 이펙트 시그널을 의미합니다.
-컴포넌트 인젝터와 연결된 서비스가 생성한 시그널도 포함합니다.<br>
-"최상위 이펙트(Root Effect)" 시그널은 최상위 계층에 등록된 서비스 초기화 단계에서 실행된 이펙트 시그널을 의미합니다.
+"뷰 이펙트 함수(View Effect)"는 컴포넌트 인스턴스 생성 컨텍스트에서 등록된 이펙트 함수를 의미합니다.
+컴포넌트 인젝터와 연결된 서비스가 등록한 이펙트 함수도 포함합니다.<br>
+"최상위 이펙트 함수(Root Effect)"는 최상위 계층에 등록된 서비스의 인스턴스 생성 컨텍스트에서 등록된 이펙트 함수를 의미합니다.
 
-`effect()` 함수는 컴포넌트의 변화 감지 과정과 연동됩니다.
+두 종류의 이펙트 함수는 모두 변경 감지 과정과 연동됩니다.
 
-- "뷰 이펙트"는 컴포넌트 변화를 검사하기 _전에_ 실행됩니다.
-- "최상위 이펙트"는 변화 감지 싸이클에서 모든 컴포넌트를 검사하기 전에 실행됩니다.
+- "뷰 이펙트 함수"는 컴포넌트 변화를 검사하기 _전에_ 실행됩니다.
+- "최상위 이펙트 함수"는 변경 감지 싸이클에서 모든 컴포넌트를 검사하기 전에 실행됩니다.
 
-두 경우 모두 이펙트 실행 중 의존하는 시그널이 하나 이상 변경되면, 변화 감지 과정을 계속 진행하기 전에 이펙트를 다시 실행합니다.
+두 경우 모두 이펙트 함수 실행 중 의존하는 시그널이 하나 이상 변경되면, 변경 감지 과정을 계속 진행하기 전에 이펙트 함수를 다시 실행합니다.
 
 <!--
 ## Destroying effects
@@ -218,16 +219,16 @@ An `effect` can be created in two different contexts that will affect when it's 
 Effects return an `EffectRef`. You can use the ref's `destroy` method to manually dispose of an effect. You can combine this with the `manualCleanup` option when creating an effect to disable automatic cleanup. Be careful to actually destroy such effects when they're no longer required.
 -->
 
-컴포넌트나 디렉티브가 종료되면, Angular는 이와 관련된 이펙트 시그널도 모두 종료합니다.
+컴포넌트나 디렉티브가 종료되면, Angular는 이와 관련된 이펙트 함수도 모두 종료합니다.
 
-이펙트 시그널은 두 가지 컨텍스트에서 생성될 수 있기 때문에 종료되는 시점이 다릅니다:
+이펙트 함수는 두 가지 컨텍스트에서 생성될 수 있기 때문에 종료되는 시점이 다릅니다:
 
-- "뷰 이펙트" 시그널은 컴포넌트가 종료되면 종료됩니다.
-- "최상위 이펙트" 시그널은 애플리케이션이 종료되면 종료됩니다.
+- "뷰 이펙트 함수"는 컴포넌트가 종료되면 종료됩니다.
+- "최상위 이펙트 함수"는 애플리케이션이 종료되면 종료됩니다.
 
 `effect()` 함수는 `EffectRef`를 반환합니다.
-이펙트 시그널의 자동 종료를 생략하고 수동으로 종료하려면 시그널을 생성할 때 `manualCleanup` 옵션을 지정한 후에 `destroy()` 메서드를 실행하면 됩니다.
-이런 경우는 시그널이 필요하지 않을 때 반드시 종료해야 하는 것을 잊지 마세요.
+이펙트 함수의 자동 종료를 생략하고 수동으로 종료하려면 이펙트 함수를 등록할 때 `manualCleanup` 옵션을 지정한 후에 `destroy()` 메서드를 실행하면 됩니다.
+이런 경우는 이펙트 함수가 필요하지 않을 때 반드시 종료해야 하는 것을 잊지 마세요.
 
 <!--
 ## Effect cleanup functions
@@ -235,7 +236,9 @@ Effects return an `EffectRef`. You can use the ref's `destroy` method to manuall
 
 <a id="effect-cleanup-functions"></a>
 
-## 이펙트 시그널 종료 함수
+<a id="이펙트-시그널-종료-함수"></a>
+
+## 이펙트 함수의 정리 콜백
 
 <!--
 When a component or directive is destroyed, Angular automatically cleans up any associated effects.
@@ -256,10 +259,10 @@ effect((onCleanup) => {
 ```
 -->
 
-이펙트 시그널이 시작한 작업은 오랜 시간 동안 실행될 수 있습니다.
-이 작업이 끝나기 전에 이펙트 시그널이 종료되거나 다시 실행되면 이전 작업을 취소해야 합니다.
+이펙트 함수가 시작한 작업은 오랜 시간 동안 실행될 수 있습니다.
+이 작업이 끝나기 전에 이펙트 함수가 종료되거나 다시 실행되면 이전 작업을 취소해야 합니다.
 이펙트 콜백 함수의 첫 번째 인자로 `onCleanup` 함수를 받을 수 있습니다.
-`onCleanup` 함수로 등록한 정리 콜백은 이펙트 시그널이 다음에 실행되기 전이나 종료될 때 호출됩니다.
+`onCleanup` 함수로 등록한 정리 콜백은 이펙트 함수가 다음에 실행되기 전이나 종료될 때 호출됩니다.
 
 ```ts
 effect((onCleanup) => {
@@ -317,7 +320,7 @@ TIP: You often don't need `afterRenderEffect` to check for DOM changes. APIs lik
 -->
 
 `effect()` 함수는 시그널이 변경되는 것에 반응하는 용도의 범용 도구입니다.
-하지만 이 함수는 Angular가 DOM을 갱신하기 _전에_ 실행됩니다.
+하지만 등록된 이펙트 콜백은 Angular가 DOM을 갱신하기 _전에_ 실행됩니다.
 그래서 DOM을 수동으로 검사하거나 조작해야 하는 경우, 서드 파티 라이브러리를 사용하는 경우라면 DOM에 직접 접근해야 합니다.
 
 이런 경우에는 `afterRenderEffect()`를 사용하면 됩니다.
@@ -458,7 +461,7 @@ If one of the phases modifies a signal value tracked by `afterRenderEffect`, the
 
 `earlyRead` 단계의 콜백은 정리 함수만 인자로 받습니다. 이후 각 단계는 이전 단계 콜백의 반환값을 `Signal`로 전달받습니다. 이 시그널을 사용해 단계 사이의 작업을 조율할 수 있습니다.
 
-이펙트 시그널은 다음 단계로 실행됩니다:
+이펙트 함수는 다음 단계로 실행됩니다:
 
 1. `earlyRead`
 2. `write`

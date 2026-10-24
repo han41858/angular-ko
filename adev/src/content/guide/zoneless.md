@@ -105,8 +105,8 @@ npm uninstall zone.js
 -->
 
 Zoneless 애플리케이션에서는 번들 크기를 줄이기 위해 빌드에서 ZoneJS를 완전히 제거해야 합니다.
-ZoneJS는 일반적으로 `angular.json`의 `build`와 `test` 타깃에 있는 `polyfills` 옵션으로 불러옵니다.
-빌드에서 제외하려면 두 타깃 모두에서 `zone.js`와 `zone.js/testing`을 제거하세요.
+ZoneJS는 일반적으로 `angular.json`의 `build`와 `test` 대상에 있는 `polyfills` 옵션으로 불러옵니다.
+빌드에서 제외하려면 두 대상 모두에서 `zone.js`와 `zone.js/testing`을 제거하세요.
 별도의 `polyfills.ts` 파일을 사용하는 프로젝트에서는 해당 파일의 `import 'zone.js';`와 `import 'zone.js/testing';`을 제거해야 합니다.
 
 빌드에서 ZoneJS를 제거한 후에는 `zone.js` 의존성도 더 이상 필요하지 않으므로 패키지를 완전히 제거할 수 있습니다.
@@ -289,7 +289,7 @@ try {
 }
 ```
 
-또한 `rxjs-interop`의 [pendingUntilEvent](/api/core/rxjs-interop/pendingUntilEvent) 헬퍼를 사용하면 옵저버블이 값을 방출하거나, 완료되거나, 에러가 발생하거나, 구독이 해제될 때까지 애플리케이션이 불안정한 상태를 유지하도록 할 수 있습니다.
+또한 `rxjs-interop`의 [pendingUntilEvent](/api/core/rxjs-interop/pendingUntilEvent) 헬퍼를 사용하면 옵저버블이 값을 방출하거나, 완료되거나, 오류가 발생하거나, 구독이 해제될 때까지 애플리케이션이 불안정한 상태를 유지하도록 할 수 있습니다.
 
 ```typescript
 readonly myObservableState = someObservable.pipe(pendingUntilEvent());

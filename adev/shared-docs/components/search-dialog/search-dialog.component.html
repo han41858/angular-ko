@@ -4,9 +4,9 @@
       [autofocus]="true"
       [hideIcon]="true"
       [formField]="searchForm"
-      [resetLabel]="'Clear the search'"
+      [resetLabel]="'검색어 지우기'"
       class="docs-search-input"
-      placeholder="Search docs"
+      placeholder="문서 검색"
     />
 
     @if (searchResults().length) {
@@ -77,7 +77,7 @@
               class="docs-search-angie"
               aria-hidden="true"
             />
-            <span>Start typing to see results</span>
+            <span>검색어를 입력하세요</span>
           </div>
         } @else {
           <div class="docs-search-results__no-results">
@@ -86,7 +86,7 @@
               class="docs-search-angie"
               aria-hidden="true"
             />
-            <span>No results found</span>
+            <span>검색 결과가 없습니다</span>
           </div>
         }
       </div>
@@ -96,7 +96,7 @@
       <ul class="docs-search-commands">
         <li>
           <kbd class="docs-search-commands-key">
-            <svg width="15" height="15" aria-label="Enter key" role="img">
+            <svg width="15" height="15" aria-label="Enter 키" role="img">
               <g
                 fill="none"
                 stroke="currentColor"
@@ -108,11 +108,11 @@
               </g>
             </svg>
           </kbd>
-          <span>to select</span>
+          <span>선택</span>
         </li>
         <li>
           <kbd class="docs-search-commands-key">
-            <svg width="15" height="15" aria-label="Arrow down" role="img">
+            <svg width="15" height="15" aria-label="아래쪽 화살표 키" role="img">
               <g
                 fill="none"
                 stroke="currentColor"
@@ -125,7 +125,7 @@
             </svg>
           </kbd>
           <kbd class="docs-search-commands-key">
-            <svg width="15" height="15" aria-label="Arrow up" role="img">
+            <svg width="15" height="15" aria-label="위쪽 화살표 키" role="img">
               <g
                 fill="none"
                 stroke="currentColor"
@@ -137,11 +137,11 @@
               </g>
             </svg>
           </kbd>
-          <span>to navigate</span>
+          <span>이동</span>
         </li>
         <li>
           <kbd class="docs-search-commands-key"
-            ><svg width="15" height="15" aria-label="Escape key" role="img">
+            ><svg width="15" height="15" aria-label="Escape 키" role="img">
               <g
                 fill="none"
                 stroke="currentColor"
@@ -155,11 +155,11 @@
               </g>
             </svg>
           </kbd>
-          <span>to close</span>
+          <span>닫기</span>
         </li>
       </ul>
       <div class="docs-algolia">
-        <span>Search by</span>
+        <span>검색 제공</span>
         <a
           target="_blank"
           rel="noopener"

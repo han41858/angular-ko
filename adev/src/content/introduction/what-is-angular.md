@@ -69,7 +69,7 @@
     Angular 컴포넌트를 활용하면 코드를 기능 단위로 쉽게 분리할 수 있습니다.
   </docs-card>
   <docs-card title="Angular Signals" href="essentials/signals" link="Signal 알아보기" titleIconName="sensors" iconImgSrc="adev/src/assets/icons/signals.svg">
-    정교하게 설계된 반응형 모델은 컴파일 타임 최적화와 함께 개발 단계를 단순화하고 앱을 빠르게 개발하는 데 도움을 줍니다.
+    세밀한 반응성 모델은 컴파일 타임 최적화와 함께 개발을 단순화하고, 기본적으로 더 빠르게 동작하는 앱을 만들도록 돕습니다.
   </docs-card>
   <docs-card title="서버 사이드 렌더링" href="guide/ssr" link="SSR 알아보기" iconImgSrc="adev/src/assets/icons/ssr.svg">
     Angular는 서버 사이드 렌더링(SSR)과 정적 사이트 생성(SSG)을 모두 지원하며, 완전한 DOM 하이드레이션도 지원합니다.
@@ -78,7 +78,7 @@
     애플리케이션 전 영역에 걸쳐 코드를 쉽게 재사용할 수 있습니다.
   </docs-card>
   <docs-card title="라우팅" href="guide/routing" link="라우팅 알아보기" iconImgSrc="adev/src/assets/icons/routing.svg">
-    라우팅 가드, 데이터 전달, 지연 로딩 등 다양한 네비게이션 기능을 제공합니다.
+    라우팅 가드, 탐색 전에 필요한 데이터 준비, 지연 로딩 등 다양한 내비게이션 기능을 제공합니다.
   </docs-card>
   <docs-card title="폼" href="guide/forms" link="폼 알아보기" iconImgSrc="adev/src/assets/icons/forms.svg">
     사용자에게 입력을 받고 입력받은 내용을 검증하는 표준화 시스템입니다.

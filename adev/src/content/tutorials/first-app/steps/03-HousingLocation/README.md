@@ -84,7 +84,7 @@ IDE의 **터미널** 창에서 다음 작업을 수행하세요:
    NOTE: 이 단계는 로컬 환경에서만 필요합니다!
 
 1. 브라우저에서 `http://localhost:4200`을 열어 애플리케이션을 확인하세요.
-1. 앱이 에러 없이 빌드되는지 확인하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
 
    HELPFUL: 새 컴포넌트를 추가했지만 아직 앱의 템플릿에서 사용하지 않았으므로 이전 실습과 동일한 화면이 표시됩니다.
 
@@ -169,7 +169,7 @@ SUMMARY: In this lesson, you created a new component for your app and added it t
 
    <docs-code header="src/app/housing-location/housing-location.css에 컴포넌트 스타일 추가하기" path="adev/src/content/tutorials/first-app/steps/04-interfaces/src/app/housing-location/housing-location.css"/>
 
-1. 코드를 저장하고 브라우저로 돌아가 앱이 에러 없이 빌드되는지 확인하세요. 화면에 "housing-location works!" 메시지가 표시되어야 합니다. 에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 코드를 저장하고 브라우저로 돌아가 앱이 오류 없이 빌드되는지 확인하세요. 화면에 "housing-location works!" 메시지가 표시되어야 합니다. 오류가 있다면 수정한 후 다음 단계로 진행하세요.
 
    <img alt="로고, 필터 검색 입력창, 검색 버튼과 'housing-location works!' 메시지가 표시된 Homes 앱의 브라우저 화면" src="assets/images/tutorials/first-app/homes-app-lesson-03-step-2.png">
 

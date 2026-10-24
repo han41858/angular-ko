@@ -570,5 +570,5 @@ Yes. `@placeholder` block content is not used for incremental hydration, but a `
 
 네.
 `@placeholder` 블록의 콘텐츠는 점진적 하이드레이션에 사용되지 않지만, 이후의 클라이언트 사이드 렌더링에는 `@placeholder`가 여전히 필요합니다.
-콘텐츠가 초기 로드에 포함된 라우트에 없었다면, 나중에 해당 `@defer` 블록 콘텐츠가 있는 라우트로 이동할 때는 일반 `@defer` 블록처럼 렌더링됩니다.
+콘텐츠가 초기 로드에 포함된 라우팅 규칙에 없었다면, 나중에 해당 `@defer` 블록 콘텐츠가 있는 라우팅 규칙으로 이동할 때는 일반 `@defer` 블록처럼 렌더링됩니다.
 따라서 이런 클라이언트 사이드 렌더링에서는 `@placeholder`가 렌더링됩니다.

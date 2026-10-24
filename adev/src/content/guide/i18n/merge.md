@@ -291,11 +291,11 @@ Angular 컴파일러가 생성하는 경고 수준을 설정하려면 다음 수
 
 | 경고 수준 | 설명                                   | 출력                                                   |
 | :-------- | :------------------------------------- | :----------------------------------------------------- |
-| `error`   | 에러를 발생시키고 빌드를 실패시킵니다. | 해당 없음                                              |
+| `error`   | 오류를 발생시키고 빌드를 실패시킵니다. | 해당 없음                                              |
 | `ignore`  | 아무 작업도 하지 않습니다.             | 해당 없음                                              |
 | `warning` | 콘솔이나 셸에 기본 경고를 표시합니다.  | `Missing translation for message "{translation_text}"` |
 
-[`angular.json`][GuideWorkspaceConfig] 작업 공간 빌드 설정 파일의 `build` 타깃에 있는 `options` 섹션에서 경고 수준을 지정하세요.
+[`angular.json`][GuideWorkspaceConfig] 작업 공간 빌드 설정 파일의 `build` 대상에 있는 `options` 섹션에서 경고 수준을 지정하세요.
 
 <!--
 ### `angular.json` `error` warning example

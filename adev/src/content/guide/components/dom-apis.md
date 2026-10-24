@@ -95,9 +95,9 @@ export class ProfilePhoto {
 
 **렌더링 콜백 함수는 서버 사이드 렌더링이나 빌드 시점 사전 렌더링에서는 실행되지 않습니다.**
 
-**Angular 라이프싸이클 후킹 함수에서 DOM을 조작하지 마세요.**
+**Angular 라이프사이클 훅에서 DOM을 조작하지 마세요.**
 Angular는 컴포넌트의 DOM이 완전히 준비된 후에 렌더링 콜백 함수를 실행하지만, 다른 시점에는 DOM이 준비되었는지 보장하지 않습니다.
-라이프싸이클 후킹 함수에서 DOM을 참조하거나 수정하면 [레이아웃 스래싱(layout thrashing)](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing)이 발생해서 페이지 렌더링 성능에 부정적인 영향을 줄 수 있습니다.
+라이프사이클 훅에서 DOM을 참조하거나 수정하면 [레이아웃 스래싱(layout thrashing)](https://web.dev/avoid-large-complex-layouts-and-layout-thrashing)이 발생해서 페이지 렌더링 성능에 부정적인 영향을 줄 수 있습니다.
 
 <!--
 ## Using a component's renderer

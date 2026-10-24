@@ -139,7 +139,7 @@ The primary `package.json` contains important package metadata, including the fo
 - 패키지가 EcmaScript 모듈\(ESM\) 형식임을 [선언합니다](#esm-declaration).
 - 모든 진입점에서 사용할 수 있는 소스 코드 형식을 정의하는 `"exports"` 필드가 있습니다.
 - `"exports"`를 이해하지 못하는 도구를 위해 기본 `@angular/core` 진입점에서 사용할 수 있는 소스 코드 형식을 정의하는 [키](#legacy-resolution-keys)가 있습니다.
-  이 키는 지원 중단 예정이며, 생태계 전반에서 `"exports"` 지원이 확대되면 제거될 수 있습니다.
+  이 키는 사용 중단이 권고되며, 생태계 전반에서 `"exports"` 지원이 확대되면 제거될 수 있습니다.
 
 - 패키지에 [부수 효과](#side-effects)가 있는지 선언합니다.
 
@@ -251,7 +251,7 @@ For more information, see [Managing assets in a library](tools/libraries/creatin
 
 라이브러리에서는 Sass 믹스인이나 미리 컴파일한 CSS처럼 JavaScript 기반 진입점의 export에 포함되지 않는 정적 파일도 추가로 노출해야 할 수 있습니다.
 
-자세한 내용은 [라이브러리의 정적 자원 관리하기](tools/libraries/creating-libraries#managing-assets-in-a-library)를 참고하세요.
+자세한 내용은 [라이브러리의 정적 리소스 관리하기](tools/libraries/creating-libraries#managing-assets-in-a-library)를 참고하세요.
 
 <!--
 ### Legacy resolution keys

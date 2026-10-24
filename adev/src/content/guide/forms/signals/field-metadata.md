@@ -12,10 +12,10 @@ This guide covers the metadata system in depth: how reducers combine contributio
 
 필드 메타데이터(field metadata)는 개별 필드에 붙일 수 있는 데이터를 의미합니다.
 Angular가 제공하는 유효성 검사 함수 `required()`나 `min()`는 이 시스템을 내부적으로 활용합니다.
-즉, 유효성 검사 함수를 실행할 때마다 해당 필드의 메타데이터 키에 영향을 미치게 됩니다.
+즉, 유효성 검사 함수를 호출할 때마다 해당 필드의 메타데이터 키에 값을 제공하게 됩니다.
 
 이 문서는 메타데이터 시스템을 깊이 있게 다룹니다.
-리듀서(reducer)가 여러 스키마 규칙을 어떻게 조합하는지, 커스텀 리듀서는 어떻게 구현하는지, `hasMetadata()`는 어떻게 활용하는지, Angular가 관리하는 메타데이터가 생명주기 객체와 연관되어 개별 필드에 어떻게 적용되는지 설명합니다.
+리듀서(reducer)가 여러 스키마 규칙의 메타데이터 제공값을 어떻게 조합하는지, 커스텀 리듀서는 어떻게 구현하는지, `hasMetadata()`는 어떻게 활용하는지, Angular가 관리하는 메타데이터가 라이프사이클 객체와 연관되어 개별 필드에 어떻게 적용되는지 설명합니다.
 
 <!--
 ## You have already been using metadata
@@ -123,8 +123,8 @@ export class Registration {
 | `maxLength()`    | `MAX_LENGTH`              | `number \| undefined` | `maxLength`       |
 | `pattern()`      | `PATTERN`                 | `RegExp[]`            | `pattern`         |
 
-`email()`이나 `validate()`와 같이 비제약 조건 유효성 검사 함수는 메타데이터에 영향을 미치지 않습니다.
-이 함수들은 유효성 검사를 실행하고 유효성 검사 에러를 반환하지만, 템플릿에서 읽을 수 있는 반응형 값을 제공하지는 않습니다.
+`email()`이나 `validate()`와 같이 비제약 조건 유효성 검사 함수는 메타데이터 값을 제공하지 않습니다.
+이 함수들은 유효성 검사를 실행하고 유효성 검사 오류를 반환하지만, 템플릿에서 읽을 수 있는 반응형 값을 제공하지는 않습니다.
 
 <!--
 ## When to use custom metadata
@@ -155,7 +155,7 @@ If you find yourself keeping a parallel `Map<fieldKey, value>` alongside your fo
 - **필드 상태에 따라 힌트를 표시할 때** - `'info' | 'warning' | 'error'`와 같은 심각도 수준을 UI에서 배지나 아이콘으로 표시하거나, 사용자가 입력한 내용과 다른 필드에 입력된 내용에 따라 도움말 메시지를 변경할 때
 
 만약 각 필드별로 정보를 추적하기 위해 폼과 함께 `Map<fieldKey, value>`를 사용하는 것을 고려한다면, 메타데이터를 활용하는 것이 좋습니다.
-메타데이터는 스키마와 함께 저장되고, 반응형으로 동작하며, 필드의 라이프싸이클 전반에 관여합니다.
+메타데이터는 스키마와 함께 저장되고, 반응형으로 동작하며, 필드의 라이프사이클 전반에 관여합니다.
 
 <!--
 ## Creating a metadata key
@@ -364,7 +364,7 @@ const message = registrationForm.username().metadata(USERNAME_HELP)?.();
 // message: string | undefined
 ```
 
-아니면 키가 등록되어 있다는 것이 명확하다면, 선택적 체이닝과 에러 발생을 생략할 수도 있습니다:
+또는 규칙이 키를 등록했다는 것이 보장된다면, 선택적 체이닝을 생략하고 null 아님 단언 연산자(`!`)를 사용할 수 있습니다:
 
 ```ts
 const message = registrationForm.username().metadata(USERNAME_HELP)!();
@@ -374,8 +374,8 @@ const message = registrationForm.username().metadata(USERNAME_HELP)!();
 위 컴포넌트 예제는 `computed()` 안에서 선택적 체이닝을 사용하면서 템플릿에 일반 `string`을 바인딩합니다.
 초기값이 비어있으면 공백이 바인딩됩니다.
 
-영향을 주는 항목이 하나인 경우는 이것으로 충분합니다.
-다음 섹션에서는 둘 이상의 스키마 규칙이 동일한 키에 영향을 미치는 경우 발생하는 상황과 리듀서를 이용하여 영향을 결합하는 방법을 다룹니다.
+메타데이터 제공자, 즉 메타데이터 값을 제공하는 스키마 규칙이 하나인 경우에는 이것이 전체 API입니다.
+다음 섹션에서는 둘 이상의 스키마 규칙이 동일한 키에 값을 제공하는 경우와 리듀서를 이용하여 메타데이터 제공값을 결합하는 방법을 다룹니다.
 
 <!--
 ## Combining contributions with reducers
@@ -383,7 +383,9 @@ const message = registrationForm.username().metadata(USERNAME_HELP)!();
 
 <a id="combining-contributions-with-reducers"></a>
 
-## 영향도 결합하기: 리듀서(reducer)
+<a id="영향도-결합하기-리듀서reducer"></a>
+
+## 리듀서로 메타데이터 제공값 결합하기
 
 <!--
 Override semantics work when only one rule contributes to a key on a given field. As soon as two rules contribute, the first value is silently discarded:
@@ -420,7 +422,7 @@ form(model, (path) => {
 Notice the two type parameters on `createMetadataKey<TWrite, TAcc>`: the first is the type each rule contributes, the second is the type the reducer produces. With `list()`, rules contribute a `string` and the field reads back a `string[]`.
 -->
 
-오버라이드 시맨틱(override semantics)은 해당 필드의 키에 검사 규칙이 하나만 영향을 미칠 때 사용합니다.
+덮어쓰기 방식(override semantics)은 해당 필드의 키에 규칙 하나만 값을 제공할 때 적합합니다.
 그런데 검사 규칙이 둘이 되면 첫번째 값은 아무 설명 없이 무시됩니다:
 
 ```ts
@@ -434,11 +436,11 @@ form(model, (path) => {
 
 두 검사 규칙이 실행되면 `state.metadata(HELP)!()`는 두 번째 메시지를 반환합니다.
 이런 상황은 대부분 원하는 상황이 아닙니다.
-영향은 종종 여러 곳에서 옵니다.
+메타데이터 제공값은 종종 여러 곳에서 옵니다.
 `apply()`를 사용해서 각 도움말 텍스트를 붙이는 두 개의 스키마가 결합되거나, 힌트를 적용하는 유효성 검사 규칙이 여러 개 사용되는 경우가 그렇습니다.
 
-영향을 결합하려면 리듀서를 `createMetadataKey()`에 전달하면 됩니다.
-리듀서는 개별 값을 어떻게 조합해서 결과를 생성하는지 정하는 함수입니다:
+메타데이터 제공값을 결합하려면 리듀서를 `createMetadataKey()`에 전달하면 됩니다.
+리듀서는 개별 메타데이터 제공값을 누적된 결과로 결합하는 방법을 정의합니다:
 
 ```ts
 import {createMetadataKey, MetadataReducer} from '@angular/forms/signals';
@@ -490,8 +492,8 @@ Angular는 6가지 리듀서를 [`MetadataReducer`](api/forms/signals/MetadataRe
 | 리듀서         | 누적 타입             | 어떤 동작을 하는지                                              | 초기값      |
 | -------------- | --------------------- | --------------------------------------------------------------- | ----------- |
 | `list<T>()`    | `T[]`                 | `T \| undefined` 를 받아서 `undefined` 값이 아닌 값을 합칩니다. | `[]`        |
-| `or()`         | `boolean`             | 어떠한 영향의 결과가 `true`면 `true`를 반환합니다.              | `false`     |
-| `and()`        | `boolean`             | 모든 영향의 결과가 `true`면 `true`를 반환합니다.                | `true`      |
+| `or()`         | `boolean`             | 어느 메타데이터 제공값이 `true`면 `true`를 반환합니다.              | `false`     |
+| `and()`        | `boolean`             | 모든 메타데이터 제공값이 `true`면 `true`를 반환합니다.                | `true`      |
 | `min()`        | `number \| undefined` | 가장 작은 값을 유지합니다.                                      | `undefined` |
 | `max()`        | `number \| undefined` | 가장 큰 값을 유지합니다.                                        | `undefined` |
 | `override()`   | `T \| undefined`      | 마지막 값이 남습니다. (기본 동작)                               | `undefined` |
@@ -500,7 +502,7 @@ Angular는 6가지 리듀서를 [`MetadataReducer`](api/forms/signals/MetadataRe
 `list()`는 리듀서 중에서 처리하는 항목의 타입보다 넓은 타입을 받는 리듀서로 유일합니다.
 검사 규칙에서 `undefined`를 반환하면, 리듀서는 이 값을 제거합니다.
 기본 `PATTERN` 키는 논리 함수가 `undefined`를 반환하는 동적 `pattern()` 규칙을 다음과 같이 처리합니다.
-`undefined` 영향은 최종 정규식 목록에 포함되지 않고 건너뜁니다.
+`undefined`인 메타데이터 제공값은 최종 정규식 목록에 포함되지 않고 건너뜁니다.
 
 <!--
 ### How built-in validator keys use reducers
@@ -553,7 +555,7 @@ This pairing of "strictest wins" is why calling `min(path.age, 18)` and `min(pat
 이렇게 "가장 엄격한 조건이 우선"하기 때문에 `min(path.age, 18)`과 `min(path.age, 21)`이 동시에 사용되어도 문제없이 동작합니다.
 검사 규칙이 등록될 때마다 유효성 검사 함수는 경계값을 조정합니다.
 따라서 경계값에 해당되지 않는 유효성 검사는 실패합니다.
-별도로, 개별 호출은 `MIN_NUMBER` 키에 영향을 미치며, `state.min!()`가 반환하는 값은 `21`이기 때문에 화면이나 커스텀 컨트롤에서는 유효 최솟값을 활용할 수 있습니다.
+별도로, 개별 호출은 `MIN_NUMBER` 키에 값을 제공하며, `state.min!()`가 반환하는 값은 `21`이기 때문에 화면이나 커스텀 컨트롤에서는 유효 최솟값을 활용할 수 있습니다.
 
 <!--
 ### Writing a custom reducer
@@ -652,10 +654,10 @@ form(model, (path) => {
 });
 ```
 
-리듀서는 영향을 주는 검사 규칙들이 변경될 때마다 실행되기 때문에, `state.metadata(SEVERITY)!()`는 모든 규칙의 결과와 동기화된 상태를 유지합니다.
+리듀서는 메타데이터 제공값이 참조하는 시그널이 변경될 때마다 실행되기 때문에, `state.metadata(SEVERITY)!()`는 모든 규칙의 결과와 동기화된 상태를 유지합니다.
 
 팁: 리듀서를 순수 함수(pure function)로 작성하세요. `reduce()`는 전달받는 두 인자에만 의존해야 하며, `getInitial()`은 매번 똑같은 값을 반환해야 합니다.
-리듀서는 검사 규칙의 신호가 변경될 때마다 다시 실행되기 때문에, 순수 함수가 아닌 리듀서는 일관성 없는 메타데이터 값을 반환합니다.
+리듀서는 메타데이터 제공값이 참조하는 시그널이 변경될 때마다 다시 실행되기 때문에, 순수 함수가 아닌 리듀서는 일관성 없는 메타데이터 값을 반환합니다.
 
 <!--
 ## Attaching lifecycle-aware objects with managed metadata
@@ -663,13 +665,15 @@ form(model, (path) => {
 
 <a id="attaching-lifecycle-aware-objects-with-managed-metadata"></a>
 
-## 메타데이터에 라이프싸이클 객체
+<a id="메타데이터에-라이프싸이클-객체"></a>
+
+## 관리형 메타데이터에 라이프사이클 관련 객체 연결하기
 
 <!--
 Managed metadata stores a lifecycle-aware object on a field instead of a reactive value. Use it for per-field objects like a `resource()` that fetches external data, an `effect()` that syncs to an outside system, or a service handle scoped to a single field.
 -->
 
-관리형 메타데이터는 반응형 값 대신 필드에 라이프싸이클 관련 객체를 저장합니다.
+관리형 메타데이터는 반응형 값 대신 필드에 라이프사이클 관련 객체를 저장합니다.
 외부 데이터를 가져오는 `resource()`, 외부 시스템과 동기화하는 `effect()`, 단일 필드에 한정된 서비스 핸들과 같은 필드별 객체에 사용할 수 있습니다.
 
 <!--
@@ -736,7 +740,7 @@ export const URL_PREVIEW = createManagedMetadataKey((_state, url: Signal<string 
 관리되지 않는 키와 달리 프레임워크는 해당 값을 `computed()`로 래핑하지 않습니다.
 
 `create`는 필드의 의존성 주입 컨텍스트 안에서 필드가 생성될 때 한 번만 실행됩니다.
-그래서 `create` 함수 안에서 `inject()`나 `resource()`, `effect()`를 실행할 수 있으며, 필드의 수명 주기에 따라 정리 작업을 실행할 수도 있습니다.
+그래서 `create` 함수 안에서 `inject()`나 `resource()`, `effect()`를 실행할 수 있으며, 필드의 라이프사이클에 따라 정리 작업을 실행할 수도 있습니다.
 그리고 필드가 종료되면 Angular가 의존성 주입 컨텍스트도 종료하므로, 그 안에서 생성한 `resource()`와 `effect()`가 정리되고 등록한 `DestroyRef` 정리 콜백이 호출됩니다.
 
 `create` 자체는 반응형이 아니기 때문에 시그널 변경에 반응해야 하는 모든 동작은 `effect()`, `resource()`, `httpResource()` 내부에 있어야 합니다.
@@ -904,15 +908,15 @@ For additional related guides on Signal Forms, check out:
 </docs-pill-row>
 -->
 
-메타데이터는 반응형 데이터가 스키마 구성을 통해 필드와 함께 이동하고, 규칙 전반에 걸쳐 누적되며, 필드의 라이프싸이클에 맞춰 함께 소멸될 수 있도록 존재한다는 점을 기억하세요.
+메타데이터는 반응형 데이터가 스키마 구성을 통해 필드와 함께 이동하고, 규칙 전반에 걸쳐 누적되며, 필드의 라이프사이클에 맞춰 함께 소멸될 수 있도록 존재한다는 점을 기억하세요.
 이는 Angular의 내장 유효성 검사 함수가 사용하는 것과 동일한 시스템을 활용하며, 필요한 사례에 맞게 사용자 정의할 수 있습니다.
 
 자세한 내용은 API 문서를 참고하세요:
 
 - [`createMetadataKey()`](api/forms/signals/createMetadataKey) - 선택적 리듀서를 사용해서 메타데이터 키를 정의합니다.
-- [`createManagedMetadataKey()`](api/forms/signals/createManagedMetadataKey) - 라이프싸이클 관련 메타데이터 키를 정의합니다.
+- [`createManagedMetadataKey()`](api/forms/signals/createManagedMetadataKey) - 라이프사이클 관련 메타데이터 키를 정의합니다.
 - [`metadata()`](api/forms/signals/metadata) - 스키마의 메타데이터 키에 값을 추가합니다.
-- [`MetadataReducer`](api/forms/signals/MetadataReducer) - 영향도를 결합하는 기본 리듀서입니다.
+- [`MetadataReducer`](api/forms/signals/MetadataReducer) - 메타데이터 제공값을 결합하는 기본 리듀서입니다.
 
 시그널 폼을 다루는 이런 문서도 확인해 보세요:
 

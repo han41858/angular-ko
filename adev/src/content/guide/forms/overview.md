@@ -114,12 +114,12 @@ Tests are deeply reliant on manual change detection execution to run properly, a
 
 반응형 폼은 템플릿 기반 폼보다 확장하기 쉽습니다.
 폼 API를 직접 사용하며, 뷰와 데이터 모델의 [데이터 흐름이 동기](#data-flow-in-reactive-forms) 방식이기 때문에 복잡한 폼을 직관적으로 구성할 수 있습니다.
-그리고 반응형 폼은 테스트할 때 설정할 것이 별로 없으며, 폼 값이 변경되거나 유효성 검사가 진행되는 동안 변화 감지를 신경 쓰지 않아도 잘 동작합니다.
+그리고 반응형 폼은 테스트할 때 설정할 것이 별로 없으며, 폼 값이 변경되거나 유효성 검사가 진행되는 동안 변경 감지를 신경 쓰지 않아도 잘 동작합니다.
 
 템플릿 기반 폼은 간단한 경우에 주로 사용하며, 재사용하기 어렵습니다.
 폼 API는 추상적이고 뷰와 데이터 모델의 [데이터 흐름은 비동기](#data-flow-in-template-driven-forms) 방식입니다.
 템플릿 기반 폼의 추상적인 특성은 테스트에도 영향을 줍니다.
-폼을 정상적으로 테스트하려면 변화 감지를 수동으로 실행해야 하고, 반응형 폼보다 설정해야 할 것도 많습니다.
+폼을 정상적으로 테스트하려면 변경 감지를 수동으로 실행해야 하고, 반응형 폼보다 설정해야 할 것도 많습니다.
 
 <!--
 ## Setting up the form model
@@ -193,7 +193,7 @@ IMPORTANT: In reactive forms, the form model is the source of truth; it provides
 
 <docs-code language="angular-ts" path="adev/src/content/examples/forms-overview/src/app/reactive/favorite-color/favorite-color.component.ts"/>
 
-중요: 반응형 폼에서는 폼 모델이 원장입니다. 이 폼 모델은 `<input>` 엘리먼트에 `[formControl]` 디렉티브로 연결해서 값을 반영하거나 유효성 검사 상태를 표현할 수 있습니다.
+중요: 반응형 폼에서는 폼 모델이 원본 데이터를 관리합니다. 이 폼 모델은 `<input>` 엘리먼트에 `[formControl]` 디렉티브로 연결해서 값을 반영하거나 유효성 검사 상태를 표현할 수 있습니다.
 
 <!--
 ### Setup in template-driven forms
@@ -221,7 +221,7 @@ IMPORTANT: In a template-driven form, the source of truth is the template. The `
 
 <docs-code language="angular-ts" path="adev/src/content/examples/forms-overview/src/app/template/favorite-color/favorite-color.component.ts"/>
 
-중요: 템플릿 폼에서는 템플릿이 원장입니다. `FormControl` 인스턴스는 `NgModel` 디렉티브가 자동으로 관리합니다.
+중요: 템플릿 폼에서는 템플릿이 원본 데이터를 관리합니다. `FormControl` 인스턴스는 `NgModel` 디렉티브가 자동으로 관리합니다.
 
 <a id="data-flow-in-forms"></a>
 
@@ -463,10 +463,10 @@ flowchart TB
 `favoriteColor` 프로퍼티 값이 _Blue_ 에서 _Red_ 로 변경될 때 모델에서 화면으로 값이 전달되는 과정은 이렇습니다.
 
 1. 컴포넌트에서 `favoriteColor` 값이 변경됩니다.
-1. 변화 감지 싸이클이 시작됩니다.
-1. 입력값이 변경되었기 때문에 `ngModel` 디렉티브의 `ngOnChanges` 라이프싸이클 후킹 함수가 실행됩니다.
+1. 변경 감지 싸이클이 시작됩니다.
+1. 입력값이 변경되었기 때문에 `ngModel` 디렉티브의 `ngOnChanges` 라이프사이클 훅이 실행됩니다.
 1. `ngOnChanges()` 메서드가 내부 `FormControl` 인스턴스의 값을 설정하는 비동기 작업을 큐에 추가합니다.
-1. 변화 감지 싸이클이 종료됩니다.
+1. 변경 감지 싸이클이 종료됩니다.
 1. 다음 틱(tick)에 `FormControl` 인스턴스의 값을 변경합니다.
 1. `FormControl` 인스턴스가 `valueChanges` 옵저버블 이벤트를 보냅니다.
 1. `valueChanges` 옵저버블 구독자가 새 값을 받습니다.
@@ -501,7 +501,7 @@ flowchart TB
     end
 ```
 
-참고: `NgModel`은 `ExpressionChangedAfterItHasBeenChecked` 에러를 방지하기 위해 변화 감지 싸이클을 분리합니다.
+참고: `NgModel`은 `ExpressionChangedAfterItHasBeenChecked` 오류를 방지하기 위해 변경 감지 싸이클을 분리합니다.
 
 <a id="mutability-of-the-data-model"></a>
 
@@ -525,12 +525,12 @@ The difference is demonstrated in the previous examples that use the favorite-co
 - With template-driven forms, the **favorite color property** is always modified to its new value
 -->
 
-변화 감지 싸이클은 효율적으로 동작합니다.
+변경 감지 싸이클은 효율적으로 동작합니다.
 
 | 방식           | 설명                                                                                                                                                                                                                                                                                                                                                   |
 | :------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 반응형 폼      | 데이터 모델을 이뮤터블로 유지합니다. 데이터 모델이 변경될 때마다 `FormControl` 인스턴스가 기존 데이터 모델을 수정하는 대신 새로운 데이터 모델을 반환합니다. 그래서 컨트롤의 옵저버블을 통해 어떤 값이 변경되었는지 명확하게 확인할 수 있기 때문에, 변화 감지도 더 효율적으로 동작합니다. 변경되는 값을 옵저버블로 받으면 데이터를 가공하기도 좋습니다. |
-| 템플릿 기반 폼 | 템플릿에서 값이 변경되면 양방향 바인딩된 객체의 값을 변경합니다. 왜냐하면, 양방향 데이터 바인딩한 경우에는 데이터 모델이 그대로 유지되기 때문이며, 그래서 값이 실제로 변경되어 화면에 반영해야 하는지 판단해야 하기 때문에 변화 감지 효율이 약간 떨어집니다.                                                                                           |
+| 반응형 폼      | 데이터 모델을 이뮤터블로 유지합니다. 데이터 모델이 변경될 때마다 `FormControl` 인스턴스가 기존 데이터 모델을 수정하는 대신 새로운 데이터 모델을 반환합니다. 그래서 컨트롤의 옵저버블을 통해 어떤 값이 변경되었는지 명확하게 확인할 수 있기 때문에, 변경 감지도 더 효율적으로 동작합니다. 변경되는 값을 옵저버블로 받으면 데이터를 가공하기도 좋습니다. |
+| 템플릿 기반 폼 | 템플릿에서 값이 변경되면 양방향 바인딩된 객체의 값을 변경합니다. 왜냐하면, 양방향 데이터 바인딩한 경우에는 데이터 모델이 그대로 유지되기 때문이며, 그래서 값이 실제로 변경되어 화면에 반영해야 하는지 판단해야 하기 때문에 변경 감지 효율이 약간 떨어집니다.                                                                                           |
 
 위에서 살펴본 예제로 다른 점을 설명해보면 이렇습니다.
 
@@ -605,7 +605,7 @@ The following tests use the favorite-color components from previous examples to 
 <!--todo: make consistent with other topics -->
 
 반응형 폼은 폼과 데이터 모델이 동기 방식으로 동작하기 때문에 테스트 코드를 작성하기 간편하며, UI를 렌더링하지 않아도 테스트를 실행할 수 있습니다.
-폼 컨트롤의 상태를 확인하거나 값을 변경하는 것은 모두 변화 감지 싸이클을 고려하지 않아도 됩니다.
+폼 컨트롤의 상태를 확인하거나 값을 변경하는 것은 모두 변경 감지 싸이클을 고려하지 않아도 됩니다.
 
 위에서 살펴본 예제로 화면에서 모델로, 모델에서 화면으로 값이 잘 전달되는지 테스트해 봅시다.
 
@@ -688,7 +688,7 @@ Here are the steps performed in the model to view test.
 1. Assert that the input value matches the value of the `favoriteColor` property in the component instance.
 -->
 
-템플릿 기반의 폼을 테스트하려면 변화 감지가 어떻게 실행되는지 확실하게 알아야 하며, 엘리먼트를 참조하고, 테스트하고, 변화를 감지하기 위해 개별 변화 감지 싸이클을 어떻게 활용해야 하는지 이해해야 합니다.
+템플릿 기반의 폼을 테스트하려면 변경 감지가 어떻게 실행되는지 확실하게 알아야 하며, 엘리먼트를 참조하고, 테스트하고, 변화를 감지하기 위해 개별 변경 감지 싸이클을 어떻게 활용해야 하는지 이해해야 합니다.
 
 아래 예제 코드는 이전에 살펴본 선호 색상 컴포넌트에서 데이터가 화면에서 모델로, 모델에서 화면으로 제대로 전달되는지 테스트하는 코드입니다.
 
@@ -700,7 +700,7 @@ Here are the steps performed in the model to view test.
 
 1. 폼 입력 엘리먼트를 쿼리하고 커스텀 "input" 이벤트를 만듭니다.
 1. 이벤트에 새 값으로 _Red_ 를 설정하고 폼 입력 엘리먼트로 "input" 이벤트를 보냅니다.
-1. 테스트 픽스쳐로 변화 감지 싸이클을 실행합니다.
+1. 테스트 픽스쳐로 변경 감지 싸이클을 실행합니다.
 1. 컴포넌트의 `favoriteColor` 프로퍼티 값이 입력 엘리먼트와 같은지 검사합니다.
 
 이제 모델에서 화면으로 전달되는 데이터를 검사해 봅시다.
@@ -710,7 +710,7 @@ Here are the steps performed in the model to view test.
 이런 순서로 테스트합니다.
 
 1. 컴포넌트 인스턴스로 `favoriteColor` 프로퍼티 값을 설정합니다.
-1. 테스트 픽스쳐로 변화 감지 싸이클을 실행합니다.
+1. 테스트 픽스쳐로 변경 감지 싸이클을 실행합니다.
 1. 다음 렌더링까지 기다리기 위해 `await fixture.whenStable()` 를 실행합니다.
 1. 폼 입력 엘리먼트를 참조합니다.
 1. 엘리먼트의 값이 컴포넌트 인스턴스의 `favoriteColor` 프로퍼티 값과 같은지 검사합니다.

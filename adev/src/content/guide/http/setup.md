@@ -134,7 +134,7 @@ XHR support on the server is **deprecated** and is intended to be removed in Ang
 
 <docs-callout critical title="서버 사이드 렌더링(SSR) 환경에서는 withXhr를 사용하지 마세요">
 
-서버에서의 XHR 지원은 **지원 중단 예정**이며 Angular 23에서 제거할 예정입니다. 기반 라이브러리인 `xhr2`는 리다이렉트를 안전하게 처리하지 못합니다. 교차 출처 리다이렉트에 `Authorization` 헤더를 전달할 수 있으며, 리다이렉트 루프로 서비스 거부(DoS) 공격을 받을 수 있습니다. SSR 애플리케이션에서는 기본 `fetch` 백엔드를 사용하세요.
+서버에서의 XHR 사용은 **사용 중단 권고** 상태이며 Angular 23에서 제거할 예정입니다. 기반 라이브러리인 `xhr2`는 리다이렉트를 안전하게 처리하지 못합니다. 교차 출처 리다이렉트에 `Authorization` 헤더를 전달할 수 있으며, 리다이렉트 루프로 서비스 거부(DoS) 공격을 받을 수 있습니다. SSR 애플리케이션에서는 기본 `fetch` 백엔드를 사용하세요.
 
 </docs-callout>
 
@@ -191,7 +191,7 @@ CRITICAL: You must configure an instance of `HttpClient` above the current injec
 상위 인젝터의 인터셉터를 거쳐 요청을 보내면서 하위 인젝터에 인터셉터를 _추가_ 하고 싶은 경우에 유용합니다.
 
 중요: 현재 인젝터보다 상위에 `HttpClient` 인스턴스를 반드시 설정해야 합니다.
-그렇지 않으면 이 옵션은 유효하지 않으며, 사용하려고 할 때 런타임 에러가 발생합니다.
+그렇지 않으면 이 옵션은 유효하지 않으며, 사용하려고 할 때 런타임 오류가 발생합니다.
 
 <!--
 ### `withJsonpSupport()`
@@ -208,9 +208,9 @@ CRITICAL: You must configure an instance of `HttpClient` above the current injec
 </docs-callout>
 -->
 
-<docs-callout critical title="JSONP는 지원 중단 예정입니다">
+<docs-callout critical title="JSONP는 사용 중단이 권고됩니다">
 
-JSONP는 크로스 사이트 스크립팅(XSS) 취약점을 유발할 수 있으므로 `withJsonpSupport`, `HttpClientJsonpModule`, `HttpClient`의 `.jsonp()` 메서드는 지원 중단 예정입니다. 대신 [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS)를 사용하는 표준 HTTP 요청을 사용하세요.
+JSONP는 크로스 사이트 스크립팅(XSS) 취약점을 유발할 수 있으므로 `withJsonpSupport`, `HttpClientJsonpModule`, `HttpClient`의 `.jsonp()` 메서드는 사용 중단이 권고됩니다. 대신 [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS)를 사용하는 표준 HTTP 요청을 사용하세요.
 
 </docs-callout>
 
@@ -289,11 +289,11 @@ Prefer `provideHttpClient` for multi-injector configurations, as it has more sta
 | **NgModule**                             | 대응하는 `provideHttpClient()` 설정                      |
 | ---------------------------------------- | -------------------------------------------------------- |
 | `HttpClientModule`                       | `provideHttpClient(withInterceptorsFromDi(), withXhr())` |
-| `HttpClientJsonpModule` (지원 중단 예정) | `withJsonpSupport()` (지원 중단 예정)                    |
+| `HttpClientJsonpModule` (사용 중단 권고) | `withJsonpSupport()` (사용 중단 권고)                    |
 | `HttpClientXsrfModule.withOptions(...)`  | `withXsrfConfiguration(...)`                             |
 | `HttpClientXsrfModule.disable()`         | `withNoXsrfProtection()`                                 |
 
-참고: `HttpClientModule`과 `HttpClientXsrfModule`도 지원 중단 예정입니다. 대신 `provideHttpClient`에 대응하는 기능을 함께 설정하세요.
+참고: `HttpClientModule`과 `HttpClientXsrfModule`도 사용 중단이 권고됩니다. 대신 `provideHttpClient`에 대응하는 기능을 함께 설정하세요.
 
 <docs-callout important title="여러 인젝터에서 HttpClientModule을 사용할 때 주의하세요">
 여러 인젝터에 `HttpClientModule`이 있으면 인터셉터의 동작이 명확하게 정해지지 않으며, 구체적인 옵션과 프로바이더 및 모듈 로드 순서에 따라 달라집니다.

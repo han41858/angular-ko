@@ -667,11 +667,11 @@ Under some circumstances, Angular animations may require a second cycle of chang
 You can use `NgZone.runOutsideAngular()` to schedule tasks outside of NgZone. Call the `waitForTasksOutsideAngular()` method on the corresponding harness if you need to explicitly wait for tasks outside `NgZone` since this does not happen automatically.
 -->
 
-`TestElement`의 메서드는 Angular 변화 감지를 자동으로 실행하고 `NgZone` 안의 작업을 기다립니다.
+`TestElement`의 메서드는 Angular 변경 감지를 자동으로 실행하고 `NgZone` 안의 작업을 기다립니다.
 대부분의 경우 하네스 작성자가 비동기 작업을 기다리기 위해 별도로 처리할 것은 없습니다.
 하지만 이것만으로 부족한 예외적인 경우도 있습니다.
 
-상황에 따라 Angular 애니메이션 이벤트를 모두 처리하려면 변화 감지를 한 번 더 실행하고 이후 `NgZone` 안정화까지 기다려야 할 수 있습니다.
+상황에 따라 Angular 애니메이션 이벤트를 모두 처리하려면 변경 감지를 한 번 더 실행하고 이후 `NgZone` 안정화까지 기다려야 할 수 있습니다.
 이런 경우에는 `ComponentHarness`의 `forceStabilize()` 메서드로 두 번째 과정을 실행할 수 있습니다.
 
 `NgZone.runOutsideAngular()`로 NgZone 바깥에 작업을 예약할 수도 있습니다.

@@ -237,7 +237,7 @@ const fixture = TestBed.createComponent(Banner);
 `createComponent` 메서드를 실행하면 현재 `TestBed` 정의가 고정되어 더 이상 설정할 수 없습니다.
 
 `configureTestingModule()`, `override...` 등 `TestBed` 설정 메서드를 추가로 실행할 수 없습니다.
-실행하면 `TestBed`가 에러를 발생시킵니다.
+실행하면 `TestBed`가 오류를 발생시킵니다.
 
 <!--
 ### `ComponentFixture`

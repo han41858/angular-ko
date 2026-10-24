@@ -41,7 +41,7 @@ Angular는 사용자 입력을 처리하는 폼을 두 가지 방식으로 지�
 
 Angular 템플릿으로 로그인 폼, 연락처 입력 폼, 업무용 폼 등 거의 모든 종류의 폼을 만들 수 있습니다.
 컨트롤을 원하는 대로 배치하고 객체 모델의 데이터와 바인딩하면 됩니다.
-유효성 검사 규칙을 지정하고 에러를 표시할 수 있으며, 특정 컨트롤의 입력을 조건에 따라 허용하거나 기본으로 제공되는 시각적 피드백을 표시하는 등 다양한 기능을 사용할 수 있습니다.
+유효성 검사 규칙을 지정하고 오류를 표시할 수 있으며, 특정 컨트롤의 입력을 조건에 따라 허용하거나 기본으로 제공되는 시각적 피드백을 표시하는 등 다양한 기능을 사용할 수 있습니다.
 
 <!--
 ## Objectives
@@ -66,7 +66,7 @@ This tutorial teaches you how to do the following:
 - 컴포넌트와 템플릿으로 Angular 폼 만들기
 - `ngModel`을 사용해서 입력 컨트롤의 값을 읽고 쓰는 양방향 데이터 바인딩 구성하기
 - 컨트롤 상태를 추적하는 CSS 클래스로 시각적 피드백 제공하기
-- 사용자에게 유효성 검사 에러를 표시하고, 폼 상태에 따라 컨트롤 입력을 허용하기
+- 사용자에게 유효성 검사 오류를 표시하고, 폼 상태에 따라 컨트롤 입력을 허용하기
 - [템플릿 참조 변수](guide/templates/variables#template-reference-variables)로 HTML 엘리먼트 사이에서 정보 공유하기
 
 <!--
@@ -91,7 +91,7 @@ Template-driven forms rely on directives defined in the `FormsModule`.
 
 | 디렉티브       | 설명                                                                                                                                                                                                                                    |
 | :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NgModel`      | 폼 엘리먼트에서 변경된 값과 데이터 모델에서 변경된 값을 동기화합니다. 이를 활용해서 사용자 입력의 유효성을 검사하고 에러를 처리할 수 있습니다.                                                                                          |
+| `NgModel`      | 폼 엘리먼트에서 변경된 값과 데이터 모델에서 변경된 값을 동기화합니다. 이를 활용해서 사용자 입력의 유효성을 검사하고 오류를 처리할 수 있습니다.                                                                                          |
 | `NgForm`       | 최상위 `FormGroup` 인스턴스를 생성하고 `<form>` 엘리먼트에 바인딩해서 폼 전체의 값과 유효성 상태를 추적합니다. `FormsModule`을 로드하면 모든 `<form>` 태그에 이 디렉티브가 기본으로 적용되므로, 별도의 셀렉터를 추가할 필요가 없습니다. |
 | `NgModelGroup` | `FormGroup` 인스턴스를 생성하고 DOM 엘리먼트에 바인딩합니다.                                                                                                                                                                            |
 
@@ -131,7 +131,7 @@ In the course of this tutorial, you bind a sample form to data and handle user i
    - `ngModel`이 컨트롤에 접근할 수 있도록 이름을 지정합니다.
 1. `ngModel`로 입력값의 유효성과 컨트롤 상태를 추적합니다.
    - 커스텀 CSS를 추가해서 상태에 따른 시각적 피드백을 제공합니다.
-   - 유효성 검사 에러 메시지를 표시하거나 숨깁니다.
+   - 유효성 검사 오류 메시지를 표시하거나 숨깁니다.
 1. 표준 HTML 버튼의 클릭 이벤트에 반응해서 모델 데이터를 추가합니다.
 1. 폼의 [`ngSubmit`](api/forms/NgForm#ngSubmit) 출력 프로퍼티로 폼 제출을 처리합니다.
    - 폼이 유효해질 때까지 **Submit** 버튼을 비활성화합니다.
@@ -560,7 +560,9 @@ To change the appearance in this way, take the following steps.
 
 <a id="show-and-hide-validation-error-messages"></a>
 
-### 유효성 검사 에러 메시지 표시하고 숨기기
+<a id="유효성-검사-에러-메시지-표시하고-숨기기"></a>
+
+### 유효성 검사 오류 메시지 표시하고 숨기기
 
 <!--
 The **Name** input box is required and clearing it turns the bar red.
@@ -613,9 +615,9 @@ You'll see the significance of this choice when you add a new actor to the form 
 문제가 있다는 것은 알 수 있지만, 사용자는 무엇이 잘못되었고 어떻게 해결해야 하는지 알 수 없습니다.
 컨트롤 상태를 확인하고 상태에 맞는 안내 메시지를 제공해 봅시다.
 
-**Skill** 선택 필드도 필수이지만, 선택할 수 있는 항목이 유효한 값으로 제한되어 있기 때문에 이런 에러 처리가 필요하지 않습니다.
+**Skill** 선택 필드도 필수이지만, 선택할 수 있는 항목이 유효한 값으로 제한되어 있기 때문에 이런 오류 처리가 필요하지 않습니다.
 
-적절한 시점에 에러 메시지가 표시되도록 다음 순서로 구성합니다.
+적절한 시점에 오류 메시지가 표시되도록 다음 순서로 구성합니다.
 
 <docs-workflow>
 <a id="add-a-local-reference-to-the-input"></a>
@@ -630,22 +632,28 @@ You'll see the significance of this choice when you add a new actor to the form 
 
 <a id="add-the-error-message"></a>
 
-<docs-step title="에러 메시지 추가하기">
-적절한 에러 메시지가 담긴 `<div>`를 추가합니다.
+<a id="에러-메시지-추가하기"></a>
+
+<docs-step title="오류 메시지 추가하기">
+적절한 오류 메시지가 담긴 `<div>`를 추가합니다.
 </docs-step>
 
 <a id="make-the-error-message-conditional"></a>
 
-<docs-step title="조건에 따라 에러 메시지 표시하기">
-`name` 컨트롤의 프로퍼티를 메시지가 담긴 `<div>` 엘리먼트의 `hidden` 프로퍼티에 바인딩해서 에러 메시지를 표시하거나 숨깁니다.
+<a id="조건에-따라-에러-메시지-표시하기"></a>
+
+<docs-step title="조건에 따라 오류 메시지 표시하기">
+`name` 컨트롤의 프로퍼티를 메시지가 담긴 `<div>` 엘리먼트의 `hidden` 프로퍼티에 바인딩해서 오류 메시지를 표시하거나 숨깁니다.
 </docs-step>
 
-<docs-code header="actor-form.component.html (에러 메시지 숨기기)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="hidden-error-msg"/>
+<docs-code header="actor-form.component.html (오류 메시지 숨기기)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="hidden-error-msg"/>
 
 <a id="add-a-conditional-error-message-to-name"></a>
 
-<docs-step title="name에 조건부 에러 메시지 추가하기">
-아래 예제와 같이 `name` 입력 필드에 조건부 에러 메시지를 추가합니다.
+<a id="name에-조건부-에러-메시지-추가하기"></a>
+
+<docs-step title="name에 조건부 오류 메시지 추가하기">
+아래 예제와 같이 `name` 입력 필드에 조건부 오류 메시지를 추가합니다.
 
 <docs-code header="actor-form.component.html (일부)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="name-with-error-msg"/>
 </docs-step>
@@ -656,7 +664,7 @@ You'll see the significance of this choice when you add a new actor to the form 
 이 예제에서는 컨트롤이 유효하거나 _pristine_ 상태일 때 메시지를 숨깁니다.
 pristine은 폼에 값이 표시된 후 사용자가 아직 값을 변경하지 않았다는 의미입니다.
 `pristine` 상태를 고려하지 않으면 값이 유효할 때만 메시지를 숨기게 됩니다.
-이 경우 새로 생성한 빈 배우 데이터나 유효하지 않은 배우 데이터로 컴포넌트를 열면, 사용자가 아무 동작을 하기 전부터 에러 메시지가 표시됩니다.
+이 경우 새로 생성한 빈 배우 데이터나 유효하지 않은 배우 데이터로 컴포넌트를 열면, 사용자가 아무 동작을 하기 전부터 오류 메시지가 표시됩니다.
 
 사용자가 값을 잘못 변경했을 때만 메시지를 표시하고 싶을 수 있습니다.
 컨트롤이 `pristine` 상태일 때 메시지를 숨기면 이렇게 동작합니다.
@@ -719,12 +727,12 @@ To let form users add a new actor, you will add a **New Actor** button that resp
 
    폼이 비워지고, 입력 필드 왼쪽의 _필수 입력_ 막대가 빨간색으로 바뀝니다.
    `name`과 `skill` 프로퍼티가 유효하지 않다는 뜻입니다.
-   에러 메시지는 숨겨져 있는 것을 확인해 보세요.
+   오류 메시지는 숨겨져 있는 것을 확인해 보세요.
    아직 아무 값도 변경하지 않았으므로 폼이 pristine 상태이기 때문입니다.
 
 1. 이름을 입력하고 **New Actor** 버튼을 다시 클릭합니다.
 
-   이제 입력 필드가 pristine 상태가 아니므로 `Name is required` 에러 메시지가 표시됩니다.
+   이제 입력 필드가 pristine 상태가 아니므로 `Name is required` 오류 메시지가 표시됩니다.
    폼은 **New Actor** 버튼을 클릭하기 전에 이름을 입력했다는 것을 기억합니다.
 
 1. 폼 컨트롤을 pristine 상태로 되돌리려면 `newActor()` 메서드를 실행한 뒤 폼의 `reset()` 메서드를 실행해서 모든 상태 플래그를 명시적으로 초기화합니다.
@@ -810,7 +818,7 @@ The `FormsModule` did this automatically when you defined a template reference v
 <a id="delete-the-name-value"></a>
 
 <docs-step title="Name 값 지우기">
-"required" 규칙을 위반했기 때문에 에러 메시지가 표시됩니다.
+"required" 규칙을 위반했기 때문에 오류 메시지가 표시됩니다.
 **Submit** 버튼도 비활성화된 것을 확인해 보세요.
 
 버튼의 활성화 상태와 폼의 유효성을 연결하는 별도 코드를 작성할 필요는 없습니다.
@@ -938,7 +946,7 @@ Here's the code for the final version of the application:
 - `#actorForm`, `#name`과 같은 템플릿 참조 변수
 - 양방향 데이터 바인딩을 위한 `[(ngModel)]` 문법
 - 유효성 검사와 폼 엘리먼트의 변경사항 추적에 사용하는 `name` 어트리뷰트
-- 컨트롤이 유효한지, 에러 메시지를 표시해야 하는지 확인하는 입력 컨트롤 참조 변수의 `valid` 프로퍼티
+- 컨트롤이 유효한지, 오류 메시지를 표시해야 하는지 확인하는 입력 컨트롤 참조 변수의 `valid` 프로퍼티
 - `NgForm`의 유효성 상태에 바인딩해서 **Submit** 버튼의 활성화 상태 제어하기
 - 유효하지 않은 컨트롤을 사용자에게 시각적으로 알리는 커스텀 CSS 클래스
 

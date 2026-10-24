@@ -18,7 +18,9 @@ The `@angular/core/rxjs-interop` package offers APIs that help you integrate RxJ
 
 <a id="create-a-signal-from-an-rxjs-observable-with-tosignal"></a>
 
-## `toSignal`로 RxJS Observable에서 시그널 생성하기
+<a id="tosignal로-rxjs-observable에서-시그널-생성하기"></a>
+
+## `toSignal`로 RxJS 옵저버블에서 시그널 생성하기
 
 <!--
 Use the `toSignal` function to create a signal which tracks the value of an Observable. It behaves similarly to the `async` pipe in templates, but is more flexible and can be used anywhere in an application.
@@ -45,7 +47,7 @@ Like the `async` pipe, `toSignal` subscribes to the Observable immediately, whic
 IMPORTANT: `toSignal` creates a subscription. You should avoid calling it repeatedly for the same Observable, and instead reuse the signal it returns.
 -->
 
-`toSignal` 함수를 사용하면 Observable의 값을 추적하는 시그널을 생성할 수 있습니다.
+`toSignal` 함수를 사용하면 옵저버블의 값을 추적하는 시그널을 생성할 수 있습니다.
 템플릿의 `async` 파이프와 비슷하게 동작하지만, 더 유연하고 애플리케이션 어디에서나 사용할 수 있습니다.
 
 ```angular-ts
@@ -65,11 +67,11 @@ export class Ticker {
 }
 ```
 
-`async` 파이프와 마찬가지로 `toSignal`은 Observable을 즉시 구독하므로 사이드 이펙트가 발생할 수 있습니다.
-`toSignal`이 생성한 구독은 `toSignal`을 호출한 컴포넌트나 서비스가 종료될 때 해당 Observable에서 자동으로 해제됩니다.
+`async` 파이프와 마찬가지로 `toSignal`은 옵저버블을 즉시 구독하므로 사이드 이펙트가 발생할 수 있습니다.
+`toSignal`이 생성한 구독은 `toSignal`을 호출한 컴포넌트나 서비스가 종료될 때 해당 옵저버블에서 자동으로 해제됩니다.
 
 중요: `toSignal`은 구독을 생성합니다.
-같은 Observable에 대해 반복해서 호출하지 말고, 반환된 시그널을 재사용하세요.
+같은 옵저버블에 대해 반복해서 호출하지 말고, 반환된 시그널을 재사용하세요.
 
 <!--
 ### Injection context
@@ -98,7 +100,7 @@ export class Ticker {
 Observables may not produce a value synchronously on subscription, but signals always require a current value. There are several ways to deal with this "initial" value of `toSignal` signals.
 -->
 
-Observable은 구독할 때 동기적으로 값을 생성하지 않을 수 있지만, 시그널은 항상 현재 값이 필요합니다.
+옵저버블은 구독할 때 동기적으로 값을 생성하지 않을 수 있지만, 시그널은 항상 현재 값이 필요합니다.
 `toSignal` 시그널의 "초기값"은 몇 가지 방법으로 처리할 수 있습니다.
 
 <!--
@@ -113,7 +115,7 @@ Observable은 구독할 때 동기적으로 값을 생성하지 않을 수 있�
 As in the example above, you can specify an `initialValue` option with the value the signal should return before the Observable emits for the first time.
 -->
 
-위 예제처럼 `initialValue` 옵션에 Observable이 첫 번째 값을 방출하기 전까지 시그널이 반환할 값을 지정할 수 있습니다.
+위 예제처럼 `initialValue` 옵션에 옵저버블이 첫 번째 값을 방출하기 전까지 시그널이 반환할 값을 지정할 수 있습니다.
 
 <!--
 #### `undefined` initial values
@@ -127,7 +129,7 @@ As in the example above, you can specify an `initialValue` option with the value
 If you don't provide an `initialValue`, the resulting signal will return `undefined` until the Observable emits. This is similar to the `async` pipe's behavior of returning `null`.
 -->
 
-`initialValue`를 지정하지 않으면 생성된 시그널은 Observable이 값을 방출할 때까지 `undefined`를 반환합니다.
+`initialValue`를 지정하지 않으면 생성된 시그널은 옵저버블이 값을 방출할 때까지 `undefined`를 반환합니다.
 이는 `null`을 반환하는 `async` 파이프의 동작과 비슷합니다.
 
 <!--
@@ -144,10 +146,10 @@ Some Observables are guaranteed to emit synchronously, such as `BehaviorSubject`
 When `requireSync` is `true`, `toSignal` enforces that the Observable emits synchronously on subscription. This guarantees that the signal always has a value, and no `undefined` type or initial value is required.
 -->
 
-`BehaviorSubject`처럼 동기적으로 값을 방출하는 것이 보장되는 Observable도 있습니다.
+`BehaviorSubject`처럼 동기적으로 값을 방출하는 것이 보장되는 옵저버블도 있습니다.
 이 경우에는 `requireSync: true` 옵션을 지정할 수 있습니다.
 
-`requireSync`가 `true`이면 `toSignal`은 Observable이 구독 시점에 동기적으로 값을 방출하도록 강제합니다.
+`requireSync`가 `true`이면 `toSignal`은 옵저버블이 구독 시점에 동기적으로 값을 방출하도록 강제합니다.
 따라서 시그널에 항상 값이 있다는 것이 보장되며, `undefined` 타입이나 초기값이 필요하지 않습니다.
 
 <!--
@@ -163,10 +165,10 @@ By default, `toSignal` automatically unsubscribes from the Observable when the c
 To override this behavior, you can pass the `manualCleanup` option. You can use this setting for Observables that complete themselves naturally.
 -->
 
-기본적으로 `toSignal`은 자신을 생성한 컴포넌트나 서비스가 종료될 때 Observable 구독을 자동으로 해제합니다.
+기본적으로 `toSignal`은 자신을 생성한 컴포넌트나 서비스가 종료될 때 옵저버블 구독을 자동으로 해제합니다.
 
 이 동작을 변경하려면 `manualCleanup` 옵션을 전달하면 됩니다.
-스스로 완료되는 Observable에 이 설정을 사용할 수 있습니다.
+스스로 완료되는 옵저버블에 이 설정을 사용할 수 있습니다.
 
 <!--
 #### Custom equality comparison
@@ -201,11 +203,11 @@ export class EqualExample {
 ```
 -->
 
-일부 Observable은 참조나 세부 내용이 달라도 **동등한** 값을 방출할 수 있습니다.
+일부 옵저버블은 참조나 세부 내용이 달라도 **동등한** 값을 방출할 수 있습니다.
 `equal` 옵션을 사용하면 연속된 두 값을 동일한 것으로 간주할 기준을 **커스텀 동등성 비교 함수**로 정의할 수 있습니다.
 
 방출된 두 값이 동등한 것으로 판단되면 생성된 시그널은 **갱신되지 않습니다**.
-따라서 중복 계산, DOM 갱신, 이펙트의 불필요한 재실행을 방지할 수 있습니다.
+따라서 중복 계산, DOM 갱신, 이펙트 함수의 불필요한 재실행을 방지할 수 있습니다.
 
 ```ts
 import {Component} from '@angular/core';
@@ -232,7 +234,9 @@ export class EqualExample {
 
 <a id="error-and-completion"></a>
 
-### 에러와 완료
+<a id="에러와-완료"></a>
+
+### 오류와 완료
 
 <!--
 If an Observable used in `toSignal` produces an error, that error is thrown when the signal is read.
@@ -240,9 +244,9 @@ If an Observable used in `toSignal` produces an error, that error is thrown when
 If an Observable used in `toSignal` completes, the signal continues to return the most recently emitted value before completion.
 -->
 
-`toSignal`에 사용한 Observable에서 에러가 발생하면 시그널을 읽을 때 해당 에러가 발생합니다.
+`toSignal`에 사용한 옵저버블에서 오류가 발생하면 시그널을 읽을 때 해당 오류가 발생합니다.
 
-`toSignal`에 사용한 Observable이 완료되면 시그널은 완료 직전에 마지막으로 방출한 값을 계속 반환합니다.
+`toSignal`에 사용한 옵저버블이 완료되면 시그널은 완료 직전에 마지막으로 방출한 값을 계속 반환합니다.
 
 <!--
 ## Create an RxJS Observable from a signal with `toObservable`
@@ -250,7 +254,9 @@ If an Observable used in `toSignal` completes, the signal continues to return th
 
 <a id="create-an-rxjs-observable-from-a-signal-with-toobservable"></a>
 
-## `toObservable`로 시그널에서 RxJS Observable 생성하기
+<a id="toobservable로-시그널에서-rxjs-observable-생성하기"></a>
+
+## `toObservable`로 시그널에서 RxJS 옵저버블 생성하기
 
 <!--
 Use the `toObservable` utility to create an `Observable` which tracks the value of a signal. The signal's value is monitored with an `effect` which emits the value to the Observable when it changes.
@@ -272,7 +278,7 @@ As the `query` signal changes, the `query$` Observable emits the latest query an
 -->
 
 `toObservable` 유틸리티를 사용하면 시그널의 값을 추적하는 `Observable`을 생성할 수 있습니다.
-시그널의 값은 `effect`로 감시하며, 값이 변경되면 Observable로 방출합니다.
+시그널의 값은 `effect`로 감시하며, 값이 변경되면 옵저버블로 방출합니다.
 
 ```ts
 import {Component, signal} from '@angular/core';
@@ -287,7 +293,7 @@ export class SearchResults {
 }
 ```
 
-`query` 시그널이 변경되면 `query$` Observable은 최신 쿼리를 방출하고 새로운 HTTP 요청을 실행합니다.
+`query` 시그널이 변경되면 `query$` 옵저버블은 최신 쿼리를 방출하고 새로운 HTTP 요청을 실행합니다.
 
 <!--
 ### Injection context {#injection-context-to-observable}
@@ -296,7 +302,9 @@ export class SearchResults {
 <a id="injection-context-1"></a>
 <a id="injection-context-to-observable"></a>
 
-### 의존성 주입 컨텍스트 {#의존성-주입-컨텍스트-2}
+<a id="의존성-주입-컨텍스트-의존성-주입-컨텍스트-2"></a>
+
+### 의존성 주입 컨텍스트 {#ko-injection-context-to-observable}
 
 <!--
 `toObservable` by default needs to run in an [injection context](guide/di/dependency-injection-context), such as during construction of a component or service. If an injection context is not available, you can manually specify the `Injector` to use instead.
@@ -330,10 +338,10 @@ mySignal.set(3);
 Here, only the last value (3) will be logged.
 -->
 
-`toObservable`은 이펙트를 사용해서 시그널의 값을 `ReplaySubject`에 반영합니다.
+`toObservable`은 이펙트 함수를 사용해서 시그널의 값을 `ReplaySubject`에 반영합니다.
 구독할 때 첫 번째 값이 있다면 동기적으로 방출될 수 있지만, 그 이후의 값은 모두 비동기적으로 방출됩니다.
 
-Observable과 달리 시그널은 값의 변경을 동기적으로 알리지 않습니다.
+옵저버블과 달리 시그널은 값의 변경을 동기적으로 알리지 않습니다.
 시그널의 값을 여러 번 갱신하더라도 `toObservable`은 시그널이 안정화된 후에만 값을 방출합니다.
 
 ```ts
@@ -415,7 +423,7 @@ export class UserProfile {
 팩토리 함수에 전달되는 인자에 대한 자세한 내용은 [리소스 로더](/guide/signals/resource#resource-loaders)를 참고하세요.
 
 그 밖의 동작과 API는 `resource`와 같습니다.
-`rxResource`는 인자 지정, 값 읽기, 로딩 상태 확인, 에러 확인을 같은 방식으로 지원합니다.
+`rxResource`는 인자 지정, 값 읽기, 로딩 상태 확인, 오류 확인을 같은 방식으로 지원합니다.
 
 <!--
 The `Observable` returned from `stream` must always emit a value or an error before it completes; see [`NG0991`](/errors/NG0991) for what happens otherwise and how to avoid it.

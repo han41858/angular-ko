@@ -33,7 +33,7 @@ The HTTP client service offers the following major features:
 HTTP 클라이언트 서비스는 다음 주요 기능을 제공합니다:
 
 - [타입이 지정된 응답 값](guide/http/making-requests#fetching-json-data) 요청
-- 간편한 [에러 처리](guide/http/making-requests#handling-request-failure)
+- 간편한 [오류 처리](guide/http/making-requests#handling-request-failure)
 - 요청과 응답 [가로채기](guide/http/interceptors)
 - 강력한 [테스트 유틸리티](guide/http/testing)
 

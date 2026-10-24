@@ -68,7 +68,7 @@ export class UserProfile { }
 그래서 실행 시점에 Angular 바인딩 문법이나 DOM API로 DOM이 변경되는 것은 컴포넌트 렌더링에 영향을 미치지 않습니다.
 
 **엘리먼트는 하나의 컴포넌트 셀렉터에만 매칭됩니다.**
-한 엘리먼트에 컴포넌트 셀렉터가 여러 개 매칭되면 에러가 발생합니다.
+한 엘리먼트에 컴포넌트 셀렉터가 여러 개 매칭되면 오류가 발생합니다.
 
 **컴포넌트 셀렉터는 대소문자를 구분합니다.**
 
@@ -235,7 +235,7 @@ Angular templates.
 
 컴포넌트는 대부분 커스텀 엘리먼트 이름으로 셀렉터를 지정합니다.
 따라서 [HTML 스펙](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name)에서 정하는 커스텀 엘리먼트 규칙에 따라 하이픈(`-`)을 최소한 하나 포함해야 합니다.
-Angular는 어떠한 컴포넌트와도 매칭되지 않는 커스텀 태그를 확인하면 버그와 오타를 방지하기 위해 에러를 발생시킵니다.
+Angular는 어떠한 컴포넌트와도 매칭되지 않는 커스텀 태그를 확인하면 버그와 오타를 방지하기 위해 오류를 발생시킵니다.
 
 Angular 템플릿에서 [네이티브 커스텀 엘리먼트](https://developer.mozilla.org/docs/Web/Web_Components) 활용방법을 자세하게 알아보려면 [심화 컴포넌트 설정](guide/components/advanced-configuration) 문서를 참고하세요.
 
@@ -312,7 +312,7 @@ export class YouTubeUploadButton { }
 이렇게 구현하면 추가 작업 없이 기존에 존재하는 엘리먼트에 커스텀 컴포넌트를 적용할 수 있습니다.
 이 방식은 `aria-label`과 같이 ARIA 어트리뷰트를 지정하는 경우에 특히 유용합니다.
 
-그런데 커스텀 어트리뷰트 셀렉터는 매칭되는 컴포넌트가 없더라도 Angular가 에러를 발생시키지 않습니다.
+그런데 커스텀 어트리뷰트 셀렉터는 매칭되는 컴포넌트가 없더라도 Angular가 오류를 발생시키지 않습니다.
 그래서 어트리뷰트 셀렉터를 사용할 때는 컴포넌트나 컴포넌트가 등록된 NgModule을 로드하는 것을 깜빡해서 컴포넌트가 렌더링되지 않을 수 있습니다.
 자세한 내용은 [컴포넌트 사용하기](guide/components#imports-in-the-component-decorator) 문서를 참고하세요.
 

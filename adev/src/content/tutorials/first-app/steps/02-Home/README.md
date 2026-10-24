@@ -124,7 +124,7 @@ IDE의 **터미널** 창에서 다음 작업을 수행하세요:
 
 1. 브라우저에서 `http://localhost:4200`을 열어 애플리케이션을 확인하세요.
 
-1. 앱이 에러 없이 빌드되는지 확인하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요.
 
    HELPFUL: 새 컴포넌트를 추가했지만 아직 앱의 템플릿에서 사용하지 않았으므로 이전 실습과 동일한 화면이 표시됩니다.
 
@@ -297,7 +297,7 @@ IDE의 **편집** 창에서 다음 작업을 수행하세요:
 
       <docs-code header="src/app/home/home.css에서 교체할 코드" path="adev/src/content/tutorials/first-app/steps/03-HousingLocation/src/app/home/home.css"/>
 
-1. 앱이 에러 없이 빌드되는지 확인하세요. 앱에 필터 검색 입력창과 버튼이 스타일과 함께 표시되어야 합니다. 에러가 있다면 수정한 후 다음 단계로 진행하세요.
+1. 앱이 오류 없이 빌드되는지 확인하세요. 앱에 필터 검색 입력창과 버튼이 스타일과 함께 표시되어야 합니다. 오류가 있다면 수정한 후 다음 단계로 진행하세요.
 
    <img alt="로고, 필터 검색 입력창, 검색 버튼이 표시된 Homes 앱의 브라우저 화면" src="assets/images/tutorials/first-app/homes-app-lesson-02-step-3.png">
 
