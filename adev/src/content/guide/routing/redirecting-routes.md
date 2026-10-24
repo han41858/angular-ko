@@ -231,6 +231,7 @@ import {Menu} from './menu';
 export const routes: Routes = [
   {
     path: 'restaurant/:location/menu',
+    pathMatch: 'full',
     redirectTo: (activatedRouteSnapshot) => {
       const location = activatedRouteSnapshot.params['location'];
       const currentHour = new Date().getHours();
@@ -280,6 +281,7 @@ import {Menu} from './menu';
 export const routes: Routes = [
   {
     path: 'restaurant/:location/menu',
+    pathMatch: 'full',
     redirectTo: (activatedRouteSnapshot) => {
       const location = activatedRouteSnapshot.params['location'];
       const currentHour = new Date().getHours();

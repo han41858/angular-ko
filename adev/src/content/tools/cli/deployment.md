@@ -99,22 +99,32 @@ ng deploy
 ## 원격 서버에 수동으로 배포하기
 
 <!--
-To manually deploy your application, create a production build and copy the output directory to a web server or content delivery network (CDN).
+To manually deploy your application, create a production build and deploy the output artifacts to your hosting environment.
 By default, `ng build` uses the `production` configuration.
 If you have customized your build configurations, you may want to confirm [production optimizations](tools/cli/deployment#production-optimizations) are being applied before deploying.
 
 `ng build` outputs the built artifacts to `dist/my-app/` by default, however this path can be configured with the `outputPath` option in the `@angular/build:application` builder.
-Copy this directory to the server and configure it to serve the directory.
+What you deploy depends on how your application is rendered:
+
+- **Static hosting (client-side rendering or `outputMode: "static"`):** Copy the `dist/my-app/browser/` directory to a web server or content delivery network (CDN), and configure it to serve that directory.
+- **Server-side rendering (`outputMode: "server"`):** Copy both the `dist/my-app/browser/` and `dist/my-app/server/` directories to the server, then run `node dist/my-app/server/server.mjs`.
+
+For more details, see [Server and hybrid rendering](guide/ssr).
 
 While this is a minimal deployment solution, there are a few requirements for the server to serve your Angular application correctly.
 -->
 
-애플리케이션을 수동으로 배포하려면 프로덕션 빌드를 생성하고 출력 디렉터리를 웹 서버나 콘텐츠 전송 네트워크(CDN)에 복사합니다.
+애플리케이션을 수동으로 배포하려면 프로덕션 빌드를 생성하고 빌드 결과물을 호스팅 환경에 배포합니다.
 `ng build`는 기본적으로 `production` 설정을 사용합니다.
 빌드 설정을 직접 변경했다면 배포하기 전에 [프로덕션 최적화](tools/cli/deployment#production-optimizations)가 적용되는지 확인하는 것이 좋습니다.
 
 `ng build`는 기본적으로 빌드 결과물을 `dist/my-app/`에 출력하지만, `@angular/build:application` 빌더의 `outputPath` 옵션으로 이 경로를 변경할 수 있습니다.
-이 디렉터리를 서버에 복사하고 해당 디렉터리의 파일을 제공하도록 서버를 설정하세요.
+배포할 대상은 애플리케이션의 렌더링 방식에 따라 달라집니다:
+
+- **정적 호스팅(클라이언트 측 렌더링 또는 `outputMode: "static"`):** `dist/my-app/browser/` 디렉터리를 웹 서버나 콘텐츠 전송 네트워크(CDN)에 복사하고, 해당 디렉터리의 파일을 제공하도록 설정합니다.
+- **서버 측 렌더링(`outputMode: "server"`):** `dist/my-app/browser/`와 `dist/my-app/server/` 디렉터리를 모두 서버에 복사한 다음, `node dist/my-app/server/server.mjs`를 실행합니다.
+
+자세한 내용은 [서버 및 하이브리드 렌더링](guide/ssr)을 참고하세요.
 
 최소한의 배포 방법은 이렇지만, 서버가 Angular 애플리케이션을 올바르게 제공하려면 몇 가지 요건을 충족해야 합니다.
 

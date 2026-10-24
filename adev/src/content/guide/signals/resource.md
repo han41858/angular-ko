@@ -279,13 +279,13 @@ userResource.reload();
 <!--
 The resource object has several signal properties for reading the status of the asynchronous loader.
 
-| Property    | Description                                                                                                     |
-| ----------- | --------------------------------------------------------------------------------------------------------------- |
-| `value`     | The most recent value of the resource, or `undefined` if no value has been received.                            |
-| `hasValue`  | Whether the resource has a value.                                                                               |
-| `error`     | The most recent error encountered while running the resource's loader, or `undefined` if no error has occurred. |
-| `isLoading` | Whether the resource loader is currently running.                                                               |
-| `status`    | The resource's specific `ResourceStatus`, as described below.                                                   |
+| Property    | Description                                                                                                                                                                                  |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`     | The most recent value of the resource, or the default value (`undefined` unless `defaultValue` is set) if no value has been received. Reading `value()` throws when the status is `'error'`. |
+| `hasValue`  | Whether the resource has a value.                                                                                                                                                            |
+| `error`     | The most recent error encountered while running the resource's loader, or `undefined` if no error has occurred.                                                                              |
+| `isLoading` | Whether the resource loader is currently running.                                                                                                                                            |
+| `status`    | The resource's specific `ResourceStatus`, as described below.                                                                                                                                |
 
 The `status` signal provides a specific `ResourceStatus` that describes the state of the resource using a string constant.
 
@@ -305,7 +305,7 @@ You can use this status information to conditionally display user interface elem
 
 | 프로퍼티    | 설명                                                                                 |
 | ----------- | ------------------------------------------------------------------------------------ |
-| `value`     | 리소스 객체의 최종 값, 값을 받지 못했으면 `undefined`                                |
+| `value`     | 리소스의 가장 최근 값이며, 값을 받지 못했으면 기본값(`defaultValue`를 설정하지 않았다면 `undefined`)입니다. 상태가 `'error'`일 때 `value()`를 읽으면 예외가 발생합니다.                                |
 | `hasValue`  | 리소스가 값을 갖고 있는지 여부                                                       |
 | `error`     | 리소스 로더를 실행하다가 발생한 가장 최근 에러, 에러가 발생하지 않았다면 `undefined` |
 | `isLoading` | 리소스 로더가 실행 중인지 여부                                                       |

@@ -100,12 +100,26 @@ In the template, use standard reactive syntax by binding the underlying control:
     @if (f.password().touched() && f.password().invalid()) {
       <div class="error-list">
         @for (error of f.password().errors(); track error) {
-          <p>{{ error.message || error.kind }}</p>
+          <p>{{ errorMessage(error) }}</p>
         }
       </div>
     }
   </div>
 </form>
+```
+
+Errors from the existing validators are `CompatValidationError`s. They don't set `message`; the error object returned by the validator is available as `context` instead:
+
+```typescript
+import {ValidationError} from '@angular/forms/signals';
+import {CompatValidationError} from '@angular/forms/signals/compat';
+
+errorMessage(error: ValidationError) {
+  if (error instanceof CompatValidationError) {
+    return (error.context as {message?: string} | null)?.message ?? error.kind;
+  }
+  return error.message ?? error.kind;
+}
 ```
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/compat-form-control-integration/app/app.ts">
@@ -168,12 +182,27 @@ const passwordErrors = f.password().errors(); // 기존 검증 함수를 통과�
     @if (f.password().touched() && f.password().invalid()) {
       <div class="error-list">
         @for (error of f.password().errors(); track error) {
-          <p>{{ error.message || error.kind }}</p>
+          <p>{{ errorMessage(error) }}</p>
         }
       </div>
     }
   </div>
 </form>
+```
+
+기존 검증 함수에서 발생한 에러는 `CompatValidationError`입니다.
+이 에러에는 `message`가 설정되지 않으며, 검증 함수가 반환한 에러 객체는 대신 `context`에서 확인할 수 있습니다:
+
+```typescript
+import {ValidationError} from '@angular/forms/signals';
+import {CompatValidationError} from '@angular/forms/signals/compat';
+
+errorMessage(error: ValidationError) {
+  if (error instanceof CompatValidationError) {
+    return (error.context as {message?: string} | null)?.message ?? error.kind;
+  }
+  return error.message ?? error.kind;
+}
 ```
 
 <docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/compat-form-control-integration/app/app.ts">
