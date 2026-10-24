@@ -4,7 +4,7 @@
 
 <a id="router-lifecycle-and-events"></a>
 
-# 라우터 라이프사이클와 이벤트
+# 라우터 라이프사이클과 이벤트
 
 <!--
 Angular Router provides a comprehensive set of lifecycle hooks and events that allow you to respond to navigation changes and execute custom logic during the routing process.

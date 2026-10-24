@@ -208,9 +208,9 @@ CRITICAL: You must configure an instance of `HttpClient` above the current injec
 </docs-callout>
 -->
 
-<docs-callout critical title="JSONP는 사용 중단이 권고됩니다">
+<docs-callout critical title="JSONP는 사용 중단을 권고합니다">
 
-JSONP는 크로스 사이트 스크립팅(XSS) 취약점을 유발할 수 있으므로 `withJsonpSupport`, `HttpClientJsonpModule`, `HttpClient`의 `.jsonp()` 메서드는 사용 중단이 권고됩니다. 대신 [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS)를 사용하는 표준 HTTP 요청을 사용하세요.
+JSONP는 크로스 사이트 스크립팅(XSS) 취약점을 유발할 수 있으므로 `withJsonpSupport`, `HttpClientJsonpModule`, `HttpClient`의 `.jsonp()` 메서드는 사용 중단을 권고합니다. 대신 [CORS](https://developer.mozilla.org/docs/Web/HTTP/CORS)를 사용하는 표준 HTTP 요청을 사용하세요.
 
 </docs-callout>
 
@@ -293,7 +293,7 @@ Prefer `provideHttpClient` for multi-injector configurations, as it has more sta
 | `HttpClientXsrfModule.withOptions(...)`  | `withXsrfConfiguration(...)`                             |
 | `HttpClientXsrfModule.disable()`         | `withNoXsrfProtection()`                                 |
 
-참고: `HttpClientModule`과 `HttpClientXsrfModule`도 사용 중단이 권고됩니다. 대신 `provideHttpClient`에 대응하는 기능을 함께 설정하세요.
+참고: `HttpClientModule`과 `HttpClientXsrfModule`도 사용 중단을 권고합니다. 대신 `provideHttpClient`에 대응하는 기능을 함께 설정하세요.
 
 <docs-callout important title="여러 인젝터에서 HttpClientModule을 사용할 때 주의하세요">
 여러 인젝터에 `HttpClientModule`이 있으면 인터셉터의 동작이 명확하게 정해지지 않으며, 구체적인 옵션과 프로바이더 및 모듈 로드 순서에 따라 달라집니다.
