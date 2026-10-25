@@ -226,6 +226,7 @@ You can also wrap an entire `FormGroup`. This is common when a reusable sub-sect
 import {signal} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {compatForm} from '@angular/forms/signals/compat';
+import {required} from '@angular/forms/signals';
 
 // 1. An existing address group with its own validation logic
 const addressGroup = new FormGroup({
@@ -323,6 +324,7 @@ template by accessing the underlying existing controls via `.control()`:
 import {signal} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {compatForm} from '@angular/forms/signals/compat';
+import {required} from '@angular/forms/signals';
 
 // 1. 자체 유효성 검사 로직이 있는 기존 주소 그룹입니다.
 const addressGroup = new FormGroup({
@@ -714,6 +716,7 @@ Attempting to call disable/enable would throw an error.
 
 ```typescript {avoid}
 import {signal, effect} from '@angular/core';
+import {SignalFormControl} from '@angular/forms/signals/compat';
 
 export class UserProfile {
   readonly emailControl = new SignalFormControl('');
@@ -764,6 +767,7 @@ export class UserProfile {
 
 ```typescript {avoid}
 import {signal, effect} from '@angular/core';
+import {SignalFormControl} from '@angular/forms/signals/compat';
 
 export class UserProfile {
   readonly emailControl = new SignalFormControl('');
@@ -942,6 +946,7 @@ If you want to preserve this behavior, you can provide the `NG_STATUS_CLASSES` p
 ```typescript
 import {provideSignalFormsConfig} from '@angular/forms/signals';
 import {NG_STATUS_CLASSES} from '@angular/forms/signals/compat';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [
@@ -956,6 +961,7 @@ You can also provide your own custom configuration to apply whatever classes you
 
 ```typescript
 import {provideSignalFormsConfig} from '@angular/forms/signals';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [
@@ -980,6 +986,7 @@ Signal Forms는 이 클래스를 자동으로 추가하지 않습니다.
 ```typescript
 import {provideSignalFormsConfig} from '@angular/forms/signals';
 import {NG_STATUS_CLASSES} from '@angular/forms/signals/compat';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [
@@ -994,6 +1001,7 @@ bootstrapApplication(App, {
 
 ```typescript
 import {provideSignalFormsConfig} from '@angular/forms/signals';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [

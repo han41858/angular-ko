@@ -300,6 +300,7 @@ When you need to catch all routes for a specific path, the solution is a wildcar
 A common example is defining a Page Not Found component.
 
 ```ts
+import {Routes} from '@angular/router';
 import {Home} from './home/home';
 import {UserProfile} from './user-profile';
 import {NotFound} from './not-found';
@@ -321,6 +322,7 @@ TIP: Wildcard routes are typically placed at the end of a routes array.
 페이지를 찾을 수 없을 때 표시할 컴포넌트를 정의하는 경우에 자주 사용합니다.
 
 ```ts
+import {Routes} from '@angular/router';
 import {Home} from './home/home';
 import {UserProfile} from './user-profile';
 import {NotFound} from './not-found';
@@ -406,6 +408,7 @@ const routes: Routes = [
 You can define a route that redirects to another route instead of rendering a component:
 
 ```ts
+import {Routes} from '@angular/router';
 import {Blog} from './home/blog';
 
 const routes: Routes = [
@@ -426,6 +429,7 @@ If you modify or remove a route, some users may still click on out-of-date links
 컴포넌트를 렌더링하는 대신 다른 라우팅 규칙으로 리다이렉트하는 라우팅 규칙을 정의할 수 있습니다.
 
 ```ts
+import {Routes} from '@angular/router';
 import {Blog} from './home/blog';
 
 const routes: Routes = [

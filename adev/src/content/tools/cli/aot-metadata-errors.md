@@ -253,6 +253,7 @@ export class MyComponent {}
 You'd also get this error if you imported `someTemplate` from some other module and neglected to initialize it there.
 
 ```ts
+import {Component} from '@angular/core';
 // ERROR - not initialized there either
 import {someTemplate} from './config';
 
@@ -301,6 +302,7 @@ export class MyComponent {}
 다른 모듈에서 `someTemplate`을 가져오더라도 해당 모듈에서 초기화하지 않았다면 같은 오류가 발생합니다.
 
 ```ts
+import {Component} from '@angular/core';
 // 오류: 가져온 모듈에서도 초기화하지 않았습니다.
 import {someTemplate} from './config';
 
@@ -521,7 +523,7 @@ Here's an illustrative example.
 
 ```ts
 // CORRECTED
-import { Inject } from '@angular/core';
+import {Inject, InjectionToken, Component} from '@angular/core';
 
 export const WINDOW = new InjectionToken('Window');
 export function _window() { return window; }
@@ -543,7 +545,7 @@ uses the `@Inject(WINDOW)` to generate the injection code.
 Angular does something similar with the `DOCUMENT` token so you can inject the browser's `document` object \(or an abstraction of it, depending upon the platform in which the application runs\).
 
 ```ts
-import { Inject }   from '@angular/core';
+import {Inject, Component} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Component({ … })
@@ -586,7 +588,7 @@ TypeScript는 주변 환경 타입을 이해하기 때문에 따로 가져올 �
 
 ```ts
 // 수정한 코드
-import { Inject } from '@angular/core';
+import {Inject, InjectionToken, Component} from '@angular/core';
 
 export const WINDOW = new InjectionToken('Window');
 export function _window() { return window; }
@@ -608,7 +610,7 @@ Angular는 `DOCUMENT` 토큰에도 비슷한 방식을 사용합니다.
 따라서 브라우저의 `document` 객체 또는 애플리케이션이 실행되는 플랫폼에 따른 추상화 객체를 주입할 수 있습니다.
 
 ```ts
-import { Inject }   from '@angular/core';
+import {Inject, Component} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Component({ … })

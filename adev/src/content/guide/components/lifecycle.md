@@ -492,7 +492,7 @@ communicate across phases, a phase function may return a result value that can b
 next phase.
 
 ```ts
-import {Component, ElementRef, afterNextRender} from '@angular/core';
+import {Component, ElementRef, afterNextRender, inject} from '@angular/core';
 
 @Component(/* ... */)
 export class UserProfile {
@@ -540,7 +540,7 @@ There are four phases, run in the following order:
 각 단계마다 실행되는 함수는 해당 단계에서 실행된 결과값을 반환하며, 다음 단계에 실행되는 함수는 이전 단계에서 실행된 결과값을 받아 참조할 수 있습니다.
 
 ```ts
-import {Component, ElementRef, afterNextRender} from '@angular/core';
+import {Component, ElementRef, afterNextRender, inject} from '@angular/core';
 
 @Component(/* ... */)
 export class UserProfile {

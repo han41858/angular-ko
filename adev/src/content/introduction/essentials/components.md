@@ -210,6 +210,7 @@ To import and use a component, you need to:
 Here's an example of a `UserProfile` component importing a `ProfilePhoto` component:
 
 ```angular-ts {header: "user-profile.ts"}
+import {Component} from '@angular/core';
 import {ProfilePhoto} from './profile-photo';
 
 @Component({
@@ -240,6 +241,7 @@ TIP: Want to know more about Angular components? See the [In-depth Components gu
 그래서 `UserProfile` 컴포넌트 안에 `ProfilePhoto` 컴포넌트를 사용하려면 이렇게 구현하면 됩니다:
 
 ```angular-ts {header: "user-profile.ts"}
+import {Component} from '@angular/core';
 import {ProfilePhoto} from './profile-photo';
 
 @Component({

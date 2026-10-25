@@ -197,6 +197,7 @@ import {
   provideClientHydration,
   withEventReplay,
   withNoIncrementalHydration,
+  bootstrapApplication,
 } from '@angular/platform-browser';
 
 bootstrapApplication(App, {
@@ -218,6 +219,7 @@ import {
   provideClientHydration,
   withEventReplay,
   withNoIncrementalHydration,
+  bootstrapApplication,
 } from '@angular/platform-browser';
 
 bootstrapApplication(App, {

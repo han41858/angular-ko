@@ -14,6 +14,7 @@ The `takeUntilDestroyed` operator, from `@angular/core/rxjs-interop`, provides a
 ```typescript
 import {Component, inject} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Observable} from 'rxjs';
 import {NotificationDispatcher, CustomPopupShower} from './some-shared-project-code';
 
 @Component(/* ... */)
@@ -62,6 +63,7 @@ RxJS의 [`takeUntil`](https://rxjs.dev/api/operators/takeUntil) 연산자와 비
 ```typescript
 import {Component, inject} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Observable} from 'rxjs';
 import {NotificationDispatcher, CustomPopupShower} from './some-shared-project-code';
 
 @Component(/* ... */)

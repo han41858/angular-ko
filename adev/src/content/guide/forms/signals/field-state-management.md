@@ -1642,7 +1642,8 @@ While field state typically updates through user interactions (typing, focusing,
 Signal Forms provides a `FormRoot` directive that simplifies form submission. It automatically prevents the default browser form submission behavior and sets the `novalidate` attribute on the `<form>` element.
 
 ```angular-ts
-import {FormField, FormRoot} from '@angular/forms/signals';
+import {FormField, FormRoot, form, required, email} from '@angular/forms/signals';
+import {Component, signal} from '@angular/core';
 
 @Component({
   imports: [FormRoot, FormField],
@@ -1688,7 +1689,8 @@ You can also submit a form manually, without using the directive, by calling `su
 이 디렉티브는 브라우저의 기본 폼 제출 동작을 막고 `<form>` 엘리먼트에 `novalidate` 어트리뷰트를 추가합니다.
 
 ```angular-ts
-import {FormField, FormRoot} from '@angular/forms/signals';
+import {FormField, FormRoot, form, required, email} from '@angular/forms/signals';
+import {Component, signal} from '@angular/core';
 
 @Component({
   imports: [FormRoot, FormField],

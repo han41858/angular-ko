@@ -142,6 +142,7 @@ To use a component, [directive](guide/directives), or [pipe](guide/templates/pip
 it to the `imports` array in the `@Component` decorator:
 
 ```ts
+import {Component} from '@angular/core';
 import {ProfilePhoto} from './profile-photo';
 
 @Component({
@@ -161,6 +162,7 @@ IMPORTANT: In Angular versions before 19.0.0, the `standalone` option defaults t
 컴포넌트나 [디렉티브](guide/directives), [파이프](guide/templates/pipes)를 사용하려면 `@Component` 데코레이터의 `imports` 배열에 로드해야 합니다.
 
 ```ts
+import {Component} from '@angular/core';
 import {ProfilePhoto} from './profile-photo';
 
 @Component({

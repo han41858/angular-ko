@@ -155,6 +155,7 @@ When you need to inspect a Router event sequence, you can enable logging for int
 
 ```ts
 import {provideRouter, Routes, withDebugTracing} from '@angular/router';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 const appRoutes: Routes = [];
 bootstrapApplication(App, {
@@ -174,6 +175,7 @@ Angular는 모든 라우터 이벤트를 콘솔에 기록하는 내장 디버깅
 
 ```ts
 import {provideRouter, Routes, withDebugTracing} from '@angular/router';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 const appRoutes: Routes = [];
 bootstrapApplication(App, {
@@ -211,10 +213,11 @@ Show loading indicators during navigation:
 
 ```angular-ts
 import {Component, computed, inject} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  imports: [RouterOutlet],
   template: `
     @if (isNavigating()) {
       <div class="loading-bar">Loading...</div>
@@ -233,10 +236,11 @@ export class App {
 
 ```angular-ts
 import {Component, computed, inject} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  imports: [RouterOutlet],
   template: `
     @if (isNavigating()) {
       <div class="loading-bar">Loading...</div>

@@ -404,7 +404,8 @@ After both rules run, `state.metadata(HELP)!()` returns only the second message.
 To combine contributions, pass a reducer to `createMetadataKey()`. A reducer describes how to fold individual values into an accumulated result:
 
 ```ts
-import {createMetadataKey, MetadataReducer} from '@angular/forms/signals';
+import {createMetadataKey, MetadataReducer, form, metadata} from '@angular/forms/signals';
+import {model} from '@angular/core';
 
 const HELP = createMetadataKey<string, string[]>(MetadataReducer.list());
 
@@ -443,7 +444,8 @@ form(model, (path) => {
 리듀서는 개별 메타데이터 제공값을 누적된 결과로 결합하는 방법을 정의합니다:
 
 ```ts
-import {createMetadataKey, MetadataReducer} from '@angular/forms/signals';
+import {createMetadataKey, MetadataReducer, form, metadata} from '@angular/forms/signals';
+import {model} from '@angular/core';
 
 const HELP = createMetadataKey<string, string[]>(MetadataReducer.list());
 

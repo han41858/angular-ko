@@ -26,6 +26,7 @@ Instead of using regular anchor elements `<a>` with an `href` attribute, you add
 
 ```angular-ts
 import {RouterLink} from '@angular/router';
+import {Component} from '@angular/core';
 
 @Component({
   template: `
@@ -45,6 +46,7 @@ export class App {}
 
 ```angular-ts
 import {RouterLink} from '@angular/router';
+import {Component} from '@angular/core';
 
 @Component({
   template: `
@@ -198,6 +200,7 @@ You can use the `router.navigate()` method to programmatically navigate between 
 
 ```angular-ts
 import {Router} from '@angular/router';
+import {Component, inject} from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -230,6 +233,7 @@ You can also build dynamic navigation paths relative to your component’s locat
 
 ```angular-ts
 import {Router, ActivatedRoute} from '@angular/router';
+import {Component, inject} from '@angular/core';
 
 @Component({
   selector: 'app-user-detail',
@@ -293,6 +297,7 @@ this.router.navigate(['/edit'], {relativeTo: this.route});
 
 ```angular-ts
 import {Router} from '@angular/router';
+import {Component, inject} from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -326,6 +331,7 @@ export class AppDashboard {
 
 ```angular-ts
 import {Router, ActivatedRoute} from '@angular/router';
+import {Component, inject} from '@angular/core';
 
 @Component({
   selector: 'app-user-detail',

@@ -893,6 +893,7 @@ export {OtherComponent} from './other.component';
 ```
 
 ```typescript {header: "parent.component.ts"}
+import {Component} from '@angular/core';
 import {HeavyComponent} from './index'; // pulls in OtherComponent too
 
 @Component({
@@ -923,6 +924,7 @@ export {OtherComponent} from './other.component';
 ```
 
 ```typescript {header: "parent.component.ts"}
+import {Component} from '@angular/core';
 import {HeavyComponent} from './index'; // 다른 컴포넌트도 함께 로드합니다.
 
 @Component({

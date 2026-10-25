@@ -1,6 +1,8 @@
 <!--
 # Data fetching with resources
 
+IMPORTANT: Route resources are in [developer preview](reference/releases#developer-preview).
+
 The Angular Router integrates with Angular signals through the `resources` route configuration. This allows you to fetch data reactively using `Resource` APIs.
 
 ## Why use route resources?
@@ -18,6 +20,7 @@ To enable route resources, provide `withRouterResources()` to your router config
 
 ```ts
 import {provideRouter, withComponentInputBinding, withRouterResources} from '@angular/router';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [provideRouter(routes, withComponentInputBinding(), withRouterResources())],
@@ -257,6 +260,8 @@ TIP: Forward the `abortSignal` provided by the resource loader to your asynchron
 
 # 리소스로 데이터 가져오기
 
+IMPORTANT: 라우팅 규칙의 리소스는 [개발자 미리보기](reference/releases#developer-preview) 단계입니다.
+
 Angular 라우터는 라우팅 규칙의 `resources` 설정을 통해 Angular 시그널과 통합됩니다. `Resource` API로 데이터를 반응형으로 가져올 수 있습니다.
 
 <a id="why-use-route-resources"></a>
@@ -278,6 +283,7 @@ Angular 라우터는 라우팅 규칙의 `resources` 설정을 통해 Angular �
 
 ```ts
 import {provideRouter, withComponentInputBinding, withRouterResources} from '@angular/router';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 bootstrapApplication(App, {
   providers: [provideRouter(routes, withComponentInputBinding(), withRouterResources())],
