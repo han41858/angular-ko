@@ -409,6 +409,8 @@ await fixture.whenStable();
 ### 갱신이 감지되는지 디버그 모드에서 확인하기
 
 <!--
+IMPORTANT: `provideCheckNoChangesConfig` is in [developer preview](reference/releases#developer-preview).
+
 Angular also provides an additional tool to help verify that an application is making
 updates to state in a zoneless-compatible way. `provideCheckNoChangesConfig({exhaustive: true, interval: <milliseconds>})`
 can be used to periodically check to ensure that no bindings have been updated
@@ -416,6 +418,8 @@ without a notification. Angular throws `ExpressionChangedAfterItHasBeenCheckedEr
 if there is an updated binding that would not have refreshed by the zoneless change
 detection.
 -->
+
+IMPORTANT: `provideCheckNoChangesConfig`는 [개발자 미리보기](reference/releases#developer-preview) 단계입니다.
 
 Angular는 애플리케이션이 Zoneless와 호환되는 방식으로 상태를 갱신하는지 확인하는 추가 도구도 제공합니다.
 `provideCheckNoChangesConfig({exhaustive: true, interval: <milliseconds>})`를 사용하면 알림 없이 갱신된 바인딩이 없는지 주기적으로 확인할 수 있습니다.

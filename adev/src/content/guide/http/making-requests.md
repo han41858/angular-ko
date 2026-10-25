@@ -1492,6 +1492,8 @@ Within a component, you can combine `@if` with the `async` pipe to render the UI
 
 ```angular-ts
 import {AsyncPipe} from '@angular/common';
+import {Component, input, inject, effect} from '@angular/core';
+import {Observable} from 'rxjs';
 
 @Component({
   imports: [AsyncPipe],
@@ -1535,6 +1537,8 @@ export class UserService {
 
 ```angular-ts
 import {AsyncPipe} from '@angular/common';
+import {Component, input, inject, effect} from '@angular/core';
+import {Observable} from 'rxjs';
 
 @Component({
   imports: [AsyncPipe],

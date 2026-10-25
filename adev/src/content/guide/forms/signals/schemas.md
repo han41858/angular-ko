@@ -134,7 +134,7 @@ const nameSchema = schema<{first: string; last: string}>((name) => {
 You can apply a reusable schema to a specific path in a form by using the `apply()` function. When you call `apply()`, the schema receives a scoped path that only sees the fields within that sub-path:
 
 ```ts
-import {apply} from '@angular/forms/signals';
+import {apply, form} from '@angular/forms/signals';
 
 profileForm = form(this.profileModel, (schemaPath) => {
   apply(schemaPath.name, nameSchema);
@@ -150,7 +150,7 @@ registrationForm = form(this.registrationModel, (schemaPath) => {
 `apply()`를 호출하면 스키마는 지정한 하위 경로 내부의 필드만 볼 수 있도록 범위가 제한된 경로를 전달받습니다:
 
 ```ts
-import {apply} from '@angular/forms/signals';
+import {apply, form} from '@angular/forms/signals';
 
 profileForm = form(this.profileModel, (schemaPath) => {
   apply(schemaPath.name, nameSchema);

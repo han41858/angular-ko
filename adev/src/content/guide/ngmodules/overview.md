@@ -393,6 +393,7 @@ You can use the [`bootstrapModule`](/api/core/PlatformRef#bootstrapModule) metho
 
 ```typescript
 import {platformBrowser} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
 @NgModule({
   bootstrap: [MyApplication],
@@ -417,6 +418,7 @@ When you bootstrap an application from an NgModule, the collected `providers` of
 
 ```typescript
 import {platformBrowser} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
 @NgModule({
   bootstrap: [MyApplication],

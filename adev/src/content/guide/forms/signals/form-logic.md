@@ -1574,7 +1574,7 @@ export class Address {
 Extract common rule configurations into reusable functions:
 
 ```ts
-import {SchemaPath, debounce, metadata, maxLength} from '@angular/forms/signals';
+import {SchemaPath, debounce, metadata, maxLength, form} from '@angular/forms/signals';
 import {PLACEHOLDER} from './metadata-keys';
 
 function emailFieldConfig(path: SchemaPath<string>) {
@@ -1600,7 +1600,7 @@ This pattern is useful when you have standard field configurations that you use 
 유효성 검사 규칙 중 공통된 부분은 재사용 가능하도록 함수로 분리하세요:
 
 ```ts
-import {SchemaPath, debounce, metadata, maxLength} from '@angular/forms/signals';
+import {SchemaPath, debounce, metadata, maxLength, form} from '@angular/forms/signals';
 import {PLACEHOLDER} from './metadata-keys';
 
 function emailFieldConfig(path: SchemaPath<string>) {

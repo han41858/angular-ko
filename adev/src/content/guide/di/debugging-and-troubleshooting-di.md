@@ -354,7 +354,7 @@ export class UserClient {
 Sometimes you want separate instances per component for component-specific state.
 
 ```angular-ts {header: 'Intentional: Component-scoped state'}
-import {Injectable, signal} from '@angular/core';
+import {Injectable, signal, Component, inject} from '@angular/core';
 
 @Injectable() // No providedIn - must be provided explicitly
 export class FormStateStore {
@@ -389,7 +389,7 @@ This pattern is useful for:
 컴포넌트 각각의 상태를 관리하려고 한다면 서비스 인스턴스를 분리할 필요가 있습니다.
 
 ```angular-ts {header: '컴포넌트 범위의 상태 관리'}
-import {Injectable, signal} from '@angular/core';
+import {Injectable, signal, Component, inject} from '@angular/core';
 
 @Injectable() // providedIn 을 지정하지 않았습니다
 export class FormStateStore {
@@ -888,6 +888,7 @@ export const APP_CONFIG = new InjectionToken<AppConfig>('app config');
 ```
 
 ```ts {header: 'app.config.ts'}
+import {bootstrapApplication} from '@angular/platform-browser';
 import {APP_CONFIG} from './config.token';
 
 export const appConfig: AppConfig = {
@@ -901,7 +902,7 @@ bootstrapApplication(App, {
 
 ```angular-ts {avoid, header: 'feature-view.ts'}
 // Creating new token with same description
-import {InjectionToken, inject} from '@angular/core';
+import {InjectionToken, inject, Component} from '@angular/core';
 import {AppConfig} from './config.token';
 
 const APP_CONFIG = new InjectionToken<AppConfig>('app config');
@@ -920,7 +921,7 @@ Even though both tokens have the description `'app config'`, they are different 
 **Solution:** Import the same token instance.
 
 ```angular-ts {prefer, header: 'feature-view.ts'}
-import {inject} from '@angular/core';
+import {inject, Component} from '@angular/core';
 import {APP_CONFIG, AppConfig} from './config.token';
 
 @Component({
@@ -950,6 +951,7 @@ export const APP_CONFIG = new InjectionToken<AppConfig>('app config');
 ```
 
 ```ts {header: 'app.config.ts'}
+import {bootstrapApplication} from '@angular/platform-browser';
 import {APP_CONFIG} from './config.token';
 
 export const appConfig: AppConfig = {
@@ -963,7 +965,7 @@ bootstrapApplication(App, {
 
 ```angular-ts {avoid, header: 'feature-view.ts'}
 // 같은 구분자로 새로운 토큰을 선언합니다.
-import {InjectionToken, inject} from '@angular/core';
+import {InjectionToken, inject, Component} from '@angular/core';
 import {AppConfig} from './config.token';
 
 const APP_CONFIG = new InjectionToken<AppConfig>('app config');
@@ -983,7 +985,7 @@ Angular는 구분자가 아니라 객체 참조를 기준으로 토큰을 구분
 **해결방법:** 같은 토큰 인스턴스를 사용하세요.
 
 ```angular-ts {prefer, header: 'feature-view.ts'}
-import {inject} from '@angular/core';
+import {inject, Component} from '@angular/core';
 import {APP_CONFIG, AppConfig} from './config.token';
 
 @Component({
@@ -1028,7 +1030,8 @@ export class UserProfile {
 **Solution:** Use `InjectionToken` for interface types.
 
 ```angular-ts {prefer, header: 'Use InjectionToken for interfaces'}
-import {InjectionToken, inject} from '@angular/core';
+import {InjectionToken, inject, Component} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 interface UserConfig {
   name: string;
@@ -1082,7 +1085,8 @@ export class UserProfile {
 **해결방법:** 인터페이스 타입에는 `InjectionToken`을 사용하세요.
 
 ```angular-ts {prefer, header: 'InjectionToken을 사용하세요'}
-import {InjectionToken, inject} from '@angular/core';
+import {InjectionToken, inject, Component} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 interface UserConfig {
   name: string;

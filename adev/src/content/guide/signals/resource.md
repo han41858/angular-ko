@@ -529,10 +529,20 @@ const userSnapshot = userResource.snapshot;
 ### 스냅샷으로 resource 조합하기
 
 <!--
+IMPORTANT: `resourceFromSnapshots` is [experimental](reference/releases#experimental). It's ready for you to try, but it might change before it is stable.
+
 You can create new resources from snapshots using `resourceFromSnapshots`. This enables composition with signal APIs like `computed` and `linkedSignal` to transform resource behavior.
 
 ```ts
-import {linkedSignal, resourceFromSnapshots, Resource, ResourceSnapshot} from '@angular/core';
+import {
+  Component,
+  input,
+  linkedSignal,
+  resourceFromSnapshots,
+  Resource,
+  ResourceSnapshot,
+} from '@angular/core';
+import {httpResource} from '@angular/common/http';
 
 function withPreviousValue<T>(input: Resource<T>): Resource<T> {
   const derived = linkedSignal<ResourceSnapshot<T>, ResourceSnapshot<T>>({
@@ -561,11 +571,21 @@ export class AwesomeProfile {
 ```
 -->
 
+IMPORTANT: `resourceFromSnapshots`는 [실험적 기능](reference/releases#experimental)입니다. 지금 사용해 볼 수 있지만, 안정화되기 전까지 변경될 수 있습니다.
+
 `resourceFromSnapshots`를 사용하면 스냅샷으로 새로운 `resource` 시그널을 만들 수 있습니다.
 `computed`나 `linkedSignal`도 사용할 수 있습니다.
 
 ```ts
-import {linkedSignal, resourceFromSnapshots, Resource, ResourceSnapshot} from '@angular/core';
+import {
+  Component,
+  input,
+  linkedSignal,
+  resourceFromSnapshots,
+  Resource,
+  ResourceSnapshot,
+} from '@angular/core';
+import {httpResource} from '@angular/common/http';
 
 function withPreviousValue<T>(input: Resource<T>): Resource<T> {
   const derived = linkedSignal<ResourceSnapshot<T>, ResourceSnapshot<T>>({

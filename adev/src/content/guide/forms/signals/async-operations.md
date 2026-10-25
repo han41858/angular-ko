@@ -475,6 +475,7 @@ Customize the HTTP request by returning an `HttpResourceRequest` object from the
 
 ```ts
 import {HttpHeaders} from '@angular/common/http';
+import {validateHttp} from '@angular/forms/signals';
 
 validateHttp(schemaPath.field, {
   request: ({value}) => ({
@@ -505,6 +506,7 @@ TIP: See the [httpResource API documentation](api/common/http/httpResource) for 
 
 ```ts
 import {HttpHeaders} from '@angular/common/http';
+import {validateHttp} from '@angular/forms/signals';
 
 validateHttp(schemaPath.field, {
   request: ({value}) => ({
@@ -999,7 +1001,7 @@ form(this.registrationModel, (schemaPath) => {
 For timing logic that a duration or `'blur'` can't express, pass a `Debouncer` function. The function receives the field context and an [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal), and returns a `Promise<void>` that resolves when the model should update:
 
 ```ts
-import {debounce, type Debouncer} from '@angular/forms/signals';
+import {debounce, type Debouncer, form} from '@angular/forms/signals';
 
 const shorterWhenLonger: Debouncer<string> = ({value}, abortSignal) => {
   // Shorter queries get a longer delay since the user is likely still typing.
@@ -1030,7 +1032,7 @@ The `abortSignal` fires when the field is touched, or when its value changes bef
 이 함수는 필드 컨텍스트와 [`AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)을 인자로 받으며, 모델이 업데이트해야 할 시점에 완료되는 `Promise<void>`를 반환합니다:
 
 ```ts
-import {debounce, type Debouncer} from '@angular/forms/signals';
+import {debounce, type Debouncer, form} from '@angular/forms/signals';
 
 const shorterWhenLonger: Debouncer<string> = ({value}, abortSignal) => {
   // 사용자가 입력 중일 가능성이 있기 때문에 쿼리가 짧으면 딜레이를 길게 합니다.
@@ -1428,6 +1430,7 @@ Async validation only runs after synchronous validation passes. This prevents un
 
 ```ts
 import {form, required, minLength, validateHttp} from '@angular/forms/signals';
+import {model} from '@angular/core';
 
 form(model, (schemaPath) => {
   // 1. These synchronous validation rules run first
@@ -1460,6 +1463,7 @@ This execution order improves performance by reducing server load and catching f
 
 ```ts
 import {form, required, minLength, validateHttp} from '@angular/forms/signals';
+import {model} from '@angular/core';
 
 form(model, (schemaPath) => {
   // 1. 동기 유효성 검사 규칙이 먼저 실행됩니다.
@@ -1523,6 +1527,7 @@ Always validate format before making async requests. This catches errors instant
 
 ```ts
 import {form, required, email, validateHttp} from '@angular/forms/signals';
+import {model} from '@angular/core';
 
 form(model, (schemaPath) => {
   // Validate format first
@@ -1553,6 +1558,7 @@ form(model, (schemaPath) => {
 
 ```ts
 import {form, required, email, validateHttp} from '@angular/forms/signals';
+import {model} from '@angular/core';
 
 form(model, (schemaPath) => {
   // 형식을 먼저 검사합니다.

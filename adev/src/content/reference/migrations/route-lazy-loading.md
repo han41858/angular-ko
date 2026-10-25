@@ -87,6 +87,8 @@ The migration will check all the components in the routes, check if they are sta
 #### 이전
 
 ```typescript {header: "app.module.ts"}
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 import {Home} from './home';
 
 @NgModule({

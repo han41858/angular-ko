@@ -1736,6 +1736,7 @@ Signal Forms have built-in support for libraries that conform to [Standard Schem
 
 ```ts
 import {form, validateStandardSchema} from '@angular/forms/signals';
+import {signal} from '@angular/core';
 import * as z from 'zod';
 
 // Define your schema
@@ -1756,6 +1757,7 @@ const userForm = form(signal({email: '', password: ''}), (schemaPath) => {
 
 ```ts
 import {form, validateStandardSchema} from '@angular/forms/signals';
+import {signal} from '@angular/core';
 import * as z from 'zod';
 
 // 스키마를 정의합니다.

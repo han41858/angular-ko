@@ -101,7 +101,7 @@ export const CONFIG_TOKEN = new InjectionToken<Config>('app.config');
 An `InjectionToken` that has a `factory` results in `providedIn: 'root'` by default (but can be overridden via the `providedIn` prop).
 
 ```ts {header: "/app/config.token.ts"}
-import {InjectionToken} from '@angular/core';
+import {InjectionToken, Component, inject} from '@angular/core';
 
 export interface AppConfig {
   apiUrl: string;
@@ -137,7 +137,7 @@ export class Header {
 하지만 `providedIn` 프로퍼티가 다시 지정되면 오버라이드할 수 있습니다.
 
 ```ts {header: "/app/config.token.ts"}
-import {InjectionToken} from '@angular/core';
+import {InjectionToken, Component, inject} from '@angular/core';
 
 export interface AppConfig {
   apiUrl: string;
@@ -1198,7 +1198,7 @@ class ApiClient {
 }
 
 // Factory function that configures based on user tier
-import {inject} from '@angular/core';
+import {inject, Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 const apiClientFactory = () => {
   const http = inject(HttpClient);
@@ -1252,7 +1252,7 @@ class ApiClient {
 }
 
 // 사용자 등급에 따라 구성되는 팩토리 함수
-import {inject} from '@angular/core';
+import {inject, Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 const apiClientFactory = () => {
   const http = inject(HttpClient);
@@ -1752,6 +1752,7 @@ For more complex scenarios, you can combine multiple configuration approaches:
 
 ```ts {header: "/libs/http-client/src/provider.ts"}
 import {Provider, InjectionToken, inject} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 // Feature flags for optional functionality
 export enum HttpFeatures {
@@ -1862,6 +1863,7 @@ bootstrapApplication(App, {
 
 ```ts {header: "/libs/http-client/src/provider.ts"}
 import {Provider, InjectionToken, inject} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
 
 // 기능 활성화 플래그
 export enum HttpFeatures {

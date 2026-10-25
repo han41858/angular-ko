@@ -46,6 +46,7 @@ template.
 
 ```angular-ts
 import {NgComponentOutlet} from '@angular/common';
+import {Component, input, computed} from '@angular/core';
 
 @Component({/*...*/})
 export class AdminBio {
@@ -81,6 +82,7 @@ directive's capabilities.
 
 ```angular-ts
 import {NgComponentOutlet} from '@angular/common';
+import {Component, input, computed} from '@angular/core';
 
 @Component({/*...*/})
 export class AdminBio {
@@ -886,6 +888,8 @@ export class PopupService {
 <!--
 ## Handling rendering errors
 
+IMPORTANT: The `onError` option and its `ErrorDetails` parameter are in [developer preview](reference/releases#developer-preview).
+
 When dynamically creating components using `ViewContainerRef.createComponent` or the standalone `createComponent` function, you can provide an `onError` callback in the options object to handle errors that occur during the rendering or change detection phases. This is the programmatic equivalent of using an `@error` block in templates.
 
 ```ts
@@ -901,6 +905,8 @@ NOTE: The `onError` callback only catches errors that occur during the rendering
 -->
 
 ## 렌더링 오류 처리하기 {#handling-rendering-errors}
+
+IMPORTANT: `onError` 옵션과 이 옵션의 `ErrorDetails` 매개변수는 [개발자 미리보기](reference/releases#developer-preview) 단계입니다.
 
 `ViewContainerRef.createComponent`나 독립형 `createComponent` 함수로 컴포넌트를 동적으로 생성할 때, 옵션 객체에 `onError` 콜백을 지정하면 렌더링이나 변경 감지 단계에서 발생하는 오류를 처리할 수 있습니다. 템플릿의 `@error` 블록과 같은 기능을 프로그래밍 방식으로 사용하는 것입니다.
 

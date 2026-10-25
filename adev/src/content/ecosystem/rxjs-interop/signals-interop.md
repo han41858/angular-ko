@@ -262,8 +262,9 @@ If an Observable used in `toSignal` completes, the signal continues to return th
 Use the `toObservable` utility to create an `Observable` which tracks the value of a signal. The signal's value is monitored with an `effect` which emits the value to the Observable when it changes.
 
 ```ts
-import {Component, signal} from '@angular/core';
+import {Component, signal, Signal, inject} from '@angular/core';
 import {toObservable} from '@angular/core/rxjs-interop';
+import {switchMap} from 'rxjs';
 
 @Component(/* ... */)
 export class SearchResults {
@@ -281,8 +282,9 @@ As the `query` signal changes, the `query$` Observable emits the latest query an
 시그널의 값은 `effect`로 감시하며, 값이 변경되면 옵저버블로 방출합니다.
 
 ```ts
-import {Component, signal} from '@angular/core';
+import {Component, signal, Signal, inject} from '@angular/core';
 import {toObservable} from '@angular/core/rxjs-interop';
+import {switchMap} from 'rxjs';
 
 @Component(/* ... */)
 export class SearchResults {
@@ -367,7 +369,7 @@ mySignal.set(3);
 Angular's [`resource` function](/guide/signals/resource) gives you a way to incorporate async data into your application's signal-based code. Building on top of this pattern, `rxResource` lets you define a resource where the source of your data is defined in terms of an RxJS `Observable`. Instead of accepting a `loader` function, `rxResource` accepts a `stream` function that returns an RxJS `Observable`.
 
 ```typescript
-import {Component, inject} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {rxResource} from '@angular/core/rxjs-interop';
 
 @Component(/* ... */)
@@ -397,7 +399,7 @@ Angular의 [`resource` 함수](/guide/signals/resource)를 사용하면 애플�
 `rxResource`는 `loader` 함수 대신 RxJS `Observable`을 반환하는 `stream` 함수를 사용합니다.
 
 ```typescript
-import {Component, inject} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {rxResource} from '@angular/core/rxjs-interop';
 
 @Component(/* ... */)
