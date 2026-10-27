@@ -160,8 +160,8 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
       domino:
-        specifier: https://github.com/angular/domino.git#1929b1ef5aee03234de322c5bbd955ba653d8727
-        version: '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/1929b1ef5aee03234de322c5bbd955ba653d8727'
+        specifier: https://github.com/angular/domino.git#df9563267725c609c9616dbe2e7b3a14ec4d1916
+        version: '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/df9563267725c609c9616dbe2e7b3a14ec4d1916'
       esbuild:
         specifier: 0.28.2
         version: 0.28.2
@@ -248,8 +248,8 @@ importers:
         specifier: ^9.0.0
         version: 9.1.1
       '@angular/ng-dev':
-        specifier: https://github.com/angular/dev-infra-private-ng-dev-builds.git#63d882fcc5b24ed2f6a36953c4c46a9177632111
-        version: https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/63d882fcc5b24ed2f6a36953c4c46a9177632111(@modelcontextprotocol/sdk@1.32.1(supports-color@11.0.0))
+        specifier: https://github.com/angular/dev-infra-private-ng-dev-builds.git#ca1613fdbd92afa1b4f786786f16bc59436b3707
+        version: https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/ca1613fdbd92afa1b4f786786f16bc59436b3707(@modelcontextprotocol/sdk@1.32.1(supports-color@11.0.0))
       '@bazel/bazelisk':
         specifier: ^1.7.5
         version: 1.28.1
@@ -1232,8 +1232,8 @@ importers:
         specifier: 3.7.2
         version: 3.7.2
       domino:
-        specifier: https://github.com/angular/domino.git#1929b1ef5aee03234de322c5bbd955ba653d8727
-        version: '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/1929b1ef5aee03234de322c5bbd955ba653d8727'
+        specifier: https://github.com/angular/domino.git#df9563267725c609c9616dbe2e7b3a14ec4d1916
+        version: '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/df9563267725c609c9616dbe2e7b3a14ec4d1916'
       esbuild-plugin-umd-wrapper:
         specifier: 3.0.0
         version: 3.0.0
@@ -1280,8 +1280,8 @@ importers:
   packages/zone.js/test/typings:
     dependencies:
       domino:
-        specifier: https://github.com/angular/domino.git#1929b1ef5aee03234de322c5bbd955ba653d8727
-        version: '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/1929b1ef5aee03234de322c5bbd955ba653d8727'
+        specifier: https://github.com/angular/domino.git#df9563267725c609c9616dbe2e7b3a14ec4d1916
+        version: '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/df9563267725c609c9616dbe2e7b3a14ec4d1916'
       zone.js:
         specifier: workspace:*
         version: link:../..
@@ -1596,8 +1596,8 @@ packages:
       '@angular/compiler':
         optional: true
 
-  '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/1929b1ef5aee03234de322c5bbd955ba653d8727':
-    resolution: {gitHosted: true, integrity: sha512-se5ZayfAEjHgDmQ1v3e7BtsxrUr/IpqcJ9AAct/5giNJkLT3+ZogtbTO7PAg1YJplFjYwevvngWWe2qeIsKw/A==, tarball: https://codeload.github.com/angular/domino/tar.gz/1929b1ef5aee03234de322c5bbd955ba653d8727}
+  '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/df9563267725c609c9616dbe2e7b3a14ec4d1916':
+    resolution: {gitHosted: true, integrity: sha512-lUc0lNEeGpi/BTq7pFwrwiPg7XJ2jKkrOc6tjJRIsQ9rOxEcI8yP5GN4TB9j5n7qzJK50K1sugikWslQw6DqfQ==, tarball: https://codeload.github.com/angular/domino/tar.gz/df9563267725c609c9616dbe2e7b3a14ec4d1916}
     version: 2.1.6
 
   '@angular/material@22.2.4':
@@ -1610,9 +1610,9 @@ packages:
       '@angular/platform-browser': ^22.0.0 || ^23.0.0
       rxjs: ^6.5.3 || ^7.4.0
 
-  '@angular/ng-dev@https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/63d882fcc5b24ed2f6a36953c4c46a9177632111':
-    resolution: {gitHosted: true, integrity: sha512-/46a9XmIKal7gr/fD/Pk5mAv5xeyUvhTGTm10SResAaxb5wH3NHKtZYrjza1T4h8JTCug8OlWleM5aiXMeOS0Q==, tarball: https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/63d882fcc5b24ed2f6a36953c4c46a9177632111}
-    version: 0.0.0-05f294094d7b9377f3b545673098aefb904962f3
+  '@angular/ng-dev@https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/ca1613fdbd92afa1b4f786786f16bc59436b3707':
+    resolution: {gitHosted: true, integrity: sha512-RnpJEUCVWc1jb4LuRO8OojP5+K2k/XTeDo7cbpwyacBZIQixf9vd00y6g4Ey71JUR/YCvMd7/nw9omeIniOfkQ==, tarball: https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/ca1613fdbd92afa1b4f786786f16bc59436b3707}
+    version: 0.0.0-a651944a7ee1d9496e7724cf1a094f26de564766
     hasBin: true
 
   '@angular/ssr@22.2.4':
@@ -7343,6 +7343,8 @@ packages:
   grpc-gcp@1.1.1:
     resolution: {integrity: sha512-I3GNn9ONy5Vrm6XdjgOu7296DnN9vudnjv7dXKW2jAogfS20YMYZAzfZNkJUMgdpQTtLJ9t+DQCzYgGBpdYuwA==}
     engines: {node: '>=12'}
+    peerDependencies:
+      protobufjs: '*'
 
   gtoken@7.1.0:
     resolution: {integrity: sha512-pCcEwRi+TKpMlxAQObHDQ56KawURgyAf6jtIY046fJ5tIv3zDe/LEIubckAO8fj6JnAxLdmWkUfNyulQ2iKdEw==}
@@ -12234,7 +12236,7 @@ snapshots:
     optionalDependencies:
       '@angular/compiler': link:packages/compiler
 
-  '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/1929b1ef5aee03234de322c5bbd955ba653d8727': {}
+  '@angular/domino@https://codeload.github.com/angular/domino/tar.gz/df9563267725c609c9616dbe2e7b3a14ec4d1916': {}
 
   '@angular/material@22.2.4(@angular/cdk@22.2.4(@angular/common@packages+common)(@angular/core@packages+core)(@angular/forms@packages+forms)(@angular/platform-browser@packages+platform-browser)(rxjs@7.8.2))(@angular/common@packages+common)(@angular/core@packages+core)(@angular/forms@packages+forms)(@angular/platform-browser@packages+platform-browser)(rxjs@7.8.2)':
     dependencies:
@@ -12246,7 +12248,7 @@ snapshots:
       rxjs: 7.8.2
       tslib: 2.8.1
 
-  '@angular/ng-dev@https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/63d882fcc5b24ed2f6a36953c4c46a9177632111(@modelcontextprotocol/sdk@1.32.1(supports-color@11.0.0))':
+  '@angular/ng-dev@https://codeload.github.com/angular/dev-infra-private-ng-dev-builds/tar.gz/ca1613fdbd92afa1b4f786786f16bc59436b3707(@modelcontextprotocol/sdk@1.32.1(supports-color@11.0.0))':
     dependencies:
       '@actions/core': 3.0.1
       '@conventional-changelog/git-client': 3.2.0(conventional-commits-filter@6.0.1)(conventional-commits-parser@7.1.3)
