@@ -814,17 +814,20 @@ Angular는 폼 컨트롤을 다시 생성하지 않고도 런타임에 검증 �
 
 <!--
 The [`addValidators`](api/forms/AbstractControl#addValidators) and [`removeValidators`](api/forms/AbstractControl#removeValidators) methods allow you to modify a control's validators after initialization.
+Angular matches validators by reference, so you must pass the same function to `removeValidators` that you passed to `addValidators`.
 
 ```ts
+private readonly usPostalCode = Validators.pattern(/^\d{5}$/);
+
 onCountryChange(country: string) {
     const postalCodeControl = this.profileForm.get('postalCode');
 
     if (country === 'US') {
       // Add validators for US postal codes
-      postalCodeControl.addValidators([Validators.required, Validators.pattern(/^\d{5}$/)]);
+      postalCodeControl.addValidators([Validators.required, this.usPostalCode]);
     } else {
       // Remove validators when not US
-      postalCodeControl.removeValidators([Validators.required]);
+      postalCodeControl.removeValidators([Validators.required, this.usPostalCode]);
     }
 
     postalCodeControl.updateValueAndValidity();
@@ -833,17 +836,20 @@ onCountryChange(country: string) {
 -->
 
 [`addValidators`](api/forms/AbstractControl#addValidators)와 [`removeValidators`](api/forms/AbstractControl#removeValidators) 메서드를 사용하면 초기화 이후에도 컨트롤의 검증 함수를 변경할 수 있습니다.
+Angular는 검증 함수를 참조로 비교하므로 `removeValidators`에는 `addValidators`에 전달했던 것과 동일한 함수를 전달해야 합니다.
 
 ```ts
+private readonly usPostalCode = Validators.pattern(/^\d{5}$/);
+
 onCountryChange(country: string) {
     const postalCodeControl = this.profileForm.get('postalCode');
 
     if (country === 'US') {
       // 미국 우편번호 검증 함수를 추가합니다.
-      postalCodeControl.addValidators([Validators.required, Validators.pattern(/^\d{5}$/)]);
+      postalCodeControl.addValidators([Validators.required, this.usPostalCode]);
     } else {
       // 미국이 아니면 검증 함수를 제거합니다.
-      postalCodeControl.removeValidators([Validators.required]);
+      postalCodeControl.removeValidators([Validators.required, this.usPostalCode]);
     }
 
     postalCodeControl.updateValueAndValidity();
