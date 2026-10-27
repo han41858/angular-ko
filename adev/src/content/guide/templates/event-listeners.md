@@ -159,7 +159,7 @@ Angular also allows you to specify [Code values for keyboard events](https://dev
 
 ```angular-html
 <!- Matches alt and left shift ->
-<input type="text" (keydown.code.alt.shiftleft)="updateField($event)" />
+<input type="text" (keydown.code.alt.shift.shiftleft)="updateField($event)" />
 ```
 
 This can be useful for handling keyboard events consistently across different operating systems. For example, when using the Alt key on macOS devices, the `key` property reports the key based on the character already modified by the Alt key. This means that a combination like Alt + S reports a `key` value of `'ß'`. The `code` property, however, corresponds to the physical or virtual button pressed rather than the character produced.
@@ -216,7 +216,7 @@ Angular에서는 `code` 접미사를 사용해서 [키보드 이벤트의 코드
 
 ```angular-html
 <!-- alt 키와 왼쪽 shift 키 조합과 매칭됩니다. -->
-<input type="text" (keydown.code.alt.shiftleft)="updateField($event)" />
+<input type="text" (keydown.code.alt.shift.shiftleft)="updateField($event)" />
 ```
 
 이 방식은 운영체제와 관계없이 키보드 이벤트를 다뤄야 할 때 유용합니다.

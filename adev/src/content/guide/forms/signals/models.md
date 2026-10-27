@@ -624,6 +624,79 @@ export class UserProfileComponent {
 폼 모델 값이 변경되면 별도 로직 없어도 폼 필드 값이 자동으로 갱신됩니다.
 
 <!--
+### Example: Synchronizing to a service
+-->
+
+<a id="example-synchronizing-to-a-service"></a>
+
+### 예제: 서비스와 동기화하기
+
+<!--
+For some use cases, a service may store a form model:
+
+```ts
+@Service()
+export class FormService {
+  private readonly formModel = signal<UserFormModel>({ name: '', birthday: null });
+  public readonly model = this.formModel.asReadonly();
+
+  public syncFormModel(value: UserFormModel) {
+    this.formModel.set(value);
+  }
+
+  // Model set synchronously or asynchronously elsewhere in service
+}
+
+@Component(...)
+export class UserForm {
+  private readonly formService = inject(FormService);
+
+  private readonly formModel = linkedSignal(() => this.formService.model(), {
+    set: (value) => this.formService.syncFormModel(value),
+  });
+
+  protected readonly form = form(this.formModel);
+}
+```
+
+`linkedSignal`'s computation function reads the service's form model, and the `set` function
+in the options allows syncing the component's form model to the service's form model. The
+form fields automatically update when the service's model changes, as well as automatically
+update the service's form model when the form fields update the component's form model.
+-->
+
+상황에 따라 서비스에서 폼 모델을 저장할 수도 있습니다:
+
+```ts
+@Service()
+export class FormService {
+  private readonly formModel = signal<UserFormModel>({ name: '', birthday: null });
+  public readonly model = this.formModel.asReadonly();
+
+  public syncFormModel(value: UserFormModel) {
+    this.formModel.set(value);
+  }
+
+  // 서비스의 다른 곳에서 동기 또는 비동기 방식으로 모델을 설정합니다.
+}
+
+@Component(...)
+export class UserForm {
+  private readonly formService = inject(FormService);
+
+  private readonly formModel = linkedSignal(() => this.formService.model(), {
+    set: (value) => this.formService.syncFormModel(value),
+  });
+
+  protected readonly form = form(this.formModel);
+}
+```
+
+`linkedSignal`의 계산 함수는 서비스의 폼 모델을 읽고, 옵션에 지정한 `set` 함수는 컴포넌트의 폼 모델을 서비스의 폼 모델에 동기화합니다.
+서비스의 모델이 변경되면 폼 필드가 자동으로 갱신됩니다.
+또한 폼 필드가 컴포넌트의 폼 모델을 변경하면 서비스의 폼 모델도 자동으로 갱신됩니다.
+
+<!--
 ## Two-way data binding
 -->
 

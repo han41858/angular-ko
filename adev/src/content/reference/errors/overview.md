@@ -44,7 +44,7 @@
 | `NG0750`  | [@defer dependencies failed to load](errors/NG0750)                                  |
 | `NG0751`  | [@defer behavior when HMR is enabled](errors/NG0751)                                 |
 | `NG0904`  | [Unsafe value used in a resource URL context](errors/NG0904)                         |
-| `NG0910`  | [Unsafe bindings on an iframe element](errors/NG0910)                                |
+| `NG0910`  | [Unsafe bindings on an element](errors/NG0910)                                       |
 | `NG0912`  | [Component ID generation collision](errors/NG0912)                                   |
 | `NG0913`  | [Runtime Performance Warnings](errors/NG0913)                                        |
 | `NG0919`  | [Circular Dependency Detected](errors/NG0919)                                        |
@@ -98,7 +98,7 @@
 | `NG0750`  | [@defer 의존성 로드 실패](errors/NG0750)                                     |
 | `NG0751`  | [HMR을 활성화했을 때의 @defer 동작](errors/NG0751)                           |
 | `NG0904`  | [리소스 URL 컨텍스트에 안전하지 않은 값 사용](errors/NG0904)                 |
-| `NG0910`  | [iframe 엘리먼트의 안전하지 않은 바인딩](errors/NG0910)                      |
+| `NG0910`  | [엘리먼트의 안전하지 않은 바인딩](errors/NG0910)                             |
 | `NG0912`  | [컴포넌트 ID 생성 충돌](errors/NG0912)                                       |
 | `NG0913`  | [런타임 성능 경고](errors/NG0913)                                            |
 | `NG0919`  | [순환 의존성 감지](errors/NG0919)                                            |
@@ -108,7 +108,7 @@
 | `NG0956`  | [DOM 구조를 다시 생성하게 만드는 추적 표현식](errors/NG0956)                 |
 | `NG0991`  | [값을 생성하기 전에 리소스가 완료됨](errors/NG0991)                          |
 | `NG01002` | [누락된 폼 컨트롤 값](errors/NG01002)                                        |
-| `NG01055` | [`formControlName`에 해당하는 컨트롤 누락](errors/NG01055)                      |
+| `NG01055` | [`formControlName`에 해당하는 컨트롤 누락](errors/NG01055)                   |
 | `NG01101` | [잘못된 비동기 유효성 검사기 반환 타입](errors/NG01101)                      |
 | `NG01203` | [누락된 값 접근자](errors/NG01203)                                           |
 | `NG01902` | [시그널 폼에서 연결이 끊어진 필드](errors/NG01902)                           |

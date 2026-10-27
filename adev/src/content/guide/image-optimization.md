@@ -549,7 +549,7 @@ If you haven't used `sizes` before, a good place to start is to set it based on 
 
 If you find that the above does not cover your desired image behavior, see the documentation on [advanced sizes values](#advanced-sizes-values).
 
-Note that `NgOptimizedImage` automatically prepends `"auto"` to the provided `sizes` value. This is an optimization that increases the accuracy of srcset selection on browsers which support `sizes="auto"`, and is ignored by browsers which do not.
+Note that for lazy-loaded images, `NgOptimizedImage` automatically prepends `"auto"` to the provided `sizes` value. This is an optimization that increases the accuracy of srcset selection on browsers which support `sizes="auto"`, and is ignored by browsers which do not. Images that are not lazy-loaded, such as `priority` images, keep the `sizes` value as provided.
 
 By default, the responsive breakpoints are:
 
@@ -589,8 +589,9 @@ CSS에서 이미지가 뷰포트 100%를 채우는 경우에는, `sizes`를 `100
 
 여기까지 읽고 더 원하는 내용이 있다면, [`sizes` 고급 활용](#sizes-고급-활용) 섹션을 참고하세요.
 
-`NgOptimizedImage`는 `sizes` 값 앞에 `"auto"`를 자동으로 추가합니다.
+`NgOptimizedImage`는 지연 로딩되는 이미지의 `sizes` 값 앞에 `"auto"`를 자동으로 추가합니다.
 이 경우 브라우저가 `sizes="auto"`를 지원한다면 srcset에 맞게 적절한 이미지를 로드할 수 있으며, `sizes="auto"`를 지원하지 않는 브라우저에서는 무시됩니다.
+`priority` 이미지처럼 지연 로딩되지 않는 이미지는 지정한 `sizes` 값을 그대로 유지합니다.
 
 기본적으로 반응형 레이아웃의 기준점은 다음과 같이 나눕니다:
 
@@ -682,7 +683,7 @@ By default, `NgOptimizedImage` sets `loading=lazy` for all images that are not m
 <!--
 By default, `NgOptimizedImage` sets `decoding="auto"` for all images. This allows the browser to decide the optimal time to decode an image after it has been fetched. When an image is marked as `priority`, Angular automatically sets `decoding="sync"` to ensure the image is decoded and painted as early as possible helping improve **Largest Contentful Paint (LCP)** performance.
 
-You can still override this behavior by explicitly setting the `decoding` attribute.
+You can override the default `auto` for non-priority images by explicitly setting the `decoding` attribute. Priority images always use `decoding="sync"`.
 [See the documentation for the standard image `decoding` attribute for details](https://developer.mozilla.org/docs/Web/HTML/Element/img#decoding).
 
 ```html
@@ -710,7 +711,8 @@ You can still override this behavior by explicitly setting the `decoding` attrib
 이 동작은 브라우저가 이미지 파일을 로드한 후에 디코딩하는 방식을 지정하기 위한 것입니다.
 만약 이미지 파일에 `priority`가 지정되어 있다면, Angular는 해당 이미지 엘리먼트에 `decoding="sync"`를 지정해서 최대 컨텐츠 페인트(Largest Contentful Paint, LCP)가 최대한 빨리 표시될 수 있도록 합니다.
 
-이 동작은 `decoding` 어트리뷰트를 직접 지정해서 오버라이드할 수 있습니다.
+`priority`가 지정되지 않은 이미지는 `decoding` 어트리뷰트를 직접 지정해서 기본값인 `auto`를 변경할 수 있습니다.
+`priority` 이미지는 항상 `decoding="sync"`를 사용합니다.
 자세한 내용은 [표준 이미지 `decoding` 어트리뷰트](https://developer.mozilla.org/docs/Web/HTML/Element/img#decoding) 문서를 참고하세요.
 
 ```html
