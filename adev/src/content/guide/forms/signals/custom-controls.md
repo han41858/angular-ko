@@ -373,18 +373,18 @@ All properties are optional. Implement only what your control needs.
 <!--
 Track when users interact with your control:
 
-| Property  | Purpose                                          |
-| --------- | ------------------------------------------------ |
-| `touched` | Whether the user has interacted with the field   |
-| `dirty`   | Whether the value differs from its initial state |
+| Property  | Purpose                                                               |
+| --------- | --------------------------------------------------------------------- |
+| `touched` | Whether the user has interacted with the field                        |
+| `dirty`   | Whether the user has modified the value, even if they changed it back |
 -->
 
 사용자가 컨트롤과 상호작용했는지 추적합니다:
 
-| 프로퍼티  | 용도                                |
-| --------- | ----------------------------------- |
-| `touched` | 사용자가 필드와 상호작용했는지 여부 |
-| `dirty`   | 현재 값이 초기 상태와 다른지 여부   |
+| 프로퍼티  | 용도                                                    |
+| --------- | ------------------------------------------------------- |
+| `touched` | 사용자가 필드와 상호작용했는지 여부                      |
+| `dirty`   | 사용자가 값을 변경했는지 여부(원래 값으로 되돌려도 유지) |
 
 <!--
 #### Validation state
@@ -839,7 +839,7 @@ export class App {
 }
 ```
 
-IMPORTANT: Emit `touch` on `blur` (when focus leaves the control), not on `focus`. Without the `touch` output the field never registers as blurred, so `debounce('blur')` has no effect on your control.
+IMPORTANT: Emit `touch` on `blur` (when focus leaves the control), not on `focus`. If your control doesn't emit `touch`, the field is never marked as touched, and `debounce('blur')` never writes the value your control emits to the form model.
 -->
 
 <a id="working-with-debounceblur"></a>
@@ -890,7 +890,8 @@ export class App {
 }
 ```
 
-중요: `touch`는 `focus`가 아니라 `blur`(컨트롤에서 포커스가 벗어날 때)에 내보내세요. `touch` 출력이 없으면 필드가 포커스를 잃었다는 사실이 기록되지 않아 `debounce('blur')`가 동작하지 않습니다.
+중요: `touch`는 `focus`가 아니라 `blur`(컨트롤에서 포커스가 벗어날 때)에 내보내세요.
+컨트롤이 `touch`를 내보내지 않으면 필드가 `touched` 상태로 표시되지 않으며, `debounce('blur')`는 컨트롤이 내보낸 값을 폼 모델에 반영하지 않습니다.
 
 <!--
 ## Value transformation

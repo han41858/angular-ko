@@ -97,7 +97,7 @@ Validation in Signal Forms follows this pattern:
 3. **Error propagation** - Validation errors are exposed through field state signals
 4. **Reactive updates** - UI automatically updates when validation state changes
 
-Validation runs on every value change for interactive fields. Hidden and disabled fields don't run validation - their validation rules are skipped until the field becomes interactive again.
+Validation runs on every value change for interactive fields. Hidden, disabled, and readonly fields don't run validation - their validation rules are skipped until the field becomes interactive again.
 -->
 
 시그널 폼의 유효성 검사는 이런 방식으로 동작합니다:
@@ -108,7 +108,8 @@ Validation runs on every value change for interactive fields. Hidden and disable
 4. **반응형 업데이트** - 유효성 검사 결과에 따라 UI가 자동으로 갱신됩니다.
 
 유효성 검사는 사용자가 필드와 상호작용하면서 값이 변경될 때마다 실행됩니다.
-화면에서 감춰져 있거나, 비활성화된 필드는 다시 상호작용한 필드가 되기 전까지는 유효성 검사에 영향을 주지 않습니다.
+화면에서 감춰져 있거나, 비활성화되었거나, 읽기 전용인 필드는 유효성 검사를 실행하지 않습니다.
+이런 필드의 유효성 검사 규칙은 다시 상호작용할 수 있는 상태가 될 때까지 건너뜁니다.
 
 <!--
 ### Validation timing
