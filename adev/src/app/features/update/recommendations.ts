@@ -3127,7 +3127,7 @@ export const RECOMMENDATIONS: Step[] = [
     step: '21.0.0-safe-resource-url-audio-src',
     // Original: If you use `SafeResourceUrl` values with `audio[src]` bindings, be aware that `audio[src]` is no longer sanitized in Angular v21. Existing uses of `bypassSecurityTrustResourceUrl` may therefore produce the `SafeValue must use [property]=binding` message. Remove the unnecessary sanitization and bind the URL directly instead.
     action:
-      '`audio[src]` 바인딩에 `SafeResourceUrl` 값을 사용하는 경우, Angular v21에서는 `audio[src]`가 더 이상 무력화되지 않는다는 점에 유의하세요. 따라서 기존의 `bypassSecurityTrustResourceUrl` 사용으로 인해 `SafeValue must use [property]=binding` 메시지가 표시될 수 있습니다. 불필요한 무력화 처리를 제거하고 URL을 직접 바인딩하세요.',
+      '`audio[src]` 바인딩에 `SafeResourceUrl` 값을 사용하는 경우, Angular v21에서는 `audio[src]`가 더 이상 정제(sanitize)되지 않는다는 점에 유의하세요. 따라서 기존의 `bypassSecurityTrustResourceUrl` 사용으로 인해 `SafeValue must use [property]=binding` 메시지가 표시될 수 있습니다. 불필요한 정제 처리를 제거하고 URL을 직접 바인딩하세요.',
   },
 
   {

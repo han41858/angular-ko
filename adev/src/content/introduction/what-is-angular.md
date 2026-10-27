@@ -113,7 +113,7 @@
     Angular CLI `ng update` 명령을 실행하면 Angular 버전이 변경된 것에 맞춰 코드를 자동으로 업그레이드할 수 있습니다.
     최신 버전을 유지하면 앱 성능과 보안을 최신 상태로 유지할 수 있습니다.
   </docs-card>
-  <docs-card title="Language Service" href="tools/language-service" link="Language Service" iconImgSrc="adev/src/assets/icons/language-service.svg">
+  <docs-card title="Language Service" href="tools/language-service" link="언어 지원 서비스" iconImgSrc="adev/src/assets/icons/language-service.svg">
     Angular는 IDE 언어 지원 서비스를 제공하기 때문에 주요 IDE에서 코드 자동완성, 코드 탐색, 리팩토링, 실시간 진단 기능을 활용할 수 있습니다.
   </docs-card>
 </docs-card-container>
@@ -130,11 +130,11 @@
 </docs-card-container>
 -->
 <docs-card-container headerTitle="자신 있게 추천합니다" headerImgSrc="adev/src/assets/images/rocket.svg">
-  <docs-card title="커밋마다 검증하는 거대한 모노레포를 Google이 관리합니다" href="https://cacm.acm.org/research/why-google-stores-billions-of-lines-of-code-in-a-single-repository/" link="Learn about Google's monorepo" titleIconName="sensors">
+  <docs-card title="커밋마다 검증하는 거대한 모노레포를 Google이 관리합니다" href="https://cacm.acm.org/research/why-google-stores-billions-of-lines-of-code-in-a-single-repository/" link="Google의 모노레포 알아보기" titleIconName="sensors">
     <p>Angular에 커밋되는 모든 코드는 셀 수 없이 많은 실제 시나리오를 반영하기 위해 Google 내부 코드 저장소에 있는 수십만 개의 테스트로 검증합니다.</p>
     <p>Angular는 Google Cloud와 같은 Google의 주요 제품에 사용되기 때문에 안정성을 크게 신경 쓰고 있습니다. 그래서 커밋으로 수정되는 코드가 충분한 테스트를 거치고, 하위 호환성도 만족하면서, 필요하다면 마이그레이션할 수 있도록 지원합니다.</p>
   </docs-card>
-  <docs-card title="명확한 지원 정책, 예측 가능한 릴리즈 일정" href="reference/releases" link="Versioning & releasing" titleIconName="sensors">
+  <docs-card title="명확한 지원 정책, 예측 가능한 릴리즈 일정" href="reference/releases" link="버전 관리 및 릴리즈" titleIconName="sensors">
     Angular는 정기적으로 새 버전을 내기 때문에 프레임워크의 안정성과 하위 호환성을 예측할 수 있습니다.
     장기 지원(LTS) 기간에는 중요한 보안 패치가 계속 제공됩니다.
     Angular 팀이 제공하는 자동 업데이트 툴과 가이드 문서를 참고해서 앱을 최신 상태로 유지할 수 있습니다.
@@ -164,14 +164,14 @@
 </docs-card-container>
 -->
 <docs-card-container headerTitle="어떤 규모에도 적합합니다" headerImgSrc="adev/src/assets/images/servers.svg">
-  <docs-card title="전 세계 사용자에게 다가가세요" href="guide/i18n" link="Internationalization" titleIconName="sensors">
+  <docs-card title="전 세계 사용자에게 다가가세요" href="guide/i18n" link="국제화" titleIconName="sensors">
     Angular가 제공하는 국제화 기능은 유니코드 표준 ICU 구문 지원을 포함하여 메시지 번역, 서식 지정 기능을 제공합니다.
   </docs-card>
-  <docs-card title="사용자를 보호하는 보안은 기본입니다" href="best-practices/security" link="Security" titleIconName="sensors">
-    Angular는 Google의 세계적인 보안 엔지니어들과 협력하여 보안은 기본으로 보장합니다.
-    HTML 무력화와 Trusted Types 지원을 포함하여 크로스 사이트 스크립팅(XSS, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
+  <docs-card title="사용자를 보호하는 보안은 기본입니다" href="best-practices/security" link="보안" titleIconName="sensors">
+    Angular는 Google의 세계적인 보안 엔지니어들과 협력하여 보안을 기본으로 고려했습니다.
+    HTML 정제(sanitization)와 Trusted Types 지원을 포함하여 크로스 사이트 스크립팅(XSS, cross-site scripting)과 크로스 사이트 요청 위조(CSRF, cross-site request forgery)와 같은 일반 취약점 보호도 함께 지원합니다.
   </docs-card>
-  <docs-card title="Vite와 esbuild로 대규모 팀 생산성을 유지하세요" href="tools/cli/build-system-migration" link="Vite and esbuild" titleIconName="sensors">
+  <docs-card title="Vite와 esbuild로 대규모 팀 생산성을 유지하세요" href="tools/cli/build-system-migration" link="Vite와 esbuild" titleIconName="sensors">
     Angular CLI는 Vite와 ESBuild를 활용하는 최신 빌드 파이프라인을 구현했습니다.
     개발자들의 보고에 따르면, 수십만 줄의 코드로 이루어진 프로젝트를 빌드하는 데에 1분도 걸리지 않는다고 합니다.
   </docs-card>
@@ -191,13 +191,13 @@
 </docs-card-container>
 -->
 <docs-card-container headerTitle="오픈 소스 퍼스트" headerImgSrc="adev/src/assets/images/open-source.svg">
-  <docs-card title="GitHub에 공개되어 있습니다" href="https://github.com/angular/angular" link="Star our GitHub" titleIconName="sensors">
+  <docs-card title="GitHub에 공개되어 있습니다" href="https://github.com/angular/angular" link="GitHub 스타 남기기" titleIconName="sensors">
     Angular 팀이 어떤 작업을 하고 있는지 궁금하신가요?
     GitHub에서 모든 PR과 커밋을 확인할 수 있습니다.
     이슈가 있거나 버그를 만나셨나요?
     GitHub 이슈를 정기적으로 검토하며 커뮤니티에 빠르게 대응하면서 여러분이 직면한 실질적인 문제를 해결하고 있습니다.
   </docs-card>
-  <docs-card title="로드맵도 투명하게 공개합니다" href="roadmap" link="Read our public roadmap" titleIconName="sensors">
+  <docs-card title="로드맵도 투명하게 공개합니다" href="roadmap" link="공개 로드맵 보기" titleIconName="sensors">
     Angular 팀은 현재는 물론 앞으로 작업할 로드맵을 공개하고 있으며, 이에 대한 피드백도 소중하게 여깁니다.
     Angular의 향후 방향성을 정하는 과정에서 커뮤니티 의견을 수렴하기 위해 의견 요청(RFC, Request for Comments)을 게시하고 있습니다.
   </docs-card>
@@ -222,15 +222,15 @@
 </docs-card-container>
 -->
 <docs-card-container headerTitle="방대한 커뮤니티" headerImgSrc="adev/src/assets/images/community.svg">
-  <docs-card title="강좌, 블로그, 리소스" href="https://devlibrary.withgoogle.com/products/angular?sort=added" link="Check out DevLibrary" titleIconName="sensors">
+  <docs-card title="강좌, 블로그, 리소스" href="https://devlibrary.withgoogle.com/products/angular?sort=added" link="DevLibrary 확인하기" titleIconName="sensors">
     우리 커뮤니티에는 재능 넘치는 개발자, 작가, 강사, 팟캐스터들이 모여 있습니다.
     Google for Developers 라이브러리는 신입 개발자와 숙련된 개발자 모두 개발에 활용할 수 있는 고품질 리소스입니다.
   </docs-card>
-  <docs-card title="오픈 소스" href="https://github.com/angular/angular/blob/main/CONTRIBUTING.md" link="Contribute to Angular" titleIconName="sensors">
+  <docs-card title="오픈 소스" href="https://github.com/angular/angular/blob/main/CONTRIBUTING.md" link="Angular에 기여하기" titleIconName="sensors">
     Angular를 더 나은 프레임워크로 만드는 데 기여하는 오픈 소스 컨트리뷰터 모두에게 감사드립니다.
     문서의 오타 수정부터 주요한 기능 추가까지, 관심 있는 분들은 GitHub에서 함께 해보세요.
   </docs-card>
-  <docs-card title="커뮤니티 파트너십" href="https://developers.google.com/community/experts/directory?specialization=angular" link="Meet the Angular GDEs" titleIconName="sensors">
+  <docs-card title="커뮤니티 파트너십" href="https://developers.google.com/community/experts/directory?specialization=angular" link="Angular GDE 만나보기" titleIconName="sensors">
     Angular 팀은 개인은 물론, 교육자들과 기업과 협력하며 지원을 계속하고 있습니다.
     Angular Google Developer Experts(GDEs)는 Angular를 사용해서 개발하고, 교육하거나 조직하는 전 세계 커뮤니티 리더를 대표합니다.
     또, 기술 업계 리더들을 위해 기업 파트너십을 확대하고 있습니다.

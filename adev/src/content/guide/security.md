@@ -119,8 +119,8 @@ For this reason, it is strongly encouraged to take advantage of these features. 
 -->
 
 Angular는 XSS 버그를 체계적으로 차단하기 위해 기본적으로 모든 값을 신뢰할 수 없는 값으로 취급합니다.
-템플릿 바인딩이나 문자열 바인딩을 통해 DOM에 값을 삽입할 때 Angular는 신뢰할 수 없는 값을 무력화하고 이스케이프합니다.
-Angular 외부에서 이미 무력화되어 안전하다고 판단한 값이라면, [신뢰할 수 있는 값으로 표시](#trusting-safe-values)해 Angular에 알려주세요.
+템플릿 바인딩이나 문자열 바인딩을 통해 DOM에 값을 삽입할 때 Angular는 신뢰할 수 없는 값을 정제(sanitize)하고 이스케이프합니다.
+Angular 외부에서 이미 정제되어 안전하다고 판단한 값이라면, [신뢰할 수 있는 값으로 표시](#trusting-safe-values)해 Angular에 알려주세요.
 
 렌더링에 사용하는 값과 달리 Angular 템플릿은 기본적으로 신뢰할 수 있다고 간주되며, 실행 가능한 코드로 취급해야 합니다.
 사용자 입력과 템플릿 구문을 이어 붙여 템플릿을 만들지 마세요.
@@ -139,7 +139,7 @@ Angular 외부에서 이미 무력화되어 안전하다고 판단한 값이라�
 
 <a id="sanitization-and-security-contexts"></a>
 
-### 무력화와 보안 컨텍스트
+### 정제와 보안 컨텍스트
 
 <!--
 _Sanitization_ is the inspection of an untrusted value, turning it into a value that's safe to insert into the DOM.
@@ -160,9 +160,9 @@ Angular sanitizes untrusted values for HTML and URLs. Sanitizing resource URLs i
 In development mode, Angular prints a console warning when it has to change a value during sanitization.
 -->
 
-_무력화(sanitization)_ 는 신뢰할 수 없는 값을 검사해 DOM에 안전하게 삽입할 수 있는 값으로 바꾸는 과정입니다.
-무력화 과정에서 값이 전혀 바뀌지 않는 경우도 많습니다.
-무력화 방식은 컨텍스트에 따라 달라집니다.
+_정제_ 는 신뢰할 수 없는 값을 검사해 DOM에 안전하게 삽입할 수 있는 값으로 바꾸는 과정입니다.
+정제 과정에서 값이 전혀 바뀌지 않는 경우도 많습니다.
+정제 방식은 컨텍스트에 따라 달라집니다.
 예를 들어 CSS에서는 무해한 값이 URL에서는 위험할 수 있습니다.
 
 Angular는 다음 보안 컨텍스트를 정의합니다.
@@ -174,9 +174,9 @@ Angular는 다음 보안 컨텍스트를 정의합니다.
 | URL           | `<a href>`와 같은 URL 프로퍼티에 사용합니다.                                     |
 | Resource URL  | `<script src>`처럼 불러온 후 코드로 실행하는 URL입니다.                          |
 
-Angular는 HTML과 URL에서 신뢰할 수 없는 값을 무력화합니다.
-리소스 URL은 임의의 코드를 포함하므로 무력화할 수 없습니다.
-개발 모드에서는 Angular가 무력화 과정에서 값을 변경해야 할 때 콘솔에 경고를 출력합니다.
+Angular는 HTML과 URL에서 신뢰할 수 없는 값을 정제합니다.
+리소스 URL은 임의의 코드를 포함하므로 정제할 수 없습니다.
+개발 모드에서는 Angular가 정제 과정에서 값을 변경해야 할 때 콘솔에 경고를 출력합니다.
 
 <!--
 ### Sanitization example
@@ -184,7 +184,7 @@ Angular는 HTML과 URL에서 신뢰할 수 없는 값을 무력화합니다.
 
 <a id="sanitization-example"></a>
 
-### 무력화 예제
+### 정제 예제
 
 <!--
 The following template binds the value of `htmlSnippet`. Once by interpolating it into an element's content, and once by binding it to the `innerHTML` property of an element:
@@ -218,7 +218,7 @@ HTML로 해석하게 하려면 `innerHTML`과 같은 HTML 프로퍼티에 바인
 
 <docs-code header="inner-html-binding.component.ts (클래스)" path="adev/src/content/examples/security/src/app/inner-html-binding.component.ts" region="class"/>
 
-Angular는 이 값을 안전하지 않다고 인식해 자동으로 무력화합니다.
+Angular는 이 값을 안전하지 않다고 인식해 자동으로 정제합니다.
 `script` 엘리먼트는 제거하지만 `<b>` 엘리먼트와 같은 안전한 내용은 유지합니다.
 
 <img alt="문자열 바인딩과 바인딩으로 표시한 HTML 값의 화면" src="assets/images/guide/security/binding-inner-html.png#small">
@@ -229,7 +229,7 @@ Angular는 이 값을 안전하지 않다고 인식해 자동으로 무력화합
 
 <a id="direct-use-of-the-dom-apis-and-explicit-sanitization-calls"></a>
 
-### DOM API 직접 사용과 명시적 무력화 호출
+### DOM API 직접 사용과 명시적 정제 호출
 
 <!--
 Unless you enforce Trusted Types, the built-in browser DOM APIs don't automatically protect you from security vulnerabilities.
@@ -244,12 +244,12 @@ That function also accepts values that were marked as trusted using the `bypassS
 
 Trusted Types를 강제 적용하지 않는 한, 브라우저의 내장 DOM API는 보안 취약점을 자동으로 방어하지 않습니다.
 예를 들어 `document`, `ElementRef`를 통해 접근하는 노드, 여러 서드 파티 API에는 안전하지 않은 메서드가 포함되어 있습니다.
-마찬가지로 DOM을 조작하는 다른 라이브러리와 상호작용할 때는 Angular 문자열 바인딩과 같은 자동 무력화 기능을 제공받지 못할 가능성이 높습니다.
+마찬가지로 DOM을 조작하는 다른 라이브러리와 상호작용할 때는 Angular 문자열 바인딩과 같은 자동 정제 기능을 제공받지 못할 가능성이 높습니다.
 DOM을 직접 조작하는 것은 피하고, 가능하면 Angular 템플릿을 사용하세요.
 
-직접 조작이 불가피하다면 Angular에 내장된 무력화 함수를 사용하세요.
-[DomSanitizer.sanitize](api/platform-browser/DomSanitizer#sanitize) 메서드와 적절한 `SecurityContext`로 신뢰할 수 없는 값을 무력화하세요.
-이 함수는 `bypassSecurityTrust` 함수로 신뢰할 수 있다고 표시한 값도 받으며, [아래에서 설명하는 것처럼](#trusting-safe-values) 해당 값은 무력화하지 않습니다.
+직접 조작이 불가피하다면 Angular에 내장된 정제 함수를 사용하세요.
+[DomSanitizer.sanitize](api/platform-browser/DomSanitizer#sanitize) 메서드와 적절한 `SecurityContext`로 신뢰할 수 없는 값을 정제하세요.
+이 함수는 `bypassSecurityTrust` 함수로 신뢰할 수 있다고 표시한 값도 받으며, [아래에서 설명하는 것처럼](#trusting-safe-values) 해당 값은 정제하지 않습니다.
 
 <!--
 ### Trusting safe values
@@ -297,7 +297,7 @@ To prevent this, call a method on the component to construct a trusted video URL
 -->
 
 애플리케이션에 실행 가능한 코드를 포함하거나, 특정 URL의 `<iframe>`을 표시하거나, 잠재적으로 위험한 URL을 구성해야 할 때가 있습니다.
-이러한 상황에서 자동 무력화를 막으려면 값을 검사하고, 생성 방식을 확인했으며, 안전하다는 것을 확인했다고 Angular에 알려주세요.
+이러한 상황에서 자동 정제를 막으려면 값을 검사하고, 생성 방식을 확인했으며, 안전하다는 것을 확인했다고 Angular에 알려주세요.
 이 작업은 _주의해서_ 수행해야 합니다.
 악성일 수 있는 값을 신뢰하면 애플리케이션에 보안 취약점을 만들게 됩니다.
 확신이 없다면 보안 전문가의 검토를 받으세요.
@@ -315,7 +315,7 @@ To prevent this, call a method on the component to construct a trusted video URL
 
 <docs-code header="bypass-security.component.html (URL)" path="adev/src/content/examples/security/src/app/bypass-security.component.html" region="URL"/>
 
-일반적으로 Angular는 URL을 자동으로 무력화해 위험한 코드를 비활성화하고, 개발 모드에서는 이 작업을 콘솔에 기록합니다.
+일반적으로 Angular는 URL을 자동으로 정제해 위험한 코드를 비활성화하고, 개발 모드에서는 이 작업을 콘솔에 기록합니다.
 이를 막으려면 `bypassSecurityTrustUrl`을 호출해 해당 URL 값을 신뢰할 수 있는 URL로 표시하세요.
 
 <docs-code header="bypass-security.component.ts (trust-url)" path="adev/src/content/examples/security/src/app/bypass-security.component.ts" region="trust-url"/>
@@ -653,7 +653,7 @@ Trusted Types를 활성화한 애플리케이션을 이를 지원하지 않는 �
 
 | 정책                     | 설명                                                                                                                                                                                                                                                                    |
 | :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `angular`                | 보안 검토를 마친 Angular 내부 코드에서 사용하는 정책이며, Trusted Types가 강제 적용될 때 Angular가 동작하는 데 필요합니다. 이 정책은 모든 인라인 템플릿 값과 Angular가 무력화한 내용을 안전하다고 취급합니다.                                                           |
+| `angular`                | 보안 검토를 마친 Angular 내부 코드에서 사용하는 정책이며, Trusted Types가 강제 적용될 때 Angular가 동작하는 데 필요합니다. 이 정책은 모든 인라인 템플릿 값과 Angular가 정제한 내용을 안전하다고 취급합니다.                                                             |
 | `angular#bundler`        | Angular CLI 번들러가 지연 로딩 청크 파일을 생성할 때 사용하는 정책입니다.                                                                                                                                                                                               |
 | `angular#unsafe-bypass`  | Angular의 [DomSanitizer](api/platform-browser/DomSanitizer)에서 `bypassSecurityTrustHtml`처럼 보안 검사를 우회하는 메서드를 사용하는 애플리케이션에 적용하는 정책입니다. 이러한 메서드를 사용하는 모든 애플리케이션은 이 정책을 활성화해야 합니다.                      |
 | `angular#unsafe-jit`     | [JIT(Just-In-Time) 컴파일러](api/core/Compiler)가 사용하는 정책입니다. 애플리케이션이 JIT 컴파일러와 직접 상호작용하거나 [platform browser dynamic](api/platform-browser-dynamic/platformBrowserDynamic)을 사용해 JIT 모드로 실행되는 경우 이 정책을 활성화해야 합니다. |
