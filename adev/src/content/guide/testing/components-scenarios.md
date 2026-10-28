@@ -2622,7 +2622,7 @@ providers?: any[];
 
 <a id="provide-a-spy-stub-herodetailservicespy"></a>
 
-### 스파이 스텁 (`HeroDetailServiceSpy`) 제공하기
+### _스파이 스텁_ (`HeroDetailServiceSpy`) 제공하기
 
 <!--
 This example completely replaces the component's `providers` array with a new array containing a `HeroDetailServiceSpy`.

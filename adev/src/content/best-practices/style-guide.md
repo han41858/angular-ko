@@ -623,7 +623,7 @@ For more details, refer to the [bindings guide](/guide/templates/binding#css-cla
 
 <a id="name-event-handlers-for-what-they-do-not-for-the-triggering-event"></a>
 
-### 이벤트 핸들러의 이름은 이벤트가 아니라 수행하는 동작 을 나타내도록 지으세요
+### 이벤트 핸들러의 이름은 이벤트가 아니라 _수행하는 동작_ 을 나타내도록 지으세요
 
 <!--
 Prefer naming event handlers for the action they perform rather than for the triggering event:
