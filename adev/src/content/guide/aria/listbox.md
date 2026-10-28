@@ -440,16 +440,6 @@ For detailed API documentation, inspect the following API references:
 
 - [`Listbox`](/api/aria/listbox/Listbox)
 - [`Option`](/api/aria/listbox/Option)
-
-### Related patterns
-
-Listbox is used by these documented dropdown patterns:
-
-- [Select](guide/aria/select) - Single-selection dropdown pattern using readonly combobox + listbox
-- [Multiselect](guide/aria/multiselect) - Multiple-selection dropdown pattern using readonly combobox + listbox with `multi`
-- [Autocomplete](guide/aria/autocomplete) - Filterable dropdown pattern using combobox + listbox
-
-For complete dropdown patterns with trigger, popup, and overlay positioning, see those pattern guides instead of using listbox alone.
 -->
 
 <a id="apis"></a>
@@ -462,6 +452,18 @@ For complete dropdown patterns with trigger, popup, and overlay positioning, see
 
 - [`Listbox`](/api/aria/listbox/Listbox)
 - [`Option`](/api/aria/listbox/Option)
+
+<!--
+### Related patterns
+
+Listbox is used by these documented dropdown patterns:
+
+- [Select](guide/aria/select) - Single-selection dropdown pattern using readonly combobox + listbox
+- [Multiselect](guide/aria/multiselect) - Multiple-selection dropdown pattern using readonly combobox + listbox with `multi`
+- [Autocomplete](guide/aria/autocomplete) - Filterable dropdown pattern using combobox + listbox
+
+For complete dropdown patterns with trigger, popup, and overlay positioning, see those pattern guides instead of using listbox alone.
+-->
 
 <a id="related-patterns"></a>
 

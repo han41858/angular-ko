@@ -4,7 +4,16 @@ Directives add behavior to elements and components in your Angular applications.
 </docs-decorative-header>
 
 A directive can change how an element looks, how it behaves, or how it fits into the DOM. Angular ships with several built-in directives, and you can write your own.
+-->
 
+<docs-decorative-header title="디렉티브" imgSrc="adev/src/assets/images/directives.svg"> <!-- markdownlint-disable-line -->
+디렉티브는 Angular 애플리케이션의 엘리먼트와 컴포넌트에 동작을 추가합니다.
+</docs-decorative-header>
+
+디렉티브는 엘리먼트의 모습이나 동작, DOM 안에서의 배치를 변경할 수 있습니다.
+Angular가 제공하는 내장 디렉티브를 사용하거나 직접 디렉티브를 작성할 수 있습니다.
+
+<!--
 ## When to use a directive
 
 Directives are most effective when they encapsulate **reusable** behavior that you want to apply to an existing element or component.
@@ -16,7 +25,21 @@ Common examples include:
 - Adding behavior to a component you don't own without changing its source.
 
 If you need to render your own markup or manage a piece of UI with its own template, reach for a [component](guide/components), a specialized directive with its own template.
+-->
 
+## 디렉티브를 사용하는 경우 {#when-to-use-a-directive}
+
+기존 엘리먼트나 컴포넌트에 적용할 **재사용 가능한** 동작을 캡슐화할 때 디렉티브가 가장 효과적입니다.
+
+다음과 같은 경우에 주로 사용합니다.
+
+- 자동 포커스나 툴팁처럼 여러 엘리먼트에 같은 모습이나 동작 적용하기
+- 호스트 엘리먼트의 DOM, 어트리뷰트, 클래스 읽거나 변경하기
+- 직접 관리하지 않는 컴포넌트의 소스 코드를 변경하지 않고 동작 추가하기
+
+직접 마크업을 렌더링하거나 자체 템플릿이 있는 UI를 관리해야 한다면, 자체 템플릿을 가진 특별한 디렉티브인 [컴포넌트](guide/components)를 사용하세요.
+
+<!--
 ## A quick example
 
 Suppose you want elements to highlight when the user hovers over them with a mouse, changing their background color to yellow. Rather than repeat the same event-handling logic on every element, you can package that behavior in a directive and apply it wherever you need it.
@@ -48,46 +71,7 @@ Apply the directive by adding its selector as an attribute on an element:
 ```
 
 Every element that carries the `appHighlight` attribute gains the same hover behavior, with the logic defined in one place.
-
-## Types of directives
-
-Angular has three primary types of directives:
-
-| Directive type                                                  | Details                                                                           |
-| :-------------------------------------------------------------- | :-------------------------------------------------------------------------------- |
-| [Components](guide/components)                                  | Define reusable UI with their own template.                                       |
-| [Attribute directives](guide/directives/attribute-directives)   | Change the appearance or behavior of an element, component, or another directive. |
-| [Structural directives](guide/directives/structural-directives) | Change the DOM layout by adding and removing DOM elements.                        |
-
-## What's next
-
-Learn more about each type of directive in the following guides.
-
-<docs-pill-row>
-  <docs-pill href="guide/directives/attribute-directives" title="Attribute directives"/>
-  <docs-pill href="guide/directives/structural-directives" title="Structural directives"/>
-  <docs-pill href="guide/directives/directive-composition-api" title="Directive composition API"/>
-</docs-pill-row>
 -->
-
-<docs-decorative-header title="디렉티브" imgSrc="adev/src/assets/images/directives.svg"> <!-- markdownlint-disable-line -->
-디렉티브는 Angular 애플리케이션의 엘리먼트와 컴포넌트에 동작을 추가합니다.
-</docs-decorative-header>
-
-디렉티브는 엘리먼트의 모습이나 동작, DOM 안에서의 배치를 변경할 수 있습니다.
-Angular가 제공하는 내장 디렉티브를 사용하거나 직접 디렉티브를 작성할 수 있습니다.
-
-## 디렉티브를 사용하는 경우 {#when-to-use-a-directive}
-
-기존 엘리먼트나 컴포넌트에 적용할 **재사용 가능한** 동작을 캡슐화할 때 디렉티브가 가장 효과적입니다.
-
-다음과 같은 경우에 주로 사용합니다.
-
-- 자동 포커스나 툴팁처럼 여러 엘리먼트에 같은 모습이나 동작 적용하기
-- 호스트 엘리먼트의 DOM, 어트리뷰트, 클래스 읽거나 변경하기
-- 직접 관리하지 않는 컴포넌트의 소스 코드를 변경하지 않고 동작 추가하기
-
-직접 마크업을 렌더링하거나 자체 템플릿이 있는 UI를 관리해야 한다면, 자체 템플릿을 가진 특별한 디렉티브인 [컴포넌트](guide/components)를 사용하세요.
 
 ## 간단한 예제 {#a-quick-example}
 
@@ -122,6 +106,18 @@ export class HighlightDirective {
 
 `appHighlight` 어트리뷰트가 있는 모든 엘리먼트에는 한 곳에 정의한 같은 호버 동작이 적용됩니다.
 
+<!--
+## Types of directives
+
+Angular has three primary types of directives:
+
+| Directive type                                                  | Details                                                                           |
+| :-------------------------------------------------------------- | :-------------------------------------------------------------------------------- |
+| [Components](guide/components)                                  | Define reusable UI with their own template.                                       |
+| [Attribute directives](guide/directives/attribute-directives)   | Change the appearance or behavior of an element, component, or another directive. |
+| [Structural directives](guide/directives/structural-directives) | Change the DOM layout by adding and removing DOM elements.                        |
+-->
+
 ## 디렉티브 종류 {#types-of-directives}
 
 Angular에는 세 가지 주요 디렉티브 종류가 있습니다.
@@ -131,6 +127,18 @@ Angular에는 세 가지 주요 디렉티브 종류가 있습니다.
 | [컴포넌트](guide/components)                                 | 자체 템플릿으로 재사용 가능한 UI를 정의합니다.                  |
 | [어트리뷰트 디렉티브](guide/directives/attribute-directives) | 엘리먼트, 컴포넌트, 다른 디렉티브의 모습이나 동작을 변경합니다. |
 | [구조 디렉티브](guide/directives/structural-directives)      | DOM 엘리먼트를 추가하거나 제거해서 DOM 배치를 변경합니다.       |
+
+<!--
+## What's next
+
+Learn more about each type of directive in the following guides.
+
+<docs-pill-row>
+  <docs-pill href="guide/directives/attribute-directives" title="Attribute directives"/>
+  <docs-pill href="guide/directives/structural-directives" title="Structural directives"/>
+  <docs-pill href="guide/directives/directive-composition-api" title="Directive composition API"/>
+</docs-pill-row>
+-->
 
 ## 다음 단계 {#whats-next}
 

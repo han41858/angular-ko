@@ -203,7 +203,48 @@ Angular packages use this same structure.
 For example, `@angular/core` is the primary entry point and `@angular/core/testing` is a secondary entry point of the same package.
 
 HELPFUL: For an architectural overview of how entry points enable code splitting and define chunk boundaries in the Angular Package Format, see [Entrypoints and code splitting](tools/libraries/angular-package-format#entrypoints-and-code-splitting).
+-->
 
+<a id="entry-points"></a>
+
+## 진입점
+
+_진입점_ 은 라이브러리 사용자가 임포트할 때 지정하는 모듈 지정자와 해당 지정자가 노출하는 공개 API를 의미합니다.
+모든 라이브러리는 하나의 _기본 진입점_ 을 가지며, 원하는 만큼 _보조 진입점_ 을 추가할 수 있습니다.
+
+기본 진입점은 패키지 자체입니다.
+라이브러리 루트의 `ng-package.json` 파일에서 설정하며 `lib.entryFile`로 공개 API를 정의하는 파일을 지정합니다.
+
+```json {header: 'projects/my-lib/ng-package.json'}
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/my-lib",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}
+```
+
+사용자는 패키지 이름으로 기본 진입점을 임포트합니다.
+
+```ts
+import {ThemeService} from 'my-lib';
+```
+
+보조 진입점은 자체 `ng-package.json` 파일이 있는 라이브러리 내부 디렉터리입니다.
+라이브러리 루트를 기준으로 한 디렉터리의 상대 경로가 임포트 하위 경로가 됩니다.
+예를 들어 `button` 디렉터리가 있으면 사용자가 `my-lib/button`을 사용할 수 있습니다.
+
+```ts
+import {ButtonComponent} from 'my-lib/button';
+```
+
+Angular 패키지도 같은 구조를 사용합니다.
+예를 들어 `@angular/core`는 기본 진입점이고 `@angular/core/testing`은 같은 패키지의 보조 진입점입니다.
+
+도움말: Angular 패키지 형식에서 진입점으로 코드 분할을 지원하고 청크 경계를 정의하는 구조는 [진입점과 코드 분할](tools/libraries/angular-package-format#entrypoints-and-code-splitting)을 참고하세요.
+
+<!--
 ### Adding a secondary entry point
 
 Create a directory inside the library with its own `ng-package.json` and public API file:
@@ -253,48 +294,7 @@ By default, `ng generate library` maps only the package root, which does not cov
 ```
 
 IMPORTANT: When importing code from another entry point in the same library, always use its package import path (for example, `import {ThemeService} from 'my-lib'`) instead of a relative path. `ng-packagr` builds each entry point separately in dependency order, so relative imports across entry points and circular dependencies between entry points will fail the build.
-
-## Refactoring parts of an application into a library
 -->
-
-<a id="entry-points"></a>
-
-## 진입점
-
-_진입점_ 은 라이브러리 사용자가 임포트할 때 지정하는 모듈 지정자와 해당 지정자가 노출하는 공개 API를 의미합니다.
-모든 라이브러리는 하나의 _기본 진입점_ 을 가지며, 원하는 만큼 _보조 진입점_ 을 추가할 수 있습니다.
-
-기본 진입점은 패키지 자체입니다.
-라이브러리 루트의 `ng-package.json` 파일에서 설정하며 `lib.entryFile`로 공개 API를 정의하는 파일을 지정합니다.
-
-```json {header: 'projects/my-lib/ng-package.json'}
-{
-  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/my-lib",
-  "lib": {
-    "entryFile": "src/public-api.ts"
-  }
-}
-```
-
-사용자는 패키지 이름으로 기본 진입점을 임포트합니다.
-
-```ts
-import {ThemeService} from 'my-lib';
-```
-
-보조 진입점은 자체 `ng-package.json` 파일이 있는 라이브러리 내부 디렉터리입니다.
-라이브러리 루트를 기준으로 한 디렉터리의 상대 경로가 임포트 하위 경로가 됩니다.
-예를 들어 `button` 디렉터리가 있으면 사용자가 `my-lib/button`을 사용할 수 있습니다.
-
-```ts
-import {ButtonComponent} from 'my-lib/button';
-```
-
-Angular 패키지도 같은 구조를 사용합니다.
-예를 들어 `@angular/core`는 기본 진입점이고 `@angular/core/testing`은 같은 패키지의 보조 진입점입니다.
-
-도움말: Angular 패키지 형식에서 진입점으로 코드 분할을 지원하고 청크 경계를 정의하는 구조는 [진입점과 코드 분할](tools/libraries/angular-package-format#entrypoints-and-code-splitting)을 참고하세요.
 
 <a id="adding-a-secondary-entry-point"></a>
 
@@ -347,6 +347,10 @@ IMPORTANT: 보조 진입점의 `ng-package.json`에는 `lib` 옵션만 지정할
 ```
 
 IMPORTANT: 같은 라이브러리의 다른 진입점에서 코드를 임포트할 때는 상대 경로 대신 항상 패키지 임포트 경로(예: `import {ThemeService} from 'my-lib'`)를 사용하세요. `ng-packagr`는 의존성 순서대로 각 진입점을 별도로 빌드하므로 진입점 사이의 상대 임포트나 순환 의존성이 있으면 빌드가 실패합니다.
+
+<!--
+## Refactoring parts of an application into a library
+-->
 
 <a id="refactoring-parts-of-an-application-into-a-library"></a>
 

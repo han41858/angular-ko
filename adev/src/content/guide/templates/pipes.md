@@ -690,7 +690,15 @@ export class JoinNamesImpurePipe implements PipeTransform {
 ## Using pipe logic outside templates
 
 Pipes are template operators designed to transform data declaratively in templates. When you need the same transformation logic in a service, a utility class, or any other non-template context, **avoid injecting the pipe class**. Pipes are not designed as injectable services.
+-->
 
+## 템플릿 밖에서 파이프 로직 사용하기 {#using-pipe-logic-outside-templates}
+
+파이프는 템플릿에서 데이터를 선언적으로 변환하는 템플릿 연산자입니다.
+서비스, 유틸리티 클래스 등 템플릿이 아닌 곳에서 같은 변환 로직이 필요하더라도 **파이프 클래스를 주입하지 마세요**.
+파이프는 의존성 주입용 서비스로 설계되지 않았습니다.
+
+<!--
 ### Extract the logic from custom pipes
 
 When you create a custom pipe, extract the transformation into a standalone function. Have the pipe's `transform()` method delegate to that function, and import the function directly wherever else you need it.
@@ -739,52 +747,7 @@ export class FormatterService {
   }
 }
 ```
-
-### Use formatting functions for built-in pipes
-
-Angular's built-in locale-aware pipes each have a corresponding standalone formatting function exported from `@angular/common`. Use these functions instead of injecting the pipe class.
-
-| Pipe           | Standalone function |
-| -------------- | ------------------- |
-| `DatePipe`     | `formatDate`        |
-| `CurrencyPipe` | `formatCurrency`    |
-| `DecimalPipe`  | `formatNumber`      |
-| `PercentPipe`  | `formatPercent`     |
-
-```ts {prefer}
-import {Service, LOCALE_ID, inject} from '@angular/core';
-import {formatNumber} from '@angular/common';
-
-@Service()
-export class PriceService {
-  private locale = inject(LOCALE_ID);
-
-  format(value: number) {
-    return formatNumber(value, this.locale, '1.2-2');
-  }
-}
-```
-
-```ts {avoid}
-import {inject, Service} from '@angular/core';
-import {DecimalPipe} from '@angular/common';
-
-@Service()
-export class PriceService {
-  private decimalPipe = inject(DecimalPipe);
-
-  format(value: number) {
-    return this.decimalPipe.transform(value, '1.2-2');
-  }
-}
-```
 -->
-
-## 템플릿 밖에서 파이프 로직 사용하기 {#using-pipe-logic-outside-templates}
-
-파이프는 템플릿에서 데이터를 선언적으로 변환하는 템플릿 연산자입니다.
-서비스, 유틸리티 클래스 등 템플릿이 아닌 곳에서 같은 변환 로직이 필요하더라도 **파이프 클래스를 주입하지 마세요**.
-파이프는 의존성 주입용 서비스로 설계되지 않았습니다.
 
 ### 커스텀 파이프의 로직 분리하기 {#extract-the-logic-from-custom-pipes}
 
@@ -835,6 +798,47 @@ export class FormatterService {
   }
 }
 ```
+
+<!--
+### Use formatting functions for built-in pipes
+
+Angular's built-in locale-aware pipes each have a corresponding standalone formatting function exported from `@angular/common`. Use these functions instead of injecting the pipe class.
+
+| Pipe           | Standalone function |
+| -------------- | ------------------- |
+| `DatePipe`     | `formatDate`        |
+| `CurrencyPipe` | `formatCurrency`    |
+| `DecimalPipe`  | `formatNumber`      |
+| `PercentPipe`  | `formatPercent`     |
+
+```ts {prefer}
+import {Service, LOCALE_ID, inject} from '@angular/core';
+import {formatNumber} from '@angular/common';
+
+@Service()
+export class PriceService {
+  private locale = inject(LOCALE_ID);
+
+  format(value: number) {
+    return formatNumber(value, this.locale, '1.2-2');
+  }
+}
+```
+
+```ts {avoid}
+import {inject, Service} from '@angular/core';
+import {DecimalPipe} from '@angular/common';
+
+@Service()
+export class PriceService {
+  private decimalPipe = inject(DecimalPipe);
+
+  format(value: number) {
+    return this.decimalPipe.transform(value, '1.2-2');
+  }
+}
+```
+-->
 
 ### 내장 파이프의 포맷팅 함수 사용하기 {#use-formatting-functions-for-built-in-pipes}
 

@@ -115,7 +115,7 @@ Once you've succeeded, the tutor will move directly to the next topic. You can a
 
 <a id="features--commands"></a>
 
-## **기능과 명령**
+## 기능과 명령
 
 <!--
 You are in control of your learning experience. Use these features at any time:
@@ -130,7 +130,7 @@ You are in control of your learning experience. Use these features at any time:
 
 <a id="leave-and-come-back"></a>
 
-### **중단했다가 이어서 학습하기**
+### 중단했다가 이어서 학습하기
 
 <!--
 Feel free to take a break. Your progress is tied to your project's code. When you return for a new session, the tutor will automatically analyze your files to determine exactly where you left off, allowing you to seamlessly pick up right where you were.
@@ -152,7 +152,7 @@ Feel free to take a break. Your progress is tied to your project's code. When yo
 
 <a id="adjust-your-experience-level"></a>
 
-### **숙련도 조절하기**
+### 숙련도 조절하기
 
 <!--
 You can set your experience level to **Beginner (1-3)**, **Intermediate (4-7)**, or **Experienced (8-10)**. You can change this setting at any time during your session, and the tutor will immediately adapt its teaching style to match.
@@ -177,7 +177,7 @@ You can set your experience level to **Beginner (1-3)**, **Intermediate (4-7)**,
 
 <a id="see-the-full-learning-plan"></a>
 
-### **전체 학습 계획 보기**
+### 전체 학습 계획 보기
 
 <!--
 Want to see the big picture or check how far you've come? Just ask for the table of contents.
@@ -207,7 +207,7 @@ The tutor will display the full learning plan and mark your current location.
 
 <a id="a-note-on-styling"></a>
 
-### **스타일에 관한 안내**
+### 스타일에 관한 안내
 
 <!--
 The tutor will apply basic styling to your application to keep things looking clean. You are highly encouraged to apply your own styling to make the app your own.
@@ -222,7 +222,7 @@ The tutor will apply basic styling to your application to keep things looking cl
 
 <a id="skip-the-current-module"></a>
 
-### **현재 모듈 건너뛰기**
+### 현재 모듈 건너뛰기
 
 <!--
 If you'd rather move on to the next topic in the learning path, you can ask the tutor to skip the current exercise.
@@ -250,7 +250,7 @@ The tutor will ask for confirmation and then present you with the complete code 
 
 <a id="jump-to-any-topic"></a>
 
-### **원하는 주제로 이동하기**
+### 원하는 주제로 이동하기
 
 <!--
 If you want to learn about a specific topic out of order (e.g., jump from the basics to forms), you can. The tutor will provide the necessary code to update your project to the correct starting point for the selected module and attempt to automatically apply any required updates.
@@ -281,7 +281,7 @@ If you want to learn about a specific topic out of order (e.g., jump from the ba
 
 <a id="troubleshooting"></a>
 
-## **문제 해결**
+## 문제 해결
 
 <!--
 ### Setup Issues
@@ -311,17 +311,6 @@ Try typing `#angular-cli` first to load the Angular context, then paste the tuto
 Open the Command Palette (`Ctrl+Shift+P`), type "MCP: List Running Servers", and look for "angular-cli" in the list.
 
 ---
-
-### General Issues
-
-If the tutor doesn't respond correctly or you suspect an issue with your application, here are a few things to try:
-
-1. **Type "proceed":** This can often nudge the tutor to continue to the next step in the event it gets stuck.
-2. **Correct the Tutor:** If the tutor is mistaken about your progress (e.g., it says you're on Module 3 but you've completed Module 8), just tell it. For example: _"I'm actually on Module 8."_ The tutor will re-evaluate your code and adjust.
-3. **Verify Your UI:** If you want to confirm what your application's user interface should look like, just ask the tutor. For example: _"What should I see in my UI?"_
-4. **Reload the Browser Window:** A refresh can solve many issues related to your application.
-5. **Hard Restart the Browser:** Errors are sometimes only surfaced in the browser's developer console. A hard restart can help clear underlying issues related to the application.
-6. **Start a New Chat:** You can always start a new chat to remove the existing history and begin fresh. The tutor will read your files to find the latest step you were on.
 -->
 
 <a id="setup-issues"></a>
@@ -352,6 +341,19 @@ code .
 
 ---
 
+<!--
+### General Issues
+
+If the tutor doesn't respond correctly or you suspect an issue with your application, here are a few things to try:
+
+1. **Type "proceed":** This can often nudge the tutor to continue to the next step in the event it gets stuck.
+2. **Correct the Tutor:** If the tutor is mistaken about your progress (e.g., it says you're on Module 3 but you've completed Module 8), just tell it. For example: _"I'm actually on Module 8."_ The tutor will re-evaluate your code and adjust.
+3. **Verify Your UI:** If you want to confirm what your application's user interface should look like, just ask the tutor. For example: _"What should I see in my UI?"_
+4. **Reload the Browser Window:** A refresh can solve many issues related to your application.
+5. **Hard Restart the Browser:** Errors are sometimes only surfaced in the browser's developer console. A hard restart can help clear underlying issues related to the application.
+6. **Start a New Chat:** You can always start a new chat to remove the existing history and begin fresh. The tutor will read your files to find the latest step you were on.
+-->
+
 <a id="general-issues"></a>
 
 ### 일반적인 문제
@@ -376,7 +378,7 @@ code .
 
 <a id="your-learning-journey-the-phased-path"></a>
 
-## **단계별 학습 과정**
+## 단계별 학습 과정
 
 <!--
 You will build your application over a five-phase journey. You can follow this path from start to finish to create a complete, fully-functional Angular application. Each module builds logically upon the last, taking you from the basics to advanced, real-world features.
@@ -398,7 +400,7 @@ You will build your application over a five-phase journey. You can follow this p
 
 <a id="phase-1-angular-fundamentals"></a>
 
-### **1단계: Angular 기초**
+### 1단계: Angular 기초
 
 <!--
 - **Module 1:** Getting Started
@@ -416,7 +418,7 @@ You will build your application over a five-phase journey. You can follow this p
 
 <a id="phase-2-state-and-signals"></a>
 
-### **2단계: 상태와 시그널**
+### 2단계: 상태와 시그널
 
 <!--
 - **Module 4:** State Management with Writable Signals (Part 1: `set`)
@@ -434,7 +436,7 @@ You will build your application over a five-phase journey. You can follow this p
 
 <a id="phase-3-component-architecture"></a>
 
-### **3단계: 컴포넌트 아키텍처**
+### 3단계: 컴포넌트 아키텍처
 
 <!--
 - **Module 7:** Template Binding (Properties & Attributes)
@@ -460,7 +462,7 @@ You will build your application over a five-phase journey. You can follow this p
 
 <a id="phase-4-advanced-features--architecture"></a>
 
-### **4단계: 고급 기능과 아키텍처**
+### 4단계: 고급 기능과 아키텍처
 
 <!--
 - **Module 13:** Two-Way Binding
@@ -482,7 +484,7 @@ You will build your application over a five-phase journey. You can follow this p
 
 <a id="phase-5-signal-forms"></a>
 
-### **5단계: 시그널 폼**
+### 5단계: 시그널 폼
 
 <!--
 - **Module 18**: **Introduction to Signal Forms**
@@ -508,7 +510,7 @@ You will build your application over a five-phase journey. You can follow this p
 
 <a id="a-note-on-ai--feedback"></a>
 
-## **AI와 피드백에 관한 안내**
+## AI와 피드백에 관한 안내
 
 <!--
 This tutor is powered by a Large Language Model (LLM). While we've worked hard to make it an expert, AIs can make mistakes. If you encounter an explanation or code example that seems incorrect, please let us know. You can correct the tutor, and it will use your feedback to adjust its response.

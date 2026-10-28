@@ -425,8 +425,6 @@ against that repo. License: MIT
 ## Library Compilation and Package Optimizations
 
 This section describes the compilation process for libraries and optimizations that apply to the npm package before publishing the artifact to a registry.
-
-### Partial compilation
 -->
 
 <a id="library-compilation-and-package-optimizations"></a>
@@ -434,6 +432,10 @@ This section describes the compilation process for libraries and optimizations t
 ## 라이브러리 컴파일과 패키지 최적화
 
 이 섹션에서는 라이브러리 컴파일 과정과 결과물을 레지스트리에 배포하기 전에 npm 패키지에 적용하는 최적화를 설명합니다.
+
+<!--
+### Partial compilation
+-->
 
 <a id="partial-compilation"></a>
 

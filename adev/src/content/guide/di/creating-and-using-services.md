@@ -88,7 +88,17 @@ Services are provisioned at the root level by default. When a service is provide
 - **Singleton Instance:** Creates a single, shared instance for the entire application.
 - **Global Availability:** Automatically accessible anywhere without manual provider registration.
 - **Tree-shakability:** Ensures the service is excluded from the final production bundle if your code never explicitly uses it.
+-->
 
+## 서비스는 어떻게 사용할 수 있나요 {#how-services-become-available}
+
+서비스는 기본적으로 최상위 계층에 제공됩니다. 서비스를 전역으로 제공하면 Angular가 다음 세 가지 이점을 보장합니다.
+
+- **싱글턴 인스턴스:** 애플리케이션 전체에서 공유하는 인스턴스를 하나만 생성합니다.
+- **전역 사용:** 프로바이더를 수동으로 등록하지 않아도 어디서든 사용할 수 있습니다.
+- **트리 셰이킹:** 코드에서 서비스를 명시적으로 사용하지 않으면 최종 프로덕션 빌드 결과물에서 제외합니다.
+
+<!--
 ### Using the `@Service` vs `@Injectable` decorator
 
 The `@Service` decorator serves as a modern, ergonomic shorthand for the traditional `@Injectable({ providedIn: 'root' })` syntax.
@@ -104,14 +114,6 @@ Use this quick reference to decide which decorator fits your scenario:
 | **Custom initialization factories**           | Yes        | Yes                                     |
 | **Non-root scopes (`platform`, etc.)**        | ❌ No      | Yes                                     |
 -->
-
-## 서비스는 어떻게 사용할 수 있나요 {#how-services-become-available}
-
-서비스는 기본적으로 최상위 계층에 제공됩니다. 서비스를 전역으로 제공하면 Angular가 다음 세 가지 이점을 보장합니다.
-
-- **싱글턴 인스턴스:** 애플리케이션 전체에서 공유하는 인스턴스를 하나만 생성합니다.
-- **전역 사용:** 프로바이더를 수동으로 등록하지 않아도 어디서든 사용할 수 있습니다.
-- **트리 셰이킹:** 코드에서 서비스를 명시적으로 사용하지 않으면 최종 프로덕션 빌드 결과물에서 제외합니다.
 
 <a id="using-the-service-decorator"></a>
 

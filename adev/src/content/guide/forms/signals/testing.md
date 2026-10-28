@@ -284,7 +284,15 @@ describe('profile form', () => {
 ## Testing forms bound to components
 
 When you need to verify behavior that depends on template bindings, user interaction through `dispatchEvent`, or custom form controls that manage their own rendering, isolated tests are not enough. You need component-bound tests to render the template so that you can interact with actual DOM elements.
+-->
 
+<a id="testing-forms-bound-to-components"></a>
+
+## 컴포넌트에 바인딩된 폼 테스트하기
+
+템플릿 바인딩에 의존하는 동작, `dispatchEvent`를 사용하는 사용자 상호작용, 자체 렌더링을 관리하는 커스텀 폼 컨트롤을 검증해야 한다면 독립적인 테스트만으로는 충분하지 않습니다. 템플릿을 렌더링하는 컴포넌트 기반 테스트로 실제 DOM 엘리먼트와 상호작용해야 합니다.
+
+<!--
 ### Setting up a component test
 
 Component-bound tests render the component so you can interact with actual DOM elements. Create the component with `TestBed.createComponent()` and wait for rendering to complete before asserting:
@@ -336,12 +344,6 @@ Notice that the component uses `form()` without an explicit injector because the
 
 The same pattern works for async operations such as async validators or server calls. Call `await fixture.whenStable()` after the async work resolves.
 -->
-
-<a id="testing-forms-bound-to-components"></a>
-
-## 컴포넌트에 바인딩된 폼 테스트하기
-
-템플릿 바인딩에 의존하는 동작, `dispatchEvent`를 사용하는 사용자 상호작용, 자체 렌더링을 관리하는 커스텀 폼 컨트롤을 검증해야 한다면 독립적인 테스트만으로는 충분하지 않습니다. 템플릿을 렌더링하는 컴포넌트 기반 테스트로 실제 DOM 엘리먼트와 상호작용해야 합니다.
 
 <a id="setting-up-a-component-test"></a>
 

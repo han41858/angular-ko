@@ -350,59 +350,6 @@ Angular does not rewrite the name in:
 Each of these produces a property that your namespaced styles no longer read. Namespace those
 names yourself, as described in
 [Using namespaced properties in TypeScript](#using-namespaced-properties-in-typescript).
-
-### Opting out of namespacing
-
-To declare or read a custom property that Angular does not namespace, such as one defined in a
-global stylesheet, prefix its name with `--global--`. Angular removes `--global` and leaves the
-remaining `--` and the rest of the name unchanged:
-
-```css
-:host {
-  /* Declares --accent-color and reads --brand-color, not --my-app_brand-color. */
-  --global--accent-color: navy;
-  color: var(--global--brand-color);
-}
-```
-
-Write two hyphens after `global`. A single hyphen, as in `--global-brand-color`, does not opt out,
-and Angular namespaces that name like any other. Avoid names that start with `--global-` followed
-by anything but a second hyphen; a future major version is planned to reject them at build time.
-Angular removes `--global` in every application, including applications that never configure a
-namespace.
-
-### Using namespaced properties in TypeScript
-
-Prefer a style binding such as `[style.--primary-color]`, which Angular namespaces for you. When
-you go through a DOM API instead, pass the name you wrote in your styles to
-[`CssVarNamespacer`](api/platform-browser/CssVarNamespacer), including the leading `--`:
-
-```angular-ts {header: "profile-photo.ts"}
-import {Component, ElementRef, inject} from '@angular/core';
-import {CssVarNamespacer} from '@angular/platform-browser';
-
-@Component({
-  selector: 'profile-photo',
-  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
-  styles: `
-    img {
-      border: 2px solid var(--primary-color);
-    }
-  `,
-})
-export class ProfilePhoto {
-  private readonly host: HTMLElement = inject(ElementRef).nativeElement;
-  private readonly cssVarNamespacer = inject(CssVarNamespacer);
-
-  setPrimaryColor(color: string): void {
-    this.host.style.setProperty(this.cssVarNamespacer.namespace('--primary-color'), color);
-  }
-}
-```
-
-Use the plain name for a property you declared with `--global--`, since Angular never namespaces
-those. For everything else, `namespace` returns the name unchanged when an application configures
-no namespace, so a library can call it for the custom properties its own styles declare.
 -->
 
 ## CSS 커스텀 프로퍼티에 네임스페이스 적용하기 {#namespacing-css-custom-properties}
@@ -454,6 +401,28 @@ Angular는 컴포넌트로 컴파일하는 스타일에 네임스페이스를 �
 이렇게 생성한 프로퍼티는 네임스페이스가 적용된 스타일에서 더 이상 읽을 수 없습니다.
 [TypeScript에서 네임스페이스가 적용된 프로퍼티 사용하기](#using-namespaced-properties-in-typescript)에서 설명하는 방식으로 직접 네임스페이스를 적용하세요.
 
+<!--
+### Opting out of namespacing
+
+To declare or read a custom property that Angular does not namespace, such as one defined in a
+global stylesheet, prefix its name with `--global--`. Angular removes `--global` and leaves the
+remaining `--` and the rest of the name unchanged:
+
+```css
+:host {
+  /* Declares --accent-color and reads --brand-color, not --my-app_brand-color. */
+  --global--accent-color: navy;
+  color: var(--global--brand-color);
+}
+```
+
+Write two hyphens after `global`. A single hyphen, as in `--global-brand-color`, does not opt out,
+and Angular namespaces that name like any other. Avoid names that start with `--global-` followed
+by anything but a second hyphen; a future major version is planned to reject them at build time.
+Angular removes `--global` in every application, including applications that never configure a
+namespace.
+-->
+
 ### 네임스페이스 적용 제외하기 {#opting-out-of-namespacing}
 
 전역 스타일시트에 정의한 프로퍼티처럼 Angular가 네임스페이스를 적용하지 않아야 하는 커스텀 프로퍼티를 선언하거나 읽으려면 이름 앞에 `--global--`을 붙이세요.
@@ -471,6 +440,41 @@ Angular는 `--global`을 제거하고 나머지 `--`와 이름은 그대로 유�
 `--global-brand-color`처럼 하이픈을 하나만 사용하면 적용 제외 대상이 되지 않으며, 다른 이름과 마찬가지로 네임스페이스가 적용됩니다.
 `--global-` 다음에 두 번째 하이픈 이외의 문자가 오는 이름은 사용하지 마세요. 향후 메이저 버전에서는 빌드 시점에 이러한 이름을 허용하지 않을 예정입니다.
 네임스페이스를 설정하지 않은 애플리케이션을 포함해서 모든 애플리케이션에서 Angular는 `--global`을 제거합니다.
+
+<!--
+### Using namespaced properties in TypeScript
+
+Prefer a style binding such as `[style.--primary-color]`, which Angular namespaces for you. When
+you go through a DOM API instead, pass the name you wrote in your styles to
+[`CssVarNamespacer`](api/platform-browser/CssVarNamespacer), including the leading `--`:
+
+```angular-ts {header: "profile-photo.ts"}
+import {Component, ElementRef, inject} from '@angular/core';
+import {CssVarNamespacer} from '@angular/platform-browser';
+
+@Component({
+  selector: 'profile-photo',
+  template: `<img src="profile-photo.jpg" alt="Your profile photo" />`,
+  styles: `
+    img {
+      border: 2px solid var(--primary-color);
+    }
+  `,
+})
+export class ProfilePhoto {
+  private readonly host: HTMLElement = inject(ElementRef).nativeElement;
+  private readonly cssVarNamespacer = inject(CssVarNamespacer);
+
+  setPrimaryColor(color: string): void {
+    this.host.style.setProperty(this.cssVarNamespacer.namespace('--primary-color'), color);
+  }
+}
+```
+
+Use the plain name for a property you declared with `--global--`, since Angular never namespaces
+those. For everything else, `namespace` returns the name unchanged when an application configures
+no namespace, so a library can call it for the custom properties its own styles declare.
+-->
 
 ### TypeScript에서 네임스페이스가 적용된 프로퍼티 사용하기 {#using-namespaced-properties-in-typescript}
 

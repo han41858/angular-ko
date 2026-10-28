@@ -1877,7 +1877,17 @@ export class StyleExample {
 Angular Signal Forms provide a `focusBoundControl()` method on field state that lets you programmatically move [focus](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) to the form control associated with a given form field.
 
 A common use case is improving accessibility on form submission: when a form is invalid, display error messages and automatically move focus to the first invalid field, guiding the user to correct it.
+-->
 
+<a id="focus-a-form-control-bound-to-a-form-field"></a>
+
+## 필드에 바인딩된 폼 컨트롤에 포커스 이동하기
+
+Angular Signal Forms의 필드 상태는 `focusBoundControl()` 메서드를 제공합니다. 이 메서드로 필드에 연결된 폼 컨트롤에 [포커스](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)를 이동할 수 있습니다.
+
+대표적인 활용 방법은 폼 제출 시 접근성을 개선하는 것입니다. 폼이 유효하지 않을 때 오류 메시지를 표시하고 첫 번째 오류 필드로 포커스를 자동 이동하여 사용자가 수정할 수 있도록 안내합니다.
+
+<!--
 ### Basic usage
 
 Given a registration form:
@@ -1899,7 +1909,33 @@ To move focus to the control bound to the `email` field:
 ```ts
 registrationForm.email().focusBoundControl();
 ```
+-->
 
+<a id="basic-usage"></a>
+
+### 기본 사용법
+
+다음과 같은 회원가입 폼이 있다고 가정해 봅시다:
+
+```ts
+@Component({/* ... */})
+export class Registration {
+  registrationModel = signal({username: '', email: '', password: ''});
+  registrationForm = form(this.registrationModel, (schemaPath) => {
+    required(schemaPath.username);
+    email(schemaPath.email);
+    required(schemaPath.password);
+  });
+}
+```
+
+`email` 필드에 연결된 컨트롤로 포커스를 이동하려면 다음과 같이 호출합니다:
+
+```ts
+registrationForm.email().focusBoundControl();
+```
+
+<!--
 ### Preventing scroll
 
 If the target control is outside the viewport and you want to focus it without triggering a scroll, you can set the [preventScroll](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll) option to `true` when calling the `focusBoundControl()` method.
@@ -1907,7 +1943,19 @@ If the target control is outside the viewport and you want to focus it without t
 ```ts
 registrationForm.email().focusBoundControl({preventScroll: true});
 ```
+-->
 
+<a id="preventing-scroll"></a>
+
+### 스크롤 방지하기
+
+컨트롤이 화면 밖에 있을 때 스크롤하지 않고 포커스만 이동하려면 `focusBoundControl()`을 호출할 때 [preventScroll](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll) 옵션을 `true`로 설정하세요.
+
+```ts
+registrationForm.email().focusBoundControl({preventScroll: true});
+```
+
+<!--
 ### Focusing the first invalid field on submission
 
 Use `errorSummary()` to locate the first invalid field and focus it when the user submits the form with errors:
@@ -1922,7 +1970,26 @@ onSubmit() {
   }
 }
 ```
+-->
 
+<a id="focusing-the-first-invalid-field-on-submission"></a>
+
+### 제출 시 첫 번째 오류 필드에 포커스 이동하기
+
+사용자가 오류가 있는 폼을 제출하면 `errorSummary()`로 첫 번째 오류 필드를 찾아 포커스를 이동하세요:
+
+```ts
+onSubmit() {
+  const firstError = this.registrationForm().errorSummary()[0];
+  if (firstError?.fieldTree) {
+    firstError.fieldTree().focusBoundControl();
+  } else {
+    // 폼 제출을 진행합니다.
+  }
+}
+```
+
+<!--
 ### Custom controls
 
 By default, calling `focusBoundControl()` on a custom control has no effect because a custom control can contain multiple native inputs. For example, a date picker can contain separate day, month, and year fields. As a result, Angular cannot determine which element should receive focus or what action to perform.
@@ -1951,65 +2018,6 @@ export class PasswordInput implements FormValueControl<string> {
 }
 ```
 -->
-
-<a id="focus-a-form-control-bound-to-a-form-field"></a>
-
-## 필드에 바인딩된 폼 컨트롤에 포커스 이동하기
-
-Angular Signal Forms의 필드 상태는 `focusBoundControl()` 메서드를 제공합니다. 이 메서드로 필드에 연결된 폼 컨트롤에 [포커스](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus)를 이동할 수 있습니다.
-
-대표적인 활용 방법은 폼 제출 시 접근성을 개선하는 것입니다. 폼이 유효하지 않을 때 오류 메시지를 표시하고 첫 번째 오류 필드로 포커스를 자동 이동하여 사용자가 수정할 수 있도록 안내합니다.
-
-<a id="basic-usage"></a>
-
-### 기본 사용법
-
-다음과 같은 회원가입 폼이 있다고 가정해 봅시다:
-
-```ts
-@Component({/* ... */})
-export class Registration {
-  registrationModel = signal({username: '', email: '', password: ''});
-  registrationForm = form(this.registrationModel, (schemaPath) => {
-    required(schemaPath.username);
-    email(schemaPath.email);
-    required(schemaPath.password);
-  });
-}
-```
-
-`email` 필드에 연결된 컨트롤로 포커스를 이동하려면 다음과 같이 호출합니다:
-
-```ts
-registrationForm.email().focusBoundControl();
-```
-
-<a id="preventing-scroll"></a>
-
-### 스크롤 방지하기
-
-컨트롤이 화면 밖에 있을 때 스크롤하지 않고 포커스만 이동하려면 `focusBoundControl()`을 호출할 때 [preventScroll](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus#preventscroll) 옵션을 `true`로 설정하세요.
-
-```ts
-registrationForm.email().focusBoundControl({preventScroll: true});
-```
-
-<a id="focusing-the-first-invalid-field-on-submission"></a>
-
-### 제출 시 첫 번째 오류 필드에 포커스 이동하기
-
-사용자가 오류가 있는 폼을 제출하면 `errorSummary()`로 첫 번째 오류 필드를 찾아 포커스를 이동하세요:
-
-```ts
-onSubmit() {
-  const firstError = this.registrationForm().errorSummary()[0];
-  if (firstError?.fieldTree) {
-    firstError.fieldTree().focusBoundControl();
-  } else {
-    // 폼 제출을 진행합니다.
-  }
-}
-```
 
 <a id="custom-controls"></a>
 
