@@ -16,10 +16,19 @@ concurrency:
 
 jobs:
   build_and_deploy:
+    # Review OS/Node versions with Angular major upgrades (roughly every six months).
+    # Hosted runner image patch versions still update within this OS label.
     runs-on: ubuntu-26.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7.0.1
+
+      # Match the Node toolchain pinned in MODULE.bazel, not the runner's default Node.
+      - name: set up Node.js
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.21.0'
+          package-manager-cache: false
 
       - name: prepare pnpm
         run: corepack enable pnpm
