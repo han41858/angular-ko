@@ -100,7 +100,7 @@ export class ShippingMethodPicker {
 ```
 
 `linkedSignal`은 `signal`과 비슷하지만 다른 점이 하나 있습니다.
-`linkedSignal`은 기본값을 직접 받지 않고 `computed` 시그널처럼 _계산 함수_ 를 통해 전달받습니다.
+`linkedSignal`은 기본값을 직접 받지 않고 `computed()` 시그널처럼 _계산 함수_ 를 통해 전달받습니다.
 그리고 계산 값이 변경되면 `linkedSignal`의 값도 새로 계산된 값으로 변경됩니다.
 이제 `linkedSignal`의 값은 언제나 유효한 값을 유지합니다.
 

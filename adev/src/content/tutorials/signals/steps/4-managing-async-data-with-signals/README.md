@@ -103,7 +103,7 @@ params 시그널이 변경되면 자동으로 다시 로딩됩니다. `reload()`
 <docs-step title="Create computed signals for resource states">
 -->
 
-<docs-step title="리소스 상태용 computed 시그널 생성하기">
+<docs-step title="리소스 상태용 computed() 시그널 생성하기">
 
 <a id="create-computed-signals-for-resource-states"></a>
 
@@ -111,7 +111,7 @@ params 시그널이 변경되면 자동으로 다시 로딩됩니다. `reload()`
 Add computed signals to access different states of the resource.
 -->
 
-리소스의 여러 상태에 접근하는 computed 시그널을 추가합니다.
+리소스의 여러 상태에 접근하는 `computed()` 시그널을 추가합니다.
 
 ```ts
 isLoading = this.userResource.isLoading;

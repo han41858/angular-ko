@@ -32,7 +32,7 @@ In this activity, you'll learn how to create a cart store with signals that allo
 Add readonly and computed signals to make the cart state reactive in `cart-store.ts`.
 -->
 
-`cart-store.ts`에 읽기 전용 시그널과 computed 시그널을 추가해서 장바구니 상태를 반응형으로 만듭니다.
+`cart-store.ts`에 읽기 전용 시그널과 `computed()` 시그널을 추가해서 장바구니 상태를 반응형으로 만듭니다.
 
 ```ts
 // Add the computed import
@@ -161,7 +161,7 @@ Excellent! You've now learned how to use signals with services. Key concepts to 
 
 - **서비스의 시그널**: 서비스에서 시그널로 반응형 상태를 관리할 수 있습니다.
 - **의존성 주입**: 컴포넌트에서 `inject()`로 시그널이 있는 서비스에 접근합니다.
-- **서비스의 computed 시그널**: 자동으로 갱신되는 파생 상태를 만듭니다.
+- **서비스의 `computed()` 시그널**: 자동으로 갱신되는 파생 상태를 만듭니다.
 - **읽기 전용 시그널**: 읽기 전용 시그널을 공개해서 외부에서 시그널 값을 직접 설정하지 못하게 합니다.
 
 <!--

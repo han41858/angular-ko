@@ -174,7 +174,9 @@ export class AwesomeCounter {
 
 <a id="computed-signals"></a>
 
-### 연산 시그널(Computed signals)
+<a id="연산-시그널computed-signals"></a>
+
+### computed() 시그널(Computed signals)
 
 <!--
 **Computed signals** are read-only signals that derive their value from other signals. You define computed signals using the `computed` function and specifying a derivation:
@@ -187,8 +189,8 @@ const doubleCount: Signal<number> = computed(() => count() * 2);
 The `doubleCount` signal depends on the `count` signal. Whenever `count` updates, Angular knows that `doubleCount` needs to update as well.
 -->
 
-**연산 시그널(Computed signal)** 은 어떤 시그널의 영향을 받아 값이 변경되는 시그널을 의미합니다.
-연산 시그널은 `computed` 함수로 생성할 수 있습니다:
+**`computed()` 시그널(Computed signal)** 은 어떤 시그널의 영향을 받아 값이 변경되는 시그널을 의미합니다.
+`computed()` 시그널은 `computed` 함수로 생성할 수 있습니다:
 
 ```typescript
 const count: WritableSignal<number> = signal(0);
@@ -204,7 +206,9 @@ const doubleCount: Signal<number> = computed(() => count() * 2);
 
 <a id="computed-signals-are-both-lazily-evaluated-and-memoized"></a>
 
-#### 연산 시그널은 지연 연산되며 연산된 결과는 캐싱됩니다
+<a id="연산-시그널은-지연-연산되며-연산된-결과는-캐싱됩니다"></a>
+
+#### computed() 시그널은 지연 연산되며 연산된 결과는 캐싱됩니다
 
 <!--
 `doubleCount`'s derivation function does not run to calculate its value until the first time you read `doubleCount`. The calculated value is then cached, and if you read `doubleCount` again, it will return the cached value without recalculating.
@@ -219,7 +223,7 @@ As a result, you can safely perform computationally expensive derivations in com
 
 이후에 `count` 시그널이 변경되면 Angular는 이를 감지하고 `doubleCount`에 캐싱된 값이 더 이상 유효하지 않다는 것을 판단하기 때문에, 이후에 `doubleCount`를 실행하면 실제 연산이 실행됩니다.
 
-따라서 배열 필터링과 같이 계산이 많은 경우라면 연산 시그널을 사용하는 것이 성능 면에서 유리합니다.
+따라서 배열 필터링과 같이 계산이 많은 경우라면 `computed()` 시그널을 사용하는 것이 성능 면에서 유리합니다.
 
 <!--
 #### Computed signals are not writable signals
@@ -227,7 +231,9 @@ As a result, you can safely perform computationally expensive derivations in com
 
 <a id="computed-signals-are-not-writable-signals"></a>
 
-#### 연산 시그널은 값을 지정할 수 없습니다
+<a id="연산-시그널은-값을-지정할-수-없습니다"></a>
+
+#### computed() 시그널은 값을 지정할 수 없습니다
 
 <!--
 You cannot directly assign values to a computed signal. That is,
@@ -239,7 +245,7 @@ doubleCount.set(3);
 produces a compilation error, because `doubleCount` is not a `WritableSignal`.
 -->
 
-연산 시그널에는 직접 값을 설정할 수 없습니다.
+`computed()` 시그널에는 직접 값을 설정할 수 없습니다.
 
 ```ts
 doubleCount.set(3);
@@ -256,7 +262,9 @@ doubleCount.set(3);
 
 <a id="연산-시그널의-종속성은-동적으로-변경됩니다"></a>
 
-#### 연산 시그널의 의존성은 동적으로 변경됩니다
+<a id="연산-시그널의-의존성은-동적으로-변경됩니다"></a>
+
+#### computed() 시그널의 의존성은 동적으로 변경됩니다
 
 <!--
 Only the signals actually read during the derivation are tracked. For example, in this `computed` the `count` signal is only read if the `showCount` signal is true:
@@ -332,7 +340,7 @@ During these operations, Angular creates a _live_ connection. If a tracked signa
 Angular가 반응 컨텍스트로 관리하는 경우는 이렇습니다:
 
 - `effect`, `afterRenderEffect` 콜백을 실행할 때
-- `computed` 시그널 값을 계산할 때
+- `computed()` 시그널 값을 계산할 때
 - `linkedSignal` 시그널 값을 계산할 때
 - `resource`의 `params` 함수를 평가할 때
 - 컴포넌트 템플릿을 렌더링할 때 ([호스트 프로퍼티](guide/components/host-elements#binding-to-the-host-element)도 포함합니다)
@@ -569,7 +577,7 @@ When you read a signal within an `OnPush` component's template, Angular tracks t
 -->
 
 `OnPush` 컴포넌트 템플릿에서 시그널 값을 읽으면 Angular는 해당 시그널을 이 컴포넌트의 의존성으로 추적합니다.
-그리고 시그널의 값이 변경되면, Angular는 다음 변화감지 사이클에서 컴포넌트를 갱신할 수 있게 컴포넌트를 [마킹](api/core/ChangeDetectorRef#markForCheck)합니다.
+그리고 시그널의 값이 변경되면, Angular는 다음 변경 감지 사이클에서 컴포넌트를 갱신할 수 있게 컴포넌트를 [마킹](api/core/ChangeDetectorRef#markForCheck)합니다.
 `OnPush` 컴포넌트에 대해 자세하게 알아보려면 [컴포넌트 서브트리 건너뛰기](best-practices/skipping-subtrees) 문서를 참고하세요.
 
 <!--
@@ -705,5 +713,5 @@ Angular DevTools can visualize the signal graph of a component or directive, sho
 See [Debug the signal graph](tools/devtools/signals) to learn how to open, read, and inspect the graph.
 -->
 
-Angular DevTools는 컴포넌트나 디렉티브의 시그널 그래프를 시각화하여 시그널, computed 시그널, 이펙트 함수, 기타 반응형 노드가 서로 어떻게 의존하는지 보여줍니다.
+Angular DevTools는 컴포넌트나 디렉티브의 시그널 그래프를 시각화하여 시그널, `computed()` 시그널, 이펙트 함수, 기타 반응형 노드가 서로 어떻게 의존하는지 보여줍니다.
 그래프를 열고 읽고 검사하는 방법은 [시그널 그래프 디버깅하기](tools/devtools/signals) 문서를 참고하세요.

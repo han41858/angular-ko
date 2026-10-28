@@ -30,7 +30,7 @@ When working in the browser playground, you do not need to `ng serve` to run the
 애플리케이션이 브라우저에서 정상적으로 실행되고 오류 없이 내용이 표시된다면 Angular 앱 개발을 시작할 수 있도록 개발 환경과 IDE가 올바르게 설정된 것입니다.
 
 NOTE: 내장 에디터를 사용한다면 [네 번째 단계](#create-hello-world)로 이동하세요.
-브라우저 플레이그라운드에서는 앱을 실행하기 위해 `ng serve`를 실행할 필요가 없습니다. `ng generate`와 같은 다른 명령어는 오른쪽 콘솔 창에서 실행할 수 있습니다.
+브라우저 놀이터에서는 앱을 실행하기 위해 `ng serve`를 실행할 필요가 없습니다. `ng generate`와 같은 다른 명령어는 오른쪽 콘솔 창에서 실행할 수 있습니다.
 
 <docs-workflow>
 

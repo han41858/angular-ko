@@ -112,7 +112,7 @@ export class HighlightDirective {
 The host bindings automatically re-evaluate when the signals change - just like template bindings in components! When `isHovered` changes, the `backgroundStyle` computed signal recalculates, and the host binding updates the element's style.
 -->
 
-시그널이 변경되면 컴포넌트의 템플릿 바인딩처럼 호스트 바인딩도 자동으로 다시 평가됩니다. `isHovered`가 변경되면 `backgroundStyle` computed 시그널이 다시 계산되고, 호스트 바인딩이 엘리먼트 스타일을 갱신합니다.
+시그널이 변경되면 컴포넌트의 템플릿 바인딩처럼 호스트 바인딩도 자동으로 다시 평가됩니다. `isHovered`가 변경되면 `backgroundStyle` `computed()` 시그널이 다시 계산되고, 호스트 바인딩이 엘리먼트 스타일을 갱신합니다.
 </docs-step>
 
 <!--
@@ -166,7 +166,7 @@ Perfect! You've now seen how signals work with directives. Some key takeaways fr
 
 - **동일한 시그널 API** - `input()`, `signal()`, `computed()`, `effect()` 등 모든 시그널 API는 디렉티브와 컴포넌트에서 똑같이 동작합니다.
 - **주로 호스트 바인딩에 사용** - 디렉티브에는 템플릿이 없으므로 호스트 바인딩의 시그널로 호스트 엘리먼트를 반응형으로 수정합니다.
-- **동일한 반응형 패턴** - 시그널이 갱신되면 컴포넌트 템플릿에서처럼 computed 시그널과 호스트 바인딩이 자동으로 다시 평가됩니다.
+- **동일한 반응형 패턴** - 시그널이 갱신되면 컴포넌트 템플릿에서처럼 `computed()` 시그널과 호스트 바인딩이 자동으로 다시 평가됩니다.
 
 <!--
 In the next lesson, you'll [learn how to query child elements with signal queries](/tutorials/signals/9-query-child-elements-with-signal-queries)!

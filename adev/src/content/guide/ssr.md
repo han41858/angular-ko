@@ -186,7 +186,7 @@ const serverConfig: ApplicationConfig = {
 };
 ```
 
-[앱 셸 패턴](ecosystem/service-workers/app-shell)을 사용한다면 클라이언트에서 렌더링하는 라우팅 규칙의 앱 셸로 사용할 컴포넌트를 지정해야 합니다.
+[앱 기본 구조 패턴](ecosystem/service-workers/app-shell)을 사용한다면 클라이언트에서 렌더링하는 라우팅 규칙의 앱 기본 구조로 사용할 컴포넌트를 지정해야 합니다.
 [`withAppShell`](api/ssr/withAppShell 'API 레퍼런스') 기능으로 지정하세요:
 
 ```typescript

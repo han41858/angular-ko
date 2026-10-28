@@ -1994,7 +1994,7 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         contentPath: 'reference/configs/angular-compiler-options',
       },
       {
-        label: 'npm dependencies',
+        label: 'npm 의존성',
         path: 'reference/configs/npm-packages',
         contentPath: 'reference/configs/npm-packages',
       },
@@ -2023,7 +2023,7 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
         contentPath: 'reference/migrations/control-flow',
       },
       {
-        label: 'inject() Function',
+        label: 'inject() 함수',
         path: 'reference/migrations/inject-function',
         contentPath: 'reference/migrations/inject-function',
       },
