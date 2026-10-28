@@ -97,9 +97,9 @@ const firstNameCapitalized = computed(() => firstName().toUpperCase());
 console.log(firstNameCapitalized()); // MORGAN
 ```
 
-`computed` 시그널은 읽을 수만 있습니다.
-그래서 `computed` 시그널에는 `set` 메서드와 `update` 메서드가 존재하지 않습니다.
-그럼에도 `computed` 시그널을 생성할 때 참조했던 시그널이 변경되면, `computed`로 생성한 시그널도 값이 갱신됩니다:
+`computed()` 시그널은 읽을 수만 있습니다.
+그래서 `computed()` 시그널에는 `set` 메서드와 `update` 메서드가 존재하지 않습니다.
+그럼에도 `computed()` 시그널을 생성할 때 참조했던 시그널이 변경되면, `computed`로 생성한 시그널도 값이 갱신됩니다:
 
 ```typescript
 import {signal, computed} from '@angular/core';

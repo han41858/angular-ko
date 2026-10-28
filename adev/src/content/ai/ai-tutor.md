@@ -426,7 +426,7 @@ You will build your application over a five-phase journey. You can follow this p
 
 - **모듈 4:** 값을 쓸 수 있는 시그널로 상태 관리하기(1부: `set`)
 - **모듈 5:** 값을 쓸 수 있는 시그널로 상태 관리하기(2부: `update`)
-- **모듈 6:** 연산 시그널
+- **모듈 6:** `computed()` 시그널
 
 <!--
 ### **Phase 3: Component Architecture**

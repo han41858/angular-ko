@@ -14,7 +14,7 @@ The graph shows how the signals, computeds, effects, and other reactive nodes in
 -->
 
 **Components** 탭에서는 선택한 컴포넌트나 디렉티브의 시그널 그래프를 실시간으로 확인할 수 있습니다.
-그래프는 해당 컴포넌트의 시그널, computed 시그널, 이펙트 함수, 기타 반응형 노드가 서로 어떻게 의존하는지 보여줍니다.
+그래프는 해당 컴포넌트의 시그널, `computed()` 시그널, 이펙트 함수, 기타 반응형 노드가 서로 어떻게 의존하는지 보여줍니다.
 이를 통해 반응형 데이터 흐름을 쉽게 이해하고 디버깅할 수 있습니다.
 
 <img src="assets/images/guide/devtools/signal-graph.png" alt="선택한 컴포넌트의 시그널 그래프가 열린 Angular DevTools의 'Components' 탭 화면입니다. 그래프에는 시그널 노드 하나가 컴포넌트 템플릿에서 읽는 computed 노드 3개와 선으로 연결되어 있으며, 오른쪽 사이드바에는 컴포넌트 프로퍼티 목록이 표시됩니다.">
@@ -92,7 +92,7 @@ effect(
 각 노드는 자신이 값을 읽는 생산자 노드(업스트림)와 자신의 값을 읽는 의존 노드(다운스트림)에 연결됩니다.
 
 팁: 각 노드의 레이블에는 해당 반응형 노드의 `debugName`이 표시됩니다.
-시그널, computed 시그널, 특히 보통 클래스 멤버에 할당하지 않는 이펙트 함수에 `debugName`을 지정하면 그래프를 훨씬 쉽게 읽을 수 있습니다:
+시그널, `computed()` 시그널, 특히 보통 클래스 멤버에 할당하지 않는 이펙트 함수에 `debugName`을 지정하면 그래프를 훨씬 쉽게 읽을 수 있습니다:
 
 ```ts
 effect(

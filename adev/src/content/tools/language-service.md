@@ -276,7 +276,7 @@ This lets the Angular Language Service provide diagnostics and completions in `.
 HTML 파일에서 자동 완성을 사용하려면 커스텀 Sublime 플러그인이 필요합니다\(또는 현재 플러그인을 수정해야 합니다\).
 
 인라인 템플릿에서 언어 지원 서비스를 사용하려면 먼저 TypeScript 지원 확장 기능을 추가한 다음 Angular 언어 지원 서비스 플러그인을 설치해야 합니다.
-TypeScript 2.3부터는 언어 서비스에서 사용할 수 있는 플러그인 모델을 제공합니다.
+TypeScript 2.3부터는 언어 지원 서비스에서 사용할 수 있는 플러그인 모델을 제공합니다.
 
 1. 로컬 `node_modules` 디렉터리에 최신 TypeScript를 설치하세요:
 
@@ -463,8 +463,8 @@ That's when the template parser produces an expression AST, which resides within
 The Angular Language Services then looks at `data.---` within its context, asks the TypeScript Language Service what the members of `data` are, and returns the list of possibilities.
 -->
 
-언어 서비스를 지원하는 편집기를 사용하면 편집기가 별도의 언어 서비스 프로세스를 시작하고 [Language Server Protocol](https://microsoft.github.io/language-server-protocol)을 사용하는 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call)로 통신합니다.
-편집기에 내용을 입력하면 편집기가 언어 서비스 프로세스에 정보를 보내 프로젝트 상태를 추적합니다.
+언어 지원 서비스를 지원하는 편집기를 사용하면 편집기가 별도의 언어 지원 서비스 프로세스를 시작하고 [Language Server Protocol](https://microsoft.github.io/language-server-protocol)을 사용하는 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call)로 통신합니다.
+편집기에 내용을 입력하면 편집기가 언어 지원 서비스 프로세스에 정보를 보내 프로젝트 상태를 추적합니다.
 
 템플릿에서 자동 완성 목록을 요청하면 편집기는 먼저 템플릿을 HTML [추상 구문 트리(AST)](https://en.wikipedia.org/wiki/Abstract_syntax_tree)로 파싱합니다.
 Angular 컴파일러는 이 트리를 해석해서 템플릿이 속한 모듈, 현재 스코프, 컴포넌트 셀렉터, 템플릿 AST 안에서 커서가 있는 위치 등의 문맥을 파악합니다.

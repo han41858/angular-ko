@@ -8,7 +8,7 @@
 Now that you've learned [how to derive state with computed signals](/tutorials/signals/2-deriving-state-with-computed-signals), you created a computed signal for `notificationsEnabled` that automatically followed your user status. But what if users want to manually disable notifications even when they're online? That's where linked signals come in.
 -->
 
-앞서 [computed 시그널로 상태를 파생하는 방법](/tutorials/signals/2-deriving-state-with-computed-signals)을 배우면서 사용자 상태를 자동으로 따르는 `notificationsEnabled` computed 시그널을 만들었습니다. 그런데 사용자가 온라인 상태에서도 알림을 직접 비활성화하고 싶다면 어떻게 할까요? 이때 linked 시그널을 사용합니다.
+앞서 [`computed()` 시그널로 상태를 파생하는 방법](/tutorials/signals/2-deriving-state-with-computed-signals)을 배우면서 사용자 상태를 자동으로 따르는 `notificationsEnabled` `computed()` 시그널을 만들었습니다. 그런데 사용자가 온라인 상태에서도 알림을 직접 비활성화하고 싶다면 어떻게 할까요? 이때 linked 시그널을 사용합니다.
 
 <!--
 Linked signals are writable signals that maintain a reactive connection to their source signals. They're perfect for creating state that normally follows a computation but can be overridden when needed.
@@ -20,7 +20,7 @@ linked 시그널은 원본 시그널과 반응형 연결을 유지하면서 값�
 In this activity, you'll learn how `linkedSignal()` differs from `computed()` by enhancing the previous user status system's computed `notificationsEnabled` to a writable linked signal.
 -->
 
-이번 실습에서는 기존 사용자 상태 시스템의 `notificationsEnabled` computed 시그널을 값을 쓸 수 있는 linked 시그널로 바꾸면서, `linkedSignal()`과 `computed()`의 차이를 배웁니다.
+이번 실습에서는 기존 사용자 상태 시스템의 `notificationsEnabled` `computed()` 시그널을 값을 쓸 수 있는 linked 시그널로 바꾸면서, `linkedSignal()`과 `computed()`의 차이를 배웁니다.
 
 <hr />
 
@@ -101,7 +101,7 @@ toggleNotifications() {
 This is the key difference: computed signals are read-only, but linked signals can be updated manually while still maintaining their reactive connection.
 -->
 
-핵심 차이는 computed 시그널은 읽기 전용이지만, linked 시그널은 반응형 연결을 유지하면서도 직접 갱신할 수 있다는 점입니다.
+핵심 차이는 `computed()` 시그널은 읽기 전용이지만, linked 시그널은 반응형 연결을 유지하면서도 직접 갱신할 수 있다는 점입니다.
 </docs-step>
 
 <!--
@@ -178,7 +178,7 @@ linked 시그널은 값을 직접 설정한 후에도 반응형 연결을 유지
 Excellent! You've learned the key differences between computed and linked signals:
 -->
 
-computed 시그널과 linked 시그널의 핵심 차이를 배웠습니다:
+`computed()` 시그널과 linked 시그널의 핵심 차이를 배웠습니다:
 
 <!--
 - **Computed signals**: Read-only, always derived from other signals
@@ -187,7 +187,7 @@ computed 시그널과 linked 시그널의 핵심 차이를 배웠습니다:
 - **Use linkedSignal when**: You need a default computation that can be overridden
 -->
 
-- **computed 시그널**: 읽기 전용이며, 항상 다른 시그널에서 파생됩니다.
+- **`computed()` 시그널**: 읽기 전용이며, 항상 다른 시그널에서 파생됩니다.
 - **linked 시그널**: 값을 쓸 수 있으며, 파생되면서 직접 갱신할 수도 있습니다.
 - **computed를 사용할 때**: 값이 항상 계산 결과여야 하는 경우입니다.
 - **linkedSignal을 사용할 때**: 기본 계산 결과를 필요에 따라 덮어써야 하는 경우입니다.

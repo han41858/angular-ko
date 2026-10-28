@@ -68,7 +68,7 @@
   <docs-card title="컴포넌트" href="essentials/components" link="컴포넌트 알아보기" iconImgSrc="adev/src/assets/icons/components.svg">
     Angular 컴포넌트를 활용하면 코드를 기능 단위로 쉽게 분리할 수 있습니다.
   </docs-card>
-  <docs-card title="Angular Signals" href="essentials/signals" link="Signal 알아보기" titleIconName="sensors" iconImgSrc="adev/src/assets/icons/signals.svg">
+  <docs-card title="Angular Signals" href="essentials/signals" link="시그널 알아보기" titleIconName="sensors" iconImgSrc="adev/src/assets/icons/signals.svg">
     세밀한 반응성 모델은 컴파일 타임 최적화와 함께 개발을 단순화하고, 기본적으로 더 빠르게 동작하는 앱을 만들도록 돕습니다.
   </docs-card>
   <docs-card title="서버 사이드 렌더링" href="guide/ssr" link="SSR 알아보기" iconImgSrc="adev/src/assets/icons/ssr.svg">

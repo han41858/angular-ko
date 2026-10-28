@@ -132,7 +132,7 @@ storyParts = linkedSignal<string[], string[]>({
 LLM API가 구조화된 데이터를 반환하도록 설정할 수 있습니다.
 LLM의 예상 출력에 맞게 `resource`의 타입을 명확하게 지정하면 타입 안전성과 에디터의 자동 완성 기능을 개선할 수 있습니다.
 
-리소스로부터 파생된 상태를 관리하려면 `computed` 시그널이나 `linkedSignal`을 사용하세요.
+리소스로부터 파생된 상태를 관리하려면 `computed()` 시그널이나 `linkedSignal`을 사용하세요.
 `linkedSignal`은 [이전 값에 접근할 수 있기 때문에](guide/signals/linked-signal) 다음과 같은 다양한 AI 활용 사례에 사용할 수 있습니다:
 
 - 채팅 기록 구성하기
