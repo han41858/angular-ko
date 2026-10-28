@@ -488,10 +488,6 @@ For detailed API documentation, inspect the following API references:
 - [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
 - [`Listbox`](/api/aria/listbox/Listbox)
 - [`Option`](/api/aria/listbox/Option)
-
-### Positioning
-
-The select pattern integrates with [CDK Overlay](https://material.angular.dev/cdk/overlay/overview) for smart positioning. Use `cdkConnectedOverlay` to handle viewport edges and scrolling automatically.
 -->
 
 <a id="apis"></a>
@@ -507,6 +503,12 @@ The select pattern integrates with [CDK Overlay](https://material.angular.dev/cd
 - [`ComboboxWidget`](/api/aria/combobox/ComboboxWidget)
 - [`Listbox`](/api/aria/listbox/Listbox)
 - [`Option`](/api/aria/listbox/Option)
+
+<!--
+### Positioning
+
+The select pattern integrates with [CDK Overlay](https://material.angular.dev/cdk/overlay/overview) for smart positioning. Use `cdkConnectedOverlay` to handle viewport edges and scrolling automatically.
+-->
 
 <a id="positioning"></a>
 

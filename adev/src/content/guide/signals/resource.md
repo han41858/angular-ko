@@ -344,7 +344,31 @@ const userResource = resource({
 The `id` value must be unique within your application and identical on the server and the client so that Angular can match the cached entry to the resource that requested it.
 
 IMPORTANT: Because the cached value is serialized into the page's HTML, avoid setting `id` on resources that load data specific to the user who triggered the server-side render, especially if the rendered HTML can be cached or shared between users.
+-->
 
+<a id="caching-resource-data-with-ssr"></a>
+
+## SSR에서 `resource` 데이터 캐싱하기
+
+애플리케이션을 서버에서 렌더링하면 리소스 로더가 초기 HTML을 만들기 위해 한 번 실행됩니다. 하이드레이션 시에는 일반적으로 브라우저가 같은 로더를 다시 실행합니다.
+
+서버의 결과를 재사용하려면 리소스에 `id`를 지정하세요. Angular는 서버에서 확정된 값을 `TransferState`에 저장하고, 클라이언트에서 이 값으로 리소스를 `'resolved'` 상태로 초기화합니다:
+
+```ts
+const userId: Signal<string> = getUserId();
+
+const userResource = resource({
+  params: () => ({id: userId()}),
+  loader: ({params}) => fetchUser(params),
+  id: 'user-unique-id',
+});
+```
+
+`id`는 애플리케이션 안에서 고유해야 하고 서버와 클라이언트에서 같아야 합니다. 그래야 Angular가 캐시 항목을 해당 리소스와 연결할 수 있습니다.
+
+중요: 캐시된 값은 페이지 HTML에 직렬화됩니다. 서버 사이드 렌더링을 요청한 사용자에게만 해당하는 데이터를 불러오는 리소스에는 `id`를 설정하지 마세요. 특히 렌더링된 HTML을 캐시하거나 여러 사용자가 공유할 수 있을 때 주의하세요.
+
+<!--
 ## Chaining resources
 
 Sometimes one resource depends on the result of another. You can express this dependency using the `chain` function available in the `params` context object.
@@ -373,47 +397,7 @@ Here `companyResource` depends on the user's `companyId`, which is only known on
 When `chain` propagates a status from `userResource` (`idle`, `loading`, `reloading`, or `error`), the params function does not continue. When `userResource` is `resolved` or `local`, `chain` returns its value, which can itself be `undefined`. The example handles this with `chain(userResource)?.companyId`, so an `undefined` value results in `undefined` params and `companyResource` becomes `idle`.
 
 NOTE: Pass the chained value directly as the params value rather than wrapping it in an object. A params value like `{companyId: undefined}` is still a defined value, so the loader would run with an `undefined` `companyId` instead of the resource becoming `idle`.
-
-### Chaining vs. reading resource values directly
-
-You might be tempted to read a resource's value directly inside `params`:
-
-```typescript {avoid, header: 'reads value() directly without status propagation'}
-const companyResource = resource({
-  params: () => {
-    const user = userResource.value(); // may be undefined
-    return user ? {companyId: user.companyId} : undefined;
-  },
-  loader: ({params}) => fetchCompany(params.companyId),
-});
-```
-
-While this works, returning `undefined` from `params` makes the resource go `idle` rather than reflecting the actual state of the upstream resource. Using `chain` is preferred because it correctly mirrors `loading` and `error` states.
-
-Reach for `chain` only when the downstream resource performs its own async work that depends on the upstream value. If you only need to derive a value synchronously from a resource, use `computed` instead.
 -->
-
-<a id="caching-resource-data-with-ssr"></a>
-
-## SSR에서 `resource` 데이터 캐싱하기
-
-애플리케이션을 서버에서 렌더링하면 리소스 로더가 초기 HTML을 만들기 위해 한 번 실행됩니다. 하이드레이션 시에는 일반적으로 브라우저가 같은 로더를 다시 실행합니다.
-
-서버의 결과를 재사용하려면 리소스에 `id`를 지정하세요. Angular는 서버에서 확정된 값을 `TransferState`에 저장하고, 클라이언트에서 이 값으로 리소스를 `'resolved'` 상태로 초기화합니다:
-
-```ts
-const userId: Signal<string> = getUserId();
-
-const userResource = resource({
-  params: () => ({id: userId()}),
-  loader: ({params}) => fetchUser(params),
-  id: 'user-unique-id',
-});
-```
-
-`id`는 애플리케이션 안에서 고유해야 하고 서버와 클라이언트에서 같아야 합니다. 그래야 Angular가 캐시 항목을 해당 리소스와 연결할 수 있습니다.
-
-중요: 캐시된 값은 페이지 HTML에 직렬화됩니다. 서버 사이드 렌더링을 요청한 사용자에게만 해당하는 데이터를 불러오는 리소스에는 `id`를 설정하지 마세요. 특히 렌더링된 HTML을 캐시하거나 여러 사용자가 공유할 수 있을 때 주의하세요.
 
 <a id="chaining-resources"></a>
 
@@ -445,6 +429,26 @@ const companyResource = resource({
 `chain`이 `userResource`의 `idle`, `loading`, `reloading`, `error` 상태를 전파하면 `params` 함수의 실행은 더 이상 진행되지 않습니다. `userResource`가 `resolved`나 `local`이면 `chain`은 값을 반환하며, 값 자체가 `undefined`일 수도 있습니다. 예제에서는 `chain(userResource)?.companyId`로 처리하므로 값이 `undefined`이면 매개변수도 `undefined`가 되고 `companyResource`는 `idle` 상태가 됩니다.
 
 참고: 연결된 값을 객체로 감싸지 말고 매개변수 값으로 직접 전달하세요. `{companyId: undefined}`도 정의된 값이므로 리소스가 `idle`이 되는 대신 `companyId`가 `undefined`인 상태로 로더를 실행합니다.
+
+<!--
+### Chaining vs. reading resource values directly
+
+You might be tempted to read a resource's value directly inside `params`:
+
+```typescript {avoid, header: 'reads value() directly without status propagation'}
+const companyResource = resource({
+  params: () => {
+    const user = userResource.value(); // may be undefined
+    return user ? {companyId: user.companyId} : undefined;
+  },
+  loader: ({params}) => fetchCompany(params.companyId),
+});
+```
+
+While this works, returning `undefined` from `params` makes the resource go `idle` rather than reflecting the actual state of the upstream resource. Using `chain` is preferred because it correctly mirrors `loading` and `error` states.
+
+Reach for `chain` only when the downstream resource performs its own async work that depends on the upstream value. If you only need to derive a value synchronously from a resource, use `computed` instead.
+-->
 
 <a id="chaining-vs-reading-resource-values-directly"></a>
 

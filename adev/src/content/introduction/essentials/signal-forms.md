@@ -546,29 +546,6 @@ email(schemaPath.email, {message: 'Please enter a valid email address'});
 ```
 
 Each node in the `FieldTree` exposes its validation and interaction state through reactive signals.
-
-### FieldTree State Signals
-
-Every node in the tree, including the root form object, provides the same signals to track its state. Since every node is a `FieldTree`, the API for monitoring validity and interaction is identical at every level.
-
-| State        | Description                                                                     |
-| ------------ | ------------------------------------------------------------------------------- |
-| `valid()`    | Returns `true` if the node passes all validation rules                          |
-| `invalid()`  | Returns `true` if there are validation errors                                   |
-| `pending()`  | Returns `true` if async validation is in progress                               |
-| `touched()`  | Returns `true` if the user has focused and blurred the field or any child field |
-| `dirty()`    | Returns `true` if the value has been changed by the user                        |
-| `disabled()` | Returns `true` if the node is disabled                                          |
-| `readonly()` | Returns `true` if the node is readonly                                          |
-| `errors()`   | Returns an array of validation errors with `kind` and `message` properties      |
-
-### Complete example {#complete-example-validation}
-
-<docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts">
-  <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts"/>
-  <docs-code header="app.html" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.html"/>
-  <docs-code header="app.css" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.css"/>
-</docs-code-multifile>
 -->
 
 시그널 폼은 폼 필드에 사용할 수 있는 유효성 검사 함수를 기본으로 제공합니다.
@@ -601,6 +578,23 @@ email(schemaPath.email, {message: 'Please enter a valid email address'});
 
 `FieldTree`의 각 노드는 유효성 검사 상태와 상호작용 상태를 반응형 시그널로 표현합니다.
 
+<!--
+### FieldTree State Signals
+
+Every node in the tree, including the root form object, provides the same signals to track its state. Since every node is a `FieldTree`, the API for monitoring validity and interaction is identical at every level.
+
+| State        | Description                                                                     |
+| ------------ | ------------------------------------------------------------------------------- |
+| `valid()`    | Returns `true` if the node passes all validation rules                          |
+| `invalid()`  | Returns `true` if there are validation errors                                   |
+| `pending()`  | Returns `true` if async validation is in progress                               |
+| `touched()`  | Returns `true` if the user has focused and blurred the field or any child field |
+| `dirty()`    | Returns `true` if the value has been changed by the user                        |
+| `disabled()` | Returns `true` if the node is disabled                                          |
+| `readonly()` | Returns `true` if the node is readonly                                          |
+| `errors()`   | Returns an array of validation errors with `kind` and `message` properties      |
+-->
+
 <a id="fieldtree-state-signals"></a>
 
 ### FieldTree 상태 시그널
@@ -618,6 +612,16 @@ email(schemaPath.email, {message: 'Please enter a valid email address'});
 | `disabled()` | 노드가 비활성화되면 `true`를 반환합니다.                                    |
 | `readonly()` | 노드가 읽기 전용이면 `true`를 반환합니다.                                   |
 | `errors()`   | `kind`, `message` 프로퍼티가 있는 유효성 검사 오류 배열을 반환합니다.       |
+
+<!--
+### Complete example {#complete-example-validation}
+
+<docs-code-multifile preview path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts">
+  <docs-code header="app.ts" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.ts"/>
+  <docs-code header="app.html" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.html"/>
+  <docs-code header="app.css" path="adev/src/content/examples/signal-forms/src/login-validation/app/app.css"/>
+</docs-code-multifile>
+-->
 
 <a id="complete-example-validation"></a>
 

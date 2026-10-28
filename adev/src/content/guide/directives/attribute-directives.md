@@ -2,7 +2,13 @@
 # Attribute directives
 
 Attribute directives change the appearance or behavior of DOM elements and Angular components.
+-->
 
+# 어트리뷰트 디렉티브
+
+어트리뷰트 디렉티브는 DOM 엘리먼트와 Angular 컴포넌트의 모습이나 동작을 변경합니다.
+
+<!--
 ## Use template bindings for one-off behavior
 
 Angular's template syntax already covers changing a single element's classes, styles, properties, and events:
@@ -12,7 +18,19 @@ Angular's template syntax already covers changing a single element's classes, st
 - [Event listeners](guide/templates/event-listeners) respond to user interaction.
 
 Attribute directives are useful when you want to package this kind of behavior into a reusable unit that you can apply to any element or component.
+-->
 
+## 한 곳에서만 사용하는 동작은 템플릿 바인딩 활용하기 {#use-template-bindings-for-one-off-behavior}
+
+Angular 템플릿 문법만으로도 개별 엘리먼트의 클래스, 스타일, 프로퍼티, 이벤트를 변경할 수 있습니다.
+
+- [클래스 및 스타일 바인딩](guide/templates/binding#css-class-and-style-property-bindings)은 CSS 클래스와 인라인 스타일을 추가하거나 제거합니다.
+- [프로퍼티 및 어트리뷰트 바인딩](guide/templates/binding)은 DOM 프로퍼티와 HTML 어트리뷰트를 설정합니다.
+- [이벤트 리스너](guide/templates/event-listeners)는 사용자 상호작용에 반응합니다.
+
+이러한 동작을 재사용 가능한 단위로 묶어서 어떤 엘리먼트나 컴포넌트에도 적용하고 싶다면 어트리뷰트 디렉티브가 유용합니다.
+
+<!--
 ## Building an attribute directive
 
 A custom attribute directive is a JavaScript class with the `@Directive()` decorator. The decorator's `selector` defines the attribute that applies the directive. The square brackets make this an attribute selector, so the directive matches elements that carry the attribute. By convention, use a prefix such as `app` to avoid naming collisions:
@@ -37,61 +55,7 @@ IMPORTANT: Directives _do not_ support namespaces.
 ```angular-html {avoid}
 <p app:Highlight>This is invalid</p>
 ```
-
-## Applying an attribute directive
-
-To apply the directive, add its selector as an attribute on an element:
-
-<docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.1.html" region="applied"/>
-
-Angular creates an instance of `HighlightDirective` for that `<p>` element, injects a reference to the element, and sets its background to yellow.
-
-## Handling user events
-
-To respond to user interaction, bind host element events to handler methods through the `host` property of the `@Directive()` decorator. The following directive highlights the host element while the pointer is over it and clears the highlight when the pointer leaves:
-
-<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.2.ts"/>
-
-The `host` property maps the `mouseenter` and `mouseleave` events to the `onMouseEnter()` and `onMouseLeave()` methods, which delegate to a `highlight()` helper that sets the background color on the host element. For more on host event bindings, see [binding to the host element](guide/components/host-elements#binding-to-the-host-element).
-
-## Accepting input values
-
-Like components, directives accept inputs through the [`input()`](guide/components/inputs) function. Give an input the same name as the selector so that a single binding both applies the directive and passes a value to it:
-
-<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.3.ts" region="input"/>
-
-Read the input by calling it as a signal, and fall back to a default when no color is set:
-
-<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.3.ts" region="mouse-enter"/>
-
-In the template, bind the value to the selector. Because the input shares the selector's name, `[appHighlight]` both applies the directive and sets its value. Here the bound `color` is a property on the component:
-
-<docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="color"/>
-
-<docs-code header="app.component.ts" path="adev/src/content/examples/attribute-directives/src/app/app.component.ts" region="class"/>
-
-A directive can declare more than one input. The following directive adds a `defaultColor` input, then falls back through `appHighlight`, `defaultColor`, and finally `red`:
-
-<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.ts"/>
-
-Bind both inputs on the same element. Because `defaultColor` takes a static string rather than a dynamic expression, it doesn't need square brackets:
-
-<docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="defaultColor"/>
 -->
-
-# 어트리뷰트 디렉티브
-
-어트리뷰트 디렉티브는 DOM 엘리먼트와 Angular 컴포넌트의 모습이나 동작을 변경합니다.
-
-## 한 곳에서만 사용하는 동작은 템플릿 바인딩 활용하기 {#use-template-bindings-for-one-off-behavior}
-
-Angular 템플릿 문법만으로도 개별 엘리먼트의 클래스, 스타일, 프로퍼티, 이벤트를 변경할 수 있습니다.
-
-- [클래스 및 스타일 바인딩](guide/templates/binding#css-class-and-style-property-bindings)은 CSS 클래스와 인라인 스타일을 추가하거나 제거합니다.
-- [프로퍼티 및 어트리뷰트 바인딩](guide/templates/binding)은 DOM 프로퍼티와 HTML 어트리뷰트를 설정합니다.
-- [이벤트 리스너](guide/templates/event-listeners)는 사용자 상호작용에 반응합니다.
-
-이러한 동작을 재사용 가능한 단위로 묶어서 어떤 엘리먼트나 컴포넌트에도 적용하고 싶다면 어트리뷰트 디렉티브가 유용합니다.
 
 ## 어트리뷰트 디렉티브 만들기 {#building-an-attribute-directive}
 
@@ -122,6 +86,16 @@ export class HighlightDirective {}
 <p app:Highlight>This is invalid</p>
 ```
 
+<!--
+## Applying an attribute directive
+
+To apply the directive, add its selector as an attribute on an element:
+
+<docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.1.html" region="applied"/>
+
+Angular creates an instance of `HighlightDirective` for that `<p>` element, injects a reference to the element, and sets its background to yellow.
+-->
+
 ## 어트리뷰트 디렉티브 적용하기 {#applying-an-attribute-directive}
 
 엘리먼트에 디렉티브 셀렉터를 어트리뷰트로 추가하면 디렉티브를 적용할 수 있습니다.
@@ -129,6 +103,16 @@ export class HighlightDirective {}
 <docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.1.html" region="applied"/>
 
 Angular는 해당 `<p>` 엘리먼트에 `HighlightDirective` 인스턴스를 생성하고, 엘리먼트의 참조를 주입한 뒤 배경을 노란색으로 설정합니다.
+
+<!--
+## Handling user events
+
+To respond to user interaction, bind host element events to handler methods through the `host` property of the `@Directive()` decorator. The following directive highlights the host element while the pointer is over it and clears the highlight when the pointer leaves:
+
+<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.2.ts"/>
+
+The `host` property maps the `mouseenter` and `mouseleave` events to the `onMouseEnter()` and `onMouseLeave()` methods, which delegate to a `highlight()` helper that sets the background color on the host element. For more on host event bindings, see [binding to the host element](guide/components/host-elements#binding-to-the-host-element).
+-->
 
 ## 사용자 이벤트 처리하기 {#handling-user-events}
 
@@ -140,6 +124,32 @@ Angular는 해당 `<p>` 엘리먼트에 `HighlightDirective` 인스턴스를 생
 `host` 프로퍼티는 `mouseenter`와 `mouseleave` 이벤트를 `onMouseEnter()`와 `onMouseLeave()` 메서드에 연결합니다.
 이 메서드들은 호스트 엘리먼트의 배경색을 설정하는 `highlight()` 헬퍼를 호출합니다.
 호스트 이벤트 바인딩은 [호스트 엘리먼트에 바인딩하기](guide/components/host-elements#binding-to-the-host-element)를 참고하세요.
+
+<!--
+## Accepting input values
+
+Like components, directives accept inputs through the [`input()`](guide/components/inputs) function. Give an input the same name as the selector so that a single binding both applies the directive and passes a value to it:
+
+<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.3.ts" region="input"/>
+
+Read the input by calling it as a signal, and fall back to a default when no color is set:
+
+<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.3.ts" region="mouse-enter"/>
+
+In the template, bind the value to the selector. Because the input shares the selector's name, `[appHighlight]` both applies the directive and sets its value. Here the bound `color` is a property on the component:
+
+<docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="color"/>
+
+<docs-code header="app.component.ts" path="adev/src/content/examples/attribute-directives/src/app/app.component.ts" region="class"/>
+
+A directive can declare more than one input. The following directive adds a `defaultColor` input, then falls back through `appHighlight`, `defaultColor`, and finally `red`:
+
+<docs-code header="highlight.directive.ts" path="adev/src/content/examples/attribute-directives/src/app/highlight.directive.ts"/>
+
+Bind both inputs on the same element. Because `defaultColor` takes a static string rather than a dynamic expression, it doesn't need square brackets:
+
+<docs-code header="app.component.html" path="adev/src/content/examples/attribute-directives/src/app/app.component.html" region="defaultColor"/>
+-->
 
 <a id="passing-values-into-an-attribute-directive"></a>
 

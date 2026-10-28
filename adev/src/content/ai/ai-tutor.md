@@ -311,17 +311,6 @@ Try typing `#angular-cli` first to load the Angular context, then paste the tuto
 Open the Command Palette (`Ctrl+Shift+P`), type "MCP: List Running Servers", and look for "angular-cli" in the list.
 
 ---
-
-### General Issues
-
-If the tutor doesn't respond correctly or you suspect an issue with your application, here are a few things to try:
-
-1. **Type "proceed":** This can often nudge the tutor to continue to the next step in the event it gets stuck.
-2. **Correct the Tutor:** If the tutor is mistaken about your progress (e.g., it says you're on Module 3 but you've completed Module 8), just tell it. For example: _"I'm actually on Module 8."_ The tutor will re-evaluate your code and adjust.
-3. **Verify Your UI:** If you want to confirm what your application's user interface should look like, just ask the tutor. For example: _"What should I see in my UI?"_
-4. **Reload the Browser Window:** A refresh can solve many issues related to your application.
-5. **Hard Restart the Browser:** Errors are sometimes only surfaced in the browser's developer console. A hard restart can help clear underlying issues related to the application.
-6. **Start a New Chat:** You can always start a new chat to remove the existing history and begin fresh. The tutor will read your files to find the latest step you were on.
 -->
 
 <a id="setup-issues"></a>
@@ -351,6 +340,19 @@ code .
 명령 팔레트(`Ctrl+Shift+P`)를 열고 "MCP: List Running Servers"를 입력한 뒤 목록에서 "angular-cli"를 찾으세요.
 
 ---
+
+<!--
+### General Issues
+
+If the tutor doesn't respond correctly or you suspect an issue with your application, here are a few things to try:
+
+1. **Type "proceed":** This can often nudge the tutor to continue to the next step in the event it gets stuck.
+2. **Correct the Tutor:** If the tutor is mistaken about your progress (e.g., it says you're on Module 3 but you've completed Module 8), just tell it. For example: _"I'm actually on Module 8."_ The tutor will re-evaluate your code and adjust.
+3. **Verify Your UI:** If you want to confirm what your application's user interface should look like, just ask the tutor. For example: _"What should I see in my UI?"_
+4. **Reload the Browser Window:** A refresh can solve many issues related to your application.
+5. **Hard Restart the Browser:** Errors are sometimes only surfaced in the browser's developer console. A hard restart can help clear underlying issues related to the application.
+6. **Start a New Chat:** You can always start a new chat to remove the existing history and begin fresh. The tutor will read your files to find the latest step you were on.
+-->
 
 <a id="general-issues"></a>
 

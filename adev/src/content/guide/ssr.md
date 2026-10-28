@@ -1283,19 +1283,6 @@ withHttpTransferCacheOptions({
 ```
 
 Enable only when credentialed requests return responses that are safe to cache.
-
-### `includeNonCacheableRequests`
-
-Determines whether requests and responses containing `Cache-Control` directives that forbid caching (`no-store`, `no-cache`, or `private`), responses with a `Set-Cookie` header, or requests using Fetch API `cache` options (`no-store` or `no-cache`), are eligible for caching.
-By default, these are excluded to respect HTTP caching controls.
-
-```ts
-withHttpTransferCacheOptions({
-  includeNonCacheableRequests: true,
-});
-```
-
-Enable only when you need to bypass cache-control restrictions for transfer caching.
 -->
 
 ### `includeRequestsWithCredentials`
@@ -1310,6 +1297,21 @@ withHttpTransferCacheOptions({
 ```
 
 자격 증명을 포함하는 요청이 캐시해도 안전한 응답을 반환할 때만 활성화하세요.
+
+<!--
+### `includeNonCacheableRequests`
+
+Determines whether requests and responses containing `Cache-Control` directives that forbid caching (`no-store`, `no-cache`, or `private`), responses with a `Set-Cookie` header, or requests using Fetch API `cache` options (`no-store` or `no-cache`), are eligible for caching.
+By default, these are excluded to respect HTTP caching controls.
+
+```ts
+withHttpTransferCacheOptions({
+  includeNonCacheableRequests: true,
+});
+```
+
+Enable only when you need to bypass cache-control restrictions for transfer caching.
+-->
 
 ### `includeNonCacheableRequests`
 

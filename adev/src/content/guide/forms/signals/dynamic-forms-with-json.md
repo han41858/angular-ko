@@ -477,35 +477,6 @@ In the template, render an array case like this:
 ```
 
 The `addItem()` method extends the model; the form re-derives the array's fields automatically. New items start with fresh validation state. The `removeItem()` method filters the model. Because arrays of primitives are [tracked by position](#tracking-item-identity), field state is tied to the index rather than the value: when an item is removed, subsequent values shift into earlier positions and inherit their existing field state, while the trailing field is dropped.
-
-### Tracking item identity
-
-Signal Forms tracks each item in an array of objects by its identity. When you store a reference to a field at a specific position, that reference follows the underlying data, not the position. Reading state through the held reference returns the data even if it has moved:
-
-```ts
-const contactModel = signal([
-  {name: 'Alice', phone: '555-0001'},
-  {name: 'Bob', phone: '555-0002'},
-]);
-
-const contactForm = form(contactModel);
-
-// Hold a reference to the field that's currently at index 0 (Alice).
-const aliceField = contactForm[0];
-
-// Swap the array items so Bob is at index 0, Alice at index 1.
-contactModel.update(([alice, bob]) => [bob, alice]);
-
-// The held reference still points to Alice's field, even after the swap.
-console.log(aliceField().value().phone); // '555-0001' (Alice's number)
-console.log(contactForm[0]().value().phone); // '555-0002' (Bob, now at index 0)
-```
-
-This identity tracking prevents bugs when sorting, reordering, or filtering, as long as the referenced item remains in the array. Stored field references remain valid even when array order changes; removing the referenced item itself orphans the held reference.
-
-For arrays of primitives (the `phoneNumbers` example above), Signal Forms tracks items positionally instead: index 0 always refers to whatever value is currently at position 0.
-
-Identity here is by JavaScript object reference, not by a logical id like a database key. If you replace the array with freshly-deserialized objects (for example, after a server reload), field state doesn't follow the logical item even when each item's `id` is unchanged. The guarantee covers in-memory operations like sorting, reordering, and filtering, not data refresh.
 -->
 
 <a id="expressing-repeating-fields-in-config"></a>
@@ -652,6 +623,37 @@ removeItem(name: string, index: number) {
 `removeItem()`은 모델을 필터링합니다.
 원시 값 배열은 [위치로 추적](#tracking-item-identity)하므로 필드 상태는 값이 아니라 인덱스에 연결됩니다.
 항목을 삭제하면 뒤에 있던 값이 앞쪽 위치로 이동하면서 해당 위치의 기존 필드 상태를 이어받고, 마지막 필드는 제거됩니다.
+
+<!--
+### Tracking item identity
+
+Signal Forms tracks each item in an array of objects by its identity. When you store a reference to a field at a specific position, that reference follows the underlying data, not the position. Reading state through the held reference returns the data even if it has moved:
+
+```ts
+const contactModel = signal([
+  {name: 'Alice', phone: '555-0001'},
+  {name: 'Bob', phone: '555-0002'},
+]);
+
+const contactForm = form(contactModel);
+
+// Hold a reference to the field that's currently at index 0 (Alice).
+const aliceField = contactForm[0];
+
+// Swap the array items so Bob is at index 0, Alice at index 1.
+contactModel.update(([alice, bob]) => [bob, alice]);
+
+// The held reference still points to Alice's field, even after the swap.
+console.log(aliceField().value().phone); // '555-0001' (Alice's number)
+console.log(contactForm[0]().value().phone); // '555-0002' (Bob, now at index 0)
+```
+
+This identity tracking prevents bugs when sorting, reordering, or filtering, as long as the referenced item remains in the array. Stored field references remain valid even when array order changes; removing the referenced item itself orphans the held reference.
+
+For arrays of primitives (the `phoneNumbers` example above), Signal Forms tracks items positionally instead: index 0 always refers to whatever value is currently at position 0.
+
+Identity here is by JavaScript object reference, not by a logical id like a database key. If you replace the array with freshly-deserialized objects (for example, after a server reload), field state doesn't follow the logical item even when each item's `id` is unchanged. The guarantee covers in-memory operations like sorting, reordering, and filtering, not data refresh.
+-->
 
 <a id="tracking-item-identity"></a>
 

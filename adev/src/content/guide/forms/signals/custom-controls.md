@@ -924,7 +924,43 @@ export class NumberInput implements FormValueControl<number | null> {
 ```
 
 Writing to the returned signal (`rawValue.set(...)`) runs `parse` and writes the result into `value`. Whenever the model changes from elsewhere - a `reset()`, a schema rule, or another part of the app - `format` runs again and the raw value updates to match.
+-->
 
+<a id="value-transformation"></a>
+
+## 값 변환하기
+
+컨트롤에 표시하는 값의 형식과 폼 모델에 저장하는 값의 형식이 다를 때가 있습니다.
+예를 들어 날짜 선택기에는 "January 15, 2024"를 표시하면서 모델에는 "2024-01-15"를 저장하거나, 통화 입력 컨트롤에는 "$1,234.56"을 표시하면서 모델에는 1234.56을 저장할 수 있습니다.
+
+`@angular/forms/signals`의 `transformedValue()`로 UI에 표시하는 원시 값과 모델 값을 동기화하세요. 컨트롤의 `value` 모델 시그널, `parse` 함수, `format` 함수를 전달하면 원시 값을 담는 쓰기 가능한 시그널을 반환합니다:
+
+- `format`은 모델 값을 템플릿에 표시할 원시 값으로 변환합니다.
+- `parse`는 사용자가 입력한 값을 모델 값으로 변환하거나 파싱 오류를 반환합니다.
+
+```angular-ts
+import {Component, model} from '@angular/core';
+import {FormValueControl, transformedValue} from '@angular/forms/signals';
+
+@Component({
+  selector: 'number-input',
+  template: `
+    <input type="text" [value]="rawValue()" (input)="rawValue.set($event.target.value)" />
+  `,
+})
+export class NumberInput implements FormValueControl<number | null> {
+  readonly value = model.required<number | null>();
+
+  protected readonly rawValue = transformedValue(this.value, {
+    parse: (val: string): {value: number | null} => ({value: val ? Number(val) : null}),
+    format: (val: number | null): string => val?.toString() ?? '',
+  });
+}
+```
+
+반환된 시그널에 `rawValue.set(...)`으로 값을 쓰면 `parse`를 실행하고 결과를 `value`에 기록합니다. `reset()`, 스키마 규칙, 애플리케이션의 다른 부분에서 모델을 변경하면 `format`을 다시 실행하여 원시 값을 모델과 일치시킵니다.
+
+<!--
 ### Reporting parse errors
 
 Sometimes the raw value has no valid model representation - a half-typed date, or letters in a numeric field. The `NumberInput` above has this problem: `Number('abc')` is `NaN`, which `parse` happily writes into the model.
@@ -973,49 +1009,7 @@ export class Order {
 A field with parse errors is invalid, which blocks submission the same way a failed validation rule does.
 
 HELPFUL: Signal Forms uses the same mechanism for native inputs. When the browser cannot parse a value (for example, a partially typed date in `<input type="date">`), it surfaces as a `parse` error on the field. See [Native HTML validation](guide/forms/signals/validation#native-html-validation) for details.
-
-### Resetting
-
-Calling `reset()` on the field clears any pending parse errors and re-formats the raw value from the model, so a control left in an unparseable state returns to a clean display value:
-
-```ts
-orderForm.amount().reset();
-```
 -->
-
-<a id="value-transformation"></a>
-
-## 값 변환하기
-
-컨트롤에 표시하는 값의 형식과 폼 모델에 저장하는 값의 형식이 다를 때가 있습니다.
-예를 들어 날짜 선택기에는 "January 15, 2024"를 표시하면서 모델에는 "2024-01-15"를 저장하거나, 통화 입력 컨트롤에는 "$1,234.56"을 표시하면서 모델에는 1234.56을 저장할 수 있습니다.
-
-`@angular/forms/signals`의 `transformedValue()`로 UI에 표시하는 원시 값과 모델 값을 동기화하세요. 컨트롤의 `value` 모델 시그널, `parse` 함수, `format` 함수를 전달하면 원시 값을 담는 쓰기 가능한 시그널을 반환합니다:
-
-- `format`은 모델 값을 템플릿에 표시할 원시 값으로 변환합니다.
-- `parse`는 사용자가 입력한 값을 모델 값으로 변환하거나 파싱 오류를 반환합니다.
-
-```angular-ts
-import {Component, model} from '@angular/core';
-import {FormValueControl, transformedValue} from '@angular/forms/signals';
-
-@Component({
-  selector: 'number-input',
-  template: `
-    <input type="text" [value]="rawValue()" (input)="rawValue.set($event.target.value)" />
-  `,
-})
-export class NumberInput implements FormValueControl<number | null> {
-  readonly value = model.required<number | null>();
-
-  protected readonly rawValue = transformedValue(this.value, {
-    parse: (val: string): {value: number | null} => ({value: val ? Number(val) : null}),
-    format: (val: number | null): string => val?.toString() ?? '',
-  });
-}
-```
-
-반환된 시그널에 `rawValue.set(...)`으로 값을 쓰면 `parse`를 실행하고 결과를 `value`에 기록합니다. `reset()`, 스키마 규칙, 애플리케이션의 다른 부분에서 모델을 변경하면 `format`을 다시 실행하여 원시 값을 모델과 일치시킵니다.
 
 <a id="reporting-parse-errors"></a>
 
@@ -1069,6 +1063,16 @@ export class Order {
 파싱 오류가 있는 필드는 유효하지 않으므로 유효성 검사 규칙에 실패한 경우와 마찬가지로 제출을 차단합니다.
 
 도움말: Signal Forms는 기본 입력에도 같은 방식을 사용합니다. 브라우저가 값을 파싱할 수 없으면(예: `<input type="date">`에 날짜를 일부만 입력한 경우) 필드에 `parse` 오류가 나타납니다. 자세한 내용은 [기본 HTML 유효성 검사](guide/forms/signals/validation#native-html-validation)를 참고하세요.
+
+<!--
+### Resetting
+
+Calling `reset()` on the field clears any pending parse errors and re-formats the raw value from the model, so a control left in an unparseable state returns to a clean display value:
+
+```ts
+orderForm.amount().reset();
+```
+-->
 
 <a id="resetting"></a>
 
@@ -1193,12 +1197,6 @@ registrationForm = form(this.registrationModel, (path) => {
 ```
 
 `apply()` merges the companion schema's rules into the parent form at the specified path. The consumer can still add more rules to the same field because `apply()` composes with other rules rather than replacing them. See the [Schemas guide](guide/forms/signals/schemas) for complete coverage of `schema()`, `apply()`, and conditional composition with `applyWhen()`.
-
-### Design considerations
-
-The consumer's model must initialize every field with a defined value. In Signal Forms, `undefined` signifies the absence of a field and not an empty value. For a reusable email control, that means the consumer should use `''` as the initial value, and not leave the property undefined. See the [Form Models guide](guide/forms/signals/models) for details on choosing initial values.
-
-In addition, controls should not register their own effects for state management. The form system manages field state through internal effects. This means that your control receives state updates through input signals. If a control needs to transform values, use `transformedValue()` as shown in the "[Value transformation](#value-transformation)" section rather than an `effect()`.
 -->
 
 <a id="making-controls-reusable"></a>
@@ -1228,6 +1226,14 @@ registrationForm = form(this.registrationModel, (path) => {
 ```
 
 `apply()`는 함께 제공된 스키마의 규칙을 부모 폼의 지정한 경로에 병합합니다. 기존 규칙을 덮어쓰지 않고 조합하므로 같은 필드에 규칙을 추가할 수도 있습니다. `schema()`, `apply()`, `applyWhen()`을 사용하는 조건부 조합에 대한 자세한 내용은 [스키마 가이드](guide/forms/signals/schemas)를 참고하세요.
+
+<!--
+### Design considerations
+
+The consumer's model must initialize every field with a defined value. In Signal Forms, `undefined` signifies the absence of a field and not an empty value. For a reusable email control, that means the consumer should use `''` as the initial value, and not leave the property undefined. See the [Form Models guide](guide/forms/signals/models) for details on choosing initial values.
+
+In addition, controls should not register their own effects for state management. The form system manages field state through internal effects. This means that your control receives state updates through input signals. If a control needs to transform values, use `transformedValue()` as shown in the "[Value transformation](#value-transformation)" section rather than an `effect()`.
+-->
 
 <a id="design-considerations"></a>
 
