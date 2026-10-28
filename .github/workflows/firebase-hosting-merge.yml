@@ -121,13 +121,24 @@ jobs:
       - name: prepare Bazel cache key
         id: bazel-cache-key
         env:
-          BUILD_CONFIG_HASH: ${{ hashFiles('.bazelversion', '.bazelrc', 'MODULE.bazel', 'MODULE.bazel.lock', 'pnpm-lock.yaml', 'package.json', '.github/workflows/firebase-hosting-merge.yml') }}
+          BUILD_CONFIG_HASH: ${{ hashFiles('.bazelversion', '.bazelrc', 'MODULE.bazel', 'MODULE.bazel.lock', 'pnpm-lock.yaml', 'package.json', '**/BUILD.bazel', '**/*.bzl', '!**/node_modules/**', '!dist/**', '!bazel-out/**', '.github/scripts/bazel-cache-fingerprint.py', '.github/workflows/firebase-hosting-merge.yml') }}
         run: |
           # Cache only action outputs, never the checkout, HOME, or Firebase credentials.
           echo "BAZEL_DISK_CACHE=$RUNNER_TEMP/angular-ko-bazel-disk-cache" >> "$GITHUB_ENV"
-          # Host tools are not all Bazel inputs. Do not reuse across runner image/tool changes.
-          toolchain_hash=$(printf '%s\n' "$ImageOS" "$ImageVersion" "$(node --version)" | sha256sum | cut -d ' ' -f 1)
-          prefix="bazel-disk-v1-${RUNNER_OS}-${RUNNER_ARCH}-${toolchain_hash}-${BUILD_CONFIG_HASH}"
+          # Reuse across image revisions only when audited host binaries/libraries match.
+          if host_hash=$(python3 .github/scripts/bazel-cache-fingerprint.py) && [[ "$host_hash" =~ ^[0-9a-f]{64}$ ]]; then
+            toolchain_hash="tools-$host_hash"
+          else
+            echo '::warning::Host fingerprint unavailable; isolating cache by runner image.'
+            if [[ -n "${ImageOS:-}" && -n "${ImageVersion:-}" ]]; then
+              image_hash=$(printf '%s\n' "$ImageOS" "$ImageVersion" "$(node --version)" | sha256sum | cut -d ' ' -f 1)
+            else
+              # Unknown images must not share a broad fallback cache.
+              image_hash="run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+            fi
+            toolchain_hash="image-$image_hash"
+          fi
+          prefix="bazel-disk-v2-${RUNNER_OS}-${RUNNER_ARCH}-${toolchain_hash}-${BUILD_CONFIG_HASH}"
           echo "prefix=$prefix" >> "$GITHUB_OUTPUT"
           echo "key=${prefix}-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
@@ -221,7 +232,10 @@ jobs:
             --jobs=2 \
             --local_resources=memory=6144 \
             --spawn_strategy=processwrapper-sandbox \
-            --action_env=NG_BUILD_MAX_WORKERS=2 &
+            --action_env=NG_BUILD_MAX_WORKERS=2 \
+            --action_env=LC_ALL=C.UTF-8 \
+            --action_env=LANG=C.UTF-8 \
+            --action_env=TZ=UTC &
           build_pid=$!
           # Capture failures explicitly because GitHub Actions runs Bash with errexit.
           build_exit_code=0
