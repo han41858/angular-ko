@@ -26,6 +26,8 @@ jobs:
       - name: check env
         run: node -v && pnpm -v
       - name: install dependencies
+        env:
+          CYPRESS_INSTALL_BINARY: '0'
         run: pnpm install --frozen-lockfile
       - name: validate Firebase Hosting access
         id: firebase-preflight
