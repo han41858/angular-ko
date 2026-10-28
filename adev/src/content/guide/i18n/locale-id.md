@@ -137,6 +137,45 @@ Angular는 기본적으로 프로젝트의 원본 지역으로 `en-US`를 사용
 ```
 
 <!--
+## Read the active locale outside dependency injection
+-->
+
+<a id="read-the-active-locale-outside-dependency-injection"></a>
+
+## 의존성 주입 밖에서 현재 지역 읽기
+
+<!--
+Inside a component or service, inject the `LOCALE_ID` token to get the active locale.
+
+If you can't inject `LOCALE_ID`, for example in a plain function outside an injection context, read `$localize.locale`.
+Each localized build sets this value, and it is what the default `LOCALE_ID` factory reads.
+If your application provides its own `LOCALE_ID`, `$localize.locale` does not reflect it.
+
+```ts
+declare const $localize: {locale?: string};
+
+export const locale = (typeof $localize !== 'undefined' && $localize.locale) || 'en-US';
+```
+
+Put this in a file that has an `import` or `export`. If your project already includes the `@angular/localize` types, omit the `declare` line.
+-->
+
+컴포넌트나 서비스 안에서는 `LOCALE_ID` 토큰을 주입해서 현재 지역을 가져오세요.
+
+주입 컨텍스트 밖의 일반 함수처럼 `LOCALE_ID`를 주입할 수 없는 경우에는 `$localize.locale`을 읽으세요.
+지역별 빌드마다 이 값이 설정되며, 기본 `LOCALE_ID` 팩토리도 이 값을 읽습니다.
+애플리케이션에서 자체 `LOCALE_ID`를 제공하더라도 `$localize.locale`에는 반영되지 않습니다.
+
+```ts
+declare const $localize: {locale?: string};
+
+export const locale = (typeof $localize !== 'undefined' && $localize.locale) || 'en-US';
+```
+
+이 코드는 `import`나 `export`가 있는 파일에 작성하세요.
+프로젝트에 이미 `@angular/localize` 타입이 포함되어 있다면 `declare` 줄은 생략하세요.
+
+<!--
 ## What's next
 -->
 

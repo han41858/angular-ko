@@ -229,32 +229,24 @@ Network 탭에서 서비스 워커가 동작하는지 확인해 보세요.
 Notice that all of the files the browser needs to render this application are cached.
 The `ngsw-config.json` boilerplate configuration is set up to cache the specific resources used by the CLI:
 
-- `index.html`
-- `favicon.ico`
+- `index.html` (and `index.csr.html` for applications with server-side rendering or prerendering)
+- `favicon.ico` and `manifest.webmanifest`
 - Build artifacts (JS and CSS bundles)
-- Anything under `assets`
-- Images and fonts directly under the configured `outputPath` (by default `./dist/<project-name>/`) or `resourcesOutputPath`.
-  See the documentation for `ng build` for more information about these options.
+- Images and fonts anywhere in the browser output (by default `./dist/<project-name>/browser/`)
 
 IMPORTANT: The generated `ngsw-config.json` includes a limited list of cacheable fonts and images extensions. In some cases, you might want to modify the glob pattern to suit your needs.
-
-IMPORTANT: If `resourcesOutputPath` or `assets` paths are modified after the generation of configuration file, you need to change the paths manually in `ngsw-config.json`.
 -->
 
 브라우저가 이 애플리케이션을 렌더링하는 데 필요한 모든 파일이 캐시에 저장됩니다.
 기본으로 생성된 `ngsw-config.json`은 CLI가 사용하는 다음 리소스를 캐시에 저장하도록 설정되어 있습니다:
 
-- `index.html`
-- `favicon.ico`
+- `index.html`(서버 사이드 렌더링이나 사전 렌더링을 사용하는 애플리케이션은 `index.csr.html`도 포함)
+- `favicon.ico`와 `manifest.webmanifest`
 - 빌드 결과물(JS와 CSS 번들)
-- `assets` 안에 있는 모든 파일
-- 설정한 `outputPath`(기본값은 `./dist/<project-name>/`) 또는 `resourcesOutputPath` 바로 아래에 있는 이미지와 폰트
-  이 옵션에 대한 자세한 내용은 `ng build` 문서를 참고하세요.
+- 브라우저 출력 디렉터리(기본값은 `./dist/<project-name>/browser/`) 내 모든 위치의 이미지와 폰트
 
 중요: 생성된 `ngsw-config.json`에는 캐시에 저장할 수 있는 폰트와 이미지 확장자가 제한된 목록으로 포함됩니다.
 필요에 따라 glob 패턴을 수정해야 할 수 있습니다.
-
-중요: 설정 파일을 생성한 뒤 `resourcesOutputPath`나 `assets` 경로를 변경했다면, `ngsw-config.json`의 경로도 직접 변경해야 합니다.
 
 <!--
 ### Making changes to your application
@@ -275,8 +267,8 @@ Make a change to the application, and watch the service worker install the updat
    This should also close the Developer Tools.
 
 1. Shut down `http-server` (Ctrl-c).
-1. Open `src/app/app.component.html` for editing.
-1. Change the text `Welcome to {{title}}!` to `Bienvenue à {{title}}!`.
+1. Open `src/app/app.html` for editing.
+1. Change the text `Hello, {{ title() }}` to `Bienvenue à {{ title() }}!`.
 1. Build and run the server again:
 
 ```shell
@@ -295,8 +287,8 @@ Make a change to the application, and watch the service worker install the updat
    개발자 도구도 함께 닫힙니다.
 
 1. `http-server`를 종료합니다(Ctrl-c).
-1. 수정할 `src/app/app.component.html` 파일을 엽니다.
-1. `Welcome to {{title}}!` 문구를 `Bienvenue à {{title}}!`로 바꿉니다.
+1. 수정할 `src/app/app.html` 파일을 엽니다.
+1. `Hello, {{ title() }}` 문구를 `Bienvenue à {{ title() }}!`로 바꿉니다.
 1. 다시 빌드하고 서버를 실행합니다:
 
 ```shell

@@ -70,7 +70,7 @@ Continuing the theme example, if a user clicks on a button that updates the `the
 
 You can use text interpolation anywhere you would normally write text in HTML.
 
-All expression values are converted to a string. Objects and arrays are converted using the value’s `toString` method.
+Expression values are converted to a string. `null` and `undefined` render as an empty string. Objects and arrays are converted using the value’s `toString` method.
 -->
 
 문자열을 바인딩하려면 이중 중괄호(`{{`, `}}`)를 사용하고 괄호 안에 표현식을 작성하면 됩니다.
@@ -124,7 +124,8 @@ export class App {
 
 HTML에 문자열을 표시하고 싶은 곳이라면 어느 곳에든 문자열 바인딩을 활용할 수 있습니다.
 
-문자열 바인딩 표현식은 모두 문자열 타입으로 변환됩니다.
+문자열 바인딩 표현식의 값은 문자열 타입으로 변환됩니다.
+`null`과 `undefined`는 빈 문자열로 렌더링됩니다.
 표현식의 결과가 객체나 배열이라면 `toString()` 메서드 실행 결과가 사용됩니다.
 
 <!--
@@ -236,7 +237,7 @@ When you need to set HTML attributes that do not have corresponding DOM properti
 
 In this example, every time `listRole` changes, Angular automatically sets the `role` attribute of the `<ul>` element by calling `setAttribute`.
 
-If the value of an attribute binding is `null`, Angular removes the attribute by calling `removeAttribute`.
+If the value of an attribute binding is `null` or `undefined`, Angular removes the attribute by calling `removeAttribute`.
 -->
 
 SVG 어트리뷰트와 같이 연관된 DOM 프로퍼티가 존재하지 않는 경우에는 템플릿 엘리먼트에 `attr.` 접두사를 붙여서 어트리뷰트와 바인딩할 수 있습니다.
@@ -248,7 +249,7 @@ SVG 어트리뷰트와 같이 연관된 DOM 프로퍼티가 존재하지 않는 
 
 이렇게 구현하면 `listRole` 값이 변경될 때마다 Angular가 자동으로 `<ul>` 엘리먼트의 `setAttribute`를 실행해서 `role` 어트리뷰트 값을 변경합니다.
 
-이때 어트리뷰트에 바인딩되는 값이 `null`이면, Angular가 `removeAttribute`를 실행해서 어트리뷰트를 제거합니다.
+이때 어트리뷰트에 바인딩되는 값이 `null`이나 `undefined`이면, Angular가 `removeAttribute`를 실행해서 어트리뷰트를 제거합니다.
 
 <!--
 ### Text interpolation in properties and attributes
@@ -341,7 +342,7 @@ The above example renders the following DOM:
 <button class="highlighted"> ... </button>
 ```
 
-Angular ignores any string values that are not valid CSS class names.
+Angular splits a string value on whitespace and ignores empty strings.
 
 When using static CSS classes, directly binding `class`, and binding specific classes, Angular intelligently combines all of the classes in the rendered result.
 
@@ -417,7 +418,7 @@ export class UserProfile {
 <button class="highlighted">...</button>
 ```
 
-유효하지 않은 CSS 클래스 이름은 무시합니다.
+Angular는 문자열 값을 공백으로 나누고 빈 문자열은 무시합니다.
 
 정적 CSS 클래스를 사용하거나 `class`를 직접 바인딩하거나, 특정 클래스를 바인딩하는 경우가 겹치면 Angular는 지능적으로 결과를 조합합니다.
 
@@ -581,7 +582,7 @@ Angular supports binding string values to ARIA attributes.
 </button>
 ```
 
-Angular writes the string value to the element’s `aria-label` attribute and removes it when the bound value is `null`.
+Angular writes the string value to the element’s `aria-label` attribute and removes it when the bound value is `null` or `undefined`.
 
 Some ARIA features expose DOM properties or directive inputs that accept structured values (such as element references). Use standard property bindings for those cases. See the [accessibility guide](/best-practices/a11y#aria-attributes-and-properties) for examples and additional guidance.
 -->
@@ -594,7 +595,7 @@ ARIA 어트리뷰트에 문자열을 바인딩할 수 있습니다.
 </button>
 ```
 
-Angular는 바인딩된 값에 따라 해당 문자열을 엘리먼트의 `aria-label` 어트리뷰트에 지정하고, 바인딩된 값이 `null`이면 어트리뷰트를 제거합니다.
+Angular는 바인딩된 값에 따라 해당 문자열을 엘리먼트의 `aria-label` 어트리뷰트에 지정하고, 바인딩된 값이 `null`이나 `undefined`이면 어트리뷰트를 제거합니다.
 
 일부 ARIA 기능은 엘리먼트 참조와 같이 어떤 형식을 요구하는 경우가 있습니다.
 이런 경우는 일반적인 프로퍼티 바인딩을 사용하세요.

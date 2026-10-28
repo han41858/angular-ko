@@ -34,7 +34,7 @@ ng generate web-worker <location>
 ```
 
 You can add a web worker anywhere in your application.
-For example, to add a web worker to the root component, `src/app/app.component.ts`, run the following command.
+For example, to add a web worker to the root component, `src/app/app.ts`, run the following command.
 
 ```shell
 ng generate web-worker app
@@ -52,9 +52,9 @@ The command performs the following actions.
    });
    ```
 
-1. Adds the following scaffold code to `src/app/app.component.ts` to use the worker.
+1. Adds the following scaffold code to `src/app/app.ts` to use the worker.
 
-   ```ts {header:"src/app/app.component.ts"}
+   ```ts {header:"src/app/app.ts"}
    if (typeof Worker !== 'undefined') {
      // Create a new
      const worker = new Worker(new URL('./app.worker', import.meta.url));
@@ -82,7 +82,7 @@ ng generate web-worker <location>
 ```
 
 애플리케이션의 어디에나 웹 워커를 추가할 수 있습니다.
-예를 들어 루트 컴포넌트인 `src/app/app.component.ts`에 웹 워커를 추가하려면 다음 명령을 실행하세요.
+예를 들어 루트 컴포넌트인 `src/app/app.ts`에 웹 워커를 추가하려면 다음 명령을 실행하세요.
 
 ```shell
 ng generate web-worker app
@@ -100,9 +100,9 @@ ng generate web-worker app
    });
    ```
 
-1. 워커를 사용할 수 있도록 `src/app/app.component.ts`에 다음 기본 코드를 추가합니다.
+1. 워커를 사용할 수 있도록 `src/app/app.ts`에 다음 기본 코드를 추가합니다.
 
-   ```ts {header:"src/app/app.component.ts"}
+   ```ts {header:"src/app/app.ts"}
    if (typeof Worker !== 'undefined') {
      // 새 워커를 생성합니다.
      const worker = new Worker(new URL('./app.worker', import.meta.url));
