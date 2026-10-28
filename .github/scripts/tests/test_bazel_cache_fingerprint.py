@@ -15,6 +15,9 @@ spec.loader.exec_module(fingerprint)
 
 
 class FingerprintTests(unittest.TestCase):
+    def test_non_stamped_target_does_not_fingerprint_git(self):
+        self.assertNotIn('git', fingerprint.TOOLS)
+
     def test_serialization_is_deterministic(self):
         self.assertEqual(fingerprint.fingerprint({'a': 1, 'b': 2}),
                          fingerprint.fingerprint({'b': 2, 'a': 1}))
@@ -70,6 +73,12 @@ class FingerprintTests(unittest.TestCase):
         with patch.dict(fingerprint.os.environ, {'ImageVersion': 'different-image'}):
             second = fingerprint.collect()
         self.assertEqual(fingerprint.fingerprint(first), fingerprint.fingerprint(second))
+        for field, value in [('bazel', 'different'), ('schema', 999),
+                             ('os_version', 'different'), ('arch', 'different'),
+                             ('node', 'different')]:
+            changed = copy.deepcopy(first)
+            changed[field] = value
+            self.assertNotEqual(fingerprint.fingerprint(first), fingerprint.fingerprint(changed))
         changed = copy.deepcopy(first)
         changed['action_env']['TZ'] = 'Asia/Seoul'
         self.assertNotEqual(fingerprint.fingerprint(first), fingerprint.fingerprint(changed))

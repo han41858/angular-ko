@@ -5,7 +5,8 @@ Audited with Bazel 8.8.2 aquery deps(//adev:build), 2026-10-28. Most tools
 (Node, coreutils, tar, jq, esbuild) are declared Bazel inputs. The remaining
 shell utilities and the shared runtime used by Node/Sass/native npm modules
 need a host fingerprint. Re-audit when build rules/toolchains change.
-This is a bounded compatibility check, not a claim of full hermeticity.
+New undeclared host dependencies require an audit; bump schema/cache epoch when
+changing compatibility policy. This is not a claim of full hermeticity.
 """
 import hashlib
 import json
@@ -23,7 +24,9 @@ ACTION_PATH = '/bin:/usr/bin:/usr/local/bin'
 TOOLS = ('bash', 'sh', 'env', 'cp', 'cat', 'grep', 'sed', 'mkdir', 'dirname',
          'mktemp', 'rm', 'readlink', 'realpath', 'basename', 'pwd', 'find',
          'sort', 'cut', 'tr', 'head', 'tail', 'wc', 'ln', 'touch', 'chmod',
-         'mv', 'git')
+         'mv')
+# Git is not used by the audited non-stamped deployment target. Re-audit if
+# release/snapshot stamping or version-generation rules are enabled.
 # Observed DT_NEEDED closure of pinned Node 24.21.0 and rules_sass Linux x64.
 # Include these even if the workflow's Node binary happens to be static.
 RUNTIME_LIBS = ('libc.so.6', 'libm.so.6', 'libdl.so.2', 'libpthread.so.0',
