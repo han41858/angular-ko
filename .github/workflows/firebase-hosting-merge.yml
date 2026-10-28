@@ -94,7 +94,45 @@ jobs:
             exit "$preflight_exit_code"
           fi
           echo 'Firebase authentication and Hosting read access verified for angular-ko.'
+      - name: prepare Bazel cache key
+        id: bazel-cache-key
+        env:
+          BUILD_CONFIG_HASH: ${{ hashFiles('.bazelversion', '.bazelrc', 'MODULE.bazel', 'MODULE.bazel.lock', 'pnpm-lock.yaml', 'package.json', '.github/workflows/firebase-hosting-merge.yml') }}
+        run: |
+          # Cache only action outputs, never the checkout, HOME, or Firebase credentials.
+          echo "BAZEL_DISK_CACHE=$RUNNER_TEMP/angular-ko-bazel-disk-cache" >> "$GITHUB_ENV"
+          # Host tools are not all Bazel inputs. Do not reuse across runner image/tool changes.
+          toolchain_hash=$(printf '%s\n' "$ImageOS" "$ImageVersion" "$(node --version)" | sha256sum | cut -d ' ' -f 1)
+          prefix="bazel-disk-v1-${RUNNER_OS}-${RUNNER_ARCH}-${toolchain_hash}-${BUILD_CONFIG_HASH}"
+          echo "prefix=$prefix" >> "$GITHUB_OUTPUT"
+          echo "key=${prefix}-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: restore Bazel action cache
+        id: bazel-cache
+        uses: actions/cache/restore@v6.1.0
+        continue-on-error: true
+        timeout-minutes: 5
+        env:
+          SEGMENT_DOWNLOAD_TIMEOUT_MINS: 3
+        with:
+          path: ${{ env.BAZEL_DISK_CACHE }}
+          key: ${{ steps.bazel-cache-key.outputs.key }}
+          restore-keys: |
+            ${{ steps.bazel-cache-key.outputs.prefix }}-
+
+      - name: prepare Bazel action cache
+        env:
+          RESTORE_OUTCOME: ${{ steps.bazel-cache.outcome }}
+          CACHE_MATCHED_KEY: ${{ steps.bazel-cache.outputs.cache-matched-key }}
+        run: |
+          # A cache outage must not block a normal cold build or leave partial restored data.
+          if [[ "$RESTORE_OUTCOME" != success || -z "$CACHE_MATCHED_KEY" ]]; then
+            rm -rf -- "$BAZEL_DISK_CACHE"
+          fi
+          mkdir -p "$BAZEL_DISK_CACHE"
+
       - name: build
+        id: build
         run: |
           resource_snapshot() {
             printf '\n--- Build resources: %s ---\n' "$(date -u +%FT%TZ)"
@@ -134,9 +172,11 @@ jobs:
             fi
             resource_snapshot || true
             printf '\nBuild step exit code: %s\n' "$build_exit_code" || true
+            echo "elapsed-seconds=$SECONDS" >> "$GITHUB_OUTPUT" || true
             exit "$build_exit_code"
           }
 
+          SECONDS=0
           build_pid=''
           monitor_pid=''
           trap finish_build EXIT
@@ -153,6 +193,7 @@ jobs:
           # Do not retain one TypeScript worker per worker key through app bundling.
           # The memory resource budget guides scheduling; it is not an RSS hard limit.
           pnpm bazel build //adev:build \
+            --disk_cache="$BAZEL_DISK_CACHE" \
             --jobs=2 \
             --local_resources=memory=6144 \
             --spawn_strategy=processwrapper-sandbox \
@@ -166,9 +207,49 @@ jobs:
         env:
           NODE_OPTIONS: '--max_old_space_size=4096'
 
+      - name: report Bazel cache and build cost
+        id: cache-report
+        if: ${{ always() && steps.build.outcome != 'skipped' }}
+        continue-on-error: true
+        env:
+          CACHE_MATCHED_KEY: ${{ steps.bazel-cache.outputs.cache-matched-key }}
+          CACHE_EXACT_HIT: ${{ steps.bazel-cache.outputs.cache-hit }}
+          RESTORE_OUTCOME: ${{ steps.bazel-cache.outcome }}
+          BUILD_SECONDS: ${{ steps.build.outputs.elapsed-seconds }}
+        run: |
+          cache_bytes=$(du -sb "$BAZEL_DISK_CACHE" | cut -f 1)
+          {
+            echo '### Bazel build cache'
+            echo "- Restore outcome: $RESTORE_OUTCOME"
+            echo "- Restored key: ${CACHE_MATCHED_KEY:-none (cold build)}"
+            echo "- Exact archive key hit: ${CACHE_EXACT_HIT:-false}"
+            echo "- Build step: ${BUILD_SECONDS:-unknown} seconds"
+            echo "- Action cache size: $cache_bytes bytes"
+            echo '- Bazel action cache hits are shown in the build log; an archive hit is not an action hit.'
+            echo '- Compare total job time too: archive restore/save overhead can offset build savings.'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # Bound archive transfer/storage. A large cache must not delay deployment indefinitely.
+          if (( cache_bytes <= 8 * 1024 * 1024 * 1024 )); then
+            echo 'save=true' >> "$GITHUB_OUTPUT"
+          else
+            echo '::warning::Bazel disk cache exceeds 8 GiB; skipping cache upload. Review cache size before raising this limit.'
+            echo '- Cache upload skipped: cache exceeds 8 GiB.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_KO }}
           channelId: live
           projectId: angular-ko
+
+      # Save only after successful build/deploy, and never overwrite an immutable exact match.
+      # Keep optional cache upload after deployment so cache service errors cannot block publishing.
+      - name: save Bazel action cache
+        if: ${{ success() && steps.cache-report.outputs.save == 'true' && steps.bazel-cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v6.1.0
+        continue-on-error: true
+        timeout-minutes: 5
+        with:
+          path: ${{ env.BAZEL_DISK_CACHE }}
+          key: ${{ steps.bazel-cache-key.outputs.key }}
