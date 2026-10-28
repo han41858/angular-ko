@@ -6,9 +6,18 @@ on:
   push:
     branches:
       - ko
+permissions:
+  contents: read
+
+# Serialize live deployments without interrupting one already in progress.
+concurrency:
+  group: firebase-hosting-angular-ko-live
+  cancel-in-progress: false
+
 jobs:
   build_and_deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7.0.1
 
@@ -19,6 +28,8 @@ jobs:
       - name: install dependencies
         run: pnpm install --frozen-lockfile
       - name: validate Firebase Hosting access
+        id: firebase-preflight
+        timeout-minutes: 5
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_KO }}
         run: |
@@ -78,6 +89,8 @@ jobs:
           unset FIREBASE_SERVICE_ACCOUNT FIREBASE_TOKEN
 
           # Reuse the repository's locked CLI; do not install another copy.
+          firebase_cli_version=$(node -p "require('firebase-tools/package.json').version")
+          echo "cli-version=$firebase_cli_version" >> "$GITHUB_OUTPUT"
           firebase_cli=$(node -p "require.resolve('firebase-tools/lib/bin/firebase.js')")
           export HOME="$preflight_dir/home"
           export XDG_CONFIG_HOME="$HOME/.config"
@@ -236,9 +249,35 @@ jobs:
             echo '- Cache upload skipped: cache exceeds 8 GiB.' >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      - name: verify current deployment revision
+        id: deployment-revision
+        timeout-minutes: 2
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Fail closed on API errors; concurrency alone does not order commits.
+          current_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/ko" --jq '.object.sha')
+          if [[ ! "$current_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo '::error::Could not verify the current ko revision.'
+            exit 1
+          fi
+          if [[ "$current_sha" != "$GITHUB_SHA" ]]; then
+            echo 'Deploy skipped: a newer ko revision is available.'
+            echo 'deploy=false' >> "$GITHUB_OUTPUT"
+            echo '### Deployment skipped: this run is no longer the current ko revision.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [[ ! -f dist/bin/adev/dist/browser/index.csr.html ]]; then
+            echo '::error::Firebase Hosting build output is missing.'
+            exit 1
+          fi
+          echo 'deploy=true' >> "$GITHUB_OUTPUT"
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        if: ${{ steps.deployment-revision.outputs.deploy == 'true' }}
+        timeout-minutes: 10
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseToolsVersion: ${{ steps.firebase-preflight.outputs.cli-version }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_KO }}
           channelId: live
           projectId: angular-ko
@@ -246,7 +285,7 @@ jobs:
       # Save only after successful build/deploy, and never overwrite an immutable exact match.
       # Keep optional cache upload after deployment so cache service errors cannot block publishing.
       - name: save Bazel action cache
-        if: ${{ success() && steps.cache-report.outputs.save == 'true' && steps.bazel-cache.outputs.cache-hit != 'true' }}
+        if: ${{ success() && steps.deployment-revision.outputs.deploy == 'true' && steps.cache-report.outputs.save == 'true' && steps.bazel-cache.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v6.1.0
         continue-on-error: true
         timeout-minutes: 5
