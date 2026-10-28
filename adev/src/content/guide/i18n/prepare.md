@@ -298,9 +298,9 @@ $localize`:{i18n_metadata}:string_to_translate`;
 
 <a id="include-interpolated-text"></a>
 
-#<a id="보간된-텍스트-포함하기"></a>
+<a id="보간된-텍스트-포함하기"></a>
 
-## 문자열 바인딩 포함하기
+### 문자열 바인딩 포함하기
 
 <!--
 Include [interpolations](guide/templates/binding#render-dynamic-text-with-text-interpolation) in a [`$localize`][ApiLocalizeInitLocalize] tagged message string.
