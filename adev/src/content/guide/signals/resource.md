@@ -73,7 +73,7 @@ const userResource = resource({
   loader: ({params}) => fetchUser(params),
 });
 
-// 리소스의 로더 함수의 실행 결과로 연산 시그널을 생성합니다.
+// 리소스의 로더 함수의 실행 결과로 computed() 시그널을 생성합니다.
 const firstName = computed(() => {
   if (userResource.hasValue()) {
     // `hasValue`는 두 가지 용도로 사용합니다:
@@ -468,7 +468,7 @@ const companyResource = resource({
 
 이 방식도 동작하지만 `params`가 `undefined`를 반환하면 선행 리소스의 실제 상태를 반영하는 대신 리소스가 `idle`이 됩니다. `loading`과 `error` 상태를 정확히 반영하는 `chain`을 사용하는 것이 좋습니다.
 
-후행 리소스가 선행 리소스의 값에 의존하는 비동기 작업을 직접 수행할 때만 `chain`을 사용하세요. 리소스에서 값을 동기적으로 파생하기만 하면 되는 경우에는 `computed`를 사용하세요.
+후행 리소스가 선행 리소스의 값에 의존하는 비동기 작업을 직접 수행할 때만 `chain`을 사용하세요. 리소스에서 값을 동기적으로 파생하기만 하면 되는 경우에는 `computed()` 함수를 사용하세요.
 
 <!--
 ## Reactive data fetching with `httpResource`
@@ -578,7 +578,7 @@ export class AwesomeProfile {
 IMPORTANT: `resourceFromSnapshots`는 [실험적 기능](reference/releases#experimental)입니다. 지금 사용해 볼 수 있지만, 안정화되기 전까지 변경될 수 있습니다.
 
 `resourceFromSnapshots`를 사용하면 스냅샷으로 새로운 `resource` 시그널을 만들 수 있습니다.
-`computed`나 `linkedSignal`도 사용할 수 있습니다.
+`computed()` 함수나 `linkedSignal`도 사용할 수 있습니다.
 
 ```ts
 import {

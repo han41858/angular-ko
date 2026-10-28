@@ -64,8 +64,8 @@ Instead, use `computed` signals to model state that depends on other state.
 -->
 
 이펙트 함수는 마지막에 사용해야 하는 API입니다.
-보통은 `computed()`를 사용할 수 있으며, 시그널이 여러 개로 파생되거나 수동으로 조작하려면 `linkedSignal()`을 사용하는 것이 좋습니다.
-만약 이펙트 함수로 어떤 시그널 값을 다른 시그널로 옮기고 있다면, 원본 데이터(source of truth)를 더 상단으로 올리고 `computed()`나 `linkedSignal()`을 사용하는 것이 좋습니다.
+보통은 `computed()` 함수를 사용할 수 있으며, 시그널이 여러 개로 파생되거나 수동으로 조작하려면 `linkedSignal()`을 사용하는 것이 좋습니다.
+만약 이펙트 함수로 어떤 시그널 값을 다른 시그널로 옮기고 있다면, 원본 데이터(source of truth)를 더 상단으로 올리고 `computed()` 함수나 `linkedSignal()`을 사용하는 것이 좋습니다.
 `effect()` 함수는 시그널이 아닌 API와 시그널을 동기화할 때 가장 효과적입니다.
 
 참고: `effect()`가 더 나은 상황은 없습니다. 사용하기 적절한 경우만 있습니다.
@@ -80,7 +80,7 @@ Instead, use `computed` signals to model state that depends on other state.
 상태값을 단순하게 전파하는 용도로 `effect()`를 사용하지 마세요.
 이런 용도로 사용하면 `ExpressionChangedAfterItHasBeenChecked` 오류가 발생하거나, 무한 루프에 빠지거나, 불필요한 변경 감지 싸이클이 실행될 수 있습니다.
 
-다른 상태에 의존하는 시그널 모델을 다룰 때는 `computed()`를 사용하세요.
+다른 상태에 의존하는 시그널 모델을 다룰 때는 `computed()` 시그널을 사용하세요.
 
 </docs-callout>
 

@@ -176,7 +176,7 @@ export class AwesomeCounter {
 
 <a id="연산-시그널computed-signals"></a>
 
-### computed() 시그널(Computed signals)
+### `computed()` 시그널(Computed signals)
 
 <!--
 **Computed signals** are read-only signals that derive their value from other signals. You define computed signals using the `computed` function and specifying a derivation:
@@ -189,8 +189,8 @@ const doubleCount: Signal<number> = computed(() => count() * 2);
 The `doubleCount` signal depends on the `count` signal. Whenever `count` updates, Angular knows that `doubleCount` needs to update as well.
 -->
 
-**`computed()` 시그널(Computed signal)** 은 어떤 시그널의 영향을 받아 값이 변경되는 시그널을 의미합니다.
-`computed()` 시그널은 `computed` 함수로 생성할 수 있습니다:
+**`computed()` 시그널(Computed signal)** 은 다른 시그널에서 값을 도출하는 읽기 전용 시그널입니다.
+`computed()` 시그널은 `computed()` 함수에 값을 계산하는 함수를 전달해 생성할 수 있습니다:
 
 ```typescript
 const count: WritableSignal<number> = signal(0);
@@ -208,7 +208,7 @@ const doubleCount: Signal<number> = computed(() => count() * 2);
 
 <a id="연산-시그널은-지연-연산되며-연산된-결과는-캐싱됩니다"></a>
 
-#### computed() 시그널은 지연 연산되며 연산된 결과는 캐싱됩니다
+#### `computed()` 시그널은 지연 연산되며 연산된 결과는 캐싱됩니다
 
 <!--
 `doubleCount`'s derivation function does not run to calculate its value until the first time you read `doubleCount`. The calculated value is then cached, and if you read `doubleCount` again, it will return the cached value without recalculating.
@@ -233,7 +233,7 @@ As a result, you can safely perform computationally expensive derivations in com
 
 <a id="연산-시그널은-값을-지정할-수-없습니다"></a>
 
-#### computed() 시그널은 값을 지정할 수 없습니다
+#### `computed()` 시그널은 값을 지정할 수 없습니다
 
 <!--
 You cannot directly assign values to a computed signal. That is,
@@ -264,7 +264,7 @@ doubleCount.set(3);
 
 <a id="연산-시그널의-의존성은-동적으로-변경됩니다"></a>
 
-#### computed() 시그널의 의존성은 동적으로 변경됩니다
+#### `computed()` 시그널의 의존성은 동적으로 변경됩니다
 
 <!--
 Only the signals actually read during the derivation are tracked. For example, in this `computed` the `count` signal is only read if the `showCount` signal is true:
@@ -289,7 +289,7 @@ Note that dependencies can be removed during a derivation as well as added. If y
 -->
 
 계산 과정에서 실제로 읽은 시그널만 추적합니다.
-예를 들어 다음 `computed`에서는 `showCount` 시그널이 `true`일 때만 `count` 시그널의 값을 읽습니다:
+예를 들어 다음 `computed()` 시그널에서는 `showCount` 시그널이 `true`일 때만 `count` 시그널의 값을 읽습니다:
 
 ```ts
 const showCount = signal(false);
@@ -426,7 +426,7 @@ effect(() => {
 ```
 -->
 
-드문 경우지만, `computed`나 `effect`와 같은 반응형 함수 안에서 의존성을 _추가하지 않고_ 코드를 실행할 수 있습니다.
+드문 경우지만, `computed()` 함수나 `effect`와 같은 반응형 함수 안에서 의존성을 _추가하지 않고_ 코드를 실행할 수 있습니다.
 
 예를 들면, `currentUser` 시그널의 값이 변경될 때 `counter` 시그널의 값을 로그로 출력한다고 합시다.
 그렇다면 이런 이펙트 함수를 작성할 수 있습니다:
@@ -541,7 +541,7 @@ For more information see the [Dependent state with linkedSignal](/guide/signals/
 All signal APIs are synchronous— `signal`, `computed`, `input`, etc. However, applications often need to deal with data that is available asynchronously. A `Resource` gives you a way to incorporate async data into your application's signal-based code and still allow you to access its data synchronously. For more information see the [Async reactivity with resources](/guide/signals/resource) guide.
 -->
 
-`computed`는 간단하게 읽기 전용 시그널을 참조하지만, 시그널 상태에 따라 값을 써야 하는 경우가 있습니다.
+`computed()` 함수는 읽기 전용 파생 시그널을 생성하지만, 시그널 상태에 따라 값을 써야 하는 경우가 있습니다.
 자세한 내용은 [linkedSignal을 활용한 의존 상태 관리](/guide/signals/linked-signal) 문서를 참고하세요.
 
 `signal`, `computed`, `input` 등 모든 시그널 API는 동기 방식으로 동작합니다.
@@ -630,7 +630,7 @@ const data = signal(['test'], {equal: isEqual});
 data.set(['test']);
 ```
 
-동일값 평가 함수는 값을 쓸 수 있는(writable) 시그널과 값을 계산하는(computed) 시그널에 모두 사용할 수 있습니다.
+동일값 평가 함수는 값을 쓸 수 있는(writable) 시그널과 `computed()` 시그널에 모두 사용할 수 있습니다.
 
 참고: 시그널이 사용하는 기본 평가 함수는 [`Object.is()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/is) 비교를 사용합니다.
 

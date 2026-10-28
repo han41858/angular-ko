@@ -100,7 +100,7 @@ export class ShippingMethodPicker {
 ```
 
 `linkedSignal`은 `signal`과 비슷하지만 다른 점이 하나 있습니다.
-`linkedSignal`은 기본값을 직접 받지 않고 `computed()` 시그널처럼 _계산 함수_ 를 통해 전달받습니다.
+`linkedSignal`은 기본값을 직접 받지 않고 `computed()` 함수처럼 _계산 함수_ 를 통해 전달받습니다.
 그리고 계산 값이 변경되면 `linkedSignal`의 값도 새로 계산된 값으로 변경됩니다.
 이제 `linkedSignal`의 값은 언제나 유효한 값을 유지합니다.
 
@@ -238,7 +238,7 @@ export class ShippingMethodPicker {
 
 `linkedSignal`을 생성할 때 연산 함수를 전달하는 대신, 객체를 전달하면서 이 객체의 프로퍼티로 `source`와 `computation` 옵션을 전달할 수 있습니다.
 
-`source`에는 `computed`나 컴포넌트 `input` 등 어떤 시그널이든 사용할 수 있습니다. `source`가 변경되거나 `computation`에서 참조한 시그널이 변경되면, `linkedSignal`은 제공된 `computation`의 실행 결과로 값을 갱신합니다.
+`source`에는 `computed()` 시그널이나 컴포넌트 `input` 등 어떤 시그널이든 사용할 수 있습니다. `source`가 변경되거나 `computation`에서 참조한 시그널이 변경되면, `linkedSignal`은 제공된 `computation`의 실행 결과로 값을 갱신합니다.
 
 그리고 `computation`은 `source`에서 새 값을 받으면서 `previous` 객체를 받는 함수입니다.
 이때 `previous` 객체에는 `source` 프로퍼티와 `value` 프로퍼티가 있습니다.
