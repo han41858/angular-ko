@@ -128,7 +128,7 @@ jobs:
           # Only audited tool fingerprints may restore across build config changes.
           compatible_prefix=''
           # Reuse across image revisions only when audited host binaries/libraries match.
-          if host_hash=$(python3 .github/scripts/bazel-cache-fingerprint.py) && [[ "$host_hash" =~ ^[0-9a-f]{64}$ ]]; then
+          if host_hash=$(GITHUB_STEP_SUMMARY="$RUNNER_TEMP/bazel-fingerprint-summary.md" python3 .github/scripts/bazel-cache-fingerprint.py --diagnostics) && [[ "$host_hash" =~ ^[0-9a-f]{64}$ ]]; then
             toolchain_hash="tools-$host_hash"
             compatible_prefix="bazel-disk-v2-${RUNNER_OS}-${RUNNER_ARCH}-${toolchain_hash}-"
           else
@@ -213,10 +213,12 @@ jobs:
             resource_snapshot || true
             printf '\nBuild step exit code: %s\n' "$build_exit_code" || true
             echo "elapsed-seconds=$SECONDS" >> "$GITHUB_OUTPUT" || true
+            echo "started-at=$build_started_at" >> "$GITHUB_OUTPUT" || true
             exit "$build_exit_code"
           }
 
           SECONDS=0
+          build_started_at=$(date +%s) || build_started_at=''
           build_pid=''
           monitor_pid=''
           trap finish_build EXIT
@@ -254,29 +256,14 @@ jobs:
         id: cache-report
         if: ${{ always() && steps.build.outcome != 'skipped' }}
         continue-on-error: true
-        env:
-          CACHE_MATCHED_KEY: ${{ steps.bazel-cache.outputs.cache-matched-key }}
-          CACHE_EXACT_HIT: ${{ steps.bazel-cache.outputs.cache-hit }}
-          RESTORE_OUTCOME: ${{ steps.bazel-cache.outcome }}
-          BUILD_SECONDS: ${{ steps.build.outputs.elapsed-seconds }}
         run: |
           cache_bytes=$(du -sb "$BAZEL_DISK_CACHE" | cut -f 1)
-          {
-            echo '### Bazel build cache'
-            echo "- Restore outcome: $RESTORE_OUTCOME"
-            echo "- Restored key: ${CACHE_MATCHED_KEY:-none (cold build)}"
-            echo "- Exact archive key hit: ${CACHE_EXACT_HIT:-false}"
-            echo "- Build step: ${BUILD_SECONDS:-unknown} seconds"
-            echo "- Action cache size: $cache_bytes bytes"
-            echo '- Bazel action cache hits are shown in the build log; an archive hit is not an action hit.'
-            echo '- Compare total job time too: archive restore/save overhead can offset build savings.'
-          } >> "$GITHUB_STEP_SUMMARY"
+          echo "cache-bytes=$cache_bytes" >> "$GITHUB_OUTPUT"
           # Bound archive transfer/storage. A large cache must not delay deployment indefinitely.
           if (( cache_bytes <= 8 * 1024 * 1024 * 1024 )); then
             echo 'save=true' >> "$GITHUB_OUTPUT"
           else
             echo '::warning::Bazel disk cache exceeds 8 GiB; skipping cache upload. Review cache size before raising this limit.'
-            echo '- Cache upload skipped: cache exceeds 8 GiB.' >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: verify current deployment revision
@@ -315,6 +302,7 @@ jobs:
       # Save only after successful build/deploy, and never overwrite an immutable exact match.
       # Keep optional cache upload after deployment so cache service errors cannot block publishing.
       - name: save Bazel action cache
+        id: bazel-cache-save
         if: ${{ success() && steps.deployment-revision.outputs.deploy == 'true' && steps.cache-report.outputs.save == 'true' && steps.bazel-cache.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v6.1.0
         continue-on-error: true
@@ -322,3 +310,19 @@ jobs:
         with:
           path: ${{ env.BAZEL_DISK_CACHE }}
           key: ${{ steps.bazel-cache-key.outputs.key }}
+
+      - name: summarize Bazel cache diagnostics
+        if: ${{ always() }}
+        continue-on-error: true
+        env:
+          CACHE_MATCHED_KEY: ${{ steps.bazel-cache.outputs.cache-matched-key }}
+          CACHE_EXACT_HIT: ${{ steps.bazel-cache.outputs.cache-hit }}
+          RESTORE_OUTCOME: ${{ steps.bazel-cache.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          BUILD_SECONDS: ${{ steps.build.outputs.elapsed-seconds }}
+          BUILD_STARTED_AT: ${{ steps.build.outputs.started-at }}
+          CACHE_SIZE_BYTES: ${{ steps.cache-report.outputs.cache-bytes }}
+          CACHE_SAVE_ALLOWED: ${{ steps.cache-report.outputs.save }}
+          CACHE_SAVE_OUTCOME: ${{ steps.bazel-cache-save.outcome }}
+          DEPLOY_ALLOWED: ${{ steps.deployment-revision.outputs.deploy }}
+        run: python3 .github/scripts/bazel-cache-summary.py
