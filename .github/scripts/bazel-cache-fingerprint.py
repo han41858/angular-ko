@@ -8,7 +8,9 @@ need a host fingerprint. Re-audit when build rules/toolchains change.
 New undeclared host dependencies require an audit; bump schema/cache epoch when
 changing compatibility policy. This is not a claim of full hermeticity.
 """
+import argparse
 import hashlib
+import html
 import json
 import os
 from pathlib import Path
@@ -135,10 +137,141 @@ def fingerprint(manifest):
                                      separators=(',', ':')).encode()).hexdigest()
 
 
-if __name__ == '__main__':
+def package_metadata(manifest):
+    """Best-effort package ownership; never an input to fingerprint()."""
+    paths = sorted({path for original, (resolved, _) in manifest['files']
+                    for path in (original, resolved)})
+    records = {path: {'status': 'unknown', 'owners': []} for path in paths}
+    result = {'status': 'unavailable', 'files': records}
+    query = shutil.which('dpkg-query', path=ACTION_PATH)
+    if not query or not paths:
+        return result
+    # Two bounded batches, not one subprocess per file. Do not pass secrets from
+    # the workflow environment to these diagnostic-only subprocesses.
+    options = {'text': True, 'capture_output': True, 'timeout': 5,
+               'env': {'LC_ALL': 'C', 'PATH': ACTION_PATH}}
     try:
-        print(fingerprint(collect()))
+        search = subprocess.run([query, '--search', *paths], **options)
+        # Exit 1 also means that only SOME paths were unmatched (e.g. Node).
+        if search.returncode not in (0, 1):
+            return result
+        owners = {path: set() for path in paths}
+        for line in search.stdout.splitlines():
+            names, separator, path = line.rpartition(': ')
+            if not separator or path not in owners:
+                continue
+            for name in names.split(', '):
+                # Ignore diversion notices and non-exact/glob matches. Multiarch
+                # package names such as libc6:amd64 must remain intact.
+                if re.fullmatch(r'[a-z0-9][a-z0-9+.-]*(?::[a-z0-9][a-z0-9-]*)?', name):
+                    owners[path].add(name)
+        names = sorted({name for values in owners.values() for name in values})
+        versions = {}
+        if names:
+            show = subprocess.run(
+                [query, '--show', '--showformat=${binary:Package}\t${Version}\n', *names],
+                **options)
+            if show.returncode in (0, 1):
+                for line in show.stdout.splitlines():
+                    name, separator, version = line.partition('\t')
+                    if (separator and name in names and
+                            re.fullmatch(r'[A-Za-z0-9.+:~_-]{1,200}', version)):
+                        versions[name] = version
+        result['status'] = 'available'
+        for path, names in owners.items():
+            records[path] = {
+                'status': 'known' if names else 'unknown',
+                'owners': [{'name': name, 'version': versions.get(name, 'unknown')}
+                           for name in sorted(names)],
+            }
+    except (OSError, subprocess.SubprocessError):
+        # No raw command output or exception text: only public package metadata
+        # that passed the parsing above is eligible for diagnostic output.
+        pass
+    return result
+
+
+def write_diagnostic_log(message):
+    # Avoid buffered stderr: a broken pipe retained in its buffer can change
+    # Python's exit status to 120 during shutdown, after main() returned success.
+    try:
+        descriptor = sys.stderr.fileno()
+    except (AttributeError, OSError):
+        # In-memory streams used by callers/tests have no OS descriptor.
+        sys.stderr.write(message)
+        return
+    remaining = message.encode('utf-8')
+    while remaining:
+        written = os.write(descriptor, remaining)
+        if not written:
+            raise OSError('diagnostic log write failed')
+        remaining = remaining[written:]
+
+
+def diagnostic_warning():
+    try:
+        write_diagnostic_log('Host fingerprint diagnostics unavailable; cache decision unchanged.\n')
+    except Exception:
+        pass
+
+
+def emit_diagnostics(manifest, host_hash):
+    """Publish the SAME collected inputs, without changing the cache key."""
+    try:
+        packages = package_metadata(manifest)
+    except Exception:
+        packages = {'status': 'unavailable', 'files': {}}
+    # Explicitly allowlist public image metadata. Never dump os.environ, file
+    # contents, subprocess stderr, or credentials into logs/step summaries.
+    runner_image = {}
+    for name in ('ImageOS', 'ImageVersion'):
+        value = os.environ.get(name, '')
+        runner_image[name] = value if re.fullmatch(r'[A-Za-z0-9._-]{1,80}', value) else 'unknown'
+    report = {'diagnostic_schema': 1, 'fingerprint': host_hash,
+              'manifest': manifest, 'runner_image': runner_image,
+              'packages': packages}
+    encoded = json.dumps(report, sort_keys=True, indent=2)
+    try:
+        write_diagnostic_log('::group::Bazel host fingerprint diagnostics (JSON)\n' +
+                             encoded + '\n::endgroup::\n')
+    except Exception:
+        diagnostic_warning()
+    # A broken log sink must not prevent a usable summary, or vice versa.
+    summary_path = os.environ.get('GITHUB_STEP_SUMMARY')
+    if summary_path:
+        try:
+            with Path(summary_path).open('a', encoding='utf-8') as summary:
+                summary.write(
+                    '\n<details><summary>호스트 지문·전체 입력·패키지 진단 (JSON)</summary>\n\n'
+                    f'- 지문: `{host_hash}`\n'
+                    f'- 해시 입력 파일: {len(manifest["files"])}개\n'
+                    '- 패키지·이미지 메타데이터는 진단 전용이며 지문 계산에 넣지 않습니다.\n'
+                    '- 소유 패키지·버전이 unknown이라고 파일이 같다는 뜻은 아닙니다.\n\n'
+                    '<pre>' + html.escape(encoded) + '</pre>\n\n</details>\n')
+        except Exception:
+            diagnostic_warning()
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--diagnostics', action='store_true',
+                        help='write input JSON to stderr and GITHUB_STEP_SUMMARY (best effort)')
+    args = parser.parse_args(argv)
+    try:
+        manifest = collect()
+        host_hash = fingerprint(manifest)
+        print(host_hash, flush=True)
     except (OSError, KeyError, RuntimeError, subprocess.SubprocessError) as error:
         print('Host fingerprint unavailable; use the image-isolated fallback: ' +
               str(error), file=sys.stderr)
-        sys.exit(1)
+        return 1
+    if args.diagnostics:
+        try:
+            emit_diagnostics(manifest, host_hash)
+        except Exception:
+            diagnostic_warning()
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
