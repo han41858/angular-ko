@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/article-comments.ts"],
-  "title": "Defer triggers",
+  "title": "지연 로딩 트리거",
   "type": "editor"
 }

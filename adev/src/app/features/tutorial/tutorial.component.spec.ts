@@ -204,7 +204,7 @@ describe('Tutorial', () => {
 
     await fixture.whenStable();
 
-    expect(revealAnswerButton.nativeElement.textContent?.trim()).toBe('Reset');
+    expect(revealAnswerButton.nativeElement.textContent?.trim()).toBe('초기화');
   });
 
   it('should not reveal the answer when button is disabled', async () => {

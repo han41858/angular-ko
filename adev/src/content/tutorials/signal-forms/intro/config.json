@@ -1,5 +1,5 @@
 {
-  "title": "Learn Angular Signal Forms",
+  "title": "Angular 시그널 폼 배우기",
   "type": "editor",
   "nextTutorial": "signals",
   "openFiles": ["src/app/app.ts", "src/app/app.html", "src/app/app.css"]

@@ -4,7 +4,7 @@
       [attr.id]="id()"
       [attr.name]="name()"
       [value]="displayValue()"
-      placeholder="Select an option"
+      placeholder="옵션 선택"
       readonly
       [tabindex]="-1"
     />
@@ -35,7 +35,7 @@
                 #innerCombobox="ngCombobox"
                 #searchInput
                 class="docs-select-search-input"
-                placeholder="Search..."
+                placeholder="검색..."
                 [(value)]="searchString"
                 [alwaysExpanded]="true"
                 (keydown.escape)="onSearchEscape($event)"
@@ -43,7 +43,7 @@
             </div>
 
             <div aria-live="polite" class="cdk-visually-hidden">
-              {{ filteredOptions().length === 0 ? 'No results found for ' + searchString() : '' }}
+              {{ filteredOptions().length === 0 ? searchString() + ' 검색 결과가 없습니다' : '' }}
             </div>
 
             <ng-template ngComboboxPopup [combobox]="innerCombobox">
@@ -55,7 +55,7 @@
                       class="docs-select-no-results-angie"
                       aria-hidden="true"
                     />
-                    <span>No results found</span>
+                    <span>검색 결과가 없습니다</span>
                   </div>
                 }
                 <div

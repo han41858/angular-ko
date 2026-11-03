@@ -44,8 +44,10 @@ export class HydrationExample {
     penddingEvents: 0,
     isHydrated: false,
     isHydrating: true,
-    title: 'Eager Module',
-    description: 'Part of initial bundle.',
+    // title: 'Eager Module',
+    title: '즉시 로딩 모듈',
+    // description: 'Part of initial bundle.',
+    description: '초기 번들에 포함됨',
   });
   card2 = signal<SimulationCard>({
     id: 2,
@@ -53,8 +55,10 @@ export class HydrationExample {
     penddingEvents: 0,
     isHydrated: false,
     isHydrating: true,
-    title: 'Eager Module',
-    description: 'Part of initial bundle.',
+    // title: 'Eager Module',
+    title: '즉시 로딩 모듈',
+    // description: 'Part of initial bundle.',
+    description: '초기 번들에 포함됨',
   });
   card3 = signal<SimulationCard>({
     id: 3,
@@ -64,8 +68,10 @@ export class HydrationExample {
     isHydrating: false,
     strategy: 'on-interaction',
     syntax: '@defer (hydrate on interaction)',
-    title: 'Interaction Module',
-    description: 'Logic loads on click.',
+    // title: 'Interaction Module',
+    title: '상호작용 모듈',
+    // description: 'Logic loads on click.',
+    description: '클릭하면 로드합니다',
   });
   card4 = signal<SimulationCard>({
     id: 4,
@@ -75,8 +81,10 @@ export class HydrationExample {
     isHydrating: false,
     strategy: 'on-timer',
     syntax: '@defer (hydrate on timer(2s))',
-    title: 'Timer Module',
-    description: 'Hydrates after 2s delay.',
+    // title: 'Timer Module',
+    title: '타이머 모듈',
+    // description: 'Hydrates after 2s delay.',
+    description: '2초 후에 하이드레이션합니다.',
   });
 
   constructor() {
@@ -137,7 +145,7 @@ export class HydrationExample {
     const pendingEvents = this.card1().penddingEvents + this.card2().penddingEvents;
     await this.wait(800);
     if (pendingEvents > 0) {
-      this.logEvent(`Replaying ${pendingEvents} queued event(s)...`);
+      this.logEvent(`대기 중인 이벤트 ${pendingEvents}개 재생 중...`);
       this.processPendingEvents(this.card1);
       this.processPendingEvents(this.card2);
     }
@@ -151,13 +159,13 @@ export class HydrationExample {
     await this.wait(2000);
 
     if (!this.card4().isHydrated) {
-      this.logEvent(`Timer fired: Hydrating Module#4`);
+      this.logEvent(`타이머 실행: 모듈 #4 하이드레이션 중`);
       cardSignal.update((c) => ({...c, isHydrating: true}));
       await this.wait(800);
       this.card4.update((c) => ({...c, isHydrating: false, isHydrated: true}));
 
       if (cardSignal().penddingEvents > 0) {
-        this.logEvent(`Replaying ${cardSignal().penddingEvents} queued event(s)...`);
+        this.logEvent(`대기 중인 이벤트 ${cardSignal().penddingEvents}개 재생 중...`);
         await this.wait(600);
         this.processPendingEvents(cardSignal);
       }
@@ -173,12 +181,12 @@ export class HydrationExample {
 
     if (card().strategy === 'on-interaction' && !card().isHydrated) {
       if (!card().isHydrating) {
-        this.logEvent(`Manual trigger: Hydrating Module#${card().id}`);
-        this.logEvent(`Queued click for Module#${card().id}`);
+        this.logEvent(`수동 트리거: 모듈 #${card().id} 하이드레이션 중`);
+        this.logEvent(`모듈 #${card().id}의 클릭 이벤트를 대기열에 추가`);
         card.update((c) => ({...c, isHydrating: true, penddingEvents: 1}));
         await this.wait(600);
         if (card().penddingEvents > 0) {
-          this.logEvent(`Replaying ${card().penddingEvents} queued event(s)...`);
+          this.logEvent(`대기 중인 이벤트 ${card().penddingEvents}개 재생 중...`);
         }
         this.processPendingEvents(card);
         card.update((c) => ({...c, isHydrating: false, isHydrated: true}));
@@ -202,7 +210,7 @@ export class HydrationExample {
 
   private async queueClick(card: WritableSignal<SimulationCard>) {
     card.update((c) => ({...c, penddingEvents: c.penddingEvents + 1}));
-    this.logEvent(`Queued click for Module#${card().id}`);
+    this.logEvent(`모듈 #${card().id}의 클릭 이벤트를 대기열에 추가`);
   }
 
   private processAction(card: WritableSignal<SimulationCard>) {

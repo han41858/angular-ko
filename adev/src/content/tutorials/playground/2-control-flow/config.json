@@ -1,5 +1,5 @@
 {
   "type": "editor-only",
-  "title": "Control flow template",
+  "title": "흐름 제어 템플릿",
   "openFiles": ["src/main.ts"]
 }

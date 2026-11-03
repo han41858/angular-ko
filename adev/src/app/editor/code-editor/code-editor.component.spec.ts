@@ -204,6 +204,15 @@ describe('CodeEditor', () => {
     });
   });
 
+  it('should label the delete button in Korean for an optional file', async () => {
+    const matTabGroup = await loader.getHarness(MatTabGroupHarness);
+    const tabs = await matTabGroup.getTabs();
+
+    await tabs[0].select();
+
+    expect(fixture.debugElement.query(By.css('[aria-label="파일 삭제"]'))).not.toBeNull();
+  });
+
   it('should not allow to delete a required file', async () => {
     const matTabGroup = await loader.getHarness(MatTabGroupHarness);
     const tabs = await matTabGroup.getTabs();
@@ -217,7 +226,7 @@ describe('CodeEditor', () => {
 
       await tab.select();
 
-      expect(fixture.debugElement.query(By.css('[aria-label="Delete file"]'))).toBeNull();
+      expect(fixture.debugElement.query(By.css('[aria-label="파일 삭제"]'))).toBeNull();
     }
   });
 
@@ -235,7 +244,7 @@ describe('CodeEditor', () => {
       MatTooltipHarness.with({selector: '.adev-editor-download-button'}),
     );
     await tooltip.show();
-    expect(await tooltip.getTooltipText()).toBe('Download current source code');
+    expect(await tooltip.getTooltipText()).toBe('현재 소스 코드 다운로드');
   });
 
   it('should not be able to get the tooltip message on the download button when the tooltip is not shown', async () => {

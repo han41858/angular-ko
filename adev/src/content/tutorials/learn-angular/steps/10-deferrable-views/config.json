@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/comments.ts"],
-  "title": "Deferrable views",
+  "title": "뷰 지연 로딩",
   "type": "editor"
 }

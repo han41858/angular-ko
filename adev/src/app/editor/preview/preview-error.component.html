@@ -7,23 +7,20 @@
   />
   @if (error()?.type === ErrorType.UNSUPPORTED_BROWSER_ENVIRONMENT) {
     @if (isIos) {
-      <p>Open angular.dev on desktop to code in your browser.</p>
+      <p>브라우저에서 코드를 작성하려면 데스크톱에서 angular.kr을 여세요.</p>
     }
   } @else if (error()?.type === ErrorType.COOKIES || error()?.type === ErrorType.UNKNOWN) {
-    <p>
-      We couldn't start the tutorial app. Please ensure third party cookies are enabled for this
-      site.
-    </p>
+    <p>튜토리얼 앱을 시작하지 못했습니다. 이 사이트에서 서드 파티 쿠키를 허용했는지 확인하세요.</p>
   } @else if (error()?.type === ErrorType.OUT_OF_MEMORY) {
     <p>
-      We couldn't start the tutorial app because your browser is out of memory. To free up memory,
-      close angular.dev tutorials in other tabs or windows, and refresh the page.
+      브라우저의 메모리가 부족해 튜토리얼 앱을 시작하지 못했습니다. 다른 탭이나 창에서 연 Angular
+      튜토리얼을 닫아 메모리를 확보한 후 페이지를 새로고침하세요.
     </p>
   }
 
   @if (error()?.message) {
     <small>
-      The error message is:
+      에러 메시지:
       <code>{{ error()!.message }}</code>
     </small>
   }

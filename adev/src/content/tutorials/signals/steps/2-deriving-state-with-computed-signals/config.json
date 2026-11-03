@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/app.css"],
   "type": "editor",
-  "title": "Deriving state with computed signals"
+  "title": "computed 시그널로 상태 파생하기"
 }

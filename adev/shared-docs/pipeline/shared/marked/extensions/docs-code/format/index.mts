@@ -105,7 +105,8 @@ function escapeHtml(text: string): string {
 function buildHeaderElement(token: CodeToken) {
   let header = '';
   if (token.style) {
-    header += `<span class="docs-code-header-style ">${token.style === 'prefer' ? 'Prefer' : 'Avoid'}</span>`;
+    // header += `<span class="docs-code-header-style ">${token.style === 'prefer' ? 'Prefer' : 'Avoid'}</span>`;
+    header += `<span class="docs-code-header-style ">${token.style === 'prefer' ? '권장' : '권장하지 않음'}</span>`;
   }
 
   if (token.header) {

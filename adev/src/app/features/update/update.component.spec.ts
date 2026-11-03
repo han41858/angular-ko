@@ -45,21 +45,32 @@ describe('UpdateComponent', () => {
     expect(queryParamComponent['level']()).toBe(3);
   });
 
+  it('should display Korean update instructions and complexity labels', async () => {
+    await component['showUpdatePath']();
+    await fixture.whenStable();
+
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.querySelector('h1')?.textContent).toContain('업데이트 가이드');
+    expect(element.querySelector('.show-button')?.textContent).toContain('업데이트 방법 보기');
+    expect(component['title']()).toContain('Angular 애플리케이션 업데이트 가이드');
+    expect(component['title']()).toContain('기본 애플리케이션');
+  });
+
   describe('getComplexityLevelName', () => {
     it('should return "Basic" for ApplicationComplexity.Basic', () => {
-      expect(component['getComplexityLevelName'](ApplicationComplexity.Basic)).toBe('Basic');
+      expect(component['getComplexityLevelName'](ApplicationComplexity.Basic)).toBe('기본');
     });
 
     it('should return "Medium" for ApplicationComplexity.Medium', () => {
-      expect(component['getComplexityLevelName'](ApplicationComplexity.Medium)).toBe('Medium');
+      expect(component['getComplexityLevelName'](ApplicationComplexity.Medium)).toBe('중급');
     });
 
     it('should return "Advanced" for ApplicationComplexity.Advanced', () => {
-      expect(component['getComplexityLevelName'](ApplicationComplexity.Advanced)).toBe('Advanced');
+      expect(component['getComplexityLevelName'](ApplicationComplexity.Advanced)).toBe('고급');
     });
 
     it('should return "Unknown" for invalid complexity level', () => {
-      expect(component['getComplexityLevelName'](999 as ApplicationComplexity)).toBe('Unknown');
+      expect(component['getComplexityLevelName'](999 as ApplicationComplexity)).toBe('알 수 없음');
     });
   });
 
@@ -88,7 +99,7 @@ describe('UpdateComponent', () => {
         const badgeText = badge.textContent?.trim();
 
         // Badge text should be one of the valid complexity levels
-        expect(['Basic', 'Medium', 'Advanced']).toContain(badgeText);
+        expect(['기본', '중급', '고급']).toContain(badgeText);
 
         // Badge should have appropriate CSS class
         const hasComplexityClass =
