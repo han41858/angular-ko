@@ -12,7 +12,7 @@ import {SECTION_HEADING} from '../styling/css-classes.mjs';
 
 // Keep the original names for fragment IDs and CLI card keys; localize only visible text.
 const SECTION_LABELS: Record<string, string> = {
-  'Arguments': '인수',
+  'Arguments': '인자',
   'Options': '옵션',
   'Description': '설명',
   'Exported by': '다음 모듈에서 내보냄',

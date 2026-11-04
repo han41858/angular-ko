@@ -62,7 +62,11 @@ describe('CLI docs to html', () => {
     const renderable = await getRenderable(command, '', 'angular/cli');
     const localFragment = JSDOM.fragment(renderEntry(renderable));
 
-    expect(localFragment.querySelector('#arguments')?.textContent).toBe('인수');
+    expect(localFragment.querySelector('#arguments')?.textContent).toBe('인자');
+    expect(localFragment.querySelector('#arguments a')?.getAttribute('href')).toBe('#arguments');
+    expect(localFragment.querySelector('#arguments a')?.getAttribute('aria-label')).toBe(
+      '인자 섹션으로 이동',
+    );
     expect(localFragment.querySelector('#options')?.textContent).toBe('옵션');
     expect(localFragment.querySelector('#options a')?.getAttribute('href')).toBe('#options');
     expect(localFragment.querySelector('#options a')?.getAttribute('aria-label')).toBe(
