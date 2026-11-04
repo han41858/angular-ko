@@ -7,7 +7,7 @@ module(
 bazel_dep(name = "rules_pkg", version = "1.3.0")
 bazel_dep(name = "rules_nodejs", version = "6.7.7")
 bazel_dep(name = "aspect_rules_ts", version = "3.10.1")
-bazel_dep(name = "aspect_rules_js", version = "3.5.1")
+bazel_dep(name = "aspect_rules_js", version = "3.5.2")
 bazel_dep(name = "aspect_rules_esbuild", version = "0.27.1")
 bazel_dep(name = "aspect_rules_jasmine", version = "2.0.4")
 bazel_dep(name = "aspect_rules_rollup", version = "2.0.1")
@@ -18,28 +18,28 @@ bazel_dep(name = "yq.bzl", version = "0.4.0")
 bazel_dep(name = "rules_angular")
 git_override(
     module_name = "rules_angular",
-    commit = "5c2a1c83782292554ba8504713e54860c72c2aeb",
+    commit = "7822265c5a0565c8c1fdc254e021178131bfcfa8",
     remote = "https://github.com/angular/rules_angular.git",
 )
 
 bazel_dep(name = "devinfra")
 git_override(
     module_name = "devinfra",
-    commit = "c0b8d59ecb851e0dd1808f3d00846d5f2c0c8d47",
+    commit = "81f07e12202b873ce483cdfaf6f851e5b79d9628",
     remote = "https://github.com/angular/dev-infra.git",
 )
 
 bazel_dep(name = "rules_sass")
 git_override(
     module_name = "rules_sass",
-    commit = "c54a4b1710c83bca1b84dae6a11ed703d69dfe2f",
+    commit = "f1905f1b55c24034d9ce5725a22c37c441b4f330",
     remote = "https://github.com/angular/rules_sass.git",
 )
 
 bazel_dep(name = "rules_browsers")
 git_override(
     module_name = "rules_browsers",
-    commit = "14e8fd76588d44cd945e10ac1186634f0dfe186f",
+    commit = "80ed35fe2809269a0a3be6693bd0a0e47c8a1bc9",
     remote = "https://github.com/angular/rules_browsers.git",
 )
 
@@ -71,8 +71,8 @@ use_repo(node, "nodejs_windows_amd64")
 pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
 pnpm.pnpm(
     name = "pnpm",
-    pnpm_version = "11.28.7",
-    pnpm_version_integrity = "sha512-IWGjCi3GSwwPCXhklvvOXwYb6WuP8R8LyY5rxnXgB0zrIluRl6J48vFx5sn7lxvR34ky5bwxBTuszdUrFaGuJg==",
+    pnpm_version = "11.28.9",
+    pnpm_version_integrity = "sha512-NUIc6icg7KP1rXIrZ+jvGPTTzUdF7S/P6w3CiNTpQ3+tOHDZHuboPyaPD29+D2JyMxexlhe7Re5DMxcu9RFZ+A==",
 )
 use_repo(pnpm, "pnpm")
 

@@ -372,14 +372,16 @@ _content_) have been initialized.
 
 You can use this lifecycle hook to read the results of
 [content queries](guide/components/queries#content-queries). While you can access the initialized
-state of these queries, attempting to change any state in this method results in an
-[ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)
+state of these queries, avoid changing non-signal state that an ancestor's template has already
+rendered. Doing so can result in an
+[ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 -->
 
 `ngAfterContentInit` 메서드는 컴포넌트 안에 있는 모든 자식 컴포넌트(컨텐츠)가 초기화된 후에 한 번 실행됩니다.
 
 이 메서드는 [컨텐츠 쿼리](guide/components/queries#content-queries) 결과를 참조해야 할 때 활용합니다.
-이 메서드를 실행하는 시점에는 컨텐츠 쿼리 결과에 접근하고 상태값을 변경할 수 있지만, 값을 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
+이 메서드에서는 초기화된 컨텐츠 쿼리의 상태를 참조할 수 있지만, 상위 컴포넌트의 템플릿이 이미 렌더링한 시그널이 아닌 상태를 변경하지 않도록 주의하세요.
+이러한 상태를 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생할 수 있습니다.
 
 ### ngAfterContentChecked
 
@@ -391,8 +393,8 @@ This method runs very frequently and can significantly impact your page's perfor
 defining this hook whenever possible, only using it when you have no alternative.
 
 While you can access the updated state
-of [content queries](guide/components/queries#content-queries) here, attempting to
-change any state in this method results in
+of [content queries](guide/components/queries#content-queries) here, avoid changing non-signal
+state that an ancestor's template has already rendered. Doing so can result in
 an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 -->
 
@@ -401,7 +403,8 @@ an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
 
-이 메서드를 실행하는 시점에는 [컨텐츠 쿼리](guide/components/queries#content-queries) 결과에 접근하고 상태값을 변경할 수 있지만, 값을 변경하면[ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
+이 메서드에서는 [컨텐츠 쿼리](guide/components/queries#content-queries)의 갱신된 상태를 참조할 수 있지만, 상위 컴포넌트의 템플릿이 이미 렌더링한 시그널이 아닌 상태를 변경하지 않도록 주의하세요.
+이러한 상태를 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생할 수 있습니다.
 
 ### ngAfterViewInit
 
@@ -411,14 +414,15 @@ _view_) have been initialized.
 
 You can use this lifecycle hook to read the results of
 [view queries](guide/components/queries#view-queries). While you can access the initialized state of
-these queries, attempting to change any state in this method results in an
-[ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)
+these queries, avoid changing non-signal state that a template has already rendered. Doing so can
+result in an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 -->
 
 `ngAfterViewInit` 메서드는 컴포넌트 템플릿 안에 있는 모든 자식 컴포넌트(뷰)가 초기화된 후에 한 번 실행됩니다.
 
 이 메서드는 [뷰 쿼리](guide/components/queries#view-queries) 결과를 참조해야 할 때 활용합니다.
-이 메서드를 실행하는 시점에는 뷰 쿼리 결과에 접근하고 상태값을 변경할 수 있지만, 값을 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
+이 메서드에서는 초기화된 뷰 쿼리의 상태를 참조할 수 있지만, 템플릿이 이미 렌더링한 시그널이 아닌 상태를 변경하지 않도록 주의하세요.
+이러한 상태를 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생할 수 있습니다.
 
 ### ngAfterViewChecked
 
@@ -430,9 +434,8 @@ This method runs very frequently and can significantly impact your page's perfor
 defining this hook whenever possible, only using it when you have no alternative.
 
 While you can access the updated state of [view queries](guide/components/queries#view-queries)
-here, attempting to
-change any state in this method results in
-an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
+here, avoid changing non-signal state that a template has already rendered. Doing so can result
+in an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 -->
 
 `ngAfterViewChecked` 메서드는 컴포넌트 템플릿 안에 있는 모든 자식 엘리먼트(뷰)의 변경 여부를 검사한 후 매번 실행됩니다.
@@ -440,7 +443,8 @@ an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 이 메서드는 아주 자주 실행되기 때문에 애플리케이션의 화면 렌더링 성능에 큰 영향을 줄 수 있습니다.
 꼭 필요한 경우가 아니라면 이 메서드는 되도록 사용하지 않는 것이 좋습니다.
 
-이 메서드를 실행하는 시점에는 [뷰 쿼리](guide/components/queries#view-queries) 결과에 접근하고 상태값을 변경할 수 있지만, 값을 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생합니다.
+이 메서드에서는 [뷰 쿼리](guide/components/queries#view-queries)의 갱신된 상태를 참조할 수 있지만, 템플릿이 이미 렌더링한 시그널이 아닌 상태를 변경하지 않도록 주의하세요.
+이러한 상태를 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생할 수 있습니다.
 
 ### afterEveryRender and afterNextRender
 

@@ -63,14 +63,14 @@ New applications will use this new build system by default via the `application`
 
 <!--
 Both automated and manual procedures are available depending on the requirements of the project.
-Starting with v18, the update process will ask if you would like to migrate existing applications to use the new build system via the automated migration.
+Since v18, the update process to a new major version asks if you would like to migrate existing applications to use the new build system via the automated migration.
 Prior to migrating, please consider reviewing the [Known Issues](#known-issues) section as it may contain relevant information for your project.
 
 HELPFUL: Remember to remove any CommonJS assumptions in the application server code if using SSR such as `require`, `__filename`, `__dirname`, or other constructs from the [CommonJS module scope](https://nodejs.org/api/modules.html#the-module-scope). All application code should be ESM compatible. This does not apply to third-party dependencies.
 -->
 
 프로젝트의 요구사항에 따라 자동 전환이나 수동 전환을 사용할 수 있습니다.
-v18부터는 업데이트 과정에서 기존 애플리케이션을 새 빌드 시스템으로 자동 전환할지 묻습니다.
+v18부터는 새 메이저 버전으로 업데이트할 때 기존 애플리케이션을 새 빌드 시스템으로 자동 전환할지 묻습니다.
 전환하기 전에 프로젝트와 관련된 내용이 있는지 [알려진 문제](#known-issues) 섹션을 확인하는 것이 좋습니다.
 
 도움말: SSR을 사용한다면 애플리케이션 서버 코드에서 `require`, `__filename`, `__dirname`을 비롯해 [CommonJS 모듈 스코프](https://nodejs.org/api/modules.html#the-module-scope)를 전제로 사용하는 코드를 제거하세요.
@@ -90,8 +90,8 @@ The automated migration will adjust both the application configuration within `a
 While many changes can be automated and most applications will not require any further changes, each application is unique and there may be some manual changes required.
 After the migration, please attempt a build of the application as there could be new errors that will require adjustments within the code.
 The errors will attempt to provide solutions to the problem when possible and the later sections of this guide describe some of the more common situations that you may encounter.
-When updating to Angular v18 via `ng update`, you will be asked to execute the migration.
-This migration is entirely optional for v18 and can also be run manually at anytime after an update via the following command:
+When updating to a new major version via `ng update`, you will be asked to execute the migration.
+This migration is entirely optional and can also be run manually at anytime after an update via the following command:
 
 ```shell
 
@@ -115,8 +115,8 @@ The migration does the following:
 전환한 뒤에는 애플리케이션을 빌드해 보세요.
 코드를 조정해야 하는 새로운 오류가 발생할 수도 있습니다.
 오류 메시지는 가능한 경우 해결 방법을 제시하며, 이 가이드의 뒷부분에서도 자주 발생하는 상황을 설명합니다.
-`ng update`로 Angular v18로 업데이트하면 이 전환을 실행할지 묻습니다.
-v18에서 전환은 전적으로 선택사항이며, 업데이트한 뒤 언제든 다음 명령으로 직접 실행할 수도 있습니다:
+`ng update`로 새 메이저 버전으로 업데이트하면 이 전환을 실행할지 묻습니다.
+전환은 전적으로 선택사항이며, 업데이트한 뒤 언제든 다음 명령으로 직접 실행할 수도 있습니다:
 
 ```shell
 
@@ -181,7 +181,7 @@ If the `application` builder is difficult for your project to adopt, `browser-es
 #### 호환 빌더로 직접 전환하기
 
 <!--
-A builder named `browser-esbuild` is available within the `@angular-devkit/build-angular` package that is present in an Angular CLI generated application.
+A builder named `browser-esbuild` is available within the `@angular-devkit/build-angular` package that applications using the `browser` builder already depend on.
 You can try out the new build system for applications that use the `browser` builder.
 If using a custom builder, please refer to the documentation for that builder on possible migration options.
 
@@ -210,7 +210,7 @@ Changing the `builder` field is the only change you will need to make.
 ```
 -->
 
-Angular CLI로 생성한 애플리케이션에 포함된 `@angular-devkit/build-angular` 패키지는 `browser-esbuild`라는 빌더를 제공합니다.
+`browser` 빌더를 사용하는 애플리케이션이 이미 의존하는 `@angular-devkit/build-angular` 패키지는 `browser-esbuild`라는 빌더를 제공합니다.
 `browser` 빌더를 사용하는 애플리케이션에서 새 빌드 시스템을 사용해 볼 수 있습니다.
 커스텀 빌더를 사용한다면 해당 빌더의 문서에서 가능한 전환 방법을 확인하세요.
 
@@ -247,8 +247,8 @@ Angular CLI로 생성한 애플리케이션에 포함된 `@angular-devkit/build-
 #### 새 `application` 빌더로 직접 전환하기
 
 <!--
-A builder named `application` is also available within the `@angular-devkit/build-angular` package that is present in an Angular CLI generated application.
-This builder is the default for all new applications created via `ng new`.
+A builder named `application` is also available within the `@angular-devkit/build-angular` package.
+New applications created via `ng new` use the same builder from the `@angular/build` package (`@angular/build:application`).
 
 The following is what you would typically find in `angular.json` for an application:
 
@@ -302,8 +302,8 @@ The new `@angular/ssr` package will also be automatically added and used with co
 The `@angular/ssr` package supports the `browser` builder as well as the `application` builder.
 -->
 
-Angular CLI로 생성한 애플리케이션에 포함된 `@angular-devkit/build-angular` 패키지는 `application`이라는 빌더도 제공합니다.
-이 빌더는 `ng new`로 생성하는 모든 새 애플리케이션의 기본 빌더입니다.
+`@angular-devkit/build-angular` 패키지는 `application`이라는 빌더도 제공합니다.
+`ng new`로 생성하는 새 애플리케이션은 `@angular/build` 패키지에서 제공하는 동일한 빌더(`@angular/build:application`)를 사용합니다.
 
 애플리케이션의 `angular.json`에는 일반적으로 다음과 같은 설정이 있습니다:
 
@@ -597,19 +597,19 @@ Vite는 Angular CLI에서 기본적으로 활성화되는 [사전 번들링 기�
 One of the main benefits of the application build system is the improved build and rebuild speed.
 However, the new application build system also provides additional features not present in the `browser` builder.
 
-IMPORTANT: The new features of the `application` builder described here are incompatible with the `karma` test builder by default because it is using the `browser` builder internally.
-Users can opt-in to use the `application` builder by setting the `builderMode` option to `application` for the `karma` builder.
-This option is currently in developer preview.
+IMPORTANT: The new features of the `application` builder described here are incompatible with the `@angular-devkit/build-angular:karma` test builder by default because it is using the `browser` builder internally.
+Users can opt-in to use the `application` builder by setting the `builderMode` option to `application` for that builder.
+The `@angular/build:karma` and `@angular/build:unit-test` builders always use the `application` builder.
 If you notice any issues, please report them [here](https://github.com/angular/angular-cli/issues).
 -->
 
 애플리케이션 빌드 시스템의 주요 이점 중 하나는 빌드와 재빌드 속도가 개선된다는 점입니다.
 새 애플리케이션 빌드 시스템은 이 외에도 `browser` 빌더에는 없는 기능을 제공합니다.
 
-중요: 여기서 설명하는 `application` 빌더의 새 기능은 기본적으로 `karma` 테스트 빌더와 호환되지 않습니다.
-`karma`가 내부적으로 `browser` 빌더를 사용하기 때문입니다.
-`karma` 빌더의 `builderMode` 옵션을 `application`으로 설정하면 `application` 빌더를 사용하도록 선택할 수 있습니다.
-이 옵션은 현재 개발자 미리보기 단계입니다.
+중요: 여기서 설명하는 `application` 빌더의 새 기능은 기본적으로 `@angular-devkit/build-angular:karma` 테스트 빌더와 호환되지 않습니다.
+이 빌더가 내부적으로 `browser` 빌더를 사용하기 때문입니다.
+해당 빌더의 `builderMode` 옵션을 `application`으로 설정하면 `application` 빌더를 사용하도록 선택할 수 있습니다.
+`@angular/build:karma`와 `@angular/build:unit-test` 빌더는 항상 `application` 빌더를 사용합니다.
 문제를 발견하면 [여기](https://github.com/angular/angular-cli/issues)에 알려주세요.
 
 <!--
@@ -888,8 +888,8 @@ For the import attribute, the following loader values are supported:
 - `dataurl` - inlines the content as a [data URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs).
 - `base64` - inlines the content as a Base64-encoded string.
 
-An additional requirement to use import attributes is that the TypeScript `module` option must be set to `esnext` to allow TypeScript to successfully build the application code.
-Once `ES2025` is available within TypeScript, this change will no longer be needed.
+An additional requirement to use import attributes is that the TypeScript `module` option must be set to `esnext` or `preserve` to allow TypeScript to successfully build the application code.
+New projects use `preserve` by default, so no change is needed.
 
 At this time, TypeScript does not support type definitions that are based on import attribute values.
 The use of `@ts-expect-error`/`@ts-ignore` or the use of individual type definition files (assuming the file is only imported with the same loader attribute) is currently required.
@@ -957,8 +957,8 @@ import 어트리뷰트는 다음 로더 값을 지원합니다:
 - `dataurl` - 내용을 [데이터 URL](https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs)로 인라인으로 포함합니다.
 - `base64` - 내용을 Base64로 인코딩된 문자열로 인라인으로 포함합니다.
 
-import 어트리뷰트를 사용하려면 추가로 TypeScript의 `module` 옵션을 `esnext`로 설정해야 TypeScript가 애플리케이션 코드를 정상적으로 빌드할 수 있습니다.
-TypeScript에서 `ES2025`를 사용할 수 있게 되면 이 변경은 더 이상 필요하지 않습니다.
+import 어트리뷰트를 사용하려면 추가로 TypeScript의 `module` 옵션을 `esnext` 또는 `preserve`로 설정해야 TypeScript가 애플리케이션 코드를 정상적으로 빌드할 수 있습니다.
+새 프로젝트는 기본적으로 `preserve`를 사용하므로 변경할 필요가 없습니다.
 
 현재 TypeScript는 import 어트리뷰트 값을 기반으로 하는 타입 정의를 지원하지 않습니다.
 따라서 `@ts-expect-error`/`@ts-ignore`를 사용하거나, 개별 타입 정의 파일을 사용해야 합니다(해당 파일을 항상 같은 로더 어트리뷰트로 import한다고 가정합니다).
