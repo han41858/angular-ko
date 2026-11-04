@@ -1,10 +1,10 @@
 <!-- #docregion -->
-<h1>첫 번째 어트리뷰트 디렉티브</h1>
+<h1>My First Attribute Directive</h1>
 <!-- #docregion applied -->
-<p appHighlight>강조해 보세요!</p>
+<p appHighlight>Highlight me!</p>
 <!-- #enddocregion applied  -->
 
-<p appHighlight="yellow">노란색으로 강조</p>
-<p [appHighlight]="'orange'">주황색으로 강조</p>
+<p appHighlight="yellow">Highlighted in yellow</p>
+<p [appHighlight]="'orange'">Highlighted in orange</p>
 
-<p [appHighlight]="color">부모 컴포넌트의 색으로 강조</p>
+<p [appHighlight]="color">Highlighted with parent component's color</p>

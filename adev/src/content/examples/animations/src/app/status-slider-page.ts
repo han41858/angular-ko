@@ -5,7 +5,7 @@ import {StatusSlider} from './status-slider';
   selector: 'app-status-slider-page',
   template: `
     <section>
-      <h2>상태 슬라이더</h2>
+      <h2>Status Slider</h2>
       <app-status-slider />
     </section>
   `,

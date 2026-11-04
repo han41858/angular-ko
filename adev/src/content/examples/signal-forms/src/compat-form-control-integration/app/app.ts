@@ -8,7 +8,7 @@ import {compatForm, CompatValidationError} from '@angular/forms/signals/compat';
 function enterprisePasswordValidator() {
   return (control: AbstractControl) => {
     if (control.value && control.value.length < 8) {
-      return {enterprisePassword: {message: '비밀번호는 8자 이상이어야 합니다.'}};
+      return {enterprisePassword: {message: 'Password must be at least 8 characters.'}};
     }
     return null;
   };

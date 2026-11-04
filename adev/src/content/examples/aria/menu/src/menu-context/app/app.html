@@ -1,12 +1,12 @@
 <!-- Target area for right-click -->
 <div (contextmenu)="onContextMenu($event)" class="context-zone">
-  이 영역 안에서 마우스 오른쪽 버튼을 클릭하면 컨텍스트 메뉴가 열립니다.
+  Right-click inside this area to open the context menu.
 </div>
 
 @if (lastAction()) {
   <p class="last-action">
     <span class="material-symbols-outlined" translate="no" aria-hidden="true">check_circle</span>
-    실행한 작업: <strong>{{ lastAction() }}</strong>
+    Action performed: <strong>{{ lastAction() }}</strong>
   </p>
 }
 
@@ -38,21 +38,21 @@
     <ng-template ngMenuContent>
       <div ngMenuItem value="Edit">
         <span class="icon material-symbols-outlined" translate="no" aria-hidden="true">edit</span>
-        <span class="label">편집</span>
+        <span class="label">Edit</span>
       </div>
 
       <div ngMenuItem value="Copy">
         <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
           >content_copy</span
         >
-        <span class="label">복사</span>
+        <span class="label">Copy</span>
       </div>
 
       <div role="separator" class="separator"></div>
 
       <div ngMenuItem value="Delete" style="color: var(--vivid-pink)">
         <span class="icon material-symbols-outlined" translate="no" aria-hidden="true">delete</span>
-        <span class="label">삭제</span>
+        <span class="label">Delete</span>
       </div>
     </ng-template>
   </div>

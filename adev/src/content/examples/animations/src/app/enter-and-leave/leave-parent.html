@@ -1,14 +1,14 @@
 <!-- #docplaster -->
-<h2><code>animate.leave</code> 부모 하위 트리 애니메이션 예제</h2>
+<h2><code>animate.leave</code> Parent Sub-tree Animation Example</h2>
 
-<button type="button" class="toggle-btn" (click)="toggle()">엘리먼트 표시 전환</button>
+<button type="button" class="toggle-btn" (click)="toggle()">Toggle Element</button>
 
 @if (isShown()) {
   <div class="leave-parent">
     <!-- the child node with `animate.leave` will animate first
          before the parent node is removed from the DOM. -->
     <div class="leave-container" animate.leave="leaving">
-      <p>안녕히 가세요</p>
+      <p>Goodbye</p>
     </div>
   </div>
 }

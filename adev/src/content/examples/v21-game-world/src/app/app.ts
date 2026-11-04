@@ -212,9 +212,9 @@ const DESTINATION_TOLERANCE = 0.005;
         </button>
       </div>
 
-      <!-- 안내 표지판 -->
+      <!-- Info Sign -->
       @if (!isDialogOpen()) {
-        <img [src]="infoSignImageUrl()" alt="안내 표지판" class="info-sign" />
+        <img [src]="infoSignImageUrl()" alt="Info Sign" class="info-sign" />
       }
 
       <!-- Dialog Box -->
@@ -232,13 +232,13 @@ const DESTINATION_TOLERANCE = 0.005;
                 allowfullscreen
               ></iframe>
             }
-            <button class="close-button" (click)="closeDialog()">닫기</button>
+            <button class="close-button" (click)="closeDialog()">Close</button>
           </div>
         </div>
       }
       <!-- Explore Button -->
       @if (activeDestination() && (activeDestination()?.id !== 'd4' || allKeysCollected())) {
-        <button class="explore-button" (click)="isDialogOpen.set(true)">입장</button>
+        <button class="explore-button" (click)="isDialogOpen.set(true)">Enter</button>
       }
     </div>
   `,

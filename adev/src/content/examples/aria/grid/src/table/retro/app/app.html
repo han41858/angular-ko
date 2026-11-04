@@ -4,7 +4,7 @@
       <th ngGridCell>
         <input
           ngGridCellWidget
-          aria-label="모든 행 선택"
+          aria-label="Select all rows"
           type="checkbox"
           [checked]="allSelected()"
           (change)="updateSelection($event)"
@@ -15,18 +15,18 @@
         <button
           ngGridCellWidget
           class="sort-button"
-          aria-label="ID로 정렬"
+          aria-label="Sort by ID"
           (click)="sortTaskById()"
         >
-          보상
+          Reward
           <span aria-hidden="true" class="material-symbols-outlined" translate="no">
             {{ sortAscending ? 'arrow_upward' : 'arrow_downward' }}
           </span>
         </button>
       </th>
-      <th ngGridCell>대상</th>
-      <th ngGridCell>등급</th>
-      <th ngGridCell>사냥꾼</th>
+      <th ngGridCell>Target</th>
+      <th ngGridCell>Rank</th>
+      <th ngGridCell>Hunter</th>
     </tr>
   </thead>
   <tbody>
@@ -35,7 +35,7 @@
         <td ngGridCell>
           <input
             ngGridCellWidget
-            aria-label="{{ $index + 1 }}번째 행 선택"
+            aria-label="Select row {{ $index + 1 }}"
             type="checkbox"
             [(ngModel)]="task.selected"
           />
@@ -47,7 +47,7 @@
           <div
             type="button"
             ngGridCellWidget
-            aria-label="사냥꾼 편집"
+            aria-label="edit hunter"
             widgetType="editable"
             (activated)="startEdit($event, task, assigneeInput)"
             (deactivated)="completeEdit($event, task)"
@@ -62,7 +62,7 @@
             />
             <button
               tabindex="-1"
-              aria-label="사냥꾼 편집"
+              aria-label="edit hunter"
               class="material-symbols-outlined assignee-edit-button"
               (click)="onClickEdit(widget, task, assigneeInput)"
               [class.hidden]="widget.isActivated()"

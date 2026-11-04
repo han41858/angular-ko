@@ -1,37 +1,37 @@
 <!-- #docregion v2, -->
-<h1>첫 번째 어트리뷰트 디렉티브</h1>
+<h1>My First Attribute Directive</h1>
 
-<h2>강조 색상 선택</h2>
+<h2>Pick a highlight color</h2>
 <div>
-  <input type="radio" name="colors" (click)="color = 'lightgreen'" />초록색
-  <input type="radio" name="colors" (click)="color = 'yellow'" />노란색
-  <input type="radio" name="colors" (click)="color = 'cyan'" />청록색
+  <input type="radio" name="colors" (click)="color = 'lightgreen'" />Green
+  <input type="radio" name="colors" (click)="color = 'yellow'" />Yellow
+  <input type="radio" name="colors" (click)="color = 'cyan'" />Cyan
 </div>
 <!-- #docregion color -->
-<p [appHighlight]="color">강조해 보세요!</p>
+<p [appHighlight]="color">Highlight me!</p>
 <!-- #enddocregion color, v2 -->
 
 <!-- #docregion defaultColor -->
-<p [appHighlight]="color" defaultColor="violet">여기도 강조해 보세요!</p>
+<p [appHighlight]="color" defaultColor="violet">Highlight me too!</p>
 <!-- #enddocregion defaultColor, -->
 
 <hr />
-<h2>아래 문장 위에 마우스를 올려 고정된 강조 색상을 확인하세요</h2>
+<h2>Mouse over the following lines to see fixed highlights</h2>
 
-<p [appHighlight]="'yellow'">노란색으로 강조</p>
-<p appHighlight="orange">주황색으로 강조</p>
+<p [appHighlight]="'yellow'">Highlighted in yellow</p>
+<p appHighlight="orange">Highlighted in orange</p>
 
 <hr />
 
 <h2>ngNonBindable</h2>
 <!-- #docregion ngNonBindable -->
-<p>ngNonBindable로 표현식 평가를 중지하세요.</p>
-<p ngNonBindable>이 표현식은 평가되지 않아야 합니다: {{ 1 + 1 }}</p>
+<p>Use ngNonBindable to stop evaluation.</p>
+<p ngNonBindable>This should not evaluate: {{ 1 + 1 }}</p>
 <!-- #enddocregion ngNonBindable -->
 
 <!-- #docregion ngNonBindable-with-directive -->
-<h3>디렉티브와 함께 사용하는 ngNonBindable</h3>
+<h3>ngNonBindable with a directive</h3>
 <div ngNonBindable [appHighlight]="'yellow'">
-  이 표현식은 평가되지 않지만 노란색으로 강조됩니다: {{ 1 + 1 }}
+  This should not evaluate: {{ 1 + 1 }}, but will highlight yellow.
 </div>
 <!-- #enddocregion ngNonBindable-with-directive -->

@@ -349,33 +349,33 @@ const f = compatForm(checkoutModel, (p) => {
 
 ```angular-html
 <form novalidate>
-  <h3>배송 정보</h3>
+  <h3>Shipping Details</h3>
 
   <div>
     <label>
-      고객 이름:
+      Customer Name:
       <input [formField]="f.customerName" />
     </label>
 
     @if (f.customerName().touched() && f.customerName().invalid()) {
       <div class="error-list">
-        <p>고객 이름은 필수입니다.</p>
+        <p>Customer name is required.</p>
       </div>
     }
   </div>
 
   <fieldset>
-    <legend>주소</legend>
+    <legend>Address</legend>
 
     @let street = f.shippingAddress().control().controls.street;
     <div>
       <label>
-        도로명:
+        Street:
         <input [formControl]="street" />
       </label>
       @if (street.touched && street.invalid) {
         <div class="error-list">
-          <p>도로명은 필수입니다</p>
+          <p>Street is required</p>
         </div>
       }
     </div>
@@ -383,12 +383,12 @@ const f = compatForm(checkoutModel, (p) => {
     @let city = f.shippingAddress().control().controls.city;
     <div>
       <label>
-        도시:
+        City:
         <input [formControl]="city" />
       </label>
       @if (city.touched && city.invalid) {
         <div class="error-list">
-          <p>도시는 필수입니다</p>
+          <p>City is required</p>
         </div>
       }
     </div>
@@ -396,12 +396,12 @@ const f = compatForm(checkoutModel, (p) => {
     @let zip = f.shippingAddress().control().controls.zip;
     <div>
       <label>
-        우편번호:
+        Zip Code:
         <input [formControl]="zip" />
       </label>
       @if (zip.touched && zip.invalid) {
         <div class="error-list">
-          <p>우편번호는 필수입니다</p>
+          <p>Zip Code is required</p>
         </div>
       }
     </div>

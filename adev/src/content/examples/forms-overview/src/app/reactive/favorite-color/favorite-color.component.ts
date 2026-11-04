@@ -3,7 +3,7 @@ import {FormControl, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-reactive-favorite-color',
-  template: ` 좋아하는 색상: <input type="text" [formControl]="favoriteColorControl" /> `,
+  template: ` Favorite Color: <input type="text" [formControl]="favoriteColorControl" /> `,
   imports: [ReactiveFormsModule],
 })
 export class FavoriteColorReactive {

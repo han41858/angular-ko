@@ -1,6 +1,6 @@
 <!-- #docregion -->
 <div class="container">
-  <h2>반응형 폼</h2>
+  <h2>Reactive Form</h2>
 
   <form [formGroup]="actorForm" #formDir="ngForm">
     <div [hidden]="formDir.submitted">
@@ -11,20 +11,20 @@
         "
       >
         <div class="form-group">
-          <label for="name">이름</label>
+          <label for="name">Name</label>
           <!-- #docregion name-with-error-msg -->
           <input type="text" id="name" class="form-control" formControlName="name" required />
 
           @if (name.invalid && (name.dirty || name.touched)) {
             <div class="alert alert-danger">
               @if (name.hasError('required')) {
-                <div>이름은 필수입니다.</div>
+                <div>Name is required.</div>
               }
               @if (name.hasError('minlength')) {
-                <div>이름은 4자 이상이어야 합니다.</div>
+                <div>Name must be at least 4 characters long.</div>
               }
               @if (name.hasError('forbiddenName')) {
-                <div>이름은 Bob일 수 없습니다.</div>
+                <div>Name cannot be Bob.</div>
               }
             </div>
           }
@@ -32,16 +32,16 @@
         </div>
 
         <div class="form-group">
-          <label for="role">역할</label>
+          <label for="role">Role</label>
           <input type="text" id="role" class="form-control" formControlName="role" />
 
           @if (role.pending) {
-            <div>검증 중...</div>
+            <div>Validating...</div>
           }
           @if (role.invalid) {
             <div class="alert alert-danger role-errors">
               @if (role.hasError('uniqueRole')) {
-                <div>이미 사용 중인 역할입니다.</div>
+                <div>Role is already taken.</div>
               }
             </div>
           }
@@ -50,14 +50,14 @@
         <!-- #docregion cross-validation-error-message -->
         @if (actorForm.hasError('unambiguousRole') && (actorForm.touched || actorForm.dirty)) {
           <div class="cross-validation-error-message alert alert-danger">
-            이름과 역할이 같으면 관객이 혼동할 수 있으므로 서로 달라야 합니다.
+            Name cannot match role or audiences will be confused.
           </div>
         }
         <!-- #enddocregion cross-validation-error-message -->
       </div>
 
       <div class="form-group">
-        <label for="skill">특기</label>
+        <label for="skill">Skill</label>
         <select id="skill" class="form-control" formControlName="skill" required>
           @for (skill of skills; track $index) {
             <option [value]="skill">{{ skill }}</option>
@@ -67,22 +67,22 @@
         @if (skill.invalid && skill.touched) {
           <div class="alert alert-danger">
             @if (skill.hasError('required')) {
-              <div>특기는 필수입니다.</div>
+              <div>Skill is required.</div>
             }
           </div>
         }
       </div>
 
-      <p>폼을 완성하면 제출 버튼이 활성화됩니다.</p>
-      <button type="submit" class="btn btn-default" [disabled]="actorForm.invalid">제출</button>
-      <button type="button" class="btn btn-default" (click)="formDir.resetForm({})">초기화</button>
+      <p>Complete the form to enable the Submit button.</p>
+      <button type="submit" class="btn btn-default" [disabled]="actorForm.invalid">Submit</button>
+      <button type="button" class="btn btn-default" (click)="formDir.resetForm({})">Reset</button>
     </div>
   </form>
 
   @if (formDir.submitted) {
     <div class="submitted-message">
-      <p>배우 {{ actorForm.value.name }}의 정보를 제출했습니다!</p>
-      <button type="button" (click)="formDir.resetForm({})">새 배우 추가</button>
+      <p>You've submitted your actor, {{ actorForm.value.name }}!</p>
+      <button type="button" (click)="formDir.resetForm({})">Add new actor</button>
     </div>
   }
 </div>

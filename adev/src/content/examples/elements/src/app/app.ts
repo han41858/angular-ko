@@ -6,9 +6,9 @@ import {PopupService} from './popup.service';
 @Component({
   selector: 'app-root',
   template: `
-    <input #input value="메시지" />
-    <button type="button" (click)="popup.showAsComponent(input.value)">컴포넌트로 표시</button>
-    <button type="button" (click)="popup.showAsElement(input.value)">엘리먼트로 표시</button>
+    <input #input value="Message" />
+    <button type="button" (click)="popup.showAsComponent(input.value)">Show as component</button>
+    <button type="button" (click)="popup.showAsElement(input.value)">Show as element</button>
   `,
   providers: [PopupService],
   imports: [Popup],

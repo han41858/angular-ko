@@ -1,4 +1,10 @@
-<div ngListbox aria-label="편의 시설" orientation="horizontal" selectionMode="follow" multi>
+<div
+  ngListbox
+  aria-label="Amenities_explicit"
+  orientation="horizontal"
+  selectionMode="follow"
+  multi
+>
   @for (amenity of amenities; track amenity) {
     <div ngOption [value]="amenity" [label]="amenity">
       <span class="option-label">{{ amenity }}</span>

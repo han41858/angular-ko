@@ -1,12 +1,12 @@
 <!-- #docplaster -->
 <nav>
-  <button type="button" (click)="toggle()">불리언/닫기 전환</button>
+  <button type="button" (click)="toggle()">Toggle Boolean/Close</button>
 </nav>
 
 <!-- #docregion trigger-boolean -->
 <div [@openClose]="isOpen ? true : false" class="open-close-container">
   <!-- #enddocregion trigger-boolean -->
-  <p>상자가 지금 {{ isOpen ? '열렸습니다' : '닫혔습니다' }}!</p>
+  <p>The box is now {{ isOpen ? 'Open' : 'Closed' }}!</p>
   <!-- #docregion trigger-boolean -->
 </div>
 <!-- #enddocregion trigger-boolean -->

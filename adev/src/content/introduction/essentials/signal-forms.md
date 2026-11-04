@@ -493,14 +493,14 @@ NOTE: Multiple select (`<select multiple>`) is not supported by the `[formField]
 ```angular-html
 <!-- 정적 옵션 -->
 <select [formField]="form.country">
-  <option value="">국가를 선택하세요</option>
+  <option value="">Select a country</option>
   <option value="us">United States</option>
   <option value="ca">Canada</option>
 </select>
 
 <!-- @for 를 사용하는 동적 옵션 -->
 <select [formField]="form.productId">
-  <option value="">제품을 선택하세요</option>
+  <option value="">Select a product</option>
   @for (product of products; track product.id) {
     <option [value]="product.id">{{ product.name }}</option>
   }

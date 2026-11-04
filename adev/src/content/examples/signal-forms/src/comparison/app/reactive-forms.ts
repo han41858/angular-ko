@@ -8,16 +8,16 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
     <form [formGroup]="loginForm" (submit)="onSubmit()">
       <div>
         <label>
-          이메일
+          Email
           <input type="email" formControlName="email" />
         </label>
         @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
           <span class="error">
             @if (loginForm.controls.email.errors?.['required']) {
-              이메일은 필수입니다
+              Email is required
             }
             @if (loginForm.controls.email.errors?.['email']) {
-              유효한 이메일 주소를 입력하세요
+              Enter a valid email address
             }
           </span>
         }
@@ -25,22 +25,22 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 
       <div>
         <label>
-          비밀번호
+          Password
           <input type="password" formControlName="password" />
         </label>
         @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
           <span class="error">
             @if (loginForm.controls.password.errors?.['required']) {
-              비밀번호는 필수입니다
+              Password is required
             }
             @if (loginForm.controls.password.errors?.['minlength']) {
-              비밀번호는 8자 이상이어야 합니다
+              Password must be at least 8 characters
             }
           </span>
         }
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid">로그인</button>
+      <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
     </form>
   `,
 })

@@ -1,14 +1,14 @@
 <form>
   <div>
     <label>
-      이메일:
+      Email:
       <input [formField]="f.email" />
     </label>
   </div>
 
   <div>
     <label>
-      비밀번호:
+      Password:
       <input [formField]="f.password" type="password" />
     </label>
 
@@ -20,6 +20,6 @@
       </div>
     }
   </div>
-  <h3>값</h3>
+  <h3>Value</h3>
   <pre>{{ formValue() | json }}</pre>
 </form>

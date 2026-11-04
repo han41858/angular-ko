@@ -7,7 +7,7 @@
     value="File"
     [submenu]="fileMenu()"
   >
-    파일
+    File
   </div>
 
   <ng-template
@@ -25,7 +25,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >article</span
           >
-          <span class="label">새로 만들기</span>
+          <span class="label">New</span>
           <span class="shortcut">⌘N</span>
         </div>
 
@@ -33,7 +33,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >folder</span
           >
-          <span class="label">열기</span>
+          <span class="label">Open</span>
           <span class="shortcut">⌘O</span>
         </div>
 
@@ -41,7 +41,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >file_copy</span
           >
-          <span class="label">사본 만들기</span>
+          <span class="label">Make a copy</span>
         </div>
 
         <div role="separator" class="example-menu-item-separator"></div>
@@ -50,7 +50,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >person_add</span
           >
-          <span class="label">공유</span>
+          <span class="label">Share</span>
           <span class="icon arrow material-symbols-outlined" translate="no" aria-hidden="true"
             >arrow_right</span
           >
@@ -71,14 +71,14 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >person_add</span
                 >
-                <span class="label">다른 사용자와 공유</span>
+                <span class="label">Share with others</span>
               </div>
 
               <div ngMenuItem value="Publish to web">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >public</span
                 >
-                <span class="label">웹에 게시</span>
+                <span class="label">Publish to web</span>
               </div>
             </ng-template>
           </div>
@@ -88,28 +88,28 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >download</span
           >
-          <span class="label">다운로드</span>
+          <span class="label">Download</span>
         </div>
 
         <div ngMenuItem value="Print">
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >print</span
           >
-          <span class="label">인쇄</span>
+          <span class="label">Print</span>
         </div>
 
         <div role="separator" class="example-menu-item-separator"></div>
 
         <div ngMenuItem value="Rename">
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true">edit</span>
-          <span class="label">이름 변경</span>
+          <span class="label">Rename</span>
         </div>
 
         <div ngMenuItem value="Delete">
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >delete</span
           >
-          <span class="label">휴지통으로 이동</span>
+          <span class="label">Move to trash</span>
         </div>
       </ng-template>
     </div>
@@ -123,7 +123,7 @@
     value="Edit"
     [submenu]="editMenu()"
   >
-    편집
+    Edit
   </div>
 
   <ng-template
@@ -139,13 +139,13 @@
       <ng-template ngMenuContent>
         <div ngMenuItem value="Undo">
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true">undo</span>
-          <span class="label">실행 취소</span>
+          <span class="label">Undo</span>
           <span class="shortcut">⌘Z</span>
         </div>
 
         <div ngMenuItem value="Redo">
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true">redo</span>
-          <span class="label">다시 실행</span>
+          <span class="label">Redo</span>
           <span class="shortcut">⌘Y</span>
         </div>
 
@@ -155,7 +155,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >content_cut</span
           >
-          <span class="label">잘라내기</span>
+          <span class="label">Cut</span>
           <span class="shortcut">⌘X</span>
         </div>
 
@@ -163,7 +163,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >content_copy</span
           >
-          <span class="label">복사</span>
+          <span class="label">Copy</span>
           <span class="shortcut">⌘C</span>
         </div>
 
@@ -171,7 +171,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >content_paste</span
           >
-          <span class="label">붙여넣기</span>
+          <span class="label">Paste</span>
           <span class="shortcut">⌘V</span>
         </div>
 
@@ -181,7 +181,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >find_replace</span
           >
-          <span class="label">찾기 및 바꾸기</span>
+          <span class="label">Find and replace</span>
           <span class="shortcut">⇧⌘H</span>
         </div>
       </ng-template>
@@ -196,7 +196,7 @@
     value="View"
     [submenu]="viewMenu()"
   >
-    보기
+    View
   </div>
 
   <ng-template
@@ -214,32 +214,32 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >check</span
           >
-          <span class="label">인쇄 레이아웃 표시</span>
+          <span class="label">Show print layout</span>
         </div>
 
         <div ngMenuItem value="Show ruler" [disabled]="true">
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >check</span
           >
-          <span class="label">눈금자 표시</span>
+          <span class="label">Show ruler</span>
         </div>
 
         <div role="separator" class="example-menu-item-separator"></div>
 
         <div ngMenuItem value="Zoom in">
-          <span class="label">확대</span>
+          <span class="label">Zoom in</span>
           <span class="shortcut">⌘+</span>
         </div>
 
         <div ngMenuItem value="Zoom out">
-          <span class="label">축소</span>
+          <span class="label">Zoom out</span>
           <span class="shortcut">⌘-</span>
         </div>
 
         <div role="separator" class="example-menu-item-separator"></div>
 
         <div ngMenuItem value="Full screen">
-          <span class="label">전체 화면</span>
+          <span class="label">Full screen</span>
         </div>
       </ng-template>
     </div>
@@ -253,7 +253,7 @@
     value="Insert"
     [submenu]="insertMenu()"
   >
-    삽입
+    Insert
   </div>
 
   <ng-template
@@ -271,7 +271,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >image</span
           >
-          <span class="label">이미지</span>
+          <span class="label">Image</span>
           <span class="icon arrow material-symbols-outlined" translate="no" aria-hidden="true"
             >arrow_right</span
           >
@@ -292,21 +292,21 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >upload</span
                 >
-                <span class="label">컴퓨터에서 업로드</span>
+                <span class="label">Upload from computer</span>
               </div>
 
               <div ngMenuItem value="Search the web">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >search</span
                 >
-                <span class="label">웹 검색</span>
+                <span class="label">Search the web</span>
               </div>
 
               <div ngMenuItem value="By URL">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >link</span
                 >
-                <span class="label">URL로 추가</span>
+                <span class="label">By URL</span>
               </div>
             </ng-template>
           </div>
@@ -316,14 +316,14 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >table_chart</span
           >
-          <span class="label">표</span>
+          <span class="label">Table</span>
         </div>
 
         <div ngMenuItem #chartEl value="Chart" [submenu]="chartMenu()">
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >insert_chart</span
           >
-          <span class="label">차트</span>
+          <span class="label">Chart</span>
           <span class="icon arrow material-symbols-outlined" translate="no" aria-hidden="true"
             >arrow_right</span
           >
@@ -344,28 +344,28 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >bar_chart</span
                 >
-                <span class="label">가로 막대</span>
+                <span class="label">Bar</span>
               </div>
 
               <div ngMenuItem value="Column">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >insert_chart</span
                 >
-                <span class="label">세로 막대</span>
+                <span class="label">Column</span>
               </div>
 
               <div ngMenuItem value="Line">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >show_chart</span
                 >
-                <span class="label">선</span>
+                <span class="label">Line</span>
               </div>
 
               <div ngMenuItem value="Pie">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >pie_chart</span
                 >
-                <span class="label">원형</span>
+                <span class="label">Pie</span>
               </div>
             </ng-template>
           </div>
@@ -375,7 +375,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >horizontal_rule</span
           >
-          <span class="label">가로선</span>
+          <span class="label">Horizontal line</span>
         </div>
       </ng-template>
     </div>
@@ -389,7 +389,7 @@
     value="Format"
     [submenu]="formatMenu()"
   >
-    서식
+    Format
   </div>
 
   <ng-template
@@ -407,7 +407,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >format_bold</span
           >
-          <span class="label">텍스트</span>
+          <span class="label">Text</span>
           <span class="icon arrow material-symbols-outlined" translate="no" aria-hidden="true"
             >arrow_right</span
           >
@@ -428,7 +428,7 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >format_bold</span
                 >
-                <span class="label">굵게</span>
+                <span class="label">Bold</span>
                 <span class="shortcut">⌘B</span>
               </div>
 
@@ -436,7 +436,7 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >format_italic</span
                 >
-                <span class="label">기울임꼴</span>
+                <span class="label">Italic</span>
                 <span class="shortcut">⌘I</span>
               </div>
 
@@ -444,7 +444,7 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >format_underlined</span
                 >
-                <span class="label">밑줄</span>
+                <span class="label">Underline</span>
                 <span class="shortcut">⌘U</span>
               </div>
 
@@ -452,14 +452,14 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >strikethrough_s</span
                 >
-                <span class="label">취소선</span>
+                <span class="label">Strikethrough</span>
                 <span class="shortcut">⇧⌘X</span>
               </div>
 
               <div role="separator" class="example-menu-item-separator"></div>
 
               <div ngMenuItem #sizeEl value="Size" [submenu]="sizeMenu()">
-                <span class="label">크기</span>
+                <span class="label">Size</span>
                 <span class="icon arrow material-symbols-outlined" translate="no" aria-hidden="true"
                   >arrow_right</span
                 >
@@ -477,12 +477,12 @@
                 <div ngMenu #sizeMenu="ngMenu">
                   <ng-template ngMenuContent>
                     <div ngMenuItem value="Increase font size">
-                      <span class="label">글꼴 크기 늘리기</span>
+                      <span class="label">Increase font size</span>
                       <span class="shortcut">⇧⌘.</span>
                     </div>
 
                     <div ngMenuItem value="Decrease font size">
-                      <span class="label">글꼴 크기 줄이기</span>
+                      <span class="label">Decrease font size</span>
                       <span class="shortcut">⇧⌘,</span>
                     </div>
                   </ng-template>
@@ -496,7 +496,7 @@
           <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
             >format_align_justify</span
           >
-          <span class="label">문단 스타일</span>
+          <span class="label">Paragraph styles</span>
           <span class="icon arrow material-symbols-outlined" translate="no" aria-hidden="true"
             >arrow_right</span
           >
@@ -513,9 +513,9 @@
         >
           <div ngMenu #paragraphMenu="ngMenu">
             <ng-template ngMenuContent>
-              <div ngMenuItem value="Normal text">일반 텍스트</div>
-              <div ngMenuItem value="Heading 1">제목 1</div>
-              <div ngMenuItem value="Heading 2">제목 2</div>
+              <div ngMenuItem value="Normal text">Normal text</div>
+              <div ngMenuItem value="Heading 1">Heading 1</div>
+              <div ngMenuItem value="Heading 2">Heading 2</div>
             </ng-template>
           </div>
         </ng-template>
@@ -545,28 +545,28 @@
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >format_align_left</span
                 >
-                <span class="label">왼쪽 정렬</span>
+                <span class="label">Align left</span>
               </div>
 
               <div ngMenuItem value="Align center">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >format_align_center</span
                 >
-                <span class="label">가운데 정렬</span>
+                <span class="label">Align center</span>
               </div>
 
               <div ngMenuItem value="Align right">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >format_align_right</span
                 >
-                <span class="label">오른쪽 정렬</span>
+                <span class="label">Align right</span>
               </div>
 
               <div ngMenuItem value="Justify">
                 <span class="icon material-symbols-outlined" translate="no" aria-hidden="true"
                   >format_align_justify</span
                 >
-                <span class="label">양쪽 정렬</span>
+                <span class="label">Justify</span>
               </div>
             </ng-template>
           </div>

@@ -8,7 +8,7 @@ import {FormsModule} from '@angular/forms';
     <form #loginForm="ngForm" (submit)="onSubmit()">
       <div>
         <label>
-          이메일
+          Email
           <input
             type="email"
             name="email"
@@ -21,10 +21,10 @@ import {FormsModule} from '@angular/forms';
         @if (emailInput.touched && emailInput.invalid) {
           <span class="error">
             @if (emailInput.errors?.['required']) {
-              이메일은 필수입니다
+              Email is required
             }
             @if (emailInput.errors?.['email']) {
-              유효한 이메일 주소를 입력하세요
+              Enter a valid email address
             }
           </span>
         }
@@ -32,7 +32,7 @@ import {FormsModule} from '@angular/forms';
 
       <div>
         <label>
-          비밀번호
+          Password
           <input
             type="password"
             name="password"
@@ -45,16 +45,16 @@ import {FormsModule} from '@angular/forms';
         @if (passwordInput.touched && passwordInput.invalid) {
           <span class="error">
             @if (passwordInput.errors?.['required']) {
-              비밀번호는 필수입니다
+              Password is required
             }
             @if (passwordInput.errors?.['minlength']) {
-              비밀번호는 8자 이상이어야 합니다
+              Password must be at least 8 characters
             }
           </span>
         }
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid">로그인</button>
+      <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
     </form>
   `,
 })

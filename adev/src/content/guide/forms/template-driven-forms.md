@@ -134,7 +134,7 @@ In the course of this tutorial, you bind a sample form to data and handle user i
    - 유효성 검사 오류 메시지를 표시하거나 숨깁니다.
 1. 표준 HTML 버튼의 클릭 이벤트에 반응해서 모델 데이터를 추가합니다.
 1. 폼의 [`ngSubmit`](api/forms/NgForm#ngSubmit) 출력 프로퍼티로 폼 제출을 처리합니다.
-   - 폼이 유효해질 때까지 **제출** 버튼을 비활성화합니다.
+   - 폼이 유효해질 때까지 **Submit** 버튼을 비활성화합니다.
    - 폼을 제출하면 입력이 끝난 폼 대신 다른 내용을 페이지에 표시합니다.
 
 <!--
@@ -228,11 +228,11 @@ The input elements are not yet bound to data values or events, so they are still
    초기 템플릿은 폼 그룹 두 개와 제출 버튼이 있는 폼 레이아웃을 정의합니다.
    두 폼 그룹은 Actor 데이터 모델의 name, studio 프로퍼티에 각각 대응합니다.
    각 그룹에는 레이블과 사용자 입력 필드가 있습니다.
-   - **이름** `<input>` 컨트롤 엘리먼트에는 HTML5 `required` 어트리뷰트가 있습니다.
-   - **소속 스튜디오** `<input>` 컨트롤 엘리먼트에는 없습니다.
+   - **Name** `<input>` 컨트롤 엘리먼트에는 HTML5 `required` 어트리뷰트가 있습니다.
+   - **Studio** `<input>` 컨트롤 엘리먼트에는 없습니다.
      `studio`는 선택 사항이기 때문입니다.
 
-   **제출** 버튼에는 스타일을 적용하는 클래스가 몇 개 있습니다.
+   **Submit** 버튼에는 스타일을 적용하는 클래스가 몇 개 있습니다.
    아직까지 폼 레이아웃은 바인딩이나 디렉티브 없이 HTML5로만 구성되어 있습니다.
 
 1. 예제 폼은 [Twitter Bootstrap](https://getbootstrap.com/css)의 `container`, `form-group`, `form-control`, `btn` 스타일 클래스를 사용합니다.
@@ -278,7 +278,7 @@ HELPFUL: This example has a temporary diagnostic interpolation after each input 
 양방향 데이터 바인딩 문법인 `[(ngModel)]`로 디렉티브를 적용하면, Angular가 컨트롤의 값과 사용자 상호작용을 추적하고 뷰와 모델을 동기화합니다.
 
 1. 템플릿 파일 `actor-form.component.html`을 엽니다.
-1. **이름** 레이블 옆의 `<input>` 태그를 찾습니다.
+1. **Name** 레이블 옆의 `<input>` 태그를 찾습니다.
 1. 양방향 데이터 바인딩 문법 `[(ngModel)]="..."`으로 `ngModel` 디렉티브를 추가합니다.
 
 <docs-code header="actor-form.component.html (일부)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="ngModelName-1"/>
@@ -327,7 +327,7 @@ The diagnostic line that shows interpolated values demonstrates that values are 
    이제 `actorForm` 템플릿 변수는 폼 전체를 관리하는 `NgForm` 디렉티브 인스턴스를 참조합니다.
 
 1. 애플리케이션을 실행합니다.
-1. **이름** 입력 필드에 값을 입력합니다.
+1. **Name** 입력 필드에 값을 입력합니다.
 
    글자를 입력하거나 삭제하면 데이터 모델에도 글자가 추가되거나 삭제되는 것을 확인할 수 있습니다.
 
@@ -373,7 +373,7 @@ Angular는 이 이름으로 부모 `<form>` 엘리먼트에 적용된 `NgForm` �
 예제에서는 `<input>` 엘리먼트에 `name` 어트리뷰트를 추가하고 배우의 이름을 의미하는 "name"으로 지정했습니다.
 고유한 값이면 무엇이든 사용할 수 있지만, 의미를 알기 쉬운 이름이 좋습니다.
 
-1. **소속 스튜디오**와 **특기**에도 같은 방식으로 `[(ngModel)]` 바인딩과 `name` 어트리뷰트를 추가합니다.
+1. **Studio**와 **Skill**에도 같은 방식으로 `[(ngModel)]` 바인딩과 `name` 어트리뷰트를 추가합니다.
 1. 문자열 바인딩으로 값을 표시하던 확인용 메시지는 이제 삭제해도 됩니다.
 1. 배우 모델 전체에 양방향 데이터 바인딩이 동작하는지 확인하기 위해 컴포넌트 템플릿 맨 위에 [`json`](api/common/JsonPipe) 파이프를 사용하는 문자열 바인딩을 추가합니다.
    이 파이프는 데이터를 문자열로 직렬화합니다.
@@ -485,7 +485,7 @@ To see how the classes are added and removed by the framework, open the browser'
 
 Angular가 클래스를 추가하고 삭제하는 모습을 확인하려면 브라우저 개발자 도구를 열고 배우 이름을 입력하는 `<input>` 엘리먼트를 검사하세요.
 
-1. 브라우저 개발자 도구에서 **이름** 입력 필드에 해당하는 `<input>` 엘리먼트를 찾습니다.
+1. 브라우저 개발자 도구에서 **Name** 입력 필드에 해당하는 `<input>` 엘리먼트를 찾습니다.
    엘리먼트에 "form-control" 외에도 여러 CSS 클래스가 있는 것을 확인할 수 있습니다.
 
 1. 처음 표시될 때는 값이 유효하고, 초기화하거나 리셋한 후 값이 변경되지 않았으며, 컨트롤에도 접근한 적이 없다는 것을 클래스가 나타냅니다.
@@ -494,7 +494,7 @@ Angular가 클래스를 추가하고 삭제하는 모습을 확인하려면 브�
    <input class="form-control ng-untouched ng-pristine ng-valid" />
    ```
 
-1. **이름** `<input>` 필드에서 다음 동작을 하면서 어떤 클래스가 적용되는지 확인해 보세요.
+1. **Name** `<input>` 필드에서 다음 동작을 하면서 어떤 클래스가 적용되는지 확인해 보세요.
    - 아무 동작도 하지 않고 상태만 확인합니다.
      클래스는 컨트롤에 접근한 적이 없고(untouched), 값이 변경되지 않았으며(pristine), 유효한 상태(valid)를 나타냅니다.
 
@@ -611,11 +611,11 @@ You'll see the significance of this choice when you add a new actor to the form 
 </docs-callout>
 -->
 
-**이름** 입력 필드는 필수이므로 값을 지우면 막대가 빨간색으로 바뀝니다.
+**Name** 입력 필드는 필수이므로 값을 지우면 막대가 빨간색으로 바뀝니다.
 문제가 있다는 것은 알 수 있지만, 사용자는 무엇이 잘못되었고 어떻게 해결해야 하는지 알 수 없습니다.
 컨트롤 상태를 확인하고 상태에 맞는 안내 메시지를 제공해 봅시다.
 
-**특기** 선택 필드도 필수이지만, 선택할 수 있는 항목이 유효한 값으로 제한되어 있기 때문에 이런 오류 처리가 필요하지 않습니다.
+**Skill** 선택 필드도 필수이지만, 선택할 수 있는 항목이 유효한 값으로 제한되어 있기 때문에 이런 오류 처리가 필요하지 않습니다.
 
 적절한 시점에 오류 메시지가 표시되도록 다음 순서로 구성합니다.
 
@@ -712,7 +712,7 @@ To let form users add a new actor, you will add a **New Actor** button that resp
 -->
 
 이번에는 표준 HTML 버튼의 클릭 이벤트에 반응해서 모델 데이터를 추가하는 방법을 알아봅니다.
-폼에서 새 배우를 추가할 수 있도록 클릭 이벤트에 반응하는 **새 배우** 버튼을 추가하겠습니다.
+폼에서 새 배우를 추가할 수 있도록 클릭 이벤트에 반응하는 **New Actor** 버튼을 추가하겠습니다.
 
 1. 템플릿의 폼 맨 아래에 "New Actor" `<button>` 엘리먼트를 추가합니다.
 1. 컴포넌트 파일에서 배우 데이터 모델에 새 배우를 생성하는 메서드를 추가합니다.
@@ -723,23 +723,23 @@ To let form users add a new actor, you will add a **New Actor** button that resp
 
    <docs-code header="actor-form.component.html (새 배우 버튼)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="new-actor-button-no-reset"/>
 
-1. 애플리케이션을 다시 실행하고 **새 배우** 버튼을 클릭합니다.
+1. 애플리케이션을 다시 실행하고 **New Actor** 버튼을 클릭합니다.
 
    폼이 비워지고, 입력 필드 왼쪽의 _필수 입력_ 막대가 빨간색으로 바뀝니다.
    `name`과 `skill` 프로퍼티가 유효하지 않다는 뜻입니다.
    오류 메시지는 숨겨져 있는 것을 확인해 보세요.
    아직 아무 값도 변경하지 않았으므로 폼이 pristine 상태이기 때문입니다.
 
-1. 이름을 입력하고 **새 배우** 버튼을 다시 클릭합니다.
+1. 이름을 입력하고 **New Actor** 버튼을 다시 클릭합니다.
 
-   이제 입력 필드가 pristine 상태가 아니므로 `이름은 필수입니다` 오류 메시지가 표시됩니다.
-   폼은 **새 배우** 버튼을 클릭하기 전에 이름을 입력했다는 것을 기억합니다.
+   이제 입력 필드가 pristine 상태가 아니므로 `Name is required` 오류 메시지가 표시됩니다.
+   폼은 **New Actor** 버튼을 클릭하기 전에 이름을 입력했다는 것을 기억합니다.
 
 1. 폼 컨트롤을 pristine 상태로 되돌리려면 `newActor()` 메서드를 실행한 뒤 폼의 `reset()` 메서드를 실행해서 모든 상태 플래그를 명시적으로 초기화합니다.
 
    <docs-code header="actor-form.component.html (폼 초기화)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="new-actor-button-form-reset"/>
 
-   이제 **새 배우** 버튼을 클릭하면 폼과 컨트롤의 상태 플래그가 모두 초기화됩니다.
+   이제 **New Actor** 버튼을 클릭하면 폼과 컨트롤의 상태 플래그가 모두 초기화됩니다.
 
 <!--
 ## Submit the form with `ngSubmit`
@@ -785,7 +785,7 @@ The `FormsModule` did this automatically when you defined a template reference v
 -->
 
 사용자는 폼을 모두 입력한 후에 제출할 수 있어야 합니다.
-폼 맨 아래의 **제출** 버튼은 그 자체로는 아무 동작도 하지 않지만, 타입이 `type="submit"`이기 때문에 폼 제출 이벤트를 발생시킵니다.
+폼 맨 아래의 **Submit** 버튼은 그 자체로는 아무 동작도 하지 않지만, 타입이 `type="submit"`이기 때문에 폼 제출 이벤트를 발생시킵니다.
 
 이 이벤트를 처리하려면 다음 순서로 진행합니다.
 
@@ -802,9 +802,9 @@ The `FormsModule` did this automatically when you defined a template reference v
 <a id="bind-the-disabled-property"></a>
 
 <docs-step title="disabled 프로퍼티 바인딩하기">
-템플릿 참조 변수 `#actorForm`으로 **제출** 버튼이 포함된 폼에 접근하고 이벤트 바인딩을 구성합니다.
+템플릿 참조 변수 `#actorForm`으로 **Submit** 버튼이 포함된 폼에 접근하고 이벤트 바인딩을 구성합니다.
 
-폼 전체의 유효성을 나타내는 프로퍼티를 **제출** 버튼의 `disabled` 프로퍼티에 바인딩하겠습니다.
+폼 전체의 유효성을 나타내는 프로퍼티를 **Submit** 버튼의 `disabled` 프로퍼티에 바인딩하겠습니다.
 
 <docs-code header="actor-form.component.html (제출 버튼)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.html" region="submit-button"/>
 </docs-step>
@@ -819,7 +819,7 @@ The `FormsModule` did this automatically when you defined a template reference v
 
 <docs-step title="Name 값 지우기">
 "required" 규칙을 위반했기 때문에 오류 메시지가 표시됩니다.
-**제출** 버튼도 비활성화된 것을 확인해 보세요.
+**Submit** 버튼도 비활성화된 것을 확인해 보세요.
 
 버튼의 활성화 상태와 폼의 유효성을 연결하는 별도 코드를 작성할 필요는 없습니다.
 폼 기능이 적용된 엘리먼트에 템플릿 참조 변수를 정의하고 버튼 컨트롤에서 이 변수를 참조하면, `FormsModule`이 자동으로 처리합니다.
@@ -880,7 +880,7 @@ Click the *Edit* button to switch the display back to the editable form.
 
 <docs-code header="actor-form.component.ts (submitted)" path="adev/src/content/examples/forms/src/app/actor-form/actor-form.component.ts" region="submitted"/>
 
-**제출** 버튼을 클릭하면 `submitted` 플래그가 true로 바뀌고 폼이 사라집니다.
+**Submit** 버튼을 클릭하면 `submitted` 플래그가 true로 바뀌고 폼이 사라집니다.
 </docs-step>
 
 <a id="add-the-submitted-state"></a>
@@ -947,7 +947,7 @@ Here's the code for the final version of the application:
 - 양방향 데이터 바인딩을 위한 `[(ngModel)]` 문법
 - 유효성 검사와 폼 엘리먼트의 변경사항 추적에 사용하는 `name` 어트리뷰트
 - 컨트롤이 유효한지, 오류 메시지를 표시해야 하는지 확인하는 입력 컨트롤 참조 변수의 `valid` 프로퍼티
-- `NgForm`의 유효성 상태에 바인딩해서 **제출** 버튼의 활성화 상태 제어하기
+- `NgForm`의 유효성 상태에 바인딩해서 **Submit** 버튼의 활성화 상태 제어하기
 - 유효하지 않은 컨트롤을 사용자에게 시각적으로 알리는 커스텀 CSS 클래스
 
 완성된 애플리케이션 코드는 다음과 같습니다.

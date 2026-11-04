@@ -16,7 +16,7 @@
         ngCombobox
         #combobox="ngCombobox"
         class="example-combobox-input"
-        placeholder="날짜 선택..."
+        placeholder="Pick a date..."
         [(value)]="selection"
         (input)="onInputInput(comboboxInput.value)"
         [(expanded)]="popupExpanded"
@@ -51,7 +51,7 @@
                 type="button"
                 class="example-datepicker-nav-button"
                 (click)="prevMonth()"
-                aria-label="이전 달"
+                aria-label="Previous Month"
               >
                 <span class="material-symbols-outlined">chevron_left</span>
               </button>
@@ -60,7 +60,7 @@
                 type="button"
                 class="example-datepicker-nav-button"
                 (click)="nextMonth()"
-                aria-label="다음 달"
+                aria-label="Next Month"
               >
                 <span class="material-symbols-outlined">chevron_right</span>
               </button>
@@ -153,5 +153,5 @@
       </ng-template>
     </ng-template>
   </div>
-  <div id="date-format-hint" class="example-combobox-hint">형식: MM/DD/YYYY</div>
+  <div id="date-format-hint" class="example-combobox-hint">Format: MM/DD/YYYY</div>
 </div>

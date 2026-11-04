@@ -1,10 +1,10 @@
-<div ngToolbar orientation="vertical" aria-label="텍스트 서식 도구">
+<div ngToolbar orientation="vertical" aria-label="Text Formatting Tools">
   <div class="group">
     <button
       ngToolbarWidget
       value="undo"
       type="button"
-      aria-label="실행 취소"
+      aria-label="undo"
       class="material-symbols-outlined"
       translate="no"
     >
@@ -15,7 +15,7 @@
       ngToolbarWidget
       value="redo"
       type="button"
-      aria-label="다시 실행"
+      aria-label="redo"
       class="material-symbols-outlined"
       translate="no"
     >
@@ -30,7 +30,7 @@
       ngToolbarWidget
       value="bold"
       type="button"
-      aria-label="굵게"
+      aria-label="bold"
       class="material-symbols-outlined"
       [attr.aria-pressed]="bold()"
       (click)="bold.set(!bold())"
@@ -43,7 +43,7 @@
       ngToolbarWidget
       value="italic"
       type="button"
-      aria-label="기울임꼴"
+      aria-label="italic"
       class="material-symbols-outlined"
       [attr.aria-pressed]="italic()"
       (click)="italic.set(!italic())"
@@ -56,7 +56,7 @@
       ngToolbarWidget
       value="underlined"
       type="button"
-      aria-label="밑줄"
+      aria-label="underlined"
       class="material-symbols-outlined"
       [attr.aria-pressed]="underlined()"
       (click)="underlined.set(!underlined())"
