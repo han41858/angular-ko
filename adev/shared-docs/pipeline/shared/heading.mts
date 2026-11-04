@@ -29,36 +29,80 @@ export function getIdFromHeading(heading: string): string {
 }
 
 /**
- * Extracts the anchor ID of every heading on a page, in document order.
- * Covers markdown headings below H1, which is reserved for the page title,
- * and `<docs-step>` titles, which are rendered as headings too. Lines inside
- * fenced code blocks are ignored so that samples cannot contribute headings.
+ * Extracts visible heading and explicit anchor IDs in document order.
+ * H1 is reserved for the page title. HTML comments and fenced code blocks
+ * cannot contribute headings, docs-step titles, or explicit anchor aliases.
  */
 export function extractHeadingIds(content: string): string[] {
-  const headings: string[] = [];
-  let insideCodeBlock = false;
+  const visibleLines: string[] = [];
+  let insideComment = false;
+  let fence: string | undefined;
 
   for (const line of content.split('\n')) {
     const trimmedLine = line.trim();
+    const fenceMatch = /^(`{3,}|~{3,})(.*)$/.exec(trimmedLine);
 
-    if (trimmedLine.startsWith('```')) {
-      insideCodeBlock = !insideCodeBlock;
+    if (fence !== undefined) {
+      // A closing fence must use the same character and at least the opening length.
+      if (
+        fenceMatch &&
+        fenceMatch[1][0] === fence[0] &&
+        fenceMatch[1].length >= fence.length &&
+        fenceMatch[2].trim() === ''
+      ) {
+        fence = undefined;
+      }
+      visibleLines.push('');
       continue;
     }
 
-    // Headings can have leading spaces.
-    if (!insideCodeBlock && trimmedLine.startsWith('##')) {
-      headings.push(trimmedLine.replace(/^#+\s*/, '').trim());
+    if (!insideComment && fenceMatch) {
+      fence = fenceMatch[1];
+      visibleLines.push('');
+      continue;
+    }
+
+    let visible = '';
+    let offset = 0;
+    while (offset < line.length) {
+      if (insideComment) {
+        const end = line.indexOf('-->', offset);
+        if (end === -1) break;
+        insideComment = false;
+        offset = end + 3;
+      } else {
+        const start = line.indexOf('<!--', offset);
+        if (start === -1) {
+          visible += line.slice(offset);
+          break;
+        }
+        visible += line.slice(offset, start);
+        insideComment = true;
+        offset = start + 4;
+      }
+    }
+    visibleLines.push(visible);
+  }
+
+  const ids: string[] = [];
+  const visibleContent = visibleLines.join('\n');
+  const targetRegex = /^[ \t]*#{2,6}[ \t]+(.+)$|<(docs-step|a)\b([^>]*)>/gim;
+  let match;
+  while ((match = targetRegex.exec(visibleContent)) !== null) {
+    if (match[1] !== undefined) {
+      ids.push(getIdFromHeading(match[1].trim()));
+    } else {
+      const isStep = match[2].toLowerCase() === 'docs-step';
+      const attributeRegex = isStep
+        ? /(?:^|\s)title\s*=\s*(["'])(.*?)\1/is
+        : /(?:^|\s)id\s*=\s*(["'])(.*?)\1/is;
+      const value = attributeRegex.exec(match[3])?.[2];
+      if (value !== undefined) {
+        ids.push(isStep ? getIdFromHeading(value) : value);
+      }
     }
   }
-
-  const stepRegex = /<docs-step[^>]*title="([^"]*)"/g;
-  let match;
-  while ((match = stepRegex.exec(content)) !== null) {
-    headings.push(match[1]);
-  }
-
-  return headings.map((heading) => getIdFromHeading(heading));
+  return ids;
 }
 
 /** Returns the IDs that appear more than once, each reported once. */

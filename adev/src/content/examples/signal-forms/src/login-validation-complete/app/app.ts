@@ -27,10 +27,10 @@ export class App {
   });
 
   loginForm = form(this.loginModel, (schemaPath) => {
-    required(schemaPath.email, {message: 'Email is required'});
-    email(schemaPath.email, {message: 'Enter a valid email address'});
+    required(schemaPath.email, {message: '이메일은 필수입니다'});
+    email(schemaPath.email, {message: '유효한 이메일 주소를 입력하세요'});
 
-    required(schemaPath.password, {message: 'Password is required'});
+    required(schemaPath.password, {message: '비밀번호는 필수입니다'});
   });
 
   onSubmit(event: Event) {

@@ -6,9 +6,10 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Component, VERSION} from '@angular/core';
+import {Component} from '@angular/core';
 import {ExternalLink} from '@angular/docs';
 import {RouterLink} from '@angular/router';
+import {version} from '../../../../../../package.json';
 import {ANGULAR_LINKS} from '../../constants/links';
 
 @Component({
@@ -18,6 +19,7 @@ import {ANGULAR_LINKS} from '../../constants/links';
   styleUrls: ['./footer.component.scss'],
 })
 export class Footer {
-  protected angularVersion = VERSION.full;
+  // Local framework builds are unstamped (0.0.0); show the repository release in the footer only.
+  protected angularVersion = version;
   protected ngLinks = ANGULAR_LINKS;
 }

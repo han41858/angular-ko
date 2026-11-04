@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/article-comments.ts"],
-  "title": "What are deferrable views",
+  "title": "지연 로딩 뷰란?",
   "type": "editor"
 }

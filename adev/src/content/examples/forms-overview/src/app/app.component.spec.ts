@@ -23,6 +23,6 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Forms Overview');
+    expect(compiled.querySelector('h1')?.textContent).toContain('폼 개요');
   }));
 });

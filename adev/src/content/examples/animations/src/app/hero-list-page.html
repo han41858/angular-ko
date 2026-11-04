@@ -1,14 +1,14 @@
 <!-- #docplaster -->
-<h2>Filter/Stagger</h2>
+<h2>필터/순차 애니메이션</h2>
 
 <!-- #docregion filter-animations -->
-<label for="search">Search heroes: </label>
+<label for="search">히어로 검색: </label>
 <input
   type="text"
   id="search"
   #criteria
   (input)="updateCriteria(criteria.value)"
-  placeholder="Search heroes"
+  placeholder="히어로 검색"
 />
 
 <ul class="heroes" [@filterAnimation]="heroesTotal">

@@ -3,13 +3,13 @@
 <div class="container">
   <!-- #docregion edit-div -->
   <div [hidden]="submitted">
-    <h1>Actor Form</h1>
+    <h1>배우 폼</h1>
     <!-- #docregion ngSubmit -->
     <form (ngSubmit)="onSubmit()" #actorForm="ngForm">
       <!-- #enddocregion ngSubmit, edit-div -->
       <div class="form-group">
         <!-- #docregion name-with-error-msg -->
-        <label for="name">Name</label>
+        <label for="name">이름</label>
         <input
           type="text"
           class="form-control"
@@ -22,13 +22,13 @@
         <!-- #docregion hidden-error-msg -->
         <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
           <!-- #enddocregion hidden-error-msg -->
-          Name is required
+          이름은 필수입니다
         </div>
         <!-- #enddocregion name-with-error-msg -->
       </div>
 
       <div class="form-group">
-        <label for="studio">Studio Affiliation</label>
+        <label for="studio">소속 스튜디오</label>
         <input
           type="text"
           class="form-control"
@@ -39,7 +39,7 @@
       </div>
 
       <div class="form-group">
-        <label for="skill">Skill</label>
+        <label for="skill">특기</label>
         <select
           class="form-control"
           id="skill"
@@ -53,31 +53,29 @@
           }
         </select>
         <div [hidden]="skill.valid || skill.pristine" class="alert alert-danger">
-          skill is required
+          특기는 필수입니다
         </div>
       </div>
 
       <!-- #docregion submit-button -->
-      <button type="submit" class="btn btn-success" [disabled]="!actorForm.form.valid">
-        Submit
-      </button>
+      <button type="submit" class="btn btn-success" [disabled]="!actorForm.form.valid">제출</button>
       <!-- #enddocregion submit-button -->
       <!-- #docregion new-actor-button-form-reset -->
       <button type="button" class="btn btn-default" (click)="newActor(); actorForm.reset()">
-        New Actor
+        새 배우
       </button>
       <!-- #enddocregion new-actor-button-form-reset -->
       <!-- #enddocregion final -->
-      <em>with</em> reset &nbsp;&nbsp;
+      <em>초기화</em> 실행 &nbsp;&nbsp;
       <!-- #docregion new-actor-button-no-reset -->
-      <button type="button" class="btn btn-default" (click)="newActor()">New Actor</button>
+      <button type="button" class="btn btn-default" (click)="newActor()">새 배우</button>
       <!-- #enddocregion new-actor-button-no-reset -->
-      <em>without</em> reset
+      <em>초기화 없이</em> 실행
 
       <!-- NOT SHOWN IN DOCS -->
       <div>
         <hr />
-        Name via form.controls = {{ showFormControls(actorForm) }}
+        form.controls로 조회한 이름 = {{ showFormControls(actorForm) }}
       </div>
       <!-- - -->
       <!-- #docregion final -->
@@ -86,21 +84,21 @@
 
   <!-- #docregion submitted -->
   <div [hidden]="!submitted">
-    <h2>You submitted the following:</h2>
+    <h2>다음 내용을 제출했습니다:</h2>
     <div class="row">
-      <div class="col-xs-3">Name</div>
+      <div class="col-xs-3">이름</div>
       <div class="col-xs-9">{{ model.name }}</div>
     </div>
     <div class="row">
-      <div class="col-xs-3">Studio</div>
+      <div class="col-xs-3">스튜디오</div>
       <div class="col-xs-9">{{ model.studio }}</div>
     </div>
     <div class="row">
-      <div class="col-xs-3">Skill</div>
+      <div class="col-xs-3">특기</div>
       <div class="col-xs-9">{{ model.skill }}</div>
     </div>
     <br />
-    <button type="button" class="btn btn-primary" (click)="submitted = false">Edit</button>
+    <button type="button" class="btn btn-primary" (click)="submitted = false">편집</button>
   </div>
   <!-- #enddocregion submitted -->
 </div>
@@ -129,21 +127,21 @@
 </style>
 <div class="no-style" style="margin-left: 4px">
   <div class="container">
-    <h1>Actor Form</h1>
+    <h1>배우 폼</h1>
     <form>
       <div class="form-group">
-        <label for="name">Name</label>
+        <label for="name">이름</label>
         <input type="text" class="form-control" id="name" required />
       </div>
 
       <div class="form-group">
-        <label for="studio">Studio</label>
+        <label for="studio">스튜디오</label>
         <input type="text" class="form-control" id="studio" />
       </div>
 
       <!-- #docregion skills -->
       <div class="form-group">
-        <label for="skill">Skill</label>
+        <label for="skill">특기</label>
         <select class="form-control" id="skill" required>
           @for (skill of skills; track $index) {
             <option [value]="skill">{{ skill }}</option>
@@ -151,21 +149,21 @@
         </select>
       </div>
       <!-- #enddocregion skills -->
-      <button type="submit" class="btn btn-success">Submit</button>
+      <button type="submit" class="btn btn-success">제출</button>
     </form>
   </div>
 
   <!-- ====================================================  -->
   <hr />
   <div class="container">
-    <h1>Actor Form</h1>
+    <h1>배우 폼</h1>
     <!-- #docregion template-variable-->
     <form #actorForm="ngForm">
       <!-- #enddocregion template-variable-->
       <!-- #docregion ngModel-2-->
       {{ model | json }}
       <div class="form-group">
-        <label for="name">Name</label>
+        <label for="name">이름</label>
         <input
           type="text"
           class="form-control"
@@ -177,7 +175,7 @@
       </div>
 
       <div class="form-group">
-        <label for="studio">Studio</label>
+        <label for="studio">스튜디오</label>
         <input
           type="text"
           class="form-control"
@@ -188,7 +186,7 @@
       </div>
 
       <div class="form-group">
-        <label for="skill">Skill</label>
+        <label for="skill">특기</label>
         <select class="form-control" id="skill" required [(ngModel)]="model.skill" name="skill">
           @for (skill of skills; track $index) {
             <option [value]="skill">{{ skill }}</option>
@@ -197,7 +195,7 @@
       </div>
 
       <!-- #enddocregion ngModel-2-->
-      <button type="submit" class="btn btn-success">Submit</button>
+      <button type="submit" class="btn btn-success">제출</button>
     </form>
   </div>
 
@@ -205,7 +203,7 @@
   <hr />
   <!-- #docregion ngModelName-1 -->
   <input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" />
-  TODO: remove this: {{ model.name }}
+  TODO: 이 부분을 제거하세요: {{ model.name }}
   <!-- #enddocregion ngModelName-1 -->
   <hr />
   <input
@@ -217,5 +215,5 @@
     name="name"
     (ngModelChange)="model.name = $event"
   />
-  TODO: remove this: {{ model.name }}
+  TODO: 이 부분을 제거하세요: {{ model.name }}
 </div>

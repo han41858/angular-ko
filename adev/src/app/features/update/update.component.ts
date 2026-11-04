@@ -74,7 +74,7 @@ export default class UpdateComponent {
   };
 
   protected readonly optionList: Option[] = [
-    {id: 'ngUpgrade', name: 'ngUpgrade', description: 'to combine AngularJS & Angular'},
+    {id: 'ngUpgrade', name: 'ngUpgrade', description: '(AngularJS와 Angular를 함께 사용)'},
     {id: 'material', name: 'Angular Material', description: ''},
     {id: 'windows', name: 'Windows', description: ''},
   ];
@@ -167,7 +167,7 @@ export default class UpdateComponent {
 
     if (tagName === 'CODE') {
       this.clipboard.copy(textContent!);
-      this.snackBar.open('Copied to clipboard', '', {duration: 2000});
+      this.snackBar.open('클립보드에 복사했습니다', '', {duration: 2000});
     }
   }
 
@@ -190,17 +190,17 @@ export default class UpdateComponent {
 
     // Refuse to generate recommendations for downgrades
     if (this.to().number < this.from().number) {
-      alert('We do not support downgrading versions of Angular.');
+      alert('Angular 버전을 낮추는 것은 지원하지 않습니다.');
       return;
     }
 
-    const labelTitle = 'Guide to update your Angular application';
-    const labelBasic = 'basic applications';
-    const labelMedium = 'medium applications';
-    const labelAdvanced = 'advanced applications';
+    const labelTitle = 'Angular 애플리케이션 업데이트 가이드';
+    const labelBasic = '기본 애플리케이션';
+    const labelMedium = '중급 애플리케이션';
+    const labelAdvanced = '고급 애플리케이션';
 
     this.title.set(`${labelTitle} v${this.from().name} -> v${this.to().name}
-    for
+    대상:
     ${this.level() < 2 ? labelBasic : this.level() < 3 ? labelMedium : labelAdvanced}`);
 
     // Find applicable steps and organize them into before, during, and after upgrade
@@ -292,7 +292,7 @@ export default class UpdateComponent {
 
     // Provide npm/yarn instructions for versions before 6
     if (this.to().number < 600) {
-      const actionMessage = `Update all of your dependencies to the latest Angular and the right version of TypeScript.`;
+      const actionMessage = `모든 의존성을 최신 Angular와 이에 맞는 TypeScript 버전으로 업데이트하세요.`;
 
       if (isWindows) {
         const packages =
@@ -305,7 +305,7 @@ export default class UpdateComponent {
         upgradeStep = {
           step: 'General Update',
           action: `${actionMessage}
-          If you are using Windows, you can use:
+          Windows에서는 다음 명령어를 사용할 수 있습니다:
 
 \`${this.packageManager} ${packages}\``,
         } as Step;
@@ -314,7 +314,7 @@ export default class UpdateComponent {
         upgradeStep = {
           step: 'General update',
           action: `${actionMessage}
-          If you are using Linux/Mac, you can use:
+          Linux/Mac에서는 다음 명령어를 사용할 수 있습니다:
 
 \`${this.packageManager} ${packages}\``,
         } as Step;
@@ -336,12 +336,12 @@ export default class UpdateComponent {
 
   protected getComplexityLevelName(level: ApplicationComplexity): string {
     const names: Record<ApplicationComplexity, string> = {
-      [ApplicationComplexity.Basic]: 'Basic',
-      [ApplicationComplexity.Medium]: 'Medium',
-      [ApplicationComplexity.Advanced]: 'Advanced',
+      [ApplicationComplexity.Basic]: '기본',
+      [ApplicationComplexity.Medium]: '중급',
+      [ApplicationComplexity.Advanced]: '고급',
     };
 
-    return names[level] ?? 'Unknown';
+    return names[level] ?? '알 수 없음';
   }
 
   private replaceVariables(action: string): string {

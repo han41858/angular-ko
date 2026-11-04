@@ -1,5 +1,5 @@
 {
-  "title": "Use the `@for` block in templates",
+  "title": "@for로 목록 표시하기",
   "type": "editor",
   "answerSrc": "../09-services/src",
   "answerRootDir": "../09-services/",

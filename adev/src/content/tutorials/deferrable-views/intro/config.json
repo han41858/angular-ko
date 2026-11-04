@@ -1,5 +1,5 @@
 {
-  "title": "Deferrable Views",
+  "title": "지연 로딩 뷰 튜토리얼",
   "type": "editor",
   "nextTutorial": "first-app",
   "openFiles": ["src/app/app.ts"]

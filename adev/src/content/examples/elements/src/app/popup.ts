@@ -5,7 +5,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 @Component({
   selector: 'my-popup',
   template: `
-    <span>Popup: {{ message() }}</span>
+    <span>팝업: {{ message() }}</span>
     <button type="button" (click)="closed.emit()">&#x2716;</button>
   `,
   animations: [

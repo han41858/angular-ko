@@ -1,29 +1,29 @@
 <!--#docregion -->
-<h3>Bypass Security Component</h3>
+<h3>보안 우회 컴포넌트</h3>
 
 <!--#docregion URL -->
-<h4>An untrusted URL:</h4>
-<p><a class="e2e-dangerous-url" [href]="dangerousUrl">Click me</a></p>
-<h4>A trusted URL:</h4>
-<p><a class="e2e-trusted-url" [href]="trustedUrl">Click me</a></p>
+<h4>신뢰할 수 없는 URL:</h4>
+<p><a class="e2e-dangerous-url" [href]="dangerousUrl">클릭해 보세요</a></p>
+<h4>신뢰할 수 있는 URL:</h4>
+<p><a class="e2e-trusted-url" [href]="trustedUrl">클릭해 보세요</a></p>
 <!--#enddocregion URL -->
 
 <!--#docregion iframe -->
-<h4>Resource URL:</h4>
-<p>Showing: {{ dangerousVideoUrl }}</p>
-<p>Trusted:</p>
+<h4>리소스 URL:</h4>
+<p>표시 중: {{ dangerousVideoUrl }}</p>
+<p>신뢰할 수 있는 URL:</p>
 <iframe
   class="e2e-iframe-trusted-src"
   width="640"
   height="390"
   [src]="videoUrl"
-  title="trusted video url"
+  title="신뢰할 수 있는 동영상 URL"
 ></iframe>
-<p>Untrusted:</p>
+<p>신뢰할 수 없는 URL:</p>
 <iframe
   class="e2e-iframe-untrusted-src"
   width="640"
   height="390"
   [src]="dangerousVideoUrl"
-  title="unTrusted video url"
+  title="신뢰할 수 없는 동영상 URL"
 ></iframe>

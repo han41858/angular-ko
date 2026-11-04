@@ -15,7 +15,7 @@
   <div #origin class="example-combobox-input-container">
     <input
       class="example-combobox-input example-dialog-input"
-      placeholder="Select a country..."
+      placeholder="국가 선택..."
       [value]="value()"
       [readonly]="true"
       [tabindex]="-1"
@@ -46,7 +46,7 @@
                 #innerCombobox="ngCombobox"
                 #searchInput
                 class="example-combobox-input"
-                placeholder="Search..."
+                placeholder="검색..."
                 [(ngModel)]="searchString"
                 [alwaysExpanded]="true"
                 (keydown.escape)="onSearchEscape($event)"
@@ -61,7 +61,7 @@
             <ng-template ngComboboxPopup [combobox]="innerCombobox">
               <div class="example-popup example-popup-no-margin">
                 @if (options().length === 0) {
-                  <div class="example-no-results">No results found</div>
+                  <div class="example-no-results">검색 결과가 없습니다</div>
                 }
                 <div
                   #listbox="ngListbox"

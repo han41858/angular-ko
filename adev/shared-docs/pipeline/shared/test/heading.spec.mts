@@ -72,6 +72,98 @@ describe('extractHeadingIds', () => {
 
     expect(extractHeadingIds(content)).toEqual(['a-real-heading', 'another-real-heading']);
   });
+
+  it('should ignore original-language tracking comments without hiding translated headings', () => {
+    const content = [
+      '<!--',
+      '## Original heading {#shared-id}',
+      '```md',
+      '## Commented sample',
+      '```',
+      '<docs-step title="Hidden step">',
+      '<a id="hidden-alias"></a>',
+      '-->',
+      '## 번역된 제목 {#shared-id}',
+      '### 지역 설정',
+    ].join('\n');
+
+    const ids = extractHeadingIds(content);
+    expect(ids).toEqual(['shared-id', '지역-설정']);
+    expect(findDuplicateIds(ids)).toEqual([]);
+  });
+
+  it('should retain visible content before and after inline and multiline comments', () => {
+    const content = [
+      '<!-- hidden -->## Visible heading <!-- hidden again -->',
+      '<!-- starts here',
+      '## Hidden heading',
+      '--><a id="old-alias"></a><!-- hidden --><docs-step title="Visible step">',
+      '## Last heading',
+    ].join('\n');
+
+    expect(extractHeadingIds(content)).toEqual([
+      'visible-heading',
+      'old-alias',
+      'visible-step',
+      'last-heading',
+    ]);
+  });
+
+  it('should ignore every kind of target in fenced code without interpreting sample comments', () => {
+    const content = [
+      '````html',
+      '```',
+      '## Sample heading',
+      '<docs-step title="Sample step">',
+      '<a id="sample-alias"></a>',
+      '<!-- An unclosed comment in a sample',
+      '````',
+      '~~~md',
+      '## Another sample',
+      '<docs-step title="Another sample step">',
+      '<a id="another-sample-alias"></a>',
+      '~~~',
+      '## Real heading',
+    ].join('\n');
+
+    expect(extractHeadingIds(content)).toEqual(['real-heading']);
+  });
+
+  it('should collect explicit aliases and step titles in document order', () => {
+    const content = [
+      '<a id="old-alias"></a>',
+      "<docs-step title='Install {#install-step}'>",
+      '## 새 제목 {#new-heading}',
+      '<a',
+      "  class='anchor' id='이전-별칭'",
+      '></a>',
+      '<docs-step',
+      '  title="Next step"',
+      '>',
+    ].join('\n');
+
+    expect(extractHeadingIds(content)).toEqual([
+      'old-alias',
+      'install-step',
+      'new-heading',
+      '이전-별칭',
+      'next-step',
+    ]);
+  });
+
+  it('should not mistake data attributes for explicit anchor IDs or step titles', () => {
+    expect(extractHeadingIds('<a data-id="not-an-id"></a>')).toEqual([]);
+    expect(extractHeadingIds('<docs-step data-title="Not a title">')).toEqual([]);
+  });
+
+  it('should preserve real duplicate IDs between visible aliases and headings', () => {
+    const ids = extractHeadingIds(
+      '<a id="same-id"></a>\n## Visible heading {#same-id}\n## Again {#same-id}',
+    );
+
+    expect(ids).toEqual(['same-id', 'same-id', 'same-id']);
+    expect(findDuplicateIds(ids)).toEqual(['same-id']);
+  });
 });
 
 describe('findDuplicateIds', () => {

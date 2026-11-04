@@ -76,3 +76,10 @@ filegroup(
     name = "files",
     srcs = glob(["**/*"]),
 )
+
+# Kept outside src/content so cross-repository asset updates cannot overwrite translations.
+filegroup(
+    name = "korean_translation_catalogs",
+    srcs = glob(["translations/*.ko.json"]),
+    visibility = ["//visibility:public"],
+)

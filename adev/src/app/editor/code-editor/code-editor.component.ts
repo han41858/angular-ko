@@ -277,7 +277,7 @@ export class CodeEditor {
       const newFile = 'src/' + renameFileInputValue;
 
       if (this.files().find(({filename}) => filename.includes(newFile))) {
-        alert('File name already exists');
+        alert('같은 이름의 파일이 이미 있습니다.');
         return;
       }
 
@@ -300,7 +300,7 @@ export class CodeEditor {
       const newFile = 'src/' + newFileInputValue;
 
       if (this.files().find(({filename}) => filename.includes(newFile))) {
-        alert('File already exists');
+        alert('파일이 이미 있습니다.');
         return;
       }
 
@@ -319,7 +319,7 @@ export class CodeEditor {
       return false;
     }
     if (fileName.includes('..')) {
-      alert('File name can not contain ".."');
+      alert('파일 이름에는 ".."를 포함할 수 없습니다.');
       return false;
     }
     return true;

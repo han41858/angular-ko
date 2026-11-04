@@ -12,14 +12,14 @@ export class App {
   // Signal Forms setup
   model = signal({country: ''});
   countryForm = form(this.model, (p) => {
-    required(p.country, {message: 'Country selection is required'});
+    required(p.country, {message: '국가를 선택해야 합니다'});
 
     validate(p.country, (ctx) => {
       const value = ctx.value();
       if (value && !ALL_COUNTRIES.includes(value)) {
         return {
           kind: 'invalidCountry',
-          message: 'Please select a valid country.',
+          message: '유효한 국가를 선택하세요.',
         };
       }
       return null;

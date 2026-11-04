@@ -56,4 +56,21 @@ describe('CLI docs to html', () => {
     // Subdomains are intentionally left as external.
     expect(hrefs).toContain('https://next.angular.dev/cli-test-preview');
   });
+
+  it('should localize CLI labels without changing card keys, anchors, or command syntax', async () => {
+    const command = entryJson.subcommands.find((sub: any) => sub.name === 'component');
+    const renderable = await getRenderable(command, '', 'angular/cli');
+    const localFragment = JSDOM.fragment(renderEntry(renderable));
+
+    expect(localFragment.querySelector('#arguments')?.textContent).toBe('인수');
+    expect(localFragment.querySelector('#options')?.textContent).toBe('옵션');
+    expect(localFragment.querySelector('#options a')?.getAttribute('href')).toBe('#options');
+    expect(localFragment.querySelector('#options a')?.getAttribute('aria-label')).toBe(
+      '옵션 섹션으로 이동',
+    );
+    expect(localFragment.querySelector('[member-id="Options"]')?.textContent).toBe(' [options]');
+    expect(localFragment.textContent).toContain('값의 타입');
+    expect(localFragment.textContent).toContain('기본값');
+    expect(localFragment.querySelector('.docs-reference-option code')?.textContent).toBe('name');
+  });
 });

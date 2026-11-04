@@ -127,4 +127,40 @@ describe('renderable', () => {
       expect(line).toMatch(/\);$/);
     }
   });
+
+  it('should localize API section labels while preserving English fragment IDs', () => {
+    const entry = {
+      ...entries.get('Component')!,
+      htmlDescription: '<p>상세 설명</p>',
+      shortHtmlDescription: '<p>요약</p>',
+      htmlUsageNotes: '<p>사용 예</p>',
+    };
+    const fragment = JSDOM.fragment(renderEntry(entry));
+
+    expect(fragment.querySelector('#description')?.textContent).toBe('설명');
+    expect(fragment.querySelector('#usage-notes')?.textContent).toBe('사용 시 참고사항');
+    expect(fragment.querySelector('#description a')?.getAttribute('href')).toBe('#description');
+    expect(fragment.querySelector('#description a')?.getAttribute('aria-label')).toBe(
+      '설명 섹션으로 이동',
+    );
+  });
+
+  it('should localize API status and source labels without changing status classes', () => {
+    const entry = {
+      ...entries.get('Component')!,
+      deprecated: undefined,
+      stable: {version: '22.0'},
+      source: {filePath: 'packages/core/src/metadata/directives.ts', startLine: 1, endLine: 2},
+    };
+    const fragment = JSDOM.fragment(renderEntry(entry));
+
+    expect(fragment.querySelector('.type-stable .status-label')?.textContent).toBe('안정화');
+    expect(fragment.querySelector('.type-stable .status-version')?.textContent).toBe('v22.0부터');
+    expect(fragment.querySelector('.docs-github-links')?.getAttribute('aria-label')).toBe(
+      '소스 보기',
+    );
+    expect(fragment.querySelector('.docs-github-links')?.getAttribute('href')).toContain(
+      'https://github.com/angular/angular/blob/main/',
+    );
+  });
 });

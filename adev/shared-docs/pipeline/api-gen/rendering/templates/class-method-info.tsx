@@ -54,7 +54,7 @@ export function ClassMethodInfo(props: {
       </div>
       {entry.htmlUsageNotes && !props.hideUsageNotes ? (
         <div className={'docs-usage-notes'}>
-          <span className={'docs-usage-notes-heading'}>Usage notes</span>
+          <span className={'docs-usage-notes-heading'}>사용 시 참고사항</span>
           <RawHtml value={entry.htmlUsageNotes} />
         </div>
       ) : (

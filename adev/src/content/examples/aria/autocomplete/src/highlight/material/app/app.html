@@ -7,7 +7,7 @@
       #combobox="ngCombobox"
       ngCombobox
       class="autocomplete-input"
-      placeholder="Select a country"
+      placeholder="국가 선택"
       [(value)]="query"
       [(expanded)]="popupExpanded"
       (click)="popupExpanded.set(true)"
@@ -18,7 +18,7 @@
     <button
       type="button"
       class="clear-button"
-      aria-label="Clear"
+      aria-label="지우기"
       (mousedown)="$event.preventDefault()"
       (click)="clear()"
     >
@@ -39,7 +39,7 @@
     <ng-template ngComboboxPopup [combobox]="combobox">
       <div class="popup">
         @if (countries().length === 0) {
-          <div class="no-results">No results found</div>
+          <div class="no-results">검색 결과가 없습니다</div>
         }
         <div
           #listbox="ngListbox"

@@ -6,7 +6,7 @@ import {ActorFormTemplateComponent} from './template/actor-form-template.compone
 
 @Component({
   selector: 'app-root',
-  template: `<h1>Form validation example</h1>
+  template: `<h1>폼 검증 예제</h1>
     <app-actor-form-template />
     <hr />
     <app-actor-form-reactive />`,

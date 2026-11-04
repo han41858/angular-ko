@@ -1,16 +1,16 @@
 <form (submit)="onSubmit($event)">
   <label>
-    Email:
+    이메일:
     <input type="email" [formField]="loginForm.email" />
   </label>
 
   <label>
-    Password:
+    비밀번호:
     <input type="password" [formField]="loginForm.password" />
   </label>
 
-  <p>Hello {{ loginForm.email().value() }}!</p>
-  <p>Password length: {{ loginForm.password().value().length }}</p>
+  <p>안녕하세요, {{ loginForm.email().value() }}님!</p>
+  <p>비밀번호 길이: {{ loginForm.password().value().length }}</p>
 
-  <button type="submit">Log In</button>
+  <button type="submit">로그인</button>
 </form>

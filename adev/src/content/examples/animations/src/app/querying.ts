@@ -17,19 +17,21 @@ import {HEROES} from './mock-heroes';
   template: `
     <nav>
       <button type="button" class="toggle" (click)="show = !show" [disabled]="toggleDisabled">
-        Toggle View
+        뷰 표시 전환
       </button>
     </nav>
     @if (show) {
       <section @query (@query.start)="toggleDisabled = true" (@query.done)="toggleDisabled = false">
-        <p>I am a simple child element</p>
+        <p>일반 자식 엘리먼트입니다</p>
         @if (show) {
-          <p>I am a child element that enters and leaves with its parent</p>
+          <p>부모와 함께 나타나고 사라지는 자식 엘리먼트입니다</p>
         }
-        <p @animateMe>I am a child element with an animation trigger</p>
+        <p @animateMe>애니메이션 트리거가 있는 자식 엘리먼트입니다</p>
         <div class="hero">
           <span class="badge">{{ hero.id }}</span>
-          <span class="name">{{ hero.name }} <small>(heroes are always animated!)</small></span>
+          <span class="name"
+            >{{ hero.name }} <small>(히어로에는 항상 애니메이션이 적용됩니다!)</small></span
+          >
         </div>
       </section>
     }

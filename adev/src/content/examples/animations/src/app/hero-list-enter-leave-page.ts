@@ -6,7 +6,7 @@ import {HeroListEnterLeave} from './hero-list-enter-leave';
   selector: 'app-hero-list-enter-leave-page',
   template: `
     <section>
-      <h2>Enter/Leave</h2>
+      <h2>진입/퇴장</h2>
 
       <app-hero-list-enter-leave
         [heroes]="heroes"

@@ -6,7 +6,7 @@ import {HeroListAuto} from './hero-list-auto';
   selector: 'app-hero-list-auto-page',
   template: `
     <section>
-      <h2>Automatic Calculation</h2>
+      <h2>자동 계산</h2>
 
       <app-hero-list-auto [heroes]="heroes" (remove)="onRemove($event)" />
     </section>

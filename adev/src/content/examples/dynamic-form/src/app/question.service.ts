@@ -13,19 +13,19 @@ export class QuestionService {
     const questions: QuestionBase<string>[] = [
       new DropdownQuestion({
         key: 'favoriteAnimal',
-        label: 'Favorite Animal',
+        label: '좋아하는 동물',
         options: [
-          {key: 'cat', value: 'Cat'},
-          {key: 'dog', value: 'Dog'},
-          {key: 'horse', value: 'Horse'},
-          {key: 'capybara', value: 'Capybara'},
+          {key: 'cat', value: '고양이'},
+          {key: 'dog', value: '개'},
+          {key: 'horse', value: '말'},
+          {key: 'capybara', value: '카피바라'},
         ],
         order: 3,
       }),
 
       new TextboxQuestion({
         key: 'firstName',
-        label: 'First name',
+        label: '이름',
         value: 'Alex',
         required: true,
         order: 1,
@@ -33,7 +33,7 @@ export class QuestionService {
 
       new TextboxQuestion({
         key: 'emailAddress',
-        label: 'Email',
+        label: '이메일',
         type: 'email',
         order: 2,
       }),

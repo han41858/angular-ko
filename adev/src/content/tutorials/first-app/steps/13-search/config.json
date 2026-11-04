@@ -1,5 +1,5 @@
 {
-  "title": "Add search functionality",
+  "title": "검색 기능 추가하기",
   "type": "local",
   "answerSrc": "../14-http/src",
   "answerRootDir": "../14-http/",

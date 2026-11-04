@@ -291,7 +291,7 @@ export class DocViewer {
       const copyLinkButtonRef = this.viewContainer.createComponent(CopyLinkButton);
       copyLinkButtonRef.setInput('href', href);
       copyLinkButtonRef.setInput('label', label);
-      copyLinkButtonRef.setInput('matTooltip', `Copy link to ${label}`);
+      copyLinkButtonRef.setInput('matTooltip', `${label} 링크 복사`);
 
       anchor.appendChild(copyLinkButtonRef.location.nativeElement);
     }
@@ -437,7 +437,7 @@ export class DocViewer {
       const iframe = this.document.createElement('iframe');
       iframe.className = 'docs-video';
       iframe.src = src;
-      iframe.title = facade.getAttribute('data-video-title') ?? 'Video player';
+      iframe.title = facade.getAttribute('data-video-title') ?? '동영상 플레이어';
       iframe.setAttribute('allow', 'accelerometer; encrypted-media; gyroscope; picture-in-picture');
       iframe.setAttribute('allowfullscreen', '');
       iframe.setAttribute('credentialless', '');

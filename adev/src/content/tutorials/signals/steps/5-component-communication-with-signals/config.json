@@ -1,5 +1,5 @@
 {
   "openFiles": ["src/app/app.ts", "src/app/product-card.ts", "src/app/app.css"],
   "type": "editor",
-  "title": "Passing data to components with input signals"
+  "title": "입력 시그널로 컴포넌트에 데이터 전달하기"
 }

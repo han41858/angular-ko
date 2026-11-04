@@ -10,6 +10,7 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "preserveSymlinks": true,
     "importHelpers": true,
     "target": "ES2022",

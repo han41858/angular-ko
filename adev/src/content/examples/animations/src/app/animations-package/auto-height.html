@@ -1,10 +1,10 @@
 <!-- #docplaster -->
-<h2>Auto Height Example</h2>
+<h2>자동 높이 예제</h2>
 
-<button type="button" (click)="toggle()">Toggle Open/Close</button>
+<button type="button" (click)="toggle()">열기/닫기 전환</button>
 
 <div class="container" [@openClose]="isOpen() ? true : false">
   <div class="content">
-    <p>The box is now {{ isOpen() ? 'Open' : 'Closed' }}!</p>
+    <p>상자가 지금 {{ isOpen() ? '열렸습니다' : '닫혔습니다' }}!</p>
   </div>
 </div>

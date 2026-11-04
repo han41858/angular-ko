@@ -6,7 +6,7 @@ import {HeroListGroups} from './hero-list-groups';
   selector: 'app-hero-list-groups-page',
   template: `
     <section>
-      <h2>Hero List Group</h2>
+      <h2>히어로 목록 그룹</h2>
 
       <app-hero-list-groups [heroes]="heroes" (remove)="onRemove($event)" />
     </section>

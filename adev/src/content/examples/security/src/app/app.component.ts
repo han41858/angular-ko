@@ -6,7 +6,7 @@ import {InnerHtmlBindingComponent} from './inner-html-binding.component';
 @Component({
   selector: 'app-root',
   template: `
-    <h1>Security</h1>
+    <h1>보안</h1>
     <app-inner-html-binding />
     <app-bypass-security />
   `,

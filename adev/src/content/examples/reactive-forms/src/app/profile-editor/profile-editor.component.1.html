@@ -1,39 +1,39 @@
 <!-- #docplaster -->
 <!-- #docregion formgroup -->
 <form [formGroup]="profileForm">
-  <label for="first-name">First Name: </label>
+  <label for="first-name">이름: </label>
   <input id="first-name" type="text" formControlName="firstName" />
 
-  <label for="last-name">Last Name: </label>
+  <label for="last-name">성: </label>
   <input id="last-name" type="text" formControlName="lastName" />
 
   <!-- #enddocregion formgroup -->
   <!-- #docregion formgroupname -->
   <div formGroupName="address">
-    <h2>Address</h2>
+    <h2>주소</h2>
 
-    <label for="street">Street: </label>
+    <label for="street">도로명: </label>
     <input id="street" type="text" formControlName="street" />
 
-    <label for="city">City: </label>
+    <label for="city">도시: </label>
     <input id="city" type="text" formControlName="city" />
 
-    <label for="state">State: </label>
+    <label for="state">주: </label>
     <input id="state" type="text" formControlName="state" />
 
-    <label for="zip">Zip Code: </label>
+    <label for="zip">우편번호: </label>
     <input id="zip" type="text" formControlName="zip" />
   </div>
   <!-- #enddocregion formgroupname -->
 
   <div formArrayName="aliases">
-    <h2>Aliases</h2>
-    <button type="button" (click)="addAlias()">+ Add another alias</button>
+    <h2>별칭</h2>
+    <button type="button" (click)="addAlias()">+ 별칭 추가</button>
 
     @for (alias of aliases.controls; track $index; let i = $index) {
       <div>
         <!-- The repeated alias template -->
-        <label for="alias-{{ i }}">Alias: </label>
+        <label for="alias-{{ i }}">별칭: </label>
         <input id="alias-{{ i }}" type="text" [formControlName]="i" />
       </div>
     }
@@ -42,8 +42,8 @@
 </form>
 <!-- #enddocregion formgroup -->
 
-<p>Form Value: {{ profileForm.value | json }}</p>
+<p>폼 값: {{ profileForm.value | json }}</p>
 
 <!-- #docregion patch-value -->
-<button type="button" (click)="updateProfile()">Update Profile</button>
+<button type="button" (click)="updateProfile()">프로필 변경</button>
 <!-- #enddocregion patch-value -->

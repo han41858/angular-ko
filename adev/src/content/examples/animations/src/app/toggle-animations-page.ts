@@ -5,7 +5,7 @@ import {OpenCloseChild} from './open-close.4';
   selector: 'app-toggle-animations-child-page',
   template: `
     <section>
-      <h2>Toggle Animations</h2>
+      <h2>애니메이션 전환</h2>
 
       <app-open-close-toggle />
     </section>

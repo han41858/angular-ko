@@ -24,10 +24,44 @@ describe('markdown to html', () => {
     markdownDocument = JSDOM.fragment(html);
   });
 
-  for (const [key, level] of Object.entries(AlertSeverityLevel)) {
+  for (const [key, level] of Object.entries(AlertSeverityLevel).filter(([key]) =>
+    /^[A-Z]+$/.test(key),
+  )) {
     it(`should create a docs-alert for ${key}:`, () => {
       const noteEl = markdownDocument.querySelector(`.docs-alert-${key.toLowerCase()}`);
       expect(noteEl?.textContent?.trim()).toMatch(new RegExp(`^${level}:`));
+    });
+  }
+
+  const koreanSeverities = [
+    ['참고', 'note'],
+    ['팁', 'tip'],
+    ['할 일', 'todo'],
+    ['질문', 'question'],
+    ['요약', 'summary'],
+    ['짧은 요약', 'tldr'],
+    ['주의', 'critical'],
+    ['중요', 'important'],
+    ['도움말', 'helpful'],
+  ];
+
+  for (const [label, severity] of koreanSeverities) {
+    it(`should render ${label} with the ${severity} severity and retain its Korean label`, () => {
+      const document = JSDOM.fragment(
+        parseMarkdown(`${label}: **한국어** 알림입니다.`, rendererContext),
+      );
+      const alert = document.querySelector(`.docs-alert-${severity}`);
+      expect(alert?.textContent?.trim()).toBe(`${label}: 한국어 알림입니다.`);
+      expect(alert?.querySelectorAll('strong').length).toBe(2);
+    });
+
+    it(`should detect ${label} after prose without wrapping the alert in a paragraph`, () => {
+      const result = parseMarkdown(
+        `설명 문장입니다.\n${label}: 한국어 알림입니다.`,
+        rendererContext,
+      );
+      expect(result).not.toMatch(/<p>\s*<div class="docs-alert/);
+      expect(JSDOM.fragment(result).querySelector(`.docs-alert-${severity}`)).not.toBeNull();
     });
   }
 
