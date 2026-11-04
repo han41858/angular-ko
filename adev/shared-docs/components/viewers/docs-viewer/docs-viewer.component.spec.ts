@@ -242,10 +242,11 @@ describe('DocViewer', () => {
     const fixture = TestBed.createComponent(CopyLinkButton);
     fixture.componentRef.setInput('href', '#test-section');
     fixture.componentRef.setInput('label', 'Test Section');
-    fixture.componentRef.setInput('matTooltip', 'Copy link to Test Section');
+    fixture.componentRef.setInput('matTooltip', 'Test Section 링크 복사');
     await fixture.whenStable();
 
     expect(fixture.nativeElement.textContent.trim()).toBe('');
+    expect(fixture.nativeElement.getAttribute('aria-label')).toBe('Test Section 링크 복사');
   });
 
   it('should copy link to clipboard when copy button is clicked', async () => {

@@ -1,10 +1,10 @@
 <header>
-  <h1>API Reference</h1>
+  <h1>API 참조</h1>
 </header>
 
 <div class="adev-reference-list-filter">
   <div class="adev-reference-list-query-filter">
-    <docs-text-field placeholder="Filter" [formField]="form.query" />
+    <docs-text-field placeholder="필터" [formField]="form.query" />
 
     <docs-select
       selectId="package-entry-filter"
@@ -14,7 +14,7 @@
   </div>
 
   <div class="adev-reference-list-status">
-    <mat-chip-listbox multiple="true" aria-label="Status selection">
+    <mat-chip-listbox multiple="true" aria-label="상태 선택">
       <!-- null indicates to not re-order the object keys -->
       @for (stat of statuses | keyvalue: null; track $index) {
         <mat-chip-option [selected]="isStatusSelected(stat.value)" (click)="setStatus(stat.value)">
@@ -24,7 +24,7 @@
     </mat-chip-listbox>
   </div>
 
-  <p class="adev-reference-list-type-filter-label">Filter by Identifier type</p>
+  <p class="adev-reference-list-type-filter-label">식별자 종류로 필터링</p>
   <ul class="adev-reference-list-type-filter">
     @for (itemType of itemTypes; track itemType) {
       <li
@@ -48,6 +48,6 @@
       class="adev-reference-list-empty-angie"
       aria-hidden="true"
     />
-    <p>No API items found.</p>
+    <p>일치하는 API 항목이 없습니다.</p>
   </div>
 }

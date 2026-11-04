@@ -23,6 +23,11 @@ import {setDefinedRoutes} from './defined-routes-context.mjs';
 import {CliCommandRenderable, DocEntryRenderable} from './entities/renderables.mjs';
 import {initHighlighter} from '../../shared/shiki.mjs';
 import {setHighlighterInstance} from './shiki/shiki.mjs';
+import {
+  getTranslationDomain,
+  translateDocumentation,
+  TranslationCatalog,
+} from './korean-translations.mjs';
 
 /** The JSON data file format for extracted API reference info. */
 interface EntryCollection {
@@ -35,10 +40,16 @@ interface EntryCollection {
 }
 
 /** Parse all JSON data source files into an array of collections. */
-function parseEntryData(srcs: string[]): EntryCollection[] {
+function parseEntryData(
+  srcs: string[],
+  catalogs: Record<string, TranslationCatalog>,
+): EntryCollection[] {
   return srcs.flatMap((jsonDataFilePath): EntryCollection | EntryCollection[] => {
     const fileContent = readFileSync(jsonDataFilePath, {encoding: 'utf8'});
-    const fileContentJson = JSON.parse(fileContent) as unknown;
+    const domain = getTranslationDomain(jsonDataFilePath);
+    const source = JSON.parse(fileContent) as unknown;
+    const fileContentJson =
+      domain && catalogs[domain] ? translateDocumentation(source, catalogs[domain]) : source;
     if ((fileContentJson as EntryCollection).entries) {
       const symbols = Object.fromEntries(
         // TODO: refactor that, it's dirty and we can probably do better than this.
@@ -136,7 +147,13 @@ async function main() {
   const [paramFilePath] = process.argv.slice(2);
   const rawParamLines = readFileSync(paramFilePath, {encoding: 'utf8'}).split('\n');
 
-  const [srcs, outputFilenameExecRootRelativePath, definedRoutesPath] = rawParamLines;
+  const [srcs, outputFilenameExecRootRelativePath, definedRoutesPath, catalogPaths] = rawParamLines;
+
+  const catalogs: Record<string, TranslationCatalog> = {};
+  for (const catalogPath of catalogPaths?.split(',').filter(Boolean) ?? []) {
+    const domain = path.basename(catalogPath, '.ko.json');
+    catalogs[domain] = JSON.parse(readFileSync(catalogPath, {encoding: 'utf8'}));
+  }
 
   setDefinedRoutes(JSON.parse(readFileSync(definedRoutesPath, {encoding: 'utf8'})) as string[]);
 
@@ -148,7 +165,7 @@ async function main() {
   // Parse all the extracted data from the source JSON files.
   // Each file represents one "collection" of docs entries corresponding to
   // a particular JS module name.
-  const entryCollections: EntryCollection[] = parseEntryData(srcs.split(','));
+  const entryCollections: EntryCollection[] = parseEntryData(srcs.split(','), catalogs);
 
   for (const collection of entryCollections) {
     const extractedEntries = collection.entries.filter(

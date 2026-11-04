@@ -44,8 +44,8 @@ export function CliCommandReference(entry: CliCommandRenderable) {
         <RawHtml value={entry.htmlDescription} />
         {entry.subcommands && entry.subcommands?.length > 0 ? (
           <>
-            <h3>Sub-commands</h3>
-            <p>This command has the following sub-commands</p>
+            <h3>하위 명령어</h3>
+            <p>이 명령어에는 다음 하위 명령어가 있습니다.</p>
             <ul>
               {entry.subcommands.map((subcommand) => (
                 <li>

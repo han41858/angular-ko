@@ -23,7 +23,7 @@ export function CliCard(props: {card: CliCardRenderable}) {
                 <code>{item.name}</code>
                 {item.aliases?.map((alias) => (
                   <div class="docs-reference-option-aliases">
-                    <span>Alias</span>
+                    <span>별칭</span>
                     <code>{alias}</code>
                   </div>
                 ))}
@@ -32,11 +32,11 @@ export function CliCard(props: {card: CliCardRenderable}) {
             </div>
             <div class="docs-reference-type-and-default">
               {/* Display the type expected for the option and the enum values if there are some. */}
-              <span>Value Type</span>
+              <span>값의 타입</span>
               <code>{item.type}</code>
               {item.enum ? (
                 <>
-                  <span>Allowed Values</span>
+                  <span>허용되는 값</span>
                   {item.enum.map((val, i, items) => (
                     <>
                       <code>{val}</code>
@@ -48,7 +48,7 @@ export function CliCard(props: {card: CliCardRenderable}) {
                 <></>
               )}
               {/* Default Value */}
-              {item.default !== undefined ? <span>Default</span> : <></>}
+              {item.default !== undefined ? <span>기본값</span> : <></>}
               {props.card.type === 'Options' && item.default !== undefined ? (
                 <code>{item.default.toString()}</code>
               ) : (

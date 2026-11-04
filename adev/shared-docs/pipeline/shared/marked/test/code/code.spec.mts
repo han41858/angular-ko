@@ -42,7 +42,7 @@ describe('markdown to html', () => {
     const parsed = await parseMarkdownAsync(markdown, rendererContext);
 
     expect(parsed).toContain("Can't inject interface");
-    expect(parsed).toContain('<span class="docs-code-header-style ">Avoid</span>');
+    expect(parsed).toContain('<span class="docs-code-header-style ">권장하지 않음</span>');
     expect(parsed).toContain("<h3>Can't inject interface</h3>");
   });
 });

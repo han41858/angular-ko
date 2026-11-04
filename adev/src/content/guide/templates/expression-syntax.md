@@ -1,13 +1,39 @@
+<!--
 # Expression Syntax
+-->
 
+# 표현식 문법
+
+<!--
 Angular expressions are based on JavaScript, but differ in some key ways. This guide walks through the similarities and differences between Angular expressions and standard JavaScript.
+-->
 
+Angular 표현식 문법은 JavaScript를 기반으로 하지만 몇 가지는 다릅니다.
+이 문서에서는 Angular 표현식 문법이 표준 JavaScript와 어떻게 비슷하고 다른지 알아봅시다.
+
+<!--
 ## Value literals
+-->
 
+<a id="value-literals"></a>
+
+## 리터럴 값
+
+<!--
 Angular supports a subset of [literal values](https://developer.mozilla.org/en-US/docs/Glossary/Literal) from JavaScript.
+-->
 
+Angular는 JavaScript의 [리터럴 값](https://developer.mozilla.org/en-US/docs/Glossary/Literal) 중 일부를 지원합니다.
+
+<!--
 ### Supported value literals
+-->
 
+<a id="supported-value-literals"></a>
+
+### 지원하는 리터럴 값
+
+<!--
 | Literal type           | Example values                  |
 | ---------------------- | ------------------------------- |
 | String                 | `'Hello'`, `"World"`            |
@@ -19,32 +45,98 @@ Angular supports a subset of [literal values](https://developer.mozilla.org/en-U
 | RegExp                 | `/\d+/`                         |
 | Template string        | `` `Hello ${name}` ``           |
 | Tagged template string | `` tag`Hello ${name}` ``        |
+-->
 
+| 리터럴 타입                 | 예시                            |
+| --------------------------- | ------------------------------- |
+| 문자열                      | `'Hello'`, `"World"`            |
+| 불리언                      | `true`, `false`                 |
+| 숫자                        | `123`, `3.14`                   |
+| 객체                        | `{name: 'Alice'}`               |
+| 배열                        | `['Onion', 'Cheese', 'Garlic']` |
+| null                        | `null`                          |
+| 정규표현식                  | `/\d+/`                         |
+| 템플릿 문자열               | `` `Hello ${name}` ``           |
+| 태그가 지정된 템플릿 문자열 | `` tag`Hello ${name}` ``        |
+
+<!--
 ### Unsupported value literals
+-->
 
+<a id="unsupported-value-literals"></a>
+
+### 지원하지 않는 리터럴 값
+
+<!--
 | Literal type | Example values |
 | ------------ | -------------- |
 | BigInt       | `1n`           |
+-->
 
+| 리터럴 타입 | 예시 |
+| ----------- | ---- |
+| BigInt      | `1n` |
+
+<!--
 ## Globals
+-->
 
+<a id="globals"></a>
+
+## 전역 변수
+
+<!--
 Angular expressions support the following [globals](https://developer.mozilla.org/en-US/docs/Glossary/Global_object):
 
 - [undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined)
 - [$any](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any)
 
 No other JavaScript globals are supported. Common JavaScript globals include `Number`, `Boolean`, `NaN`, `Infinity`, `parseInt`, and more.
+-->
 
+Angular 표현식에서는 다음과 같은 [전역](https://developer.mozilla.org/en-US/docs/Glossary/Global_object) 변수를 사용할 수 있습니다:
+
+- [undefined](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined)
+- [$any](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any)
+
+이 외에 `Number`, `Boolean`, `NaN`, `Infinity`, `parseInt` 등 표준 JavaScript에서 지원하는 전역 객체는 지원하지 않습니다.
+
+<!--
 ## Local variables
+-->
 
+<a id="local-variables"></a>
+
+## 지역 변수
+
+<!--
 Angular automatically makes special local variables available for use in expressions in specific contexts. These special variables always start with the dollar sign character (`$`).
 
 For example, `@for` blocks make several local variables corresponding to information about the loop, such as `$index`.
+-->
 
+표현식의 특정 컨텍스트에서 사용할 수 있는 특별한 지역 변수들이 있습니다.
+이 변수들은 Angular가 자동으로 선언한 것이며, 달러 기호(`$`)로 시작합니다.
+
+`@for` 블록에서 실행 블록을 한 번씩 돌 때마다 변경되는 `$index`와 같은 변수가 이런 경우에 해당합니다.
+
+<!--
 ## What operators are supported?
+-->
 
+<a id="what-operators-are-supported"></a>
+
+## 어떤 연산자를 사용할 수 있나요?
+
+<!--
 ### Supported operators
+-->
 
+<a id="supported-operators"></a>
+
+### 지원하는 연산자
+
+<!--
 Angular supports the following operators from standard JavaScript.
 
 | Operator                      | Example(s)                                     |
@@ -82,6 +174,7 @@ Angular supports the following operators from standard JavaScript.
 | Spread in object literals     | `{...obj, foo: 'bar'}`                         |
 | Spread in array literals      | `[...arr, 1, 2, 3]`                            |
 | Rest in function calls        | `fn(...args)`                                  |
+
 | Arrow function                | `items.filter((i) => i.active)`                |
 
 NOTE: Assignment and increment/decrement operators are only valid in [event listener statements](#event-listener-statements). Using them in a binding or interpolation is a compile error, unless they are inside an arrow function.
@@ -110,9 +203,87 @@ During the migration to v22, the `ng update` schematics added a `$safeNavigation
 `$safeNavigationMigration` is a **temporary migration aid only**. It instructs the compiler to compile the wrapped safe-navigation expression using the legacy null-returning semantics rather than the standard JavaScript `?.` semantics. It is not a real function and cannot be called from TypeScript.
 
 NOTE: Prefer migrating expressions to no longer rely on `null` vs `undefined` distinctions so that `$safeNavigationMigration` can be removed. This function may be removed in a future version of Angular.
+-->
 
+Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산자를 사용할 수 있습니다.
+
+| 연산자                        | 예시                                           |
+| ----------------------------- | ---------------------------------------------- |
+| 더하기 / 문자열 연결하기      | `1 + 2`                                        |
+| 빼기                          | `52 - 3`                                       |
+| 곱하기                        | `41 * 6`                                       |
+| 나누기                        | `20 / 4`                                       |
+| 나머지 구하기                 | `17 % 5`                                       |
+| 지수 연산                     | `10 ** 3`                                      |
+| 소괄호                        | `9 * (8 + 4)`                                  |
+| 삼항 연산자                   | `a > b ? true : false`                         |
+| AND 논리 연산                 | `&&`                                           |
+| Or 논리 연산                  | `\|\|`                                         |
+| Not 논리 연산                 | `!`                                            |
+| Null 병합(Nullish Coalescing) | `possiblyNullValue ?? 'default'`               |
+| 비교 연산자                   | `<`, `<=`, `>`, `>=`, `==`, `===`, `!==`, `!=` |
+| 단항 마이너스                 | `-x`                                           |
+| 단항 플러스                   | `+y`                                           |
+| 프로퍼티 접근                 | `person['name']`                               |
+| typeof                        | `typeof 42`                                    |
+| void                          | `void 1`                                       |
+| in                            | `'model' in car`                               |
+| instanceof                    | `car instanceof Automobile`                    |
+| 할당                          | `a = b`                                        |
+| 더하기 할당                   | `a += b`                                       |
+| 빼기 할당                     | `a -= b`                                       |
+| 곱하기 할당                   | `a *= b`                                       |
+| 나누기 할당                   | `a /= b`                                       |
+| 나머지 구하기 할당            | `a %= b`                                       |
+| 지수 할당                     | `a **= b`                                      |
+| AND 논리 연산 할당            | `a &&= b`                                      |
+| OR 논리 연산 할당             | `a \|\|= b`                                    |
+| Null 병합 할당                | `a ??= b`                                      |
+| 객체 리터럴의 객체 전개              | `{...obj, foo: 'bar'}`                         |
+| 배열 리터럴의 배열 전개              | `[...arr, 1, 2, 3]`                            |
+| 함수의 나머지 인자 연산자     | `fn(...args)`                                  |
+
+| 화살표 함수 | `items.filter((i) => i.active)` |
+
+참고: 할당 연산자와 증가/감소 연산자는 [이벤트 리스너 구문](#event-listener-statements)에서만 사용할 수 있습니다. 화살표 함수 내부가 아니라면 바인딩이나 문자열 바인딩에서 사용했을 때 컴파일 오류가 발생합니다.
+
+화살표 함수의 본문은 표현식이어야 합니다. 화살표 함수 안에서 파이프를 사용할 수는 없지만, 화살표 함수를 파이프의 인자로 전달할 수는 있습니다.
+
+그리고 표준 JavaScript 연산자 외에 다음과 같은 연산자도 지원합니다:
+
+| 연산자                         | 예시                           |
+| ------------------------------ | ------------------------------ |
+| [Pipe](/guide/templates/pipes) | `{{ total \| currency }}`      |
+| 옵셔널 체이닝\*                | `someObj.someProp?.nestedProp` |
+| null 보정 연산자 (TypeScript)  | `someObj!.someProp`            |
+
+### 안전 탐색 마이그레이션 {#safe-navigation-migration}
+
+Angular 22 이전에는 옵셔널 체이닝 연산자(`?.`)의 왼쪽 값이 `null`이나 `undefined`이면 `null`을 반환했지만, 표준 JavaScript의 `?.`는 `undefined`를 반환합니다.
+Angular 22부터 Angular 표현식의 옵셔널 체이닝 연산자도 표준 JavaScript와 동일하게 동작합니다.
+
+v22로 마이그레이션할 때 `ng update` 스키매틱은 기존의 `null` 반환 동작을 유지하기 위해 기존 표현식에 `$safeNavigationMigration` 특수 함수를 추가했습니다.
+
+```html
+{{ $safeNavigationMigration(foo?.bar) }}
+```
+
+`$safeNavigationMigration`은 **임시 마이그레이션 도구**입니다.
+감싼 안전 탐색 표현식을 표준 JavaScript `?.` 의미 대신 기존의 `null` 반환 의미로 컴파일하도록 컴파일러에 지시합니다.
+실제 함수가 아니므로 TypeScript에서 호출할 수 없습니다.
+
+참고: `$safeNavigationMigration`을 제거할 수 있도록 `null`과 `undefined`의 차이에 의존하지 않는 표현식으로 마이그레이션하는 것이 좋습니다.
+이 함수는 향후 Angular 버전에서 제거될 수 있습니다.
+
+<!--
 ### Unsupported operators
+-->
 
+<a id="unsupported-operators"></a>
+
+### 지원하지 않는 연산자
+
+<!--
 | Operator              | Example(s)                        |
 | --------------------- | --------------------------------- |
 | All bitwise operators | `&`, `&=`, `~`, `\|=`, `^=`, etc. |
@@ -120,15 +291,46 @@ NOTE: Prefer migrating expressions to no longer rely on `null` vs `undefined` di
 | Array destructuring   | `const [firstItem] = items`       |
 | Comma operator        | `x = (x++, x)`                    |
 | new                   | `new Car()`                       |
+-->
 
+| 연산자         | 예시                           |
+| -------------- | ------------------------------ |
+| 비트 연산자    | `&`, `&=`, `~`, `\|=`, `^=` 등 |
+| 객체 구조 분해 할당 | `const { name } = person`      |
+| 배열 구조 분해 할당 | `const [firstItem] = items`    |
+| 쉼표 연산자    | `x = (x++, x)`                 |
+| new            | `new Car()`                    |
+
+<!--
 ## Lexical context for expressions
+-->
 
+<a id="lexical-context-for-expressions"></a>
+
+## 표현식의 컨텍스트
+
+<!--
 Angular expressions are evaluated within the context of the component class as well as any relevant [template variables](/guide/templates/variables), locals, and globals.
 
 When referring to component class members, `this` is always implied. However, if a template declares a [template variables](guide/templates/variables) with the same name as a member, the variable shadows that member. You can unambiguously reference such a class member by explicitly using `this.`. This can be useful when creating an `@let` declaration that shadows a class member, e.g. for signal narrowing purposes.
+-->
 
+Angular 표현식에서는 컴포넌트 클래스의 컨텍스트 외에도 [템플릿 변수](/guide/templates/variables), 지역 변수, 전역 변수를 활용할 수 있습니다.
+
+컴포넌트 클래스 멤버를 참조할 때는 `this`가 사용된 것으로 간주합니다.
+하지만 템플릿에 클래스 멤버와 같은 이름으로 [템플릿 변수](guide/templates/variables)가 선언되어 있다면 템플릿 변수의 우선순위가 높습니다.
+이 경우는 `this.`를 명시적으로 사용해서 클래스 멤버를 참조할 수 있습니다.
+`@let`을 사용하면 더 유용합니다.
+
+<!--
 ## Declarations
+-->
 
+<a id="declarations"></a>
+
+## 변수 선언
+
+<!--
 Generally speaking, declarations are not supported in Angular expressions. This includes, but is not limited to:
 
 | Declarations                      | Example(s)                                  |
@@ -137,10 +339,33 @@ Generally speaking, declarations are not supported in Angular expressions. This 
 | Functions                         | `function myCustomFunction() { }`           |
 | Arrow functions with block bodies | `() => { }`                                 |
 | Classes                           | `class Rectangle { }`                       |
+-->
 
+일반적으로 Angular 표현식에서는 선언문을 지원하지 않습니다.
+이런 경우가 모두 해당됩니다:
+
+| 선언                         | 예시                                        |
+| ---------------------------- | ------------------------------------------- |
+| 변수                         | `let label = 'abc'`, `const item = 'apple'` |
+| 함수                         | `function myCustomFunction() { }`           |
+| 블록 본문을 가진 화살표 함수 | `() => { }`                                 |
+| 클래스                       | `class Rectangle { }`                       |
+
+<!--
 ## Event listener statements
+-->
 
+## 이벤트 리스너 실행문 {#event-listener-statements}
+
+<!--
 Event handlers are **statements** rather than expressions. While they support all of the same syntax as Angular expressions, there are two key differences:
 
 1. Statements **do support** assignment operators (but not destructuring assignments)
 1. Statements **do not support** pipes
+-->
+
+이벤트 핸들러는 표현식(expressions)이 아니고 **실행문(statements)** 입니다.
+실행문은 Angular 표현식과 거의 비슷하지만, 두 가지가 다릅니다:
+
+1. 할당 연산자를 지원합니다. (분해 할당은 지원하지 않습니다.)
+1. 파이프를 허용하지 않습니다.

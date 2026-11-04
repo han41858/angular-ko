@@ -76,7 +76,7 @@ export class NodeRuntimeState {
   private checkUnsupportedEnvironment(): void {
     if (isIos) {
       this.setError({
-        message: 'Unsupported environment',
+        message: '지원하지 않는 실행 환경입니다.',
         type: ErrorType.UNSUPPORTED_BROWSER_ENVIRONMENT,
       });
     }

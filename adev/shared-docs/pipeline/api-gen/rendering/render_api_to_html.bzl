@@ -22,7 +22,8 @@ def _render_api_to_html(ctx):
     # The manifest is a flat JSON array of route paths and `route#anchor` entries derived from
     # the application's navigation tree.
     args.add(ctx.file.defined_routes.path)
-    inputs = ctx.files.srcs + [ctx.file.defined_routes]
+    args.add_joined(ctx.files.translation_catalogs, join_with = ",")
+    inputs = ctx.files.srcs + [ctx.file.defined_routes] + ctx.files.translation_catalogs
 
     # Define an action that runs the executable.
     ctx.actions.run(
@@ -56,6 +57,12 @@ render_api_to_html = rule(
         "defined_routes": attr.label(
             default = Label("//adev/scripts/routes:defined-routes.json"),
             allow_single_file = [".json"],
+        ),
+
+        # Korean overlays are separate from upstream-generated JSON and are declared action inputs.
+        "translation_catalogs": attr.label_list(
+            default = [Label("//adev/shared-docs/pipeline/api-gen/rendering:korean_translation_catalogs")],
+            allow_files = [".json"],
         ),
 
         # The executable for this rule (private).

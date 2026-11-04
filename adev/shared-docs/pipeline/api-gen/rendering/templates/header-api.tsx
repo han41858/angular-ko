@@ -43,7 +43,7 @@ export function HeaderApi(props: {
           </div>
           {statusTag(entry)}
           {entry.entryType === EntryType.Pipe && !(entry as PipeEntry).isPure && (
-            <div className={`${HEADER_ENTRY_LABEL} type-impure-pipe full`}>Impure</div>
+            <div className={`${HEADER_ENTRY_LABEL} type-impure-pipe full`}>비순수</div>
           )}
         </div>
         {sourceUrl && (
@@ -51,8 +51,8 @@ export function HeaderApi(props: {
             class="docs-github-links"
             target="_blank"
             href={sourceUrl}
-            title="View source"
-            aria-label="View source"
+            title="소스 보기"
+            aria-label="소스 보기"
           >
             <i role="presentation" aria-hidden="true" class="material-symbols-outlined">
               code
@@ -83,20 +83,20 @@ function statusTag(entry: DocEntryRenderable) {
   if (entry.deprecated) {
     tag = (
       <div className={`${HEADER_ENTRY_LABEL} type-deprecated full`}>
-        {tagInVersionString('deprecated', entry.deprecated)}
+        {tagInVersionString('사용 중단 권고', entry.deprecated)}
       </div>
     );
   } else if (entry.stable) {
     tag = (
       <div className={`${HEADER_ENTRY_LABEL} type-stable full`}>
-        {tagInVersionString('stable', entry.stable)}
+        {tagInVersionString('안정화', entry.stable)}
       </div>
     );
   } else if (entry.developerPreview) {
     tag = (
       <div className={`${HEADER_ENTRY_LABEL} type-developer_preview full`}>
         <a href="/reference/releases#developer-preview">
-          {tagInVersionString('developer preview', entry.developerPreview)}
+          {tagInVersionString('개발자 미리보기', entry.developerPreview)}
         </a>
       </div>
     );
@@ -104,7 +104,7 @@ function statusTag(entry: DocEntryRenderable) {
     tag = (
       <div className={`${HEADER_ENTRY_LABEL} type-experimental full`}>
         <a href="/reference/releases#experimental">
-          {tagInVersionString('experimental', entry.experimental)}
+          {tagInVersionString('실험적', entry.experimental)}
         </a>
       </div>
     );
@@ -118,7 +118,7 @@ function tagInVersionString(label: string, tag: {version: string | undefined} | 
     return (
       <>
         <span className="status-label">{label}</span>
-        <span className="status-version">since v{tag.version}</span>
+        <span className="status-version">v{tag.version}부터</span>
       </>
     );
   }
@@ -128,14 +128,34 @@ function tagInVersionString(label: string, tag: {version: string | undefined} | 
 
 function getEntryTypeDisplayName(entryType: EntryType | string): string {
   switch (entryType) {
+    case EntryType.Block:
+      return '블록';
+    case EntryType.Component:
+      return '컴포넌트';
+    case EntryType.Constant:
+      return '상수';
+    case EntryType.Decorator:
+      return '데코레이터';
+    case EntryType.Directive:
+      return '디렉티브';
+    case EntryType.Element:
+      return '엘리먼트';
+    case EntryType.Enum:
+      return '열거형';
+    case EntryType.Function:
+      return '함수';
+    case EntryType.Interface:
+      return '인터페이스';
+    case EntryType.Pipe:
+      return '파이프';
     case EntryType.NgModule:
       return 'NgModule';
     case EntryType.TypeAlias:
-      return 'Type Alias';
+      return '타입 별칭';
     case EntryType.UndecoratedClass:
-      return 'Class';
+      return '클래스';
     case EntryType.InitializerApiFunction:
-      return 'Initializer API';
+      return '초기화 API';
   }
   return entryType;
 }

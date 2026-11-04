@@ -47,7 +47,7 @@ const updateGuidePageRoute: Route = {
   loadComponent: () => import('../features/update/update.component'),
   data: {
     ...commonReferenceRouteData,
-    label: 'Update guide',
+    label: '업데이트 가이드',
   },
 };
 
@@ -133,7 +133,7 @@ export const routes: Route[] = [
       {
         path: '',
         loadComponent: () => import('../features/home/home.component'),
-        data: {label: 'Home'},
+        data: {label: '홈'},
       },
       {
         path: PAGE_PREFIX.DOCS,
@@ -146,7 +146,7 @@ export const routes: Route[] = [
       {
         path: PAGE_PREFIX.PLAYGROUND,
         loadComponent: () => import('../features/playground/playground.component'),
-        data: {...commonTutorialRouteData, label: 'Playground'},
+        data: {...commonTutorialRouteData, label: '놀이터'},
       },
       ...SUB_NAVIGATION_ROUTES,
       ...API_REFERENCE_ROUTES,
@@ -159,6 +159,6 @@ export const routes: Route[] = [
   {
     path: '**',
     loadComponent: () => import('../features/not-found/not-found').then((m) => m.NotFound),
-    data: {label: 'Page not found'},
+    data: {label: '페이지를 찾을 수 없습니다'},
   },
 ];
