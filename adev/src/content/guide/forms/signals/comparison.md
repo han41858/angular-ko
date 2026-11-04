@@ -67,7 +67,7 @@ The best way to understand the differences is to see the same form implemented i
 세 방식으로 같은 폼을 구현한 예제를 보면 차이를 가장 쉽게 이해할 수 있습니다.
 
 <docs-code-multifile>
-  <docs-code language="angular-ts" header="Signal Forms" path="adev/src/content/examples/signal-forms/src/comparison/app/signal-forms.ts"/>
+  <docs-code language="angular-ts" header="시그널 폼" path="adev/src/content/examples/signal-forms/src/comparison/app/signal-forms.ts"/>
   <docs-code header="반응형 폼" path="adev/src/content/examples/signal-forms/src/comparison/app/reactive-forms.ts"/>
   <docs-code header="템플릿 기반 폼" path="adev/src/content/examples/signal-forms/src/comparison/app/template-driven-forms.ts"/>
 </docs-code-multifile>

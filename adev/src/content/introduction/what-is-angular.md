@@ -113,7 +113,7 @@
     Angular CLI `ng update` 명령을 실행하면 Angular 버전이 변경된 것에 맞춰 코드를 자동으로 업그레이드할 수 있습니다.
     최신 버전을 유지하면 앱 성능과 보안을 최신 상태로 유지할 수 있습니다.
   </docs-card>
-  <docs-card title="Language Service" href="tools/language-service" link="언어 지원 서비스" iconImgSrc="adev/src/assets/icons/language-service.svg">
+  <docs-card title="언어 지원 서비스" href="tools/language-service" link="언어 지원 서비스" iconImgSrc="adev/src/assets/icons/language-service.svg">
     Angular는 IDE 언어 지원 서비스를 제공하기 때문에 주요 IDE에서 코드 자동완성, 코드 탐색, 리팩토링, 실시간 진단 기능을 활용할 수 있습니다.
   </docs-card>
 </docs-card-container>

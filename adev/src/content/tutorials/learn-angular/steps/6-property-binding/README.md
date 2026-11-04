@@ -95,7 +95,7 @@ export class App {
 
 <docs-step title="`contentEditable`에 바인딩해 보세요" header="app.ts" language="ts">
 
-그다음은 `div` 엘리먼트의 `contentEditable` 어트리뷰트와 `isEditable` 프로퍼티를 <code aria-label="square brackets">[]</code> 문법으로 바인딩하면 됩니다.
+그다음은 `div` 엘리먼트의 `contentEditable` 어트리뷰트와 `isEditable` 프로퍼티를 <code aria-label="대괄호">[]</code> 문법으로 바인딩하면 됩니다.
 
 ```angular-ts {highlight:[3]}
 @Component({

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 //tslint:disable:no-console
-import {execSync} from 'node:child_process';
+import {execFileSync, execSync} from 'node:child_process';
 import {join} from 'node:path';
 import {updateAssets} from './update-assets.mjs';
 
@@ -33,6 +33,15 @@ async function main() {
   console.log('Change list');
   console.log('-----------------------------------------------\n');
   execSync(`git status --porcelain`, {stdio: 'inherit'});
+
+  // Fail visibly when upstream prose changes instead of silently retaining English fallback.
+  execFileSync(
+    process.execPath,
+    [join(import.meta.dirname, '../check-korean-doc-translations.mjs')],
+    {
+      stdio: 'inherit',
+    },
+  );
 }
 
 main().catch((err) => {

@@ -446,7 +446,13 @@ in an [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100).
 이 메서드에서는 [뷰 쿼리](guide/components/queries#view-queries)의 갱신된 상태를 참조할 수 있지만, 템플릿이 이미 렌더링한 시그널이 아닌 상태를 변경하지 않도록 주의하세요.
 이러한 상태를 변경하면 [ExpressionChangedAfterItHasBeenCheckedError](errors/NG0100)가 발생할 수 있습니다.
 
+<!--
 ### afterEveryRender and afterNextRender
+-->
+
+<a id="aftereveryrender-and-afternextrender"></a>
+
+### afterEveryRender와 afterNextRender
 
 <!--
 The `afterEveryRender` and `afterNextRender` functions let you register a **render callback** to be
@@ -579,12 +585,12 @@ export class UserProfile {
 
 전체 과정은 4단계로 진행됩니다:
 
-| 단계             | 설명                                                                                                                                                                                                  |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `earlyRead`      | 다음 단계에서 필요한 DOM 속성과 스타일 값을 읽을 때 사용합니다. 가능하다면, 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다.                                                   |
-| `write`          | 레이아웃 DOM 프로퍼티나 스타일 값을 설정할 때 사용합니다.                                                                                                                                             |
+| 단계             | 설명                                                                                                                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `earlyRead`      | 다음 단계에서 필요한 DOM 속성과 스타일 값을 읽을 때 사용합니다. 가능하다면, 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다.                                             |
+| `write`          | 레이아웃 DOM 프로퍼티나 스타일 값을 설정할 때 사용합니다.                                                                                                                                       |
 | `mixedReadWrite` | 기본 단계입니다. 레이아웃에 영향을 주는 프로퍼티와 스타일을 읽고 쓰는 작업을 모두 수행해야 할 때 사용합니다. 가능하다면 이 단계를 생략하고 `write` 단계와 `read` 단계를 활용하는 것이 좋습니다. |
-| `read`           | 레이아웃 DOM 프로퍼티를 읽을 때 사용합니다.                                                                                                                                                           |
+| `read`           | 레이아웃 DOM 프로퍼티를 읽을 때 사용합니다.                                                                                                                                                     |
 
 <!--
 ## Lifecycle interfaces

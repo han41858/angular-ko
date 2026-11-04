@@ -46,7 +46,7 @@ const CONFIRMATION_DISPLAY_TIME_MS = 1000;
     },
   ],
   host: {
-    '[ariaLabel]': '"Copy link to " + label()',
+    '[ariaLabel]': 'label() + " 링크 복사"',
     '(click)': 'copyLink()',
     'matTooltipPosition': 'above',
     '[class.docs-copy-link-success]': 'showCopySuccess()',
