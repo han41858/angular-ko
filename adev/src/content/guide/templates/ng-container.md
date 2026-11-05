@@ -27,7 +27,7 @@
 
 You can apply directives to `<ng-container>` to add behaviors or configuration to a part of your template.
 
-Angular ignores all attribute bindings and event listeners applied to `<ng-container>`, including those applied via directive.
+Angular ignores class bindings, style bindings, DOM event listeners, and static attributes applied to `<ng-container>`, including those applied via directive. Attribute bindings cause errors, and property bindings only work for directive inputs.
 -->
 
 `<ng-container>` 는 여러 엘리먼트를 하나로 묶거나, 템플릿에 추가로 렌더링될 엘리먼트의 위치를 지정하는 특별한 엘리먼트입니다.
@@ -52,7 +52,9 @@ Angular ignores all attribute bindings and event listeners applied to `<ng-conta
 
 `<ng-container>`에 동작을 추가하거나 템플릿에서 사용되는 설정을 더하려면 이 엘리먼트에 디렉티브를 적용할 수도 있습니다.
 
-다만, Angular는 `<ng-container>`에 적용된 어트리뷰트 바인딩과 이벤트 리스너를 무시합니다. 디렉티브를 통해 적용된 바인딩과 리스너도 마찬가지입니다.
+Angular는 `<ng-container>`에 적용된 클래스 바인딩, 스타일 바인딩, DOM 이벤트 리스너, 정적 어트리뷰트를 무시합니다.
+디렉티브를 통해 적용된 경우에도 마찬가지입니다.
+어트리뷰트 바인딩은 오류를 발생시키며, 프로퍼티 바인딩은 디렉티브의 입력 프로퍼티에만 사용할 수 있습니다.
 
 <!--
 ## Using `<ng-container>` to display dynamic contents

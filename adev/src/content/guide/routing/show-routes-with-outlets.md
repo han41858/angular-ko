@@ -274,7 +274,7 @@ Pages may have multiple outlets— you can assign a name to each outlet to speci
 <app-footer />
 ```
 
-Each outlet must have a unique name. The name cannot be set or changed dynamically. By default, the name is `'primary'`.
+Each outlet must have a unique name. You can bind the name to a value. When the value changes, the outlet destroys its current component and renders the route for the new name, if one matches. By default, the name is `'primary'`.
 
 Angular matches the outlet's name to the `outlet` property defined on each route:
 
@@ -299,7 +299,8 @@ Angular matches the outlet's name to the `outlet` property defined on each route
 ```
 
 각 아웃렛의 이름은 고유해야 합니다.
-이름은 동적으로 설정하거나 변경할 수 없습니다.
+이름을 값에 바인딩할 수 있습니다.
+값이 변경되면 아웃렛은 현재 컴포넌트를 제거하고, 새 이름과 일치하는 라우팅 규칙이 있으면 해당 화면을 렌더링합니다.
 기본 이름은 `'primary'`입니다.
 
 Angular는 아웃렛 이름을 각 라우팅 규칙에 정의한 `outlet` 프로퍼티와 매칭합니다.

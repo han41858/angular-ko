@@ -2378,8 +2378,9 @@ export const RECOMMENDATIONS: Step[] = [
     level: ApplicationComplexity.Basic,
     material: true,
     step: 'update @angular/material',
-    // Original: Run `ng update @angular/material@17`.
-    action: '`ng update @angular/material@17`을 실행하세요.',
+    // Original: Run `ng update @angular/material@17`. If your application still uses legacy Angular Material components (deprecated in v15 and removed in v17), run `ng generate @angular/material:mdc-migration` before upgrading to Material v17. Read the [MDC migration guide](https://v17.material.angular.dev/guide/mdc-migration) for detailed instructions.
+    action:
+      '`ng update @angular/material@17`을 실행하세요. 애플리케이션에서 아직 레거시 Angular Material 컴포넌트(v15에서 사용 중단이 권고되었으며 v17에서 제거됨)를 사용한다면 Material v17로 업그레이드하기 전에 `ng generate @angular/material:mdc-migration`을 실행하세요. 자세한 방법은 [MDC 마이그레이션 가이드](https://v17.material.angular.dev/guide/mdc-migration)를 참고하세요.',
   },
   {
     possibleIn: 1700,

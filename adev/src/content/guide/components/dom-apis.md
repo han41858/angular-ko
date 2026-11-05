@@ -119,8 +119,8 @@ method to update synthetic animation properties and the `listen` method to add e
 synthetic animation events. See the [Animations](guide/animations) guide for details.
 
 Aside from these two narrow use-cases, there is no difference between using `Renderer2` and native
-DOM APIs. `Renderer2` APIs do not support DOM manipulation in server-side rendering or build-time
-pre-rendering contexts.
+DOM APIs. Both work in server-side rendering and build-time pre-rendering, but the server's DOM lacks
+browser-only APIs such as layout measurement and observers.
 -->
 
 컴포넌트는 `Renderer2` 인스턴스를 의존성 객체로 주입받아서 Angular 기능과 관련된 특정 DOM 조작 기능을 실행할 수 있습니다.
@@ -132,7 +132,7 @@ pre-rendering contexts.
 자세한 내용은 [애니메이션](guide/animations) 문서를 참고하세요.
 
 이 두 가지 사용방법을 제외하면, `Renderer2` 를 사용하는 방식과 네이티브 DOM API를 활용하는 방식은 차이가 없습니다.
-`Renderer2` API는 서버 사이드 렌더링이나 빌드 시점의 프리 렌더링에서는 DOM 조작을 지원하지 않습니다.
+두 방식 모두 서버 사이드 렌더링과 빌드 시점의 프리 렌더링에서 동작하지만, 서버의 DOM에는 레이아웃 측정이나 옵저버와 같은 브라우저 전용 API가 없습니다.
 
 <!--
 ## When to use DOM APIs
