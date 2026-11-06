@@ -170,6 +170,8 @@ But most servers by default will reject `http://my-app.test/users/42` and return
 Configure the fallback route or 404 page to `index.html` for your server, so Angular is served for deep links and can display the correct route.
 Some servers call this fallback behavior "Single-Page Application" (SPA) mode.
 
+IMPORTANT: When you prerender your application with `outputMode: "static"`, configure your server to use `index.csr.html` as the fallback instead of `index.html`. The build writes the host page to `index.csr.html`, whereas `index.html` (if generated) contains the prerendered content for the root route (`/`).
+
 Once the browser loads the application, Angular router will read the URL to determine which page it is on and display `/users/42` correctly.
 
 For "real" 404 pages such as `http://my-app.test/does-not-exist`, the server does not require any additional configuration.
@@ -195,6 +197,9 @@ Angular 라우터는 _클라이언트 측에서_ 화면을 전환하며 새로�
 이를 대신해서 `index.html`을 반환하도록 설정해야 합니다.
 서버의 대체 라우팅 규칙이나 404 페이지를 `index.html`로 설정하면 딥 링크 요청에도 Angular가 제공되어 올바른 라우팅 규칙의 화면을 표시할 수 있습니다.
 일부 서버는 이러한 대체 응답 방식을 "단일 페이지 애플리케이션"(SPA) 모드라고 부릅니다.
+
+IMPORTANT: `outputMode: "static"`으로 애플리케이션을 프리 렌더링한다면 서버가 `index.html` 대신 `index.csr.html`로 대체 응답하도록 설정하세요.
+빌드 과정에서 호스트 페이지는 `index.csr.html`에 기록되며, `index.html`이 생성되는 경우에는 루트 라우팅 규칙(`/`)의 프리 렌더링된 콘텐츠가 담깁니다.
 
 브라우저가 애플리케이션을 불러오면 Angular 라우터가 URL을 읽어서 현재 페이지를 판단하고 `/users/42`를 올바르게 표시합니다.
 
