@@ -10,6 +10,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {WINDOW} from '@angular/docs';
 import {provideRouter} from '@angular/router';
+import {version} from '../../../../../../package.json';
 import {Footer} from './footer.component';
 
 describe('Footer', () => {
@@ -38,7 +39,7 @@ describe('Footer', () => {
   });
 
   it('should display the repository release version in the footer', () => {
-    expect(fixture.nativeElement.textContent).toContain('Built by Angular at v22.2.3.');
+    expect(fixture.nativeElement.textContent).toContain(`Built by Angular at v${version}.`);
   });
 
   it('should create', () => {
