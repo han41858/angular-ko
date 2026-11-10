@@ -25,5 +25,5 @@ export default {
     apiKey: 'dfca7ed184db27927a512e5c6668b968',
     indexName: indexName,
   },
-  googleAnalyticsId: 'G-XB6NEVW32B',
+  googleAnalyticsId: 'G-BDHJXDP0GW',
 };
