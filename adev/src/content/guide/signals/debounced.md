@@ -36,7 +36,7 @@ export class Search {
 }
 ```
 
-`debounced` takes the source signal and a wait duration in milliseconds. The returned resource's `value()` always contains the last settled value, and `status()` tells you whether a new value is still pending.
+`debounced` takes the source signal and a wait duration in milliseconds. The returned resource's `value()` contains the last settled value, and `status()` tells you whether a new value is still pending.
 -->
 
 중요: `debounced`는 아직 [실험실](reference/releases#experimental) 단계입니다.
@@ -73,7 +73,7 @@ export class Search {
 ```
 
 `debounced`는 소스 시그널과 밀리초 단위 시간을 인자로 받습니다.
-이 함수를 실행하고 반환한 리소스 시그널의 `value()`는 언제나 마지막으로 안정된 값을 나타내며, `status()`를 사용하면 새 값이 안정되었는지 확인할 수 있습니다.
+이 함수를 실행하고 반환한 리소스 시그널의 `value()`는 마지막으로 안정된 값을 나타내며, `status()`를 사용하면 새 값이 안정되었는지 확인할 수 있습니다.
 
 <!--
 ## Status during debounce
@@ -84,14 +84,18 @@ export class Search {
 ## 지연되는 동안의 상태
 
 <!--
-While the debounce timer is counting down, `status()` is `'loading'` and `value()` returns the previously resolved value. When the timer expires, the resource settles to `'resolved'`. If the source signal throws, the resource enters `'error'` immediately; no timer runs.
+While the debounce timer is counting down after a resolved value, `status()` is `'loading'` and `value()` returns the previously resolved value. When the timer expires, the resource settles to `'resolved'`.
+
+If the source signal throws, the resource enters `'error'` immediately, `value()` throws, and no timer runs. After the source signal stops throwing, the resource stays in `'error'` until the new wait settles, then becomes `'resolved'`.
 
 See [Resource status](/guide/signals/resource#resource-status) for the full list of statuses and their `value()` behavior.
 -->
 
-시그널을 지연시키는 동안 `status()`가 반환하는 값은 `'loading'`이며, `value()`는 이전 값을 반환합니다.
-그리고 타이머가 종료되면 리소스 시그널 상태가 `'resolved'`로 변경됩니다.
-소스 시그널에서 오류가 발생하면 리소스 시그널은 타이머 만료에 관계없이 `'error'` 상태가 됩니다.
+값이 안정된 후 다음 값을 기다리는 디바운스 타이머가 실행되는 동안 `status()`가 반환하는 값은 `'loading'`이며, `value()`는 이전에 안정된 값을 반환합니다.
+타이머가 종료되면 리소스 시그널 상태가 `'resolved'`로 변경됩니다.
+
+소스 시그널에서 오류가 발생하면 리소스 시그널은 즉시 `'error'` 상태가 되고, `value()`도 오류를 던지며, 타이머는 실행되지 않습니다.
+소스 시그널에서 더 이상 오류가 발생하지 않더라도 새로운 대기 시간이 끝날 때까지 리소스 시그널은 `'error'` 상태를 유지하며, 대기 시간이 끝나면 `'resolved'` 상태가 됩니다.
 
 가능한 상태의 전체 목록과 `value()` 동작에 대해 더 알아보려면 [Resource status](/guide/signals/resource#resource-status) 문서를 참고하세요.
 

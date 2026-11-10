@@ -39,6 +39,7 @@
 | `NG0505`  | [No hydration info in server response](errors/NG0505)                                |
 | `NG0506`  | [NgZone remains unstable](errors/NG0506)                                             |
 | `NG0507`  | [HTML content was altered after SSR](errors/NG0507)                                  |
+| `NG0509`  | [Hydration Missing Node on Path](errors/NG0509)                                      |
 | `NG0600`  | [Signal write in a disallowed context](errors/NG0600)                                |
 | `NG0602`  | [Disallowed function call inside reactive context](errors/NG0602)                    |
 | `NG0750`  | [@defer dependencies failed to load](errors/NG0750)                                  |
@@ -93,6 +94,7 @@
 | `NG0505`  | [서버 응답에 하이드레이션 정보가 없음](errors/NG0505)                        |
 | `NG0506`  | [NgZone이 불안정한 상태로 유지됨](errors/NG0506)                             |
 | `NG0507`  | [서버 사이드 렌더링 후 변경된 HTML 콘텐츠](errors/NG0507)                    |
+| `NG0509`  | [하이드레이션 중 경로상의 노드 누락](errors/NG0509)                          |
 | `NG0600`  | [허용되지 않은 컨텍스트에서 시그널 값 쓰기](errors/NG0600)                   |
 | `NG0602`  | [반응 컨텍스트에서 허용되지 않는 함수 호출](errors/NG0602)                   |
 | `NG0750`  | [@defer 의존성 로드 실패](errors/NG0750)                                     |

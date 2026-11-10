@@ -29,7 +29,7 @@ The tutorial walks you through the following steps:
 1. Develop a component to create form controls dynamically.
 
 The form you create uses input validation and styling to improve the user experience.
-It has a Submit button that is only enabled when all user input is valid, and flags invalid input with color coding and error messages.
+It has a Save button that is only enabled when all user input is valid, and flags invalid input with color coding and error messages.
 
 The basic version can evolve to support a richer variety of questions, more graceful rendering, and superior user experience.
 -->
@@ -55,7 +55,7 @@ The basic version can evolve to support a richer variety of questions, more grac
 1. 폼 컨트롤을 동적으로 생성하는 컴포넌트를 만듭니다.
 
 만들 폼에는 사용자 경험을 개선하기 위해 입력 유효성 검사와 스타일을 적용합니다.
-모든 입력 값이 유효할 때만 제출 버튼이 활성화되며, 유효하지 않은 입력은 색상과 오류 메시지로 표시합니다.
+모든 입력 값이 유효할 때만 저장 버튼이 활성화되며, 유효하지 않은 입력은 색상과 오류 메시지로 표시합니다.
 
 이 기본 구현을 확장하면 더 다양한 질문을 지원하고, 화면 표시를 다듬으며, 사용자 경험을 개선할 수 있습니다.
 
@@ -163,14 +163,14 @@ The `DropdownQuestion` control type presents a list of choices in a select box.
 
 <!--
 A dynamic form uses a service to create grouped sets of input controls, based on the form model.
-The following `QuestionControlService` collects a set of `FormGroup` instances that consume the metadata from the question model.
+The following `QuestionControlService` builds a `FormGroup` of `FormControl` instances from the metadata in the question model.
 You can specify default values and validation rules.
 
 <docs-code header="question-control.service.ts" path="adev/src/content/examples/dynamic-form/src/app/question-control.service.ts"/>
 -->
 
 동적 폼은 서비스를 사용해서 폼 모델에 따라 입력 컨트롤을 그룹으로 묶어 생성합니다.
-다음 `QuestionControlService`는 질문 모델의 메타데이터를 사용하는 `FormGroup` 인스턴스를 구성합니다.
+다음 `QuestionControlService`는 질문 모델의 메타데이터를 바탕으로 `FormControl` 인스턴스들로 구성된 `FormGroup`을 생성합니다.
 기본값과 유효성 검사 규칙도 지정할 수 있습니다.
 
 <docs-code header="question-control.service.ts" path="adev/src/content/examples/dynamic-form/src/app/question-control.service.ts"/>
@@ -189,7 +189,7 @@ Each question is represented in the form component's template by an `<app-questi
 
 The `DynamicFormQuestionComponent` is responsible for rendering the details of an individual question based on values in the data-bound question object.
 The form relies on a [`[formGroup]` directive](api/forms/FormGroupDirective 'API reference') to connect the template HTML to the underlying control objects.
-The `DynamicFormQuestionComponent` creates form groups and populates them with controls defined in the question model, specifying display and validation rules.
+The `DynamicFormQuestionComponent` receives the form group built by `QuestionControlService` and renders the control for its question, displaying validation state based on the rules set there.
 
 <docs-code-multifile>
   <docs-code header="dynamic-form-question.component.html" path="adev/src/content/examples/dynamic-form/src/app/dynamic-form-question.component.html"/>
@@ -208,7 +208,7 @@ Both directives are defined in `ReactiveFormsModule`.
 
 `DynamicFormQuestionComponent`는 데이터 바인딩으로 전달된 질문 객체의 값에 따라 개별 질문의 세부 내용을 렌더링합니다.
 폼은 [`[formGroup]` 디렉티브](api/forms/FormGroupDirective 'API 레퍼런스')를 사용해서 템플릿 HTML과 실제 컨트롤 객체를 연결합니다.
-`DynamicFormQuestionComponent`는 폼 그룹을 생성하고 질문 모델에 정의된 컨트롤을 채우면서, 표시 방식과 유효성 검사 규칙을 지정합니다.
+`DynamicFormQuestionComponent`는 `QuestionControlService`가 생성한 폼 그룹을 전달받아 해당 질문의 컨트롤을 렌더링하고, 서비스에서 설정한 규칙에 따라 유효성 검사 상태를 표시합니다.
 
 <docs-code-multifile>
   <docs-code header="dynamic-form-question.component.html" path="adev/src/content/examples/dynamic-form/src/app/dynamic-form-question.component.html"/>

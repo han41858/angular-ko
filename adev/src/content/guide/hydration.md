@@ -656,6 +656,67 @@ Many third party scripts, such as ad trackers and analytics, modify the DOM befo
 [`AfterNextRender`](api/core/afterNextRender)를 사용해서 하이드레이션 후 처리가 끝날 때까지 스크립트 실행을 미루는 방법도 고려할 수 있습니다.
 
 <!--
+### CDNs and browser extensions
+-->
+
+<a id="cdns-and-browser-extensions"></a>
+
+### CDN과 브라우저 확장 프로그램
+
+<!--
+Code outside your application can change the HTML from the server before hydration starts. You often can't see these errors on your computer, because they don't happen on your local server.
+-->
+
+애플리케이션 외부의 코드가 하이드레이션을 시작하기 전에 서버에서 받은 HTML을 변경할 수 있습니다.
+이런 오류는 로컬 서버에서 발생하지 않기 때문에 개발자의 컴퓨터에서는 확인하기 어려운 경우가 많습니다.
+
+<!--
+**CDNs that change HTML.** Some CDN features change HTML on its way to the browser. For example, some features remove comment nodes and whitespace, but hydration needs them. Another example is Email Address Obfuscation from Cloudflare, which is on by default. This feature changes email addresses to elements like `<span class="__cf_email__" data-cfemail="...">`. It also changes `mailto:` links and adds a script that changes the content back. If this script doesn't run before hydration starts, Angular finds an element where it expects text. Your local server doesn't use the CDN, so your application works on your computer and fails only in production.
+-->
+
+**HTML을 변경하는 CDN.** 일부 CDN 기능은 HTML이 브라우저에 전달되는 도중에 내용을 변경합니다.
+예를 들어, 하이드레이션에 필요한 주석 노드와 공백을 제거하는 기능이 있습니다.
+Cloudflare에서 기본으로 활성화되는 이메일 주소 난독화(Email Address Obfuscation)도 그 예입니다.
+이 기능은 이메일 주소를 `<span class="__cf_email__" data-cfemail="...">` 같은 엘리먼트로 바꿉니다.
+또한 `mailto:` 링크를 변경하고 내용을 원래대로 되돌리는 스크립트를 추가합니다.
+하이드레이션이 시작되기 전에 이 스크립트가 실행되지 않으면 Angular는 텍스트가 있어야 할 위치에서 엘리먼트를 발견합니다.
+로컬 서버는 CDN을 사용하지 않으므로 애플리케이션은 개발자의 컴퓨터에서는 동작하고 프로덕션에서만 실패합니다.
+
+<!--
+**Browser extensions.** Some browser extensions change the page before hydration starts. Examples are click-to-call tools, translators, and password managers. You can't control these extensions. Only users who install them have the problem, so you may see errors from only some users.
+-->
+
+**브라우저 확장 프로그램.** 일부 브라우저 확장 프로그램은 하이드레이션이 시작되기 전에 페이지를 변경합니다.
+클릭하여 전화 걸기 도구, 번역기, 비밀번호 관리자 등이 그 예입니다.
+이런 확장 프로그램은 애플리케이션에서 제어할 수 없습니다.
+설치한 사용자에게만 문제가 발생하므로 일부 사용자에게서만 오류가 보고될 수 있습니다.
+
+<!--
+To fix these errors:
+-->
+
+이런 오류를 해결하려면 다음과 같이 하세요:
+
+<!--
+- Add `ngSkipHydration` to the component host around the changed content. Add it in the template where you write that content, like this: `<app-contact ngSkipHydration><a href="tel:...">...</a></app-contact>`. Angular then renders this content again in the browser, and this removes the changes. You can use this attribute only on component host elements, so you can't add it to the `<a>` element. Read more in [how to skip hydration](#how-to-skip-hydration-for-particular-components).
+- Turn off the CDN feature for your application. In Cloudflare, turn off [Email Address Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/) in the security settings, or use a [Configuration Rule](https://developers.cloudflare.com/rules/configuration-rules/settings/) to turn it off for the hostnames of your application.
+-->
+
+- 변경되는 콘텐츠를 감싸는 컴포넌트 호스트에 `ngSkipHydration`을 추가하세요.
+  해당 콘텐츠를 작성하는 템플릿에 `<app-contact ngSkipHydration><a href="tel:...">...</a></app-contact>`처럼 추가하세요.
+  그러면 Angular가 브라우저에서 이 콘텐츠를 다시 렌더링하여 외부에서 변경한 내용을 제거합니다.
+  이 어트리뷰트는 컴포넌트 호스트 엘리먼트에만 사용할 수 있으므로 `<a>` 엘리먼트에는 추가할 수 없습니다.
+  자세한 내용은 [하이드레이션 건너뛰기](#how-to-skip-hydration-for-particular-components)를 참고하세요.
+- 애플리케이션에서 해당 CDN 기능을 끄세요.
+  Cloudflare에서는 보안 설정에서 [이메일 주소 난독화](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/)를 끄거나, [구성 규칙](https://developers.cloudflare.com/rules/configuration-rules/settings/)을 사용하여 애플리케이션의 호스트 이름에 대해 이 기능을 끄세요.
+
+<!--
+NOTE: The `&lt;!--email_off--&gt;` comments from Cloudflare don't help in Angular templates, because the compiler removes comments from templates.
+-->
+
+참고: Angular 컴파일러는 템플릿에서 주석을 제거하므로 Cloudflare의 `<!--email_off-->` 주석은 Angular 템플릿에서 도움이 되지 않습니다.
+
+<!--
 ## Incremental Hydration
 -->
 
