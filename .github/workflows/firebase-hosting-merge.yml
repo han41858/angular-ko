@@ -231,10 +231,10 @@ jobs:
           monitor_pid=$!
 
           # Waiting on a background build lets cancellation run the cleanup trap promptly.
-          # Use the same development target directly: adev:build is a local-only wrapper.
+          # Build optimized production assets and prerendered pages for Firebase Hosting.
           # Do not retain one TypeScript worker per worker key through app bundling.
           # The memory resource budget guides scheduling; it is not an RSS hard limit.
-          pnpm bazel build //adev:build \
+          pnpm bazel build //adev:build.production \
             --disk_cache="$BAZEL_DISK_CACHE" \
             --jobs=2 \
             --local_resources=memory=6144 \
