@@ -231,6 +231,9 @@ export class App {}
 The `<ng-content>` placeholder supports the same CSS selectors
 as [component selectors](guide/components/selectors).
 
+IMPORTANT: if using an attribute or class selector, it must be set statically, i.e `class="within"`.
+Dynamic bindings such as `[class.within]="isWithin()"` will not be seen by the `select` selector.
+
 If you include one or more `<ng-content>` placeholders with a `select` attribute and
 one `<ng-content>` placeholder without a `select` attribute, the latter captures all elements that
 did not match a `select` attribute:
@@ -329,6 +332,9 @@ export class App {}
 ```
 
 `<ng-content>` 플레이스홀더에 사용하는 CSS 셀렉터는 [컴포넌트 셀렉터](guide/components/selectors)로 지정하는 방식과 같습니다.
+
+중요: 어트리뷰트 셀렉터나 클래스 셀렉터를 사용하려면 `class="within"`처럼 어트리뷰트나 클래스를 정적으로 설정해야 합니다.
+`[class.within]="isWithin()"`처럼 동적으로 바인딩한 값은 `select` 셀렉터가 인식하지 못합니다.
 
 `<ng-content>` 를 하나 이상 사용할 때 `select` 어트리뷰트를 지정한 `<ng-content>` 외에 `select` 어트리뷰트를 사용하지 않는 `<ng-content>`를 사용할 수 있는데, 이 경우는 `select` 어트리뷰트가 매칭되지 않는 모든 엘리먼트와 매칭됩니다:
 

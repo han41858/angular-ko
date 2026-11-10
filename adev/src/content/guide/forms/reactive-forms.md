@@ -605,7 +605,7 @@ The `FormBuilder` service is an injectable provider from the reactive forms modu
 
 </docs-step>
 <docs-step title="Generate form controls">
-The `FormBuilder` service has three methods: `control()`, `group()`, and `array()`. These are factory methods for generating instances in your component classes including form controls, form groups, and form arrays. Use the `group` method to create the `profileForm` controls.
+The `FormBuilder` service has four methods: `control()`, `group()`, `record()`, and `array()`. These are factory methods for generating instances in your component classes including form controls, form groups, form records, and form arrays. Use the `group` method to create the `profileForm` controls.
 
 <docs-code header="profile-editor.component.ts (form builder)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder"/>
 
@@ -655,8 +655,8 @@ TIP: You can define the control with just the initial value, but if your control
 <a id="generate-form-controls"></a>
 
 <docs-step title="폼 컨트롤 생성하기">
-`FormBuilder` 서비스에는 `control()`, `group()`, `array()` 메서드가 있습니다.
-이 메서드는 컴포넌트 클래스에서 폼 컨트롤, 폼 그룹, 폼 배열 인스턴스를 생성하는 팩토리 메서드입니다.
+`FormBuilder` 서비스에는 `control()`, `group()`, `record()`, `array()`라는 네 가지 메서드가 있습니다.
+이 메서드는 컴포넌트 클래스에서 폼 컨트롤, 폼 그룹, 폼 레코드, 폼 배열 인스턴스를 생성하는 팩토리 메서드입니다.
 `group` 메서드로 `profileForm`의 컨트롤을 생성하세요.
 
 <docs-code header="profile-editor.component.ts (폼 빌더)" path="adev/src/content/examples/reactive-forms/src/app/profile-editor/profile-editor.component.2.ts" region="form-builder"/>

@@ -672,7 +672,7 @@ Here are the steps performed in the view to model test.
 
 1. Query the view for the form input element, and create a custom "input" event for the test.
 1. Set the new value for the input to _Red_, and dispatch the "input" event on the form input element.
-1. Run change detection through the test fixture.
+1. Use `await fixture.whenStable()` to wait for the update to be processed.
 1. Assert that the component `favoriteColor` property value matches the value from the input.
 
 The following test verifies the data flow from model to view.
@@ -682,7 +682,6 @@ The following test verifies the data flow from model to view.
 Here are the steps performed in the model to view test.
 
 1. Use the component instance to set the value of the `favoriteColor` property.
-1. Run change detection through the test fixture.
 1. Use `await fixture.whenStable()` to wait for the next rendering.
 1. Query the view for the form input element.
 1. Assert that the input value matches the value of the `favoriteColor` property in the component instance.
@@ -700,7 +699,7 @@ Here are the steps performed in the model to view test.
 
 1. 폼 입력 엘리먼트를 쿼리하고 커스텀 "input" 이벤트를 만듭니다.
 1. 이벤트에 새 값으로 _Red_ 를 설정하고 폼 입력 엘리먼트로 "input" 이벤트를 보냅니다.
-1. 테스트 픽스쳐로 변경 감지 싸이클을 실행합니다.
+1. `await fixture.whenStable()`을 사용해서 변경 사항이 처리될 때까지 기다립니다.
 1. 컴포넌트의 `favoriteColor` 프로퍼티 값이 입력 엘리먼트와 같은지 검사합니다.
 
 이제 모델에서 화면으로 전달되는 데이터를 검사해 봅시다.
@@ -710,7 +709,6 @@ Here are the steps performed in the model to view test.
 이런 순서로 테스트합니다.
 
 1. 컴포넌트 인스턴스로 `favoriteColor` 프로퍼티 값을 설정합니다.
-1. 테스트 픽스쳐로 변경 감지 싸이클을 실행합니다.
 1. 다음 렌더링까지 기다리기 위해 `await fixture.whenStable()` 를 실행합니다.
 1. 폼 입력 엘리먼트를 참조합니다.
 1. 엘리먼트의 값이 컴포넌트 인스턴스의 `favoriteColor` 프로퍼티 값과 같은지 검사합니다.
