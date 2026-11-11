@@ -118,7 +118,6 @@ Angular는 용도에 따라 네 가지 라우팅 규칙 가드를 제공합니�
 ### CanActivate
 -->
 
-
 ### CanActivate
 
 <!--
@@ -127,7 +126,7 @@ The `CanActivate` guard determines whether a user can access a route. It is most
 It has access to the following default arguments:
 
 - `route`: `ActivatedRouteSnapshot` - Contains information about the route being activated
-- `state`: `RouterStateSnapshot` - Contains the router's current state
+- `state`: `RouterStateSnapshot` - Contains the state the router is navigating to, not the current state (use `Router.routerState` for that)
 
 It can return the [standard return guard types](#route-guard-return-types).
 
@@ -152,7 +151,8 @@ For more information, check out the [API docs for CanActivateFn](api/router/CanA
 다음 기본 인자를 사용할 수 있습니다.
 
 - `route`: `ActivatedRouteSnapshot` — 활성화하려는 라우팅 규칙의 정보가 있습니다.
-- `state`: `RouterStateSnapshot` — 라우터의 현재 상태가 있습니다.
+- `state`: `RouterStateSnapshot` - 현재 상태가 아니라 라우터가 이동하려는 상태가 있습니다.
+  현재 상태는 `Router.routerState`에서 확인하세요.
 
 [일반적인 가드 반환 타입](#route-guard-return-types)을 반환할 수 있습니다.
 
@@ -175,7 +175,6 @@ export const authGuard: CanActivateFn = (
 ### CanActivateChild
 -->
 
-
 ### CanActivateChild
 
 <!--
@@ -184,7 +183,7 @@ The `CanActivateChild` guard determines whether a user can access child routes o
 It has access to the following default arguments:
 
 - `childRoute`: `ActivatedRouteSnapshot` - Contains information about the "future" snapshot (i.e., state the router is attempting to navigate to) of the child route being activated
-- `state`: `RouterStateSnapshot` - Contains the router's current state
+- `state`: `RouterStateSnapshot` - Contains the state the router is navigating to, not the current state (use `Router.routerState` for that)
 
 It can return the [standard return guard types](#route-guard-return-types).
 
@@ -209,7 +208,8 @@ For more information, check out the [API docs for CanActivateChildFn](api/router
 다음 기본 인자를 사용할 수 있습니다.
 
 - `childRoute`: `ActivatedRouteSnapshot` — 활성화하려는 자식 라우팅 규칙의 "미래" 스냅샷(라우터가 이동하려는 상태) 정보가 있습니다.
-- `state`: `RouterStateSnapshot` — 라우터의 현재 상태가 있습니다.
+- `state`: `RouterStateSnapshot` - 현재 상태가 아니라 라우터가 이동하려는 상태가 있습니다.
+  현재 상태는 `Router.routerState`에서 확인하세요.
 
 [일반적인 가드 반환 타입](#route-guard-return-types)을 반환할 수 있습니다.
 
@@ -228,7 +228,6 @@ export const adminChildGuard: CanActivateChildFn = (
 <!--
 ### CanDeactivate
 -->
-
 
 ### CanDeactivate
 
@@ -290,7 +289,6 @@ export const unsavedChangesGuard: CanDeactivateFn<Form> = (
 <!--
 ### CanMatch
 -->
-
 
 ### CanMatch
 

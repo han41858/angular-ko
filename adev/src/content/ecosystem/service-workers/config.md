@@ -113,7 +113,6 @@ The following sections describe each property of the configuration file.
 ### `appData`
 -->
 
-
 ### `appData`
 
 <!--
@@ -130,7 +129,6 @@ Many applications use this section to provide additional information for the dis
 ### `index`
 -->
 
-
 ### `index`
 
 <!--
@@ -144,7 +142,6 @@ Usually this is `/index.html`.
 <!--
 ### `assetGroups`
 -->
-
 
 ### `assetGroups`
 
@@ -253,7 +250,6 @@ interface AssetGroup {
 #### `name`
 -->
 
-
 #### `name`
 
 <!--
@@ -267,7 +263,6 @@ It identifies this particular group of assets between versions of the configurat
 <!--
 #### `installMode`
 -->
-
 
 #### `installMode`
 
@@ -297,7 +292,6 @@ Defaults to `prefetch`.
 #### `updateMode`
 -->
 
-
 #### `updateMode`
 
 <!--
@@ -326,7 +320,6 @@ Defaults to the value `installMode` is set to.
 #### `resources`
 -->
 
-
 #### `resources`
 
 <!--
@@ -348,7 +341,6 @@ This section describes the resources to cache, broken up into the following grou
 <!--
 #### `cacheQueryOptions`
 -->
-
 
 #### `cacheQueryOptions`
 
@@ -375,7 +367,6 @@ Currently, only the following options are supported:
 <!--
 ### `dataGroups`
 -->
-
 
 ### `dataGroups`
 
@@ -492,7 +483,6 @@ Similar to `assetGroups`, every data group has a `name` which uniquely identifie
 #### `urls`
 -->
 
-
 #### `urls`
 
 <!--
@@ -516,7 +506,6 @@ URL 패턴 목록입니다.
 #### `version`
 -->
 
-
 #### `version`
 
 <!--
@@ -539,7 +528,6 @@ API 형식이 이전 버전과 호환되지 않는 방식으로 변경되는 경
 #### `cacheConfig`
 -->
 
-
 #### `cacheConfig`
 
 <!--
@@ -551,7 +539,6 @@ The following properties define the policy by which matching requests are cached
 <!--
 ##### `maxSize`
 -->
-
 
 ##### `maxSize`
 
@@ -568,7 +555,6 @@ CRITICAL: Open-ended caches can grow in unbounded ways and eventually exceed sto
 <!--
 ##### `maxAge`
 -->
-
 
 ##### `maxAge`
 
@@ -602,7 +588,6 @@ For example, the string `3d12h` caches content for up to three and a half days.
 <!--
 ##### `timeout`
 -->
-
 
 ##### `timeout`
 
@@ -640,7 +625,6 @@ For example, the string `5s30u` translates to five seconds and 30 milliseconds o
 ##### `refreshAhead`
 -->
 
-
 ##### `refreshAhead`
 
 <!--
@@ -674,7 +658,6 @@ For example, the string `1h30m` translates to one hour and 30 minutes ahead of t
 <!--
 ##### `strategy`
 -->
-
 
 ##### `strategy`
 
@@ -718,7 +701,6 @@ Angular 서비스 워커는 데이터 리소스에 다음 두 캐싱 전략 중 
 <!--
 ##### `cacheOpaqueResponses`
 -->
-
 
 ##### `cacheOpaqueResponses`
 
@@ -780,7 +762,6 @@ See [assetGroups](#assetgroups) for details.
 <!--
 ### `navigationUrls`
 -->
-
 
 ### `navigationUrls`
 
@@ -878,7 +859,6 @@ URL이 일반 URL/패턴 중 _하나 이상_ 과 일치하면서, 제외 패턴�
 ### `navigationRequestStrategy`
 -->
 
-
 ### `navigationRequestStrategy`
 
 <!--
@@ -918,13 +898,25 @@ IMPORTANT: The `freshness` strategy usually results in more requests sent to the
 ### `applicationMaxAge`
 -->
 
-
 ### `applicationMaxAge`
 
 <!--
-This optional property enables you to configure how long the service worker will cache any requests. Within the `maxAge`, files will be served from cache. Beyond it, all requests will only be served from the network, including asset and data requests.
+This optional property enables you to configure how long the service worker serves an application version from its cache. The age is measured from the time you built the application, not from the time the files were cached on the device.
 -->
 
-이 선택적 프로퍼티로 서비스 워커가 요청을 캐시에 유지할 기간을 설정할 수 있습니다.
-`maxAge` 이내에는 캐시에서 파일을 제공합니다.
-이 기간이 지나면 정적 리소스 요청과 데이터 요청을 포함한 모든 요청을 네트워크로만 처리합니다.
+이 선택적 프로퍼티로 서비스 워커가 캐시에서 애플리케이션 버전을 제공할 수 있는 기간을 설정할 수 있습니다.
+이 기간은 기기에 파일을 캐시한 시점이 아니라 애플리케이션을 빌드한 시점부터 계산합니다.
+
+<!--
+Within the `applicationMaxAge`, the service worker serves files from the cache. Beyond it, the service worker sends all requests to the network, including asset and data requests, even if no newer version exists. The application does not work offline until a new build is deployed and the device has fetched it.
+-->
+
+`applicationMaxAge` 이내에는 서비스 워커가 캐시에서 파일을 제공합니다.
+이 기간이 지나면 더 최신 버전이 없더라도 정적 리소스 요청과 데이터 요청을 포함한 모든 요청을 네트워크로 보냅니다.
+새 빌드를 배포하고 기기에서 이를 가져오기 전까지는 애플리케이션이 오프라인에서 작동하지 않습니다.
+
+<!--
+If you omit `applicationMaxAge`, there is no maximum age and the service worker serves cached versions regardless of how old they are.
+-->
+
+`applicationMaxAge`를 생략하면 최대 기간이 제한되지 않으므로 서비스 워커는 얼마나 오래되었는지에 관계없이 캐시된 버전을 제공합니다.

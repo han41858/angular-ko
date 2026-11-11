@@ -156,7 +156,7 @@ One way to ensure that a component is using the correct notification mechanisms 
 use [ChangeDetectionStrategy.OnPush](/best-practices/skipping-subtrees#using-onpush).
 
 The `OnPush` change detection strategy is not required, but it is a recommended step towards zoneless compatibility for application components. It is not always possible for library components to use `ChangeDetectionStrategy.OnPush`.
-When a library component is a host for user-components which might use `ChangeDetectionStrategy.Eager`/`Default`, it cannot use `OnPush` because that would prevent the child component from being refreshed if it is not `OnPush` compatible and relies on ZoneJS to trigger change detection. Components can use the `Default` strategy as long as they notify Angular when change detection needs to run (calling `markForCheck`, using signals, `AsyncPipe`, etc.).
+When a library component is a host for user-components which might use `ChangeDetectionStrategy.Eager`, it cannot use `OnPush` because that would prevent the child component from being refreshed if it is not `OnPush` compatible and relies on ZoneJS to trigger change detection. Components can use the `Eager` strategy as long as they notify Angular when change detection needs to run (calling `markForCheck`, using signals, `AsyncPipe`, etc.).
 Being a host for a user component means using an API such as `ViewContainerRef.createComponent` and not just hosting a portion of a template from a user component (i.e. content projection or using a template ref input).
 -->
 
@@ -164,9 +164,9 @@ Being a host for a user component means using an API such as `ViewContainerRef.c
 
 `OnPush` 변경 감지 전략이 필수는 아니지만, 애플리케이션 컴포넌트의 Zoneless 호환성을 확보하는 과정에서 권장되는 단계입니다.
 라이브러리 컴포넌트에서는 항상 `ChangeDetectionStrategy.OnPush`를 사용할 수 있는 것은 아닙니다.
-라이브러리 컴포넌트가 `ChangeDetectionStrategy.Eager`/`Default`를 사용할 수 있는 사용자 컴포넌트의 호스트라면 `OnPush`를 사용할 수 없습니다.
+라이브러리 컴포넌트가 `ChangeDetectionStrategy.Eager`를 사용할 수 있는 사용자 컴포넌트의 호스트라면 `OnPush`를 사용할 수 없습니다.
 자식 컴포넌트가 `OnPush`와 호환되지 않고 ZoneJS에 의존해 변경 감지를 실행하는 경우, `OnPush`가 자식 컴포넌트의 갱신을 막기 때문입니다.
-컴포넌트는 변경 감지를 실행해야 할 때 Angular에 알리기만 하면(`markForCheck` 호출, 시그널 사용, `AsyncPipe` 사용 등) `Default` 전략을 사용할 수 있습니다.
+컴포넌트는 변경 감지를 실행해야 할 때 Angular에 알리기만 하면(`markForCheck` 호출, 시그널 사용, `AsyncPipe` 사용 등) `Eager` 전략을 사용할 수 있습니다.
 사용자 컴포넌트의 호스트라는 것은 `ViewContainerRef.createComponent`와 같은 API를 사용한다는 뜻입니다.
 사용자 컴포넌트의 템플릿 일부만 호스팅하는 경우(콘텐츠 프로젝션이나 템플릿 참조 입력값 사용)는 여기에 해당하지 않습니다.
 

@@ -612,13 +612,13 @@ export class Profile {
 ## 화면에 표시되지만 수정할 수 없는 필드: `readonly()`
 
 <!--
-The `readonly()` rule prevents users from updating a field. The `[FormField]` directive automatically binds this state to the HTML `readonly` attribute, which prevents editing while still allowing users to focus and select text.
+The `readonly()` rule prevents users from updating a field. The `FormField` directive automatically binds this state to the HTML `readonly` attribute, which prevents editing while still allowing users to focus and select text.
 
 NOTE: Readonly fields skip [validation](guide/forms/signals/validation).
 -->
 
 `readonly()` 규칙을 적용하면 사용자가 필드 값을 수정할 수 없습니다.
-`[formField]` 디렉티브는 상태에 따라 HTML `readonly` 어트리뷰트 자동으로 바인딩하는데, 이 어트리뷰트가 설정되면 사용자는 포커스를 옮기거나 텍스트를 선택할 수 있지만, 값을 수정할 수는 없습니다.
+`FormField` 디렉티브는 상태에 따라 HTML `readonly` 어트리뷰트를 자동으로 바인딩하는데, 이 어트리뷰트가 설정되면 사용자는 포커스를 옮기거나 텍스트를 선택할 수 있지만, 값을 수정할 수는 없습니다.
 
 참고: 읽기 전용 필드는 [유효성 검사](guide/forms/signals/validation)에 영향을 주지 않습니다.
 
@@ -664,7 +664,7 @@ export class Account {
 }
 ```
 
-The `[FormField]` directive automatically binds the `readonly` attribute based on the field's state.
+The `FormField` directive automatically binds the `readonly` attribute based on the field's state.
 -->
 
 폼 필드를 항상 읽기 전용으로 지정하려면 `readonly()`에 필드 경로를 지정하면 됩니다:
@@ -700,7 +700,7 @@ export class Account {
 }
 ```
 
-`[formField]` 디렉티브는 필드 상태에 따라 HTML `readonly` 어트리뷰트를 자동으로 바인딩합니다.
+`FormField` 디렉티브는 필드 상태에 따라 HTML `readonly` 어트리뷰트를 자동으로 바인딩합니다.
 
 <!--
 ### Conditional readonly
@@ -1032,10 +1032,18 @@ export class Search {
   });
 
   searchForm = form(this.searchModel, (schemaPath) => {
-    debounce(schemaPath.query, () => {
-      // Return a promise that resolves after 500ms
+    debounce(schemaPath.query, (context, abortSignal) => {
+      // Return a promise that resolves after 500ms, or right away when the debounce is aborted
       return new Promise<void>((resolve) => {
-        setTimeout(() => resolve(), 500);
+        const timeoutId = setTimeout(resolve, 500);
+        abortSignal.addEventListener(
+          'abort',
+          () => {
+            clearTimeout(timeoutId);
+            resolve();
+          },
+          {once: true},
+        );
       });
     });
   });
@@ -1077,10 +1085,18 @@ export class Search {
   });
 
   searchForm = form(this.searchModel, (schemaPath) => {
-    debounce(schemaPath.query, () => {
-      // 500ms 후에 종료되는 Promise를 반환합니다.
+    debounce(schemaPath.query, (context, abortSignal) => {
+      // 500ms 후에 완료되거나 디바운스가 취소되면 즉시 완료되는 Promise를 반환합니다.
       return new Promise<void>((resolve) => {
-        setTimeout(() => resolve(), 500);
+        const timeoutId = setTimeout(resolve, 500);
+        abortSignal.addEventListener(
+          'abort',
+          () => {
+            clearTimeout(timeoutId);
+            resolve();
+          },
+          {once: true},
+        );
       });
     });
   });

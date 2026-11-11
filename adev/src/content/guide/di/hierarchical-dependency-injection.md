@@ -167,7 +167,7 @@ The following diagram represents the relationship between the `root` `ModuleInje
 
 ```mermaid
 stateDiagram-v2
-    elementInjector: EnvironmentInjector<br>(configured by Angular)<br>has special things like DomSanitizer => providedIn 'platform'
+    elementInjector: EnvironmentInjector<br>(configured by Angular)<br>has special things like PlatformLocation => providedIn 'platform'
     rootInjector: root EnvironmentInjector<br>(configured by AppConfig)<br>has things for your app => bootstrapApplication(..., AppConfig)
     nullInjector: NullInjector<br>always throws an error unless<br>you use @Optional()
 
@@ -222,7 +222,7 @@ bootstrapApplication(App, appConfig);
 
 ```mermaid
 stateDiagram-v2
-    elementInjector: EnvironmentInjector<br>(Angular가 구성)<br>'platform'으로 providedIn 설정하면 등록됩니다.
+    elementInjector: EnvironmentInjector<br>(Angular가 구성)<br>PlatformLocation처럼 providedIn이 'platform'인 항목이 있습니다.
     rootInjector: 최상위 EnvironmentInjector<br>(AppConfig에 따라 구성)<br>bootstrapApplication(..., AppConfig)을 실행할 때 구성
     nullInjector: NullInjector<br>@Optional()을 사용하지 않으면 에러가 발생합니다.
 

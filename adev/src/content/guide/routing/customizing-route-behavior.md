@@ -297,7 +297,7 @@ provideRouter(routes, withRouterConfig({urlUpdateStrategy: 'eager'}));
 ### 기본 쿼리 파라미터 처리 방식 선택하기
 
 <!--
-`defaultQueryParamsHandling` sets the fallback behavior for `Router.createUrlTree` when the call does not specify `queryParamsHandling`. `'replace'` is the default and swaps out the existing query string. `'merge'` combines the provided values with the current ones, and `'preserve'` keeps the existing query parameters unless you explicitly supply new ones.
+`defaultQueryParamsHandling` sets the fallback behavior for `Router.createUrlTree` when the call does not specify `queryParamsHandling`. `'replace'` is the default and swaps out the existing query string. `'merge'` combines the provided values with the current ones, and `'preserve'` keeps the existing query parameters and ignores any `queryParams` you pass to the call.
 
 ```ts
 provideRouter(routes, withRouterConfig({defaultQueryParamsHandling: 'merge'}));
@@ -308,7 +308,7 @@ This is especially helpful for search and filter pages to automatically retain e
 
 `defaultQueryParamsHandling`은 `Router.createUrlTree`를 실행하면서 `queryParamsHandling`을 지정하지 않았을 때 적용할 기본 동작을 설정합니다.
 기본값인 `'replace'`는 기존 쿼리 문자열을 교체합니다.
-`'merge'`는 전달한 값을 현재 값과 합치고, `'preserve'`는 새 값을 명시적으로 전달하지 않는 한 기존 쿼리 파라미터를 유지합니다.
+`'merge'`는 전달한 값을 현재 값과 합치고, `'preserve'`는 기존 쿼리 파라미터를 유지하며 호출 시 전달한 `queryParams`는 모두 무시합니다.
 
 ```ts
 provideRouter(routes, withRouterConfig({defaultQueryParamsHandling: 'merge'}));
@@ -1278,7 +1278,7 @@ export const routes: Routes = [
 ];
 ```
 
-The component receives the extracted parameters through route inputs:
+If you enable [`withComponentInputBinding`](api/router/withComponentInputBinding), the component receives the extracted parameters through route inputs:
 
 ```angular-ts
 import {Component, input, inject, resource} from '@angular/core';
@@ -1296,7 +1296,7 @@ import {Component, input, inject, resource} from '@angular/core';
   `,
 })
 export class Documentation {
-  // Route parameters are automatically bound to signal inputs
+  // The router sets these inputs from the route parameters
   version = input.required<string>(); // Receives the version parameter
   section = input.required<string>(); // Receives the section parameter
 
@@ -1353,7 +1353,7 @@ export const routes: Routes = [
 ];
 ```
 
-컴포넌트는 라우팅 규칙 입력을 통해 추출한 파라미터를 전달받습니다:
+[`withComponentInputBinding`](api/router/withComponentInputBinding)을 활성화하면 컴포넌트는 라우팅 규칙 입력을 통해 추출한 파라미터를 전달받습니다:
 
 ```angular-ts
 import {Component, input, inject, resource} from '@angular/core';
@@ -1371,7 +1371,7 @@ import {Component, input, inject, resource} from '@angular/core';
   `,
 })
 export class Documentation {
-  // 라우팅 규칙 파라미터는 입력 시그널에 자동으로 바인딩됩니다.
+  // 라우터가 라우팅 규칙 파라미터로 이 입력값들을 설정합니다.
   version = input.required<string>(); // 버전 파라미터를 받습니다.
   section = input.required<string>(); // 섹션 파라미터를 받습니다.
 
