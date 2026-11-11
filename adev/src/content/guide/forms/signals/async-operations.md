@@ -369,7 +369,7 @@ onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
 } // prettier-ignore
 ```
 
-The type for `onSuccess` can be specified either directly in the parameter, or with the `parse` property of `validateHttp`'s `options`
+The type for `onSuccess` can be specified either directly in the parameter, or with the `parse` property of `validateHttp`'s `options`.
 
 ```ts
 onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
@@ -379,8 +379,8 @@ onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
 // or
 
 options: {
-  parse: (response) => response as {usernameTaken: boolean; profanity: boolean};
-}
+  parse: (response) => response as {usernameTaken: boolean; profanity: boolean},
+},
 onSuccess: (response) => {
   // ...
 } // prettier-ignore
@@ -443,8 +443,8 @@ onSuccess: (response: { usernameTaken: boolean; profanity: boolean }) => {
 // 또는
 
 options: {
-  parse: (response) => response as {usernameTaken: boolean; profanity: boolean};
-}
+  parse: (response) => response as {usernameTaken: boolean; profanity: boolean},
+},
 onSuccess: (response) => {
   // ...
 } // prettier-ignore
@@ -499,7 +499,7 @@ validateHttp(schemaPath.field, {
 });
 ```
 
-TIP: See the [httpResource API documentation](api/common/http/httpResource) for all available options.
+TIP: See the [`HttpResourceRequest` API documentation](api/common/http/HttpResourceRequest) for all available request properties, and the [httpResource API documentation](api/common/http/httpResource) for the `options` parameter.
 -->
 
 `request` 함수에서 `HttpResourceRequest` 객체를 반환하면 HTTP 요청을 커스터마이징할 수 있습니다:
@@ -530,7 +530,7 @@ validateHttp(schemaPath.field, {
 });
 ```
 
-팁: 사용할 수 있는 옵션을 확인하려면 [httpResource API 문서](api/common/http/httpResource)를 참고하세요.
+팁: 사용할 수 있는 요청 프로퍼티는 [`HttpResourceRequest` API 문서](api/common/http/HttpResourceRequest)를, `options` 인자는 [httpResource API 문서](api/common/http/httpResource)를 참고하세요.
 
 <!--
 ## Custom async validation with validateAsync()

@@ -557,11 +557,13 @@ import {TitleStrategy, RouterStateSnapshot} from '@angular/router';
 @Injectable()
 export class AppTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);
+  // Read once: getTitle() returns the prefixed title after the first update
+  private readonly defaultTitle = this.title.getTitle();
 
   updateTitle(snapshot: RouterStateSnapshot): void {
     // PageTitle is equal to the "Title" of a route if it's set
-    // If its not set it will use the "title" given in index.html
-    const pageTitle = this.buildTitle(snapshot) || this.title.getTitle();
+    // If it's not set, it uses the "title" given in index.html
+    const pageTitle = this.buildTitle(snapshot) || this.defaultTitle;
     this.title.setTitle(`MyAwesomeApp - ${pageTitle}`);
   }
 }
@@ -592,11 +594,13 @@ import {TitleStrategy, RouterStateSnapshot} from '@angular/router';
 @Injectable()
 export class AppTitleStrategy extends TitleStrategy {
   private readonly title = inject(Title);
+  // 처음 갱신한 뒤에는 getTitle()이 접두사가 붙은 제목을 반환하므로 한 번만 읽습니다.
+  private readonly defaultTitle = this.title.getTitle();
 
   updateTitle(snapshot: RouterStateSnapshot): void {
     // 라우팅 규칙에 "Title"이 설정되어 있으면 PageTitle은 그 값과 같습니다.
     // 설정되어 있지 않으면 index.html의 "title"을 사용합니다.
-    const pageTitle = this.buildTitle(snapshot) || this.title.getTitle();
+    const pageTitle = this.buildTitle(snapshot) || this.defaultTitle;
     this.title.setTitle(`MyAwesomeApp - ${pageTitle}`);
   }
 }

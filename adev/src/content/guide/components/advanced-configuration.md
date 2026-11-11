@@ -24,7 +24,7 @@ TIP: This guide assumes you've already read the [Essentials Guide](essentials). 
 The `@Component` decorator accepts a `changeDetection` option that controls the component's **change
 detection mode**. There are two change detection mode options.
 
-**`ChangeDetectionStrategy.Eager`/`Default`** is an optional mode. In this mode,
+**`ChangeDetectionStrategy.Eager`** is an optional mode. In this mode,
 Angular checks whether the component's DOM needs an update whenever any activity may have occurred
 application-wide. Activities that trigger this checking include user interaction, network response,
 timers, and more.
@@ -35,15 +35,18 @@ needs to perform. In this mode, the framework only checks if a component's DOM n
 - A component input has changes as a result of a binding in a template, or
 - An event listener in this component runs
 - The component is explicitly marked for check, via `ChangeDetectorRef.markForCheck` or something which wraps it, like `AsyncPipe`.
+- A signal read in the component's template changes.
 
-Additionally, when an OnPush component is checked, Angular _also_ checks all of its ancestor
-components, traversing upwards through the application tree.
+In the first three cases, Angular _also_ checks all of the component's ancestor
+components, traversing upwards through the application tree. When a signal changes, Angular only
+refreshes the components whose templates read it.
 -->
 
 `@Component` 데코레이터의 `changeDetection` 옵션을 지정하면 **변경 감지 모드** 를 설정할 수 있습니다.
 변경 감지 모드는 두 가지가 있습니다.
 
-**`ChangeDetectionStrategy.Eager`/`Default`**는 선택해서 사용할 수 있는 모드입니다. 이 모드에서는 애플리케이션 어디에서든 사용자 상호작용, 네트워크 응답, 타이머 등의 활동이 발생했을 가능성이 있을 때, 해당 컴포넌트의 DOM을 갱신해야 하는지 검사합니다.
+**`ChangeDetectionStrategy.Eager`**는 선택해서 사용할 수 있는 모드입니다.
+이 모드에서는 애플리케이션 어디에서든 사용자 상호작용, 네트워크 응답, 타이머 등의 활동이 발생했을 가능성이 있을 때, 해당 컴포넌트의 DOM을 갱신해야 하는지 검사합니다.
 
 Angular v22 부터는 **`ChangeDetectionStrategy.OnPush`** 가 기본값입니다.
 이 모드를 사용하면 성능 최적화를 위해 변경 감지 검사를 줄이며, 이런 경우만 검사합니다:
@@ -51,8 +54,10 @@ Angular v22 부터는 **`ChangeDetectionStrategy.OnPush`** 가 기본값입니�
 - 템플릿에 바인딩된 입력 프로퍼티가 변경될 때
 - 컴포넌트의 이벤트 리스너가 실행될 때
 - `ChangeDetectorRef.markForCheck` 또는 이를 내부적으로 사용하는 `AsyncPipe` 등을 통해 컴포넌트가 검사 대상으로 명시적으로 표시될 때
+- 컴포넌트의 템플릿에서 읽는 시그널이 변경될 때
 
-추가로, OnPush 컴포넌트에서 변화가 발생하면 Angular는 애플리케이션 트리를 따라 모든 부모 컴포넌트를 _함께_ 검사합니다.
+처음 세 가지 경우에는 Angular가 애플리케이션 트리를 따라 올라가며 해당 컴포넌트의 모든 상위 컴포넌트도 _함께_ 검사합니다.
+시그널이 변경되면 Angular는 템플릿에서 해당 시그널을 읽는 컴포넌트만 갱신합니다.
 
 <!--
 ## PreserveWhitespaces

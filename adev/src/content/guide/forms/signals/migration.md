@@ -438,13 +438,12 @@ form.password().value(); // 'password'
 form().value(); // { email: '', password: FormControl}
 ```
 
-If you need the whole form value, you'd have to build it manually:
+If you need the whole form value with the controls unwrapped, use `extractValue` from `@angular/forms/signals/compat`:
 
 ```typescript
-const formValue = computed(() => ({
-  email: form.email().value(),
-  password: form.password().value(),
-})); // {email: '', password: ''}
+import {extractValue} from '@angular/forms/signals/compat';
+
+const formValue = computed(() => extractValue(form)); // {email: '', password: 'password'}
 ```
 -->
 
@@ -463,13 +462,12 @@ form.password().value(); // 'password'
 form().value(); // { email: '', password: FormControl}
 ```
 
-폼 전체의 값이 필요하다면 직접 구성해야 합니다:
+컨트롤에서 값을 꺼낸 폼 전체의 값이 필요하다면 `@angular/forms/signals/compat`의 `extractValue`를 사용하세요:
 
 ```typescript
-const formValue = computed(() => ({
-  email: form.email().value(),
-  password: form.password().value(),
-})); // {email: '', password: ''}
+import {extractValue} from '@angular/forms/signals/compat';
+
+const formValue = computed(() => extractValue(form)); // {email: '', password: 'password'}
 ```
 
 <!--

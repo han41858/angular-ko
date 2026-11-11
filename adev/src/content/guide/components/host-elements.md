@@ -242,54 +242,70 @@ export class CustomSlider {
 ## 바인딩 우선순위
 
 <!--
-When you use a component in a template, you can add bindings to that component instance's element.
-The component may _also_ define host bindings for the same properties or attributes.
+When using a component in a template, you can apply bindings to that component's element. The component (or directives applied to it) may also define host bindings for the same properties, attributes, classes, or styles.
 
-```angular-ts
-@Component({
-  ...,
-  host: {
-    'role': 'presentation',
-    '[id]': 'id',
-  }
-})
-export class ProfilePhoto { /* ... */ }
-```
-
-```angular-html
-<profile-photo role="group" [id]="otherId" />
-```
-
-In cases like this, the following rules determine which value wins:
-
-- If both values are static, the instance binding wins.
-- If one value is static and the other dynamic, the dynamic value wins.
-- If both values are dynamic, the component's host binding wins.
+How Angular handles these collisions depends on the type of binding:
 -->
 
-템플릿에 컴포넌트를 사용할 때 컴포넌트 인스턴스와 엘리먼트를 바인딩할 수 있습니다.
-그런데 컴포넌트는 같은 프로퍼티나 어트리뷰트에 대해 호스트 바인딩을 정의할 수도 있습니다.
+템플릿에서 컴포넌트를 사용할 때 해당 컴포넌트의 엘리먼트에 바인딩을 적용할 수 있습니다.
+컴포넌트나 이 컴포넌트에 적용된 디렉티브에서도 같은 프로퍼티, 어트리뷰트, 클래스, 스타일에 호스트 바인딩을 정의할 수 있습니다.
 
-```angular-ts
-@Component({
-  ...,
-  host: {
-    'role': 'presentation',
-    '[id]': 'id',
-  }
-})
-export class ProfilePhoto { /* ... */ }
-```
+Angular가 이러한 충돌을 처리하는 방식은 바인딩 유형에 따라 다릅니다:
 
-```angular-html
-<profile-photo role="group" [id]="otherId" />
-```
+<!--
+### Class and style bindings
+-->
 
-이 경우, 다음 규칙에 따라 어떤 값이 사용되는지 결정됩니다:
+<a id="class-and-style-bindings"></a>
 
-- 두 값이 모두 정적이면 인스턴스 바인딩의 우선순위가 높습니다.
-- 한 값은 정적이고 다른 값은 동적이면, 동적인 값이 사용됩니다.
-- 두 값이 모두 동적이면, 컴포넌트 호스트 바인딩의 우선순위가 높습니다.
+### 클래스와 스타일 바인딩
+
+<!--
+Class and style bindings have a defined precedence order. Bindings defined in the template take priority over host bindings defined on directives or components:
+
+1. **Template bindings** (e.g., `[class.active]` or `[style.color]`)
+2. **Static template values** (e.g., `class="..."` or `style="..."` in the template)
+3. **Directive host bindings**
+4. **Component host bindings**
+5. **Static host values** (e.g., `host: {class: '...'}`)
+
+If a binding's value is `undefined`, Angular falls back to the next level. A `null` value removes the class or style without falling back.
+-->
+
+클래스와 스타일 바인딩에는 정해진 우선순위가 있습니다.
+템플릿에 정의된 바인딩은 디렉티브나 컴포넌트에 정의된 호스트 바인딩보다 우선합니다:
+
+1. **템플릿 바인딩** (예: `[class.active]` 또는 `[style.color]`)
+2. **정적 템플릿 값** (예: 템플릿의 `class="..."` 또는 `style="..."`)
+3. **디렉티브 호스트 바인딩**
+4. **컴포넌트 호스트 바인딩**
+5. **정적 호스트 값** (예: `host: {class: '...'}`)
+
+바인딩 값이 `undefined`이면 Angular는 다음 우선순위의 값을 사용합니다.
+값이 `null`이면 다음 우선순위의 값을 사용하지 않고 클래스나 스타일을 제거합니다.
+
+<!--
+### Property and attribute collisions
+-->
+
+<a id="property-and-attribute-collisions"></a>
+
+### 프로퍼티와 어트리뷰트 충돌
+
+<!--
+For non-styling properties and attributes (such as `id`, `role`, or `[attr.aria-*]`):
+
+- **Static attributes:** If both the template and the component declare a static attribute (e.g., `<my-cmp id="parent">` and `host: {id: 'child'}`), the attribute set in the template wins.
+- **Static and dynamic:** If one value is static and the other is dynamic, the dynamic value wins.
+- **Dynamic bindings:** Avoid binding to the same DOM property or attribute both in the template and via host bindings. Angular does not reconcile duplicate property bindings; overlapping dynamic bindings can lead to unexpected overwrites based on change detection execution order.
+-->
+
+스타일과 관련이 없는 프로퍼티나 어트리뷰트(예: `id`, `role`, `[attr.aria-*]`)에는 다음 규칙이 적용됩니다:
+
+- **정적 어트리뷰트:** 템플릿과 컴포넌트가 모두 정적 어트리뷰트를 선언하면(예: `<my-cmp id="parent">`와 `host: {id: 'child'}`) 템플릿에 설정된 어트리뷰트가 우선합니다.
+- **정적 값과 동적 값:** 한 값은 정적이고 다른 값은 동적이면 동적 값이 우선합니다.
+- **동적 바인딩:** 템플릿과 호스트 바인딩에서 같은 DOM 프로퍼티나 어트리뷰트에 동시에 바인딩하지 마세요.
+  Angular는 중복된 프로퍼티 바인딩을 조정하지 않으므로, 동적 바인딩이 겹치면 변경 감지 실행 순서에 따라 값이 예상치 않게 덮어써질 수 있습니다.
 
 <!--
 ## Styling with CSS custom properties

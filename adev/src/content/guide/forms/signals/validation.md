@@ -1062,7 +1062,7 @@ signupForm = form(this.signupModel, (schemaPath) => {
 });
 ```
 
-If the email field is empty, only the `required()` error appears. If the user types "a@b", both `email()` and `minLength()` errors appear. All validation rules run - validation doesn't stop after the first failure.
+If the email field is empty, only the `required()` error appears. If the user types "a@", both `email()` and `minLength()` errors appear. All validation rules run - validation doesn't stop after the first failure.
 
 TIP: Use the `touched() && invalid()` pattern in your templates to prevent errors from appearing before users have interacted with a field. For comprehensive guidance on displaying validation errors, see the [Field State Management guide](guide/forms/signals/field-state-management#conditional-error-display).
 -->
@@ -1078,7 +1078,7 @@ signupForm = form(this.signupModel, (schemaPath) => {
 ```
 
 이메일 필드가 빈 값이라면 `required()` 오류만 발생합니다.
-사용자가 "a@b" 라고 입력하면 `email()` 오류와 `minLength()` 오류가 발생합니다.
+사용자가 "a@"라고 입력하면 `email()` 오류와 `minLength()` 오류가 발생합니다.
 유효성 검사 규칙 중에서 오류가 발생하는 것이 있더라도, 유효성 검사 규칙은 모두 실행됩니다.
 
 참고: 사용자가 필드에 접근한 이후에만 템플릿에 오류를 표시하려면 `touched() && invalid()` 패턴을 사용하세요.
@@ -1782,12 +1782,12 @@ const userForm = form(signal({email: '', password: ''}), (schemaPath) => {
 ### 동적 스키마
 
 <!--
-You can pass a signal instead of a static schema so the validation schema updates automatically when its dependencies change.
+Instead of a static schema, you can pass a function that returns the schema. The validation then updates automatically when the signals read by the function change.
 
 ```angular-ts
 import {Component, computed, signal} from '@angular/core';
 import {form, FormField, validateStandardSchema} from '@angular/forms/signals';
-import z from 'zod';
+import * as z from 'zod';
 
 @Component({/* ... */})
 export class DynamicSchema {
@@ -1808,12 +1808,13 @@ export class DynamicSchema {
 ```
 -->
 
-정적 스키마 대신 시그널을 인자로 전달하면, 유효성 검사의 의존성을 동적으로 변경할 수 있습니다.
+정적 스키마 대신 스키마를 반환하는 함수를 전달할 수 있습니다.
+이 함수가 읽는 시그널이 변경되면 유효성 검사도 자동으로 갱신됩니다.
 
 ```angular-ts
 import {Component, computed, signal} from '@angular/core';
 import {form, FormField, validateStandardSchema} from '@angular/forms/signals';
-import z from 'zod';
+import * as z from 'zod';
 
 @Component({/* ... */})
 export class DynamicSchema {
