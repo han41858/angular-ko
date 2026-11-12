@@ -93,11 +93,11 @@ In this lesson, you will enable routing in your application to navigate to the d
           <docs-code header="Add router configuration in src/main.ts" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/main.ts" visibleLines="[6,8]"/>
 
 3.  In `src/app/app.ts`, update the component to use routing:
-    1.  Add file level imports for the router directives `RouterOutlet` and `RouterLink`:
+    1.  Add file level imports for the router directives `RouterLink` and `RouterOutlet`:
 
-          <docs-code language="angular-ts" header="Import router directives in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/app/app.ts" visibleLines="[3]"/>
+          <docs-code language="angular-ts" header="Import router directives in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/app/app.ts" visibleLines="[2]"/>
 
-    1.  Add `RouterOutlet` and `RouterLink` to the `@Component` metadata imports
+    1.  In the `@Component` metadata imports, replace `Home` with `RouterLink` and `RouterOutlet`:
 
           <docs-code language="angular-ts" header="Add router directives to component imports in src/app/app.ts" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/app/app.ts" visibleLines="[6]"/>
 
@@ -123,10 +123,10 @@ In this lesson, you will enable routing in your application to navigate to the d
      <docs-code header="src/main.ts에 라우터 설정 추가하기" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/main.ts" visibleLines="[6,8]"/>
 
 3. `src/app/app.ts`에서 컴포넌트가 라우팅을 사용하도록 수정하세요:
-   1. 파일 수준에 라우터 디렉티브인 `RouterOutlet`과 `RouterLink`를 불러오는 구문을 추가하세요:
+   1. 파일 수준에 라우터 디렉티브인 `RouterLink`와 `RouterOutlet`를 불러오는 구문을 추가하세요:
 
-     <docs-code language="angular-ts" header="src/app/app.ts에서 라우터 디렉티브 불러오기" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/app/app.ts" visibleLines="[3]"/>
-   1. `@Component` 메타데이터의 imports에 `RouterOutlet`과 `RouterLink`를 추가하세요.
+     <docs-code language="angular-ts" header="src/app/app.ts에서 라우터 디렉티브 불러오기" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/app/app.ts" visibleLines="[2]"/>
+   1. `@Component` 메타데이터의 imports에서 `Home`을 `RouterLink`와 `RouterOutlet`으로 바꾸세요.
 
      <docs-code language="angular-ts" header="src/app/app.ts의 컴포넌트 imports에 라우터 디렉티브 추가하기" path="adev/src/content/tutorials/first-app/steps/11-details-page/src/app/app.ts" visibleLines="[6]"/>
    1. `template` 프로퍼티의 `<app-home />` 태그를 `<router-outlet>` 디렉티브로 바꾸고 홈 페이지로 돌아오는 링크를 추가하세요. 다음 코드와 같아야 합니다:

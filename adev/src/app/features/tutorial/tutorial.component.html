@@ -64,6 +64,18 @@
         >
           {{ answerRevealed() ? '초기화' : '정답 확인하기' }}
         </button>
+        @if (answerRevealed()) {
+          <button
+            type="button"
+            (click)="handleBackToMyCode()"
+            [disabled]="!canRevealAnswer()"
+            class="docs-reveal-answer-button adev-reveal-desktop-button docs-primary-btn"
+            [attr.text]="'내 코드로 돌아가기'"
+            aria-label="내 코드로 돌아가기"
+          >
+            내 코드로 돌아가기
+          </button>
+        }
       }
 
       <!-- Download code -->
@@ -118,6 +130,18 @@
           >
             {{ answerRevealed() ? '초기화' : '정답 확인하기' }}
           </button>
+          @if (answerRevealed()) {
+            <button
+              type="button"
+              (click)="handleBackToMyCode()"
+              [disabled]="!canRevealAnswer()"
+              class="docs-reveal-answer-button adev-reveal-mobile-button docs-primary-btn"
+              [attr.text]="'내 코드로 돌아가기'"
+              aria-label="내 코드로 돌아가기"
+            >
+              내 코드로 돌아가기
+            </button>
+          }
         }
       </div>
 

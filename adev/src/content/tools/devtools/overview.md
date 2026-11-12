@@ -53,7 +53,7 @@ When you open the extension, you'll see four additional tabs:
 | [Injector Tree](tools/devtools/injectors) | Lets you visualize the Environment and Element Injector hierarchy                                                      |
 | [Router Tree](tools/devtools/router)      | Lets you visualize the routing tree of your application.                                                               |
 
-Other tabs like `Transfer State` are experimental and can be enabled via the devtools settings and are not documented yet.
+A `Transfer State` tab also appears when the application uses hydration.
 
 HELPFUL: For users of Chromium based browsers, you might be interested in the [Performance panel integration](/best-practices/profiling-with-chrome-devtools).
 
@@ -72,7 +72,7 @@ The information popover contains among others what version of Angular is running
 | [Injector Tree](tools/devtools/injectors) | 환경 인젝터와 엘리먼트 인젝터의 계층을 시각적으로 확인할 수 있습니다.                           |
 | [Router Tree](tools/devtools/router)      | 애플리케이션의 라우팅 트리를 시각적으로 확인할 수 있습니다.                                     |
 
-`Transfer State` 등의 다른 탭은 실험 단계이며, DevTools 설정에서 활성화할 수 있지만 아직 문서화되지 않았습니다.
+애플리케이션에서 하이드레이션을 사용하면 `Transfer State` 탭도 표시됩니다.
 
 도움말: Chromium 기반 브라우저 사용자라면 [Performance 패널 통합 기능](/best-practices/profiling-with-chrome-devtools)도 참고해 보세요.
 

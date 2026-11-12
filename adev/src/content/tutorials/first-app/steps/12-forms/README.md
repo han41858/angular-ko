@@ -27,8 +27,8 @@ IMPORTANT: 이 실습은 로컬 환경에서 진행하는 것을 권장합니다
 <!--
 ## What you'll learn
 
-- Your app has a form into which users can enter data that is sent to your app's service.
-- The service writes the data from the form to the browser's console log.
+- Your app will have a form into which users can enter data that is sent to your app's service.
+- The service will write the data from the form to the browser's console log.
 
 <docs-workflow>
 -->
@@ -49,9 +49,9 @@ In this example, the method writes the data from the form to the browser's conso
 
 In the **Edit** pane of your IDE:
 
-1.  In `src/app/housing.service.ts`, inside the `HousingService` class, paste this method at the bottom of the class definition.
+1.  In `src/app/housing-service.ts`, inside the `HousingService` class, paste this method at the bottom of the class definition.
 
-       <docs-code header="Submit method in src/app/housing.service.ts" path="adev/src/content/tutorials/first-app/steps/13-search/src/app/housing.service.ts" visibleLines="[118,122]"/>
+       <docs-code header="Submit method in src/app/housing-service.ts" path="adev/src/content/tutorials/first-app/steps/13-search/src/app/housing-service.ts" visibleLines="[119,123]"/>
 
 1.  Confirm that the app builds without error.
     Correct any errors before you continue to the next step.
@@ -67,9 +67,9 @@ In the **Edit** pane of your IDE:
 
 IDE의 **편집** 창에서 다음 작업을 수행하세요:
 
-1. `src/app/housing.service.ts`의 `HousingService` 클래스 정의 맨 아래에 다음 메서드를 붙여 넣으세요.
+1. `src/app/housing-service.ts`의 `HousingService` 클래스 정의 맨 아래에 다음 메서드를 붙여 넣으세요.
 
-   <docs-code header="src/app/housing.service.ts의 제출 메서드" path="adev/src/content/tutorials/first-app/steps/13-search/src/app/housing.service.ts" visibleLines="[118,122]"/>
+   <docs-code header="src/app/housing-service.ts의 제출 메서드" path="adev/src/content/tutorials/first-app/steps/13-search/src/app/housing-service.ts" visibleLines="[119,123]"/>
 
 1. 앱이 오류 없이 빌드되는지 확인하세요.
    오류가 있다면 수정한 후 다음 단계로 진행하세요.
@@ -198,7 +198,7 @@ This step tests the new form to see that when the form data is submitted to the 
 
 </docs-workflow>
 
-SUMMARY: In this lesson, you updated your app to add a form using Angular's forms feature, and connect the data captured in the form to a component using an event handler.
+SUMMARY: In this lesson, you added a form using Angular's forms feature, and connected the data captured in the form to a component using an event handler.
 
 For more information about the topics covered in this lesson, visit:
 

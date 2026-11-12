@@ -132,9 +132,8 @@ In the **Explorer** pane of your IDE:
       1. New components are added to this directory.
 
    1. In the file explorer, find the image directory (`/public`) that contains images used by the app.
-   1. In the file explorer, find the files and directories that an Angular app needs to build and run, but they are not files that you normally interact with.
+   1. In the file explorer, find the files and directories that an Angular app needs to build and run. They are not files that you normally interact with.
       1. `.angular` has files required to build the Angular app.
-      1. `.e2e` has files used to test the app.
       1. `.node_modules` has the node.js packages that the app uses.
       1. `angular.json` describes the Angular app to the app building tools.
       1. `package.json` is used by `npm` (the node package manager) to run the finished app.
@@ -172,7 +171,6 @@ IDE의 **탐색기** 창에서 다음 작업을 수행하세요:
    1. 파일 탐색기에서 앱에 사용하는 이미지가 있는 `/public` 디렉터리를 찾으세요.
    1. 파일 탐색기에서 Angular 앱을 빌드하고 실행하는 데 필요하지만 평소에는 직접 다루지 않는 파일과 디렉터리를 확인하세요.
       1. `.angular`에는 Angular 앱 빌드에 필요한 파일이 있습니다.
-      1. `.e2e`에는 앱 테스트에 사용하는 파일이 있습니다.
       1. `node_modules`에는 앱에서 사용하는 Node.js 패키지가 있습니다.
       1. `angular.json`은 앱 빌드 도구에 Angular 앱의 구성을 전달합니다.
       1. `package.json`은 `npm`(Node 패키지 매니저)이 완성된 앱을 실행할 때 사용합니다.

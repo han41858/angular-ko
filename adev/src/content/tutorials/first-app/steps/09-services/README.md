@@ -15,8 +15,7 @@ This tutorial lesson demonstrates how to create an Angular service and use depen
 <!--
 ## What you'll learn
 
-Your app has a service to serve the data to your app.
-At the end of this lesson, the service reads data from local, static data.
+Your app will have a service that reads local, static data and serves it to your app.
 In a later lesson, you'll update the service to get data from a web service.
 -->
 
@@ -24,8 +23,7 @@ In a later lesson, you'll update the service to get data from a web service.
 
 ## 학습 목표
 
-앱에 데이터를 제공하는 서비스를 만듭니다.
-이번 실습을 마치면 서비스가 로컬의 정적 데이터를 읽어 제공합니다.
+로컬의 정적 데이터를 읽어 앱에 제공하는 서비스를 만듭니다.
 이후 실습에서는 웹 서비스에서 데이터를 가져오도록 수정합니다.
 
 <!--
@@ -84,7 +82,7 @@ In the **Terminal** pane of your IDE:
 1. In the `first-app` directory, run this command to create the new service.
 
    ```shell
-   ng generate service housing --skip-tests
+   ng generate service housingService --skip-tests
    ```
 
 1. Run `ng serve` to build the app and serve it to `http://localhost:4200`.
@@ -105,7 +103,7 @@ IDE의 **터미널** 창에서 다음 작업을 수행하세요:
 1. `first-app` 디렉터리에서 다음 명령어로 새 서비스를 만드세요.
 
    ```shell
-   ng generate service housing --skip-tests
+   ng generate service housingService --skip-tests
    ```
 
 1. `ng serve`를 실행해 앱을 빌드하고 `http://localhost:4200`에서 실행하세요.
@@ -122,18 +120,18 @@ For now, your app's new service uses the data that has, so far, been created loc
 In the **Edit** pane of your IDE:
 
 1. In `src/app/home/home.ts`, from `Home`, copy the `baseUrl` variable and the `housingLocationList` variable with its array value.
-1. In `src/app/housing.service.ts`:
+1. In `src/app/housing-service.ts`:
    1. Inside the `HousingService` class, paste the variables that you copied from `Home` in the previous step.
    1. Inside the `HousingService` class, paste these functions after the data you just copied.
       These functions allow dependencies to access the service's data.
 
-      <docs-code header="Service functions in src/app/housing.service.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[110,116]"/>
+      <docs-code header="Service functions in src/app/housing-service.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing-service.ts" visibleLines="[111,117]"/>
 
       You will need these functions in a future lesson. For now, it is enough to understand that these functions return either a specific `HousingLocation` by id or the entire list.
 
    1. Add a file level import for the `HousingLocation`.
 
-      <docs-code header="Import HousingLocation type in  src/app/housing.service.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[2]"/>
+      <docs-code header="Import HousingLocation type in  src/app/housing-service.ts" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing-service.ts" visibleLines="[2]"/>
 
 1. Confirm that the app builds without error.
    Correct any errors before you continue to the next step.
@@ -151,18 +149,18 @@ In the **Edit** pane of your IDE:
 IDE의 **편집** 창에서 다음 작업을 수행하세요:
 
 1. `src/app/home/home.ts`의 `Home`에서 `baseUrl` 변수와 `housingLocationList` 변수의 배열 값을 복사하세요.
-1. `src/app/housing.service.ts`에서 다음 작업을 수행하세요:
+1. `src/app/housing-service.ts`에서 다음 작업을 수행하세요:
    1. `HousingService` 클래스 안에 앞 단계에서 `Home`으로부터 복사한 변수를 붙여 넣으세요.
    1. `HousingService` 클래스 안에서 복사한 데이터 다음에 아래 함수를 붙여 넣으세요.
       이 함수들은 서비스를 사용하는 쪽에서 서비스의 데이터에 접근할 수 있게 합니다.
 
-      <docs-code header="src/app/housing.service.ts의 서비스 함수" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[110,116]"/>
+      <docs-code header="src/app/housing-service.ts의 서비스 함수" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing-service.ts" visibleLines="[111,117]"/>
 
       이 함수들은 이후 실습에서 사용합니다. 지금은 id로 특정 `HousingLocationInfo`를 반환하거나 전체 목록을 반환한다는 점만 이해하면 됩니다.
 
    1. 파일 수준에 `HousingLocationInfo`를 불러오는 import 구문을 추가하세요.
 
-      <docs-code header="src/app/housing.service.ts에서 HousingLocationInfo 타입 불러오기" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing.service.ts" visibleLines="[2]"/>
+      <docs-code header="src/app/housing-service.ts에서 HousingLocationInfo 타입 불러오기" path="adev/src/content/tutorials/first-app/steps/10-routing/src/app/housing-service.ts" visibleLines="[2]"/>
 
 1. 앱이 오류 없이 빌드되는지 확인하세요.
    오류가 있다면 수정한 후 다음 단계로 진행하세요.

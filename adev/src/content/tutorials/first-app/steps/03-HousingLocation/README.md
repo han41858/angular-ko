@@ -15,7 +15,7 @@ This tutorial lesson demonstrates how to add the `HousingLocation` component to 
 <!--
 ## What you'll learn
 
-- Your app has a new component: `HousingLocation` and it displays a message confirming that the component was added to your application.
+Your app will have a new component, `HousingLocation`, and it will display a message confirming that the component was added to your application.
 
 <docs-workflow>
 -->
@@ -24,7 +24,7 @@ This tutorial lesson demonstrates how to add the `HousingLocation` component to 
 
 ## 학습 목표
 
-- 앱에 `HousingLocation` 컴포넌트를 추가하고, 컴포넌트가 추가되었음을 확인하는 메시지를 표시합니다.
+앱에 `HousingLocation` 컴포넌트를 추가하고, 컴포넌트가 추가되었음을 확인하는 메시지를 표시합니다.
 
 <docs-workflow>
 

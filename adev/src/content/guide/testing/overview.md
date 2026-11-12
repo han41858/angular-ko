@@ -227,7 +227,7 @@ For advanced use cases, you can provide a custom Vitest configuration file using
 
 IMPORTANT: While using a custom configuration enables advanced options, the Angular team does not provide support for the contents of the configuration file or for any third-party plugins. The CLI will also override certain properties (`test.projects`, `test.include`) to ensure proper integration.
 
-You can create a Vitest configuration file (e.g., `vitest-base.config.ts`) and reference it in your `angular.json`:
+You can create a Vitest configuration file (e.g., `vitest-base.config.mts`) and reference it in your `angular.json`:
 
 ```json
 {
@@ -237,7 +237,7 @@ You can create a Vitest configuration file (e.g., `vitest-base.config.ts`) and r
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "runnerConfig": "vitest-base.config.ts"
+            "runnerConfig": "vitest-base.config.mts"
           }
         }
       }
@@ -252,7 +252,7 @@ You can also generate a base configuration file using the CLI:
 ng generate config vitest
 ```
 
-This creates a `vitest-base.config.ts` file that you can customize.
+This creates a `vitest-base.config.mts` file that you can customize.
 
 HELPFUL: Read more about Vitest configuration in the [official Vitest documentation](https://vitest.dev/config/).
 -->
@@ -262,7 +262,7 @@ HELPFUL: Read more about Vitest configuration in the [official Vitest documentat
 중요: 커스텀 설정으로 고급 옵션을 사용할 수 있지만, Angular 팀은 설정 파일의 내용이나 서드 파티 플러그인을 지원하지 않습니다.
 또한 CLI는 올바르게 통합하기 위해 일부 프로퍼티(`test.projects`, `test.include`)를 덮어씁니다.
 
-Vitest 설정 파일(예: `vitest-base.config.ts`)을 만들고 `angular.json`에서 참조하세요.
+Vitest 설정 파일(예: `vitest-base.config.mts`)을 만들고 `angular.json`에서 참조하세요.
 
 ```json
 {
@@ -272,7 +272,7 @@ Vitest 설정 파일(예: `vitest-base.config.ts`)을 만들고 `angular.json`�
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "runnerConfig": "vitest-base.config.ts"
+            "runnerConfig": "vitest-base.config.mts"
           }
         }
       }
@@ -287,7 +287,7 @@ CLI로 기본 설정 파일을 생성할 수도 있습니다.
 ng generate config vitest
 ```
 
-수정해서 사용할 수 있는 `vitest-base.config.ts` 파일이 생성됩니다.
+수정해서 사용할 수 있는 `vitest-base.config.mts` 파일이 생성됩니다.
 
 참고: Vitest 설정에 대한 자세한 내용은 [공식 Vitest 문서](https://vitest.dev/config/)를 참고하세요.
 

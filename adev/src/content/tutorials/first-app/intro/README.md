@@ -37,10 +37,10 @@ For the best experience with this tutorial, review these requirements to make su
 
 The lessons in this tutorial assume that you have experience with the following:
 
-1. Created an HTML web page by editing the HTML directly.
-1. Programmed web site content in JavaScript.
-1. Read Cascading Style Sheet (CSS) content and understand how selectors are used.
-1. Used command-line instructions to perform tasks on your computer.
+1. Creating HTML web pages by editing the HTML directly.
+1. Programming web site content in JavaScript.
+1. Reading Cascading Style Sheet (CSS) content and understanding how selectors are used.
+1. Using command-line instructions to perform tasks on your computer.
 -->
 
 <a id="your-experience"></a>
@@ -166,8 +166,8 @@ From a **Terminal** window run the following command: `npm install -g @angular/c
 You are free to use any tool you prefer to build apps with Angular. We recommend the following:
 
 1. [Visual Studio Code](https://code.visualstudio.com/)
-2. As an optional, but recommended step you can further improve your developer experience by installing the [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)
-3. [WebStorm](https://www.jetbrains.com/webstorm/)
+   - As an optional but recommended step, you can further improve your developer experience by installing the [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)
+1. [WebStorm](https://www.jetbrains.com/webstorm/)
    </docs-step>
 -->
 
@@ -178,8 +178,8 @@ You are free to use any tool you prefer to build apps with Angular. We recommend
 Angular 앱을 개발할 때는 원하는 도구를 자유롭게 사용해도 됩니다. 다음 도구를 권장합니다:
 
 1. [Visual Studio Code](https://code.visualstudio.com/)
-2. 필수는 아니지만 [Angular 언어 지원 서비스](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)를 설치하면 개발 환경을 더 편리하게 사용할 수 있습니다.
-3. [WebStorm](https://www.jetbrains.com/webstorm/)
+   - 필수는 아니지만 [Angular 언어 지원 서비스](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)를 설치하면 개발 환경을 더 편리하게 사용할 수 있으므로 권장합니다.
+1. [WebStorm](https://www.jetbrains.com/webstorm/)
    </docs-step>
 
 <!--

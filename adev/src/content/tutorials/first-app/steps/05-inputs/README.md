@@ -19,7 +19,7 @@ NOTE: 이 동영상은 이전 문법을 사용하지만 핵심 개념은 동일�
 <!--
 ## What you'll learn
 
-Your app's `HousingLocation` template has a `HousingLocation` property to receive input.
+Your app's `HousingLocation` template will have a `HousingLocation` property to receive input.
 -->
 
 <a id="what-youll-learn"></a>

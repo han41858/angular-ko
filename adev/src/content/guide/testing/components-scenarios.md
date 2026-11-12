@@ -340,7 +340,7 @@ The `Welcome` component displays a welcome message to the logged-in user.
 It knows who the user is based on a property of the injected `UserAuthentication`:
 
 ```angular-ts
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {UserAuthentication} from '../model/user.authentication';
 
 @Component({
@@ -349,7 +349,7 @@ import {UserAuthentication} from '../model/user.authentication';
 })
 export class Welcome {
   private userAuth = inject(UserAuthentication);
-  welcome = signal(
+  welcome = computed(() =>
     this.userAuth.isLoggedIn() ? `Welcome, ${this.userAuth.user().name}` : 'Please log in.',
   );
 }
@@ -364,7 +364,7 @@ The `Welcome` component has decision logic that interacts with the service, logi
 주입된 `UserAuthentication`의 프로퍼티로 사용자가 누구인지 확인합니다.
 
 ```angular-ts
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject} from '@angular/core';
 import {UserAuthentication} from '../model/user.authentication';
 
 @Component({
@@ -373,7 +373,7 @@ import {UserAuthentication} from '../model/user.authentication';
 })
 export class Welcome {
   private userAuth = inject(UserAuthentication);
-  welcome = signal(
+  welcome = computed(() =>
     this.userAuth.isLoggedIn() ? `Welcome, ${this.userAuth.user().name}` : 'Please log in.',
   );
 }

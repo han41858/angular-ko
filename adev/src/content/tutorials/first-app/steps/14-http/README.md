@@ -311,19 +311,19 @@ JSON Server는 모의 REST API를 만드는 오픈 소스 도구입니다. 현�
 <docs-step title="Update service to use web server instead of local array">
 The data source has been configured, the next step is to update your web app to connect to it use the data.
 
-1.  In `src/app/housing.service.ts`, make the following changes:
+1.  In `src/app/housing-service.ts`, make the following changes:
 
 1.  Update the code to remove `housingLocationList` property and the array containing the data, as well as the `baseUrl` property.
 
 1.  Add a string property called `url` and set its value to `'http://localhost:3000/locations'`
 
-    <docs-code header="Add url property to housing.service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[6]"/>
+    <docs-code header="Add url property to housing-service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[6]"/>
 
     This code will result in errors in the rest of the file because it depends on the `housingLocationList` property. We're going to update the service methods next.
 
 1.  Update the `getAllHousingLocations` function to make a call to the web server you configured.
 
-     <docs-code header="Update the getAllHousingLocations method in housing.service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[8,11]"/>
+     <docs-code header="Update the getAllHousingLocations method in housing-service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[8,11]"/>
 
     The code now uses asynchronous code to make a **GET** request over HTTP.
 
@@ -333,11 +333,11 @@ The data source has been configured, the next step is to update your web app to 
 
     HELPFUL: Notice the `fetch` URL now appends the `id` as a path segment (`${this.url}/${id}`) to request the location with a matching `id` property value.
 
-     <docs-code header="Update the getHousingLocationById method in housing.service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[13,17]"/>
+     <docs-code header="Update the getHousingLocationById method in housing-service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[13,17]"/>
 
 1.  Once all the updates are complete, your updated service should match the following code.
 
-     <docs-code header="Final version of housing.service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[1,23]" />
+     <docs-code header="Final version of housing-service.ts" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[1,23]" />
 
 </docs-step>
 -->
@@ -348,19 +348,19 @@ The data source has been configured, the next step is to update your web app to 
 
 데이터 소스가 준비되었으므로 웹 앱을 연결해 해당 데이터를 사용하도록 수정합니다.
 
-1. `src/app/housing.service.ts`를 다음과 같이 수정하세요:
+1. `src/app/housing-service.ts`를 다음과 같이 수정하세요:
 
 1. `housingLocationList` 프로퍼티와 데이터 배열, `baseUrl` 프로퍼티를 삭제하세요.
 
 1. `url` 문자열 프로퍼티를 추가하고 `'http://localhost:3000/locations'`를 할당하세요.
 
-   <docs-code header="housing.service.ts에 url 프로퍼티 추가하기" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[6]"/>
+   <docs-code header="housing-service.ts에 url 프로퍼티 추가하기" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[6]"/>
 
    나머지 코드는 `housingLocationList` 프로퍼티에 의존하므로 이 시점에는 오류가 발생합니다. 다음으로 서비스 메서드를 수정하겠습니다.
 
 1. `getAllHousingLocations` 함수가 설정한 웹 서버를 호출하도록 수정하세요.
 
-    <docs-code header="housing.service.ts의 getAllHousingLocations 메서드 수정하기" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[8,11]"/>
+    <docs-code header="housing-service.ts의 getAllHousingLocations 메서드 수정하기" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[8,11]"/>
 
    이제 비동기 코드로 HTTP **GET** 요청을 보냅니다.
 
@@ -370,11 +370,11 @@ The data source has been configured, the next step is to update your web app to 
 
    HELPFUL: `fetch`의 URL 뒤에 `id`를 경로 구간으로 추가한 `${this.url}/${id}` 형식을 확인하세요. 이렇게 하면 `id` 프로퍼티가 일치하는 주택 정보를 요청할 수 있습니다.
 
-    <docs-code header="housing.service.ts의 getHousingLocationById 메서드 수정하기" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[13,17]"/>
+    <docs-code header="housing-service.ts의 getHousingLocationById 메서드 수정하기" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[13,17]"/>
 
 1. 모든 수정을 마친 서비스는 다음 코드와 같아야 합니다.
 
- <docs-code header="housing.service.ts의 최종 코드" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing.service.ts" visibleLines="[1,23]" />
+ <docs-code header="housing-service.ts의 최종 코드" path="adev/src/content/tutorials/first-app/steps/14-http/src-final/app/housing-service.ts" visibleLines="[1,23]" />
 
 </docs-step>
 
@@ -399,7 +399,7 @@ The server is now reading data from the HTTP request but the components that rel
 
 NOTE: This lesson relies on the `fetch` browser API. For the support of interceptors, please refer to the [HTTP client documentation](/guide/http)
 
-SUMMARY: In this lesson, you updated your app to use a local web server (`json-server`), and use asynchronous service methods to retrieve data.
+SUMMARY: In this lesson, you used a local web server (`json-server`) and asynchronous service methods to retrieve data.
 
 Congratulations! You've successfully completed this tutorial and are ready to continue your journey with building even more complex Angular Apps.
 
