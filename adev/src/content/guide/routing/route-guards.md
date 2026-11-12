@@ -68,7 +68,9 @@ All route guards share the same possible return types. This gives you flexibilit
 | `UrlTree` or `RedirectCommand`  | Redirects to another route instead of blocking                                    |
 | `Promise<T>` or `Observable<T>` | Router uses the first emitted value and then unsubscribes                         |
 
-NOTE: `CanMatch` behaves differently— when it returns `false`, Angular tries other matching routes instead of completely blocking navigation.
+NOTE: A route guard must emit a value. An `Observable` that completes without emitting, such as `EMPTY` or any `Observable<never>`, leaves the router without a result, so the navigation fails with an RxJS `EmptyError`. This often comes from a request that an interceptor cancels. If your source can complete empty, give it a value with `defaultIfEmpty(false)`.
+
+NOTE: `CanMatch` is different. When it returns `false`, Angular tries other matching routes instead of blocking navigation.
 -->
 
 모든 라우팅 규칙 가드는 같은 반환 타입을 지원하기 때문에 내비게이션을 유연하게 제어할 수 있습니다.
@@ -78,6 +80,11 @@ NOTE: `CanMatch` behaves differently— when it returns `false`, Angular tries o
 | `boolean`                         | `true`는 내비게이션을 허용하고, `false`는 차단합니다(`CanMatch` 라우팅 규칙 가드는 아래 참고 사항을 확인하세요). |
 | `UrlTree` 또는 `RedirectCommand`  | 내비게이션을 차단하는 대신 다른 라우팅 규칙으로 리다이렉트합니다.                                                |
 | `Promise<T>` 또는 `Observable<T>` | 라우터가 처음 방출된 값을 사용한 뒤 구독을 해제합니다.                                                           |
+
+참고: 라우팅 규칙 가드는 반드시 값을 방출해야 합니다.
+`EMPTY`나 `Observable<never>`처럼 값을 방출하지 않고 완료되는 `Observable`은 라우터에 결과를 제공하지 못하므로 RxJS `EmptyError`와 함께 내비게이션이 실패합니다.
+인터셉터에서 요청을 취소할 때 이런 상황이 자주 발생합니다.
+소스가 값을 방출하지 않고 완료될 수 있다면 `defaultIfEmpty(false)`로 값을 제공하세요.
 
 참고: `CanMatch`는 다르게 동작합니다.
 `false`를 반환하면 Angular는 내비게이션을 완전히 차단하는 대신 매칭할 수 있는 다른 라우팅 규칙을 확인합니다.

@@ -184,7 +184,7 @@ import {InjectionToken, inject} from '@angular/core';
 import {APP_CONFIG} from './config.token';
 
 // Logger function type
-export type LoggerFn = (level: string, message: string) => void;
+export type LoggerFn = (level: 'log' | 'warn' | 'error', message: string) => void;
 
 // Global logger function with dependencies
 export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
@@ -192,7 +192,7 @@ export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
   factory: () => {
     const config = inject(APP_CONFIG);
 
-    return (level: string, message: string) => {
+    return (level: 'log' | 'warn' | 'error', message: string) => {
       if (config.features.logging !== false) {
         console[level](`[${new Date().toISOString()}] ${message}`);
       }
@@ -251,7 +251,7 @@ import {InjectionToken, inject} from '@angular/core';
 import {APP_CONFIG} from './config.token';
 
 // 로그 함수 타입
-export type LoggerFn = (level: string, message: string) => void;
+export type LoggerFn = (level: 'log' | 'warn' | 'error', message: string) => void;
 
 // 전역 로그 함수
 export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
@@ -259,7 +259,7 @@ export const LOGGER_FN = new InjectionToken<LoggerFn>('logger.function', {
   factory: () => {
     const config = inject(APP_CONFIG);
 
-    return (level: string, message: string) => {
+    return (level: 'log' | 'warn' | 'error', message: string) => {
       if (config.features.logging !== false) {
         console[level](`[${new Date().toISOString()}] ${message}`);
       }
@@ -409,7 +409,7 @@ import {Injectable, Component, inject} from '@angular/core';
 
 @Injectable({providedIn: 'root'})
 export class DataStore {
-  private data: ListItem[] = [];
+  private data: string[] = [];
 }
 
 // This component gets its own instance
@@ -434,7 +434,7 @@ import {Injectable, Component, inject} from '@angular/core';
 
 @Injectable({providedIn: 'root'})
 export class DataStore {
-  private data: ListItem[] = [];
+  private data: string[] = [];
 }
 
 // 컴포넌트는 의존성 객체의 개별적인 인스턴스를 갖습니다.

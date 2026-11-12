@@ -15,7 +15,7 @@ This tutorial lesson demonstrates how to create a new [component](guide/componen
 <!--
 ## What you'll learn
 
-Your app has a new component: `Home`.
+Your app will have a new component: `Home`.
 -->
 
 <a id="what-youll-learn"></a>
@@ -37,7 +37,7 @@ When you create your `Home`, you use these properties:
 - `selector`: to describe how Angular refers to the component in templates.
 - `imports`: to describe the component's dependencies.
 - `template`: to describe the component's HTML markup and layout.
-- `styleUrls`: to list the URLs of the CSS files that the component uses in an array.
+- `styleUrl`: to specify the URL of the CSS file that the component uses.
 
 <docs-pill-row>
   <docs-pill href="api/core/Component" title="Learn more about Components"/>
@@ -60,7 +60,7 @@ Angular 컴포넌트의 프로퍼티는 메타데이터로 정의합니다.
 - `selector`: Angular가 템플릿에서 컴포넌트를 참조하는 방법을 정의합니다.
 - `imports`: 컴포넌트의 의존성을 정의합니다.
 - `template`: 컴포넌트의 HTML 마크업과 레이아웃을 정의합니다.
-- `styleUrls`: 컴포넌트에서 사용하는 CSS 파일의 URL을 배열로 나열합니다.
+- `styleUrl`: 컴포넌트에서 사용하는 CSS 파일의 URL을 지정합니다.
 
 <docs-pill-row>
   <docs-pill href="api/core/Component" title="컴포넌트 자세히 알아보기"/>
