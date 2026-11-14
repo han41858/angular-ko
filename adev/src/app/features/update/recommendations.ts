@@ -3498,9 +3498,9 @@ export const RECOMMENDATIONS: Step[] = [
     necessaryAsOf: 2200,
     level: ApplicationComplexity.Medium,
     step: '22.0.0-component-onpush-default',
-    // Original: Components with no `changeDetection` property defined are now `OnPush` by default. To maintain `Eager` (the previous default) change detection, explicitly set `changeDetection: ChangeDetectionStrategy.Eager` in your component decorator.
+    // Original: Components with no `changeDetection` property defined are now `OnPush` by default. `ng update` keeps your existing components on the previous behavior by adding `changeDetection: ChangeDetectionStrategy.Eager` to every component that has no `changeDetection` property. It also replaces the deprecated `ChangeDetectionStrategy.Default` with `ChangeDetectionStrategy.Eager`. If you update without running `ng update`, set `changeDetection: ChangeDetectionStrategy.Eager` yourself where you need the previous behavior.
     action:
-      '이제 `changeDetection` 프로퍼티가 정의되지 않은 컴포넌트는 기본적으로 `OnPush`를 사용합니다. 이전 기본값인 `Eager` 변경 감지를 유지하려면 컴포넌트 데코레이터에 `changeDetection: ChangeDetectionStrategy.Eager`를 명시적으로 설정하세요.',
+      '이제 `changeDetection` 프로퍼티가 정의되지 않은 컴포넌트는 기본적으로 `OnPush`를 사용합니다. `ng update`는 `changeDetection` 프로퍼티가 없는 모든 컴포넌트에 `changeDetection: ChangeDetectionStrategy.Eager`를 추가하여 기존 동작을 유지합니다. 또한 사용 중단이 권고된 `ChangeDetectionStrategy.Default`를 `ChangeDetectionStrategy.Eager`로 바꿉니다. `ng update`를 실행하지 않고 업데이트한다면, 이전 동작이 필요한 컴포넌트에 `changeDetection: ChangeDetectionStrategy.Eager`를 직접 설정하세요.',
   },
   {
     possibleIn: 2200,

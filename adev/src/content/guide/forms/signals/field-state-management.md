@@ -1011,19 +1011,26 @@ The root form is also a field in the field tree. When you call it as a function,
 
 <!--
 ```angular-ts
+import {Component, signal} from '@angular/core';
+import {FormField, FormRoot, form, required} from '@angular/forms/signals';
+
 @Component({
+  imports: [FormRoot, FormField],
   template: `
-    <form novalidate>
+    <form [formRoot]="loginForm">
       <input [formField]="loginForm.email" />
       <input [formField]="loginForm.password" />
 
-      <button [disabled]="!loginForm().valid()">Sign In</button>
+      <button type="submit" [disabled]="!loginForm().valid()">Sign In</button>
     </form>
   `,
 })
 export class Login {
   loginModel = signal({email: '', password: ''});
-  loginForm = form(this.loginModel);
+  loginForm = form(this.loginModel, (schemaPath) => {
+    required(schemaPath.email);
+    required(schemaPath.password);
+  });
 }
 ```
 
@@ -1031,19 +1038,26 @@ In this example, the form is valid only when all child fields are valid. This al
 -->
 
 ```angular-ts
+import {Component, signal} from '@angular/core';
+import {FormField, FormRoot, form, required} from '@angular/forms/signals';
+
 @Component({
+  imports: [FormRoot, FormField],
   template: `
-    <form novalidate>
+    <form [formRoot]="loginForm">
       <input [formField]="loginForm.email" />
       <input [formField]="loginForm.password" />
 
-      <button [disabled]="!loginForm().valid()">Sign In</button>
+      <button type="submit" [disabled]="!loginForm().valid()">Sign In</button>
     </form>
   `,
 })
 export class Login {
   loginModel = signal({email: '', password: ''});
-  loginForm = form(this.loginModel);
+  loginForm = form(this.loginModel, (schemaPath) => {
+    required(schemaPath.email);
+    required(schemaPath.password);
+  });
 }
 ```
 
@@ -1680,7 +1694,7 @@ export class Registration {
 }
 ```
 
-When you use `FormRoot`, submitting the form automatically calls the `submit()` function, which marks all fields as touched (revealing validation errors) and executes your `action` callback if the form is valid.
+When you use `FormRoot` with a form that has a `submission` option, submitting the form automatically calls the `submit()` function, which marks all fields as touched (revealing validation errors) and executes your `action` callback if the form is valid.
 
 You can also submit a form manually, without using the directive, by calling `submit(this.registrationForm)`. When explicitly calling the `submit` function like this, you can pass a `FormSubmitOptions` to override the default `submission` logic for the form: `submit(this.registrationForm, {action: () => /* ... */ })`.
 -->
@@ -1727,7 +1741,7 @@ export class Registration {
 }
 ```
 
-`formRoot`를 사용하면 폼을 제출할 때 `submit()` 함수가 자동으로 실행됩니다.
+`submission` 옵션이 있는 폼에 `FormRoot`를 사용하면 폼을 제출할 때 `submit()` 함수가 자동으로 실행됩니다.
 이 함수는 모든 필드를 touched 상태로 표시하여 유효성 검사 오류가 드러나게 하고, 폼이 유효한 경우 `action` 콜백 함수를 실행합니다.
 
 디렉티브를 사용하지 않고 `submit(this.registrationForm)`을 실행해서 수동으로 폼을 제출할 수도 있습니다.
@@ -1992,7 +2006,7 @@ onSubmit() {
 <!--
 ### Custom controls
 
-By default, calling `focusBoundControl()` on a custom control has no effect because a custom control can contain multiple native inputs. For example, a date picker can contain separate day, month, and year fields. As a result, Angular cannot determine which element should receive focus or what action to perform.
+By default, calling `focusBoundControl()` on a custom control focuses the control's host element, which usually cannot receive focus. A custom control can contain multiple native inputs. For example, a date picker can contain separate day, month, and year fields. As a result, Angular cannot determine which element should receive focus or what action to perform.
 
 To support programmatic focus in a custom control, implement a `focus()` method. When `focusBoundControl()` is called on the field state associated with a custom control, Angular calls the control's `focus()` method if one is present.
 
@@ -2000,7 +2014,7 @@ Consider a custom password input:
 
 ```html
 <div class="password-block">
-  <input type="password" #passwordCtrl [value]="value()" (input)="value.set($event.target.value)" />
+  <input type="password" #passwordCtrl [value]="value()" (input)="value.set(passwordCtrl.value)" />
 </div>
 ```
 
@@ -2023,7 +2037,10 @@ export class PasswordInput implements FormValueControl<string> {
 
 ### 커스텀 컨트롤
 
-커스텀 컨트롤에서 `focusBoundControl()`을 호출해도 기본적으로는 아무 동작도 하지 않습니다. 커스텀 컨트롤에는 기본 입력 엘리먼트가 여러 개 있을 수 있기 때문입니다. 예를 들어 날짜 선택기는 일, 월, 연도 필드를 각각 포함할 수 있습니다. Angular는 어느 엘리먼트에 포커스를 주거나 어떤 동작을 실행해야 하는지 결정할 수 없습니다.
+커스텀 컨트롤에서 `focusBoundControl()`을 호출하면 기본적으로 컨트롤의 호스트 엘리먼트에 포커스를 시도하지만, 호스트 엘리먼트는 일반적으로 포커스를 받을 수 없습니다.
+커스텀 컨트롤에는 기본 입력 엘리먼트가 여러 개 있을 수 있습니다.
+예를 들어 날짜 선택기는 일, 월, 연도 필드를 각각 포함할 수 있습니다.
+Angular는 어느 엘리먼트에 포커스를 주거나 어떤 동작을 실행해야 하는지 결정할 수 없습니다.
 
 커스텀 컨트롤에서 코드로 포커스를 이동할 수 있도록 하려면 `focus()` 메서드를 구현하세요. 연결된 필드 상태에 `focusBoundControl()`을 호출하면 Angular가 컨트롤에 구현된 `focus()` 메서드를 호출합니다.
 
@@ -2031,7 +2048,7 @@ export class PasswordInput implements FormValueControl<string> {
 
 ```html
 <div class="password-block">
-  <input type="password" #passwordCtrl [value]="value()" (input)="value.set($event.target.value)" />
+  <input type="password" #passwordCtrl [value]="value()" (input)="value.set(passwordCtrl.value)" />
 </div>
 ```
 

@@ -349,7 +349,7 @@ req.flush('Failed!', {status: 500, statusText: 'Internal Server Error'});
 ### 네트워크 오류
 
 <!--
-Requests can also fail due to network errors, which surface as `ProgressEvent` errors. These can be delivered with the `error()` method:
+Requests can also fail due to network errors, which `HttpClient` reports as an `HttpErrorResponse` with a `status` of `0`. These can be simulated with the `error()` method, which wraps the given `ProgressEvent` in such a response:
 
 ```ts
 const req = httpTesting.expectOne('/api/config');
@@ -359,8 +359,8 @@ req.error(new ProgressEvent('network error!'));
 ```
 -->
 
-요청은 네트워크 오류로 실패할 수도 있으며, 이런 오류는 `ProgressEvent`로 전달됩니다.
-`error()` 메서드로 전달할 수 있습니다:
+요청은 네트워크 오류로 실패할 수도 있으며, `HttpClient`는 이런 오류를 `status`가 `0`인 `HttpErrorResponse`로 전달합니다.
+`error()` 메서드는 전달받은 `ProgressEvent`를 이 응답으로 감싸 네트워크 오류를 재현합니다:
 
 ```ts
 const req = httpTesting.expectOne('/api/config');
