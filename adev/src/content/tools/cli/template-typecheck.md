@@ -467,22 +467,29 @@ See [Improving template type checking for custom directives](/guide/directives/s
 ## 입력 세터의 타입 변환
 
 <!--
-Occasionally it is desirable for the `input()` property of a directive or component to alter the value bound to it, typically using a `transform` function for the input.
+Occasionally it is desirable for an input of a directive or component to alter the value bound to it, typically in the input's setter.
 As an example, consider this custom button component:
-
-Consider the following directive:
 
 ```angular-ts
 @Component({
   selector: 'submit-button',
   template: `
     <div class="wrapper">
-      <button [disabled]="disabled()">Submit</button>
+      <button [disabled]="disabled">Submit</button>
     </div>
   `,
 })
 class SubmitButton {
-  disabled = input.required({transform: booleanAttribute});
+  private _disabled = false;
+
+  @Input()
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = value;
+  }
 }
 ```
 
@@ -546,23 +553,30 @@ The suffix should be the `@Input` _field_ name.
 Care should be taken that if an `ngAcceptInputType_` override is present for a given input, then the setter should be able to handle any values of the overridden type.
 -->
 
-때로는 디렉티브나 컴포넌트의 `input()` 프로퍼티가 바인딩된 값을 변환하는 것이 좋습니다.
-일반적으로 입력의 `transform` 함수를 사용합니다.
+때로는 디렉티브나 컴포넌트의 입력이 바인딩된 값을 변환하는 것이 좋습니다.
+일반적으로 입력의 세터에서 변환합니다.
 예를 들어 다음 커스텀 버튼 컴포넌트를 살펴봅시다:
-
-다음 디렉티브를 살펴보세요:
 
 ```angular-ts
 @Component({
   selector: 'submit-button',
   template: `
     <div class="wrapper">
-      <button [disabled]="disabled()">Submit</button>
+      <button [disabled]="disabled">Submit</button>
     </div>
   `,
 })
 class SubmitButton {
-  disabled = input.required({transform: booleanAttribute});
+  private _disabled = false;
+
+  @Input()
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = value;
+  }
 }
 ```
 
