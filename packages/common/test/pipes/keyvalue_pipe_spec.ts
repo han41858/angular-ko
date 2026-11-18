@@ -330,7 +330,6 @@ describe('KeyValuePipe', () => {
 
   it('should be available as a standalone pipe', async () => {
     @Component({
-      selector: 'test-component',
       imports: [KeyValuePipe, JsonPipe],
       template: '{{ value | keyvalue | json }}',
     })

@@ -379,6 +379,7 @@ export interface SupportedApis {
   signals: boolean;
   transferState: boolean;
   signalPropertiesInspection: boolean;
+  signalWatch: boolean;
 }
 
 export type TransferStateValue =
@@ -395,6 +396,8 @@ export interface DevtoolsConfig {
   hydrationOverlays: boolean;
   cdHighlighting: boolean;
   cdDataStream: boolean;
+  forBlocks: boolean;
+  deferBlocks: boolean;
 }
 
 export interface Events {

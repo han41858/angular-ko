@@ -8,15 +8,10 @@
 
 <!--
 Route transition animations enhance user experience by providing smooth visual transitions when navigating between different views in your Angular application. [Angular Router](/guide/routing) includes built-in support for the browser's View Transitions API, enabling seamless animations between route changes in supported browsers.
-
-HELPFUL: The Router's native View Transitions integration is currently in [developer preview](/reference/releases#developer-preview). Native View Transitions are a relatively new browser feature with limited support across all browsers.
 -->
 
 라우팅 규칙 전환 애니메이션은 Angular 애플리케이션의 여러 뷰 사이를 이동할 때 화면을 부드럽게 전환해서 사용자 경험을 개선합니다.
 [Angular 라우터](/guide/routing)는 브라우저의 View Transitions API를 기본으로 지원하므로, 지원되는 브라우저에서 라우팅 규칙이 바뀔 때 매끄러운 애니메이션을 적용할 수 있습니다.
-
-참고: 라우터의 네이티브 View Transitions 통합 기능은 현재 [개발자 프리뷰](/reference/releases#developer-preview)입니다.
-네이티브 View Transitions는 비교적 새로운 브라우저 기능이므로 모든 브라우저에서 지원되지는 않습니다.
 
 <!--
 ## How View Transitions work

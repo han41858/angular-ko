@@ -461,12 +461,14 @@ If you want to customize the options of the `IntersectionObserver`, the `viewpor
 <div #greeting>Hello!</div>
 
 <!- With options and a trigger ->
-@defer (on viewport({trigger: greeting, rootMargin: '100px', threshold: 0.5})) {
+@defer (
+  on viewport({trigger: greeting, rootMargin: '100px', scrollMargin: '50px', threshold: 0.5})
+) {
 <greetings-cmp />
 }
 
 <!- With options and an implied trigger ->
-@defer (on viewport({rootMargin: '100px', threshold: 0.5})) {
+@defer (on viewport({rootMargin: '100px', scrollMargin: '50px', threshold: 0.5})) {
 <greetings-cmp />
 } @placeholder {
   <div>Implied trigger</div>
@@ -505,12 +507,14 @@ If you want to customize the options of the `IntersectionObserver`, the `viewpor
 <div #greeting>Hello!</div>
 
 <!-- 옵션을 지정하며 트리거링 -->
-@defer (on viewport({trigger: greeting, rootMargin: '100px', threshold: 0.5})) {
+@defer (
+  on viewport({trigger: greeting, rootMargin: '100px', scrollMargin: '50px', threshold: 0.5})
+) {
   <greetings-cmp />
 }
 
 <!-- 옵션을 지정하며 암묵적 트리거링 -->
-@defer (on viewport({rootMargin: '100px', threshold: 0.5})) {
+@defer (on viewport({rootMargin: '100px', scrollMargin: '50px', threshold: 0.5})) {
   <greetings-cmp />
 } @placeholder {
   <div>Implied trigger</div>

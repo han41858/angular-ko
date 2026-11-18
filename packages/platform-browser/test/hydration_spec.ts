@@ -24,8 +24,8 @@ import {BehaviorSubject} from 'rxjs';
 
 import {
   provideClientHydration,
-  withNoHttpTransferCache,
   withIncrementalHydration,
+  withNoHttpTransferCache,
   withNoIncrementalHydration,
 } from '../public_api';
 import {withHttpTransferCacheOptions} from '../src/hydration';
@@ -34,7 +34,6 @@ describe('provideClientHydration', () => {
   @Component({
     selector: 'test-hydrate-app',
     template: '',
-    standalone: false,
   })
   class SomeComponent {}
 
@@ -78,7 +77,6 @@ describe('provideClientHydration', () => {
           TestBed.resetTestingModule();
 
           TestBed.configureTestingModule({
-            declarations: [SomeComponent],
             providers: [
               {provide: PLATFORM_ID, useValue: 'server'},
               {provide: DOCUMENT, useFactory: () => document},
@@ -110,7 +108,6 @@ describe('provideClientHydration', () => {
           TestBed.resetTestingModule();
 
           TestBed.configureTestingModule({
-            declarations: [SomeComponent],
             providers: [
               {provide: PLATFORM_ID, useValue: 'server'},
               {provide: DOCUMENT, useFactory: () => document},
@@ -142,7 +139,6 @@ describe('provideClientHydration', () => {
           TestBed.resetTestingModule();
 
           TestBed.configureTestingModule({
-            declarations: [SomeComponent],
             providers: [
               {provide: PLATFORM_ID, useValue: 'server'},
               {provide: DOCUMENT, useFactory: () => document},

@@ -6,8 +6,9 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {actAsync} from '@angular/private/testing';
-import {Injector, resource, ResourceParamsStatus, signal} from '../../src/core';
+import {timeout} from '@angular/private/testing';
+
+import {ApplicationRef, Injector, resource, ResourceParamsStatus, signal} from '../../src/core';
 import {TestBed} from '../../testing';
 
 function throwStatusAndErrors<T>(source: () => T | ResourceParamsStatus | Error): () => T {
@@ -20,9 +21,45 @@ function throwStatusAndErrors<T>(source: () => T | ResourceParamsStatus | Error)
 }
 
 describe('resource with ResourceParamsStatus', () => {
+  for (const [paramsStatus, expectedStatus] of [
+    [ResourceParamsStatus.IDLE, 'idle'],
+    [ResourceParamsStatus.LOADING, 'loading'],
+    [new Error('params error'), 'error'],
+  ] as const) {
+    it(`should cancel a pending load and release stability when params throws ${expectedStatus}`, async () => {
+      const params = signal<string | ResourceParamsStatus | Error>('first');
+      const abortSignals: AbortSignal[] = [];
+      const res = resource({
+        params: throwStatusAndErrors(params),
+        loader: ({params, abortSignal}) => {
+          abortSignals.push(abortSignal);
+          // The first load deliberately remains pending even after it is aborted.
+          return params === 'first' ? new Promise<string>(() => {}) : Promise.resolve(params);
+        },
+        injector: TestBed.inject(Injector),
+      });
+      const appRef = TestBed.inject(ApplicationRef);
+
+      await timeout();
+      expect(abortSignals[0]?.aborted).toBeFalse();
+
+      params.set(paramsStatus);
+      await appRef.whenStable();
+
+      expect(res.status()).toBe(expectedStatus);
+      expect(abortSignals.map((signal) => signal.aborted)).toEqual([true]);
+
+      params.set('second');
+      await appRef.whenStable();
+
+      expect(res.snapshot()).toEqual({status: 'resolved', value: 'second'});
+      expect(abortSignals.map((signal) => signal.aborted)).toEqual([true, false]);
+    });
+  }
+
   it('should transition to idle when params throws ResourceParamsStatus.IDLE', async () => {
     const s = signal<string | ResourceParamsStatus>('foo');
-    const res = await actAsync(() =>
+    const res = await act(() =>
       resource({
         params: throwStatusAndErrors(s),
         loader: async ({params}) => {
@@ -35,7 +72,7 @@ describe('resource with ResourceParamsStatus', () => {
     expect(res.status()).toBe('resolved');
     expect(res.value()).toBe('foo');
 
-    await actAsync(() => s.set(ResourceParamsStatus.IDLE));
+    await act(() => s.set(ResourceParamsStatus.IDLE));
 
     expect(res.status()).toBe('idle');
     expect(res.value()).toBe(undefined);
@@ -44,7 +81,7 @@ describe('resource with ResourceParamsStatus', () => {
   it('should transition to loading when params throws ResourceParamsStatus.LOADING', async () => {
     const s = signal<string | ResourceParamsStatus>('foo');
     let loadCount = 0;
-    const res = await actAsync(() =>
+    const res = await act(() =>
       resource({
         params: throwStatusAndErrors(s),
         loader: async ({params}) => {
@@ -59,7 +96,7 @@ describe('resource with ResourceParamsStatus', () => {
     expect(res.value()).toBe('foo');
     expect(loadCount).toBe(1);
 
-    await actAsync(() => s.set(ResourceParamsStatus.LOADING));
+    await act(() => s.set(ResourceParamsStatus.LOADING));
 
     expect(res.status()).toBe('loading');
     expect(res.value()).toBe(undefined);
@@ -68,7 +105,7 @@ describe('resource with ResourceParamsStatus', () => {
 
   it('should transition to error when params throws an Error', async () => {
     const s = signal<string | Error>('foo');
-    const res = await actAsync(() =>
+    const res = await act(() =>
       resource({
         params: throwStatusAndErrors(s),
         loader: async ({params}) => params as string,
@@ -79,7 +116,7 @@ describe('resource with ResourceParamsStatus', () => {
     expect(res.status()).toBe('resolved');
 
     const err = new Error('params error');
-    await actAsync(() => s.set(err));
+    await act(() => s.set(err));
 
     expect(res.status()).toBe('error');
     expect(res.error()).toEqual(err);
@@ -89,7 +126,7 @@ describe('resource with ResourceParamsStatus', () => {
   it('should recover from special statuses', async () => {
     const s = signal<string | ResourceParamsStatus | Error>(ResourceParamsStatus.IDLE);
     let loadCount = 0;
-    const res = await actAsync(() =>
+    const res = await act(() =>
       resource({
         params: throwStatusAndErrors(s),
         loader: async ({params}) => {
@@ -102,17 +139,17 @@ describe('resource with ResourceParamsStatus', () => {
 
     expect(res.status()).toBe('idle');
 
-    await actAsync(() => s.set(ResourceParamsStatus.LOADING));
+    await act(() => s.set(ResourceParamsStatus.LOADING));
 
     expect(res.status()).toBe('loading');
     expect(loadCount).toBe(0);
 
-    await actAsync(() => s.set(new Error('fail')));
+    await act(() => s.set(new Error('fail')));
 
     expect(res.status()).toBe('error');
     expect(loadCount).toBe(0);
 
-    await actAsync(() => s.set('foo'));
+    await act(() => s.set('foo'));
 
     expect(res.status()).toBe('resolved');
     expect(res.value()).toBe('foo');
@@ -121,7 +158,7 @@ describe('resource with ResourceParamsStatus', () => {
 
   it('should propagate a different error thrown from params', async () => {
     const s = signal<string | Error>('foo');
-    const res = await actAsync(() =>
+    const res = await act(() =>
       resource({
         params: throwStatusAndErrors(s),
         loader: async ({params}) => params as string,
@@ -129,11 +166,11 @@ describe('resource with ResourceParamsStatus', () => {
       }),
     );
 
-    await actAsync(() => s.set(new Error('first')));
+    await act(() => s.set(new Error('first')));
     expect(res.status()).toBe('error');
     expect(res.error()).toEqual(new Error('first'));
 
-    await actAsync(() => s.set(new Error('second')));
+    await act(() => s.set(new Error('second')));
     expect(res.status()).toBe('error');
     expect(res.error()).toEqual(new Error('second'));
   });
@@ -143,7 +180,7 @@ describe('resource with ResourceParamsStatus', () => {
     const s = signal<string | ResourceParamsStatus>(ResourceParamsStatus.LOADING);
     let paramsCount = 0;
     let loadCount = 0;
-    const res = await actAsync(() =>
+    const res = await act(() =>
       resource({
         params: () => {
           paramsCount++;
@@ -161,13 +198,13 @@ describe('resource with ResourceParamsStatus', () => {
     expect(res.status()).toBe('loading');
     expect(paramsCount).toBe(1);
 
-    await actAsync(() => unrelated.set(1));
+    await act(() => unrelated.set(1));
 
     expect(paramsCount).toBe(2);
     expect(res.status()).toBe('loading');
     expect(loadCount).toBe(0);
 
-    await actAsync(() => s.set('foo'));
+    await act(() => s.set('foo'));
     expect(res.status()).toBe('resolved');
     expect(loadCount).toBe(1);
   });
@@ -176,7 +213,7 @@ describe('resource with ResourceParamsStatus', () => {
     const throwIt = signal(false);
     let loads = 0;
 
-    const res = await actAsync(() =>
+    const res = await act(() =>
       resource({
         params: () => {
           if (throwIt()) {
@@ -195,9 +232,15 @@ describe('resource with ResourceParamsStatus', () => {
     expect(res.status()).toBe('idle');
     expect(loads).toBe(0);
 
-    await actAsync(() => throwIt.set(true));
+    await act(() => throwIt.set(true));
 
     expect(res.status()).toBe('error');
     expect(loads).toBe(0);
   });
 });
+
+async function act<T>(fn: () => T): Promise<T> {
+  const result = fn();
+  await TestBed.inject(ApplicationRef).whenStable();
+  return result;
+}

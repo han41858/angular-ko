@@ -566,6 +566,44 @@ export class ProductList {
 ```
 
 <!--
+## Controlling scrolling with RouterLink
+
+When in-memory scrolling is enabled with `withInMemoryScrolling({scrollPositionRestoration: 'enabled'})` (or `'top'`), the router scrolls to the top of the page after a link is clicked, even when the link only changes a query parameter. The `RouterLink` directive supports a `scroll` input that lets a single link opt out:
+
+```angular-html
+<!- Switches tabs without scrolling back to the top of the page ->
+<a routerLink="/products/42" [queryParams]="{tab: 'reviews'}" scroll="manual">Reviews</a>
+```
+
+With `scroll="manual"`, the router does not scroll for that navigation. The default, `'after-transition'`, scrolls according to the router's scrolling configuration.
+
+The same option is available for programmatic navigation:
+
+```ts
+router.navigateByUrl('/products/42?tab=reviews', {scroll: 'manual'});
+```
+-->
+
+<a id="controlling-scrolling-with-routerlink"></a>
+
+## RouterLink로 스크롤 제어하기
+
+`withInMemoryScrolling({scrollPositionRestoration: 'enabled'})`(또는 `'top'`)으로 메모리 내 스크롤을 활성화하면 링크를 클릭할 때 쿼리 파라미터만 바뀌어도 라우터가 페이지 맨 위로 스크롤합니다. `RouterLink` 디렉티브의 `scroll` 입력으로 특정 링크만 이 동작에서 제외할 수 있습니다.
+
+```angular-html
+<!-- 페이지 맨 위로 스크롤하지 않고 탭 전환 -->
+<a routerLink="/products/42" [queryParams]="{tab: 'reviews'}" scroll="manual">Reviews</a>
+```
+
+`scroll="manual"`을 사용하면 해당 내비게이션에서 라우터가 스크롤하지 않습니다. 기본값인 `'after-transition'`은 라우터의 스크롤 설정을 따릅니다.
+
+코드로 내비게이션을 실행할 때도 같은 옵션을 사용할 수 있습니다.
+
+```ts
+router.navigateByUrl('/products/42?tab=reviews', {scroll: 'manual'});
+```
+
+<!--
 ## Next steps
 -->
 

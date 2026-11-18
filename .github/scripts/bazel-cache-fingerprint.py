@@ -29,7 +29,7 @@ TOOLS = ('bash', 'sh', 'env', 'cp', 'cat', 'grep', 'sed', 'mkdir', 'dirname',
          'mv')
 # Git is not used by the audited non-stamped deployment target. Re-audit if
 # release/snapshot stamping or version-generation rules are enabled.
-# Observed DT_NEEDED closure of pinned Node 24.21.0 and rules_sass Linux x64.
+# Observed DT_NEEDED closure of pinned Node 24.22.3 and rules_sass Linux x64.
 # Include these even if the workflow's Node binary happens to be static.
 RUNTIME_LIBS = ('libc.so.6', 'libm.so.6', 'libdl.so.2', 'libpthread.so.0',
                 'libstdc++.so.6', 'libgcc_s.so.1')
@@ -100,7 +100,7 @@ def collect():
             raise RuntimeError('required host tool unavailable: ' + tool)
         add_binary(path)
     node = shutil.which('node')
-    if not node or run([node, '--version']).strip() != 'v24.21.0':
+    if not node or run([node, '--version']).strip() != 'v24.22.3':
         raise RuntimeError('unexpected Node version')
     add_binary(node)
 
@@ -126,7 +126,7 @@ def collect():
         add_file(locale_file)
     add_file('/usr/share/zoneinfo/UTC')
     return {'schema': 2, 'os': os_release['ID'], 'os_version': os_release['VERSION_ID'],
-            'arch': platform.machine(), 'node': '24.21.0',
+            'arch': platform.machine(), 'node': '24.22.3',
             'bazel': Path('.bazelversion').read_text().strip(),
             'action_env': {'LC_ALL': 'C.UTF-8', 'LANG': 'C.UTF-8', 'TZ': 'UTC'},
             'files': sorted(files.items())}

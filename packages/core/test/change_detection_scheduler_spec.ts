@@ -47,13 +47,14 @@ import {
   tick,
 } from '../testing';
 
-import {ChangeDetectionStrategy} from '@angular/compiler';
 import {provideNoopAnimations} from '@angular/platform-browser/animations';
 import {isBrowser, isNode, withBody} from '@angular/private/testing';
 import {ChangeDetectionSchedulerImpl} from '../src/change_detection/scheduling/zoneless_scheduling_impl';
 import {RuntimeError, RuntimeErrorCode} from '../src/errors';
 import {scheduleCallbackWithRafRace} from '../src/util/callback_scheduler';
 import {global} from '../src/util/global';
+
+const {withProxyZone} = (Zone as any)[Zone.__symbol__('fakeAsyncTest')];
 
 function isStable(injector = TestBed.inject(EnvironmentInjector)): boolean {
   return toSignal(injector.get(ApplicationRef).isStable, {requireSync: true, injector})();
@@ -470,7 +471,10 @@ describe('Angular with zoneless enabled', () => {
     });
 
     it('executes render hooks when a new one is registered', async () => {
-      const {promise: calledPromise, resolve: resolveFn} = Promise.withResolvers<void>();
+      let resolveFn: Function;
+      let calledPromise = new Promise((resolve) => {
+        resolveFn = resolve;
+      });
       TestBed.runInInjectionContext(() => {
         afterNextRender(() => {
           resolveFn();
@@ -494,7 +498,10 @@ describe('Angular with zoneless enabled', () => {
       await fixture.whenStable();
       expect(checks).toBe(1);
 
-      const {promise: calledPromise, resolve: resolveFn} = Promise.withResolvers<void>();
+      let resolveFn: Function;
+      let calledPromise = new Promise((resolve) => {
+        resolveFn = resolve;
+      });
       TestBed.runInInjectionContext(() => {
         afterNextRender(() => {
           resolveFn();
@@ -551,7 +558,6 @@ describe('Angular with zoneless enabled', () => {
   it('change detects embedded view when attached to a host on ApplicationRef and declaration is marked for check', async () => {
     @Component({
       template: '<ng-template #template><div>{{thing}}</div></ng-template>',
-      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class DynamicCmp {
       @ViewChild('template') templateRef!: TemplateRef<{}>;
@@ -559,7 +565,6 @@ describe('Angular with zoneless enabled', () => {
     }
     @Component({
       template: '',
-      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class Host {
       readonly vcr = inject(ViewContainerRef);
@@ -576,7 +581,7 @@ describe('Angular with zoneless enabled', () => {
     expect(embeddedViewRef.rootNodes[0].innerHTML).toContain('initial');
 
     fixture.componentInstance.thing = 'new';
-    fixture.changeDetectorRef.markForCheck();
+    fixture.debugElement.injector.get(ChangeDetectorRef).markForCheck();
     await fixture.whenStable();
     expect(embeddedViewRef.rootNodes[0].innerHTML).toContain('new');
   });
@@ -584,7 +589,6 @@ describe('Angular with zoneless enabled', () => {
   it('change detects embedded view when attached directly to ApplicationRef and declaration is marked for check', async () => {
     @Component({
       template: '<ng-template #template><div>{{thing}}</div></ng-template>',
-      changeDetection: ChangeDetectionStrategy.Eager,
     })
     class DynamicCmp {
       @ViewChild('template') templateRef!: TemplateRef<{}>;
@@ -600,7 +604,7 @@ describe('Angular with zoneless enabled', () => {
     expect(embeddedViewRef.rootNodes[0].innerHTML).toContain('initial');
 
     fixture.componentInstance.thing = 'new';
-    fixture.changeDetectorRef.markForCheck();
+    fixture.debugElement.injector.get(ChangeDetectorRef).markForCheck();
     await fixture.whenStable();
     expect(embeddedViewRef.rootNodes[0].innerHTML).toContain('new');
   });
@@ -707,46 +711,56 @@ describe('Angular with zoneless enabled', () => {
     (Zone.root as any)._zoneDelegate.handleError = previousHandle;
   });
 
-  it('runs inside fakeAsync zone', fakeAsync(() => {
-    let didRun = false;
-    @Component({template: ''})
-    class App {
-      ngOnInit() {
-        didRun = true;
-      }
-    }
+  it(
+    'runs inside fakeAsync zone',
+    withProxyZone(
+      fakeAsync(() => {
+        let didRun = false;
+        @Component({template: ''})
+        class App {
+          ngOnInit() {
+            didRun = true;
+          }
+        }
 
-    TestBed.createComponent(App);
-    expect(didRun).toBe(false);
-    tick();
-    expect(didRun).toBe(true);
+        TestBed.createComponent(App);
+        expect(didRun).toBe(false);
+        tick();
+        expect(didRun).toBe(true);
 
-    didRun = false;
-    TestBed.createComponent(App);
-    expect(didRun).toBe(false);
-    flush();
-    expect(didRun).toBe(true);
-  }));
+        didRun = false;
+        TestBed.createComponent(App);
+        expect(didRun).toBe(false);
+        flush();
+        expect(didRun).toBe(true);
+      }),
+    ),
+  );
 
-  it('can run inside fakeAsync zone', fakeAsync(() => {
-    let didRun = false;
-    @Component({template: ''})
-    class App {
-      ngDoCheck() {
-        didRun = true;
-      }
-    }
+  it(
+    'can run inside fakeAsync zone',
+    withProxyZone(
+      fakeAsync(() => {
+        let didRun = false;
+        @Component({template: ''})
+        class App {
+          ngDoCheck() {
+            didRun = true;
+          }
+        }
 
-    // create component runs inside the zone and triggers CD as a result
-    const fixture = TestBed.createComponent(App);
-    didRun = false;
+        // create component runs inside the zone and triggers CD as a result
+        const fixture = TestBed.createComponent(App);
+        didRun = false;
 
-    // schedules change detection
-    fixture.debugElement.injector.get(ChangeDetectorRef).markForCheck();
-    expect(didRun).toBe(false);
-    tick();
-    expect(didRun).toBe(true);
-  }));
+        // schedules change detection
+        fixture.debugElement.injector.get(ChangeDetectorRef).markForCheck();
+        expect(didRun).toBe(false);
+        tick();
+        expect(didRun).toBe(true);
+      }),
+    ),
+  );
 });
 
 describe('Angular with scheduler and ZoneJS', () => {
@@ -957,28 +971,33 @@ describe('Angular with scheduler and ZoneJS', () => {
     expect(ticks).toBe(1);
   });
 
-  it('can run inside fakeAsync zone', fakeAsync(() => {
-    TestBed.configureTestingModule({
-      providers: [provideZoneChangeDetection({scheduleInRootZone: false} as any)],
-    });
-    let didRun = false;
-    @Component({template: ''})
-    class App {
-      ngDoCheck() {
-        didRun = true;
-      }
-    }
+  it(
+    'can run inside fakeAsync zone',
+    withProxyZone(
+      fakeAsync(() => {
+        TestBed.configureTestingModule({
+          providers: [provideZoneChangeDetection({scheduleInRootZone: false} as any)],
+        });
+        let didRun = false;
+        @Component({template: ''})
+        class App {
+          ngDoCheck() {
+            didRun = true;
+          }
+        }
 
-    // create component runs inside the zone and triggers CD as a result
-    const fixture = TestBed.createComponent(App);
-    didRun = false;
+        // create component runs inside the zone and triggers CD as a result
+        const fixture = TestBed.createComponent(App);
+        didRun = false;
 
-    // schedules change detection
-    fixture.debugElement.injector.get(ChangeDetectorRef).markForCheck();
-    expect(didRun).toBe(false);
-    tick();
-    expect(didRun).toBe(true);
-  }));
+        // schedules change detection
+        fixture.debugElement.injector.get(ChangeDetectorRef).markForCheck();
+        expect(didRun).toBe(false);
+        tick();
+        expect(didRun).toBe(true);
+      }),
+    ),
+  );
 
   describe('explicit ApplicationRef.tick from outside the Angular zone', () => {
     function collectErrors(): unknown[] {

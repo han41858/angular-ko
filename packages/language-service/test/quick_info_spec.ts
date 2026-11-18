@@ -665,6 +665,58 @@ describe('quick info', () => {
           expectedDisplayString: '(property) AppCmp.anyValue: any',
         });
       });
+
+      it('should work for postfix update expression targets', () => {
+        expectQuickInfo({
+          templateOverride: `<div (click)="hero.i¦d++"></div>`,
+          expectedSpanText: 'id',
+          expectedDisplayString: '(property) Hero.id: number',
+        });
+        expectQuickInfo({
+          templateOverride: `<div (click)="hero.i¦d--"></div>`,
+          expectedSpanText: 'id',
+          expectedDisplayString: '(property) Hero.id: number',
+        });
+      });
+
+      it('should work for prefix update expression targets', () => {
+        expectQuickInfo({
+          templateOverride: `<div (click)="++hero.i¦d"></div>`,
+          expectedSpanText: 'id',
+          expectedDisplayString: '(property) Hero.id: number',
+        });
+        expectQuickInfo({
+          templateOverride: `<div (click)="--hero.i¦d"></div>`,
+          expectedSpanText: 'id',
+          expectedDisplayString: '(property) Hero.id: number',
+        });
+      });
+
+      it('should work for update expression targets wrapped in parentheses or non-null assertions', () => {
+        expectQuickInfo({
+          templateOverride: `<div (click)="(hero.i¦d)++"></div>`,
+          expectedSpanText: 'id',
+          expectedDisplayString: '(property) Hero.id: number',
+        });
+        expectQuickInfo({
+          templateOverride: `<div (click)="++(hero.i¦d)"></div>`,
+          expectedSpanText: 'id',
+          expectedDisplayString: '(property) Hero.id: number',
+        });
+        expectQuickInfo({
+          templateOverride: `<div (click)="hero.i¦d!++"></div>`,
+          expectedSpanText: 'id',
+          expectedDisplayString: '(property) Hero.id: number',
+        });
+      });
+
+      it('should work for the operand of an update expression inside a larger expression', () => {
+        expectQuickInfo({
+          templateOverride: `<div (click)="setTitle(hero.nam¦e); hero.id++"></div>`,
+          expectedSpanText: 'name',
+          expectedDisplayString: '(property) Hero.name: string',
+        });
+      });
     });
 
     describe('blocks', () => {
@@ -1213,102 +1265,9 @@ describe('quick info', () => {
     });
   });
 
-  describe('selectorless', () => {
+  describe('inline type check blocks', () => {
     beforeEach(() => {
       env = LanguageServiceTestEnv.setup();
-      project = env.addProject(
-        'test',
-        {
-          'app.ts': `
-            import {Component, Directive, EventEmitter, Input, Output} from '@angular/core';
-
-            @Component({template: ''})
-            export class TestComponent {
-              @Input() name!: string;
-              @Output() testEvent = new EventEmitter<string>();
-            }
-
-            @Directive()
-            export class TestDirective {
-              @Input() value!: number;
-              @Output() dirEvent = new EventEmitter<number>();
-            }
-
-            @Component({templateUrl: './app.html'})
-            export class AppCmp {
-              stringValue = 'hello';
-              numberValue = 123;
-              handleEvent() {}
-            }
-          `,
-          'app.html': 'Will be overridden',
-        },
-        {_enableSelectorless: true},
-      );
-    });
-
-    it('should work for selectorless components', () => {
-      expectQuickInfo({
-        templateOverride: '<TestComp¦onent/>',
-        expectedSpanText: '<TestComponent/>',
-        expectedDisplayString: '(component) TestComponent',
-      });
-    });
-
-    it('should work for selectorless directives', () => {
-      expectQuickInfo({
-        templateOverride: '<div @Test¦Directive></div>',
-        expectedSpanText: '@TestDirective',
-        expectedDisplayString: '(directive) TestDirective',
-      });
-    });
-
-    it('should work for selectorless component input', () => {
-      expectQuickInfo({
-        templateOverride: '<TestComponent [na¦me]="stringValue"/>',
-        expectedSpanText: 'name',
-        expectedDisplayString: '(property) TestComponent.name: string',
-      });
-    });
-
-    it('should work for selectorless component output', () => {
-      expectQuickInfo({
-        templateOverride: '<TestComponent (testEv¦ent)="handleEvent()"/>',
-        expectedSpanText: 'testEvent',
-        expectedDisplayString: '(event) TestComponent.testEvent: EventEmitter<string>',
-      });
-    });
-
-    it('should work for selectorless directive input', () => {
-      expectQuickInfo({
-        templateOverride: '<div @TestDirective([val¦ue]="numberValue")></div>',
-        expectedSpanText: 'value',
-        expectedDisplayString: '(property) TestDirective.value: number',
-      });
-    });
-
-    it('should work for selectorless directive output', () => {
-      expectQuickInfo({
-        templateOverride: '<div @TestDirective((dirEv¦ent)="handleEvent()")></div>',
-        expectedSpanText: 'dirEvent',
-        expectedDisplayString: '(event) TestDirective.dirEvent: EventEmitter<number>',
-      });
-    });
-
-    it('should work for selectorless component references', () => {
-      expectQuickInfo({
-        templateOverride: '<TestComponent #r¦ef/>',
-        expectedSpanText: 'ref',
-        expectedDisplayString: '(reference) ref: TestComponent',
-      });
-    });
-
-    it('should work for selectorless directive references', () => {
-      expectQuickInfo({
-        templateOverride: '<div @TestDirective(#r¦ef)></div>',
-        expectedSpanText: 'ref',
-        expectedDisplayString: '(reference) ref: TestDirective',
-      });
     });
 
     it('should get quick info for a component with non-exported generic bound requiring external copy', () => {

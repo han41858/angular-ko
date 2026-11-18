@@ -214,9 +214,11 @@ runInEachFileSystem(() => {
       }`,
       );
 
-      expect(messages).toEqual([
+      expect(messages.sort()).toEqual([
         `TestComponent.html(1, 29): Property 'heihgt' does not exist on type 'TestComponent'. Did you mean 'height'?`,
-        `TestComponent.html(1, 6): Can't bind to 'srcc' since it isn't a known property of 'img'.`,
+        jasmine.stringContaining(
+          `TestComponent.html(1, 6): Can't bind to 'srcc' since it isn't a known property of 'img'.`,
+        ),
       ]);
     });
 
@@ -230,8 +232,10 @@ runInEachFileSystem(() => {
       );
 
       expect(messages).toEqual([
-        `TestComponent.html(1, 6): Binding to event property 'onclick' is disallowed for security reasons, please use (click)=...
+        jasmine.stringContaining(
+          `TestComponent.html(1, 6): Binding to event property 'onclick' is disallowed for security reasons, please use (click)=...
 If 'onclick' is a directive input, make sure the directive is imported by the current module.`,
+        ),
       ]);
     });
 
@@ -1059,11 +1063,13 @@ class TestComponent {
         ],
       );
 
-      expect(messages).toEqual([
+      expect(messages.sort()).toEqual([
         // These messages are expected to refer to the native
         // typings since the inputs/outputs haven't been exposed.
+        jasmine.stringContaining(
+          `TestComponent.html(1, 10): Can't bind to 'input' since it isn't a known property of 'div'.`,
+        ),
         `TestComponent.html(1, 60): Argument of type 'Event' is not assignable to parameter of type 'string'.`,
-        `TestComponent.html(1, 10): Can't bind to 'input' since it isn't a known property of 'div'.`,
       ]);
     });
 

@@ -8,15 +8,13 @@
 
 import {ElementPosition} from '../../../../protocol';
 
-import {
-  findDirectiveAndHost,
-  findNodeInForest,
-  getDirectiveName,
-} from '../directive-forest/component-tree/component-tree';
+import {findNodeInForest} from '../directive-forest';
 import {getDirectiveForestManager} from '../directive-forest/manager';
-import {Highlight, inspectElementHighlightTemplate} from '../shared/highlighter/highlights';
+import {findDirectiveAndHost, getDirectiveName} from '../directive-forest/utils/directive';
+import {inspectElementHighlightTemplate} from '../shared/highlighter/templates';
 import {highlightElement} from '../shared/highlighter';
 import {ComponentTreeNode} from '../shared/interfaces';
+import {Highlight} from '../shared/highlighter/types';
 
 export interface ComponentInspectorOptions {
   onComponentEnter: (id: number) => void;
@@ -25,10 +23,10 @@ export interface ComponentInspectorOptions {
 }
 
 export class ComponentInspector {
-  private _selectedDirective!: {directive: unknown; host: Element | null};
-  private readonly _onComponentEnter;
-  private readonly _onComponentSelect;
-  private readonly _onComponentLeave;
+  private selectedDirective!: {directive: unknown; host: Element | null};
+  private readonly onComponentEnter;
+  private readonly onComponentSelect;
+  private readonly onComponentLeave;
   private currentHighlight: Highlight | null = null;
 
   constructor(
@@ -39,9 +37,9 @@ export class ComponentInspector {
     },
   ) {
     this.bindMethods();
-    this._onComponentEnter = componentOptions.onComponentEnter;
-    this._onComponentSelect = componentOptions.onComponentSelect;
-    this._onComponentLeave = componentOptions.onComponentLeave;
+    this.onComponentEnter = componentOptions.onComponentEnter;
+    this.onComponentSelect = componentOptions.onComponentSelect;
+    this.onComponentLeave = componentOptions.onComponentLeave;
   }
 
   startInspecting(): void {
@@ -61,9 +59,9 @@ export class ComponentInspector {
     e.stopImmediatePropagation();
     e.preventDefault();
 
-    if (this._selectedDirective.directive && this._selectedDirective.host) {
-      this._onComponentSelect(
-        getDirectiveForestManager().getDirectiveId(this._selectedDirective.directive)!,
+    if (this.selectedDirective.directive && this.selectedDirective.host) {
+      this.onComponentSelect(
+        getDirectiveForestManager().getDirectiveId(this.selectedDirective.directive)!,
       );
     }
   }
@@ -73,14 +71,14 @@ export class ComponentInspector {
 
     const el = e.target;
     if (el instanceof Node) {
-      this._selectedDirective = findDirectiveAndHost(el);
+      this.selectedDirective = findDirectiveAndHost(el);
     }
 
     this.unhighlight();
-    if (this._selectedDirective.directive && this._selectedDirective.host) {
-      this.highlightElement(this._selectedDirective.host);
-      this._onComponentEnter(
-        getDirectiveForestManager().getDirectiveId(this._selectedDirective.directive)!,
+    if (this.selectedDirective.directive && this.selectedDirective.host) {
+      this.highlightElement(this.selectedDirective.host);
+      this.onComponentEnter(
+        getDirectiveForestManager().getDirectiveId(this.selectedDirective.directive)!,
       );
     }
   }
@@ -88,7 +86,7 @@ export class ComponentInspector {
   cancelEvent(e: MouseEvent): void {
     e.stopImmediatePropagation();
     e.preventDefault();
-    this._onComponentLeave();
+    this.onComponentLeave();
   }
 
   bindMethods(): void {

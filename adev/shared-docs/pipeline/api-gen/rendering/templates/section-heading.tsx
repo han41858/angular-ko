@@ -23,7 +23,11 @@ const SECTION_LABELS: Record<string, string> = {
 /** Component to render the API section. */
 export function SectionHeading(props: {name: string}) {
   const id = convertSectionNameToId(props.name);
-  const displayName = SECTION_LABELS[props.name] ?? props.name;
+  const displayName =
+    SECTION_LABELS[props.name] ??
+    (props.name.endsWith(' builder options')
+      ? `${props.name.slice(0, -' builder options'.length)} 빌더 옵션`
+      : props.name);
   const label = displayName + ' 섹션으로 이동';
 
   return (

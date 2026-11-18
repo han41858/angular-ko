@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.dev/license
  */
-import {InputOptions, PluginItem, transformSync} from '@babel/core';
+import {PluginItem, transformSync} from '@babel/core';
 
 import {needsLinking} from '../../../linker';
 import {createEs2015LinkerPlugin} from '../../../linker/babel';
@@ -92,26 +92,6 @@ function linkPartials(fileSystem: FileSystem, test: ComplianceTest): CompileResu
  * @param linkerPlugin The linker plugin to apply.
  * @returns The file's source content, which has been transformed using the linker if necessary.
  */
-function toBabelInputSourceMap(
-  sourceMap: RawSourceMap | undefined,
-): NonNullable<InputOptions['inputSourceMap']> {
-  if (sourceMap === undefined) {
-    return false;
-  }
-  return {
-    version:
-      typeof sourceMap.version === 'string' ? parseInt(sourceMap.version, 10) : sourceMap.version,
-    sources: sourceMap.sources,
-    names: sourceMap.names,
-    sourceRoot: sourceMap.sourceRoot,
-    sourcesContent: sourceMap.sourcesContent
-      ? sourceMap.sourcesContent.map((s) => s ?? '')
-      : undefined,
-    mappings: sourceMap.mappings,
-    file: sourceMap.file ?? '',
-  };
-}
-
 function applyLinker(
   cwd: string,
   filename: string,
@@ -125,14 +105,13 @@ function applyLinker(
   const result = transformSync(source, {
     cwd,
     filename,
-    inputSourceMap: toBabelInputSourceMap(sourceMap),
     sourceMaps: !!sourceMap,
     plugins: [linkerPlugin],
     parserOpts: {sourceType: 'unambiguous'},
     generatorOpts: {
       // Keep escaped unicode sequences (e.g. `\uFFFD`) in golden-linked output.
       // Babel 8 may emit raw non-ASCII characters with default jsesc settings.
-      jsescOption: {minimal: false},
+      jsescOption: {minimal: false, quotes: 'double'},
     },
   });
   if (result === null) {
@@ -141,11 +120,17 @@ function applyLinker(
   if (result.code == null) {
     throw fail('Babel transform result does not have any code');
   }
+  // `@babel/generator` strips the parens around `(this && this.__decorate)` that Prettier
+  // preserves in the `full compile` golden.
+  const linkedCode = result.code.replace(
+    /\bthis && this\.(__decorate|__metadata|__param)\b/g,
+    '(this && this.$1)',
+  );
   const linkedSourceMap = result.map
     ? ({...result.map, file: result.map.file ?? undefined} as RawSourceMap)
     : undefined;
   return {
-    linkedSource: result.code,
+    linkedSource: linkedCode,
     linkedSourceMap,
   };
 }

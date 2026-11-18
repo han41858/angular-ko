@@ -17,7 +17,6 @@ import {
   DefaultUrlSerializer,
   UrlTree,
   Params,
-  NavigationExtras,
 } from '../src';
 import {withExperimentalPlatformNavigation, withRouterConfig} from '../src/provide_router';
 import {withBody, useAutoTick, timeout} from '@angular/private/testing';
@@ -34,7 +33,7 @@ import {
   provideLocationMocks,
   MOCK_PLATFORM_LOCATION_CONFIG,
 } from '@angular/common/testing';
-import {Component, DestroyRef, inject} from '@angular/core';
+import {Component, DestroyRef, inject, Provider} from '@angular/core';
 
 /// <reference types="dom-navigation" />
 
@@ -567,12 +566,23 @@ if (typeof window !== 'undefined' && 'navigation' in window && !isFirefox()) {
   describe('focusReset with real platform navigation', () => {
     const navigation = window.navigation as Navigation;
 
-    async function setup() {
+    async function setup(providers: Provider[] = []) {
       TestBed.configureTestingModule({
         providers: [
-          provideRouter([{path: '**', children: []}], withExperimentalPlatformNavigation()),
+          provideRouter(
+            [
+              {
+                path: 'guarded',
+                canActivate: [() => inject(Router).parseUrl('/search?q=redirected')],
+                children: [],
+              },
+              {path: '**', children: []},
+            ],
+            withExperimentalPlatformNavigation(),
+          ),
           {provide: PlatformLocation, useClass: BrowserPlatformLocation},
           {provide: PlatformNavigation, useFactory: () => navigation},
+          ...providers,
         ],
       });
       const router = TestBed.inject(Router);
@@ -601,20 +611,34 @@ if (typeof window !== 'undefined' && 'navigation' in window && !isFirefox()) {
     );
 
     it(
-      "keeps focus with focusReset: 'manual' in the extras",
+      "keeps focus with focusReset: 'manual'",
       withBody('<input>', async () => {
         const router = await setup();
         const input = document.querySelector('input')!;
         input.focus();
         expect(document.activeElement).toBe(input);
 
-        await router.navigate(['/search'], {
-          queryParams: {q: 'manual'},
-          focusReset: 'manual',
-        } as NavigationExtras);
+        await router.navigate(['/search'], {queryParams: {q: 'manual'}, focusReset: 'manual'});
         await navigation.transition?.finished;
 
         expect(router.url).toBe('/search?q=manual');
+        expect(document.activeElement).toBe(input);
+      }),
+    );
+
+    it(
+      "keeps focusReset: 'manual' when a guard redirects",
+      withBody('<input>', async () => {
+        // Without precommitHandler, the browser navigation is created for the redirect.
+        const router = await setup([{provide: PRECOMMIT_HANDLER_SUPPORTED, useValue: false}]);
+        const input = document.querySelector('input')!;
+        input.focus();
+        expect(document.activeElement).toBe(input);
+
+        await router.navigateByUrl('/guarded', {focusReset: 'manual'});
+        await navigation.transition?.finished;
+
+        expect(router.url).toBe('/search?q=redirected');
         expect(document.activeElement).toBe(input);
       }),
     );

@@ -9,6 +9,7 @@
 import {Fragment, h} from 'preact';
 import {CliCommandRenderable} from '../entities/renderables.mjs';
 import {REFERENCE_MEMBERS} from '../styling/css-classes.mjs';
+import {convertSectionNameToId} from '../transforms/reference-section-id.mjs';
 import {CliCard} from './cli-card';
 import {HeaderCli} from './header-cli';
 import {RawHtml} from './raw-html';
@@ -50,6 +51,23 @@ export function CliCommandReference(entry: CliCommandRenderable) {
               {entry.subcommands.map((subcommand) => (
                 <li>
                   <a href={`cli/${entry.name}/${subcommand.name}`}>{subcommand.name}</a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <></>
+        )}
+        {entry.builders && entry.builders.length > 0 ? (
+          <>
+            <h3>빌더</h3>
+            <p>이 명령어에는 다음 빌더가 있습니다.</p>
+            <ul>
+              {entry.builders.map((builder) => (
+                <li>
+                  <a href={`#${convertSectionNameToId(`${builder.name} builder options`)}`}>
+                    {builder.name}
+                  </a>
                 </li>
               ))}
             </ul>

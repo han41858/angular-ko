@@ -488,6 +488,13 @@ export const DOCS_SUB_NAVIGATION_DATA: NavigationItem[] = [
             status: 'new',
           },
           {
+            // label: 'Error boundaries',
+            label: '오류 경계',
+            path: 'guide/routing/error-boundaries',
+            contentPath: 'guide/routing/error-boundaries',
+            status: 'new',
+          },
+          {
             // label: 'Lifecycle and events',
             label: '라우팅 과정, 라우팅 이벤트',
             path: 'guide/routing/lifecycle-and-events',
@@ -1848,6 +1855,10 @@ export const REFERENCE_SUB_NAVIGATION_DATA: NavigationItem[] = [
           {
             label: 'directive',
             path: 'cli/generate/directive',
+          },
+          {
+            label: 'entry-point',
+            path: 'cli/generate/entry-point',
           },
           {
             label: 'enum',

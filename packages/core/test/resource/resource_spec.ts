@@ -7,6 +7,7 @@
  */
 
 import {timeout} from '@angular/private/testing';
+
 import {
   ApplicationRef,
   ɵCACHE_ACTIVE as CACHE_ACTIVE,
@@ -25,6 +26,7 @@ import {
   signal,
   TransferState,
 } from '../../src/core';
+import {promiseWithResolvers} from '../../src/util/promise_with_resolvers';
 import {TestBed} from '../../testing';
 
 abstract class MockBackend<T, R> {
@@ -52,7 +54,7 @@ abstract class MockBackend<T, R> {
       entry.reject(reason);
     }
 
-    return timeout();
+    return flushMicrotasks();
   }
 
   async flush(): Promise<void> {
@@ -64,7 +66,7 @@ abstract class MockBackend<T, R> {
     this.pending.clear();
 
     await Promise.all(allPending);
-    await timeout();
+    await flushMicrotasks();
   }
 
   protected abstract prepareResponse(request: T): R;
@@ -132,7 +134,7 @@ describe('resource', () => {
     });
 
     TestBed.tick();
-    await timeout();
+    await flushMicrotasks();
 
     expect(prevStatus).toBe('idle');
   });
@@ -343,7 +345,7 @@ describe('resource', () => {
     const res = resource({
       params: request,
       loader: async ({params}) => {
-        const p = Promise.withResolvers<number>();
+        const p = promiseWithResolvers<number>();
         resolve.push(() => p.resolve(params));
         return p.promise;
       },
@@ -361,7 +363,7 @@ describe('resource', () => {
 
     // Resolve the first load.
     resolve[0]();
-    await timeout();
+    await flushMicrotasks();
 
     // The resource should still be loading. Ticking (triggering the 2nd effect)
     // should not change the loading status.
@@ -372,7 +374,7 @@ describe('resource', () => {
 
     // Resolve the second load.
     resolve[1]?.();
-    await timeout();
+    await flushMicrotasks();
 
     // We should see the resolved value.
     expect(res.status()).toBe('resolved');
@@ -461,6 +463,72 @@ describe('resource', () => {
 
     expect(aborted).toEqual([{counter: 0}]);
   });
+
+  it('should cancel a pending load and release stability when params becomes undefined', async () => {
+    const params = signal<number | undefined>(1);
+    let abortSignal: AbortSignal | undefined;
+    const res = resource({
+      params,
+      loader: (options) => {
+        abortSignal = options.abortSignal;
+        // Aborting a loader does not require its promise to settle.
+        return new Promise<number>(() => {});
+      },
+      injector: TestBed.inject(Injector),
+    });
+    const appRef = TestBed.inject(ApplicationRef);
+
+    await timeout();
+    expect(abortSignal?.aborted).toBeFalse();
+
+    params.set(undefined);
+    await appRef.whenStable();
+
+    expect(abortSignal?.aborted).toBeTrue();
+    expect(res.snapshot()).toEqual({status: 'idle', value: undefined});
+  });
+
+  for (const settlement of ['resolve', 'reject'] as const) {
+    it(`should discard a cancelled load's late ${settlement} without releasing a newer load's pending task`, async () => {
+      const params = signal<number | undefined>(1);
+      const first = promiseWithResolvers<number>();
+      const second = promiseWithResolvers<number>();
+      const abortSignals: AbortSignal[] = [];
+      const res = resource({
+        params,
+        loader: ({params, abortSignal}) => {
+          abortSignals.push(abortSignal);
+          return params === 1 ? first.promise : second.promise;
+        },
+        injector: TestBed.inject(Injector),
+      });
+      const appRef = TestBed.inject(ApplicationRef);
+
+      await timeout();
+      params.set(undefined);
+      await appRef.whenStable();
+
+      params.set(2);
+      await timeout();
+
+      let stable = false;
+      const whenStable = appRef.whenStable().then(() => (stable = true));
+      if (settlement === 'resolve') {
+        first.resolve(1);
+      } else {
+        first.reject(new Error('cancelled load'));
+      }
+      await timeout();
+
+      expect(res.snapshot()).toEqual({status: 'loading', value: undefined});
+      expect(abortSignals.map((signal) => signal.aborted)).toEqual([true, false]);
+      expect(stable).toBeFalse();
+
+      second.resolve(2);
+      await whenStable;
+      expect(res.snapshot()).toEqual({status: 'resolved', value: 2});
+    });
+  }
 
   it('should cancel pending requests when the resource is destroyed via injector', async () => {
     const counter = signal(0);
@@ -1117,29 +1185,29 @@ describe('resource', () => {
       injector: TestBed.inject(Injector),
     });
 
-    await timeout();
+    await flushMicrotasks();
     expect(loadCount).toBe(1);
     expect(userResource.value()).toBe('user-1-1');
 
     // Updating `routeParams` with a new object that has the same `id` should not re-run the loader
     routeParams.set({id: '1', tab: 'orders'});
-    await timeout();
+    await flushMicrotasks();
     expect(loadCount).toBe(1);
     expect(userResource.value()).toBe('user-1-1');
 
     // Even after a manual reload(), a subsequent signal update with the same `id` should not trigger another reload
     userResource.reload();
-    await timeout();
+    await flushMicrotasks();
     expect(loadCount).toBe(2);
     expect(userResource.value()).toBe('user-1-2');
 
     routeParams.set({id: '1', tab: 'settings'});
-    await timeout();
+    await flushMicrotasks();
     expect(loadCount).toBe(2);
     expect(userResource.value()).toBe('user-1-2');
 
     routeParams.set({id: '2', tab: 'settings'});
-    await timeout();
+    await flushMicrotasks();
     expect(loadCount).toBe(3);
     expect(userResource.value()).toBe('user-2-3');
   });
@@ -1258,7 +1326,7 @@ describe('with TransferState', () => {
     expect(testResource.value()).toBe(123);
 
     // Should prevent loader from running
-    await timeout();
+    await flushMicrotasks();
     expect(testResource.value()).toBe(123);
   });
 
@@ -1274,7 +1342,7 @@ describe('with TransferState', () => {
 
     expect(testResource.status()).toBe('loading');
 
-    await timeout();
+    await flushMicrotasks();
 
     expect(testResource.status()).toBe('resolved');
     expect(testResource.value()).toBe(789);
@@ -1291,7 +1359,7 @@ describe('with TransferState', () => {
       injector: TestBed.inject(Injector),
     });
 
-    await timeout();
+    await flushMicrotasks();
 
     expect(testResource.status()).toBe('resolved');
     expect(testResource.value()).toBe(101112);
