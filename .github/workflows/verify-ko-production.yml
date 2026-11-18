@@ -1,0 +1,51 @@
+name: Verify Korean docs production build
+
+on:
+  push:
+    branches:
+      - verify/ko-22.3.0-build
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.3'
+          package-manager-cache: false
+      - name: Install dependencies
+        env:
+          CYPRESS_INSTALL_BINARY: '0'
+        run: |
+          corepack enable pnpm
+          pnpm install --frozen-lockfile
+      - name: Build Korean documentation
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+        run: |
+          pnpm bazel build //adev:build.production \
+            --jobs=2 \
+            --local_resources=memory=6144 \
+            --spawn_strategy=processwrapper-sandbox \
+            --action_env=NG_BUILD_MAX_WORKERS=2 \
+            --action_env=LC_ALL=C.UTF-8 \
+            --action_env=LANG=C.UTF-8 \
+            --action_env=TZ=UTC
+      - name: Check generated output
+        run: |
+          root=dist/bin/adev/dist/browser
+          test -s "$root/index.csr.html"
+          test -s "$root/guide/routing/error-boundaries/index.html"
+          test -s "$root/errors/NG8022/index.html"
+          test -s "$root/extended-diagnostics/NG8119/index.html"
+          grep -q '라우팅의 오류 경계' "$root/guide/routing/error-boundaries/index.html"
+          grep -q 'NG8022' "$root/errors/NG8022/index.html"
+          grep -q 'NG8119' "$root/extended-diagnostics/NG8119/index.html"
+          grep -rl 'G-BDHJXDP0GW' --include='*.js' "$root" > "$RUNNER_TEMP/analytics-js.txt"
