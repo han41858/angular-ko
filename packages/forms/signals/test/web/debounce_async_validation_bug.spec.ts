@@ -19,7 +19,6 @@ describe('debounced inside validateAsync bug', () => {
     const loads: string[] = [];
 
     @Component({
-      selector: 'debounce-bug',
       template: ` <input [formField]="form.hello" /> `,
       imports: [FormField],
     })

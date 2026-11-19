@@ -145,14 +145,20 @@ export class UserProfile {
 <!--
 ### The `ResourceContext` object
 
-The `resources` function receives a `ResourceContext` that provides access to reactive route signals: `params`, `queryParams`, `fragment`, and `data`.
+The `resources` function receives a `ResourceContext` that provides:
+
+- Route signals: `params`, `queryParams`, `fragment`, and `data`.
+- `resources`: a signal of the resources inherited from ancestor routes. See [Resource inheritance](#resource-inheritance).
 -->
 
 <a id="the-resourcecontext-object"></a>
 
 ### `ResourceContext` 객체
 
-`resources` 함수는 `ResourceContext`를 인자로 받습니다. 이 객체로 라우팅 규칙의 반응형 시그널인 `params`, `queryParams`, `fragment`, `data`에 접근할 수 있습니다.
+`resources` 함수는 다음 정보를 제공하는 `ResourceContext`를 인자로 받습니다.
+
+- 라우팅 규칙 시그널: `params`, `queryParams`, `fragment`, `data`.
+- `resources`: 상위 라우팅 규칙에서 상속한 리소스의 시그널입니다. [리소스 상속](#resource-inheritance)을 참고하세요.
 
 <!--
 ### Supported resource implementations
@@ -283,7 +289,7 @@ TIP: `ctx.params()`처럼 파라미터 객체 전체를 반환하지 말고 `ctx
 
 Data resolvers execute sequentially from parent route to child route. If a parent route resolver takes 200ms and a child route resolver takes 300ms, the navigation is blocked for 500ms.
 
-Route resources across the matched route hierarchy run concurrently, so the same navigation completes in 300ms, the time of the slowest resource.
+Route resources across the matched route hierarchy run concurrently, so the same navigation completes in 300ms, the time of the slowest resource. Resources that depend on data from an ancestor route also set up immediately instead of waiting; see [Chaining a resource off an ancestor resource](#chaining-a-resource-off-an-ancestor-resource).
 -->
 
 <a id="parallel-execution"></a>
@@ -292,7 +298,245 @@ Route resources across the matched route hierarchy run concurrently, so the same
 
 데이터 리졸버는 상위 라우팅 규칙에서 하위 라우팅 규칙 순서로 실행됩니다. 상위 라우팅 규칙의 리졸버가 200ms, 하위 라우팅 규칙의 리졸버가 300ms 걸리면 내비게이션은 500ms 동안 대기합니다.
 
-매칭된 라우팅 규칙 계층의 리소스는 동시에 실행되므로, 같은 내비게이션을 가장 느린 리소스의 실행 시간인 300ms에 완료할 수 있습니다.
+매칭된 라우팅 규칙 계층의 리소스는 동시에 실행되므로, 같은 내비게이션을 가장 느린 리소스의 실행 시간인 300ms에 완료할 수 있습니다. 상위 라우팅 규칙의 데이터에 의존하는 리소스도 기다리지 않고 바로 초기화됩니다. [상위 리소스에 연결하기](#chaining-a-resource-off-an-ancestor-resource)를 참고하세요.
+
+<!--
+## Resource inheritance
+
+Every route inherits the resources of its ancestor routes. Angular exposes those inherited resources in two forms:
+
+| API                                                               | Contains                                         | Behavior                                                                                        | Use it to                                                          |
+| :---------------------------------------------------------------- | :----------------------------------------------- | :---------------------------------------------------------------------------------------------- | :----------------------------------------------------------------- |
+| `ctx.resources()` inside a `resources` function                   | Ancestor resources only                          | The raw resources returned by ancestor `resources` functions. Their state is always live.       | Chain a resource off an ancestor resource                          |
+| `ActivatedRoute.resources` and `ActivatedRouteSnapshot.resources` | The route's own resources and ancestor resources | Read-only resources managed by the router. Their state is frozen while a navigation is pending. | Read data or call `reload()` from a component, directive, or guard |
+
+If a route defines a resource with the same name as an ancestor resource, the route's own resource shadows the inherited one.
+
+### Binding inherited resources to component inputs
+
+With `withComponentInputBinding()`, the router binds both inherited resources and the route's own resources to matching component inputs:
+
+```angular-ts
+import {Component, input, resource} from '@angular/core';
+import {Routes} from '@angular/router';
+
+interface Project {
+  id: string;
+  name: string;
+}
+
+interface Task {
+  id: string;
+  title: string;
+}
+
+const routes: Routes = [
+  {
+    path: 'projects/:projectId',
+    resources: (ctx) => ({
+      project: resource({
+        params: () => ctx.params()['projectId'],
+        loader: ({params: id}) => fetchProject(id),
+      }),
+    }),
+    children: [
+      {
+        path: 'tasks/:taskId',
+        component: TaskDetail,
+        resources: (ctx) => ({
+          task: resource({
+            params: () => ctx.params()['taskId'],
+            loader: ({params: id}) => fetchTask(id),
+          }),
+        }),
+      },
+    ],
+  },
+];
+
+@Component({
+  template: `
+    <h1>Project: {{ project().name }}</h1>
+    <h2>Task: {{ task().title }}</h2>
+  `,
+})
+export class TaskDetail {
+  // Inherited from the parent 'projects/:projectId' route
+  project = input.required<Project>();
+
+  // Bound from the route's own resource
+  task = input.required<Task>();
+}
+```
+
+NOTE: When the router binds route state to component inputs, resource names take precedence over route `data` (including resolved values), path parameters, and query parameters.
+
+### Chaining a resource off an ancestor resource
+
+A child route frequently needs data from an ancestor route before it can load its own data. Instead of waiting for the ancestor route to finish loading, chain the child's `params` function off the ancestor resource with [`chain()`](/guide/signals/resource#chaining-resources). Angular passes a context object that contains `chain` to every `params` function:
+
+```ts
+import {Resource, resource} from '@angular/core';
+import {Routes} from '@angular/router';
+
+interface User {
+  id: string;
+  role: string;
+}
+
+const routes: Routes = [
+  {
+    path: 'user/:id',
+    resources: (ctx) => ({
+      user: resource({
+        params: () => ctx.params()['id'],
+        loader: ({params: id}) => fetchUser(id),
+      }),
+    }),
+    children: [
+      {
+        path: 'details',
+        component: UserDetails,
+        resources: (ctx) => ({
+          details: resource({
+            // Retains the loading state until the inherited 'user' resource resolves
+            params: ({chain}) => chain(ctx.resources()['user'] as Resource<User>).role,
+            loader: ({params: role}) => fetchRoleDetails(role),
+          }),
+        }),
+      },
+    ],
+  },
+];
+```
+
+IMPORTANT: Never destructure or invoke `ctx.resources()` directly in the outer `resources` function body (for example, `const {user} = ctx.resources()`). Because ancestor routes initialize in parallel and can do so asynchronously, ancestor resources are not available during route setup. Calling `ctx.resources()` synchronously outside a reactive context throws an error and fails the navigation. Always read `ctx.resources()` reactively inside a resource's `params` function.
+
+NOTE: Because `ctx.resources()` is typed as a record of `Resource<unknown>`, cast the inherited resource to its value type (such as `as Resource<User>`) when reading it.
+
+`chain()` also propagates the state of the ancestor resource. If the ancestor errors, the chained resource errors with a `ResourceDependencyError`, and the router cancels the navigation when that chained resource is blocking. If the ancestor is `idle`, the chained resource becomes `idle`.
+-->
+
+<a id="resource-inheritance"></a>
+
+## 리소스 상속
+
+모든 라우팅 규칙은 상위 라우팅 규칙의 리소스를 상속합니다. Angular는 상속된 리소스를 두 가지 방식으로 제공합니다.
+
+| API | 포함하는 리소스 | 동작 | 용도 |
+| :-- | :-- | :-- | :-- |
+| `resources` 함수 안의 `ctx.resources()` | 상위 리소스만 | 상위 `resources` 함수가 반환한 원본 리소스입니다. 항상 실시간 상태를 반영합니다. | 상위 리소스에 연결하기 |
+| `ActivatedRoute.resources`와 `ActivatedRouteSnapshot.resources` | 현재 규칙의 리소스와 상위 리소스 | 라우터가 관리하는 읽기 전용 리소스입니다. 내비게이션 대기 중에는 상태가 고정됩니다. | 컴포넌트, 디렉티브 또는 가드에서 데이터를 읽거나 `reload()` 호출하기 |
+
+현재 라우팅 규칙이 상위 리소스와 같은 이름의 리소스를 정의하면, 현재 규칙의 리소스가 우선합니다.
+
+<a id="binding-inherited-resources-to-component-inputs"></a>
+
+### 상속된 리소스를 컴포넌트 입력에 바인딩하기
+
+`withComponentInputBinding()`을 사용하면 라우터가 상속된 리소스와 현재 라우팅 규칙의 리소스를 이름이 일치하는 컴포넌트 입력에 바인딩합니다.
+
+```angular-ts
+import {Component, input, resource} from '@angular/core';
+import {Routes} from '@angular/router';
+
+interface Project {
+  id: string;
+  name: string;
+}
+
+interface Task {
+  id: string;
+  title: string;
+}
+
+const routes: Routes = [
+  {
+    path: 'projects/:projectId',
+    resources: (ctx) => ({
+      project: resource({
+        params: () => ctx.params()['projectId'],
+        loader: ({params: id}) => fetchProject(id),
+      }),
+    }),
+    children: [
+      {
+        path: 'tasks/:taskId',
+        component: TaskDetail,
+        resources: (ctx) => ({
+          task: resource({
+            params: () => ctx.params()['taskId'],
+            loader: ({params: id}) => fetchTask(id),
+          }),
+        }),
+      },
+    ],
+  },
+];
+
+@Component({
+  template: `
+    <h1>Project: {{ project().name }}</h1>
+    <h2>Task: {{ task().title }}</h2>
+  `,
+})
+export class TaskDetail {
+  // 상위 'projects/:projectId' 라우팅 규칙에서 상속
+  project = input.required<Project>();
+
+  // 현재 라우팅 규칙의 리소스에 바인딩
+  task = input.required<Task>();
+}
+```
+
+NOTE: 라우터가 라우팅 상태를 컴포넌트 입력에 바인딩할 때 같은 이름이 있으면 리소스가 라우팅 규칙의 `data`(리졸버가 반환한 값 포함), 경로 파라미터, 쿼리 파라미터보다 우선합니다.
+
+<a id="chaining-a-resource-off-an-ancestor-resource"></a>
+
+### 상위 리소스에 연결하기
+
+하위 라우팅 규칙은 자체 데이터를 로드하기 전에 상위 라우팅 규칙의 데이터가 필요한 경우가 많습니다. 상위 규칙의 로딩이 끝날 때까지 기다리는 대신, [`chain()`](/guide/signals/resource#chaining-resources)으로 하위 리소스의 `params` 함수를 상위 리소스에 연결하세요. Angular는 모든 `params` 함수에 `chain`이 포함된 컨텍스트 객체를 전달합니다.
+
+```ts
+import {Resource, resource} from '@angular/core';
+import {Routes} from '@angular/router';
+
+interface User {
+  id: string;
+  role: string;
+}
+
+const routes: Routes = [
+  {
+    path: 'user/:id',
+    resources: (ctx) => ({
+      user: resource({
+        params: () => ctx.params()['id'],
+        loader: ({params: id}) => fetchUser(id),
+      }),
+    }),
+    children: [
+      {
+        path: 'details',
+        component: UserDetails,
+        resources: (ctx) => ({
+          details: resource({
+            // 상속된 'user' 리소스의 데이터가 준비될 때까지 로딩 상태 유지
+            params: ({chain}) => chain(ctx.resources()['user'] as Resource<User>).role,
+            loader: ({params: role}) => fetchRoleDetails(role),
+          }),
+        }),
+      },
+    ],
+  },
+];
+```
+
+IMPORTANT: 바깥쪽 `resources` 함수 본문에서 `ctx.resources()`를 직접 호출하거나 구조 분해하지 마세요(예: `const {user} = ctx.resources()`). 상위 라우팅 규칙은 병렬로 초기화되며 비동기적으로 초기화될 수 있으므로, 라우팅 규칙을 설정할 때는 상위 리소스를 사용할 수 없습니다. 반응형 컨텍스트 밖에서 `ctx.resources()`를 동기적으로 호출하면 오류가 발생하고 내비게이션이 실패합니다. 항상 리소스의 `params` 함수 안에서 `ctx.resources()`를 반응형으로 읽으세요.
+
+NOTE: `ctx.resources()`의 타입은 `Resource<unknown>`의 레코드이므로 상속된 리소스를 읽을 때 해당 값의 타입으로 단언하세요(예: `as Resource<User>`).
+
+`chain()`은 상위 리소스의 상태도 전달합니다. 상위 리소스에 오류가 발생하면 연결된 리소스에도 `ResourceDependencyError`가 발생하고, 그 리소스가 블로킹 리소스라면 라우터가 내비게이션을 취소합니다. 상위 리소스가 `idle` 상태라면 연결된 리소스도 `idle`이 됩니다.
 
 <!--
 ## Blocking and non-blocking resources
@@ -530,6 +774,8 @@ While a navigation is pending, the router freezes the resources that it exposes 
 If you navigate from `/user/1` to `/user/2` and the router reuses the `UserProfile` component, the component keeps rendering the data from `/user/1` until `/user/2` resolves. The router then unfreezes the resources and the UI transitions directly to the new data with no loading flash.
 
 The router exposes these resources as read-only, even when the `resources` function returns a writable resource such as `resource()`. You can read the resource signals and call `reload()`, but not `set()` or `update()`. A `reload()` call during an active navigation or during rollback recovery returns `false` so that it cannot interrupt the router's transition tracking.
+
+NOTE: Freezing applies only to the resources that the router exposes on `ActivatedRoute`. The raw resources available through `ctx.resources()` always report their live state, which is what allows a chained resource to react to an ancestor resource during a navigation.
 -->
 
 <a id="transitional-states-during-pending-navigations"></a>
@@ -541,6 +787,8 @@ The router exposes these resources as read-only, even when the `resources` funct
 `/user/1`에서 `/user/2`로 이동할 때 라우터가 `UserProfile` 컴포넌트를 재사용하면, 컴포넌트는 `/user/2`의 데이터가 준비될 때까지 `/user/1`의 데이터를 계속 렌더링합니다. 이후 라우터가 리소스 상태 고정을 해제하면 로딩 화면이 잠깐 나타나는 현상 없이 UI가 새 데이터로 바로 전환됩니다.
 
 `resources` 함수가 `resource()`처럼 쓰기 가능한 리소스를 반환하더라도 라우터는 읽기 전용으로 제공합니다. 리소스 시그널을 읽거나 `reload()`를 실행할 수는 있지만 `set()`, `update()`는 사용할 수 없습니다. 내비게이션이나 롤백 복구가 진행 중일 때 `reload()`를 실행하면 라우터의 전환 추적을 방해하지 않도록 `false`를 반환합니다.
+
+NOTE: 상태 고정은 라우터가 `ActivatedRoute`로 제공하는 리소스에만 적용됩니다. `ctx.resources()`를 통해 접근하는 원본 리소스는 항상 실시간 상태를 반환하므로, 연결된 리소스가 내비게이션 중에도 상위 리소스의 변화에 반응할 수 있습니다.
 
 <!--
 ### Rollback recovery on cancellation

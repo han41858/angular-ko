@@ -22,8 +22,6 @@ import {
   TemplateEntity,
   TmplAstBoundAttribute,
   TmplAstBoundEvent,
-  TmplAstComponent,
-  TmplAstDirective,
   TmplAstElement,
   TmplAstLetDeclaration,
   TmplAstNode,
@@ -32,6 +30,8 @@ import {
   TmplAstTextAttribute,
   TmplAstVariable,
   TypeCheckingConfig,
+  Unary,
+  unwrapWriteTarget,
 } from '@angular/compiler';
 import ts from 'typescript';
 
@@ -51,8 +51,6 @@ import {
   OutputBindingSymbol,
   PipeSymbol,
   ReferenceSymbol,
-  SelectorlessComponentSymbol,
-  SelectorlessDirectiveSymbol,
   Symbol,
   SymbolKind,
   SymbolReference,
@@ -106,8 +104,6 @@ export class SymbolBuilder {
   getSymbol(
     node: TmplAstReference | TmplAstVariable | TmplAstLetDeclaration,
   ): ReferenceSymbol | VariableSymbol | LetDeclarationSymbol | null;
-  getSymbol(node: TmplAstComponent): SelectorlessComponentSymbol | null;
-  getSymbol(node: TmplAstDirective): SelectorlessDirectiveSymbol | null;
   getSymbol(node: AST | TmplAstNode): Symbol | null;
   getSymbol(node: AST | TmplAstNode): Symbol | null {
     if (this.symbolCache.has(node)) {
@@ -123,10 +119,6 @@ export class SymbolBuilder {
       symbol = this.getSymbolOfBoundEvent(node);
     } else if (node instanceof TmplAstElement) {
       symbol = this.getSymbolOfElement(node);
-    } else if (node instanceof TmplAstComponent) {
-      symbol = this.getSymbolOfSelectorlessComponent(node);
-    } else if (node instanceof TmplAstDirective) {
-      symbol = this.getSymbolOfSelectorlessDirective(node);
     } else if (node instanceof TmplAstTemplate) {
       symbol = this.getSymbolOfAstTemplate(node);
     } else if (node instanceof TmplAstVariable) {
@@ -177,48 +169,7 @@ export class SymbolBuilder {
     };
   }
 
-  private getSymbolOfSelectorlessComponent(
-    node: TmplAstComponent,
-  ): SelectorlessComponentSymbol | null {
-    const directives = this.getDirectivesOfNode(node);
-    const primaryDirective =
-      directives.find((dir) => dir.matchSource === MatchSource.Selector && dir.isComponent) ?? null;
-
-    if (primaryDirective === null) {
-      return null;
-    }
-
-    return {
-      tcbLocation: primaryDirective.tcbLocation,
-      kind: SymbolKind.SelectorlessComponent,
-      directives,
-      templateNode: node,
-    };
-  }
-
-  private getSymbolOfSelectorlessDirective(
-    node: TmplAstDirective,
-  ): SelectorlessDirectiveSymbol | null {
-    const directives = this.getDirectivesOfNode(node);
-    const primaryDirective =
-      directives.find((dir) => dir.matchSource === MatchSource.Selector && !dir.isComponent) ??
-      null;
-
-    if (primaryDirective === null) {
-      return null;
-    }
-
-    return {
-      tcbLocation: primaryDirective.tcbLocation,
-      kind: SymbolKind.SelectorlessDirective,
-      directives,
-      templateNode: node,
-    };
-  }
-
-  private getDirectivesOfNode(
-    templateNode: TmplAstElement | TmplAstTemplate | TmplAstComponent | TmplAstDirective,
-  ): DirectiveSymbol[] {
+  private getDirectivesOfNode(templateNode: TmplAstElement | TmplAstTemplate): DirectiveSymbol[] {
     const elementSourceSpan = templateNode.startSourceSpan ?? templateNode.sourceSpan;
     const boundDirectives = this.boundTarget.getDirectivesOfNode(templateNode) ?? [];
     let symbols = this.getDirectiveSymbolsForDirectives(boundDirectives, elementSourceSpan);
@@ -226,30 +177,28 @@ export class SymbolBuilder {
     // 'getDirectivesOfNode' will not return the directives intended for an element
     // on a microsyntax template, for example '<div *ngFor="let user of users;" dir>',
     // the 'dir' will be skipped, but it's needed in language service.
-    if (!(templateNode instanceof TmplAstDirective)) {
-      const firstChild = templateNode.children.find(
-        (c): c is TmplAstElement => c instanceof TmplAstElement,
-      );
-      if (firstChild !== undefined) {
-        const isMicrosyntaxTemplate =
-          templateNode instanceof TmplAstTemplate &&
-          sourceSpanEqual(firstChild.sourceSpan, templateNode.sourceSpan);
-        if (isMicrosyntaxTemplate) {
-          const firstChildDirectives = this.boundTarget.getDirectivesOfNode(firstChild);
-          if (firstChildDirectives !== null) {
-            const childSymbols = this.getDirectiveSymbolsForDirectives(
-              firstChildDirectives,
-              elementSourceSpan,
-            );
-            // Merge symbols, avoiding duplicates
-            for (const symbol of childSymbols) {
-              if (
-                !symbols.some(
-                  (s) => s.ref.name === symbol.ref.name && s.ref.filePath === symbol.ref.filePath,
-                )
-              ) {
-                symbols.push(symbol);
-              }
+    const firstChild = templateNode.children.find(
+      (c): c is TmplAstElement => c instanceof TmplAstElement,
+    );
+    if (firstChild !== undefined) {
+      const isMicrosyntaxTemplate =
+        templateNode instanceof TmplAstTemplate &&
+        sourceSpanEqual(firstChild.sourceSpan, templateNode.sourceSpan);
+      if (isMicrosyntaxTemplate) {
+        const firstChildDirectives = this.boundTarget.getDirectivesOfNode(firstChild);
+        if (firstChildDirectives !== null) {
+          const childSymbols = this.getDirectiveSymbolsForDirectives(
+            firstChildDirectives,
+            elementSourceSpan,
+          );
+          // Merge symbols, avoiding duplicates
+          for (const symbol of childSymbols) {
+            if (
+              !symbols.some(
+                (s) => s.ref.name === symbol.ref.name && s.ref.filePath === symbol.ref.filePath,
+              )
+            ) {
+              symbols.push(symbol);
             }
           }
         }
@@ -678,14 +627,26 @@ export class SymbolBuilder {
 
     let withSpan = expression.sourceSpan;
 
+    // Whether `withSpan` points at a property read, in which case the search below should look
+    // for a `PropertyAccessExpression` rather than settling for whichever node comes first.
+    let isPropertyRead = expression instanceof PropertyRead;
+
     // The `name` part of a property write and `ASTWithName` do not have their own
     // AST so there is no way to retrieve a `Symbol` for just the `name` via a specific node.
-    if (
-      expression instanceof Binary &&
-      Binary.isAssignmentOperation(expression.operation) &&
-      expression.left instanceof PropertyRead
-    ) {
-      withSpan = expression.left.nameSpan;
+    if (expression instanceof Binary && Binary.isAssignmentOperation(expression.operation)) {
+      const target = unwrapWriteTarget(expression.left);
+      if (target instanceof PropertyRead) {
+        withSpan = target.nameSpan;
+        isPropertyRead = true;
+      }
+    } else if (expression instanceof Unary && Unary.isUpdateOperation(expression.operator)) {
+      // The target of an update operator can be wrapped in parentheses or a non-null assertion
+      // (e.g. `(value)++` or `value!++`), neither of which affect what is being written to.
+      const target = unwrapWriteTarget(expression.expr);
+      if (target instanceof PropertyRead) {
+        withSpan = target.nameSpan;
+        isPropertyRead = true;
+      }
     } else if (
       expression instanceof ASTWithName &&
       !(expression instanceof SafePropertyRead) &&
@@ -698,7 +659,7 @@ export class SymbolBuilder {
 
     // Property reads in templates usually map to a `PropertyAccessExpression`
     // (e.g. `ctx.foo`) so try looking for one first.
-    if (expression instanceof PropertyRead || expression instanceof SafePropertyRead) {
+    if (isPropertyRead || expression instanceof SafePropertyRead) {
       node = findFirstMatchingNode(this.typeCheckBlock, {
         withSpan,
         filter: ts.isPropertyAccessExpression,

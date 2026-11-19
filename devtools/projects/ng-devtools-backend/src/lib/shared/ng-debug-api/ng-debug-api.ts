@@ -7,7 +7,7 @@
  */
 
 import type {ɵFrameworkAgnosticGlobalUtils as GlobalUtils} from '@angular/core';
-import {getAppRoots} from '../../directive-forest/component-tree/get-roots';
+import {getAppRoots} from '../../directive-forest/utils/app-roots';
 import {Framework} from '../../directive-forest/core-enums';
 import {AngularDevtoolsError} from '../utils/error';
 
@@ -108,4 +108,10 @@ export function ngDebugSignalPropertiesInspectionApiIsSupported(): boolean {
       return !fw || fw === Framework.Angular;
     })
   );
+}
+
+/** Checks whether Signal Watch API is supported within window.ng */
+export function ngDebugSignalWatchApiIsSupported(): boolean {
+  const ng = ngDebugClient();
+  return ngDebugApiIsSupported(ng, 'toggleWatchSignal');
 }

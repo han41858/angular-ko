@@ -89,6 +89,22 @@ CLI가 프로젝트와 프로젝트 구성 요소를 생성하는 데 사용하�
 이 스키마는 `--help` 출력에 표시되는 것처럼 각 `ng generate` 하위 명령어에서 CLI가 사용할 수 있는 옵션을 설명합니다.
 
 <!--
+### Automatic formatting
+-->
+
+<a id="automatic-formatting"></a>
+
+### 자동 서식 지정
+
+<!--
+If [Prettier](https://prettier.io/) or [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) is installed in your workspace, the Angular CLI automatically formats any files created or modified by schematics and `ng update` migrations.
+The CLI only formats the affected files and leaves all other files untouched.
+-->
+
+워크스페이스에 [Prettier](https://prettier.io/) 또는 [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)가 설치되어 있으면 Angular CLI는 스키매틱과 `ng update` 마이그레이션이 생성하거나 수정한 파일의 서식을 자동으로 지정합니다.
+CLI는 영향을 받은 파일의 서식만 지정하고 나머지 파일은 변경하지 않습니다.
+
+<!--
 ## Developing schematics for libraries
 -->
 

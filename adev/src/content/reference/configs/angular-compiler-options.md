@@ -136,35 +136,34 @@ Default is `false`.
 Specifies the compilation mode to use.
 The following modes are available:
 
-| Modes       | Details                                                                                             |
-| :---------- | :-------------------------------------------------------------------------------------------------- |
-| `'full'`    | Generates fully AOT-compiled code according to the version of Angular that is currently being used. |
-| `'partial'` | Generates code in a stable, but intermediate form suitable for a published library.                 |
+| Modes       | Details                                                                                                                                                      |
+| :---------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `'full'`    | Generates fully AOT-compiled code. The compiler ABI (the internal runtime APIs used by this code) is stable across patch versions of the same minor version. |
+| `'partial'` | Generates code in a stable, but intermediate form suitable for independently published libraries.                                                            |
 
 The default value is `'full'`.
 
 For most applications, `'full'` is the correct compilation mode.
 
-Use `'partial'` for independently published libraries, such as npm packages.
-`'partial'` compilations output a stable, intermediate format which better supports usage by applications built at different Angular versions from the library.
-Libraries built at "HEAD" alongside their applications and using the same version of Angular such as in a mono-repository can use `'full'` since there is no risk of version skew.
+Use `'partial'` for independently published libraries, such as NPM packages.
+`'partial'` compilations output a stable, intermediate format which better supports usage by applications built at different major or minor Angular versions from the library.
+Libraries built at "HEAD" alongside their applications and using the same version of Angular such as in a mono-repository can use `'full'` since there is no risk of version skew across minor versions. Note that the compiler ABI is stable across patch versions of the same minor, allowing for safe sharing of the Angular runtime in microfrontend architectures where different applications might be on different patch levels.
 -->
 
-사용할 컴파일 모드를 지정합니다.
-다음 모드를 사용할 수 있습니다.
+사용할 컴파일 모드를 지정합니다. 다음 모드를 사용할 수 있습니다.
 
-| 모드        | 설명                                                                     |
-| :---------- | :----------------------------------------------------------------------- |
-| `'full'`    | 현재 사용하는 Angular 버전에 맞춰 완전히 AOT 컴파일된 코드를 생성합니다. |
-| `'partial'` | 배포할 라이브러리에 적합한 안정적인 중간 형식의 코드를 생성합니다.       |
+| 모드 | 설명 |
+| :--- | :--- |
+| `'full'` | 완전히 AOT 컴파일된 코드를 생성합니다. 컴파일러 ABI(이 코드가 사용하는 내부 런타임 API)는 같은 마이너 버전 내의 패치 버전 간에 안정적입니다. |
+| `'partial'` | 독립적으로 배포하는 라이브러리에 적합한 안정적인 중간 형식의 코드를 생성합니다. |
 
 기본값은 `'full'`입니다.
 
-대부분의 애플리케이션에는 `'full'` 컴파일 모드가 적합합니다.
+대부분의 애플리케이션에는 `'full'`이 적합합니다.
 
 npm 패키지처럼 독립적으로 배포하는 라이브러리에는 `'partial'`을 사용하세요.
-`'partial'` 컴파일은 안정적인 중간 형식을 출력하므로 라이브러리와 다른 Angular 버전으로 빌드된 애플리케이션에서 라이브러리를 사용하기에 더 적합합니다.
-모노레포처럼 애플리케이션과 함께 "HEAD"에서 빌드되고 같은 Angular 버전을 사용하는 라이브러리는 버전 불일치 위험이 없으므로 `'full'`을 사용할 수 있습니다.
+`'partial'` 컴파일은 안정적인 중간 형식을 출력하므로, 라이브러리와 메이저 또는 마이너 버전이 다른 Angular로 빌드한 애플리케이션에서도 사용하기 쉽습니다.
+모노레포에서 애플리케이션과 함께 같은 Angular 버전으로 "HEAD"에서 빌드하는 라이브러리는 마이너 버전이 어긋날 위험이 없으므로 `'full'`을 사용할 수 있습니다. 컴파일러 ABI는 같은 마이너 버전 내의 패치 버전 간에 안정적이므로, 패치 버전이 다른 여러 애플리케이션이 있는 마이크로프런트엔드 아키텍처에서도 Angular 런타임을 안전하게 공유할 수 있습니다.
 
 <!--
 ### `disableTypeScriptVersionCheck`
@@ -236,15 +235,11 @@ IMPORTANT: 이 옵션은 `@angular-devkit/build-angular:browser` 빌더에서만
 When `true`, replaces the `templateUrl` and `styleUrls` properties in all `@Component` decorators with inline content in the `template` and `styles` properties.
 
 When enabled, the `.js` output of `ngc` does not include any lazy-loaded template or style URLs.
-
-For library projects created with the Angular CLI, the development configuration default is `true`.
 -->
 
 `true`이면 모든 `@Component` 데코레이터의 `templateUrl`과 `styleUrls` 프로퍼티를 인라인 콘텐츠가 들어 있는 `template`과 `styles` 프로퍼티로 대체합니다.
 
 이 옵션을 활성화하면 `ngc`가 출력하는 `.js` 파일에 지연 로딩할 템플릿이나 스타일 URL이 포함되지 않습니다.
-
-Angular CLI로 생성한 라이브러리 프로젝트에서는 개발 설정의 기본값이 `true`입니다.
 
 <!--
 ### `flatModuleId`
@@ -395,16 +390,12 @@ When `true`, does not emit `.ngfactory.js` and `.ngstyle.js` files.
 This turns off most of the template compiler and disables the reporting of template diagnostics.
 
 Can be used to instruct the template compiler to produce `.metadata.json` files for distribution with an `npm` package. This avoids the production of `.ngfactory.js` and `.ngstyle.js` files that cannot be distributed to `npm`.
-
-For library projects created with the Angular CLI, the development configuration default is `true`.
 -->
 
 `true`이면 `.ngfactory.js`와 `.ngstyle.js` 파일을 출력하지 않습니다.
 이 옵션은 템플릿 컴파일러의 대부분을 끄고 템플릿 진단 보고를 비활성화합니다.
 
 템플릿 컴파일러가 `npm` 패키지와 함께 배포할 `.metadata.json` 파일을 생성하도록 할 때 사용할 수 있습니다. 이렇게 하면 `npm`에 배포할 수 없는 `.ngfactory.js`와 `.ngstyle.js` 파일의 생성을 피할 수 있습니다.
-
-Angular CLI로 생성한 라이브러리 프로젝트에서는 개발 설정의 기본값이 `true`입니다.
 
 <!--
 ### `strictMetadataEmit`
@@ -430,8 +421,6 @@ The template compiler can then use the error nodes to report an error if these s
 
 If the client of a library intends to use a symbol in an annotation, the template compiler does not normally report this. It gets reported after the client actually uses the symbol.
 This option allows detection of these errors during the build phase of the library and is used, for example, in producing Angular libraries themselves.
-
-For library projects created with the Angular CLI, the development configuration default is `true`.
 -->
 
 `true`이고 `"skipMetadataEmit"`이 `false`이면 오류를 `.metadata.json` 파일에 보고합니다.
@@ -449,8 +438,6 @@ For library projects created with the Angular CLI, the development configuration
 
 라이브러리를 사용하는 쪽에서 심벌을 어노테이션에 사용하려고 하더라도 템플릿 컴파일러는 일반적으로 오류를 미리 보고하지 않습니다. 실제로 심벌을 사용한 뒤에 오류를 보고합니다.
 이 옵션을 사용하면 라이브러리 빌드 단계에서 이러한 오류를 감지할 수 있으며, Angular 라이브러리 자체를 제작할 때도 사용합니다.
-
-Angular CLI로 생성한 라이브러리 프로젝트에서는 개발 설정의 기본값이 `true`입니다.
 
 <!--
 ### `strictInjectionParameters`

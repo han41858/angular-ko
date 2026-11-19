@@ -162,6 +162,8 @@ Angular supports the following operators from standard JavaScript.
 | in                            | `'model' in car`                               |
 | instanceof                    | `car instanceof Automobile`                    |
 | Assignment                    | `a = b`                                        |
+| Increment                     | `a++`, `++a`                                   |
+| Decrement                     | `a--`, `--a`                                   |
 | Addition Assignment           | `a += b`                                       |
 | Subtraction Assignment        | `a -= b`                                       |
 | Multiplication Assignment     | `a *= b`                                       |
@@ -192,9 +194,9 @@ Angular expressions additionally also support the following non-standard operato
 ### Safe navigation migration
 
 Prior to Angular 22, the optional chaining operator (`?.`) returned `null` when the left-hand side is `null` or `undefined`, whereas standard JavaScript's `?.` returns `undefined`.
-Since Angular 22, the optional chaining operator behavior in angular expressions is alligned with the standard Javascript's behavior.
+Since Angular 22, the optional chaining operator behavior in Angular expressions is aligned with the standard JavaScript behavior.
 
-During the migration to v22, the `ng update` schematics added a `$safeNavigationMigration` magic function to existing expressions to preserve the previous `null`-returning behavior.
+During the migration to v22, the `ng update` schematics adds a `$safeNavigationMigration` function to existing expressions to preserve the previous behavior.
 
 ```html
 {{ $safeNavigationMigration(foo?.bar) }}
@@ -230,6 +232,8 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 | in                            | `'model' in car`                               |
 | instanceof                    | `car instanceof Automobile`                    |
 | 할당                          | `a = b`                                        |
+| 증가                          | `a++`, `++a`                                   |
+| 감소                          | `a--`, `--a`                                   |
 | 더하기 할당                   | `a += b`                                       |
 | 빼기 할당                     | `a -= b`                                       |
 | 곱하기 할당                   | `a *= b`                                       |
@@ -262,7 +266,7 @@ Angular 표현식에는 표준 JavaScript 연산자 중 다음과 같은 연산�
 Angular 22 이전에는 옵셔널 체이닝 연산자(`?.`)의 왼쪽 값이 `null`이나 `undefined`이면 `null`을 반환했지만, 표준 JavaScript의 `?.`는 `undefined`를 반환합니다.
 Angular 22부터 Angular 표현식의 옵셔널 체이닝 연산자도 표준 JavaScript와 동일하게 동작합니다.
 
-v22로 마이그레이션할 때 `ng update` 스키매틱은 기존의 `null` 반환 동작을 유지하기 위해 기존 표현식에 `$safeNavigationMigration` 특수 함수를 추가했습니다.
+v22로 마이그레이션할 때 `ng update` 스키매틱은 이전 동작을 유지하기 위해 기존 표현식에 `$safeNavigationMigration` 함수를 추가합니다.
 
 ```html
 {{ $safeNavigationMigration(foo?.bar) }}

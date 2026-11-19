@@ -10,21 +10,19 @@ import {
   ClassPropertyMapping,
   CssSelector,
   AbstractBoundTemplate,
-  DirectiveMatcher,
   DirectiveMeta,
   MatchSource,
   parseTemplate,
   ParseTemplateOptions,
   R3TargetBinder,
-  SelectorlessMatcher,
   SelectorMatcher,
 } from '@angular/compiler';
 import ts from 'typescript';
 
-import {absoluteFrom, AbsoluteFsPath} from '../../file_system';
+import {absoluteFrom, AbsoluteFsPath, getFileSystem} from '../../file_system';
 import {Reference} from '../../imports';
 import {ClassDeclaration, DeclarationNode} from '../../reflection';
-import {getDeclaration, makeProgram} from '../../testing';
+import {createNgpBoundTemplate, getDeclaration, isNgpTestMode, makeProgram} from '../../testing';
 
 export interface ComponentMeta extends DirectiveMeta {
   ref: {key: string; node: DeclarationNode};
@@ -72,6 +70,9 @@ export function getBoundTemplate(
     declaration: ClassDeclaration;
   }> = [],
 ): AbstractBoundTemplate<DeclarationNode> {
+  if (isNgpTestMode()) {
+    return createNgpBoundTemplate(getFileSystem(), template, options, components, pipes);
+  }
   const componentsMeta = components.map(({selector, declaration, inputs = {}, outputs = {}}) => ({
     ref: new Reference(declaration),
     selector,
@@ -87,23 +88,11 @@ export function getBoundTemplate(
     matchSource: MatchSource.Selector,
   }));
 
-  let matcher: DirectiveMatcher<ComponentMeta>;
+  const matcher = new SelectorMatcher<ComponentMeta[]>();
 
-  if (options.enableSelectorless) {
-    const registry = new Map<string, ComponentMeta[]>();
-
-    for (const current of componentsMeta) {
-      registry.set(current.name, [current]);
-    }
-
-    matcher = new SelectorlessMatcher(registry);
-  } else {
-    matcher = new SelectorMatcher();
-
-    for (const current of componentsMeta) {
-      if (current.selector !== null) {
-        matcher.addSelectables(CssSelector.parse(current.selector), [current]);
-      }
+  for (const current of componentsMeta) {
+    if (current.selector !== null) {
+      matcher.addSelectables(CssSelector.parse(current.selector), [current]);
     }
   }
 

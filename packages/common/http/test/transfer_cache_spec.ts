@@ -6,21 +6,22 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {DOCUMENT} from '../../index';
 import {
   ApplicationRef,
   Component,
   createEnvironmentInjector,
   EnvironmentInjector,
   Injectable,
+  makeStateKey,
   PLATFORM_ID,
   TransferState,
-  makeStateKey,
 } from '@angular/core';
 import {TestBed} from '@angular/core/testing';
-import {useAutoTick, timeout, withBody} from '@angular/private/testing';
+import {timeout, useAutoTick, withBody} from '@angular/private/testing';
 import {BehaviorSubject, Observable, of} from 'rxjs';
+import {DOCUMENT} from '../../index';
 
+import {PLATFORM_BROWSER_ID, PLATFORM_SERVER_ID} from '../../src/platform_id';
 import {
   HttpClient,
   HttpHeaders,
@@ -34,18 +35,17 @@ import {
 import {
   BODY,
   CACHE_OPTIONS,
+  generateHash,
   HEADERS,
   HTTP_TRANSFER_CACHE_ORIGIN_MAP,
+  REQ_URL,
   RESPONSE_TYPE,
   STATUS,
   STATUS_TEXT,
-  REQ_URL,
   transferCacheInterceptorFn,
   withHttpTransferCache,
-  generateHash,
 } from '../src/transfer_cache';
 import {HttpTestingController, provideHttpClientTesting} from '../testing';
-import {PLATFORM_BROWSER_ID, PLATFORM_SERVER_ID} from '../../src/platform_id';
 
 interface RequestParams {
   method?: string;
@@ -75,7 +75,6 @@ describe('TransferCache', () => {
   @Component({
     selector: 'test-app-http',
     template: 'hello',
-    standalone: false,
   })
   class SomeComponent {}
 
@@ -530,7 +529,6 @@ describe('TransferCache', () => {
         }
 
         TestBed.configureTestingModule({
-          declarations: [SomeComponent],
           providers: [
             {provide: PLATFORM_ID, useValue: PLATFORM_SERVER_ID},
             {provide: DOCUMENT, useFactory: () => document},
@@ -1003,7 +1001,6 @@ describe('TransferCache', () => {
           }
 
           TestBed.configureTestingModule({
-            declarations: [SomeComponent],
             providers: [
               {provide: PLATFORM_ID, useValue: PLATFORM_BROWSER_ID},
               {provide: DOCUMENT, useFactory: () => document},
@@ -1040,7 +1037,6 @@ describe('TransferCache', () => {
           }
 
           TestBed.configureTestingModule({
-            declarations: [SomeComponent],
             providers: [
               {provide: PLATFORM_ID, useValue: PLATFORM_SERVER_ID},
               {provide: DOCUMENT, useFactory: () => document},
@@ -1160,7 +1156,6 @@ describe('TransferCache', () => {
           }
 
           TestBed.configureTestingModule({
-            declarations: [SomeComponent],
             providers: [
               {provide: PLATFORM_ID, useValue: PLATFORM_SERVER_ID},
               {provide: DOCUMENT, useFactory: () => document},
@@ -1251,7 +1246,6 @@ describe('TransferCache', () => {
           }
 
           TestBed.configureTestingModule({
-            declarations: [SomeComponent],
             providers: [
               {provide: PLATFORM_ID, useValue: PLATFORM_SERVER_ID},
               {provide: DOCUMENT, useFactory: () => document},
@@ -1301,7 +1295,6 @@ describe('TransferCache', () => {
             }
 
             TestBed.configureTestingModule({
-              declarations: [SomeComponent],
               providers: [
                 {provide: PLATFORM_ID, useValue: PLATFORM_SERVER_ID},
                 {provide: DOCUMENT, useFactory: () => document},
@@ -1353,7 +1346,6 @@ describe('TransferCache', () => {
             }
 
             TestBed.configureTestingModule({
-              declarations: [SomeComponent],
               providers: [
                 {provide: DOCUMENT, useFactory: () => document},
                 {provide: ApplicationRef, useClass: ApplicationRefPatched},
@@ -1376,7 +1368,6 @@ describe('TransferCache', () => {
 
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-              declarations: [SomeComponent],
               providers: [
                 {provide: DOCUMENT, useFactory: () => document},
                 {provide: ApplicationRef, useClass: ApplicationRefPatched},

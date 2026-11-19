@@ -14,8 +14,8 @@ import {
   I18nOptions,
   LegacyNgcOptions,
   MiscOptions,
-  TypeCheckingOptions,
   TargetOptions,
+  TypeCheckingOptions,
 } from './public_options';
 
 /**
@@ -104,13 +104,6 @@ export interface InternalOptions {
    * @internal
    */
   _enableHmr?: boolean;
-
-  /**
-   * Whether selectorless is enabled.
-   *
-   * @internal
-   */
-  _enableSelectorless?: boolean;
 
   /**
    * Whether this is a compilation of Angular core itself.

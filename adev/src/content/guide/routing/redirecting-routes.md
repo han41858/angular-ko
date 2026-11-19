@@ -315,6 +315,70 @@ export const routes: Routes = [
 자세한 내용은 [RedirectFunction API 문서](api/router/RedirectFunction)를 참고하세요.
 
 <!--
+## Redirecting from components and resources with `RedirectCommand`
+
+In addition to static and function-based route redirects, components and route resources can imperatively trigger a redirect by throwing a `RedirectCommand`. This is especially useful for redirecting unauthenticated users or handling dynamic authorization checks during data fetching:
+
+```angular-ts
+import {Component, inject, resource} from '@angular/core';
+import {Router, RedirectCommand} from '@angular/router';
+
+@Component({
+  selector: 'app-account',
+  template: `<p>Account Details</p>`,
+})
+export class AccountPage {
+  private router = inject(Router);
+
+  accountData = resource({
+    loader: async () => {
+      const response = await fetch('/api/account');
+      if (response.status === 401) {
+        // Automatically redirects to /login when unauthorized
+        throw new RedirectCommand(this.router.parseUrl('/login'));
+      }
+      return response.json();
+    },
+  });
+}
+```
+
+When a `RedirectCommand` is thrown inside a routed component constructor, lifecycle hook, or route resource loader, the Angular Router intercepts the command and dispatches navigation to the target URL automatically.
+-->
+
+<a id="redirecting-from-components-and-resources-with-redirectcommand"></a>
+
+## `RedirectCommand`로 컴포넌트와 리소스에서 리다이렉트하기
+
+정적 리다이렉트나 함수를 통한 리다이렉트 외에도, 컴포넌트와 라우팅 리소스에서 `RedirectCommand`를 던져 직접 리다이렉트할 수 있습니다. 인증되지 않은 사용자를 다른 페이지로 보내거나, 데이터를 가져오는 중에 동적으로 권한을 확인할 때 특히 유용합니다.
+
+```angular-ts
+import {Component, inject, resource} from '@angular/core';
+import {Router, RedirectCommand} from '@angular/router';
+
+@Component({
+  selector: 'app-account',
+  template: `<p>Account Details</p>`,
+})
+export class AccountPage {
+  private router = inject(Router);
+
+  accountData = resource({
+    loader: async () => {
+      const response = await fetch('/api/account');
+      if (response.status === 401) {
+        // 인증되지 않으면 자동으로 /login으로 리다이렉트
+        throw new RedirectCommand(this.router.parseUrl('/login'));
+      }
+      return response.json();
+    },
+  });
+}
+```
+
+라우팅된 컴포넌트의 생성자, 생명주기 훅, 또는 라우팅 리소스 로더 안에서 `RedirectCommand`를 던지면 Angular 라우터가 이를 가로채 대상 URL로 자동으로 이동합니다.
+
+<!--
 ## Next steps
 -->
 
@@ -324,6 +388,8 @@ export const routes: Routes = [
 
 <!--
 For more information about the `redirectTo` property, check out the [API docs](api/router/Route#redirectTo).
+To learn more about error boundaries and catching component failures, see the [Error boundaries guide](/guide/routing/error-boundaries).
 -->
 
 `redirectTo` 프로퍼티의 자세한 내용은 [API 문서](api/router/Route#redirectTo)를 참고하세요.
+[오류 경계 가이드](/guide/routing/error-boundaries)에서 오류 경계와 컴포넌트 오류를 포착하는 방법을 자세히 알아보세요.

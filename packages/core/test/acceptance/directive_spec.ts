@@ -18,12 +18,12 @@ import {
   OnChanges,
   Output,
   provideZoneChangeDetection,
+  signal,
   SimpleChange,
   SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
-  ChangeDetectionStrategy,
 } from '../../src/core';
 import {TestBed} from '../../testing';
 
@@ -36,7 +36,6 @@ describe('directives', () => {
   describe('matching', () => {
     @Directive({
       selector: 'ng-template[test]',
-      standalone: false,
     })
     class TestDirective {
       constructor(public templateRef: TemplateRef<any>) {}
@@ -44,23 +43,20 @@ describe('directives', () => {
 
     @Directive({
       selector: '[title]',
-      standalone: false,
     })
     class TitleDirective {}
 
     @Component({
       selector: 'test-cmpt',
       template: '',
-      standalone: false,
 
-      changeDetection: ChangeDetectionStrategy.Eager,
+      imports: [TestDirective, TitleDirective],
     })
     class TestComponent {}
 
     it('should match directives with attribute selectors on bindings', () => {
       @Directive({
         selector: '[test]',
-        standalone: false,
       })
       class TestDir {
         testValue: boolean | undefined;
@@ -77,8 +73,12 @@ describe('directives', () => {
         }
       }
 
-      TestBed.configureTestingModule({declarations: [TestComponent, TestDir]});
-      TestBed.overrideTemplate(TestComponent, `<span class="fade" [test]="false"></span>`);
+      TestBed.overrideComponent(TestComponent, {
+        set: {
+          template: `<span class="fade" [test]="false"></span>`,
+          imports: [TestDirective, TitleDirective, TestDir],
+        },
+      });
 
       const fixture = TestBed.createComponent(TestComponent);
       const testDir = fixture.debugElement.query(By.directive(TestDir)).injector.get(TestDir);
@@ -95,7 +95,6 @@ describe('directives', () => {
     it('should not accidentally set inputs from attributes extracted from bindings / outputs', () => {
       @Directive({
         selector: '[test]',
-        standalone: false,
       })
       class TestDir {
         @Input() prop1: boolean | undefined;
@@ -114,11 +113,12 @@ describe('directives', () => {
         }
       }
 
-      TestBed.configureTestingModule({declarations: [TestComponent, TestDir]});
-      TestBed.overrideTemplate(
-        TestComponent,
-        `<span class="fade" [prop1]="true" [test]="false" [prop2]="true"></span>`,
-      );
+      TestBed.overrideComponent(TestComponent, {
+        set: {
+          template: `<span class="fade" [prop1]="true" [test]="false" [prop2]="true"></span>`,
+          imports: [TestDirective, TitleDirective, TestDir],
+        },
+      });
 
       const fixture = TestBed.createComponent(TestComponent);
       const testDir = fixture.debugElement.query(By.directive(TestDir)).injector.get(TestDir);
@@ -135,7 +135,6 @@ describe('directives', () => {
     });
 
     it('should match directives on ng-template', () => {
-      TestBed.configureTestingModule({declarations: [TestComponent, TestDirective]});
       TestBed.overrideTemplate(TestComponent, `<ng-template test></ng-template>`);
 
       const fixture = TestBed.createComponent(TestComponent);
@@ -148,18 +147,7 @@ describe('directives', () => {
     });
 
     it('should match directives on ng-template created by * syntax', () => {
-      TestBed.configureTestingModule({declarations: [TestComponent, TestDirective]});
       TestBed.overrideTemplate(TestComponent, `<div *test></div>`);
-
-      const fixture = TestBed.createComponent(TestComponent);
-      const nodesWithDirective = fixture.debugElement.queryAllNodes(By.directive(TestDirective));
-
-      expect(nodesWithDirective.length).toBe(1);
-    });
-
-    it('should match directives on ng-template inside of SVG elements', () => {
-      TestBed.configureTestingModule({declarations: [TestComponent, TestDirective]});
-      TestBed.overrideTemplate(TestComponent, `<svg><ng-template test></ng-template></svg>`);
 
       const fixture = TestBed.createComponent(TestComponent);
       const nodesWithDirective = fixture.debugElement.queryAllNodes(By.directive(TestDirective));
@@ -170,29 +158,22 @@ describe('directives', () => {
     it('should match directives on <ng-container>', () => {
       @Directive({
         selector: 'ng-container[directiveA]',
-        standalone: false,
       })
       class DirectiveA {
         constructor(public viewContainerRef: ViewContainerRef) {}
       }
 
       @Component({
-        selector: 'my-component',
         template: ` <ng-container *ngIf="visible" directiveA>
           <span>Some content</span>
         </ng-container>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [CommonModule, DirectiveA],
       })
       class MyComponent {
         visible = true;
       }
 
-      TestBed.configureTestingModule({
-        declarations: [MyComponent, DirectiveA],
-        imports: [CommonModule],
-      });
       const fixture = TestBed.createComponent(MyComponent);
       fixture.detectChanges();
       const directiveA = fixture.debugElement.query(By.css('span')).injector.get(DirectiveA);
@@ -201,7 +182,6 @@ describe('directives', () => {
     });
 
     it('should match directives on i18n-annotated attributes', () => {
-      TestBed.configureTestingModule({declarations: [TestComponent, TitleDirective]});
       TestBed.overrideTemplate(
         TestComponent,
         `
@@ -216,7 +196,6 @@ describe('directives', () => {
     });
 
     it('should match a mix of bound directives and classes', () => {
-      TestBed.configureTestingModule({declarations: [TestComponent, TitleDirective]});
       TestBed.overrideTemplate(
         TestComponent,
         `
@@ -233,17 +212,17 @@ describe('directives', () => {
     it('should match classes to directive selectors without case sensitivity', () => {
       @Directive({
         selector: '.Titledir',
-        standalone: false,
       })
       class TitleClassDirective {}
 
-      TestBed.configureTestingModule({declarations: [TestComponent, TitleClassDirective]});
-      TestBed.overrideTemplate(
-        TestComponent,
-        `
+      TestBed.overrideComponent(TestComponent, {
+        set: {
+          template: `
         <div class="titleDir" [id]="someId"></div>
       `,
-      );
+          imports: [TestDirective, TitleDirective, TitleClassDirective],
+        },
+      });
 
       const fixture = TestBed.createComponent(TestComponent);
       const nodesWithDirective = fixture.debugElement.queryAllNodes(
@@ -256,17 +235,17 @@ describe('directives', () => {
     it('should match class selectors on ng-template', () => {
       @Directive({
         selector: '.titleDir',
-        standalone: false,
       })
       class TitleClassDirective {}
 
-      TestBed.configureTestingModule({declarations: [TestComponent, TitleClassDirective]});
-      TestBed.overrideTemplate(
-        TestComponent,
-        `
+      TestBed.overrideComponent(TestComponent, {
+        set: {
+          template: `
         <ng-template class="titleDir"></ng-template>
       `,
-      );
+          imports: [TestDirective, TitleDirective, TitleClassDirective],
+        },
+      });
 
       const fixture = TestBed.createComponent(TestComponent);
       const nodesWithDirective = fixture.debugElement.queryAllNodes(
@@ -279,22 +258,18 @@ describe('directives', () => {
     it('should NOT match class selectors on ng-template created by * syntax', () => {
       @Directive({
         selector: '.titleDir',
-        standalone: false,
       })
       class TitleClassDirective {}
 
       @Component({
         selector: 'test-cmp',
         template: `<div *ngIf="condition" class="titleDir"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [CommonModule, TitleClassDirective],
       })
       class TestCmp {
         condition = false;
       }
-
-      TestBed.configureTestingModule({declarations: [TestCmp, TitleClassDirective]});
 
       const fixture = TestBed.createComponent(TestCmp);
 
@@ -313,7 +288,6 @@ describe('directives', () => {
     });
 
     it('should NOT match classes to directive selectors', () => {
-      TestBed.configureTestingModule({declarations: [TestComponent, TitleDirective]});
       TestBed.overrideTemplate(
         TestComponent,
         `
@@ -330,17 +304,17 @@ describe('directives', () => {
     it('should match attributes to directive selectors without case sensitivity', () => {
       @Directive({
         selector: '[title=Titledir]',
-        standalone: false,
       })
       class TitleAttributeDirective {}
 
-      TestBed.configureTestingModule({declarations: [TestComponent, TitleAttributeDirective]});
-      TestBed.overrideTemplate(
-        TestComponent,
-        `
+      TestBed.overrideComponent(TestComponent, {
+        set: {
+          template: `
         <div title="titleDir" [id]="someId"></div>
       `,
-      );
+          imports: [TestDirective, TitleDirective, TitleAttributeDirective],
+        },
+      });
 
       const fixture = TestBed.createComponent(TestComponent);
       const nodesWithDirective = fixture.debugElement.queryAllNodes(
@@ -353,14 +327,17 @@ describe('directives', () => {
     it('should match directives with attribute selectors on outputs', () => {
       @Directive({
         selector: '[out]',
-        standalone: false,
       })
       class TestDir {
         @Output() out = new EventEmitter();
       }
 
-      TestBed.configureTestingModule({declarations: [TestComponent, TestDir]});
-      TestBed.overrideTemplate(TestComponent, `<span class="span" (out)="someVar = true"></span>`);
+      TestBed.overrideComponent(TestComponent, {
+        set: {
+          template: `<span class="span" (out)="someVar = true"></span>`,
+          imports: [TestDirective, TitleDirective, TestDir],
+        },
+      });
 
       const fixture = TestBed.createComponent(TestComponent);
       const spanEl = fixture.nativeElement.children[0];
@@ -376,7 +353,6 @@ describe('directives', () => {
 
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class MyDir {
         ngOnInit() {
@@ -385,18 +361,15 @@ describe('directives', () => {
       }
 
       @Component({
-        selector: `my-comp`,
         template: `<p [attr.dir]="direction"></p>
           <p dir="rtl"></p>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [MyDir],
       })
       class MyComp {
         direction = 'auto';
       }
 
-      TestBed.configureTestingModule({declarations: [MyDir, MyComp]});
       const fixture = TestBed.createComponent(MyComp);
       fixture.detectChanges();
 
@@ -409,7 +382,6 @@ describe('directives', () => {
 
       @Directive({
         selector: 'svg[dir]',
-        standalone: false,
       })
       class MyDir {
         constructor(private el: ElementRef) {}
@@ -421,13 +393,11 @@ describe('directives', () => {
       @Component({
         selector: `my-comp`,
         template: `<svg dir><text dir></text></svg>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [MyDir],
       })
       class MyComp {}
 
-      TestBed.configureTestingModule({declarations: [MyDir, MyComp]});
       const fixture = TestBed.createComponent(MyComp);
       fixture.detectChanges();
 
@@ -439,7 +409,6 @@ describe('directives', () => {
 
       @Directive({
         selector: 'text[dir]',
-        standalone: false,
       })
       class MyDir {
         constructor(private el: ElementRef) {}
@@ -451,13 +420,11 @@ describe('directives', () => {
       @Component({
         selector: `my-comp`,
         template: `<svg dir><text dir></text></svg>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [MyDir],
       })
       class MyComp {}
 
-      TestBed.configureTestingModule({declarations: [MyDir, MyComp]});
       const fixture = TestBed.createComponent(MyComp);
       fixture.detectChanges();
 
@@ -469,7 +436,6 @@ describe('directives', () => {
 
       @Directive({
         selector: '[test]',
-        standalone: false,
       })
       class MyDir {
         constructor() {
@@ -487,15 +453,12 @@ describe('directives', () => {
         template: `
           <div class="a" style="font-size: 10px;" [disabled]="true" [test]="test"></div>
         `,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [MyDir],
       })
       class MyComp {
         test = '';
       }
-
-      TestBed.configureTestingModule({declarations: [MyComp, MyDir]});
 
       const fixture = TestBed.createComponent(MyComp);
       fixture.detectChanges();
@@ -509,7 +472,6 @@ describe('directives', () => {
       let dirInstance: WithInput;
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class WithInput {
         constructor() {
@@ -519,17 +481,14 @@ describe('directives', () => {
       }
 
       @Component({
-        selector: 'my-app',
         template: '<ng-template [dir]="message"></ng-template>',
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [WithInput],
       })
       class TestComp {
         message = 'Hello';
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, WithInput]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -540,7 +499,6 @@ describe('directives', () => {
       let dirInstance: WithInput;
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class WithInput {
         constructor() {
@@ -550,17 +508,14 @@ describe('directives', () => {
       }
 
       @Component({
-        selector: 'my-app',
         template: '<ng-template dir="{{ message }}"></ng-template>',
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [WithInput],
       })
       class TestComp {
         message = 'Hello';
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, WithInput]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -571,7 +526,6 @@ describe('directives', () => {
       let dirInstance: WithInput;
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class WithInput {
         constructor() {
@@ -581,17 +535,14 @@ describe('directives', () => {
       }
 
       @Component({
-        selector: 'my-app',
         template: '<ng-template *ngIf="true" dir="{{ message }}"></ng-template>',
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [CommonModule, WithInput],
       })
       class TestComp {
         message = 'Hello';
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, WithInput]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -603,7 +554,6 @@ describe('directives', () => {
 
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class StructuralDir {
         constructor() {
@@ -623,17 +573,13 @@ describe('directives', () => {
             <div>Some content</div>
           </ng-template>
         `,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [StructuralDir],
       })
       class App {
         items: number[] = [1, 2, 3];
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, StructuralDir],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -653,7 +599,6 @@ describe('directives', () => {
 
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class StructuralDir {
         constructor() {
@@ -673,18 +618,14 @@ describe('directives', () => {
             <div>Some content</div>
           </ng-template>
         `,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [StructuralDir],
       })
       class App {
         items: number[] = [1, 2, 3];
         title: string = 'element title';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, StructuralDir],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -700,7 +641,6 @@ describe('directives', () => {
     it('should allow directive inputs specified using the object literal syntax in @Input', () => {
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class Dir {
         @Input() plainInput: number | undefined;
@@ -709,9 +649,8 @@ describe('directives', () => {
 
       @Component({
         template: '<div dir [plainInput]="plainValue" [alias]="aliasedValue"></div>',
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [Dir],
       })
       class App {
         @ViewChild(Dir) dirInstance!: Dir;
@@ -719,7 +658,6 @@ describe('directives', () => {
         aliasedValue = 321;
       }
 
-      TestBed.configureTestingModule({declarations: [App, Dir]});
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
       const {dirInstance, plainValue, aliasedValue} = fixture.componentInstance;
@@ -732,7 +670,6 @@ describe('directives', () => {
       @Directive({
         selector: '[dir]',
         inputs: [{name: 'plainInput'}, {name: 'aliasedInput', alias: 'alias'}],
-        standalone: false,
       })
       class Dir {
         plainInput: number | undefined;
@@ -741,9 +678,8 @@ describe('directives', () => {
 
       @Component({
         template: '<div dir [plainInput]="plainValue" [alias]="aliasedValue"></div>',
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [Dir],
       })
       class App {
         @ViewChild(Dir) dirInstance!: Dir;
@@ -751,7 +687,6 @@ describe('directives', () => {
         aliasedValue = 321;
       }
 
-      TestBed.configureTestingModule({declarations: [App, Dir]});
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
       const {dirInstance, plainValue, aliasedValue} = fixture.componentInstance;
@@ -763,30 +698,26 @@ describe('directives', () => {
     it('should transform incoming input values', () => {
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class Dir {
         @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Component({
-        template: '<div dir [value]="assignedValue"></div>',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
+        template: '<div dir [value]="assignedValue()"></div>',
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(Dir) dir!: Dir;
-        assignedValue = '';
+        assignedValue = signal('');
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(0);
 
-      fixture.componentInstance.assignedValue = 'hello';
+      fixture.componentInstance.assignedValue.set('hello');
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(1);
@@ -796,30 +727,26 @@ describe('directives', () => {
       @Directive({
         selector: '[dir]',
         inputs: [{name: 'value', transform: (value: string) => (value ? 1 : 0)}],
-        standalone: false,
       })
       class Dir {
         value = -1;
       }
 
       @Component({
-        template: '<div dir [value]="assignedValue"></div>',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
+        template: '<div dir [value]="assignedValue()"></div>',
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(Dir) dir!: Dir;
-        assignedValue = '';
+        assignedValue = signal('');
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(0);
 
-      fixture.componentInstance.assignedValue = 'hello';
+      fixture.componentInstance.assignedValue.set('hello');
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(1);
@@ -828,7 +755,6 @@ describe('directives', () => {
     it('should transform incoming static input values', () => {
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class Dir {
         @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
@@ -836,15 +762,13 @@ describe('directives', () => {
 
       @Component({
         template: '<div dir value="staticValue"></div>',
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(Dir) dir!: Dir;
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -854,30 +778,26 @@ describe('directives', () => {
     it('should transform incoming values for aliased inputs', () => {
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class Dir {
         @Input({alias: 'valueAlias', transform: (value: string) => (value ? 1 : 0)}) value = -1;
       }
 
       @Component({
-        template: '<div dir [valueAlias]="assignedValue"></div>',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
+        template: '<div dir [valueAlias]="assignedValue()"></div>',
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(Dir) dir!: Dir;
-        assignedValue = '';
+        assignedValue = signal('');
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(0);
 
-      fixture.componentInstance.assignedValue = 'hello';
+      fixture.componentInstance.assignedValue.set('hello');
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(1);
@@ -891,28 +811,24 @@ describe('directives', () => {
 
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class Dir extends Parent {}
 
       @Component({
-        template: '<div dir [value]="assignedValue"></div>',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
+        template: '<div dir [value]="assignedValue()"></div>',
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(Dir) dir!: Dir;
-        assignedValue = '';
+        assignedValue = signal('');
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(0);
 
-      fixture.componentInstance.assignedValue = 'hello';
+      fixture.componentInstance.assignedValue.set('hello');
       fixture.detectChanges();
 
       expect(fixture.componentInstance.dir.value).toBe(1);
@@ -927,28 +843,24 @@ describe('directives', () => {
       @Directive({
         selector: '[dir]',
         hostDirectives: [{directive: HostDir, inputs: ['value: valueAlias']}],
-        standalone: false,
       })
       class Dir {}
 
       @Component({
-        template: '<div dir [valueAlias]="assignedValue"></div>',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
+        template: '<div dir [valueAlias]="assignedValue()"></div>',
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(HostDir) hostDir!: HostDir;
-        assignedValue = '';
+        assignedValue = signal('');
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
       expect(fixture.componentInstance.hostDir.value).toBe(0);
 
-      fixture.componentInstance.assignedValue = 'hello';
+      fixture.componentInstance.assignedValue.set('hello');
       fixture.detectChanges();
 
       expect(fixture.componentInstance.hostDir.value).toBe(1);
@@ -959,7 +871,6 @@ describe('directives', () => {
 
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class Dir implements OnChanges {
         @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
@@ -972,17 +883,14 @@ describe('directives', () => {
       }
 
       @Component({
-        template: '<div dir [value]="assignedValue"></div>',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
+        template: '<div dir [value]="assignedValue()"></div>',
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(Dir) dir!: Dir;
-        assignedValue = '';
+        assignedValue = signal('');
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -990,7 +898,7 @@ describe('directives', () => {
         jasmine.objectContaining({previousValue: undefined, currentValue: 0}),
       ]);
 
-      fixture.componentInstance.assignedValue = 'hello';
+      fixture.componentInstance.assignedValue.set('hello');
       fixture.detectChanges();
 
       expect(trackedChanges).toEqual([
@@ -1009,7 +917,6 @@ describe('directives', () => {
 
       @Directive({
         selector: '[dir]',
-        standalone: false,
       })
       class Dir {
         @Input({transform}) value: any;
@@ -1017,15 +924,13 @@ describe('directives', () => {
 
       @Component({
         template: '<div dir value="foo"></div>',
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [Dir],
       })
       class TestComp {
         @ViewChild(Dir) dir!: Dir;
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Dir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -1034,11 +939,7 @@ describe('directives', () => {
 
     it('should transform value assigned using setInput', () => {
       @Component({
-        selector: 'comp',
         template: '',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class Comp {
         @Input({transform: (value: string) => (value ? 1 : 0)}) value = -1;
@@ -1046,15 +947,11 @@ describe('directives', () => {
 
       @Component({
         template: '<ng-container #location/>',
-        standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestComp {
         @ViewChild('location', {read: ViewContainerRef}) vcr!: ViewContainerRef;
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, Comp]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -1071,8 +968,6 @@ describe('directives', () => {
       @Component({
         selector: 'app-test[value]',
         template: ``,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestComponent {
         @Input() value = 'unset';
@@ -1081,8 +976,6 @@ describe('directives', () => {
       @Component({
         selector: 'app-root',
         template: ``,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         constructor(vcr: ViewContainerRef) {
@@ -1103,8 +996,6 @@ describe('directives', () => {
       @Component({
         selector: 'app-test',
         template: ``,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class TestComponent {
         @Input() value = 'unset';
@@ -1113,8 +1004,6 @@ describe('directives', () => {
       @Component({
         selector: 'app-root',
         template: ``,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {
         constructor(vcr: ViewContainerRef) {
@@ -1133,7 +1022,6 @@ describe('directives', () => {
   describe('outputs', () => {
     @Directive({
       selector: '[out]',
-      standalone: false,
     })
     class TestDir {
       @Output() out = new EventEmitter();
@@ -1142,16 +1030,14 @@ describe('directives', () => {
     it('should allow outputs of directive on ng-template', () => {
       @Component({
         template: `<ng-template (out)="value = true"></ng-template>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [TestDir],
       })
       class TestComp {
         @ViewChild(TestDir, {static: true}) testDir: TestDir | undefined;
         value = false;
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, TestDir]});
       const fixture = TestBed.createComponent(TestComp);
       fixture.detectChanges();
 
@@ -1168,15 +1054,13 @@ describe('directives', () => {
         template: ` <ng-container (out)="value = true">
           <span>Hello</span>
         </ng-container>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [TestDir],
       })
       class TestComp {
         value = false;
       }
 
-      TestBed.configureTestingModule({declarations: [TestComp, TestDir]});
       const fixture = TestBed.createComponent(TestComp);
       const testDir = fixture.debugElement.query(By.css('span')).injector.get(TestDir);
 
@@ -1195,7 +1079,6 @@ describe('directives', () => {
 
     @Directive({
       selector: '[dir-with-title]',
-      standalone: false,
     })
     class DirWithTitle {
       @Input() title = '';
@@ -1204,15 +1087,11 @@ describe('directives', () => {
     it('should set both the div attribute and the directive input for `title="value"`', () => {
       @Component({
         template: `<div dir-with-title title="a"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {}
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1227,17 +1106,13 @@ describe('directives', () => {
     it('should set the directive input only, shadowing the title property of the div, for `[title]="value"`', () => {
       @Component({
         template: `<div dir-with-title [title]="value"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value = 'a';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1255,17 +1130,13 @@ describe('directives', () => {
     it('should allow setting directive `title` input with `[title]="value"` and a "attr.title" attribute with `attr.title="test"`', () => {
       @Component({
         template: `<div dir-with-title [title]="value" attr.title="test"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value = 'a';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1281,18 +1152,14 @@ describe('directives', () => {
     it('should allow setting directive `title` input with `[title]="value1"` and attribute with `[attr.title]="value2"`', () => {
       @Component({
         template: `<div dir-with-title [title]="value1" [attr.title]="value2"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value1 = 'a';
         value2 = 'b';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1307,18 +1174,14 @@ describe('directives', () => {
     it('should allow setting directive `title` input with `[title]="value1"` and attribute with `attr.title="{{value2}}"`', () => {
       @Component({
         template: `<div dir-with-title [title]="value1" attr.title="{{ value2 }}"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value1 = 'a';
         value2 = 'b';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1333,17 +1196,13 @@ describe('directives', () => {
     it('should allow setting directive `title` input with `title="{{value}}"` and a "attr.title" attribute with `attr.title="test"`', () => {
       @Component({
         template: `<div dir-with-title title="{{ value }}" attr.title="test"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value = 'a';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1359,18 +1218,14 @@ describe('directives', () => {
     it('should allow setting directive `title` input with `title="{{value1}}"` and attribute with `[attr.title]="value2"`', () => {
       @Component({
         template: `<div dir-with-title title="{{ value1 }}" [attr.title]="value2"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value1 = 'a';
         value2 = 'b';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1385,18 +1240,14 @@ describe('directives', () => {
     it('should allow setting directive `title` input with `title="{{value1}}"` and attribute with `attr.title="{{value2}}"`', () => {
       @Component({
         template: `<div dir-with-title title="{{ value1 }}" attr.title="{{ value2 }}"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value1 = 'a';
         value2 = 'b';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1411,17 +1262,13 @@ describe('directives', () => {
     it('should set the directive input only, shadowing the title property on the div, for `title="{{value}}"`', () => {
       @Component({
         template: `<div dir-with-title title="{{ value }}"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value = 'a';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1436,17 +1283,13 @@ describe('directives', () => {
     it('should set the title attribute only, not directive input, for `attr.title="{{value}}"`', () => {
       @Component({
         template: `<div dir-with-title attr.title="{{ value }}"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value = 'a';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1461,17 +1304,13 @@ describe('directives', () => {
     it('should set the title attribute only, not directive input, for `[attr.title]="value"`', () => {
       @Component({
         template: `<div dir-with-title [attr.title]="value"></div>`,
-        standalone: false,
 
-        changeDetection: ChangeDetectionStrategy.Eager,
+        imports: [DirWithTitle],
       })
       class App {
         value = 'a';
       }
 
-      TestBed.configureTestingModule({
-        declarations: [App, DirWithTitle],
-      });
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
 
@@ -1523,8 +1362,6 @@ describe('directives', () => {
         selector: 'app',
         template: '<div dir></div>',
         standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {}
 
@@ -1587,8 +1424,6 @@ describe('directives', () => {
         selector: 'app',
         template: '<div dir></div>',
         standalone: false,
-
-        changeDetection: ChangeDetectionStrategy.Eager,
       })
       class App {}
 

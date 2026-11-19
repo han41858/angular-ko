@@ -568,7 +568,7 @@ export function ɵɵdeferHydrateOnTimer(delay: number) {
  * @param walkUpTimes Number of times to walk up/down the tree hierarchy to find the trigger.
  * @codeGenApi
  */
-export function ɵɵdeferOnHover(triggerIndex: number, walkUpTimes?: number) {
+export function ɵɵdeferOnHover(triggerIndex: number | null, walkUpTimes?: number) {
   const lView = getLView();
   const tNode = getCurrentTNode()!;
 
@@ -604,7 +604,7 @@ export function ɵɵdeferOnHover(triggerIndex: number, walkUpTimes?: number) {
  * @param walkUpTimes Number of times to walk up/down the tree hierarchy to find the trigger.
  * @codeGenApi
  */
-export function ɵɵdeferPrefetchOnHover(triggerIndex: number, walkUpTimes?: number) {
+export function ɵɵdeferPrefetchOnHover(triggerIndex: number | null, walkUpTimes?: number) {
   const lView = getLView();
   const tNode = getCurrentTNode()!;
 
@@ -665,7 +665,7 @@ export function ɵɵdeferHydrateOnHover() {
  * @param walkUpTimes Number of times to walk up/down the tree hierarchy to find the trigger.
  * @codeGenApi
  */
-export function ɵɵdeferOnInteraction(triggerIndex: number, walkUpTimes?: number) {
+export function ɵɵdeferOnInteraction(triggerIndex: number | null, walkUpTimes?: number) {
   const lView = getLView();
   const tNode = getCurrentTNode()!;
 
@@ -701,7 +701,7 @@ export function ɵɵdeferOnInteraction(triggerIndex: number, walkUpTimes?: numbe
  * @param walkUpTimes Number of times to walk up/down the tree hierarchy to find the trigger.
  * @codeGenApi
  */
-export function ɵɵdeferPrefetchOnInteraction(triggerIndex: number, walkUpTimes?: number) {
+export function ɵɵdeferPrefetchOnInteraction(triggerIndex: number | null, walkUpTimes?: number) {
   const lView = getLView();
   const tNode = getCurrentTNode()!;
 
@@ -763,9 +763,9 @@ export function ɵɵdeferHydrateOnInteraction() {
  * @codeGenApi
  */
 export function ɵɵdeferOnViewport(
-  triggerIndex: number,
+  triggerIndex: number | null,
   walkUpTimes?: number | null,
-  options?: IntersectionObserverInit,
+  options?: unknown,
 ) {
   const lView = getLView();
   const tNode = getCurrentTNode()!;
@@ -799,7 +799,7 @@ export function ɵɵdeferOnViewport(
       onViewportWrapper,
       () => triggerDeferBlock(TriggerType.Regular, lView, tNode),
       TriggerType.Regular,
-      options,
+      options as IntersectionObserverInit,
     );
   }
 }
@@ -811,9 +811,9 @@ export function ɵɵdeferOnViewport(
  * @codeGenApi
  */
 export function ɵɵdeferPrefetchOnViewport(
-  triggerIndex: number,
+  triggerIndex: number | null,
   walkUpTimes?: number | null,
-  options?: IntersectionObserverInit,
+  options?: unknown,
 ) {
   const lView = getLView();
   const tNode = getCurrentTNode()!;
@@ -847,7 +847,7 @@ export function ɵɵdeferPrefetchOnViewport(
       onViewportWrapper,
       () => triggerPrefetching(tDetails, lView, tNode),
       TriggerType.Prefetch,
-      options,
+      options as IntersectionObserverInit,
     );
   }
 }
@@ -856,7 +856,7 @@ export function ɵɵdeferPrefetchOnViewport(
  * Creates runtime data structures for the `on viewport` hydrate trigger.
  * @codeGenApi
  */
-export function ɵɵdeferHydrateOnViewport(options?: IntersectionObserverInit) {
+export function ɵɵdeferHydrateOnViewport(options?: unknown) {
   const lView = getLView();
   const tNode = getCurrentTNode()!;
 

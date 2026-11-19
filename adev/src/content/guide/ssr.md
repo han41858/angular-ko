@@ -976,7 +976,7 @@ To configure this, update your `angular.json` file as follows:
 ```json
 {
   "projects": {
-    "your-app": {
+    "my-app": {
       "architect": {
         "build": {
           "options": {
@@ -1002,7 +1002,7 @@ To configure this, update your `angular.json` file as follows:
 ```json
 {
   "projects": {
-    "your-app": {
+    "my-app": {
       "architect": {
         "build": {
           "options": {
@@ -1014,6 +1014,77 @@ To configure this, update your `angular.json` file as follows:
   }
 }
 ```
+
+<!--
+### Prerendered file output format
+-->
+
+<a id="prerendered-file-output-format"></a>
+
+### 사전 렌더링 파일의 출력 형식
+
+<!--
+The `format` property of the `prerender` option controls the file structure Angular writes for each prerendered route. For a route with the path `about`:
+
+| `format`              | Prerendered file   |
+| --------------------- | ------------------ |
+| `directory` (default) | `about/index.html` |
+| `file`                | `about.html`       |
+
+Depending on your static hosting provider, you can set `format` to `"file"` if your host requires `<route>.html` files to serve routes without redirecting to a trailing slash.
+
+```json
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "build": {
+          "options": {
+            "outputMode": "static",
+            "prerender": {
+              "format": "file"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+NOTE: The `format` option is only considered when the build does not produce a server.
+-->
+
+`prerender` 옵션의 `format` 프로퍼티는 Angular가 각 사전 렌더링 경로에 대해 생성하는 파일 구조를 제어합니다.
+경로가 `about`인 라우팅 규칙의 경우 다음과 같습니다:
+
+| `format`            | 사전 렌더링 파일     |
+| ------------------- | -------------------- |
+| `directory` (기본값) | `about/index.html`   |
+| `file`              | `about.html`         |
+
+정적 호스팅 서비스에서 끝에 슬래시를 붙인 경로로 리디렉션하지 않고 콘텐츠를 제공하려면 `<route>.html` 파일이 필요한 경우, `format`을 `"file"`로 설정할 수 있습니다.
+
+```json
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "build": {
+          "options": {
+            "outputMode": "static",
+            "prerender": {
+              "format": "file"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+참고: `format` 옵션은 빌드에서 서버 파일을 생성하지 않을 때만 적용됩니다.
 
 <!--
 ## Caching data when using HttpClient
@@ -1108,7 +1179,7 @@ CRITICAL: SSR 중 Fetch 구현은 [Fetch 표준](https://fetch.spec.whatwg.org/#
 You can customize how Angular caches HTTP responses during server‑side rendering (SSR) and reuses them during hydration by configuring `HttpTransferCacheOptions`.
 This configuration is provided globally using `withHttpTransferCacheOptions` inside `provideClientHydration()`.
 
-By default, `HttpClient` caches all `HEAD` and `GET` requests which don't contain `Authorization`, `Proxy-Authorization`, or `Cookie` headers and are not sent with `withCredentials` or Fetch API `credentials` modes that can send credentials. Angular also skips transfer cache when a request or response includes `Cache-Control` directives that forbid caching (`no-store`, `no-cache`, or `private`), or when the Fetch API `cache` option is set to `no-store` or `no-cache`. Responses that carry a `Set-Cookie` header are also skipped. You can override the request filtering settings by using `withHttpTransferCacheOptions` in the hydration configuration.
+By default, `HttpClient` caches all `HEAD`, `QUERY` and `GET` requests which don't contain `Authorization`, `Proxy-Authorization`, or `Cookie` headers and are not sent with `withCredentials` or Fetch API `credentials` modes that can send credentials. Angular also skips transfer cache when a request or response includes `Cache-Control` directives that forbid caching (`no-store`, `no-cache`, or `private`), or when the Fetch API `cache` option is set to `no-store` or `no-cache`. Responses that carry a `Set-Cookie` header are also skipped. You can override the request filtering settings by using `withHttpTransferCacheOptions` in the hydration configuration.
 
 ```ts
 import {
@@ -1137,7 +1208,7 @@ bootstrapApplication(App, {
 `HttpTransferCacheOptions`를 설정하면 Angular가 서버 사이드 렌더링(SSR) 중 HTTP 응답을 캐시하고 하이드레이션 중 재사용하는 방식을 조정할 수 있습니다.  
 이 설정은 `provideClientHydration()` 안의 `withHttpTransferCacheOptions`로 전역에 제공합니다.
 
-기본적으로 `HttpClient`는 `Authorization`, `Proxy-Authorization`, `Cookie` 헤더가 없고, `withCredentials`나 자격 증명을 전송할 수 있는 Fetch API의 `credentials` 모드로 보내지 않은 모든 `HEAD`, `GET` 요청을 캐시합니다.
+기본적으로 `HttpClient`는 `Authorization`, `Proxy-Authorization`, `Cookie` 헤더가 없고, `withCredentials`나 자격 증명을 전송할 수 있는 Fetch API의 `credentials` 모드로 보내지 않은 모든 `HEAD`, `QUERY`, `GET` 요청을 캐시합니다.
 요청이나 응답의 `Cache-Control`에 캐시를 금지하는 지시자(`no-store`, `no-cache`, `private`)가 있거나 Fetch API의 `cache` 옵션이 `no-store` 또는 `no-cache`이면 Angular는 전송 캐시를 건너뜁니다.
 `Set-Cookie` 헤더가 포함된 응답도 건너뜁니다.
 하이드레이션 설정의 `withHttpTransferCacheOptions`로 요청 필터링 설정을 재정의할 수 있습니다.
@@ -1212,7 +1283,7 @@ Angular는 요청이나 응답을 전송 캐시에 저장할 수 있는지 판�
 ### `includePostRequests`
 
 <!--
-By default, only `GET` and `HEAD` requests are cached.
+By default, only `GET`, `QUERY` and `HEAD` requests are cached.  
 You can enable caching for `POST` requests when they are used as read operations such as GraphQL queries.
 
 ```ts
@@ -1226,7 +1297,7 @@ Use this only when `POST` requests are **idempotent** and safe to reuse between 
 ---
 -->
 
-기본적으로 `GET`과 `HEAD` 요청만 캐시합니다.  
+기본적으로 `GET`, `QUERY`, `HEAD` 요청만 캐시합니다.  
 GraphQL 쿼리처럼 읽기 작업에 사용하는 `POST` 요청은 캐시를 활성화할 수 있습니다.
 
 ```ts

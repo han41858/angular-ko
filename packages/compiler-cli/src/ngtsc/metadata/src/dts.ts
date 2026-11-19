@@ -11,12 +11,7 @@ import ts from 'typescript';
 
 import {OwningModule, Reference} from '../../imports';
 import {ForeignTypeResolver, PartialEvaluator, ResolvedValue} from '../../partial_evaluator/index';
-import {
-  ClassDeclaration,
-  isNamedClassDeclaration,
-  ReflectionHost,
-  TypeValueReferenceKind,
-} from '../../reflection';
+import {ClassDeclaration, ReflectionHost, TypeValueReferenceKind} from '../../reflection';
 import {nodeDebugInfo} from '../../util/src/typescript';
 
 import {
@@ -31,6 +26,7 @@ import {
 import {
   extractDirectiveTypeCheckMeta,
   extraReferenceFromTypeQuery,
+  readBaseClass,
   readBooleanType,
   readMapType,
   readStringArrayType,
@@ -205,8 +201,6 @@ export class DtsMetadataReader implements MetadataReader {
       def.type.typeArguments.length > 8
         ? readHostDirectivesType(this.checker, def.type.typeArguments[8], ref.bestGuessOwningModule)
         : null;
-    const isSignal =
-      def.type.typeArguments.length > 9 && (readBooleanType(def.type.typeArguments[9]) ?? false);
 
     // At this point in time, the `.d.ts` may not be fully extractable when
     // trying to resolve host directive types to their declarations.
@@ -226,13 +220,12 @@ export class DtsMetadataReader implements MetadataReader {
       hostDirectives: hostDirectives?.result ?? null,
       queries: readStringArrayType(def.type.typeArguments[5]),
       ...extractDirectiveTypeCheckMeta(clazz, inputs, this.reflector),
-      baseClass: readBaseClass(clazz, this.checker, this.reflector),
+      baseClass: readBaseClass(clazz, this.reflector, this.evaluator),
       isPoisoned,
       isStructural,
       animationTriggerNames: null,
       ngContentSelectors,
       isStandalone,
-      isSignal,
       // We do not transfer information about inputs from class metadata
       // via `.d.ts` declarations. This is fine because this metadata is
       // currently only used for classes defined in source files. E.g. in migrations.
@@ -254,10 +247,6 @@ export class DtsMetadataReader implements MetadataReader {
       preserveWhitespaces: false,
       isExplicitlyDeferred: false,
       deferredBlocks: null,
-      // We don't need to know if imported components from .d.ts
-      // files are selectorless for type-checking purposes.
-      selectorlessEnabled: false,
-      localReferencedSymbols: null,
     };
   }
 
@@ -359,41 +348,6 @@ function readInputsType(type: ts.TypeNode): Record<string, InputMapping> {
   }
 
   return inputsMap;
-}
-
-function readBaseClass(
-  clazz: ClassDeclaration,
-  checker: ts.TypeChecker,
-  reflector: ReflectionHost,
-): Reference<ClassDeclaration> | 'dynamic' | null {
-  if (!isNamedClassDeclaration(clazz)) {
-    // Technically this is an error in a .d.ts file, but for the purposes of finding the base class
-    // it's ignored.
-    return reflector.hasBaseClass(clazz) ? 'dynamic' : null;
-  }
-
-  if (clazz.heritageClauses !== undefined) {
-    for (const clause of clazz.heritageClauses) {
-      if (clause.token === ts.SyntaxKind.ExtendsKeyword) {
-        const baseExpr = clause.types[0].expression;
-        let symbol = checker.getSymbolAtLocation(baseExpr);
-        if (symbol === undefined) {
-          return 'dynamic';
-        } else if (symbol.flags & ts.SymbolFlags.Alias) {
-          symbol = checker.getAliasedSymbol(symbol);
-        }
-        if (
-          symbol.valueDeclaration !== undefined &&
-          isNamedClassDeclaration(symbol.valueDeclaration)
-        ) {
-          return new Reference(symbol.valueDeclaration);
-        } else {
-          return 'dynamic';
-        }
-      }
-    }
-  }
-  return null;
 }
 
 function readHostDirectivesType(

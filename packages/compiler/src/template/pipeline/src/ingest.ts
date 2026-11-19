@@ -12,7 +12,7 @@ import * as e from '../../../expression_parser/ast';
 import * as i18n from '../../../i18n/i18n_ast';
 import {splitNsName} from '../../../ml_parser/tags';
 import * as o from '../../../output/output_ast';
-import {ParseSourceSpan} from '../../../parse_util';
+import {ParseError, ParseSourceSpan} from '../../../parse_util';
 import * as t from '../../../render3/r3_ast';
 import {
   DeferBlockDepsEmitMode,
@@ -32,7 +32,12 @@ import {
   type CompilationJob,
   type ViewCompilationUnit,
 } from './compilation';
-import {BINARY_OPERATORS, namespaceForKey, prefixWithNamespace} from './conversion';
+import {
+  BINARY_OPERATORS,
+  UNARY_OPERATORS,
+  namespaceForKey,
+  prefixWithNamespace,
+} from './conversion';
 import {MATH_ML_NAMESPACE, SVG_NAMESPACE} from './namespaces';
 
 // Schema containing DOM elements and their properties.
@@ -124,6 +129,23 @@ export function ingestHostBinding(
     }
     if (property.isAnimation) {
       bindingKind = ir.BindingKind.Animation;
+    }
+    if (bindingKind === ir.BindingKind.Attribute) {
+      const report = domSchema.validateAttribute(property.name);
+      if (report.error) {
+        bindingParser.errors.push(new ParseError(property.sourceSpan, report.msg!));
+      }
+    } else if (
+      bindingKind === ir.BindingKind.Property &&
+      !property.name.startsWith('class.') &&
+      !property.name.startsWith('style.') &&
+      !property.name.startsWith('class!') &&
+      !property.name.startsWith('style!')
+    ) {
+      const report = domSchema.validateProperty(property.name);
+      if (report.error) {
+        bindingParser.errors.push(new ParseError(property.sourceSpan, report.msg!));
+      }
     }
     const securityContexts = calcHostBindingSecurityContexts(
       bindingParser,
@@ -308,8 +330,6 @@ function ingestNodes(unit: ViewCompilationUnit, template: t.Node[]): void {
       ingestLetDeclaration(unit, node);
     } else if (node instanceof t.BoundaryBlock) {
       ingestBoundaryBlock(unit, node);
-    } else if (node instanceof t.Component) {
-      // TODO(crisbeto): account for selectorless nodes.
     } else {
       throw new Error(`Unsupported template node: ${node.constructor.name}`);
     }
@@ -1308,24 +1328,18 @@ function convertAst(
   } else if (ast instanceof e.LiteralPrimitive) {
     return o.literal(ast.value, undefined, convertSourceSpan(ast.span, baseSourceSpan));
   } else if (ast instanceof e.Unary) {
-    switch (ast.operator) {
-      case '+':
-        return new o.UnaryOperatorExpr(
-          o.UnaryOperator.Plus,
-          convertAst(ast.expr, job, baseSourceSpan),
-          undefined,
-          convertSourceSpan(ast.span, baseSourceSpan),
-        );
-      case '-':
-        return new o.UnaryOperatorExpr(
-          o.UnaryOperator.Minus,
-          convertAst(ast.expr, job, baseSourceSpan),
-          undefined,
-          convertSourceSpan(ast.span, baseSourceSpan),
-        );
-      default:
-        throw new Error(`AssertionError: unknown unary operator ${ast.operator}`);
+    if (!UNARY_OPERATORS.has(ast.operator)) {
+      throw new Error(`AssertionError: unknown unary operator ${ast.operator}`);
     }
+    return new o.UnaryOperatorExpr(
+      UNARY_OPERATORS.get(ast.operator)!,
+      convertAst(ast.expr, job, baseSourceSpan),
+      undefined,
+      convertSourceSpan(ast.span, baseSourceSpan),
+      undefined,
+      undefined,
+      ast.isPrefix,
+    );
   } else if (ast instanceof e.Binary) {
     const operator = BINARY_OPERATORS.get(ast.operation);
     if (operator === undefined) {

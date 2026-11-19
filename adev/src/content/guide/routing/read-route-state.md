@@ -47,7 +47,7 @@ The `ActivatedRoute` can provide different information about the route. Some com
 | `data`        | An `Observable` that contains the `data` object provided for the route. Also contains any resolved values from the resolve guard. |
 | `params`      | An `Observable` that contains the required and optional parameters specific to the route.                                         |
 | `queryParams` | An `Observable` that contains the query parameters available to all routes.                                                       |
-| `resources` | An optional record of `Resource` instances defined on the route (when `withRouterResources` is enabled). |
+| `resources`   | An optional record of read-only `Resource` instances defined on or inherited by the route (requires `withRouterResources()`).     |
 
 Check out the [`ActivatedRoute` API docs](/api/router/ActivatedRoute) for a complete list of what you can access with in the route.
 -->
@@ -79,7 +79,7 @@ export class Product {
 | `data`        | 라우팅 규칙에 제공한 `data` 객체를 포함하는 `Observable`입니다. resolve 가드에서 가져온 값도 포함합니다. |
 | `params`      | 해당 라우팅 규칙의 필수 파라미터와 선택 파라미터를 포함하는 `Observable`입니다.                          |
 | `queryParams` | 모든 라우팅 규칙에서 사용할 수 있는 쿼리 파라미터를 포함하는 `Observable`입니다.                         |
-| `resources`   | 라우팅 규칙에 정의된 `Resource` 인스턴스의 선택적 레코드입니다(`withRouterResources`를 활성화한 경우).   |
+| `resources` | 현재 라우팅 규칙에 정의되었거나 상위 규칙에서 상속된 읽기 전용 `Resource` 인스턴스의 선택적 레코드입니다(`withRouterResources()` 필요). |
 
 라우팅 규칙에서 접근할 수 있는 전체 정보는 [`ActivatedRoute` API 문서](/api/router/ActivatedRoute)를 참고하세요.
 

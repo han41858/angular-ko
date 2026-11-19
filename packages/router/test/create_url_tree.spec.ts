@@ -764,7 +764,6 @@ describe('createUrlTreeFromSnapshot', () => {
 
     @Component({
       template: 'child works!',
-      standalone: false,
     })
     class ChildComponent {}
 
@@ -861,7 +860,7 @@ describe('createUrlTreeFromSnapshot', () => {
 
 async function advance(fixture: ComponentFixture<unknown>) {
   await timeout();
-  fixture.detectChanges();
+  await fixture.whenStable();
 }
 
 describe('createUrlTree with custom serializer', () => {

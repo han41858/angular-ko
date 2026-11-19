@@ -57,6 +57,138 @@ describe('CLI docs to html', () => {
     expect(hrefs).toContain('https://next.angular.dev/cli-test-preview');
   });
 
+  it('should render builder option sections when builders are provided', async () => {
+    const buildEntry = {
+      name: 'build',
+      command: 'ng build [project]',
+      shortDescription: 'Compiles an Angular application or library.',
+      longDescription: 'Long description.',
+      aliases: ['b'],
+      deprecated: false,
+      options: [
+        {
+          name: 'project',
+          type: 'string',
+          description: 'The name of the project.',
+          positional: 0,
+        },
+        {
+          name: 'configuration',
+          type: 'string',
+          aliases: ['c'],
+          description: 'One or more named builder configurations.',
+        },
+      ],
+      builders: [
+        {
+          name: 'Application',
+          options: [
+            {
+              name: 'aot',
+              type: 'boolean',
+              default: true,
+              description: 'Build using Ahead of Time compilation.',
+            },
+          ],
+        },
+        {
+          name: 'Library',
+          options: [
+            {
+              name: 'compilation-mode',
+              type: 'string',
+              default: 'partial',
+              enum: ['full', 'partial'],
+              description: 'Angular compilation mode.',
+            },
+          ],
+        },
+      ],
+    };
+
+    const renderableJson = await getRenderable(buildEntry as any, '', 'angular/cli');
+    const localFragment = JSDOM.fragment(renderEntry(renderableJson));
+    const h3Headings = Array.from(localFragment.querySelectorAll('h3')).map((h) =>
+      h.textContent?.trim(),
+    );
+    expect(h3Headings).toContain('빌더');
+
+    const builderLinks = Array.from(
+      localFragment.querySelectorAll('.docs-reference-cli-content ul a'),
+    ).map((a) => ({
+      text: a.textContent?.trim(),
+      href: a.getAttribute('href'),
+    }));
+    expect(builderLinks).toEqual([
+      {text: 'Application', href: '#application-builder-options'},
+      {text: 'Library', href: '#library-builder-options'},
+    ]);
+
+    const headings = Array.from(localFragment.querySelectorAll('h2')).map((h) => ({
+      id: h.id,
+      text: h.textContent?.trim(),
+    }));
+
+    expect(headings).toEqual([
+      {id: 'arguments', text: '인자'},
+      {id: 'options', text: '옵션'},
+      {id: 'application-builder-options', text: 'Application 빌더 옵션'},
+      {id: 'library-builder-options', text: 'Library 빌더 옵션'},
+    ]);
+
+    const cards = localFragment.querySelectorAll('.docs-reference-member-card');
+    expect(cards.length).toBe(4);
+    expect(cards[2].textContent).toContain('aot');
+    expect(cards[2].textContent).toContain('기본값');
+    expect(cards[2].textContent).toContain('true');
+    expect(cards[3].textContent).toContain('compilation-mode');
+    expect(cards[3].textContent).toContain('기본값');
+    expect(cards[3].textContent).toContain('partial');
+  });
+
+  it('should render deprecated labels and messages for deprecated CLI options', async () => {
+    const newEntry = {
+      name: 'new',
+      command: 'ng new [name]',
+      shortDescription: 'Creates a new Angular workspace.',
+      longDescription: 'Long description.',
+      aliases: ['n'],
+      deprecated: false,
+      options: [
+        {
+          name: 'legacy-flag',
+          type: 'boolean',
+          deprecated: true,
+          description: 'A deprecated boolean option.',
+        },
+        {
+          name: 'test-runner',
+          type: 'string',
+          deprecated: 'New projects will only be configured with Vitest in a future version.',
+          default: 'vitest',
+          enum: ['karma', 'vitest'],
+          description: 'The unit testing runner to use.',
+        },
+      ],
+    };
+
+    const renderableJson = await getRenderable(newEntry as any, '', 'angular/cli');
+    const localFragment = JSDOM.fragment(renderEntry(renderableJson));
+    const items = localFragment.querySelectorAll('.docs-ref-content');
+    expect(items).toHaveSize(2);
+
+    const booleanDeprecatedBadge = items[0].querySelector('.docs-deprecated');
+    expect(booleanDeprecatedBadge?.textContent).toBe('@deprecated');
+    expect(items[0].querySelector('.docs-deprecation-message')).toBeNull();
+
+    const messageContainer = items[1].querySelector('.docs-deprecation-message');
+    expect(messageContainer).not.toBeNull();
+    expect(messageContainer?.querySelector('.docs-deprecated')?.textContent).toBe('@deprecated');
+    expect(messageContainer?.textContent).toContain(
+      'New projects will only be configured with Vitest in a future version.',
+    );
+  });
+
   it('should localize CLI labels without changing card keys, anchors, or command syntax', async () => {
     const command = entryJson.subcommands.find((sub: any) => sub.name === 'component');
     const renderable = await getRenderable(command, '', 'angular/cli');

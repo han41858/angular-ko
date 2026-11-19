@@ -325,15 +325,13 @@ Unlike an application, a library has its own `package.json` configuration file.
 
 Under the `projects/` folder, the `my-lib` folder contains your library code.
 
-| Library source files     | Purpose                                                                                                                                                                                         |
-| :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/lib`                | Contains your library project's logic and data. Like an application project, a library project can contain components, services, modules, directives, and pipes.                                |
-| `src/public-api.ts`      | Specifies all files that are exported from your library.                                                                                                                                        |
-| `ng-package.json`        | Configuration file used by [ng-packagr](https://github.com/ng-packagr/ng-packagr) for building your library.                                                                                    |
-| `package.json`           | Configures [npm package dependencies](reference/configs/npm-packages) that are required for this library.                                                                                       |
-| `tsconfig.lib.json`      | Library-specific [TypeScript Configuration](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html), including [Angular compiler options](reference/configs/angular-compiler-options). |
-| `tsconfig.lib.prod.json` | Library-specific [TypeScript Configuration](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) that is used when building the library in production mode.                         |
-| `tsconfig.spec.json`     | [TypeScript Configuration](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) for the library's unit tests.                                                                       |
+| Library source files | Purpose                                                                                                                                                                                         |
+| :------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/lib`            | Contains your library project's logic and data. Like an application project, a library project can contain components, services, modules, directives, and pipes.                                |
+| `src/public-api.ts`  | Specifies all files that are exported from your library's primary entry point.                                                                                                                  |
+| `package.json`       | Configures [npm package dependencies](reference/configs/npm-packages) and entry points (`exports`) for this library.                                                                            |
+| `tsconfig.lib.json`  | Library-specific [TypeScript Configuration](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html), including [Angular compiler options](reference/configs/angular-compiler-options). |
+| `tsconfig.spec.json` | [TypeScript Configuration](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) for the library's unit tests.                                                                       |
 -->
 
 CLI로 라이브러리를 생성하면(`ng generate library my-lib`와 같은 명령어 사용), 생성된 파일은 워크스페이스의 `projects/` 폴더에 들어갑니다.
@@ -346,9 +344,7 @@ CLI로 라이브러리를 생성하면(`ng generate library my-lib`와 같은 �
 | 라이브러리 소스 파일     | 용도                                                                                                                                                                                |
 | :----------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `src/lib`                | 라이브러리 프로젝트의 로직과 데이터를 담습니다. 애플리케이션 프로젝트와 마찬가지로 라이브러리 프로젝트에도 컴포넌트, 서비스, 모듈, 디렉티브, 파이프를 포함할 수 있습니다.           |
-| `src/public-api.ts`      | 라이브러리에서 내보내는 모든 파일을 지정합니다.                                                                                                                                     |
-| `ng-package.json`        | 라이브러리를 빌드할 때 [ng-packagr](https://github.com/ng-packagr/ng-packagr)가 사용하는 설정 파일입니다.                                                                           |
-| `package.json`           | 이 라이브러리에 필요한 [npm 패키지 의존성](reference/configs/npm-packages)을 설정합니다.                                                                                            |
+| `src/public-api.ts`      | 라이브러리의 기본 진입점에서 내보내는 모든 파일을 지정합니다.                                                                                                                                     |
+| `package.json`           | 이 라이브러리의 [npm 패키지 의존성](reference/configs/npm-packages)과 진입점(`exports`)을 설정합니다.                                                                                            |
 | `tsconfig.lib.json`      | [Angular 컴파일러 옵션](reference/configs/angular-compiler-options)을 포함한 라이브러리별 [TypeScript 설정](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)입니다. |
-| `tsconfig.lib.prod.json` | 라이브러리를 프로덕션 모드로 빌드할 때 사용하는 라이브러리별 [TypeScript 설정](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)입니다.                              |
 | `tsconfig.spec.json`     | 라이브러리 단위 테스트용 [TypeScript 설정](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)입니다.                                                                  |

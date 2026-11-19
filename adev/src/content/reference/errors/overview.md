@@ -146,6 +146,7 @@
 | `NG8002` | [Invalid Attribute](errors/NG8002)                          |
 | `NG8003` | [Missing Reference Target](errors/NG8003)                   |
 | `NG8011` | [Control Flow Preventing Content Projection](errors/NG8011) |
+| `NG8022` | [Unsupported Binding on a Form Field](errors/NG8022)        |
 | `NG8023` | [Multiple Components Match Same Element](errors/NG8023)     |
 | `NG8024` | [Conflicting Host Directive Binding](errors/NG8024)         |
 -->
@@ -161,5 +162,6 @@
 | `NG8002` | [유효하지 않은 속성](errors/NG8002)                           |
 | `NG8003` | [누락된 참조 대상](errors/NG8003)                             |
 | `NG8011` | [제어 흐름이 콘텐츠 프로젝션을 차단함](errors/NG8011)         |
+| `NG8022` | [폼 필드에서 지원하지 않는 바인딩](errors/NG8022)       |
 | `NG8023` | [같은 엘리먼트와 일치하는 여러 컴포넌트](errors/NG8023)       |
 | `NG8024` | [충돌하는 호스트 디렉티브 바인딩](errors/NG8024)              |

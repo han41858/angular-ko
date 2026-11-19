@@ -23,7 +23,6 @@ import {
   ASTWithSource,
   Binary,
   BindingPipe,
-  BindingPipeType,
   Call,
   Chain,
   Conditional,
@@ -57,6 +56,7 @@ import {
   ThisReceiver,
   TypeofExpression,
   Unary,
+  unwrapWriteTarget,
   VariableBinding,
   VoidExpression,
   type AssignmentOperation,
@@ -100,10 +100,7 @@ function getLocation(span: ParseSourceSpan): string {
 }
 
 export class Parser {
-  constructor(
-    private readonly _lexer: Lexer,
-    private readonly _supportsDirectPipeReferences = false,
-  ) {}
+  constructor(private readonly _lexer: Lexer) {}
 
   parseAction(
     input: string,
@@ -122,7 +119,6 @@ export class Parser {
       ParseFlags.Action,
       errors,
       0,
-      this._supportsDirectPipeReferences,
     ).parseChain();
 
     return new ASTWithSource(ast, input, getLocation(parseSourceSpan), absoluteOffset, errors);
@@ -184,7 +180,6 @@ export class Parser {
       ParseFlags.None,
       errors,
       0,
-      this._supportsDirectPipeReferences,
     ).parseChain();
   }
 
@@ -231,7 +226,6 @@ export class Parser {
       ParseFlags.None,
       errors,
       0 /* relative offset */,
-      this._supportsDirectPipeReferences,
     );
     return parser.parseTemplateBindings({
       source: templateKey,
@@ -286,7 +280,6 @@ export class Parser {
         ParseFlags.None,
         errors,
         offsets[i],
-        this._supportsDirectPipeReferences,
       ).parseChain();
       expressionNodes.push(ast);
     }
@@ -322,7 +315,6 @@ export class Parser {
       ParseFlags.None,
       errors,
       0,
-      this._supportsDirectPipeReferences,
     ).parseChain();
     const strings = ['', '']; // The prefix and suffix strings are both empty
     return this.createInterpolationAst(
@@ -599,7 +591,6 @@ class _ParseAST {
     private parseFlags: ParseFlags,
     private errors: ParseError[],
     private offset: number,
-    private supportsDirectPipeReferences: boolean,
   ) {}
 
   private peek(offset: number): Token {
@@ -746,6 +737,29 @@ class _ParseAST {
     return token.type === TokenType.Operator && Binary.isAssignmentOperation(token.strValue);
   }
 
+  private validateIncrementDecrementTarget(operand: AST): boolean {
+    if (!(this.parseFlags & ParseFlags.Action)) {
+      this.error('Bindings cannot contain assignments');
+      return false;
+    }
+
+    const target = unwrapWriteTarget(operand);
+
+    if (target instanceof PropertyRead || target instanceof KeyedRead) {
+      return true;
+    }
+
+    if (!(target instanceof EmptyExpr)) {
+      if (target instanceof SafePropertyRead || target instanceof SafeKeyedRead) {
+        this.error(`The '?.' operator cannot be used in the assignment`);
+      } else {
+        this.error('The expression cannot be used in the assignment');
+      }
+    }
+
+    return false;
+  }
+
   private expectOperator(operator: string) {
     if (this.consumeOptionalOperator(operator)) return;
     this.error(`Missing expected operator ${operator}`);
@@ -863,24 +877,12 @@ class _ParseAST {
           // If there are additional expressions beyond the name, then the artificial end for the
           // name is no longer relevant.
         }
-        let type: BindingPipeType;
-        if (this.supportsDirectPipeReferences) {
-          const charCode = nameId.charCodeAt(0);
-          type =
-            charCode === chars.$_ || (charCode >= chars.$A && charCode <= chars.$Z)
-              ? BindingPipeType.ReferencedDirectly
-              : BindingPipeType.ReferencedByName;
-        } else {
-          type = BindingPipeType.ReferencedByName;
-        }
-
         result = new BindingPipe(
           this.span(start),
           this.sourceSpan(start, fullSpanEnd),
           result,
           nameId,
           args,
-          type,
           nameSpan,
         );
       } while (this.consumeOptionalOperator('|'));
@@ -1041,9 +1043,11 @@ class _ParseAST {
     while (this.next.type == TokenType.Operator && this.next.strValue === '**') {
       // This aligns with Javascript semantics which require any unary operator preceeding the
       // exponentiation operation to be explicitly grouped as either applying to the base or result
-      // of the exponentiation operation.
+      // of the exponentiation operation. Note that `++`/`--` are excluded, because JS classifies
+      // them as an "update expressions" and explicitly allows them on the left-hand side of `**`
+      // (e.g. `a++ ** 2` is valid, `-a ** 2` is not).
       if (
-        result instanceof Unary ||
+        (result instanceof Unary && !Unary.isUpdateOperation(result.operator)) ||
         result instanceof PrefixNot ||
         result instanceof TypeofExpression ||
         result instanceof VoidExpression
@@ -1077,6 +1081,14 @@ class _ParseAST {
           this.advance();
           result = this.parsePrefix();
           return new PrefixNot(this.span(start), this.sourceSpan(start), result);
+        case '++':
+        case '--': {
+          this.advance();
+          const operand = this.parsePrefix();
+          return this.validateIncrementDecrementTarget(operand)
+            ? Unary.createPrefixUpdate(this.span(start), this.sourceSpan(start), operator, operand)
+            : new EmptyExpr(this.span(start), this.sourceSpan(start));
+        }
       }
     } else if (this.next.isKeywordTypeof()) {
       const start = this.inputIndex;
@@ -1117,9 +1129,20 @@ class _ParseAST {
       } else if (this.next.isTemplateLiteralPart()) {
         result = this.parseTaggedTemplateLiteral(result, start);
       } else {
-        return result;
+        break;
       }
     }
+
+    if (this.next.isOperator('++') || this.next.isOperator('--')) {
+      // Note: we need to capture this here before we advance.
+      const operator = this.next.strValue as '++' | '--';
+      this.advance();
+      return this.validateIncrementDecrementTarget(result)
+        ? Unary.createPostfixUpdate(this.span(start), this.sourceSpan(start), operator, result)
+        : new EmptyExpr(this.span(start), this.sourceSpan(start));
+    }
+
+    return result;
   }
 
   private parsePrimary(): AST {

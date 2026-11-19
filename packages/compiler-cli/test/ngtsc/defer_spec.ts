@@ -9,7 +9,7 @@
 import {ErrorCode, ngErrorCode} from '../../src/ngtsc/diagnostics';
 
 import {runInEachFileSystem} from '../../src/ngtsc/file_system/testing';
-import {loadStandardTestFiles} from '../../src/ngtsc/testing';
+import {isNgpTestMode, loadStandardTestFiles} from '../../src/ngtsc/testing';
 
 import {NgtscTestEnvironment} from './env';
 
@@ -73,8 +73,8 @@ runInEachFileSystem(() => {
       const jsContents = env.getContents('test.js');
 
       expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-      expect(cleanNewLines(jsContents)).toContain(
-        '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA), LocalDep]',
+      expect(cleanNewLines(jsContents)).toMatch(
+        /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\), LocalDep ?\]/,
       );
 
       // The `CmpA` symbol wasn't referenced elsewhere, so it can be defer-loaded
@@ -363,8 +363,8 @@ runInEachFileSystem(() => {
 
         // Both `CmpA` and `CmpB` were used inside the defer block and were not
         // referenced elsewhere, so we generate dynamic imports and drop a regular one.
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA), /* @ts-ignore */ import("./cmp-a").then(m => m.CmpB)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\), (?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpB\) ?\]/,
         );
         expect(jsContents).not.toContain('import { CmpA, CmpB }');
       });
@@ -407,8 +407,8 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\) ?\]/,
         );
 
         // The `CmpA` symbol wasn't referenced elsewhere, so it can be defer-loaded
@@ -458,8 +458,8 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\) ?\]/,
         );
         expect(jsContents).not.toContain('import { CmpA }');
       });
@@ -507,8 +507,8 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\) ?\]/,
         );
         expect(jsContents).not.toContain('import { CmpA }');
       });
@@ -556,8 +556,8 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\) ?\]/,
         );
         expect(jsContents).not.toContain('import { CmpA }');
       });
@@ -605,8 +605,8 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\) ?\]/,
         );
         expect(jsContents).not.toContain('import { CmpA }');
       });
@@ -657,8 +657,8 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmps").then(m => m.CmpA), /* @ts-ignore */ import("./cmps").then(m => m.CmpB)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmps"\)\.then\(\(?m\)? => m\.CmpA\), (?:\/\* @ts-ignore \*\/ )?import\("\.\/cmps"\)\.then\(\(?m\)? => m\.CmpB\) ?\]/,
         );
         expect(jsContents).not.toContain('import { CmpA }');
         expect(jsContents).not.toContain('import { CmpB }');
@@ -703,11 +703,11 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          'const TestCmp_Defer_1_DepsFn = () => [/* @ts-ignore */ import("./cmp-a").then(m => m.default), LocalDep];',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /const TestCmp_Defer_1_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.default\), LocalDep ?\];/,
         );
-        expect(cleanNewLines(jsContents)).toContain(
-          'i0.ɵsetClassMetadataAsync(TestCmp, () => [/* @ts-ignore */ import("./cmp-a").then(m => m.default)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /i0\.ɵsetClassMetadataAsync\(TestCmp, \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.default\) ?\]/,
         );
         // The `CmpA` symbol wasn't referenced elsewhere, so it can be defer-loaded
         // via dynamic imports and an original import can be removed.
@@ -766,10 +766,17 @@ runInEachFileSystem(() => {
 
         const jsContents = env.getContents('test.js');
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '() => [/* @ts-ignore */ import("./cmp").then(m => m.Cmp)]',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp"\)\.then\(\(?m\)? => m\.Cmp\) ?\]/,
         );
-        expect(jsContents).not.toContain('import { Cmp }');
+        if (isNgpTestMode()) {
+          // `TestCmp` also injects `Cmp` via constructor DI (`ɵɵdirectiveInject(Cmp)`), so `ngp`
+          // retains the named `import { Cmp }` instead of synthesizing `import * as i1`.
+          expect(jsContents).toContain('import { Cmp }');
+          expect(jsContents).not.toContain('import * as i1');
+        } else {
+          expect(jsContents).not.toContain('import { Cmp }');
+        }
       });
 
       it('should retain symbols used in types and eagerly', () => {
@@ -1014,14 +1021,11 @@ runInEachFileSystem(() => {
         // Expect that all deferrableImports in local compilation mode
         // are located in a single function (since we can't detect in
         // the local mode which components belong to which block).
-        expect(cleanNewLines(jsContents)).toContain(
-          'const AppCmp_For_1_Conditional_0_Defer_1_DepsFn = () => [/* @ts-ignore */ ' +
-            'import("./deferred-a").then(m => m.DeferredCmpA), /* @ts-ignore */ ' +
-            'import("./pipe-a").then(m => m.PipeA)];',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /const AppCmp_For_1_Conditional_0_Defer_1_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-a"\)\.then\(\(?m\)? => m\.DeferredCmpA\), (?:\/\* @ts-ignore \*\/ )?import\("\.\/pipe-a"\)\.then\(\(?m\)? => m\.PipeA\) ?\];/,
         );
-        expect(cleanNewLines(jsContents)).toContain(
-          'const AppCmp_For_1_Conditional_0_Defer_4_DepsFn = () => [/* @ts-ignore */ ' +
-            'import("./deferred-b").then(m => m.DeferredCmpB)];',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /const AppCmp_For_1_Conditional_0_Defer_4_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-b"\)\.then\(\(?m\)? => m\.DeferredCmpB\) ?\];/,
         );
 
         // Make sure there are no eager imports present in the output.
@@ -1034,12 +1038,8 @@ runInEachFileSystem(() => {
         expect(jsContents).toContain('ɵɵdefer(4, 3, AppCmp_For_1_Conditional_0_Defer_4_DepsFn);');
 
         // Expect `ɵsetClassMetadataAsync` to contain dynamic imports too.
-        expect(cleanNewLines(jsContents)).toContain(
-          'ɵsetClassMetadataAsync(AppCmp, () => [/* @ts-ignore */ ' +
-            'import("./deferred-a").then(m => m.DeferredCmpA), /* @ts-ignore */ ' +
-            'import("./pipe-a").then(m => m.PipeA), /* @ts-ignore */ ' +
-            'import("./deferred-b").then(m => m.DeferredCmpB)], ' +
-            '(DeferredCmpA, PipeA, DeferredCmpB) => {',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /ɵsetClassMetadataAsync\(AppCmp, \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-a"\)\.then\(\(?m\)? => m\.DeferredCmpA\), (?:\/\* @ts-ignore \*\/ )?import\("\.\/pipe-a"\)\.then\(\(?m\)? => m\.PipeA\), (?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-b"\)\.then\(\(?m\)? => m\.DeferredCmpB\) ?\], \(DeferredCmpA, PipeA, DeferredCmpB\) => \{/,
         );
       });
 
@@ -1119,32 +1119,27 @@ runInEachFileSystem(() => {
 
         // Expect that all deferrableImports to become dynamic imports.
         // Other imported symbols remain eager.
-        expect(cleanNewLines(jsContents)).toContain(
-          'const AppCmp_Defer_1_DepsFn = () => [/* @ts-ignore */ ' +
-            'import("./deferred-a").then(m => m.DeferredCmpA)];',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /const AppCmp_Defer_1_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\(["']\.\/deferred-a["']\)\.then\(\(?m\)? => m\.DeferredCmpA\) ?\];/,
         );
-        expect(cleanNewLines(jsContents)).toContain(
-          'const AppCmp_Defer_4_DepsFn = () => [/* @ts-ignore */ ' +
-            'import("./deferred-b").then(m => m.DeferredCmpB)];',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /const AppCmp_Defer_4_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\(["']\.\/deferred-b["']\)\.then\(\(?m\)? => m\.DeferredCmpB\) ?\];/,
         );
 
         // Make sure there are no eager imports present in the output.
-        expect(jsContents).not.toContain(`from './deferred-a'`);
-        expect(jsContents).not.toContain(`from './deferred-b'`);
+        expect(jsContents).not.toMatch(/from ["']\.\/deferred-a["']/);
+        expect(jsContents).not.toMatch(/from ["']\.\/deferred-b["']/);
 
         // Eager dependencies retain their imports.
-        expect(jsContents).toContain(`from './eager-a';`);
+        expect(jsContents).toMatch(/from ["']\.\/eager-a["'];/);
 
         // Defer blocks would have their own dependency functions in full mode.
         expect(jsContents).toContain('ɵɵdefer(1, 0, AppCmp_Defer_1_DepsFn);');
         expect(jsContents).toContain('ɵɵdefer(4, 3, AppCmp_Defer_4_DepsFn);');
 
         // Expect `ɵsetClassMetadataAsync` to contain dynamic imports too.
-        expect(cleanNewLines(jsContents)).toContain(
-          'ɵsetClassMetadataAsync(AppCmp, () => [/* @ts-ignore */ ' +
-            'import("./deferred-a").then(m => m.DeferredCmpA), /* @ts-ignore */ ' +
-            'import("./deferred-b").then(m => m.DeferredCmpB)], ' +
-            '(DeferredCmpA, DeferredCmpB) => {',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /ɵsetClassMetadataAsync\(AppCmp, \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\(["']\.\/deferred-a["']\)\.then\(\(?m\)? => m\.DeferredCmpA\), (?:\/\* @ts-ignore \*\/ )?import\(["']\.\/deferred-b["']\)\.then\(\(?m\)? => m\.DeferredCmpB\) ?\], \(DeferredCmpA, DeferredCmpB\) => \{/,
         );
       });
 
@@ -1487,13 +1482,11 @@ runInEachFileSystem(() => {
           env.driveMain();
           const jsContents = env.getContents('test.js');
 
-          expect(cleanNewLines(jsContents)).toContain(
-            'const AppCmp_Defer_1_DepsFn = () => [/* @ts-ignore */ ' +
-              'import("./deferred-a").then(m => m.DeferredCmpA)];',
+          expect(cleanNewLines(jsContents)).toMatch(
+            /const AppCmp_Defer_1_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-a"\)\.then\(\(?m\)? => m\.DeferredCmpA\) ?\];/,
           );
-          expect(cleanNewLines(jsContents)).toContain(
-            'const AppCmp_Defer_4_DepsFn = () => [/* @ts-ignore */ ' +
-              'import("./deferred-b").then(m => m.DeferredCmpB)];',
+          expect(cleanNewLines(jsContents)).toMatch(
+            /const AppCmp_Defer_4_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-b"\)\.then\(\(?m\)? => m\.DeferredCmpB\) ?\];/,
           );
         });
 
@@ -1584,7 +1577,9 @@ runInEachFileSystem(() => {
           expect(jsContents).not.toContain('dependencies: [MyCmp]');
 
           // Verify that MyCmp is deferred
-          expect(cleanNewLines(jsContents)).toContain('import("./my-cmp").then(m => m.MyCmp)');
+          expect(cleanNewLines(jsContents)).toMatch(
+            /import\("\.\/my-cmp"\)\.then\(\(?m\)? => m\.MyCmp\)/,
+          );
         });
 
         it('should remove the import statement for explicitly deferred imports even in local compilation mode', () => {
@@ -1742,13 +1737,11 @@ runInEachFileSystem(() => {
           env.driveMain();
           const jsContents = env.getContents('test.js');
 
-          expect(cleanNewLines(jsContents)).toContain(
-            'const AppCmp_Defer_1_DepsFn = () => [/* @ts-ignore */ ' +
-              'import("./deferred-a").then(m => m.DeferredCmpA)];',
+          expect(cleanNewLines(jsContents)).toMatch(
+            /const AppCmp_Defer_1_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-a"\)\.then\(\(?m\)? => m\.DeferredCmpA\) ?\];/,
           );
-          expect(cleanNewLines(jsContents)).toContain(
-            'const AppCmp_Defer_4_DepsFn = () => [/* @ts-ignore */ ' +
-              'import("./deferred-b").then(m => m.DeferredCmpB)];',
+          expect(cleanNewLines(jsContents)).toMatch(
+            /const AppCmp_Defer_4_DepsFn = \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/deferred-b"\)\.then\(\(?m\)? => m\.DeferredCmpB\) ?\];/,
           );
         });
 
@@ -1776,9 +1769,7 @@ runInEachFileSystem(() => {
                 blockA: [DeferredCmpA],
               },
               template: \`
-                @defer {
-                  <deferred-cmp-a />
-                }
+                @defer {}
               \`,
             })
             export class AppCmp {}
@@ -1814,9 +1805,7 @@ runInEachFileSystem(() => {
                 blockA: [DeferredCmpA],
               },
               template: \`
-                @defer (name blockB) {
-                  <deferred-cmp-a />
-                }
+                @defer (name blockB) {}
               \`,
             })
             export class AppCmp {}
@@ -1984,11 +1973,8 @@ runInEachFileSystem(() => {
         const jsContents = env.getContents('test.js');
 
         expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-        expect(cleanNewLines(jsContents)).toContain(
-          '(() => { (typeof ngDevMode === "undefined" || ngDevMode) && ' +
-            'i0.ɵsetClassMetadataAsync(TestCmp, ' +
-            '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.CmpA)], ' +
-            'CmpA => { i0.ɵsetClassMetadata(TestCmp',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /\(\(\) => \{ \(typeof ngDevMode === "undefined" \|\| ngDevMode\) && i0\.ɵsetClassMetadataAsync\(TestCmp, \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.CmpA\) ?\], \(?CmpA\)? => \{ i0\.ɵsetClassMetadata\(TestCmp/,
         );
       });
 
@@ -2095,14 +2081,10 @@ runInEachFileSystem(() => {
       const jsContents = env.getContents('test.js');
 
       expect(jsContents).toContain('ɵɵdefer(1, 0, TestCmp_Defer_1_DepsFn)');
-      expect(cleanNewLines(jsContents)).toContain(
-        '(() => { (typeof ngDevMode === "undefined" || ngDevMode) && ' +
-          // Main `setClassMetadataAsync` call
-          'i0.ɵsetClassMetadataAsync(TestCmp, ' +
-          // Dependency loading function (note: no local `LocalDep` here)
-          // Callback that invokes `setClassMetadata` at the end
-          '() => [/* @ts-ignore */ import("./cmp-a").then(m => m.default)], ' +
-          'CmpA => { i0.ɵsetClassMetadata(TestCmp',
+      // Main `setClassMetadataAsync` call with the dependency loading function (note: no local
+      // `LocalDep` here) and the callback that invokes `setClassMetadata` at the end.
+      expect(cleanNewLines(jsContents)).toMatch(
+        /\(\(\) => \{ \(typeof ngDevMode === "undefined" \|\| ngDevMode\) && i0\.ɵsetClassMetadataAsync\(TestCmp, \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/cmp-a"\)\.then\(\(?m\)? => m\.default\) ?\], \(?CmpA\)? => \{ i0\.ɵsetClassMetadata\(TestCmp/,
       );
     });
 
@@ -2562,8 +2544,18 @@ runInEachFileSystem(() => {
         );
 
         const diags = env.driveDiagnostics();
-        expect(diags.length).toBe(1);
-        expect(diags[0].messageText).toContain(`@defer block must specify a 'name' parameter`);
+
+        if (isNgpTestMode()) {
+          expect(diags.length).toBe(2);
+          expect(diags[0].messageText).toContain(`@defer block must specify a 'name' parameter`);
+          expect(diags[1].messageText).toContain(
+            `Pipe 'pipea' was imported via \`@Component.deferredImports\` under block 'blockA', ` +
+              `but is used in a \`@defer\` block configured for 'unnamed'`,
+          );
+        } else {
+          expect(diags.length).toBe(1);
+          expect(diags[0].messageText).toContain(`@defer block must specify a 'name' parameter`);
+        }
       });
 
       it('should report an error when a structural directive from deferredImports is used in an unassociated defer block', () => {
@@ -2779,10 +2771,8 @@ runInEachFileSystem(() => {
         expect(jsContents).not.toContain('DirA, DirA');
 
         // Ensure that setClassMetadataAsync has exactly one parameter for DirA
-        expect(cleanNewLines(jsContents)).toContain(
-          'i0.ɵsetClassMetadataAsync(TestCmp, ' +
-            '() => [/* @ts-ignore */ import("./dirs").then(m => m.DirA)], ' +
-            'DirA => { i0.ɵsetClassMetadata(TestCmp',
+        expect(cleanNewLines(jsContents)).toMatch(
+          /i0\.ɵsetClassMetadataAsync\(TestCmp, \(\) => \[ ?(?:\/\* @ts-ignore \*\/ )?import\("\.\/dirs"\)\.then\(\(?m\)? => m\.DirA\) ?\], \(?DirA\)? => \{ i0\.ɵsetClassMetadata\(TestCmp/,
         );
       });
     });

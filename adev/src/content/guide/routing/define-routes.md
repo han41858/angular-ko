@@ -780,6 +780,50 @@ When you need to fetch data for a route, Angular Router supports reactive route 
 - [라우팅 규칙 데이터 리졸버](/guide/routing/data-resolvers): 리졸버 함수로 라우팅 규칙을 활성화하기 전에 데이터를 가져옵니다.
 
 <!--
+### Error fallback components
+
+You can specify an `errorComponent` on a route to render a dedicated fallback component if the route component throws an error during initialization or rendering:
+
+```ts
+import {Routes} from '@angular/router';
+import {ProductDetails} from './product-details';
+import {ProductErrorFallback} from './product-error-fallback';
+
+export const routes: Routes = [
+  {
+    path: 'product/:id',
+    component: ProductDetails,
+    errorComponent: ProductErrorFallback,
+  },
+];
+```
+
+To learn more about configuring error fallbacks and retrying failed routes, see the [Error boundaries guide](/guide/routing/error-boundaries).
+-->
+
+<a id="error-fallback-components"></a>
+
+### 오류 대체 컴포넌트
+
+라우팅 규칙에 `errorComponent`를 지정하면, 라우팅 컴포넌트를 초기화하거나 렌더링하는 중 오류가 발생했을 때 전용 대체 컴포넌트를 표시할 수 있습니다.
+
+```ts
+import {Routes} from '@angular/router';
+import {ProductDetails} from './product-details';
+import {ProductErrorFallback} from './product-error-fallback';
+
+export const routes: Routes = [
+  {
+    path: 'product/:id',
+    component: ProductDetails,
+    errorComponent: ProductErrorFallback,
+  },
+];
+```
+
+오류 대체 컴포넌트 설정과 실패한 라우팅 규칙의 재시도에 관해서는 [오류 경계 가이드](/guide/routing/error-boundaries)를 참고하세요.
+
+<!--
 ## Nested Routes
 -->
 

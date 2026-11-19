@@ -13,9 +13,9 @@ import {
   NgModuleFactory,
   Provider,
   ProviderToken,
+  Resource,
   Signal,
   Type,
-  Resource,
   WritableResource,
 } from '@angular/core';
 import {Observable} from 'rxjs';
@@ -59,12 +59,25 @@ export interface ResourceContext {
    * @developerPreview 22.2
    */
   fragment: Signal<string | null>;
+  // TODO(v23): Remove data from ResourceContext (or restrict to static data) in 3p.
+  // 3p-only-start
   /**
    * Data provided in the route configuration.
    *
    * @developerPreview 22.2
    */
   data: Signal<Record<string, any>>;
+  // 3p-only-end
+  /**
+   * Resources inherited from ancestor routes, keyed by name.
+   *
+   * Read this signal inside a reactive context such as a resource's `params` function (for example,
+   * with `chain(ctx.resources()['user'])`) rather than synchronously in the `resources` function
+   * body, as ancestor `resources` functions may still be initializing asynchronously.
+   *
+   * @developerPreview 22.3
+   */
+  resources: Signal<ResourceResult>;
 }
 
 /**
@@ -651,6 +664,16 @@ export interface Route {
    * Can be empty if child routes specify components.
    */
   component?: Type<any>;
+
+  /**
+   * The component to instantiate when an error occurs in this route.
+   *
+   * Requires the error boundary feature to be enabled with `withErrorBoundaries`.
+   *
+   * @see [Error boundaries](guide/routing/error-boundaries)
+   * @developerPreview 22.3
+   */
+  errorComponent?: Type<unknown>;
 
   /**
    * An object specifying a lazy-loaded component.
@@ -1675,4 +1698,19 @@ export interface NavigationBehaviorOptions {
    * @see InMemoryScrollingOptions
    */
   readonly scroll?: 'manual' | 'after-transition';
+
+  /**
+   * Configures whether the browser resets focus when the navigation is complete. It only applies
+   * when the router uses the browser Navigation API (`withExperimentalPlatformNavigation`).
+   *
+   * - When 'after-transition' (the default), the browser moves focus to the first element with the
+   * `autofocus` attribute, or to the `<body>`.
+   * - When 'manual', the browser doesn't reset focus. For example, a search field that updates a
+   * query parameter as the user types keeps focus.
+   *
+   * @see [NavigateEvent#intercept](https://developer.mozilla.org/docs/Web/API/NavigateEvent/intercept)
+   *
+   * @experimental 22.3
+   */
+  readonly focusReset?: 'manual' | 'after-transition';
 }

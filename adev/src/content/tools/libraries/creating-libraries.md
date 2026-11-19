@@ -64,12 +64,12 @@ When you generate a new library, the workspace configuration file, `angular.json
   …
   "my-lib": {
     "root": "projects/my-lib",
-    "sourceRoot": "projects/my-lib/src",
+    "sourceRoot": "projects/my-lib",
     "projectType": "library",
     "prefix": "lib",
     "architect": {
       "build": {
-        "builder": "@angular/build:ng-packagr",
+        "builder": "@angular/build:library",
         …
 
 ```
@@ -134,12 +134,12 @@ Angular에서 사용하는 라이브러리임을 나타내는 관례에 따라 `
   …
   "my-lib": {
     "root": "projects/my-lib",
-    "sourceRoot": "projects/my-lib/src",
+    "sourceRoot": "projects/my-lib",
     "projectType": "library",
     "prefix": "lib",
     "architect": {
       "build": {
-        "builder": "@angular/build:ng-packagr",
+        "builder": "@angular/build:library",
         …
 
 ```
@@ -168,20 +168,27 @@ ng lint my-lib
 
 <!--
 ## Entry points
+-->
 
+<a id="entry-points"></a>
+
+## 진입점
+
+<!--
 An _entry point_ is a module specifier that consumers import from, together with the public API that specifier exposes.
-Every library has one _primary entry point_, and can add any number of _secondary entry points_.
+Every library has one _primary entry point_, and you can add any number of _secondary entry points_.
 
-The primary entry point is the package itself.
-The `ng-package.json` file at the root of the library configures it, and `lib.entryFile` names the file that defines its public API.
+You configure entry points in the library's `package.json` file using the `"exports"` field.
+The `"."` key defines the primary entry point and points to the TypeScript file that exports its public API:
 
-```json {header: 'projects/my-lib/ng-package.json'}
+```json {header: "projects/my-lib/package.json"}
 {
-  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/my-lib",
-  "lib": {
-    "entryFile": "src/public-api.ts"
-  }
+  "name": "my-lib",
+  "version": "0.0.1",
+  "exports": {
+    ".": "./src/public-api.ts"
+  },
+  …
 }
 ```
 
@@ -191,9 +198,8 @@ Consumers import the primary entry point by the package name:
 import {ThemeService} from 'my-lib';
 ```
 
-A secondary entry point is a directory inside the library with its own `ng-package.json` file.
-The path of that directory relative to the library root defines the import subpath.
-For example, a `button` directory makes `my-lib/button` available to consumers:
+A secondary entry point is an additional subpath key in `"exports"` that points to its own public API file.
+For example, a `"./button"` export makes `my-lib/button` available to consumers:
 
 ```ts
 import {ButtonComponent} from 'my-lib/button';
@@ -205,148 +211,174 @@ For example, `@angular/core` is the primary entry point and `@angular/core/testi
 HELPFUL: For an architectural overview of how entry points enable code splitting and define chunk boundaries in the Angular Package Format, see [Entrypoints and code splitting](tools/libraries/angular-package-format#entrypoints-and-code-splitting).
 -->
 
-<a id="entry-points"></a>
+_진입점_ 은 라이브러리 사용자가 import할 때 사용하는 모듈 지정자와 해당 지정자가 공개하는 API를 뜻합니다.
+모든 라이브러리에는 _기본 진입점_ 이 하나 있으며, _보조 진입점_ 은 원하는 만큼 추가할 수 있습니다.
 
-## 진입점
+라이브러리의 `package.json`에서 `"exports"` 필드로 진입점을 설정합니다.
+`"."` 키는 기본 진입점을 정의하며, 공개 API를 내보내는 TypeScript 파일을 가리킵니다:
 
-_진입점_ 은 라이브러리 사용자가 임포트할 때 지정하는 모듈 지정자와 해당 지정자가 노출하는 공개 API를 의미합니다.
-모든 라이브러리는 하나의 _기본 진입점_ 을 가지며, 원하는 만큼 _보조 진입점_ 을 추가할 수 있습니다.
-
-기본 진입점은 패키지 자체입니다.
-라이브러리 루트의 `ng-package.json` 파일에서 설정하며 `lib.entryFile`로 공개 API를 정의하는 파일을 지정합니다.
-
-```json {header: 'projects/my-lib/ng-package.json'}
+```json {header: "projects/my-lib/package.json"}
 {
-  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/my-lib",
-  "lib": {
-    "entryFile": "src/public-api.ts"
-  }
+  "name": "my-lib",
+  "version": "0.0.1",
+  "exports": {
+    ".": "./src/public-api.ts"
+  },
+  …
 }
 ```
 
-사용자는 패키지 이름으로 기본 진입점을 임포트합니다.
+라이브러리 사용자는 패키지 이름으로 기본 진입점을 가져옵니다:
 
 ```ts
 import {ThemeService} from 'my-lib';
 ```
 
-보조 진입점은 자체 `ng-package.json` 파일이 있는 라이브러리 내부 디렉터리입니다.
-라이브러리 루트를 기준으로 한 디렉터리의 상대 경로가 임포트 하위 경로가 됩니다.
-예를 들어 `button` 디렉터리가 있으면 사용자가 `my-lib/button`을 사용할 수 있습니다.
+보조 진입점은 별도의 공개 API 파일을 가리키는 `"exports"`의 하위 경로 키입니다.
+예를 들어 `"./button"`을 내보내면 라이브러리 사용자가 `my-lib/button`을 가져올 수 있습니다:
 
 ```ts
 import {ButtonComponent} from 'my-lib/button';
 ```
 
 Angular 패키지도 같은 구조를 사용합니다.
-예를 들어 `@angular/core`는 기본 진입점이고 `@angular/core/testing`은 같은 패키지의 보조 진입점입니다.
+예를 들어 `@angular/core`는 기본 진입점이며, `@angular/core/testing`은 같은 패키지의 보조 진입점입니다.
 
-도움말: Angular 패키지 형식에서 진입점으로 코드 분할을 지원하고 청크 경계를 정의하는 구조는 [진입점과 코드 분할](tools/libraries/angular-package-format#entrypoints-and-code-splitting)을 참고하세요.
+도움말: Angular 패키지 형식에서 진입점이 코드 분할을 가능하게 하고 청크 경계를 정의하는 방식은 [진입점과 코드 분할](tools/libraries/angular-package-format#entrypoints-and-code-splitting)을 참고하세요.
 
 <!--
 ### Adding a secondary entry point
-
-Create a directory inside the library with its own `ng-package.json` and public API file:
-
-```text
-projects/my-lib/
-├── ng-package.json      (primary entry point: my-lib)
-├── package.json
-├── src/
-│   ├── public-api.ts
-│   └── lib/ …
-└── button/
-    ├── ng-package.json  (secondary entry point: my-lib/button)
-    └── src/
-        ├── public-api.ts
-        └── button.ts
-```
-
-The secondary `ng-package.json` configures only the entry point itself:
-
-```json {header: 'projects/my-lib/button/ng-package.json'}
-{
-  "$schema": "../../../node_modules/ng-packagr/ng-entrypoint.schema.json",
-  "lib": {
-    "entryFile": "src/public-api.ts"
-  }
-}
-```
-
-IMPORTANT: A secondary `ng-package.json` accepts only the `lib` options. Package-wide options such as `dest` and `assets` belong in the `ng-package.json` at the library root and apply to every entry point.
-
-You do not need to register the secondary entry point anywhere else.
-During the build, `ng-packagr` automatically discovers every `ng-package.json` under the library root and derives the import subpath from its directory path (for example, `button/` becomes `my-lib/button` and `testing/harness/` becomes `my-lib/testing/harness`).
-
-To import a secondary entry point from an application in the same workspace, add a wildcard path mapping in the workspace `tsconfig.json`.
-By default, `ng generate library` maps only the package root, which does not cover subpaths:
-
-```json {header: 'tsconfig.json'}
-{
-  "compilerOptions": {
-    "paths": {
-      "my-lib": ["./dist/my-lib"],
-      "my-lib/*": ["./dist/my-lib/*"]
-    }
-  }
-}
-```
-
-IMPORTANT: When importing code from another entry point in the same library, always use its package import path (for example, `import {ThemeService} from 'my-lib'`) instead of a relative path. `ng-packagr` builds each entry point separately in dependency order, so relative imports across entry points and circular dependencies between entry points will fail the build.
 -->
 
 <a id="adding-a-secondary-entry-point"></a>
 
 ### 보조 진입점 추가하기
 
-라이브러리 내부에 자체 `ng-package.json`과 공개 API 파일이 있는 디렉터리를 만드세요.
+<!--
+Use the [`entry-point` schematic](cli/generate/entry-point) to generate a new secondary entry point in your library:
 
-```text
-projects/my-lib/
-├── ng-package.json      (기본 진입점: my-lib)
-├── package.json
-├── src/
-│   ├── public-api.ts
-│   └── lib/ …
-└── button/
-    ├── ng-package.json  (보조 진입점: my-lib/button)
-    └── src/
-        ├── public-api.ts
-        └── button.ts
+```shell
+ng generate entry-point button --project my-lib
 ```
 
-보조 진입점의 `ng-package.json`은 해당 진입점만 설정합니다.
+You can also generate nested subpaths, such as `testing/harness`:
 
-```json {header: 'projects/my-lib/button/ng-package.json'}
-{
-  "$schema": "../../../node_modules/ng-packagr/ng-entrypoint.schema.json",
-  "lib": {
-    "entryFile": "src/public-api.ts"
-  }
-}
+```shell
+ng generate entry-point testing/harness --project my-lib
 ```
 
-IMPORTANT: 보조 진입점의 `ng-package.json`에는 `lib` 옵션만 지정할 수 있습니다. `dest`, `assets` 같은 패키지 전체 옵션은 라이브러리 루트의 `ng-package.json`에 지정하며 모든 진입점에 적용됩니다.
+Running `ng generate entry-point button --project my-lib` performs the following steps:
 
-보조 진입점을 다른 곳에 등록할 필요는 없습니다.
-빌드 중 `ng-packagr`가 라이브러리 루트 아래의 모든 `ng-package.json`을 자동으로 발견하고 디렉터리 경로에서 임포트 하위 경로를 도출합니다. 예를 들어 `button/`은 `my-lib/button`, `testing/harness/`는 `my-lib/testing/harness`가 됩니다.
+1. Creates a `button/src/` directory inside the library with its own `public-api.ts` file and initial component files:
 
-같은 워크스페이스의 애플리케이션에서 보조 진입점을 임포트하려면 워크스페이스의 `tsconfig.json`에 와일드카드 경로 매핑을 추가하세요.
-기본적으로 `ng generate library`는 패키지 루트만 매핑하므로 하위 경로는 포함되지 않습니다.
+   ```text
+   projects/my-lib/
+   ├── package.json
+   ├── src/
+   │   ├── public-api.ts         (primary entry point: my-lib)
+   │   └── lib/
+   │       ├── my-lib.spec.ts
+   │       └── my-lib.ts
+   └── button/
+       └── src/
+           ├── button.spec.ts
+           ├── button.ts
+           └── public-api.ts     (secondary entry point: my-lib/button)
+   ```
 
-```json {header: 'tsconfig.json'}
-{
-  "compilerOptions": {
-    "paths": {
-      "my-lib": ["./dist/my-lib"],
-      "my-lib/*": ["./dist/my-lib/*"]
-    }
-  }
-}
+1. Registers the `"./button"` subpath in the library's `package.json`:
+
+   ```json {header: "projects/my-lib/package.json"}
+   {
+     "name": "my-lib",
+     "version": "0.0.1",
+     "exports": {
+       ".": "./src/public-api.ts",
+       "./button": "./button/src/public-api.ts"
+     },
+     …
+   }
+   ```
+
+1. Adds a `"my-lib/*"` wildcard path mapping in the workspace `tsconfig.json` (if not already present) so applications in the same workspace can resolve secondary entry points from the built library output:
+
+   ```json {header: "tsconfig.json"}
+   {
+     "compilerOptions": {
+       "paths": {
+         "my-lib": ["./dist/my-lib"],
+         "my-lib/*": ["./dist/my-lib/*"]
+       }
+     }
+   }
+   ```
+
+   Because `"my-lib/*"` is a wildcard pattern, it is added the first time you generate a secondary entry point and automatically covers all current and future secondary entry points without further updates to `tsconfig.json`.
+
+During the build, `@angular/build:library` discovers all entry points from the `"exports"` field in `projects/my-lib/package.json`, compiles and bundles each entry point, and writes the corresponding `types` and `default` export conditions into `dist/my-lib/package.json`.
+-->
+
+[`entry-point` 스키매틱](cli/generate/entry-point)을 사용해 라이브러리에 보조 진입점을 새로 생성하세요:
+
+```shell
+ng generate entry-point button --project my-lib
 ```
 
-IMPORTANT: 같은 라이브러리의 다른 진입점에서 코드를 임포트할 때는 상대 경로 대신 항상 패키지 임포트 경로(예: `import {ThemeService} from 'my-lib'`)를 사용하세요. `ng-packagr`는 의존성 순서대로 각 진입점을 별도로 빌드하므로 진입점 사이의 상대 임포트나 순환 의존성이 있으면 빌드가 실패합니다.
+`testing/harness`처럼 중첩된 하위 경로도 생성할 수 있습니다:
+
+```shell
+ng generate entry-point testing/harness --project my-lib
+```
+
+`ng generate entry-point button --project my-lib`를 실행하면 다음 작업을 수행합니다:
+
+1. 라이브러리에 `button/src/` 디렉터리를 만들고 그 안에 별도의 `public-api.ts` 파일과 초기 컴포넌트 파일을 생성합니다:
+
+   ```text
+   projects/my-lib/
+   ├── package.json
+   ├── src/
+   │   ├── public-api.ts         (primary entry point: my-lib)
+   │   └── lib/
+   │       ├── my-lib.spec.ts
+   │       └── my-lib.ts
+   └── button/
+       └── src/
+           ├── button.spec.ts
+           ├── button.ts
+           └── public-api.ts     (secondary entry point: my-lib/button)
+   ```
+
+1. 라이브러리의 `package.json`에 `"./button"` 하위 경로를 등록합니다:
+
+   ```json {header: "projects/my-lib/package.json"}
+   {
+     "name": "my-lib",
+     "version": "0.0.1",
+     "exports": {
+       ".": "./src/public-api.ts",
+       "./button": "./button/src/public-api.ts"
+     },
+     …
+   }
+   ```
+
+1. 같은 워크스페이스의 애플리케이션이 빌드된 라이브러리 결과물에서 보조 진입점을 찾을 수 있도록, 워크스페이스의 `tsconfig.json`에 `"my-lib/*"` 와일드카드 경로 매핑을 추가합니다. 이미 있다면 추가하지 않습니다:
+
+   ```json {header: "tsconfig.json"}
+   {
+     "compilerOptions": {
+       "paths": {
+         "my-lib": ["./dist/my-lib"],
+         "my-lib/*": ["./dist/my-lib/*"]
+       }
+     }
+   }
+   ```
+
+   `"my-lib/*"`는 와일드카드 패턴이므로 보조 진입점을 처음 생성할 때만 추가됩니다. 이후 `tsconfig.json`을 더 수정하지 않아도 기존 및 신규 보조 진입점에 모두 적용됩니다.
+
+빌드할 때 `@angular/build:library`는 `projects/my-lib/package.json`의 `"exports"` 필드에서 모든 진입점을 찾아 각각 컴파일하고 번들링합니다. 그 후 대응하는 `types` 및 `default` export 조건을 `dist/my-lib/package.json`에 기록합니다.
 
 <!--
 ## Refactoring parts of an application into a library
@@ -476,11 +508,10 @@ For more information, see [Schematics Overview](tools/cli/schematics) and [Schem
 <!--
 Use the Angular CLI and the npm package manager to build and publish your library as an npm package.
 
-Angular CLI uses a tool called [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/main/README.md) to create packages from your compiled code that can be published to npm.
-See [Building libraries with Ivy](tools/libraries/creating-libraries#publishing-libraries) for information on the distribution formats supported by `ng-packagr` and guidance on how
-to choose the right format for your library.
+The Angular CLI uses the `@angular/build:library` builder to compile your code into packages in the [Angular Package Format](tools/libraries/angular-package-format) that you can publish to npm.
+See [Publishing libraries](tools/libraries/creating-libraries#publishing-libraries) for information on the supported distribution formats and guidance on how to choose the right format for your library.
 
-You should always build libraries for distribution using the `production` configuration.
+You should always build libraries for distribution using the `production` configuration (the default configuration for `ng build`).
 This ensures that generated output uses the appropriate optimizations and the correct package format for npm.
 
 ```shell
@@ -494,10 +525,10 @@ npm publish
 
 Angular CLI와 npm 패키지 관리자를 사용해서 라이브러리를 빌드하고 npm 패키지로 배포하세요.
 
-Angular CLI는 [ng-packagr](https://github.com/ng-packagr/ng-packagr/blob/main/README.md)라는 도구로 컴파일된 코드를 npm에 배포할 수 있는 패키지로 만듭니다.
-`ng-packagr`가 지원하는 배포 형식과 라이브러리에 맞는 형식을 선택하는 방법은 [Ivy로 라이브러리 빌드하기](tools/libraries/creating-libraries#publishing-libraries)를 참고하세요.
+Angular CLI는 `@angular/build:library` 빌더로 코드를 [Angular 패키지 형식](tools/libraries/angular-package-format)으로 컴파일해 npm에 배포할 수 있는 패키지를 만듭니다.
+지원하는 배포 형식과 라이브러리에 맞는 형식을 선택하는 방법은 [라이브러리의 배포 형식](tools/libraries/creating-libraries#publishing-libraries)을 참고하세요.
 
-배포할 라이브러리는 항상 `production` 설정으로 빌드해야 합니다.
+배포할 라이브러리는 항상 `production` 설정(`ng build`의 기본 설정)으로 빌드해야 합니다.
 그러면 생성된 결과물에 적절한 최적화와 올바른 npm 패키지 형식이 적용됩니다.
 
 ```shell
@@ -513,64 +544,115 @@ npm publish
 -->
 
 <a id="managing-assets-in-a-library"></a>
-
 <a id="라이브러리의-정적-자원-관리하기"></a>
 
 ## 라이브러리의 정적 리소스 관리하기
 
 <!--
 In your Angular library, the distributable can include additional assets like theming files, Sass mixins, or documentation \(like a changelog\).
-For more information [copy assets into your library as part of the build](https://github.com/ng-packagr/ng-packagr/blob/main/docs/copy-assets.md) and [embed assets in component styles](https://github.com/ng-packagr/ng-packagr/blob/main/docs/embed-assets-css.md).
+By default, the library builder copies `README.md` and `LICENSE*` files from the root of your library to the output directory, and inlines assets referenced via relative `url()` paths in component stylesheets as data URLs.
+To copy additional files as part of the build, configure the [`assets` option](reference/configs/workspace-config#assets-configuration) on your library's `build` target in `angular.json`:
 
-IMPORTANT: When including additional assets like Sass mixins or pre-compiled CSS.
-You need to add these manually to the conditional ["exports"](tools/libraries/angular-package-format#exports) in the `package.json` of the primary entrypoint.
-
-`ng-packagr` will merge handwritten `"exports"` with the auto-generated ones, allowing for library authors to configure additional export subpaths, or custom conditions.
-
-```json
-
-"exports": {
-  ".": {
-    "sass": "./_index.scss",
-  },
-  "./theming": {
-    "sass": "./_theming.scss"
-  },
-  "./prebuilt-themes/indigo-pink.css": {
-    "style": "./prebuilt-themes/indigo-pink.css"
+```json {header: "angular.json"}
+{
+  "projects": {
+    "my-lib": {
+      "architect": {
+        "build": {
+          "builder": "@angular/build:library",
+          "options": {
+            "tsConfig": "projects/my-lib/tsconfig.lib.json",
+            "assets": [
+              "projects/my-lib/CHANGELOG.md",
+              "projects/my-lib/_index.scss",
+              "projects/my-lib/prebuilt-themes",
+              {
+                "glob": "**/*.scss",
+                "input": "projects/my-lib/src/theming",
+                "output": "theming"
+              }
+            ]
+          }
+        }
+      }
+    }
   }
 }
-
 ```
 
-The above is an extract from the [@angular/material](https://unpkg.com/browse/@angular/material/package.json) distributable.
+IMPORTANT: When including additional assets like Sass mixins or pre-compiled CSS, expose them in the [`"exports"`](tools/libraries/angular-package-format#exports) field of your library's `package.json`.
+
+The library builder merges custom `"exports"` subpaths and conditions with the generated entry point exports, allowing you to expose stylesheets or custom conditions alongside TypeScript entry points:
+
+```json {header: "projects/my-lib/package.json"}
+{
+  "exports": {
+    ".": {
+      "sass": "./_index.scss",
+      "default": "./src/public-api.ts"
+    },
+    "./theming": {
+      "sass": "./theming/_theming.scss"
+    },
+    "./prebuilt-themes/indigo-pink.css": {
+      "style": "./prebuilt-themes/indigo-pink.css"
+    }
+  }
+}
+```
 -->
 
-Angular 라이브러리의 배포 결과물에는 테마 파일, Sass 믹스인, 변경 이력 같은 문서 등의 추가 자원을 포함할 수 있습니다.
-자세한 내용은 [빌드 중 라이브러리에 자원 복사하기](https://github.com/ng-packagr/ng-packagr/blob/main/docs/copy-assets.md)와 [컴포넌트 스타일에 자원 포함하기](https://github.com/ng-packagr/ng-packagr/blob/main/docs/embed-assets-css.md)를 참고하세요.
+Angular 라이브러리의 배포 결과물에는 테마 파일, Sass 믹스인, 변경 이력 같은 문서 등의 추가 리소스를 포함할 수 있습니다.
+기본적으로 라이브러리 빌더는 라이브러리 루트의 `README.md`와 `LICENSE*` 파일을 출력 디렉터리로 복사합니다. 또한 컴포넌트 스타일시트에서 상대 경로의 `url()`로 참조한 리소스를 데이터 URL로 인라인 처리합니다.
+빌드 중에 다른 파일을 복사하려면 `angular.json`에서 라이브러리의 `build` 타깃에 [`assets` 옵션](reference/configs/workspace-config#assets-configuration)을 설정하세요:
 
-중요: Sass 믹스인이나 미리 컴파일한 CSS 같은 추가 자원을 포함할 때는 기본 진입점의 `package.json`에서 조건부 ["exports"](tools/libraries/angular-package-format#exports)에 직접 추가해야 합니다.
-
-`ng-packagr`는 직접 작성한 `"exports"`를 자동 생성한 항목과 병합합니다.
-따라서 라이브러리 작성자는 추가 export 하위 경로나 커스텀 조건을 설정할 수 있습니다.
-
-```json
-
-"exports": {
-  ".": {
-    "sass": "./_index.scss",
-  },
-  "./theming": {
-    "sass": "./_theming.scss"
-  },
-  "./prebuilt-themes/indigo-pink.css": {
-    "style": "./prebuilt-themes/indigo-pink.css"
+```json {header: "angular.json"}
+{
+  "projects": {
+    "my-lib": {
+      "architect": {
+        "build": {
+          "builder": "@angular/build:library",
+          "options": {
+            "tsConfig": "projects/my-lib/tsconfig.lib.json",
+            "assets": [
+              "projects/my-lib/CHANGELOG.md",
+              "projects/my-lib/_index.scss",
+              "projects/my-lib/prebuilt-themes",
+              {
+                "glob": "**/*.scss",
+                "input": "projects/my-lib/src/theming",
+                "output": "theming"
+              }
+            ]
+          }
+        }
+      }
+    }
   }
 }
-
 ```
 
-위 예제는 [@angular/material](https://unpkg.com/browse/@angular/material/package.json) 배포 결과물에서 발췌한 것입니다.
+중요: Sass 믹스인이나 미리 컴파일한 CSS 같은 추가 리소스를 포함할 때는 라이브러리의 `package.json`에 있는 [`"exports"`](tools/libraries/angular-package-format#exports) 필드로 공개하세요.
+
+라이브러리 빌더는 사용자 정의 `"exports"` 하위 경로와 조건을 자동 생성한 진입점 export에 병합하므로, TypeScript 진입점과 함께 스타일시트나 사용자 정의 조건을 공개할 수 있습니다:
+
+```json {header: "projects/my-lib/package.json"}
+{
+  "exports": {
+    ".": {
+      "sass": "./_index.scss",
+      "default": "./src/public-api.ts"
+    },
+    "./theming": {
+      "sass": "./theming/_theming.scss"
+    },
+    "./prebuilt-themes/indigo-pink.css": {
+      "style": "./prebuilt-themes/indigo-pink.css"
+    }
+  }
+}
+```
 
 <!--
 ## Peer dependencies
@@ -668,14 +750,9 @@ ng build my-lib --watch
 
 ```
 
-IMPORTANT: The CLI `build` command uses a different builder and invokes a different build tool for libraries than it does for applications.
+IMPORTANT: The CLI `build` command uses a different builder for libraries (`@angular/build:library`) than it does for applications (`@angular/build:application`).
 
-- The build system for applications, `@angular/build`, is based on `esbuild`, and is included in all new Angular CLI projects
-- The build system for libraries is based on `ng-packagr`.
-  It is only added to your dependencies when you add a library using `ng generate library my-lib`.
-
-The two build systems support different things, and even where they support the same things, they do those things differently.
-This means that the TypeScript source can result in different JavaScript code in a built library than it would in a built application.
+Libraries are compiled and packaged according to the [Angular Package Format](tools/libraries/angular-package-format), which means that TypeScript source code produces different output in a built library than it does in a built application.
 
 For this reason, an application that depends on a library should only use TypeScript path mappings that point to the _built library_.
 TypeScript path mappings should _not_ point to the library source `.ts` files.
@@ -706,14 +783,9 @@ ng build my-lib --watch
 
 ```
 
-중요: CLI의 `build` 명령은 라이브러리와 애플리케이션에 서로 다른 빌더와 빌드 도구를 사용합니다.
+중요: CLI의 `build` 명령은 라이브러리(`@angular/build:library`)와 애플리케이션(`@angular/build:application`)에 서로 다른 빌더를 사용합니다.
 
-- 애플리케이션 빌드 시스템인 `@angular/build`는 `esbuild`를 기반으로 하며, 모든 새 Angular CLI 프로젝트에 포함됩니다.
-- 라이브러리 빌드 시스템은 `ng-packagr`를 기반으로 합니다.
-  `ng generate library my-lib`로 라이브러리를 추가할 때만 의존성에 추가됩니다.
-
-두 빌드 시스템이 지원하는 기능은 서로 다르며, 같은 기능을 지원하더라도 처리 방식이 다릅니다.
-따라서 같은 TypeScript 소스라도 라이브러리로 빌드했을 때와 애플리케이션으로 빌드했을 때 생성되는 JavaScript 코드가 다를 수 있습니다.
+라이브러리는 [Angular 패키지 형식](tools/libraries/angular-package-format)에 따라 컴파일하고 패키징하므로, 같은 TypeScript 소스라도 라이브러리로 빌드했을 때와 애플리케이션으로 빌드했을 때 출력이 다릅니다.
 
 이 때문에 라이브러리에 의존하는 애플리케이션은 _빌드된 라이브러리_ 를 가리키는 TypeScript 경로 매핑만 사용해야 합니다.
 TypeScript 경로 매핑이 라이브러리의 원본 `.ts` 파일을 가리켜서는 _안 됩니다_.
@@ -853,26 +925,26 @@ To use linked libraries, you need to configure your application's `angular.json`
 <!--
 There are two distribution formats to use when publishing a library:
 
-| Distribution formats        | Details                                                                                                                                                                                                                                                                                                                                  |
-| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Partial-Ivy \(recommended\) | Contains portable code that can be consumed by Ivy applications built with any version of Angular from v12 onwards.                                                                                                                                                                                                                      |
-| Full-Ivy                    | Contains private Angular Ivy instructions, which are not guaranteed to work across different versions of Angular. This format requires that the library and application are built with the _exact_ same version of Angular. This format is useful for environments where all library and application code is built directly from source. |
+| Distribution formats        | Details                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Partial-Ivy \(recommended\) | Contains portable code that can be consumed by Ivy applications built with any version of Angular from v12 onwards.                                                                                                                                                                                                                                                                                                                               |
+| Full-Ivy                    | Contains private Angular Ivy instructions. The compiler ABI (the internal runtime APIs called by these instructions) is stable across patch versions but may change between minor versions. This format requires that the library and application are built with the same minor version of Angular. This format is useful for environments where all library and application code is built from source or shared in a microfrontend architecture. |
 
 For publishing to npm use the partial-Ivy format as it is stable between patch versions of Angular.
 
-Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions are not part of Angular's public API, and so might change between patch versions.
+Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions depend on the compiler ABI, which might change between minor versions.
 -->
 
 라이브러리를 배포할 때 사용할 수 있는 형식은 두 가지입니다:
 
-| 배포 형식            | 설명                                                                                                                                                                                                                                                         |
-| :------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Partial-Ivy \(권장\) | v12 이상의 어떤 Angular 버전으로 빌드한 Ivy 애플리케이션에서도 사용할 수 있는 이식 가능한 코드를 포함합니다.                                                                                                                                                 |
-| Full-Ivy             | Angular의 비공개 Ivy 명령어를 포함하므로 서로 다른 Angular 버전 사이의 동작을 보장하지 않습니다. 라이브러리와 애플리케이션을 _정확히_ 같은 Angular 버전으로 빌드해야 합니다. 모든 라이브러리와 애플리케이션 코드를 소스에서 직접 빌드하는 환경에 유용합니다. |
+| 배포 형식 | 설명 |
+| :--- | :--- |
+| Partial-Ivy \(권장\) | v12 이상의 Angular 버전으로 빌드한 Ivy 애플리케이션에서 사용할 수 있는 이식 가능한 코드를 포함합니다. |
+| Full-Ivy | Angular의 비공개 Ivy 명령어를 포함합니다. 컴파일러 ABI(이 명령어가 호출하는 내부 런타임 API)는 패치 버전 간에는 안정적이지만 마이너 버전 간에는 바뀔 수 있습니다. 라이브러리와 애플리케이션을 같은 Angular 마이너 버전으로 빌드해야 합니다. 모든 라이브러리와 애플리케이션 코드를 소스에서 빌드하거나 마이크로프런트엔드 아키텍처에서 공유하는 환경에 유용합니다. |
 
 npm에 배포할 때는 Angular 패치 버전 사이에서도 안정적으로 유지되는 partial-Ivy 형식을 사용하세요.
 
-생성된 Ivy 명령어는 Angular의 공개 API가 아니어서 패치 버전 사이에서도 변경될 수 있으므로, npm에 배포할 라이브러리는 full-Ivy 코드로 컴파일하지 마세요.
+생성된 Ivy 명령어는 마이너 버전 간에 바뀔 수 있는 컴파일러 ABI에 의존하므로, npm에 배포할 라이브러리는 full-Ivy 코드로 컴파일하지 마세요.
 
 <!--
 ## Ensuring library version compatibility
@@ -887,11 +959,11 @@ The Angular version used to build an application should always be the same or gr
 For example, if you had a library using Angular version 13, the application that depends on that library should use Angular version 13 or later.
 Angular does not support using an earlier version for the application.
 
-If you intend to publish your library to npm, compile with partial-Ivy code by setting `"compilationMode": "partial"` in `tsconfig.prod.json`.
+If you intend to publish your library to npm, build with the `production` configuration, which sets `"compilationMode": "partial"` by default to emit partial-Ivy code.
 This partial format is stable between different versions of Angular, so is safe to publish to npm.
 Code with this format is processed during the application build using the same version of the Angular compiler, ensuring that the application and all of its libraries use a single version of Angular.
 
-Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions are not part of Angular's public API, and so might change between patch versions.
+Avoid compiling libraries with full-Ivy code if you are publishing to npm because the generated Ivy instructions depend on the compiler ABI, which might change between minor versions.
 
 If you've never published a package in npm before, you must create a user account.
 Read more in [Publishing npm Packages](https://docs.npmjs.com/getting-started/publishing-npm-packages).
@@ -901,11 +973,11 @@ Read more in [Publishing npm Packages](https://docs.npmjs.com/getting-started/pu
 예를 들어 Angular 버전 13을 사용하는 라이브러리가 있다면 이를 사용하는 애플리케이션은 Angular 버전 13 이상이어야 합니다.
 애플리케이션에서 더 낮은 버전을 사용하는 것은 지원하지 않습니다.
 
-npm에 라이브러리를 배포하려면 `tsconfig.prod.json`에 `"compilationMode": "partial"`을 설정해서 partial-Ivy 코드로 컴파일하세요.
+npm에 라이브러리를 배포하려면 `production` 설정으로 빌드하세요. 이 설정은 기본적으로 `"compilationMode": "partial"`을 적용해 partial-Ivy 코드를 출력합니다.
 이 부분 컴파일 형식은 서로 다른 Angular 버전 사이에서도 안정적으로 유지되므로 npm에 안전하게 배포할 수 있습니다.
 이 형식의 코드는 애플리케이션 빌드 중에 같은 Angular 컴파일러 버전으로 처리되므로, 애플리케이션과 모든 라이브러리가 하나의 Angular 버전을 사용하게 됩니다.
 
-생성된 Ivy 명령어는 Angular의 공개 API가 아니어서 패치 버전 사이에서도 변경될 수 있으므로, npm에 배포할 라이브러리는 full-Ivy 코드로 컴파일하지 마세요.
+생성된 Ivy 명령어는 마이너 버전 간에 바뀔 수 있는 컴파일러 ABI에 의존하므로, npm에 배포할 라이브러리는 full-Ivy 코드로 컴파일하지 마세요.
 
 npm에 패키지를 배포한 적이 없다면 사용자 계정을 만들어야 합니다.
 자세한 내용은 [npm 패키지 배포하기](https://docs.npmjs.com/getting-started/publishing-npm-packages)를 참고하세요.

@@ -18,9 +18,7 @@ describe('signalGraphTool', () => {
 
   it('should discover signal graph from targeted element', async () => {
     @Component({
-      selector: 'signal-graph-test-root',
       template: '<div>Signals test: {{ double() }}</div>',
-      standalone: true,
     })
     class SignalGraphTestComponent {
       private readonly count = signal(1, {debugName: 'count'});
