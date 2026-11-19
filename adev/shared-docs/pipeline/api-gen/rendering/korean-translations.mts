@@ -23,6 +23,7 @@ export function translateDocumentation<T>(data: T, catalog: TranslationCatalog):
         const isProse =
           key === 'description' ||
           key === 'shortDescription' ||
+          key === 'deprecated' ||
           key === 'longDescription' ||
           (isJsDocTag &&
             key === 'comment' &&
@@ -37,9 +38,14 @@ export function translateDocumentation<T>(data: T, catalog: TranslationCatalog):
   return visit(data) as T;
 }
 
-/** Only externally generated CLI/Aria/CDK docs use these catalogs. Framework data is untouched. */
-export function getTranslationDomain(sourcePath: string): string | undefined {
-  return sourcePath
-    .replaceAll('\\', '/')
-    .match(/(?:^|\/)adev\/src\/content\/(cli|aria|cdk)\//)?.[1];
+/** Only explicit external collections and the primary Router API have Korean catalogs. */
+export function getTranslationDomain(sourcePath: string, moduleName?: string): string | undefined {
+  const normalizedPath = sourcePath.replaceAll('\\', '/');
+  if (
+    moduleName === '@angular/router' &&
+    /(?:^|\/)adev\/src\/content\/api\/router_docs_api\.json$/.test(normalizedPath)
+  ) {
+    return 'router';
+  }
+  return normalizedPath.match(/(?:^|\/)adev\/src\/content\/(cli|aria|cdk)\//)?.[1];
 }

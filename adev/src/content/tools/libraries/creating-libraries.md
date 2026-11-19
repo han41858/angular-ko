@@ -338,7 +338,7 @@ ng generate entry-point testing/harness --project my-lib
    projects/my-lib/
    ├── package.json
    ├── src/
-   │   ├── public-api.ts         (primary entry point: my-lib)
+   │   ├── public-api.ts         (기본 진입점: my-lib)
    │   └── lib/
    │       ├── my-lib.spec.ts
    │       └── my-lib.ts
@@ -346,7 +346,7 @@ ng generate entry-point testing/harness --project my-lib
        └── src/
            ├── button.spec.ts
            ├── button.ts
-           └── public-api.ts     (secondary entry point: my-lib/button)
+           └── public-api.ts     (보조 진입점: my-lib/button)
    ```
 
 1. 라이브러리의 `package.json`에 `"./button"` 하위 경로를 등록합니다:

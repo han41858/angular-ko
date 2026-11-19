@@ -46,8 +46,11 @@ function parseEntryData(
 ): EntryCollection[] {
   return srcs.flatMap((jsonDataFilePath): EntryCollection | EntryCollection[] => {
     const fileContent = readFileSync(jsonDataFilePath, {encoding: 'utf8'});
-    const domain = getTranslationDomain(jsonDataFilePath);
     const source = JSON.parse(fileContent) as unknown;
+    const domain = getTranslationDomain(
+      jsonDataFilePath,
+      (source as Partial<EntryCollection> | null)?.moduleName,
+    );
     const fileContentJson =
       domain && catalogs[domain] ? translateDocumentation(source, catalogs[domain]) : source;
     if ((fileContentJson as EntryCollection).entries) {

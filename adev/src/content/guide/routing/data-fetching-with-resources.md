@@ -489,7 +489,7 @@ export class TaskDetail {
 }
 ```
 
-NOTE: 라우터가 라우팅 상태를 컴포넌트 입력에 바인딩할 때 같은 이름이 있으면 리소스가 라우팅 규칙의 `data`(리졸버가 반환한 값 포함), 경로 파라미터, 쿼리 파라미터보다 우선합니다.
+참고: 라우터가 라우팅 상태를 컴포넌트 입력에 바인딩할 때 같은 이름이 있으면 리소스가 라우팅 규칙의 `data`(리졸버가 반환한 값 포함), 경로 파라미터, 쿼리 파라미터보다 우선합니다.
 
 <a id="chaining-a-resource-off-an-ancestor-resource"></a>
 
@@ -532,9 +532,9 @@ const routes: Routes = [
 ];
 ```
 
-IMPORTANT: 바깥쪽 `resources` 함수 본문에서 `ctx.resources()`를 직접 호출하거나 구조 분해하지 마세요(예: `const {user} = ctx.resources()`). 상위 라우팅 규칙은 병렬로 초기화되며 비동기적으로 초기화될 수 있으므로, 라우팅 규칙을 설정할 때는 상위 리소스를 사용할 수 없습니다. 반응형 컨텍스트 밖에서 `ctx.resources()`를 동기적으로 호출하면 오류가 발생하고 내비게이션이 실패합니다. 항상 리소스의 `params` 함수 안에서 `ctx.resources()`를 반응형으로 읽으세요.
+중요: 바깥쪽 `resources` 함수 본문에서 `ctx.resources()`를 직접 호출하거나 구조 분해하지 마세요(예: `const {user} = ctx.resources()`). 상위 라우팅 규칙은 병렬로 초기화되며 비동기적으로 초기화될 수 있으므로, 라우팅 규칙을 설정할 때는 상위 리소스를 사용할 수 없습니다. 반응형 컨텍스트 밖에서 `ctx.resources()`를 동기적으로 호출하면 오류가 발생하고 내비게이션이 실패합니다. 항상 리소스의 `params` 함수 안에서 `ctx.resources()`를 반응형으로 읽으세요.
 
-NOTE: `ctx.resources()`의 타입은 `Resource<unknown>`의 레코드이므로 상속된 리소스를 읽을 때 해당 값의 타입으로 단언하세요(예: `as Resource<User>`).
+참고: `ctx.resources()`의 타입은 `Resource<unknown>`의 레코드이므로 상속된 리소스를 읽을 때 해당 값의 타입으로 단언하세요(예: `as Resource<User>`).
 
 `chain()`은 상위 리소스의 상태도 전달합니다. 상위 리소스에 오류가 발생하면 연결된 리소스에도 `ResourceDependencyError`가 발생하고, 그 리소스가 블로킹 리소스라면 라우터가 내비게이션을 취소합니다. 상위 리소스가 `idle` 상태라면 연결된 리소스도 `idle`이 됩니다.
 
@@ -788,7 +788,7 @@ NOTE: Freezing applies only to the resources that the router exposes on `Activat
 
 `resources` 함수가 `resource()`처럼 쓰기 가능한 리소스를 반환하더라도 라우터는 읽기 전용으로 제공합니다. 리소스 시그널을 읽거나 `reload()`를 실행할 수는 있지만 `set()`, `update()`는 사용할 수 없습니다. 내비게이션이나 롤백 복구가 진행 중일 때 `reload()`를 실행하면 라우터의 전환 추적을 방해하지 않도록 `false`를 반환합니다.
 
-NOTE: 상태 고정은 라우터가 `ActivatedRoute`로 제공하는 리소스에만 적용됩니다. `ctx.resources()`를 통해 접근하는 원본 리소스는 항상 실시간 상태를 반환하므로, 연결된 리소스가 내비게이션 중에도 상위 리소스의 변화에 반응할 수 있습니다.
+참고: 상태 고정은 라우터가 `ActivatedRoute`로 제공하는 리소스에만 적용됩니다. `ctx.resources()`를 통해 접근하는 원본 리소스는 항상 실시간 상태를 반환하므로, 연결된 리소스가 내비게이션 중에도 상위 리소스의 변화에 반응할 수 있습니다.
 
 <!--
 ### Rollback recovery on cancellation

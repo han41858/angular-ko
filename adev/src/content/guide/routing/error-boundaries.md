@@ -10,11 +10,11 @@ NOTE: This guide covers error handling at the route level. For catching errors w
 
 # 라우팅의 오류 경계
 
-IMPORTANT: 라우터 오류 경계는 [개발자 프리뷰](reference/releases#developer-preview)입니다.
+중요: 라우터 오류 경계는 [개발자 프리뷰](reference/releases#developer-preview)입니다.
 
 웹 애플리케이션을 만들다 보면 컴포넌트를 초기화하거나 데이터를 불러오거나 화면을 렌더링하는 중에 런타임 오류가 발생할 수 있습니다. Angular 라우터는 **오류 경계**를 사용해 오류의 영향을 개별 라우팅 규칙으로 제한하므로, 컴포넌트 하나의 실패로 애플리케이션 화면 전체가 중단되는 일을 방지합니다.
 
-NOTE: 이 가이드는 라우팅 규칙 단위의 오류 처리를 다룹니다. 컴포넌트 템플릿의 특정 영역에서 발생하는 오류를 포착하려면 [템플릿 `@boundary` 블록 가이드](/guide/templates/error-boundaries)를 참고하세요.
+참고: 이 가이드는 라우팅 규칙 단위의 오류 처리를 다룹니다. 컴포넌트 템플릿의 특정 영역에서 발생하는 오류를 포착하려면 [템플릿 `@boundary` 블록 가이드](/guide/templates/error-boundaries)를 참고하세요.
 
 <!--
 ## What are router error boundaries?
@@ -82,9 +82,9 @@ export const routes: Routes = [
 
 `/products/123`으로 이동할 때 `ProductDetails`를 생성하거나 렌더링하는 중 오류가 발생하면 Angular 라우터는 대신 `<router-outlet>` 안에 `ProductErrorFallback`을 생성합니다.
 
-NOTE: `errorComponent`는 오류 경계를 활성화한 경우에만 동작합니다. [전역 오류 경계 설정](#global-error-boundary-configuration)을 참고하세요.
+참고: `errorComponent`는 오류 경계를 활성화한 경우에만 동작합니다. [전역 오류 경계 설정](#global-error-boundary-configuration)을 참고하세요.
 
-NOTE: `loadComponent`로 지연 로드할 수 있는 라우팅 컴포넌트와 달리, `errorComponent`는 라우팅 설정에서 즉시 로드해야 합니다.
+참고: `loadComponent`로 지연 로드할 수 있는 라우팅 컴포넌트와 달리, `errorComponent`는 라우팅 설정에서 즉시 로드해야 합니다.
 
 ---
 
@@ -150,9 +150,9 @@ export class ProductErrorFallback {
 }
 ```
 
-NOTE: 라우팅 설정에 이름이 `error`인 파라미터, 쿼리 파라미터 또는 라우팅 데이터가 있더라도 오류 컴포넌트의 `error` 입력에는 포착한 런타임 `Error`가 항상 우선합니다.
+참고: 라우팅 설정에 이름이 `error`인 파라미터, 쿼리 파라미터 또는 라우팅 데이터가 있더라도 오류 컴포넌트의 `error` 입력에는 포착한 런타임 `Error`가 항상 우선합니다.
 
-IMPORTANT: `errorComponent` 자체를 생성하거나 렌더링하는 중 오류가 발생하면 `RouterOutlet`은 그 오류를 다시 포착하지 않습니다. 무한 오류 루프를 방지하기 위해 예외는 아웃렛 밖으로 전파되어 루트 `ErrorHandler` 또는 이를 감싸는 [템플릿 `@boundary` 블록](/guide/templates/error-boundaries)으로 전달됩니다.
+중요: `errorComponent` 자체를 생성하거나 렌더링하는 중 오류가 발생하면 `RouterOutlet`은 그 오류를 다시 포착하지 않습니다. 무한 오류 루프를 방지하기 위해 예외는 아웃렛 밖으로 전파되어 루트 `ErrorHandler` 또는 이를 감싸는 [템플릿 `@boundary` 블록](/guide/templates/error-boundaries)으로 전달됩니다.
 
 <!--
 ## Route parameter and data binding
@@ -253,10 +253,10 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withErrorBoundaries({
-        // Default fallback component for routes that do not define their own errorComponent
+        // errorComponent를 지정하지 않은 라우팅 규칙에 사용할 기본 대체 컴포넌트
         defaultErrorComponent: GlobalErrorFallback,
 
-        // Global telemetry hook invoked whenever a route error is caught
+        // 라우팅 오류를 포착할 때마다 호출되는 전역 텔레메트리 훅
         onError: (error, details) => {
           inject(AnalyticsService).logException(error, details);
         },
@@ -347,7 +347,7 @@ export class UserProfile {
     loader: async () => {
       const response = await fetch('/api/user');
       if (response.status === 401) {
-        // Automatically redirects to /login when unauthorized
+        // 인증되지 않으면 자동으로 /login으로 리다이렉트
         throw new RedirectCommand(this.router.parseUrl('/login'));
       }
       return response.json();
@@ -362,7 +362,7 @@ export class UserProfile {
 2. 중첩 아웃렛이나 템플릿 오류 경계가 있다면 Angular는 중복 명령을 제거해 내비게이션이 한 번만 시작되도록 합니다.
 3. 전환 중에는 오류 컴포넌트를 설정한 경우 해당 컴포넌트가 렌더링됩니다.
 
-NOTE: `errorComponent`가 설정되지 않은 상태에서 `RedirectCommand`를 던지면 라우터가 내비게이션을 시작하고, 전역 `ErrorHandler`가 이를 애플리케이션 충돌로 기록하지 않도록 해당 오류를 더 이상 전파하지 않습니다.
+참고: `errorComponent`가 설정되지 않은 상태에서 `RedirectCommand`를 던지면 라우터가 내비게이션을 시작하고, 전역 `ErrorHandler`가 이를 애플리케이션 충돌로 기록하지 않도록 해당 오류를 더 이상 전파하지 않습니다.
 
 <!--
 ## Error boundary scope vs. navigation errors
@@ -384,7 +384,7 @@ NOTE: When an error boundary displays an `errorComponent`, `canDeactivate` guard
 - **뷰 계층 오류(오류 경계)**: 컴포넌트 생성자, 의존성 주입, 생명주기 훅(`ngOnInit`), 템플릿 표현식, 컴포넌트의 `resource()` 로더에서 발생합니다. `RouterOutlet`이 오류를 포착하고 `errorComponent`를 표시합니다.
 - **내비게이션 파이프라인 오류(`NavigationError`)**: `canActivate` 또는 `canMatch` 가드나 라우팅 규칙의 `resolve` 데이터 함수가 실패하는 등 라우팅 규칙이 활성화되기 전에 발생합니다. 내비게이션은 아웃렛에 도달하기 전에 중단되며, `withNavigationErrorHandler`로 오류 처리 방식을 변경할 수 있습니다.
 
-NOTE: 오류 경계가 `errorComponent`를 표시하는 상태에서 다른 곳으로 이동하면 해당 라우팅 규칙에 설정한 `canDeactivate` 가드가 실행됩니다. 가드는 `component` 파라미터로 현재 활성화된 `errorComponent` 인스턴스를 받습니다. 가드가 특정 컴포넌트의 프로퍼티나 메서드에 접근한다면 타입을 확인하거나 오류 컴포넌트 인스턴스를 안전하게 처리하세요.
+참고: 오류 경계가 `errorComponent`를 표시하는 상태에서 다른 곳으로 이동하면 해당 라우팅 규칙에 설정한 `canDeactivate` 가드가 실행됩니다. 가드는 `component` 파라미터로 현재 활성화된 `errorComponent` 인스턴스를 받습니다. 가드가 특정 컴포넌트의 프로퍼티나 메서드에 접근한다면 타입을 확인하거나 오류 컴포넌트 인스턴스를 안전하게 처리하세요.
 
 <!--
 ## Next steps
