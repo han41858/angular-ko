@@ -44,7 +44,7 @@ describe('Korean generated documentation overlays', () => {
     expect(translateDocumentation(data, {})).toEqual(data);
   });
 
-  it('uses only the explicit cross-repository content directories', () => {
+  it('uses the explicit cross-repository content directories', () => {
     expect(getTranslationDomain('adev/src/content/cli/build.json')).toBe('cli');
     expect(getTranslationDomain('/execroot/angular/adev/src/content/aria/aria-tabs.json')).toBe(
       'aria',
@@ -52,5 +52,18 @@ describe('Korean generated documentation overlays', () => {
     expect(getTranslationDomain('C:\\repo\\adev\\src\\content\\cdk\\cdk_testing.json')).toBe('cdk');
     expect(getTranslationDomain('adev/src/content/api/core.json')).toBeUndefined();
     expect(getTranslationDomain('packages/core/cli/file.json')).toBeUndefined();
+  });
+
+  it('localizes only the primary Router framework API collection', () => {
+    const routerPath = '/execroot/angular/adev/src/content/api/router_docs_api.json';
+    expect(getTranslationDomain(routerPath, '@angular/router')).toBe('router');
+    expect(getTranslationDomain(routerPath)).toBeUndefined();
+    expect(getTranslationDomain(routerPath, '@angular/router/testing')).toBeUndefined();
+    expect(
+      getTranslationDomain('adev/src/content/api/router_testing_docs_api.json', '@angular/router'),
+    ).toBeUndefined();
+    expect(
+      getTranslationDomain('adev/src/content/api/core_docs_api.json', '@angular/core'),
+    ).toBeUndefined();
   });
 });

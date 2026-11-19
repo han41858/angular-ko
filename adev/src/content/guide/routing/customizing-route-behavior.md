@@ -585,7 +585,7 @@ export class CustomRouteReuseStrategy implements RouteReuseStrategy {
 IMPORTANT: Inherited route [resources](guide/routing/data-fetching-with-resources#resource-inheritance) do not work with a custom `RouteReuseStrategy` that detaches a route without also detaching the ancestors whose resources it depends on.
 -->
 
-IMPORTANT: 상위 라우팅 규칙의 [리소스](guide/routing/data-fetching-with-resources#resource-inheritance)를 상속받는 경우, 커스텀 `RouteReuseStrategy`에서 해당 규칙만 분리하고 리소스를 제공하는 상위 규칙을 함께 분리하지 않으면 이 리소스는 동작하지 않습니다.
+중요: 상위 라우팅 규칙의 [리소스](guide/routing/data-fetching-with-resources#resource-inheritance)를 상속받는 경우, 커스텀 `RouteReuseStrategy`에서 해당 규칙만 분리하고 리소스를 제공하는 상위 규칙을 함께 분리하지 않으면 이 리소스는 동작하지 않습니다.
 
 <!--
 ### Manually destroying detached route handles
