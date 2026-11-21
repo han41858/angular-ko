@@ -1,0 +1,62 @@
+name: Verify Korean docs production build
+
+on:
+  push:
+    branches:
+      - verify/ko-da7-production-20261121
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '24.22.3'
+          package-manager-cache: false
+      - name: Install dependencies
+        env:
+          CYPRESS_INSTALL_BINARY: '0'
+        run: |
+          corepack enable pnpm
+          pnpm install --frozen-lockfile
+      - name: Build Korean documentation
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+        run: |
+          pnpm bazel build //adev:build.production \
+            --jobs=2 \
+            --local_resources=memory=6144 \
+            --spawn_strategy=processwrapper-sandbox \
+            --action_env=NG_BUILD_MAX_WORKERS=2 \
+            --action_env=LC_ALL=C.UTF-8 \
+            --action_env=LANG=C.UTF-8 \
+            --action_env=TZ=UTC
+      - name: Check extracted Router and translation catalogs
+        run: |
+          node adev/scripts/check-korean-doc-translations.mjs
+          extracted=dist/bin/adev/src/content/api/router_docs_api.json
+          test -s "$extracted"
+          node adev/scripts/check-korean-doc-translations.mjs --router "$extracted"
+      - name: Check generated output
+        run: |
+          root=dist/bin/adev/dist/browser
+          test -s "$root/index.csr.html"
+          grep -q 'outputSchema' "$root/ai/webmcp/index.html"
+          grep -q '출력 스키마 명시하기' "$root/ai/webmcp/index.html"
+          grep -q '검색 조건과 일치하는 상품 이름 목록입니다.' "$root/ai/webmcp/index.html"
+          grep -q 'matchingProducts' "$root/ai/webmcp/index.html"
+          grep -q 'Angular는 반환값이' "$root/ai/webmcp/index.html"
+          grep -q 'NG0957' "$root/errors/index.html"
+          grep -q 'id="fixing-the-error"' "$root/errors/NG0957/index.html"
+          grep -q 'keyvalue' "$root/errors/NG0957/index.html"
+          grep -q '순회할 수 없음' "$root/errors/NG0957/index.html"
+          grep -q 'guide/routing' "$root/guide/routing/index.html"
+          grep -A2 "label: '라우팅'" adev/src/app/routing/navigation-entries/index.ts | grep -q "status: 'updated'"
+          grep -rl 'G-BDHJXDP0GW' --include='*.js' "$root" > "$RUNNER_TEMP/analytics-js.txt"
