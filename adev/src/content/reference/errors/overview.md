@@ -54,6 +54,7 @@
 | `NG0951`  | [Child query result is required but no value is available](errors/NG0951)            |
 | `NG0955`  | [Track expression resulted in duplicated keys for a given collection](errors/NG0955) |
 | `NG0956`  | [Tracking expression caused re-creation of the DOM structure](errors/NG0956)         |
+| `NG0957`  | [Collection used in @for is not iterable](errors/NG0957)                             |
 | `NG0991`  | [Resource completed before producing a value](errors/NG0991)                         |
 | `NG01002` | [Missing Control Value](errors/NG01002)                                              |
 | `NG01055` | [Missing control for `formControlName`](errors/NG01055)                              |
@@ -110,6 +111,7 @@
 | `NG0951`  | [필수 자식 쿼리 결과에 사용할 수 있는 값이 없음](errors/NG0951)              |
 | `NG0955`  | [컬렉션에서 중복된 키를 생성하는 추적 표현식](errors/NG0955)                 |
 | `NG0956`  | [DOM 구조를 다시 생성하게 만드는 추적 표현식](errors/NG0956)                 |
+| `NG0957`  | [@for에 사용한 컬렉션을 순회할 수 없음](errors/NG0957)                       |
 | `NG0991`  | [값을 생성하기 전에 리소스가 완료됨](errors/NG0991)                          |
 | `NG01002` | [누락된 폼 컨트롤 값](errors/NG01002)                                        |
 | `NG01055` | [`formControlName`에 해당하는 컨트롤 누락](errors/NG01055)                   |
