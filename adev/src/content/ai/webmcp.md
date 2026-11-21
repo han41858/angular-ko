@@ -22,7 +22,7 @@ WebMCP는 웹 애플리케이션이 브라우저 내부에서 직접 실행되�
 예를 들어 신규 사용자 등록 애플리케이션은 브라우저의 AI 에이전트가 DOM 상호작용으로 복잡한 마법사 UI를 거치는 대신, 사용자를 직접 생성하도록 WebMCP 도구를 제공할 수 있습니다.
 
 Angular는 WebMCP를 실험적으로 지원합니다.
-애플리케이션의 의존성 주입 라이프사이클와 연결된 도구를 쉽게 등록하고, 시그널 폼을 AI가 사용할 수 있는 도구로 자동 변환할 수 있습니다.
+애플리케이션의 의존성 주입 라이프사이클과 연결된 도구를 쉽게 등록하고, 시그널 폼을 AI가 사용할 수 있는 도구로 자동 변환할 수 있습니다.
 
 중요: WebMCP 명세는 매우 초기 단계이며 자주 변경됩니다.
 따라서 Angular의 WebMCP 지원은 현재 [**실험 단계**](reference/releases#experimental)입니다.
@@ -121,6 +121,8 @@ import {provideExperimentalWebMcpTools} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
 import {AppRoot} from './app-root';
 
+const allProducts: string[] = [/* ... */];
+
 bootstrapApplication(AppRoot, {
   providers: [
     provideExperimentalWebMcpTools([
@@ -142,6 +144,18 @@ bootstrapApplication(AppRoot, {
           required: ['query'],
           additionalProperties: false,
         },
+        outputSchema: {
+          type: 'object',
+          properties: {
+            results: {
+              type: 'array',
+              items: {type: 'string'},
+              description: 'List of matching product names.',
+            },
+          },
+          required: ['results'],
+          additionalProperties: false,
+        },
         execute: ({query, maxResults}) => {
           // Type of `query` is inferred as `string`.
           // Type of `maxResults` is inferred as `number | undefined`.
@@ -152,9 +166,11 @@ bootstrapApplication(AppRoot, {
             throw new Error(`Bad maxResults: ${maxResults}`);
 
           const limit = maxResults ?? 5;
-          return {
-            content: [{type: 'text', text: `Returning up to ${limit} results for "${query}".`}],
-          };
+          const matchingProducts = allProducts
+            .filter((product) => product.includes(query))
+            .slice(0, limit);
+
+          return {results: matchingProducts};
         },
       },
     ]),
@@ -173,40 +189,56 @@ import {provideExperimentalWebMcpTools} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
 import {AppRoot} from './app-root';
 
+const allProducts: string[] = [/* ... */];
+
 bootstrapApplication(AppRoot, {
   providers: [
     provideExperimentalWebMcpTools([
       {
         name: 'searchCatalog',
-        description: 'Searches the store catalog for products matching a query.',
+        description: '검색어와 일치하는 상품을 매장 카탈로그에서 찾습니다.',
         inputSchema: {
           type: 'object',
           properties: {
             query: {
               type: 'string',
-              description: 'The search keywords.',
+              description: '검색어입니다.',
             },
             maxResults: {
               type: 'number',
-              description: 'Maximum number of results to return.',
+              description: '반환할 최대 결과 수입니다.',
             },
           },
           required: ['query'],
           additionalProperties: false,
         },
+        outputSchema: {
+          type: 'object',
+          properties: {
+            results: {
+              type: 'array',
+              items: {type: 'string'},
+              description: '검색 조건과 일치하는 상품 이름 목록입니다.',
+            },
+          },
+          required: ['results'],
+          additionalProperties: false,
+        },
         execute: ({query, maxResults}) => {
-          // `query`의 타입은 `string`으로 추론합니다.
-          // `maxResults`의 타입은 `number | undefined`로 추론합니다.
+          // `query`의 타입은 `string`으로 추론됩니다.
+          // `maxResults`의 타입은 `number | undefined`로 추론됩니다.
 
-          // 입력이 스키마에 맞는지 검증되지 않을 수 있으므로 실행 중 검증하는 것을 고려하세요.
+          // 입력이 스키마와 일치하는지 자동으로 검사하지 않을 수 있으므로 런타임에 검증하는 것을 고려하세요.
           if (typeof query !== 'string') throw new Error(`Bad query: ${query}`);
           if (typeof maxResults !== 'number' && maxResults !== undefined)
             throw new Error(`Bad maxResults: ${maxResults}`);
 
           const limit = maxResults ?? 5;
-          return {
-            content: [{type: 'text', text: `Returning up to ${limit} results for "${query}".`}],
-          };
+          const matchingProducts = allProducts
+            .filter((product) => product.includes(query))
+            .slice(0, limit);
+
+          return {results: matchingProducts};
         },
       },
     ]),
@@ -525,6 +557,10 @@ Angular는 입력 스키마를 추론하는 것 외에도 WebMCP 도구를 폼�
 검사가 끝나기 전에 제출 작업이 실행되므로 검사 오류가 에이전트에 전달되지 않습니다.
 이러한 검사는 제출 작업에서 처리하세요.
 
+참고: 기본적으로 비동기 유효성 검사기는 폼 제출을 막지 않습니다.
+검사가 끝나기 전에 제출 액션이 실행되므로 해당 오류가 에이전트에 전달되지 않습니다.
+이러한 검사는 제출 액션에서 처리하세요.
+
 <!--
 #### Constraints
 -->
@@ -594,6 +630,22 @@ Angular does not provide any implicit validation that the inputs provided by an 
 
 Angular는 에이전트가 제공한 입력이 정의된 JSON 스키마와 실제로 일치하는지 암시적으로 검증하지 않습니다.
 안정성을 확보하려면 `execute` 함수의 인자를 사용하기 전에 명시적으로 검증하는 것을 고려하세요.
+
+<!--
+### Define explicit output schemas
+-->
+
+<a id="define-explicit-output-schemas"></a>
+
+### 출력 스키마 명시하기
+
+<!--
+To make tool execution as predictable as possible for the AI agent, explicitly define an `outputSchema` and ensure your `execute` function returns an object that strictly matches it. Angular does not automatically validate that the returned content matches the defined `outputSchema`. Ensure your data matches the `outputSchema` or consider validating it at runtime to avoid confusing the agent with inconsistent information.
+-->
+
+AI 에이전트가 도구의 실행 결과를 예측할 수 있도록 `outputSchema`를 명시하고 `execute` 함수가 이 스키마와 정확히 일치하는 객체를 반환하도록 하세요.
+Angular는 반환값이 정의된 `outputSchema`와 일치하는지 자동으로 검증하지 않습니다.
+데이터가 `outputSchema`와 일치하도록 하거나 런타임에 검증해 일관되지 않은 정보가 에이전트에 전달되지 않도록 하세요.
 
 <!--
 ### Testing
