@@ -234,19 +234,20 @@ export class RegistrationComponent {
 A field is considered "empty" when its value is one of the following, and non-empty for every other
 value — including `0` and the empty array `[]`:
 
-| Condition                | Example     |
-| ------------------------ | ----------- |
-| Value is `null`          | `null`      |
-| Value is `undefined`     | `undefined` |
-| Value is an empty string | `''`        |
-| Value is `false`         | `false`     |
-| Value is `NaN`           | `NaN`       |
+| Condition                | Example                        |
+| ------------------------ | ------------------------------ |
+| Value is `null`          | `null`                         |
+| Value is `undefined`     | `undefined`                    |
+| Value is an empty string | `''`                           |
+| Value is `false`         | `false`                        |
+| Value is non-finite      | `NaN`, `Infinity`, `-Infinity` |
 
 The last two are worth calling out:
 
 - `false` is empty to follow the native semantics of `required` on `<input type="checkbox">`, where
   an unchecked box fails validation.
-- `NaN` is empty because it is usually the result of a parsing error, and is not a valid number.
+- Non-finite numbers (`NaN`, `Infinity`, `-Infinity`) are empty because they are not valid numbers
+  in form controls and clear native numeric controls.
 
 For conditional requirements, use the `when` option:
 
@@ -304,18 +305,18 @@ export class RegistrationComponent {
 
 필드 값이 다음 중 하나이면 "빈 값"으로 판단합니다. `0`이나 빈 배열 `[]`을 포함한 다른 모든 값은 비어 있지 않은 것으로 판단합니다:
 
-| 조건                  | 예제        |
-| --------------------- | ----------- |
-| 값이 `null`일 때      | `null`      |
-| 값이 `undefined`일 때 | `undefined` |
-| 값이 빈 문자열일 때   | `''`        |
-| 값이 `false`일 때     | `false`     |
-| 값이 `NaN`일 때       | `NaN`       |
+| 조건                    | 예제                           |
+| ----------------------- | ------------------------------ |
+| 값이 `null`일 때        | `null`                         |
+| 값이 `undefined`일 때   | `undefined`                    |
+| 값이 빈 문자열일 때     | `''`                           |
+| 값이 `false`일 때       | `false`                        |
+| 유한하지 않은 숫자일 때 | `NaN`, `Infinity`, `-Infinity` |
 
 마지막 두 항목에는 다음과 같은 이유가 있습니다:
 
 - `false`는 `<input type="checkbox">`의 `required`와 같은 의미로 처리합니다. 선택하지 않은 체크박스는 유효성 검사를 통과하지 못합니다.
-- `NaN`은 보통 파싱 오류의 결과이며 유효한 숫자가 아니므로 빈 값으로 처리합니다.
+- 유한하지 않은 숫자(`NaN`, `Infinity`, `-Infinity`)는 폼 컨트롤에서 유효한 숫자가 아니며, 브라우저의 숫자 입력 필드도 이러한 값을 받으면 비워지므로 빈 값으로 처리합니다.
 
 조건부로 필수 항목이라면 `when` 옵션을 사용하면 됩니다:
 

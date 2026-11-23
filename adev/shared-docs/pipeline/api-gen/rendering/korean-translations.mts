@@ -38,7 +38,7 @@ export function translateDocumentation<T>(data: T, catalog: TranslationCatalog):
   return visit(data) as T;
 }
 
-/** Only explicit external collections and the primary Router API have Korean catalogs. */
+/** Only explicit external and framework collections have Korean catalogs. */
 export function getTranslationDomain(sourcePath: string, moduleName?: string): string | undefined {
   const normalizedPath = sourcePath.replaceAll('\\', '/');
   if (
@@ -47,5 +47,24 @@ export function getTranslationDomain(sourcePath: string, moduleName?: string): s
   ) {
     return 'router';
   }
+  if (
+    moduleName === '@angular/forms/signals' &&
+    /(?:^|\/)adev\/src\/content\/api\/forms_signals_docs_api\.json$/.test(normalizedPath)
+  ) {
+    return 'forms-signals';
+  }
   return normalizedPath.match(/(?:^|\/)adev\/src\/content\/(cli|aria|cdk)\//)?.[1];
+}
+
+/** The remaining Signal Forms API entries keep their source prose. */
+export function translateSignalFormsRequired<T extends {entries: readonly {name: string}[]}>(
+  source: T,
+  catalog: TranslationCatalog,
+): T {
+  return {
+    ...source,
+    entries: source.entries.map((entry) =>
+      entry.name === 'required' ? translateDocumentation(entry, catalog) : entry,
+    ),
+  };
 }

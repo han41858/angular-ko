@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.dev/license
  */
 
-import {Component, signal, viewChildren, Injectable} from '@angular/core';
+import {Component, signal, viewChildren} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
-import {FormField, form} from '../../public_api';
+import {FormField, form, required, requiredError} from '../../public_api';
 import {InputValidityMonitor} from '../../src/directive/input_validity_monitor';
 import {TestInputValidityMonitor} from './test_input_validity_monitor';
 
@@ -136,6 +136,51 @@ describe('numeric inputs', () => {
       expect(fixture.componentInstance.f().value()).toEqual(NaN);
       // No parse errors if its `NaN` from the model
       expect(fixture.componentInstance.f().errors()).toEqual([]);
+    });
+
+    it('should clear the input when the model is set to Infinity or -Infinity', () => {
+      @Component({
+        imports: [FormField],
+        template: `<input type="number" [formField]="f" />`,
+      })
+      class TestCmp {
+        readonly data = signal<number>(2.5);
+        readonly f = form(this.data, (p) => {
+          required(p);
+        });
+      }
+
+      const fixture = act(() => TestBed.createComponent(TestCmp));
+      const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+      expect(input.value).toBe('2.5');
+      expect(fixture.componentInstance.f().errors()).toEqual([]);
+
+      act(() => {
+        fixture.componentInstance.data.set(Infinity);
+      });
+
+      expect(input.value).toBe('');
+      expect(fixture.componentInstance.f().value()).toBe(Infinity);
+      expect(fixture.componentInstance.f().errors()).toEqual([
+        requiredError({fieldTree: fixture.componentInstance.f}),
+      ]);
+
+      act(() => {
+        fixture.componentInstance.data.set(7);
+      });
+
+      expect(input.value).toBe('7');
+      expect(fixture.componentInstance.f().errors()).toEqual([]);
+
+      act(() => {
+        fixture.componentInstance.data.set(-Infinity);
+      });
+
+      expect(input.value).toBe('');
+      expect(fixture.componentInstance.f().value()).toBe(-Infinity);
+      expect(fixture.componentInstance.f().errors()).toEqual([
+        requiredError({fieldTree: fixture.componentInstance.f}),
+      ]);
     });
 
     it('should not overwrite DOM input value on change detection when model remains NaN', () => {

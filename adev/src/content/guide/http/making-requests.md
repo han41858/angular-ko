@@ -1467,6 +1467,14 @@ TIP: Using the `async` pipe or the `toSignal` operation to subscribe to `Observa
 팁: `async` 파이프나 `toSignal`로 `Observable`을 구독하면 구독을 적절하게 정리할 수 있습니다.
 
 <!--
+IMPORTANT: When the injector providing `HttpClient` (using the default fetch backend) is destroyed—such as when an SSR request is aborted or a child `EnvironmentInjector` is destroyed—Angular aborts in-flight requests without emitting `complete` or `error`. If you await a request with `firstValueFrom` or `lastValueFrom`, the returned `Promise` stays unsettled and any subsequent `finally` block will not run. To avoid leaking external resources such as locks or connections, register cleanup with [`DestroyRef.onDestroy()`](api/core/DestroyRef#onDestroy) or pipe [`takeUntilDestroyed()`](ecosystem/rxjs-interop/take-until-destroyed) before converting the `Observable` to a `Promise`.
+-->
+
+중요: 기본 Fetch 백엔드를 사용하는 `HttpClient`를 제공한 인젝터가 소멸하면 Angular는 `complete`나 `error`를 내보내지 않고 진행 중인 요청을 취소합니다. SSR 요청이 중단되거나 하위 `EnvironmentInjector`가 소멸할 때가 그 예입니다.
+`firstValueFrom`이나 `lastValueFrom`으로 요청을 기다리면 반환된 `Promise`가 이행되지도 거부되지도 않으며, 이후의 `finally` 블록도 실행되지 않습니다.
+잠금이나 연결 같은 외부 리소스가 남지 않도록 [`DestroyRef.onDestroy()`](api/core/DestroyRef#onDestroy)에 정리 작업을 등록하거나, `Observable`을 `Promise`로 변환하기 전에 [`takeUntilDestroyed()`](ecosystem/rxjs-interop/take-until-destroyed) 연산자를 적용하세요.
+
+<!--
 ## Best practices
 -->
 

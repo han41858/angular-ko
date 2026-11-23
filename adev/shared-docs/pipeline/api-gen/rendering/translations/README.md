@@ -8,7 +8,8 @@ CLI·Aria·CDK 원본 JSON은 `adev/scripts/update-cross-repo-docs`로 갱신되
 렌더러는 해당 디렉터리의 `description`, `shortDescription`, `longDescription`, `jsdocTags`의 `comment`만 변환합니다.
 API 이름·타입·명령·옵션·기본값·경로·소스 정보와 `rawComment`는 수정하지 않습니다.
 `since`와 `breaking-change` 버전 메타데이터도 보존합니다.
-프레임워크 API 중에는 `packages/router/index.ts`에서 추출한 기본 `@angular/router` 컬렉션에만 `router.ko.json`을 적용합니다.
+프레임워크 API 중 `packages/router/index.ts`에서 추출한 기본 `@angular/router` 컬렉션에는 `router.ko.json`을 적용합니다.
+`forms-signals.ko.json`은 `@angular/forms/signals`에서 추출한 `required()`의 본문에만 적용합니다.
 추출 JSON과 TypeScript의 JSDoc 원본은 수정하지 않습니다.
 `@angular/router/testing`과 `@angular/router/upgrade` 및 다른 프레임워크 API는 이 사전의 대상이 아닙니다.
 
