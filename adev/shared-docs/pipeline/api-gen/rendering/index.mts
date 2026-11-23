@@ -26,6 +26,7 @@ import {setHighlighterInstance} from './shiki/shiki.mjs';
 import {
   getTranslationDomain,
   translateDocumentation,
+  translateSignalFormsRequired,
   TranslationCatalog,
 } from './korean-translations.mjs';
 
@@ -51,8 +52,16 @@ function parseEntryData(
       jsonDataFilePath,
       (source as Partial<EntryCollection> | null)?.moduleName,
     );
+    const catalog = domain ? catalogs[domain] : undefined;
+    const formsCollection = source as Partial<EntryCollection> | null;
     const fileContentJson =
-      domain && catalogs[domain] ? translateDocumentation(source, catalogs[domain]) : source;
+      domain === 'forms-signals'
+        ? catalog && Array.isArray(formsCollection?.entries)
+          ? translateSignalFormsRequired(formsCollection as EntryCollection, catalog)
+          : source
+        : catalog
+          ? translateDocumentation(source, catalog)
+          : source;
     if ((fileContentJson as EntryCollection).entries) {
       const symbols = Object.fromEntries(
         // TODO: refactor that, it's dirty and we can probably do better than this.

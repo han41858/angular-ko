@@ -3,7 +3,11 @@
  * Copyright Google LLC All Rights Reserved.
  * Use of this source code is governed by an MIT-style license in the LICENSE file.
  */
-import {getTranslationDomain, translateDocumentation} from '../korean-translations.mjs';
+import {
+  getTranslationDomain,
+  translateDocumentation,
+  translateSignalFormsRequired,
+} from '../korean-translations.mjs';
 
 describe('Korean generated documentation overlays', () => {
   const catalog = {'Source description.': '원문 설명입니다.'};
@@ -65,5 +69,24 @@ describe('Korean generated documentation overlays', () => {
     expect(
       getTranslationDomain('adev/src/content/api/core_docs_api.json', '@angular/core'),
     ).toBeUndefined();
+  });
+  it('localizes only required in the Signal Forms framework API collection', () => {
+    const sourcePath = 'adev/src/content/api/forms_signals_docs_api.json';
+    expect(getTranslationDomain(sourcePath, '@angular/forms/signals')).toBe('forms-signals');
+    expect(getTranslationDomain(sourcePath, '@angular/forms')).toBeUndefined();
+    expect(
+      getTranslationDomain('adev/src/content/api/forms_docs_api.json', '@angular/forms/signals'),
+    ).toBeUndefined();
+
+    const source = {
+      entries: [
+        {name: 'required', description: 'Source description.'},
+        {name: 'minLength', description: 'Source description.'},
+      ],
+    };
+    const result = translateSignalFormsRequired(source, catalog);
+    expect(result.entries[0]).toEqual({name: 'required', description: '원문 설명입니다.'});
+    expect(result.entries[1]).toBe(source.entries[1]);
+    expect(source.entries[0].description).toBe('Source description.');
   });
 });
