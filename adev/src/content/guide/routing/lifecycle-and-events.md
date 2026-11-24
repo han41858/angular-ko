@@ -497,23 +497,24 @@ These events track the core navigation process from start through route recognit
 ### 활성화 이벤트
 
 <!--
-These events occur during the activation phase when route components are being instantiated and initialized. Activation events fire for each route in the route tree, including parent and child routes.
+These events fire for each route in the route tree, including parent and child routes. The start events fire during the guard phase, before the route's guards run. The end events fire after the route is activated.
 
 | Event                                                     | Description                                   |
 | --------------------------------------------------------- | --------------------------------------------- |
-| [`ActivationStart`](api/router/ActivationStart)           | Occurs at the start of route activation       |
 | [`ChildActivationStart`](api/router/ChildActivationStart) | Occurs at the start of child route activation |
+| [`ActivationStart`](api/router/ActivationStart)           | Occurs at the start of route activation       |
 | [`ActivationEnd`](api/router/ActivationEnd)               | Occurs at the end of route activation         |
 | [`ChildActivationEnd`](api/router/ChildActivationEnd)     | Occurs at the end of child route activation   |
 -->
 
-이 이벤트는 라우팅 규칙 컴포넌트 인스턴스를 생성하고 초기화하는 활성화 단계에서 발생합니다.
 활성화 이벤트는 부모와 자식 라우팅 규칙을 포함해 라우팅 규칙 트리의 각 라우팅 규칙에서 발생합니다.
+시작 이벤트는 가드 단계에서 해당 라우팅 규칙의 가드가 실행되기 전에 발생합니다.
+종료 이벤트는 해당 라우팅 규칙이 활성화된 후 발생합니다.
 
 | 이벤트                                                    | 설명                                            |
 | --------------------------------------------------------- | ----------------------------------------------- |
-| [`ActivationStart`](api/router/ActivationStart)           | 라우팅 규칙 활성화가 시작될 때 발생합니다.      |
 | [`ChildActivationStart`](api/router/ChildActivationStart) | 자식 라우팅 규칙 활성화가 시작될 때 발생합니다. |
+| [`ActivationStart`](api/router/ActivationStart)           | 라우팅 규칙 활성화가 시작될 때 발생합니다.      |
 | [`ActivationEnd`](api/router/ActivationEnd)               | 라우팅 규칙 활성화가 끝날 때 발생합니다.        |
 | [`ChildActivationEnd`](api/router/ChildActivationEnd)     | 자식 라우팅 규칙 활성화가 끝날 때 발생합니다.   |
 
